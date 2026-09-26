@@ -1495,6 +1495,26 @@ GAME_COMPILER_UNITS = {
     # varargs: the game compiler's ginclude headers are installed next to its
     # driver, so this unit no longer needs the SN toolchain's stdarg.h
     "sdk/debug/debug_print",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ffc30: queue a textured sprite GIF packet (TEX0 from the texture
+    # bank, RGBAQ alpha, UV/XYZ corners) on the DMA tag list
+    "textbin/fun_001ffc30",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200080: queue a HUD sprite GIF packet sized from the texture table
+    # (1<<log2 sizes as UV)
+    "textbin/fun_00200080",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200258: HUD sprite packet like fun_00200080 with a UV origin
+    # (texture size in subpixels)
+    "textbin/fun_00200258",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200958: queue a textured HUD sprite GIF packet (TEX0 from the
+    # texture, UV/XYZ2 corners, alpha)
+    "textbin/fun_00200958",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200f90: GIF packet like fun_00200e08 with an explicit Z for both
+    # XYZ2 corners
+    "textbin/fun_00200f90",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -1661,18 +1681,6 @@ PADLESS_ASM_UNITS = {
     "textbin/fun_00200c80",
     # fun_00200e08: same packet as fun_00200c80 with register 0x46
     "textbin/fun_00200e08",
-    # fun_00200f90: GIF packet like fun_00200e08 with an explicit Z for both
-    # XYZ2 corners
-    "textbin/fun_00200f90",
-    # fun_00200958: queue a textured HUD sprite GIF packet (TEX0 from the
-    # texture, UV/XYZ2 corners, alpha)
-    "textbin/fun_00200958",
-    # fun_00200080: queue a HUD sprite GIF packet sized from the texture table
-    # (1<<log2 sizes as UV)
-    "textbin/fun_00200080",
-    # fun_00200258: HUD sprite packet like fun_00200080 with a UV origin
-    # (texture size in subpixels)
-    "textbin/fun_00200258",
     # snd_bank_load_from_ee_cb: load a sound bank over SIF RPC 0x57 once the
     # server is idle (scalar lui/at externs, gp .extern flags)
     "textbin/audio/banks/snd_bank_load_from_ee_cb",
@@ -1702,9 +1710,6 @@ PADLESS_ASM_UNITS = {
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
     "textbin/rendering/set_up_vis_gif_viewer",
-    # fun_001ffc30: queue a textured sprite GIF packet (TEX0 from the texture
-    # bank, RGBAQ alpha, UV/XYZ corners) on the DMA tag list
-    "textbin/fun_001ffc30",
     # fun_001ffe18: queue a textured quad as a 4-vertex triangle strip GIF
     # packet (same texture bank lookup as fun_001ffc30)
     "textbin/fun_001ffe18",
