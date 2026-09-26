@@ -20,9 +20,13 @@ sibling tooling repository points at this checkout.
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
 
-The game compiler is not optional: 297 units are built by it, and `configure.py`
-stops with an error instead of routing them to a different compiler when it is
-missing. Build it from the patch stack in
+The game compiler is not optional: it builds the game line, and `configure.py`
+stops with an error instead of routing those units to a different compiler when
+it is missing. Its driver has no builtin include directory, so the three headers
+it needs for `<stdarg.h>` (`stdarg.h`, `stddef.h`, `va-mips.h`, taken from the
+compiler's own `gcc/ginclude`) must sit in `tools/compilers/game-compiler/include/`;
+the `cc_game` rule adds that directory with `-I`. Without them a unit that
+includes `<stdarg.h>` cannot compile. Build it from the patch stack in
 [`patches/sce-991111b/`](../patches/sce-991111b/README.md), which records the
 pinned source archive, its SHA-256 and the host recipe that reproduces the
 expected `cc1`; then install the result as `tools/compilers/game-compiler`, or

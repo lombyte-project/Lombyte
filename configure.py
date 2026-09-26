@@ -61,10 +61,6 @@ EE_GCC_PATCHED_ROOT = os.environ.get("EE_GCC_PATCHED_ROOT", "").strip()
 GAME_COMPILER_ROOT = os.environ.get("GAME_COMPILER_ROOT", "").strip()
 # Promoted textbin units matched byte-exact under the SN compiler.
 SN_COMPILER_UNITS = {
-    # sdk/debug/debug_print: the EE-GCC 2.9 tree ships no stdarg.h, and the SN
-    # stdarg va_start reproduces the retail varargs save prologue byte-exactly
-    # (100/100/100/100 direct objdiff).
-    "sdk/debug/debug_print",
     # fun_00233980 is a save-less leaf, so the sq/lq fingerprint classifies it
     # as "none" and sends it to EE-GCC 2.9, which hoists the bump-pointer load
     # and diverges from retail. Fresh SN -O2 -g2 -mno-split-addresses reproduces
@@ -1496,6 +1492,9 @@ GAME_COMPILER_UNITS = {
     # vo_buf_inc_count: VoBuf: mark the write slot full, advance the ring under
     # DI/EI (volatile write/count)
     "textbin/video/decoder/vo_buf_inc_count",
+    # varargs: the game compiler's ginclude headers are installed next to its
+    # driver, so this unit no longer needs the SN toolchain's stdarg.h
+    "sdk/debug/debug_print",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -2312,7 +2311,8 @@ def build_stuff(
             "cc_game",
             description="cc_game $in",
             command=(
-                f"{game_root}/ee-gcc -c {common_includes} {LANG_DEFINE} {COMPILER_FLAGS} "
+                f"{game_root}/ee-gcc -c -I{game_root}/include {common_includes} "
+                f"{LANG_DEFINE} {COMPILER_FLAGS} "
                 f"$in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug"
             ),
         )
