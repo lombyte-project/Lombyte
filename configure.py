@@ -539,9 +539,6 @@ EE_GCC_PATCHED_UNITS = {
 EE_GCC_PATCHED_FLAG_UNITS = {
     "picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
     "textbin/fun_00226848": "-mastra-no-lo-sum-tie",
-    # 2026-09-26 flag-removal batch 1: dropping -fno-expensive-optimizations
-    # and -fno-schedule-insns from this set changes no allocated section or
-    # relocation, so only the three load-bearing -mastra-* switches remain.
     "_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
     "math/conversion/truncate_float_to_s32": "-mastra-inplace-cvt",
 }
@@ -640,9 +637,6 @@ EE_GCC_FLAG_UNITS = {
     # sign-extension pair, which the local compiler only emits when the s32
     # result is forced through an s64 local + (u32) truncation.  Exact under
     # -Os -fno-cse-follow-jumps (pipeline-2026-09-13-11).
-    # 2026-09-26 flag-removal batch 1: -fno-cse-follow-jumps is a no-op for
-    # this unit on the current EE-GCC 2.9 route (allocated sections and
-    # relocations unchanged), so the entry keeps only -Os.
     "__swrite": "-Os",
     # AppendDmaTag: retail folds the non-small global's absolute load as
     # `lui v0,%hi; lw v0,%lo(v0)` and the absolute store through the $at macro;
@@ -655,26 +649,13 @@ EE_GCC_FLAG_UNITS = {
     # `asm("" : "+r"(r1))` one-cycle edge delays the E8 store so reorg fills
     # the call-2 slot instead (pipeline-2026-09-13-12g).
     "cmd_sem_init": "-fno-schedule-insns",
-    # Pending textbin walls (not byte-exact yet): retail's gcse predates
-    # edge-based PRE insertion, so -fno-edge-lcm moves the hoisted computations
-    # to block ends and raises the measured similarity.  A/B on the 2026-09-16
-    # baseline workspace (native 991111-01, objdiff .text percent):
-    #   fun_001f39d0 80.36 -> 80.84   fun_0022f778 71.06 -> 75.25
-    #   fun_001fbc50 74.43 -> 74.75   fun_002093d8 72.23 -> 72.84
-    #   fun_0022ca50 52.21 -> 56.34   fun_001fa978 27.43 -> 28.05
-    # Units that measured worse keep the default route, and fun_0021a328 is
-    # neutral (+0.04): fun_001fce28 54.07 -> 53.87, fun_001fde90 58.98 -> 56.16,
-    # fun_00205640 46.17 -> 45.80.
-    # 2026-09-27 flag-removal batch 3: the six entries that implemented this
-    # note (draw_debug_profiler, fun_0022f778, draw_dialog_text,
-    # memcard_update_state, sound_update, setup_fs_aa_buffer) are removed. Every
-    # owner is still a pending INCLUDE_ASM wrapper, so the wrapper's object is
-    # the oracle's assembly and the option cannot change a byte - measured, not
-    # assumed (tools repo analysis/research/flag-removal-batch1-20260926.md).
-    # The A/B numbers above stay as the research record: patch 0016 only changes
-    # the game compiler, while these units build on the 991111-01 route where
-    # -fno-edge-lcm is still a real requirement. Re-adding it at promotion time
-    # needs a recorded reason (RNC_ALLOW_FLAG_EXCEPTION).
+    # No -fno-edge-lcm entry remains: the six that did (draw_debug_profiler,
+    # fun_0022f778, draw_dialog_text, memcard_update_state, sound_update,
+    # setup_fs_aa_buffer) belong to units that are still assembly wrappers,
+    # where the option cannot change a byte. Those units build on the 991111-01
+    # route, where -fno-edge-lcm is a real requirement for their C once a body
+    # replaces the wrapper: re-add it then, with the measurement and the reason
+    # recorded in this comment.
 }
 
 
@@ -1278,12 +1259,8 @@ GAME_COMPILER_FLAG_UNITS = {
     # (it deletes the jump after the last return, so jump.c if-converts
     # `return 1; ... return 0;' tails).  Retail/SN do not; the flag keeps the
     # old behavior for them.  fun_0012eea8, fun_0012ef28, fun_00207300 and the
-    # snd_stream_safe_cd_* entries.
-    # 2026-09-26 flag-removal batch 1: count_nonzero_entries_up_to_40,
-    # draw_two_texture_panels, vo_buf_get_tag and vo_buf_get_data no longer
-    # change any allocated section or relocation with the flag removed
-    # (tools repo analysis/research/flag-removal-batch1-20260926.md), so their
-    # entries are gone; the remaining entries are still load-bearing.
+    # snd_stream_safe_cd_* entries.  Every entry here is load-bearing: removing
+    # the flag changes allocated sections or relocations.
     "hud_heap_alloc": "-mastra-cygnus-cfg",
     # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
     # (the .extern-ordering class); its call loop needs patch
@@ -1299,14 +1276,9 @@ GAME_COMPILER_FLAG_UNITS = {
     "snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
     "snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
     "snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
-    # 2026-09-26 flag-removal batch 1: attach_manipulator and
-    # audio_dec_begin_put kept -fno-strict-aliasing from an era when the game
-    # compiler enabled aliasing at -O2; clearing it leaves every allocated
-    # section and relocation byte-identical (attach_manipulator differs only in
-    # debug symbol data, which the linked ELF gate ignores), so both entries
-    # are removed.  vu1_add_g_sregister needs only the address form: removing
-    # -fno-strict-aliasing from its pair is a no-op, removing
-    # -mno-split-addresses is not.
+    # vu1_add_g_sregister needs only the address form: the game compiler already
+    # builds without strict aliasing, so -fno-strict-aliasing changes nothing
+    # here while -mno-split-addresses is required.
     "vu1_add_g_sregister": "-mno-split-addresses",
     "snd_stream_safe_cd_sync": "-fno-gcse -mastra-r5900-extern-buffer",
     "is_audio_ok": "-mno-split-addresses",
@@ -1314,9 +1286,6 @@ GAME_COMPILER_FLAG_UNITS = {
     "fun_0023a3b8": "-mno-split-addresses",
     "handle_mpeg_no_data": "-mno-split-addresses",
     "handle_end_image": "-mno-split-addresses",
-    # 2026-09-26 flag-removal batch 1: vi_buf_begin_put is byte-identical
-    # without -mno-split-addresses (allocated sections and relocations), so
-    # the entry is gone.
     "wait_for_display_vsync": "-mno-split-addresses",
     "prepare_debug_profiler_render": "-mno-split-addresses",
     "put_disp_buffer": "-mno-split-addresses",
@@ -1327,13 +1296,11 @@ GAME_COMPILER_FLAG_UNITS = {
     "snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
     "fun_00225490": "-fno-schedule-insns",
     "fun_0022c7e8": "-fno-schedule-insns",
-    # 2026-09-27 flag-removal batch 3: the fun_001f33b8 (-fno-schedule-insns) and
-    # fun_00221f58 (-G0) entries are removed for the same measured reason - their
-    # owners are pending INCLUDE_ASM wrappers, so the option reaches the compiler
-    # but cannot change the wrapper's bytes. The longer "textbin/..." keys were
-    # additionally dead: first-suffix-match always resolved the shorter key first.
-    # The bank receipts keep the measured requirement for when the units are
-    # promoted; re-adding an entry then needs a recorded reason.
+    # fun_001f33b8 (-fno-schedule-insns) and fun_00221f58 (-G0) carry no entry:
+    # both owners are still assembly wrappers, where an option cannot change the
+    # wrapper's bytes. The shorter keys also always won first-suffix-match over
+    # the longer "textbin/..." spellings, so those were dead as well. Re-add with
+    # the measurement and the reason recorded here if a C body needs them.
 }
 
 SN_FLAG_UNITS = {
@@ -1343,11 +1310,10 @@ SN_FLAG_UNITS = {
     # default prepass scheduler swaps them.  100/100/100 with
     # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
     "snd_post_message": "-fno-schedule-insns",
-    # fun_0021b6d8: exact-route compiler flags.  2026-09-26: a subset probe
-    # suggested three of the four pins were redundant, but the full-ELF gate
-    # then differed in 4 bytes inside this unit, so the set stays intact.  The
-    # entry is still a high-risk workaround for a register-allocation
-    # difference; see docs/COMPILER_FLAGS_POLICY.md in the tools repo.
+    # fun_0021b6d8: exact-route compiler flags.  All four register pins are
+    # required here; dropping any one of them changes the linked bytes.  This is
+    # the last register-allocation workaround in the project and the only entry
+    # no compiler improvement can retire on its own.
     "fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
 }
 
@@ -2253,10 +2219,11 @@ def build_stuff(
         raise SystemExit(
             "the reconstructed game compiler is required: "
             f"{_game_compiler_root()} has no ee-gcc/cc1.\n"
-            "Set GAME_COMPILER_ROOT to a compiler directory, or keep it at "
-            "tools/compilers/game-compiler (the baseline workspace stages it "
-            "under tools/cc/game-compiler). scripts/setup-linux-cloud.sh in the "
-            "tools repository builds it; see its docs/LINUX_CLOUD_SETUP.md."
+            "Install it at tools/compilers/game-compiler (the baseline "
+            "workspace stages it under tools/cc/game-compiler) or point "
+            "GAME_COMPILER_ROOT at it. The patch stack that rebuilds it from "
+            "the pinned source archive is in patches/sce-991111b; see "
+            "docs/building.md."
         )
 
     if game_compiler_configured():

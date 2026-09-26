@@ -29,9 +29,11 @@ Procedure and acceptance bar for Ratchet & Clank (PS2, `SCUS_971.99`).
 - Profiles are per owner, chosen from observed codegen (save style,
   scheduling, addressing). Directory names and single samples are not
   evidence.
-- Per-owner flags require a stated hypothesis and a passing gate. Freeze
-  profile and flags while refining a candidate, and record which build produced
-  an accepted result.
+- A per-owner compiler or assembler option is a last resort, and the project is
+  removing the ones it has. Add one only when the mismatch is measured, the
+  cause is not explained by the source or by a compiler bug you can fix, and the
+  entry carries that reason in `configure.py` next to the option. Prefer fixing
+  the source or the compiler over freezing a switch for a function.
 
 ## 4. The unit loop
 
@@ -127,9 +129,11 @@ justify a change in behavior.
   boundary detection or symbol inference is a starting point, never the
   authority; a wrong entry fails the full-image gate instead of silently
   changing the output.
-- Compiler routing is explicit (`SN_COMPILER_UNITS`, per-unit flags) because
-  the textbin range mixes SN and EE-GCC 2.9 code; a wrong route shows up as a
-  byte difference at the gate.
+- Compiler routing is explicit because the textbin range mixes code from the
+  reconstructed game compiler, the SN compiler and the vendored EE-GCC 2.9; a
+  wrong route shows up as a byte difference at the gate. The game compiler is
+  required, and the SN route is the one being retired, so a unit that matches
+  under the game compiler should be routed there rather than kept on SN.
 - The build targets the boot executable and its embedded DVP overlay blobs;
   other disc files are out of scope.
 - `verify-baseline.sh` only rebuilds a directory it owns: the staging root must

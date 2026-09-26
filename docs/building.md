@@ -13,11 +13,20 @@ sibling tooling repository points at this checkout.
 
 | Tool                                                | Required location                                                                 |
 | :-------------------------------------------------- | :-------------------------------------------------------------------------------- |
+| Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)    | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
 | EE-GCC `2.9-ee-991111-01`                           | `tools/compilers/ee-gcc2.9-991111-01/`                                            |
 | SN EE-GCC `2.95.2`                                  | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
 | R5900 binutils                                      | the `mips-ps2-decompals-*` executables; set `BINUTILS_ROOT` to their directory    |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
+
+The game compiler is not optional: 297 units are built by it, and `configure.py`
+stops with an error instead of routing them to a different compiler when it is
+missing. Build it from the patch stack in
+[`patches/sce-991111b/`](../patches/sce-991111b/README.md), which records the
+pinned source archive, its SHA-256 and the host recipe that reproduces the
+expected `cc1`; then install the result as `tools/compilers/game-compiler`, or
+point `GAME_COMPILER_ROOT` at it.
 
 A few units were matched with an optional patched EE-GCC profile. `make elf` does
 not need it — those units fall back to the retail oracle — but install it to work

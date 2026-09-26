@@ -1,9 +1,9 @@
 # Compiler patch surfaces
 
 Every compiler patch this project uses is reproducible from this directory.
-`make elf` does not require any of them: units whose compiler is unavailable
-are rebuilt from the retail oracle, so the public build stays green without a
-patched toolchain.
+`make elf` needs only the game compiler, which this directory also rebuilds;
+units whose *other* compiler is unavailable are rebuilt from the retail oracle,
+so the public build stays green without a patched toolchain.
 
 ## Rules
 

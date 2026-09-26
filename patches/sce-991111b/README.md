@@ -139,8 +139,8 @@ reproducible from this directory. Every other entry names its exact fixture.
   - root cause found by runtime instrumentation (fprintf traces at every real
     `INSN_ANNULLED_BRANCH_P` assignment site in a rebuilt `cc1`), not static
     source reading - three earlier static theories about this exact mechanism
-    were each disproven first; see `docs/PROJECT_STATUS.md` in the tools repo
-    for the full trace
+    were each disproven first; the full trace is kept with the project's
+    internal development notes
   - fixture: `textbin/fun_002071c0` -> 100.0. The compiler patch alone only
     narrows this unit's residual (91.111 -> 92.778%, zero movement on every
     other unit in the corpus); reaching exact also required an independent,
