@@ -1337,63 +1337,18 @@ GAME_COMPILER_FLAG_UNITS = {
 }
 
 SN_FLAG_UNITS = {
-    # Keep the loop's address register separate from the mode's live range.
-    "snd_stream_safe_cd_sync": "-fno-gcse",
-    "fun_00225490": "-fno-schedule-insns",
-    # run 14 mass-c: 47.7f must materialize inline (lui/ori/mtc1), not via
-    # .lit4; verified with p07 97.78 -> padless 100/100/100.
-    "fun_00207300": "-G0 -mastra-cygnus-cfg",
     "fun_00225530": "-mno-split-addresses",
-    "vu1_add_g_sregister": "-mno-split-addresses",
-    # Two independent tiny-FPU field loads must stay in retail's order; the
-    # prepass scheduler swaps them under default SN.
-    "fun_0022c7e8": "-fno-schedule-insns",
-    # 0x160Exx/0x1612xx video-decoder globals: retail folds absolute loads as
-    # `lui rd,%hi; lw rd,%lo(rd)` and absolute $at stores; the default split
-    # sequence differs. Non-small (array) declarations pin the absolute form.
-    "is_audio_ok": "-mno-split-addresses",
-    "process_audio_stream": "-mno-split-addresses",
-    "fun_0023a3b8": "-mno-split-addresses",
-    "handle_mpeg_no_data": "-mno-split-addresses",
-    "prepare_debug_profiler_render": "-mno-split-addresses",
-    "handle_end_image": "-mno-split-addresses",
-    "fun_001f21c0": "-mno-split-addresses",
-    "force_help_message": "-mno-split-addresses",
     "audio_dec_create": "-mno-split-addresses",
-    # fun_0023be20: the two index computations must stay in retail's order and
-    # arg0->unk0 is materialized directly at each use; the default
-    # split-address sequence diverges.  100/100/100 + patha byte-equal
-    # (byte-max campaign 2026-09-13, pipeline-2026-09-13-10).
-    "vi_buf_begin_put": "-mno-split-addresses",
-    # fun_001fb2a8: retail folds the non-small global's absolute load
-    # (`lui a0,0x16; lw a0,-0x1148(a0)`) and keeps the ra save after it; the
-    # array extern alone leaves the lui scheduled before the frame adjust.
-    # 100/100/100 under SN with flag (pipeline-2026-09-13-11).
-    "put_disp_buffer": "-mno-split-addresses",
     # snd_post_message: retail keeps the index in v1 and the base in v0; the
     # default prepass scheduler swaps them.  100/100/100 with
     # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
     "snd_post_message": "-fno-schedule-insns",
-    # run 16 worker b: fun_0023b590 (startDisplay fragment) needs the
-    # absolute $at store pair (`lui at,0x16; sw ...`) that retail emits; the
-    # default split sequence differs.  Padless route + this flag is
-    # instruction-identical (76/76) and patha byte-equal.
-    "wait_for_display_vsync": "-mno-split-addresses",
-    # fun_0022db10: the limit/base globals are non-small absolute loads and
-    # retail materializes the 0x13E550 slot table as `lui v0,0x14;
-    # addiu v0,v0,-0x1ab0` with the 0x70 stride in v1.  100/100/100 + patha
-    # byte-equal with -mno-split-addresses (pipeline-2026-09-15-16 worker c).
-    "allocate_voice_for_bank_entry": "-mno-split-addresses",
     # fun_0021b6d8: exact-route compiler flags.  2026-09-26: a subset probe
     # suggested three of the four pins were redundant, but the full-ELF gate
     # then differed in 4 bytes inside this unit, so the set stays intact.  The
     # entry is still a high-risk workaround for a register-allocation
     # difference; see docs/COMPILER_FLAGS_POLICY.md in the tools repo.
     "fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
-    # 2026-09-26 flag-removal batch 1: '-Wa,-mips4' is a no-op for
-    # textbin/fun_001f2070 on the SN route (allocated sections and relocations
-    # unchanged), and the "textbin/fun_001f2070" key below was shadowed by the
-    # shorter "fun_001f2070" key under first-suffix-match, so both entries go.
 }
 
 # Units whose retail objects carry compiler-emitted hazard NOPs that the
@@ -2286,6 +2241,23 @@ def build_stuff(
         description="cc $in",
         command=f"{compile_cmd} $in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug",
     )
+
+    if not game_compiler_configured():
+        # The reconstructed game compiler is mandatory, not optional.  Without
+        # it, every unit in GAME_COMPILER_UNITS silently falls through to
+        # another rule (patched/SN/EE-GCC 2.9), which changes codegen for 297
+        # units without any error - the repository ignores tools/, so a fresh
+        # clone reroutes them unnoticed.  Failing here keeps the build honest
+        # and makes the per-unit SN entries for cc_game owners unreachable, so
+        # they can be deleted instead of sitting as dead configuration.
+        raise SystemExit(
+            "the reconstructed game compiler is required: "
+            f"{_game_compiler_root()} has no ee-gcc/cc1.\n"
+            "Set GAME_COMPILER_ROOT to a compiler directory, or keep it at "
+            "tools/compilers/game-compiler (the baseline workspace stages it "
+            "under tools/cc/game-compiler). scripts/setup-linux-cloud.sh in the "
+            "tools repository builds it; see its docs/LINUX_CLOUD_SETUP.md."
+        )
 
     if game_compiler_configured():
         game_root = _game_compiler_root()
