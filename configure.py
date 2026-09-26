@@ -174,9 +174,6 @@ SN_COMPILER_UNITS = {
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "textbin/fun_00208030",
-    # fun_001f2070: project the camera-relative point through the view matrix
-    # into GS screen coordinates and depth
-    "textbin/fun_001f2070",
 }
 
 # C units relocated from src/textbin/<module> to semantic source roots.
@@ -1519,6 +1516,23 @@ GAME_COMPILER_UNITS = {
     # snd_bank_load_from_ee_cb: load a sound bank over SIF RPC 0x57 once the
     # server is idle (scalar lui/at externs, gp .extern flags)
     "textbin/audio/banks/snd_bank_load_from_ee_cb",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f2070: project the camera-relative point through the view matrix
+    # into GS screen coordinates and depth
+    "textbin/fun_001f2070",
+    # moved off the SN route: byte-identical on the game compiler
+    # init_view_context: Plain-C rewrite of the public NON_MATCHING body is
+    # byte-exact on the padless route: the Display/Screen/View structs, the s16
+    # half-width shifts, the float literals (32.0f, 745472.0f, 0.63f, 0.5f,
+    # 4.0f, 524288.0f, 255.0f) and the two func_001FA6C0 calls reproduce every
+    # store in retail order; only the padless assembler drops the single nop the
+    # native route inserts after the 255.0f mtc1, so the source is already
+    # optimal and the route is the only lever
+    "textbin/rendering/view/init_view_context",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0022c830: camera roll from the look vector angle, scaled by the
+    # clamped distance
+    "textbin/fun_0022c830",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -1655,9 +1669,6 @@ PADLESS_ASM_UNITS = {
     # fun_001f5138: fog/alpha GS registers around a full-screen sprite when
     # enabled
     "rendering/effects/draw_fogged_fullscreen_sprite",
-    # fun_0022c830: camera roll from the look vector angle, scaled by the
-    # clamped distance
-    "textbin/fun_0022c830",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
     "textbin/gameplay/entities/patch_moby_gifs",
@@ -1698,14 +1709,6 @@ PADLESS_ASM_UNITS = {
     # variable for the group loop pins f->s3/i->s4, and `f->loaded = 1` before
     # the relocation stores fixes their schedule.
     "textbin/fun_002028e0",
-    # init_view_context: Plain-C rewrite of the public NON_MATCHING body is
-    # byte-exact on the padless route: the Display/Screen/View structs, the s16
-    # half-width shifts, the float literals (32.0f, 745472.0f, 0.63f, 0.5f,
-    # 4.0f, 524288.0f, 255.0f) and the two func_001FA6C0 calls reproduce every
-    # store in retail order; only the padless assembler drops the single nop the
-    # native route inserts after the 255.0f mtc1, so the source is already
-    # optimal and the route is the only lever
-    "textbin/rendering/view/init_view_context",
     # set_up_vis_gif_viewer: Registered route is padless+none (native scores
     # only 87.8): the packet high word is (u64)(u32)n << 32 taken from the 2nd
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the

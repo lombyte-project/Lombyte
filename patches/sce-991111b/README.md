@@ -36,7 +36,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0034`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`
+   `0050`, `0051`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -52,6 +52,7 @@ reproducible from this directory. Every other entry names its exact fixture.
 
 ## Published patches
 
+- `0051-r5900-fpr-hazard-exact.patch` SHA-256: `9ff24814d74915e50f3d0297fbf6441881538379897deed00f91525df23584db`
 - `0050-r5900-dli-retail-form.patch` SHA-256: `e671ea0cb029a7193d6a54a0ee58d65ae116edcd4674bf88baa3670eacecbe43`
 - `0049-sibcall-pass-needs-placeholder.patch` SHA-256: `6b9dae8921c7cdcc9cae3879f92990c969fd098aed7594afa7d98db8c33e714a`
   - cc1 (production stack): `05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`
