@@ -539,7 +539,10 @@ EE_GCC_PATCHED_UNITS = {
 EE_GCC_PATCHED_FLAG_UNITS = {
     "picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
     "textbin/fun_00226848": "-mastra-no-lo-sum-tie",
-    "_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse -fno-expensive-optimizations -fno-schedule-insns",
+    # 2026-09-26 flag-removal batch 1: dropping -fno-expensive-optimizations
+    # and -fno-schedule-insns from this set changes no allocated section or
+    # relocation, so only the three load-bearing -mastra-* switches remain.
+    "_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
     "math/conversion/truncate_float_to_s32": "-mastra-inplace-cvt",
 }
 
@@ -554,96 +557,6 @@ PADLESS_POLICY_UNITS = {
     # INCLUDE_ASM wrapper (the SN driver -S stage cannot expand the oracle's
     # `.include`, so a pending unit must keep the native EE-GCC 2.9 route).
     "fun_0022f778": "la-gprel",
-    # fun_001f7a30: exact on padless with la-gprel
-    "initialize_alpha_lookup_table": "la-gprel",
-    # fun_0020cc18: exact on padless with la-gprel
-    "find_or_allocate_id_slot": "la-gprel",
-    # fun_001f5210: exact on padless with la-gprel
-    "emit_rgba_draw_packet": "la-gprel",
-    # fun_002169c0: exact on padless with la-gprel
-    "fun_002169c0": "la-gprel",
-    # fun_00216a20: exact on padless with la-gprel
-    "fun_00216a20": "la-gprel",
-    # fun_001ff418: exact on padless with la-gprel
-    "apply_pending_animation": "la-gprel",
-    # fun_001ff500: exact on padless with la-gprel
-    "load_animation_definition": "la-gprel",
-    # fun_00209370: exact on padless with la-gprel
-    "load_and_initialize_level_chunk": "la-gprel",
-    # fun_001ebcf0: exact on padless with la-gprel
-    "execute_camera_post_update_callbacks": "la-gprel",
-    # fun_001f4650: exact on padless with la-gprel
-    "dispatch_callback_list_1": "la-gprel",
-    # fun_001f46c8: exact on padless with la-gprel
-    "dispatch_callback_list_2": "la-gprel",
-    # fun_001f4740: exact on padless with la-gprel
-    "dispatch_callback_list_3": "la-gprel",
-    # fun_001f4808: exact on padless with la-gprel
-    "dispatch_callback_list_4": "la-gprel",
-    # fun_0020acc0: exact on padless with la-gprel
-    "calculate_crc16": "la-gprel",
-    # fun_001ff658: exact on padless with la-gprel
-    "copy_text_to_shared_buffer": "la-gprel",
-    # fun_002043b0: exact on padless with la-gprel
-    "load_level_chunk_from_disc": "la-gprel",
-    # fun_001fee38: exact on padless with la-gprel
-    "find_animation_definition_index": "la-gprel",
-    # fun_001ff960: exact on padless with la-gprel
-    "find_valid_animation_frame_index": "la-gprel",
-    # fun_0020c880: exact on padless with la-gprel
-    "update_moby_animation_state": "la-gprel",
-    # video_dec_flush: exact on padless with la-gprel
-    "video_dec_flush": "la-gprel",
-    # fun_001f5138: exact on padless with la-gprel
-    "draw_fogged_fullscreen_sprite": "la-gprel",
-    # vo_buf_create: exact on padless with la-gprel
-    "vo_buf_create": "la-gprel",
-    # detach_manipulator: exact on padless with la-gprel
-    "detach_manipulator": "la-gprel",
-    # fun_00207a18: exact on padless with la-gprel
-    "fun_00207a18": "la-gprel",
-    # fun_0021ea48: exact on padless with la-gprel
-    "fun_0021ea48": "la-gprel",
-    # audio_dec_end_put: exact on padless with la-gprel
-    "audio_dec_end_put": "la-gprel",
-    # patch_moby_gifs: exact on padless with la-gprel
-    "patch_moby_gifs": "la-gprel",
-    # fun_002191b8: exact on padless with la-gprel
-    "fun_002191b8": "la-gprel",
-    # fun_00208408: exact on padless with la-gprel
-    "fun_00208408": "la-gprel",
-    # fun_001fed30: exact on padless with la-gprel
-    "fun_001fed30": "la-gprel",
-    # update_all_cameras: exact on padless with la-gprel
-    "update_all_cameras": "la-gprel",
-    # vi_buf_put_ts: exact on padless with la-gprel
-    "vi_buf_put_ts": "la-gprel",
-    # vo_buf_inc_count: exact on padless with la-gprel
-    "vo_buf_inc_count": "la-gprel",
-    # fun_0021c420: exact on padless with la-gprel
-    "fun_0021c420": "la-gprel",
-    # patch_tfrag_gifs: exact on padless with la-gprel
-    "patch_tfrag_gifs": "la-gprel",
-    # vi_buf_reset: exact on padless with la-gprel
-    "vi_buf_reset": "la-gprel",
-    # fun_00208280: exact on padless with la-gprel
-    "fun_00208280": "la-gprel",
-    # fun_0020b950: exact on padless with la-gprel
-    "fun_0020b950": "la-gprel",
-    # snd_send_iop_command_and_wait: exact on padless with la-gprel
-    "snd_send_iop_command_and_wait": "la-gprel",
-    # snd_send_iop_command_no_wait: exact on padless with la-gprel
-    "snd_send_iop_command_no_wait": "la-gprel",
-    # fun_002028e0: exact on padless with la-gprel
-    "fun_002028e0": "la-gprel",
-    # load_display_text_resource_entry: exact on padless with la-gprel
-    "load_display_text_resource_entry": "la-gprel",
-    # fun_00212ed8: exact on padless with la-gprel
-    "fun_00212ed8": "la-gprel",
-    # parse_particle_textures: exact on padless with la-gprel
-    "parse_particle_textures": "la-gprel",
-    # fun_00221460: exact on padless with la-gprel
-    "fun_00221460": "la-gprel",
 }
 
 SDK_COMPILER_UNITS = {
@@ -727,7 +640,10 @@ EE_GCC_FLAG_UNITS = {
     # sign-extension pair, which the local compiler only emits when the s32
     # result is forced through an s64 local + (u32) truncation.  Exact under
     # -Os -fno-cse-follow-jumps (pipeline-2026-09-13-11).
-    "__swrite": "-Os -fno-cse-follow-jumps",
+    # 2026-09-26 flag-removal batch 1: -fno-cse-follow-jumps is a no-op for
+    # this unit on the current EE-GCC 2.9 route (allocated sections and
+    # relocations unchanged), so the entry keeps only -Os.
+    "__swrite": "-Os",
     # AppendDmaTag: retail folds the non-small global's absolute load as
     # `lui v0,%hi; lw v0,%lo(v0)` and the absolute store through the $at macro;
     # -G0 + -mno-split-addresses reproduces that (100/100/100/100 + patha,
@@ -749,12 +665,16 @@ EE_GCC_FLAG_UNITS = {
     # Units that measured worse keep the default route, and fun_0021a328 is
     # neutral (+0.04): fun_001fce28 54.07 -> 53.87, fun_001fde90 58.98 -> 56.16,
     # fun_00205640 46.17 -> 45.80.
-    "draw_debug_profiler": "-fno-edge-lcm",
-    "fun_0022f778": "-fno-edge-lcm",
-    "draw_dialog_text": "-fno-edge-lcm",
-    "memcard_update_state": "-fno-edge-lcm",
-    "sound_update": "-fno-edge-lcm",
-    "setup_fs_aa_buffer": "-fno-edge-lcm",
+    # 2026-09-27 flag-removal batch 3: the six entries that implemented this
+    # note (draw_debug_profiler, fun_0022f778, draw_dialog_text,
+    # memcard_update_state, sound_update, setup_fs_aa_buffer) are removed. Every
+    # owner is still a pending INCLUDE_ASM wrapper, so the wrapper's object is
+    # the oracle's assembly and the option cannot change a byte - measured, not
+    # assumed (tools repo analysis/research/flag-removal-batch1-20260926.md).
+    # The A/B numbers above stay as the research record: patch 0016 only changes
+    # the game compiler, while these units build on the 991111-01 route where
+    # -fno-edge-lcm is still a real requirement. Re-adding it at promotion time
+    # needs a recorded reason (RNC_ALLOW_FLAG_EXCEPTION).
 }
 
 
@@ -1357,13 +1277,14 @@ GAME_COMPILER_FLAG_UNITS = {
     # Cygnus sibcall pass still ran its CFG cleanup before the first jump pass
     # (it deletes the jump after the last return, so jump.c if-converts
     # `return 1; ... return 0;' tails).  Retail/SN do not; the flag keeps the
-    # old behavior for them.  The five below plus fun_0012eea8, fun_0012ef28,
-    # fun_00207300 and the two snd_stream_safe_cd_* entries.
+    # old behavior for them.  fun_0012eea8, fun_0012ef28, fun_00207300 and the
+    # snd_stream_safe_cd_* entries.
+    # 2026-09-26 flag-removal batch 1: count_nonzero_entries_up_to_40,
+    # draw_two_texture_panels, vo_buf_get_tag and vo_buf_get_data no longer
+    # change any allocated section or relocation with the flag removed
+    # (tools repo analysis/research/flag-removal-batch1-20260926.md), so their
+    # entries are gone; the remaining entries are still load-bearing.
     "hud_heap_alloc": "-mastra-cygnus-cfg",
-    "count_nonzero_entries_up_to_40": "-mastra-cygnus-cfg",
-    "draw_two_texture_panels": "-mastra-cygnus-cfg",
-    "vo_buf_get_tag": "-mastra-cygnus-cfg",
-    "vo_buf_get_data": "-mastra-cygnus-cfg",
     # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
     # (the .extern-ordering class); its call loop needs patch
     # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
@@ -1378,16 +1299,24 @@ GAME_COMPILER_FLAG_UNITS = {
     "snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
     "snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
     "snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
-    "attach_manipulator": "-fno-strict-aliasing",
-    "audio_dec_begin_put": "-fno-strict-aliasing",
-    "vu1_add_g_sregister": "-fno-strict-aliasing -mno-split-addresses",
+    # 2026-09-26 flag-removal batch 1: attach_manipulator and
+    # audio_dec_begin_put kept -fno-strict-aliasing from an era when the game
+    # compiler enabled aliasing at -O2; clearing it leaves every allocated
+    # section and relocation byte-identical (attach_manipulator differs only in
+    # debug symbol data, which the linked ELF gate ignores), so both entries
+    # are removed.  vu1_add_g_sregister needs only the address form: removing
+    # -fno-strict-aliasing from its pair is a no-op, removing
+    # -mno-split-addresses is not.
+    "vu1_add_g_sregister": "-mno-split-addresses",
     "snd_stream_safe_cd_sync": "-fno-gcse -mastra-r5900-extern-buffer",
     "is_audio_ok": "-mno-split-addresses",
     "process_audio_stream": "-mno-split-addresses",
     "fun_0023a3b8": "-mno-split-addresses",
     "handle_mpeg_no_data": "-mno-split-addresses",
     "handle_end_image": "-mno-split-addresses",
-    "vi_buf_begin_put": "-mno-split-addresses",
+    # 2026-09-26 flag-removal batch 1: vi_buf_begin_put is byte-identical
+    # without -mno-split-addresses (allocated sections and relocations), so
+    # the entry is gone.
     "wait_for_display_vsync": "-mno-split-addresses",
     "prepare_debug_profiler_render": "-mno-split-addresses",
     "put_disp_buffer": "-mno-split-addresses",
@@ -1398,18 +1327,13 @@ GAME_COMPILER_FLAG_UNITS = {
     "snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
     "fun_00225490": "-fno-schedule-insns",
     "fun_0022c7e8": "-fno-schedule-insns",
-    # fun_001f33b8: exact-route compiler flags
-    "fun_001f33b8": "-fno-schedule-insns",
-    # fun_00221f58: exact-route compiler flags
-    "fun_00221f58": "-G0",
-    # measured: textbin/fun_001f33b8 needs '-fno-schedule-insns' for its public
-    # score; the bank receipt carries it, configure.py did not, and the public
-    # harness reads only configure.py
-    "textbin/fun_001f33b8": "-fno-schedule-insns",
-    # measured: textbin/fun_00221f58 needs '-G0' for its public score; the bank
-    # receipt carries it, configure.py did not, and the public harness reads
-    # only configure.py
-    "textbin/fun_00221f58": "-G0",
+    # 2026-09-27 flag-removal batch 3: the fun_001f33b8 (-fno-schedule-insns) and
+    # fun_00221f58 (-G0) entries are removed for the same measured reason - their
+    # owners are pending INCLUDE_ASM wrappers, so the option reaches the compiler
+    # but cannot change the wrapper's bytes. The longer "textbin/..." keys were
+    # additionally dead: first-suffix-match always resolved the shorter key first.
+    # The bank receipts keep the measured requirement for when the units are
+    # promoted; re-adding an entry then needs a recorded reason.
 }
 
 SN_FLAG_UNITS = {
@@ -1460,14 +1384,16 @@ SN_FLAG_UNITS = {
     # addiu v0,v0,-0x1ab0` with the 0x70 stride in v1.  100/100/100 + patha
     # byte-equal with -mno-split-addresses (pipeline-2026-09-15-16 worker c).
     "allocate_voice_for_bank_entry": "-mno-split-addresses",
-    # fun_001f2070: exact-route compiler flags
-    "fun_001f2070": "-Wa,-mips4",
-    # fun_0021b6d8: exact-route compiler flags
+    # fun_0021b6d8: exact-route compiler flags.  2026-09-26: a subset probe
+    # suggested three of the four pins were redundant, but the full-ELF gate
+    # then differed in 4 bytes inside this unit, so the set stays intact.  The
+    # entry is still a high-risk workaround for a register-allocation
+    # difference; see docs/COMPILER_FLAGS_POLICY.md in the tools repo.
     "fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
-    # measured: textbin/fun_001f2070 needs '-Wa,-mips4' for its public score;
-    # the bank receipt carries it, configure.py did not, and the public harness
-    # reads only configure.py
-    "textbin/fun_001f2070": "-Wa,-mips4",
+    # 2026-09-26 flag-removal batch 1: '-Wa,-mips4' is a no-op for
+    # textbin/fun_001f2070 on the SN route (allocated sections and relocations
+    # unchanged), and the "textbin/fun_001f2070" key below was shadowed by the
+    # shorter "fun_001f2070" key under first-suffix-match, so both entries go.
 }
 
 # Units whose retail objects carry compiler-emitted hazard NOPs that the
