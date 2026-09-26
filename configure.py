@@ -61,15 +61,6 @@ EE_GCC_PATCHED_ROOT = os.environ.get("EE_GCC_PATCHED_ROOT", "").strip()
 GAME_COMPILER_ROOT = os.environ.get("GAME_COMPILER_ROOT", "").strip()
 # Promoted textbin units matched byte-exact under the SN compiler.
 SN_COMPILER_UNITS = {
-    # textbin/fun_002267b8: originally promoted 2026-09-18 (commit 78cae12)
-    # under SN, then moved to GAME_COMPILER_UNITS on 2026-09-20 (commit
-    # 3dd9c02, "game-only SN parity") when the game-compiler briefly achieved
-    # parity for it. That parity has since broken (the installed game-compiler
-    # patch revision moved again) -- verified 2026-09-22 with objdiff-cli
-    # against the real expected object: cc_game route 43.77778%, fresh SN
-    # 100/100/100/100. Moved back to SN, which is a fixed binary compiler and
-    # doesn't drift.
-    "textbin/fun_002267b8",
     # sdk/debug/debug_print: the EE-GCC 2.9 tree ships no stdarg.h, and the SN
     # stdarg va_start reproduces the retail varargs save prologue byte-exactly
     # (100/100/100/100 direct objdiff).
@@ -173,41 +164,17 @@ SN_COMPILER_UNITS = {
     # (run-14 mass-d; EE-GCC 2.9 stages at 76.00).  The unit is a
     # non-textbin prefix, so the per-unit set is the only routing hook.
     "rendering/state/initialize_render_state",
-    # fun_00209298: validate the two DMA packet sizes in a header, then
-    # initialise one A and twenty B packets
-    "world/streaming/initialize_dma_packet_payloads",
-    # fun_0020cca8: Typed helper prototypes, one scratch record, and the retail
-    # float field preserve the SN match.
-    "textbin/fun_0020cca8",
     # vu1_sync_chain: wait for DMA channels in a mask to go idle, report a
     # timeout after 100000 spins
     "textbin/rendering/vu1_sync_chain",
     # fun_001f0bd0: queue a debug text entry and sprintf it into the text pool
     "textbin/fun_001f0bd0",
-    # fun_00217048: pad setup: DBC and pad2 init, then open socket slot 0
-    "textbin/fun_00217048",
-    # fun_00213358: build a direction from two random angles and a computed
-    # pitch
-    "textbin/fun_00213358",
-    # fun_0020baf0: is an unlock condition met (kind 0-9 switch over the
-    # progress tables)
-    "textbin/fun_0020baf0",
     # snd_send_current_batch: send the current sound command batch over SIF RPC
     # and flip to the other buffer
     "textbin/audio/rpc/snd_send_current_batch",
-    # fun_001ed360: verified exact on the registered route
-    "textbin/fun_001ed360",
-    # fun_00209168: gp-rel defeated with a >8-byte struct wrapper for D_0013D290
-    # so retail's lui/%hi+%lo form is reproduced
-    "textbin/fun_00209168",
     # fun_00226670: do-while over a signed s32 byte cursor (retail guards at the
     # bottom with a signed slt) plus two address forms for one symbol
     "textbin/fun_00226670",
-    # draw_ui_frame: Declaring the callee void
-    # func_001F52A0(s32,s32,s32,s32,u64) and mutating the x/y parameters in
-    # place (x += 4; y -= 4) with the remaining offsets inline in the calls
-    # reproduced the retail register allocation exactly.
-    "textbin/ui/frames/draw_ui_frame",
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "textbin/fun_00208030",
@@ -1250,6 +1217,285 @@ GAME_COMPILER_UNITS = {
     # the base load; this also corrects the bank, which counted 0x40 and wrote
     # 256 bytes into the 64-byte buffer retail counts 0xF into.
     "textbin/fun_00207e58",
+    # moved off the SN route: byte-identical on the game compiler
+    # snd_send_iop_command_and_wait: copy the command payload, wait for the IOP,
+    # call the sound RPC and poll for completion (wait loop entered at its test)
+    "textbin/audio/rpc/snd_send_iop_command_and_wait",
+    # moved off the SN route: byte-identical on the game compiler
+    # snd_send_iop_command_no_wait: append a sound command to the current batch
+    # (send immediately when idle), waiting for batch space
+    "textbin/audio/rpc/snd_send_iop_command_no_wait",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0012f208: promoted exact under SN cc1 + Ps2EeAs (padless policy
+    # "none", 172/172 bytes, verified 2026-09-22).  The plain cc_sn route
+    # drops the retail lui/addiu pair and compiles to 164 B, so the unit
+    # must stay on the padless route.
+    "storage/wad/wad_get_sectors",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ebcf0: run and clear the deferred callback list
+    "gameplay/camera/execute_camera_post_update_callbacks",
+    # moved off the SN route: byte-identical on the game compiler
+    # update_all_cameras: pick the best active camera of 48, run its mode
+    # update, keep the previous position
+    "textbin/gameplay/camera/update_all_cameras",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ed360: verified exact on the registered route
+    "textbin/fun_001ed360",
+    # moved off the SN route: byte-identical on the game compiler
+    # reset_gs_registers: queue the two GIF reset tags and reapply the display
+    # mode
+    "textbin/rendering/state/reset_gs_registers",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f4650: run each registered callback with its argument
+    "gameplay/callbacks/dispatch_callback_list_1",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f46c8: run each registered callback with its argument
+    "gameplay/callbacks/dispatch_callback_list_2",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f4740: run each registered callback with its argument
+    "gameplay/callbacks/dispatch_callback_list_3",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f4808: run each registered callback with its argument
+    "gameplay/callbacks/dispatch_callback_list_4",
+    # moved off the SN route: byte-identical on the game compiler
+    # draw_ui_frame: Declaring the callee void
+    # func_001F52A0(s32,s32,s32,s32,u64) and mutating the x/y parameters in
+    # place (x += 4; y -= 4) with the remaining offsets inline in the calls
+    # reproduced the retail register allocation exactly.
+    "textbin/ui/frames/draw_ui_frame",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f7a30: table fill with bits 3 and 4 of the index swapped
+    "rendering/texture/initialize_alpha_lookup_table",
+    # moved off the SN route: byte-identical on the game compiler
+    "ui/help/get_help_message_text",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001fed30: move a slot to the end of the most-recently-used byte list
+    "textbin/fun_001fed30",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001fee38: index of an id in the 0xFFFF-terminated animation table
+    "gameplay/animation/find_animation_definition_index",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ff418: switch to the queued animation: copy the next fields and run
+    # its callback
+    "gameplay/animation/apply_pending_animation",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ff500: look up an animation definition and copy id, index, flags
+    # and frame count
+    "gameplay/animation/load_animation_definition",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ff658: name buffer: default text block-copied when the name fits,
+    # then strcpy
+    "ui/text/copy_text_to_shared_buffer",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00203640: register a moby class slot: map class->slot,
+    # slot->class/moby/data, then init the moby
+    "textbin/fun_00203640",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_002043b0: place the level buffer below the top of RAM, page- and
+    # quadword-aligned, then load into it
+    "world/streaming/load_level_chunk_from_disc",
+    # moved off the SN route: byte-identical on the game compiler
+    # find_id_in_terminated_table: index of an id in a zero-terminated table of
+    # at most 20 entries
+    "textbin/world/data/find_id_in_terminated_table",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00205278: separate s64 max/delta locals with a distinct s32 loop-1
+    # index, and plain array indexing so EE-GCC merges both arrays into one
+    # induction variable
+    "textbin/fun_00205278",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00206710: a src pointer variable for the 0x70000000 base keeps
+    # retail's constant in s3 and its base+index add order, `s = i % 0x10` in
+    # its own variable reproduces the divmod copy (daddu v0,v1,zero) and
+    # retail's add destinations, and (u32) casts on the nibble shift/and give
+    # srl plus a bnel for `if (t != 0)`
+    "textbin/fun_00206710",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_00206f50",
+    # moved off the SN route: byte-identical on the game compiler
+    # run 13 wave 3 (2026-09-14): same short-loop padding-NOP class; the
+    # padless object is instruction-identical (49/49) and patha byte-equal.
+    "textbin/fun_002073b8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00207a18: is a screen point within 35 units of the reference point
+    # (always true while the override flag is set)
+    "textbin/fun_00207a18",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00208280: format a menu text entry, substituting %b with the entry's
+    # weapon name
+    "textbin/fun_00208280",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00208408: map a point into a view's screen space (view 106 uses the
+    # rotated layout), scaled by 1/512
+    "textbin/fun_00208408",
+    # moved off the SN route: byte-identical on the game compiler
+    # 2026-09-25: these five were promoted exact on a non-default route, so
+    # the baseline build compiled them with the default cc_sn and the linked
+    # ELF differed from retail in exactly 336 bytes, all inside them:
+    #   fun_001fee88 164 B  fun_00208770 95 B  fun_00215390 40 B
+    #   fun_0022ea08 98 B  fun_00239690  6 B
+    # The route lives in the workbench registry; without the entry here the
+    # per-unit gate and the full build measure different compilers.
+    "textbin/fun_00208770",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00209168: gp-rel defeated with a >8-byte struct wrapper for D_0013D290
+    # so retail's lui/%hi+%lo form is reproduced
+    "textbin/fun_00209168",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00209298: validate the two DMA packet sizes in a header, then
+    # initialise one A and twenty B packets
+    "world/streaming/initialize_dma_packet_payloads",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00209370: read the level chunk, start the loader and run the chunk at
+    # its stored offset
+    "world/streaming/load_and_initialize_level_chunk",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020acc0: 16-bit CRC (poly 0x1F45 step) over at most 0x1800 bytes
+    "storage/memory_card/data/calculate_crc16",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020b950: evaluate the level's menu entries (unlock conditions,
+    # callbacks) and count the available ones
+    "textbin/fun_0020b950",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020baf0: is an unlock condition met (kind 0-9 switch over the
+    # progress tables)
+    "textbin/fun_0020baf0",
+    # moved off the SN route: byte-identical on the game compiler
+    "gameplay/state/compute_interpolated_record_value",
+    # moved off the SN route: byte-identical on the game compiler
+    # detach_manipulator: unlink a manipulator from a moby list and clear it
+    "textbin/gameplay/entities/detach_manipulator",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020cc18: first free or matching slot in a 16-entry table
+    "gameplay/entities/find_or_allocate_id_slot",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020cca8: Typed helper prototypes, one scratch record, and the retail
+    # float field preserve the SN match.
+    "textbin/fun_0020cca8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0020d060: chain the GIF paging refs (or a NOP ref when paging is off)
+    # around the texture upload
+    "textbin/fun_0020d060",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00212d68: look up an id in the -1-terminated map and store its
+    # value/extra for the current slot (global re-read, no local)
+    "textbin/fun_00212d68",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00212ed8: Pinning the three live pseudos to retail hard registers with
+    # GCC register variables (anims $4, n $5, v $2) - the idiom already promoted
+    # 145 times in the game tree - reproduces the retail lw v0 / lbu a1 pair
+    # exactly; the four residual rows were a reload-allocator choice no source
+    # shape could move.
+    "textbin/fun_00212ed8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00213358: build a direction from two random angles and a computed
+    # pitch
+    "textbin/fun_00213358",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00213ed8: step a value toward a target by at most step, return the
+    # remaining error
+    "textbin/fun_00213ed8",
+    # moved off the SN route: byte-identical on the game compiler
+    # load_display_text_resource_entry: A 0x20-byte local whose tail half is a
+    # union with a mode(TI) member gives the por+sq zero store, and an explicit
+    # f32 scale local that is live across the middle call forces the f20
+    # callee-saved save/restore and the 0x50 frame.
+    "textbin/ui/text/load_display_text_resource_entry",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_002169c0: handle callback: store the id, bump the state or report the
+    # saved position
+    "textbin/fun_002169c0",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00216a20: handle callback: store the id, bump the state or report the
+    # saved position
+    "textbin/fun_00216a20",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00217048: pad setup: DBC and pad2 init, then open socket slot 0
+    "textbin/fun_00217048",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_002191b8: leave the level: release owner objects, refresh the 14 level
+    # handles, set state 20
+    "textbin/fun_002191b8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0021c420: reload the scratchpad lighting words for the object's
+    # current slot
+    "textbin/fun_0021c420",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0021ddf8: release the owner's unheld item handles, keeping some while
+    # a 0x9999 tag is in range
+    "textbin/fun_0021ddf8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0021e110: item HUD: bail if the level id is locked, release attached
+    # handles, else draw the 0x4F4D label
+    "textbin/fun_0021e110",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_0021ea48: spawn the 0x46E helper moby at the camera anchor and link it
+    # to its owner
+    "textbin/fun_0021ea48",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_0021f158",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_002216c0: collect the owned items of the four slot tables into the
+    # menu list (icon, id, two values, slot index)
+    "textbin/fun_002216c0",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_00225530",
+    # moved off the SN route: byte-identical on the game compiler
+    # textbin/fun_002267b8: originally promoted 2026-09-18 (commit 78cae12)
+    # under SN, then moved to GAME_COMPILER_UNITS on 2026-09-20 (commit
+    # 3dd9c02, "game-only SN parity") when the game-compiler briefly achieved
+    # parity for it. That parity has since broken (the installed game-compiler
+    # patch revision moved again) -- verified 2026-09-22 with objdiff-cli
+    # against the real expected object: cc_game route 43.77778%, fresh SN
+    # 100/100/100/100. Moved back to SN, which is a fixed binary compiler and
+    # doesn't drift.
+    "textbin/fun_002267b8",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_00226a70",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00227140: queue a DMA ref tag to the slot matrix, then upload the slot
+    # entry (TagPtr reloads; D_00160360[2] gp-small)
+    "textbin/fun_00227140",
+    # moved off the SN route: byte-identical on the game compiler
+    # dma_shrub_textures: chain the shrub texture DMA refs, track the peak
+    # upload size
+    "textbin/rendering/texture/dma_shrub_textures",
+    # moved off the SN route: byte-identical on the game compiler
+    # dma_tfrag_textures: chain the tfrag texture DMA refs, track the peak
+    # upload size
+    "textbin/rendering/texture/dma_tfrag_textures",
+    # moved off the SN route: byte-identical on the game compiler
+    # patch_tfrag_gifs: patch tfrag GIF tex words through the texture remap
+    # table
+    "textbin/rendering/patch_tfrag_gifs",
+    # moved off the SN route: byte-identical on the game compiler
+    # dma_tie_textures: chain the tie texture DMA refs, track the peak upload
+    # size
+    "textbin/rendering/texture/dma_tie_textures",
+    # moved off the SN route: byte-identical on the game compiler
+    "audio/decoder/audio_dec_create",
+    # moved off the SN route: byte-identical on the game compiler
+    # audio_dec_end_put: account for bytes consumed by the audio decoder,
+    # finishing the preload after 40 blocks
+    "textbin/audio/decoder/audio_dec_end_put",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/video/decoder/buffers/copy_video_buffer_region",
+    # moved off the SN route: byte-identical on the game compiler
+    # vi_buf_reset: ViBuf: reset counters and timestamps, rebuild the D4 ref
+    # chain and restart the DMA channel
+    "textbin/video/decoder/vi_buf_reset",
+    # moved off the SN route: byte-identical on the game compiler
+    # vi_buf_put_ts: ViBuf: queue a timestamp (pts/dts) in the ring under the
+    # semaphore
+    "textbin/video/decoder/vi_buf_put_ts",
+    # moved off the SN route: byte-identical on the game compiler
+    # vo_buf_create: Volatile field writes and buffer-stride loop preserve
+    # retail store order.
+    "textbin/video/decoder/vo_buf_create",
+    # moved off the SN route: byte-identical on the game compiler
+    # vo_buf_inc_count: VoBuf: mark the write slot full, advance the ring under
+    # DI/EI (volatile write/count)
+    "textbin/video/decoder/vo_buf_inc_count",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -1301,11 +1547,13 @@ GAME_COMPILER_FLAG_UNITS = {
     # wrapper's bytes. The shorter keys also always won first-suffix-match over
     # the longer "textbin/..." spellings, so those were dead as well. Re-add with
     # the measurement and the reason recorded here if a C body needs them.
+    # moved off the SN route with its unit; the game compiler needs the same option
+    "fun_00225530": "-mno-split-addresses",
+    # moved off the SN route with its unit; the game compiler needs the same option
+    "audio_dec_create": "-mno-split-addresses",
 }
 
 SN_FLAG_UNITS = {
-    "fun_00225530": "-mno-split-addresses",
-    "audio_dec_create": "-mno-split-addresses",
     # snd_post_message: retail keeps the index in v1 and the base in v0; the
     # default prepass scheduler swaps them.  100/100/100 with
     # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
@@ -1324,18 +1572,9 @@ SN_FLAG_UNITS = {
 # assembler's section tail padding.  The list is explicit per unit: the
 # assembler swap is proven per-object and must not drift to other units.
 PADLESS_ASM_UNITS = {
-    # 2026-09-25: these five were promoted exact on a non-default route, so
-    # the baseline build compiled them with the default cc_sn and the linked
-    # ELF differed from retail in exactly 336 bytes, all inside them:
-    #   fun_001fee88 164 B  fun_00208770 95 B  fun_00215390 40 B
-    #   fun_0022ea08 98 B  fun_00239690  6 B
-    # The route lives in the workbench registry; without the entry here the
-    # per-unit gate and the full build measure different compilers.
-    "textbin/fun_00208770",
     "textbin/fun_00239690",
     "textbin/fun_0022ea08",
 
-    "gameplay/state/compute_interpolated_record_value",
     "math/random/random_float_between",
     "textbin/fun_001ff480",
     "textbin/fun_001eda60",
@@ -1353,9 +1592,6 @@ PADLESS_ASM_UNITS = {
     # loop body contains a forward branch; SN cc1 + Ps2EeAs emits it and the
     # resulting object is instruction-identical to the retail target (106/106).
     "textbin/fun_002212b8",
-    # run 13 wave 3 (2026-09-14): same short-loop padding-NOP class; the
-    # padless object is instruction-identical (49/49) and patha byte-equal.
-    "textbin/fun_002073b8",
     # run 14 mass-c: FUN_0022da68 had two compiler-emitted hazard NOPs dropped
     # by the bundled GNU as (padless object instruction-identical, 41/41;
     # patha byte-equal vs retail).
@@ -1382,53 +1618,9 @@ PADLESS_ASM_UNITS = {
     # object is instruction-identical (67/67) and patha byte-equal
     # (sha 508793fb...).  No SN flag needed.
     "audio/decoder/terminate_audio_system",
-    # fun_0012f208: promoted exact under SN cc1 + Ps2EeAs (padless policy
-    # "none", 172/172 bytes, verified 2026-09-22).  The plain cc_sn route
-    # drops the retail lui/addiu pair and compiles to 164 B, so the unit
-    # must stay on the padless route.
-    "storage/wad/wad_get_sectors",
-    # fun_001f7a30: table fill with bits 3 and 4 of the index swapped
-    "rendering/texture/initialize_alpha_lookup_table",
-    # fun_0020cc18: first free or matching slot in a 16-entry table
-    "gameplay/entities/find_or_allocate_id_slot",
     # fun_001f5210: RGBA packed from four int arguments as u64 (GS register
     # style), then a GIF tag
     "rendering/packets/emit_rgba_draw_packet",
-    # fun_002169c0: handle callback: store the id, bump the state or report the
-    # saved position
-    "textbin/fun_002169c0",
-    # fun_00216a20: handle callback: store the id, bump the state or report the
-    # saved position
-    "textbin/fun_00216a20",
-    # fun_001ff418: switch to the queued animation: copy the next fields and run
-    # its callback
-    "gameplay/animation/apply_pending_animation",
-    # fun_001ff500: look up an animation definition and copy id, index, flags
-    # and frame count
-    "gameplay/animation/load_animation_definition",
-    # fun_00209370: read the level chunk, start the loader and run the chunk at
-    # its stored offset
-    "world/streaming/load_and_initialize_level_chunk",
-    # fun_001ebcf0: run and clear the deferred callback list
-    "gameplay/camera/execute_camera_post_update_callbacks",
-    # fun_001f4650: run each registered callback with its argument
-    "gameplay/callbacks/dispatch_callback_list_1",
-    # fun_001f46c8: run each registered callback with its argument
-    "gameplay/callbacks/dispatch_callback_list_2",
-    # fun_001f4740: run each registered callback with its argument
-    "gameplay/callbacks/dispatch_callback_list_3",
-    # fun_001f4808: run each registered callback with its argument
-    "gameplay/callbacks/dispatch_callback_list_4",
-    # fun_0020acc0: 16-bit CRC (poly 0x1F45 step) over at most 0x1800 bytes
-    "storage/memory_card/data/calculate_crc16",
-    # fun_001ff658: name buffer: default text block-copied when the name fits,
-    # then strcpy
-    "ui/text/copy_text_to_shared_buffer",
-    # fun_002043b0: place the level buffer below the top of RAM, page- and
-    # quadword-aligned, then load into it
-    "world/streaming/load_level_chunk_from_disc",
-    # fun_001fee38: index of an id in the 0xFFFF-terminated animation table
-    "gameplay/animation/find_animation_definition_index",
     # fun_001ff960: frame index of an animation, 0 when the frame or its data is
     # missing
     "gameplay/animation/find_valid_animation_frame_index",
@@ -1440,94 +1632,18 @@ PADLESS_ASM_UNITS = {
     # fun_001f5138: fog/alpha GS registers around a full-screen sprite when
     # enabled
     "rendering/effects/draw_fogged_fullscreen_sprite",
-    # vo_buf_create: Volatile field writes and buffer-stride loop preserve
-    # retail store order.
-    "textbin/video/decoder/vo_buf_create",
-    # find_id_in_terminated_table: index of an id in a zero-terminated table of
-    # at most 20 entries
-    "textbin/world/data/find_id_in_terminated_table",
-    # fun_00213ed8: step a value toward a target by at most step, return the
-    # remaining error
-    "textbin/fun_00213ed8",
-    # detach_manipulator: unlink a manipulator from a moby list and clear it
-    "textbin/gameplay/entities/detach_manipulator",
     # fun_0022c830: camera roll from the look vector angle, scaled by the
     # clamped distance
     "textbin/fun_0022c830",
-    # fun_00207a18: is a screen point within 35 units of the reference point
-    # (always true while the override flag is set)
-    "textbin/fun_00207a18",
-    # fun_0021ea48: spawn the 0x46E helper moby at the camera anchor and link it
-    # to its owner
-    "textbin/fun_0021ea48",
-    # audio_dec_end_put: account for bytes consumed by the audio decoder,
-    # finishing the preload after 40 blocks
-    "textbin/audio/decoder/audio_dec_end_put",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
     "textbin/gameplay/entities/patch_moby_gifs",
     # fun_00202800: load packed screen points: shift x/y, convert u/v, clear
     # flags
     "textbin/fun_00202800",
-    # fun_0021e110: item HUD: bail if the level id is locked, release attached
-    # handles, else draw the 0x4F4D label
-    "textbin/fun_0021e110",
-    # fun_00203640: register a moby class slot: map class->slot,
-    # slot->class/moby/data, then init the moby
-    "textbin/fun_00203640",
-    # fun_002191b8: leave the level: release owner objects, refresh the 14 level
-    # handles, set state 20
-    "textbin/fun_002191b8",
-    # fun_00208408: map a point into a view's screen space (view 106 uses the
-    # rotated layout), scaled by 1/512
-    "textbin/fun_00208408",
-    # fun_001fed30: move a slot to the end of the most-recently-used byte list
-    "textbin/fun_001fed30",
-    # reset_gs_registers: queue the two GIF reset tags and reapply the display
-    # mode
-    "textbin/rendering/state/reset_gs_registers",
-    # update_all_cameras: pick the best active camera of 48, run its mode
-    # update, keep the previous position
-    "textbin/gameplay/camera/update_all_cameras",
-    # vi_buf_put_ts: ViBuf: queue a timestamp (pts/dts) in the ring under the
-    # semaphore
-    "textbin/video/decoder/vi_buf_put_ts",
     # vi_buf_stop_dma: ViBuf: stop the IPU DMA, save D4/D3 channel and IPU
     # registers after the FIFO drains
     "textbin/video/decoder/vi_buf_stop_dma",
-    # vo_buf_inc_count: VoBuf: mark the write slot full, advance the ring under
-    # DI/EI (volatile write/count)
-    "textbin/video/decoder/vo_buf_inc_count",
-    # fun_0021c420: reload the scratchpad lighting words for the object's
-    # current slot
-    "textbin/fun_0021c420",
-    # patch_tfrag_gifs: patch tfrag GIF tex words through the texture remap
-    # table
-    "textbin/rendering/patch_tfrag_gifs",
-    # dma_shrub_textures: chain the shrub texture DMA refs, track the peak
-    # upload size
-    "textbin/rendering/texture/dma_shrub_textures",
-    # dma_tie_textures: chain the tie texture DMA refs, track the peak upload
-    # size
-    "textbin/rendering/texture/dma_tie_textures",
-    # dma_tfrag_textures: chain the tfrag texture DMA refs, track the peak
-    # upload size
-    "textbin/rendering/texture/dma_tfrag_textures",
-    # fun_0021ddf8: release the owner's unheld item handles, keeping some while
-    # a 0x9999 tag is in range
-    "textbin/fun_0021ddf8",
-    # fun_0020d060: chain the GIF paging refs (or a NOP ref when paging is off)
-    # around the texture upload
-    "textbin/fun_0020d060",
-    # vi_buf_reset: ViBuf: reset counters and timestamps, rebuild the D4 ref
-    # chain and restart the DMA channel
-    "textbin/video/decoder/vi_buf_reset",
-    # fun_00208280: format a menu text entry, substituting %b with the entry's
-    # weapon name
-    "textbin/fun_00208280",
-    # fun_0020b950: evaluate the level's menu entries (unlock conditions,
-    # callbacks) and count the available ones
-    "textbin/fun_0020b950",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "textbin/fun_00232d00",
@@ -1538,19 +1654,9 @@ PADLESS_ASM_UNITS = {
     # extern choices that keep the store in retail order, and a packed one-field
     # struct for the unaligned 64-bit copy
     "textbin/ui/menus/save_data/saving_data_menu",
-    # fun_00205278: separate s64 max/delta locals with a distinct s32 loop-1
-    # index, and plain array indexing so EE-GCC merges both arrays into one
-    # induction variable
-    "textbin/fun_00205278",
     # fun_002135f0: padless route: the block header fields are read through one
     # struct so the scale stays in the load
     "textbin/fun_002135f0",
-    # fun_00227140: queue a DMA ref tag to the slot matrix, then upload the slot
-    # entry (TagPtr reloads; D_00160360[2] gp-small)
-    "textbin/fun_00227140",
-    # fun_00212d68: look up an id in the -1-terminated map and store its
-    # value/extra for the current slot (global re-read, no local)
-    "textbin/fun_00212d68",
     # fun_00200c80: queue a GIF packet with one register pair and two XYZ2
     # corners (pixel or subpixel coordinates)
     "textbin/fun_00200c80",
@@ -1568,18 +1674,9 @@ PADLESS_ASM_UNITS = {
     # fun_00200258: HUD sprite packet like fun_00200080 with a UV origin
     # (texture size in subpixels)
     "textbin/fun_00200258",
-    # fun_002216c0: collect the owned items of the four slot tables into the
-    # menu list (icon, id, two values, slot index)
-    "textbin/fun_002216c0",
     # snd_bank_load_from_ee_cb: load a sound bank over SIF RPC 0x57 once the
     # server is idle (scalar lui/at externs, gp .extern flags)
     "textbin/audio/banks/snd_bank_load_from_ee_cb",
-    # snd_send_iop_command_and_wait: copy the command payload, wait for the IOP,
-    # call the sound RPC and poll for completion (wait loop entered at its test)
-    "textbin/audio/rpc/snd_send_iop_command_and_wait",
-    # snd_send_iop_command_no_wait: append a sound command to the current batch
-    # (send immediately when idle), waiting for batch space
-    "textbin/audio/rpc/snd_send_iop_command_no_wait",
     # fun_001f4fb8: Byte-exact on the padless route (both none and la-gprel
     # policies) with the mask as 0xFF000000FFULL, a local s32 temp for each
     # tested field so the test and the 5th u64 arg share one load, an s64 mask
@@ -1593,12 +1690,6 @@ PADLESS_ASM_UNITS = {
     # variable for the group loop pins f->s3/i->s4, and `f->loaded = 1` before
     # the relocation stores fixes their schedule.
     "textbin/fun_002028e0",
-    # fun_00206710: a src pointer variable for the 0x70000000 base keeps
-    # retail's constant in s3 and its base+index add order, `s = i % 0x10` in
-    # its own variable reproduces the divmod copy (daddu v0,v1,zero) and
-    # retail's add destinations, and (u32) casts on the nibble shift/and give
-    # srl plus a bnel for `if (t != 0)`
-    "textbin/fun_00206710",
     # init_view_context: Plain-C rewrite of the public NON_MATCHING body is
     # byte-exact on the padless route: the Display/Screen/View structs, the s16
     # half-width shifts, the float literals (32.0f, 745472.0f, 0.63f, 0.5f,
@@ -1607,11 +1698,6 @@ PADLESS_ASM_UNITS = {
     # native route inserts after the 255.0f mtc1, so the source is already
     # optimal and the route is the only lever
     "textbin/rendering/view/init_view_context",
-    # load_display_text_resource_entry: A 0x20-byte local whose tail half is a
-    # union with a mode(TI) member gives the por+sq zero store, and an explicit
-    # f32 scale local that is live across the middle call forces the f20
-    # callee-saved save/restore and the 0x50 frame.
-    "textbin/ui/text/load_display_text_resource_entry",
     # set_up_vis_gif_viewer: Registered route is padless+none (native scores
     # only 87.8): the packet high word is (u64)(u32)n << 32 taken from the 2nd
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
@@ -1629,12 +1715,6 @@ PADLESS_ASM_UNITS = {
     # keeping the two size args s32 to avoid the zero-extend pair, reproduced
     # retail exactly on the padless route; the registered sn route is 99.38.
     "textbin/fun_00200600",
-    # fun_00212ed8: Pinning the three live pseudos to retail hard registers with
-    # GCC register variables (anims $4, n $5, v $2) - the idiom already promoted
-    # 145 times in the game tree - reproduces the retail lw v0 / lbu a1 pair
-    # exactly; the four residual rows were a reload-allocator choice no source
-    # shape could move.
-    "textbin/fun_00212ed8",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
     # INCREMENTS: p is a walked front-end pointer read through *p, p = p + 1
     # sits in the for-increment clause after i = i + 1 so the loop bottom RTL
