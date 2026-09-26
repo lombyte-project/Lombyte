@@ -16,6 +16,9 @@ extern s32 FlushCache(s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
+// Retail keeps this symbol out of small data here: the size decides the
+// HI16/LO16 pair instead of a gp-relative reference.
+__asm__(".extern D_0015ED00, 12");
 __asm__(".extern D_0015EC88, 4");
 __asm__(".extern D_0015ECD0, 4");
 __asm__(".extern D_0015ECC8, 4");

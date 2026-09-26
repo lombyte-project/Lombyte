@@ -1515,6 +1515,10 @@ GAME_COMPILER_UNITS = {
     # fun_00200f90: GIF packet like fun_00200e08 with an explicit Z for both
     # XYZ2 corners
     "textbin/fun_00200f90",
+    # moved off the SN route: byte-identical on the game compiler
+    # snd_bank_load_from_ee_cb: load a sound bank over SIF RPC 0x57 once the
+    # server is idle (scalar lui/at externs, gp .extern flags)
+    "textbin/audio/banks/snd_bank_load_from_ee_cb",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -1681,9 +1685,6 @@ PADLESS_ASM_UNITS = {
     "textbin/fun_00200c80",
     # fun_00200e08: same packet as fun_00200c80 with register 0x46
     "textbin/fun_00200e08",
-    # snd_bank_load_from_ee_cb: load a sound bank over SIF RPC 0x57 once the
-    # server is idle (scalar lui/at externs, gp .extern flags)
-    "textbin/audio/banks/snd_bank_load_from_ee_cb",
     # fun_001f4fb8: Byte-exact on the padless route (both none and la-gprel
     # policies) with the mask as 0xFF000000FFULL, a local s32 temp for each
     # tested field so the test and the 5th u64 arg share one load, an s64 mask
