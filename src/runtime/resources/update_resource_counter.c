@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern s32 ResourceCounter __asm__("D_0015F8F8");
+s32 ResourceCounter __asm__("D_0015F8F8") = 0;
 
 void DecrementResourceCounter(void) __asm__("UpdateResourceCounter");
 

@@ -127,6 +127,18 @@ def _textbin_oracle_labels(source_root: Path, symbol: str, address: int) -> list
     return [symbol] + [alias for alias in aliases if alias != symbol]
 
 
+def _symbol_addrs(path: Path) -> dict[int, tuple[str, ...]]:
+    """Retail names the splat configuration assigns to addresses."""
+    names: dict[int, list[str]] = {}
+    if not path.is_file():
+        return {}
+    for line in path.read_text(errors="replace").splitlines():
+        match = re.match(r"\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(0x[0-9A-Fa-f]+)\s*;", line)
+        if match:
+            names.setdefault(int(match.group(2), 16), []).append(match.group(1))
+    return {address: tuple(found) for address, found in names.items()}
+
+
 def _has_address_asm_label(source: Path, address: int) -> bool:
     """Whether a C unit binds to its FUN symbol or includes its FUN oracle."""
     try:
@@ -175,9 +187,26 @@ def configured_textbin_functions(
             raise ValueError(f"unsafe unit name in configuration: {name!r}")
         is_textbin_unit = name.startswith(("assembly/textbin/", "textbin/"))
         address = int(item["start"])
-        has_address_asm_label = (
-            source_root is not None
-            and _has_address_asm_label(source_root / f"{name}.c", address)
+        # A unit may hold several functions of one translation unit; they must
+        # tile its range exactly in the function map.
+        functions: list[dict[str, object]] = []
+        cursor, end = address, address + int(item["size"])
+        while cursor < end:
+            row = mapped.get(cursor)
+            if row is None:
+                break
+            symbol = str(row["symbol"])
+            # Unit and symbol names become file paths and assembler arguments:
+            # fail closed instead of writing outside the workspace.
+            if rnc_units.unsafe_unit_name(symbol):
+                raise ValueError(f"unsafe symbol name in function map: {symbol!r}")
+            functions.append({"symbol": symbol, "address": cursor, "size": row["size"]})
+            cursor += int(row["size"])
+        if not functions or cursor != end:
+            continue
+        has_address_asm_label = source_root is not None and any(
+            _has_address_asm_label(source_root / f"{name}.c", int(f["address"]))
+            for f in functions
         )
         # Retained NON_MATCHING units keep the ``assembly/textbin/`` prefix;
         # exact promotion used to normalize them to ``textbin/``. Semantic
@@ -185,20 +214,13 @@ def configured_textbin_functions(
         # whose source explicitly binds its function to a FUN assembler label.
         if not (is_textbin_unit or has_address_asm_label):
             continue
-        row = mapped.get(address)
-        if row is None or int(row["size"]) != int(item["size"]):
-            continue
-        symbol = str(row["symbol"])
-        # Unit and symbol names become file paths and assembler arguments:
-        # fail closed instead of writing outside the workspace.
-        if rnc_units.unsafe_unit_name(symbol):
-            raise ValueError(f"unsafe symbol name in function map: {symbol!r}")
         rows.append(
             {
                 "unit": name,
                 "address": address,
-                "size": row["size"],
-                "symbol": symbol,
+                "size": item["size"],
+                "symbol": functions[0]["symbol"],
+                "functions": functions,
                 "has_address_asm_label": bool(has_address_asm_label),
             }
         )
@@ -218,13 +240,12 @@ def install(
     )
     installed: list[str] = []
     errors: list[dict[str, str]] = []
+    retail_names = _symbol_addrs(config.parent / "symbol_addrs.txt")
     for row in configured_textbin_functions(
         config, function_map, workspace / "src"
     ):
         unit = str(row["unit"])
         symbol = str(row["symbol"])
-        address = int(row["address"])
-        size = int(row["size"])
         asm = workspace / "config/us/expected/asm" / unit / f"{symbol}.s"
         obj = workspace / "config/us/expected/obj" / f"{unit}.c.o"
         wrapper = workspace / "src" / f"{unit}.c"
@@ -234,20 +255,32 @@ def install(
         asm.parent.mkdir(parents=True, exist_ok=True)
         obj.parent.mkdir(parents=True, exist_ok=True)
         try:
-            raw = _elf_file_bytes(elf, address, size)
-            words = [
-                struct.unpack_from("<I", raw, offset)[0]
-                for offset in range(0, len(raw), 4)
-            ]
-            labels = (
-                [symbol]
-                if unit.startswith("textbin/")
-                and not row["has_address_asm_label"]
-                else _textbin_oracle_labels(workspace / "src", symbol, address)
-            )
-            body = "".join(f"glabel {label}\n" for label in labels)
-            body += "".join(f"    .word 0x{word:08X}\n" for word in words)
-            body += f".size {symbol}, . - {symbol}\n"
+            body = ""
+            for function in row["functions"]:
+                name = str(function["symbol"])
+                start = int(function["address"])
+                raw = _elf_file_bytes(elf, start, int(function["size"]))
+                words = [
+                    struct.unpack_from("<I", raw, offset)[0]
+                    for offset in range(0, len(raw), 4)
+                ]
+                if unit.startswith("textbin/") and not row["has_address_asm_label"]:
+                    labels = [name]
+                else:
+                    labels = _textbin_oracle_labels(workspace / "src", name, start)
+                    retail = [n for n in retail_names.get(start, ()) if n not in labels]
+                    # A function the source defines under its retail name, not
+                    # its FUN label, is sized under that name as well.
+                    if retail and not _has_address_asm_label(
+                        workspace / "src" / f"{unit}.c", start
+                    ):
+                        name = retail[0]
+                        labels = [name] + labels + retail[1:]
+                    else:
+                        labels += retail
+                body += "".join(f"glabel {label}\n" for label in labels)
+                body += "".join(f"    .word 0x{word:08X}\n" for word in words)
+                body += f".size {name}, . - {name}\n"
             rendered = (
                 '.include "macro.inc"\n.set noreorder\n.text\n'
                 + body

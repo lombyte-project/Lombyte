@@ -95,6 +95,7 @@ def load_group_assignments(repo: Path) -> dict[str, dict[str, str | None]]:
         raise ValueError(f"unsupported recovered-name proposal schema in {path}")
 
     result: dict[str, dict[str, str | None]] = {}
+    first_address: dict[str, int | None] = {}
     for entry in proposals.get("entries", []):
         if not isinstance(entry, dict):
             continue
@@ -129,10 +130,25 @@ def load_group_assignments(repo: Path) -> dict[str, dict[str, str | None]]:
         if entry.get("status") != "proposed" or not isinstance(name, str) or not FUNCTION_NAME_RE.fullmatch(name):
             name = None
         assignment = {"logical_group": group, "proposed_name": name}
+        # A unit holding several functions of one translation unit has one
+        # entry per function: they must agree on the group, and the unit takes
+        # the name of its first function.
+        address = parse_address(entry.get("address"))
         previous = result.get(unit_key)
-        if previous is not None and previous != assignment:
-            raise ValueError(f"multiple grouping/name entries for source unit {unit_key}")
+        if previous is not None:
+            if previous["logical_group"] != group:
+                raise ValueError(f"multiple grouping entries for source unit {unit_key}")
+            previous_address = first_address.get(unit_key)
+            if address is None or previous_address is None:
+                if previous != assignment:
+                    raise ValueError(f"multiple grouping/name entries for source unit {unit_key}")
+                continue
+            if address == previous_address:
+                raise ValueError(f"multiple entries for function {entry.get('address')} in {unit_key}")
+            if address > previous_address:
+                continue
         result[unit_key] = assignment
+        first_address[unit_key] = address
     return result
 
 

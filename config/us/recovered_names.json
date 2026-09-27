@@ -3886,8 +3886,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/snd_got_returns",
-        "source_path": "src/audio/snd_got_returns.c",
+        "unit": "audio/rpc/snd_returns",
+        "source_path": "src/audio/rpc/snd_returns.c",
         "address": "0x0012de70",
         "current_name": "FUN_0012de70",
         "proposed_name": "snd_got_returns",
@@ -14333,8 +14333,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/rendering/vu1_send_chain",
-        "source_path": "src/assembly/textbin/rendering/vu1_send_chain.c",
+        "unit": "rendering/vu1_chain",
+        "source_path": "src/rendering/vu1_chain.c",
         "address": "0x002336a0",
         "current_name": "FUN_002336a0",
         "proposed_name": "vu1_send_chain",
@@ -14356,8 +14356,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/rendering/vu1_sync_chain",
-        "source_path": "src/assembly/textbin/rendering/vu1_sync_chain.c",
+        "unit": "rendering/vu1_chain",
+        "source_path": "src/rendering/vu1_chain.c",
         "address": "0x002337b0",
         "current_name": "FUN_002337b0",
         "proposed_name": "vu1_sync_chain",

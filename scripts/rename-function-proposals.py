@@ -976,17 +976,18 @@ def replace_category_owners(payload: Any, renames: dict[str, str]) -> int:
 
 
 def find_duplicate_catalog_units(payload: dict[str, Any]) -> list[str]:
-    """Unit paths that more than one rename proposal claims.
+    """Unit paths in which more than one rename proposal claims one function.
 
     ``update_catalog_owners`` rewrites the unit of *every* entry that shares an
     address with a moved unit, so a catalog that already held two rows for one
     function - one proposed, one left unresolved - ends up with both rows naming
     the same unit. ``progress_groups.py`` then refuses to load the catalog, and
     the progress workflow fails three files away from the cause. The invariant is
-    one row per unit, and it is checked here so the failure names the rows
-    instead of the symptom.
+    one row per function of a unit (a unit that holds a whole translation unit
+    has one row per function), and it is checked here so the failure names the
+    rows instead of the symptom.
     """
-    seen: dict[str, list[dict[str, Any]]] = {}
+    seen: dict[tuple[str, str], list[dict[str, Any]]] = {}
     entries = (payload.get("rename_proposals") or {}).get("entries") or []
     for entry in entries:
         if not isinstance(entry, dict):
@@ -997,9 +998,9 @@ def find_duplicate_catalog_units(payload: dict[str, Any]) -> list[str]:
         unit = (source[4:-2] if source.startswith("src/") else source[:-2]).removeprefix(
             "assembly/"
         )
-        seen.setdefault(unit, []).append(entry)
+        seen.setdefault((unit, str(entry.get("address") or "")), []).append(entry)
     return sorted(
-        unit for unit, rows in seen.items() if len(rows) > 1
+        {unit for (unit, _), rows in seen.items() if len(rows) > 1}
     )
 
 

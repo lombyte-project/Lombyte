@@ -137,6 +137,14 @@ justify a change in behavior.
   builds them (SN, the patched EE-GCC, or the SDK compiler for a few game
   functions). It only shrinks: a unit leaves it when it builds on its own
   compiler with the common configuration, and nothing new is added.
+- Small-data variables belong to the file that defines them. Ps2EeAs reaches a
+  variable gp-relative only when it already knows its size: in a delay slot
+  (`.set nomacro`) or after its definition in the same translation unit. So a
+  unit that retail reaches gp-relative outside delay slots defines the
+  variable itself, ahead of its functions, and is listed in `SDATA_OVERLAYS`
+  so its `.sdata` lands at the retail address; functions that share such a
+  variable live in one file (`rendering/vu1_chain.c`,
+  `audio/rpc/snd_returns.c`). No `__asm__(".extern ...")` is needed.
 - The build targets the boot executable and its embedded DVP overlay blobs;
   other disc files are out of scope.
 - `verify-baseline.sh` only rebuilds a directory it owns: the staging root must

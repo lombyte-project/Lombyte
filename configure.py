@@ -80,20 +80,14 @@ ROUTE_EXCEPTIONS = {
     # Game code still built by the SN compiler (cc1 2.95.2).  SN is not a compiler of
     # the retail build; these are the units the game compiler does not reproduce
     # yet with the common configuration.
-    "audio/snd_got_returns": "cc_sn",
     "audio/rpc/snd_post_message": "cc_sn",
     # snd_send_current_batch: send the current sound command batch over SIF RPC
     # and flip to the other buffer
     "textbin/audio/rpc/snd_send_current_batch": "cc_sn",
-    # fun_001f0bd0: queue a debug text entry and sprintf it into the text pool
-    "textbin/fun_001f0bd0": "cc_sn",
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "textbin/fun_00208030": "cc_sn",
     "textbin/fun_00221e50": "cc_sn",
-    # vu1_sync_chain: wait for DMA channels in a mask to go idle, report a
-    # timeout after 100000 spins
-    "textbin/rendering/vu1_sync_chain": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
@@ -137,9 +131,6 @@ ROUTE_EXCEPTIONS = {
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_0022c6f8": "cc_ee_gcc_patched",
-    # Game code that reproduces on the SDK compiler but not yet on the game compiler.
-    "runtime/resources/update_resource_counter": "sdk-compiler",
-    "runtime/objects/store_object_index": "sdk-compiler",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
     # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
@@ -184,6 +175,20 @@ RODATA_OVERLAYS = {
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "fun_0020baf0": (0x1E8390, 0xE9310),  # unlock-condition switch table
     "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
+}
+
+# Recovered C units that define the small-data variables their original
+# translation unit owned.  Retail reaches such a variable gp-relative only
+# where the assembler already knew its size, i.e. after the definition in
+# the same file; a unit that defines it reproduces that and needs no
+# `.extern`.  Key: configured unit-name suffix; value: (retail VMA, retail
+# file offset) of the unit's `.sdata`, which retail kept inside the preserved
+# small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
+SDATA_OVERLAYS = {
+    "audio/rpc/snd_returns": (0x15EC80, 0x5FC00),
+    "textbin/fun_001f0bd0": (0x15F000, 0x5FF80),
+    "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878),
+    "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
 # Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
@@ -1319,6 +1324,12 @@ def fix_assets(config_dir: Path, config: dict[str, Any]):
         data_asm, count = re.subn(
             rf'\.incbin "{asset_rel_path}/', '.incbin "assets/', data_asm
         )
+        # The preserved small-data blobs carry no symbols of their own: the
+        # variables in them are addressed through undefined_syms, and a unit
+        # listed in SDATA_OVERLAYS defines its variables itself.
+        if asm_file.name in ("core_lit.s", "lit.s"):
+            data_asm, labels = re.subn(r"^glabel \S+\n", "", data_asm, flags=re.M)
+            count += labels
         if count > 0:
             asm_file.write_text(data_asm)
 
@@ -1453,6 +1464,15 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
                     f"    {suffix.lstrip('_')}.rdata 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
                     "    {\n"
                     f"        build/src/{unit}.c.o(.rodata);\n"
+                    "    } :data_alt"
+                )
+    for unit in c_units:
+        for suffix, (vram, at) in SDATA_OVERLAYS.items():
+            if unit.endswith(suffix):
+                rodata_overlay_sections.append(
+                    f"    {suffix.replace('/', '.')}.sdata 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
+                    "    {\n"
+                    f"        build/src/{unit}.c.o(.sdata);\n"
                     "    } :data_alt"
                 )
     rodata_overlay = (

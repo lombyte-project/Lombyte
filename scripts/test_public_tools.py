@@ -1540,6 +1540,14 @@ class RenameCatalogUnitTests(unittest.TestCase):
             ["audio/music/music_start_track_10000"],
         )
 
+    def test_two_functions_of_one_unit_are_accepted(self):
+        payload = self._payload(["src/rendering/vu1_chain.c"] * 2)
+        for entry, address in zip(
+            payload["rename_proposals"]["entries"], ("0x002336a0", "0x002337b0")
+        ):
+            entry["address"] = address
+        self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
+
     def test_a_pending_and_a_promoted_path_are_the_same_unit(self):
         # assembly/<x>.c and <x>.c are one unit before and after promotion.
         payload = self._payload(
