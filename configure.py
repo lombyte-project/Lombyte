@@ -131,7 +131,6 @@ ROUTE_EXCEPTIONS = {
     # stash slots
     "textbin/fun_00232d00": "cc_sn_padless",
     # Game code still built by the patched 991111 compiler (plus the SN assembler).
-    "math/conversion/truncate_float_to_s32": "cc_ee_gcc_patched",
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_00226848": "cc_ee_gcc_patched",
@@ -139,10 +138,6 @@ ROUTE_EXCEPTIONS = {
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_0022c6f8": "cc_ee_gcc_patched",
     # Game code that reproduces on the SDK compiler but not yet on the game compiler.
-    "math/multiply_global_factor_ed64": "sdk-compiler",
-    "math/multiply_global_scale": "sdk-compiler",
-    "math/multiply_global_factor_ed70": "sdk-compiler",
-    "math/convert_integer_to_float": "sdk-compiler",
     "runtime/resources/update_resource_counter": "sdk-compiler",
     "runtime/objects/store_object_index": "sdk-compiler",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
@@ -163,7 +158,6 @@ ROUTE_EXCEPTIONS = {
 # Per-unit extra flags for the patched 991111 profile.  Every -mastra-* option
 # is opt-in and absent by default; flag-absent output is byte-identical.
 EE_GCC_PATCHED_FLAG_UNITS = {
-    "math/conversion/truncate_float_to_s32": "-mastra-inplace-cvt",
     "sdk/library/picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
     "textbin/fun_00226848": "-mastra-no-lo-sum-tie",
     "sdk/library/_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
@@ -1102,18 +1096,18 @@ def rename_locals(base_path: Path):
 
 
 def fix_gp_rel_stores(asm_root: Path) -> int:
-    """Normalize the gp-relative store spelling for the frozen assembler.
+    """Normalize the gp-relative store and FPU load spelling for the frozen assembler.
 
     Splat emits ``sw $r, %gp_rel(sym)($28)`` for small-data stores.  The
-    pinned EE 2.9 assembler rejects the ``%gp_rel`` operator on stores
-    ("Bad expression"), while the hand-written oracles used
+    pinned EE 2.9 assembler rejects the ``%gp_rel`` operator on stores and
+    on ``lwc1``/``ldc1`` ("Bad expression"), while the hand-written oracles used
     ``.extern sym, 4`` plus a bare ``sym`` operand, which expands to the
     same R_MIPS_GPREL16 relocation.  Only generated per-function
     ``expected/asm`` files are touched; expected objects come from the
     whole-unit ``.c.s`` output through binutils and are unaffected.
     """
     pattern = re.compile(
-        r"(?P<indent>[ \t]*)(?P<op>sw|swc1|sd|sdc1|sh|sb)(?P<spacing>\s+)"
+        r"(?P<indent>[ \t]*)(?P<op>sw|swc1|sd|sdc1|sh|sb|lwc1|ldc1)(?P<spacing>\s+)"
         r"(?P<reg>\$[a-z0-9]+),\s*%gp_rel\((?P<sym>[A-Za-z0-9_]+)\)\(\$28\)"
     )
     fixed = 0

@@ -6985,7 +6985,7 @@
       },
       {
         "unit": "math/conversion/truncate_float_to_s32",
-        "source_path": "src/math/conversion/truncate_float_to_s32.c",
+        "source_path": "src/assembly/math/conversion/truncate_float_to_s32.c",
         "address": "0x001fa6d0",
         "current_name": "FUN_001fa6d0",
         "proposed_name": "truncate_float_to_s32",

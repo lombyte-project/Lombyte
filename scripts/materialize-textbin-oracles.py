@@ -128,14 +128,17 @@ def _textbin_oracle_labels(source_root: Path, symbol: str, address: int) -> list
 
 
 def _has_address_asm_label(source: Path, address: int) -> bool:
-    """Whether a relocated fallback C unit still binds to its FUN symbol."""
+    """Whether a C unit binds to its FUN symbol or includes its FUN oracle."""
     try:
         text = source.read_text(errors="replace")
     except OSError:
         return False
     label = re.escape(f"FUN_{address:08x}")
+    if re.search(r'__asm__\s*\(\s*"' + label + r'"\s*\)', text, re.IGNORECASE):
+        return True
+    # An intentional-assembly wrapper includes the raw oracle by its FUN name.
     return re.search(
-        r'__asm__\s*\(\s*"' + label + r'"\s*\)', text, re.IGNORECASE
+        r'INCLUDE_ASM\s*\(\s*"[^"]*/' + label + r'\.s"', text, re.IGNORECASE
     ) is not None
 
 
