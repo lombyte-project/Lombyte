@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern f32 func_001F99C0(f32);
-extern s32 func_001FA6D0(f32);
+extern s32 func_001FA6D0(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001f9d68(void *);
 
 void FUN_00214a98(f32 *v, s32 *out) {
