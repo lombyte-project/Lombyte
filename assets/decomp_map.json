@@ -3,30 +3,30 @@
   "source": "scripts/generate_treemap.py",
   "units_total": 1331,
   "groups_total": 118,
-  "matching_c": 825,
+  "matching_c": 834,
   "intentional_asm": 241,
-  "pending_c": 265,
+  "pending_c": 256,
   "bytes_total": 430720,
-  "bytes_matching_c": 142052,
+  "bytes_matching_c": 147256,
   "bytes_intentional_asm": 90112,
-  "bytes_pending_c": 198556,
-  "c_exact_percent_of_recoverable": 41.7054,
-  "c_fuzzy_percent_of_recoverable": 67.7497,
+  "bytes_pending_c": 193352,
+  "c_exact_percent_of_recoverable": 43.2333,
+  "c_fuzzy_percent_of_recoverable": 72.347,
   "groups": [
     {
       "name": "game/unclassified",
       "logical_group": "unclassified",
       "category": "game",
       "functions": 341,
-      "matching_c": 117,
-      "pending_c": 124,
+      "matching_c": 123,
+      "pending_c": 118,
       "intentional_asm": 100,
       "bytes_total": 178564,
-      "bytes_matching_c": 27432,
-      "bytes_pending_c": 84880,
+      "bytes_matching_c": 30596,
+      "bytes_pending_c": 81716,
       "bytes_intentional_asm": 66252,
-      "c_exact_percent_of_recoverable": 24.4248,
-      "c_fuzzy_percent_of_recoverable": 59.5286
+      "c_exact_percent_of_recoverable": 27.242,
+      "c_fuzzy_percent_of_recoverable": 60.1031
     },
     {
       "name": "sdk/library",
@@ -41,7 +41,7 @@
       "bytes_pending_c": 12956,
       "bytes_intentional_asm": 8872,
       "c_exact_percent_of_recoverable": 77.1289,
-      "c_fuzzy_percent_of_recoverable": 77.1289
+      "c_fuzzy_percent_of_recoverable": 95.9889
     },
     {
       "name": "game/rendering",
@@ -56,7 +56,7 @@
       "bytes_pending_c": 12212,
       "bytes_intentional_asm": 140,
       "c_exact_percent_of_recoverable": 27.8932,
-      "c_fuzzy_percent_of_recoverable": 68.9584
+      "c_fuzzy_percent_of_recoverable": 65.8663
     },
     {
       "name": "game/gameplay/state",
@@ -86,7 +86,7 @@
       "bytes_pending_c": 1976,
       "bytes_intentional_asm": 2276,
       "c_exact_percent_of_recoverable": 77.6975,
-      "c_fuzzy_percent_of_recoverable": 77.6975
+      "c_fuzzy_percent_of_recoverable": 91.6172
     },
     {
       "name": "game/storage/memory_card",
@@ -101,7 +101,7 @@
       "bytes_pending_c": 6680,
       "bytes_intentional_asm": 0,
       "c_exact_percent_of_recoverable": 8.3425,
-      "c_fuzzy_percent_of_recoverable": 78.2794
+      "c_fuzzy_percent_of_recoverable": 77.7651
     },
     {
       "name": "game/video/decoder",
@@ -161,22 +161,22 @@
       "bytes_pending_c": 4620,
       "bytes_intentional_asm": 0,
       "c_exact_percent_of_recoverable": 17.2043,
-      "c_fuzzy_percent_of_recoverable": 67.4623
+      "c_fuzzy_percent_of_recoverable": 65.7341
     },
     {
       "name": "game/audio/music",
       "logical_group": "audio/music",
       "category": "game",
       "functions": 15,
-      "matching_c": 10,
-      "pending_c": 5,
+      "matching_c": 11,
+      "pending_c": 4,
       "intentional_asm": 0,
       "bytes_total": 5304,
-      "bytes_matching_c": 2508,
-      "bytes_pending_c": 2796,
+      "bytes_matching_c": 3256,
+      "bytes_pending_c": 2048,
       "bytes_intentional_asm": 0,
-      "c_exact_percent_of_recoverable": 47.2851,
-      "c_fuzzy_percent_of_recoverable": 74.0317
+      "c_exact_percent_of_recoverable": 61.3876,
+      "c_fuzzy_percent_of_recoverable": 88.1342
     },
     {
       "name": "sdk/rpc",
@@ -191,22 +191,22 @@
       "bytes_pending_c": 640,
       "bytes_intentional_asm": 500,
       "c_exact_percent_of_recoverable": 86.5997,
-      "c_fuzzy_percent_of_recoverable": 86.5997
+      "c_fuzzy_percent_of_recoverable": 98.8317
     },
     {
       "name": "game/ui/text",
       "logical_group": "ui/text",
       "category": "game",
       "functions": 23,
-      "matching_c": 19,
-      "pending_c": 4,
+      "matching_c": 20,
+      "pending_c": 3,
       "intentional_asm": 0,
       "bytes_total": 5256,
-      "bytes_matching_c": 2252,
-      "bytes_pending_c": 3004,
+      "bytes_matching_c": 2892,
+      "bytes_pending_c": 2364,
       "bytes_intentional_asm": 0,
-      "c_exact_percent_of_recoverable": 42.8463,
-      "c_fuzzy_percent_of_recoverable": 64.3668
+      "c_exact_percent_of_recoverable": 55.0228,
+      "c_fuzzy_percent_of_recoverable": 70.1377
     },
     {
       "name": "sdk/debug",
@@ -221,7 +221,7 @@
       "bytes_pending_c": 2616,
       "bytes_intentional_asm": 16,
       "c_exact_percent_of_recoverable": 48.1775,
-      "c_fuzzy_percent_of_recoverable": 48.1775
+      "c_fuzzy_percent_of_recoverable": 81.8701
     },
     {
       "name": "game/audio/streaming",
@@ -386,7 +386,7 @@
       "bytes_pending_c": 2308,
       "bytes_intentional_asm": 0,
       "c_exact_percent_of_recoverable": 7.8275,
-      "c_fuzzy_percent_of_recoverable": 38.8306
+      "c_fuzzy_percent_of_recoverable": 36.4953
     },
     {
       "name": "game/input/pad",
@@ -573,15 +573,15 @@
       "logical_group": "ui/menus/missions",
       "category": "game",
       "functions": 3,
-      "matching_c": 1,
-      "pending_c": 2,
+      "matching_c": 2,
+      "pending_c": 1,
       "intentional_asm": 0,
       "bytes_total": 1404,
-      "bytes_matching_c": 144,
-      "bytes_pending_c": 1260,
+      "bytes_matching_c": 796,
+      "bytes_pending_c": 608,
       "bytes_intentional_asm": 0,
-      "c_exact_percent_of_recoverable": 10.2564,
-      "c_fuzzy_percent_of_recoverable": 68.5356
+      "c_exact_percent_of_recoverable": 56.6952,
+      "c_fuzzy_percent_of_recoverable": 92.849
     },
     {
       "name": "game/audio",
@@ -836,7 +836,7 @@
       "bytes_pending_c": 136,
       "bytes_intentional_asm": 0,
       "c_exact_percent_of_recoverable": 78.2051,
-      "c_fuzzy_percent_of_recoverable": 78.2051
+      "c_fuzzy_percent_of_recoverable": 92.6603
     },
     {
       "name": "game/world/animation",
@@ -1121,7 +1121,7 @@
       "bytes_pending_c": 56,
       "bytes_intentional_asm": 108,
       "c_exact_percent_of_recoverable": 64.1026,
-      "c_fuzzy_percent_of_recoverable": 64.1026
+      "c_fuzzy_percent_of_recoverable": 92.6923
     },
     {
       "name": "game/runtime/time",

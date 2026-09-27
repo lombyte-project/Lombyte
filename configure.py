@@ -550,6 +550,9 @@ SDK_COMPILER_UNITS = {
     # fun_00120a28: the table walk matches when the cursor is a named local and
     # the two 8-byte globals are read through their own struct wrappers
     "textbin/fun_00120a28",
+    # fun_00120d40: cd command guard: take the command semaphore, check the
+    # drive is idle, bind the cd rpc server once
+    "textbin/fun_00120d40",
 }
 
 # Recovered C units that own the small .rodata retail kept inside the
@@ -1574,6 +1577,31 @@ GAME_COMPILER_UNITS = {
     "textbin/fun_0022ea08",
     # moved off the SN route: byte-identical on the game compiler
     "textbin/fun_00239690",
+    # fun_001fb8f0: draw a flat-shaded rectangle as a sprite GIF packet with the
+    # screen offset applied
+    "textbin/fun_001fb8f0",
+    # fun_00220e28: options list menu: fade timer, cursor up/down, toggle option
+    # flags or open the confirm page
+    "textbin/fun_00220e28",
+    # fun_00220850: draw the HUD pickup icon: three layered sprites, pulsing
+    # when the state is 6/13/17, otherwise sized from a table with a scrolling
+    # phase
+    "textbin/fun_00220850",
+    # fun_00223e28: draw a flashing highlight box: clip to screen, random
+    # twinkle sprite while active, shadow and bordered frame
+    "textbin/fun_00223e28",
+    # process_bgm_display_text_event: scaled font print: palette colour escapes
+    # 8..15, accent overlay glyphs, greyed wide glyphs for control codes
+    "textbin/audio/music/process_bgm_display_text_event",
+    # font_print: integer font print: palette colour escapes 8..15, accent
+    # overlay glyphs, greyed wide glyphs for control codes
+    "textbin/ui/text/font_print",
+    # draw_missions_menu: missions menu: widest label sets the column, rows
+    # spaced by height over six or seven entries
+    "textbin/ui/menus/missions/draw_missions_menu",
+    # fun_00239160: shop footer: clear the panel, then say whether the selected
+    # slot is affordable or still locked
+    "textbin/fun_00239160",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
