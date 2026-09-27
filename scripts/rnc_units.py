@@ -210,6 +210,37 @@ def workspace_problem(workspace: Path, repo: Path | None = None) -> str | None:
     return None
 
 
+# A unit counts as C_EXACT only when its source is C: inline asm is allowed
+# solely as a label binding a declaration to its linked name
+# (`__asm__("FUN_00202d10")`). Any other asm in the file (instructions, empty
+# memory barriers, `.extern` directives, register pins) keeps the unit pending
+# however exact its bytes are. include/qcopy.h is the approved exception and
+# lives in a header, not in the unit.
+_ASM_START_RE = re.compile(r"\b(?:__asm__|__asm|asm)\b(?:\s*(?:__volatile__|volatile))?\s*\(")
+_ASM_LABEL_RE = re.compile(r'\s*"[A-Za-z_.$][\w.$]*"\s*')
+_COMMENT_RE = re.compile(r"/\*.*?\*/|//[^\n]*", re.S)
+# `register int x asm("v1")` pins a register; it is not a name label.
+_ASM_REGISTER_RE = re.compile(
+    r"\$\w+|zero|at|v[01]|a[0-3]|t[0-9]|s[0-8]|k[01]|gp|sp|fp|ra|f[0-9]|f[12][0-9]|f3[01]")
+
+
+def non_label_asm(source: Path) -> bool:
+    """True when the source holds inline asm other than a name label."""
+    try:
+        text = _COMMENT_RE.sub(" ", source.read_text(errors="replace"))
+    except OSError:
+        return False
+    for match in _ASM_START_RE.finditer(text):
+        depth, index = 1, match.end()
+        while index < len(text) and depth:
+            depth += {"(": 1, ")": -1}.get(text[index], 0)
+            index += 1
+        body = text[match.end():index - 1]
+        if not _ASM_LABEL_RE.fullmatch(body) or _ASM_REGISTER_RE.fullmatch(body.strip()[1:-1]):
+            return True
+    return False
+
+
 def classify_units(repo: Path) -> list[dict]:
     """Every configured C unit with category, source path and display name.
 
@@ -225,6 +256,7 @@ def classify_units(repo: Path) -> list[dict]:
         source = unit_source(repo, owner)
         if owner in exact_assembly or (
             not owner.startswith("assembly/") and source.is_file()
+            and not non_label_asm(source)
         ):
             category = "exact"
         elif owner in intentional:

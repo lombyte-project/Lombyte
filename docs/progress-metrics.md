@@ -7,13 +7,24 @@ and executables elsewhere on the disc are out of scope.
 
 | Metric      | Meaning                                                                   |
 | :---------- | :------------------------------------------------------------------------ |
-| **C_EXACT** | the unit's functions compile to the same bytes as retail                  |
+| **C_EXACT** | the unit's functions compile from C to the same bytes as retail           |
 | **C_FUZZY** | a pending unit's C body is measurably similar to retail, without matching |
 
 This document deliberately carries **no percentages**: they are regenerated from
 the build and would be stale the moment they were written down. Read the current
 figures from `assets/decomp_map.svg`, from `progress/report.json`, or from
 [decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) — never from prose.
+
+## Exact bytes are not enough: the source must be C
+
+A promoted unit counts toward C_EXACT only when its source is C. Inline asm is
+allowed solely as a label that binds a declaration to its linked name
+(`void f(void) __asm__("FUN_00202d10");`), plus the one approved idiom in
+`include/qcopy.h`. A unit whose file holds any other asm - instructions, an
+empty memory barrier, `__asm__("" : "+r"(x))`, a `.extern` directive, or a
+register pin (`register int x asm("v1")`) - builds byte-exact but stays
+**pending** (C_FUZZY 99.99) until the asm is gone. `non_label_asm()` in
+`scripts/rnc_units.py` (mirrored in `scripts/generate_treemap.py`) is the rule.
 
 ## 100 % is not the same as exact
 

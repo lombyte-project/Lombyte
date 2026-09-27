@@ -497,6 +497,9 @@ class UnitListHelpersTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.units = load_module("rnc_units", ROOT / "scripts" / "rnc_units.py")
+        cls.treemap = load_module(
+            "rnc_generate_treemap", ROOT / "scripts" / "generate_treemap.py"
+        )
 
     def test_parse_config_rows(self):
         with tempfile.TemporaryDirectory() as name:
@@ -567,6 +570,37 @@ class UnitListHelpersTests(unittest.TestCase):
         self.assertEqual(units["textbin/exact_one"], "exact")
         self.assertEqual(units["assembly/textbin/pending_one"], "pending")
         self.assertEqual(units["assembly/textbin/intentional_asm"], "asm")
+
+    def test_non_label_asm(self):
+        cases = {
+            'void f(void) __asm__("FUN_00202d10");\n': False,
+            'extern int g __asm__("D_001604F0"); /* asm("x" : : ) */\n': False,
+            'void f(void) { __asm__ __volatile__("" ::: "memory"); }\n': True,
+            '__asm__(".extern D_0015FD64, 4");\n': True,
+            'void f(void) { register int x asm("v1") = 0; }\n': True,
+            'void f(void) { register int x __asm__("$5"); }\n': True,
+            'void f(int p) { __asm__ volatile("" : "+r"(p)); }\n': True,
+            'int f(void) { int r; __asm__("mfc0 %0, $12" : "=r"(r)); return r; }\n': True,
+        }
+        with tempfile.TemporaryDirectory() as name:
+            for index, (text, expected) in enumerate(cases.items()):
+                source = Path(name) / f"u{index}.c"
+                source.write_text(text)
+                with self.subTest(text=text):
+                    self.assertEqual(self.units.non_label_asm(source), expected)
+                    self.assertEqual(self.treemap.non_label_asm(source), expected)
+
+    def test_classify_units_asm_body_is_not_exact(self):
+        with tempfile.TemporaryDirectory() as name:
+            repo = Path(name)
+            (repo / "config" / "us").mkdir(parents=True)
+            (repo / "src" / "textbin").mkdir(parents=True)
+            (repo / "src" / "textbin" / "barrier.c").write_text(
+                'void f(void) { __asm__ __volatile__("" ::: "memory"); }\n')
+            (repo / "config" / "us" / "rnc1.us.yaml").write_text(
+                "  - [0x1000, c, textbin/barrier]\n  - [0x1100, textbin, text_gap_end]\n")
+            units = {u["owner"]: u["category"] for u in self.units.classify_units(repo)}
+        self.assertEqual(units["textbin/barrier"], "pending")
 
     def test_split_oracle_guard_plain_source(self):
         self.assertEqual(self.units.split_oracle_guard("int f(void) { return 1; }\n"), (False, None))
