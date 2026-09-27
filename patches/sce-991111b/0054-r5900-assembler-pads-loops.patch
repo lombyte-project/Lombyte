@@ -1,0 +1,41 @@
+diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
+index c7adc4d..5f64251 100644
+--- a/gcc/config/mips/mips.c
++++ b/gcc/config/mips/mips.c
+@@ -257,7 +257,7 @@ char *mips_isa_string;		/* for -mips{1,2,3,4} */
+ char *mips_abi_string;		/* for -mabi={32,n32,64,eabi} */
+ /* ASTRA P25: opt-in annulment of fall-through delay slots whose register
+    is the branch-tested one and is dead on the not-taken path.  */
+-char *mips_astra_annul_dead_slots = "";
++char *mips_astra_annul_dead_slots = 0;	/* ASTRA P54: opt-in again */
+ /* ASTRA P21: opt-in retention of the save_restore_insns emission order.  */
+ char *mips_astra_keep_frame_order;
+ 
+@@ -9131,8 +9131,8 @@ machine_dependent_reorg (first)
+   rtx insn;
+   struct constant *constants;
+ 
+-  if (TARGET_MIPS5900)
+-    mips_r5900_lengthen_loops (first);
++  /* ASTRA P54: no mips_r5900_lengthen_loops here; Ps2EeAs pads short
++     loops when it assembles them, and padding them twice is wrong.  */
+       
+   if (! TARGET_MIPS16)
+     return;
+diff --git a/gcc/config/mips/mips.h b/gcc/config/mips/mips.h
+index b7754f0..9689e6a 100644
+--- a/gcc/config/mips/mips.h
++++ b/gcc/config/mips/mips.h
+@@ -4840,9 +4840,9 @@ while (0)
+    PC relative loads that are out of range.  */
+ #define MACHINE_DEPENDENT_REORG(X) machine_dependent_reorg (X)
+ 
+-/* ASTRA P19: after delay slot scheduling, reproduce the retail R5900
+-   assembler's short-loop padding; see mips_r5900_pad_loops.  */
+-#define MACHINE_DEPENDENT_REORG_AFTER_DBR(X) mips_r5900_pad_loops (X)
++/* ASTRA P54: the R5900 short-loop padding is the assembler's.  The game
++   code is assembled by Ps2EeAs, which pads a short loop itself, so cc1 no
++   longer imitates it (mips_r5900_pad_loops is not called).  */
+ 
+ /* ASTRA P25: opt-in annulment of dead fall-through delay slots.  */
+ #define MACHINE_DEPENDENT_REORG_AFTER_DBR_2(X) mips_r5900_annul_dead_slots (X)

@@ -36,7 +36,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0034`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`
+   `0050`, `0051`, `0052`, `0053`, `0054`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -50,7 +50,32 @@ Patches marked *production dependency* are in that stack but turned no
 fixture exact on their own; they are published so the production compiler is
 reproducible from this directory. Every other entry names its exact fixture.
 
+The game code is compiled with this `cc1` and assembled by SN's `Ps2EeAs`
+(`configure.py`, rule `game-compiler`), as the retail executable was. The
+patched GNU `as` of this tree only assembles the pending `INCLUDE_ASM`
+wrappers. The `cc1` bytes depend on the host compiler as well as on the
+stack: on the Linux cloud host used for `0054`, the stack through `0053`
+builds `d372122712b3f995…`, which produces the same object as `05ff323f…` for
+every game-compiler unit, and the full stack builds `6f4bb085d51c0633…`.
+Check a rebuilt compiler by its output, not by its hash, when the host
+differs. `make` does not track header dependencies: after changing
+`mips.h`, remove `toplev.o` (or build from a fresh tree).
+
 ## Published patches
+
+- `0054-r5900-assembler-pads-loops.patch` SHA-256: `2cec82e691f4c2fbd20fe530960df5fe2476b891561bd6ad65342b31f8fa03eb`
+  - role: default. The R5900 short-loop padding and the `div` padding are
+    the assembler's: `Ps2EeAs` adds them itself. `cc1` no longer imitates
+    it: the Cygnus `mips_r5900_lengthen_loops` pass and the post-dbr
+    `mips_r5900_pad_loops` (`0019`, `0046`) are not run, and the `0025`
+    dead-slot annulment is opt-in again (it annulled slots retail leaves
+    plain). With `Ps2EeAs` and no `-g` (its line labels count as branch
+    targets for the `div` padding), 478 of 522 game-range C units build
+    byte-identically with the common configuration; full-ELF gate PASS
+  - fixtures: `textbin/audio/banks/snd_bank_load_by_loc`,
+    `textbin/fun_00226670`, `textbin/video/decoder/vi_buf_stop_dma`,
+    `gameplay/animation/find_valid_animation_frame_index`,
+    `video/decoder/video_dec_flush`
 
 - `0053-gas-la-absolute-unknown-symbol.patch` SHA-256: `c43dcd5c4f48a7b25b2660f2bace5cd9709364d179c561ef9a705f8f0ea8c93d`
   - role: default (gas). `0020` gave loads and stores the retail rule for a

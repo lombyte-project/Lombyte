@@ -3,9 +3,9 @@
 The verified environment is **Linux/WSL**. Compiler versions matter for
 matching: preserve the directory layouts and the executable permissions, and
 expect the toolchain binaries to be installed by you — nothing here is
-downloaded. Until its last units are moved (see below), the SN compiler is also
-needed, and it is a Windows executable that has to be runnable, so a plain Linux
-setup is not enough by itself.
+downloaded. The game code is assembled by SN's `Ps2EeAs`, a Windows
+executable that has to be runnable, so a plain Linux setup is not enough by
+itself.
 
 Everything below is run from the checkout root, and `RNC_GAME_ROOT` in the
 sibling tooling repository points at this checkout.
@@ -16,7 +16,7 @@ sibling tooling repository points at this checkout.
 | :-------------------------------------------------- | :-------------------------------------------------------------------------------- |
 | Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)     | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
 | SDK compiler (EE-GCC `2.9-ee-991111-01`)            | `tools/compilers/sdk-compiler/` (with `bin/ee-gcc`)                               |
-| SN EE-GCC `2.95.2`                                  | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
+| SN EE-GCC `2.95.2` (its `ee/bin/Ps2EeAs.exe`)      | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
 | R5900 binutils                                      | the `mips-ps2-decompals-*` executables; set `BINUTILS_ROOT` to their directory    |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
@@ -24,7 +24,11 @@ sibling tooling repository points at this checkout.
 The retail executable was built with two compilers, and so is this one. The SDK
 libraries are linked as one block ahead of the game code; `configure.py` builds
 every C unit below `GAME_TEXT_START` with the SDK compiler and every unit from
-there on with the game compiler. The few units that do not reproduce on their
+there on with the game compiler. The game compiler's `cc1` output is assembled
+by `Ps2EeAs`, which pads short loops and `div` instructions itself; the game
+code is compiled without `-g`, whose line labels the assembler would take for
+branch targets. Pending `INCLUDE_ASM` wrappers are assembled by the game
+compiler's GNU `as` instead. The few units that do not reproduce on their
 compiler yet are listed in `ROUTE_EXCEPTIONS` with the route that still builds
 them; that list only shrinks.
 

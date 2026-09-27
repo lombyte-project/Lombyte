@@ -1,30 +1,14 @@
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef float f32;
-typedef double f64;
+#include "types.h"
+
 extern f32 func_001F9DC8(f32);
-f32 FUN_002133d0(s32 arg0, f32 fparg0, f32 fparg1, f32 fparg2)
+
+f32 FUN_002133d0(s32 arg0, f32 from, f32 to, f32 t)
 {
-  if (fparg2 != 0.0f)
-  {
-    goto block_2;
-  }
-  return fparg0;
-  block_2:
-  if (fparg2 != 1.0f)
-  {
-    block_4:
-    return fparg0 + ((fparg1 - fparg0) * ((1.0f - func_001F9DC8(fparg2 * 3.1415927f)) * 0.5f));
-
-    goto block_4;
-  }
-
-  return fparg1;
+    if (t == 0.0f) {
+        return from;
+    }
+    if (t == 1.0f) {
+        return to;
+    }
+    return from + (to - from) * ((1.0f - func_001F9DC8(t * 3.1415927f)) * 0.5f);
 }
-

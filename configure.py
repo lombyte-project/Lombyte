@@ -91,18 +91,11 @@ ROUTE_EXCEPTIONS = {
     # into a 1bpp threshold mask (4 source rows per output row)
     "textbin/fun_00208030": "cc_sn",
     "textbin/fun_00221e50": "cc_sn",
-    # fun_00226670: do-while over a signed s32 byte cursor (retail guards at the
-    # bottom with a signed slt) plus two address forms for one symbol
-    "textbin/fun_00226670": "cc_sn",
     # vu1_sync_chain: wait for DMA channels in a mask to go idle, report a
     # timeout after 100000 spins
     "textbin/rendering/vu1_sync_chain": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
-    # snd_bank_load_by_loc: padless route with no policy: the bank load resolves
-    # once the sub-record pointer is a named local
-    "textbin/audio/banks/snd_bank_load_by_loc": "cc_sn_padless",
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
-    "gameplay/animation/find_valid_animation_frame_index": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
     # INCREMENTS: p is a walked front-end pointer read through *p, p = p + 1
     # sits in the for-increment clause after i = i + 1 so the loop bottom RTL
@@ -137,77 +130,20 @@ ROUTE_EXCEPTIONS = {
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "textbin/fun_00232d00": "cc_sn_padless",
-    # vi_buf_stop_dma: ViBuf: stop the IPU DMA, save D4/D3 channel and IPU
-    # registers after the FIFO drains
-    "textbin/video/decoder/vi_buf_stop_dma": "cc_sn_padless",
-    "video/decoder/video_dec_flush": "cc_sn_padless",
-    # --- route closure fallout, 2026-09-27
-    #
-    # These five were promoted while the SN line was still legal for game code,
-    # so their bodies are byte-exact there. Closing ROUTE_EXCEPTIONS moved them
-    # onto the game compiler, which does not reproduce them with the common
-    # configuration: all five were re-measured on game-compiler and sit at
-    # 89.8-99.5%, and four of them come out 4-8 bytes SHORT in .text, which
-    # shifts every later address and turns the full-ELF gate red in scattered
-    # fragments. A per-unit score does not show this - it is measured on the
-    # registered route, while the build uses the provenance route.
-    #
-    # They are listed here as measurements, not preferences, and each is a
-    # candidate for retirement: the residual is small and the levers are known.
-    #
-    # fun_00200c80: retail materialises the 32-bit constant 0xF0000000 with two
-    # ori+dsll pairs; the game compiler folds it into a shift sequence, so the
-    # unit is 8 bytes short.
-    "textbin/fun_00200c80": "cc_sn_padless",
-    # fun_00200e08: same shape of constant folding, same 8-byte shortfall.
-    "textbin/fun_00200e08": "cc_sn_padless",
-    # fun_002135f0: 4 bytes short on the game compiler.
-    "textbin/fun_002135f0": "cc_sn_padless",
-    # saving_data_menu: 4 bytes short on the game compiler.
-    "textbin/ui/menus/save_data/saving_data_menu": "cc_sn_padless",
-    # fun_001f4fb8: right size, but the game compiler still disagrees on 97.5% of
-    # the body where the SN line is byte-exact.
-    "textbin/fun_001f4fb8": "cc_sn_padless",
-    #
-    # Six more, found the same way but by a scan that was looking for the wrong
-    # thing. The list above came from comparing compiled .text SIZES, which can
-    # only see units whose size changed. These six come out the right size with
-    # the wrong bytes, so a size comparison reports them as identical and they
-    # were never candidates. Their fragments were found in the full-ELF diff:
-    #   fun_001fb8f0  98.93 -> 100.0      fun_00223e28  98.56 -> 100.0
-    #   fun_001ffe18  99.56 -> 100.0      fun_0022ea08  97.00 -> 100.0
-    #   fun_00200600  99.69 -> 100.0      fun_00239690  97.45 -> 100.0
-    # (game-compiler -> padless, measured per unit)
-    #
-    # The lesson is the general one: a size comparison is not a correctness
-    # check, and neither is a per-unit score, because both are blind to a unit
-    # that is right in every dimension they look at.
-    "textbin/fun_001fb8f0": "cc_sn_padless",
-    "textbin/fun_001ffe18": "cc_sn_padless",
-    "textbin/fun_00200600": "cc_sn_padless",
-    "textbin/fun_00223e28": "cc_sn_padless",
-    "textbin/fun_0022ea08": "cc_sn_padless",
-    "textbin/fun_00239690": "cc_sn_padless",
     # Game code still built by the patched 991111 compiler (plus the SN assembler).
     "math/conversion/truncate_float_to_s32": "cc_ee_gcc_patched",
-    "runtime/memory/calculate_ring_buffer_bounds": "cc_ee_gcc_patched",
-    # fun_002133d0 (run-14 worker b): retail materializes the float constants
-    # pi/1.0/0.5 with lui/ori/mtc1 and carries the FP hazard NOPs; the frozen
-    # profiles emit .lit4 loads and drop the NOPs. The patched profile plus the
-    # permuter shape is 100/100/100 and patha linked-byte equal, 2026-09-14.
-    "textbin/fun_002133d0": "cc_ee_gcc_patched",
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_00226848": "cc_ee_gcc_patched",
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_0022c6f8": "cc_ee_gcc_patched",
+    # Game code that reproduces on the SDK compiler but not yet on the game compiler.
     "math/multiply_global_factor_ed64": "sdk-compiler",
     "math/multiply_global_scale": "sdk-compiler",
     "math/multiply_global_factor_ed70": "sdk-compiler",
     "math/convert_integer_to_float": "sdk-compiler",
     "runtime/resources/update_resource_counter": "sdk-compiler",
-    # Game code that reproduces on the SDK compiler but not yet on the game compiler.
     "runtime/objects/store_object_index": "sdk-compiler",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
@@ -338,6 +274,14 @@ SN_FLAG_UNITS = {
     # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
     "audio/rpc/snd_post_message": "-fno-schedule-insns",
 }
+
+
+def _is_include_asm(config_dir: Path, source: Path) -> bool:
+    """A pending unit: its C file only wraps splat's listing."""
+    try:
+        return "INCLUDE_ASM" in (config_dir / source).read_text(errors="replace")
+    except OSError:
+        return False
 
 
 def unit_compiler(unit: str, vram: int) -> str:
@@ -513,10 +457,13 @@ PADLESS_ASM_HELPER = r'''#!/usr/bin/env python3
 
 `normalize IN OUT` rewrites GNU `alias = function` assignments into
 co-located labels (Ps2EeAs rejects the assignment form).
-`finish PADDED OUT` removes only the `.text` section tail padding after the
-last sized function and adds empty `.data`/`.bss` sections so object
-comparison sees the GNU layout.  Every check fails closed; no target bytes,
-addresses or expected lengths are inputs.
+`finish PADDED OUT [REFERENCE]` removes only the `.text` section tail padding
+after the last sized function and adds empty `.data`/`.bss` sections so object
+comparison sees the GNU layout.  With a REFERENCE object assembled by GNU as
+from the same source, data sections Ps2EeAs rounded up to their alignment are
+trimmed back to the reference size: data sizes do not depend on the
+assembler, and the removed tail must be zero bytes nothing refers to.  Every
+check fails closed; no target bytes, addresses or expected lengths are inputs.
 """
 import re
 import struct
@@ -588,6 +535,41 @@ def unpad(data):
                 raise ValueError("relocation refers to removed padding")
     result = bytearray(data)
     struct.pack_into("<I", result, shoff + index * shsize + 20, end)
+    return bytes(result)
+
+
+def _sections(data):
+    shoff = struct.unpack_from("<I", data, 32)[0]
+    shsize, count, names_index = struct.unpack_from("<HHH", data, 46)
+    headers = [struct.unpack_from("<10I", data, shoff + i * shsize) for i in range(count)]
+    nh = headers[names_index]
+    names = data[nh[4]:nh[4] + nh[5]]
+    return shoff, shsize, headers, [names[h[0]:].split(b"\0")[0] for h in headers]
+
+
+def trim_data_sections(data, reference):
+    shoff, shsize, headers, names = _sections(data)
+    _, _, ref_headers, ref_names = _sections(reference)
+    ref_size = {n: h[5] for n, h in zip(ref_names, ref_headers) if h[1] == 1}
+    result = bytearray(data)
+    for index, (h, name) in enumerate(zip(headers, names)):
+        if h[1] != 1 or h[2] & 4 or name not in ref_size or h[5] <= ref_size[name]:
+            continue
+        end = ref_size[name]
+        if h[5] - end >= max(h[8], 1) or any(data[h[4] + end:h[4] + h[5]]):
+            raise ValueError("%s: tail beyond the reference is not alignment padding" % name.decode())
+        for s in headers:
+            if s[1] == 2:
+                for offset in range(s[4], s[4] + s[5], 16):
+                    sym = struct.unpack_from("<IIIBBH", data, offset)
+                    if sym[5] == index and sym[1] > end:
+                        raise ValueError("symbol refers to removed padding")
+            if s[1] in (4, 9) and s[7] == index:
+                stride = 12 if s[1] == 4 else 8
+                if any(struct.unpack_from("<I", data, offset)[0] >= end
+                       for offset in range(s[4], s[4] + s[5], stride)):
+                    raise ValueError("relocation refers to removed padding")
+        struct.pack_into("<I", result, shoff + index * shsize + 20, end)
     return bytes(result)
 
 
@@ -691,7 +673,7 @@ def apply_la_gprel_policy(assembly):
 
 def main(argv):
     if len(argv) not in (4, 5):
-        raise SystemExit("usage: padless-asm.py normalize|finish IN OUT [POLICY]")
+        raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE]")
     mode, source, destination = argv[1:4]
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
@@ -705,7 +687,10 @@ def main(argv):
             raise SystemExit("unknown assembler policy: " + policy)
         open(destination, "w").write(assembly)
     elif mode == "finish":
-        open(destination, "wb").write(add_empty_sections(unpad(data)))
+        data = unpad(data)
+        if len(argv) == 5:
+            data = trim_data_sections(data, open(argv[4], "rb").read())
+        open(destination, "wb").write(add_empty_sections(data))
     else:
         raise SystemExit("unknown mode: " + mode)
 
@@ -826,17 +811,48 @@ def build_stuff(
             "docs/building.md."
         )
 
-    if game_compiler_configured():
-        game_root = _game_compiler_root()
-        ninja.rule(
-            "game-compiler",
-            description="game-compiler $in",
-            command=(
-                f"{game_root}/ee-gcc -c -I{game_root}/include {common_includes} "
-                f"{LANG_DEFINE} {COMPILER_FLAGS} "
-                f"$in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug"
-            ),
+    if not sn_compiler_configured():
+        raise SystemExit(
+            "the game code is assembled by Ps2EeAs: set SN_TOOLCHAIN_ROOT to the "
+            "SN tree that holds ee/bin/Ps2EeAs.exe (see docs/building.md)"
         )
+    # The generated helper rewrites GNU alias assignments to labels for
+    # Ps2EeAs and trims only the section tail padding Ps2EeAs adds.
+    (config_dir / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
+    ee_assembler = str(Path(SN_TOOLCHAIN_ROOT) / "ee/bin/Ps2EeAs.exe")
+
+    game_root = _game_compiler_root()
+    # Game code: the game compiler's cc1, assembled by Ps2EeAs, as retail was.
+    # Ps2EeAs pads short loops and div instructions near a label itself, so
+    # the compile carries no -g: the line-number labels it would add are
+    # "possible branch destinations" to the assembler.  The game compiler's
+    # GNU as assembles the same source only to tell `finish` the true size
+    # of the data sections.
+    ninja.rule(
+        "game-compiler",
+        description="game-compiler $in",
+        command=(
+            f"mkdir -p $gc_work && "
+            f"{game_root}/ee-gcc -S -I{game_root}/include {common_includes} "
+            f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 $in $extra -o $gc_work/cand.s && "
+            f"{sys.executable} padless-asm.py normalize $gc_work/cand.s $gc_work/cand-final.s none && "
+            f"'{ee_assembler}' -o '$gc_work_win/cand-padded.o' '$gc_work_win/cand-final.s' && "
+            f"{game_root}/as -mabi=eabi -o $gc_work/cand-ref.o $gc_work/cand-final.s && "
+            f"{sys.executable} padless-asm.py finish $gc_work/cand-padded.o $out $gc_work/cand-ref.o && "
+            f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
+        ),
+    )
+    # Pending units: an INCLUDE_ASM wrapper around splat's GNU-syntax listing,
+    # assembled by the game compiler's own GNU as.
+    ninja.rule(
+        "include-asm",
+        description="include-asm $in",
+        command=(
+            f"{game_root}/ee-gcc -c -I{game_root}/include {common_includes} "
+            f"{LANG_DEFINE} {COMPILER_FLAGS} "
+            f"$in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug"
+        ),
+    )
 
     if sn_compiler_configured():
         sn_root = Path(SN_TOOLCHAIN_ROOT)
@@ -867,8 +883,6 @@ def build_stuff(
         # compiler-emitted hazard NOPs, while Ps2EeAs materializes them and
         # pads `.text` to its section alignment.  The generated helper rewrites
         # GNU alias assignments to labels and trims only that padding.
-        (config_dir / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
-        ee_assembler = str(Path(SN_TOOLCHAIN_ROOT) / "ee/bin/Ps2EeAs.exe")
         ninja.rule(
             "cc_sn_padless",
             description="cc_sn_padless $in",
@@ -952,9 +966,14 @@ def build_stuff(
             ]
             unit = _unit_from_object(entry.object_path)
             rule = unit_compiler(unit, int(seg.vram_start))
-            if rule == "game-compiler":
+            if rule == "game-compiler" and _is_include_asm(config_dir, entry.src_paths[0]):
+                build(entry.object_path, entry.src_paths, "include-asm")
+            elif rule == "game-compiler":
                 flags = GAME_COMPILER_FLAG_UNITS.get(unit, "")
-                variables = {"extra": f"{flags} "} if flags else {}
+                gc_work = str(ROOT / "build/game-work/units" / unit)
+                variables = {"gc_work": gc_work, "gc_work_win": _win_path(gc_work)}
+                if flags:
+                    variables["extra"] = f"{flags} "
                 build(entry.object_path, entry.src_paths, rule, variables=variables)
             elif rule == "sdk-compiler":
                 flags = SDK_COMPILER_FLAG_UNITS.get(unit, "")
