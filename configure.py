@@ -168,6 +168,26 @@ ROUTE_EXCEPTIONS = {
     # fun_001f4fb8: right size, but the game compiler still disagrees on 97.5% of
     # the body where the SN line is byte-exact.
     "textbin/fun_001f4fb8": "cc_sn_padless",
+    #
+    # Six more, found the same way but by a scan that was looking for the wrong
+    # thing. The list above came from comparing compiled .text SIZES, which can
+    # only see units whose size changed. These six come out the right size with
+    # the wrong bytes, so a size comparison reports them as identical and they
+    # were never candidates. Their fragments were found in the full-ELF diff:
+    #   fun_001fb8f0  98.93 -> 100.0      fun_00223e28  98.56 -> 100.0
+    #   fun_001ffe18  99.56 -> 100.0      fun_0022ea08  97.00 -> 100.0
+    #   fun_00200600  99.69 -> 100.0      fun_00239690  97.45 -> 100.0
+    # (game-compiler -> padless, measured per unit)
+    #
+    # The lesson is the general one: a size comparison is not a correctness
+    # check, and neither is a per-unit score, because both are blind to a unit
+    # that is right in every dimension they look at.
+    "textbin/fun_001fb8f0": "cc_sn_padless",
+    "textbin/fun_001ffe18": "cc_sn_padless",
+    "textbin/fun_00200600": "cc_sn_padless",
+    "textbin/fun_00223e28": "cc_sn_padless",
+    "textbin/fun_0022ea08": "cc_sn_padless",
+    "textbin/fun_00239690": "cc_sn_padless",
     # Game code still built by the patched 991111 compiler (plus the SN assembler).
     "math/conversion/truncate_float_to_s32": "cc_ee_gcc_patched",
     "runtime/memory/calculate_ring_buffer_bounds": "cc_ee_gcc_patched",
