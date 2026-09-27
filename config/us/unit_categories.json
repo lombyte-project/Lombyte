@@ -96,7 +96,6 @@
     "assembly/sdk/syscalls/update_rfu_dispatch_state",
     "assembly/sdk/threads/wait_semaphore",
     "assembly/sdk/threads/wakeup_thread",
-    "assembly/math/compute_sector_index",
     "assembly/math/fast_count_chars",
     "assembly/math/subtract_integer_with_clamp",
     "assembly/sdk/dma/do_csc2",
