@@ -74,4 +74,3 @@ void FUN_001ffe18(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x70);
 }
 
-extern __typeof__(FUN_001ffe18) func_001FFE18 __attribute__((alias("FUN_001ffe18")));

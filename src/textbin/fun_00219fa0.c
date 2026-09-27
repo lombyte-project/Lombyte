@@ -24,7 +24,7 @@ extern void func_001F4280();
 extern void func_001F4398();
 extern s32 func_001FF960();
 extern void func_001FFC30();
-extern void func_001FFE18();
+extern void func_001FFE18() __asm__("FUN_001ffe18");
 extern void func_00200080();
 extern void func_00200E08();
 
