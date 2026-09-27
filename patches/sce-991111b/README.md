@@ -5,8 +5,8 @@ project's **game compiler**: the production stack below, applied to the pinned
 archive, rebuilds the installed game-compiler `cc1` (joint parity gate 55/58,
 full-ELF gate PASS). Its bytes depend on the host compiler: through `0049`
 the WSL host built `05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`,
-and the full stack through `0055` builds `66c253915a6fa851…` on the Linux cloud
-host (see the build notes below). Check a rebuilt compiler by its output.
+and the stack through `0055` builds `66c253915a6fa851…`, the full stack through
+`0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). Check a rebuilt compiler by its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
 - SHA-256: `1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92`
@@ -38,7 +38,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0034`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`
+   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -59,12 +59,25 @@ wrappers. The `cc1` bytes depend on the host compiler as well as on the
 stack: on the Linux cloud host used for `0054`, the stack through `0053`
 builds `d372122712b3f995…`, which produces the same object as `05ff323f…` for
 every game-compiler unit, the stack through `0054` builds `6f4bb085d51c0633…`,
-and the full stack builds `66c253915a6fa851…`.
+the stack through `0055` builds `66c253915a6fa851…`, and the full stack
+through `0056` builds `fc69951c0ec883e19179d289fd690b3c7f94f15abb71b1ddafad14d7794cdf15`.
 Check a rebuilt compiler by its output, not by its hash, when the host
 differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0056-sda-extern-before-use.patch` SHA-256: `3cddcbd64614d349a827f1bc51678dbe383996575b9e7c27f3a79bb3da0998ad`
+  - role: default. A variable declared `__attribute__((sda))` gets its
+    `.extern NAME, SIZE` at its first use, ahead of the text of the function
+    that uses it, instead of in the end-of-file list. SN's `Ps2EeAs` is
+    single-pass: it addresses a symbol gp-relative only when its size is known
+    before the reference, which is how retail reaches some externals through
+    `$gp` and keeps others of the same size absolute. Unmarked externals keep
+    the end-of-file placement, so the patch is inert without the attribute.
+  - fixtures: `textbin/fun_00206b78`, `textbin/fun_0022e8c8` byte-identical,
+    and thirteen promoted units drop their inline `.extern` asm; full-ELF gate
+    PASS, linked ELF hash unchanged
 
 - `0055-r5900-no-second-hilo.patch` SHA-256: `f10fc14fa98c178f91244e721ed7fc4e5f1c1c6b1e851b8cf63c012d72f25262`
   - role: default. The R5900's second HI/LO pair stays fixed, so the register

@@ -1,0 +1,33 @@
+diff --git a/gcc/config/mips/mips.c b/gcc/config/mips/mips.c
+index 5f64251..d325b8b 100644
+--- a/gcc/config/mips/mips.c
++++ b/gcc/config/mips/mips.c
+@@ -5353,6 +5353,28 @@ mips_output_external (file, decl, name)
+   int len;
+   tree section_name;
+ 
++  /* ASTRA 0056: a variable the source marks `sda' is small data by
++     declaration, and SN's single-pass assembler needs its size before the
++     first reference to address it gp-relative.  The end-of-file list comes
++     too late for that, so emit its .extern here, at the first use, which is
++     ahead of the text of the function that uses it.  Unmarked externals keep
++     the end-of-file placement, where retail keeps them absolute.  */
++  if (TARGET_GP_OPT && file != 0
++      && TREE_CODE (decl) == VAR_DECL && DECL_SDA (decl)
++      && (len = int_size_in_bytes (TREE_TYPE (decl))) > 0)
++    {
++      tree name_tree = get_identifier (name);
++
++      if (! TREE_ASM_WRITTEN (name_tree))
++	{
++	  TREE_ASM_WRITTEN (name_tree) = 1;
++	  fputs ("\t.extern\t", file);
++	  assemble_name (file, name);
++	  fprintf (file, ", %d\n", len);
++	}
++      return 0;
++    }
++
+   if (TARGET_GP_OPT
+       && TREE_CODE (decl) != FUNCTION_DECL
+       && (len = int_size_in_bytes (TREE_TYPE (decl))) > 0
