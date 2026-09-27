@@ -177,7 +177,7 @@ RODATA_OVERLAYS = {
     "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
-    "fun_001fe980": (0x1E7A70, 0xE89F0),  # ported from rac1-decomp (PAL) via the cross-region correspondence
+    "fun_001fe980": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
     "fun_001fdc08": (0x1E7A20, 0xE89A0),  # switch table (PAL import)
 }
 
