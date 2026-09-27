@@ -48,10 +48,7 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 
 - [Himuro](https://github.com/Mikompilation/Himuro) — PS2 decompilation research and reference EE-GCC toolchain work used by Lombyte's matching compiler profiles.
 - [bordplate/RC1](https://codeberg.org/bordplate/RC1) — an earlier matching-decompilation skeleton for the same game; recovered symbol names and structure were used as reference with attribution.
-- [Lynder063/rac1-decomp](https://github.com/Lynder063/rac1-decomp) — a matching decompilation of the PAL release (SCES-50916) of the same game. Its toolchain notes on GCC 2.95 sub-build differences, register-spill widths and small-data addressing informed this project's compiler setup.
-  - **Some of this repository's C is their code.** Functions the PAL project decompiled are ported to this build: symbols are translated into the NTSC address space, the code is reduced to what each function needs, and every port is proven byte-exact against our retail. The decompilation itself — reading the machine code and writing the C — is their work.
-  - Every ported file says so in its first line, `/* Ported from rac1-decomp, the PAL decompilation (<file>, <function>). */`, naming the PAL source file and function it came from; `grep -rl "Ported from rac1-decomp" src` lists them.
-  - The two projects exchange work in both directions. The PAL project uses Lombyte's matched functions through its `tools/lombyte.py`; our side of the exchange is the cross-region tooling in Lombyte-Tools (`analysis/cross-region/`).
+- [Lynder063/rac1-decomp](https://github.com/Lynder063/rac1-decomp) — the PAL decompilation of the same game; some functions here are their C, ported to this build (marked `Ported from rac1-decomp` in the source).
 - [splat](https://github.com/ethteck/splat) and [spimdisasm](https://github.com/Decompollaborate/spimdisasm) — executable splitting and disassembly.
 - [objdiff](https://github.com/encounter/objdiff) — object-level comparison.
 - The PS2 reverse-engineering and decompilation communities for the tools and research that make matching projects possible.
