@@ -7,7 +7,7 @@ extern s32 D_0015ED88;
 extern s32 D_001940D4[];
 extern struct DisplayModes D_00137B80;
 extern struct Flags D_0013E550;
-extern u8 D_0012F1C8[];
+extern void FUN_0012f1c8();
 extern void func_0023A3B8(s32, s32, s32, s32, s32);
 extern s32 sceGsSyncV(s32);
 extern void FUN_00120558(s32, s32);
@@ -30,7 +30,7 @@ void FUN_00231608(s32 mode) {
     func_0023A3B8(w, h, (base + 0x3F) & ~0x3F, (base + 0x30003F) & ~0x3F, D_0015ED88);
     sceGsSyncV(0);
     FUN_00120558(0, 0);
-    sceGsSyncVCallback(D_0012F1C8);
+    sceGsSyncVCallback(FUN_0012f1c8);
     func_001F4A58(4);
     D_0013E550.flags |= 0x10;
 }

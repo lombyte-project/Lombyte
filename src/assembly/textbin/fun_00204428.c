@@ -24,7 +24,7 @@ extern s32 D_0015EE50;
 extern s32 D_0015EE54;
 extern s32 D_0015EEBC;
 extern s32 D_0015EEC0;
-extern u8 D_0022DD78[];
+extern void FUN_0022dd78();
 extern u8 D_1FF8000[];
 extern s32 func_0012DC80();
 extern s32 func_0012E088();
@@ -146,7 +146,7 @@ block_31:
         case 6:
             if (func_0012DC80(temp_4_67) == 0) {
                 *(s32 *)D_0015ED5C = 0xFFFFFFFF;
-                func_0012E088(D_0015EE4C->unk8 + D_0015EE4C, D_0022DD78, (u64) ((s64) D_0015ED5C << 0x20) >> 0x20);
+                func_0012E088(D_0015EE4C->unk8 + D_0015EE4C, FUN_0022dd78, (u64) ((s64) D_0015ED5C << 0x20) >> 0x20);
                 goto block_31;
             }
             /* Duplicate return node #36. Try simplifying control flow for better match */

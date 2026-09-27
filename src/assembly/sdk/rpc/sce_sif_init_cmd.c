@@ -34,8 +34,8 @@ struct M2c_var_3_42 {
     s32 unk4;
 };
 
-extern u8 D_0011A428[];
-extern u8 D_0011A448[];
+extern void FUN_0011a428();
+extern void FUN_0011a448();
 extern u8 D_0012FC04[];
 extern u8 D_00154D80[];
 extern u8 D_00154E00[];
@@ -102,9 +102,9 @@ loop_6:
     if (var_16_59 >= 0) {
         goto loop_6;
     }
-    D_00154E80.unk0 = D_0011A448;
+    D_00154E80.unk0 = FUN_0011a448;
     D_00154E80.unk4 = &D_00154E58;
-    D_00154E80.unk8 = D_0011A428;
+    D_00154E80.unk8 = FUN_0011a428;
     D_00154E80.unkC = &D_00154E58;
     EnableInterrupts();
     FlushCache(0);

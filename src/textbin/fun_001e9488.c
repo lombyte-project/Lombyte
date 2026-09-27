@@ -28,7 +28,7 @@ extern void func_0023A3B8(int, int, int, int, int);
 extern void sceCdSync(int);
 extern void sceGsSyncV(int);
 extern void FUN_00120558(int, int);
-extern void D_0012F1C8(void);
+extern int FUN_0012f1c8(void);
 extern void sceGsSyncVCallback(void (*)(void));
 extern void func_00200B10(int, int, int, int, int, int);
 /* Start level `level`: pick its two load parameters from the level
@@ -76,7 +76,7 @@ void FUN_001e9488(int level) {
     sceCdSync(0);
     sceGsSyncV(0);
     FUN_00120558(0, 0);
-    sceGsSyncVCallback(D_0012F1C8);
+    sceGsSyncVCallback(FUN_0012f1c8);
     func_00200B10(0x1000000, D_0015EE88, 0x1B, 6, 6, 1);
     D_0015EED8 = 0;
     func_001F4A58(4);

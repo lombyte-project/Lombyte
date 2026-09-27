@@ -12,7 +12,7 @@ struct M2c_D_00137B80 {
 };
 
 extern u8 D_0010E4C0[];
-extern u8 D_0012F1C8[];
+extern void FUN_0012f1c8();
 extern struct M2c_D_00137B80 D_00137B80;
 extern s32 D_0015ED80;
 extern s32 D_0015ED88;
@@ -125,7 +125,7 @@ u8 sp_slot[0x840];    s32 temp_16_103;
     DebugPrint(D_001E7AF8);
     func_00121190(0);
     func_00217048();
-    sceGsSyncVCallback(D_0012F1C8);
+    sceGsSyncVCallback(FUN_0012f1c8);
     D_00160F0C = 0x160000;
     func_002015D8();
     func_00121190(0);

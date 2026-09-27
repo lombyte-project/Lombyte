@@ -131,8 +131,8 @@ extern s32 D_0015F60C;
 extern u8 D_00187080[];
 extern u8 D_00187290[];
 extern s32 D_001872D4[];
-extern u8 D_0022DD90[];
-extern u8 D_0022DDD8[];
+extern void FUN_0022dd90();
+extern void FUN_0022ddd8();
 extern s32 ComputeByteStringHash();
 extern s32 ComputeSectorIndex();
 extern s32 FillTransferWords();
@@ -674,13 +674,13 @@ loop_103:
 block_107:
     func_0012E368(temp_18_724, &D_0013E550);
     temp_16_722->unk74 = 6U;
-    func_0012E448(temp_18_724, D_0022DDD8, var_21_707 + D_0013E5C0);
+    func_0012E448(temp_18_724, FUN_0022ddd8, var_21_707 + D_0013E5C0);
     goto block_121;
 block_108:
     if (!(temp_4_716 & 0x10)) {
         goto block_110;
     }
-    func_0012E448(temp_18_724, D_0022DDD8, var_21_707 + D_0013E5C0);
+    func_0012E448(temp_18_724, FUN_0022ddd8, var_21_707 + D_0013E5C0);
     goto block_121;
 block_110:
     temp_20_762 = temp_16_722->unk84;
@@ -713,12 +713,12 @@ block_118:
     if (temp_4_809->unk74 == 7) {
         goto block_120;
     }
-    func_0012E4C0(temp_18_724, var_17_766, *var_23_714, var_22_767, var_19_769, temp_20_762, D_0022DDD8, sp21C);
+    func_0012E4C0(temp_18_724, var_17_766, *var_23_714, var_22_767, var_19_769, temp_20_762, FUN_0022ddd8, sp21C);
     goto block_121;
 block_120:
     temp_3_826 = temp_4_809->unk78;
     temp_4_809->unk74 = 1U;
-    func_0012E308(temp_3_826->unk1C, temp_3_826->unk1A, *var_23_714, var_22_767, var_19_769, temp_20_762, D_0022DD90, var_21_707 + D_0013E5C0);
+    func_0012E308(temp_3_826->unk1C, temp_3_826->unk1A, *var_23_714, var_22_767, var_19_769, temp_20_762, FUN_0022dd90, var_21_707 + D_0013E5C0);
 block_121:
     var_23_714 += 4;
     var_21_707 += 0x70;

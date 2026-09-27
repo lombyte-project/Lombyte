@@ -15,9 +15,9 @@ extern int FUN_001f9770(void *);
 extern void FUN_0012ecd0(int, void (*)(int, long), long);
 extern void FUN_0012e448(int, void (*)(int, long), long);
 extern void FUN_0012ed00(int, void (*)(int, long), long);
-extern void D_00216BC0(int, long);
+extern void FUN_00216bc0(int, long);
 extern void func_00216B68(int, long);
-extern void D_00216990(int, long);
+extern void FUN_00216990(int, long);
 /* music_UpdateStream(music_Playing &): with a live handle and state other
    than 9, state 5 stops the stream (state 6) and state 6 without a
    handle resets; a fading record (+0xC bit 15) pauses the handle once
@@ -72,12 +72,12 @@ void music_update_stream(MusicPlaying *p) {
         if (p->state != 2 && p->state != 3) {
             h = p->handle;
             p->handle = 0xFFFFFFFF;
-            FUN_0012ecd0(h, D_00216BC0, (long)(unsigned int)p);
+            FUN_0012ecd0(h, FUN_00216bc0, (long)(unsigned int)p);
             FUN_0012e448(h, func_00216B68, (long)(unsigned int)p);
             return;
         }
         if (p->handle != 0xFFFFFFFF && p->state == 2) {
-            FUN_0012ed00(p->handle, D_00216990, (long)(unsigned int)p);
+            FUN_0012ed00(p->handle, FUN_00216990, (long)(unsigned int)p);
         }
     } else if (p->state == 7 || p->handle == 0) {
         p->state = 0;

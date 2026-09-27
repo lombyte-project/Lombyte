@@ -73,7 +73,7 @@ extern u8 D_001B6880[];
 extern u8 D_001CAAC0[];
 extern u8 D_001CD780[];
 extern u8 D_001D9740[];
-extern u8 D_0022DD78[];
+extern void FUN_0022dd78();
 extern void FillTransferWords();
 extern void FlushCache();
 extern void func_0012DC80();
@@ -272,7 +272,7 @@ loop_12:
     }
     func_002049F0(0, var_5_381, var_6_372, temp_7_377, var_8_384);
     *(s32 *)D_0015ED5C = 0xFFFFFFFF;
-    func_0012E088(temp_21_130 + temp_20_100->unk64, D_0022DD78, (u64) ((s64) D_0015ED5C << 0x20) >> 0x20);
+    func_0012E088(temp_21_130 + temp_20_100->unk64, FUN_0022dd78, (u64) ((s64) D_0015ED5C << 0x20) >> 0x20);
     do {
         FlushCache(0);
         sceGsSyncV(0);

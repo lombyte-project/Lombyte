@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import functools
 import json
 import os
 import re
@@ -100,6 +101,7 @@ def _elf_file_bytes(path: Path, address: int, size: int) -> bytes:
     raise ValueError(f"ELF range is not file-backed: 0x{address:08X}+0x{size:X}")
 
 
+@functools.lru_cache(maxsize=None)
 def _textbin_reference_aliases(source_root: Path) -> dict[int, tuple[str, ...]]:
     """Index address-shaped symbol references used by checked-in sources."""
     pattern = re.compile(r"\b(?:FUN|func|sub|D)_[0-9A-Fa-f]{8}\b")
@@ -123,7 +125,12 @@ def _textbin_reference_aliases(source_root: Path) -> dict[int, tuple[str, ...]]:
 
 
 def _textbin_oracle_labels(source_root: Path, symbol: str, address: int) -> list[str]:
-    aliases = list(_textbin_reference_aliases(source_root).get(address, ()))
+    # Pending wrappers include listings from config/us/expected/asm, and a
+    # listing can call a function by a spelling no C source uses.
+    aliases = set(_textbin_reference_aliases(source_root).get(address, ()))
+    listings = source_root.parent / "config/us/expected/asm"
+    aliases |= set(_textbin_reference_aliases(listings).get(address, ()))
+    aliases = sorted(aliases)
     return [symbol] + [alias for alias in aliases if alias != symbol]
 
 
