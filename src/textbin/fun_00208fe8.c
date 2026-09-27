@@ -1,0 +1,20 @@
+#include "types.h"
+#include "rnc/assembly_textbin_fun_00208f28_types.h"
+
+/* D_0013D2AC is the +0x1C field of the shared D_0013D290 save-state block. */
+extern struct M2c_D_0013D290 D_0013D290;
+extern s32 D_0015EEB0;
+extern s32 D_0015EEB4;
+
+void FUN_00208fe8(void) __asm__("FUN_00208fe8");
+
+void FUN_00208fe8(void) {
+    if (*(s32 *)((u8 *)&D_0013D290 + 0x1C)) {
+        D_0015EEB0 = 3;
+    } else if (D_0015EEB4 & 0x20) {
+        D_0015EEB4 ^= 0x20;
+        D_0015EEB0 = 0xC;
+    }
+}
+
+extern __typeof__(FUN_00208fe8) func_00208FE8 __attribute__((alias("FUN_00208fe8")));

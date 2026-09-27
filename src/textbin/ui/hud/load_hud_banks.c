@@ -1,0 +1,124 @@
+#include "types.h"
+
+#define ALIGN64(x) (((x) + 0x3F) & ~0x3FU)
+
+struct Chunk {
+    s32 offset;
+    s32 size;
+};
+
+struct HudFile {
+    u8 pad0[0x20];
+    struct Chunk chunk[6];
+};
+
+struct HudBank {
+    s32 unk0;
+    s32 off4;
+    s32 off8;
+    s32 offC;
+    s32 off10;
+    u8 pad14[0x40];
+    s32 has54;
+    s32 size58;
+    s32 has5C;
+    s32 has60;
+    s32 has64;
+    u8 pad68[0x2C];
+    s32 unk94;
+    s32 unk98;
+    s32 unk9C;
+    s32 unkA0;
+    s32 unkA4;
+};
+
+struct HudBanks {
+    u8 pad0[0x18];
+    struct HudBank *bank;
+    void *p1C;
+    void *p20;
+    void *p24;
+    void *p28;
+};
+
+struct Vram {
+    u8 pad0[8];
+    s32 base;
+};
+
+extern struct HudFile *D_0015EE4C;
+extern char D_0015FBB0[];
+extern char D_0015FBC0[];
+extern char D_0015FBD0[];
+extern char D_0015FBE0[];
+extern char D_0015FBF0[];
+extern struct Vram D_001940C0;
+extern struct HudBanks D_0019A3E8;
+extern u32 D_0019A420[];
+extern struct HudBank *func_001FF288(u32, s32, char *, s32);
+extern void FUN_001f98d0(void *, void *, u32);
+extern void load_compressed_hud_bank(s32, s32) __asm__("FUN_00202d10");
+extern s32 func_00232E40(void *, u32, u32, char *);
+extern void func_001FF128(s32, s32, s32);
+extern void func_001FEFC0(s32, void *);
+extern void FlushCache(s32);
+
+void load_hud_banks(void) __asm__("FUN_00202a98");
+
+void load_hud_banks(void) {
+    struct HudFile *f = D_0015EE4C;
+    struct HudBank *b;
+    void *t;
+    s32 i;
+    u32 size;
+    u32 n;
+    s32 vram;
+    u32 *dst;
+    s32 *c;
+    struct HudBanks *hb;
+    struct Vram *v;
+
+    dst = D_0019A420;
+    c = &f->chunk[1].size;
+    for (i = 0; i < 5; i++) {
+        *dst++ = ALIGN64(*c);
+        c += 2;
+    }
+    size = ALIGN64(f->chunk[0].size);
+    v = &D_001940C0;
+    b = func_001FF288(size, 0, D_0015FBB0, 0x23A);
+    hb = &D_0019A3E8;
+    FUN_001f98d0(b, (void *)(f->chunk[0].offset + (s32)f), size);
+    hb->bank = b;
+    hb->p1C = (u8 *)b + b->off4;
+    vram = v->base + 0x60000;
+    hb->p20 = (u8 *)b + b->off8;
+    hb->p28 = (u8 *)b + b->offC;
+    hb->p24 = (u8 *)b + b->off10;
+    if (b->has54) {
+        n = ALIGN64(f->chunk[1].size) >> 4;
+        load_compressed_hud_bank(0, vram);
+        hb->bank->unk94 = func_00232E40((void *)(f->chunk[1].offset + (s32)f), n, n, D_0015FBC0);
+        func_001FF128(0, vram, 1);
+    }
+    if (hb->bank->size58) {
+        t = func_001FF288(hb->bank->size58, 0, D_0015FBB0, 0x261);
+        load_compressed_hud_bank(1, (s32)t);
+        FlushCache(0);
+        func_001FEFC0(1, t);
+    }
+    if (hb->bank->has5C) {
+        u32 n3 = ALIGN64(f->chunk[3].size) >> 4;
+        hb->bank->unk9C = func_00232E40((void *)(f->chunk[3].offset + (s32)f), n3, n3, D_0015FBD0);
+    }
+    if (hb->bank->has60) {
+        u32 n4 = ALIGN64(f->chunk[4].size) >> 4;
+        hb->bank->unkA0 = func_00232E40((void *)(f->chunk[4].offset + (s32)f), n4, n4, D_0015FBE0);
+    }
+    if (hb->bank->has64) {
+        u32 n5 = ALIGN64(f->chunk[5].size) >> 4;
+        hb->bank->unkA4 = func_00232E40((void *)(f->chunk[5].offset + (s32)f), n5, n5, D_0015FBF0);
+    }
+}
+
+extern __typeof__(load_hud_banks) func_00202A98 __attribute__((alias("FUN_00202a98")));
