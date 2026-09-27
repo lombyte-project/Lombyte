@@ -35,7 +35,13 @@ from splat.util.conf import load as splat_load_yaml
 
 ROOT = Path.cwd()
 
-COMPILER = "ee-gcc2.9-991111-01"
+# The two compilers of the retail build: tools/compilers/game-compiler (the
+# reconstructed Sony/Cygnus 2.9-ee-991111b, game code) and
+# tools/compilers/sdk-compiler (the vendored EE-GCC 2.9-991111-01, the SDK
+# libraries).  The build stages tools/compilers as tools/cc.
+SDK_COMPILER = "sdk-compiler"
+# decomp.me id of the SDK compiler, for the permuter settings.
+SDK_COMPILER_DECOMPME = "ee-gcc2.9-991111-01"
 CROSS = "mips-ps2-decompals-"
 COMPILER_FLAGS = "-DMATCHING_DECOMP -O2 -g2 -gstabs"
 LANG_DEFINE = "-DBUILD_US_VERSION"
@@ -579,7 +585,7 @@ RODATA_OVERLAYS = {
 # sce_sif_init_iop_heap: retail tail (lui v0; sw; move v0) is byte-exact only
 # under -fno-schedule-insns; applying it globally to all EE-GCC 2.9 units changes
 # scePad2Read and other already-exact siblings.
-EE_GCC_FLAG_UNITS = {
+SDK_COMPILER_FLAG_UNITS = {
     "sce_sif_init_iop_heap": "-fno-schedule-insns",
     # Absolute-store macros and the final GP store's delay-slot placement.
     "initialize_global_state_entry": "-mno-split-addresses -fno-schedule-insns",
@@ -1783,7 +1789,7 @@ PADLESS_ASM_UNITS = {
 
 
 def _unit_flag(unit: str) -> str:
-    for suffix, flags in EE_GCC_FLAG_UNITS.items():
+    for suffix, flags in SDK_COMPILER_FLAG_UNITS.items():
         if unit.endswith(suffix):
             return flags
     return ""
@@ -1914,7 +1920,7 @@ def suppress_stdout_stderr():
 
 
 def get_compiler_command(command: str) -> Path:
-    compiler_dir = Path("tools") / "cc" / COMPILER
+    compiler_dir = Path("tools") / "cc" / SDK_COMPILER
     ee_dir = compiler_dir / "lib" / "gcc-lib" / "ee"
     ee_compiler_dirname = next(os.walk(ee_dir))[1][0]
 
@@ -1928,7 +1934,7 @@ def get_compiler_command(command: str) -> Path:
 
 def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     rel_root = Path(os.path.relpath(ROOT, config_dir))
-    game_cc_dir = f"{rel_root}/tools/cc/{COMPILER}/bin"
+    sdk_cc_dir = f"{rel_root}/tools/cc/{SDK_COMPILER}/bin"
 
     common_includes = (
         f"-I{src_path.parent / 'src'} "
@@ -1938,7 +1944,7 @@ def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     )
 
     compile_cmd = (
-        f"{game_cc_dir}/ee-gcc -c {common_includes} {LANG_DEFINE} {COMPILER_FLAGS}"
+        f"{sdk_cc_dir}/ee-gcc -c {common_includes} {LANG_DEFINE} {COMPILER_FLAGS}"
     )
 
     return compile_cmd, common_includes
@@ -2257,7 +2263,7 @@ compiler_type = "gcc"
 [preserve_macros]
 
 [decompme.compilers]
-"tools/cc/{COMPILER}/bin/ee-gcc" = "{COMPILER}"
+"tools/cc/{SDK_COMPILER}/bin/ee-gcc" = "{SDK_COMPILER_DECOMPME}"
 """
         )
 
@@ -2326,8 +2332,8 @@ def build_stuff(
     )
 
     ninja.rule(
-        "cc",
-        description="cc $in",
+        "sdk-compiler",
+        description="sdk-compiler $in",
         command=f"{compile_cmd} $in $extra -o $out && {CROSS}strip $out -N dummy-symbol-name -R .mdebug",
     )
 
@@ -2337,7 +2343,7 @@ def build_stuff(
         # another rule (patched/SN/EE-GCC 2.9), which changes codegen for 297
         # units without any error - the repository ignores tools/, so a fresh
         # clone reroutes them unnoticed.  Failing here keeps the build honest
-        # and makes the per-unit SN entries for cc_game owners unreachable, so
+        # and makes the per-unit SN entries for game-compiler owners unreachable, so
         # they can be deleted instead of sitting as dead configuration.
         raise SystemExit(
             "the reconstructed game compiler is required: "
@@ -2352,8 +2358,8 @@ def build_stuff(
     if game_compiler_configured():
         game_root = _game_compiler_root()
         ninja.rule(
-            "cc_game",
-            description="cc_game $in",
+            "game-compiler",
+            description="game-compiler $in",
             command=(
                 f"{game_root}/ee-gcc -c -I{game_root}/include {common_includes} "
                 f"{LANG_DEFINE} {COMPILER_FLAGS} "
@@ -2494,7 +2500,7 @@ def build_stuff(
                 variables = {}
                 if game_extra:
                     variables["extra"] = f"{game_extra} "
-                build(entry.object_path, entry.src_paths, "cc_game", variables=variables)
+                build(entry.object_path, entry.src_paths, "game-compiler", variables=variables)
             elif use_patched:
                 pat_work = str(ROOT / "build/patched-work/units" / unit)
                 flags = _unit_patched_flag(unit)
@@ -2548,7 +2554,7 @@ def build_stuff(
             else:
                 extra = _unit_flag(unit)
                 variables = {"extra": f"{extra} "} if extra else {}
-                build(entry.object_path, entry.src_paths, "cc", variables=variables)
+                build(entry.object_path, entry.src_paths, "sdk-compiler", variables=variables)
 
         elif isinstance(
             seg,

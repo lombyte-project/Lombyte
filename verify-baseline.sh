@@ -46,7 +46,8 @@ if [[ -e "$BASELINE_ROOT" && ! -f "$BASELINE_ROOT/.rnc-baseline-root" ]]; then
 fi
 
 [[ -x "$VENV/bin/python" ]] || die "missing virtual environment: $VENV (create it with: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt)"
-[[ -d "$COMPILER_ROOT/ee-gcc2.9-991111-01" ]] || die "missing frozen EE compiler under $COMPILER_ROOT"
+[[ -x "$COMPILER_ROOT/game-compiler/ee-gcc" ]] || die "missing game compiler: $COMPILER_ROOT/game-compiler"
+[[ -x "$COMPILER_ROOT/sdk-compiler/bin/ee-gcc" ]] || die "missing SDK compiler: $COMPILER_ROOT/sdk-compiler"
 [[ -x "$SN_TOOLCHAIN_ROOT/bin/ee-gcc.exe" ]] || die "missing textbin ee-gcc under $SN_TOOLCHAIN_ROOT"
 if [[ -n "${EE_GCC_PATCHED_ROOT:-}" && -x "$EE_GCC_PATCHED_ROOT/xgcc" ]]; then
   printf 'note: patched EE-GCC profile: %s\n' "$EE_GCC_PATCHED_ROOT"
