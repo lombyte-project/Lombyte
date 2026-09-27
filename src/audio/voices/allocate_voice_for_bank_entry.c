@@ -7,8 +7,8 @@ struct M2c_temp_3_30 {
 };
 
 extern u8 D_0013E550[];
-extern s32 D_0015F5B4[];
-extern s32 D_0015F634[];
+extern s32 D_0015F5B4;
+extern u8 *D_0015F634;
 extern s32 func_0022D7F0();
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -16,10 +16,10 @@ s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) {
     s32 temp_2_22;
     struct M2c_temp_3_30 *temp_3_30;
 
-    if (arg1 >= D_0015F5B4[0]) {
+    if (arg1 >= D_0015F5B4) {
         return -1;
     }
-    temp_2_22 = func_0022D7F0(D_0015F634[0] + (arg1 << 5), arg0, arg2, 0, 0x400);
+    temp_2_22 = func_0022D7F0(D_0015F634 + (arg1 << 5), arg0, arg2, 0, 0x400);
     if (temp_2_22 >= 0) {
         u32 b = 0x140000;
         s32 step = 0x70;

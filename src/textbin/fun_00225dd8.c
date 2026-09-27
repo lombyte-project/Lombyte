@@ -4,18 +4,18 @@
 
 extern u8 D_001D60B8[];
 s32 FUN_00225dd8(s32 arg0) {
-    register s32 var_6_6 __asm__("a2") = 0;
+    s32 count = 0;
     u8 *base = D_001D60B8;
-    u8 *var_5_8 = base + 4;
-loop_1:
-    var_6_6 += 1;
-    if (*(s32 *)(var_5_8 - 4) == arg0) {
-        *(s32 *)var_5_8 |= 4;
-        return 0;
+    u8 *entry = base + 4;
+loop:
+    count += 1;
+    if (*(s32 *)(entry - 4) != arg0) {
+        entry += 8;
+        if (count >= 5) {
+            return 1;
+        }
+        goto loop;
     }
-    var_5_8 += 8;
-    if (var_6_6 >= 5) {
-        return 1;
-    }
-    goto loop_1;
+    *(s32 *)entry |= 4;
+    return 0;
 }

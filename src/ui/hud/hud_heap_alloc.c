@@ -21,6 +21,10 @@ s32 hud_heap_alloc(s32 arg0) {
         InitializeResourceEntry();
     }
     if ((D_0019A3E8.unk14 - D_0019A3E8.unk10) >= arg_c) {
+        goto allocate;
+    }
+    return 0;
+allocate:
         var_2_20 = D_0019A3E8.unk10;
         tmp = arg_c + 0xF;
         size = tmp & 0xFFFFFFF0;
@@ -29,8 +33,6 @@ s32 hud_heap_alloc(s32 arg0) {
         next = next + size;
         D_0019A3E8.unk10 = next;
         return var_2_20;
-    }
-    return 0;
 }
 
 extern __typeof__(hud_heap_alloc) func_001ff288 __attribute__((alias("FUN_001ff288")));

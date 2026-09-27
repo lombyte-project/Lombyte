@@ -18,7 +18,8 @@ struct M2c_arg0 {
     s32 unk60;
 };
 
-extern s32 D_001612BC[];
+struct M2c_D_001612BC;
+extern struct M2c_D_001612BC *D_001612BC;
 extern s32 snd_init_movie_sound() __asm__("FUN_0012f068");
 extern s32 func_001F9810();
 s32 audio_dec_create(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3) __asm__("FUN_0023abd0");
@@ -42,7 +43,7 @@ s32 audio_dec_create(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     arg0->unk58 = 0;
     arg0->unk5C = 0;
     arg0->unk60 = 0;
-    D_001612BC[0] = arg3;
+    D_001612BC = (struct M2c_D_001612BC *)arg3;
     four = 0x400;
     arg0->unk4C = four;
     temp_2_38 = snd_init_movie_sound(0x400, 0x1000, 0x400, 0, 5, 3);

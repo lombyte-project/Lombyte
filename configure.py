@@ -127,14 +127,6 @@ ROUTE_EXCEPTIONS = {
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
     "textbin/gameplay/entities/patch_moby_gifs": "cc_sn_padless",
-    # fun_0021b6d8: Byte-exact only with per-unit -ffixed flags: local_alloc
-    # ranks argument registers above v1/v0 for short-lived pseudos, so the two
-    # != -1 condition pseudos land in a3 and v1 where retail uses v1 and v0. 70
-    # source shapes and all seven cc1 builds leave the pseudo set unchanged, and
-    # a register-variable equivalent fails because cc1 splits a single-use
-    # temporary out of its pinned variable. NOTE: promotion writes an
-    # SN_FLAG_UNITS entry in the game configure.py.
-    "textbin/fun_0021b6d8": "cc_sn_padless",
     # fun_00221460: A dead `p = m->items;` statement that cc1 deletes still
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
@@ -163,20 +155,17 @@ ROUTE_EXCEPTIONS = {
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
     "textbin/fun_0022c6f8": "cc_ee_gcc_patched",
-    # Game code that reproduces on the SDK compiler but not yet on the game compiler.
-    "runtime/objects/store_object_index": "sdk-compiler",
-    "runtime/dma/initialize_streaming_state": "sdk-compiler",
     "math/multiply_global_factor_ed64": "sdk-compiler",
     "math/multiply_global_scale": "sdk-compiler",
     "math/multiply_global_factor_ed70": "sdk-compiler",
     "math/convert_integer_to_float": "sdk-compiler",
     "runtime/resources/update_resource_counter": "sdk-compiler",
-    "textbin/fun_00225dd8": "sdk-compiler",
-    "runtime/state/initialize_global_state_entry": "sdk-compiler",
-    "runtime/resources/lookup_resource_entry": "sdk-compiler",
-    "gameplay/state/clear_stage_state_flag": "sdk-compiler",
-    "video/decoder/buffers/get_fifo_index": "sdk-compiler",
+    # Game code that reproduces on the SDK compiler but not yet on the game compiler.
+    "runtime/objects/store_object_index": "sdk-compiler",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
+    # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
+    # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
+    "sdk/time/bcd_to_time": "cc_ee_gcc_patched",
     # _pictureCodingExtension: absolute IPU_CTRL volatile stores must fill the
     # _nextBit call delay slots; the patched profile splits the AT macro and the
     # at-store policy brackets it with .set noat. 100/100/100, gate 2026-09-13.
@@ -186,18 +175,15 @@ ROUTE_EXCEPTIONS = {
     # reload-CSE folds and reverses load_register_parameters; 100/100/100 and
     # full-ELF gate 2026-09-13.
     "sdk/library/_lastFrame": "cc_ee_gcc_patched",
-    # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
-    # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
-    "sdk/time/bcd_to_time": "cc_ee_gcc_patched",
 }
 
 # Per-unit extra flags for the patched 991111 profile.  Every -mastra-* option
 # is opt-in and absent by default; flag-absent output is byte-identical.
 EE_GCC_PATCHED_FLAG_UNITS = {
+    "math/conversion/truncate_float_to_s32": "-mastra-inplace-cvt",
     "sdk/library/picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
     "textbin/fun_00226848": "-mastra-no-lo-sum-tie",
     "sdk/library/_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
-    "math/conversion/truncate_float_to_s32": "-mastra-inplace-cvt",
 }
 
 # Per-unit assembler policies applied by the generated padless-asm.py helper.
@@ -231,13 +217,9 @@ RODATA_OVERLAYS = {
 # scePad2Read and other already-exact siblings.
 SDK_COMPILER_FLAG_UNITS = {
     "sdk/rpc/sce_sif_init_iop_heap": "-fno-schedule-insns",
-    # Absolute-store macros and the final GP store's delay-slot placement.
-    "runtime/state/initialize_global_state_entry": "-mno-split-addresses -fno-schedule-insns",
     # Retail writes the absolute global through the assembler `$at` macro
     # (`lui $1,%hi; sw ...,%lo($1)`); the default split-address sequence uses a
     # general register instead.  Validated 100/100/100 under EE-GCC 2.9 + flag.
-    "gameplay/state/clear_stage_state_flag": "-mno-split-addresses",
-    "runtime/dma/initialize_streaming_state": "-mno-split-addresses",
     # DIntr: Sony libkernel privileged-loop glue.  The ps2sdk glue.c shape
     # (pinned eie/next/res + `.p2align 3`) matches retail only under the size
     # optimization with the missing-cse-follow-jumps policy; the default
@@ -269,14 +251,6 @@ SDK_COMPILER_FLAG_UNITS = {
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
 GAME_COMPILER_FLAG_UNITS = {
-    # -mastra-cygnus-cfg (patch 0049): these sources were matched while the
-    # Cygnus sibcall pass still ran its CFG cleanup before the first jump pass
-    # (it deletes the jump after the last return, so jump.c if-converts
-    # `return 1; ... return 0;' tails).  Retail/SN do not; the flag keeps the
-    # old behavior for them.  fun_0012eea8, fun_0012ef28, fun_00207300 and the
-    # snd_stream_safe_cd_* entries.  Every entry here is load-bearing: removing
-    # the flag changes allocated sections or relocations.
-    "ui/hud/hud_heap_alloc": "-mastra-cygnus-cfg",
     # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
     # (the .extern-ordering class); its call loop needs patch
     # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
@@ -287,25 +261,18 @@ GAME_COMPILER_FLAG_UNITS = {
     # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
     # 2026-09-22 demotion measured cc_game without the flag (62.65).
     "textbin/fun_00221968": "-fno-expensive-optimizations",
-    "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
-    "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
-    "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
-    "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer -mastra-cygnus-cfg",
+    # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
+    # constraints; the same four pins reproduce the object on the game compiler.
+    "textbin/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
+    "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer",
     # vu1_add_g_sregister needs only the address form: the game compiler already
     # builds without strict aliasing, so -fno-strict-aliasing changes nothing
     # here while -mno-split-addresses is required.
     "rendering/vu1_add_g_sregister": "-mno-split-addresses",
-    "audio/streaming/snd_stream_safe_cd_sync": "-fno-gcse -mastra-r5900-extern-buffer",
-    "audio/decoder/is_audio_ok": "-mno-split-addresses",
-    "audio/decoder/process_audio_stream": "-mno-split-addresses",
-    "textbin/fun_0023a3b8": "-mno-split-addresses",
-    "video/decoder/callbacks/handle_mpeg_no_data": "-mno-split-addresses",
-    "video/decoder/callbacks/handle_end_image": "-mno-split-addresses",
-    "video/display/wait_for_display_vsync": "-mno-split-addresses",
-    "rendering/debug/prepare_debug_profiler_render": "-mno-split-addresses",
-    "rendering/packets/put_disp_buffer": "-mno-split-addresses",
-    "audio/voices/allocate_voice_for_bank_entry": "-mno-split-addresses",
-    "ui/help/force_help_message": "-mno-split-addresses",
+    "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
     "textbin/fun_001f21c0": "-mno-split-addresses",
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
@@ -316,10 +283,6 @@ GAME_COMPILER_FLAG_UNITS = {
     # wrapper's bytes. The shorter keys also always won first-suffix-match over
     # the longer "textbin/..." spellings, so those were dead as well. Re-add with
     # the measurement and the reason recorded here if a C body needs them.
-    # moved off the SN route with its unit; the game compiler needs the same option
-    "textbin/fun_00225530": "-mno-split-addresses",
-    # moved off the SN route with its unit; the game compiler needs the same option
-    "audio/decoder/audio_dec_create": "-mno-split-addresses",
 }
 
 SN_FLAG_UNITS = {
@@ -327,11 +290,6 @@ SN_FLAG_UNITS = {
     # default prepass scheduler swaps them.  100/100/100 with
     # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
     "audio/rpc/snd_post_message": "-fno-schedule-insns",
-    # fun_0021b6d8: exact-route compiler flags.  All four register pins are
-    # required here; dropping any one of them changes the linked bytes.  This is
-    # the last register-allocation workaround in the project and the only entry
-    # no compiler improvement can retire on its own.
-    "textbin/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
 }
 
 

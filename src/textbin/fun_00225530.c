@@ -5,7 +5,7 @@ struct M2c_arg0 {
     s64 unk38;
 };
 
-extern s32 D_0015F60C[4];
+extern s32 D_0015F60C;
 extern s32 func_0020C828();
 
 s32 FUN_00225530(struct M2c_arg0 *arg0) {
@@ -13,6 +13,6 @@ s32 FUN_00225530(struct M2c_arg0 *arg0) {
         return 0;
     }
     func_0020C828();
-    arg0->unk38 = (s64) D_0015F60C[0];
+    arg0->unk38 = (s64) D_0015F60C;
     return 0;
 }
