@@ -1,0 +1,21 @@
+diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
+index 2370b49..94c905d 100644
+--- a/gas/config/tc-mips.c
++++ b/gas/config/tc-mips.c
+@@ -4261,8 +4261,15 @@ macro (ip)
+ 	       addiu	$tempreg,$tempreg,<sym>	(BFD_RELOC_LO16)
+ 	     If we have a constant, we need two instructions anyhow,
+ 	     so we may as well always use the latter form.  */
++	  /* ASTRA P20 for the address form: in reorder mode a symbol whose
++	     size is still unknown (no .extern seen yet) gets the absolute
++	     lui/addiu pair in one register, as ld_st already does.  The
++	     deferred relaxation pair would resolve to gp at link time.  */
+ 	  if ((valueT) offset_expr.X_add_number >= MAX_GPREL_OFFSET
+-	      || nopic_need_relax (offset_expr.X_add_symbol, 1))
++	      || nopic_need_relax (offset_expr.X_add_symbol, 1)
++	      || (! mips_opts.noreorder
++		  && ! S_IS_DEFINED (offset_expr.X_add_symbol)
++		  && offset_expr.X_add_symbol->ecoff_extern_size == 0))
+ 	    p = NULL;
+ 	  else
+ 	    {

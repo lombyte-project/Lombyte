@@ -1533,6 +1533,47 @@ GAME_COMPILER_UNITS = {
     # fun_0022c830: camera roll from the look vector angle, scaled by the
     # clamped distance
     "textbin/fun_0022c830",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f4fb8: the mask as 0xFF000000FFULL, a local s32 temp for each
+    # tested field so the test and the 5th u64 arg share one load, an s64 mask
+    # local for the loop, and the 5th arg written as (u64)((s64)x << 0x20) >>
+    # 0x20 to force the dsll32/dsrl32 sign-extension (dli expansion: 0052)
+    "textbin/fun_001f4fb8",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001ffe18: queue a textured quad as a 4-vertex triangle strip GIF
+    # packet (same texture bank lookup as fun_001ffc30)
+    "textbin/fun_001ffe18",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200600: both packet 64-bit constants come out of ori/dsll/ori
+    # chains (dli expansion: 0052); pos.x/pos.y are assigned first so f12/f13
+    # stay out of extra callee-saves, and the two size args stay s32 to avoid
+    # the zero-extend pair
+    "textbin/fun_00200600",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200c80: queue a GIF packet with one register pair and two XYZ2
+    # corners (pixel or subpixel coordinates)
+    "textbin/fun_00200c80",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_00200e08: same packet as fun_00200c80 with register 0x46
+    "textbin/fun_00200e08",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_002135f0: the block header fields are read through one struct so the
+    # scale stays in the load (absolute la for the unsized symbol: 0053)
+    "textbin/fun_002135f0",
+    # moved off the SN route: byte-identical on the game compiler
+    # saving_data_menu: byte arithmetic for the D_0013D290 entry, array/scalar
+    # extern choices that keep the store in retail order, and a packed one-field
+    # struct for the unaligned 64-bit copy (absolute la of the 8-byte symbol:
+    # 0053)
+    "textbin/ui/menus/save_data/saving_data_menu",
+    # moved off the SN route: byte-identical on the game compiler
+    # fun_001f5138: fog/alpha GS registers around a full-screen sprite when
+    # enabled
+    "rendering/effects/draw_fogged_fullscreen_sprite",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_0022ea08",
+    # moved off the SN route: byte-identical on the game compiler
+    "textbin/fun_00239690",
 }
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
@@ -1609,9 +1650,6 @@ SN_FLAG_UNITS = {
 # assembler's section tail padding.  The list is explicit per unit: the
 # assembler swap is proven per-object and must not drift to other units.
 PADLESS_ASM_UNITS = {
-    "textbin/fun_00239690",
-    "textbin/fun_0022ea08",
-
     "math/random/random_float_between",
     "textbin/fun_001ff480",
     "textbin/fun_001eda60",
@@ -1666,9 +1704,6 @@ PADLESS_ASM_UNITS = {
     # video_dec_flush: append the 4-byte end code to the ring buffer, send it,
     # round the stream position
     "video/decoder/video_dec_flush",
-    # fun_001f5138: fog/alpha GS registers around a full-screen sprite when
-    # enabled
-    "rendering/effects/draw_fogged_fullscreen_sprite",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
     "textbin/gameplay/entities/patch_moby_gifs",
@@ -1684,25 +1719,6 @@ PADLESS_ASM_UNITS = {
     # snd_bank_load_by_loc: padless route with no policy: the bank load resolves
     # once the sub-record pointer is a named local
     "textbin/audio/banks/snd_bank_load_by_loc",
-    # saving_data_menu: byte arithmetic for the D_0013D290 entry, array/scalar
-    # extern choices that keep the store in retail order, and a packed one-field
-    # struct for the unaligned 64-bit copy
-    "textbin/ui/menus/save_data/saving_data_menu",
-    # fun_002135f0: padless route: the block header fields are read through one
-    # struct so the scale stays in the load
-    "textbin/fun_002135f0",
-    # fun_00200c80: queue a GIF packet with one register pair and two XYZ2
-    # corners (pixel or subpixel coordinates)
-    "textbin/fun_00200c80",
-    # fun_00200e08: same packet as fun_00200c80 with register 0x46
-    "textbin/fun_00200e08",
-    # fun_001f4fb8: Byte-exact on the padless route (both none and la-gprel
-    # policies) with the mask as 0xFF000000FFULL, a local s32 temp for each
-    # tested field so the test and the 5th u64 arg share one load, an s64 mask
-    # local for the loop, and the 5th arg written as (u64)((s64)x << 0x20) >>
-    # 0x20 to force the dsll32/dsrl32 sign-extension; native/sn top out at 97.5
-    # because their assembler expands dli differently.
-    "textbin/fun_001f4fb8",
     # fun_002028e0: Plain-C rewrite: the 8-byte sprite clear must be a struct
     # s64 field store (not a cast-pointer store) so reload.c coalesces the
     # post-call %hi/%lo reload into the loop-carried base copy, a separate index
@@ -1714,15 +1730,6 @@ PADLESS_ASM_UNITS = {
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
     "textbin/rendering/set_up_vis_gif_viewer",
-    # fun_001ffe18: queue a textured quad as a 4-vertex triangle strip GIF
-    # packet (same texture bank lookup as fun_001ffc30)
-    "textbin/fun_001ffe18",
-    # fun_00200600: Decoding the listing dsll32 as a shift by N+32 on the R5900
-    # (both packet 64-bit constants come out of the ori/dsll/ori chains),
-    # assigning pos.x/pos.y first so f12/f13 stay out of extra callee-saves, and
-    # keeping the two size args s32 to avoid the zero-extend pair, reproduced
-    # retail exactly on the padless route; the registered sn route is 99.38.
-    "textbin/fun_00200600",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
     # INCREMENTS: p is a walked front-end pointer read through *p, p = p + 1
     # sits in the for-increment clause after i = i + 1 so the loop bottom RTL

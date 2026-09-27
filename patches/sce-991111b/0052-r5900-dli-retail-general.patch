@@ -1,0 +1,187 @@
+diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
+index 744d28d..2370b49 100644
+--- a/gas/config/tc-mips.c
++++ b/gas/config/tc-mips.c
+@@ -3056,109 +3056,79 @@ load_register (counter, reg, ep, dbl)
+             }
+         }
+ 
+-      /* R5900 64-bit immediates whose middle 32 bits are zero - the GS and
+-         ADX mask constants are all of that shape - are materialised by the
+-         original assembler as a 16-bit field shifted into place plus the low
+-         16 bits:
+-
+-             ori   rt, $zero, (value >> s)     # smallest s with value>>s <= 0xffff
+-             dsll  rt, rt, s                   # dsll32 when s >= 32
+-             ori   rt, rt, value & 0xffff      # only when the low bits are set
+-
+-         The generic search below can only find a shifted 16-bit constant when
+-         one 32-bit half of the value is entirely zero, so for a value with
+-         both a top and a bottom 16-bit field it falls back to a four-
+-         instruction lui/dsll32/ori sequence that assembles to different bytes.
+-         Recognise the retail form first; the condition below is deliberately
+-         narrow (the middle 32 bits must be zero) so every value the generic
+-         path already handled keeps its existing expansion.  */
+-      if ((hi32.X_add_number & 0x0000ffff) == 0
+-          && (lo32.X_add_number & 0xffff0000) == 0)
+-        {
+-          unsigned long long wide = ((unsigned long long) (unsigned long)
+-                                     hi32.X_add_number) << 32
+-            | (unsigned long long) (unsigned long) lo32.X_add_number;
+-          int shift2;
+-
+-          for (shift2 = 0; shift2 <= 48; shift2++)
+-            {
+-              unsigned long long top = wide >> shift2;
+-
+-              if (top <= 0xffff)
+-                {
+-                  expressionS hi_expr, lo_expr;
+-
+-                  hi_expr.X_op = O_constant;
+-                  hi_expr.X_add_number = (valueT) (offsetT) top;
+-                  macro_build ((char *) NULL, counter, &hi_expr, "ori", "t,r,i",
+-                               reg, 0, (int) BFD_RELOC_LO16);
+-                  if (shift2)
+-                    macro_build ((char *) NULL, counter, NULL,
+-                                 (shift2 >= 32) ? "dsll32" : "dsll", "d,w,<",
+-                                 reg, reg, (shift2 >= 32) ? shift2 - 32 : shift2);
+-                  if (shift2 && (wide & 0xffff) != 0)
+-                    {
+-                      lo_expr.X_op = O_constant;
+-                      lo_expr.X_add_number = (valueT) (offsetT) (wide & 0xffff);
+-                      macro_build ((char *) NULL, counter, &lo_expr, "ori", "t,r,i",
+-                                   reg, reg, (int) BFD_RELOC_LO16);
+-                    }
+-                  return;
+-                }
+-            }
+-        }
+-
+-      /* R5900 64-bit immediates whose middle 32 bits are zero - the GS and
+-         ADX mask constants are all of that shape - are materialised by the
+-         original assembler as a 16-bit field shifted into place plus the low
+-         16 bits:
+-
+-             ori   rt, $zero, (value >> s)     # smallest s with value>>s <= 0xffff
+-             dsll  rt, rt, s                   # dsll32 when s >= 32
+-             ori   rt, rt, value & 0xffff      # only when the low bits are set
+-
+-         The generic search below can only find a shifted 16-bit constant when
+-         one 32-bit half of the value is entirely zero, so for a value with
+-         both a top and a bottom 16-bit field it falls back to a four-
+-         instruction lui/dsll32/ori sequence that assembles to different bytes.
+-         Recognise the retail form first; the condition below is deliberately
+-         narrow (the middle 32 bits must be zero) so every value the generic
+-         path already handled keeps its existing expansion.  */
+-      if ((hi32.X_add_number & 0x0000ffff) == 0
+-          && (lo32.X_add_number & 0xffff0000) == 0)
+-        {
+-          unsigned long long wide = ((unsigned long long) (unsigned long)
+-                                     hi32.X_add_number) << 32
+-            | (unsigned long long) (unsigned long) lo32.X_add_number;
+-          int shift2;
+-
+-          for (shift2 = 0; shift2 <= 48; shift2++)
+-            {
+-              unsigned long long top = wide >> shift2;
+-
+-              if (top <= 0xffff)
+-                {
+-                  expressionS hi_expr, lo_expr;
+-
+-                  hi_expr.X_op = O_constant;
+-                  hi_expr.X_add_number = (valueT) (offsetT) top;
+-                  macro_build ((char *) NULL, counter, &hi_expr, "ori", "t,r,i",
+-                               reg, 0, (int) BFD_RELOC_LO16);
+-                  if (shift2)
+-                    macro_build ((char *) NULL, counter, NULL,
+-                                 (shift2 >= 32) ? "dsll32" : "dsll", "d,w,<",
+-                                 reg, reg, (shift2 >= 32) ? shift2 - 32 : shift2);
+-                  if (shift2 && (wide & 0xffff) != 0)
+-                    {
+-                      lo_expr.X_op = O_constant;
+-                      lo_expr.X_add_number = (valueT) (offsetT) (wide & 0xffff);
+-                      macro_build ((char *) NULL, counter, &lo_expr, "ori", "t,r,i",
+-                                   reg, reg, (int) BFD_RELOC_LO16);
+-                    }
+-                  return;
+-                }
+-            }
+-        }
++      /* R5900 64-bit immediates are materialised by the original assembler
++         top-down in 16-bit fields: the first field is aligned so that its
++         top bit is the highest set bit of the value, and each following
++         field is aligned to the highest set bit that is still missing, with
++         the shifts between them merged (zero runs cost no instruction):
++
++             ori   rt, $zero, value >> s0
++             dsll  rt, rt, s0 - s1          # dsll32 when the shift is >= 32
++             ori   rt, rt, (value >> s1) & 0xffff
++             ...
++             dsll  rt, rt, sN               # last shift down to bit 0
++             ori   rt, rt, value & ((1 << sN) - 1)   # when those bits are set
++
++         0x0005353535353106 -> ori 0xa6a6 ; dsll 16 ; ori 0xa6a6 ; dsll 11 ;
++         ori 0x106, and 0x000000ff000000ff -> ori 0xff00 ; dsll 24 ; ori 0xff.
++         Every multi-instruction 64-bit constant in the game's expected
++         listings follows this rule, including the zero-middle GS masks the
++         first version of this change handled and values the generic search
++         below would build with lui/dsll32.  Two shapes keep their existing
++         expansion because the listings show them that way: a plain low mask
++         2^n - 1 (li -1 ; dsrl) and values whose high word is all ones.  */
++      {
++        unsigned long long wide = ((unsigned long long) (unsigned long)
++                                   (hi32.X_add_number & 0xffffffff)) << 32
++          | (unsigned long long) (unsigned long)
++            (lo32.X_add_number & 0xffffffff);
++
++        if ((hi32.X_add_number & 0xffffffff) != 0xffffffff
++            && (wide & (wide + 1)) != 0)
++          {
++            expressionS field;
++            int top, cur, next, amount;
++            unsigned long long rest;
++
++            top = 63;
++            while (((wide >> top) & 1) == 0)
++              top--;
++            cur = top - 15;
++            field.X_op = O_constant;
++            field.X_add_number = (valueT) (offsetT) (wide >> cur);
++            macro_build ((char *) NULL, counter, &field, "ori", "t,r,i",
++                         reg, 0, (int) BFD_RELOC_LO16);
++            for (;;)
++              {
++                rest = wide & ((1ULL << cur) - 1);
++                if (rest == 0)
++                  next = 0;
++                else
++                  {
++                    top = cur - 1;
++                    while (((rest >> top) & 1) == 0)
++                      top--;
++                    next = (top < 16) ? 0 : top - 15;
++                  }
++                amount = cur - next;
++                if (amount != 0)
++                  macro_build ((char *) NULL, counter, NULL,
++                               (amount >= 32) ? "dsll32" : "dsll", "d,w,<",
++                               reg, reg,
++                               (amount >= 32) ? amount - 32 : amount);
++                cur = next;
++                if (rest == 0)
++                  break;
++                field.X_add_number = (valueT) (offsetT)
++                  ((rest >> cur) & 0xffff);
++                macro_build ((char *) NULL, counter, &field, "ori", "t,r,i",
++                             reg, reg, (int) BFD_RELOC_LO16);
++                if (cur == 0)
++                  break;
++              }
++            return;
++          }
++      }
+ 
+       /* Check for 16bit shifted constant.  We know that hi32 is
+          non-zero, so start the mask on the first bit of the hi32
