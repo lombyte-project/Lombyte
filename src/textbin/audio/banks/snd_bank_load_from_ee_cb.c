@@ -1,7 +1,7 @@
 #include "types.h"
-extern s32 D_0015EC88;
-extern s32 D_0015ECC8;
-extern s32 D_0015ECD0;
+extern s32 D_0015EC88 __attribute__((sda));
+extern s32 D_0015ECC8 __attribute__((sda));
+extern s32 D_0015ECD0 __attribute__((sda));
 extern s64 D_0015ECD8;
 extern u32 D_0015ED00;
 extern s32 D_00137B40[4];
@@ -18,10 +18,6 @@ extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, voi
 
 // Retail keeps this symbol out of small data here: the size decides the
 // HI16/LO16 pair instead of a gp-relative reference.
-__asm__(".extern D_0015ED00, 12");
-__asm__(".extern D_0015EC88, 4");
-__asm__(".extern D_0015ECD0, 4");
-__asm__(".extern D_0015ECC8, 4");
 void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) __asm__("FUN_0012e088");
 
 void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) {

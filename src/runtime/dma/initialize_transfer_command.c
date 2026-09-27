@@ -13,7 +13,6 @@ extern struct M2c_D_001D5BF0 D_001D5BF0;
  * FUN_00218d78 declares `extern u32 D_0015F604[]`), i.e. non-small-data.
  * The size metadata (12 = non-small under -G8; exact extent unknown) lets
  * GAS expand the compiler's symbolic store via lui $at, matching target. */
-__asm__(".extern D_0015F604, 12");
 void InitializeTransferCommand(void) {
     D_001D5BF0.unkC = 0;
     D_001D5BF0.unk10 = 0;

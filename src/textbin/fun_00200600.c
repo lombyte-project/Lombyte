@@ -1,5 +1,4 @@
 #include "types.h"
-__asm__(".extern D_00160F00, 12");
 
 struct DmaTag {
     u32 w0;

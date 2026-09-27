@@ -1,5 +1,4 @@
 #include "types.h"
-__asm__(".extern D_001601B0, 4");
 
 /* Draws the pause menu's ring of 8 icons and the quick-select overlay.
    arg0 is the pause-state object: unk20/unk24 give the viewport
@@ -24,7 +23,7 @@ struct PauseState {
 };
 
 extern s32 D_0015F438;
-extern s32 D_001601B0;
+extern s32 D_001601B0 __attribute__((sda));
 extern u8 D_0013E520[];
 extern u8 D_001602D8[];
 extern u8 D_001602E0[];

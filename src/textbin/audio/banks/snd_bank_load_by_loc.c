@@ -6,8 +6,8 @@ extern u8 D_00153DA8[];
 extern u8 D_00153DD8[];
 extern u8 D_00153DF8[];
 extern u8 D_0015EBE8[];
-extern s32 D_0015EC88;
-extern s32 D_0015ECC8;
+extern s32 D_0015EC88 __attribute__((sda));
+extern s32 D_0015ECC8 __attribute__((sda));
 extern u32 D_0015ED00;
 extern s32 printf(const char *, ...);
 extern s32 func_0012EE08(s32);
@@ -16,8 +16,6 @@ extern void FlushCache(s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
-__asm__(".extern D_0015EC88, 4");
-__asm__(".extern D_0015ECC8, 4");
 
 s32 snd_bank_load_by_loc(s32 arg0, s32 arg1) __asm__("FUN_0012df20");
 

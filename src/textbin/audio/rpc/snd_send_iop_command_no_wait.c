@@ -1,11 +1,11 @@
 #include "types.h"
 struct SndCb { s32 func; s32 pad; s64 data; };
-extern s32 D_0015ECC4;
-extern s32 D_0015EC80;
-extern s32 D_0015ECC0;
-extern s32 *D_0015ECA0[2];
-extern s32 D_0015ECA8[2];
-extern struct SndCb *D_0015ECB0[2];
+extern s32 D_0015ECC4 __attribute__((sda));
+extern s32 D_0015EC80 __attribute__((sda));
+extern s32 D_0015ECC0 __attribute__((sda));
+extern s32 *D_0015ECA0[2] __attribute__((sda));
+extern s32 D_0015ECA8[2] __attribute__((sda));
+extern struct SndCb *D_0015ECB0[2] __attribute__((sda));
 extern s32 D_00133100[4];
 extern u8 D_0015EBC0[];
 extern char D_00153D20[];
@@ -18,12 +18,6 @@ extern s32 FlushCache(s32);
 extern s32 StoreObjectIndex(void *, s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
-__asm__(".extern D_0015ECC4, 4");
-__asm__(".extern D_0015EC80, 4");
-__asm__(".extern D_0015ECC0, 4");
-__asm__(".extern D_0015ECA0, 8");
-__asm__(".extern D_0015ECA8, 8");
-__asm__(".extern D_0015ECB0, 8");
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) __asm__("FUN_0012e6e0");
 
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) {

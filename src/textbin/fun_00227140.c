@@ -4,9 +4,8 @@ struct TagPtr { struct DmaTag *p; };
 struct Mat { u8 pad[0x30]; };
 extern struct TagPtr D_00160F00;
 extern struct Mat D_001D7D90[];
-extern s32 D_00160360[2];
+extern s32 D_00160360[2] __attribute__((sda));
 extern void FUN_00228598(s32, s32);
-__asm__(".extern D_00160360, 8");
 
 void FUN_00227140(s32 arg0, s32 slot, s32 mat) {
     D_00160F00.p->w0 = 0x30000003;

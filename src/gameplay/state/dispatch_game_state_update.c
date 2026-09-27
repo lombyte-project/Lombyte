@@ -1,12 +1,11 @@
 #include "types.h"
 
 extern s32 D_0013E050[];
-extern s32 D_0015F434;
+extern s32 D_0015F434 __attribute__((sda));
 extern s32 D_0015F618;
 extern void func_001F4248(void);
 extern void func_001F39D0(void);
 extern void func_0022F288(void);
-__asm__(".extern D_0015F434, 4");
 
 void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 

@@ -1,12 +1,11 @@
 #include "types.h"
-extern f32 D_0015F348;
+extern f32 D_0015F348 __attribute__((sda));
 extern s32 D_0015F478;
 extern s32 func_001F76A0();
 extern s32 func_001F89A4();
 extern s32 func_001F8FF0();
 extern void func_00233980(s32, s64);
 /* retail small-data globals, declared to GAS before the body */
-__asm__(".extern D_0015F348, 4");
 
 void FUN_001f79a8(void) {
     if (D_0015F478 != 0) {

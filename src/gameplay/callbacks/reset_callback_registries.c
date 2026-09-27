@@ -1,9 +1,9 @@
 #include "types.h"
 extern s32 D_0015F330;
 extern s32 D_0015F334;
-extern s32 D_0015F34C;
-extern s32 D_0015F360;
-extern s32 D_0015F370;
+extern s32 D_0015F34C __attribute__((sda));
+extern s32 D_0015F360 __attribute__((sda));
+extern s32 D_0015F370 __attribute__((sda));
 extern s32 D_0015F444;
 extern s32 D_0015F448;
 extern s32 D_0015F464;
@@ -15,11 +15,7 @@ extern s32 D_0015F648;
 extern s32 D_00161190;
 extern s32 D_00161194;
 extern s32 D_00161198;
-extern s32 D_0016119C;
-__asm__(".extern D_0015F34C, 4");
-__asm__(".extern D_0015F360, 4");
-__asm__(".extern D_0015F370, 4");
-__asm__(".extern D_0016119C, 4");
+extern s32 D_0016119C __attribute__((sda));
 
 void reset_callback_registries(void) __asm__("FUN_001f37e8");
 

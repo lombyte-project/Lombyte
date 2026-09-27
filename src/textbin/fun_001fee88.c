@@ -3,7 +3,7 @@
 
 extern u8 D_0015F6D8[];
 extern struct M2c_D_0015FA00 *D_0015FA00;
-extern s32 D_0015FA04;
+extern s32 D_0015FA04 __attribute__((sda));
 extern s32 D_0015FA08;
 extern s32 D_0015FA0C;
 extern u8 D_00199B60[];
@@ -12,7 +12,6 @@ extern s32 func_001F9810();
 extern s32 func_001FF288();
 extern s32 func_001FF308();
 /* retail small-data globals, declared to GAS before the body */
-__asm__(".extern D_0015FA04, 4");
 
 void FUN_001fee88(void) {
     s32 var_17_14;

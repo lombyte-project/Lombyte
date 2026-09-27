@@ -19,11 +19,10 @@ struct Metrics {
 };
 
 extern struct View D_00151780;
-extern struct Metrics *D_0015F350;
+extern struct Metrics *D_0015F350 __attribute__((sda));
 extern void func_00233980(s32, u64);
 extern void func_001F52A0(s32, s32, s32, s32, u64);
 
-__asm__(".extern D_0015F350, 4");
 
 void FUN_001f4fb8(void) {
     s32 i;
