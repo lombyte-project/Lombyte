@@ -1,10 +1,11 @@
 # Building
 
-The verified environment is **Linux/WSL**. The SN compiler is a Windows
-executable and has to be runnable, so a plain Linux setup is not enough by
-itself. Compiler versions matter for matching: preserve the directory layouts and
-the executable permissions, and expect the toolchain binaries to be installed by
-you — nothing here is downloaded.
+The verified environment is **Linux/WSL**. Compiler versions matter for
+matching: preserve the directory layouts and the executable permissions, and
+expect the toolchain binaries to be installed by you — nothing here is
+downloaded. Until its last units are moved (see below), the SN compiler is also
+needed, and it is a Windows executable that has to be runnable, so a plain Linux
+setup is not enough by itself.
 
 Everything below is run from the checkout root, and `RNC_GAME_ROOT` in the
 sibling tooling repository points at this checkout.
@@ -14,27 +15,34 @@ sibling tooling repository points at this checkout.
 | Tool                                                | Required location                                                                 |
 | :-------------------------------------------------- | :-------------------------------------------------------------------------------- |
 | Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)    | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
-| EE-GCC `2.9-ee-991111-01`                           | `tools/compilers/ee-gcc2.9-991111-01/`                                            |
-| SN EE-GCC `2.95.2`                                  | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
+| SDK compiler (EE-GCC `2.9-ee-991111-01`)            | `tools/compilers/sdk-compiler/` (with `bin/ee-gcc`)                               |
+| SN EE-GCC `2.95.2` (retiring)                       | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
 | R5900 binutils                                      | the `mips-ps2-decompals-*` executables; set `BINUTILS_ROOT` to their directory    |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
 
-The game compiler is not optional: it builds the game line, and `configure.py`
-stops with an error instead of routing those units to a different compiler when
-it is missing. Its driver has no builtin include directory, so the three headers
-it needs for `<stdarg.h>` (`stdarg.h`, `stddef.h`, `va-mips.h`, taken from the
-compiler's own `gcc/ginclude`) must sit in `tools/compilers/game-compiler/include/`;
-the `cc_game` rule adds that directory with `-I`. Without them a unit that
+The retail executable was built with two compilers, and so is this one. The SDK
+libraries are linked as one block ahead of the game code; `configure.py` builds
+every C unit below `GAME_TEXT_START` with the SDK compiler and every unit from
+there on with the game compiler. The few units that do not reproduce on their
+compiler yet are listed in `ROUTE_EXCEPTIONS` with the route that still builds
+them; that list only shrinks.
+
+The game compiler is not optional: `configure.py` stops with an error instead of
+routing its units to a different compiler when it is missing. Its driver has no
+builtin include directory, so the three headers it needs for `<stdarg.h>`
+(`stdarg.h`, `stddef.h`, `va-mips.h`, taken from the compiler's own
+`gcc/ginclude`) must sit in `tools/compilers/game-compiler/include/`; the
+`game-compiler` rule adds that directory with `-I`. Without them a unit that
 includes `<stdarg.h>` cannot compile. Build it from the patch stack in
 [`patches/sce-991111b/`](../patches/sce-991111b/README.md), which records the
 pinned source archive, its SHA-256 and the host recipe that reproduces the
 expected `cc1`; then install the result as `tools/compilers/game-compiler`, or
 point `GAME_COMPILER_ROOT` at it.
 
-A few units were matched with an optional patched EE-GCC profile. `make elf` does
-not need it — those units fall back to the retail oracle — but install it to work
-on their C:
+A few units in `ROUTE_EXCEPTIONS` still use an optional patched EE-GCC profile.
+`make elf` does not need it — those units fall back to the retail oracle — but
+install it to work on their C:
 
 ```sh
 python3 scripts/build-patched-toolchain.py
@@ -82,7 +90,7 @@ and verifies the reconstructed executable against retail.
 The staging directory defaults to `build/baseline` inside the checkout and is
 **recreated on every run**. If the checkout lives on a Windows-mounted drive
 (`/mnt/c/...`), point `BASELINE_ROOT` at a native Linux directory such as
-`$HOME/rnc-baseline` so the frozen 32-bit compiler works on a local filesystem.
+`$HOME/rnc-baseline` so the 32-bit SDK compiler works on a local filesystem.
 
 | Output                   | Default location                             |
 | :----------------------- | :------------------------------------------- |
@@ -142,9 +150,10 @@ python3 rebuild-iso.py \
 | `VENV`                | `.venv` in the checkout                             |
 | `BASELINE_ROOT`       | `build/baseline`; disposable staging directory      |
 | `BINUTILS_ROOT`       | directory holding your `mips-ps2-decompals-*` tools |
-| `EE_GCC_PATCHED_ROOT` | optional patched EE-GCC profile                     |
+| `EE_GCC_PATCHED_ROOT` | optional patched EE-GCC profile (retiring)          |
 | `COMPILER_ROOT`       | `tools/compilers` in the checkout                   |
-| `SN_TOOLCHAIN_ROOT`   | `tools/compilers/ee-gcc-2.95.2` in the checkout     |
+| `GAME_COMPILER_ROOT`  | overrides `tools/compilers/game-compiler`           |
+| `SN_TOOLCHAIN_ROOT`   | `tools/compilers/ee-gcc-2.95.2` (retiring)          |
 
 ```sh
 # Override only when the checkout is on a Windows-mounted drive.
@@ -161,5 +170,4 @@ repository stores no oracle and no extracted game data, which is why a build
 cannot start before step 3.
 
 The layout of both repositories is mapped in `docs/project-map.md` in the
-sibling tooling checkout, together with the compiler inventory and which route
-owns which unit.
+sibling tooling checkout.
