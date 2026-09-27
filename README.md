@@ -26,9 +26,7 @@
 
 > [!WARNING]
 > Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
-> A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.<br>
-> The reconstructed game compiler is required too, and is rebuilt from the
-> patch stack in [`patches/`](patches/README.md) — see [Building](docs/building.md).
+> A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.
 
 | Game                   | Platform      | Region       | Boot executable |
 | ---------------------- | ------------- | ------------ | --------------- |
