@@ -1,0 +1,23 @@
+diff --git a/gcc/config/mips/mips.h b/gcc/config/mips/mips.h
+index 9689e6a..134c7a9 100644
+--- a/gcc/config/mips/mips.h
++++ b/gcc/config/mips/mips.h
+@@ -743,14 +743,10 @@ do									\
+ 	fixed_regs[27] = call_used_regs[27] = 1;                        \
+ 	fixed_regs[30] = call_used_regs[30] = 1;                        \
+       }									\
+-    /* The r5900 has a second hilo register.  Expose them to the	\
+-       register allocators when compiling for the r5900.  */		\
+-    if (TARGET_MIPS5900)                                                \
+-      {									\
+-	fixed_regs[HI1_REGNUM] = 0;					\
+-	fixed_regs[LO1_REGNUM] = 0;					\
+-	fixed_regs[HILO1_REGNUM] = 0;					\
+-      }									\
++    /* The r5900 has a second hilo register (mult1/div1).  The retail	\
++       game code never uses it - 436 multiplies, none on pipeline 1 -	\
++       so it stays fixed and the allocators keep every product in the	\
++       first pair.  */							\
+     SUBTARGET_CONDITIONAL_REGISTER_USAGE				\
+   }									\
+ while (0)

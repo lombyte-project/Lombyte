@@ -36,7 +36,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
    `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0034`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
-   `0050`, `0051`, `0052`, `0053`, `0054`
+   `0050`, `0051`, `0052`, `0053`, `0054`, `0055`
 
 Configure for `--target=mips64r5900-sf-elf --host=i686-linux-gnu
 --build=i686-linux-gnu --disable-nls --enable-languages=c --without-headers`
@@ -56,12 +56,25 @@ patched GNU `as` of this tree only assembles the pending `INCLUDE_ASM`
 wrappers. The `cc1` bytes depend on the host compiler as well as on the
 stack: on the Linux cloud host used for `0054`, the stack through `0053`
 builds `d372122712b3f995…`, which produces the same object as `05ff323f…` for
-every game-compiler unit, and the full stack builds `6f4bb085d51c0633…`.
+every game-compiler unit, the stack through `0054` builds `6f4bb085d51c0633…`,
+and the full stack builds `66c253915a6fa851…`.
 Check a rebuilt compiler by its output, not by its hash, when the host
 differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
 
 ## Published patches
+
+- `0055-r5900-no-second-hilo.patch` SHA-256: `f10fc14fa98c178f91244e721ed7fc4e5f1c1c6b1e851b8cf63c012d72f25262`
+  - role: default. The R5900's second HI/LO pair stays fixed, so the register
+    allocator never places a product there (`mult1`, `div1`). The retail game
+    code has 436 multiplies and none on pipeline 1 (the 8 `mult1` of the
+    executable are all in the SDK, which the SDK compiler builds). With the
+    pair exposed, the game compiler chose `mult1` for the second of two
+    overlapping multiplies. All 494 game-range units that were byte-identical
+    stay byte-identical; `-ffixed-hi1` cannot express this, because the
+    R5900 register setup un-fixes the pair after the command line is read
+  - fixtures: `textbin/fun_001fe980`, `textbin/fun_00214260`,
+    `textbin/storage/memory_card/data/memcard_restore_info` (PAL imports)
 
 - `0054-r5900-assembler-pads-loops.patch` SHA-256: `2cec82e691f4c2fbd20fe530960df5fe2476b891561bd6ad65342b31f8fa03eb`
   - role: default. The R5900 short-loop padding and the `div` padding are
