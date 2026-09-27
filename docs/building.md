@@ -14,9 +14,9 @@ sibling tooling repository points at this checkout.
 
 | Tool                                                | Required location                                                                 |
 | :-------------------------------------------------- | :-------------------------------------------------------------------------------- |
-| Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)    | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
+| Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)     | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
 | SDK compiler (EE-GCC `2.9-ee-991111-01`)            | `tools/compilers/sdk-compiler/` (with `bin/ee-gcc`)                               |
-| SN EE-GCC `2.95.2` (retiring)                       | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
+| SN EE-GCC `2.95.2`                                  | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
 | R5900 binutils                                      | the `mips-ps2-decompals-*` executables; set `BINUTILS_ROOT` to their directory    |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
@@ -28,9 +28,9 @@ there on with the game compiler. The few units that do not reproduce on their
 compiler yet are listed in `ROUTE_EXCEPTIONS` with the route that still builds
 them; that list only shrinks.
 
-The game compiler is not optional: `configure.py` stops with an error instead of
-routing its units to a different compiler when it is missing. Its driver has no
-builtin include directory, so the three headers it needs for `<stdarg.h>`
+The game compiler is required: `configure.py` stops with an error when it is
+missing. Its driver has no builtin include directory, so the three headers it
+needs for `<stdarg.h>`
 (`stdarg.h`, `stddef.h`, `va-mips.h`, taken from the compiler's own
 `gcc/ginclude`) must sit in `tools/compilers/game-compiler/include/`; the
 `game-compiler` rule adds that directory with `-I`. Without them a unit that
@@ -40,16 +40,9 @@ pinned source archive, its SHA-256 and the host recipe that reproduces the
 expected `cc1`; then install the result as `tools/compilers/game-compiler`, or
 point `GAME_COMPILER_ROOT` at it.
 
-A few units in `ROUTE_EXCEPTIONS` still use an optional patched EE-GCC profile.
-`make elf` does not need it — those units fall back to the retail oracle — but
-install it to work on their C:
-
-```sh
-python3 scripts/build-patched-toolchain.py
-export EE_GCC_PATCHED_ROOT="$PWD/tools/ee-gcc2.9-991111-01-patched"
-```
-
-See [patched-toolchain.md](patched-toolchain.md).
+Some units in `ROUTE_EXCEPTIONS` build with a patched EE-GCC profile, built
+separately. See [patched-toolchain.md](patched-toolchain.md) for the build and
+for how those units are handled when the profile is absent.
 
 ## 2. Python environment
 
@@ -150,10 +143,10 @@ python3 rebuild-iso.py \
 | `VENV`                | `.venv` in the checkout                             |
 | `BASELINE_ROOT`       | `build/baseline`; disposable staging directory      |
 | `BINUTILS_ROOT`       | directory holding your `mips-ps2-decompals-*` tools |
-| `EE_GCC_PATCHED_ROOT` | optional patched EE-GCC profile (retiring)          |
+| `EE_GCC_PATCHED_ROOT` | patched EE-GCC profile; see patched-toolchain.md    |
 | `COMPILER_ROOT`       | `tools/compilers` in the checkout                   |
 | `GAME_COMPILER_ROOT`  | overrides `tools/compilers/game-compiler`           |
-| `SN_TOOLCHAIN_ROOT`   | `tools/compilers/ee-gcc-2.95.2` (retiring)          |
+| `SN_TOOLCHAIN_ROOT`   | `tools/compilers/ee-gcc-2.95.2`                     |
 
 ```sh
 # Override only when the checkout is on a Windows-mounted drive.

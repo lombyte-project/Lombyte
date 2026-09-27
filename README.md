@@ -9,10 +9,8 @@
 </p>
 
 <p align="center">
-  <sub>
     A work-in-progress, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2.<br>
     Reconstructing the original executable in readable C, with a native PC port as the long-term goal.
-  </sub>
 </p>
 <br>
 
@@ -50,6 +48,7 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 
 - [Himuro](https://github.com/Mikompilation/Himuro) — PS2 decompilation research and reference EE-GCC toolchain work used by Lombyte's matching compiler profiles.
 - [bordplate/RC1](https://codeberg.org/bordplate/RC1) — an earlier matching-decompilation skeleton for the same game; recovered symbol names and structure were used as reference with attribution.
+- [Lynder063/rac1-decomp](https://github.com/Lynder063/rac1-decomp) — a matching decompilation of the PAL release of the same game; its toolchain notes on GCC 2.95 sub-build differences, register-spill widths and small-data addressing informed this project's compiler setup.
 - [splat](https://github.com/ethteck/splat) and [spimdisasm](https://github.com/Decompollaborate/spimdisasm) — executable splitting and disassembly.
 - [objdiff](https://github.com/encounter/objdiff) — object-level comparison.
 - The PS2 reverse-engineering and decompilation communities for the tools and research that make matching projects possible.

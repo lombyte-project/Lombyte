@@ -47,9 +47,9 @@ the map is a derived artifact. Prefer `decomp:` whenever the commit changes
 
 ```
 decomp: promote fun_002212b8 (424 B)
-decomp: promote run-11 owners (20 units; C_EXACT 485 / 65,428 B)
+decomp: promote run-11 owners (20 units)
 docs: add recovered engine source layout reference
-chore: refresh treemap (audit 465 units)
+chore: refresh treemap
 config: refresh recovered-name unit paths for promoted units
 fix: make verify-baseline.sh executable
 ```

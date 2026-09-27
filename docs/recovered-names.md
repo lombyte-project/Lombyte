@@ -18,7 +18,7 @@ The `rename_proposals` object uses schema `rnc-function-name-proposals-v1`. Each
 - `logical_group_confidence`: support for the subsystem assignment.
 - `unit` and `source_path`: the source-unit context associated with the catalog entry.
 
-This catalog snapshot contains **689** function entries: **395** names marked `proposed`, **2** marked `needs_review`, and **292** marked `unresolved`. An unresolved function may still have a tentative logical-group assignment. The `summary` object contains derived counts and should be regenerated when entries change.
+Count the entries rather than copying figures into this file: `rename_proposals.status` records how far the proposals have been applied (`base_commit` names the commit they were applied against), `match_counts` breaks down the `symbols` array by match extent, and both are regenerated with the catalog. An unresolved function may still have a tentative logical-group assignment.
 
 ## Naming and source organization
 

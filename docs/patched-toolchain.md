@@ -1,9 +1,9 @@
-# Patched EE-GCC profile (optional)
+# Patched EE-GCC profile
 
-Some units in `src/` were matched with a patched build of EE-GCC
-2.9-ee-991111-01. It is optional: `make elf` reproduces the retail executable
-without it, rebuilding those units from the retail oracle instead of their C.
-Install the profile to compile and verify their C.
+Some units in `src/` are matched with a patched build of EE-GCC
+2.9-ee-991111-01. `make elf` reproduces the retail executable without it,
+rebuilding those units from the retail oracle instead of their C; install the
+profile to compile and verify their C.
 
 The patch lives in
 [`patches/ee-gcc-2.9-991111-01/`](../patches/ee-gcc-2.9-991111-01/): 166
