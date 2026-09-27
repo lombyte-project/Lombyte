@@ -2,9 +2,11 @@
 
 Second patch surface for the Sony/Cygnus EE line and the source of the
 project's **game compiler**: the production stack below, applied to the pinned
-archive, rebuilds the installed game-compiler `cc1` byte for byte
-(`05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`; joint
-parity gate 55/58, full-ELF gate PASS).
+archive, rebuilds the installed game-compiler `cc1` (joint parity gate 55/58,
+full-ELF gate PASS). Its bytes depend on the host compiler: through `0049`
+the WSL host built `05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`,
+and the full stack through `0055` builds `66c253915a6fa851…` on the Linux cloud
+host (see the build notes below). Check a rebuilt compiler by its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
 - SHA-256: `1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92`
