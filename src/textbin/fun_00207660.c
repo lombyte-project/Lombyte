@@ -1,0 +1,8 @@
+/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207F00). */
+#define NOT_SDA __attribute__((section(".data")))
+extern unsigned char D_0013D3CB NOT_SDA;
+int FUN_00207660(void) {
+    return D_0013D3CB != 0;
+}
+
+extern __typeof__(FUN_00207660) func_00207660 __attribute__((alias("FUN_00207660")));
