@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 79.178496,
-    "total_code": "345648",
-    "matched_code": "143256",
-    "matched_code_percent": 41.445633,
-    "total_functions": 1171,
-    "matched_functions": 848,
-    "matched_functions_percent": 72.416738,
-    "complete_code": "143256",
-    "complete_code_percent": 41.445633,
-    "total_units": 109,
-    "complete_units": 45
+    "fuzzy_match_percent": 79.229214,
+    "total_code": "346492",
+    "matched_code": "144100",
+    "matched_code_percent": 41.588262,
+    "total_functions": 1177,
+    "matched_functions": 854,
+    "matched_functions_percent": 72.557349,
+    "complete_code": "144100",
+    "complete_code_percent": 41.588262,
+    "total_units": 110,
+    "complete_units": 46
   },
   "units": [
     {
@@ -229,15 +229,15 @@
     {
       "name": "sdk/library",
       "measures": {
-        "fuzzy_match_percent": 96.225182,
-        "total_code": "56648",
-        "matched_code": "31008",
-        "matched_code_percent": 54.738031,
-        "total_functions": 164,
-        "matched_functions": 113,
-        "matched_functions_percent": 68.902439,
-        "complete_code": "31008",
-        "complete_code_percent": 54.738031,
+        "fuzzy_match_percent": 96.274896,
+        "total_code": "57404",
+        "matched_code": "31764",
+        "matched_code_percent": 55.334123,
+        "total_functions": 166,
+        "matched_functions": 115,
+        "matched_functions_percent": 69.277108,
+        "complete_code": "31764",
+        "complete_code_percent": 55.334123,
         "total_units": 1,
         "complete_units": 0
       },
@@ -258,6 +258,15 @@
           "address": "192",
           "metadata": {
             "virtual_address": "78824"
+          }
+        },
+        {
+          "name": "quorem",
+          "size": "532",
+          "fuzzy_match_percent": 100.0,
+          "address": "280",
+          "metadata": {
+            "virtual_address": "78912"
           }
         },
         {
@@ -537,6 +546,15 @@
           "address": "24464",
           "metadata": {
             "virtual_address": "103096"
+          }
+        },
+        {
+          "name": "exponent",
+          "size": "224",
+          "fuzzy_match_percent": 100.0,
+          "address": "24896",
+          "metadata": {
+            "virtual_address": "103528"
           }
         },
         {
@@ -6549,6 +6567,66 @@
           "address": "54280",
           "metadata": {
             "virtual_address": "178832"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "sdk"
+        ]
+      }
+    },
+    {
+      "name": "sdk/syscalls",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "88",
+        "matched_code": "88",
+        "matched_code_percent": 100.0,
+        "total_functions": 4,
+        "matched_functions": 4,
+        "matched_functions_percent": 100.0,
+        "complete_code": "88",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "JumpToRfuDispatch",
+          "size": "8",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "125464"
+          }
+        },
+        {
+          "name": "RfuDispatchEntry",
+          "size": "40",
+          "fuzzy_match_percent": 100.0,
+          "address": "8",
+          "metadata": {
+            "virtual_address": "125472"
+          }
+        },
+        {
+          "name": "UpdateRfuDispatchState",
+          "size": "32",
+          "fuzzy_match_percent": 100.0,
+          "address": "560",
+          "metadata": {
+            "virtual_address": "126024"
+          }
+        },
+        {
+          "name": "JumpToRfuStatus",
+          "size": "8",
+          "fuzzy_match_percent": 100.0,
+          "address": "65104",
+          "metadata": {
+            "virtual_address": "190568"
           }
         }
       ],
@@ -13192,17 +13270,17 @@
       "id": "sdk",
       "name": "Sony SDK",
       "measures": {
-        "fuzzy_match_percent": 95.300873,
-        "total_code": "81980",
-        "matched_code": "48452",
-        "matched_code_percent": 59.10222,
-        "total_functions": 295,
-        "matched_functions": 220,
-        "matched_functions_percent": 74.576271,
-        "complete_code": "48452",
-        "complete_code_percent": 59.10222,
-        "total_units": 10,
-        "complete_units": 3
+        "fuzzy_match_percent": 95.348758,
+        "total_code": "82824",
+        "matched_code": "49296",
+        "matched_code_percent": 59.51898,
+        "total_functions": 301,
+        "matched_functions": 226,
+        "matched_functions_percent": 75.083056,
+        "complete_code": "49296",
+        "complete_code_percent": 59.51898,
+        "total_units": 11,
+        "complete_units": 4
       }
     }
   ]
