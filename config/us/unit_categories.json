@@ -239,6 +239,14 @@
     "assembly/math/multiply_global_factor_ed64",
     "assembly/math/multiply_global_scale",
     "assembly/math/multiply_global_factor_ed70",
-    "assembly/math/conversion/truncate_float_to_s32"
+    "assembly/math/conversion/truncate_float_to_s32",
+    "runtime/cache/synchronize_cache_range",
+    "runtime/interrupts/enable_intc",
+    "runtime/interrupts/disable_intc",
+    "runtime/dma/disable_dmac",
+    "runtime/dma/enable_dmac",
+    "video/decoder/callbacks/handle_end_image",
+    "sdk/library/DIntr",
+    "sdk/interrupts/enable_interrupts"
   ]
 }
