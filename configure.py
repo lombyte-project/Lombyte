@@ -434,6 +434,25 @@ def _win_path(value: str) -> str:
     return value.replace("/", "\\")
 
 
+def _windows_exe(path: str) -> str:
+    """Spell a Windows tool (Ps2EeAs, the SN driver) for a ninja command.
+
+    A checkout on a Windows drive under WSL (/mnt/<drive>/, see _win_path)
+    runs the PE natively through WSL interop. Anywhere else the PE can only run
+    under wine, so it is launched through an explicit `wine` rather than
+    whatever binfmt_misc resolves: launched that way, Ps2EeAs exits 253
+    printing nothing on some inputs (fun_001ec530, a div.s in a branch delay
+    slot) that `wine Ps2EeAs.exe` assembles. RNC_WINE overrides the wine
+    binary; an empty RNC_WINE runs the PE directly.
+    """
+    wine = os.environ.get("RNC_WINE")
+    if wine is None:
+        on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
+        wine = "" if on_windows_drive else (shutil.which("wine") or "")
+    quoted = shlex.quote(path)
+    return f"{shlex.quote(wine)} {quoted}" if wine else quoted
+
+
 def _unit_from_object(object_path: Path) -> str:
     """Derive the unit name from the ninja object path.
 
@@ -830,7 +849,7 @@ def build_stuff(
     # The generated helper rewrites GNU alias assignments to labels for
     # Ps2EeAs and trims only the section tail padding Ps2EeAs adds.
     (config_dir / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
-    ee_assembler = str(Path(SN_TOOLCHAIN_ROOT) / "ee/bin/Ps2EeAs.exe")
+    ee_assembler = _windows_exe(str(Path(SN_TOOLCHAIN_ROOT) / "ee/bin/Ps2EeAs.exe"))
 
     game_root = _game_compiler_root()
     # Game code: the game compiler's cc1, assembled by Ps2EeAs, as retail was.
@@ -847,7 +866,7 @@ def build_stuff(
             f"{game_root}/ee-gcc -S -I{game_root}/include {common_includes} "
             f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 $in $extra -o $gc_work/cand.s && "
             f"{sys.executable} padless-asm.py normalize $gc_work/cand.s $gc_work/cand-final.s none && "
-            f"'{ee_assembler}' -o '$gc_work_win/cand-padded.o' '$gc_work_win/cand-final.s' && "
+            f"{ee_assembler} -o '$gc_work_win/cand-padded.o' '$gc_work_win/cand-final.s' && "
             f"{game_root}/as -mabi=eabi -o $gc_work/cand-ref.o $gc_work/cand-final.s && "
             f"{sys.executable} padless-asm.py finish $gc_work/cand-padded.o $out $gc_work/cand-ref.o && "
             f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
@@ -868,7 +887,7 @@ def build_stuff(
     if sn_compiler_configured():
         sn_root = Path(SN_TOOLCHAIN_ROOT)
         sn_repo = ROOT
-        sn_driver = str(sn_root / "bin/ee-gcc.exe")
+        sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc.exe"))
         sn_lib = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2"))
         sn_eebin = _win_path(str(sn_root / "ee/bin"))
         sn_inc = _win_path(str(sn_root / "lib/gcc-lib/ee/2.95.2/include"))
@@ -882,7 +901,7 @@ def build_stuff(
             description="cc_sn $in",
             command=(
                 f"mkdir -p $sn_work && cp $in $sn_work/cand.c && "
-                f"'{sn_driver}' -c '-B{sn_lib}\\' '-B{sn_eebin}\\' "
+                f"{sn_driver} -c '-B{sn_lib}\\' '-B{sn_eebin}\\' "
                 f"-I'{sn_inc}' -I'{sn_repo_inc}' "
                 f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
                 f"'$sn_work_win/cand.c' -o '$sn_work_win/cand.o' && "
@@ -899,12 +918,12 @@ def build_stuff(
             description="cc_sn_padless $in",
             command=(
                 f"mkdir -p $sn_work && cp $in $sn_work/cand.c && "
-                f"'{sn_driver}' -S '-B{sn_lib}\\' '-B{sn_eebin}\\' "
+                f"{sn_driver} -S '-B{sn_lib}\\' '-B{sn_eebin}\\' "
                 f"-I'{sn_inc}' -I'{sn_repo_inc}' "
                 f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
                 f"'$sn_work_win/cand.c' -o '$sn_work_win/cand.s' && "
                 f"{sys.executable} padless-asm.py normalize $sn_work/cand.s $sn_work/cand-final.s $policy && "
-                f"'{ee_assembler}' -o '$sn_work_win/cand-padded.o' '$sn_work_win/cand-final.s' && "
+                f"{ee_assembler} -o '$sn_work_win/cand-padded.o' '$sn_work_win/cand-final.s' && "
                 f"{sys.executable} padless-asm.py finish $sn_work/cand-padded.o $out && "
                 f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
             ),
@@ -926,7 +945,7 @@ def build_stuff(
                     f"-DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -g2 $extra "
                     f"$pat_work/cand.c -o $pat_work/cand.s && "
                     f"{sys.executable} padless-asm.py normalize $pat_work/cand.s $pat_work/cand-final.s $policy && "
-                    f"'{ee_assembler}' -o '$pat_work_win/cand-padded.o' '$pat_work_win/cand-final.s' && "
+                    f"{ee_assembler} -o '$pat_work_win/cand-padded.o' '$pat_work_win/cand-final.s' && "
                     f"{sys.executable} padless-asm.py finish $pat_work/cand-padded.o $out && "
                     f"{CROSS}strip $out -N dummy-symbol-name -R .mdebug"
                 ),
