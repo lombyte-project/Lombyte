@@ -141,6 +141,33 @@ ROUTE_EXCEPTIONS = {
     # registers after the FIFO drains
     "textbin/video/decoder/vi_buf_stop_dma": "cc_sn_padless",
     "video/decoder/video_dec_flush": "cc_sn_padless",
+    # --- route closure fallout, 2026-09-27
+    #
+    # These five were promoted while the SN line was still legal for game code,
+    # so their bodies are byte-exact there. Closing ROUTE_EXCEPTIONS moved them
+    # onto the game compiler, which does not reproduce them with the common
+    # configuration: all five were re-measured on game-compiler and sit at
+    # 89.8-99.5%, and four of them come out 4-8 bytes SHORT in .text, which
+    # shifts every later address and turns the full-ELF gate red in scattered
+    # fragments. A per-unit score does not show this - it is measured on the
+    # registered route, while the build uses the provenance route.
+    #
+    # They are listed here as measurements, not preferences, and each is a
+    # candidate for retirement: the residual is small and the levers are known.
+    #
+    # fun_00200c80: retail materialises the 32-bit constant 0xF0000000 with two
+    # ori+dsll pairs; the game compiler folds it into a shift sequence, so the
+    # unit is 8 bytes short.
+    "textbin/fun_00200c80": "cc_sn_padless",
+    # fun_00200e08: same shape of constant folding, same 8-byte shortfall.
+    "textbin/fun_00200e08": "cc_sn_padless",
+    # fun_002135f0: 4 bytes short on the game compiler.
+    "textbin/fun_002135f0": "cc_sn_padless",
+    # saving_data_menu: 4 bytes short on the game compiler.
+    "textbin/ui/menus/save_data/saving_data_menu": "cc_sn_padless",
+    # fun_001f4fb8: right size, but the game compiler still disagrees on 97.5% of
+    # the body where the SN line is byte-exact.
+    "textbin/fun_001f4fb8": "cc_sn_padless",
     # Game code still built by the patched 991111 compiler (plus the SN assembler).
     "math/conversion/truncate_float_to_s32": "cc_ee_gcc_patched",
     "runtime/memory/calculate_ring_buffer_bounds": "cc_ee_gcc_patched",
