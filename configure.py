@@ -179,6 +179,14 @@ RODATA_OVERLAYS = {
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
     "fun_001fe980": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
     "fun_001fdc08": (0x1E7A20, 0xE89A0),  # switch table (PAL import)
+    # A switch's jump table is a literal pool that retail placed at a fixed VMA
+    # (jtbl_001528E0 = 0x1528E0); the expected object references it by that
+    # splat symbol, so the compiled .rodata has to land at the same VMA and
+    # file offset for the relocation to resolve content-equal. Same shape as
+    # _getpic above. This only fixes the PLACEMENT, so it unblocks objdiff
+    # pairing; it does not by itself make the unit match.
+    "_sceFs_Rcv_Intr": (0x1528E0, 0x53860),  # retail switch table (jtbl_001528E0)
+    "fun_00216c48": (0x1E86A0, 0xE9620),  # retail switch table (jtbl_001E86A0)
 }
 
 # Recovered C units that define the small-data variables their original
