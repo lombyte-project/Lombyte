@@ -997,7 +997,7 @@ segments:
           - [0xf5800, c, textbin/fun_001f4880]
           - [0xf59d8, c, textbin/rendering/transitions/fade_to_black]
           - [0xf5b60, c, textbin/fun_001f4be0]
-          - [0xf5d18, c, assembly/textbin/fun_001f4d98]
+          - [0xf5d18, c, textbin/fun_001f4d98]
           - [0xf5f38, c, textbin/fun_001f4fb8]
           - [0xf60b8, c, rendering/effects/draw_fogged_fullscreen_sprite]
           - [0xf6190, c, rendering/packets/emit_rgba_draw_packet]
