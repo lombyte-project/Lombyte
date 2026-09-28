@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 79.73755,
+    "fuzzy_match_percent": 79.737552,
     "total_code": "345780",
-    "matched_code": "159436",
-    "matched_code_percent": 46.109087,
+    "matched_code": "159476",
+    "matched_code_percent": 46.120655,
     "total_functions": 1169,
-    "matched_functions": 910,
-    "matched_functions_percent": 77.844311,
-    "complete_code": "159436",
-    "complete_code_percent": 46.109087,
+    "matched_functions": 911,
+    "matched_functions_percent": 77.929855,
+    "complete_code": "159476",
+    "complete_code_percent": 46.120655,
     "total_units": 107,
     "complete_units": 57
   },
@@ -5641,15 +5641,15 @@
     {
       "name": "sdk/rpc",
       "measures": {
-        "fuzzy_match_percent": 98.830446,
+        "fuzzy_match_percent": 98.830529,
         "total_code": "4776",
-        "matched_code": "3560",
-        "matched_code_percent": 74.539363,
+        "matched_code": "3600",
+        "matched_code_percent": 75.376884,
         "total_functions": 24,
-        "matched_functions": 20,
-        "matched_functions_percent": 83.333333,
-        "complete_code": "3560",
-        "complete_code_percent": 74.539363,
+        "matched_functions": 21,
+        "matched_functions_percent": 87.5,
+        "complete_code": "3600",
+        "complete_code_percent": 75.376884,
         "total_units": 1,
         "complete_units": 0
       },
@@ -5702,7 +5702,7 @@
         {
           "name": "sceSifRemoveCmdHandler",
           "size": "40",
-          "fuzzy_match_percent": 99.99,
+          "fuzzy_match_percent": 100.0,
           "address": "4568",
           "metadata": {
             "virtual_address": "112360"
@@ -13126,15 +13126,15 @@
       "id": "sdk",
       "name": "Sony SDK",
       "measures": {
-        "fuzzy_match_percent": 95.343801,
+        "fuzzy_match_percent": 95.343805,
         "total_code": "82728",
-        "matched_code": "52836",
-        "matched_code_percent": 63.867131,
+        "matched_code": "52876",
+        "matched_code_percent": 63.915482,
         "total_functions": 299,
-        "matched_functions": 240,
-        "matched_functions_percent": 80.267559,
-        "complete_code": "52836",
-        "complete_code_percent": 63.867131,
+        "matched_functions": 241,
+        "matched_functions_percent": 80.602007,
+        "complete_code": "52876",
+        "complete_code_percent": 63.915482,
         "total_units": 10,
         "complete_units": 5
       }
