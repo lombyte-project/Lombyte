@@ -3,11 +3,15 @@
 extern u32 D_00154E64[];
 extern u32 D_00154E6C[];
 
-void sceSifAddCmdHandler(s32 idx, s32 arg1, s32 arg2) {
-    register u32 off __asm__("v1") = idx << 3;
-    register u32 base __asm__("a0") = (idx < 0) ? D_00154E64[0] : D_00154E6C[0];
-    u32 *slot = (u32 *)(off + base);
+void sceSifAddCmdHandler(s32 idx, u32 handler, u32 data) {
+    u32 off = idx << 3;
 
-    slot[0] = arg1;
-    slot[1] = arg2;
+    if (idx < 0) {
+        idx = D_00154E64[0];
+    } else {
+        idx = D_00154E6C[0];
+    }
+    off += idx;
+    *(u32 *)off = handler;
+    *(u32 *)(off + 4) = data;
 }
