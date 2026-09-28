@@ -1,32 +1,32 @@
 {
   "measures": {
-    "fuzzy_match_percent": 79.474007,
+    "fuzzy_match_percent": 79.474011,
     "total_code": "339440",
-    "matched_code": "160692",
-    "matched_code_percent": 47.340325,
+    "matched_code": "160852",
+    "matched_code_percent": 47.387462,
     "total_functions": 1164,
-    "matched_functions": 916,
-    "matched_functions_percent": 78.694158,
-    "complete_code": "160692",
-    "complete_code_percent": 47.340325,
+    "matched_functions": 918,
+    "matched_functions_percent": 78.865979,
+    "complete_code": "160852",
+    "complete_code_percent": 47.387462,
     "total_units": 107,
-    "complete_units": 58
+    "complete_units": 59
   },
   "units": [
     {
       "name": "game/runtime/state",
       "measures": {
-        "fuzzy_match_percent": 99.999725,
+        "fuzzy_match_percent": 100.0,
         "total_code": "436",
-        "matched_code": "424",
-        "matched_code_percent": 97.247706,
+        "matched_code": "436",
+        "matched_code_percent": 100.0,
         "total_functions": 21,
-        "matched_functions": 20,
-        "matched_functions_percent": 95.238095,
-        "complete_code": "424",
-        "complete_code_percent": 97.247706,
+        "matched_functions": 21,
+        "matched_functions_percent": 100.0,
+        "complete_code": "436",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -176,7 +176,7 @@
         {
           "name": "SetStateField",
           "size": "12",
-          "fuzzy_match_percent": 99.99,
+          "fuzzy_match_percent": 100.0,
           "address": "1222896",
           "metadata": {
             "virtual_address": "1301488"
@@ -220,7 +220,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "game"
         ]
@@ -229,15 +229,15 @@
     {
       "name": "sdk/library",
       "measures": {
-        "fuzzy_match_percent": 95.808203,
+        "fuzzy_match_percent": 95.808232,
         "total_code": "50992",
-        "matched_code": "34128",
-        "matched_code_percent": 66.928146,
+        "matched_code": "34276",
+        "matched_code_percent": 67.218387,
         "total_functions": 160,
-        "matched_functions": 123,
-        "matched_functions_percent": 76.875,
-        "complete_code": "34128",
-        "complete_code_percent": 66.928146,
+        "matched_functions": 124,
+        "matched_functions_percent": 77.5,
+        "complete_code": "34276",
+        "complete_code_percent": 67.218387,
         "total_units": 1,
         "complete_units": 0
       },
@@ -992,7 +992,7 @@
         {
           "name": "cdvd_exit",
           "size": "148",
-          "fuzzy_match_percent": 99.99,
+          "fuzzy_match_percent": 100.0,
           "address": "58648",
           "metadata": {
             "virtual_address": "137280"
@@ -13066,30 +13066,30 @@
       "measures": {
         "fuzzy_match_percent": 74.977536,
         "total_code": "263052",
-        "matched_code": "107772",
-        "matched_code_percent": 40.969846,
+        "matched_code": "107784",
+        "matched_code_percent": 40.974408,
         "total_functions": 870,
-        "matched_functions": 674,
-        "matched_functions_percent": 77.471264,
-        "complete_code": "107772",
-        "complete_code_percent": 40.969846,
+        "matched_functions": 675,
+        "matched_functions_percent": 77.586207,
+        "complete_code": "107784",
+        "complete_code_percent": 40.974408,
         "total_units": 97,
-        "complete_units": 53
+        "complete_units": 54
       }
     },
     {
       "id": "sdk",
       "name": "Sony SDK",
       "measures": {
-        "fuzzy_match_percent": 94.958189,
+        "fuzzy_match_percent": 94.958209,
         "total_code": "76388",
-        "matched_code": "52920",
-        "matched_code_percent": 69.277897,
+        "matched_code": "53068",
+        "matched_code_percent": 69.471645,
         "total_functions": 294,
-        "matched_functions": 242,
-        "matched_functions_percent": 82.312925,
-        "complete_code": "52920",
-        "complete_code_percent": 69.277897,
+        "matched_functions": 243,
+        "matched_functions_percent": 82.653061,
+        "complete_code": "53068",
+        "complete_code_percent": 69.471645,
         "total_units": 10,
         "complete_units": 5
       }

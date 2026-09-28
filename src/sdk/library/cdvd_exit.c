@@ -4,8 +4,9 @@ extern s32 DIntr(); extern s32 DeleteSema(); extern s32 SignalSema(); extern s32
 void cdvd_exit(void) {
     s32 temp_16_31;
     if (D_001312D4[0] != 0) {
-        D_00131314[0] = -1;
-        __asm__ volatile ("" ::: "memory");
+        do {
+            D_00131314[0] = -1;
+        } while (0);
         SignalSema(D_001312E0[0]);
     }
     DeleteSema(D_001312E8[0]);

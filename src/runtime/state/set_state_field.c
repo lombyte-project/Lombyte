@@ -3,7 +3,10 @@
 int SetStateField(int *state_fields) __asm__("func_0023CC70");
 
 int SetStateField(int *state_fields) {
-    register int field_value asm("$2") = 1;
-    state_fields[42] = field_value;
-    return field_value;
+    int value = 1;
+
+    do {
+        state_fields[42] = value;
+    } while (0);
+    return value;
 }
