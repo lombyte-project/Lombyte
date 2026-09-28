@@ -13138,6 +13138,23 @@
         "total_units": 10,
         "complete_units": 5
       }
+    },
+    {
+      "id": "overlays",
+      "name": "Level overlays (out of scope)",
+      "measures": {
+        "fuzzy_match_percent": 0.0,
+        "total_code": "0",
+        "matched_code": "0",
+        "matched_code_percent": 0.0,
+        "total_functions": 0,
+        "matched_functions": 0,
+        "matched_functions_percent": 0.0,
+        "complete_code": "0",
+        "complete_code_percent": 0.0,
+        "total_units": 0,
+        "complete_units": 0
+      }
     }
   ]
 }

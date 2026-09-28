@@ -74,6 +74,8 @@ screen overlays.
 ## Scope
 
 The matching decompilation targets the retail boot executable only. Per-level
-`update/*` and `hero*` code lives in overlays that are out of scope for the
-matching goal; the module list above is provided as engine context for naming
-and for the future runtime, not as a work queue.
+`update/*` and `hero*` code lives in the level code overlays, which are out of
+scope until the executable is done (see
+[progress-metrics.md](progress-metrics.md#level-overlays)); the module list above
+is provided as engine context for naming and for the future runtime, not as a
+work queue.

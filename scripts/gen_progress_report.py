@@ -61,7 +61,10 @@ from progress_groups import (  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 REPORT = REPO / "progress" / "report.json"
-CATEGORIES = (("game", "Game"), ("sdk", "Sony SDK"))
+# "overlays" is the per-level game code loaded from each level's data
+# (out of scope for now, see docs/progress-metrics.md). It has no units, so
+# it reports 0 and does not move the totals.
+CATEGORIES = (("game", "Game"), ("sdk", "Sony SDK"), ("overlays", "Level overlays (out of scope)"))
 
 
 def unit_name(owner: str) -> str:

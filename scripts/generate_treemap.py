@@ -878,7 +878,7 @@ def render_svg(
         '<?xml version="1.0" encoding="UTF-8"?>',
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" '
-        f'aria-label="Decompilation progress treemap">',
+        f'aria-label="Decompilation progress treemap of the boot ELF (SCUS_971.99)">',
         f"<title>{esc(title)}</title>",
         f'<rect width="{width}" height="{height}" fill="{BACKGROUND}"/>',
         '<defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0">'
@@ -1058,7 +1058,7 @@ def main(argv=None) -> int:
         help="groups below this size are combined per status class; 0 (default) "
         "draws every logical group",
     )
-    parser.add_argument("--title", default="Ratchet & Clank - decompilation progress")
+    parser.add_argument("--title", default="Ratchet & Clank - boot ELF (SCUS_971.99) decompilation progress")
     parser.add_argument(
         "--no-scores",
         action="store_true",
