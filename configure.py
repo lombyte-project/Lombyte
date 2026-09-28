@@ -306,6 +306,9 @@ LANGUAGES = {
 
 BASENAME = "SCUS_971.99"
 LD_PATH = f"{BASENAME}.ld"
+# The script ld actually runs: LD_PATH with every per-object `.text` statement
+# rewritten to a unique input-section name (see write_fast_linkerscript).
+FAST_LD_PATH = f"{BASENAME}.fast.ld"
 ELF_PATH = f"build/{BASENAME}"
 MAP_PATH = f"build/{BASENAME}.map"
 PRE_ELF_PATH = f"build/{BASENAME}.elf"
@@ -740,6 +743,7 @@ def clean(config_dir: Path):
         "undefined_syms_auto.txt",
         "padless-asm.py",
         LD_PATH,
+        FAST_LD_PATH,
     ):
         (config_dir / file).unlink(missing_ok=True)
 
@@ -760,6 +764,42 @@ compiler_type = "gcc"
 "tools/cc/{SDK_COMPILER}/bin/ee-gcc" = "{SDK_COMPILER_DECOMPME}"
 """
         )
+
+
+_TEXT_STATEMENT_RE = re.compile(r"^(\s*)(build/\S+?\.o)\(\.text\);$", re.MULTILINE)
+
+
+def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
+    """Write FAST_LD_PATH from LD_PATH; return (object, link copy, section) rows.
+
+    GNU ld 2.40 resolves a statement that names its input file
+    (`build/src/x.c.o(.text);`) by walking the whole input list, and the cost
+    of the retail layout (one output section per object, ~2100 of them) grows
+    about cubically: 117 s for the boot ELF, while `*(.text.NAME)` statements
+    over the same objects link in 2 s (docs/SPEEDUP.md in the tools repo).
+
+    So each object with a `.text` statement gets a link copy under
+    build/link/ whose `.text` is renamed to a unique `.text.lnkNNNN`, the
+    statement becomes `*(.text.lnkNNNN);`, every other statement naming that
+    object names the copy, and the copies are loaded with INPUT(). LD_PATH
+    itself is unchanged, so the tools that read the layout keep working; the
+    linked bytes are identical (the gate hash proves it).
+    """
+    text = (config_dir / LD_PATH).read_text()
+    rows: list[tuple[str, str, str]] = []
+
+    def rename(match: re.Match) -> str:
+        obj = match.group(2)
+        section = f".text.lnk{len(rows):04d}"
+        rows.append((obj, "build/link/" + obj.removeprefix("build/"), section))
+        return f"{match.group(1)}*({section}); /* {obj} */"
+
+    text = _TEXT_STATEMENT_RE.sub(rename, text)
+    for obj, copy, _ in rows:
+        text = text.replace(f"{obj}(", f"{copy}(")
+    inputs = "".join(f"    {copy}\n" for _, copy, _ in rows)
+    (config_dir / FAST_LD_PATH).write_text(f"INPUT(\n{inputs})\n\n" + text)
+    return rows
 
 
 def build_stuff(
@@ -958,6 +998,12 @@ def build_stuff(
     )
 
     ninja.rule(
+        "link_copy",
+        description="link copy $out",
+        command=f"{CROSS}objcopy --rename-section .text=$section $in $out",
+    )
+
+    ninja.rule(
         "verify_boot",
         description="verify reconstructed boot ELF $in",
         command="cmp -s $in && touch $out",
@@ -1101,11 +1147,16 @@ def build_stuff(
     )
     alias_path.write_text("\n".join(alias_lines) + "\n")
 
+    link_copies = []
+    for obj, copy, section in write_fast_linkerscript(config_dir):
+        ninja.build(copy, "link_copy", obj, variables={"section": section})
+        link_copies.append(copy)
+
     ninja.build(
         PRE_ELF_PATH,
         "ld",
-        LD_PATH,
-        implicit=[str(obj) for obj in built_objects],
+        FAST_LD_PATH,
+        implicit=[str(obj) for obj in built_objects] + link_copies + [LD_PATH],
         variables={"mapfile": MAP_PATH},
     )
 
