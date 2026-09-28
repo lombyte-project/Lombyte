@@ -29,9 +29,8 @@ struct M2c_arg0 {
 };
 
 extern u8 D_00113AC8[];
-extern s32 std();
+extern void std();
 void __sinit(struct M2c_arg0 *arg0) {
-    register s32 temp_17_10 __asm__("v0");
     s32 *temp_17_9;
 
     temp_17_9 = ((u8 *)arg0 + (0x1E4));
@@ -41,7 +40,6 @@ void __sinit(struct M2c_arg0 *arg0) {
     std(((u8 *)arg0 + (0x23C)), 9, 1, arg0);
     std(((u8 *)arg0 + (0x294)), 0xA, 2, arg0);
     arg0->unk1E0 = temp_17_9;
-    temp_17_10 = 3;
-    arg0->unk1DC = temp_17_10;
+    arg0->unk1DC = 3;
     arg0->unk1D8 = 0;
 }
