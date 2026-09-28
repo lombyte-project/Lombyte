@@ -83,11 +83,11 @@ ROUTE_EXCEPTIONS = {
     "audio/rpc/snd_post_message": "cc_sn",
     # snd_send_current_batch: send the current sound command batch over SIF RPC
     # and flip to the other buffer
-    "textbin/audio/rpc/snd_send_current_batch": "cc_sn",
+    "audio/rpc/snd_send_current_batch": "cc_sn",
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
-    "textbin/fun_00208030": "cc_sn",
-    "textbin/fun_00221e50": "cc_sn",
+    "ui/menus/fun_00208030": "cc_sn",
+    "ui/menus/fun_00221e50": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
@@ -95,42 +95,42 @@ ROUTE_EXCEPTIONS = {
     # sits in the for-increment clause after i = i + 1 so the loop bottom RTL
     # orders [counter][p walk], and the table stays indexed so its base
     # materialises in the preheader. 45 earlier shapes had missed it.
-    "textbin/rendering/texture/parse_particle_textures": "cc_sn_padless",
+    "rendering/texture/parse_particle_textures": "cc_sn_padless",
     # fun_00202800: load packed screen points: shift x/y, convert u/v, clear
     # flags
-    "textbin/fun_00202800": "cc_sn_padless",
+    "world/loaders/unpack_point_records": "cc_sn_padless",
     # fun_002028e0: Plain-C rewrite: the 8-byte sprite clear must be a struct
     # s64 field store (not a cast-pointer store) so reload.c coalesces the
     # post-call %hi/%lo reload into the loop-carried base copy, a separate index
     # variable for the group loop pins f->s3/i->s4, and `f->loaded = 1` before
     # the relocation stores fixes their schedule.
-    "textbin/fun_002028e0": "cc_sn_padless",
+    "world/loaders/relocate_sky_definition": "cc_sn_padless",
     # set_up_vis_gif_viewer: Registered route is padless+none (native scores
     # only 87.8): the packet high word is (u64)(u32)n << 32 taken from the 2nd
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
-    "textbin/rendering/set_up_vis_gif_viewer": "cc_sn_padless",
+    "rendering/set_up_vis_gif_viewer": "cc_sn_padless",
     "gameplay/animation/update_moby_animation_state": "cc_sn_padless",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
-    "textbin/gameplay/entities/patch_moby_gifs": "cc_sn_padless",
+    "gameplay/entities/patch_moby_gifs": "cc_sn_padless",
     # fun_00221460: A dead `p = m->items;` statement that cc1 deletes still
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
     # emit in retail's order a2<-s0, a3<-v0, a1<-s2. NOTE:
     # src/assembly/textbin/fun_001fd748.c still declares that callee as s32 in
     # another translation unit.
-    "textbin/fun_00221460": "cc_sn_padless",
+    "ui/menus/fun_00221460": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
-    "textbin/fun_00232d00": "cc_sn_padless",
+    "storage/cd/fun_00232d00": "cc_sn_padless",
     # Game code still built by the patched 991111 compiler (plus the SN assembler).
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
-    "textbin/fun_00226848": "cc_ee_gcc_patched",
+    "ui/menus/fun_00226848": "cc_ee_gcc_patched",
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
-    "textbin/fun_0022c6f8": "cc_ee_gcc_patched",
+    "audio/sound/fun_0022c6f8": "cc_ee_gcc_patched",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
     # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
@@ -150,7 +150,7 @@ ROUTE_EXCEPTIONS = {
 # is opt-in and absent by default; flag-absent output is byte-identical.
 EE_GCC_PATCHED_FLAG_UNITS = {
     "sdk/library/picturecodingextension": "-mastra-volatile-delay -mastra-sd-saves",
-    "textbin/fun_00226848": "-mastra-no-lo-sum-tie",
+    "ui/menus/fun_00226848": "-mastra-no-lo-sum-tie",
     "sdk/library/_lastFrame": "-mastra-sd-saves -mastra-cse-argdup -mastra-call-args-reverse",
 }
 
@@ -173,12 +173,12 @@ RODATA_OVERLAYS = {
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
-    "fun_0020baf0": (0x1E8390, 0xE9310),  # unlock-condition switch table
+    "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
     "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
-    "fun_001fe980": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
-    "fun_001fdc08": (0x1E7A20, 0xE89A0),  # switch table (PAL import)
+    "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
+    "ui/help/dismiss_help": (0x1E7A20, 0xE89A0),  # switch table (PAL import)
     # A switch's jump table is a literal pool that retail placed at a fixed VMA
     # (jtbl_001528E0 = 0x1528E0); the expected object references it by that
     # splat symbol, so the compiled .rodata has to land at the same VMA and
@@ -198,7 +198,7 @@ RODATA_OVERLAYS = {
 # small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
 SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00),
-    "textbin/fun_001f0bd0": (0x15F000, 0x5FF80),
+    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80),
     "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878),
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
@@ -250,14 +250,14 @@ GAME_COMPILER_FLAG_UNITS = {
     # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
     # full-ELF PASS on 2026-09-22.
     "audio/streaming/snd_init_vag_streaming_ex": "-mastra-r5900-extern-buffer",
-    "textbin/fun_00219fa0": "-mastra-r5900-extern-buffer",
+    "ui/menus/fun_00219fa0": "-mastra-r5900-extern-buffer",
     # fun_00221968: 100/100/100 on the game compiler only with
     # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
     # 2026-09-22 demotion measured cc_game without the flag (62.65).
-    "textbin/fun_00221968": "-fno-expensive-optimizations",
+    "ui/menus/fun_00221968": "-fno-expensive-optimizations",
     # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
     # constraints; the same four pins reproduce the object on the game compiler.
-    "textbin/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
+    "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
     "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
     "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
     "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
@@ -267,11 +267,11 @@ GAME_COMPILER_FLAG_UNITS = {
     # here while -mno-split-addresses is required.
     "rendering/vu1_add_g_sregister": "-mno-split-addresses",
     "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
-    "textbin/fun_001f21c0": "-mno-split-addresses",
+    "rendering/state/reset_graphics": "-mno-split-addresses",
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "textbin/fun_00225490": "-fno-schedule-insns",
-    "textbin/fun_0022c7e8": "-fno-schedule-insns",
+    "ui/menus/fun_00225490": "-fno-schedule-insns",
+    "audio/sound/fun_0022c7e8": "-fno-schedule-insns",
     # fun_001f33b8 (-fno-schedule-insns) and fun_00221f58 (-G0) carry no entry:
     # both owners are still assembly wrappers, where an option cannot change the
     # wrapper's bytes. The shorter keys also always won first-suffix-match over

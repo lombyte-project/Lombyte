@@ -178,6 +178,12 @@ def map_rows(path: Path) -> dict[int, dict[str, object]]:
     return rows
 
 
+def _is_address_unit(name: str) -> bool:
+    """A promoted unit still named after its address (``<group>/fun_001f4fb8``):
+    its source defines the FUN symbol itself, as the ``textbin/`` units did."""
+    return not name.startswith("assembly/") and re.fullmatch(r"fun_[0-9a-f]{8}", name.rsplit("/", 1)[-1]) is not None
+
+
 def configured_textbin_functions(
     config: Path,
     function_map: Path,
@@ -192,7 +198,7 @@ def configured_textbin_functions(
         # Validate before using the configured name to inspect a source path.
         if rnc_units.unsafe_unit_name(name):
             raise ValueError(f"unsafe unit name in configuration: {name!r}")
-        is_textbin_unit = name.startswith(("assembly/textbin/", "textbin/"))
+        is_textbin_unit = name.startswith(("assembly/textbin/", "textbin/")) or _is_address_unit(name)
         address = int(item["start"])
         # A unit may hold several functions of one translation unit; they must
         # tile its range exactly in the function map.
@@ -271,7 +277,7 @@ def install(
                     struct.unpack_from("<I", raw, offset)[0]
                     for offset in range(0, len(raw), 4)
                 ]
-                if unit.startswith("textbin/") and not row["has_address_asm_label"]:
+                if (unit.startswith("textbin/") or _is_address_unit(unit)) and not row["has_address_asm_label"]:
                     labels = [name]
                 else:
                     labels = _textbin_oracle_labels(workspace / "src", name, start)
