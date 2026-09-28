@@ -19,13 +19,13 @@ struct M2c_temp_16_13 {
     s32 unk174;
 };
 extern s32 _decPicture(struct M2c_temp_16_13 *a0);
-extern s32 _dispatchMpegCbNodata(struct M2c_arg0 *a0);
-extern s32 _outputFrame(struct M2c_temp_16_13 *a0, s32 a1, s32 a2);
+extern void _dispatchMpegCbNodata(struct M2c_arg0 *a0);
+extern void _outputFrame(struct M2c_temp_16_13 *a0, s32 a1, s32 a2);
 extern s32 _updateRefImage(struct M2c_temp_16_13 *a0, s32 a1);
 s32 _decodeOrSkipFrame(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     s32 ret;
     s32 flag;
-    register s32 t __asm__("v1");
+    s32 t;
     struct M2c_temp_16_13 *tmp;
     flag = 0;
     tmp = arg0->unk40;
@@ -37,7 +37,8 @@ s32 _decodeOrSkipFrame(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
         if (_updateRefImage(tmp, 0) == 0) {
             t = 0;
         } else {
-            t = _decPicture(tmp) != 0;
+            t = 0;
+            t = _decPicture(tmp) != t;
         }
         ret = t;
     } else {

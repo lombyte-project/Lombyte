@@ -18,8 +18,8 @@ extern s32 isceSifSetDma();
 s32 _sceSifSendCmd(u32 packet, s32 mode, SifCmd *cmd, s32 size, u32 src, u32 dst, s32 dst_size) {
     SifDma tags[2];
     s32 num;
-    register u32 mode44 __asm__("v0");
-    register u32 addr0 __asm__("a0");
+    register u32 mode44;
+    register u32 addr0;
 
     if ((u32)(size - 0x10) >= 0x61) {
         return 0;

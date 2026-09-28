@@ -8,8 +8,8 @@ extern s32 func_00120D40();
 extern s32 sceSifCallRpc();
 extern void sceSifWriteBackDCache();
 s32 sceCdMmode(s32 arg0) {
-    register u8 *state __asm__("s2");
-    register s32 mode __asm__("s0");
+    register u8 *state;
+    register s32 mode;
     s32 result;
 
     state = D_00132900;

@@ -15,15 +15,15 @@ extern u8 D_001B3AC0[];
 extern u8 D_001D59D8[];
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 void FUN_002267b8(void) {
-    register s32 inner_6 asm("v1");
-    register s32 tbl_6 asm("v0");
+    register s32 inner_6;
+    register s32 tbl_6;
     s32 var_6_6;
-    register u8 *base18 asm("v0");
+    register u8 *base18;
     struct M2c_var_5_18 *var_5_18;
-    register s32 addr asm("v0");
-    register s32 a8 asm("v1");
-    register s32 ac asm("v0");
-    register s32 bound asm("v1");
+    register s32 addr;
+    register s32 a8;
+    register s32 ac;
+    register s32 bound;
 
     var_6_6 = D_001D5BF0.unkA8;
     if (var_6_6 < (var_6_6 + D_001D5BF0.unkAC)) {    u8 *astra_ptr1 = D_001B3AC0;

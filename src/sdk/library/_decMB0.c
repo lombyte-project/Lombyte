@@ -2,15 +2,15 @@
 #include "rnc/assembly_sdk_library__decMB0_types.h"
 
 extern u8 D_00153898[];
-extern int _Error();
-extern int _flushBuf();
+extern void _Error();
+extern void _flushBuf();
 extern s16 _ipuVdec(struct M2c_arg0 *, s32);
-extern int _motionVector();
-extern int _motionVectors();
+extern void _motionVector();
+extern void _motionVectors();
 extern s32 _nextBit(struct M2c_arg0 *, s32);
-extern int _sendIpuCommand();
-extern int _waitIpuIdle();
-extern int receiveDataFromIPU();
+extern void _sendIpuCommand();
+extern void _waitIpuIdle();
+extern void receiveDataFromIPU();
 int _decMB0(struct M2c_arg0 *arg0, int *arg1, int *arg2, int *arg3, struct M2c_arg4 *arg4, int *arg5, int arg6)
 {
   int *sp20;
@@ -79,7 +79,7 @@ int _decMB0(struct M2c_arg0 *arg0, int *arg1, int *arg2, int *arg3, struct M2c_a
     var_23_95 = temp_6_75 == 3;
   }
   var_2_103 = 0;
-  if (((temp_6_75 == 3) && (arg0->unk17C == 0)) && (((*arg1) & 3) != 0))
+  if (((arg0->unk174 == 3) && (arg0->unk17C == 0)) && (((*arg1) & 3) != 0))
   {
     var_2_103 = _nextBit(arg0, 1);
   }
@@ -147,7 +147,10 @@ int _decMB0(struct M2c_arg0 *arg0, int *arg1, int *arg2, int *arg3, struct M2c_a
       arg0->unk1B0 = 0;
       if (arg0->unk11C != 0)
       {
-        __asm__ volatile("");
+        if (arg0->unk174)
+        {
+          return 0;
+        }
         return 0;
       }
       if ((((*arg1) & 1) || ((arg0->unk1B0 = 1, ((*arg1) & 1) != 0))) && (arg0->unk180 == 0))

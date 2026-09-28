@@ -31,7 +31,7 @@ s32 draw_quit_game_menu(struct M2c_arg0 *arg0)
   s16 packet[0xC];
   s32 temp_16_69;
   s32 temp_17_18;
-  register s32 temp_17_81 asm("s1");
+  register s32 temp_17_81;
   s32 temp_18_25;
   s32 temp_2_73;
   s32 temp_16_16;

@@ -10,7 +10,7 @@ extern s32 func_00211808();
 void draw_mobys(void) __asm__("FUN_0020d460");
 
 void draw_mobys(void) {
-    register s32 flag __asm__("v1");
+    register s32 flag;
     s32 *new_var;
 
     func_0020D278();

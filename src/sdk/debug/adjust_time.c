@@ -7,19 +7,17 @@ struct AdjustTimeArg {
     u8 hour;
 };
 
-extern s32 func_0012D3C0();
-extern s32 subhour();
+extern void func_0012D3C0();
+extern void subhour();
 extern void addhour();
-extern s32 func_0012D428();
+extern void func_0012D428();
 
 void AdjustTime(struct AdjustTimeArg *arg0, s32 arg1)
 {
     s32 hour;
-    register s32 input_hour __asm__("v0");
 
     func_0012D3C0();
-    input_hour = arg0->hour;
-    hour = input_hour + arg1;
+    hour = arg0->hour + arg1;
     if (hour >= 0) {
         if (hour >= 0x3D) {
             do {

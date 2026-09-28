@@ -15,9 +15,9 @@ extern u8 D_001537A8[];
 
 s32 _mbAddressIncrement(MbCtx *ctx) {
     s32 total;
-    register u32 code __asm__("$16");
+    register u32 code;
     s32 bits;
-    register s32 ret __asm__("$2");
+    register s32 ret;
     total = 0;
     do {
         code = _ipuVdec(ctx, 0);

@@ -13,8 +13,8 @@ extern s32 D_001996FC[];
 extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
 extern s32 func_00225AC0();
 s32 FUN_0021d2c8(struct M2c_arg0 *arg0) {
-    register s32 temp_5_19 __asm__("a1");
-    register s32 v38 __asm__("v1");
+    register s32 temp_5_19;
+    register s32 v38;
 
     if ((D_001516D8[0] != 0) && (arg0->unk50 == 1)) {
         request_audio_stream_break();

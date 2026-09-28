@@ -8,9 +8,9 @@ extern s32 SignalSema();
 extern s32 mcDelayThread();
 s32 sceMcSync(s32 arg0, s32 *arg1, s32 *arg2) {
     s32 var_16_24;
-    register s32 wait_flag __asm__("s2") = arg0;
-    register s32 *code_out __asm__("s4") = arg1;
-    register s32 *status_out __asm__("s5") = arg2;
+    register s32 wait_flag = arg0;
+    register s32 *code_out = arg1;
+    register s32 *status_out = arg2;
 
     if (D_00132DA8[0] == 0) {
         return -1;

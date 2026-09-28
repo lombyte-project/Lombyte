@@ -14,8 +14,8 @@ void load_compressed_hud_bank(s32 arg0, s32 arg1) {
         func_0020B618(*(s32 *)((u8 *)(base1 - (-(arg0 * 8))) + 0x28) + base1, size);
     }
     {
-        register u32 b2 asm("v1");
-        register s32 i2 asm("a0");
+        register u32 b2;
+        register s32 i2;
         i2 = arg0 * 4;
         b2 = D_0019A400[0];
         *(s32 *)((u8 *)b2 + i2 + 0x74) = 0;

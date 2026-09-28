@@ -9,10 +9,10 @@
 extern struct M2c_D_0013D290 D_0013D290;
 extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
-extern s32 func_001FBAB8();
+extern void func_001FBAB8();
 
 void FUN_00208f28(void) {
-    register s32 flags asm("v0");
+    s32 flags;
 
     if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) {
         if (D_0013D290.unkE4 != 0) {
