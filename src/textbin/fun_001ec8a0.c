@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001ECC48). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 #include "qcopy.h"
 extern char D_0013F350[];
 extern void FUN_001f9bf8(void *dst, void *src, float len);    /* dst = normalize(src) * len */

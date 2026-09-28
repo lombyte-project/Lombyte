@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/space.c, func_0022F258). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern void FUN_001f98d0(void *, void *, int);
 extern int FUN_001f44b8(int);
 extern void FUN_001f9a68(void *, void *, float);

@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/missionfunc.c, func_0020CCD0). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 typedef struct { int a, b, c, d; } Rec16_C940;
 extern Rec16_C940 D_0013D5B0[];
 extern unsigned char D_0013D4C2 NOT_SDA;

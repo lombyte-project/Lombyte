@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/memcard.c, func_0020BFC8). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern char D_0013D290[];
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_001A04C0[];

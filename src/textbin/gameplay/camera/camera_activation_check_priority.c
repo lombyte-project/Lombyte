@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001EC5B8). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 typedef struct {
     char unk_00[0x10];
     int unk10;

@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/vendor.c, func_0023B018). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 typedef struct {
     int x;
     int y;

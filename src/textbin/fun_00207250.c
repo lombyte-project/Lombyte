@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207A80). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern int D_001A03C0 NOT_SDA;
 extern int D_001A03B8 NOT_SDA;
 /* Hit test in two layouts: arg3 (the third float, $f14) must lie in

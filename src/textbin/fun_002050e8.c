@@ -1,6 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/map.c, func_00205918). */
-#define NOT_SDA __attribute__((section(".data")))
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern int D_001A00F0[];
 extern unsigned char D_0013D4E1 NOT_SDA;
 extern int *D_001601E0 MACRO_ADDR;

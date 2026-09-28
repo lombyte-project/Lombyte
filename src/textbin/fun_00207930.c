@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00208160). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern unsigned char D_0013D3E3 NOT_SDA;
 int FUN_00207930(int arg0, float unused1, float unused2, float arg1) {
     if (arg0 < 0x15F) {

@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_002072C0). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern int D_001413DC NOT_SDA;
 extern unsigned char D_0013D396 NOT_SDA;
 /* `if (x) return 1;` in both arms with one shared `return 0;` keeps the

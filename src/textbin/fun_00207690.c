@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207EC0). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern unsigned char D_0013D3D8 NOT_SDA;
 /* The recorded C was right; the two ps2eeas nops were the only
    residual. */

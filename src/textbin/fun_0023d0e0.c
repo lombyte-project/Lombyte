@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/movie/videodec.c, func_0023E4B0). */
 #ifndef COMMON_H
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 #endif /* STRUCTS_H */
 #ifndef EZMPEG_H
 typedef struct {

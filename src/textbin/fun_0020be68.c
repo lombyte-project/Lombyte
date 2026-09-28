@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/missionfunc.c, func_0020CCB8). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern int D_0013D4C0 NOT_SDA;
 int FUN_0020be68(int arg0) {
     unsigned char *base = (unsigned char *)&D_0013D4C0;

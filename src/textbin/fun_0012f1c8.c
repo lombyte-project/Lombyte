@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/core/permcb.c, func_0012F308). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern long D_0015ED40 MACRO_ADDR;
 extern long D_0015ED48 MACRO_ADDR;
 extern long D_0015ED50 MACRO_ADDR;

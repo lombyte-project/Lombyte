@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021EFA0). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 #include "qcopy.h"
 extern int FUN_00225530(int);
 extern char *D_001D5BF4 NOT_SDA;

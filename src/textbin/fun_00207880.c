@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_002080B0). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 typedef struct {
     char _pad0[0x12E4];
     unsigned char unk12E4;

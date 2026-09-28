@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/bmain.c, func_001E9808). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern int D_0015ED80 MACRO_ADDR;
 extern int D_0015EED8 MACRO_ADDR;
 extern int D_0015F604 MACRO_ADDR;

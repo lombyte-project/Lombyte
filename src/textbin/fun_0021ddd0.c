@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021EDD8). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern unsigned char D_001413F4 NOT_SDA;
 static inline short pauseFlagState(void) {
     if (D_001413F4 != 1) {

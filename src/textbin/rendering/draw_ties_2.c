@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/tiefunc.c, func_00236CA8). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern void FUN_001f98d0(void *, void *, int);
 extern int D_0018A2B0[];
 extern void FlushCache(int);

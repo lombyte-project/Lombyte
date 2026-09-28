@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/draw.c, func_001F4F90). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 typedef struct {
     short start;   /* 0x0 */
     short end;     /* 0x2 */

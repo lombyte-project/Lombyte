@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001ECEA0). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 #include "qcopy.h"
 extern void FUN_001f9a10(void *, void *, void *);
 extern char D_0013F490[];

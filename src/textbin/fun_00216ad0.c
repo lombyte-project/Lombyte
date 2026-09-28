@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/stream.c, func_00217970). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern short D_001516F0 NOT_SDA;
 void FUN_00216ad0(int arg0, long arg1) {
     short *p = (short *)(int)arg1;

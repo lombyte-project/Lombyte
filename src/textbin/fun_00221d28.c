@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00222D70). */
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#include "sda.h"
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_001D4528[];
 /* `D_001D4528[(unsigned)D_0015ED84 % 19]`; the older near-miss

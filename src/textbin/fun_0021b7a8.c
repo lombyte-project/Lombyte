@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021C790). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern char D_001D5BF0[] NOT_SDA;
 /* Pause page link walk: with arg1 clear, follow arg0's +0x4C chain for
    as long as the current page is skippable (bit 8 of its +0x30 flags

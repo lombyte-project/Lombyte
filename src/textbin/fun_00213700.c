@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c, func_00214550). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 #include "qcopy.h"
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9a10(void *, void *, void *);

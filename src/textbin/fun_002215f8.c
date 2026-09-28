@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00222640). */
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern int D_0013D4C0 NOT_SDA;
 extern unsigned char D_0013E520[];
 typedef struct {
