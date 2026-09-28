@@ -1649,7 +1649,7 @@ segments:
           - [0x1197fc, textbin, text_gap_0021887c_after_fun_0021880c]
           - [0x119808, c, assembly/textbin/fun_00218888]
           - [0x1199dc, textbin, text_gap_00218a5c_before_fun_00218d10]
-          - [0x119c90, c, assembly/textbin/fun_00218d10]
+          - [0x119c90, c, rendering/fun_00218d10]
           - [0x119cf8, c, assembly/textbin/audio/voices/pause_all_sounds]
           - [0x119ecc, textbin, text_gap_00218f4c_after_fun_00218d78]
           - [0x119ee8, c, runtime/dma/initialize_transfer_command]
