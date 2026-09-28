@@ -1,28 +1,23 @@
 #include "rnc1_functions.h"
 
+/* Sign of the 2D cross product (a - c) x (t - c): 1 when negative.
+   The product is a block of its own (a do/while (0), as a macro would
+   expand), which keeps the two leading differences ahead of it, as in
+   retail. */
 int Func00208818(int a0, int a1, int a2, int a3, int t0, int t1)
 {
     int dx;
     int dy;
-    int term1;
-    int term2;
-    register int base1 asm("v0");
-    register int base2 asm("t1");
-    int diff;
 
     dx = a0 - a2;
-    asm volatile("" : "+r"(dx));
     dy = a1 - a3;
-    asm volatile("" : "+r"(dy));
-    base1 = t0 - a2;
-    base2 = t1 - a3;
-    term1 = base1 * dy;
-    asm volatile("" ::: "memory");
-    term2 = base2 * dx;
-    diff = term1 - term2;
+    do {
+        int term1 = (t0 - a2) * dy;
+        int term2 = (t1 - a3) * dx;
 
-    if (diff < 0) {
-        return 1;
-    }
-    return 0;
+        if (term1 - term2 < 0) {
+            return 1;
+        }
+        return 0;
+    } while (0);
 }

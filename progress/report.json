@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 79.405599,
+    "fuzzy_match_percent": 79.4056,
     "total_code": "339440",
-    "matched_code": "160112",
-    "matched_code_percent": 47.169456,
+    "matched_code": "160148",
+    "matched_code_percent": 47.180061,
     "total_functions": 1164,
-    "matched_functions": 914,
-    "matched_functions_percent": 78.522337,
-    "complete_code": "160112",
-    "complete_code_percent": 47.169456,
+    "matched_functions": 915,
+    "matched_functions_percent": 78.608247,
+    "complete_code": "160148",
+    "complete_code_percent": 47.180061,
     "total_units": 107,
-    "complete_units": 57
+    "complete_units": 58
   },
   "units": [
     {
@@ -11356,23 +11356,23 @@
     {
       "name": "game/math/geometry",
       "measures": {
-        "fuzzy_match_percent": 99.99,
+        "fuzzy_match_percent": 100.0,
         "total_code": "36",
-        "matched_code": "0",
-        "matched_code_percent": 0.0,
+        "matched_code": "36",
+        "matched_code_percent": 100.0,
         "total_functions": 1,
-        "matched_functions": 0,
-        "matched_functions_percent": 0.0,
-        "complete_code": "0",
-        "complete_code_percent": 0.0,
+        "matched_functions": 1,
+        "matched_functions_percent": 100.0,
+        "complete_code": "36",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
           "name": "Func00208818",
           "size": "36",
-          "fuzzy_match_percent": 99.99,
+          "fuzzy_match_percent": 100.0,
           "address": "0",
           "metadata": {
             "virtual_address": "1087384"
@@ -11380,7 +11380,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "game"
         ]
@@ -13064,17 +13064,17 @@
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 74.889263,
+        "fuzzy_match_percent": 74.889264,
         "total_code": "263052",
-        "matched_code": "107192",
-        "matched_code_percent": 40.749358,
+        "matched_code": "107228",
+        "matched_code_percent": 40.763043,
         "total_functions": 870,
-        "matched_functions": 672,
-        "matched_functions_percent": 77.241379,
-        "complete_code": "107192",
-        "complete_code_percent": 40.749358,
+        "matched_functions": 673,
+        "matched_functions_percent": 77.356322,
+        "complete_code": "107228",
+        "complete_code_percent": 40.763043,
         "total_units": 97,
-        "complete_units": 52
+        "complete_units": 53
       }
     },
     {
