@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 D_001601B4;
-__asm__(".extern D_001601B4, 4");
+extern s32 D_001601B4 __attribute__((sda));
 extern s32 FUN_001f96f8(s32);
 extern void func_001FA6E0(s32, s32, f32);
 void FUN_0021b6d8(s32 delay, s32 from, s32 to) {

@@ -247,6 +247,11 @@
     "runtime/dma/enable_dmac",
     "video/decoder/callbacks/handle_end_image",
     "sdk/library/DIntr",
-    "sdk/interrupts/enable_interrupts"
+    "sdk/interrupts/enable_interrupts",
+    "sdk/library/__divdi3",
+    "sdk/library/moddi3",
+    "sdk/library/__muldi3",
+    "sdk/library/udivdi3",
+    "sdk/library/umoddi3"
   ]
 }

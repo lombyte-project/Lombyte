@@ -439,7 +439,6 @@ extern void FUN_00201f88(int);
    padding, shifting every later function in the object by -4 and
    producing spurious `jal` diffs far from the cause -- so restore it
    explicitly. */
-__asm__(".align 4");
 
 struct LightRecord32C {
     u8 pad_0[0x1B];
