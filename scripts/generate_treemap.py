@@ -1058,7 +1058,7 @@ def main(argv=None) -> int:
         help="groups below this size are combined per status class; 0 (default) "
         "draws every logical group",
     )
-    parser.add_argument("--title", default="Ratchet & Clank - boot ELF (SCUS_971.99) decompilation progress")
+    parser.add_argument("--title", default="Ratchet & Clank - boot ELF (SCUS_971.99)")
     parser.add_argument(
         "--no-scores",
         action="store_true",
