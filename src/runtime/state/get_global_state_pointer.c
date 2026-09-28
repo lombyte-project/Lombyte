@@ -11,7 +11,7 @@ extern struct GlobalStatePointer GlobalStatePointer
 int *GetGlobalStatePointer(void) __asm__("func_001138A8");
 
 int *GetGlobalStatePointer(void) {
-    register int **state_pointer asm("$3") = &GlobalStatePointer.value;
+    register int **state_pointer = &GlobalStatePointer.value;
 
     return *state_pointer;
 }

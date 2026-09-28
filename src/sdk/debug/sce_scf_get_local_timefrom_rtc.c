@@ -2,7 +2,7 @@
 extern s32 sceScfGetSummerTime();
 extern s32 sceScfGetTimeZone();
 void sceScfGetLocalTimefromRTC(s32 arg0) {
-    register s32 arg0_s0 __asm__("s0");
+    register s32 arg0_s0;
     s32 temp_17_10;
     s32 summer_minutes;
 

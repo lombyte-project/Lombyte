@@ -27,7 +27,7 @@ extern s32 strncpy(s8 *, s8 *, s32);
 s32 sceMcGetDir(s32 arg0, s32 arg1, s8 *arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 temp_2_67;
     s32 var_2_30;
-    register s32 path_arg __asm__("s4") = arg1;
+    register s32 path_arg = arg1;
 
     if (D_00159A00.unk24 == 0) {
         return -0x64;

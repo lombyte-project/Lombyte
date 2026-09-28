@@ -17,7 +17,7 @@ void PackRenderCommandFields(u64 *command_words, u64 upper_field,
         tail_field <<= 16;
     }
     {
-        register u64 packed_command asm("v0");
+        register u64 packed_command;
         packed_command = upper_field | middle_field;
         packed_command |= low_field;
         packed_command |= tail_field;

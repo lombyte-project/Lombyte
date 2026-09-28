@@ -10,7 +10,6 @@ s32 snd_stream_safe_cd_get_error(s32 arg0) {
         return sceCdGetError();
     }
     p = D_00137B00;
-    __asm__ __volatile__("" : "+r"(p));
     return *(volatile s32 *)(p + 0x10);
 }
 
