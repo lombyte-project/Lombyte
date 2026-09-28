@@ -1391,7 +1391,7 @@ segments:
           - [0x109b08, c, ui/menus/fun_00208b88]
           - [0x109b40, c, ui/menus/fun_00208bc0]
           - [0x109b80, textbin, text_gap_00208c00_after_fun_00208bc0]
-          - [0x109c24, c, assembly/textbin/fun_00208ca4]
+          - [0x109c28, c, assembly/textbin/fun_00208ca8]
           - [0x109ca0, textbin, text_gap_00208d20_after_fun_00208ca4]
           - [0x109ce0, c, ui/menus/fun_00208d60]
           - [0x109d54, textbin, text_gap_00208dd4_after_fun_00208d60]
