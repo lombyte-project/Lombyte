@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/memcard_update_state/FUN_002093d8.s", FUN_002093d8);
 #else
-#include "rnc/assembly_textbin_fun_002093d8_types.h"
+#include "rnc/storage_memory_card_memcard_update_state_types.h"
 extern struct M2c_D_00137B80 D_00137B80;
 extern u8 D_00137B94[];
 extern u8 D_0013D1D0[];

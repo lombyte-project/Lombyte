@@ -1,4 +1,4 @@
-#include "rnc/assembly_sdk_library_cpr8_types.h"
+#include "rnc/sdk_library_cpr8_types.h"
 #include "types.h"
 
 extern s32 DIntr();

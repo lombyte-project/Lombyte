@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/printf_impl/_printf.s", _printf);
 #else
-#include "rnc/assembly_sdk_deci_debug_printf_impl_types.h"
+#include "rnc/sdk_debug_printf_impl_types.h"
 #include "types.h"
 
 

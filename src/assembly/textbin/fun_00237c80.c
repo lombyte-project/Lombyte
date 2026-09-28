@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00237c80/FUN_00237c80.s", FUN_00237c80);
 #else
-#include "rnc/assembly_textbin_fun_00237c80_types.h"
+#include "rnc/fun_00237c80_types.h"
 #include "types.h"
 /* sn-2.95.3-136 matched TU. */
 

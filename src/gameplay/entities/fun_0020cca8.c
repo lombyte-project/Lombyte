@@ -1,4 +1,4 @@
-#include "rnc/assembly_textbin_fun_0020cca8_types.h"
+#include "rnc/gameplay_entities_fun_0020cca8_types.h"
 #include "types.h"
 
 

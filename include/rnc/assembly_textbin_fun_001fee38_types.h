@@ -1,8 +1,0 @@
-#ifndef RNC_ASSEMBLY_TEXTBIN_FUN_001FEE38_TYPES_H
-#define RNC_ASSEMBLY_TEXTBIN_FUN_001FEE38_TYPES_H
-
-#include "types.h"
-
-typedef struct { char b[0x20]; } T32;
-
-#endif /* RNC_ASSEMBLY_TEXTBIN_FUN_001FEE38_TYPES_H */

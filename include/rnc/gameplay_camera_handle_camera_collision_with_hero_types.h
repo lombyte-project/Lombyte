@@ -1,0 +1,16 @@
+#ifndef RNC_GAMEPLAY_CAMERA_HANDLE_CAMERA_COLLISION_WITH_HERO_TYPES_H
+#define RNC_GAMEPLAY_CAMERA_HANDLE_CAMERA_COLLISION_WITH_HERO_TYPES_H
+
+#include "types.h"
+
+struct M2c_D_001870D0 {
+    u8 pad_0[0xC4];
+    s32 unkC4;
+};
+
+struct M2c_arg0 {
+    u8 pad_0[0x86];
+    u16 unk86;
+};
+
+#endif /* RNC_GAMEPLAY_CAMERA_HANDLE_CAMERA_COLLISION_WITH_HERO_TYPES_H */

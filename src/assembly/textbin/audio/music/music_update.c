@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_update/FUN_00216290.s", FUN_00216290);
 #else
-#include "rnc/assembly_textbin_fun_00216290_types.h"
+#include "rnc/audio_music_music_update_types.h"
 #include "types.h"
 
 

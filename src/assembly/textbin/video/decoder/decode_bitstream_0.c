@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/decode_bitstream_0/FUN_0023cec8.s", FUN_0023cec8);
 #else
-#include "rnc/assembly_textbin_fun_0023cec8_types.h"
+#include "rnc/video_decoder_decode_bitstream_0_types.h"
 #include "types.h"
 
 

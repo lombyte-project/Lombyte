@@ -1,4 +1,4 @@
-#include "rnc/assembly_textbin_fun_0021fc68_types.h"
+#include "rnc/rendering_transitions_draw_transition_overlay_types.h"
 #include "types.h"
 
 extern struct M2c_D_00151780 D_00151780;

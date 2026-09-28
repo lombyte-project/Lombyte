@@ -5,7 +5,7 @@
 /* Exact SDK/library unit sceIpuInit; symbolic expected assembly retained pending source recovery. */
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/sce_ipu_init/sceIpuInit.s", sceIpuInit);
 #else
-#include "rnc/assembly_sdk_dma_ipu_gs_sce_ipu_init_types.h"
+#include "rnc/sdk_dma_sce_ipu_init_types.h"
 #include "types.h"
 
 

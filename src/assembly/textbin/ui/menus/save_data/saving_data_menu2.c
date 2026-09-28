@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/saving_data_menu2/FUN_002235b8.s", FUN_002235b8);
 #else
-#include "rnc/assembly_textbin_fun_002235b8_types.h"
+#include "rnc/ui_menus_save_data_saving_data_menu2_types.h"
 #include "types.h"
 
 

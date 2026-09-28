@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/text/font_print_window/FUN_001f7090.s", FUN_001f7090);
 #else
-#include "rnc/assembly_textbin_fun_001f7090_types.h"
+#include "rnc/ui_text_font_print_window_types.h"
 #include "types.h"
 
 

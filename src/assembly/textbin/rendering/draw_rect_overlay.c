@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/draw_rect_overlay/FUN_001f52a0.s", FUN_001f52a0);
 #else
-#include "rnc/assembly_textbin_fun_001f52a0_types.h"
+#include "rnc/rendering_draw_rect_overlay_types.h"
 #include "types.h"
 
 

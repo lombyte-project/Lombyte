@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_00233938_types.h"
+#include "rnc/rendering_vu1_fun_00233938_types.h"
 extern struct M2c_D_00160F00 * volatile D_00160F00;
 void FUN_00233938(s32 arg0)
 {

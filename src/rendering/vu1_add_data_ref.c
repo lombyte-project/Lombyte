@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_00233830_types.h"
+#include "rnc/rendering_vu1_add_data_ref_types.h"
 extern struct M2c_D_00160F00 * volatile D_00160F00;
 void vu1_add_data_ref(s32 arg0, s32 arg1) __asm__("FUN_00233830");
 

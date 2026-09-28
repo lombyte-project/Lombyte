@@ -1,4 +1,4 @@
-#include "rnc/assembly_textbin_fun_001eb410_types.h"
+#include "rnc/gameplay_state_transition_default_draw_types.h"
 extern u8 D_00100AE0[];
 extern s32 D_0013E504[];
 extern s32 D_0015ED88;

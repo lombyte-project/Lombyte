@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_load_wad/FUN_001ea830.s", FUN_001ea830);
 #else
-#include "rnc/assembly_textbin_fun_001ea830_types.h"
+#include "rnc/gameplay_state_transition_load_wad_types.h"
 extern struct M2c_D_00137B80 D_00137B80;
 extern s32 D_0015EE74;
 extern s32 D_0015EE78;

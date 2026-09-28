@@ -1,0 +1,8 @@
+#ifndef RNC_AUDIO_MUSIC_MUSIC_START_TRACK_TYPES_H
+#define RNC_AUDIO_MUSIC_MUSIC_START_TRACK_TYPES_H
+
+#include "types.h"
+
+#include "rnc/d_001516d0.h"
+
+#endif /* RNC_AUDIO_MUSIC_MUSIC_START_TRACK_TYPES_H */

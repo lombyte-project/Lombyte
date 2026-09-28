@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_0021fce0_types.h"
+#include "rnc/ui_menus_fun_0021fce0_types.h"
 
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
 s32 FUN_0021fce0(struct M2c_arg0 *arg0) {

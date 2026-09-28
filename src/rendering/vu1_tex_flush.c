@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_00233b68_types.h"
+#include "rnc/rendering_vu1_tex_flush_types.h"
 extern struct M2c_D_00160F00 * volatile D_00160F00;
 extern u8 D_001DEE00[];
 void vu1_tex_flush(void) __asm__("FUN_00233b68");

@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/voices/sound_stop_all_sounds/FUN_0022dcd0.s", FUN_0022dcd0);
 #else
-#include "rnc/assembly_textbin_fun_0022dcd0_types.h"
+#include "rnc/audio_voices_sound_stop_all_sounds_types.h"
 #include "types.h"
 
 

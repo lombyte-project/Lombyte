@@ -1,0 +1,11 @@
+#ifndef RNC_WORLD_LOADERS_REGISTER_MOBY_CLASS_TYPES_H
+#define RNC_WORLD_LOADERS_REGISTER_MOBY_CLASS_TYPES_H
+
+#include "types.h"
+
+struct M2c_arg0 {
+    u8 pad_0[0x2C];
+    s32 unk2C;
+};
+
+#endif /* RNC_WORLD_LOADERS_REGISTER_MOBY_CLASS_TYPES_H */

@@ -1,4 +1,4 @@
-#include "rnc/assembly_textbin_fun_001ed940_types.h"
+#include "rnc/gameplay_camera_fun_001ed940_types.h"
 #include "types.h"
 extern struct M2c_D_0013F350 D_0013F350;
 extern s32 D_0015EF98;

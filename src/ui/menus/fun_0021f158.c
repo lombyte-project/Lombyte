@@ -1,10 +1,10 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/assembly_textbin_fun_0021f158_types.h"
+#include "rnc/ui_menus_fun_0021f158_types.h"
 #include "types.h"
 
 
-#include "rnc/assembly_textbin_fun_0021f158_types.h"
+#include "rnc/ui_menus_fun_0021f158_types.h"
 #include "types.h"
 
 extern s32 D_0013D428[];

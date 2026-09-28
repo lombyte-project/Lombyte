@@ -1,9 +1,9 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/assembly_textbin_fun_00216950_types.h"
+#include "rnc/audio_streaming_finish_audio_stream_read_types.h"
 #include "types.h"
 
-#include "rnc/assembly_textbin_fun_00216950_types.h"
+#include "rnc/audio_streaming_finish_audio_stream_read_types.h"
 #include "types.h"
 
 

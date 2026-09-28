@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN_0023a460.s", FUN_0023a460);
 #else
-#include "rnc/assembly_textbin_fun_0023a460_types.h"
+#include "rnc/video_decoder_read_mpeg_types.h"
 #include "types.h"
 
 

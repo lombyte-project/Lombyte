@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/effects/get_effect_texture/FUN_001f44b8.s", FUN_001f44b8);
 #else
-#include "rnc/assembly_textbin_fun_001f44b8_types.h"
+#include "rnc/rendering_effects_get_effect_texture_types.h"
 #include "types.h"
 
 

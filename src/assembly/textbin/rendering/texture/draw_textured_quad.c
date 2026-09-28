@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/texture/draw_textured_quad/FUN_001f5450.s", FUN_001f5450);
 #else
-#include "rnc/assembly_textbin_fun_001f5450_types.h"
+#include "rnc/rendering_texture_draw_textured_quad_types.h"
 #include "types.h"
 
 

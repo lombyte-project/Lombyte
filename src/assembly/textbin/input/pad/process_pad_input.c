@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/input/pad/process_pad_input/FUN_00217328.s", FUN_00217328);
 #else
-#include "rnc/assembly_textbin_fun_00217328_types.h"
+#include "rnc/input_pad_process_pad_input_types.h"
 #include "types.h"
 
 

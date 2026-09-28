@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu/FUN_00220348.s", FUN_00220348);
 #else
-#include "rnc/assembly_textbin_fun_00220348_types.h"
+#include "rnc/ui_menus_save_data_draw_checking_memory_card_data_menu_types.h"
 #include "types.h"
 
 

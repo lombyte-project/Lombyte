@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_sdk_library__decMB0_types.h"
+#include "rnc/sdk_library__decMB0_types.h"
 
 extern u8 D_00153898[];
 extern void _Error();

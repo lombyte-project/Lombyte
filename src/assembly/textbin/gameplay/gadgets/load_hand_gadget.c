@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/gadgets/load_hand_gadget/FUN_00224368.s", FUN_00224368);
 #else
-#include "rnc/assembly_textbin_fun_00224368_types.h"
+#include "rnc/gameplay_gadgets_load_hand_gadget_types.h"
 #include "types.h"
 
 

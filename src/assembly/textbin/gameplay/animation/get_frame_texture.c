@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/animation/get_frame_texture/FUN_001ffa10.s", FUN_001ffa10);
 #else
 #include "types.h"
-#include "rnc/assembly_textbin_fun_001ffa10_types.h"
+#include "rnc/gameplay_animation_get_frame_texture_types.h"
 
 struct FrameTextureRef {
     s16 texture;

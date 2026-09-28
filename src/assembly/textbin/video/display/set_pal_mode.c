@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s", FUN_001f34e8);
 #else
-#include "rnc/assembly_textbin_fun_001f34e8_types.h"
+#include "rnc/video_display_set_pal_mode_types.h"
 #include "types.h"
 
 

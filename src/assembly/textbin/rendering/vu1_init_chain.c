@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/vu1_init_chain/FUN_002335d0.s", FUN_002335d0);
 #else
-#include "rnc/assembly_textbin_fun_002335d0_types.h"
+#include "rnc/rendering_vu1_init_chain_types.h"
 #include "types.h"
 
 

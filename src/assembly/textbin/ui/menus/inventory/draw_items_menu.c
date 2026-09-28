@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/inventory/draw_items_menu/FUN_0021eb20.s", FUN_0021eb20);
 #else
-#include "rnc/assembly_textbin_fun_0021eb20_types.h"
+#include "rnc/ui_menus_inventory_draw_items_menu_types.h"
 #include "types.h"
 
 

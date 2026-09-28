@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_0021d1f8_types.h"
+#include "rnc/ui_menus_fun_0021d1f8_types.h"
 
 extern struct M2c_D_00137B80 D_00137B80;
 extern struct M2c_D_001516D0 D_001516D0;

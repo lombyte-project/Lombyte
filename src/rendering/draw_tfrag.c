@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_002333a8_types.h"
+#include "rnc/rendering_draw_tfrag_types.h"
 
 struct Locals {
     u8 pad0[0x30];

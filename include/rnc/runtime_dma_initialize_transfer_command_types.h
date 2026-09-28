@@ -1,0 +1,15 @@
+#ifndef RNC_RUNTIME_DMA_INITIALIZE_TRANSFER_COMMAND_TYPES_H
+#define RNC_RUNTIME_DMA_INITIALIZE_TRANSFER_COMMAND_TYPES_H
+
+#include "types.h"
+
+struct M2c_D_001D5BF0 {
+    s32 unk0;
+    u8 pad_4[0x8];
+    s32 unkC;
+    s32 unk10;
+    u8 pad_14[0xFC];
+    s32 unk110;
+};
+
+#endif /* RNC_RUNTIME_DMA_INITIALIZE_TRANSFER_COMMAND_TYPES_H */

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_00233bc8_types.h"
+#include "rnc/rendering_vu1_gs_regs_normal_types.h"
 extern struct M2c_D_00160F00 * volatile D_00160F00;
 extern u8 D_001DE3C0[];
 void vu1_gs_regs_normal(void) __asm__("FUN_00233bc8");

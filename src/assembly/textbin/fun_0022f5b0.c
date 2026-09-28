@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022f5b0/FUN_0022f5b0.s", FUN_0022f5b0);
 #else
-#include "rnc/assembly_textbin_fun_0022f5b0_types.h"
+#include "rnc/fun_0022f5b0_types.h"
 #include "types.h"
 
 

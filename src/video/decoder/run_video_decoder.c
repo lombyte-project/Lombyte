@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_0023ce28_types.h"
+#include "rnc/video_decoder_run_video_decoder_types.h"
 
 extern s32 D_0016120C;
 extern s32 func_0023BCC0();

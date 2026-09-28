@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_textbin_fun_002168a8_types.h"
+#include "rnc/audio_streaming_update_audio_stream_until_idle_types.h"
 extern struct M2c_D_001516D0 D_001516D0;
 
 extern void ReadGlobalTableEntry(void);

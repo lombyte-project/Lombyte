@@ -1,4 +1,4 @@
-#include "rnc/assembly_textbin_fun_001fee88_types.h"
+#include "rnc/ui_hud_init_hud_types.h"
 #include "types.h"
 
 extern u8 D_0015F6D8[];

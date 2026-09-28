@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/texture/load_pif_as_psmt8_h/FUN_001e9168.s", FUN_001e9168);
 #else
-#include "rnc/assembly_textbin_fun_001e9168_types.h"
+#include "rnc/rendering_texture_load_pif_as_psmt8_h_types.h"
 #include "types.h"
 
 

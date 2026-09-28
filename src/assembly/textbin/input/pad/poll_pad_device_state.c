@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/input/pad/poll_pad_device_state/FUN_002170c8.s", FUN_002170c8);
 #else
-#include "rnc/assembly_textbin_fun_002170c8_types.h"
+#include "rnc/input_pad_poll_pad_device_state_types.h"
 #include "types.h"
 
 

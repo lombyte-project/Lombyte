@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/assembly_sdk_sce_pad2_read_types.h"
+#include "rnc/sdk_input_sce_pad2_read_types.h"
 
 extern u8 D_0015B540[];
 extern u8 D_0015B550[];

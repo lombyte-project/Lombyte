@@ -9,7 +9,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022f778/FUN_0022f778.s", FUN_0022f778);
 #else
-#include "rnc/assembly_textbin_fun_0022f778_types.h"
+#include "rnc/fun_0022f778_types.h"
 #include "types.h"
 extern s32 D_0013CAE4[];
 extern struct M2c_D_0013D4C0 D_0013D4C0;

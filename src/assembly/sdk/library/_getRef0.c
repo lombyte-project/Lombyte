@@ -5,7 +5,7 @@
 /* Exact SDK/library unit _getRef0; symbolic expected assembly retained pending source recovery. */
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_getRef0/_getRef0.s", _getRef0);
 #else
-#include "rnc/assembly_sdk_library__getRef0_types.h"
+#include "rnc/sdk_library__getRef0_types.h"
 #include "types.h"
 
 

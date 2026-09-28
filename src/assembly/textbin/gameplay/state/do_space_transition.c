@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/do_space_transition/FUN_00231ff0.s", FUN_00231ff0);
 #else
-#include "rnc/assembly_textbin_fun_00231ff0_types.h"
+#include "rnc/gameplay_state_do_space_transition_types.h"
 extern struct M2c_D_0013D290 D_0013D290;
 extern struct M2c_D_0013DD40 D_0013DD40;
 extern struct M2c_D_0013DD58 D_0013DD58;

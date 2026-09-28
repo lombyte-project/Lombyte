@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/update_mode_freeze/FUN_001fce28.s", FUN_001fce28);
 #else
-#include "rnc/assembly_textbin_fun_001fce28_types.h"
+#include "rnc/runtime_memory_update_mode_freeze_types.h"
 extern struct S_0013C940 D_0013C940;
 extern s32 D_0013CAE4[];
 extern volatile u16 D_0013E05A[];

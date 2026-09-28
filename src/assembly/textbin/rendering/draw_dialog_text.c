@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/draw_dialog_text/FUN_001fbc50.s", FUN_001fbc50);
 #else
-#include "rnc/assembly_textbin_fun_001fbc50_types.h"
+#include "rnc/rendering_draw_dialog_text_types.h"
 #include "types.h"
 
 

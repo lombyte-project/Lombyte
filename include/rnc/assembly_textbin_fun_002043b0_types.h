@@ -1,8 +1,0 @@
-#ifndef RNC_ASSEMBLY_TEXTBIN_FUN_002043B0_TYPES_H
-#define RNC_ASSEMBLY_TEXTBIN_FUN_002043B0_TYPES_H
-
-#include "types.h"
-
-typedef struct ADXF_PTINFO { char _pad[8]; Sint32 nfile; } ADXF_PTINFO;
-
-#endif /* RNC_ASSEMBLY_TEXTBIN_FUN_002043B0_TYPES_H */

@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_localized_three_option_menu/FUN_00222a98.s", FUN_00222a98);
 #else
-#include "rnc/assembly_textbin_fun_00222a98_types.h"
+#include "rnc/ui_menus_draw_localized_three_option_menu_types.h"
 #include "types.h"
 
 

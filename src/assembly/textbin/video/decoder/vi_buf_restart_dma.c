@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/vi_buf_restart_dma/FUN_0023c280.s", FUN_0023c280);
 #else
-#include "rnc/assembly_textbin_fun_0023c280_types.h"
+#include "rnc/video_decoder_vi_buf_restart_dma_types.h"
 #include "types.h"
 
 
