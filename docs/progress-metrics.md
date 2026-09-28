@@ -21,7 +21,7 @@ figures from `assets/decomp_map.svg`, from `progress/report.json`, or from
 A promoted unit counts toward C_EXACT only when its source is C. Inline asm is
 allowed solely as a label that binds a declaration to its linked name
 (`void f(void) __asm__("FUN_00202d10");`), plus the one approved idiom in
-`include/qcopy.h`. A unit whose file holds any other asm - instructions, an
+`include/qcopy.h` and `include/qzero.h`. A unit whose file holds any other asm - instructions, an
 empty memory barrier, `__asm__("" : "+r"(x))`, a `.extern` directive, or a
 register pin (`register int x asm("v1")`) - builds byte-exact but stays
 **pending** (C_FUZZY 99.99) until the asm is gone. `non_label_asm()` in
