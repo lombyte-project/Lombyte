@@ -91,6 +91,10 @@ LABEL_FILLS = {
 # Partial groups use a copper range; a single soft sheen is laid over the map
 # instead of repeating a gradient inside every tile.
 PARTIAL_ORANGE = "#bf7a2e"
+# The executable's drawer: a warm, dim face (the page is already blue-black)
+# with sharp corners, edged in the bolt orange.
+DRAWER_FACE_TOP = "#2a1e12"
+DRAWER_FACE_BOTTOM = "#1a130c"
 UNCLASSIFIED_LAYOUT_CAP_BYTES = 16 * 1024
 
 ROW_RE = re.compile(
@@ -943,12 +947,12 @@ def render_svg(
         f'<stop offset="0" stop-color="{PLATE}"/>'
         f'<stop offset="1" stop-color="{PARTIAL_ORANGE}"/>'
         '</linearGradient><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#ffffff" stop-opacity="0.05"/>'
-        '<stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>'
-        '<stop offset="1" stop-color="#000000" stop-opacity="0.16"/>'
+        f'<stop offset="0" stop-color="{ORANGE}" stop-opacity="0.10"/>'
+        f'<stop offset="0.5" stop-color="{ORANGE}" stop-opacity="0.02"/>'
+        '<stop offset="1" stop-color="#000000" stop-opacity="0.18"/>'
         '</linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1">'
-        '<stop offset="0" stop-color="#1a2030"/>'
-        '<stop offset="1" stop-color="#121722"/>'
+        f'<stop offset="0" stop-color="{DRAWER_FACE_TOP}"/>'
+        f'<stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/>'
         "</linearGradient></defs>",
     ]
 
@@ -989,7 +993,7 @@ def render_svg(
     )
     row_x = width - margin_px - round(widest) - gap
     for offset, (color, text) in enumerate(legend_rows):
-        y = 14 + offset * 17
+        y = 9 + offset * 17  # three rows centred in the header band
         row_title = (
             '<title>Pending C: dark plate to copper shows C_EXACT coverage; '
             'bolt orange marks 100% exact.</title>'
@@ -1023,12 +1027,12 @@ def render_svg(
     ddx, ddy = width - 2 * margin_px, drawer_height
     inset = 6
     lines.append(
-        f'<rect x="{dx0}" y="{dy0}" width="{ddx}" height="{ddy}" rx="10" '
-        f'fill="url(#drawer-face)" stroke="{CHROME}" stroke-opacity="0.35" stroke-width="1.2">'
+        f'<rect x="{dx0}" y="{dy0}" width="{ddx}" height="{ddy}" '
+        f'fill="url(#drawer-face)" stroke="{ORANGE}" stroke-opacity="0.55" stroke-width="1.2">'
         f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></rect>"
     )
     lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
-                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}" rx="6"/></clipPath>')
+                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}"/></clipPath>')
     placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset, min_bytes)
     lines.append('<g clip-path="url(#drawer-clip)" opacity="0.22">')
     for tile, rect in placements:
