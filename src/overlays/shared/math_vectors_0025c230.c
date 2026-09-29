@@ -2,8 +2,43 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c230.s", FUN_L00_0025c230);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c2b0.s", FUN_L00_0025c2b0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+
+float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
+    float v0[4], v1[4], v2[16];
+    float *w = v1;
+    FUN_001f9a28(v0, c, a);
+    FUN_001fa2d8(v2, b);
+    FUN_001f9d20(w, v0, v2);
+    return w[d];
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
+
+typedef struct { int a[4]; } Vq __attribute__((aligned(16)));
+
+extern float FUN_001f9ab0(void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
+    Vq t0, t1;
+    FUN_L00_001ff500(&t1, c, 1.0f);
+    FUN_001f9a68(&t0, &t1, FUN_001f9ab0(&t1, b) * s);
+    FUN_001f9a28(a, b, &t0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c338.s", FUN_L00_0025c338);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c348.s", FUN_L00_0025c348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c35c.s", FUN_L00_0025c35c);

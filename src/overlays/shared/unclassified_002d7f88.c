@@ -14,9 +14,43 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8980.s", FUN_L00_002d8980);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9f78.s", FUN_L00_002d9f78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9fd0.s", FUN_L00_002d9fd0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
+
+typedef struct { int a[16]; } V __attribute__((aligned(16)));
+
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa298(void *, void *);
+extern void FUN_001fa2b8(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_0020e098(void *);
+
+void FUN_L00_002d9fd0(char *a, char *b, void *c) {
+    V t0, t1, t2;
+    FUN_001fa050(&t0, c);
+    FUN_001fa298(&t1, a + 0xC0);
+    FUN_001fa378(&t2, &t1, &t0);
+    FUN_001fa2b8(b + 0xC0, &t2);
+    *(unsigned short *)(b + 0x34) |= 4;
+    FUN_0020e098(b);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da058.s", FUN_L00_002da058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da1e0.s", FUN_L00_002da1e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
+
+int FUN_L00_002da1e0(char *a) {
+    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0xC);
+    if (fn != 0) {
+        return fn(a);
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da250.s", FUN_L00_002da250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da360.s", FUN_L00_002da360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da660.s", FUN_L00_002da660);
@@ -33,7 +67,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dd8e8.s", FUN_L00_002dd8e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddca0.s", FUN_L00_002ddca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddcb8.s", FUN_L00_002ddcb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002defe0.s", FUN_L00_002defe0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
+
+extern short D_L00_001E6008[];
+extern void FUN_L00_002dd8e8(void);
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+
+void FUN_L00_002defe0(int arg0) {
+    int i;
+    if (D_L00_001E6008[0] > 0) {
+        for (i = 0; i < 10; i++) {
+            if (D_L00_001E6008[i] > 0x40) D_L00_001E6008[i] = 0x40;
+            D_L00_001E6008[i] = (unsigned short)D_L00_001E6008[i] - 4;
+        }
+        enqueue_callback_list_1(FUN_L00_002dd8e8, arg0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df048.s", FUN_L00_002df048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df1e0.s", FUN_L00_002df1e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df3d8.s", FUN_L00_002df3d8);

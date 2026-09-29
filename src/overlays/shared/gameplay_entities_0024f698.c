@@ -4,4 +4,26 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f698.s", FUN_L00_0024f698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f6c8.s", FUN_L00_0024f6c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f7c8.s", FUN_L00_0024f7c8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250800), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_00210850(void *, int, int *, void *);
+
+void FUN_L00_0024f7c8(char *arg0, int arg1, void *arg2) {
+    char buf[0x40];
+    int n;
+    float s;
+
+    s = *(float *)(arg0 + 0x2C) * 0.0009765625f;
+    n = arg1;
+    FUN_00210850(arg0, 1, &n, buf);
+    FUN_001f9a68(arg2, buf + 0x30, s);
+    FUN_001f9cf8(arg2, arg2, arg0 + 0xC0);
+    FUN_001f9a10(arg2, arg2, arg0 + 0x10);
+}

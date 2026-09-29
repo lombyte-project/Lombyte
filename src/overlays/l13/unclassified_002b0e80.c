@@ -12,7 +12,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4958.s", FUN_L13_002b4958);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4a58.s", FUN_L13_002b4a58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4c80.s", FUN_L13_002b4c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4f28.s", FUN_L13_002b4f28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4fb8.s", FUN_L13_002b4fb8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Release the vendor moby's attached object and clear its reference. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13/vendor_002B2020.c: func_L13_002B6168), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x228];
+    void *value;
+} Level13VendorMoby;
+
+extern void FUN_L00_00267a08(void *);
+
+void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
+    if (moby->value != 0) {
+        FUN_L00_00267a08(moby->value);
+        moby->value = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4ff0.s", FUN_L13_002b4ff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8590.s", FUN_L13_002b8590);

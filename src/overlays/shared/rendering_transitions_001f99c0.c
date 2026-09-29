@@ -2,4 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f99c0.s", FUN_L00_001f99c0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/draw_001F3A78.c: func_L00_001F9D40), where it is exact; names translated to the US level program. */
+
+extern int D_0013E05A[];
+extern int D_0015EE84;
+extern int D_L00_0015F3F8;
+extern s32 sceGsSyncV(s32);
+extern void FUN_L00_002a09d8(int);
+extern void FUN_L00_002a0f18(void *, int, int);
+void vu1_init_chain(void) __asm__("FUN_002335d0");
+
+void FUN_L00_001f99c0(void *a) {
+    FUN_L00_002a09d8(1);
+    sceGsSyncV(0);
+    D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
+    vu1_init_chain();
+    FUN_L00_002a0f18(a, D_0015EE84, *(int *)((char *)D_0013E05A + 0x4AA) << 11);
+}

@@ -4,8 +4,62 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024eec0.s", FUN_L00_0024eec0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024eed8.s", FUN_L00_0024eed8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024efb0.s", FUN_L00_0024efb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f028.s", FUN_L00_0024f028);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
+
+void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
+    int i;
+    int n = a[4] + a[5];
+    int *t = *(int **)a;
+    for (i = 0; i < n; i++, t += 4) {
+        unsigned short *e = *(unsigned short **)t;
+        int c = ((unsigned char *)e)[2]; int cnt; e += 2; if (c != 0) { cnt = c; do { e[0] = e[0] + dx; e[1] = e[1] + dy; e += 2; cnt--; } while (cnt != 0); }
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250060), where it is exact; names translated to the US level program. */
+
+typedef struct Slot {
+    short id;
+    short s2;
+    unsigned char used;
+    char pad5[7];
+    void *p0C;
+    void *p10;
+    int p14;
+    char pad18[4];
+    void *p1C;
+    char pad20[0x20];
+} Slot;
+
+extern Slot D_L00_0018EB40[];
+extern char D_L00_00186D40[];
+
+Slot *FUN_L00_0024f028(char *o, int id) {
+    int i = 0;
+    Slot *s;
+    unsigned char *r;
+    for (i = 0; i < 6 && D_L00_0018EB40[i].used != 0; i++) {
+    }
+    s = &D_L00_0018EB40[i];
+    s->used = 1;
+    s->id = id;
+    id = (short)id;
+    s->p10 = D_L00_00186D40 + i * 0x1500;
+    s->p14 = *(int *)(o + 0x24);
+    r = *(unsigned char **)(*(char **)(*(char **)(o + 0x24) + 0x1C) + id * 4 + 4);
+    s->s2 = r[2];
+    s->p0C = r + (r[0] + 4);
+    s->p1C = *(void **)(o + 0x60);
+    *(Slot **)(o + 0x60) = s;
+    return s;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f190.s", FUN_L00_0024f190);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f3e0.s", FUN_L00_0024f3e0);

@@ -2,10 +2,36 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bb38.s", FUN_L00_0025bb38);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
+
+extern float FUN_001fa5c8(float, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+float FUN_L00_0025bb38(int n, float x, float y) {
+    float d = FUN_001fa5c8(x, y);
+    if (n == 0 || d * (float)n > 0.0f) return d;
+    if (AbsoluteFloat(d) <= 0.0017453292f) return 0.0f;
+    if (d > 0.0f) return d - 6.2831855f;
+    return d + 6.2831855f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bc00.s", FUN_L00_0025bc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bc98.s", FUN_L00_0025bc98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025be00.s", FUN_L00_0025be00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bfe0.s", FUN_L00_0025bfe0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c088.s", FUN_L00_0025c088);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
+
+void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
+    int x, y;
+    if (mask & 1) { x = *b; y = *a; *a = x; *b = y; }
+    if (mask & 2) { x = *c; y = *b; *b = x; *c = y; }
+    if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c0e8.s", FUN_L00_0025c0e8);

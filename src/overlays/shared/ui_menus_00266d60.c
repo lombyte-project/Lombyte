@@ -4,5 +4,23 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266d60.s", FUN_L00_00266d60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266dec.s", FUN_L00_00266dec);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266e00.s", FUN_L00_00266e00);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/stream_002670E0.c: func_L00_00267C48), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_00266d60(int, int, int *);
+extern s32 SubtractIntegerWithClamp(s32);
+
+int FUN_L00_00266e00(int a, int b, int c, int d) {
+    int v[2];
+    int r = 0;
+    if (FUN_L00_00266d60(a, c, &v[0])) {
+        if (FUN_L00_00266d60(b, c, &v[1])) {
+            r = SubtractIntegerWithClamp(v[0] - v[1]) < d;
+        }
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266e80.s", FUN_L00_00266e80);

@@ -9,7 +9,37 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd478.s", FUN_L00_001fd478);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd6f8.s", FUN_L00_001fd6f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fe990.s", FUN_L00_001fe990);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fea18.s", FUN_L00_001fea18);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/drawquad_001FD1D8.c: func_L00_001FE9C8), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x10]; short life; unsigned short ang; char pad2[4]; float f; char pad3[4]; } P;
+
+extern P D_L00_0016EA40[16];
+extern float D_0015ED6C;
+extern float FUN_001fa5c8(float, float);
+extern void FillTransferWords(u8 *, s32, s32);
+
+void FUN_L00_001fea18(void) {
+    int i;
+    P *p = D_L00_0016EA40;
+    for (i = 15; i >= 0; i--, p++) {
+        if (p->life > 0) {
+            p->f = FUN_001fa5c8(p->f, D_0015ED6C * 5.2359877f);
+            if (p->life > 12) {
+                p->ang = p->ang + 5;
+            } else {
+                p->ang = p->ang - 5;
+            }
+            p->life = p->life - 1;
+            if (p->life <= 0) {
+                FillTransferWords(p, 0, 0x20);
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fee70.s", FUN_L00_001fee70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fefc8.s", FUN_L00_001fefc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff030.s", FUN_L00_001ff030);

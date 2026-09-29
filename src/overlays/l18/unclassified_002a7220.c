@@ -13,7 +13,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5cf8.s", FUN_L18_002d5cf8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6190.s", FUN_L18_002d6190);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Switch to state four while active, then restore the saved state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+    char pad21[0x9B];
+    unsigned char saved_state;
+} Level18VendorMoby;
+
+extern int FUN_L00_002dbb20(Level18VendorMoby *);
+
+int FUN_L18_002d6190(Level18VendorMoby *moby) {
+    int active = FUN_L00_002dbb20(moby);
+    if (active != 0) {
+        moby->state = 4;
+    } else if (moby->state == 4) {
+        moby->state = moby->saved_state;
+    }
+    return active;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6280.s", FUN_L18_002d6280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
@@ -28,7 +52,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8070.s", FUN_L18_002d8070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8710.s", FUN_L18_002d8710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8858.s", FUN_L18_002d8858);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+} Level18State;
+
+int FUN_L18_002d8858(Level18State *obj) {
+    if (obj->state == 1) {
+        return 1;
+    }
+    if (obj->state == 2) {
+        obj->state = 5;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8888.s", FUN_L18_002d8888);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88a0.s", FUN_L18_002d88a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88b8.s", FUN_L18_002d88b8);
@@ -43,7 +86,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc458.s", FUN_L18_002dc458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002df608.s", FUN_L18_002df608);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfaa0.s", FUN_L18_002dfaa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfb90.s", FUN_L18_002dfb90);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Read the vendor moby's current float value. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002E0F80), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x60];
+    float value;
+} Level18VendorFloatData;
+
+typedef struct {
+    char pad0[0x78];
+    Level18VendorFloatData *data;
+} Level18VendorFloatMoby;
+
+float FUN_L18_002dfb90(Level18VendorFloatMoby *moby) {
+    return moby->data->value;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e22c0.s", FUN_L18_002e22c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);

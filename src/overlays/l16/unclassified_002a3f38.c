@@ -5,7 +5,21 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a3f38.s", FUN_L16_002a3f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c3d38.s", FUN_L16_002c3d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c44f0.s", FUN_L16_002c44f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c4710.s", FUN_L16_002c4710);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Check whether this vendor moby is in state six. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16/vendor_002A50F0.c: func_L16_002C5A08), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+} Level16VendorMoby;
+
+int FUN_L16_002c4710(Level16VendorMoby *moby) {
+    return moby->state == 6;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c6268.s", FUN_L16_002c6268);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9480.s", FUN_L16_002c9480);

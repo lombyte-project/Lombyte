@@ -2,42 +2,595 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231d08.s", FUN_L00_00231d08);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* With both objects at D_0013F450 + 0x1180 and +0x1184 present and the
+   first's byte 0x53 equal to 1, asks func_L00_00232850 for a pair of
+   sequences and starts one on each object (func_00213DE0). Each
+   sequence is read into a local before the func_001F9850 call, as
+   retail holds it in a saved register across it. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232560), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char D_0013F350[];
+extern int FUN_001f96f8(int);
+extern int FUN_L00_00231ff8(int, int *, int *);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L00_00231d08(void) {
+    char *base = D_0013F350;
+    char *a = *(char **)(base + 0x1180);
+    char *b = *(char **)(base + 0x1184);
+    int buf[2];
+    int seq;
+
+    if (a == 0 || b == 0) {
+        return;
+    }
+    if (*(unsigned char *)(a + 0x53) != 1) {
+        return;
+    }
+    if (FUN_L00_00231ff8(0, &buf[0], &buf[1]) == 0) {
+        return;
+    }
+    seq = buf[0];
+    blend_moby_animation(a, seq, 0, FUN_001f96f8(7));
+    seq = buf[1];
+    blend_moby_animation(b, seq, 0, FUN_001f96f8(7));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231db0.s", FUN_L00_00231db0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231e78.s", FUN_L00_00231e78);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0020d498(int);
+extern int FUN_L00_00231db0();
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L00_00231e78(int id, int arg, float t) {
+    char *base = D_0013F350;
+    char *blk2;
+    char *blk3;
+    char *a;
+    char *b;
+    int seq0;
+    int seq1;
+    int ok;
+    int seq;
+
+    if (*(int *)(base + 0x11A4) != 2) {
+        return;
+    }
+    a = *(char **)(base + 0x1180);
+    b = *(char **)(base + 0x1184);
+    if (a == 0 || b == 0) {
+        return;
+    }
+    if (FUN_L00_00231ff8(id, &seq0, &seq1) != 0 && id != 0) {
+        if (*(unsigned char *)(a + 0x53) == seq0) {
+            return;
+        }
+        blend_moby_animation(a, seq0, arg, (int)t);
+        blend_moby_animation(b, seq1, arg, (int)t);
+        return;
+    }
+    blk2 = D_0013F350;
+    ok = 1;
+    if (*(int *)(blk2 + 0x208C) == 0 && FUN_L00_00231db0(*(unsigned char *)(a + 0x53), &id) != 0) {
+        if (id == 0) {
+            ok = 0;
+        }
+    }
+    if (!ok) {
+        return;
+    }
+    seq = FUN_001f96f8(7);
+    blk3 = D_0013F350;
+    if (*(int *)(blk3 + 0x2090) == 8 && FUN_L00_0020d498(3) == 2) {
+        seq = FUN_001f96f8(0x13);
+    }
+    if (*(unsigned char *)(a + 0x53) != 1) {
+        blend_moby_animation(a, 1, 0, seq);
+    }
+    if (*(unsigned char *)(b + 0x53) != 1) {
+        blend_moby_animation(b, 1, 0, seq);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231ff8.s", FUN_L00_00231ff8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232128.s", FUN_L00_00232128);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Unless the flag at D_0013F450 + 0x20A4 is set, and only while state
+   +0x11A4 is 2: asks func_L00_00232850 for a pair of values for the
+   current animation's id (+0x2080, byte 0x53), and when it finds one,
+   copies the float at +0xA90 to field 0x58 of both objects at +0x1180 and
+   +0x1184 that exist. The pair goes in a two-int stack array (&buf[1] is
+   retail's `ori $6, $sp, 4`). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232980), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_L00_00231ff8(int, int *, int *);
+
+void FUN_L00_00232128(void) {
+    char *base = D_0013F350;
+    int buf[2];
+
+    if (*(unsigned char *)(base + 0x20A4) != 0) {
+        return;
+    }
+    if (*(int *)(base + 0x11A4) != 2) {
+        return;
+    }
+    if (FUN_L00_00231ff8(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), &buf[0], &buf[1]) == 0) {
+        return;
+    }
+    if (*(char **)(base + 0x1180) != 0) {
+        *(float *)(*(char **)(base + 0x1180) + 0x58) = *(float *)(base + 0xA90);
+    }
+    if (*(char **)(base + 0x1184) != 0) {
+        *(float *)(*(char **)(base + 0x1184) + 0x58) = *(float *)(base + 0xA90);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321c0.s", FUN_L00_002321c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321d8.s", FUN_L00_002321d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321e4.s", FUN_L00_002321e4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232220.s", FUN_L00_00232220);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002322c8.s", FUN_L00_002322c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232320.s", FUN_L00_00232320);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232A78), where it is exact; names translated to the US level program. */
+
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L00_00232220(int a0, int a1, float a2) {
+    char *base = D_0013F350;
+    int buf[4];
+    int ok;
+
+    if (*(void **)(base + 0x2278) != 0) {
+        if (*(int *)(base + 0x227C) != 0) {
+            ok = FUN_L00_002321c0(a0, buf);
+            if (ok != 0) {
+                blend_moby_animation(*(void **)(base + 0x2278), buf[0], a1, (int)a2);
+            } else if (*(unsigned char *)(*(char **)(base + 0x2278) + 0x53) != 0) {
+                blend_moby_animation(*(void **)(base + 0x2278), 0, 0, FUN_001f96f8(7));
+            }
+        }
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* With the animation at D_0013F450 + 0x2278 set and enabled (+0x227C),
+   and a sequence ready for the current id (func_L00_00232A18), copies
+   the float at +0xA90 to the animation's field 0x58. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232B20), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_L00_002321c0(int, int *);
+
+void FUN_L00_002322c8(void) {
+    char *base = D_0013F350;
+    int buf[4];
+
+    if (*(void **)(base + 0x2278) != 0 && *(int *)(base + 0x227C) != 0
+        && FUN_L00_002321c0(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), buf) != 0) {
+        *(float *)(*(char **)(base + 0x2278) + 0x58) = *(float *)(base + 0xA90);
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Syncs the animation at D_0013F450 + 0x2278 to the one at +0x2080:
+   takes the float at +0xA94 into 0x5C, copies the source's 0x54 and its
+   sequence byte 0x51 into both sequence slots, then looks each slot's id
+   up in its bank of the model. The typed structs give retail's
+   base-first index adds, which byte offsets turn round. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232B78), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x10];
+    unsigned char count;
+    char pad11[0xB];
+    int ids[1];
+} AnimBank;
+
+typedef struct {
+    char pad0[0x48];
+    AnimBank *banks[1];
+} AnimModel;
+
+typedef struct {
+    char pad0[0x24];
+    AnimModel *model;
+    char pad28[0x28];
+    unsigned char seq[2];
+    unsigned char bank[2];
+    float f54;
+    float f58;
+    float f5C;
+    char pad60[8];
+    int id[2];
+} AnimState;
+
+extern char D_0013F350[];
+
+void FUN_L00_00232320(void) {
+    char *base = D_0013F350;
+    AnimState *obj = *(AnimState **)(base + 0x2278);
+
+    if (obj == 0) {
+        return;
+    }
+    obj->f5C = *(float *)(base + 0xA94);
+    obj->f54 = *(float *)(*(char **)(base + 0x2080) + 0x54);
+    obj->seq[0] = *(unsigned char *)(*(char **)(base + 0x2080) + 0x51);
+    obj->seq[1] = *(unsigned char *)(*(char **)(base + 0x2080) + 0x51);
+    obj->id[0] = obj->model->banks[obj->bank[0]]->ids[obj->seq[0]];
+    obj->id[1] = obj->model->banks[obj->bank[1]]->ids[obj->seq[1]];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002323b8.s", FUN_L00_002323b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002325a0.s", FUN_L00_002325a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002325e0.s", FUN_L00_002325e0);
+/* Queues sequence SEQ of bank BANK (D_0013F450 + 0xAB0 / 0xAB4) when BANK
+   is valid and SEQ is below the count of the current animation's bank.
+   The base pointer is a local inside the test, as retail forms it only
+   there. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232E60), where it is exact; names translated to the US level program. */
+
+void FUN_L00_002325e0(int bank, int seq) {
+    if (bank >= 0) {
+        char *base = D_0013F350;
+        AnimState *obj = *(AnimState **)(base + 0x2080);
+
+        if (seq < obj->model->banks[obj->bank[1]]->count) {
+            *(int *)(base + 0xAB0) = bank;
+            *(int *)(base + 0xAB4) = seq;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232628.s", FUN_L00_00232628);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232640.s", FUN_L00_00232640);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Stores ID at D_0013F450 + 0xAB8, or func_001F9850(5) when ID is -1. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_001f96f8(int);
+
+void FUN_L00_00232640(int id) {
+    if (id == -1) {
+        id = FUN_001f96f8(5);
+    }
+    *(int *)(D_0013F350 + 0xAB8) = id;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232670.s", FUN_L00_00232670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232b90.s", FUN_L00_00232b90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232fe8.s", FUN_L00_00232fe8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002330d0.s", FUN_L00_002330d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233210.s", FUN_L00_00233210);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233248.s", FUN_L00_00233248);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Sets bit 0 of the flags (0x34) of every object the block at D_0013F450
+   holds: the one at +0xA88, both of each of the seven pairs at +0x1090,
+   the one at +0x118C and, when +0x20A4 is 1, the one at +0x1624. In mode
+   8 (+0x10B8) it then clears bits 0 and 6 of the first pair's first
+   object, if D_L00_0015F6A8 is clear and the object's byte 0x20 is set.
+   Each of the three stages takes its own pointer to the block: retail
+   re-forms the address from the saved %hi after the loop and again
+   before the last test. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233868), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char *a;
+    char *b;
+    char pad8[0x48];
+} ObjPair;
+
+extern char D_0013F350[];
+extern int D_L00_0015F5C4;
+
+void FUN_L00_00232fe8(void) {
+    char *base = D_0013F350;
+    char *tail;
+    char *last;
+    char *obj;
+    int i;
+
+    *(unsigned short *)(*(char **)(base + 0xA88) + 0x34) |= 1;
+    for (i = 0; i < 7; i++) {
+        if (((ObjPair *)(base + 0x1090))[i].a != 0) {
+            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].a + 0x34) |= 1;
+        }
+        if (((ObjPair *)(base + 0x1090))[i].b != 0) {
+            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].b + 0x34) |= 1;
+        }
+    }
+    tail = D_0013F350;
+    obj = *(char **)(tail + 0x118C);
+    if (obj != 0) {
+        *(unsigned short *)(obj + 0x34) |= 1;
+    }
+    if (*(unsigned char *)(tail + 0x20A4) == 1) {
+        obj = *(char **)(tail + 0x1624);
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) |= 1;
+        }
+    }
+    last = D_0013F350;
+    if (*(int *)(last + 0x10B8) == 8) {
+        obj = ((ObjPair *)(last + 0x1090))[0].a;
+        if (obj != 0 && D_L00_0015F5C4 == 0 && *(unsigned char *)(obj + 0x20) != 0) {
+            *(unsigned short *)(obj + 0x34) &= ~0x41;
+        }
+    }
+}
+/* Undoes func_L00_00233868: clears bit 0 of the flags (0x34) of the
+   objects at D_0013F450 + 0xA88, in the seven pairs at +0x1090, at
+   +0x118C and (when +0x20A4 is 1) at +0x1624. Then it flags with 0x41
+   the objects at +0x1180, +0x1184 and +0x118C while the short at +0x22D8
+   is set, and the first pair's first object when +0x20AF is set, or
+   +0x20AE is set in mode 8 (+0x10B8). Each stage takes a fresh pointer to the
+   block, as retail re-forms it from the saved %hi before each one. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
+
+void FUN_L00_002330d0(void) {
+    char *base = D_0013F350;
+    char *blk2;
+    char *blk3;
+    char *blk4;
+    char *obj;
+    int i;
+
+    *(unsigned short *)(*(char **)(base + 0xA88) + 0x34) &= ~1;
+    for (i = 0; i < 7; i++) {
+        if (((ObjPair *)(base + 0x1090))[i].a != 0) {
+            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].a + 0x34) &= ~1;
+        }
+        if (((ObjPair *)(base + 0x1090))[i].b != 0) {
+            *(unsigned short *)(((ObjPair *)(base + 0x1090))[i].b + 0x34) &= ~1;
+        }
+    }
+    blk2 = D_0013F350;
+    obj = *(char **)(blk2 + 0x118C);
+    if (obj != 0) {
+        *(unsigned short *)(obj + 0x34) &= ~1;
+    }
+    if (*(unsigned char *)(blk2 + 0x20A4) == 1) {
+        obj = *(char **)(blk2 + 0x1624);
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) &= ~1;
+        }
+    }
+    blk3 = D_0013F350;
+    if (*(short *)(blk3 + 0x22D8) != 0) {
+        obj = *(char **)(blk3 + 0x1180);
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) |= 0x41;
+        }
+        obj = *(char **)(blk3 + 0x1184);
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) |= 0x41;
+        }
+        obj = *(char **)(blk3 + 0x118C);
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) |= 0x41;
+        }
+    }
+    blk4 = D_0013F350;
+    if ((*(unsigned char *)(blk4 + 0x20AE) != 0 && *(int *)(blk4 + 0x10B8) == 8)
+        || *(unsigned char *)(blk4 + 0x20AF) != 0) {
+        char *blk5 = D_0013F350;
+
+        obj = ((ObjPair *)(blk5 + 0x1090))[0].a;
+        if (obj != 0) {
+            *(unsigned short *)(obj + 0x34) |= 0x41;
+        }
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Sets bit 0 of the flags (0x34) of the objects at D_0013F450 + 0x2080
+   and, when present, +0x1620. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233A90), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+
+void FUN_L00_00233210(void) {
+    char *base = D_0013F350;
+    char *obj;
+
+    *(unsigned short *)(*(char **)(base + 0x2080) + 0x34) |= 1;
+    obj = *(char **)(base + 0x1620);
+    if (obj != 0) {
+        *(unsigned short *)(obj + 0x34) |= 1;
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
+   objects at D_0013F450 + 0x2080 and, when present, +0x1620. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233AC8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+
+void FUN_L00_00233248(void) {
+    char *base = D_0013F350;
+    char *obj;
+
+    *(unsigned short *)(*(char **)(base + 0x2080) + 0x34) &= ~1;
+    obj = *(char **)(base + 0x1620);
+    if (obj != 0) {
+        *(unsigned short *)(obj + 0x34) &= ~1;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233288.s", FUN_L00_00233288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002332d0.s", FUN_L00_002332d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233440.s", FUN_L00_00233440);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002334d0.s", FUN_L00_002334d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002335c8.s", FUN_L00_002335c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233660.s", FUN_L00_00233660);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
+   R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
+   by the matrix at D_0013F450 and adds the vector at D_0013F450 + 0x80. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233E48), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+
+void FUN_L00_002335c8(float *out, float r, float angle, float z) {
+    char *base;
+
+    out[0] = FUN_001f9dc8(angle) * r;
+    out[1] = FUN_001f9de0(angle) * r;
+    base = D_0013F350;
+    out[2] = z;
+    FUN_001f9d20(out, out, base);
+    FUN_001f9a10(out, out, base + 0x80);
+}
+/* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
+   then transforms it by the matrix at D_0013F450 and adds the vector at
+   D_0013F450 + 0x80. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233EE0), where it is exact; names translated to the US level program. */
+
+void FUN_L00_00233660(float *out, float x, float y, float z) {
+    char *base;
+
+    FUN_001f99f8(out);
+    base = D_0013F350;
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    FUN_001f9d20(out, out, base);
+    FUN_001f9a10(out, out, base + 0x80);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002336e8.s", FUN_L00_002336e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233708.s", FUN_L00_00233708);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233810.s", FUN_L00_00233810);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002338d0.s", FUN_L00_002338d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002339d0.s", FUN_L00_002339d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233a78.s", FUN_L00_00233a78);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_001f9b20(void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+
+float FUN_L00_002339d0(float *v) {
+    char *base = D_0013F350;
+    float m[16] __attribute__((aligned(16)));
+    float inv[16] __attribute__((aligned(16)));
+    float out[4] __attribute__((aligned(16)));
+
+    switch (*(unsigned char *)(base + 0x20B3)) {
+    case 0:
+        return FUN_001f9b20(v);
+    case 1:
+    case 2:
+        FUN_001fa050(m, *(char **)(base + 0x2080) + 0x40);
+        FUN_001fa2d8(inv, m);
+        FUN_001f9d20(out, v, inv);
+        return FUN_001f9b20(out);
+    }
+    return 0.0f;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_001f9ab0(void *, void *);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(void *, void *);
+
+float FUN_L00_00233a78(float *v) {
+    char *base = D_0013F350;
+    float m[16] __attribute__((aligned(16)));
+    float axis[4] __attribute__((aligned(16)));
+
+    switch (*(unsigned char *)(base + 0x20B3)) {
+    case 0:
+        return v[2];
+    case 1:
+    case 2:
+        FUN_001f99f8(axis);
+        axis[2] = 1.0f;
+        FUN_001fa050(m, *(char **)(base + 0x2080) + 0x40);
+        FUN_001f9d20(axis, axis, m);
+        return FUN_001f9ab0(axis, v);
+    }
+    return 0.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233b20.s", FUN_L00_00233b20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233ba0.s", FUN_L00_00233ba0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Like func_L00_002343A0, but instead of setting z it scales the point's
+   xy to length Z (func_L00_001FF500): in view mode 0 (D_0013F450 +
+   0x20B3) directly, in modes 1 and 2 between the transforms by the
+   matrices at +0x40 and +0x0. The switch gives retail's case tree. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00234420), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_L00_001ff550(float *, float *, float);
+
+void FUN_L00_00233ba0(float *dst, float *src, float z) {
+    char *base = D_0013F350;
+
+    switch (*(unsigned char *)(base + 0x20B3)) {
+    case 0:
+        FUN_L00_001ff550(dst, src, z);
+        break;
+    case 1:
+    case 2:
+        FUN_001f9d20(dst, src, base + 0x40);
+        FUN_L00_001ff550(dst, dst, z);
+        FUN_001f9d20(dst, dst, base);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233c30.s", FUN_L00_00233c30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233d30.s", FUN_L00_00233d30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233db8.s", FUN_L00_00233db8);
@@ -47,7 +600,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e98.s", FUN_L00_00233e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233ee8.s", FUN_L00_00233ee8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f38.s", FUN_L00_00233f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f80.s", FUN_L00_00233f80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002347c0.s", FUN_L00_002347c0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00235040), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_L00_00262030(int, void *, void *, float);
+
+void FUN_L00_002347c0(void) {
+    char *base = D_0013F350;
+
+    if (FUN_L00_00262030(*(short *)(base + 0x22DA), base + 0x80, base + 0x80, *(float *)(base + 0x234)) != 0) {
+        *(short *)(base + 0x1F6) = 4;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234808.s", FUN_L00_00234808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234a50.s", FUN_L00_00234a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234b38.s", FUN_L00_00234b38);

@@ -8,7 +8,28 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df9a0.s", FUN_L00_002df9a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e01b0.s", FUN_L00_002e01b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e02e0.s", FUN_L00_002e02e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0324.s", FUN_L00_002e0324);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0340.s", FUN_L00_002e0340);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int D_L00_0015F404;
+extern short D_L00_0015F3FC;
+extern void FUN_L00_002223f8(int, int);
+extern void FUN_L00_002eac18(int);
+
+void FUN_L00_002e0340(char *a) {
+    if (*(unsigned char *)(a + 0x20) == 4) {
+        D_L00_0015F404 = 0;
+        *(int *)&D_L00_0015F3FC = 0;
+        FUN_L00_002eac18(3);
+    }
+    if (*(int *)(D_0013F350 + 0x208C) == 0x13) {
+        FUN_L00_002223f8(0, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e03a0.s", FUN_L00_002e03a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0788.s", FUN_L00_002e0788);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1f28.s", FUN_L00_002e1f28);
@@ -46,7 +67,33 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7318.s", FUN_L00_002e7318);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7520.s", FUN_L00_002e7520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7530.s", FUN_L00_002e7530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e79c8.s", FUN_L00_002e79c8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Only for arg1==1: true when arg2 is past the edge plane
+   (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
+
+typedef float V[4] __attribute__((aligned(16)));
+
+extern V D_L00_00173E60;
+extern float FUN_001f9ab0(void *, void *);
+extern void FUN_001f9a28(float *, float *, float *);
+
+int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
+    V diff;
+    char *ptr2;
+
+    if (arg1 == 1) {
+        ptr2 = *(char **)((char *)arg0 + 0x70) + 0x130;
+        FUN_001f9a28(diff, D_L00_00173E60, arg2);
+        if (FUN_001f9ab0(diff, ptr2) < 0.0f) {
+            return 1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7a30.s", FUN_L00_002e7a30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7d20.s", FUN_L00_002e7d20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8378.s", FUN_L00_002e8378);
@@ -72,4 +119,41 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8918.s", FUN_L00_002e8918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8970.s", FUN_L00_002e8970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e89b0.s", FUN_L00_002e89b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8bb8.s", FUN_L00_002e8bb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8f40.s", FUN_L00_002e8f40);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
+
+extern float D_L00_0015EF40;
+extern float FUN_001f9af0(void *);
+extern void FUN_001f9a28(float *, float *, float *);
+extern void FUN_001f9a40(float, void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L00_002e8f40(int m) {
+    char *p = *(char **)(m + 0x70);
+    char *r = p + 0x1D0;
+    char *q = p + 0x130;
+    if (*(short *)(p + 0x10) > 0) {
+        float v[4];
+        float f;
+        float lim;
+        FUN_001f9a28(v, (float *)p, (float *)(p + 0x90));
+        FUN_001f9a40(D_L00_0015EF40, q, q, v);
+        f = FUN_001f9af0(q);
+        lim = *(float *)(q + 0x2C);
+        if (lim < f) {
+            f = lim;
+            FUN_L00_001ff500(q, q, f);
+            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
+        } else {
+            float t = lim - *(float *)(r + 0x30);
+            if (f < t) {
+                f = t;
+                FUN_L00_001ff500(q, q, f);
+            }
+            *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
+        }
+    }
+}

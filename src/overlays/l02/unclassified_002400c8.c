@@ -2,7 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002400c8.s", FUN_L02_002400c8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Mark every moby of class 0x1B1 in the active level. */
+/* Ported from rac1-decomp (PAL, src/overlays/l02/initonce_00240A00.c: func_L02_00240A00), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x34];
+    unsigned short flags;
+    char pad36[0x70];
+    short class_id;
+} Level02Moby;
+
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    Level02Moby *mobys[1];
+} Level02MobyList;
+
+extern Level02MobyList D_L02_0016CE60;
+extern int D_0015ED84;
+
+void FUN_L02_002400c8(void) {
+    int i;
+    if (D_0015ED84 == 2) {
+        for (i = 0; i < D_L02_0016CE60.count; i++) {
+            Level02Moby *moby = D_L02_0016CE60.mobys[i];
+            if (moby->class_id == 0x1B1) {
+                moby->flags |= 0x800;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a47f8.s", FUN_L02_002a47f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4818.s", FUN_L02_002a4818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);

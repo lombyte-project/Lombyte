@@ -13,7 +13,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4a58.s", FUN_L16_002e4a58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5010.s", FUN_L16_002e5010);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5258.s", FUN_L16_002e5258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e54a0.s", FUN_L16_002e54a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e56e0.s", FUN_L16_002e56e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Start the vendor moby's turn and mark it active. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float value;
+} Level16VendorTurnData;
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+    char pad21[0x57];
+    Level16VendorTurnData *data;
+    char pad7C[0x40];
+    unsigned char active;
+} Level16VendorTurnMoby;
+
+void FUN_L16_002e56e0(Level16VendorTurnMoby *moby) {
+    moby->data->value = -3.1415925f;
+    moby->active = 1;
+    moby->state = 2;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5e08.s", FUN_L16_002e5e08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6428.s", FUN_L16_002e6428);

@@ -5,18 +5,73 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020c758.s", FUN_L00_0020c758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cf58.s", FUN_L00_0020cf58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d2f8.s", FUN_L00_0020d2f8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* OUT = the camera-space point (0.3, 0, 1.34) in world space
+   (func_L00_00233EE0). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00233660(float *, float, float, float);
+
+void FUN_L00_0020d2f8(float *out) {
+    FUN_L00_00233660(out, 0.3f, 0.0f, 1.34f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d330.s", FUN_L00_0020d330);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d460.s", FUN_L00_0020d460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d498.s", FUN_L00_0020d498);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d4d0.s", FUN_L00_0020d4d0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Whether func_L00_0020DB30(ARG) is one of 10, 17, 20 or 25. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0020d498(int);
+
+int FUN_L00_0020d4d0(int arg) {
+    int v = FUN_L00_0020d498(arg);
+
+    if (v == 0x11 || v == 10 || v == 0x14 || v == 0x19) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d518.s", FUN_L00_0020d518);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d540.s", FUN_L00_0020d540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d568.s", FUN_L00_0020d568);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d5b8.s", FUN_L00_0020d5b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d5d0.s", FUN_L00_0020d5d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d61c.s", FUN_L00_0020d61c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d658.s", FUN_L00_0020d658);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* The value BACK entries ago (at most 31, and at most the entry count
+   +0x21AC) in the 32-float ring at D_0013F450 + 0x2128 whose newest
+   entry is +0x21A8. The ring as a struct array gives retail's base-first
+   index add. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020DCF0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x2128];
+    float ring[32];
+    int head;
+    int count;
+} RingBlock;
+
+extern char D_0013F350[];
+
+float FUN_L00_0020d658(int back) {
+    RingBlock *b = (RingBlock *)D_0013F350;
+    int n = back < 32 ? back : 31;
+
+    if (b->count < n) {
+        n = b->count;
+    }
+    return b->ring[(b->head - n + 31) % 32];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d6b0.s", FUN_L00_0020d6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d8f8.s", FUN_L00_0020d8f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020da10.s", FUN_L00_0020da10);
@@ -24,36 +79,247 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020da68.s", FUN_L00_0020da68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020dd20.s", FUN_L00_0020dd20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e360.s", FUN_L00_0020e360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e4c8.s", FUN_L00_0020e4c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e698.s", FUN_L00_0020e698);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_L00_00205000(int);
+extern void FUN_L00_002323b8(int, int, float);
+
+void FUN_L00_0020e698(void) {
+    unsigned char *g = (unsigned char *)D_0013F350;
+    if (g[0x20A8] != 0) {
+        if (*(int *)(g + 0xD08) != 0) {
+            *(int *)(g + 0xD14) = 1;
+        } else if (*(int *)(g + 0x2084) == 0) {
+            unsigned char *m = *(unsigned char **)(g + 0x2080);
+            if (m[0x53] == *(int *)(g + 0x2294)) {
+                int r = FUN_L00_00205000(0);
+                FUN_L00_002323b8(r, 0, -2.0f);
+            }
+        }
+        D_0013F350[0x20A8] = 0;
+        D_0013F350[0x20AA] = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e728.s", FUN_L00_0020e728);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020ea80.s", FUN_L00_0020ea80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f0b8.s", FUN_L00_0020f0b8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020F750), where it is exact; names translated to the US level program. */
+
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+float FUN_L00_0020f0b8(float *a, float *b) {
+    float s = 0.0f;
+    int i, j;
+    for (i = 0; i < 3; i++) {
+        float *q = (float *)((i << 4) + (int)b);
+        float *p = (float *)((i << 4) + (int)a);
+        for (j = 0; j < 3; j++) {
+            s += AbsoluteFloat(*p++ - *q++);
+        }
+    }
+    return s;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f580.s", FUN_L00_0020f580);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fca8.s", FUN_L00_0020fca8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fd80.s", FUN_L00_0020fd80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fde0.s", FUN_L00_0020fde0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* For events 9, 11, 13, 16 and 23: sets the short at D_0013F450 +
+   0x22CE to 3 and +0x1DC to func_001F9850(70). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_001f96f8(int);
+
+void FUN_L00_0020fd80(int id) {
+    char *base;
+
+    switch (id) {
+    case 9:
+    case 11:
+    case 13:
+    case 16:
+    case 23:
+        base = D_0013F350;
+        *(short *)(base + 0x22CE) = 3;
+        *(short *)(base + 0x1DC) = FUN_001f96f8(0x46);
+        break;
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* For events 9, 11, 13-16, 18, 19, 22, 23 and 26: sets the short at
+   D_0013F450 + 0x1DA to func_001F9850(70). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int FUN_001f96f8(int);
+
+void FUN_L00_0020fde0(int id) {
+    switch (id) {
+    case 9:
+    case 11:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 18:
+    case 19:
+    case 22:
+    case 23:
+    case 26:
+        *(short *)(D_0013F350 + 0x1DA) = FUN_001f96f8(0x46);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fe30.s", FUN_L00_0020fe30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fea0.s", FUN_L00_0020fea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210928.s", FUN_L00_00210928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210a08.s", FUN_L00_00210a08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210b30.s", FUN_L00_00210b30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210c80.s", FUN_L00_00210c80);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_001ff550(float *, float *, float);
+
+void FUN_L00_00210c80(float *v, int each, float s, float z) {
+    if (each) {
+        v[0] *= s;
+        v[1] *= s;
+        v[2] *= z;
+    } else {
+        FUN_L00_001ff550(v, v, s);
+        v[2] = z;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210ce8.s", FUN_L00_00210ce8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211250.s", FUN_L00_00211250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211360.s", FUN_L00_00211360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211380.s", FUN_L00_00211380);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211830.s", FUN_L00_00211830);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211870.s", FUN_L00_00211870);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* The xy length of the vector at D_0013F450 + 0x1D20, capped at 1. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_001f9b20(void *);
+
+float FUN_L00_00211830(void) {
+    float len = FUN_001f9b20(D_0013F350 + 0x1D20);
+
+    if (1.0f < len) {
+        len = 1.0f;
+    }
+    return len;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Whether T lies in the window that ends at D_0013F450 + 0xAA8 and is
+   +0xAAC long (T before the end, within that length of it). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+
+int FUN_L00_00211870(float t) {
+    char *base = D_0013F350;
+    float end = *(float *)(base + 0xAA8);
+
+    if (t < end) {
+        if (end - t <= *(float *)(base + 0xAAC)) {
+            return 1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002118b0.s", FUN_L00_002118b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002118c8.s", FUN_L00_002118c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211be8.s", FUN_L00_00211be8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211cf8.s", FUN_L00_00211cf8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_00214598(void *, void *);
+
+void FUN_L00_00211cf8(float x, float y, float z) {
+    float in[3];
+    float t[16], u[16];
+    in[0] = x;
+    in[1] = y;
+    in[2] = z;
+    FUN_001fa050(t, in);
+    FUN_001fa050(u, D_0013E533 + 0xEAD);
+    FUN_001fa378(u, u, t);
+    FUN_00214598(u, D_0013E533 + 0xEAD);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211d78.s", FUN_L00_00211d78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211e30.s", FUN_L00_00211e30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211e98.s", FUN_L00_00211e98);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern void FUN_L00_00211d78(int, float, float, float);
+
+void FUN_L00_00211e30(int a, float x, float y, float z) {
+    char *g = D_0013F350;
+    if (*(unsigned char *)(g + 0x20B3) != 0) {
+        FUN_L00_00211d78(a, x, y, z);
+    } else {
+        *(float *)(g + 0x188) = FUN_L00_0025bc98(g + 0x98, g + 0x184, a, *(float *)(g + 0x180), x, y, z);
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED64;
+extern float D_0015ED6C;
+extern int FUN_L00_0020d498(int);
+extern void FUN_L00_00211e30(int, float, float, float);
+
+void FUN_L00_00211e98(void) {
+    float a, b, c;
+    if (FUN_L00_0020d498(0) == 16) {
+        a = D_0015ED64 * 0.006f;
+        b = D_0015ED64 * 0.07f;
+        c = D_0015ED6C * 13.962634086608887f;
+    } else {
+        a = D_0015ED64 * 0.002f;
+        b = D_0015ED64 * 0.07f;
+        c = D_0015ED6C * 6.981317043304443f;
+    }
+    FUN_L00_00211e30(0, a, b, c);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211f38.s", FUN_L00_00211f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212088.s", FUN_L00_00212088);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002120d8.s", FUN_L00_002120d8);
@@ -62,7 +328,32 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212318.s", FUN_L00_00212318);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002126b8.s", FUN_L00_002126b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002127b8.s", FUN_L00_002127b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212ff0.s", FUN_L00_00212ff0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002132b8.s", FUN_L00_002132b8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern float FUN_001f9af0(void *);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L00_002132b8(float a, float b) {
+    char *p = D_0013E533 + 0x173D;
+    char *q = p - 0x920;
+    float v;
+    build_spherical_offset(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
+    FUN_001f9a68(p, p, a);
+    v = FUN_001f9af0(p);
+    if (v <= b) {
+        FUN_001f99f8(p);
+    } else {
+        FUN_L00_001ff500(p, p, v - b);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213350.s", FUN_L00_00213350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002133a8.s", FUN_L00_002133a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002137a8.s", FUN_L00_002137a8);

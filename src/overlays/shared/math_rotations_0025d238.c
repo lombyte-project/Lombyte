@@ -14,15 +14,64 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025dcd8.s", FUN_L00_0025dcd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e308.s", FUN_L00_0025e308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e310.s", FUN_L00_0025e310);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e368.s", FUN_L00_0025e368);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0025e3b8(void *);
+
+int FUN_L00_0025e368(char *a) {
+    int r;
+    if (a == 0) {
+        r = 0;
+    } else if (FUN_L00_0025e3b8(a) == 0) {
+        r = 1;
+    } else {
+        r = *(short *)(a + 0xA6) == 0x1F6;
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3b8.s", FUN_L00_0025e3b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3c8.s", FUN_L00_0025e3c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3f8.s", FUN_L00_0025e3f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f090.s", FUN_L00_0025f090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f3e8.s", FUN_L00_0025f3e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f730.s", FUN_L00_0025f730);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f780.s", FUN_L00_0025f780);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9af0(void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L00_0025f730(void *a, float x) {
+    if (x < FUN_001f9af0(a)) {
+        FUN_L00_001ff500(a, a, x);
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
+
+extern int D_L00_0015FFD8;
+
+void FUN_L00_0025f780(int a, short *list, short max) {
+    int k = ((a - D_L00_0015FFD8) << 8) >> 16;
+    int i;
+    for (i = 1; i <= list[0]; i++) {
+        if (list[i] == k) return;
+    }
+    if (list[0] < max) {
+        list[0]++;
+        list[list[0]] = k;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f800.s", FUN_L00_0025f800);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f858.s", FUN_L00_0025f858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f878.s", FUN_L00_0025f878);

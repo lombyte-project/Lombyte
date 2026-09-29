@@ -2,4 +2,26 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002644e0.s", FUN_L00_002644e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00265558.c: func_L00_00265558), where it is exact; names translated to the US level program. */
+
+extern int D_L00_0015F590;
+extern int D_L00_0015F594;
+extern int D_L00_00161E04;
+s32 remove_hud_item(s32 arg0) __asm__("FUN_001ff480");
+
+int FUN_L00_002644e0(int a) {
+    if (D_L00_0015F594 == a) {
+        if (D_L00_00161E04 != -1) {
+            D_L00_0015F590 = 0;
+            D_L00_0015F594 = 0;
+            remove_hud_item(D_L00_00161E04);
+            D_L00_00161E04 = -1;
+            return 1;
+        }
+    }
+    return 0;
+}

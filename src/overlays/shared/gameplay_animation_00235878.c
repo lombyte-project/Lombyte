@@ -2,17 +2,207 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235878.s", FUN_L00_00235878);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
+   for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
+   0xFFFF, 0, 0, 0, 0, 1), +0x7C = 0, +0x6C = -6, then reloads it with
+   func_001FFC48. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int unk00, unk04;
+    char pad08[0x18];
+    int unk20, unk24;
+    char pad28[0x3C];
+    int unk64, unk68, unk6C;
+    char pad70[0xC];
+    int unk7C;
+    char pad80[0x10];
+} HudBank;
+
+extern HudBank D_L00_0017DC50[];
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+void apply_pending_animation(struct Anim *anim) __asm__("FUN_001ff418");
+
+void FUN_L00_00235878(void) {
+    int i;
+
+    for (i = 0; i < 13; i++) {
+        queue_animation_update(i, 0xFFFF, 0, 0, 0, 0, 1);
+        D_L00_0017DC50[i].unk7C = 0;
+        D_L00_0017DC50[i].unk6C = -6;
+        apply_pending_animation(&D_L00_0017DC50[i]);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002359f0.s", FUN_L00_002359f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235a70.s", FUN_L00_00235a70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235ad8.s", FUN_L00_00235ad8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x8];
+    int unk08;
+    int *unk0C;
+    char pad10[0x38];
+    short unk48;
+    short unk4A;
+    char pad4C[0x4];
+    int unk50;
+    int unk54;
+    int w;
+    int h;
+    int flags;
+    char pad64[0x8];
+    int unk6C;
+    unsigned char cnt[4];
+    int unk74;
+    int unk78;
+    int unk7C;
+    void *unk80;
+} HudElem;
+
+int FUN_L00_00235a70(HudElem *rec, int *x, int *y) {
+    int w = rec->w;
+    int h = rec->h;
+    int flags = rec->flags;
+
+    if ((flags ^ 1) & 1) {
+        if (!(flags & 2)) {
+            *y -= h >> 1;
+        }
+    }
+    if (!(rec->flags & 4)) {
+        if (rec->flags & 8) {
+            *x -= w;
+        } else {
+            *x -= w >> 1;
+        }
+    }
+    return 0;
+}
+/* Slides a HUD element in or out from its anchored edge: step T moves by
+   D (back while the timer +0x7C runs, forward otherwise), clamped to
+   0..23, picks a ramp value from D_L00_0017E4A0 (timer running) or
+   D_L00_0017E500, and offsets *Y by it times (height + 52) for flags 1
+   (up) / 2 (down), or *X by it times (width + 20) for flags 4 (left) /
+   8 (right), rounded (func_001FA888 / func_001FA898 convert). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L00_0017E3A0[];
+extern float D_L00_0017E400[];
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+
+void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
+    int dx = 0;
+    int dy = 0;
+    float s;
+
+    if (e->unk7C != 0) {
+        t -= d;
+    } else {
+        t += d;
+    }
+    if (t < 0) {
+        t = 0;
+    }
+    if (t > 23) {
+        t = 23;
+    }
+    if (e->unk7C != 0) {
+        s = D_L00_0017E3A0[t];
+    } else {
+        s = D_L00_0017E400[t];
+    }
+    if (e->flags & 1) {
+        dy = -truncate_float_to_s32(s * (ConvertIntegerToFloat(e->h) + 52.0f) + 0.5f);
+    } else if (e->flags & 2) {
+        dy = truncate_float_to_s32(s * (ConvertIntegerToFloat(e->h) + 52.0f) + 0.5f);
+    } else if (e->flags & 4) {
+        dx = -truncate_float_to_s32(s * (ConvertIntegerToFloat(e->w) + 20.0f) + 0.5f);
+    } else if (e->flags & 8) {
+        dx = truncate_float_to_s32(s * (ConvertIntegerToFloat(e->w) + 20.0f) + 0.5f);
+    }
+    *x += dx;
+    *y += dy;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235c80.s", FUN_L00_00235c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235d4c.s", FUN_L00_00235d4c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235d80.s", FUN_L00_00235d80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235dc0.s", FUN_L00_00235dc0);
+/* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
+   offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00235c80(HudElem *);
+
+void FUN_L00_00235d80(HudElem *e) {
+    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk48 = 0;
+    e->unk4A = 0;
+    FUN_L00_00235c80(e);
+}
+/* func_L00_00236710 for a 32 x 32 element. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
+
+void FUN_L00_00235dc0(HudElem *e) {
+    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk48 = 0;
+    e->unk4A = 0;
+    e->w = 0x20;
+    e->h = 0x20;
+    FUN_L00_00235c80(e);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235e18.s", FUN_L00_00235e18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235ea0.s", FUN_L00_00235ea0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236128.s", FUN_L00_00236128);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0023aaa8(void *);
+
+void FUN_L00_00236128(HudElem *e) {
+    unsigned char *c = e->cnt;
+    int v;
+    int cap;
+
+    if (e->unk0C != 0) {
+        v = *e->unk0C;
+        cap = e->unk08;
+        if (v < 0) {
+            v = 0;
+        }
+        e->unk78 = v;
+        if (cap < v) {
+            e->unk78 = cap;
+        }
+    }
+    if (e->unk74 != e->unk78) {
+        e->unk7C = FUN_001f96f8(0xB4);
+        if (e->unk6C >= 0x18) {
+            e->unk74 = e->unk78;
+        }
+    }
+    if (e->unk7C >= FUN_001f96f8(5)) {
+        if (c[0] < FUN_001f96f8(8)) {
+            c[0]++;
+        } else if (c[1] < FUN_001f96f8(8)) {
+            c[1]++;
+        }
+    } else {
+        if (c[1] != 0 || c[0] != 0) {
+            e->unk6C = 1;
+        }
+        if (c[1] != 0) {
+            c[1]--;
+        } else if (c[0] != 0) {
+            c[0]--;
+        }
+    }
+    FUN_L00_0023aaa8((char *)e + 0x40);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236268.s", FUN_L00_00236268);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236458.s", FUN_L00_00236458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);

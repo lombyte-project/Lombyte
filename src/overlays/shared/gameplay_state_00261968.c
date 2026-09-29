@@ -8,12 +8,91 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d70.s", FUN_L00_00261d70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d78.s", FUN_L00_00261d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262360.s", FUN_L00_00262360);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262480.s", FUN_L00_00262480);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262500.s", FUN_L00_00262500);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
+
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_00214598(void *, void *);
+
+void FUN_L00_00262480(char *a, float x, float y, float z) {
+    float in[3];
+    float t[16], u[16];
+    in[0] = x;
+    in[1] = y;
+    in[2] = z;
+    FUN_001fa050(t, in);
+    FUN_001fa050(u, a + 0x40);
+    FUN_001fa378(u, u, t);
+    FUN_00214598(u, a + 0x40);
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
+
+void FUN_L00_00262500(int a, char *b) {
+    if (*(int *)(b + 0x13C) == 0) {
+        *(int *)(b + 0x134) = a;
+        *(int *)(b + 0x13C) = 1;
+        *(short *)(b + 0x132) = 0;
+        *(int *)(b + 0x138) = 0;
+        *(short *)(b + 0x130) = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262528.s", FUN_L00_00262528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262608.s", FUN_L00_00262608);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262840.s", FUN_L00_00262840);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
+
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L00_00262840(char *o) {
+    int i;
+    if (*(int *)(o + 0x13C) != 0) {
+        for (i = 0; i < *(int *)(o + 0x138); i++) {
+            int *p = (int *)(o + 0x120) + i;
+            if (*p != 0) {
+                mark_moby_for_removal(*p);
+                *p = 0;
+            }
+        }
+        *(int *)(o + 0x13C) = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002628c0.s", FUN_L00_002628c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002628d8.s", FUN_L00_002628d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262b00.s", FUN_L00_00262b00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262b80.s", FUN_L00_00262b80);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+
+void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
+    float t;
+    *p = FUN_001fa580(*p, y);
+    *(float *)(a + 0x18) -= *q;
+    t = FUN_001f9de0(*p) * x;
+    *q = t;
+    *(float *)(a + 0x18) += t;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+
+void FUN_L00_00262b80(float *o, float *a, float *b, float r, float l1, float l2) {
+    o[0x10] = r * FUN_001f9de0(*a) * FUN_001f9de0(*b);
+    o[0x11] = r * FUN_001f9de0(*a) * FUN_001f9dc8(*b);
+    *a = FUN_001fa580(*a, l1);
+    *b = FUN_001fa580(*b, l2);
+}

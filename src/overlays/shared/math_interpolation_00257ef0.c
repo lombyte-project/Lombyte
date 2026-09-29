@@ -2,9 +2,38 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257ef0.s", FUN_L00_00257ef0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+
+float FUN_L00_00257ef0(float x, float y, float z) {
+    float t = FUN_001fa5c8(y, x);
+    float c = FUN_001f9dc8(z * 3.1415927f);
+    return FUN_001fa580(x, t * ((1.0f - c) * 0.5f));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257f70.s", FUN_L00_00257f70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258050.s", FUN_L00_00258050);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+
+void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
+    float s = (1.0f - FUN_001f9dc8(ang * 3.1415927f)) * 0.5f;
+    out[0] = FUN_001fa580(a[0], FUN_001fa5c8(b[0], a[0]) * s);
+    out[1] = FUN_001fa580(a[1], FUN_001fa5c8(b[1], a[1]) * s);
+    out[2] = FUN_001fa580(a[2], FUN_001fa5c8(b[2], a[2]) * s);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258110.s", FUN_L00_00258110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258278.s", FUN_L00_00258278);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002583e0.s", FUN_L00_002583e0);
@@ -20,7 +49,51 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002592b8.s", FUN_L00_002592b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025930c.s", FUN_L00_0025930c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259404.s", FUN_L00_00259404);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259420.s", FUN_L00_00259420);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259430.s", FUN_L00_00259430);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259468.s", FUN_L00_00259468);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259508.s", FUN_L00_00259508);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
+
+int FUN_L00_00259430(int *p, int b) {
+    int w = *p;
+    int v = (w >> 24) - b;
+    if (v < 0) v = 0;
+    *p = (w & 0xFFFFFF) | (v << 24);
+    return v == 0;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+
+float FUN_L00_00259468(float *a, float *b, int *out, float f) {
+    int n = truncate_float_to_s32(b[2] / f);
+    float s = ConvertIntegerToFloat(n);
+    float r = a[2] + b[2] * s - ConvertIntegerToFloat((n * n + n) >> 1) * f;
+    if (out) {
+        *out = n;
+    }
+    return r;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
+    float t[4];
+    FUN_001f9a68(t, c, ConvertIntegerToFloat(d));
+    t[2] -= ConvertIntegerToFloat((d * d + d) >> 1) * f;
+    FUN_001f9a10(a, b, t);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002595a0.s", FUN_L00_002595a0);

@@ -14,7 +14,49 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2e28.s", FUN_L00_002d2e28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2e98.s", FUN_L00_002d2e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2ee8.s", FUN_L00_002d2ee8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d37d0.s", FUN_L00_002d37d0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D1168.c: func_L00_002D4C80), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char D_0013E533[];
+extern int FUN_001f96f8(int);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L00_002d37d0(char *a) {
+    if (*(int *)(D_0013E533 + 0x2EA1) == 8) {
+        if (*(unsigned char *)(a + 0x53) != 6) {
+            blend_moby_animation(a, 6, 0, FUN_001f96f8(10));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3838.s", FUN_L00_002d3838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3a10.s", FUN_L00_002d3a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);

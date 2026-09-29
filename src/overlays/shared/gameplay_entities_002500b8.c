@@ -3,4 +3,17 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002500b8.s", FUN_L00_002500b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002502a0.s", FUN_L00_002502a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84;
+extern unsigned char D_0014C050[];
+
+void FUN_L00_002502a0(int idx) {
+    if (idx != 0xFF) {
+        D_0014C050[idx + D_0015ED84 * 16] = 0xFF;
+    }
+}

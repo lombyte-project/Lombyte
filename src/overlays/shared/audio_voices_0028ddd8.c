@@ -2,10 +2,47 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ddd8.s", FUN_L00_0028ddd8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F0B0), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_0015F5F4;
+extern char D_0013E533[];
+extern int D_L00_0015F5F0;
+extern int FUN_0022d7f0(void *, int, int, int, int);
+
+int FUN_L00_0028ddd8(int a, int b, int c, int d) {
+    int r;
+    if (a >= D_L00_0015F5F0) return -1;
+    r = FUN_0022d7f0(D_L00_0015F5F4 + a * 32, b, 0, c + 0x40, d);
+    if (r >= 0) {
+        char *e = D_0013E533 + 0x1D + r * 0x70;
+        *(int *)(e + 0x8C) = c;
+        *(short *)(e + 0x7E) = a;
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028de68.s", FUN_L00_0028de68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df30.s", FUN_L00_0028df30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df38.s", FUN_L00_0028df38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df58.s", FUN_L00_0028df58);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F230), where it is exact; names translated to the US level program. */
+
+typedef struct { int k; int v; } TE;
+
+extern TE D_L00_001EA980[];
+
+void FUN_L00_0028df58(short *a) {
+    int i;
+    for (i = 0; D_L00_001EA980[i].k != -1 && D_L00_001EA980[i].k != a[0]; i++) {
+    }
+    a[1] = i;
+    *(int *)(a + 2) = D_L00_001EA980[i].v;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e108.s", FUN_L00_0028e108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e138.s", FUN_L00_0028e138);

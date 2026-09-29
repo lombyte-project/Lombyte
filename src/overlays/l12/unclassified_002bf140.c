@@ -5,7 +5,28 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf140.s", FUN_L12_002bf140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf770.s", FUN_L12_002bf770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e16b8.s", FUN_L12_002e16b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e17f8.s", FUN_L12_002e17f8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Move the vendor moby to state eight unless it is in state nine or eleven. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+} Level12VendorStateMoby;
+
+extern int FUN_L00_002dbe20(Level12VendorStateMoby *);
+
+int FUN_L12_002e17f8(Level12VendorStateMoby *moby) {
+    int result = FUN_L00_002dbe20(moby);
+    if (moby->state == 9 || moby->state == 11) {
+        return 0;
+    }
+    moby->state = 8;
+    return result;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1878.s", FUN_L12_002e1878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e18e8.s", FUN_L12_002e18e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e19a8.s", FUN_L12_002e19a8);

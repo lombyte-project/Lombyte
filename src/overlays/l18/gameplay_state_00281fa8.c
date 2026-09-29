@@ -2,4 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_00281fa8.s", FUN_L18_00281fa8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Serialize save data once and retain its destination buffer. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18/pause_00282F48.c: func_L18_00282F48), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0xE0];
+    char *save_data;
+} Level18PauseState;
+
+extern Level18PauseState D_L18_001BA6F0;
+void memcard_make_whole_save(u8 *arg0) __asm__("FUN_0020abb0");
+
+void FUN_L18_00281fa8(char *save_data) {
+    if (D_L18_001BA6F0.save_data == 0) {
+        D_L18_001BA6F0.save_data = save_data;
+        memcard_make_whole_save(save_data);
+    }
+}

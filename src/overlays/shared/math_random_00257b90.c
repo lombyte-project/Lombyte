@@ -2,5 +2,35 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257b90.s", FUN_L00_00257b90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257c48.s", FUN_L00_00257c48);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258BC8), where it is exact; names translated to the US level program. */
+
+extern s32 rand();
+
+int FUN_L00_00257b90(int lo, int hi) {
+    return ((rand() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
+   (bits 16-27 of the RNG word) for the magnitude and bit 16 for the
+   sign. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258C80), where it is exact; names translated to the US level program. */
+
+extern s32 rand();
+
+float FUN_L00_00257c48(float lo, float hi) {
+    int v = rand() >> 16;
+    float range = hi - lo;
+    float r = lo + (float)(v & 0xFFF) * range * 0.000244140625f;
+
+    if (v & 1) {
+        r = -r;
+    }
+    return r;
+}

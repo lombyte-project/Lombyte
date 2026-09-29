@@ -2,5 +2,23 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023f0d8.s", FUN_L00_0023f0d8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/lights_0023FA70.c: func_L00_0023FA70), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_0015FCA8;
+extern float D_L00_0015FCA0;
+extern float D_L00_0015FCA4;
+extern int D_L00_0015FC98;
+extern int D_L00_0015FC9C;
+
+void FUN_L00_0023f0d8(char *p) {
+    D_L00_0015FC98 = *(int *)p; p += 4;
+    D_L00_0015FC9C = *(int *)p; p += 4;
+    D_L00_0015FCA0 = *(float *)p; p += 4;
+    D_L00_0015FCA4 = *(float *)p; p += 4;
+    D_L00_0015FCA8 = p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023f120.s", FUN_L00_0023f120);

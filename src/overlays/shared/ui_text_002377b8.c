@@ -13,14 +13,71 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238f88.s", FUN_L00_00238f88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002395b0.s", FUN_L00_002395b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239630.s", FUN_L00_00239630);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239810.s", FUN_L00_00239810);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239cc8.s", FUN_L00_00239cc8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Sets E up with func_L00_0023B0F8, points +0x80 at the shorts of
+   D_L00_0015FB70 (declared like D_L00_0015FB68, out of $gp's reach) and
+   clears the first. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x8];
+    int unk08;
+    int *unk0C;
+    char pad10[0x38];
+    short unk48;
+    short unk4A;
+    char pad4C[0x4];
+    int unk50;
+    int unk54;
+    int w;
+    int h;
+    int flags;
+    char pad64[0x8];
+    int unk6C;
+    unsigned char cnt[4];
+    int unk74;
+    int unk78;
+    int unk7C;
+    void *unk80;
+} HudElem;
+
+typedef struct {
+    short unk0;
+    short unk2;
+    short unk4;
+    short unk6;
+} HudCounter;
+
+extern HudCounter D_L00_0015FAB8;
+extern void FUN_L00_0023a760(HudElem *);
+
+void FUN_L00_00239cc8(HudElem *e) {
+    FUN_L00_0023a760(e);
+    e->unk80 = &D_L00_0015FAB8;
+    D_L00_0015FAB8.unk0 = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239d00.s", FUN_L00_00239d00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a1f8.s", FUN_L00_0023a1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a218.s", FUN_L00_0023a218);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a640.s", FUN_L00_0023a640);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a760.s", FUN_L00_0023a760);
+/* func_L00_00236750 without the offsets: a 32 x 32 element with a timer
+   of 30 + func_001F9850(120). */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00235c80(HudElem *);
+
+void FUN_L00_0023a760(HudElem *e) {
+    e->unk7C = FUN_001f96f8(0x78) + 0x1E;
+    e->w = 0x20;
+    e->h = 0x20;
+    FUN_L00_00235c80(e);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a7a8.s", FUN_L00_0023a7a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aa98.s", FUN_L00_0023aa98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aaa8.s", FUN_L00_0023aaa8);

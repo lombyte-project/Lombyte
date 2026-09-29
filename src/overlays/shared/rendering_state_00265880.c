@@ -2,4 +2,17 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00265880.s", FUN_L00_00265880);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/music_002664B0.c: func_L00_002666C8), where it is exact; names translated to the US level program. */
+
+extern char D_001516D0[];
+
+void FUN_L00_00265880(int v) {
+    char *b = D_001516D0;
+    if (*(short *)(b + 0x40) & 0x8000) *(short *)(b + 0x42) = v;
+    if (*(short *)(b + 0x78) & 0x8000) *(short *)(b + 0x7A) = v;
+    if (*(short *)(b + 0x5C) & 0x8000) *(short *)(b + 0x5E) = v;
+}

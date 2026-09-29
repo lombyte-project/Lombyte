@@ -16,7 +16,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a2f0.s", FUN_L00_0028a2f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a3a8.s", FUN_L00_0028a3a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a480.s", FUN_L00_0028a480);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a620.s", FUN_L00_0028a620);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a920.s", FUN_L00_0028a920);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_0016051C;
+extern char D_L00_001BD7E0[];
+extern void FUN_001f9fc8(void *);
+extern void FUN_0022bba0(void);
+extern void FUN_L00_00288ec0(int, int);
+extern void FUN_L00_00289108(void);
+void sky_draw_shell(s32 arg0) __asm__("FUN_0022b690");
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L00_0028a920(void) {
+    FUN_001f9fc8(D_L00_001BD7E0);
+    sky_draw_shell(0);
+    sky_draw_shell(1);
+    if (*(short *)(D_L00_0016051C + 8) == 0) FUN_L00_00288ec0(0x78, 8);
+    FUN_L00_00289108();
+    FUN_0022bba0();
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    sky_draw_shell(2);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a998.s", FUN_L00_0028a998);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028aa98.s", FUN_L00_0028aa98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ac88.s", FUN_L00_0028ac88);

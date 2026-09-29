@@ -3,4 +3,16 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257d78.s", FUN_L00_00257d78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257e20.s", FUN_L00_00257e20);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
+
+float FUN_L00_00257e20(float a, float b, float c, float d, float t) {
+    float p = (d - c) - (a - b);
+    float q = (a - b) - p;
+    float t2 = t * t;
+    float t3 = t2 * t;
+    return p * t3 + q * t2 + (c - a) * t + b;
+}

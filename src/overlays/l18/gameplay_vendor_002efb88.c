@@ -36,7 +36,29 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7220.s", FUN_L18_002f7220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f76a0.s", FUN_L18_002f76a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7880.s", FUN_L18_002f7880);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7ab0.s", FUN_L18_002f7ab0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Activate the vendor moby and set its initial flags. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002F2AE0.c: func_L18_002F8F10), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char substate;
+    char pad32[2];
+    unsigned short flags;
+} Level18VendorMobyShort;
+
+void FUN_L18_002f7ab0(Level18VendorMobyShort *moby) {
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->flags |= 3;
+        moby->substate = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7ad8.s", FUN_L18_002f7ad8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7c40.s", FUN_L18_002f7c40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8050.s", FUN_L18_002f8050);

@@ -2,6 +2,23 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028d8c0.s", FUN_L00_0028d8c0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028EB98), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+
+int FUN_L00_0028d8c0(int a, int i) {
+    if (i >= 0) {
+        char *p = D_0013E533 + 0x1D + i * 0x70;
+        if (*(int *)(p + 0x88) == a) {
+            int t = *(unsigned char *)(p + 0x74);
+            if (t == 1 || t == 2) return 1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028d918.s", FUN_L00_0028d918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028d950.s", FUN_L00_0028d950);

@@ -16,7 +16,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002165b8.s", FUN_L00_002165b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216710.s", FUN_L00_00216710);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002167d0.s", FUN_L00_002167d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216de8.s", FUN_L00_00216de8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216e48.s", FUN_L00_00216e48);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_002175D0), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
+
+extern G D_0013F350;
+extern int FUN_0022da68(int, int, int);
+
+void FUN_L00_00216e48(int idx, int a, int b) {
+    G *g = &D_0013F350;
+    if (g->a[idx] == -1) {
+        g->a[idx] = FUN_0022da68(b, 4, a);
+    }
+    g->b[idx] = a;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ef8.s", FUN_L00_00216ef8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216f10.s", FUN_L00_00216f10);

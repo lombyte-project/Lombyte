@@ -6,4 +6,30 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284e50.s", FUN_L00_00284e50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851f4.s", FUN_L00_002851f4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285208.s", FUN_L00_00285208);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
+
+typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
+
+extern int FUN_L00_002851c0(int, int);
+extern void FUN_L00_001ff090(int, void *, unsigned short);
+
+void FUN_L00_00285208(int *h) {
+    int i;
+
+    for (i = 0; i < *h; i++) {
+        int m = FUN_L00_002851c0(((Ent *)(h + 1))[i].b, ((Ent *)(h + 1))[i].a);
+        if (m != 0) {
+            int dst;
+            if (((Ent *)(h + 1))[i].kind == 1) {
+                dst = ((Ent *)(h + 1))[i].off + m;
+            } else {
+                dst = ((Ent *)(h + 1))[i].off + *(int *)(m + 0x78);
+            }
+            FUN_L00_001ff090(dst, &((Ent *)(h + 1))[i].pad, ((Ent *)(h + 1))[i].len);
+        }
+    }
+}

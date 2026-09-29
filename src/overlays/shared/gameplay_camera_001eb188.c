@@ -15,7 +15,47 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed054.s", FUN_L00_001ed054);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed230.s", FUN_L00_001ed230);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed280.s", FUN_L00_001ed280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed580.s", FUN_L00_001ed580);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed630.s", FUN_L00_001ed630);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_001f9a10(void *, void *, void *);
+
+void FUN_L00_001ed580(float *o, float *v, void *m) {
+    o[0] = v[2] * FUN_001f9dc8(v[1]) * FUN_001f9dc8(v[0]);
+    o[1] = v[2] * FUN_001f9dc8(v[1]) * FUN_001f9de0(v[0]);
+    o[2] = v[2] * FUN_001f9de0(v[1]);
+    *(int *)(o + 3) = 0;
+    FUN_001f9a10(o, o, m);
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
+
+typedef float W[4] __attribute__((aligned(16)));
+
+extern float FUN_001f9af0(float *);
+extern float FUN_001f9b20(float *);
+extern float FUN_L00_001ff8b0(float, float);
+extern void FUN_001f9a28(float *);
+extern void FUN_001fa5c8(float, float);
+
+int FUN_L00_001ed630(float *a) {
+    W v;
+    float t;
+    FUN_001f9a28(v);
+    a[1] = FUN_L00_001ff8b0(FUN_001f9b20(v), v[2]);
+    t = FUN_L00_001ff8b0(v[0], v[1]);
+    FUN_001fa5c8(t, a[0]);
+    a[0] = t;
+    a[2] = FUN_001f9af0(v);
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed6a8.s", FUN_L00_001ed6a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed878.s", FUN_L00_001ed878);

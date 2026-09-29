@@ -2,4 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_00265ff8.s", FUN_L18_00265ff8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Set an attached effect's alpha from distance and the supplied scale. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18/mobyutil_00267000.c: func_L18_00267000), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x10];
+    float position[4];
+} Level18Moby;
+
+typedef struct {
+    char pad0[0xA];
+    unsigned char alpha;
+} Level18Effect;
+
+extern Level18Effect *FUN_L00_0025c338(Level18Moby *);
+extern char D_0013E533[];
+extern float FUN_001f9b48(void *, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+
+void FUN_L18_00265ff8(Level18Moby *moby, float scale) {
+    Level18Effect *effect;
+    int alpha;
+
+    if (moby == 0) {
+        return;
+    }
+    effect = FUN_L00_0025c338(moby);
+    if (effect == 0) {
+        return;
+    }
+    alpha = truncate_float_to_s32(FUN_001f9b48(D_0013E533 + 0xE9D, moby->position) * 8.0f * scale) - 1;
+    if (alpha >= 256) {
+        alpha = 255;
+    } else if (alpha < 0) {
+        alpha = 0;
+    }
+    effect->alpha = alpha;
+}

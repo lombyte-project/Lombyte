@@ -4,5 +4,26 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002002e0.s", FUN_L00_002002e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00200418.s", FUN_L00_00200418);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00200510.s", FUN_L00_00200510);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/fastfunc_001FEF78.c: func_L00_002004C0), where it is exact; names translated to the US level program. */
+
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+float FUN_L00_00200510(float a, float b, float c) {
+    float r = FUN_001fa5c8(b, a);
+    if (!(r > 0.0f)) {
+        c = -c;
+    }
+    if (c > AbsoluteFloat(r)) {
+        c = AbsoluteFloat(r);
+    } else if (c < -AbsoluteFloat(r)) {
+        c = -AbsoluteFloat(r);
+    }
+    return FUN_001fa580(a, c);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002005c8.s", FUN_L00_002005c8);
