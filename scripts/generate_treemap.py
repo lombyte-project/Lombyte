@@ -973,9 +973,8 @@ def render_svg(
     lines.append(
         f'<text x="{margin_px}" y="41" font-family="{esc(FONT)}" '
         f'font-size="10" '
-        f'fill="{MUTED}">{len(exact) + ov_exact} matching C &#183; {len(asm)} intentional asm '
-        f"&#183; {len(pending) + len(overlays) - ov_exact} pending &#183; "
-        f"{total_units} executable units + {len(overlays)} overlay functions</text>"
+        f'fill="{MUTED}">{len(exact) + ov_exact:,} of {total_units + len(overlays):,} functions in C '
+        f"&#183; executable and 19 level overlays</text>"
     )
     legend_font = 10
     swatch = 10
@@ -1016,7 +1015,7 @@ def render_svg(
     lines.append(
         f'<text x="{status_x}" y="52" text-anchor="end" '
         f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
-        f"of recoverable C decompiled, executable and overlays</text>"
+        f"C_EXACT &#183; executable + overlays</text>"
     )
 
     # The drawer: the executable, its own percentage over its dimmed treemap.
@@ -1029,8 +1028,8 @@ def render_svg(
         f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></rect>"
     )
     lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
-                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset - 10}" rx="6"/></clipPath>')
-    placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset - 10, min_bytes)
+                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}" rx="6"/></clipPath>')
+    placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset, min_bytes)
     lines.append('<g clip-path="url(#drawer-clip)" opacity="0.22">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
@@ -1045,13 +1044,7 @@ def render_svg(
     lines.append("</g>")
     lines.append(
         f'<rect x="{dx0 + inset}" y="{dy0 + inset}" width="{ddx - 2 * inset}" '
-        f'height="{ddy - 2 * inset - 10}" fill="url(#sheen)" pointer-events="none"/>'
-    )
-    # handle
-    hw = 64
-    lines.append(
-        f'<rect x="{dx0 + ddx / 2 - hw / 2:.1f}" y="{dy0 + ddy - 11}" width="{hw}" height="6" rx="3" '
-        f'fill="{CHROME}" fill-opacity="0.55"/>'
+        f'height="{ddy - 2 * inset}" fill="url(#sheen)" pointer-events="none"/>'
     )
     cx, cy = dx0 + ddx / 2, dy0 + ddy / 2
     lines.append(
@@ -1064,7 +1057,7 @@ def render_svg(
         f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="6" stroke-opacity="0.6">'
         f"{boot_percent:.1f}%</text>"
     )
-    caption = f"C_EXACT of the executable&#8217;s recoverable C &#183; {boot_exact_bytes:,} of {boot_recoverable:,} B"
+    caption = "C_EXACT of the executable"
     if fuzzy_percent is not None:
         caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
     lines.append(
@@ -1144,21 +1137,8 @@ def render_svg(
         f'<line x1="{margin_px}" y1="{separator_y:.1f}" x2="{width - margin_px}" '
         f'y2="{separator_y:.1f}" stroke="{PLATE}" stroke-width="1" opacity="0.8"/>'
     )
-    if fuzzy_percent is None:
-        progress_text = (f"C_EXACT {total_percent:.1f}% of recoverable C &#183; "
-                         f"executable {boot_percent:.1f}% &#183; overlays {ov_percent:.1f}%")
-    else:
-        progress_text = (
-            f"C_EXACT {total_percent:.1f}% / C_FUZZY {total_fuzzy:.1f}% of recoverable C &#183; "
-            f"executable C_EXACT {boot_percent:.1f}% / C_FUZZY {fuzzy_percent:.1f}% &#183; "
-            f"overlays {ov_percent:.1f}%"
-        )
-    lines.append(
-        f'<text x="{margin_px}" y="{height - 20}" '
-        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
-        f"{exact_bytes:,} of {total_bytes:,} bytes are matching C &#183; "
-        f"{exact_percent:.1f}% of all code, executable and 19 level overlays</text>"
-    )
+    progress_text = (f"executable {boot_percent:.1f}% &#183; overlays {ov_percent:.1f}% &#183; "
+                     f"{exact_bytes:,} of {total_bytes:,} B in C")
     lines.append(
         f'<text x="{margin_px}" y="{height - 8}" '
         f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
@@ -1208,8 +1188,8 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--footer",
         type=int,
-        default=34,
-        help="footer band below the map; fits the two footer lines",
+        default=22,
+        help="footer band below the map; fits the footer line",
     )
     parser.add_argument(
         "--min-bytes",
