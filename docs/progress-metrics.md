@@ -1,10 +1,10 @@
 # Progress metrics
 
 Two numbers describe the same reconstruction from different angles, and both are
-byte-weighted over the **configured code in the boot executable** — not the whole
-disc. The disc's embedded DVP overlay blobs are rebuilt as raw data; level code
-overlays and executables elsewhere on the disc are out of scope (see
-[Level overlays](#level-overlays)).
+byte-weighted over the **configured code in the boot executable and the 19 level
+code overlays** — the game's program, not the whole disc. The disc's embedded
+DVP overlay blobs are rebuilt as raw data; other executables on the disc are out
+of scope. How the overlays are counted is in [Level overlays](#level-overlays).
 
 | Metric      | Meaning                                                                   |
 | :---------- | :------------------------------------------------------------------------ |
@@ -50,12 +50,16 @@ comparison against the original through `./verify-baseline.sh` (see
 
 ## The progress map
 
-`assets/decomp_map.svg` tiles the boot executable by logical function group,
-sized by the combined executable bytes of its functions. A tile's label shows
-byte-weighted **C_EXACT** progress, and **C_FUZZY** when similarity scores are
-available. **Orange** groups have all recoverable C functions matching exactly,
-**chrome** groups contain intentional low-level assembly only, and **dark
-steel** groups contain pending C.
+`assets/decomp_map.svg` has two parts. The **drawer** at the top is the boot
+executable: its own C_EXACT percentage over its group treemap, dimmed to a
+texture (every logical group is a tile sized by its bytes; the colour is the
+group's state). Below it the **tree** lists the shared level code first and then
+the 19 levels in game order, each with its planet, a one-line description, its
+C_EXACT percentage and a bar of blocks, one per `src/overlays/` file, sized by
+bytes. The headline percentage in the header is the whole game. Everywhere the
+same scale applies: **orange** is all recoverable C matching exactly, **chrome**
+is intentional low-level assembly only, and **dark steel** to **copper** is
+pending C by its exact coverage.
 
 ```sh
 .venv/bin/python scripts/generate_treemap.py
@@ -117,6 +121,25 @@ Every level's data starts with its own build of the game program: code records
 that replace the executable's whole `main` segment (text, data, vtables, bss)
 when the level loads. The executable's game code is a subset of each level's
 program; the rest is per-level code (enemies, bosses, level logic, the `update/*`
-and `hero*` modules). All distinct game code across the levels is several times
-the executable's game code.
+and `hero*` modules). All distinct level code is about nine times the
+executable's game code ([overlays.md](overlays.md)).
+
+The overlays count in the headline C_EXACT with these rules:
+
+- every distinct function counts **once**: an executable function repeated in
+  the levels is the executable's, a function shared by several levels is one
+  function (`config/overlays/us/functions.tsv` is the list);
+- a shared or level function is **C_EXACT** when its C is in `src/overlays/`,
+  where it is put only after the byte proof (compiled on the game compiler
+  route, placed at its address in the level, byte for byte the level's text,
+  method `overlay-place-bytes-v1`); it is **pending** while its line there is
+  an `INCLUDE_ASM` stub. Overlay functions carry no C_FUZZY: a stub counts 0;
+- there is no intentional-asm class in the overlays yet: everything is
+  recoverable until a function is shown to be hand-written VU/MMI code.
+
+`progress/report.json` keeps the executable and the overlays apart in its
+categories: `boot` (= `game` + `sdk`), `overlays` (= `shared` + `levels`), and
+one `level_NN` per level. `assets/decomp_map.json` (schema
+`rnc-public-progress-v3`) has the same split as `boot`, `overlays` and
+`total`; its top-level fields describe the total.
 

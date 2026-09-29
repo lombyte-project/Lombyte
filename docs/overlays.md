@@ -69,8 +69,8 @@ records:
 
 | kind | functions | bytes | meaning |
 | :--- | ---: | ---: | :--- |
-| `exe` | 693 | 269,260 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
-| `shared` | 1,959 | 1,190,224 | in two or more levels (1,154 of them in all 19: 591,620 bytes) |
+| `exe` | 691 | 269,236 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
+| `shared` | 1,961 | 1,190,248 | in two or more levels (1,156 of them in all 19: 591,644 bytes) |
 | `level` | 1,379 | 2,028,412 | in one level only |
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the
@@ -82,8 +82,11 @@ in the level's `data` record.
 
 Masking hides a constant that goes through a masked field, so a few tiny
 functions that differ only in such a constant share one catalogue row (the
-`core.lit` constant loaders above). The per-place proof below is what finally
-decides a C body for every place.
+`core.lit` constant loaders above). Only executable code from 0x15EF00 up can
+reappear in a level as the same function; a level body whose masked
+fingerprint equals a resident function's (8 and 12 byte bodies) is a distinct
+copy and is catalogued as level code. The per-place proof below is what
+finally decides a C body for every place.
 
 ## Sources and the proof
 
@@ -93,12 +96,14 @@ level's own, in link order: a file runs from one executable unit to the next
 functions between the executable's), or about 32 KB, and is named after that
 unit and its first function. Every function starts as an
 `INCLUDE_ASM("config/us/overlays/asm/<name>.s", <name>)` stub and is replaced
-by C as it is matched. The build target `make overlays` compiles every file
-through the game compiler route (the same `cc1` and `Ps2EeAs` as the
-executable's game code) into `build/overlays/`; the executable build and
-`./verify-baseline.sh` are untouched.
+by C as it is matched. The build target `make overlays` (`configure.py
+--overlays`, then ninja in `build/overlays/`) compiles every file with the
+game compiler's driver (its `cc1`, GNU `as`) and the executable's game-code
+flags into `build/overlays/obj/`; nothing is linked, and the executable
+build and `./verify-baseline.sh` are untouched.
 
-An overlay function is C_EXACT when its C, compiled on the game compiler and
+An overlay function is C_EXACT when its C, compiled on the game compiler
+route (`cc1`, then `Ps2EeAs` as retail's game code was assembled) and
 placed at its canonical address with every symbol at that level's address
 (`_gp` = 0x166C00, jump tables from the level's `data` record), is byte for
 byte the level's text (`scripts/decomp try FUN_LNN_xxxxxxxx cand.c` in the
