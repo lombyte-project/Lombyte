@@ -614,6 +614,49 @@ def trim_data_sections(data, reference):
     return bytes(result)
 
 
+def fix_gprel_externs(data):
+    """Rebase GPREL16 addends against undefined symbols for GNU ld.
+
+    Ps2EeAs relaxes a small-data access to $gp and writes the in-place
+    addend as A - gp0 (gp0 = the .reginfo gp_value) for every symbol.  GNU
+    ld adds gp0 back only for local symbols, so a relaxed access to an
+    undefined symbol that has no `.extern` size is off by gp0 and overflows GPREL16 at link
+    time.  GNU as writes such an addend without the -gp0 term, so add gp0
+    back for exactly those relocations; the instruction bytes after linking
+    are what Ps2EeAs meant.  No-op for objects without that case.
+    """
+    shoff, shsize, headers, names = _sections(data)
+    gp0 = 0
+    for h, name in zip(headers, names):
+        if h[1] == 0x70000006:  # SHT_MIPS_REGINFO
+            gp0 = struct.unpack_from("<i", data, h[4] + 20)[0]
+    if not gp0:
+        return data
+    result = bytearray(data)
+    for h in headers:
+        if h[1] != 9 or h[9] != 8:
+            continue
+        symtab = headers[h[6]]
+        target = headers[h[7]]
+        for offset in range(h[4], h[4] + h[5], 8):
+            r_offset, r_info = struct.unpack_from("<II", data, offset)
+            if r_info & 0xFF != 7:  # R_MIPS_GPREL16
+                continue
+            sym = struct.unpack_from("<IIIBBH", data, symtab[4] + (r_info >> 8) * 16)
+            # Only undefined symbols without an `.extern NAME, SIZE`: Ps2EeAs
+            # writes a correct (gp0-free) addend for the sized ones.
+            if sym[3] >> 4 == 0 or sym[5] != 0 or sym[2] != 0:
+                continue
+            where = target[4] + r_offset
+            word = struct.unpack_from("<I", result, where)[0]
+            addend = ((word & 0xFFFF) ^ 0x8000) - 0x8000
+            addend += gp0
+            if not -0x8000 <= addend < 0x8000:
+                raise ValueError("GPREL16 addend out of range after rebase")
+            struct.pack_into("<I", result, where, (word & 0xFFFF0000) | (addend & 0xFFFF))
+    return bytes(result)
+
+
 def add_empty_sections(data):
     shoff = struct.unpack_from("<I", data, 32)[0]
     shsize, count, names_index = struct.unpack_from("<HHH", data, 46)
@@ -728,7 +771,7 @@ def main(argv):
             raise SystemExit("unknown assembler policy: " + policy)
         open(destination, "w").write(assembly)
     elif mode == "finish":
-        data = unpad(data)
+        data = fix_gprel_externs(unpad(data))
         if len(argv) == 5:
             data = trim_data_sections(data, open(argv[4], "rb").read())
         open(destination, "wb").write(add_empty_sections(data))
