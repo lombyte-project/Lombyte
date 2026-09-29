@@ -1,0 +1,140 @@
+{
+ "schema": "rnc-overlay-levels-v1",
+ "game": "Ratchet & Clank (USA) SCUS-97199",
+ "note": "Planet names and one-line descriptions for the progress map; game order. Community reference metadata, not game evidence.",
+ "levels": [
+  {
+   "index": 0,
+   "id": "level-00",
+   "table_name": "Veldin Tutorial",
+   "planet": "Veldin",
+   "description": "Kyzil Plateau: the tutorial, Ratchet's home"
+  },
+  {
+   "index": 1,
+   "id": "level-01",
+   "table_name": "Novalis",
+   "planet": "Novalis",
+   "description": "Tobruk Crater: a village under Blarg attack"
+  },
+  {
+   "index": 2,
+   "id": "level-02",
+   "table_name": "Aridia",
+   "planet": "Aridia",
+   "description": "Outpost X11: sand, swamps and the Trespasser"
+  },
+  {
+   "index": 3,
+   "id": "level-03",
+   "table_name": "Kerwan",
+   "planet": "Kerwan",
+   "description": "Metropolis: the city of towers and trains"
+  },
+  {
+   "index": 4,
+   "id": "level-04",
+   "table_name": "Eudora",
+   "planet": "Eudora",
+   "description": "Logging Site: forest and Blarg lumber mills"
+  },
+  {
+   "index": 5,
+   "id": "level-05",
+   "table_name": "Rilgar",
+   "planet": "Rilgar",
+   "description": "Blackwater City: canals and the hoverboard race"
+  },
+  {
+   "index": 6,
+   "id": "level-06",
+   "table_name": "Nebula G34",
+   "planet": "Nebula G34",
+   "description": "Blarg Tactical Research Station: zero-gravity corridors"
+  },
+  {
+   "index": 7,
+   "id": "level-07",
+   "table_name": "Umbris",
+   "planet": "Umbris",
+   "description": "Qwark's headquarters and the Snagglebeast"
+  },
+  {
+   "index": 8,
+   "id": "level-08",
+   "table_name": "Batalia",
+   "planet": "Batalia",
+   "description": "Fort Krontos: a war zone with turrets and tanks"
+  },
+  {
+   "index": 9,
+   "id": "level-09",
+   "table_name": "Gaspar",
+   "planet": "Gaspar",
+   "description": "Blarg Depot: lava fields and the Pilot's Helmet"
+  },
+  {
+   "index": 10,
+   "id": "level-10",
+   "table_name": "Orxon",
+   "planet": "Orxon",
+   "description": "the toxic Blarg homeworld, first with Clank"
+  },
+  {
+   "index": 11,
+   "id": "level-11",
+   "table_name": "Pokitaru",
+   "planet": "Pokitaru",
+   "description": "Jowai Resort: the ocean and the Thruster-Pack"
+  },
+  {
+   "index": 12,
+   "id": "level-12",
+   "table_name": "Hoven",
+   "planet": "Hoven",
+   "description": "Bomb Factory: ice, magnetic walls and the Hologuise"
+  },
+  {
+   "index": 13,
+   "id": "level-13",
+   "table_name": "Oltanis Orbit",
+   "planet": "Oltanis Orbit",
+   "description": "Gemlik Base: Qwark's fighter and the ship dogfight"
+  },
+  {
+   "index": 14,
+   "id": "level-14",
+   "table_name": "Oltanis",
+   "planet": "Oltanis",
+   "description": "Gorda City Ruins: a bombed city in a storm"
+  },
+  {
+   "index": 15,
+   "id": "level-15",
+   "table_name": "Quartu",
+   "planet": "Quartu",
+   "description": "Robot Factory: Clank's birthplace and Giant Clank"
+  },
+  {
+   "index": 16,
+   "id": "level-16",
+   "table_name": "Kalebo III",
+   "planet": "Kalebo III",
+   "description": "Gadgetron headquarters and the hoverboard finals"
+  },
+  {
+   "index": 17,
+   "id": "level-17",
+   "table_name": "Veldin Orbit",
+   "planet": "Veldin Orbit",
+   "description": "Drek's Fleet: the flagship boarding"
+  },
+  {
+   "index": 18,
+   "id": "level-18",
+   "table_name": "Veldin Finale",
+   "planet": "Veldin",
+   "description": "Kyzil Plateau again: the Deplanetizer and Drek"
+  }
+ ]
+}
