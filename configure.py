@@ -189,6 +189,7 @@ RODATA_OVERLAYS = {
     "fun_00216c48": (0x1E86A0, 0xE9620),  # retail switch table (jtbl_001E86A0)
     "fun_0022b288": (0x1E8910, 0xE9890),  # switch table
     "fun_002223f0": (0x1E8810, 0xE9790),  # switch table
+    "fun_00237ed0": (0x1E8A90, 0xE9A10),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
