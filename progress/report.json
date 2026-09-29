@@ -1,15 +1,15 @@
 {
   "measures": {
-    "fuzzy_match_percent": 80.273296,
+    "fuzzy_match_percent": 80.281368,
     "total_code": "339436",
-    "matched_code": "164252",
-    "matched_code_percent": 48.389682,
+    "matched_code": "164380",
+    "matched_code_percent": 48.427391,
     "total_functions": 1164,
-    "matched_functions": 927,
-    "matched_functions_percent": 79.639175,
-    "complete_code": "164252",
-    "complete_code_percent": 48.389682,
-    "total_units": 116,
+    "matched_functions": 929,
+    "matched_functions_percent": 79.810997,
+    "complete_code": "164380",
+    "complete_code_percent": 48.427391,
+    "total_units": 115,
     "complete_units": 66
   },
   "units": [
@@ -1712,13 +1712,13 @@
       "name": "game/runtime/newlib",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "500",
-        "matched_code": "500",
+        "total_code": "572",
+        "matched_code": "572",
         "matched_code_percent": 100.0,
-        "total_functions": 5,
-        "matched_functions": 5,
+        "total_functions": 6,
+        "matched_functions": 6,
         "matched_functions_percent": 100.0,
-        "complete_code": "500",
+        "complete_code": "572",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -1749,6 +1749,15 @@
           "address": "8456",
           "metadata": {
             "virtual_address": "94344"
+          }
+        },
+        {
+          "name": "double_is_not_nan",
+          "size": "72",
+          "fuzzy_match_percent": 100.0,
+          "address": "8552",
+          "metadata": {
+            "virtual_address": "94440"
           }
         },
         {
@@ -2303,50 +2312,17 @@
       }
     },
     {
-      "name": "game/math/floating_point",
-      "measures": {
-        "fuzzy_match_percent": 77.7778,
-        "total_code": "72",
-        "matched_code": "0",
-        "matched_code_percent": 0.0,
-        "total_functions": 1,
-        "matched_functions": 0,
-        "matched_functions_percent": 0.0,
-        "complete_code": "0",
-        "complete_code_percent": 0.0,
-        "total_units": 1,
-        "complete_units": 0
-      },
-      "functions": [
-        {
-          "name": "double_is_not_nan",
-          "size": "72",
-          "fuzzy_match_percent": 77.7778,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "94440"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": false,
-        "progress_categories": [
-          "game"
-        ]
-      }
-    },
-    {
       "name": "game/math",
       "measures": {
-        "fuzzy_match_percent": 80.970294,
+        "fuzzy_match_percent": 88.886944,
         "total_code": "144",
-        "matched_code": "44",
-        "matched_code_percent": 30.555556,
+        "matched_code": "100",
+        "matched_code_percent": 69.444444,
         "total_functions": 5,
-        "matched_functions": 2,
-        "matched_functions_percent": 40.0,
-        "complete_code": "44",
-        "complete_code_percent": 30.555556,
+        "matched_functions": 3,
+        "matched_functions_percent": 60.0,
+        "complete_code": "100",
+        "complete_code_percent": 69.444444,
         "total_units": 1,
         "complete_units": 0
       },
@@ -2354,7 +2330,7 @@
         {
           "name": "ClassifyDoubleNaN",
           "size": "56",
-          "fuzzy_match_percent": 79.6429,
+          "fuzzy_match_percent": 100.0,
           "address": "0",
           "metadata": {
             "virtual_address": "94512"
@@ -13280,16 +13256,16 @@
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 75.925393,
+        "fuzzy_match_percent": 75.935846,
         "total_code": "262136",
-        "matched_code": "110272",
-        "matched_code_percent": 42.066713,
+        "matched_code": "110400",
+        "matched_code_percent": 42.115543,
         "total_functions": 866,
-        "matched_functions": 680,
-        "matched_functions_percent": 78.52194,
-        "complete_code": "110272",
-        "complete_code_percent": 42.066713,
-        "total_units": 105,
+        "matched_functions": 682,
+        "matched_functions_percent": 78.752887,
+        "complete_code": "110400",
+        "complete_code_percent": 42.115543,
+        "total_units": 104,
         "complete_units": 60
       }
     },
