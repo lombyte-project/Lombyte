@@ -1233,6 +1233,18 @@ class CheckUnitTests(unittest.TestCase):
         self.assertFalse(verdict["measurable"])
         self.assertEqual(verdict["unmeasurable_reason"], "no-pairing")
 
+    def test_verdict_zero_size_alias_does_not_block(self):
+        verdict = self.check.score_verdict(
+            text_match=100.0,
+            functions=[
+                {"name": "FUN_00204ef8", "size": 100, "match_percent": 100.0},
+                {"name": "func_00204EF8", "size": 0, "match_percent": None},
+            ],
+            section_rows=[],
+        )
+        self.assertTrue(verdict["ok"])
+        self.assertTrue(verdict["promotable"])
+
     def test_verdict_no_reloc_textbin_is_promotable(self):
         verdict = self.check.score_verdict(
             text_match=100.0,

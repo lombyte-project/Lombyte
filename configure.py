@@ -435,6 +435,11 @@ def _win_path(value: str) -> str:
     match = re.match(r"^/mnt/([A-Za-z])/(.*)$", value)
     if match:
         return f"{match.group(1).upper()}:/{match.group(2)}".replace("/", "\\")
+    # A native WSL path (e.g. a BASELINE_ROOT on ext4) is reachable from
+    # Windows only over UNC (\\wsl.localhost\<distro>\...).
+    distro = os.environ.get("WSL_DISTRO_NAME")
+    if distro and value.startswith("/"):
+        return f"\\\\wsl.localhost\\{distro}{value}".replace("/", "\\")
     return value.replace("/", "\\")
 
 

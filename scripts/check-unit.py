@@ -197,6 +197,12 @@ def score_verdict(
     every non-``.text`` section at 100% on the strict pass.
     """
     custom_sections = custom_sections or []
+    # A zero-size alias label (func_xxxx beside FUN_xxxx) has no body to
+    # score, so objdiff reports None for it; it cannot block the verdict.
+    functions = [
+        row for row in functions
+        if not (row["match_percent"] is None and row.get("size", 0) == 0)
+    ]
     if custom_sections:
         return {
             "measurable": False,
@@ -450,7 +456,10 @@ def main(argv=None) -> int:
                 '`__attribute__((section(".text.*")))` seed attributes so the '
                 "functions can be paired and linked."
             )
-        elif any(function["match_percent"] is None for function in functions):
+        elif any(
+            function["match_percent"] is None and function.get("size", 0) > 0
+            for function in functions
+        ):
             notes.append(
                 "the retail function symbol(s) could not be paired with your "
                 "C; check the canonical symbol names in the body "
