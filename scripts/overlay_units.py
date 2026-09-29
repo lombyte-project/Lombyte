@@ -21,7 +21,10 @@ LEVELS = Path("config/overlays/us/levels.json")
 SOURCES = Path("src/overlays")
 OVERLAY_FUNC_RE = re.compile(r"^FUN_L(\d{2})_([0-9a-f]{8})$")
 STUB_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*(FUN_L\d{2}_[0-9a-f]{8})\s*\)')
-DEF_RE = re.compile(r"^[A-Za-z_][\w\s\*]*?\b(FUN_L\d{2}_[0-9a-f]{8})\s*\(", re.M)
+# a definition's first line: unindented, not `extern`, and no `;` after the
+# parameter list (a prototype of a function whose stub lives in another file
+# is not that function's C)
+DEF_RE = re.compile(r"^(?!extern\b)[A-Za-z_][\w\s\*]*?\b(FUN_L\d{2}_[0-9a-f]{8})\s*\([^;\n]*$", re.M)
 
 
 def load_levels(repo: Path) -> dict[int, dict]:
