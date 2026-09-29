@@ -57,6 +57,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from overlay_units import category_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     committed_function_scores,
     group_for_owner,
@@ -762,33 +763,9 @@ def build_group_tiles(units: list[dict]) -> list[dict]:
     return sorted(tiles, key=lambda tile: (-tile["size"], tile["address"], tile["owner"]))
 
 
-def render_svg(
-    units,
-    *,
-    width,
-    height,
-    margin,
-    header,
-    footer,
-    min_bytes,
-    title,
-    fuzzy_percent=None,
-) -> str:
-    # Chrome (margins, header, footer, legend) scales with the canvas, while
-    # tile label fonts stay at a fixed readable size so a larger map fits
-    # names on many more tiles.
-    scale = max(1.0, min(width / 800.0, height / 400.0))
-    # Keep the chrome compact on large canvases so tiles stay as big as
-    # possible and more unit names fit.
-    chrome_scale = 1.0 + (scale - 1.0) * 0.1
-    text_scale = chrome_scale
-    margin_px = round(margin * chrome_scale)
-    header_px = round(header * chrome_scale)
-    footer_px = round(footer * chrome_scale)
-    map_x, map_y = margin_px, header_px
-    map_dx = width - 2 * margin_px
-    map_dy = height - header_px - footer_px - margin_px
-
+def layout_boot(units, map_x, map_y, map_dx, map_dy, min_bytes):
+    """The executable's group treemap (SDK band on top, Game below, two
+    half-width panes each); returns [(tile, rect)]."""
     group_tiles = build_group_tiles(units)
     tiles = [tile for tile in group_tiles if tile["size"] >= min_bytes]
     small_groups = [tile for tile in group_tiles if tile["size"] < min_bytes]
@@ -813,20 +790,7 @@ def render_svg(
             tile["tree_group_count"] = len(selected)
             tile["threshold"] = min_bytes
             tiles.append(tile)
-
     assign_unique_short_names(tiles)
-
-    total_units = len(units)
-    total_bytes = sum(unit["size"] for unit in units)
-    exact = [unit for unit in units if unit["category"] == "exact"]
-    asm = [unit for unit in units if unit["category"] == "asm"]
-    pending = [unit for unit in units if unit["category"] == "pending"]
-    exact_bytes = sum(unit["size"] for unit in exact)
-    asm_bytes = sum(unit["size"] for unit in asm)
-    pending_bytes = total_bytes - exact_bytes - asm_bytes
-    recoverable = total_bytes - asm_bytes
-    exact_percent = (100.0 * exact_bytes / total_bytes) if total_bytes else 0.0
-    recoverable_percent = (100.0 * exact_bytes / recoverable) if recoverable else 0.0
 
     # Cap only the visual weight of Unclassified. Its byte counts, tooltip
     # statistics, and global progress remain based on the full configured size.
@@ -839,9 +803,6 @@ def render_svg(
             layout_size = min(layout_size, UNCLASSIFIED_LAYOUT_CAP_BYTES)
         tile["layout_size"] = layout_size
 
-    # Keep SDK compact in a short top band and let Game use the remaining
-    # area. Each band is split into equal-width panes to cap every tile at half
-    # the map width while preserving proportional layout within each pane.
     sdk_tiles = [tile for tile in tiles if tile["report_category"] == "sdk"]
     game_tiles = [tile for tile in tiles if tile["report_category"] == "game"]
     sdk_height = map_dy * 0.25 if sdk_tiles and game_tiles else (map_dy if sdk_tiles else 0.0)
@@ -873,12 +834,109 @@ def render_svg(
 
     place_category(sdk_tiles, map_y, sdk_height)
     place_category(game_tiles, game_y, game_height)
+    return placements
+
+
+def overlay_branches(functions: list[dict], levels: dict[int, dict]) -> list[dict]:
+    """The tree: shared code first, then the 19 levels in game order. Each
+    branch carries its blocks (one per src/overlays file, in address order)."""
+    by_category: dict[str, list[dict]] = {}
+    for function in functions:
+        by_category.setdefault(category_of(function), []).append(function)
+    branches = []
+    order = ["shared"] + [f"level_{i:02d}" for i in sorted(levels)]
+    for category in order:
+        members = by_category.get(category, [])
+        if category == "shared":
+            index, planet, description = None, "Shared code", "functions present in two or more levels"
+        else:
+            index = int(category[-2:])
+            meta = levels.get(index, {})
+            planet = meta.get("planet") or meta.get("table_name") or category
+            description = meta.get("description", "")
+        files: dict[str, list[dict]] = {}
+        for function in members:
+            files.setdefault(function["file"] or category, []).append(function)
+        blocks = []
+        for file, group in sorted(files.items(), key=lambda item: min(f["address"] for f in item[1])):
+            size = sum(f["size"] for f in group)
+            exact_bytes = sum(f["size"] for f in group if f["exact"])
+            blocks.append({
+                "file": file, "size": size, "count": len(group),
+                "matching_c": sum(1 for f in group if f["exact"]),
+                "bytes_matching_c": exact_bytes,
+                "category": "exact" if group and exact_bytes == size else "pending",
+                "group": True, "exact_percent": 100.0 * exact_bytes / size if size else None,
+            })
+        size = sum(f["size"] for f in members)
+        exact_bytes = sum(f["size"] for f in members if f["exact"])
+        branches.append({
+            "category": category, "index": index, "planet": planet, "description": description,
+            "id": levels.get(index, {}).get("id") if index is not None else "shared",
+            "functions": len(members), "matching_c": sum(1 for f in members if f["exact"]),
+            "bytes_total": size, "bytes_matching_c": exact_bytes,
+            "c_exact_percent": 100.0 * exact_bytes / size if size else 0.0,
+            "blocks": blocks,
+        })
+    return branches
+
+
+def render_svg(
+    units,
+    overlays,
+    levels,
+    *,
+    width,
+    margin,
+    header,
+    footer,
+    min_bytes,
+    title,
+    fuzzy_percent=None,
+    drawer_height=170,
+    branch_height=44,
+) -> tuple[str, int]:
+    """The map: the executable as a drawer (its own C_EXACT over its dimmed
+    group treemap) above the tree of the shared code and the 19 levels.
+    Returns (svg, height)."""
+    scale = 1.0
+    text_scale = 1.0
+    margin_px, header_px, footer_px = margin, header, footer
+    branches = overlay_branches(overlays, levels)
+    tree_top = header_px + drawer_height + 26
+    height = tree_top + branch_height * len(branches) + footer_px + margin_px
+
+    total_units = len(units)
+    exact = [unit for unit in units if unit["category"] == "exact"]
+    asm = [unit for unit in units if unit["category"] == "asm"]
+    pending = [unit for unit in units if unit["category"] == "pending"]
+    boot_bytes = sum(unit["size"] for unit in units)
+    boot_exact_bytes = sum(unit["size"] for unit in exact)
+    asm_bytes = sum(unit["size"] for unit in asm)
+    boot_recoverable = boot_bytes - asm_bytes
+    boot_percent = (100.0 * boot_exact_bytes / boot_recoverable) if boot_recoverable else 0.0
+    ov_bytes = sum(f["size"] for f in overlays)
+    ov_exact_bytes = sum(f["size"] for f in overlays if f["exact"])
+    ov_exact = sum(1 for f in overlays if f["exact"])
+    ov_percent = (100.0 * ov_exact_bytes / ov_bytes) if ov_bytes else 0.0
+    total_bytes = boot_bytes + ov_bytes
+    exact_bytes = boot_exact_bytes + ov_exact_bytes
+    pending_bytes = total_bytes - exact_bytes - asm_bytes
+    recoverable = total_bytes - asm_bytes
+    total_percent = (100.0 * exact_bytes / recoverable) if recoverable else 0.0
+    exact_percent = (100.0 * exact_bytes / total_bytes) if total_bytes else 0.0
+    # C_FUZZY is measured on the executable's pending units only; an overlay
+    # stub contributes nothing, so the total is the executable's fuzzy bytes
+    # over everything recoverable.
+    total_fuzzy = None
+    if fuzzy_percent is not None and recoverable:
+        total_fuzzy = (fuzzy_percent * boot_recoverable + 100.0 * ov_exact_bytes) / recoverable
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" '
-        f'aria-label="Decompilation progress treemap of the boot ELF (SCUS_971.99)">',
+        f'aria-label="Decompilation progress of the boot ELF (SCUS_971.99) and the 19 level overlays">',
         f"<title>{esc(title)}</title>",
         f'<rect width="{width}" height="{height}" fill="{BACKGROUND}"/>',
         '<defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0">'
@@ -888,6 +946,9 @@ def render_svg(
         '<stop offset="0" stop-color="#ffffff" stop-opacity="0.05"/>'
         '<stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>'
         '<stop offset="1" stop-color="#000000" stop-opacity="0.16"/>'
+        '</linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1">'
+        '<stop offset="0" stop-color="#1a2030"/>'
+        '<stop offset="1" stop-color="#121722"/>'
         "</linearGradient></defs>",
     ]
 
@@ -899,39 +960,38 @@ def render_svg(
         title_spans += f'<tspan fill="{CHROME}"> &amp; {esc(clank)}</tspan>'
     if separator:
         title_spans += f'<tspan fill="{MUTED}" font-weight="500"> - {esc(tail)}</tspan>'
-    mark = round(10 * text_scale)
+    mark = 10
     lines.append(
         f'<path d="{BOLT_PATH}" fill="{ORANGE}" fill-rule="evenodd" '
-        f'transform="translate({margin_px} {round(24 * scale) - mark}) scale({mark / 12:.3f})"/>'
+        f'transform="translate({margin_px} {24 - mark}) scale({mark / 12:.3f})"/>'
     )
     lines.append(
-        f'<text x="{margin_px + round(16 * text_scale)}" y="{round(24 * scale)}" '
-        f'font-family="{esc(FONT)}" font-size="{14 * text_scale:.1f}" '
+        f'<text x="{margin_px + 16}" y="24" '
+        f'font-family="{esc(FONT)}" font-size="14" '
         f'font-weight="700" letter-spacing="0.2">{title_spans}</text>'
     )
     lines.append(
-        f'<text x="{margin_px}" y="{round(41 * scale)}" font-family="{esc(FONT)}" '
-        f'font-size="{10 * text_scale:.1f}" '
-        f'fill="{MUTED}">{len(exact)} matching C &#183; {len(asm)} intentional asm '
-        f"&#183; {len(pending)} pending</text>"
+        f'<text x="{margin_px}" y="41" font-family="{esc(FONT)}" '
+        f'font-size="10" '
+        f'fill="{MUTED}">{len(exact) + ov_exact} matching C &#183; {len(asm)} intentional asm '
+        f"&#183; {len(pending) + len(overlays) - ov_exact} pending &#183; "
+        f"{total_units} executable units + {len(overlays)} overlay functions</text>"
     )
-    legend_font = 10 * text_scale
-    swatch = round(10 * scale)
-    gap = round(15 * scale)
+    legend_font = 10
+    swatch = 10
+    gap = 15
     legend_rows = (
         (ORANGE, f"matching C &#183; {exact_bytes:,} B"),
         (CHROME, f"intentional asm &#183; {asm_bytes:,} B"),
         ("url(#progress-range)", f"pending C &#183; {pending_bytes:,} B"),
     )
-    # All rows share a left edge and hug the right edge as one block.
-    # 0.56em/char is the same width estimate the tile labels use.
     widest = max(
         len(html.unescape(text)) * legend_font * 0.56 for _, text in legend_rows
     )
     row_x = width - margin_px - round(widest) - gap
     for offset, (color, text) in enumerate(legend_rows):
-        y = round(14 * scale) + offset * round(17 * scale)
-        title = (
+        y = 14 + offset * 17
+        row_title = (
             '<title>Pending C: dark plate to copper shows C_EXACT coverage; '
             'bolt orange marks 100% exact.</title>'
             if color == "url(#progress-range)"
@@ -939,49 +999,144 @@ def render_svg(
         )
         lines.append(
             f'<rect x="{row_x}" y="{y}" width="{swatch}" height="{swatch}" rx="2" '
-            f'fill="{color}">{title}</rect>'
+            f'fill="{color}">{row_title}</rect>'
         )
         lines.append(
-            f'<text x="{row_x + gap}" y="{y + round(9 * scale)}" '
-            f'font-family="{esc(FONT)}" font-size="{legend_font:.1f}" fill="{MUTED}">{text}</text>'
+            f'<text x="{row_x + gap}" y="{y + 9}" '
+            f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
         )
 
-    # Hero stat: the goal-tracking percentage, HUD-style.
-    status_x = row_x - round(10 * chrome_scale)
+    # Hero stat: the whole game (executable + overlays), HUD-style.
+    status_x = row_x - 10
     lines.append(
-        f'<text x="{status_x}" y="{round(38 * scale)}" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="{28 * text_scale:.1f}" font-weight="800" '
-        f'fill="{ORANGE}">{recoverable_percent:.1f}%</text>'
+        f'<text x="{status_x}" y="38" text-anchor="end" '
+        f'font-family="{esc(FONT)}" font-size="28" font-weight="800" '
+        f'fill="{ORANGE}">{total_percent:.1f}%</text>'
     )
     lines.append(
-        f'<text x="{status_x}" y="{round(52 * scale)}" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="{9 * text_scale:.1f}" fill="{MUTED}">'
-        f"of recoverable C decompiled</text>"
+        f'<text x="{status_x}" y="52" text-anchor="end" '
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
+        f"of recoverable C decompiled, executable and overlays</text>"
     )
 
-    placed = []
+    # The drawer: the executable, its own percentage over its dimmed treemap.
+    dx0, dy0 = margin_px, header_px
+    ddx, ddy = width - 2 * margin_px, drawer_height
+    inset = 6
+    lines.append(
+        f'<rect x="{dx0}" y="{dy0}" width="{ddx}" height="{ddy}" rx="10" '
+        f'fill="url(#drawer-face)" stroke="{CHROME}" stroke-opacity="0.35" stroke-width="1.2">'
+        f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></rect>"
+    )
+    lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
+                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset - 10}" rx="6"/></clipPath>')
+    placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset - 10, min_bytes)
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.22">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
-        dx, dy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
-        if dx <= 0 or dy <= 0:
+        tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
+        if tdx <= 0 or tdy <= 0:
             continue
-        fill = tile_fill(tile)
-        dash = ' stroke-dasharray="3 2"' if tile.get("group") else ""
         lines.append(
-            f'<rect x="{x:.2f}" y="{y:.2f}" width="{dx:.2f}" height="{dy:.2f}" rx="1" '
-            f'fill="{fill}" stroke="{STROKE}" stroke-width="0.6"{dash} '
-            f'shape-rendering="geometricPrecision">'
-            f"<title>{esc(tile_tooltip(tile))}</title></rect>"
+            f'<rect x="{x:.2f}" y="{y:.2f}" width="{tdx:.2f}" height="{tdy:.2f}" rx="1" '
+            f'fill="{tile_fill(tile)}" stroke="{STROKE}" stroke-width="0.6" '
+            f'shape-rendering="geometricPrecision"><title>{esc(tile_tooltip(tile))}</title></rect>'
         )
-        placed.append((tile, x, y, dx, dy))
-
-    # One soft light across the whole plate: a single gradient reads as depth,
-    # where a gradient inside every tile reads as noise.
+    lines.append("</g>")
     lines.append(
-        f'<rect x="{map_x}" y="{map_y}" width="{map_dx}" height="{map_dy}" fill="url(#sheen)"/>'
+        f'<rect x="{dx0 + inset}" y="{dy0 + inset}" width="{ddx - 2 * inset}" '
+        f'height="{ddy - 2 * inset - 10}" fill="url(#sheen)" pointer-events="none"/>'
     )
-    for tile, x, y, dx, dy in placed:
-        draw_tile_label(lines, tile, x, y, dx, dy)
+    # handle
+    hw = 64
+    lines.append(
+        f'<rect x="{dx0 + ddx / 2 - hw / 2:.1f}" y="{dy0 + ddy - 11}" width="{hw}" height="6" rx="3" '
+        f'fill="{CHROME}" fill-opacity="0.55"/>'
+    )
+    cx, cy = dx0 + ddx / 2, dy0 + ddy / 2
+    lines.append(
+        f'<text x="{dx0 + 14}" y="{dy0 + 20}" font-family="{esc(FONT)}" font-size="10" '
+        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">BOOT ELF &#183; SCUS_971.99</text>'
+    )
+    lines.append(
+        f'<text x="{cx:.1f}" y="{cy + 12:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="52" font-weight="800" fill="{ORANGE}" '
+        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="6" stroke-opacity="0.6">'
+        f"{boot_percent:.1f}%</text>"
+    )
+    caption = f"C_EXACT of the executable&#8217;s recoverable C &#183; {boot_exact_bytes:,} of {boot_recoverable:,} B"
+    if fuzzy_percent is not None:
+        caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
+    lines.append(
+        f'<text x="{cx:.1f}" y="{cy + 34:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="10" fill="{TEXT}" fill-opacity="0.9" style="paint-order:stroke" '
+        f'stroke="{BACKGROUND}" stroke-width="4" stroke-opacity="0.6">{caption}</text>'
+    )
+
+    # The tree: a trunk on the left, one branch per line.
+    trunk_x = margin_px + 14
+    label_x = trunk_x + 20
+    pct_x = width - margin_px
+    bar_right = pct_x - 118
+    lines.append(
+        f'<text x="{margin_px}" y="{tree_top - 8}" font-family="{esc(FONT)}" font-size="10" '
+        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">LEVEL OVERLAYS &#183; '
+        f'{ov_exact_bytes:,} of {ov_bytes:,} B matching C ({ov_percent:.1f}%)</text>'
+    )
+    first_y = tree_top + 14
+    last_y = tree_top + branch_height * (len(branches) - 1) + 14
+    lines.append(
+        f'<line x1="{trunk_x}" y1="{tree_top - 2}" x2="{trunk_x}" y2="{last_y}" '
+        f'stroke="{PLATE}" stroke-width="2"/>'
+    )
+    for i, branch in enumerate(branches):
+        y = tree_top + i * branch_height + 14
+        lines.append(
+            f'<path d="M {trunk_x} {y} h 12" stroke="{PLATE}" stroke-width="2" fill="none"/>'
+        )
+        dot = ORANGE if branch["bytes_total"] and branch["bytes_matching_c"] == branch["bytes_total"] else \
+            (PARTIAL_ORANGE if branch["bytes_matching_c"] else PLATE)
+        lines.append(
+            f'<circle cx="{trunk_x}" cy="{y}" r="3.5" fill="{dot}" stroke="{BACKGROUND}" stroke-width="1"/>'
+        )
+        number = "" if branch["index"] is None else f"{branch['index']:02d} &#183; "
+        lines.append(
+            f'<text x="{label_x}" y="{y + 4}" font-family="{esc(FONT)}" font-size="11">'
+            f'<tspan fill="{MUTED}">{number}</tspan>'
+            f'<tspan fill="{TEXT}" font-weight="700">{esc(branch["planet"])}</tspan>'
+            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"])}</tspan></text>'
+        )
+        pct = branch["c_exact_percent"]
+        pct_fill = ORANGE if pct >= 100.0 else (PARTIAL_ORANGE if pct > 0 else MUTED)
+        lines.append(
+            f'<text x="{pct_x}" y="{y + 4}" text-anchor="end" font-family="{esc(FONT)}" '
+            f'font-size="13" font-weight="800" fill="{pct_fill}">{pct:.1f}%</text>'
+        )
+        lines.append(
+            f'<text x="{pct_x}" y="{y + 20}" text-anchor="end" font-family="{esc(FONT)}" '
+            f'font-size="8.5" fill="{MUTED}">{branch["matching_c"]}/{branch["functions"]} fn '
+            f'&#183; {branch["bytes_total"]:,} B</text>'
+        )
+        # blocks: one per src/overlays file, width by bytes
+        bar_x, bar_y, bar_h = label_x, y + 12, 10
+        bar_w = bar_right - bar_x
+        total = branch["bytes_total"] or 1
+        gap_px = 1.0
+        n = len(branch["blocks"])
+        usable = bar_w - gap_px * max(n - 1, 0)
+        x = bar_x
+        for block in branch["blocks"]:
+            w = usable * block["size"] / total
+            tip = (f"{block['file']}: {block['matching_c']}/{block['count']} functions matching C, "
+                   f"{block['bytes_matching_c']:,}/{block['size']:,} B")
+            lines.append(
+                f'<rect x="{x:.2f}" y="{bar_y}" width="{max(w, 0.4):.2f}" height="{bar_h}" rx="1" '
+                f'fill="{tile_fill(block)}" stroke="{STROKE}" stroke-width="0.4"><title>{esc(tip)}</title></rect>'
+            )
+            x += w + gap_px
+        if n == 0:
+            lines.append(f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w:.2f}" height="{bar_h}" rx="1" '
+                         f'fill="{PLATE}" fill-opacity="0.4"/>')
 
     generated = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     separator_y = height - footer_px
@@ -990,30 +1145,32 @@ def render_svg(
         f'y2="{separator_y:.1f}" stroke="{PLATE}" stroke-width="1" opacity="0.8"/>'
     )
     if fuzzy_percent is None:
-        progress_text = f"C_EXACT {recoverable_percent:.1f}% of recoverable C"
+        progress_text = (f"C_EXACT {total_percent:.1f}% of recoverable C &#183; "
+                         f"executable {boot_percent:.1f}% &#183; overlays {ov_percent:.1f}%")
     else:
         progress_text = (
-            f"C_EXACT {recoverable_percent:.1f}% / C_FUZZY {fuzzy_percent:.1f}% "
-            "of recoverable C"
+            f"C_EXACT {total_percent:.1f}% / C_FUZZY {total_fuzzy:.1f}% of recoverable C &#183; "
+            f"executable C_EXACT {boot_percent:.1f}% / C_FUZZY {fuzzy_percent:.1f}% &#183; "
+            f"overlays {ov_percent:.1f}%"
         )
     lines.append(
-        f'<text x="{margin_px}" y="{height - round(20 * scale)}" '
-        f'font-family="{esc(FONT)}" font-size="{9 * text_scale:.1f}" fill="{MUTED}" opacity="0.85">'
-        f"{exact_bytes:,} of {total_bytes:,} configured bytes are matching C &#183; "
-        f"{exact_percent:.1f}% of all configured code</text>"
+        f'<text x="{margin_px}" y="{height - 20}" '
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
+        f"{exact_bytes:,} of {total_bytes:,} bytes are matching C &#183; "
+        f"{exact_percent:.1f}% of all code, executable and 19 level overlays</text>"
     )
     lines.append(
-        f'<text x="{margin_px}" y="{height - round(8 * scale)}" '
-        f'font-family="{esc(FONT)}" font-size="{9 * text_scale:.1f}" fill="{MUTED}" opacity="0.85">'
+        f'<text x="{margin_px}" y="{height - 8}" '
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
         f"{progress_text}</text>"
     )
     lines.append(
-        f'<text x="{width - margin_px}" y="{height - round(8 * scale)}" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="{9 * text_scale:.1f}" fill="{MUTED}" opacity="0.85">'
+        f'<text x="{width - margin_px}" y="{height - 8}" text-anchor="end" '
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
         f"generated {generated} &#183; scripts/generate_treemap.py</text>"
     )
     lines.append("</svg>")
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines) + "\n", height
 
 
 def main(argv=None) -> int:
@@ -1037,7 +1194,10 @@ def main(argv=None) -> int:
         "--output", type=Path, help="SVG path (default: <repo>/assets/decomp_map.svg)"
     )
     parser.add_argument("--width", type=int, default=800)
-    parser.add_argument("--height", type=int, default=1600)
+    parser.add_argument("--height", type=int, default=None,
+                        help="ignored: the height follows the number of tree branches")
+    parser.add_argument("--drawer-height", type=int, default=170,
+                        help="height of the executable's drawer")
     parser.add_argument("--margin", type=int, default=10)
     parser.add_argument(
         "--header",
@@ -1058,7 +1218,7 @@ def main(argv=None) -> int:
         help="groups below this size are combined per status class; 0 (default) "
         "draws every logical group",
     )
-    parser.add_argument("--title", default="Ratchet & Clank - boot ELF (SCUS_971.99)")
+    parser.add_argument("--title", default="Ratchet & Clank - decompilation progress")
     parser.add_argument(
         "--no-scores",
         action="store_true",
@@ -1121,16 +1281,20 @@ def main(argv=None) -> int:
     if scores:
         fuzzy_percent = fuzzy_progress(units, scores)
 
-    svg = render_svg(
+    overlays = overlay_functions(repo)
+    levels = load_levels(repo)
+    svg, height = render_svg(
         units,
+        overlays,
+        levels,
         width=args.width,
-        height=args.height,
         margin=args.margin,
         header=args.header,
         footer=args.footer,
         min_bytes=args.min_bytes,
         title=args.title,
         fuzzy_percent=fuzzy_percent,
+        drawer_height=args.drawer_height,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(svg)
@@ -1147,9 +1311,7 @@ def main(argv=None) -> int:
     # can never drift apart.
     stats_path = output.with_suffix(".json")
     recoverable = total - asm_bytes
-    stats = {
-        "schema": "rnc-public-progress-v2",
-        "source": "scripts/generate_treemap.py",
+    boot = {
         "units_total": len(units),
         "groups_total": len(group_tiles),
         "matching_c": len(exact),
@@ -1181,6 +1343,74 @@ def main(argv=None) -> int:
             }
             for group in group_tiles
         ],
+    }
+    branches = overlay_branches(overlays, levels)
+
+    def branch_stats(branch: dict) -> dict:
+        return {
+            "id": branch["id"],
+            "index": branch["index"],
+            "planet": branch["planet"],
+            "description": branch["description"],
+            "functions": branch["functions"],
+            "matching_c": branch["matching_c"],
+            "pending_c": branch["functions"] - branch["matching_c"],
+            "bytes_total": branch["bytes_total"],
+            "bytes_matching_c": branch["bytes_matching_c"],
+            "bytes_pending_c": branch["bytes_total"] - branch["bytes_matching_c"],
+            "c_exact_percent_of_recoverable": round(branch["c_exact_percent"], 4),
+            "files": [
+                {
+                    "file": block["file"],
+                    "functions": block["count"],
+                    "matching_c": block["matching_c"],
+                    "bytes_total": block["size"],
+                    "bytes_matching_c": block["bytes_matching_c"],
+                }
+                for block in branch["blocks"]
+            ],
+        }
+
+    ov_bytes = sum(f["size"] for f in overlays)
+    ov_exact_bytes = sum(f["size"] for f in overlays if f["exact"])
+    ov_exact = sum(1 for f in overlays if f["exact"])
+    overlays_stats = {
+        "functions_total": len(overlays),
+        "matching_c": ov_exact,
+        "pending_c": len(overlays) - ov_exact,
+        "bytes_total": ov_bytes,
+        "bytes_matching_c": ov_exact_bytes,
+        "bytes_pending_c": ov_bytes - ov_exact_bytes,
+        "c_exact_percent_of_recoverable": round(100.0 * ov_exact_bytes / ov_bytes, 4) if ov_bytes else 0.0,
+        "shared": next((branch_stats(b) for b in branches if b["category"] == "shared"), None),
+        "levels": [branch_stats(b) for b in branches if b["category"] != "shared"],
+    }
+    all_recoverable = recoverable + ov_bytes
+    all_exact = exact_bytes + ov_exact_bytes
+    total_fuzzy = None
+    if fuzzy_percent is not None and all_recoverable:
+        total_fuzzy = (fuzzy_percent * recoverable + 100.0 * ov_exact_bytes) / all_recoverable
+    total_stats = {
+        "units_total": len(units) + len(overlays),
+        "matching_c": len(exact) + ov_exact,
+        "intentional_asm": len(asm),
+        "pending_c": len(pending) + len(overlays) - ov_exact,
+        "bytes_total": total + ov_bytes,
+        "bytes_matching_c": all_exact,
+        "bytes_intentional_asm": asm_bytes,
+        "bytes_pending_c": all_recoverable - all_exact,
+        "c_exact_percent_of_recoverable": round(100.0 * all_exact / all_recoverable, 4) if all_recoverable else 0.0,
+        "c_fuzzy_percent_of_recoverable": round(total_fuzzy, 4) if total_fuzzy is not None else None,
+    }
+    # The header fields describe the whole game (executable + overlays); the
+    # executable alone is under "boot", as the drawer shows it.
+    stats = {
+        "schema": "rnc-public-progress-v3",
+        "source": "scripts/generate_treemap.py",
+        **total_stats,
+        "boot": boot,
+        "overlays": overlays_stats,
+        "total": total_stats,
     }
     stats_path.write_text(json.dumps(stats, indent=2) + "\n")
     print(f"  stats: {stats_path}")

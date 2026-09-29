@@ -230,10 +230,52 @@ class ProgressReportTests(unittest.TestCase):
         self.assertLess(pending["fuzzy_match_percent"], 100.0)
         self.assertEqual(units["sdk/library"]["metadata"], {
             "complete": True,
-            "progress_categories": ["sdk"],
+            "progress_categories": ["boot", "sdk"],
         })
         game = next(c for c in report["categories"] if c["id"] == "game")
         self.assertEqual(game["measures"]["complete_units"], 0)
+        boot = next(c for c in report["categories"] if c["id"] == "boot")
+        self.assertEqual(boot["measures"]["total_code"], report["measures"]["total_code"])
+
+    def test_overlay_functions_join_the_report(self):
+        """A shared/level function counts once; C in src/overlays is matched,
+        an INCLUDE_ASM stub is pending; exe rows belong to the executable."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._repo(Path(tmp))
+            (repo / "config" / "overlays" / "us").mkdir(parents=True)
+            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+                "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
+                "FUN_00112400\texe\t256\tf0\t19\t00:001EAA08\ttextbin/promoted\n"
+                "FUN_L00_00200000\tshared\t64\tf1\t19\t00:00200000,01:00210000\t\n"
+                "FUN_L03_00300000\tlevel\t32\tf2\t1\t03:00300000\t\n"
+            )
+            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+                "schema": "rnc-overlay-levels-v1",
+                "levels": [{"index": 3, "id": "level-03", "planet": "Kerwan", "description": "Metropolis"}],
+            }))
+            (repo / "src" / "overlays" / "shared").mkdir(parents=True)
+            (repo / "src" / "overlays" / "shared" / "unit_00200000.c").write_text(
+                "int FUN_L00_00200000(int a) {\n    return a + 1;\n}\n")
+            (repo / "src" / "overlays" / "l03").mkdir(parents=True)
+            (repo / "src" / "overlays" / "l03" / "unit_00300000.c").write_text(
+                '#include "asm.h"\nINCLUDE_ASM("config/us/overlays/asm/FUN_L03_00300000.s", FUN_L03_00300000);\n')
+            report = self._build(repo, {})
+        units = {unit["name"]: unit for unit in report["units"]}
+        self.assertIn("shared/unit_00200000", units)
+        self.assertIn("level_03/unit_00300000", units)
+        self.assertEqual(report["measures"]["total_code"], str(0x100 + 0x100 + 0x80 + 64 + 32))
+        self.assertEqual(report["measures"]["matched_code"], str(0x100 + 0x80 + 64))
+        shared = units["shared/unit_00200000"]
+        self.assertEqual(shared["metadata"]["progress_categories"], ["overlays", "shared"])
+        self.assertTrue(shared["metadata"]["complete"])
+        level = units["level_03/unit_00300000"]
+        self.assertEqual(level["metadata"]["progress_categories"], ["overlays", "levels", "level_03"])
+        self.assertEqual(level["functions"][0]["fuzzy_match_percent"], 0.0)
+        categories = {c["id"]: c["measures"] for c in report["categories"]}
+        self.assertEqual(categories["overlays"]["total_code"], "96")
+        self.assertEqual(categories["overlays"]["matched_code"], "64")
+        self.assertEqual(categories["level_03"]["total_code"], "32")
+        self.assertNotIn("level_00", categories)
 
     def test_check_detects_a_stale_report(self):
         with tempfile.TemporaryDirectory() as tmp:

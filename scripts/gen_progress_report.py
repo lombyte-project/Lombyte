@@ -11,6 +11,13 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
 
 * every recoverable configured C unit (``config/us/rnc1.us.yaml`` rows
   ``[0xADDR, c, owner]``) with its byte size, nested under a logical group;
+* every shared and level function of the 19 level overlays
+  (``config/overlays/us/functions.tsv``, ``docs/overlays.md``), once each,
+  grouped by its ``src/overlays/`` file; it is matched when its C is there
+  (promotion follows the byte proof) and pending while it is an
+  ``INCLUDE_ASM`` stub. The top-level measures cover the executable and the
+  overlays together; the categories keep them apart: ``boot`` (= ``game`` +
+  ``sdk``), ``overlays`` (= ``shared`` + ``levels``), ``level_NN``;
 * a function is matched only when it is C_EXACT: a promoted source outside
   ``src/assembly/`` with no inline asm but name labels (``non_label_asm``), or
   a legacy exact unit in ``config/us/unit_categories.json``.
@@ -50,6 +57,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from rnc_units import INCLUDE_ASM_RE, classify_units, source_symbol  # noqa: E402
+from overlay_units import category_of, group_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     canonical_owner,
     committed_function_scores,
@@ -61,9 +69,22 @@ from progress_groups import (  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 REPORT = REPO / "progress" / "report.json"
-# The boot executable only: level code overlays are not reported
-# (docs/progress-metrics.md, "Level overlays").
-CATEGORIES = (("game", "Game"), ("sdk", "Sony SDK"))
+# A unit carries every category it belongs to (decomp.dev sums a category
+# over the units that list it): executable units ``boot`` and ``game``/``sdk``,
+# overlay functions ``overlays`` and ``shared`` or ``levels`` + ``level_NN``.
+CATEGORIES = (("boot", "Boot executable"), ("game", "Game"), ("sdk", "Sony SDK"),
+              ("overlays", "Level overlays"), ("shared", "Shared level code"),
+              ("levels", "Per-level code"))
+LEVEL_CATEGORIES = tuple((f"level_{i:02d}", f"Level {i:02d}") for i in range(19))
+
+
+def unit_categories(function: dict) -> list[str]:
+    c = function["category"]
+    if c in ("game", "sdk"):
+        return ["boot", c]
+    if c == "shared":
+        return ["overlays", "shared"]
+    return ["overlays", "levels", c]
 
 
 def unit_name(owner: str) -> str:
@@ -159,6 +180,21 @@ def build_report(scores: dict[object, float]) -> dict:
         })
     functions.sort(key=lambda function: function["address"])
 
+    levels = load_levels(REPO)
+    for function in overlay_functions(REPO):
+        category = category_of(function)
+        functions.append({
+            "owner": f"overlays/{function['name']}",
+            "size": function["size"],
+            "address": function["address"],
+            "exact": function["exact"],
+            "fuzzy": 100.0 if function["exact"] else 0.0,
+            "category": category,
+            "logical_group": group_of(function),
+            "symbol": function["name"],
+            "level_name": levels.get(function["level"], {}).get("planet", ""),
+        })
+
     grouped: dict[tuple[str, str], list[dict]] = {}
     for function in functions:
         key = (function["category"], function["logical_group"])
@@ -166,7 +202,10 @@ def build_report(scores: dict[object, float]) -> dict:
 
     report_groups = []
     for (category, logical_group), members in grouped.items():
-        name = report_group_name(category, logical_group)
+        if category in ("game", "sdk"):
+            name = report_group_name(category, logical_group)
+        else:
+            name = f"{category}/{logical_group}"
         report_groups.append({
             "name": name,
             "category": category,
@@ -190,19 +229,23 @@ def build_report(scores: dict[object, float]) -> dict:
             } for function in members],
             "metadata": {
                 "complete": all(function["exact"] for function in members),
-                "progress_categories": [group["category"]],
+                "progress_categories": unit_categories(members[0]),
             },
         })
+    categories = list(CATEGORIES) + [
+        (cid, cname) for cid, cname in LEVEL_CATEGORIES
+        if any(function["category"] == cid for function in functions)
+    ]
     return {
         "measures": measures(functions, report_groups),
         "units": report_units,
         "version": 2,
         "categories": [{"id": cid, "name": cname,
                         "measures": measures(
-                            [function for function in functions if function["category"] == cid],
-                            [group for group in report_groups if group["category"] == cid],
+                            [function for function in functions if cid in unit_categories(function)],
+                            [group for group in report_groups if cid in unit_categories(group["functions"][0])],
                         )}
-                       for cid, cname in CATEGORIES],
+                       for cid, cname in categories],
     }
 
 
