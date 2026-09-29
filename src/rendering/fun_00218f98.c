@@ -43,7 +43,7 @@ extern s32 D_001940C0[];
 extern s32 D_0015F438;
 extern s32 D_00160F0C;
 extern s32 D_0015EE78;
-extern s32 D_0023A2C0[];
+extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern struct O2 *D_001D5D90[];
 extern u8 D_001601C0 __attribute__((sda));
@@ -90,7 +90,7 @@ void FUN_00218f98(void) {
             if (o != 0) {
                 s32 k;
                 o->f34 &= 0xFFFD;
-                D_001D5D90[i]->f74 = D_0023A2C0;
+                D_001D5D90[i]->f74 = FUN_0023a2c0;
                 D_001D5D90[i]->f10 = D_00186F40.f140;
                 D_001D5D90[i]->f14 = D_00186F40.f144;
                 D_001D5D90[i]->f18 = D_00186F40.f148;
