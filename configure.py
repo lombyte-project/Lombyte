@@ -1670,11 +1670,68 @@ SECTIONS
     linkerscript_path.write_text(script)
 
 
+OVERLAYS_SRC = Path("src/overlays")
+OVERLAYS_BUILD = Path("build/overlays")
+
+
+def build_overlays() -> Path:
+    """Write build/overlays/build.ninja: every src/overlays/**/*.c compiled to
+    build/overlays/obj/<same path>.o.
+
+    The level overlays (docs/overlays.md) are a build of their own: the
+    objects are never linked, the executable's build.ninja, linker script and
+    verify-baseline.sh do not see them. Every file goes through the game
+    compiler's driver (its cc1, GNU as) with the executable's game-code flags,
+    so a file may hold both C and INCLUDE_ASM stubs of the retail assembly
+    under config/us/overlays/asm/. Whether a function's C is exact is proved
+    separately, on the candidate, by the tooling's `decomp try`.
+    """
+    sources = sorted(OVERLAYS_SRC.glob("**/*.c"))
+    if not sources:
+        raise SystemExit(f"no overlay sources under {OVERLAYS_SRC}")
+    if not game_compiler_configured():
+        raise SystemExit(
+            "the reconstructed game compiler is required: "
+            f"{_game_compiler_root()} has no ee-gcc/cc1 (see docs/building.md)"
+        )
+    asm_dir = Path("config/us/overlays/asm")
+    if not asm_dir.is_dir():
+        raise SystemExit(
+            f"{asm_dir} is missing: the overlay assembly is restored from the retail "
+            "records by the tooling setup (docs/overlays.md)"
+        )
+    OVERLAYS_BUILD.mkdir(parents=True, exist_ok=True)
+    game_root = os.path.relpath(_game_compiler_root(), OVERLAYS_BUILD)
+    rel_root = os.path.relpath(ROOT, OVERLAYS_BUILD)
+    ninja_path = OVERLAYS_BUILD / "build.ninja"
+    ninja = ninja_syntax.Writer(open(str(ninja_path), "w"), width=9999)
+    ninja.rule(
+        "overlay-cc",
+        description="overlay-cc $in",
+        command=(
+            f"{game_root}/ee-gcc -c -I{game_root}/include -I{rel_root}/src "
+            f"-I{rel_root}/include -Wa,-I{rel_root}/include -Wa,-I{rel_root} "
+            f"{LANG_DEFINE} {COMPILER_FLAGS} $in -o $out"
+        ),
+    )
+    objects = []
+    for src in sources:
+        obj = Path("obj") / src.relative_to(OVERLAYS_SRC).with_suffix(".c.o")
+        objects.append(str(obj))
+        ninja.build(outputs=[str(obj)], rule="overlay-cc", inputs=[f"{rel_root}/{src}"])
+    ninja.build(outputs=["overlays"], rule="phony", inputs=objects)
+    ninja.default(["overlays"])
+    ninja.close()
+    print(f"{len(sources)} overlay source files -> {ninja_path} (ninja -C {OVERLAYS_BUILD})")
+    return ninja_path
+
+
 def main():
     class ArgsProtocol:
         YAML_FILE: Path
         clean: bool
         make_asm: bool
+        overlays: bool
 
     parser = argparse.ArgumentParser(description="Configure the project")
     parser.add_argument(
@@ -1695,7 +1752,16 @@ def main():
         help="Extract assembly for each function into 'expected/' subfolder",
         action="store_true",
     )
+    parser.add_argument(
+        "--overlays",
+        help="Only write build/overlays/build.ninja for the level overlay sources (docs/overlays.md)",
+        action="store_true",
+    )
     args = cast(ArgsProtocol, parser.parse_args())
+
+    if args.overlays:
+        build_overlays()
+        return
 
     config = splat_load_yaml(
         [args.YAML_FILE],
