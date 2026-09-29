@@ -69,8 +69,8 @@ records:
 
 | kind | functions | bytes | meaning |
 | :--- | ---: | ---: | :--- |
-| `exe` | 691 | 269,084 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
-| `shared` | 1,961 | 1,190,400 | in two or more levels (1,156 of them in all 19: 591,796 bytes) |
+| `exe` | 693 | 269,260 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
+| `shared` | 1,959 | 1,190,224 | in two or more levels (1,154 of them in all 19: 591,620 bytes) |
 | `level` | 1,379 | 2,028,412 | in one level only |
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the
