@@ -1855,7 +1855,7 @@ segments:
           - [0x127ec4, textbin, text_gap_00226f44_before_fun_00226f50]
           - [0x127ed0, c, gameplay/state/clear_scene_state_buffers]
           - [0x127f20, textbin, text_gap_00226fa0_after_fun_00226f50]
-          - [0x127f38, c, assembly/textbin/fun_00226fb8]
+          - [0x127f38, c, ui/menus/fun_00226fb8]
           - [0x128068, c, world/data/parse_typed_resource_record]
           - [0x1280bc, textbin, text_gap_0022713c_after_fun_002270e8]
           - [0x1280c0, c, ui/menus/fun_00227140]
