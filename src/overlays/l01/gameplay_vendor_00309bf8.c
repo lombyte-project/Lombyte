@@ -2,8 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309bf8.s", FUN_L01_00309bf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309c98.s", FUN_L01_00309c98);
+typedef struct {
+    u8 pad0[0x5C];
+    f32 f5c;
+} Ent;
+
+extern Ent D_L01_00202D80[];
+extern s32 D_L01_0015F5CC;
+void FUN_L00_002371e0(void);
+void FUN_L01_002b96e0(s32, void *);
+extern float FUN_001fa6c0(s32);
+extern float FUN_001f9de0(float);
+
+void FUN_L01_00309bf8(void) {
+    f32 v;
+    s32 i;
+
+    FUN_L00_002371e0();
+    FUN_L01_002b96e0(3, D_L01_00202D80);
+    v = FUN_001f9de0((FUN_001fa6c0(D_L01_0015F5CC & 0x3F) - 32.0f) * 0.09817477f);
+    v = v * 0.5f + 0.5f;
+    for (i = 2; i >= 0; i--) {
+        D_L01_00202D80[i].f5c = v;
+    }
+}
+typedef struct {
+    u8 pad0[0x30]; u8 b30; u8 b31; s16 h32;
+} FlagMoby;
+extern void FUN_L01_00309bf8(void);
+void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
+
+void FUN_L01_00309c98(FlagMoby *m) {
+    int v = 0xFF;
+    m->h32 = v;
+    m->b30 = v;
+    enqueue_callback_list_1(FUN_L01_00309bf8, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ba18.s", FUN_L01_0030ba18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030be70.s", FUN_L01_0030be70);

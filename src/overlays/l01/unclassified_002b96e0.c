@@ -10,17 +10,130 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6bf0.s", FUN_L01_002e6bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efc60.s", FUN_L01_002efc60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f3120.s", FUN_L01_002f3120);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4348.s", FUN_L01_002f4348);
+#include "sda.h"
+
+typedef struct {
+    s32 target;
+    f32 angle;
+    f32 speed;
+} RotVars;
+
+typedef struct Moby {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 alpha;
+    u8 pad31[0xF];
+    f32 rot;
+    u8 pad44[0x34];
+    void *vars;
+    u8 pad7c[0x2A];
+    s16 oclass;
+    u8 padA8[0x58];
+} Moby;
+
+extern Moby *D_L01_0015FFD8 __attribute__((sda));
+f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+f32 fast_normalize_angle(f32 a) __asm__("FUN_001fa610");
+
+void FUN_L01_002f4348(Moby *self) {
+    RotVars *v;
+    Moby *m;
+    f32 *mv;
+
+    v = self->vars;
+    switch (self->state) {
+    case 0:
+        v->angle = self->rot;
+        v->speed = v->speed * 0.017453292f;
+        self->state = 1;
+        break;
+    case 1:
+        if (v->target != -1) {
+            m = &D_L01_0015FFD8[v->target];
+            if (m->oclass == 0x118) {
+                mv = m->vars;
+                m->alpha = 0xFF;
+                self->rot = fast_add_rotations(v->angle,
+                    fast_normalize_angle(fast_add_rotations(v->speed, -v->angle) * mv[0]));
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4428.s", FUN_L01_002f4428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f60f8.s", FUN_L01_002f60f8);
+extern u8 D_L01_001E2FC0[];
+void FUN_L00_002371e0(void);
+void FUN_L01_002b96e0(s32, void *);
+
+void FUN_L01_002f60f8(void) {
+    FUN_L00_002371e0();
+    FUN_L01_002b96e0(8, D_L01_001E2FC0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6180.s", FUN_L01_002f6180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f68a0.s", FUN_L01_002f68a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f7728.s", FUN_L01_002f7728);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f81c8.s", FUN_L01_002f81c8);
+extern f32 D_0015ED60;
+f32 FUN_001f99c0(f32);
+
+f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 accel, f32 damp, f32 range) {
+    f32 d;
+    f32 f;
+
+    range = range * range;
+    damp = ((1.0f - damp) - 1.0f) * D_0015ED60 + 1.0f;
+    *vel = *vel * damp;
+    d = *pos - target;
+    d = d * d;
+    if (range < d) {
+        d = range;
+    }
+    d = d * accel / range;
+    if (target < *pos) {
+        *vel = *vel - d;
+    } else {
+        *vel = *vel + d;
+    }
+    *pos = *pos + *vel;
+    return FUN_001f99c0(target - *pos);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8268.s", FUN_L01_002f8268);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8c58.s", FUN_L01_002f8c58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9000.s", FUN_L01_002f9000);
+typedef struct {
+    u8 pad0[0x80];
+    s32 idx;
+} Sub;
+
+typedef struct {
+    u8 pad0[0x78];
+    Sub *sub;
+} Obj;
+
+extern u8 *D_L01_001600EC;
+extern f32 D_L01_00161C28 __attribute__((sda));
+extern f32 D_L01_00161C2C __attribute__((sda));
+extern f32 D_L01_00161C30 __attribute__((sda));
+extern f32 D_L01_00161C34 __attribute__((sda));
+extern f32 D_L01_00161C38 __attribute__((sda));
+
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+void FUN_L00_002e8918(void *, f32, f32);
+void FUN_L00_002e8450(s32, f32, f32);
+void FUN_L00_002e84b8(f32, f32);
+void FUN_L00_002e84f0(s32, f32, f32);
+
+void FUN_L01_002f9000(Obj *obj) {
+    u8 m[16];
+    u8 *p;
+
+    p = D_L01_001600EC + obj->sub->idx * 128;
+    build_look_at_matrix(m, p, p + 0x20, D_L01_00161C28);
+    FUN_L00_002e8918(m, 0.13962634f, 0.0f);
+    FUN_L00_002e8450(0, D_L01_00161C2C, D_L01_00161C38);
+    FUN_L00_002e84b8(D_L01_00161C30, D_L01_00161C38);
+    FUN_L00_002e84f0(0, D_L01_00161C34, D_L01_00161C38);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9080.s", FUN_L01_002f9080);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f95c0.s", FUN_L01_002f95c0);

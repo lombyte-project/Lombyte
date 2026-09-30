@@ -9,7 +9,45 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa068.s", FUN_L01_002fa068);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa4c0.s", FUN_L01_002fa4c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa800.s", FUN_L01_002fa800);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fac80.s", FUN_L01_002fac80);
+typedef struct {
+    u8 pad0[0xA6];
+    s16 type;
+} Moby;
+
+typedef struct {
+    u8 pad0[0x44];
+    s16 count;
+    u8 pad46[0x178 - 0x46];
+    Moby *list[1];
+} MobyList;
+
+typedef struct {
+    u8 b0;
+    u8 active;
+    u8 pad2[0x1E];
+    f32 x;
+    f32 y;
+    f32 z;
+} Effect;
+
+extern s32 D_L01_0015F5C4;
+extern u8 D_0015EDB0;
+extern MobyList D_L01_0016CCE0;
+extern Effect D_L01_0017C8C0;
+extern void FUN_0020cb10(void *, int, void *);
+
+void FUN_L01_002fac80(void) {
+    s32 i;
+
+    if (D_L01_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L01_0016CCE0.count; i++) {
+            if (D_L01_0016CCE0.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
+                FUN_0020cb10(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
+                D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.75f;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb8a8.s", FUN_L01_002fb8a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0e8.s", FUN_L01_002fd0e8);
@@ -17,10 +55,55 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd9a0.s", FUN_L01_002fd9a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fed68.s", FUN_L01_002fed68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff860.s", FUN_L01_002ff860);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffa90.s", FUN_L01_002ffa90);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 state;
+    u8 pad21[0xF];
+    u8 b30; u8 b31; s16 h32;
+    u8 pad34[4];
+    u64 d38;
+    u128 rot;
+    u8 pad50[0x28];
+    s32 *pvars;
+} SpawnedMoby;
+extern SpawnedMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8(SpawnedMoby *, s32);
+
+SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
+    SpawnedMoby *m;
+    s32 *pv;
+
+    m = create_moby(0x30B);
+    if (m != 0) {
+        m->b30 = 0x20;
+        m->h32 = 0xFF;
+        m->b31 = 1;
+        m->state = 0;
+        pv = m->pvars;
+        m->d38 = src->d38;
+        qcopy(&m->pos, &src->pos);
+        qcopy(&m->rot, &src->rot);
+        *pv = -1;
+        FUN_L00_00250df8(m, -1);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffb28.s", FUN_L01_002ffb28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffcd0.s", FUN_L01_002ffcd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffdc0.s", FUN_L01_002ffdc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003021b8.s", FUN_L01_003021b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302328.s", FUN_L01_00302328);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00307c48.s", FUN_L01_00307c48);
+void *FUN_L00_0025a420(void *, s32, s32);
+void FUN_0020c828(void *);
+
+void FUN_L01_00307c48(void *self) {
+    u8 *p;
+
+    p = FUN_L00_0025a420(self, 0x10000, 0);
+    if (p != NULL && *(f32 *)(p + 0x2C) > 0.0f) {
+        FUN_0020c828(self);
+    }
+}
