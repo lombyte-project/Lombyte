@@ -155,7 +155,67 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6f10.s", FUN_L00_002b6f10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b7398.s", FUN_L00_002b7398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b7568.s", FUN_L00_002b7568);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b77f0.s", FUN_L00_002b77f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8230.s", FUN_L00_002b8230);
+extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
+extern unsigned char D_0013F350_2b8230[] __asm__("D_0013F350");
+extern unsigned short D_00141BD8_2b8230 __asm__("D_00141BD8") __attribute__((section(".data")));
+extern unsigned char D_00141848_2b8230[] __asm__("D_00141848");
+extern int D_0015EEA4_2b8230 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern int D_0015ED84_2b8230 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
+void FUN_L00_0023e838_2b8230(int) __asm__("FUN_L00_0023e838");
+void FUN_L00_0028d918_2b8230(int) __asm__("FUN_L00_0028d918");
+int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
+void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
+
+void FUN_L00_002b8230(unsigned char *m)
+{
+    unsigned char *v = *(unsigned char **)(m + 0x78);
+    unsigned char *P;
+    unsigned char *voice;
+    int h, c;
+    if (m[0x53] == 2) {
+        m[0x20] = 4;
+        if (*(void **)v)
+            FUN_0020c828_2b8230(*(void **)v);
+        if (*(short *)(v + 0x44) != -1) {
+            FUN_L00_0023e838_2b8230(*(short *)(v + 0x44));
+            *(short *)(v + 0x44) = -1;
+        }
+        h = *(short *)(v + 0x4A);
+        if (h != -1) {
+            voice = D_0013E550_2b8230 + h * 0x70;
+            if (*(unsigned char **)(voice + 0x88) == m && voice[0x74])
+                FUN_L00_0028d918_2b8230(h);
+        }
+        *(short *)(v + 0x4A) = -1;
+        return;
+    }
+    if (D_00141BD8_2b8230)
+        return;
+    P = D_00141848_2b8230;
+    if (*(unsigned short *)(P + 0x50))
+        return;
+    if (m[0x20] == 3) {
+        (*(unsigned short *)(v + 0x50))++;
+        return;
+    }
+    c = *(short *)(v + 0x50);
+    if (c == 0)
+        return;
+    if (FUN_001f96f8_2b8230(0x78) < c) {
+        if (*(unsigned short *)(P + 0x50) <= 0xFFFE)
+            (*(unsigned short *)(P + 0x50))++;
+        h = FUN_001f96f8_2b8230(D_0015EEA4_2b8230) / 600;
+        if (*(unsigned short *)(P + 0x52) < h)
+            *(unsigned short *)(P + 0x52) = FUN_001f96f8_2b8230(D_0015EEA4_2b8230) / 600;
+        *(int *)(P + 0x54) = *(int *)(P + 0x54) | (1 << D_0015ED84_2b8230) | 0x80000000;
+    } else if (*(short *)(v + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
+        D_0013F350_2b8230[0x20B4]++;
+    }
+    *(short *)(v + 0x50) = 0;
+    if (D_0013F350_2b8230[0x20B4] >= 3)
+        FUN_L00_00203908_2b8230(0x4E24, 0x4E);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8438.s", FUN_L00_002b8438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8798.s", FUN_L00_002b8798);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b87b0.s", FUN_L00_002b87b0);

@@ -199,7 +199,67 @@ void FUN_L00_0023a760(HudElem *e) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a7a8.s", FUN_L00_0023a7a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aa98.s", FUN_L00_0023aa98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aaa8.s", FUN_L00_0023aaa8);
+typedef struct {
+    unsigned short id;
+    unsigned short n;
+    unsigned short base;
+    unsigned char p6;
+    unsigned char rate;
+} T_23aaa8;
+typedef struct {
+    short id;
+    unsigned char mode;
+    unsigned char p3;
+    int frame;
+    int p8;
+    int start;
+} O_23aaa8;
+extern T_23aaa8 *D_L00_0017E4F4_23aaa8 __asm__("D_L00_0017E4F4") __attribute__((section(".data")));
+extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
+int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
+int FUN_00213260_23aaa8(int) __asm__("FUN_00213260");
+int FUN_L00_0023aaa8(O_23aaa8 *o) {
+    T_23aaa8 *t = &D_L00_0017E4F4_23aaa8[o->id];
+    int r;
+    int k, a;
+    r = 0;
+    if (t->id != 0xFFFF) {
+        switch (o->mode) {
+        case 0:
+            r = t->base;
+            break;
+        case 1:
+            r = t->base + ((D_L00_0015F5CC_23aaa8 - o->start) / t->rate) % t->n;
+            break;
+        case 2:
+            r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
+            k = t->n * 2;
+            r = r % (k - 2);
+            if (r >= t->n) { int b = r + 2; r = k - b; }
+            r += t->base;
+            break;
+        case 3:
+            if (o->start < D_L00_0015F5CC_23aaa8) {
+                int m;
+                r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
+                m = t->n * 2;
+                if (r < m - 2) {
+                    if (r >= t->n) { int b = r + 2; r = m - b; }
+            r += t->base;
+                } else {
+                    r = t->base;
+                    a = FUN_001f96f8_23aaa8(0xA);
+                    o->start = t->n * 2 + a + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
+                }
+            } else {
+                r = o->frame;
+            }
+            break;
+        }
+    }
+    o->frame = r;
+    return r;
+}
 typedef struct E_23ac78 { int a; unsigned int flags; int b[3]; void (*cb)(struct E_23ac78 *); char pad[0x68 - 0x18]; int on; int lvl; char pad2[0x7C - 0x70]; int t; char pad3[0x90 - 0x80]; } E_23ac78;
 extern E_23ac78 D_L00_0017DC50[] __attribute__((section(".data")));
 typedef struct { int a; int b; } H_23ac78;

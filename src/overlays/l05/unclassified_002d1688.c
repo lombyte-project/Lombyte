@@ -14,7 +14,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002dac80.s", FUN_L05_002dac80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002daf58.s", FUN_L05_002daf58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db018.s", FUN_L05_002db018);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db238.s", FUN_L05_002db238);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f8718.s", FUN_L05_002f8718);
+#include "qcopy.h"
+extern void *CreateMoby() __asm__("FUN_0020c4f8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L05_002f8718(char *owner) {
+    char *moby = CreateMoby(0x1B7);
+    if (moby != 0) {
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 2;
+        qcopy(moby + 0x10, owner + 0x10);
+        qcopy(moby + 0x40, owner + 0x40);
+        *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);

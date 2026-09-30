@@ -8,7 +8,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313350.s", FUN_L07_00313350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313420.s", FUN_L07_00313420);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313920.s", FUN_L07_00313920);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
+
+void FUN_L07_00313920(float *out, float value) {
+    float neg = -value;
+    out[0] += random_float_between(neg, value);
+    out[1] += random_float_between(neg, value);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313988.s", FUN_L07_00313988);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313af0.s", FUN_L07_00313af0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313d30.s", FUN_L07_00313d30);
@@ -21,7 +33,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317cb0.s", FUN_L07_00317cb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317e60.s", FUN_L07_00317e60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00318e98.s", FUN_L07_00318e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319698.s", FUN_L07_00319698);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
+
+void FUN_L07_00319698(char *arg, char *other) {
+    char *dst = *(char **)(arg + 0x78);
+    if (other != 0) {
+        *(int *)(dst + 0x98) = scale_ticks(*(int *)(other + 0x84));
+    }
+    DeleteMoby(arg);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003196e0.s", FUN_L07_003196e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319f48.s", FUN_L07_00319f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a250.s", FUN_L07_0031a250);

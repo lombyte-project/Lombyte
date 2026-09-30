@@ -11,7 +11,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa250.s", FUN_L18_002fa250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa640.s", FUN_L18_002fa640);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa728.s", FUN_L18_002fa728);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa888.s", FUN_L18_002fa888);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa8e0.s", FUN_L18_002fa8e0);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Remove a vendor moby and any child it owns. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBD40), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x84];
+    void *child;
+} L18VD_a8e0;
+
+typedef struct {
+    char pad0[0x78];
+    L18VD_a8e0 *data;
+    char pad7C[0x2A];
+    short class_id;
+} L18VM_a8e0;
+
+void FUN_L18_002fa8e0(L18VM_a8e0 *moby) {
+    if (moby->class_id == 0x630) {
+        void *child = moby->data->child;
+        if (child != 0) {
+            DeleteMoby(child);
+        }
+        DeleteMoby(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fad28.s", FUN_L18_002fad28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fbb98.s", FUN_L18_002fbb98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);

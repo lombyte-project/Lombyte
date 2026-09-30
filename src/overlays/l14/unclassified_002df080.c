@@ -23,7 +23,32 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef150.s", FUN_L14_002ef150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef3e0.s", FUN_L14_002ef3e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef578.s", FUN_L14_002ef578);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Select the vendor moby's state from its value and mark it initialized. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0A00), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0xAC];
+    float value;
+    char padB0[0x74];
+    short field124;
+} Level14VendorData;
+
+typedef struct {
+    char pad0[0x78];
+    Level14VendorData *data;
+    char pad7C[0x40];
+    unsigned char state;
+} Level14VendorMoby;
+
+void FUN_L14_002ef578(Level14VendorMoby *moby) {
+    Level14VendorData *data = moby->data;
+    moby->state = data->value < 0.0f ? 2 : 1;
+    data->field124 = 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef5a8.s", FUN_L14_002ef5a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef630.s", FUN_L14_002ef630);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef6f0.s", FUN_L14_002ef6f0);

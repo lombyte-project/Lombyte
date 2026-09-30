@@ -474,7 +474,49 @@ void FUN_L00_002ebb00(O002ebb00 *o) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebbd8.s", FUN_L00_002ebbd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec4a8.s", FUN_L00_002ec4a8);
+typedef int q_2ec4a8 __attribute__((mode(TI)));
+typedef union { q_2ec4a8 q; float f[4]; } V_2ec4a8;
+extern unsigned char D_0013F3D0_2ec4a8[] __asm__("D_0013F3D0");
+extern unsigned char D_L00_00166E30_2ec4a8[] __asm__("D_L00_00166E30") __attribute__((section(".data")));
+void FUN_001f9a28_2ec4a8(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff500_2ec4a8(void *, void *, float) __asm__("FUN_L00_001ff500");
+float FUN_001f9ab0_2ec4a8(void *, void *) __asm__("FUN_001f9ab0");
+float FUN_001f9df8_2ec4a8(float) __asm__("FUN_001f9df8");
+float FUN_L00_001eb328_2ec4a8(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
+void FUN_001f9ad8_2ec4a8(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_00214890_2ec4a8(void *, void *, void *, float) __asm__("FUN_00214890");
+
+void FUN_L00_002ec4a8(unsigned char *m)
+{
+    V_2ec4a8 v;
+    V_2ec4a8 w;
+    V_2ec4a8 x;
+    unsigned char *g = D_0013F3D0_2ec4a8;
+    unsigned char *q = *(unsigned char **)(m + 0x70);
+    unsigned char *p = q + 0x40;
+    float *t = (float *)(q + 0x30);
+    float a, k;
+    qcopy(&v, g);
+    v.f[2] += *(float *)(p + 0x4C);
+    FUN_001f9a28_2ec4a8(&w, &v, m + 0x30);
+    FUN_L00_001ff500_2ec4a8(&w, &w, 1.0f);
+    a = 1.5707964f - FUN_001f9df8_2ec4a8(FUN_001f9ab0_2ec4a8(&w, m));
+    if (*(int *)(g + 0x2004) == 0x25) {
+        *(float *)(q + 0x30) += 0.017f;
+        if (1.0f < *(float *)(q + 0x30))
+            *(float *)(q + 0x30) = 1.0f;
+        k = a * *(float *)(q + 0x30);
+    } else {
+        k = FUN_L00_001eb328_2ec4a8(t, 0.0f, a, 0.02f, 0.175f, 0.0f);
+    }
+    FUN_001f9ad8_2ec4a8(&x, &w, m + 0x40);
+    FUN_00214890_2ec4a8(m, m + 0x40, &x, k);
+    FUN_L00_001ff500_2ec4a8(m + 0x40, m, 1.0f);
+    qcopy(m, m + 0x40);
+    FUN_001f9ad8_2ec4a8(m + 0x10, m, D_L00_00166E30_2ec4a8);
+    FUN_L00_001ff500_2ec4a8(m + 0x10, m + 0x10, 1.0f);
+    FUN_001f9ad8_2ec4a8(m + 0x20, m + 0x10, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec6a8.s", FUN_L00_002ec6a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec6c0.s", FUN_L00_002ec6c0);
 #define NOT_SDA

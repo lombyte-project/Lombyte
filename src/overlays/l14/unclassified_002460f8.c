@@ -2,7 +2,39 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002460f8.s", FUN_L14_002460f8);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Attach the callback during the six active phases of this level event. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/initonce_00246A90.c: func_L14_00246A90), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x30];
+    int state;
+    int phase;
+    char pad38[0x144];
+    void *moby;
+} Level14State;
+
+extern Level14State D_L14_0016CF60;
+extern int D_0015ED84;
+extern void FUN_L00_0023e008(void *);
+extern void func_L00_0023E4C8(void *) __asm__("FUN_L14_002459c0");
+
+void FUN_L14_002460f8(void) {
+    void *moby;
+    if (D_0015ED84 != 14 || D_L14_0016CF60.state != 0) {
+        return;
+    }
+    moby = D_L14_0016CF60.moby;
+    if (moby != 0 && (unsigned)(D_L14_0016CF60.phase - 0x1C) < 6) {
+        FUN_L00_0023e008(moby);
+        AddDrawCallback(func_L00_0023E4C8, moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac2b8.s", FUN_L14_002ac2b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);

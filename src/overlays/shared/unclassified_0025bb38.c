@@ -99,7 +99,19 @@ float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float ac
     *cur = FUN_001fa580_25be00(*vel, *cur);
     return *vel;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bfe0.s", FUN_L00_0025bfe0);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
+
+unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
+    unsigned int x = truncate_float_to_s32(r * 255.0f) & 0xFF;
+    unsigned int y = truncate_float_to_s32(g * 255.0f) & 0xFF;
+    unsigned int z = truncate_float_to_s32(b * 255.0f) & 0xFF;
+    unsigned int w = truncate_float_to_s32(a * 255.0f);
+    {unsigned int q_ = x | (y << 8);
+    q_ |= (z << 16);
+    return q_ | (w << 24);}
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

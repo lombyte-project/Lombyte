@@ -3,7 +3,37 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e73c0.s", FUN_L15_002e73c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7ed8.s", FUN_L15_002e7ed8);
+#include "qcopy.h"
+extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00250df8(void *, void *);
+
+char *FUN_L15_002e7ed8(void *unused, void *vector) {
+    char *moby = CreateMoby(0x4E9);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        char *field;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0x7F;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        moby[0xBC] = 0;
+        *(int *)(data + 0x10) = 0;
+        clear_u64_value(data);
+        qcopy(moby + 0x10, vector);
+        field = *(char **)(moby + 0x24);
+        *(int *)(moby + 0x94) = *(int *)(field + 0x10);
+        FUN_L00_00250df8(moby, field);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ea748.s", FUN_L15_002ea748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eabd8.s", FUN_L15_002eabd8);

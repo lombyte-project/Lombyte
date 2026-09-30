@@ -2,7 +2,69 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284e50.s", FUN_L00_00284e50);
+#include "qcopy.h"
+typedef int ti_00284e50 __attribute__((mode(TI)));
+typedef struct { unsigned char h[0x404]; unsigned char f[0x7FF]; } B_00284e50;
+extern B_00284e50 D_L00_001BA620 __attribute__((section(".data")));
+extern B_00284e50 D_L00_001BB280 __attribute__((section(".data")));
+extern int D_L00_001BA4D0[] __attribute__((section(".data")));
+extern char D_L00_001BB230[] __attribute__((section(".data")));
+extern int D_0015ED84;
+extern unsigned char D_0014C050[][16];
+extern int D_0014C190[][64];
+extern char D_0013F350[];
+extern char D_001516D0[];
+extern char D_0013E550[];
+extern void FUN_L00_001ff090(int, void *, unsigned short);
+
+void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
+    unsigned char *src;
+    int i;
+    char *s;
+    char *p;
+    char *q;
+    char *g;
+    int lvl;
+    signed char c;
+    int v;
+
+    FUN_L00_001ff090((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
+    lvl = D_0015ED84;
+    for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
+        v = *src;
+        if ((unsigned char)v == 0) continue;
+        if ((unsigned char)v != 1 && D_0014C050[lvl][(unsigned char)v - 2] != 0xFF) continue;
+        D_L00_001BB280.f[i] = v;
+        D_0014C190[lvl][i >> 5] |= 1 << (i & 0x1F);
+        D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
+    }
+    s = D_L00_001BB230;
+    *(int *)D_L00_001BB230 = 1;
+    qcopy(s + 0x10, a);
+    qcopy(s + 0x20, b);
+    p = D_0013F350;
+    q = D_001516D0;
+    g = D_0013E550;
+    {
+        char *o = *(char **)(p + 0x2080);
+        *(int *)(s + 0x30) = *(int *)(o + 0x38);
+        *(int *)(s + 0x34) = *(int *)(o + 0x3C);
+        *(int *)(s + 0x38) = *(int *)(o + 0x80);
+        *(int *)(s + 0x44) = *(unsigned char *)(p + 0x20A4);
+        *(char **)(s + 0x48) = o;
+        *(int *)(s + 0x4C) = *(short *)(p + 0x22CC);
+        *(int *)(s + 0x3C) = *(int *)(g + 0x64);
+        *(char *)(s + 0x40) = *(unsigned char *)(g + 0x68);
+        *(char *)(s + 0x41) = *(unsigned char *)(g + 0x69);
+        *(char *)(s + 0x42) = *(unsigned char *)(g + 0x6A);
+        c = *(signed char *)(q + 0x22);
+        if (c != -1) {
+            *(int *)(s + 0xC54) = c;
+        } else {
+            *(int *)(s + 0xC54) = *(short *)(q + 0x38);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851f4.s", FUN_L00_002851f4);

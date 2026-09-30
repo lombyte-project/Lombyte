@@ -7,4 +7,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e1950.s", FUN_L02_002e1950);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e1fb8.s", FUN_L02_002e1fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e2228.s", FUN_L02_002e2228);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea048.s", FUN_L02_002ea048);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea198.s", FUN_L02_002ea198);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EB5D0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L02_002a47f8(float);
+extern void FUN_L02_002ea048(void);
+
+void FUN_L02_002ea198(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        FUN_L02_002a47f8(0.16666667f);
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        AddDrawCallback(FUN_L02_002ea048, moby);
+        break;
+    }
+}

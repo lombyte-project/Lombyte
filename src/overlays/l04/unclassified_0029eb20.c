@@ -57,7 +57,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1e98.s", FUN_L04_002c1e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c2270.s", FUN_L04_002c2270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c4808.s", FUN_L04_002c4808);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
+
+extern void FUN_L04_002c46d0(void *);
+
+void FUN_L04_002c4808(char *arg) {
+    char *data = *(char **)(arg + 0x78);
+    void *other = *(void **)(data + 0xF8);
+    if (other != 0) {
+        DeleteMoby(other);
+    }
+    FUN_L04_002c46d0(arg);
+    DeleteMoby(arg);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c4850.s", FUN_L04_002c4850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6858.s", FUN_L04_002c6858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6bb8.s", FUN_L04_002c6bb8);

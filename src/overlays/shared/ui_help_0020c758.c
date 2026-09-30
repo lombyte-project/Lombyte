@@ -701,7 +701,50 @@ void FUN_L00_00212088(f32 x, f32 y) {
     if (p->b < p->a) FUN_00213ed8_00212088(&p->b, p->a, x);
     else FUN_00213ed8_00212088(&p->b, p->a, y);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002120d8.s", FUN_L00_002120d8);
+extern float FastCos(float) __asm__("FUN_001f9dc8");
+
+/* Builds a direction vector into D_0013F350+0xE0: either func_00215C00's
+   spherical formula from D_0013F350's +0x194 radius, the clamped angle
+   arg0 (falling back to +0x98 above pi) and +0x2E4, or, when +0x20B3 is
+   set, a flat vector (r,0,0) rotated by the matrix func_001FA218 builds
+   from the +0x2080 table's +0x40 axis. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00212790), where it is exact; names translated to the US level program. */
+
+extern float FastSin(float) __asm__("FUN_001f9de0");
+extern void func_001F9EE8(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void func_001FA218(void *, void *) __asm__("FUN_001fa050");
+extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
+
+void FUN_L00_002120d8(float arg0) {
+    char *g = D_0013F350;
+    float y;
+    float r;
+    float out[4];
+
+    y = *(float *)(g + 0x98);
+    if (arg0 <= 3.14159274f) {
+        y = arg0;
+    }
+    r = *(float *)(g + 0x194);
+
+    if (*(unsigned char *)(g + 0x20B3) != 0) {
+        float matrix[16];
+        float vec[4];
+
+        vec[0] = FastCos(0.0f) * r;
+        vec[1] = FastSin(0.0f) * r;
+        vec[2] = 0.0f;
+
+        func_001FA218(matrix, *(char **)(g + 0x2080) + 0x40);
+        func_001F9EE8(vec, vec, matrix);
+
+        qcopy(out, vec);
+    } else {
+        func_00215C00(out, r, y, *(float *)(g + 0x2E4));
+    }
+
+    qcopy(D_0013F350 + 0xE0, out);
+}
 typedef unsigned int u128_2121c0_002121c0 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_2121c0_002121c0 q_002121c0; float f[4]; } V_2121c0_002121c0;
 typedef struct {
@@ -937,7 +980,34 @@ s32 FUN_L00_002133a8(s32 mode) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002137a8.s", FUN_L00_002137a8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00213E60), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int x, y, z, w;
+} Quad;
+
+extern char D_0013F350_002137a8[] __asm__("D_0013F350");
+extern int FUN_L00_002133a8_002137a8(int index) __asm__("FUN_L00_002133a8");
+
+void FUN_L00_002137a8(void) {
+    Quad *dst = (Quad *)(D_0013F350_002137a8 + 0x80);
+    Quad *table = (Quad *)((char *)dst + 0x1A80);
+    int i;
+
+    for (i = 0; i < 16; i++) {
+        char *base;
+
+        if (FUN_L00_002133a8_002137a8(i) == 1)
+            return;
+
+        base = D_0013F350_002137a8;
+        if (*(int *)(base + 0x21B4) >= 2) {
+            (*(int *)(base + 0x21B4))--;
+            *(int *)(base + 0x21B0) = (*(int *)(base + 0x21B0) + 31) % 32;
+        }
+        qcopy(dst, &table[*(int *)(base + 0x21B0)]);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213de8.s", FUN_L00_00213de8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);

@@ -38,13 +38,76 @@ int FUN_L18_002d6190(Level18VendorMoby *moby) {
     }
     return active;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6280.s", FUN_L18_002d6280);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7670), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L18_002d6280(unsigned char *arg) {
+    unsigned short flags;
+    arg[0x20] = 5;
+    if (arg[0x53] != 0) {
+        blend_moby_animation(arg, 0, 0, scale_ticks(10));
+    }
+    flags = *(unsigned short *)(arg + 0x34);
+    arg[0x31] = 0;
+    flags |= 1;
+    *(int *)(arg + 0x94) = 0;
+    flags &= 0xEFFF;
+    *(unsigned short *)(arg + 0x34) = flags;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6c80.s", FUN_L18_002d6c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6d50.s", FUN_L18_002d6d50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6dc0.s", FUN_L18_002d6dc0);
+/* Initialize the vendor action mode and scale. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D81B0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x24];
+    float scale;
+    char pad28[4];
+    int mode;
+} Level18VendorActionData;
+
+typedef struct {
+    char pad0[0x78];
+    Level18VendorActionData *data;
+} Level18VendorActionMoby;
+
+void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
+    Level18VendorActionData *data = moby->data;
+    data->mode = 5;
+    data->scale = 1.5f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
 
@@ -95,7 +158,23 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dbe80.s", FUN_L18_002dbe80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc0c8.s", FUN_L18_002dc0c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc260.s", FUN_L18_002dc260);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc3e0.s", FUN_L18_002dc3e0);
+#include "qcopy.h"
+extern void *CreateMoby() __asm__("FUN_0020c4f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD7D0), where it is exact; names translated to the US level program. */
+
+char *FUN_L18_002dc3e0(void *owner, void *vector, float value) {
+    char *moby = CreateMoby(0x274);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        qcopy(moby + 0x10, vector);
+        *(float *)data = value;
+        *(int *)(data + 0x08) = 3;
+        *(void **)(data + 0x0C) = owner;
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc458.s", FUN_L18_002dc458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002df608.s", FUN_L18_002df608);
@@ -121,11 +200,60 @@ float FUN_L18_002dfb90(Level18VendorFloatMoby *moby) {
     return moby->data->value;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e22c0.s", FUN_L18_002e22c0);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E36B0), where it is exact; names translated to the US level program. */
+
+extern void func_001FA1F8(void *, void *) __asm__("FUN_001fa030");
+
+char *FUN_L18_002e22c0(void *vector) {
+    char *moby = CreateMoby(0x326);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        moby[0x30] = 0x40;
+        moby[0x20] = 0;
+        *(char **)(data + 0x0C) = moby;
+        *(int *)(moby + 0x94) = 0;
+        *(unsigned short *)(moby + 0x34) |= 0x41;
+        qcopy(moby + 0x10, vector);
+        clear_u64_value(moby + 0x40);
+        func_001FA1F8(moby + 0xC0, moby + 0x40);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea0f0.s", FUN_L18_002ea0f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea168.s", FUN_L18_002ea168);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB4E0), where it is exact; names translated to the US level program. */
+
+char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
+    char *moby = CreateMoby(0x3D7);
+    if (moby != 0) {
+        char *data;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        qcopy(moby + 0x10, vector);
+        data = *(char **)(moby + 0x78);
+        *(void **)(data + 0x20) = owner;
+        *(int *)(data + 0x28) = 5;
+        *(int *)(data + 0x34) = value;
+        *(int *)(data + 0x24) = 0;
+    }
+    return moby;
+}
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB558), where it is exact; names translated to the US level program. */
+
+void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active, float speed) {
+    char *data = *(char **)(arg + 0x78);
+    qcopy(arg + 0x10, src);
+    *(int *)(data + 0x28) = scale_ticks(5);
+    *(float *)(data + 0x24) = speed;
+    if (active && arg[0x20] == 0) {
+        arg[0x20] = 1;
+        *(int *)(data + 0x28) = 0;
+        qcopy(data, position);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea598.s", FUN_L18_002ea598);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);

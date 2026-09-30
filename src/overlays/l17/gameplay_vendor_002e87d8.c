@@ -15,12 +15,112 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec360.s", FUN_L17_002ec360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002edf10.s", FUN_L17_002edf10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ee2b0.s", FUN_L17_002ee2b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ee9c0.s", FUN_L17_002ee9c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eea70.s", FUN_L17_002eea70);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void FastVecAdd(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0xD0];
+    float x, y;
+    char pad1[0x2FC - 0xD8];
+    void *current;
+    char pad2[8];
+    short active;
+    char pad3[0x22DA - 0x30A];
+    unsigned short index;
+} CameraGlobals;
+
+extern CameraGlobals D_0013F350;
+extern char D_L17_001676C0[];
+extern float FUN_L00_001ff8b0(float, float);
+extern void FUN_L00_001ff550(void *, void *, float);
+
+void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
+    FastVecSub(temp, D_L17_001676C0, moby + 0x10);
+    FUN_L00_001ff550(temp, temp, 2.5f);
+    *(float *)(temp + 8) = 1.5f;
+    FastVecAdd(temp, temp, moby + 0x10);
+    clear_u64_value(state);
+    *(float *)(state + 8) = FUN_L00_001ff8b0(D_0013F350.x - *(float *)temp,
+                                                 D_0013F350.y - *(float *)(temp + 4));
+    *(int *)(state + 4) = 0;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
+
+extern char D_L17_001B0DB0[];
+extern char D_L17_001D9F70[];
+extern void FUN_001f9cf8(void *, void *, void *);
+
+void FUN_L17_002eea70(char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    if (D_0013F350.active && D_0013F350.current == moby) {
+        char *vec = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
+        char *point = moby + 0xC0;
+        int i;
+        for (i = 10; i >= 0; i--) {
+            FUN_001f9cf8(vec, D_L17_001D9F70 + (10 - i) * 0x10, point);
+            FastVecAdd(vec, vec, moby + 0x10);
+            *(float *)(vec + 0xC) = 1.0f;
+            vec += 0x10;
+        }
+        D_0013F350.index = *(unsigned short *)(state + 0x80);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eeb68.s", FUN_L17_002eeb68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efa48.s", FUN_L17_002efa48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efd48.s", FUN_L17_002efd48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efea8.s", FUN_L17_002efea8);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern int FUN_L00_002db8f8(void *);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+int FUN_L17_002efea8(unsigned char *moby) {
+    int result = FUN_L00_002db8f8(moby);
+    if (result) {
+        moby[0x20] = 12;
+    } else if (moby[0x20] == 12) {
+        moby[0x20] = 6;
+        if (moby[0x53] != 7) {
+            int value = scale_ticks(10);
+            blend_moby_animation(moby, 7, 0, value);
+        }
+    }
+    return result;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f00a0.s", FUN_L17_002f00a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0210.s", FUN_L17_002f0210);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f04d0.s", FUN_L17_002f04d0);

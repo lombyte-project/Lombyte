@@ -426,7 +426,16 @@ void FUN_L00_002e8590(float a, float b) {
         if (b != 0.0f) *(float *)(q + 0xE0) = b;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8620.s", FUN_L00_002e8620);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+
+void FUN_L00_002e8620(void) {
+    char *p = D_L00_00166E00_002e8620;
+    if (*(short *)(p + 0x86) == 0) {
+        *(short *)(*(char **)(p + 0x70) + 0x226) = 1;
+    }
+}
 extern u8 *vd_2e8648 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e8648(void) {
     u8 *p = vd_2e8648;

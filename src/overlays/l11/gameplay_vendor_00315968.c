@@ -51,8 +51,27 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003181f0.s", FUN_L11_003181f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318488.s", FUN_L11_00318488);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318b30.s", FUN_L11_00318b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318d10.s", FUN_L11_00318d10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318e78.s", FUN_L11_00318e78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318e98.s", FUN_L11_00318e98);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
+
+void FUN_L11_00318e78(char *arg, void *src) {
+    char *dst = *(char **)(arg + 0x78);
+    qcopy(arg + 0x10, src);
+    *(int *)(dst + 0x28) = 5;
+}
+#include "qcopy.h"
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
+
+void FUN_L11_00318e98(char *arg, void *src) {
+    char *dst;
+    arg[0x20] = 2;
+    dst = *(char **)(arg + 0x78);
+    qcopy(dst, src);
+    *(int *)(dst + 0x20) = scale_ticks(0x3C);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318ed8.s", FUN_L11_00318ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319028.s", FUN_L11_00319028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003191c0.s", FUN_L11_003191c0);
@@ -61,7 +80,28 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a758.s", FUN_L11_0031a758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a7d8.s", FUN_L11_0031a7d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031aa80.s", FUN_L11_0031aa80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ab08.s", FUN_L11_0031ab08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ada0.s", FUN_L11_0031ada0);
+extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
+
+char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
+    char *moby = CreateMoby(0x5F4);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        moby[0x20] = 1;
+        qcopy(moby + 0x10, position);
+        *(float *)(moby + 0x40) = random_angle_radians();
+        *(float *)(moby + 0x48) = random_angle_radians();
+        *(short *)(moby + 0x32) = 0xFF;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        moby[0x31] = 1;
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * scale;
+        *(void **)(data + 0x24) = owner;
+        qcopy(data, vector);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ae68.s", FUN_L11_0031ae68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031b098.s", FUN_L11_0031b098);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031d8d8.s", FUN_L11_0031d8d8);

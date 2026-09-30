@@ -5,8 +5,31 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003058a8.s", FUN_L13_003058a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305988.s", FUN_L13_00305988);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305a58.s", FUN_L13_00305a58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003060b8.s", FUN_L13_003060b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00306148.s", FUN_L13_00306148);
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307550), where it is exact; names translated to the US level program. */
+
+void FUN_L13_003060b8(char *moby) {
+    char vector[16];
+    clear_u64_value(vector);
+    func_L00_0025F4A8_alt(moby, vector, moby + 0x10, 2.0f, 1.0f, 12, 4, 18,
+                           4.0f, 3.0f, 1.0f, 2.0f, 0, 20.0f, 1, 1, -1, 0);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_003075E0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+
+void FUN_L13_00306148(char *moby) {
+    char vector[16];
+    clear_u64_value(vector);
+    FUN_L00_0025e450(moby, vector, moby + 0x10, 0.0f, 0.0f, 5, 1, 5,
+                       0.0f, 0.0f, 0.0f, 1.0f, 0, 0.0f, 0, 1, -1, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003061c8.s", FUN_L13_003061c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00306300.s", FUN_L13_00306300);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003073c8.s", FUN_L13_003073c8);

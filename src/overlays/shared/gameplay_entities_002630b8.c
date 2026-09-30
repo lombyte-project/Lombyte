@@ -50,7 +50,43 @@ void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) { if (D_0015EDB7)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b38.s", FUN_L00_00263b38);
 void FUN_L00_00263b50(char *p) { *(float *)(p + 0x70) = 1.0f; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b60.s", FUN_L00_00263b60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b70.s", FUN_L00_00263b70);
+typedef struct { unsigned char pad0[4]; int w4; unsigned char pad8[2]; unsigned char bA; unsigned char bB; } T_263b70;
+typedef struct { unsigned char pad0[8]; unsigned char b8; unsigned char b9; short hA; unsigned char padC[0x14]; T_263b70 tail; } P_263b70;
+int FUN_00213260_263b70(int) __asm__("FUN_00213260");
+int FUN_001f96f8_263b70(int) __asm__("FUN_001f96f8");
+int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
+P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float, int) __asm__("FUN_L00_0026d000");
+void FUN_L00_00263b70(void *p0, void *p1, void *vel, float a, float b) {
+    P_263b70 *part;
+    T_263b70 *tail;
+    int i, j, m;
+    for (i = 0; i < 2; i++) {
+        int n = FUN_00213260_263b70(0x10);
+        part = FUN_L00_0026d000_263b70(p0, FUN_00213260_263b70(2) == 0 ? n : -n, vel, 0.1f, 1.0f, 0.9f, a, 0x7F204080);
+        if (part) {
+            tail = &part->tail;
+            part->hA = FUN_001f96f8_263b70(0x1E);
+            part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+    }
+    m = 0x10;
+    for (j = 0; j < 3; j++) {
+        part = FUN_L00_0026d000_263b70(p1, m, vel, 0.05f, 1.0f, 0.97f, b, 0x7FFFFFFF);
+        m = -m;
+        if (part) {
+            tail = &part->tail;
+            part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
+            part->hA = FUN_001f96f8_263b70(6);
+            part->b8 = FUN_00213260_263b70(0xFF);
+            tail->w4 = 2;
+            tail->bA = 0x7F;
+            tail->bB = part->hA;
+        }
+    }
+}
 extern int D_L00_0015F640_00263d40 __asm__("D_L00_0015F640") __attribute__((section(".sdata")));
 extern char D_L00_00179118_00263d40[] __asm__("D_L00_00179118");
 int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");

@@ -12,7 +12,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300278.s", FUN_L06_00300278);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003003f0.s", FUN_L06_003003f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300df0.s", FUN_L06_00300df0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300f70.s", FUN_L06_00300f70);
+#include "qcopy.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
+
+void FUN_L06_00300f70(char *arg, void *a, void *b) {
+    char *dst = *(char **)(arg + 0x78);
+    arg[0x20] = 2;
+    qcopy(dst, a);
+    qcopy(dst + 0x10, b);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302400.s", FUN_L06_00302400);

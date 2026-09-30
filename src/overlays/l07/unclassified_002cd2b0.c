@@ -5,7 +5,21 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cd2b0.s", FUN_L07_002cd2b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cdb28.s", FUN_L07_002cdb28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002fbdb8.s", FUN_L07_002fbdb8);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002FD198), where it is exact; names translated to the US level program. */
+
+extern void func_00233AB8(void) __asm__("FUN_L07_002ba260");
+
+void FUN_L07_002fbdb8(char *arg) {
+    arg[0x30] = 8;
+    *(short *)(arg + 0xA6) = 0x215;
+    AddDrawCallback((void *)func_00233AB8, arg);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b538.s", FUN_L07_0030b538);
@@ -15,7 +29,34 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030bbc8.s", FUN_L07_0030bbc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030c508.s", FUN_L07_0030c508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd48.s", FUN_L07_0030cd48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d440.s", FUN_L07_0030d440);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
+
+extern char D_L07_00166E40[];
+extern void register_audio_stream_callback(void) __asm__("FUN_L07_0030d420");
+extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
+extern char D_L07_00208560[];
+extern void FUN_L02_002a40d0(void *, float);
+
+void FUN_L07_0030d440(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        FUN_L02_002a40d0(D_L07_00208560, 0.66666669f);
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        if (!is_point_inside_clip_volume(D_L07_00166E40, **(int **)(moby + 0x78))) {
+            AddDrawCallback((void *)register_audio_stream_callback, moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dbb0.s", FUN_L07_0030dbb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
@@ -51,13 +92,38 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f0f8.s", FUN_L07_0030f0f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f1e0.s", FUN_L07_0030f1e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f4d0.s", FUN_L07_0030f4d0);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
+
+extern int D_L07_00173ED8 __attribute__((section(".data")));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+
+int FUN_L07_0030f4d0(void *moby, int id, float scale) {
+    char temp[16];
+    FUN_L00_0024f7c8(moby, 0, temp);
+    if (coll_sphere(scale, temp, 0x21, moby) && D_L07_00173ED8 == id) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f540.s", FUN_L07_0030f540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f5f0.s", FUN_L07_0030f5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003112c8.s", FUN_L07_003112c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311bc8.s", FUN_L07_00311bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003120d8.s", FUN_L07_003120d8);
+extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
+
+void FUN_L07_003120d8(char *moby) {
+    float distance = FastVecDist(moby + 0x10, D_L07_00166E40);
+    char *state;
+    if (distance > 80.0f) distance = 80.0f;
+    state = D_L07_00166E40 - 0x140;
+    *(int *)(state + 0x168) = 0x14;
+    *(float *)(state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312150.s", FUN_L07_00312150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003122b0.s", FUN_L07_003122b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312420.s", FUN_L07_00312420);

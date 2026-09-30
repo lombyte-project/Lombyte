@@ -9,7 +9,28 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ecd10.s", FUN_L13_002ecd10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed4a8.s", FUN_L13_002ed4a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f3750.s", FUN_L13_002f3750);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Clear a vendor moby's field and set its flags unless it is the current target. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4BE8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x34];
+    unsigned short flags;
+    char pad36[0x5E];
+    int field94;
+} Level13VendorMoby;
+
+extern char D_0013E030[];
+
+void FUN_L13_002f3750(Level13VendorMoby *moby) {
+    if (*(void **)(D_0013E030) != moby) {
+        moby->field94 = 0;
+        moby->flags |= 3;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f3778.s", FUN_L13_002f3778);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8880.s", FUN_L13_002f8880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8a78.s", FUN_L13_002f8a78);

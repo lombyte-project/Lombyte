@@ -9,7 +9,33 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003032e8.s", FUN_L12_003032e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303540.s", FUN_L12_00303540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304218.s", FUN_L12_00304218);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304d98.s", FUN_L12_00304d98);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Scale and play the vendor cue while its counter is below the limit. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0xAC];
+    short value;
+} Level12VendorCounterData;
+
+typedef struct {
+    char pad0[0x78];
+    Level12VendorCounterData *data;
+} Level12VendorCounterMoby;
+
+void FUN_L12_00304d98(Level12VendorCounterMoby *moby) {
+    Level12VendorCounterData *data = moby->data;
+    int count = scale_ticks(0x50);
+    int value = data->value;
+    if (value < count) {
+        emit_rgba_draw_packet(0xAA, 0, 0, (count - value) * 0x50 / count);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304e00.s", FUN_L12_00304e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003054b0.s", FUN_L12_003054b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306350.s", FUN_L12_00306350);

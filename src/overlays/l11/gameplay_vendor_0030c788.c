@@ -11,7 +11,41 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e730.s", FUN_L11_0030e730);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e978.s", FUN_L11_0030e978);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030eb90.s", FUN_L11_0030eb90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f2a8.s", FUN_L11_0030f2a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f5a8.s", FUN_L11_0030f5a8);
+#include "qcopy.h"
+extern void *CreateMoby() __asm__("FUN_0020c4f8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_0025d1b8(void *);
+
+char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
+    char *moby = CreateMoby(id);
+    if (moby != 0) {
+        char *data;
+        float angle;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        moby[0xBC] = 0;
+        data = *(char **)(moby + 0x78);
+        qcopy(moby + 0x10, position);
+        qcopy(data + 0x10, vector);
+        angle = random_angle_radians();
+        *(int *)(moby + 0x40) = 0;
+        *(float *)(moby + 0x48) = angle;
+        *(float *)(moby + 0x44) = 0.7853982f;
+        FUN_L00_00250df8(moby);
+        FUN_L00_0025d1b8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f660.s", FUN_L11_0030f660);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fd98.s", FUN_L11_0030fd98);

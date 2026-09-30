@@ -4,9 +4,48 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb668.s", FUN_L11_002cb668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb810.s", FUN_L11_002cb810);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb990.s", FUN_L11_002cb990);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013D3E2[];
+
+void FUN_L11_002cb990(char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    if (*(short *)(moby + 0xA6) == 0x41 && (unsigned char)moby[0x20] == 1) {
+        char *child;
+        D_0013D3E2[0] = moby[0x20];
+        moby[0x20] = 2;
+        child = *(char **)(state + 8);
+        if (child) child[0x20] = 2;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0710.s", FUN_L11_002d0710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0fa8.s", FUN_L11_002d0fa8);
+extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
+
+extern float D_L11_001677C0[];
+extern void FUN_L00_0025a120(void *);
+extern void FUN_L02_002e0cd8(void *);
+extern void FUN_L11_002d1030(void *);
+extern void FUN_L11_002d1340(void *);
+extern void FUN_L11_002d14b0(void *);
+extern void FUN_L11_002d27b0(void *);
+
+void FUN_L11_002d0fa8(unsigned char *moby) {
+    FUN_L02_002e0cd8(moby);
+    if (moby[0x31] && FastVecDist(moby + 0x10, D_L11_001677C0) < 38.0f) {
+        FUN_L00_0025a120(moby);
+        moby[0x7F] = 30;
+    }
+    FUN_L11_002d1030(moby);
+    FUN_L11_002d1340(moby);
+    FUN_L11_002d14b0(moby);
+    FUN_L11_002d27b0(moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1030.s", FUN_L11_002d1030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1340.s", FUN_L11_002d1340);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
@@ -65,10 +104,86 @@ void FUN_L11_002f3040(char *moby) {
         count--;
     } while (count >= 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f3350.s", FUN_L11_002f3350);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x88];
+    float timer;
+    char pad1[0x2FC - 0x8C];
+    char *current;
+    char pad2[0x30E - 0x300];
+    short active;
+    char pad3[0x2084 - 0x310];
+    int mode;
+    char pad4[0x22DA - 0x2088];
+    unsigned short index;
+} Globals;
+
+extern Globals D_0013F350;
+
+void FUN_L11_002f3350(unsigned char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        if (*(int *)state == -1) DeleteMoby(moby);
+        break;
+    case 1:
+        if (D_0013F350.timer > 194.0f && D_0013F350.mode != 0x32) {
+            D_0013F350.index = *(unsigned short *)state;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309378.s", FUN_L11_00309378);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a480.s", FUN_L11_0030a480);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+int FUN_L11_0030a480(unsigned char *moby) {
+    char *current;
+    if (moby[0x20] != 1) return 0;
+    current = D_0013F350.current;
+    if (current != (char *)moby || D_0013F350.active) return 0;
+    current[0x20] = 2;
+    if (((unsigned char *)current)[0x53]) {
+        int value = scale_ticks(0x14);
+        blend_moby_animation(current, 0, 0, value);
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a500.s", FUN_L11_0030a500);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 

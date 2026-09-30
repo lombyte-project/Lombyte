@@ -810,7 +810,7 @@ extern void *FUN_L00_002678b8_0026ed28(s32) __asm__("FUN_L00_002678b8");
 extern s32 FUN_001fa6d0_0026ed28(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_002132a8_0026ed28(f32, f32) __asm__("FUN_002132a8");
 extern s32 FUN_L00_0025bfe0_0026ed28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
-extern f32 D_0015ED60_0026ed28 __asm__("D_0015ED60") __attribute__((sda));
+extern f32 D_0015ED60_0026ed28 __asm__("D_0015ED60");
 extern u8 *D_L00_001B20A0_0026ed28[] __asm__("D_L00_001B20A0") __attribute__((section(".data")));
 Part_26ed28 *FUN_L00_0026ed28(u8 *a) {
     Part_26ed28 *p;
@@ -836,7 +836,45 @@ Part_26ed28 *FUN_L00_0026ed28(u8 *a) {
     }
     return p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026ee48.s", FUN_L00_0026ee48);
+typedef struct { unsigned char *o; float f4, f8, fC, f10, f14, f18; } B_26ee48;
+extern float D_0015ED60_26ee48 __asm__("D_0015ED60");
+void FUN_L00_00267a08_26ee48(void *) __asm__("FUN_L00_00267a08");
+int FUN_L00_0025bfe0_26ee48(float, float, float, float) __asm__("FUN_L00_0025bfe0");
+int FUN_001fa6d0_26ee48(float) __asm__("FUN_001fa6d0");
+void FUN_L00_0026ee48(unsigned char *p) {
+    B_26ee48 *b;
+    unsigned char *o;
+    if (p == 0) return;
+    b = (B_26ee48 *)(p + 0x20);
+    o = b->o;
+    if (o == 0 || (o[0x20] & 0xF0) == 0xF0) goto kill;
+    qcopy(p + 0x10, o + 0x10);
+    b->f4 += b->f8;
+    if (b->f4 < 0.0f) {
+kill:
+        FUN_L00_00267a08_26ee48(p);
+        return;
+    }
+    if (0.6f < b->f4) {
+        b->f8 = -b->f8;
+        b->f4 += b->f8;
+    }
+    b->f10 += D_0015ED60_26ee48 * -0.0174f;
+    if (b->f10 < 0.0f) b->f10 = 0.0f;
+    b->f14 += D_0015ED60_26ee48 * -0.01446f;
+    if (b->f14 < 0.0f) b->f14 = 0.0f;
+    b->f18 += D_0015ED60_26ee48 * -0.0015f;
+    if (b->f18 < 0.0f) b->f18 = 0.0f;
+    {
+        int c = FUN_L00_0025bfe0_26ee48(b->f10, b->f14, b->f18, b->f4);
+        float d = D_0015ED60_26ee48 * 0.0011f;
+        *(int *)(p + 4) = c;
+        b->fC += d;
+    }
+    if (1.0f < b->fC) b->fC -= 1.0f;
+    p[8] = FUN_001fa6d0_26ee48(b->fC * 255.0f);
+    *(float *)(p + 0xC) = *(float *)(*(unsigned char **)(p + 0x20) + 0x2C) * 100000.0f * 30.0f + 50000.0f;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -851,7 +889,58 @@ void FUN_L00_0026f048(char *a) {
         FUN_L00_00267a08(a);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026f080.s", FUN_L00_0026f080);
+typedef struct {
+    unsigned char pad0[0x88];
+    float f88;
+    unsigned char pad8C[0x2F0 - 0x8C];
+    float f2F0;
+    unsigned char pad2F4[0x2084 - 0x2F4];
+    int i2084;
+} P_26f080;
+extern P_26f080 D_0013F350_26f080 __asm__("D_0013F350");
+extern unsigned char *D_L00_001B2108_26f080 __asm__("D_L00_001B2108") __attribute__((section(".data")));
+extern float D_0015ED6C_26f080 __asm__("D_0015ED6C");
+unsigned char *FUN_L00_002678b8_26f080(int) __asm__("FUN_L00_002678b8");
+int FUN_001fa6d0_26f080(float) __asm__("FUN_001fa6d0");
+float FUN_00213308_26f080(void) __asm__("FUN_00213308");
+float FUN_002132a8_26f080(float, float) __asm__("FUN_002132a8");
+int FUN_L00_00257b90_26f080(int, int) __asm__("FUN_L00_00257b90");
+int FUN_001f96f8_26f080(int) __asm__("FUN_001f96f8");
+unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
+    unsigned char *m = FUN_L00_002678b8_26f080(0x22);
+    if (m) {
+        float *q = (float *)(m + 0x20);
+        int a;
+        *(int *)(m + 4) = 0x88A0A0A0;
+        m[9] = FUN_001fa6d0_26f080(4.0f) + 0x40;
+        m[1] = 0;
+        m[3] = 0x44;
+        q[3] = FUN_002132a8_26f080(0.75f, 1.25f) * x;
+        *(float *)(m + 0xC) = 5250.0f;
+        m[8] = FUN_L00_00257b90_26f080(-10, 10) - 0x80;
+        m[2] = *D_L00_001B2108_26f080;
+        a = FUN_001f96f8_26f080(0x46);
+        *(short *)(m + 0xA) = FUN_L00_00257b90_26f080(a, FUN_001f96f8_26f080(0x8C));
+        if (y == -1.0f) {
+            P_26f080 *p = &D_0013F350_26f080;
+            if (p->i2084 == 0x31) {
+                q[4] = p->f88 + 0.4f;
+            } else {
+                q[4] = p->f2F0;
+            }
+        } else {
+            q[4] = y;
+        }
+        q[5] = FUN_00213308_26f080();
+        q[6] = FUN_002132a8_26f080(D_0015ED6C_26f080 * 1.7453293f, D_0015ED6C_26f080 * 6.981317f);
+        q[7] = FUN_002132a8_26f080(D_0015ED6C_26f080 * 0.5f, D_0015ED6C_26f080 * 1.4f);
+        q[0] = v[0];
+        q[1] = v[1];
+        q[2] = v[2];
+        qcopy(m + 0x10, pos);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026f280.s", FUN_L00_0026f280);
 extern unsigned char *D_L00_001B210C_0026f548 __asm__("D_L00_001B210C") __attribute__((section(".data")));
 extern float D_0015ED70_0026f548 __asm__("D_0015ED70") __attribute__((section(".sdata")));

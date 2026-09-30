@@ -175,7 +175,19 @@ void FUN_L00_002bebc8(char *a) {
     *(int *)(a + 0x4C) = *(int *)(g + 0x1F08);
     *(float *)(a + 0x5C) = *(float *)(g + 0x1EE4);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bec00.s", FUN_L00_002bec00);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
+
+void FUN_L00_002bec00(char *a) {
+    char *g = D_0013F350;
+    *(float *)(g + 0x1F20) = *(float *)(a + 0x50);
+    *(float *)(g + 0x1F24) = *(float *)(a + 0x54);
+    *(float *)(g + 0x1F28) = *(float *)(a + 0x58);
+    *(char *)(g + 0x1F3F) = *(char *)(a + 0x68);
+    *(float *)(g + 0x1F40) = *(float *)(a + 0x44);
+    qcopy(g + 0x1F10, a);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -17,7 +17,33 @@ float FUN_L00_00257ef0(float x, float y, float z) {
     float c = FUN_001f9dc8(z * 3.1415927f);
     return FUN_001fa580(x, t * ((1.0f - c) * 0.5f));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257f70.s", FUN_L00_00257f70);
+#include "qcopy.h"
+extern void FastVecAdd(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FastVecScale(void *, void *, float) __asm__("FUN_001f9a68");
+extern float FastCos(float) __asm__("FUN_001f9dc8");
+extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+
+/* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
+   Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258FA8), where it is exact; names translated to the US level program. */
+
+void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
+    float tmp[4];
+    float ease;
+
+    if (t == 0.0f) {
+        qcopy(dst, a);
+        return;
+    }
+    if (t == 1.0f) {
+        qcopy(dst, b);
+        return;
+    }
+    ease = (1.0f - FastCos(t * 3.14159274f)) * 0.5f;
+    FastVecSub(tmp, b, a);
+    FastVecScale(tmp, tmp, ease);
+    FastVecAdd(dst, a, tmp);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

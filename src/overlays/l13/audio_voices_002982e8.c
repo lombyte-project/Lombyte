@@ -2,4 +2,28 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002982e8.s", FUN_L13_002982e8);
+#include "qcopy.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Enable a sound effect and copy its 16-byte parameter vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/sound_002994D0.c: func_L13_002994D0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x75];
+    unsigned char flags;
+} Level13SoundEffectTarget;
+
+extern char D_0013E533[];
+
+int FUN_L13_002982e8(int index, const void *vector) {
+    int offset = index * 0x70;
+    char *base = D_0013E533 + 0x1D;
+    char *vector_base = base + 0xA0;
+    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(base + offset);
+    effect->flags |= 0x40;
+    qcopy(vector_base + offset, vector);
+    return 1;
+}

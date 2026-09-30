@@ -514,7 +514,24 @@ float FUN_L00_002332d0(void) {
     }
     return FUN_L00_001ff8b0_002332d0(v.f[0], v.f[1]);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233440.s", FUN_L00_00233440);
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00233CC0), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013D4DC[];
+
+int FUN_L00_00233440(void) {
+    char *base = D_0013F350;
+    int state = *(int *)(base + 0x2084);
+    int r = *(short *)(base + 0x308);
+
+    if (state == 0x3F || state == 0x71 || state == 0x70
+        || (*(unsigned char *)(base + 0x12E7) != 0 && D_0013D4DC[0] != 0 && state == 0
+            && *(short *)(base + 0x30E) < scale_ticks(4))) {
+        r = 1;
+    }
+    return r;
+}
 typedef struct { f32 v[4]; } V002334d0 __attribute__((aligned(16)));
 extern u8 D_0013F350_002334d0[] __asm__("D_0013F350");
 extern u8 D_0013F5E0_002334d0[] __asm__("D_0013F5E0");
@@ -642,7 +659,34 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002338d0.s", FUN_L00_002338d0);
+extern float FastVecDot(void *, void *) __asm__("FUN_001f9ab0");
+extern void FastVecScale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L00_002338d0(float *dst, float *src) {
+    char *base = D_0013F350;
+    float n[4] __attribute__((aligned(16)));
+
+    switch (*(unsigned char *)(base + 0x20B3)) {
+    case 0:
+        qcopy(dst, src);
+        dst[2] = 0.0f;
+        break;
+    case 1:
+        FUN_L00_001ff500(n, base + 0x270, 1.0f);
+        FastVecScale(n, n, FastVecDot(n, src));
+        FastVecSub(dst, src, n);
+        break;
+    case 2:
+        FastVecScale(n, base + 0x290, FastVecDot(base + 0x290, src));
+        FastVecSub(dst, src, n);
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

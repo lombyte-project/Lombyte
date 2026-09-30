@@ -106,7 +106,53 @@ unsigned char *FUN_L00_002c52a8(u128 *a, int b, int c, int d) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c53c0.s", FUN_L00_002c53c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c5be0.s", FUN_L00_002c5be0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c5be8.s", FUN_L00_002c5be8);
+typedef struct { char pad[0x34]; short h34; short h36; char pad2[0x14]; } E_2c5be8;
+extern int D_0013D428_2c5be8[] __asm__("D_0013D428");
+extern int D_0013DE08_2c5be8[] __asm__("D_0013DE08");
+extern E_2c5be8 D_179AC0_2c5be8[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
+extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
+extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
+extern int D_15F5CC_2c5be8 __asm__("D_L00_0015F5CC");
+extern int D_161838_2c5be8 __asm__("D_L00_00161838");
+extern int f33e40_2c5be8(int, int) __asm__("FUN_L00_00233e40");
+extern void f63db0_2c5be8(int, int, int) __asm__("FUN_L00_00263db0");
+extern void f99f8_2c5be8(void *) __asm__("FUN_001f99f8");
+extern int f99a8_2c5be8(int) __asm__("FUN_001f99a8");
+extern int f96f8_2c5be8(int) __asm__("FUN_001f96f8");
+extern int f8dc90_2c5be8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+
+int FUN_L00_002c5be8(char *o) {
+    int *p = *(int **)(o + 0x78);
+    int before;
+    float f;
+    int d;
+
+    if (*(unsigned char *)(o + 0x20) == 2) {
+    fail:
+        return 0;
+    }
+    before = D_0013D428_2c5be8[p[2]];
+    f = f33e40_2c5be8(p[2], p[0]);
+    if (before >= D_0013D428_2c5be8[p[2]]) {
+        goto fail;
+    }
+    d = D_0013D428_2c5be8[p[2]] - before;
+    f63db0_2c5be8(d == 1 ? ((E_2c5be8 *)(p[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36 : ((E_2c5be8 *)(p[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34, d, -1);
+    if (f < (float)p[0]) {
+        D_0013DE08_2c5be8[p[2]] += D_0013D428_2c5be8[p[2]] - before;
+        *(unsigned char *)(o + 0x20) = 2;
+        *(float *)(o + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
+        f99f8_2c5be8(p + 4);
+        { int t = D_15F5CC_2c5be8 - D_161838_2c5be8; int r;
+        *(float *)(p + 9) = D_0015ED6C_2c5be8 * 8.0f;
+        r = f99a8_2c5be8(t);
+        if (f96f8_2c5be8(10) < r) {
+            f8dc90_2c5be8(0, 0, o, 0xD5);
+            D_161838_2c5be8 = D_15F5CC_2c5be8;
+        } }
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c5dc8.s", FUN_L00_002c5dc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
 #include "eetypes.h"

@@ -59,7 +59,30 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3e28.s", FUN_L12_002e3e28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3ed8.s", FUN_L12_002e3ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e6c48.s", FUN_L12_002e6c48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e7208.s", FUN_L12_002e7208);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
+
+extern char D_L12_00167240[];
+extern void FUN_L12_002e71b0(void);
+
+void FUN_L12_002e7208(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        {
+            int value = *(int *)(data + 0xC);
+            if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
+                AddDrawCallback((void *)FUN_L12_002e71b0, moby);
+            }
+        }
+        break;
+    }
+}
 /* Forward the vendor parameters with fixed range and scale values. */
 /* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8610), where it is exact; names translated to the US level program. */
 
@@ -71,7 +94,33 @@ void FUN_L12_002e7290(void *a, void *b) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8608.s", FUN_L12_002e8608);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e86d0.s", FUN_L12_002e86d0);
+extern void DeleteMoby(void *) __asm__("FUN_0020c828");
+
+/* Release the vendor moby and any child it owns. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x248];
+    void *child;
+} Level12VendorData;
+
+typedef struct {
+    char pad0[0x78];
+    Level12VendorData *data;
+    char pad7C[0x38];
+    short fieldB4;
+} Level12VendorMoby;
+
+extern void FUN_L00_00257470(Level12VendorMoby *, int, int);
+
+void FUN_L12_002e86d0(Level12VendorMoby *moby) {
+    moby->fieldB4 = 0;
+    FUN_L00_00257470(moby, 0, -1);
+    if (moby->data->child != 0) {
+        DeleteMoby(moby->data->child);
+    }
+    DeleteMoby(moby);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
 extern void *FUN_L04_002ce080(void *, void *);
@@ -96,7 +145,17 @@ void FUN_L12_002e8720(unsigned char *moby) {
         *(void **)(data + 0x248) = FUN_L04_002ce080(moby, vector);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e87b0.s", FUN_L12_002e87b0);
+/* Initialize two vendor vectors using the global scale. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9B30), where it is exact; names translated to the US level program. */
+
+extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED70;
+f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+
+void FUN_L12_002e87b0(char *moby) {
+    float value = probe_ground_height(moby + 0x10, 0, 0.5f);
+    approach_value(moby + 0x18, value, 27.0f * D_0015ED70);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8808.s", FUN_L12_002e8808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eae00.s", FUN_L12_002eae00);

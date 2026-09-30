@@ -14,5 +14,18 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00308220.s", FUN_L09_00308220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003082d8.s", FUN_L09_003082d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a238.s", FUN_L09_0030a238);
+extern float FastAddRots(float, float) __asm__("FUN_001fa580");
+extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
+
+void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
+    float v = FastSubRots(b, a) * scale;
+    *dst = v;
+    *dst = FastAddRots(v, a);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a298.s", FUN_L09_0030a298);
