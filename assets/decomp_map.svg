@@ -3,14 +3,14 @@
 <title>Ratchet &amp; Clank - decompilation progress</title>
 <rect width="800" height="1086" fill="#0d1117"/>
 <defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3632"/><stop offset="1" stop-color="#d87620"/></linearGradient><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#de812f" stop-opacity="0.10"/><stop offset="0.5" stop-color="#de812f" stop-opacity="0.02"/><stop offset="1" stop-color="#000000" stop-opacity="0.08"/></linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2816"/><stop offset="1" stop-color="#2a1d10"/></linearGradient><radialGradient id="drawer-halo"><stop offset="0" stop-color="#0d1117" stop-opacity="0.8"/><stop offset="0.6" stop-color="#0d1117" stop-opacity="0.55"/><stop offset="1" stop-color="#0d1117" stop-opacity="0"/></radialGradient></defs>
-<text x="10" y="24" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#a6adc8">1,493 of 4,782 functions in C &#183; executable and 19 level overlays</text>
+<text x="10" y="24" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#a6adc8">1,517 of 4,782 functions in C &#183; executable and 19 level overlays</text>
 <rect x="629" y="9" width="10" height="10" rx="2" fill="#de812f"></rect>
-<text x="644" y="18" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">matching C &#183; 327,292 B</text>
+<text x="644" y="18" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">matching C &#183; 337,448 B</text>
 <rect x="629" y="26" width="10" height="10" rx="2" fill="#c3cbd8"></rect>
 <text x="644" y="35" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">intentional asm &#183; 96,332 B</text>
 <rect x="629" y="43" width="10" height="10" rx="2" fill="url(#progress-range)"><title>Pending C: dark plate to copper shows C_EXACT coverage; bolt orange marks 100% exact.</title></rect>
-<text x="644" y="52" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">pending C &#183; 3,231,688 B</text>
-<text x="619" y="38" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="28" font-weight="800" fill="#de812f">9.2%</text>
+<text x="644" y="52" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">pending C &#183; 3,221,532 B</text>
+<text x="619" y="38" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="28" font-weight="800" fill="#de812f">9.5%</text>
 <text x="619" y="52" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8">C_EXACT &#183; executable + overlays</text>
 <rect x="10" y="62" width="780" height="86" fill="url(#drawer-face)"><title>Boot ELF SCUS_971.99: 219,772 of 340,320 recoverable bytes are matching C (64.6%); 1046 matching, 147 pending, 249 intentional asm units</title></rect>
 <clipPath id="drawer-clip"><rect x="10" y="62" width="780" height="86"/></clipPath>
@@ -148,13 +148,13 @@
 <text x="22" y="79" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" style="paint-order:stroke" stroke="#0d1117" stroke-width="3.15" stroke-opacity="0.7">BOOT ELF &#183; SCUS_971.99</text>
 <text x="400.0" y="112.0" text-anchor="middle" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="36" font-weight="800" fill="#de812f" style="paint-order:stroke" stroke="#0d1117" stroke-width="2.1" stroke-opacity="0.6">64.6%</text>
 <text x="400.0" y="130.0" text-anchor="middle" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5" fill-opacity="0.95" style="paint-order:stroke" stroke="#0d1117" stroke-width="2.1" stroke-opacity="0.7">C_EXACT of the executable &#183; C_FUZZY 86.0%</text>
-<text x="10" y="166" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 107,520 of 3,218,660 B matching C (3.3%)</text>
+<text x="10" y="166" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 117,676 of 3,218,660 B matching C (3.7%)</text>
 <line x1="24" y1="172" x2="24" y2="1024" stroke="#3a3632" stroke-width="2"/>
 <path d="M 24 188 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="188" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="192" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8"></tspan><tspan fill="#e8edf5" font-weight="700">Shared code</tspan><tspan fill="#a6adc8"> &#183; functions present in two or more levels</tspan></text>
-<text x="790" y="192" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">6.9%</text>
-<text x="790" y="208" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">384/1961 fn &#183; 1,190,248 B</text>
+<text x="790" y="192" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">7.7%</text>
+<text x="790" y="208" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">408/1961 fn &#183; 1,190,248 B</text>
 <rect x="44.00" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/start_001eaa08.c: 0/3 functions matching C, 0/1,056 B</title></rect>
 <rect x="45.36" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_fonts_001eb070.c: 0/1 functions matching C, 0/4 B</title></rect>
 <rect x="46.36" y="200" width="0.40" height="10" rx="1" fill="#c56e22" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/sdk_debug_001eb0b0.c: 1/2 functions matching C, 92/100 B</title></rect>
@@ -206,7 +206,7 @@
 <rect x="192.89" y="200" width="5.61" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_00237488.c: 0/18 functions matching C, 0/16,320 B</title></rect>
 <rect x="199.50" y="200" width="4.84" height="10" rx="1" fill="#413931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_text_002377b8.c: 10/24 functions matching C, 1,768/14,092 B</title></rect>
 <rect x="205.34" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_animation_002397b8.c: 0/1 functions matching C, 0/20 B</title></rect>
-<rect x="206.35" y="200" width="0.51" height="10" rx="1" fill="#443a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_hud_0023b120.c: 1/6 functions matching C, 228/1,484 B</title></rect>
+<rect x="206.35" y="200" width="0.51" height="10" rx="1" fill="#67482d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_hud_0023b120.c: 2/6 functions matching C, 644/1,484 B</title></rect>
 <rect x="207.86" y="200" width="0.40" height="10" rx="1" fill="#6c4a2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_frames_0023d028.c: 2/4 functions matching C, 500/1,076 B</title></rect>
 <rect x="209.23" y="200" width="0.66" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_0023db30.c: 1/3 functions matching C, 88/1,932 B</title></rect>
 <rect x="210.89" y="200" width="0.40" height="10" rx="1" fill="#52402f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_0023f0d8.c: 1/2 functions matching C, 72/256 B</title></rect>
@@ -249,7 +249,7 @@
 <rect x="274.54" y="200" width="1.11" height="10" rx="1" fill="#463b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_vectors_0025c230.c: 3/8 functions matching C, 572/3,220 B</title></rect>
 <rect x="276.65" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_entities_0025c758.c: 0/2 functions matching C, 0/40 B</title></rect>
 <rect x="277.66" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_entities_0025d1b8.c: 0/1 functions matching C, 0/20 B</title></rect>
-<rect x="278.67" y="200" width="3.25" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_rotations_0025d238.c: 6/26 functions matching C, 796/9,448 B</title></rect>
+<rect x="278.67" y="200" width="3.25" height="10" rx="1" fill="#423931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_rotations_0025d238.c: 7/26 functions matching C, 1,264/9,448 B</title></rect>
 <rect x="282.92" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_0025e2c0.c: 0/2 functions matching C, 0/616 B</title></rect>
 <rect x="284.13" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_culling_0025fa38.c: 2/2 functions matching C, 316/316 B</title></rect>
 <rect x="285.24" y="200" width="2.07" height="10" rx="1" fill="#443a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_0025fcb8.c: 4/13 functions matching C, 964/6,032 B</title></rect>
@@ -259,7 +259,7 @@
 <rect x="291.60" y="200" width="1.65" height="10" rx="1" fill="#453b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_00261968.c: 6/15 functions matching C, 836/4,800 B</title></rect>
 <rect x="294.25" y="200" width="0.97" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_text_00262ae8.c: 0/4 functions matching C, 0/2,832 B</title></rect>
 <rect x="296.22" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_camera_00262cf0.c: 1/1 functions matching C, 264/264 B</title></rect>
-<rect x="297.32" y="200" width="1.57" height="10" rx="1" fill="#433a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_entities_002630b8.c: 4/14 functions matching C, 676/4,572 B</title></rect>
+<rect x="297.32" y="200" width="1.57" height="10" rx="1" fill="#4d3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_entities_002630b8.c: 5/14 functions matching C, 1,096/4,572 B</title></rect>
 <rect x="299.89" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_00263938.c: 0/1 functions matching C, 0/12 B</title></rect>
 <rect x="300.89" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_00263a18.c: 0/2 functions matching C, 0/664 B</title></rect>
 <rect x="302.12" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_002644e0.c: 1/1 functions matching C, 96/96 B</title></rect>
@@ -274,9 +274,9 @@
 <rect x="313.21" y="200" width="0.40" height="10" rx="1" fill="#5c442e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_menus_00266d60.c: 1/4 functions matching C, 128/356 B</title></rect>
 <rect x="314.33" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/input_pad_002678b8.c: 0/5 functions matching C, 0/836 B</title></rect>
 <rect x="315.62" y="200" width="0.53" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00268900.c: 0/2 functions matching C, 0/1,548 B</title></rect>
-<rect x="317.15" y="200" width="10.98" height="10" rx="1" fill="#4e3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_00269290.c: 28/60 functions matching C, 8,132/31,940 B</title></rect>
+<rect x="317.15" y="200" width="10.98" height="10" rx="1" fill="#55412f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_00269290.c: 32/60 functions matching C, 9,808/31,940 B</title></rect>
 <rect x="329.13" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_interpolation_0026d930.c: 0/6 functions matching C, 0/432 B</title></rect>
-<rect x="330.28" y="200" width="6.68" height="10" rx="1" fill="#5e452e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_002712b8.c: 29/54 functions matching C, 7,252/19,432 B</title></rect>
+<rect x="330.28" y="200" width="6.68" height="10" rx="1" fill="#764e2b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_002712b8.c: 36/54 functions matching C, 10,148/19,432 B</title></rect>
 <rect x="337.95" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00275690.c: 0/1 functions matching C, 0/64 B</title></rect>
 <rect x="338.98" y="200" width="2.01" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio_voices_00276368.c: 0/7 functions matching C, 0/5,856 B</title></rect>
 <rect x="341.99" y="200" width="0.43" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_00276a48.c: 0/4 functions matching C, 0/1,248 B</title></rect>
@@ -302,7 +302,7 @@
 <rect x="377.04" y="200" width="0.40" height="10" rx="1" fill="#443a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_00284e50.c: 1/5 functions matching C, 180/1,120 B</title></rect>
 <rect x="378.43" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio_streaming_00285318.c: 0/1 functions matching C, 0/20 B</title></rect>
 <rect x="379.43" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00288968.c: 0/1 functions matching C, 0/184 B</title></rect>
-<rect x="380.50" y="200" width="3.25" height="10" rx="1" fill="#4d3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00288ec0.c: 8/24 functions matching C, 2,332/9,472 B</title></rect>
+<rect x="380.50" y="200" width="3.25" height="10" rx="1" fill="#59432e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00288ec0.c: 10/24 functions matching C, 3,200/9,472 B</title></rect>
 <rect x="384.75" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_rotations_002899f8.c: 0/2 functions matching C, 0/144 B</title></rect>
 <rect x="385.80" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_0028be78.c: 0/1 functions matching C, 0/408 B</title></rect>
 <rect x="386.94" y="200" width="0.40" height="10" rx="1" fill="#6c4a2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio_voices_0028d8c0.c: 1/3 functions matching C, 72/156 B</title></rect>
@@ -315,7 +315,7 @@
 <rect x="407.86" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/world_data_00293d38.c: 0/1 functions matching C, 0/128 B</title></rect>
 <rect x="408.91" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/storage_stash_00293ed0.c: 0/1 functions matching C, 0/32 B</title></rect>
 <rect x="409.92" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_00294ae0.c: 0/2 functions matching C, 0/532 B</title></rect>
-<rect x="411.10" y="200" width="7.59" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00295100.c: 7/28 functions matching C, 996/22,096 B</title></rect>
+<rect x="411.10" y="200" width="7.59" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00295100.c: 9/28 functions matching C, 1,824/22,096 B</title></rect>
 <rect x="419.69" y="200" width="10.16" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00297d10.c: 0/36 functions matching C, 0/29,560 B</title></rect>
 <rect x="430.85" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_0029a2a0.c: 0/2 functions matching C, 0/560 B</title></rect>
 <rect x="432.04" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_state_0029b0a0.c: 0/1 functions matching C, 0/288 B</title></rect>
@@ -334,12 +334,12 @@
 <rect x="454.53" y="200" width="5.44" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002a4038.c: 0/20 functions matching C, 0/15,840 B</title></rect>
 <rect x="460.98" y="200" width="8.21" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002a4830.c: 5/31 functions matching C, 2,168/23,896 B</title></rect>
 <rect x="470.19" y="200" width="3.32" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002a7e40.c: 0/4 functions matching C, 0/9,676 B</title></rect>
-<rect x="474.51" y="200" width="10.77" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002aa670.c: 6/18 functions matching C, 2,260/31,328 B</title></rect>
+<rect x="474.51" y="200" width="10.77" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002aa670.c: 7/18 functions matching C, 2,664/31,328 B</title></rect>
 <rect x="486.28" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002aea70.c: 0/1 functions matching C, 0/640 B</title></rect>
 <rect x="487.50" y="200" width="0.80" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002aee30.c: 0/5 functions matching C, 0/2,328 B</title></rect>
 <rect x="489.30" y="200" width="5.68" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b17d8.c: 0/31 functions matching C, 0/16,532 B</title></rect>
 <rect x="495.98" y="200" width="1.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b1e48.c: 0/5 functions matching C, 0/4,060 B</title></rect>
-<rect x="498.37" y="200" width="10.17" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b2100.c: 3/28 functions matching C, 572/29,584 B</title></rect>
+<rect x="498.37" y="200" width="10.17" height="10" rx="1" fill="#3b3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b2100.c: 4/28 functions matching C, 1,028/29,584 B</title></rect>
 <rect x="509.54" y="200" width="2.94" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b3840.c: 0/27 functions matching C, 0/8,560 B</title></rect>
 <rect x="513.48" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/runtime_dma_002b7a48.c: 0/2 functions matching C, 0/736 B</title></rect>
 <rect x="514.73" y="200" width="1.60" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b7d50.c: 0/6 functions matching C, 0/4,664 B</title></rect>
@@ -347,19 +347,19 @@
 <rect x="518.66" y="200" width="10.82" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b8c08.c: 0/32 functions matching C, 0/31,476 B</title></rect>
 <rect x="530.47" y="200" width="9.24" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b94d0.c: 9/29 functions matching C, 1,812/26,884 B</title></rect>
 <rect x="540.71" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002bc210.c: 0/3 functions matching C, 0/644 B</title></rect>
-<rect x="541.93" y="200" width="11.05" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002bffa8.c: 6/26 functions matching C, 1,756/32,156 B</title></rect>
-<rect x="553.98" y="200" width="10.54" height="10" rx="1" fill="#3b3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c8440.c: 5/25 functions matching C, 796/30,684 B</title></rect>
+<rect x="541.93" y="200" width="11.05" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002bffa8.c: 7/26 functions matching C, 2,176/32,156 B</title></rect>
+<rect x="553.98" y="200" width="10.54" height="10" rx="1" fill="#3b3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c8440.c: 6/25 functions matching C, 1,232/30,684 B</title></rect>
 <rect x="565.52" y="200" width="2.97" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c8830.c: 0/10 functions matching C, 0/8,632 B</title></rect>
 <rect x="569.49" y="200" width="11.12" height="10" rx="1" fill="#3b3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002cfcb8.c: 4/29 functions matching C, 708/32,372 B</title></rect>
 <rect x="581.61" y="200" width="3.39" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002d6810.c: 0/9 functions matching C, 0/9,860 B</title></rect>
-<rect x="586.00" y="200" width="10.11" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002d7f88.c: 12/33 functions matching C, 2,148/29,424 B</title></rect>
+<rect x="586.00" y="200" width="10.11" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002d7f88.c: 13/33 functions matching C, 2,564/29,424 B</title></rect>
 <rect x="597.11" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002de370.c: 0/5 functions matching C, 0/1,104 B</title></rect>
 <rect x="598.49" y="200" width="11.00" height="10" rx="1" fill="#403831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002df730.c: 19/61 functions matching C, 3,476/32,004 B</title></rect>
 <rect x="610.49" y="200" width="1.84" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e22d8.c: 0/11 functions matching C, 0/5,368 B</title></rect>
 <rect x="613.34" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002e30b8.c: 0/1 functions matching C, 0/12 B</title></rect>
 <rect x="614.34" y="200" width="1.71" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e3de8.c: 0/8 functions matching C, 0/4,988 B</title></rect>
 <rect x="617.05" y="200" width="0.91" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e5958.c: 0/4 functions matching C, 0/2,648 B</title></rect>
-<rect x="618.96" y="200" width="6.52" height="10" rx="1" fill="#453a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e9010.c: 17/41 functions matching C, 3,160/18,972 B</title></rect>
+<rect x="618.96" y="200" width="6.52" height="10" rx="1" fill="#473b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e9010.c: 18/41 functions matching C, 3,612/18,972 B</title></rect>
 <rect x="626.48" y="200" width="3.33" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002ec308.c: 0/20 functions matching C, 0/9,688 B</title></rect>
 <rect x="630.81" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio_decoder_002ee6c8.c: 0/3 functions matching C, 0/208 B</title></rect>
 <rect x="631.88" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/runtime_buffers_002ef300.c: 1/1 functions matching C, 68/68 B</title></rect>
@@ -601,6 +601,6 @@
 <rect x="491.63" y="1036" width="130.80" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002efb88.c: 1/39 functions matching C, 40/32,576 B</title></rect>
 <rect x="623.43" y="1036" width="48.57" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002f88e8.c: 0/19 functions matching C, 0/12,096 B</title></rect>
 <line x1="10" y1="1064.0" x2="790" y2="1064.0" stroke="#3a3632" stroke-width="1" opacity="0.8"/>
-<text x="10" y="1078" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 64.6% &#183; overlays 3.3% &#183; 327,292 of 3,655,312 B in C</text>
+<text x="10" y="1078" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 64.6% &#183; overlays 3.7% &#183; 337,448 of 3,655,312 B in C</text>
 <text x="790" y="1078" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-09-30 &#183; scripts/generate_treemap.py</text>
 </svg>
