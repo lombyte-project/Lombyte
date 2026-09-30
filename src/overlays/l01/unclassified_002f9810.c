@@ -137,7 +137,101 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa4c0.s", FUN_L01_002fa4c0);
+typedef union { u128 q; f32 f[4]; } Vec4;
+
+typedef struct {
+    u128 vel;
+    void *coll;
+    u8 sound[4];
+} DropVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;
+    u8 pad20[0x58];
+    DropVars *vars;
+    u8 pad7C[0x2A];
+    u16 hA6;
+} DropMoby;
+
+typedef struct {
+    u128 dir;
+    DropMoby *owner;
+    s32 flags;
+    u8 b28;
+    u8 b29;
+    u16 id;
+    f32 scale;
+    s32 count;
+} DropProbe;
+
+extern f32 FUN_001f96b0(f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern s32 FUN_L00_001efc70(void *, void *, s32, void *, void *);
+extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
+extern void FUN_L01_002fa1b0(void *, void *, s32, f32, f32);
+void FUN_0020c828(void *);
+extern u8 D_L01_00167240[];
+extern u128 D_L01_001742E0;
+
+void FUN_L01_002fa4c0(DropMoby *m) {
+    DropVars *v;
+    u128 *pos;
+    Vec4 prev;
+    DropProbe probe;
+    u128 tmp;
+    f32 a;
+    f32 b;
+    f32 zero;
+    f32 one;
+    f32 ten;
+    f32 half;
+
+    v = m->vars;
+    pos = &m->pos.q;
+    qcopy(&prev, pos);
+    zero = 0.0f;
+    one = 1.0f;
+    ten = 10.0f;
+    a = FUN_001f96b0(ten);
+    b = FUN_001f96b0(ten);
+    b = b * FUN_001f96b0(ten);
+    ((f32 *)&v->vel)[2] -= (a * zero + one) * 2.0f / b;
+    FUN_001f9a10(pos, pos, &v->vel);
+    if (m->pos.f[0] < zero || m->pos.f[1] < zero || m->pos.f[2] < zero
+        || FUN_001f9b80(pos, D_L01_00167240) > 64.0f) {
+        FUN_0020c828(m);
+        return;
+    }
+    probe.owner = m;
+    probe.flags = 0x10001;
+    probe.scale = one;
+    probe.count = 1;
+    qcopy(&probe.dir, &v->vel);
+    ((f32 *)&probe.dir)[2] = one;
+    ((f32 *)&probe.dir)[3] = 5627.9248f;
+    probe.b28 = 1;
+    probe.b29 = 1;
+    probe.id = m->hA6;
+    if (FUN_001f9740(v->sound) != 0) {
+        tmp = m->pos.q;
+        FUN_L01_002fa1b0(m, &tmp, 0, 0.5f, zero);
+        FUN_0020c828(m);
+    } else if (FUN_L00_001efc70(&prev, pos, 0, v->coll, &probe) != 0) {
+        qcopy(pos, &D_L01_001742E0);
+        tmp = m->pos.q;
+        FUN_L01_002fa1b0(m, &tmp, 0, 0.5f, zero);
+        FUN_0020c828(m);
+    } else {
+        half = 0.5f;
+        if (probe_world_sphere(half, pos, 0x10, v->coll, &probe) != 0) {
+            tmp = m->pos.q;
+            FUN_L01_002fa1b0(m, &tmp, 0, half, zero);
+            FUN_0020c828(m);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa800.s", FUN_L01_002fa800);
 typedef struct {
     u8 pad0[0xA6];
@@ -179,7 +273,90 @@ void FUN_L01_002fac80(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb8a8.s", FUN_L01_002fb8a8);
+typedef union { u128 q; f32 f[4]; } PendVec4;
+
+typedef struct {
+    u8 pad0[0x60];
+    PendVec4 pivot;
+    f32 swing;
+    s32 sound;
+} PendulumVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    PendVec4 pos;
+    u8 state;
+    u8 pad21[0x23];
+    f32 rot_x;
+    f32 rot_z;
+    u8 pad4c[0x2C];
+    PendulumVars *vars;
+    u8 pad7c[0x34];
+    u8 id;
+    u8 padB1[0xB];
+    u8 trigger;
+} PendulumMoby;
+
+extern s32 D_0015ED84 __attribute__((sda));
+extern u8 D_0014C050[];
+extern u8 D_0013E550[];
+extern int FUN_L00_0028d8c0(void *, int);
+extern void FUN_L00_0028d918(int);
+extern s32 FUN_0022da68(s32, s32, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+
+void FUN_L01_002fb8a8(PendulumMoby *self) {
+    PendulumVars *v;
+    PendVec4 arm;
+    PendVec4 d;
+    s32 h;
+    u8 *voice;
+
+    v = self->vars;
+    switch (self->state) {
+    case 0:
+        qcopy(&v->pivot, &self->pos);
+        v->swing = 1.0f;
+        self->state = 1;
+        v->sound = -1;
+        break;
+    case 1:
+        if (self->trigger == 2 || D_0014C050[self->id + D_0015ED84 * 16] == 0xFF) {
+            self->state = 2;
+            self->trigger = 0;
+        }
+        break;
+    case 2:
+        v->swing -= D_0015ED6C * 0.5f;
+        if (v->swing < 0.0f) {
+            v->swing = 0.0f;
+        }
+        if (v->swing == 0.0f) {
+            h = v->sound;
+            if (h != -1) {
+                voice = D_0013E550 + h * 0x70;
+                if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
+                    FUN_L00_0028d918(h);
+                }
+            }
+            v->sound = -1;
+            self->state = 1;
+        } else if (!FUN_L00_0028d8c0(self, v->sound)) {
+            v->sound = FUN_0022da68(0, 4, self);
+        }
+        break;
+    }
+    self->rot_x = v->swing * 0.62831855f;
+    arm.q = 0;
+    arm.f[2] = -11.0f;
+    FUN_001f9a10(&arm, &arm, &v->pivot);
+    d.f[0] = FUN_001f9dc8(self->rot_z) * 11.0f * FUN_001f9de0(self->rot_x);
+    d.f[1] = FUN_001f9de0(self->rot_z) * 11.0f * FUN_001f9de0(self->rot_x);
+    d.f[2] = FUN_001f9dc8(self->rot_x) * 11.0f;
+    FUN_001f9a10(&self->pos, &arm, &d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0e8.s", FUN_L01_002fd0e8);
 typedef struct {
     f32 x, y, z, w;
@@ -260,7 +437,85 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fed68.s", FUN_L01_002fed68);
+typedef struct {
+    Vec4 home;
+    f32 t;
+    f32 radius;
+} HoverVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;
+    u8 state;
+    u8 pad21[0x27];
+    f32 rot_z;
+    u8 pad4C[0x2C];
+    HoverVars *vars;
+    u8 pad7C[0x2A];
+    s16 oclass;
+} HoverMoby;
+
+extern f32 FUN_001f99c0(f32);
+extern Vec4 D_0013F3D0;
+
+void FUN_L01_002fed68(HoverMoby *m) {
+    HoverVars *v;
+    Vec4 *player;
+    Vec4 off;
+    f32 k;
+
+    v = m->vars;
+    switch (m->state) {
+    case 0:
+        qcopy(&v->home, &m->pos);
+        v->t = 0.0f;
+        m->state = 1;
+        break;
+    case 1:
+        player = &D_0013F3D0;
+        if (FUN_001f9b80(v, player) < v->radius && FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
+            m->state = 2;
+            if (m->oclass == 0x300) {
+                FUN_0022da68(0, 0, m);
+            }
+        }
+        break;
+    case 2:
+        v->t += 1.0f / FUN_001f96b0(20.0f);
+        if (v->t >= 1.0f) {
+            v->t = 1.0f;
+            m->state = 3;
+        }
+        break;
+    case 3:
+        k = 1.1f;
+        if (FUN_001f9b80(v, &D_0013F3D0) > v->radius * k
+            && FUN_001f9b80(v, D_L01_00167240) > v->radius * k) {
+            m->state = 4;
+            if (m->oclass == 0x300) {
+                FUN_0022da68(0, 0, m);
+            }
+        }
+        break;
+    case 4:
+        player = &D_0013F3D0;
+        if (FUN_001f9b80(v, player) < v->radius && FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
+            m->state = 2;
+        } else {
+            v->t -= 1.0f / FUN_001f96b0(20.0f);
+            if (v->t <= 0.0f) {
+                v->t = 0.0f;
+                m->state = 1;
+            }
+        }
+        break;
+    }
+    off.f[0] = FUN_001f9dc8(m->rot_z) * v->t * (m->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[1] = FUN_001f9de0(m->rot_z) * v->t * (m->oclass == 0x300 ? 2.0f : -2.0f);
+    off.f[2] = 0.0f;
+    m->pos.f[0] = v->home.f[0] + off.f[0];
+    m->pos.f[1] = v->home.f[1] + off.f[1];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff860.s", FUN_L01_002ff860);
 typedef struct {
     u8 pad0[0x10];
@@ -296,7 +551,6 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     }
     return m;
 }
-typedef union { u128 q; f32 f[4]; } Vec4;
 
 typedef struct {
     s32 sound;

@@ -5,7 +5,70 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9a30.s", FUN_L01_002b9a30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002bd100.s", FUN_L01_002bd100);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6518.s", FUN_L01_002e6518);
+#include "eetypes.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} SplashVec;
+
+typedef struct {
+    u32 c[6];
+} SplashColors;
+
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 pad20[0xA0];
+    u8 mtx[0x40];
+} SplashMoby;
+
+extern SplashColors D_L01_0020AF50;
+extern SplashColors D_L01_0020AF68;
+extern f32 D_0015ED6C;
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern int FUN_L00_00257b90(int lo, int hi);
+extern s32 FUN_001f96f8(s32);
+extern void FUN_L00_0026ced0(void *, void *, u32, u32, f32, s32);
+
+void FUN_L01_002e6518(SplashMoby *m, u128 *origin) {
+    SplashVec base;
+    SplashVec vel;
+    SplashVec tmp;
+    SplashVec rel;
+    SplashColors inner;
+    SplashColors outer;
+    SplashVec *bp;
+    u32 *c1;
+    u32 *c2;
+    f32 size;
+    s32 i;
+
+    base.q = *origin;
+    bp = &base;
+    for (i = 2; i >= 0; i--) {
+        tmp.q = 0;
+        tmp.f[0] = random_float_between(1.0f, -1.0f) * (D_0015ED6C * 0.2f);
+        tmp.f[1] = random_float_between(1.0f, -1.0f) * (D_0015ED6C * 0.2f);
+        tmp.f[2] = random_float_between(0.8f, 1.2f) * (D_0015ED6C * -7.0f);
+        vel.q = tmp.q;
+        inner = D_L01_0020AF50;
+        outer = D_L01_0020AF68;
+        FUN_L00_0024f7c8(m, 1, &tmp);
+        FUN_001f9cf8(&vel, &vel, m->mtx);
+        FUN_001f9a28(&rel, &m->pos, bp);
+        FUN_001f9a10(&vel, &vel, &rel);
+        c1 = &inner.c[random_integer_below(6)];
+        c2 = &outer.c[random_integer_below(6)];
+        size = random_float_between(105000.0f, 157500.0f);
+        FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6bf0.s", FUN_L01_002e6bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efc60.s", FUN_L01_002efc60);
@@ -170,7 +233,7 @@ extern f32 FUN_001f9af0(void *);
 extern f32 FUN_L00_001ff8b0(f32, f32);
 extern s32 FUN_001f96f8(s32);
 extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern void FUN_0022da68(s32, s32, void *);
+extern s32 FUN_0022da68(s32, s32, void *);
 
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4 p;
@@ -273,4 +336,100 @@ void FUN_L01_002f9000(Obj *obj) {
     FUN_L00_002e84f0(0, D_L01_00161C34, D_L01_00161C38);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9080.s", FUN_L01_002f9080);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f95c0.s", FUN_L01_002f95c0);
+typedef struct {
+    u8 pad0[0x20];
+    s32 x20;
+    s16 x24;
+    u8 pad26[2];
+    u8 x28;
+    u8 pad29[0x15];
+    s16 x3e;
+    u8 pad40[0x20];
+    u8 x60[0x40];
+    f32 home_z;
+    u8 home_mode;
+    u8 padA5;
+    s16 timer;
+    f32 travel;
+    f32 speed;
+    f32 period;
+    s32 xb4;
+} LiftVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 state;
+    u8 pad21[0xF];
+    u8 b30;
+    u8 pad31;
+    s16 h32;
+    u8 pad34[0xC];
+    u8 x40[0x38];
+    LiftVars *pvars;
+    u8 pad7c[0x40];
+    u8 mode;
+} LiftMoby;
+
+extern int FUN_001f9770(void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+
+void FUN_L01_002f95c0(LiftMoby *m) {
+    LiftVars *v;
+    u128 old;
+    u128 delta;
+    u128 *dp;
+
+    v = m->pvars;
+    qcopy(&old, &m->pos);
+    FUN_001f9770(&v->timer);
+    if (m->state == 0) {
+        v->x28 = 4;
+        v->x3e = 0xD;
+        v->x20 = 0;
+        v->x24 = 0;
+        v->home_z = ((f32 *)&m->pos)[2];
+        m->mode = v->home_mode;
+        v->timer = FUN_001f96f8(0x78);
+        m->state = 1;
+        m->b30 = 0xFF;
+        m->h32 = 0xFF;
+        v->xb4 = -1;
+    }
+    switch (m->mode) {
+    case 0:
+        if (v->timer == 0) {
+            m->mode = 2;
+            v->speed = v->travel / FUN_001fa6c0(FUN_001f96f8(truncate_float_to_s32(v->period * 60.0f)));
+            v->timer = FUN_001f96f8(truncate_float_to_s32(v->period * 60.0f));
+            FUN_0022da68(0, 0, m);
+        }
+        break;
+    case 1:
+        if (v->timer == 0) {
+            m->mode = 2;
+            v->speed = -(v->travel / FUN_001fa6c0(FUN_001f96f8(truncate_float_to_s32(v->period * 60.0f))));
+            v->timer = FUN_001f96f8(truncate_float_to_s32(v->period * 60.0f));
+            FUN_0022da68(1, 0, m);
+        }
+        break;
+    case 2:
+        ((f32 *)&m->pos)[2] -= v->speed;
+        if (v->timer == 0) {
+            if (v->speed < 0.0f) {
+                m->mode = 0;
+            } else {
+                m->mode = 1;
+            }
+            if (m->mode == v->home_mode) {
+                ((f32 *)&m->pos)[2] = v->home_z;
+            }
+            v->timer = FUN_001f96f8(0x78);
+        }
+        break;
+    }
+    dp = &delta;
+    FUN_001f9a28(dp, &m->pos, &old);
+    FUN_L00_00260738(v->x60, dp, m->x40, m->x40);
+}

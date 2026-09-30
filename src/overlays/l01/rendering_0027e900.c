@@ -2,7 +2,86 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0027e900.s", FUN_L01_0027e900);
+#include "eetypes.h"
+#include "qcopy.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 id;
+    f32 f10;
+    f32 f14;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 b1B;
+} SparkBody;
+
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    s32 w4;
+    u8 b8;
+    u8 b9;
+    s16 hA;
+    f32 fC;
+    u128 pos;
+    SparkBody body;
+} Spark;
+
+extern void *FUN_L00_002678b8(s32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int FUN_001f96f8(int);
+extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
+extern u8 *D_L01_001B2500[];
+
+void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode,
+                      f32 x, f32 y, f32 z, f32 w, f32 a, f32 r, f32 g, f32 b, f32 size) {
+    Spark *p;
+    SparkBody *s;
+    u128 v = *pos;
+    u128 *pv = &v;
+
+    if (id == 0) {
+        return;
+    }
+    p = FUN_L00_002678b8(6);
+    if (p == 0) {
+        return;
+    }
+    s = &p->body;
+    qcopy(&p->pos, pv);
+    if (mode == 0xFF) {
+        p->b9 = (kind >> 5) * 16 + truncate_float_to_s32(4.0f);
+        if (kind & 1) {
+            p->b3 = 0x48;
+        } else {
+            p->b3 = 0x44;
+        }
+    } else {
+        p->b9 = kind;
+        p->b3 = mode;
+    }
+    p->b1 = 0;
+    p->b2 = *D_L01_001B2500[tex];
+    s->x = x;
+    s->y = y;
+    s->z = z;
+    s->f14 = a;
+    s->r = truncate_float_to_s32(r * 65535.0f);
+    s->g = truncate_float_to_s32(g * 65535.0f);
+    s->b = truncate_float_to_s32(b * 65535.0f);
+    s->f10 = size;
+    s->id = id;
+    p->fC = w;
+    p->b8 = a * 255.0f;
+    p->hA = FUN_001f96f8(life);
+    s->b1B = 0;
+    p->w4 = FUN_L00_0025bfe0(r, g, b, size);
+}
 #include "eetypes.h"
 #include "qcopy.h"
 typedef struct {
@@ -24,7 +103,7 @@ typedef struct {
     u128 pos;
     PartMotion m;
 } Particle;
-extern Particle *FUN_L00_002678b8(s32);
+extern void *FUN_L00_002678b8(s32);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
@@ -51,7 +130,7 @@ Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
     return p;
 }
 extern u8 *D_L01_001B25E4[];
-Particle *FUN_L00_002678b8(s32);
+void *FUN_L00_002678b8(s32);
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
