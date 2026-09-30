@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1660,
+  "matching_c": 1701,
   "intentional_asm": 249,
-  "pending_c": 2873,
+  "pending_c": 2832,
   "bytes_total": 3655312,
-  "bytes_matching_c": 376032,
+  "bytes_matching_c": 406848,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3182948,
-  "c_exact_percent_of_recoverable": 10.5657,
-  "c_fuzzy_percent_of_recoverable": 12.6107,
+  "bytes_pending_c": 3152132,
+  "c_exact_percent_of_recoverable": 11.4316,
+  "c_fuzzy_percent_of_recoverable": 13.4766,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,24 +1933,24 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 614,
-    "pending_c": 2726,
+    "matching_c": 655,
+    "pending_c": 2685,
     "bytes_total": 3218660,
-    "bytes_matching_c": 156260,
-    "bytes_pending_c": 3062400,
-    "c_exact_percent_of_recoverable": 4.8548,
+    "bytes_matching_c": 187076,
+    "bytes_pending_c": 3031584,
+    "c_exact_percent_of_recoverable": 5.8122,
     "shared": {
       "id": "shared",
       "index": null,
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1961,
-      "matching_c": 472,
-      "pending_c": 1489,
+      "matching_c": 513,
+      "pending_c": 1448,
       "bytes_total": 1190248,
-      "bytes_matching_c": 122136,
-      "bytes_pending_c": 1068112,
-      "c_exact_percent_of_recoverable": 10.2614,
+      "bytes_matching_c": 152952,
+      "bytes_pending_c": 1037296,
+      "c_exact_percent_of_recoverable": 12.8504,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -1997,9 +1997,9 @@
         {
           "file": "src/overlays/shared/unclassified_001ee1b0.c",
           "functions": 20,
-          "matching_c": 0,
+          "matching_c": 1,
           "bytes_total": 21232,
-          "bytes_matching_c": 0
+          "bytes_matching_c": 928
         },
         {
           "file": "src/overlays/shared/runtime_dma_001f3678.c",
@@ -2158,9 +2158,9 @@
         {
           "file": "src/overlays/shared/ui_help_00203b18.c",
           "functions": 63,
-          "matching_c": 30,
+          "matching_c": 31,
           "bytes_total": 31076,
-          "bytes_matching_c": 8608
+          "bytes_matching_c": 9396
         },
         {
           "file": "src/overlays/shared/unclassified_0020bc88.c",
@@ -2172,9 +2172,9 @@
         {
           "file": "src/overlays/shared/ui_help_0020c758.c",
           "functions": 63,
-          "matching_c": 32,
+          "matching_c": 35,
           "bytes_total": 31940,
-          "bytes_matching_c": 7420
+          "bytes_matching_c": 9844
         },
         {
           "file": "src/overlays/shared/unclassified_00211b08.c",
@@ -2186,9 +2186,9 @@
         {
           "file": "src/overlays/shared/ui_help_00214658.c",
           "functions": 21,
-          "matching_c": 6,
+          "matching_c": 8,
           "bytes_total": 12664,
-          "bytes_matching_c": 3744
+          "bytes_matching_c": 5360
         },
         {
           "file": "src/overlays/shared/unclassified_00216f34.c",
@@ -2256,9 +2256,9 @@
         {
           "file": "src/overlays/shared/ui_help_00229010.c",
           "functions": 5,
-          "matching_c": 3,
+          "matching_c": 4,
           "bytes_total": 2908,
-          "bytes_matching_c": 1300
+          "bytes_matching_c": 1988
         },
         {
           "file": "src/overlays/shared/ui_help_00229b70.c",
@@ -2557,9 +2557,9 @@
         {
           "file": "src/overlays/shared/math_interpolation_00257ef0.c",
           "functions": 22,
-          "matching_c": 12,
+          "matching_c": 13,
           "bytes_total": 5972,
-          "bytes_matching_c": 2528
+          "bytes_matching_c": 3444
         },
         {
           "file": "src/overlays/shared/unclassified_00258090.c",
@@ -2613,9 +2613,9 @@
         {
           "file": "src/overlays/shared/math_rotations_0025d238.c",
           "functions": 26,
-          "matching_c": 8,
+          "matching_c": 9,
           "bytes_total": 9448,
-          "bytes_matching_c": 1880
+          "bytes_matching_c": 2536
         },
         {
           "file": "src/overlays/shared/rendering_0025e2c0.c",
@@ -2634,9 +2634,9 @@
         {
           "file": "src/overlays/shared/rendering_view_0025fcb8.c",
           "functions": 13,
-          "matching_c": 4,
+          "matching_c": 5,
           "bytes_total": 6032,
-          "bytes_matching_c": 964
+          "bytes_matching_c": 1604
         },
         {
           "file": "src/overlays/shared/rendering_00260130.c",
@@ -2788,9 +2788,9 @@
         {
           "file": "src/overlays/shared/rendering_00269290.c",
           "functions": 60,
-          "matching_c": 37,
+          "matching_c": 40,
           "bytes_total": 31940,
-          "bytes_matching_c": 12556
+          "bytes_matching_c": 14884
         },
         {
           "file": "src/overlays/shared/math_interpolation_0026d930.c",
@@ -2802,9 +2802,9 @@
         {
           "file": "src/overlays/shared/rendering_002712b8.c",
           "functions": 54,
-          "matching_c": 39,
+          "matching_c": 43,
           "bytes_total": 19432,
-          "bytes_matching_c": 11784
+          "bytes_matching_c": 14964
         },
         {
           "file": "src/overlays/shared/rendering_view_00275690.c",
@@ -3033,9 +3033,9 @@
         {
           "file": "src/overlays/shared/gameplay_space_0028e8a0.c",
           "functions": 6,
-          "matching_c": 3,
+          "matching_c": 4,
           "bytes_total": 2280,
-          "bytes_matching_c": 1012
+          "bytes_matching_c": 1796
         },
         {
           "file": "src/overlays/shared/unclassified_00291918.c",
@@ -3075,9 +3075,9 @@
         {
           "file": "src/overlays/shared/unclassified_00295100.c",
           "functions": 28,
-          "matching_c": 9,
+          "matching_c": 12,
           "bytes_total": 22096,
-          "bytes_matching_c": 1824
+          "bytes_matching_c": 4280
         },
         {
           "file": "src/overlays/shared/unclassified_00297d10.c",
@@ -3194,9 +3194,9 @@
         {
           "file": "src/overlays/shared/unclassified_002a4830.c",
           "functions": 31,
-          "matching_c": 10,
+          "matching_c": 11,
           "bytes_total": 23896,
-          "bytes_matching_c": 3992
+          "bytes_matching_c": 4664
         },
         {
           "file": "src/overlays/shared/unclassified_002a7e40.c",
@@ -3208,9 +3208,9 @@
         {
           "file": "src/overlays/shared/unclassified_002aa670.c",
           "functions": 18,
-          "matching_c": 7,
+          "matching_c": 10,
           "bytes_total": 31328,
-          "bytes_matching_c": 2664
+          "bytes_matching_c": 4908
         },
         {
           "file": "src/overlays/shared/unclassified_002aea70.c",
@@ -3243,9 +3243,9 @@
         {
           "file": "src/overlays/shared/unclassified_002b2100.c",
           "functions": 28,
-          "matching_c": 6,
+          "matching_c": 8,
           "bytes_total": 29584,
-          "bytes_matching_c": 2128
+          "bytes_matching_c": 3540
         },
         {
           "file": "src/overlays/shared/unclassified_002b3840.c",
@@ -3285,9 +3285,9 @@
         {
           "file": "src/overlays/shared/unclassified_002b94d0.c",
           "functions": 29,
-          "matching_c": 11,
+          "matching_c": 13,
           "bytes_total": 26884,
-          "bytes_matching_c": 2404
+          "bytes_matching_c": 3636
         },
         {
           "file": "src/overlays/shared/unclassified_002bc210.c",
@@ -3299,16 +3299,16 @@
         {
           "file": "src/overlays/shared/unclassified_002bffa8.c",
           "functions": 26,
-          "matching_c": 9,
+          "matching_c": 11,
           "bytes_total": 32156,
-          "bytes_matching_c": 3336
+          "bytes_matching_c": 4896
         },
         {
           "file": "src/overlays/shared/unclassified_002c8440.c",
           "functions": 25,
-          "matching_c": 7,
+          "matching_c": 9,
           "bytes_total": 30684,
-          "bytes_matching_c": 1908
+          "bytes_matching_c": 3368
         },
         {
           "file": "src/overlays/shared/unclassified_002c8830.c",
@@ -3334,9 +3334,9 @@
         {
           "file": "src/overlays/shared/unclassified_002d7f88.c",
           "functions": 33,
-          "matching_c": 15,
+          "matching_c": 17,
           "bytes_total": 29424,
-          "bytes_matching_c": 3664
+          "bytes_matching_c": 4996
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002de370.c",
@@ -3348,9 +3348,9 @@
         {
           "file": "src/overlays/shared/gameplay_vendor_002df730.c",
           "functions": 61,
-          "matching_c": 21,
+          "matching_c": 24,
           "bytes_total": 32004,
-          "bytes_matching_c": 4056
+          "bytes_matching_c": 6224
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002e22d8.c",
@@ -3383,9 +3383,9 @@
         {
           "file": "src/overlays/shared/gameplay_vendor_002e9010.c",
           "functions": 41,
-          "matching_c": 21,
+          "matching_c": 23,
           "bytes_total": 18972,
-          "bytes_matching_c": 5048
+          "bytes_matching_c": 6380
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002ec308.c",
@@ -4694,14 +4694,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1660,
+    "matching_c": 1701,
     "intentional_asm": 249,
-    "pending_c": 2873,
+    "pending_c": 2832,
     "bytes_total": 3655312,
-    "bytes_matching_c": 376032,
+    "bytes_matching_c": 406848,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3182948,
-    "c_exact_percent_of_recoverable": 10.5657,
-    "c_fuzzy_percent_of_recoverable": 12.6107
+    "bytes_pending_c": 3152132,
+    "c_exact_percent_of_recoverable": 11.4316,
+    "c_fuzzy_percent_of_recoverable": 13.4766
   }
 }
