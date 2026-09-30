@@ -22,7 +22,14 @@ void FUN_L00_00259858(char *a, int b, int c, float d) {
     *(int *)(a + 0x20) = 0;
     FUN_001f99f8(a);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259888.s", FUN_L00_00259888);
+#include "qcopy.h"
+void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
+    *(int *)(a + 0x10) = b;
+    *(int *)(a + 0x14) = c;
+    *(float *)(a + 0x1C) = d;
+    *(int *)(a + 0x20) = 1;
+    qcopy(a, q);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002598b0.s", FUN_L00_002598b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002599e8.s", FUN_L00_002599e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259a88.s", FUN_L00_00259a88);

@@ -2,4 +2,19 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ed18.s", FUN_L00_0024ed18);
+typedef struct { s32 a; s16 h; } K0024ed18;
+typedef struct { u8 pad[0x10]; u8 n; u8 pad2[0xB]; K0024ed18 *k[1]; } O0024ed18;
+s32 FUN_001fa6d0(f32);
+s32 FUN_L00_0024ed18(O0024ed18 *o, f32 t) {
+    s16 v = FUN_001fa6d0(t * 16.0f);
+    s32 i;
+    for (i = 0; i < o->n; i++) {
+        if (v < o->k[i]->h) {
+            if (i > 0) {
+                if (v - o->k[i - 1]->h < o->k[i]->h - v) i = i - 1;
+            }
+            return i;
+        }
+    }
+    return -1;
+}

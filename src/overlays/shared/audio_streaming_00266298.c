@@ -9,5 +9,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266340.s", FUN_L00_00266340);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266448.s", FUN_L00_00266448);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002667d0.s", FUN_L00_002667d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002667f4.s", FUN_L00_002667f4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266858.s", FUN_L00_00266858);
+typedef struct { s32 a, b, c, d; } E00266858;
+extern E00266858 D_0013D5B0[];
+s32 FUN_L00_002667d0(s32, s32);
+void FUN_L00_00266858(s32 a, s32 b) {
+    s32 i = FUN_L00_002667d0(a, b);
+    if (i != -1) D_0013D5B0[i].d = b;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002668a0.s", FUN_L00_002668a0);

@@ -5,7 +5,24 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269290.s", FUN_L00_00269290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002694f8.s", FUN_L00_002694f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269958.s", FUN_L00_00269958);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269a70.s", FUN_L00_00269a70);
+typedef struct { f32 v[4]; s32 x10; s32 x14; s16 x18; s16 x1a; s32 x1c; } S00269a70;
+typedef struct { u8 p0[4]; s32 x4; u8 x8; u8 p9; s16 xa; f32 xc; u8 p10[0x10]; S00269a70 s; } O00269a70;
+extern f32 D_0015ED60;
+f32 FUN_001fa6c0(s32);
+void FUN_001f9a68(void *, void *, f32);
+void FUN_001f9a10(void *, void *, void *);
+s32 FUN_L00_002371e0(s32, s32, f32);
+s32 FUN_001f9770(void *);
+void FUN_L00_00267a08(void *);
+void FUN_L00_00269a70(O00269a70 *o) {
+    S00269a70 *s = &o->s;
+    o->xc = FUN_001fa6c0(s->x18 * (s->x1c - o->xa) / s->x1c + s->x1a) * 1000.0f;
+    FUN_001f9a68(s, s, D_0015ED60 * -0.019999980926513672f + 1.0f);
+    FUN_001f9a10(o->p10, o->p10, s);
+    o->x8++;
+    o->x4 = FUN_L00_002371e0(s->x14, s->x10, o->xa / FUN_001fa6c0(s->x1c));
+    if (FUN_001f9770(&o->xa)) FUN_L00_00267a08(o);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269b70.s", FUN_L00_00269b70);
 #define NOT_SDA
 
@@ -48,7 +65,32 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026bed0.s", FUN_L00_0026bed0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c088.s", FUN_L00_0026c088);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c3d0.s", FUN_L00_0026c3d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c558.s", FUN_L00_0026c558);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c6e8.s", FUN_L00_0026c6e8);
+#include "sda.h"
+#include "qcopy.h"
+typedef struct { u8 x0; u8 x1; u8 x2; u8 x3; u32 x4; u8 x8; u8 x9; u8 pa[2]; u32 xc; f32 a[4]; f32 b[4]; f32 c[4]; } E0026c6e8;
+extern u8 *D_L00_001B20CC NOT_SDA;
+E0026c6e8 *FUN_L00_002678b8(s32);
+s32 FUN_00213260(s32);
+s32 FUN_001fa6d0(f32);
+void FUN_001f9a28(void *, void *, void *);
+void FUN_L00_0026c6e8(void *pos, void *vel) {
+    E0026c6e8 *e = FUN_L00_002678b8(0x13);
+    u32 v;
+    if (e == 0) return;
+    v = (FUN_00213260(6) * 6 + 0x40) | 0x78404000;
+    e->x4 = v;
+    e->xc = v;
+    e->x9 = FUN_001fa6d0(2.0f) + 0x20;
+    e->x3 = 0x48;
+    e->x1 = 3;
+    e->x2 = *D_L00_001B20CC;
+    qcopy(e->a, pos);
+    qcopy(e->c, vel);
+    FUN_001f9a28(e->b, pos, e->c);
+    FUN_001f9a28(e->b, e->b, e->c);
+    e->a[3] = 0.09f;
+    e->b[3] = 0.5f;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

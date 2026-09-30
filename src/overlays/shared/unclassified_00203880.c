@@ -32,4 +32,6 @@ void FUN_L00_002039a0(void) {
         *(int *)(D_L00_00179410 + 4) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203a28.s", FUN_L00_00203a28);
+typedef struct { s32 a; u32 b; } P;
+extern P D_00141968[];
+void FUN_L00_00203a28(void) { s32 i; for (i = 0; i < 0x94; i++) D_00141968[i].b &= 0x7FFFFFFF; }

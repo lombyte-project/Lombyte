@@ -3,5 +3,7 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f8ec8.s", FUN_L00_001f8ec8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f8f50.s", FUN_L00_001f8f50);
+extern s32 D_L00_0015F5D8;
+void FUN_L00_002772c0(s32);
+void FUN_L00_001f8f50(void) { if (D_L00_0015F5D8 == 0) FUN_L00_002772c0(0); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f8f78.s", FUN_L00_001f8f78);

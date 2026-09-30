@@ -26,7 +26,9 @@ int FUN_L00_0028ddd8(int a, int b, int c, int d) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028de68.s", FUN_L00_0028de68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df30.s", FUN_L00_0028df30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df38.s", FUN_L00_0028df38);
+typedef struct { s32 w[0x1C]; } E0028df38;
+extern E0028df38 D_0013E550[];
+s32 FUN_L00_0028df38(s32 i, s32 v) { E0028df38 *p = &D_0013E550[i]; p->w[0x21] = v; return 1; }
 #define NOT_SDA
 
 #define MACRO_ADDR

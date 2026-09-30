@@ -2,7 +2,32 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d238.s", FUN_L00_0025d238);
+#include "eetypes.h"
+typedef union { u128 q; f32 f[4]; } V0025d238;
+void FUN_001f9a28(void *, void *, void *);
+f32 FUN_001f99c0(f32);
+void FUN_001f9a68(void *, void *, f32);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
+    V0025d238 t0, t1;
+    f32 *pv, *p0, *p1;
+    V0025d238 *a = &t0, *b = &t1;
+    s32 i;
+    t0.q = src->q;
+    p0 = t0.f;
+    pv = v->f;
+    p1 = t1.f;
+    for (i = 2; i >= 0; i--) {
+        if (*pv < 0.0f) {
+            FUN_001f9a28(b, v, a);
+            FUN_001f9a68(b, b, FUN_001f99c0((*p0 - 0.1f) / *p1));
+            FUN_001f9a10(v, a, b);
+        }
+        pv++;
+        p1++;
+        p0++;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d458.s", FUN_L00_0025d458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d538.s", FUN_L00_0025d538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7a0.s", FUN_L00_0025d7a0);

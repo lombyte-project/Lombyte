@@ -2,4 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00201720.s", FUN_L00_00201720);
+#include "sda.h"
+extern s32 D_L00_00173054 NOT_SDA;
+s32 FUN_L00_00201720(void) { return D_L00_00173054; }

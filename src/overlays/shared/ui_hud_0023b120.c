@@ -2,7 +2,28 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023b120.s", FUN_L00_0023b120);
+typedef struct { u8 p[6]; u8 lw; u8 lh; } R0023b120;
+typedef struct { s16 a; s16 k; } T0023b120;
+typedef struct { u8 p[0x20]; T0023b120 *tab; R0023b120 *rec; } G0023b120;
+typedef struct { u8 p[0x48]; s16 x; s16 y; } O0023b120;
+extern G0023b120 D_L00_0017E4D8;
+void FUN_001ffc30(s32, s32, s32, s32, s32, s32);
+void FUN_L00_0023b120(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
+    s32 w0, h0, w, h;
+    R0023b120 *r;
+    if (id < 0) return;
+    x += o->x;
+    y += o->y;
+    r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
+    w0 = 1 << r->lw;
+    h0 = 1 << r->lh;
+    w = w0;
+    h = h0;
+    if (flags & 1) { x -= w >> 1; y -= h >> 1; }
+    if (flags & 2) { x += w >> 2; y += h >> 2; w >>= 1; h >>= 1; }
+    if (flags & 4) { x -= w0 >> 1; y -= h0 >> 1; w <<= 1; h <<= 1; }
+    FUN_001ffc30(id, x, y, w, h, extra);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023b6c0.s", FUN_L00_0023b6c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023bac0.s", FUN_L00_0023bac0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023cdb0.s", FUN_L00_0023cdb0);

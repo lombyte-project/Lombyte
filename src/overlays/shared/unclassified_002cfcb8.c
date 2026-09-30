@@ -66,7 +66,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5800.s", FUN_L00_002d5800);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5830.s", FUN_L00_002d5830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5988.s", FUN_L00_002d5988);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5de8.s", FUN_L00_002d5de8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6bf0.s", FUN_L00_002d6bf0);
+typedef struct { u8 p0[0x10]; f32 r[4]; f32 a[4]; s32 c[4]; f32 x40, x44, x48, x4c; } M002d6bf0;
+typedef struct { u8 p0[0x78]; M002d6bf0 *m; } O002d6bf0;
+s32 FUN_00213260(s32);
+s32 FUN_001f96f8(s32);
+void FUN_L00_002d6bf0(O002d6bf0 *o) {
+    M002d6bf0 *m = o->m;
+    s32 i;
+    for (i = 0; i < 4; i++) m->r[i] = FUN_00213260(0xFF);
+    m->a[0] = -1.0f;
+    m->a[1] = -2.25f;
+    m->a[2] = 1.25f;
+    m->a[3] = 2.5f;
+    for (i = 0; i < 4; i++) m->c[i] = FUN_001f96f8(i * 0x40 + 0x3F);
+    m->x40 = 2.5f;
+    m->x44 = 3.0f;
+    m->x4c = 2.5f;
+    m->x48 = 3.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6cd0.s", FUN_L00_002d6cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6f28.s", FUN_L00_002d6f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);

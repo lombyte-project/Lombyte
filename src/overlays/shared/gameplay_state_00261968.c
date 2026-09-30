@@ -44,7 +44,28 @@ void FUN_L00_00262500(int a, char *b) {
         *(short *)(b + 0x130) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262528.s", FUN_L00_00262528);
+typedef struct { u8 p0[0x23]; u8 x23; u8 p24[0xC]; u8 x30; u8 x31; u16 x32; s16 x34; u8 p36[2]; u64 x38; u8 p40[0x32]; u8 x72; u8 p73[0x21]; s32 x94; u8 p98[0xE]; s16 xa6; } E00262528;
+typedef struct { u8 p0[0x100]; s32 x100[4]; s32 x110[4]; E00262528 *x120[4]; u8 p130[4]; E00262528 *x134; s32 x138; } O00262528;
+E00262528 *FUN_0020c4f8(s32);
+void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
+    E00262528 *e;
+    if (o->x138 == 4) return;
+    if (b >= 9) return;
+    e = FUN_0020c4f8(o->x134->xa6);
+    if (e == 0) return;
+    e->x32 = o->x134->x32;
+    e->x38 = o->x134->x38;
+    e->x31 = 1;
+    e->x34 = 0x80A;
+    e->x30 = 0;
+    e->x94 = 0;
+    if (e->xa6 == 0) e->x72 = 0;
+    e->x23 = a;
+    o->x110[o->x138] = b;
+    o->x100[o->x138] = a;
+    o->x120[o->x138] = e;
+    o->x138++;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262608.s", FUN_L00_00262608);
 #define NOT_SDA
 

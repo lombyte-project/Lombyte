@@ -94,7 +94,7 @@ int FUN_L00_00205000(int a) {
         return D_L00_00179AC0[i].v;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002050b8.s", FUN_L00_002050b8);
+s32 FUN_L00_002050b8(s32 a) { return a; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002050c0.s", FUN_L00_002050c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205110.s", FUN_L00_00205110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020513c.s", FUN_L00_0020513c);
@@ -317,7 +317,18 @@ void FUN_L00_002091d8(float x, float y, float z) {
     buf[2] = 0.6f;
     FUN_L00_002090d0(buf, x, y, z);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209240.s", FUN_L00_00209240);
+#include "sda.h"
+typedef struct { s32 v[9]; } T00209240;
+extern T00209240 D_L00_001E7C10;
+extern s32 D_001413D0 NOT_SDA;
+extern u8 D_0013FE10[];
+void FUN_L00_0024f8f0(s32, s32, T00209240 *, void *);
+void FUN_L00_00209240(s32 a) {
+    T00209240 t;
+    if (a == 0) a = D_001413D0;
+    t = D_L00_001E7C10;
+    FUN_L00_0024f8f0(a, 9, &t, D_0013FE10);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002092c8.s", FUN_L00_002092c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209540.s", FUN_L00_00209540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00209638.s", FUN_L00_00209638);

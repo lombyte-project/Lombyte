@@ -172,7 +172,26 @@ void FUN_L00_002eba18(char *o) {
     }
     *(char *)(o + 0x7D) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebb00.s", FUN_L00_002ebb00);
+#include "qcopy.h"
+typedef struct { u8 pad[0x50]; u8 x50[0x20]; u8 *m; } O002ebb00;
+extern u8 D_0013F3D0[];
+void FUN_L00_001eb0b0(void *);
+void FUN_L00_001eb0c8(void *, void *, f32);
+void FUN_L00_002eb3b0(O002ebb00 *);
+void FUN_L00_002ebb00(O002ebb00 *o) {
+    u8 *m = o->m;
+    u8 *a = m + 0xB0;
+    u8 *m2;
+    qcopy(a, D_0013F3D0);
+    *(f32 *)(a + 8) += 2.0f;
+    qcopy(m + 0xC0, D_0013F3D0 + 0x10);
+    m2 = o->m;
+    qcopy(m2 + 0x80, a);
+    FUN_L00_001eb0b0(m2 + 0x14);
+    *(f32 *)(m2 + 0x1C) = 4.64f;
+    FUN_L00_001eb0c8(o->x50, m2 + 0x14, 0.0f);
+    FUN_L00_002eb3b0(o);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebbd8.s", FUN_L00_002ebbd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec4a8.s", FUN_L00_002ec4a8);

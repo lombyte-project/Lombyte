@@ -37,7 +37,25 @@ void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258110.s", FUN_L00_00258110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258278.s", FUN_L00_00258278);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002583e0.s", FUN_L00_002583e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002583f0.s", FUN_L00_002583f0);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef union { u128 q; f32 f[4]; } V002583f0;
+typedef struct { u8 pad[0x18]; s32 x18; s32 x1c; } G002583f0;
+extern G002583f0 D_L00_00173E40;
+s32 FUN_L00_001efc70(void *, void *, s32, s32, s32);
+s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
+    V002583f0 t0, t1;
+    s32 r;
+    qcopy(&t0, pos);
+    t0.f[2] += up;
+    qcopy(&t1, pos);
+    t1.f[2] -= down;
+    if (t1.f[2] < 0.0f) t1.f[2] = 0.0f;
+    r = FUN_L00_001efc70(&t0, &t1, 0x22, a, 0);
+    if (D_L00_00173E40.x1c < 0) r = 0;
+    if (flag && D_L00_00173E40.x18 != 0) r = 0;
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258490.s", FUN_L00_00258490);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
 float FUN_001fa6c0(int);
