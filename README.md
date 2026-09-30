@@ -13,7 +13,7 @@
 </p>
 
 > [!NOTE]
-> Yeah, this project is obviously AI-driven — that’s pretty apparent... <br>
+> Yeah, this project is obviously AI-driven— that’s pretty apparent... <br>
 > AI is what makes it possible for me to work on this project at all, while I still make the calls<br>
 on the data structure, tooling, and overall direction, with all PRs reviewed manually.
 
