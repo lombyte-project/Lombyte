@@ -1025,7 +1025,7 @@ def render_svg(
     # The drawer: the executable, its own percentage over its dimmed treemap.
     dx0, dy0 = margin_px, header_px
     ddx, ddy = width - 2 * margin_px, drawer_height
-    inset = 6
+    inset = 0  # the treemap fills the drawer edge to edge: no frame around it
     lines.append(
         f'<rect x="{dx0}" y="{dy0}" width="{ddx}" height="{ddy}" '
         f'fill="url(#drawer-face)">'
