@@ -10,7 +10,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238b18.s", FUN_L00_00238b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238b80.s", FUN_L00_00238b80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238f88.s", FUN_L00_00238f88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002395b0.s", FUN_L00_002395b0);
+typedef struct { short a, b, c, d; } Q2395b0;
+extern Q2395b0 D_L00_0015FAB0;
+int FUN_001f96f8(int);
+void FUN_L00_00235c80();
+void FUN_L00_002395b0(char *p) {
+    int r = FUN_001f96f8(0xB4);
+    *(int *)(p + 0x7C) = r + 30;
+    *(int *)(p + 0x58) = 64;
+    *(int *)(p + 0x5C) = 64;
+    *(short *)(p + 0x48) = 32;
+    *(short *)(p + 0x4A) = 0;
+    FUN_L00_00235c80(p);
+    *(Q2395b0 **)(p + 0x80) = &D_L00_0015FAB0;
+    D_L00_0015FAB0.d = 1;
+    D_L00_0015FAB0.a = 0;
+    D_L00_0015FAB0.b = 0;
+    D_L00_0015FAB0.c = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239630.s", FUN_L00_00239630);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239810.s", FUN_L00_00239810);
 #define NOT_SDA

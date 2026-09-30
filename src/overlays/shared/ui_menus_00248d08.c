@@ -16,7 +16,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249780.s", FUN_L00_00249780);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002497cc.s", FUN_L00_002497cc);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249908.s", FUN_L00_00249908);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249998.s", FUN_L00_00249998);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002499ec.s", FUN_L00_002499ec);
+int FUN_L00_002499ec(float a, float b, float c) { return c <= 180.0f; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249a18.s", FUN_L00_00249a18);
 #define NOT_SDA
 

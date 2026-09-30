@@ -6,4 +6,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e008.s", FUN_L00_0023e008);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e5e0.s", FUN_L00_0023e5e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e738.s", FUN_L00_0023e738);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e838.s", FUN_L00_0023e838);
+extern char D_L00_001802C0[];
+extern char D_L00_001804C0[];
+void FUN_00201f88();
+void FUN_001f9810();
+void FUN_L00_0023e838(int i) {
+    FUN_00201f88();
+    FUN_001f9810(D_L00_001802C0 + i * 32, 32);
+    FUN_001f9810(D_L00_001804C0 + i * 48, 48);
+}

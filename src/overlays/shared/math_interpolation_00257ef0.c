@@ -40,7 +40,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002583e0.s", FUN_L00_002583e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002583f0.s", FUN_L00_002583f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258490.s", FUN_L00_00258490);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258ad0.s", FUN_L00_00258ad0);
+float FUN_001fa6c0(int);
+void FUN_L00_00258830(int, int, float, float, float, int);
+void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
+    FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258b50.s", FUN_L00_00258b50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259028.s", FUN_L00_00259028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002591a0.s", FUN_L00_002591a0);
@@ -96,4 +100,22 @@ void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
     t[2] -= ConvertIntegerToFloat((d * d + d) >> 1) * f;
     FUN_001f9a10(a, b, t);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002595a0.s", FUN_L00_002595a0);
+float FUN_001f99c0(float);
+float FUN_001f9988(float);
+int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
+    float d = b * b - a * 4.0f * c;
+    float s, t;
+    if (d == 0.0f) {
+        *r0 = -b / (a + a);
+        return 1;
+    }
+    s = FUN_001f9988(FUN_001f99c0(d));
+    *r0 = (-b + s) / (a + a);
+    *r1 = (-b - s) / (a + a);
+    if (*r0 < *r1) {
+        t = *r0;
+        *r1 = t;
+        *r0 = (-b - s) / (a + a);
+    }
+    { int r = 0; if (0.0f < d) r = 2; return r; }
+}

@@ -4,7 +4,37 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4830.s", FUN_L00_002a4830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4890.s", FUN_L00_002a4890);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4cd8.s", FUN_L00_002a4cd8);
+extern int D_L00_00161390;
+#define SDA __attribute__((sda))
+extern int D_L00_00161368 SDA, D_L00_0016136C SDA, D_L00_00161370 SDA;
+extern int D_L00_0016137C SDA, D_L00_00161380 SDA, D_L00_00161388;
+extern float D_L00_00161374 SDA, D_L00_00161378 SDA, D_L00_00161384 SDA, D_L00_0016138C SDA;
+extern float D_0015ED60;
+int FUN_001f96f8(int);
+float FUN_001fa6c0(int);
+void FUN_L00_002a4cd8(unsigned char *p) {
+    float one;
+    int r;
+    switch (p[0x20]) {
+    case 0:
+        D_L00_00161390 = 0;
+        p[0x20] = 1;
+        p[0x30] = 0xFF;
+        one = 1.0f;
+        D_L00_0016137C = FUN_001f96f8(D_L00_00161368);
+        r = FUN_001f96f8(D_L00_0016136C);
+        D_L00_00161380 = r;
+        D_L00_00161384 = one / FUN_001fa6c0(r);
+        r = FUN_001f96f8(D_L00_00161370);
+        D_L00_00161388 = r;
+        D_L00_0016138C = one / (float)r;
+        break;
+    case 1:
+        D_L00_00161374 -= D_L00_00161378 * D_0015ED60;
+        if (D_L00_00161374 <= -8.0f) D_L00_00161374 += 8.0f;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4dc8.s", FUN_L00_002a4dc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4de0.s", FUN_L00_002a4de0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4e48.s", FUN_L00_002a4e48);

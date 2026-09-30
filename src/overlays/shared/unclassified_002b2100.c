@@ -37,7 +37,25 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b57f0.s", FUN_L00_002b57f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b58d8.s", FUN_L00_002b58d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5b20.s", FUN_L00_002b5b20);
+extern int D_00141330[];
+extern int D_L00_00167014[];
+void FUN_L00_002eba18();
+void FUN_L00_002223f8();
+void FUN_L00_002b57f0();
+void FUN_L00_00203b78();
+void FUN_0020c828();
+void FUN_L00_002b5b20(void *a, char **b) {
+    char *x = *(char **)(*b + 0x78);
+    if (x) *(int *)(x + 4) = 0;
+    D_00141330[0] = 0;
+    FUN_L00_002eba18(*(int *)((char *)b + 0x14));
+    *(int *)((char *)b + 0x14) = 0;
+    FUN_L00_002223f8(0, 1);
+    FUN_L00_002b57f0(a, 1);
+    FUN_L00_00203b78();
+    FUN_0020c828(a);
+    D_L00_00167014[0] = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5ba0.s", FUN_L00_002b5ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5d00.s", FUN_L00_002b5d00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);

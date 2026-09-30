@@ -2,4 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00277df8.s", FUN_L00_00277df8);
+extern int D_0015EE90;
+extern char D_L00_001B8910[];
+extern char D_L00_001B8940[];
+int FUN_L00_00277df8(char *p) { *(char **)(p + 0x34) = D_0015EE90 ? D_L00_001B8910 : D_L00_001B8940; return 0; }

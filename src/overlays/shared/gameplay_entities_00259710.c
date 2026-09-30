@@ -54,7 +54,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025a420.s", FUN_L00_0025a420);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025a454.s", FUN_L00_0025a454);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025a478.s", FUN_L00_0025a478);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025a9f8.s", FUN_L00_0025a9f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025ab48.s", FUN_L00_0025ab48);
+typedef int q128 __attribute__((mode(TI)));
+typedef union { q128 q; float f[4]; } U25ab48;
+float FUN_L00_001ff8b0(float, float);
+float FUN_001f9b20(void *);
+void FUN_L00_0025ab48(q128 *v, float *ang, float *s1, float *s2) {
+    U25ab48 t;
+    t.q = *v;
+    if (t.f[3] != 5627.9248046875f) {
+        *ang = FUN_L00_001ff8b0(t.f[0], t.f[1]);
+        return;
+    }
+    *ang = FUN_L00_001ff8b0(t.f[0], t.f[1]);
+    *s1 *= FUN_001f9b20(&t);
+    t.f[3] = 0;
+    *s2 *= t.f[2];
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

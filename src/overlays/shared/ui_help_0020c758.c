@@ -277,7 +277,24 @@ void FUN_L00_00211cf8(float x, float y, float z) {
     FUN_001fa378(u, u, t);
     FUN_00214598(u, D_0013E533 + 0xEAD);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211d78.s", FUN_L00_00211d78);
+typedef float V4_211d78[4] __attribute__((aligned(16)));
+extern char D_0013F4C0[];
+void FUN_001f9d20(void *, void *, void *);
+float FUN_L00_001ff8b0(float, float);
+void FUN_L00_00211cf8(float, float, float);
+extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+void FUN_L00_00211d78(int a, float x, float y, float z) {
+    V4_211d78 t;
+    float out;
+    float zero = 0.0f;
+    char *g = D_0013F4C0;
+    float r;
+    FUN_001f9d20(t, g, g - 0x130);
+    r = FUN_L00_001ff8b0(t[0], t[1]);
+    out = zero;
+    *(float *)(g + 0x18) = FUN_L00_0025bc98((char *)&out, g + 0x14, a, r, x, y, z);
+    FUN_L00_00211cf8(zero, zero, out);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

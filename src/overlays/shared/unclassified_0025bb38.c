@@ -18,7 +18,15 @@ float FUN_L00_0025bb38(int n, float x, float y) {
     if (d > 0.0f) return d - 6.2831855f;
     return d + 6.2831855f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bc00.s", FUN_L00_0025bc00);
+extern float bb38_fif(float, void *, float) __asm__("FUN_L00_0025bb38");
+float FUN_001fa580(float, float);
+void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
+    float r = bb38_fif(a, o, *p);
+    if (lim < r) r = lim;
+    else if (r < -lim) r = -lim;
+    *p = FUN_001fa580(*p, r);
+    bb38_fif(a, o, *p);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bc98.s", FUN_L00_0025bc98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025be00.s", FUN_L00_0025be00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bfe0.s", FUN_L00_0025bfe0);
