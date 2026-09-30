@@ -75,28 +75,7 @@ BACKGROUND = "#0d1117"
 STROKE = "#0d1117"
 TEXT = "#e8edf5"
 MUTED = "#a6adc8"
-# RG Future (assets/fonts/, regular and italic) is embedded in the SVG so the
-# map renders the same everywhere it is shown as an image; the glyphs it lacks
-# (punctuation, the middle dot, %) fall back to the system sans-serif.
-FONT = "'RG Future', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-FONT_FILES = (("normal", "rg-future.otf"), ("italic", "rg-future-italic.otf"))
-REPO_ROOT = Path(__file__).resolve().parents[1]
-
-
-def font_face_style(repo: Path) -> str:
-    """A <style> with @font-face rules for the fonts under assets/fonts/, each
-    as a data: URL; empty when the files are absent (a checkout without them
-    renders in the fallback fonts)."""
-    import base64
-    rules = []
-    for style, name in FONT_FILES:
-        path = repo / "assets" / "fonts" / name
-        if not path.is_file():
-            continue
-        data = base64.b64encode(path.read_bytes()).decode("ascii")
-        rules.append("@font-face{font-family:'RG Future';font-style:%s;font-weight:400;"
-                     "src:url(data:font/otf;base64,%s) format('opentype');}" % (style, data))
-    return f"<style>{''.join(rules)}</style>" if rules else ""
+FONT = "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
 # 12x12 hex-nut "bolt" mark (the series' currency) used as the title glyph.
 BOLT_PATH = (
@@ -963,7 +942,6 @@ def render_svg(
         f'viewBox="0 0 {width} {height}" role="img" '
         f'aria-label="Decompilation progress of the boot ELF (SCUS_971.99) and the 19 level overlays">',
         f"<title>{esc(title)}</title>",
-        font_face_style(REPO_ROOT),
         f'<rect width="{width}" height="{height}" fill="{BACKGROUND}"/>',
         '<defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0">'
         f'<stop offset="0" stop-color="{PLATE}"/>'
@@ -985,7 +963,7 @@ def render_svg(
     if ampersand:
         title_spans += f'<tspan fill="{CHROME}"> &amp; {esc(clank)}</tspan>'
     if separator:
-        title_spans += f'<tspan fill="{MUTED}" font-weight="500" font-style="italic"> - {esc(tail)}</tspan>'
+        title_spans += f'<tspan fill="{MUTED}" font-weight="500"> - {esc(tail)}</tspan>'
     mark = 10
     lines.append(
         f'<path d="{BOLT_PATH}" fill="{ORANGE}" fill-rule="evenodd" '
@@ -1002,7 +980,7 @@ def render_svg(
         f'fill="{MUTED}">{len(exact) + ov_exact:,} of {total_units + len(overlays):,} functions in C '
         f"&#183; executable and 19 level overlays</text>"
     )
-    legend_font = 11
+    legend_font = 10
     swatch = 10
     gap = 15
     legend_rows = (
@@ -1040,7 +1018,7 @@ def render_svg(
     )
     lines.append(
         f'<text x="{status_x}" y="52" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="10" fill="{MUTED}">'
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
         f"C_EXACT &#183; executable + overlays</text>"
     )
 
@@ -1123,7 +1101,7 @@ def render_svg(
             f'<text x="{label_x}" y="{y + 4}" font-family="{esc(FONT)}" font-size="11">'
             f'<tspan fill="{MUTED}">{number}</tspan>'
             f'<tspan fill="{TEXT}" font-weight="700">{esc(branch["planet"])}</tspan>'
-            f'<tspan fill="{MUTED}" font-style="italic"> &#183; {esc(branch["description"])}</tspan></text>'
+            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"])}</tspan></text>'
         )
         pct = branch["c_exact_percent"]
         pct_fill = ORANGE if pct >= 100.0 else (PARTIAL_ORANGE if pct > 0 else MUTED)
@@ -1167,12 +1145,12 @@ def render_svg(
                      f"{exact_bytes:,} of {total_bytes:,} B in C")
     lines.append(
         f'<text x="{margin_px}" y="{height - 8}" '
-        f'font-family="{esc(FONT)}" font-size="10" fill="{MUTED}" opacity="0.85">'
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
         f"{progress_text}</text>"
     )
     lines.append(
         f'<text x="{width - margin_px}" y="{height - 8}" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="10" fill="{MUTED}" opacity="0.85">'
+        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
         f"generated {generated} &#183; scripts/generate_treemap.py</text>"
     )
     lines.append("</svg>")
