@@ -203,7 +203,91 @@ int FUN_L00_002c5be8(char *o) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c5dc8.s", FUN_L00_002c5dc8);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_2c5dc8;
+typedef int Q_2c5dc8 __attribute__((mode(TI)));
+typedef struct { float u, v; } UV_2c5dc8;
+typedef struct {
+    V_2c5dc8 corner[4];
+    unsigned int color[4];
+    UV_2c5dc8 uv[4];
+    long x70, tex, x80, x88;
+} Quad_2c5dc8;
+typedef struct { char pad0[0x14]; char *x14; float x18, x1c, x20; } Vars_2c5dc8;
+extern V_2c5dc8 D_L00_00166DC0_2c5dc8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+long tex_2c5dc8(int) __asm__("FUN_001f44b8");
+void pos_2c5dc8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+void sub_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a28");
+void add_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a10");
+float len_2c5dc8(void *) __asm__("FUN_001f9af0");
+void cross_2c5dc8(void *, void *, void *) __asm__("FUN_001f9ad8");
+float f9dc8_2c5dc8(float) __asm__("FUN_001f9dc8");
+float f9de0_2c5dc8(float) __asm__("FUN_001f9de0");
+float fa610_2c5dc8(float) __asm__("FUN_001fa610");
+void scale_2c5dc8(void *, void *, float) __asm__("FUN_L00_001ff500");
+void draw_2c5dc8(void *, int, int) __asm__("FUN_L00_001fd228");
+void FUN_L00_002c5dc8(char *m) {
+    Quad_2c5dc8 q;
+    V_2c5dc8 b, c, a, d, f, g, e, h, k;
+    Vars_2c5dc8 *v;
+    unsigned int col;
+    float half = 0.05f;
+    float len, t, step, x, s, amp, wob;
+    if (m == 0) return;
+    v = *(Vars_2c5dc8 **)(m + 0x78);
+    if (v == 0) return;
+    q.tex = tex_2c5dc8(0xF);
+    col = 0x80808080; q.color[3] = col; q.color[2] = col; q.color[1] = col; q.color[0] = col;
+    q.x80 = 0xFF9000000260L;
+    q.x70 = 5;
+    q.x88 = 0xFF00000044L;
+    q.uv[0].u = 0.0f;
+    q.uv[0].v = 0.0f;
+    q.uv[1].u = 1.0f;
+    q.uv[1].v = 0.0f;
+    q.uv[2].u = 0.0f;
+    q.uv[2].v = 1.0f;
+    q.uv[3].u = 1.0f;
+    q.uv[3].v = 1.0f;
+    pos_2c5dc8(m, 0, &a);
+    qcopy(&b, v->x14 + 0x10);
+    qcopy(&c, &b);
+    sub_2c5dc8(&d, &a, &b);
+    t = 0.0f;
+    len = len_2c5dc8(&d);
+    qcopy(&e, &d);
+    e.f[2] -= 0.1f;
+    cross_2c5dc8(&f, &d, &e);
+    cross_2c5dc8(&g, &d, &f);
+    qcopy(&q.corner[0], &b);
+    qcopy(&q.corner[2], &b);
+    q.corner[0].f[2] -= half;
+    q.corner[2].f[2] += half;
+    wob = f9dc8_2c5dc8(fa610_2c5dc8(v->x18));
+    while (t < len) {
+        step = 0.2f;
+        if (len - t < step) step = len - t;
+        t += step;
+        x = t * 3.1415927f;
+        s = f9de0_2c5dc8(x / len);
+        amp = f9de0_2c5dc8(fa610_2c5dc8(x / v->x1c)) * s * wob * v->x20;
+        scale_2c5dc8(&d, &d, step);
+        add_2c5dc8(&c, &c, &d);
+        qcopy(&q.corner[1], &c);
+        qcopy(&q.corner[3], &c);
+        sub_2c5dc8(&h, &D_L00_00166DC0_2c5dc8, &c);
+        cross_2c5dc8(&k, &h, &d);
+        scale_2c5dc8(&k, &k, 0.05f);
+        add_2c5dc8(&q.corner[1], &q.corner[1], &k);
+        sub_2c5dc8(&q.corner[3], &q.corner[3], &k);
+        scale_2c5dc8(&e, &f, amp);
+        add_2c5dc8(&q.corner[1], &q.corner[1], &e);
+        add_2c5dc8(&q.corner[3], &q.corner[3], &e);
+        draw_2c5dc8(&q, 0, 1);
+        qcopy(&b, &c);
+        qcopy(&q.corner[0], &q.corner[1]);
+        qcopy(&q.corner[2], &q.corner[3]);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
 #include "eetypes.h"
 unsigned char *FUN_0020c4f8(int);

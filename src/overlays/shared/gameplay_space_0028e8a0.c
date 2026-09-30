@@ -11,7 +11,100 @@ void FUN_L00_0028e990(void) {
         *(s32 *)(D_0013E030 + 0x94) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e9c8.s", FUN_L00_0028e9c8);
+typedef struct { char pad[0x20]; unsigned char st; char pad21[0x13]; unsigned short flags; char pad36[0x70]; short type; char pada8[0x58]; } O_28e9c8;
+typedef struct { char pad[0x34]; unsigned short flags; } F_28e9c8;
+typedef struct { F_28e9c8 *x0; int x4; int x8; char padc[0x14]; int x20; short x24; short x26; char pad28[4]; short x2c; } E_28e9c8;
+typedef struct { char pad[0x58]; int x58; int x5c; } C_28e9c8;
+extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
+extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
+extern int D_L00_0015F5D8_28e9c8 __asm__("D_L00_0015F5D8");
+extern char D_L00_0017C340_28e9c8[] __asm__("D_L00_0017C340") __attribute__((section(".data")));
+extern char D_L00_0017C380_28e9c8[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
+extern struct { int x0, x4, x8; } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
+extern int D_L00_001611CC_28e9c8 __asm__("D_L00_001611CC");
+extern int D_L00_0015F5C4_28e9c8 __asm__("D_L00_0015F5C4");
+extern float D_L00_0015F3FC_28e9c8 __asm__("D_L00_0015F3FC");
+extern int D_L00_0015F400_28e9c8 __asm__("D_L00_0015F400");
+extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") __attribute__((section(".data")));
+extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
+extern int D_0015ED84_28e9c8 __asm__("D_0015ED84");
+extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") __attribute__((section(".data")));
+extern struct { char pad[0x1C]; int x1c; char pad20[0x3A]; short x5a; } D_001516D0_28e9c8 __asm__("D_001516D0");
+void memset_28e9c8(void *, int, int) __asm__("FUN_001f97e8");
+void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
+int f2223f8_28e9c8(int, int) __asm__("FUN_L00_002223f8");
+void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
+int fr_28e9c8(int) __asm__("FUN_001f96f8");
+void f245610_28e9c8(int, int) __asm__("FUN_L00_00245610");
+void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
+void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
+int f122298_28e9c8(int) __asm__("FUN_00122298");
+int f215b10_28e9c8(void) __asm__("FUN_00215b10");
+void FUN_L00_0028e9c8(int a) {
+    O_28e9c8 *o;
+    int t, n, m, m2, u;
+    D_0013E030_28e9c8.x24 = -1;
+    D_L00_0015F5D8_28e9c8 = 1;
+    D_0013E030_28e9c8.x20 = a;
+    D_0013E030_28e9c8.x8 = 0;
+    memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);
+    memset_28e9c8(D_L00_0017C340_28e9c8, 0, 0x40);
+    memset_28e9c8(D_L00_0017C380_28e9c8, 0, 0x40);
+    f2335a0_28e9c8();
+    u = D_L00_001611CC_28e9c8 - 0x60000;
+    D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + u;
+    D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + u;
+    D_L00_0015F3FC_28e9c8 = 1.0f;
+    D_L00_0015F5C4_28e9c8 = 6;
+    D_L00_001611CC_28e9c8 = u;
+    D_L00_0015F400_28e9c8 = 0;
+    f2223f8_28e9c8(100, 2);
+    D_001413F5_28e9c8 = 1;
+    f232fe8_28e9c8();
+    D_0013E030_28e9c8.x0->flags |= 1;
+    for (o = D_L00_0015FFDC_28e9c8; o->st != 0xFF; o++) {
+        if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB)) o->flags |= 0x80;
+    }
+    if (a == 0) {
+        n = D_0013E030_28e9c8.x26;
+        m = n + 1;
+        t = n + 6;
+        if (D_0015ED84_28e9c8 == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+            m = 0;
+            t = 11;
+        } else if (D_0015ED84_28e9c8 == 14 && D_0013E030_28e9c8.x26 == 2) {
+            m = 8;
+            t = 14;
+        }
+        f245610_28e9c8(m, fr_28e9c8(6));
+    } else {
+        int k, r;
+        n = D_0013E030_28e9c8.x26;
+        k = D_0013E030_28e9c8.x2c;
+        t = n + 3;
+        if (k) t = n;
+        m2 = n + 5;
+        if (D_0015ED84_28e9c8 == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+            t = 10;
+            if (k) t = 9;
+            m2 = 4;
+        } else if (D_0015ED84_28e9c8 == 14 && D_0013E030_28e9c8.x26 == 2) {
+            t = 13;
+            if (D_0013E030_28e9c8.x2c) t = 12;
+            m2 = 9;
+        }
+        r = 0;
+        if (!D_0013E030_28e9c8.x2c) r = fr_28e9c8(6);
+        f245610_28e9c8(m2, r);
+    }
+    D_001516D0_28e9c8.x1c = t + 40000;
+    f2049f0_28e9c8(0);
+    while (D_001516D0_28e9c8.x5a != 3) {
+        f22ca50_28e9c8();
+        f122298_28e9c8(0);
+    }
+    f215b10_28e9c8();
+}
 extern char D_0013F350[];
 extern char D_001516D0[];
 extern int D_L00_0015F5D8 __attribute__((sda));

@@ -121,7 +121,111 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     if (flag && D_L00_00173E40.x18 != 0) r = 0;
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258490.s", FUN_L00_00258490);
+typedef int u128_258490 __attribute__((mode(TI)));
+typedef union { u128_258490 q; float f[4]; } V_258490;
+extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern V_258490 D_L00_00173E60_258490 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern V_258490 D_L00_00173E70_258490 __asm__("D_L00_00173E70") __attribute__((section(".data")));
+extern float FUN_L00_00259710_258490(void *) __asm__("FUN_L00_00259710");
+extern float FUN_001f99c0_258490(float) __asm__("FUN_001f99c0");
+extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9a10_258490(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a68_258490(void *, void *, float) __asm__("FUN_001f9a68");
+extern void FUN_L00_001ff500_258490(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern int FUN_L00_001efc70_258490(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
+extern float FUN_001f9b20_258490(void *) __asm__("FUN_001f9b20");
+extern float FUN_001f9b80_258490(void *, void *) __asm__("FUN_001f9b80");
+extern float FUN_L00_001ff8b0_258490(float, float) __asm__("FUN_L00_001ff8b0");
+extern void FUN_00125180_258490(void *, void *) __asm__("FUN_00125180");
+extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) {
+    V_258490 d;
+    V_258490 n;
+    V_258490 a;
+    V_258490 b;
+    V_258490 up;
+    V_258490 t;
+    int ok;
+    int i;
+    int m2;
+    float gz;
+    float zz;
+    float ang;
+    unsigned char *c;
+    float *nrm;
+    unsigned char *q60;
+    unsigned char *q40;
+
+    ok = 1;
+    m2 = flags & 2;
+    pos->f[2] += h;
+    gz = FUN_L00_00259710_258490(pos);
+    pos->f[2] -= h;
+    if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
+        if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
+            qcopy(pos, to);
+            ok = 0;
+        }
+    }
+    FUN_001f9a28_258490(&d, pos, to);
+    FUN_L00_001ff500_258490(&n, &d, r * 1.2f);
+    up.q = 0;
+    up.f[2] = h;
+    FUN_001f9a10_258490(&a, to, &up);
+    FUN_001f9a10_258490(&b, &a, &n);
+    if (ok && FUN_L00_001efc70_258490(&a, &b, m2 | 0x24, ign, 0)) {
+        c = D_L00_00173E40_258490;
+        if (*(int *)(c + 0x1C) > 0) {
+            nrm = (float *)(c + 0x40);
+            if (slope <= FUN_L00_001ff8b0_258490(*(float *)(c + 0x48), FUN_001f9b20_258490(nrm))) {
+                *(int *)(c + 0x48) = 0;
+                FUN_00125180_258490(nrm, nrm);
+                {
+                    float k = -d.f[0] * *(float *)(c + 0x40) - d.f[1] * *(float *)(c + 0x44);
+                    if (0.0f < k) {
+                        FUN_001f9a68_258490(nrm, nrm, k);
+                        ok = 0;
+                        FUN_001f9a10_258490(&d, &d, nrm);
+                    }
+                }
+            }
+            FUN_001f9a10_258490(pos, to, &d);
+        }
+    }
+    if (!(flags & 2)) {
+        zz = h + r;
+        q60 = (unsigned char *)&D_L00_00173E60_258490;
+        q40 = q60 - 0x20;
+        i = 0;
+        do {
+            qcopy(&t, pos);
+            t.f[2] += zz;
+            if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
+                break;
+            }
+            ang = FUN_L00_001ff8b0_258490(FUN_001f9b80_258490(pos, q60), *(float *)(q40 + 0x28) - pos->f[2]);
+            if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
+                qcopy(pos, &D_L00_00173E70_258490);
+                ok = 0;
+                pos->f[2] -= zz;
+            }
+            i++;
+        } while (i < 6);
+    }
+    pos->f[2] += h;
+    gz = FUN_L00_00259710_258490(pos);
+    pos->f[2] -= h;
+    if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
+        if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
+            qcopy(pos, to);
+            ok = 0;
+        }
+    }
+    to->f[0] = pos->f[0];
+    to->f[1] = pos->f[1];
+    return ok;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
 float FUN_001fa6c0(int);
 void FUN_L00_00258830(int, int, float, float, float, int);

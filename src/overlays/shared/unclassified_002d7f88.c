@@ -155,7 +155,65 @@ void FUN_L00_002d8418(char *p) {
     FUN_L00_002730e0_002d8418(pos, &q, D_L00_00161A6C_002d8418, D_L00_00161A68_002d8418, FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A74_002d8418);
     FUN_L00_002730e0_002d8418(pos, &q, D_L00_00161A70_002d8418, D_L00_00161A68_002d8418, FUN_00213260_002d8418(0xFF) & 0xFF, 1, D_L00_00161A78_002d8418);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8510.s", FUN_L00_002d8510);
+typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_2d8510;
+typedef struct { u8 p0[0x58]; s16 h58[4]; f32 f60[4]; } O_2d8510;
+typedef struct { u8 p0[0x10]; V_2d8510 v10; u8 p20[0x58]; O_2d8510 *p78; } M_2d8510;
+typedef struct { u8 p0[0xF8]; u8 *pF8; } T_2d8510;
+extern V_2d8510 D_L00_00166DC0_2d8510 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern T_2d8510 D_L00_001B2080_2d8510 __asm__("D_L00_001B2080") __attribute__((section(".data")));
+extern s32 D_L00_00161A58_2d8510 __asm__("D_L00_00161A58") __attribute__((sda));
+extern s32 D_L00_00161A7C_2d8510 __asm__("D_L00_00161A7C") __attribute__((sda));
+extern s32 D_L00_00161A80_2d8510 __asm__("D_L00_00161A80") __attribute__((sda));
+extern s32 D_L00_00161A84_2d8510 __asm__("D_L00_00161A84") __attribute__((sda));
+extern s32 D_L00_00161A88_2d8510 __asm__("D_L00_00161A88") __attribute__((sda));
+extern f32 D_L00_00161A90_2d8510[1] __asm__("D_L00_00161A90") __attribute__((sda));
+extern f32 D_L00_00161AA0_2d8510[1] __asm__("D_L00_00161AA0") __attribute__((sda));
+extern f32 D_L00_00161AB0_2d8510[1] __asm__("D_L00_00161AB0") __attribute__((sda));
+void FUN_001f9a28_2d8510(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff500_2d8510(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9a10_2d8510(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 FUN_001f9770_2d8510(void *) __asm__("FUN_001f9770");
+s32 FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
+f32 FUN_001fa6c0_2d8510(s32) __asm__("FUN_001fa6c0");
+s32 FUN_001fa6d0_2d8510(f32) __asm__("FUN_001fa6d0");
+f32 FUN_001f99c0_2d8510(f32) __asm__("FUN_001f99c0");
+s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
+u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
+s32 FUN_L00_002d8510(M_2d8510 *m) {
+    O_2d8510 *o;
+    V_2d8510 a, b;
+    s32 i, ret, c, hi, al;
+    f32 z, t, f;
+    u8 *p;
+    o = m->p78;
+    FUN_001f9a28_2d8510(&a, &D_L00_00166DC0_2d8510, &m->v10);
+    ret = 0;
+    FUN_L00_001ff500_2d8510(&a, &a, -0.3f);
+    FUN_L00_001ff500_2d8510(&b, &a, 0.1f);
+    FUN_001f9a10_2d8510(&a, &a, &m->v10);
+    z = a.z;
+    for (i = 0; i < 4; i++) {
+        if (FUN_001f9770_2d8510(&o->h58[i])) continue;
+        if (o->h58[i] > FUN_001f96f8_2d8510(0x30)) ret = 1;
+        f = o->f60[i] += D_L00_00161A90_2d8510[i];
+        if (255.0f <= f) o->f60[i] = f - 255.0f;
+        else if (f <= 0.0f) o->f60[i] = f + 255.0f;
+        t = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - o->h58[i]);
+        t = t / (f32)FUN_001f96f8_2d8510(0xFF);
+        c = FUN_001fa6e0_2d8510(D_L00_00161A7C_2d8510, D_L00_00161A80_2d8510, FUN_001f99c0_2d8510(0.5f - t));
+        hi = c >> 24;
+        t = 1.0f - o->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_2d8510));
+        al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - t)) << 24;
+        c = al | (c & 0xFFFFFF);
+        a.z = z + D_L00_00161AB0_2d8510[i];
+        p = FUN_L00_00272f68_2d8510(&a, c, FUN_001fa6d0_2d8510(o->f60[i]), D_L00_00161A88_2d8510, 0, 2, 1, D_L00_00161AA0_2d8510[i] * t);
+        if (p) p[2] = *D_L00_001B2080_2d8510.pF8;
+        p = FUN_L00_00272f68_2d8510(&a, al | 0xFFFFFF, FUN_001fa6d0_2d8510(o->f60[i]), D_L00_00161A88_2d8510, D_L00_00161A84_2d8510, 2, 1, D_L00_00161AA0_2d8510[i] * (t * 0.7f));
+        if (p) p[2] = *D_L00_001B2080_2d8510.pF8;
+        FUN_001f9a10_2d8510(&a, &a, &b);
+    }
+    return ret;
+}
 #include "eetypes.h"
 typedef union { u128 q_002d8850; float f[4]; } Vec4_002d8850;
 typedef struct { float f0_002d8850; char pad[0xc]; u128 p10; Vec4_002d8850 p20; char *e[4]; } M_002d8850;

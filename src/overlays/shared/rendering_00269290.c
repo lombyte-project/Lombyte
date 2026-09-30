@@ -767,7 +767,84 @@ void FUN_L00_0026d598(void *a, void *b, int flag) {
     }
 
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026d700.s", FUN_L00_0026d700);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_26d700;
+typedef int Q_26d700 __attribute__((mode(TI)));
+typedef struct { float x0, x4, x8, xc, r, g, b, a; } S_26d700;
+typedef struct { char pad0[4]; int x4; unsigned char x8; char pad9; short xa; float xc; Q_26d700 pos; S_26d700 s; } P_26d700;
+extern float D_0015ED60_26d700 __asm__("D_0015ED60");
+extern float D_0015ED64_26d700 __asm__("D_0015ED64");
+extern int D_001413D0_26d700 __asm__("D_001413D0") __attribute__((section(".data")));
+extern Q_26d700 D_L00_00173E60_26d700 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+void add_26d700(void *, void *, void *) __asm__("FUN_001f9a10");
+int coll_26d700(void *, void *, int, int, int) __asm__("FUN_L00_001efc70");
+void clr_26d700(void *) __asm__("FUN_001f99f8");
+int tick_26d700(void *) __asm__("FUN_001f9770");
+void kill_26d700(P_26d700 *) __asm__("FUN_L00_00267a08");
+int rgba_26d700(float, float, float, float) __asm__("FUN_L00_0025bfe0");
+void FUN_L00_0026d700(P_26d700 *p) {
+    V_26d700 t;
+    S_26d700 *s;
+    float r, g, b, dt;
+    int neg;
+    if (p == 0) return;
+    s = &p->s;
+    r = s->r;
+    neg = 0;
+    g = s->g;
+    b = s->b;
+    if (r < 0.0f || g < 0.0f || b < 0.0f) {
+        r = -r;
+        neg = 1;
+        g = -g;
+        b = -b;
+    }
+    s->a += D_0015ED60_26d700 * 0.0f;
+    p->xc += D_0015ED60_26d700 * -100.0f;
+    add_26d700(&t, &p->pos, s);
+    if (s->x0 != 0.0f || s->x4 != 0.0f || s->x8 != 0.0f) {
+        if (coll_26d700(&p->pos, &t, 2, D_001413D0_26d700, 0)) {
+            p->pos = D_L00_00173E60_26d700;
+            clr_26d700(s);
+            p->xc += p->xc;
+        } else {
+            p->pos = *(Q_26d700 *)&t;
+            if (s->xc != 0.0f) s->x8 += s->xc;
+            else s->x8 += D_0015ED64_26d700 * -0.0063f;
+        }
+    }
+    if (s->a <= 0.0f || tick_26d700(&p->xa) || p->xc < 0.0f || t.f[0] < 0.01f || t.f[1] < 0.01f || t.f[2] < 0.01f) {
+        kill_26d700(p);
+        return;
+    }
+    if (!neg) {
+        r += D_0015ED60_26d700 * -0.01f;
+        dt = D_0015ED60_26d700;
+        if (r < 0.0f) r = 0.0f;
+        g += dt * -0.03001f;
+        if (g < 0.0f) g = 0.0f;
+    } else {
+        g += D_0015ED60_26d700 * -0.01f;
+        dt = D_0015ED60_26d700;
+        if (g < 0.0f) g = 0.0f;
+        r += dt * -0.03001f;
+        if (r < 0.0f) r = 0.0f;
+    }
+    b += dt * -0.05f;
+    if (b < 0.0f) b = 0.0f;
+    s->a += dt * 0.0f;
+    if (s->a < 0.0f) s->a = 0.0f;
+    p->x4 = rgba_26d700(r, g, b, s->a);
+    if (neg > 0) {
+        s->r = -r;
+        s->g = -g;
+        s->b = -b;
+    } else {
+        s->r = r;
+        s->g = g;
+        s->b = b;
+    }
+    p->x8--;
+}
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_0026daa0;
 typedef struct { char *o; short h4; short h6; int i8; int iC; } E_0026daa0;
 extern char D_L00_00166DC0_0026daa0[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));

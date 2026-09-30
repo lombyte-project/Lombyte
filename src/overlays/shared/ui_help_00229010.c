@@ -65,7 +65,66 @@ void FUN_L00_002293a8(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00229660.s", FUN_L00_00229660);
+typedef struct {
+    u8 p0[0x168]; f32 f168; u8 p1[0x198-0x16C]; s32 i198; u8 p2[0x1B8-0x19C]; s32 i1B8;
+    u8 p3[0x248-0x1BC]; f32 f248; u8 p4[4]; f32 f250; u8 b254; u8 p5[0x2084-0x255]; s32 i2084;
+    u8 p6[0x229C-0x2088]; f32 f229C; u8 p7[0x22D8-0x22A0]; s16 h22D8;
+} P_229660;
+extern P_229660 D_0013F350_229660 __asm__("D_0013F350") __attribute__((section(".data")));
+extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") __attribute__((section(".data")));
+extern f32 D_0015ED6C_229660 __asm__("D_0015ED6C");
+extern int FUN_L00_00221d98_229660(void) __asm__("FUN_L00_00221d98");
+extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
+extern int FUN_L00_00266e00_229660(int, void *, int, int) __asm__("FUN_L00_00266e00");
+extern int FUN_L00_00266d60_229660(int, int, void *) __asm__("FUN_L00_00266d60");
+extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
+extern void FUN_L00_002223f8_229660(int, int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8_229660b(int, int) __asm__("FUN_L00_002223f8");
+
+#define P D_0013F350_229660
+int FUN_L00_00229660(void) {
+    int n, t, a;
+    int m;
+
+    if (P.i2084 == 0xE) return 0;
+    n = FUN_L00_00221d98_229660();
+    t = FUN_001f96f8_229660(5);
+    if ((D_0013CAE0_229660 & 0xA) && n > 0 && FUN_L00_00266e00_229660(0x40, (void *)0x1F000, t + n, n)) {
+        m = 0xB;
+found:
+        FUN_L00_002223f8_229660(m, 1);
+        return 1;
+    }
+    a = FUN_001f96f8_229660(9);
+    if (FUN_001f96f8_229660(6) < P.i198) {
+        if (!FUN_L00_00266d60_229660(0x40, a, 0)) return 0;
+        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && P.h22D8 == 0) {
+            if ((2.5f < P.f248 || P.f250 < 0.7853982f) && 0.7f < P.f229C
+                && D_0015ED6C_229660 * 0.9f < P.f168) {
+                m = 0xA;
+                goto found;
+            }
+        }
+        if (FUN_L00_0020d498_229660(3) == 3 && P.h22D8 == 0 && 0.7f < P.f229C
+            && (2.5f < P.f248 || P.b254) && D_0015ED6C_229660 * 0.9f < P.f168) {
+            if (P.i1B8) return 1;
+            m = 0x10;
+            goto found;
+        }
+        if (FUN_L00_0020d498_229660(3) == 3 && P.h22D8 == 0) {
+            m = 0xD;
+            goto found;
+        }
+        if (FUN_L00_0020d498_229660(3) == 2 && P.h22D8 == 0 && D_0013D4C2_229660) {
+            m = 0xF;
+            goto found;
+        }
+        FUN_L00_002223f8_229660b(7, 1);
+        return 1;
+    }
+    return 0;
+}
 typedef unsigned int u128_229910_00229910 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
 typedef union { u128_229910_00229910 q_00229910; float f[4]; } V_229910_00229910;
