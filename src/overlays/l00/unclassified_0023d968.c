@@ -2,7 +2,63 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d968.s", FUN_L00_0023d968);
+extern s32 D_0015ED84;
+extern s32 D_0015EE88;
+void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
+void do_sky_gif_paging(void) __asm__("FUN_0022b558");
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+extern void FUN_L00_002892d0(void);
+extern void FUN_L00_00289330(void);
+extern void FUN_L00_00289420(void);
+extern void FUN_L00_002895a0(void);
+extern void FUN_L00_002899a8(void);
+extern void FUN_L00_00289a90(void);
+extern void FUN_L00_00289bd8(void);
+extern void FUN_L00_00289cb8(void);
+extern void FUN_L00_0028a208(void);
+extern void FUN_L00_0028a2f0(void);
+extern void FUN_L00_0028a3a8(void);
+extern void FUN_L00_0028a480(void);
+extern void FUN_L00_0028a620(void);
+extern void FUN_L00_0028a7a0(void);
+extern void FUN_L00_0028ab08(void);
+extern void FUN_L00_0028a920(void);
+extern void FUN_L00_0028a998(void);
+extern void FUN_L00_0028aa98(void);
+extern void FUN_L00_0028ac88(void);
+extern void FUN_L00_0028b080(void);
+extern void FUN_L00_0028b1a0(void);
+
+void FUN_L00_0023d968(void)
+{
+    setup_sky_gif_paging();
+    switch (D_0015ED84) {
+    case 0: FUN_L00_00289330(); break;
+    case 1: FUN_L00_00289420(); break;
+    case 2: FUN_L00_002895a0(); break;
+    case 3: FUN_L00_002899a8(); break;
+    case 4: FUN_L00_00289a90(); break;
+    case 5: FUN_L00_00289bd8(); break;
+    case 6: FUN_L00_00289cb8(); break;
+    case 7: FUN_L00_0028a208(); break;
+    case 8: FUN_L00_0028a2f0(); break;
+    case 9: FUN_L00_0028a3a8(); break;
+    case 10: FUN_L00_0028a480(); break;
+    case 11: FUN_L00_0028a620(); break;
+    case 12: FUN_L00_0028a7a0(); break;
+    case 13: FUN_L00_0028a920(); break;
+    case 14: FUN_L00_0028a998(); break;
+    case 15: FUN_L00_0028aa98(); break;
+    case 16: FUN_L00_0028ab08(); break;
+    case 17: FUN_L00_0028ac88(); break;
+    case 18: FUN_L00_0028b080(); break;
+    case 19: FUN_L00_0028b1a0(); break;
+    default: FUN_L00_002892d0(); break;
+    }
+    do_sky_gif_paging();
+    vu1_add_g_sregister(0x47, 0x5360B);
+    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+}
 #include "eetypes.h"
 
 typedef struct {
@@ -143,4 +199,86 @@ void FUN_L00_00289330(void) {
     FUN_001f9fc8(D_L00_001BD7E0);
     sky_draw_shell(4);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9dc8.s", FUN_L00_002d9dc8);
+typedef struct {
+    u8 pad0[0x20];
+    u8 unk20[4];
+    s16 unk24;
+    u8 pad26[6];
+    f32 unk2C;
+    u8 pad30[0x26];
+    s16 unk56;
+    u8 pad58[8];
+    s32 unk60;
+} DoorVars;
+
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 alpha;
+    u8 unk31;
+    u8 pad32[2];
+    u16 flags;
+    u8 pad36[0x42];
+    DoorVars *vars;
+} DoorMoby;
+
+extern int D_L00_0015F5C4;
+extern u8 D_0013D388[];
+extern u8 D_0013F3D0[];
+extern s16 D_00141628[];
+extern s32 FUN_L00_002668a0(DoorMoby *, void *);
+extern s32 FUN_L00_00266448(DoorMoby *, void *);
+extern void FUN_0022e188(s32);
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+
+void FUN_L00_002d9dc8(DoorMoby *m)
+{
+    DoorVars *vars;
+
+    vars = m->vars;
+    if (D_L00_0015F5C4 == 2) {
+        m->unk31 = 0;
+        m->flags |= 1;
+    } else {
+        m->unk31 = 1;
+        m->flags &= ~1;
+    }
+    switch (m->state) {
+    case 0:
+        D_00141628[0] = 1;
+        FUN_L00_002668a0(m, vars->unk20);
+        if (D_0013D388[8] != 0) {
+            vars->unk56 = 1;
+            vars->unk2C = 3.0f;
+            vars->unk24 = 0;
+        } else {
+            vars->unk2C = 255.0f;
+        }
+        D_0013D388[8] = 1;
+        m->alpha = 0xFF;
+        m->state = 1;
+        break;
+    case 1:
+        if (vars->unk56 != 0) {
+            if (is_point_inside_clip_volume((s32)D_0013F3D0, vars->unk60) != 0) {
+                vars->unk2C = 16.0f;
+            } else {
+                vars->unk2C = 3.0f;
+            }
+        }
+        if (FUN_L00_00266448(m, vars->unk20) != 0) {
+            m->state = 2;
+            vars->unk2C = 3.0f;
+        }
+        if (vars->unk24 >= 4 && D_L00_0015F5C4 != 6) {
+            FUN_0022e188(1);
+        }
+        break;
+    case 2:
+        if (D_L00_0015F5C4 != 2) {
+            m->state = 1;
+        }
+        break;
+    }
+}

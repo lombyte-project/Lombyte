@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1212,
+  "matching_c": 1215,
   "intentional_asm": 249,
-  "pending_c": 3321,
+  "pending_c": 3318,
   "bytes_total": 3655312,
-  "bytes_matching_c": 245364,
+  "bytes_matching_c": 246712,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3313616,
-  "c_exact_percent_of_recoverable": 6.8942,
-  "c_fuzzy_percent_of_recoverable": 8.9393,
+  "bytes_pending_c": 3312268,
+  "c_exact_percent_of_recoverable": 6.9321,
+  "c_fuzzy_percent_of_recoverable": 8.9771,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 166,
-    "pending_c": 3174,
+    "matching_c": 169,
+    "pending_c": 3171,
     "bytes_total": 3218660,
-    "bytes_matching_c": 25592,
-    "bytes_pending_c": 3193068,
-    "c_exact_percent_of_recoverable": 0.7951,
+    "bytes_matching_c": 26940,
+    "bytes_pending_c": 3191720,
+    "c_exact_percent_of_recoverable": 0.837,
     "shared": {
       "id": "shared",
       "index": null,
@@ -3515,26 +3515,26 @@
         "planet": "Veldin",
         "description": "Kyzil Plateau: the tutorial, Ratchet's home",
         "functions": 11,
-        "matching_c": 7,
-        "pending_c": 4,
+        "matching_c": 10,
+        "pending_c": 1,
         "bytes_total": 8180,
-        "bytes_matching_c": 6524,
-        "bytes_pending_c": 1656,
-        "c_exact_percent_of_recoverable": 79.7555,
+        "bytes_matching_c": 7872,
+        "bytes_pending_c": 308,
+        "c_exact_percent_of_recoverable": 96.2347,
         "files": [
           {
             "file": "src/overlays/l00/unclassified_0023d968.c",
             "functions": 4,
-            "matching_c": 2,
+            "matching_c": 4,
             "bytes_total": 2008,
-            "bytes_matching_c": 1124
+            "bytes_matching_c": 2008
           },
           {
             "file": "src/overlays/l00/gameplay_vendor_002e0988.c",
             "functions": 7,
-            "matching_c": 5,
+            "matching_c": 6,
             "bytes_total": 6172,
-            "bytes_matching_c": 5400
+            "bytes_matching_c": 5864
           }
         ]
       },
@@ -4708,14 +4708,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1212,
+    "matching_c": 1215,
     "intentional_asm": 249,
-    "pending_c": 3321,
+    "pending_c": 3318,
     "bytes_total": 3655312,
-    "bytes_matching_c": 245364,
+    "bytes_matching_c": 246712,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3313616,
-    "c_exact_percent_of_recoverable": 6.8942,
-    "c_fuzzy_percent_of_recoverable": 8.9393
+    "bytes_pending_c": 3312268,
+    "c_exact_percent_of_recoverable": 6.9321,
+    "c_fuzzy_percent_of_recoverable": 8.9771
   }
 }

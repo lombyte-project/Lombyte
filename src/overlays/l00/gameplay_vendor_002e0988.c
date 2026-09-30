@@ -599,7 +599,77 @@ void FUN_L00_002e1678(TrollMoby *m)
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1aa8.s", FUN_L00_002e1aa8);
+typedef struct {
+    u8 pad0[0x10];
+    f32 unk10;
+    u8 pad14[2];
+    s16 unk16;
+    s32 color;
+} SparkTail;
+
+typedef struct {
+    u8 pad0[0xA];
+    s16 life;
+    f32 unkC;
+    u8 pad10[0x10];
+    SparkTail tail;
+} SparkPart;
+
+typedef struct {
+    u8 pad0[0x1C0];
+    f32 pos[4];
+} SparkVars;
+
+typedef struct {
+    u8 pad0[0x78];
+    SparkVars *vars;
+} SparkMoby;
+
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void FUN_00213358(void *out, f32 a, f32 b);
+extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern void FUN_L00_002e1c78();
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+
+void FUN_L00_002e1aa8(SparkMoby *m)
+{
+    SparkVars *vars;
+    SparkPart *p;
+    SparkTail *t;
+    f32 *pos;
+    f32 vel[4];
+    s32 i;
+    s32 life;
+
+    vars = m->vars;
+    pos = vars->pos;
+    FUN_L00_0024f7c8(m, 1, pos);
+    vars->pos[2] -= 0.333f;
+    FUN_00213358(vel, 0.005f, 0.03f);
+    p = FUN_L00_00274948(pos, vel, 0x7F, m);
+    if (p != 0) {
+        p->unkC = random_float_between(6000.0f, 32000.0f);
+    }
+    for (i = 0; i < 3; i++) {
+        p = FUN_L00_00274948(vars->pos, D_L00_0015F580, 0x7F, m);
+        if (p != 0) {
+            t = &p->tail;
+            if (i == 2 && random_integer_below(8) == 0) {
+                p->unkC = 180000.0f;
+            } else {
+                p->unkC = random_float_between(80000.0f, 120000.0f);
+            }
+            life = vend_rand(2);
+            p->life = life;
+            t->unk10 = 1.0f / ConvertIntegerToFloat((s16)life);
+            t->color = 0x7F7F7F;
+            t->unk16 = 3;
+        }
+    }
+    enqueue_callback_list_1((s32)FUN_L00_002e1c78, (s32)m);
+}
 typedef union {
     u128 q;
     f32 f[4];
