@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 85.13353,
+    "fuzzy_match_percent": 85.517209,
     "total_code": "339628",
-    "matched_code": "197792",
-    "matched_code_percent": 58.237837,
+    "matched_code": "203892",
+    "matched_code_percent": 60.033919,
     "total_functions": 1167,
-    "matched_functions": 971,
-    "matched_functions_percent": 83.204799,
-    "complete_code": "197792",
-    "complete_code_percent": 58.237837,
+    "matched_functions": 972,
+    "matched_functions_percent": 83.290488,
+    "complete_code": "203892",
+    "complete_code_percent": 60.033919,
     "total_units": 116,
-    "complete_units": 69
+    "complete_units": 70
   },
   "units": [
     {
@@ -4663,17 +4663,17 @@
     {
       "name": "game/storage/memory_card",
       "measures": {
-        "fuzzy_match_percent": 82.827069,
+        "fuzzy_match_percent": 100.0,
         "total_code": "7588",
-        "matched_code": "1488",
-        "matched_code_percent": 19.60991,
+        "matched_code": "7588",
+        "matched_code_percent": 100.0,
         "total_functions": 8,
-        "matched_functions": 7,
-        "matched_functions_percent": 87.5,
-        "complete_code": "1488",
-        "complete_code_percent": 19.60991,
+        "matched_functions": 8,
+        "matched_functions_percent": 100.0,
+        "complete_code": "7588",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -4706,7 +4706,7 @@
         {
           "name": "memcard_update_state",
           "size": "6100",
-          "fuzzy_match_percent": 78.638,
+          "fuzzy_match_percent": 100.0,
           "address": "925560",
           "metadata": {
             "virtual_address": "1090392"
@@ -4750,7 +4750,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "game"
         ]
@@ -13307,17 +13307,17 @@
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 82.015335,
+        "fuzzy_match_percent": 82.512073,
         "total_code": "262328",
-        "matched_code": "141788",
-        "matched_code_percent": 54.049892,
+        "matched_code": "147888",
+        "matched_code_percent": 56.375225,
         "total_functions": 869,
-        "matched_functions": 722,
-        "matched_functions_percent": 83.084005,
-        "complete_code": "141788",
-        "complete_code_percent": 54.049892,
+        "matched_functions": 723,
+        "matched_functions_percent": 83.199079,
+        "complete_code": "147888",
+        "complete_code_percent": 56.375225,
         "total_units": 105,
-        "complete_units": 63
+        "complete_units": 64
       }
     },
     {
