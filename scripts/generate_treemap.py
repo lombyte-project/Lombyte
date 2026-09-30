@@ -9,7 +9,7 @@ What the map shows
   Assignments come from ``rename_proposals.entries[].logical_group`` where
   available; conservative fallbacks use non-architectural source-module buckets.
 
-    * bolt orange (#e0852e) - every recoverable function in the group is
+    * bolt orange (#de812f) - every recoverable function in the group is
       matching C: promoted source or a legacy exact unit listed in
       ``config/us/unit_categories.json``.
     * warm copper shades - partial C_EXACT coverage; C_FUZZY does not affect
@@ -70,7 +70,7 @@ from progress_groups import (  # noqa: E402
 # and the dark riveted plate behind them. The greys are the warm gunmetal of
 # assets/lombyte-logo.png so the README logo and the map read as one piece.
 # The canvas stays GitHub dark.
-ORANGE = "#e0852e"
+ORANGE = "#de812f"
 CHROME = "#d6d0c6"
 PLATE = "#3a3632"
 BACKGROUND = "#0d1117"
@@ -92,11 +92,11 @@ LABEL_FILLS = {
 }
 # Partial groups use a copper range; a single soft sheen is laid over the map
 # instead of repeating a gradient inside every tile.
-PARTIAL_ORANGE = "#bd6f2a"
+PARTIAL_ORANGE = "#d87620"
 # The executable's drawer: a warm, dim face (the page is already blue-black)
 # with sharp corners, edged in the bolt orange.
-DRAWER_FACE_TOP = "#2a1e12"
-DRAWER_FACE_BOTTOM = "#1a130c"
+DRAWER_FACE_TOP = "#3a2816"
+DRAWER_FACE_BOTTOM = "#2a1d10"
 UNCLASSIFIED_LAYOUT_CAP_BYTES = 16 * 1024
 
 ROW_RE = re.compile(
@@ -951,13 +951,13 @@ def render_svg(
         '</linearGradient><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{ORANGE}" stop-opacity="0.10"/>'
         f'<stop offset="0.5" stop-color="{ORANGE}" stop-opacity="0.02"/>'
-        '<stop offset="1" stop-color="#000000" stop-opacity="0.18"/>'
+        '<stop offset="1" stop-color="#000000" stop-opacity="0.08"/>'
         '</linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{DRAWER_FACE_TOP}"/>'
         f'<stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/>'
         '</linearGradient><radialGradient id="drawer-halo">'
-        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0.72"/>'
-        f'<stop offset="0.6" stop-color="{BACKGROUND}" stop-opacity="0.45"/>'
+        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0.8"/>'
+        f'<stop offset="0.6" stop-color="{BACKGROUND}" stop-opacity="0.55"/>'
         f'<stop offset="1" stop-color="{BACKGROUND}" stop-opacity="0"/>'
         "</radialGradient></defs>",
     ]
@@ -1040,7 +1040,7 @@ def render_svg(
     lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
                  f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}"/></clipPath>')
     placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.42">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.75">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
