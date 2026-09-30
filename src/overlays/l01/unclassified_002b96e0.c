@@ -4,7 +4,122 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9a30.s", FUN_L01_002b9a30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002bd100.s", FUN_L01_002bd100);
+#include "eetypes.h"
+
+typedef union { u128 q; f32 f[4]; } EmitVec;
+
+typedef struct {
+    EmitVec r[4];
+} EmitMtx;
+
+typedef struct {
+    u8 pad0[0x70];
+    s32 flags;
+    u8 pad74[8];
+    void *owner;
+    EmitVec vel;
+    f32 vel_range[4];
+    f32 life_min;
+    f32 life_max;
+    f32 size_min;
+    f32 size_max;
+    f32 fade[4];
+    s32 tex;
+    u8 count;
+    u8 delay;
+    u8 blend;
+    u8 alpha;
+    s32 timer;
+    f32 spread[3];
+} Emitter;
+
+typedef struct {
+    u8 pad0[0x10];
+    EmitVec pos;
+    u8 pad20[0x20];
+    f32 rot[4];
+    u8 pad50[0x28];
+    Emitter *vars;
+} EmitterMoby;
+
+extern s32 D_0015ED84;
+extern f32 D_0015ED60;
+extern int FUN_L00_002002e0(void *, f32);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L01_0027e900(void *, void *, f32, f32, f32, f32, f32, f32, f32, f32, f32, s32, u8, u8, u8);
+
+void FUN_L01_002bd100(EmitterMoby *self) {
+    Emitter *v;
+    EmitVec out;
+    EmitVec p;
+    EmitVec off;
+    union {
+        struct {
+            EmitMtx m;
+            EmitVec ang;
+        } rot;
+        struct {
+            EmitVec vel;
+            EmitMtx m;
+        } lin;
+    } u;
+    f32 size;
+    s32 i;
+
+    v = self->vars;
+    if (D_0015ED84 == 1) {
+        p.q = self->pos.q;
+        p.f[3] = 20.0f;
+        if (FUN_L00_002002e0(&p, 240.0f) == -1) {
+            return;
+        }
+    }
+    v->owner = self;
+    if (v->timer <= 0) {
+        v->timer = v->delay;
+        for (i = 0; i < v->count; i++) {
+            p.q = self->pos.q;
+            off.f[0] = random_float_between(-v->spread[0], v->spread[0]);
+            off.f[1] = random_float_between(-v->spread[1], v->spread[2]);
+            off.f[2] = random_float_between(-v->spread[2], v->spread[2]);
+            if (v->flags & 0x2000) {
+                FUN_001fa050(&u.rot.m, self->rot);
+                FUN_001f9d20(&off, &off, &u.rot.m);
+            }
+            FUN_001f9a10(&p, &p, &off);
+            if (v->flags & 0x1000) {
+                u.rot.ang.f[0] = random_float_between(-v->vel_range[0], v->vel_range[0]) * 3.1415927f / 180.0f;
+                u.rot.ang.f[1] = random_float_between(-v->vel_range[1], v->vel_range[1]) * 3.1415927f / 180.0f;
+                u.rot.ang.f[2] = random_float_between(-v->vel_range[2], v->vel_range[2]) * 3.1415927f / 180.0f;
+                if (v->flags & 0x4000) {
+                    u.rot.ang.f[0] = fast_add_rotations(u.rot.ang.f[0], self->rot[0]);
+                    u.rot.ang.f[1] = fast_add_rotations(u.rot.ang.f[0], self->rot[1]);
+                    u.rot.ang.f[2] = fast_add_rotations(u.rot.ang.f[0], self->rot[2]);
+                }
+                FUN_001fa050(&u.rot.m, &u.rot.ang);
+                FUN_001f9d20(&out, &v->vel, &u.rot.m);
+                size = random_float_between(v->size_min, v->size_max);
+                FUN_L01_0027e900(v, &p, out.f[0], out.f[1], out.f[2], size, random_float_between(v->life_min, v->life_max), v->fade[0], v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha, 0xFF);
+            } else {
+                u.lin.vel.f[0] = random_float_between(v->vel.f[0], v->vel_range[0]) * D_0015ED60;
+                u.lin.vel.f[1] = random_float_between(v->vel.f[1], v->vel_range[1]) * D_0015ED60;
+                u.lin.vel.f[2] = random_float_between(v->vel.f[2], v->vel_range[2]) * D_0015ED60;
+                if (v->flags & 0x4000) {
+                    FUN_001fa050(&u.lin.m, self->rot);
+                    FUN_001f9d20(&u.lin.vel, &u.lin.vel, &u.lin.m);
+                }
+                size = random_float_between(v->size_min, v->size_max);
+                FUN_L01_0027e900(v, &p, u.lin.vel.f[0], u.lin.vel.f[1], u.lin.vel.f[2], size, random_float_between(v->life_min, v->life_max), v->fade[0], v->fade[1], v->fade[2], v->fade[3], v->tex, v->blend, v->alpha, 0xFF);
+            }
+        }
+    } else {
+        v->timer--;
+    }
+}
 #include "eetypes.h"
 
 typedef union {
@@ -299,8 +414,208 @@ f32 FUN_L01_002f81c8(f32 *pos, f32 *vel, f32 target, f32 accel, f32 damp, f32 ra
     *pos = *pos + *vel;
     return FUN_001f99c0(target - *pos);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8268.s", FUN_L01_002f8268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8c58.s", FUN_L01_002f8c58);
+typedef union {
+    u128 q;
+    struct {
+        f32 x, y, z, w;
+    } v;
+} HoverVec;
+
+typedef struct {
+    f32 home_x;
+    f32 home_y;
+    f32 pad8[2];
+    f32 vel_x;
+    f32 vel_y;
+} HoverVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    HoverVec pos;
+    u8 state;
+    u8 pad21[0x57];
+    HoverVars *pvars;
+} HoverMoby;
+
+typedef struct {
+    u8 pad0[0x80];
+    HoverVec pos;
+} HoverPlayer;
+
+extern HoverPlayer D_0013F350;
+extern f32 D_L01_00161BF0 __attribute__((sda));
+extern f32 D_L01_00161BF4 __attribute__((sda));
+extern f32 D_L01_00161BF8 __attribute__((sda));
+extern f32 D_L01_00161BFC __attribute__((sda));
+extern f32 D_L01_00161C00 __attribute__((sda));
+extern f32 D_0015ED70;
+extern f32 spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
+extern f32 FUN_001f9b80(void *, void *);
+f32 FUN_001f99c0(f32);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
+extern f32 FUN_001f9b48(void *, void *);
+extern void FUN_L00_001ff500(void *, void *, f32);
+extern f32 FUN_002135f0(void *, s32);
+
+void FUN_L01_002f8268(HoverMoby *m) {
+    HoverVars *v;
+    HoverPlayer *pl;
+    HoverVec old;
+    HoverVec tgt;
+    HoverVec step;
+    HoverVec d;
+    f32 ang;
+    f32 dz;
+    f32 lim;
+
+    old.q = m->pos.q;
+    v = m->pvars;
+    tgt.q = old.q;
+    if (v == 0) {
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        *(u128 *)v = old.q;
+        m->state = 1;
+        break;
+    case 1:
+        spring_axis_to(&m->pos.v.x, v->home_x, &v->vel_x, D_L01_00161BF0 * D_0015ED70, D_L01_00161BF4, 3.0f);
+        spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * D_0015ED70, D_L01_00161BF4, 3.0f);
+        if (FUN_001f9b80(&m->pos, &D_0013F350.pos) < D_L01_00161BF8) {
+            if (FUN_001f99c0(m->pos.v.z - D_0013F350.pos.v.z) < 0.7f) {
+                ang = FUN_L00_001ff8b0(m->pos.v.x - D_0013F350.pos.v.x, m->pos.v.y - D_0013F350.pos.v.y);
+                m->pos.v.x = FUN_001f9dc8(ang) * D_L01_00161BF8;
+                m->pos.v.y = FUN_001f9de0(ang) * D_L01_00161BF8;
+                m->pos.v.x += D_0013F350.pos.v.x;
+                m->pos.v.y += D_0013F350.pos.v.y;
+            }
+        }
+        FUN_L00_00258490(m, &tgt, &m->pos, 3, 0.1f, D_L01_00161C00, 600.0f, 1.5707964f);
+        m->pos.v.x = tgt.v.x;
+        m->pos.v.y = tgt.v.y;
+        m->pos.v.z = old.v.z;
+        if (FUN_001f9b48(&old, &m->pos) > D_L01_00161BFC * D_0015ED6C) {
+            FUN_001f9a28(&d, &m->pos, &old);
+            step.q = d.q;
+            FUN_L00_001ff500(&step, &step, D_L01_00161BFC * D_0015ED6C);
+            FUN_001f9a10(&d, &old, &step);
+            m->pos.q = d.q;
+        }
+        dz = FUN_002135f0(&m->pos, 0) - m->pos.v.z;
+        lim = D_0015ED6C * 3.0f;
+        if (dz > lim) {
+            dz = lim;
+        } else if (dz < -lim) {
+            dz = -lim;
+        }
+        m->pos.v.z += dz;
+        break;
+    }
+}
+typedef union {
+    u128 q;
+    f32 f[4];
+} SteamVec;
+
+typedef struct {
+    u32 c[3];
+} SteamColors;
+
+typedef struct {
+    s32 active;
+    s16 puff_timer;
+    s16 burst_timer;
+    s32 x8;
+    f32 height;
+} SteamVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    SteamVec pos;
+    u8 pad20[0x58];
+    SteamVars *pvars;
+} SteamMoby;
+
+typedef struct {
+    u8 pad0[0x2C];
+    f32 floor_z;
+} SteamParticle;
+
+extern SteamColors D_L01_00161C08;
+extern SteamColors D_L01_00161C18;
+extern int FUN_001f9770(void *);
+extern s32 FUN_001f9740(void *);
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
+extern void *FUN_L00_0026bed0(void *, void *, u32, u32, f32, s32, u32);
+
+void FUN_L01_002f8c58(SteamMoby *m) {
+    SteamVars *v;
+    SteamColors colors;
+    SteamVec vel;
+    SteamVec pos;
+    SteamVec puff;
+    SteamParticle *p;
+    f32 r;
+    f32 ang;
+    f32 size;
+    s32 life;
+    s32 i;
+
+    v = m->pvars;
+    FUN_001f9770(&v->puff_timer);
+    FUN_001f9770(&v->burst_timer);
+    if (v->active == 0) {
+        return;
+    }
+    if (FUN_001f9740(v)) {
+        v->puff_timer = FUN_001f96f8(0x78);
+    }
+    if (v->burst_timer == 0 && random_integer_below(100) < 5) {
+        colors = D_L01_00161C08;
+        pos.q = 0;
+        pos.f[0] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        pos.f[1] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        vel.q = pos.q;
+        r = random_float_between(0.0f, 0.25f);
+        ang = random_angle_radians();
+        pos.f[0] = FUN_001f9dc8(ang) * r;
+        pos.f[1] = FUN_001f9de0(ang) * r;
+        pos.f[2] = 0.0f;
+        FUN_001f9a10(&pos, &pos, &m->pos);
+        pos.f[2] += v->height;
+        FUN_L01_002f8530(&pos, &vel, colors.c[random_integer_below(3)], FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+    }
+    for (i = 0; i < 2; i++) {
+        colors = D_L01_00161C18;
+        puff.q = 0;
+        puff.f[0] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        puff.f[1] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        puff.f[2] = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+        vel.q = puff.q;
+        r = random_float_between(0.0f, 0.25f);
+        ang = random_angle_radians();
+        puff.f[0] = FUN_001f9dc8(ang) * r;
+        puff.f[1] = FUN_001f9de0(ang) * r;
+        puff.f[2] = 0.0f;
+        FUN_001f9a10(&puff, &puff, &m->pos);
+        r *= D_0015ED6C;
+        r *= 8.0f;
+        puff.f[2] += v->height;
+        vel.f[2] += r;
+        size = random_float_between(70000.0f, 140000.0f);
+        life = FUN_001f96f8(0xB4);
+        p = FUN_L00_0026bed0(&puff, &vel, 0x0F081020, 0x00081020, size, life, colors.c[random_integer_below(3)]);
+        if (p != 0) {
+            p->floor_z = m->pos.f[2] - 0.5f;
+        }
+    }
+}
 typedef struct {
     u8 pad0[0x80];
     s32 idx;
@@ -335,7 +650,175 @@ void FUN_L01_002f9000(Obj *obj) {
     FUN_L00_002e84b8(D_L01_00161C30, D_L01_00161C38);
     FUN_L00_002e84f0(0, D_L01_00161C34, D_L01_00161C38);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9080.s", FUN_L01_002f9080);
+typedef union {
+    u128 q;
+    f32 f[4];
+} CapVec;
+
+typedef struct {
+    u32 c[3];
+} CapColors;
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 w20;
+    s16 h24;
+    u8 pad26[2];
+    u8 b28;
+    u8 pad29[0x15];
+    s16 h3E;
+    u8 pad40[0x20];
+    CapVec rot;
+    CapVec home;
+    s32 cam;
+    s16 wait;
+    s16 hold;
+    s16 rise_len;
+    s16 rise;
+    s32 music;
+} CapVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    CapVec pos;
+    u8 state;
+    u8 pad21[0x57];
+    CapVars *pvars;
+    u8 pad7c[0x36];
+    s16 id;
+} CapMoby;
+
+typedef struct {
+    u8 pad0[0x80];
+    u8 pos[8];
+    f32 z;
+    u8 pad8c[0x2000];
+    u32 mode;
+} CapPlayer;
+
+typedef struct {
+    f32 x, y, z;
+} CapVec3;
+
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} CapLevelState;
+
+typedef struct {
+    u8 pad0[0x160];
+    f32 shake;
+    u8 pad164[4];
+    s32 shake_time;
+} CapCamera;
+
+extern CapPlayer cap_player __asm__("D_0013F350");
+extern CapLevelState D_L01_001BB6B0;
+extern CapCamera D_L01_00167100;
+extern CapColors D_L01_00161C40;
+extern s32 D_0014C190[][64];
+extern s32 D_L01_001BA950[];
+extern s32 D_L01_0015F404;
+extern void FUN_001f99f8(void *);
+void FUN_L01_002f9000(Obj *obj);
+extern void FUN_L00_002eac18(s32);
+extern void FUN_L01_0023cf98(s32, s32);
+
+void FUN_L01_002f9080(CapMoby *m) {
+    CapVars *v;
+    u8 *e;
+
+    v = m->pvars;
+    if (m->state != 1 && !FUN_001f9770(&v->wait) && random_integer_below(100) < 5) {
+        CapColors colors;
+        CapVec vel;
+        CapVec pos;
+        f32 r;
+        f32 ang;
+
+        colors = D_L01_00161C40;
+        pos.q = 0;
+        pos.f[0] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        pos.f[1] = random_float_between(D_0015ED6C * -0.5f, D_0015ED6C * 0.5f);
+        vel.q = pos.q;
+        r = random_float_between(2.0f, 3.0f);
+        ang = random_angle_radians();
+        pos.f[0] = FUN_001f9dc8(ang) * r;
+        pos.f[1] = FUN_001f9de0(ang) * r;
+        pos.f[2] = 0.0f;
+        FUN_001f9a10(&pos, &pos, &v->home);
+        FUN_L01_002f8530(&pos, &vel, colors.c[random_integer_below(3)], FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+    }
+    switch (m->state) {
+    case 0:
+        v->w20 = 0;
+        v->h24 = 0;
+        v->b28 = 4;
+        v->h3E = 5;
+        qcopy(&v->home, &m->pos);
+        m->state = 1;
+        if (D_L01_001BB6B0.collected[m->id] != 0
+            || (D_0014C190[D_0015ED84][m->id >> 5] >> (m->id & 0x1F)) & 1) {
+            FUN_001f99f8(&v->rot);
+            m->state = 4;
+            m->pos.f[2] = v->home.f[2] - 20.0f;
+            v->music = -1;
+        }
+        break;
+    case 1:
+        if (v->cam != -1) {
+            e = (u8 *)(v->cam * 128 + (s32)D_L01_001600EC);
+            if (cap_player.z >= *(f32 *)(e + 0x38)
+                && FUN_001f9b80(cap_player.pos, e + 0x30) < 10.0f
+                && (cap_player.mode < 2 || cap_player.mode == 9)) {
+                v->wait = FUN_L00_00257b90(FUN_001f96f8(300), FUN_001f96f8(600));
+                v->rise = FUN_001f96f8(v->rise_len);
+                m->state = 2;
+                D_L01_00167100.shake = 0.4f;
+                D_L01_00167100.shake_time = FUN_001f96f8(30);
+                FUN_0022da68(1, 0, m);
+            }
+        }
+        break;
+    case 2:
+        FUN_L01_002f9000((Obj *)m);
+        if (FUN_001f9770(&v->rise)) {
+            FUN_001f99f8(&v->rot);
+            v->hold = FUN_001f96f8(0x2D);
+            m->state = 3;
+        }
+        break;
+    case 3: {
+        CapVec3 old;
+
+        FUN_L01_002f9000((Obj *)m);
+        m->pos.f[2] -= 0.0f;
+        qcopy(&old, &m->pos);
+        v->rot.f[2] -= D_0015ED70 * 30.0f;
+        FUN_001f9a10(&m->pos, &m->pos, &v->rot);
+        if (FUN_001f9770(&v->hold) && 20.0f < v->home.f[2] - m->pos.f[2]) {
+            D_L01_00167100.shake = 0.1f;
+            D_L01_00167100.shake_time = FUN_001f96f8(20);
+            FUN_001f99f8(&v->rot);
+            m->state = 4;
+            FUN_0022da68(0, 0, m);
+            m->pos.f[2] = v->home.f[2] - 20.0f;
+            D_0014C190[D_0015ED84][m->id >> 5] |= 1 << (m->id & 0x1F);
+            D_L01_001BA950[m->id >> 5] |= 1 << (m->id & 0x1F);
+        }
+        m->pos.f[2] += 0.0f;
+        break;
+    }
+    case 4:
+        if (v->wait == 0 && v->music != -1) {
+            FUN_L00_002eac18(0);
+            FUN_L01_0023cf98(0, 1);
+            D_L01_0015F404 = 0;
+            v->music = -1;
+        }
+        break;
+    }
+}
 typedef struct {
     u8 pad0[0x20];
     s32 x20;

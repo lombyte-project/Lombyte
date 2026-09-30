@@ -74,7 +74,89 @@ void FUN_L01_002f9bf0(SwayMoby *m) {
     }
     m->rotz = FUN_001fa580(m->rotz, D_0015ED6C * -12.566371f * v->sway);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9d80.s", FUN_L01_002f9d80);
+typedef union { u128 q; f32 f[4]; } BurstVec;
+
+typedef struct {
+    u32 c[3];
+} BurstColors;
+
+typedef struct {
+    u8 pad0[0xA6];
+    s16 oclass;
+} BurstClassMoby;
+
+typedef struct {
+    u8 pad0[0x20];
+    BurstClassMoby *moby;
+} BurstTarget;
+
+typedef struct {
+    u8 pad0[0x10];
+    BurstVec pos;
+    u8 pad20[0x84];
+    u8 bA4;
+    u8 padA5[0xD];
+    s16 id;
+} BurstMoby;
+
+extern s32 D_0015ED84;
+extern s32 D_0014C190[][64];
+extern s32 D_L01_001BA950[];
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} BurstLevelState;
+extern BurstLevelState D_L01_001BB6B0;
+extern BurstColors D_L01_00161C60;
+extern void *FUN_L00_0025a420(void *, s32, s32);
+extern void FUN_0020c828(void *);
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_001f9a10(void *, void *, void *);
+extern int FUN_L00_00257b90(int lo, int hi);
+extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
+
+void FUN_L01_002f9d80(BurstMoby *self) {
+    BurstTarget *t;
+    BurstColors colors;
+    BurstVec dir;
+    BurstVec pos;
+    f32 r;
+    f32 ang;
+    s32 i;
+
+    t = FUN_L00_0025a420(self, 0x830000, 0);
+    if (D_L01_001BB6B0.collected[self->id] != 0
+        || (D_0014C190[D_0015ED84][self->id >> 5] >> (self->id & 0x1F)) & 1) {
+        FUN_0020c828(self);
+    }
+    if (t != NULL && t->moby->oclass == 0x2AE) {
+        for (i = 0; i < 20; i++) {
+            colors = D_L01_00161C60;
+            pos.q = 0;
+            pos.f[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
+            pos.f[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
+            pos.f[2] = random_float_between(-D_0015ED6C, D_0015ED6C);
+            dir.q = pos.q;
+            r = random_float_between(2.0f, 3.0f);
+            ang = random_angle_radians();
+            pos.f[0] = FUN_001f9dc8(ang) * r;
+            pos.f[1] = FUN_001f9de0(ang) * r;
+            pos.f[2] = 0.0f;
+            FUN_L00_001ff500(&dir, &dir, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 20.0f));
+            FUN_001f9a10(&pos, &pos, &self->pos);
+            FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)], FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+        }
+        D_0014C190[D_0015ED84][self->id >> 5] |= 1 << (self->id & 0x1F);
+        D_L01_001BA950[self->id >> 5] |= 1 << (self->id & 0x1F);
+        FUN_0020c828(self);
+    } else {
+        self->bA4 = 0xFF;
+    }
+}
 typedef struct {
     u128 target;
     s32 owner;
