@@ -1050,7 +1050,7 @@ def render_svg(
     lines.append(
         f'<text x="{cx:.1f}" y="{cy + 7:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="36" font-weight="800" fill="{ORANGE}" '
-        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="5" stroke-opacity="0.8">'
+        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="2" stroke-opacity="0.6">'
         f"{boot_percent:.1f}%</text>"
     )
     caption = "C_EXACT of the executable"
@@ -1059,7 +1059,7 @@ def render_svg(
     lines.append(
         f'<text x="{cx:.1f}" y="{cy + 25:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}" fill-opacity="0.95" style="paint-order:stroke" '
-        f'stroke="{BACKGROUND}" stroke-width="4" stroke-opacity="0.8">{caption}</text>'
+        f'stroke="{BACKGROUND}" stroke-width="2" stroke-opacity="0.7">{caption}</text>'
     )
 
     # The tree: a trunk on the left, one branch per line.
