@@ -653,4 +653,61 @@ int FUN_L00_002ed8b0(char *a) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed950.s", FUN_L00_002ed950);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002edad8.s", FUN_L00_002edad8);
+typedef struct { s32 snd; s32 lo; s32 hi; s32 timer; s32 h; } S_2edad8;
+typedef struct { f32 f[4]; } V_2edad8;
+extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 D_0013E550_2edad8[] __asm__("D_0013E550");
+extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_2edad8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void mul_2edad8(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern f32 fabs_2edad8(f32) __asm__("FUN_001f99c0");
+extern s32 tick_2edad8(void *) __asm__("FUN_001f9740");
+extern s32 play_2edad8(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
+extern f32 frand_2edad8(f32, f32) __asm__("FUN_002132a8");
+extern s32 irand_2edad8(s32) __asm__("FUN_00213260");
+extern s32 scale_2edad8(s32) __asm__("FUN_001f96f8");
+void FUN_L00_002edad8(u8 *m) {
+    V_2edad8 d;
+    V_2edad8 e;
+    V_2edad8 a;
+    V_2edad8 b;
+    V_2edad8 r;
+    S_2edad8 *s;
+    f32 f;
+    u8 *v;
+    s = *(S_2edad8 **)(m + 8);
+    {
+        f32 g = *(f32 *)(m + 0xC);
+        e.f[0] = g;
+        e.f[1] = g;
+        e.f[2] = g;
+    }
+    sub_2edad8(&d, D_L00_00166DC0_2edad8, m + 0x40);
+    d.f[3] = 0;
+    mul_2edad8(&a, &d, m + 0x50);
+    mul_2edad8(&b, &e, m + 0x50);
+    f = fabs_2edad8(a.f[0]);
+    if (!(f <= fabs_2edad8(b.f[0]) + 1.0f)) return;
+    f = fabs_2edad8(a.f[1]);
+    if (!(f <= fabs_2edad8(b.f[1]) + 1.0f)) return;
+    f = fabs_2edad8(a.f[2]);
+    if (!(f <= fabs_2edad8(b.f[2]) + 1.0f)) return;
+    v = D_0013E550_2edad8 + s->h * 0x70;
+    if (*(u8 **)(v + 0x8C) == m && v[0x74] != 0) return;
+    if (tick_2edad8(&s->timer) != 0) {
+    s->h = play_2edad8(s->snd, 0, m, 0x400);
+    if (s->h != -1) {
+        r.f[0] = frand_2edad8(-1.0f, 1.0f);
+        r.f[1] = frand_2edad8(-1.0f, 1.0f);
+        r.f[2] = frand_2edad8(-1.0f, 1.0f);
+        mul_2edad8(&r, &r, m + 0x10);
+        add_2edad8(&r, &r, m + 0x40);
+        qcopy(D_0013E550_2edad8 + 0x90 + s->h * 0x70, &r);
+    }
+    if (s->hi > 0) {
+        s->timer = (f32)scale_2edad8(s->lo + irand_2edad8(s->hi - s->lo)) * 60.0f;
+    }
+    } else {
+        s->h = -1;
+    }
+}

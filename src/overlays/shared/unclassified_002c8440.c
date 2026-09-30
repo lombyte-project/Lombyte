@@ -159,7 +159,75 @@ void FUN_L00_002cc210(unsigned char *m) {
         FUN_0020c828_2cc210(m);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cc360.s", FUN_L00_002cc360);
+typedef unsigned int u128_2cc360 __attribute__((mode(TI), aligned(16)));
+typedef union { u128_2cc360 q; float f[4]; } V_2cc360;
+typedef struct { char p0[0x46]; short h46; } C_2cc360;
+typedef struct M_2cc360 {
+    char p0[0x10]; V_2cc360 pos; char p20[4]; C_2cc360 *c; struct M_2cc360 *next;
+    char p2c[5]; unsigned char b31; short h32; unsigned short h34;
+} M_2cc360;
+extern M_2cc360 *D_L00_0015FFE4_2cc360 __asm__("D_L00_0015FFE4");
+extern float *c338_2cc360(void *) __asm__("FUN_L00_0025c338");
+extern float dist_2cc360(void *, void *) __asm__("FUN_001f9b80");
+extern float atan_2cc360(float, float) __asm__("FUN_L00_001ff8b0");
+extern float diffrot_2cc360(float, float) __asm__("FUN_001fa688");
+extern int coll_2cc360(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
+M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw, float maxPitch, float maxDist) {
+    M_2cc360 *best = 0;
+    float bestScore = 1.0e9f;
+    M_2cc360 *m;
+    float *info;
+    V_2cc360 t;
+    V_2cc360 *pp;
+    float d, ys, ps, score;
+    int i, found;
+    for (m = D_L00_0015FFE4_2cc360; m; m = m->next) {
+        if (m->h32 == 0) continue;
+        if (excl) {
+            found = 0;
+            for (i = 0; i < 7; i++) {
+                if (excl[i] == m) {
+                    found = 1;
+                    break;
+                }
+            }
+            if (found) continue;
+        } else if (!m->b31) {
+            continue;
+        }
+        info = c338_2cc360(m);
+        if (!info) continue;
+        if (info[0] < 0.0f) continue;
+        if (!(m->h34 & 0x1000)) continue;
+        if (!m) continue;
+        if (!m->c) continue;
+        if (m->c->h46 != 5) continue;
+        pp = &m->pos;
+        d = dist_2cc360(pos, pp);
+        if (!(d < maxDist)) continue;
+        qcopy(&t, pp);
+        t.f[2] += info[4] + 0.1f;
+        ys = diffrot_2cc360(rot[2], atan_2cc360(t.f[0] - pos[0], t.f[1] - pos[1]));
+        ys = ys * ys;
+        if (ys < maxYaw * maxYaw) {
+            ps = diffrot_2cc360(rot[1], atan_2cc360(d, t.f[2] - pos[2]));
+            ps = ps * ps;
+            if (!(ps < maxPitch * maxPitch)) continue;
+            if (5.0f < d) {
+                ys = ys * ps * d;
+                ys += d;
+            } else {
+                ys = d / 5.0f;
+            }
+            if (ys < bestScore) {
+                if (coll_2cc360(pos, &t, 2, m, 0)) continue;
+                bestScore = ys;
+                best = m;
+            }
+        }
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cc608.s", FUN_L00_002cc608);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ccee0.s", FUN_L00_002ccee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cd1f0.s", FUN_L00_002cd1f0);

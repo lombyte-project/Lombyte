@@ -134,7 +134,67 @@ float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
     }
     return FUN_001f9b80_25db00(p, out);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025dcd8.s", FUN_L00_0025dcd8);
+typedef int u128_25dcd8 __attribute__((mode(TI)));
+extern float fabs_25dcd8(float) __asm__("FUN_001f99c0");
+extern float db00_25dcd8(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
+extern float dist_25dcd8(void *, void *) __asm__("FUN_001f9b80");
+extern float dsq_25dcd8(void *, void *) __asm__("FUN_001f9b48");
+extern void b6b8_25dcd8(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern void vsub_25dcd8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vadd_25dcd8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void vmul_25dcd8(void *, void *, float) __asm__("FUN_001f9a68");
+extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
+extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
+float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25dcd8 *b, float r) {
+    u128_25dcd8 d[2];
+    u128_25dcd8 c[1];
+    u128_25dcd8 e[1];
+    u128_25dcd8 g[1];
+    float *o, *fa, *fb;
+    float res, t, u;
+    int i;
+    if (r > 0.0f && fabs_25dcd8(((float *)p)[2] - ((float *)a)[2]) < r
+        && fabs_25dcd8(((float *)p)[2] - ((float *)b)[2]) < r) {
+        res = db00_25dcd8(out, p, a, b);
+        r = dist_25dcd8(a, out);
+        u = dist_25dcd8(a, b);
+        d[0] = *a;
+        d[1] = *b;
+        b6b8_25dcd8(out, &d[0], &d[1], r / u);
+        return res;
+    }
+    vsub_25dcd8(d, b, a);
+    d[1] = *a;
+    vscl_25dcd8(d, d, 1.0f);
+    qcopy(c, d);
+    t = -dot_25dcd8(p, d);
+    u = dot_25dcd8(&d[1], c);
+    vmul_25dcd8(out, d, -(t + u) / dot_25dcd8(d, c));
+    vadd_25dcd8(out, out, &d[1]);
+    i = 0;
+    fb = (float *)b;
+    fa = (float *)a;
+    o = (float *)out;
+    do {
+        if (*o > *fa && *fb < *o) break;
+        if (*o < *fa && *o < *fb) break;
+        i++;
+        fb++;
+        fa++;
+        o++;
+    } while (i < 3);
+    if (i < 3) {
+        if (dsq_25dcd8(out, a) < dsq_25dcd8(out, b)) {
+            qcopy(out, a);
+        } else {
+            qcopy(out, b);
+        }
+    }
+    e[0] = *p;
+    g[0] = *out;
+    return da70_25dcd8(e, g, 0.0f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e308.s", FUN_L00_0025e308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e310.s", FUN_L00_0025e310);

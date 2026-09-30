@@ -81,7 +81,54 @@ void FUN_L00_002e0340(char *a) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e03a0.s", FUN_L00_002e03a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0788.s", FUN_L00_002e0788);
+typedef int u128_2e0788 __attribute__((mode(TI)));
+extern char D_L00_00166DC0[] __attribute__((section(".data")));
+extern void vsub_2e0788(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vadd_2e0788(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vscl_2e0788(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern int f9740_2e0788(void *) __asm__("FUN_001f9740");
+extern int ticks_2e0788(int) __asm__("FUN_001f96f8");
+extern float i2f_2e0788(int) __asm__("FUN_001fa6c0");
+extern float f99c0_2e0788(float) __asm__("FUN_001f99c0");
+extern int lerpc_2e0788(int, int, float) __asm__("FUN_001fa6e0");
+extern int f2i_2e0788(float) __asm__("FUN_001fa6d0");
+extern unsigned char *spr_2e0788(u128_2e0788 *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+typedef struct { char pad[0x10]; float a[4]; float b[4]; int t[4]; float c[4]; } M_2e0788;
+void FUN_L00_002e0788(unsigned char *p) {
+    u128_2e0788 v[2];
+    M_2e0788 *m = *(M_2e0788 **)(p + 0x78);
+    float *a;
+    int *t;
+    int i, j, c;
+    float f, g;
+    j = 0;
+    p += 0x10;
+    vsub_2e0788(v, D_L00_00166DC0, p);
+    t = m->t;
+    a = m->a;
+    vscl_2e0788(v, v, -0.3f);
+    vscl_2e0788(&v[1], v, 0.1f);
+    vadd_2e0788(v, v, p);
+    for (i = 3; i >= 0; i--) {
+        f = *a + m->b[j];
+        *a = f;
+        if (f >= 255.0f) {
+            *a = f - 255.0f;
+        } else if (f <= 0.0f) {
+            *a = f + 255.0f;
+        }
+        if (f9740_2e0788(t)) {
+            m->t[j] = ticks_2e0788(0xff);
+        }
+        t++;
+        g = i2f_2e0788(ticks_2e0788(0xff) - m->t[j]);
+        g = g / (float)ticks_2e0788(0xff);
+        c = lerpc_2e0788(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - g));
+        spr_2e0788(v, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, m->c[j]);
+        j++;
+        vadd_2e0788(v, v, &v[1]);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1f28.s", FUN_L00_002e1f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2040.s", FUN_L00_002e2040);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e20f8.s", FUN_L00_002e20f8);

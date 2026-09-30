@@ -2,7 +2,80 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025fcb8.s", FUN_L00_0025fcb8);
+#include "qcopy.h"
+#include "qzero.h"
+extern char D_0013F350_25fcb8[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern short D_L00_001B0830_25fcb8[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
+extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L00_0015FFD8");
+extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") __attribute__((section(".data")));
+extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
+
+int FUN_L00_0025fcb8(char *a, char *o, float best) {
+    char *g = D_0013F350_25fcb8;
+    char *m;
+    char *p;
+    int res;
+    int i;
+    int j;
+    float d;
+
+    m = *(char **)(g + 0x2080);
+    res = 0;
+    if (*(int *)(g + 0x208C) == 0x18 || *(int *)(g + 0x2084) == 0x72) {
+        m = 0;
+        res = 2;
+    }
+    for (i = 1; i <= D_L00_001B0830_25fcb8[0]; i++) {
+        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_25fcb8[i] << 8);
+        if (p == 0) continue;
+        if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFD) continue;
+        if (*(unsigned char *)(p + 0x20) != 3) continue;
+        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        if (d < best) {
+            m = p;
+            best = d;
+            res = 1;
+        }
+    }
+    for (j = 0; j < 20; j++) {
+        p = D_L00_001DD100_25fcb8[j];
+        if (p == 0) continue;
+        if (*(short *)(p + 0xA6) != 0x10E) continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFD) continue;
+        if (*(unsigned char *)(p + 0xBC) == 0) continue;
+        d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
+        if (d < best) {
+            m = p;
+            best = d;
+            res = 1;
+        }
+    }
+    if (m != 0) {
+        *(char **)(o + 0x40) = m;
+        qcopy(o, m + 0x10);
+        qcopy(o + 0x10, m + 0x40);
+        g = D_0013F350_25fcb8;
+        if (m == *(char **)(g + 0x2080)) {
+            qcopy(o + 0x20, g + 0xC0);
+            qcopy(o + 0x30, g + 0xD0);
+        } else {
+            qcopy(o + 0x30, o);
+            *(float *)(o + 0x38) += 0.6f;
+            qcopy(o + 0x20, o + 0x30);
+        }
+    } else {
+        *(char **)(o + 0x40) = 0;
+        qzero(o);
+        qzero(o + 0x10);
+        qzero(o + 0x30);
+        qzero(o + 0x20);
+    }
+    *(int *)(o + 0x44) = res;
+    return res;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025ff38.s", FUN_L00_0025ff38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002603e0.s", FUN_L00_002603e0);
 typedef float M4_260400[16] __attribute__((aligned(16)));

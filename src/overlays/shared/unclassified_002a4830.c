@@ -459,5 +459,74 @@ void FUN_L00_002a9c50(M_2a9c50 *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a9ed0.s", FUN_L00_002a9ed0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002aa008.s", FUN_L00_002aa008);
+typedef union { u128 q; f32 f[4]; } V_2aa008;
+typedef struct { u8 pad[0x5C]; s32 i5C; } D_2aa008;
+typedef struct { u8 pad[0x34]; s16 h34; } M_2aa008;
+typedef struct N_2aa008 { u8 pad[0x10]; V_2aa008 v10; u8 b20; u8 pad2[0x28 - 0x21]; struct N_2aa008 *p28; f32 f2C; u8 pad3[0x78 - 0x30]; void *p78; u8 pad4[0xA6 - 0x7C]; s16 hA6; } N_2aa008;
+typedef struct { u8 pad[0x10]; V_2aa008 v10; } Q_2aa008;
+typedef struct { u8 pad[0x100]; u8 v100[0x2FC - 0x100]; void *p2FC; u8 pad2[0x2080 - 0x300]; Q_2aa008 *p2080; } P_2aa008;
+extern P_2aa008 D_0013F350_2aa008 __asm__("D_0013F350");
+extern f32 D_0015ED6C_2aa008 __asm__("D_0015ED6C");
+extern f32 D_0015ED70_2aa008 __asm__("D_0015ED70");
+extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
+extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+f32 FUN_002132a8_2aa008(f32, f32) __asm__("FUN_002132a8");
+void FUN_L00_001ff500_2aa008(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9a10_2aa008(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 FUN_L00_0025c338_2aa008(void *) __asm__("FUN_L00_0025c338");
+s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
+s32 FUN_L00_001efc70_2aa008(void *, void *, s32, void *, s32) __asm__("FUN_L00_001efc70");
+void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
+void FUN_001f9a68_2aa008(void *, void *, f32) __asm__("FUN_001f9a68");
+void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
+    V_2aa008 d;
+    V_2aa008 t;
+    V_2aa008 e;
+    M_2aa008 *m;
+    P_2aa008 *P;
+    N_2aa008 *n;
+    s32 count;
+    N_2aa008 *best;
+    s32 bestv;
+    V_2aa008 *k;
+    t.q = 0;
+    m = self->p78;
+    t.f[0] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    t.f[1] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    t.f[2] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    self->b20 = 1;
+    self->f2C = self->f2C / 0.65f;
+    d.q = t.q;
+    FUN_L00_001ff500_2aa008(&d, &d, FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
+    FUN_001f9a10_2aa008(m, &d, arg);
+    P = &D_0013F350_2aa008;
+    if (P->p2FC && FUN_L00_0025c338_2aa008(P->p2FC)) {
+        FUN_001f9a10_2aa008(m, m, P->v100);
+    }
+    m->h34 = FUN_001f96f8_2aa008(0x78);
+    count = 0;
+    best = 0;
+    bestv = 0;
+    for (n = D_L00_0015FFE4_2aa008; n; n = n->p28) {
+        if (n->b20 != 0xFE) if (n->b20 != 0xFD) if (n->hA6 == self->hA6) if (n != self) {
+            if (best == 0 || ((D_2aa008 *)n->p78)->i5C < bestv) {
+                bestv = ((D_2aa008 *)n->p78)->i5C;
+                best = n;
+            }
+            count++;
+        }
+    }
+    if (count >= 8) ((D_2aa008 *)best->p78)->i5C = -1;
+    qcopy(&self->v10, pos);
+    t.q = D_0013F350_2aa008.p2080->v10.q;
+    t.f[2] = pos->f[2];
+    if (FUN_L00_001efc70_2aa008(&t, pos, 0, D_0013F350_2aa008.p2080, 0)) {
+        k = D_L00_00173E60_2aa008;
+        qcopy(&self->v10, &k[0]);
+        FUN_L00_001ff500_2aa008(&e, &k[2], D_0015ED70_2aa008 * 9.7f);
+        FUN_001f9a10_2aa008(&self->v10, &self->v10, &e);
+        FUN_L00_001ff660_2aa008(m, m, &k[2]);
+        FUN_001f9a68_2aa008(m, m, 0.6f);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002aa2a8.s", FUN_L00_002aa2a8);
