@@ -15,6 +15,7 @@ wrong; write `decomp: promote …`.
 | Type     | Use for                                                                   |
 | :------- | :------------------------------------------------------------------------ |
 | `decomp` | Exact-C promotions, source work, source refactors, oracle/source plumbing |
+| `overlay` | The level overlay layer: its catalogue, `src/overlays/` stubs and promoted C, the overlays build, its map and report plumbing |
 | `docs`   | README and documentation, source headers, ROLE comments, reference data   |
 | `chore`  | Non-behavioral cleanup, generated artifacts, tooling, data refreshes      |
 | `fix`    | A bug fix in tooling or the build                                         |
@@ -22,7 +23,9 @@ wrong; write `decomp: promote …`.
 
 A commit that promotes sources and also refreshes the map is still `decomp:`;
 the map is a derived artifact. Prefer `decomp:` whenever the commit changes
-`src/` behavior.
+`src/` behavior. Work on the level overlays is `overlay:` whatever it touches
+(`config/overlays/`, `src/overlays/`, the overlay parts of the scripts and
+the map); `decomp:` stays the executable's.
 
 ## Rules
 
@@ -48,6 +51,7 @@ the map is a derived artifact. Prefer `decomp:` whenever the commit changes
 ```
 decomp: promote fun_002212b8 (424 B)
 decomp: promote run-11 owners (20 units)
+overlay: promote 159 shared functions into src/overlays
 docs: add recovered engine source layout reference
 chore: refresh treemap
 config: refresh recovered-name unit paths for promoted units

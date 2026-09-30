@@ -7,7 +7,7 @@ Install into the repository (idempotent):
     # or: python3 scripts/install-commit-hook.py  (tools repository)
 
 The standard is one lowercase `<type>: <summary>` prefix per subject
-(`decomp`, `docs`, `chore`, `fix`, `config`), with no repeated scope token.
+(`decomp`, `overlay`, `docs`, `chore`, `fix`, `config`), with no repeated scope token.
 
 The hook also rewrites the message file before validation: every
 `co-authored-by:` and `claude-session:` trailer line (case-insensitive) is
@@ -28,7 +28,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-TYPES = {"decomp", "docs", "chore", "fix", "config"}
+TYPES = {"decomp", "overlay", "docs", "chore", "fix", "config"}
 SUBJECT_RE = re.compile(r"^(?P<type>[a-z]+): (?P<summary>\S.*)$")
 NON_IMPERATIVE_RE = re.compile(
     r"^(?:added|updated|fixed|changed|removed|moved)\b", re.IGNORECASE
@@ -101,7 +101,7 @@ def validate(subject: str) -> list[str]:
         found.append("summary should be lowercase")
     if NON_IMPERATIVE_RE.match(summary):
         found.append("summary should use the imperative mood (e.g. 'promote ...')")
-    if re.match(r"^(?:decomp|docs|chore|fix|config):", summary):
+    if re.match(r"^(?:decomp|overlay|docs|chore|fix|config):", summary):
         found.append("type prefix must not be repeated in the summary")
     if re.match(r"^[\w/.-]+:\s", summary):
         found.append("scope token (e.g. 'textbin:', 'sdk:') must be dropped")
