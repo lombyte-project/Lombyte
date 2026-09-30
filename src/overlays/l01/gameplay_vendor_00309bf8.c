@@ -100,8 +100,94 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c190.s", FUN_L01_0030c190);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d0f0.s", FUN_L01_0030d0f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ef18.s", FUN_L01_0030ef18);
+typedef struct {
+    u8 pad0[0x2C];
+    f32 f2c;
+} TriggerHit;
+
+typedef struct {
+    u8 pad0[0x10];
+    u8 pos[0x10];
+    u8 state;
+    u8 pad21[0x1F];
+    u8 rot[0x10];
+} TriggerMoby;
+
+extern s32 D_L01_0015F580;
+void *FUN_L00_0025a420(void *, s32, s32);
+extern s32 FUN_0022da68(s32, s32, void *);
+extern void FUN_L01_002787a0();
+extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
+extern void FUN_L01_00278e20();
+void FUN_0020c828(void *);
+
+void FUN_L01_0030d0f0(TriggerMoby *obj) {
+    TriggerHit *hit;
+    s32 flag;
+
+    flag = 0;
+    hit = FUN_L00_0025a420(obj, 0x10000, 0);
+    switch (obj->state) {
+    case 0:
+        obj->state = 1;
+        break;
+    case 1:
+        if (hit != 0 && hit->f2c > 0.0f) {
+            flag = 1;
+        }
+        if (flag) {
+            obj->state = 2;
+        }
+        break;
+    case 2:
+        FUN_0022da68(0, 0, obj);
+        FUN_L01_002787a0(obj);
+        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f, &D_L01_0015F580);
+        FUN_L01_00278e20(obj, 0x718);
+        FUN_0020c828(obj);
+        break;
+    }
+}
+typedef struct {
+    f32 x, y, z, w;
+} EnvVec;
+
+extern EnvVec D_L01_00167240;
+extern f32 D_L01_00162110[2];
+extern void FUN_001f9a28(void *, void *, void *);
+extern f32 FUN_001f9ab0(void *, void *);
+extern void FUN_001f9a68(void *, void *, f32);
+extern f32 FUN_001f9af0(void *);
+
+void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
+    EnvVec eye;
+    EnvVec pos;
+    EnvVec refl;
+    EnvVec nrm;
+    s32 i;
+    f32 len;
+
+    for (i = 0; i < n; i++) {
+        pos.w = 1.0f;
+        pos.x = verts[i][0];
+        pos.y = verts[i][1];
+        pos.z = verts[i][2];
+        FUN_001f9a28(&eye, &pos, &D_L01_00167240);
+        FUN_L00_001ff500(&eye, &eye, 1.0f);
+        nrm.w = 1.0f;
+        nrm.x = -normals[i][0];
+        nrm.y = -normals[i][1];
+        nrm.z = -normals[i][2];
+        FUN_L00_001ff500(&nrm, &nrm, 1.0f);
+        FUN_001f9a68(&refl, &nrm, FUN_001f9ab0(&nrm, &eye) * 2.0f);
+        FUN_001f9a28(&refl, &eye, &refl);
+        FUN_L00_001ff500(&refl, &refl, 1.0f);
+        refl.z += 1.0f;
+        len = FUN_001f9af0(&refl) * 2.0f;
+        uv[i][0] = (refl.x / len + 0.5f) * 2.0f + D_L01_00162110[0];
+        uv[i][1] = (refl.y / len + 0.5f) * 2.0f + D_L01_00162110[1];
+    }
+}
 extern s32 D_L01_00202EA0[];
 extern s32 D_L01_00208108[];
 extern s32 D_L01_00208120[];
@@ -111,7 +197,7 @@ extern u8 D_L01_00208170[];
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void FUN_001f76a0(void);
-void FUN_L01_0030ef18(s32, s32, s32, s32, void *);
+void FUN_L01_0030ef18();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);
 
 void FUN_L01_0030f0e0(void) {

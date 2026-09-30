@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1223,
+  "matching_c": 1231,
   "intentional_asm": 249,
-  "pending_c": 3310,
+  "pending_c": 3302,
   "bytes_total": 3655312,
-  "bytes_matching_c": 242400,
+  "bytes_matching_c": 245604,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3316580,
-  "c_exact_percent_of_recoverable": 6.8109,
-  "c_fuzzy_percent_of_recoverable": 8.87,
+  "bytes_pending_c": 3313376,
+  "c_exact_percent_of_recoverable": 6.901,
+  "c_fuzzy_percent_of_recoverable": 8.96,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 177,
-    "pending_c": 3163,
+    "matching_c": 185,
+    "pending_c": 3155,
     "bytes_total": 3218660,
-    "bytes_matching_c": 22628,
-    "bytes_pending_c": 3196032,
-    "c_exact_percent_of_recoverable": 0.703,
+    "bytes_matching_c": 25832,
+    "bytes_pending_c": 3192828,
+    "c_exact_percent_of_recoverable": 0.8026,
     "shared": {
       "id": "shared",
       "index": null,
@@ -3544,12 +3544,12 @@
         "planet": "Novalis",
         "description": "Tobruk Crater: a village under Blarg attack",
         "functions": 67,
-        "matching_c": 18,
-        "pending_c": 49,
+        "matching_c": 26,
+        "pending_c": 41,
         "bytes_total": 114892,
-        "bytes_matching_c": 3560,
-        "bytes_pending_c": 111332,
-        "c_exact_percent_of_recoverable": 3.0986,
+        "bytes_matching_c": 6764,
+        "bytes_pending_c": 108128,
+        "c_exact_percent_of_recoverable": 5.8873,
         "files": [
           {
             "file": "src/overlays/l01/ui_help_00233de0.c",
@@ -3596,23 +3596,23 @@
           {
             "file": "src/overlays/l01/unclassified_002b96e0.c",
             "functions": 22,
-            "matching_c": 5,
+            "matching_c": 6,
             "bytes_total": 31824,
-            "bytes_matching_c": 948
+            "bytes_matching_c": 1372
           },
           {
             "file": "src/overlays/l01/unclassified_002f9810.c",
             "functions": 22,
-            "matching_c": 5,
+            "matching_c": 10,
             "bytes_total": 14520,
-            "bytes_matching_c": 976
+            "bytes_matching_c": 3032
           },
           {
             "file": "src/overlays/l01/gameplay_vendor_00309bf8.c",
             "functions": 10,
-            "matching_c": 5,
+            "matching_c": 7,
             "bytes_total": 7144,
-            "bytes_matching_c": 1116
+            "bytes_matching_c": 1840
           }
         ]
       },
@@ -4708,14 +4708,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1223,
+    "matching_c": 1231,
     "intentional_asm": 249,
-    "pending_c": 3310,
+    "pending_c": 3302,
     "bytes_total": 3655312,
-    "bytes_matching_c": 242400,
+    "bytes_matching_c": 245604,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3316580,
-    "c_exact_percent_of_recoverable": 6.8109,
-    "c_fuzzy_percent_of_recoverable": 8.87
+    "bytes_pending_c": 3313376,
+    "c_exact_percent_of_recoverable": 6.901,
+    "c_fuzzy_percent_of_recoverable": 8.96
   }
 }

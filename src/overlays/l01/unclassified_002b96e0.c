@@ -72,14 +72,70 @@ void FUN_L01_002f60f8(void) {
     FUN_L00_002371e0();
     FUN_L01_002b96e0(8, D_L01_001E2FC0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6180.s", FUN_L01_002f6180);
 #include "eetypes.h"
+#include "qzero.h"
 #include "qcopy.h"
 
 typedef union {
     u128 q;
     f32 f[4];
 } Vec4;
+
+typedef struct {
+    Vec4 *pts;
+    u8 pad4[4];
+    Vec4 *out;
+    s32 count;
+    u8 pad10[0x50];
+} BoundGroup;
+
+extern s32 D_L01_00161BA0 __attribute__((sda));
+extern BoundGroup D_L01_001E3380[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9a28(void *, void *, void *);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001fa6c0(s32);
+extern void FUN_L01_002f6150(void);
+void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
+
+void FUN_L01_002f6180(void *arg) {
+    Vec4 c;
+    Vec4 d;
+    Vec4 *p;
+    s32 i;
+    s32 j;
+    s32 k;
+    f32 r;
+
+    if (D_L01_00161BA0 == 0) {
+        D_L01_00161BA0 = 1;
+        for (i = 0; i < 2; i++) {
+            qzero(&c);
+            p = (D_L01_001E3380 + i)->pts;
+            for (j = 0; j < (D_L01_001E3380 + i)->count; j++) {
+                FUN_001f9a10(&c, &c, p);
+                p++;
+            }
+            FUN_001f9a68(&c, &c, 1.0f / FUN_001fa6c0((D_L01_001E3380 + i)->count));
+            c.f[3] = 0.0f;
+            p = (D_L01_001E3380 + i)->pts;
+            for (k = 0; k < (D_L01_001E3380 + i)->count; k++) {
+                FUN_001f9a28(&d, &c, p);
+                r = FUN_001f9af0(&d);
+                if (c.f[3] < r) {
+                    c.f[3] = r;
+                }
+                p++;
+            }
+            qcopy((D_L01_001E3380 + i)->out, &c);
+        }
+    }
+    enqueue_callback_list_1(FUN_L01_002f6150, arg);
+}
+#include "eetypes.h"
+#include "qcopy.h"
+
 
 typedef struct {
     Vec4 dir;
