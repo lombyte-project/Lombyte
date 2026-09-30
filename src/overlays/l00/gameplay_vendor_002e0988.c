@@ -80,7 +80,200 @@ void FUN_L00_002e0988(HelpMoby *m)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0b88.s", FUN_L00_002e0b88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1678.s", FUN_L00_002e1678);
+#include "eetypes.h"
+#include "qcopy.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} TrollVec;
+
+typedef struct TrollMoby {
+    u8 pad0[0x10];
+    TrollVec pos;
+    u8 state;
+    u8 pad21[0x13];
+    u16 flags;
+    u8 pad36[0x42];
+    struct TrollVars *vars;
+    u8 pad7C[0x18];
+    s32 unk94;
+    u8 pad98[0xC];
+    u8 unkA4;
+} TrollMoby;
+
+typedef struct TrollVars {
+    u8 pad0[0x20];
+    f32 health;
+    u8 pad24[2];
+    s16 unk26;
+    u8 pad28[0x10];
+    s32 unk38;
+    u8 pad3C[0x24];
+    u8 unk60[7];
+    u8 unk67;
+    u8 pad68[8];
+    u8 unk70[0x10];
+    f32 unk80;
+    f32 unk84;
+    f32 unk88;
+    f32 unk8C;
+    s32 unk90;
+    s32 unk94;
+    f32 unk98;
+    u8 pad9C[0x11];
+    u8 unkAD;
+    u8 padAE[0xE];
+    f32 unkBC;
+    f32 unkC0;
+    f32 unkC4;
+    u8 padC8[8];
+    TrollVec target;
+    u8 padE0[0x30];
+    TrollMoby *targetMoby;
+    s32 unk114;
+    u8 pad118[0x9C];
+    s32 unk1B4;
+    u8 pad1B8[4];
+    s32 unk1BC;
+    u8 pad1C0[0x1A];
+    s16 unk1DA;
+} TrollVars;
+
+typedef struct {
+    s32 unk0;
+    u8 pad4[0xC];
+    u8 data[1];
+} TrollAnim;
+
+typedef struct {
+    u8 pad0[0x10];
+    TrollVec pos;
+} TrollColl;
+
+extern s16 FUN_001f96f8(s32);
+extern int FUN_001f9770(void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern float FUN_L00_001ff8b0(float, float);
+extern void FUN_L00_00257470(TrollMoby *, s32, s32);
+extern int FUN_L00_00257b90(int, int);
+extern TrollColl *FUN_L00_0025a420(TrollMoby *, s32, s32);
+extern void FUN_L00_0025a478(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32);
+extern void FUN_L00_0025ab48(TrollVec *, f32 *, f32 *, f32 *);
+extern void FUN_L00_0025c558(TrollMoby *, void *, s32, s32, s32, f32);
+extern void FUN_L00_0025d458(TrollMoby *, void *);
+extern void FUN_L00_0025d538(TrollMoby *, void *);
+extern s32 FUN_L00_0025fcb8(TrollMoby *, f32, void *);
+extern void FUN_L00_0025ff38(TrollMoby *, void *, s32, s32, void *, s32, f32);
+extern void FUN_L00_002e2040(TrollMoby *);
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L00_00161BD0 __attribute__((sda));
+extern f32 D_L00_00161BD4 __attribute__((sda));
+extern f32 D_L00_00161BD8 __attribute__((sda));
+extern f32 D_L00_00161BDC __attribute__((sda));
+extern f32 D_L00_00161BE0 __attribute__((sda));
+extern TrollAnim *D_L00_001B04B0[];
+
+void FUN_L00_002e1678(TrollMoby *m)
+{
+    TrollVars *vars;
+    void *anim;
+    TrollColl *coll;
+    TrollAnim *a;
+    TrollMoby *t;
+    TrollVec v;
+    u8 *g;
+    s32 hit;
+    f32 dmg;
+    f32 angle;
+    f32 unused;
+    f32 range;
+
+    vars = m->vars;
+    if (m->state == 0) {
+        return;
+    }
+    if (vars->unk38 != 0) {
+        vars->unk38 = 0;
+        vars->unk1DA = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x12C));
+    }
+    FUN_001f9770(&vars->unk1DA);
+    anim = vars->unk60;
+    dmg = 0.0f;
+    coll = FUN_L00_0025a420(m, 0x330000, 0);
+    FUN_L00_0025a478(m, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && m->state != 8 && dmg != 0.0f) {
+        vars->health -= dmg;
+        vars->unk90 = 0x200;
+        vars->unk80 = D_L00_00161BD4 * D_0015ED70;
+        vars->unk84 = D_L00_00161BD8 * D_0015ED70;
+        vars->unk88 = D_L00_00161BDC * D_0015ED6C;
+        vars->unk8C = D_L00_00161BE0 * D_0015ED6C;
+        vars->unkAD = 0;
+        vars->unk94 = 9;
+        vars->unkBC = D_0015ED6C + D_0015ED6C;
+        vars->unk98 = 0.5f;
+        if (vars->health <= 0.0f) {
+            vars->unk94 = 0x29;
+            m->flags &= ~0x1000;
+            v.q = coll->pos.q;
+            FUN_L00_0025ab48(&v, &angle, &vars->unk88, &vars->unk8C);
+            FUN_L00_0025c558(m, vars->unk70, 0xB, 1, 0, angle);
+            vars->unkC0 = 7.0f;
+            vars->unkC4 = 16.0f;
+            m->state = 8;
+            m->unk94 = 0;
+            vars->unk67 = 0x78;
+            FUN_L00_0025d458(m, anim);
+            FUN_L00_00257470(m, 0, -1);
+        } else {
+            vars->unk88 = D_L00_00161BDC * D_0015ED6C * 0.35f;
+            vars->unk8C = D_L00_00161BE0 * D_0015ED6C * 0.5f;
+            v.q = coll->pos.q;
+            FUN_L00_0025ab48(&v, &unused, &vars->unk88, &vars->unk8C);
+            FUN_L00_0025c558(m, vars->unk70, 8, 1, 0, FUN_L00_001ff8b0(coll->pos.f[0], coll->pos.f[1]));
+            vars->unkC4 = vars->unkC0 = -1.0f;
+            m->state = 7;
+            vars->unk67 = 0xFA;
+            vars->unk26 = FUN_001f96f8(0x3C);
+            FUN_L00_0025d458(m, anim);
+        }
+        FUN_L00_002e2040(m);
+    }
+    m->unkA4 = 0xFF;
+    FUN_L00_0025d538(m, anim);
+    if (m->state == 1) {
+        a = D_L00_001B04B0[vars->unk1B4];
+        FUN_L00_0025ff38(m, &vars->target, 0, 0, a->data, a->unk0, 64.0f);
+    } else if (m->state != 5) {
+        range = D_L00_00161BD0;
+        if (vars->unk1DA != 0) {
+            range = 37.0f;
+        }
+        if (FUN_L00_0025fcb8(m, range, &vars->target) != 2 && range < FUN_001f9b80(&m->pos, &vars->target)) {
+            vars->unk114 = 2;
+        }
+    }
+    if (vars->targetMoby == 0) {
+        g = D_0013F350;
+        vars->targetMoby = *(TrollMoby **)(g + 0x2080);
+        qcopy(&vars->target, g + 0x80);
+    }
+    if (vars->unk1BC >= 0) {
+        t = (TrollMoby *)(D_L00_0015FFD8 + (vars->unk1BC << 8));
+        if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
+            vars->unk1BC = -1;
+        } else {
+            range = FUN_001f9b80(&m->pos, &t->pos);
+            if (range < FUN_001f9b80(&m->pos, &vars->targetMoby->pos)) {
+                vars->targetMoby = t;
+                qcopy(&vars->target, &t->pos);
+                vars->unk114 = 1;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1aa8.s", FUN_L00_002e1aa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1c78.s", FUN_L00_002e1c78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1df0.s", FUN_L00_002e1df0);

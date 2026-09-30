@@ -3,6 +3,144 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d968.s", FUN_L00_0023d968);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e268.s", FUN_L00_0023e268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289330.s", FUN_L00_00289330);
+#include "eetypes.h"
+
+typedef struct {
+    u8 pad0[0x34];
+    u16 flags;
+    u8 pad36[0x70];
+    s16 oClass;
+} VeldinMoby;
+
+typedef struct {
+    u8 pad0[0x30];
+    s32 state;
+    s32 timer;
+    u8 pad38[0xC];
+    s16 count;
+    u8 pad46[0x132];
+    VeldinMoby *mobys[1];
+    VeldinMoby *unk17C;
+    u8 pad180[4];
+    VeldinMoby *unk184;
+    VeldinMoby *unk188;
+} VeldinLevelState;
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} VeldinVec;
+
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+extern int FUN_001f96f8(int);
+extern void FUN_001f99f8(void *);
+extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
+extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+extern void FUN_L00_0023db30();
+extern void FUN_L00_002935b8();
+extern void FUN_L00_0023e008(VeldinMoby *);
+void FUN_L00_0024f7c8(char *arg0, int arg1, void *arg2);
+extern void FUN_L00_00257024(void *);
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_L00_0026ced0(void *, void *, s32, s32, s32, f32);
+extern f32 D_0015ED6C;
+extern s32 D_0015ED84;
+extern VeldinLevelState D_L00_0016C860;
+
+void FUN_L00_0023e268(void)
+{
+    VeldinMoby *m;
+    VeldinMoby *mb;
+    char *src;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 n;
+    f32 a;
+    f32 b;
+    s32 r;
+    VeldinVec buf;
+    VeldinVec v;
+
+    if (D_0015ED84 == 0) {
+        for (i = 0; i < D_L00_0016C860.count; i++) {
+            if (D_L00_0016C860.mobys[i]->oClass == 0x212) {
+                enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.mobys[i]);
+            }
+        }
+    }
+    if (D_0015ED84 == 2) {
+        for (j = 0; j < D_L00_0016C860.count; j++) {
+            mb = D_L00_0016C860.mobys[j];
+            if (mb->oClass == 0x1B1) {
+                mb->flags |= 0x800;
+            }
+        }
+    }
+    if (D_0015ED84 == 3 && D_L00_0016C860.state == 5 && FUN_001f96f8(900) < D_L00_0016C860.timer
+        && D_L00_0016C860.timer < FUN_001f96f8(1100)) {
+        src = (char *)D_L00_0016C860.unk184;
+        if (src != 0) {
+            for (n = 0; n < 4; n++) {
+                FUN_001f99f8(&v);
+                FUN_L00_0024f7c8(src, n % 2, &buf);
+                a = veldin_random_angle();
+                b = veldin_random_angle();
+                build_spherical_offset(v.f, veldin_random_range(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
+                r = FUN_001f96f8(0xC);
+                FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080, FUN_L00_00257b90(r, FUN_001f96f8(0x23)), 147000.0f);
+            }
+        }
+    }
+    if (D_0015ED84 == 7 && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0
+        && D_L00_0016C860.unk188->oClass == 0x214) {
+        enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
+    }
+    if (D_0015ED84 == 14 && D_L00_0016C860.state == 0) {
+        m = D_L00_0016C860.unk17C;
+        if (m != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
+            FUN_L00_0023e008(m);
+            enqueue_callback_list_1((s32)FUN_L00_0023db30, (s32)m);
+        }
+    }
+    if (D_0015ED84 == 15 && (u32)(D_L00_0016C860.state - 3) < 2) {
+        for (k = 0; k < D_L00_0016C860.count; k++) {
+            FUN_L00_00257024(D_L00_0016C860.mobys[k]);
+        }
+    }
+}
+#include "qzero.h"
+
+typedef union { u128 q; f32 f[4]; } SkyRotVec;
+
+extern char *D_L00_0016051C;
+extern char D_L00_001BD7E0[];
+extern int D_L00_0015F5CC;
+extern void FUN_001f9fc8(void *);
+extern void FUN_0022bba0(void);
+extern void FUN_L00_00288ec0(int, int);
+extern void FUN_L00_00289108(void);
+extern void FUN_L00_001ffa90(void *, void *);
+void sky_draw_shell(s32 arg0) __asm__("FUN_0022b690");
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L00_00289330(void) {
+    SkyRotVec rot;
+
+    *(short *)(D_L00_0016051C + 4) = 0;
+    sky_draw_shell(0);
+    sky_draw_shell(1);
+    if (*(short *)(D_L00_0016051C + 8) == 0) FUN_L00_00288ec0(0xF4, 0xC);
+    FUN_L00_00289108();
+    FUN_0022bba0();
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    sky_draw_shell(2);
+    qzero(&rot);
+    rot.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
+    FUN_L00_001ffa90(D_L00_001BD7E0, &rot);
+    sky_draw_shell(3);
+    FUN_001f9fc8(D_L00_001BD7E0);
+    sky_draw_shell(4);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9dc8.s", FUN_L00_002d9dc8);

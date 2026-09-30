@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1206,
+  "matching_c": 1209,
   "intentional_asm": 249,
-  "pending_c": 3327,
+  "pending_c": 3324,
   "bytes_total": 3655312,
-  "bytes_matching_c": 239348,
+  "bytes_matching_c": 241540,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3319632,
-  "c_exact_percent_of_recoverable": 6.7252,
-  "c_fuzzy_percent_of_recoverable": 8.7702,
+  "bytes_pending_c": 3317440,
+  "c_exact_percent_of_recoverable": 6.7868,
+  "c_fuzzy_percent_of_recoverable": 8.8318,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 160,
-    "pending_c": 3180,
+    "matching_c": 163,
+    "pending_c": 3177,
     "bytes_total": 3218660,
-    "bytes_matching_c": 19576,
-    "bytes_pending_c": 3199084,
-    "c_exact_percent_of_recoverable": 0.6082,
+    "bytes_matching_c": 21768,
+    "bytes_pending_c": 3196892,
+    "c_exact_percent_of_recoverable": 0.6763,
     "shared": {
       "id": "shared",
       "index": null,
@@ -3515,26 +3515,26 @@
         "planet": "Veldin",
         "description": "Kyzil Plateau: the tutorial, Ratchet's home",
         "functions": 11,
-        "matching_c": 1,
-        "pending_c": 10,
+        "matching_c": 4,
+        "pending_c": 7,
         "bytes_total": 8180,
-        "bytes_matching_c": 508,
-        "bytes_pending_c": 7672,
-        "c_exact_percent_of_recoverable": 6.2103,
+        "bytes_matching_c": 2700,
+        "bytes_pending_c": 5480,
+        "c_exact_percent_of_recoverable": 33.0073,
         "files": [
           {
             "file": "src/overlays/l00/unclassified_0023d968.c",
             "functions": 4,
-            "matching_c": 0,
+            "matching_c": 2,
             "bytes_total": 2008,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 1124
           },
           {
             "file": "src/overlays/l00/gameplay_vendor_002e0988.c",
             "functions": 7,
-            "matching_c": 1,
+            "matching_c": 2,
             "bytes_total": 6172,
-            "bytes_matching_c": 508
+            "bytes_matching_c": 1576
           }
         ]
       },
@@ -4708,14 +4708,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1206,
+    "matching_c": 1209,
     "intentional_asm": 249,
-    "pending_c": 3327,
+    "pending_c": 3324,
     "bytes_total": 3655312,
-    "bytes_matching_c": 239348,
+    "bytes_matching_c": 241540,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3319632,
-    "c_exact_percent_of_recoverable": 6.7252,
-    "c_fuzzy_percent_of_recoverable": 8.7702
+    "bytes_pending_c": 3317440,
+    "c_exact_percent_of_recoverable": 6.7868,
+    "c_fuzzy_percent_of_recoverable": 8.8318
   }
 }
