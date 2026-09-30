@@ -751,7 +751,55 @@ void FUN_L00_002e1c78(GlowMoby *m)
     }
     FUN_L00_001fd228(&quad, mat, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1df0.s", FUN_L00_002e1df0);
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 alpha;
+} SlotMoby;
+
+extern s32 D_L00_00161BF8[] MACRO_ADDR;
+extern s32 D_L00_00161C88[] MACRO_ADDR;
+extern void FUN_L00_002e20f8(s32);
+extern void FUN_L00_002e2250(s32, s32);
+extern void FUN_L00_002e2af0();
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+
+void FUN_L00_002e1df0(SlotMoby *m)
+{
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 st;
+
+    switch (m->state) {
+    case 0:
+        for (j = 0; j < 3; j++) {
+            D_L00_00161BF8[j] = 0;
+            D_L00_00161C88[j] = 0;
+        }
+        m->state = 1;
+        m->alpha = 0xFF;
+        break;
+    case 1:
+        n = 0;
+        for (i = 0; i < 3; i++) {
+            st = D_L00_00161BF8[i];
+            if (st == 1) {
+            } else if (st == 4) {
+                FUN_L00_002e20f8(i);
+            } else if (st != 0) {
+                n++;
+                FUN_L00_002e2250(D_L00_00161C88[i], i);
+                D_L00_00161BF8[i] = 4;
+            }
+        }
+        if (n != 0) {
+            enqueue_callback_list_1((s32)FUN_L00_002e2af0, (s32)m);
+        }
+        break;
+    }
+}
 typedef struct {
     u8 pad0[0x20];
     u8 state;

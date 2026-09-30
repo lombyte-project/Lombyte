@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 8.977124,
+    "fuzzy_match_percent": 8.985778,
     "total_code": "3558980",
-    "matched_code": "246712",
-    "matched_code_percent": 6.932099,
+    "matched_code": "247020",
+    "matched_code_percent": 6.940753,
     "total_functions": 4533,
-    "matched_functions": 1215,
-    "matched_functions_percent": 26.803441,
-    "complete_code": "246712",
-    "complete_code_percent": 6.932099,
+    "matched_functions": 1216,
+    "matched_functions_percent": 26.825502,
+    "complete_code": "247020",
+    "complete_code_percent": 6.940753,
     "total_units": 468,
-    "complete_units": 90
+    "complete_units": 91
   },
   "units": [
     {
@@ -44884,17 +44884,17 @@
     {
       "name": "level_00/gameplay_vendor_002e0988",
       "measures": {
-        "fuzzy_match_percent": 95.009721,
+        "fuzzy_match_percent": 100.0,
         "total_code": "6172",
-        "matched_code": "5864",
-        "matched_code_percent": 95.009721,
+        "matched_code": "6172",
+        "matched_code_percent": 100.0,
         "total_functions": 7,
-        "matched_functions": 6,
-        "matched_functions_percent": 85.714286,
-        "complete_code": "5864",
-        "complete_code_percent": 95.009721,
+        "matched_functions": 7,
+        "matched_functions_percent": 100.0,
+        "complete_code": "6172",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -44945,7 +44945,7 @@
         {
           "name": "FUN_L00_002e1df0",
           "size": "308",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "5224",
           "metadata": {
             "virtual_address": "3022320"
@@ -44962,7 +44962,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "overlays",
           "levels",
@@ -52698,17 +52698,17 @@
       "id": "overlays",
       "name": "Level overlays",
       "measures": {
-        "fuzzy_match_percent": 0.836994,
+        "fuzzy_match_percent": 0.846563,
         "total_code": "3218660",
-        "matched_code": "26940",
-        "matched_code_percent": 0.836994,
+        "matched_code": "27248",
+        "matched_code_percent": 0.846563,
         "total_functions": 3340,
-        "matched_functions": 169,
-        "matched_functions_percent": 5.05988,
-        "complete_code": "26940",
-        "complete_code_percent": 0.836994,
+        "matched_functions": 170,
+        "matched_functions_percent": 5.08982,
+        "complete_code": "27248",
+        "complete_code_percent": 0.846563,
         "total_units": 352,
-        "complete_units": 14
+        "complete_units": 15
       }
     },
     {
@@ -52732,34 +52732,34 @@
       "id": "levels",
       "name": "Per-level code",
       "measures": {
-        "fuzzy_match_percent": 0.43995,
+        "fuzzy_match_percent": 0.455134,
         "total_code": "2028412",
-        "matched_code": "8924",
-        "matched_code_percent": 0.43995,
+        "matched_code": "9232",
+        "matched_code_percent": 0.455134,
         "total_functions": 1379,
-        "matched_functions": 24,
-        "matched_functions_percent": 1.740392,
-        "complete_code": "8924",
-        "complete_code_percent": 0.43995,
+        "matched_functions": 25,
+        "matched_functions_percent": 1.812908,
+        "complete_code": "9232",
+        "complete_code_percent": 0.455134,
         "total_units": 130,
-        "complete_units": 6
+        "complete_units": 7
       }
     },
     {
       "id": "level_00",
       "name": "Level 00",
       "measures": {
-        "fuzzy_match_percent": 96.234719,
+        "fuzzy_match_percent": 100.0,
         "total_code": "8180",
-        "matched_code": "7872",
-        "matched_code_percent": 96.234719,
+        "matched_code": "8180",
+        "matched_code_percent": 100.0,
         "total_functions": 11,
-        "matched_functions": 10,
-        "matched_functions_percent": 90.909091,
-        "complete_code": "7872",
-        "complete_code_percent": 96.234719,
+        "matched_functions": 11,
+        "matched_functions_percent": 100.0,
+        "complete_code": "8180",
+        "complete_code_percent": 100.0,
         "total_units": 2,
-        "complete_units": 1
+        "complete_units": 2
       }
     },
     {
