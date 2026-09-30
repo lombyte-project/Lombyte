@@ -960,8 +960,8 @@ def render_svg(
     # Header: function count on the left, legend on the right. The README
     # carries the heading, so the map has no title line of its own.
     lines.append(
-        f'<text x="{margin_px}" y="36" font-family="{esc(FONT)}" '
-        f'font-size="11" '
+        f'<text x="{margin_px}" y="24" font-family="{esc(FONT)}" '
+        f'font-size="12" '
         f'fill="{MUTED}">{len(exact) + ov_exact:,} of {total_units + len(overlays):,} functions in C '
         f"&#183; executable and 19 level overlays</text>"
     )
