@@ -2,7 +2,83 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0988.s", FUN_L00_002e0988);
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 alpha;
+    u8 pad31[0x47];
+    s32 *vars;
+} HelpMoby;
+
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+} HelpTarget;
+
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+extern void FUN_L00_00203908(s32, s32);
+extern u8 D_0013F350[];
+extern u8 D_0013F3D0[];
+extern u16 D_00141848[];
+extern u16 D_00141850[];
+extern u16 D_00141968[];
+extern u8 *D_L00_0015FFD8 __attribute__((sda));
+
+void FUN_L00_002e0988(HelpMoby *m)
+{
+    s32 *vars;
+    s32 *p;
+    s32 i;
+    HelpTarget *t;
+    u8 *g;
+
+    vars = m->vars;
+    if (m->state == 0) {
+        m->state = 1;
+        m->alpha = 0xFF;
+    }
+    if (D_00141968[0x18 / 2] == 0) {
+        FUN_L00_00203908(3, 3);
+    }
+    if (D_00141968[0x3A0 / 2] == 0) {
+        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[4]) != 0) {
+            FUN_L00_00203908(0x4E2A, 0x74);
+        }
+    }
+    if (D_00141968[0x48 / 2] == 0) {
+        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[0]) != 0 && D_00141850[0] == 0) {
+            FUN_L00_00203908(5, 9);
+        }
+    }
+    if (D_00141968[0x40 / 2] == 0 && D_00141848[0] == 0) {
+        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[1]) != 0) {
+            FUN_L00_00203908(4, 8);
+        }
+    }
+    if (D_00141968[0] == 0) {
+        if (is_point_inside_clip_volume((s32)D_0013F3D0, vars[2]) != 0) {
+            FUN_L00_00203908(0, 0);
+        }
+    }
+    if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
+        g = D_0013F350;
+        p = vars + 5;
+        for (i = 0; i < 4; i++) {
+            if (*p != -1) {
+                t = (HelpTarget *)(D_L00_0015FFD8 + (*p << 8));
+                if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
+                    if (*(s32 *)(g + 0x22A8) < 4) {
+                        FUN_L00_00203908(1, 1);
+                    } else {
+                        FUN_L00_00203908(2, 2);
+                    }
+                }
+            }
+            p++;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0b88.s", FUN_L00_002e0b88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1678.s", FUN_L00_002e1678);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1aa8.s", FUN_L00_002e1aa8);
