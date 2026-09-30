@@ -8466,7 +8466,7 @@
       },
       {
         "unit": "textbin/draw_boot_image",
-        "source_path": "src/assembly/textbin/fun_002012b8.c",
+        "source_path": "src/assembly/textbin/draw_boot_image.c",
         "address": "0x002012b8",
         "current_name": "FUN_002012b8",
         "proposed_name": null,
