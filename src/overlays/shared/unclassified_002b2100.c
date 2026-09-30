@@ -92,7 +92,88 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b46a8.s", FUN_L00_002b46a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b57f0.s", FUN_L00_002b57f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b58d8.s", FUN_L00_002b58d8);
+typedef int q_2b58d8 __attribute__((mode(TI)));
+typedef union { q_2b58d8 q; float f[4]; } V_2b58d8;
+typedef struct { unsigned char p[0x2080]; void *w2080; } G_2b58d8;
+extern G_2b58d8 D_0013F350_2b58d8 __asm__("D_0013F350");
+extern int D_L00_0017E508_2b58d8 __asm__("D_L00_0017E508") __attribute__((section(".data")));
+extern int D_L00_0015F608_2b58d8 __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
+extern float D_L00_0016149C_2b58d8 __asm__("D_L00_0016149C") __attribute__((sda));
+extern float D_0015ED6C_2b58d8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern q_2b58d8 D_L00_00173E60_2b58d8 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+unsigned char *FUN_0020c4f8_2b58d8(int) __asm__("FUN_0020c4f8");
+int FUN_L00_0025c338_2b58d8(void *) __asm__("FUN_L00_0025c338");
+float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
+int FUN_001f96f8_2b58d8(int) __asm__("FUN_001f96f8");
+void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
+void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
+int FUN_L00_002eb930_2b58d8(void *) __asm__("FUN_L00_002eb930");
+int FUN_L00_002223f8_2b58d8(int, int) __asm__("FUN_L00_002223f8");
+void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
+void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
+int FUN_L00_002bb360_2b58d8(void *) __asm__("FUN_L00_002bb360");
+void FUN_L00_0025d1b8_2b58d8(void *) __asm__("FUN_L00_0025d1b8");
+int FUN_0022da68_2b58d8(int, int, void *) __asm__("FUN_0022da68");
+int FUN_L00_001efc70_2b58d8(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
+void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
+
+unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float fb)
+{
+    unsigned char *m = FUN_0020c4f8_2b58d8(0xAC);
+    if (m) {
+        unsigned char *v = *(unsigned char **)(m + 0x78);
+        unsigned char *G = (unsigned char *)&D_0013F350_2b58d8;
+        V_2b58d8 t;
+        *(unsigned char **)(G + 0x1FE0) = m;
+        D_L00_0017E508_2b58d8 = 1;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        m[0x20] = 1;
+        *(float *)(m + 0x48) = fa;
+        *(float *)(m + 0x44) = fb;
+        *(unsigned char **)(v + 0x24) = G + 0x1F60;
+        *(unsigned char **)(v + 0x28) = G + 0x1FA0;
+        *(unsigned char **)(v + 0x0) = a;
+        qcopy(m + 0x10, pos);
+        *(int *)(v + 0x8) = 0;
+        *(int *)(v + 0xC) = 0;
+        if (*(void **)(G + 0x2FC) && FUN_L00_0025c338_2b58d8(*(void **)(G + 0x2FC)))
+            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(G + 0x100);
+        else
+            *(int *)(v + 0x4) = 0;
+        *(int *)(v + 0x10) = FUN_001f96f8_2b58d8(0xBB8);
+        *(int *)(v + 0x18) = 0;
+        *(int *)(v + 0x1C) = 0;
+        *(int *)(v + 0x14) = 0;
+        *(float *)(v + 0x44) = 0.4f;
+        FUN_L00_002b56d0_2b58d8(m);
+        FUN_L00_00250df8_2b58d8(m);
+        *(int *)(v + 0x14) = FUN_L00_002eb930_2b58d8(m);
+        FUN_L00_002223f8_2b58d8(0x1D, 1);
+        FUN_001f97e8_2b58d8(*(void **)(v + 0x24), 0, 0x40);
+        FUN_001f97e8_2b58d8(*(void **)(v + 0x28), 0, 0x40);
+        FUN_0020cb10_2b58d8(m, 0, *(void **)(v + 0x24));
+        FUN_0020cb10_2b58d8(m, 1, *(void **)(v + 0x28));
+        {
+            int r = FUN_L00_002bb360_2b58d8(m);
+            float k = D_L00_0016149C_2b58d8 * D_0015ED6C_2b58d8;
+            *(int *)(v + 0x20) = r;
+            *(float *)(v + 0x48) = k;
+        }
+        FUN_L00_0025d1b8_2b58d8(m);
+        *(int *)(v + 0x2C) = FUN_0022da68_2b58d8(0, 4, m);
+        t.q = *(q_2b58d8 *)(a + 0x10);
+        t.f[2] = pos->f[2];
+        if (FUN_L00_001efc70_2b58d8(&t, pos, 0, ({ G_2b58d8 *g2 = &D_0013F350_2b58d8; g2->w2080; }), 0)) {
+            m[0xBC] = 1;
+            qcopy(m + 0x10, &D_L00_00173E60_2b58d8);
+        }
+        D_L00_0015F608_2b58d8 = 1;
+        FUN_002151d8_2b58d8(6, 0);
+    }
+    return m;
+}
 extern int D_00141330[];
 extern int D_L00_00167014[];
 void FUN_L00_002eba18();

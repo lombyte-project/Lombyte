@@ -187,7 +187,67 @@ void FUN_L00_002d6bf0(O002d6bf0 *o) {
     m->x4c = 2.5f;
     m->x48 = 3.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6cd0.s", FUN_L00_002d6cd0);
+typedef int ti_2d6cd0 __attribute__((mode(TI)));
+typedef struct {
+    char p0[0x10];
+    float a[4];
+    float b[4];
+    int c[4];
+    float d[4];
+} P_2d6cd0;
+extern char D_166DC0_2d6cd0[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern int D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
+extern void sub_2d6cd0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void ff500_2d6cd0(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void add_2d6cd0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int f9740_2d6cd0(void *) __asm__("FUN_001f9740");
+extern int fr_2d6cd0(int) __asm__("FUN_001f96f8");
+extern float i2f_2d6cd0(int) __asm__("FUN_001fa6c0");
+extern float fabs_2d6cd0(float) __asm__("FUN_001f99c0");
+extern int lerpc_2d6cd0(int, int, float) __asm__("FUN_001fa6e0");
+extern int f2i_2d6cd0(float) __asm__("FUN_001fa6d0");
+extern void spr_2d6cd0(void *, int, int, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+
+void FUN_L00_002d6cd0(char *o) {
+    P_2d6cd0 *p = *(P_2d6cd0 **)(o + 0x78);
+    union { ti_2d6cd0 q; float f[4]; } v;
+    float d[4] __attribute__((aligned(16)));
+    float e[4] __attribute__((aligned(16)));
+    int i, col;
+    float f;
+
+    if (*(unsigned short *)(o + 0x34) & 1) {
+        return;
+    }
+    v.q = *(ti_2d6cd0 *)(o + 0x10);
+    v.f[2] += 0.333000004f;
+    sub_2d6cd0(d, D_166DC0_2d6cd0, o + 0x10);
+    ff500_2d6cd0(d, d, -0.3f);
+    ff500_2d6cd0(e, d, 0.1f);
+    add_2d6cd0(d, d, o + 0x10);
+    v.f[2] -= 0.333000004f;
+    for (i = 0; i < 4; i++) {
+        {
+            float h = p->a[i] + p->b[i];
+            p->a[i] = h;
+            if (255.0f <= h) {
+                p->a[i] = h - 255.0f;
+            } else if (h <= 0.0f) {
+                p->a[i] = h + 255.0f;
+            }
+        }
+        if (f9740_2d6cd0(&p->c[i])) {
+            p->c[i] = fr_2d6cd0(0xFF);
+        }
+        f = i2f_2d6cd0(fr_2d6cd0(0xFF) - p->c[i]);
+        f = f / (float)fr_2d6cd0(0xFF);
+        col = lerpc_2d6cd0(0x4040FFFF, 0x1040FFFF, fabs_2d6cd0(0.5f - f));
+        if (D_15F5C4_2d6cd0 != 2) {
+            spr_2d6cd0(d, col, f2i_2d6cd0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        }
+        add_2d6cd0(d, d, e);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6f28.s", FUN_L00_002d6f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7bf0.s", FUN_L00_002d7bf0);

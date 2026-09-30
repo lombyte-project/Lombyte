@@ -412,7 +412,73 @@ void FUN_L00_002072c8(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00207330.s", FUN_L00_00207330);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00207430.s", FUN_L00_00207430);
+typedef int ti_207430 __attribute__((mode(TI)));
+extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
+extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") __attribute__((section(".data")));
+extern float D_0015EE18_207430g __asm__("D_0015EE18_gp") __attribute__((sda));
+extern float D_0015EE18_207430m __asm__("D_0015EE18");
+extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
+extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
+extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
+extern int fr_207430(int) __asm__("FUN_001f96f8");
+extern float i2f_207430(int) __asm__("FUN_001fa6c0");
+extern float sin_207430(float) __asm__("FUN_001f9de0");
+extern int f2i_207430(float) __asm__("FUN_001fa6d0");
+extern void f4f7c8_207430(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern float fabs_207430(float) __asm__("FUN_001f99c0");
+extern void f8038_207430(void *, int, float, float) __asm__("FUN_L00_00208038");
+extern void fcb10_207430(void *, int, void *) __asm__("FUN_0020cb10");
+
+void FUN_L00_00207430(char *o) {
+    union { ti_207430 q; float f[4]; } v;
+    int k, r, g;
+    float f, c, s;
+    unsigned char *t;
+
+    *(unsigned short *)(o + 0x34) |= 0x10;
+    k = fr_207430(100);
+    f = i2f_207430(k);
+    c = sin_207430((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
+    s = c * 24.0f;
+    r = f2i_207430(s);
+    g = f2i_207430(c * 52.0f);
+    {
+        int w = ((f2i_207430(s) + 0x4C) << 16) | 0x80000000;
+        w |= (g + 0xA2) << 8;
+        w |= r + 0x44;
+        *(int *)(o + 0x90) = w;
+    }
+    if (*(short *)(o + 0xA6) == 0x1A3) {
+        f4f7c8_207430(o, 6, &v);
+        v.f[2] -= 0.07f;
+        if (2.0f < fabs_207430(*(float *)(o + 0x18) - v.f[2])) {
+            f8038_207430(&v, 0x200000C0, 0.25f, 0.15f);
+        }
+    } else {
+        f4f7c8_207430(o, 1, &v);
+        v.f[2] -= 0.00700000022f;
+        f8038_207430(&v, 0x200000C0, 0.0469999984f, 0.15f);
+    }
+    t = D_17C380_207430;
+    if (*(short *)(o + 0xA6) == 0x1A3) {
+        t = D_17C3C0_207430;
+    } else if (*(short *)(o + 0xA6) == 0x555) {
+        t = D_17C400_207430;
+    }
+    if (*(unsigned char *)0x15EDB3 && t[1] == 0) {
+        float x;
+        if (*(short *)(o + 0xA6) == 0x1A3) {
+            fcb10_207430(o, 1, t);
+            x = D_0015EE18_207430g;
+        } else {
+            fcb10_207430(o, 2, t);
+            x = D_0015EE18_207430m;
+        }
+        *(float *)(t + 0x20) = x;
+        *(float *)(t + 0x24) = x;
+        *(float *)(t + 0x28) = x;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002076a8.s", FUN_L00_002076a8);
 typedef unsigned int u128_2078a8 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_2078a8 q; float f[4]; } Vec4_2078a8;

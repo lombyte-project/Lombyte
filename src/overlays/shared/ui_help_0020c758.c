@@ -106,7 +106,57 @@ float FUN_L00_0020d658(int back) {
     }
     return b->ring[(b->head - n + 31) % 32];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d6b0.s", FUN_L00_0020d6b0);
+typedef struct {
+    char p0[0x2084];
+    int w2084;
+    char p1[0x2D8 - 0x2088 + 0x2000];
+} G_20d6b0;
+typedef struct {
+    char p0[0x140];
+    float v140[4];
+    char p1[0x154 - 0x150];
+    float f154;
+    float f158;
+} C_20d6b0;
+extern char D_0013F3D0_20d6b0[] __asm__("D_0013F3D0");
+extern C_20d6b0 D_166C80_20d6b0 __asm__("D_L00_00166C80");
+extern float dist_20d6b0(void *, void *) __asm__("FUN_001f9b48");
+extern float atan2_20d6b0(float, float) __asm__("FUN_L00_001ff8b0");
+extern float adiff_20d6b0(float, float) __asm__("FUN_001fa688");
+extern float hdist_20d6b0(void *, void *) __asm__("FUN_001f9b80");
+extern int f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
+
+float FUN_L00_0020d6b0(char *o, float yaw, float range, float ylim, float plim, int *out) {
+    float v[4] __attribute__((aligned(16)));
+    char *g;
+    float d, a, s, p, m, r;
+
+    *out = 0;
+    qcopy(v, D_0013F3D0_20d6b0);
+    g = D_0013F3D0_20d6b0 - 0x80;
+    if (*(int *)(g + 0x2084) == 0x14) {
+        v[2] = *(float *)(g + 0x2D8);
+    }
+    d = dist_20d6b0(v, o + 0x10);
+    if (range < d) *out = 1;
+    a = adiff_20d6b0(atan2_20d6b0(*(float *)(o + 0x10) - v[0], *(float *)(o + 0x14) - v[1]), yaw);
+    s = a;
+    m = a;
+    p = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(v, o + 0x10), *(float *)(o + 0x18) - v[2]), 0.0f);
+    if (*(int *)(g + 0x2084) == 1 || *(int *)(g + 0x2084) == 0x1E) {
+        C_20d6b0 *c = &D_166C80_20d6b0;
+        float b = adiff_20d6b0(atan2_20d6b0(*(float *)(o + 0x10) - c->v140[0], *(float *)(o + 0x14) - c->v140[1]), c->f158);
+        p = adiff_20d6b0(atan2_20d6b0(hdist_20d6b0(c->v140, o + 0x10), *(float *)(o + 0x18) - c->v140[2]), -c->f154);
+        m = p;
+        s = b + p;
+        if (p < b) m = b;
+    }
+    if (0.0f < ylim && ylim < m) *out = 1;
+    if (0.0f < plim && plim < p) *out = 1;
+    r = d + s * d;
+    if (f5e3b8_20d6b0(o)) r += 7.0f;
+    return r;
+}
 extern char *D_L00_001ABA00[] __attribute__((section(".data")));
 float *FUN_L00_0025c338(char *);
 float FUN_L00_0020d6b0(char *, float, float, float, float, int *);

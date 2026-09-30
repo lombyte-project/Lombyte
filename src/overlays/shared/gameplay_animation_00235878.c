@@ -158,7 +158,73 @@ void FUN_L00_00235dc0(HudElem *e) {
     FUN_L00_00235c80(e);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235e18.s", FUN_L00_00235e18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235ea0.s", FUN_L00_00235ea0);
+extern float FUN_001fa6c0(int);
+extern int FUN_001fa6d0(float);
+extern float FUN_001f9988(float);
+extern void FUN_L00_0023aaa8(void *);
+
+void FUN_L00_00235ea0(e) HudElem *e; {
+    unsigned char *c = e->cnt;
+    int v;
+    int cap;
+    int d;
+    int s;
+
+    if (e->unk0C != 0) {
+        v = *e->unk0C;
+        cap = e->unk08;
+        if (v < 0) {
+            v = 0;
+        }
+        e->unk78 = v;
+        if (cap < v) {
+            e->unk78 = cap;
+        }
+    }
+    if (e->unk74 != e->unk78) {
+        e->unk7C = FUN_001f96f8(0xB4);
+        if (e->unk6C >= 0x18) {
+            int t = e->unk74 - e->unk78;
+            d = t < 0 ? -t : t;
+            if (d != 0) {
+                s = FUN_001fa6d0(FUN_001f9988(FUN_001fa6c0(d) / 25.0f) * 5.0f);
+                s = s < d * FUN_001f96f8(2) / FUN_001f96f8(10) ? d * FUN_001f96f8(2) / FUN_001f96f8(10) : s;
+                if (s >= 0x7A) {
+                    s = 0x79;
+                } else if (s <= 0) {
+                    s = 1;
+                }
+                c[3] += s;
+                if (c[3] > FUN_001f96f8(2)) {
+                    s = c[3] / FUN_001f96f8(2);
+                    if (e->unk78 < e->unk74) {
+                        e->unk74 = e->unk74 - s;
+                    } else {
+                        e->unk74 = e->unk74 + s;
+                    }
+                    c[3] -= s * FUN_001f96f8(2);
+                }
+            }
+        }
+    }
+    if (e->unk7C >= FUN_001f96f8(5)) {
+        if (c[0] < FUN_001f96f8(8)) {
+            c[0]++;
+        } else if (c[1] < FUN_001f96f8(8)) {
+            c[1]++;
+        }
+    } else {
+        if (c[1] != 0 || c[0] != 0) {
+            e->unk6C = 1;
+        }
+        if (c[1] != 0) {
+            c[1]--;
+        } else if (c[0] != 0) {
+            c[0]--;
+        }
+    }
+    FUN_L00_0023aaa8((char *)e + 0x40);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0023aaa8(void *);

@@ -66,7 +66,77 @@ void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
     o->x120[o->x138] = e;
     o->x138++;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262608.s", FUN_L00_00262608);
+#include "qcopy.h"
+typedef int q_262608 __attribute__((mode(TI)));
+typedef struct {
+    q_262608 a[8];
+    q_262608 b[8];
+    unsigned char pad[0x10];
+    int w[8];
+    short head;
+    short count;
+    unsigned char *src;
+    int n;
+    int active;
+} S_262608;
+void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
+void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
+void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
+
+void FUN_L00_00262608(S_262608 *s, int dec)
+{
+    unsigned char *src;
+    unsigned char *o;
+    int h, i, k, done;
+    unsigned char **pp;
+    if (!s->active)
+        return;
+    src = s->src;
+    if (!src || src[0x20] == 0xFE || src[0x20] == 0xFD) {
+        FUN_L00_00262840_262608(s);
+        return;
+    }
+    h = s->head;
+    qcopy(&s->a[h], src + 0x10);
+    qcopy(&s->b[h], src + 0x40);
+    s->head = (h + 1) % 8;
+    if (++s->count > 8)
+        s->count = 8;
+    for (i = 0; i < s->n; i++) {
+        int t;
+        if (s->count >= (t = s->w[i])) {
+            o = (unsigned char *)*(int *)((char *)&s->w[i] + 0x10);
+            k = (s->head - t + 8) % 8;
+            o[0x52] = s->src[0x52];
+            o[0x53] = s->src[0x53];
+            o[0x50] = s->src[0x50];
+            o[0x51] = s->src[0x51];
+            *(float *)(o + 0x54) = *(float *)(s->src + 0x54);
+            FUN_0020c880_262608(o);
+            qcopy(o + 0x10, &s->a[k]);
+            qcopy(o + 0x40, &s->b[k]);
+            FUN_L00_00250df8_262608(o);
+        }
+    }
+    if (dec) {
+        done = 1;
+        for (i = 0; i < s->n; i++) {
+            unsigned char *q = (unsigned char *)*(int *)((char *)&s->w[i] + 0x10);
+            if (q) {
+                int v = q[0x23];
+                int a = v;
+                if (dec < v)
+                    v = dec;
+                a -= v;
+                q[0x23] = a;
+                if ((unsigned char)a)
+                    done = 0;
+            }
+        }
+        if (done)
+            FUN_L00_00262840_262608(s);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -89,7 +159,47 @@ void FUN_L00_00262840(char *o) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002628c0.s", FUN_L00_002628c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002628d8.s", FUN_L00_002628d8);
+void FUN_0020cb88_2628d8(void *, void *) __asm__("FUN_0020cb88");
+void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
+float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
+float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
+void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
+void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
+
+void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb)
+{
+    unsigned char *o = *(unsigned char **)(p + 0x78);
+    float f;
+    if (!o) {
+        *(void **)(p + 0x78) = m;
+    } else if (o != m) {
+        if (p[1] && o[0x20] < 0x7F)
+            FUN_0020cb88_2628d8(o, p);
+        p[1] = 0;
+        *(void **)(p + 0x78) = m;
+    }
+    if (*(float *)(p + 0x60) == 0.0f && *(float *)(p + 0x64) == 0.0f && *(float *)(p + 0x68) == 0.0f
+        && *(float *)(p + 0x70) == 1.0f
+        && FUN_001f99c0_2628d8(*(float *)(p + 0x40)) < 0.005f
+        && FUN_001f99c0_2628d8(*(float *)(p + 0x44)) < 0.005f
+        && FUN_001f99c0_2628d8(*(float *)(p + 0x48)) < 0.005f) {
+        if (p[1])
+            FUN_0020cb88_2628d8(m, p);
+        return;
+    }
+    FUN_L00_0025bc98_2628d8(p + 0x40, p + 0x50, *(float *)(p + 0x60), fa, fb, 0.0f, 0);
+    FUN_L00_0025bc98_2628d8(p + 0x44, p + 0x54, *(float *)(p + 0x64), fa, fb, 0.0f, 0);
+    FUN_L00_0025bc98_2628d8(p + 0x48, p + 0x58, *(float *)(p + 0x68), fa, fb, 0.0f, 0);
+    if (!p[1])
+        FUN_0020cb10_2628d8(m, c, p);
+    FUN_L00_00259f50_2628d8(p + 0x10, p + 0x40);
+    f = *(float *)(p + 0x70);
+    *(float *)(p + 0x20) = f;
+    *(float *)(p + 0x24) = f;
+    *(float *)(p + 0x28) = f;
+    FUN_001f99f8_2628d8(p + 0x60);
+    *(float *)(p + 0x70) = 1.0f;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

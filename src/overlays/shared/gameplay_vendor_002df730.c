@@ -111,7 +111,54 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2250.s", FUN_L00_002e2250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2af0.s", FUN_L00_002e2af0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2c88.s", FUN_L00_002e2c88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3388.s", FUN_L00_002e3388);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3a88.s", FUN_L00_002e3a88);
+typedef struct { char p0[0x60]; int path; float f64, f68, f6C; int i70; float f74; } D_2e3a88;
+extern int *D_L00_001B04B0_2e3a88[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
+extern float D_L00_00161C98_2e3a88 __asm__("D_L00_00161C98") __attribute__((sda));
+extern float D_L00_00161C9C_2e3a88 __asm__("D_L00_00161C9C") __attribute__((sda));
+extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
+void FUN_0020c828_2e3a88(void *) __asm__("FUN_0020c828");
+float FUN_001f9b48_2e3a88(void *, void *) __asm__("FUN_001f9b48");
+float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
+void FUN_00214e58_2e3a88(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
+int FUN_00213260_2e3a88(int) __asm__("FUN_00213260");
+void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
+void FUN_L00_002e3a88(unsigned char *m) {
+    D_2e3a88 *d = *(D_2e3a88 **)(m + 0x78);
+    int *p = D_L00_001B04B0_2e3a88[d->path];
+    float y;
+    switch (m[0x20]) {
+    case 0:
+        if (d->path == -1) {
+            FUN_0020c828_2e3a88(m);
+            return;
+        }
+        {
+            float a = FUN_001f9b48_2e3a88(p + 4, p + 8);
+            float b = FUN_001f9b48_2e3a88(p + 4, p + *p * 4);
+            d->f74 = D_L00_00161C98_2e3a88 * D_0015ED6C_2e3a88 / a;
+            d->i70 = FUN_001f99c0_2e3a88(a - b) < 0.1f;
+        }
+        d->f6C = d->f68 * (float)*p;
+        m[0x20] = 1;
+        *(float *)(m + 0x2C) *= D_L00_00161C9C_2e3a88;
+        m[0x30] = 0xFF;
+    case 1:
+        y = *(float *)(m + 0x18);
+        FUN_00214e58_2e3a88(p, d->f6C, d->i70, m + 0x10, m + 0x40, 0);
+        *(float *)(m + 0x44) *= 0.5f;
+        *(float *)(m + 0x18) += d->f64;
+        d->f6C += d->f74;
+        if ((float)*p < d->f6C) d->f6C -= (float)*p;
+        if (m[0x70] & 2) {
+            if (y < *(float *)(m + 0x18) || FUN_00213260_2e3a88(3) != 0) {
+                if (m[0x53]) FUN_00212f90_2e3a88(m, 0, 0, 10);
+            } else {
+                if (m[0x53] != 1) FUN_00212f90_2e3a88(m, 1, 0, 10);
+            }
+        }
+        break;
+    }
+}
 extern char D_0013F3D0[];
 float FUN_001f9b48(void *, void *);
 float FUN_001f9af0(void *);

@@ -34,7 +34,45 @@ float FUN_001fa6c0(int);
 int FUN_001fa6d0(float);
 void FUN_L00_00250320(void *, int *, int *, int *);
 void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = FUN_001f96f8(s->lo); s->flag = 0; if (old != 0) { int n = FUN_001f96f8(s->lo); s->cur = FUN_001fa6d0(n * (old / FUN_001fa6c0(FUN_001f96f8(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d538.s", FUN_L00_0025d538);
+typedef struct { s16 t; s16 phase; u8 r0, g0, b0; u8 r1, g1, b1; u8 pad[2]; s16 d0; s16 d1; } S_25d538;
+f32 FUN_001fa6c0_25d538(s32) __asm__("FUN_001fa6c0");
+s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
+s32 FUN_001f9770_25d538(void *) __asm__("FUN_001f9770");
+s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
+void FUN_L00_002502f0_25d538(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
+void FUN_L00_0025d538(s32 id, S_25d538 *s) {
+    f32 d, f;
+    s32 r, g, b;
+    if (s->t == 0) return;
+    if (FUN_001f9770_25d538(s)) {
+        if (s->phase != 0) {
+            FUN_L00_002502f0_25d538(id, s->r0, s->g0, s->b0);
+            return;
+        }
+        s->phase = 1;
+        s->t = FUN_001f96f8_25d538(s->d1);
+    }
+    if (s->phase == 0) {
+        d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d0));
+        f = (d - s->t) / d;
+        if (s->r1 != 0) r = FUN_001fa6d0_25d538(s->r0 + (s->r1 - s->r0) * f);
+        else r = s->r0;
+        if (s->g1 != 0) g = FUN_001fa6d0_25d538(s->g0 + (s->g1 - s->g0) * f);
+        else g = s->g0;
+        if (s->b1 != 0) b = FUN_001fa6d0_25d538(s->b0 + (s->b1 - s->b0) * f);
+        else b = s->b0;
+    } else {
+        d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d1));
+        f = (d - s->t) / d;
+        if (s->r1 != 0) r = FUN_001fa6d0_25d538(s->r1 + (s->r0 - s->r1) * f);
+        else r = s->r0;
+        if (s->g1 != 0) g = FUN_001fa6d0_25d538(s->g1 + (s->g0 - s->g1) * f);
+        else g = s->g0;
+        if (s->b1 != 0) b = FUN_001fa6d0_25d538(s->b1 + (s->b0 - s->b1) * f);
+        else b = s->b0;
+    }
+    FUN_L00_002502f0_25d538(id, r, g, b);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7a0.s", FUN_L00_0025d7a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7d0.s", FUN_L00_0025d7d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d808.s", FUN_L00_0025d808);

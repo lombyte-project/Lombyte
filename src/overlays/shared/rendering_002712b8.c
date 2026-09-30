@@ -903,7 +903,48 @@ unsigned char *FUN_L00_00274948(u128 *a, u128 *b, int c, int d) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00274a70.s", FUN_L00_00274a70);
+typedef int q_274a70 __attribute__((mode(TI)));
+f32 FUN_001fa6c0_274a70(s32) __asm__("FUN_001fa6c0");
+s32 FUN_001fa6d0_274a70(f32) __asm__("FUN_001fa6d0");
+s32 FUN_001f9770_274a70(void *) __asm__("FUN_001f9770");
+void FUN_001f9a10_274a70(void *, void *, void *) __asm__("FUN_001f9a10");
+f32 FUN_L00_00257c48_274a70(f32, f32) __asm__("FUN_L00_00257c48");
+void FUN_L00_00267a08_274a70(void *) __asm__("FUN_L00_00267a08");
+void FUN_L00_00274a70(u8 *p) {
+    u8 *q = p + 0x20;
+    s32 k, n;
+    f32 f;
+    if (*(f32 *)(p + 0x10) < 2.0f || 1021.0f < *(f32 *)(p + 0x10) ||
+        *(f32 *)(p + 0x14) < 2.0f || 1021.0f < *(f32 *)(p + 0x14) ||
+        *(f32 *)(p + 0x18) < 2.0f || 1021.0f < *(f32 *)(p + 0x18)) goto kill;
+    k = *(s16 *)(q + 0x16);
+    if (k == 1) {
+        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0xD0);
+    } else if (k == 3) {
+        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0xE0);
+    } else if (k == 2) {
+        qcopy(p + 0x10, *(u8 **)(*(u8 **)(q + 0x1C) + 0x78) + 0x1F0);
+    } else if (k == 4) {
+        f32 z = *(f32 *)(p + 0x18);
+        qcopy(p + 0x10, *(u8 **)(q + 0x1C) + 0x10);
+        *(f32 *)(p + 0x18) = z + 0.2f;
+    } else {
+        FUN_001f9a10_274a70(p + 0x10, p + 0x10, q);
+    }
+    if (*(f32 *)(p + 0x10) < 2.0f || 1021.0f < *(f32 *)(p + 0x10) ||
+        *(f32 *)(p + 0x14) < 2.0f || 1021.0f < *(f32 *)(p + 0x14) ||
+        *(f32 *)(p + 0x18) < 2.0f || 1021.0f < *(f32 *)(p + 0x18)) goto kill;
+    n = p[8];
+    n += FUN_001fa6d0_274a70(FUN_L00_00257c48_274a70(0.0f, 64.0f));
+    if (n >= 0x100) n -= 0xFF;
+    p[8] = n;
+    if (FUN_001f9770_274a70(p + 0xA) != 0) {
+kill:
+        FUN_L00_00267a08_274a70(p);
+        return;
+    }
+    *(u32 *)(p + 4) = (FUN_001fa6d0_274a70(FUN_001fa6c0_274a70(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) * FUN_001fa6c0_274a70(*(s16 *)(q + 0x14))) << 24) | *(u32 *)(q + 0x18);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00274cf8.s", FUN_L00_00274cf8);
 #define NOT_SDA
 

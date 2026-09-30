@@ -3,7 +3,48 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e008.s", FUN_L00_0023e008);
+#include "qcopy.h"
+typedef int ti_23e008 __attribute__((mode(TI)));
+extern float D_0015ED60_23e008 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern void getpos_23e008(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern float rndf_23e008(float, float) __asm__("FUN_002132a8");
+extern int rndi_23e008(int) __asm__("FUN_00213260");
+extern float rnda_23e008(void) __asm__("FUN_00213308");
+extern void dir_23e008(void *, float, float, float) __asm__("FUN_00214db0");
+extern float rnd_23e008(float, float) __asm__("FUN_L00_00257c48");
+extern int fr_23e008(int) __asm__("FUN_001f96f8");
+extern unsigned char *emit_23e008(float *, int, float, float, float, int, int, int, void *) __asm__("FUN_L00_00272060");
+extern int rf_23e008(float) __asm__("FUN_001fa6d0");
+
+void FUN_L00_0023e008(void *p)
+{
+    ti_23e008 dir[1];
+    ti_23e008 old[1];
+    float pos[4] __attribute__((aligned(16)));
+    int i;
+    unsigned char *r;
+    getpos_23e008(p, 0, pos);
+    for (i = 3; i >= 0; i--) {
+        float s = rndf_23e008(0.15f, 0.5f);
+        int k = rndi_23e008(2);
+        float a, b;
+        if (k == 0) k--;
+        a = rnda_23e008();
+        b = rndf_23e008(0.34906584f, 1.53588974f);
+        dir_23e008(dir, rndf_23e008(0.05f, 0.2f) * D_0015ED60_23e008, a, b);
+        qcopy(old, pos);
+        pos[0] += rnd_23e008(0.0f, 0.15f);
+        pos[1] += rnd_23e008(0.0f, 0.15f);
+        pos[2] += rnd_23e008(0.0f, 0.15f);
+        r = emit_23e008(pos, fr_23e008(0x3C), s * 0.1f, s, 0.009f, 0x7F7F2020, 0, k, dir);
+        if (r)
+            r[9] = rf_23e008(4.0f) + 0x70;
+        k = -k;
+        r = emit_23e008(pos, fr_23e008(0x3C), s * 0.07f, s * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
+        if (r)
+            r[9] = rf_23e008(4.0f) + 0x70;
+    }
+}
 #include "eetypes.h"
 #include "qcopy.h"
 typedef union { u128 q_0023e5e0; float f[4]; } Vec4_0023e5e0;
