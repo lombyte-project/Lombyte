@@ -14,7 +14,7 @@ What the map shows
       ``config/us/unit_categories.json``.
     * warm copper shades - partial C_EXACT coverage; C_FUZZY does not affect
       tile colors, and only fully exact groups reach bolt orange.
-    * chrome (#d6d0c6) - the group contains intentional low-level asm only:
+    * chrome (#c3cbd8) - the group contains intentional low-level asm only:
       hand-written SIMD/VU0/MMI code excluded from the C goal.
     * dark plate (#3a3632) - no C_EXACT progress; C_FUZZY never changes color.
 
@@ -67,28 +67,23 @@ from progress_groups import (  # noqa: E402
 )
 
 # Ratchet & Clank (2002) logo palette: Ratchet's bolt orange, Clank's chrome,
-# and the dark riveted plate behind them. The greys are the warm gunmetal of
-# assets/lombyte-logo.png so the README logo and the map read as one piece.
-# The canvas stays GitHub dark.
+# and the dark riveted plate behind them. The plate is the warm gunmetal of
+# assets/lombyte-logo.png; text stays neutral white. The canvas stays GitHub
+# dark.
 ORANGE = "#de812f"
-CHROME = "#d6d0c6"
+CHROME = "#c3cbd8"
 PLATE = "#3a3632"
 BACKGROUND = "#0d1117"
 STROKE = "#0d1117"
-TEXT = "#efe9df"
-MUTED = "#b1aaa0"
+TEXT = "#e8edf5"
+MUTED = "#a6adc8"
 FONT = "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
-# 12x12 hex-nut "bolt" mark (the series' currency) used as the title glyph.
-BOLT_PATH = (
-    "M6 0.7 L11.3 3.5 L11.3 8.5 L6 11.3 L0.7 8.5 L0.7 3.5 Z "
-    "M3.8 6 A2.2 2.2 0 1 1 8.2 6 A2.2 2.2 0 1 1 3.8 6 Z"
-)
 # Tile label inks: dark ink on the bright orange and chrome plates, light ink
 # on the dark pending plate.
 LABEL_FILLS = {
     "exact": ("#2b1604", "#5d3512"),
-    "asm": ("#171411", "#58524a"),
+    "asm": ("#10161e", "#4d5768"),
 }
 # Partial groups use a copper range; a single soft sheen is laid over the map
 # instead of repeating a gradient inside every tile.
@@ -962,27 +957,11 @@ def render_svg(
         "</radialGradient></defs>",
     ]
 
-    # Header: bolt mark and two-tone title on the left, legend on the right.
-    head, separator, tail = title.partition(" - ")
-    ratchet, ampersand, clank = head.partition(" & ")
-    title_spans = f'<tspan fill="{ORANGE}">{esc(ratchet)}</tspan>'
-    if ampersand:
-        title_spans += f'<tspan fill="{CHROME}"> &amp; {esc(clank)}</tspan>'
-    if separator:
-        title_spans += f'<tspan fill="{MUTED}" font-weight="500"> - {esc(tail)}</tspan>'
-    mark = 10
+    # Header: function count on the left, legend on the right. The README
+    # carries the heading, so the map has no title line of its own.
     lines.append(
-        f'<path d="{BOLT_PATH}" fill="{ORANGE}" fill-rule="evenodd" '
-        f'transform="translate({margin_px} {24 - mark}) scale({mark / 12:.3f})"/>'
-    )
-    lines.append(
-        f'<text x="{margin_px + 16}" y="24" '
-        f'font-family="{esc(FONT)}" font-size="14" '
-        f'font-weight="700" letter-spacing="0.2">{title_spans}</text>'
-    )
-    lines.append(
-        f'<text x="{margin_px}" y="41" font-family="{esc(FONT)}" '
-        f'font-size="10" '
+        f'<text x="{margin_px}" y="36" font-family="{esc(FONT)}" '
+        f'font-size="11" '
         f'fill="{MUTED}">{len(exact) + ov_exact:,} of {total_units + len(overlays):,} functions in C '
         f"&#183; executable and 19 level overlays</text>"
     )

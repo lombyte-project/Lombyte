@@ -7,14 +7,23 @@
   <a href="docs/building.md"><img src="https://img.shields.io/badge/Build-Guide-c3cbd8?style=flat-square&logo=gnubash&logoColor=c3cbd8&labelColor=0d1117" alt="Build guide"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/Contributing-Guide-c3cbd8?style=flat-square&logo=github&logoColor=c3cbd8&labelColor=0d1117" alt="Contributing guide"></a>
 </p>
-
 <p align="center">
     A work-in-progress, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2.<br>
-    Reconstructing the original executable in readable C, with a native PC port as the long-term goal.
+    Reconstructing the original executable in readable C, with a native Rust port as the long-term goal.
 </p>
-<br>
+
+> [!NOTE]
+> Yeah, the project is obviously AI-driven — that’s pretty apparent... <br>
+> AI is what makes it possible for me to work on this project at all, while I still make the calls<br>
+on the data structure, tooling, and overall direction, with all PRs reviewed manually.
+
+> [!WARNING]
+> Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
+> A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.
 
 ---
+
+<h3>Decompilation progress</h3>
 
 <p align="center">
   <a href="https://decomp.dev/mateuszklysz/Lombyte">
@@ -23,10 +32,6 @@
 </p>
 
 <h3>Supported version</h3>
-
-> [!WARNING]
-> Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
-> A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.
 
 | Game                   | Platform      | Region       | Boot executable |
 | ---------------------- | ------------- | ------------ | --------------- |
