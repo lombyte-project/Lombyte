@@ -9,14 +9,14 @@ What the map shows
   Assignments come from ``rename_proposals.entries[].logical_group`` where
   available; conservative fallbacks use non-architectural source-module buckets.
 
-    * bolt orange (#dd8b30) - every recoverable function in the group is
+    * bolt orange (#e0852e) - every recoverable function in the group is
       matching C: promoted source or a legacy exact unit listed in
       ``config/us/unit_categories.json``.
     * warm copper shades - partial C_EXACT coverage; C_FUZZY does not affect
       tile colors, and only fully exact groups reach bolt orange.
-    * chrome (#c3cbd8) - the group contains intentional low-level asm only:
+    * chrome (#d6d0c6) - the group contains intentional low-level asm only:
       hand-written SIMD/VU0/MMI code excluded from the C goal.
-    * dark plate (#2e3644) - no C_EXACT progress; C_FUZZY never changes color.
+    * dark plate (#3a3632) - no C_EXACT progress; C_FUZZY never changes color.
 
   The Unclassified tile is visually capped at 16 KiB so it does not dominate
   the whole map. Its tooltip and progress numbers retain the true byte total.
@@ -67,14 +67,16 @@ from progress_groups import (  # noqa: E402
 )
 
 # Ratchet & Clank (2002) logo palette: Ratchet's bolt orange, Clank's chrome,
-# and the dark riveted plate behind them. The canvas stays GitHub dark.
-ORANGE = "#dd8b30"
-CHROME = "#c3cbd8"
-PLATE = "#2e3644"
+# and the dark riveted plate behind them. The greys are the warm gunmetal of
+# assets/lombyte-logo.png so the README logo and the map read as one piece.
+# The canvas stays GitHub dark.
+ORANGE = "#e0852e"
+CHROME = "#d6d0c6"
+PLATE = "#3a3632"
 BACKGROUND = "#0d1117"
 STROKE = "#0d1117"
-TEXT = "#e8edf5"
-MUTED = "#a6adc8"
+TEXT = "#efe9df"
+MUTED = "#b1aaa0"
 FONT = "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
 # 12x12 hex-nut "bolt" mark (the series' currency) used as the title glyph.
@@ -86,11 +88,11 @@ BOLT_PATH = (
 # on the dark pending plate.
 LABEL_FILLS = {
     "exact": ("#2b1604", "#5d3512"),
-    "asm": ("#10161e", "#4d5768"),
+    "asm": ("#171411", "#58524a"),
 }
 # Partial groups use a copper range; a single soft sheen is laid over the map
 # instead of repeating a gradient inside every tile.
-PARTIAL_ORANGE = "#bf7a2e"
+PARTIAL_ORANGE = "#bd6f2a"
 # The executable's drawer: a warm, dim face (the page is already blue-black)
 # with sharp corners, edged in the bolt orange.
 DRAWER_FACE_TOP = "#2a1e12"
@@ -897,7 +899,7 @@ def render_svg(
     min_bytes,
     title,
     fuzzy_percent=None,
-    drawer_height=170,
+    drawer_height=86,
     branch_height=44,
 ) -> tuple[str, int]:
     """The map: the executable as a drawer (its own C_EXACT over its dimmed
@@ -953,7 +955,11 @@ def render_svg(
         '</linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{DRAWER_FACE_TOP}"/>'
         f'<stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/>'
-        "</linearGradient></defs>",
+        '</linearGradient><radialGradient id="drawer-halo">'
+        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0.72"/>'
+        f'<stop offset="0.6" stop-color="{BACKGROUND}" stop-opacity="0.45"/>'
+        f'<stop offset="1" stop-color="{BACKGROUND}" stop-opacity="0"/>'
+        "</radialGradient></defs>",
     ]
 
     # Header: bolt mark and two-tone title on the left, legend on the right.
@@ -1034,7 +1040,7 @@ def render_svg(
     lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
                  f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}"/></clipPath>')
     placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.22">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.42">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
@@ -1051,23 +1057,30 @@ def render_svg(
         f'height="{ddy - 2 * inset}" fill="url(#sheen)" pointer-events="none"/>'
     )
     cx, cy = dx0 + ddx / 2, dy0 + ddy / 2
+    # A soft local shadow keeps the percentage legible over the brighter
+    # treemap without darkening the whole drawer.
     lines.append(
-        f'<text x="{dx0 + 14}" y="{dy0 + 20}" font-family="{esc(FONT)}" font-size="10" '
-        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">BOOT ELF &#183; SCUS_971.99</text>'
+        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="200" ry="{ddy * 0.62:.1f}" '
+        f'fill="url(#drawer-halo)" pointer-events="none"/>'
     )
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 12:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="52" font-weight="800" fill="{ORANGE}" '
-        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="6" stroke-opacity="0.6">'
+        f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
+        f'font-weight="700" fill="{CHROME}" style="paint-order:stroke" stroke="{BACKGROUND}" '
+        f'stroke-width="3" stroke-opacity="0.7">BOOT ELF &#183; SCUS_971.99</text>'
+    )
+    lines.append(
+        f'<text x="{cx:.1f}" y="{cy + 7:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="36" font-weight="800" fill="{ORANGE}" '
+        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="5" stroke-opacity="0.8">'
         f"{boot_percent:.1f}%</text>"
     )
     caption = "C_EXACT of the executable"
     if fuzzy_percent is not None:
         caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 34:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="10" fill="{TEXT}" fill-opacity="0.9" style="paint-order:stroke" '
-        f'stroke="{BACKGROUND}" stroke-width="4" stroke-opacity="0.6">{caption}</text>'
+        f'<text x="{cx:.1f}" y="{cy + 25:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="10" fill="{TEXT}" fill-opacity="0.95" style="paint-order:stroke" '
+        f'stroke="{BACKGROUND}" stroke-width="4" stroke-opacity="0.8">{caption}</text>'
     )
 
     # The tree: a trunk on the left, one branch per line.
@@ -1180,7 +1193,7 @@ def main(argv=None) -> int:
     parser.add_argument("--width", type=int, default=800)
     parser.add_argument("--height", type=int, default=None,
                         help="ignored: the height follows the number of tree branches")
-    parser.add_argument("--drawer-height", type=int, default=170,
+    parser.add_argument("--drawer-height", type=int, default=86,
                         help="height of the executable's drawer")
     parser.add_argument("--margin", type=int, default=10)
     parser.add_argument(
