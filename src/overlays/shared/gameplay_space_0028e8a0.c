@@ -3,7 +3,14 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e8a0.s", FUN_L00_0028e8a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e990.s", FUN_L00_0028e990);
+#include "sda.h"
+extern u8 *D_0013E030 NOT_SDA;
+void FUN_L00_0028e990(void) {
+    if (D_0013E030 != 0) {
+        *(u16 *)(D_0013E030 + 0x34) |= 3;
+        *(s32 *)(D_0013E030 + 0x94) = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e9c8.s", FUN_L00_0028e9c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ecd8.s", FUN_L00_0028ecd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ed58.s", FUN_L00_0028ed58);

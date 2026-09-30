@@ -63,8 +63,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ac88.s", FUN_L00_0024ac88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024acb0.s", FUN_L00_0024acb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ace8.s", FUN_L00_0024ace8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ad0c.s", FUN_L00_0024ad0c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ad60.s", FUN_L00_0024ad60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ad88.s", FUN_L00_0024ad88);
+#include "sda.h"
+extern s32 D_0015EEB4 MACRO_ADDR;
+extern s32 D_0015EEB0 MACRO_ADDR;
+void FUN_L00_0024ad60(void) { if ((D_0015EEB4 ^ 1) & 1) D_0015EEB0 = 3; }
+extern s32 D_0013D290[];
+void FUN_L00_0024ad88(void) {
+    s32 *p = D_0013D290;
+p[0x37] = -1; D_0015EEB0 = 4; p[0x38] = -1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024adb0.s", FUN_L00_0024adb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ade0.s", FUN_L00_0024ade0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024adfc.s", FUN_L00_0024adfc);
@@ -73,7 +80,16 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae38.s", FUN_L00_0024ae38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae58.s", FUN_L00_0024ae58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae78.s", FUN_L00_0024ae78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024aeac.s", FUN_L00_0024aeac);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024aed8.s", FUN_L00_0024aed8);
+extern s32 D_0015EEB0;
+void FUN_L00_0024aed8(void) {
+    s32 *p = D_0013D290;
+    p[7] = 0;
+    if (p[0x37] < 0) {
+        p[0x38] = 0;
+        p[0x37] = 3;
+    }
+    D_0015EEB0 = 8;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024af08.s", FUN_L00_0024af08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024af58.s", FUN_L00_0024af58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024af68.s", FUN_L00_0024af68);

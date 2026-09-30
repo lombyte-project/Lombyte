@@ -3,4 +3,11 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb0b0.s", FUN_L00_001eb0b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb0c8.s", FUN_L00_001eb0c8);
+f32 FUN_001fa580(f32, f32);
+void FUN_L00_001eb0c8(f32 *d, f32 *s, f32 x) {
+    d[0] = FUN_001fa580(s[0], x);
+    d[1] = s[1];
+    d[2] = s[2];
+    d[3] = s[3];
+    d[4] = s[4];
+}

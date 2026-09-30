@@ -2,4 +2,4 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00277f60.s", FUN_L00_00277f60);
+s32 FUN_L00_00277f60(u8 *p) { *(s32 *)(p + 0x44) = -1; return 0; }

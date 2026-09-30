@@ -64,7 +64,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3388.s", FUN_L00_002e3388);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3a88.s", FUN_L00_002e3a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3ca8.s", FUN_L00_002e3ca8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3d88.s", FUN_L00_002e3d88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4168.s", FUN_L00_002e4168);
+extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
+void FUN_L00_002e4168(int a, void *b) { qcopy(b, D_0013F3D0_002e4168); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4180.s", FUN_L00_002e4180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4290.s", FUN_L00_002e4290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e42c0.s", FUN_L00_002e42c0);
@@ -128,7 +129,23 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6d60.s", FUN_L00_002e6d60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7138.s", FUN_L00_002e7138);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7318.s", FUN_L00_002e7318);
 int FUN_L00_002e7520(void) { char buf[0x50]; return 0; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7530.s", FUN_L00_002e7530);
+typedef struct { f32 v[4]; } V002e7530 __attribute__((aligned(16)));
+typedef struct { u8 p[0x70]; u8 *m; } O002e7530;
+void FUN_001f9a28_002e7530(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff500_002e7530(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9a10_002e7530(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V002e7530 *out, f32 k1, f32 k2) {
+    V002e7530 t0, t1, t2, t3;
+    u8 *m = o->m;
+    FUN_001f9a28_002e7530(&t0, b, c);
+    m += 0x90;
+    FUN_L00_001ff500_002e7530(&t1, &t0, k1);
+    FUN_001f9a10_002e7530(b, b, &t1);
+    FUN_001f9a28_002e7530(&t2, b, m);
+    FUN_L00_001ff500_002e7530(&t2, &t2, k2);
+    FUN_001f9a10_002e7530(&t3, m, &t2);
+    FUN_001f9a28_002e7530(a, &t3, out);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
 #define NOT_SDA
 

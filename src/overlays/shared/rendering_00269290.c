@@ -191,7 +191,34 @@ void FUN_L00_0026fa00(char *p) {
     *(int *)(p + 4) = FUN_L00_002371e0(0, q[4], (float)(n - k) / (float)n);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fb00.s", FUN_L00_0026fb00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fc38.s", FUN_L00_0026fc38);
+typedef struct { f32 v[4]; } V0026fc38 __attribute__((aligned(16)));
+typedef struct { s32 x0; u8 *x4; s32 x8; } S0026fc38;
+typedef struct { u8 p0[2]; u8 x2; u8 p3; s32 x4; u8 x8; u8 p9; s16 xa; f32 xc; u8 p10[0x10]; S0026fc38 s; } O0026fc38;
+extern f32 D_L00_00160200_0026fc38 __asm__("D_L00_00160200") __attribute__((sda));
+extern s32 D_L00_00160204_0026fc38 __asm__("D_L00_00160204") __attribute__((sda));
+extern f32 D_L00_00160208_0026fc38 __asm__("D_L00_00160208") __attribute__((sda));
+extern u8 D_L00_0016020C_0026fc38 __asm__("D_L00_0016020C") __attribute__((sda));
+extern u8 D_L00_00166DC0_0026fc38[] __asm__("D_L00_00166DC0");
+extern u8 *D_L00_001B211C_0026fc38 __asm__("D_L00_001B211C") __attribute__((section(".data")));
+void FUN_001f9a28_0026fc38(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff500_0026fc38(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9a10_0026fc38(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 FUN_001fa6d0_0026fc38(f32) __asm__("FUN_001fa6d0");
+void FUN_L00_00267a08_0026fc38(void *) __asm__("FUN_L00_00267a08");
+void FUN_L00_0026fc38(O0026fc38 *o) {
+    V0026fc38 t;
+    S0026fc38 *s = &o->s;
+    o->xc = D_L00_00160200_0026fc38;
+    o->x4 = D_L00_00160204_0026fc38;
+    o->x8 += D_L00_0016020C_0026fc38;
+    FUN_001f9a28_0026fc38(&t, s->x4 + 0x10, D_L00_00166DC0_0026fc38);
+    FUN_L00_001ff500_0026fc38(&t, &t, D_L00_00160208_0026fc38);
+    FUN_001f9a10_0026fc38(o->p10, s->x4 + 0x10, &t);
+    o->x2 = D_L00_001B211C_0026fc38[FUN_001fa6d0_0026fc38((f32)(s->x8 / 2))];
+    s->x8++;
+    if (s->x8 >= 0x1F) s->x8 = 0;
+    if (o->xa == 0) FUN_L00_00267a08_0026fc38(o);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fd28.s", FUN_L00_0026fd28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026ff10.s", FUN_L00_0026ff10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00270708.s", FUN_L00_00270708);

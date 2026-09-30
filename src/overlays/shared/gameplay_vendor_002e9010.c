@@ -32,7 +32,27 @@ void FUN_L00_002e9bb0(int a) {
     FUN_L00_002e8378(a);
     FUN_L00_002e9010(a);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9c28.s", FUN_L00_002e9c28);
+extern s32 D_0015EDE4;
+extern f32 D_L00_0015EF44 __attribute__((sda));
+extern f32 D_L00_00161DB0[2] __attribute__((sda));
+void FUN_L00_002e46b8();
+void FUN_L00_002e6000();
+void FUN_001e93e8();
+void FUN_L00_002e5830();
+void FUN_L00_002e9bb0();
+void FUN_L00_002e5e38();
+void FUN_L00_002e9c28(u8 *m) {
+    u8 *p = *(u8 **)(m + 0x70) + 0x1D0;
+    D_L00_0015EF44 = D_L00_00161DB0[D_0015EDE4];
+    FUN_L00_002e46b8();
+    FUN_L00_002e6000(m);
+    FUN_001e93e8(m);
+    FUN_L00_002e5830(m);
+    FUN_001e93e8(m, p);
+    FUN_L00_002e9bb0(m);
+    FUN_001e93e8(m);
+    FUN_L00_002e5e38(m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9cc0.s", FUN_L00_002e9cc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9dd0.s", FUN_L00_002e9dd0);
 void FUN_L00_002e9dd0();

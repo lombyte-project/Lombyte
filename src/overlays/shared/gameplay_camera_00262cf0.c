@@ -3,4 +3,13 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262cf0.s", FUN_L00_00262cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262d38.s", FUN_L00_00262d38);
+typedef struct { s32 v[19]; } T;
+extern T D_L00_001E9060;
+s32 FUN_001f96f8(s32);
+void FUN_L00_00263d40(s32, s32);
+void FUN_L00_00262d38(s32 i) {
+    T t = D_L00_001E9060;
+    if (i < 0) i = 0;
+    if (i > 18) i = 18;
+    FUN_L00_00263d40(t.v[i], FUN_001f96f8(0x49C));
+}

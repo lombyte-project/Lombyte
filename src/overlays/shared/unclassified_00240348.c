@@ -5,7 +5,23 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00240348.s", FUN_L00_00240348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002403e8.s", FUN_L00_002403e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00240448.s", FUN_L00_00240448);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241728.s", FUN_L00_00241728);
+#include "sda.h"
+typedef struct { s32 a, b, c, off; } Ent;
+typedef struct { s32 n; s32 pad[3]; Ent e[1]; } Tbl;
+extern u8 *D_L00_00173E40 NOT_SDA;
+extern Tbl *D_L00_0015F618 __attribute__((sda));
+void FUN_L00_00241728(s32 *h) {
+    s32 i;
+    Tbl *t;
+    if (h[0]) D_L00_00173E40 = (u8 *)h + h[0];
+    if (h[1]) {
+        t = (Tbl *)((u8 *)h + h[1]);
+        D_L00_0015F618 = t;
+        for (i = 0; i < t->n; i++) {
+            t->e[i].off = (s32)((u8 *)t + t->e[i].off);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241940.s", FUN_L00_00241940);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00244110.s", FUN_L00_00244110);

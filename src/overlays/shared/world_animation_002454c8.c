@@ -2,5 +2,34 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002454c8.s", FUN_L00_002454c8);
+typedef struct { s32 a, b; } P2;
+typedef struct { u8 pad[0x1530]; P2 x[14]; P2 y[1]; } Tab;
+typedef struct { u8 pad[0x5C]; u8 *buf; s32 ptr[70]; } H;
+extern s32 D_0015ED80;
+extern Tab D_00137B80;
+extern H D_L00_0016C860;
+void FUN_00216788(void *, s32, s32);
+void FUN_002168a8(s32);
+void FUN_001f4a58(s32);
+void FUN_L00_002454c8(s32 i) {
+    s32 n;
+    s32 *e;
+    if (D_0015ED80 == 0) {
+        FUN_00216788(D_L00_0016C860.buf, D_00137B80.x[i].a, D_00137B80.x[i].b);
+    } else {
+        FUN_00216788(D_L00_0016C860.buf, D_00137B80.y[i].a, D_00137B80.y[i].b);
+    }
+    FUN_002168a8(0);
+    FUN_001f4a58(4);
+    FUN_002168a8(1);
+    e = (s32 *)D_L00_0016C860.buf;
+    n = 0;
+    if (e[1] != 0) {
+        do {
+            D_L00_0016C860.ptr[n] = (s32)(D_L00_0016C860.buf + (e[0] + 0x800));
+            n++;
+            e += 2;
+        } while (n < 70 && e[1] != 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00245610.s", FUN_L00_00245610);

@@ -41,7 +41,7 @@ int FUN_L00_0020d4d0(int arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d518.s", FUN_L00_0020d518);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d540.s", FUN_L00_0020d540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d568.s", FUN_L00_0020d568);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d5b8.s", FUN_L00_0020d5b8);
+s32 FUN_L00_0020d5b8(u8 *p, s32 a) { if (a == 0xFF) a = p[0xA5]; return a; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d5d0.s", FUN_L00_0020d5d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d61c.s", FUN_L00_0020d61c);
 #define NOT_SDA
@@ -184,7 +184,20 @@ void FUN_L00_0020fde0(int id) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fe30.s", FUN_L00_0020fe30);
+s32 FUN_L00_00233f38_0020fe30(void) __asm__("FUN_L00_00233f38");
+extern s32 D_L00_0015F5C4_0020fe30 __asm__("D_L00_0015F5C4");
+extern u8 D_0013F350_0020fe30[] __asm__("D_0013F350");
+s32 FUN_L00_0020fe30(void) {
+    u8 *b;
+    u32 s;
+    if (FUN_L00_00233f38_0020fe30()) return 0;
+    if (D_L00_0015F5C4_0020fe30) return 0;
+    b = D_0013F350_0020fe30;
+    if (b[0x20A4]) return 0;
+    s = *(u32 *)(b + 0x208C);
+    if (s < 3 || s == 4) return b[0x12E4] == 0;
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fea0.s", FUN_L00_0020fea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210928.s", FUN_L00_00210928);
@@ -338,7 +351,14 @@ void FUN_L00_00211e98(void) {
     FUN_L00_00211e30(0, a, b, c);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211f38.s", FUN_L00_00211f38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212088.s", FUN_L00_00212088);
+typedef struct { u8 pad[0x190]; f32 a; f32 b; } S00212088;
+extern S00212088 D_0013F350_00212088 __asm__("D_0013F350");
+void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
+void FUN_L00_00212088(f32 x, f32 y) {
+    S00212088 *p = &D_0013F350_00212088;
+    if (p->b < p->a) FUN_00213ed8_00212088(&p->b, p->a, x);
+    else FUN_00213ed8_00212088(&p->b, p->a, y);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002120d8.s", FUN_L00_002120d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002121c0.s", FUN_L00_002121c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212318.s", FUN_L00_00212318);

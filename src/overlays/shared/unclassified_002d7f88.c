@@ -28,7 +28,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d81b8.s", FUN_L00_002d81b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8418.s", FUN_L00_002d8418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8510.s", FUN_L00_002d8510);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8850.s", FUN_L00_002d8850);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8908.s", FUN_L00_002d8908);
+typedef f32 V4[4] __attribute__((aligned(16)));
+extern V4 D_L00_001E3CA0[];
+extern V4 D_L00_001E3D20[];
+extern f32 D_L00_001619F0 __attribute__((sda));
+extern f32 D_L00_00161A14 __attribute__((sda));
+void FUN_00214890(V4 *, V4 *, V4 *, f32);
+void FUN_L00_001ff500(V4 *, V4 *, f32);
+void FUN_L00_002d8908(void) {
+    s32 i;
+    for (i = 0; i < 8; i++) {
+        FUN_00214890(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i], D_L00_001619F0);
+        FUN_L00_001ff500(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d8980.s", FUN_L00_002d8980);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);
@@ -78,7 +91,45 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db890.s", FUN_L00_002db890);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db8f8.s", FUN_L00_002db8f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbb20.s", FUN_L00_002dbb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbc30.s", FUN_L00_002dbc30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbe20.s", FUN_L00_002dbe20);
+typedef struct { u8 pad0[0x2050]; s32 slot[11]; s32 count; } G;
+extern G D_0013F350;
+u8 *FUN_L00_002db890(u8 *);
+s32 FUN_001f96f8(s32);
+void FUN_00212f90(void *, s32, s32, s32);
+s32 FUN_L00_002dbe20(u8 *m) {
+    u8 *o = FUN_L00_002db890(m);
+    s32 k;
+    if (o == 0) return 0;
+    if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD) return 0;
+    k = *(s16 *)(o + 0x68);
+    if (k == 8) return 0;
+    switch (k) {
+    case 3:
+        if (*(s16 *)(o + 0x6A) != -1) {
+            D_0013F350.slot[*(s16 *)(o + 0x6A)] = 0;
+            if (D_0013F350.count > 0) D_0013F350.count--;
+        }
+        /* fall through */
+    case 1:
+    case 2: {
+        if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
+            u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
+            FUN_00212f90(m, c, 0, FUN_001f96f8(10));
+        }
+        *(s16 *)(o + 0x68) = 7;
+        return 0;
+    }
+    case 4:
+        return 1;
+    case 0:
+    case 5:
+    case 6:
+    case 7:
+    case 9:
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dbf28.s", FUN_L00_002dbf28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dc938.s", FUN_L00_002dc938);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002dc9f0.s", FUN_L00_002dc9f0);

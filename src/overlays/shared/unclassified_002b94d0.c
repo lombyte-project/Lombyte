@@ -6,7 +6,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ba970.s", FUN_L00_002ba970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002baae0.s", FUN_L00_002baae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb0b0.s", FUN_L00_002bb0b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb360.s", FUN_L00_002bb360);
+typedef int q128 __attribute__((mode(TI)));
+u8 *FUN_0020c4f8(s32);
+void FUN_001f99f8();
+void FUN_0020e098();
+void FUN_L00_00250df8();
+u8 *FUN_L00_002bb360(u8 *src) {
+    u8 *m = FUN_0020c4f8(0xB3);
+    if (m) {
+        u8 *v = *(u8 **)(m + 0x78);
+        m[0x30] = 0xFF;
+        *(s16 *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(s16 *)(m + 0x34) = 0x204;
+        m[0x23] = 0x50;
+        m[0x20] = 0;
+        *(u8 **)(v + 8) = src;
+        FUN_001f99f8(m + 0x40);
+        *(q128 *)(m + 0xC0) = *(q128 *)(src + 0xC0);
+        *(q128 *)(m + 0xD0) = *(q128 *)(src + 0xD0);
+        *(q128 *)(m + 0xE0) = *(q128 *)(src + 0xE0);
+        FUN_0020e098(m);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb400.s", FUN_L00_002bb400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb558.s", FUN_L00_002bb558);
 typedef struct { u8 b[0x50]; } E002bbb00;

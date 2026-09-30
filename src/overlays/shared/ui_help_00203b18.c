@@ -102,7 +102,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205150.s", FUN_L00_00205150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020515c.s", FUN_L00_0020515c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205160.s", FUN_L00_00205160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205168.s", FUN_L00_00205168);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002054e8.s", FUN_L00_002054e8);
+typedef struct { u8 pad[0xB0]; } E002054e8;
+extern E002054e8 D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
+void FUN_L00_00205168_002054e8(E002054e8 *) __asm__("FUN_L00_00205168");
+void FUN_L00_002054e8(void) {
+    E002054e8 *p = D_L00_0017A680_002054e8;
+    E002054e8 *end = (E002054e8 *)((u8 *)p + 0x1550);
+    do { FUN_L00_00205168_002054e8(p); p++; } while ((s32)p < (s32)end);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205538.s", FUN_L00_00205538);
 #define NOT_SDA
 
@@ -200,7 +207,31 @@ void FUN_L00_002061f0(void) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206c08.s", FUN_L00_00206c08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206cf8.s", FUN_L00_00206cf8);
+#include "sda.h"
+typedef struct { u8 p[8]; s32 x8; u8 pc[0x40]; } E00206cf8;
+typedef struct { u8 p[0x280]; u16 x280; u8 p282[0x13E]; u16 x3c0; } G00206cf8;
+extern G00206cf8 D_00141968_00206cf8 __asm__("D_00141968");
+extern u16 D_001418F0_00206cf8 __asm__("D_001418F0") NOT_SDA;
+extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
+extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
+extern u8 D_0013D4C0_00206cf8[] __asm__("D_0013D4C0") NOT_SDA;
+s32 FUN_L00_0020d568_00206cf8(void) __asm__("FUN_L00_0020d568");
+s32 FUN_L00_00203908_00206cf8(s32, s32) __asm__("FUN_L00_00203908");
+void FUN_L00_00206cf8(void) {
+    s32 i, n;
+    if (D_00141968_00206cf8.x3c0 == 0 && D_0013D4C0_00206cf8[4] != 0 && FUN_L00_0020d568_00206cf8() != 0) {
+        FUN_L00_00203908_00206cf8(0x4E2E, 0x78);
+    }
+    if (D_L00_0015F5CC_00206cf8 <= 0) return;
+    if (D_L00_0015F5CC_00206cf8 & 0x7F) return;
+    if (D_00141968_00206cf8.x280 != 0) return;
+    if (D_001418F0_00206cf8 != 0) return;
+    n = 0;
+    for (i = 0; i < 0x25; i++) {
+        if (D_L00_00179AC0_00206cf8[i].x8 == 0 && i != 8 && i != 0x18 && D_0013D4C0_00206cf8[i] != 0) n++;
+    }
+    if (n >= 9) FUN_L00_00203908_00206cf8(0x4E26, 0x50);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206e00.s", FUN_L00_00206e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002070d0.s", FUN_L00_002070d0);
 #define NOT_SDA

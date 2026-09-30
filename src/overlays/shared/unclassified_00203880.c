@@ -5,7 +5,24 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203880.s", FUN_L00_00203880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002038c0.s", FUN_L00_002038c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002038f0.s", FUN_L00_002038f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203908.s", FUN_L00_00203908);
+typedef struct { s32 state; u8 pad[0x20]; s32 cur; s32 idx; } S00203908;
+typedef struct { u16 id; u16 pad; s32 v; } P00203908;
+extern S00203908 D_L00_00179410_00203908 __asm__("D_L00_00179410");
+typedef struct { u8 pad[0x1C]; s32 x1c; u8 pad2[0x30]; s32 x50; } G00203908;
+extern G00203908 D_001516D0_00203908 __asm__("D_001516D0");
+extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
+void FUN_001fed30_00203908(s32) __asm__("FUN_001fed30");
+s32 FUN_L00_00203908(s32 a, s32 b) {
+    S00203908 *s = &D_L00_00179410_00203908;
+    if (s->state == 0 && s->cur == -1 && D_001516D0_00203908.x50 == 0
+        && D_001516D0_00203908.x1c == s->cur && D_00141968_00203908[b].id != 0xFFFF) {
+        s->idx = b;
+        s->cur = a;
+        FUN_001fed30_00203908(a);
+        return 1;
+    }
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -15,7 +15,13 @@ void FUN_L00_001eb448(void) { D_L00_00166C80.p->h = 1; D_L00_00166C80.p->b = 0; 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ecf40.s", FUN_L00_001ecf40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed000.s", FUN_L00_001ed000);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed054.s", FUN_L00_001ed054);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed230.s", FUN_L00_001ed230);
+typedef struct { s32 id; s32 pad[4]; } E5;
+extern E5 D_L00_001EA880[];
+s32 FUN_L00_001ed230(s32 id) {
+    s32 n = 0;
+    while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id) n++;
+    return n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed280.s", FUN_L00_001ed280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
 #define NOT_SDA

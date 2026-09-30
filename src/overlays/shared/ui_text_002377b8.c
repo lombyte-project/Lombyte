@@ -114,7 +114,33 @@ void FUN_L00_00239cc8(HudElem *e) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239d00.s", FUN_L00_00239d00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a1f8.s", FUN_L00_0023a1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a218.s", FUN_L00_0023a218);
+#include "sda.h"
+extern s32 D_00141398 NOT_SDA;
+extern s32 D_L00_0015F7F0 __attribute__((sda));
+s32 FUN_001f96f8(s32);
+void FUN_L00_0023a218(u8 *m) {
+    u8 *q = m + 0x70;
+    if (D_00141398) {
+        s32 r = FUN_001f96f8(10);
+        s32 lim = D_L00_0015F7F0;
+        *(s32 *)(m + 0x7C) = r;
+        if (m[0x70] < lim) {
+            m[0x70]++;
+        } else if (q[1] < lim) {
+            q[1]++;
+        }
+    } else {
+        *(s32 *)(m + 0x7C) = 0;
+        *(s32 *)(m + 0x6C) = 1;
+        if (q[1]) {
+            q[1]--;
+        } else if (m[0x70]) {
+            m[0x70]--;
+        } else {
+            *(s32 *)(m + 0x6C) = -6;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a640.s", FUN_L00_0023a640);
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer

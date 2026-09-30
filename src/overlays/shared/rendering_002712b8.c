@@ -82,7 +82,30 @@ void FUN_L00_00271d20(O00271d20 *o) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00271df8.s", FUN_L00_00271df8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00271ec8.s", FUN_L00_00271ec8);
+#include "sda.h"
+typedef struct { f32 x, y, z, w; } V __attribute__((aligned(16)));
+extern f32 D_0015ED70 MACRO_ADDR;
+void FUN_L00_001ff318(V *, V *, f32);
+void FUN_L00_001ff290(V *, V *, V *);
+s32 FUN_001f9770(void *);
+void FUN_L00_00267a08(void *);
+void FUN_L00_00271ec8(u8 *m) {
+    V t;
+    V *v = (V *)(m + 0x20);
+    u32 c;
+    FUN_L00_001ff318(&t, v, 0.95f);
+    v->z += D_0015ED70 * 5.0f;
+    FUN_L00_001ff290(&t, (V *)(m + 0x10), v);
+    c = *(u32 *)(m + 4) + 0xFE000000;
+    *(u32 *)(m + 4) = c;
+    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || FUN_001f9770(m + 0xA) != 0) {
+        FUN_L00_00267a08(m);
+    } else {
+        f32 f = *(f32 *)(m + 0xC);
+        m[8]++;
+        *(f32 *)(m + 0xC) = f + (210000.0f - f) * 0.07f;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -111,7 +134,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002721f0.s", FUN_L00_002721f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00272438.s", FUN_L00_00272438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002725d8.s", FUN_L00_002725d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002726d8.s", FUN_L00_002726d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00272838.s", FUN_L00_00272838);
+void FUN_001f9a68(void *, void *, f32);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_L00_00267a08(void *);
+void FUN_L00_00272838(u8 *m) {
+    s32 n;
+    FUN_001f9a68(m + 0x20, m + 0x20, 0.975f);
+    FUN_001f9a10(m + 0x10, m + 0x10, m + 0x20);
+    *(f32 *)(m + 0xC) += 6300.0f;
+    n = m[4] - 4;
+    if (n <= 0) {
+        FUN_L00_00267a08(m);
+    } else {
+        s32 t = (n << 8) | 0x60000000;
+        *(s32 *)(m + 4) = ((n << 16) | t) | n;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002728e8.s", FUN_L00_002728e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002729c8.s", FUN_L00_002729c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00272bc0.s", FUN_L00_00272bc0);

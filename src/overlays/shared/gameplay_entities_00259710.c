@@ -2,7 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259710.s", FUN_L00_00259710);
+void FUN_00213508(void *, s32, f32);
+void FUN_L00_00259710(void *a) { FUN_00213508(a, 0x20, 0.5f); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259738.s", FUN_L00_00259738);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259740.s", FUN_L00_00259740);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259810.s", FUN_L00_00259810);
@@ -104,7 +105,7 @@ float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025aca0.s", FUN_L00_0025aca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b430.s", FUN_L00_0025b430);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b440.s", FUN_L00_0025b440);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6a8.s", FUN_L00_0025b6a8);
+f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) { return a + (b - a) * t; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
 #define NOT_SDA
 

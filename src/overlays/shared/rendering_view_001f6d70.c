@@ -2,4 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f6d70.s", FUN_L00_001f6d70);
+extern s32 D_L00_00169C80[];
+void FUN_L00_001f6d70(void) {
+    s32 *p = D_L00_00169C80;
+    s32 v = p[0x364/4];
+p[0x364/4] = 0; p[0x1B0/4] = 0; p[0x368/4] = v;
+}

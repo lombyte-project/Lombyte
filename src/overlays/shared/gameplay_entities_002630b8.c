@@ -15,7 +15,16 @@ void FUN_L00_00263b50(char *p) { *(float *)(p + 0x70) = 1.0f; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b60.s", FUN_L00_00263b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b70.s", FUN_L00_00263b70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263d40.s", FUN_L00_00263d40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263db0.s", FUN_L00_00263db0);
+extern u8 D_L00_00179118[];
+extern s32 D_L00_0015F640;
+s32 FUN_001f96f8(s32);
+s32 FUN_001fdd10();
+void FUN_00116248();
+void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
+    if (c == -1) c = FUN_001f96f8(0xB4);
+    FUN_00116248(D_L00_00179118, FUN_001fdd10(a), b);
+    D_L00_0015F640 = c;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263e30.s", FUN_L00_00263e30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263fd8.s", FUN_L00_00263fd8);
 extern s32 D_L00_0015F590;

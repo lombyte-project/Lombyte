@@ -68,7 +68,23 @@ void FUN_L00_0028a920(void) {
     sky_draw_shell(2);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a998.s", FUN_L00_0028a998);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028aa98.s", FUN_L00_0028aa98);
+extern u8 D_L00_001BD7E0_0028aa98[] __asm__("D_L00_001BD7E0");
+extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
+void FUN_001f9fc8_0028aa98(void *) __asm__("FUN_001f9fc8");
+void FUN_0022b690_0028aa98(s32) __asm__("FUN_0022b690");
+void FUN_L00_00288ec0_0028aa98(s32, s32) __asm__("FUN_L00_00288ec0");
+void FUN_L00_00289108_0028aa98(void) __asm__("FUN_L00_00289108");
+void FUN_0022bba0_0028aa98(void) __asm__("FUN_0022bba0");
+void FUN_00233980_0028aa98(s32, u64) __asm__("FUN_00233980");
+void FUN_L00_0028aa98(void) {
+    FUN_001f9fc8_0028aa98(D_L00_001BD7E0_0028aa98);
+    FUN_0022b690_0028aa98(0);
+    if (*(s16 *)(D_L00_0016051C_0028aa98 + 8) == 0) FUN_L00_00288ec0_0028aa98(0x78, 8);
+    FUN_L00_00289108_0028aa98();
+    FUN_0022bba0_0028aa98();
+    FUN_00233980_0028aa98(0x42, 0x8000000044ULL);
+    FUN_0022b690_0028aa98(1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ac88.s", FUN_L00_0028ac88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028b080.s", FUN_L00_0028b080);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028b1a0.s", FUN_L00_0028b1a0);

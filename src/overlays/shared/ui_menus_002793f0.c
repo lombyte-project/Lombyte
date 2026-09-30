@@ -4,5 +4,12 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002793f0.s", FUN_L00_002793f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00279404.s", FUN_L00_00279404);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027a6a8.s", FUN_L00_0027a6a8);
+extern s32 D_00141EA0[];
+s32 FUN_L00_0027a6a8(u8 *a) {
+    s32 *s = (s32 *)(a + 0x30);
+    s32 *d = D_00141EA0;
+    s32 i;
+    for (i = 7; i >= 0; i--) *d++ = *s++;
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027a748.s", FUN_L00_0027a748);
