@@ -32,4 +32,34 @@ void FUN_L00_002454c8(s32 i) {
         } while (n < 70 && e[1] != 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00245610.s", FUN_L00_00245610);
+typedef struct { s32 a, b; } P2_245610;
+typedef struct { u8 pad[0x12E8]; P2_245610 x[10]; P2_245610 y[1]; } Tab_245610;
+typedef struct { u8 pad[0x5C]; u8 *buf; s32 ptr[70]; } H_245610;
+extern Tab_245610 T_245610 __asm__("D_00137B80");
+extern H_245610 H245610 __asm__("D_L00_0016C860");
+void FUN_00216788(void *, s32, s32);
+void FUN_002168a8(s32);
+void FUN_001f4a58(s32);
+void FUN_L00_00245610(s32 i, s32 p) {
+    s32 n;
+    s32 *e;
+    if (D_0015ED80 == 0) {
+        FUN_00216788(H245610.buf, T_245610.x[i].a, T_245610.x[i].b);
+    } else {
+        FUN_00216788(H245610.buf, T_245610.y[i].a, T_245610.y[i].b);
+    }
+    if (p != 0) {
+        FUN_002168a8(0);
+        FUN_001f4a58(p);
+    }
+    FUN_002168a8(1);
+    e = (s32 *)H245610.buf;
+    n = 0;
+    if (e[1] != 0) {
+        do {
+            H245610.ptr[n] = (s32)(H245610.buf + (e[0] + 0x800));
+            n++;
+            e += 2;
+        } while (n < 70 && e[1] != 0);
+    }
+}

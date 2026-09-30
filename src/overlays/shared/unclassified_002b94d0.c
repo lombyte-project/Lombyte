@@ -3,7 +3,42 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ba970.s", FUN_L00_002ba970);
+typedef struct { u8 pad[0x3E]; s16 h3E; } S2ba970;
+extern f32 D_0015ED60;
+extern f32 D_L00_001615EC __attribute__((sda));
+extern f32 D_L00_001615F0 __attribute__((sda));
+extern s32 D_L00_001615D4 __attribute__((sda));
+extern s32 D_L00_001615DC __attribute__((sda));
+extern f32 D_L00_001615FC __attribute__((sda));
+extern f32 D_L00_00161600 __attribute__((sda));
+extern f32 D_L00_00161630 __attribute__((sda));
+extern s32 D_L00_00161604 __attribute__((sda));
+extern s32 D_L00_00161608 __attribute__((sda));
+extern f32 D_L00_0016160C __attribute__((sda));
+extern f32 D_L00_00161610 __attribute__((sda));
+extern f32 D_L00_00161634 __attribute__((sda));
+extern s16 D_L00_00161660 __attribute__((section(".sdata")));
+extern s16 D_L00_00161662 __attribute__((section(".sdata")));
+extern s16 D_L00_00161664 __attribute__((section(".sdata")));
+extern s16 D_L00_00161666 __attribute__((section(".sdata")));
+extern u8 D_L00_001DB5C0[];
+extern u8 D_L00_001DBA20[];
+void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
+void FUN_L00_002bb0b0(void *);
+void FUN_L00_002ba970(u8 *o) {
+    S2ba970 *v = *(S2ba970 **)(o + 0x78);
+    D_L00_001615EC -= D_L00_001615F0 * D_0015ED60;
+    if (D_L00_001615EC <= -8.0f) {
+        D_L00_001615EC += 8.0f;
+    }
+    FUN_L00_002baae0(D_L00_001DB5C0, D_L00_001615D4, D_L00_001615DC, v->h3E, D_L00_001615FC, D_L00_00161600, D_L00_00161630);
+    FUN_L00_002baae0(D_L00_001DB5C0 + 0x140, D_L00_00161604, D_L00_00161608, v->h3E, D_L00_0016160C, D_L00_00161610, D_L00_00161634);
+    FUN_L00_002baae0(D_L00_001DBA20, D_L00_00161660, D_L00_00161660, 5, D_L00_0016160C, D_L00_00161610, 0.2f);
+    FUN_L00_002baae0(D_L00_001DBA20 + 0x50, D_L00_00161662, D_L00_00161662, 5, D_L00_0016160C, D_L00_00161610, 0.2f);
+    FUN_L00_002baae0(D_L00_001DBA20 + 0xA0, D_L00_00161664, D_L00_00161664, 5, D_L00_0016160C, D_L00_00161610, 0.2f);
+    FUN_L00_002baae0(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C, D_L00_00161610, 0.2f);
+    FUN_L00_002bb0b0(o);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002baae0.s", FUN_L00_002baae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb0b0.s", FUN_L00_002bb0b0);
 typedef int q128 __attribute__((mode(TI)));

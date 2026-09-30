@@ -57,10 +57,92 @@ void FUN_00212f90(unsigned char *, int, int, int);
 void FUN_L00_00250df8(unsigned char *);
 unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) { unsigned char *m = FUN_0020c4f8(0xd1); if (m) { char *q = *(char **)(m + 0x78); *(float *)(q + 4) = f; *(unsigned char **)q = src; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; FUN_L00_002502f0(m, 0x80, 0x80, 0x80); FUN_L00_0024f7c8(src, 0, m + 0x10); *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0); *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0); *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0); if (m[0x53]) FUN_00212f90(m, 0, 0, FUN_001f96f8(10)); FUN_L00_00250df8(m); m[0x20] = 0; *(unsigned short *)(m + 0x34) |= 4; } return m; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7070.s", FUN_L00_002c7070);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7320.s", FUN_L00_002c7320);
+typedef union { u128 q; f32 f[4]; s32 i[4]; } V2c7320;
+extern unsigned char D_0013F350_2c7320[] __asm__("D_0013F350");
+extern s32 D_0013CAE0_2c7320[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern f32 D_0015ED6C_2c7320 __asm__("D_0015ED6C");
+extern f32 dist_2c7320(void *, void *) __asm__("FUN_001f9b48");
+extern void sub_2c7320(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_2c7320(void *, void *, f32) __asm__("FUN_L00_001ff500");
+extern void add_2c7320(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 atan_2c7320(f32, f32) __asm__("FUN_L00_001ff8b0");
+extern f32 adiff_2c7320(f32, f32) __asm__("FUN_001fa688");
+extern f32 dist2_2c7320(void *, void *) __asm__("FUN_001f9b80");
+extern f32 cos_2c7320(f32) __asm__("FUN_001f9dc8");
+extern f32 sin_2c7320(f32) __asm__("FUN_001f9de0");
+extern f32 fn_2c7320(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
+void FUN_L00_002c7320(V2c7320 *pos, V2c7320 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
+    V2c7320 t;
+    V2c7320 u;
+    f32 ang;
+    f32 s;
+    f32 k;
+    f32 v;
+    u8 *P;
+    if (range < dist_2c7320(pos, tgt)) {
+        sub_2c7320(&t, tgt, pos);
+        scale_2c7320(&t, &t, range - 0.01f);
+        add_2c7320(&t, &t, pos);
+    } else {
+        t.q = tgt->q;
+    }
+    ang = atan_2c7320(t.f[0] - pos->f[0], t.f[1] - pos->f[1]);
+    P = D_0013F350_2c7320;
+    if (adiff_2c7320(*(f32 *)(P + 0x98), ang) > 0.87266463f
+        || dist2_2c7320(pos, &t) < 1.5f) {
+        ang = *(f32 *)(P + 0x98);
+        u.f[0] = cos_2c7320(ang) * 1.5f;
+        u.f[1] = sin_2c7320(*(f32 *)(P + 0x98)) * 1.5f;
+        u.i[2] = 0;
+        add_2c7320(&u, &u, pos);
+        t.f[0] = u.f[0];
+        t.f[1] = u.f[1];
+    }
+    s = D_0015ED6C_2c7320 * 8.5f;
+    out[0] = cos_2c7320(ang) * s;
+    out[1] = sin_2c7320(ang) * s;
+    *(s32 *)&out[2] = 0;
+    out[2] = fn_2c7320(pos, &t, s, -speed, 0);
+    if (D_0013CAE0_2c7320[0] & 5) {
+        k = 3.5f / s;
+    } else {
+        k = 2.5f / s;
+    }
+    v = speed * k * 0.5f;
+    if (v < out[2]) {
+        out[2] = v;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7548.s", FUN_L00_002c7548);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7a58.s", FUN_L00_002c7a58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c8078.s", FUN_L00_002c8078);
+#include "qcopy.h"
+s32 FUN_L00_001f35d8();
+float FUN_002132a8(float, float);
+int FUN_001160d8(void);
+int FUN_001f96f8(int);
+void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
+void FUN_L00_002c8078(unsigned char *m) {
+    float v[4] __attribute__((aligned(16)));
+    int i;
+    int r, g; unsigned char b;
+    float s;
+    switch (FUN_L00_001f35d8()) {
+    case 0: case 1: case 3: case 8: case 11: case 12: case 13:
+        for (i = 0; i < 20; i++) {
+            qcopy(v, m + 0x10);
+            v[0] += FUN_002132a8(-0.3f, 0.3f);
+            v[1] += FUN_002132a8(-0.3f, 0.3f);
+            v[2] += FUN_002132a8(-0.3f, 0.3f);
+            r = (FUN_001160d8() + 0x30) & 0x3F;
+            g = (FUN_001160d8() + 0x20) & 0x3F;
+            b = FUN_001160d8() & 0x2F;
+            s = FUN_002132a8(100000.0f, 800000.0f);
+            FUN_L00_00269b70(v, r, g, b, s, 0.0f, FUN_001f96f8(FUN_001160d8() % 40 + 10));
+        }
+        m[0x20] = 4;
+        break;
+    }
+}
 #include "qcopy.h"
 extern unsigned char D_0013F350[];
 unsigned char *FUN_0020c4f8(int);

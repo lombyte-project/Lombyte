@@ -234,7 +234,89 @@ void FUN_L00_00206cf8(void) {
     if (n >= 9) FUN_L00_00203908_00206cf8(0x4E26, 0x50);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206e00.s", FUN_L00_00206e00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002070d0.s", FUN_L00_002070d0);
+int FUN_001f96f8(int);
+void FUN_001f4a58(int);
+void FUN_L00_002062b0(void);
+void FUN_L00_00232670(void);
+void FUN_L00_00211670(void);
+void FUN_L00_0020b960(void);
+void FUN_L00_0020bed0(void);
+void FUN_L00_0020cf58(void);
+void FUN_L00_0020d330(void);
+void FUN_L00_00229b70(void);
+void FUN_L00_00216f10(void);
+void FUN_L00_0020b1d8(void);
+void FUN_L00_0020a318(void);
+void FUN_L00_0020a540(void);
+void FUN_L00_0020ac98(void);
+void FUN_L00_0020a9e8(void);
+void FUN_L00_002056a8(void);
+void FUN_L00_002059d8(void);
+void FUN_L00_00214fe8(void);
+void FUN_L00_002054e8(void);
+void FUN_L00_00208820(void);
+void FUN_L00_00209240(int);
+void FUN_L00_00210928(void);
+void FUN_001f7978(void);
+void FUN_L00_00207c48(void);
+void FUN_L00_00207a58(void);
+void FUN_L00_00206cf8(void);
+void FUN_L00_00205ea8(void);
+void FUN_L00_00206080(void);
+void FUN_L00_00206e00(void);
+void FUN_001e93e8(int);
+void FUN_L00_002484e0(void *);
+void FUN_L00_00257024(int);
+void FUN_L00_002076a8(void);
+void FUN_L00_00208b60(void);
+void FUN_L00_002070d0(void) {
+    unsigned char *g = D_0013F350;
+    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || 1022.0f < *(float *)(g + 0x80) || 1022.0f < *(float *)(g + 0x84)) {
+        FUN_001f4a58(FUN_001f96f8(0x10));
+        { unsigned char *g2 = D_0013F350; g2[0x20B1] = 1; }
+        return;
+    }
+    *(short *)(g + 0x1EB2) = 0;
+    *(short *)(g + 0x1EB0) = 0;
+    if (g[0x20A4]) {
+        FUN_L00_002062b0();
+        return;
+    }
+    FUN_L00_00232670();
+    FUN_L00_00211670();
+    FUN_L00_0020b960();
+    FUN_L00_0020bed0();
+    FUN_L00_0020cf58();
+    FUN_L00_0020d330();
+    FUN_L00_00229b70();
+    if (g[0x20A4]) return;
+    FUN_L00_00216f10();
+    FUN_L00_0020b1d8();
+    FUN_L00_0020a318();
+    FUN_L00_0020a540();
+    FUN_L00_0020ac98();
+    FUN_L00_0020a9e8();
+    FUN_L00_002056a8();
+    FUN_L00_002059d8();
+    FUN_L00_00214fe8();
+    FUN_L00_002054e8();
+    FUN_L00_00208820();
+    FUN_L00_00209240(0);
+    FUN_L00_00210928();
+    FUN_001f7978();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    FUN_L00_00206cf8();
+    FUN_L00_00205ea8();
+    FUN_L00_00206080();
+    FUN_L00_00206e00();
+    FUN_001e93e8(*(int *)(g + 0x2080));
+    if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32)
+        FUN_L00_002484e0(g + 0x80);
+    { unsigned char *g2 = D_0013F350; FUN_L00_00257024(*(int *)(g2 + 0x2080)); }
+    FUN_L00_002076a8();
+    FUN_L00_00208b60();
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -458,5 +540,145 @@ void FUN_L00_0020b930(void) {
         FUN_L00_00210b30();
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020b960.s", FUN_L00_0020b960);
+typedef struct {
+    u8 pad0[0x88];
+    f32 f88;
+    u8 pad8C[0x7C];
+    f32 f108;
+    u8 pad10C[0x8C];
+    s32 i198;
+    u8 pad19C[0x98];
+    f32 f234;
+    u8 pad238[0xA0];
+    f32 f2D8;
+    f32 f2DC;
+    u8 pad2E0[0x10];
+    f32 f2F0;
+    f32 f2F4;
+    u8 pad2F8[0x8];
+    s32 i300;
+    u8 pad304[0x4];
+    s16 h308;
+    u8 pad30A[0x2];
+    s16 h30C;
+    u8 pad30E[0x110];
+    s16 h41E;
+    u8 pad420[0xCC0];
+    u8 * p10E0;
+    u8 pad10E4[0x1FC];
+    s16 h12E0;
+    u8 b12E2;
+    u8 b12E3;
+    u8 b12E4;
+    u8 b12E5;
+    u8 b12E6;
+    u8 b12E7;
+    u8 pad12E8[0x2];
+    u8 b12EA;
+    u8 b12EB;
+    u8 b12EC;
+    u8 b12ED;
+    u8 b12EE;
+    u8 pad12EF[0xD95];
+    s32 i2084;
+    u8 pad2088[0x4];
+    s32 i208C;
+    u8 pad2090[0x14];
+    u8 b20A4;
+    u8 pad20A5[0x4];
+    u8 b20A9;
+    u8 pad20AA[0x1FA];
+    f32 f22A4;
+    s32 i22A8;
+} P20b960;
+extern P20b960 D_0013F350_20b960 __asm__("D_0013F350");
+extern s32 D_0015ED84_20b960 __asm__("D_0015ED84");
+void FUN_001f9810_20b960(void *, int) __asm__("FUN_001f9810");
+int FUN_L00_001f0d60_20b960(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
+int FUN_L00_001f35d8_20b960(void) __asm__("FUN_L00_001f35d8");
+f32 FUN_001f99c0_20b960(f32) __asm__("FUN_001f99c0");
+void FUN_L00_0020b930_20b960(void) __asm__("FUN_L00_0020b930");
+void FUN_L00_002223f8_20b960(int, int) __asm__("FUN_L00_002223f8");
+#define P D_0013F350_20b960
+void FUN_L00_0020b960(void) {
+    u8 save = P.b12ED;
+    s16 t = P.h12E0;
+    f32 d;
+    int s;
+    FUN_001f9810_20b960(&P.h12E0, 0x10);
+    P.b12ED = save;
+    P.h12E0 = -1;
+    P.b20A9 = 0;
+    P.h308 = 0;
+    if (t == -1) return;
+    if (t == 2) {
+        if (P.h30C == 0 || P.f2DC < 0.3f) {
+            P.b12E7 = 1;
+            if (P.b20A4 == 0 && P.p10E0 != 0 && *(s16 *)(P.p10E0 + 0xA6) == 0xAD) P.h308 = 1;
+        }
+    }
+    if (t == 14) {
+        P.b12E4 = 1;
+        P.f22A4 = 0.2f;
+        P.f2F0 = P.f2D8 + 0.2f;
+    }
+    if (t == 0) {
+        d = P.f2F0 - P.f2D8;
+        P.f22A4 = d;
+        if (d < 0.85f && 0.25f < d) P.b20A9 = 1;
+        P.b12E4 = 1;
+    }
+    if (t == 3) P.b12E6 = 1;
+    if (D_0015ED84_20b960 == 13 && P.i2084 != 0x7B && FUN_L00_001f0d60_20b960((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) && FUN_L00_001f35d8_20b960() == 11) {
+        goto s7B;
+    }
+    if (t == 11) P.b12EB = 1;
+    if (t == 2) P.b12E7 = 1;
+    if (t == 4) P.b12E3 = 1;
+    if (t == 7) P.b12E2 = 1;
+    if (t == 13) P.b12EC = 1;
+    if (t == 1) P.b12E5 = 1;
+    if (t == 8) P.b12EA = 1;
+    if (t == 9) P.b12EE = 1;
+    if (t == 12) P.b12EA = 1;
+    if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
+        s = 0x31;
+        goto call;
+    }
+    if (P.b12E5 && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
+        s = 0x7D;
+        goto call;
+    }
+    if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
+        FUN_L00_0020b930_20b960();
+        if (P.i22A8) goto call3c;
+        s = 0x7C;
+        goto call;
+    }
+    if (P.b12EC && P.i2084 != 0x7F && FUN_001f99c0_20b960(P.f2F0 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
+        FUN_L00_0020b930_20b960();
+        s = 0x7F;
+        goto call;
+    }
+    if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B && FUN_001f99c0_20b960(P.f2F4 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F4 - P.f88 && (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
+        FUN_L00_0020b930_20b960();
+        if (P.i22A8) {
+            s = 0x68;
+            goto call;
+        }
+    s7B:
+        s = 0x7B;
+    call:
+        FUN_L00_002223f8_20b960(s, 1);
+        return;
+    call3c:
+        s = 0x3C;
+        goto call;
+    }
+    if (P.b12EB && P.i2084 != 0x7B && FUN_001f99c0_20b960(P.f2F4 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F4 - P.f88 && P.f108 < 0.0f) {
+        FUN_L00_0020b930_20b960();
+        FUN_L00_002223f8_20b960(0x7B, 1);
+    }
+}
+#undef P
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020bed0.s", FUN_L00_0020bed0);
