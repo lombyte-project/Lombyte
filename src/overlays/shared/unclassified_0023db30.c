@@ -5,7 +5,17 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e008.s", FUN_L00_0023e008);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e5e0.s", FUN_L00_0023e5e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023e738.s", FUN_L00_0023e738);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef union { u128 q_0023e738; float f[4]; } Vec4_0023e738;
+typedef struct { float x, y, z, b_0023e738; Vec4_0023e738 pos; } P_0023e738;
+typedef struct { char pad[0xc]; char *buf; int used; char pad2[0x30 - 0x14]; } T_0023e738;
+extern float D_L00_0015F5D4_0023e738 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
+extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
+extern char D_L00_00180640_0023e738[] __asm__("D_L00_00180640");
+void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
+int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e) { int i; T_0023e738 *t; P_0023e738 *p; if (0.8f < D_L00_0015F5D4_0023e738) return -1; for (i = 0; i < 8; i++) if (D_L00_001804C0_0023e738[i].used == 0) break; if (i == 8) return -1; t = &D_L00_001804C0_0023e738[i]; p = &D_L00_001802C0_0023e738[i]; qcopy(&p->pos, v); p->pos.f[3] = a; p->x = c; p->y = d; p->z = e; p->b_0023e738 = b_0023e738; FUN_001f9810_0023e738(t, 0x30); t->used = 1; t->buf = D_L00_00180640_0023e738 + i * 1024; return i; }
 extern char D_L00_001802C0[];
 extern char D_L00_001804C0[];
 void FUN_00201f88();

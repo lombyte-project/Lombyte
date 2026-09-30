@@ -3,7 +3,31 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024eec0.s", FUN_L00_0024eec0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024eed8.s", FUN_L00_0024eed8);
+static __inline__ void qcopy(void *dst, void *src)
+{
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
+}
+typedef struct { float m[16]; } __attribute__((aligned(16))) Mtx;
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4;
+typedef struct { float a; float b; float pad[2]; Vec4 v; } Ent32;
+typedef struct { char h[0x10]; Ent32 e[1]; } Tbl;
+void FUN_001fa2d8(Mtx *, void *);
+void FUN_001f9a28(Vec4 *, void *, void *);
+void FUN_001f9d20(Vec4 *, Vec4 *, Mtx *);
+void FUN_001f9a68(Vec4 *, Vec4 *, float);
+void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
+    Mtx m;
+    Vec4 t;
+    Ent32 *e = &(*(Tbl **)(p + 0x94))->e[idx];
+    float k = 1024.0f / *(float *)(p + 0x2C);
+    FUN_001fa2d8(&m, p + 0xC0);
+    FUN_001f9a28(&t, v, p + 0x10);
+    FUN_001f9d20(&t, &t, &m);
+    FUN_001f9a68(&t, &t, k);
+    qcopy(&e->v, &t);
+    e->b = b * k;
+    e->v.w = a * k;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

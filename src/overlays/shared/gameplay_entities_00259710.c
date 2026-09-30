@@ -7,7 +7,7 @@ void FUN_L00_00259710(void *a) { FUN_00213508(a, 0x20, 0.5f); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259738.s", FUN_L00_00259738);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259740.s", FUN_L00_00259740);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259810.s", FUN_L00_00259810);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259830.s", FUN_L00_00259830);
+int FUN_L00_00259830(char *a) { char *p = *(char **)(a + 0x94); if (p && *(int *)(p + 8)) return 1; return 0; }
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -8,7 +8,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd228.s", FUN_L00_001fd228);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd478.s", FUN_L00_001fd478);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd6f8.s", FUN_L00_001fd6f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fe990.s", FUN_L00_001fe990);
+#include "eetypes.h"
+#include "qcopy.h"
+extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
+float FUN_00213308_001fe990() __asm__("FUN_00213308");
+int FUN_L00_001fe990(u128 *v, int b, float x) { u128 t; u128 *tp = &t; char *e; int i; *tp = *v; e = D_L00_0016EA40_001fe990; for (i = 0; i < 16; i++, e += 0x20) { if (*(short *)(e + 0x10) <= 0) { qcopy(e, tp); *(float *)(e + 0x1c) = x; *(short *)(e + 0x10) = 0x18; *(short *)(e + 0x14) = b; *(float *)(e + 0x18) = FUN_00213308_001fe990(); return i; } } return -1; }
 #define NOT_SDA
 
 #define MACRO_ADDR

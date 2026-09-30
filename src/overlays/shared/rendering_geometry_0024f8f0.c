@@ -2,4 +2,22 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f8f0.s", FUN_L00_0024f8f0);
+typedef struct { float m[16]; } __attribute__((aligned(16))) Mtx;
+typedef struct { float r[12]; float t[4]; } __attribute__((aligned(16))) M4;
+void FUN_001fa298(Mtx *, void *);
+void FUN_00210850(char *, int, int, M4 *);
+void FUN_001fa378(void *, Mtx *, void *);
+void FUN_001f9a68(void *, void *, float);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_L00_0024f8f0(char *p, int n, int c, M4 *out) {
+    Mtx m;
+    float s = *(float *)(p + 0x2C) * (1.0f / 1024.0f);
+    int i;
+    FUN_001fa298(&m, p + 0xC0);
+    FUN_00210850(p, n, c, out);
+    for (i = 0; i < n; i++) {
+        FUN_001fa378(&out[i], &m, &out[i]);
+        FUN_001f9a68(out[i].t, out[i].t, s);
+        FUN_001f9a10(out[i].t, out[i].t, p + 0x10);
+    }
+}

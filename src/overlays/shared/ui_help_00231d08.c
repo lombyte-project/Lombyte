@@ -272,7 +272,8 @@ void FUN_L00_002325e0(int bank, int seq) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232628.s", FUN_L00_00232628);
+extern int D_0013F350_00232628[] __asm__("D_0013F350");
+void FUN_L00_00232628(void) { int *p = D_0013F350_00232628; p[0xab0/4] = -1; p[0xab8/4] = 0; }
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -522,8 +523,39 @@ void FUN_L00_00233660(float *out, float x, float y, float z) {
     FUN_001f9d20(out, out, base);
     FUN_001f9a10(out, out, base + 0x80);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002336e8.s", FUN_L00_002336e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233708.s", FUN_L00_00233708);
+void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
+void FUN_L00_002336e8(float x) { FUN_L00_002334d0_002336e8(-x); }
+typedef unsigned int u128_00233708 __attribute__((mode(TI), aligned(16)));
+typedef struct { float x, y, z, w_00233708; } __attribute__((aligned(16))) Vec4_00233708;
+typedef struct { Vec4_00233708 r[4]; } Mtx_00233708;
+struct G_00233708 { char pad[0x2080]; char *obj; char pad2[0x20B3 - 0x2084]; unsigned char mode; };
+extern struct G_00233708 D_0013F350_00233708 __asm__("D_0013F350");
+float FUN_001f9dc8_00233708(float) __asm__("FUN_001f9dc8");
+float FUN_001f9de0_00233708(float) __asm__("FUN_001f9de0");
+void FUN_001fa050_00233708(Mtx_00233708 *, void *) __asm__("FUN_001fa050");
+void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *, Mtx_00233708 *) __asm__("FUN_001f9d20");
+void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *, Vec4_00233708 *) __asm__("FUN_001f9a10");
+void FUN_L00_00233708(Vec4_00233708 *out, Vec4_00233708 *in, float d) {
+    struct G_00233708 *g = &D_0013F350_00233708;
+    Mtx_00233708 m;
+    Vec4_00233708 v;
+    switch (g->mode) {
+    case 0:
+        *(u128_00233708 *)out = *(u128_00233708 *)in;
+        out->x += FUN_001f9dc8_00233708(*(float *)(g->obj + 0x48)) * d;
+        out->y += FUN_001f9de0_00233708(*(float *)(g->obj + 0x48)) * d;
+        break;
+    case 1:
+    case 2:
+        v.x = FUN_001f9dc8_00233708(0.0f) * d;
+        v.y = FUN_001f9de0_00233708(0.0f) * d;
+        v.z = 0.0f;
+        FUN_001fa050_00233708(&m, g->obj + 0x40);
+        FUN_001f9d20_00233708(&v, &v, &m);
+        FUN_001f9a10_00233708(out, in, &v);
+        break;
+    }
+}
 #include "qcopy.h"
 typedef struct { f32 m[16]; } M00233810 __attribute__((aligned(16)));
 typedef struct { f32 v[4]; } V00233810 __attribute__((aligned(16)));
@@ -689,7 +721,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233db8.s", FUN_L00_00233db8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233df4.s", FUN_L00_00233df4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e40.s", FUN_L00_00233e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e98.s", FUN_L00_00233e98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233ee8.s", FUN_L00_00233ee8);
+static __inline__ void qcopy_00233ee8(void *dst, void *src)
+{
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
+}
+struct G_00233ee8 { char pad[0x1640]; float pos[3]; float f; int n; char pad2[0x2084 - 0x1654]; int state; };
+extern struct G_00233ee8 D_0013F350_00233ee8 __asm__("D_0013F350");
+void FUN_L00_002223f8_00233ee8(int, int) __asm__("FUN_L00_002223f8");
+void FUN_L00_00233ee8(void *v, float f, int n) {
+    qcopy_00233ee8(D_0013F350_00233ee8.pos, v);
+    D_0013F350_00233ee8.f = f;
+    D_0013F350_00233ee8.n = n;
+    if ((unsigned)(D_0013F350_00233ee8.state - 0x65) >= 3) {
+        FUN_L00_002223f8_00233ee8(0x65, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f38.s", FUN_L00_00233f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f80.s", FUN_L00_00233f80);
 #define NOT_SDA
@@ -711,8 +757,39 @@ void FUN_L00_002347c0(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234808.s", FUN_L00_00234808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234a50.s", FUN_L00_00234a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234b38.s", FUN_L00_00234b38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234c78.s", FUN_L00_00234c78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234d40.s", FUN_L00_00234d40);
+extern char D_L00_0017A608[];
+extern char D_L00_0017C680[];
+extern char D_L00_0015F6A8[];
+void FUN_0020cca8(void *, int, void *);
+void FUN_001fa2b8(void *, void *);
+void FUN_0020e098(void *);
+void FUN_L00_002092c8(void *, void *, void *, int, void *);
+void FUN_L00_00234c78(void *a, char *p) { u128 mt[4]; FUN_0020cca8(a, 4, mt); qcopy(p + 0x10, &mt[3]); FUN_001fa2b8(p + 0xc0, mt); FUN_0020e098(p); if (*(short *)(p + 0xa6) == 0x1b1) FUN_L00_002092c8(D_L00_0017A608, D_L00_0017C680, *(void **)(p + 0x24), 6, a); else FUN_L00_002092c8(D_L00_0015F6A8, D_L00_0017C680, *(void **)(p + 0x24), 0, a); *(int *)(p + 0x50) = 0; *(char **)(p + 0x68) = D_L00_0017C680; *(int *)(p + 0x54) = 0; *(char **)(p + 0x6c) = D_L00_0017C680; }
+static __inline__ void qcopy_00234d40(void *dst, void *src)
+{
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
+}
+typedef unsigned int u128_00234d40 __attribute__((mode(TI), aligned(16)));
+typedef struct { float x, y, z, w_00234d40; } __attribute__((aligned(16))) Vec4_00234d40;
+struct G_00234d40 { Vec4_00234d40 a; char pad[0x80 - 0x10]; Vec4_00234d40 pos; char pad2[8]; float f98; };
+extern struct G_00234d40 D_0013F350_00234d40 __asm__("D_0013F350");
+void FUN_001f9a68_00234d40(Vec4_00234d40 *, void *, float) __asm__("FUN_001f9a68");
+void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *, Vec4_00234d40 *) __asm__("FUN_001f9a10");
+float FUN_00213508_00234d40(Vec4_00234d40 *, int, float) __asm__("FUN_00213508");
+float FUN_001f99c0_00234d40(float) __asm__("FUN_001f99c0");
+void FUN_L00_00233ee8_00234d40(void *, float, int) __asm__("FUN_L00_00233ee8");
+void FUN_L00_00234d40(void) {
+    Vec4_00234d40 v;
+    struct G_00234d40 *g = &D_0013F350_00234d40;
+    Vec4_00234d40 *pos = &g->pos;
+    FUN_001f9a68_00234d40(&v, g, -0.75f);
+    FUN_001f9a10_00234d40(&v, &v, pos);
+    v.z += 0.5f;
+    v.z = FUN_00213508_00234d40(&v, 0, 0.5f);
+    if (FUN_001f99c0_00234d40(g->pos.z - v.z) > 0.3f) return;
+    FUN_L00_00233ee8_00234d40(pos, g->f98, 1);
+    qcopy_00234d40(pos, &v);
+}
 void FUN_L00_002395b0();
 void FUN_L00_00239630();
 void FUN_L00_00239810();

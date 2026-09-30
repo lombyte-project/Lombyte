@@ -36,7 +36,11 @@ void FUN_L00_002a4cd8(unsigned char *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4dc8.s", FUN_L00_002a4dc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4de0.s", FUN_L00_002a4de0);
+#include "eetypes.h"
+#include "qcopy.h"
+unsigned char *FUN_0020c4f8(int);
+void FUN_L00_00250df8(unsigned char *);
+unsigned char *FUN_L00_002a4de0(u128 *v) { unsigned char *m = FUN_0020c4f8(0x3ef); if (m) { m[0x30] = 0xff; *(unsigned short *)(m + 0x34) |= 0x41; qcopy(m + 0x10, v); FUN_L00_00250df8(m); } return m; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4e48.s", FUN_L00_002a4e48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5040.s", FUN_L00_002a5040);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a57a8.s", FUN_L00_002a57a8);
@@ -48,7 +52,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7438.s", FUN_L00_002a7438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7780.s", FUN_L00_002a7780);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7c70.s", FUN_L00_002a7c70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7d90.s", FUN_L00_002a7d90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7de0.s", FUN_L00_002a7de0);
+extern int D_L00_00173E58 __attribute__((section(".data")));
+char *FUN_L00_0025c338(int);
+int FUN_L00_002a7de0(void) { char *p = FUN_L00_0025c338(D_L00_00173E58); if (p && (*(unsigned short *)(p + 0x1e) & 2)) return 1; return 0; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7e20.s", FUN_L00_002a7e20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a8028.s", FUN_L00_002a8028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a82c0.s", FUN_L00_002a82c0);

@@ -12,4 +12,6 @@ s32 FUN_L00_0027a6a8(u8 *a) {
     for (i = 7; i >= 0; i--) *d++ = *s++;
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027a748.s", FUN_L00_0027a748);
+extern int D_0015EDF0 __attribute__((section(".sdata")));
+extern int D_0013E5A0 __attribute__((section(".data")));
+int FUN_L00_0027a748(void) { D_0013E5A0 = D_0015EDF0 * 8 / 10; return 0; }

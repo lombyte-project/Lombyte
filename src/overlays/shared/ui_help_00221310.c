@@ -24,7 +24,11 @@ int FUN_L00_00221d98(void) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00221df8.s", FUN_L00_00221df8);
+extern char D_0013F350[];
+void FUN_L00_002118c8(int, float);
+float FUN_001fa5c8(float, float);
+float FUN_001fa688(float, float);
+int FUN_L00_00221df8(void) { int r = 2; float a; FUN_L00_002118c8(0, 1.0f); { char *g = D_0013F350; a = FUN_001fa5c8(*(float *)(g + 0x180), *(float *)(g + 0x98)); } if (FUN_001fa688(a, 3.1415927f) < 0.7853982f) r = 3; else if (FUN_001fa688(a, -1.5707964f) < 0.7853982f) r = 1; else if (FUN_001fa688(a, 1.5707964f) < 0.7853982f) r = 0; return r; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00221ee0.s", FUN_L00_00221ee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00222158.s", FUN_L00_00222158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002223f8.s", FUN_L00_002223f8);

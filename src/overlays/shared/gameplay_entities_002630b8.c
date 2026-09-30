@@ -4,17 +4,35 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630b8.s", FUN_L00_002630b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630c8.s", FUN_L00_002630c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263468.s", FUN_L00_00263468);
+#include "eetypes.h"
+typedef union { u128 q; float f[4]; } Vec4;
+extern int D_L00_0015FC98;
+extern unsigned char *D_L00_0015FCA8;
+extern float D_L00_0015FCA0 __attribute__((section(".sdata")));
+extern float D_L00_0015FCA4 __attribute__((section(".sdata")));
+float FUN_L00_00263468(Vec4 *v) { Vec4 t; int iy, ix; t.q = v->q; iy = t.f[1]; ix = t.f[0]; return (D_L00_0015FCA4 - D_L00_0015FCA0) * (1.0f - (D_L00_0015FCA8 + D_L00_0015FC98 * iy)[ix] / 255.0f) + D_L00_0015FCA0; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002634f8.s", FUN_L00_002634f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263618.s", FUN_L00_00263618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637e8.s", FUN_L00_002637e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263ac8.s", FUN_L00_00263ac8);
+extern unsigned char D_0015EDB7 __attribute__((section(".sdata")));
+void FUN_0020cb10();
+void FUN_0020cb88();
+void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) { if (D_0015EDB7) { if (p[1] == 0) FUN_0020cb10();  *(float *)(p + 0x20) = x; *(float *)(p + 0x24) = x; *(float *)(p + 0x28) = x; } else if (p[1]) FUN_0020cb88(a, p); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b38.s", FUN_L00_00263b38);
 void FUN_L00_00263b50(char *p) { *(float *)(p + 0x70) = 1.0f; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b60.s", FUN_L00_00263b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b70.s", FUN_L00_00263b70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263d40.s", FUN_L00_00263d40);
+extern int D_L00_0015F640_00263d40 __asm__("D_L00_0015F640") __attribute__((section(".sdata")));
+extern char D_L00_00179118_00263d40[] __asm__("D_L00_00179118");
+int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
+int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
+void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
+void FUN_L00_00263d40(int a, int b) {
+    if (b == -1) b = FUN_001f96f8_00263d40(0xB4);
+    FUN_001165b8_00263d40(D_L00_00179118_00263d40, FUN_001fdd10_00263d40(a));
+    D_L00_0015F640_00263d40 = b;
+}
 extern u8 D_L00_00179118[];
 extern s32 D_L00_0015F640;
 s32 FUN_001f96f8(s32);

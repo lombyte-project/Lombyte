@@ -2,7 +2,15 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f8ec8.s", FUN_L00_001f8ec8);
+extern int D_L00_0015F5D8;
+extern int D_L00_0015F3F4 __attribute__((sda));
+int FUN_L00_00201720(void);
+void FUN_001fb368(void);
+void FUN_001f39d0(void);
+void FUN_L00_002772c0(int);
+void FUN_001f5210(int, int, int, int);
+void FUN_001fbc50(void);
+void FUN_L00_001f8ec8(void) { if (D_L00_0015F5D8 == 0) { if (FUN_L00_00201720() == 0) { FUN_001fb368(); D_L00_0015F3F4 = 0x100ff; FUN_001f39d0(); } else if (FUN_L00_00201720() == 3) FUN_L00_002772c0(1); FUN_001f5210(0, 0, 0, 0x40); FUN_001fbc50(); } }
 extern s32 D_L00_0015F5D8;
 void FUN_L00_002772c0(s32);
 void FUN_L00_001f8f50(void) { if (D_L00_0015F5D8 == 0) FUN_L00_002772c0(0); }

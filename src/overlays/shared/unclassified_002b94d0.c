@@ -121,5 +121,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf050.s", FUN_L00_002bf050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf810.s", FUN_L00_002bf810);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf8b0.s", FUN_L00_002bf8b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf9f0.s", FUN_L00_002bf9f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bfe08.s", FUN_L00_002bfe08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bfec8.s", FUN_L00_002bfec8);
+#include "eetypes.h"
+#include "qcopy.h"
+unsigned char *FUN_0020c4f8(int);
+void FUN_L00_00250df8(unsigned char *);
+void FUN_L00_0025d1b8(unsigned char *);
+unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) { unsigned char *m = FUN_0020c4f8(0xba); if (m) { char *q; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; q = *(char **)(m + 0x78); m[0x20] = 0; m[0xbc] = 0; qcopy(m + 0x10, b); qcopy(q + 0x10, c); *(int *)(q + 0x60) = a; FUN_L00_00250df8(m); FUN_L00_0025d1b8(m); *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.1f; } return m; }
+typedef union { u128 q; float f[4]; } Vec4;
+extern char *D_L00_00173E58 __attribute__((section(".data")));
+int FUN_L00_001efc70(Vec4 *, Vec4 *, int, void *, int);
+unsigned int FUN_L00_001f35d8(void);
+int FUN_L00_002bfec8(unsigned char *p) { Vec4 a, b; int r = p[0x20]; qcopy(&a, p + 0x10); qcopy(&b, p + 0x10); a.f[2] -= 0.3f; b.f[2] += 1.0f; if (FUN_L00_001efc70(&b, &a, 6, p, 0)) { char *o = D_L00_00173E58; if (o && *(char **)(o + 0x24) && *(short *)(*(char **)(o + 0x24) + 0x46) == 5) { r = 11; } else { switch (FUN_L00_001f35d8()) { case 0: case 1: case 3: case 8: case 11: case 12: case 13: r = 11; break; } } } return r; }

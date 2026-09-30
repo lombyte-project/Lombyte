@@ -2,5 +2,21 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a0f18.s", FUN_L00_002a0f18);
+void FUN_00122518(void *, short, int, int, int, int, int, int);
+void FUN_00118a80(int);
+void FUN_001227d8(void *, int);
+void FUN_00120558(int, int);
+void FUN_L00_002a0f18(int dst, int src, int size) {
+    char buf[0x70] __attribute__((aligned(16)));
+    int left = (size + 0x3FFF) & ~0x3FFF;
+    int off = 0;
+    while (left > 0) {
+        FUN_00122518(buf, (src + off) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        left -= 0x4000;
+        FUN_00118a80(0);
+        FUN_001227d8(buf, dst + off);
+        off += 0x4000;
+        FUN_00120558(0, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a0fc8.s", FUN_L00_002a0fc8);

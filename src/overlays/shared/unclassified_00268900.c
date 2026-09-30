@@ -4,5 +4,15 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268900.s", FUN_L00_00268900);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268d48.s", FUN_L00_00268d48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268f10.s", FUN_L00_00268f10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268fe8.s", FUN_L00_00268fe8);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef union { u128 q; float f[4]; } Vec4;
+extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
+unsigned char *FUN_L00_002678b8(int);
+int FUN_001fa6d0(float);
+int FUN_001f96f8(int);
+void FUN_L00_00268f10(Vec4 *v, int c) { unsigned char *m = FUN_L00_002678b8(1); if (m) { v->f[2] += 0.1f; qcopy(m + 0x10, v); *(int *)(m + 4) = (c << 24) | 0x907070; m[9] = FUN_001fa6d0(2.0f) + 0x40; m[3] = 0x48; m[1] = 0; m[2] = *D_L00_001B2084; *(float *)(m + 0xc) = 31500.002f; m[8] = 0xa0; *(short *)(m + 0xa) = FUN_001f96f8(0x1b); *(int *)(m + 0x20) = c; } }
+int FUN_001f96f8(int);
+int FUN_001f9770(void *);
+void FUN_L00_00267a08(unsigned char *);
+void FUN_L00_00268fe8(unsigned char *p) { int r = FUN_001f96f8(0x1b); int k = *(short *)(p + 0xa) * *(int *)(p + 0x20) / r; *(int *)(p + 4) = (*(int *)(p + 4) & 0xffffff) | (k << 24); if (FUN_001f9770(p + 0xa)) FUN_L00_00267a08(p); else { int a = FUN_001f96f8(0x1b); int b = FUN_001f96f8(0x1b); p[2] = D_L00_001B2084[(a - *(short *)(p + 0xa)) * 9 / b]; } }

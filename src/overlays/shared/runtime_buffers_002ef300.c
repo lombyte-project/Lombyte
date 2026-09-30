@@ -2,4 +2,11 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ef300.s", FUN_L00_002ef300);
+typedef struct { int pos; int used; int size; } Ring;
+void FUN_L00_002ef300(char *base, int n) {
+    Ring *r = (Ring *)(base + 0x50000);
+    int avail = r->size - r->used;
+    if (n < avail) avail = n;
+    r->pos = (r->pos + avail) % r->size;
+    r->used += avail;
+}

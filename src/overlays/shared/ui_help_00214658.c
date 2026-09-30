@@ -8,12 +8,27 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215340.s", FUN_L00_00215340);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215b68.s", FUN_L00_00215b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215ef8.s", FUN_L00_00215ef8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216078.s", FUN_L00_00216078);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef union { u128 q; float f[4]; } Vec4;
+extern char *D_001413D0 __attribute__((section(".data")));
+void FUN_001fa050(void *, void *);
+void FUN_001fa2d8(void *, void *);
+void FUN_001f9d20(void *, void *, void *);
+float FUN_001f9988(float);
+float FUN_L00_001ff8b0(float, float);
+void FUN_L00_00216078(Vec4 *v, float *out) { Vec4 m0[4]; Vec4 m1[4]; Vec4 t; Vec4 *tp = &t; qcopy(tp, v); FUN_001fa050(m0, D_001413D0 + 0x40); FUN_001fa2d8(m1, m0); FUN_001f9d20(tp, tp, m1); out[0] = FUN_L00_001ff8b0(FUN_001f9988(t.f[0] * t.f[0] + t.f[2] * t.f[2]), t.f[1]); out[1] = -FUN_L00_001ff8b0(t.f[2], t.f[0]); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216128.s", FUN_L00_00216128);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216130.s", FUN_L00_00216130);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002163f0.s", FUN_L00_002163f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002165b8.s", FUN_L00_002165b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216710.s", FUN_L00_00216710);
+extern char D_0013F4A0[];
+float FUN_L00_002339d0(void *);
+void FUN_L00_00233b20(void *, void *, float);
+void FUN_L00_00233ba0(void *, void *, float);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_001f99f8(void *);
+void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else FUN_001f99f8(g); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002167d0.s", FUN_L00_002167d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216de8.s", FUN_L00_00216de8);
 #define NOT_SDA

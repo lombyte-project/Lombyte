@@ -89,7 +89,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6f28.s", FUN_L00_002d6f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7bf0.s", FUN_L00_002d7bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7d58.s", FUN_L00_002d7d58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7e90.s", FUN_L00_002d7e90);
+#include "eetypes.h"
+#include "qcopy.h"
+unsigned char *FUN_0020c4f8(int);
+void FUN_L00_0025d1b8(unsigned char *);
+void FUN_L00_002502f0(unsigned char *, int, int, int);
+float FUN_00213308(void);
+void FUN_L00_00250df8(unsigned char *);
+unsigned char *FUN_L00_002d7e90(u128 *v, float s) { unsigned char *m = FUN_0020c4f8(0x307); if (m) { FUN_L00_0025d1b8(m); FUN_L00_002502f0(m, 0x28, 0x28, 0x46); m[0x30] = 0xff; *(short *)(m + 0x32) = 0x40; *(float *)(m + 0x2c) *= s; qcopy(m + 0x10, v); *(float *)(m + 0x48) = FUN_00213308(); FUN_L00_00250df8(m); } return m; }
 void FUN_0020c828();
 void FUN_L00_002d7f38(u8 *m) {
     *(f32 *)(m + 0x2C) *= 1.025f;

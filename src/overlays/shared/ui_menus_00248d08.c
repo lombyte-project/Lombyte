@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d08.s", FUN_L00_00248d08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d38.s", FUN_L00_00248d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d88.s", FUN_L00_00248d88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248dc8.s", FUN_L00_00248dc8);
+int FUN_L00_00248dc8(float a, float b, float c) { return 95.0f <= c; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002494c8.s", FUN_L00_002494c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249528.s", FUN_L00_00249528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002496f8.s", FUN_L00_002496f8);
@@ -59,7 +59,14 @@ void FUN_L00_0024a798(s32 v, s32 i) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a7e8.s", FUN_L00_0024a7e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a88c.s", FUN_L00_0024a88c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a8e0.s", FUN_L00_0024a8e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ac88.s", FUN_L00_0024ac88);
+struct Menu_0024ac88 { char pad0[0x1C]; int sel; char pad1[0xBC-0x20]; int saved; char pad2[0xF4-0xC0]; int f4; };
+extern int D_0015EEB0_0024ac88 __asm__("D_0015EEB0") __attribute__((section(".sdata")));
+extern struct Menu_0024ac88 D_0013D290_0024ac88 __asm__("D_0013D290");
+void FUN_L00_0024ac88(void) {
+    D_0015EEB0_0024ac88 = 3;
+    D_0013D290_0024ac88.f4 = 0;
+    D_0013D290_0024ac88.sel = D_0013D290_0024ac88.saved;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024acb0.s", FUN_L00_0024acb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ace8.s", FUN_L00_0024ace8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ad0c.s", FUN_L00_0024ad0c);
@@ -105,6 +112,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b190.s", FUN_L00_0024b190);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b1b8.s", FUN_L00_0024b1b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b1f8.s", FUN_L00_0024b1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b22c.s", FUN_L00_0024b22c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b248.s", FUN_L00_0024b248);
+extern int D_0015EEB0 __attribute__((section(".sdata")));
+extern int D_0015EEB4;
+void FUN_L00_0024b248(void) {
+    if (D_0015EEB4 & 0x40) {
+        return;
+    }
+    D_0015EEB0 = 3;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b298.s", FUN_L00_0024b298);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b3a0.s", FUN_L00_0024b3a0);

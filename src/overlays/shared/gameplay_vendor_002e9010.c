@@ -167,11 +167,47 @@ void FUN_L00_002eb278(void *arg) {
     FUN_001fa050(m, a + 0x40);
     FUN_001fa2b8(a, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eb320.s", FUN_L00_002eb320);
+#include "eetypes.h"
+#include "qcopy.h"
+void FUN_L00_001eb0c8_002eb320(void *, void *, float) __asm__("FUN_L00_001eb0c8");
+void FUN_L00_001eb0b0_002eb320(void *) __asm__("FUN_L00_001eb0b0");
+void FUN_L00_001ff250_002eb320(void *) __asm__("FUN_L00_001ff250");
+void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
+void FUN_L00_002eb320(char *p, void *b, u128 *v, float x) { char *m = *(char **)(p + 0x70); char *d = m + 0xb0; qcopy(d, v); qcopy(m + 0x80, v); *(float *)(d + 0x18) = x; FUN_L00_001eb0c8_002eb320(m + 0x14, b, x); FUN_L00_001eb0c8_002eb320(p + 0x50, b, 0.0f); FUN_L00_001eb0b0_002eb320(m); FUN_L00_001ff250_002eb320(m + 0x90); FUN_L00_002eb278_002eb320(p); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eb3b0.s", FUN_L00_002eb3b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eb480.s", FUN_L00_002eb480);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eb648.s", FUN_L00_002eb648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eb930.s", FUN_L00_002eb930);
+static __inline__ void qcopy_002eb930(void *dst, void *src)
+{
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
+}
+extern short D_L00_00166EF0_002eb930[] __asm__("D_L00_00166EF0");
+extern char D_L00_001E77C0_002eb930[] __asm__("D_L00_001E77C0");
+extern char D_L00_001E77D8_002eb930[] __asm__("D_L00_001E77D8");
+extern char D_L00_001E77F0_002eb930[] __asm__("D_L00_001E77F0");
+char *FUN_L00_001eb1f8_002eb930(int) __asm__("FUN_L00_001eb1f8");
+void FUN_001ebf10_002eb930(char *) __asm__("FUN_001ebf10");
+void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
+void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
+void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
+void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
+char *FUN_L00_002eb930(void *arg) {
+    char *o = FUN_L00_001eb1f8_002eb930(6);
+    char *m;
+    D_L00_00166EF0_002eb930[0] = 0;
+    FUN_001ebf10_002eb930(o);
+    FUN_L00_002eb648_002eb930(o, arg);
+    m = *(char **)(o + 0x70);
+    qcopy_002eb930(m + 0xB0, m + 0x80);
+    FUN_L00_001eb0c8_002eb930(m + 0x14, D_L00_001E77C0_002eb930, 0.0f);
+    FUN_L00_001eb0c8_002eb930(o + 0x50, m + 0x14, 0.0f);
+    FUN_L00_002eb3b0_002eb930(o);
+    *(int *)(m + 0x9C) = 1;
+    FUN_L00_001eb0c8_002eb930(m + 0x28, D_L00_001E77D8_002eb930, 0.0f);
+    FUN_L00_001eb0c8_002eb930(m + 0x3C, D_L00_001E77F0_002eb930, 0.0f);
+    FUN_L00_001eb0b0_002eb930(m + 0x50);
+    return o;
+}
 extern char D_0013F350[];
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
 float FUN_L00_001ff8b0(float, float);
@@ -234,7 +270,14 @@ void FUN_L00_002ec7b0(char *a) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec7e8.s", FUN_L00_002ec7e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec988.s", FUN_L00_002ec988);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed230.s", FUN_L00_002ed230);
+typedef struct { char pad[0x2c]; short v; short w; char pad2[0x48 - 0x30]; short a; short b; } S_002ed230;
+extern char *D_L00_0015EF50_002ed230 __asm__("D_L00_0015EF50") __attribute__((section(".sdata")));
+extern unsigned char D_001413F4_002ed230 __asm__("D_001413F4") __attribute__((section(".data")));
+extern int D_0015ED84_002ed230 __asm__("D_0015ED84") __attribute__((sda));
+extern int D_001413DC_002ed230 __asm__("D_001413DC") __attribute__((section(".data")));
+extern char D_0013F350_002ed230[] __asm__("D_0013F350");
+void FUN_L00_002ec988_002ed230(unsigned char *) __asm__("FUN_L00_002ec988");
+int FUN_L00_002ed230(unsigned char *p) { S_002ed230 *s = *(S_002ed230 **)(D_L00_0015EF50_002ed230 + *(short *)(p + 0x84) * 32 + 0x1c); if (s->a == 1 && s->b != 0) return 0; if (s->v == 11 && D_001413F4_002ed230 != 2) return 0; if ((s->v == 1 || s->v == 10) && s->w == 0) { char *g = D_0013F350_002ed230; if (*(short *)(g + 0x30c) != 0) { if (D_0015ED84_002ed230 != 14) return 0; if (*(int *)(g + 0x2284) != 13) return 0; } } if (s->v == 2 && D_001413DC_002ed230 != 0x1a) { s->w = 0; return 0; } FUN_L00_002ec988_002ed230(p); return 0; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed348.s", FUN_L00_002ed348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed498.s", FUN_L00_002ed498);
 #define NOT_SDA

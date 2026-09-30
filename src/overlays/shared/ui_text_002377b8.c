@@ -2,7 +2,20 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002377b8.s", FUN_L00_002377b8);
+struct G { char pad[0x10B8]; int mode; char pad2[0x20A4 - 0x10BC]; unsigned char flag; };
+extern struct G D_0013F350;
+extern unsigned char D_0013E529[];
+void FUN_L00_00235ea0(char *);
+int FUN_001f96f8(int);
+void FUN_L00_002377b8(char *p) {
+    FUN_L00_00235ea0(p);
+    if (D_0013E529[0] != 0) *(int *)(p + 8) = 10; else *(int *)(p + 8) = 5;
+    if (D_0013F350.mode == 9 && D_0013F350.flag == 0) {
+        *(int *)(p + 0x7C) = FUN_001f96f8(0x78) + 30;
+    } else if (*(int *)(p + 0x7C) > 30) {
+        *(int *)(p + 0x7C) = 30;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237840.s", FUN_L00_00237840);
 typedef struct { u8 pad[0x48]; s16 x48; s16 x4a; u8 p4c[0xC]; s32 x58; s32 x5c; u8 p60[0x10]; s32 x70; s32 x74; s32 x78; } O00237ae8;
 typedef struct { s32 x0; u8 p[0x14]; s32 x18; } D00237ae8;
@@ -42,7 +55,15 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237ba0.s", FUN_L00_00237ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238b18.s", FUN_L00_00238b18);
+extern int D_L00_0015FA90 __attribute__((section(".sdata")));
+extern void *D_L00_0015FAC0 __attribute__((section(".sdata")));
+extern int D_L00_0015F718 __attribute__((sda));
+extern int D_L00_0015F71C __attribute__((sda));
+extern int D_L00_0015F72C __attribute__((sda));
+extern int D_L00_0015F740 __attribute__((sda));
+int FUN_001f96f8(int);
+void FUN_L00_00238b18(char *p) {
+ int a, b; D_L00_0015FA90 = 4; D_L00_0015FAC0 = &D_L00_0015F740; a = D_L00_0015F718; b = D_L00_0015F71C; *(short *)(p + 0x48) = 0; *(short *)(p + 0x4A) = 0; *(int *)(p + 0x58) = a; *(int *)(p + 0x5C) = b; *(int *)(p + 0x74) = -2; *(int *)(p + 0x78) = FUN_001f96f8(30); D_L00_0015F72C = 0; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238b80.s", FUN_L00_00238b80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238f88.s", FUN_L00_00238f88);
 typedef struct { short a, b, c, d; } Q2395b0;
@@ -161,4 +182,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aa98.s", FUN_L00_0023aa98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aaa8.s", FUN_L00_0023aaa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023ac78.s", FUN_L00_0023ac78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023adb8.s", FUN_L00_0023adb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aef8.s", FUN_L00_0023aef8);
+void FUN_L00_00235878();
+extern int D_L00_0015F968 __attribute__((sda));
+extern int D_L00_0015F970 __attribute__((section(".sdata")));
+extern int D_L00_0015F96C __attribute__((section(".sdata")));
+void FUN_L00_0023aef8(void) { FUN_L00_00235878(); D_L00_0015F968 = 1; D_L00_0015F970 = -1; D_L00_0015F96C = 0; }

@@ -48,7 +48,13 @@ void FUN_L00_00269c70(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026a4c8.s", FUN_L00_0026a4c8);
+#include "eetypes.h"
+#include "qcopy.h"
+extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0") __attribute__((section(".data")));
+unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
+int FUN_001fa6d0_0026a4c8(float) __asm__("FUN_001fa6d0");
+float FUN_001fa6c0_0026a4c8(int) __asm__("FUN_001fa6c0");
+void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f) { if (n) { unsigned char *m = FUN_L00_002678b8_0026a4c8(8); if (m) { int *e; qcopy(m + 0x10, a); e = (int *)(m + 0x20); *(int *)(m + 4) = c; m[9] = FUN_001fa6d0_0026a4c8(4.0f) - 0x60; m[3] = 0x48; m[1] = 0; *(int *)(m + 0xc) = 0; m[8] = 0; m[2] = *D_L00_001B20A0_0026a4c8; qcopy(e, b); *(short *)(m + 0xa) = n; e[6] = n; *(float *)&e[7] = f / FUN_001fa6c0_0026a4c8(n); e[4] = c; e[5] = d; } } }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026a5b8.s", FUN_L00_0026a5b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026a6f0.s", FUN_L00_0026a6f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026a880.s", FUN_L00_0026a880);
@@ -58,7 +64,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b230.s", FUN_L00_0026b230);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b500.s", FUN_L00_0026b500);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b790.s", FUN_L00_0026b790);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b910.s", FUN_L00_0026b910);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026ba68.s", FUN_L00_0026ba68);
+extern char D_L00_00166DC0_0026ba68[] __asm__("D_L00_00166DC0");
+void FUN_001f9a28_0026ba68(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff500_0026ba68(void *, void *, float) __asm__("FUN_L00_001ff500");
+void FUN_001f9a10_0026ba68(void *, void *, void *) __asm__("FUN_001f9a10");
+int FUN_001f9770_0026ba68(void *) __asm__("FUN_001f9770");
+void FUN_L00_00267a08_0026ba68(unsigned char *) __asm__("FUN_L00_00267a08");
+int FUN_001f96f8_0026ba68(int) __asm__("FUN_001f96f8");
+int FUN_001fa6d0_0026ba68(float) __asm__("FUN_001fa6d0");
+void FUN_L00_0026ba68(unsigned char *p) { u128 t; int *e = (int *)(p + 0x20); p[8] += p[0x20]; if (e[1] == 0) { u128 *d = (u128 *)(p + 0x10); qcopy(d, (char *)e[2] + 0x10); FUN_001f9a28_0026ba68(&t, D_L00_00166DC0_0026ba68, d); FUN_L00_001ff500_0026ba68(&t, &t, 0.01f); FUN_001f9a10_0026ba68(d, d, &t); } else if (FUN_001f9770_0026ba68(p + 0xa)) FUN_L00_00267a08_0026ba68(p); else *(int *)(p + 4) = (FUN_001fa6d0_0026ba68(*(short *)(p + 0xa) * (127.0f / FUN_001f96f8_0026ba68(6))) << 24) | 0xffffff; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026bb70.s", FUN_L00_0026bb70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026bca8.s", FUN_L00_0026bca8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026bed0.s", FUN_L00_0026bed0);
@@ -120,7 +134,33 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026d598.s", FUN_L00_0026d598);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026d700.s", FUN_L00_0026d700);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026daa0.s", FUN_L00_0026daa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026dbe0.s", FUN_L00_0026dbe0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026dd20.s", FUN_L00_0026dd20);
+static __inline__ void qcopy_0026dd20(void *dst, void *src)
+{
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
+}
+extern unsigned char *D_L00_001B20EC_0026dd20[] __asm__("D_L00_001B20EC");
+char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
+int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
+int FUN_001fa6d0_0026dd20(float) __asm__("FUN_001fa6d0");
+char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
+    char *o = FUN_L00_002678b8_0026dd20(0x1B);
+    if (o) {
+        char *q = o + 0x20;
+        qcopy_0026dd20(o + 0x10, pos);
+        o[8] = FUN_001160d8_0026dd20();
+        *(int *)(o + 4) = a;
+        o[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
+        o[3] = 0x48;
+        *(float *)(o + 0xC) = f;
+        o[1] = 0;
+        o[2] = D_L00_001B20EC_0026dd20[0][0];
+        *(int *)(q + 0x18) = o[7];
+        qcopy_0026dd20(q, dir);
+        *(int *)(q + 0x10) = b;
+        *(int *)(q + 0x14) = b;
+    }
+    return o;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
