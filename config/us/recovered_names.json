@@ -915,7 +915,7 @@
     },
     {
       "name": "CollLine_Fix",
-      "unit": "assembly/textbin/fun_001efa68",
+      "unit": "assembly/textbin/coll_line_fix",
       "unit_size": "0x10f0",
       "match": "fragment",
       "address": "0x1efa68",
@@ -1139,7 +1139,7 @@
     },
     {
       "name": "FastIntersectVert",
-      "unit": "assembly/textbin/fun_001f7a98",
+      "unit": "assembly/textbin/fast_intersect_vert",
       "unit_size": "0x178",
       "match": "fragment",
       "address": "0x1f7a98",
@@ -1171,7 +1171,7 @@
     },
     {
       "name": "ScisAndRender",
-      "unit": "assembly/textbin/fun_001f83a4",
+      "unit": "assembly/textbin/scis_and_render",
       "unit_size": "0x5fc",
       "match": "entry_size_unknown",
       "address": "0x1f83a4",
@@ -1187,7 +1187,7 @@
     },
     {
       "name": "FastDecTimer__FRs",
-      "unit": "assembly/textbin/fun_001f9770",
+      "unit": "assembly/textbin/fast_dec_timer_s16",
       "unit_size": "0x30",
       "match": "fragment",
       "address": "0x1f9770",
@@ -1211,7 +1211,7 @@
     },
     {
       "name": "FastMemZero16__FPvi",
-      "unit": "assembly/textbin/fun_001f9810",
+      "unit": "assembly/textbin/fast_mem_zero16",
       "unit_size": "0x28",
       "match": "fragment",
       "address": "0x1f9810",
@@ -1219,7 +1219,7 @@
     },
     {
       "name": "FastMemCopy",
-      "unit": "assembly/textbin/fun_001f98d0",
+      "unit": "assembly/textbin/fast_mem_copy",
       "unit_size": "0x28",
       "match": "fragment",
       "address": "0x1f98d0",
@@ -1227,7 +1227,7 @@
     },
     {
       "name": "FastVecSub",
-      "unit": "assembly/textbin/fun_001f9a28",
+      "unit": "assembly/textbin/fast_vec_sub",
       "unit_size": "0x18",
       "match": "fragment",
       "address": "0x1f9a28",
@@ -1251,7 +1251,7 @@
     },
     {
       "name": "FastVecLength",
-      "unit": "assembly/textbin/fun_001f9af0",
+      "unit": "assembly/textbin/fast_vec_length",
       "unit_size": "0x30",
       "match": "fragment",
       "address": "0x1f9af0",
@@ -1259,7 +1259,7 @@
     },
     {
       "name": "FastVecNormalize",
-      "unit": "assembly/textbin/fun_001f9bf8",
+      "unit": "assembly/textbin/fast_vec_normalize",
       "unit_size": "0x50",
       "match": "fragment",
       "address": "0x1f9bf8",
@@ -1275,7 +1275,7 @@
     },
     {
       "name": "FastVectorToPackedChars__FR4vec4",
-      "unit": "assembly/textbin/fun_001f9d68",
+      "unit": "assembly/textbin/fast_vector_to_packed_chars",
       "unit_size": "0x28",
       "match": "fragment",
       "address": "0x1f9d68",
@@ -1315,7 +1315,7 @@
     },
     {
       "name": "FastArcTan__Fff",
-      "unit": "assembly/textbin/fun_001f9e90",
+      "unit": "assembly/textbin/fast_arc_tan",
       "unit_size": "0x110",
       "match": "fragment",
       "address": "0x1f9e90",
@@ -1363,7 +1363,7 @@
     },
     {
       "name": "FastBSphereCheck",
-      "unit": "assembly/textbin/fun_001fa728",
+      "unit": "assembly/textbin/fast_bsphere_check",
       "unit_size": "0xf8",
       "match": "entry_size_unknown",
       "address": "0x1fa728",
@@ -1763,7 +1763,7 @@
     },
     {
       "name": "FastDecompress",
-      "unit": "assembly/textbin/fun_0020b618",
+      "unit": "assembly/textbin/fast_decompress",
       "unit_size": "0x334",
       "match": "entry_size_unknown",
       "address": "0x20b618",
@@ -1891,7 +1891,7 @@
     },
     {
       "name": "UpdateMobyGrids",
-      "unit": "assembly/textbin/fun_0020dc20",
+      "unit": "assembly/textbin/update_moby_grids",
       "unit_size": "0x2d8",
       "match": "entry_size_unknown",
       "address": "0x20dc20",
@@ -1907,7 +1907,7 @@
     },
     {
       "name": "MobyProc",
-      "unit": "assembly/textbin/fun_00211808",
+      "unit": "assembly/textbin/moby_proc",
       "unit_size": "0x1420",
       "match": "entry_size_unknown",
       "address": "0x211808",
@@ -2027,7 +2027,7 @@
     },
     {
       "name": "CreatePart",
-      "unit": "assembly/textbin/fun_00217a30",
+      "unit": "assembly/textbin/create_part",
       "unit_size": "0x150",
       "match": "fragment",
       "address": "0x217a30",
@@ -2035,7 +2035,7 @@
     },
     {
       "name": "UpdateParts",
-      "unit": "assembly/textbin/fun_00217b88",
+      "unit": "assembly/textbin/update_parts",
       "unit_size": "0x8c",
       "match": "fragment",
       "address": "0x217b88",
@@ -2051,7 +2051,7 @@
     },
     {
       "name": "_part_load_tex",
-      "unit": "assembly/textbin/fun_0021880c",
+      "unit": "assembly/textbin/part_load_tex",
       "unit_size": "0x70",
       "match": "fragment",
       "address": "0x21880c",
@@ -2211,7 +2211,7 @@
     },
     {
       "name": "ShrubProc",
-      "unit": "assembly/textbin/fun_00228be8",
+      "unit": "assembly/textbin/shrub_proc",
       "unit_size": "0x1744",
       "match": "fragment",
       "address": "0x228be8",
@@ -2219,7 +2219,7 @@
     },
     {
       "name": "BuildShrubTextureDma",
-      "unit": "assembly/textbin/fun_0022a330",
+      "unit": "assembly/textbin/build_shrub_texture_dma",
       "unit_size": "0x2ac",
       "match": "entry_size_unknown",
       "address": "0x22a330",
@@ -2291,7 +2291,7 @@
     },
     {
       "name": "_ssp_load_tex",
-      "unit": "assembly/textbin/fun_0022bec4",
+      "unit": "assembly/textbin/ssp_load_tex",
       "unit_size": "0xd0",
       "match": "fragment",
       "address": "0x22bec4",
@@ -2299,7 +2299,7 @@
     },
     {
       "name": "SkyBsphereCheck",
-      "unit": "assembly/textbin/fun_0022c4c8",
+      "unit": "assembly/textbin/sky_bsphere_check",
       "unit_size": "0xe0",
       "match": "entry_size_unknown",
       "address": "0x22c4c8",
@@ -2483,7 +2483,7 @@
     },
     {
       "name": "ComputeTfragTextureUsage",
-      "unit": "assembly/textbin/fun_00234bd8",
+      "unit": "assembly/textbin/compute_tfrag_texture_usage",
       "unit_size": "0x16c",
       "match": "fragment",
       "address": "0x234bd8",
@@ -2499,7 +2499,7 @@
     },
     {
       "name": "LightTfrags",
-      "unit": "assembly/textbin/fun_00234f98",
+      "unit": "assembly/textbin/light_tfrags",
       "unit_size": "0x6a4",
       "match": "entry_size_unknown",
       "address": "0x234f98",
@@ -2539,7 +2539,7 @@
     },
     {
       "name": "TieProc",
-      "unit": "assembly/textbin/fun_00235be8",
+      "unit": "assembly/textbin/tie_proc",
       "unit_size": "0x14d4",
       "match": "fragment",
       "address": "0x235be8",
@@ -2547,7 +2547,7 @@
     },
     {
       "name": "BuildTieTextureDma",
-      "unit": "assembly/textbin/fun_002370c0",
+      "unit": "assembly/textbin/build_tie_texture_dma",
       "unit_size": "0x2ac",
       "match": "fragment",
       "address": "0x2370c0",
@@ -2555,7 +2555,7 @@
     },
     {
       "name": "LightTies",
-      "unit": "assembly/textbin/fun_00237370",
+      "unit": "assembly/textbin/light_ties",
       "unit_size": "0x6fc",
       "match": "entry_size_unknown",
       "address": "0x237370",
@@ -8465,7 +8465,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/fun_002012b8",
+        "unit": "textbin/draw_boot_image",
         "source_path": "src/assembly/textbin/fun_002012b8.c",
         "address": "0x002012b8",
         "current_name": "FUN_002012b8",
