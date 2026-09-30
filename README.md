@@ -13,15 +13,13 @@
 </p>
 
 > [!NOTE]
-> Yeah, this project is obviously AI-driven— that’s pretty apparent... <br>
+> Yes, this project is obviously AI-driven— that’s pretty apparent... <br>
 > AI is what makes it possible for me to work on this project at all, while I still make the calls<br>
 on the data structure, tooling, and overall direction, with all PRs reviewed manually.
 
 > [!WARNING]
 > Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
 > A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.
-
----
 
 <h3>Decompilation progress</h3>
 

@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1243,
+  "matching_c": 1254,
   "intentional_asm": 249,
-  "pending_c": 3290,
+  "pending_c": 3279,
   "bytes_total": 3655312,
-  "bytes_matching_c": 255576,
+  "bytes_matching_c": 263756,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3303404,
-  "c_exact_percent_of_recoverable": 7.1812,
-  "c_fuzzy_percent_of_recoverable": 9.2402,
+  "bytes_pending_c": 3295224,
+  "c_exact_percent_of_recoverable": 7.411,
+  "c_fuzzy_percent_of_recoverable": 9.456,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -22,7 +22,7 @@
     "bytes_intentional_asm": 96332,
     "bytes_pending_c": 120548,
     "c_exact_percent_of_recoverable": 64.578,
-    "c_fuzzy_percent_of_recoverable": 86.1114,
+    "c_fuzzy_percent_of_recoverable": 85.9644,
     "groups": [
       {
         "name": "game/unclassified",
@@ -52,7 +52,7 @@
         "bytes_pending_c": 12028,
         "bytes_intentional_asm": 14528,
         "c_exact_percent_of_recoverable": 76.4931,
-        "c_fuzzy_percent_of_recoverable": 96.0393
+        "c_fuzzy_percent_of_recoverable": 95.7968
       },
       {
         "name": "game/ui/menus",
@@ -67,7 +67,7 @@
         "bytes_pending_c": 2352,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 93.6066,
-        "c_fuzzy_percent_of_recoverable": 97.4928
+        "c_fuzzy_percent_of_recoverable": 96.4706
       },
       {
         "name": "game/rendering",
@@ -247,7 +247,7 @@
         "bytes_pending_c": 2232,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 58.3582,
-        "c_fuzzy_percent_of_recoverable": 86.409
+        "c_fuzzy_percent_of_recoverable": 86.4089
       },
       {
         "name": "sdk/rpc",
@@ -262,7 +262,7 @@
         "bytes_pending_c": 1132,
         "bytes_intentional_asm": 500,
         "c_exact_percent_of_recoverable": 76.2982,
-        "c_fuzzy_percent_of_recoverable": 98.8317
+        "c_fuzzy_percent_of_recoverable": 98.8306
       },
       {
         "name": "sdk/debug",
@@ -277,7 +277,7 @@
         "bytes_pending_c": 2412,
         "bytes_intentional_asm": 16,
         "c_exact_percent_of_recoverable": 52.2187,
-        "c_fuzzy_percent_of_recoverable": 86.9525
+        "c_fuzzy_percent_of_recoverable": 86.9521
       },
       {
         "name": "game/ui/text",
@@ -382,7 +382,7 @@
         "bytes_pending_c": 1496,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 56.1033,
-        "c_fuzzy_percent_of_recoverable": 89.3592
+        "c_fuzzy_percent_of_recoverable": 89.3591
       },
       {
         "name": "game/runtime/memory",
@@ -457,7 +457,7 @@
         "bytes_pending_c": 728,
         "bytes_intentional_asm": 224,
         "c_exact_percent_of_recoverable": 69.967,
-        "c_fuzzy_percent_of_recoverable": 95.1106
+        "c_fuzzy_percent_of_recoverable": 95.1098
       },
       {
         "name": "game/audio/decoder",
@@ -547,7 +547,7 @@
         "bytes_pending_c": 176,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 90.0677,
-        "c_fuzzy_percent_of_recoverable": 100.0
+        "c_fuzzy_percent_of_recoverable": 99.999
       },
       {
         "name": "game/rendering/geometry",
@@ -1282,7 +1282,7 @@
         "bytes_pending_c": 44,
         "bytes_intentional_asm": 120,
         "c_exact_percent_of_recoverable": 69.4444,
-        "c_fuzzy_percent_of_recoverable": 88.8889
+        "c_fuzzy_percent_of_recoverable": 88.8869
       },
       {
         "name": "game/input/pad",
@@ -1732,7 +1732,7 @@
         "bytes_pending_c": 36,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 57.1429,
-        "c_fuzzy_percent_of_recoverable": 100.0
+        "c_fuzzy_percent_of_recoverable": 99.9957
       },
       {
         "name": "game/runtime/buffers",
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 197,
-    "pending_c": 3143,
+    "matching_c": 208,
+    "pending_c": 3132,
     "bytes_total": 3218660,
-    "bytes_matching_c": 35804,
-    "bytes_pending_c": 3182856,
-    "c_exact_percent_of_recoverable": 1.1124,
+    "bytes_matching_c": 43984,
+    "bytes_pending_c": 3174676,
+    "c_exact_percent_of_recoverable": 1.3665,
     "shared": {
       "id": "shared",
       "index": null,
@@ -3515,26 +3515,26 @@
         "planet": "Veldin",
         "description": "Kyzil Plateau: the tutorial, Ratchet's home",
         "functions": 11,
-        "matching_c": 0,
-        "pending_c": 11,
+        "matching_c": 11,
+        "pending_c": 0,
         "bytes_total": 8180,
-        "bytes_matching_c": 0,
-        "bytes_pending_c": 8180,
-        "c_exact_percent_of_recoverable": 0.0,
+        "bytes_matching_c": 8180,
+        "bytes_pending_c": 0,
+        "c_exact_percent_of_recoverable": 100.0,
         "files": [
           {
             "file": "src/overlays/l00/unclassified_0023d968.c",
             "functions": 4,
-            "matching_c": 0,
+            "matching_c": 4,
             "bytes_total": 2008,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 2008
           },
           {
             "file": "src/overlays/l00/gameplay_vendor_002e0988.c",
             "functions": 7,
-            "matching_c": 0,
+            "matching_c": 7,
             "bytes_total": 6172,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 6172
           }
         ]
       },
@@ -4708,14 +4708,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1243,
+    "matching_c": 1254,
     "intentional_asm": 249,
-    "pending_c": 3290,
+    "pending_c": 3279,
     "bytes_total": 3655312,
-    "bytes_matching_c": 255576,
+    "bytes_matching_c": 263756,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3303404,
-    "c_exact_percent_of_recoverable": 7.1812,
-    "c_fuzzy_percent_of_recoverable": 9.2402
+    "bytes_pending_c": 3295224,
+    "c_exact_percent_of_recoverable": 7.411,
+    "c_fuzzy_percent_of_recoverable": 9.456
   }
 }
