@@ -7,71 +7,56 @@ extern struct M2c_D_00156880 D_00156880;
 extern u8 D_001574C0[];
 extern u8 D_00157D80[];
 extern u8 D_00157F80[];
-extern struct M2c_temp_16_13 *get_iob(void);
+extern struct M2c_temp_16_13 *get_iob(s32);
 extern s32 _sceFsWaitS(s32 arg0);
 extern s32 ReadQueueStatus(void);
 extern s32 CreateSema(void *param);
 extern s32 DeleteSema(s32 id);
 extern s32 WaitSema(s32 id);
 extern s32 sceSifCallRpc(void *a0, s32 a1, s32 a2, void *a3, s32 a4, void *a5, s32 a6, void *a7, void *a8);
-s32 sceClose(void) {
+s32 sceClose(s32 fd) {
     struct Sema sema;
-    s32 sp30;
-    s32 temp_16_79;
-    s32 temp_2_46;
-    struct M2c_temp_16_13 *temp_16_13;
+    s32 result;
+    s32 ok;
+    s32 sid;
+    struct M2c_temp_16_13 *io;
     struct M2c_D_00156880 *state = &D_00156880;
-    register s32 q __asm__("v0");
-    temp_16_13 = get_iob();
+
+    io = get_iob(fd);
     _sceFsWaitS(1);
-    q = D_0012FC94[0];
-    if (q == 0) {
+    if (D_0012FC94[0] == 0) {
         ReadQueueStatus();
         return -1;
     }
-    if (temp_16_13 == NULL) {
-        goto block_6;
+    if (io == NULL || io->unk4 == 0) {
+        ReadQueueStatus();
+        return -9;
     }
-    if (temp_16_13->unk4 == 0) {
-        goto block_5;
-    }
-    goto block_7;
-block_5:
-block_6:
-    ReadQueueStatus();
-    return -9;
-block_7:
-    state->unkC = (s32) temp_16_13->unk0;
+    state->unkC = io->unk0;
     sema.max_count = 1;
-    state->unk10 = (s32) ((s32) (((u8 *)temp_16_13 - (u8 *)D_00157D80)) >> 4);
+    state->unk10 = ((u8 *)io - (u8 *)D_00157D80) >> 4;
     sema.init_count = 0;
     sema.option = 0;
-    temp_2_46 = CreateSema(&sema);
-    state->unk0 = temp_2_46;
-    state->unk4 = &sp30;
+    sid = CreateSema(&sema);
+    state->unk0 = sid;
+    state->unk4 = (s32)&result;
     state->unk8 = 4;
     if (sceSifCallRpc(D_00157F80, 1, 0, state, 0x14, D_001574C0, 4, 0, 0) < 0) {
-        goto block_9;
+        DeleteSema(sid);
+        ReadQueueStatus();
+        return -0xB;
     }
-    temp_16_13->unk4 = 0;
-    goto block_11;
-block_9:
-    DeleteSema(temp_2_46);
+    io->unk4 = 0;
+    ok = *(u32 *)((u32)D_001574C0 | 0x20000000);
     ReadQueueStatus();
-    return -0xB;
-block_11:
-    temp_16_79 = *(u32 *)((u32) D_001574C0 | 0x20000000);
-    ReadQueueStatus();
-    if (temp_16_79 != 0) {
-        goto block_13;
+    if (ok == 0) {
+        DeleteSema(sid);
+        return -0xB;
     }
-    DeleteSema(temp_2_46);
-    return -0xB;
-block_13:
-    WaitSema(temp_2_46);
-    DeleteSema(temp_2_46);
-    if (sp30 < 0) {
-        return sp30;
+    WaitSema(sid);
+    DeleteSema(sid);
+    if (result < 0) {
+        return result;
     }
     return 0;
 }

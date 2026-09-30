@@ -45,8 +45,8 @@ extern s32 _csc_storeRefImage();
 extern s32 _getPtsDtsFlags();
 extern s32 _isOutSizeOK();
 void _dispRefImage(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1) {
-    register u64 temp_6_28 __asm__("a2");
-    register struct M2c_temp_7_14 *temp_7_14 __asm__("a3");
+    u64 temp_6_28;
+    struct M2c_temp_7_14 *temp_7_14;
     s32 *temp_7_9;
 
     temp_7_9 = arg0->unk858;
@@ -63,7 +63,7 @@ void _dispRefImage(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1) {
     arg0->unkC0 = (s32) arg1->unk50;
     arg0->unkC4 = (s32) arg1->unk54;
     arg0->unkC8 = (s32) arg1->unk58;
-    if (_isOutSizeOK(arg0, arg1, temp_6_28, temp_7_14) != 0) {
+    if (_isOutSizeOK(arg0, arg1) != 0) {
         if (arg1->unk28 == 1) {
             if (arg0->unkB0 != 0) {
                 _csc_storeRefImage(arg0, arg1);
