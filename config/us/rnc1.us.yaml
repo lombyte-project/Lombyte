@@ -1407,7 +1407,7 @@ segments:
           - [0x10a218, c, world/streaming/initialize_dma_packet_payloads]
           - [0x10a2ec, textbin, text_gap_0020936c_before_fun_00209370]
           - [0x10a2f0, c, world/streaming/load_and_initialize_level_chunk]
-          - [0x10a358, c, assembly/textbin/storage/memory_card/memcard_update_state]
+          - [0x10a358, c, storage/memory_card/memcard_update_state]
           - [0x10bb2c, textbin, text_gap_0020abac_before_fun_0020abb0]
           - [0x10bb30, c, storage/memory_card/memcard_make_whole_save]
           - [0x10bbd8, c, storage/memory_card/memcard_initialize]
