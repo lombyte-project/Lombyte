@@ -79,7 +79,332 @@ void FUN_L00_002e0988(HelpMoby *m)
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0b88.s", FUN_L00_002e0b88);
+#include "eetypes.h"
+#include "sda.h"
+#include "qcopy.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} VendVec;
+
+typedef struct {
+    s32 count;
+    s32 pad4[3];
+    VendVec pts[1];
+} VendPath;
+
+typedef struct {
+    u8 pad0[0x10];
+    VendVec pos;
+} VendTarget;
+
+typedef struct {
+    u8 pad0[0x20];
+    f32 unk20;
+    s16 unk24;
+    u8 pad26[2];
+    u8 unk28;
+    u8 unk29;
+    u8 pad2A[0x58 - 0x2A];
+    u8 unk58;
+    u8 pad59;
+    u8 unk5A;
+    u8 pad5B[0x70 - 0x5B];
+    u8 unk70[0xD0 - 0x70];
+    f32 homeX;
+    f32 homeY;
+    u8 padD8[0x110 - 0xD8];
+    VendTarget *target;
+    s32 unk114;
+    u8 pad118[0x120 - 0x118];
+    u8 unk120[0x1A0 - 0x120];
+    u128 spawnPos;
+    u8 pad1B0[4];
+    s32 unk1B4;
+    s32 pathIdx;
+    u8 pad1BC[0x1D0 - 0x1BC];
+    f32 turnVel;
+    f32 speed;
+    s16 timer;
+    u8 pad1DA[2];
+    s32 pathPt;
+} VendVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    VendVec pos;
+    u8 state;
+    u8 pad21[0x31 - 0x21];
+    u8 unk31;
+    u8 pad32[2];
+    u16 flags34;
+    u8 pad36[0x40 - 0x36];
+    VendVec unk40;
+    u8 pad50[2];
+    u8 unk52;
+    u8 anim;
+    u8 pad54[0x70 - 0x54];
+    u8 unk70;
+    u8 pad71[0x78 - 0x71];
+    VendVars *vars;
+    u8 pad7C[3];
+    s8 unk7F;
+    u8 pad80[0xA6 - 0x80];
+    u16 unkA6;
+    u8 padA8[0xC0 - 0xA8];
+    VendVec unkC0;
+} VendMoby;
+
+typedef struct {
+    f32 dir[4];
+    VendMoby *moby;
+    s32 flags;
+    u8 unk88;
+    u8 unk89;
+    u16 unk8A;
+    f32 unk8C;
+    s32 unk90;
+} VendQuery;
+
+typedef struct {
+    s32 moby;
+    s32 pad;
+    f32 pos[4];
+} VendHit;
+
+extern f32 D_0015ED64 __attribute__((sda));
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L00_00161BE4 __attribute__((sda));
+extern s32 D_L00_00161BE8 __attribute__((sda));
+extern f32 D_L00_00161BEC __attribute__((sda));
+extern VendVec D_L00_00166DC0;
+extern s32 D_001413D0 NOT_SDA;
+extern VendHit D_L00_00173E58;
+extern VendPath *vend_paths[] __asm__("D_L00_001B04B0");
+extern s32 D_L00_0015F580[] MACRO_ADDR;
+
+extern void FUN_L00_002e1678();
+extern void FUN_L00_00263b38(void *, f32);
+extern void FUN_L00_002628d8(VendMoby *, void *, s32, f32, f32);
+extern void FUN_L00_0025a120(VendMoby *);
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void blend_moby_animation(VendMoby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void mark_moby_for_removal(VendMoby *) __asm__("FUN_0020c828");
+extern s32 vend_rand(s32) __asm__("FUN_001f96f8");
+extern f32 FUN_L00_001ff8b0(f32, f32);
+extern void FUN_L00_0025be00(void *, f32, void *, f32, f32, f32);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_00213f38(f32, f32, f32, f32, f32 *, f32 *);
+extern void FUN_L00_001ff500(void *, void *, f32);
+extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
+extern f32 FUN_001fa580(f32, f32);
+extern f32 FUN_001fa5c8(f32, f32);
+extern void FUN_0020cca8(VendMoby *, s32, void *);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_0020c9e0(VendMoby *);
+extern s32 FUN_L00_001efc70(void *, void *, s32, VendMoby *, VendQuery *);
+extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
+extern s32 FUN_L00_002e2190(VendMoby *, void *, void *);
+extern s32 FUN_L00_0025c698(VendMoby *, void *);
+extern void FUN_L00_0025f090(VendMoby *, void *, s32, f32, f32);
+extern void FUN_L00_00263e30(VendMoby *, s32, s32, s32, s32, s32, s32);
+extern void FUN_L00_00263fd8(VendMoby *, s32, void *, void *, s32, s32, f32, void *, void *, void *);
+extern void FUN_L00_002e1aa8();
+
+#define VEND_TURN(m, v, ang, k) FUN_L00_0025be00(&(m)->unk40.f[2], ang, &(v)->turnVel, D_0015ED70 * (k), D_0015ED70 * (k), D_0015ED6C * 12.566371f)
+#define VEND_ANIM(m, a, t) if ((m)->anim != (a)) blend_moby_animation((m), (a), 0, (t))
+
+void FUN_L00_002e0b88(VendMoby *moby) {
+    VendVars *vars;
+    VendTarget *target;
+    VendPath *path;
+    VendVec delta;
+    VendVec dir;
+    VendVec mtx[4];
+    VendQuery query;
+    VendVec probe;
+    f32 vel;
+    s32 hit;
+
+    vars = moby->vars;
+    FUN_L00_002e1678(moby);
+    target = vars->target;
+    FUN_L00_00263b38(vars->unk120, 2.5f);
+    if (*(u8 *)0x15EDB7 != 0) {
+        FUN_L00_002628d8(moby, vars->unk120, 2, D_0015ED64 * 0.03f, D_0015ED64 * 0.3f);
+    }
+    if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, &D_L00_00166DC0) < 27.0f) {
+        FUN_L00_0025a120(moby);
+        moby->unk7F = 0x15;
+    }
+    switch (moby->state) {
+    case 0:
+        qcopy(&vars->spawnPos, &moby->pos);
+        vars->unk29 = 0;
+        vars->unk20 = 2.0f;
+        vars->unk28 = 1;
+        vars->unk24 = 2;
+        vars->unk58 = truncate_float_to_s32(14.0f);
+        vars->unk5A = truncate_float_to_s32(8.0f);
+        vars->pathPt = 1;
+        if (random_integer_below(2) != 0) {
+            moby->flags34 |= 0x8000;
+        }
+        if (vars->pathIdx >= 0) {
+            if (vars->unk1B4 == -1) {
+                mark_moby_for_removal(moby);
+                return;
+            }
+            qcopy(&moby->pos, &vend_paths[vars->pathIdx]->pts[0]);
+            moby->state = 1;
+            VEND_ANIM(moby, 1, 5);
+        } else {
+            moby->state = 3;
+            VEND_ANIM(moby, 1, 5);
+        }
+        break;
+    case 1:
+        if (moby->unk70 & 2) {
+            if (moby->anim == 1 && random_integer_below(4) == 0) {
+                VEND_ANIM(moby, 2, vend_rand(20));
+            } else {
+                VEND_ANIM(moby, 1, vend_rand(20));
+            }
+        }
+        if (vars->unk114 != 2) {
+            moby->state = 2;
+            VEND_ANIM(moby, 9, vend_rand(10));
+        }
+        break;
+    case 2:
+        vel = 0.0f;
+        path = vend_paths[vars->pathIdx];
+        qcopy(&delta, &path->pts[vars->pathPt]);
+        VEND_TURN(moby, vars, FUN_L00_001ff8b0(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]), 12.566371f);
+        FUN_001f9a28(&dir, &delta, &moby->pos);
+        FUN_00213f38(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]), D_0015ED70 * 8.0f, D_0015ED70 * 16.0f, D_0015ED6C * 12.0f, &vel, &vars->speed);
+        if (FUN_001f9af0(&dir) < vars->speed + vars->speed) {
+            vars->pathPt++;
+            if (vars->pathPt == path->count) {
+                moby->state = 3;
+                VEND_ANIM(moby, 1, vend_rand(10));
+            }
+        }
+        FUN_L00_001ff500(&dir, &dir, vars->speed);
+        FUN_001f9a10(&moby->pos, &moby->pos, &dir);
+        break;
+    case 3:
+        VEND_TURN(moby, vars, FUN_L00_001ff8b0(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]), 12.566371f);
+        if (FUN_001f9b80(&moby->pos, D_0013F3D0) < 20.0f) {
+            VEND_ANIM(moby, 4, vend_rand(20));
+        } else if (moby->unk70 & 2) {
+            VEND_ANIM(moby, random_integer_below(2) + 1, vend_rand(20));
+        }
+        if (vars->unk114 != 2 && FUN_L00_002e1f28(moby, 0, 0) != 0) {
+            moby->state = 4;
+            VEND_ANIM(moby, 5, vend_rand(10));
+        }
+        break;
+    case 4:
+        VEND_TURN(moby, vars, FUN_L00_001ff8b0(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]), 12.566371f);
+        if (moby->unk70 & 2) {
+            vars->timer = 0;
+            moby->state = 5;
+            VEND_ANIM(moby, 6, vend_rand(10));
+        }
+        break;
+    case 5: {
+        f32 ang;
+
+        ang = FUN_L00_001ff8b0(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
+        if (moby->flags34 & 0x8000) {
+            ang = FUN_001fa580(ang, D_L00_00161BEC);
+        } else {
+            ang = FUN_001fa5c8(ang, D_L00_00161BEC);
+        }
+        VEND_TURN(moby, vars, ang, 1.5707964f);
+        FUN_0020cca8(moby, 0, mtx);
+        qcopy(&delta, &moby->unkC0);
+        delta.f[2] = 0.0f;
+        FUN_L00_001ff500(&delta, &delta, D_L00_00161BE4);
+        FUN_001f9a10(&dir, &mtx[3], &delta);
+        hit = 0;
+        query.flags = 0x10000;
+        query.moby = moby;
+        query.unk90 = 1;
+        query.unk8C = 1.0f;
+        query.dir[0] = FUN_001f9dc8(moby->unk40.f[2]);
+        query.dir[1] = FUN_001f9de0(moby->unk40.f[2]);
+        query.dir[3] = 5627.925f;
+        query.unk89 = 1;
+        query.unk8A = moby->unkA6;
+        query.dir[2] = 1.0f;
+        query.unk88 = 0;
+        if (moby->unk52 == moby->anim && FUN_0020c9e0(moby) > 1.0f) {
+            hit = 1;
+            query.flags |= 1;
+        }
+        qcopy(&probe, &moby->pos);
+        probe.f[2] += 0.5f;
+        if (FUN_L00_001efc70(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
+            D_L00_00173E58.moby == D_001413D0) {
+            vend_2040(moby);
+            moby->state = 6;
+            VEND_ANIM(moby, 7, vend_rand(10));
+        }
+        if (FUN_L00_001efc70(&mtx[3], &dir, 0, moby, &query) != 0) {
+            qcopy(&dir, D_L00_00173E58.pos);
+            if (hit != 0 && D_L00_00173E58.moby == D_001413D0) {
+                vend_2040(moby);
+                moby->state = 6;
+                VEND_ANIM(moby, 7, vend_rand(10));
+            }
+        }
+        FUN_L00_002e2190(moby, mtx, &dir);
+        if (moby->unk70 & 2) {
+            if (vars->timer++ == D_L00_00161BE8) {
+                vend_2040(moby);
+                moby->state = 6;
+                VEND_ANIM(moby, 12, vend_rand(10));
+            }
+        }
+        break;
+    }
+    case 6:
+        VEND_TURN(moby, vars, FUN_L00_001ff8b0(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]), 12.566371f);
+        if (moby->unk70 & 2) {
+            moby->state = 3;
+            VEND_ANIM(moby, 1, vend_rand(10));
+        }
+        break;
+    case 7:
+        if (FUN_L00_0025c698(moby, vars->unk70) & 0x140) {
+            moby->state = 3;
+            VEND_ANIM(moby, 1, vend_rand(10));
+        }
+        break;
+    case 8:
+        if (FUN_L00_0025c698(moby, vars->unk70) & 0x140) {
+            FUN_L00_0025f090(moby, &moby->pos, -1, 0.75f, 13.0f);
+            FUN_L00_00263e30(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
+            FUN_L00_00263fd8(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580, D_L00_0015F580, D_L00_0015F580);
+            FUN_L00_00263fd8(moby, 0x78E, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580, D_L00_0015F580, D_L00_0015F580);
+            FUN_L00_00263fd8(moby, 0x78F, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580, D_L00_0015F580, D_L00_0015F580);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        break;
+    }
+    FUN_L00_002e1aa8(moby);
+}
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -275,6 +600,180 @@ void FUN_L00_002e1678(TrollMoby *m)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1aa8.s", FUN_L00_002e1aa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1c78.s", FUN_L00_002e1c78);
+typedef union {
+    u128 q;
+    f32 f[4];
+} GlowVec;
+
+typedef struct {
+    GlowVec corner[4];
+    u32 color[4];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    f32 unk5C;
+    f32 unk60;
+    s32 unk64;
+    f32 unk68;
+    f32 unk6C;
+    s64 unk70;
+    s64 tex;
+    s64 unk80;
+    s64 unk88;
+} GlowQuad;
+
+typedef struct {
+    u8 pad0[0x1C0];
+    GlowVec pos;
+} GlowVars;
+
+typedef struct {
+    u8 pad0[0x78];
+    GlowVars *vars;
+} GlowMoby;
+
+extern GlowVec glow_origin __asm__("D_L00_00166DC0");
+extern GlowVec D_0013F5E0;
+extern GlowVec D_L00_001E6CA0[4];
+extern void FUN_001f9a68(f32, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_001fd228(void *, void *, s32);
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+
+void FUN_L00_002e1c78(GlowMoby *m)
+{
+    GlowQuad quad;
+    GlowVec mat[4];
+    GlowVec *src;
+    GlowVec *dst;
+    s32 i;
+    f32 one;
+
+    qcopy(&mat[3], &m->vars->pos);
+    one = 1.0f;
+    mat[3].f[3] = one;
+    FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
+    FUN_L00_001ff500(&mat[0], &mat[0], one);
+    fast_vec_cross(&mat[1], &mat[0], &D_0013F5E0);
+    FUN_L00_001ff500(&mat[1], &mat[1], -1.0f);
+    fast_vec_cross(&mat[2], &mat[1], &mat[0]);
+    quad.tex = get_effect_texture(0xB);
+    quad.unk88 = 0x8000000048L;
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk70 = 5;
+    quad.color[3] = 0x80FFFFFF;
+    quad.color[2] = 0x80FFFFFF;
+    quad.color[1] = 0x80FFFFFF;
+    quad.unk50 = 0;
+    quad.unk54 = 0;
+    quad.unk58 = 0;
+    quad.unk5C = one;
+    quad.unk60 = one;
+    quad.color[0] = 0x80FFFFFF;
+    quad.unk64 = 0;
+    quad.unk68 = one;
+    quad.unk6C = one;
+    src = D_L00_001E6CA0;
+    dst = quad.corner;
+    for (i = 0; i < 4; i++) {
+        FUN_001f9a68(0.2f, dst++, src++);
+    }
+    FUN_L00_001fd228(&quad, mat, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1df0.s", FUN_L00_002e1df0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3800.s", FUN_L00_002e3800);
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0xF];
+    u8 unk30;
+} FlockMoby;
+
+typedef struct {
+    u8 pad0[0x30];
+    s32 phase;
+    s32 level;
+    u8 pad38[0x178 - 0x38];
+    void *mobys[4];
+} FlockGame;
+
+typedef struct {
+    u8 pad0[4];
+    s32 unk4;
+    u8 pad8[2];
+    u8 unkA;
+    u8 unkB;
+} FlockTail;
+
+typedef struct {
+    u8 pad0[3];
+    u8 unk3;
+    u8 pad4[4];
+    u8 unk8;
+    u8 pad9;
+    s16 unkA;
+    u8 padC[0x20 - 0xC];
+    FlockTail tail;
+} FlockPart;
+
+extern s32 D_L00_0015F5C4;
+extern FlockGame D_L00_0016C860;
+
+extern void FUN_L00_002637f8(void *);
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void FUN_L00_00263b70(void *, void *, void *, f32, f32);
+extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
+
+void FUN_L00_002e3800(FlockMoby *moby) {
+    f32 pos[4];
+    void *src;
+    FlockPart *part;
+    s32 color;
+    s32 v;
+    s32 i;
+    s32 phase;
+    s32 idx;
+    FlockTail *tail;
+
+    switch (moby->state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        moby->state = 1;
+        break;
+    case 1:
+        if ((D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 2 && vend_rand(0x618) <= D_L00_0016C860.level) ||
+            (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {
+            phase = D_L00_0016C860.phase;
+            idx = -1;
+            if (phase == 2) {
+                idx = 3;
+            } else if (phase == 3) {
+                idx = 2;
+            }
+            FUN_L00_002637f8(D_L00_0016C860.mobys[idx]);
+        }
+        if (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 4) {
+            src = D_L00_0016C860.mobys[3];
+            if (src != 0 && vend_rand(150) <= D_L00_0016C860.level && D_L00_0016C860.level <= vend_rand(220)) {
+                FUN_L00_0024f7c8(src, 0, pos);
+                FUN_L00_00263b70(pos, pos, D_L00_0015F580, 120000.0f, 50000.0f);
+                for (i = 0; i < 10; i++) {
+                    color = (FUN_L00_00257b90(0x40, 0x80) << 24) | 0x787878;
+                    v = FUN_L00_00257b90(0, 4);
+                    part = FUN_L00_0026d000(pos, random_integer_below(2) == 0 ? v : -v, D_L00_0015F580, color,
+                                            0.75f, 1.0f, 1.03f, 120000.0f);
+                    if (part != 0) {
+                        part->unk3 = 0x44;
+                        tail = &part->tail;
+                        part->unk8 = FUN_L00_00257b90(0, 0xFF);
+                        part->unkA = vend_rand(60);
+                        tail->unk4 = 2;
+                        tail->unkA = color >> 24;
+                        tail->unkB = part->unkA;
+                    }
+                }
+            }
+        }
+        break;
+    }
+}
