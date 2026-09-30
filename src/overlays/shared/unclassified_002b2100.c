@@ -4,7 +4,63 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b2100.s", FUN_L00_002b2100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b3058.s", FUN_L00_002b3058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b3458.s", FUN_L00_002b3458);
+#include "qcopy.h"
+typedef struct {
+    int w0;
+    int w4;
+    int w8;
+    int wC;
+    int idx[4];
+    unsigned char *p[4];
+} V_2b3458;
+extern unsigned char *D_L00_0015FFD8_2b3458 __asm__("D_L00_0015FFD8");
+extern int D_L00_00161478_2b3458 __asm__("D_L00_00161478") __attribute__((sda));
+extern int D_L00_00161480_2b3458 __asm__("D_L00_00161480") __attribute__((sda));
+int FUN_L00_0025a420_2b3458(void *, int, int) __asm__("FUN_L00_0025a420");
+int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
+void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
+void FUN_L00_002b3458(unsigned char *m) {
+    V_2b3458 *v = *(V_2b3458 **)(m + 0x78);
+    int r, i;
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        v->w4 = D_L00_00161478_2b3458;
+        v->w8 = 3;
+        v->p[0] = D_L00_0015FFD8_2b3458 + (v->idx[0] << 8);
+        v->p[1] = D_L00_0015FFD8_2b3458 + (v->idx[1] << 8);
+        v->p[2] = D_L00_0015FFD8_2b3458 + (v->idx[2] << 8);
+        v->p[3] = D_L00_0015FFD8_2b3458 + (v->idx[3] << 8);
+        break;
+    case 1:
+        r = FUN_L00_0025a420_2b3458(m, 0x10000, 0);
+        FUN_001f9740_2b3458(&v->wC);
+        if (r && v->wC == 0) {
+            m[0xA4] = 0xFF;
+            v->wC = D_L00_00161480_2b3458;
+            if (--v->w8 <= 0) {
+                FUN_0020c828_2b3458(m);
+                return;
+            }
+        }
+        if (v->p[0][0x20] == 0x50 || v->p[1][0x20] == 0x50 || v->p[2][0x20] == 0x50 || v->p[3][0x20] == 0x50) {
+            if (FUN_001f9740_2b3458(&v->w4)) {
+                v->w4 = D_L00_00161478_2b3458;
+                for (i = 0; i < 4; i++) {
+                    if (v->p[i][0x20] == 0x50) {
+                        unsigned char *q;
+                        v->p[i][0x20] = 0x51;
+                        q = v->p[i];
+                        qcopy(q + 0x10, m + 0x10);
+                        q[0xA4] = 0xFF;
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b3628.s", FUN_L00_002b3628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b3c50.s", FUN_L00_002b3c50);
 #define NOT_SDA

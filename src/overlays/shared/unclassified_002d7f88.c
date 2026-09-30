@@ -2,7 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7f88.s", FUN_L00_002d7f88);
+#include "qcopy.h"
+typedef int q128_002d7f88 __attribute__((mode(TI)));
+typedef struct { u8 pad[0x20]; u8 b20; u8 pad2[0x40 - 0x21]; q128_002d7f88 q40; u8 pad3[0x78 - 0x50]; void *p78; u8 pad4[0xA6 - 0x7C]; s16 hA6; } O_002d7f88;
+typedef struct { O_002d7f88 *o; f32 f4; u8 v8[4]; f32 fC; } D_002d7f88;
+typedef struct { u8 pad[0x10]; u8 v10[4]; f32 f14; u8 pad2[0x23 - 0x18]; u8 b23; u8 pad3[0x2C - 0x24]; f32 f2C; u8 pad4[0x40 - 0x30]; q128_002d7f88 q40; u8 pad5[0x78 - 0x50]; D_002d7f88 *p78; } S_002d7f88;
+extern f32 D_L00_001616DC;
+extern f32 D_0015ED6C;
+s32 FUN_001f9740(void *);
+void FUN_0020c828(void *);
+void FUN_001f99f8(void *);
+void FUN_001f9cf8(void *, void *, void *);
+void FUN_001f9a10(void *, void *, void *);
+s32 FUN_001fa6d0(f32);
+void FUN_L00_002d7f88(S_002d7f88 *self) {
+    D_002d7f88 *d = self->p78;
+    O_002d7f88 *o;
+    void *m;
+    f32 t;
+    d->f4 += (D_L00_001616DC + D_L00_001616DC) * D_0015ED6C;
+    if (FUN_001f9740(d->v8) != 0 || D_L00_001616DC * 1.1f <= d->f4) goto kill;
+    o = d->o;
+    if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
+kill:
+        FUN_0020c828(self);
+        return;
+    }
+    m = o->p78;
+    FUN_001f99f8(self->v10);
+    self->f14 = -d->f4;
+    FUN_001f9cf8(self->v10, self->v10, (u8 *)d->o + 0xC0);
+    FUN_001f9a10(self->v10, self->v10, m);
+    qcopy(&self->q40, &d->o->q40);
+    if (d->f4 > D_L00_001616DC) {
+        self->b23 = FUN_001fa6d0((1.0f - (d->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
+    }
+    t = d->fC;
+    self->f2C = t * 0.1f + t * d->f4 / D_L00_001616DC;
+}
 int FUN_L00_002d8128(unsigned char *p) { return p[0x20] == 1; }
 typedef int q128 __attribute__((mode(TI)));
 typedef struct { char pad[0x10]; q128 q; signed char b20; } P2d8138;

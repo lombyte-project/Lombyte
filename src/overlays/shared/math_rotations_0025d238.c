@@ -55,7 +55,47 @@ void FUN_L00_0025da70(u128_0025da70 *a, u128_0025da70 *b, float lim) {
         FUN_001f9b48_0025da70(pa, pb);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025db00.s", FUN_L00_0025db00);
+#include "qcopy.h"
+typedef int T25db00_q __attribute__((mode(TI)));
+void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L00_001ff550_25db00(void *, void *, float) __asm__("FUN_L00_001ff550");
+float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
+float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
+float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
+{
+    float d[4];
+    float n[4];
+    T25db00_q c[1];
+    float k;
+    int i;
+    float *o, *pa, *pb;
+
+    FUN_001f9a28_25db00(d, a, b);
+    n[0] = -d[1];
+    n[1] = d[0];
+    *(int *)&n[2] = 0;
+    qcopy(c, a);
+    *(int *)&((float *)c)[2] = 0;
+    FUN_L00_001ff550_25db00(n, n, 1.0f);
+    k = -FUN_001f9ab0_25db00(n, c) + (n[0] * p[0] + n[1] * p[1]);
+    out[0] = p[0] - k * n[0];
+    out[1] = p[1] - k * n[1];
+    *(int *)&out[2] = 0;
+    o = out; pa = (float *)a; pb = (float *)b;
+    for (i = 0; i < 2; i++) {
+        if ((o[i] > pa[i] && o[i] > pb[i]) || (o[i] < pa[i] && o[i] < pb[i])) break;
+    }
+    if (i < 2) {
+        if (FUN_001f9b80_25db00(out, a) < FUN_001f9b80_25db00(out, b)) {
+            qcopy(out, a);
+            *(int *)&out[2] = 0;
+        } else {
+            qcopy(out, b);
+            *(int *)&out[2] = 0;
+        }
+    }
+    return FUN_001f9b80_25db00(p, out);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025dcd8.s", FUN_L00_0025dcd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e308.s", FUN_L00_0025e308);

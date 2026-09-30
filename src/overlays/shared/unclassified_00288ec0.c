@@ -3,7 +3,58 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00288ec0.s", FUN_L00_00288ec0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289108.s", FUN_L00_00289108);
+typedef struct {
+    unsigned char b0;
+    unsigned char p1[3];
+    int w4;
+    int p8;
+    unsigned short hC;
+    unsigned short hE;
+    float f10, f14, f18;
+    int p1C;
+} E_289108;
+typedef struct {
+    unsigned char p0[8];
+    short n;
+    unsigned char pa[0x1C - 0xA];
+    E_289108 *list;
+} G_289108;
+extern G_289108 *D_L00_0016051C_289108 __asm__("D_L00_0016051C");
+float FUN_001fa6c0_289108(int) __asm__("FUN_001fa6c0");
+float FUN_001f9dc8_289108(float) __asm__("FUN_001f9dc8");
+float FUN_001f9de0_289108(float) __asm__("FUN_001f9de0");
+float FUN_001f99c0_289108(float) __asm__("FUN_001f99c0");
+int FUN_001160d8_289108(void) __asm__("FUN_001160d8");
+void FUN_L00_00289108(void) {
+    int i;
+    for (i = 0; i < D_L00_0016051C_289108->n; i++) {
+        E_289108 *e = &D_L00_0016051C_289108->list[i];
+        if (e->b0 == 0) {
+            unsigned short *h = &e->hC;
+            float a, b;
+            e->hC++;
+            h[1]++;
+            a = FUN_001fa6c0_289108((e->hC & 0xFFF) - 0x800) * 0.0015339808f;
+            b = FUN_001fa6c0_289108((h[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            e->f10 = FUN_001f9dc8_289108(a) * FUN_001f9de0_289108(b) * 50.0f;
+            e->f14 = FUN_001f9de0_289108(a) * FUN_001f9de0_289108(b) * 50.0f;
+            e->f18 = FUN_001f99c0_289108(FUN_001f9dc8_289108(b)) * 50.0f;
+            if ((e->hC & 0x3F) < 8) {
+                e->w4 = 0x702020F0;
+            } else {
+                e->w4 = 0x202020F0;
+            }
+        } else if (e->b0 == 1) {
+            int r = FUN_001160d8_289108() >> 16;
+            int t = ((r & 0x1F00) << 10) - 0x202020;
+            int c = *(int *)&e->hC;
+            c += t;
+            c += (r & 0x1F0) << 6;
+            c += (r & 0x1F) << 2;
+            e->w4 = c;
+        }
+    }
+}
 extern char D_L00_001BD7E0[];
 extern char *D_L00_0016051C;
 void FUN_001f9fc8();
@@ -169,7 +220,46 @@ void FUN_L00_0028a3a8(void) {
     FUN_001f9fc8(D_L00_001BD7E0);
     FUN_0022b690(4);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a480.s", FUN_L00_0028a480);
+typedef int T28a480_q __attribute__((mode(TI)));
+extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
+extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
+extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C") __attribute__((section(".sdata")));
+extern char D_L00_001BD7E0_28a480[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
+extern void FUN_L00_001ffa90_28a480(void *, void *) __asm__("FUN_L00_001ffa90");
+extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
+extern void FUN_0022b690_28a480(int) __asm__("FUN_0022b690");
+
+void FUN_L00_0028a480(void)
+{
+    T28a480_q v[1];
+    int i;
+
+    qzero(v);
+    for (i = 0; i < *(short *)(D_L00_0016051C_28a480 + 6); i++) {
+        switch (i) {
+        case 0:
+            ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
+            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            break;
+        case 1:
+            ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
+            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            break;
+        case 2:
+            ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
+            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            break;
+        case 3:
+            ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
+            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            break;
+        default:
+            FUN_001f9fc8_28a480(D_L00_001BD7E0_28a480);
+            break;
+        }
+        FUN_0022b690_28a480(i);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a620.s", FUN_L00_0028a620);
 #define NOT_SDA
 
