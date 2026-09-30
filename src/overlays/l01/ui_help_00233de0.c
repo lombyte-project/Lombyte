@@ -3,5 +3,183 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00233de0.s", FUN_L01_00233de0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234b40.s", FUN_L01_00234b40);
+#include "eetypes.h"
+#include "qcopy.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} HopVec;
+
+typedef struct {
+    u8 pad0[0x98];
+    f32 f98;
+    u8 pad9C[0x44];
+    HopVec vE0;
+    u8 padF0[0x60];
+    HopVec v150;
+    f32 f160;
+    f32 f164;
+    u8 pad168[0x8];
+    HopVec v170;
+    f32 f180;
+    u8 pad184[0xC];
+    f32 f190;
+    f32 f194;
+    s32 i198;
+    u8 pad19C[0x16C];
+    s16 s308;
+    s16 s30A;
+    u8 pad30C[0xE8];
+    f32 f3F4;
+    u8 pad3F8[0x1C];
+    f32 f414;
+    u8 pad418[0x6];
+    s16 s41E;
+    u8 pad420[0x18];
+    f32 f438;
+    f32 f43C;
+    u8 pad440[0xC];
+    s32 i44C;
+    s32 i450;
+    f32 f454;
+    f32 f458;
+    f32 f45C;
+    u8 pad460[0x10];
+    HopVec v470;
+    u8 pad480[0x20];
+    f32 f4A0;
+    u8 pad4A4[0x47C];
+    HopVec v920;
+    u8 pad930[0x14];
+    f32 f944;
+    u8 pad948[0x160];
+    f32 fAA8;
+    u8 padAAC[0x15D8];
+    s32 i2084;
+    u8 pad2088[0x4];
+    s32 i208C;
+} HopPlayer;
+
+extern HopPlayer D_0013F350;
+extern f32 D_0015ED64;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 D_L01_0017C250[];
+extern s32 FUN_001f96f8(s32);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern f32 FUN_001fa688(f32, f32);
+extern f32 FUN_001f9b20(void *);
+extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
+extern void FUN_L00_002132b8(f32, f32);
+extern void FUN_L00_00212088(f32, f32);
+extern void FUN_L00_00211e30(int, float, float, float);
+extern void FUN_L00_00233ba0(void *, void *, f32);
+extern void FUN_L00_00233708(void *, void *, f32);
+extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_L00_001ff550(float *, float *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L01_00234358(f32);
+
+void FUN_L01_00234b40(void) {
+    HopVec tmp;
+    f32 speed;
+    f32 a;
+    f32 d;
+    f32 arg;
+    s32 state;
+
+    state = D_0013F350.i2084;
+    if (state == 10) {
+        FUN_L00_002132b8(0.7f, D_0015ED6C * 0.0f);
+        qcopy(&D_0013F350.v150, &D_0013F350.v920);
+        D_0013F350.f194 = D_0013F350.f164;
+    } else if (state == 16) {
+        if (FUN_001f96f8(0x36) < D_0013F350.i198) {
+            approach_value(D_0015ED70 * 25.0f, D_0015ED70 * 7.0f, &D_0013F350.f4A0);
+        }
+        if (D_0013F350.i198 < FUN_001f96f8(0x37)) {
+            D_0013F350.f190 = D_0013F350.f3F4;
+        } else {
+            D_0013F350.f190 = D_0015ED6C * 3.5f;
+        }
+        FUN_L00_00212088(D_0015ED70 * 44.0f, D_0015ED70 * 45.0f);
+        FUN_L00_00233ba0(&D_0013F350.vE0, &D_0013F350.vE0, 0.0f);
+        FUN_L00_00233708(&D_0013F350.vE0, &D_0013F350.vE0, D_0013F350.f194);
+    } else if (state == 0x1C) {
+        if (FUN_001f96f8(0x28) < D_0013F350.i198) {
+            FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
+            FUN_L01_00234358(D_0015ED70 * 20.0f);
+        }
+        if (13.0f <= D_0013F350.fAA8 && D_0013F350.fAA8 <= 30.0f) {
+            if (27.0f < D_0013F350.fAA8) {
+                approach_value(0.0f, D_0015ED70 * 8.0f, &D_0013F350.f45C);
+            } else {
+                approach_value(D_0015ED6C * 2.0f, D_0015ED70 * 8.0f, &D_0013F350.f45C);
+            }
+        }
+        D_0013F350.vE0.f[0] = FUN_001f9dc8(D_0013F350.f98) * D_0013F350.f45C;
+        D_0013F350.vE0.f[1] = FUN_001f9de0(D_0013F350.f98) * D_0013F350.f45C;
+    } else if (state == 11 || state == 12) {
+        D_0013F350.f180 = D_0013F350.f43C;
+        FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 6.981317f);
+        if (D_0013F350.i450 != 3) {
+            D_0013F350.f194 = D_0013F350.f454;
+        } else {
+            D_0013F350.f194 = 0.0f;
+        }
+        if (D_0013F350.i2084 == 11) {
+            if (D_0013F350.s41E != 0 && D_0013F350.i44C < FUN_001f96f8(0xC)) {
+                approach_value(0.0f, D_0015ED70 * 8.0f, &D_0013F350.f458);
+            } else {
+                approach_value(D_0015ED6C * 4.2f, D_0015ED70 * 8.0f, &D_0013F350.f458);
+            }
+        }
+        D_0013F350.vE0.f[0] = FUN_001f9dc8(D_0013F350.f438) * D_0013F350.f458;
+        D_0013F350.vE0.f[1] = FUN_001f9de0(D_0013F350.f438) * D_0013F350.f458;
+        a = D_0013F350.f454 * FUN_001f9de0(FUN_001fa688(D_0013F350.f43C, D_0013F350.f438));
+        D_0013F350.vE0.f[0] += FUN_001f9dc8(D_0013F350.f43C) * a;
+        D_0013F350.vE0.f[1] += FUN_001f9de0(D_0013F350.f43C) * a;
+        FUN_L00_002132b8(0.7f, D_0015ED6C * 0.0f);
+        qcopy(&D_0013F350.v150, &D_0013F350.v920);
+    } else if (state == 0x11) {
+        D_0013F350.f180 = D_0013F350.v470.f[3];
+        qcopy(&D_0013F350.v170, &D_0013F350.v470);
+        if (FUN_001f96f8(9) < D_0013F350.i198) {
+            FUN_L00_00211e30(-1, D_0015ED64 * 0.042f, D_0015ED64 * 0.2f, D_0015ED6C * 11.868238f);
+        }
+        if (FUN_001f96f8(9) <= D_0013F350.i198) {
+            if (D_0013F350.s308 == 0) {
+                D_0013F350.vE0.f[0] = FUN_001f9dc8(D_0013F350.f180) * (D_0015ED6C * 4.9f);
+                D_0013F350.vE0.f[1] = FUN_001f9de0(D_0013F350.f180) * (D_0015ED6C * 4.9f);
+            } else {
+                FUN_L00_00233ba0(&D_0013F350.vE0, &D_0013F350.vE0, 0.0f);
+                FUN_L00_001ff500(&tmp, &D_0013F350.v170, D_0015ED6C * 4.9f);
+                FUN_001f9a10(&D_0013F350.vE0, &D_0013F350.vE0, &tmp);
+            }
+        }
+        D_0013F350.f194 = D_0013F350.f164;
+    } else {
+        FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0013F350.f414);
+        FUN_L00_002132b8(0.7f, D_0015ED6C * 0.0f);
+        qcopy(&D_0013F350.v150, &D_0013F350.v920);
+        arg = D_0015ED70 * 20.0f;
+        if (D_0013F350.f190 < D_L01_0017C250[0] * D_0015ED6C * 0.2f) {
+            if (D_0013F350.i208C == 2) {
+                d = D_0013F350.f944;
+                speed = FUN_001f9b20(&D_0013F350.vE0);
+                approach_value(0.0f, d, &speed);
+                FUN_L00_001ff550(D_0013F350.vE0.f, D_0013F350.vE0.f, speed);
+                return;
+            }
+            if (D_0013F350.s30A != 0) {
+                arg = D_0015ED70 * 6.0f;
+            } else {
+                arg = D_0015ED70 * 2.0f;
+            }
+        }
+        FUN_L01_00234358(arg);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002370b8.s", FUN_L01_002370b8);

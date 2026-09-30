@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1242,
+  "matching_c": 1243,
   "intentional_asm": 249,
-  "pending_c": 3291,
+  "pending_c": 3290,
   "bytes_total": 3655312,
-  "bytes_matching_c": 253896,
+  "bytes_matching_c": 255576,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3305084,
-  "c_exact_percent_of_recoverable": 7.134,
-  "c_fuzzy_percent_of_recoverable": 9.193,
+  "bytes_pending_c": 3303404,
+  "c_exact_percent_of_recoverable": 7.1812,
+  "c_fuzzy_percent_of_recoverable": 9.2402,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 196,
-    "pending_c": 3144,
+    "matching_c": 197,
+    "pending_c": 3143,
     "bytes_total": 3218660,
-    "bytes_matching_c": 34124,
-    "bytes_pending_c": 3184536,
-    "c_exact_percent_of_recoverable": 1.0602,
+    "bytes_matching_c": 35804,
+    "bytes_pending_c": 3182856,
+    "c_exact_percent_of_recoverable": 1.1124,
     "shared": {
       "id": "shared",
       "index": null,
@@ -3544,19 +3544,19 @@
         "planet": "Novalis",
         "description": "Tobruk Crater: a village under Blarg attack",
         "functions": 67,
-        "matching_c": 37,
-        "pending_c": 30,
+        "matching_c": 38,
+        "pending_c": 29,
         "bytes_total": 114892,
-        "bytes_matching_c": 15056,
-        "bytes_pending_c": 99836,
-        "c_exact_percent_of_recoverable": 13.1045,
+        "bytes_matching_c": 16736,
+        "bytes_pending_c": 98156,
+        "c_exact_percent_of_recoverable": 14.5667,
         "files": [
           {
             "file": "src/overlays/l01/ui_help_00233de0.c",
             "functions": 3,
-            "matching_c": 0,
+            "matching_c": 1,
             "bytes_total": 24352,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 1680
           },
           {
             "file": "src/overlays/l01/ui_help_0023cf98.c",
@@ -4708,14 +4708,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1242,
+    "matching_c": 1243,
     "intentional_asm": 249,
-    "pending_c": 3291,
+    "pending_c": 3290,
     "bytes_total": 3655312,
-    "bytes_matching_c": 253896,
+    "bytes_matching_c": 255576,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3305084,
-    "c_exact_percent_of_recoverable": 7.134,
-    "c_fuzzy_percent_of_recoverable": 9.193
+    "bytes_pending_c": 3303404,
+    "c_exact_percent_of_recoverable": 7.1812,
+    "c_fuzzy_percent_of_recoverable": 9.2402
   }
 }

@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 9.193027,
+    "fuzzy_match_percent": 9.240232,
     "total_code": "3558980",
-    "matched_code": "253896",
-    "matched_code_percent": 7.133954,
+    "matched_code": "255576",
+    "matched_code_percent": 7.181159,
     "total_functions": 4533,
-    "matched_functions": 1242,
-    "matched_functions_percent": 27.399073,
-    "complete_code": "253896",
-    "complete_code_percent": 7.133954,
+    "matched_functions": 1243,
+    "matched_functions_percent": 27.421134,
+    "complete_code": "255576",
+    "complete_code_percent": 7.181159,
     "total_units": 468,
     "complete_units": 89
   },
@@ -20109,15 +20109,15 @@
     {
       "name": "level_01/ui_help_00233de0",
       "measures": {
-        "fuzzy_match_percent": 0.0,
+        "fuzzy_match_percent": 6.898817,
         "total_code": "24352",
-        "matched_code": "0",
-        "matched_code_percent": 0.0,
+        "matched_code": "1680",
+        "matched_code_percent": 6.898817,
         "total_functions": 3,
-        "matched_functions": 0,
-        "matched_functions_percent": 0.0,
-        "complete_code": "0",
-        "complete_code_percent": 0.0,
+        "matched_functions": 1,
+        "matched_functions_percent": 33.333333,
+        "complete_code": "1680",
+        "complete_code_percent": 6.898817,
         "total_units": 1,
         "complete_units": 0
       },
@@ -20134,7 +20134,7 @@
         {
           "name": "FUN_L01_00234b40",
           "size": "1680",
-          "fuzzy_match_percent": 0.0,
+          "fuzzy_match_percent": 100.0,
           "address": "3424",
           "metadata": {
             "virtual_address": "2313024"
@@ -52698,15 +52698,15 @@
       "id": "overlays",
       "name": "Level overlays",
       "measures": {
-        "fuzzy_match_percent": 1.060193,
+        "fuzzy_match_percent": 1.112388,
         "total_code": "3218660",
-        "matched_code": "34124",
-        "matched_code_percent": 1.060193,
+        "matched_code": "35804",
+        "matched_code_percent": 1.112388,
         "total_functions": 3340,
-        "matched_functions": 196,
-        "matched_functions_percent": 5.868263,
-        "complete_code": "34124",
-        "complete_code_percent": 1.060193,
+        "matched_functions": 197,
+        "matched_functions_percent": 5.898204,
+        "complete_code": "35804",
+        "complete_code_percent": 1.112388,
         "total_units": 352,
         "complete_units": 13
       }
@@ -52732,15 +52732,15 @@
       "id": "levels",
       "name": "Per-level code",
       "measures": {
-        "fuzzy_match_percent": 0.794119,
+        "fuzzy_match_percent": 0.876942,
         "total_code": "2028412",
-        "matched_code": "16108",
-        "matched_code_percent": 0.794119,
+        "matched_code": "17788",
+        "matched_code_percent": 0.876942,
         "total_functions": 1379,
-        "matched_functions": 51,
-        "matched_functions_percent": 3.698332,
-        "complete_code": "16108",
-        "complete_code_percent": 0.794119,
+        "matched_functions": 52,
+        "matched_functions_percent": 3.770848,
+        "complete_code": "17788",
+        "complete_code_percent": 0.876942,
         "total_units": 130,
         "complete_units": 5
       }
@@ -52766,15 +52766,15 @@
       "id": "level_01",
       "name": "Level 01",
       "measures": {
-        "fuzzy_match_percent": 13.104481,
+        "fuzzy_match_percent": 14.566724,
         "total_code": "114892",
-        "matched_code": "15056",
-        "matched_code_percent": 13.104481,
+        "matched_code": "16736",
+        "matched_code_percent": 14.566724,
         "total_functions": 67,
-        "matched_functions": 37,
-        "matched_functions_percent": 55.223881,
-        "complete_code": "15056",
-        "complete_code_percent": 13.104481,
+        "matched_functions": 38,
+        "matched_functions_percent": 56.716418,
+        "complete_code": "16736",
+        "complete_code_percent": 14.566724,
         "total_units": 9,
         "complete_units": 0
       }
