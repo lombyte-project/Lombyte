@@ -27,7 +27,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eb38.s", FUN_L07_0030eb38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ebc8.s", FUN_L07_0030ebc8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FFA8), where it is exact; names translated to the US level program. */
+
+extern float FUN_L00_00259710(void *);
+
+int FUN_L07_0030ebc8(char *moby, char *data) {
+    float distance = FUN_L00_00259710(moby + 0x10);
+    float delta;
+    *(float *)(data + 0x130) = distance;
+    delta = **(float **)(data + 0x12C) - distance;
+    *(float *)(data + 0x138) = distance + delta * 0.5f;
+    if (delta < 0.41f) return 2;
+    if (delta > 0.68f) return 0;
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ec58.s", FUN_L07_0030ec58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);

@@ -11,7 +11,27 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0390.s", FUN_L18_002f0390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f06c0.s", FUN_L18_002f06c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0848.s", FUN_L18_002f0848);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f16f0.s", FUN_L18_002f16f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1c38.s", FUN_L18_002f1c38);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3038), where it is exact; names translated to the US level program. */
+
+extern void FUN_L18_002f1d08(int, int);
+extern void FUN_L18_002fa888(int, int);
+
+void FUN_L18_002f1c38(unsigned char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    if (*(short *)(moby + 0xA6) == 0x565 && moby[0x20] == 1) {
+        if (*(int *)(state + 0xC) != -1) {
+            FUN_L18_002f1d08(0x802, *(int *)(state + 0xC));
+            FUN_L18_002f1d08(0x908, *(int *)(state + 0xC));
+            FUN_L18_002f1d08(0x954, *(int *)(state + 0xC));
+        }
+        moby[0x20] = 2;
+        FUN_L18_002fa888(moby[0x21], 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1cc8.s", FUN_L18_002f1cc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1d08.s", FUN_L18_002f1d08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1e68.s", FUN_L18_002f1e68);

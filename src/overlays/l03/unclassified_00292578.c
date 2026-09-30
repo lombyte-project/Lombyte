@@ -15,11 +15,38 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d1b8.s", FUN_L03_0029d1b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5b78.s", FUN_L03_002c5b78);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
+
+int FUN_L03_002c5b78(unsigned char *moby) {
+    if (moby && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(short *)(moby + 0xA6) == 0x23D && moby[0x20] == 5) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6a20.s", FUN_L03_002c6a20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c38.s", FUN_L03_002c6c38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6ca0.s", FUN_L03_002c6ca0);
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
+
+f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+
+int FUN_L03_002c6ca0(unsigned char *moby) {
+    unsigned char state;
+    char *data;
+    data = *(char **)(moby + 0x78);
+    if (!moby) return 0;
+    state = moby[0x20];
+    if (state == 0xFE) return 0;
+    if (state == 0xFD) return 0;
+    if (*(short *)(moby + 0xA6) != 0x23E) return 0;
+    if (moby[0x52] == 10 && compute_interpolated_record_value(moby) >= 10.0f) return 1;
+    if (moby[0x20] == 10 || moby[0x20] == 13 || *(int *)(data + 0x284) == -1) return 1;
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6d98.s", FUN_L03_002c6d98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6e18.s", FUN_L03_002c6e18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6fd0.s", FUN_L03_002c6fd0);

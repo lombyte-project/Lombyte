@@ -52,7 +52,53 @@ float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, flo
     }
     return d;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025be00.s", FUN_L00_0025be00);
+extern float FUN_001fa5c8_25be00(float, float) __asm__("FUN_001fa5c8");
+extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
+extern float FUN_001f99c0_25be00(float) __asm__("FUN_001f99c0");
+extern float FUN_001f9988_25be00(float) __asm__("FUN_001f9988");
+extern float FUN_00213ed8_25be00(float, float, float *) __asm__("FUN_00213ed8");
+extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
+
+float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv) {
+    float d;
+    float v;
+    float stop;
+    float t;
+
+    d = FUN_001fa5c8_25be00(target, *cur);
+    v = *vel;
+    if (v * d >= 0.0f && d != 0.0f) {
+        stop = v * v / accel * 0.5f;
+        if (FUN_001f99c0_25be00(d) < stop) {
+            maxv = FUN_001f99c0_25be00(d);
+            maxv += FUN_001f99c0_25be00(*vel);
+            if (stop < maxv) {
+                FUN_00213ed8_25be00(0.0f, accel, vel);
+            } else {
+                FUN_00213ed8_25be00(0.0f, accel * 1.1f, vel);
+            }
+        } else {
+            t = FUN_001f9988_25be00((accel + accel) * d);
+            if (maxv < t) {
+                t = maxv;
+            }
+            if (d < 0.0f) {
+                FUN_L00_0025bc00_25be00(vel, 0, -t, lim);
+            } else {
+                FUN_L00_0025bc00_25be00(vel, 0, t, lim);
+            }
+        }
+        maxv = FUN_001f99c0_25be00(d);
+        if (!(FUN_001f99c0_25be00(*vel) < maxv)) {
+            *cur = target;
+            return d;
+        }
+    } else {
+        FUN_L00_0025bc00_25be00(vel, 0, 0.0f, accel);
+    }
+    *cur = FUN_001fa580_25be00(*vel, *cur);
+    return *vel;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bfe0.s", FUN_L00_0025bfe0);
 #define NOT_SDA
 

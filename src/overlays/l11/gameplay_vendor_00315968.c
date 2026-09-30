@@ -8,13 +8,44 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316090.s", FUN_L11_00316090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003160a8.s", FUN_L11_003160a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316128.s", FUN_L11_00316128);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316160.s", FUN_L11_00316160);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316210.s", FUN_L11_00316210);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00317680), where it is exact; names translated to the US level program. */
+
+extern void *FUN_L00_002dbb20(void *);
+
+void *FUN_L11_00316210(unsigned char *arg) {
+    void *found = FUN_L00_002dbb20(arg);
+    if (found != 0) {
+        unsigned char state = arg[0x20];
+        if (state != 0x14) {
+            arg[0xBC] = state;
+            arg[0x20] = 0x14;
+        }
+    } else if (arg[0x20] == 0x14) {
+        arg[0x20] = arg[0xBC];
+    }
+    return found;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316320.s", FUN_L11_00316320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317678.s", FUN_L11_00317678);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317820.s", FUN_L11_00317820);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317c98.s", FUN_L11_00317c98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318050.s", FUN_L11_00318050);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */
+
+int FUN_L11_00318050(char *moby, void **out) {
+    char *data = *(char **)(moby + 0x78);
+    int i;
+    int count = *(int *)(data + 0x64) + 1;
+    out[0] = moby;
+    for (i = 0; i < *(int *)(data + 0x64); i++) {
+        out[i + 1] = ((void **)(data + 0x70))[i];
+    }
+    return count;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003181f0.s", FUN_L11_003181f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318488.s", FUN_L11_00318488);

@@ -37,7 +37,14 @@ void FUN_L02_002400c8(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a47f8.s", FUN_L02_002a47f8);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59D8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L02_002a40d0(void *);
+
+void FUN_L02_002a47f8(void) {
+    char scratch[0x40];
+    FUN_L02_002a40d0(scratch);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4818.s", FUN_L02_002a4818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3c98.s", FUN_L02_002d3c98);

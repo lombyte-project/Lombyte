@@ -27,7 +27,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305898.s", FUN_L05_00305898);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306d30.s", FUN_L05_00306d30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307358.s", FUN_L05_00307358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307470.s", FUN_L05_00307470);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
+
+int FUN_L05_00307470(int arg) {
+    return arg == 5 ? 6 : arg;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307480.s", FUN_L05_00307480);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);

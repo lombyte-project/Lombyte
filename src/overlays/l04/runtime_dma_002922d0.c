@@ -3,7 +3,18 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002922d0.s", FUN_L04_002922d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292370.s", FUN_L04_00292370);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
+
+void FUN_L04_00292370(void *unused, char *arg) {
+    *(float *)(arg + 0x10C) = -0.19634955f;
+    *(float *)(arg + 0x110) = 1.5707964f;
+    *(float *)(arg + 0x1BC) = -1.5707964f;
+    *(float *)(arg + 0x1C0) = 0.19634955f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002927d0.s", FUN_L04_002927d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292828.s", FUN_L04_00292828);

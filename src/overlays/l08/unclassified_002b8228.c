@@ -21,7 +21,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc0c8.s", FUN_L08_002dc0c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc648.s", FUN_L08_002dc648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc7f0.s", FUN_L08_002dc7f0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDB68), where it is exact; names translated to the US level program. */
+
+extern int D_L08_001B0CB0[];
+
+void FUN_L08_002dc7f0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (*(float *)(data + 0x104) > 0.9f) {
+        try_set_help_message(0xA, 0x1F4D);
+    } else if (*(int *)(data + 0x120) == D_L08_001B0CB0[*(int *)(data + 0x80)]) {
+        try_set_help_message(0xA, 0x1F50);
+    } else if (*(int *)(data + 0x120) == D_L08_001B0CB0[*(int *)(data + 0x88)]) {
+        try_set_help_message(0xA, 0x1F4F);
+    } else {
+        try_set_help_message(0xA, 0x1F4E);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc8a0.s", FUN_L08_002dc8a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);

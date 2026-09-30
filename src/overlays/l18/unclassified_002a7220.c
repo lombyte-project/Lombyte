@@ -46,7 +46,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6c80.s", FUN_L18_002d6c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6d50.s", FUN_L18_002d6d50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6dc0.s", FUN_L18_002d6dc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7f68.s", FUN_L18_002d7f68);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0028d8c0(void *, int);
+s32 allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
+
+void FUN_L18_002d7f68(unsigned char *arg, int value) {
+    char *data = *(char **)(arg + 0x78);
+    if (arg[0x20] != 2) {
+        arg[0x20] = 2;
+        *(int *)(data + 0x6C) = value;
+    }
+    if (!FUN_L00_0028d8c0(arg, *(int *)(data + 0x70))) {
+        *(int *)(data + 0x70) = allocate_voice_for_group_entry(0x12, 0, arg);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7fd0.s", FUN_L18_002d7fd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8070.s", FUN_L18_002d8070);

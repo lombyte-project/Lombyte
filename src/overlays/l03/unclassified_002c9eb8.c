@@ -5,10 +5,35 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc828.s", FUN_L03_002cc828);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+
+void FUN_L03_002cc828(unsigned char *arg) {
+    char *item = FUN_L00_0025a420(arg, 0x130000, 0);
+    if (item != 0) {
+        char *other = *(char **)(item + 0x20);
+        if (other != 0 && *(short *)(other + 0xA6) != *(short *)(arg + 0xA6)) {
+            arg[0x20] = 4;
+        }
+    }
+    arg[0xA4] = 0xFF;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc888.s", FUN_L03_002cc888);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d30d8.s", FUN_L03_002d30d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3100.s", FUN_L03_002d3100);
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
+
+void FUN_L03_002d3100(void *arg, int mode) {
+    if (mode == 1) {
+        try_set_help_message(8, 0xBC9);
+    } else {
+        try_set_help_message(8, 0xBC9);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3c40.s", FUN_L03_002d3c40);
@@ -25,6 +50,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca70.s", FUN_L03_002dca70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcad4.s", FUN_L03_002dcad4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb30.s", FUN_L03_002dcb30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb48.s", FUN_L03_002dcb48);
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF10), where it is exact; names translated to the US level program. */
+
+int FUN_L03_002dcb48(unsigned char *moby, char *data) {
+    if (moby[0x20] && *(int *)(data + 0x7C) == 1) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcbc8.s", FUN_L03_002dcbc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dccc0.s", FUN_L03_002dccc0);

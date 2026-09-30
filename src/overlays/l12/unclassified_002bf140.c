@@ -4,7 +4,27 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf140.s", FUN_L12_002bf140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf770.s", FUN_L12_002bf770);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e16b8.s", FUN_L12_002e16b8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002db8f8(void *);
+extern void FUN_L01_0026e090(int, int);
+
+int FUN_L12_002e16b8(unsigned char *moby) {
+    int active;
+    if (moby[0x20] == 9 || moby[0x20] == 11 || moby[0x20] == 13) return 0;
+    active = FUN_L00_002db8f8(moby);
+    if (active) {
+        if (moby[0x21] != 0xFF) FUN_L01_0026e090(moby[0x21], 1);
+        moby[0x20] = 8;
+    } else if (moby[0x20] == 8) {
+        moby[0x20] = 1;
+    }
+    return active;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -40,12 +60,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3e28.s", FUN_L12_002e3e28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3ed8.s", FUN_L12_002e3ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e6c48.s", FUN_L12_002e6c48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e7208.s", FUN_L12_002e7208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e7290.s", FUN_L12_002e7290);
+/* Forward the vendor parameters with fixed range and scale values. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8610), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+
+void FUN_L12_002e7290(void *a, void *b) {
+    FUN_L00_0025f3e8(a, b, -1, 1.0f, 10.0f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8608.s", FUN_L12_002e8608);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e86d0.s", FUN_L12_002e86d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8720.s", FUN_L12_002e8720);
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
+
+extern void *FUN_L04_002ce080(void *, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L12_0027b9c0(void *, void *, int);
+
+void FUN_L12_002e8720(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    unsigned char *target = *(unsigned char **)(data + 0x248);
+    if (target != 0) {
+        unsigned char *current;
+        FUN_L12_0027b9c0(moby, target, 1);
+        current = *(unsigned char **)(data + 0x248);
+        if (*(unsigned short *)(moby + 0x34) & 1) {
+            *(unsigned short *)(current + 0x34) |= 0x41;
+        } else {
+            *(unsigned short *)(current + 0x34) &= 0xFFBE;
+        }
+    } else {
+        char vector[16];
+        FUN_L00_0024f7c8(moby, 1, vector);
+        *(void **)(data + 0x248) = FUN_L04_002ce080(moby, vector);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e87b0.s", FUN_L12_002e87b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8808.s", FUN_L12_002e8808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);

@@ -17,14 +17,67 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d25e8.s", FUN_L11_002d25e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2cd0.s", FUN_L11_002f2cd0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
+
+void FUN_L11_002f2cd0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    switch (*(int *)(data + 0x10)) {
+    case 0:
+        try_set_help_message(0xB, 0x2B0D);
+        break;
+    case 3:
+        try_set_help_message(0xB, 0x2B0B);
+        break;
+    case 1:
+    case 2:
+    case 4:
+        try_set_help_message(0xB, 0x2B0C);
+        break;
+    default:
+        try_set_help_message(0xB, 0);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f3040.s", FUN_L11_002f3040);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
+
+void FUN_L11_002f3040(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char **child = (char **)(data + 0x14);
+    int count;
+    int on;
+    moby[0x31] = 1;
+    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    on = 1;
+    count = 2;
+    do {
+        if (*child) {
+            *(unsigned short *)(*child + 0x34) &= 0xFFFE;
+            (*child)[0x31] = on;
+            *(int *)(*child + 0x94) = *(int *)(*(char **)(*child + 0x24) + 0x10);
+        }
+        child++;
+        count--;
+    } while (count >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f3350.s", FUN_L11_002f3350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309378.s", FUN_L11_00309378);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a480.s", FUN_L11_0030a480);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a500.s", FUN_L11_0030a500);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a830.s", FUN_L11_0030a830);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a840.s", FUN_L11_0030a840);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
+
+int FUN_L11_0030a830(unsigned char *arg) {
+    return arg[0x20] == 5;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
+
+void FUN_L11_0030a840(unsigned char *arg) {
+    *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a850.s", FUN_L11_0030a850);

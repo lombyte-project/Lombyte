@@ -5,7 +5,18 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0228.s", FUN_L08_002e0228);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1698.s", FUN_L08_002e1698);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
+
+extern void FUN_L08_00230b38(int, int);
+
+void FUN_L08_002e1698(char *arg) {
+    arg[0xBC] = 1;
+    FUN_L08_00230b38(0x32, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1c98.s", FUN_L08_002e1c98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
