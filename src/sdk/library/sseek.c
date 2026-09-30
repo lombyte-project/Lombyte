@@ -18,33 +18,31 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
-struct M2c_arg0 {
+
+typedef struct __sFILE {
     u8 pad_0[0xC];
-    u16 unkC;
-    s16 unkE;
-    u8 pad_12[0x3E];
-    s32 unk50;
-    s32 unk54;
-};
+    s16 _flags;
+    s16 _file;
+    u8 pad_10[0x40];
+    s32 _offset;
+    void *_data;
+} FILE;
 
-extern s32 func_00114518();
-s64 __sseek(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
-    s64 temp_2_11;
-    register u16 var_2_18 __asm__("v0");
-    register s32 temp_2_19 __asm__("v1");
+#define __SOFF 0x1000
 
-    temp_2_11 = func_00114518(arg0->unk54, arg0->unkE, arg1, arg2);
-    if (temp_2_11 != -1)
-        goto nonminus;
-    var_2_18 = arg0->unkC;
-    var_2_18 &= 0xEFFF;
-    goto done;
-nonminus:
-        temp_2_19 = (s32) ((s64) (temp_2_11 << 0x20) >> 0x20);
-        arg0->unk50 = temp_2_19;
-        var_2_18 = arg0->unkC;
-        var_2_18 |= 0x1000;
-done:
-    arg0->unkC = var_2_18;
-    return temp_2_11;
+extern s64 func_00114518();
+
+s64 __sseek(void *cookie, s32 offset, s32 whence)
+{
+    register FILE *fp = (FILE *)cookie;
+    register s64 ret;
+
+    ret = func_00114518(fp->_data, fp->_file, offset, whence);
+    if (ret == -1L)
+        fp->_flags &= ~__SOFF;
+    else {
+        fp->_flags |= __SOFF;
+        fp->_offset = ret;
+    }
+    return ret;
 }

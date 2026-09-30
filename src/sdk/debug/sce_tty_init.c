@@ -20,12 +20,7 @@ extern s32 sceDeci2Open();
 extern void sceTtyHandler();
 s32 sceTtyInit(void) {
     struct M2c_D_00154A50 *state = &D_00154A50;
-    register struct Mmio *p __asm__("v0");
-    register struct Mmio *q __asm__("a0");
-    register u32 mask __asm__("v1");
-    register s32 baud __asm__("a2");
-    register s32 cmd __asm__("a1");
-    s32 ret;
+    struct Mmio *hdr;
 
     FlushCache(0);
     *(volatile s32 *)&state->unk0 = sceDeci2Open(0x210, state, &sceTtyHandler);
@@ -33,20 +28,16 @@ s32 sceTtyInit(void) {
         return 0;
     }
     state->unkC = 0;
-    mask = 0x20000000;
-    q = (struct Mmio *)((u32)D_00154BC0 | mask);
     state->unk4 = 0;
-    p = (struct Mmio *)((u32)D_00154A80 | mask);
     state->unk8 = 0;
-    state->unk14 = (s32)q;
-    state->unk10 = (s32)p;
-    baud = 0x210;
-    cmd = 0x45;
-    p->unk2 = 0;
-    p->unk4 = baud;
-    p->unk6 = cmd;
-    p->unk7 = 0x48;
-    p->unk8 = 0;
-    state->unk18 = func_00119568(0x100, cmd, baud);
+    state->unk14 = (u32)D_00154BC0 | 0x20000000;
+    hdr = (struct Mmio *)((u32)D_00154A80 | 0x20000000);
+    state->unk10 = (s32)hdr;
+    hdr->unk2 = 0;
+    hdr->unk4 = 0x210;
+    hdr->unk6 = 'E';
+    hdr->unk7 = 'H';
+    hdr->unk8 = 0;
+    state->unk18 = func_00119568(0x100);
     return 1;
 }

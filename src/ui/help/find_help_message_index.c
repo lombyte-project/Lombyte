@@ -1,8 +1,10 @@
 #include "types.h"
-struct M2c_D_0015F6A0 {
-    u8 pad_0[0x4];
-    s32 unk4;
-};
+typedef struct HelpMsg {
+    s32 unk0;
+    s32 id;
+    s32 unk8;
+    s32 unkC;
+} HelpMsg;
 
 struct M2c_D_001996D0 {
     u8 pad_0[0x2C];
@@ -10,34 +12,30 @@ struct M2c_D_001996D0 {
 };
 
 extern struct M2c_D_001996D0 D_001996D0;
+extern HelpMsg *D_0015F6A0;
 s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 
 s32 find_help_message_index(s32 arg0) {
-    s32 var_5_9;
-    s32 var_6_4;
-    register struct M2c_D_0015F6A0 *p __asm__("v1");
-    register struct M2c_D_0015F6A0 *q __asm__("a3");
+    s32 i;
+    s32 found = -1;
 
-    var_6_4 = -1;
-    var_5_9 = 0;
+    i = 0;
     if (D_001996D0.unk2C > 0) {
-        p = *(struct M2c_D_0015F6A0 **)0x15F6A0;
-        if (p->unk4 == arg0) {
-            var_6_4 = 0;
+        if (D_0015F6A0[0].id == arg0) {
+            found = 0;
         } else {
-            q = p;
-loop_4:
-            var_5_9 += 1;
-            if (var_5_9 < D_001996D0.unk2C) {
-                if (*(s32 *)((u8 *)q + (var_5_9 * 0x10) + 0x4) == arg0) {
-                    var_6_4 = var_5_9;
+        next:
+            i++;
+            if (i < D_001996D0.unk2C) {
+                if (D_0015F6A0[i].id == arg0) {
+                    found = i;
                 } else {
-                    goto loop_4;
+                    goto next;
                 }
             }
         }
     }
-    return var_6_4;
+    return found;
 }
 
 extern __typeof__(find_help_message_index) func_001fdca0 __attribute__((alias("FUN_001fdca0")));

@@ -10,21 +10,14 @@ struct M2c_arg0 {
     s32 unk810;
 };
 
-extern s32 _ipuSetMPEG1();
+extern void _ipuSetMPEG1();
 void _clearOnce(struct M2c_arg0 *arg0) {
-    register u32 value_590 __asm__("s1");
-    register u32 value_594 __asm__("v0");
-    register u32 value_6D0 __asm__("v1");
-    register u32 value_6D4 __asm__("a0");
+    u32 spr = 0x70000000;
 
     _ipuSetMPEG1(1);
-    value_590 = 0x70000000;
-    value_594 = 0x70001800;
-    value_6D0 = 0x70001B00;
-    value_6D4 = 0x70003300;
-    arg0->unk590 = value_590;
-    arg0->unk594 = value_594;
-    arg0->unk6D0 = value_6D0;
-    arg0->unk6D4 = value_6D4;
+    arg0->unk590 = spr;
+    arg0->unk594 = spr + 0x1800;
+    arg0->unk6D0 = spr + 0x1B00;
+    arg0->unk6D4 = spr + 0x3300;
     arg0->unk810 = 0;
 }
