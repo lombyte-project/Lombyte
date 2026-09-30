@@ -27,7 +27,31 @@ void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
     *p = FUN_001fa580(*p, r);
     bb38_fif(a, o, *p);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bc98.s", FUN_L00_0025bc98);
+extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
+extern void FUN_L00_0025b798_0025bc98(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
+extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
+extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
+
+float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c) {
+    float d;
+    if (n == 2) {
+        if ((0.0f < x && *p < 0.0f) || (x < 0.0f && 0.0f < *p)) {
+            n = 1;
+            if (x < 0.0f) n = -1;
+        } else {
+            n = 0;
+        }
+    }
+    d = FUN_L00_0025bb38_0025bc98(x, n, *p);
+    FUN_L00_0025b798_0025bc98(q, d, a, b, c);
+    d = FUN_L00_0025bb38_0025bc98(x, n, *p = FUN_001fa580_0025bc98(*p, *q));
+    if (FUN_001f99c0_0025bc98(d) < c * 0.01f) {
+        *p = x;
+        *q = 0;
+        return *q;
+    }
+    return d;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025be00.s", FUN_L00_0025be00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025bfe0.s", FUN_L00_0025bfe0);
 #define NOT_SDA

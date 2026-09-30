@@ -88,7 +88,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6cd0.s", FUN_L00_002d6cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d6f28.s", FUN_L00_002d6f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d73e8.s", FUN_L00_002d73e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7bf0.s", FUN_L00_002d7bf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d7d58.s", FUN_L00_002d7d58);
+typedef struct { float x, y, z, w; } V_2d7d58;
+extern V_2d7d58 D_L00_001CB7E0_2d7d58[] __asm__("D_L00_001CB7E0") __attribute__((section(".data")));
+extern float D_L00_001D02E0_2d7d58[] __asm__("D_L00_001D02E0") __attribute__((section(".data")));
+extern float D_L00_001D15A0_2d7d58[] __asm__("D_L00_001D15A0") __attribute__((section(".data")));
+extern float D_L00_001D31C0_2d7d58[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
+extern float D_L00_001D4480_2d7d58[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
+extern unsigned char D_L00_001D2D10_2d7d58[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
+float FUN_L00_00257c48_2d7d58(float, float) __asm__("FUN_L00_00257c48");
+float FUN_002132a8_2d7d58(float, float) __asm__("FUN_002132a8");
+void FUN_L00_002d7d58(char *m, int i) {
+    char *v = *(char **)(m + 0x78);
+    float b;
+    V_2d7d58 *p;
+    float f = FUN_L00_00257c48_2d7d58(0.0f, 1.0f);
+    p = &D_L00_001CB7E0_2d7d58[i];
+    p->x = f;
+    p->y = FUN_L00_00257c48_2d7d58(0.0f, 1.0f);
+    p->z = FUN_L00_00257c48_2d7d58(0.0f, 1.0f);
+    b = *(float *)(v + 0x4C);
+    D_L00_001D02E0_2d7d58[i] = FUN_002132a8_2d7d58(*(float *)(v + 0x44), *(float *)(v + 0x44) + 2.0f);
+    D_L00_001D15A0_2d7d58[i] = FUN_002132a8_2d7d58(b, b + 4.0f);
+    D_L00_001D31C0_2d7d58[i] = 0.0f;
+    D_L00_001D4480_2d7d58[i] = FUN_002132a8_2d7d58(0.003f, 0.005f);
+    D_L00_001D2D10_2d7d58[i] = 1;
+}
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *FUN_0020c4f8(int);

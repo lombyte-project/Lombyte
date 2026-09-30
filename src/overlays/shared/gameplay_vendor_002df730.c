@@ -28,7 +28,34 @@ void FUN_L00_002df730(unsigned char *p) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df808.s", FUN_L00_002df808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df9a0.s", FUN_L00_002df9a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e01b0.s", FUN_L00_002e01b0);
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2e01b0;
+extern char D_0013F350_2e01b0[] __asm__("D_0013F350");
+extern float D_0015ED6C_2e01b0 __asm__("D_0015ED6C");
+int FUN_001f9740_2e01b0(void *) __asm__("FUN_001f9740");
+void FUN_L00_0024f7c8_2e01b0(char *, int, void *) __asm__("FUN_L00_0024f7c8");
+float FUN_002132a8_2e01b0(float, float) __asm__("FUN_002132a8");
+void FUN_L00_001ff500_2e01b0(V_2e01b0 *, void *, float) __asm__("FUN_L00_001ff500");
+int FUN_L00_00257b90_2e01b0(int, int) __asm__("FUN_L00_00257b90");
+void FUN_L00_0026f548_2e01b0(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
+int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
+void FUN_L00_002e01b0(char *m) {
+    V_2e01b0 t, v;
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    int a;
+    float r;
+    if (FUN_001f9740_2e01b0(d + 4) == 0) return;
+    FUN_L00_0024f7c8_2e01b0(m, 0, &t);
+    r = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
+    FUN_L00_001ff500_2e01b0(&v, m + 0xD0, r);
+    g = D_0013F350_2e01b0;
+    v.x += *(float *)(g + 0x100) * 0.8f;
+    v.y += *(float *)(g + 0x104) * 0.8f;
+    v.z += *(float *)(g + 0x108) + FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
+    FUN_L00_0026f548_2e01b0(&t, &v, 2, FUN_L00_00257b90_2e01b0(0x5A, 0x78));
+    a = FUN_001f96f8_2e01b0(5);
+    *(int *)(d + 4) = FUN_L00_00257b90_2e01b0(a, FUN_001f96f8_2e01b0(15));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e02e0.s", FUN_L00_002e02e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e0324.s", FUN_L00_002e0324);
 #define NOT_SDA
@@ -106,12 +133,118 @@ void FUN_L00_002e3ca8(unsigned char *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e3d88.s", FUN_L00_002e3d88);
 extern u8 D_0013F3D0_002e4168[] __asm__("D_0013F3D0");
 void FUN_L00_002e4168(int a, void *b) { qcopy(b, D_0013F3D0_002e4168); }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4180.s", FUN_L00_002e4180);
+#include "eetypes.h"
+typedef struct { char b[0x80]; } M_2e4180_002e4180;
+extern M_2e4180_002e4180 *D_L00_001600F4_002e4180 __asm__("D_L00_001600F4");
+extern char D_L00_00173E70_002e4180[] __asm__("D_L00_00173E70");
+extern char *FUN_L00_001ee1b0_002e4180(void *) __asm__("FUN_L00_001ee1b0");
+extern void FUN_001f9a28_002e4180(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9a68_002e4180(void *, void *, float) __asm__("FUN_001f9a68");
+extern void FUN_001f9a10_002e4180(void *, void *, void *) __asm__("FUN_001f9a10");
+
+int FUN_L00_002e4180(u128 *p, float r) {
+    u128 a;
+    u128 d;
+    char *e;
+    char *c;
+    char *v;
+    float l, inv;
+    a = *p;
+    {
+        int *q = (int *)FUN_L00_001ee1b0_002e4180(&a);
+        if (q == 0) goto fail;
+        e = (char *)&D_L00_001600F4_002e4180[q[5]];
+    }
+    c = e + 0x30;
+    FUN_001f9a28_002e4180(&d, p, c);
+    l = FUN_001f9af0_002e4180(e);
+    inv = 1.0f / FUN_001f9af0_002e4180(&d);
+    v = D_L00_00173E70_002e4180;
+    FUN_001f9a68_002e4180(v, &d, (l + r) * inv);
+    FUN_001f9a68_002e4180(v - 0x10, &d, l * inv);
+    FUN_001f9a10_002e4180(v, v, c);
+    FUN_001f9a10_002e4180(v - 0x10, v - 0x10, c);
+    return 1;
+fail:
+    return 0;
+}
 typedef int q128 __attribute__((mode(TI)));
 int FUN_L00_001ee1b0(q128 *, float);
 int FUN_L00_002e4290(q128 *v) { q128 t = *v; return FUN_L00_001ee1b0(&t, 0.0f) != 0; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e42c0.s", FUN_L00_002e42c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4430.s", FUN_L00_002e4430);
+typedef int q128_002e42c0 __attribute__((mode(TI)));
+typedef struct { u8 p0[0x2DC]; f32 f2DC; u8 p1[0x30C - 0x2E0]; s16 h30C; u8 p2[0x2080 - 0x30E]; void *p2080; } G_002e42c0;
+extern G_002e42c0 D_0013F350_002e42c0 __asm__("D_0013F350") __attribute__((section(".data")));
+extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern q128_002e42c0 D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+void FUN_L00_002e4168_002e42c0(s32, q128_002e42c0 *) __asm__("FUN_L00_002e4168");
+void FUN_001f9a68_002e42c0(q128_002e42c0 *, void *, f32) __asm__("FUN_001f9a68");
+void FUN_001f9a10_002e42c0(q128_002e42c0 *, q128_002e42c0 *, q128_002e42c0 *) __asm__("FUN_001f9a10");
+s32 FUN_L00_001efc70_002e42c0(q128_002e42c0 *, q128_002e42c0 *, s32, void *, s32) __asm__("FUN_L00_001efc70");
+s32 FUN_L00_002e42c0(q128_002e42c0 *out, s32 flag) {
+    q128_002e42c0 v[4];
+    G_002e42c0 *g = &D_0013F350_002e42c0;
+    u8 *q = D_L00_00166E10_002e42c0;
+    f32 f;
+    if (g->h30C == 0) {
+        FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), out);
+        return 1;
+    }
+    FUN_L00_002e4168_002e42c0(*(s32 *)(q - 0x10), &v[0]);
+    f = g->f2DC;
+    if (30.0f <= f || flag == 0) {
+        FUN_001f9a68_002e42c0(&v[3], q + 0x30, 0.2f);
+        FUN_001f9a10_002e42c0(&v[1], &v[0], &v[3]);
+        FUN_001f9a68_002e42c0(&v[3], q + 0x30, -30.0f);
+        FUN_001f9a10_002e42c0(&v[2], &v[0], &v[3]);
+        if (FUN_L00_001efc70_002e42c0(&v[1], &v[2], 0x12, g->p2080, 0)) {
+            qcopy(out, &D_L00_00173E60_002e42c0);
+            return 0;
+        }
+        qcopy(out, &v[0]);
+        return -1;
+    } else {
+        FUN_001f9a68_002e42c0(&v[1], q + 0x30, -f);
+        FUN_001f9a10_002e42c0(out, &v[0], &v[1]);
+        return 1;
+    }
+}
+typedef float V4_2e4430[4] __attribute__((aligned(16)));
+extern char D_L00_00166E10_002e4430[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+void FUN_001f9a68_002e4430(void *, void *, float) __asm__("FUN_001f9a68");
+void FUN_001f9a10_002e4430(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_001f9a28_002e4430(void *, void *, void *) __asm__("FUN_001f9a28");
+float FUN_001f9ab0_002e4430(void *, void *) __asm__("FUN_001f9ab0");
+void FUN_001f99f8_002e4430(void *) __asm__("FUN_001f99f8");
+void FUN_L00_002e42c0_002e4430(void *, int) __asm__("FUN_L00_002e42c0");
+void FUN_L00_002e4430(char *o) {
+    V4_2e4430 m, a, b;
+    char *g = D_L00_00166E10_002e4430;
+    char *g30 = g + 0x30;
+    char *q = *(char **)(o + 0x70);
+    char *p, *r;
+    FUN_L00_002e42c0_002e4430(m, 0);
+    p = q + 0x40;
+    r = q + 0x130;
+    { float x = FUN_001f9ab0_002e4430(m, g30); FUN_001f9a68_002e4430(a, g30, x); }
+    FUN_001f9a28_002e4430(p, m, a);
+    qcopy(q + 0x50, a);
+    FUN_001f9a10_002e4430(p, p, q + 0x50);
+    g += 0x20;
+    FUN_001f9a68_002e4430(b, g, *(float *)(p + 0xB0));
+    FUN_001f9a10_002e4430(q + 0x80, b, p);
+    FUN_001f9a10_002e4430(q + 0xD0, b, p);
+    FUN_001f99f8_002e4430(q + 0xE0);
+    p[0xC4] = 0;
+    *(float *)(p + 0xC8) = 1.0f;
+    p[0xC5] = 0;
+    *(s16 *)(p + 0xC6) = 0;
+    qcopy(q + 0xA0, p);
+    FUN_001f99f8_002e4430(q + 0xB0);
+    FUN_001f99f8_002e4430(q + 0xC0);
+    FUN_001f9a68_002e4430(b, g, *(float *)(r + 0x30));
+    FUN_001f9a10_002e4430(q + 0x90, b, p);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4580.s", FUN_L00_002e4580);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e46b8.s", FUN_L00_002e46b8);
 typedef float V4[4] __attribute__((aligned(16)));

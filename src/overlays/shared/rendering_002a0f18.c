@@ -19,4 +19,25 @@ void FUN_L00_002a0f18(int dst, int src, int size) {
         FUN_00120558(0, 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a0fc8.s", FUN_L00_002a0fc8);
+extern int D_L00_001611C0_002a0fc8 __asm__("D_L00_001611C0");
+void FUN_00122330_002a0fc8(int, short, int, int, int, int, int, int) __asm__("FUN_00122330");
+void FUN_L00_002a0fc8(int dst, int src, int size) {
+    int left = (size + 0x3FFF) & ~0x3FFF;
+    int off = 0;
+    while (left > 0) {
+        *(int *)D_L00_001611C0_002a0fc8 = 0x10000006;
+        *(int *)(D_L00_001611C0_002a0fc8 + 4) = 0;
+        *(int *)(D_L00_001611C0_002a0fc8 + 8) = 0;
+        *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000006;
+        D_L00_001611C0_002a0fc8 += 0x10;
+        left -= 0x4000;
+        FUN_00122330_002a0fc8(D_L00_001611C0_002a0fc8, (src + off) >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        D_L00_001611C0_002a0fc8 += 0x60;
+        *(int *)D_L00_001611C0_002a0fc8 = 0x30000400;
+        *(int *)(D_L00_001611C0_002a0fc8 + 4) = dst + off;
+        *(int *)(D_L00_001611C0_002a0fc8 + 8) = 0;
+        *(int *)(D_L00_001611C0_002a0fc8 + 12) = 0x50000400;
+        D_L00_001611C0_002a0fc8 += 0x10;
+        off += 0x4000;
+    }
+}

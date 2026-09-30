@@ -56,7 +56,42 @@ void FUN_L00_002b5b20(void *a, char **b) {
     FUN_0020c828(a);
     D_L00_00167014[0] = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5ba0.s", FUN_L00_002b5ba0);
+typedef unsigned int u128_2b5ba0 __attribute__((mode(TI), aligned(16)));
+typedef union { u128_2b5ba0 q; float f[4]; } V_2b5ba0;
+typedef struct { u128_2b5ba0 r[4]; } M_2b5ba0;
+extern float D_0015ED60_gp __attribute__((sda));
+extern float D_0015ED60 __attribute__((section(".sdata")));
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa298(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_001fa2b8(void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_0020e098(void *);
+
+void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
+    M_2b5ba0 a, b, c;
+    V_2b5ba0 k, r;
+    unsigned char *e = *(unsigned char **)(o + 0x20);
+    unsigned char *t;
+    if (e == 0) return;
+    k.q = 0;
+    k.f[1] = 0.11f;
+    t = *(unsigned char **)(e + 0x78);
+    if (0.45f < *(float *)(t + 0xC)) {
+        *(float *)(t + 0xC) = *(float *)(t + 0xC) - D_0015ED60_gp * 0.05f;
+    } else if (*(float *)(t + 0xC) < 0.45f) {
+        *(float *)(t + 0xC) = *(float *)(t + 0xC) + D_0015ED60_gp * 0.05f;
+    }
+    *(float *)(*(unsigned char **)(o + 0x20) + 0x48) = D_0015ED60 * -1.5707964f;
+    FUN_001fa050(&b, *(unsigned char **)(o + 0x20) + 0x40);
+    FUN_001fa298(&c, m + 0xC0);
+    FUN_001fa378(&a, &c, &b);
+    FUN_001fa2b8(*(unsigned char **)(o + 0x20) + 0xC0, &a);
+    FUN_001f9d20(&r, &k, &a);
+    FUN_001f9a10(*(unsigned char **)(o + 0x20) + 0x10, &r, m + 0x10);
+    FUN_0020e098(*(unsigned char **)(o + 0x20));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5d00.s", FUN_L00_002b5d00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6bc8.s", FUN_L00_002b6bc8);

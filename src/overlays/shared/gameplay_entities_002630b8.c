@@ -11,7 +11,35 @@ extern unsigned char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0 __attribute__((section(".sdata")));
 extern float D_L00_0015FCA4 __attribute__((section(".sdata")));
 float FUN_L00_00263468(Vec4 *v) { Vec4 t; int iy, ix; t.q = v->q; iy = t.f[1]; ix = t.f[0]; return (D_L00_0015FCA4 - D_L00_0015FCA0) * (1.0f - (D_L00_0015FCA8 + D_L00_0015FC98 * iy)[ix] / 255.0f) + D_L00_0015FCA0; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002634f8.s", FUN_L00_002634f8);
+typedef union { u128 q; float f[4]; } Vec4_2634f8;
+typedef struct { u8 pad[0x140]; Vec4_2634f8 pos; u8 pad2[8]; } S166C80_2634f8;
+extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0") __attribute__((section(".sdata")));
+extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4") __attribute__((section(".sdata")));
+extern S166C80_2634f8 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
+int FUN_L00_001efc70_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_L00_001efc70");
+void FUN_001f9a28_002634f8(void *, void *, void *) __asm__("FUN_001f9a28");
+float FUN_001f9b20_002634f8(void *) __asm__("FUN_001f9b20");
+void FUN_L00_00268f10_002634f8(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
+void FUN_L00_002634f8(Vec4_2634f8 *v) {
+    Vec4_2634f8 t, u, d;
+    float k, f;
+    S166C80_2634f8 *b;
+    k = (D_L00_0015FCA4_002634f8 - D_L00_0015FCA0_002634f8) * 0.00390625f;
+    t.q = v->q;
+    f = FUN_L00_00263468_002634f8(&t) + k;
+    b = &D_L00_00166C80_002634f8;
+    t.f[2] = f;
+    if (f < b->pos.f[2] + 5.0f) {
+        u.q = t.q;
+        u.f[2] = u.f[2] - (k + k);
+        if (FUN_L00_001efc70_002634f8(&t, &u, 0x12, 0, 0)) {
+            FUN_001f9a28_002634f8(&d, &D_L00_00173E60_002634f8, &b->pos);
+            FUN_L00_00268f10_002634f8(&D_L00_00173E60_002634f8, (u8)(int)(FUN_001f9b20_002634f8(&d) / 60.0f * 191.0f + 64.0f));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263618.s", FUN_L00_00263618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637e8.s", FUN_L00_002637e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);

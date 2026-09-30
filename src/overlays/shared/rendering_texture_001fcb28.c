@@ -2,5 +2,38 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fcb28.s", FUN_L00_001fcb28);
+extern int FUN_001f6250_1fcb28(char *, int) __asm__("FUN_001f6250");
+extern int FUN_001fa6d0_1fcb28(float) __asm__("FUN_001fa6d0");
+extern void FUN_00201128_1fcb28(int, int, int, int, int) __asm__("FUN_00201128");
+extern void FUN_001f61f8_1fcb28(void) __asm__("FUN_001f61f8");
+extern void FUN_001f61e8_1fcb28(void) __asm__("FUN_001f61e8");
+extern void FUN_001f6530_1fcb28(int, int, u64, char *, int) __asm__("FUN_001f6530");
+
+void FUN_L00_001fcb28(int x, int y, int mode, char *str, float s, float a) {
+    int w, l, r;
+    u32 c;
+    s32 d;
+    w = FUN_001f6250_1fcb28(str, -1) * s;
+    r = x;
+    l = r;
+    switch (mode) {
+    case 0:
+        r -= w >> 1;
+        l = x + (w >> 1);
+        break;
+    case 1:
+        r -= w;
+        break;
+    case -1:
+        l = r + w;
+        break;
+    }
+    FUN_00201128_1fcb28(r - 0x20, y - 0xE, l - r + 0x40, 0x1C, FUN_001fa6d0_1fcb28(s * 112.0f));
+    FUN_001f61f8_1fcb28();
+    c = (int)(a * 128.0f) << 24;
+    d = c + 0xE0E0E0;
+    FUN_001f6530_1fcb28(r + 1, y - 7, c, str, -1);
+    FUN_001f6530_1fcb28(r, y - 8, d, str, -1);
+    FUN_001f61e8_1fcb28();
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fcca0.s", FUN_L00_001fcca0);

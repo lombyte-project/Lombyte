@@ -27,7 +27,41 @@ int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
     FUN_00214598(n, out);
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002604f0.s", FUN_L00_002604f0);
+#include "qcopy.h"
+typedef float V4_2604f0[4] __attribute__((aligned(16)));
+u8 *FUN_L00_0025c338_002604f0(void *) __asm__("FUN_L00_0025c338");
+void FUN_001f9cf8_002604f0(void *, void *, void *) __asm__("FUN_001f9cf8");
+void FUN_001f9a10_002604f0(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_001fa050_002604f0(void *, void *) __asm__("FUN_001fa050");
+void FUN_001fa298_002604f0(void *, void *) __asm__("FUN_001fa298");
+void FUN_001fa378_002604f0(void *, void *, void *) __asm__("FUN_001fa378");
+void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
+void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
+void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
+int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
+    float m2[16] __attribute__((aligned(16)));
+    float m[16] __attribute__((aligned(16)));
+    V4_2604f0 t;
+    u8 *r = FUN_L00_0025c338_002604f0(b);
+    if (!r) return 0;
+    FUN_001f9cf8_002604f0(e, c, b + 0xC0);
+    FUN_001f9a10_002604f0(e, e, b + 0x10);
+    FUN_001fa050_002604f0(m, d);
+    FUN_001fa298_002604f0(m2, b + 0xC0);
+    FUN_001fa378_002604f0(m, m2, m);
+    FUN_00214598_002604f0(m, f);
+    if (*(int *)(r + 0x3C) & 4) {
+        FUN_001f9a10_002604f0(e, e, r + 0x10);
+        FUN_L00_00260668_002604f0(a, b, e, f, c, d);
+        return 1;
+    }
+    if (a[0x22] && a[0x22] < b[0x22]) {
+        qcopy(t, r + 0x10);
+        FUN_L00_0025f730_002604f0(t, 1.0f);
+        FUN_001f9a10_002604f0(e, e, t);
+    }
+    return 1;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

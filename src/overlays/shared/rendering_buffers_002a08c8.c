@@ -2,7 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a08c8.s", FUN_L00_002a08c8);
+extern volatile int D_L00_001611A0_002a08c8 __asm__("D_L00_001611A0") __attribute__((sda));
+extern u32 D_L00_001611B8_002a08c8[] __asm__("D_L00_001611B8") __attribute__((section(".data")));
+extern int D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");
+extern int D_L00_001611CC_002a08c8 __asm__("D_L00_001611CC");
+extern int D_L00_001611D0_002a08c8 __asm__("D_L00_001611D0");
+extern int D_L00_001611D4_002a08c8 __asm__("D_L00_001611D4");
+extern char D_L00_001E9530_002a08c8[] __asm__("D_L00_001E9530");
+void FUN_001e93b0_002a08c8(char *) __asm__("FUN_001e93b0");
+u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
+void FUN_00118a80_002a08c8(int) __asm__("FUN_00118a80");
+void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
+void FUN_L00_002a08c8(void) {
+    int r; int d; u32 *s;
+    d = D_L00_001611C0_002a08c8 - D_L00_001611B8_002a08c8[D_L00_001611D0_002a08c8];
+    D_L00_001611A0_002a08c8 |= 0x1F;
+    r = 0;
+    if (D_L00_001611D4_002a08c8 < d) {
+        D_L00_001611D4_002a08c8 = d;
+        if (D_L00_001611CC_002a08c8 < d) {
+            FUN_001e93b0_002a08c8(D_L00_001E9530_002a08c8);
+            r = 1;
+        }
+    }
+    if (r == 0) {
+    { int *p = (int *)D_L00_001611C0_002a08c8; *p = 0x70000000; }
+    *(int *)(D_L00_001611C0_002a08c8 + 4) = 0;
+    *(int *)(D_L00_001611C0_002a08c8 + 8) = 0;
+    *(int *)(D_L00_001611C0_002a08c8 + 12) = 0;
+    s = FUN_00122fe0_002a08c8(1);
+    *s |= 0xC0;
+    FUN_00118a80_002a08c8(0);
+    FUN_001232c8_002a08c8(s, D_L00_001611B8_002a08c8[D_L00_001611D0_002a08c8]);
+    } else {
+        D_L00_001611A0_002a08c8 = 0;
+    }
+}
 extern int D_L00_001611A0 __attribute__((sda));
 extern char D_L00_001E9548[];
 void FUN_L00_001ff018(int);

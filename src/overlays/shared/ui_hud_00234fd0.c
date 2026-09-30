@@ -3,5 +3,31 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234fd0.s", FUN_L00_00234fd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235310.s", FUN_L00_00235310);
+typedef struct { int pad[5]; int a[8]; int b[16]; int c[8]; } T_235310;
+typedef struct { int v; short s; short pad; } E_235310;
+typedef struct { char pad[0x18]; T_235310 *t; char pad2[8]; E_235310 *a; E_235310 *b; } G_235310;
+extern G_235310 D_L00_0017E4D8 __attribute__((section(".data")));
+
+void FUN_L00_00235310(int n) {
+    int d = D_L00_0017E4D8.t->c[n];
+    int i, j, s, end;
+    if (n == 0) {
+        for (j = 0; j < D_L00_0017E4D8.t->b[0]; j++) {
+            D_L00_0017E4D8.a[j].s = 0;
+        }
+    }
+    if (n) s = D_L00_0017E4D8.t->a[n - 1]; else s = 0;
+    end = D_L00_0017E4D8.t->a[n];
+    for (i = s; i < end; i++) {
+        D_L00_0017E4D8.b[i].v -= d;
+        D_L00_0017E4D8.b[i].v |= 0x80000000;
+    }
+    if (n) s = D_L00_0017E4D8.t->b[n - 1]; else s = 0;
+    end = D_L00_0017E4D8.t->b[n];
+    for (i = s; i < end; i++) {
+        D_L00_0017E4D8.a[i].v -= d;
+        D_L00_0017E4D8.a[i].v |= 0x80000000;
+    }
+    D_L00_0017E4D8.t->c[n] = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235668.s", FUN_L00_00235668);
