@@ -40,9 +40,129 @@ void FUN_L01_00309c98(FlagMoby *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ba18.s", FUN_L01_0030ba18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030be70.s", FUN_L01_0030be70);
+#include "eetypes.h"
+#include "qcopy.h"
+
+typedef struct {
+    u8 pad0[0x10];
+    f32 spin_x;
+    f32 spin_y;
+    f32 spin_z;
+    u8 pad1c[4];
+    s32 timer;
+    void *parent;
+} DebrisVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 state;
+    u8 pad21[0xB];
+    f32 scale;
+    u8 b30;
+    u8 b31;
+    s16 h32;
+    u8 pad34[0xC];
+    u128 rot;
+    u8 pad50[0x28];
+    DebrisVars *vars;
+} DebrisMoby;
+
+extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8(DebrisMoby *);
+extern void FUN_L00_001ff500(void *, void *, f32);
+extern f32 FUN_L00_00257c48(f32 lo, f32 hi);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern s32 FUN_001f96f8(s32);
+
+DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
+    DebrisMoby *m;
+    DebrisVars *v;
+
+    m = create_moby(0x5E6);
+    if (m != NULL) {
+        v = m->vars;
+        v->parent = src;
+        qcopy(&m->pos, &src->pos);
+        m->rot = src->rot;
+        m->state = 0;
+        m->b30 = 0xFF;
+        m->h32 = 0xFF;
+        m->b31 = 1;
+        m->scale = m->scale * scale;
+        FUN_L00_001ff500(v, dir, random_float_between(0.8f, 1.2f));
+        v->spin_x = FUN_L00_00257c48(0.0f, 0.008726646f);
+        v->spin_y = FUN_L00_00257c48(0.05235988f, 0.13962634f);
+        v->spin_z = FUN_L00_00257c48(0.0f, 0.017453292f);
+        v->timer = FUN_001f96f8(200);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c190.s", FUN_L01_0030c190);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d0f0.s", FUN_L01_0030d0f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ef18.s", FUN_L01_0030ef18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030f0e0.s", FUN_L01_0030f0e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030f208.s", FUN_L01_0030f208);
+extern s32 D_L01_00202EA0[];
+extern s32 D_L01_00208108[];
+extern s32 D_L01_00208120[];
+extern s32 D_L01_00208138[];
+extern s32 D_L01_00208150[];
+extern u8 D_L01_00208170[];
+extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+void FUN_001f76a0(void);
+void FUN_L01_0030ef18(s32, s32, s32, s32, void *);
+void FUN_L00_001fde98(s32, s32, s32, void *, s32);
+
+void FUN_L01_0030f0e0(void) {
+    s32 i;
+
+    vu1_add_g_sregister(6, get_effect_texture(0x28));
+    vu1_add_g_sregister(0x42, 0x2000000064);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260);
+    FUN_001f76a0();
+    for (i = 0; i < 5; i++) {
+        FUN_L01_0030ef18(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i], D_L01_00208170);
+        FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170, 1);
+    }
+}
+typedef struct {
+    u8 pad0[0x20];
+    u8 state;
+} ScrollMoby;
+
+extern f32 D_L01_00162110[2];
+extern f32 D_0015ED7C;
+void FUN_L01_0030f0e0(void);
+void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
+
+void FUN_L01_0030f208(ScrollMoby *m) {
+    f32 d;
+
+    switch (m->state) {
+    case 0:
+        D_L01_00162110[0] = 0.0f;
+        D_L01_00162110[1] = 0.0f;
+        m->state = 1;
+        break;
+    case 1:
+        d = D_0015ED7C * 0.025f;
+        D_L01_00162110[0] += d;
+        D_L01_00162110[1] += d;
+        if (D_L01_00162110[0] > 1.0f) {
+            D_L01_00162110[0] -= 1.0f;
+        }
+        if (D_L01_00162110[0] < -1.0f) {
+            D_L01_00162110[0] += 1.0f;
+        }
+        if (D_L01_00162110[1] > 1.0f) {
+            D_L01_00162110[1] -= 1.0f;
+        }
+        if (D_L01_00162110[1] < -1.0f) {
+            D_L01_00162110[1] += 1.0f;
+        }
+        enqueue_callback_list_1(FUN_L01_0030f0e0, m);
+        break;
+    }
+}

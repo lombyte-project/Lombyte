@@ -69,8 +69,8 @@ typedef struct {
     u8 pad50[0x28];
     s32 *pvars;
 } SpawnedMoby;
-extern SpawnedMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(SpawnedMoby *, s32);
+extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *m;
@@ -92,10 +92,122 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffb28.s", FUN_L01_002ffb28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffcd0.s", FUN_L01_002ffcd0);
+#include "qzero.h"
+typedef struct {
+    u8 pad0[0x8];
+    f32 f8;
+    u8 padC[4];
+    f32 f10;
+    s32 timer;
+    u8 pad18[4];
+    f32 spin;
+} OrbVars;
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 pad20[0xC];
+    f32 scale;
+    u8 b30; u8 b31; s16 h32;
+    u8 pad34[0xC];
+    s32 w40;
+    u8 pad44[4];
+    f32 rotz;
+    u8 pad4C[0x2C];
+    OrbVars *pvars;
+} OrbMoby;
+extern void FUN_L00_0025d1b8(OrbMoby *);
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+
+OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
+    OrbMoby *m;
+    OrbVars *pv;
+
+    m = create_moby(0x313);
+    if (m != 0) {
+        pv = m->pvars;
+        FUN_L00_0025d1b8(m);
+        m->w40 = 0;
+        m->h32 = 0x40;
+        m->b30 = 0xFF;
+        m->scale = m->scale * scale;
+        m->rotz = random_angle_radians();
+        qcopy(&m->pos, pos);
+        qzero(pv);
+        pv->f8 = -D_0015ED6C;
+        pv->timer = 0x78;
+        pv->f10 = D_0015ED70 * 15.0f;
+        pv->spin = random_float_between(0.0031415929f, 0.062831856f);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffdc0.s", FUN_L01_002ffdc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003021b8.s", FUN_L01_003021b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302328.s", FUN_L01_00302328);
+typedef struct {
+    u8 pad0[0x10];
+    s32 w10;
+    u8 pad14[0x10];
+    f32 f24;
+} MobyClass;
+typedef struct {
+    u8 pad0[0x20];
+    f32 f20;
+    u8 pad24[0x14C];
+    s32 w170;
+    u8 pad174[0xB0];
+    f32 f224;
+    u8 pad228[0x28];
+    f32 f250;
+} ClonedVars;
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 pad20[4];
+    MobyClass *mclass;
+    u8 pad28[4];
+    f32 scale;
+    u8 b30; u8 b31; s16 h32;
+    u16 flags;
+    u8 pad36[2];
+    u64 d38;
+    u128 rot;
+    u8 pad50[0x28];
+    void *pvars;
+    u8 pad7C[0x18];
+    s32 w94;
+} ClonedMoby;
+extern void FUN_L00_002591d0(ClonedMoby **, s32, s32, s32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+
+ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
+    ClonedMoby *m;
+    ClonedVars *v;
+
+    m = 0;
+    FUN_L00_002591d0(&m, *(s32 *)src->pvars, 0, 0);
+    v = m->pvars;
+    m->b30 = 0x80;
+    m->h32 = 0x80;
+    m->d38 = src->d38;
+    m->b31 = 1;
+    m->w94 = m->mclass->w10;
+    m->flags |= 0x1020;
+    m->scale = m->mclass->f24;
+    {
+        ClonedMoby *d = m;
+        qcopy(&d->pos, &src->pos);
+        qcopy(&d->rot, &src->rot);
+    }
+    v->f20 = 3.0f;
+    v->f250 = 1.0f;
+    v->w170 = truncate_float_to_s32(819.2f);
+    v->f224 = 30.0f;
+    FUN_L00_00250df8(m);
+    return m;
+}
 void *FUN_L00_0025a420(void *, s32, s32);
 void FUN_0020c828(void *);
 

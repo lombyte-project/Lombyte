@@ -73,7 +73,88 @@ void FUN_L01_002f60f8(void) {
     FUN_L01_002b96e0(8, D_L01_001E2FC0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6180.s", FUN_L01_002f6180);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f68a0.s", FUN_L01_002f68a0);
+#include "eetypes.h"
+#include "qcopy.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
+
+typedef struct {
+    Vec4 dir;
+    u128 color;
+    u8 pad20[0x10];
+    void *owner;
+    s32 kind;
+    f32 len;
+} BeamVars;
+
+typedef struct {
+    u8 pad0[0x10];
+    u128 pos;
+    u8 state;
+    u8 pad21[0xB];
+    f32 scale;
+    u8 b30;
+    u8 b31;
+    s16 h32;
+    u8 pad34[0xC];
+    s32 w40;
+    f32 rot_x;
+    f32 rot_z;
+    u8 pad4c[0x2C];
+    BeamVars *vars;
+} BeamMoby;
+
+extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8();
+extern f32 FUN_001f9b20(void *);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_L00_001ff8b0(f32, f32);
+extern s32 FUN_001f96f8(s32);
+extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
+extern void FUN_0022da68(s32, s32, void *);
+
+BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
+    Vec4 p;
+    Vec4 d;
+    Vec4 c;
+    BeamMoby *m;
+    BeamVars *v;
+    Vec4 *pp;
+    Vec4 *pd;
+    Vec4 *pc;
+
+    pp = &p;
+    pd = &d;
+    pc = &c;
+    p.q = *pos;
+    d.q = *dir;
+    c.q = *color;
+    m = create_moby(0x2AE);
+    if (m != NULL) {
+        v = m->vars;
+        v->owner = owner;
+        m->w40 = 0;
+        m->b30 = 0xFF;
+        m->h32 = 0xFF;
+        m->b31 = 1;
+        m->scale = m->scale * 0.25f;
+        m->rot_x = -FUN_L00_001ff8b0(FUN_001f9b20(pd), pd->f[2]);
+        m->rot_z = FUN_L00_001ff8b0(d.f[0], pd->f[1]);
+        qcopy(&m->pos, pp);
+        qcopy(&v->dir, pd);
+        qcopy(&v->color, pc);
+        v->kind = kind;
+        v->len = FUN_001f9af0(pd);
+        FUN_L00_0026daa0(m, 0x2F4F7F7F, FUN_001f96f8(0x78), -1, 420000.0f);
+        FUN_L00_0026daa0(m, 0x4F6F7F7F, FUN_001f96f8(0x78), -1, 210000.0f);
+        FUN_0022da68(0, 0, m);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f7728.s", FUN_L01_002f7728);
 extern f32 D_0015ED60;
 f32 FUN_001f99c0(f32);

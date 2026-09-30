@@ -3,6 +3,81 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0027e900.s", FUN_L01_0027e900);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287b00.s", FUN_L01_00287b00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287c80.s", FUN_L01_00287c80);
+#include "eetypes.h"
+#include "qcopy.h"
+typedef struct {
+    u128 pos;
+    f32 size;
+    f32 speed;
+} PartMotion;
+
+typedef struct {
+    u8 pad0;
+    u8 active;
+    u8 tex;
+    u8 kind;
+    u32 color;
+    u8 spin;
+    u8 alpha;
+    s16 life;
+    f32 scale;
+    u128 pos;
+    PartMotion m;
+} Particle;
+extern Particle *FUN_L00_002678b8(s32);
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern u8 *D_L01_001B25E0[];
+
+Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
+    Particle *p;
+    s32 c;
+    u32 col;
+
+    p = FUN_L00_002678b8(0x38);
+    if (p != 0) {
+        qcopy(&p->pos, pos);
+        c = random_integer_below(0x10) * 2 + 0x60;
+        col = (c << 8) | 0x40000000;
+        p->color = (c << 16) | col | c;
+        p->alpha = truncate_float_to_s32(4.0f) + 0x20;
+        p->kind = 0x48;
+        p->active = 0;
+        p->tex = *D_L01_001B25E0[0];
+        p->scale = f;
+        qcopy(&p->m.pos, vel);
+        p->spin = random_integer_below(0x100);
+    }
+    return p;
+}
+extern u8 *D_L01_001B25E4[];
+Particle *FUN_L00_002678b8(s32);
+s32 random_integer_below(s32) __asm__("FUN_00213260");
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+
+Particle *FUN_L01_00287c80(u128 *pos, u128 *dir, f32 scale, f32 speed) {
+    Particle *p;
+    PartMotion *m;
+    f32 r;
+
+    p = FUN_L00_002678b8(0x39);
+    if (p != NULL) {
+        qcopy(&p->pos, pos);
+        m = &p->m;
+        p->color = (random_integer_below(0x10) << 25) | 0x808080;
+        p->alpha = truncate_float_to_s32(12.0f) + 0x20;
+        p->kind = 0x48;
+        p->active = 1;
+        p->tex = *D_L01_001B25E4[0];
+        p->life = 0x80;
+        p->scale = scale * 210000.0f;
+        qcopy(&m->pos, dir);
+        r = random_float_between(0.0f, 256.0f);
+        m->size = r;
+        p->spin = truncate_float_to_s32(r);
+        m->speed = speed;
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b780.s", FUN_L01_0028b780);
