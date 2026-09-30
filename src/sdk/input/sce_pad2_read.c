@@ -8,38 +8,28 @@ extern struct M2c_temp_2_27 *scePad2GetSide();
 extern s32 scePad2LinkDriver();
 extern s32 scePad2SetButtonOrder();
 
-s32 scePad2Read(s32 arg0, s32 arg1) {
-    s32 temp_4_9;
-    register s32 temp_2_30 __asm__("v0");
-    struct M2c_temp_2_27 *temp_2_27;
-    register u8 *temp_5_33 __asm__("a1");
-    register s32 copy_len __asm__("a2");
-    register s32 output __asm__("s2");
-    register s32 multiplier __asm__("v1");
+s32 scePad2Read(s32 port, u8 *data) {
+    struct M2c_temp_2_27 *side;
+    u8 *src;
 
-    output = arg1;
-    temp_4_9 = arg0 * 0x330;
-    if (*(u32 *)((u8 *)D_0015B540 + temp_4_9) == 0) {
+    if (*(u32 *)(D_0015B540 + port * 0x330) == 0) {
         return -1;
     }
-    if (*(s32 *)((u8 *)(D_0015B540 + temp_4_9) + 0x4) == 0) {
-        if (scePad2LinkDriver(arg0) < 0) {
+    if (*(s32 *)(D_0015B540 + port * 0x330 + 4) == 0) {
+        if (scePad2LinkDriver(port) < 0) {
             return -1;
         }
     }
-    temp_2_27 = scePad2GetSide(arg0);
-    temp_2_30 = (s32)temp_2_27->unk2;
-    if (temp_2_30 != 0) {
-        temp_5_33 = ((u8 *)temp_2_27 + (0x1C));
-        copy_len = temp_2_30;
-        if (temp_5_33 != NULL) {
-            memcpy((void *)output, temp_5_33, copy_len);
-            multiplier = 0x330;
-            scePad2SetButtonOrder(((u8 *)temp_2_27 + ((temp_2_27->unk2 + 0x1C))), (multiplier * arg0) + D_0015B550);
+    side = scePad2GetSide(port);
+    if (side->unk2 != 0) {
+        src = (u8 *)side + 0x1C;
+        if (src != NULL) {
+            memcpy(data, src, side->unk2);
+            scePad2SetButtonOrder((u8 *)side + (side->unk2 + 0x1C), D_0015B550 + port * 0x330);
         }
     }
-    if (temp_2_27->unk4 == 0) {
+    if (side->unk4 == 0) {
         return -1;
     }
-    return temp_2_27->unk2;
+    return side->unk2;
 }

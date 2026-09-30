@@ -33,53 +33,25 @@ __attribute__((section(".data"))) extern s32 D_001D5D14;
 extern s32 func_0022DA68();
 s32 FUN_00221d68(struct M2c_arg0 *arg0)
 {
-  s32 temp_3_27;
-  s32 temp_5_41;
-  register s32 var_2_44 __asm__("v0");
-  if (D_0013C940.unk1C4 & 0xD00)
-  {
-    if (D_001D5D14 == 0)
-    {
-      return 1;
-    }
-    goto block_4;
+  s32 prev;
+
+  if ((D_0013C940.unk1C4 & 0xD00) && D_001D5D14 == 0) {
+    return 1;
   }
-  block_4:
-  if (D_0013C940.unk1C4 & 0x10)
-  {
-    temp_3_27 = D_001D5BF0.unk4->unk38;
-    temp_5_41 = temp_3_27 != 0;
-    if (temp_5_41)
-    {
-      D_001D5BF0.unk8 = temp_3_27;
-      goto block_10;
-    }
-    if (D_001D5BF0.unk124 == 0)
-    {
+  if (D_0013C940.unk1C4 & 0x10) {
+    if (D_001D5BF0.unk4->unk38 != 0) {
+      D_001D5BF0.unk8 = D_001D5BF0.unk4->unk38;
+    } else if (D_001D5BF0.unk124 == 0) {
       return -1;
     }
-    goto block_11;
   }
-
-  block_10:
-  block_11:
-  temp_5_41 = arg0->unk40;
-
-
-  if (D_0013C940.unk1A4 & 0x40)
-  {
-    var_2_44 = temp_5_41 + 1;
-    arg0->unk40 = (s32) (var_2_44 % 30);
-    goto block_after;
+  prev = arg0->unk40;
+  if (D_0013C940.unk1A4 & 0x40) {
+    arg0->unk40 = (prev + 1) % 30;
+  } else if (D_0013C940.unk1A4 & 0x20) {
+    arg0->unk40 = (prev + 29) % 30;
   }
-  if (D_0013C940.unk1A4 & 0x20)
-  {
-    var_2_44 = temp_5_41 + 0x1D;
-    arg0->unk40 = (s32) (var_2_44 % 30);
-  }
-  block_after:
-  if (arg0->unk40 != temp_5_41)
-  {
+  if (arg0->unk40 != prev) {
     func_0022DA68(1, 0x11, arg0->unk14);
   }
   return 0;

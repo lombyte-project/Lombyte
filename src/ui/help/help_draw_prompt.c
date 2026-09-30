@@ -10,22 +10,25 @@ struct M2c_D_001996D0 {
 };
 
 extern struct M2c_D_001996D0 D_001996D0;
-extern s32 func_001F44B8();
+extern u64 func_001F44B8();
 extern s32 func_001F5450();
 extern s32 func_001F5F18();
 void help_draw_prompt(void) __asm__("FUN_001fe898");
 
 void help_draw_prompt(void) {
-    s32 var_16_27;
-    s64 call;
+    s32 alpha;
+
     D_001996D0.unk18 = 0x20;
     D_001996D0.unk1C = 0x20;
     func_001F5F18(D_001996D0.unk14 - 0x20, D_001996D0.unk14 + 0x20, D_001996D0.unk10 - 0x20, D_001996D0.unk10 + 0x20, 0x60);
-    if ((D_001996D0.unk0 == 1) || (var_16_27 = 0x7E, (D_001996D0.unk0 == 7))) {
-        var_16_27 = D_001996D0.unk4 * 0x15;
+    if (D_001996D0.unk0 == 1 || D_001996D0.unk0 == 7) {
+        alpha = D_001996D0.unk4 * 21;
+    } else {
+        alpha = 0x7E;
     }
-    var_16_27 = (var_16_27 < 0x81) ? var_16_27 : 0x80;
-    call = (u64) func_001F44B8(4);
-    __asm__ __volatile__("" : "+r"(call));
-    func_001F5450(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40, (u64) ((var_16_27 << 0x18) | 0x808080), call);
+    if (alpha > 0x80) {
+        alpha = 0x80;
+    }
+    func_001F5450(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
+                  (u64)(alpha << 24 | 0x808080), func_001F44B8(4));
 }
