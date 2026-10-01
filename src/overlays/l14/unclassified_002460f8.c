@@ -35,6 +35,45 @@ void FUN_L14_002460f8(void) {
         AddDrawCallback(func_L00_0023E4C8, moby);
     }
 }
+
+extern u16 *D_L14_001ABF40[];
+extern u8 *D_L14_0015FFD8 __attribute__((sda));
+extern void FUN_L00_0023e838(s32);
+extern void FUN_0020c828(void *);
+
+/* Walk the record list at D_L14_001ABF40[index] (terminated by a negative
+ * entry) and flag the objects whose state byte at 0x20 is 1. */
+void FUN_L14_002b44a8(s32 index)
+{
+    u16 *p = D_L14_001ABF40[index];
+    u8 *base;
+    u8 *o;
+
+    if (p == 0) {
+        return;
+    }
+    base = D_L14_0015FFD8;
+    do {
+        o = base + ((*p & 0x7FFF) << 8);
+        if (o[0x20] == 1) {
+            *(s16 *)(*(u8 **)(o + 0x78) + 0x88) = 1;
+        }
+    } while (*(s16 *)p++ >= 0);
+}
+
+/* Release the handle stored at 0x12 of the record, then hand the moby over. */
+void FUN_L14_002bb4d8(u8 *self)
+{
+    u8 *p = *(u8 **)(self + 0x78);
+    s16 v = *(s16 *)(p + 0x12);
+
+    if (v != -1) {
+        FUN_L00_0023e838(v);
+        *(s16 *)(p + 0x12) = -1;
+    }
+    FUN_0020c828(self);
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac2b8.s", FUN_L14_002ac2b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);
@@ -57,7 +96,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002af048.s", FUN_L14_002af048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002af070.s", FUN_L14_002af070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3bf0.s", FUN_L14_002b3bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4340.s", FUN_L14_002b4340);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b44a8.s", FUN_L14_002b44a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4500.s", FUN_L14_002b4500);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4670.s", FUN_L14_002b4670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4694.s", FUN_L14_002b4694);
@@ -75,7 +113,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5d18.s", FUN_L14_002b5d18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bb310.s", FUN_L14_002bb310);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bb4d8.s", FUN_L14_002bb4d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d5f40.s", FUN_L14_002d5f40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6358.s", FUN_L14_002d6358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d64d0.s", FUN_L14_002d64d0);

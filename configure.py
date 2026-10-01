@@ -495,8 +495,10 @@ def _unit_from_object(object_path: Path) -> str:
 # C aliases in promoted sources: ALIAS __attribute__((alias("TARGET"))).
 # The oracle fallback keeps the bytes but not the aliases, so they are handed
 # to the linker (PROVIDE, only when nothing else defines them).
+# The declaration may carry a parameter list between the name and the
+# attribute, so the name is not always immediately followed by __attribute__.
 _ALIAS_RE = re.compile(
-    r"([A-Za-z_]\w*)\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
+    r"([A-Za-z_]\w*)\s*(?:\([^;{]*?\))?\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
 )
 
 

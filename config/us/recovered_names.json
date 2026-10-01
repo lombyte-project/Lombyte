@@ -9654,14 +9654,14 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00208f28",
-        "source_path": "src/ui/menus/fun_00208f28.c",
+        "unit": "ui/menus/save_card_state_saving",
+        "source_path": "src/ui/menus/save_card_state_saving.c",
         "address": "0x00208f28",
         "current_name": "FUN_00208f28",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_saving",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "git_log",
@@ -9671,6 +9671,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_SAVING in the memory-card state machine: the dispatcher indexes the handler table with the state index (22) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 21 into D_0015EEB0, so it advances to CS_SAVE_FAILED."
           }
         ],
         "logical_group_confidence": "high"
@@ -18262,103 +18266,127 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002088d0",
-        "source_path": "src/ui/menus/fun_002088d0.c",
+        "unit": "ui/menus/save_card_state_good_save",
+        "source_path": "src/ui/menus/save_card_state_good_save.c",
         "address": "0x002088d0",
         "current_name": "FUN_002088d0",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_good_save",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_GOOD_SAVE in the memory-card state machine: the dispatcher indexes the handler table with the state index (1) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 21 into D_0015EEB0, so it advances to CS_SAVE_FAILED."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208b28",
-        "source_path": "src/ui/menus/fun_00208b28.c",
+        "unit": "ui/menus/save_card_state_formatting",
+        "source_path": "src/ui/menus/save_card_state_formatting.c",
         "address": "0x00208b28",
         "current_name": "FUN_00208b28",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_formatting",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_FORMATTING in the memory-card state machine: the dispatcher indexes the handler table with the state index (8) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 17 into D_0015EEB0, so it advances to CS_FORMAT_FAILED."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208b88",
-        "source_path": "src/ui/menus/fun_00208b88.c",
+        "unit": "ui/menus/save_card_state_formatted",
+        "source_path": "src/ui/menus/save_card_state_formatted.c",
         "address": "0x00208b88",
         "current_name": "FUN_00208b88",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_formatted",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_FORMATTED in the memory-card state machine: the dispatcher indexes the handler table with the state index (9) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 10 into D_0015EEB0, so it advances to CS_CHECK_SAVE."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208bc0",
-        "source_path": "src/ui/menus/fun_00208bc0.c",
+        "unit": "ui/menus/save_card_state_check_save",
+        "source_path": "src/ui/menus/save_card_state_check_save.c",
         "address": "0x00208bc0",
         "current_name": "FUN_00208bc0",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_check_save",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_CHECK_SAVE in the memory-card state machine: the dispatcher indexes the handler table with the state index (10) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 11 into D_0015EEB0, so it advances to CS_CHECKING_SAVE."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208d60",
-        "source_path": "src/ui/menus/fun_00208d60.c",
+        "unit": "ui/menus/save_card_state_creating_save",
+        "source_path": "src/ui/menus/save_card_state_creating_save.c",
         "address": "0x00208d60",
         "current_name": "FUN_00208d60",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_creating_save",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_CREATING_SAVE in the memory-card state machine: the dispatcher indexes the handler table with the state index (15) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 18 into D_0015EEB0, so it advances to CS_CREATE_FAILED."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208fe8",
-        "source_path": "src/ui/menus/fun_00208fe8.c",
+        "unit": "ui/menus/save_card_state_prompt_begin_no_save",
+        "source_path": "src/ui/menus/save_card_state_prompt_begin_no_save.c",
         "address": "0x00208fe8",
         "current_name": "FUN_00208fe8",
-        "proposed_name": null,
+        "proposed_name": "save_card_state_prompt_begin_no_save",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_PROMPT_BEGIN_NOSAVE in the memory-card state machine: the dispatcher indexes the handler table with the state index (24) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 12 into D_0015EEB0, so it advances to CS_NOSAVE."
           }
         ],
         "logical_group_confidence": "high"
@@ -18973,6 +19001,216 @@
           }
         ],
         "logical_group_confidence": "high"
+      },
+      {
+        "address": "0x002088a8",
+        "confidence": "high",
+        "current_name": "FUN_002088a8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_INIT in the memory-card state machine: the dispatcher indexes the handler table with the state index (0) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_init",
+        "source_path": "src/ui/menus/save_card_state_init.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_init"
+      },
+      {
+        "address": "0x00208980",
+        "confidence": "high",
+        "current_name": "FUN_00208980",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_WARNING in the memory-card state machine: the dispatcher indexes the handler table with the state index (2) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_warning",
+        "source_path": "src/ui/menus/save_card_state_warning.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_warning"
+      },
+      {
+        "address": "0x002089a8",
+        "confidence": "high",
+        "current_name": "FUN_002089a8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_NOCARD in the memory-card state machine: the dispatcher indexes the handler table with the state index (3) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 4 into D_0015EEB0, so it advances to CS_WAIT_FOR_CARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_no_card",
+        "source_path": "src/ui/menus/save_card_state_no_card.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_no_card"
+      },
+      {
+        "address": "0x00208af8",
+        "confidence": "high",
+        "current_name": "FUN_00208af8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_FORMAT_PENDING in the memory-card state machine: the dispatcher indexes the handler table with the state index (7) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_format_pending",
+        "source_path": "src/ui/menus/save_card_state_format_pending.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_format_pending"
+      },
+      {
+        "address": "0x00208ca8",
+        "confidence": "high",
+        "current_name": "FUN_00208ca8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_PROMPT_CREATE_SAVE in the memory-card state machine: the dispatcher indexes the handler table with the state index (13) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_prompt_create_save",
+        "source_path": "src/ui/menus/save_card_state_prompt_create_save.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_prompt_create_save"
+      },
+      {
+        "address": "0x00208e68",
+        "confidence": "high",
+        "current_name": "FUN_00208e68",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_FORMAT_FAILED in the memory-card state machine: the dispatcher indexes the handler table with the state index (17) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_format_failed",
+        "source_path": "src/ui/menus/save_card_state_format_failed.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_format_failed"
+      },
+      {
+        "address": "0x00208e90",
+        "confidence": "high",
+        "current_name": "FUN_00208e90",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_CREATE_FAILED in the memory-card state machine: the dispatcher indexes the handler table with the state index (18) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_create_failed",
+        "source_path": "src/ui/menus/save_card_state_create_failed.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_create_failed"
+      },
+      {
+        "address": "0x00208eb8",
+        "confidence": "high",
+        "current_name": "FUN_00208eb8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_NO_ROOM in the memory-card state machine: the dispatcher indexes the handler table with the state index (19) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_no_room",
+        "source_path": "src/ui/menus/save_card_state_no_room.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_no_room"
+      },
+      {
+        "address": "0x00208ed8",
+        "confidence": "high",
+        "current_name": "FUN_00208ed8",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_LOAD_FAILED in the memory-card state machine: the dispatcher indexes the handler table with the state index (20) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_load_failed",
+        "source_path": "src/ui/menus/save_card_state_load_failed.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_load_failed"
+      },
+      {
+        "address": "0x00208f00",
+        "confidence": "high",
+        "current_name": "FUN_00208f00",
+        "evidence": [
+          {
+            "kind": "cross_region_module",
+            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Handler of state CS_SAVE_FAILED in the memory-card state machine: the dispatcher indexes the handler table with the state index (21) and calls the entry, and the name table immediately after the handler table (same length, 26 slots, the last null) carries the state names. This handler stores 3 into D_0015EEB0, so it advances to CS_NOCARD."
+          }
+        ],
+        "logical_group": "ui/menus",
+        "logical_group_confidence": "high",
+        "proposed_name": "save_card_state_save_failed",
+        "source_path": "src/ui/menus/save_card_state_save_failed.c",
+        "status": "proposed",
+        "unit": "ui/menus/save_card_state_save_failed"
       }
     ]
   }

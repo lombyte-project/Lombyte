@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1701,
+  "matching_c": 1706,
   "intentional_asm": 249,
-  "pending_c": 2832,
+  "pending_c": 2827,
   "bytes_total": 3655312,
-  "bytes_matching_c": 406848,
+  "bytes_matching_c": 407268,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3152132,
-  "c_exact_percent_of_recoverable": 11.4316,
-  "c_fuzzy_percent_of_recoverable": 13.4766,
+  "bytes_pending_c": 3151712,
+  "c_exact_percent_of_recoverable": 11.4434,
+  "c_fuzzy_percent_of_recoverable": 13.4884,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 655,
-    "pending_c": 2685,
+    "matching_c": 660,
+    "pending_c": 2680,
     "bytes_total": 3218660,
-    "bytes_matching_c": 187076,
-    "bytes_pending_c": 3031584,
-    "c_exact_percent_of_recoverable": 5.8122,
+    "bytes_matching_c": 187496,
+    "bytes_pending_c": 3031164,
+    "c_exact_percent_of_recoverable": 5.8253,
     "shared": {
       "id": "shared",
       "index": null,
@@ -4348,12 +4348,12 @@
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
         "functions": 131,
-        "matching_c": 2,
-        "pending_c": 129,
+        "matching_c": 7,
+        "pending_c": 124,
         "bytes_total": 149872,
-        "bytes_matching_c": 168,
-        "bytes_pending_c": 149704,
-        "c_exact_percent_of_recoverable": 0.1121,
+        "bytes_matching_c": 588,
+        "bytes_pending_c": 149284,
+        "c_exact_percent_of_recoverable": 0.3923,
         "files": [
           {
             "file": "src/overlays/l14/ui_help_0021dd30.c",
@@ -4379,9 +4379,9 @@
           {
             "file": "src/overlays/l14/unclassified_002460f8.c",
             "functions": 53,
-            "matching_c": 1,
+            "matching_c": 3,
             "bytes_total": 32612,
-            "bytes_matching_c": 120
+            "bytes_matching_c": 296
           },
           {
             "file": "src/overlays/l14/unclassified_002df080.c",
@@ -4400,9 +4400,9 @@
           {
             "file": "src/overlays/l14/gameplay_vendor_00300e00.c",
             "functions": 28,
-            "matching_c": 0,
+            "matching_c": 3,
             "bytes_total": 15908,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 244
           }
         ]
       },
@@ -4694,14 +4694,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1701,
+    "matching_c": 1706,
     "intentional_asm": 249,
-    "pending_c": 2832,
+    "pending_c": 2827,
     "bytes_total": 3655312,
-    "bytes_matching_c": 406848,
+    "bytes_matching_c": 407268,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3152132,
-    "c_exact_percent_of_recoverable": 11.4316,
-    "c_fuzzy_percent_of_recoverable": 13.4766
+    "bytes_pending_c": 3151712,
+    "c_exact_percent_of_recoverable": 11.4434,
+    "c_fuzzy_percent_of_recoverable": 13.4884
   }
 }
