@@ -2,7 +2,37 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec308.s", FUN_L02_002ec308);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L02_002ec308(char *self) {
+    char *cur;
+    FUN_L00_002591d0((int *)&cur, *(unsigned char *)(self + 0x21), 0, 0);
+    while (cur != 0) {
+        if (*(unsigned char *)(cur + 0x31) != 0) {
+            char *data = *(char **)(cur + 0x78);
+            if (*(short *)(cur + 0xA6) == *(short *)(self + 0xA6)) {
+                if ((*(int *)(data + 0xB0) & 0xFF) > 0x80) {
+                    char *q = data + 0x80;
+                    int i;
+                    for (i = 2; i >= 0; i--) {
+                        FUN_L00_00263618(q, *(int *)(data + 0xB0), 0.9f, 0.45f);
+                        q += 0x10;
+                    }
+                }
+            }
+        }
+        FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec3f0.s", FUN_L02_002ec3f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002eca30.s", FUN_L02_002eca30);
@@ -10,8 +40,48 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ece18.s", FUN_L02_002ece18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed420.s", FUN_L02_002ed420);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed658.s", FUN_L02_002ed658);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f1f60.s", FUN_L02_002f1f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f6570.s", FUN_L02_002f6570);
+/* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+extern void FUN_L01_00278e20(void *, int);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L02_002f1f60(char *m) {
+    int hit = 0;
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f) hit = 1;
+        if (hit) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)m);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263e30(m, 0x71D, 1, 0x71D, 1, 5, 2);
+        FUN_L01_00278e20(m, 0x71C);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
+/* Store the selected value only while this level object is inactive. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79A8), where it is exact; names translated to the US level program. */
+
+extern char *D_L02_00167400;
+
+void FUN_L02_002f6570(int value) {
+    char *moby = D_L02_00167400;
+    if (*(short *)(moby + 0x86) == 0) {
+        char *data = *(char **)(moby + 0x70);
+        *(int *)(data + 0x218) = value;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f6598.s", FUN_L02_002f6598);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa6d8.s", FUN_L02_002fa6d8);

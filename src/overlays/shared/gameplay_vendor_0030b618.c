@@ -11,7 +11,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d5f0.s", FUN_L01_0030d5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030dda0.s", FUN_L01_0030dda0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030de68.s", FUN_L01_0030de68);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Initialize both consecutive effect entries. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L01_0030de68(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *entry = data + 0x70;
+    int i;
+    for (i = 1; i >= 0; i--) {
+        FUN_L00_00263618(entry, 0x2528AA28, 0.1f, 0.08f);
+        entry += 0x10;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ded0.s", FUN_L01_0030ded0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);

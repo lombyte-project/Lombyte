@@ -8,7 +8,30 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d9e08.s", FUN_L06_002d9e08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d9e78.s", FUN_L06_002d9e78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9e28.s", FUN_L06_002e9e28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9e30.s", FUN_L06_002e9e30);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Switches every moby listed in a table into state 15 until a negative entry. */
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB260), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_0015FFD8;
+extern short *D_L06_001ABFC0[];
+
+void FUN_L06_002e9e30(int index) {
+    short *p = D_L06_001ABFC0[index];
+    do {
+        char *moby = D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if ((unsigned char)moby[0x20] < 0x7F) {
+            unsigned short flags = *(unsigned short *)(moby + 0x34);
+            moby[0x20] = 15;
+            flags |= 0x41;
+            *(int *)(moby + 0x94) = 0;
+            flags &= 0xEFFF;
+            *(unsigned short *)(moby + 0x34) = flags;
+        }
+    } while (*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ec8.s", FUN_L06_002e9ec8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9f18.s", FUN_L06_002e9f18);

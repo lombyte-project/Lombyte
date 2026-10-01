@@ -8,7 +8,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8530.s", FUN_L01_002f8530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8718.s", FUN_L01_002f8718);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb4b8.s", FUN_L01_002fb4b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb5b0.s", FUN_L01_002fb5b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0c0.s", FUN_L01_002fd0c0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Register this level's vendor data set. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
+
+extern char D_L01_001E34C0[];
+extern void FUN_L01_002b91c8(char *, int);
+
+void FUN_L01_002fd0c0(void) {
+    FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff028.s", FUN_L01_002ff028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff118.s", FUN_L01_002ff118);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);

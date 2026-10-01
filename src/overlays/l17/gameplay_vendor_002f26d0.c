@@ -11,7 +11,88 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f4fb0.s", FUN_L17_002f4fb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f4fb8.s", FUN_L17_002f4fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5260.s", FUN_L17_002f5260);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5390.s", FUN_L17_002f5390);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f54d8.s", FUN_L17_002f54d8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Projects each direction pair into 2D texture coordinates (reflection mapping). */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z; } V3;
+
+typedef struct { V3 v; float w; } V4;
+
+extern char D_L17_001676C0[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9af0(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
+    V4 v0;
+    V4 p;
+    V4 r;
+    V4 q;
+    int i;
+    for (i = 0; i < n; i++) {
+        float d;
+        float len;
+        p.w = 1.0f;
+        p.v.x = a[i].x;
+        p.v.y = a[i].y;
+        p.v.z = a[i].z;
+        FUN_001f9a28(&v0, &p, D_L17_001676C0);
+        FUN_L00_001ff500(&v0, &v0, 1.0f);
+        q.w = 1.0f;
+        q.v.x = b[i].x;
+        q.v.y = b[i].y;
+        q.v.z = b[i].z;
+        FUN_L00_001ff500(&q, &q, 1.0f);
+        d = FUN_001f9ab0(&q, &v0);
+        FUN_001f9a68(&r, &q, d + d);
+        FUN_001f9a28(&r, &v0, &r);
+        FUN_L00_001ff500(&r, &r, 1.0f);
+        r.v.z = r.v.z + 1.0f;
+        len = FUN_001f9af0(&r);
+        len = len + len;
+        out[i * 2] = (r.v.x / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5690.s", FUN_L17_002f5690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f59a8.s", FUN_L17_002f59a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f6138.s", FUN_L17_002f6138);
+/* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
+
+void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
+    float a[4];
+    float t[4];
+    float r[4];
+    float c[4];
+    int i;
+    for (i = 0; i < n; i++) {
+        float *p = (float *)(i * 12 + (int)pos);
+        float *q;
+        float len;
+        t[3] = 1.0f;
+        t[0] = p[0];
+        t[1] = p[1];
+        t[2] = p[2];
+        FUN_001f9a28(a, D_L17_001676C0, t);
+        FUN_L00_001ff500(a, a, 1.0f);
+        c[3] = 1.0f;
+        q = (float *)(i * 12 + (int)nrm);
+        c[0] = q[0];
+        c[1] = q[1];
+        c[2] = q[2];
+        FUN_L00_001ff500(c, c, 1.0f);
+        FUN_001f9a68(r, c, FUN_001f9ab0(c, a) * 2.0f);
+        FUN_001f9a28(r, a, r);
+        FUN_L00_001ff500(r, r, 1.0f);
+        r[2] += 1.0f;
+        len = FUN_001f9af0(r) * 2.0f;
+        out[i * 2] = (r[0] / len + 0.5f) * 4.0f;
+        out[i * 2 + 1] = (r[1] / len + 0.5f) * 4.0f;
+    }
+}

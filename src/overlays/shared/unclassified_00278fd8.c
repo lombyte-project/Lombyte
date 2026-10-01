@@ -15,7 +15,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a248.s", FUN_L15_0029a248);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a2a8.s", FUN_L15_0029a2a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a570.s", FUN_L15_0029a570);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aba8.s", FUN_L15_0029aba8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L15_0029aba8(char *m) {
+    int v = (*(int *)(m + 0x90) & 0xFFFFFF) | 0x30000000;
+    char *p = *(char **)(m + 0x78) + 0x2A0;
+    int i;
+    for (i = 2; i >= 0; i--) {
+        FUN_L00_00263618(p, v, 0.2f, 0.08f);
+        p += 0x10;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ae18.s", FUN_L15_0029ae18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029af88.s", FUN_L15_0029af88);

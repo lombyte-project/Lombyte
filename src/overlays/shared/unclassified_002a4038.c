@@ -4,7 +4,17 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4038.s", FUN_L02_002a4038);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4058.s", FUN_L02_002a4058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40d0.s", FUN_L02_002a40d0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L02_002a4058(char *arg, int val);
+
+void FUN_L02_002a40d0(char *arg) {
+    FUN_L02_002a4058(arg, 0x80);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a46e0.s", FUN_L02_002a46e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002cb978.s", FUN_L02_002cb978);
@@ -20,5 +30,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0cd8.s", FUN_L02_002e0cd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea7d0.s", FUN_L02_002ea7d0);
+/* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L02_002ea7d0(char *moby) {
+    float *d = *(float **)(moby + 0x78);
+    int *q;
+    int i;
+
+    for (i = 0; i < 4; i++) {
+        d[i] = (float)random_integer_below(0xFF);
+    }
+    d[4] = -1.0f;
+    d[5] = -2.25f;
+    d[6] = 1.25f;
+    d[7] = 2.5f;
+    q = (int *)(d + 8);
+    for (i = 0; i < 4; i++) {
+        q[i] = FUN_001f96f8(0x3F + i * 0x40);
+    }
+    d[12] = 2.5f;
+    d[13] = 3.0f;
+    d[15] = 2.5f;
+    d[14] = 3.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea8b0.s", FUN_L02_002ea8b0);

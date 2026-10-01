@@ -29,7 +29,32 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef560.s", FUN_L01_002ef560);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efa88.s", FUN_L01_002efa88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efbf8.s", FUN_L01_002efbf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1d18.s", FUN_L01_002f1d18);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* runs the moby update and sets its state byte */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_002db890(char *);
+extern int FUN_L00_002dbc30(char *, int, int, float);
+extern void FUN_0022da68(int, int, char *);
+
+int FUN_L01_002f1d18(char *m, int a, int b, float f) {
+    char *h = FUN_L00_002db890(m);
+    int r = FUN_L00_002dbc30(m, a, b, f);
+    if (r != 0) {
+        m[0x20] = 7;
+    } else if ((unsigned char)m[0x20] == 7) {
+        m[0x20] = 1;
+    }
+    if (h != 0) {
+        if (*(short *)(h + 0x68) == 6) {
+            FUN_0022da68(2, 0, m);
+        }
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2b68.s", FUN_L01_002f2b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5040.s", FUN_L01_002f5040);

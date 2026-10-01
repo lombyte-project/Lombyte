@@ -11,7 +11,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4050.s", FUN_L08_002d4050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4108.s", FUN_L08_002d4108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e7eb0.s", FUN_L08_002e7eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0b40.s", FUN_L08_002f0b40);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Runs the two per-entry update calls over a 13-entry table. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
+
+typedef struct { int a, b; } Pair;
+
+extern Pair D_L08_001E8348[];
+extern char D_L08_001E8360[];
+extern int D_L08_001E2858[];
+extern int D_L08_001E8268[];
+extern int D_L08_001E82A0[];
+extern int D_L08_001E8310[];
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+
+void FUN_L08_002f0b40(int a) {
+    int i;
+    for (i = 0; i < 13; i++) {
+        FUN_L08_00258090(D_L08_001E8360, D_L08_001E82A0[i], D_L08_001E2858[i], &D_L08_001E8348[a]);
+        FUN_L00_001fde98(D_L08_001E2858[i], D_L08_001E8268[i], D_L08_001E8310[i], D_L08_001E8360, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0c18.s", FUN_L08_002f0c18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0f68.s", FUN_L08_002f0f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1158.s", FUN_L08_002f1158);

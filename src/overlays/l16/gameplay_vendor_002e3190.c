@@ -54,7 +54,53 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e84e8.s", FUN_L16_002e84e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e88d0.s", FUN_L16_002e88d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8970.s", FUN_L16_002e8970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b08.s", FUN_L16_002e8b08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b98.s", FUN_L16_002e8b98);
+/* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float x, y, z;
+} Vec3f;
+
+extern char D_L16_001671C0[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9af0(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
+    int i;
+    float a[4];
+    float v[4];
+    float t[4];
+    float w[4];
+
+    for (i = 0; i < n; i++) {
+        float d;
+        float len;
+
+        v[3] = 1.0f;
+        v[0] = p2[i].x;
+        v[1] = p2[i].y;
+        v[2] = p2[i].z;
+        FUN_001f9a28(a, v, D_L16_001671C0);
+        FUN_L00_001ff500(a, a, 1.0f);
+        w[3] = 1.0f;
+        w[0] = p1[i].x;
+        w[1] = p1[i].y;
+        w[2] = p1[i].z;
+        FUN_L00_001ff500(w, w, 1.0f);
+        d = FUN_001f9ab0(w, a);
+        FUN_001f9a68(t, w, d + d);
+        FUN_001f9a28(t, a, t);
+        FUN_L00_001ff500(t, t, 1.0f);
+        t[2] = t[2] + 1.0f;
+        len = FUN_001f9af0(t);
+        len = len + len;
+        out[i * 2] = (t[0] / len + 0.5f) * 2.0f;
+        out[i * 2 + 1] = (t[1] / len + 0.5f) * 2.0f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8d40.s", FUN_L16_002e8d40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);

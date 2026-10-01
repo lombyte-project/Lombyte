@@ -4,7 +4,33 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00297d10.s", FUN_L06_00297d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8510.s", FUN_L06_002d8510);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawns moby class 0x12E at the owner's position, copying its fields. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L06_002d8510(char *owner) {
+    char *moby = func_0020D348_m(0x12E);
+    if (moby != 0) {
+        ((unsigned char *)moby)[0x30] = 0x60;
+        *(short *)(moby + 0x32) = 0x60;
+        moby[0x31] = 1;
+        *(int *)(moby + 0x40) = 0;
+        *(int *)(moby + 0x44) = 0;
+        *(float *)(moby + 0x48) = *(float *)(owner + 0x48);
+        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        qcopy(moby + 0x10, owner + 0x10);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d85a0.s", FUN_L06_002d85a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8b98.s", FUN_L06_002d8b98);

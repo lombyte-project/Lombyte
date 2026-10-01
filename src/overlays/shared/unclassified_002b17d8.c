@@ -8,7 +8,17 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2f60.s", FUN_L14_002b2f60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3268.s", FUN_L14_002b3268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3318.s", FUN_L14_002b3318);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B4568), where it is exact; names translated to the US level program. */
+
+void FUN_L14_002b3318(char *moby) {
+    unsigned short *field = (unsigned short *)(moby + 0x34);
+    *field = (*field | 0x41) & 0xEFFF;
+    *(int *)(moby + 0x94) = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3330.s", FUN_L14_002b3330);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3358.s", FUN_L14_002b3358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3418.s", FUN_L14_002b3418);

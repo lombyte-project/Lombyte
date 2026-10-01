@@ -25,7 +25,94 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319510.s", FUN_L05_00319510);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003195f0.s", FUN_L05_003195f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003195f8.s", FUN_L05_003195f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319690.s", FUN_L05_00319690);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319740.s", FUN_L05_00319740);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003198e8.s", FUN_L05_003198e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Advances a moby's path: steps the path position and returns whether it has reached the end. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
+
+extern float FUN_00213f38(float, float, float, float, float *, float *);
+extern void FUN_00214e58(int *, int, void *, float *, int, float);
+
+int FUN_L05_003195f8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *path;
+    FUN_00213f38(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
+    path = *(int **)(d + 0xAC);
+    FUN_00214e58(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
+    return *(float *)(d + 0xC0) >= 1.0f;
+}
+/* Plays the sound that goes with the moby's current variant. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
+
+s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
+
+void FUN_L05_00319690(char *moby) {
+    switch (*(short *)(*(char **)(moby + 0x78) + 0xB6)) {
+    case 0: try_set_help_message(8, 0x13A5); break;
+    case 1: try_set_help_message(8, 0x1398); break;
+    case 2: try_set_help_message(8, 0x139A); break;
+    case 3: try_set_help_message(8, 0x139C); break;
+    case 4: try_set_help_message(8, 0x1399); break;
+    default: try_set_help_message(8, 0x139B); break;
+    }
+}
+#include "qcopy.h"
+
+/* Wobbles a moby's position and rotation from its sine-driven state. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+
+void FUN_L05_00319740(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float s, t, w;
+    qcopy(moby + 0x10, d + 0x60);
+    qcopy(moby + 0x40, d + 0x70);
+    s = FUN_001fa580(*(float *)(d + 0xC8), D_0015ED6C * 2.0943951f);
+    *(float *)(d + 0xC8) = s;
+    t = FUN_001f9de0(s);
+    w = D_0015ED6C * 1.6929693f;
+    *(float *)(moby + 0x18) += t * 0.25f;
+    s = FUN_001fa580(*(float *)(d + 0xCC), w);
+    *(float *)(d + 0xCC) = s;
+    t = FUN_001fa580(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
+    w = D_0015ED6C * 0.9250245f;
+    *(float *)(moby + 0x44) = t;
+    s = FUN_001fa580(*(float *)(d + 0xD0), w);
+    *(float *)(d + 0xD0) = s;
+    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+    if (*(float *)(moby + 0x40) > 0.17453292f) *(float *)(moby + 0x40) = 0.17453292f;
+    else if (*(float *)(moby + 0x40) < -0.17453292f) *(float *)(moby + 0x40) = -0.17453292f;
+    if (*(float *)(moby + 0x44) > 0.17453292f) *(float *)(moby + 0x44) = 0.17453292f;
+    else if (*(float *)(moby + 0x44) < -0.17453292f) *(float *)(moby + 0x44) = -0.17453292f;
+}
+/* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
+
+extern char *D_L05_001B0930[];
+extern char D_0013F350[];
+extern char D_L05_00215C00[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+
+void FUN_L05_003198e8(char *a) {
+    char *data = *(char **)(a + 0x78);
+    int idx = *(int *)(data + 0xDC);
+    if (idx != -1) {
+        char *p = D_L05_001B0930[idx];
+        if (*(int *)p == 7) {
+            int i;
+            char *g;
+            for (i = 0; i < 7; i++) {
+                FUN_001f9cf8(p + 0x10 + i * 16, D_L05_00215C00 + i * 16, a + 0xC0);
+                FUN_001f9a10(p + 0x10 + i * 16, p + 0x10 + i * 16, a + 0x10);
+            }
+            g = D_0013F350;
+            *(unsigned short *)(g + 0x22DA) = *(unsigned short *)(data + 0xDC);
+        }
+    }
+}

@@ -2,5 +2,16 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0025c758.s", FUN_L02_0025c758);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0025D750.c: func_L02_0025D750), where it is exact; names translated to the US level program. */
+
+void FUN_L02_0025c758(char *moby) {
+    float delta = 0.2f;
+    float val = *(float *)(moby + 0x18);
+    *(float *)(moby + 0x84) = val - delta;
+    *(float *)(moby + 0x88) = val + delta;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0025c780.s", FUN_L02_0025c780);
