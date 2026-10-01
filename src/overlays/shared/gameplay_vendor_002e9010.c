@@ -382,7 +382,85 @@ void FUN_L00_002ead60(char *m) {
     FUN_001fa2b8(m, v);
     *(short *)(m + 0x7E) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eae20.s", FUN_L00_002eae20);
+#define F(p, o) (*(float *)((char *)(p) + (o)))
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L00_00166DD8 __attribute__((section(".data")));
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float FUN_L00_00257ef0(float, float, float);
+extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
+extern int FUN_001f9740(int *);
+extern void FUN_L00_001ed580(void *, void *, void *);
+extern void FUN_L00_001ed630(void *, void *, void *);
+extern void FUN_L00_00257f70(void *, void *, void *, float);
+extern void FUN_L00_00258050(float *, float *, float *, float);
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
+
+void FUN_L00_002eae20(void *arg) {
+    char *m = arg;
+    float mtx[16];
+    char *d = *(char **)(m + 0x70);
+    char *a = d + 0x30;
+    char *b = d + 0x80;
+    char *c = d + 0xE0;
+    int t = *(unsigned char *)(m + 0x88);
+    if (t == 1) {
+        qcopy(m + 0x30, b);
+        qcopy(m + 0x40, d + 0x90);
+    } else if (t == 2) {
+        float u;
+        FUN_001f9740((int *)c);
+        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / ConvertIntegerToFloat(*(int *)(c + 4));
+        FUN_L00_00257f70(m + 0x30, m + 0x30, b, u);
+        FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
+    } else if (t == 3) {
+        if (FUN_001f9740((int *)c) != 0) {
+            qcopy(m + 0x30, b);
+            qcopy(m + 0x40, d + 0x90);
+        } else {
+            float t, x, y, diff, z;
+            t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / ConvertIntegerToFloat(*(int *)(c + 4));
+            FUN_L00_001ed630(d + 0xE8, b, D_0013F3D0_c);
+            x = FUN_001fa5c8(F(c, 8), F(c, 0x1C));
+            y = FUN_001fa5c8(F(b, 0x18), D_L00_00166DD8);
+            if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
+                diff = F(c, 8) - F(c, 0x1C);
+                z = 0;
+                if (diff < z && y > z) {
+                    diff = -diff;
+                } else if (diff > z && y < z) {
+                    diff = -diff;
+                }
+                F(c, 0x1C) += cosine_interpolate_alt(0, diff, t);
+            } else {
+                F(c, 0x1C) = FUN_L00_00257ef0(F(c, 0x1C), F(c, 8), t);
+            }
+            F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) * FUN_L00_00257e20(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
+            F(c, 0x20) = FUN_L00_00257ef0(F(c, 0x20), F(c, 0xC), t);
+            FUN_L00_00257f70(c + 0x30, c + 0x30, D_0013F3D0_c, t);
+            FUN_L00_001ed580(m + 0x30, c + 0x1C, c + 0x30);
+            FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
+        }
+    } else {
+        if (*(short *)(d + 0x1C) == 1) {
+            F(m, 0x30) = cam_interp_values(d, F(m, 0x30), F(b, 0), F(d, 0x10), F(d, 0x14), F(d, 0x18));
+            F(m, 0x34) = cam_interp_values(d + 4, F(m, 0x34), F(b, 4), F(d, 0x10), F(d, 0x14), F(d, 0x18));
+            F(m, 0x38) = cam_interp_values(d + 8, F(m, 0x38), F(b, 8), F(d, 0x10), F(d, 0x14), F(d, 0x18));
+        }
+        if (*(short *)(a + 0x2C) == 1) {
+            F(m, 0x40) = FUN_L00_001eb328(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x44) = FUN_L00_001eb328(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x48) = FUN_L00_001eb328(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+        }
+    }
+    FUN_001fa050(mtx, m + 0x40);
+    FUN_001fa2b8(m, mtx);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -390,11 +468,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eae20.s", FUN_L00_002eae20);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_001ed6a8(void *, float);
-extern void FUN_L00_002eae20(void *);
+extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
 
 void FUN_L00_002eb218(char *a) {
     char *p = *(char **)(a + 0x70) + 0xE0;
-    FUN_L00_002eae20(a);
+    FUN_L00_002eae20_u(a);
     if (*(int *)(p + 0x40) != 0) {
         a[0x89] = 0;
         FUN_L00_001ed6a8(a + 0x30, 0.5f);

@@ -340,7 +340,58 @@ void FUN_L00_002e4430(char *o) {
     FUN_001f9a10_002e4430(q + 0x90, b, p);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4580.s", FUN_L00_002e4580);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e46b8.s", FUN_L00_002e46b8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E5B68), where it is exact; names translated to the US level program. */
+
+typedef struct { int a[4]; } Vq4 __attribute__((aligned(16)));
+
+extern char D_0013E533[];
+extern char D_L00_00166E10[];
+extern float FUN_001f9ab0(void *, void *);
+extern int FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
+extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a28(float *, float *, float *);
+extern void FUN_001f9a68_c(void *, void *, float) __asm__("FUN_001f9a68");
+
+void FUN_L00_002e46b8(char *a) {
+    Vq4 t;
+    Vq4 v1, v2;
+    char *b = D_L00_00166E10;
+    char *m = *(char **)(a + 0x70);
+    char *m40 = m + 0x40;
+    char *g, *g3;
+    qcopy(&t, D_0013E533 + 0xF5D);
+    FUN_001f9a10_c(a + 0x30, &t, a + 0x30);
+    FUN_001f9a10_c(m + 0xA0, &t, m + 0xA0);
+    FUN_001f9a10_c(m40, &t, m40);
+    FUN_001f9a10_c(m + 0xD0, &t, m + 0xD0);
+    FUN_001f9a10_c(m, &t, m);
+    g = D_0013E533 + 0xE1D;
+    if (*(short *)(g + 0x308) == 0) {
+        char *p = *(char **)(g + 0x2FC);
+        char *q;
+        if (p == 0 || *(short *)(p + 0xA6) != 0x22D || ((q = b - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(q + 0x398)) {
+            char *g2 = D_0013E533 + 0xE1D;
+            *(float *)(*(char **)(a + 0x70) + 0x1C8) = *(float *)(g2 + 0x14C);
+        }
+    }
+    g3 = D_0013E533 + 0xE1D;
+    if ((unsigned)(*(int *)(g3 + 0x2084) - 0xB) < 2) {
+        char *m2 = *(char **)(a + 0x70);
+        char *s = b + 0x30;
+        float f;
+        *(short *)(m2 + 0x10) = 0;
+        FUN_001f9a68_c(&v1, b + 0x80, *(float *)(b + 0xA4));
+        f = FUN_001f9ab0(s, &t);
+        FUN_001f9a68_c(&v2, s, f);
+        FUN_001f9a28((float *)&v2, (float *)&t, (float *)&v2);
+        FUN_001f9a28((float *)&v1, (float *)&v1, (float *)&v2);
+        FUN_001f9a10_c(a + 0x30, &v1, a + 0x30);
+        FUN_001f9a10_c(m40 + 0x60, &v1, m40 + 0x60);
+        FUN_001f9a10_c(m40, &v1, m40);
+        FUN_001f9a10_c(m40 + 0x90, &v1, m40 + 0x90);
+        FUN_001f9a10_c(m2, &v1, m2);
+    }
+}
 typedef float V4[4] __attribute__((aligned(16)));
 extern char D_L00_00166E10[];
 void FUN_001f9a68(void *, void *, float);

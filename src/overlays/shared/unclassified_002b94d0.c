@@ -357,7 +357,42 @@ void FUN_L00_002be890(void *mv) {
     }
     FUN_L00_001fd228_2be890(&quad, 0, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002beab0.s", FUN_L00_002beab0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Nudge a position and ask the level helper about it, lowering a global on success. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFDB8), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z, w; } Vx __attribute__((aligned(16)));
+
+extern char D_0013E533[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_L00_00173E40[];
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+
+int FUN_L00_002beab0(char *a, int b, Vx *c) {
+    Vx v;
+    float s;
+    float t;
+    int r;
+    s = ConvertIntegerToFloat((unsigned char)D_0013E533[1]) * 0.5f + 1.0f;
+    if (c != 0) {
+        qcopy(&v, c);
+    } else {
+        qcopy(&v, a + 0x10);
+    }
+    t = s * 0.2f;
+    v.z = v.z + t;
+    r = FUN_L00_001f0d60(s * 0.1999f, &v, b, a);
+    if (r != 0) {
+        float *g = (float *)D_L00_00173E40;
+        g[14] -= t;
+    }
+    return r;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

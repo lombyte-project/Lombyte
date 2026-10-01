@@ -2,7 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e8a0.s", FUN_L00_0028e8a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
+
+extern char D_0013E030_c[] __asm__("D_0013E030");
+extern int D_0015ED84;
+__attribute__((sda)) extern int D_L00_00160540;
+extern void FUN_L00_0028e990_c(void) __asm__("FUN_L00_0028e990");
+extern void FUN_L00_0028e180(void);
+void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
+
+void FUN_L00_0028e8a0(char *m) {
+    char *g;
+    int *src;
+    D_L00_00160540 = 1;
+    FUN_L00_0028e990_c();
+    if (D_0015ED84 == 0xD) {
+        char *q = D_0013E030_c;
+        *(float *)(q + 0x60) = 464.66f;
+        *(float *)(q + 0x64) = 580.68f;
+        *(float *)(q + 0x68) = 316.72f;
+        *(float *)(q + 0x78) = 2.77f;
+    }
+    g = D_0013E030_c;
+    *(short *)(g + 0x26) = *(unsigned short *)(m + 0xA6) - 0x213;
+    *(char **)g = m;
+    *(void **)(m + 0x74) = FUN_L00_0028e180;
+    *(unsigned short *)(m + 0x34) &= 0xFFFC;
+    *(int *)(m + 0x94) = *(int *)(*(int *)(m + 0x24) + 0x10);
+    set_moby_animation(m, 1, 0);
+    src = *(int **)(m + 0x78);
+    *(int *)(g + 0x30) = src[0];
+    *(int *)(g + 0x34) = src[1];
+    *(int *)(g + 0x38) = src[2];
+}
 #include "sda.h"
 extern u8 *D_0013E030 NOT_SDA;
 void FUN_L00_0028e990(void) {

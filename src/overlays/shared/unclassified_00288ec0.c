@@ -402,7 +402,114 @@ void FUN_L00_0028aa98(void) {
     FUN_00233980_0028aa98(0x42, 0x8000000044ULL);
     FUN_0022b690_0028aa98(1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028ac88.s", FUN_L00_0028ac88);
+/* Hand-written from the US listing (closest relative FUN_L00_002895a0). */
+
+typedef struct {
+    u8 type;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    u32 color;
+    f32 f8;
+    union { struct { u16 a, b; } h; u32 w; } c;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 f1C;
+} Star28ac88;
+typedef struct {
+    u8 pad0[4];
+    s16 s4;
+    u8 pad6[2];
+    s16 count;
+    u8 padA[0x12];
+    Star28ac88 *stars;
+} Sky28ac88;
+extern Sky28ac88 *D_L00_0016051C_c __asm__("D_L00_0016051C");
+extern u32 D_L00_00160500[2] __attribute__((sda));
+void FUN_001f9fc8(void *);
+void FUN_0022b690(int);
+void FUN_0022bba0(void);
+void FUN_00233980(int, long);
+int FUN_001160d8(void);
+int FUN_00213260(int);
+f32 FUN_00213308(void);
+f32 FUN_001fa6c0(int);
+f32 FUN_001f9dc8(f32);
+f32 FUN_001f9de0(f32);
+#define SKY D_L00_0016051C_c
+void FUN_L00_0028ac88(void) {
+    int i, j;
+    Star28ac88 *s;
+    f32 a, b;
+    int t16, t18, r;
+    SKY->s4 = 0;
+    FUN_001f9fc8(D_L00_001BD7E0);
+    FUN_0022b690(0);
+    if (SKY->count == 0) {
+        SKY->count = 0x100;
+        for (i = 0; i < SKY->count; i++) {
+            s = &SKY->stars[i];
+            if (i >= 0xF0) {
+                u16 *h;
+                s->type = 0;
+                h = &s->c.h.a;
+                h[0] = FUN_001160d8() >> 16;
+                h[1] = FUN_001160d8() >> 16;
+                s->b2 = 1;
+                s->b3 = 0x48;
+                s->f1C = 0.18f;
+                s->color = D_L00_00160500[(FUN_001160d8() >> 16) & 3];
+            } else {
+                s->type = 1;
+                s->c.h.a = FUN_00213260(0x100);
+                {
+                    int q = FUN_001160d8() >> 16;
+                    s->b3 = 0x48;
+                    s->b2 = q & 1;
+                }
+                s->f8 = FUN_00213308();
+                s->f1C = FUN_001fa6c0(FUN_00213260(0x30) + 0x20) * (1.0f / 256.0f);
+                a = FUN_00213308();
+                b = FUN_00213308();
+                s->x = FUN_001f9dc8(a) * FUN_001f9de0(b) * 50.0f;
+                s->y = FUN_001f9de0(a) * FUN_001f9de0(b) * 50.0f;
+                s->z = FUN_001f9dc8(b) * 50.0f;
+                t16 = FUN_00213260(0x18) + 8;
+                t18 = FUN_00213260(0x20) << 24;
+                {
+                    u32 u, w;
+                    if ((FUN_001160d8() >> 16) & 1) { u = (t16 << 16) + 0x30505050; w = t18 + u; }
+                    else { u = (t16 << 8) + 0x30505050; w = t18 + u; w |= t16; }
+                    s->c.w = w;
+                }
+            }
+        }
+    }
+    for (j = 0; j < SKY->count; j++) {
+        s = &SKY->stars[j];
+        if (s->type == 0) {
+            u16 *h = &s->c.h.a;
+            h[0]++;
+            h[1]++;
+            a = FUN_001fa6c0((s->c.h.a & 0xFFF) - 0x800) * 0.0015339808f;
+            b = FUN_001fa6c0((h[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            s->x = FUN_001f9dc8(a) * FUN_001f9de0(b) * 50.0f;
+            s->y = FUN_001f9de0(a) * FUN_001f9de0(b) * 50.0f;
+            s->z = FUN_001f9dc8(b) * 50.0f;
+            s->color &= 0xFFFFFF;
+            if ((s->c.h.a & 0x3F) < 8) s->color |= 0x70000000;
+            else s->color |= 0x24000000;
+        } else {
+            r = FUN_001160d8() >> 16;
+            { u32 u = ((r & 0x1F00) << 10) + 0xFFDFDFE0; u32 c = s->c.w + u; c += (r & 0x1F0) << 6; c += (r & 0x1F) << 2; s->color = c; }
+        }
+    }
+    FUN_0022bba0();
+    FUN_00233980(0x42, 0x8000000044L);
+    FUN_0022b690(1);
+    FUN_0022b690(2);
+}
 #include "qzero.h"
 void FUN_001f9fc8(void *);
 void FUN_0022b690(int);
