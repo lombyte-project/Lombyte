@@ -1137,7 +1137,7 @@ def main() -> int:
         "--game-root",
         type=Path,
         default=Path(os.environ.get("RNC_GAME_ROOT", DEFAULT_GAME_ROOT)),
-        help="public RncDecomp checkout (default: this script's repository root)",
+        help="public Lombyte checkout (default: this script's repository root)",
     )
     parser.add_argument("--include-needs-review", action="store_true")
     parser.add_argument("--limit", type=int, help="limit to the first N proposals by address")
@@ -1156,7 +1156,7 @@ def main() -> int:
     yaml_path = root / YAML_REL
     categories_path = root / CATEGORIES_REL
     if not (root / "src").is_dir() or not map_path.is_file():
-        print(f"error: not an RncDecomp game checkout: {root}", file=sys.stderr)
+        print(f"error: not a Lombyte game checkout: {root}", file=sys.stderr)
         return 2
     try:
         map_original = map_path.read_text(encoding="utf-8")

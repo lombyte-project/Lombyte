@@ -1,4 +1,4 @@
-# R&CRE — Ratchet & Clank (PS2, USA) matching decompilation
+# Lombyte — Ratchet & Clank (PS2, USA) matching decompilation
 #
 # Only the boot ELF is recompiled, and it must match retail byte-for-byte
 # (full-ELF SHA gate). `make iso` patches it into a copy of your legally owned
