@@ -6,10 +6,70 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002efb88.s", FUN_L18_002efb88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0030.s", FUN_L18_002f0030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0054.s", FUN_L18_002f0054);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0120.s", FUN_L18_002f0120);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f02e8.s", FUN_L18_002f02e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F16D8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern short D_L18_0016221C_d __asm__("D_L18_0016221C") __attribute__((sda));
+extern short D_L18_00162220_d __asm__("D_L18_00162220") __attribute__((sda));
+extern short D_L18_00162224_d __asm__("D_L18_00162224") __attribute__((sda));
+extern short D_L18_00162228_d __asm__("D_L18_00162228") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+
+void FUN_L18_002f02e8(char *moby, void *out) {
+    char *data = *(char **)(moby + 0x78);
+    float v[3];
+    float r = random_float_between_alt(*(float *)&D_L18_00162224_d, *(float *)&D_L18_00162228_d);
+    float ang = random_angle_radians();
+    v[0] = FUN_001f9dc8(ang) * r;
+    v[1] = FUN_001f9de0(ang) * r;
+    v[2] = 0.0f;
+    v[2] = random_float_between_alt(*(float *)&D_L18_0016221C_d, *(float *)&D_L18_00162220_d);
+    FUN_001f9a10(out, v, data + 0x120);
+    *(int *)(data + 0x160) = FUN_001f96f8(180);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0390.s", FUN_L18_002f0390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f06c0.s", FUN_L18_002f06c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0848.s", FUN_L18_002f0848);
+#include "qcopy.h"
+
+/* Advance a ring of recorded positions, store the moby's position, and register draw callbacks once per frame. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1C38), where it is exact; names translated to the US level program. */
+
+extern int D_L18_0015F5CC;
+extern short D_L18_00162230_d __asm__("D_L18_00162230") __attribute__((sda));
+extern void FUN_L18_002f0390(void);
+extern void FUN_L18_002f06c0(void);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+
+void FUN_L18_002f0848(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int off;
+    int cur;
+    int old;
+    if ((D_L18_0015F5CC & 3) == 0) {
+        *(unsigned short *)(data + 0x166) = (*(unsigned short *)(data + 0x166) + 1) & 0xF;
+        if ((float)*(short *)(data + 0x164) < 4.0f) {
+            *(unsigned short *)(data + 0x164) = *(unsigned short *)(data + 0x164) + 1;
+        }
+    }
+    off = *(short *)(data + 0x166) << 4;
+    qcopy((char *)(off + (int)data) + 0x10, moby + 0x10);
+    cur = D_L18_0015F5CC;
+    old = *(int *)&D_L18_00162230_d;
+    *(float *)(data + off + 0x1C) = 1.0f;
+    if (cur != old) {
+        *(int *)&D_L18_00162230_d = cur;
+        enqueue_callback_list_1_alt(FUN_L18_002f0390, moby);
+        enqueue_callback_list_1_alt(FUN_L18_002f06c0, moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f16f0.s", FUN_L18_002f16f0);
 #define NOT_SDA
 
@@ -193,9 +253,64 @@ void FUN_L18_002f2970(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2b18.s", FUN_L18_002f2b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2bf0.s", FUN_L18_002f2bf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f5e18.s", FUN_L18_002f5e18);
+/* Latches the target from the global block once, and counts a class 0x24B hit. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7278), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern short D_L18_001623A8_d __asm__("D_L18_001623A8") __attribute__((sda));
+
+void FUN_L18_002f5e18(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    if (*(int *)(d + 0x3E4) == 0) {
+        char *a = D_0013E533 + 0xE1D;
+        if (*(int *)(a + 0x300) != 0) {
+            *(int *)(d + 0x3E8) = *(int *)(a + 0x2FC);
+        }
+        if (*(int *)(a + 0x2084) == 0x77) {
+            char *t = *(char **)(d + 0x3E8);
+            *(int *)(d + 0x3E4) = 1;
+            if (t != 0) {
+                if (*(short *)(t + 0xA6) == 0x24B) {
+                    *(int *)&D_L18_001623A8_d = *(int *)&D_L18_001623A8_d + 1;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f5e80.s", FUN_L18_002f5e80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6878.s", FUN_L18_002f6878);
+/* steps a moby's offset vector toward a target, returns whether both settled */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7CD8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float FUN_001f9af0(void *);
+extern float FUN_00213f38(float, float, float, float, float *, float *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+int FUN_L18_002f6878(char *moby, float arg, void *x) {
+    char *data = *(char **)(moby + 0x78);
+    char *p = data + 0x3C0;
+    float a[4];
+    float b[4];
+    float v = 0.0f;
+    float len;
+    float s;
+    b[0] = v;
+    FUN_001f9a28(a, x, p);
+    a[2] = v;
+    len = FUN_001f9af0(a);
+    s = D_0015ED70 * 10.0f;
+    FUN_00213f38(len, s, s, arg, b, (float *)(data + 0x374));
+    FUN_L00_001ff500(a, a, *(float *)(data + 0x374));
+    FUN_001f9a10(p, p, a);
+    if (len < 0.1f) {
+        if (*(float *)(data + 0x374) < 0.1f) {
+            return 1;
+        }
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6960.s", FUN_L18_002f6960);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
@@ -241,7 +356,49 @@ void FUN_L18_002f7028(int a0, int idx) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f70b8.s", FUN_L18_002f70b8);
+/* Picks a new state for the moby at random among the allowed transitions, retrying up to 100 times until one is accepted. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8518), where it is exact; names translated to the US level program. */
+
+extern char *D_L18_001600EC;
+extern float FUN_001f9b80(void *, void *);
+extern short D_L18_00162378_d __asm__("D_L18_00162378") __attribute__((sda));
+extern short D_L18_001DFB40[];
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+int FUN_L18_002f70b8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int state = *(int *)(data + 0x350);
+    int tries = 0;
+    int r;
+    int ok;
+    do {
+        r = random_integer_below(6);
+        switch (r) {
+        case 0: state = 0xD; break;
+        case 1: state = 0xE; break;
+        case 2: state = 0xF; break;
+        case 3: state = 0x10; break;
+        case 4: state = 0x11; break;
+        case 5: state = 0x13; break;
+        }
+        ok = *(short *)((char *)D_L18_001DFB40 + r * 2 + *(int *)(data + 0x34C) * 12);
+        if (state == *(int *)(data + 0x350)) ok = 0;
+        if (state == 0x13) {
+            if (*(int *)(data + 0x364) != 0) {
+                ok = 0;
+            } else {
+                float d = FUN_001f9b80(D_0013E533 + 0xE9D, D_L18_001600EC + *(int *)(data + 0x25C) * 128 + 0x30);
+                if (*(float *)&D_L18_00162378_d + 2.0f < d) ok = 0;
+            }
+        }
+        if (state == 0x11) {
+            if (*(int *)(data + 0x350) == 0xE) ok = 0;
+        }
+        if (ok != 0) break;
+        tries++;
+    } while (tries < 100);
+    return state;
+}
 typedef unsigned int u128_f7220 __attribute__((mode(TI)));
 extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 

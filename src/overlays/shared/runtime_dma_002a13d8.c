@@ -5,6 +5,32 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13d8.s", FUN_L00_002a13d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13f0.s", FUN_L00_002a13f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a1538.s", FUN_L00_002a1538);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a15c8.s", FUN_L00_002a15c8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9988(float);
+
+float FUN_L00_002a15c8(char *a, char *b) {
+    float s = *(float *)(b + 0xDC);
+    float gap = *(float *)(a + 0x18) - *(float *)(b + 0x68);
+    float c = *(float *)(b + 0xD8) + s * 0.5f;
+    float d = c * c + (s + s) * gap;
+    float res;
+    if (d > 0.0f) {
+        d = FUN_001f9988(d);
+        if (d <= c) {
+            res = c - d;
+        } else {
+            res = c + d;
+        }
+        res = res / *(float *)(b + 0xDC);
+    } else {
+        res = 100000.0f;
+    }
+    return res;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a1670.s", FUN_L00_002a1670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3cc0.s", FUN_L00_002a3cc0);

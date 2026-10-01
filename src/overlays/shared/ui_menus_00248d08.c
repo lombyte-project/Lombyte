@@ -3,7 +3,22 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d08.s", FUN_L00_00248d08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d38.s", FUN_L00_00248d38);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Menu hit test: x in [58, 86] and a flag clear. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/menu_00249720.c: func_L00_00249750), where it is exact; names translated to the US level program. */
+
+int FUN_L00_00248d38(float a, float b, float x) {
+    int flag;
+    if (x >= 58.0f && x <= 86.0f) {
+        if (flag == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d88.s", FUN_L00_00248d88);
 int FUN_L00_00248dc8(float a, float b, float c) { return 95.0f <= c; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002494c8.s", FUN_L00_002494c8);

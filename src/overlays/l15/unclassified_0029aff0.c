@@ -15,4 +15,34 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c6900.s", FUN_L15_002c6900);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf110.s", FUN_L15_002cf110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf3a8.s", FUN_L15_002cf3a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e46b0.s", FUN_L15_002e46b0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Nudge a moby's field 0x48 toward a signed step depending on a linked moby's state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8") __attribute__((sda));
+extern short D_L15_00161EC0_d __asm__("D_L15_00161EC0") __attribute__((sda));
+
+void FUN_L15_002e46b0(char *moby) {
+    int idx = **(int **)(moby + 0x78);
+    if (idx != -1) {
+        char *other = (char *)(idx * 256 + *(int *)&D_L15_0015FFD8_d);
+        char *d = *(char **)(other + 0x78);
+        int st = (unsigned char)other[0x20];
+        float step;
+        if (st == 2) {
+            step = *(float *)&D_L15_00161EC0_d * 0.017453292f * D_0015ED6C;
+            if (*(int *)(d + 0x10) != 0) step = -step;
+        } else if (st == 4) {
+            step = *(float *)&D_L15_00161EC0_d * 0.017453292f * D_0015ED6C;
+            if (*(int *)(d + 0x10) == 0) step = -step;
+        } else {
+            return;
+        }
+        *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), step);
+    }
+}

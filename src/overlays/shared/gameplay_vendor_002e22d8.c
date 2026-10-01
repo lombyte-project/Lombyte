@@ -6,10 +6,56 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e22d8.s", FUN_L16_002e22d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2b60.s", FUN_L16_002e2b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2e88.s", FUN_L16_002e2e88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2fa0.s", FUN_L16_002e2fa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3050.s", FUN_L16_002e3050);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED64;
+extern void FUN_L00_002628d8(char *, char *, int, float, float);
+
+void FUN_L16_002e3050(char *moby)
+{
+    float ticks = D_0015ED64;
+    float a = ticks * 0.03f;
+    float b = ticks * 0.3f;
+    char *data = *(char **)(moby + 0x78);
+    *(float *)(data + 0x144) = *(float *)(data + 0x17C);
+    FUN_L00_002628d8(moby, data + 0xE0, 2, a, b);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5708.s", FUN_L16_002e5708);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cf8.s", FUN_L16_002e5cf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5d30.s", FUN_L16_002e5d30);
+/* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern char D_0013E533[];
+extern float FUN_001f9b48(void *);
+extern short *D_L16_001ABCC0[];
+extern void FUN_0022da68(int, int, int);
+extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
+
+void FUN_L16_002e5d30(int idx) {
+    short *p = D_L16_001ABCC0[idx];
+    char *best = 0;
+    float bestd = 50000.0f;
+    if (p != 0) {
+        do {
+            char *m = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (*(short *)(m + 0xA6) != 0x5A3) {
+                float d = func_001F9D10_2E7198(D_0013E533 + 0xE9D, m + 0x10);
+                if (d < bestd) {
+                    bestd = d;
+                    best = m;
+                }
+            }
+        } while (*p++ >= 0);
+        if (best != 0) {
+            FUN_0022da68(0, 0, (int)best);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9df0.s", FUN_L16_002e9df0);

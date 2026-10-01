@@ -8,12 +8,74 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9eb0.s", FUN_L01_002b9eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002bf3f0.s", FUN_L01_002bf3f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c72c8.s", FUN_L01_002c72c8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* spawns two bursts of particles around a point */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+extern char D_L01_00167240[];
+extern char D_L01_001742E0[];
+extern float D_L01_001742C0[];
+extern float FUN_001f9b20(void *);
+extern float FUN_001fa580(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_L00_00257c48(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_0026c6e8(char *, char *);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L01_002c72c8(void) {
+    float v[4];
+    float p[4];
+    float a, b;
+    int i;
+    FUN_001f9a28(v, D_L01_00167240, D_L01_001742E0);
+    a = -FUN_L00_001ff8b0(FUN_001f9b20(v), v[2]);
+    FUN_L00_001ff8b0(v[0], v[1]);
+    for (i = 19; i >= 0; i--) {
+        float x, y;
+        x = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        y = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        build_spherical_offset(v, 0.2f, y, x);
+        FUN_001f9a68(p, v, random_float_between_alt(1.0f, 3.0f));
+        FUN_001f9a10(p, p, D_L01_001742E0);
+        FUN_L00_0026c6e8((char *)p, (char *)v);
+    }
+    for (i = 9; i >= 0; i--) {
+        float x, y;
+        p[0] = D_L01_001742C0[8] + FUN_L00_00257c48(0.0f, 0.1f);
+        p[1] = D_L01_001742C0[9] + FUN_L00_00257c48(0.0f, 0.1f);
+        p[2] = D_L01_001742C0[10] + FUN_L00_00257c48(0.0f, 0.1f);
+        x = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        y = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        build_spherical_offset(v, 0.05f, y, x);
+        FUN_L00_0026cbb0(p, v, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 20000.0f);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0bd8.s", FUN_L01_002e0bd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e30b8.s", FUN_L01_002e30b8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L01_002e30b8(int unused, void *out)
+{
+    char scratch[16];
+    char *base = D_0013E533 + 0xE1D;
+    FUN_L00_001ff500(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
+    FUN_001f9a10(out, scratch, base + 0x80);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3110.s", FUN_L01_002e3110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3208.s", FUN_L01_002e3208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e32a8.s", FUN_L01_002e32a8);

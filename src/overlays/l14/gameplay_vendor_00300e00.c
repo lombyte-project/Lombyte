@@ -73,11 +73,45 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305b18.s", FUN_L14_00305b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305d28.s", FUN_L14_00305d28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003061d8.s", FUN_L14_003061d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003061f8.s", FUN_L14_003061f8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00307680), where it is exact; names translated to the US level program. */
+
+void FUN_L14_003061f8(int unused, char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    d[0x28] = 4;
+    *(int *)(d + 0x20) = 0;
+    *(short *)(d + 0x24) = 0;
+    *(short *)(d + 0x3E) = 0;
+    moby[0x20] = 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_0030621c.s", FUN_L14_0030621c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307510.s", FUN_L14_00307510);
+/* Precomputes per-point segment values of a path and snaps the moby to its first point. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00308998), where it is exact; names translated to the US level program. */
+
+extern char *D_L14_001B0BB0[];
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_L00_001ff8b0(float, float);
+
+void FUN_L14_00307510(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *p = D_L14_001B0BB0[*(int *)(d + 0x78)];
+    int i;
+    for (i = 0; i < *(int *)p; i++) {
+        int o = i * 16;
+        float f = FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
+        *(float *)(p + o + 0x1C) = f;
+    }
+    *(int *)(d + 0x70) = 0;
+    *(int *)(d + 0x74) = 0;
+    qcopy(moby + 0x10, p + 0x10);
+    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) = *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307a80.s", FUN_L14_00307a80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003087c0.s", FUN_L14_003087c0);

@@ -210,7 +210,32 @@ void FUN_L02_002fa710(void) {
         FUN_L02_001fc008(FUN_L02_002fa770);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa770.s", FUN_L02_002fa770);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int a;
+    int b;
+    float c;
+    float d;
+} S;
+
+extern S D_L02_00167600;
+extern short D_L02_0016238C_d __asm__("D_L02_0016238C") __attribute__((sda));
+
+void FUN_L02_002fa770(void) {
+    S *s = &D_L02_00167600;
+    s->c = 10000.0f;
+    if (s->b == 0) {
+        float v = s->d - *(float *)&D_L02_0016238C_d;
+        s->d = v;
+        if (v < 0.0f) {
+            s->d = 0.0f;
+        }
+    } else {
+        s->b = 0;
+    }
+    s->a = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa7c8.s", FUN_L02_002fa7c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb788.s", FUN_L02_002fb788);

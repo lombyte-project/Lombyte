@@ -34,5 +34,33 @@ void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     FUN_001f9a10(v10, v10, a + 0x10);
     FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d, *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c46d0.s", FUN_L04_002c46d0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
+
+extern short D_L04_001618C0_d __asm__("D_L04_001618C0") __attribute__((sda));
+extern short D_L04_001618C4_d __asm__("D_L04_001618C4") __attribute__((sda));
+extern short D_L04_001618C8_d __asm__("D_L04_001618C8") __attribute__((sda));
+extern short D_L04_001618CC_d __asm__("D_L04_001618CC") __attribute__((sda));
+extern short D_L04_001618D0_d __asm__("D_L04_001618D0") __attribute__((sda));
+extern short D_L04_001618D4_d __asm__("D_L04_001618D4") __attribute__((sda));
+extern short D_L04_001618D8_d __asm__("D_L04_001618D8") __attribute__((sda));
+extern short D_L04_001618DC_d __asm__("D_L04_001618DC") __attribute__((sda));
+extern void FUN_L04_002c45b8(char *a, int i, int j, int k);
+
+void FUN_L04_002c46d0(char *a)
+{
+    FUN_L04_002c45b8(a, 0, 1, *(int *)&D_L04_001618C0_d);
+    FUN_L04_002c45b8(a, 2, 3, *(int *)&D_L04_001618C4_d);
+    FUN_L04_002c45b8(a, 4, 5, *(int *)&D_L04_001618C8_d);
+    FUN_L04_002c45b8(a, 5, 6, *(int *)&D_L04_001618CC_d);
+    FUN_L04_002c45b8(a, 6, 7, *(int *)&D_L04_001618D0_d);
+    FUN_L04_002c45b8(a, 8, 9, *(int *)&D_L04_001618C8_d);
+    FUN_L04_002c45b8(a, 9, 10, *(int *)&D_L04_001618CC_d);
+    FUN_L04_002c45b8(a, 10, 11, *(int *)&D_L04_001618D0_d);
+    FUN_L04_002c45b8(a, 12, 13, *(int *)&D_L04_001618D4_d);
+    FUN_L04_002c45b8(a, 14, 15, *(int *)&D_L04_001618D4_d);
+    FUN_L04_002c45b8(a, 16, 17, *(int *)&D_L04_001618D8_d);
+    FUN_L04_002c45b8(a, 20, 21, *(int *)&D_L04_001618D8_d);
+    FUN_L04_002c45b8(a, 18, 19, *(int *)&D_L04_001618DC_d);
+    FUN_L04_002c45b8(a, 22, 23, *(int *)&D_L04_001618DC_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce080.s", FUN_L04_002ce080);

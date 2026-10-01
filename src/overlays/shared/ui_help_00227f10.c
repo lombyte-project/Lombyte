@@ -2,5 +2,43 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00227f10.s", FUN_L12_00227f10);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002284A8.c: func_L12_002284A8), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern char D_L12_00179F40[];
+extern int FUN_L00_0020d498(int);
+
+int FUN_L12_00227f10(int a) {
+    char *base = D_0013E533 + 0xE1D;
+    int i;
+    char *p;
+    if (((unsigned char *)base)[0x20A4] == 3) {
+        return 0;
+    }
+    if (*(int *)(base + 0x22A8) == 1) {
+        return 0x54;
+    }
+    if (((unsigned char *)base)[0x12E2] != 0) {
+        return 0x6E;
+    }
+    if (a == 0) {
+        return 0;
+    }
+    if (((unsigned char *)base)[0x20A8] == 0) {
+        return 0;
+    }
+    if (((unsigned char *)base)[0x20AA] == 0) {
+        return 0;
+    }
+    if (*(short *)(base + 0x22C8) != 0) {
+        return 0;
+    }
+    i = FUN_L00_0020d498(0) * 0x4C;
+    p = D_L12_00179F40 - (-i);
+    return *(int *)(p + 0x24);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00235c08.s", FUN_L12_00235c08);

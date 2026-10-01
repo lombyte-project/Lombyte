@@ -6,6 +6,98 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea4e8.s", FUN_L10_002ea4e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea7b0.s", FUN_L10_002ea7b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eaa08.s", FUN_L10_002eaa08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eacd8.s", FUN_L10_002eacd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eb6f0.s", FUN_L10_002eb6f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eb7e0.s", FUN_L10_002eb7e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* update: wait for state 1, then act on the level's current mode */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EC098), where it is exact; names translated to the US level program. */
+
+struct L10Data {
+    char pad0[0x30];
+    int mode;
+    char pad1[0x178 - 0x34];
+    int slot[4];
+};
+
+extern int D_L10_0015F5C4;
+extern struct L10Data D_L10_0016CCE0;
+extern void FUN_L00_002637f8(int);
+
+void FUN_L10_002eacd8(char *m) {
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        ((unsigned char *)m)[0x30] = 0xFF;
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (D_L10_0015F5C4 == 2) {
+            if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 ||
+                D_L10_0016CCE0.mode == 6 || D_L10_0016CCE0.mode == 7) {
+                int v = D_L10_0016CCE0.mode;
+                int i;
+                i = 0;
+                if (v == 3) i = 1;
+                else if (v == 5 || v == 6) i = 2;
+                else if (v == 7) i = 3;
+                FUN_L00_002637f8(D_L10_0016CCE0.slot[i]);
+            }
+        }
+        break;
+    }
+}
+/* Update for moby class 1855: waits, arms, then fires an effect and deletes itself. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_0022da68(int, int, int);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L10_002eb6f0(char *m) {
+    int hit = 0;
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f) hit = 1;
+        if (hit) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)m);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263e30(m, 0x742, 1, 0x742, 1, 11, 2);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
+/* per-frame update: wait for a condition, then run, then clean up */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECBA0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L01_00278e20(void *, int);
+void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L10_002eb7e0(char *moby) {
+    int ok = 0;
+    char *p = FUN_L00_0025a420(moby, 0x10000, 0);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (p != 0) {
+            if (0.0f < *(float *)(p + 0x2C)) ok = 1;
+        }
+        if (ok != 0) moby[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)moby);
+        FUN_L01_002787a0(moby);
+        FUN_L01_00278e20(moby, 0x741);
+        mark_moby_for_removal_c(moby);
+        break;
+    }
+}

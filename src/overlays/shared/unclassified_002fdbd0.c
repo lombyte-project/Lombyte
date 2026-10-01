@@ -8,7 +8,33 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff978.s", FUN_L06_002ff978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300b90.s", FUN_L06_00300b90);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float FUN_001fa580(float, float);
+extern short D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
+extern void FUN_001f9a10(float *, float *, float *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_00300b90(char *moby) {
+    char *data;
+    float t = D_0015ED70 * 15.0f;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L06_00162080_d;
+    data = *(char **)(moby + 0x78);
+    *(float *)(data + 8) -= t;
+    FUN_001f9a10((float *)(moby + 0x10), (float *)(moby + 0x10), (float *)data);
+    FUN_001f9a10((float *)(moby + 0x40), (float *)(moby + 0x40), (float *)(data + 0x10));
+    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), *(float *)(data + 0x10));
+    *(float *)(moby + 0x44) = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(data + 0x14));
+    *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), *(float *)(data + 0x18));
+    if (--*(unsigned char *)(moby + 0xBC) == 0) {
+        mark_moby_for_removal(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300c60.s", FUN_L06_00300c60);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 

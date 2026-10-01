@@ -5,7 +5,55 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a8da0.s", FUN_L17_002a8da0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a95b8.s", FUN_L17_002a95b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cb310.s", FUN_L17_002cb310);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbc10.s", FUN_L17_002cbc10);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Steps a moby's countdown from a helper's output and retires it when it runs out. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CD088), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+
+void FUN_L17_002cbc10(char *m) {
+    char *d;
+    char *e;
+    char *r;
+    int st;
+    float fv;
+    int s;
+    d = *(char **)(m + 0x78);
+    if (*(unsigned char *)(m + 0x20) != 0) {
+        fv = 0.0f;
+        r = FUN_L00_0025a420(m, 0x330000, 0);
+        if (r != 0) {
+            if (*(int *)(r + 0x20) != 0) {
+                int h = *(short *)(*(char **)(r + 0x20) + 0xA6);
+                if (h != 0x3F1) {
+                    if (h != 0x127) r = 0;
+                }
+            }
+        }
+        e = d + 0x60;
+        FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+        if (st != 1 && *(unsigned char *)(m + 0x20) != 4) {
+            float t = *(float *)(d + 0x20) - fv;
+            *(float *)(d + 0x20) = t;
+            s = 0xB;
+            if (t <= 0.0f) s = 1;
+            if (s == 1) {
+                *(unsigned char *)(m + 0x20) = 4;
+                *(short *)(m + 0x34) &= 0xEFFF;
+            }
+            *(unsigned char *)(d + 0x67) = 0xF0;
+            FUN_L00_0025d458(m, (short *)e);
+        }
+        *(unsigned char *)(m + 0xA4) = 0xFF;
+        FUN_L00_0025d538(m, e);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d77f0.s", FUN_L17_002d77f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d7cf0.s", FUN_L17_002d7cf0);

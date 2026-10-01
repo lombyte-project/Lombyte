@@ -6,7 +6,27 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030b618.s", FUN_L01_0030b618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c898.s", FUN_L01_0030c898);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d260.s", FUN_L01_0030d260);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* offset a position by two camera-relative vectors, then raise z by 1 */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L01_0030d260(void *unused, float *p) {
+    float a[4];
+    float b[4];
+    char *g = D_0013E533 + 0xE1D;
+    FUN_L00_001ff500(a, *(char **)(g + 0x2080) + 0xD0, 1.1f);
+    FUN_L00_001ff500(b, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9a10(p, a, b);
+    FUN_001f9a10(p, p, g + 0x80);
+    p[2] = p[2] + 1.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d5f0.s", FUN_L01_0030d5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
@@ -51,7 +71,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316e88.s", FUN_L01_00316e88);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
+
+extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
+extern char *FUN_L00_001eb1f8(int);
+
+void FUN_L01_00316e88(float a, float b) {
+    char *m = D_L01_00167280_d;
+    char *t;
+    char *d;
+    if (*(short *)(m + 0x86) != 5) t = FUN_L00_001eb1f8(5);
+    else t = m;
+    d = *(char **)(t + 0x70) + 0xE0;
+    *(float *)(d + 0x44) = a;
+    *(float *)(d + 0x48) = b;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319f18.s", FUN_L01_00319f18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0031a078.s", FUN_L01_0031a078);

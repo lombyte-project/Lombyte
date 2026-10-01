@@ -47,7 +47,28 @@ void FUN_L08_002f0dc8(void) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1548.s", FUN_L08_002f1548);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5d98.s", FUN_L08_002f5d98);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+float FUN_L08_002f5d98(float x, char *arg) {
+    float f = x * 8.0f;
+    int i = func_001FA898_r(f);
+    float fr = f - ConvertIntegerToFloat(i);
+    char *t;
+    int j;
+    i = i % 8;
+    j = i + 1; j = j % 8;
+    t = arg + 0x90;
+    return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f70a0.s", FUN_L08_002f70a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00302ce8.s", FUN_L08_00302ce8);

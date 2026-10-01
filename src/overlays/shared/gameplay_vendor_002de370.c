@@ -2,8 +2,55 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002de370.s", FUN_L03_002de370);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_0015ED70;
+extern float FUN_001fa580(float, float);
+extern int FUN_001f9740(int *arg0);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_001ff290(void *, void *, void *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L03_002de370(char *moby) {
+    float v[4];
+    char *d = *(char **)(moby + 0x78);
+    *(float *)(d + 8) = *(float *)(d + 8) - D_0015ED70 * 9.8f;
+    FUN_L00_001ff290(v, moby + 0x10, d);
+    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), *(float *)(d + 0x10));
+    *(float *)(moby + 0x44) = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(d + 0x14));
+    *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), *(float *)(d + 0x18));
+    {
+        float a = ConvertIntegerToFloat(*(int *)(d + 0x24));
+        float b = ConvertIntegerToFloat(*(int *)(d + 0x20));
+        moby[0x23] = func_001FA898_r(a * 255.0f / b);
+    }
+    if (FUN_001f9740((int *)(d + 0x24)) != 0) {
+        mark_moby_for_removal(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8628.s", FUN_L03_002e8628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8730.s", FUN_L03_002e8730);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8870.s", FUN_L03_002e8870);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8980.s", FUN_L03_002e8980);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int D_L03_0015EF50;
+extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
+
+void FUN_L03_002e8980(char *moby)
+{
+    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
+    char *sub = *(char **)(entry + 0x1C);
+    if (*(int *)(moby + 0x74) == 4) {
+        if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
+            *(short *)(moby + 0x7E) = 3;
+        }
+    }
+}

@@ -3,4 +3,21 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b7a48.s", FUN_L01_002b7a48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b7c68.s", FUN_L01_002b7c68);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */
+
+extern float D_L01_001CAD00[];
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_002b7c68(float *in, int *out) {
+    out[0] = func_001FA898_r((in[0] + D_L01_001CAD00[2]) * 1024.0f);
+    out[1] = func_001FA898_r((in[1] + D_L01_001CAD00[3]) * 1024.0f);
+    out[2] = func_001FA898_r((in[2] - 1.0f) * 1024.0f);
+    ((short *)out)[6] = func_001FA898_r(D_L01_001CAD00[0] * 1024.0f);
+    ((short *)out)[7] = func_001FA898_r(D_L01_001CAD00[0] * 1024.0f);
+}

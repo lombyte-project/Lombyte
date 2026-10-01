@@ -149,7 +149,41 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7fd0.s", FUN_L18_002d7fd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8070.s", FUN_L18_002d8070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8710.s", FUN_L18_002d8710);
+/* turns the moby's heading toward a target, clamped per state, and updates its hover offset */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9B00), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern short D_L18_00161A48_d __asm__("D_L18_00161A48") __attribute__((sda));
+extern short D_L18_00161A4C_d __asm__("D_L18_00161A4C") __attribute__((sda));
+
+void FUN_L18_002d8710(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float v = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(data + 0x6C));
+    *(float *)(moby + 0x44) = v;
+    if (((unsigned char *)moby)[0x20] == 5) {
+        if (v > 0.5235988f) {
+            *(float *)(moby + 0x44) = 0.5235988f;
+        } else if (v < -0.5235988f) {
+            *(float *)(moby + 0x44) = -0.5235988f;
+        }
+    } else if (((unsigned char *)moby)[0x20] == 4) {
+        if (v > 0.08726646f) {
+            *(float *)(moby + 0x44) = 0.08726646f;
+        } else if (v < -0.08726646f) {
+            *(float *)(moby + 0x44) = -0.08726646f;
+        }
+    } else {
+        if (v > 0.034906585f) {
+            *(float *)(moby + 0x44) = 0.034906585f;
+        } else if (v < -0.034906585f) {
+            *(float *)(moby + 0x44) = -0.034906585f;
+        }
+    }
+    *(float *)(data + 0x74) = FUN_001fa580(*(float *)(data + 0x74), *(float *)&D_L18_00161A4C_d * 0.017453292f * D_0015ED6C);
+    *(float *)(moby + 0x18) = *(float *)(data + 0x64) + *(float *)&D_L18_00161A48_d * FUN_001f9de0(*(float *)(data + 0x74));
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -178,7 +212,52 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db938.s", FUN_L18_002db938);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dbe80.s", FUN_L18_002dbe80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc0c8.s", FUN_L18_002dc0c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc260.s", FUN_L18_002dc260);
+/* UpdateMoby_628 */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD650), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern float FUN_001f9b80(void *, void *);
+extern int D_L18_0015F5CC;
+extern int FUN_001f9740(int *);
+extern short D_L18_00161CA0_d __asm__("D_L18_00161CA0") __attribute__((sda));
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
+extern void FUN_L00_00259a88(int, void *);
+extern void FUN_L18_002dc4b8(void);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L18_002dc260(char *moby) {
+    char buf[0x30];
+    float v[4];
+    float *d = *(float **)(moby + 0x78);
+    char *tgt;
+    char *pos;
+    int flag;
+
+    if (FUN_001f9740((int *)(d + 2))) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+    pos = moby + 0x10;
+    tgt = D_0013E533 + 0xE9D;
+    if (FUN_001f9b80(pos, tgt) < d[0] + 0.5f) {
+        FUN_001f9a28(v, tgt, pos);
+        v[2] = 0.0f;
+        FUN_L00_001ff500(v, v, D_0015ED6C * 4.0f);
+        v[2] = D_0015ED6C * 4.0f;
+        FUN_L00_00259888(buf, (int)moby, 0x10001, v, 1.0f);
+        FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
+    }
+    flag = D_L18_0015F5CC & 4;
+    d[1] = d[1] + *(float *)&D_L18_00161CA0_d * D_0015ED6C;
+    if (flag == 0) {
+        FUN_L00_002598b0(*(int *)(d + 3), d[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
+    }
+    enqueue_callback_list_1_alt(FUN_L18_002dc4b8, moby);
+}
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 

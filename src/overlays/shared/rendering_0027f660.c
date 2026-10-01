@@ -2,14 +2,74 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0027f660.s", FUN_L01_0027f660);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
+
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern int FUN_L00_0025bfe0(float, float, float, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L01_001B250C_d __asm__("D_L01_001B250C") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_0027f660(char *pos, char *vel) {
+    unsigned char *p = FUN_L00_002678b8(10);
+    if (p != 0) {
+        char *q = (char *)p + 0x20;
+        qcopy(p + 0x10, pos);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
+        p[9] = func_001FA898_r(8.0f) - 0x60;
+        p[1] = 0;
+        p[3] = 0x48;
+        *(float *)(p + 0xC) = random_float_between_alt(60900.0f, 90300.0f);
+        p[8] = 0;
+        p[2] = *D_L01_001B250C_d;
+        *(float *)(q + 0x10) = 0.425f;
+        *(float *)(q + 0x14) = 0.425f;
+        *(float *)(q + 0x18) = 0.225f;
+        *(float *)(q + 0x1C) = 1.0f;
+        *(short *)(p + 0xA) = FUN_001f96f8(0x57);
+        qcopy(q, vel);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00280970.s", FUN_L01_00280970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00285768.s", FUN_L01_00285768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287158.s", FUN_L01_00287158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b408.s", FUN_L01_0028b408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b410.s", FUN_L01_0028b410);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b510.s", FUN_L01_0028b510);
+/* Returns the index of the entry whose distance to arg0 is closest to a target value. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C2D8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int count;
+    int pad[3];
+    float e[1][4];
+} List;
+
+extern float FUN_001f9b48(void *, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
+    int best = 0;
+    int i;
+    float bestDiff = 1e11f;
+    for (i = 0; i < arg1->count; i++) {
+        float d = FUN_001f9b48(arg1->e[i], arg0);
+        if (AbsoluteFloat(d - target) < bestDiff) {
+            bestDiff = d;
+            best = i;
+        }
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b5e0.s", FUN_L01_0028b5e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7f0.s", FUN_L01_0028b7f0);
@@ -36,5 +96,24 @@ int FUN_L01_0028b878(char *p)
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b8c8.s", FUN_L01_0028b8c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028ba80.s", FUN_L01_0028ba80);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
+    char tmp[16];
+    float t2 = t * t;
+    float t3 = t2 * t;
+    float b = t2 * 3.0f;
+    float a = t3 + t3;
+    float c = t2 + t2;
+    FUN_001f9a68(out, p1, a - b + 1.0f);
+    FUN_001f9a68(tmp, p3, t3 - c + t);
+    FUN_001f9a10(out, out, tmp);
+    FUN_001f9a68(tmp, p4, t3 - t2);
+    FUN_001f9a10(out, out, tmp);
+    FUN_001f9a68(tmp, p2, b - a);
+    FUN_001f9a10(out, out, tmp);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028bb90.s", FUN_L01_0028bb90);

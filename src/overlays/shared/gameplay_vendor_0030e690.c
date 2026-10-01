@@ -30,7 +30,22 @@ void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigne
     ang = FUN_001fa580(ang, 1.5707964f);
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311210.s", FUN_L11_00311210);
+/* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
+
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char D_0013E05A[];
+extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
+    float p[4];
+    int *g;
+    project_to_screen(p, pt);
+    g = (int *)(D_0013E05A + 0x4A6);
+    *outx = func_001FA898_r((p[0] - (float)g[4]) * 0.0625f);
+    *outy = func_001FA898_r((p[1] - (float)g[5]) * 0.0625f) + yoff;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003112b8.s", FUN_L11_003112b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319670.s", FUN_L11_00319670);

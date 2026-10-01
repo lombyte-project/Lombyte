@@ -11,7 +11,50 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002953f8.s", FUN_L03_002953f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029c9d0.s", FUN_L03_0029c9d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029caa8.s", FUN_L03_0029caa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029cff0.s", FUN_L03_0029cff0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d1b8.s", FUN_L03_0029d1b8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E370), where it is exact; names translated to the US level program. */
+
+extern char D_L03_00166EC0[];
+extern float FUN_001f9b48(void *, void *);
+extern int FUN_001f96f8(int);
+extern int FUN_001f9770(void *);
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_00257b90(int, int);
+
+void FUN_L03_0029d1b8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int r;
+    float f;
+    switch (*(short *)(moby + 0xA6)) {
+    case 0x33:
+    case 0x40:
+    case 0x4B:
+    case 0x73:
+    case 0x74:
+    case 0x76:
+    case 0x77:
+        if (*(short *)(data + 0x148) == -1) {
+            int lo = *(short *)(data + 0x14C);
+            *(short *)(data + 0x148) = FUN_001f96f8(FUN_L00_00257b90(lo, lo + *(short *)(data + 0x14E)));
+        } else {
+            int x, y;
+            if (!FUN_001f9770(data + 0x148)) {
+                break;
+            }
+            f = FUN_001f9b48(moby + 0x10, D_L03_00166EC0);
+            if (f > 15.0f && f < 90.0f) {
+                FUN_0022da68(0, 0, (int)moby);
+            }
+            x = FUN_001f96f8(0x898);
+            y = FUN_001f96f8(0x898);
+            *(short *)(data + 0x148) = FUN_001f96f8(FUN_L00_00257b90(x, y + FUN_001f96f8(0x3E8)));
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);

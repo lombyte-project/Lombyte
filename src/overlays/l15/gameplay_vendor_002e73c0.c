@@ -2,7 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e73c0.s", FUN_L15_002e73c0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Updates a moby: initialises its vector, then applies an angle-based offset. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern void FUN_001f99f8(void *);
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+
+void FUN_L15_002e73c0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (data != 0) {
+        unsigned char state = moby[0x20];
+        switch (state) {
+        case 0: {
+            char *vec = data + 0x40;
+            FUN_001f99f8(vec);
+            *(int *)(data + 0x9C) |= 4;
+            moby[0x20] = 3;
+            break;
+        }
+        case 3:
+            *(float *)(moby + 0x58) = 1.3888889f;
+            *(float *)(data + 0x40) = FUN_001f9dc8(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) * (D_0015ED6C * 2.5f);
+            *(float *)(data + 0x44) = FUN_001f9de0(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) * (D_0015ED6C * 2.5f);
+            *(int *)(data + 0x48) = 0;
+            break;
+        }
+        FUN_L00_00260738(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
+    }
+}
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -41,7 +76,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eac90.s", FUN_L15_002eac90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb6b8.s", FUN_L15_002eb6b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb928.s", FUN_L15_002eb928);
+/* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
+
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern short D_L15_00162198_d __asm__("D_L15_00162198") __attribute__((sda));
+extern short D_L15_0016219C_d __asm__("D_L15_0016219C") __attribute__((sda));
+extern void FUN_L00_0026f080(float, float, char *, float *);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L15_002eb928(char *moby)
+{
+    float vec[4];
+    float *data = *(float **)(moby + 0x78);
+    if (random_integer_below(*(int *)&D_L15_0016219C_d - 1) == 0) {
+        char *pos = moby + 0x10;
+        FUN_001f99f8(vec);
+        vec[2] = random_float_between_alt(0.75f, 1.5f) * *(float *)&D_L15_00162198_d * D_0015ED6C;
+        FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb9e0.s", FUN_L15_002eb9e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
@@ -54,7 +108,44 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f794c.s", FUN_L15_002f794c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f85a8.s", FUN_L15_002f85a8);
+/* tests several indexed conditions of a moby's entry in the table */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
+
+extern char *D_L15_0015EF50;
+extern char D_0013E533[];
+extern int *D_L15_001B0AB0[];
+extern int FUN_L00_00259740(float *p, float *v, int n);
+extern int FUN_L00_0025fa38(void *p, int i);
+extern int FUN_L00_0025faf0(float *p, int idx);
+extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
+
+int FUN_L15_002f85a8(char *moby) {
+    int *e = *(int **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    int r;
+    int i;
+    if (e[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[10])) {
+        return 0;
+    }
+    if (e[3] >= 0) {
+        if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, e[3])) {
+            return 1;
+        }
+    } else if (e[4] >= 0) {
+        if (FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[4])) {
+            return 1;
+        }
+    } else if (e[2] >= 0) {
+        if (FUN_L00_0025faf0((float *)(D_0013E533 + 0xE9D), e[2])) {
+            return 1;
+        }
+    } else if (e[5] >= 0) {
+        i = e[5];
+        if (FUN_L00_00259740((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4), D_L15_001B0AB0[i][0])) {
+            return 1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8698.s", FUN_L15_002f8698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8ba8.s", FUN_L15_002f8ba8);

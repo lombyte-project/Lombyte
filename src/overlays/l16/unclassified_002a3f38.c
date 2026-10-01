@@ -21,13 +21,118 @@ int FUN_L16_002c4710(Level16VendorMoby *moby) {
     return moby->state == 6;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c6268.s", FUN_L16_002c6268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9480.s", FUN_L16_002c9480);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9568.s", FUN_L16_002c9568);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C75D0), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float FUN_L00_001ff8b0(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00250df8(void *);
+extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f) {
+    unsigned char *moby = (unsigned char *)func_0020D348_m(0x119);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        moby[0x30] = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 1;
+        *(short *)(moby + 0x32) = 0xFF;
+        *(int *)(data + 0x20) = a;
+        *(float *)(data + 0x24) = f;
+        *(int *)(data + 0x28) = c;
+        *(short *)(data + 0xC) = FUN_001f96f8(5);
+        *(short *)(data + 0xE) = FUN_001f96f8(0xF);
+        qcopy(moby + 0x10, pos);
+        qcopy(data + 0x10, dir);
+        *(float *)(moby + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453292f;
+        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]) + 1.5707964f;
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
+/* updates the moby: initialises in state 0, then runs its motion in state 1 */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CA848), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern void FUN_L16_002c9568(char *);
+extern void FUN_L16_002c9650(char *);
+f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L16_002c9480(unsigned char *m) {
+    switch (m[0x20]) {
+    case 0: {
+        float f;
+        float h;
+        FUN_L16_002c9568((char *)m);
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 0.9f;
+        f = probe_ground_height(m + 0x10, 0, 0.5f);
+        h = AbsoluteFloat(f - *(float *)(m + 0x18));
+        if (h < 1.0f) {
+            *(float *)(m + 0x18) = f + 0.9f;
+        }
+        m[0x20] = 1;
+        break;
+    }
+    case 1:
+        *(float *)(m + 0x48) = FUN_001fa580(*(float *)(m + 0x48), D_0015ED6C * 4.1887903f);
+        FUN_L16_002c9650((char *)m);
+        break;
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CA930), where it is exact; names translated to the US level program. */
+
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L16_002c9568(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float *f = (float *)data;
+    int *p;
+    int i;
+    int arg;
+    for (i = 3; i >= 0; i--, f++) {
+        *f = (float)random_integer_below(0xFF);
+    }
+    p = (int *)(data + 0x20);
+    *(float *)(data + 0x10) = -1.0f;
+    *(float *)(data + 0x14) = -2.25f;
+    *(float *)(data + 0x18) = 1.25f;
+    *(float *)(data + 0x1C) = 2.5f;
+    arg = 0x3F;
+    for (i = 3; i >= 0; i--, p++) {
+        *p = FUN_001f96f8(arg);
+        arg += 0x40;
+    }
+    *(float *)(data + 0x30) = 3.5f;
+    *(float *)(data + 0x34) = 4.2f;
+    *(float *)(data + 0x3C) = 3.5f;
+    *(float *)(data + 0x38) = 4.2f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9650.s", FUN_L16_002c9650);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9878.s", FUN_L16_002c9878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9a50.s", FUN_L16_002c9a50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9c38.s", FUN_L16_002c9c38);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CB000), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern short *D_L16_001ABFC0_2CB000[] __asm__("D_L16_001ABCC0");
+
+void FUN_L16_002c9c38(int index, void *arg) {
+    short *p = D_L16_001ABFC0_2CB000[index];
+    if (p) {
+        do {
+            char *moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (*(short *)(moby + 0xA6) == 0x1D7) {
+                FUN_L00_00260738(*(char **)(moby + 0x78) + 0x20, arg, moby + 0x40, moby + 0x40);
+            }
+        } while (*p++ >= 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cddb8.s", FUN_L16_002cddb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
@@ -61,8 +166,74 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ced20.s", FUN_L16_002ced20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cee70.s", FUN_L16_002cee70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf198.s", FUN_L16_002cf198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf4a8.s", FUN_L16_002cf4a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf5c8.s", FUN_L16_002cf5c8);
+/* Updates a moby: waits for trigger, registers a draw callback and a sound handle. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0870), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
+extern int FUN_L16_002cf738(void *);
+extern void FUN_0022da68(int, int, void *);
+extern void FUN_L00_0028d918(int);
+extern void FUN_L16_002cf7a8(void);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002cf4a8(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    if ((*(unsigned short *)(moby + 0x34) & 2) == 0) {
+        unsigned char state = moby[0x20];
+        switch (state) {
+        case 0:
+            if (data[0] == 0) {
+                func_L16_002D0990_2D0870(moby);
+                moby[0x20] = 1;
+            }
+            break;
+        case 1:
+            if (FUN_L16_002cf738(moby) != 0) {
+                data[2] = state;
+                enqueue_callback_list_1_alt(FUN_L16_002cf7a8, moby);
+                if (FUN_L00_0028d8c0(moby, data[3]) == 0) {
+                    data[3] = func_0022ED80_i(0, 4, moby);
+                }
+            } else if (data[2] != 0) {
+                int h = data[3];
+                data[2] = 0;
+                if (h != -1) {
+                    char *e = D_0013E533 + 0x1D + h * 0x70;
+                    if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                        FUN_L00_0028d918(h);
+                    }
+                }
+                data[3] = -1;
+            }
+            break;
+        }
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0990), where it is exact; names translated to the US level program. */
+
+extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
+extern int FUN_L16_002cf678(char *);
+
+void FUN_L16_002cf5c8(char *moby) {
+    short *p = D_L16_001ABCC0_c[(unsigned char)moby[0x21]];
+    if (p != 0) {
+        do {
+            char *other = D_L16_0015FFD8 + (((unsigned short)*p & 0x7FFF) << 8);
+            if (*(short *)(other + 0xA6) == 0x228) {
+                int *data;
+                if (moby != other) {
+                    *(unsigned short *)(other + 0x34) |= 2;
+                }
+                data = *(int **)(other + 0x78);
+                *data = FUN_L16_002cf678(other);
+            }
+        } while (*p++ >= 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf678.s", FUN_L16_002cf678);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf738.s", FUN_L16_002cf738);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf760.s", FUN_L16_002cf760);
@@ -88,19 +259,110 @@ void FUN_L16_002cf9d0(Level16VendorVectorMoby *moby, int index, void *out) {
     qcopy(out, moby->data->vectors + index * 16 + 16);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf9f8.s", FUN_L16_002cf9f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cff48.s", FUN_L16_002cff48);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1310), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0025d7a0(char *, int, int, int);
+
+void FUN_L16_002cff48(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (*(float *)(data + 0x2C8) <= 0.0f) {
+        int idx = *(short *)(data + 0x2F4);
+        char *tab = *(char **)(data + 0x2C0);
+        int off = idx * 16;
+        if (*(float *)(tab + off + 0x1C) == 1.0f) {
+            while (1) {
+                char *t;
+                if (*(float *)(tab + off + 0x1C) == 2.0f) break;
+                idx = FUN_L00_0025d7a0(tab, idx, 1, 1);
+                tab = *(char **)(data + 0x2C0);
+                off = idx * 16;
+            }
+            *(short *)(data + 0x2F0) = idx;
+            qcopy(data + 0x270, *(char **)(data + 0x2C0) + (short)idx * 16 + 0x10);
+            *(int *)(data + 0x2E4) = 1;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d0058.s", FUN_L16_002d0058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d04a0.s", FUN_L16_002d04a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d59e0.s", FUN_L16_002d59e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ad0.s", FUN_L16_002d5ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5cb8.s", FUN_L16_002d5cb8);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7080), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float FUN_00213f38(float, float, float, float, float *, float *);
+extern int D_L16_0015F5CC;
+extern int FUN_001f9740(int *arg0);
+extern s32 SubtractIntegerWithClamp(s32);
+extern short D_L16_00161A84_d __asm__("D_L16_00161A84") __attribute__((sda));
+extern short D_L16_00161A88_d __asm__("D_L16_00161A88") __attribute__((sda));
+
+void FUN_L16_002d5cb8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        moby[0x20] = 1;
+        *(float *)data = *(float *)(moby + 0x18);
+        break;
+    case 1: {
+        int r = FUN_001f9740((int *)(data + 8));
+        float f;
+        if (r != 0) {
+            if (r == 2) {
+                if (SubtractIntegerWithClamp(*(int *)&D_L16_00161A88_d - D_L16_0015F5CC) >= 4) {
+                    *(int *)&D_L16_00161A88_d = D_L16_0015F5CC;
+                    FUN_0022da68(1, 0, moby);
+                }
+            }
+            f = *(float *)data;
+        } else {
+            f = *(float *)data + *(float *)&D_L16_00161A84_d;
+        }
+        FUN_00213f38(f, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 10.0f, (float *)(moby + 0x18), (float *)(data + 4));
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5e80.s", FUN_L16_002d5e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ef8.s", FUN_L16_002d5ef8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d6260.s", FUN_L16_002d6260);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d6740.s", FUN_L16_002d6740);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002de3b8.s", FUN_L16_002de3b8);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7B08), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L16_002d6740(char *moby) {
+    int flag = 0;
+    char *p = FUN_L00_0025a420(moby, 0x10000, 0);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (p != 0 && 0.0f < *(float *)(p + 0x2C)) flag = 1;
+        if (flag) moby[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, moby);
+        FUN_L00_00257470(moby, 0, -1);
+        FUN_L01_002787a0(moby);
+        FUN_L00_00263e30(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002DF780), where it is exact; names translated to the US level program. */
+
+extern short D_L16_00161C74;
+
+void FUN_L16_002de3b8(float f) {
+    *(float *)&D_L16_00161C74 = f;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
 extern void FUN_0022da68(int, int, void *);

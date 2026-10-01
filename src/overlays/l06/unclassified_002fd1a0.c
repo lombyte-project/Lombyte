@@ -33,7 +33,55 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ffcb0.s", FUN_L06_002ffcb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300278.s", FUN_L06_00300278);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003003f0.s", FUN_L06_003003f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300df0.s", FUN_L06_00300df0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float FUN_001f9de0(float);
+extern int D_L06_0015F5CC_d __asm__("D_L06_0015F5CC") __attribute__((sda));
+extern short D_L06_00162090_d __asm__("D_L06_00162090") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_00300df0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int state;
+    if (data == 0) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+    state = (unsigned char)moby[0x20];
+    switch (state) {
+    case 0:
+        *(short *)(moby + 0x32) = 0x200;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(float *)(data + 0xC) = *(float *)(moby + 0x18);
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC);
+        } else {
+            float f = ConvertIntegerToFloat(D_L06_0015F5CC_d % 600) / 600.0f;
+            float g = FUN_001f9de0(f * 6.28318f);
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + *(float *)&D_L06_00162090_d * g;
+        }
+        break;
+    case 2:
+        if (*(float *)(data + 0xC) > 1.0f)
+            FUN_001f9a68(data, data, 0.985f);
+        FUN_001f9a10(moby + 0x10, moby + 0x10, data);
+        FUN_001f9a10(moby + 0x40, moby + 0x40, data + 0x10);
+        if (*(int *)(D_0013E533 + 0x2EA1) != 0x72)
+            mark_moby_for_removal(moby);
+        break;
+    }
+}
 #include "qcopy.h"
 
 #define NOT_SDA
@@ -56,7 +104,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302fd8.s", FUN_L06_00302fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304028.s", FUN_L06_00304028);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_0015FFD8;
+extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
+void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_00304028(char *moby)
+{
+    char *data = *(char **)(moby + 0x78);
+    short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
+    do {
+        mark_moby_for_removal_c(D_L06_0015FFD8 + ((*p & 0x7FFF) << 8));
+    } while (*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 #define NOT_SDA
 

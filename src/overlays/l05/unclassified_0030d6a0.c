@@ -14,9 +14,71 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003150f0.s", FUN_L05_003150f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003156d0.s", FUN_L05_003156d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00315ee0.s", FUN_L05_00315ee0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00315f70.s", FUN_L05_00315f70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316070.s", FUN_L05_00316070);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
+
+extern short D_L05_00161EC0_d __asm__("D_L05_00161EC0") __attribute__((sda));
+extern short D_L05_00161EC4_d __asm__("D_L05_00161EC4") __attribute__((sda));
+extern short D_L05_00161EC8_d __asm__("D_L05_00161EC8") __attribute__((sda));
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L05_00315ee0(char *a, char *b, char *c) {
+    float t;
+    FUN_L00_001ff500(b, a + 0xC0, *(float *)&D_L05_00161EC8_d);
+    FUN_001f9a10(b, b, a + 0x10);
+    *(float *)(b + 8) = *(float *)(b + 8) + *(float *)&D_L05_00161EC0_d;
+    FUN_001f99f8(c);
+    t = *(float *)&D_L05_00161EC4_d;
+    *(float *)(c + 8) = *(float *)(a + 0x48);
+    *(float *)(c + 4) = t * 0.017453292f;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
+
+extern char *D_L05_001B0930[];
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+
+void FUN_L05_00315f70(char *moby) {
+    int i = 0;
+    char *data = *(char **)(moby + 0x78);
+    char *tab = D_L05_001B0930[*(int *)(data + 0x68)];
+    float ang = 0.0f;
+    float step = 6.28318f / (float)(*(int *)tab - 1);
+    for (; i < *(int *)tab; i++) {
+        char *v = tab + 0x10 + i * 16;
+        *(float *)v = FUN_001f9dc8(ang) * 3.5f;
+        *(float *)(v + 4) = FUN_001f9de0(ang) * 3.5f;
+        *(int *)(v + 8) = 0;
+        FUN_001f9a10(v, v, moby + 0x10);
+        ang = FUN_001fa580(ang, step);
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
+
+extern char D_L05_001671C0[];
+extern char D_L05_00211B20[];
+extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
+extern void FUN_L03_00291918(char *);
+
+void FUN_L05_00316070(char *moby) {
+    int *p = *(int **)(moby + 0x78);
+    int i;
+    int none = 1;
+    for (i = 0; i < 8; p++, i++) {
+        if (*p == -1) continue;
+        if (is_point_inside_clip_volume_alt(D_L05_001671C0, *p) != 0) {
+            none = 0;
+            break;
+        }
+    }
+    if (none) FUN_L03_00291918(D_L05_00211B20);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);

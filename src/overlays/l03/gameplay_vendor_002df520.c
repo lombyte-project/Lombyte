@@ -24,4 +24,18 @@ void FUN_L03_002ebdb0(void *arg) {
     NoOpMainCallback(arg);
     FUN_L03_002ebc58(arg);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebde8.s", FUN_L03_002ebde8);
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int D_L03_0015EF50;
+extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
+
+void FUN_L03_002ebde8(char *moby)
+{
+    char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
+    char *sub = *(char **)(entry + 0x1C);
+    int value = *(int *)(sub + 0xC);
+    if (value >= 0 && is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, value) == 0) {
+        *(short *)(moby + 0x7E) = 3;
+    }
+}

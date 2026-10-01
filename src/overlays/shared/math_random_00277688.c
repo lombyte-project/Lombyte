@@ -2,4 +2,20 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00277688.s", FUN_L09_00277688);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_002785C0.c: func_L09_002785C0), where it is exact; names translated to the US level program. */
+
+extern s32 rand();
+
+float FUN_L09_00277688(float scale)
+{
+    int x = (rand() >> 16) & 0xFFF;
+    float t = (float)x;
+    t = t * (1.0f / 4096.0f);
+    t = t * t;
+    t = 1.0f - t;
+    return t * scale;
+}

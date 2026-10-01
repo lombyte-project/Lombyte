@@ -4,7 +4,46 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e87d8.s", FUN_L17_002e87d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e8e08.s", FUN_L17_002e8e08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e94d8.s", FUN_L17_002e94d8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* spawns the class-0x558 object from src at pos, sets its state block and aims it along the vector v */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EAFC8), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_L00_001ff8b0(float, float);
+extern int FUN_001f96f8(int);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
+    char *r = func_0020D348_m(0x558);
+    if (r != 0) {
+        char *d;
+        char *p = r + 0x10;
+        float tmp[4];
+        *(unsigned char *)(r + 0x30) = 0xFF;
+        *(short *)(r + 0x32) = 0xFF;
+        r[0x31] = 1;
+        r[0x20] = 0;
+        *(long *)(r + 0x38) = *(long *)(src + 0x38);
+        qcopy(p, pos);
+        d = *(char **)(r + 0x78);
+        *(float *)(d + 0x40) = f;
+        qcopy(d + 0x10, v);
+        *(int *)(d + 0x38) = FUN_001f96f8(0x258);
+        *(char **)(d + 0x3C) = src;
+        FUN_001f9a28(tmp, d + 0x10, p);
+        FUN_L00_001ff500(d, tmp, *(float *)(d + 0x40));
+        *(float *)(r + 0x48) = FUN_L00_001ff8b0(v[0] - *(float *)(r + 0x10), v[1] - *(float *)(r + 0x14));
+        *(float *)(r + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b80(p, v), v[2] - *(float *)(r + 0x18));
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eace8.s", FUN_L17_002eace8);
 #include "qcopy.h"
@@ -129,7 +168,38 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     FUN_001f9a10(d, a, moby + 0x10);
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec150.s", FUN_L17_002ec150);
+/* Fires a projectile from the moby when the trigger is ready and the player presses a button. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */
+
+extern int FUN_L13_002e6a58(void *, void *, int, void *, float, int);
+extern short D_L17_00162074_d __asm__("D_L17_00162074") __attribute__((sda));
+extern short D_L17_00162078_d __asm__("D_L17_00162078") __attribute__((sda));
+extern unsigned char D_0013E533[];
+
+void FUN_L17_002ec150(char *moby, char *obj) {
+    char a[16];
+    char b[16];
+    if (FUN_001f9740(obj + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+        char *g = (char *)D_0013E533 + 0xE1D;
+        if (*(unsigned char *)(g + 0x15F6) != 0) {
+            char *pos = moby + 0x40;
+            float s;
+            int n;
+            unsigned short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
+            *(unsigned short *)(obj + 0x6A) = t;
+            FUN_L00_0024f7c8(moby, t + 7, a);
+            FUN_L00_001ff500(b, obj, 0.3f);
+            FUN_001f9a10(a, a, b);
+            s = *(float *)&D_L17_00162074_d * *(float *)&D_L17_001620A0_d;
+            n = FUN_001f96f8(300);
+            if (FUN_L13_002e6a58(moby, a, *(int *)(obj + 0xEC), pos, s, n)) {
+                FUN_0022da68(2, 0, (int)moby);
+                *(unsigned char *)(g + 0x15F6) -= 1;
+                *(int *)(obj + 0x84) = *(int *)&D_L17_00162078_d;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec360.s", FUN_L17_002ec360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002edf10.s", FUN_L17_002edf10);
@@ -193,7 +263,33 @@ void FUN_L17_002eea70(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eeb68.s", FUN_L17_002eeb68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efa48.s", FUN_L17_002efa48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efd48.s", FUN_L17_002efd48);
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1858), where it is exact; names translated to the US level program. */
+
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+
+int FUN_L17_002efd48(char *moby, float *target, float speed) {
+    char *data;
+    float *yaw = (float *)(moby + 0x48);
+    float ang;
+    float turn;
+    float tmp[3];
+    data = *(char **)(moby + 0x78);
+    ang = FUN_L00_001ff8b0(target[0] - *(float *)(moby + 0x10), target[1] - *(float *)(moby + 0x14));
+    turn = D_0015ED70 * 12.566371f;
+    FUN_L00_0025be00(yaw, (float *)(data + 0x1DC), ang, turn, turn, D_0015ED6C * 7.3303828f);
+    approach_value((float *)(data + 0x1D8), speed, D_0015ED70 * 13.0f);
+    tmp[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * *(float *)(data + 0x1D8);
+    tmp[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * *(float *)(data + 0x1D8);
+    tmp[2] = -(D_0015ED6C * 0.5f);
+    FUN_L00_00258830((int)moby, (int)tmp, 0.5f, 0.5f, 0.0f, 0);
+    return FUN_001f9b80(moby + 0x10, target) < 0.2f;
+}
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */

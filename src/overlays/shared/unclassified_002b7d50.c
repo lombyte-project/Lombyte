@@ -3,8 +3,66 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b7d50.s", FUN_L13_002b7d50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba088.s", FUN_L13_002ba088);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1c50.s", FUN_L13_002e1c50);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+
+float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, float hi)
+{
+    float t;
+    float u;
+    float r = 0.0f;
+    int i;
+    if (x > lo) {
+        t = (x - lo) / (hi - lo);
+        if (t < 0.0f) {
+            t = 0.0f;
+        }
+        if (t > 1.0f) {
+            t = 1.0f;
+        }
+        for (i = 1; i < n; i++) {
+            t = t * t;
+        }
+        u = 1.0f - t;
+        if (flag != 0) {
+            r = FUN_001fa580(b, FUN_001fa5c8(c, b) * t);
+        } else {
+            r = b * u + c * t;
+        }
+    } else {
+        r = b;
+    }
+    return r;
+}
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_0025d1b8(void *);
+
+unsigned char *FUN_L13_002e1c50(char *position, int moby_class)
+{
+    unsigned char *moby = func_0020D348_m(moby_class);
+    if (moby != 0) {
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        moby[0xBC] = 0;
+        qcopy(moby + 0x10, position);
+        FUN_L00_00250df8(moby);
+        FUN_L00_0025d1b8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1cc8.s", FUN_L13_002e1cc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6a58.s", FUN_L13_002e6a58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6c08.s", FUN_L13_002e6c08);

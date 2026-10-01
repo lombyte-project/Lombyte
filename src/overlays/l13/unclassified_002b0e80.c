@@ -4,9 +4,76 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b0e80.s", FUN_L13_002b0e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b39e0.s", FUN_L13_002b39e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4060.s", FUN_L13_002b4060);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5210), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+extern unsigned char D_0013E533[];
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a10(void *, void *, void *);
+
+void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
+{
+    float ang = *(float *)(moby + 0x48);
+    float r = 2.5f;
+    float z = 1.5f;
+    unsigned char *x;
+    if ((moby[0xBC] >= 2 && (moby[0xBC] & 1)) || (moby[0x20] >= 2 && (moby[0x20] & 1))) {
+        ang = FUN_001fa5c8(ang, 1.5707964f);
+    } else {
+        ang = FUN_001fa580(ang, 1.5707964f);
+    }
+    if (*(short *)(moby + 0xA6) == 0x15) {
+        r = 2.0f;
+        z = 1.2f;
+    }
+    v[0] = FUN_001f9dc8(ang) * r;
+    v[1] = FUN_001f9de0(ang) * r;
+    v[2] = z;
+    FUN_001f9a10(v, v, moby + 0x10);
+    FUN_001f99f8(w);
+    x = D_0013E533 + 0xE1D;
+    w[2] = FUN_L00_001ff8b0(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
+    *(int *)(w + 1) = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b41b8.s", FUN_L13_002b41b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b47a0.s", FUN_L13_002b47a0);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L13_003061c8(float, float *, float *, void *);
+extern float D_0015ED6C;
+extern float FUN_001f9b80(void *, void *);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int D_L13_0015F5CC;
+extern short D_L13_00161388_d __asm__("D_L13_00161388") __attribute__((sda));
+extern short D_L13_0016138C_d __asm__("D_L13_0016138C") __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+
+void FUN_L13_002b47a0(char *moby)
+{
+    float v[4];
+    float v2[4];
+    char *data;
+    float d, x, ang;
+    data = *(char **)(moby + 0x78);
+    if (D_L13_0015F5CC % *(int *)&D_L13_0016138C_d == 0) {
+        FUN_L00_0024f7c8(moby, 0, v);
+        d = FUN_001f9b80(moby + 0x10, *(char **)(data + 0x40) + 0x10);
+        x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
+        ang = FUN_001fa580(random_float_between_alt(-x, x) * 0.017453292f, *(float *)(moby + 0x48));
+        v2[0] = FUN_001f9dc8(ang) * (*(float *)&D_L13_00161388_d * D_0015ED6C);
+        v2[1] = FUN_001f9de0(ang) * (*(float *)&D_L13_00161388_d * D_0015ED6C);
+        v2[2] = 0;
+        FUN_001f9a10(v, v, v2);
+        FUN_L13_003061c8(*(float *)(data + 0x68), v, v2, moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b48d8.s", FUN_L13_002b48d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4958.s", FUN_L13_002b4958);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4a58.s", FUN_L13_002b4a58);
@@ -117,7 +184,65 @@ skip:
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b9df8.s", FUN_L13_002b9df8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b9f58.s", FUN_L13_002b9f58);
+/* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
+
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L11_00308848(void *, void *, void *, float, float);
+extern unsigned char D_0013A4E0[];
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
+
+void FUN_L13_002b9df8(char *moby, char *obj, float p2, float p3) {
+    char a[16];
+    char b[16];
+    char c[16];
+    char d[16];
+    build_spherical_offset(a, D_0015ED6C * 400.0f, p2, p3);
+    FUN_001f9a10(a, a, obj);
+    if (func_001F9908_i(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
+        FUN_0022da68(3, 0, (int)moby);
+        FUN_L00_001ff500(c, a, 2.2f);
+        FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
+        FUN_001f9a10(b, b, c);
+        FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
+        *(int *)(obj + 0x80) = FUN_001f96f8(4);
+        obj[0x61] ^= 1;
+    }
+    FUN_L00_001ff500(a, a, 23.0f);
+    FUN_001f9a10(d, a, moby + 0x10);
+    FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
+}
+/* Fires a timed burst from a moby while a pad button is held and ammo remains. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
+
+extern int FUN_L13_002e6a58(void *, void *, float, int, void *, int);
+
+void FUN_L13_002b9f58(char *moby, char *obj) {
+    if (func_001F9908_i(obj + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+        unsigned char *u = D_0013E533 + 0xE1D;
+        if (u[0x15F6] != 0) {
+            char a[16];
+            char b[16];
+            float s;
+            int h;
+            char *pos = moby + 0x40;
+            short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
+            *(short *)(obj + 0x6A) = t;
+            FUN_L00_0024f7c8(moby, t + 7, a);
+            FUN_L00_001ff500(b, obj, 0.3f);
+            FUN_001f9a10(a, a, b);
+            s = D_0015ED6C * 100.0f;
+            h = FUN_001f96f8(300);
+            if (FUN_L13_002e6a58(moby, a, s, *(int *)(obj + 0xEC), pos, h) != 0) {
+                FUN_0022da68(2, 0, (int)moby);
+                u[0x15F6]--;
+                *(int *)(obj + 0x84) = FUN_001f96f8(30);
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba178.s", FUN_L13_002ba178);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002bb068.s", FUN_L13_002bb068);

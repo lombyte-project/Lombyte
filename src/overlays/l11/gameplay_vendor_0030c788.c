@@ -50,7 +50,81 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f660.s", FUN_L11_0030f660);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fd98.s", FUN_L11_0030fd98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fe50.s", FUN_L11_0030fe50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310028.s", FUN_L11_00310028);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern void FUN_L11_0030fe50(void *, void *, void *);
+f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L11_00310028(unsigned char *moby)
+{
+    char *data = *(char **)(moby + 0x78);
+    char *u = data + 0x20;
+    unsigned char *t = *(unsigned char **)(data + 0x70);
+    if (t == 0 || t[0x20] == 0xFE || t[0x20] == 0xFD) {
+        if (moby[0x20] < 3) {
+            moby[0x20] = 4;
+        }
+    }
+    switch (moby[0x20]) {
+    case 0:
+        if (moby[0x53] != 1) {
+            blend_moby_animation(moby, 1, 0, 0xF);
+        }
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (moby[0x70] & 2) {
+            moby[0xA4] = 0xFF;
+            moby[0x20] = 2;
+        }
+        break;
+    case 2:
+        FUN_L11_0030fe50(moby, data, u);
+        if ((moby[0x70] & 2) && moby[0x53] != 1) {
+            blend_moby_animation(moby, 1, 0, 0xA);
+        }
+        break;
+    case 3:
+        if (moby[0x23] != 0) {
+            moby[0x23]--;
+        }
+        if (compute_interpolated_record_value(moby) > 13.5f) {
+            moby[0x20] = 4;
+        }
+        break;
+    case 4:
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310180.s", FUN_L11_00310180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310698.s", FUN_L11_00310698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311710.s", FUN_L11_00311710);
@@ -60,7 +134,45 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311be8.s", FUN_L11_00311be8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003125a8.s", FUN_L11_003125a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003126f8.s", FUN_L11_003126f8);
+/* on a pad press, fires the aimed shot and resets the cooldown */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int FUN_001f96f8(int);
+extern int FUN_L11_00309378(void *, void *, int, void *, float, int);
+extern short D_L11_00162064_d __asm__("D_L11_00162064") __attribute__((sda));
+extern short D_L11_00162068_d __asm__("D_L11_00162068") __attribute__((sda));
+extern short D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern unsigned char D_0013A4E0[];
+extern void FUN_001f9740(int *arg0);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
+extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
+
+void FUN_L11_003126f8(char *moby, char *d) {
+    if (func_001F9908_i(d + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
+        char *g = D_0013E533 + 0xE1D;
+        if (*(unsigned char *)(g + 0x15F6) != 0) {
+            char a[16];
+            char b[16];
+            int t = 0;
+            int v = (*(unsigned short *)(d + 0x6A) + 1) & 3;
+            *(unsigned short *)(d + 0x6A) = v;
+            FUN_L00_0024f7c8(moby, v + 7, a);
+            FUN_L00_001ff500(b, d, 0.3f);
+            FUN_001f9a10(a, a, b);
+            if (*(int *)(d + 0x88) != 0 && !(500 < *(int *)(d + 0x8C))) t = *(int *)(d + 0x88);
+            if (FUN_L11_00309378(moby, a, t, moby + 0x40, *(float *)&D_L11_00162064_d * *(float *)&D_L11_00162090_d, FUN_001f96f8(300))) {
+                func_0022ED80_i(2, 0, (int)moby);
+                *(unsigned char *)(g + 0x15F6) -= 1;
+                *(int *)(d + 0x84) = *(int *)&D_L11_00162068_d;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00312838.s", FUN_L11_00312838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313290.s", FUN_L11_00313290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313f60.s", FUN_L11_00313f60);

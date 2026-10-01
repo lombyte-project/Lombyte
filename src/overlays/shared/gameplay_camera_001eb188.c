@@ -35,7 +35,54 @@ s32 FUN_L00_001ed230(s32 id) {
     while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id) n++;
     return n;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed280.s", FUN_L00_001ed280);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* resets the camera behind the hero */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+
+extern S D_L00_00166C80_c __asm__("D_L00_00166C80");
+extern char *FUN_L00_001eb1f8(int);
+extern char D_0013E533[];
+extern char D_L00_00169110[];
+extern void FUN_001ed470(void);
+void backup_current_cam(void) __asm__("FUN_001ebc90");
+void update_moby(struct Moby *moby) __asm__("FUN_001ebec8");
+
+void FUN_L00_001ed280(void) {
+    char *g = (char *)&D_L00_00166C80_c;
+    float *s, *d, *t, *u;
+    char *a;
+    if (*(char **)(g + 0x180) != 0) {
+        *(short *)(*(char **)(g + 0x180) + 0x8E) = 0;
+        *(*(char **)(g + 0x180) + 0x7D) = 0;
+        *(short *)(*(char **)(g + 0x180) + 0x7E) = 0;
+    }
+    *(char **)(g + 0x180) = FUN_L00_001eb1f8(0);
+    *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
+    *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
+    *(short *)(g + 0x270) = 0;
+    FUN_001ed470();
+    update_moby(*(char **)(g + 0x180));
+    backup_current_cam();
+    a = *(char **)(g + 0x180);
+    s = (float *)(g + 0x140);
+    qcopy(s, a + 0x30);
+    d = (float *)(a + 0x64);
+    d[0] = s[0];
+    d[1] = s[1];
+    d[2] = s[2];
+    t = (float *)(D_0013E533 + 0xE9D);
+    u = (float *)(g + 0x190);
+    u[0] = t[0];
+    u[1] = t[1];
+    u[2] = t[2];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
 #define NOT_SDA
 

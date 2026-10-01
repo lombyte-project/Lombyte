@@ -41,15 +41,137 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003094f8.s", FUN_L13_003094f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00309e88.s", FUN_L13_00309e88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a488.s", FUN_L13_0030a488);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a6d8.s", FUN_L13_0030a6d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030ad38.s", FUN_L13_0030ad38);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C1F0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_L00_001ff8b0(float, float);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+
+void FUN_L13_0030ad38(char *moby, float *p, float *q) {
+    float a, k;
+    char *base;
+    FUN_001f99f8(q);
+    k = 2.25f;
+    if ((*(unsigned char *)(moby + 0xBC) >= 2 && (*(unsigned char *)(moby + 0xBC) & 1)) ||
+        (*(unsigned char *)(moby + 0x20) >= 2 && (*(unsigned char *)(moby + 0x20) & 1))) {
+        a = -1.5707964f;
+        q[0] = *(float *)(moby + 0x44);
+    } else {
+        a = 1.5707964f;
+        q[0] = -*(float *)(moby + 0x44);
+    }
+    p[0] = FUN_001f9dc8(a) * k;
+    p[1] = FUN_001f9de0(a) * k;
+    p[2] = 1.5f;
+    FUN_001f9cf8(p, p, moby + 0xC0);
+    FUN_001f9a10(p, p, moby + 0x10);
+    base = D_0013E533 + 0xE1D;
+    q[2] = FUN_L00_001ff8b0(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030ae68.s", FUN_L13_0030ae68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030af50.s", FUN_L13_0030af50);
+/* Checks the moby's trigger lists and copies the configured state bytes into it. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C408), where it is exact; names translated to the US level program. */
+
+extern int FUN_L13_0030ae68(int, int);
+extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
+
+void FUN_L13_0030af50(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    int *p = (int *)d;
+    int i;
+    char *base;
+    for (i = 0; i < 8; i++) {
+        if (*p != -1) {
+            if (FUN_L13_0030ae68(*p, -1) != 0) return;
+            p++;
+        }
+    }
+    base = D_0013E533 + 0xE1D;
+    if (*(int *)(base + 0x15F0) != 0 && *(int *)(base + 0x2084) == 0x32) return;
+    if (*(int *)(d + 0x28) != -1 && is_point_inside_clip_volume_alt(base + 0x80, *(int *)(d + 0x28)) == 0) return;
+    if (*(int *)(d + 0x20) != -1) moby[0x20] = d[0x20];
+    if (*(int *)(d + 0x24) == -1) return;
+    moby[0xBC] = d[0x24];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bb70.s", FUN_L13_0030bb70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bdf0.s", FUN_L13_0030bdf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bfb0.s", FUN_L13_0030bfb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c060.s", FUN_L13_0030c060);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c138.s", FUN_L13_0030c138);
+#include "qcopy.h"
+
+/* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_00259a88(void *, void *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L13_0030c060(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *owner = *(char **)(data + 0x60);
+    char *p;
+    char buf[0x30];
+    if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(data + 0x64) ||
+        (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+    p = FUN_L00_0025a420(moby, -1, 0);
+    if (p != 0) {
+        qcopy(buf, p + 0x10);
+        *(int *)(buf + 0x10) = *(int *)(p + 0x20);
+        *(int *)(buf + 0x14) = *(int *)(p + 0x24);
+        buf[0x18] = p[0x28];
+        buf[0x19] = p[0x29];
+        *(short *)(buf + 0x1A) = *(short *)(p + 0x2A);
+        *(float *)(buf + 0x1C) = *(float *)(p + 0x2C);
+        *(int *)(buf + 0x20) = *(int *)(p + 0x30);
+        FUN_L00_00259a88(*(void **)(data + 0x60), buf);
+    }
+    ((unsigned char *)moby)[0xA4] = 0xFF;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D600), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float D_0015ED6C;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
+    unsigned char *m = (unsigned char *)func_0020D348_m(0x662);
+    if (m != 0) {
+        char *data;
+        float r1, dd;
+        data = *(char **)(m + 0x78);
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        m[0x23] = FUN_L00_00257b90(0x40, 0x80);
+        FUN_L00_002502f0(m, 0x20, 0x60, 0x10);
+        qcopy(m + 0x10, a);
+        qcopy(data, b);
+        r1 = random_float_between_alt(D_0015ED6C * 6.2831855f, D_0015ED6C * 12.566371f);
+        dd = D_0015ED6C;
+        *(float *)(data + 0x10) = r1;
+        *(float *)(data + 0x14) = random_float_between_alt(dd * 6.2831855f, dd * 12.566371f);
+        *(short *)(data + 0x18) = c;
+        *(short *)(data + 0x1A) = c;
+        if (d == 0) {
+            *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(0.5f, 0.75f);
+        }
+        *(float *)(data + 0x1C) = *(float *)(m + 0x2C);
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(2.0f, 5.0f);
+        m[0xBC] = d;
+        FUN_L00_00250df8(m);
+    }
+    return (char *)m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c3b8.s", FUN_L13_0030c3b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030cdb8.s", FUN_L13_0030cdb8);

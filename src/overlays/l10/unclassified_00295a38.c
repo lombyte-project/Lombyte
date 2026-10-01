@@ -16,12 +16,60 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002cdf50.s", FUN_L10_002cdf50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b74.s", FUN_L10_002d7b74);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D8F34), where it is exact; names translated to the US level program. */
+
+void FUN_L10_002d7b74(char *a, float f) {
+    *(float *)(a + 0x18) = f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8c00.s", FUN_L10_002d8c00);
+/* update: on a timer, fire a projectile from the moby's angle, then rearm the timer */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern int FUN_001f9740(int *arg0);
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L10_002d8058();
+extern short D_L10_00161BF0_d __asm__("D_L10_00161BF0") __attribute__((sda));
+extern short D_L10_00161BF4_d __asm__("D_L10_00161BF4") __attribute__((sda));
+extern short D_L10_00161BF8_d __asm__("D_L10_00161BF8") __attribute__((sda));
+extern short D_L10_00161BFC_d __asm__("D_L10_00161BFC") __attribute__((sda));
+extern short D_L10_00161C00_d __asm__("D_L10_00161C00") __attribute__((sda));
+extern short D_L10_00161C04_d __asm__("D_L10_00161C04") __attribute__((sda));
+extern short D_L10_00161C08_d __asm__("D_L10_00161C08") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L10_002d8c00(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float a[4];
+    float b[4];
+    if (((unsigned char *)moby)[0x20] == 0) {
+        *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
+        moby[0x20] = 1;
+    }
+    if (FUN_001f9740((int *)data)) {
+        float x = *(float *)&D_L10_00161BF8_d;
+        float p = random_float_between_alt(-x, x) * 0.017453292f;
+        float q = FUN_001fa580(*(float *)(moby + 0x48), p);
+        float r = random_float_between_alt(*(float *)&D_L10_00161BFC_d, *(float *)&D_L10_00161C00_d) * 0.017453292f;
+        build_spherical_offset(a, random_float_between_alt(*(float *)&D_L10_00161C04_d, *(float *)&D_L10_00161C08_d) * D_0015ED6C, q, r);
+        FUN_001f9a10(b, moby + 0x10, a);
+        FUN_L10_002d8058(moby, b, a);
+        FUN_0022da68(0, 0, (int)moby);
+        *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9000.s", FUN_L10_002d9000);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d90a8.s", FUN_L10_002d90a8);

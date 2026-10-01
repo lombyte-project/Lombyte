@@ -4,7 +4,31 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002df270.s", FUN_L10_002df270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dfc38.s", FUN_L10_002dfc38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e0138.s", FUN_L10_002e0138);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Sets every listed entity in state 1 to state 2. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E14F8), where it is exact; names translated to the US level program. */
+
+typedef struct { char p0[0x10]; float x; float y; char p1[8]; unsigned char state; char p2[0xDF]; } Ent;
+
+extern Ent *D_L10_0015FFD8;
+extern short *D_L10_001ABCC0[];
+
+void FUN_L10_002e0138(unsigned char *m) {
+    short *p;
+    if (m[0x21] != 0xFF) {
+        p = D_L10_001ABCC0[m[0x21]];
+        if (p != 0) {
+            do {
+                Ent *base = D_L10_0015FFD8;
+                Ent *e = (Ent *)((*(unsigned short *)p & 0x7FFF) * 256 + (int)base);
+                if (e->state == 1) e->state = 2;
+            } while (*p++ >= 0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e01a8.s", FUN_L10_002e01a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e17c0.s", FUN_L10_002e17c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e1cb0.s", FUN_L10_002e1cb0);
@@ -18,7 +42,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3ef0.s", FUN_L10_002e3ef0);
 /* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
 /* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */
 
-typedef struct { char p0[0x10]; float x; float y; char p1[8]; unsigned char state; char p2[0xDF]; } Ent;
 
 extern Ent *D_L10_0015FFD8;
 extern float FUN_001f9b48(void *, void *);

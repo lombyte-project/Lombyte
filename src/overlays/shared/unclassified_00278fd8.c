@@ -5,14 +5,42 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00278fd8.s", FUN_L15_00278fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002979d8.s", FUN_L15_002979d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299a68.s", FUN_L15_00299a68);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
+
+extern float FUN_L00_001ff8b0(float, float);
+extern void FUN_L15_00299880(void *, void *, void *, void *, float);
+
+void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
+{
+    float angle = FUN_L00_001ff8b0(point[0] - *(float *)(moby + 0x10),
+                                     point[1] - *(float *)(moby + 0x14));
+    FUN_L15_00299880(moby, a, b, c, angle);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ae0.s", FUN_L15_00299ae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299dd8.s", FUN_L15_00299dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a030.s", FUN_L15_0029a030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a248.s", FUN_L15_0029a248);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L15_0029a248(char *a, char *b) {
+    char *d;
+    if (a != b) {
+        d = *(char **)(b + 0x78);
+        if (*(short *)(d + 0x19C) == 0 || random_integer_below(0x10) == 0) {
+            *(char **)(d + 0x198) = a;
+            *(short *)(d + 0x19C) = FUN_001f96f8(0xB4);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a2a8.s", FUN_L15_0029a2a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a570.s", FUN_L15_0029a570);
 #define NOT_SDA
@@ -50,7 +78,50 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7628.s", FUN_L15_002a7628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbac0.s", FUN_L15_002cbac0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbba0.s", FUN_L15_002cbba0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L15_002cbba0(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (moby[0x20] == 1) {
+        moby[0x20] = 2;
+        if (moby[0x53] != 1) {
+            blend_moby_animation(moby, 1, 0, FUN_001f96f8(10));
+        }
+    }
+    if (moby[0x20] == 3) {
+        if (*(int *)(data + 8) == 0) {
+            *(int *)(data + 0x18) = FUN_001f96f8(0x78);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbc30.s", FUN_L15_002cbc30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbd88.s", FUN_L15_002cbd88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d6770.s", FUN_L15_002d6770);

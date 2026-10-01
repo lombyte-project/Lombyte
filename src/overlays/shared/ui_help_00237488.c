@@ -2,7 +2,30 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00237488.s", FUN_L05_00237488);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
+
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern unsigned char D_0013E533[];
+
+void FUN_L05_00237488(float *out, float *p, float step) {
+    char *g = (char *)D_0013E533 + 0xE1D;
+    float v[2];
+    v[0] = -*(float *)(g + 0x1D20);
+    v[1] = *(float *)(g + 0x1D24);
+    approach_value(p + 2, v[0], step);
+    if (p[2] > 1.0f) p[2] = 1.0f;
+    if (p[2] < -1.0f) p[2] = -1.0f;
+    out[0] = p[2];
+    approach_value(p + 1, v[1], step);
+    if (p[1] > 1.0f) p[1] = 1.0f;
+    if (p[1] < -1.0f) p[1] = -1.0f;
+    out[1] = p[1];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b378.s", FUN_L05_0023b378);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b3c4.s", FUN_L05_0023b3c4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b400.s", FUN_L05_0023b400);

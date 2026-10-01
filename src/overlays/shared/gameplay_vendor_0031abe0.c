@@ -13,4 +13,25 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329540.s", FUN_L05_00329540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003296e0.s", FUN_L05_003296e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003298d8.s", FUN_L05_003298d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0032a6e0.s", FUN_L05_0032a6e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
+
+extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section(".data")));
+extern void FUN_002144d8(void *, void *);
+extern void FUN_L05_003296e0(void *);
+
+void FUN_L05_0032a6e0(char *out)
+{
+    char *src = D_L05_00167204_d;
+    qcopy(out + 0x30, src + 0x30);
+    qcopy(out, src);
+    qcopy(out + 0x10, src + 0x10);
+    qcopy(out + 0x20, src + 0x20);
+    FUN_002144d8(out + 0x40, out);
+    FUN_L05_003296e0(out);
+}

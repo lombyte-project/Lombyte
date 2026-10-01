@@ -346,7 +346,34 @@ void FUN_L00_00299c00(void) {
     FUN_002335a0();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a330.s", FUN_L00_0029a330);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
+extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
+extern unsigned char D_L00_00197BCC_d __asm__("D_L00_00197BCC") __attribute__((section(".data")));
+extern void FUN_L00_0024d8d0(int, int);
+extern void FlushCache(s32);
+extern void relocate_asset_entry_pointers_alt(char *arg0, int idx) __asm__("FUN_002032e0");
+
+void FUN_L00_0029a330(void) {
+    int i;
+    int *p;
+    char *base;
+    int v;
+    v = D_L00_001CA4C0_d[6] + 0x80000;
+    FlushCache(0);
+    FUN_L00_0024d8d0(v, D_L00_001CA4C0_d[6]);
+    FlushCache(0);
+    p = (int *)D_L00_001CA4C0_d[6];
+    base = D_L00_00197300_d[D_L00_00197BCC_d];
+    for (i = 0; i < 16; i++) {
+        int e = *p++;
+        if (e) {
+            *(int *)(base + 0x48 + i * 4) = D_L00_001CA4C0_d[6] + e;
+            relocate_asset_entry_pointers_alt(base, i);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a400.s", FUN_L00_0029a400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a6b0.s", FUN_L00_0029a6b0);
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4_29ab70;

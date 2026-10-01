@@ -2,8 +2,46 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00226f10.s", FUN_L01_00226f10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00227e48.s", FUN_L01_00227e48);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Looks up the value of the current help record, or 0/0x54 in the special cases. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
+
+extern char D_L01_00179F40[];
+extern int FUN_L00_0020d498(int);
+extern unsigned char D_0013E533[];
+
+int FUN_L01_00226f10(int a) {
+    char *g = (char *)D_0013E533 + 0xE1D;
+    char *r;
+    int n;
+    if (*(unsigned char *)(g + 0x20A4) == 3) return 0;
+    if (*(int *)(g + 0x22A8) == 1) return 0x54;
+    if (a == 0) return 0;
+    if (*(unsigned char *)(g + 0x20A8) == 0) return 0;
+    if (*(unsigned char *)(g + 0x20AA) == 0) return 0;
+    if (*(short *)(g + 0x22C8) != 0) return 0;
+    n = FUN_L00_0020d498(0);
+    r = D_L01_00179F40 - (-(n * 0x4C));
+    return *(int *)(r + 0x24);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
+
+void FUN_L01_00227e48(int a0, int a1, int a2) {
+    if (a2 != 0) {
+        char *g = (char *)D_0013E533 + 0xE1D;
+        char *m = *(char **)(g + 0x10E0);
+        int flag = 0;
+        if (m != 0) {
+            flag = *(short *)(m + 0xA6) == 0xAD;
+        }
+        FUN_L00_0028de68(a0, a1, flag, 0, *(int *)(g + 0x2080));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
 #define NOT_SDA
 
@@ -105,8 +143,89 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022cd48.s", FUN_L01_0022cd48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231348.s", FUN_L01_00231348);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231450.s", FUN_L01_00231450);
+/* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00205538(void);
+extern void FUN_L00_00206c08(void);
+extern void FUN_L00_0020e698(void);
+extern void FUN_L00_00210748();
+extern void FUN_L00_00232628(void);
+extern void FUN_L00_00232fe8(void);
+extern void FUN_L00_00262840(char *o);
+extern void FUN_L01_00231ae0(void);
+extern void FUN_L01_0023cf98(int, int);
+
+void FUN_L01_00231348(int a, int b, int c) {
+    char *g;
+    FUN_L00_0020e698();
+    g = (char *)D_0013E533 + 0xE1D;
+    *(char *)(g + 0x20A6) = 1;
+    FUN_L00_00210748();
+    *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
+    FUN_L00_00262840(g + 0x1670);
+    *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
+    FUN_L00_00232fe8();
+    FUN_L00_00206c08();
+    FUN_L00_00205538();
+    *(char *)(g + 0x20A4) = a;
+    *(int *)(g + 0xA84) = c;
+    *(int *)(g + 0x2080) = c;
+    FUN_L01_00231ae0();
+    *(float *)(g + 0x220) = *(float *)(g + 0x228);
+    *(float *)(g + 0x224) = *(float *)(g + 0x22C);
+    *(unsigned short *)(*(char **)(g + 0x2080) + 0x34) |= 6;
+    *(float *)(g + 0xA90) = 1.0f;
+    *(float *)(g + 0xA94) = 1.0f;
+    FUN_L00_00232628();
+    FUN_L00_00257024(*(void **)(g + 0x2080));
+    FUN_L00_00207a58();
+    *(short *)(g + 0x22CC) = b;
+    if (a == 1) {
+        *(unsigned short *)(g + 0x22B0) = *(unsigned short *)(g + 0x22A8);
+        *(int *)(g + 0x22A8) = *(int *)(g + 0x22AC);
+    }
+    FUN_L01_0023cf98(b, 1);
+}
+#include "qcopy.h"
+
+/* resets the hero state and default camera fields */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00231A68), where it is exact; names translated to the US level program. */
+
+extern int D_L01_0015F5C4;
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L01_00231450(void) {
+    char *g;
+    char *p;
+    char *m;
+    char *a;
+    FUN_L00_00205538();
+    g = (char *)D_0013E533 + 0xE1D;
+    p = *(char **)(g + 0xA84);
+    g[0x20A4] = 0;
+    if (p != 0) {
+        *(unsigned short *)(p + 0x34) &= 0xFFF9;
+    }
+    *(int *)(g + 0xA84) = 0;
+    m = *(char **)(g + 0xA8C);
+    if (m != 0) {
+        mark_moby_for_removal(m);
+        *(int *)(g + 0xA8C) = 0;
+    }
+    FUN_L00_00206c08();
+    a = *(char **)(g + 0xA88);
+    *(char **)(g + 0x2080) = a;
+    qcopy(a + 0x10, g + 0x80);
+    *(int *)(a + 0x98) = 0;
+    *(float *)(g + 0xA94) = 1.0f;
+    FUN_L00_00232628();
+    if (*(int *)(g + 0x2084) == 0x64) {
+        if (D_L01_0015F5C4 == 2) return;
+        if (D_L01_0015F5C4 == 6) return;
+    }
+    FUN_L01_0023cf98(0, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231580.s", FUN_L01_00231580);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231ae0.s", FUN_L01_00231ae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232290.s", FUN_L01_00232290);
@@ -117,5 +236,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0023c710.s", FUN_L01_0023c710);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002405a0.s", FUN_L01_002405a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00242198.s", FUN_L01_00242198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002488e8.s", FUN_L01_002488e8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002490E0), where it is exact; names translated to the US level program. */
+
+void FUN_L01_002488e8(void) {
+    *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) |= 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00248900.s", FUN_L01_00248900);

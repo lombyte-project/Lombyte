@@ -2,13 +2,127 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00291918.s", FUN_L03_00291918);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_00292AC0), where it is exact; names translated to the US level program. */
+
+extern char D_L03_001CAF00[];
+extern void FUN_L02_0024f748(char *);
+extern void FUN_L02_0024fa80(char *);
+extern void FUN_L02_002a40f0(char *);
+extern void FUN_L02_002a46e0(char *);
+extern void WriteDmaChannel(u32, u32, u32);
+
+void FUN_L03_00291918(char *moby)
+{
+    FUN_L02_002a40f0(moby);
+    WriteDmaChannel(D_L03_001CAF00, 0x70002800, 0xF8);
+    FUN_L02_0024f748(moby);
+    FUN_L02_0024fa80(moby);
+    FUN_L02_002a46e0(moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00291970.s", FUN_L03_00291970);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bae48.s", FUN_L03_002bae48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002beba0.s", FUN_L03_002beba0);
+#include "qcopy.h"
+
+/* update: follow the parent, blend its color, scale by the wind factor */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002BC140), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern int FUN_001f9770(void *);
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L00_00262cf0(void *, void *, float, float, float);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L03_002bae48(char *moby) {
+    char *p = *(char **)(moby + 0x78);
+    float ratio;
+    float v;
+    int c;
+    int g;
+    int b;
+    if (FUN_001f9770(p + 0xE)) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+    *(float *)(moby + 0x44) = *(float *)(*(char **)p + 0x44);
+    *(float *)(moby + 0x48) = *(float *)(*(char **)p + 0x48);
+    qcopy(moby + 0x10, *(char **)(*(char **)p + 0x78) + 0xF0);
+    v = *(float *)(p + 0x10) + *(float *)(p + 0x14);
+    *(float *)(p + 0x10) = v;
+    FUN_L00_00262cf0(moby + 0x10, moby + 0x10, -v, *(float *)(moby + 0x48), *(float *)(moby + 0x44));
+    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), D_0015ED6C * 5.235987663269043f);
+    ratio = ConvertIntegerToFloat(*(short *)(p + 0xE));
+    ratio = ratio / ConvertIntegerToFloat(*(short *)(p + 0xC));
+    c = FUN_001fa6e0(*(int *)(p + 8), *(int *)(p + 4), ratio);
+    b = (c >> 16) & 0xFF;
+    g = (c >> 8) & 0xFF;
+    FUN_L00_002502f0(moby, c & 0xFF, g, b);
+    moby[0x23] = func_001FA898_r(ratio * 128.0f);
+    *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * (D_0015ED60 * 0.019999981f + 1.0f);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002BFF68), where it is exact; names translated to the US level program. */
+
+extern char *D_L03_001600EC;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+
+int FUN_L03_002beba0(int idx, float *out) {
+    char *mat;
+    if (idx != -1) {
+        mat = D_L03_001600EC + idx * 128;
+        out[0] = random_float_between_alt(-1.0f, 1.0f);
+        out[1] = random_float_between_alt(-1.0f, 1.0f);
+        out[2] = random_float_between_alt(-1.0f, 1.0f);
+        FUN_001f9cf8(out, out, mat);
+        FUN_001f9a10(out, out, mat + 0x30);
+        return 0;
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bec60.s", FUN_L03_002bec60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bef68.s", FUN_L03_002bef68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c45d8.s", FUN_L03_002c45d8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00250df8(void *);
+extern char *func_0020D348_m_2C59A0(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg)
+{
+    char *m;
+    char *d;
+    m = func_0020D348_m_2C59A0(0x221);
+    if (m != 0) {
+        d = *(char **)(m + 0x78);
+        *(char **)(d + 0x10) = owner;
+        qcopy(m + 0x10, pos);
+        qcopy(d, dir);
+        *(float *)(m + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(float *)(m + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
+        *(int *)(d + 0x18) = 0;
+        *(short *)(d + 0x14) = FUN_001f96f8(500);
+        *(short *)(d + 0x16) = ang;
+        *(unsigned char *)(m + 0x30) = (*(unsigned char **)(d + 0x10))[0x30];
+        *(unsigned short *)(m + 0x32) = *(unsigned short *)(*(char **)(d + 0x10) + 0x32);
+        m[0x31] = 1;
+        m[0x20] = 0;
+        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.001f;
+        *(int *)(d + 0x1C) = arg;
+        *(int *)(d + 0x20) = 0;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c60.s", FUN_L03_002c6c60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c90.s", FUN_L03_002c6c90);

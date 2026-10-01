@@ -27,13 +27,81 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00307ca0.s", FUN_L01_00307ca0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308380.s", FUN_L01_00308380);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern short D_L01_00161F10_d __asm__("D_L01_00161F10") __attribute__((sda));
+extern short D_L01_00161F14_d __asm__("D_L01_00161F14") __attribute__((sda));
+extern short D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
+extern short D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
+extern short D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
+extern void FUN_L01_00308550(char *);
+extern void FUN_L01_003089f0(char *);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L01_00308380(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float r;
+    float s;
+    float k;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L01_00161F10_d;
+    if (((unsigned char *)moby)[0x20] == 1) {
+        s = FUN_001f9de0(*(float *)(moby + 0x4C));
+        *(float *)(moby + 0x18) = *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_d + *(float *)&D_L01_00161F18_d * s;
+        *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), *(float *)(data + 0x68));
+        *(float *)(moby + 0x44) = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(data + 0x64));
+        r = FUN_001fa580(*(float *)(moby + 0x48), *(float *)(data + 0x60));
+        k = *(float *)&D_L01_00161F2C_d * 0.017453292f * D_0015ED6C;
+        *(float *)(moby + 0x48) = r;
+        *(float *)(moby + 0x4C) = FUN_001fa580(*(float *)(moby + 0x4C), k);
+    }
+    FUN_L01_00308550(moby);
+    if (random_integer_below(*(int *)&D_L01_00161F50_d) == 0) {
+        FUN_L01_003089f0(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308550.s", FUN_L01_00308550);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003087e0.s", FUN_L01_003087e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003089f0.s", FUN_L01_003089f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308b28.s", FUN_L01_00308b28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308bd8.s", FUN_L01_00308bd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003092d0.s", FUN_L01_003092d0);
+#include "qcopy.h"
+
+/* Places the three child mobys at this moby's position and orients each from its data. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030A6A8), where it is exact; names translated to the US level program. */
+
+extern short D_L01_00161F78_d __asm__("D_L01_00161F78") __attribute__((sda));
+extern short D_L01_00161F80_d __asm__("D_L01_00161F80") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L01_003092d0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char **p = (char **)(d + 0x14);
+    float v[4];
+    int i;
+    for (i = 2; i >= 0; i--) {
+        float t;
+        float u;
+        char *o = *p;
+        qcopy(o + 0x10, m + 0x10);
+        u = *(float *)&D_L01_00161F80_d * 0.017453292f;
+        *(float *)(o + 0x18) += *(float *)&D_L01_00161F78_d;
+        *(float *)(*p + 0x44) = u;
+        t = *(float *)(d + 0x20) * 2.4f - 1.2f;
+        FUN_001fa030(*p + 0xC0, *p + 0x40);
+        FUN_L00_001ff500(v, *p + 0xC0, t);
+        FUN_001f9a10(*p + 0x10, *p + 0x10, v);
+        *(float *)(*p + 0x44) = *(float *)(d + 0x24) * -1.0471976f - 0.34906584f;
+        FUN_001fa030(*p + 0xC0, *p + 0x40);
+        FUN_L00_00250df8(*p);
+        p++;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309430.s", FUN_L01_00309430);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
 /* Mark the parent and its three attached objects active. */

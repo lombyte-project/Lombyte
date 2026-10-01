@@ -2,7 +2,30 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027b8e0.s", FUN_L12_0027b8e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* tests whether a point lies within height, distance and heading limits of a moby */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001fa688(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
+    float d = AbsoluteFloat(b[2] - *(float *)(a + 0x18));
+    if (d > y) return 0;
+    if (FUN_001f9b48(b, a + 0x10) > x) return 0;
+    if (!(0.0f < z)) return 1;
+    {
+        float r = FUN_L00_001ff8b0(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
+        r = FUN_001fa688(*(float *)(a + 0x48), r);
+        if (r > z) return 0;
+    }
+    return 1;
+}
 extern void MobyAnimAdvance(void *) __asm__("FUN_L00_00250480");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"

@@ -8,8 +8,130 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f32f0.s", FUN_L17_002f32f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f3848.s", FUN_L17_002f3848);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f40d8.s", FUN_L17_002f40d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f4fb0.s", FUN_L17_002f4fb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f4fb8.s", FUN_L17_002f4fb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5260.s", FUN_L17_002f5260);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Finds the listed moby of type 0x733 in state 4 and launches it along a rotated vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char *D_L17_0015FFD8;
+extern char D_0013E533[];
+extern char D_L17_001676C0[];
+extern char D_L17_001676D0[];
+extern float D_0015ED6C;
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern int FUN_001f96f8(int);
+extern short *D_L17_001AC140[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+char *FUN_L17_002f4fb8(int list) {
+    short *s = D_L17_001AC140[list];
+    float A[4], B[4], C[4], D[4], E[4], F[4];
+    char *m;
+    char *d;
+    int idx;
+    do {
+        idx = (*s & 0x7FFF) << 8;
+        if (*(short *)(0xA6 + idx + D_L17_0015FFD8) != 0x733) continue;
+        if (*(unsigned char *)(0x20 + idx + D_L17_0015FFD8) != 4) continue;
+        if (random_integer_below(10)) continue;
+        m = D_L17_0015FFD8 + idx;
+        d = *(char **)(m + 0x78);
+        qcopy(C, D_L17_001676D0);
+        C[0] = 0;
+        if (C[1] > 0.17453292f) C[1] = 0.17453292f;
+        else if (C[1] < -0.17453292f) C[1] = -0.17453292f;
+        FUN_001fa030(D, C);
+        {
+            float f = FUN_001fa580(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
+            FUN_L00_001ff500(A, E, FUN_001f9de0(f) * 12.0f);
+            FUN_001f9a10(B, D_L17_001676C0, A);
+            FUN_L00_001ff500(A, F, FUN_001f9dc8(f) * 12.0f);
+        }
+        FUN_001f9a10(B, B, A);
+        FUN_L00_001ff500(A, D, 6.0f);
+        FUN_001f9a10(B, B, A);
+        qcopy(d + 0xB0, D_0013E533 + 0xE9D);
+        qcopy(m + 0x10, B);
+        m[0x20] = 5;
+        m[0xBC] = 1;
+        *(float *)(d + 0x6C) = D_0015ED6C * 20.0f;
+        *(float *)(d + 0x94) = 5.0f;
+        if (*(unsigned char *)(m + 0x53)) blend_moby_animation(m, 0, 0, FUN_001f96f8(10));
+        *(unsigned short *)(m + 0x34) &= 0xFFFE;
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        return m;
+    } while (*s++ >= 0);
+    return 0;
+}
+/* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_0022da68(int, int, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+extern void FUN_L01_00278e20(void *, int);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L17_002f5260(unsigned char *m) {
+    int flag = 0;
+    char *p = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (p && *(float *)(p + 0x2C) > 0.0f) flag = 1;
+        if (flag) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)m);
+        FUN_L00_00257470(m, 0, -1);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263e30(m, 0x753, 1, 0x753, 1, 11, 2);
+        FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
+        FUN_L01_00278e20(m, 0x752);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5390.s", FUN_L17_002f5390);
 #define NOT_SDA
 
@@ -88,7 +210,31 @@ void FUN_L17_002f5690(void) {
         FUN_L00_001fde98(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162410_d)[i], p, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f59a8.s", FUN_L17_002f59a8);
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
+
+extern char D_L17_001DF6A0[];
+extern short D_L17_00162420_d __asm__("D_L17_00162420") __attribute__((sda));
+extern short D_L17_00162440_d __asm__("D_L17_00162440") __attribute__((sda));
+extern short D_L17_00162448_d __asm__("D_L17_00162448") __attribute__((sda));
+extern short D_L17_00162450_d __asm__("D_L17_00162450") __attribute__((sda));
+extern short D_L17_00162458_d __asm__("D_L17_00162458") __attribute__((sda));
+void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L17_002f59a8(void) {
+    int i;
+    float *p;
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x30));
+    vu1_add_g_sregister(0x42, 0x2000000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    FUN_001f76a0();
+    p = (float *)D_L17_001DF6A0;
+    for (i = 0; i < 1; i++) {
+        FUN_L17_002f54d8(((int *)&D_L17_00162420_d)[i], (V3 *)((int *)&D_L17_00162450_d)[i], (V3 *)((int *)&D_L17_00162440_d)[i], ((int *)&D_L17_00162448_d)[i], p);
+        FUN_L00_001fde98(((int *)&D_L17_00162420_d)[i], ((int *)&D_L17_00162440_d)[i], ((int *)&D_L17_00162458_d)[i], p, 1);
+    }
+}
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
 /* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 

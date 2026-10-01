@@ -2,6 +2,27 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f3038.s", FUN_L04_001f3038);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* index of the nearest of n vectors to a + 0x10 */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b80(void *, void *);
+
+int FUN_L04_001f3038(char *a, char *b, int n) {
+    int best = -1;
+    int i;
+    float m = 32767.0f;
+    for (i = 0; i < n; i++) {
+        float d = FUN_001f9b80(a + 0x10, b + i * 0x10);
+        if (d < m) {
+            m = d;
+            best = i;
+        }
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f3a80.s", FUN_L04_001f3a80);

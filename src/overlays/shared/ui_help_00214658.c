@@ -519,7 +519,30 @@ void FUN_001f9a10(void *, void *, void *);
 void FUN_001f99f8(void *);
 void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else FUN_001f99f8(g); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002167d0.s", FUN_L00_002167d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216de8.s", FUN_L00_00216de8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* passes a pointer chosen by a mode byte to func_0022ED80, copying a vector first in mode 3 */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int FUN_0022da68(int, int, int);
+
+int FUN_L00_00216de8(int a, int b) {
+    char *p = D_0013E533 + 0xE1D;
+    int c;
+    if (*(unsigned char *)(p + 0x20A4) == 3) {
+        c = *(int *)(p + 0xA88);
+        if (c != 0) {
+            qcopy((char *)c + 0x10, p + 0x80);
+            return FUN_0022da68(a, b, c);
+        }
+    } else {
+        return FUN_0022da68(a, b, *(int *)(p + 0x2080));
+    }
+    return -1;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -540,7 +563,25 @@ void FUN_L00_00216e48(int idx, int a, int b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ef8.s", FUN_L00_00216ef8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216f10.s", FUN_L00_00216f10);
+/* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f9770(void *);
+extern int FUN_L00_00216de8();
+extern unsigned char D_001413F5[];
+
+void FUN_L00_00216f10(void) {
+    char *p = (char *)D_001413F5 + 0x137;
+    short *q = (short *)(D_001413F5 + 0x139);
+    int i;
+
+    for (i = 0; i < 8; i++) {
+        if (FUN_001f9770(p + i * 8) == 2) {
+            q[i * 4 - 3] = 0;
+            FUN_L00_00216de8(q[i * 4 - 2], q[i * 4]);
+        }
+    }
+}
 typedef struct { float f[4]; } __attribute__((aligned(16))) Vec4_00216f90;
 extern char D_0013F3D0_00216f90[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern int D_L00_00167014_00216f90 __asm__("D_L00_00167014") __attribute__((section(".data")));
@@ -596,6 +637,32 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
     FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217118.s", FUN_L00_00217118);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217368.s", FUN_L00_00217368);
+/* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
+
+extern int *D_L00_00177F00[];
+extern void FUN_L00_002336e8(float *dst, float *src, float h);
+extern void FUN_L00_002a7e20(void *, int);
+
+void FUN_L00_00217368(int a, int n) {
+    if (n != 0) {
+        char *d = D_0013E533 + 0xE1D;
+        int i;
+        if (*(int *)(d + 0xA64) == 0) {
+            FUN_0022da68(1, 0, a);
+            *(int *)(d + 0xA64) = 1;
+        }
+        for (i = 0; i < n; i++) {
+            int *m = D_L00_00177F00[i];
+            int t = (m && (m = (int *)m[9])) ? *(short *)((char *)m + 0x46) : 0;
+            if (t == 5 || t == 9) {
+                float v[4] __attribute__((aligned(16)));
+                qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
+                FUN_L00_002336e8(v, v, 0.5f);
+                FUN_L00_002a7e20(v, 4);
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217450.s", FUN_L00_00217450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217658.s", FUN_L00_00217658);

@@ -7,7 +7,54 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d36e0.s", FUN_L08_002d36e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3d78.s", FUN_L08_002d3d78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4050.s", FUN_L08_002d4050);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern void *FUN_L00_002dbe20(void *);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void *FUN_L08_002d4050(char *arg)
+{
+    void *result = FUN_L00_002dbe20(arg);
+    char *obj = *(char **)(arg + 0x78);
+    arg[0x20] = 3;
+    *(float *)(obj + 0x200) = 4.0f;
+    *(float *)(obj + 0x208) = 0.5f;
+    if ((unsigned char)arg[0x53] != 2) {
+        blend_moby_animation(arg, 2, 0, 3);
+    }
+    *(short *)(obj + 0xC8) = 0;
+    return result;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4108.s", FUN_L08_002d4108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e7eb0.s", FUN_L08_002e7eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
@@ -38,7 +85,30 @@ void FUN_L08_002f0b40(int a) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0c18.s", FUN_L08_002f0c18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0f68.s", FUN_L08_002f0f68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1158.s", FUN_L08_002f1158);
+/* advance a 2-D wrapped phase by a and b and write scaled sines */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED7C;
+extern float FUN_001f9de0(float);
+
+void FUN_L08_002f1158(float *out, float *ph, float a, float b, float scale) {
+    ph[0] += a * D_0015ED7C;
+    if (ph[0] > 1.0f) {
+        ph[0] -= 2.0f;
+    }
+    if (ph[0] < -1.0f) {
+        ph[0] += 2.0f;
+    }
+    ph[1] += b * D_0015ED7C;
+    if (ph[1] > 1.0f) {
+        ph[1] -= 2.0f;
+    }
+    if (ph[1] < -1.0f) {
+        ph[1] += 2.0f;
+    }
+    out[0] = FUN_001f9de0(ph[0] * 3.1415927f) * scale;
+    out[1] = FUN_001f9de0(ph[1] * 3.1415927f) * scale;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f12a0.s", FUN_L08_002f12a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1378.s", FUN_L08_002f1378);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5830.s", FUN_L08_002f5830);

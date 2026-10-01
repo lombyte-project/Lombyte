@@ -40,6 +40,18 @@ void FUN_L05_002661a0(HudElem *e) {
     e->h = 0x80;
     e->unk4A = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002661e8.s", FUN_L05_002661e8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+
+void FUN_L05_002661e8(char *moby)
+{
+    if (*(int *)(D_0013E533 + 0x2EA9) == 0x16) {
+        *(int *)(moby + 0x7C) = FUN_001f96f8(0x1E);
+        *(int *)(moby + 0x6C) = 5;
+    } else {
+        *(int *)(moby + 0x6C) = -6;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266320.s", FUN_L05_00266320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266710.s", FUN_L05_00266710);
