@@ -33,7 +33,47 @@ void FUN_L02_002ec308(char *self) {
         FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec3f0.s", FUN_L02_002ec3f0);
+/* Refreshes a moby's three sub-objects, packs its colour bytes, and queues a redraw when the global changed. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
+
+extern int D_L02_0015F5CC;
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+void FUN_L02_002ec308(char *self);
+
+void FUN_L02_002ec3f0(char *moby) {
+    int i;
+    char *data;
+    char *p;
+    int v;
+    int r, g, b, c;
+    int *q;
+
+    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
+        return;
+    }
+    data = *(char **)(moby + 0x78);
+    p = data + 0x80;
+    for (i = 0; i < 3; i++) {
+        FUN_L00_0024f7c8(moby, i + 3, p);
+        p += 0x10;
+    }
+    v = D_L02_0015F5CC;
+    r = *(unsigned char *)(moby + 0x92);
+    g = *(unsigned char *)(moby + 0x91);
+    b = *(unsigned char *)(moby + 0x90);
+    c = (r << 16) | 0x30000000;
+    c |= g << 8;
+    c |= b;
+    *(int *)(data + 0xB0) = c;
+    if (v != 0) {
+        q = *(int **)(data + 0xB4);
+        if (v != *q) {
+            *q = v;
+            enqueue_callback_list_1_alt(FUN_L02_002ec308, moby);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002eca30.s", FUN_L02_002eca30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);

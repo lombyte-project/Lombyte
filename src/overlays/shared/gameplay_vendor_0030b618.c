@@ -29,7 +29,23 @@ void FUN_L01_0030de68(char *moby) {
         entry += 0x10;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ded0.s", FUN_L01_0030ded0);
+/* Attach two effect entries and register their update callback. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
+
+void FUN_L01_0030de68(char *moby);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void enqueue_callback_list_1_alt(void (*)(char *), char *) __asm__("FUN_001f4600");
+
+void FUN_L01_0030ded0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *entry = data + 0x70;
+    int i;
+    for (i = 0; i < 2; i++) {
+        FUN_L00_0024f7c8(moby, i + 3, entry);
+        entry += 0x10;
+    }
+    enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);

@@ -36,5 +36,38 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308bd8.s", FUN_L01_00308bd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003092d0.s", FUN_L01_003092d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309430.s", FUN_L01_00309430);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003097e8.s", FUN_L01_003097e8);
+/* Mark the parent and its three attached objects active. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
+
+typedef struct L01Moby L01Moby;
+
+typedef struct {
+    char pad[0x14];
+    L01Moby *slots[3];
+} L01MobyData;
+
+struct L01Moby {
+    char pad0[0x31];
+    unsigned char state;
+    char pad32[2];
+    unsigned short flags;
+    char pad36[0x42];
+    L01MobyData *data;
+    char pad7c[0x18];
+    int field94;
+};
+
+void FUN_L01_003097e8(L01Moby *moby) {
+    L01Moby **slots = moby->data->slots;
+    int i;
+    moby->field94 = 0;
+    moby->flags |= 1;
+    moby->state = 0;
+    for (i = 2; i >= 0; i--, slots++) {
+        if (*slots != 0) {
+            (*slots)->flags |= 1;
+            (*slots)->state = 0;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309838.s", FUN_L01_00309838);

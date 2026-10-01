@@ -5,7 +5,102 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00226f10.s", FUN_L01_00226f10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00227e48.s", FUN_L01_00227e48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228870.s", FUN_L01_00228870);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern unsigned char D_0013E533[];
+extern void FUN_L00_002054e8(void);
+extern void FUN_L00_002056a8(void);
+extern void FUN_L00_002059d8(void);
+extern void FUN_L00_00205ea8(void);
+extern void FUN_L00_00206080(void);
+extern void FUN_L00_00206cf8(void);
+extern void FUN_L00_00206e00(void);
+extern void FUN_L00_00207a58(void);
+extern void FUN_L00_00207c48(void);
+extern void FUN_L00_00208820(void);
+extern void FUN_L00_00208b60(void);
+extern void FUN_L00_00209240(int);
+extern void FUN_L00_0020a318(void);
+extern void FUN_L00_0020a540(void);
+extern void FUN_L00_0020a9e8(void);
+extern void FUN_L00_0020ac98(void);
+extern void FUN_L00_0020b1d8(void);
+extern void FUN_L00_00210928(void);
+extern void FUN_L00_00211670(void);
+extern void FUN_L00_00214fe8(void);
+extern void FUN_L00_00216f10(void);
+extern void FUN_L00_00232670(void);
+extern void FUN_L00_002484e0(void *);
+extern void FUN_L00_00257024(void *);
+extern void FUN_L01_00228000(void);
+extern void FUN_L01_00228e38(void);
+extern void FUN_L01_0022cd48(void);
+extern void FUN_L01_0022d090(void);
+extern void FUN_L01_00242930(void);
+extern void NoOpMainCallback_alt(void *) __asm__("FUN_001e93e8");
+void begin_draw_frame(void) __asm__("FUN_001f7978");
+void fade_to_black(s32 n) __asm__("FUN_001f4a58");
+
+void FUN_L01_00228870(void) {
+    char *g = (char *)D_0013E533 + 0xE1D;
+    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
+        char *q;
+        fade_to_black(FUN_001f96f8(0x10));
+        q = (char *)D_0013E533 + 0xE1D;
+        q[0x20B1] = 1;
+        return;
+    }
+    *(short *)(g + 0x1EB2) = 0;
+    *(short *)(g + 0x1EB0) = 0;
+    if (*(unsigned char *)(g + 0x20A4) != 0) {
+        FUN_L01_00228000();
+        return;
+    }
+    FUN_L00_00232670();
+    FUN_L00_00211670();
+    FUN_L01_0022cd48();
+    FUN_L01_0022d090();
+    FUN_L01_00242930();
+    if (*(unsigned char *)(g + 0x20A4) != 0) {
+        return;
+    }
+    FUN_L00_00216f10();
+    FUN_L00_0020b1d8();
+    FUN_L00_0020a318();
+    FUN_L00_0020a540();
+    FUN_L00_0020ac98();
+    FUN_L00_0020a9e8();
+    FUN_L00_002056a8();
+    FUN_L00_002059d8();
+    FUN_L00_00214fe8();
+    FUN_L00_002054e8();
+    FUN_L00_00208820();
+    FUN_L00_00209240(0);
+    FUN_L00_00210928();
+    begin_draw_frame();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    FUN_L00_00206cf8();
+    FUN_L00_00205ea8();
+    FUN_L00_00206080();
+    FUN_L00_00206e00();
+    NoOpMainCallback_alt(*(void **)(g + 0x2080));
+    if (*(int *)(g + 0x208C) != 0x16 && *(int *)(g + 0x2084) != 0x32) {
+        FUN_L00_002484e0(g + 0x80);
+    }
+    {
+        char *q = (char *)D_0013E533 + 0xE1D;
+        FUN_L00_00257024(*(void **)(q + 0x2080));
+    }
+    FUN_L01_00228e38();
+    FUN_L00_00208b60();
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022cd48.s", FUN_L01_0022cd48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
