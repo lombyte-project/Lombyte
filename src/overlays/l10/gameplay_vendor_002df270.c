@@ -11,7 +11,63 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e1cb0.s", FUN_L10_002e1cb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e1d38.s", FUN_L10_002e1d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3a90.s", FUN_L10_002e3a90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3ef0.s", FUN_L10_002e3ef0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e4840.s", FUN_L10_002e4840);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */
+
+typedef struct { char p0[0x10]; float x; float y; char p1[8]; unsigned char state; char p2[0xDF]; } Ent;
+
+extern Ent *D_L10_0015FFD8;
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001fa688(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+extern short *D_L10_001ABCC0[];
+extern short D_L10_00161E48_d __asm__("D_L10_00161E48") __attribute__((sda));
+extern unsigned char D_0013E533[];
+extern void FUN_001f9a10(void *, void *, void *);
+
+float FUN_L10_002e4840(char *self) {
+    char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
+    float hi, lo, ang, dist, v[3];
+    short *p;
+    if ((unsigned char)self[0x21] == 0xFF) {
+        return FUN_L00_001ff8b0(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
+                                 *(float *)(self + 0x14) - *(float *)(owner + 0x14));
+    }
+    lo = -(*(float *)&D_L10_00161E48_d * 0.017453292f);
+    hi = *(float *)&D_L10_00161E48_d * 0.017453292f;
+    ang = FUN_L00_001ff8b0(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
+                            *(float *)(self + 0x14) - *(float *)(owner + 0x14));
+    dist = FUN_001f9b48(owner + 0x10, self + 0x10);
+    v[0] = FUN_001f9dc8(ang) * 2.0f;
+    v[1] = FUN_001f9de0(ang) * 2.0f;
+    v[2] = 0.0f;
+    FUN_001f9a10(v, v, D_0013E533 + 0xE9D);
+    p = D_L10_001ABCC0[(unsigned char)self[0x21]];
+    if (p != 0) {
+        do {
+            int idx = *(unsigned short *)p & 0x7FFF;
+            if (D_L10_0015FFD8[idx].state == 5 || FUN_001f9b48(&D_L10_0015FFD8[idx].x, owner + 0x10) < dist) {
+                float d = FUN_L00_001ff8b0(D_L10_0015FFD8[idx].x - *(float *)(owner + 0x10),
+                                            D_L10_0015FFD8[idx].y - *(float *)(owner + 0x14));
+                float r = FUN_001fa5c8(d, ang);
+                if (r > 0.0f && r < hi) {
+                    hi = r;
+                } else if (r < 0.0f && r > lo) {
+                    lo = r;
+                }
+            }
+        } while (*p++ >= 0);
+    }
+    return FUN_001fa580(FUN_001fa580(lo, FUN_001fa688(hi, lo) * 0.5f), ang);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e4a88.s", FUN_L10_002e4a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5968.s", FUN_L10_002e5968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);

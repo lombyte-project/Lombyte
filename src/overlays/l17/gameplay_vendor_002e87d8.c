@@ -9,7 +9,46 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eace8.s", FUN_L17_002eace8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb768.s", FUN_L17_002eb768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb9a8.s", FUN_L17_002eb9a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec000.s", FUN_L17_002ec000);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f9740(void *);
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L11_00308848(void *, void *, void *, float, float);
+extern short D_L17_0016206C_d __asm__("D_L17_0016206C") __attribute__((sda));
+extern short D_L17_00162070_d __asm__("D_L17_00162070") __attribute__((sda));
+extern short D_L17_001620A0_d __asm__("D_L17_001620A0") __attribute__((sda));
+extern unsigned char D_0013A4E0[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
+    char a[16];
+    char b[16];
+    char c[16];
+    char d[16];
+    build_spherical_offset(a, *(float *)&D_L17_0016206C_d * *(float *)&D_L17_001620A0_d, p2, p3);
+    FUN_001f9a10(a, a, obj);
+    if (FUN_001f9740(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
+        FUN_0022da68(3, 0, (int)moby);
+        FUN_L00_001ff500(c, a, 2.2f);
+        FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
+        FUN_001f9a10(b, b, c);
+        FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
+        *(int *)(obj + 0x80) = *(int *)&D_L17_00162070_d;
+        obj[0x61] ^= 1;
+    }
+    FUN_L00_001ff500(a, a, 23.0f);
+    FUN_001f9a10(d, a, moby + 0x10);
+    FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec150.s", FUN_L17_002ec150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec360.s", FUN_L17_002ec360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);

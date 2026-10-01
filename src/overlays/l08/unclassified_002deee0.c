@@ -31,8 +31,82 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e4e90.s", FUN_L08_002e4e90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8788.s", FUN_L08_002e8788);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8ba0.s", FUN_L08_002e8ba0);
+/* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
+extern float FUN_001fa580(float, float);
+extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L08_002e8ba0(char *a) {
+    char *data = *(char **)(a + 0x78);
+    float v0[4], v10[4], v20[4];
+    char *base = data + 0x60;
+    int i;
+    for (i = 0; i < 12; i++) {
+        int *e = (int *)(base + 0x1C + i * 16);
+        char *m = (char *)e[-3];
+        if (m != 0) {
+            *(float *)(m + 0x48) = *(float *)(a + 0x48);
+            FUN_L00_0024f7c8(m, e[-1], v0);
+            FUN_L00_0024f7c8((void *)e[-2], e[0], v10);
+            FUN_001f9a28(v20, v10, v0);
+            FUN_001f9a10(m + 0x10, m + 0x10, v20);
+        }
+    }
+    if (*(int *)(data + 0x90) != 0) {
+        char *r = *(char **)(data + 0x90);
+        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(r + 0x40), *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
+    }
+    for (i = 0; i < 12; i++) {
+        char *m = *(char **)(base + 0x10 + i * 16);
+        if (m != 0) FUN_L00_00250df8(m);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8cd0.s", FUN_L08_002e8cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9558.s", FUN_L08_002e9558);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9758.s", FUN_L08_002e9758);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9a18.s", FUN_L08_002e9a18);
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
+
+extern short D_L08_00161D38_d __asm__("D_L08_00161D38") __attribute__((sda));
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L08_002e9a18(char *arg) {
+    char *data = *(char **)(arg + 0x78);
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    int i;
+    char *p;
+    char *parts = data + 0x60;
+    for (i = 0; i < 16; i++) {
+        char *e = parts + 0x1C + i * 16;
+        char *part = *(char **)(e - 0xC);
+        if (part != 0) {
+            *(float *)(part + 0x48) = *(float *)(arg + 0x48);
+            FUN_L00_0024f7c8(part, *(int *)(e - 4), v0);
+            FUN_L00_0024f7c8(*(void **)(e - 8), *(int *)e, v1);
+            FUN_001f9a28(v2, v1, v0);
+            FUN_001f9a10(part + 0x10, part + 0x10, v2);
+        }
+    }
+    if (*(char **)(data + 0x90) != 0) {
+        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(*(char **)(data + 0x90) + 0x40), *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
+    }
+    p = parts + 0x10;
+    for (i = 0; i < 16; i++) {
+        char *o = *(char **)p;
+        if (o != 0) {
+            FUN_L00_00250df8(o);
+            o = *(char **)p;
+            if (*(unsigned short *)(o + 0x34) & 0x8000) {
+                FUN_001f9a68(o + 0xD0, o + 0xD0, -1.0f);
+            }
+        }
+        p += 16;
+    }
+}

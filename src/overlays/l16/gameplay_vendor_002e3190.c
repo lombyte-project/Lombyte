@@ -106,5 +106,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e93b0.s", FUN_L16_002e93b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e98e0.s", FUN_L16_002e98e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9ce0.s", FUN_L16_002e9ce0);
+/* Sets up the draw state then runs both per-slot calls over three entries. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001E28D0[];
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161FB8_d[1] __asm__("D_L16_00161FB8") __attribute__((sda));
+extern short D_L16_00161FC8_d[1] __asm__("D_L16_00161FC8") __attribute__((sda));
+extern short D_L16_00161FD8_d[1] __asm__("D_L16_00161FD8") __attribute__((sda));
+extern short D_L16_00161FE8_d[1] __asm__("D_L16_00161FE8") __attribute__((sda));
+extern short D_L16_00161FF8_d[1] __asm__("D_L16_00161FF8") __attribute__((sda));
+extern void FUN_001f76a0(void);
+extern void FUN_L00_001fde98(int, int, int, char *, int);
+void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L16_002e9ce0(void) {
+    int i;
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x29));
+    vu1_add_g_sregister(0x42, 0x4000000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    FUN_001f76a0();
+    for (i = 0; i < 3; i++) {
+        FUN_L16_002e8b98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FE8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FD8_d)[i], D_L16_001E28D0);
+        FUN_L00_001fde98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FF8_d)[i], D_L16_001E28D0, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ea128.s", FUN_L16_002ea128);

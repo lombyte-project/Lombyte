@@ -295,7 +295,21 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
     Q.f294 = 0.018f;
     Q.f288 = 0.018f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ea9d8.s", FUN_L00_002ea9d8);
+/* Copies a vector into the current object's slot, switching to state 5 first. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_00166E00 __attribute__((section(".data")));
+extern char *FUN_L00_001eb1f8(int);
+
+void FUN_L00_002ea9d8(char *src) {
+    char *g = D_L00_00166E00;
+    char *p;
+    if (*(short *)(g + 0x86) != 5)
+        p = FUN_L00_001eb1f8(5);
+    else
+        p = g;
+    qcopy(*(char **)(p + 0x70) + 0x80, src);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eaa88.s", FUN_L00_002eaa88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eaaa0.s", FUN_L00_002eaaa0);
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));

@@ -60,7 +60,34 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5690.s", FUN_L17_002f5690);
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
+
+extern char D_L17_001DE8A0[];
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern short D_L17_001623F0_d __asm__("D_L17_001623F0") __attribute__((sda));
+extern short D_L17_001623F8_d __asm__("D_L17_001623F8") __attribute__((sda));
+extern short D_L17_00162400_d __asm__("D_L17_00162400") __attribute__((sda));
+extern short D_L17_00162408_d __asm__("D_L17_00162408") __attribute__((sda));
+extern short D_L17_00162410_d __asm__("D_L17_00162410") __attribute__((sda));
+extern void FUN_001f76a0(void);
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L17_002f5690(void) {
+    int i;
+    float *p;
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x30));
+    vu1_add_g_sregister(0x42, 0x2000000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    FUN_001f76a0();
+    p = (float *)D_L17_001DE8A0;
+    for (i = 0; i < 2; i++) {
+        FUN_L17_002f54d8(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_00162408_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162400_d)[i], p);
+        FUN_L00_001fde98(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162410_d)[i], p, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f59a8.s", FUN_L17_002f59a8);
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
 /* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */

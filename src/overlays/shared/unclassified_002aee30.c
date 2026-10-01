@@ -4,6 +4,35 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002aee30.s", FUN_L04_002aee30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002af058.s", FUN_L04_002af058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c45b8.s", FUN_L04_002c45b8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
+
+extern char D_L04_001D2C90[];
+extern short D_L04_001618B0_d __asm__("D_L04_001618B0") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L04_002c41e0(void *, void *, void *, int, float, float);
+
+void FUN_L04_002c45b8(char *a, int i, int j, int k) {
+    float v0[4], v10[4];
+    char *pi, *pj;
+    pi = D_L04_001D2C90 + i * 16;
+    qcopy(v0, pi);
+    v0[3] = 1.0f;
+    FUN_001f9cf8(v0, v0, a + 0xC0);
+    FUN_001f9a10(v0, v0, a + 0x10);
+    pj = D_L04_001D2C90 + j * 16;
+    qcopy(v10, pj);
+    v10[3] = 1.0f;
+    FUN_001f9cf8(v10, v10, a + 0xC0);
+    FUN_001f9a10(v10, v10, a + 0x10);
+    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d, *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c46d0.s", FUN_L04_002c46d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce080.s", FUN_L04_002ce080);

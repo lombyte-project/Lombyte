@@ -122,10 +122,42 @@ void FUN_L02_002f6570(int value) {
         *(int *)(data + 0x218) = value;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f6598.s", FUN_L02_002f6598);
+/* Update the active object's coordinates without replacing zero fields. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79D0), where it is exact; names translated to the US level program. */
+
+extern char *D_L02_00167400_d __asm__("D_L02_00167400") __attribute__((section(".data")));
+
+void FUN_L02_002f6598(float x, float y, float z) {
+    char *moby = D_L02_00167400_d;
+    if (*(short *)(moby + 0x86) == 0) {
+        char *data = *(char **)(moby + 0x70) + 0x1D0;
+        if (*(float *)(data + 0x3C) != 0.0f) {
+            *(float *)(data + 0x3C) = x;
+        }
+        if (*(float *)(data + 0x40) != 0.0f) {
+            *(float *)(data + 0x40) = y;
+        }
+        if (*(float *)(data + 0x44) != 0.0f) {
+            *(float *)(data + 0x44) = z;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa6d8.s", FUN_L02_002fa6d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa710.s", FUN_L02_002fa710);
+/* Start the timed effect while its duration is nonzero. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
+
+extern float D_L02_0016760C __attribute__((section(".data")));
+extern void FUN_L00_002e84f0(int, float, float);
+extern void FUN_L02_001fc008(void (*)(void));
+extern void FUN_L02_002fa770(void);
+
+void FUN_L02_002fa710(void) {
+    if (D_L02_0016760C != 0.0f) {
+        FUN_L00_002e84f0(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
+        FUN_L02_001fc008(FUN_L02_002fa770);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa770.s", FUN_L02_002fa770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa7c8.s", FUN_L02_002fa7c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
