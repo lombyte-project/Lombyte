@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3190.s", FUN_L16_002e3190);
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L16_002e36e8(unsigned char *moby) {
     float *d = *(float **)(moby + 0x78);
@@ -20,7 +20,7 @@ void FUN_L16_002e36e8(unsigned char *moby) {
         FUN_001f9bf8(moby + 0xE0, moby + 0xE0, d[1] * 0.25f);
         moby[0x20] = 1;
         *(unsigned short *)(moby + 0x34) |= 0x101;
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);

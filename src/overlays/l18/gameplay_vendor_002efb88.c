@@ -405,13 +405,13 @@ extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 
 typedef union { u128_f7220 quad; float f[4]; } L18Vector;
 
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 void FUN_L18_002f7220(char *source, char *dest, L18Vector *from, L18Vector *to) {
     L18Vector a, b;
     a.quad = from->quad;
     b.quad = to->quad;
-    *(float *)(dest + 0x68) = FastSubRots(FUN_L00_001ff8b0(b.f[0] - a.f[0], b.f[1] - a.f[1]), *(float *)(source + 0x48));
+    *(float *)(dest + 0x68) = FastSubRots(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), *(float *)(source + 0x48));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f76a0.s", FUN_L18_002f76a0);

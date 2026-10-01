@@ -8,12 +8,12 @@
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_L15_00299880(void *, void *, void *, void *, float);
 
 void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
 {
-    float angle = FUN_L00_001ff8b0(point[0] - *(float *)(moby + 0x10),
+    float angle = FUN_001f9e90(point[0] - *(float *)(moby + 0x10),
                                      point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880(moby, a, b, c, angle);
 }

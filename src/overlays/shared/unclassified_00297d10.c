@@ -11,7 +11,7 @@
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L06_002d8510(char *owner) {
     char *moby = func_0020D348_m(0x12E);
@@ -25,7 +25,7 @@ char *FUN_L06_002d8510(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -47,7 +47,7 @@ char *FUN_L06_002d8b98(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(char **)(moby + 0xB8) = owner;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -191,16 +191,16 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
 extern char D_L06_00167400[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 float FUN_L06_002f2148(char *a, char *b, int c) {
     float r = FUN_001f9b80(a + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = FUN_001fa688(g[0x56],
-                            FUN_L00_001ff8b0(*(float *)(b + 0x10) - *(float *)(a + 0x10),
+                            FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
     float u = FUN_001fa688(*(float *)(a + 0x48),
-                            FUN_L00_001ff8b0(*(float *)(b + 0x10) - *(float *)(a + 0x10),
+                            FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
     r = r + u * 10.0f;
     r = r + t * 3.0f;
@@ -218,7 +218,7 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
 void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float thresh) {
     float dist = FUN_001f9b80(a + 0x10, c + 0x10);
     if (!(thresh < dist)) {
-        float ang = FUN_L00_001ff8b0(*(float *)(c + 0x10) - *(float *)(a + 0x10),
+        float ang = FUN_001f9e90(*(float *)(c + 0x10) - *(float *)(a + 0x10),
                                       *(float *)(c + 0x14) - *(float *)(a + 0x14));
         float v = dist + FUN_001fa688(*(float *)(a + 0x48), ang) * 5.0f;
         if (c == b) {

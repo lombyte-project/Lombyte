@@ -111,7 +111,7 @@ float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
     *(int *)&n[2] = 0;
     qcopy(c, a);
     *(int *)&((float *)c)[2] = 0;
-    FUN_L00_001ff550_25db00(n, n, 1.0f);
+    FUN_001f9c48_25db00(n, n, 1.0f);
     k = -FUN_001f9ab0_25db00(n, c) + (n[0] * p[0] + n[1] * p[1]);
     out[0] = p[0] - k * n[0];
     out[1] = p[1] - k * n[1];

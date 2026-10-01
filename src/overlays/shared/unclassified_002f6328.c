@@ -60,7 +60,7 @@ extern short D_L01_00161F80_d __asm__("D_L01_00161F80") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L01_003092d0(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -81,7 +81,7 @@ void FUN_L01_003092d0(char *m) {
         FUN_001f9a10(*p + 0x10, *p + 0x10, v);
         *(float *)(*p + 0x44) = *(float *)(d + 0x24) * -1.0471976f - 0.34906584f;
         FUN_001fa030(*p + 0xC0, *p + 0x40);
-        FUN_0020def8(*p);
+        FUN_L00_00250df8(*p);
         p++;
     }
 }

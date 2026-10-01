@@ -130,7 +130,7 @@ typedef union { u128_229910_00229910 q_00229910; float f[4]; } V_229910_00229910
 extern char D_0013F350_00229910[] __asm__("D_0013F350");
 extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
-extern float FUN_L00_001ff8b0_00229910(float, float) __asm__("FUN_L00_001ff8b0");
+extern float FUN_001f9e90_00229910(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa688_00229910(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9dc8_00229910(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_00229910(float) __asm__("FUN_001f9de0");
@@ -142,14 +142,14 @@ int FUN_L00_00229910(void) {
     float d;
 #define GF_229910_00229910(x) (*(float *)(g + (x)))
     if (GF_229910_00229910(0x164) < GF_229910_00229910(0x234) / (float)FUN_001f96f8_00229910(20)) return 0;
-    if (0.52359879f < FUN_001fa688_00229910(FUN_L00_001ff8b0_00229910(GF_229910_00229910(0x100), GF_229910_00229910(0x104)), GF_229910_00229910(0x98))) return 0;
+    if (0.52359879f < FUN_001fa688_00229910(FUN_001f9e90_00229910(GF_229910_00229910(0x100), GF_229910_00229910(0x104)), GF_229910_00229910(0x98))) return 0;
     qcopy(&v, g + 0x80);
     v.f[0] += FUN_001f9dc8_00229910(GF_229910_00229910(0x98)) * GF_229910_00229910(0x234) * 0.75f;
     v.f[1] += FUN_001f9de0_00229910(GF_229910_00229910(0x98)) * GF_229910_00229910(0x234) * 0.75f;
     qcopy(&w, &v);
     v.f[2] += 0.47f;
     w.f[2] -= 1.0f;
-    if (FUN_L00_001efc70_00229910(&v, &w, 2, *(void **)(g + 0x2080), 0)) {
+    if (FUN_001efa68_00229910(&v, &w, 2, *(void **)(g + 0x2080), 0)) {
         d = D_L00_00173E68_00229910 - GF_229910_00229910(0x88);
         if (d < 0.37f && -1.0f < d) return 1;
     }

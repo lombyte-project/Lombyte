@@ -20,3 +20,5 @@ void FUN_L01_002b7c68(float *in, int *out) {
     ((short *)out)[6] = func_001FA898_r(D_L01_001CAD00[0] * 1024.0f);
     ((short *)out)[7] = func_001FA898_r(D_L01_001CAD00[0] * 1024.0f);
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b7a48.s", FUN_L01_002b7a48);

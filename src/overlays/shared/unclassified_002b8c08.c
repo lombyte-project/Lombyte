@@ -19,7 +19,7 @@ extern char D_L01_001742E0[];
 extern float D_L01_001742C0[];
 extern float FUN_001f9b20(void *);
 extern float FUN_001fa580(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00257c48(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
@@ -36,8 +36,8 @@ void FUN_L01_002c72c8(void) {
     float a, b;
     int i;
     FUN_001f9a28(v, D_L01_00167240, D_L01_001742E0);
-    a = -FUN_L00_001ff8b0(FUN_001f9b20(v), v[2]);
-    FUN_L00_001ff8b0(v[0], v[1]);
+    a = -FUN_001f9e90(FUN_001f9b20(v), v[2]);
+    FUN_001f9e90(v[0], v[1]);
     for (i = 19; i >= 0; i--) {
         float x, y;
         x = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
@@ -120,5 +120,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5040.s", FUN_L01_002f5040);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5168.s", FUN_L01_002f5168);
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002be1c0.s", FUN_L01_002be1c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ed5d8.s", FUN_L01_002ed5d8);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);

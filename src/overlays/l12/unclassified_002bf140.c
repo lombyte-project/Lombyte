@@ -125,11 +125,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
 /* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa5c8(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 void FUN_L12_002e8608(char *moby, float *pos) {
     char *data = *(char **)(moby + 0x78);
-    float a = FUN_L00_001ff8b0(pos[0] - *(float *)(moby + 0x10), pos[1] - *(float *)(moby + 0x14));
+    float a = FUN_001f9e90(pos[0] - *(float *)(moby + 0x10), pos[1] - *(float *)(moby + 0x14));
     float d = FUN_001fa5c8(a, *(float *)(moby + 0x48));
     if (d > 1.2217305f) {
         d = 1.2217305f;
@@ -213,7 +213,7 @@ extern float FUN_L00_00258110(float *vel, float cur, float target, float k, floa
 
 void FUN_L12_002eae00(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    float ang = FUN_001fa5c8(FUN_L00_001ff8b0(*(float *)(data + 0x70), *(float *)(data + 0x74)), *(float *)(moby + 0x48));
+    float ang = FUN_001fa5c8(FUN_001f9e90(*(float *)(data + 0x70), *(float *)(data + 0x74)), *(float *)(moby + 0x48));
     float a = *(float *)(data + 0x94) * 0.2268928f * FUN_001f9dc8(ang) / (D_0015ED6C * 10.0f);
     float b = *(float *)(data + 0x94) * -0.2268928f * FUN_001f9de0(ang) / (D_0015ED6C * 10.0f);
     float r0, k0, d0, m0, k1, d1, m1;

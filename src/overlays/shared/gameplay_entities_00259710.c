@@ -133,7 +133,7 @@ int FUN_L00_00259d08(void *a, void *b, void *c, void *d, void *e, int f, int n) 
         FUN_001f9a68_00259d08(vb, db, t);
         FUN_001f9a10_00259d08(va, va, c);
         FUN_001f9a10_00259d08(vb, vb, d);
-        if (FUN_L00_001efc70_00259d08(va, vb, 0, e, f)) return 1;
+        if (FUN_001efa68_00259d08(va, vb, 0, e, f)) return 1;
         t += k;
     }
     return 0;
@@ -172,7 +172,7 @@ void FUN_L00_00259fe8(unsigned char *m, float r) {
     if (D_L00_0015F434_00259fe8 >= 32) return;
     qcopy(&D_L00_0016E080_00259fe8[D_L00_0015F434_00259fe8].u_00259fe8.a_00259fe8, m + 0x10);
     h = FUN_00213508_00259fe8(m + 0x10, 0, 0.5f);
-    if (FUN_L00_001f35d8_00259fe8() == 0) return;
+    if (FUN_001f0b58_00259fe8() == 0) return;
     D_L00_0016E080_00259fe8[D_L00_0015F434_00259fe8].u_00259fe8.f[2] = h + 0.025f;
     qcopy(&D_L00_0016E080_00259fe8[D_L00_0015F434_00259fe8].b, &D_L00_00173E80_00259fe8);
     y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(m + 0x18) - h)) * 0.125f;
@@ -210,7 +210,7 @@ typedef struct {
     f32 x, y, z, w;
     u8 *self; s32 i24; u8 b28; u8 b29; u16 h2A; f32 f2C; s32 i30;
 } __attribute__((aligned(16))) M_0025a9f8;
-f32 FUN_L00_001ff8b0_0025a9f8(f32, f32) __asm__("FUN_L00_001ff8b0");
+f32 FUN_001f9e90_0025a9f8(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f9dc8_0025a9f8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_0025a9f8(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00259a88_0025a9f8(u8 *, M_0025a9f8 *) __asm__("FUN_L00_00259a88");
@@ -230,7 +230,7 @@ void FUN_L00_0025a9f8(u8 *self, q128_0025a9f8 *pos, u8 **list, s32 n, u8 *skip, 
         l.m.i30 = k;
         l.m.b28 = c0;
         l.m.b29 = c1;
-        a = FUN_L00_001ff8b0_0025a9f8(*(f32 *)(e + 0x10) - pp[0], *(f32 *)(e + 0x14) - pp[1]);
+        a = FUN_001f9e90_0025a9f8(*(f32 *)(e + 0x10) - pp[0], *(f32 *)(e + 0x14) - pp[1]);
         l.m.x = FUN_001f9dc8_0025a9f8(a) * spd;
         l.m.y = FUN_001f9de0_0025a9f8(a) * spd;
         l.m.z = z;
@@ -240,16 +240,16 @@ void FUN_L00_0025a9f8(u8 *self, q128_0025a9f8 *pos, u8 **list, s32 n, u8 *skip, 
 }
 typedef int q128 __attribute__((mode(TI)));
 typedef union { q128 q; float f[4]; } U25ab48;
-float FUN_L00_001ff8b0(float, float);
+float FUN_001f9e90(float, float);
 float FUN_001f9b20(void *);
 void FUN_L00_0025ab48(q128 *v, float *ang, float *s1, float *s2) {
     U25ab48 t;
     t.q = *v;
     if (t.f[3] != 5627.9248046875f) {
-        *ang = FUN_L00_001ff8b0(t.f[0], t.f[1]);
+        *ang = FUN_001f9e90(t.f[0], t.f[1]);
         return;
     }
-    *ang = FUN_L00_001ff8b0(t.f[0], t.f[1]);
+    *ang = FUN_001f9e90(t.f[0], t.f[1]);
     *s1 *= FUN_001f9b20(&t);
     t.f[3] = 0;
     *s2 *= t.f[2];

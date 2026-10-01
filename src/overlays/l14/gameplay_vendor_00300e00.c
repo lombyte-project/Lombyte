@@ -42,7 +42,7 @@ void FUN_L14_003167e0(u8 *arg0)
 
 
 extern u8 *FUN_0020c4f8(s32);
-extern void FUN_0020def8(u8 *);
+extern void FUN_L00_00250df8(u8 *);
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -59,7 +59,7 @@ u8 *FUN_L14_00306158(u8 *self)
         o[0x20] = 0;
         *(s16 *)(o + 0x32) = 0x40;
         o[0x31] = 1;
-        FUN_0020def8(o);
+        FUN_L00_00250df8(o);
     }
     return o;
 }
@@ -94,7 +94,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
 
 extern char *D_L14_001B0BB0[];
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 void FUN_L14_00307510(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -108,7 +108,7 @@ void FUN_L14_00307510(char *moby) {
     *(int *)(d + 0x70) = 0;
     *(int *)(d + 0x74) = 0;
     qcopy(moby + 0x10, p + 0x10);
-    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
     *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) = *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
@@ -120,5 +120,3 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315920.s", FUN_L14_00315920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00316748.s", FUN_L14_00316748);
-
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314e10.s", FUN_L14_00314e10);

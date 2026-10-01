@@ -16,7 +16,7 @@ extern float FUN_001f9af0(void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int FUN_001f96f8(int);
 extern unsigned char D_0013E533[];
@@ -48,7 +48,7 @@ void FUN_L00_00221b68(void) {
         d = FUN_001f9b80(p + 0x80, p + 0x210);
         lim = *(float *)(p + 0x234) * 0.9f;
         if (d < lim) {
-            ang = FUN_L00_001ff8b0(*(float *)(p + 0x80) - *(float *)(p + 0x210), *(float *)(p + 0x84) - *(float *)(p + 0x214));
+            ang = FUN_001f9e90(*(float *)(p + 0x80) - *(float *)(p + 0x210), *(float *)(p + 0x84) - *(float *)(p + 0x214));
             if (d < *(float *)(p + 0x234) * 0.05f) {
                 ang = *(float *)(p + 0x98);
             }
@@ -170,7 +170,7 @@ void FUN_L00_00221ee0(void) {
         qcopy(&v, &G.q80);
         v.f[2] += 0.5f;
         qcopy(&w, &best->q10);
-        if (FUN_L00_001efc70_221ee0(&v, &w, 2, 0, 0) == 0) {
+        if (FUN_001efa68_221ee0(&v, &w, 2, 0, 0) == 0) {
             G.f998 = bestd;
             G.h99E = 1;
         }

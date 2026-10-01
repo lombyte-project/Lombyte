@@ -46,10 +46,10 @@ the records and the catalogue.
 - `$gp` is the executable's, 0x166C00, in every level. No level text contains
   an `addiu $gp, $gp, imm`: the value the executable's startup sets stays.
   Of the level copies of executable functions that reach resident memory
-  (below 0x15EF00) through `$gp`, 1149 agree with the executable word for word
-  at those instructions (3267 words over 15,344 copies); the 38 that differ are
-  masked-fingerprint collisions (small functions that load different `core.lit`
-  constants), not a different `$gp`. Level code's `$gp` offsets span
+  (below 0x15EF00) through `$gp`, 1205 agree with the executable word for word
+  at those instructions (3398 words over 16,442 copies); the 76 that differ are
+  masked-fingerprint collisions (two groups of small functions that load
+  different `core.lit` constants), not a different `$gp`. Level code's `$gp` offsets span
   -0x7EA8..0x7BDC, from `core.lit` into the level's `data` record.
 - Dispatch records: `vtbl` 12-byte entries `{oClass, update, table}` (100 to
   189 classes per level), `camvtbl` 20-byte entries `{id, init, activate,
@@ -69,9 +69,9 @@ records:
 
 | kind | functions | bytes | meaning |
 | :--- | ---: | ---: | :--- |
-| `exe` | 738 | 294,308 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
-| `shared` | 1,720 | 1,192,848 | in two or more levels (906 of them in all 19: 526,868 bytes) |
-| `level` | 1,450 | 2,070,628 | in one level only |
+| `exe` | 772 | 305,748 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
+| `shared` | 1,645 | 1,152,124 | in two or more levels (931 of them in all 19: 555,024 bytes) |
+| `level` | 1,341 | 2,028,340 | in one level only |
 
 ### What makes a place a function start (2026-10-01)
 
@@ -91,20 +91,26 @@ Now a start needs one of:
   they are not starts);
 - a callback address the code builds itself and keeps (`lui` plus `addiu`,
   passed as an argument or stored; `FUN_L00_002377b8` is reached no other way);
-- a frame opener right after padding or right after a return, which is the only
-  sign left for the functions a level links but never calls;
-- a copy of an executable function body, the level's entry point, the start of
-  the text record, or a hand-confirmed row in
-  `config/overlays/us/confirmed-starts.tsv`.
+- a `j` from another function (a tail call);
+- code right after a return (and its delay slot and padding) that no row
+  reaches, when it opens a frame in its first four instructions or runs to a
+  `jr $ra` of its own over at least 32 bytes: the only sign left for the
+  functions a level links but never calls;
+- a copy of an executable function body (the row is exactly the executable
+  function's size), the level's entry point, the start of the text record, or
+  a hand-confirmed row in `config/overlays/us/confirmed-starts.tsv`. A
+  confirmed start cuts every copy of its function, in every level.
 
-A row ends at its last *reachable* instruction, so the bytes the compiler
+A row ends at its last *reachable* instruction (branches with their delay
+slots, `j` inside the function, `switch` cases read from the jump table), so the bytes the compiler
 leaves between one function's return and the next function's first instruction
 (the tail of two returns whose bodies are elsewhere, a `beqz`/`jr $ra`/`break`
 block) belong to no row: no C produces them, so a row that swallowed them could
-never be matched.
+never be matched. The fingerprint is taken over that reachable body too, so
+every copy of a function in every level lands in one row.
 
-Level 00 goes from 2,305 starts to 1,965. All 1,026 promoted overlay C
-functions keep their exact bytes.
+Level 00 goes from 2,305 starts to 1,981. Every promoted overlay C function that checked exact
+before the change still does (1,010 of 1,026).
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the
 lowest-numbered level that has it, its *canonical level*. Data it references

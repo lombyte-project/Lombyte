@@ -23,7 +23,7 @@ f32 FUN_001f9dc8(f32);
 f32 FUN_001f9de0(f32);
 void FUN_001fa050(void *, void *);
 void FUN_001f9838(void *, void *, s32);
-void FUN_0020def8(void *);
+void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
     A001f4490 *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
@@ -41,5 +41,5 @@ void FUN_L00_001f4490(void) {
     qcopy(d + 0x10, &c->x80);
     qcopy(d + 0x40, c->x90);
     FUN_001f9838(d + 0xC0, c, 0x30);
-    FUN_0020def8(c->x2080);
+    FUN_L00_00250df8(c->x2080);
 }

@@ -61,3 +61,7 @@ void FUN_L04_002c46d0(char *a)
     FUN_L04_002c45b8(a, 18, 19, *(int *)&D_L04_001618DC_d);
     FUN_L04_002c45b8(a, 22, 23, *(int *)&D_L04_001618DC_d);
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002aee30.s", FUN_L04_002aee30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002af058.s", FUN_L04_002af058);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce080.s", FUN_L04_002ce080);

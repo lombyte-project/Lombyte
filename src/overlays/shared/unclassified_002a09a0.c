@@ -12,7 +12,7 @@
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
 
 char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
@@ -33,9 +33,9 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         *(int *)(data + 0x14) = FUN_001f96f8(0xF0);
         *(char **)(data + 0x18) = owner;
         *(int *)(data + 0x10) = 0;
-        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(pos[0], pos[1]);
+        *(float *)(moby + 0x48) = FUN_001f9e90(pos[0], pos[1]);
         a = FUN_001f9b20(pos);
-        b = FUN_L00_001ff8b0(a, pos[2]);
+        b = FUN_001f9e90(a, pos[2]);
         *(float *)(moby + 0x44) = -b;
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;

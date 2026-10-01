@@ -91,7 +91,7 @@ int FUN_L03_002beba0(int idx, float *out) {
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern char *func_0020D348_m_2C59A0(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg)
@@ -116,7 +116,7 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg)
         *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.001f;
         *(int *)(d + 0x1C) = arg;
         *(int *)(d + 0x20) = 0;
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

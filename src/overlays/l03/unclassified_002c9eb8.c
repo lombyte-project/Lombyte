@@ -54,3 +54,25 @@ int FUN_L03_002dcb48(unsigned char *moby, char *data) {
     }
     return 0;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc888.s", FUN_L03_002cc888);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d30d8.s", FUN_L03_002d30d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d4288.s", FUN_L03_002d4288);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da710.s", FUN_L03_002da710);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db020.s", FUN_L03_002db020);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca30.s", FUN_L03_002dca30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb30.s", FUN_L03_002dcb30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcbc8.s", FUN_L03_002dcbc8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dccc0.s", FUN_L03_002dccc0);

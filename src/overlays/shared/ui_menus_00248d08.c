@@ -58,8 +58,23 @@ extern struct Menu_0024ac88 D_0013D290_0024ac88 __asm__("D_0013D290");
 #include "sda.h"
 extern s32 D_0015EEB4 MACRO_ADDR;
 extern s32 D_0015EEB0 MACRO_ADDR;
-void FUN_L00_0024ad60(void) { if ((D_0015EEB4 ^ 1) & 1) D_0015EEB0 = 3; }
+void FUN_00208980(void) { if ((D_0015EEB4 ^ 1) & 1) D_0015EEB0 = 3; }
 extern s32 D_0013D290[];
 extern s32 D_0015EEB0;
 extern int D_0015EEB0 __attribute__((section(".sdata")));
 extern int D_0015EEB4;
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d08.s", FUN_L00_00248d08);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d88.s", FUN_L00_00248d88);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249728.s", FUN_L00_00249728);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249998.s", FUN_L00_00249998);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249a18.s", FUN_L00_00249a18);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249af8.s", FUN_L00_00249af8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249d80.s", FUN_L00_00249d80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024adb0.s", FUN_L00_0024adb0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae18.s", FUN_L00_0024ae18);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae58.s", FUN_L00_0024ae58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024afe0.s", FUN_L00_0024afe0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b050.s", FUN_L00_0024b050);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b1b8.s", FUN_L00_0024b1b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b380.s", FUN_L00_0024b380);

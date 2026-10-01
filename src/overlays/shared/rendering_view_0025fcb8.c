@@ -113,7 +113,7 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 t;
-    u8 *r = FUN_L00_0025c338_002604f0(b);
+    u8 *r = FUN_L00_002603d0_002604f0(b);
     if (!r) return 0;
     FUN_001f9cf8_002604f0(e, c, b + 0xC0);
     FUN_001f9a10_002604f0(e, e, b + 0x10);

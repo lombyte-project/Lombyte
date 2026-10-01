@@ -21,7 +21,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
@@ -41,7 +41,7 @@ char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
         *(int *)(moby + 0x40) = 0;
         *(float *)(moby + 0x48) = angle;
         *(float *)(moby + 0x44) = 0.7853982f;
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
@@ -178,5 +178,4 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313290.s", FUN_L11_00313290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313f60.s", FUN_L11_00313f60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00314318.s", FUN_L11_00314318);
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f270.s", FUN_L11_0030f270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310ad0.s", FUN_L11_00310ad0);

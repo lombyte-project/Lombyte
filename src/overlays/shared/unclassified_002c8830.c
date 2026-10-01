@@ -14,11 +14,11 @@
 extern char *func_0020D348_m(int);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, float b) {
@@ -32,8 +32,8 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
         f = FUN_001f9b20(dir);
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(f, dir[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(f, dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
         *(float *)(d + 0x10) = 1.0f;
         if (b > 0.0f) {
             FUN_001f9bf8(d, dir, b);
@@ -48,7 +48,7 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
         m[0x23] = func_001FA898_r(*(float *)(d + 0x10) * 24.0f);
         FUN_L00_002502f0(m, 0xFF, 0xFF, 0xFF);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -66,8 +66,8 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(short *)(m + 0x32) = truncate_float_to_s32(size);
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(dir), dir[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(dir), dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
         *(float *)(p + 0x10) = 1.0f;
         if (len > 0.0f) {
             FUN_001f9bf8(p, dir, len);
@@ -81,7 +81,7 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(float *)(p + 0x20) = z;
         *(int *)(p + 0x18) = r - 13;
         *(short *)(m + 0x34) = 0x200;
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

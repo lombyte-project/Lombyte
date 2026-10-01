@@ -67,7 +67,7 @@ typedef struct {
 } DebrisMoby;
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_0020def8(DebrisMoby *);
+extern void FUN_L00_00250df8(DebrisMoby *);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern f32 FUN_L00_00257c48(f32 lo, f32 hi);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -93,7 +93,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         v->spin_y = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         v->spin_z = FUN_L00_00257c48(0.0f, 0.017453292f);
         v->timer = FUN_001f96f8(200);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

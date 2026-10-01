@@ -2,5 +2,3 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_0025602c.s", FUN_L14_0025602c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002916e0.s", FUN_L14_002916e0);

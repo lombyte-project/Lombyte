@@ -37,5 +37,3 @@ int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
     }
     return r;
 }
-
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c590.s", FUN_L04_0024c590);

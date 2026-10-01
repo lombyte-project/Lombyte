@@ -182,7 +182,7 @@ extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_L00_002502f0(void *, s32, s32, s32);
 void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern void FUN_0020def8();
+extern void FUN_L00_00250df8();
 
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 p;
@@ -213,7 +213,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         v->color = color;
         FUN_L00_0026daa0(m, 0x2F00007F, color, -1, 210000.0f);
         FUN_L00_0026daa0(m, 0x4F004F7F, v->color, -1, 115500.0f);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -605,7 +605,7 @@ typedef struct {
     s32 *pvars;
 } SpawnedMoby;
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_0020def8();
+extern void FUN_L00_00250df8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *m;
@@ -622,7 +622,7 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         qcopy(&m->pos, &src->pos);
         qcopy(&m->rot, &src->rot);
         *pv = -1;
-        FUN_0020def8(m, -1);
+        FUN_L00_00250df8(m, -1);
     }
     return m;
 }
@@ -720,7 +720,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         pv->timer = 0x78;
         pv->f10 = D_0015ED70 * 15.0f;
         pv->spin = random_float_between(0.0031415929f, 0.062831856f);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -794,7 +794,7 @@ typedef struct {
 } PlayerPosView;
 extern s32 FUN_L01_0026e008(s32, s32);
 extern ClonedMoby *FUN_L01_00302328(ClonedMoby *);
-extern f32 FUN_L00_001ff8b0(f32, f32);
+extern f32 FUN_001f9e90(f32, f32);
 extern f32 FUN_001fa580(f32, f32);
 extern void FUN_L00_0025c558(void *, void *, s32, s32, s32, f32);
 extern s32 D_L01_00161E90 __attribute__((sda));
@@ -833,7 +833,7 @@ void FUN_L01_003021b8(SpawnerMoby *m) {
             nv->w78 = 0;
             nv->w7C = 0;
             FUN_L00_0025c558(n, nv->path, 5, 8, 0,
-                FUN_001fa580(FUN_L00_001ff8b0(D_0013F350.x - m->x, D_0013F350.y - m->y),
+                FUN_001fa580(FUN_001f9e90(D_0013F350.x - m->x, D_0013F350.y - m->y),
                              3.1415927f));
             n->state = 9;
         }
@@ -864,7 +864,7 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
     v->f250 = 1.0f;
     v->w170 = truncate_float_to_s32(819.2f);
     v->f224 = 30.0f;
-    FUN_0020def8(m);
+    FUN_L00_00250df8(m);
     return m;
 }
 void *FUN_L00_0025a420(void *, s32, s32);

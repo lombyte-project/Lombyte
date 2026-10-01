@@ -48,7 +48,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *, void *);
+extern void FUN_L00_00250df8(void *, void *);
 
 char *FUN_L15_002e7ed8(void *unused, void *vector) {
     char *moby = CreateMoby(0x4E9);
@@ -65,7 +65,7 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
         qcopy(moby + 0x10, vector);
         field = *(char **)(moby + 0x24);
         *(int *)(moby + 0x94) = *(int *)(field + 0x10);
-        FUN_0020def8(moby, field);
+        FUN_L00_00250df8(moby, field);
     }
     return moby;
 }

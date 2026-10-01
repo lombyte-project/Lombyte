@@ -2,4 +2,4 @@
 #include "types.h"
 #include "asm.h"
 
-s32 FUN_L00_00277f60(u8 *p) { *(s32 *)(p + 0x44) = -1; return 0; }
+s32 FUN_0021a318(u8 *p) { *(s32 *)(p + 0x44) = -1; return 0; }

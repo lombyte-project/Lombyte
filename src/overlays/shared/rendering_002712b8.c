@@ -570,7 +570,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
             g = (P_272bc0 *)(c - 0x80);
             if (g->f88 < *(float *)(p + 0x18) + 1.2f) {
                 FUN_001f9a28_272bc0(t, c, p + 0x10);
-                FUN_L00_001ff500_272bc0(t, t, 1.0f);
+                FUN_001f9bf8_272bc0(t, t, 1.0f);
                 t[2] = 1.0f;
                 FUN_L00_00259bc8_272bc0(g->i2080, *(int *)(q + 0x18), 1, p + 0x10, t, *(float *)(q + 0x1C));
             }
@@ -865,7 +865,7 @@ void FUN_L00_00273ee0(unsigned char *o) {
     *(float *)(o + 0xC) += D_0015ED60_273ee0 * -100.0f;
     FUN_001f9a10_273ee0(out, b, c);
     if (*(float *)(o + 0x20) != 0.0f || c[1] != 0.0f || c[2] != 0.0f) {
-        if (FUN_L00_001efc70_273ee0(o + 0x10, out, 2, o, 0)) {
+        if (FUN_001efa68_273ee0(o + 0x10, out, 2, o, 0)) {
             *(u128 *)(o + 0x10) = D_L00_00173E60_273ee0[0];
             FUN_001f99f8_273ee0(c);
             *(float *)(o + 0xC) += *(float *)(o + 0xC);
@@ -1101,7 +1101,7 @@ void FUN_L00_00274818(char *p) {
     FUN_0020cca8_274818(s->o, s->b4, a);
     x = FUN_001fa6c0_274818(s->b5);
     x = FUN_002132a8_274818(-x, x);
-    FUN_L00_001ff500_274818(&b, a, (x / 100.0f - one) * s->fC);
+    FUN_001f9bf8_274818(&b, a, (x / 100.0f - one) * s->fC);
     FUN_001f9a10_274818(p + 0x20, v, &b);
     *(float *)(p + 0x1C) = f;
     *(float *)(p + 0x2C) = save;
@@ -1251,10 +1251,10 @@ void FUN_L00_00274e48(M_274e48 *m) {
     if (d < 5.0f && 0.0f < r->p18[2]) {
         FUN_001f9a28_274e48(&a, r->p18, &m->v10);
         if (0.5f < FUN_001f9af0_274e48(&a)) {
-            FUN_L00_001ff500_274e48(&a, &a, 0.1f / d);
+            FUN_001f9bf8_274e48(&a, &a, 0.1f / d);
             FUN_001f9a10_274e48(&m->v10, &m->v10, &a);
         } else {
-            FUN_L00_001ff500_274e48(&a, &a, 0.005f);
+            FUN_001f9bf8_274e48(&a, &a, 0.005f);
             FUN_00214a98_274e48(&a, (u8 *)r + 4);
         }
     }
@@ -1471,7 +1471,7 @@ extern unsigned char *D_L00_001B21B8_275910 __asm__("D_L00_001B21B8") __attribut
 extern unsigned char *FUN_L00_002678b8_275910(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_275910(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
-extern unsigned char *FUN_L00_002603d0_275910(int) __asm__("FUN_L00_002603d0");
+extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
 unsigned char *FUN_L00_00275910(q_275910 *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y) {
     unsigned char *m = FUN_L00_002678b8_275910(0x4E);
@@ -1501,7 +1501,7 @@ unsigned char *FUN_L00_00275910(q_275910 *pos, int s, int col, int mode, int b, 
         *(int *)(q + 0x18) = h;
         *(float *)(q + 0x1C) = 0;
         if (h) {
-            unsigned char *r = FUN_L00_0025c338_275910(h);
+            unsigned char *r = FUN_002141f8_275910(h);
             if (r) *(float *)(q + 0x1C) = *(float *)(r + 0x10);
         }
         v = (float *)(q + 0xC);

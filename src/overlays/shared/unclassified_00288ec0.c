@@ -317,19 +317,19 @@ void FUN_L00_0028a480(void)
         switch (i) {
         case 0:
             ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480g * 2) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_28a480, v);
             break;
         case 1:
             ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480d * 5) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_28a480, v);
             break;
         case 2:
             ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480d * 10) & 0x3FFFF) * 2.39684496e-05f - 3.14159265f;
-            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_28a480, v);
             break;
         case 3:
             ((float *)v)[2] = (float)((D_L00_0015F5CC_28a480g * 10) & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            FUN_L00_001ffa90_28a480(D_L00_001BD7E0_28a480, v);
+            FUN_001fa070_28a480(D_L00_001BD7E0_28a480, v);
             break;
         default:
             FUN_001f9fc8_28a480(D_L00_001BD7E0_28a480);
@@ -583,7 +583,7 @@ void FUN_L00_0028b1a0(void)
         if (i > 0) {
             M = D_L00_001BD7E0_28b1a0;
             v[2] = (float)((int)(*p + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
-            FUN_L00_001ffa90_28b1a0(M, v);
+            FUN_001fa070_28b1a0(M, v);
             FUN_001f9a80_28b1a0(M, M, k);
             FUN_001f9a80_28b1a0(M + 0x10, M + 0x10, k);
             FUN_001f9a80_28b1a0(M + 0x20, M + 0x20, k);

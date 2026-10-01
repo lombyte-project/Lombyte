@@ -319,3 +319,43 @@ void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
         qcopy(data, position);
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002a7220.s", FUN_L18_002a7220);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002a75f0.s", FUN_L18_002a75f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5050.s", FUN_L18_002d5050);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5610.s", FUN_L18_002d5610);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5cf8.s", FUN_L18_002d5cf8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6c80.s", FUN_L18_002d6c80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7fd0.s", FUN_L18_002d7fd0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8888.s", FUN_L18_002d8888);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88b8.s", FUN_L18_002d88b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db460.s", FUN_L18_002db460);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db938.s", FUN_L18_002db938);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dbe80.s", FUN_L18_002dbe80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc0c8.s", FUN_L18_002dc0c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc458.s", FUN_L18_002dc458);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002df608.s", FUN_L18_002df608);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfaa0.s", FUN_L18_002dfaa0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea598.s", FUN_L18_002ea598);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eacd8.s", FUN_L18_002eacd8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eaea0.s", FUN_L18_002eaea0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ec130.s", FUN_L18_002ec130);

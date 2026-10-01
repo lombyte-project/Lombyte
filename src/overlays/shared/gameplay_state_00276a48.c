@@ -28,3 +28,5 @@ int FUN_L01_00276c40(int idx, int a, int mask)
     return 0;
 }
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276a48.s", FUN_L01_00276a48);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276fe8.s", FUN_L01_00276fe8);

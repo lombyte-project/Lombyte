@@ -32,7 +32,7 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
     if (f < b->pos.f[2] + 5.0f) {
         u.q = t.q;
         u.f[2] = u.f[2] - (k + k);
-        if (FUN_L00_001efc70_002634f8(&t, &u, 0x12, 0, 0)) {
+        if (FUN_001efa68_002634f8(&t, &u, 0x12, 0, 0)) {
             FUN_001f9a28_002634f8(&d, &D_L00_00173E60_002634f8, &b->pos);
             FUN_L00_00268f10_002634f8(&D_L00_00173E60_002634f8, (u8)(int)(FUN_001f9b20_002634f8(&d) / 60.0f * 191.0f + 64.0f));
         }
@@ -190,7 +190,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001fa030(void *, void *);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00257d78(float *, float, float);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -251,7 +251,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d + 0x20, v12);
         }
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

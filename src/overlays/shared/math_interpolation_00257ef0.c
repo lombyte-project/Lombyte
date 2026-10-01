@@ -134,7 +134,7 @@ extern void FUN_001f9bf8_258490(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_001f9b20_258490(void *) __asm__("FUN_001f9b20");
 extern float FUN_001f9b80_258490(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_L00_001ff8b0_258490(float, float) __asm__("FUN_L00_001ff8b0");
+extern float FUN_001f9e90_258490(float, float) __asm__("FUN_001f9e90");
 extern void FUN_00125180_258490(void *, void *) __asm__("FUN_00125180");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -168,16 +168,16 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
         }
     }
     FUN_001f9a28_258490(&d, pos, to);
-    FUN_L00_001ff500_258490(&n, &d, r * 1.2f);
+    FUN_001f9bf8_258490(&n, &d, r * 1.2f);
     up.q = 0;
     up.f[2] = h;
     FUN_001f9a10_258490(&a, to, &up);
     FUN_001f9a10_258490(&b, &a, &n);
-    if (ok && FUN_L00_001efc70_258490(&a, &b, m2 | 0x24, ign, 0)) {
+    if (ok && FUN_001efa68_258490(&a, &b, m2 | 0x24, ign, 0)) {
         c = D_L00_00173E40_258490;
         if (*(int *)(c + 0x1C) > 0) {
             nrm = (float *)(c + 0x40);
-            if (slope <= FUN_L00_001ff8b0_258490(*(float *)(c + 0x48), FUN_001f9b20_258490(nrm))) {
+            if (slope <= FUN_001f9e90_258490(*(float *)(c + 0x48), FUN_001f9b20_258490(nrm))) {
                 *(int *)(c + 0x48) = 0;
                 FUN_00125180_258490(nrm, nrm);
                 {
@@ -203,7 +203,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
                 break;
             }
-            ang = FUN_L00_001ff8b0_258490(FUN_001f9b80_258490(pos, q60), *(float *)(q40 + 0x28) - pos->f[2]);
+            ang = FUN_001f9e90_258490(FUN_001f9b80_258490(pos, q60), *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
                 qcopy(pos, &D_L00_00173E70_258490);
                 ok = 0;
@@ -232,7 +232,7 @@ void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
 }
 void FUN_001f99f8_259028(void *) __asm__("FUN_001f99f8");
 float FUN_001f9b48_259028(void *, void *) __asm__("FUN_001f9b48");
-float FUN_L00_001ff8b0_259028(float, float) __asm__("FUN_L00_001ff8b0");
+float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00258278_259028(unsigned char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
 float FUN_001fa688_259028(float, float) __asm__("FUN_001fa688");
 int FUN_001f9740_259028(void *) __asm__("FUN_001f9740");
@@ -243,7 +243,7 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     float a, d;
     FUN_001f99f8_259028(out);
     if (FUN_001f9b48_259028(m + 0x10, tgt) < *(float *)(c + 0x2C)) r = 4;
-    a = FUN_L00_001ff8b0_259028(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
+    a = FUN_001f9e90_259028(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
     FUN_L00_00258278_259028(m, (float *)(c + 0x14), a, *(float *)(c + 0x3C), *(float *)(c + 0x40), *(float *)(c + 0x44));
     d = FUN_001fa688_259028(a, *(float *)(m + 0x48));
     if (*(float *)(c + 0x28) <= d) r |= 0x10;

@@ -119,8 +119,8 @@ void FUN_L02_002d3dd0(void *moby) {
 
 /* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_001ff8b0(float, float);
-extern void FUN_0020def8(void *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_L00_00250df8(void *);
 extern void func_00213DE0(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L02_002d6118(unsigned char *moby, void *position, float *direction) {
@@ -132,8 +132,8 @@ void FUN_L02_002d6118(unsigned char *moby, void *position, float *direction) {
     }
     qcopy(moby + 0x10, position);
     qcopy(data + 0x40, direction);
-    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(direction[0], direction[1]);
-    FUN_0020def8(moby);
+    *(float *)(moby + 0x48) = FUN_001f9e90(direction[0], direction[1]);
+    FUN_L00_00250df8(moby);
 }
 #include "qcopy.h"
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
@@ -225,6 +225,6 @@ void FUN_L02_002df0b0(char *moby)
     k2 = *(float *)&D_L02_00161C3C_d;
     *(float *)(*(char **)(d + 0x84) + 0x48) = r;
     *(float *)(*(char **)(d + 0x88) + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), (*(float *)(*(char **)(d + 0x88) + 0x18) - *(float *)(moby + 0x18)) * k2 * 0.017453292f);
-    FUN_0020def8(*(char **)(d + 0x84));
-    FUN_0020def8(*(char **)(d + 0x88));
+    FUN_L00_00250df8(*(char **)(d + 0x84));
+    FUN_L00_00250df8(*(char **)(d + 0x88));
 }

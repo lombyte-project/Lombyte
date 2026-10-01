@@ -15,7 +15,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e8e08.s", FUN_L17_002e8e08);
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -39,8 +39,8 @@ char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
         *(char **)(d + 0x3C) = src;
         FUN_001f9a28(tmp, d + 0x10, p);
         FUN_001f9bf8(d, tmp, *(float *)(d + 0x40));
-        *(float *)(r + 0x48) = FUN_L00_001ff8b0(v[0] - *(float *)(r + 0x10), v[1] - *(float *)(r + 0x14));
-        *(float *)(r + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b80(p, v), v[2] - *(float *)(r + 0x18));
+        *(float *)(r + 0x48) = FUN_001f9e90(v[0] - *(float *)(r + 0x10), v[1] - *(float *)(r + 0x14));
+        *(float *)(r + 0x44) = -FUN_001f9e90(FUN_001f9b80(p, v), v[2] - *(float *)(r + 0x18));
     }
     return r;
 }
@@ -227,7 +227,7 @@ typedef struct {
 
 extern CameraGlobals D_0013F350;
 extern char D_L17_001676C0[];
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_001f9c48(void *, void *, float);
 
 void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
@@ -236,7 +236,7 @@ void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
     *(float *)(temp + 8) = 1.5f;
     FastVecAdd(temp, temp, moby + 0x10);
     clear_u64_value(state);
-    *(float *)(state + 8) = FUN_L00_001ff8b0(D_0013F350.x - *(float *)temp,
+    *(float *)(state + 8) = FUN_001f9e90(D_0013F350.x - *(float *)temp,
                                                  D_0013F350.y - *(float *)(temp + 4));
     *(int *)(state + 4) = 0;
 }
@@ -280,7 +280,7 @@ int FUN_L17_002efd48(char *moby, float *target, float speed) {
     float turn;
     float tmp[3];
     data = *(char **)(moby + 0x78);
-    ang = FUN_L00_001ff8b0(target[0] - *(float *)(moby + 0x10), target[1] - *(float *)(moby + 0x14));
+    ang = FUN_001f9e90(target[0] - *(float *)(moby + 0x10), target[1] - *(float *)(moby + 0x14));
     turn = D_0015ED70 * 12.566371f;
     FUN_L00_0025be00(yaw, (float *)(data + 0x1DC), ang, turn, turn, D_0015ED6C * 7.3303828f);
     approach_value((float *)(data + 0x1D8), speed, D_0015ED70 * 13.0f);
@@ -345,6 +345,5 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1940.s", FUN_L17_002f1940);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f20d8.s", FUN_L17_002f20d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2180.s", FUN_L17_002f2180);
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1418.s", FUN_L17_002f1418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);

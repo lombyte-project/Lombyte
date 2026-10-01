@@ -256,6 +256,6 @@ void FUN_L00_0028efc8(unsigned char *m) {
             FUN_001f9cf8_28efc8(&quad.corner[k], &quad.corner[k], D_0013E030_28efc8.p0 + 0xC0);
             FUN_001f9a10_28efc8(&quad.corner[k], &quad.corner[k], &v);
         }
-        FUN_L00_001fd228_28efc8(&quad, 0, 0);
+        FUN_001f7d30_28efc8(&quad, 0, 0);
     }
 }

@@ -12,9 +12,9 @@
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = func_0020D348_m(0x50C);
@@ -32,9 +32,9 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         *(int *)(d + 0x14) = a3;
         *(int *)(d + 0x2C) = a5;
         *(int *)(d + 0x28) = 0;
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(d), *(float *)(d + 8));
-        FUN_0020def8(m);
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)d, *(float *)(d + 4));
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(d), *(float *)(d + 8));
+        FUN_L00_00250df8(m);
     }
     return m;
 }

@@ -61,7 +61,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L10_002dd848(char *owner) {
     char *moby = CreateMoby(0x462);
@@ -75,7 +75,34 @@ char *FUN_L10_002dd848(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         qcopy(moby + 0x10, owner + 0x10);
         *(float *)(moby + 0x18) = 59.0f;
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295a38.s", FUN_L10_00295a38);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c7a20.s", FUN_L10_002c7a20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9000.s", FUN_L10_002d9000);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d90a8.s", FUN_L10_002d90a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d92b8.s", FUN_L10_002d92b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd650.s", FUN_L10_002dd650);

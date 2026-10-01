@@ -14,7 +14,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 extern float FUN_001fa5c8(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern unsigned char D_0013E533[];
 extern void FUN_001f99f8(void *);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -40,7 +40,7 @@ void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
     FUN_001f9a10(v, v, moby + 0x10);
     FUN_001f99f8(w);
     x = D_0013E533 + 0xE1D;
-    w[2] = FUN_L00_001ff8b0(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
+    w[2] = FUN_001f9e90(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
     *(int *)(w + 1) = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b41b8.s", FUN_L13_002b41b8);

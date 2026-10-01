@@ -40,7 +40,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030ab80.s", FUN_L09_0030ab80);
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
     char *m = (char *)func_0020D348_m(0x75E);
@@ -61,7 +61,7 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
         d[0x1C] = b;
         d[0x1A] = a;
         d[0x1B] = 0;
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

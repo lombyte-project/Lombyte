@@ -242,7 +242,7 @@ void FUN_00214598(void *, void *);
 int FUN_001f96f8(int);
 void FUN_00212f90(void *, int, int, int);
 void FUN_0020d580(void *);
-void FUN_0020def8(void *);
+void FUN_L00_00250df8(void *);
 void FUN_L00_002061f0(void) {
     M4_2061f0 m;
     char *g = (char *)D_0013F350;
@@ -258,7 +258,7 @@ void FUN_L00_002061f0(void) {
         *(unsigned short *)(o + 0x34) &= 0xFFBE;
         FUN_00212f90(o, 0x81, 0, FUN_001f96f8(10));
         FUN_0020d580(o);
-        FUN_0020def8(o);
+        FUN_L00_00250df8(o);
     } else {
         *(unsigned short *)(o + 0x34) |= 0x41;
     }
@@ -649,7 +649,7 @@ extern void f330d0_208820(void) __asm__("FUN_L00_002330d0");
 extern void f78a8_208820(void) __asm__("FUN_L00_002078a8");
 extern void f79e8_208820(void) __asm__("FUN_L00_002079e8");
 extern void ff090_208820(void *, void *, int) __asm__("FUN_001f9838");
-extern void f50df8_208820(void *) __asm__("FUN_0020def8");
+extern void f50df8_208820(void *) __asm__("FUN_L00_00250df8");
 extern void f336e8_208820(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void f4eed8_208820(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
@@ -716,7 +716,7 @@ extern void FUN_L00_00233210_00208a10(void) __asm__("FUN_L00_00233210");
 extern void FUN_L00_00233248_00208a10(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_001f9838_00208a10(void *, void *, int) __asm__("FUN_001f9838");
-extern void FUN_0020def8_00208a10(void *) __asm__("FUN_0020def8");
+extern void FUN_L00_00250df8_00208a10(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_002336e8_00208a10(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void FUN_L00_0024eed8_00208a10(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 
@@ -734,7 +734,7 @@ void FUN_L00_00208a10(void) {
     o = D_0013F350_00208a10.obj;
     qcopy(o + 0x10, &D_0013F350_00208a10.a);
     qcopy(o + 0x40, &D_0013F350_00208a10.b);
-    FUN_L00_001ff090_00208a10(o + 0xC0, &D_0013F350_00208a10, 0x30);
+    FUN_001f9838_00208a10(o + 0xC0, &D_0013F350_00208a10, 0x30);
     FUN_L00_00250df8_00208a10(D_0013F350_00208a10.obj);
     if (D_0013F350_00208a10.k == 0 && *(int *)(D_0013F350_00208a10.obj + 0x94) != 0) {
         qcopy(&v, &D_0013F350_00208a10.a);
@@ -1225,7 +1225,7 @@ void FUN_L00_0020b960(void) {
         P.b12E4 = 1;
     }
     if (t == 3) P.b12E6 = 1;
-    if (D_0015ED84_20b960 == 13 && P.i2084 != 0x7B && FUN_L00_001f0d60_20b960((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) && FUN_L00_001f35d8_20b960() == 11) {
+    if (D_0015ED84_20b960 == 13 && P.i2084 != 0x7B && FUN_L00_001f0d60_20b960((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) && FUN_001f0b58_20b960() == 11) {
         goto s7B;
     }
     if (t == 11) P.b12EB = 1;

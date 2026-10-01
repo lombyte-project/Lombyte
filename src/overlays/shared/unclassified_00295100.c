@@ -515,7 +515,7 @@ extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
 extern void FUN_0020c5f0_29b680(void *, int) __asm__("FUN_0020c5f0");
 extern void FUN_001f9a10_29b680(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9cf8_29b680(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_0020def8_29b680(void *) __asm__("FUN_0020def8");
+extern void FUN_L00_00250df8_29b680(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_00212ed8_29b680(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_0020c880_29b680(void *) __asm__("FUN_0020c880");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");

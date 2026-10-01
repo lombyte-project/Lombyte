@@ -45,7 +45,7 @@ void FUN_L00_002e01b0(char *m) {
     if (FUN_001f9740_2e01b0(d + 4) == 0) return;
     FUN_L00_0024f7c8_2e01b0(m, 0, &t);
     r = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
-    FUN_L00_001ff500_2e01b0(&v, m + 0xD0, r);
+    FUN_001f9bf8_2e01b0(&v, m + 0xD0, r);
     g = D_0013F350_2e01b0;
     v.x += *(float *)(g + 0x100) * 0.8f;
     v.y += *(float *)(g + 0x104) * 0.8f;
@@ -278,7 +278,7 @@ s32 FUN_L00_002e42c0(q128_002e42c0 *out, s32 flag) {
         FUN_001f9a10_002e42c0(&v[1], &v[0], &v[3]);
         FUN_001f9a68_002e42c0(&v[3], q + 0x30, -30.0f);
         FUN_001f9a10_002e42c0(&v[2], &v[0], &v[3]);
-        if (FUN_L00_001efc70_002e42c0(&v[1], &v[2], 0x12, g->p2080, 0)) {
+        if (FUN_001efa68_002e42c0(&v[1], &v[2], 0x12, g->p2080, 0)) {
             qcopy(out, &D_L00_00173E60_002e42c0);
             return 0;
         }
@@ -468,10 +468,10 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
     u8 *m = o->m;
     FUN_001f9a28_002e7530(&t0, b, c);
     m += 0x90;
-    FUN_L00_001ff500_002e7530(&t1, &t0, k1);
+    FUN_001f9bf8_002e7530(&t1, &t0, k1);
     FUN_001f9a10_002e7530(b, b, &t1);
     FUN_001f9a28_002e7530(&t2, b, m);
-    FUN_L00_001ff500_002e7530(&t2, &t2, k2);
+    FUN_001f9bf8_002e7530(&t2, &t2, k2);
     FUN_001f9a10_002e7530(&t3, m, &t2);
     FUN_001f9a28_002e7530(a, &t3, out);
 }
@@ -553,7 +553,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
     dist = 0.0f;
     qcopy(pos, base + 0x90);
     spd = D_L00_00161CD8_2e7a30;
-    FUN_L00_001ff500_2e7a30(ndir, dir, 1.0f);
+    FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
     for (i = 0; i < FUN_001fa6d0_2e7a30(*(float *)(e + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
             g = D_0013F350_2e7a30;
@@ -565,7 +565,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
                     found = 1;
                     if (g[0x20A4] != 2 && FUN_001f99c0_2e7a30(D_0013CA40_2e7a30) > 0.05f) {
                         FUN_001f9a28_2e7a30(d, step, save);
-                        FUN_L00_001ff500_2e7a30(d, d, 1.0f);
+                        FUN_001f9bf8_2e7a30(d, d, 1.0f);
                         if (FUN_001f99c0_2e7a30(FUN_001f9ab0_2e7a30(D_L00_00166E40_2e7a30, d)) < 0.75f) {
                             float lim;
                             float cf;
@@ -581,8 +581,8 @@ int FUN_L00_002e7a30(unsigned char *a) {
                         }
                     }
                     FUN_001f9a28_2e7a30(d, pos, p + 0x50);
-                    FUN_L00_001ff500_2e7a30(c, d, *(float *)(c + 0x2C) - *(float *)(e + 0x30));
-                    FUN_L00_001ff500_2e7a30(ndir, c, 1.0f);
+                    FUN_001f9bf8_2e7a30(c, d, *(float *)(c + 0x2C) - *(float *)(e + 0x30));
+                    FUN_001f9bf8_2e7a30(ndir, c, 1.0f);
                 }
             }
         }
@@ -671,7 +671,7 @@ extern float FUN_001f9ab0_2e8bb8(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_001f9af0_2e8bb8(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9ad8_2e8bb8(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void FUN_001f9bf8_2e8bb8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float FUN_L00_001ff8b0_2e8bb8(float, float) __asm__("FUN_L00_001ff8b0");
+extern float FUN_001f9e90_2e8bb8(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_2e8bb8(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_2e8bb8(float, float) __asm__("FUN_001fa5c8");
 
@@ -725,8 +725,8 @@ void FUN_L00_002e8bb8(unsigned char *o, float k, float in) {
     a = FUN_001f9ab0_2e8bb8(c, base + 0x20);
     b = FUN_001f9af0_2e8bb8(c);
     FUN_001f9ad8_2e8bb8(axis, base + 0x20, c);
-    FUN_L00_001ff500_2e8bb8(axis, axis, 1.0f);
-    ang = FUN_L00_001ff8b0_2e8bb8(b, a);
+    FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
+    ang = FUN_001f9e90_2e8bb8(b, a);
     if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(lim) && sel == D_L00_00161CC0_2e8bb8) {
         *(float *)(s + 8) = ang / 0.69813168f;
     }

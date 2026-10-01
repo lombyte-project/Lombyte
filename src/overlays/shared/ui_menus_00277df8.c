@@ -5,4 +5,4 @@
 extern int D_0015EE90;
 extern char D_L00_001B8910[];
 extern char D_L00_001B8940[];
-int FUN_L00_00277df8(char *p) { *(char **)(p + 0x34) = D_0015EE90 ? D_L00_001B8910 : D_L00_001B8940; return 0; }
+int FUN_0021a1b0(char *p) { *(char **)(p + 0x34) = D_0015EE90 ? D_L00_001B8910 : D_L00_001B8940; return 0; }

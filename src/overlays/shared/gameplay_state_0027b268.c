@@ -14,7 +14,7 @@ extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(float *, float *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L12_0027b370(char *parent, char *list, int n) {
     float m0[16];
@@ -32,7 +32,9 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
             FUN_00214598(m1, p + 0x40);
             FUN_001f9d20(m2, list + i * 0x30, m0);
             FUN_001f9a10(p + 0x10, parent + 0x10, m2);
-            FUN_0020def8(p);
+            FUN_L00_00250df8(p);
         }
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027b268.s", FUN_L12_0027b268);

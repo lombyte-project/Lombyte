@@ -11,7 +11,7 @@ extern long D_0015EED0_29fcd0 __asm__("D_0015EED0") __attribute__((section(".sda
 void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void FUN_001f9a28_29fcd0(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9af0_29fcd0(void *) __asm__("FUN_001f9af0");
-void FUN_L00_001ff500_29fcd0(void *, void *, float) __asm__("FUN_L00_001ff500");
+void FUN_001f9bf8_29fcd0(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_29fcd0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_00237a78_29fcd0(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
 void FUN_00239690_29fcd0(int, int, float) __asm__("FUN_00239690");
@@ -42,13 +42,13 @@ void FUN_L00_0029fcd0(void *m)
     FUN_001f9a28_29fcd0(d1, &out[1], out);
     FUN_001f9a28_29fcd0(d2, &out[2], out);
     len = FUN_001f9af0_29fcd0(d1);
-    FUN_L00_001ff500_29fcd0(tmp, d1, 0.03f);
+    FUN_001f9bf8_29fcd0(tmp, d1, 0.03f);
     FUN_001f9a10_29fcd0(base, base, tmp);
-    FUN_L00_001ff500_29fcd0(d1, d1, len - 0.06f);
+    FUN_001f9bf8_29fcd0(d1, d1, len - 0.06f);
     len = FUN_001f9af0_29fcd0(d2);
-    FUN_L00_001ff500_29fcd0(tmp, d2, 0.04f);
+    FUN_001f9bf8_29fcd0(tmp, d2, 0.04f);
     FUN_001f9a10_29fcd0(base, base, tmp);
-    FUN_L00_001ff500_29fcd0(d2, d2, len - 0.04f);
+    FUN_001f9bf8_29fcd0(d2, d2, len - 0.04f);
     qcopy(&c[0], base);
     FUN_001f9a10_29fcd0(&c[1], base, d1);
     FUN_001f9a10_29fcd0(&c[2], base, d2);

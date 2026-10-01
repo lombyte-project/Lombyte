@@ -11,7 +11,7 @@
 
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
@@ -20,7 +20,7 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     if (FUN_001f9b48(b, a + 0x10) > x) return 0;
     if (!(0.0f < z)) return 1;
     {
-        float r = FUN_L00_001ff8b0(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
+        float r = FUN_001f9e90(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
         r = FUN_001fa688(*(float *)(a + 0x48), r);
         if (r > z) return 0;
     }
@@ -36,7 +36,7 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void func_001FA480(void *, void *) __asm__("FUN_001fa2b8");
 extern void func_0020DAF8(void *, int, void *) __asm__("FUN_0020cca8");
 extern void func_0020EEE8(void *) __asm__("FUN_0020e098");
@@ -46,7 +46,7 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
     func_0020DAF8(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
     MobyAnimAdvance(child);
-    FUN_0020def8(child);
+    FUN_L00_00250df8(child);
     func_001FA480(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);
     func_0020EEE8(child);

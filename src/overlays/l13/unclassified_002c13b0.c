@@ -39,7 +39,7 @@ typedef struct {
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -66,7 +66,7 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
@@ -122,7 +122,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L13_002e8438(char *owner) {
@@ -139,7 +139,7 @@ char *FUN_L13_002e8438(char *owner) {
         *(char **)data = owner;
         *(int *)(data + 4) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x200;
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
     }

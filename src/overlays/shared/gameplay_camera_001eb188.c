@@ -102,7 +102,7 @@ typedef float W[4] __attribute__((aligned(16)));
 
 extern float FUN_001f9af0(float *);
 extern float FUN_001f9b20(float *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(float *);
 extern void FUN_001fa5c8(float, float);
 
@@ -110,8 +110,8 @@ int FUN_L00_001ed630(float *a) {
     W v;
     float t;
     FUN_001f9a28(v);
-    a[1] = FUN_L00_001ff8b0(FUN_001f9b20(v), v[2]);
-    t = FUN_L00_001ff8b0(v[0], v[1]);
+    a[1] = FUN_001f9e90(FUN_001f9b20(v), v[2]);
+    t = FUN_001f9e90(v[0], v[1]);
     FUN_001fa5c8(t, a[0]);
     a[0] = t;
     a[2] = FUN_001f9af0(v);

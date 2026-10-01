@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024a7e8.s", FUN_L00_0024a7e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024adb0.s", FUN_L00_0024adb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae18.s", FUN_L00_0024ae18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae58.s", FUN_L00_0024ae58);
@@ -10,4 +9,3 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024afe0.s", FUN_L00_0024afe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b050.s", FUN_L00_0024b050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b1b8.s", FUN_L00_0024b1b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b380.s", FUN_L00_0024b380);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b410.s", FUN_L00_0024b410);

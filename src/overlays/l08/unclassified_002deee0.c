@@ -52,7 +52,7 @@ void FUN_L08_002e1698(char *arg) {
 extern char *func_0020D348_m(int);
 extern char D_0013E533[];
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
     unsigned char *m = func_0020D348_m(oClass);
@@ -67,7 +67,7 @@ void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
         FUN_L00_0024f7c8(m, joint, v0);
         FUN_L00_0024f7c8(parent, pjoint, v10);
         FUN_001f9a28(m + 0x10, v10, v0);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -155,7 +155,7 @@ extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L08_002e8ba0(char *a) {
     char *data = *(char **)(a + 0x78);
@@ -179,7 +179,7 @@ void FUN_L08_002e8ba0(char *a) {
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
-        if (m != 0) FUN_0020def8(m);
+        if (m != 0) FUN_L00_00250df8(m);
     }
 }
 /* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
@@ -213,7 +213,7 @@ void FUN_L08_002e9a18(char *arg) {
     for (i = 0; i < 16; i++) {
         char *o = *(char **)p;
         if (o != 0) {
-            FUN_0020def8(o);
+            FUN_L00_00250df8(o);
             o = *(char **)p;
             if (*(unsigned short *)(o + 0x34) & 0x8000) {
                 FUN_001f9a68(o + 0xD0, o + 0xD0, -1.0f);
@@ -222,3 +222,22 @@ void FUN_L08_002e9a18(char *arg) {
         p += 16;
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2078.s", FUN_L08_002e2078);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2da0.s", FUN_L08_002e2da0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2df0.s", FUN_L08_002e2df0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e3870.s", FUN_L08_002e3870);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e4e90.s", FUN_L08_002e4e90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8cd0.s", FUN_L08_002e8cd0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9558.s", FUN_L08_002e9558);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9758.s", FUN_L08_002e9758);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);

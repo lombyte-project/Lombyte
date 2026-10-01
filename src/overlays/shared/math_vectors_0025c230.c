@@ -45,7 +45,7 @@ float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");
 float FUN_001fa580_0025c558(float, float) __asm__("FUN_001fa580");
 int FUN_001f96f8_0025c558(int) __asm__("FUN_001f96f8");
-float *FUN_L00_002603d0_0025c558(void *) __asm__("FUN_L00_002603d0");
+float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
@@ -59,7 +59,7 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
     b->h2C = FUN_001f96f8_0025c558(300);
     b->h3E = 0;
     b->b3C = 1;
-    r = FUN_L00_0025c338_0025c558(a);
+    r = FUN_002141f8_0025c558(a);
     if (r && *r == 0.0f) {
         b->w24 |= 0x20;
         *(int *)(a + 0x94) = 0;

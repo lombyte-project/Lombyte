@@ -80,7 +80,7 @@ typedef struct {
 } S_262608;
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
-void FUN_0020def8_262608(void *) __asm__("FUN_0020def8");
+void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L00_00262608(S_262608 *s, int dec)
 {

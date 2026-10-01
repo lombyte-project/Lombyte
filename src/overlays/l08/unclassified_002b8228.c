@@ -38,10 +38,10 @@ void FUN_L08_002b8228(char *moby) {
 /* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D35E8), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
     char *m = func_0020D348_m(0xF8);
@@ -58,8 +58,8 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
         qcopy(m + 0x10, pos);
         qcopy(d + 0x10, vec);
         *(float *)(m + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453292f;
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
-        FUN_0020def8(m);
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -102,8 +102,8 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
         qcopy(moby + 0x10, pos);
         qcopy(data, vec);
         *(float *)(moby + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453293f;
-        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
-        FUN_0020def8(moby);
+        *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }

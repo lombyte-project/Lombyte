@@ -137,7 +137,7 @@ void FUN_L00_002e9cc0(char *p) {
     char b[16] __attribute__((aligned(16)));
     char *g = D_0013F350_002e9cc0;
     int m;
-    FUN_L00_001ff500_002e9cc0(a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9bf8_002e9cc0(a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
     m = *(unsigned char *)(g + 0x20A4);
     if (m == 2) {
         FUN_001f9a68_002e9cc0(b, a, 9.5f);
@@ -168,7 +168,7 @@ void FUN_L00_002e9dd0(char *m) {
     u128 a;
     u128 b;
     unsigned char *g = D_0013F350_2e9dd0;
-    FUN_L00_001ff500_2e9dd0(&a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9bf8_2e9dd0(&a, *(char **)(g + 0x2080) + 0xE0, 1.0f);
     if (g[0x20A4] == 2) {
         FUN_001f9a68_2e9dd0(&b, &a, 9.5f);
     } else if (g[0x20A4] == 1) {
@@ -182,7 +182,7 @@ void FUN_L00_002e9dd0(char *m) {
         qcopy(m + 0x20, &a);
         FUN_001f9ad8_2e9dd0(m + 0x10, d, &a);
     }
-    FUN_L00_001ff500_2e9dd0(m + 0x10, m + 0x10, 1.0f);
+    FUN_001f9bf8_2e9dd0(m + 0x10, m + 0x10, 1.0f);
     FUN_001f9ad8_2e9dd0(m, &a, m + 0x10);
     qcopy(m + 0x40, m);
 }
@@ -325,8 +325,8 @@ void FUN_L00_002eac18(int mode) {
         char *p = o + 0x30;
         FUN_001fa050_2eac18(m, d);
         FUN_001fa2b8_2eac18(o, m);
-        FUN_L00_001ff500_2eac18(v1, m, -1.0f);
-        FUN_L00_001ff500_2eac18(v0, &m[8], 1.2f);
+        FUN_001f9bf8_2eac18(v1, m, -1.0f);
+        FUN_001f9bf8_2eac18(v0, &m[8], 1.2f);
         FUN_001f9a10_2eac18(p, d - 0x10, v0);
         FUN_001f9a10_2eac18(p, p, v1);
         *(short *)(*(char **)(g + 0x180) + 0x8A) = 1;
@@ -545,7 +545,7 @@ void FUN_001f9a10_2eb648(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_001eb0c8_2eb648(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb320_2eb648(char *, void *, void *, float) __asm__("FUN_L00_002eb320");
 float FUN_001fa580_2eb648(float, float) __asm__("FUN_001fa580");
-float FUN_L00_001ff8b0_2eb648(float, float) __asm__("FUN_L00_001ff8b0");
+float FUN_001f9e90_2eb648(float, float) __asm__("FUN_001f9e90");
 float FUN_001fa688_2eb648(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b80_2eb648(void *, void *) __asm__("FUN_001f9b80");
 int FUN_L00_002eb648(char *a, char *t) {
@@ -584,7 +584,7 @@ int FUN_L00_002eb648(char *a, char *t) {
     cam = D_L00_00166C80_2eb648;
     pp = g + 0x80;
     cp = cam + 0x140;
-    ang = FUN_L00_001ff8b0_2eb648(*(float *)(cam + 0x140) - *(float *)(g + 0x80), *(float *)(cam + 0x144) - *(float *)(g + 0x84));
+    ang = FUN_001f9e90_2eb648(*(float *)(cam + 0x140) - *(float *)(g + 0x80), *(float *)(cam + 0x144) - *(float *)(g + 0x84));
     ang = FUN_001fa688_2eb648(ang, *(float *)(cam + 0x158));
     d1 = FUN_001f9b80_2eb648(pp, cp);
     if (d1 < FUN_001f9b80_2eb648(*(char **)(g + 0x1090) + 0x10, cp)) {
@@ -646,14 +646,14 @@ char *FUN_L00_002eb930(void *arg) {
 }
 extern char D_0013F350[];
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
-float FUN_L00_001ff8b0(float, float);
+float FUN_001f9e90(float, float);
 float FUN_001fa688(float, float);
 float FUN_001f9b48(void *, void *);
 void FUN_L00_002eba18(char *o) {
     char *g = D_0013F350;
     char *h = D_00166C80_c;
     char *s = *(char **)(g + 0x2080);
-    float a = FUN_L00_001ff8b0(*(float *)(s + 0x10) - *(float *)(h + 0x140), *(float *)(s + 0x14) - *(float *)(h + 0x144));
+    float a = FUN_001f9e90(*(float *)(s + 0x10) - *(float *)(h + 0x140), *(float *)(s + 0x14) - *(float *)(h + 0x144));
     if (FUN_001fa688(*(float *)(h + 0x158), a) < 0.5585053563117981f && FUN_001f9b48(g + 0x80, h + 0x140) < 8.0f) {
         *(char *)(h + 0x273) = 0;
         *(short *)(o + 0x7E) = 2;
@@ -709,7 +709,7 @@ void FUN_L00_002ec4a8(unsigned char *m)
     qcopy(&v, g);
     v.f[2] += *(float *)(p + 0x4C);
     FUN_001f9a28_2ec4a8(&w, &v, m + 0x30);
-    FUN_L00_001ff500_2ec4a8(&w, &w, 1.0f);
+    FUN_001f9bf8_2ec4a8(&w, &w, 1.0f);
     a = 1.5707964f - FUN_001f9df8_2ec4a8(FUN_001f9ab0_2ec4a8(&w, m));
     if (*(int *)(g + 0x2004) == 0x25) {
         *(float *)(q + 0x30) += 0.017f;
@@ -721,10 +721,10 @@ void FUN_L00_002ec4a8(unsigned char *m)
     }
     FUN_001f9ad8_2ec4a8(&x, &w, m + 0x40);
     FUN_00214890_2ec4a8(m, m + 0x40, &x, k);
-    FUN_L00_001ff500_2ec4a8(m + 0x40, m, 1.0f);
+    FUN_001f9bf8_2ec4a8(m + 0x40, m, 1.0f);
     qcopy(m, m + 0x40);
     FUN_001f9ad8_2ec4a8(m + 0x10, m, D_L00_00166E30_2ec4a8);
-    FUN_L00_001ff500_2ec4a8(m + 0x10, m + 0x10, 1.0f);
+    FUN_001f9bf8_2ec4a8(m + 0x10, m + 0x10, 1.0f);
     FUN_001f9ad8_2ec4a8(m + 0x20, m + 0x10, m);
 }
 /* camera update: copies the moby's matrix when the camera mode changes */

@@ -5,3 +5,8 @@
 extern int D_0013CB04[];
 extern char D_L00_001B63F8[];
 extern char D_L00_001B9CF8[];
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f448.s", FUN_L00_0027f448);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284d90.s", FUN_L00_00284d90);

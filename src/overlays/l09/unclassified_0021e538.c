@@ -54,7 +54,7 @@ void FUN_L09_002ead30(unsigned char *m) {
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
 extern s32 rand();
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L09_002edb60(char *src, int cls) {
@@ -67,7 +67,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         qcopy(moby + 0x10, src + 0x10);
         qcopy(moby + 0x40, src + 0x40);
         moby[0xBC] = FUN_001f96f8(10);
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
         if (cls == 0x514) {
@@ -88,7 +88,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_002ee380(char *owner, void *position, float angle) {
     u128_ee380 pos;
@@ -106,7 +106,7 @@ char *FUN_L09_002ee380(char *owner, void *position, float angle) {
         qcopy(moby + 0x40, owner + 0x40);
         *(float *)(moby + 0x48) = angle;
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        FUN_0020def8(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }

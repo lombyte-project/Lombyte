@@ -35,3 +35,16 @@ void FUN_L04_002d3580(char *m) {
 float FUN_L04_002e17b0(void) {
     return -2.55f;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ca420.s", FUN_L04_002ca420);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002cdda0.s", FUN_L04_002cdda0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1608.s", FUN_L04_002d1608);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d16b8.s", FUN_L04_002d16b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d6f68.s", FUN_L04_002d6f68);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1768.s", FUN_L04_002e1768);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1d00.s", FUN_L04_002e1d00);

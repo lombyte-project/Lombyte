@@ -333,10 +333,10 @@ typedef struct {
 } BeamMoby;
 
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_0020def8();
+extern void FUN_L00_00250df8();
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9af0(void *);
-extern f32 FUN_L00_001ff8b0(f32, f32);
+extern f32 FUN_001f9e90(f32, f32);
 extern s32 FUN_001f96f8(s32);
 extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
 extern s32 FUN_0022da68(s32, s32, void *);
@@ -366,8 +366,8 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         m->h32 = 0xFF;
         m->b31 = 1;
         m->scale = m->scale * 0.25f;
-        m->rot_x = -FUN_L00_001ff8b0(FUN_001f9b20(pd), pd->f[2]);
-        m->rot_z = FUN_L00_001ff8b0(d.f[0], pd->f[1]);
+        m->rot_x = -FUN_001f9e90(FUN_001f9b20(pd), pd->f[2]);
+        m->rot_z = FUN_001f9e90(d.f[0], pd->f[1]);
         qcopy(&m->pos, pp);
         qcopy(&v->dir, pd);
         qcopy(&v->color, pc);
@@ -376,7 +376,7 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         FUN_L00_0026daa0(m, 0x2F4F7F7F, FUN_001f96f8(0x78), -1, 420000.0f);
         FUN_L00_0026daa0(m, 0x4F6F7F7F, FUN_001f96f8(0x78), -1, 210000.0f);
         FUN_0022da68(0, 0, m);
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -476,7 +476,7 @@ void FUN_L01_002f8268(HoverMoby *m) {
         spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * D_0015ED70, D_L01_00161BF4, 3.0f);
         if (FUN_001f9b80(&m->pos, &D_0013F350.pos) < D_L01_00161BF8) {
             if (FUN_001f99c0(m->pos.v.z - D_0013F350.pos.v.z) < 0.7f) {
-                ang = FUN_L00_001ff8b0(m->pos.v.x - D_0013F350.pos.v.x, m->pos.v.y - D_0013F350.pos.v.y);
+                ang = FUN_001f9e90(m->pos.v.x - D_0013F350.pos.v.x, m->pos.v.y - D_0013F350.pos.v.y);
                 m->pos.v.x = FUN_001f9dc8(ang) * D_L01_00161BF8;
                 m->pos.v.y = FUN_001f9de0(ang) * D_L01_00161BF8;
                 m->pos.v.x += D_0013F350.pos.v.x;

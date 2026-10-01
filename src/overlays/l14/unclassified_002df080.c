@@ -127,9 +127,9 @@ typedef struct {
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -142,8 +142,8 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
         *(short *)(m + 0x32) = 0x7F;
         m[0x31] = 1;
         data = *(char **)(m + 0x78);
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(b), b[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(b[0], b[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(b), b[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(b[0], b[1]);
         qcopy(m + 0x10, a);
         qcopy(data + 0x10, a);
         qcopy(data, b);
@@ -152,7 +152,7 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
         *(int *)(data + 0x20) = c;
         *(int *)(data + 0x24) = d;
         m[0x23] = 0x10;
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -227,6 +227,6 @@ void FUN_L14_002fc890(char *moby) {
     *(int *)(data + 0x60) = 0;
     *(int *)(data + 0x64) = 0;
     qcopy(moby + 0x10, path + 4);
-    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(path[8] - path[4], path[9] - path[5]);
+    *(float *)(moby + 0x48) = FUN_001f9e90(path[8] - path[4], path[9] - path[5]);
     *(float *)(data + 0x80) = *(float *)(data + 0x84) = *(float *)(data + 0x88) = *(float *)(data + 0x70) = *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
 }

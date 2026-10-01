@@ -33,3 +33,17 @@ void FUN_L15_002e46b0(char *moby) {
         *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), step);
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029aff0.s", FUN_L15_0029aff0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a36d0.s", FUN_L15_002a36d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3ba8.s", FUN_L15_002a3ba8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7880.s", FUN_L15_002a7880);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002aa280.s", FUN_L15_002aa280);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c52b8.s", FUN_L15_002c52b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c6900.s", FUN_L15_002c6900);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf110.s", FUN_L15_002cf110);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf3a8.s", FUN_L15_002cf3a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);

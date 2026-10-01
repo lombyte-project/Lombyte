@@ -46,7 +46,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a6d8.s", FUN_L13_0030a6d8);
 extern char D_0013E533[];
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_001f99f8(void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -70,7 +70,7 @@ void FUN_L13_0030ad38(char *moby, float *p, float *q) {
     FUN_001f9cf8(p, p, moby + 0xC0);
     FUN_001f9a10(p, p, moby + 0x10);
     base = D_0013E533 + 0xE1D;
-    q[2] = FUN_L00_001ff8b0(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
+    q[2] = FUN_001f9e90(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030ae68.s", FUN_L13_0030ae68);
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */
@@ -142,7 +142,7 @@ extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_0020def8(void *);
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
     unsigned char *m = (unsigned char *)func_0020D348_m(0x662);
@@ -169,7 +169,7 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
         *(float *)(data + 0x1C) = *(float *)(m + 0x2C);
         *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(2.0f, 5.0f);
         m[0xBC] = d;
-        FUN_0020def8(m);
+        FUN_L00_00250df8(m);
     }
     return (char *)m;
 }
