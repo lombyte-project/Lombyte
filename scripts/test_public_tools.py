@@ -277,6 +277,32 @@ class ProgressReportTests(unittest.TestCase):
         self.assertEqual(categories["level_03"]["total_code"], "32")
         self.assertNotIn("level_00", categories)
 
+    def test_overlay_one_line_c_definition_counts(self):
+        """A definition whose body opens on the same line (the shape a tiny
+        promoted function takes) is matched, not pending; the classifier used
+        to require the parameter list to close the line."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._repo(Path(tmp))
+            (repo / "config" / "overlays" / "us").mkdir(parents=True)
+            (repo / "config" / "overlays" / "us" / "functions.tsv").write_text(
+                "# name\tkind\tsize\tfingerprint\tlevels\tplaces\texe unit\n"
+                "FUN_L00_00200000\tshared\t40\tf1\t19\t00:00200000\t\n"
+            )
+            (repo / "config" / "overlays" / "us" / "levels.json").write_text(json.dumps({
+                "schema": "rnc-overlay-levels-v1",
+                "levels": [],
+            }))
+            (repo / "src" / "overlays" / "shared").mkdir(parents=True)
+            (repo / "src" / "overlays" / "shared" / "unit_00200000.c").write_text(
+                "int FUN_L00_00200000(float a) { return a <= 1.0f; }\n")
+            report = self._build(repo, {})
+        units = {unit["name"]: unit for unit in report["units"]}
+        self.assertIn("shared/unit_00200000", units)
+        self.assertTrue(units["shared/unit_00200000"]["metadata"]["complete"])
+        shared = {c["id"]: c["measures"] for c in report["categories"]}["shared"]
+        self.assertEqual(shared["total_code"], "40")
+        self.assertEqual(shared["matched_code"], "40")
+
     def test_check_detects_a_stale_report(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
