@@ -1,7 +1,33 @@
 # Building
 
-`./setup.sh` does everything on this page for you (see
-[Quick setup](../README.md#quick-setup)): it downloads and hash-checks the
+## Quick setup
+
+One command installs the toolchain, builds the game compiler from source,
+takes the boot executable from your own disc image, and rebuilds the game
+byte-for-byte:
+
+```sh
+git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
+./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
+```
+
+It ends with `PASS: reconstructed boot ELF matches retail`; from there,
+[CONTRIBUTING.md](../CONTRIBUTING.md) shows how to pick a function and check
+your C.
+
+| Platform                          | How                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linux (Ubuntu 24.04+, Debian 13+) | the two lines above                                                                                                                                                     |
+| Windows                           | in PowerShell: `wsl --install -d Ubuntu`, reboot, open Ubuntu and run the two lines above from your Linux home directory (`~`, not `/mnt/c`)                             |
+| WSL                               | same as Linux                                                                                                                                                           |
+| macOS, other Linux distributions  | with [Docker](https://docs.docker.com/get-docker/): `./setup.sh --docker --iso ...`, then `./setup.sh --shell` for a shell with the toolchain (`make elf`, `check-unit`) |
+
+Already have the executable? `./setup.sh --elf /path/to/SCUS_971.99`.
+`./setup.sh --check` lists what is installed, `./setup.sh --help` the rest.
+
+## What the script does
+
+`./setup.sh` does everything on the rest of this page for you: it downloads and hash-checks the
 public toolchain releases into `tools/`, builds the game compiler from source
 with `scripts/build-game-compiler.py`, creates `.venv`, takes the boot
 executable from your disc image, and runs the gate. The rest of this page is

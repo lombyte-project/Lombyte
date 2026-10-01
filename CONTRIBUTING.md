@@ -18,7 +18,7 @@ build instead of slipping through.
 ```
 
 installs the toolchain, extracts the boot executable from your own disc image
-and runs the first `make elf` (see [Quick setup](README.md#quick-setup) for
+and runs the first `make elf` (see [Quick setup](docs/building.md#quick-setup) for
 Windows, WSL and macOS, and [docs/building.md](docs/building.md) for the manual
 route). Afterwards, rebuild at any time with:
 

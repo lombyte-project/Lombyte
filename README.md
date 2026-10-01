@@ -49,23 +49,12 @@ Contributions to matching C, recovered names, types, and documentation are welco
 
 <h4>Quick setup</h4>
 
-One command installs the toolchain, builds the game compiler from source, takes the boot executable from your own disc image, and rebuilds the game byte-for-byte:
-
 ```sh
 git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
 ./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
 ```
 
-It ends with `PASS: reconstructed boot ELF matches retail`; from there, [CONTRIBUTING.md](CONTRIBUTING.md) shows how to pick a function and check your C.
-
-| Platform                          | How                                                                                                                                                                     |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Linux (Ubuntu 24.04+, Debian 13+) | the two lines above                                                                                                                                                     |
-| Windows                           | in PowerShell: `wsl --install -d Ubuntu`, reboot, open Ubuntu and run the two lines above from your Linux home directory (`~`, not `/mnt/c`)                             |
-| WSL                               | same as Linux                                                                                                                                                           |
-| macOS, other Linux distributions  | with [Docker](https://docs.docker.com/get-docker/): `./setup.sh --docker --iso ...`, then `./setup.sh --shell` for a shell with the toolchain (`make elf`, `check-unit`) |
-
-Already have the executable? `./setup.sh --elf /path/to/SCUS_971.99`. `./setup.sh --check` lists what is installed, `./setup.sh --help` the rest; what the script installs, and the manual route, are in [docs/building.md](docs/building.md).
+Windows, macOS and other options: [docs/building.md](docs/building.md#quick-setup).
 
 Work-in-progress C is also welcome when it preserves the matching baseline. Do not submit game images, extracted game data, or proprietary compiler binaries.
 
