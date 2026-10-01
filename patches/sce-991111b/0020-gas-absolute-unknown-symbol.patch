@@ -5,18 +5,18 @@ diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
  	     With a constant we always use the latter case.  */
  	  if (breg == 0)
  	    {
-+	      /* ASTRA P20: in reorder mode the retail R5900 assembler
-+		 decides at the use.  A symbol whose size is still unknown
-+		 (no .extern seen yet) gets the absolute lui/<op> form; the
-+		 deferred relaxation pair would resolve to gp at link time
-+		 and does not match.  Inside a noreorder block (the compiler
-+		 delay-slot pattern) the retail assembler emits the single
-+		 gp-relative form instead.  */
++	      /* ASTRA P20: the retail R5900 assembler decides at the use:
++		 a symbol whose size is still unknown (no .extern seen yet)
++		 gets the absolute lui/<op> form in both reorder and noreorder
++		 mode; the deferred relaxation pair would resolve to gp at
++		 link time and does not match.  A symbol whose size is known
++		 keeps the gp-relative form -- in a noreorder block that is
++		 the single gp-relative instruction emitted below, in reorder
++		 mode the relaxable pair.  */
  	      if ((valueT) offset_expr.X_add_number >= MAX_GPREL_OFFSET
 -		  || nopic_need_relax (offset_expr.X_add_symbol, 1))
 +		  || nopic_need_relax (offset_expr.X_add_symbol, 1)
-+		  || (! mips_opts.noreorder
-+		      && ! S_IS_DEFINED (offset_expr.X_add_symbol)
++		  || (! S_IS_DEFINED (offset_expr.X_add_symbol)
 +		      && offset_expr.X_add_symbol->ecoff_extern_size == 0))
  		p = NULL;
 +	      else if (mips_opts.noreorder)
@@ -29,29 +29,3 @@ diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
  	      else
  		{
  		  frag_grow (20);
-@@ -11701,6 +11718,25 @@
-       if (new > 0)
- 	memcpy (fixptr - old, fixptr, new);
- 
-+      /* ASTRA P20: the retail R5900 assembler expands a relaxable gp
-+	 pair to the absolute form `lui base,0` + `op %lo(base)`.  The
-+	 default expansion keeps a copy of the second instruction in the
-+	 first slot (md_convert_frag can even be entered twice, which
-+	 leaves two copies), so rebuild the first word from the base
-+	 register of the second.  Only the 4/8-byte ld_st and la pairs
-+	 are touched.  */
-+      if (mips_pic == NO_PIC
-+	  && old == 4 && new == 8
-+	  && RELAX_RELOC2 (fragp->fr_subtype) == 4)
-+	{
-+	  unsigned char *pair = (unsigned char *) (fragp->fr_literal
-+						   + fragp->fr_fix - old);
-+	  unsigned long second = bfd_get_32 (stdoutput, pair + 4);
-+	  unsigned long base = (second >> 21) & 0x1f;
-+
-+	  md_number_to_chars ((char *) pair, 0x3c000000UL | (base << 16), 4);
-+	}
-+
-       fragp->fr_fix += new - old;
-     }
- }

@@ -403,13 +403,15 @@ differs. `make` does not track header dependencies: after changing
     `textbin/fun_002242b8`, `textbin/fun_00225660`, `textbin/fun_0022da68` -> 100.0
   - control parity: 58 controls, 21 -> 26 exact, zero regressions
 
-- `0020-gas-absolute-unknown-symbol.patch` SHA-256: `4a1726ac272b83648eea77e07e3fb13c4440a378cb3e69831c71f596838392dc`
+- `0020-gas-absolute-unknown-symbol.patch` SHA-256: `3e961d443cc8e6dedd89ef82c7afa2bfdb791b65a16949a2b22fc5855b0fa0c6`
   - component: gas from the same recovered tree; assembler SHA-256
     `4f76f5b6eca8e66240ab7b98efef8071a6740b8d33e32238427dbcba9f87cfba`
-  - role: reproduce the retail R5900 absolute/gp decision: reorder-mode
-    references to a symbol whose size is not yet known become `lui %hi` +
-    `op %lo` at the use, known-small symbols stay `%gp_rel`, and noreorder
-    delay slots always use the single `%gp_rel` form
+  - role: reproduce the retail R5900 absolute/gp decision: a reference to a
+    symbol whose size is not yet known at the use (no `.extern` seen yet)
+    becomes `lui %hi` + `op %lo` in reorder and noreorder alike (the noreorder
+    case follows the same size-at-use rule), known-small symbols stay
+    `%gp_rel`, and inside a noreorder block a known symbol is the single
+    gp-relative instruction emitted at the use
   - fixtures: `textbin/fun_0023b590`, `textbin/fun_0023aba0`,
     `runtime/dma/initialize_streaming_state` (with `-mno-split-addresses`), plus
     `textbin/fun_001eda60` and `textbin/fun_00233d90` (default route) -> 100.0
