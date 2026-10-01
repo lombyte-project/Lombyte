@@ -1861,6 +1861,7 @@ segments:
           - [0x126410, c, ui/menus/fun_00225490]
           - [0x1264b0, c, ui/menus/delete_moby]
           - [0x1264f4, textbin, text_gap_00225574_after_fun_00225530]
+          - [0x126508, c, ui/menus/fun_00225588]
           - [0x1265e0, c, ui/menus/fun_00225660]
           - [0x126664, textbin, text_gap_002256e4_after_fun_00225660]
           - [0x126668, c, assembly/textbin/fun_002256e8]
