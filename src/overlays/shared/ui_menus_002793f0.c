@@ -12,4 +12,3 @@ s32 FUN_L00_0027a6a8(u8 *a) {
 }
 extern int D_0015EDF0 __attribute__((section(".sdata")));
 extern int D_0013E5A0 __attribute__((section(".data")));
-int FUN_0021cb00(void) { D_0013E5A0 = D_0015EDF0 * 8 / 10; return 0; }

@@ -83,3 +83,7 @@ Slot *FUN_L00_0024f028(char *o, int id) {
     *(Slot **)(o + 0x60) = s;
     return s;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f190.s", FUN_L00_0024f190);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f3e0.s", FUN_L00_0024f3e0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f440.s", FUN_L00_0024f440);

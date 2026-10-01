@@ -202,6 +202,7 @@ void FUN_L00_0028ed58(s32 a) {
         p->h24 = -1;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028eed0.s", FUN_L00_0028eed0);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_28efc8;
 typedef struct {
     V_28efc8 corner[4];

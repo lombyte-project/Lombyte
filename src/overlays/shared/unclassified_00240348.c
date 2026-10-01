@@ -19,3 +19,7 @@ void FUN_L00_00241728(s32 *h) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241940.s", FUN_L00_00241940);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00244110.s", FUN_L00_00244110);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002451b8.s", FUN_L00_002451b8);

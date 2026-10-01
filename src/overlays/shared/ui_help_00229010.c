@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00229010.s", FUN_L00_00229010);
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
 extern u8 D_0013F4A0_002293a8[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");

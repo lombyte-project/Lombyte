@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
 typedef struct { u8 pad[0x3E]; s16 h3E; } S2ba970;
 extern f32 D_0015ED60;
 extern f32 D_L00_001615EC __attribute__((sda));
@@ -38,6 +39,7 @@ void FUN_L00_002ba970(u8 *o) {
     FUN_L00_002baae0(D_L00_001DBA20 + 0xF0, D_L00_00161666, D_L00_00161666, 5, D_L00_0016160C, D_L00_00161610, 0.2f);
     FUN_L00_002bb0b0(o);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002baae0.s", FUN_L00_002baae0);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2bb0b0;
 typedef struct { float u, v; } UV_2bb0b0;
 typedef struct {
@@ -178,6 +180,7 @@ void FUN_L00_002bb400(unsigned char *m) {
     *(float *)(m + 0x44) = FUN_001fa580_2bb400(*(float *)(m + 0x44), FUN_L00_0025e310_2bb400(v->fC));
     FUN_0020e098_2bb400(m);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb558.s", FUN_L00_002bb558);
 typedef struct { u8 b[0x50]; } E002bbb00;
 extern s16 D_L00_001DBEC0[];
 extern s16 D_L00_001DBED8[];
@@ -200,6 +203,7 @@ void FUN_L00_002bbb00(void *o) {
     }
     FUN_L00_002bc1a0(o);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bbbc8.s", FUN_L00_002bbbc8);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2bc1a0;
 typedef struct {
     V_2bc1a0 corner[4];
@@ -273,6 +277,13 @@ void FUN_L00_002bc1a0(void *mv) {
     }
     FUN_001f7d30_2bc1a0(&quad, 0, 0);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc7e8.s", FUN_L00_002bc7e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bd0a0.s", FUN_L00_002bd0a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bdc50.s", FUN_L00_002bdc50);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be078.s", FUN_L00_002be078);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be650.s", FUN_L00_002be650);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2be890;
 typedef struct {
     V_2be890 corner[4];
@@ -469,6 +480,8 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
     }
     return 0.0f;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bed90.s", FUN_L00_002bed90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf050.s", FUN_L00_002bf050);
 /* Steps a vector by n repeated additions of the normalised difference. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
 
@@ -513,6 +526,7 @@ void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
     F2BF(o, 0x14) = F2BF(o, 0x14) * (r / F2BF(o, 0x10));
 }
 #undef F2BF
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf9f0.s", FUN_L00_002bf9f0);
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *FUN_0020c4f8(int);

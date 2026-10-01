@@ -87,6 +87,8 @@ int FUN_L03_002beba0(int idx, float *out) {
     }
     return 1;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bec60.s", FUN_L03_002bec60);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bef68.s", FUN_L03_002bef68);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
@@ -120,3 +122,16 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg)
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c60.s", FUN_L03_002c6c60);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c90.s", FUN_L03_002c6c90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cca00.s", FUN_L03_002cca00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ce238.s", FUN_L03_002ce238);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3cd8.s", FUN_L03_002d3cd8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d47c0.s", FUN_L03_002d47c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d5208.s", FUN_L03_002d5208);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db480.s", FUN_L03_002db480);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc310.s", FUN_L03_002dc310);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc478.s", FUN_L03_002dc478);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc9b0.s", FUN_L03_002dc9b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca30.s", FUN_L03_002dca30);

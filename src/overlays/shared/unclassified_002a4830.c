@@ -155,6 +155,7 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4dc8.s", FUN_L00_002a4dc8);
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *FUN_0020c4f8(int);
@@ -231,6 +232,10 @@ void FUN_L00_002a4e48(char *o) {
         *(float *)(o + 0x10) = 5.0f;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5040.s", FUN_L00_002a5040);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a57a8.s", FUN_L00_002a57a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a5dd8.s", FUN_L00_002a5dd8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a6b70.s", FUN_L00_002a6b70);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -383,6 +388,8 @@ int FUN_L00_002a7210(void *ov, void *tv, float a, float b) {
     *(unsigned char *)(o + 0x20) = 4;
     return 1;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7438.s", FUN_L00_002a7438);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a7780.s", FUN_L00_002a7780);
 typedef struct { char p0[0x50]; u8 b50; u8 b51; u8 b52; u8 b53; f32 f54; } O_002a7c70;
 typedef struct { char p0[0x198]; s32 i198; char p1[0x2080 - 0x19C]; O_002a7c70 *p2080; s32 i2084; char p2[8]; s32 i2090; } G_002a7c70;
 extern G_002a7c70 D_0013F350_002a7c70 __asm__("D_0013F350") __attribute__((section(".data")));
@@ -554,6 +561,8 @@ void FUN_L00_002a8418(float *v) {
     if (t > k) t = k;
     FUN_001f9bf8(v, v, FastVecLength(v) * ((k - t) / k * 0.3f + 0.7f));
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a84c8.s", FUN_L00_002a84c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
@@ -582,6 +591,8 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a9aa0.s", FUN_L00_002a9aa0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a9b80.s", FUN_L00_002a9b80);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F320;
@@ -715,6 +726,7 @@ void FUN_L00_002a9c50(M_2a9c50 *m) {
         draw_2a9c50(&quad, mat, 1);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a9ed0.s", FUN_L00_002a9ed0);
 typedef union { u128 q; f32 f[4]; } V_2aa008;
 typedef struct { u8 pad[0x5C]; s32 i5C; } D_2aa008;
 typedef struct { u8 pad[0x34]; s16 h34; } M_2aa008;
@@ -785,3 +797,4 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
         FUN_001f9a68_2aa008(m, m, 0.6f);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002aa2a8.s", FUN_L00_002aa2a8);

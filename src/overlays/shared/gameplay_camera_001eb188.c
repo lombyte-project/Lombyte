@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1f8.s", FUN_L00_001eb1f8);
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
@@ -75,6 +76,7 @@ void FUN_L00_001ed280(void) {
     u[1] = t[1];
     u[2] = t[2];
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
 #define NOT_SDA
 
 #define MACRO_ADDR

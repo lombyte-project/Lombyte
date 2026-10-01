@@ -2,6 +2,11 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0dc0.s", FUN_L02_002e0dc0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e1950.s", FUN_L02_002e1950);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e1fb8.s", FUN_L02_002e1fb8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e2228.s", FUN_L02_002e2228);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea048.s", FUN_L02_002ea048);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA

@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
 #include "qcopy.h"
 typedef int ti_23e008 __attribute__((mode(TI)));
 extern float D_0015ED60_23e008 __asm__("D_0015ED60") __attribute__((section(".sdata")));

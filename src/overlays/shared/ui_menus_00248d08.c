@@ -58,7 +58,6 @@ extern struct Menu_0024ac88 D_0013D290_0024ac88 __asm__("D_0013D290");
 #include "sda.h"
 extern s32 D_0015EEB4 MACRO_ADDR;
 extern s32 D_0015EEB0 MACRO_ADDR;
-void FUN_00208980(void) { if ((D_0015EEB4 ^ 1) & 1) D_0015EEB0 = 3; }
 extern s32 D_0013D290[];
 extern s32 D_0015EEB0;
 extern int D_0015EEB0 __attribute__((section(".sdata")));

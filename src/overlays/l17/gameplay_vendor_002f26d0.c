@@ -2,6 +2,11 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f32f0.s", FUN_L17_002f32f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f3848.s", FUN_L17_002f3848);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f40d8.s", FUN_L17_002f40d8);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -126,6 +131,7 @@ void FUN_L17_002f5260(unsigned char *m) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5390.s", FUN_L17_002f5390);
 #define NOT_SDA
 
 #define MACRO_ADDR

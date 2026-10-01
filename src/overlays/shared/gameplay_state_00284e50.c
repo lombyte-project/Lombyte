@@ -65,6 +65,8 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -44,6 +44,7 @@ void FUN_L11_002cb668(char *moby) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb810.s", FUN_L11_002cb810);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -62,6 +63,7 @@ void FUN_L11_002cb990(char *moby) {
         if (child) child[0x20] = 2;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0710.s", FUN_L11_002d0710);
 extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
@@ -85,6 +87,7 @@ void FUN_L11_002d0fa8(unsigned char *moby) {
     FUN_L11_002d14b0(moby);
     FUN_L11_002d27b0(moby);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1030.s", FUN_L11_002d1030);
 #include "qcopy.h"
 
 /* moves the parts' positions and stores the moby's displacement since last frame */
@@ -118,6 +121,8 @@ void FUN_L11_002d1340(void *mp) {
     }
     FUN_001f9a28(d + 0x140, moby + 0x10, A);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2088.s", FUN_L11_002d2088);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D3500), where it is exact; names translated to the US level program. */
 
 struct TgtData {
@@ -160,6 +165,11 @@ int FUN_L11_002d2340(char *moby, char *other) {
     }
     return FUN_L01_00276fe8(buf, n, d->b[d->idx], moby + 0x10, other, d->e, 0.2f) != 0;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2460.s", FUN_L11_002d2460);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d25e8.s", FUN_L11_002d25e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -185,6 +195,7 @@ void FUN_L11_002f2cd0(char *moby) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
 void FUN_L11_002f3040(char *moby) {
@@ -241,6 +252,8 @@ void FUN_L11_002f3350(unsigned char *moby) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309378.s", FUN_L11_00309378);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
@@ -285,6 +298,7 @@ int FUN_L11_0030a480(unsigned char *moby) {
     }
     return 1;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a500.s", FUN_L11_0030a500);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
 int FUN_L11_0030a830(unsigned char *arg) {
@@ -295,3 +309,4 @@ int FUN_L11_0030a830(unsigned char *arg) {
 void FUN_L11_0030a840(unsigned char *arg) {
     *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a850.s", FUN_L11_0030a850);

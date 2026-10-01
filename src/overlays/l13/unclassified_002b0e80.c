@@ -247,4 +247,3 @@ void FUN_L13_002b9f58(char *moby, char *obj) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba178.s", FUN_L13_002ba178);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002bb068.s", FUN_L13_002bb068);
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c13b0.s", FUN_L13_002c13b0);

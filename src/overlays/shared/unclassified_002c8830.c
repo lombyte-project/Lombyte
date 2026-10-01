@@ -2,6 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb790.s", FUN_L11_002cb790);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308670.s", FUN_L11_00308670);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -52,6 +54,7 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003089d0.s", FUN_L11_003089d0);
 /* spawns a streak moby aimed along a direction with the given size and colour */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
@@ -85,3 +88,7 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309098.s", FUN_L11_00309098);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003094f8.s", FUN_L11_003094f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a908.s", FUN_L11_0030a908);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030b358.s", FUN_L11_0030b358);

@@ -225,11 +225,13 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     to->f[1] = pos->f[1];
     return ok;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
 float FUN_001fa6c0(int);
 void FUN_L00_00258830(int, int, float, float, float, int);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
     FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258b50.s", FUN_L00_00258b50);
 void FUN_001f99f8_259028(void *) __asm__("FUN_001f99f8");
 float FUN_001f9b48_259028(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
@@ -257,6 +259,8 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     }
     return r;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002591d0.s", FUN_L00_002591d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002592b8.s", FUN_L00_002592b8);
 #define NOT_SDA
 
 #define MACRO_ADDR

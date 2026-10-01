@@ -132,6 +132,7 @@ void FUN_L00_002892d0(void) {
     FUN_001f9fc8(D_L00_001BD7E0);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) FUN_0022b690(i);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289420.s", FUN_L00_00289420);
 typedef struct {
     u8 type;
     u8 b1;
@@ -239,6 +240,8 @@ void FUN_L00_002895a0(void) {
     FUN_0022b690_2895a0(3);
 }
 #undef SKY
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002899a8.s", FUN_L00_002899a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289a90.s", FUN_L00_00289a90);
 #include "qzero.h"
 typedef int q128 __attribute__((mode(TI)));
 typedef union { q128 q; float f[4]; } U289bd8;
@@ -263,6 +266,7 @@ void FUN_L00_00289bd8(void) {
     FUN_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(1);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289cb8.s", FUN_L00_00289cb8);
 extern char D_L00_001BD7E0[]; extern char *D_L00_0016051C; extern int D_L00_0015F5CC;
 void FUN_001f9fc8(void *); void FUN_0022b690(int); void FUN_L00_00288ec0(int, int); void FUN_L00_00289108(void); void FUN_0022bba0(void); void FUN_00233980(int, long); void FUN_001fa070(void *, void *);
 void FUN_L00_0028a208(void) {
@@ -279,6 +283,7 @@ void FUN_L00_0028a208(void) {
     FUN_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(2);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a2f0.s", FUN_L00_0028a2f0);
 extern int D_L00_0015F5CC;
 void FUN_001f9fc8(void *);
 void FUN_0022b690(int);
@@ -338,6 +343,7 @@ void FUN_L00_0028a480(void)
         FUN_0022b690_28a480(i);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a620.s", FUN_L00_0028a620);
 #define NOT_SDA
 
 #define MACRO_ADDR

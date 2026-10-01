@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "qzero.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9810.s", FUN_L01_002f9810);
 typedef struct {
     f32 sway;
     f32 dir;
@@ -217,6 +218,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
 typedef union { u128 q; f32 f[4]; } Vec4;
 
 typedef struct {
@@ -312,6 +314,7 @@ void FUN_L01_002fa4c0(DropMoby *m) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa800.s", FUN_L01_002fa800);
 typedef struct {
     u8 pad0[0xA6];
     s16 type;
@@ -351,6 +354,7 @@ void FUN_L01_002fac80(void) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
 typedef union { u128 q; f32 f[4]; } PendVec4;
 
 typedef struct {
@@ -435,6 +439,7 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
     d.f[2] = FUN_001f9dc8(self->rot_x) * 11.0f;
     FUN_001f9a10(&self->pos, &arm, &d);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0e8.s", FUN_L01_002fd0e8);
 typedef struct {
     f32 x, y, z, w;
 } SparkVec;
@@ -513,6 +518,7 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
 typedef struct {
     Vec4 home;
     f32 t;
@@ -592,6 +598,7 @@ void FUN_L01_002fed68(HoverMoby *m) {
     m->pos.f[0] = v->home.f[0] + off.f[0];
     m->pos.f[1] = v->home.f[1] + off.f[1];
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff860.s", FUN_L01_002ff860);
 typedef struct {
     u8 pad0[0x10];
     u128 pos;
@@ -724,6 +731,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffdc0.s", FUN_L01_002ffdc0);
 typedef struct {
     u8 pad0[0x10];
     s32 w10;

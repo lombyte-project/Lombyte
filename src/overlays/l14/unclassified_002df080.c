@@ -31,6 +31,7 @@ void FUN_L14_002df080(u8 *moby)
     d[0x1E8 / 4] = 0.0f;
     d[0x1EC / 4] = 0.0f;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df138.s", FUN_L14_002df138);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -52,6 +53,7 @@ void FUN_L14_002df458(char *m) {
     FUN_L14_002df510(m, d, 0x80, 0x40, 10);
     FUN_L14_002df510(m, d + 0xA0, 0x30, 0x10, 0x14);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df510.s", FUN_L14_002df510);
 extern s32 FUN_00214720(u8 *base, s32 arg);
 extern void FUN_001f99f8(void *);
 extern void FUN_L00_00259a88(s32, void *);
@@ -94,6 +96,12 @@ void FUN_L14_002dfc58(u8 *moby)
         FUN_L00_00259a88(*(s32 *)(q + 0x2080), &r);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e7bd8.s", FUN_L14_002e7bd8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb388.s", FUN_L14_002eb388);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb568.s", FUN_L14_002eb568);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb810.s", FUN_L14_002eb810);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ec810.s", FUN_L14_002ec810);
 #include "qcopy.h"
 
 /* Spawn a projectile moby at a, aimed along b, with two parameters. */
@@ -156,6 +164,15 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ece00.s", FUN_L14_002ece00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed280.s", FUN_L14_002ed280);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed530.s", FUN_L14_002ed530);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee6b0.s", FUN_L14_002ee6b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef150.s", FUN_L14_002ef150);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef3e0.s", FUN_L14_002ef3e0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -182,6 +199,7 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
     moby->state = data->value < 0.0f ? 2 : 1;
     data->field124 = 1;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef5a8.s", FUN_L14_002ef5a8);
 extern u8 D_L14_001E03B0[];
 extern u8 *D_L14_001B0BB0[];
 extern u8 D_0013F350[];
@@ -212,6 +230,15 @@ void FUN_L14_002ef630(u8 *moby)
     x = D_0013F350;
     *(s16 *)(x + 0x22DA) = *(u16 *)(data + 0x114);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef6f0.s", FUN_L14_002ef6f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1140.s", FUN_L14_002f1140);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f12f0.s", FUN_L14_002f12f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f13f8.s", FUN_L14_002f13f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fba20.s", FUN_L14_002fba20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc0f0.s", FUN_L14_002fc0f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc3e8.s", FUN_L14_002fc3e8);
 /* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDD18), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
@@ -230,3 +257,8 @@ void FUN_L14_002fc890(char *moby) {
     *(float *)(moby + 0x48) = FUN_001f9e90(path[8] - path[4], path[9] - path[5]);
     *(float *)(data + 0x80) = *(float *)(data + 0x84) = *(float *)(data + 0x88) = *(float *)(data + 0x70) = *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc9a0.s", FUN_L14_002fc9a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fcbb0.s", FUN_L14_002fcbb0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fd310.s", FUN_L14_002fd310);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fd918.s", FUN_L14_002fd918);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fdbb8.s", FUN_L14_002fdbb8);

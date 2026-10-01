@@ -74,3 +74,4 @@ void FUN_L00_00235310(int n) {
     }
     D_L00_0017E4D8.t->c[n] = 0;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235668.s", FUN_L00_00235668);

@@ -446,4 +446,3 @@ void FUN_L00_00228fa8(void) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00229010.s", FUN_L00_00229010);

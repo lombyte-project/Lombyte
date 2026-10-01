@@ -216,6 +216,7 @@ void FUN_L00_00269a70(O00269a70 *o) {
     o->x4 = FUN_L00_002371e0(s->x14, s->x10, o->xa / FUN_001fa6c0(s->x1c));
     if (FUN_001f9770(&o->xa)) FUN_L00_00267a08(o);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269b70.s", FUN_L00_00269b70);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -239,6 +240,7 @@ void FUN_L00_00269c70(char *m) {
         *(int *)(m + 4) = (*(int *)(m + 4) & 0xFFFFFF) | ((*(int *)(m + 0x20) * 127 / FUN_001f96f8(6)) << 24);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
 #include "eetypes.h"
 #include "qcopy.h"
 extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0") __attribute__((section(".data")));
@@ -318,6 +320,7 @@ void FUN_L00_0026a880(unsigned char *p) {
     FUN_001f9a68_0026a880(e, e, D_0015ED60_0026a880 * -0.100000024f + 1.0f);
     p[8]--;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026a9f0.s", FUN_L00_0026a9f0);
 /* Per-tick update of a particle type 11: moves, drags, fades and kills it. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
 
@@ -426,6 +429,8 @@ void FUN_L00_0026ac78(char *m) {
         if (FUN_001f9770(m + 0xA)) FUN_L00_00267a08(m);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b230.s", FUN_L00_0026b230);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026b500.s", FUN_L00_0026b500);
 extern unsigned char *D_L00_001B20B4_26b790 __asm__("D_L00_001B20B4") __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8_26b790(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_26b790(float) __asm__("FUN_001fa6d0");
@@ -625,6 +630,7 @@ unsigned char *FUN_L00_0026bed0(void *a, void *b, int c, int d, int n, int k, fl
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c088.s", FUN_L00_0026c088);
 #include "qzero.h"
 extern unsigned char *D_L00_001B20C8_26c3d0 __asm__("D_L00_001B20C8") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_26c3d0(int) __asm__("FUN_L00_002678b8");
@@ -742,6 +748,7 @@ void FUN_L00_0026c7f0(char *a) {
     *(int *)(a + 0xC) = t;
     if (t < 0) FUN_L00_00267a08(a);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c860.s", FUN_L00_0026c860);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
@@ -1403,6 +1410,7 @@ void FUN_L00_0026e3a8(P_26e3a8 *p) {
         vadd_26e3a8(p->pos, a, v);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026e670.s", FUN_L00_0026e670);
 typedef int V_26eb88 __attribute__((mode(TI)));
 extern float D_0015ED60_26eb88 __asm__("D_0015ED60");
 extern float D_L00_001601F4_26eb88 __asm__("D_L00_001601F4") __attribute__((sda));
@@ -1798,6 +1806,7 @@ void FUN_L00_0026fa00(char *p) {
     k = k < 0 ? -k : k;
     *(int *)(p + 4) = FUN_L00_002371e0(0, q[4], (float)(n - k) / (float)n);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fb00.s", FUN_L00_0026fb00);
 typedef struct { f32 v[4]; } V0026fc38 __attribute__((aligned(16)));
 typedef struct { s32 x0; u8 *x4; s32 x8; } S0026fc38;
 typedef struct { u8 p0[2]; u8 x2; u8 p3; s32 x4; u8 x8; u8 p9; s16 xa; f32 xc; u8 p10[0x10]; S0026fc38 s; } O0026fc38;
@@ -1826,6 +1835,8 @@ void FUN_L00_0026fc38(O0026fc38 *o) {
     if (s->x8 >= 0x1F) s->x8 = 0;
     if (o->xa == 0) FUN_L00_00267a08_0026fc38(o);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fd28.s", FUN_L00_0026fd28);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026ff10.s", FUN_L00_0026ff10);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -1842,6 +1853,8 @@ void FUN_L00_00270710(char *a) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00270758.s", FUN_L00_00270758);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00270948.s", FUN_L00_00270948);
 extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
 f32 FUN_001fa6c0_2710a0(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");

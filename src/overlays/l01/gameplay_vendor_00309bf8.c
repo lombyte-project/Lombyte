@@ -38,6 +38,8 @@ void FUN_L01_00309c98(FlagMoby *m) {
     m->b30 = v;
     enqueue_callback_list_1(FUN_L01_00309bf8, m);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ba18.s", FUN_L01_0030ba18);
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -97,6 +99,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c190.s", FUN_L01_0030c190);
 typedef struct {
     u8 pad0[0x2C];
     f32 f2c;

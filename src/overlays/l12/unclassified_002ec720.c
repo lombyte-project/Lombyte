@@ -2,6 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec720.s", FUN_L12_002ec720);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ecac0.s", FUN_L12_002ecac0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -41,3 +43,5 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
     }
     return moby;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ece00.s", FUN_L12_002ece00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ed280.s", FUN_L12_002ed280);

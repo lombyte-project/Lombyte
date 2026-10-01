@@ -39,6 +39,11 @@ void FUN_L01_0027f660(char *pos, char *vel) {
         qcopy(q, vel);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00280970.s", FUN_L01_00280970);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00285768.s", FUN_L01_00285768);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287158.s", FUN_L01_00287158);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b410.s", FUN_L01_0028b410);
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C2D8), where it is exact; names translated to the US level program. */
 
@@ -64,6 +69,9 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     }
     return best;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b5e0.s", FUN_L01_0028b5e0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b828.s", FUN_L01_0028b828);
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -82,6 +90,7 @@ int FUN_L01_0028b878(char *p)
     return next;
 }
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b8c8.s", FUN_L01_0028b8c8);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
@@ -102,3 +111,4 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     FUN_001f9a68(tmp, p2, b - a);
     FUN_001f9a10(out, out, tmp);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028bb90.s", FUN_L01_0028bb90);

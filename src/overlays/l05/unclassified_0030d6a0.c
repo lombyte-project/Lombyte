@@ -2,6 +2,18 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030d6a0.s", FUN_L05_0030d6a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030dc68.s", FUN_L05_0030dc68);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e1f8.s", FUN_L05_0030e1f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f218.s", FUN_L05_0030f218);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003150f0.s", FUN_L05_003150f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003156d0.s", FUN_L05_003156d0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -67,3 +79,17 @@ void FUN_L05_00316070(char *moby) {
     }
     if (none) FUN_L03_00291918(D_L05_00211B20);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316990.s", FUN_L05_00316990);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318b98.s", FUN_L05_00318b98);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318c78.s", FUN_L05_00318c78);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003193a8.s", FUN_L05_003193a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319c28.s", FUN_L05_00319c28);

@@ -2,6 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c8440.s", FUN_L00_002c8440);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
 /* 0x002c92d8, 112 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -23,6 +25,8 @@ void FUN_L00_002c92d8(char *a) {
     }
 }
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c9348.s", FUN_L00_002c9348);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -76,6 +80,10 @@ int FUN_L00_002caf10(char *a) {
     a[0x20] = 5;
     return r;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf40.s", FUN_L00_002caf40);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf70.s", FUN_L00_002caf70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
 #include "qcopy.h"
 extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern int D_L00_001618A4_2cbf68 __asm__("D_L00_001618A4") __attribute__((sda));
@@ -239,6 +247,7 @@ M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw
     }
     return best;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cc608.s", FUN_L00_002cc608);
 typedef int u128_2ccee0 __attribute__((mode(TI)));
 typedef union { u128_2ccee0 q; float f[4]; } V_2ccee0;
 extern float D_0015ED60_2ccee0 __asm__("D_0015ED60");
@@ -330,6 +339,7 @@ unsigned char *FUN_L00_002ccee0(int a, V_2ccee0 *pos, unsigned char *tgt, float 
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cd1f0.s", FUN_L00_002cd1f0);
 #include "qcopy.h"
 typedef unsigned int u128_2cdcc0 __attribute__((mode(TI), aligned(16)));
 typedef struct {
@@ -411,3 +421,7 @@ void FUN_L00_002cde78(char *m) {
         *(int *)(p + 0x50) = FUN_L00_002725d8(m, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cdf28.s", FUN_L00_002cdf28);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ce1f0.s", FUN_L00_002ce1f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ce358.s", FUN_L00_002ce358);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cf218.s", FUN_L00_002cf218);

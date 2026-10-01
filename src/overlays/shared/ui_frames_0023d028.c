@@ -57,6 +57,7 @@ void FUN_L00_0023d028(void) {
     }
     D_0015EE24_23d028 += 0xB4;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d198.s", FUN_L00_0023d198);
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));
 void FUN_L00_0023d3d8(int i) {

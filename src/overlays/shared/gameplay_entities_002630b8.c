@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630c8.s", FUN_L00_002630c8);
 #include "eetypes.h"
 typedef union { u128 q; float f[4]; } Vec4;
 extern int D_L00_0015FC98;
@@ -38,10 +39,13 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263618.s", FUN_L00_00263618);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
 extern unsigned char D_0015EDB7 __attribute__((section(".sdata")));
 void FUN_0020cb10();
 void FUN_0020cb88();
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) { if (D_0015EDB7) { if (p[1] == 0) FUN_0020cb10();  *(float *)(p + 0x20) = x; *(float *)(p + 0x24) = x; *(float *)(p + 0x28) = x; } else if (p[1]) FUN_0020cb88(a, p); }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263b38.s", FUN_L00_00263b38);
 void FUN_L00_00263b50(char *p) { *(float *)(p + 0x70) = 1.0f; }
 typedef struct { unsigned char pad0[4]; int w4; unsigned char pad8[2]; unsigned char bA; unsigned char bB; } T_263b70;
 typedef struct { unsigned char pad0[8]; unsigned char b8; unsigned char b9; short hA; unsigned char padC[0x14]; T_263b70 tail; } P_263b70;

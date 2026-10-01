@@ -28,6 +28,7 @@ void FUN_L08_002b8228(char *moby) {
     FUN_L00_0025d1b8(moby);
     *(int *)(d + 0x24) = FUN_L08_00279f00(moby);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b82a0.s", FUN_L08_002b82a0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -63,6 +64,21 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d23f0.s", FUN_L08_002d23f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0f0.s", FUN_L08_002da0f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002daa10.s", FUN_L08_002daa10);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc0c8.s", FUN_L08_002dc0c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc648.s", FUN_L08_002dc648);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -107,3 +123,9 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
     }
     return moby;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de848.s", FUN_L08_002de848);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dec90.s", FUN_L08_002dec90);

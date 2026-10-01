@@ -39,3 +39,4 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         qcopy(f, pos2);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029e6d8.s", FUN_L07_0029e6d8);

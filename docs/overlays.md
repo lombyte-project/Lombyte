@@ -110,7 +110,7 @@ never be matched. The fingerprint is taken over that reachable body too, so
 every copy of a function in every level lands in one row.
 
 Level 00 goes from 2,305 starts to 1,981. Every promoted overlay C function that checked exact
-before the change still does (1,010 of 1,026).
+before the change still does (1,015 of 1,031).
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the
 lowest-numbered level that has it, its *canonical level*. Data it references

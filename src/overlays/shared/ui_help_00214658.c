@@ -258,6 +258,8 @@ void FUN_L00_00214ed8(float a, float b, float c) {
         D_0013F350_214ed8.xA5C = r;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214fe8.s", FUN_L00_00214fe8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215340.s", FUN_L00_00215340);
 typedef struct { u8 p0[0x164]; f32 f164; u8 p1[0x188 - 0x168]; f32 f188; u8 p2[0x2084 - 0x18C]; s32 i2084; u8 p3[4]; s32 i208C; } P_215b68;
 typedef struct { u8 p0[0x10E0]; f32 f10E0; u8 p1[4]; f32 f10E8; u8 p2[0x1190 - 0x10EC]; f32 f1190; f32 f1194; f32 f1198; u8 p3[0x1240 - 0x119C]; f32 f1240; } X_215b68;
 extern P_215b68 D_0013F350_215b68 __asm__("D_0013F350") __attribute__((section(".data")));
@@ -322,6 +324,7 @@ st94:
         X.f1198 = u * 0.87f;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215ef8.s", FUN_L00_00215ef8);
 #include "eetypes.h"
 #include "qcopy.h"
 typedef union { u128 q; float f[4]; } Vec4;
@@ -514,6 +517,7 @@ void FUN_L00_00233ba0(void *, void *, float);
 void FUN_001f9a10(void *, void *, void *);
 void FUN_001f99f8(void *);
 void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else FUN_001f99f8(g); }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002167d0.s", FUN_L00_002167d0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -556,6 +560,7 @@ void FUN_L00_00216e48(int idx, int a, int b) {
     }
     g->b[idx] = a;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
@@ -629,6 +634,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
     if (flag) FUN_L00_001ed280_00216f90();
     FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217118.s", FUN_L00_00217118);
 /* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 
@@ -656,3 +662,5 @@ void FUN_L00_00217368(int a, int n) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217450.s", FUN_L00_00217450);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217658.s", FUN_L00_00217658);

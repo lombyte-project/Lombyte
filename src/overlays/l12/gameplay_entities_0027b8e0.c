@@ -56,3 +56,4 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
         *(unsigned short *)(child + 0x34) &= 0xFFBE;
     *(unsigned short *)(child + 0x34) |= 6;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027ba70.s", FUN_L12_0027ba70);

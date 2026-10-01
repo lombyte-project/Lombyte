@@ -42,6 +42,10 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     }
     return moby;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0a98.s", FUN_L16_002a0a98);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0dc0.s", FUN_L16_002a0dc0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d2cf0.s", FUN_L16_002d2cf0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d38b0.s", FUN_L16_002d38b0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
@@ -122,3 +126,8 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     FUN_001f9a10(p, p, vec);
     return d;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3f78.s", FUN_L16_002d3f78);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4070.s", FUN_L16_002d4070);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d41f8.s", FUN_L16_002d41f8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4590.s", FUN_L16_002d4590);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4908.s", FUN_L16_002d4908);

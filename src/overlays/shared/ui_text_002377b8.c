@@ -16,6 +16,7 @@ void FUN_L00_002377b8(char *p) {
         *(int *)(p + 0x7C) = 30;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237840.s", FUN_L00_00237840);
 typedef struct { u8 pad[0x48]; s16 x48; s16 x4a; u8 p4c[0xC]; s32 x58; s32 x5c; u8 p60[0x10]; s32 x70; s32 x74; s32 x78; } O00237ae8;
 typedef struct { s32 x0; u8 p[0x14]; s32 x18; } D00237ae8;
 typedef struct { u8 p[0x38]; u16 x38; u8 p2[0x12]; } E00237ae8;
@@ -52,6 +53,8 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
         d++;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237ba0.s", FUN_L00_00237ba0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
 extern int D_L00_0015FA90 __attribute__((section(".sdata")));
 extern void *D_L00_0015FAC0 __attribute__((section(".sdata")));
 extern int D_L00_0015F718 __attribute__((sda));
@@ -61,6 +64,8 @@ extern int D_L00_0015F740 __attribute__((sda));
 int FUN_001f96f8(int);
 void FUN_L00_00238b18(char *p) {
  int a, b; D_L00_0015FA90 = 4; D_L00_0015FAC0 = &D_L00_0015F740; a = D_L00_0015F718; b = D_L00_0015F71C; *(short *)(p + 0x48) = 0; *(short *)(p + 0x4A) = 0; *(int *)(p + 0x58) = a; *(int *)(p + 0x5C) = b; *(int *)(p + 0x74) = -2; *(int *)(p + 0x78) = FUN_001f96f8(30); D_L00_0015F72C = 0; }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238b80.s", FUN_L00_00238b80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00238f88.s", FUN_L00_00238f88);
 typedef struct { short a, b, c, d; } Q2395b0;
 extern Q2395b0 D_L00_0015FAB0;
 int FUN_001f96f8(int);
@@ -79,6 +84,8 @@ void FUN_L00_002395b0(char *p) {
     D_L00_0015FAB0.b = 0;
     D_L00_0015FAB0.c = 0;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239630.s", FUN_L00_00239630);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239810.s", FUN_L00_00239810);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -125,6 +132,8 @@ void FUN_L00_00239cc8(HudElem *e) {
     e->unk80 = &D_L00_0015FAB8;
     D_L00_0015FAB8.unk0 = 0;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239d00.s", FUN_L00_00239d00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0 __attribute__((sda));
@@ -152,6 +161,7 @@ void FUN_L00_0023a218(u8 *m) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 extern short D_00140986 __attribute__((section(".data")));
 int FUN_L00_00235a70(char *, int *, int *);
 void FUN_L00_00235ad8(char *, int *, int *, int, int);

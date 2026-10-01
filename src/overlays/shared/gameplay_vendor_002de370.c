@@ -35,6 +35,9 @@ void FUN_L03_002de370(char *moby) {
         mark_moby_for_removal(moby);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8628.s", FUN_L03_002e8628);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8730.s", FUN_L03_002e8730);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8870.s", FUN_L03_002e8870);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];

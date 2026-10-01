@@ -397,6 +397,7 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002721f0.s", FUN_L00_002721f0);
 typedef unsigned int u128_272438 __attribute__((mode(TI), aligned(16)));
 extern unsigned char D_L00_00177F00_272438[] __asm__("D_L00_00177F00");
 void FUN_L00_00262360_272438(int, float *, float *, void *, float, float) __asm__("FUN_L00_00262360");
@@ -430,6 +431,8 @@ void FUN_L00_00272438(unsigned char *m) {
     t = *pos;
     FUN_L00_0025a9f8_272438(q->p14, (void *)&t, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002725d8.s", FUN_L00_002725d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002726d8.s", FUN_L00_002726d8);
 void FUN_001f9a68(void *, void *, f32);
 void FUN_001f9a10(void *, void *, void *);
 void FUN_L00_00267a08(void *);
@@ -845,6 +848,8 @@ void FUN_L00_00273800(char *a) {
         *(int *)(a + 4) = (w & 0xFFFFFF) | (t << 24);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002738e8.s", FUN_L00_002738e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00273a68.s", FUN_L00_00273a68);
 extern float D_0015ED60_273ee0 __asm__("D_0015ED60");
 extern float D_0015ED64_273ee0 __asm__("D_0015ED64");
 extern u128 D_L00_00173E60_273ee0[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
@@ -1412,6 +1417,7 @@ void FUN_L00_00275320(O_275320 *o) {
     FUN_001f9a10_275320(vel, &tmp, vel);
     vel->f[3] = h + D_L00_00160258_275320;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00275510.s", FUN_L00_00275510);
 extern float D_0015ED64_002756f0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015ED60_002756f0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern void FUN_001f9a10_002756f0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1511,6 +1517,7 @@ unsigned char *FUN_L00_00275910(q_275910 *pos, int s, int col, int mode, int b, 
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00275aa0.s", FUN_L00_00275aa0);
 extern float FUN_001fa6c0(int);
 
 void FUN_L00_00275d68(unsigned char *m) {

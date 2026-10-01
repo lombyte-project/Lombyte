@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
 #include "eetypes.h"
 
 typedef union { u128 q; f32 f[4]; } EmitVec;
@@ -182,6 +183,10 @@ void FUN_L01_002e6518(SplashMoby *m, u128 *origin) {
         FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6bf0.s", FUN_L01_002e6bf0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efc60.s", FUN_L01_002efc60);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f3120.s", FUN_L01_002f3120);
 #include "sda.h"
 
 typedef struct {
@@ -233,6 +238,9 @@ void FUN_L01_002f4348(Moby *self) {
         break;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4428.s", FUN_L01_002f4428);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
 extern u8 D_L01_001E2FC0[];
 void FUN_L00_002371e0(void);
 void FUN_L01_002b96e0(s32, void *);
@@ -380,6 +388,7 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f7728.s", FUN_L01_002f7728);
 extern f32 D_0015ED60;
 f32 FUN_001f99c0(f32);
 

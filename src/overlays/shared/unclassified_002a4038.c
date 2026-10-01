@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4058.s", FUN_L02_002a4058);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -13,6 +14,19 @@ extern void FUN_L02_002a4058(char *arg, int val);
 void FUN_L02_002a40d0(char *arg) {
     FUN_L02_002a4058(arg, 0x80);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a46e0.s", FUN_L02_002a46e0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002cb978.s", FUN_L02_002cb978);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8910.s", FUN_L02_002d8910);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8ad0.s", FUN_L02_002d8ad0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d92f0.s", FUN_L02_002d92f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da6c0.s", FUN_L02_002da6c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da938.s", FUN_L02_002da938);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);
 /* Re-arms the matching entry of the moby list when the level mode is 2. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002E2110), where it is exact; names translated to the US level program. */
 
@@ -46,6 +60,7 @@ void FUN_L02_002e0cd8(char *moby) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
@@ -73,3 +88,4 @@ void FUN_L02_002ea7d0(char *moby) {
     d[15] = 2.5f;
     d[14] = 3.0f;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea8b0.s", FUN_L02_002ea8b0);

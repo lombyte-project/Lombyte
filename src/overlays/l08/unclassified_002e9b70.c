@@ -2,6 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
@@ -42,6 +45,8 @@ void FUN_L08_002f0dc8(void) {
     vu1_add_g_sregister(0x42, (long)D_L08_00161E00 << 32 | 0x48);
     FUN_L08_002f0cf0(0);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1548.s", FUN_L08_002f1548);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -64,3 +69,6 @@ float FUN_L08_002f5d98(float x, char *arg) {
     t = arg + 0x90;
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5e58.s", FUN_L08_002f5e58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f70a0.s", FUN_L08_002f70a0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00302ce8.s", FUN_L08_00302ce8);

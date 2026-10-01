@@ -130,6 +130,7 @@ void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
     *x += dx;
     *y += dy;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235c80.s", FUN_L00_00235c80);
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
@@ -154,6 +155,7 @@ void FUN_L00_00235dc0(HudElem *e) {
     e->h = 0x20;
     FUN_L00_00235c80(e);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235e18.s", FUN_L00_00235e18);
 extern float FUN_001fa6c0(int);
 extern int FUN_001fa6d0(float);
 extern float FUN_001f9988(float);
@@ -265,5 +267,10 @@ void FUN_L00_00236128(HudElem *e) {
     }
     FUN_L00_0023aaa8((char *)e + 0x40);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236268.s", FUN_L00_00236268);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236458.s", FUN_L00_00236458);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
 void FUN_L00_00235ea0();
 void FUN_L00_002371e0(void) { FUN_L00_00235ea0(); }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237200.s", FUN_L00_00237200);

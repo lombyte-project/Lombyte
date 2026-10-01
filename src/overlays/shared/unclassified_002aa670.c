@@ -2,6 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002aa670.s", FUN_L00_002aa670);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ac910.s", FUN_L00_002ac910);
 typedef struct { char pad[0x14]; int n; float f18; s16 h1c; s16 h1e; } V_2acad8;
 typedef struct { char pad[0x23]; u8 b23; char pad2[0x2C - 0x24]; float f2c; char pad3[0x40 - 0x30]; float r[3]; char pad4[0x78 - 0x4C]; V_2acad8 *v; } M_2acad8;
 extern float D_0015ED6C_2acad8 __asm__("D_0015ED6C");
@@ -181,6 +183,9 @@ unsigned char *FUN_L00_002ace70(int owner, void *pos) {
     }
     return m;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002acfd8.s", FUN_L00_002acfd8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ad410.s", FUN_L00_002ad410);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002adb30.s", FUN_L00_002adb30);
 extern float D_0015ED6C_2af450 __asm__("D_0015ED6C");
 unsigned char *FUN_0020c4f8_2af450(int) __asm__("FUN_0020c4f8");
 void FUN_L00_002502f0_2af450(void *, int, int, int) __asm__("FUN_L00_002502f0");
@@ -491,6 +496,8 @@ float FUN_L00_002aff50(int n) {
     }
     return sum;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002affa8.s", FUN_L00_002affa8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b03a0.s", FUN_L00_002b03a0);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2b1af0;
 typedef int Q_2b1af0 __attribute__((mode(TI)));
 typedef struct { V_2b1af0 a; char pad[0x30]; V_2b1af0 b; } P_2b1af0;
@@ -549,3 +556,4 @@ void FUN_L00_002b1af0(unsigned char *o) {
         spark_2b1af0(&c, &d, 0x4F007FFF, 0x1FFFFFFF, rndi_2b1af0(t, fr_2b1af0(0x28)), 1, 10000.0f);
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b1de0.s", FUN_L00_002b1de0);

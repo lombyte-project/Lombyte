@@ -76,6 +76,7 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
     *(int *)(o + 0x44) = res;
     return res;
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025ff38.s", FUN_L00_0025ff38);
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *c338_p(char *) __asm__("FUN_L00_002603d0");
 void FUN_001fa050(void *, void *);
@@ -177,6 +178,7 @@ void FUN_L00_00260738(char *out, q128 *pos, void *m1, void *m2) {
     FUN_00214598(c, out);
     qcopy(out + 0x10, pos);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002607d0.s", FUN_L00_002607d0);
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
@@ -259,3 +261,4 @@ void FUN_L00_00260860(int id, int flag) {
         }
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00260a88.s", FUN_L00_00260a88);

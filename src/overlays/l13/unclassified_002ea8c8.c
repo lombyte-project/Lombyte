@@ -2,6 +2,13 @@
 #include "types.h"
 #include "asm.h"
 
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea8c8.s", FUN_L13_002ea8c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eac00.s", FUN_L13_002eac00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eb098.s", FUN_L13_002eb098);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ecd10.s", FUN_L13_002ecd10);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed4a8.s", FUN_L13_002ed4a8);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -24,3 +31,6 @@ void FUN_L13_002f3750(Level13VendorMoby *moby) {
         moby->flags |= 3;
     }
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f3778.s", FUN_L13_002f3778);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8880.s", FUN_L13_002f8880);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8a78.s", FUN_L13_002f8a78);

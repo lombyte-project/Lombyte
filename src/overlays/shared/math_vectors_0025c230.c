@@ -39,7 +39,7 @@ void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
     FUN_001f9a68(&t0, &t1, FUN_001f9ab0(&t1, b) * s);
     FUN_001f9a28(a, b, &t0);
 }
-s32 FUN_002141f8(u8 *o) { return **(s32 **)(o + 0x78); }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c398.s", FUN_L00_0025c398);
 typedef struct { f32 f0; f32 f4; f32 f8; f32 fC; u8 p10[8]; f32 f18; f32 f1C; u8 p20[4]; u32 w24; u8 p28[4]; s16 h2C; u8 p2E[0xE]; u8 b3C; u8 p3D; s16 h3E; f32 f40; int w44; } B_25c558;
 float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");
@@ -67,3 +67,4 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
     if (b->w24 & 2) FUN_002130d8_0025c558(a, c, e, d, 1);
     else FUN_00212f90_0025c558(a, c, e, d);
 }
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c698.s", FUN_L00_0025c698);
