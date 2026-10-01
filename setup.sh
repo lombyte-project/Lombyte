@@ -58,7 +58,7 @@ WITH_PATCHED=0
 IN_CONTAINER=${LOMBYTE_IN_CONTAINER:-0}
 
 usage() {
-    sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,16p' "$ROOT/setup.sh" | sed 's/^# \{0,1\}//'
     cat <<'EOF'
 
 Options:
@@ -75,8 +75,8 @@ EOF
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --iso) ISO=$2; shift 2 ;;
-        --elf) ELF=$2; shift 2 ;;
+        --iso) [[ $# -ge 2 ]] || { echo "error: --iso needs a path" >&2; exit 2; }; ISO=$2; shift 2 ;;
+        --elf) [[ $# -ge 2 ]] || { echo "error: --elf needs a path" >&2; exit 2; }; ELF=$2; shift 2 ;;
         --no-build) BUILD=0; shift ;;
         --with-patched) WITH_PATCHED=1; shift ;;
         --docker) MODE=docker; shift ;;
@@ -184,7 +184,7 @@ if [[ "$MODE" == docker ]]; then
         args+=(--elf /input/SCUS_971.99)
     fi
     [[ "$WITH_PATCHED" == 1 ]] && args+=(--with-patched)
-    docker_run bash setup.sh "${args[@]}"
+    docker_run bash setup.sh ${args[@]+"${args[@]}"}
     say "done. Open a shell with the toolchain: ./setup.sh --shell  (then: make elf, python3 scripts/check-unit.py ...)"
     exit 0
 fi
@@ -430,7 +430,7 @@ install_elf() {
     if sha_ok "$ELF_TARGET" "$ELF_SHA"; then
         return
     fi
-    if [[ -f "$ELF_TARGET" ]]; then
+    if [[ -f "$ELF_TARGET" && ( -n "$ELF" || -n "$ISO" || -n "$(ls dumps/*.iso 2>/dev/null)" ) ]]; then
         warn "config/us/SCUS_971.99 exists but is not the supported release; replacing it"
     fi
     if [[ -n "$ELF" ]]; then

@@ -5,7 +5,7 @@
 # disc image, leaving the raw game data untouched.
 #
 # Setup: put a legally owned disc dump in dumps/ (e.g. dumps/game.iso) and
-# install the prerequisites (see README.md). Then run `make`.
+# install the toolchain (docs/building.md). Then run `make elf`.
 
 .PHONY: elf iso clean-iso check progress overlays
 
@@ -15,19 +15,19 @@ check: ## Run the public CI checks locally (tests, script parse)
 	python3 scripts/gen_progress_report.py --check
 
 progress: ## Regenerate progress/report.json for decomp.dev (after `make elf`)
-	$${VENV:-.venv}/bin/python scripts/gen_progress_report.py --workspace build/baseline
+	$${VENV:-.venv}/bin/python scripts/gen_progress_report.py --workspace "$${BASELINE_ROOT:-build/baseline}"
 
 elf: ## Rebuild the boot ELF byte-for-byte (full baseline + SHA gate)
 	./verify-baseline.sh
-	@ls -l build/SCUS_971.99 2>/dev/null || echo "built ELF found in the baseline workspace (see verify-baseline.sh output)"
+	@ls -l "$${BASELINE_ROOT:-build/baseline}/config/us/build/SCUS_971.99"
 
-overlays: ## Compile the level overlay sources (src/overlays, docs/overlays.md) into build/overlays/obj
+overlays: ## Compile the level overlay sources (src/overlays, docs/overlays.md) into build/overlays/obj; needs the generated config/us/overlays/asm
 	$${VENV:-.venv}/bin/python configure.py --overlays
-	ninja -C build/overlays
+	$${VENV:-.venv}/bin/ninja -C build/overlays
 
 iso: elf ## Patch the rebuilt boot ELF into a copy of the disc image
 	@iso="$$(ls dumps/*.iso 2>/dev/null | head -1)"; \
-	test -n "$$iso" || (echo "no dumps/*.iso found; place a legally owned dump in dumps/"; exit 1); \
+	test -n "$$iso" || { echo "no dumps/*.iso found; place a legally owned dump in dumps/" >&2; exit 1; }; \
 	python3 rebuild-iso.py --iso "$$iso"
 
 clean-iso:

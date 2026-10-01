@@ -210,8 +210,9 @@ SDATA_OVERLAYS = {
 }
 
 # Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
-# exact codegen requires a different scheduling model.  Keyed by unit-name
-# suffix so both the assembly-backed and the normalized/promoted name match.
+# exact codegen requires a different scheduling model.  Keyed by the configured
+# owner path (exact match): a unit renamed or moved out of assembly/ must have
+# its entry renamed with it.
 # sce_sif_init_iop_heap: retail tail (lui v0; sw; move v0) is byte-exact only
 # under -fno-schedule-insns; applying it globally to all EE-GCC 2.9 units changes
 # scePad2Read and other already-exact siblings.
@@ -249,7 +250,7 @@ SDK_COMPILER_FLAG_UNITS = {
 }
 
 
-# Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
+# Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
 GAME_COMPILER_FLAG_UNITS = {
     # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
     # (the .extern-ordering class); its call loop needs patch
