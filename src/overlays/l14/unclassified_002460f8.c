@@ -108,7 +108,29 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5730.s", FUN_L14_002b5730);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5850.s", FUN_L14_002b5850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c98.s", FUN_L14_002b5c98);
+extern u8 D_0013E550[];
+extern void FUN_L00_0028d918(s32 idx);
+
+/* 0x002B5C98, 124 bytes.  Clears a moby's link to its slot entry, releasing
+ * the slot if it still points back here.
+ * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * func_L14_002B6EE8), where it is exact; names translated to the US level
+ * program. */
+void FUN_L14_002b5c98(u8 *moby)
+{
+    u8 *data = *(u8 **)(moby + 0x78);
+    s32 idx;
+    *(u16 *)(moby + 0x34) |= 0x41;
+    *(s32 *)(moby + 0x94) = 0;
+    idx = *(s32 *)(data + 0x108);
+    if (idx != -1) {
+        u8 *e = D_0013E550 + idx * 0x70;
+        if (*(u8 **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0) {
+            FUN_L00_0028d918(idx);
+        }
+    }
+    *(s32 *)(data + 0x108) = -1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5d18.s", FUN_L14_002b5d18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
