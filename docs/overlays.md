@@ -46,8 +46,8 @@ the records and the catalogue.
 - `$gp` is the executable's, 0x166C00, in every level. No level text contains
   an `addiu $gp, $gp, imm`: the value the executable's startup sets stays.
   Of the level copies of executable functions that reach resident memory
-  (below 0x15EF00) through `$gp`, 1205 agree with the executable word for word
-  at those instructions (3398 words over 16,442 copies); the 76 that differ are
+  (below 0x15EF00) through `$gp`, 1224 agree with the executable word for word
+  at those instructions (3455 words over 17,270 copies); the 114 that differ are
   masked-fingerprint collisions (two groups of small functions that load
   different `core.lit` constants), not a different `$gp`. Level code's `$gp` offsets span
   -0x7EA8..0x7BDC, from `core.lit` into the level's `data` record.
@@ -69,9 +69,9 @@ records:
 
 | kind | functions | bytes | meaning |
 | :--- | ---: | ---: | :--- |
-| `exe` | 772 | 305,748 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
-| `shared` | 1,645 | 1,152,124 | in two or more levels (931 of them in all 19: 555,024 bytes) |
-| `level` | 1,341 | 2,028,340 | in one level only |
+| `exe` | 773 | 305,760 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
+| `shared` | 1,648 | 1,152,164 | in two or more levels (932 of them in all 19: 555,040 bytes) |
+| `level` | 1,342 | 2,028,360 | in one level only |
 
 ### What makes a place a function start (2026-10-01)
 
@@ -93,9 +93,11 @@ Now a start needs one of:
   passed as an argument or stored; `FUN_L00_002377b8` is reached no other way);
 - a `j` from another function (a tail call);
 - code right after a return (and its delay slot and padding) that no row
-  reaches, when it opens a frame in its first four instructions or runs to a
-  `jr $ra` of its own over at least 32 bytes: the only sign left for the
-  functions a level links but never calls;
+  reaches, when it opens a frame in its first four instructions, runs to a
+  `jr $ra` of its own over at least 32 bytes, or is a whole leaf (its own
+  `jr $ra`, no `$sp` access, no trap: a getter like `lui; lbu; jr $ra; sltu`
+  or a `return 0;`): the only sign left for the functions a level links but
+  never calls;
 - a copy of an executable function body (the row is exactly the executable
   function's size), the level's entry point, the start of the text record, or
   a hand-confirmed row in `config/overlays/us/confirmed-starts.tsv`. A
@@ -109,7 +111,7 @@ block) belong to no row: no C produces them, so a row that swallowed them could
 never be matched. The fingerprint is taken over that reachable body too, so
 every copy of a function in every level lands in one row.
 
-Level 00 goes from 2,305 starts to 1,981. Every promoted overlay C function that checked exact
+Level 00 goes from 2,305 starts to 2,025. Every promoted overlay C function that checked exact
 before the change still does (1,015 of 1,031).
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the

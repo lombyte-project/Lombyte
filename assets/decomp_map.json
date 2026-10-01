@@ -1,16 +1,16 @@
 {
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
-  "units_total": 4428,
+  "units_total": 4432,
   "matching_c": 2072,
   "intentional_asm": 249,
-  "pending_c": 2107,
-  "bytes_total": 3617116,
+  "pending_c": 2111,
+  "bytes_total": 3617176,
   "bytes_matching_c": 501152,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3019632,
-  "c_exact_percent_of_recoverable": 14.2341,
-  "c_fuzzy_percent_of_recoverable": 16.2942,
+  "bytes_pending_c": 3019692,
+  "c_exact_percent_of_recoverable": 14.2339,
+  "c_fuzzy_percent_of_recoverable": 16.2939,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1932,25 +1932,25 @@
     ]
   },
   "overlays": {
-    "functions_total": 2986,
+    "functions_total": 2990,
     "matching_c": 1026,
-    "pending_c": 1960,
-    "bytes_total": 3180464,
+    "pending_c": 1964,
+    "bytes_total": 3180524,
     "bytes_matching_c": 281380,
-    "bytes_pending_c": 2899084,
-    "c_exact_percent_of_recoverable": 8.8471,
+    "bytes_pending_c": 2899144,
+    "c_exact_percent_of_recoverable": 8.847,
     "shared": {
       "id": "shared",
       "index": null,
       "planet": "Shared code",
       "description": "functions present in two or more levels",
-      "functions": 1645,
+      "functions": 1648,
       "matching_c": 696,
-      "pending_c": 949,
-      "bytes_total": 1152124,
+      "pending_c": 952,
+      "bytes_total": 1152164,
       "bytes_matching_c": 201156,
-      "bytes_pending_c": 950968,
-      "c_exact_percent_of_recoverable": 17.4596,
+      "bytes_pending_c": 951008,
+      "c_exact_percent_of_recoverable": 17.459,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -2058,6 +2058,13 @@
           "bytes_matching_c": 192
         },
         {
+          "file": "src/overlays/shared/unclassified_001ff230.c",
+          "functions": 1,
+          "matching_c": 0,
+          "bytes_total": 16,
+          "bytes_matching_c": 0
+        },
+        {
           "file": "src/overlays/shared/ui_help_001ff938.c",
           "functions": 8,
           "matching_c": 3,
@@ -2087,9 +2094,9 @@
         },
         {
           "file": "src/overlays/shared/unclassified_002025d0.c",
-          "functions": 2,
+          "functions": 3,
           "matching_c": 0,
-          "bytes_total": 56,
+          "bytes_total": 72,
           "bytes_matching_c": 0
         },
         {
@@ -3281,6 +3288,13 @@
           "matching_c": 1,
           "bytes_total": 7656,
           "bytes_matching_c": 116
+        },
+        {
+          "file": "src/overlays/shared/gameplay_vendor_00329538.c",
+          "functions": 1,
+          "matching_c": 0,
+          "bytes_total": 8,
+          "bytes_matching_c": 0
         }
       ]
     },
@@ -4130,13 +4144,13 @@
         "index": 14,
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
-        "functions": 126,
+        "functions": 127,
         "matching_c": 27,
-        "pending_c": 99,
-        "bytes_total": 149868,
+        "pending_c": 100,
+        "bytes_total": 149888,
         "bytes_matching_c": 4992,
-        "bytes_pending_c": 144876,
-        "c_exact_percent_of_recoverable": 3.3309,
+        "bytes_pending_c": 144896,
+        "c_exact_percent_of_recoverable": 3.3305,
         "files": [
           {
             "file": "src/overlays/l14/ui_help_0021dd30.c",
@@ -4186,6 +4200,13 @@
             "matching_c": 5,
             "bytes_total": 15896,
             "bytes_matching_c": 548
+          },
+          {
+            "file": "src/overlays/l14/gameplay_vendor_0030621c.c",
+            "functions": 1,
+            "matching_c": 0,
+            "bytes_total": 20,
+            "bytes_matching_c": 0
           }
         ]
       },
@@ -4469,15 +4490,15 @@
     ]
   },
   "total": {
-    "units_total": 4428,
+    "units_total": 4432,
     "matching_c": 2072,
     "intentional_asm": 249,
-    "pending_c": 2107,
-    "bytes_total": 3617116,
+    "pending_c": 2111,
+    "bytes_total": 3617176,
     "bytes_matching_c": 501152,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3019632,
-    "c_exact_percent_of_recoverable": 14.2341,
-    "c_fuzzy_percent_of_recoverable": 16.2942
+    "bytes_pending_c": 3019692,
+    "c_exact_percent_of_recoverable": 14.2339,
+    "c_fuzzy_percent_of_recoverable": 16.2939
   }
 }
