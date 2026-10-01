@@ -123,8 +123,21 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg)
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c60.s", FUN_L03_002c6c60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c90.s", FUN_L03_002c6c90);
+/* Recognize the active vendor object state. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00310738), where it is exact; names translated to the US level program. */
+
+int FUN_L03_002c6c60(char *moby) {
+    if (*(short *)(moby + 0xA6) == 0x23e &&
+        ((unsigned char *)moby)[0x20] == 14) {
+        return 1;
+    }
+    return 0;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_00301090), where it is exact; names translated to the US level program. */
+
+void FUN_L03_002c6c90(unsigned char *moby) {
+    moby[0x20] = 14;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cca00.s", FUN_L03_002cca00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ce238.s", FUN_L03_002ce238);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3cd8.s", FUN_L03_002d3cd8);

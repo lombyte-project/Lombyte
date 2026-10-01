@@ -131,7 +131,54 @@ void FUN_L14_00307a80(unsigned char *moby) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003087c0.s", FUN_L14_003087c0);
+/* Play the level sound once on first update, then handle the two-state moby. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00309C48), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x30];
+    int state;
+    char pad34[0x144];
+    int v178[2];
+} Level14State;
+
+extern Level14State D_L14_0016CF60;
+extern int D_L14_0015F5C4;
+extern int FUN_L01_0026e008(int, int);
+extern unsigned char D_0013D408[];
+extern void FUN_L00_002637f8(int);
+extern void FUN_L00_00263d40(int arg0, int arg1);
+s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+
+void FUN_L14_003087c0(unsigned char *moby) {
+    int *d = *(int **)(moby + 0x78);
+    unsigned v;
+    int i;
+    if (d[0] != -1) {
+        if (FUN_L01_0026e008(d[0], -1) == 0) {
+            if (D_0013D408[0x17] == 0) {
+                D_0013D408[0x17] = 1;
+                allocate_voice_for_bank_entry(1, 0, 0);
+                FUN_L00_00263d40(0x53d6, -1);
+            }
+        }
+    }
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L14_0015F5C4 == 2) {
+            v = D_L14_0016CF60.state - 3;
+            if (v < 3) {
+                i = 0;
+                if (v <= D_L14_0015F5C4) i = moby[0x20];
+                FUN_L00_002637f8(D_L14_0016CF60.v178[i]);
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314f00.s", FUN_L14_00314f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315920.s", FUN_L14_00315920);
