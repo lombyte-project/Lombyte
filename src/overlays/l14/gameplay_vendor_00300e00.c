@@ -112,7 +112,25 @@ void FUN_L14_00307510(char *moby) {
     *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) = *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307a80.s", FUN_L14_00307a80);
+extern void FUN_L12_002e71b0(void);
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+/* 0x00307a80, 84 bytes.
+ * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c:
+ * func_L14_00308F08), where it is exact; names translated to the US level
+ * program. The size-matched PAL neighbour was the callback this one enqueues,
+ * not this body. */
+void FUN_L14_00307a80(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        enqueue_callback_list_1((int)FUN_L12_002e71b0, (int)moby);
+        break;
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003087c0.s", FUN_L14_003087c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314f00.s", FUN_L14_00314f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);

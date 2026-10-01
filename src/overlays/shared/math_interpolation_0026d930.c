@@ -39,4 +39,27 @@ void FUN_L01_0026e090(int i, int v) {
         } while (*(short *)p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e0e0.s", FUN_L01_0026e0e0);
+extern void *D_L01_001ABCC0[];
+extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8")
+    __attribute__((section(".sdata")));
+/* 0x0026e0e0, 88 bytes.
+ * Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c:
+ * func_L01_0026F090), where it is exact; names translated to the US level
+ * program. The datum needs the unsplit macro form here, so it is declared
+ * through an alias (same symbol, .sdata) beside its neighbour's declaration. */
+void FUN_L01_0026e0e0(int list, int state) {
+    unsigned short *p;
+    unsigned short *q = (unsigned short *)D_L01_001ABCC0[list];
+
+    if (q != 0) {
+        p = q;
+        do {
+            char *m = (char *)(((*p & 0x7FFF) << 8) + (int)D_L01_0015FFD8_e0e0);
+
+            if (m[0x20] >= 0) {
+                m[0x20] = state;
+            }
+        } while (*(short *)p++ >= 0);
+    }
+}
+

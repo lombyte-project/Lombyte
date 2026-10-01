@@ -56,7 +56,28 @@ void FUN_L18_002fa728(char *moby) {
         FUN_L00_00250df8(child);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa888.s", FUN_L18_002fa888);
+extern int D_L18_001AC240[];
+extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+/* 0x002fa888, 88 bytes.
+ * Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c:
+ * func_L18_002FBCE8), where it is exact; names translated to the US level
+ * program. */
+void FUN_L18_002fa888(int idx, int value) {
+    unsigned short *table = (unsigned short *)D_L18_001AC240[idx];
+
+    if (table != 0) {
+        unsigned short *p = table;
+        do {
+            unsigned char *moby =
+                (unsigned char *)(((p[0] & 0x7FFF) << 8) + D_L00_0015FFD8);
+
+            if (*(short *)(moby + 0xA6) == 0x630) {
+                moby[0xBC] = value;
+            }
+        } while ((short)*p++ >= 0);
+    }
+}
+
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 #define NOT_SDA
