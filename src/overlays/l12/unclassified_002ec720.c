@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec720.s", FUN_L12_002ec720);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ecac0.s", FUN_L12_002ecac0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -16,7 +14,7 @@ extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_L00_001ff8b0(float, float);
 extern int FUN_001f96f8(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
     char *moby = func_0020D348_m(0x199);
@@ -39,9 +37,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         *(float *)(data + 0x24) = f1;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = r;
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ece00.s", FUN_L12_002ece00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ed280.s", FUN_L12_002ed280);

@@ -15,7 +15,7 @@ extern int D_0014C190[][64];
 extern char D_0013F350[];
 extern char D_001516D0[];
 extern char D_0013E550[];
-extern void FUN_L00_001ff090(int, void *, unsigned short);
+extern void FUN_001f9838(int, void *, unsigned short);
 
 void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
     unsigned char *src;
@@ -28,7 +28,7 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
     signed char c;
     int v;
 
-    FUN_L00_001ff090((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
+    FUN_001f9838((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
     lvl = D_0015ED84;
     for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
         v = *src;
@@ -65,9 +65,6 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851f4.s", FUN_L00_002851f4);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -77,7 +74,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851f4.s", FUN_L00_002851f4);
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 
 extern int FUN_L00_002851c0(int, int);
-extern void FUN_L00_001ff090(int, void *, unsigned short);
+extern void FUN_001f9838(int, void *, unsigned short);
 
 void FUN_L00_00285208(int *h) {
     int i;
@@ -91,7 +88,7 @@ void FUN_L00_00285208(int *h) {
             } else {
                 dst = ((Ent *)(h + 1))[i].off + *(int *)(m + 0x78);
             }
-            FUN_L00_001ff090(dst, &((Ent *)(h + 1))[i].pad, ((Ent *)(h + 1))[i].len);
+            FUN_001f9838(dst, &((Ent *)(h + 1))[i].pad, ((Ent *)(h + 1))[i].len);
         }
     }
 }

@@ -42,10 +42,6 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0a98.s", FUN_L16_002a0a98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0dc0.s", FUN_L16_002a0dc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d2cf0.s", FUN_L16_002d2cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d38b0.s", FUN_L16_002d38b0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
@@ -110,7 +106,7 @@ extern float FUN_001f9b48(void *);
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 float FUN_L16_002d3eb8(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
@@ -122,12 +118,7 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     zero[0] = 0;
     FUN_00213f38((float *)zero, (float *)(data + 0x2D4), d, b, b, D_0015ED6C * 5.0f);
     FUN_001f9a28(vec, target, p);
-    FUN_L00_001ff500(vec, vec, *(float *)(data + 0x2D4));
+    FUN_001f9bf8(vec, vec, *(float *)(data + 0x2D4));
     FUN_001f9a10(p, p, vec);
     return d;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3f78.s", FUN_L16_002d3f78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4070.s", FUN_L16_002d4070);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d41f8.s", FUN_L16_002d41f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4590.s", FUN_L16_002d4590);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4908.s", FUN_L16_002d4908);

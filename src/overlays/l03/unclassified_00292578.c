@@ -2,15 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292578.s", FUN_L03_00292578);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292890.s", FUN_L03_00292890);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292d10.s", FUN_L03_00292d10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002953f8.s", FUN_L03_002953f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029c9d0.s", FUN_L03_0029c9d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029caa8.s", FUN_L03_0029caa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029cff0.s", FUN_L03_0029cff0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -55,9 +46,6 @@ void FUN_L03_0029d1b8(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -70,9 +58,6 @@ int FUN_L03_002c5b78(unsigned char *moby) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6a20.s", FUN_L03_002c6a20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6c38.s", FUN_L03_002c6c38);
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
 f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
@@ -90,8 +75,3 @@ int FUN_L03_002c6ca0(unsigned char *moby) {
     if (moby[0x20] == 10 || moby[0x20] == 13 || *(int *)(data + 0x284) == -1) return 1;
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6d98.s", FUN_L03_002c6d98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6e18.s", FUN_L03_002c6e18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6fd0.s", FUN_L03_002c6fd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c95a8.s", FUN_L03_002c95a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9ca0.s", FUN_L03_002c9ca0);

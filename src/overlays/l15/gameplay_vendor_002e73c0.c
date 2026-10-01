@@ -48,7 +48,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *, void *);
+extern void FUN_0020def8(void *, void *);
 
 char *FUN_L15_002e7ed8(void *unused, void *vector) {
     char *moby = CreateMoby(0x4E9);
@@ -65,17 +65,10 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
         qcopy(moby + 0x10, vector);
         field = *(char **)(moby + 0x24);
         *(int *)(moby + 0x94) = *(int *)(field + 0x10);
-        FUN_L00_00250df8(moby, field);
+        FUN_0020def8(moby, field);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ea748.s", FUN_L15_002ea748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eabd8.s", FUN_L15_002eabd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eac90.s", FUN_L15_002eac90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb6b8.s", FUN_L15_002eb6b8);
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 
@@ -96,18 +89,6 @@ void FUN_L15_002eb928(char *moby)
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb9e0.s", FUN_L15_002eb9e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfd4.s", FUN_L15_002ebfd4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edb20.s", FUN_L15_002edb20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f794c.s", FUN_L15_002f794c);
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
@@ -146,6 +127,3 @@ int FUN_L15_002f85a8(char *moby) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8698.s", FUN_L15_002f8698);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8ba8.s", FUN_L15_002f8ba8);

@@ -202,7 +202,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern f32 FUN_001f9af0(void *);
 extern f32 FUN_00213f38(f32, f32, f32, f32, f32 *, f32 *);
-extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
 extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
 extern f32 FUN_001fa580(f32, f32);
 extern f32 FUN_001fa5c8(f32, f32);
@@ -210,7 +210,7 @@ extern void FUN_0020cca8(VendMoby *, s32, void *);
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_0020c9e0(VendMoby *);
-extern s32 FUN_L00_001efc70(void *, void *, s32, VendMoby *, VendQuery *);
+extern s32 FUN_001efa68(void *, void *, s32, VendMoby *, VendQuery *);
 extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
 extern s32 FUN_L00_002e2190(VendMoby *, void *, void *);
 extern s32 FUN_L00_0025c698(VendMoby *, void *);
@@ -298,7 +298,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
                 VEND_ANIM(moby, 1, vend_rand(10));
             }
         }
-        FUN_L00_001ff500(&dir, &dir, vars->speed);
+        FUN_001f9bf8(&dir, &dir, vars->speed);
         FUN_001f9a10(&moby->pos, &moby->pos, &dir);
         break;
     case 3:
@@ -334,7 +334,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         FUN_0020cca8(moby, 0, mtx);
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
-        FUN_L00_001ff500(&delta, &delta, D_L00_00161BE4);
+        FUN_001f9bf8(&delta, &delta, D_L00_00161BE4);
         FUN_001f9a10(&dir, &mtx[3], &delta);
         hit = 0;
         query.flags = 0x10000;
@@ -354,13 +354,13 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         }
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.5f;
-        if (FUN_L00_001efc70(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
+        if (FUN_001efa68(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
             D_L00_00173E58.moby == D_001413D0) {
             vend_2040(moby);
             moby->state = 6;
             VEND_ANIM(moby, 7, vend_rand(10));
         }
-        if (FUN_L00_001efc70(&mtx[3], &dir, 0, moby, &query) != 0) {
+        if (FUN_001efa68(&mtx[3], &dir, 0, moby, &query) != 0) {
             qcopy(&dir, D_L00_00173E58.pos);
             if (hit != 0 && D_L00_00173E58.moby == D_001413D0) {
                 vend_2040(moby);
@@ -706,8 +706,8 @@ extern GlowVec glow_origin __asm__("D_L00_00166DC0");
 extern GlowVec D_0013F5E0;
 extern GlowVec D_L00_001E6CA0[4];
 extern void FUN_001f9a68(f32, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
-extern void FUN_L00_001fd228(void *, void *, s32);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f7d30(void *, void *, s32);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
@@ -724,9 +724,9 @@ void FUN_L00_002e1c78(GlowMoby *m)
     one = 1.0f;
     mat[3].f[3] = one;
     FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
-    FUN_L00_001ff500(&mat[0], &mat[0], one);
+    FUN_001f9bf8(&mat[0], &mat[0], one);
     fast_vec_cross(&mat[1], &mat[0], &D_0013F5E0);
-    FUN_L00_001ff500(&mat[1], &mat[1], -1.0f);
+    FUN_001f9bf8(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     quad.tex = get_effect_texture(0xB);
     quad.unk88 = 0x8000000048L;
@@ -749,7 +749,7 @@ void FUN_L00_002e1c78(GlowMoby *m)
     for (i = 0; i < 4; i++) {
         FUN_001f9a68(0.2f, dst++, src++);
     }
-    FUN_L00_001fd228(&quad, mat, 0);
+    FUN_001f7d30(&quad, mat, 0);
 }
 typedef struct {
     u8 pad0[0x20];

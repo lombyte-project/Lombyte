@@ -40,10 +40,3 @@ void FUN_L10_002e3de8(char *moby) {
     h = *(int *)&D_L10_00161E5C_d;
     FUN_L01_00287158(v, c, d, g, h, e);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9028.s", FUN_L10_002e9028);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e91b8.s", FUN_L10_002e91b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a50.s", FUN_L10_002f5a50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a78.s", FUN_L10_002f5a78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f65f8.s", FUN_L10_002f65f8);

@@ -14,7 +14,7 @@ extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_L00_001ff8b0(float, float);
 extern int FUN_001f96f8(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = func_0020D348_m(0x50C);
@@ -34,11 +34,10 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = FUN_L00_001ff8b0(*(float *)d, *(float *)(d + 4));
         *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(d), *(float *)(d + 8));
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307298.s", FUN_L08_00307298);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
@@ -71,8 +70,6 @@ void FUN_L08_00307b90(int arg) {
     t = FUN_001f9b20(D_L08_00162360) / FUN_001f9af0(v);
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307cf0.s", FUN_L08_00307cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003085f0.s", FUN_L08_003085f0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_00167600_d __asm__("D_L08_00167600") __attribute__((section(".data")));
@@ -80,4 +77,3 @@ extern char *D_L08_00167600_d __asm__("D_L08_00167600") __attribute__((section("
 void FUN_L08_00313ba8(void) {
     D_L08_00167600_d[0x88] = 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);

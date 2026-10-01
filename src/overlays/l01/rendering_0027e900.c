@@ -159,4 +159,3 @@ Particle *FUN_L01_00287c80(u128 *pos, u128 *dir, f32 scale, f32 speed) {
     }
     return p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b780.s", FUN_L01_0028b780);

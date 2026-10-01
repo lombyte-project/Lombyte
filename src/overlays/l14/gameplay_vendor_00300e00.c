@@ -42,7 +42,7 @@ void FUN_L14_003167e0(u8 *arg0)
 
 
 extern u8 *FUN_0020c4f8(s32);
-extern void FUN_L00_00250df8(u8 *);
+extern void FUN_0020def8(u8 *);
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -59,7 +59,7 @@ u8 *FUN_L14_00306158(u8 *self)
         o[0x20] = 0;
         *(s16 *)(o + 0x32) = 0x40;
         o[0x31] = 1;
-        FUN_L00_00250df8(o);
+        FUN_0020def8(o);
     }
     return o;
 }
@@ -87,7 +87,6 @@ void FUN_L14_003061f8(int unused, char *moby) {
     *(short *)(d + 0x3E) = 0;
     moby[0x20] = 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_0030621c.s", FUN_L14_0030621c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
@@ -115,11 +114,11 @@ void FUN_L14_00307510(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307a80.s", FUN_L14_00307a80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003087c0.s", FUN_L14_003087c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314e18.s", FUN_L14_00314e18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314f00.s", FUN_L14_00314f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315920.s", FUN_L14_00315920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00316748.s", FUN_L14_00316748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003167c4.s", FUN_L14_003167c4);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314e10.s", FUN_L14_00314e10);

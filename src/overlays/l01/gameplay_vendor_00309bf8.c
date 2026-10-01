@@ -38,8 +38,6 @@ void FUN_L01_00309c98(FlagMoby *m) {
     m->b30 = v;
     enqueue_callback_list_1(FUN_L01_00309bf8, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030acb8.s", FUN_L01_0030acb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ba18.s", FUN_L01_0030ba18);
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -69,8 +67,8 @@ typedef struct {
 } DebrisMoby;
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(DebrisMoby *);
-extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_0020def8(DebrisMoby *);
+extern void FUN_001f9bf8(void *, void *, f32);
 extern f32 FUN_L00_00257c48(f32 lo, f32 hi);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 FUN_001f96f8(s32);
@@ -90,16 +88,15 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         m->h32 = 0xFF;
         m->b31 = 1;
         m->scale = m->scale * scale;
-        FUN_L00_001ff500(v, dir, random_float_between(0.8f, 1.2f));
+        FUN_001f9bf8(v, dir, random_float_between(0.8f, 1.2f));
         v->spin_x = FUN_L00_00257c48(0.0f, 0.008726646f);
         v->spin_y = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         v->spin_z = FUN_L00_00257c48(0.0f, 0.017453292f);
         v->timer = FUN_001f96f8(200);
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c190.s", FUN_L01_0030c190);
 typedef struct {
     u8 pad0[0x2C];
     f32 f2c;
@@ -173,15 +170,15 @@ void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32
         pos.y = verts[i][1];
         pos.z = verts[i][2];
         FUN_001f9a28(&eye, &pos, &D_L01_00167240);
-        FUN_L00_001ff500(&eye, &eye, 1.0f);
+        FUN_001f9bf8(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
         nrm.y = -normals[i][1];
         nrm.z = -normals[i][2];
-        FUN_L00_001ff500(&nrm, &nrm, 1.0f);
+        FUN_001f9bf8(&nrm, &nrm, 1.0f);
         FUN_001f9a68(&refl, &nrm, FUN_001f9ab0(&nrm, &eye) * 2.0f);
         FUN_001f9a28(&refl, &eye, &refl);
-        FUN_L00_001ff500(&refl, &refl, 1.0f);
+        FUN_001f9bf8(&refl, &refl, 1.0f);
         refl.z += 1.0f;
         len = FUN_001f9af0(&refl) * 2.0f;
         uv[i][0] = (refl.x / len + 0.5f) * 2.0f + D_L01_00162110[0];

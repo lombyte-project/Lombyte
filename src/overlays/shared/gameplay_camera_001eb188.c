@@ -2,11 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb188.s", FUN_L00_001eb188);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1e4.s", FUN_L00_001eb1e4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1f8.s", FUN_L00_001eb1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb218.s", FUN_L00_001eb218);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb230.s", FUN_L00_001eb230);
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
@@ -25,9 +20,6 @@ typedef struct { char pad[0x7D]; u8 b; s16 h; } T001eb448;
 typedef struct { char pad[0x180]; T001eb448 *p; } S001eb448;
 extern S001eb448 D_L00_00166C80;
 void FUN_L00_001eb448(void) { D_L00_00166C80.p->h = 1; D_L00_00166C80.p->b = 0; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ecf40.s", FUN_L00_001ecf40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed000.s", FUN_L00_001ed000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed054.s", FUN_L00_001ed054);
 typedef struct { s32 id; s32 pad[4]; } E5;
 extern E5 D_L00_001EA880[];
 s32 FUN_L00_001ed230(s32 id) {
@@ -83,7 +75,6 @@ void FUN_L00_001ed280(void) {
     u[1] = t[1];
     u[2] = t[2];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -183,4 +174,3 @@ void FUN_L00_001ed6a8(ti_1ed6a8 *pos, float r) {
         qcopy(&D_166DC0_1ed6a8, pos);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed878.s", FUN_L00_001ed878);

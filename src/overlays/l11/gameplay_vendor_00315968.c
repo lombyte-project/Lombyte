@@ -5,7 +5,6 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315968.s", FUN_L11_00315968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315f58.s", FUN_L11_00315f58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316090.s", FUN_L11_00316090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003160a8.s", FUN_L11_003160a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316128.s", FUN_L11_00316128);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316160.s", FUN_L11_00316160);
 #define NOT_SDA
@@ -143,7 +142,7 @@ extern short D_L11_001623A4_d __asm__("D_L11_001623A4") __attribute__((sda));
 extern short D_L11_001623A8_d __asm__("D_L11_001623A8") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L11_00318ed8(char *m) {
     float v0[4];
@@ -153,8 +152,8 @@ void FUN_L11_00318ed8(char *m) {
     float v4[4];
     float s = random_float_between_alt(2.5f, 3.0f);
     float a = random_angle_radians();
-    FUN_L00_001ff500(v2, m + 0xD0, s * FUN_001f9de0(a));
-    FUN_L00_001ff500(v1, m + 0xE0, s * FUN_001f9dc8(a));
+    FUN_001f9bf8(v2, m + 0xD0, s * FUN_001f9de0(a));
+    FUN_001f9bf8(v1, m + 0xE0, s * FUN_001f9dc8(a));
     FUN_001f9a10(v1, v1, v2);
     FUN_001f9a28(v0, m + 0x10, v1);
     FUN_001f9a68(v3, v1, 1.0f / (float)FUN_001f96f8(*(int *)&D_L11_00162394_d + *(int *)&D_L11_00162398_d + *(int *)&D_L11_0016239C_d));
@@ -248,3 +247,5 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031db50.s", FUN_L11_0031db50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e2f0.s", FUN_L11_0031e2f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e930.s", FUN_L11_0031e930);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031f150.s", FUN_L11_0031f150);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a438.s", FUN_L11_0031a438);

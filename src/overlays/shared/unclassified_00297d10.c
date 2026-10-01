@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00297d10.s", FUN_L06_00297d10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -13,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L06_002d8510(char *owner) {
     char *moby = func_0020D348_m(0x12E);
@@ -27,12 +25,10 @@ char *FUN_L06_002d8510(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d85a0.s", FUN_L06_002d85a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 
@@ -51,7 +47,7 @@ char *FUN_L06_002d8b98(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(char **)(moby + 0xB8) = owner;
         qcopy(moby + 0x10, owner + 0x10);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
     return moby;
 }
@@ -84,8 +80,6 @@ void FUN_L06_002e6148(char *moby)
     *(unsigned short *)(moby + 0x34) &= 0xFFBE;
     FUN_L00_002d6bf0(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e8678.s", FUN_L06_002e8678);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e94f0.s", FUN_L06_002e94f0);
 /* Build an orthogonal frame from two vectors and apply it to the matrix at moby+0xC0. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
 
@@ -95,17 +89,17 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001fa400(void *, void *, void *, float);
 extern void FUN_001fa480(void *, void *);
 extern void FUN_002144d8(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     float d;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
-    FUN_L00_001ff500(C, a1, 1.0f);
+    FUN_001f9bf8(C, a1, 1.0f);
     d = FUN_001f9ab0(C, a2);
-    FUN_L00_001ff500(E, C, d);
+    FUN_001f9bf8(E, C, d);
     FUN_001f9a28(D, a2, E);
-    FUN_L00_001ff500(D, D, 1.0f);
+    FUN_001f9bf8(D, D, 1.0f);
     qcopy(H, C);
     qcopy(F, D);
     fast_vec_cross(G, F, H);
@@ -115,10 +109,6 @@ void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     FUN_001fa400(A, A, B, *(float *)&D_L06_00161C00_d);
     FUN_001fa480(A, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9aa8.s", FUN_L06_002e9aa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9f30.s", FUN_L06_002e9f30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea198.s", FUN_L06_002ea198);
 /* burst of 20 sparks around a point with random velocity and colour */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
 
@@ -149,7 +139,6 @@ void FUN_L06_002ea498(char *m) {
         FUN_L00_00269958(b, a, 0x7000A0FF, 0xFF, t, 0x1E, u, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea5e0.s", FUN_L06_002ea5e0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -196,8 +185,6 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea7c8.s", FUN_L06_002ea7c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f0040.s", FUN_L06_002f0040);
 /* scores a target moby by distance, heading differences and flags */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */
 
@@ -225,10 +212,6 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2910.s", FUN_L06_002f2910);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f32f0.s", FUN_L06_002f32f0);
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
@@ -247,13 +230,3 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f37d0.s", FUN_L06_002f37d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f38c8.s", FUN_L06_002f38c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7930.s", FUN_L06_002f7930);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7ab8.s", FUN_L06_002f7ab8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7c68.s", FUN_L06_002f7c68);

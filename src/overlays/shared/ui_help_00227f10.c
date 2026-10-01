@@ -41,4 +41,3 @@ int FUN_L12_00227f10(int a) {
     p = D_L12_00179F40 - (-i);
     return *(int *)(p + 0x24);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00235c08.s", FUN_L12_00235c08);

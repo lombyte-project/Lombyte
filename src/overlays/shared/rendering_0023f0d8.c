@@ -21,4 +21,3 @@ void FUN_L00_0023f0d8(char *p) {
     D_L00_0015FCA4 = *(float *)p; p += 4;
     D_L00_0015FCA8 = p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023f120.s", FUN_L00_0023f120);

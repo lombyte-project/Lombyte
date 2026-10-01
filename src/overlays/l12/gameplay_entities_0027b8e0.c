@@ -26,7 +26,7 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     }
     return 1;
 }
-extern void MobyAnimAdvance(void *) __asm__("FUN_L00_00250480");
+extern void MobyAnimAdvance(void *) __asm__("FUN_0020d580");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 
@@ -36,7 +36,7 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 extern void func_001FA480(void *, void *) __asm__("FUN_001fa2b8");
 extern void func_0020DAF8(void *, int, void *) __asm__("FUN_0020cca8");
 extern void func_0020EEE8(void *) __asm__("FUN_0020e098");
@@ -46,7 +46,7 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
     func_0020DAF8(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
     MobyAnimAdvance(child);
-    FUN_L00_00250df8(child);
+    FUN_0020def8(child);
     func_001FA480(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);
     func_0020EEE8(child);
@@ -56,4 +56,3 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
         *(unsigned short *)(child + 0x34) &= 0xFFBE;
     *(unsigned short *)(child + 0x34) |= 6;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027ba70.s", FUN_L12_0027ba70);

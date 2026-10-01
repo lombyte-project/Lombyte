@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002b1e48.s", FUN_L07_002b1e48);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -27,6 +26,3 @@ void FUN_L07_002f8058(unsigned char *moby)
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030bf90.s", FUN_L07_0030bf90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00310df0.s", FUN_L07_00310df0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031aee0.s", FUN_L07_0031aee0);

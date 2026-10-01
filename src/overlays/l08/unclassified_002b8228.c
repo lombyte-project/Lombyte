@@ -28,7 +28,6 @@ void FUN_L08_002b8228(char *moby) {
     FUN_L00_0025d1b8(moby);
     *(int *)(d + 0x24) = FUN_L08_00279f00(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b82a0.s", FUN_L08_002b82a0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -42,7 +41,7 @@ extern char *func_0020D348_m(int);
 extern float FUN_L00_001ff8b0(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
     char *m = func_0020D348_m(0xF8);
@@ -60,26 +59,10 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
         qcopy(d + 0x10, vec);
         *(float *)(m + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453292f;
         *(float *)(m + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d23f0.s", FUN_L08_002d23f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0c0.s", FUN_L08_002da0c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0f0.s", FUN_L08_002da0f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002daa10.s", FUN_L08_002daa10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc0c8.s", FUN_L08_002dc0c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc648.s", FUN_L08_002dc648);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -120,14 +103,7 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
         qcopy(data, vec);
         *(float *)(moby + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453293f;
         *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3d8.s", FUN_L08_002de3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de848.s", FUN_L08_002de848);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dec90.s", FUN_L08_002dec90);

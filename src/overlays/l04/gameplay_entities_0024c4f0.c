@@ -3,7 +3,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c4f0.s", FUN_L04_0024c4f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c57c.s", FUN_L04_0024c57c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c660.s", FUN_L04_0024c660);
 #define NOT_SDA
 
@@ -38,3 +37,5 @@ int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
     }
     return r;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c590.s", FUN_L04_0024c590);

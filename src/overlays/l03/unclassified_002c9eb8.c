@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -23,8 +20,6 @@ void FUN_L03_002cc828(unsigned char *arg) {
     }
     arg[0xA4] = 0xFF;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc888.s", FUN_L03_002cc888);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d30d8.s", FUN_L03_002d30d8);
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
 void FUN_L03_002d3100(void *arg, int mode) {
@@ -34,8 +29,6 @@ void FUN_L03_002d3100(void *arg, int mode) {
         try_set_help_message(8, 0xBC9);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
@@ -53,19 +46,6 @@ void FUN_L03_002d3c40(char *m) {
     FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * 0.0174532925f * D_0015ED6C, m, (float *)(d + 0xEC), (float *)(d + 0xE8));
     FUN_L00_00262b80(m, d + 0xF0, d + 0xF4, D_L03_00161AF8, D_L03_00161AFC * 0.0174532925f * D_0015ED6C, D_L03_00161B00 * 0.0174532925f * D_0015ED6C);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d4288.s", FUN_L03_002d4288);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da710.s", FUN_L03_002da710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db020.s", FUN_L03_002db020);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca70.s", FUN_L03_002dca70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcad4.s", FUN_L03_002dcad4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb30.s", FUN_L03_002dcb30);
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF10), where it is exact; names translated to the US level program. */
 
 int FUN_L03_002dcb48(unsigned char *moby, char *data) {
@@ -74,5 +54,3 @@ int FUN_L03_002dcb48(unsigned char *moby, char *data) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcbc8.s", FUN_L03_002dcbc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dccc0.s", FUN_L03_002dccc0);

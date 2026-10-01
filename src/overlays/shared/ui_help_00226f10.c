@@ -42,7 +42,6 @@ void FUN_L01_00227e48(int a0, int a1, int a2) {
         FUN_L00_0028de68(a0, a1, flag, 0, *(int *)(g + 0x2080));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -139,10 +138,6 @@ void FUN_L01_00228870(void) {
     FUN_L01_00228e38();
     FUN_L00_00208b60();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022cd48.s", FUN_L01_0022cd48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
@@ -226,19 +221,8 @@ void FUN_L01_00231450(void) {
     }
     FUN_L01_0023cf98(0, 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231580.s", FUN_L01_00231580);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00231ae0.s", FUN_L01_00231ae0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232290.s", FUN_L01_00232290);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232978.s", FUN_L01_00232978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232dc0.s", FUN_L01_00232dc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00233940.s", FUN_L01_00233940);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0023c710.s", FUN_L01_0023c710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002405a0.s", FUN_L01_002405a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00242198.s", FUN_L01_00242198);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002490E0), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002488e8(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) |= 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00248900.s", FUN_L01_00248900);

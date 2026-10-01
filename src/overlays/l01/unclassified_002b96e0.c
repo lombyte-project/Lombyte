@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9a30.s", FUN_L01_002b9a30);
 #include "eetypes.h"
 
 typedef union { u128 q; f32 f[4]; } EmitVec;
@@ -44,7 +42,7 @@ typedef struct {
 
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
-extern int FUN_L00_002002e0(void *, f32);
+extern int FUN_001fa728(void *, f32);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern void FUN_001fa050(void *, void *);
@@ -74,7 +72,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
     if (D_0015ED84 == 1) {
         p.q = self->pos.q;
         p.f[3] = 20.0f;
-        if (FUN_L00_002002e0(&p, 240.0f) == -1) {
+        if (FUN_001fa728(&p, 240.0f) == -1) {
             return;
         }
     }
@@ -184,10 +182,6 @@ void FUN_L01_002e6518(SplashMoby *m, u128 *origin) {
         FUN_L00_0026ced0(&tmp, &vel, *c1, *c2, size, FUN_001f96f8(FUN_L00_00257b90(5, 0xF)));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6bf0.s", FUN_L01_002e6bf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efc60.s", FUN_L01_002efc60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f3120.s", FUN_L01_002f3120);
 #include "sda.h"
 
 typedef struct {
@@ -239,9 +233,6 @@ void FUN_L01_002f4348(Moby *self) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4428.s", FUN_L01_002f4428);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
 extern u8 D_L01_001E2FC0[];
 void FUN_L00_002371e0(void);
 void FUN_L01_002b96e0(s32, void *);
@@ -342,7 +333,7 @@ typedef struct {
 } BeamMoby;
 
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8();
+extern void FUN_0020def8();
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9af0(void *);
 extern f32 FUN_L00_001ff8b0(f32, f32);
@@ -385,11 +376,10 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         FUN_L00_0026daa0(m, 0x2F4F7F7F, FUN_001f96f8(0x78), -1, 420000.0f);
         FUN_L00_0026daa0(m, 0x4F6F7F7F, FUN_001f96f8(0x78), -1, 210000.0f);
         FUN_0022da68(0, 0, m);
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f7728.s", FUN_L01_002f7728);
 extern f32 D_0015ED60;
 f32 FUN_001f99c0(f32);
 
@@ -456,7 +446,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
 extern f32 FUN_001f9b48(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
 extern f32 FUN_002135f0(void *, s32);
 
 void FUN_L01_002f8268(HoverMoby *m) {
@@ -500,7 +490,7 @@ void FUN_L01_002f8268(HoverMoby *m) {
         if (FUN_001f9b48(&old, &m->pos) > D_L01_00161BFC * D_0015ED6C) {
             FUN_001f9a28(&d, &m->pos, &old);
             step.q = d.q;
-            FUN_L00_001ff500(&step, &step, D_L01_00161BFC * D_0015ED6C);
+            FUN_001f9bf8(&step, &step, D_L01_00161BFC * D_0015ED6C);
             FUN_001f9a10(&d, &old, &step);
             m->pos.q = d.q;
         }

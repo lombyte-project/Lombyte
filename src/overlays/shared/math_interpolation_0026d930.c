@@ -23,9 +23,6 @@ void FUN_L01_0026d930(char *p)
     *(float *)(p + 0x28) = 1.57f;
     *(float *)(p + 0x2C) = 0.1f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026dff8.s", FUN_L01_0026dff8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e008.s", FUN_L01_0026e008);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e02c.s", FUN_L01_0026e02c);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_0015FFD8;
@@ -41,4 +38,3 @@ void FUN_L01_0026e090(int i, int v) {
         } while (*(short *)p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e0e0.s", FUN_L01_0026e0e0);

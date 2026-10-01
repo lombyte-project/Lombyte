@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00295100.s", FUN_L00_00295100);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00295348.s", FUN_L00_00295348);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -51,7 +49,6 @@ void FUN_L00_00297e70(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00297f78.s", FUN_L00_00297f78);
 typedef struct { char pad[0x20]; unsigned char st; char pad21[0x13]; unsigned short flags; char pad36[0x70]; short type; char pada8[0x58]; } O_298840;
 typedef struct { char pad[0x34]; unsigned short flags; } F_298840;
 typedef struct { char pad[0x30]; int x30; int x34; int x38; int x3c; char pad40[8]; short x48; char pad4a[0xE]; int x58; int x5c; } C_298840;
@@ -231,7 +228,7 @@ extern void mrx_298de8(void *, void *, float) __asm__("FUN_00125360");
 extern void mry_298de8(void *, void *, float) __asm__("FUN_00125408");
 extern void mrz_298de8(void *, void *, float) __asm__("FUN_001252b8");
 extern void vcross_298de8(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void vscl_298de8(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void vscl_298de8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vsub_298de8(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));
@@ -272,7 +269,6 @@ int FUN_L00_00298de8(void) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00298f90.s", FUN_L00_00298f90);
 typedef struct { s32 a, b; } P2;
 typedef struct { u8 pad[0x1808]; P2 x[19]; P2 y[1]; } Tab;
 extern s32 D_0015ED80;
@@ -325,8 +321,6 @@ void FUN_L00_00299560(s32 i) {
     }
     FUN_L00_002995d0(a, b, D_0015ED88);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002995d0.s", FUN_L00_002995d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
 
@@ -363,7 +357,6 @@ void FUN_L00_002999a8(void) {
     sceCdSync_alt(0);
     FUN_L00_002997c8();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
 extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0015F3FC;
@@ -380,7 +373,6 @@ void FUN_L00_00299c00(void) {
     D_L00_0015F3FC = 0;
     FUN_002335a0();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
@@ -409,8 +401,6 @@ void FUN_L00_0029a330(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a400.s", FUN_L00_0029a400);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029a6b0.s", FUN_L00_0029a6b0);
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4_29ab70;
 extern int D_L00_0015F5D8_29ab70 __asm__("D_L00_0015F5D8");
 extern int D_L00_0015F5C4_29ab70 __asm__("D_L00_0015F5C4") __attribute__((sda));
@@ -469,7 +459,6 @@ void FUN_L00_0029ab70(int a) {
     f216088_29ab70();
     f12dc80_29ab70();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ad08.s", FUN_L00_0029ad08);
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4;
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4 __attribute__((sda));
@@ -510,7 +499,6 @@ void FUN_L00_0029af80(void) {
     FUN_00216088();
     FUN_0012dc80();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029b4d8.s", FUN_L00_0029b4d8);
 typedef float V_29b680[4] __attribute__((aligned(16)));
 typedef struct { int k; int f; char pad[0xC]; } E_29b680;
 typedef struct { char p0[0x1C]; unsigned char *p1C; unsigned char *p20; char p1[0x58 - 0x24]; int i58; char p2[0xD0 - 0x5C]; E_29b680 ent[1]; } P_29b680;
@@ -527,7 +515,7 @@ extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
 extern void FUN_0020c5f0_29b680(void *, int) __asm__("FUN_0020c5f0");
 extern void FUN_001f9a10_29b680(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9cf8_29b680(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_00250df8_29b680(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_0020def8_29b680(void *) __asm__("FUN_0020def8");
 extern void FUN_00212ed8_29b680(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_0020c880_29b680(void *) __asm__("FUN_0020c880");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
@@ -606,5 +594,3 @@ void FUN_L00_0029b680(void) {
     D_L00_00161E38_29b680 = 0;
 }
 #undef P
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ba78.s", FUN_L00_0029ba78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029c648.s", FUN_L00_0029c648);

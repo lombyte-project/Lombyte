@@ -5,7 +5,6 @@
 #include "qcopy.h"
 #include "qzero.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9810.s", FUN_L01_002f9810);
 typedef struct {
     f32 sway;
     f32 dir;
@@ -114,7 +113,7 @@ extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
@@ -146,7 +145,7 @@ void FUN_L01_002f9d80(BurstMoby *self) {
             pos.f[0] = FUN_001f9dc8(ang) * r;
             pos.f[1] = FUN_001f9de0(ang) * r;
             pos.f[2] = 0.0f;
-            FUN_L00_001ff500(&dir, &dir, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 20.0f));
+            FUN_001f9bf8(&dir, &dir, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 20.0f));
             FUN_001f9a10(&pos, &pos, &self->pos);
             FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)], FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
@@ -183,7 +182,7 @@ extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_L00_002502f0(void *, s32, s32, s32);
 void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern void FUN_L00_00250df8();
+extern void FUN_0020def8();
 
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 p;
@@ -214,11 +213,10 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         v->color = color;
         FUN_L00_0026daa0(m, 0x2F00007F, color, -1, 210000.0f);
         FUN_L00_0026daa0(m, 0x4F004F7F, v->color, -1, 115500.0f);
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
 typedef union { u128 q; f32 f[4]; } Vec4;
 
 typedef struct {
@@ -250,7 +248,7 @@ typedef struct {
 extern f32 FUN_001f96b0(f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
-extern s32 FUN_L00_001efc70(void *, void *, s32, void *, void *);
+extern s32 FUN_001efa68(void *, void *, s32, void *, void *);
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L01_002fa1b0(void *, void *, s32, f32, f32);
 void FUN_0020c828(void *);
@@ -300,7 +298,7 @@ void FUN_L01_002fa4c0(DropMoby *m) {
         tmp = m->pos.q;
         FUN_L01_002fa1b0(m, &tmp, 0, 0.5f, zero);
         FUN_0020c828(m);
-    } else if (FUN_L00_001efc70(&prev, pos, 0, v->coll, &probe) != 0) {
+    } else if (FUN_001efa68(&prev, pos, 0, v->coll, &probe) != 0) {
         qcopy(pos, &D_L01_001742E0);
         tmp = m->pos.q;
         FUN_L01_002fa1b0(m, &tmp, 0, 0.5f, zero);
@@ -314,7 +312,6 @@ void FUN_L01_002fa4c0(DropMoby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa800.s", FUN_L01_002fa800);
 typedef struct {
     u8 pad0[0xA6];
     s16 type;
@@ -354,7 +351,6 @@ void FUN_L01_002fac80(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
 typedef union { u128 q; f32 f[4]; } PendVec4;
 
 typedef struct {
@@ -383,7 +379,7 @@ extern s32 D_0015ED84 __attribute__((sda));
 extern u8 D_0014C050[];
 extern u8 D_0013E550[];
 extern int FUN_L00_0028d8c0(void *, int);
-extern void FUN_L00_0028d918(int);
+extern void FUN_0022d798(int);
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern f32 FUN_001f9dc8(f32);
@@ -420,7 +416,7 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
             if (h != -1) {
                 voice = D_0013E550 + h * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
-                    FUN_L00_0028d918(h);
+                    FUN_0022d798(h);
                 }
             }
             v->sound = -1;
@@ -439,7 +435,6 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
     d.f[2] = FUN_001f9dc8(self->rot_x) * 11.0f;
     FUN_001f9a10(&self->pos, &arm, &d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fd0e8.s", FUN_L01_002fd0e8);
 typedef struct {
     f32 x, y, z, w;
 } SparkVec;
@@ -518,7 +513,6 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb58.s", FUN_L01_002feb58);
 typedef struct {
     Vec4 home;
     f32 t;
@@ -598,7 +592,6 @@ void FUN_L01_002fed68(HoverMoby *m) {
     m->pos.f[0] = v->home.f[0] + off.f[0];
     m->pos.f[1] = v->home.f[1] + off.f[1];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff860.s", FUN_L01_002ff860);
 typedef struct {
     u8 pad0[0x10];
     u128 pos;
@@ -612,7 +605,7 @@ typedef struct {
     s32 *pvars;
 } SpawnedMoby;
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8();
+extern void FUN_0020def8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *m;
@@ -629,7 +622,7 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         qcopy(&m->pos, &src->pos);
         qcopy(&m->rot, &src->rot);
         *pv = -1;
-        FUN_L00_00250df8(m, -1);
+        FUN_0020def8(m, -1);
     }
     return m;
 }
@@ -727,11 +720,10 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         pv->timer = 0x78;
         pv->f10 = D_0015ED70 * 15.0f;
         pv->spin = random_float_between(0.0031415929f, 0.062831856f);
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffdc0.s", FUN_L01_002ffdc0);
 typedef struct {
     u8 pad0[0x10];
     s32 w10;
@@ -872,7 +864,7 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
     v->f250 = 1.0f;
     v->w170 = truncate_float_to_s32(819.2f);
     v->f224 = 30.0f;
-    FUN_L00_00250df8(m);
+    FUN_0020def8(m);
     return m;
 }
 void *FUN_L00_0025a420(void *, s32, s32);

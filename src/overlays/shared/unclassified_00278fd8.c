@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00278fd8.s", FUN_L15_00278fd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002979d8.s", FUN_L15_002979d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -20,12 +17,6 @@ void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
                                      point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880(moby, a, b, c, angle);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ae0.s", FUN_L15_00299ae0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299dd8.s", FUN_L15_00299dd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a030.s", FUN_L15_0029a030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
@@ -41,8 +32,6 @@ void FUN_L15_0029a248(char *a, char *b) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a2a8.s", FUN_L15_0029a2a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a570.s", FUN_L15_0029a570);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -61,23 +50,6 @@ void FUN_L15_0029aba8(char *m) {
         p += 0x10;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ae18.s", FUN_L15_0029ae18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029af88.s", FUN_L15_0029af88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ead0.s", FUN_L15_0029ead0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2488.s", FUN_L15_002a2488);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2868.s", FUN_L15_002a2868);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a29b8.s", FUN_L15_002a29b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2bf0.s", FUN_L15_002a2bf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a35d8.s", FUN_L15_002a35d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7628.s", FUN_L15_002a7628);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbac0.s", FUN_L15_002cbac0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -122,6 +94,3 @@ void FUN_L15_002cbba0(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbc30.s", FUN_L15_002cbc30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbd88.s", FUN_L15_002cbd88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d6770.s", FUN_L15_002d6770);

@@ -77,8 +77,8 @@ extern void FUN_L00_00212088(f32, f32);
 extern void FUN_L00_00211e30(int, float, float, float);
 extern void FUN_L00_00233ba0(void *, void *, f32);
 extern void FUN_L00_00233708(void *, void *, f32);
-extern void FUN_L00_001ff500(void *, void *, f32);
-extern void FUN_L00_001ff550(float *, float *, float);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern void FUN_001f9c48(float *, float *, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L01_00234358(f32);
 
@@ -155,7 +155,7 @@ void FUN_L01_00234b40(void) {
                 D_0013F350.vE0.f[1] = FUN_001f9de0(D_0013F350.f180) * (D_0015ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0(&D_0013F350.vE0, &D_0013F350.vE0, 0.0f);
-                FUN_L00_001ff500(&tmp, &D_0013F350.v170, D_0015ED6C * 4.9f);
+                FUN_001f9bf8(&tmp, &D_0013F350.v170, D_0015ED6C * 4.9f);
                 FUN_001f9a10(&D_0013F350.vE0, &D_0013F350.vE0, &tmp);
             }
         }
@@ -170,7 +170,7 @@ void FUN_L01_00234b40(void) {
                 d = D_0013F350.f944;
                 speed = FUN_001f9b20(&D_0013F350.vE0);
                 approach_value(0.0f, d, &speed);
-                FUN_L00_001ff550(D_0013F350.vE0.f, D_0013F350.vE0.f, speed);
+                FUN_001f9c48(D_0013F350.vE0.f, D_0013F350.vE0.f, speed);
                 return;
             }
             if (D_0013F350.s30A != 0) {

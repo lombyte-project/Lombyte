@@ -24,5 +24,3 @@ int FUN_L04_001f3038(char *a, char *b, int n) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f3a80.s", FUN_L04_001f3a80);

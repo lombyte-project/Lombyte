@@ -18,4 +18,3 @@ void FUN_L03_00250a78(float *p, float a, float b)
     p[6] = (a + a) / x;
     p[5] = (a + a) / (x * x);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00250ae8.s", FUN_L03_00250ae8);

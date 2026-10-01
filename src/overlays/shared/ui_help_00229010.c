@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00229010.s", FUN_L00_00229010);
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
 extern u8 D_0013F4A0_002293a8[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");
@@ -135,7 +134,7 @@ extern float FUN_L00_001ff8b0_00229910(float, float) __asm__("FUN_L00_001ff8b0")
 extern float FUN_001fa688_00229910(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9dc8_00229910(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_00229910(float) __asm__("FUN_001f9de0");
-extern int FUN_L00_001efc70_00229910(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
+extern int FUN_001efa68_00229910(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int FUN_L00_00229910(void) {
     char *g = D_0013F350_00229910;

@@ -55,7 +55,6 @@ int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
     }
     return h;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df30.s", FUN_L00_0028df30);
 typedef struct { s32 w[0x1C]; } E0028df38;
 extern E0028df38 D_0013E550[];
 s32 FUN_L00_0028df38(s32 i, s32 v) { E0028df38 *p = &D_0013E550[i]; p->w[0x21] = v; return 1; }
@@ -76,5 +75,3 @@ void FUN_L00_0028df58(short *a) {
     a[1] = i;
     *(int *)(a + 2) = D_L00_001EA980[i].v;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e108.s", FUN_L00_0028e108);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028e138.s", FUN_L00_0028e138);

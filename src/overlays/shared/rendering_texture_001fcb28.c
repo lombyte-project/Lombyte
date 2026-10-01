@@ -36,4 +36,3 @@ void FUN_L00_001fcb28(int x, int y, int mode, char *str, float s, float a) {
     FUN_001f6530_1fcb28(r, y - 8, d, str, -1);
     FUN_001f61e8_1fcb28();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fcca0.s", FUN_L00_001fcca0);

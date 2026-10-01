@@ -16,5 +16,3 @@ void FUN_L02_00264e40(char *moby) {
     }
     *(short *)(moby + 0x1C) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002651d0.s", FUN_L02_002651d0);

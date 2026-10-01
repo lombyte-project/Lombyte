@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029eb20.s", FUN_L04_0029eb20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -79,7 +77,6 @@ void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c) {
         blend_moby_animation(other, a, b, c);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba448.s", FUN_L04_002ba448);
 /* Spawns an effect on the moby at its marker vector. */
 /* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB700), where it is exact; names translated to the US level program. */
 
@@ -94,9 +91,6 @@ void FUN_L04_002ba470(char *moby) {
     FUN_L00_0024f7c8(moby, 6, w);
     FUN_L00_0025e450(moby, v, w, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, -1, 1.5f, 15.0f, 1, 1, -1, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba520.s", FUN_L04_002ba520);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1d70.s", FUN_L04_002c1d70);
 /* Check that a moby's spot is clear of the other mobys of class 0x154. */
 /* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3218), where it is exact; names translated to the US level program. */
 
@@ -132,9 +126,6 @@ int FUN_L04_002c1e98(char *moby) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c2270.s", FUN_L04_002c2270);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
@@ -150,6 +141,3 @@ void FUN_L04_002c4808(char *arg) {
     FUN_L04_002c46d0(arg);
     DeleteMoby(arg);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c4850.s", FUN_L04_002c4850);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6858.s", FUN_L04_002c6858);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6bb8.s", FUN_L04_002c6bb8);

@@ -4,7 +4,6 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e690.s", FUN_L11_0030e690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310ad0.s", FUN_L11_00310ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #define NOT_SDA
 
@@ -50,4 +49,5 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003112b8.s", FUN_L11_003112b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319670.s", FUN_L11_00319670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a1c0.s", FUN_L11_0031a1c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a438.s", FUN_L11_0031a438);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003162d0.s", FUN_L11_003162d0);

@@ -142,7 +142,7 @@ extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
     unsigned char *m = (unsigned char *)func_0020D348_m(0x662);
@@ -169,7 +169,7 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
         *(float *)(data + 0x1C) = *(float *)(m + 0x2C);
         *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * random_float_between_alt(2.0f, 5.0f);
         m[0xBC] = d;
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
     return (char *)m;
 }

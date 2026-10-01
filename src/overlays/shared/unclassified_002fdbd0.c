@@ -2,12 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fdbd0.s", FUN_L06_002fdbd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff978.s", FUN_L06_002ff978);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -35,7 +29,6 @@ void FUN_L06_00300b90(char *moby) {
         mark_moby_for_removal(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300c60.s", FUN_L06_00300c60);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
 extern int D_L06_0015F5CC;

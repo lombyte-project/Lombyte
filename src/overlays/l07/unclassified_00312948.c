@@ -2,12 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312dc8.s", FUN_L07_00312dc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313350.s", FUN_L07_00313350);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313420.s", FUN_L07_00313420);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 #define NOT_SDA
@@ -43,8 +37,6 @@ void FUN_L07_00313988(char *m, char *a, void *b, void *c) {
         qcopy(c, D_L07_001B0530[*(int *)(a + 0x188)] + i * 16 + 0x10);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313af0.s", FUN_L07_00313af0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313d30.s", FUN_L07_00313d30);
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
 
@@ -128,13 +120,6 @@ void FUN_L07_00313f60(char *moby, char *d, float *t) {
     *(float *)(d + 0x264) = *(float *)(d + 0x1FC);
     FUN_L00_002628d8(moby, d + 0x200, 0xB, k * 0.030f, k * 0.3f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314058.s", FUN_L07_00314058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317910.s", FUN_L07_00317910);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317cb0.s", FUN_L07_00317cb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317e60.s", FUN_L07_00317e60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00318e98.s", FUN_L07_00318e98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
@@ -151,6 +136,3 @@ void FUN_L07_00319698(char *arg, char *other) {
     }
     DeleteMoby(arg);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003196e0.s", FUN_L07_003196e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319f48.s", FUN_L07_00319f48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a250.s", FUN_L07_0031a250);

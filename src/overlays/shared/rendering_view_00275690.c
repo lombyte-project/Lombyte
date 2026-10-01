@@ -8,12 +8,12 @@
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00276680), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002002e0(char *, float);
+extern int FUN_001fa728(char *, float);
 extern void FUN_001f9a80(void *, void *, float);
 
 void FUN_L01_00275690(char *vec, float scale)
 {
     char scratch[16];
     FUN_001f9a80(scratch, vec, 0.0009765625f);
-    FUN_L00_002002e0(scratch, scale);
+    FUN_001fa728(scratch, scale);
 }

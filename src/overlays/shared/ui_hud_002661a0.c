@@ -53,5 +53,3 @@ void FUN_L05_002661e8(char *moby)
         *(int *)(moby + 0x6C) = -6;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266320.s", FUN_L05_00266320);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266710.s", FUN_L05_00266710);

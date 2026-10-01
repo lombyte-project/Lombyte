@@ -93,6 +93,3 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
     p[13] = 0;
     *(char * volatile *)&D_L00_001611C0_23bac0 += 0x70;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023cdb0.s", FUN_L00_0023cdb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023cdb8.s", FUN_L00_0023cdb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023cea0.s", FUN_L00_0023cea0);

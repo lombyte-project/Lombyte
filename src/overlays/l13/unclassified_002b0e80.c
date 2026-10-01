@@ -190,7 +190,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
 extern unsigned char D_0013A4E0[];
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
@@ -204,14 +204,14 @@ void FUN_L13_002b9df8(char *moby, char *obj, float p2, float p3) {
     FUN_001f9a10(a, a, obj);
     if (func_001F9908_i(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         FUN_0022da68(3, 0, (int)moby);
-        FUN_L00_001ff500(c, a, 2.2f);
+        FUN_001f9bf8(c, a, 2.2f);
         FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
         FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = FUN_001f96f8(4);
         obj[0x61] ^= 1;
     }
-    FUN_L00_001ff500(a, a, 23.0f);
+    FUN_001f9bf8(a, a, 23.0f);
     FUN_001f9a10(d, a, moby + 0x10);
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
@@ -232,7 +232,7 @@ void FUN_L13_002b9f58(char *moby, char *obj) {
             short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
             *(short *)(obj + 0x6A) = t;
             FUN_L00_0024f7c8(moby, t + 7, a);
-            FUN_L00_001ff500(b, obj, 0.3f);
+            FUN_001f9bf8(b, obj, 0.3f);
             FUN_001f9a10(a, a, b);
             s = D_0015ED6C * 100.0f;
             h = FUN_001f96f8(300);
@@ -246,3 +246,5 @@ void FUN_L13_002b9f58(char *moby, char *obj) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ba178.s", FUN_L13_002ba178);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002bb068.s", FUN_L13_002bb068);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c13b0.s", FUN_L13_002c13b0);

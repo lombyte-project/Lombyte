@@ -2,12 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6a30.s", FUN_L01_002f6a30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8530.s", FUN_L01_002f8530);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8718.s", FUN_L01_002f8718);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb4b8.s", FUN_L01_002fb4b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb5b0.s", FUN_L01_002fb5b0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -21,12 +15,6 @@ extern void FUN_L01_002b91c8(char *, int);
 void FUN_L01_002fd0c0(void) {
     FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff028.s", FUN_L01_002ff028);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff118.s", FUN_L01_002ff118);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00307ca0.s", FUN_L01_00307ca0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
@@ -62,11 +50,6 @@ void FUN_L01_00308380(char *moby) {
         FUN_L01_003089f0(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308550.s", FUN_L01_00308550);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003087e0.s", FUN_L01_003087e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003089f0.s", FUN_L01_003089f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308b28.s", FUN_L01_00308b28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308bd8.s", FUN_L01_00308bd8);
 #include "qcopy.h"
 
 /* Places the three child mobys at this moby's position and orients each from its data. */
@@ -76,8 +59,8 @@ extern short D_L01_00161F78_d __asm__("D_L01_00161F78") __attribute__((sda));
 extern short D_L01_00161F80_d __asm__("D_L01_00161F80") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001fa030(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_0020def8(void *);
 
 void FUN_L01_003092d0(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -94,16 +77,14 @@ void FUN_L01_003092d0(char *m) {
         *(float *)(*p + 0x44) = u;
         t = *(float *)(d + 0x20) * 2.4f - 1.2f;
         FUN_001fa030(*p + 0xC0, *p + 0x40);
-        FUN_L00_001ff500(v, *p + 0xC0, t);
+        FUN_001f9bf8(v, *p + 0xC0, t);
         FUN_001f9a10(*p + 0x10, *p + 0x10, v);
         *(float *)(*p + 0x44) = *(float *)(d + 0x24) * -1.0471976f - 0.34906584f;
         FUN_001fa030(*p + 0xC0, *p + 0x40);
-        FUN_L00_00250df8(*p);
+        FUN_0020def8(*p);
         p++;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309430.s", FUN_L01_00309430);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
 /* Mark the parent and its three attached objects active. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
 
@@ -138,4 +119,3 @@ void FUN_L01_003097e8(L01Moby *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00309838.s", FUN_L01_00309838);

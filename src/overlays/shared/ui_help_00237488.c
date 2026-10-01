@@ -26,20 +26,6 @@ void FUN_L05_00237488(float *out, float *p, float step) {
     if (p[1] < -1.0f) p[1] = -1.0f;
     out[1] = p[1];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b378.s", FUN_L05_0023b378);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b3c4.s", FUN_L05_0023b3c4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b400.s", FUN_L05_0023b400);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023dc88.s", FUN_L05_0023dc88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0024bdc0.s", FUN_L05_0024bdc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002515d0.s", FUN_L05_002515d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00251be8.s", FUN_L05_00251be8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253850.s", FUN_L05_00253850);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551b8.s", FUN_L05_002551b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551d0.s", FUN_L05_002551d0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -53,7 +39,6 @@ int FUN_L05_002551f4(int arg) {
         r = 0x68;
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00255208.s", FUN_L05_00255208);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
 extern char D_L05_0017C068[];

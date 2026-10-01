@@ -21,7 +21,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L09_00308220(char *owner, int cls) {
@@ -36,7 +36,7 @@ char *FUN_L09_00308220(char *owner, int cls) {
         qcopy(moby + 0x10, owner + 0x10);
         qcopy(moby + 0x40, owner + 0x40);
         moby[0xBC] = FUN_001f96f8(10);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
         FUN_L00_0025d1b8(moby);
         *(float *)(moby + 0x2C) = *(float *)(owner + 0x2C);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(owner + 0x34);

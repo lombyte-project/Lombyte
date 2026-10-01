@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);
 typedef struct { s32 a, b, c; } P002833d0;
 typedef struct { u8 p0[0x10]; f32 x, y, z; u8 p1c[0x18]; s16 x34; u8 p36[0x12]; f32 x48; u8 p4c[0x28]; void *x74; P002833d0 *x78; } E002833d0;
 typedef struct { u8 p0[0x34]; s32 x34; u8 p38[4]; s32 x3c; u8 p40[4]; E002833d0 *x44; } O002833d0;

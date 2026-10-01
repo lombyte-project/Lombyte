@@ -16,7 +16,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001f9df8(float);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
@@ -25,7 +25,7 @@ void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag)
     float q[4];
     float d, l, ang;
     fast_vec_cross(q, b, a);
-    FUN_L00_001ff500(q, q, 1.0f);
+    FUN_001f9bf8(q, q, 1.0f);
     d = FUN_001f9ab0(a, b);
     if (flag == 0) {
         l = FUN_001f9af0(a);
@@ -41,4 +41,3 @@ void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag)
     q[3] = FUN_001f9dc8(ang);
     rotate_vector_by_quaternion(dst, a, q);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0024eab0.s", FUN_L03_0024eab0);

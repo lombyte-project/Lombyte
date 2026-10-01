@@ -11,9 +11,6 @@ void FUN_L00_001f3770(s32, s32, s32, s32);
 void FUN_L00_001f36f8(void) { s32 i; E001f36f8 *p;
  for (i = 0; i < D_L00_0015EFC4; i++) FUN_L00_001f3770(D_L00_0016A840[i].a, D_L00_0016A840[i].b, D_L00_0016A840[i].c, D_L00_0016A840[i].d);
  D_L00_0015EFC4 = 0; D_L00_0015EFC0 = D_L00_0016A040; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3770.s", FUN_L00_001f3770);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3a70.s", FUN_L00_001f3a70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3aa0.s", FUN_L00_001f3aa0);
 #include "qcopy.h"
 typedef struct { u8 p[0x140]; f32 x, y, z; u8 p14c[0xC]; f32 x158; } A001f4490;
 typedef struct { u8 p[0x84]; f32 x84, x88, x8c, x90; } B001f4490;
@@ -25,8 +22,8 @@ f32 FUN_001fa580(f32, f32);
 f32 FUN_001f9dc8(f32);
 f32 FUN_001f9de0(f32);
 void FUN_001fa050(void *, void *);
-void FUN_L00_001ff090(void *, void *, s32);
-void FUN_L00_00250df8(void *);
+void FUN_001f9838(void *, void *, s32);
+void FUN_0020def8(void *);
 void FUN_L00_001f4490(void) {
     A001f4490 *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
@@ -43,8 +40,6 @@ void FUN_L00_001f4490(void) {
     d = c->x2080;
     qcopy(d + 0x10, &c->x80);
     qcopy(d + 0x40, c->x90);
-    FUN_L00_001ff090(d + 0xC0, c, 0x30);
-    FUN_L00_00250df8(c->x2080);
+    FUN_001f9838(d + 0xC0, c, 0x30);
+    FUN_0020def8(c->x2080);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f4598.s", FUN_L00_001f4598);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f58e0.s", FUN_L00_001f58e0);

@@ -202,7 +202,6 @@ void FUN_L00_0028ed58(s32 a) {
         p->h24 = -1;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028eed0.s", FUN_L00_0028eed0);
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_28efc8;
 typedef struct {
     V_28efc8 corner[4];
@@ -224,7 +223,7 @@ void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");
 long FUN_001f44b8_28efc8(int) __asm__("FUN_001f44b8");
 int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("FUN_001fa6c0");
-void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("FUN_L00_001fd228");
+void FUN_001f7d30_28efc8(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L00_0028efc8(unsigned char *m) {
     Q_28efc8 quad;
     V_28efc8 v;

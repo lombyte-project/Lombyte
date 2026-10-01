@@ -3,7 +3,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277ff0.s", FUN_L01_00277ff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002783a8.s", FUN_L01_002783a8);
 #define NOT_SDA
 
@@ -23,14 +22,13 @@ void FUN_L01_002787a0(char *moby)
     }
     FUN_L00_00260a88(moby, 4, 7, r, -1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278ad0.s", FUN_L01_00278ad0);
 #include "qcopy.h"
 
 /* spawns a moby of a class copying the source moby's placement, scaled */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 void FUN_L01_00278e20(char *src, int oClass) {
     char *m = func_0020D348_m(oClass);
@@ -43,6 +41,11 @@ void FUN_L01_00278e20(char *src, int oClass) {
         *(long *)(m + 0x38) = *(long *)(src + 0x38);
         m[0x30] = 0;
         *(short *)(m + 0x34) = 0;
-        FUN_L00_00250df8(m);
+        FUN_0020def8(m);
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002781d0.s", FUN_L01_002781d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278720.s", FUN_L01_00278720);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278a50.s", FUN_L01_00278a50);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278ad8.s", FUN_L01_00278ad8);

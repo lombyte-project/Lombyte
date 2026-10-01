@@ -18,7 +18,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_L00_001ff8b0(float, float);
 extern int FUN_001f96f8(int);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
     char *r = func_0020D348_m(0x558);
@@ -38,7 +38,7 @@ char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
         *(int *)(d + 0x38) = FUN_001f96f8(0x258);
         *(char **)(d + 0x3C) = src;
         FUN_001f9a28(tmp, d + 0x10, p);
-        FUN_L00_001ff500(d, tmp, *(float *)(d + 0x40));
+        FUN_001f9bf8(d, tmp, *(float *)(d + 0x40));
         *(float *)(r + 0x48) = FUN_L00_001ff8b0(v[0] - *(float *)(r + 0x10), v[1] - *(float *)(r + 0x14));
         *(float *)(r + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b80(p, v), v[2] - *(float *)(r + 0x18));
     }
@@ -143,7 +143,7 @@ extern short D_L17_00162070_d __asm__("D_L17_00162070") __attribute__((sda));
 extern short D_L17_001620A0_d __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -157,14 +157,14 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     FUN_001f9a10(a, a, obj);
     if (FUN_001f9740(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
         FUN_0022da68(3, 0, (int)moby);
-        FUN_L00_001ff500(c, a, 2.2f);
+        FUN_001f9bf8(c, a, 2.2f);
         FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
         FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
         *(int *)(obj + 0x80) = *(int *)&D_L17_00162070_d;
         obj[0x61] ^= 1;
     }
-    FUN_L00_001ff500(a, a, 23.0f);
+    FUN_001f9bf8(a, a, 23.0f);
     FUN_001f9a10(d, a, moby + 0x10);
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
@@ -188,7 +188,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
             unsigned short t = (*(unsigned short *)(obj + 0x6A) + 1) & 3;
             *(unsigned short *)(obj + 0x6A) = t;
             FUN_L00_0024f7c8(moby, t + 7, a);
-            FUN_L00_001ff500(b, obj, 0.3f);
+            FUN_001f9bf8(b, obj, 0.3f);
             FUN_001f9a10(a, a, b);
             s = *(float *)&D_L17_00162074_d * *(float *)&D_L17_001620A0_d;
             n = FUN_001f96f8(300);
@@ -228,11 +228,11 @@ typedef struct {
 extern CameraGlobals D_0013F350;
 extern char D_L17_001676C0[];
 extern float FUN_L00_001ff8b0(float, float);
-extern void FUN_L00_001ff550(void *, void *, float);
+extern void FUN_001f9c48(void *, void *, float);
 
 void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
     FastVecSub(temp, D_L17_001676C0, moby + 0x10);
-    FUN_L00_001ff550(temp, temp, 2.5f);
+    FUN_001f9c48(temp, temp, 2.5f);
     *(float *)(temp + 8) = 1.5f;
     FastVecAdd(temp, temp, moby + 0x10);
     clear_u64_value(state);
@@ -344,4 +344,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f10c8.s", FUN_L17_002f10c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1940.s", FUN_L17_002f1940);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f20d8.s", FUN_L17_002f20d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2180.s", FUN_L17_002f2180);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26c8.s", FUN_L17_002f26c8);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1418.s", FUN_L17_002f1418);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);

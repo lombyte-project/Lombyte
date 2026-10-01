@@ -65,7 +65,6 @@ void FUN_L00_00231d08(void) {
     seq = buf[1];
     blend_moby_animation(b, seq, 0, FUN_001f96f8(7));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231db0.s", FUN_L00_00231db0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0020d498(int);
@@ -180,9 +179,6 @@ void FUN_L00_00232128(void) {
         *(float *)(*(char **)(base + 0x1184) + 0x58) = *(float *)(base + 0xA90);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321c0.s", FUN_L00_002321c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321d8.s", FUN_L00_002321d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321e4.s", FUN_L00_002321e4);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232A78), where it is exact; names translated to the US level program. */
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -276,8 +272,6 @@ void FUN_L00_00232320(void) {
     obj->id[0] = obj->model->banks[obj->bank[0]]->ids[obj->seq[0]];
     obj->id[1] = obj->model->banks[obj->bank[1]]->ids[obj->seq[1]];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002323b8.s", FUN_L00_002323b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002325a0.s", FUN_L00_002325a0);
 /* Queues sequence SEQ of bank BANK (D_0013F450 + 0xAB0 / 0xAB4) when BANK
    is valid and SEQ is below the count of the current animation's bank.
    The base pointer is a local inside the test, as retail forms it only
@@ -313,8 +307,6 @@ void FUN_L00_00232640(int id) {
     }
     *(int *)(D_0013F350 + 0xAB8) = id;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232670.s", FUN_L00_00232670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00232b90.s", FUN_L00_00232b90);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -550,7 +542,7 @@ int FUN_L00_00233440(void) {
 typedef struct { f32 v[4]; } V002334d0 __attribute__((aligned(16)));
 extern u8 D_0013F350_002334d0[] __asm__("D_0013F350");
 extern u8 D_0013F5E0_002334d0[] __asm__("D_0013F5E0");
-void FUN_L00_001ff500_002334d0(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     u8 *b = D_0013F350_002334d0;
@@ -680,7 +672,7 @@ extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L00_002338d0(float *dst, float *src) {
     char *base = D_0013F350;
@@ -692,7 +684,7 @@ void FUN_L00_002338d0(float *dst, float *src) {
         dst[2] = 0.0f;
         break;
     case 1:
-        FUN_L00_001ff500(n, base + 0x270, 1.0f);
+        FUN_001f9bf8(n, base + 0x270, 1.0f);
         FastVecScale(n, n, FastVecDot(n, src));
         FastVecSub(dst, src, n);
         break;
@@ -791,24 +783,23 @@ void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
 
 extern char D_0013F350[];
 extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_L00_001ff550(float *, float *, float);
+extern void FUN_001f9c48(float *, float *, float);
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
     char *base = D_0013F350;
 
     switch (*(unsigned char *)(base + 0x20B3)) {
     case 0:
-        FUN_L00_001ff550(dst, src, z);
+        FUN_001f9c48(dst, src, z);
         break;
     case 1:
     case 2:
         FUN_001f9d20(dst, src, base + 0x40);
-        FUN_L00_001ff550(dst, dst, z);
+        FUN_001f9c48(dst, dst, z);
         FUN_001f9d20(dst, dst, base);
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233c30.s", FUN_L00_00233c30);
 #include "eetypes.h"
 typedef union { u128 q; f32 f[4]; } V00233d30;
 extern u8 D_0013F350_00233d30[] __asm__("D_0013F350");
@@ -835,10 +826,6 @@ f32 FUN_L00_00233d30(f32 *v) {
     }
     return 0.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233db8.s", FUN_L00_00233db8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233df4.s", FUN_L00_00233df4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e40.s", FUN_L00_00233e40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e98.s", FUN_L00_00233e98);
 static __inline__ void qcopy_00233ee8(void *dst, void *src)
 {
     __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
@@ -854,8 +841,6 @@ void FUN_L00_00233ee8(void *v, float f, int n) {
         FUN_L00_002223f8_00233ee8(0x65, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f38.s", FUN_L00_00233f38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233f80.s", FUN_L00_00233f80);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -872,7 +857,6 @@ void FUN_L00_002347c0(void) {
         *(short *)(base + 0x1F6) = 4;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234808.s", FUN_L00_00234808);
 /* in state 2 or 6: flag the matching mobys, update, then clear bit 0 of three mobys */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002352D0), where it is exact; names translated to the US level program. */
 
@@ -913,7 +897,6 @@ void FUN_L00_00234a50(int a0) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234b38.s", FUN_L00_00234b38);
 extern char D_L00_0017A608[];
 extern char D_L00_0017C680[];
 extern char D_L00_0015F6A8[];

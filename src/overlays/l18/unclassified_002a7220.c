@@ -2,17 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002a7220.s", FUN_L18_002a7220);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002a75f0.s", FUN_L18_002a75f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5050.s", FUN_L18_002d5050);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5610.s", FUN_L18_002d5610);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5cf8.s", FUN_L18_002d5cf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -83,10 +72,6 @@ void FUN_L18_002d6280(unsigned char *arg) {
     flags &= 0xEFFF;
     *(unsigned short *)(arg + 0x34) = flags;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6c80.s", FUN_L18_002d6c80);
 extern int D_L18_001AC240[];
 extern short D_L00_0015FFD8 __attribute__((section(".sdata")));
 /* 0x002d6d50, 108 bytes.
@@ -129,7 +114,6 @@ void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
     data->mode = 5;
     data->scale = 1.5f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0028d8c0(void *, int);
@@ -145,10 +129,6 @@ void FUN_L18_002d7f68(unsigned char *arg, int value) {
         *(int *)(data + 0x70) = allocate_voice_for_group_entry(0x12, 0, arg);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7fd0.s", FUN_L18_002d7fd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8070.s", FUN_L18_002d8070);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
 /* turns the moby's heading toward a target, clamped per state, and updates its hover offset */
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9B00), where it is exact; names translated to the US level program. */
 
@@ -204,14 +184,6 @@ int FUN_L18_002d8858(Level18State *obj) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8888.s", FUN_L18_002d8888);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88a0.s", FUN_L18_002d88a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88b8.s", FUN_L18_002d88b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db460.s", FUN_L18_002db460);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db938.s", FUN_L18_002db938);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dbe80.s", FUN_L18_002dbe80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc0c8.s", FUN_L18_002dc0c8);
 /* UpdateMoby_628 */
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD650), where it is exact; names translated to the US level program. */
 
@@ -221,7 +193,7 @@ extern int D_L18_0015F5CC;
 extern int FUN_001f9740(int *);
 extern short D_L18_00161CA0_d __asm__("D_L18_00161CA0") __attribute__((sda));
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
 extern void FUN_L00_00259a88(int, void *);
@@ -246,7 +218,7 @@ void FUN_L18_002dc260(char *moby) {
     if (FUN_001f9b80(pos, tgt) < d[0] + 0.5f) {
         FUN_001f9a28(v, tgt, pos);
         v[2] = 0.0f;
-        FUN_L00_001ff500(v, v, D_0015ED6C * 4.0f);
+        FUN_001f9bf8(v, v, D_0015ED6C * 4.0f);
         v[2] = D_0015ED6C * 4.0f;
         FUN_L00_00259888(buf, (int)moby, 0x10001, v, 1.0f);
         FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
@@ -275,10 +247,6 @@ char *FUN_L18_002dc3e0(void *owner, void *vector, float value) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc458.s", FUN_L18_002dc458);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002df608.s", FUN_L18_002df608);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfaa0.s", FUN_L18_002dfaa0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -299,7 +267,6 @@ typedef struct {
 float FUN_L18_002dfb90(Level18VendorFloatMoby *moby) {
     return moby->data->value;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E36B0), where it is exact; names translated to the US level program. */
@@ -321,8 +288,6 @@ char *FUN_L18_002e22c0(void *vector) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB4E0), where it is exact; names translated to the US level program. */
 
 char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
@@ -354,9 +319,3 @@ void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
         qcopy(data, position);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea598.s", FUN_L18_002ea598);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eacd8.s", FUN_L18_002eacd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eaea0.s", FUN_L18_002eaea0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ec130.s", FUN_L18_002ec130);

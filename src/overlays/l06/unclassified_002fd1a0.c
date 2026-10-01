@@ -2,10 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd1a0.s", FUN_L06_002fd1a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fda30.s", FUN_L06_002fda30);
 extern int D_L06_001ABFC0[];
 extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
 /* 0x002ffc38, 116 bytes.
@@ -29,10 +25,6 @@ void FUN_L06_002ffc38(int idx)
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ffcb0.s", FUN_L06_002ffcb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300278.s", FUN_L06_00300278);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003003f0.s", FUN_L06_003003f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -96,14 +88,6 @@ void FUN_L06_00300f70(char *arg, void *a, void *b) {
     qcopy(dst, a);
     qcopy(dst + 0x10, b);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302400.s", FUN_L06_00302400);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302578.s", FUN_L06_00302578);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302fd8.s", FUN_L06_00302fd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
 /* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
@@ -118,7 +102,6 @@ void FUN_L06_00304028(char *moby)
         mark_moby_for_removal_c(D_L06_0015FFD8 + ((*p & 0x7FFF) << 8));
     } while (*p++ >= 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -133,8 +116,3 @@ void FUN_L06_003047b8(char *arg) {
         FUN_0022da68(0, 0, arg);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003047f8.s", FUN_L06_003047f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305000.s", FUN_L06_00305000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305170.s", FUN_L06_00305170);

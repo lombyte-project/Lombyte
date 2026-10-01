@@ -2,16 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e538.s", FUN_L09_0021e538);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e8c0.s", FUN_L09_0021e8c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c2500.s", FUN_L09_002c2500);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c2610.s", FUN_L09_002c2610);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c26c8.s", FUN_L09_002c26c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ea528.s", FUN_L09_002ea528);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ea778.s", FUN_L09_002ea778);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaa50.s", FUN_L09_002eaa50);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -29,7 +19,7 @@ extern float FUN_001fa580(float, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L09_002ead30(unsigned char *m) {
@@ -46,7 +36,7 @@ void FUN_L09_002ead30(unsigned char *m) {
         FUN_001f9a28(m + 0x10, d + 0x20, D_L09_00166F40);
         len = FUN_001f9af0(m + 0x10);
         if (len > 100.0f) {
-            FUN_L00_001ff500(m + 0x10, m + 0x10, 100.0f);
+            FUN_001f9bf8(m + 0x10, m + 0x10, 100.0f);
             FUN_001f9a10(m + 0x10, m + 0x10, D_L09_00166F40);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
         } else {
@@ -58,15 +48,13 @@ void FUN_L09_002ead30(unsigned char *m) {
         *(float *)(m + 0x44) = FUN_001fa580(t, *(float *)(d + 0x44));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaea8.s", FUN_L09_002eaea8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eb970.s", FUN_L09_002eb970);
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
 extern s32 rand();
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L09_002edb60(char *src, int cls) {
@@ -79,7 +67,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         qcopy(moby + 0x10, src + 0x10);
         qcopy(moby + 0x40, src + 0x40);
         moby[0xBC] = FUN_001f96f8(10);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
         FUN_L00_0025d1b8(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
         if (cls == 0x514) {
@@ -90,8 +78,6 @@ char *FUN_L09_002edb60(char *src, int cls) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ee110.s", FUN_L09_002ee110);
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
@@ -102,7 +88,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 
 char *FUN_L09_002ee380(char *owner, void *position, float angle) {
     u128_ee380 pos;
@@ -120,11 +106,10 @@ char *FUN_L09_002ee380(char *owner, void *position, float angle) {
         qcopy(moby + 0x40, owner + 0x40);
         *(float *)(moby + 0x48) = angle;
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef430.s", FUN_L09_002ef430);
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
 
 extern char D_L09_001F3080[];
@@ -144,10 +129,6 @@ void FUN_L09_002ef750(void) {
     FUN_L03_00291918(D_L09_001FC740);
     FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef868.s", FUN_L09_002ef868);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef9b0.s", FUN_L09_002ef9b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efda8.s", FUN_L09_002efda8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efe48.s", FUN_L09_002efe48);
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
@@ -161,5 +142,3 @@ void FUN_L09_002f0040(char *moby)
         mark_moby_for_removal_c(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002f86a0.s", FUN_L09_002f86a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00300888.s", FUN_L09_00300888);

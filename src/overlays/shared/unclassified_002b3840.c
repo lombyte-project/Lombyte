@@ -2,14 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002b3840.s", FUN_L05_002b3840);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002ce088.s", FUN_L05_002ce088);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4150.s", FUN_L05_002d4150);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4168.s", FUN_L05_002d4168);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4278.s", FUN_L05_002d4278);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5054.s", FUN_L05_002f5054);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5074.s", FUN_L05_002f5074);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -28,7 +20,6 @@ void FUN_L05_002f5190(int a, int b, int i, int c) {
         } while (*(short *)p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5200.s", FUN_L05_002f5200);
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
@@ -88,9 +79,6 @@ void FUN_L05_002f8080(char *m) {
     }
     FUN_L05_002f81b8(m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f81b8.s", FUN_L05_002f81b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307010.s", FUN_L05_00307010);
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
@@ -139,9 +127,6 @@ void FUN_L05_0030c0a8(unsigned char *m) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c220.s", FUN_L05_0030c220);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c5b0.s", FUN_L05_0030c5b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317398.s", FUN_L05_00317398);
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_00319B58), where it is exact; names translated to the US level program. */
@@ -165,10 +150,6 @@ void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
     d->s[1] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
     d->s[2] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319510.s", FUN_L05_00319510);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003195f0.s", FUN_L05_003195f0);
 #define NOT_SDA
 
 #define MACRO_ADDR

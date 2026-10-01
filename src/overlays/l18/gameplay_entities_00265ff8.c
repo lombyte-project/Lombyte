@@ -19,7 +19,7 @@ typedef struct {
     unsigned char alpha;
 } Level18Effect;
 
-extern Level18Effect *FUN_L00_0025c338(Level18Moby *);
+extern Level18Effect *FUN_L00_002603d0(Level18Moby *);
 extern char D_0013E533[];
 extern float FUN_001f9b48(void *, void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -31,7 +31,7 @@ void FUN_L18_00265ff8(Level18Moby *moby, float scale) {
     if (moby == 0) {
         return;
     }
-    effect = FUN_L00_0025c338(moby);
+    effect = FUN_L00_002603d0(moby);
     if (effect == 0) {
         return;
     }

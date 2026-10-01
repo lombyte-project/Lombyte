@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f698.s", FUN_L00_0024f698);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f6c8.s", FUN_L00_0024f6c8);
 #define NOT_SDA
 
 #define MACRO_ADDR

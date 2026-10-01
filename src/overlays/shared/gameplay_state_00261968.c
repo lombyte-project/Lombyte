@@ -4,7 +4,6 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261968.s", FUN_L00_00261968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d70.s", FUN_L00_00261d70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d78.s", FUN_L00_00261d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262360.s", FUN_L00_00262360);
@@ -81,7 +80,7 @@ typedef struct {
 } S_262608;
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
-void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
+void FUN_0020def8_262608(void *) __asm__("FUN_0020def8");
 
 void FUN_L00_00262608(S_262608 *s, int dec)
 {
@@ -158,7 +157,6 @@ void FUN_L00_00262840(char *o) {
         *(int *)(o + 0x13C) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002628c0.s", FUN_L00_002628c0);
 void FUN_0020cb88_2628d8(void *, void *) __asm__("FUN_0020cb88");
 void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
 float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");

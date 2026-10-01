@@ -33,4 +33,3 @@ void FUN_L03_00260130(int a, int *b, int *c, float *d, int e) {
         *(short *)(p + 0xA) = e;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00264620.s", FUN_L03_00264620);

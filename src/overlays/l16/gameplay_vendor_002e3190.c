@@ -10,17 +10,17 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3190.s", FUN_L16_002e3190);
 /* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001ff500(void *, void *, float);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_0020def8(void *);
 
 void FUN_L16_002e36e8(unsigned char *moby) {
     float *d = *(float **)(moby + 0x78);
     if (moby[0x20] == 0) {
-        FUN_L00_001ff500(moby + 0xD0, moby + 0xD0, d[0] * 0.25f);
-        FUN_L00_001ff500(moby + 0xE0, moby + 0xE0, d[1] * 0.25f);
+        FUN_001f9bf8(moby + 0xD0, moby + 0xD0, d[0] * 0.25f);
+        FUN_001f9bf8(moby + 0xE0, moby + 0xE0, d[1] * 0.25f);
         moby[0x20] = 1;
         *(unsigned short *)(moby + 0x34) |= 0x101;
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
@@ -162,7 +162,7 @@ extern float FUN_001f9ab0(void *, void *);
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
     int i;
@@ -180,16 +180,16 @@ void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
         v[1] = p2[i].y;
         v[2] = p2[i].z;
         FUN_001f9a28(a, v, D_L16_001671C0);
-        FUN_L00_001ff500(a, a, 1.0f);
+        FUN_001f9bf8(a, a, 1.0f);
         w[3] = 1.0f;
         w[0] = p1[i].x;
         w[1] = p1[i].y;
         w[2] = p1[i].z;
-        FUN_L00_001ff500(w, w, 1.0f);
+        FUN_001f9bf8(w, w, 1.0f);
         d = FUN_001f9ab0(w, a);
         FUN_001f9a68(t, w, d + d);
         FUN_001f9a28(t, a, t);
-        FUN_L00_001ff500(t, t, 1.0f);
+        FUN_001f9bf8(t, t, 1.0f);
         t[2] = t[2] + 1.0f;
         len = FUN_001f9af0(t);
         len = len + len;
@@ -202,7 +202,7 @@ void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
 
 extern char D_L16_001DC600[][16] __attribute__((section(".data")));
 extern char D_L16_001DC630[] __attribute__((section(".data")));
-extern int FUN_L00_002002e0(char *, float);
+extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
 extern short D_L16_00161EF0 __attribute__((sda));
 extern short D_L16_00161F00 __attribute__((sda));
@@ -228,7 +228,7 @@ void FUN_L16_002e8d40(void) {
     vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
     FUN_001f76a0();
     for (i = 0; i < 3; i++) {
-        if (FUN_L00_002002e0(D_L16_001DC600[i], 512.0f) != -1) {
+        if (FUN_001fa728(D_L16_001DC600[i], 512.0f) != -1) {
             FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DC630);
             FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DC630, 1);
         }

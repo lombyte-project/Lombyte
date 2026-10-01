@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b7d50.s", FUN_L13_002b7d50);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -45,7 +44,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 unsigned char *FUN_L13_002e1c50(char *position, int moby_class)
@@ -58,11 +57,8 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class)
         moby[0x20] = 0;
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
-        FUN_L00_00250df8(moby);
+        FUN_0020def8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1cc8.s", FUN_L13_002e1cc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6a58.s", FUN_L13_002e6a58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6c08.s", FUN_L13_002e6c08);

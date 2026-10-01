@@ -31,25 +31,21 @@ typedef struct { int a[4]; } Vq __attribute__((aligned(16)));
 extern float FUN_001f9ab0(void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
     Vq t0, t1;
-    FUN_L00_001ff500(&t1, c, 1.0f);
+    FUN_001f9bf8(&t1, c, 1.0f);
     FUN_001f9a68(&t0, &t1, FUN_001f9ab0(&t1, b) * s);
     FUN_001f9a28(a, b, &t0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c338.s", FUN_L00_0025c338);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c348.s", FUN_L00_0025c348);
-s32 FUN_L00_0025c35c(u8 *o) { return **(s32 **)(o + 0x78); }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c378.s", FUN_L00_0025c378);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c398.s", FUN_L00_0025c398);
+s32 FUN_002141f8(u8 *o) { return **(s32 **)(o + 0x78); }
 typedef struct { f32 f0; f32 f4; f32 f8; f32 fC; u8 p10[8]; f32 f18; f32 f1C; u8 p20[4]; u32 w24; u8 p28[4]; s16 h2C; u8 p2E[0xE]; u8 b3C; u8 p3D; s16 h3E; f32 f40; int w44; } B_25c558;
 float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");
 float FUN_001fa580_0025c558(float, float) __asm__("FUN_001fa580");
 int FUN_001f96f8_0025c558(int) __asm__("FUN_001f96f8");
-float *FUN_L00_0025c338_0025c558(void *) __asm__("FUN_L00_0025c338");
+float *FUN_L00_002603d0_0025c558(void *) __asm__("FUN_L00_002603d0");
 void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
 void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
@@ -71,4 +67,3 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
     if (b->w24 & 2) FUN_002130d8_0025c558(a, c, e, d, 1);
     else FUN_00212f90_0025c558(a, c, e, d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c698.s", FUN_L00_0025c698);

@@ -74,7 +74,6 @@ void FUN_L02_002ec3f0(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
 /* Spawns three particles around a moby with randomized direction, speed and colour. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
 
@@ -128,10 +127,6 @@ void FUN_L02_002eca30(char *m, void *arg1) {
         if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ece18.s", FUN_L02_002ece18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed420.s", FUN_L02_002ed420);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed658.s", FUN_L02_002ed658);
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
@@ -194,8 +189,6 @@ void FUN_L02_002f6598(float x, float y, float z) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa6d8.s", FUN_L02_002fa6d8);
 /* Start the timed effect while its duration is nonzero. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 
@@ -236,8 +229,3 @@ void FUN_L02_002fa770(void) {
     }
     s->a = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa7c8.s", FUN_L02_002fa7c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb788.s", FUN_L02_002fb788);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fc298.s", FUN_L02_002fc298);

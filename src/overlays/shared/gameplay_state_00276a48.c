@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276a48.s", FUN_L01_00276a48);
 extern int D_L01_001B0930[];
 /* 0x00276c40, 112 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
@@ -29,5 +28,3 @@ int FUN_L01_00276c40(int idx, int a, int mask)
     return 0;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276cb0.s", FUN_L01_00276cb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276fe8.s", FUN_L01_00276fe8);

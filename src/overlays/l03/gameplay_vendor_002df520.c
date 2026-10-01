@@ -39,3 +39,5 @@ void FUN_L03_002ebde8(char *moby)
         *(short *)(moby + 0x7E) = 3;
     }
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebaf0.s", FUN_L03_002ebaf0);

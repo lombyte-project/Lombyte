@@ -5,9 +5,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8c08.s", FUN_L01_002b8c08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8cb0.s", FUN_L01_002b8cb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9eb0.s", FUN_L01_002b9eb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002bf3f0.s", FUN_L01_002bf3f0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -67,13 +65,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L01_002e30b8(int unused, void *out)
 {
     char scratch[16];
     char *base = D_0013E533 + 0xE1D;
-    FUN_L00_001ff500(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
+    FUN_001f9bf8(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
     FUN_001f9a10(out, scratch, base + 0x80);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3110.s", FUN_L01_002e3110);
@@ -121,3 +119,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2b68.s", FUN_L01_002f2b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5040.s", FUN_L01_002f5040);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5168.s", FUN_L01_002f5168);
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002be1c0.s", FUN_L01_002be1c0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ed5d8.s", FUN_L01_002ed5d8);

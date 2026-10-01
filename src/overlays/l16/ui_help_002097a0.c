@@ -13,7 +13,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002097a0.s", FUN_L16_002097a0);
 
 extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_0025f730(void *a, float x);
 
 void FUN_L16_0020f8b0(void) {
@@ -22,7 +22,7 @@ void FUN_L16_0020f8b0(void) {
     char *q;
     qcopy(p, p - 0x670);
     q = p - 0x770;
-    FUN_L00_001ff500(tmp, q, *(float *)(q + 0x194));
+    FUN_001f9bf8(tmp, q, *(float *)(q + 0x194));
     FUN_001f9a10(p, p, tmp);
     qcopy(p - 0x690, p);
     FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));

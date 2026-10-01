@@ -30,4 +30,3 @@ void FUN_L02_0023ccc8(char *m) {
     }
     *(int *)(m + 0x74) = **(int **)(m + 0xC);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0023cda8.s", FUN_L02_0023cda8);

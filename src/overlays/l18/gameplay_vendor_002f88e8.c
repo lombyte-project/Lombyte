@@ -20,7 +20,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa640.s", FUN_L18_002fa640);
 
 extern char *func_0020D348_m(int);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_00250df8(void *);
+extern void FUN_0020def8(void *);
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -53,7 +53,7 @@ void FUN_L18_002fa728(char *moby) {
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
-        FUN_L00_00250df8(child);
+        FUN_0020def8(child);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa888.s", FUN_L18_002fa888);
@@ -93,6 +93,5 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc4e0.s", FUN_L18_002fc4e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc668.s", FUN_L18_002fc668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc7e0.s", FUN_L18_002fc7e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc804.s", FUN_L18_002fc804);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fca98.s", FUN_L18_002fca98);
