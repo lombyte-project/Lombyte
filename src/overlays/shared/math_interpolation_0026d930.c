@@ -39,7 +39,6 @@ void FUN_L01_0026e090(int i, int v) {
         } while (*(short *)p++ >= 0);
     }
 }
-extern void *D_L01_001ABCC0[];
 extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8")
     __attribute__((section(".sdata")));
 /* 0x0026e0e0, 88 bytes.
