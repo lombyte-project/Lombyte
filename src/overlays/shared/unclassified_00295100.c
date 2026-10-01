@@ -327,7 +327,42 @@ void FUN_L00_00299560(s32 i) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002995d0.s", FUN_L00_002995d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002999a8.s", FUN_L00_002999a8);
+/* Stop sound, wait for the loader to go idle, then start the movie load. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
+
+extern char D_0013D290[];
+extern int D_L00_00161048;
+extern int D_L00_0016104C;
+extern int D_L00_00161050;
+extern int D_L00_00161058;
+extern int sceCdSync_alt(int) __asm__("FUN_00120c30");
+extern short D_L00_00161054_d __asm__("D_L00_00161054") __attribute__((sda));
+extern void FUN_0023a3b8(int, int, int, int, int);
+extern void FUN_L00_002997c8(void);
+extern void FlushCache(s32);
+s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
+void memcard_update_state(void) __asm__("FUN_002093d8");
+void music_stop(void) __asm__("FUN_00215ee8");
+void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
+
+void FUN_L00_002999a8(void) {
+    FlushCache(0);
+    sound_stop_all_sounds();
+    music_stop();
+    snd_stream_safe_cd_sync(0);
+    for (;;) {
+        char *ld = D_0013D290;
+        if (*(int *)(ld + 0xD4) < 3 && *(int *)(ld + 0xDC) < 0) {
+            break;
+        }
+        memcard_update_state();
+    }
+    FUN_0023a3b8(D_L00_00161048, D_L00_0016104C,
+                  (*(int *)&D_L00_00161054_d + 0x3F) & ~0x3F,
+                  (D_L00_00161058 + 0x3F) & ~0x3F, D_L00_00161050);
+    sceCdSync_alt(0);
+    FUN_L00_002997c8();
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
 extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5D8;

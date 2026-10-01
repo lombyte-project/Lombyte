@@ -62,7 +62,112 @@ void FUN_L00_00269290(char *o) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002694f8.s", FUN_L00_002694f8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* part type 3 update: spawn, drift toward a target, fade, and expire */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026A398), where it is exact; names translated to the US level program. */
+
+extern char D_L00_00166DC0[];
+extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
+extern float D_L00_001CB7C0[];
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+extern int D_L00_0015F5CC;
+extern int FUN_001f9770(void *);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int FUN_L00_00257b90(int, int);
+extern int func_001F9850(int) __asm__("FUN_001f96f8");
+extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_L00_001efc70");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_00267a08(void *);
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L00_002694f8(char *m) {
+    char *p = m + 0x20;
+    float v[4];
+    float d, a;
+    int t, s, k;
+    float *g;
+    char *q;
+    char *B;
+    char *pos;
+    t = *(int *)(p + 0x1C);
+    if (t >= 3) {
+        s = *(short *)(m + 0xA);
+        pos = m + 0x10;
+        if (s > func_001F9850(0x78) && FUN_L00_001f0d60(7.99f, pos, 0x12, 0)) {
+            *(int *)(p + 0x14) = 1;
+            *(short *)(m + 0xA) = func_001F9850(0x78);
+            *(int *)(p + 0x1C) = -1;
+        } else {
+            *(int *)(p + 0x1C) = 0;
+        }
+    } else {
+        pos = m + 0x10;
+        if (t < 0) goto after;
+        *(int *)(p + 0x1C) = t + 1;
+    }
+    if (*(int *)(p + 0x1C) >= 0) {
+        g = D_L00_001CB7C0;
+        *(float *)p = FUN_001f9dc8(g[1]) * g[5] / 2.5f;
+        *(float *)(p + 4) = FUN_001f9de0(g[1]) * g[5] / 2.5f;
+        *(int *)(p + 8) = 0;
+        FUN_001f9a10(pos, pos, p);
+    }
+after:
+    q = D_L00_00166DC0;
+    B = q - 0x140;
+    d = FUN_001f9b48(pos, q);
+    a = FUN_001fa5c8(FUN_L00_001ff8b0(*(float *)(m + 0x10) - *(float *)(B + 0x140), *(float *)(m + 0x14) - *(float *)(B + 0x144)), *(float *)(B + 0x158));
+    if (AbsoluteFloat(a) > 1.0471976f) {
+        if ((*(int *)(p + 0x18))++ >= 6) goto kill;
+        v[0] = FUN_001f9dc8(FUN_001fa580(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
+        v[1] = FUN_001f9de0(FUN_001fa580(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
+        v[2] = *(float *)(m + 0x18) - *(float *)(B + 0x148);
+        FUN_001f9a10(pos, v, q);
+        qcopy(v, pos);
+        v[2] = v[2] + 32.0f;
+        if (func_L00_001EFFF0(pos, v, 0x12, 0, 0)) goto kill;
+    }
+    if ((D_L00_0015F5CC & 3) == 0) m[8]++;
+    s = *(short *)(m + 0xA);
+    if (func_001F9850(0x78) >= s) {
+        if (*(int *)(p + 0x14)) {
+            k = *(short *)(m + 0xA) * 0x14 / func_001F9850(0x78);
+        } else {
+            k = (func_001F9850(0x78) - *(short *)(m + 0xA)) * 0x14 / func_001F9850(0x78);
+        }
+    } else {
+        k = 0x14;
+    }
+    if (d < 8.0f || d > 96.0f) goto kill;
+    if (d < 16.0f) {
+        k = func_001FA898_r(ConvertIntegerToFloat_c(k) * (d - 8.0f) * 0.125f);
+    } else if (d > 80.0f) {
+        k = func_001FA898_r(ConvertIntegerToFloat_c(k) * (96.0f - d) * 0.0625f);
+    }
+    *(int *)(m + 4) = (k << 24) | (*(int *)(m + 4) & 0xFFFFFF);
+    if (FUN_001f9770(m + 0xA)) {
+        if (*(int *)(p + 0x14)) {
+kill:
+            **(char **)(p + 0x10) = 0;
+            FUN_L00_00267a08(m);
+        } else {
+            *(int *)(p + 0x14) = 1;
+            *(short *)(m + 0xA) = FUN_L00_00257b90(func_001F9850(0x78) * 3, func_001F9850(0x78) * 9);
+        }
+    }
+}
 #include "eetypes.h"
 #include "qcopy.h"
 extern unsigned char *D_L00_001B2090_00269958 __asm__("D_L00_001B2090") __attribute__((section(".data")));
@@ -644,7 +749,39 @@ void FUN_L00_0026c7f0(char *a) {
     if (t < 0) FUN_L00_00267a08(a);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c860.s", FUN_L00_0026c860);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026cbb0.s", FUN_L00_0026cbb0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
+
+extern s32 rand();
+extern unsigned char *D_L00_001B20D4_d __asm__("D_L00_001B20D4") __attribute__((section(".data")));
+extern void *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
+
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f) {
+    char *p;
+    char *q;
+    int v;
+    if (n == 0) return 0;
+    p = FUN_L00_002678b8_c(0x15);
+    if (p) {
+        qcopy(p + 0x10, pos);
+        *(int *)(p + 4) = c;
+        v = func_001FA898_r(4.0f) - 0x60;
+        p[1] = 0;
+        *(float *)(p + 0xC) = f;
+        p[3] = 0x48;
+        p[9] = v;
+        p[8] = rand();
+        q = p + 0x20;
+        p[2] = *D_L00_001B20D4_d;
+        *(short *)(p + 0xA) = n;
+        *(short *)(q + 0x18) = n;
+        *(float *)(q + 0x1C) = f;
+        *(int *)(q + 0x10) = c;
+        *(int *)(q + 0x14) = d;
+        *(short *)(q + 0x1A) = k;
+        qcopy(q, dir);
+    }
+    return p;
+}
 typedef struct { f32 v[4]; s32 x10; s32 x14; s16 x18; s16 x1a; f32 x1c; } S_0026ccb0_0026ccb0;
 typedef struct { u8 p0[4]; s32 x4; u8 x8; u8 p9; s16 xa; f32 xc; u128 p10; S_0026ccb0_0026ccb0 s; } O_0026ccb0_0026ccb0;
 typedef struct { f32 x, y, z, w_0026ccb0; } V_0026ccb0_0026ccb0;
@@ -1443,7 +1580,67 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026f280.s", FUN_L00_0026f280);
+/* Updates a particle that swirls on a circle: fades with age, spins, and moves along its orbit. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_00270120), where it is exact; names translated to the US level program. */
+
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED60_c __asm__("D_0015ED60");
+extern float D_0015ED6C;
+extern float D_L00_00166DD8_d __asm__("D_L00_00166DD8") __attribute__((section(".data")));
+extern float FUN_001f9b20(void *);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern void FUN_L00_001ff550(void *, void *, float);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+void FUN_L00_0026f280(char *m) {
+    char *p = m + 0x20;
+    float v[3];
+    char *q;
+    float a, k;
+    if (FUN_001f9770(m + 0xA)) {
+        FUN_L00_00267a08(m);
+        return;
+    }
+    if (*(float *)(m + 0x18) > *(float *)(p + 0x10)) {
+        int s;
+        *(int *)(p + 8) = 0;
+        s = *(short *)(m + 0xA);
+        if (FUN_001f96f8(0xE) - 2 < s) *(short *)(m + 0xA) = FUN_001f96f8(0xE) - 2;
+    }
+    if (*(float *)(p + 0x10) < *(float *)(m + 0x18) + D_0015ED6C * 1.3f * 40.0f) {
+        if (random_integer_below(0x14) == 0) {
+            int s = *(short *)(m + 0xA);
+            if (FUN_001f96f8(0xE) - 2 < s) *(short *)(m + 0xA) = FUN_001f96f8(0xE) - 2;
+        }
+    }
+    if (*(short *)(m + 0xA) < FUN_001f96f8(0xE)) {
+        int r = *(unsigned char *)(m + 7);
+        *(int *)(m + 4) = ((r * *(short *)(m + 0xA) / FUN_001f96f8(0xE)) << 24) | (*(int *)(m + 4) & 0xFFFFFF);
+    }
+    *(float *)(m + 0xC) += D_0015ED60_c * 840.00006f;
+    if (*(float *)(p + 0xC) < *(float *)(m + 0xC)) *(float *)(m + 0xC) = *(float *)(p + 0xC);
+    v[0] = *(float *)(p + 0);
+    v[1] = *(float *)(p + 4);
+    v[2] = *(float *)(p + 8);
+    {
+        float len = FUN_001f9b20(v);
+        FUN_L00_001ff550(v, v, D_0015ED60_c * -0.029999971f * len + len);
+    }
+    FUN_001f9a10(m + 0x10, m + 0x10, v);
+    approach_value(v + 2, D_0015ED6C * 1.3f, D_0015ED70 * 5.0f);
+    *(float *)(p + 0) = v[0];
+    *(float *)(p + 4) = v[1];
+    *(float *)(p + 8) = v[2];
+    *(float *)(p + 0x14) = FUN_001fa580(*(float *)(p + 0x14), *(float *)(p + 0x18));
+    a = FUN_001fa580(D_L00_00166DD8_d, 1.5707964f);
+    k = FUN_001f9de0(*(float *)(p + 0x14)) * *(float *)(p + 0x1C);
+    v[0] = FUN_001f9dc8(a) * k;
+    v[1] = FUN_001f9de0(a) * k;
+    v[2] = 0;
+    FUN_001f9a10(m + 0x10, m + 0x10, v);
+}
 extern unsigned char *D_L00_001B210C_0026f548 __asm__("D_L00_001B210C") __attribute__((section(".data")));
 extern float D_0015ED70_0026f548 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 unsigned char *FUN_L00_002678b8_0026f548(int) __asm__("FUN_L00_002678b8");
@@ -1473,7 +1670,72 @@ void FUN_L00_0026f548(u128 *a, u128 *b, int k, int j) {
     }
 
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026f660.s", FUN_L00_0026f660);
+/* Moves a particle by its velocity according to its mode, bouncing or killing it on contact. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_00270500), where it is exact; names translated to the US level program. */
+
+typedef struct { int a[4]; } V __attribute__((aligned(16)));
+
+extern V D_L00_00173E60;
+extern float D_0013F640 __attribute__((section(".data")));
+extern int D_L00_00173E40[];
+extern int FUN_L00_001f35d8(void);
+extern void FUN_L00_002715e8(void *, int, int, float, float);
+extern void FUN_L00_002741a0(void *, int, float, float);
+
+void FUN_L00_0026f660(char *m) {
+    char *b = m + 0x20;
+    int mode = *(int *)(b + 0x10);
+    V tmp;
+    char *q;
+
+    if (mode == 0) {
+        FUN_001f9a10(m + 0x10, m + 0x10, b);
+    } else if (mode == 1) {
+        q = m + 0x10;
+        FUN_001f9a10(&tmp, q, b);
+        if (func_L00_001EFFF0(q, &tmp, 2, 0, 0)) {
+            if (FUN_L00_001f35d8() == 0) {
+                FUN_L00_002715e8(&D_L00_00173E60, 0, -1, 0.2f, 5250.0f);
+            }
+            FUN_L00_00267a08(m);
+            return;
+        }
+        qcopy(q, &tmp);
+    } else if (mode == 3) {
+        float lim;
+        q = m + 0x10;
+        FUN_001f9a10(q, q, b);
+        lim = D_0013F640;
+        if (*(float *)(m + 0x18) < lim) {
+            *(float *)(m + 0x18) = lim;
+            FUN_L00_002715e8(q, 0, -1, 0.2f, 5250.0f);
+            FUN_L00_00267a08(m);
+            return;
+        }
+    } else {
+        q = m + 0x10;
+        FUN_001f9a10(&tmp, q, b);
+        if (func_L00_001EFFF0(q, &tmp, 2, 0, 0)) {
+            if (FUN_L00_001f35d8() != 0) {
+                int *d = D_L00_00173E40;
+                *(float *)((char *)d + 0x28) += 0.05f;
+                FUN_L00_002741a0(d + 8, -1, 0.25f, 3150.0f);
+            }
+            FUN_L00_00267a08(m);
+            return;
+        }
+        qcopy(q, &tmp);
+    }
+    *(float *)(b + 8) -= *(float *)(b + 0x1C);
+    *(unsigned char *)(m + 8) += 2;
+    *(int *)(b + 0x14) -= 1;
+    if (*(int *)(b + 0x14) <= 0 || *(float *)(m + 0x18) < *(float *)(b + 0x18)) {
+        *(int *)(m + 4) += 0xF0000000;
+        if (*(int *)(m + 4) < 0) {
+            FUN_L00_00267a08(m);
+        }
+    }
+}
 extern u128 D_L00_00166DC0_26f898 __asm__("D_L00_00166DC0");
 extern void FUN_001f9a28_26f898(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001f9af0_26f898(void *) __asm__("FUN_001f9af0");

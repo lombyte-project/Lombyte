@@ -226,7 +226,100 @@ int FUN_L00_002276c0(void) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00227778.s", FUN_L00_00227778);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002279b0.s", FUN_L00_002279b0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
+
+extern float D_L00_00173E68 __attribute__((section(".data")));
+extern int D_L00_0015F5CC;
+extern int FUN_L00_001f35d8(void);
+extern int FUN_L00_00216de8(int a, int b);
+extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_L00_001efc70");
+extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
+extern void FUN_L00_002126b8(void *, void *, int, float, float);
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+
+#define F(o) (*(float *)(p + (o)))
+#define I(o) (*(int *)(p + (o)))
+
+int FUN_L00_002279b0(void) {
+    char *p = (char *)D_0013F350_c;
+    char *q;
+    char *u;
+    int r;
+    float v1[4];
+    float v2[4];
+    float t;
+    float scale;
+    if (I(0x2084) == 0x6A) {
+        return 0;
+    }
+    r = 0;
+    if (*(unsigned char *)(p + 0x12E4) != 0) {
+        if (I(0x208C) == 0x11) {
+            if (I(0x2088) != 1) {
+                if (0.0f < F(0x108)) {
+                    if (F(0x2F0) - 0.4f < F(0x88)) {
+                        r = 1;
+                    }
+                }
+            }
+        } else if (I(0x208C) != 0x12 && I(0x208C) != 3) {
+            t = 0.2f;
+            if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
+                t = AbsoluteFloat(F(0xE8)) + 0.07f;
+            }
+            if (AbsoluteFloat(F(0x2F0) - (F(0x88) + 0.45f)) < t) {
+                if (I(0x208C) != 4 || *(short *)(p + 0x41E) != 0) {
+                    if (0.8f < F(0x22A4) && F(0x108) < 0.0f) {
+                        r = 1;
+                    }
+                }
+            }
+            q = (char *)D_0013F350_c;
+            if (*(float *)(q + 0x88) < *(float *)(q + 0x2F0) - 0.8f) {
+                if (*(int *)(q + 0x208C) != 4 || *(short *)(q + 0x41E) != 0) {
+                    r = 1;
+                }
+            }
+        }
+    }
+    p = (char *)D_0013F350_c;
+    t = 0.27f;
+    if (t < AbsoluteFloat(F(0xE8)) + 0.07f) {
+        t = AbsoluteFloat(F(0xE8));
+    }
+    if (I(0x2084) == 0x12) {
+        if (*(short *)(p + 0x41E) != 0) {
+            if (F(0x88) < F(0x2F0) - 0.7f) {
+                r = 1;
+            }
+        }
+    }
+    u = (char *)D_0013F350_c;
+    if (*(int *)(u + 0x208C) - 0x11 >= 2u && *(int *)(u + 0x208C) != 7 && *(int *)(u + 0x208C) != 0x14 && *(int *)(u + 0x2084) != 0x12
+        && (D_L00_0015F5CC & 0xF) == 0) {
+        scale = 4.0f;
+        if ((D_L00_0015F5CC & 0x3F) == 0) {
+            scale = 16.0f;
+        }
+        FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
+        if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) != 0) {
+            int s = FUN_L00_001f35d8();
+            *(short *)(u + 0x12E0) = s;
+            if ((short)s == 0) {
+                v1[2] = D_L00_00173E68 - 0.01f;
+                if (func_L00_001EFFF0(v1, v2, 2, *(int *)(u + 0x2080), 0) == 0) {
+                    FUN_L00_002223f8(0x34, 1);
+                    return 1;
+                }
+            }
+        }
+    }
+    if (r != 0) {
+        FUN_L00_002223f8(0x37, 1);
+        FUN_L00_00216de8(3, 0);
+    }
+    return r;
+}
 typedef struct {
     u8 p0[0x88];
     f32 f88;

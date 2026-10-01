@@ -140,7 +140,128 @@ void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263fd8.s", FUN_L00_00263fd8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawns a break-effect fragment moby of class cls from src, and initialises its motion data. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00265050), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x11];
+    unsigned char unk11; /* 0x11: copied to a moby's +0x7C */
+    unsigned char unk12; /* 0x12: copied to a moby's +0x7E */
+    char _pad13[0x1C - 0x13];
+    int frames[1]; /* 0x1C */
+} MobySeq;
+
+typedef struct {
+    char _pad00[0x48];
+    MobySeq *seqs[1]; /* 0x48: animation sequences */
+} MobyClass;
+
+typedef struct {
+    char _pad00[0x20];
+    unsigned char state; /* 0x20 */
+    char _pad21[0x24 - 0x21];
+    MobyClass *pClass; /* 0x24 */
+    char _pad28[0x38 - 0x28];
+    unsigned long unk38; /* 0x38 */
+    char _pad40[0x50 - 0x40];
+    unsigned char frame;     /* 0x50 */
+    unsigned char prevFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52: 0xFF for none */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x68 - 0x54];
+    int frameData;     /* 0x68 */
+    int prevFrameData; /* 0x6C */
+    char _pad70[0x78 - 0x70];
+    char *pvars; /* 0x78: this moby's 0x80 bytes at D_00160028 */
+    unsigned char unk7C; /* 0x7C: the sound it wants (func_0020D790) */
+    unsigned char unk7D; /* 0x7D: the handle of the one playing, or 0xFF */
+    unsigned char unk7E; /* 0x7E */
+    char _pad7F[0x100 - 0x7F];
+} Moby;
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
+extern float FUN_001f9af0(void *a);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001f96b0(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_00257d78(float *, float, float);
+extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12) {
+    char *m = (char *)func_0020D348_m(cls);
+    char *d;
+    float t[4];
+    float r, f21, k, k2;
+
+    if (m != 0) {
+        r = *(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24);
+        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * r;
+        m[0x31] = 1;
+        *(unsigned short *)(m + 0x34) |= 0x100;
+        d = *(char **)(m + 0x78);
+        *(long *)(m + 0x38) = *(long *)(src + 0x38);
+        m[0x20] = 1;
+        qcopy(m + 0x10, pos);
+        FUN_001fa030(m + 0xC0, mat);
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x80;
+        *(int *)(m + 0x94) = 0;
+        if (a8 == 0)
+            *(int *)(d + 0x30) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(60.0f, 120.0f)));
+        else
+            *(int *)(d + 0x30) = a8;
+        *(int *)(d + 0x34) = a9;
+        if (*(float *)(d + 0x38) == 0.0f)
+            *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * D_0015ED70;
+        else
+            *(float *)(d + 0x38) = scale;
+        if (FUN_001f9af0(v10) == 0.0f) {
+            f21 = random_angle_radians();
+            k = random_float_between_alt(2.0f, 4.0f) * D_0015ED6C;
+            t[0] = FUN_001f9dc8(f21) * k;
+            t[1] = FUN_001f9de0(f21) * k;
+            t[2] = 0.0f;
+            t[2] = random_float_between_alt(5.0f, 8.0f) * D_0015ED6C;
+            qcopy(d, t);
+        } else {
+            qcopy(d, v10);
+        }
+        if (FUN_001f9af0(v11) == 0.0f) {
+            float g = D_0015ED6C_s[0];
+            FUN_L00_00257d78(t, g * 3.1415927f, g * 6.2831855f);
+            qcopy(d + 0x10, t);
+        } else {
+            qcopy(d + 0x10, v11);
+        }
+        if (FUN_001f9af0(v12) == 0.0f && v12[3] == 0.0f) {
+            qcopy(t, *(char **)(m + 0x24) + 0x30);
+            k2 = *(float *)(m + 0x2C);
+            k2 = k2 * 0.0009765625f;
+            FUN_001f9a68(t, t, k2);
+            t[3] = t[3] * k2;
+            qcopy(d + 0x20, t);
+        } else {
+            qcopy(d + 0x20, v12);
+        }
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 extern s32 D_L00_0015F590;
 extern s32 D_L00_0015F594;
 extern s32 D_L00_00161E08;

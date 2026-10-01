@@ -197,7 +197,77 @@ void FUN_L00_0023a760(HudElem *e) {
     e->h = 0x20;
     FUN_L00_00235c80(e);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a7a8.s", FUN_L00_0023a7a8);
+/* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
+
+extern char D_L00_0015F7C8[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_0015ED80;
+extern int FUN_001fa6e0(int, int, float);
+extern int find_valid_animation_frame_index_alt(int, int) __asm__("FUN_001ff960");
+extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L00_0015F91C_d __asm__("D_L00_0015F91C") __attribute__((sda));
+extern short D_L00_0015F920_d __asm__("D_L00_0015F920") __attribute__((sda));
+extern short D_L00_0015F924_d __asm__("D_L00_0015F924") __attribute__((sda));
+extern short D_L00_0015F928_d __asm__("D_L00_0015F928") __attribute__((sda));
+extern short D_L00_0015F92C_d __asm__("D_L00_0015F92C") __attribute__((sda));
+extern short D_L00_0015F930_d __asm__("D_L00_0015F930") __attribute__((sda));
+extern short D_L00_0015F934_d __asm__("D_L00_0015F934") __attribute__((sda));
+extern short D_L00_0015F938_d __asm__("D_L00_0015F938") __attribute__((sda));
+extern short D_L00_0015F93C_d __asm__("D_L00_0015F93C") __attribute__((sda));
+extern short D_L00_0015F940_d __asm__("D_L00_0015F940") __attribute__((sda));
+extern void FUN_L00_0023b120(char *, int, int, int, int, int);
+void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
+void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
+void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
+
+int FUN_L00_0023a7a8(char *m) {
+    char buf[16];
+    char *q = m + 0x70;
+    int x4;
+    int y = 0x12;
+    int x, a, alpha, w, s16, tex, c1, wd, v74;
+    float f21, f20;
+    if (D_0015ED80) y = 0xA;
+    x = *(int *)(m + 0x50);
+    if (*(unsigned char *)(m + 0x70) == 0) return *(int *)(m + 0x58);
+    {
+        f20 = ConvertIntegerToFloat(*(unsigned char *)(m + 0x70));
+        f21 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F91C_d);
+        if (f21 > 1.0f) f21 = 1.0f;
+        else if (f21 < 0.0f) f21 = 0.0f;
+        f20 = ConvertIntegerToFloat(*(unsigned char *)(q + 1));
+        f20 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F920_d);
+        if (f20 > 1.0f) f20 = 1.0f;
+        else if (f20 < 0.0f) f20 = 0.0f;
+        alpha = truncate_float_to_s32(f21 * 128.0f);
+        a = truncate_float_to_s32((float)alpha * 0.7f);
+        if (*(int *)(m + 8) < 100) w = *(int *)&D_L00_0015F924_d;
+        else w = *(int *)&D_L00_0015F928_d;
+        x4 = x + 4;
+        wd = x + truncate_float_to_s32((float)w * f21);
+        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20, a);
+        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, a);
+        draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20, 0x20, a);
+        tex = find_valid_animation_frame_index_alt(*(int *)m, 3);
+        *(int *)(m + 0x44) = tex;
+        FUN_L00_0023b120(m, tex, x, y, 0, alpha);
+        v74 = *(int *)(m + 0x74);
+        sprintf_alt(buf, D_L00_0015F7C8, v74, *(int *)(m + 8));
+        if (v74 != 0)
+            s16 = FUN_001fa6e0(*(int *)&D_L00_0015F92C_d, *(int *)&D_L00_0015F930_d, f20);
+        else
+            s16 = FUN_001fa6e0(*(int *)&D_L00_0015F934_d, *(int *)&D_L00_0015F938_d, f20);
+        c1 = FUN_001fa6e0(0, 0x80000000, f20);
+        {
+            int tx = x + *(int *)&D_L00_0015F93C_d + w;
+            font_print_right(tx + 1, y + *(int *)&D_L00_0015F940_d + 1, c1, buf, -1);
+        }
+        font_print_right(x + *(int *)&D_L00_0015F93C_d + w, y + *(int *)&D_L00_0015F940_d, s16, buf, -1);
+    }
+    return *(int *)(m + 0x58);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aa98.s", FUN_L00_0023aa98);
 typedef struct {
     unsigned short id;

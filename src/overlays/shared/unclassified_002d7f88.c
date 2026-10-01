@@ -562,4 +562,42 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df3d8.s", FUN_L00_002df3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df4a8.s", FUN_L00_002df4a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df4f8.s", FUN_L00_002df4f8);
+/* update for the pulsing colour object */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int FUN_001fa6e0(int, int, float);
+extern short D_L00_00161B90_d __asm__("D_L00_00161B90") __attribute__((sda));
+extern short D_L00_00161B94_d __asm__("D_L00_00161B94") __attribute__((sda));
+extern short D_L00_00161B98_d __asm__("D_L00_00161B98") __attribute__((sda));
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L00_002df4a8(void *);
+
+void FUN_L00_002df4f8(char *m) {
+    char *p = *(char **)(m + 0x78);
+    unsigned char s = m[0x20];
+    float a;
+    int c, hi, r, g, b, t;
+    switch (s) {
+    case 0:
+        *(float *)p = *(float *)p * 0.017453292f;
+        m[0x20] = 1;
+        break;
+    case 1:
+        a = FUN_001fa580(*(float *)p, *(float *)&D_L00_00161B98_d * 0.017453292f * D_0015ED6C_c);
+        *(float *)p = a;
+        a = FUN_001f9de0(a);
+        c = FUN_001fa6e0(*(int *)&D_L00_00161B90_d, *(int *)&D_L00_00161B94_d, a * 0.5f + 0.5f);
+        b = (c >> 16) & 0xFF; g = (c >> 8) & 0xFF; r = c & 0xFF;
+        hi = 0x38; if (D_0015ED84 == 0 || D_0015ED84 == 0x12) hi = 0x20;
+        t = hi << 24 | b << 16;
+        t |= g << 8;
+        *(int *)(p + 4) = t | r;
+        FUN_L00_002df4a8(m);
+        FUN_L00_002502f0(m, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
+        break;
+    }
+}

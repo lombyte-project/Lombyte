@@ -411,7 +411,32 @@ void FUN_L00_002072c8(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00207330.s", FUN_L00_00207330);
+/* Tint the effect from the moby's colour bytes, then set the four shape floats from its vector sum. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_00207948), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z, w; } Vx __attribute__((aligned(16)));
+
+extern char D_L00_001801D0[] __attribute__((section(".data")));
+extern void FUN_L00_00250350(void *, void *);
+extern void PackRenderCommandFields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
+extern void FUN_L00_002503c0(void *, void *);
+
+void FUN_L00_00207330(void *a, char *m) {
+    Vx v;
+    float *f;
+    float s;
+    unsigned char *q = m + 0x38;
+    int c = q[4] + q[5] + q[6];
+    PackRenderCommandFields(a, c * 4 / 10 + ((c * 3 / 10) << 8), 12, 12, 0);
+    FUN_L00_00250350(m, D_L00_001801D0);
+    FUN_L00_002503c0(m, &v);
+    f = (float *)(D_L00_001801D0 - 0x310);
+    s = v.x + v.y + v.z;
+    f[0xC0] = s * 0.5f;
+    f[0xC1] = s * 0.4f;
+    f[0xC2] = s * 0.0f;
+    f[0xC3] = -0.3f;
+}
 typedef int ti_207430 __attribute__((mode(TI)));
 extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
 extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") __attribute__((section(".data")));

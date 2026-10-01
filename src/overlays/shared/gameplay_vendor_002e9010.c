@@ -660,7 +660,45 @@ void FUN_L00_002ec4a8(unsigned char *m)
     FUN_001f9ad8_2ec4a8(m + 0x20, m + 0x10, m);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec6a8.s", FUN_L00_002ec6a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ec6c0.s", FUN_L00_002ec6c0);
+/* camera update: copies the moby's matrix when the camera mode changes */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern void FUN_L00_002ebbd8(void *);
+void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
+extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
+
+void FUN_L00_002ec6c0(char *m) {
+    char *b = D_0013F350;
+    char *p = *(char **)(m + 0x70) + 0xB8;
+    int v = *(int *)(b + 0x2084);
+    char *q;
+    int x, y;
+    if (v == 0x2C) {
+        q = m + 0x30;
+        x = *(int *)(p + 8);
+        y = *(int *)(b + 0x994);
+    } else {
+        q = m + 0x30;
+        if ((unsigned)(v - 0x24) >= 3) goto done;
+        x = *(int *)(p + 8);
+        y = *(int *)(b + 0x964);
+    }
+    if (x != y) {
+        char *g = D_L00_00166D80_c;
+        char *r = *(char **)(g + 0x184);
+        qcopy(r + 0x30, q);
+        qcopy(r, m);
+        qcopy(r + 0x10, m + 0x10);
+        qcopy(r + 0x20, m + 0x20);
+        FUN_L00_002ebbd8(m);
+        *(int *)(g + 0x2F4) = FUN_001f96f8(0x2D);
+    }
+done:
+    refresh_point_light((int)m);
+    FUN_L00_001ed6a8(q, 0.5f);
+    *(int *)(*(char **)(m + 0x70) + 0x80) = 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -433,7 +433,362 @@ s32 FUN_L00_0020fe30(void) {
     if (s < 3 || s == 4) return b[0x12E4] == 0;
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020fea0.s", FUN_L00_0020fea0);
+/* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x10B8];
+    int f10B8;
+    char pad4[0x1108 - 0x10BC];
+    int f1108;
+    char pad5[0x1158 - 0x110C];
+    int f1158;
+    char pad6[0x11A8 - 0x115C];
+    int f11A8;
+    char pad7[0x2084 - 0x11AC];
+    int f2084;
+    int f2088;
+    int f208C;
+    char pad1[0x20A6 - 0x2090];
+    unsigned char f20A6;
+    unsigned char f20A7;
+    unsigned char f20A8;
+    char pad2[3];
+    unsigned char f20AC;
+    char pad3[0x20B8 - 0x20AD];
+    int a[7];
+    int b[7];
+    int c[7];
+    int d[7];
+} Sel;
+
+typedef struct { char pad[0x20]; int f20; char pad2[0x28]; } ItemDef;
+
+extern char D_0013C940[];
+extern char D_00141660[];
+extern unsigned char D_0013D4C0[];
+extern int D_0015ED8C;
+extern int D_0015ED90;
+extern int D_0015ED94;
+extern ItemDef D_L00_00179AC0[];
+extern int FUN_001f9770(void *);
+extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
+extern int FUN_L00_00216de8(int, int);
+extern int FUN_L00_00257b90(int, int);
+extern void FUN_L00_0020a500(void);
+extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
+extern void FUN_L00_002cdcc0(void);
+s32 FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
+void FUN_L00_0020fd80_c(int id) __asm__("FUN_L00_0020fd80");
+void FUN_L00_0020fde0_c(int id) __asm__("FUN_L00_0020fde0");
+void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L00_0020fea0(int i) {
+    int changed;
+    int flag6;
+    int flag4;
+    unsigned char st;
+
+    if (i == 0) {
+        int v;
+        char *g = D_0013F350;
+        v = *(int *)(g + 0x10B8);
+        if (v != 8 && v != 0x17 && v != 9 && *(unsigned char *)(g + 0x10AC) == 2) {
+            *(unsigned char *)(g + 0x10AC) = 0;
+        }
+    }
+    if (i == 0) {
+        Sel *g = (Sel *)(D_0013F350);
+        if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) != 8) {
+            g->f20A6 = 1;
+        }
+    }
+    if (i == 0) {
+        Sel *g = (Sel *)(D_0013F350);
+        if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) == 8) {
+            if (g->a[0] == 0x1F) {
+                g->a[0] = 0;
+            }
+            if (g->a[0] != 0x18 && g->a[0] != 0x24) {
+                return;
+            }
+        }
+    }
+    {
+        Sel *g = (Sel *)(D_0013F350);
+        if (g->f20AC != 0 && i == 0) {
+            if (g->f20A6 == 0 || *(int *)((char *)g + 0x10B8) == 8) {
+                g->f20A6 = 0;
+                return;
+            }
+        }
+    }
+    changed = 0;
+    {
+    char *pad = D_0013C940;
+    if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(D_0013F350))->f20A6 != 0) {
+        if (i == 0) {
+            int v;
+            Sel *g = (Sel *)(D_0013F350);
+            v = *(int *)((char *)g + 0x10B8);
+            if (v != 8) {
+                if (g->f20A6 != 0 && v != 0 && v != 0x1F) {
+                    g->c[0] = v;
+                }
+                ((Sel *)(D_0013F350))->b[i] = 8;
+                changed = 1;
+            }
+        }
+    }
+    }
+    if (i == 0) {
+        char *pad = D_0013C940;
+        if (*(int *)(pad + 0x1A4) & 0x20) {
+            Sel *g = (Sel *)(D_0013F350);
+            if (g->f20A7 == 0) {
+                if (g->f10B8 != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
+                    g->b[0] = *(int *)(D_00141660);
+                    changed = 1;
+                }
+            }
+        }
+    }
+    if (i == 1) {
+        Sel *g;
+        if (FUN_L00_0020d568_c() || ((Sel *)(D_0013F350))->f2084 == 0x12) {
+            int v;
+            g = (Sel *)(D_0013F350);
+            v = *(int *)((char *)g + 0x1108);
+            if (v != 0) {
+                g->c[1] = v;
+                g->a[1] = 0x26;
+            }
+        }
+        g = (Sel *)(D_0013F350);
+        if (g->f208C == 0xF && D_0013D4C0[0x1D] != 0) {
+            if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
+                int v;
+                g->a[1] = 0x1D;
+                v = *(int *)((char *)g + i * 0x50 + 0x10B8);
+                if (v != 0) {
+                    g->c[i] = v;
+                } else {
+                    g->c[i] = 0x26;
+                }
+            }
+        }
+        g = (Sel *)(D_0013F350);
+        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && D_0013D4C0[0x1C] != 0) {
+            if (*(int *)(D_00141660 + 4) != 0x1C || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
+                int v;
+                g->a[1] = 0x1C;
+                v = *(int *)((char *)g + i * 0x50 + 0x10B8);
+                if (v != 0) {
+                    g->c[i] = v;
+                } else {
+                    g->c[i] = 0x26;
+                }
+            }
+        }
+    }
+    flag6 = 0;
+    if (i == 2) {
+        Sel *g = (Sel *)(D_0013F350);
+        Sel *h;
+        Sel *h2;
+        if (g->f208C == 0x11 || g->f2084 == 0x76 || g->f2084 == 0x6A || g->f2084 == 0x82
+            || *(unsigned char *)((char *)g + 0x22CB) != 0) {
+            if (((int *)(D_00141660))[i] != 6
+                || (h2 = (Sel *)(D_0013F350), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+                h = (Sel *)(D_0013F350);
+                if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->b[i] != 6 && D_0013D4C0[6] != 0) {
+                    int v;
+                    h->a[i] = 6;
+                    flag6 = 1;
+                    v = *(int *)((char *)h + i * 0x50 + 0x10B8);
+                    if (v != 0) {
+                        h->c[i] = v;
+                    } else {
+                        h->c[i] = 0x26;
+                    }
+                }
+            }
+        } else if (*(int *)((char *)g + 0x1158) == 6 && g->c[2] != 0) {
+            g->d[2] = 1;
+        }
+    }
+    flag4 = 0;
+    if (i == 3) {
+        Sel *g;
+        if (FUN_L00_0020d568_c() || ((Sel *)(D_0013F350))->f2084 == 0x12) {
+            if (*(int *)(D_00141660 + 0xC) != 4) {
+                int v;
+                g = (Sel *)(D_0013F350);
+                v = *(int *)((char *)g + 0x11A8);
+                if (v != 4 && D_0013D4C0[4] != 0) {
+                    g->c[3] = v;
+                    flag4 = 1;
+                    g->a[3] = 4;
+                }
+            }
+        } else if (((Sel *)(D_0013F350))->f11A8 == 4 && ((Sel *)(D_0013F350))->c[3] != 0) {
+            ((Sel *)(D_0013F350))->d[3] = 1;
+        }
+        if (((Sel *)(D_0013F350))->f2084 == 8 && ((int *)(D_00141660))[i] == 4) {
+            ((Sel *)(D_0013F350))->a[i] = 2;
+        }
+    }
+    {
+        Sel *g = (Sel *)(D_0013F350);
+        int *qb = g->d;
+        int *q = qb + i;
+        if (*q != 0) {
+            int *r;
+            int *rb;
+            int w;
+            *q = 0;
+            rb = g->c;
+            r = rb + i;
+            w = *r;
+            if (w != 0 && w != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
+                if (w == 0x26) {
+                    w = 0;
+                }
+                *r = 0;
+                ((int *)(D_00141660))[i] = w;
+                g->b[i] = w;
+                if (i == 0) {
+                    D_L00_00179AC0[g->b[0]].f20 = 0x20;
+                }
+                changed = 1;
+            }
+        }
+    }
+    {
+        Sel *g = (Sel *)(D_0013F350);
+        int *s;
+        int *sb;
+        if (*(unsigned char *)((char *)g + 0x1FF5) != 0) {
+            FUN_L00_002cdcc0();
+            g->a[i] = 0;
+        }
+        sb = g->a;
+        s = sb + i;
+        if (*s == 0x1F) {
+            if (FUN_L00_0020fe30_c()) {
+                int v;
+                if (*(short *)((char *)g + 0x22DE) == 0) {
+                    FUN_L00_00216de8(0x18, 0);
+                    *(short *)((char *)g + 0x22DE) = 0x12;
+                    *(short *)((char *)g + 0x22DC) = 1;
+                }
+                changed = 1;
+                g->b[i] = *s;
+                v = ((int *)(D_00141660))[i];
+                ((int *)(D_00141660))[i] = *s;
+                D_0015ED8C = v;
+            }
+            ((Sel *)(D_0013F350))->a[i] = 0;
+        }
+    }
+    {
+        int v;
+        Sel *g = (Sel *)(D_0013F350);
+        int *ab = g->a;
+        int *a = ab + i;
+        v = *a;
+        if (v != 0) {
+            int *bb = g->b;
+            int *b = bb + i;
+            if (v != *b) {
+                if (v == 0x26) {
+                    *b = 0;
+                    ((int *)(D_00141660))[i] = 0;
+                } else {
+                    Sel *h;
+                    int u;
+                    if (i == 0 && g->a[0] != 0x24 && *(int *)((char *)g + 0x10B8) != 8) {
+                        D_0015ED8C = *(int *)(D_00141660);
+                    }
+                    h = (Sel *)(D_0013F350);
+                    u = h->a[i];
+                    h->b[i] = u;
+                    if (u != 0x24 && (flag6 == 0 || u != 6) && (flag4 == 0 || u != 4)) {
+                        ((int *)(D_00141660))[i] = u;
+                    }
+                    if (i == 0) {
+                        Sel *k = (Sel *)(D_0013F350);
+                        D_L00_00179AC0[k->b[0]].f20 = 0x20;
+                    }
+                }
+                changed = 1;
+            } else {
+                *a = 0;
+            }
+        }
+    }
+    {
+        char *s = D_0013F350 + i * 0x50;
+        st = *(unsigned char *)(s + 0x10AC);
+        if (st == 2) {
+            changed = 0;
+        }
+        if (st == 1 && *(short *)(s + 0x10A8) == 0) {
+            *(short *)(s + 0x10A8) = *(unsigned char *)(s + 0x10AD);
+        }
+    }
+    if (FUN_001f9770(D_0013F350 + 0x10A8 + i * 0x50) == 0) {
+        changed = 0;
+    }
+    if (changed) {
+        Sel *g = (Sel *)(D_0013F350);
+        *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
+        FUN_L00_0020a500();
+        *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
+        FUN_L00_0020fde0_c(*((int *)(D_0013F350 + 0x20D4) + i));
+        FUN_L00_0020fd80_c(*((int *)(D_0013F350 + 0x20D4) + i));
+        if (g->f20A8 != 0) {
+            FUN_L00_0020e698_c();
+        }
+        if (i == 0) {
+            if (*(int *)(D_0013F350 + 0x20D4) == 8) {
+                D_0015ED90 = 1;
+            } else {
+                D_0015ED90 = 0;
+            }
+        }
+        if (i == 3) {
+            if (((Sel *)(D_0013F350))->f11A8 == 3) {
+                D_0015ED94 = 1;
+            } else {
+                D_0015ED94 = 0;
+            }
+        }
+        {
+            Sel *k = (Sel *)(D_0013F350);
+            char *s = (char *)k + i * 0x50;
+            *(unsigned char *)(s + 0x10AA) = 0;
+            k->a[i] = 0;
+            k->f20A6 = 0;
+            if (*(char **)((char *)k + 0xD00) != 0) {
+                *(int *)(*(char **)((char *)k + 0xD00) + 0x34) = 1;
+            }
+            if (*(char **)((char *)k + 0xD04) != 0) {
+                *(int *)(*(char **)((char *)k + 0xD04) + 0x34) = 1;
+            }
+            if (*(void **)(s + 0x1090) != 0) {
+                blend_moby_animation(*(void **)(s + 0x1090), 2, 0, 2);
+            }
+            if (*(void **)(s + 0x1094) != 0 && i != 3) {
+                blend_moby_animation(*(void **)(s + 0x1094), 2, 0, 2);
+            }
+        }
+        {
+            char *e = D_0013F350;
+            *(int *)(e + i * 0x50 + 0x10B4) = 3;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210748.s", FUN_L00_00210748);
 typedef struct {
     u8 pad0[0x308]; s16 x308; u8 pad1[0x2084 - 0x30A]; s32 x2084; u8 pad2[4]; s32 x208C;

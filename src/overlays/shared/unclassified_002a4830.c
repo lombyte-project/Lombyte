@@ -3,7 +3,128 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4830.s", FUN_L00_002a4830);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4890.s", FUN_L00_002a4890);
+/* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
+
+struct Amb {
+    float f0;
+    float f4;
+    float f8;
+    short hC;
+    short hE;
+    float f10;
+    float f14;
+    float f18;
+    short h1C;
+    short h1E;
+};
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f9770(void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern struct Amb D_L00_001CB7C0;
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L00_002a4890(void) {
+    struct Amb *s = &D_L00_001CB7C0;
+    float a, b, c, d, e;
+    switch (s->hC) {
+    case 1:
+        break;
+    case 2:
+        switch (s->hE) {
+        case 0:
+            if (FUN_001f9770(&s->h1E)) {
+                a = ConvertIntegerToFloat(s->h1C) * random_float_between_alt(0.5f, 1.5f);
+                c = FUN_001fa580(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
+                b = random_float_between_alt(s->f10 * 0.5f, s->f10 * 1.5f);
+                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f18 = (b - s->f14) / a;
+                s->h1E = func_001FA898_r(a);
+                s->hE = 1;
+            }
+            break;
+        case 1:
+            if (FUN_001f9770(&s->h1E)) {
+                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(2.0f, 3.0f));
+                s->hE = 0;
+            } else {
+                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f14 = s->f14 + s->f18;
+                d = AbsoluteFloat(s->f14);
+                e = D_0015ED6C * 9.6f;
+                if (e < d) {
+                    if (s->f14 < 0.0f) e = -e;
+                    s->f14 = e;
+                }
+            }
+            break;
+        }
+        break;
+    case 3:
+        switch (s->hE) {
+        case 0:
+            if (FUN_001f9770(&s->h1E)) {
+                a = FUN_001f96b0(random_float_between_alt(45.0f, 60.0f));
+                c = FUN_001fa580(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
+                b = random_float_between_alt(s->f10 * 1.5f, s->f10 + s->f10);
+                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f18 = (b - s->f14) / a;
+                s->h1E = func_001FA898_r(a);
+                s->hE = 1;
+            }
+            break;
+        case 1:
+            if (FUN_001f9770(&s->h1E)) {
+                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(1.0f, 1.5f));
+                s->hE = 2;
+            } else {
+                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f14 = s->f14 + s->f18;
+                d = AbsoluteFloat(s->f14);
+                e = D_0015ED6C * 9.6f;
+                if (e < d) {
+                    if (s->f14 < 0.0f) e = -e;
+                    s->f14 = e;
+                }
+            }
+            break;
+        case 2:
+            if (FUN_001f9770(&s->h1E)) {
+                a = FUN_001f96b0(random_float_between_alt(45.0f, 60.0f));
+                c = FUN_001fa580(s->f0, random_float_between_alt(-0.785398f, 0.785398f));
+                b = random_float_between_alt(s->f10 * 0.8f, s->f10 * 1.2f);
+                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f18 = (b - s->f14) / a;
+                s->h1E = func_001FA898_r(a);
+                s->hE = 3;
+            }
+            break;
+        case 3:
+            if (FUN_001f9770(&s->h1E)) {
+                s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(3.0f, 5.0f));
+                s->hE = 0;
+            } else {
+                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f14 = s->f14 + s->f18;
+                d = AbsoluteFloat(s->f14);
+                e = D_0015ED6C * 9.6f;
+                if (e < d) {
+                    if (s->f14 < 0.0f) e = -e;
+                    s->f14 = e;
+                }
+            }
+            break;
+        }
+        break;
+    }
+}
 extern int D_L00_00161390;
 #define SDA __attribute__((sda))
 extern int D_L00_00161368 SDA, D_L00_0016136C SDA, D_L00_00161370 SDA;

@@ -792,7 +792,33 @@ void FUN_L00_00273448(P_273448 *p) {
     vscl_273448(v, v, e->f14);
     vadd_273448(p->pos, a, v);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00273708.s", FUN_L00_00273708);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L00_001B2178_d __asm__("D_L00_001B2178") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+unsigned char *FUN_L00_00273708(void *a, int b, int c) {
+    unsigned char *r = FUN_L00_002678b8_c(0x3E);
+    if (r != 0) {
+        unsigned char *v = r + 0x20;
+        qcopy(r + 0x10, a);
+        *(int *)(r + 4) = 0x7F7F4040;
+        r[9] = truncate_float_to_s32(4.0f) + 0x40;
+        r[1] = 0;
+        r[3] = 0x48;
+        *(float *)(r + 0xC) = 30000.0f;
+        r[8] = random_integer_below(0xFF);
+        *(short *)(v + 2) = c;
+        if (c >= 2) c = 0;
+        r[2] = D_L00_001B2178_d[c];
+        *(short *)(r + 0x20) = truncate_float_to_s32(127.0f / ConvertIntegerToFloat_c(b));
+        *(short *)(r + 0xA) = b;
+    }
+    return r;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -1163,7 +1189,29 @@ kill:
     }
     *(u32 *)(p + 4) = (FUN_001fa6d0_274a70(FUN_001fa6c0_274a70(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) * FUN_001fa6c0_274a70(*(s16 *)(q + 0x14))) << 24) | *(u32 *)(q + 0x18);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00274cf8.s", FUN_L00_00274cf8);
+/* spawns a particle at pos with a colour byte taken from a table and a heading */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
+
+unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
+    unsigned char *r = FUN_L00_002678b8_c(0x46);
+    if (r != 0) {
+        qcopy(r + 0x10, a);
+        *(int *)(r + 4) = 0x80404040;
+        r[9] = truncate_float_to_s32(2.0f) + 0x20;
+        r[3] = 0x44;
+        r[1] = 1;
+        r[2] = D_L00_001B2198[idx];
+        r[8] = truncate_float_to_s32(ang * 128.0f / 3.14159274f) - 0x20;
+        *(float *)(r + 0xC) = 147000.0f;
+        *(short *)(r + 0xA) = FUN_001f96f8(0x78);
+    }
+    return r;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

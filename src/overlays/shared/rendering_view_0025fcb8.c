@@ -180,7 +180,88 @@ void FUN_L00_00260738(char *out, q128 *pos, void *m1, void *m2) {
     qcopy(out + 0x10, pos);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002607d0.s", FUN_L00_002607d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00260860.s", FUN_L00_00260860);
+/* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[8]; unsigned short a; char pad2[8]; unsigned short b; char pad3[4]; } ItemRec;
+
+typedef struct { char pad[8]; int t; char pad2[0x40]; } ItemDef;
+
+extern ItemDef D_L00_00179AC0[] __attribute__((section(".data")));
+extern ItemRec D_L00_001C40B0[] __attribute__((section(".data")));
+extern int D_0013D428[];
+extern int D_00141EA0[];
+extern int D_L00_001B0340[] __attribute__((section(".data")));
+extern int D_L00_001C3E98[] __attribute__((section(".data")));
+extern int FUN_001f96f8(int);
+extern unsigned char D_0013D4C0[];
+extern unsigned char D_0013D4E8[];
+extern int D_00141408 __attribute__((section(".data")));
+extern int D_00141410 __attribute__((section(".data")));
+extern int D_00141414 __attribute__((section(".data")));
+extern unsigned char D_0015EDD0[] __attribute__((section(".sdata")));
+extern void FUN_L00_00263d40(int arg0, int arg1);
+
+void FUN_L00_00260860(int id, int flag) {
+    unsigned char *pa = &D_0013D4C0[id];
+    unsigned char *pb = &D_0013D4E8[id];
+    int idx = id + 0x25;
+    int *p;
+    int i;
+
+    if (*pa == 0) {
+        idx = id;
+    }
+    p = &D_L00_001B0340[idx];
+    *pb = 1;
+    if (*p != -1) {
+        FUN_L00_00263d40(*p, FUN_001f96f8(0x12C));
+    }
+    if (*pa == 0) {
+        ItemRec *r;
+        *pa = 1;
+        r = &D_L00_001C40B0[id];
+        *pb = 1;
+        if (r->a != 0) {
+            int *q = &D_0013D428[id];
+            int v = r->b;
+            if (v < *q) {
+                v = *q;
+            }
+            *q = v;
+        }
+        for (i = 0; i < 20; i++) {
+            if (id != 0 && D_L00_001C3E98[i] == id) {
+                int j;
+                for (j = 0;; j++) {
+                    unsigned char b = D_0015EDD0[j];
+                    if ((b & 0x3F) == id || b == 0xFF) {
+                        D_0015EDD0[j] = id | 0x40;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        if (flag != 0) {
+            int t = D_L00_00179AC0[id].t;
+            if (t == 0) {
+                D_00141408 = id;
+            } else if (t == 3) {
+                D_00141414 = id;
+            } else if (t == 2) {
+                D_00141410 = id;
+            }
+        }
+        if (D_L00_00179AC0[id].t == 0) {
+            for (i = 0; i < 8 && D_00141EA0[i] != 0; i++) {
+            }
+            if (i < 8) {
+                D_00141EA0[i] = id;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00260a88.s", FUN_L00_00260a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261358.s", FUN_L00_00261358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002613d8.s", FUN_L00_002613d8);

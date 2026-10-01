@@ -180,7 +180,55 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b57f0.s", FUN_L00_002b57f0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
+
+extern char D_L00_0016CA40[] __attribute__((section(".data")));
+extern int D_L00_0015F30C;
+extern unsigned char D_L00_0015F444;
+extern unsigned char D_L00_0015F445;
+extern unsigned char D_L00_0015F446 __attribute__((sda));
+extern float D_L00_0015F448;
+extern float D_L00_0015F44C;
+extern float D_L00_0015F450;
+extern float D_L00_0015F454;
+extern int D_L00_0015FFF0;
+extern int D_L00_0016017C;
+extern float D_L00_001604A4;
+extern float D_L00_00160F80;
+extern float D_L00_00160FE0;
+extern int D_L00_00169FF8 __attribute__((section(".data")));
+extern void FUN_001fb280(int, int, int);
+
+void FUN_L00_002b57f0(int m_, int flag) {
+    char *m = (char *)m_;
+    char *p;
+    float f0, f1, f2, f3;
+    char *d;
+
+    p = *(char **)(m + 0x78);
+    D_L00_0015F30C = 0;
+    f0 = *(float *)(p + 0x30);
+    f1 = *(float *)(p + 0x34);
+    f2 = *(float *)(p + 0x38);
+    f3 = *(float *)(p + 0x3C);
+    D_L00_0015F448 = f0;
+    D_L00_0015F44C = f1;
+    D_L00_0015F450 = f2;
+    D_L00_0015F454 = f3;
+    D_L00_0015F444 = p[0x40];
+    D_L00_0015F445 = p[0x41];
+    D_L00_0015F446 = p[0x42];
+    D_L00_00169FF8 = 1;
+    if (flag != 0) {
+        D_L00_00160F80 = 512000.0f;
+        D_L00_00160FE0 = 720.0f;
+        D_L00_001604A4 = 500.0f;
+        D_L00_0015FFF0 = 500;
+        D_L00_0016017C = 0x1F4000;
+    }
+    d = D_L00_0016CA40;
+    FUN_001fb280(*(int *)(d + 0x23C), *(int *)(d + 0x240), *(int *)(d + 0x244));
+}
 typedef int q_2b58d8 __attribute__((mode(TI)));
 typedef union { q_2b58d8 q; float f[4]; } V_2b58d8;
 typedef struct { unsigned char p[0x2080]; void *w2080; } G_2b58d8;
@@ -267,7 +315,7 @@ extern int D_00141330[];
 extern int D_L00_00167014[];
 void FUN_L00_002eba18();
 void FUN_L00_002223f8();
-void FUN_L00_002b57f0();
+void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
 void FUN_0020c828();
 void FUN_L00_002b5b20(void *a, char **b) {
@@ -277,7 +325,7 @@ void FUN_L00_002b5b20(void *a, char **b) {
     FUN_L00_002eba18(*(int *)((char *)b + 0x14));
     *(int *)((char *)b + 0x14) = 0;
     FUN_L00_002223f8(0, 1);
-    FUN_L00_002b57f0(a, 1);
+    FUN_L00_002b57f0_u(a, 1);
     FUN_L00_00203b78();
     FUN_0020c828(a);
     D_L00_00167014[0] = 0;
@@ -318,7 +366,79 @@ void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
     FUN_001f9a10(*(unsigned char **)(o + 0x20) + 0x10, &r, m + 0x10);
     FUN_0020e098(*(unsigned char **)(o + 0x20));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b5d00.s", FUN_L00_002b5d00);
+/* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
+
+typedef struct { int v[6]; } V6;
+
+extern V6 D_L00_001E9A58 __attribute__((section(".data")));
+extern V6 D_L00_001E9A70 __attribute__((section(".data")));
+extern char D_L00_00166DC0[] __attribute__((section(".data")));
+extern float D_0015ED6C;
+extern float D_L00_0015F5D0;
+extern float FUN_001f9af0(void *);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_001f96f8(int);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range, float f1, float f2, float f3, float scale);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
+extern void FUN_L00_002ac910(void *, void *, void *, int, int, int, int, int, float);
+extern void FUN_001f99f8(void *);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L00_002b5d00(char *m, int flag) {
+    float tmp[4];
+    float d[4];
+    float n[4];
+    V6 A;
+    V6 B;
+    float len, extra, sc;
+    int count, i, j;
+
+    qcopy(tmp, m + 0x10);
+    tmp[2] += 0.3f;
+    FUN_L00_0026b790(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    for (j = 4; j >= 0; j--) {
+        FUN_L00_0026b790(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+    }
+    if (flag != 0) {
+        FUN_001f9a28(d, D_L00_00166DC0, m + 0x10);
+        FUN_001f99f8(n);
+        len = FUN_001f9af0(d);
+        if (len < 8.0f) {
+            count = func_001FA898_r(len) + 2;
+        } else {
+            count = 10;
+        }
+        extra = 0.0f;
+        if (len < 7.0f) extra = 7.0f - len;
+        if (count > 0) {
+        i = count;
+        do {
+            int *pa, *pb;
+            int a, b;
+            sc = random_float_between_alt(8.0f, 10.0f) * D_0015ED6C - extra * D_0015ED6C;
+            A = D_L00_001E9A58;
+            B = D_L00_001E9A70;
+            pa = A.v + random_integer_below(6);
+            pb = B.v + random_integer_below(6);
+            a = FUN_L00_00257b90(FUN_001f96f8(15), FUN_001f96f8(20));
+            b = FUN_L00_00257b90(FUN_001f96f8(25), FUN_001f96f8(30));
+            FUN_L00_0026a9f0(m + 0x10, n, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
+        } while (--i);
+        }
+        if (D_L00_0015F5D0 < 0.95f) {
+            FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
+            FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(24), 0x7F, 0x20, 0, 0x20, 2.0f);
+        }
+        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(20), 0x7F, 0x40, 0, 0x30, 3.0f);
+        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(27), 0x60, 0x10, 0, 0x40, 2.0f);
+        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(29), 0x20, 0, 0, 0x20, 1.0f);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6bc8.s", FUN_L00_002b6bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6f10.s", FUN_L00_002b6f10);
