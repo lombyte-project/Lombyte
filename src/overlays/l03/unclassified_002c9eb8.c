@@ -36,7 +36,23 @@ void FUN_L03_002d3100(void *arg, int mode) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3c40.s", FUN_L03_002d3c40);
+/* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float D_L03_00161AF0 __attribute__((sda));
+extern float D_L03_00161AF4 __attribute__((sda));
+extern float D_L03_00161AF8 __attribute__((sda));
+extern float D_L03_00161AFC __attribute__((sda));
+extern float D_L03_00161B00 __attribute__((sda));
+extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
+
+void FUN_L03_002d3c40(char *m) {
+    char *d = *(char **)(m + 0x78);
+    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * 0.0174532925f * D_0015ED6C, m, (float *)(d + 0xEC), (float *)(d + 0xE8));
+    FUN_L00_00262b80(m, d + 0xF0, d + 0xF4, D_L03_00161AF8, D_L03_00161AFC * 0.0174532925f * D_0015ED6C, D_L03_00161B00 * 0.0174532925f * D_0015ED6C);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d4288.s", FUN_L03_002d4288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);

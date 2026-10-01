@@ -101,7 +101,43 @@ void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
         out[i * 2 + 1] = (t[1] / len + 0.5f) * 2.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8d40.s", FUN_L16_002e8d40);
+/* Sets up the draw state, then draws the three entries of the level's table. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001DC600[][16] __attribute__((section(".data")));
+extern char D_L16_001DC630[] __attribute__((section(".data")));
+extern int FUN_L00_002002e0(char *, float);
+extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161EF0 __attribute__((sda));
+extern short D_L16_00161F00 __attribute__((sda));
+extern short D_L16_00161F10 __attribute__((sda));
+extern short D_L16_00161F20 __attribute__((sda));
+extern short D_L16_00161F30 __attribute__((sda));
+extern void FUN_001f76a0(void);
+extern void FUN_L00_001fde98(int, int, int, char *, int);
+extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
+
+void FUN_L16_002e8d40(void) {
+    int *a = (int *)&D_L16_00161EF0;
+    int *b = (int *)&D_L16_00161F00;
+    int *c = (int *)&D_L16_00161F10;
+    int *d = (int *)&D_L16_00161F20;
+    int *e = (int *)&D_L16_00161F30;
+    int i;
+
+    vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
+    vu1_add_g_sregister_l16(0x42, 0x4000000064);
+    vu1_add_g_sregister_l16(8, 0);
+    vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
+    FUN_001f76a0();
+    for (i = 0; i < 3; i++) {
+        if (FUN_L00_002002e0(D_L16_001DC600[i], 512.0f) != -1) {
+            FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DC630);
+            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DC630, 1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e93b0.s", FUN_L16_002e93b0);

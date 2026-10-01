@@ -5,7 +5,46 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0dc8.s", FUN_L08_002f0dc8);
+/* Draws three rows of HUD elements with their colours. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
+
+extern int D_L08_00161DD0 __attribute__((sda));
+extern int D_L08_00161DD4;
+extern int D_L08_00161DD8;
+extern int D_L08_00161DF0 __attribute__((sda));
+extern int D_L08_00161DF4;
+extern int D_L08_00161E00 __attribute__((sda));
+extern unsigned char D_L08_00161E08;
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern void FUN_001f76a0(void);
+extern void FUN_L08_002f0b40(int);
+extern void FUN_L08_002f0c18(int);
+extern void FUN_L08_002f0cf0(int);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L08_002f0dc8(void) {
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1);
+    FUN_001f76a0();
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
+    vu1_add_g_sregister(0x42, (long)D_L08_00161DD0 << 32 | 0x44);
+    FUN_L08_002f0b40(0);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
+    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD4 * D_L08_00161E08) >> 8) << 32 | 0x62);
+    FUN_L08_002f0b40(1);
+    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD8 * D_L08_00161E08) >> 8) << 32 | 0x68);
+    FUN_L08_002f0b40(2);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
+    vu1_add_g_sregister(0x42, (long)D_L08_00161DF0 << 32 | 0x48);
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister(0x42, (long)D_L08_00161DF4 << 32 | 0x48);
+    FUN_L08_002f0c18(1);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
+    vu1_add_g_sregister(0x42, (long)D_L08_00161E00 << 32 | 0x48);
+    FUN_L08_002f0cf0(0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1548.s", FUN_L08_002f1548);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5d98.s", FUN_L08_002f5d98);

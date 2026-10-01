@@ -75,7 +75,59 @@ void FUN_L02_002ec3f0(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002eca30.s", FUN_L02_002eca30);
+/* Spawns three particles around a moby with randomized direction, speed and colour. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L02_00161F84 __attribute__((sda));
+extern short D_L02_00161F88 __attribute__((sda));
+extern short D_L02_00161F8C __attribute__((sda));
+extern short D_L02_00161F90 __attribute__((sda));
+extern short D_L02_00161F94 __attribute__((sda));
+extern short D_L02_00161F98 __attribute__((sda));
+extern short D_L02_00161F9C __attribute__((sda));
+extern short D_L02_00161FA0 __attribute__((sda));
+extern short D_L02_00161FA4 __attribute__((sda));
+extern short D_L02_00161FA8 __attribute__((sda));
+extern short D_L02_00161FAC __attribute__((sda));
+extern short D_L02_00161FB0 __attribute__((sda));
+extern short D_L02_00161FB4 __attribute__((sda));
+extern short D_L02_00161FB8 __attribute__((sda));
+extern short D_L02_00161FBC __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_00257d78(float *, float, float);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002eca30(char *m, void *arg1) {
+    float v10[4], v20[4], v30[4], v40[4], v50[4];
+    int i;
+    FUN_001f9a28(v30, m + 0x10, arg1);
+    for (i = 0; i < 3; i++) {
+        int a, b, c, d, e;
+        char *p;
+        FUN_L00_0024f7c8(m, i, v50);
+        FUN_001f9a68(v10, v30, *(float *)&D_L02_00161F84);
+        FUN_001f9a68(v20, v30, *(float *)&D_L02_00161F88);
+        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161F8C * D_0015ED6C);
+        FUN_001f9a10(v20, v20, v40);
+        v10[3] = random_float_between_alt(*(float *)&D_L02_00161FA0, *(float *)&D_L02_00161FA4);
+        v20[3] = random_float_between_alt(*(float *)&D_L02_00161FA8, *(float *)&D_L02_00161FAC);
+        a = FUN_001fa6e0(*(int *)&D_L02_00161FB0, *(int *)&D_L02_00161FB4, random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_00161FB8, *(int *)&D_L02_00161FBC, random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F90 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F94 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
+        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F98 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
+        p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
+        if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ece18.s", FUN_L02_002ece18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed420.s", FUN_L02_002ed420);

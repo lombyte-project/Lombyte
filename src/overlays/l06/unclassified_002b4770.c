@@ -109,7 +109,53 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fb090.s", FUN_L06_002fb090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fb148.s", FUN_L06_002fb148);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fb2a8.s", FUN_L06_002fb2a8);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern char D_L06_00167540[] __attribute__((section(".data")));
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern short D_0015ED70_s __asm__("D_0015ED70");
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_002ea9d8(void *);
+
+int FUN_L06_002fb2a8(char *moby) {
+    float v0[4], m[4], v1[4], v2[4];
+    char *data;
+    char *pos;
+    char *x;
+    float t;
+    data = *(char **)(moby + 0x78);
+    FUN_001f99f8(m);
+    if (*(unsigned char *)(moby + 0x53) == 8) {
+        qcopy(v0, D_L06_00167540);
+        pos = moby + 0x10;
+    } else {
+        t = *(float *)&D_0015ED70_s * 3.0f;
+        FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015ED6C + D_0015ED6C);
+        FUN_L00_001ff500(v1, moby + 0xC0, 8.0f);
+        FUN_001f9a10(v1, v1, moby + 0x10);
+        x = D_0013F350;
+        v1[2] = *(float *)(x + 0x88) + 2.0f;
+        FUN_L00_001ff500(v2, x, -7.0f);
+        FUN_001f9a10(v2, v2, x + 0x80);
+        v2[2] += 4.0f;
+        pos = moby + 0x10;
+        FUN_001f9a40(v0, v1, v2, *(float *)(data + 0x118));
+    }
+    m[2] = FUN_L00_001ff8b0(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
+    m[1] = -FUN_L00_001ff8b0(FUN_001f9b80(v0, pos), *(float *)(moby + 0x18) - v0[2])
+         - (1.0f - *(float *)(data + 0x118)) * 30.0f * 0.017453293f;
+    FUN_L00_002ea9d8(v0);
+    FUN_L00_002ea9d8(m);
+    if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1) return 1;
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -126,7 +172,55 @@ void FUN_L06_002fb4b0(char *arg) {
     *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
     FUN_L00_002eac18(2);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fb668.s", FUN_L06_002fb668);
+#include "qcopy.h"
+
+/* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern char D_L06_00167540[];
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L06_00312a78(void *);
+extern void FUN_L06_00312ad0(void *);
+
+int FUN_L06_002fb668(char *moby) {
+    float v0[4], m[4], v1[4], v2[4];
+    char *data;
+    char *pos;
+    char *x;
+    float t;
+    data = *(char **)(moby + 0x78);
+    FUN_001f99f8(m);
+    if (*(unsigned char *)(moby + 0x53) == 6) {
+        qcopy(v0, D_L06_00167540);
+        pos = moby + 0x10;
+    } else {
+        t = D_0015ED70 * 0.5f;
+        FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015ED6C * 0.5f);
+        FUN_L00_001ff500(v1, moby + 0xC0, 8.0f);
+        FUN_001f9a10(v1, v1, moby + 0x10);
+        x = D_0013F350;
+        v1[2] = *(float *)(x + 0x88) + 2.0f;
+        FUN_L00_001ff500(v2, x, -7.0f);
+        FUN_001f9a10(v2, v2, x + 0x80);
+        v2[2] += 4.0f;
+        pos = moby + 0x10;
+        FUN_001f9a40(v0, v1, v2, *(float *)(data + 0x118));
+    }
+    m[2] = FUN_L00_001ff8b0(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
+    m[1] = -FUN_L00_001ff8b0(FUN_001f9b80(v0, pos), *(float *)(moby + 0x18) - v0[2])
+         - (1.0f - *(float *)(data + 0x118)) * 30.0f * 0.017453293f;
+    FUN_L06_00312a78(v0);
+    FUN_L06_00312ad0(m);
+    if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1) return 1;
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbc88.s", FUN_L06_002fbc88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc640.s", FUN_L06_002fc640);

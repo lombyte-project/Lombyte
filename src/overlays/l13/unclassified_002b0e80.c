@@ -37,7 +37,85 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8590.s", FUN_L13_002b8590);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b89f8.s", FUN_L13_002b89f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8be0.s", FUN_L13_002b8be0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b95b8.s", FUN_L13_002b95b8);
+#include "qcopy.h"
+
+/* Per-frame target tracking: validates the current target, re-picks one and drops it when lost. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BA828), where it is exact; names translated to the US level program. */
+
+extern char D_L13_001670D0[];
+extern int D_L13_0015F5C4;
+extern char D_0013C940[];
+extern unsigned char D_00140946[];
+extern int FUN_001f96f8(int);
+extern int FUN_L13_002b8be0(int, char *, char *, void *, float, float, float, char *, char *);
+extern void FUN_001f9740(int *arg0);
+
+#define W(p, o) (*(int *)((char *)(p) + (o)))
+#define P(p, o) (*(char **)((char *)(p) + (o)))
+#define H(p, o) (*(short *)((char *)(p) + (o)))
+#define B(p, o) (*(unsigned char *)((char *)(p) + (o)))
+#define FLAG D_00140946[0]
+
+void FUN_L13_002b95b8(int a, char *p) {
+    char *g = 0;
+    char *pad;
+    char *t;
+    char *r;
+    float v[4];
+    if (!(D_L13_0015F5C4 >= 3 && D_L13_0015F5C4 <= 4)) {
+        FUN_001f9740((int *)(p + 0x8C));
+    }
+    if (W(p, 0x8C) != 0 && P(p, 0x88) != 0 && H(P(p, 0x88), 0xA6) == W(p, 0x124) &&
+        B(P(p, 0x88), 0x20) != 0xFE && B(P(p, 0x88), 0x20) != 0xFD) {
+        pad = D_0013C940;
+        if (B(P(p, 0x88), 0x31) != 0) {
+            if (W(pad, 0x1B4) & 0x2000) {
+                goto take;
+            }
+            if (FLAG != 0) {
+                goto skip;
+            }
+        }
+    }
+    pad = D_0013C940;
+    if (W(pad, 0x1B4) & 0x2000) {
+take:
+        g = P(p, 0x88);
+    }
+    W(p, 0xEC) = 0;
+    W(p, 0x124) = -1;
+    W(p, 0x88) = 0;
+skip:
+    qcopy(v, D_L13_001670D0);
+    r = (char *)FUN_L13_002b8be0(a, p, D_L13_001670D0 - 0x10, v, 0.19634955f, 0.19634955f, 255.0f, P(p, 0x88), g);
+    if ((r != P(p, 0x88) && W(p, 0x8C) >= 0x1F5) || FLAG == 0) {
+        W(p, 0xEC) = 0;
+        W(p, 0x124) = -1;
+        W(p, 0x88) = 0;
+    }
+    if (r != 0 && (P(p, 0x88) == 0 || (H(P(p, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) && FLAG != 0) {
+        P(p, 0x88) = r;
+        W(p, 0x124) = H(r, 0xA6);
+        W(p, 0x8C) = W(p, 0x138);
+    }
+    if (r != P(p, 0x88)) {
+        W(p, 0x118) = W(p, 0x118) + 1;
+        if (FUN_001f96f8(0x3C) < W(p, 0x118)) {
+            W(p, 0xEC) = 0;
+            W(p, 0x124) = -1;
+            W(p, 0x88) = 0;
+        }
+    } else {
+        W(p, 0x118) = 0;
+    }
+    t = P(p, 0x88);
+    if (t != 0 && W(p, 0x84) == 0) {
+        if (H(t, 0xA6) != W(p, 0x124) || B(t, 0x20) == 0xFE || B(t, 0x20) == 0xFD) {
+            W(p, 0x88) = 0;
+            W(p, 0x124) = -1;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b9df8.s", FUN_L13_002b9df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b9f58.s", FUN_L13_002b9f58);
