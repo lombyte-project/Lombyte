@@ -124,4 +124,21 @@ void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
     if (mask & 2) { x = *c; y = *b; *b = x; *c = y; }
     if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c0e8.s", FUN_L00_0025c0e8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0025c088(int *, int *, int *, int);
+
+unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
+    int v[3];
+    unsigned a;
+    unsigned t;
+    if (mask == 0) return c;
+    v[0] = c & 0xFF;
+    v[1] = ((int)(c & 0xFF00)) >> 8;
+    v[2] = (c >> 16) & 0xFF;
+    a = c >> 24;
+    FUN_L00_0025c088(&v[0], &v[1], &v[2], mask);
+    t = (a << 24) | (v[2] << 16);
+    t |= v[1] << 8;
+    return t | v[0];
+}

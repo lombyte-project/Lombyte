@@ -7,7 +7,87 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e8e08.s", FUN_L17_002e8e08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e94d8.s", FUN_L17_002e94d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eace8.s", FUN_L17_002eace8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb768.s", FUN_L17_002eb768);
+#include "qcopy.h"
+
+/* picks the moby to home in on, keeping or dropping the current target */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED258), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013C940[];
+extern unsigned char D_00140946[];
+extern int D_L17_0015F5C4;
+extern char D_L17_001676D0[] __attribute__((section(".data")));
+extern short D_L17_0016216C __attribute__((sda));
+extern int FUN_001f9740(void *);
+extern int FUN_001f96f8(int);
+extern int FUN_L17_002eace8(int, char *, char *, char *, float, float, float, char *, char *);
+#define W(p, o) (*(int *)((char *)(p) + (o)))
+#define P(p, o) (*(char **)((char *)(p) + (o)))
+#define H(p, o) (*(short *)((char *)(p) + (o)))
+#define B(p, o) (*(unsigned char *)((char *)(p) + (o)))
+#define FLAG (D_00140946[0])
+
+void FUN_L17_002eb768(int a, char *p) {
+    char *g = 0;
+    char *pad;
+    char *t;
+    char *r;
+    float v[4];
+    int h;
+    if (!(D_L17_0015F5C4 >= 3 && D_L17_0015F5C4 <= 4)) {
+        FUN_001f9740((int *)(p + 0x8C));
+    }
+    if (W(p, 0x8C) != 0 && P(p, 0x88) != 0 && H(P(p, 0x88), 0xA6) == W(p, 0x128) &&
+        B(P(p, 0x88), 0x20) != 0xFE && B(P(p, 0x88), 0x20) != 0xFD) {
+        pad = (char *)D_0013C940;
+        if (B(P(p, 0x88), 0x31) != 0) {
+            if (W(pad, 0x1B4) & 0x2000) {
+                goto take;
+            }
+            if (FLAG != 0) {
+                goto skip;
+            }
+        }
+    }
+    pad = (char *)D_0013C940;
+    if (W(pad, 0x1B4) & 0x2000) {
+take:
+        g = P(p, 0x88);
+    }
+    W(p, 0xEC) = 0;
+    W(p, 0x128) = -1;
+    W(p, 0x88) = 0;
+skip:
+    qcopy(v, D_L17_001676D0);
+    r = (char *)FUN_L17_002eace8(a, p, D_L17_001676D0 - 0x10, (char *)v, 0.19634955f, 0.19634955f, 255.0f, P(p, 0x88), g);
+    if ((r != P(p, 0x88) && W(p, 0x8C) >= 0x1F5) || FLAG == 0) {
+        W(p, 0xEC) = 0;
+        W(p, 0x128) = -1;
+        W(p, 0x88) = 0;
+    }
+    if (r != 0 && (P(p, 0x88) == 0 || (H(P(p, 0x88), 0xA6) != 0x3EB && H(r, 0xA6) == 0x3EB)) && FLAG != 0) {
+        P(p, 0x88) = r;
+        h = *(int *)&D_L17_0016216C;
+        W(p, 0x128) = H(r, 0xA6);
+        W(p, 0x8C) = h;
+    }
+    if (r != P(p, 0x88)) {
+        W(p, 0x118) = W(p, 0x118) + 1;
+        if (FUN_001f96f8(0x3C) < W(p, 0x118)) {
+            W(p, 0xEC) = 0;
+            W(p, 0x128) = -1;
+            W(p, 0x88) = 0;
+        }
+    } else {
+        W(p, 0x118) = 0;
+    }
+    t = P(p, 0x88);
+    if (t != 0 && W(p, 0x84) == 0) {
+        if (H(t, 0xA6) != W(p, 0x128) || B(t, 0x20) == 0xFE || B(t, 0x20) == 0xFD) {
+            W(p, 0x88) = 0;
+            W(p, 0x128) = -1;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb9a8.s", FUN_L17_002eb9a8);
 #define NOT_SDA
 

@@ -28,7 +28,39 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da938.s", FUN_L02_002da938);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0cd8.s", FUN_L02_002e0cd8);
+/* Re-arms the matching entry of the moby list when the level mode is 2. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002E2110), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    char *mobys[1];
+} Level02MobyList;
+
+extern Level02MobyList D_L02_0016CE60;
+extern int D_L02_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern unsigned char D_L02_0017CA40[];
+void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L02_002e0cd8(char *moby) {
+    int i;
+    if (D_L02_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L02_0016CE60.count; i++) {
+            char *e = D_L02_0016CE60.mobys[i];
+            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *s = D_L02_0017CA40;
+                if (s[1] == 0) {
+                    attach_manipulator(e, 0, s);
+                    *(float *)(s + 0x20) = 2.75f;
+                    *(float *)(s + 0x24) = 2.75f;
+                    *(float *)(s + 0x28) = 2.75f;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */

@@ -70,7 +70,37 @@ void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, flo
     write_dma_channel(D_L02_001CB400, 0x70002800, 0xF8);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3c98.s", FUN_L02_002d3c98);
+#include "qcopy.h"
+
+/* Transforms two table vectors by the moby's matrix and passes them on. */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
+
+extern float D_L02_001D3230[][4] __attribute__((section(".data")));
+extern short D_L02_001619C0 __attribute__((sda));
+extern short D_L02_001619D0 __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L02_002d3a50(void *, void *, void *, int, float, float);
+
+void FUN_L02_002d3c98(char *moby, int a, int b, int d) {
+    float va[4];
+    float vb[4];
+    float *pa = D_L02_001D3230[a];
+    float *pb;
+    qcopy(va, pa);
+    va[3] = 1.0f;
+    FUN_001f9a28(va, va, &D_L02_001619C0);
+    FUN_001f9cf8(va, va, moby + 0xC0);
+    FUN_001f9a10(va, va, moby + 0x10);
+    pb = D_L02_001D3230[b];
+    qcopy(vb, pb);
+    vb[3] = 1.0f;
+    FUN_001f9a28(vb, vb, &D_L02_001619C0);
+    FUN_001f9cf8(vb, vb, moby + 0xC0);
+    FUN_001f9a10(vb, vb, moby + 0x10);
+    FUN_L02_002d3a50(moby, va, vb, d, pa[3] * *(float *)&D_L02_001619D0, pb[3] * *(float *)&D_L02_001619D0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3dd0.s", FUN_L02_002d3dd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5658.s", FUN_L02_002d5658);

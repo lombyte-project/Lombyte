@@ -24,7 +24,37 @@ int FUN_L00_0028ddd8(int a, int b, int c, int d) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028de68.s", FUN_L00_0028de68);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F140), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550_c[] __asm__("D_0013E550");
+
+extern unsigned char D_L00_001BD820[];
+extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int D_L00_0015F574 __attribute__((section(".sdata")));
+extern int D_L00_0015F5F0 __attribute__((section(".sdata")));
+extern char *D_L00_0015F5F4 __attribute__((section(".sdata")));
+
+int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
+    int idx;
+    int h;
+    int t;
+
+    t = D_L00_001BD820[D_0015ED84] + a0 * 4;
+    t += a1 * 2;
+    t += a2;
+    idx = t + D_L00_0015F574;
+
+    if (idx >= D_L00_0015F5F0) {
+        return -1;
+    }
+    h = FUN_0022d7f0(D_L00_0015F5F4 + idx * 32, a3, a4, 0, 0x400);
+    if (h >= 0) {
+        char *rec = D_0013E550_c + h * 0x70;
+        *(int *)(rec + 0x88) = a4;
+        *(short *)(rec + 0x7E) = idx;
+    }
+    return h;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028df30.s", FUN_L00_0028df30);
 typedef struct { s32 w[0x1C]; } E0028df38;
 extern E0028df38 D_0013E550[];

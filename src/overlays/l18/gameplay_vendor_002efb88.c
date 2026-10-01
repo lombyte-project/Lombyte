@@ -70,7 +70,65 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1e68.s", FUN_L18_002f1e68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1fd8.s", FUN_L18_002f1fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2310.s", FUN_L18_002f2310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2598.s", FUN_L18_002f2598);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2620.s", FUN_L18_002f2620);
+#include "qcopy.h"
+
+/* Draws 25 textured quads from the L18 tables, in the moby's frame. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3A80), where it is exact; names translated to the US level program. */
+
+typedef float FVec4[4] __attribute__((aligned(16)));
+typedef struct {
+    FVec4 v;
+} FRow;
+extern short D_L18_00162310 __attribute__((sda));
+extern short D_L18_00162314 __attribute__((sda));
+extern short D_L18_00162318 __attribute__((sda));
+extern short D_L18_0016231C __attribute__((sda));
+extern short D_L18_00162320 __attribute__((sda));
+extern short D_L18_00162324 __attribute__((sda));
+extern short D_L18_00162328 __attribute__((sda));
+extern short D_L18_00162308 __attribute__((sda));
+extern float D_L18_001DA7A0[][2] __attribute__((section(".data")));
+extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
+extern short D_L18_001DA610[][4][2] __attribute__((section(".data")));
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern void FUN_001f9fc8(void *);
+extern void FUN_L00_001fd228(void *, void *, int);
+
+void FUN_L18_002f2620(char *moby) {
+    FRow m[4];
+    int colors[4];
+    float uv[4][2];
+    unsigned long pkt[4];
+    float mat[4][4];
+    char *data = *(char **)(moby + 0x78);
+    int i;
+    int j;
+
+    pkt[1] = get_effect_texture_alt((*(int *)&D_L18_00162324));
+    pkt[3] = (*(int *)&D_L18_00162310) | (long)(*(int *)&D_L18_00162314) << 2;
+    pkt[3] |= (long)(*(int *)&D_L18_00162318) << 4;
+    pkt[3] |= (long)(*(int *)&D_L18_0016231C) << 6;
+    pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
+    pkt[2] = 0xFF9000000260;
+    pkt[0] = 0;
+    FUN_001f9fc8(mat);
+    mat[3][2] = *(float *)(moby + 0x18) - *(float *)data;
+    colors[3] = (*(int *)&D_L18_00162328);
+    colors[2] = (*(int *)&D_L18_00162328);
+    colors[1] = (*(int *)&D_L18_00162328);
+    colors[0] = (*(int *)&D_L18_00162328);
+    for (i = 0; i < 25; i++) {
+        float ofs = *(float *)&D_L18_00162308;
+        for (j = 0; j < 4; j++) {
+            int a = D_L18_001DA610[i][j][0];
+            int b = D_L18_001DA610[i][j][1];
+            qcopy(&m[j], &D_L18_001DA3C0[a]);
+            uv[j][0] = D_L18_001DA7A0[b][0] + ofs;
+            uv[j][1] = D_L18_001DA7A0[b][1];
+        }
+        FUN_L00_001fd228(m, mat, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f27c8.s", FUN_L18_002f27c8);
 #include "qcopy.h"
 
