@@ -99,7 +99,7 @@ def unit_category(name: str) -> str:
 def unit_symbol(unit: dict) -> str:
     source = unit["source"]
     if source.is_file():
-        text = source.read_text(errors="replace")
+        text = source.read_text(encoding="utf-8", errors="replace")
         if unit["category"] == "pending":
             match = INCLUDE_ASM_RE.search(text)
             if match:
@@ -268,7 +268,7 @@ def main(argv: list[str] | None = None) -> int:
               else committed_scores(args.report))
     text = render(build_report(scores))
     if args.check:
-        if not args.report.is_file() or args.report.read_text() != text:
+        if not args.report.is_file() or args.report.read_text(encoding="utf-8") != text:
             print(f"{args.report.relative_to(REPO)} is out of date: run "
                   "python3 scripts/gen_progress_report.py --workspace build/baseline "
                   "after ./verify-baseline.sh and commit the result", file=sys.stderr)
@@ -276,7 +276,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{args.report.relative_to(REPO)} is current")
         return 0
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(text)
+    args.report.write_text(text, encoding="utf-8")
     m = json.loads(text)["measures"]
     print(f"wrote {args.report.relative_to(REPO)}: {m['matched_code']} / {m['total_code']} B "
           f"({m['matched_code_percent']:.2f} %), fuzzy {m['fuzzy_match_percent']:.2f} %, "

@@ -126,7 +126,7 @@ def load_recovered_full(config_dir: Path) -> dict[str, str]:
     if not path.is_file():
         return {}
     try:
-        payload = json.loads(path.read_text())
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
     names: dict[str, str] = {}
@@ -159,7 +159,7 @@ def load_overlay_names(repo: Path) -> dict[int, str]:
         return names
     for path in sorted(names_dir.glob("level-*.json")):
         try:
-            payload = json.loads(path.read_text())
+            payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
         for entry in payload.get("functions", []):
@@ -173,7 +173,7 @@ def load_overlay_names(repo: Path) -> dict[int, str]:
 
 def source_symbol(source: Path) -> str | None:
     """First function name (or INCLUDE_ASM symbol) in a unit source, or None."""
-    text = source.read_text(errors="replace")
+    text = source.read_text(encoding="utf-8", errors="replace")
     match = FUNC_DEF_RE.search(text)
     if match:
         return match.group(1)
@@ -350,7 +350,7 @@ def balanced_columns(tiles: list[dict]) -> tuple[list[dict], list[dict]]:
 def parse_units(config: Path):
     """Configured C units as (owner, address, size) sorted by address."""
     rows = []
-    for line in config.read_text().splitlines():
+    for line in config.read_text(encoding="utf-8").splitlines():
         match = ROW_RE.match(line)
         if match:
             rows.append((int(match.group(1), 16), match.group(2), match.group(3)))
@@ -371,7 +371,7 @@ def load_categories(path: Path | None):
     if path is None or not path.is_file():
         return set(), set()
     try:
-        payload = json.loads(path.read_text())
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return set(), set()
     return (
@@ -397,7 +397,7 @@ _ASM_REGISTER_RE = re.compile(
 def non_label_asm(source: Path) -> bool:
     """True when the source holds inline asm other than a name label."""
     try:
-        text = _COMMENT_RE.sub(" ", source.read_text(errors="replace"))
+        text = _COMMENT_RE.sub(" ", source.read_text(encoding="utf-8", errors="replace"))
     except OSError:
         return False
     for match in _ASM_START_RE.finditer(text):
@@ -1273,7 +1273,7 @@ def main(argv=None) -> int:
         drawer_height=args.drawer_height,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(svg)
+    output.write_text(svg, encoding="utf-8")
 
     group_tiles = build_group_tiles(units)
     total = sum(unit["size"] for unit in units)
@@ -1388,7 +1388,7 @@ def main(argv=None) -> int:
         "overlays": overlays_stats,
         "total": total_stats,
     }
-    stats_path.write_text(json.dumps(stats, indent=2) + "\n")
+    stats_path.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     print(f"  stats: {stats_path}")
     shown = sum(1 for group in group_tiles if group["size"] >= args.min_bytes)
     small_buckets = sum(
