@@ -10,7 +10,7 @@ s32 enable_intc(s32 arg0) {
     u32 status;
     s32 result;
 
-    __asm__ __volatile__("mfc0 %0, \$12" : "=r"(status));
+    __asm__ __volatile__("mfc0 %0, $12" : "=r"(status));
     status &= 0x10000;
     if (status != 0) {
         DIntr();

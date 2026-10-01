@@ -25,9 +25,9 @@ Build notes: same 32-bit host recipe as
 `REAL_VALUE_NEGATE` into a no-op, so negative float/double constants are sent
 to the `.sdata` pool instead of `li.s`/`li.d` (the retail SN cc1 emits
 `li.s`/`li.d`).
-Reference binary of
-this vintage: `/root/rnc-toolchains/tier2-20260909/991111b-r4` (scores 79.87 on
-`fun_0022f778`, so it is not the retail compiler for that unit).
+A reference build of
+this vintage scores 79.87 on `fun_0022f778`, so it is not the retail compiler
+for that unit.
 
 ## Production stack (game compiler)
 
@@ -46,7 +46,8 @@ and build `cc1` with `make LANGUAGES=c 'CC=gcc -m32' 'CFLAGS=-O2
 -fno-strict-aliasing -fcommon -std=gnu89 -D_GNU_SOURCE' cc1`; the result is
 `cc1` `05ff323f6e75accb…` (verified 2026-09-23 from a fresh extraction;
 through `0048` it is `4dfa3cf0f0fa8d31…`).
-`0035` and `0038` are published but not part of the production stack.
+`0038` is published but not part of the production stack; `0035` was never
+published (its record below is kept for the stack history).
 
 Patches marked *production dependency* are in that stack but turned no
 fixture exact on their own; they are published so the production compiler is

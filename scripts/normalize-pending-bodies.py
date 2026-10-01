@@ -172,7 +172,7 @@ def candidate_bank() -> Path | None:
         path = Path(tools_root) / "build" / "decompiler" / "candidates"
         if path.is_dir():
             return path
-    sibling = ROOT.parent / "RncDecomp-tools" / "build" / "decompiler" / "candidates"
+    sibling = ROOT.parent / "Lombyte-Tools" / "build" / "decompiler" / "candidates"
     if sibling.is_dir():
         return sibling
     local = ROOT / "build" / "decompiler" / "candidates"

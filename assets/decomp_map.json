@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4782,
-  "matching_c": 1706,
+  "matching_c": 1713,
   "intentional_asm": 249,
-  "pending_c": 2827,
+  "pending_c": 2820,
   "bytes_total": 3655312,
-  "bytes_matching_c": 407268,
+  "bytes_matching_c": 408568,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 3151712,
-  "c_exact_percent_of_recoverable": 11.4434,
-  "c_fuzzy_percent_of_recoverable": 13.4884,
+  "bytes_pending_c": 3150412,
+  "c_exact_percent_of_recoverable": 11.4799,
+  "c_fuzzy_percent_of_recoverable": 13.5249,
   "boot": {
     "units_total": 1442,
     "groups_total": 127,
@@ -1933,12 +1933,12 @@
   },
   "overlays": {
     "functions_total": 3340,
-    "matching_c": 660,
-    "pending_c": 2680,
+    "matching_c": 667,
+    "pending_c": 2673,
     "bytes_total": 3218660,
-    "bytes_matching_c": 187496,
-    "bytes_pending_c": 3031164,
-    "c_exact_percent_of_recoverable": 5.8253,
+    "bytes_matching_c": 188796,
+    "bytes_pending_c": 3029864,
+    "c_exact_percent_of_recoverable": 5.8657,
     "shared": {
       "id": "shared",
       "index": null,
@@ -4348,12 +4348,12 @@
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
         "functions": 131,
-        "matching_c": 7,
-        "pending_c": 124,
+        "matching_c": 14,
+        "pending_c": 117,
         "bytes_total": 149872,
-        "bytes_matching_c": 588,
-        "bytes_pending_c": 149284,
-        "c_exact_percent_of_recoverable": 0.3923,
+        "bytes_matching_c": 1888,
+        "bytes_pending_c": 147984,
+        "c_exact_percent_of_recoverable": 1.2597,
         "files": [
           {
             "file": "src/overlays/l14/ui_help_0021dd30.c",
@@ -4379,16 +4379,16 @@
           {
             "file": "src/overlays/l14/unclassified_002460f8.c",
             "functions": 53,
-            "matching_c": 3,
+            "matching_c": 7,
             "bytes_total": 32612,
-            "bytes_matching_c": 296
+            "bytes_matching_c": 1040
           },
           {
             "file": "src/overlays/l14/unclassified_002df080.c",
             "functions": 39,
-            "matching_c": 1,
+            "matching_c": 4,
             "bytes_total": 32128,
-            "bytes_matching_c": 48
+            "bytes_matching_c": 604
           },
           {
             "file": "src/overlays/l14/unclassified_002fded0.c",
@@ -4694,14 +4694,14 @@
   },
   "total": {
     "units_total": 4782,
-    "matching_c": 1706,
+    "matching_c": 1713,
     "intentional_asm": 249,
-    "pending_c": 2827,
+    "pending_c": 2820,
     "bytes_total": 3655312,
-    "bytes_matching_c": 407268,
+    "bytes_matching_c": 408568,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 3151712,
-    "c_exact_percent_of_recoverable": 11.4434,
-    "c_fuzzy_percent_of_recoverable": 13.4884
+    "bytes_pending_c": 3150412,
+    "c_exact_percent_of_recoverable": 11.4799,
+    "c_fuzzy_percent_of_recoverable": 13.5249
   }
 }

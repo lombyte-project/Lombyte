@@ -12,13 +12,13 @@ Because the matching decompilation reproduces the boot ELF byte-for-byte
 (full-ELF SHA gate), the patched ISO is byte-identical to the original.
 
 Usage:
-  python3 rebuild-iso.py [--iso dumps/....iso] [--elf build/SCUS_971.99] [--out build/....iso]
+  python3 rebuild-iso.py [--iso dumps/....iso] [--elf PATH] [--out build/....iso]
 
-If --elf is omitted, the script looks for a reconstructed boot ELF (build/SCUS_971.99
-or a baseline workspace: build/baseline in the checkout, or BASELINE_ROOT when
-set); run the baseline first (./verify-baseline.sh) to produce it. For a dry
-check of the patching machinery you may pass extracted/SCUS_971.99
-(byte-identical to the built ELF today).
+If --elf is omitted, the script looks for the reconstructed boot ELF in the
+baseline workspace (build/baseline/config/us/build/SCUS_971.99 in the checkout,
+or under BASELINE_ROOT when set); run `make elf` first to produce it. For a dry
+check of the patching machinery you may pass config/us/SCUS_971.99 (the retail
+executable, byte-identical to the built ELF).
 """
 
 from __future__ import annotations
@@ -119,8 +119,8 @@ def main() -> int:
         elf_path = next((p for p in built_elf_candidates() if p.is_file()), None)
         if elf_path is None:
             raise SystemExit(
-                "no built boot ELF found. Run ./verify-baseline.sh first "
-                "(produces build/SCUS_971.99), or pass --elf."
+                "no built boot ELF found. Run `make elf` first (it leaves the ELF "
+                "in the baseline workspace), or pass --elf."
             )
     if not elf_path.is_file():
         raise SystemExit(f"built ELF not found: {elf_path}")

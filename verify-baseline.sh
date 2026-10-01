@@ -35,7 +35,7 @@ case "$_RESOLVED_ROOT" in
 esac
 case "$_RESOLVED_ROOT" in
   /) die "BASELINE_ROOT must not be the filesystem root" ;;
-  "$HOME") die "BASELINE_ROOT must not be the home directory ($HOME)" ;;
+  "${HOME:-}") die "BASELINE_ROOT must not be the home directory (${HOME:-})" ;;
 esac
 _PROJECT_RESOLVED="$(realpath -m "$PROJECT_ROOT")"
 case "$_PROJECT_RESOLVED" in

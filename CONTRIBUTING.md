@@ -41,24 +41,26 @@ used below.
 python3 scripts/list-functions.py --score
 ```
 
-Lists the units whose C is still pending. `--score` measures each candidate's
-C body against retail (about a minute for the full list) and lists the closest
-first; without it the list is offline and sorted by size. `--limit` and
-`--filter` narrow it.
+Lists the pending units that already carry a C body, smallest first (25 by
+default; `--limit 0` shows all, `--all` adds the units with no C yet). A unit
+already under its subsystem directory can still appear here when its C keeps a
+piece of inline assembly. `--score` measures each candidate's C body against
+retail (about a minute for the full list) and lists the closest first; without
+it the list is offline. `--filter` narrows it by owner path.
 
-Grab a unit name, for example `assembly/math/sign_extend_packed_value`. If you
+Grab a unit name, for example `assembly/textbin/runtime/memory/clear_u64_value`. If you
 want to claim it, open an issue or comment on an existing one with the unit
 name.
 
 ### 3. Read the source and the retail assembly
 
-Open the unit's source, e.g. `src/assembly/math/subtract_integer_with_clamp.c`.
+Open the unit's source, e.g. `src/assembly/textbin/runtime/memory/clear_u64_value.c`.
 While a unit is pending, it keeps the retail assembly as an _oracle_ and the
 readable C body as a fallback:
 
 ```c
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/...", SubtractIntegerWithClamp);
+INCLUDE_ASM("config/us/expected/asm/.../FUN_001f99f8.s", FUN_001f99f8);
 #else
 /* readable C body -- this is what you edit */
 #endif /* NON_MATCHING */
@@ -78,9 +80,9 @@ next to the C and the surrounding units.
 - Remove `__attribute__((section(".text.*")))` seed attributes: the retail
   unit object uses plain `.text`, and promoted units never use custom text
   sections.
-- Keep the unit's canonical symbol name (the header's `SYMBOL:` field). A
-  friendly name is welcome as an alias, e.g.
-  `int MyName(int a0) __asm__("func_00123456");`.
+- Keep the unit's canonical symbol name (the second argument of its
+  `INCLUDE_ASM(...)` line). A friendly name is welcome as an alias, e.g.
+  `int MyName(int a0) __asm__("FUN_00123456");`.
 - Declare variables at the start of blocks and use the project typedefs
   (`u32`, `s32`, `f32`, …) — this is GCC 2.9 era, not modern C.
 - Keep it descriptive C: no inline assembly or copied disassembly in the body.
@@ -88,7 +90,7 @@ next to the C and the surrounding units.
 ### 5. Check your work
 
 ```sh
-python3 scripts/check-unit.py assembly/math/subtract_integer_with_clamp
+python3 scripts/check-unit.py assembly/textbin/runtime/memory/clear_u64_value
 ```
 
 This compiles just that unit's C body and compares it with the retail object,
@@ -133,7 +135,7 @@ Once the unit matches, make the C the only compiled code:
 
 Commit with the project's message standard (see
 [`docs/commit-messages.md`](docs/commit-messages.md)), for example
-`decomp: promote SubtractIntegerWithClamp (24 B)`, and open a pull request
+`decomp: promote clear_u64_value (8 B)`, and open a pull request
 using the template. Include the unit name, its size, and the `PASS` line from
 `make elf`. A maintainer will review and merge.
 
@@ -145,11 +147,12 @@ Every pull request runs the public `tools` job in
 - `python3 scripts/test_public_tools.py -v` — the script regression suite;
 - `python3 -m py_compile scripts/*.py` — every public script must parse.
 
-These checks need no game data and never upload build outputs. Run the same
-checks locally with `make check`. The full `make elf` rebuild stays a local,
+These checks need no game data and never upload build outputs. `make check`
+runs them locally, plus the progress workflow's
+`python3 scripts/gen_progress_report.py --check` (see below). The full `make elf` rebuild stays a local,
 contributor-run gate (see above); CI does not run it for you.
 
-The `progress` job in
+The `progress` workflow in
 [`.github/workflows/progress.yml`](.github/workflows/progress.yml) feeds
 [decomp.dev](https://decomp.dev/mateuszklysz/Lombyte). It does not build the game and uses no
 secrets: it checks that the committed `progress/report.json` matches the
@@ -185,8 +188,11 @@ acceptance discipline and the recovery ladder.
   deliverable.
 - Run `python3 scripts/test_public_tools.py` before changing anything under
   `scripts/`.
+- The tracked [`.pre-commit-config.yaml`](.pre-commit-config.yaml) runs the
+  usual file checks (JSON/YAML validity, large files, shebang modes); install
+  it with `pre-commit install` or `prek install` if you use either.
 - Enable the commit-message hook once per checkout (optional but handy):
 
   ```sh
-  ln -sf ../scripts/commit-msg.py .git/hooks/commit-msg
+  ln -sf ../../scripts/commit-msg.py .git/hooks/commit-msg
   ```

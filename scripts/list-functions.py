@@ -172,7 +172,7 @@ def default_audit() -> Path | None:
     tools_root = os.environ.get("RNC_TOOLS_ROOT", "").strip()
     if tools_root:
         candidates.append(Path(tools_root) / "analysis" / "audits")
-    candidates.append(ROOT.parent / "RncDecomp-tools" / "analysis" / "audits")
+    candidates.append(ROOT.parent / "Lombyte-Tools" / "analysis" / "audits")
     candidates.append(ROOT / "analysis" / "audits")
     for directory in candidates:
         if directory.is_dir():

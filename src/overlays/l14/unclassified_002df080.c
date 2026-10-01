@@ -2,11 +2,80 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df080.s", FUN_L14_002df080);
+/* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the
+ * moby's data block and clears four fields.
+ * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * func_L14_002E0480), where it is exact; names translated to the US level
+ * program. */
+void FUN_L14_002df080(u8 *moby)
+{
+    f32 *d = *(f32 **)(moby + 0x78);
+    f32 *p = d;
+    s32 i;
+    for (i = 0; i < 10; i++) {
+        p[0] = d[0x1F0 / 4] * (f32)i;
+        p[1] = p[2] = 0.0f;
+        p[3] = 1.0f;
+        p += 4;
+    }
+    i = 0;
+    p = d;
+    for (; i < 20; i++) {
+        p[0xA0 / 4] = (f32)i * 0.39f;
+        p[0xA4 / 4] = p[0xA8 / 4] = 0.0f;
+        p[0xAC / 4] = 1.0f;
+        p += 4;
+    }
+    d[0x1E0 / 4] = 0.0f;
+    d[0x1E4 / 4] = 0.0f;
+    d[0x1E8 / 4] = 0.0f;
+    d[0x1EC / 4] = 0.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df138.s", FUN_L14_002df138);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df458.s", FUN_L14_002df458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df510.s", FUN_L14_002df510);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfc58.s", FUN_L14_002dfc58);
+extern s32 FUN_00214720(u8 *base, s32 arg);
+extern void FUN_001f99f8(void *);
+extern void FUN_L00_00259a88(s32, void *);
+extern u8 D_0013F3D0[];
+
+typedef struct {
+    f32 v[4];
+    u8 *moby;
+    s32 flags;
+    s8 a;
+    s8 b;
+    s16 c;
+    f32 range;
+    s32 one;
+} Level14Req;
+
+/* 0x002DFC58, 184 bytes.  If the moby's check passes, builds an effect
+ * request on the stack and submits it.
+ * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c:
+ * func_L14_002E1058), where it is exact; names translated to the US level
+ * program. */
+void FUN_L14_002dfc58(u8 *moby)
+{
+    u8 *base = D_0013F3D0;
+    Level14Req r;
+    u8 *q;
+    if (FUN_00214720(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
+        r.flags = 0x200001;
+        r.range = 100.0f;
+        r.one = 1;
+        r.moby = moby;
+        FUN_001f99f8(&r);
+        r.v[2] = 1.0f;
+        r.v[3] = 5627.925f;
+        r.a = 5;
+        r.b = 4;
+        r.c = *(u16 *)(moby + 0xA6);
+        q = base - 0x80;
+        *(s32 *)(q + 0x22A8) = 0;
+        FUN_L00_00259a88(*(s32 *)(q + 0x2080), &r);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e7bd8.s", FUN_L14_002e7bd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eaf88.s", FUN_L14_002eaf88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eb388.s", FUN_L14_002eb388);
@@ -50,7 +119,36 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
     data->field124 = 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef5a8.s", FUN_L14_002ef5a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef630.s", FUN_L14_002ef630);
+extern u8 D_L14_001E03B0[];
+extern u8 *D_L14_001B0BB0[];
+extern u8 D_0013F350[];
+extern void FUN_001f9cf8(u8 *, u8 *, u8 *);
+extern void FUN_001f9a10(u8 *, u8 *, u8 *);
+
+/* 0x002EF630, 192 bytes.  Rebuilds the 11 vectors of a table entry from the
+ * moby's matrix and position.
+ * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c:
+ * func_L14_002F0AB8), where it is exact; names translated to the US level
+ * program. */
+void FUN_L14_002ef630(u8 *moby)
+{
+    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *src = D_L14_001E03B0;
+    u8 *dst = D_L14_001B0BB0[*(s32 *)(data + 0x114)] + 0x10;
+    s32 i = 10;
+    f32 one = 1.0f;
+    u8 *x;
+    do {
+        FUN_001f9cf8(dst, src, moby + 0xC0);
+        src += 0x10;
+        i--;
+        FUN_001f9a10(dst, dst, moby + 0x10);
+        *(f32 *)(dst + 0xC) = one;
+        dst += 0x10;
+    } while (i >= 0);
+    x = D_0013F350;
+    *(s16 *)(x + 0x22DA) = *(u16 *)(data + 0x114);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef6f0.s", FUN_L14_002ef6f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);

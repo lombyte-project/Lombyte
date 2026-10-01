@@ -1,12 +1,5 @@
-/* C_EXACT - promoted 2026-09-09 (per-unit -fno-schedule-insns routing)
- * SYMBOL: sceSifInitIopHeap
- * COMPILER: EE-GCC 2.9-991111-01 -O2 -g2 -gstabs -fno-schedule-insns
- *   (per-unit flag via configure.py SDK_COMPILER_FLAG_UNITS; the flag is NOT
- *   production-default because it regresses the sibling scePad2Read)
- * SCORE: code=100 functions=100 data=100 complete_data=100
- * DECISION: promoted (staged object + full-ELF SHA gate PASS e05058...c0c9)
- * BLOCKER: none
- */
+/* sceSifInitIopHeap: SDK compiler, built with the legacy per-unit
+ * -fno-schedule-insns entry in configure.py (SDK_COMPILER_FLAG_UNITS). */
 
 #include "types.h"
 struct SifClient { u8 pad_0[0x24]; s32 unk24; };
