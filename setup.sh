@@ -223,7 +223,11 @@ check_installed() {
     LABEL="R5900 binutils (tools/binutils-mips-ps2-decompals)"; check test -x "$TOOLS/binutils-mips-ps2-decompals/mips-ps2-decompals-ld"
     LABEL="objdiff-cli (tools/objdiff)";                        check test -x "$TOOLS/objdiff/objdiff-cli"
     LABEL="Python environment (.venv)";                         check "$ROOT/.venv/bin/python" -c "import splat, spimdisasm, ninja"
-    LABEL="PE runner (WSL interop or wine)";                    check bash -c 'grep -qi microsoft /proc/version || command -v wine'
+    if [[ "$ROOT" =~ ^/mnt/[A-Za-z]/ ]]; then
+        LABEL="PE runner (WSL interop, checkout on a Windows drive)"; check true
+    else
+        LABEL="PE runner (wine)";                                   check command -v wine
+    fi
     LABEL="retail boot ELF (config/us/SCUS_971.99)";            check sha_ok "$ELF_TARGET" "$ELF_SHA"
     [[ "$ok" == 1 ]]
 }
@@ -244,7 +248,11 @@ install_packages() {
         for p in "${packages[@]}"; do
             dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p")
         done
-        if ! is_wsl && ! command -v wine >/dev/null 2>&1; then
+        # configure.py runs the PE tools under wine whenever the checkout is
+        # not on /mnt/<drive>/ (_windows_exe): its Ps2EeAs exits 253 through
+        # WSL interop on some inputs. Mirror that choice here rather than
+        # keying on is_wsl, so a checkout on a native path gets wine on WSL too.
+        if ! command -v wine >/dev/null 2>&1 && [[ ! "$ROOT" =~ ^/mnt/[A-Za-z]/ ]]; then
             missing+=(wine wine64 wine32:i386)
         fi
         if [[ ${#missing[@]} -gt 0 ]]; then
@@ -257,7 +265,9 @@ install_packages() {
             as_root apt-get install -y --no-install-recommends "${missing[@]}"
         fi
     else
-        warn "not a Debian/Ubuntu system; make sure these are installed: ${packages[*]}$(is_wsl || echo ' wine (with 32-bit support)')"
+        local wine_note=""
+        [[ "$ROOT" =~ ^/mnt/[A-Za-z]/ ]] || wine_note=" wine (with 32-bit support)"
+        warn "not a Debian/Ubuntu system; make sure these are installed: ${packages[*]}${wine_note}"
     fi
     local need tool
     for tool in curl git make tar xz gcc python3 ninja flex; do

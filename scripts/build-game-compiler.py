@@ -216,14 +216,22 @@ def extract_source(archive: Path, work: Path) -> Path:
 
 
 def apply_patches(source: Path) -> None:
+    # Apply from the repository root with --directory: run from inside the
+    # checkout, git resolves the patch paths against the repository root and
+    # skips every path that is not there with exit status 0, so no patch lands
+    # and the first hunk that no longer matches (0046) is blamed instead.
+    try:
+        directory = ["--directory", str(source.resolve().relative_to(Path.cwd().resolve()))]
+    except ValueError:
+        directory = []
     for patch in patch_files():
         check = subprocess.run(
-            ["git", "apply", "--check", str(patch)],
-            cwd=source, capture_output=True, text=True,
+            ["git", "apply", "--check", *directory, str(patch)],
+            capture_output=True, text=True,
         )
         if check.returncode != 0:
             raise BuildError(f"{patch.name} does not apply: {check.stderr.strip()}")
-        run(["git", "apply", str(patch)], cwd=source)
+        run(["git", "apply", *directory, str(patch)])
 
 
 def local_bison() -> Path | None:
