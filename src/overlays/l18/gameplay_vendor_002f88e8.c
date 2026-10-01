@@ -9,7 +9,53 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9c20.s", FUN_L18_002f9c20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa250.s", FUN_L18_002fa250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa640.s", FUN_L18_002fa640);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa728.s", FUN_L18_002fa728);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* updates a moby that drags a child moby along with it */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+void FUN_L18_002fa728(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char tmp[16];
+    char *child;
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        FUN_001f9a28(tmp, moby + 0x10, data + 0x60);
+        FUN_L00_00260738(data + 0x20, tmp, data + 0x70, moby + 0x40);
+        break;
+    }
+    if (*(unsigned char *)(moby + 0xBC) != 0 && *(int *)(data + 0x80) != 0 && *(int *)(data + 0x84) == 0) {
+        char *c = func_0020D348_m(0x764);
+        *(char **)(data + 0x84) = c;
+        if (c != 0) {
+            *(unsigned short *)(c + 0x32) = *(unsigned short *)(moby + 0x32);
+            (*(char **)(data + 0x84))[0x31] = 1;
+            *(long *)(*(char **)(data + 0x84) + 0x38) = *(long *)(moby + 0x38);
+            *(float *)(*(char **)(data + 0x84) + 0x2C) *= *(float *)(moby + 0x2C) / *(float *)(*(char **)(moby + 0x24) + 0x24);
+        }
+    }
+    qcopy(data + 0x60, moby + 0x10);
+    qcopy(data + 0x70, moby + 0x40);
+    child = *(char **)(data + 0x84);
+    if (child != 0) {
+        qcopy(child + 0x10, moby + 0x10);
+        qcopy(child + 0x40, moby + 0x40);
+        FUN_L00_00250df8(child);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa888.s", FUN_L18_002fa888);
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 

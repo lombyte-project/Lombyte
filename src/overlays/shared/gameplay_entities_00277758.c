@@ -2,4 +2,23 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00277758.s", FUN_L09_00277758);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_002785C0.c: func_L09_00278690), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_L09_00277688(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void FUN_001f99f8(void *);
+
+void FUN_L09_00277758(float *out, float scale)
+{
+    float angle = random_angle_radians();
+    float magnitude = FUN_L09_00277688(scale);
+    FUN_001f99f8(out);
+    out[0] = FUN_001f9dc8(angle) * magnitude;
+    out[1] = FUN_001f9de0(angle) * magnitude;
+}

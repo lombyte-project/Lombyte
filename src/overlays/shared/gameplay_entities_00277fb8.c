@@ -5,6 +5,44 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277ff0.s", FUN_L01_00277ff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002783a8.s", FUN_L01_002783a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002787a0.s", FUN_L01_002787a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern float FUN_001f9b80(void *, void *);
+extern void FUN_L00_00260a88(void *, int, int, int, int);
+
+void FUN_L01_002787a0(char *moby)
+{
+    int r = 0;
+    if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+        r = 2;
+    }
+    FUN_L00_00260a88(moby, 4, 7, r, -1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278ad0.s", FUN_L01_00278ad0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278e20.s", FUN_L01_00278e20);
+#include "qcopy.h"
+
+/* spawns a moby of a class copying the source moby's placement, scaled */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L01_00278e20(char *src, int oClass) {
+    char *m = func_0020D348_m(oClass);
+    if (m != 0) {
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+        qcopy(m + 0x10, src + 0x10);
+        qcopy(m + 0x40, src + 0x40);
+        *(long *)(m + 0x38) = *(long *)(src + 0x38);
+        m[0x30] = 0;
+        *(short *)(m + 0x34) = 0;
+        FUN_L00_00250df8(m);
+    }
+}

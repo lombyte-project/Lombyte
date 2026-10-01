@@ -2,9 +2,43 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026d930.s", FUN_L01_0026d930);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
+
+void FUN_L01_0026d930(char *p)
+{
+    *(int *)(p + 0x0) = 0x280;
+    *(float *)(p + 0x4) = 1.0f;
+    *(float *)(p + 0x8) = 0.5f;
+    *(float *)(p + 0xC) = 0.5f;
+    *(int *)(p + 0x14) = 0;
+    *(int *)(p + 0x10) = 0;
+    *(int *)(p + 0x18) = 0;
+    *(float *)(p + 0x24) = 2.7f;
+    *(float *)(p + 0x20) = 0.3f;
+    *(float *)(p + 0x1C) = 0.3f;
+    *(float *)(p + 0x28) = 1.57f;
+    *(float *)(p + 0x2C) = 0.1f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026dff8.s", FUN_L01_0026dff8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e008.s", FUN_L01_0026e008);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e02c.s", FUN_L01_0026e02c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e090.s", FUN_L01_0026e090);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
+
+extern char *D_L01_0015FFD8;
+extern unsigned short *D_L01_001ABCC0[];
+
+void FUN_L01_0026e090(int i, int v) {
+    unsigned short *t = D_L01_001ABCC0[i];
+    unsigned short *p;
+    if (t != 0) {
+        p = t;
+        do {
+            D_L01_0015FFD8[(*p & 0x7FFF) * 256 + 0xBC] = v;
+        } while (*(short *)p++ >= 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e0e0.s", FUN_L01_0026e0e0);

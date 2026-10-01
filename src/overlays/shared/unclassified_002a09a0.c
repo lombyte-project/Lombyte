@@ -2,14 +2,130 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a09a0.s", FUN_L16_002a09a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float FUN_001f9b20(void *);
+extern float FUN_L00_001ff8b0(float, float);
+extern int FUN_001f96f8(int);
+
+char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
+    char *moby = func_0020D348_m(0x31);
+    if (moby != 0) {
+        char *data;
+        float a;
+        float b;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * 3.0f;
+        qcopy(moby + 0x10, vec);
+        data = *(char **)(moby + 0x78);
+        qcopy(data, pos);
+        *(int *)(data + 0x14) = FUN_001f96f8(0xF0);
+        *(char **)(data + 0x18) = owner;
+        *(int *)(data + 0x10) = 0;
+        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(pos[0], pos[1]);
+        a = FUN_001f9b20(pos);
+        b = FUN_L00_001ff8b0(a, pos[2]);
+        *(float *)(moby + 0x44) = -b;
+        moby[0x31] = 0;
+        *(unsigned short *)(moby + 0x34) |= 1;
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0a98.s", FUN_L16_002a0a98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0dc0.s", FUN_L16_002a0dc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d2cf0.s", FUN_L16_002d2cf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d38b0.s", FUN_L16_002d38b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3dc0.s", FUN_L16_002d3dc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3de0.s", FUN_L16_002d3de0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3eb8.s", FUN_L16_002d3eb8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
+
+void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
+    char *data = *(char **)(moby + 0x78);
+    *(void **)(data + 0x2D0) = owner;
+    qcopy(data + 0x2C0, position);
+    *(float *)(data + 0x2CC) = *(float *)(vector + 8);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern float D_0015ED6C;
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L16_002d3de0(char *moby, int arg) {
+    char *d = *(char **)(moby + 0x78);
+    if (((unsigned char *)moby)[0x20] == 10) {
+        moby[0x20] = 1;
+        if (((unsigned char *)moby)[0x53] != 1) {
+            blend_moby_animation(moby, 1, 0, FUN_001f96f8(0x14));
+        }
+        moby[0x31] = 1;
+        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        *(short *)(d + 0x2DC) = arg;
+        *(float *)(d + 0x2BC) = *(float *)(moby + 0x18);
+        qcopy(d + 0x2C0, moby + 0x10);
+        *(float *)(d + 0x2D4) = D_0015ED6C * 5.0f;
+    }
+}
+/* steers the moby's vector toward the target and returns the distance */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5280), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float FUN_001f9b48(void *);
+extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+float FUN_L16_002d3eb8(char *moby, float *target) {
+    char *data = *(char **)(moby + 0x78);
+    char *p = data + 0x2C0;
+    float d = FUN_001f9b48(p);
+    float b = D_0015ED70 * 4.0f;
+    int zero[1];
+    float vec[4];
+    zero[0] = 0;
+    FUN_00213f38((float *)zero, (float *)(data + 0x2D4), d, b, b, D_0015ED6C * 5.0f);
+    FUN_001f9a28(vec, target, p);
+    FUN_L00_001ff500(vec, vec, *(float *)(data + 0x2D4));
+    FUN_001f9a10(p, p, vec);
+    return d;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3f78.s", FUN_L16_002d3f78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4070.s", FUN_L16_002d4070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d41f8.s", FUN_L16_002d41f8);

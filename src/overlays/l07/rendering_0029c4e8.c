@@ -2,5 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029c4e8.s", FUN_L07_0029c4e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawn a particle moby at pos with a colour, lifetime and size. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
+
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern int FUN_L00_0025bfe0(float, float, float, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L07_001B2164_d __asm__("D_L07_001B2164") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L07_0029c4e8(void *pos, void *pos2) {
+    unsigned char *p = FUN_L00_002678b8(0x41);
+    if (p) {
+        float *f = (float *)(p + 0x20);
+        qcopy(p + 0x10, pos);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
+        p[9] = func_001FA898_r(4.0f) + 0x40;
+        p[1] = 0;
+        p[3] = 0x48;
+        *(float *)(p + 0xC) = random_float_between_alt(20000.0f, 120000.0f);
+        p[8] = 0;
+        p[2] = *D_L07_001B2164_d;
+        f[4] = 1.0f;
+        f[5] = 1.0f;
+        f[6] = 1.0f;
+        f[7] = 0.6f;
+        *(short *)(p + 0xA) = FUN_001f96f8(0x50);
+        qcopy(f, pos2);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029e6d8.s", FUN_L07_0029e6d8);

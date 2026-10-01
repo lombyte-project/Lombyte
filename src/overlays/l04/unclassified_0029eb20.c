@@ -4,12 +4,11 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029eb20.s", FUN_L04_0029eb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002a5a08.s", FUN_L04_002a5a08);
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -37,6 +36,38 @@ typedef struct {
     unsigned char unk70;     /* 0x70 */
 } MobyAnim;
 
+extern int FUN_001f96f8(int);
+extern s32 rand();
+extern void FUN_0020e098(void *);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L04_002a5a08(char *m) {
+    int *d;
+    if (m != 0) {
+        *(int *)(m + 0x94) = 0;
+        d = *(int **)(m + 0x78);
+        if (*d == 0) {
+            if (*(unsigned char *)(m + 0x53) != 1) {
+                blend_moby_animation(m, (void *)1, 0, (void *)FUN_001f96f8(3));
+            }
+            *d = FUN_001f96f8((rand() + 0x1E) & 0xFF);
+        }
+        if ((*(unsigned char *)(m + 0x70) & 2) && *(unsigned char *)(m + 0x53) != 0) {
+            blend_moby_animation(m, 0, 0, (void *)FUN_001f96f8(3));
+        }
+        *d = *d - 1;
+        FUN_0020e098(m);
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
+
+
+
+
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c) {
@@ -49,11 +80,58 @@ void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba448.s", FUN_L04_002ba448);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba470.s", FUN_L04_002ba470);
+/* Spawns an effect on the moby at its marker vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB700), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f99f8(float *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
+
+void FUN_L04_002ba470(char *moby) {
+    float w[4];
+    float v[4];
+    FUN_001f99f8(v);
+    FUN_L00_0024f7c8(moby, 6, w);
+    FUN_L00_0025e450(moby, v, w, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, -1, 1.5f, 15.0f, 1, 1, -1, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba520.s", FUN_L04_002ba520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1d70.s", FUN_L04_002c1d70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1e98.s", FUN_L04_002c1e98);
+/* Check that a moby's spot is clear of the other mobys of class 0x154. */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3218), where it is exact; names translated to the US level program. */
+
+extern char *D_L04_0015FFE4;
+extern float FUN_001f9b80(float *, float *);
+extern void FUN_L00_0025fcb8(char *, float *, float);
+
+int FUN_L04_002c1e98(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float vec[20];
+    float d0;
+    float s;
+    char *o;
+    int flag = 0;
+    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) {
+        flag = 1;
+    }
+    if (flag) {
+        float x = *(float *)(data + 0x140);
+        s = x + x;
+    } else {
+        s = *(float *)(data + 0x140);
+    }
+    FUN_L00_0025fcb8(moby, vec, s);
+    d0 = FUN_001f9b80((float *)(moby + 0x10), vec);
+    for (o = D_L04_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
+        if (o != moby && *(short *)(o + 0xA6) == 0x154) {
+            float *q = (float *)(o + 0x10);
+            if (FUN_001f9b80((float *)(moby + 0x10), q) < 3.0f || FUN_001f9b80(q, vec) < d0) {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c2270.s", FUN_L04_002c2270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);

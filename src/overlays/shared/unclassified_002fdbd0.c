@@ -8,6 +8,80 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff978.s", FUN_L06_002ff978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300b90.s", FUN_L06_00300b90);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float FUN_001fa580(float, float);
+extern short D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
+extern void FUN_001f9a10(float *, float *, float *);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_00300b90(char *moby) {
+    char *data;
+    float t = D_0015ED70 * 15.0f;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L06_00162080_d;
+    data = *(char **)(moby + 0x78);
+    *(float *)(data + 8) -= t;
+    FUN_001f9a10((float *)(moby + 0x10), (float *)(moby + 0x10), (float *)data);
+    FUN_001f9a10((float *)(moby + 0x40), (float *)(moby + 0x40), (float *)(data + 0x10));
+    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), *(float *)(data + 0x10));
+    *(float *)(moby + 0x44) = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(data + 0x14));
+    *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), *(float *)(data + 0x18));
+    if (--*(unsigned char *)(moby + 0xBC) == 0) {
+        mark_moby_for_removal(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300c60.s", FUN_L06_00300c60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003021d8.s", FUN_L06_003021d8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
+
+extern int D_L06_0015F5CC;
+extern short D_L06_001620C8 __attribute__((sda));
+extern short D_L06_001620CC __attribute__((sda));
+extern short D_L06_001620D0 __attribute__((sda));
+extern short D_L06_001620D4 __attribute__((sda));
+extern short D_L06_001620D8 __attribute__((sda));
+extern short D_L06_001620DC __attribute__((sda));
+extern short D_L06_001620E0 __attribute__((sda));
+extern short D_L06_001620E4 __attribute__((sda));
+extern short D_L06_001620E8 __attribute__((sda));
+extern void DrawUIFrame(int, int, int, int, int) __asm__("FUN_001f5f18");
+extern float func_001FA888(int) __asm__("FUN_001fa6c0");
+extern float FastSin(float) __asm__("FUN_001f9de0");
+extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern void FontPrintCenterLarge(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+
+#define W(x) (*(int *)&(x))
+
+/* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
+void FUN_L06_003021d8(char *moby) {
+    char buf[8];
+    char *data = *(char **)(moby + 0x78);
+    float v;
+    int col;
+
+    DrawUIFrame(W(D_L06_001620D8) + W(D_L06_001620CC), W(D_L06_001620DC) + W(D_L06_001620CC),
+                  W(D_L06_001620E0) + W(D_L06_001620C8), W(D_L06_001620E4) + W(D_L06_001620C8), W(D_L06_001620E8));
+    v = FastSin(func_001FA888(D_L06_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    if (v > 1.0f) {
+        v = 1.0f;
+    } else if (v < 0.0f) {
+        v = 0.0f;
+    }
+    col = FastTweenColor(W(D_L06_001620D0), W(D_L06_001620D4), v);
+    buf[0] = 0x30;
+    buf[1] = *(int *)(data + 0xB4) / scale_ticks(0xE10) + 0x30;
+    buf[2] = 0x3A;
+    buf[3] = *(int *)(data + 0xB4) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
+    buf[4] = *(int *)(data + 0xB4) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
+    buf[5] = 0x3A;
+    buf[6] = *(int *)(data + 0xB4) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
+    buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    FontPrintCenterLarge(W(D_L06_001620C8), W(D_L06_001620CC), col, (int)buf, 8);
+}

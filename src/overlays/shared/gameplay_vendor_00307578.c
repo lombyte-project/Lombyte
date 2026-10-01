@@ -3,10 +3,69 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307c48.s", FUN_L06_00307c48);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* state transitions of a moby depending on its id at 0xA6 */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_002502a0(int idx);
+
+void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
+    switch (*(short *)(m + 0xA6)) {
+    case 0x3F7:
+    case 0x502:
+        if (m[0x20] == 2) {
+            m[0x20] = 3;
+            FUN_0022da68(0, 0, (int)m);
+        }
+        break;
+    case 0x404:
+        if (m[0x20] == 1) m[0x20] = 2;
+        break;
+    case 0x542:
+        m[0x20] = 2;
+        FUN_L00_0028dc90(0, 0, (int)m, 0x434);
+        m[0x30] = 0xFF;
+        FUN_L00_002502a0(a[0xB0]);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00309860.s", FUN_L06_00309860);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030be60.s", FUN_L06_0030be60);
+/* UpdateMoby: state 0 deletes, state 1 draws and times out */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_0030D2A0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L06_0030bfa8(void);
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_0030be60(char *m) {
+    float *d = *(float **)(m + 0x78);
+    switch ((unsigned char)m[0x20]) {
+    case 0:
+        mark_moby_for_removal(m);
+        break;
+    case 1:
+        enqueue_callback_list_1(FUN_L06_0030bfa8, m);
+        d[0] = d[0] + d[1];
+        if (2.0f < d[0]) {
+            mark_moby_for_removal(m);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bef8.s", FUN_L06_0030bef8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bfa8.s", FUN_L06_0030bfa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00316330.s", FUN_L06_00316330);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_0015EF50;
+
+void FUN_L06_00316330(char *moby) {
+    if (*(short *)(moby + 0x86) == 0x12) {
+        *(int *)(*(char **)(D_L06_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
+    }
+}

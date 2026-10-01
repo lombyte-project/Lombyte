@@ -6,19 +6,86 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030b618.s", FUN_L01_0030b618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c898.s", FUN_L01_0030c898);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d260.s", FUN_L01_0030d260);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* offset a position by two camera-relative vectors, then raise z by 1 */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L01_0030d260(void *unused, float *p) {
+    float a[4];
+    float b[4];
+    char *g = D_0013E533 + 0xE1D;
+    FUN_L00_001ff500(a, *(char **)(g + 0x2080) + 0xD0, 1.1f);
+    FUN_L00_001ff500(b, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9a10(p, a, b);
+    FUN_001f9a10(p, p, g + 0x80);
+    p[2] = p[2] + 1.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d5f0.s", FUN_L01_0030d5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030dda0.s", FUN_L01_0030dda0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030de68.s", FUN_L01_0030de68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030ded0.s", FUN_L01_0030ded0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Initialize both consecutive effect entries. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L01_0030de68(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *entry = data + 0x70;
+    int i;
+    for (i = 1; i >= 0; i--) {
+        FUN_L00_00263618(entry, 0x2528AA28, 0.1f, 0.08f);
+        entry += 0x10;
+    }
+}
+/* Attach two effect entries and register their update callback. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
+
+void FUN_L01_0030de68(char *moby);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void enqueue_callback_list_1_alt(void (*)(char *), char *) __asm__("FUN_001f4600");
+
+void FUN_L01_0030ded0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *entry = data + 0x70;
+    int i;
+    for (i = 0; i < 2; i++) {
+        FUN_L00_0024f7c8(moby, i + 3, entry);
+        entry += 0x10;
+    }
+    enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316e88.s", FUN_L01_00316e88);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
+
+extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
+extern char *FUN_L00_001eb1f8(int);
+
+void FUN_L01_00316e88(float a, float b) {
+    char *m = D_L01_00167280_d;
+    char *t;
+    char *d;
+    if (*(short *)(m + 0x86) != 5) t = FUN_L00_001eb1f8(5);
+    else t = m;
+    d = *(char **)(t + 0x70) + 0xE0;
+    *(float *)(d + 0x44) = a;
+    *(float *)(d + 0x48) = b;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319f18.s", FUN_L01_00319f18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0031a078.s", FUN_L01_0031a078);

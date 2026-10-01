@@ -3,7 +3,30 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002097a0.s", FUN_L16_002097a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_0020f8b0.s", FUN_L16_0020f8b0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_0025f730(void *a, float x);
+
+void FUN_L16_0020f8b0(void) {
+    char tmp[16];
+    char *p = D_0013E533 + 0x158D;
+    char *q;
+    qcopy(p, p - 0x670);
+    q = p - 0x770;
+    FUN_L00_001ff500(tmp, q, *(float *)(q + 0x194));
+    FUN_001f9a10(p, p, tmp);
+    qcopy(p - 0x690, p);
+    FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_0020ffb0.s", FUN_L16_0020ffb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_00210b60.s", FUN_L16_00210b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_00211098.s", FUN_L16_00211098);

@@ -56,7 +56,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3528.s", FUN_L12_002e3528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3948.s", FUN_L12_002e3948);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3e28.s", FUN_L12_002e3e28);
+/* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern short D_L12_00161914_d __asm__("D_L12_00161914") __attribute__((sda));
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(void *, void *);
+
+void FUN_L12_002e3e28(char *moby, float *out, int on) {
+    float m[4];
+    float a[4];
+    float b[4];
+    float pad[12];
+    float g;
+    if (on) {
+        FUN_001f9a28(a, D_0013E533 + 0xE9D, moby + 0x10);
+        FUN_001f99f8(m);
+        m[2] = -*(float *)(moby + 0x48);
+        FUN_001fa050(b, m);
+        FUN_001f9d20(a, a, b);
+        g = *(float *)&D_L12_00161914_d;
+        out[1] = a[0] / g;
+        out[0] = -a[1] / g;
+    } else {
+        out[0] = 0;
+        out[1] = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3ed8.s", FUN_L12_002e3ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e6c48.s", FUN_L12_002e6c48);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
@@ -93,7 +122,23 @@ void FUN_L12_002e7290(void *a, void *b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8608.s", FUN_L12_002e8608);
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
+
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+
+void FUN_L12_002e8608(char *moby, float *pos) {
+    char *data = *(char **)(moby + 0x78);
+    float a = FUN_L00_001ff8b0(pos[0] - *(float *)(moby + 0x10), pos[1] - *(float *)(moby + 0x14));
+    float d = FUN_001fa5c8(a, *(float *)(moby + 0x48));
+    if (d > 1.2217305f) {
+        d = 1.2217305f;
+    } else if (d < -1.2217305f) {
+        d = -1.2217305f;
+    }
+    *(float *)(data + 0x188) = d * 0.35f;
+    *(float *)(data + 0x208) = d * 0.8f;
+}
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 /* Release the vendor moby and any child it owns. */
@@ -158,7 +203,30 @@ void FUN_L12_002e87b0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8808.s", FUN_L12_002e8808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eae00.s", FUN_L12_002eae00);
+/* Springs the moby's two rotation angles toward a heading taken from its data's direction vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
+
+void FUN_L12_002eae00(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float ang = FUN_001fa5c8(FUN_L00_001ff8b0(*(float *)(data + 0x70), *(float *)(data + 0x74)), *(float *)(moby + 0x48));
+    float a = *(float *)(data + 0x94) * 0.2268928f * FUN_001f9dc8(ang) / (D_0015ED6C * 10.0f);
+    float b = *(float *)(data + 0x94) * -0.2268928f * FUN_001f9de0(ang) / (D_0015ED6C * 10.0f);
+    float r0, k0, d0, m0, k1, d1, m1;
+    k0 = D_0015ED70 * 0.5235988f;
+    d0 = D_0015ED70 * 1.0471976f;
+    m0 = D_0015ED6C * 0.7853982f;
+    r0 = FUN_L00_00258110((float *)(data + 0x9C), *(float *)(moby + 0x44), a, k0, d0, m0);
+    k1 = D_0015ED70 * 1.0471976f;
+    d1 = D_0015ED70 * 2.0943952f;
+    m1 = D_0015ED6C * 1.2217305f;
+    *(float *)(moby + 0x44) = r0;
+    *(float *)(moby + 0x40) = FUN_L00_00258110((float *)(data + 0x98), *(float *)(moby + 0x40), b, k1, d1, m1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eaf68.s", FUN_L12_002eaf68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb220.s", FUN_L12_002eb220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb570.s", FUN_L12_002eb570);

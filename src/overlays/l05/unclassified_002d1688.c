@@ -5,13 +5,83 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1e30.s", FUN_L05_002d1e30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1fd8.s", FUN_L05_002d1fd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d6f48.s", FUN_L05_002d6f48);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L05_002d6f48(unsigned char *moby) {
+    unsigned char *it;
+    int i;
+    char *data;
+    char *q;
+    FUN_L00_002591d0((int *)&it, moby[0x21], 0, 0);
+    while (it != 0) {
+        if (it[0x31] != 0) {
+            data = *(char **)(it + 0x78);
+            if (*(short *)(it + 0xA6) == *(short *)(moby + 0xA6)) {
+                q = data + 0x330;
+                for (i = 2; i >= 0; i--) {
+                    FUN_L00_00263618(q, *(int *)(data + 0x360), 0.45f, 0.4f);
+                    q += 0x10;
+                }
+            }
+        }
+        FUN_L00_002592b8((int *)&it, (int)it, 0, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7020.s", FUN_L05_002d7020);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7890.s", FUN_L05_002d7890);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern short D_L05_001613D0_d __asm__("D_L05_001613D0") __attribute__((sda));
+extern void FUN_00214e58(int *, int, void *, float *, int, float);
+
+void FUN_L05_002d7890(char *moby, int *path) {
+    float *d = *(float **)(moby + 0x78);
+    d[2] = d[2] + *(float *)&D_L05_001613D0_d * D_0015ED6C / d[3];
+    if ((float)path[0] < d[2]) {
+        d[2] = d[2] - (float)path[0];
+    }
+    FUN_00214e58(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
+    *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002dac80.s", FUN_L05_002dac80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002daf58.s", FUN_L05_002daf58);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013E533[];
+extern int FUN_001f96f8(int);
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L05_002db238(void *, void *);
+
+void FUN_L05_002daf58(unsigned char *m) {
+    char *r = FUN_L00_0025a420(m, 0x330000, 0);
+    if (r != 0) {
+        char *b = D_0013E533 + 0xF1D;
+        char *o;
+        m[0x20] = 2;
+        m[0x31] = 0;
+        *(int *)(m + 0x94) = 0;
+        *(unsigned short *)(m + 0x34) |= 1;
+        FUN_L05_002db238(m, b);
+        FUN_0022da68(0, 0, (int)m);
+        o = *(char **)(r + 0x20);
+        if (o != 0 && *(short *)(o + 0xA6) == 0) {
+            int v = FUN_001f96f8(0x3C);
+            char *y = b - 0x100;
+            *(int *)(y + 0x8C4) += v;
+        }
+        m[0xA4] = 0xFF;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db018.s", FUN_L05_002db018);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db238.s", FUN_L05_002db238);
 #include "qcopy.h"
@@ -48,9 +118,53 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305898.s", FUN_L05_00305898);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306d30.s", FUN_L05_00306d30);
+/* Moves a point along a looped path of 16-byte nodes stored in the moby's data. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00308188), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_L00_001ff8b0(float, float);
+
+void FUN_L05_00306d30(char *moby, int idx, float *out) {
+    char *p = *(char **)(*(char **)(moby + 0x78) + 0x244);
+    float v[4];
+    float a;
+    qcopy(out, p + 0x10 + idx * 16);
+    qcopy(v, p + 0x10 + ((idx + 1) % *(int *)p) * 16);
+    a = FUN_001fa580(FUN_L00_001ff8b0(v[0] - out[0], v[1] - out[1]), 1.5707964f);
+    out[0] = out[0] + FUN_001f9dc8(a) * 0.0f;
+    out[1] = out[1] + FUN_001f9de0(a) * 0.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307358.s", FUN_L05_00307358);
+/* advances a moby's path waypoint until it reaches one flagged 2.0 */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003087B0), where it is exact; names translated to the US level program. */
+
+extern char *D_L05_001B0930[];
+extern int FUN_L00_0025d7a0(char *, int, int, int);
+
+void FUN_L05_00307358(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *cur = *(char **)(d + 0x244);
+    int idx;
+    int off;
+    if (cur != D_L05_001B0930[*(int *)(d + 0x220)]) {
+        if (*(float *)(d + 0x24C) <= 0.0f) {
+            idx = *(short *)(d + 0x258);
+            off = idx * 16;
+            if (*(float *)(cur + off + 0x1C) == 1.0f) {
+                while (*(float *)(cur + off + 0x1C) != 2.0f) {
+                    idx = FUN_L00_0025d7a0(cur, idx, 1, 1);
+                    cur = *(char **)(d + 0x244);
+                    off = idx * 16;
+                }
+                *(int *)(d + 0x27C) = idx;
+                qcopy(d + 0x210, *(char **)(d + 0x244) + idx * 16 + 0x10);
+                *(int *)(d + 0x26C) = 1;
+            }
+        }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -60,7 +174,57 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307358.s", FUN_L05_00307358);
 int FUN_L05_00307470(int arg) {
     return arg == 5 ? 6 : arg;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307480.s", FUN_L05_00307480);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088D8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern int FUN_L05_00307470(int);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L05_00307480(char *moby, int a1, int a2, int a3) {
+    char *data;
+    char *child;
+    float ratio;
+    float f;
+    float max;
+    int idx;
+    blend_moby_animation(moby, a1, a2, a3);
+    data = *(char **)(moby + 0x78);
+    child = *(char **)(data + 0x268);
+    if (child != 0) {
+        ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
+        idx = FUN_L05_00307470(a1);
+        f = (float)a2 * ratio;
+        max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) - (-(idx * 4)) + 0x48) + 0x10);
+        if (max < f) f = max;
+        else if (f < 0.0f) f = 0.0f;
+        blend_moby_animation(*(char **)(data + 0x268), idx, (int)f, a3);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030bdd8.s", FUN_L05_0030bdd8);

@@ -1,11 +1,56 @@
 # Building
 
+## Quick setup
+
+One command installs the toolchain, builds the game compiler from source,
+takes the boot executable from your own disc image, and rebuilds the game
+byte-for-byte:
+
+```sh
+git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
+./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
+```
+
+It ends with `PASS: reconstructed boot ELF matches retail`; from there,
+[CONTRIBUTING.md](../CONTRIBUTING.md) shows how to pick a function and check
+your C.
+
+| Platform                          | How                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linux (Ubuntu 24.04+, Debian 13+) | the two lines above                                                                                                                                                     |
+| Windows                           | in PowerShell: `wsl --install -d Ubuntu`, reboot, open Ubuntu and run the two lines above from your Linux home directory (`~`, not `/mnt/c`)                             |
+| WSL                               | same as Linux                                                                                                                                                           |
+| macOS, other Linux distributions  | with [Docker](https://docs.docker.com/get-docker/): `./setup.sh --docker --iso ...`, then `./setup.sh --shell` for a shell with the toolchain (`make elf`, `check-unit`) |
+
+Already have the executable? `./setup.sh --elf /path/to/SCUS_971.99`.
+`./setup.sh --check` lists what is installed, `./setup.sh --no-build` installs
+without rebuilding, `./setup.sh --with-patched` also builds the optional
+[patched profile](patched-toolchain.md), and `./setup.sh --help` lists the rest.
+
+## What the script does
+
+`./setup.sh` does everything on the rest of this page for you: it downloads and hash-checks the
+public toolchain releases into `tools/`, builds the game compiler from source
+with `scripts/build-game-compiler.py`, creates `.venv`, takes the boot
+executable from your disc image, and runs the gate. The rest of this page is
+the manual route and the reference for what the script installs.
+
+The script ships nothing proprietary: it downloads the toolchain from the
+public mirrors the PS2 decompilation community uses and checks every file
+against a pinned SHA-256 before installing it, builds the game compiler from
+its GPL source and this repository's
+[patch stack](../patches/sce-991111b/README.md), and only ever reads the game
+from the disc image or executable you provide. It writes inside the checkout
+only (`tools/`, `build/`, `.venv`, `config/us/SCUS_971.99`); the one system
+change it makes is installing the listed Debian/Ubuntu packages with `sudo`
+(on plain Linux that includes Wine and the i386 architecture for it). Nothing
+is added to your shell profile or `PATH`.
+
 The verified environment is **Linux/WSL**. Compiler versions matter for
-matching: preserve the directory layouts and the executable permissions, and
-expect the toolchain binaries to be installed by you — nothing here is
-downloaded. The game code is assembled by SN's `Ps2EeAs`, a Windows
-executable that has to be runnable, so a plain Linux setup is not enough by
-itself.
+matching: on the manual route below, preserve the directory layouts and the
+executable permissions of what you install. The game code is assembled by SN's
+`Ps2EeAs`, a Windows executable that has to be runnable (Wine on Linux), so a
+plain Linux toolchain is not enough by itself.
 
 Everything below is run from the checkout root, and `RNC_GAME_ROOT` in the
 sibling tooling repository points at this checkout.
@@ -17,7 +62,7 @@ sibling tooling repository points at this checkout.
 | Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)     | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
 | SDK compiler (EE-GCC `2.9-ee-991111-01`)            | `tools/compilers/sdk-compiler/` (with `bin/ee-gcc`)                               |
 | SN EE-GCC `2.95.2` (its `ee/bin/Ps2EeAs.exe`)      | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
-| R5900 binutils                                      | the `mips-ps2-decompals-*` executables; set `BINUTILS_ROOT` to their directory    |
+| R5900 binutils                                      | `tools/binutils-mips-ps2-decompals/` (then `/opt/binutils-mips-ps2-decompals`), or set `BINUTILS_ROOT` |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
 
@@ -41,8 +86,16 @@ needs for `<stdarg.h>`
 includes `<stdarg.h>` cannot compile. Build it from the patch stack in
 [`patches/sce-991111b/`](../patches/sce-991111b/README.md), which records the
 pinned source archive, its SHA-256 and the host recipe that reproduces the
-expected `cc1`; then install the result as `tools/compilers/game-compiler`, or
-point `GAME_COMPILER_ROOT` at it.
+expected `cc1`: `python3 scripts/build-game-compiler.py` downloads the
+archive, applies the stack and installs `cc1`, `cpp`, `xgcc`, the patched `as`,
+the `ee-gcc` wrapper and the headers into `tools/compilers/game-compiler`
+(about a minute; `--archive` reuses a local copy of the source archive). Or
+point `GAME_COMPILER_ROOT` at an existing build.
+
+The game code is assembled by the EE assembler of SN ProDG 3.01
+(`ps2eeas` 1.9.25.758, installed as `ee/bin/Ps2EeAs.exe` in the SN tree);
+the older assembler shipped in the ProDG 2.0 compiler archive pads loops
+differently and fails the gate.
 
 Some units in `ROUTE_EXCEPTIONS` build with a patched EE-GCC profile, built
 separately. See [patched-toolchain.md](patched-toolchain.md) for the build and
@@ -138,8 +191,11 @@ python3 rebuild-iso.py \
 
 | Target           | Effect                                                          |
 | :--------------- | :-------------------------------------------------------------- |
-| `make check`     | the public CI checks (tests, script parse) without a full build |
+| `make check`     | the public CI checks (tests, script parse, progress report check) without a full build |
 | `make progress`  | regenerate `progress/report.json` after `make elf`              |
+| `.venv/bin/python scripts/generate_treemap.py` | regenerate the progress map (`assets/decomp_map.svg`, `.json`) after `make progress` |
+| `make iso`       | patch the verified ELF into a copy of the first `dumps/*.iso`   |
+| `make overlays`  | compile `src/overlays/` (needs the generated overlay asm, see [overlays.md](overlays.md)) |
 | `make clean-iso` | remove the rebuilt ISO                                          |
 
 | Variable              | Default / usage                                     |
@@ -166,5 +222,5 @@ during a build from your own retail executable and are ignored by Git. The
 repository stores no oracle and no extracted game data, which is why a build
 cannot start before step 3.
 
-The layout of both repositories is mapped in `docs/project-map.md` in the
-sibling tooling checkout.
+The layout of this repository is described in [`src/README.md`](../src/README.md)
+and [`config/README.md`](../config/README.md).

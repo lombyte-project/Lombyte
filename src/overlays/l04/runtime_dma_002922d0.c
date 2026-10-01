@@ -16,7 +16,21 @@ void FUN_L04_00292370(void *unused, char *arg) {
     *(float *)(arg + 0x1C0) = 0.19634955f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002927d0.s", FUN_L04_002927d0);
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002a13f0(int *a, char *b);
+
+int FUN_L04_002927d0(char *arg0, char *arg1) {
+    int **p = (int **)(arg1 + 0x70);
+    int *found = 0;
+    int i;
+    for (i = 12; i >= 0; i--) {
+        int *e = *p++;
+        if (*e == (int)(unsigned char)arg0[0x52]) found = e;
+    }
+    if (found == 0) return (unsigned char)arg1[0xB6];
+    return FUN_L00_002a13f0(found, arg1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292828.s", FUN_L04_00292828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292d48.s", FUN_L04_00292d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);

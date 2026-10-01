@@ -3,10 +3,90 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001ff938.s", FUN_L15_001ff938);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00200788.s", FUN_L15_00200788);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Show the indexed help prompt when its flag and message are active. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_00200D20), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013E05A[];
+extern unsigned char D_0013E533[];
+extern void FUN_L00_00207330(int, int);
+
+void FUN_L15_00200788(void) {
+    unsigned char *base = D_0013E533 + 0xE1D;
+    int index = *(int *)(base + 0x10B8);
+    if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
+        int first = *(int *)(base + 0x1090);
+        if (first != 0) {
+            FUN_L00_00207330(first, *(int *)(base + 0x2080));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002007d8.s", FUN_L15_002007d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00208ca8.s", FUN_L15_00208ca8);
+#include "qcopy.h"
+
+/* Reset the help prompt state and show the default message unless the level is in a special phase. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_002092E0), where it is exact; names translated to the US level program. */
+
+extern int D_L15_0015F5C4;
+extern void FUN_L00_00205538(void);
+extern void FUN_L00_00206c08(void);
+extern void FUN_L00_00232628(void);
+extern void FUN_L15_00216c38(int, int);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
+
+void FUN_L15_00208ca8(void) {
+    unsigned char *base = D_0013E533 + 0xE1D;
+    unsigned char *b;
+    int p;
+    void *q;
+    char *m;
+    if (base[0x20A4] == 2) {
+        int v = *(short *)(base + 0x1634);
+        if (v != -1) {
+            set_animation_parameter(v, 0);
+            *(short *)(base + 0x1634) = -1;
+        }
+    }
+    FUN_L00_00205538();
+    b = D_0013E533 + 0xE1D;
+    p = *(int *)(b + 0xA84);
+    b[0x20A4] = 0;
+    if (p != 0) {
+        *(unsigned short *)(p + 0x34) &= 0xFFF9;
+    }
+    q = *(void **)(b + 0xA8C);
+    *(int *)(b + 0xA84) = 0;
+    if (q != 0) {
+        mark_moby_for_removal(q);
+        *(int *)(b + 0xA8C) = 0;
+    }
+    FUN_L00_00206c08();
+    m = *(char **)(b + 0xA88);
+    *(char **)(b + 0x2080) = m;
+    qcopy(m + 0x10, b + 0x80);
+    *(int *)(m + 0x98) = 0;
+    *(float *)(b + 0xA94) = 1.0f;
+    FUN_L00_00232628();
+    if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F5C4 != 2 && D_L15_0015F5C4 != 6)) {
+        FUN_L15_00216c38(0, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00209450.s", FUN_L15_00209450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0020a328.s", FUN_L15_0020a328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00215e58.s", FUN_L15_00215e58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0021ab60.s", FUN_L15_0021ab60);
+/* Select the message associated with the current help mode. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L15_00216c38(int, int);
+
+void FUN_L15_0021ab60(void) {
+    switch (D_0013E533[0x2EC1]) {
+    case 0: FUN_L15_00216c38(0, 1); break;
+    case 2: FUN_L15_00216c38(0x5A, 1); break;
+    case 3: FUN_L15_00216c38(0x53, 1); break;
+    }
+}

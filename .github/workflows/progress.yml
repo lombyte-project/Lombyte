@@ -2,11 +2,11 @@
 #
 # decomp.dev picks up an objdiff report from a workflow artifact called
 # SCUS_971.99_report on main. Building the executable here is not an option:
-# it needs the retail SCUS_971.99 and compilers that are not public. Instead,
-# maintainers regenerate progress/report.json after a local `make elf` with
-# `make progress` and commit it. This workflow checks that the committed file
-# still agrees with src/ and the linker config, validates it with objdiff and
-# publishes it. No secrets are used. The report lists unit names, symbols,
+# it needs the retail SCUS_971.99 and compilers this repository may not
+# redistribute. Instead, maintainers regenerate progress/report.json after a
+# local `make elf` with `make progress` and commit it. This workflow checks
+# that the committed file still agrees with src/ and the linker config,
+# validates it with objdiff and publishes it. No secrets are used. The report lists unit names, symbols,
 # addresses, sizes and match percentages; it never contains game bytes.
 #
 # Registering the repository on decomp.dev (/manage/new) is a one-time manual

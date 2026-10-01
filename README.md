@@ -47,6 +47,15 @@ Only this release is currently targeted. PAL, NTSC-J, and the PlayStation 3 rema
 
 Contributions to matching C, recovered names, types, and documentation are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and verification requirements.
 
+<h4>Quick setup</h4>
+
+```sh
+git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
+./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
+```
+
+Windows, macOS and other options: [docs/building.md](docs/building.md#quick-setup).
+
 Work-in-progress C is also welcome when it preserves the matching baseline. Do not submit game images, extracted game data, or proprietary compiler binaries.
 
 <h3>Credits</h3>

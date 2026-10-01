@@ -447,7 +447,25 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bed90.s", FUN_L00_002bed90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf050.s", FUN_L00_002bf050);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf810.s", FUN_L00_002bf810);
+/* Steps a vector by n repeated additions of the normalised difference. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L00_002bf810(char *a, char *b, int n) {
+    float d[4];
+    float t[4];
+    int i;
+    FUN_001f9a28(d, b, a);
+    FUN_001f9a68(d, d, 1.0f / ConvertIntegerToFloat(n));
+    qcopy(t, a);
+    for (i = 0; i < n; i++) {
+        FUN_001f9a10(t, t, d);
+    }
+}
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f99c0(float);

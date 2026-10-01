@@ -2,21 +2,240 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec308.s", FUN_L02_002ec308);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec3f0.s", FUN_L02_002ec3f0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L02_002ec308(char *self) {
+    char *cur;
+    FUN_L00_002591d0((int *)&cur, *(unsigned char *)(self + 0x21), 0, 0);
+    while (cur != 0) {
+        if (*(unsigned char *)(cur + 0x31) != 0) {
+            char *data = *(char **)(cur + 0x78);
+            if (*(short *)(cur + 0xA6) == *(short *)(self + 0xA6)) {
+                if ((*(int *)(data + 0xB0) & 0xFF) > 0x80) {
+                    char *q = data + 0x80;
+                    int i;
+                    for (i = 2; i >= 0; i--) {
+                        FUN_L00_00263618(q, *(int *)(data + 0xB0), 0.9f, 0.45f);
+                        q += 0x10;
+                    }
+                }
+            }
+        }
+        FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
+    }
+}
+/* Refreshes a moby's three sub-objects, packs its colour bytes, and queues a redraw when the global changed. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
+
+extern int D_L02_0015F5CC;
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+void FUN_L02_002ec308(char *self);
+
+void FUN_L02_002ec3f0(char *moby) {
+    int i;
+    char *data;
+    char *p;
+    int v;
+    int r, g, b, c;
+    int *q;
+
+    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
+        return;
+    }
+    data = *(char **)(moby + 0x78);
+    p = data + 0x80;
+    for (i = 0; i < 3; i++) {
+        FUN_L00_0024f7c8(moby, i + 3, p);
+        p += 0x10;
+    }
+    v = D_L02_0015F5CC;
+    r = *(unsigned char *)(moby + 0x92);
+    g = *(unsigned char *)(moby + 0x91);
+    b = *(unsigned char *)(moby + 0x90);
+    c = (r << 16) | 0x30000000;
+    c |= g << 8;
+    c |= b;
+    *(int *)(data + 0xB0) = c;
+    if (v != 0) {
+        q = *(int **)(data + 0xB4);
+        if (v != *q) {
+            *q = v;
+            enqueue_callback_list_1_alt(FUN_L02_002ec308, moby);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002eca30.s", FUN_L02_002eca30);
+/* Spawns three particles around a moby with randomized direction, speed and colour. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L02_00161F84 __attribute__((sda));
+extern short D_L02_00161F88 __attribute__((sda));
+extern short D_L02_00161F8C __attribute__((sda));
+extern short D_L02_00161F90 __attribute__((sda));
+extern short D_L02_00161F94 __attribute__((sda));
+extern short D_L02_00161F98 __attribute__((sda));
+extern short D_L02_00161F9C __attribute__((sda));
+extern short D_L02_00161FA0 __attribute__((sda));
+extern short D_L02_00161FA4 __attribute__((sda));
+extern short D_L02_00161FA8 __attribute__((sda));
+extern short D_L02_00161FAC __attribute__((sda));
+extern short D_L02_00161FB0 __attribute__((sda));
+extern short D_L02_00161FB4 __attribute__((sda));
+extern short D_L02_00161FB8 __attribute__((sda));
+extern short D_L02_00161FBC __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_00257d78(float *, float, float);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002eca30(char *m, void *arg1) {
+    float v10[4], v20[4], v30[4], v40[4], v50[4];
+    int i;
+    FUN_001f9a28(v30, m + 0x10, arg1);
+    for (i = 0; i < 3; i++) {
+        int a, b, c, d, e;
+        char *p;
+        FUN_L00_0024f7c8(m, i, v50);
+        FUN_001f9a68(v10, v30, *(float *)&D_L02_00161F84);
+        FUN_001f9a68(v20, v30, *(float *)&D_L02_00161F88);
+        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161F8C * D_0015ED6C);
+        FUN_001f9a10(v20, v20, v40);
+        v10[3] = random_float_between_alt(*(float *)&D_L02_00161FA0, *(float *)&D_L02_00161FA4);
+        v20[3] = random_float_between_alt(*(float *)&D_L02_00161FA8, *(float *)&D_L02_00161FAC);
+        a = FUN_001fa6e0(*(int *)&D_L02_00161FB0, *(int *)&D_L02_00161FB4, random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_00161FB8, *(int *)&D_L02_00161FBC, random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F90 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F94 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
+        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F98 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
+        p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
+        if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ece18.s", FUN_L02_002ece18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed420.s", FUN_L02_002ed420);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed658.s", FUN_L02_002ed658);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f1f60.s", FUN_L02_002f1f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f6570.s", FUN_L02_002f6570);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f6598.s", FUN_L02_002f6598);
+/* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+extern void FUN_L01_00278e20(void *, int);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L02_002f1f60(char *m) {
+    int hit = 0;
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f) hit = 1;
+        if (hit) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)m);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263e30(m, 0x71D, 1, 0x71D, 1, 5, 2);
+        FUN_L01_00278e20(m, 0x71C);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
+/* Store the selected value only while this level object is inactive. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79A8), where it is exact; names translated to the US level program. */
+
+extern char *D_L02_00167400;
+
+void FUN_L02_002f6570(int value) {
+    char *moby = D_L02_00167400;
+    if (*(short *)(moby + 0x86) == 0) {
+        char *data = *(char **)(moby + 0x70);
+        *(int *)(data + 0x218) = value;
+    }
+}
+/* Update the active object's coordinates without replacing zero fields. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79D0), where it is exact; names translated to the US level program. */
+
+extern char *D_L02_00167400_d __asm__("D_L02_00167400") __attribute__((section(".data")));
+
+void FUN_L02_002f6598(float x, float y, float z) {
+    char *moby = D_L02_00167400_d;
+    if (*(short *)(moby + 0x86) == 0) {
+        char *data = *(char **)(moby + 0x70) + 0x1D0;
+        if (*(float *)(data + 0x3C) != 0.0f) {
+            *(float *)(data + 0x3C) = x;
+        }
+        if (*(float *)(data + 0x40) != 0.0f) {
+            *(float *)(data + 0x40) = y;
+        }
+        if (*(float *)(data + 0x44) != 0.0f) {
+            *(float *)(data + 0x44) = z;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa6d8.s", FUN_L02_002fa6d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa710.s", FUN_L02_002fa710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa770.s", FUN_L02_002fa770);
+/* Start the timed effect while its duration is nonzero. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
+
+extern float D_L02_0016760C __attribute__((section(".data")));
+extern void FUN_L00_002e84f0(int, float, float);
+extern void FUN_L02_001fc008(void (*)(void));
+extern void FUN_L02_002fa770(void);
+
+void FUN_L02_002fa710(void) {
+    if (D_L02_0016760C != 0.0f) {
+        FUN_L00_002e84f0(1, D_L02_0016760C * 0.35f + 0.0f, 0.005f);
+        FUN_L02_001fc008(FUN_L02_002fa770);
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int a;
+    int b;
+    float c;
+    float d;
+} S;
+
+extern S D_L02_00167600;
+extern short D_L02_0016238C_d __asm__("D_L02_0016238C") __attribute__((sda));
+
+void FUN_L02_002fa770(void) {
+    S *s = &D_L02_00167600;
+    s->c = 10000.0f;
+    if (s->b == 0) {
+        float v = s->d - *(float *)&D_L02_0016238C_d;
+        s->d = v;
+        if (v < 0.0f) {
+            s->d = 0.0f;
+        }
+    } else {
+        s->b = 0;
+    }
+    s->a = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa7c8.s", FUN_L02_002fa7c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb788.s", FUN_L02_002fb788);

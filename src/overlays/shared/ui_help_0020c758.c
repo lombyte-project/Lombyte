@@ -1309,6 +1309,18 @@ void FUN_L00_002137a8(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213de8.s", FUN_L00_00213de8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
+
+void FUN_L00_00213de8(float s) {
+    char *p = D_0013E533 + 0xF1D;
+    float *f;
+
+    FUN_001f9a68(p, p, s);
+    FUN_001f9a68(p + 0x10, p + 0x10, s);
+    FUN_001f9a68(p - 0x20, p - 0x20, s);
+    FUN_001f9a68(p + 0x50, p + 0x50, s);
+    f = (float *)(p - 0x100);
+    f[0x194 / 4] = f[0x194 / 4] * s;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213e68.s", FUN_L00_00213e68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00214108.s", FUN_L00_00214108);

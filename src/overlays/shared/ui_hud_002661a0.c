@@ -2,7 +2,56 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002661a0.s", FUN_L05_002661a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002661e8.s", FUN_L05_002661e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Sets up a HUD element: timer, 128x128 size, zero offsets. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x8];
+    int unk08;
+    int *unk0C;
+    char pad10[0x38];
+    short unk48;
+    short unk4A;
+    char pad4C[0x4];
+    int unk50;
+    int unk54;
+    int w;
+    int h;
+    int flags;
+    char pad64[0x8];
+    int unk6C;
+    unsigned char cnt[4];
+    int unk74;
+    int unk78;
+    int unk7C;
+    void *unk80;
+} HudElem;
+
+extern int FUN_001f96f8(int);
+
+void FUN_L05_002661a0(HudElem *e) {
+    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->w = 0x80;
+    e->unk48 = 0;
+    e->h = 0x80;
+    e->unk4A = 0;
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+
+void FUN_L05_002661e8(char *moby)
+{
+    if (*(int *)(D_0013E533 + 0x2EA9) == 0x16) {
+        *(int *)(moby + 0x7C) = FUN_001f96f8(0x1E);
+        *(int *)(moby + 0x6C) = 5;
+    } else {
+        *(int *)(moby + 0x6C) = -6;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266320.s", FUN_L05_00266320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00266710.s", FUN_L05_00266710);

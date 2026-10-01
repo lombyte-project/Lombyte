@@ -37,7 +37,8 @@ linker at the generated retail layout addresses and compares each allocated
 section byte-for-byte against `config/us/SCUS_971.99`
 (`retail_verification`, method `ps2-ld-retail-bytes-v1`).
 
-`scripts/promote-unit.py` requires both, and the promotion receipt records the
+The maintainer's promotion tool (`promote-unit.py`, in the private tooling
+checkout, not in `scripts/`) requires both, and the promotion receipt records the
 object hash, the retail hash and the layout hash the comparison was bound to. A
 100 % candidate with `exact=False` is a real state, not a rounding artifact: it
 usually means the store order or a linked address is wrong in a way objdiff
@@ -142,4 +143,3 @@ categories: `boot` (= `game` + `sdk`), `overlays` (= `shared` + `levels`), and
 one `level_NN` per level. `assets/decomp_map.json` (schema
 `rnc-public-progress-v3`) has the same split as `boot`, `overlays` and
 `total`; its top-level fields describe the total.
-

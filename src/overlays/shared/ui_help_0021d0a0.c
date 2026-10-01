@@ -8,4 +8,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00227cf8.s", FUN_L06_00227cf8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002291d0.s", FUN_L06_002291d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0022a1d0.s", FUN_L06_0022a1d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002348d0.s", FUN_L06_002348d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00239528.s", FUN_L06_00239528);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0021D6B8.c: func_L06_00239CD0), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013E533[];
+extern void FUN_L06_002356a0(int, int);
+
+void FUN_L06_00239528(void) {
+    switch (D_0013E533[0x2EC1]) {
+    case 0: FUN_L06_002356a0(0, 1); break;
+    case 1: FUN_L06_002356a0(0x43, 1); break;
+    case 3: FUN_L06_002356a0(0x53, 1); break;
+    }
+}

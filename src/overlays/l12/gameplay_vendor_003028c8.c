@@ -44,7 +44,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003076e0.s", FUN_L12_003076e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00307840.s", FUN_L12_00307840);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00307ab8.s", FUN_L12_00307ab8);
+#include "qcopy.h"
+
+/* per-frame update of a moby's timer and approach state */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int FUN_001f96f8(int);
+extern int FUN_001f9770(void *);
+extern int FUN_L00_0025fcb8(char *, char *, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L12_00307ab8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *pad;
+    if (*(unsigned char *)(m + 0x20) != 0) {
+        if (*(int *)(d + 0x38) != 0) {
+            *(short *)(d + 0xFE) = FUN_001f96f8(0xB4);
+        }
+        *(int *)(d + 0x38) = 0;
+        if (FUN_001f9770(d + 0xFE)) {
+            *(float *)(d + 0xF8) = *(float *)(d + 0xF4);
+        } else {
+            *(float *)(d + 0xF8) = *(float *)(d + 0xF4) + 5.0f;
+        }
+        if (FUN_L00_0025fcb8(m, d + 0x70, *(float *)(d + 0xF8)) != 2) {
+            if (AbsoluteFloat(*(float *)(m + 0x18) - *(float *)(d + 0x78)) > 3.0f) {
+                *(int *)(d + 0xB4) = 2;
+            }
+        }
+        if (*(int *)(d + 0xB0) == 0) {
+            pad = D_0013E533 + 0xE1D;
+            *(int *)(d + 0xB0) = *(int *)(pad + 0x2080);
+            qcopy(d + 0x70, pad + 0x80);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003081b0.s", FUN_L12_003081b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003093c8.s", FUN_L12_003093c8);

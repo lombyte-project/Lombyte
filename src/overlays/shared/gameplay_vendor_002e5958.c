@@ -3,6 +3,26 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e5958.s", FUN_L15_002e5958);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb0a0.s", FUN_L15_002eb0a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L15_002eac90(void);
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+
+void FUN_L15_002eb0a0(char *moby)
+{
+    if (*(unsigned char *)(moby + 0x20) == 0) {
+        FUN_L00_002502f0(moby, 0x40, 0x40, 0x40);
+        moby[0x20] = 1;
+    } else {
+        enqueue_callback_list_1((void *)FUN_L15_002eac90, moby);
+        *(short *)(moby + 0x32) = 0;
+        *(unsigned short *)(moby + 0x34) |= 1;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebd78.s", FUN_L15_002ebd78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed068.s", FUN_L15_002ed068);

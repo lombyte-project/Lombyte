@@ -9,6 +9,68 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003084d8.s", FUN_L08_003084d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00308c90.s", FUN_L08_00308c90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00308f68.s", FUN_L08_00308f68);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001fa030(void *, void *);
+extern void FUN_L08_0027fe00(float *, float *, int, float);
+
+void FUN_L08_00308c90(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float a[4];
+    float b[12];
+    float c[4];
+    int i;
+    for (i = 0; i < *(int *)(data + 0x14); i++) {
+        a[0] = -1.0f;
+        a[1] = random_float_between_alt(-*(float *)(data + 4), *(float *)(data + 4));
+        a[2] = 0;
+        a[3] = 1.0f;
+        FUN_001fa030(b, moby + 0x40);
+        FUN_001f9cf8(a, a, b);
+        FUN_001f9a10(a, a, moby + 0x10);
+        c[0] = 0;
+        c[1] = random_float_between_alt(*(float *)(data + 0x18) * D_0015ED6C, *(float *)(data + 0x1C) * D_0015ED6C);
+        c[2] = random_float_between_alt(*(float *)(data + 0x20) * D_0015ED6C, *(float *)(data + 0x24) * D_0015ED6C);
+        c[3] = 0;
+        FUN_L08_0027fe00(a, c, *(int *)(data + 0x10), *(float *)(data + 0xC));
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
+
+typedef struct { int a, b; } Pair;
+
+extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
+extern char D_L08_001F8560[];
+extern short D_L08_001623C8_d __asm__("D_L08_001623C8") __attribute__((sda));
+extern short D_L08_001623D0_d __asm__("D_L08_001623D0") __attribute__((sda));
+extern short D_L08_001623D8_d __asm__("D_L08_001623D8") __attribute__((sda));
+extern short D_L08_001623E8_d __asm__("D_L08_001623E8") __attribute__((sda));
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+
+void FUN_L08_00308f68(int x) {
+    int i;
+    int *a = (int *)&D_L08_001623C8_d;
+    int *b = (int *)&D_L08_001623D8_d;
+    int *c = (int *)&D_L08_001623D0_d;
+    int *e = (int *)&D_L08_001623E8_d;
+
+    for (i = 0; i < 2; i++) {
+        FUN_L08_00258090(D_L08_001F8560, b[i], a[i], &D_L08_00162408[x]);
+        FUN_L00_001fde98(a[i], c[i], e[i], D_L08_001F8560, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003097b0.s", FUN_L08_003097b0);

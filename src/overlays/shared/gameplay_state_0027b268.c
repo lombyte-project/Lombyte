@@ -3,4 +3,37 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027b268.s", FUN_L12_0027b268);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027b370.s", FUN_L12_0027b370);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
+
+extern char *D_L12_0015FFD8;
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_00214598(void *, void *);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L12_0027b370(char *parent, char *list, int n) {
+    float m0[16];
+    float m1[16];
+    float m2[4];
+    char *p;
+    int i;
+    FUN_001fa050(m0, (float *)(parent + 0x40));
+    for (i = 0; i < n; i++) {
+        int idx = *(int *)(list + i * 0x30 + 0x20);
+        if (idx != -1) {
+            p = D_L12_0015FFD8 + idx * 256;
+            FUN_001fa050(m1, (float *)(list + i * 0x30 + 0x10));
+            FUN_001fa378(m1, m0, m1);
+            FUN_00214598(m1, p + 0x40);
+            FUN_001f9d20(m2, list + i * 0x30, m0);
+            FUN_001f9a10(p + 0x10, parent + 0x10, m2);
+            FUN_L00_00250df8(p);
+        }
+    }
+}

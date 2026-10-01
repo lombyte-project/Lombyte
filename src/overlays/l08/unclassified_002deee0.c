@@ -3,7 +3,37 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002deee0.s", FUN_L08_002deee0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0228.s", FUN_L08_002e0228);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* finds the first of eight linked entries whose direction lines up with the moby */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
+
+extern char D_L08_001675C0[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9dc8(float);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+int FUN_L08_002e0228(char *m) {
+    float a[4];
+    float b[4];
+    int *p = (int *)(*(char **)(m + 0x78) + 0x60);
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (p[i] != 0) {
+            float d;
+            build_spherical_offset(a, 1.0f, *(float *)(m + 0x48), -*(float *)(m + 0x44));
+            FUN_001f9a28(b, (char *)p[i] + 0x10, D_L08_001675C0);
+            FUN_L00_001ff500(b, b, 1.0f);
+            d = FUN_001f9ab0(b, a);
+            if (FUN_001f9dc8(0.06981317f) < d) return p[i];
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e0328.s", FUN_L08_002e0328);
 #define NOT_SDA
 
@@ -18,7 +48,32 @@ void FUN_L08_002e1698(char *arg) {
     FUN_L08_00230b38(0x32, 1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e16c0.s", FUN_L08_002e16c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1c98.s", FUN_L08_002e1c98);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E3010), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern char D_0013E533[];
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
+    unsigned char *m = func_0020D348_m(oClass);
+    float v0[4], v10[4];
+    if (m != 0) {
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(unsigned short *)(m + 0x34) |= 0x4000;
+        *(long *)(m + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
+        qcopy(m + 0x40, parent + 0x40);
+        FUN_L00_0024f7c8(m, joint, v0);
+        FUN_L00_0024f7c8(parent, pjoint, v10);
+        FUN_001f9a28(m + 0x10, v10, v0);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2078.s", FUN_L08_002e2078);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
@@ -26,13 +81,160 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2da0.s", FUN_L08_002e2da0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2df0.s", FUN_L08_002e2df0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e3870.s", FUN_L08_002e3870);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e4db8.s", FUN_L08_002e4db8);
+/* builds a basis from a direction vector and writes the orientation into the moby */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f99f8(void *);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_00214598(void *, void *);
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+
+void FUN_L08_002e4db8(char *a, float *v) {
+    float m[16];
+    float n[16];
+    float r[4];
+    float s[4];
+    char *d = *(char **)(a + 0x78);
+    r[1] = v[2];
+    r[2] = v[0];
+    r[0] = -v[1];
+    fast_vec_cross(r, v, r);
+    fast_vec_cross(s, r, v);
+    qcopy(m, r);
+    qcopy(m + 4, s);
+    qcopy(m + 8, v);
+    FUN_001f99f8(m + 12);
+    d += 0x10;
+    m[15] = 1.0f;
+    FUN_00214598(m, d);
+    FUN_001fa050(n, (float *)d);
+    n[15] = 42.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e4e90.s", FUN_L08_002e4e90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8788.s", FUN_L08_002e8788);
+/* spawns the child mobys this object owns and fills its part table */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
+
+extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
+
+void FUN_L08_002e8788(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *e = data + 0xBC;
+    int i = 0;
+    char *c;
+    char *c2;
+    char *c3;
+    *(char **)(data + 0x60) = moby;
+    *(int *)(data + 0x64) = 0;
+    *(int *)(data + 0x68) = 0;
+    *(int *)(data + 0x6C) = 0;
+    *(char **)(data + 0x90) = FUN_L08_002e1c98_c(moby, 0x1C0, 1, 0);
+    *(char **)(data + 0x94) = moby;
+    *(int *)(data + 0x98) = 1;
+    *(int *)(data + 0x9C) = 0;
+    c = FUN_L08_002e1c98_c(moby, 0x1BD, 0, 2);
+    *(char **)(data + 0x70) = c;
+    *(int *)(data + 0x7C) = 2;
+    *(char **)(data + 0x74) = moby;
+    *(int *)(data + 0x78) = 0;
+    *(float *)(c + 0x2C) = *(float *)(*(char **)(c + 0x24) + 0x24) * 0.75f;
+    c2 = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
+    *(char **)(data + 0x80) = c2;
+    *(char **)(data + 0x84) = moby;
+    *(int *)(data + 0x88) = 1;
+    *(int *)(data + 0x8C) = 1;
+    c3 = FUN_L08_002e1c98_c(c2, 0x1B9, 0, 0);
+    *(char **)(data + 0xA0) = c3;
+    *(char **)(data + 0xA4) = *(char **)(data + 0x80);
+    *(int *)(data + 0xA8) = 0;
+    *(int *)(data + 0xAC) = 0;
+    do {
+        int j = i + 2;
+        i++;
+        *(char **)(e - 0xC) = FUN_L08_002e1c98_c(*(char **)(data + 0x90), 0x1BB, 0, j);
+        *(char **)(e - 8) = *(char **)(data + 0x90);
+        *(int *)(e - 4) = 0;
+        *(int *)e = j;
+        e += 0x10;
+    } while (i < 8);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8ba0.s", FUN_L08_002e8ba0);
+/* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
+extern float FUN_001fa580(float, float);
+extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L08_002e8ba0(char *a) {
+    char *data = *(char **)(a + 0x78);
+    float v0[4], v10[4], v20[4];
+    char *base = data + 0x60;
+    int i;
+    for (i = 0; i < 12; i++) {
+        int *e = (int *)(base + 0x1C + i * 16);
+        char *m = (char *)e[-3];
+        if (m != 0) {
+            *(float *)(m + 0x48) = *(float *)(a + 0x48);
+            FUN_L00_0024f7c8(m, e[-1], v0);
+            FUN_L00_0024f7c8((void *)e[-2], e[0], v10);
+            FUN_001f9a28(v20, v10, v0);
+            FUN_001f9a10(m + 0x10, m + 0x10, v20);
+        }
+    }
+    if (*(int *)(data + 0x90) != 0) {
+        char *r = *(char **)(data + 0x90);
+        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(r + 0x40), *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
+    }
+    for (i = 0; i < 12; i++) {
+        char *m = *(char **)(base + 0x10 + i * 16);
+        if (m != 0) FUN_L00_00250df8(m);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8cd0.s", FUN_L08_002e8cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9558.s", FUN_L08_002e9558);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9758.s", FUN_L08_002e9758);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9a18.s", FUN_L08_002e9a18);
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
+
+extern short D_L08_00161D38_d __asm__("D_L08_00161D38") __attribute__((sda));
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L08_002e9a18(char *arg) {
+    char *data = *(char **)(arg + 0x78);
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    int i;
+    char *p;
+    char *parts = data + 0x60;
+    for (i = 0; i < 16; i++) {
+        char *e = parts + 0x1C + i * 16;
+        char *part = *(char **)(e - 0xC);
+        if (part != 0) {
+            *(float *)(part + 0x48) = *(float *)(arg + 0x48);
+            FUN_L00_0024f7c8(part, *(int *)(e - 4), v0);
+            FUN_L00_0024f7c8(*(void **)(e - 8), *(int *)e, v1);
+            FUN_001f9a28(v2, v1, v0);
+            FUN_001f9a10(part + 0x10, part + 0x10, v2);
+        }
+    }
+    if (*(char **)(data + 0x90) != 0) {
+        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(*(char **)(data + 0x90) + 0x40), *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
+    }
+    p = parts + 0x10;
+    for (i = 0; i < 16; i++) {
+        char *o = *(char **)p;
+        if (o != 0) {
+            FUN_L00_00250df8(o);
+            o = *(char **)p;
+            if (*(unsigned short *)(o + 0x34) & 0x8000) {
+                FUN_001f9a68(o + 0xD0, o + 0xD0, -1.0f);
+            }
+        }
+        p += 16;
+    }
+}

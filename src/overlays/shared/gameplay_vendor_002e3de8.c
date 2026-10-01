@@ -2,7 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3de8.s", FUN_L10_002e3de8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int, int);
+extern short D_L10_00161E58_d __asm__("D_L10_00161E58") __attribute__((sda));
+extern short D_L10_00161E5C_d __asm__("D_L10_00161E5C") __attribute__((sda));
+extern short D_L10_00161E60_d __asm__("D_L10_00161E60") __attribute__((sda));
+extern short D_L10_00161E64_d __asm__("D_L10_00161E64") __attribute__((sda));
+extern short D_L10_00161E68_d __asm__("D_L10_00161E68") __attribute__((sda));
+extern short D_L10_00161E6C_d __asm__("D_L10_00161E6C") __attribute__((sda));
+extern short D_L10_00161E70_d __asm__("D_L10_00161E70") __attribute__((sda));
+extern void FUN_001f9a10(float *, float *, float *);
+extern void FUN_L01_00287158(float *, float, float, int, int, int);
+
+void FUN_L10_002e3de8(char *moby) {
+    float v[3];
+    int g, h;
+    float a = random_angle_radians();
+    float b = random_float_between_alt(0.0f, *(float *)&D_L10_00161E70_d);
+    float c = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60_d);
+    float d = random_float_between_alt(*(float *)&D_L10_00161E60_d, *(float *)&D_L10_00161E64_d);
+    int e = FUN_L00_00257b90(*(int *)&D_L10_00161E68_d, *(int *)&D_L10_00161E6C_d);
+    v[0] = FUN_001f9dc8(a) * b;
+    v[1] = FUN_001f9de0(a) * b;
+    v[2] = 0.0f;
+    FUN_001f9a10(v, v, (float *)(moby + 0x10));
+    v[2] = v[2] + 0.025f;
+    g = *(int *)&D_L10_00161E58_d;
+    h = *(int *)&D_L10_00161E5C_d;
+    FUN_L01_00287158(v, c, d, g, h, e);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9028.s", FUN_L10_002e9028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e91b8.s", FUN_L10_002e91b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a50.s", FUN_L10_002f5a50);

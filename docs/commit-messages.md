@@ -64,7 +64,7 @@ The repository version-controls a `commit-msg` hook at `scripts/commit-msg.py`.
 Enable it once per checkout:
 
 ```sh
-ln -sf ../scripts/commit-msg.py .git/hooks/commit-msg
+ln -sf ../../scripts/commit-msg.py .git/hooks/commit-msg
 ```
 
 The hook rejects any subject that does not match the standard above.

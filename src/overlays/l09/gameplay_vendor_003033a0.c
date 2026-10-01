@@ -10,7 +10,40 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003041d0.s", FUN_L09_003041d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304360.s", FUN_L09_00304360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304c80.s", FUN_L09_00304c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00308220.s", FUN_L09_00308220);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* spawn a moby copying position, rotation and data word from owner */
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_0025d1b8(void *);
+
+char *FUN_L09_00308220(char *owner, int cls) {
+    char *moby = func_0020D348_m(cls);
+    if (moby != 0) {
+        unsigned char state;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        state = 0xFF;
+        *(short *)(moby + 0x32) = state;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        qcopy(moby + 0x10, owner + 0x10);
+        qcopy(moby + 0x40, owner + 0x40);
+        moby[0xBC] = FUN_001f96f8(10);
+        FUN_L00_00250df8(moby);
+        FUN_L00_0025d1b8(moby);
+        *(float *)(moby + 0x2C) = *(float *)(owner + 0x2C);
+        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(owner + 0x34);
+        **(int **)(moby + 0x78) = **(int **)(owner + 0x78);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003082d8.s", FUN_L09_003082d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003091b0.s", FUN_L09_003091b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);

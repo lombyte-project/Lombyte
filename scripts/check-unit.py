@@ -4,7 +4,7 @@
 Usage:
   python3 scripts/check-unit.py <unit> [--workspace DIR] [--json]
 
-``<unit>`` is a configured unit path such as ``assembly/textbin/fast_sin``; a
+``<unit>`` is a configured unit path such as ``assembly/textbin/runtime/memory/clear_u64_value``; a
 leading ``src/`` and a trailing ``.c`` are accepted.  When the file keeps its
 assembly oracle under ``#ifndef NON_MATCHING``, the C body under ``#else`` is
 staged into the workspace and measured alone, so the source tree keeps its
@@ -16,8 +16,8 @@ authoritative.  It needs a baseline workspace built once with
 only inside it.
 
 Usage examples:
-  python3 scripts/check-unit.py assembly/math/subtract_integer_with_clamp
-  python3 scripts/check-unit.py assembly/textbin/fast_sin --workspace build/baseline
+  python3 scripts/check-unit.py assembly/textbin/runtime/memory/clear_u64_value
+  python3 scripts/check-unit.py assembly/runtime/dma/dma_to_spr --workspace build/baseline
 """
 
 from __future__ import annotations
@@ -86,9 +86,16 @@ def build_environment() -> dict:
     venv_bin = ROOT / ".venv" / "bin"
     if venv_bin.is_dir():
         prefix.append(str(venv_bin))
-    binutils = Path(os.environ.get("BINUTILS_ROOT", "/opt/binutils-mips-ps2-decompals"))
-    if binutils.is_dir():
-        prefix.append(str(binutils))
+    binutils = os.environ.get("BINUTILS_ROOT")
+    candidates = (
+        [Path(binutils)]
+        if binutils
+        else [ROOT / "tools" / "binutils-mips-ps2-decompals", Path("/opt/binutils-mips-ps2-decompals")]
+    )
+    for candidate in candidates:
+        if candidate.is_dir():
+            prefix.append(str(candidate))
+            break
     if prefix:
         env["PATH"] = os.pathsep.join(prefix + [env.get("PATH", "")])
     return env

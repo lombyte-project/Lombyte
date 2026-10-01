@@ -3,13 +3,67 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3190.s", FUN_L16_002e3190);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e36e8.s", FUN_L16_002e36e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L16_002e36e8(unsigned char *moby) {
+    float *d = *(float **)(moby + 0x78);
+    if (moby[0x20] == 0) {
+        FUN_L00_001ff500(moby + 0xD0, moby + 0xD0, d[0] * 0.25f);
+        FUN_L00_001ff500(moby + 0xE0, moby + 0xE0, d[1] * 0.25f);
+        moby[0x20] = 1;
+        *(unsigned short *)(moby + 0x34) |= 0x101;
+        FUN_L00_00250df8(moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3fa0.s", FUN_L16_002e3fa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e43e0.s", FUN_L16_002e43e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4900.s", FUN_L16_002e4900);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4a58.s", FUN_L16_002e4a58);
+/* Pick the path for the current segment and set the travel speeds from its length. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_001B0930[];
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b48(void *, void *);
+
+void FUN_L16_002e4a58(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float inv, a, b, r;
+    switch (*(short *)(d + 0xAC)) {
+    case 0:
+        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x90)];
+        *(short *)(d + 0xAE) = 1;
+        break;
+    case 1:
+        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x94)];
+        *(short *)(d + 0xAE) = 0;
+        break;
+    case 2:
+        *(char **)(d + 0xA4) = D_L16_001B0930[*(int *)(d + 0x9C)];
+        *(short *)(d + 0xAE) = 1;
+        break;
+    }
+    p = *(char **)(d + 0xA4);
+    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    a = D_0015ED6C * 20.0f;
+    b = D_0015ED70 * 5.0f;
+    inv = 1.0f / (r * (float)**(int **)(d + 0xA4));
+    *(int *)(d + 0xB4) = 0;
+    *(int *)(d + 0xB0) = 0;
+    *(float *)(d + 0xC4) = a * inv;
+    *(float *)(d + 0xC8) = b * inv;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5010.s", FUN_L16_002e5010);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5258.s", FUN_L16_002e5258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e54a0.s", FUN_L16_002e54a0);
@@ -42,8 +96,50 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5e08.s", FUN_L16_002e5e08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6428.s", FUN_L16_002e6428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6808.s", FUN_L16_002e6808);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e70c0.s", FUN_L16_002e70c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7168.s", FUN_L16_002e7168);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
+
+extern short D_L16_0015F638;
+extern void FUN_L01_0027a248(int, int);
+extern void FUN_L13_002650a8(int, int, int, int);
+extern void FUN_L16_002de3b8(float f);
+
+void FUN_L16_002e70c0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int *p = (int *)(data + 0x60);
+    int i;
+    for (i = 15; i >= 0; i--) {
+        FUN_L13_002650a8(*p, 1, 1, 1);
+        p++;
+    }
+    p = (int *)(data + 0xA0);
+    for (i = 7; i >= 0; i--) {
+        FUN_L13_002650a8(*p, 0, 0, 0);
+        p++;
+    }
+    *(float *)&D_L16_0015F638 = 74.0f;
+    FUN_L16_002de3b8(76.0f);
+    FUN_L01_0027a248(2, 6);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
+
+void FUN_L16_002e7168(char *moby)
+{
+    char *data = *(char **)(moby + 0x78);
+    int *p;
+    int i;
+    p = (int *)(data + 0x60);
+    for (i = 15; i >= 0; i--) {
+        FUN_L13_002650a8(p[0], 0, 0, 0);
+        p++;
+    }
+    p = (int *)(data + 0xA0);
+    for (i = 7; i >= 0; i--) {
+        FUN_L13_002650a8(p[0], 1, 1, 0);
+        p++;
+    }
+    FUN_L16_002de3b8(100.0f);
+    FUN_L01_0027a248(0, 8);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7208.s", FUN_L16_002e7208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7a30.s", FUN_L16_002e7a30);
@@ -54,11 +150,119 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e84e8.s", FUN_L16_002e84e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e88d0.s", FUN_L16_002e88d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8970.s", FUN_L16_002e8970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b08.s", FUN_L16_002e8b08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b98.s", FUN_L16_002e8b98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8d40.s", FUN_L16_002e8d40);
+/* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float x, y, z;
+} Vec3f;
+
+extern char D_L16_001671C0[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9af0(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
+    int i;
+    float a[4];
+    float v[4];
+    float t[4];
+    float w[4];
+
+    for (i = 0; i < n; i++) {
+        float d;
+        float len;
+
+        v[3] = 1.0f;
+        v[0] = p2[i].x;
+        v[1] = p2[i].y;
+        v[2] = p2[i].z;
+        FUN_001f9a28(a, v, D_L16_001671C0);
+        FUN_L00_001ff500(a, a, 1.0f);
+        w[3] = 1.0f;
+        w[0] = p1[i].x;
+        w[1] = p1[i].y;
+        w[2] = p1[i].z;
+        FUN_L00_001ff500(w, w, 1.0f);
+        d = FUN_001f9ab0(w, a);
+        FUN_001f9a68(t, w, d + d);
+        FUN_001f9a28(t, a, t);
+        FUN_L00_001ff500(t, t, 1.0f);
+        t[2] = t[2] + 1.0f;
+        len = FUN_001f9af0(t);
+        len = len + len;
+        out[i * 2] = (t[0] / len + 0.5f) * 2.0f;
+        out[i * 2 + 1] = (t[1] / len + 0.5f) * 2.0f;
+    }
+}
+/* Sets up the draw state, then draws the three entries of the level's table. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001DC600[][16] __attribute__((section(".data")));
+extern char D_L16_001DC630[] __attribute__((section(".data")));
+extern int FUN_L00_002002e0(char *, float);
+extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161EF0 __attribute__((sda));
+extern short D_L16_00161F00 __attribute__((sda));
+extern short D_L16_00161F10 __attribute__((sda));
+extern short D_L16_00161F20 __attribute__((sda));
+extern short D_L16_00161F30 __attribute__((sda));
+extern void FUN_001f76a0(void);
+extern void FUN_L00_001fde98(int, int, int, char *, int);
+extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
+
+void FUN_L16_002e8d40(void) {
+    int *a = (int *)&D_L16_00161EF0;
+    int *b = (int *)&D_L16_00161F00;
+    int *c = (int *)&D_L16_00161F10;
+    int *d = (int *)&D_L16_00161F20;
+    int *e = (int *)&D_L16_00161F30;
+    int i;
+
+    vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
+    vu1_add_g_sregister_l16(0x42, 0x4000000064);
+    vu1_add_g_sregister_l16(8, 0);
+    vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
+    FUN_001f76a0();
+    for (i = 0; i < 3; i++) {
+        if (FUN_L00_002002e0(D_L16_001DC600[i], 512.0f) != -1) {
+            FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DC630);
+            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DC630, 1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e93b0.s", FUN_L16_002e93b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e98e0.s", FUN_L16_002e98e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9ce0.s", FUN_L16_002e9ce0);
+/* Sets up the draw state then runs both per-slot calls over three entries. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001E28D0[];
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161FB8_d[1] __asm__("D_L16_00161FB8") __attribute__((sda));
+extern short D_L16_00161FC8_d[1] __asm__("D_L16_00161FC8") __attribute__((sda));
+extern short D_L16_00161FD8_d[1] __asm__("D_L16_00161FD8") __attribute__((sda));
+extern short D_L16_00161FE8_d[1] __asm__("D_L16_00161FE8") __attribute__((sda));
+extern short D_L16_00161FF8_d[1] __asm__("D_L16_00161FF8") __attribute__((sda));
+extern void FUN_001f76a0(void);
+extern void FUN_L00_001fde98(int, int, int, char *, int);
+void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L16_002e9ce0(void) {
+    int i;
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x29));
+    vu1_add_g_sregister(0x42, 0x4000000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    FUN_001f76a0();
+    for (i = 0; i < 3; i++) {
+        FUN_L16_002e8b98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FE8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FD8_d)[i], D_L16_001E28D0);
+        FUN_L00_001fde98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FF8_d)[i], D_L16_001E28D0, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ea128.s", FUN_L16_002ea128);

@@ -8,11 +8,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1608.s", FUN_L04_002d1608);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d16b8.s", FUN_L04_002d16b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d3580.s", FUN_L04_002d3580);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* UpdateMoby_584 */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_0025d1b8(void *);
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+
+void FUN_L04_002d3580(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    FUN_001f9a28(v, m + 0x10, d + 0xA0);
+    FUN_L00_00260738(d + 0x60, v, m + 0x40, m + 0x40);
+    qcopy(d + 0xA0, m + 0x10);
+    if (*(unsigned char *)(m + 0x20) == 0) {
+        *(int *)(d + 0x20) = 0;
+        *(short *)(d + 0x24) = 0;
+        d[0x28] = 4;
+        *(short *)(d + 0x3E) = 0xD;
+        FUN_L00_0025d1b8(m);
+        m[0x20] = 1;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d6f68.s", FUN_L04_002d6f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1768.s", FUN_L04_002e1768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17b0.s", FUN_L04_002e17b0);
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002E2B90), where it is exact; names translated to the US level program. */
+
+float FUN_L04_002e17b0(void) {
+    return -2.55f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1d00.s", FUN_L04_002e1d00);

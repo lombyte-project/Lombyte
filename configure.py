@@ -210,8 +210,9 @@ SDATA_OVERLAYS = {
 }
 
 # Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
-# exact codegen requires a different scheduling model.  Keyed by unit-name
-# suffix so both the assembly-backed and the normalized/promoted name match.
+# exact codegen requires a different scheduling model.  Keyed by the configured
+# owner path (exact match): a unit renamed or moved out of assembly/ must have
+# its entry renamed with it.
 # sce_sif_init_iop_heap: retail tail (lui v0; sw; move v0) is byte-exact only
 # under -fno-schedule-insns; applying it globally to all EE-GCC 2.9 units changes
 # scePad2Read and other already-exact siblings.
@@ -249,7 +250,7 @@ SDK_COMPILER_FLAG_UNITS = {
 }
 
 
-# Per-unit extra flags for GAME_COMPILER_UNITS (suffix match, as SN_FLAG_UNITS).
+# Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
 GAME_COMPILER_FLAG_UNITS = {
     # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
     # (the .extern-ordering class); its call loop needs patch
@@ -440,12 +441,25 @@ def _win_path(value: str) -> str:
     match = re.match(r"^/mnt/([A-Za-z])/(.*)$", value)
     if match:
         return f"{match.group(1).upper()}:/{match.group(2)}".replace("/", "\\")
+    # Under wine the PE reads the Unix path directly (wine maps / to Z:),
+    # and it cannot resolve a UNC path at all: keep the path unchanged.
+    if _wine_binary():
+        return value
     # A native WSL path (e.g. a BASELINE_ROOT on ext4) is reachable from
     # Windows only over UNC (\\wsl.localhost\<distro>\...).
     distro = os.environ.get("WSL_DISTRO_NAME")
     if distro and value.startswith("/"):
         return f"\\\\wsl.localhost\\{distro}{value}".replace("/", "\\")
     return value.replace("/", "\\")
+
+
+def _wine_binary() -> str:
+    """The wine binary the PE tools must run under, or "" to run them directly."""
+    wine = os.environ.get("RNC_WINE")
+    if wine is not None:
+        return wine
+    on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
+    return "" if on_windows_drive else (shutil.which("wine") or "")
 
 
 def _windows_exe(path: str) -> str:
@@ -459,10 +473,7 @@ def _windows_exe(path: str) -> str:
     slot) that `wine Ps2EeAs.exe` assembles. RNC_WINE overrides the wine
     binary; an empty RNC_WINE runs the PE directly.
     """
-    wine = os.environ.get("RNC_WINE")
-    if wine is None:
-        on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
-        wine = "" if on_windows_drive else (shutil.which("wine") or "")
+    wine = _wine_binary()
     quoted = shlex.quote(path)
     return f"{shlex.quote(wine)} {quoted}" if wine else quoted
 
@@ -485,8 +496,10 @@ def _unit_from_object(object_path: Path) -> str:
 # C aliases in promoted sources: ALIAS __attribute__((alias("TARGET"))).
 # The oracle fallback keeps the bytes but not the aliases, so they are handed
 # to the linker (PROVIDE, only when nothing else defines them).
+# The declaration may carry a parameter list between the name and the
+# attribute, so the name is not always immediately followed by __attribute__.
 _ALIAS_RE = re.compile(
-    r"([A-Za-z_]\w*)\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
+    r"([A-Za-z_]\w*)\s*(?:\([^;{]*?\))?\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
 )
 
 

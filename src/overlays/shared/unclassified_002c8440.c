@@ -4,7 +4,27 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c8440.s", FUN_L00_002c8440);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c92d8.s", FUN_L00_002c92d8);
+/* 0x002c92d8, 112 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+// resets the fields of a record (if non-null) to their defaults
+void FUN_L00_002c92d8(char *a) {
+    if (a != 0) {
+        *(int *)(a + 0x78) = 0;
+        *(float *)(a + 0x7C) = 0.05f;
+        *(float *)(a + 0x80) = 0.863f;
+        *(int *)(a + 0x84) = 4;
+        *(int *)(a + 0x88) = 3;
+        *(float *)(a + 0x8C) = 0.625f;
+        *(short *)(a + 0x9C) = -1;
+        *(short *)(a + 0x9E) = -1;
+        *(int *)(a + 0xA0) = -1;
+        *(int *)(a + 0xA4) = -1;
+        *(int *)(a + 0xA8) = -1;
+        *(int *)(a + 0xAC) = -1;
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c9348.s", FUN_L00_002c9348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97d8.s", FUN_L00_002c97d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);

@@ -70,8 +70,52 @@ void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, flo
     write_dma_channel(D_L02_001CB400, 0x70002800, 0xF8);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3c98.s", FUN_L02_002d3c98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3dd0.s", FUN_L02_002d3dd0);
+#include "qcopy.h"
+
+/* Transforms two table vectors by the moby's matrix and passes them on. */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
+
+extern float D_L02_001D3230[][4] __attribute__((section(".data")));
+extern short D_L02_001619C0 __attribute__((sda));
+extern short D_L02_001619D0 __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L02_002d3a50(void *, void *, void *, int, float, float);
+
+void FUN_L02_002d3c98(char *moby, int a, int b, int d) {
+    float va[4];
+    float vb[4];
+    float *pa = D_L02_001D3230[a];
+    float *pb;
+    qcopy(va, pa);
+    va[3] = 1.0f;
+    FUN_001f9a28(va, va, &D_L02_001619C0);
+    FUN_001f9cf8(va, va, moby + 0xC0);
+    FUN_001f9a10(va, va, moby + 0x10);
+    pb = D_L02_001D3230[b];
+    qcopy(vb, pb);
+    vb[3] = 1.0f;
+    FUN_001f9a28(vb, vb, &D_L02_001619C0);
+    FUN_001f9cf8(vb, vb, moby + 0xC0);
+    FUN_001f9a10(vb, vb, moby + 0x10);
+    FUN_L02_002d3a50(moby, va, vb, d, pa[3] * *(float *)&D_L02_001619D0, pb[3] * *(float *)&D_L02_001619D0);
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
+
+extern short D_L02_001619EC_d __asm__("D_L02_001619EC") __attribute__((sda));
+extern short D_L02_001619F0_d __asm__("D_L02_001619F0") __attribute__((sda));
+extern short D_L02_001619F4_d __asm__("D_L02_001619F4") __attribute__((sda));
+extern short D_L02_001619F8_d __asm__("D_L02_001619F8") __attribute__((sda));
+extern void FUN_L02_002d3c98(char *moby, int a, int b, int d);
+
+void FUN_L02_002d3dd0(void *moby) {
+    FUN_L02_002d3c98(moby, 0, 1, *(int *)&D_L02_001619F0_d);
+    FUN_L02_002d3c98(moby, 2, 3, *(int *)&D_L02_001619EC_d);
+    FUN_L02_002d3c98(moby, 4, 5, *(int *)&D_L02_001619F4_d);
+    FUN_L02_002d3c98(moby, 6, 7, *(int *)&D_L02_001619F4_d);
+    FUN_L02_002d3c98(moby, 8, 9, *(int *)&D_L02_001619F8_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5658.s", FUN_L02_002d5658);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5728.s", FUN_L02_002d5728);
@@ -181,7 +225,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd370.s", FUN_L02_002dd370);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002def80.s", FUN_L02_002def80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df0b0.s", FUN_L02_002df0b0);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001fa580(float, float);
+extern short D_L02_00161C3C_d __asm__("D_L02_00161C3C") __attribute__((sda));
+
+void FUN_L02_002df0b0(char *moby)
+{
+    char *d = *(char **)(moby + 0x78);
+    char *a = *(char **)(d + 0x84);
+    float k, k2;
+    float r;
+    qcopy(a + 0x10, moby + 0x10);
+    qcopy(*(char **)(d + 0x88) + 0x10, moby + 0x10);
+    k = *(float *)&D_L02_00161C3C_d;
+    *(float *)(a + 0x18) = *(float *)(moby + 0x18) + *(float *)(d + 0x94);
+    *(int *)(d + 0x8C) = 0;
+    *(float *)(*(char **)(d + 0x88) + 0x18) = *(float *)(moby + 0x18) + *(float *)(d + 0x98);
+    *(int *)(d + 0x90) = 0;
+    r = FUN_001fa580(*(float *)(moby + 0x48), (*(float *)(*(char **)(d + 0x84) + 0x18) - *(float *)(moby + 0x18)) * k * 0.017453292f);
+    k2 = *(float *)&D_L02_00161C3C_d;
+    *(float *)(*(char **)(d + 0x84) + 0x48) = r;
+    *(float *)(*(char **)(d + 0x88) + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), (*(float *)(*(char **)(d + 0x88) + 0x18) - *(float *)(moby + 0x18)) * k2 * 0.017453292f);
+    FUN_L00_00250df8(*(char **)(d + 0x84));
+    FUN_L00_00250df8(*(char **)(d + 0x88));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df1a8.s", FUN_L02_002df1a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df730.s", FUN_L02_002df730);

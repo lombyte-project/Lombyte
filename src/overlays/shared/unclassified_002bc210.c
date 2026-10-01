@@ -4,4 +4,17 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bc210.s", FUN_L12_002bc210);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e6b60.s", FUN_L12_002e6b60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e71b0.s", FUN_L12_002e71b0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* calls func_L12_002BD3D0 with two looked-up ids */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
+
+extern char D_L12_001F5480[];
+extern s32 get_effect_texture() __asm__("FUN_001f44b8");
+extern void FUN_L12_002bc210(void *, int, int, int);
+
+void FUN_L12_002e71b0(void) {
+    FUN_L12_002bc210(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
+}

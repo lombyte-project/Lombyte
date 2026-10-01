@@ -2,9 +2,68 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b8228.s", FUN_L08_002b8228);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
+
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L08_00279f00(char *);
+extern short D_L08_00161468_d __asm__("D_L08_00161468") __attribute__((sda));
+extern short D_L08_0016146C_d __asm__("D_L08_0016146C") __attribute__((sda));
+extern void FUN_L00_0025d1b8(void *);
+
+void FUN_L08_002b8228(char *moby) {
+    float a = *(float *)&D_L08_00161468_d;
+    float b = *(float *)&D_L08_0016146C_d;
+    char *d;
+    *(float *)(moby + 0x40) = 0.0f;
+    *(float *)(moby + 0x44) = 0.5235988f;
+    *(float *)(moby + 0x48) = 0.0f;
+    d = *(char **)(moby + 0x78);
+    *(float *)(d + 0xC) = random_float_between_alt(a, b);
+    *(int *)(d + 0x28) = 0;
+    *(float *)(d + 8) = *(float *)(moby + 0x18);
+    FUN_L00_0025d1b8(moby);
+    *(int *)(d + 0x24) = FUN_L08_00279f00(moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b82a0.s", FUN_L08_002b82a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d22e0.s", FUN_L08_002d22e0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawns a moby of class 0xF8 at a position and facing derived from a vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D35E8), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float FUN_L00_001ff8b0(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001f96f8(int);
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
+    char *m = func_0020D348_m(0xF8);
+    if (m != 0) {
+        char *d = *(char **)(m + 0x78);
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        m[0x20] = 1;
+        *(int *)(d + 0x30) = arg;
+        *(int *)(d + 0x20) = FUN_001f96f8(300);
+        *(float *)(d + 0x2C) = 1.0f;
+        *(int *)(d + 0x24) = 0;
+        qcopy(m + 0x10, pos);
+        qcopy(d + 0x10, vec);
+        *(float *)(m + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453292f;
+        *(float *)(m + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d23f0.s", FUN_L08_002d23f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d4ca0.s", FUN_L08_002d4ca0);
@@ -41,7 +100,30 @@ void FUN_L08_002dc7f0(char *moby) {
         try_set_help_message(0xA, 0x1F4E);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc8a0.s", FUN_L08_002dc8a0);
+/* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
+
+char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
+    char *moby = func_0020D348_m(0x1A9);
+    char *data;
+    if (moby) {
+        data = *(char **)(moby + 0x78);
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 1;
+        *(char **)(data + 0x20) = src;
+        *(int *)(data + 0x10) = FUN_001f96f8(0x12C);
+        *(float *)(data + 0x1C) = 1.0f;
+        *(int *)(data + 0x14) = 0;
+        qcopy(moby + 0x10, pos);
+        qcopy(data, vec);
+        *(float *)(moby + 0x40) = random_float_between_alt(-180.0f, 180.0f) * 0.017453293f;
+        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)vec, *(float *)(vec + 4)) + 1.5707964f;
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3d8.s", FUN_L08_002de3d8);

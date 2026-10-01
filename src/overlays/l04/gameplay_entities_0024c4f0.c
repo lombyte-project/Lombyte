@@ -5,4 +5,36 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c4f0.s", FUN_L04_0024c4f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c57c.s", FUN_L04_0024c57c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c660.s", FUN_L04_0024c660);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c7d8.s", FUN_L04_0024c7d8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* finds the closest point on a polygon's edges to a point, returns whether the first test hit */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D790), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9af0(void *);
+extern int FUN_L04_0024c4f0(float *, float *, int);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L04_0024c660(float *, float *, float *, float *);
+
+int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
+    float tmp[4];
+    float diff[4];
+    float best;
+    int i;
+    int r = FUN_L04_0024c4f0(p, poly, n) != 0;
+    best = 0;
+    for (i = 0; i < n; i++) {
+        float d;
+        FUN_L04_0024c660(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
+        FUN_001f9a28(diff, p, tmp);
+        d = FUN_001f9af0(diff);
+        if (i == 0 || d < best) {
+            best = d;
+            qcopy(out, tmp);
+        }
+    }
+    return r;
+}

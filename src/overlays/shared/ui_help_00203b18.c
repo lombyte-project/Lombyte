@@ -1054,7 +1054,59 @@ typedef struct { char pad[0xA4]; float a; float b; } S0020a1e0;
 extern S0020a1e0 D_L00_0017A680;
 void FUN_L00_0020a1e0(float a, float b) { S0020a1e0 *p = &D_L00_0017A680; p->a = a; p->b = b; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a240.s", FUN_L00_0020a240);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a318.s", FUN_L00_0020a318);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_0020A990), where it is exact; names translated to the US level program. */
+
+extern V D_L00_00173E60_d __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
+extern float D_0015ED64;
+extern float FUN_001f9b48(void *, void *);
+extern int FUN_L00_0020a240(int, float, float);
+extern int FUN_L00_0025e3b8(void *);
+extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
+
+void FUN_L00_0020a318(void) {
+    char *g = (char *)D_0013E533 + 0xE1D;
+    char *p;
+    char *p2;
+    char *h;
+    char *g2;
+    float f12, f13, f, s, s2;
+    *(short *)(g + 0x22C8) = 0;
+    if (*(unsigned char *)(g + 0x20AB) == 0) return;
+    if (FUN_L00_0020d498(0) == 0x1A) return;
+    if (*(int *)(g + 0x2084) == 0x81) {
+        p = D_L00_0017A680_d;
+        s = D_0015ED64;
+        *(float *)(p + 0x694) = -0.349065840f;
+        *(float *)(p + 0x6D4) = s * 0.05f;
+        *(float *)(p + 0x6D8) = s * 0.3f;
+    }
+    f13 = 1.29999995f;
+    if (*(short *)(g + 0x22C8) != 0) f13 = 1.5999999f;
+    f12 = 0.569999993f;
+    if (*(unsigned char *)(g + 0x20A8) != 0) f12 = 0.699999988f;
+    if (FUN_L00_0020a240(0, f12, f13) == 0) return;
+    if (*(unsigned char *)(g + 0x20A8) != 0) {
+        if (D_L00_00173E58_d != 0) {
+            if (FUN_L00_0025e3b8(D_L00_00173E58_d) != 0) return;
+        }
+    }
+    s2 = D_0015ED64;
+    p2 = D_L00_0017A680_d;
+    *(float *)(p2 + 0x6D4) = s2 * 0.05f;
+    *(float *)(p2 + 0x6D8) = s2 * 0.3f;
+    h = (char *)D_0013E533 + 0xE9D;
+    f = FUN_001f9b48(h, D_L00_00173E60_d);
+    g2 = (char *)D_0013E533 + 0xE1D;
+    f = f - *(float *)(g2 + 0x234);
+    f = (1.29999995f - f) / 1.29999995f;
+    f = f * 1.25f;
+    f = f * -1.22173047f;
+    if (f > -0.523598790f) f = -0.523598790f;
+    if (f < -1.22173047f) f = -1.22173047f;
+    *(float *)(p2 + 0x694) = f;
+    *(short *)(g2 + 0x22C8) = 1;
+}
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
 void FUN_L00_0020a500(void) {
     char *p = D_0013F350_0020a500;

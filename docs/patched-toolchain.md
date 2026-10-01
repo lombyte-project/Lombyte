@@ -6,8 +6,8 @@ rebuilding those units from the retail oracle instead of their C; install the
 profile to compile and verify their C.
 
 The patch lives in
-[`patches/ee-gcc-2.9-991111-01/`](../patches/ee-gcc-2.9-991111-01/): 166
-inserted and 15 deleted lines over 8 files, adding opt-in `-mastra-*` flags
+[`patches/ee-gcc-2.9-991111-01/`](../patches/ee-gcc-2.9-991111-01/): 203
+inserted and 15 deleted lines over 9 files, adding opt-in `-mastra-*` flags
 (inert by default), R5900 `sq`/`lq` saves, classic `mult`/`mflo` code
 generation, and the in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`),
 against the public snapshot
@@ -26,6 +26,9 @@ python3 scripts/build-patched-toolchain.py
 export EE_GCC_PATCHED_ROOT="$PWD/tools/ee-gcc2.9-991111-01-patched"
 make elf
 ```
+
+`./setup.sh --with-patched` runs the same build as part of the one-command
+setup and exports `EE_GCC_PATCHED_ROOT` for its own `make elf`.
 
 Options: `--source-dir DIR` (reuse a checkout, offline), `--bison PATH`,
 `--check` (verify the patch only), `--verify-hashes`.

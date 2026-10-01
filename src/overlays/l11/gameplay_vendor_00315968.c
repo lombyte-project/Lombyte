@@ -48,9 +48,63 @@ int FUN_L11_00318050(char *moby, void **out) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003181f0.s", FUN_L11_003181f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318488.s", FUN_L11_00318488);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern void FUN_001f9a28(void *, void *, void *);
+
+void FUN_L11_00318488(char *m) {
+    char *d = *(char **)(m + 0x78);
+    m[0x20] = 1;
+    *(int *)(m + 0x94) = 0;
+    FUN_001f9a28(d + 0x10, m + 0x10, d);
+    *(float *)(d + 0x20) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
+    *(float *)(d + 0x24) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318b30.s", FUN_L11_00318b30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318d10.s", FUN_L11_00318d10);
+#include "qcopy.h"
+
+/* Spawns a spark effect moby from a source moby, initialises its particle bytes and warms it up. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A180), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern int FUN_001f96f8(int);
+extern int FUN_L11_00318ed8_u() __asm__("FUN_L11_00318ed8");
+extern void FUN_001f99f8(void *);
+extern void FUN_001fa030(void *, void *);
+s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
+
+char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
+    char *mob = func_0020D348_m(0x511);
+    if (mob != 0) {
+        char *d;
+        unsigned char *p;
+        int i, k, t;
+        *(short *)(mob + 0x32) = 0x40;
+        *(unsigned char *)(mob + 0x30) = 0xFF;
+        mob[0x31] = 1;
+        *(int *)(mob + 0x2C) = 0;
+        d = *(char **)(mob + 0x78);
+        *(long *)(mob + 0x38) = *(long *)(src + 0x38);
+        mob[0x20] = 1;
+        qcopy(mob + 0x10, pos);
+        qcopy(mob + 0x40, src + 0x40);
+        FUN_001f99f8(d);
+        *(char **)(d + 0x24) = src;
+        p = (unsigned char *)(d + 0x14);
+        *(int *)(d + 0x20) = FUN_001f96f8(ticks);
+        *(int *)(d + 0x28) = 5;
+        FUN_001fa030(mob + 0xC0, mob + 0x40);
+        for (i = 0, t = 10; i < 4; i++, t += 10, p++) {
+            p[-4] = random_integer_below(0xFF);
+            if (i * (i & 1)) p[0] = 0xFF; else p[0] = 1;
+            p[4] = t;
+        }
+        for (k = 0x31; k >= 0; k--) FUN_L11_00318ed8_u(mob);
+    }
+    return mob;
+}
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
@@ -72,9 +126,73 @@ void FUN_L11_00318e98(char *arg, void *src) {
     qcopy(dst, src);
     *(int *)(dst + 0x20) = scale_ticks(0x3C);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318ed8.s", FUN_L11_00318ed8);
+/* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern short D_L11_0016238C_d __asm__("D_L11_0016238C") __attribute__((sda));
+extern short D_L11_00162390_d __asm__("D_L11_00162390") __attribute__((sda));
+extern short D_L11_00162394_d __asm__("D_L11_00162394") __attribute__((sda));
+extern short D_L11_00162398_d __asm__("D_L11_00162398") __attribute__((sda));
+extern short D_L11_0016239C_d __asm__("D_L11_0016239C") __attribute__((sda));
+extern short D_L11_001623A0_d __asm__("D_L11_001623A0") __attribute__((sda));
+extern short D_L11_001623A4_d __asm__("D_L11_001623A4") __attribute__((sda));
+extern short D_L11_001623A8_d __asm__("D_L11_001623A8") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_L00_001ff500(void *, void *, float);
+
+void FUN_L11_00318ed8(char *m) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    float v4[4];
+    float s = random_float_between_alt(2.5f, 3.0f);
+    float a = random_angle_radians();
+    FUN_L00_001ff500(v2, m + 0xD0, s * FUN_001f9de0(a));
+    FUN_L00_001ff500(v1, m + 0xE0, s * FUN_001f9dc8(a));
+    FUN_001f9a10(v1, v1, v2);
+    FUN_001f9a28(v0, m + 0x10, v1);
+    FUN_001f9a68(v3, v1, 1.0f / (float)FUN_001f96f8(*(int *)&D_L11_00162394_d + *(int *)&D_L11_00162398_d + *(int *)&D_L11_0016239C_d));
+    qcopy(v4, v3);
+    v3[3] = *(float *)&D_L11_001623A0_d;
+    v4[3] = *(float *)&D_L11_001623A4_d;
+    FUN_00218888(v0, v3, v4, *(int *)&D_L11_0016238C_d, *(int *)&D_L11_00162390_d, *(int *)&D_L11_00162394_d, *(int *)&D_L11_00162398_d, *(int *)&D_L11_0016239C_d, *(int *)&D_L11_001623A8_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319028.s", FUN_L11_00319028);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003191c0.s", FUN_L11_003191c0);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A630), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern int FUN_001fa6e0(int, int, float);
+extern short D_L11_001623A8_d __asm__("D_L11_001623A8") __attribute__((sda));
+extern short D_L11_001623AC_d __asm__("D_L11_001623AC") __attribute__((sda));
+extern short D_L11_001623B0_d __asm__("D_L11_001623B0") __attribute__((sda));
+extern short D_L11_001623B4_d __asm__("D_L11_001623B4") __attribute__((sda));
+extern short D_L11_001623B8_d __asm__("D_L11_001623B8") __attribute__((sda));
+extern short D_L11_001623BC_d __asm__("D_L11_001623BC") __attribute__((sda));
+extern short D_L11_001623C0_d __asm__("D_L11_001623C0") __attribute__((sda));
+extern short D_L11_001623C4_d __asm__("D_L11_001623C4") __attribute__((sda));
+extern short D_L11_001623C8_d __asm__("D_L11_001623C8") __attribute__((sda));
+extern short D_L11_001623CC_d __asm__("D_L11_001623CC") __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+
+void FUN_L11_003191c0(char *moby) {
+    float v0[4];
+    float v1[4];
+    int c1;
+    int c2;
+    FUN_L00_00257d78(v0, *(float *)&D_L11_001623AC_d * D_0015ED6C, *(float *)&D_L11_001623B0_d * D_0015ED6C);
+    FUN_L00_00257d78(v1, *(float *)&D_L11_001623AC_d * D_0015ED6C, *(float *)&D_L11_001623B0_d * D_0015ED6C);
+    v0[3] = *(float *)&D_L11_001623B4_d;
+    v1[3] = *(float *)&D_L11_001623B8_d;
+    c1 = FUN_001fa6e0(*(int *)&D_L11_001623BC_d, *(int *)&D_L11_001623C0_d, random_float_between_alt(0.0f, 1.0f));
+    c2 = FUN_001fa6e0(*(int *)&D_L11_001623BC_d, *(int *)&D_L11_001623C0_d, random_float_between_alt(0.0f, 1.0f));
+    FUN_00218888(moby + 0x10, v0, v1, c1, c2, *(int *)&D_L11_001623C4_d, *(int *)&D_L11_001623C8_d, *(int *)&D_L11_001623CC_d, *(int *)&D_L11_001623A8_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319838.s", FUN_L11_00319838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a758.s", FUN_L11_0031a758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a7d8.s", FUN_L11_0031a7d8);
@@ -104,7 +222,28 @@ char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ae68.s", FUN_L11_0031ae68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031b098.s", FUN_L11_0031b098);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031d8d8.s", FUN_L11_0031d8d8);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
+
+extern int D_L11_001FF750[];
+extern int D_L11_001FF770[];
+extern short D_L11_00162530_d __asm__("D_L11_00162530") __attribute__((sda));
+extern short D_L11_00162540_d __asm__("D_L11_00162540") __attribute__((sda));
+extern short D_L11_00162550_d __asm__("D_L11_00162550") __attribute__((sda));
+extern short D_L11_00162570_d __asm__("D_L11_00162570") __attribute__((sda));
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+
+void FUN_L11_0031d8d8(int arg) {
+    int *a = (int *)&D_L11_00162530_d;
+    int *b = (int *)&D_L11_00162540_d;
+    int *c = (int *)&D_L11_00162550_d;
+    int *d = (int *)&D_L11_00162570_d;
+    int i;
+    for (i = 0; i < 4; i++) {
+        FUN_L08_00258090(D_L11_001FF770, c[i], a[i], (char *)D_L11_001FF750 + arg * 8);
+        FUN_L00_001fde98(a[i], b[i], d[i], D_L11_001FF770, 1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031db50.s", FUN_L11_0031db50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e2f0.s", FUN_L11_0031e2f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e930.s", FUN_L11_0031e930);

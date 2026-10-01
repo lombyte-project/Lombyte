@@ -22,9 +22,107 @@ void FUN_L07_002fbdb8(char *arg) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b538.s", FUN_L07_0030b538);
+#include "qcopy.h"
+
+/* spawns a moby of class 0x370 at a position moving along a direction */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C918), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char *func_0020D348_m(int);
+extern float FUN_001f9b20(void *);
+extern float FUN_L00_001ff8b0(float, float);
+extern int FUN_001f96f8(int);
+extern void FUN_L00_001ff550(void *, void *, float);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
+    unsigned char *m = func_0020D348_m(0x370);
+    if (m) {
+        char *d;
+        float V[4];
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x31] = 1;
+        *(int *)(m + 0x40) = 0;
+        d = *(char **)(m + 0x78);
+        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(dir), dir[2]);
+        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        qcopy(m + 0x10, pos);
+        qcopy(d + 0x40, pos);
+        qcopy(d + 0x30, dir);
+        qcopy(V, d + 0x30);
+        V[2] = 0.0f;
+        FUN_L00_001ff550(V, V, 1.0f);
+        V[2] = 1.0f;
+        FUN_L00_00259888(d, (int)m, 0x10001, V, 1.0f);
+        d[0x18] = 1;
+        d[0x19] = 1;
+        blend_moby_animation(m, 1, 0, FUN_001f96f8(5));
+        *(short *)(m + 0x34) = 0x208;
+        *(int *)(d + 0x50) = a;
+        *(int *)(d + 0x54) = b;
+        m[0x23] = 0x10;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b6a8.s", FUN_L07_0030b6a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ba90.s", FUN_L07_0030ba90);
+/* spawns a moby with random velocity and copies position */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L07_0030ba90(char *pos, char *vec, int c, short d) {
+    char *m = func_0020D348_m(0x372);
+    char *p;
+    if (m) {
+        p = *(char **)(m + 0x78);
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(unsigned short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(float *)(m + 0x40) = random_angle_radians();
+        *(float *)(m + 0x44) = random_angle_radians();
+        *(float *)(m + 0x48) = random_angle_radians();
+        *(float *)(p + 0x18) = FUN_L00_00257c48(100.0f, 300.0f) * 0.017453292f * D_0015ED6C;
+        *(float *)(p + 0x1C) = FUN_L00_00257c48(100.0f, 300.0f) * 0.017453292f * D_0015ED6C;
+        qcopy(m + 0x10, pos);
+        qcopy(p, vec);
+        *(int *)(p + 0x10) = c;
+        *(int *)(p + 0x14) = d;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030bbc8.s", FUN_L07_0030bbc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030c508.s", FUN_L07_0030c508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd48.s", FUN_L07_0030cd48);
@@ -60,9 +158,89 @@ void FUN_L07_0030d440(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dbb0.s", FUN_L07_0030dbb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e0e0.s", FUN_L07_0030e0e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e1f8.s", FUN_L07_0030e1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e370.s", FUN_L07_0030e370);
+/* Slows and steers a moby toward another when it is below and close in height. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b80(void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_00259bc8(char *m, float t, int a, int b, void *pos, void *vel);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L07_0030e0e0(char *a, char *b, char *c) {
+    float v[4];
+    float w[4];
+    if (*(float *)(a + 0x18) < *(float *)(b + 0x18) + *(float *)(c + 0x10) * 0.3f) {
+        float d = FUN_001f9b80(b + 0x10, a + 0x10);
+        if (AbsoluteFloat(d - *(float *)(c + 8)) < 0.3f) {
+            FUN_001f9a28(v, a + 0x10, b + 0x10);
+            FUN_L00_001ff500(w, v, *(float *)(c + 8) - 0.05f);
+            FUN_L00_001ff500(v, v, 1.0f);
+            v[2] = 1.0f;
+            FUN_L00_00259bc8(a, *(float *)(c + 0x1c), (int)b, 0x10001, w, v);
+        }
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F5D8), where it is exact; names translated to the US level program. */
+
+extern char *D_L07_0015FFE4;
+extern char D_0013E533[];
+extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L07_0030dcf0(void);
+void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L07_0030e1f8(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float r;
+    char *p;
+    *(float *)(d + 8) = *(float *)(d + 8) + *(float *)(d + 0xC);
+    *(float *)(m + 0x2C) = *(float *)(d + 8);
+    r = (*(float *)(d + 8) - *(float *)d) / (*(float *)(d + 4) - *(float *)d);
+    if (r < 0.2f) {
+        m[0x23] = func_001FA898_r(r * 5.0f * 127.0f);
+    } else if (r > 0.8f) {
+        m[0x23] = func_001FA898_r((1.0f - r) * 5.0f * 127.0f);
+    } else {
+        m[0x23] = 0x80;
+    }
+    if (r >= 1.0f) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    enqueue_callback_list_1((void *)FUN_L07_0030dcf0, m);
+    FUN_L07_0030e0e0_c(*(void **)(D_0013E533 + 0x2E9D), m, d);
+    for (p = D_L07_0015FFE4; p; p = *(char **)(p + 0x28)) {
+        FUN_L07_0030e0e0_c(p, m, d);
+    }
+}
+/* Spawn the class 0x419 effect moby at a position with a data block, and start its particle. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F750), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
+
+char *FUN_L07_0030e370(char *pos, char *vec, int arg) {
+    char *m = func_0020D348_m(0x419);
+    if (m != 0) {
+        char *data;
+        *(short *)(m + 0x32) = *(unsigned char *)(m + 0x30) = 0xFF;
+        m[0x31] = 1;
+        data = *(char **)(m + 0x78);
+        *(float *)(m + 0x40) = random_angle_radians();
+        *(float *)(m + 0x44) = random_angle_radians();
+        *(float *)(m + 0x48) = random_angle_radians();
+        qcopy(m + 0x10, pos);
+        qcopy(data, vec);
+        *(int *)(data + 0x10) = arg;
+        m[0x23] = 0x30;
+        *(unsigned short *)(m + 0x34) |= 0x200;
+        FUN_L00_00250df8(m);
+        FUN_L00_0026daa0(m, 0x800040FF, 0x80, -1, 500000.0f);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
@@ -86,11 +264,79 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
     if (delta > 0.68f) return 0;
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ec58.s", FUN_L07_0030ec58);
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
+
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L07_0030ec58(char *arg) {
+    switch (((unsigned char *)arg)[0xBC]) {
+    case 0:
+        if (((unsigned char *)arg)[0x53] != 0) {
+            blend_moby_animation(arg, 0, 0, 10);
+        }
+        arg[0x20] = 1;
+        break;
+    case 1:
+        if (((unsigned char *)arg)[0x53] != 3) {
+            blend_moby_animation(arg, 3, 0, 10);
+        }
+        arg[0x20] = 7;
+        break;
+    case 2:
+        if (((unsigned char *)arg)[0x53] != 9) {
+            blend_moby_animation(arg, 9, 0, 10);
+        }
+        arg[0x20] = 0xF;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f0f8.s", FUN_L07_0030f0f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f1e0.s", FUN_L07_0030f1e0);
+/* Step a moby's velocity toward a target: gravity when above a height, then ease and clamp. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003104D8), where it is exact; names translated to the US level program. */
+
+extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
+extern void FUN_001f9a68(void *, void *, float);
+
+void FUN_L07_0030f0f8(char *a, char *b, float f12, float f13, float f14) {
+    float v[4];
+    char *q;
+    if (**(float **)(b + 0x12C) - 0.3f < *(float *)(a + 0x18)) {
+        *(float *)(b + 0xD8) -= D_0015ED6C * 9.8f;
+    }
+    qcopy(v, a + 0x10);
+    FUN_00213f38(v + 2, (float *)(b + 0xD8), *(float *)(b + 0x138), f12, f13, f14);
+    q = b + 0xD0;
+    if (FUN_L00_00258ad0((int)a, (int)q, 0x400, 0x10, 1.0f, 0.0f)) {
+        FUN_001f9a68(q, q, 0.5f);
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003105C0), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa688(float, float);
+
+int FUN_L07_0030f1e0(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) {
+    float speed = FUN_001f9b20(obj + 0xD0);
+    int r = 0;
+    float d = FUN_001fa688(*(float *)(moby + 0x48), a);
+    if (d < lo) {
+        speed += up;
+        r = 1;
+    } else if (hi < d) {
+        speed -= down;
+    }
+    if (vmax < speed) {
+        speed = vmax;
+    } else if (speed < vmin) {
+        speed = vmin;
+    }
+    *(float *)(obj + 0xD0) = FUN_001f9dc8(*(float *)(moby + 0x48)) * speed;
+    *(float *)(obj + 0xD4) = FUN_001f9de0(*(float *)(moby + 0x48)) * speed;
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -124,6 +370,72 @@ void FUN_L07_003120d8(char *moby) {
     *(int *)(state + 0x168) = 0x14;
     *(float *)(state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312150.s", FUN_L07_00312150);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003122b0.s", FUN_L07_003122b0);
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
+
+extern char D_L07_00180340[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int FUN_001f9770(void *);
+extern int FUN_001fa6e0(int, int, float);
+extern void FUN_L00_0023e838(int);
+
+void FUN_L07_00312150(char *a) {
+    int h;
+    float f;
+    int c;
+    float *p;
+    if (FUN_001f9770(a + 0x284)) {
+        if (*(short *)(a + 0x280) != -1) {
+            FUN_L00_0023e838(*(short *)(a + 0x280));
+            *(short *)(a + 0x280) = -1;
+            *(short *)(a + 0x282) = -1;
+        }
+    } else if (*(short *)(a + 0x280) != -1) {
+        h = (*(short *)(a + 0x286) * 7) / 8;
+        if (h < *(short *)(a + 0x284)) {
+            f = ConvertIntegerToFloat(*(short *)(a + 0x284) - h);
+            f /= ConvertIntegerToFloat(*(short *)(a + 0x286) - h);
+            c = FUN_001fa6e0(0, *(int *)(a + 0x288), 1.0f - f);
+        } else {
+            f = ConvertIntegerToFloat(*(short *)(a + 0x284));
+            f /= ConvertIntegerToFloat(h);
+            c = FUN_001fa6e0(*(int *)(a + 0x288), *(int *)(a + 0x28C), 1.0f - f);
+        }
+        p = (float *)(D_L07_00180340 + *(short *)(a + 0x280) * 32);
+        p[0] = ConvertIntegerToFloat(c & 0xFF) * 0.0078125f;
+        p[1] = ConvertIntegerToFloat((c >> 8) & 0xFF) * 0.0078125f;
+        p[2] = ConvertIntegerToFloat((c >> 16) & 0xFF) * 0.0078125f;
+    }
+}
+/* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f9740(int *arg0);
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
+extern void FUN_L00_001ff600(float, void *, void *);
+extern void FUN_L07_00311eb8(float, void *, void *, int, void *, short, unsigned int, int);
+
+int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
+    unsigned char *moby = mp;
+    float A[4];
+    float B[4];
+    if (FUN_001f9740((int *)(obj + 0x160))) {
+        FUN_L00_0024f7c8(moby, *(int *)(obj + 0x164) & 1, A);
+        FUN_001f9a28(B, vec, A);
+        FUN_L00_001ff600(10.7f, B, B);
+        B[2] += 0.5f;
+        if (B[2] > 0.0f) B[2] = 0.0f;
+        FUN_L00_001ff500(B, B, D_0015ED6C * 9.0f);
+        FUN_L07_0030e370_c(A, B, moby);
+        FUN_0022da68(0, 0, (int)moby);
+        FUN_L07_00311eb8(10.0f, moby, obj, 0, A, FUN_001f96f8(0x1E), 0x800060FF, 0);
+        *(int *)(obj + 0x160) = FUN_001f96f8(9);
+        if (++*(int *)(obj + 0x164) >= 0x15) {
+            *(short *)(obj + 0x198) = FUN_001f96f8(0x23);
+            *(int *)(obj + 0x160) = FUN_001f96f8(0x1E);
+            return 1;
+        }
+    }
+    return moby[0x20];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312420.s", FUN_L07_00312420);

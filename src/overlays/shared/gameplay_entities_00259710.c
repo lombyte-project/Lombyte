@@ -5,7 +5,28 @@
 void FUN_00213508(void *, s32, f32);
 void FUN_L00_00259710(void *a) { FUN_00213508(a, 0x20, 0.5f); }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259738.s", FUN_L00_00259738);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259740.s", FUN_L00_00259740);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
+
+int FUN_L00_00259740(float *p, float *v, int n) {
+    int r = 0;
+    int i = 0;
+    int k;
+    for (k = 0; k < n; k++) {
+        float y1 = v[k * 4 + 1];
+        i++;
+        if (i == n) i = 0;
+        if ((y1 < p[1] && p[1] <= v[i * 4 + 1]) || (v[i * 4 + 1] < p[1] && p[1] <= y1)) {
+            if (v[k * 4] + (p[1] - v[k * 4 + 1]) / (v[i * 4 + 1] - v[k * 4 + 1]) * (v[i * 4] - v[k * 4]) < p[0]) {
+                r = !r;
+            }
+        }
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00259810.s", FUN_L00_00259810);
 int FUN_L00_00259830(char *a) { char *p = *(char **)(a + 0x94); if (p && *(int *)(p + 8)) return 1; return 0; }
 #define NOT_SDA

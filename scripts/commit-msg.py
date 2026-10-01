@@ -3,8 +3,7 @@
 
 Install into the repository (idempotent):
 
-    ln -sf ./scripts/commit-msg .git/hooks/commit-msg
-    # or: python3 scripts/install-commit-hook.py  (tools repository)
+    ln -sf ../../scripts/commit-msg.py .git/hooks/commit-msg
 
 The standard is one lowercase `<type>: <summary>` prefix per subject
 (`decomp`, `overlay`, `docs`, `chore`, `fix`, `config`), with no repeated scope token.
@@ -89,6 +88,9 @@ def strip_trailers(path: Path) -> bool:
 
 def validate(subject: str) -> list[str]:
     found: list[str] = []
+    # Subjects git writes itself (merges, reverts, autosquash) keep their form.
+    if re.match(r'^(?:Merge |Revert "|fixup! |squash! |amend! )', subject.strip()):
+        return found
     match = SUBJECT_RE.match(subject.strip())
     if not match:
         return ["expected '<type>: <summary>' with a lowercase type prefix"]

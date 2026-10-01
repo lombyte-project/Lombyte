@@ -2,7 +2,48 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb668.s", FUN_L11_002cb668);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern float D_0015ED6C;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001fa580(float, float);
+extern int FUN_L00_00203908(int, int);
+extern unsigned char D_0013D4C2[];
+extern unsigned char D_0013D4E3[];
+int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L11_002cb668(char *moby) {
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        if (D_0013D4C2[4] != 0) {
+            mark_moby_for_removal(moby);
+        } else {
+            *(float *)(moby + 0x18) += 0.75f;
+            *(unsigned short *)(moby + 0x34) |= 1;
+            moby[0x20] = 1;
+        }
+        break;
+    case 1:
+        break;
+    case 2:
+        FUN_001fa580(*(float *)(moby + 0x48), D_0015ED6C * 4.7123890f);
+        if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 2.0f) {
+            D_0013D4C2[4] = 1;
+            D_0013D4E3[0xB] = 1;
+            memcard_save_data(0, -1);
+            FUN_L00_00203908(0x2AF8, 0x3A);
+            mark_moby_for_removal(moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb810.s", FUN_L11_002cb810);
 #define NOT_SDA
 
@@ -47,10 +88,83 @@ void FUN_L11_002d0fa8(unsigned char *moby) {
     FUN_L11_002d27b0(moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1030.s", FUN_L11_002d1030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1340.s", FUN_L11_002d1340);
+#include "qcopy.h"
+
+/* moves the parts' positions and stores the moby's displacement since last frame */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
+
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void FUN_L00_00261d78(float, void *, void *, void *);
+
+void FUN_L11_002d1340(void *mp) {
+    unsigned char *moby = mp;
+    char *d = *(char **)(moby + 0x78);
+    float A[4];
+    float B[4];
+    qcopy(A, moby + 0x10);
+    qcopy(B, d + 0x130);
+    FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
+    if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
+        FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10, moby + 0x10);
+        switch (*(int *)(d + 0x158)) {
+        case 2:
+            FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(d + 0x84), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(d + 0x88), moby + 0x10, moby + 0x10);
+            break;
+        case 3:
+            FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
+            FUN_L00_00261d78(0.3f, *(void **)(d + 0x84), moby + 0x10, moby + 0x10);
+            break;
+        }
+    }
+    FUN_001f9a28(d + 0x140, moby + 0x10, A);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2088.s", FUN_L11_002d2088);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2340.s", FUN_L11_002d2340);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D3500), where it is exact; names translated to the US level program. */
+
+struct TgtData {
+    char pad0[0x60];
+    int a[4];
+    int b[4];
+    int c[4];
+    char pad1[0x90];
+    char e[0x38];
+    int idx;
+};
+
+extern int *D_L11_001B0EB0[];
+extern int FUN_L00_00259740(void *, void *, int);
+extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
+
+int FUN_L11_002d2340(char *moby, char *other) {
+    struct TgtData *d = *(struct TgtData **)(moby + 0x78);
+    int *p = d->a;
+    int *ent = D_L11_001B0EB0[*(int *)((char *)p - (-(d->idx * 4)))];
+    int buf[8];
+    int n;
+    if (FUN_L00_00259740(other, ent + 4, *ent) == 0) return 0;
+    buf[0] = *(int *)((char *)p - (-(d->idx * 4)));
+    n = 1;
+    switch (d->idx) {
+    case 2:
+        n = 4;
+        buf[1] = d->c[0];
+        buf[2] = d->c[1];
+        buf[3] = d->c[2];
+        break;
+    case 3:
+        n = 3;
+        buf[1] = d->c[0];
+        buf[2] = d->c[1];
+        break;
+    default:
+        break;
+    }
+    return FUN_L01_00276fe8(buf, n, d->b[d->idx], moby + 0x10, other, d->e, 0.2f) != 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2460.s", FUN_L11_002d2460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d25e8.s", FUN_L11_002d25e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);

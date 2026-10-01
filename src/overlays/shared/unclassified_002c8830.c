@@ -5,9 +5,90 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002c8830.s", FUN_L11_002c8830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb790.s", FUN_L11_002cb790);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308670.s", FUN_L11_00308670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308848.s", FUN_L11_00308848);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* spawns a moby of class 0x3F1 aimed along a direction */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b20(void *);
+extern float FUN_L00_001ff8b0(float, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L00_00250df8(void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, float b) {
+    unsigned char *m = func_0020D348_m(0x3F1);
+    if (m) {
+        char *d = *(char **)(m + 0x78);
+        float f;
+        *(char **)(d + 0x1C) = owner;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = func_001FA898_r(a);
+        *(int *)(m + 0x40) = 0;
+        m[0x31] = 1;
+        f = FUN_001f9b20(dir);
+        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(f, dir[2]);
+        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(d + 0x10) = 1.0f;
+        if (b > 0.0f) {
+            FUN_L00_001ff500(d, dir, b);
+        } else {
+            qcopy(d, dir);
+            b = FUN_001f9af0(dir);
+        }
+        qcopy(m + 0x10, pos);
+        *(int *)(d + 0x18) = *(int *)(d + 0x14) = func_001FA898_r(a / b);
+        *(short *)(m + 0x34) = 0x200;
+        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) *
+            (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
+        m[0x23] = func_001FA898_r(*(float *)(d + 0x10) * 24.0f);
+        FUN_L00_002502f0(m, 0xFF, 0xFF, 0xFF);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003089d0.s", FUN_L11_003089d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308f48.s", FUN_L11_00308f48);
+/* spawns a streak moby aimed along a direction with the given size and colour */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
+
+char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z) {
+    char *m = func_0020D348_m(0x3F9);
+    if (m != 0) {
+        char *p = *(char **)(m + 0x78);
+        int r;
+        *(int *)(m + 0x94) = 0;
+        *(int *)(p + 0x1C) = owner;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = truncate_float_to_s32(size);
+        *(int *)(m + 0x40) = 0;
+        m[0x31] = 1;
+        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(dir), dir[2]);
+        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(p + 0x10) = 1.0f;
+        if (len > 0.0f) {
+            FUN_L00_001ff500(p, dir, len);
+        } else {
+            qcopy(p, dir);
+            len = FUN_001f9af0(dir);
+        }
+        qcopy(m + 0x10, pos);
+        r = truncate_float_to_s32(size / len);
+        *(int *)(p + 0x14) = r;
+        *(float *)(p + 0x20) = z;
+        *(int *)(p + 0x18) = r - 13;
+        *(short *)(m + 0x34) = 0x200;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309098.s", FUN_L11_00309098);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003094f8.s", FUN_L11_003094f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a908.s", FUN_L11_0030a908);
