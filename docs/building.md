@@ -23,7 +23,9 @@ your C.
 | macOS, other Linux distributions  | with [Docker](https://docs.docker.com/get-docker/): `./setup.sh --docker --iso ...`, then `./setup.sh --shell` for a shell with the toolchain (`make elf`, `check-unit`) |
 
 Already have the executable? `./setup.sh --elf /path/to/SCUS_971.99`.
-`./setup.sh --check` lists what is installed, `./setup.sh --help` the rest.
+`./setup.sh --check` lists what is installed, `./setup.sh --no-build` installs
+without rebuilding, `./setup.sh --with-patched` also builds the optional
+[patched profile](patched-toolchain.md), and `./setup.sh --help` lists the rest.
 
 ## What the script does
 
@@ -45,11 +47,10 @@ change it makes is installing the listed Debian/Ubuntu packages with `sudo`
 is added to your shell profile or `PATH`.
 
 The verified environment is **Linux/WSL**. Compiler versions matter for
-matching: preserve the directory layouts and the executable permissions, and
-expect the toolchain binaries to be installed by you — nothing here is
-downloaded. The game code is assembled by SN's `Ps2EeAs`, a Windows
-executable that has to be runnable, so a plain Linux setup is not enough by
-itself.
+matching: on the manual route below, preserve the directory layouts and the
+executable permissions of what you install. The game code is assembled by SN's
+`Ps2EeAs`, a Windows executable that has to be runnable (Wine on Linux), so a
+plain Linux toolchain is not enough by itself.
 
 Everything below is run from the checkout root, and `RNC_GAME_ROOT` in the
 sibling tooling repository points at this checkout.
@@ -61,7 +62,7 @@ sibling tooling repository points at this checkout.
 | Game compiler (Sony/Cygnus EE `2.9-ee-991111b`)     | `tools/compilers/game-compiler/` (with `ee-gcc` and `cc1`)                        |
 | SDK compiler (EE-GCC `2.9-ee-991111-01`)            | `tools/compilers/sdk-compiler/` (with `bin/ee-gcc`)                               |
 | SN EE-GCC `2.95.2` (its `ee/bin/Ps2EeAs.exe`)      | `tools/compilers/ee-gcc-2.95.2/` (with `bin/ee-gcc.exe` and its supporting tools) |
-| R5900 binutils                                      | `tools/binutils-mips-ps2-decompals/`, or set `BINUTILS_ROOT` to their directory   |
+| R5900 binutils                                      | `tools/binutils-mips-ps2-decompals/` (then `/opt/binutils-mips-ps2-decompals`), or set `BINUTILS_ROOT` |
 | [objdiff CLI](https://github.com/encounter/objdiff) | `tools/objdiff/objdiff-cli`                                                       |
 | Ninja, Python dependencies                          | installed into `.venv` below                                                      |
 
@@ -190,9 +191,11 @@ python3 rebuild-iso.py \
 
 | Target           | Effect                                                          |
 | :--------------- | :-------------------------------------------------------------- |
-| `make check`     | the public CI checks (tests, script parse) without a full build |
+| `make check`     | the public CI checks (tests, script parse, progress report check) without a full build |
 | `make progress`  | regenerate `progress/report.json` after `make elf`              |
 | `.venv/bin/python scripts/generate_treemap.py` | regenerate the progress map (`assets/decomp_map.svg`, `.json`) after `make progress` |
+| `make iso`       | patch the verified ELF into a copy of the first `dumps/*.iso`   |
+| `make overlays`  | compile `src/overlays/` (needs the generated overlay asm, see [overlays.md](overlays.md)) |
 | `make clean-iso` | remove the rebuilt ISO                                          |
 
 | Variable              | Default / usage                                     |

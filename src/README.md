@@ -1,7 +1,8 @@
 # Source layout
 
 `src/` is organized by semantic subsystem: `audio`, `gameplay`, `input`,
-`math`, `rendering`, `runtime`, `sdk`, `storage`, `ui`, `video`, and `world`.
+`math`, `rendering`, `runtime`, `sdk`, `storage`, `ui`, `video`, and `world`,
+plus `overlays` for the level code layer.
 
 - `src/assembly/` marks units whose current implementation still uses an
   assembly oracle. Its subdirectories follow the same subsystem boundaries;

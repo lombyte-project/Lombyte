@@ -71,7 +71,7 @@ Procedure and acceptance bar for Ratchet & Clank (PS2, `SCUS_971.99`).
 ## 7. Promotion transaction
 
 - Place the owner under its logical subsystem path. Pending assembly-backed
-  owners stay under `assembly/textbin/`. Keep the canonical linker symbol and
+  owners stay under `assembly/<subsystem>/`. Keep the canonical linker symbol and
   required external aliases, resolve relocations and data ownership, and
   re-verify all four measures from a fresh compile.
 - Remove the oracle only after the transaction succeeds, and update the record.

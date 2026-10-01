@@ -9,13 +9,14 @@ oracle. Build instructions and requirements:
   `git apply` at the source root.
 - Patch SHA-256:
   `2726db653714629a1239773af36ef02e67dccd0b4e7f7aabe78feed51b93f99e`.
-Changes (166 inserted, 15 deleted lines across 8 files):
+Changes (203 inserted, 15 deleted lines across 9 files):
 | File                                              | Change                                                                  |
 | :------------------------------------------------ | :---------------------------------------------------------------------- |
 | `ee/gcc/c-parse.in`                               | typed midrule actions, so bison 1.28 parses the grammar on modern hosts |
 | `ee/gcc/config/mips/mips.h`                       | opt-in `-mastra-*` target options, inert unless selected                |
 | `ee/gcc/config/mips/mips.c`, `mips.md`            | R5900 `sq`/`lq` callee saves; `mulsi3` uses classic `mult`/`mflo`; in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`) |
 | `ee/gcc/calls.c`, `cse.c`, `reload1.c`, `reorg.c` | codegen policies behind the opt-in flags                                |
+| `ee/gcc/local-alloc.c`                            | `-mastra-no-lo-sum-tie`: a multiply-referenced `lo_sum` base is not tied to its `%hi` result and is allocated to `a3`, as retail does |
 Reference binaries (the maintainer's build; rebuilds elsewhere differ because
 GCC embeds build paths):
 ```text
