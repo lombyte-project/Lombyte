@@ -56,7 +56,27 @@ void FUN_L00_002e01b0(char *m) {
     a = FUN_001f96f8_2e01b0(5);
     *(int *)(d + 4) = FUN_L00_00257b90_2e01b0(a, FUN_001f96f8_2e01b0(15));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e02e0.s", FUN_L00_002e02e0);
+extern char D_0013F350[];
+extern u8 *D_L00_0015FFD8 __attribute__((section(".sdata")));
+
+s32 FUN_L00_002e02e0(void) {
+    char *base;
+    u8 *tbl;
+    s32 v;
+    s32 idx;
+    u8 flags;
+    base = D_0013F350;
+    tbl = D_L00_0015FFD8;
+    v = *(s32 *)(base + 0x2FC);
+    flags = (u8)base[0x20B0];
+    tbl += *(s32 *)*(s32 *)((u8 *)v + 0x78) << 8;
+    if (!flags) {
+        if (tbl[0xBC] & 2) return 1;
+    } else {
+        if (tbl[0xBC] & 1) return 1;
+    }
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -130,7 +150,28 @@ void FUN_L00_002e0788(unsigned char *p) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e1f28.s", FUN_L00_002e1f28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2040.s", FUN_L00_002e2040);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e20f8.s", FUN_L00_002e20f8);
+#include "sda.h"
+
+extern s32 D_L00_00161BF8[] MACRO_ADDR;
+extern s32 D_L00_00161C38[] MACRO_ADDR;
+extern s32 D_L00_00161C48[] MACRO_ADDR;
+extern s32 D_L00_00161C88[] MACRO_ADDR;
+extern void FUN_L00_0023e838(s32);
+
+void FUN_L00_002e20f8(s32 i) {
+    s32 v;
+    v = D_L00_00161C38[i];
+    D_L00_00161BF8[i] = 0;
+    D_L00_00161C88[i] = 0;
+    if (v != -1) {
+        FUN_L00_0023e838(v);
+        D_L00_00161C38[i] = -1;
+    }
+    if (D_L00_00161C48[i] != -1) {
+        FUN_L00_0023e838(D_L00_00161C48[i]);
+        D_L00_00161C48[i] = -1;
+    }
+}
 #include "qcopy.h"
 #include "sda.h"
 typedef struct { u8 b[0x40]; } B002e2190;
@@ -623,7 +664,20 @@ int FUN_L00_002e7a30(unsigned char *a) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7d20.s", FUN_L00_002e7d20);
 void FUN_L00_002e8378(void) { volatile char buf[0x50]; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8388.s", FUN_L00_002e8388);
+struct P2_388 { char pad[0x220]; s32 cur; };
+struct P1_388 { char pad0[0x70]; struct P2_388 *p; char pad1[0x12]; s16 f86; };
+extern struct P1_388 *D_L00_00166E00_c __asm__("D_L00_00166E00");
+s32 FUN_L00_002e8388(s32 id) {
+    struct P1_388 *t = D_L00_00166E00_c;
+    if (t->f86 != 0) {
+        return -1;
+    }
+    if (t->p->cur == id) {
+        t->p->cur = 0;
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e83c0.s", FUN_L00_002e83c0);
 extern u8 *vd_2e8450 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e8450(s32 f, f32 a, f32 b) {

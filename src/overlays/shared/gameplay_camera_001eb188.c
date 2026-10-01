@@ -2,7 +2,18 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1f8.s", FUN_L00_001eb1f8);
+typedef struct { char pad09[0x86]; s16 id; char pad09b[0x18]; } Ent09;
+extern Ent09 D_L00_00167150[];
+s32 FUN_L00_001eb1f8(s32 id) {
+    s32 p; s32 e; s16 v;
+    p = (s32)&D_L00_00167150[0];
+    e = p + 0x1E00;
+    for (;;) {
+        v = *(s16 *)(p + 0x86);
+        if (v != id) { p += 0xA0; if (p < e) continue; return 0; }
+        return p;
+    }
+}
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
@@ -40,7 +51,7 @@ s32 FUN_L00_001ed230(s32 id) {
 typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
 
 extern S D_L00_00166C80_c __asm__("D_L00_00166C80");
-extern char *FUN_L00_001eb1f8(int);
+extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
 extern char D_0013E533[];
 extern char D_L00_00169110[];
 extern void FUN_001ed470(void);
@@ -56,7 +67,7 @@ void FUN_L00_001ed280(void) {
         *(*(char **)(g + 0x180) + 0x7D) = 0;
         *(short *)(*(char **)(g + 0x180) + 0x7E) = 0;
     }
-    *(char **)(g + 0x180) = FUN_L00_001eb1f8(0);
+    *(char **)(g + 0x180) = FUN_L00_001eb1f8_u(0);
     *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
     *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
     *(short *)(g + 0x270) = 0;

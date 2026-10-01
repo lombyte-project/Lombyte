@@ -2,7 +2,52 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ee1b0.s", FUN_L00_001ee1b0);
+typedef int q128 __attribute__((mode(TI)));
+typedef union { q128 q; f32 f[4]; s32 i[4]; } V;
+
+extern void FUN_001f9a28(void *, void *, void *);
+extern f32 FUN_001f9b20(void *);
+extern s32 truncate_float_to_s32(f32);
+extern s32 *D_L00_0015EF80;
+extern void FUN_001e93b0(char *);
+extern char D_L00_001E78B0[];
+extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
+
+s32 *FUN_L00_001ee1b0(q128 *v, f32 rad) {
+    V t;
+    V d;
+    V *tp;
+    s32 i, j, k;
+    char *p;
+    char *e;
+    f32 f;
+
+    tp = &t;
+    t.q = *v;
+    i = truncate_float_to_s32(t.f[0] * 0.0625f);
+    j = truncate_float_to_s32(t.f[1] * 0.0625f);
+    if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
+        FUN_001e93b0(D_L00_001E78B0);
+        return 0;
+    }
+    p = (char *)D_L00_0015EF80[j * 64 + i];
+    if (p == 0) {
+        return 0;
+    }
+    p += (s32)D_L00_0015EF80;
+    for (k = 0; k < *(s32 *)p; k++) {
+        e = p + 0x10 + k * 0x30;
+        FUN_001f9a28(&d, e, tp);
+        f = *(f32 *)(e + 0xC);
+        d.f[3] = 1.0f;
+        if (FUN_001f9b20(&d) < f + rad) {
+            if (FUN_L00_001ee318_c(tp, (s32 *)e, rad) != 0) {
+                return (s32 *)e;
+            }
+        }
+    }
+    return 0;
+}
 typedef int u128_1ee318 __attribute__((mode(TI)));
 typedef union { u128_1ee318 q; float f[4]; int i[4]; } V_1ee318;
 extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");

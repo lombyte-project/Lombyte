@@ -52,8 +52,24 @@ void FUN_L00_0020d330(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d460.s", FUN_L00_0020d460);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d498.s", FUN_L00_0020d498);
+typedef struct { char pad[0x50]; } E_20d460;
+extern E_20d460 D_13F350_20d460[] __asm__("D_0013F350");
+s32 FUN_L00_0020d460(s32 i) {
+    char *p = (char *)&D_13F350_20d460[i];
+    if (*(s32 *)(p + 0x10B4) == 2) {
+        return *(s32 *)(p + 0x1090);
+    }
+    return 0;
+}
+extern char D_0013F350[];
+int FUN_L00_0020d498(int i) {
+    char *p = D_0013F350 + i * 0x50;
+    switch (*(int *)(p + 0x10B4)) {
+    case 2:
+        return *(int *)(p + 0x10B8);
+    }
+    return -1;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -61,22 +77,84 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d498.s", FUN_L00_0020d498);
 /* Whether func_L00_0020DB30(ARG) is one of 10, 17, 20 or 25. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0020d498(int);
+extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L00_0020d4d0(int arg) {
-    int v = FUN_L00_0020d498(arg);
+    int v = FUN_L00_0020d498_u(arg);
 
     if (v == 0x11 || v == 10 || v == 0x14 || v == 0x19) {
         return 1;
     }
     return 0;
 }
-s32 FUN_L00_0020d518(int a) { return (u32)(FUN_L00_0020d498(a) - 5) < 3; }
+s32 FUN_L00_0020d518(int a) { return (u32)(FUN_L00_0020d498_u(a) - 5) < 3; }
 int FUN_L00_0020d498_0020d540() __asm__("FUN_L00_0020d498");
 int FUN_L00_0020d540(void) { return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d568.s", FUN_L00_0020d568);
+extern u32 D_0013F350_c[1] __asm__("D_0013F350");
+s32 FUN_L00_0020d568(void) {
+    u32 *p = D_0013F350_c;
+    u32 a = *(u32 *)((u8 *)p + 0x208C);
+    u32 b;
+    if (a - 0x11 < 2) { goto one; }
+    b = *(u32 *)((u8 *)p + 0x2084);
+    if (b == 0x6A) { goto one; }
+    if (b == 0x82) { goto one; }
+    if (b == 0x76) { goto one; }
+    if (b != 0x75) { goto zero; }
+    one:
+    return 1;
+zero:
+    return 0;
+}
 s32 FUN_L00_0020d5b8(u8 *p, s32 a) { if (a == 0xFF) a = p[0xA5]; return a; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020d5d0.s", FUN_L00_0020d5d0);
+/* FUN_L00_0020d5d0 -- per-mode angle helper.
+ *
+ * Writes 0.0f to *out, then looks up the mode (0x1C..0x6F) in a jump table.
+ * Modes 0x1C/0x1D/0x1F optionally overwrite *out with the sloped angle, modes
+ * 0x32/0x33/0x5F/0x60/0x6B/0x6D/0x6E only report "handled", and everything
+ * else (including a mode outside the table) falls through to 0.
+ *
+ * `D_0013FDF8` is spelled as a char array and read through a float pointer on
+ * purpose: that is the form that makes the compiler build the address in $v0
+ * (`lui $v0,%hi` + `lwc1 $f0,%lo($v0)`) instead of using the `l.s` macro's $at.
+ * The 25.0f threshold is held in a local so it lands in $f1 and the load in $f0.
+ * The case groups are written 33, then 22..., then 0/1/3: gcc emits the blocks
+ * in source order, and retail lays them out in exactly that order.
+ */
+
+extern char D_0013FDF8[];
+
+int FUN_L00_0020d5d0(int mode, float *out) __asm__("FUN_L00_0020d5d0");
+
+int FUN_L00_0020d5d0(int mode, float *out) {
+    int i;
+    *out = 0.0f;
+    i = mode - 0x1C;
+    switch (i) {
+    case 33:
+        *out = -0.9599311f;
+        return 1;
+    case 22:
+    case 23:
+    case 63:
+    case 64:
+    case 79:
+    case 81:
+    case 82:
+        return 1;
+    case 0:
+    case 1:
+    case 3: {
+        float c;
+        c = 25.0f;
+        if (c < *(float *)D_0013FDF8) {
+            *out = -1.3089969f;
+        }
+        return 1;
+    }
+    }
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -178,7 +256,14 @@ char *FUN_L00_0020d8f8(float a, float b, float c, float d) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020da10.s", FUN_L00_0020da10);
+s32 FUN_L00_0020da10(s32 a0) {
+    switch (a0) {
+    case 1: return 0x79;
+    case 2: return 0x77;
+    case 3: return 0x75;
+    }
+    return 0;
+}
 typedef struct {
     char p0[0x1DC]; short h1DC;
     char p1[0xA9C - 0x1DE]; int wA9C;
@@ -794,18 +879,18 @@ typedef struct {
     u8 pad3[0x20A7 - 0x2090]; u8 x20A7; u8 pad4[4]; u8 x20AC; u8 pad5; u8 x20AE;
 } G00210928;
 extern G00210928 D_0013F350_210928 __asm__("D_0013F350");
-s32 FUN_L00_0020d568();
+s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
 void FUN_L00_0020ea80();
 void FUN_L00_0020f580();
 void FUN_L00_00234808();
 void FUN_L00_002080b0();
 void FUN_L00_00210748();
 void FUN_L00_00210928(void) {
-    if (D_0013F350_210928.x308 == 1 || (u32)(D_0013F350_210928.x208C - 0x15) < 2 || FUN_L00_0020d568()) {
+    if (D_0013F350_210928.x308 == 1 || (u32)(D_0013F350_210928.x208C - 0x15) < 2 || FUN_L00_0020d568_u()) {
         D_0013F350_210928.x20A7 = 1;
         D_0013F350_210928.x20AC = 1;
     }
-    if (FUN_L00_0020d568() || D_0013F350_210928.x208C == 0x15 || D_0013F350_210928.x208C == 0x16 || D_0013F350_210928.x208C == 3 || D_0013F350_210928.x2084 == 0x12) {
+    if (FUN_L00_0020d568_u() || D_0013F350_210928.x208C == 0x15 || D_0013F350_210928.x208C == 0x16 || D_0013F350_210928.x208C == 3 || D_0013F350_210928.x2084 == 0x12) {
         D_0013F350_210928.x20AE = 1;
     } else {
         D_0013F350_210928.x20AE = 0;
@@ -942,7 +1027,8 @@ void FUN_L00_00210c80(float *v, int each, float s, float z) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00210ce8.s", FUN_L00_00210ce8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211250.s", FUN_L00_00211250);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211360.s", FUN_L00_00211360);
+typedef struct { u8 pad[0xA6]; s16 f; } K2;
+s32 FUN_L00_00211360(K2 *p) { if (p == 0) { return 0; } if (p->f == 0x47) { return 1; } return 0; }
 typedef struct {
     u8 pad0[0x80];
     f32 v80[4];
@@ -1220,12 +1306,12 @@ void FUN_L00_00211e30(int a, float x, float y, float z) {
 
 extern float D_0015ED64;
 extern float D_0015ED6C;
-extern int FUN_L00_0020d498(int);
+extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 extern void FUN_L00_00211e30(int, float, float, float);
 
 void FUN_L00_00211e98(void) {
     float a, b, c;
-    if (FUN_L00_0020d498(0) == 16) {
+    if (FUN_L00_0020d498_u(0) == 16) {
         a = D_0015ED64 * 0.006f;
         b = D_0015ED64 * 0.07f;
         c = D_0015ED6C * 13.962634086608887f;

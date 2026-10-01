@@ -80,7 +80,17 @@ int FUN_L00_002caf10(char *a) {
     a[0x20] = 5;
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf40.s", FUN_L00_002caf40);
+s32 FUN_L00_002caf40(s32 arg0) {
+    s32 ptr;
+    if (arg0 != 0) {
+        ptr = *(s32 *)((u8 *)arg0 + 0x78);
+        if (ptr != 0) {
+            return *(s32 *)((u8 *)ptr + 0x14);
+        }
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf70.s", FUN_L00_002caf70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);

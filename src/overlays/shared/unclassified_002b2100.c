@@ -582,6 +582,29 @@ void FUN_L00_002b8230(unsigned char *m)
         FUN_L00_00203908_2b8230(0x4E24, 0x4E);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8438.s", FUN_L00_002b8438);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8798.s", FUN_L00_002b8798);
+/* 0x78 points at a table of 15 s32 slots; index 0 is skipped, so the first
+   free slot from 1 to 15 takes val. */
+typedef struct {
+    u8 pad0[0x78];
+    s32 *slots;
+} ListSlots8;
+
+void FUN_L00_002b8798(ListSlots8 *arg0, s32 val)
+{
+    s32 *p = arg0->slots;
+    s32 i = 0;
+    s32 *q;
+    s32 n;
+
+    while (i < 15) {
+        n = i * 4;
+        q = (s32 *)((u8 *)p + 4);
+        if (*(s32 *)((u8 *)q + n) == 0) {
+            *(s32 *)((u8 *)q + n) = val;
+            break;
+        }
+        i++;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b87e0.s", FUN_L00_002b87e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b9310.s", FUN_L00_002b9310);

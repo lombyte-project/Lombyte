@@ -2,4 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002603d0.s", FUN_L00_002603d0);
+char *FUN_L00_002603d0(char *m) {
+    if (m == 0) return 0;
+    if ((*(u16 *)(m + 0x34) & 0x20) == 0) return 0;
+    return *(char **)(*(char **)(m + 0x78) + 8);
+}

@@ -202,21 +202,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e310.s", FUN_L00_0025e310);
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0025e3b8(void *);
+extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 int FUN_L00_0025e368(char *a) {
     int r;
     if (a == 0) {
         r = 0;
-    } else if (FUN_L00_0025e3b8(a) == 0) {
+    } else if (FUN_L00_0025e3b8_u(a) == 0) {
         r = 1;
     } else {
         r = *(short *)(a + 0xA6) == 0x1F6;
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3b8.s", FUN_L00_0025e3b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3f8.s", FUN_L00_0025e3f8);
+s32 FUN_L00_0025e3f8(void *p) {
+    s16 v = *(s16 *)((char *)p + 0xA6);
+    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 || v == 0xDF) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f090.s", FUN_L00_0025f090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f3e8.s", FUN_L00_0025f3e8);
@@ -260,4 +265,21 @@ void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[0] += FUN_002132a8(-r, r);
     v[1] += FUN_002132a8(-r, r);
     v[2] += FUN_002132a8(-r, r);
+}
+extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8") __attribute__((sda));
+extern u8 *D_L00_0015FFE0 __attribute__((sda));
+s32 FUN_L00_0025e3b8(u8 *m) {
+    u32 v;
+    if (m == 0) {
+bad:
+        return 0;
+    }
+    if (m < D_L00_0015FFD8_c) {
+        goto bad;
+    }
+    if (m > D_L00_0015FFE0) {
+        goto bad;
+    }
+    v = *(u16 *)(m + 0xA6);
+    return (v - 0x1F4) < 0x29;
 }

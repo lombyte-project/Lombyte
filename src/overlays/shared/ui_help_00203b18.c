@@ -95,7 +95,22 @@ int FUN_L00_00205000(int a) {
 }
 s32 FUN_L00_002050b8(s32 a) { return a; }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002050c0.s", FUN_L00_002050c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205110.s", FUN_L00_00205110);
+extern s32 D_001413D0[];
+extern s32 D_001404D4[];
+extern s32 D_001403E0[];
+
+int FUN_L00_00205110(int a) {
+    if (a == 0 || a == 2 || a == 3 || a == 4) {
+        return D_001413D0[0];
+    }
+    if (a == 1) {
+        return D_001404D4[0];
+    }
+    if (a == 5) {
+        return D_001403E0[0];
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00205168.s", FUN_L00_00205168);
 typedef struct { u8 pad[0xB0]; } E002054e8;
 extern E002054e8 D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");

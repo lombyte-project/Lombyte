@@ -164,7 +164,18 @@ float FUN_L00_002d54c8(unsigned char *m, float *t, float vel)
         return d;
     return 37.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5800.s", FUN_L00_002d5800);
+typedef struct { char pad[0x78]; s32 f; } T6;
+s32 FUN_L00_002d5800(T6 *p) {
+    s32 v;
+    if (p != 0) {
+        v = p->f;
+        if (v != 0) {
+            return v + 0xD0;
+        }
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5830.s", FUN_L00_002d5830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5988.s", FUN_L00_002d5988);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5de8.s", FUN_L00_002d5de8);

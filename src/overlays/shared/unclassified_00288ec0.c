@@ -283,7 +283,25 @@ void FUN_L00_0028a208(void) {
     FUN_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(2);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a2f0.s", FUN_L00_0028a2f0);
+typedef union { q128 q; f32 f[4]; } V0028a2f0;
+extern u8 D_L00_001BD7E0_c[] __asm__("D_L00_001BD7E0");
+extern u8 *D_L00_0016051C_c2 __asm__("D_L00_0016051C");
+extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
+void FUN_001f9fc8(void *);
+void FUN_0022b690_c(s32) __asm__("FUN_0022b690");
+void FUN_L00_001ffa90(void *, void *);
+void FUN_L00_0028a2f0(void) {
+    V0028a2f0 t;
+    *(s16 *)(D_L00_0016051C_c2 + 4) = 0;
+    FUN_001f9fc8(D_L00_001BD7E0_c);
+    FUN_0022b690_c(0);
+    qzero(&t);
+    t.f[2] = (f32)(D_L00_0015F5CC_c % 40000) * 0.00015707963029854f - 3.1415927f;
+    FUN_L00_001ffa90(D_L00_001BD7E0_c, &t);
+    FUN_0022b690_c(1);
+    FUN_001f9fc8(D_L00_001BD7E0_c);
+    FUN_0022b690_c(2);
+}
 extern int D_L00_0015F5CC;
 void FUN_001f9fc8(void *);
 void FUN_0022b690(int);
