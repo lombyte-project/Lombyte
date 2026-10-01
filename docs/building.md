@@ -219,5 +219,5 @@ during a build from your own retail executable and are ignored by Git. The
 repository stores no oracle and no extracted game data, which is why a build
 cannot start before step 3.
 
-The layout of both repositories is mapped in `docs/project-map.md` in the
-sibling tooling checkout.
+The layout of this repository is described in [`src/README.md`](../src/README.md)
+and [`config/README.md`](../config/README.md).

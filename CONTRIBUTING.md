@@ -188,5 +188,5 @@ acceptance discipline and the recovery ladder.
 - Enable the commit-message hook once per checkout (optional but handy):
 
   ```sh
-  ln -sf ../scripts/commit-msg.py .git/hooks/commit-msg
+  ln -sf ../../scripts/commit-msg.py .git/hooks/commit-msg
   ```

@@ -10,9 +10,9 @@
 - Semantically grouped C units live directly under their logical subsystem,
   even when they were first recovered from a textbin region. Compiler routing
   for those moved units is recorded explicitly in `configure.py`.
-- `src/textbin/` contains flat C owners whose physical subsystem placement is
-  still uncertain. The progress views can carry a tentative logical group
-  without turning that guess into a source-directory decision.
+- `src/overlays/` holds the level code overlays (`shared/` and `lNN/`), see
+  [`docs/overlays.md`](../docs/overlays.md); they are compiled by
+  `make overlays`, not linked into the boot executable.
 
 The active configuration lists every build owner explicitly. Keep each owner
 path aligned with its source file. Do not infer that a C file is safe to replace
