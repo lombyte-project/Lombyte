@@ -17,7 +17,24 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b808.s", FUN_L01_0028b808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b828.s", FUN_L01_0028b828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b850.s", FUN_L01_0028b850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b860.s", FUN_L01_0028b860);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b878.s", FUN_L01_0028b878);
+/* 0x0028b878, 76 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+int FUN_L01_0028b878(char *p)
+{
+    int max = 0;
+    int next;
+    if (p[4] >= 0) {
+        max = **(int **)(p + 0x10) - 1;
+    }
+    next = *(int *)p + 1;
+    if (max < next) {
+        next %= max + 1;
+    }
+    *(int *)p = next;
+    return next;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b8c8.s", FUN_L01_0028b8c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028ba80.s", FUN_L01_0028ba80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028bb90.s", FUN_L01_0028bb90);

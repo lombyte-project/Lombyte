@@ -31,7 +31,32 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9c38.s", FUN_L16_002c9c38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cddb8.s", FUN_L16_002cddb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ceca8.s", FUN_L16_002ceca8);
+extern int D_L16_001ABCC0[];
+extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+/* 0x002ceca8, 116 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+// For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
+void FUN_L16_002ceca8(int idx) {
+    short *p = (short *)D_L16_001ABCC0[idx];
+    if (p != 0) {
+        do {
+            char *moby;
+        again:
+            moby = D_L00_0015FFD8 + ((*p & 0x7FFF) << 8);
+            if (*(short *)(moby + 0xA6) != 0x21D) goto again;
+            {
+                int two = 2;
+                unsigned short flags = *(unsigned short *)(moby + 0x34);
+                moby[0x31] = 1;
+                flags &= 0xFFFE;
+                moby[0x20] = two;
+                *(unsigned short *)(moby + 0x34) = flags;
+            }
+        } while (*p++ >= 0);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ced20.s", FUN_L16_002ced20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cee70.s", FUN_L16_002cee70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);

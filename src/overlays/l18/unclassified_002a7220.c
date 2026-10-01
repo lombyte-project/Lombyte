@@ -87,7 +87,28 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6c80.s", FUN_L18_002d6c80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6d50.s", FUN_L18_002d6d50);
+extern int D_L18_001AC240[];
+extern short D_L00_0015FFD8 __attribute__((section(".sdata")));
+/* 0x002d6d50, 108 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+// Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
+void FUN_L18_002d6d50(int idx) {
+    short *p = (short *)D_L18_001AC240[idx];
+    if (p != 0) {
+        char *base = *(char **)&D_L00_0015FFD8;
+        do {
+            int off = (*p & 0x7FFF) << 8;
+            char *moby = (char *)off + (int)base;
+            if (*(short *)(moby + 0xA6) == 0x247) {
+                char *data = *(char **)(moby + 0x78);
+                *(int *)(data + 0x30) = 1;
+                *(float *)(data + 0x24) = 1.5f;
+            }
+        } while (*p++ >= 0);
+    }
+}
+
 /* Initialize the vendor action mode and scale. */
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D81B0), where it is exact; names translated to the US level program. */
 

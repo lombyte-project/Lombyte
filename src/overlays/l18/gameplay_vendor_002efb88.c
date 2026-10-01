@@ -199,8 +199,48 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6878.s", FUN_L18_002f6878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6960.s", FUN_L18_002f6960);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6fa8.s", FUN_L18_002f6fa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7028.s", FUN_L18_002f7028);
+extern int D_L18_001AC240[];
+extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+/* 0x002f6fa8, 124 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+void FUN_L18_002f6fa8(int unused, int idx)
+{
+    short *p = D_L18_001AC240[idx];
+    if (p != 0) {
+        do {
+            unsigned char *m = D_L00_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
+                unsigned short flags = *(unsigned short *)(m + 0x34);
+                *(int *)(m + 0x94) = 0;
+                flags |= 1;
+                m[0x31] = 0;
+                *(unsigned short *)(m + 0x34) = flags;
+            }
+        } while (*p++ >= 0);
+    }
+}
+
+extern int D_L18_001AC240[];
+extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+/* 0x002f7028, 140 bytes.
+ * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * the US level program (data still reached through the MACRO_ADDR form). */
+// Walks a list of moby indices and resets the flags of each live moby.
+void FUN_L18_002f7028(int a0, int idx) {
+    short *p = D_L18_001AC240[idx];
+    if (p != 0) {
+        do {
+            unsigned char *m = D_L00_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
+                m[0x31] = 1;
+                *(unsigned short *)(m + 0x34) &= 0xFFFE;
+                *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            }
+        } while (*p++ >= 0);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f70b8.s", FUN_L18_002f70b8);
 typedef unsigned int u128_f7220 __attribute__((mode(TI)));
 extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
