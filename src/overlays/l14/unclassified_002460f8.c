@@ -87,16 +87,16 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae448.s", FUN_L14_002ae448);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae6d8.s", FUN_L14_002ae6d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae7d8.s", FUN_L14_002ae7d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae900.s", FUN_L14_002ae900);
-extern s16 D_L14_001613A8;
-extern s16 D_L14_001613AC;
-extern s16 D_L14_001613B0;
-extern s16 D_L14_001613B4;
-extern s16 D_L14_001613B8;
-extern s16 D_L14_001613BC;
-extern s16 D_L14_001613C0;
-extern s16 D_L14_001613C4;
-extern s16 D_L14_001613C8;
-extern s16 D_L14_001613CC;
+extern f32 D_L14_001613A8 __attribute__((sda));
+extern f32 D_L14_001613AC __attribute__((sda));
+extern f32 D_L14_001613B0 __attribute__((sda));
+extern f32 D_L14_001613B4 __attribute__((sda));
+extern f32 D_L14_001613B8 __attribute__((sda));
+extern s32 D_L14_001613BC __attribute__((sda));
+extern f32 D_L14_001613C0 __attribute__((sda));
+extern f32 D_L14_001613C4 __attribute__((sda));
+extern f32 D_L14_001613C8 __attribute__((sda));
+extern f32 D_L14_001613CC __attribute__((sda));
 extern void FUN_L00_00262b00(f32, f32, u8 *, f32 *, f32 *);
 extern void FUN_L00_00262b80(u8 *, u8 *, u8 *, f32, f32, f32);
 extern s32 FUN_001f9770(s16 *);
@@ -105,8 +105,8 @@ extern f32 FUN_001fa580(f32, f32);
 extern void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 
 /* 0x002AEA08, 208 bytes.  Per-frame update of a moby's aim and turn state from
- * level tuning constants.  All ten constants are gp-relative, so this unit
- * must be assembled with ee-as (see the note on the PR).
+ * level tuning constants.  The ten constants are small data ($gp-relative),
+ * declared with __attribute__((sda)).
  * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFC48), where it is exact; names translated to the US level
  * program. */
@@ -114,21 +114,21 @@ void FUN_L14_002aea08(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     f32 t;
-    FUN_L00_00262b00(*(f32 *)&D_L14_001613A8, *(f32 *)&D_L14_001613AC, moby, (f32 *)(data + 0x1A0), (f32 *)(data + 0x1A4));
-    FUN_L00_00262b80(moby, data + 0x1A8, data + 0x1AC, *(f32 *)&D_L14_001613B0, *(f32 *)&D_L14_001613B4, *(f32 *)&D_L14_001613B8);
+    FUN_L00_00262b00(D_L14_001613A8, D_L14_001613AC, moby, (f32 *)(data + 0x1A0), (f32 *)(data + 0x1A4));
+    FUN_L00_00262b80(moby, data + 0x1A8, data + 0x1AC, D_L14_001613B0, D_L14_001613B4, D_L14_001613B8);
     if (*(u8 *)(moby + 0x20) == 1) {
         if (FUN_001f9770((s16 *)(data + 0x1B4))) {
-            *(s16 *)(data + 0x1B4) = FUN_001f96f8(*(s32 *)&D_L14_001613BC);
-            t = *(f32 *)&D_L14_001613C0;
+            *(s16 *)(data + 0x1B4) = FUN_001f96f8(D_L14_001613BC);
+            t = D_L14_001613C0;
             if (FUN_00213260(2)) t = -t;
             *(f32 *)(data + 0x1B0) = FUN_001fa580(*(f32 *)(moby + 0x48), t);
         }
         FUN_L00_0025b8c0((f32 *)(moby + 0x48), (f32 *)(data + 0x1B8), *(f32 *)(data + 0x1B0),
-                         *(f32 *)&D_L14_001613C4, *(f32 *)&D_L14_001613C8, *(f32 *)&D_L14_001613CC);
+                         D_L14_001613C4, D_L14_001613C8, D_L14_001613CC);
     }
 }
 extern s32 FUN_00213260(s32 n);
-extern s16 D_L14_0016139C;
+extern f32 D_L14_0016139C __attribute__((sda));
 extern f32 FUN_001fa6c0(s16);
 extern s32 FUN_L00_002002e0(u8 *, f32);
 extern void FUN_0020cca8(u8 *, s32, u8 *);
@@ -147,7 +147,7 @@ void FUN_L14_002aead8(u8 *moby)
     f32 v[4];
     if (FUN_00213260(5)) {
         qcopy(v, moby + 0x10);
-        v[3] = *(f32 *)&D_L14_0016139C;
+        v[3] = D_L14_0016139C;
         if (FUN_L00_002002e0((u8 *)v, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
             p = data + 0xA0;
             FUN_0020cca8(moby, 1, p);
@@ -160,13 +160,13 @@ void FUN_L14_002aead8(u8 *moby)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aeba0.s", FUN_L14_002aeba0);
 extern s32 FUN_001fa6d0(f32 f);
-extern s16 D_L14_00161418;
+extern s32 D_L14_00161418 __attribute__((sda));
 extern s32 D_L14_001D8210[];
 extern s32 D_L14_001D80C8[];
 
 /* 0x002AED50, 212 bytes.  Advances the blink phase and fades each light
- * entry's alpha up and down.  Its counter and its 1.0f constant are
- * gp-relative, so this unit must be assembled with ee-as.
+ * entry's alpha up and down.  Its counter and its 1.0f constant are small
+ * data ($gp-relative), declared with __attribute__((sda)).
  * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFF90), where it is exact; names translated to the US level
  * program. */
@@ -179,7 +179,7 @@ void FUN_L14_002aed50(u8 *moby)
     *(f32 *)(data + 0x164) = f;
     step = FUN_001fa6d0(f);
     if (1.0f <= *(f32 *)(data + 0x164)) *(s32 *)(data + 0x164) = 0;
-    for (i = 0; i < *(s32 *)&D_L14_00161418; i++) {
+    for (i = 0; i < D_L14_00161418; i++) {
         s32 v = D_L14_001D8210[i];
         if (v != 0) {
             v += step;
