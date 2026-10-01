@@ -12,7 +12,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2e28.s", FUN_L00_002d2e28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2e98.s", FUN_L00_002d2e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2ee8.s", FUN_L00_002d2ee8);
 #define NOT_SDA
 
@@ -123,7 +122,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
 extern float D_0015ED70_2d54c8 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-float FUN_L00_001ff8b0_2d54c8(float, float) __asm__("FUN_L00_001ff8b0");
+float FUN_001f9e90_2d54c8(float, float) __asm__("FUN_001f9e90");
 float FUN_001f9b48_2d54c8(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001fa580_2d54c8(float, float) __asm__("FUN_001fa580");
 float FUN_L00_0025be00_2d54c8(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -138,7 +137,7 @@ float FUN_L00_002d54c8(unsigned char *m, float *t, float vel)
     unsigned char *v;
     float ang, d, z, a, lim, w;
     v = *(unsigned char **)(m + 0x78);
-    ang = FUN_L00_001ff8b0_2d54c8(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
+    ang = FUN_001f9e90_2d54c8(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
     z = *(float *)(m + 0x18);
     d = FUN_001f9b48_2d54c8(m + 0x10, t);
     if (2.0f < d)
@@ -198,7 +197,7 @@ typedef struct {
 extern char D_166DC0_2d6cd0[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern int D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
 extern void sub_2d6cd0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void ff500_2d6cd0(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void ff500_2d6cd0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_2d6cd0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int f9740_2d6cd0(void *) __asm__("FUN_001f9740");
 extern int fr_2d6cd0(int) __asm__("FUN_001f96f8");

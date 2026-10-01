@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203358.s", FUN_L00_00203358);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -14,3 +13,5 @@ int FUN_L00_002033ac(int a, int b, int *c, int d, int *e) {
     *c = 0;
     return -1;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203358.s", FUN_L00_00203358);

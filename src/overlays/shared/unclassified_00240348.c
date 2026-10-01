@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00240348.s", FUN_L00_00240348);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002403e8.s", FUN_L00_002403e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00240448.s", FUN_L00_00240448);
 #include "sda.h"
 typedef struct { s32 a, b, c, off; } Ent;
 typedef struct { s32 n; s32 pad[3]; Ent e[1]; } Tbl;

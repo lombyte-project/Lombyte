@@ -77,9 +77,8 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
     return res;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025ff38.s", FUN_L00_0025ff38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002603e0.s", FUN_L00_002603e0);
 typedef float M4_260400[16] __attribute__((aligned(16)));
-extern char *c338_p(char *) __asm__("FUN_L00_0025c338");
+extern char *c338_p(char *) __asm__("FUN_L00_002603d0");
 void FUN_001fa050(void *, void *);
 void FUN_001f9a10(void *, void *, void *);
 void FUN_001f9a28(void *, void *, void *);
@@ -102,7 +101,7 @@ int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
 }
 #include "qcopy.h"
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
-u8 *FUN_L00_0025c338_002604f0(void *) __asm__("FUN_L00_0025c338");
+u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
 void FUN_001f9cf8_002604f0(void *, void *, void *) __asm__("FUN_001f9cf8");
 void FUN_001f9a10_002604f0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001fa050_002604f0(void *, void *) __asm__("FUN_001fa050");
@@ -115,7 +114,7 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 t;
-    u8 *r = FUN_L00_0025c338_002604f0(b);
+    u8 *r = FUN_L00_002603d0_002604f0(b);
     if (!r) return 0;
     FUN_001f9cf8_002604f0(e, c, b + 0xC0);
     FUN_001f9a10_002604f0(e, e, b + 0x10);
@@ -141,7 +140,7 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0025c338(char *);
+extern int FUN_L00_002603d0(char *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(void *, void *);
@@ -154,7 +153,7 @@ int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     float v[4];
     float w[4];
     float pad[12];
-    if (FUN_L00_0025c338(o) == 0) return 0;
+    if (FUN_L00_002603d0(o) == 0) return 0;
     FUN_001f9a28(v, a, o + 0x10);
     FUN_001fa2d8(m, o + 0xC0);
     FUN_001f9d20(b, v, m);
@@ -263,6 +262,3 @@ void FUN_L00_00260860(int id, int flag) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00260a88.s", FUN_L00_00260a88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261358.s", FUN_L00_00261358);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002613d8.s", FUN_L00_002613d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261478.s", FUN_L00_00261478);

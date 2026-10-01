@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13d8.s", FUN_L00_002a13d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13f0.s", FUN_L00_002a13f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a1538.s", FUN_L00_002a1538);
 #define NOT_SDA
@@ -33,4 +32,3 @@ float FUN_L00_002a15c8(char *a, char *b) {
     return res;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a1670.s", FUN_L00_002a1670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3cc0.s", FUN_L00_002a3cc0);

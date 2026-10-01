@@ -46,7 +46,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a6d8.s", FUN_L13_0030a6d8);
 extern char D_0013E533[];
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_001f99f8(void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -70,7 +70,7 @@ void FUN_L13_0030ad38(char *moby, float *p, float *q) {
     FUN_001f9cf8(p, p, moby + 0xC0);
     FUN_001f9a10(p, p, moby + 0x10);
     base = D_0013E533 + 0xE1D;
-    q[2] = FUN_L00_001ff8b0(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
+    q[2] = FUN_001f9e90(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030ae68.s", FUN_L13_0030ae68);
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */

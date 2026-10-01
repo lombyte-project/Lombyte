@@ -27,7 +27,6 @@ void FUN_L01_00252570(void) {
     vu1_add_g_sregister(0x47, 0x5360B);
     vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261c00.s", FUN_L01_00261c00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261c10.s", FUN_L01_00261c10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261d78.s", FUN_L01_00261d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261df8.s", FUN_L01_00261df8);

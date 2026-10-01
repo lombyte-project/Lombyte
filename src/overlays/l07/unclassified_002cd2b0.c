@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cd2b0.s", FUN_L07_002cd2b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cdb28.s", FUN_L07_002cdb28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA
@@ -20,8 +17,6 @@ void FUN_L07_002fbdb8(char *arg) {
     *(short *)(arg + 0xA6) = 0x215;
     AddDrawCallback((void *)func_00233AB8, arg);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
 #include "qcopy.h"
 
 /* spawns a moby of class 0x370 at a position moving along a direction */
@@ -55,9 +50,9 @@ typedef struct {
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
-extern void FUN_L00_001ff550(void *, void *, float);
+extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -72,14 +67,14 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
         m[0x31] = 1;
         *(int *)(m + 0x40) = 0;
         d = *(char **)(m + 0x78);
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(dir), dir[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(dir), dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
         qcopy(m + 0x10, pos);
         qcopy(d + 0x40, pos);
         qcopy(d + 0x30, dir);
         qcopy(V, d + 0x30);
         V[2] = 0.0f;
-        FUN_L00_001ff550(V, V, 1.0f);
+        FUN_001f9c48(V, V, 1.0f);
         V[2] = 1.0f;
         FUN_L00_00259888(d, (int)m, 0x10001, V, 1.0f);
         d[0x18] = 1;
@@ -93,7 +88,6 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b6a8.s", FUN_L07_0030b6a8);
 /* spawns a moby with random velocity and copies position */
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
 
@@ -123,10 +117,6 @@ char *FUN_L07_0030ba90(char *pos, char *vec, int c, short d) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030bbc8.s", FUN_L07_0030bbc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030c508.s", FUN_L07_0030c508);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd48.s", FUN_L07_0030cd48);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define NOT_SDA
@@ -155,15 +145,12 @@ void FUN_L07_0030d440(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dbb0.s", FUN_L07_0030dbb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
 /* Slows and steers a moby toward another when it is below and close in height. */
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_00259bc8(char *m, float t, int a, int b, void *pos, void *vel);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -174,8 +161,8 @@ void FUN_L07_0030e0e0(char *a, char *b, char *c) {
         float d = FUN_001f9b80(b + 0x10, a + 0x10);
         if (AbsoluteFloat(d - *(float *)(c + 8)) < 0.3f) {
             FUN_001f9a28(v, a + 0x10, b + 0x10);
-            FUN_L00_001ff500(w, v, *(float *)(c + 8) - 0.05f);
-            FUN_L00_001ff500(v, v, 1.0f);
+            FUN_001f9bf8(w, v, *(float *)(c + 8) - 0.05f);
+            FUN_001f9bf8(v, v, 1.0f);
             v[2] = 1.0f;
             FUN_L00_00259bc8(a, *(float *)(c + 0x1c), (int)b, 0x10001, w, v);
         }
@@ -241,11 +228,6 @@ char *FUN_L07_0030e370(char *pos, char *vec, int arg) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eb38.s", FUN_L07_0030eb38);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -290,8 +272,6 @@ void FUN_L07_0030ec58(char *arg) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
 /* Step a moby's velocity toward a target: gravity when above a height, then ease and clamp. */
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003104D8), where it is exact; names translated to the US level program. */
 
@@ -337,7 +317,6 @@ int FUN_L07_0030f1e0(char *moby, char *obj, float a, float lo, float up, float h
     *(float *)(obj + 0xD4) = FUN_001f9de0(*(float *)(moby + 0x48)) * speed;
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
@@ -353,11 +332,6 @@ int FUN_L07_0030f4d0(void *moby, int id, float scale) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f540.s", FUN_L07_0030f540);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f5f0.s", FUN_L07_0030f5f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003112c8.s", FUN_L07_003112c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311bc8.s", FUN_L07_00311bc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
 extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
@@ -425,7 +399,7 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
         FUN_L00_001ff600(10.7f, B, B);
         B[2] += 0.5f;
         if (B[2] > 0.0f) B[2] = 0.0f;
-        FUN_L00_001ff500(B, B, D_0015ED6C * 9.0f);
+        FUN_001f9bf8(B, B, D_0015ED6C * 9.0f);
         FUN_L07_0030e370_c(A, B, moby);
         FUN_0022da68(0, 0, (int)moby);
         FUN_L07_00311eb8(10.0f, moby, obj, 0, A, FUN_001f96f8(0x1E), 0x800060FF, 0);
@@ -438,4 +412,31 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
     }
     return moby[0x20];
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cd2b0.s", FUN_L07_002cd2b0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cdb28.s", FUN_L07_002cdb28);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b6a8.s", FUN_L07_0030b6a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030bbc8.s", FUN_L07_0030bbc8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030c508.s", FUN_L07_0030c508);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd48.s", FUN_L07_0030cd48);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dbb0.s", FUN_L07_0030dbb0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eb38.s", FUN_L07_0030eb38);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f540.s", FUN_L07_0030f540);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f5f0.s", FUN_L07_0030f5f0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003112c8.s", FUN_L07_003112c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311bc8.s", FUN_L07_00311bc8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312420.s", FUN_L07_00312420);

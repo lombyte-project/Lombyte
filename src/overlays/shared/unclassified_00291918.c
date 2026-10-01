@@ -23,7 +23,6 @@ void FUN_L03_00291918(char *moby)
     FUN_L02_0024fa80(moby);
     FUN_L02_002a46e0(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00291970.s", FUN_L03_00291970);
 #include "qcopy.h"
 
 /* update: follow the parent, blend its color, scale by the wind factor */
@@ -136,5 +135,3 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc310.s", FUN_L03_002dc310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc478.s", FUN_L03_002dc478);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc9b0.s", FUN_L03_002dc9b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca30.s", FUN_L03_002dca30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca60.s", FUN_L03_002dca60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb10.s", FUN_L03_002dcb10);

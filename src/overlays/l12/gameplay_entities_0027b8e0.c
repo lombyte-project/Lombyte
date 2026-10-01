@@ -11,7 +11,7 @@
 
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
@@ -20,13 +20,13 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     if (FUN_001f9b48(b, a + 0x10) > x) return 0;
     if (!(0.0f < z)) return 1;
     {
-        float r = FUN_L00_001ff8b0(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
+        float r = FUN_001f9e90(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
         r = FUN_001fa688(*(float *)(a + 0x48), r);
         if (r > z) return 0;
     }
     return 1;
 }
-extern void MobyAnimAdvance(void *) __asm__("FUN_L00_00250480");
+extern void MobyAnimAdvance(void *) __asm__("FUN_0020d580");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 

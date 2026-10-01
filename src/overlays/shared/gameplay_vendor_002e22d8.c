@@ -27,7 +27,6 @@ void FUN_L16_002e3050(char *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5708.s", FUN_L16_002e5708);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cf8.s", FUN_L16_002e5cf8);
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
 

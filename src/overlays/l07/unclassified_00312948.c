@@ -75,12 +75,12 @@ typedef struct {
 } MobyAnim;
 
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_L00_00257b90(int, int);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, int b) {
-    float h = FUN_L00_001ff8b0(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14));
+    float h = FUN_001f9e90(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14));
     if (*(float *)(obj + 0x98) < FUN_001fa688(*(float *)(m + 0x48), h)) {
         *(int *)(obj + 0x168) = 0;
         *(float *)(m + 0x58) = 1.0f;
@@ -88,7 +88,7 @@ int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, in
         obj[0x1F6] = a;
         obj[0x1F5] = b;
         qcopy(obj + 0xC0, vec);
-        if (FUN_L00_001ff8b0(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14)) < 0.0f) {
+        if (FUN_001f9e90(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14)) < 0.0f) {
             if (m[0x53] != 3) {
                 int r = FUN_L00_00257b90(0, 1);
                 blend_moby_animation(m, 3, r, FUN_L00_00257b90(0xF, 0x14));
@@ -114,7 +114,7 @@ void FUN_L07_00313f60(char *moby, char *d, float *t) {
     float a;
     float k;
     if (((unsigned char *)moby)[0x20] < 10) {
-        a = FUN_L00_001ff8b0(t[0] - *(float *)(moby + 0x10), t[1] - *(float *)(moby + 0x14));
+        a = FUN_001f9e90(t[0] - *(float *)(moby + 0x10), t[1] - *(float *)(moby + 0x14));
         *(float *)(d + 0x268) = FUN_001fa5c8(a, *(float *)(moby + 0x48));
     } else {
         *(int *)(d + 0x268) = 0;

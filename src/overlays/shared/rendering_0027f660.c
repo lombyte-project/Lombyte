@@ -43,7 +43,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00280970.s", FUN_L01_00280970);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00285768.s", FUN_L01_00285768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287158.s", FUN_L01_00287158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b408.s", FUN_L01_0028b408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b410.s", FUN_L01_0028b410);
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C2D8), where it is exact; names translated to the US level program. */
@@ -72,11 +71,7 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b5e0.s", FUN_L01_0028b5e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7f0.s", FUN_L01_0028b7f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b808.s", FUN_L01_0028b808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b828.s", FUN_L01_0028b828);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b850.s", FUN_L01_0028b850);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b860.s", FUN_L01_0028b860);
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */

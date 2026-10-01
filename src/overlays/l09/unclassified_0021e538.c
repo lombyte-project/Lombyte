@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e538.s", FUN_L09_0021e538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e8c0.s", FUN_L09_0021e8c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
@@ -29,7 +28,7 @@ extern float FUN_001fa580(float, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L09_002ead30(unsigned char *m) {
@@ -46,7 +45,7 @@ void FUN_L09_002ead30(unsigned char *m) {
         FUN_001f9a28(m + 0x10, d + 0x20, D_L09_00166F40);
         len = FUN_001f9af0(m + 0x10);
         if (len > 100.0f) {
-            FUN_L00_001ff500(m + 0x10, m + 0x10, 100.0f);
+            FUN_001f9bf8(m + 0x10, m + 0x10, 100.0f);
             FUN_001f9a10(m + 0x10, m + 0x10, D_L09_00166F40);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
         } else {

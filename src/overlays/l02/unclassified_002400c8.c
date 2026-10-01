@@ -126,7 +126,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5c88.s", FUN_L02_002d5c88);
 
 /* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_L00_00250df8(void *);
 extern void func_00213DE0(void *, int, int, int) __asm__("FUN_00212f90");
 
@@ -139,7 +139,7 @@ void FUN_L02_002d6118(unsigned char *moby, void *position, float *direction) {
     }
     qcopy(moby + 0x10, position);
     qcopy(data + 0x40, direction);
-    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(direction[0], direction[1]);
+    *(float *)(moby + 0x48) = FUN_001f9e90(direction[0], direction[1]);
     FUN_L00_00250df8(moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d6210.s", FUN_L02_002d6210);
@@ -219,8 +219,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dca10.s", FUN_L02_002dca10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcfe0.s", FUN_L02_002dcfe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2c4.s", FUN_L02_002dd2c4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd360.s", FUN_L02_002dd360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd370.s", FUN_L02_002dd370);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);

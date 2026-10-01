@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00278fd8.s", FUN_L15_00278fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002979d8.s", FUN_L15_002979d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
 #define NOT_SDA
@@ -11,12 +10,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_L15_00299880(void *, void *, void *, void *, float);
 
 void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
 {
-    float angle = FUN_L00_001ff8b0(point[0] - *(float *)(moby + 0x10),
+    float angle = FUN_001f9e90(point[0] - *(float *)(moby + 0x10),
                                      point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880(moby, a, b, c, angle);
 }
@@ -24,7 +23,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ae0.s", FUN_L15_00299ae0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299dd8.s", FUN_L15_00299dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a030.s", FUN_L15_0029a030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 

@@ -1,0 +1,22 @@
+# level	address	name	size	why
+# Function starts a human confirmed, for the ones no rule finds. A level links
+# the whole program, so it holds functions nothing in that level calls (no jal
+# target, no dispatch record, no jalr table, no callback address), and a start
+# only the old shape heuristics saw is a fragment as often as not
+# (docs/overlays.md, issue #31). The evidence for every row is
+# promoted C that compiles to exactly these bytes: 14 rows, 480 bytes. Drop a
+# row once a rule explains the start.
+00	002033AC	FUN_L00_002033ac	16	promoted C; uncalled in all 19 levels, no table names it
+00	00248D38	FUN_L00_00248d38	76	promoted C; the global check that follows it is a function of its own
+00	00249A48	FUN_L00_00249a48	48	promoted C; same shape as FUN_L00_00248d38
+00	00249B58	FUN_L00_00249b58	76	promoted C; same shape as FUN_L00_00248d38
+03	002DCB48	FUN_L03_002dcb48	36	promoted C; uncalled, starts on a store
+04	002E17B0	FUN_L04_002e17b0	20	promoted C; uncalled, starts on a store
+05	002551F4	FUN_L05_002551f4	16	promoted C; uncalled, starts on a store
+10	002D7B74	FUN_L10_002d7b74	8	promoted C; uncalled, a store and a return
+14	003061F8	FUN_L14_003061f8	36	promoted C; uncalled, starts on a store
+00	00248DC8	FUN_L00_00248dc8	40	promoted C; uncalled, a float comparison (two copies in level 00)
+00	00249758	FUN_L00_00249758	40	promoted C; uncalled, a float comparison
+00	002499EC	FUN_L00_002499ec	40	promoted C; uncalled, a float comparison
+00	00263B50	FUN_L00_00263b50	16	promoted C; uncalled, a float store and a return
+00	002E8534	FUN_L00_002e8534	12	promoted C; uncalled, a volatile float store and a return

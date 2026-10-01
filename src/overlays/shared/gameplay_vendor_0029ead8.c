@@ -3,3 +3,4 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ead8.s", FUN_L00_0029ead8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3ec8.s", FUN_L00_002a3ec8);

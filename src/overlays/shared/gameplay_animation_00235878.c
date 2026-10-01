@@ -37,7 +37,6 @@ void FUN_L00_00235878(void) {
         apply_pending_animation(&D_L00_0017DC50[i]);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002359f0.s", FUN_L00_002359f0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -132,7 +131,6 @@ void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
     *y += dy;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235c80.s", FUN_L00_00235c80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235d4c.s", FUN_L00_00235d4c);
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */

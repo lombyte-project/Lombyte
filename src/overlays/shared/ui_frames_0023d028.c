@@ -67,4 +67,3 @@ void FUN_L00_0023d3d8(int i) {
     for (j = 0; (D_0015EDD0[j] & 0x3F) != v && D_0015EDD0[j] != 0xFF; j++);
     if (D_0015EDD0[j] == 0xFF) D_0015EDD0[j] = v;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d460.s", FUN_L00_0023d460);

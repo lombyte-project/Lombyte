@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00295100.s", FUN_L00_00295100);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00295348.s", FUN_L00_00295348);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -231,7 +229,7 @@ extern void mrx_298de8(void *, void *, float) __asm__("FUN_00125360");
 extern void mry_298de8(void *, void *, float) __asm__("FUN_00125408");
 extern void mrz_298de8(void *, void *, float) __asm__("FUN_001252b8");
 extern void vcross_298de8(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void vscl_298de8(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void vscl_298de8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vsub_298de8(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00298de8(void) {
     float m[16] __attribute__((aligned(16)));

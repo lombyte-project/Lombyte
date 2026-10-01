@@ -14,7 +14,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ecac0.s", FUN_L12_002ecac0);
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern int FUN_001f96f8(int);
 extern void FUN_L00_00250df8(void *);
 
@@ -30,8 +30,8 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         moby[0x20] = 1;
         qcopy(moby + 0x10, pos);
         qcopy(data, src);
-        *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)data, *(float *)(data + 4));
-        *(float *)(moby + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(data), *(float *)(data + 8));
+        *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
+        *(float *)(moby + 0x44) = -FUN_001f9e90(FUN_001f9b20(data), *(float *)(data + 8));
         r = FUN_001f96f8(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;

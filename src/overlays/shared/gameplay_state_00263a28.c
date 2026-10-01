@@ -2,9 +2,4 @@
 #include "types.h"
 #include "asm.h"
 
-int FUN_L00_00280020(char *p) {
-    *(int *)(p + 0x40) = 0;
-    *(int *)(p + 0x50) = 0;
-    *(int *)(p + 0x3C) = 0;
-    return 0;
-}
+INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00263a28.s", FUN_L01_00263a28);

@@ -2,14 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002b3840.s", FUN_L05_002b3840);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002ce088.s", FUN_L05_002ce088);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4150.s", FUN_L05_002d4150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4168.s", FUN_L05_002d4168);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4278.s", FUN_L05_002d4278);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5054.s", FUN_L05_002f5054);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5074.s", FUN_L05_002f5074);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -168,7 +162,6 @@ void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319510.s", FUN_L05_00319510);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003195f0.s", FUN_L05_003195f0);
 #define NOT_SDA
 
 #define MACRO_ADDR

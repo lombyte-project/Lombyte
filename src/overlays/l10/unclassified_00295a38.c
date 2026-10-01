@@ -2,20 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295a38.s", FUN_L10_00295a38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002bf018.s", FUN_L10_002bf018);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002bf028.s", FUN_L10_002bf028);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002bf08c.s", FUN_L10_002bf08c);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c7a20.s", FUN_L10_002c7a20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002cdf50.s", FUN_L10_002cdf50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -25,10 +11,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
 void FUN_L10_002d7b74(char *a, float f) {
     *(float *)(a + 0x18) = f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 /* update: on a timer, fire a projectile from the moby's angle, then rearm the timer */
 /* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
 
@@ -70,17 +52,6 @@ void FUN_L10_002d8c00(char *moby) {
         *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9000.s", FUN_L10_002d9000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d90a8.s", FUN_L10_002d90a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d92b8.s", FUN_L10_002d92b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd650.s", FUN_L10_002dd650);
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
@@ -108,3 +79,30 @@ char *FUN_L10_002dd848(char *owner) {
     }
     return moby;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295a38.s", FUN_L10_00295a38);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c7a20.s", FUN_L10_002c7a20);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9000.s", FUN_L10_002d9000);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d90a8.s", FUN_L10_002d90a8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d92b8.s", FUN_L10_002d92b8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd650.s", FUN_L10_002dd650);

@@ -2,11 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb188.s", FUN_L00_001eb188);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1e4.s", FUN_L00_001eb1e4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb1f8.s", FUN_L00_001eb1f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb218.s", FUN_L00_001eb218);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001eb230.s", FUN_L00_001eb230);
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
@@ -25,9 +21,6 @@ typedef struct { char pad[0x7D]; u8 b; s16 h; } T001eb448;
 typedef struct { char pad[0x180]; T001eb448 *p; } S001eb448;
 extern S001eb448 D_L00_00166C80;
 void FUN_L00_001eb448(void) { D_L00_00166C80.p->h = 1; D_L00_00166C80.p->b = 0; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ecf40.s", FUN_L00_001ecf40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed000.s", FUN_L00_001ed000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed054.s", FUN_L00_001ed054);
 typedef struct { s32 id; s32 pad[4]; } E5;
 extern E5 D_L00_001EA880[];
 s32 FUN_L00_001ed230(s32 id) {
@@ -111,7 +104,7 @@ typedef float W[4] __attribute__((aligned(16)));
 
 extern float FUN_001f9af0(float *);
 extern float FUN_001f9b20(float *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(float *);
 extern void FUN_001fa5c8(float, float);
 
@@ -119,8 +112,8 @@ int FUN_L00_001ed630(float *a) {
     W v;
     float t;
     FUN_001f9a28(v);
-    a[1] = FUN_L00_001ff8b0(FUN_001f9b20(v), v[2]);
-    t = FUN_L00_001ff8b0(v[0], v[1]);
+    a[1] = FUN_001f9e90(FUN_001f9b20(v), v[2]);
+    t = FUN_001f9e90(v[0], v[1]);
     FUN_001fa5c8(t, a[0]);
     a[0] = t;
     a[2] = FUN_001f9af0(v);
@@ -183,4 +176,3 @@ void FUN_L00_001ed6a8(ti_1ed6a8 *pos, float r) {
         qcopy(&D_166DC0_1ed6a8, pos);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed878.s", FUN_L00_001ed878);

@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026eff0.s", FUN_L01_0026eff0);
 typedef struct {
     char pad0[0x84];
     f32 lo;

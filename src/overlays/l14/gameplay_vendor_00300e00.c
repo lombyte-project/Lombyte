@@ -87,7 +87,6 @@ void FUN_L14_003061f8(int unused, char *moby) {
     *(short *)(d + 0x3E) = 0;
     moby[0x20] = 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_0030621c.s", FUN_L14_0030621c);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
@@ -95,7 +94,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
 
 extern char *D_L14_001B0BB0[];
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 void FUN_L14_00307510(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -109,7 +108,7 @@ void FUN_L14_00307510(char *moby) {
     *(int *)(d + 0x70) = 0;
     *(int *)(d + 0x74) = 0;
     qcopy(moby + 0x10, p + 0x10);
-    *(float *)(moby + 0x48) = FUN_L00_001ff8b0(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
     *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) = *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
@@ -133,11 +132,9 @@ void FUN_L14_00307a80(unsigned char *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003087c0.s", FUN_L14_003087c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314e18.s", FUN_L14_00314e18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314f00.s", FUN_L14_00314f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315920.s", FUN_L14_00315920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00316748.s", FUN_L14_00316748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003167c4.s", FUN_L14_003167c4);

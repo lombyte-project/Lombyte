@@ -4,7 +4,6 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002efb88.s", FUN_L18_002efb88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0030.s", FUN_L18_002f0030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0054.s", FUN_L18_002f0054);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0120.s", FUN_L18_002f0120);
 #define NOT_SDA
 
@@ -152,7 +151,7 @@ extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
 extern short D_L18_001DA610[][4][2] __attribute__((section(".data")));
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_001f9fc8(void *);
-extern void FUN_L00_001fd228(void *, void *, int);
+extern void FUN_001f7d30(void *, void *, int);
 
 void FUN_L18_002f2620(char *moby) {
     FRow m[4];
@@ -186,7 +185,7 @@ void FUN_L18_002f2620(char *moby) {
             uv[j][0] = D_L18_001DA7A0[b][0] + ofs;
             uv[j][1] = D_L18_001DA7A0[b][1];
         }
-        FUN_L00_001fd228(m, mat, 0);
+        FUN_001f7d30(m, mat, 0);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f27c8.s", FUN_L18_002f27c8);
@@ -214,7 +213,7 @@ extern short D_L18_00162324 __attribute__((sda));
 extern short D_L18_00162328 __attribute__((sda));
 extern short D_L18_00162308 __attribute__((sda));
 extern void FUN_001f9fc8(void *);
-extern void FUN_L00_001fd228(void *, void *, int);
+extern void FUN_001f7d30(void *, void *, int);
 
 void FUN_L18_002f2970(char *moby) {
     FRow_l18 m[4];
@@ -248,7 +247,7 @@ void FUN_L18_002f2970(char *moby) {
             uv[j][0] = D_L18_001DB3A0[b][0] + ofs;
             uv[j][1] = D_L18_001DB3A0[b][1];
         }
-        FUN_L00_001fd228(m, mat, 0);
+        FUN_001f7d30(m, mat, 0);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2b18.s", FUN_L18_002f2b18);
@@ -285,7 +284,7 @@ extern float D_0015ED70;
 extern float FUN_001f9af0(void *);
 extern float FUN_00213f38(float, float, float, float, float *, float *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 int FUN_L18_002f6878(char *moby, float arg, void *x) {
     char *data = *(char **)(moby + 0x78);
@@ -301,7 +300,7 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     len = FUN_001f9af0(a);
     s = D_0015ED70 * 10.0f;
     FUN_00213f38(len, s, s, arg, b, (float *)(data + 0x374));
-    FUN_L00_001ff500(a, a, *(float *)(data + 0x374));
+    FUN_001f9bf8(a, a, *(float *)(data + 0x374));
     FUN_001f9a10(p, p, a);
     if (len < 0.1f) {
         if (*(float *)(data + 0x374) < 0.1f) {
@@ -406,13 +405,13 @@ extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 
 typedef union { u128_f7220 quad; float f[4]; } L18Vector;
 
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 void FUN_L18_002f7220(char *source, char *dest, L18Vector *from, L18Vector *to) {
     L18Vector a, b;
     a.quad = from->quad;
     b.quad = to->quad;
-    *(float *)(dest + 0x68) = FastSubRots(FUN_L00_001ff8b0(b.f[0] - a.f[0], b.f[1] - a.f[1]), *(float *)(source + 0x48));
+    *(float *)(dest + 0x68) = FastSubRots(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), *(float *)(source + 0x48));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f76a0.s", FUN_L18_002f76a0);

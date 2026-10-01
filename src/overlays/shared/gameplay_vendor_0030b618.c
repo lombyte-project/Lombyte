@@ -15,14 +15,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
 
 extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L01_0030d260(void *unused, float *p) {
     float a[4];
     float b[4];
     char *g = D_0013E533 + 0xE1D;
-    FUN_L00_001ff500(a, *(char **)(g + 0x2080) + 0xD0, 1.1f);
-    FUN_L00_001ff500(b, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9bf8(a, *(char **)(g + 0x2080) + 0xD0, 1.1f);
+    FUN_001f9bf8(b, *(char **)(g + 0x2080) + 0xE0, 1.0f);
     FUN_001f9a10(p, a, b);
     FUN_001f9a10(p, p, g + 0x80);
     p[2] = p[2] + 1.0f;

@@ -8,7 +8,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031cf58.s", FUN_L05_0031cf58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031d160.s", FUN_L05_0031d160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329358.s", FUN_L05_00329358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003294c0.s", FUN_L05_003294c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329538.s", FUN_L05_00329538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329540.s", FUN_L05_00329540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003296e0.s", FUN_L05_003296e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003298d8.s", FUN_L05_003298d8);

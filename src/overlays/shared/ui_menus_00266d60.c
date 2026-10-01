@@ -3,7 +3,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266d60.s", FUN_L00_00266d60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00266dec.s", FUN_L00_00266dec);
 #define NOT_SDA
 
 #define MACRO_ADDR

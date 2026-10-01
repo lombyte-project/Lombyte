@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00297d10.s", FUN_L06_00297d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
 #define NOT_SDA
 
@@ -95,17 +94,17 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001fa400(void *, void *, void *, float);
 extern void FUN_001fa480(void *, void *);
 extern void FUN_002144d8(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     float d;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
-    FUN_L00_001ff500(C, a1, 1.0f);
+    FUN_001f9bf8(C, a1, 1.0f);
     d = FUN_001f9ab0(C, a2);
-    FUN_L00_001ff500(E, C, d);
+    FUN_001f9bf8(E, C, d);
     FUN_001f9a28(D, a2, E);
-    FUN_L00_001ff500(D, D, 1.0f);
+    FUN_001f9bf8(D, D, 1.0f);
     qcopy(H, C);
     qcopy(F, D);
     fast_vec_cross(G, F, H);
@@ -204,16 +203,16 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f0040.s", FUN_L06_002f0040);
 extern char D_L06_00167400[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 
 float FUN_L06_002f2148(char *a, char *b, int c) {
     float r = FUN_001f9b80(a + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = FUN_001fa688(g[0x56],
-                            FUN_L00_001ff8b0(*(float *)(b + 0x10) - *(float *)(a + 0x10),
+                            FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
     float u = FUN_001fa688(*(float *)(a + 0x48),
-                            FUN_L00_001ff8b0(*(float *)(b + 0x10) - *(float *)(a + 0x10),
+                            FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
     r = r + u * 10.0f;
     r = r + t * 3.0f;
@@ -235,7 +234,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f32f0.s", FUN_L06_002f32f0);
 void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float thresh) {
     float dist = FUN_001f9b80(a + 0x10, c + 0x10);
     if (!(thresh < dist)) {
-        float ang = FUN_L00_001ff8b0(*(float *)(c + 0x10) - *(float *)(a + 0x10),
+        float ang = FUN_001f9e90(*(float *)(c + 0x10) - *(float *)(a + 0x10),
                                       *(float *)(c + 0x14) - *(float *)(a + 0x14));
         float v = dist + FUN_001fa688(*(float *)(a + 0x48), ang) * 5.0f;
         if (c == b) {

@@ -99,7 +99,6 @@ void FUN_L15_002eb928(char *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb9e0.s", FUN_L15_002eb9e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfd4.s", FUN_L15_002ebfd4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
@@ -107,7 +106,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edb20.s", FUN_L15_002edb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f794c.s", FUN_L15_002f794c);
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 

@@ -27,8 +27,6 @@ void FUN_L05_00237488(float *out, float *p, float step) {
     out[1] = p[1];
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b378.s", FUN_L05_0023b378);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b3c4.s", FUN_L05_0023b3c4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b400.s", FUN_L05_0023b400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023dc88.s", FUN_L05_0023dc88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0024bdc0.s", FUN_L05_0024bdc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002515d0.s", FUN_L05_002515d0);

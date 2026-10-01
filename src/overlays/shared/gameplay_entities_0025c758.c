@@ -14,4 +14,3 @@ void FUN_L02_0025c758(char *moby) {
     *(float *)(moby + 0x84) = val - delta;
     *(float *)(moby + 0x88) = val + delta;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0025c780.s", FUN_L02_0025c780);

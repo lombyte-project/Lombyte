@@ -134,7 +134,6 @@ void FUN_L00_00239cc8(HudElem *e) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239d00.s", FUN_L00_00239d00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a1f8.s", FUN_L00_0023a1f8);
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0 __attribute__((sda));
@@ -268,7 +267,6 @@ int FUN_L00_0023a7a8(char *m) {
     }
     return *(int *)(m + 0x58);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023aa98.s", FUN_L00_0023aa98);
 typedef struct {
     unsigned short id;
     unsigned short n;

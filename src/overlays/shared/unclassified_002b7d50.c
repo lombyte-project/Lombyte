@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b7d50.s", FUN_L13_002b7d50);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -63,6 +62,8 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class)
     }
     return moby;
 }
+
+INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b7d50.s", FUN_L13_002b7d50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1cc8.s", FUN_L13_002e1cc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6a58.s", FUN_L13_002e6a58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6c08.s", FUN_L13_002e6c08);

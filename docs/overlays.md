@@ -26,10 +26,11 @@ only what carries no bytes:
 | `config/overlays/us/level-table.json` | where each level lies in the ISO |
 | `config/overlays/us/level-NN.json`, `index.json` | the records of each level program: address, size, type, entry point |
 | `config/overlays/us/functions.tsv` | the function catalogue (below) |
+| `config/overlays/us/confirmed-starts.tsv` | function starts confirmed by hand, for the ones no rule finds |
 | `config/overlays/us/levels.json` | planet name and description per level (progress map) |
 | `src/overlays/shared/`, `src/overlays/lNN/` | the C, and `INCLUDE_ASM` stubs for functions not yet in C |
 
-## Facts measured on the US records (2026-09-29)
+## Facts measured on the US records
 
 `scripts/decomp overlays facts` in the tooling repository prints these from
 the records and the catalogue.
@@ -44,18 +45,17 @@ the records and the catalogue.
   1,200,936 bytes per level; the executable's game `.text` is 345,696 bytes.
 - `$gp` is the executable's, 0x166C00, in every level. No level text contains
   an `addiu $gp, $gp, imm`: the value the executable's startup sets stays.
-  Of the level copies of executable functions that reach resident memory
-  (below 0x15EF00) through `$gp`, 1053 agree with the executable word for word
-  at those instructions; the 114 that differ are 6 masked-fingerprint
-  collisions (small functions that load different `core.lit` constants) times
-  19 levels, not a different `$gp`. Level code's `$gp` offsets span
-  -0x7EA8..0x7BDC, from `core.lit` into the level's `data` record.
+  Level copies of executable functions that reach resident memory (below
+  0x15EF00) through `$gp` agree with the executable word for word at those
+  instructions; the few that differ are masked-fingerprint collisions (small
+  functions that load different `core.lit` constants), not a different `$gp`.
+  Level code's `$gp` offsets span -0x7EA8..0x7BDC, from `core.lit` into the
+  level's `data` record.
 - Dispatch records: `vtbl` 12-byte entries `{oClass, update, table}` (100 to
   189 classes per level), `camvtbl` 20-byte entries `{id, init, activate,
   update, exit}` (6 to 9), `sndvtbl` 8-byte entries `{id, function}` (0 to 6);
-  every list ends at an id of -1. 3669 of the 3673 table pointers land on a
-  catalogued function start; the 4 that do not are two tiny functions the
-  split joined to their predecessor (the same two cases as in PAL).
+  every list ends at an id of -1. Every table pointer lands on a catalogued
+  function start.
 - Every level's entry point (0x245C28 for level 00 .. 0x247F10 for level 18)
   is a catalogued shared function: the level initialiser.
 
@@ -64,14 +64,50 @@ the records and the catalogue.
 `config/overlays/us/functions.tsv` lists every distinct function of the 19
 level programs once. Two functions are the same function when their
 instructions agree with the link-dependent fields masked: `j`/`jal` targets,
-`lui` values, `$gp` offsets and non-stack memory offsets. On the 2026-09-29
-records:
+`lui` values, `$gp` offsets and non-stack memory offsets. Each row has a kind:
 
-| kind | functions | bytes | meaning |
-| :--- | ---: | ---: | :--- |
-| `exe` | 691 | 269,236 | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
-| `shared` | 1,961 | 1,190,248 | in two or more levels (1,156 of them in all 19: 591,644 bytes) |
-| `level` | 1,379 | 2,028,412 | in one level only |
+| kind | meaning |
+| :--- | :--- |
+| `exe` | the same code as an executable function; keeps its `FUN_xxxxxxxx` name, its C lives where the executable's does |
+| `shared` | in two or more levels |
+| `level` | in one level only |
+
+### What makes a place a function start
+
+A row is a function, so its start has to be an entry point of the retail code,
+not a place the text happens to look like one. The old rule cut after every
+`jr $ra` and at every frame opener, which turned a shared epilogue, a loop body
+or the tail of a function into a row of its own, and a fragment cannot be
+written in C because it never was a function.
+Now a start needs one of:
+
+- a `jal` that targets it;
+- a dispatch record that names it (`vtbl`, `camvtbl`, `sndvtbl`);
+- a pointer in a table the code calls through with `jalr` (a memory-card state
+  handler table is 25 pointers the dispatcher indexes; a `switch` table is
+  entered with `jr`, and its entries are case labels inside one function, so
+  they are not starts);
+- a callback address the code builds itself and keeps (`lui` plus `addiu`,
+  passed as an argument or stored; `FUN_L00_002377b8` is reached no other way);
+- a `j` from another function (a tail call);
+- code right after a return (and its delay slot and padding) that no row
+  reaches, when it opens a frame in its first four instructions, runs to a
+  `jr $ra` of its own over at least 32 bytes, or is a whole leaf (its own
+  `jr $ra`, no `$sp` access, no trap: a getter like `lui; lbu; jr $ra; sltu`
+  or a `return 0;`): the only sign left for the functions a level links but
+  never calls;
+- a copy of an executable function body (the row is exactly the executable
+  function's size), the level's entry point, the start of the text record, or
+  a hand-confirmed row in `config/overlays/us/confirmed-starts.tsv`. A
+  confirmed start cuts every copy of its function, in every level.
+
+A row ends at its last *reachable* instruction (branches with their delay
+slots, `j` inside the function, `switch` cases read from the jump table), so the bytes the compiler
+leaves between one function's return and the next function's first instruction
+(the tail of two returns whose bodies are elsewhere, a `beqz`/`jr $ra`/`break`
+block) belong to no row: no C produces them, so a row that swallowed them could
+never be matched. The fingerprint is taken over that reachable body too, so
+every copy of a function in every level lands in one row.
 
 A shared or level function is `FUN_LNN_xxxxxxxx`: its address in the
 lowest-numbered level that has it, its *canonical level*. Data it references

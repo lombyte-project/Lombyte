@@ -224,7 +224,7 @@ void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");
 long FUN_001f44b8_28efc8(int) __asm__("FUN_001f44b8");
 int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("FUN_001fa6c0");
-void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("FUN_L00_001fd228");
+void FUN_001f7d30_28efc8(void *, void *, int) __asm__("FUN_001f7d30");
 void FUN_L00_0028efc8(unsigned char *m) {
     Q_28efc8 quad;
     V_28efc8 v;
@@ -257,6 +257,6 @@ void FUN_L00_0028efc8(unsigned char *m) {
             FUN_001f9cf8_28efc8(&quad.corner[k], &quad.corner[k], D_0013E030_28efc8.p0 + 0xC0);
             FUN_001f9a10_28efc8(&quad.corner[k], &quad.corner[k], &v);
         }
-        FUN_L00_001fd228_28efc8(&quad, 0, 0);
+        FUN_001f7d30_28efc8(&quad, 0, 0);
     }
 }

@@ -181,8 +181,6 @@ void FUN_L00_00232128(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321c0.s", FUN_L00_002321c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321d8.s", FUN_L00_002321d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002321e4.s", FUN_L00_002321e4);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232A78), where it is exact; names translated to the US level program. */
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -501,7 +499,7 @@ float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
 void FUN_001fa050_002332d0(void *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_002332d0(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f99f8_002332d0(void *) __asm__("FUN_001f99f8");
-float FUN_L00_001ff8b0_002332d0(float, float) __asm__("FUN_L00_001ff8b0");
+float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
 float FUN_L00_002332d0(void) {
     float m[16] __attribute__((aligned(16)));
     Vec4_2332d0 v, a, b, w;
@@ -516,18 +514,18 @@ float FUN_L00_002332d0(void) {
         w.q = P->v270.q;
         FUN_001f99f8_002332d0(&a);
         FUN_001f99f8_002332d0(&b);
-        a.f[2] = -FUN_L00_001ff8b0_002332d0(P->v270.f[0], P->v270.f[1]);
+        a.f[2] = -FUN_001f9e90_002332d0(P->v270.f[0], P->v270.f[1]);
         FUN_001fa050_002332d0(m, &a);
         FUN_001f9d20_002332d0(&v, &v, m);
         FUN_001f9d20_002332d0(&w, &w, m);
-        b.f[1] = -FUN_L00_001ff8b0_002332d0(w.f[2], w.f[0]);
+        b.f[1] = -FUN_001f9e90_002332d0(w.f[2], w.f[0]);
         FUN_001fa050_002332d0(m, &b);
         FUN_001f9d20_002332d0(&v, &v, m);
         a.f[2] = -a.f[2];
         FUN_001fa050_002332d0(m, &a);
         FUN_001f9d20_002332d0(&v, &v, m);
     }
-    return FUN_L00_001ff8b0_002332d0(v.f[0], v.f[1]);
+    return FUN_001f9e90_002332d0(v.f[0], v.f[1]);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
@@ -550,7 +548,7 @@ int FUN_L00_00233440(void) {
 typedef struct { f32 v[4]; } V002334d0 __attribute__((aligned(16)));
 extern u8 D_0013F350_002334d0[] __asm__("D_0013F350");
 extern u8 D_0013F5E0_002334d0[] __asm__("D_0013F5E0");
-void FUN_L00_001ff500_002334d0(void *, void *, f32) __asm__("FUN_L00_001ff500");
+void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     u8 *b = D_0013F350_002334d0;
@@ -560,14 +558,14 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         out[2] = in[2] - k;
         break;
     case 1:
-        FUN_L00_001ff500_002334d0(&t, b + 0x270, -k);
+        FUN_001f9bf8_002334d0(&t, b + 0x270, -k);
         FUN_001f9a10_002334d0(out, in, &t);
         break;
     case 2:
         if (*(s32 *)(b + 0x2084) == 0x3E && *(s16 *)(b + 0x30E) == 0) {
-            FUN_L00_001ff500_002334d0(&t, b + 0x270, -k);
+            FUN_001f9bf8_002334d0(&t, b + 0x270, -k);
         } else {
-            FUN_L00_001ff500_002334d0(&t, D_0013F5E0_002334d0, k);
+            FUN_001f9bf8_002334d0(&t, D_0013F5E0_002334d0, k);
         }
         FUN_001f9a10_002334d0(out, in, &t);
         break;
@@ -680,7 +678,7 @@ extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L00_002338d0(float *dst, float *src) {
     char *base = D_0013F350;
@@ -692,7 +690,7 @@ void FUN_L00_002338d0(float *dst, float *src) {
         dst[2] = 0.0f;
         break;
     case 1:
-        FUN_L00_001ff500(n, base + 0x270, 1.0f);
+        FUN_001f9bf8(n, base + 0x270, 1.0f);
         FastVecScale(n, n, FastVecDot(n, src));
         FastVecSub(dst, src, n);
         break;
@@ -791,19 +789,19 @@ void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
 
 extern char D_0013F350[];
 extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_L00_001ff550(float *, float *, float);
+extern void FUN_001f9c48(float *, float *, float);
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
     char *base = D_0013F350;
 
     switch (*(unsigned char *)(base + 0x20B3)) {
     case 0:
-        FUN_L00_001ff550(dst, src, z);
+        FUN_001f9c48(dst, src, z);
         break;
     case 1:
     case 2:
         FUN_001f9d20(dst, src, base + 0x40);
-        FUN_L00_001ff550(dst, dst, z);
+        FUN_001f9c48(dst, dst, z);
         FUN_001f9d20(dst, dst, base);
         break;
     }
@@ -814,7 +812,7 @@ typedef union { u128 q; f32 f[4]; } V00233d30;
 extern u8 D_0013F350_00233d30[] __asm__("D_0013F350");
 void FUN_001f9d20_00233d30(void *, void *, void *) __asm__("FUN_001f9d20");
 f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
-f32 FUN_L00_001ff8b0_00233d30(f32, f32) __asm__("FUN_L00_001ff8b0");
+f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_L00_00233d30(f32 *v) {
     u8 *b = D_0013F350_00233d30;
     V00233d30 t;
@@ -831,12 +829,11 @@ f32 FUN_L00_00233d30(f32 *v) {
         d = FUN_001f9b20_00233d30(&t);
         z = t.f[2];
     call:
-        return FUN_L00_001ff8b0_00233d30(z, d);
+        return FUN_001f9e90_00233d30(z, d);
     }
     return 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233db8.s", FUN_L00_00233db8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233df4.s", FUN_L00_00233df4);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e40.s", FUN_L00_00233e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233e98.s", FUN_L00_00233e98);
 static __inline__ void qcopy_00233ee8(void *dst, void *src)

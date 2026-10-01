@@ -3,7 +3,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b96e0.s", FUN_L01_002b96e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9a30.s", FUN_L01_002b9a30);
 #include "eetypes.h"
 
 typedef union { u128 q; f32 f[4]; } EmitVec;
@@ -44,7 +43,7 @@ typedef struct {
 
 extern s32 D_0015ED84;
 extern f32 D_0015ED60;
-extern int FUN_L00_002002e0(void *, f32);
+extern int FUN_001fa728(void *, f32);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern void FUN_001fa050(void *, void *);
@@ -74,7 +73,7 @@ void FUN_L01_002bd100(EmitterMoby *self) {
     if (D_0015ED84 == 1) {
         p.q = self->pos.q;
         p.f[3] = 20.0f;
-        if (FUN_L00_002002e0(&p, 240.0f) == -1) {
+        if (FUN_001fa728(&p, 240.0f) == -1) {
             return;
         }
     }
@@ -345,7 +344,7 @@ extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8();
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9af0(void *);
-extern f32 FUN_L00_001ff8b0(f32, f32);
+extern f32 FUN_001f9e90(f32, f32);
 extern s32 FUN_001f96f8(s32);
 extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
 extern s32 FUN_0022da68(s32, s32, void *);
@@ -375,8 +374,8 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         m->h32 = 0xFF;
         m->b31 = 1;
         m->scale = m->scale * 0.25f;
-        m->rot_x = -FUN_L00_001ff8b0(FUN_001f9b20(pd), pd->f[2]);
-        m->rot_z = FUN_L00_001ff8b0(d.f[0], pd->f[1]);
+        m->rot_x = -FUN_001f9e90(FUN_001f9b20(pd), pd->f[2]);
+        m->rot_z = FUN_001f9e90(d.f[0], pd->f[1]);
         qcopy(&m->pos, pp);
         qcopy(&v->dir, pd);
         qcopy(&v->color, pc);
@@ -456,7 +455,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
 extern f32 FUN_001f9b48(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
 extern f32 FUN_002135f0(void *, s32);
 
 void FUN_L01_002f8268(HoverMoby *m) {
@@ -486,7 +485,7 @@ void FUN_L01_002f8268(HoverMoby *m) {
         spring_axis_to(&m->pos.v.y, v->home_y, &v->vel_y, D_L01_00161BF0 * D_0015ED70, D_L01_00161BF4, 3.0f);
         if (FUN_001f9b80(&m->pos, &D_0013F350.pos) < D_L01_00161BF8) {
             if (FUN_001f99c0(m->pos.v.z - D_0013F350.pos.v.z) < 0.7f) {
-                ang = FUN_L00_001ff8b0(m->pos.v.x - D_0013F350.pos.v.x, m->pos.v.y - D_0013F350.pos.v.y);
+                ang = FUN_001f9e90(m->pos.v.x - D_0013F350.pos.v.x, m->pos.v.y - D_0013F350.pos.v.y);
                 m->pos.v.x = FUN_001f9dc8(ang) * D_L01_00161BF8;
                 m->pos.v.y = FUN_001f9de0(ang) * D_L01_00161BF8;
                 m->pos.v.x += D_0013F350.pos.v.x;
@@ -500,7 +499,7 @@ void FUN_L01_002f8268(HoverMoby *m) {
         if (FUN_001f9b48(&old, &m->pos) > D_L01_00161BFC * D_0015ED6C) {
             FUN_001f9a28(&d, &m->pos, &old);
             step.q = d.q;
-            FUN_L00_001ff500(&step, &step, D_L01_00161BFC * D_0015ED6C);
+            FUN_001f9bf8(&step, &step, D_L01_00161BFC * D_0015ED6C);
             FUN_001f9a10(&d, &old, &step);
             m->pos.q = d.q;
         }

@@ -88,8 +88,8 @@ extern f32 FUN_L00_0025bc98_214658(float *, float *, int, float, float, float, f
 extern void FUN_L00_002091d8_214658(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_214658(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void FUN_L00_00233708_214658(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void FUN_L00_001ff500_214658(void *, void *, f32) __asm__("FUN_L00_001ff500");
-extern void FUN_L00_001ff550_214658(float *, float *, float) __asm__("FUN_L00_001ff550");
+extern void FUN_001f9bf8_214658(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void FUN_001f9c48_214658(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_214658(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00213e68_214658(f32) __asm__("FUN_L00_00213e68");
 
@@ -182,7 +182,7 @@ void FUN_L00_00214658(void) {
                 P.vE0.f[1] = FUN_001f9de0_214658(P.f180) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_214658(&P.vE0, &P.vE0, 0.0f);
-                FUN_L00_001ff500_214658(&tmp, &P.v170, ED6C * 4.9f);
+                FUN_001f9bf8_214658(&tmp, &P.v170, ED6C * 4.9f);
                 FUN_001f9a10_214658(&P.vE0, &P.vE0, &tmp);
             }
         }
@@ -205,7 +205,7 @@ void FUN_L00_00214658(void) {
                 if (P.b12E2) d = ED70 * 0.17f;
                 speed = FUN_001f9b20_214658(&P.vE0);
                 approach_value_214658(0.0f, d, &speed);
-                FUN_L00_001ff550_214658(P.vE0.f, P.vE0.f, speed);
+                FUN_001f9c48_214658(P.vE0.f, P.vE0.f, speed);
                 return;
             }
             if (P.s30A != 0) {
@@ -237,7 +237,7 @@ typedef struct { char pad0[0x80]; float x80; float x84; char pad1[0x98-0x88]; fl
 extern S_214ed8 D_0013F350_214ed8 __asm__("D_0013F350");
 void FUN_L00_002118c8(int, float);
 char *FUN_L00_0020d8f8(float, float, float, float);
-float FUN_L00_001ff8b0(float, float);
+float FUN_001f9e90(float, float);
 void FUN_L00_00214ed8(float a, float b, float c) {
     S_214ed8 *g = &D_0013F350_214ed8;
     float r;
@@ -252,7 +252,7 @@ void FUN_L00_00214ed8(float a, float b, float c) {
     }
     p = FUN_L00_0020d8f8(a, r, b, c);
     if (p != 0 && (g->xA54 == 0 || g->xA58 != 0)) {
-        g->xA5C = FUN_L00_001ff8b0(*(float *)(p + 0x10) - g->x80, *(float *)(p + 0x14) - g->x84);
+        g->xA5C = FUN_001f9e90(*(float *)(p + 0x10) - g->x80, *(float *)(p + 0x14) - g->x84);
         g->xA54 = p;
     } else {
         D_0013F350_214ed8.xA5C = r;
@@ -333,9 +333,8 @@ void FUN_001fa050(void *, void *);
 void FUN_001fa2d8(void *, void *);
 void FUN_001f9d20(void *, void *, void *);
 float FUN_001f9988(float);
-float FUN_L00_001ff8b0(float, float);
-void FUN_L00_00216078(Vec4 *v, float *out) { Vec4 m0[4]; Vec4 m1[4]; Vec4 t; Vec4 *tp = &t; qcopy(tp, v); FUN_001fa050(m0, D_001413D0 + 0x40); FUN_001fa2d8(m1, m0); FUN_001f9d20(tp, tp, m1); out[0] = FUN_L00_001ff8b0(FUN_001f9988(t.f[0] * t.f[0] + t.f[2] * t.f[2]), t.f[1]); out[1] = -FUN_L00_001ff8b0(t.f[2], t.f[0]); }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216128.s", FUN_L00_00216128);
+float FUN_001f9e90(float, float);
+void FUN_L00_00216078(Vec4 *v, float *out) { Vec4 m0[4]; Vec4 m1[4]; Vec4 t; Vec4 *tp = &t; qcopy(tp, v); FUN_001fa050(m0, D_001413D0 + 0x40); FUN_001fa2d8(m1, m0); FUN_001f9d20(tp, tp, m1); out[0] = FUN_001f9e90(FUN_001f9988(t.f[0] * t.f[0] + t.f[2] * t.f[2]), t.f[1]); out[1] = -FUN_001f9e90(t.f[2], t.f[0]); }
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_216130;
 typedef struct { V_216130 r[4]; } M_216130;
 typedef int Q_216130 __attribute__((mode(TI)));
@@ -345,9 +344,9 @@ extern char D_0013F3F4_216130[] __asm__("D_0013F3F4");
 extern char D_0013F3E0_216130[] __asm__("D_0013F3E0");
 float dot_216130(void *, void *) __asm__("FUN_001f9ab0");
 float sqrt_216130(float) __asm__("FUN_001f9988");
-float atan2_216130(float, float) __asm__("FUN_L00_001ff8b0");
+float atan2_216130(float, float) __asm__("FUN_001f9e90");
 void cross_216130(void *, void *, void *) __asm__("FUN_001f9ad8");
-void rot_216130(void *, void *) __asm__("FUN_L00_001ffa90");
+void rot_216130(void *, void *) __asm__("FUN_001fa070");
 void mmul_216130(void *, void *, void *) __asm__("FUN_001fa378");
 void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
@@ -562,7 +561,6 @@ void FUN_L00_00216e48(int idx, int a, int b) {
     g->b[idx] = a;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ef8.s", FUN_L00_00216ef8);
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 

@@ -147,7 +147,7 @@ extern unsigned char D_0013A4E0[];
 extern void FUN_001f9740(int *arg0);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_0022da68(int, int, int);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
@@ -162,7 +162,7 @@ void FUN_L11_003126f8(char *moby, char *d) {
             int v = (*(unsigned short *)(d + 0x6A) + 1) & 3;
             *(unsigned short *)(d + 0x6A) = v;
             FUN_L00_0024f7c8(moby, v + 7, a);
-            FUN_L00_001ff500(b, d, 0.3f);
+            FUN_001f9bf8(b, d, 0.3f);
             FUN_001f9a10(a, a, b);
             if (*(int *)(d + 0x88) != 0 && !(500 < *(int *)(d + 0x8C))) t = *(int *)(d + 0x88);
             if (FUN_L11_00309378(moby, a, t, moby + 0x40, *(float *)&D_L11_00162064_d * *(float *)&D_L11_00162090_d, FUN_001f96f8(300))) {
@@ -177,3 +177,4 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00312838.s", FUN_L11_00312838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313290.s", FUN_L11_00313290);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313f60.s", FUN_L11_00313f60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00314318.s", FUN_L11_00314318);
+

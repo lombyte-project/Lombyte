@@ -50,7 +50,7 @@ extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 extern float FUN_001fa5c8(float, float);
 extern float FUN_001fa688(float, float);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern short *D_L10_001ABCC0[];
 extern short D_L10_00161E48_d __asm__("D_L10_00161E48") __attribute__((sda));
 extern unsigned char D_0013E533[];
@@ -61,12 +61,12 @@ float FUN_L10_002e4840(char *self) {
     float hi, lo, ang, dist, v[3];
     short *p;
     if ((unsigned char)self[0x21] == 0xFF) {
-        return FUN_L00_001ff8b0(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
+        return FUN_001f9e90(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                                  *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     }
     lo = -(*(float *)&D_L10_00161E48_d * 0.017453292f);
     hi = *(float *)&D_L10_00161E48_d * 0.017453292f;
-    ang = FUN_L00_001ff8b0(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
+    ang = FUN_001f9e90(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                             *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     dist = FUN_001f9b48(owner + 0x10, self + 0x10);
     v[0] = FUN_001f9dc8(ang) * 2.0f;
@@ -78,7 +78,7 @@ float FUN_L10_002e4840(char *self) {
         do {
             int idx = *(unsigned short *)p & 0x7FFF;
             if (D_L10_0015FFD8[idx].state == 5 || FUN_001f9b48(&D_L10_0015FFD8[idx].x, owner + 0x10) < dist) {
-                float d = FUN_L00_001ff8b0(D_L10_0015FFD8[idx].x - *(float *)(owner + 0x10),
+                float d = FUN_001f9e90(D_L10_0015FFD8[idx].x - *(float *)(owner + 0x10),
                                             D_L10_0015FFD8[idx].y - *(float *)(owner + 0x14));
                 float r = FUN_001fa5c8(d, ang);
                 if (r > 0.0f && r < hi) {
@@ -99,3 +99,4 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e85b8.s", FUN_L10_002e85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9648.s", FUN_L10_002e9648);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9990.s", FUN_L10_002e9990);
+

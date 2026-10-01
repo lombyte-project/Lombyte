@@ -7,7 +7,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f32f0.s", FUN_L17_002f32f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f3848.s", FUN_L17_002f3848);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f40d8.s", FUN_L17_002f40d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f4fb0.s", FUN_L17_002f4fb0);
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -55,7 +54,7 @@ extern int FUN_001f96f8(int);
 extern short *D_L17_001AC140[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001fa030(void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -79,12 +78,12 @@ char *FUN_L17_002f4fb8(int list) {
         FUN_001fa030(D, C);
         {
             float f = FUN_001fa580(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-            FUN_L00_001ff500(A, E, FUN_001f9de0(f) * 12.0f);
+            FUN_001f9bf8(A, E, FUN_001f9de0(f) * 12.0f);
             FUN_001f9a10(B, D_L17_001676C0, A);
-            FUN_L00_001ff500(A, F, FUN_001f9dc8(f) * 12.0f);
+            FUN_001f9bf8(A, F, FUN_001f9dc8(f) * 12.0f);
         }
         FUN_001f9a10(B, B, A);
-        FUN_L00_001ff500(A, D, 6.0f);
+        FUN_001f9bf8(A, D, 6.0f);
         FUN_001f9a10(B, B, A);
         qcopy(d + 0xB0, D_0013E533 + 0xE9D);
         qcopy(m + 0x10, B);
@@ -149,7 +148,7 @@ extern float FUN_001f9ab0(void *, void *);
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
     V4 v0;
@@ -165,16 +164,16 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         p.v.y = a[i].y;
         p.v.z = a[i].z;
         FUN_001f9a28(&v0, &p, D_L17_001676C0);
-        FUN_L00_001ff500(&v0, &v0, 1.0f);
+        FUN_001f9bf8(&v0, &v0, 1.0f);
         q.w = 1.0f;
         q.v.x = b[i].x;
         q.v.y = b[i].y;
         q.v.z = b[i].z;
-        FUN_L00_001ff500(&q, &q, 1.0f);
+        FUN_001f9bf8(&q, &q, 1.0f);
         d = FUN_001f9ab0(&q, &v0);
         FUN_001f9a68(&r, &q, d + d);
         FUN_001f9a28(&r, &v0, &r);
-        FUN_L00_001ff500(&r, &r, 1.0f);
+        FUN_001f9bf8(&r, &r, 1.0f);
         r.v.z = r.v.z + 1.0f;
         len = FUN_001f9af0(&r);
         len = len + len;
@@ -253,16 +252,16 @@ void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
         t[1] = p[1];
         t[2] = p[2];
         FUN_001f9a28(a, D_L17_001676C0, t);
-        FUN_L00_001ff500(a, a, 1.0f);
+        FUN_001f9bf8(a, a, 1.0f);
         c[3] = 1.0f;
         q = (float *)(i * 12 + (int)nrm);
         c[0] = q[0];
         c[1] = q[1];
         c[2] = q[2];
-        FUN_L00_001ff500(c, c, 1.0f);
+        FUN_001f9bf8(c, c, 1.0f);
         FUN_001f9a68(r, c, FUN_001f9ab0(c, a) * 2.0f);
         FUN_001f9a28(r, a, r);
-        FUN_L00_001ff500(r, r, 1.0f);
+        FUN_001f9bf8(r, r, 1.0f);
         r[2] += 1.0f;
         len = FUN_001f9af0(r) * 2.0f;
         out[i * 2] = (r[0] / len + 0.5f) * 4.0f;

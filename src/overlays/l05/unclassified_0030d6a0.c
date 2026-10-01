@@ -25,11 +25,11 @@ extern short D_L05_00161EC4_d __asm__("D_L05_00161EC4") __attribute__((sda));
 extern short D_L05_00161EC8_d __asm__("D_L05_00161EC8") __attribute__((sda));
 extern void FUN_001f99f8(void *);
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L05_00315ee0(char *a, char *b, char *c) {
     float t;
-    FUN_L00_001ff500(b, a + 0xC0, *(float *)&D_L05_00161EC8_d);
+    FUN_001f9bf8(b, a + 0xC0, *(float *)&D_L05_00161EC8_d);
     FUN_001f9a10(b, b, a + 0x10);
     *(float *)(b + 8) = *(float *)(b + 8) + *(float *)&D_L05_00161EC0_d;
     FUN_001f99f8(c);
@@ -93,4 +93,3 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318c78.s", FUN_L05_00318c78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003193a8.s", FUN_L05_003193a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319c28.s", FUN_L05_00319c28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319c4c.s", FUN_L05_00319c4c);

@@ -74,7 +74,6 @@ void FUN_L00_0025d538(s32 id, S_25d538 *s) {
     FUN_L00_002502f0_25d538(id, r, g, b);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7a0.s", FUN_L00_0025d7a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7d0.s", FUN_L00_0025d7d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d808.s", FUN_L00_0025d808);
 typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
 typedef struct { float x, y, z, w_0025da70; } __attribute__((aligned(16))) Vec4_0025da70;
@@ -96,7 +95,7 @@ void FUN_L00_0025da70(u128_0025da70 *a, u128_0025da70 *b, float lim) {
 #include "qcopy.h"
 typedef int T25db00_q __attribute__((mode(TI)));
 void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_L00_001ff550_25db00(void *, void *, float) __asm__("FUN_L00_001ff550");
+void FUN_001f9c48_25db00(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
 float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
@@ -114,7 +113,7 @@ float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
     *(int *)&n[2] = 0;
     qcopy(c, a);
     *(int *)&((float *)c)[2] = 0;
-    FUN_L00_001ff550_25db00(n, n, 1.0f);
+    FUN_001f9c48_25db00(n, n, 1.0f);
     k = -FUN_001f9ab0_25db00(n, c) + (n[0] * p[0] + n[1] * p[1]);
     out[0] = p[0] - k * n[0];
     out[1] = p[1] - k * n[1];
@@ -142,7 +141,7 @@ extern float dsq_25dcd8(void *, void *) __asm__("FUN_001f9b48");
 extern void b6b8_25dcd8(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void vsub_25dcd8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vadd_25dcd8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_L00_001ff500");
+extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vmul_25dcd8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
@@ -196,7 +195,6 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
     return da70_25dcd8(e, g, 0.0f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e308.s", FUN_L00_0025e308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e310.s", FUN_L00_0025e310);
 #define NOT_SDA
 
@@ -218,7 +216,6 @@ int FUN_L00_0025e368(char *a) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3b8.s", FUN_L00_0025e3b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3c8.s", FUN_L00_0025e3c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e3f8.s", FUN_L00_0025e3f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f090.s", FUN_L00_0025f090);
@@ -230,11 +227,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f3e8.s", FUN_L00_0025f3e8);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 
 void FUN_L00_0025f730(void *a, float x) {
     if (x < FUN_001f9af0(a)) {
-        FUN_L00_001ff500(a, a, x);
+        FUN_001f9bf8(a, a, x);
     }
 }
 #define NOT_SDA
@@ -257,10 +254,7 @@ void FUN_L00_0025f780(int a, short *list, short max) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f800.s", FUN_L00_0025f800);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f858.s", FUN_L00_0025f858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f878.s", FUN_L00_0025f878);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f8c4.s", FUN_L00_0025f8c4);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f8d8.s", FUN_L00_0025f8d8);
 f32 FUN_002132a8(f32, f32);
 void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[0] += FUN_002132a8(-r, r);

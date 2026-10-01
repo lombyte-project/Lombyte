@@ -20,5 +20,3 @@ int FUN_L00_0028d8c0(int a, int i) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028d918.s", FUN_L00_0028d918);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028d950.s", FUN_L00_0028d950);

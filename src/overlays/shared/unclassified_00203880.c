@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00203880.s", FUN_L00_00203880);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002038c0.s", FUN_L00_002038c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002038f0.s", FUN_L00_002038f0);
 typedef struct { s32 state; u8 pad[0x20]; s32 cur; s32 idx; } S00203908;
 typedef struct { u16 id; u16 pad; s32 v; } P00203908;
 extern S00203908 D_L00_00179410_00203908 __asm__("D_L00_00179410");

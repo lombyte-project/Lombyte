@@ -3,7 +3,6 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277ff0.s", FUN_L01_00277ff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002783a8.s", FUN_L01_002783a8);
 #define NOT_SDA
 
@@ -23,7 +22,6 @@ void FUN_L01_002787a0(char *moby)
     }
     FUN_L00_00260a88(moby, 4, 7, r, -1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00278ad0.s", FUN_L01_00278ad0);
 #include "qcopy.h"
 
 /* spawns a moby of a class copying the source moby's placement, scaled */

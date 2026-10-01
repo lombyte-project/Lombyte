@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002c8830.s", FUN_L11_002c8830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb790.s", FUN_L11_002cb790);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308670.s", FUN_L11_00308670);
 #define NOT_SDA
@@ -17,9 +16,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308670.s", FUN_L11_00308670);
 extern char *func_0020D348_m(int);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
-extern float FUN_L00_001ff8b0(float, float);
+extern float FUN_001f9e90(float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_001ff500(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -35,11 +34,11 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
         f = FUN_001f9b20(dir);
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(f, dir[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(f, dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
         *(float *)(d + 0x10) = 1.0f;
         if (b > 0.0f) {
-            FUN_L00_001ff500(d, dir, b);
+            FUN_001f9bf8(d, dir, b);
         } else {
             qcopy(d, dir);
             b = FUN_001f9af0(dir);
@@ -70,11 +69,11 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(short *)(m + 0x32) = truncate_float_to_s32(size);
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
-        *(float *)(m + 0x44) = -FUN_L00_001ff8b0(FUN_001f9b20(dir), dir[2]);
-        *(float *)(m + 0x48) = FUN_L00_001ff8b0(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(dir), dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
         *(float *)(p + 0x10) = 1.0f;
         if (len > 0.0f) {
-            FUN_L00_001ff500(p, dir, len);
+            FUN_001f9bf8(p, dir, len);
         } else {
             qcopy(p, dir);
             len = FUN_001f9af0(dir);

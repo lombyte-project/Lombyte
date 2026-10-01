@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4038.s", FUN_L02_002a4038);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4058.s", FUN_L02_002a4058);
 #define NOT_SDA
 
