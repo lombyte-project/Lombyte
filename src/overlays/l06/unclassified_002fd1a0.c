@@ -136,5 +136,41 @@ void FUN_L06_003047b8(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003047f8.s", FUN_L06_003047f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305000.s", FUN_L06_00305000);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
+
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern short D_L06_001621E8_d __asm__("D_L06_001621E8") __attribute__((sda));
+extern short D_L06_001621EC_d __asm__("D_L06_001621EC") __attribute__((sda));
+extern short D_L06_001621F0_d __asm__("D_L06_001621F0") __attribute__((sda));
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L00_00259858(char *a, int b, int c, float d);
+
+void FUN_L06_00305000(char *m) {
+    float P[4];
+    float Q[4];
+    float A[12];
+    FUN_L00_00259858((char *)A, (int)m, 0x10000, 6.0f);
+    P[0] = *(float *)&D_L06_001621E8_d;
+    P[1] = *(float *)&D_L06_001621EC_d;
+    P[2] = *(float *)&D_L06_001621F0_d;
+    Q[0] = -*(float *)&D_L06_001621E8_d;
+    Q[1] = *(float *)&D_L06_001621EC_d;
+    Q[2] = *(float *)&D_L06_001621F0_d;
+    FUN_001f9cf8(P, P, m + 0xC0);
+    FUN_001f9a10(P, P, m + 0x10);
+    FUN_001f9cf8(Q, Q, m + 0xC0);
+    FUN_001f9a10(Q, Q, m + 0x10);
+    FUN_001efa68(P, Q, 0, (int)m, (int)A);
+    P[0] = *(float *)&D_L06_001621E8_d;
+    P[1] = -*(float *)&D_L06_001621EC_d;
+    P[2] = *(float *)&D_L06_001621F0_d;
+    Q[0] = -*(float *)&D_L06_001621E8_d;
+    Q[1] = -*(float *)&D_L06_001621EC_d;
+    Q[2] = *(float *)&D_L06_001621F0_d;
+    FUN_001f9cf8(P, P, m + 0xC0);
+    FUN_001f9a10(P, P, m + 0x10);
+    FUN_001f9cf8(Q, Q, m + 0xC0);
+    FUN_001f9a10(Q, Q, m + 0x10);
+    FUN_001efa68(P, Q, 0, (int)m, (int)A);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305170.s", FUN_L06_00305170);

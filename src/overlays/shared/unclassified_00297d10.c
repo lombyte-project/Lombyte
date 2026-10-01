@@ -114,7 +114,23 @@ void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     FUN_001fa400(A, A, B, *(float *)&D_L06_00161C00_d);
     FUN_001fa480(A, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9aa8.s", FUN_L06_002e9aa8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
+
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern void FUN_001f9a10(void *, void *, void *);
+
+void FUN_L06_002e9aa8(char *moby) {
+    float a[4];
+    float b[4];
+    float c[4];
+    qcopy(b, moby + 0x10);
+    FUN_001f9bf8(c, moby + 0xE0, 1.0f);
+    FUN_001f9a10(b, b, c);
+    qcopy(a, moby + 0x10);
+    FUN_001f9bf8(c, moby + 0xE0, -1.0f);
+    FUN_001f9a10(a, a, c);
+    FUN_001efa68(b, a, 2, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9f30.s", FUN_L06_002e9f30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea198.s", FUN_L06_002ea198);

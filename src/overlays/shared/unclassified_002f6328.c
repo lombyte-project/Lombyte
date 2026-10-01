@@ -6,7 +6,47 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6a30.s", FUN_L01_002f6a30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8530.s", FUN_L01_002f8530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f8718.s", FUN_L01_002f8718);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb4b8.s", FUN_L01_002fb4b8);
+typedef struct {
+    u8 pad0[0xA6];
+    s16 type;
+} Moby;
+
+typedef struct {
+    u8 pad0[0x44];
+    s16 count;
+    u8 pad46[0x178 - 0x46];
+    Moby *list[1];
+} MobyList;
+
+typedef struct {
+    u8 b0;
+    u8 active;
+    u8 pad2[0x1E];
+    f32 x;
+    f32 y;
+    f32 z;
+} Effect;
+
+extern s32 D_L01_0015F5C4;
+extern u8 D_0015EDB0;
+extern MobyList D_L01_0016CCE0;
+extern Effect D_L01_0017C8C0;
+extern void FUN_0020cb10(void *, int, void *);
+
+void FUN_L01_002fb4b8(void) {
+    s32 i;
+
+    if (D_L01_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L01_0016CCE0.count; i++) {
+            int t = D_L01_0016CCE0.list[i]->type;
+
+            if ((t == 0x398 || t == 0x1BF) && D_L01_0017C8C0.active == 0) {
+                FUN_0020cb10(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
+                D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.1f;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb5b0.s", FUN_L01_002fb5b0);
 #define NOT_SDA
 

@@ -128,10 +128,120 @@ void FUN_L02_002eca30(char *m, void *arg1) {
         if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecd50.s", FUN_L02_002ecd50);
+void FUN_L02_002ec308(char *self);
+
+void FUN_L02_002ecd50(char *moby) {
+    int i;
+    char *data;
+    char *p;
+    int v;
+    int r, g, b, c;
+    int *q;
+
+    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
+        return;
+    }
+    data = *(char **)(moby + 0x78);
+    p = data + 0x80;
+    for (i = 0; i < 6; i++) {
+        FUN_L00_0024f7c8(moby, i + 2, p);
+        p += 0x10;
+    }
+    v = D_L02_0015F5CC;
+    r = *(unsigned char *)(moby + 0x92);
+    g = *(unsigned char *)(moby + 0x91);
+    b = *(unsigned char *)(moby + 0x90);
+    c = (r << 16) | 0x30000000;
+    c |= g << 8;
+    c |= b;
+    *(int *)(data + 0xE0) = c;
+    if (v != 0) {
+        q = *(int **)(data + 0xE4);
+        if (v != *q) {
+            *q = v;
+            enqueue_callback_list_1_alt(FUN_L02_002ec308, moby);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ece18.s", FUN_L02_002ece18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed420.s", FUN_L02_002ed420);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ed658.s", FUN_L02_002ed658);
+extern short D_L02_00161FD8 __attribute__((sda));
+extern short D_L02_00161FDC __attribute__((sda));
+extern short D_L02_00161FE0 __attribute__((sda));
+extern short D_L02_00161FE4 __attribute__((sda));
+extern short D_L02_00161FE8 __attribute__((sda));
+extern short D_L02_00161FEC __attribute__((sda));
+extern short D_L02_00161FF0 __attribute__((sda));
+extern short D_L02_00161FF4 __attribute__((sda));
+extern short D_L02_00161FF8 __attribute__((sda));
+extern short D_L02_00161FFC __attribute__((sda));
+extern short D_L02_00162000 __attribute__((sda));
+extern short D_L02_00162004 __attribute__((sda));
+extern short D_L02_00162008 __attribute__((sda));
+extern short D_L02_0016200C __attribute__((sda));
+extern short D_L02_00162010 __attribute__((sda));
+
+void FUN_L02_002ed420(char *m, void *arg1) {
+    float v10[4], v20[4], v30[4], v40[4], v50[4];
+    int i;
+
+    FUN_001f9a28(v30, m + 0x10, arg1);
+    for (i = 0; i < 2; i++) {
+        int a, b, c, d, e;
+        char *p;
+
+        FUN_L00_0024f7c8(m, i, v50);
+        FUN_001f9a68(v10, v30, *(float *)&D_L02_00161FD8);
+        FUN_001f9a68(v20, v30, *(float *)&D_L02_00161FDC);
+        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_00161FE0 * D_0015ED6C);
+        FUN_001f9a10(v20, v20, v40);
+        v10[3] = random_float_between_alt(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8);
+        v20[3] = random_float_between_alt(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
+        a = FUN_001fa6e0(*(int *)&D_L02_00162004, *(int *)&D_L02_00162008, random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010, random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE8 * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FEC * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
+        if (p != 0) {
+            p[9] = func_001FA898_r(8.0f) + 0x60;
+        }
+    }
+}
+extern short D_L02_00162014 __attribute__((sda));
+extern short D_L02_00162018 __attribute__((sda));
+extern short D_L02_0016201C __attribute__((sda));
+extern short D_L02_00162020 __attribute__((sda));
+extern short D_L02_00162024 __attribute__((sda));
+extern short D_L02_00162028 __attribute__((sda));
+extern short D_L02_0016202C __attribute__((sda));
+
+void FUN_L02_002ed658(char *m, void *arg1) {
+    float v10[4], v20[4], v30[4], v40[4], v50[4];
+    int i;
+
+    FUN_001f9a28(v30, m + 0x10, arg1);
+    for (i = 0; i < 2; i++) {
+        int a, b, c, d, e;
+        char *p;
+
+        FUN_L00_0024f7c8(m, i, v50);
+        FUN_001f9a68(v10, v30, *(float *)&D_L02_00162014);
+        FUN_001f9a68(v20, v30, *(float *)&D_L02_00162018);
+        FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_0016201C * D_0015ED6C);
+        FUN_001f9a10(v20, v20, v40);
+        v10[3] = random_float_between_alt(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8) / 1.5f;
+        v20[3] = random_float_between_alt(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000) / 1.5f;
+        a = FUN_001fa6e0(*(int *)&D_L02_00162020, *(int *)&D_L02_00162024, random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_00162028, *(int *)&D_L02_0016202C, random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE8 * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FEC * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
+        if (p != 0) {
+            p[9] = func_001FA898_r(8.0f) + 0x60;
+        }
+    }
+}
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 

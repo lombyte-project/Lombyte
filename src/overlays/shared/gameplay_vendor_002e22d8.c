@@ -57,4 +57,16 @@ void FUN_L16_002e5d30(int idx) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9df0.s", FUN_L16_002e9df0);
+extern void FUN_L16_002e9ce0(void);
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+
+void FUN_L16_002e9df0(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        enqueue_callback_list_1((int)FUN_L16_002e9ce0, (int)moby);
+        break;
+    }
+}

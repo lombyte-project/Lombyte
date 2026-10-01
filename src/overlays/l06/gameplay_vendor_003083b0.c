@@ -4,7 +4,44 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003083b0.s", FUN_L06_003083b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00308c68.s", FUN_L06_00308c68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00309240.s", FUN_L06_00309240);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_0015FFD8;
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001fa728(char *, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short *D_L06_001ABFC0[];
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L06_00309240(int idx) {
+    short *p;
+    char *m;
+    char *data;
+    float v[4];
+    if (D_L06_001ABFC0[idx] != 0) {
+        p = D_L06_001ABFC0[idx];
+        do {
+            m = D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (*(short *)(m + 0xA6) == 0x5E8 && (unsigned char)m[0x20] == 1) {
+                qcopy(v, m + 0x10);
+                v[3] = 0.25f;
+                if (FUN_001fa728((char *)v, 64.0f) >= 0) {
+                    data = *(char **)(m + 0x78);
+                    m[0x20] = 2;
+                    *(int *)(data + 0x28) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(30.0f, 60.0f)));
+                }
+            }
+        } while (*p++ >= 0);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

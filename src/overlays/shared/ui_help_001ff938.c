@@ -76,7 +76,85 @@ void FUN_L15_00208ca8(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00209450.s", FUN_L15_00209450);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0020a328.s", FUN_L15_0020a328);
+typedef struct { f32 f[4]; } V_20a328;
+typedef struct { u8 p0[0x98]; f32 f98; u8 p1[0xE0 - 0x9C]; V_20a328 vE0; u8 p2[0x240 - 0xF0]; s32 i240; u8 p3[0x308 - 0x244]; s16 h308;
+    u8 p4[0x2080 - 0x30A]; void *p2080; u8 p5[0x208C - 0x2084]; s32 i208C; u8 p6[0x20A4 - 0x2090]; u8 b20A4; } P_20a328;
+typedef struct { u8 p0[0x18]; s32 i18; s32 i1C; u8 p1[0x40 - 0x20]; V_20a328 v40; } X_20a328;
+extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") __attribute__((section(".data")));
+extern char D_0013F3D0_20a328[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") __attribute__((section(".data")));
+extern s32 D_L15_0017445C_20a328 __asm__("D_L15_0017445C") __attribute__((section(".data")));
+extern f32 D_0015ED6C_20a328 __asm__("D_0015ED6C");
+extern f32 FUN_L00_002339d0_20a328(void *) __asm__("FUN_L00_002339d0");
+extern f32 FUN_001f9b20_20a328(void *) __asm__("FUN_001f9b20");
+extern f32 FUN_001f9dc8_20a328(f32) __asm__("FUN_001f9dc8");
+extern f32 FUN_001f9de0_20a328(f32) __asm__("FUN_001f9de0");
+extern void FUN_001f9a68_20a328(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int FUN_001efa68_20a328(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int FUN_001f0b58_20a328(void) __asm__("FUN_001f0b58");
+extern f32 FUN_001f9e90_20a328(f32, f32) __asm__("FUN_001f9e90");
+extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
+#define P D_0013F350_20a328
+#define X D_L15_00174440_20a328
+
+void FUN_L15_0020a328(int force) {
+    V_20a328 a, d1, b, d2;
+    char *src;
+    P_20a328 *g;
+    f32 off, k, c, ang, t;
+    int r;
+
+    if (P.h308 != 0) return;
+    if (FUN_L00_002339d0_20a328(&P.vE0) < D_0015ED6C_20a328 * 0.1f) return;
+    off = 0.3700000047683716f;
+    k = 0.5f;
+    if ((u32)(P.i208C - 0x11) < 2) {
+        off = 0.0f;
+        k = 0.7f;
+    } else if (P.b20A4 == 2) {
+        off = 1.5f;
+        k = 5.0f;
+    }
+    src = D_0013F3D0_20a328;
+    qcopy(&a, src);
+    a.f[2] += off;
+    qcopy(&b, src);
+    b.f[2] += off * 0.3f;
+    if (force || FUN_001f9b20_20a328(src + 0x60) < 0.01f) {
+        g = (P_20a328 *)(src - 0x80);
+        c = 1.4f;
+        d1.f[0] = FUN_001f9dc8_20a328(g->f98) * k;
+        d1.f[1] = FUN_001f9de0_20a328(g->f98) * k;
+        *(s32 *)&d1.f[2] = 0;
+        d2.f[0] = FUN_001f9dc8_20a328(g->f98) * k * c;
+        d2.f[1] = FUN_001f9de0_20a328(g->f98) * k * c;
+        *(s32 *)&d2.f[2] = 0;
+    } else {
+        qcopy(&d1, src + 0x60);
+        *(s32 *)&d1.f[2] = 0;
+        FUN_001f9a68_20a328(&d1, &d1, k / FUN_001f9b20_20a328(&d1));
+        qcopy(&d2, &d1);
+        FUN_001f9a68_20a328(&d2, &d2, 1.4f);
+    }
+    FUN_001f9a10_20a328(&d1, &d1, &a);
+    FUN_001f9a10_20a328(&d2, &d2, &b);
+    r = -1;
+    if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C_20a328 > 0) r = FUN_001f0b58_20a328();
+    ang = 0.0f;
+    if (FUN_001efa68_20a328(&a, &d1, 4, P.p2080, 0) && X.i1C > 0)
+        ang = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
+    if (0.8726646304130554f <= ang || r == 8 || r == 12) {
+        P.i240 = X.i18;
+        *(s32 *)&X.v40.f[2] = 0;
+        FUN_00125180_20a328(&X.v40, &X.v40);
+        t = -P.vE0.f[0] * X.v40.f[0] - P.vE0.f[1] * X.v40.f[1];
+        if (0.0f < t) {
+            FUN_001f9a68_20a328(&X.v40, &X.v40, t);
+            FUN_001f9a10_20a328(&P.vE0, &P.vE0, &X.v40);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00215e58.s", FUN_L15_00215e58);
 /* Select the message associated with the current help mode. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */

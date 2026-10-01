@@ -188,17 +188,59 @@ void FUN_L18_002f2620(char *moby) {
         FUN_001f7d30(m, mat, 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f27c8.s", FUN_L18_002f27c8);
-#include "qcopy.h"
-
-/* Draws 22 textured quads from the L18 tables, in the moby's frame. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3DD0), where it is exact; names translated to the US level program. */
-
 typedef float FVec4_l18[4] __attribute__((aligned(16)));
 
 typedef struct {
     FVec4_l18 v;
 } FRow_l18;
+
+extern float D_L18_001DAE80[][2] __attribute__((section(".data")));
+extern FRow_l18 D_L18_001DA8D0[] __attribute__((section(".data")));
+extern short D_L18_001DAC20[][4][2] __attribute__((section(".data")));
+extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
+
+void FUN_L18_002f27c8(char *moby) {
+    FRow_l18 m[4];
+    int colors[4];
+    float uv[4][2];
+    unsigned long pkt[4];
+    float mat[4][4];
+    char *data = *(char **)(moby + 0x78);
+    int i;
+    int j;
+
+    pkt[1] = get_effect_texture_l18((*(int *)&D_L18_00162324));
+    pkt[3] = (*(int *)&D_L18_00162310) | (long)(*(int *)&D_L18_00162314) << 2;
+    pkt[3] |= (long)(*(int *)&D_L18_00162318) << 4;
+    pkt[3] |= (long)(*(int *)&D_L18_0016231C) << 6;
+    pkt[3] |= (long)(*(int *)&D_L18_00162320) << 32;
+    pkt[2] = 0xFF9000000260;
+    pkt[0] = 0;
+    FUN_001f9fc8(mat);
+    mat[3][2] = *(float *)(moby + 0x18) - *(float *)data;
+    colors[3] = (*(int *)&D_L18_00162328);
+    colors[2] = (*(int *)&D_L18_00162328);
+    colors[1] = (*(int *)&D_L18_00162328);
+    colors[0] = (*(int *)&D_L18_00162328);
+    for (i = 0; i < 38; i++) {
+        float ofs = *(float *)&D_L18_00162308;
+        for (j = 0; j < 4; j++) {
+            int a = D_L18_001DAC20[i][j][0];
+            int b = D_L18_001DAC20[i][j][1];
+
+            qcopy(&m[j], &D_L18_001DA8D0[a]);
+            uv[j][0] = D_L18_001DAE80[b][0] + ofs;
+            uv[j][1] = D_L18_001DAE80[b][1];
+        }
+        FUN_001f7d30(m, mat, 0);
+    }
+}
+#include "qcopy.h"
+
+/* Draws 22 textured quads from the L18 tables, in the moby's frame. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3DD0), where it is exact; names translated to the US level program. */
+
+
 
 extern float D_L18_001DB3A0[][2] __attribute__((section(".data")));
 extern FRow_l18 D_L18_001DB030[] __attribute__((section(".data")));
@@ -250,7 +292,40 @@ void FUN_L18_002f2970(char *moby) {
         FUN_001f7d30(m, mat, 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2b18.s", FUN_L18_002f2b18);
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    char *mobys[1];
+} ML;
+
+extern ML D_L18_0016D260;
+extern int D_L18_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern unsigned char D_L18_0017CE40[];
+extern short D_L18_001623A4 __attribute__((sda));
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L18_002f2b18(char *moby) {
+    int i;
+
+    if (D_L18_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L18_0016D260.count; i++) {
+            char *e = D_L18_0016D260.mobys[i];
+
+            if (*(short *)(e + 0xA6) == 0x4E1) {
+                unsigned char *s = D_L18_0017CE40;
+
+                if (s[1] == 0) {
+                    attach_manipulator(e, 0, s);
+                    *(float *)(s + 0x20) = *(float *)&D_L18_001623A4;
+                    *(float *)(s + 0x24) = *(float *)&D_L18_001623A4;
+                    *(float *)(s + 0x28) = *(float *)&D_L18_001623A4;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2bf0.s", FUN_L18_002f2bf0);
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7278), where it is exact; names translated to the US level program. */

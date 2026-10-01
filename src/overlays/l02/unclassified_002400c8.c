@@ -215,11 +215,77 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d7748.s", FUN_L02_002d7748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d85b8.s", FUN_L02_002d85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dbd38.s", FUN_L02_002dbd38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc2c8.s", FUN_L02_002dc2c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dca10.s", FUN_L02_002dca10);
+/* UpdateMoby_656: steps the moby's animation state from 0/2 (when flagged) and 1/3 (when the timer runs out) */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DDE48), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_001fefc8(void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002dca10(unsigned char *moby) {
+    switch (moby[0x53]) {
+    case 0:
+        if (moby[0x70] & 2) {
+            blend_moby_animation(moby, 1, 0, 0);
+            moby[0xBC] = func_001FA898_r(FUN_001f96b0(random_float_between_alt(180.0f, 240.0f)));
+        }
+        break;
+    case 2:
+        if (moby[0x70] & 2) {
+            blend_moby_animation(moby, 3, 0, 0);
+            moby[0xBC] = func_001FA898_r(FUN_001f96b0(random_float_between_alt(180.0f, 240.0f)));
+        }
+        break;
+    case 1:
+        if (FUN_L00_001fefc8(moby + 0xBC) != 0 && moby[0x53] != 2) {
+            blend_moby_animation(moby, 2, 0, 0);
+        }
+        break;
+    case 3:
+        if (FUN_L00_001fefc8(moby + 0xBC) != 0 && moby[0x53] != 0) {
+            blend_moby_animation(moby, 0, 0, 0);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcfe0.s", FUN_L02_002dcfe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd370.s", FUN_L02_002dd370);
+/* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L02_002dd370(char *moby) {
+    switch (((unsigned char *)moby)[0x53]) {
+    case 0:
+        if (((unsigned char *)moby)[0x70] & 2) {
+            blend_moby_animation(moby, 2, 0, FUN_001f96f8(5));
+            moby[0xBC] = func_001FA898_r(FUN_001f96b0(random_float_between_alt(60.0f, 180.0f)));
+        }
+        break;
+    case 2:
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            if (((unsigned char *)moby)[0x53] != 3) blend_moby_animation(moby, 3, 0, FUN_001f96f8(5));
+        }
+        break;
+    case 3:
+        if (((unsigned char *)moby)[0x70] & 2) {
+            blend_moby_animation(moby, 7, 0, FUN_001f96f8(5));
+            moby[0xBC] = func_001FA898_r(FUN_001f96b0(random_float_between_alt(60.0f, 180.0f)));
+        }
+        break;
+    case 7:
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            if (((unsigned char *)moby)[0x53] != 0) blend_moby_animation(moby, 0, 0, FUN_001f96f8(5));
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002def80.s", FUN_L02_002def80);

@@ -2,7 +2,28 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002922d0.s", FUN_L04_002922d0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
+
+extern float D_L04_00173FE8_d __asm__("D_L04_00173FE8") __attribute__((section(".data")));
+extern int FUN_001efa68(void *, void *, int, int, int);
+
+float FUN_L04_002922d0(float *pos) {
+    float a[4];
+    float b[4];
+    qcopy(a, pos);
+    a[2] = a[2] - 2.5f;
+    if (a[2] < 0.1f) a[2] = 0.1f;
+    qcopy(b, pos);
+    b[2] = b[2] + 0.75f;
+    if (FUN_001efa68(b, a, 2, 0, 0) != 0) return D_L04_00173FE8_d;
+    return 0.0f;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

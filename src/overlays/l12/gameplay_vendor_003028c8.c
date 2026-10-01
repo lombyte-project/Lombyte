@@ -5,7 +5,31 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003028c8.s", FUN_L12_003028c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302c58.s", FUN_L12_00302c58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003032e8.s", FUN_L12_003032e8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
+
+extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
+extern float FUN_001fa580(float, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L08_00313ba8(void *);
+
+void FUN_L12_003032e8(char *moby) {
+    float m[8];
+    char *data = *(char **)(moby + 0x78);
+    FUN_L08_00313ba8(moby);
+    FUN_001f9cf8(m, &D_L12_00161EF0_d, moby + 0xC0);
+    FUN_001f9a10(m, m, moby + 0x10);
+    FUN_L00_002ea9d8(m);
+    m[4] = 0;
+    m[5] = -*(float *)(data + 0x74);
+    m[6] = FUN_001fa580(1.5707964f, *(float *)(moby + 0x48));
+    FUN_L00_002ea9d8(m + 4);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303540.s", FUN_L12_00303540);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00304218.s", FUN_L12_00304218);

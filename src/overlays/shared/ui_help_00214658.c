@@ -560,7 +560,30 @@ void FUN_L00_00216e48(int idx, int a, int b) {
     }
     g->b[idx] = a;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
+/* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
+
+extern u8 D_0013F350_00216ec0[] __asm__("D_0013F350");
+
+void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
+
+void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
+    u8 *base;
+    s16 *p;
+    s32 n = 0;
+    base = D_0013F350_00216ec0;
+    p = (s16 *)(base + 0x21D8);
+    do {
+        n = n + 1;
+        if (p[0] == 0) {
+            p[0] = 1;
+            p[3] = c;
+            p[2] = b;
+            p[1] = a;
+            return;
+        }
+        p = p + 4;
+    } while (n < 8);
+}
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 

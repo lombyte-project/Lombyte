@@ -4,4 +4,95 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002020a8.s", FUN_L17_002020a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_0020dbe8.s", FUN_L17_0020dbe8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_0020e1c0.s", FUN_L17_0020e1c0);
+#define NOT_SDA
+#define MACRO_ADDR
+
+/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui_help_0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
+
+typedef struct {
+    u8 pad0[0x80];
+    f32 v80[4];
+    u8 pad90[0x108];
+    s32 i198;
+    u8 pad19C[0x74];
+    f32 v210[4];
+    f32 f220;
+    f32 f224;
+    f32 f228;
+    f32 f22C;
+    f32 f230;
+    f32 f234;
+    f32 f238;
+    u8 pad23C[0x1B];
+    u8 b257;
+    u8 pad258[0xA8];
+    s32 i300;
+    u8 pad304[0x11A];
+    s16 s41E;
+    s32 i420;
+    u8 pad424[0x10];
+    f32 f434;
+    u8 pad438[0xEAA];
+    u8 b12E2;
+    u8 pad12E3;
+    u8 b12E4;
+    u8 pad12E5[0xD9F];
+    s32 i2084;
+    u8 pad2088[0x4];
+    s32 i208C;
+    u8 pad2090[0x4];
+    s32 i2094;
+    u8 pad2098[0xC];
+    u8 b20A4;
+} P211380;
+extern P211380 D_0013F350_211380 __asm__("D_0013F350");
+extern f32 D_0013F570_211380[] __asm__("D_0013F570");
+extern f32 D_0015ED60_211380 __asm__("D_0015ED60");
+extern f32 D_0015ED64_211380 __asm__("D_0015ED64");
+extern f32 D_0015ED6C_211380 __asm__("D_0015ED6C");
+f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
+f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
+void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
+#define P D_0013F350_211380
+void FUN_L17_0020e1c0(void) {
+    switch (P.b20A4) {
+    case 0:
+        P.f228 = 0.8f;
+        P.f22C = 0.7f;
+        P.f230 = 0.45f;
+        break;
+    case 1:
+        P.f228 = 0.59999996f;
+        P.f22C = 0.45000002f;
+        P.f230 = 0.3f;
+        break;
+    case 3:
+        P.f228 = 0.8f;
+        P.f22C = 0.6f;
+        P.f230 = 0.45f;
+        break;
+    }
+    if (P.i208C == 4) {
+        if (P.i198 > P.i420 && P.s41E == 0) P.f22C = P.f434;
+    } else if (P.i2084 == 6) {
+        P.f22C = 0.5f;
+    } else if (P.i2084 == 4) {
+        P.f228 = 0.35000002f;
+    } else if ((u32)(P.i208C - 0x11) < 2) {
+        P.f228 = 0.0f;
+        P.f22C = 0.0f;
+    } else if (P.b12E2 && P.i300) {
+        P.f228 = 0.8f;
+        P.f22C = 0.9f;
+    } else if (P.i2084 == 0x7F) {
+        P.f230 = 0.8f;
+    }
+    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 || FUN_001f9b80_211380(P.v210, P.v80) > P.f234 * 0.5f) {
+        f32 *q = D_0013F570_211380;
+        P211380 *b = (P211380 *)((u8 *)q - 0x220);
+        approach_value_211380(b->f228, D_0015ED60_211380 * 0.02f, q);
+        approach_value_211380(b->f22C, D_0015ED60_211380 * 0.02f, q + 1);
+        FUN_L00_0025b8c0_211380(q + 5, q + 6, b->f230, D_0015ED64_211380 * 0.02f, D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
+    }
+}
+#undef P

@@ -135,7 +135,40 @@ void FUN_L05_0030c0a8(unsigned char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c220.s", FUN_L05_0030c220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c5b0.s", FUN_L05_0030c5b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317398.s", FUN_L05_00317398);
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    char *mobys[1];
+} ML;
+
+extern ML D_L05_0016CC60;
+extern int D_L05_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern unsigned char D_L05_0017C8A0[];
+extern short D_L05_00161EE8 __attribute__((sda));
+extern void attach_manipulator_c(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L05_00317398(char *moby) {
+    int i;
+
+    if (D_L05_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L05_0016CC60.count; i++) {
+            char *e = D_L05_0016CC60.mobys[i];
+
+            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *s = D_L05_0017C8A0;
+
+                if (s[1] == 0) {
+                    attach_manipulator_c(e, 0, s);
+                    *(float *)(s + 0x20) = *(float *)&D_L05_00161EE8;
+                    *(float *)(s + 0x24) = *(float *)&D_L05_00161EE8;
+                    *(float *)(s + 0x28) = *(float *)&D_L05_00161EE8;
+                }
+            }
+        }
+    }
+}
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_00319B58), where it is exact; names translated to the US level program. */

@@ -6,5 +6,116 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0021b698.s", FUN_L02_0021b698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0021ff70.s", FUN_L02_0021ff70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002203e8.s", FUN_L02_002203e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002216a0.s", FUN_L02_002216a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00222270.s", FUN_L02_00222270);
+typedef unsigned int u128_222270 __attribute__((mode(TI), aligned(16)));
+#include "qcopy.h"
+typedef struct {
+    u8 pad0[0x80];
+    u128_222270 pos;
+    u8 pad90[0x1CC - 0x90];
+    s32 w1CC;
+    u8 pad1D0[0x1F8 - 0x1D0];
+    s16 h1F8;
+    u8 pad1FA[6];
+    u128_222270 q200;
+    u128_222270 q210;
+    f32 f220;
+    f32 f224;
+    u8 pad228[0xC];
+    f32 f234;
+    u8 pad238[4];
+    s32 w23C;
+    u8 pad240[0x17];
+    u8 b257;
+    u8 pad258[0x2080 - 0x258];
+    s32 w2080;
+    s32 w2084;
+    u8 pad2088[4];
+    s32 w208C;
+    u8 pad2090[0x20B3 - 0x2090];
+    u8 b20B3;
+    u8 pad20B4[0x22DA - 0x20B4];
+    s16 h22DA;
+} G_222270;
+typedef union { u128_222270 q; f32 f[4]; } V_222270;
+extern G_222270 G_222270v __asm__("D_0013F350");
+extern f32 D_0015ED60;
+extern u128_222270 coll_222270[] __asm__("D_L02_00174470") __attribute__((section(".data")));
+extern void vzero_222270(void *) __asm__("FUN_001f99f8");
+extern void f2347c0_222270(void) __asm__("FUN_L00_002347c0");
+extern void f233810_222270(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void f2334d0_222270(void *, void *, f32) __asm__("FUN_L00_002334d0");
+extern void vadd_222270(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vsub_222270(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 vlen_222270(void *) __asm__("FUN_001f9af0");
+extern s32 coll1_222270(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
+extern s32 coll2_222270(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+extern s32 coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
+extern void vscl_222270(void *, void *, f32) __asm__("FUN_001f9bf8");
+s32 FUN_L02_00222270(s32 mode) {
+    V_222270 old;
+    V_222270 v;
+    V_222270 w;
+    s32 mask;
+    s32 i;
+    u128_222270 *c;
+    f32 h;
+    if (G_222270v.w1CC != 0) {
+        return 1;
+    }
+    qcopy(&old, &G_222270v.pos);
+    vzero_222270(&v);
+    if (G_222270v.h22DA != 0) {
+        f2347c0_222270();
+        G_222270v.h22DA = 0;
+    }
+    if (G_222270v.w208C != 0x11) {
+        if (G_222270v.b20B3 != 0 || G_222270v.h1F8 != 0) {
+            if (G_222270v.b20B3 == 1 || G_222270v.h1F8 != 0) {
+                f233810_222270(&v, &v, 0.6f);
+            } else {
+                f2334d0_222270(&v, &v, -G_222270v.f224);
+            }
+        } else {
+            v.f[2] = G_222270v.f224;
+        }
+    }
+    vadd_222270(&G_222270v.pos, &G_222270v.pos, &v);
+    mask = 0x324;
+    if (G_222270v.w2084 == 0x7F) {
+        mask = 0xD24;
+    }
+    for (i = 0; i < 8; i++) {
+        if (G_222270v.b20B3 != 0) {
+            if (!coll1_222270(&G_222270v.pos, mask, G_222270v.w2080, D_0015ED60 * 0.4f)) break;
+        } else {
+            s32 a;
+            h = G_222270v.f220 - G_222270v.f224;
+            if (h < 0.05f) {
+                h = 0.05f;
+            }
+            a = coll2_222270(&G_222270v.pos, mask, G_222270v.f234, G_222270v.w2080, h);
+            if (!(a | coll3_222270(&G_222270v.pos, G_222270v.f234))) break;
+        }
+        c = coll_222270;
+        qcopy(&G_222270v.pos, c);
+        qcopy(&G_222270v.q200, c + 1);
+        qcopy(&G_222270v.q210, c - 1);
+        G_222270v.b257 = 1;
+        G_222270v.w23C = ((s32 *)c)[-6];
+    }
+    vsub_222270(&G_222270v.pos, &G_222270v.pos, &v);
+    vsub_222270(&w, &G_222270v.pos, &old);
+    h = vlen_222270(&w);
+    if (G_222270v.f234 * 1.5f < h) {
+        if (mode == 0xF) {
+            if (512.0f < w.f[0]) w.f[0] = 512.0f; else if (w.f[0] < -512.0f) w.f[0] = -512.0f;
+            if (512.0f < w.f[1]) w.f[1] = 512.0f; else if (w.f[1] < -512.0f) w.f[1] = -512.0f;
+            if (512.0f < w.f[2]) w.f[2] = 512.0f; else if (w.f[2] < -512.0f) w.f[2] = -512.0f;
+            vscl_222270(&w, &w, G_222270v.f234);
+            vadd_222270(&G_222270v.pos, &old, &w);
+        }
+        return -1;
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00225c20.s", FUN_L02_00225c20);

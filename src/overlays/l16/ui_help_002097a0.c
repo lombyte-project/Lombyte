@@ -28,5 +28,127 @@ void FUN_L16_0020f8b0(void) {
     FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_0020ffb0.s", FUN_L16_0020ffb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_00210b60.s", FUN_L16_00210b60);
+/* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/ui_help_0020c758.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
+
+typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
+typedef struct {
+    u8 pad0[0x80];
+    u128_2133a8 pos;
+    u8 pad90[0x1CC - 0x90];
+    s32 w1CC;
+    u8 pad1D0[0x1F8 - 0x1D0];
+    s16 h1F8;
+    u8 pad1FA[6];
+    u128_2133a8 q200;
+    u128_2133a8 q210;
+    f32 f220;
+    f32 f224;
+    u8 pad228[0xC];
+    f32 f234;
+    u8 pad238[4];
+    s32 w23C;
+    u8 pad240[0x17];
+    u8 b257;
+    u8 pad258[0x2080 - 0x258];
+    s32 w2080;
+    s32 w2084;
+    u8 pad2088[4];
+    s32 w208C;
+    u8 pad2090[0x20B3 - 0x2090];
+    u8 b20B3;
+    u8 pad20B4[0x22DA - 0x20B4];
+    s16 h22DA;
+} G_2133a8;
+typedef union { u128_2133a8 q; f32 f[4]; } V_2133a8;
+extern G_2133a8 G_2133a8v __asm__("D_0013F350");
+extern f32 D_0015ED60;
+extern u128_2133a8 coll_2133a8[] __asm__("D_L16_00174270") __attribute__((section(".data")));
+extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
+extern void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
+extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern void f233810_2133a8(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
+extern void vadd_2133a8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vsub_2133a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 vlen_2133a8(void *) __asm__("FUN_001f9af0");
+extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
+extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+extern s32 coll3_2133a8(void *, f32) __asm__("FUN_L00_001f3170");
+extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
+s32 FUN_L16_00210b60(s32 mode) {
+    V_2133a8 old;
+    V_2133a8 v;
+    V_2133a8 w;
+    s32 mask;
+    s32 i;
+    u128_2133a8 *c;
+    f32 h;
+    if (G_2133a8v.w1CC != 0) {
+        return 1;
+    }
+    qcopy(&old, &G_2133a8v.pos);
+    vzero_2133a8(&v);
+    if (G_2133a8v.h22DA != 0) {
+        f2347c0_2133a8();
+        G_2133a8v.h22DA = 0;
+    }
+    if (G_2133a8v.w208C != 0x11) {
+        if (G_2133a8v.w208C == 0x16) {
+            f233660_2133a8(&v, 0.0f, 0.0f, 0.7f);
+            vsub_2133a8(&v, &v, &G_2133a8v.pos);
+        } else if (G_2133a8v.b20B3 != 0 || G_2133a8v.h1F8 != 0) {
+            if (G_2133a8v.b20B3 == 1 || G_2133a8v.h1F8 != 0 || (unsigned)(G_2133a8v.w208C - 0x15) < 2) {
+                f233810_2133a8(&v, &v, 0.6f);
+            } else {
+                f2334d0_2133a8(&v, &v, -G_2133a8v.f224);
+            }
+        } else {
+            v.f[2] = G_2133a8v.f224;
+        }
+    }
+    vadd_2133a8(&G_2133a8v.pos, &G_2133a8v.pos, &v);
+    mask = 0x24;
+    if (G_2133a8v.w2084 == 0x7F) {
+        mask = 0xD24;
+    }
+    for (i = 0; i < 8; i++) {
+        if (G_2133a8v.b20B3 != 0) {
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.4f)) break;
+        } else if (G_2133a8v.w208C == 0x11) {
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, 0.6f)) break;
+        } else if (G_2133a8v.w208C == 0x16) {
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.5f)) break;
+        } else if (G_2133a8v.w208C == 0xF) {
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.45f)) break;
+        } else {
+            s32 a;
+            h = G_2133a8v.f220 - G_2133a8v.f224;
+            if (h < 0.05f) {
+                h = 0.05f;
+            }
+            a = coll2_2133a8(&G_2133a8v.pos, mask, G_2133a8v.f234, G_2133a8v.w2080, h);
+            if (!(a | coll3_2133a8(&G_2133a8v.pos, G_2133a8v.f234))) break;
+        }
+        c = coll_2133a8;
+        qcopy(&G_2133a8v.pos, c);
+        qcopy(&G_2133a8v.q200, c + 1);
+        qcopy(&G_2133a8v.q210, c - 1);
+        G_2133a8v.b257 = 1;
+        G_2133a8v.w23C = ((s32 *)c)[-6];
+    }
+    vsub_2133a8(&G_2133a8v.pos, &G_2133a8v.pos, &v);
+    vsub_2133a8(&w, &G_2133a8v.pos, &old);
+    h = vlen_2133a8(&w);
+    if (G_2133a8v.f234 * 1.5f < h) {
+        if (mode == 0xF) {
+            if (512.0f < w.f[0]) w.f[0] = 512.0f; else if (w.f[0] < -512.0f) w.f[0] = -512.0f;
+            if (512.0f < w.f[1]) w.f[1] = 512.0f; else if (w.f[1] < -512.0f) w.f[1] = -512.0f;
+            if (512.0f < w.f[2]) w.f[2] = 512.0f; else if (w.f[2] < -512.0f) w.f[2] = -512.0f;
+            vscl_2133a8(&w, &w, G_2133a8v.f234);
+            vadd_2133a8(&G_2133a8v.pos, &old, &w);
+        }
+        return -1;
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_00211098.s", FUN_L16_00211098);

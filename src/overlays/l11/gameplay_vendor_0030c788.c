@@ -133,7 +133,40 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311a88.s", FUN_L11_00311a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311be8.s", FUN_L11_00311be8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003125a8.s", FUN_L11_003125a8);
+extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
+extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
+extern int FUN_L11_00308848(void *, void *, void *, float, float);
+extern short D_L11_0016205C_d __asm__("D_L11_0016205C") __attribute__((sda));
+extern short D_L11_00162060_d __asm__("D_L11_00162060") __attribute__((sda));
+extern short D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern unsigned char D_0013A4E0[];
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L11_003125a8(char *moby, char *obj, float p2, float p3) {
+    char a[16];
+    char b[16];
+    char c[16];
+    char d[16];
+
+    build_spherical_offset((f32 *)a, *(float *)&D_L11_0016205C_d * *(float *)&D_L11_00162090_d, p2, p3);
+    FUN_001f9a10(a, a, obj);
+    if (FUN_001f9740_c(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
+        FUN_001f9bf8(c, a, 2.2f);
+        FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
+        FUN_001f9a10(b, b, c);
+        FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
+        *(int *)(obj + 0x80) = *(int *)&D_L11_00162060_d;
+        obj[0x61] ^= 1;
+        FUN_0022da68_c(3, 0, (int)moby);
+    }
+    FUN_001f9bf8(a, a, 23.0f);
+    FUN_001f9a10(d, a, moby + 0x10);
+    FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
+}
 /* on a pad press, fires the aimed shot and resets the cooldown */
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
 

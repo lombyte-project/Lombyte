@@ -55,9 +55,128 @@ char *FUN_L15_002e4580(char *src, float *v, char *pos) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d6810.s", FUN_L15_002d6810);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d77c0.s", FUN_L15_002d77c0);
+extern int D_L15_0015F5CC;
+extern short D_L15_00161BD4 __attribute__((sda));
+extern short D_L15_00161BD8 __attribute__((sda));
+extern short D_L15_00161BDC __attribute__((sda));
+extern short D_L15_00161BE0 __attribute__((sda));
+extern short D_L15_00161BE4 __attribute__((sda));
+extern short D_L15_00161BE8 __attribute__((sda));
+extern short D_L15_00161BEC __attribute__((sda));
+extern short D_L15_00161BF0 __attribute__((sda));
+extern short D_L15_00161BF4 __attribute__((sda));
+extern void DrawUIFrame(int, int, int, int, int) __asm__("FUN_001f5f18");
+extern float func_001FA888(int) __asm__("FUN_001fa6c0");
+extern float FastSin(float) __asm__("FUN_001f9de0");
+extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern void FontPrintCenterLarge(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+
+#define W(x) (*(int *)&(x))
+
+void FUN_L15_002d77c0(char *moby) {
+    char buf[8];
+    char *data = *(char **)(moby + 0x78);
+    float v;
+    int col;
+
+    DrawUIFrame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
+                 W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4), W(D_L15_00161BF4));
+    v = FastSin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    if (v > 1.0f) {
+        v = 1.0f;
+    } else if (v < 0.0f) {
+        v = 0.0f;
+    }
+    col = FastTweenColor(W(D_L15_00161BDC), W(D_L15_00161BE0), v);
+    buf[0] = 0x30;
+    buf[1] = *(short *)(data + 0x12) / scale_ticks(0xE10) + 0x30;
+    buf[2] = 0x3A;
+    buf[3] = *(short *)(data + 0x12) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
+    buf[4] = *(short *)(data + 0x12) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
+    buf[5] = 0x3A;
+    buf[6] = *(short *)(data + 0x12) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
+    buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    FontPrintCenterLarge(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d79e8.s", FUN_L15_002d79e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d7bb0.s", FUN_L15_002d7bb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d8710.s", FUN_L15_002d8710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d8e48.s", FUN_L15_002d8e48);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
+typedef struct { float u, v; } UV2d8e48;
+typedef struct {
+    V2d8e48 corner[4];
+    unsigned int color[4];
+    UV2d8e48 uv[4];
+    long unk70, tex, unk80, unk88;
+} Q2d8e48;
+extern unsigned int D_L15_00161CAC __asm__("D_L15_00161CAC") __attribute__((sda));
+extern unsigned int D_L15_00161C60 __asm__("D_L15_00161C60") __attribute__((sda));
+extern float D_L15_00161CB4 __asm__("D_L15_00161CB4") __attribute__((sda));
+extern float D_L15_00161CB8 __asm__("D_L15_00161CB8") __attribute__((sda));
+extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
+extern V2d8e48 D_0013F5E0 __asm__("D_0013F5E0");
+extern V2d8e48 D_L15_001D36F0[] __asm__("D_L15_001D36F0") __attribute__((section(".data")));
+extern UV2d8e48 D_L15_001D3730[] __asm__("D_L15_001D3730") __attribute__((section(".data")));
+extern void vsub_2d8e48(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vadd_2d8e48(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vscl_2d8e48(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_2d8e48(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void vmul_2d8e48(float, void *, void *) __asm__("FUN_001f9a68");
+extern void xform_2d8e48(void *, void *, void *) __asm__("FUN_001f9d20");
+extern long tex_2d8e48(int) __asm__("FUN_001f44b8");
+extern float rnd_2d8e48(float, float) __asm__("FUN_L00_00257c48");
+extern void draw_2d8e48(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L15_002d8e48(void *mv) {
+    Q2d8e48 quad;
+    V2d8e48 mat[4];
+    V2d8e48 *pos;
+    unsigned int c;
+    float s;
+    int i;
+    pos = *(V2d8e48 **)((char *)mv + 0x78);
+    quad.tex = tex_2d8e48(0xB);
+    pos = (V2d8e48 *)((char *)pos + 0xF0);
+    quad.unk88 = 0x8000000048L;
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk70 = 0;
+    vsub_2d8e48(&mat[3], &D_L15_001673C0, pos);
+    vscl_2d8e48(&mat[3], &mat[3], 0.3f);
+    vadd_2d8e48(&mat[3], &mat[3], pos);
+    mat[3].f[3] = 1.0f;
+    vsub_2d8e48(&mat[0], &D_L15_001673C0, &mat[3]);
+    vscl_2d8e48(&mat[0], &mat[0], 1.0f);
+    cross_2d8e48(&mat[1], &mat[0], &D_0013F5E0);
+    vscl_2d8e48(&mat[1], &mat[1], -1.0f);
+    cross_2d8e48(&mat[2], &mat[1], &mat[0]);
+    c = D_L15_00161CAC;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    s = D_L15_00161CB4 + rnd_2d8e48(0.0f, 0.025f);
+    for (i = 0; i < 4; i++) {
+        vmul_2d8e48(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
+        quad.uv[i].u = D_L15_001D3730[i].u;
+        quad.uv[i].v = D_L15_001D3730[i].v;
+    }
+    draw_2d8e48(&quad, 0, 0);
+    c = D_L15_00161C60;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    s = D_L15_00161CB8 + rnd_2d8e48(0.0f, 0.05f);
+    for (i = 0; i < 4; i++) {
+        vmul_2d8e48(s, &quad.corner[i], &D_L15_001D36F0[i]);
+        xform_2d8e48(&quad.corner[i], &quad.corner[i], &mat[0]);
+        quad.uv[i].u = D_L15_001D3730[i].u;
+        quad.uv[i].v = D_L15_001D3730[i].v;
+    }
+    draw_2d8e48(&quad, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e4380.s", FUN_L15_002e4380);

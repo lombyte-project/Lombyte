@@ -128,7 +128,39 @@ void FUN_L07_00313f60(char *moby, char *d, float *t) {
     *(float *)(d + 0x264) = *(float *)(d + 0x1FC);
     FUN_L00_002628d8(moby, d + 0x200, 0xB, k * 0.030f, k * 0.3f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314058.s", FUN_L07_00314058);
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    char *mobys[1];
+} L07MobyList;
+
+extern L07MobyList D_L07_0016C8E0;
+extern int D_L07_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern unsigned char D_L07_0020C6C0[];
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L07_00314058(char *moby) {
+    int i;
+
+    if (D_L07_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L07_0016C8E0.count; i++) {
+            char *e = D_L07_0016C8E0.mobys[i];
+
+            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *s = D_L07_0020C6C0;
+
+                if (D_0015EDB0 != 0 && s[1] == 0) {
+                    attach_manipulator(e, 0xB, s);
+                    *(float *)(s + 0x20) = 2.75f;
+                    *(float *)(s + 0x24) = 2.75f;
+                    *(float *)(s + 0x28) = 2.75f;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317910.s", FUN_L07_00317910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317cb0.s", FUN_L07_00317cb0);

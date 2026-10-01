@@ -358,4 +358,78 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea598.s", FUN_L18_002ea598);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eacd8.s", FUN_L18_002eacd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002eaea0.s", FUN_L18_002eaea0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ec130.s", FUN_L18_002ec130);
+typedef struct { float f[4]; } __attribute__((aligned(16))) Vec130;
+typedef struct { float u, v; } UVec130;
+typedef struct {
+    Vec130 corner[4];
+    unsigned int color[4];
+    UVec130 uv[4];
+    long unk70, tex, unk80, unk88;
+} Qec130;
+extern unsigned int D_L18_001620A0 __asm__("D_L18_001620A0") __attribute__((sda));
+extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda));
+extern float D_L18_001620A8 __asm__("D_L18_001620A8") __attribute__((sda));
+extern float D_L18_001620AC __asm__("D_L18_001620AC") __attribute__((sda));
+extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") __attribute__((section(".data")));
+extern Vec130 D_0013F5E0 __asm__("D_0013F5E0");
+extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") __attribute__((section(".data")));
+extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") __attribute__((section(".data")));
+extern void vsub_ec130(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void vadd_ec130(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_ec130(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
+extern void xform_ec130(void *, void *, void *) __asm__("FUN_001f9d20");
+extern long tex_ec130(int) __asm__("FUN_001f44b8");
+extern float rnd_ec130(float, float) __asm__("FUN_L00_00257c48");
+extern void draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
+
+void FUN_L18_002ec130(void *mv) {
+    Qec130 quad;
+    Vec130 mat[4];
+    Vec130 *pos;
+    unsigned int c;
+    float s;
+    int i;
+    pos = (Vec130 *)mv;
+    quad.tex = tex_ec130(0xB);
+    pos = (Vec130 *)((char *)pos + 0x10);
+    quad.unk88 = 0x8000000048L;
+    quad.unk80 = 0xFF9000000260L;
+    quad.unk70 = 0;
+    vsub_ec130(&mat[3], &D_L18_001677C0, pos);
+    vscl_ec130(&mat[3], &mat[3], 0.3f);
+    vadd_ec130(&mat[3], &mat[3], pos);
+    mat[3].f[3] = 1.0f;
+    vsub_ec130(&mat[0], &D_L18_001677C0, &mat[3]);
+    vscl_ec130(&mat[0], &mat[0], 1.0f);
+    cross_ec130(&mat[1], &mat[0], &D_0013F5E0);
+    vscl_ec130(&mat[1], &mat[1], -1.0f);
+    cross_ec130(&mat[2], &mat[1], &mat[0]);
+    c = D_L18_001620A0;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    s = D_L18_001620A8 + rnd_ec130(0.0f, 0.025f);
+    for (i = 0; i < 4; i++) {
+        vmul_ec130(s, &quad.corner[i], &D_L18_001D9CA0[i]);
+        xform_ec130(&quad.corner[i], &quad.corner[i], &mat[0]);
+        quad.uv[i].u = D_L18_001D9CE0[i].u;
+        quad.uv[i].v = D_L18_001D9CE0[i].v;
+    }
+    draw_ec130(&quad, 0, 0);
+    c = D_L18_00162054;
+    quad.color[3] = c;
+    quad.color[2] = c;
+    quad.color[1] = c;
+    quad.color[0] = c;
+    s = D_L18_001620AC + rnd_ec130(0.0f, 0.05f);
+    for (i = 0; i < 4; i++) {
+        vmul_ec130(s, &quad.corner[i], &D_L18_001D9CA0[i]);
+        xform_ec130(&quad.corner[i], &quad.corner[i], &mat[0]);
+        quad.uv[i].u = D_L18_001D9CE0[i].u;
+        quad.uv[i].v = D_L18_001D9CE0[i].v;
+    }
+    draw_ec130(&quad, 0, 0);
+}

@@ -143,8 +143,57 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ce238.s", FUN_L03_002ce238);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3cd8.s", FUN_L03_002d3cd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d47c0.s", FUN_L03_002d47c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d5208.s", FUN_L03_002d5208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db480.s", FUN_L03_002db480);
+typedef struct {
+    char pad0[0x44];
+    short count;
+    char pad46[0x132];
+    char *mobys[1];
+} ML;
+
+extern ML D_L03_0016C960;
+extern int D_L03_0015F5C4;
+extern unsigned char D_0015EDB0;
+extern unsigned char D_L03_0017C540[];
+extern short D_L03_00161BC4 __attribute__((sda));
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L03_002db480(char *moby) {
+    int i;
+
+    if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {
+        for (i = 0; i < D_L03_0016C960.count; i++) {
+            char *e = D_L03_0016C960.mobys[i];
+
+            if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
+                unsigned char *s = D_L03_0017C540;
+
+                if (s[1] == 0) {
+                    attach_manipulator(e, 1, s);
+                    *(float *)(s + 0x20) = *(float *)&D_L03_00161BC4;
+                    *(float *)(s + 0x24) = *(float *)&D_L03_00161BC4;
+                    *(float *)(s + 0x28) = *(float *)&D_L03_00161BC4;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc310.s", FUN_L03_002dc310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc478.s", FUN_L03_002dc478);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dc9b0.s", FUN_L03_002dc9b0);
+extern void FUN_L02_002a4058(void *, int, float);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern unsigned char D_L03_001DC1A0[];
+extern void FUN_00215420(void);
+
+void FUN_L03_002dc9b0(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        FUN_L02_002a4058(D_L03_001DC1A0, 0x20, 0.6666667f);
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        AddDrawCallback(FUN_00215420, moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dca30.s", FUN_L03_002dca30);

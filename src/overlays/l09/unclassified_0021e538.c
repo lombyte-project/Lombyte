@@ -145,7 +145,29 @@ void FUN_L09_002ef750(void) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef868.s", FUN_L09_002ef868);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef9b0.s", FUN_L09_002ef9b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efda8.s", FUN_L09_002efda8);
+extern char *CreateMoby_c(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L09_002efda8(char *owner, void *position, float angle) {
+    u128_ee380 pos;
+    void *copy = &pos;
+    char *moby;
+
+    pos = *(u128_ee380 *)position;
+    moby = CreateMoby_c(0x144);
+    if (moby != 0) {
+        unsigned char state;
+
+        ((unsigned char *)moby)[0x30] = ((unsigned char *)owner)[0x30];
+        state = ((unsigned char *)owner)[0x30];
+        moby[0x31] = 1;
+        *(short *)(moby + 0x32) = state;
+        qcopy(moby + 0x10, copy);
+        qcopy(moby + 0x40, owner + 0x40);
+        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efe48.s", FUN_L09_002efe48);
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
 

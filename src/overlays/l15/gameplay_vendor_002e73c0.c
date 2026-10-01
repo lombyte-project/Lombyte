@@ -71,7 +71,32 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ea748.s", FUN_L15_002ea748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eabd8.s", FUN_L15_002eabd8);
+/* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
+extern float FUN_001f96b0(float);
+extern int FUN_001f9740(int *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L15_0016207C;
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L15_002eabd8(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        data[0] = func_001FA898_r(FUN_001f96b0(*(float *)(data + 1) * 60.0f));
+        moby[0x20] = 1;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        break;
+    case 1:
+        if (FUN_001f9740(data)) {
+            data[0] = func_001FA898_r(FUN_001f96b0(*(float *)&D_L15_0016207C * 60.0f));
+            FUN_L15_002e7ed8_c(moby, moby + 0x10);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eac90.s", FUN_L15_002eac90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);

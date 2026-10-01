@@ -194,7 +194,57 @@ void FUN_L11_003191c0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319838.s", FUN_L11_00319838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a758.s", FUN_L11_0031a758);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a7d8.s", FUN_L11_0031a7d8);
+extern char *D_L11_0015FFD8;
+extern char D_0013E533[];
+extern char D_L11_001677C0[];
+extern char D_L11_001677D0[];
+extern float FUN_001fa580(float, float);
+extern short *D_L11_001AC240[];
+extern s32 random_integer_below_c(s32 arg0) __asm__("FUN_00213260");
+extern void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+char *FUN_L11_0031a7d8(int list) {
+    short *s = D_L11_001AC240[list];
+    float A[4], B[4], C[4], D[4], E[4], F[4];
+    char *m;
+    char *d;
+    int idx;
+
+    do {
+        idx = (*s & 0x7FFF) << 8;
+        if (*(short *)(0xA6 + idx + D_L11_0015FFD8) != 0x527) continue;
+        if (*(unsigned char *)(0x20 + idx + D_L11_0015FFD8) != 4) continue;
+        if (random_integer_below_c(10)) continue;
+        m = D_L11_0015FFD8 + idx;
+        d = *(char **)(m + 0x78);
+        qcopy(C, D_L11_001677D0);
+        C[0] = 0;
+        if (C[1] > 0.17453292f) C[1] = 0.17453292f;
+        else if (C[1] < -0.17453292f) C[1] = -0.17453292f;
+        FUN_001fa030(D, C);
+        {
+            float f = FUN_001fa580(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
+            FUN_001f9bf8(A, E, FUN_001f9de0(f) * 12.0f);
+            FUN_001f9a10(B, D_L11_001677C0, A);
+            FUN_001f9bf8(A, F, FUN_001f9dc8(f) * 12.0f);
+        }
+        FUN_001f9a10(B, B, A);
+        FUN_001f9bf8(A, D, 6.0f);
+        FUN_001f9a10(B, B, A);
+        qcopy(d + 0xB0, D_0013E533 + 0xE9D);
+        qcopy(m + 0x10, B);
+        m[0x20] = 5;
+        m[0xBC] = 1;
+        *(float *)(d + 0x6C) = D_0015ED6C * 20.0f;
+        *(float *)(d + 0x94) = 5.0f;
+        *(int *)(d + 0x98) = 0;
+        if (*(unsigned char *)(m + 0x53)) blend_moby_animation(m, 0, 0, FUN_001f96f8(10));
+        *(unsigned short *)(m + 0x34) &= 0xFFFE;
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        return m;
+    } while (*s++ >= 0);
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031aa80.s", FUN_L11_0031aa80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ab08.s", FUN_L11_0031ab08);
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
@@ -243,7 +293,44 @@ void FUN_L11_0031d8d8(int arg) {
         FUN_L00_001fde98(a[i], b[i], d[i], D_L11_001FF770, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031db50.s", FUN_L11_0031db50);
+extern int D_L11_001624F8 __attribute__((sda));
+extern int D_L11_001624FC;
+extern int D_L11_00162518 __attribute__((sda));
+extern int D_L11_0016251C;
+extern int D_L11_00162528 __attribute__((sda));
+extern unsigned char D_L11_00162590;
+extern int get_effect_texture_alt_31db50(int) __asm__("FUN_001f44b8");
+extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
+extern void FUN_L11_0031d8d8_c(int) __asm__("FUN_L11_0031d8d8");
+extern void FUN_L08_002f0c18(int);
+void vu1_add_g_sregister_31db50(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L11_0031db50(void) {
+    vu1_add_g_sregister_31db50(0x42, 0x8000000044L);
+    vu1_add_g_sregister_31db50(8, 0);
+    vu1_add_g_sregister_31db50(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister_31db50(0x47, 0x513F1);
+    FUN_001f76a0_31db50();
+    vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2C));
+    vu1_add_g_sregister_31db50(0x42, (long)D_L11_001624F8 << 32 | 0x44);
+    FUN_L11_0031d8d8_c(0);
+    if (D_L11_00162590 != 0) {
+        vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x29));
+        vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_00162590) >> 8) << 32 | 0x68);
+        FUN_L11_0031d8d8_c(1);
+        vu1_add_g_sregister_31db50(0x42, (long)((D_L11_001624FC * D_L11_00162590) >> 8) << 32 | 0x62);
+        FUN_L11_0031d8d8_c(2);
+    }
+    vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2A));
+    vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162518 << 32 | 0x48);
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister_31db50(0x42, (long)D_L11_0016251C << 32 | 0x48);
+    FUN_L08_002f0c18(1);
+    vu1_add_g_sregister_31db50(6, get_effect_texture_alt_31db50(0x2B));
+    vu1_add_g_sregister_31db50(0x42, (long)D_L11_00162528 << 32 | 0x48);
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister_31db50(0x47, 0x5360B);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e2f0.s", FUN_L11_0031e2f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e930.s", FUN_L11_0031e930);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031f150.s", FUN_L11_0031f150);
