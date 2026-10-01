@@ -166,6 +166,7 @@ python3 rebuild-iso.py \
 | :--------------- | :-------------------------------------------------------------- |
 | `make check`     | the public CI checks (tests, script parse) without a full build |
 | `make progress`  | regenerate `progress/report.json` after `make elf`              |
+| `.venv/bin/python scripts/generate_treemap.py` | regenerate the progress map (`assets/decomp_map.svg`, `.json`) after `make progress` |
 | `make clean-iso` | remove the rebuilt ISO                                          |
 
 | Variable              | Default / usage                                     |

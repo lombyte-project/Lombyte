@@ -122,6 +122,12 @@ Once the unit matches, make the C the only compiled code:
 4. Run `make elf` again; it must end with `PASS`.
 5. Regenerate the decomp.dev progress report with `make progress` and commit
    `progress/report.json` with the promotion; CI fails if it is stale.
+6. Regenerate the progress map from that report and commit
+   `assets/decomp_map.svg` and `assets/decomp_map.json` with it:
+
+   ```sh
+   .venv/bin/python scripts/generate_treemap.py
+   ```
 
 ### 7. Open a pull request
 
