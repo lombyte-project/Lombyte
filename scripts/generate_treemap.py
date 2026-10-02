@@ -1248,7 +1248,7 @@ def main(argv=None) -> int:
             return 2
         scores, index_path = measured
     elif not args.no_scores:
-        scores = committed_function_scores(repo / "progress" / "fuzzy_scores.json")
+        scores = committed_function_scores(repo / "build" / "progress" / "fuzzy_scores.json")
 
     for unit in units:
         score = scores.get(unit["owner"])

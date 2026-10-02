@@ -146,11 +146,11 @@ Every pull request runs the public `tools` job in
 These checks need no game data and never upload build outputs. `make check`
 runs them locally, and also writes the progress report and map to
 `build/progress/` for a preview. The full `make elf` rebuild stays a local,
-contributor-run gate (see above); CI does not run it for you.
+contributor-run gate (see above); CI runs it only on `main`, to measure C_FUZZY.
 
 The `progress` workflow in
-[`.github/workflows/progress.yml`](.github/workflows/progress.yml) does not
-build the game and uses no secrets. C_EXACT follows from the tree, so on every
+[`.github/workflows/progress.yml`](.github/workflows/progress.yml) needs no
+game data for C_EXACT, which follows from the tree, so on every
 run it generates the objdiff report (`scripts/gen_progress_report.py`) and the
 progress map (`scripts/generate_treemap.py`), validates the report with objdiff
 and uploads it as the `SCUS_971.99_report` artifact that
@@ -162,9 +162,11 @@ branch and [`progress-comment.yml`](.github/workflows/progress-comment.yml)
 posts the result as one comment, updated on every push. None of these files is
 committed, so they cannot fall behind `main` or conflict between pull requests.
 
-The one input CI cannot measure is C_FUZZY, the similarity of pending C bodies,
-which needs a build. It is kept in `progress/fuzzy_scores.json`; refreshing it
-with `make progress` after `make elf` is optional and only moves C_FUZZY.
+C_FUZZY, the similarity of pending C bodies, needs a build. On every push to
+`main` the workflow also runs `./setup.sh` and `make elf` with the retail ELF
+from a repository secret, measures the pending bodies and publishes
+`fuzzy_scores.json` with the report; pull requests reuse main's last
+measurement. Locally, `make progress` after `make elf` previews the same.
 The report holds unit names, symbols, addresses, sizes and match percentages
 only, never retail bytes.
 

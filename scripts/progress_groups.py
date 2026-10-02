@@ -177,7 +177,7 @@ def parse_address(value) -> int | None:
 
 
 def committed_function_scores(path: Path) -> dict[object, float]:
-    """Read per-function scores from ``progress/fuzzy_scores.json``
+    """Read per-function scores from ``fuzzy_scores.json``
     (``rnc-fuzzy-scores-v1``) or from a flat or grouped report v2 JSON."""
     if not path.is_file():
         return {}
@@ -206,8 +206,8 @@ def committed_function_scores(path: Path) -> dict[object, float]:
 def write_fuzzy_scores(path: Path, report: dict) -> int:
     """Keep the measured similarity of every partly matched function.
 
-    The scores need a local build to measure, so they are the one progress
-    input CI cannot recompute; everything else is derived from the tree.
+    The scores need a build to measure (CI on main does it); everything else
+    in the report is derived from the tree.
     """
     scores = {}
     for unit in report.get("units", []):

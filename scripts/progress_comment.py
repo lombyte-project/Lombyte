@@ -113,8 +113,8 @@ def render(base: dict, head: dict, base_label: str) -> str:
         lines += ["", f"**{len(lost)} function{'s' if len(lost) != 1 else ''} no longer "
                   f"matched** ({sum(item['size'] for item in lost):,} B):", ""]
         lines += function_rows(lost)
-    lines += ["", f"<sub>Compared with {base_label}. C_FUZZY uses the scores in "
-              "`progress/fuzzy_scores.json`.</sub>", ""]
+    lines += ["", f"<sub>Compared with {base_label}. C_FUZZY uses "
+              "main's last measurement.</sub>", ""]
     return "\n".join(lines)
 
 

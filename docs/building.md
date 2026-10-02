@@ -200,7 +200,7 @@ python3 rebuild-iso.py \
 | Target           | Effect                                                          |
 | :--------------- | :-------------------------------------------------------------- |
 | `make check`     | the public CI checks (tests, script parse) and a preview of the progress report and map in `build/progress/`, without a full build |
-| `make progress`  | optional, after `make elf`: re-measure C_FUZZY into `progress/fuzzy_scores.json` and preview the report and map |
+| `make progress`  | after `make elf`: measure C_FUZZY and preview the report and map in `build/progress/` (CI does this on main) |
 | `make iso`       | patch the verified ELF into a copy of the first `dumps/*.iso`   |
 | `make overlays`  | compile `src/overlays/` (needs the generated overlay asm, see [overlays.md](overlays.md)) |
 | `make clean-iso` | remove the rebuilt ISO                                          |

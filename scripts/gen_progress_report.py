@@ -7,8 +7,10 @@ derived from the tree (linker config, ``src/``, overlay tables), so the
 ``progress`` workflow regenerates it on every push and pull request, publishes
 it with the progress map on the ``progress`` branch and comments the change
 on pull requests. The exception is C_FUZZY, the measured similarity of pending
-functions, which needs a local build: it lives in ``progress/fuzzy_scores.json``
-and is refreshed, optionally, by ``make progress``.
+functions, which needs a build: on every push to main the workflow rebuilds the
+executable (the retail ELF comes from a repository secret), measures it with
+``--workspace`` and publishes ``fuzzy_scores.json`` next to the report. Other
+runs read those last published scores from ``build/progress/fuzzy_scores.json``.
 
 What the report counts (the same contract as ``assets/decomp_map.json``):
 
@@ -41,11 +43,11 @@ files. No retail bytes are included.
 Usage::
 
     python3 scripts/gen_progress_report.py
-        CI and local: write build/progress/report.json from the repository,
-        reusing progress/fuzzy_scores.json; needs no toolchain or executable
+        write build/progress/report.json from the repository, reusing
+        build/progress/fuzzy_scores.json; needs no toolchain or executable
     python3 scripts/gen_progress_report.py --workspace build/baseline
-        optional, after ./verify-baseline.sh: measure pending units and also
-        refresh progress/fuzzy_scores.json
+        after ./verify-baseline.sh: measure pending units and also write
+        build/progress/fuzzy_scores.json (CI on main; `make progress`)
 """
 
 from __future__ import annotations
@@ -71,7 +73,7 @@ from progress_groups import (  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 REPORT = REPO / "build" / "progress" / "report.json"
-SCORES = REPO / "progress" / "fuzzy_scores.json"
+SCORES = REPO / "build" / "progress" / "fuzzy_scores.json"
 # A unit carries every category it belongs to (decomp.dev sums a category
 # over the units that list it): executable units ``boot`` and ``game``/``sdk``,
 # overlay functions ``overlays`` and ``shared`` or ``levels`` + ``level_NN``.

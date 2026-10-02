@@ -305,7 +305,7 @@ class ProgressReportTests(unittest.TestCase):
 
     def test_promotion_shows_in_the_regenerated_report_and_comment(self):
         """CI regenerates the report from the tree; the PR comment lists a
-        promoted function and C_FUZZY survives through progress/fuzzy_scores.json."""
+        promoted function and C_FUZZY survives through fuzzy_scores.json."""
         comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress_comment.py")
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))

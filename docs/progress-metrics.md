@@ -71,9 +71,10 @@ Neither the map nor the objdiff-format report behind
 [decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) is committed. The
 `progress` workflow regenerates both from the tree on every push to `main`
 (publishing them on the `progress` branch) and on every pull request (posting
-the change as a comment); it never builds the game. C_FUZZY comes from
-`progress/fuzzy_scores.json`, which `make progress` refreshes after `make elf`;
-`--workspace build/baseline` on either script measures it directly.
+the change as a comment). On `main` it also rebuilds the executable, with the
+retail ELF from a repository secret, to measure C_FUZZY and publishes
+`fuzzy_scores.json` beside the report; pull requests reuse that measurement.
+Locally, `make progress` after `make elf` measures it the same way.
 
 ## What counts as intentional assembly
 
