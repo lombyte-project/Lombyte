@@ -240,7 +240,34 @@ void FUN_L00_002895a0(void) {
     FUN_0022b690_2895a0(3);
 }
 #undef SKY
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002899a8.s", FUN_L00_002899a8);
+#include "qzero.h"
+
+/* D_L00_0015F5CC is read as u16 for the first sky rotation and masked with 0x1FFFF for the second. */
+
+typedef struct { f32 f[4]; } __attribute__((aligned(16))) SkyRotVec_2899a8;
+
+extern char *D_L00_0016051C_2899a8 __asm__("D_L00_0016051C");
+extern char D_L00_001BD7E0_2899a8[] __asm__("D_L00_001BD7E0");
+extern s32 D_L00_0015F5CC_2899a8 __asm__("D_L00_0015F5CC");
+extern void FUN_001f9fc8_2899a8(void *) __asm__("FUN_001f9fc8");
+extern void FUN_001fa070_2899a8(void *, void *) __asm__("FUN_001fa070");
+void sky_draw_shell_2899a8(s32) __asm__("FUN_0022b690");
+
+void FUN_L00_002899a8_2899a8(void) __asm__("FUN_L00_002899a8");
+
+void FUN_L00_002899a8_2899a8(void) {
+    SkyRotVec_2899a8 rot;
+    *(short *)(D_L00_0016051C_2899a8 + 4) = 0;
+    FUN_001f9fc8_2899a8(D_L00_001BD7E0_2899a8);
+    sky_draw_shell_2899a8(0);
+    qzero(&rot);
+    rot.f[2] = (f32)*(u16 *)&D_L00_0015F5CC_2899a8 * 9.5873802e-5f - 3.1415927f;
+    FUN_001fa070_2899a8(D_L00_001BD7E0_2899a8, &rot);
+    sky_draw_shell_2899a8(1);
+    rot.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC_2899a8 & 0x1FFFF) * 4.7936901e-5f - 3.1415927f;
+    FUN_001fa070_2899a8(D_L00_001BD7E0_2899a8, &rot);
+    sky_draw_shell_2899a8(2);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289a90.s", FUN_L00_00289a90);
 #include "qzero.h"
 typedef int q128 __attribute__((mode(TI)));
