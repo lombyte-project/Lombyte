@@ -21,7 +21,7 @@ from pathlib import Path
 
 MARKER = "<!-- lombyte-progress-report -->"
 ROWS = (("total", "All code"), ("boot", "Boot executable"), ("game", "Game"),
-        ("sdk", "Sony SDK"), ("overlays", "Level overlays"),
+        ("sdk", "SDK"), ("overlays", "Level overlays"),
         ("shared", "Shared level code"), ("levels", "Per-level code"))
 LIST_LIMIT = 40
 
