@@ -725,6 +725,7 @@ segments:
           - [0x2db34, textbin, text_gap_0012c2f0_d3]
           - [0x2db38, c, sdk/dma/set_d4_chcr]
           - [0x2db9c, textbin, text_gap_0012c2f0_d4]
+          - [0x2dba0, textbin, text_gap_0012cc20]
           - [0x2dc88, c, sdk/dma/sce_ipu_restart_dma]
           - [0x2ddd8, c, sdk/video/ipu/sce_ipu_sync]
           - [0x2de40, c, sdk/dma/set_d4_chcr_variant]
