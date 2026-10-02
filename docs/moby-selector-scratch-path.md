@@ -3,9 +3,6 @@ This is a static data-flow reference for the USA / NTSC-U boot executable
 `SCUS_971.99`. It records confirmed relationships around the intentional
 low-level assembly units `FUN_00210850` and `FUN_002109B8`, plus the C wrapper
 `FUN_0020CCA8` that calls the resolver.
-It is not a C implementation, a work claim, or a request to change unit
-ownership, assembly classification, or oracle use. It contains no game data,
-retail bytes, disassembly, generated oracle files, dumps, or tools.
 ## Scope and terminology
 The terms below describe dataflow only:
 - **selector**: an integer used to reach a class-owned descriptor;
