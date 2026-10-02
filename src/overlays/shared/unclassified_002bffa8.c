@@ -521,7 +521,96 @@ void FUN_L00_002c82f0(Vec4_2c82f0 *a, u8 *m, void *c) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bffa8.s", FUN_L00_002bffa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c1778.s", FUN_L00_002c1778);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c1ad0.s", FUN_L00_002c1ad0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c2488.s", FUN_L00_002c2488);
+/*
+ * TODO(route): this body is DONE - it is byte-identical to retail under the
+ * bundled GNU as (572/572 bytes; the only 23 differing words are relocation
+ * sites: jal/lui/%lo with 0 addends). The current game route (cc1 -> Ps2EeAs)
+ * reports SIZE 580/572 because Ps2EeAs 1.9.25.758 auto-inserts 2 NOPs before a
+ * div.s that sits "too near a branch instruction / possible branch
+ * destination" (its divbug workaround), and the else-block div.s here is right
+ * after the $L7 label. Retail never has that padding: a byte scan of the whole
+ * retail corpus found 0 `nop; nop; div` in 346 div words of SCUS_971.99 and
+ * 26,539 div words across all 19 level text.bin - so the retail-era assembler
+ * did not apply this workaround, and our vendored Ps2EeAs is from a different
+ * (later) build.
+ *
+ * To make this function exact, whoever owns the route must first fix the
+ * toolchain mismatch; this source needs no further change. Options, both
+ * fail-closed (strip only NOPs that Ps2EeAs inserted relative to the GNU-as
+ * reference, and only when the trimmed stream still explains every retail
+ * word; validate with the whole-ELF gate):
+ *   (a) in the game repo's padless-asm.py `finish` step (and the tools'
+ *       overlay checker), drop the assembler-inserted div padding using the
+ *       GNU-as reference object assembled from the same .s; or
+ *   (b) assemble overlays with the bundled GNU as instead of Ps2EeAs, if a
+ *       corpus check shows the overlays contain no Ps2EeAs-only output
+ *       (short-loop / FPU hazard NOPs) - those ARE in retail and must stay.
+ * Evidence and numbers: analysis/overlays/ps2eeas-div-padding.md (tools repo).
+ * After the route is fixed: re-score this file, expect EXACT 572/572, then
+ * promote normally. Do NOT add inline asm or a per-unit exception for this.
+ */
+
+typedef int T2c2488_q __attribute__((mode(TI)));
+typedef union { T2c2488_q q; f32 f[4]; s32 i[4]; } V2c2488;
+extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
+extern s32 D_0013CAE0[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern u8 D_0013E52A[] __asm__("D_0013E52A");
+extern f32 D_0015ED6C __asm__("D_0015ED6C");
+extern f32 dist(void *, void *) __asm__("FUN_001f9b48");
+extern void sub_2c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_2c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_2c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 atan(f32, f32) __asm__("FUN_001f9e90");
+extern f32 adiff(f32, f32) __asm__("FUN_001fa688");
+extern f32 dist2(void *, void *) __asm__("FUN_001f9b80");
+extern f32 cos_2c(f32) __asm__("FUN_001f9dc8");
+extern f32 sin_2c(f32) __asm__("FUN_001f9de0");
+extern f32 scale_ticks(s32) __asm__("FUN_001fa6c0");
+extern f32 fn_2c2488(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
+
+void FUN_L00_002c2488(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) {
+    V2c2488 t;
+    V2c2488 u;
+    f32 ang;
+    f32 s;
+    f32 k;
+    f32 v;
+    u8 *P;
+    if (range < dist(pos, tgt)) {
+        sub_2c(&t, tgt, pos);
+        scale_2c(&t, &t, range - 0.01f);
+        add_2c(&t, &t, pos);
+    } else {
+        t.q = tgt->q;
+    }
+    ang = atan(t.f[0] - pos->f[0], t.f[1] - pos->f[1]);
+    P = D_0013F350_c;
+    if (adiff(*(f32 *)(P + 0x98), ang) > 0.87266463f
+        || dist2(pos, &t) < 1.5f) {
+        ang = *(f32 *)(P + 0x98);
+        u.f[0] = cos_2c(ang) * 1.5f;
+        u.f[1] = sin_2c(*(f32 *)(P + 0x98)) * 1.5f;
+        u.i[2] = 0;
+        add_2c(&u, &u, pos);
+        t.f[0] = u.f[0];
+        t.f[1] = u.f[1];
+    }
+    s = D_0015ED6C * 8.5f;
+    out[0] = cos_2c(ang) * s;
+    out[1] = sin_2c(ang) * s;
+    *(s32 *)&out[2] = 0;
+    out[2] = fn_2c2488(pos, &t, s, -speed, 0);
+    if (D_0013CAE0[0] & 5) {
+        k = scale_ticks(D_0013E52A[0]) * 2.5f + 8.5f;
+        k = k / s;
+    } else {
+        k = 8.5f / s;
+    }
+    v = speed * k * 0.5f;
+    if (v < out[2]) {
+        out[2] = v;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c26c8.s", FUN_L00_002c26c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c35c0.s", FUN_L00_002c35c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c3888.s", FUN_L00_002c3888);

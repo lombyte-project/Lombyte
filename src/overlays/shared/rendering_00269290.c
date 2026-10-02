@@ -1835,7 +1835,68 @@ void FUN_L00_0026fc38(O0026fc38 *o) {
     if (s->x8 >= 0x1F) s->x8 = 0;
     if (o->xa == 0) FUN_L00_00267a08_0026fc38(o);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fd28.s", FUN_L00_0026fd28);
+/* NEAR: only diff is a Ps2EeAs nop between mul.s and div.s after the div-check label (assembler wall). */
+typedef struct {
+    u128 vel;
+    f32 f10;
+    s16 h14;
+    s16 h16;
+    u8 b18;
+    u8 pad19[3];
+    s32 w1c;
+} E_26fd28;
+typedef struct {
+    u8 b0, b1, b2, b3;
+    s32 w4;
+    u8 b8, b9;
+    s16 hA;
+    f32 fC;
+    u128 pos;
+    E_26fd28 e;
+} P_26fd28;
+extern P_26fd28 *alloc_26fd28(s32) __asm__("FUN_L00_002678b8");
+extern s32 col_26fd28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
+extern s32 trunc_26fd28(f32) __asm__("FUN_001fa6d0");
+extern f32 rang_26fd28(void) __asm__("FUN_00213308");
+extern f32 rfb_26fd28(f32, f32) __asm__("FUN_002132a8");
+extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
+extern u8 *tex_26fd28 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
+P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 c, s32 d) {
+    P_26fd28 *p;
+    E_26fd28 *e;
+    f32 f;
+    s32 t;
+    p = alloc_26fd28(0x28);
+    if (p != 0) {
+        e = &p->e;
+        qcopy(&p->pos, pos);
+        qcopy(e, vel);
+        p->w4 = col_26fd28(0.7f, 0.7f, 0.7f, 0.08f);
+        p->b9 = trunc_26fd28(4.0f) + 0x40;
+        p->b1 = 0;
+        p->b3 = 0x44;
+        f = rang_26fd28();
+        e->f10 = f;
+        p->b8 = (s32)(f * 256.0f);
+        p->b2 = tex_26fd28[rnd_26fd28() & 7];
+        e->b18 = c;
+        e->h14 = 0;
+        e->h16 = 0;
+        if (c < 5) {
+            p->fC = rfb_26fd28(7000.0f, 10000.0f);
+            t = rnd_26fd28();
+            {
+                s32 n = (s32)(8.0f / (D_0015ED60 * 0.443f));
+                p->hA = n - t % (n * 6 / 7);
+            }
+        } else {
+            p->fC = 10000.0f;
+            p->hA = (s32)(8.0f / (D_0015ED60 * 0.443f));
+        }
+        e->w1c = d;
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026ff10.s", FUN_L00_0026ff10);
 #define NOT_SDA
 
@@ -1853,7 +1914,52 @@ void FUN_L00_00270710(char *a) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00270758.s", FUN_L00_00270758);
+/* Spawns a particle of type 0x2A at a with velocity b, class c and tag d. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_002715F8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED60_c2 __asm__("D_0015ED60");
+extern int FUN_L00_0025bfe0(float, float, float, float);
+extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
+extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
+
+void *FUN_L00_00270758(char *a, char *b, unsigned char c, int d) {
+    char *p = FUN_L00_002678b8_c2(0x2A);
+
+    if (p != 0) {
+        char *q = p + 0x20;
+        float f;
+        int rnd;
+
+        qcopy(p + 0x10, a);
+        qcopy(q, b);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
+        p[9] = (char)(func_001FA898_r(4.0f) + 0x40);
+        p[1] = 0;
+        p[3] = 0x44;
+        f = random_float_between_alt(0.0f, 1.0f);
+        *(float *)(q + 0x10) = f;
+        p[8] = (char)(int)(f * 256.0f);
+        p[2] = D_L00_001B20B0[rand() & 7];
+        q[0x18] = c;
+        *(short *)(q + 0x14) = 0;
+        *(short *)(q + 0x16) = 0;
+        if (c < 5) {
+            int n;
+            int y;
+
+            *(float *)(p + 0xC) = random_float_between_alt(7000.0f, 10000.0f);
+            rnd = rand();
+            n = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
+            y = n * 6 / 7;
+            *(short *)(p + 0xA) = n - rnd % y;
+        } else {
+            *(short *)(p + 0xA) = (int)(8.0f / (D_0015ED60_c2 * 0.443f));
+            *(float *)(p + 0xC) = 10000.0f;
+        }
+        *(int *)(q + 0x1C) = d;
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00270948.s", FUN_L00_00270948);
 extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
 f32 FUN_001fa6c0_2710a0(s32) __asm__("FUN_001fa6c0");

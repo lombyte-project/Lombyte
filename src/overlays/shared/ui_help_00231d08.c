@@ -296,7 +296,123 @@ void FUN_L00_00232320(void) {
     obj->id[0] = obj->model->banks[obj->bank[0]]->ids[obj->seq[0]];
     obj->id[1] = obj->model->banks[obj->bank[1]]->ids[obj->seq[1]];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002323b8.s", FUN_L00_002323b8);
+#include "qcopy.h"
+
+/* Starts animation sequence A0 (slot byte A1) over time T on the object at +0x2080 of the game block. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232C10), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x11];
+    unsigned char unk11; /* 0x11: copied to a moby's +0x7C */
+    unsigned char unk12; /* 0x12: copied to a moby's +0x7E */
+    char _pad13[0x1C - 0x13];
+    int frames[1]; /* 0x1C */
+} MobySeq;
+
+typedef struct {
+    char _pad00[0x48];
+    MobySeq *seqs[1]; /* 0x48: animation sequences */
+} MobyClass;
+
+typedef struct {
+    char _pad00[0x20];
+    unsigned char state; /* 0x20 */
+    char _pad21[0x24 - 0x21];
+    MobyClass *pClass; /* 0x24 */
+    char _pad28[0x38 - 0x28];
+    unsigned long unk38; /* 0x38 */
+    char _pad40[0x50 - 0x40];
+    unsigned char frame;     /* 0x50 */
+    unsigned char prevFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52: 0xFF for none */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x68 - 0x54];
+    int frameData;     /* 0x68 */
+    int prevFrameData; /* 0x6C */
+    char _pad70[0x78 - 0x70];
+    char *pvars; /* 0x78: this moby's 0x80 bytes at D_00160028 */
+    unsigned char unk7C; /* 0x7C: the sound it wants (func_0020D790) */
+    unsigned char unk7D; /* 0x7D: the handle of the one playing, or 0xFF */
+    unsigned char unk7E; /* 0x7E */
+    char _pad7F[0x100 - 0x7F];
+} Moby;
+
+extern char D_L00_00196D00[] __attribute__((section(".data")));
+extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") __attribute__((section(".sdata")));
+extern int FUN_L00_0024f698(void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L00_0015F6E0 __attribute__((sda));
+extern void FUN_L00_002118b0(void);
+extern void FUN_L00_00231e78_c(int, int, float) __asm__("FUN_L00_00231e78");
+extern void FUN_L00_00232220_c(int, int, float) __asm__("FUN_L00_00232220");
+extern void FUN_L00_00232628(void);
+extern void FUN_L00_00251ce8(void *, int);
+extern void FlushCache(s32);
+void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
+
+void FUN_L00_002323b8(int a0, int a1, float t) {
+    char *g2;
+    char *g3;
+    char *g1 = D_0013F350;
+    char *obj = *(char **)(g1 + 0x2080);
+    int slot;
+    int o;
+    char *e;
+
+    if (*(int *)(g1 + 0xA98) & 2) {
+        *(int *)(obj + 0x54) = 0;
+    }
+    if (D_0015EDB4_m[1] != 0) {
+        if (a0 == 0x31) {
+            a0 = 0x32;
+        } else if (a0 == 0x32) {
+            a0 = 0x31;
+        }
+    }
+    slot = FUN_L00_0024f698(obj);
+    if (slot >= 0) {
+        FUN_L00_00251ce8(obj, slot | 0x300);
+        FlushCache(0);
+        e = D_L00_00196D00 + slot * 16;
+        qcopy(e, obj);
+        if (*(unsigned char *)(obj + 0x52) != 0xFF) {
+            *(unsigned char *)(obj + 0xA5) = *(unsigned char *)(obj + 0x52);
+        }
+        qcopy(e, obj + 0xF0);
+        *(unsigned char *)(obj + 0x52) = 0xFF;
+        *(unsigned char *)(obj + 0x50) = slot;
+    }
+    *(unsigned char *)(obj + 0x51) = a1;
+    *(unsigned char *)(obj + 0x53) = a0;
+    update_moby_animation_state(obj);
+    g2 = D_0013F350;
+    *(float *)(g2 + 0xA90) = 1.0f;
+    if (t > 0.0f) {
+        *(float *)(g2 + 0xA94) = 1.0f / t;
+        *(float *)(obj + 0x54) = 0.0f;
+        *(int *)(g2 + 0xAA0) = -1;
+    } else {
+        *(float *)(g2 + 0xA94) = 1.0f;
+        *(int *)(g2 + 0xAA0) = truncate_float_to_s32(-t) - 1;
+        *(int *)(g2 + 0xAA4) = 0;
+        *(float *)(obj + 0x54) = 0.0f;
+    }
+    FUN_L00_00232628();
+    g3 = D_0013F350;
+    o = a0 * 4;
+    *(unsigned char *)(obj + 0x7C) = *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
+    *(int *)(g3 + 0xA9C) = 1;
+    if (t < 0.0f) {
+        t = *(int *)((char *)&D_L00_0015F6E0 + *(int *)(g3 + 0xAA0) * 4);
+    }
+    if (*(unsigned char *)(g3 + 0x20A4) == 0) {
+        FUN_L00_00231e78_c(a0, a1, t);
+    }
+    FUN_L00_002118b0();
+    if (*(int *)(g3 + 0x2278) != 0) {
+        FUN_L00_00232220_c(a0, a1, t);
+    }
+}
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
 extern void FUN_0020c880_2325a0(void *) __asm__("FUN_0020c880");
 void FUN_L00_002325a0(int a, int b) {

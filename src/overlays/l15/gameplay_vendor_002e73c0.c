@@ -169,6 +169,73 @@ int FUN_L15_002f85a8(char *moby) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8698.s", FUN_L15_002f8698);
+/* tests whether the target lies within a cone of the player's axis */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
+
+extern char *D_L15_001600EC;
+extern char D_L15_00167410[];
+extern char D_L15_00167280[];
+extern float FUN_001f9ab0(void *a, void *b);
+extern float FUN_001f9af0(void *a);
+extern float FUN_001f9df8(float);
+extern float FUN_001fa688(float, float);
+extern float FUN_001f9e90(float, float);
+extern void FUN_001f9a28(void *dst, void *a, void *b);
+extern void FUN_001f9a68(void *, void *, float);
+extern float FUN_001f99c0(float);
+
+int FUN_L15_002f8698(char *moby, float a, float b) {
+    float d[4];
+    float p[4];
+    float q[4];
+    float r[4];
+    char *data;
+    char *vec = D_L15_00167410;
+    char *g;
+    float dot1;
+    float dot2;
+    float lenq;
+    float lenr;
+    float dot3;
+    float den;
+    char *tbl = D_L15_0015EF50;
+    char *src;
+
+    data = *(char **)(tbl + *(short *)(moby + 0x84) * 32 + 0x1C);
+    src = D_L15_001600EC + *(int *)(data + 0x48) * 128;
+    if (a == 0.0f && b == 0.0f) {
+        return 1;
+    }
+    g = D_L15_00167280;
+    FUN_001f9a28(d, src + 0x30, *(char **)(g + 0x180) + 0x30);
+    dot1 = FUN_001f9ab0(d, (vec + 0x30));
+    FUN_001f9a68(p, (vec + 0x30), dot1);
+    FUN_001f9a28(q, d, p);
+    lenq = FUN_001f9af0(q);
+    dot2 = FUN_001f9ab0(*(char **)(g + 0x180), (vec + 0x30));
+    FUN_001f9a68(p, (vec + 0x30), dot2);
+    FUN_001f9a28(r, *(char **)(g + 0x180), p);
+    lenr = FUN_001f9af0(r);
+    if (b != 0.0f) {
+        float t1 = FUN_001f9e90(lenq, dot1);
+        float t2 = FUN_001f9e90(lenr, dot2);
+        float t3 = FUN_001fa688(t1, t2);
+        if (b * 0.017453292f < t3) {
+            return 0;
+        }
+    }
+    if (a == 0.0f) {
+        return 1;
+    }
+    dot3 = FUN_001f9ab0(q, r);
+    den = lenr * lenq;
+    if (den == 0.0f) {
+        return 0;
+    }
+    if (FUN_001f99c0(1.5707964f - FUN_001f9df8(dot3 / den)) < a * 0.017453292f) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8ba8.s", FUN_L15_002f8ba8);
