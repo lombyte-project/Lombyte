@@ -2,27 +2,27 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4441,
-  "matching_c": 2272,
+  "matching_c": 2279,
   "intentional_asm": 249,
-  "pending_c": 1920,
+  "pending_c": 1913,
   "bytes_total": 3618116,
-  "bytes_matching_c": 559384,
+  "bytes_matching_c": 562976,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 2962400,
-  "c_exact_percent_of_recoverable": 15.8835,
-  "c_fuzzy_percent_of_recoverable": 19.027,
+  "bytes_pending_c": 2958808,
+  "c_exact_percent_of_recoverable": 15.9855,
+  "c_fuzzy_percent_of_recoverable": 19.0379,
   "boot": {
     "units_total": 1451,
     "groups_total": 127,
-    "matching_c": 1055,
+    "matching_c": 1061,
     "intentional_asm": 249,
-    "pending_c": 147,
+    "pending_c": 141,
     "bytes_total": 437592,
-    "bytes_matching_c": 220712,
+    "bytes_matching_c": 224072,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 120548,
-    "c_exact_percent_of_recoverable": 64.6756,
-    "c_fuzzy_percent_of_recoverable": 97.116,
+    "bytes_pending_c": 117188,
+    "c_exact_percent_of_recoverable": 65.6602,
+    "c_fuzzy_percent_of_recoverable": 97.1607,
     "groups": [
       {
         "name": "game/unclassified",
@@ -44,15 +44,15 @@
         "logical_group": "sdk/library",
         "category": "sdk",
         "functions": 186,
-        "matching_c": 141,
-        "pending_c": 21,
+        "matching_c": 147,
+        "pending_c": 15,
         "intentional_asm": 24,
         "bytes_total": 65696,
-        "bytes_matching_c": 39140,
-        "bytes_pending_c": 12028,
+        "bytes_matching_c": 42500,
+        "bytes_pending_c": 8668,
         "bytes_intentional_asm": 14528,
-        "c_exact_percent_of_recoverable": 76.4931,
-        "c_fuzzy_percent_of_recoverable": 97.7924
+        "c_exact_percent_of_recoverable": 83.0597,
+        "c_fuzzy_percent_of_recoverable": 98.0904
       },
       {
         "name": "game/ui/menus",
@@ -1933,24 +1933,24 @@
   },
   "overlays": {
     "functions_total": 2990,
-    "matching_c": 1217,
-    "pending_c": 1773,
+    "matching_c": 1218,
+    "pending_c": 1772,
     "bytes_total": 3180524,
-    "bytes_matching_c": 338672,
-    "bytes_pending_c": 2841852,
-    "c_exact_percent_of_recoverable": 10.6483,
+    "bytes_matching_c": 338904,
+    "bytes_pending_c": 2841620,
+    "c_exact_percent_of_recoverable": 10.6556,
     "shared": {
       "id": "shared",
       "index": null,
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1648,
-      "matching_c": 830,
-      "pending_c": 818,
+      "matching_c": 831,
+      "pending_c": 817,
       "bytes_total": 1152164,
-      "bytes_matching_c": 231316,
-      "bytes_pending_c": 920848,
-      "c_exact_percent_of_recoverable": 20.0767,
+      "bytes_matching_c": 231548,
+      "bytes_pending_c": 920616,
+      "c_exact_percent_of_recoverable": 20.0968,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -2011,9 +2011,9 @@
         {
           "file": "src/overlays/shared/rendering_debug_001f8ec8.c",
           "functions": 3,
-          "matching_c": 2,
+          "matching_c": 3,
           "bytes_total": 408,
-          "bytes_matching_c": 176
+          "bytes_matching_c": 408
         },
         {
           "file": "src/overlays/shared/rendering_transitions_001f99c0.c",
@@ -2143,9 +2143,9 @@
         },
         {
           "file": "shared",
-          "functions": 2,
+          "functions": 3,
           "matching_c": 0,
-          "bytes_total": 148,
+          "bytes_total": 380,
           "bytes_matching_c": 0
         },
         {
@@ -2829,9 +2829,9 @@
         },
         {
           "file": "src/overlays/shared/unclassified_00288ec0.c",
-          "functions": 20,
+          "functions": 19,
           "matching_c": 15,
-          "bytes_total": 8548,
+          "bytes_total": 8316,
           "bytes_matching_c": 5864
         },
         {
@@ -4498,14 +4498,14 @@
   },
   "total": {
     "units_total": 4441,
-    "matching_c": 2272,
+    "matching_c": 2279,
     "intentional_asm": 249,
-    "pending_c": 1920,
+    "pending_c": 1913,
     "bytes_total": 3618116,
-    "bytes_matching_c": 559384,
+    "bytes_matching_c": 562976,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 2962400,
-    "c_exact_percent_of_recoverable": 15.8835,
-    "c_fuzzy_percent_of_recoverable": 19.027
+    "bytes_pending_c": 2958808,
+    "c_exact_percent_of_recoverable": 15.9855,
+    "c_fuzzy_percent_of_recoverable": 19.0379
   }
 }
