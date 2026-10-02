@@ -1058,6 +1058,7 @@ segments:
           - [0xf8a04, textbin, text_gap_001f7a84_after_fun_001f7a30]
           - [0xf8a18, c, assembly/textbin/fast_intersect_vert]
           - [0xf8b90, textbin, text_gap_001f7c10_after_fun_001f7a98]
+          - [0xf8c50, textbin, text_gap_001f7cd0]
           - [0xf8cb0, c, assembly/textbin/fast_draw_quad_real]
           - [0xf9264, c, assembly/textbin/write_setup_block]
           - [0xf92e4, c, assembly/textbin/write_gs_header]
