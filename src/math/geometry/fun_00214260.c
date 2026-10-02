@@ -1,31 +1,23 @@
-#include "types.h"
-#include "asm.h"
+extern float FUN_001f9988(float);
+typedef struct {
+    int next[3];
+} QuatNext;
+extern QuatNext D_0015FFD8;
+/* Rotation matrix (rows of four floats) to quaternion (x, y, z, w), by
+   Shoemake's method: from the trace when it is positive, else from the
+   largest diagonal element, working on a packed 3x3 copy. */
+void FUN_00214260(void *arg0, void *arg1) {
+    float *q = arg0;
+    float (*m)[4] = arg1;
+    QuatNext n = D_0015FFD8;
+    float mat[3][3];
+    float trace;
+    float s;
+    int i, j, k;
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00214260/FUN_00214260.s", FUN_00214260);
-#else
-#include "types.h"
-
-struct Next3 {
-    s32 v[3];
-};
-
-extern struct Next3 D_0015FFD8;
-extern f32 func_001F9988(f32);
-
-void FUN_00214260(f32 *q, f32 m[3][4]) {
-    struct Next3 nxt;
-    f32 mat[3][3];
-    f32 tr;
-    f32 s;
-    s32 i;
-    s32 j;
-    s32 k;
-
-    nxt = D_0015FFD8;
-    tr = m[0][0] + m[1][1] + m[2][2];
-    if (tr > 0.0f) {
-        s = func_001F9988(tr + 1.0f);
+    trace = m[0][0] + m[1][1] + m[2][2];
+    if (trace > 0.0f) {
+        s = FUN_001f9988(trace + 1.0f);
         q[3] = s * 0.5f;
         s = 0.5f / s;
         q[0] = (m[2][1] - m[1][2]) * s;
@@ -48,9 +40,9 @@ void FUN_00214260(f32 *q, f32 m[3][4]) {
         if (mat[2][2] > mat[i][i]) {
             i = 2;
         }
-        j = nxt.v[i];
-        k = nxt.v[j];
-        s = func_001F9988(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
+        j = n.next[i];
+        k = n.next[j];
+        s = FUN_001f9988(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
         q[i] = s * 0.5f;
         if (s != 0.0f) {
             s = 0.5f / s;
@@ -60,4 +52,5 @@ void FUN_00214260(f32 *q, f32 m[3][4]) {
         q[k] = (mat[k][i] + mat[i][k]) * s;
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(FUN_00214260) func_00214260 __attribute__((alias("FUN_00214260")));
