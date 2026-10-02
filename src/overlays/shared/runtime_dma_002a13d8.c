@@ -3,7 +3,19 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13f0.s", FUN_L00_002a13f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a1538.s", FUN_L00_002a1538);
+void FUN_L00_001fff28(void *, s32, f32);
+void FUN_L00_002a1538(u8 *a0) {
+    s32 i;
+    u8 *r = a0 + 0x130;
+    u8 *q = a0 + 0x170;
+    for (i = 0; i < 2; i++) {
+        u8 *p = a0 + i * 0xB0;
+        if (p[0x161] != 0) FUN_L00_001fff28(q + i * 0xB0, 2, 0.0f);
+        if (p[0x121] != 0) FUN_L00_001fff28(r + i * 0xB0, 2, 0.0f);
+        *(s32 *)(p + 0x104) = 0;
+        *(s32 *)(p + 0xFC) = 0;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -66,7 +66,15 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
+extern u8 *D_L00_0015FFD8;
+extern u8 *D_L00_0015FFDC;
+u8 *FUN_L00_002851c0(s32 a, s32 id) {
+    u8 *p;
+    for (p = D_L00_0015FFD8; p != D_L00_0015FFDC; p += 0x100) {
+        if (*(s16 *)(p + 0xB2) == id) return p;
+    }
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -75,14 +83,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002851c0.s", FUN_L00_002851c0);
 
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 
-extern int FUN_L00_002851c0(int, int);
+extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
 extern void FUN_001f9838(int, void *, unsigned short);
 
 void FUN_L00_00285208(int *h) {
     int i;
 
     for (i = 0; i < *h; i++) {
-        int m = FUN_L00_002851c0(((Ent *)(h + 1))[i].b, ((Ent *)(h + 1))[i].a);
+        int m = FUN_L00_002851c0_u(((Ent *)(h + 1))[i].b, ((Ent *)(h + 1))[i].a);
         if (m != 0) {
             int dst;
             if (((Ent *)(h + 1))[i].kind == 1) {

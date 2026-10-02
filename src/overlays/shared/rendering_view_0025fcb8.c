@@ -178,7 +178,22 @@ void FUN_L00_00260738(char *out, q128 *pos, void *m1, void *m2) {
     FUN_00214598(c, out);
     qcopy(out + 0x10, pos);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002607d0.s", FUN_L00_002607d0);
+extern u8 D_0013DD40_2607d0[] __asm__("D_0013DD40");
+extern s32 D_0013D510_2607d0[] __asm__("D_0013D510");
+extern s32 D_0015ED84_2607d0 __asm__("D_0015ED84");
+void FUN_L00_00262d38(s32);
+void FUN_L00_002607d0(s32 id) {
+    s32 n, i;
+    n = 0;
+    if (D_0013DD40_2607d0[id] == 0) {
+        for (i = 0; i < 20; i++) {
+            if (D_0013DD40_2607d0[i]) n++;
+        }
+        D_0013DD40_2607d0[id] = 1;
+        D_0013D510_2607d0[n] = id;
+        if (id != *(volatile s32 *)&D_0015ED84_2607d0) FUN_L00_00262d38(id);
+    }
+}
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 

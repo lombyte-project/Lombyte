@@ -1806,7 +1806,39 @@ void FUN_L00_0026fa00(char *p) {
     k = k < 0 ? -k : k;
     *(int *)(p + 4) = FUN_L00_002371e0(0, q[4], (float)(n - k) / (float)n);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026fb00.s", FUN_L00_0026fb00);
+typedef struct { float v[4]; float f10; float f14; } Q_26fb00;
+typedef struct { char pad[4]; int c4; u8 b8; u8 b9; s16 ha; float fc; float v10[4]; Q_26fb00 q; } P_26fb00;
+extern float D_0015ED60_26fb00 __asm__("D_0015ED60");
+extern int FUN_001f9770_26fb00(void *) __asm__("FUN_001f9770");
+extern int FUN_001fa6d0_26fb00(float) __asm__("FUN_001fa6d0");
+extern void FUN_L00_00267a08_26fb00(void *) __asm__("FUN_L00_00267a08");
+extern void FUN_001f9a10_26fb00(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a68_26fb00(void *, void *, float) __asm__("FUN_001f9a68");
+
+void FUN_L00_0026fb00(P_26fb00 *p) {
+    Q_26fb00 *q = &p->q;
+    float zero, x, y;
+    if (FUN_001f9770_26fb00(&p->ha)) {
+        goto kill;
+    }
+    p->fc += q->f10;
+    p->b8++;
+    zero = 0.0f;
+    x = q->f14 - D_0015ED60_26fb00 * 0.01f;
+    q->f14 = x;
+    y = zero;
+    if (!(x < zero)) y = x;
+    q->f14 = y;
+    p->c4 &= 0xFFFFFF;
+    p->c4 |= FUN_001fa6d0_26fb00(q->f14 * 255.0f) << 24;
+    if (q->f14 <= zero) {
+    kill:
+        FUN_L00_00267a08_26fb00(p);
+        return;
+    }
+    FUN_001f9a10_26fb00(p->v10, p->v10, q);
+    FUN_001f9a68_26fb00(q, q, D_0015ED60_26fb00 * -0.019999981f + 1.0f);
+}
 typedef struct { f32 v[4]; } V0026fc38 __attribute__((aligned(16)));
 typedef struct { s32 x0; u8 *x4; s32 x8; } S0026fc38;
 typedef struct { u8 p0[2]; u8 x2; u8 p3; s32 x4; u8 x8; u8 p9; s16 xa; f32 xc; u8 p10[0x10]; S0026fc38 s; } O0026fc38;

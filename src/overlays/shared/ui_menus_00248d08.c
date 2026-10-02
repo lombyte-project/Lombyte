@@ -82,7 +82,27 @@ void FUN_L00_0024ae18(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024ae58.s", FUN_L00_0024ae58);
+extern s32 D_0015EEB4_c3 __asm__("D_0015EEB4");
+extern s32 D_L00_0015F5A8;
+void FUN_L00_0024ae58(void) {
+    if (D_0013D2AC[0] != -2) {
+        D_0015EEB0 = 3;
+        return;
+    }
+    if (D_0015EEB4_c3 & 0x20) {
+        D_0015EEB4_c3 ^= 0x20;
+        if (D_L00_0015F5A8 != 0) {
+            D_0015EEB0 = 0x17;
+            return;
+        }
+        D_0015EEB0 = 5;
+        return;
+    }
+    if (D_0015EEB4_c3 & 8) {
+        D_0015EEB4_c3 ^= 8;
+        D_0015EEB0 = 7;
+    }
+}
 void FUN_L00_0024afe0(void)
 {
     if (D_0013D290[7] < -1) {
@@ -101,7 +121,39 @@ void FUN_L00_0024b050(void) {
         D_0015EEB0 = 0xD;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024b1b8.s", FUN_L00_0024b1b8);
+struct Menu_24b1b8 { char pad0[0x1C]; s32 sel; char pad1[0xF4 - 0x20]; s32 f4; };
+extern s32 D_0015EEB4_24b1b8[] __asm__("D_0015EEB4");
+extern s32 D_0015EEB4_s_24b1b8 __asm__("D_0015EEB4");
+extern s32 D_0015EEB0_24b1b8 __asm__("D_0015EEB0");
+extern struct Menu_24b1b8 D_0013D290_24b1b8 __asm__("D_0013D290");
+void FUN_L00_0024b1b8(void) {
+    s32 f;
+    s32 x;
+    s32 t;
+    s32 n;
+    f = D_0015EEB4_s_24b1b8;
+    t = f & ~4;
+    x = t & ~2;
+    D_0015EEB4_s_24b1b8 = x;
+    if (f & 0x80) {
+        t = x ^ 0x80;
+        n = 0x15;
+    common:
+        D_0015EEB0_24b1b8 = n;
+        D_0015EEB4_s_24b1b8 = t | 0x40;
+        return;
+    }
+    if (f & 0x100) {
+        t = x ^ 0x100;
+        n = 0x14;
+        goto common;
+    }
+    if (D_0013D290_24b1b8.sel != 0) {
+        D_0015EEB0_24b1b8 = 3;
+    } else if (D_0013D290_24b1b8.f4 != 0) {
+        D_0015EEB0_24b1b8 = 1;
+    }
+}
 /* D_0013D2AC is the +0x1C field of the shared D_0013D290 block. */
 typedef struct { u8 pad[0x1C]; s32 f; } M2c_D_0013D290_0024b380;
 extern M2c_D_0013D290_0024b380 D_0013D290_0024b380 __asm__("D_0013D290");

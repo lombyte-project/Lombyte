@@ -351,7 +351,18 @@ void FUN_L00_002da660(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da790.s", FUN_L00_002da790);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db890.s", FUN_L00_002db890);
+typedef s32 (*Fn_db890)(void *);
+typedef struct Cb_db890 { char pad[0x10]; Fn_db890 f10; } Cb_db890;
+typedef struct Sub_db890 { char pad[0x2C]; Cb_db890 *f2C; } Sub_db890;
+typedef struct Obj_db890 { char pad0[0x20]; u8 f20; char pad1[3]; Sub_db890 *f24; char pad2[0x50]; s32 f78; } Obj_db890;
+s32 FUN_L00_002db890(Obj_db890 *o) {
+    Fn_db890 f;
+    if (o == 0 || o->f20 == 0xFE) return 0;
+    if (o->f20 == 0xFD || o->f78 == 0 || o->f24 == 0) return 0;
+    f = o->f24->f2C->f10;
+    if (f) return f(o);
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db8f8.s", FUN_L00_002db8f8);
 extern u32 D_L00_00161B20_002dbb20[1] __asm__("D_L00_00161B20") __attribute__((sda));
 extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") __attribute__((section(".data")));
@@ -438,11 +449,11 @@ fail:
 }
 typedef struct { u8 pad0[0x2050]; s32 slot[11]; s32 count; } G;
 extern G D_0013F350;
-u8 *FUN_L00_002db890(u8 *);
+u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
 s32 FUN_001f96f8(s32);
 void FUN_00212f90(void *, s32, s32, s32);
 s32 FUN_L00_002dbe20(u8 *m) {
-    u8 *o = FUN_L00_002db890(m);
+    u8 *o = FUN_L00_002db890_u(m);
     s32 k;
     if (o == 0) return 0;
     if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD) return 0;

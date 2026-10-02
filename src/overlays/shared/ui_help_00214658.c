@@ -657,7 +657,67 @@ void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag
     if (flag) FUN_L00_001ed280_00216f90();
     FUN_L00_002500b8_00216f90(D_001413D0_00216f90);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217118.s", FUN_L00_00217118);
+typedef int q_217118 __attribute__((mode(TI)));
+extern unsigned char D_0013F430_217118[] __asm__("D_0013F430");
+extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
+extern unsigned char D_0013F3D0_217118[] __asm__("D_0013F3D0");
+extern unsigned char D_L00_00173E40_217118[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+float FUN_L00_002339d0_217118(void *) __asm__("FUN_L00_002339d0");
+void FUN_001f9a68_217118(void *, float, void *) __asm__("FUN_001f9a68");
+void FUN_L00_00233ba0_217118(void *, void *, float) __asm__("FUN_L00_00233ba0");
+void FUN_L00_00233708_217118(void *, void *, float) __asm__("FUN_L00_00233708");
+void FUN_L00_00233b20_217118(void *, void *, float) __asm__("FUN_L00_00233b20");
+void FUN_001f9a10_217118(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L00_00233810_217118(void *, void *, float) __asm__("FUN_L00_00233810");
+int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
+float FUN_L00_00233d30_217118(void *) __asm__("FUN_L00_00233d30");
+void FUN_L00_00213de8_217118(float) __asm__("FUN_L00_00213de8");
+
+void FUN_L00_00217118(float a, float b)
+{
+    q_217118 t[1];
+    q_217118 u[1];
+    unsigned char *P = D_0013F430_217118;
+    unsigned char *G;
+    unsigned char *Q;
+    float k, r;
+    unsigned char *e;
+    if (FUN_L00_002339d0_217118(P) == 0.0f)
+        return;
+    G = P - 0xE0;
+    if (0.5f < *(float *)(G + 0x229C) && *(int *)(G + 0x208C) != 6 && *(short *)(G + 0x1F4) == 0 && G[0x12E7] == 0)
+        return;
+    Q = D_0013F350_217118;
+    if (*(short *)(Q + 0x30E))
+        return;
+    if (*(int *)(Q + 0x2084) == 0x20)
+        a = 2.0f;
+    Q += 0xE0;
+    FUN_001f9a68_217118(t, a, Q);
+    if (0.0f < b && FUN_L00_002339d0_217118(t) < b) {
+        FUN_L00_00233ba0_217118(t, t, 0.0f);
+        FUN_L00_00233708_217118(t, t, b);
+    }
+    FUN_L00_00233b20_217118(t, t, 0.0f);
+    FUN_001f9a10_217118(t, t, D_0013F3D0_217118);
+    qcopy(u, t);
+    FUN_L00_00233810_217118(t, t, 0.3f);
+    P = D_0013F3D0_217118 - 0x80;
+    k = -0.2f;
+    if (*(int *)(P + 0x2084) == 0x20)
+        k = -0.35f;
+    if (P[0x20A4] == 2)
+        k = -0.7f;
+    FUN_L00_00233810_217118(u, u, k);
+    r = 1.0f;
+    if (FUN_L00_001efc70_217118(t, u, 4, *(void **)(P + 0x2080), 0)) {
+        e = D_L00_00173E40_217118;
+        if (*(int *)(e + 0x1C) > 0 && FUN_L00_00233d30_217118(e + 0x40) <= 0.87266463f)
+            r = 0.0f;
+    }
+    if (r != 0.0f)
+        FUN_L00_00213de8_217118(0.0f);
+}
 /* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 

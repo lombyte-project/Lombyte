@@ -432,7 +432,46 @@ void FUN_L00_00272438(unsigned char *m) {
     FUN_L00_0025a9f8_272438(q->p14, (void *)&t, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002725d8.s", FUN_L00_002725d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002726d8.s", FUN_L00_002726d8);
+typedef unsigned int u128_2726d8 __attribute__((mode(TI), aligned(16)));
+typedef struct { u8 *owner; s32 x4; s32 x8; f32 xC; } Q_2726d8;
+typedef struct {
+    u8 pad0[0x10];
+    u128_2726d8 pos;
+    u8 pad20[0xC];
+    f32 f2C;
+    Q_2726d8 q;
+} P_2726d8;
+void FUN_L00_00267a08(void *);
+f32 FUN_002132a8(f32, f32);
+void FUN_L00_0024f7c8(void *, s32, void *);
+void FUN_001f9a28(void *, void *, void *);
+f32 FUN_001f9af0(void *);
+void FUN_001f9bf8(void *, void *, f32);
+void FUN_001f9a10(void *, void *, void *);
+void FUN_L00_002726d8(P_2726d8 *p) {
+    Q_2726d8 *q = &p->q;
+    u128_2726d8 t;
+    f32 save, sc, r2, f;
+    if (p->q.owner == 0 || *(s16 *)(p->q.owner + 0xA6) != q->x8 || p->q.owner[0x20] == 0xFE || p->q.owner[0x20] == 0xFD) {
+        FUN_L00_00267a08(p);
+        return;
+    }
+    sc = q->xC * FUN_002132a8(0.5f, 1.0f);
+    save = p->f2C;
+    qcopy(&t, &p->pos);
+    FUN_L00_0024f7c8(p->q.owner, q->x4, &p->pos);
+    FUN_001f9a28(&t, &t, &p->pos);
+    r2 = FUN_002132a8(-0.021f, 0.021f);
+    if (FUN_001f9af0(&t) < 0.0625f) {
+        f = r2 + 0.0625f;
+    } else {
+        f = FUN_001f9af0(&t) + r2;
+    }
+    FUN_001f9bf8(&t, &t, f);
+    FUN_001f9a10((u8 *)p + 0x20, &p->pos, &t);
+    *(f32 *)((u8 *)p + 0x1C) = sc;
+    p->f2C = save;
+}
 void FUN_001f9a68(void *, void *, f32);
 void FUN_001f9a10(void *, void *, void *);
 void FUN_L00_00267a08(void *);

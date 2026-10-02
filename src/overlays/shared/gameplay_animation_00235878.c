@@ -155,7 +155,30 @@ void FUN_L00_00235dc0(HudElem *e) {
     e->h = 0x20;
     FUN_L00_00235c80(e);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235e18.s", FUN_L00_00235e18);
+typedef struct {
+    u8 pad[0x64];
+    s32 key;
+    s32 f68;
+    u8 pad2[0x7C - 0x6C];
+    s32 v;
+    u8 pad3[0x90 - 0x80];
+} T_235e18;
+extern T_235e18 D_L00_0017DC50_235e18[] __asm__("D_L00_0017DC50") __attribute__((section(".data")));
+s32 FUN_L00_00235e18(s32 key, s32 val) {
+    s32 i;
+    s32 r;
+    T_235e18 *e;
+    r = 1;
+    for (i = 0; i < 13; i++) {
+        if (D_L00_0017DC50_235e18[i].key == key) break;
+    }
+    if (i < 13 && D_L00_0017DC50_235e18[i].f68 == 0) {
+        e = D_L00_0017DC50_235e18 + i;
+        e->v = (val < e->v) ? e->v : val;
+        return 0;
+    }
+    return 1;
+}
 extern float FUN_001fa6c0(int);
 extern int FUN_001fa6d0(float);
 extern float FUN_001f9988(float);

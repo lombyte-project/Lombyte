@@ -21,4 +21,22 @@ void FUN_L00_0023f0d8(char *p) {
     D_L00_0015FCA4 = *(float *)p; p += 4;
     D_L00_0015FCA8 = p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023f120.s", FUN_L00_0023f120);
+extern u32 D_L00_0015F43C;
+extern s32 D_L00_0015F438;
+extern u32 D_L00_0015F440;
+void FUN_L00_0023f120(s32 *p) {
+    s32 i, j;
+    s32 n;
+    n = *p;
+    p += 4;
+    D_L00_0015F43C = (u32)p;
+    p = (s32 *)((u8 *)p + (n << 5));
+    D_L00_0015F438 = n;
+    D_L00_0015F440 = (u32)p;
+    for (i = 0; i < D_L00_0015F438; i++) {
+        *(u32 *)(D_L00_0015F440 + i * 4) += D_L00_0015F440;
+    }
+    for (j = 0; j < D_L00_0015F438; j++) {
+        *(u32 *)(*(u32 *)(D_L00_0015F440 + j * 4) + 4) += D_L00_0015F440;
+    }
+}

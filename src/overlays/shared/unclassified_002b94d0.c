@@ -481,7 +481,184 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
     return 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bed90.s", FUN_L00_002bed90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bf050.s", FUN_L00_002bf050);
+#include "sda.h"
+
+typedef int V4 __attribute__((mode(TI), aligned(16)));
+typedef union { V4 q; f32 f[4]; } VU;
+
+typedef struct { u8 pad0[0x46]; s16 h46; } Cls;
+typedef struct { u8 pad0[0x24]; Cls *p24; } Hit;
+typedef struct { u8 pad0[0x38]; Hit *p38; } Ext;
+typedef struct {
+    u8 pad0[0x10];
+    f32 f10;
+    f32 f14;
+    u8 pad18[0x30];
+    f32 f48;
+    u8 pad4C[0x2C];
+    Ext *p78;
+} Mob;
+typedef struct { u8 pad0[0x18]; Hit *unk18; } XD;
+
+extern Hit *D_L00_00173E58_bf __asm__("D_L00_00173E58") NOT_SDA;
+extern XD D_L00_00173E40_c __asm__("D_L00_00173E40");
+extern VU D_L00_00173E60;
+
+extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
+extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
+extern f32 FUN_001fa580(f32, f32);
+extern f32 FUN_001fa5c8(f32, f32);
+extern f32 FUN_001fa688(f32, f32);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9b48(void *, void *);
+extern s32 FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
+
+f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 step, f32 h, f32 r2, f32 r1) {
+    VU v0;
+    VU v1;
+    f32 da;
+    s32 n;
+    s32 i;
+    f32 best;
+    f32 bestDist;
+    f32 bestDiff;
+    f32 cur;
+    f32 a;
+    f32 h2;
+    f32 d;
+    f32 diff;
+    Ext *x;
+    Hit *t;
+
+    da = arc / step;
+    best = ang;
+    n = FUN_001fa6d0_c(step);
+    bestDist = 0.0f;
+    x = m->p78;
+    bestDiff = 6.2831855f;
+    *out = bestDist;
+    if (tgt != 0) {
+        cur = FUN_001f9e90_c(tgt[0] - m->f10, tgt[1] - m->f14);
+    } else {
+        cur = ang;
+    }
+    arc *= 0.5f;
+    FUN_001fa580(ang, arc);
+    arc = FUN_001fa5c8(ang, arc);
+
+    qcopy(&v0, pos);
+    v0.f[1] += FUN_001f9de0(cur) * r1;
+    v0.f[0] += FUN_001f9dc8(cur) * r1;
+    v0.f[2] += h;
+    qcopy(&v1, pos);
+    v1.f[1] += FUN_001f9de0(cur) * r2;
+    v1.f[0] += FUN_001f9dc8(cur) * r2;
+    v1.f[2] += h + h;
+    if (FUN_001efa68_c(&v0, &v1, 4, m, 0) == 0) {
+        if (FUN_L00_002bec80_c(&v1, m) != 0.0f) {
+            best = cur;
+            bestDist = r2;
+            *out = r2;
+        }
+    } else {
+        if (D_L00_00173E58_bf == x->p38 || (D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 && D_L00_00173E58_bf->p24->h46 == 5)) {
+            *out = 100.0f;
+            return cur;
+        }
+        best = cur;
+        bestDist = FUN_001f9b48(&v0, &D_L00_00173E60);
+        bestDiff = 0.0f;
+        if (*out < bestDist) {
+            *out = bestDist;
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        qcopy(&v0, pos);
+        v0.f[1] += FUN_001f9de0(arc) * r1;
+        v0.f[0] += FUN_001f9dc8(arc) * r1;
+        v0.f[2] += h;
+        qcopy(&v1, pos);
+        v1.f[1] += FUN_001f9de0(arc) * r2;
+        v1.f[0] += FUN_001f9dc8(arc) * r2;
+        v1.f[2] += h + h;
+        if (FUN_001efa68_c(&v0, &v1, 4, m, 0) == 0) {
+            if (FUN_L00_002bec80_c(&v1, m) != 0.0f) {
+                diff = FUN_001fa688(arc, cur);
+                if (diff < bestDiff || bestDist < r2) {
+                    bestDiff = diff;
+                    best = arc;
+                    bestDist = r2;
+                    if (*out < r2) {
+                        *out = r2;
+                    }
+                }
+            }
+        } else {
+            if (D_L00_00173E40_c.unk18 == x->p38 || (D_L00_00173E40_c.unk18 != 0 && D_L00_00173E40_c.unk18->p24 != 0 && D_L00_00173E40_c.unk18->p24->h46 == 5)) {
+                *out = 100.0f;
+                return arc;
+            }
+            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            if (bestDist < d) {
+                best = arc;
+                bestDist = d;
+                bestDiff = FUN_001fa688(best, cur);
+                if (*out < d) {
+                    *out = d;
+                }
+            } else if (d == bestDist) {
+                diff = FUN_001fa688(arc, cur);
+                if (diff < bestDiff) {
+                    bestDiff = diff;
+                    best = arc;
+                    bestDist = d;
+                    if (*out < d) {
+                        *out = d;
+                    }
+                }
+            }
+        }
+        arc = FUN_001fa580(arc, da);
+    }
+
+    ang = FUN_001fa5c8(best, 1.5707964f);
+    qcopy(&v0, pos);
+    v0.f[1] += FUN_001f9de0(ang) * r1;
+    v0.f[0] += FUN_001f9dc8(ang) * r1;
+    v0.f[2] += h * 0.125f;
+    qcopy(&v1, &v0);
+    v1.f[1] += FUN_001f9de0(best) * r2;
+    v1.f[0] += FUN_001f9dc8(best) * r2;
+    v1.f[2] += 0.12f;
+    if (FUN_001efa68_c(&v0, &v1, 4, m, 0) != 0) {
+        if (D_L00_00173E58_bf != x->p38 && !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 && D_L00_00173E58_bf->p24->h46 == 5)) {
+            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            best = FUN_001fa580(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
+        }
+    }
+    ang = FUN_001fa580(ang, 3.1415927f);
+    qcopy(&v0, pos);
+    v0.f[1] += FUN_001f9de0(ang) * r1;
+    v0.f[0] += FUN_001f9dc8(ang) * r1;
+    v0.f[2] += h * 0.125f;
+    qcopy(&v1, &v0);
+    v1.f[1] += FUN_001f9de0(best) * r2;
+    v1.f[0] += FUN_001f9dc8(best) * r2;
+    v1.f[2] += 0.12f;
+    if (FUN_001efa68_c(&v0, &v1, 4, m, 0) != 0) {
+        if (D_L00_00173E58_bf != x->p38 && !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 && D_L00_00173E58_bf->p24->h46 == 5)) {
+            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            best = FUN_001fa5c8(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
+        }
+    }
+    if (2.5132742f < FUN_001fa688(best, m->f48)) {
+        best = FUN_001fa580(m->f48, FUN_001fa5c8(best, m->f48) * 0.5f);
+    }
+    return best;
+}
 /* Steps a vector by n repeated additions of the normalised difference. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
 

@@ -73,7 +73,19 @@ void FUN_L00_0025d538(s32 id, S_25d538 *s) {
     }
     FUN_L00_002502f0_25d538(id, r, g, b);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d7a0.s", FUN_L00_0025d7a0);
+s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 d, s32 wrap) {
+    if (wrap) {
+        i = (i + d + tab[0]) % tab[0];
+    } else {
+        i += d;
+        if (d < 0) {
+            if (i < 0) i = 0;
+        } else {
+            if (tab[0] - 1 < i) i = tab[0] - 1;
+        }
+    }
+    return i;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d808.s", FUN_L00_0025d808);
 typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
 typedef struct { float x, y, z, w_0025da70; } __attribute__((aligned(16))) Vec4_0025da70;
