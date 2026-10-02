@@ -25,7 +25,7 @@
 
 <p align="center">
   <a href="https://decomp.dev/mateuszklysz/Lombyte">
-    <img src="assets/decomp_map.svg" alt="Lombyte decompilation progress" width="100%">
+    <img src="https://raw.githubusercontent.com/mateuszklysz/Lombyte/progress/decomp_map.svg" alt="Lombyte decompilation progress" width="100%">
   </a>
 </p>
 

@@ -303,20 +303,36 @@ class ProgressReportTests(unittest.TestCase):
         self.assertEqual(shared["total_code"], "40")
         self.assertEqual(shared["matched_code"], "40")
 
-    def test_check_detects_a_stale_report(self):
+    def test_promotion_shows_in_the_regenerated_report_and_comment(self):
+        """CI regenerates the report from the tree; the PR comment lists a
+        promoted function and C_FUZZY survives through fuzzy_scores.json."""
+        comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress_comment.py")
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
-            path = repo / "progress" / "report.json"
-            with mock.patch.object(self.report, "REPO", repo):
-                self.assertEqual(self.report.main(["--report", str(path)]), 0)
-                self.assertEqual(self.report.main(["--check", "--report", str(path)]), 0)
+            base, head = repo / "base.json", repo / "head.json"
+            scores = repo / "progress" / "fuzzy_scores.json"
+            scores.parent.mkdir(parents=True, exist_ok=True)
+            scores.write_text(json.dumps({"schema": "rnc-fuzzy-scores-v1",
+                                          "scores": {"0x00013400": 42.5}}))
+            with mock.patch.object(self.report, "REPO", repo), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(self.report.main(["--report", str(base), "--scores", str(scores)]), 0)
                 (repo / "src" / "assembly" / "textbin" / "pending.c").unlink()
                 (repo / "src" / "textbin" / "pending.c").write_text("void P(void) {\n}\n")
                 (repo / "config" / "us" / "rnc1.us.yaml").write_text(
                     (repo / "config" / "us" / "rnc1.us.yaml").read_text().replace(
                         "assembly/textbin/pending", "textbin/pending"))
-                with contextlib.redirect_stderr(io.StringIO()):
-                    self.assertEqual(self.report.main(["--check", "--report", str(path)]), 1)
+                self.assertEqual(self.report.main(["--report", str(head), "--scores", str(scores)]), 0)
+            old, new = json.loads(base.read_text()), json.loads(head.read_text())
+            fuzzy = [f["fuzzy_match_percent"] for u in old["units"] for f in u["functions"]
+                     if f["metadata"]["virtual_address"] == str(0x13400)]
+            self.assertEqual(fuzzy, [42.5])
+            self.assertLess(int(old["measures"]["matched_code"]), int(new["measures"]["matched_code"]))
+            text = comment.render(old, new, "main")
+            self.assertTrue(text.startswith(comment.MARKER))
+            self.assertIn("1 newly matched function", text)
+            self.assertIn("`P`", text)
+            self.assertIn("No report for main yet", comment.render({}, new, "main"))
 
 
 class BaselineGuardTests(unittest.TestCase):

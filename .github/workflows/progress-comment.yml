@@ -1,0 +1,58 @@
+# Posts the progress comment that progress.yml prepared for a pull request.
+#
+# It runs from main with a token that may write pull request comments, and it
+# never checks out or runs code from the pull request: it only reads the
+# artifact's PR number (checked to be a number) and Markdown, and it updates
+# its own earlier comment, found by a marker, instead of adding a new one.
+name: progress-comment
+
+on:
+  workflow_run:
+    workflows: [progress]
+    types: [completed]
+
+permissions:
+  actions: read
+  pull-requests: write
+
+jobs:
+  comment:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the comment
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: gh run download "$RUN_ID" --name progress-comment --dir comment
+
+      - name: Post or update the comment
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          pr="$(tr -d '[:space:]' < comment/pr-number)"
+          case "$pr" in ''|*[!0-9]*) echo "bad PR number" >&2; exit 1;; esac
+          # The artifact comes from pull request code, so its PR number is only
+          # trusted when that PR's head is the commit the run built.
+          head="$(gh api "repos/$GH_REPO/pulls/$pr" --jq .head.sha)"
+          if [ "$head" != "$HEAD_SHA" ]; then
+            echo "PR #$pr head $head is not the run's commit $HEAD_SHA; not commenting" >&2
+            exit 1
+          fi
+          marker='<!-- lombyte-progress-report -->'
+          head -c 60000 comment/comment.md > body.md
+          grep -qF "$marker" body.md || { echo "comment has no marker" >&2; exit 1; }
+          id="$(gh api --paginate "repos/$GH_REPO/issues/$pr/comments" \
+                --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -1)"
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GH_REPO/issues/comments/$id" -F body=@body.md > /dev/null
+            echo "updated comment $id on #$pr"
+          else
+            gh api -X POST "repos/$GH_REPO/issues/$pr/comments" -F body=@body.md > /dev/null
+            echo "posted a comment on #$pr"
+          fi

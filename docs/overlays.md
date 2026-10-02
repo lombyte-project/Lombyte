@@ -153,7 +153,7 @@ there counts as exact, exactly as a promoted executable unit does.
 Every distinct function counts once. An executable function repeated in the
 levels counts as the executable's; a shared function counts once, not 19
 times. The headline C_EXACT covers the executable and the overlays together
-([progress-metrics.md](progress-metrics.md)); `assets/decomp_map.svg` shows the
+([progress-metrics.md](progress-metrics.md)); the progress map shows the
 executable as a drawer with its own percentage above a tree of the shared code
-and the 19 levels, and `progress/report.json` carries the categories `boot`,
+and the 19 levels, and the progress report carries the categories `boot`,
 `shared`, `levels` and `level_NN` for decomp.dev.

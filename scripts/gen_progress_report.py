@@ -2,10 +2,14 @@
 """Progress report for decomp.dev, in objdiff's report format (version 2).
 
 decomp.dev reads ``report.json`` from the CI artifact ``SCUS_971.99_report``
-on the default branch. CI cannot build the game: the retail executable and
-several compilers may not be redistributed. So the report is generated
-locally and committed as ``progress/report.json``; the workflow only checks
-that it is current, validates it with objdiff and uploads it.
+on the default branch. The report is not committed: every number but one is
+derived from the tree (linker config, ``src/``, overlay tables), so the
+``progress`` workflow regenerates it on every push and pull request, publishes
+it with the progress map on the ``progress`` branch and comments the change
+on pull requests. The exception is C_FUZZY, the measured similarity of pending
+functions, which needs a build: the maintainers' tooling measures it with
+``--workspace`` and keeps ``fuzzy_scores.json``, which the workflow copies to
+``build/progress/fuzzy_scores.json`` and publishes next to the report.
 
 What the report counts (the same contract as ``assets/decomp_map.json``):
 
@@ -37,14 +41,12 @@ files. No retail bytes are included.
 
 Usage::
 
-    python3 scripts/gen_progress_report.py --workspace build/baseline
-        after ./verify-baseline.sh: measure pending units, write the report
     python3 scripts/gen_progress_report.py
-        rewrite the report from the repository, reusing committed fuzzy scores
-    python3 scripts/gen_progress_report.py --check
-        CI: fail when the committed report does not match the repository
-
-``--check`` needs neither the toolchain nor the executable.
+        write build/progress/report.json from the repository, reusing
+        build/progress/fuzzy_scores.json; needs no toolchain or executable
+    python3 scripts/gen_progress_report.py --workspace build/baseline
+        after ./verify-baseline.sh: measure pending units and also write
+        build/progress/fuzzy_scores.json (the tooling; `make progress`)
 """
 
 from __future__ import annotations
@@ -60,6 +62,7 @@ from rnc_units import INCLUDE_ASM_RE, classify_units, source_symbol  # noqa: E40
 from overlay_units import category_of, group_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     canonical_owner,
+    write_fuzzy_scores,
     committed_function_scores,
     group_for_owner,
     load_group_assignments,
@@ -68,7 +71,8 @@ from progress_groups import (  # noqa: E402
 )
 
 REPO = Path(__file__).resolve().parents[1]
-REPORT = REPO / "progress" / "report.json"
+REPORT = REPO / "build" / "progress" / "report.json"
+SCORES = REPO / "build" / "progress" / "fuzzy_scores.json"
 # A unit carries every category it belongs to (decomp.dev sums a category
 # over the units that list it): executable units ``boot`` and ``game``/``sdk``,
 # overlay functions ``overlays`` and ``shared`` or ``levels`` + ``level_NN``.
@@ -256,32 +260,34 @@ def render(report: dict) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--workspace", type=Path,
-                      help="baseline workspace to measure pending units in (local only)")
-    mode.add_argument("--check", action="store_true",
-                      help="fail if progress/report.json is out of date (CI)")
+    parser.add_argument("--workspace", type=Path,
+                        help="baseline workspace to measure pending units in (local only); "
+                             "also refreshes --scores")
     parser.add_argument("--report", type=Path, default=REPORT)
+    parser.add_argument("--scores", type=Path, default=SCORES,
+                        help="C_FUZZY scores of pending functions (default: %(default)s)")
     args = parser.parse_args(argv)
 
     scores = (measure_pending(args.workspace) if args.workspace
-              else committed_scores(args.report))
-    text = render(build_report(scores))
-    if args.check:
-        if not args.report.is_file() or args.report.read_text(encoding="utf-8") != text:
-            print(f"{args.report.relative_to(REPO)} is out of date: run "
-                  "python3 scripts/gen_progress_report.py --workspace build/baseline "
-                  "after ./verify-baseline.sh and commit the result", file=sys.stderr)
-            return 1
-        print(f"{args.report.relative_to(REPO)} is current")
-        return 0
+              else committed_scores(args.scores))
+    report = build_report(scores)
+    if args.workspace:
+        count = write_fuzzy_scores(args.scores, report)
+        print(f"wrote {display(args.scores)}: {count} measured functions")
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(text, encoding="utf-8")
-    m = json.loads(text)["measures"]
-    print(f"wrote {args.report.relative_to(REPO)}: {m['matched_code']} / {m['total_code']} B "
+    args.report.write_text(render(report), encoding="utf-8")
+    m = report["measures"]
+    print(f"wrote {display(args.report)}: {m['matched_code']} / {m['total_code']} B "
           f"({m['matched_code_percent']:.2f} %), fuzzy {m['fuzzy_match_percent']:.2f} %, "
           f"{m['complete_units']} / {m['total_units']} groups")
     return 0
+
+
+def display(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO))
+    except ValueError:
+        return str(path)
 
 
 if __name__ == "__main__":

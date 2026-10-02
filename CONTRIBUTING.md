@@ -122,14 +122,10 @@ Once the unit matches, make the C the only compiled code:
    per-file metadata is written.
 
 4. Run `make elf` again; it must end with `PASS`.
-5. Regenerate the decomp.dev progress report with `make progress` and commit
-   `progress/report.json` with the promotion; CI fails if it is stale.
-6. Regenerate the progress map from that report and commit
-   `assets/decomp_map.svg` and `assets/decomp_map.json` with it:
 
-   ```sh
-   .venv/bin/python scripts/generate_treemap.py
-   ```
+There is no progress file to regenerate: CI rebuilds the decomp.dev report and
+the progress map from the tree, and the pull request gets a comment with the
+change in C_EXACT and the newly matched functions.
 
 ### 7. Open a pull request
 
@@ -148,18 +144,31 @@ Every pull request runs the public `tools` job in
 - `python3 -m py_compile scripts/*.py` — every public script must parse.
 
 These checks need no game data and never upload build outputs. `make check`
-runs them locally, plus the progress workflow's
-`python3 scripts/gen_progress_report.py --check` (see below). The full `make elf` rebuild stays a local,
+runs them locally, and also writes the progress report and map to
+`build/progress/` for a preview. The full `make elf` rebuild stays a local,
 contributor-run gate (see above); CI does not run it for you.
 
 The `progress` workflow in
-[`.github/workflows/progress.yml`](.github/workflows/progress.yml) feeds
-[decomp.dev](https://decomp.dev/mateuszklysz/Lombyte). It does not build the game and uses no
-secrets: it checks that the committed `progress/report.json` matches the
-repository (`scripts/gen_progress_report.py --check`), validates it with
-objdiff, and uploads it as the `SCUS_971.99_report` artifact. The report is
-made locally by `make progress` after `make elf`; it contains unit names,
-symbols, addresses, sizes and match percentages only, never retail bytes.
+[`.github/workflows/progress.yml`](.github/workflows/progress.yml) needs no
+game data for C_EXACT, which follows from the tree, so on every
+run it generates the objdiff report (`scripts/gen_progress_report.py`) and the
+progress map (`scripts/generate_treemap.py`), validates the report with objdiff
+and uploads it as the `SCUS_971.99_report` artifact that
+[decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) reads. On `main` it also
+publishes `report.json`, `decomp_map.svg` and `decomp_map.json` on the
+[`progress`](https://github.com/mateuszklysz/Lombyte/tree/progress) branch,
+which the README shows. On a pull request it compares the report with that
+branch and [`progress-comment.yml`](.github/workflows/progress-comment.yml)
+posts the result as one comment, updated on every push. None of these files is
+committed, so they cannot fall behind `main` or conflict between pull requests.
+
+C_FUZZY, the similarity of pending C bodies, needs a build, so CI does not
+measure it: the maintainers' tooling repository keeps the measured scores and
+the workflow reads them through a repository secret (pull requests from forks
+reuse the scores last published for `main`). Locally, `make progress` after
+`make elf` measures them for a preview.
+The report holds unit names, symbols, addresses, sizes and match percentages
+only, never retail bytes.
 
 ## Not exact yet? That is still useful
 

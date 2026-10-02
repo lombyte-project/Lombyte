@@ -1,16 +1,24 @@
-# Publishes Lombyte's progress to decomp.dev.
+# Progress report, progress map and pull request comment.
 #
-# decomp.dev picks up an objdiff report from a workflow artifact called
-# SCUS_971.99_report on main. Building the executable here is not an option:
-# it needs the retail SCUS_971.99 and compilers this repository may not
-# redistribute. Instead, maintainers regenerate progress/report.json after a
-# local `make elf` with `make progress` and commit it. This workflow checks
-# that the committed file still agrees with src/ and the linker config,
-# validates it with objdiff and publishes it. No secrets are used. The report lists unit names, symbols,
-# addresses, sizes and match percentages; it never contains game bytes.
+# Nothing here builds the game. C_EXACT follows from the tree (linker config,
+# src/, overlay tables), so the report and the map are regenerated on every run
+# instead of being committed. C_FUZZY needs a build, so it is measured where
+# the builds happen: the decomp workbench in the private Lombyte-Tools
+# repository keeps progress/fuzzy_scores.json there, and this job reads that
+# one file through the LOMBYTE_TOOLS_TOKEN secret (a read-only token for
+# mateuszklysz/Lombyte-Tools). Without the secret (pull requests from forks)
+# it falls back to the scores last published on the `progress` branch. The
+# published files list unit names, symbols, addresses, sizes and match
+# percentages; they never contain game bytes.
 #
-# Registering the repository on decomp.dev (/manage/new) is a one-time manual
-# step outside this workflow.
+# * every run: build the report and the map, validate the report with objdiff
+#   and upload it as SCUS_971.99_report, the artifact decomp.dev reads from
+#   main (registering the repository on decomp.dev is a one-time manual step);
+# * push to main: publish report.json, decomp_map.svg, decomp_map.json and
+#   fuzzy_scores.json on the `progress` branch, which the README shows;
+# * pull request: compare with the report on `progress` and hand the Markdown
+#   to progress-comment.yml, which posts it (that workflow has the write
+#   token, so comments work for pull requests from forks too).
 name: progress
 
 on:
@@ -25,16 +33,46 @@ permissions:
 jobs:
   report:
     runs-on: ubuntu-latest
+    env:
+      # Only whether the secret exists; the token itself reaches the one
+      # checkout step below and no step that runs repository code.
+      HAS_TOOLS_TOKEN: ${{ secrets.LOMBYTE_TOOLS_TOKEN != '' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.12"
 
-      # Fails if units were promoted, retagged or added without regenerating
-      # the report, so the published numbers cannot fall behind src/.
-      - name: Check the committed report is current
-        run: python3 scripts/gen_progress_report.py --check
+      - name: Fetch the C_FUZZY scores from Lombyte-Tools
+        if: env.HAS_TOOLS_TOKEN == 'true'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: mateuszklysz/Lombyte-Tools
+          token: ${{ secrets.LOMBYTE_TOOLS_TOKEN }}
+          path: build/tools
+          sparse-checkout: progress/fuzzy_scores.json
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Use the C_FUZZY scores
+        run: |
+          mkdir -p build/progress
+          if [ -f build/tools/progress/fuzzy_scores.json ]; then
+            cp build/tools/progress/fuzzy_scores.json build/progress/fuzzy_scores.json
+            echo "C_FUZZY scores from Lombyte-Tools"
+          elif git fetch --depth=1 origin progress &&
+               git show FETCH_HEAD:fuzzy_scores.json > build/progress/fuzzy_scores.json; then
+            echo "C_FUZZY scores last published for main"
+          else
+            rm -f build/progress/fuzzy_scores.json
+            echo "no C_FUZZY scores available"
+          fi
+          rm -rf build/tools
+
+      - name: Generate the report and the map
+        run: |
+          python3 scripts/gen_progress_report.py
+          python3 scripts/generate_treemap.py
 
       - name: Validate the report with objdiff
         run: |
@@ -42,33 +80,103 @@ jobs:
             https://github.com/encounter/objdiff/releases/download/v3.8.0/objdiff-cli-linux-x86_64
           echo "bc1e047126f9c6914bd1695798175234642ab9eaf45e886f841b59a4231e1a81  $RUNNER_TEMP/objdiff-cli" | sha256sum --check
           chmod +x "$RUNNER_TEMP/objdiff-cli"
-          "$RUNNER_TEMP/objdiff-cli" report changes progress/report.json progress/report.json \
+          "$RUNNER_TEMP/objdiff-cli" report changes build/progress/report.json build/progress/report.json \
             -o "$RUNNER_TEMP/validation.json"
 
-      - name: Summarise
+      - name: Compare with main
         run: |
-          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
-          import json
-          r = json.load(open("progress/report.json"))
-          m = r["measures"]
-          print("| Measure | Value |")
-          print("| --- | --- |")
-          print("| C_EXACT code | %.2f%% (%s / %s bytes) |"
-                % (m["matched_code_percent"], m["matched_code"], m["total_code"]))
-          print("| C_FUZZY | %.2f%% |" % m["fuzzy_match_percent"])
-          print("| Groups complete | %s / %s |" % (m["complete_units"], m["total_units"]))
-          for c in r["categories"]:
-              cm = c["measures"]
-              print("| %s | %.2f%% code, %s / %s groups |"
-                    % (c["name"], cm["matched_code_percent"], cm["complete_units"], cm["total_units"]))
-          PY
+          mkdir -p build/progress-base
+          if git fetch --depth=1 origin progress; then
+            git show FETCH_HEAD:report.json > build/progress-base/report.json
+            label="main ($(git log -1 --format=%s FETCH_HEAD | sed -n 's/.*@ \([0-9a-f]\{7\}\).*/\1/p'))"
+          else
+            label="main"
+          fi
+          python3 scripts/progress_comment.py build/progress-base/report.json \
+            build/progress/report.json --base-label "$label" > build/progress/comment.md
+          cat build/progress/comment.md >> "$GITHUB_STEP_SUMMARY"
 
-      # decomp.dev only reads the artifact from main; pull requests just run
-      # the checks above.
       - name: Upload the progress report
-        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: SCUS_971.99_report
-          path: progress/report.json
+          path: build/progress/report.json
           if-no-files-found: error
+
+      - name: Upload the progress map
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: progress-map
+          path: |
+            build/progress/decomp_map.svg
+            build/progress/decomp_map.json
+            build/progress/fuzzy_scores.json
+          if-no-files-found: error
+
+      - name: Upload the pull request comment
+        if: github.event_name == 'pull_request'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: echo "$PR_NUMBER" > build/progress/pr-number
+      - if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: progress-comment
+          path: |
+            build/progress/comment.md
+            build/progress/pr-number
+          if-no-files-found: error
+
+  publish:
+    needs: report
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    # One publish at a time, oldest first, so the branch always ends on the
+    # newest main.
+    concurrency:
+      group: progress-publish
+      cancel-in-progress: false
+    steps:
+      - name: Download this run's report and map
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh run download "$RUN_ID" --name SCUS_971.99_report --dir out
+          gh run download "$RUN_ID" --name progress-map --dir out
+      - name: Push to the progress branch
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init -q publish && cd publish
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GH_REPO}.git"
+          if git fetch -q --depth=1 origin progress; then
+            git checkout -q -b progress FETCH_HEAD
+          else
+            git checkout -q --orphan progress
+          fi
+          cp ../out/report.json ../out/decomp_map.svg ../out/decomp_map.json .
+          if [ -f ../out/fuzzy_scores.json ]; then cp ../out/fuzzy_scores.json .; fi
+          cat > README.md <<'MD'
+          # Lombyte progress
+
+          Generated by the `progress` workflow on every push to `main`; do not edit.
+          `report.json` is the objdiff report decomp.dev reads, `decomp_map.svg`
+          and `decomp_map.json` are the progress map in the main README and
+          `fuzzy_scores.json` is the C_FUZZY measurement of main's build.
+          MD
+          git add -A
+          if git diff --cached --quiet; then
+            echo "progress branch already current"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "progress @ ${GITHUB_SHA::7}"
+          git push -q origin progress

@@ -40,7 +40,11 @@ Layout
 
 Usage
   python3 scripts/generate_treemap.py
-  python3 scripts/generate_treemap.py --min-bytes 512 --output assets/decomp_map.svg
+  python3 scripts/generate_treemap.py --min-bytes 512 --output /tmp/decomp_map.svg
+
+  The map and its JSON are build output (``build/progress/``), not committed:
+  the ``progress`` workflow regenerates them on every push to main and
+  publishes them on the ``progress`` branch, which the README shows.
   python3 scripts/generate_treemap.py --width 800 --height 400   # compact variant
 """
 
@@ -1167,7 +1171,7 @@ def main(argv=None) -> int:
         help="derived categories JSON (default: <repo>/config/us/unit_categories.json)",
     )
     parser.add_argument(
-        "--output", type=Path, help="SVG path (default: <repo>/assets/decomp_map.svg)"
+        "--output", type=Path, help="SVG path (default: <repo>/build/progress/decomp_map.svg)"
     )
     parser.add_argument("--width", type=int, default=800)
     parser.add_argument("--height", type=int, default=None,
@@ -1221,7 +1225,7 @@ def main(argv=None) -> int:
         print(f"error: linker config not found: {config}", file=sys.stderr)
         return 2
     categories = (args.categories or repo / "config/us/unit_categories.json").resolve()
-    output = (args.output or repo / "assets" / "decomp_map.svg").resolve()
+    output = (args.output or repo / "build" / "progress" / "decomp_map.svg").resolve()
 
     units = build_units(repo, config, categories)
     if not units:
@@ -1244,7 +1248,7 @@ def main(argv=None) -> int:
             return 2
         scores, index_path = measured
     elif not args.no_scores:
-        scores = committed_function_scores(repo / "progress" / "report.json")
+        scores = committed_function_scores(repo / "build" / "progress" / "fuzzy_scores.json")
 
     for unit in units:
         score = scores.get(unit["owner"])
