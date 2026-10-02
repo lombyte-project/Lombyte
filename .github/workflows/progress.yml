@@ -34,7 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      TOOLS_TOKEN: ${{ secrets.LOMBYTE_TOOLS_TOKEN }}
+      # Only whether the secret exists; the token itself reaches the one
+      # checkout step below and no step that runs repository code.
+      HAS_TOOLS_TOKEN: ${{ secrets.LOMBYTE_TOOLS_TOKEN != '' }}
       # Measured on main, and on a manual run of any branch (to try the build).
       MEASURE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     steps:
@@ -55,7 +57,7 @@ jobs:
           fi
 
       - name: Fetch the retail ELF
-        if: env.MEASURE == 'true' && env.TOOLS_TOKEN != ''
+        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           repository: mateuszklysz/Lombyte-Tools
@@ -68,11 +70,11 @@ jobs:
       # setup.sh checks the ELF's SHA-256, installs the public toolchain and
       # runs `make elf`, which must reproduce retail before anything is measured.
       - name: Build the executable
-        if: env.MEASURE == 'true' && env.TOOLS_TOKEN != ''
+        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
         run: ./setup.sh --elf build/retail/extracted/SCUS_971.99
 
       - name: Measure C_FUZZY
-        if: env.MEASURE == 'true' && env.TOOLS_TOKEN != ''
+        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
         run: |
           .venv/bin/python scripts/gen_progress_report.py --workspace build/baseline
           rm -rf build/retail config/us/SCUS_971.99
@@ -141,6 +143,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write
     # One publish at a time, oldest first, so the branch always ends on the
     # newest main.
@@ -148,10 +151,14 @@ jobs:
       group: progress-publish
       cancel-in-progress: false
     steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          path: out
-          merge-multiple: true
+      - name: Download this run's report and map
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh run download "$RUN_ID" --name SCUS_971.99_report --dir out
+          gh run download "$RUN_ID" --name progress-map --dir out
       - name: Push to the progress branch
         env:
           GH_REPO: ${{ github.repository }}

@@ -33,9 +33,17 @@ jobs:
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           pr="$(tr -d '[:space:]' < comment/pr-number)"
           case "$pr" in ''|*[!0-9]*) echo "bad PR number" >&2; exit 1;; esac
+          # The artifact comes from pull request code, so its PR number is only
+          # trusted when that PR's head is the commit the run built.
+          head="$(gh api "repos/$GH_REPO/pulls/$pr" --jq .head.sha)"
+          if [ "$head" != "$HEAD_SHA" ]; then
+            echo "PR #$pr head $head is not the run's commit $HEAD_SHA; not commenting" >&2
+            exit 1
+          fi
           marker='<!-- lombyte-progress-report -->'
           head -c 60000 comment/comment.md > body.md
           grep -qF "$marker" body.md || { echo "comment has no marker" >&2; exit 1; }
