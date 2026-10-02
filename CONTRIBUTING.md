@@ -146,7 +146,7 @@ Every pull request runs the public `tools` job in
 These checks need no game data and never upload build outputs. `make check`
 runs them locally, and also writes the progress report and map to
 `build/progress/` for a preview. The full `make elf` rebuild stays a local,
-contributor-run gate (see above); CI runs it only on `main`, to measure C_FUZZY.
+contributor-run gate (see above); CI does not run it for you.
 
 The `progress` workflow in
 [`.github/workflows/progress.yml`](.github/workflows/progress.yml) needs no
@@ -162,11 +162,11 @@ branch and [`progress-comment.yml`](.github/workflows/progress-comment.yml)
 posts the result as one comment, updated on every push. None of these files is
 committed, so they cannot fall behind `main` or conflict between pull requests.
 
-C_FUZZY, the similarity of pending C bodies, needs a build. On every push to
-`main` the workflow also runs `./setup.sh` and `make elf` with the retail ELF
-from a repository secret, measures the pending bodies and publishes
-`fuzzy_scores.json` with the report; pull requests reuse main's last
-measurement. Locally, `make progress` after `make elf` previews the same.
+C_FUZZY, the similarity of pending C bodies, needs a build, so CI does not
+measure it: the maintainers' tooling repository keeps the measured scores and
+the workflow reads them through a repository secret (pull requests from forks
+reuse the scores last published for `main`). Locally, `make progress` after
+`make elf` measures them for a preview.
 The report holds unit names, symbols, addresses, sizes and match percentages
 only, never retail bytes.
 

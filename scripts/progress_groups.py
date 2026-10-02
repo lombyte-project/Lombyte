@@ -206,7 +206,7 @@ def committed_function_scores(path: Path) -> dict[object, float]:
 def write_fuzzy_scores(path: Path, report: dict) -> int:
     """Keep the measured similarity of every partly matched function.
 
-    The scores need a build to measure (CI on main does it); everything else
+    The scores need a build to measure (the maintainers' tooling does it); everything else
     in the report is derived from the tree.
     """
     scores = {}

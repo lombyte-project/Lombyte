@@ -1,14 +1,15 @@
 # Progress report, progress map and pull request comment.
 #
-# C_EXACT follows from the tree (linker config, src/, overlay tables), so the
-# report and the map are regenerated on every run instead of being committed.
-# C_FUZZY needs a build: on a push to main the job runs ./setup.sh and
-# `make elf` with the retail SCUS_971.99, read from the private tooling
-# repository through the LOMBYTE_TOOLS_TOKEN secret (a read-only token for
-# mateuszklysz/Lombyte-Tools), and measures the pending C bodies. Every other
-# run, and main while the secret is missing, reuses the last published
-# fuzzy_scores.json. The published files list unit names, symbols, addresses,
-# sizes and match percentages; they never contain game bytes.
+# Nothing here builds the game. C_EXACT follows from the tree (linker config,
+# src/, overlay tables), so the report and the map are regenerated on every run
+# instead of being committed. C_FUZZY needs a build, so it is measured where
+# the builds happen: the decomp workbench in the private Lombyte-Tools
+# repository keeps progress/fuzzy_scores.json there, and this job reads that
+# one file through the LOMBYTE_TOOLS_TOKEN secret (a read-only token for
+# mateuszklysz/Lombyte-Tools). Without the secret (pull requests from forks)
+# it falls back to the scores last published on the `progress` branch. The
+# published files list unit names, symbols, addresses, sizes and match
+# percentages; they never contain game bytes.
 #
 # * every run: build the report and the map, validate the report with objdiff
 #   and upload it as SCUS_971.99_report, the artifact decomp.dev reads from
@@ -32,52 +33,41 @@ permissions:
 jobs:
   report:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
     env:
       # Only whether the secret exists; the token itself reaches the one
       # checkout step below and no step that runs repository code.
       HAS_TOOLS_TOKEN: ${{ secrets.LOMBYTE_TOOLS_TOKEN != '' }}
-      # Measured on main, and on a manual run of any branch (to try the build).
-      MEASURE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.12"
 
-      - name: Fetch the last published C_FUZZY scores
-        run: |
-          mkdir -p build/progress
-          if git fetch --depth=1 origin progress &&
-             git show FETCH_HEAD:fuzzy_scores.json > build/progress/fuzzy_scores.json; then
-            echo "reusing the fuzzy scores published for main"
-          else
-            rm -f build/progress/fuzzy_scores.json
-            echo "no published fuzzy scores yet"
-          fi
-
-      - name: Fetch the retail ELF
-        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
+      - name: Fetch the C_FUZZY scores from Lombyte-Tools
+        if: env.HAS_TOOLS_TOKEN == 'true'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           repository: mateuszklysz/Lombyte-Tools
           token: ${{ secrets.LOMBYTE_TOOLS_TOKEN }}
-          path: build/retail
-          sparse-checkout: extracted/SCUS_971.99
+          path: build/tools
+          sparse-checkout: progress/fuzzy_scores.json
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
-      # setup.sh checks the ELF's SHA-256, installs the public toolchain and
-      # runs `make elf`, which must reproduce retail before anything is measured.
-      - name: Build the executable
-        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
-        run: ./setup.sh --elf build/retail/extracted/SCUS_971.99
-
-      - name: Measure C_FUZZY
-        if: env.MEASURE == 'true' && env.HAS_TOOLS_TOKEN == 'true'
+      - name: Use the C_FUZZY scores
         run: |
-          .venv/bin/python scripts/gen_progress_report.py --workspace build/baseline
-          rm -rf build/retail config/us/SCUS_971.99
+          mkdir -p build/progress
+          if [ -f build/tools/progress/fuzzy_scores.json ]; then
+            cp build/tools/progress/fuzzy_scores.json build/progress/fuzzy_scores.json
+            echo "C_FUZZY scores from Lombyte-Tools"
+          elif git fetch --depth=1 origin progress &&
+               git show FETCH_HEAD:fuzzy_scores.json > build/progress/fuzzy_scores.json; then
+            echo "C_FUZZY scores last published for main"
+          else
+            rm -f build/progress/fuzzy_scores.json
+            echo "no C_FUZZY scores available"
+          fi
+          rm -rf build/tools
 
       - name: Generate the report and the map
         run: |

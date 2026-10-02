@@ -15,7 +15,7 @@ check: ## Run the public CI checks locally (tests, script parse, progress report
 	python3 scripts/gen_progress_report.py
 	python3 scripts/generate_treemap.py
 
-progress: ## After `make elf`: measure C_FUZZY and preview the report and map in build/progress/ (CI does this on main)
+progress: ## After `make elf`: measure C_FUZZY and preview the report and map in build/progress/
 	$${VENV:-.venv}/bin/python scripts/gen_progress_report.py --workspace "$${BASELINE_ROOT:-build/baseline}"
 	$${VENV:-.venv}/bin/python scripts/generate_treemap.py
 

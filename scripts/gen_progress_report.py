@@ -7,10 +7,9 @@ derived from the tree (linker config, ``src/``, overlay tables), so the
 ``progress`` workflow regenerates it on every push and pull request, publishes
 it with the progress map on the ``progress`` branch and comments the change
 on pull requests. The exception is C_FUZZY, the measured similarity of pending
-functions, which needs a build: on every push to main the workflow rebuilds the
-executable (the retail ELF comes from a repository secret), measures it with
-``--workspace`` and publishes ``fuzzy_scores.json`` next to the report. Other
-runs read those last published scores from ``build/progress/fuzzy_scores.json``.
+functions, which needs a build: the maintainers' tooling measures it with
+``--workspace`` and keeps ``fuzzy_scores.json``, which the workflow copies to
+``build/progress/fuzzy_scores.json`` and publishes next to the report.
 
 What the report counts (the same contract as ``assets/decomp_map.json``):
 
@@ -47,7 +46,7 @@ Usage::
         build/progress/fuzzy_scores.json; needs no toolchain or executable
     python3 scripts/gen_progress_report.py --workspace build/baseline
         after ./verify-baseline.sh: measure pending units and also write
-        build/progress/fuzzy_scores.json (CI on main; `make progress`)
+        build/progress/fuzzy_scores.json (the tooling; `make progress`)
 """
 
 from __future__ import annotations
