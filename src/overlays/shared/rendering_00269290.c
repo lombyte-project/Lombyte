@@ -748,7 +748,69 @@ void FUN_L00_0026c7f0(char *a) {
     *(int *)(a + 0xC) = t;
     if (t < 0) FUN_L00_00267a08(a);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0026c860.s", FUN_L00_0026c860);
+typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_26c860;
+typedef int q_26c860 __attribute__((mode(TI)));
+typedef struct { q_26c860 q[4]; } M3_26c860;
+typedef struct { M3_26c860 *p0; f32 f4; f32 f8; f32 fC; f32 f10; f32 f14; u8 *p18; f32 f1C; } R_26c860;
+typedef struct { u8 p0[4]; s32 i4; u8 b8; u8 p9; s16 hA; f32 fC; V_26c860 v10; R_26c860 r; } M_26c860;
+extern f32 D_0015ED60_26c860 __asm__("D_0015ED60");
+f32 FUN_001f9de0_26c860(f32) __asm__("FUN_001f9de0");
+f32 FUN_001f9dc8_26c860(f32) __asm__("FUN_001f9dc8");
+void FUN_001f9d20_26c860(void *, void *, void *) __asm__("FUN_001f9d20");
+void FUN_001f9a28_26c860(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001f9a10_26c860(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_L00_0024f7c8_26c860(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
+void FUN_L00_001ff500_26c860(void *, void *, f32) __asm__("FUN_L00_001ff500");
+f32 FUN_001fa580_26c860(f32, f32) __asm__("FUN_001fa580");
+f32 FUN_L00_0025c230_26c860(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
+s32 FUN_001f9770_26c860(void *) __asm__("FUN_001f9770");
+void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");
+s32 FUN_001fa6d0_26c860(f32) __asm__("FUN_001fa6d0");
+void FUN_L00_0026c860(M_26c860 *m) {
+    R_26c860 *r = &m->r;
+    V_26c860 c, a, b;
+    M3_26c860 mat;
+    if (r->f10 != 0.0f) {
+        f32 zero = 0.0f;
+        mat.q[0] = r->p0->q[0];
+        mat.q[1] = r->p0->q[1];
+        mat.q[2] = r->p0->q[2];
+        a.y = FUN_001f9de0_26c860(r->f14) * r->f10;
+        a.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
+        a.x = zero;
+        a.w = zero;
+        FUN_001f9d20_26c860(&b, &a, &mat);
+        FUN_001f9a28_26c860(&m->v10, &m->v10, &b);
+        r->f1C += D_0015ED60_26c860 * 0.06001f;
+        FUN_L00_0024f7c8_26c860(r->p18, 0, &c);
+        FUN_001f9a28_26c860(&a, &c, &m->v10);
+        FUN_L00_001ff500_26c860(&a, &a, r->f1C);
+        FUN_001f9a10_26c860(&m->v10, &m->v10, &a);
+        r->f14 = FUN_001fa580_26c860(r->f14, D_0015ED60_26c860 * 0.5235988f);
+        r->f10 *= D_0015ED60_26c860 * -0.10000002384185791f + 1.0f;
+        a.y = FUN_001f9de0_26c860(r->f14) * r->f10;
+        a.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
+        a.x = zero;
+        a.w = zero;
+        FUN_001f9d20_26c860(&b, &a, &mat);
+        FUN_001f9a10_26c860(&m->v10, &m->v10, &b);
+        if (zero < FUN_L00_0025c230_26c860(&c, r->p18 + 0xC0, &m->v10, 1)) { FUN_L00_00267a08_26c860(m); return; }
+    }
+    r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
+    if (r->f4 <= 0.0f || FUN_001f9770_26c860(&m->hA)) {
+        FUN_L00_00267a08_26c860(m);
+        return;
+    }
+    if (1.0f <= r->f4) {
+        r->fC = -r->fC;
+        r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
+    }
+    m->fC += D_0015ED60_26c860 * -2940.0f;
+    m->i4 = (m->i4 & 0xFFFFFF) | (FUN_001fa6d0_26c860(r->f4 * 255.0f) << 24);
+    r->f8 += D_0015ED60_26c860 * 0.006f;
+    if (1.0f < r->f8) r->f8 -= 1.0f;
+    m->b8 = r->f8 * 255.0f;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
 
 extern s32 rand();

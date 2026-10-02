@@ -2,4 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027c410.s", FUN_L00_0027c410);
+typedef struct { char pad[0x1C4]; volatile s32 f1C4; } G_7c410;
+extern G_7c410 D_0013C940_7c410 __asm__("D_0013C940");
+typedef struct { char pad0[4]; s32 *f4; s32 f8; char pad1[0x118]; s32 f124; } H_7c410;
+extern H_7c410 D_L00_001B9CF0_7c410 __asm__("D_L00_001B9CF0") __attribute__((section(".data")));
+extern s32 D_0013D384_7c410 __asm__("D_0013D384") __attribute__((section(".data")));
+extern s32 D_L00_0015F5C0_7c410 __asm__("D_L00_0015F5C0");
+extern s32 D_L00_0015F5D8_7c410 __asm__("D_L00_0015F5D8");
+extern s32 D_L00_0015F570_7c410 __asm__("D_L00_0015F570");
+extern s32 D_L00_00184414_7c410 __asm__("D_L00_00184414") __attribute__((section(".data")));
+extern s32 D_0015ED84_7c410 __asm__("D_0015ED84") __attribute__((sda));
+
+s32 FUN_L00_0027c410(s32 o) {
+    s32 f = D_0013C940_7c410.f1C4;
+    s32 v;
+    H_7c410 *h;
+    if (f & 0xD00) {
+        if (*(s32 *)(o + 0x30) & 0x20) {
+            D_L00_00184414_7c410 = D_0015ED84_7c410;
+        }
+        return -1;
+    }
+    if (f & 0x10) {
+        if (*(s32 *)(o + 0x30) & 0x20) {
+            D_L00_00184414_7c410 = D_0015ED84_7c410;
+        }
+        h = &D_L00_001B9CF0_7c410;
+        v = *(s32 *)((u8 *)h->f4 + 0x38);
+        if (v != 0) {
+            h->f8 = v;
+        } else if (h->f124 == 0) {
+            return -1;
+        }
+    }
+    if (D_0013C940_7c410.f1C4 & 0x20) {
+        D_0013D384_7c410 = 0;
+        D_L00_0015F5C0_7c410 = -1;
+        D_L00_0015F570_7c410 = 1;
+        D_L00_0015F5D8_7c410 = 1;
+    }
+    return 0;
+}

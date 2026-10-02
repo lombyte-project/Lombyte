@@ -7,7 +7,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d0538.s", FUN_L00_002d0538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d09b8.s", FUN_L00_002d09b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d1428.s", FUN_L00_002d1428);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d19b0.s", FUN_L00_002d19b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d1e80.s", FUN_L00_002d1e80);
+typedef struct M2d1e80 { u8 p0[0x20]; u8 state; u8 p21[0x10]; u8 vis; u8 p32[2]; u16 flags; u8 p36[0x42]; s32 *vars; u8 p7c[0x40]; u8 bc; } M2d1e80;
+extern s32 D_L00_0015F5C4;
+extern s32 D_L00_0016C890[];
+void FUN_0020cca8(M2d1e80 *, s32, s32 *);
+void FUN_001f4600(void *, M2d1e80 *);
+void FUN_L00_002d19b0(void);
+void FUN_L00_002d1e80(M2d1e80 *m) {
+    s32 *v = m->vars;
+    if (m->state == 0) { m->state = 1; m->bc = 1; v[0x10] = 0; }
+    if (D_L00_0015F5C4 == 2 && (D_L00_0016C890[0] < 3 || D_L00_0016C890[0] == 4)) { m->vis = 0; m->flags |= 1; }
+    else { m->vis = 1; m->flags &= 0xFFFE; }
+    FUN_0020cca8(m, 0, v);
+    if (m->vis) FUN_001f4600(FUN_L00_002d19b0, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);

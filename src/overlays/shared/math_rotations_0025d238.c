@@ -270,8 +270,30 @@ void FUN_L00_0025f780(int a, short *list, short max) {
         list[list[0]] = k;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f800.s", FUN_L00_0025f800);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f878.s", FUN_L00_0025f878);
+extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
+void FUN_L00_0025f800(s32 p, s16 *a)
+{
+    s32 i;
+    for (i = 1; i <= a[0]; i++) {
+        if (D_L00_0015FFD8_c2 + (a[i] << 8) == p) {
+            a[i] = a[a[0]];
+            a[0]--;
+            return;
+        }
+    }
+}
+typedef struct { u8 pad[0x18]; s32 id; } V25f878;
+typedef struct { u8 pad[0x78]; V25f878 *p78; u8 pad7c[0x100 - 0x7C]; } M25f878;
+extern s16 D_L00_001B0770[] __attribute__((section(".data")));
+extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
+M25f878 *FUN_L00_0025f878(s32 id) {
+    s32 i;
+        for (i = 1; i <= D_L00_001B0770[0]; i++) {
+        M25f878 *o = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)D_L00_0015FFD8_c3);
+        if (o->p78->id == id) return o;
+    }
+    return 0;
+}
 f32 FUN_002132a8(f32, f32);
 void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[0] += FUN_002132a8(-r, r);

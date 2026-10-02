@@ -93,4 +93,24 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
     p[13] = 0;
     *(char * volatile *)&D_L00_001611C0_23bac0 += 0x70;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023cdb8.s", FUN_L00_0023cdb8);
+typedef struct O23cdb8 { u8 pad0[0x8]; s32 max; s32 *src; u8 pad10[0x5C]; s32 f6C; u8 c[4]; s32 val; u8 pad78[4]; s32 timer; } O23cdb8;
+extern s32 D_L00_0015F91C __attribute__((sda));
+extern s32 D_L00_0015F920 __attribute__((sda));
+s32 FUN_001f96f8(s32);
+void FUN_L00_0023cdb8(O23cdb8 *p) {
+    u8 *c = p->c;
+    s32 v = *p->src;
+    p->val = v;
+    if (p->max < v) p->val = p->max;
+    else if (v < 0) p->val = 0;
+    if (p->timer >= FUN_001f96f8(5)) {
+        p->timer = FUN_001f96f8(5);
+        if (c[0] < D_L00_0015F91C) c[0]++;
+        else if (c[1] < D_L00_0015F920) c[1]++;
+    } else {
+        p->f6C = 1;
+        if (c[1] != 0) c[1]--;
+        else if (c[0] != 0) c[0]--;
+        else p->f6C = -6;
+    }
+}

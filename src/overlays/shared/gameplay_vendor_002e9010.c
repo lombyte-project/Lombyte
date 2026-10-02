@@ -602,7 +602,48 @@ void FUN_L00_002ea9d8(char *src) {
         p = g;
     qcopy(*(char **)(p + 0x70) + 0x80, src);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eaaa0.s", FUN_L00_002eaaa0);
+typedef int Q_2eaaa0 __attribute__((mode(TI)));
+typedef struct { f32 v[4]; } __attribute__((aligned(16))) V_2eaaa0;
+extern V_2eaaa0 D_L00_00166DC0_2eaaa0[2] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") __attribute__((section(".data")));
+u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
+void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
+void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
+void FUN_L00_002eaaa0(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
+    u8 *m = FUN_L00_001eb1f8_2eaaa0(5);
+    V_2eaaa0 a, b, c, d;
+    u8 *n;
+    u8 *e;
+    u8 *p;
+    qcopy(&a, pa);
+    qcopy(&b, pb);
+    qcopy(&c, &D_L00_00166DC0_2eaaa0[0]);
+    qcopy(&d, &D_L00_00166DC0_2eaaa0[1]);
+    FUN_001ebf10_2eaaa0(m);
+    n = *(u8 **)(m + 0x70);
+    e = n + 0xE0;
+    p = n + 0x80;
+    m[0x7C] = 7;
+    m[0x7D] = 1;
+    qcopy(m + 0x30, &a);
+    qcopy(&D_L00_00166DC0_2eaaa0[0], &a);
+    qcopy(m + 0x40, &b);
+    qcopy(p, &a);
+    qcopy(n + 0x90, &b);
+    *(s32 *)(e + 0x40) = x;
+    m[0x88] = mode;
+    if (mode != 2) {
+        if (mode != 3) return;
+        *(f32 *)(e + 0x44) = 1.0f;
+        *(f32 *)(e + 0x48) = 0.0f;
+        qcopy(m + 0x30, &c);
+        qcopy(m + 0x40, &d);
+        qcopy(n + 0x110, &D_0013F3D0_2eaaa0);
+        FUN_L00_001ed630_2eaaa0(n + 0xFC, &c, &D_0013F3D0_2eaaa0);
+    }
+    *(s32 *)(e + 4) = w;
+    *(s32 *)(n + 0xE0) = w;
+}
 extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern char D_0013F3E0_2eac18[] __asm__("D_0013F3E0");
 void FUN_L00_001eb448_2eac18(void) __asm__("FUN_L00_001eb448");
@@ -1242,7 +1283,45 @@ int FUN_L00_002ed8b0(char *a) {
     FUN_L00_002ed498(a);
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed950.s", FUN_L00_002ed950);
+typedef struct { s32 id; s32 w4; s32 w8; s32 wC; s32 snd; } S_2ed950;
+typedef struct { u8 p[0x74]; u8 b74; u8 p2[0x8C - 0x75]; void *o; } E_2ed950;
+#define ENT_2ed950(i) ((E_2ed950 *)((u8 *)D_0013E550_2ed950 + (i) * 0x70))
+typedef struct { u8 p[0x18]; u8 b18; u8 p2[7]; } T_2ed950;
+extern u8 D_L00_00166DC0_2ed950[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") __attribute__((section(".data")));
+extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
+f32 FUN_001f9b48_2ed950(void *, void *) __asm__("FUN_001f9b48");
+s32 FUN_001f9740_2ed950(s32 *) __asm__("FUN_001f9740");
+s32 FUN_L00_0028ddd8_2ed950(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
+s32 FUN_00213260_2ed950(s32) __asm__("FUN_00213260");
+s32 FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
+void FUN_0022d798_2ed950(s32) __asm__("FUN_0022d798");
+void FUN_L00_002ed950(u8 *m) {
+    S_2ed950 *s = *(S_2ed950 **)(m + 8);
+    f32 d, r;
+    if (s->id < 0) return;
+    d = FUN_001f9b48_2ed950(D_L00_00166DC0_2ed950, m + 0x40);
+    r = *(f32 *)(m + 0xC);
+    if (d < r) {
+        E_2ed950 *e = ENT_2ed950(s->snd);
+        s32 fl = 0;
+        s32 four = 4;
+        if (D_L00_0015F5F4_2ed950[s->id].b18) fl = four;
+        if (e->o == m && e->b74) return;
+        if (!FUN_001f9740_2ed950(&s->wC)) return;
+        s->snd = FUN_L00_0028ddd8_2ed950(s->id, fl, m, 0x400);
+        if (s->w8 > 0) {
+            s->wC = FUN_001f96f8_2ed950(s->w4 + FUN_00213260_2ed950(s->w8 - s->w4)) * 60.0f;
+        }
+    } else if (r + 1.0f < d) {
+        s32 h = s->snd;
+        if (h != -1) {
+            E_2ed950 *e = ENT_2ed950(h);
+            if (e->o == m && e->b74) FUN_0022d798_2ed950(h);
+        }
+        s->snd = -1;
+    }
+}
 typedef struct { s32 snd; s32 lo; s32 hi; s32 timer; s32 h; } S_2edad8;
 typedef struct { f32 f[4]; } V_2edad8;
 extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));

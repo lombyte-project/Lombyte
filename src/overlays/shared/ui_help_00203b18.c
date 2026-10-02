@@ -1165,14 +1165,38 @@ void FUN_L00_00209ec8(void) {
 typedef struct { char pad[0xA4]; float a; float b; } S0020a1e0;
 extern S0020a1e0 D_L00_0017A680;
 void FUN_L00_0020a1e0(float a, float b) { S0020a1e0 *p = &D_L00_0017A680; p->a = a; p->b = b; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a240.s", FUN_L00_0020a240);
+typedef struct V0020a240 { f32 x, y, z, w; } V0020a240;
+typedef struct G0020a240 {
+    u8 pad[0x80];
+    u8 v80[0x1b4];
+    f32 f234;
+} G0020a240;
+extern G0020a240 D_0013F350_c __asm__("D_0013F350");
+extern u8 D_L00_00173E60[];
+extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
+extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
+extern f32 FUN_001f9b80(void *, void *);
+s32 FUN_L00_0020a240(f32 *out, f32 a, f32 b)
+{
+    G0020a240 *g = &D_0013F350_c;
+    V0020a240 p;
+    V0020a240 q;
+
+    FUN_L00_002335c8(&p, g->f234 - 0.02f, 0.0f, a);
+    FUN_L00_002335c8(&q, b, 0.0f, a);
+    if (FUN_001efa68(&p, &q, 2, 0, 0)) {
+        if (out != 0) *out = FUN_001f9b80(g->v80, D_L00_00173E60);
+        return 1;
+    }
+    return 0;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_0020A990), where it is exact; names translated to the US level program. */
 
 extern V D_L00_00173E60_d __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
 extern float D_0015ED64;
 extern float FUN_001f9b48(void *, void *);
-extern int FUN_L00_0020a240(int, float, float);
+extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
 extern int FUN_L00_0025e3b8(void *);
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
@@ -1197,7 +1221,7 @@ void FUN_L00_0020a318(void) {
     if (*(short *)(g + 0x22C8) != 0) f13 = 1.5999999f;
     f12 = 0.569999993f;
     if (*(unsigned char *)(g + 0x20A8) != 0) f12 = 0.699999988f;
-    if (FUN_L00_0020a240(0, f12, f13) == 0) return;
+    if (FUN_L00_0020a240_u(0, f12, f13) == 0) return;
     if (*(unsigned char *)(g + 0x20A8) != 0) {
         if (D_L00_00173E58_d != 0) {
             if (FUN_L00_0025e3b8(D_L00_00173E58_d) != 0) return;

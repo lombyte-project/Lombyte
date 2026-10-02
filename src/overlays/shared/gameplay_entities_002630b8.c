@@ -39,7 +39,64 @@ void FUN_L00_002634f8(Vec4_2634f8 *v) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00263618.s", FUN_L00_00263618);
+#include "qcopy.h"
+typedef int ti_00263618 __attribute__((mode(TI)));
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    u64 a, b, c, d;
+} Pk_00263618;
+extern u8 D_L00_00166DC0_00263618[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern float D_L00_001B0470_00263618[4][4] __asm__("D_L00_001B0470") __attribute__((section(".data")));
+u64 FUN_001f44b8_00263618(s32) __asm__("FUN_001f44b8");
+void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_001f9bf8_00263618(void *, void *, float) __asm__("FUN_001f9bf8");
+void FUN_001f9ad8_00263618(void *, void *, void *) __asm__("FUN_001f9ad8");
+void FUN_001f9a68_00263618(void *, void *, float) __asm__("FUN_001f9a68");
+void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
+void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
+void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
+void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
+    Pk_00263618 pk;
+    float up[4];
+    float M[4][4];
+    float t[4];
+    s32 i;
+    ti_00263618 z = 0;
+    *(ti_00263618 *)up = z;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+    pk.b = FUN_001f44b8_00263618(0xB);
+    pk.d = 0x8000000048ULL;
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 5;
+    pk.uv[0] = 0.0f;
+    pk.uv[1] = 0.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 1.0f;
+    pk.uv[7] = 1.0f;
+    qcopy(M[3], pos);
+    FUN_001f9a28_00263618(M[0], D_L00_00166DC0_00263618, M[3]);
+    FUN_001f9bf8_00263618(M[0], M[0], 1.0f);
+    FUN_001f9ad8_00263618(M[1], M[0], up);
+    FUN_001f9bf8_00263618(M[1], M[1], 1.0f);
+    FUN_001f9ad8_00263618(M[2], M[1], M[0]);
+    FUN_001f9a68_00263618(t, M[0], r);
+    FUN_001f9a10_00263618(M[3], M[3], t);
+    pk.col[3] = col;
+    pk.col[2] = col;
+    pk.col[1] = col;
+    pk.col[0] = col;
+    for (i = 0; i < 4; i++) {
+        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470_00263618[i], s);
+        FUN_001f9d20_00263618(pk.m[i], pk.m[i], M);
+    }
+    FUN_001f7d30_00263618(&pk, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
 extern unsigned char D_0015EDB7 __attribute__((section(".sdata")));
 void FUN_0020cb10();
