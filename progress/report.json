@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 16.359625,
+    "fuzzy_match_percent": 16.360927,
     "total_code": "3521568",
-    "matched_code": "504660",
-    "matched_code_percent": 14.330548,
+    "matched_code": "505496",
+    "matched_code_percent": 14.354288,
     "total_functions": 4191,
-    "matched_functions": 2087,
-    "matched_functions_percent": 49.797184,
-    "complete_code": "504660",
-    "complete_code_percent": 14.330548,
+    "matched_functions": 2089,
+    "matched_functions_percent": 49.844906,
+    "complete_code": "505496",
+    "complete_code_percent": 14.354288,
     "total_units": 437,
     "complete_units": 125
   },
@@ -230,15 +230,15 @@
     {
       "name": "sdk/library",
       "measures": {
-        "fuzzy_match_percent": 96.324143,
+        "fuzzy_match_percent": 96.413731,
         "total_code": "51168",
-        "matched_code": "41664",
-        "matched_code_percent": 81.425891,
+        "matched_code": "42500",
+        "matched_code_percent": 83.059725,
         "total_functions": 162,
-        "matched_functions": 145,
-        "matched_functions_percent": 89.506173,
-        "complete_code": "41664",
-        "complete_code_percent": 81.425891,
+        "matched_functions": 147,
+        "matched_functions_percent": 90.740741,
+        "complete_code": "42500",
+        "complete_code_percent": 83.059725,
         "total_units": 1,
         "complete_units": 0
       },
@@ -1434,7 +1434,7 @@
         {
           "name": "_updateRefImage",
           "size": "692",
-          "fuzzy_match_percent": 93.8381,
+          "fuzzy_match_percent": 97.1098,
           "address": "94632",
           "metadata": {
             "virtual_address": "173264"
@@ -1468,9 +1468,9 @@
           }
         },
         {
-          "name": "_getPtsDtsFlags",
+          "name": "GetMpegPictureTimestampsAndFlags",
           "size": "396",
-          "fuzzy_match_percent": 98.3838,
+          "fuzzy_match_percent": 100.0,
           "address": "96184",
           "metadata": {
             "virtual_address": "174816"
@@ -1486,9 +1486,9 @@
           }
         },
         {
-          "name": "_dispRefImageField",
+          "name": "PrepareMpegPictureFieldTransfers",
           "size": "440",
-          "fuzzy_match_percent": 96.1818,
+          "fuzzy_match_percent": 100.0,
           "address": "96856",
           "metadata": {
             "virtual_address": "175488"
@@ -48793,15 +48793,15 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 86.345258,
+        "fuzzy_match_percent": 86.3587,
         "total_code": "341044",
-        "matched_code": "223020",
-        "matched_code_percent": 65.393322,
+        "matched_code": "223856",
+        "matched_code_percent": 65.638451,
         "total_functions": 1201,
-        "matched_functions": 1058,
-        "matched_functions_percent": 88.093256,
-        "complete_code": "223020",
-        "complete_code_percent": 65.393322,
+        "matched_functions": 1060,
+        "matched_functions_percent": 88.259784,
+        "complete_code": "223856",
+        "complete_code_percent": 65.638451,
         "total_units": 116,
         "complete_units": 76
       }
@@ -48827,15 +48827,15 @@
       "id": "sdk",
       "name": "Sony SDK",
       "measures": {
-        "fuzzy_match_percent": 96.236599,
+        "fuzzy_match_percent": 96.295901,
         "total_code": "77300",
-        "matched_code": "62668",
-        "matched_code_percent": 81.071151,
+        "matched_code": "63504",
+        "matched_code_percent": 82.152652,
         "total_functions": 298,
-        "matched_functions": 271,
-        "matched_functions_percent": 90.939597,
-        "complete_code": "62668",
-        "complete_code_percent": 81.071151,
+        "matched_functions": 273,
+        "matched_functions_percent": 91.610738,
+        "complete_code": "63504",
+        "complete_code_percent": 82.152652,
         "total_units": 11,
         "complete_units": 6
       }

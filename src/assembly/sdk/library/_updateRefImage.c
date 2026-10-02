@@ -6,251 +6,248 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_updateRefImage/_updateRefImage.s", _updateRefImage);
 #else
 #include "types.h"
-struct M2c_ref {
+struct MpegReferencePicture {
     u8 pad_0[0x18];
-    s64 unk18;
-    s64 unk20;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
+    s64 presentation_timestamp;
+    s64 decoding_timestamp;
+    s32 status;
+    s32 coding_type;
+    s32 picture_structure;
+    s32 progressive_sequence;
+    s32 progressive_frame;
+    s32 top_field_first;
+    s32 repeat_first_field;
+    s32 horizontal_offset0;
+    s32 horizontal_offset1;
+    s32 horizontal_offset2;
+    s32 vertical_offset0;
+    s32 vertical_offset1;
+    s32 vertical_offset2;
+    s32 display_width;
+    s32 display_height;
 };
 
-struct M2c_arg0 {
+struct MpegReferenceState {
     u8 pad_0[0xA0];
-    s32 unkA0;
-    s32 unkA4;
+    s32 queued_picture_count0;
+    s32 queued_picture_count1;
     u8 pad_A8[0x40];
-    s32 unkE8;
+    s32 reorder_gate;
     u8 pad_EC[0x50];
-    s32 unk13C;
+    s32 progressive_sequence;
     u8 pad_140[0x8];
-    s32 unk148;
-    s32 unk14C;
-    s32 unk150;
+    s32 display_width;
+    s32 display_height;
+    s32 coding_type;
     u8 pad_154[0x20];
-    s32 unk174;
-    s32 unk178;
+    s32 picture_structure;
+    s32 top_field_first;
     u8 pad_17C[0x8];
-    s32 unk184;
-    s32 unk188;
-    s32 unk18C;
-    s32 unk190;
-    s32 unk194;
-    s32 unk198;
-    s32 unk19C;
-    s32 unk1A0;
-    s32 unk1A4;
-    s32 unk1A8;
+    s32 repeat_first_field;
+    s32 progressive_frame;
+    s32 horizontal_offset0;
+    s32 horizontal_offset1;
+    s32 horizontal_offset2;
+    s32 vertical_offset0;
+    s32 vertical_offset1;
+    s32 vertical_offset2;
+    s32 closed_group;
+    s32 broken_link;
     u8 pad_1AC[0xC];
-    struct M2c_ref * unk1B8;
-    struct M2c_ref * unk1BC;
-    struct M2c_ref * unk1C0;
-    s32 unk1C4;
-    struct M2c_ref * unk1C8;
-    struct M2c_ref * unk1CC;
-    struct M2c_ref * unk1D0;
-    s32 unk1D4;
-    struct M2c_ref * unk1D8;
-    struct M2c_ref * unk1DC;
-    struct M2c_ref * unk1E0;
-    s32 unk1E4;
+    struct MpegReferencePicture * current_frame;
+    struct MpegReferencePicture * previous_frame;
+    struct MpegReferencePicture * selected_frame;
+    struct MpegReferencePicture *reordered_frame;
+    struct MpegReferencePicture * current_top_field;
+    struct MpegReferencePicture * previous_top_field;
+    struct MpegReferencePicture * selected_top_field;
+    struct MpegReferencePicture *reordered_top_field;
+    struct MpegReferencePicture * current_bottom_field;
+    struct MpegReferencePicture * previous_bottom_field;
+    struct MpegReferencePicture * selected_bottom_field;
+    struct MpegReferencePicture *reordered_bottom_field;
     u8 pad_1E8[0x640];
-    s64 unk828;
-    s64 unk830;
+    s64 presentation_timestamp;
+    s64 decoding_timestamp;
 };
 
 
-s32 _updateRefImage(struct M2c_arg0 *arg0, s32 arg1) {
-    s32 temp_10_7;
-    s32 temp_4_64;
-    s32 temp_9_5;
-    s32 var_11_9;
-    s32 var_13_10;
-    s32 var_4_115;
-    s32 var_4_52;
-    struct M2c_ref *temp_2_111;
-    struct M2c_ref *temp_4_92;
-    struct M2c_ref *temp_3_95;
-    struct M2c_ref *temp_6_97;
-    struct M2c_ref *var_2_113;
-    struct M2c_ref *var_3_55;
-    struct M2c_ref *var_8_8;
+s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) __asm__("_updateRefImage");
 
-    temp_9_5 = arg0->unk174;
-    var_11_9 = ((temp_9_5 ^ 3) == 0) ? 2 : 4;
-    temp_10_7 = arg0->unk150;
-    var_8_8 = NULL;
-    var_13_10 = 0;
-    if (temp_10_7 != 3) {
-        goto block_19;
+s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) {
+    s32 coding_type;
+    s32 top_field_status;
+    s32 picture_structure;
+    s32 queue_threshold;
+    s32 references_ready;
+    s32 reference_status;
+    struct MpegReferencePicture *previous_bottom_field;
+    struct MpegReferencePicture *current_reference;
+    struct MpegReferencePicture *previous_frame;
+    struct MpegReferencePicture *previous_top_field;
+    struct MpegReferencePicture *primary_reference;
+    struct MpegReferencePicture *secondary_reference;
+    struct MpegReferencePicture *selected_picture;
+
+    picture_structure = state->picture_structure;
+    queue_threshold = ((picture_structure ^ 3) == 0) ? 2 : 4;
+    coding_type = state->coding_type;
+    selected_picture = NULL;
+    references_ready = 0;
+    if (coding_type != 3) {
+        goto swap_references;
     }
-    arg0->unk1C0 = (struct M2c_ref *) arg0->unk1C4;
-    arg0->unk1D0 = (struct M2c_ref *) arg0->unk1D4;
-    arg0->unk1E0 = (struct M2c_ref *) arg0->unk1E4;
-    if ((arg0->unkA0 + arg0->unkA4) < var_11_9) {
-        goto block_3;
+    state->selected_frame = state->reordered_frame;
+    state->selected_top_field = state->reordered_top_field;
+    state->selected_bottom_field = state->reordered_bottom_field;
+    if ((state->queued_picture_count0 + state->queued_picture_count1) < queue_threshold) {
+        goto check_reorder_gate;
     }
-    arg0->unkE8 = 0;
-    arg0->unk1A8 = 0;
-    arg0->unk1A4 = 0;
-block_3:
-    if (arg0->unkE8 != 0) {
-        goto block_5;
+    state->reorder_gate = 0;
+    state->broken_link = 0;
+    state->closed_group = 0;
+check_reorder_gate:
+    if (state->reorder_gate != 0) {
+        goto check_closed_group;
     }
-    if (arg0->unk1A8 == 0) {
-        goto block_7;
+    if (state->broken_link == 0) {
+        goto clear_reorder_gate;
     }
-block_5:
-    if (arg0->unk1A4 != 0) {
-        goto block_7;
+check_closed_group:
+    if (state->closed_group != 0) {
+        goto clear_reorder_gate;
     }
-    arg0->unk1B8->unk28 = 0;
-    arg0->unk1C8->unk28 = 0;
-    arg0->unk1D8->unk28 = 0;
-block_7:
-    arg0->unkE8 = 0;
-    arg0->unk1A8 = 0;
-    if (arg0->unk174 != 3) {
-        goto block_13;
+    state->current_frame->status = 0;
+    state->current_top_field->status = 0;
+    state->current_bottom_field->status = 0;
+clear_reorder_gate:
+    state->reorder_gate = 0;
+    state->broken_link = 0;
+    if (state->picture_structure != 3) {
+        goto check_current_fields;
     }
-    var_4_52 = 1;
-    if (arg0->unk1B8->unk28 != 1) {
-        goto block_10;
+    reference_status = 1;
+    if (state->current_frame->status != 1) {
+        goto check_frame_gate;
     }
-    var_3_55 = arg0->unk1BC;
-    goto block_18;
-block_10:
-    if (arg0->unk1A4 == 0) {
-        goto block_32;
+    secondary_reference = state->previous_frame;
+    goto check_secondary_reference;
+check_frame_gate:
+    if (state->closed_group == 0) {
+        goto select_picture;
     }
-    var_3_55 = arg0->unk1BC;
-    goto block_18;
-block_13:
-    temp_4_64 = arg0->unk1C8->unk28;
-    if (temp_4_64 != 1) {
-        goto block_15;
+    secondary_reference = state->previous_frame;
+    goto check_secondary_reference;
+check_current_fields:
+    top_field_status = state->current_top_field->status;
+    if (top_field_status != 1) {
+        goto check_field_gate;
     }
-    if (arg0->unk1D8->unk28 == temp_4_64) {
-        goto block_16;
+    if (state->current_bottom_field->status == top_field_status) {
+        goto check_previous_fields;
     }
-block_15:
-    if (arg0->unk1A4 == 0) {
-        goto block_32;
+check_field_gate:
+    if (state->closed_group == 0) {
+        goto select_picture;
     }
-block_16:
-    var_4_52 = arg0->unk1CC->unk28;
-    if (var_4_52 != 1) {
-        goto block_32;
+check_previous_fields:
+    reference_status = state->previous_top_field->status;
+    if (reference_status != 1) {
+        goto select_picture;
     }
-    var_3_55 = arg0->unk1DC;
-block_18:
-    var_13_10 = ((var_3_55->unk28 ^ 1) != 0) ? 0 : var_4_52;
-    goto block_31;
-block_19:
-    if (arg1 != 0) {
-        goto block_21;
+    secondary_reference = state->previous_bottom_field;
+check_secondary_reference:
+    references_ready = reference_status;
+    if (secondary_reference->status != 1) references_ready = 0;
+    goto select_picture_after_reference_check;
+swap_references:
+    if (force_reorder != 0) {
+        goto select_previous_references;
     }
-    temp_4_92 = arg0->unk1B8;
-    temp_3_95 = arg0->unk1BC;
-    arg0->unk1BC = temp_4_92;
-    temp_4_92 = arg0->unk1C8;
-    temp_6_97 = arg0->unk1CC;
-    arg0->unk1CC = temp_4_92;
-    temp_4_92 = arg0->unk1D8;
-    temp_2_111 = arg0->unk1DC;
-    arg0->unk1B8 = temp_3_95;
-    arg0->unk1C8 = temp_6_97;
-    arg0->unk1D8 = temp_2_111;
-    arg0->unk1DC = temp_4_92;
-block_21:
-    arg0->unk1C0 = arg0->unk1BC;
-    arg0->unk1D0 = arg0->unk1CC;
-    arg0->unk1E0 = arg0->unk1DC;
-    if (temp_9_5 != 3) {
-        goto block_24;
+    current_reference = state->current_frame;
+    previous_frame = state->previous_frame;
+    state->previous_frame = current_reference;
+    current_reference = state->current_top_field;
+    previous_top_field = state->previous_top_field;
+    state->previous_top_field = current_reference;
+    current_reference = state->current_bottom_field;
+    previous_bottom_field = state->previous_bottom_field;
+    state->current_frame = previous_frame;
+    state->current_top_field = previous_top_field;
+    state->current_bottom_field = previous_bottom_field;
+    state->previous_bottom_field = current_reference;
+select_previous_references:
+    state->selected_frame = state->previous_frame;
+    state->selected_top_field = state->previous_top_field;
+    state->selected_bottom_field = state->previous_bottom_field;
+    if (picture_structure != 3) {
+        goto check_predicted_fields;
     }
-    if (temp_10_7 != 2) {
-        goto block_30;
+    if (coding_type != 2) {
+        goto references_available;
     }
-    var_2_113 = arg0->unk1B8;
-    var_4_115 = 1;
-    goto block_29;
-block_24:
-    if (temp_10_7 != 2) {
-        goto block_30;
+    primary_reference = state->current_frame;
+    reference_status = 1;
+    goto check_primary_reference;
+check_predicted_fields:
+    /* Forced reordering can reuse a ready previous field. Otherwise test
+     * the current top/bottom pair, as in the retail branch at 0x00129704. */
+    primary_reference = (picture_structure == 1) ? state->previous_bottom_field : state->previous_top_field;
+    if (coding_type != 2) goto references_available;
+    if (force_reorder != 0 && primary_reference->status == 1) goto references_available;
+    primary_reference = state->current_top_field;
+    reference_status = primary_reference->status;
+    if (reference_status != 1) goto select_picture;
+    primary_reference = state->current_bottom_field;
+check_primary_reference:
+    if (primary_reference->status != reference_status) {
+        goto select_picture;
     }
-    var_2_113 = arg0->unk1C8;
-    if (arg1 == 0) {
-        var_2_113 = (temp_9_5 ^ 1) ? arg0->unk1CC : arg0->unk1DC;
-    } else if (arg0->unk1C8->unk28 == 1) {
-        goto block_30;
+references_available:
+    references_ready = 1;
+select_picture_after_reference_check:
+select_picture:
+    if (state->picture_structure == 2) {
+        goto select_bottom_field;
     }
-    var_4_115 = var_2_113->unk28;
-    if (var_4_115 != 1) {
-        goto block_32;
+    if (state->picture_structure >= 3) {
+        goto check_frame_structure;
     }
-    var_2_113 = arg0->unk1D8;
-block_29:
-    if (var_2_113->unk28 != var_4_115) {
-        goto block_32;
+    if (state->picture_structure != 1) {
+        goto no_selected_field;
     }
-block_30:
-    var_13_10 = 1;
-block_31:
-block_32:
-    if (arg0->unk174 == 2) {
-        goto block_42;
+    selected_picture = state->selected_top_field;
+    goto copy_picture_metadata;
+no_selected_field:
+    goto copy_picture_metadata;
+check_frame_structure:
+    if (state->picture_structure != 3) {
+        goto no_selected_frame;
     }
-    if (arg0->unk174 >= 3) {
-        goto block_38;
-    }
-    if (arg0->unk174 != 1) {
-        goto block_36;
-    }
-    var_8_8 = arg0->unk1D0;
-    goto block_43;
-block_36:
-    goto block_43;
-block_38:
-    if (arg0->unk174 != 3) {
-        goto block_40;
-    }
-    var_8_8 = arg0->unk1C0;
-    goto block_43;
-block_40:
-    goto block_43;
-block_42:
-    var_8_8 = arg0->unk1E0;
-block_43:
-    var_8_8->unk28 = 0;
-    var_8_8->unk18 = arg0->unk828;
-    var_8_8->unk2C = arg0->unk150;
-    var_8_8->unk20 = arg0->unk830;
-    var_8_8->unk30 = arg0->unk174;
-    var_8_8->unk34 = arg0->unk13C;
-    var_8_8->unk38 = arg0->unk188;
-    var_8_8->unk3C = arg0->unk178;
-    var_8_8->unk40 = arg0->unk184;
-    var_8_8->unk44 = arg0->unk18C;
-    var_8_8->unk48 = arg0->unk190;
-    var_8_8->unk4C = arg0->unk194;
-    var_8_8->unk50 = arg0->unk198;
-    var_8_8->unk54 = arg0->unk19C;
-    var_8_8->unk58 = arg0->unk1A0;
-    var_8_8->unk5C = arg0->unk148;
-    var_8_8->unk60 = arg0->unk14C;
-    return var_13_10;
+    selected_picture = state->selected_frame;
+    goto copy_picture_metadata;
+no_selected_frame:
+    goto copy_picture_metadata;
+select_bottom_field:
+    selected_picture = state->selected_bottom_field;
+copy_picture_metadata:
+    selected_picture->status = 0;
+    selected_picture->presentation_timestamp = state->presentation_timestamp;
+    selected_picture->coding_type = state->coding_type;
+    selected_picture->decoding_timestamp = state->decoding_timestamp;
+    selected_picture->picture_structure = state->picture_structure;
+    selected_picture->progressive_sequence = state->progressive_sequence;
+    selected_picture->progressive_frame = state->progressive_frame;
+    selected_picture->top_field_first = state->top_field_first;
+    selected_picture->repeat_first_field = state->repeat_first_field;
+    selected_picture->horizontal_offset0 = state->horizontal_offset0;
+    selected_picture->horizontal_offset1 = state->horizontal_offset1;
+    selected_picture->horizontal_offset2 = state->horizontal_offset2;
+    selected_picture->vertical_offset0 = state->vertical_offset0;
+    selected_picture->vertical_offset1 = state->vertical_offset1;
+    selected_picture->vertical_offset2 = state->vertical_offset2;
+    selected_picture->display_width = state->display_width;
+    selected_picture->display_height = state->display_height;
+    return references_ready;
 }
 #endif /* NON_MATCHING */
