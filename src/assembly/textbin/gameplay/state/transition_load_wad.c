@@ -172,7 +172,9 @@ extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 
 extern s32 D_0015EF64_far __asm__("D_0015EF64") __attribute__((section(".data")));
-void FUN_001ea830(void) {
+void transition_load_wad(void) __asm__("FUN_001ea830");
+
+void transition_load_wad(void) {
     u8 li[0x60];
     WadHeader *hdr;
     u8 *data;

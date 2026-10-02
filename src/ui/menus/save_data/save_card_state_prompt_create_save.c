@@ -4,7 +4,9 @@ extern int D_0015EEB0 MACRO_ADDR;
 extern int D_0015EEB4 MACRO_ADDR;
 extern int D_0015F5E8 MACRO_ADDR;
 
-void FUN_00208ca8(void) {
+void save_card_state_prompt_create_save(void) __asm__("FUN_00208ca8");
+
+void save_card_state_prompt_create_save(void) {
     int flags;
 
     if (*(int *)(D_0013D290 + 0x1C) != 0) {
@@ -27,4 +29,4 @@ void FUN_00208ca8(void) {
     }
 }
 
-extern __typeof__(FUN_00208ca8) func_00208CA8 __attribute__((alias("FUN_00208ca8")));
+extern __typeof__(save_card_state_prompt_create_save) func_00208CA8 __attribute__((alias("FUN_00208ca8")));

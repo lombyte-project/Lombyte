@@ -96,7 +96,9 @@ extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern s32 InitializeGlobalStateEntry();
 extern s32 func_001FBAB8();
 extern s32 func_0022DA68();
-s32 FUN_002232d8(struct M2c_arg0 *arg0)
+s32 loading_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_002232d8");
+
+s32 loading_data_menu(struct M2c_arg0 *arg0)
 {
   s32 temp_19_15;
   s32 mobj_unk38;

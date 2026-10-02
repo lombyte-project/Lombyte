@@ -44,7 +44,9 @@ extern void FlushCache(int);
 extern void func_0020B618(int, void *);
 extern void func_00203338(void *, void *, void *, int);
 
-void FUN_00204a40(int cls, int mode) {
+void select_world_object_resource_tables(int cls, int mode) __asm__("FUN_00204a40");
+
+void select_world_object_resource_tables(int cls, int mode) {
     int i;
     int n;
     char *data;

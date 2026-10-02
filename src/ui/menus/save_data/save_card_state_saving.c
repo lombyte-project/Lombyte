@@ -11,7 +11,9 @@ extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
 extern void func_001FBAB8();
 
-void FUN_00208f28(void) {
+void save_card_state_saving(void) __asm__("FUN_00208f28");
+
+void save_card_state_saving(void) {
     s32 flags;
 
     if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) {

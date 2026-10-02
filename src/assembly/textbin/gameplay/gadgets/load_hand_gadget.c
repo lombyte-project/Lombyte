@@ -148,7 +148,9 @@ extern void func_00224E18();
 extern void func_00224FC0();
 extern void func_002250F0();
 extern void func_00225180();
-s32 FUN_00224368(Hand *h)
+s32 load_hand_gadget(Hand *h) __asm__("FUN_00224368");
+
+s32 load_hand_gadget(Hand *h)
 {
   Moby *m;
   s32 cur0;

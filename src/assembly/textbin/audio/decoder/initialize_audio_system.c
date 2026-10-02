@@ -69,8 +69,10 @@ extern s32 AddIntcHandler(s32, void *, s32);
 extern s32 func_00119090(s32);
 extern s32 AddDmacHandler(s32, void *, s32);
 extern s32 func_00119160(s32);
-s32 FUN_0023a7c0(s32 arg0, s32 arg1, s32 arg2);
-s32 FUN_0023a7c0(s32 arg0, s32 arg1, s32 arg2)
+s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2);
+s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0023a7c0");
+
+s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2)
 {
   struct ThreadArgs th;
   s32 tid;

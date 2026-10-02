@@ -6,9 +6,9 @@ extern struct M2c_D_0013D290 D_0013D290;
 extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
 
-void FUN_00208fe8(void) __asm__("FUN_00208fe8");
+void save_card_state_prompt_begin_no_save(void) __asm__("FUN_00208fe8");
 
-void FUN_00208fe8(void) {
+void save_card_state_prompt_begin_no_save(void) {
     if (*(s32 *)((u8 *)&D_0013D290 + 0x1C)) {
         D_0015EEB0 = 3;
     } else if (D_0015EEB4 & 0x20) {
@@ -17,4 +17,4 @@ void FUN_00208fe8(void) {
     }
 }
 
-extern __typeof__(FUN_00208fe8) func_00208FE8 __attribute__((alias("FUN_00208fe8")));
+extern __typeof__(save_card_state_prompt_begin_no_save) func_00208FE8 __attribute__((alias("FUN_00208fe8")));

@@ -8,7 +8,9 @@ extern int D_0015EEB4 MACRO_ADDR;
    D_0013D290 record. The cross-jumped `b` back into the 0x80 arm is
    one GNU as pads as a short loop and ps2eeas did not;
    tools/ps2eeas_nops.py writes it as a .word. */
-void FUN_002088d0(void) {
+void save_card_state_good_save(void) __asm__("FUN_002088d0");
+
+void save_card_state_good_save(void) {
     int flags = D_0015EEB4;
     char *b;
     int nf;
@@ -42,4 +44,4 @@ void FUN_002088d0(void) {
     }
 }
 
-extern __typeof__(FUN_002088d0) func_002088D0 __attribute__((alias("FUN_002088d0")));
+extern __typeof__(save_card_state_good_save) func_002088D0 __attribute__((alias("FUN_002088d0")));

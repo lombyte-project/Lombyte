@@ -23,7 +23,9 @@ extern s32 func_00215E00(s32, s32, s32, s32);
 extern void func_002160A8(void *);
 extern s32 func_00216788(s32, s32, s32);
 
-void FUN_00216290(void) {
+void music_update(void) __asm__("FUN_00216290");
+
+void music_update(void) {
     struct M2c_D_001516D0 *m;
     s8 song;
     s32 n;

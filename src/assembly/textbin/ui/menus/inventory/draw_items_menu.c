@@ -77,7 +77,7 @@ extern int sprintf(char *, const char *, ...);
 extern char *strchr(const char *, int);
 extern char *strcpy(char *, const char *);
 extern u32 strlen(const char *);
-s32 FUN_0021eb20(ItemsMenu *m);
+s32 draw_items_menu(ItemsMenu *m);
 static inline int inline_fn(s32 arg0, int arg1)
 {
   return arg0 + arg1;
@@ -91,7 +91,9 @@ static inline int idiv(s32 a, int n)
   return a / n;
 }
 
-s32 FUN_0021eb20(ItemsMenu *m)
+s32 draw_items_menu(ItemsMenu *m) __asm__("FUN_0021eb20");
+
+s32 draw_items_menu(ItemsMenu *m)
 {
   char buf[0x80];
   char *p;

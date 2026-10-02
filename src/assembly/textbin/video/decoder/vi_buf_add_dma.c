@@ -849,7 +849,9 @@ extern void func_0023AB78(char *); /* ErrMessage */
 extern char D_001E8B20[];          /* "DMA ADD not active\n" */
 
 /* viBufAddDMA(ViBuf *) */
-int FUN_0023bf70(ViBuf *f) {
+int vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");
+
+int vi_buf_add_dma(ViBuf *f) {
     int i;
     int index;
     int id;

@@ -101,7 +101,9 @@ extern void func_0022E188(s32);
 extern void func_0012E418(s32);
 extern void func_00216088();
 extern void func_0012DC80();
-void FUN_001fce28(void)
+void update_mode_freeze(void) __asm__("FUN_001fce28");
+
+void update_mode_freeze(void)
 {
   func_0022CA50();
   if (D_00193300.unk4 != 0)
