@@ -4,84 +4,86 @@
 
 typedef union { u128 q; f32 f[4]; } Vec4;
 
-struct Tab {
+struct CameraPath {
     s32 count;
     s32 pad[3];
-    u128 q[1];
+    u128 points[1];
 };
 
-extern void FUN_001f9a28(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a40(void *, void *, void *, f32);
-extern f32 FUN_001f9b20(void *);
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 func_001FA580(f32, f32);
-extern f32 func_001FA5C8(f32, f32);
-extern s32 func_001FA6D0(f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 
-void FUN_00214e58(struct Tab *tab, s32 flag, void *dst, f32 *out, s32 flags, f32 t) {
-    Vec4 q0;
-    Vec4 q1;
-    Vec4 q2;
-    Vec4 v;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 clamp;
-    f32 f;
-    f32 a;
-    f32 b;
+void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) __asm__("FUN_00214e58");
+
+void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) {
+    Vec4 current_point;
+    Vec4 next_point;
+    Vec4 following_point;
+    Vec4 segment;
+    s32 point_index;
+    s32 next_index;
+    s32 following_index;
+    s32 clamped;
+    f32 fraction;
+    f32 pitch;
+    f32 heading;
     f32 c;
-    f32 d;
-    f32 e;
-    f32 z;
-    f32 m;
+    f32 next_heading;
+    f32 bank;
+    f32 next_bank;
+    f32 next_pitch;
 
-    clamp = 0;
-    i = func_001FA6D0(t);
-    if (flag == 0) {
-        s32 n = tab->count - 2;
-        if (!(i < n)) {
-            i = n;
-            clamp = 1;
+    clamped = 0;
+    point_index = convert_float_to_word(progress);
+    if (loop == 0) {
+        s32 n = path->count - 2;
+        if (!(point_index < n)) {
+            point_index = n;
+            clamped = 1;
         }
     }
-    f = t - (f32)i;
-    if (clamp) {
-        if (1.0f < f) {
-            f = 1.0f;
+    fraction = progress - (f32)point_index;
+    if (clamped) {
+        if (1.0f < fraction) {
+            fraction = 1.0f;
         }
     }
-    k = i + 2;
-    j = i + 1;
-    if (!(k < tab->count)) {
-        j = j % tab->count;
-        k = k % tab->count;
+    following_index = point_index + 2;
+    next_index = point_index + 1;
+    if (!(following_index < path->count)) {
+        next_index = next_index % path->count;
+        following_index = following_index % path->count;
     }
-    z = 0.0f;
-    qcopy(&q0.q, &tab->q[i]);
-    qcopy(&q1.q, &tab->q[j]);
-    FUN_001f9a40(dst, &q0, &q1, f);
+    next_bank = 0.0f;
+    qcopy(&current_point.q, &path->points[point_index]);
+    qcopy(&next_point.q, &path->points[next_index]);
+    FUN_001f9a40(position, &current_point, &next_point, fraction);
     if (!(flags & 1)) {
-        FUN_001f9a28(&v, &q1, &q0);
-        b = FUN_001f9e90(v.f[0], v.f[1]);
-        a = FUN_001f9e90(FUN_001f9b20(&v), v.f[2]);
-        e = q0.f[3];
-        m = a;
-        if (clamp) {
-            d = b;
-            e = z;
+        subtract_vector_xyz(&segment, &next_point, &current_point);
+        heading = FUN_001f9e90(segment.f[0], segment.f[1]);
+        pitch = FUN_001f9e90(vector_length_xy(&segment), segment.f[2]);
+        bank = current_point.f[3];
+        next_pitch = pitch;
+        if (clamped) {
+            next_heading = heading;
+            bank = next_bank;
         } else {
-            qcopy(&q2.q, &tab->q[k]);
-            FUN_001f9a28(&v, &q2, &q1);
-            d = FUN_001f9e90(v.f[0], v.f[1]);
-            m = FUN_001f9e90(FUN_001f9b20(&v), v.f[2]);
-            z = q1.f[3];
+            qcopy(&following_point.q, &path->points[following_index]);
+            subtract_vector_xyz(&segment, &following_point, &next_point);
+            next_heading = FUN_001f9e90(segment.f[0], segment.f[1]);
+            next_pitch = FUN_001f9e90(vector_length_xy(&segment), segment.f[2]);
+            next_bank = next_point.f[3];
         }
-        *(s32 *)out = 0;
-        out[1] = -func_001FA580(func_001FA5C8(m, a) * f, a);
-        out[2] = func_001FA580(func_001FA5C8(d, b) * f, b);
-        out[3] = -func_001FA580(func_001FA5C8(z, e) * f, e);
+        *(s32 *)rotation = 0;
+        rotation[1] = -fast_add_rotations(fast_subtract_rotations(next_pitch, pitch) * fraction, pitch);
+        rotation[2] = fast_add_rotations(fast_subtract_rotations(next_heading, heading) * fraction, heading);
+        rotation[3] = -fast_add_rotations(fast_subtract_rotations(next_bank, bank) * fraction, bank);
     }
 }
 
-extern __typeof__(FUN_00214e58) func_00214E58 __attribute__((alias("FUN_00214e58")));
+extern __typeof__(sample_camera_path) func_00214E58 __attribute__((alias("FUN_00214e58")));

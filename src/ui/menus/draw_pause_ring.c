@@ -29,8 +29,8 @@ extern u8 D_001602D8[];
 extern u8 D_001602E0[];
 extern u8 D_001863D0[];
 extern s32 SubtractIntegerWithClamp(s32);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 func_001FA610(f32);
 extern void func_001F4280(s32);
 extern void func_001F4398(void);
@@ -68,8 +68,8 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         f32 t, x, y;
 
         t = func_001FA610((f32)i * 0.7853982f + -1.5707964f);
-        x = cx + func_001F9DC8(t) * radius;
-        y = cy + func_001F9DE0(t) * radius;
+        x = cx + fast_cos(t) * radius;
+        y = cy + fast_sin(t) * radius;
         if (i == arg0->sel) {
             u64 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40)
                          * 0x10202) | 0x80000000;

@@ -72,7 +72,7 @@ typedef struct
   s16 tbp;
   s16 cbp;
   s16 mbp;
-} TexEntry;
+} ResidentRenderTextureDefinition;
 typedef struct 
 {
   u64 tex0;
@@ -93,142 +93,144 @@ typedef struct
   u64 pad38;
   u64 end;
   u64 pad48;
-} GsBlock;
+} ObjectRenderRecord;
 typedef struct 
 {
   s32 offset;
   u8 pad4[0xC];
-} Reloc;
+} RenderStreamEntry;
 typedef struct 
 {
-  Reloc *relocs[3];
-  s32 unkC;
+  RenderStreamEntry *streams[3];
+  s32 packed_normals;
   u8 pad10[0x10];
-  u8 counts[3];
-  u8 nblocks;
+  u8 stream_counts[3];
+  u8 record_count;
   u8 pad24[2];
-  s16 unk26;
-  s32 unk28;
-  GsBlock *blocks;
+  s16 runtime_index;
+  s32 runtime_data;
+  ObjectRenderRecord *records;
   u8 pad30[0x16];
-  u16 id;
+  u16 class_slot;
   f32 scale;
-} Model;
+} ObjectRenderClass;
 typedef union 
 {
   u128 q;
   u8 b[16];
-} Map16;
+} MaterialMap;
 extern s32 D_00160F4C;
 extern s16 D_001E1900[];
 extern u8 D_001E1A00[];
-extern Model *D_001E1700[];
+extern ObjectRenderClass *D_001E1700[];
 extern s32 D_001E2E00[];
-extern Map16 D_001E3600[];
+extern MaterialMap D_001E3600[];
 extern s32 D_0015EE8C;
 extern u64 D_0019E540[];
-extern s32 func_001FA6D0(f32);
-extern s32 func_001F97A0(s32);
-void FUN_00203730(Model *model, TexEntry *tex, u128 *map, s32 cls)
+extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
+extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+void register_object_render_class(ObjectRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, s32 class_id) __asm__("FUN_00203730");
+
+void register_object_render_class(ObjectRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, s32 class_id)
 {
   s32 i;
-  int new_var;
+  int mip_address_word;
   s32 j;
   s32 k;
-  s32 m;
-  s32 lo10;
-  s32 hi10;
-  s32 lo30;
-  s32 hi30;
-  s64 tw;
-  s64 cw;
-  u64 lw;
-  u64 lh;
-  s32 base;
-  s32 r;
-  Map16 *slot;
-  GsBlock *blk;
-  TexEntry *e;
-  u64 *g;
-  u64 d0;
-  u64 d1;
-  u64 d2;
-  u64 d3;
-  D_001E1900[D_00160F4C] = cls;
-  D_001E1A00[cls] = D_00160F4C;
-  D_001E1700[D_00160F4C] = model;
-  model->id = D_00160F4C;
-  r = func_001FA6D0(model->scale * 1024.0f);
+  s32 material_index;
+  s32 draw_high;
+  s32 draw_shift;
+  s32 material_base;
+  s32 material_shift;
+  s64 width_units_64;
+  s64 width_units_128;
+  u64 width_log2;
+  u64 height_log2;
+  s32 gs_block_base;
+  s32 fixed_threshold;
+  MaterialMap *slot_materials;
+  ObjectRenderRecord *record;
+  ResidentRenderTextureDefinition *texture;
+  u64 *fallback_packet;
+  u64 tex0_word;
+  u64 tex1_word;
+  u64 mip_word;
+  u64 clamp_word;
+  D_001E1900[D_00160F4C] = class_id;
+  D_001E1A00[class_id] = D_00160F4C;
+  D_001E1700[D_00160F4C] = render_class;
+  render_class->class_slot = D_00160F4C;
+  fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
   j = D_00160F4C++;
-  D_001E2E00[j] = r;
-  model->unk28 = 0;
-  model->unk26 = 0;
+  D_001E2E00[j] = fixed_threshold;
+  render_class->runtime_data = 0;
+  render_class->runtime_index = 0;
   for (i = 0; i < 3; i++)
   {
-    if (model->relocs[i] != 0)
+    if (render_class->streams[i] != 0)
     {
-      model->relocs[i] = (Reloc *) (((s32) model->relocs[i]) + ((s32) model));
-      for (j = 0; j < model->counts[i]; j++)
+      render_class->streams[i] = (RenderStreamEntry *) (((s32) render_class->streams[i]) + ((s32) render_class));
+      for (j = 0; j < render_class->stream_counts[i]; j++)
       {
-        model->relocs[i][j].offset += (s32) model->relocs[i];
+        render_class->streams[i][j].offset += (s32) render_class->streams[i];
       }
 
     }
   }
 
-  model->unkC += (s32) model;
-  model->blocks = (GsBlock *) (((s32) model->blocks) + ((s32) model));
-  slot = &D_001E3600[D_001E1A00[cls]];
-  blk = model->blocks;
-  slot->q = *map;
-  for (k = 0; k < model->nblocks; k++)
+  render_class->packed_normals += (s32) render_class;
+  render_class->records = (ObjectRenderRecord *) (((s32) render_class->records) + ((s32) render_class));
+  slot_materials = &D_001E3600[D_001E1A00[class_id]];
+  record = render_class->records;
+  slot_materials->q = *material_map;
+  for (k = 0; k < render_class->record_count; k++)
   {
-    lo10 = blk->tex1.w[0];
-    m = slot->b[k];
-    hi10 = blk->tex1.w[1];
-    lo30 = blk->clamp.w[0];
-    hi30 = blk->clamp.w[1];
-    if (tex != 0)
+    draw_high = record->tex1.w[0];
+    material_index = slot_materials->b[k];
+    draw_shift = record->tex1.w[1];
+    material_base = record->clamp.w[0];
+    material_shift = record->clamp.w[1];
+    if (textures != 0)
     {
-      e = &tex[m];
-      tw = ((s16) e->size) >> 6;
-      cw = ((s16) e->size) >> 7;
-      if (tw <= 0)
+      texture = &textures[material_index];
+      width_units_64 = ((s16) texture->size) >> 6;
+      width_units_128 = ((s16) texture->size) >> 7;
+      if (width_units_64 <= 0)
       {
-        tw = 1;
+        width_units_64 = 1;
       }
-      if (cw <= 0)
+      if (width_units_128 <= 0)
       {
-        cw = 1;
+        width_units_128 = 1;
       }
-      lw = func_001F97A0((s16) e->size);
-      lh = func_001F97A0(e->h);
-      base = D_0015EE8C >> 8;
-      d0 = (((u64) tw) << 14) | ((((u64) lw) << 26) | 0x1300000);
-      d0 |= ((u64) lh) << 30;
-      d0 |= (((u64) (e->tbp + base)) << 37) | (((u64) 1) << 34);
-      d0 |= ((u64) 1) << 63;
-      d1 = ((((u64) (e->w - 1)) << 2) | ((((u64) hi10) << 6) | 0x20)) | (((u64) lo10) << 32);
-      new_var = (((u64) (e->mbp + base)) << 40) | (((u64) 1) << 34);
-      d2 = ((((u64) cw) << 14) | (((u64) (e->cbp + base)) << 20)) | new_var;
-      d2 |= ((u64) 1) << 54;
-      d3 = (lo30 | (((u64) hi30) << 2)) | (((u64) m) << 24);
-      blk->tex0 = d0;
-      blk->tex1.d = d1;
-      blk->mip = d2;
-      blk->clamp.d = d3;
+      width_log2 = highest_set_bit_index((s16) texture->size);
+      height_log2 = highest_set_bit_index(texture->h);
+      gs_block_base = D_0015EE8C >> 8;
+      tex0_word = (((u64) width_units_64) << 14) | ((((u64) width_log2) << 26) | 0x1300000);
+      tex0_word |= ((u64) height_log2) << 30;
+      tex0_word |= (((u64) (texture->tbp + gs_block_base)) << 37) | (((u64) 1) << 34);
+      tex0_word |= ((u64) 1) << 63;
+      tex1_word = ((((u64) (texture->w - 1)) << 2) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+      mip_address_word = (((u64) (texture->mbp + gs_block_base)) << 40) | (((u64) 1) << 34);
+      mip_word = ((((u64) width_units_128) << 14) | (((u64) (texture->cbp + gs_block_base)) << 20)) | mip_address_word;
+      mip_word |= ((u64) 1) << 54;
+      clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
+      record->tex0 = tex0_word;
+      record->tex1.d = tex1_word;
+      record->mip = mip_word;
+      record->clamp.d = clamp_word;
     }
     else
     {
-      d1 = ((D_0019E540[(m * 3) + 1] & 0x1C) | ((((u64) hi10) << 6) | 0x20)) | (((u64) lo10) << 32);
-      d3 = (lo30 | (((u64) hi30) << 2)) | (((u64) m) << 24);
-      blk->tex0 = D_0019E540[m * 3];
-      blk->tex1.d = d1;
-      blk->mip = D_0019E540[(m * 3) + 2];
-      blk->clamp.d = d3;
+      tex1_word = ((D_0019E540[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+      clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
+      record->tex0 = D_0019E540[material_index * 3];
+      record->tex1.d = tex1_word;
+      record->mip = D_0019E540[(material_index * 3) + 2];
+      record->clamp.d = clamp_word;
     }
-    blk->end = 0;
-    blk++;
+    record->end = 0;
+    record++;
   }
 
 }

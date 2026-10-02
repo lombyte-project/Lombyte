@@ -31,100 +31,100 @@ struct PacketCursor {
 extern struct PacketCursor D_00160F00_s __asm__("D_00160F00") MACRO_ADDR;
 #define D_00160F00 (D_00160F00_s.p)
 
-extern void func_0012F368(s32);
-extern void func_001F3868(void);
-extern void func_001F3958(void);
-extern void func_001F4A58(s32);
-extern void func_001F5450(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64);
-extern f32 func_001FA6C0(s32);
-extern void func_001FB3D0(void);
-extern s32 func_00204428(void);
-extern void func_00208840(void);
-extern void func_002093D8(void);
-extern void func_002316E8(s32, s32, s32, s32, s32, u64, f32, f32, f32, f32);
-extern void func_00231878(s32, s32, s32, u64 *, u64 *, u64 *);
-extern void func_002335D0(void);
-extern void func_00233630(void);
-extern void func_002336A0(void);
-extern void func_002337B0(s32);
-extern void func_00233980(s32, u64);
+extern void read_file_entry_with_retry(s32) __asm__("func_0012F368");
+extern void reset_gs_registers(void) __asm__("func_001F3868");
+extern void reset_gs_registers_pr(void) __asm__("func_001F3958");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("func_001F5450");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern s32 service_level_archive_load(void) __asm__("func_00204428");
+extern void run_state_handler(void) __asm__("func_00208840");
+extern void memcard_update_state(void) __asm__("func_002093D8");
+extern void append_scrolling_textured_quad(s32, s32, s32, s32, s32, u64, f32, f32, f32, f32) __asm__("func_002316E8");
+extern void prepare_loading_slide_textures(s32, s32, s32, u64 *, u64 *, u64 *) __asm__("func_00231878");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
+extern void swap_render_buffer_chain(void) __asm__("func_00233630");
+extern void vu1_send_chain(void) __asm__("func_002336A0");
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void sceGsSyncV(s32);
 
-void fun_00231bd8(s32 a0, s32 cur, s32 sel, s32 n, s32 skip) __asm__("FUN_00231bd8");
+void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_slide, s32 duration_ticks, s32 preload_level) __asm__("FUN_00231bd8");
 
-void fun_00231bd8(s32 a0, s32 cur, s32 sel, s32 n, s32 skip) {
-    u64 tex0;
-    u64 tex1;
-    u64 tex2;
-    s32 i;
-    s32 a;
-    s32 fade;
-    f32 t;
-    f32 t0;
-    f32 t1;
+void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_slide, s32 duration_ticks, s32 preload_level) {
+    u64 shared_texture;
+    u64 first_texture;
+    u64 second_texture;
+    s32 frame;
+    s32 alpha;
+    s32 fade_in_alpha;
+    f32 scroll_phase;
+    f32 scroll_start;
+    f32 scroll_end;
 
-    func_00231878(a0, cur, sel, &tex0, &tex1, &tex2);
-    if (skip != 0) {
-        func_0012F368(D_0015ED84);
+    prepare_loading_slide_textures(language_index, first_slide, second_slide, &shared_texture, &first_texture, &second_texture);
+    if (preload_level != 0) {
+        read_file_entry_with_retry(D_0015ED84);
         D_0015EE48 = 0;
         D_0015EE4A = 0;
     }
     sceGsSyncV(0);
-    func_002335D0();
-    for (i = 0; i < n && D_0013D290.xD4 < 3 && D_0013D290.xDC < 0; i++) {
-        a = 0x80;
-        func_001F3868();
-        func_001FB3D0();
-        func_00233980(1, (u64)0x8000 << 16);
-        func_00233980(8, 0);
+    vu1_init_chain();
+    for (frame = 0; frame < duration_ticks && D_0013D290.xD4 < 3 && D_0013D290.xDC < 0; frame++) {
+        alpha = 0x80;
+        reset_gs_registers();
+        append_draw_buffer_packet();
+        vu1_add_g_sregister(1, (u64)0x8000 << 16);
+        vu1_add_g_sregister(8, 0);
         D_00160F00[0] = 0x30000014;
-        fade = i * 4;
-        if (i <= 0x1F) {
-            a = fade;
+        fade_in_alpha = frame * 4;
+        if (frame <= 0x1F) {
+            alpha = fade_in_alpha;
         }
         D_00160F00[1] = (s32)D_0013CDD0;
         D_00160F00[2] = 0;
         D_00160F00[3] = 0x50000014;
         D_00160F00 += 4;
-        if (n - 0x10 < i) {
-            a = (n - i) * 8;
+        if (duration_ticks - 0x10 < frame) {
+            alpha = (duration_ticks - frame) * 8;
         }
-        t = func_001FA6C0(i % 600) * 0.0016666667f;
-        if (cur == sel) {
-            func_002316E8(0, D_0013E500.y - 0x20, 0x200, 0x40, (a << 24) | 0x808080, tex0, 0.0f, 4.0f,
-                          t + 0.0f, t + 0.4f);
-            func_001F5450(0, D_0013E500.y - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, tex1);
+        scroll_phase = convert_integer_to_float(frame % 600) * 0.0016666667f;
+        if (first_slide == second_slide) {
+            append_scrolling_textured_quad(0, D_0013E500.y - 0x20, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
+                          scroll_phase + 0.0f, scroll_phase + 0.4f);
+            draw_textured_quad(0, D_0013E500.y - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
         } else {
-            t0 = t + 0.0f;
-            t1 = t + 0.4f;
-            func_002316E8(0, D_0013E500.y - 0x2E, 0x200, 0x40, (a << 24) | 0x808080, tex0, 0.0f, 4.0f, t0,
-                          t1);
-            func_001F5450(0, D_0013E500.y - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, tex1);
-            if (i > 0x40) {
-                if (i < 0x60) {
-                    a = (i - 0x40) * 4;
+            scroll_start = scroll_phase + 0.0f;
+            scroll_end = scroll_phase + 0.4f;
+            append_scrolling_textured_quad(0, D_0013E500.y - 0x2E, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start,
+                          scroll_end);
+            draw_textured_quad(0, D_0013E500.y - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
+            if (frame > 0x40) {
+                if (frame < 0x60) {
+                    alpha = (frame - 0x40) * 4;
                 }
-                func_002316E8(0, D_0013E500.y, 0x200, 0x40, (a << 24) | 0x808080, tex0, 0.0f, 4.0f, t0, t1);
-                func_001F5450(0, D_0013E500.y, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, tex2);
+                append_scrolling_textured_quad(0, D_0013E500.y, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start, scroll_end);
+                draw_textured_quad(0, D_0013E500.y, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, second_texture);
             }
         }
-        func_002093D8();
-        func_00208840();
-        func_002337B0(1);
+        memcard_update_state();
+        run_state_handler();
+        vu1_sync_chain(1);
         sceGsSyncV(0);
-        func_001F3958();
-        func_002336A0();
-        func_00233630();
-        if (skip != 0) {
-            if (func_00204428() == 0) {
-                if (n < i + 0x14) {
-                    n = i + 0x14;
+        reset_gs_registers_pr();
+        vu1_send_chain();
+        swap_render_buffer_chain();
+        if (preload_level != 0) {
+            if (service_level_archive_load() == 0) {
+                if (duration_ticks < frame + 0x14) {
+                    duration_ticks = frame + 0x14;
                 }
             } else {
-                skip = 0;
+                preload_level = 0;
             }
         }
     }
-    func_001F4A58(2);
+    fade_to_black(2);
 }
 #endif /* NON_MATCHING */

@@ -1,12 +1,12 @@
 #include "types.h"
 
 struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct Point { u64 flags; u8 pad8[8]; };
-struct PointList { u8 pad0[0xC]; s16 count; u8 padE[2]; struct Point *points; };
+struct SkyVisibilityEntry { u64 flags; u8 pad8[8]; };
+struct SkyVisibilityList { u8 pad0[0xC]; s16 count; u8 padE[2]; struct SkyVisibilityEntry *points; };
 extern struct DmaTag *D_00160F00;
 extern struct DmaTag *D_00160470;
 extern u8 D_00160450[];
-extern struct PointList *D_0016045C;
+extern struct SkyVisibilityList *D_0016045C;
 extern s32 D_0015EE74;
 extern s32 D_0015EE78;
 extern s32 D_0015F458;
@@ -16,19 +16,19 @@ void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 
 void setup_sky_gif_paging(void) {
     struct DmaTag *tag;
-    struct PointList *list;
-    s32 i;
+    struct SkyVisibilityList *visibility_list;
+    s32 entry_index;
 
     tag = D_00160F00;
     D_00160470 = tag;
     tag = tag + 1;
     D_00160F00 = tag;
     func_001F21B8(D_00160450, 1);
-    list = D_0016045C;
+    visibility_list = D_0016045C;
     D_0015EE74 = D_0015EE78;
     D_0015F458 = 0;
-    for (i = 0; i < list->count; i++) {
-        list->points[i].flags = 0;
+    for (entry_index = 0; entry_index < visibility_list->count; entry_index++) {
+        visibility_list->points[entry_index].flags = 0;
     }
 }
 

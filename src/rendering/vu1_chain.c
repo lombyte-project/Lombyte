@@ -9,15 +9,15 @@ struct DmaTag {
 
 /* The VU1 packet pointer: a one-field struct so every store through .p
    reloads the global, exactly like retail. */
-struct TagPtr {
-    struct DmaTag *p;
+struct DmaTagCursor {
+    struct DmaTag *tag;
 };
 
 /* The DMA-busy mask this file owns: both functions below read it
    gp-relative, which needs its definition ahead of them. */
 volatile s32 D_00160EE0 = 0;
 extern s32 D_00160EF8[];
-extern struct TagPtr D_00160F00;
+extern struct DmaTagCursor D_00160F00;
 extern s32 D_00160F0C;
 extern s32 D_00160F10;
 extern s32 D_00160F14;
@@ -31,14 +31,14 @@ extern void sceDmaSend(struct DmaTag *, s32);
 void vu1_send_chain(void) __asm__("FUN_002336a0");
 
 void vu1_send_chain(void) {
-    struct DmaTag *chan;
+    struct DmaTag *channel;
     s32 chain_size;
     s32 remaining;
     s32 overflow;
 
     chain_size = D_00160EF8[D_00160F10];
     overflow = 0;
-    remaining = (s32)D_00160F00.p - chain_size;
+    remaining = (s32)D_00160F00.tag - chain_size;
     D_00160EE0 |= 0x1F;
     if (D_00160F14 < remaining) {
         D_00160F14 = remaining;
@@ -48,14 +48,14 @@ void vu1_send_chain(void) {
         }
     }
     if (overflow == 0) {
-        D_00160F00.p->unk0 = 0x70000000;
-        D_00160F00.p->unk4 = 0;
-        D_00160F00.p->unk8 = 0;
-        D_00160F00.p->unkC = 0;
-        chan = sceDmaGetChan(1);
-        chan->unk0 |= 0xC0;
+        D_00160F00.tag->unk0 = 0x70000000;
+        D_00160F00.tag->unk4 = 0;
+        D_00160F00.tag->unk8 = 0;
+        D_00160F00.tag->unkC = 0;
+        channel = sceDmaGetChan(1);
+        channel->unk0 |= 0xC0;
         FlushCache(0);
-        sceDmaSend(chan, D_00160EF8[D_00160F10]);
+        sceDmaSend(channel, D_00160EF8[D_00160F10]);
         return;
     }
     D_00160EE0 = 0;
@@ -65,17 +65,17 @@ extern __typeof__(vu1_send_chain) func_002336A0 __attribute__((alias("FUN_002336
 
 extern void SpinWait(s32);
 extern void DebugPrint(char *, ...);
-extern void FUN_001f21c0(void);
+extern void reset_graphics(void) __asm__("FUN_001f21c0");
 void vu1_sync_chain(s32 mask) __asm__("FUN_002337b0");
 
 void vu1_sync_chain(s32 mask) {
-    s32 i;
+    s32 poll_count;
 
-    for (i = 0; D_00160EE0 & mask; i++) {
+    for (poll_count = 0; D_00160EE0 & mask; poll_count++) {
         SpinWait(0x400);
-        if (i > 100000) {
+        if (poll_count > 100000) {
             DebugPrint(D_001E89E0);
-            FUN_001f21c0();
+            reset_graphics();
             break;
         }
     }

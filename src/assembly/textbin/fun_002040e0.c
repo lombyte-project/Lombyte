@@ -5,11 +5,10 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s", FUN_002040e0);
 #else
 #include "types.h"
-#include "sda.h"
 
-#define SCE_GS_SET_TEX0(tbp, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
-    ((u64)(tbp) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) | \
-    ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) | \
+#define SCE_GS_SET_TEX0(tbp, width_units_64, psm, width_log2, height_log2, tcc, tfx, cbp, cpsm, csm, csa, cld) \
+    ((u64)(tbp) | ((u64)(width_units_64) << 14) | ((u64)(psm) << 20) | ((u64)(width_log2) << 26) | \
+    ((u64)(height_log2) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) | \
     ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
 #define SCE_GS_SET_TEX1(lcm, mxl, mmag, mmin, mtba, l, k) \
     ((u64)(lcm) | ((u64)(mxl) << 2) | ((u64)(mmag) << 5) | ((u64)(mmin) << 6) | \
@@ -17,19 +16,19 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s
 #define SCE_GS_SET_CLAMP(wms, wmt, minu, maxu, minv, maxv) \
     ((u64)(wms) | ((u64)(wmt) << 2) | ((u64)(minu) << 4) | ((u64)(maxu) << 14) | \
     ((u64)(minv) << 24) | ((u64)(maxv) << 34))
-#define SCE_GS_SET_MIPTBP1(tbp1, tbw1, tbp2, tbw2, tbp3, tbw3) \
-    ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(tbw2) << 34) | \
+#define SCE_GS_SET_MIPTBP1(tbp1, tbw1, tbp2, width_units_128, tbp3, tbw3) \
+    ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(width_units_128) << 34) | \
     ((u64)(tbp3) << 40) | ((u64)(tbw3) << 54))
 
 typedef struct {
-    s32 id;
+    s32 texture_index;
     s16 width;
     s16 height;
-    s16 f8;
+    s16 draw_control_count;
     s16 clut;
-    s16 fC;
-    s16 fE;
-} TexInfo;
+    s16 mip_block_offset_0;
+    s16 mip_block_offset_1;
+} ResidentRenderTextureDefinition;
 
 typedef struct {
     u64 data;
@@ -39,112 +38,112 @@ typedef struct {
 typedef struct {
     s32 tex;
     s32 pad4[3];
-    s32 f10;
-    s32 f14;
+    s32 draw_high;
+    s32 draw_shift;
     s32 pad18[2];
-    s32 f20;
-    s32 f24;
+    s32 material_base;
+    s32 material_shift;
     s32 pad28[10];
-} Sprite;
+} TfragMaterialPacket;
 
 typedef struct {
     u8 pad0[0x10];
     u8 *data;
     u8 pad14[8];
-    u16 off;
+    u16 material_packet_offset;
     u8 pad1E[0xA];
     u8 count;
     u8 pad29[0x17];
-} SpriteSet;
+} TfragRenderRecord;
 
 typedef struct {
-    s32 off;
+    s32 records_offset;
     s32 count;
     f32 scale;
-} SpriteHdr;
+} TfragRenderHeader;
 
 extern f32 D_00160EA0[3];
-extern SpriteSet *D_00160E8C;
+extern TfragRenderRecord *D_00160E8C;
 typedef struct { s32 v; } Count;
 extern Count D_00160E90;
 extern s32 D_0015EE8C;
 
-extern s32 func_001F97A0(s32);
-extern void func_00233068(f32 *);
+extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern void set_tfrag_dists(f32 *) __asm__("func_00233068");
 
-void FUN_002040e0(SpriteHdr *h, TexInfo *texs) __asm__("FUN_002040e0");
+void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextureDefinition *textures) __asm__("FUN_002040e0");
 
-void FUN_002040e0(SpriteHdr *h, TexInfo *texs)
+void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextureDefinition *textures)
 {
-    SpriteSet *set;
-    SpriteSet *s;
-    GifAD *p;
-    TexInfo *t;
-    s32 n;
+    TfragRenderRecord *records;
+    TfragRenderRecord *record;
+    GifAD *packet;
+    ResidentRenderTextureDefinition *texture;
+    s32 record_count;
     s32 i;
     s32 j;
-    s32 id;
-    s32 a;
-    s32 b;
-    s32 c;
-    s32 d;
-    s32 w;
-    s32 tbw;
-    s32 tbw2;
-    s32 tw;
-    s32 th;
-    s32 cb;
-    f32 f;
-    u64 d0;
-    u64 d1;
-    u64 d2;
-    u64 d3;
+    s32 texture_index;
+    s32 draw_high;
+    s32 draw_shift;
+    s32 material_base;
+    s32 material_shift;
+    s32 width;
+    s32 width_units_64;
+    s32 width_units_128;
+    s32 width_log2;
+    s32 height_log2;
+    s32 gs_block_base;
+    f32 range_scale;
+    u64 tex0_word;
+    u64 tex1_word;
+    u64 clamp_word;
+    u64 mip_word;
 
-    D_00160E90.v = h->count;
-    f = h->scale;
-    D_00160EA0[0] = f * 6.0f;
-    D_00160EA0[1] = f * 4.0f;
-    D_00160EA0[2] = f + f;
-    func_00233068(D_00160EA0);
-    set = (SpriteSet *)((u8 *)h + h->off);
-    D_00160E8C = set;
-    n = D_00160E90.v;
-    for (i = 0; i < n; i++) {
-        set[i].data = (u8 *)set + (s32)set[i].data;
+    D_00160E90.v = header->count;
+    range_scale = header->scale;
+    D_00160EA0[0] = range_scale * 6.0f;
+    D_00160EA0[1] = range_scale * 4.0f;
+    D_00160EA0[2] = range_scale + range_scale;
+    set_tfrag_dists(D_00160EA0);
+    records = (TfragRenderRecord *)((u8 *)header + header->records_offset);
+    D_00160E8C = records;
+    record_count = D_00160E90.v;
+    for (i = 0; i < record_count; i++) {
+        records[i].data = (u8 *)records + (s32)records[i].data;
     }
     for (i = 0; i < D_00160E90.v; i++) {
         for (j = 0; j < D_00160E8C[i].count; j++) {
-            p = (GifAD *)(D_00160E8C[i].data + D_00160E8C[i].off + j * 0x50);
-            id = ((Sprite *)p)->tex;
-            c = ((Sprite *)p)->f20;
-            a = ((Sprite *)p)->f10;
-            b = ((Sprite *)p)->f14;
-            t = &texs[id];
-            d = ((Sprite *)p)->f24;
-            w = t->width;
-            tbw = w >> 6;
-            tbw2 = w >> 7;
-            if (tbw2 <= 0) {
-                tbw2 = 1;
+            packet = (GifAD *)(D_00160E8C[i].data + D_00160E8C[i].material_packet_offset + j * 0x50);
+            texture_index = ((TfragMaterialPacket *)packet)->tex;
+            material_base = ((TfragMaterialPacket *)packet)->material_base;
+            draw_high = ((TfragMaterialPacket *)packet)->draw_high;
+            draw_shift = ((TfragMaterialPacket *)packet)->draw_shift;
+            texture = &textures[texture_index];
+            material_shift = ((TfragMaterialPacket *)packet)->material_shift;
+            width = texture->width;
+            width_units_64 = width >> 6;
+            width_units_128 = width >> 7;
+            if (width_units_128 <= 0) {
+                width_units_128 = 1;
             }
-            if (tbw <= 0) {
-                tbw = 1;
+            if (width_units_64 <= 0) {
+                width_units_64 = 1;
             }
-            tw = func_001F97A0(w);
-            th = func_001F97A0(t->height);
-            cb = D_0015EE8C >> 8;
-            d0 = SCE_GS_SET_TEX0(0, tbw, 0x13, tw, th, 1, 0, t->clut + cb, 0, 0, 0, 4);
-            d1 = SCE_GS_SET_TEX1(0, t->f8 - 1, 1, b, 0, 0, a);
-            d2 = SCE_GS_SET_CLAMP(c, d, 0, 0, id, 0);
-            d3 = SCE_GS_SET_MIPTBP1(0, tbw2, t->fC + cb, 1, t->fE + cb, 1);
-            p->data = d0;
-            p++;
-            p->data = d1;
-            p++;
-            p->data = d2;
-            p++;
-            p->data = d3;
-            p[1].data = 0;
+            width_log2 = highest_set_bit_index(width);
+            height_log2 = highest_set_bit_index(texture->height);
+            gs_block_base = D_0015EE8C >> 8;
+            tex0_word = SCE_GS_SET_TEX0(0, width_units_64, 0x13, width_log2, height_log2, 1, 0, texture->clut + gs_block_base, 0, 0, 0, 4);
+            tex1_word = SCE_GS_SET_TEX1(0, texture->draw_control_count - 1, 1, draw_shift, 0, 0, draw_high);
+            clamp_word = SCE_GS_SET_CLAMP(material_base, material_shift, 0, 0, texture_index, 0);
+            mip_word = SCE_GS_SET_MIPTBP1(0, width_units_128, texture->mip_block_offset_0 + gs_block_base, 1, texture->mip_block_offset_1 + gs_block_base, 1);
+            packet->data = tex0_word;
+            packet++;
+            packet->data = tex1_word;
+            packet++;
+            packet->data = clamp_word;
+            packet++;
+            packet->data = mip_word;
+            packet[1].data = 0;
         }
     }
 }

@@ -1,86 +1,88 @@
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
-struct SF {
+struct SkyShellSet {
     u8 pad_0[4];
-    u16 unk4;
-    s16 unk6;
+    u16 relocation_state;
+    s16 shell_count;
 };
-struct Mat { u8 pad[0x30]; u64 unk30; };
+struct SkyTransform { u8 pad[0x30]; u64 translation; };
 
 extern f32 D_00160404 __attribute__((sda));
-extern struct SF *D_0016045C;
+extern struct SkyShellSet *D_0016045C;
 extern u8 D_00160460;
-extern struct Mat D_001D96E0;
+extern struct SkyTransform D_001D96E0;
 extern s32 D_0015EE88;
 extern void func_001F99F8(f32 *);
 extern void FUN_001f9a80(void *, void *, f32);
 extern void FUN_001f9fc8(void *);
 extern void FUN_001fa070(void *, f32 *);
-extern f32 func_001FA580(f32, f32);
-extern void func_0022B4C8(void);
-extern void func_0022B558(void);
-extern void func_0022B690(s32);
-extern void func_00233980(s32, s64) ;
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern void setup_sky_gif_paging(void) __asm__("func_0022B4C8");
+extern void do_sky_gif_paging(void) __asm__("func_0022B558");
+extern void sky_draw_shell(s32) __asm__("func_0022B690");
+extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980") ;
 
-void FUN_0022b288(void) {
-    f32 v[4];
-    f32 s;
-    u8 *m;
-    s32 i;
+void draw_sky_shells(void) __asm__("FUN_0022b288");
 
-    i = 0;
-    func_0022B4C8();
-    D_0016045C->unk4 = 0;
+void draw_sky_shells(void) {
+    f32 rotation_angles[4];
+    f32 shell_scale;
+    u8 *transform_row;
+    s32 shell_index;
+
+    shell_index = 0;
+    setup_sky_gif_paging();
+    D_0016045C->relocation_state = 0;
     FUN_001f9fc8(&D_001D96E0);
-    func_001F99F8(v);
-    if (D_0016045C->unk6 > 0) {
+    func_001F99F8(rotation_angles);
+    if (D_0016045C->shell_count > 0) {
         do {
-            s = 1.0f;
-            switch (i) {
+            shell_scale = 1.0f;
+            switch (shell_index) {
             case 0:
-                *(s32 *)&v[1] = 0;
-                v[2] = D_00160404;
+                *(s32 *)&rotation_angles[1] = 0;
+                rotation_angles[2] = D_00160404;
             case 1:
-                *(s32 *)&v[1] = 0;
-                v[2] = func_001FA580(D_00160404, v[1]);
-                s = 1.0f;
+                *(s32 *)&rotation_angles[1] = 0;
+                rotation_angles[2] = fast_add_rotations(D_00160404, rotation_angles[1]);
+                shell_scale = 1.0f;
                 break;
             case 2:
-                v[1] = -0.075f;
-                v[2] = func_001FA580(D_00160404, -0.15f);
-                s = 1.25f;
+                rotation_angles[1] = -0.075f;
+                rotation_angles[2] = fast_add_rotations(D_00160404, -0.15f);
+                shell_scale = 1.25f;
                 break;
             case 3:
-                v[1] = 0.05f;
-                v[2] = func_001FA580(D_00160404, 0.125f);
-                s = 1.5f;
+                rotation_angles[1] = 0.05f;
+                rotation_angles[2] = fast_add_rotations(D_00160404, 0.125f);
+                shell_scale = 1.5f;
                 break;
             case 4:
-                v[1] = 0.1f;
-                v[2] = func_001FA580(D_00160404, -0.05f);
-                s = 1.75f;
+                rotation_angles[1] = 0.1f;
+                rotation_angles[2] = fast_add_rotations(D_00160404, -0.05f);
+                shell_scale = 1.75f;
                 break;
             case 5:
-                v[1] = -0.15f;
-                v[2] = func_001FA580(D_00160404, 0.1f);
-                s = 2.0f;
+                rotation_angles[1] = -0.15f;
+                rotation_angles[2] = fast_add_rotations(D_00160404, 0.1f);
+                shell_scale = 2.0f;
                 break;
             }
-            FUN_001fa070(&D_001D96E0, v);
-            m = (u8 *)&D_001D96E0;
-            FUN_001f9a80(m, m, s);
-            FUN_001f9a80(m + 0x10, m + 0x10, s);
-            FUN_001f9a80(m + 0x20, m + 0x20, s);
-            m += 0x30;
-            qcopy(m, &D_00160460);
-            func_0022B690(i);
-            i++;
-        } while (i < D_0016045C->unk6);
+            FUN_001fa070(&D_001D96E0, rotation_angles);
+            transform_row = (u8 *)&D_001D96E0;
+            FUN_001f9a80(transform_row, transform_row, shell_scale);
+            FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
+            FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);
+            transform_row += 0x30;
+            qcopy(transform_row, &D_00160460);
+            sky_draw_shell(shell_index);
+            shell_index++;
+        } while (shell_index < D_0016045C->shell_count);
     }
-    func_0022B558();
-    func_00233980(0x47, 0x5360B);
-    func_00233980(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+    do_sky_gif_paging();
+    vu1_add_g_sregister(0x47, 0x5360B);
+    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
 }
 
-extern __typeof__(FUN_0022b288) func_0022B288 __attribute__((alias("FUN_0022b288")));
+extern __typeof__(draw_sky_shells) func_0022B288 __attribute__((alias("FUN_0022b288")));

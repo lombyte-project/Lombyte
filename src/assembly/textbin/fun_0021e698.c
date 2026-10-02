@@ -52,8 +52,8 @@ struct Base {
 
 extern struct Base D_00186F40;
 extern struct Anchor D_001E0408[];
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 void FUN_0021e698(struct Obj *o) {
     struct Owner *w = o->link->owner;
@@ -71,9 +71,9 @@ void FUN_0021e698(struct Obj *o) {
     o->z = (&D_00186F40.pos)->z + D_001E0408[i].z;
     fwd = D_001E0408[i].fwd;
     side = D_001E0408[i].side;
-    c = func_001F9DC8(o->rot);
+    c = fast_cos(o->rot);
     nfwd = -fwd;
-    s = func_001F9DE0(o->rot);
+    s = fast_sin(o->rot);
     o->x += nfwd * s + side * c;
     o->y += fwd * c + side * s;
 }

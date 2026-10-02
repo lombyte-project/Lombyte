@@ -82,6 +82,10 @@ def find_ninja() -> str | None:
 
 def build_environment() -> dict:
     env = dict(os.environ)
+    # Match verify-baseline.sh when reconfiguring its disposable workspace.
+    env["SN_TOOLCHAIN_ROOT"] = env.get("SN_TOOLCHAIN_ROOT") or str(
+        ROOT / "tools/compilers/ee-gcc-2.95.2"
+    )
     prefix = []
     venv_bin = ROOT / ".venv" / "bin"
     if venv_bin.is_dir():
@@ -404,8 +408,29 @@ def main(argv=None) -> int:
     if ninja is None:
         return error("ninja was not found; install the requirements into .venv")
 
-    workspace_source.write_text(staged)
+    if workspace_source.read_text() != staged:
+        workspace_source.write_text(staged)
     object_target = f"build/src/{unit}.c.o"
+    # The workspace was configured with the oracle present. Staging its C
+    # does not change Ninja's rule: refresh it so configure selects the normal
+    # game-compiler route (including Ps2EeAs), rather than include-asm.
+    oracle_rule = f"build {object_target}: include-asm "
+    if any(
+        line.startswith(oracle_rule)
+        for line in (project / "build.ninja").read_text().splitlines()
+    ):
+        configured = subprocess.run(
+            [sys.executable, str(workspace / "configure.py"), "config/us/rnc1.us.yaml"],
+            cwd=str(workspace), capture_output=True, text=True,
+            env=build_environment(),
+        )
+        if configured.returncode != 0:
+            print(configured.stdout, end="", file=sys.stderr)
+            print(configured.stderr, end="", file=sys.stderr)
+            return fail_result(
+                unit, "configure-failed", "could not configure the staged C build",
+                as_json=args.json, code=2,
+            )
     build = subprocess.run(
         [ninja, "-C", str(project), object_target],
         capture_output=True,

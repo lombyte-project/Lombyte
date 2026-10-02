@@ -39,8 +39,8 @@ extern struct M2c_D_0016045C * volatile D_0016045C;
 extern u8 D_001D96E0[];
 extern void func_001160C8(s32);
 extern f32 func_001F99C0(f32);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern void func_001F9FC8(u8 *);
 extern f32 func_001FA580(f32, f32);
 extern f32 func_001FA6C0(s32);
@@ -106,11 +106,11 @@ loop_3:
             func_001FA580(-3.0f, func_00213308() * 0.2f);
             t22 = func_00213308();
             t21 = t22 * 0.09f + 1.2f;
-            t20 = func_001F9DC8(t22);
-            e->f10 = t20 * func_001F9DE0(t21) * f50;
-            t20 = func_001F9DE0(t22);
-            e->f14 = t20 * func_001F9DE0(t21) * f50;
-            e->f18 = func_001F9DC8(t21) * f50;
+            t20 = fast_cos(t22);
+            e->f10 = t20 * fast_sin(t21) * f50;
+            t20 = fast_sin(t22);
+            e->f14 = t20 * fast_sin(t21) * f50;
+            e->f18 = fast_cos(t21) * f50;
             v2 = func_00213260(0x18);
             k = func_00213260(0x20) << 0x18;
             if ((rand() >> 0x10) & 1) {
@@ -137,11 +137,11 @@ loop_15:
         e->c.h2 = (u16) (e->c.h2 + 1);
         t22 = func_001FA6C0((e->c.h0 & 0xFFF) - 0x800) * fs;
         t21 = func_001FA6C0((e->c.h2 & 0xFFF) - 0x800) * fs;
-        t20 = func_001F9DC8(t22);
-        e->f10 = t20 * func_001F9DE0(t21) * f50;
-        t20 = func_001F9DE0(t22);
-        e->f14 = t20 * func_001F9DE0(t21) * f50;
-        e->f18 = func_001F99C0(func_001F9DC8(t21)) * f50;
+        t20 = fast_cos(t22);
+        e->f10 = t20 * fast_sin(t21) * f50;
+        t20 = fast_sin(t22);
+        e->f14 = t20 * fast_sin(t21) * f50;
+        e->f18 = func_001F99C0(fast_cos(t21)) * f50;
         if ((u32) (e->c.h0 & 0x3F) < 8U) {
             e->col4 = 0x702020F0;
         } else {

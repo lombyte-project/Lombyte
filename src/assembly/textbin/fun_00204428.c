@@ -7,74 +7,76 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00204428/FUN_00204428.s
 #include "types.h"
 #include "sda.h"
 
-struct Tbl {
+struct LevelArchiveDiscTable {
     u8 pad_0[0x2968];
-    s32 unk2968;
-    s32 unk296C;
-    s32 unk2970;
-    s32 unk2974;
-    s32 unk2978;
-    s32 unk297C;
+    s32 shared_start_sector;
+    s32 shared_sector_count;
+    s32 sound_start_sector;
+    s32 sound_sector_count;
+    s32 alternate_sound_start_sector;
+    s32 alternate_sound_sector_count;
 };
 
-struct Streams {
+struct LevelArchiveDiscEntry {
     u8 pad_0[0x12C8];
-    s32 unk12C8;
-    s32 unk12CC;
+    s32 start_sector;
+    s32 sector_count;
 };
 
-struct Hdr {
+struct LevelArchiveHeader {
     u8 pad_0[8];
-    s32 unk8;
+    s32 sound_bank_offset;
 };
 
-extern struct Tbl D_00137B80;
+extern struct LevelArchiveDiscTable D_00137B80;
 extern s16 D_0013E056[];
 extern s32 D_0015ED58 MACRO_ADDR;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
-extern struct Hdr *D_0015EE4C;
+extern struct LevelArchiveHeader *D_0015EE4C;
 extern u8 *D_0015EE50;
 extern u8 *D_0015EE54;
 extern s32 D_0015EEBC __attribute__((sda));
 extern s32 D_0015EEC0 MACRO_ADDR;
 extern u8 D_1FF8000[];
-extern void FUN_0022dd78();
-extern s32 func_0012DC80();
-extern void func_0012E088(s32, s32, u64);
-extern void func_0012E1A8();
-extern s32 func_0012E1D8(s32);
-extern s32 func_0012E3B8();
-extern void func_00216728(s32, s32, s32);
+extern void store_async_sound_bank_handle() __asm__("FUN_0022dd78");
+extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
+extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("func_0012E088");
+extern void snd_resolve_bank_xrefs() __asm__("func_0012E1A8");
+extern s32 snd_unload_bank(s32) __asm__("func_0012E1D8");
+extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
+extern void submit_audio_stream_io_request(s32, s32, s32) __asm__("func_00216728");
 extern s32 sceCdBreak();
 extern s32 sceCdGetError();
 extern s32 sceCdSync(s32);
 
-s32 FUN_00204428(void) {
-    s32 st;
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-    u8 *p;
-    u8 *m1;
-    u8 *m2;
-    struct Streams *q;
-    s32 n;
-    struct Hdr *r;
+s32 service_level_archive_load(void) __asm__("FUN_00204428");
 
-    n = D_0013E056[0] + 1;
+s32 service_level_archive_load(void) {
+    s32 stage;
+    s32 retry_stage;
+    s32 archive_start_or_bytes;
+    s32 level_archive_sectors;
+    s32 archive_start_or_sectors;
+    u8 *sound_archive_buffer;
+    u8 *level_archive_buffer;
+    u8 *shared_archive_buffer;
+    struct LevelArchiveDiscEntry *disc_entry;
+    s32 level_index;
+    struct LevelArchiveHeader *shared_header;
+
+    level_index = D_0013E056[0] + 1;
     if (sceCdSync(1) != 0) {
         D_0015EEBC = D_0015EEBC + 1;
         if (D_0015ED58 == 1) {
             if (D_0015EEBC >= 0x2D1) {
                 D_0015EEC0 = D_0015ED58;
-                x = D_0015EE48 - 1;
+                retry_stage = D_0015EE48 - 1;
                 D_0015ED58 = 0;
-                if ((u16)x < 3) {
-                    D_0015EE48 = x;
+                if ((u16)retry_stage < 3) {
+                    D_0015EE48 = retry_stage;
                 }
                 sceCdBreak();
             }
@@ -84,47 +86,47 @@ s32 FUN_00204428(void) {
     if (sceCdGetError() != 0) {
         if (D_0015EEC0 == 0) {
             D_0015EEC0 = 1;
-            x = D_0015EE48 - 1;
+            retry_stage = D_0015EE48 - 1;
             D_0015ED58 = 0;
-            if ((u16)x < 3) {
-                D_0015EE48 = x;
+            if ((u16)retry_stage < 3) {
+                D_0015EE48 = retry_stage;
             }
         }
     }
-    st = (s16)D_0015EE48;
-    switch (st) {
+    stage = (s16)D_0015EE48;
+    switch (stage) {
     case 0:
         if (D_0015ED80 != 0) {
-            y = ((D_00137B80.unk297C << 11) + 0xFFF) & 0xFFFFF000;
+            archive_start_or_bytes = ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         } else {
-            y = ((D_00137B80.unk2974 << 11) + 0xFFF) & 0xFFFFF000;
+            archive_start_or_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
-        p = D_1FF8000 - y;
-        q = (struct Streams *)((u8 *)&D_00137B80 + n * 8);
-        z = q->unk12CC;
-        m1 = p - (((z << 11) + 0xFFF) & 0xFFFFF000);
-        w = D_00137B80.unk296C;
-        m2 = m1 - (((w << 11) + 0xFFF) & 0xFFFFF000);
-        y = D_00137B80.unk2968;
-        D_0015EE54 = m1;
-        D_0015EE50 = p;
-        D_0015EE4C = (struct Hdr *)m2;
-        func_00216728((s32)m2, y, w);
+        sound_archive_buffer = D_1FF8000 - archive_start_or_bytes;
+        disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
+        level_archive_sectors = disc_entry->sector_count;
+        level_archive_buffer = sound_archive_buffer - (((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000);
+        archive_start_or_sectors = D_00137B80.shared_sector_count;
+        shared_archive_buffer = level_archive_buffer - (((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000);
+        archive_start_or_bytes = D_00137B80.shared_start_sector;
+        D_0015EE54 = level_archive_buffer;
+        D_0015EE50 = sound_archive_buffer;
+        D_0015EE4C = (struct LevelArchiveHeader *)shared_archive_buffer;
+        submit_audio_stream_io_request((s32)shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 1:
-        q = (struct Streams *)((u8 *)&D_00137B80 + n * 8);
-        p = D_0015EE54;
-        z = q->unk12CC;
-        w = q->unk12C8;
-        func_00216728((s32)p, w, z);
+        disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
+        sound_archive_buffer = D_0015EE54;
+        level_archive_sectors = disc_entry->sector_count;
+        archive_start_or_sectors = disc_entry->start_sector;
+        submit_audio_stream_io_request((s32)sound_archive_buffer, archive_start_or_sectors, level_archive_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            func_00216728((s32)D_0015EE50, D_00137B80.unk2978, D_00137B80.unk297C);
+            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
         } else {
-            func_00216728((s32)D_0015EE50, D_00137B80.unk2970, D_00137B80.unk2974);
+            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
         }
         D_0015EE48 = D_0015EE48 + 1;
         break;
@@ -132,7 +134,7 @@ s32 FUN_00204428(void) {
         if (D_0015EE4A != 0) {
             return 0;
         }
-        func_0012E3B8();
+        snd_stop_all_sounds();
         if (D_0015ED5C != 0) {
             D_0015EE48 = D_0015EE48 + 1;
         } else {
@@ -140,37 +142,37 @@ s32 FUN_00204428(void) {
         }
         break;
     case 4:
-        if (func_0012DC80() != 0) {
+        if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        func_0012E1D8(D_0015ED5C);
+        snd_unload_bank(D_0015ED5C);
         D_0015ED5C = 0;
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 5:
-        if (func_0012DC80() != 0) {
+        if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        func_0012E1A8();
+        snd_resolve_bank_xrefs();
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 6:
-        if (func_0012DC80() != 0) {
+        if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        r = D_0015EE4C;
+        shared_header = D_0015EE4C;
         D_0015ED5C = -1;
-        func_0012E088(r->unk8 + (s32)r, (s32)FUN_0022dd78, (u32)&D_0015ED5C);
+        snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header, (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 7:
-        if (func_0012DC80() != 0) {
+        if (snd_flush_sound_commands() != 0) {
             return 0;
         }
         if (D_0015ED5C == -1) {
             return 0;
         }
-        func_0012E1A8();
+        snd_resolve_bank_xrefs();
         return 1;
     }
     return 0;
