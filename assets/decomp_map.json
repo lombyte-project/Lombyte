@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4442,
-  "matching_c": 2342,
+  "matching_c": 2347,
   "intentional_asm": 249,
-  "pending_c": 1851,
+  "pending_c": 1846,
   "bytes_total": 3618168,
-  "bytes_matching_c": 595288,
+  "bytes_matching_c": 600092,
   "bytes_intentional_asm": 96332,
-  "bytes_pending_c": 2926548,
-  "c_exact_percent_of_recoverable": 16.9028,
-  "c_fuzzy_percent_of_recoverable": 19.9517,
+  "bytes_pending_c": 2921744,
+  "c_exact_percent_of_recoverable": 17.0392,
+  "c_fuzzy_percent_of_recoverable": 20.0881,
   "boot": {
     "units_total": 1452,
     "groups_total": 127,
@@ -1933,24 +1933,24 @@
   },
   "overlays": {
     "functions_total": 2990,
-    "matching_c": 1279,
-    "pending_c": 1711,
+    "matching_c": 1284,
+    "pending_c": 1706,
     "bytes_total": 3180524,
-    "bytes_matching_c": 370536,
-    "bytes_pending_c": 2809988,
-    "c_exact_percent_of_recoverable": 11.6502,
+    "bytes_matching_c": 375340,
+    "bytes_pending_c": 2805184,
+    "c_exact_percent_of_recoverable": 11.8012,
     "shared": {
       "id": "shared",
       "index": null,
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1648,
-      "matching_c": 889,
-      "pending_c": 759,
+      "matching_c": 894,
+      "pending_c": 754,
       "bytes_total": 1152164,
-      "bytes_matching_c": 261908,
-      "bytes_pending_c": 890256,
-      "c_exact_percent_of_recoverable": 22.7318,
+      "bytes_matching_c": 266712,
+      "bytes_pending_c": 885452,
+      "c_exact_percent_of_recoverable": 23.1488,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -2116,9 +2116,9 @@
         {
           "file": "src/overlays/shared/ui_help_00203b18.c",
           "functions": 62,
-          "matching_c": 43,
+          "matching_c": 45,
           "bytes_total": 31388,
-          "bytes_matching_c": 12836
+          "bytes_matching_c": 14716
         },
         {
           "file": "src/overlays/shared/unclassified_0020bc88.c",
@@ -2130,9 +2130,9 @@
         {
           "file": "src/overlays/shared/ui_help_0020c758.c",
           "functions": 67,
-          "matching_c": 50,
+          "matching_c": 51,
           "bytes_total": 32336,
-          "bytes_matching_c": 14604
+          "bytes_matching_c": 15064
         },
         {
           "file": "src/overlays/shared/ui_help_00214658.c",
@@ -2221,9 +2221,9 @@
         {
           "file": "src/overlays/shared/ui_help_00231d08.c",
           "functions": 49,
-          "matching_c": 42,
+          "matching_c": 43,
           "bytes_total": 12500,
-          "bytes_matching_c": 6612
+          "bytes_matching_c": 7196
         },
         {
           "file": "src/overlays/shared/ui_hud_00234fd0.c",
@@ -2690,9 +2690,9 @@
         {
           "file": "src/overlays/shared/rendering_00269290.c",
           "functions": 61,
-          "matching_c": 52,
+          "matching_c": 53,
           "bytes_total": 32432,
-          "bytes_matching_c": 22336
+          "bytes_matching_c": 24216
         },
         {
           "file": "src/overlays/shared/math_interpolation_0026d930.c",
@@ -4498,14 +4498,14 @@
   },
   "total": {
     "units_total": 4442,
-    "matching_c": 2342,
+    "matching_c": 2347,
     "intentional_asm": 249,
-    "pending_c": 1851,
+    "pending_c": 1846,
     "bytes_total": 3618168,
-    "bytes_matching_c": 595288,
+    "bytes_matching_c": 600092,
     "bytes_intentional_asm": 96332,
-    "bytes_pending_c": 2926548,
-    "c_exact_percent_of_recoverable": 16.9028,
-    "c_fuzzy_percent_of_recoverable": 19.9517
+    "bytes_pending_c": 2921744,
+    "c_exact_percent_of_recoverable": 17.0392,
+    "c_fuzzy_percent_of_recoverable": 20.0881
   }
 }
