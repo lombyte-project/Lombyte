@@ -960,9 +960,10 @@ def build_stuff(
 
     game_root = _game_compiler_root()
     # Game code: the game compiler's cc1, assembled by Ps2EeAs, as retail was.
-    # Ps2EeAs pads short loops and div instructions near a label itself, so
-    # the compile carries no -g: the line-number labels it would add are
-    # "possible branch destinations" to the assembler.  The game compiler's
+    # Ps2EeAs pads short loops itself (its div padding is patched out at
+    # install: retail has none, scripts/patch-ps2eeas.py), and the compile
+    # carries no -g: the line-number labels it would add are "possible branch
+    # destinations" to the assembler.  The game compiler's
     # GNU as assembles the same source only to tell `finish` the true size
     # of the data sections.
     ninja.rule(
