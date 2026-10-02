@@ -4,141 +4,167 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/inventory/draw_items_menu/FUN_0021eb20.s", FUN_0021eb20);
 #else
-#include "rnc/ui_menus_inventory_draw_items_menu_types.h"
-#include "types.h"
+
+typedef signed char s8;
+typedef unsigned char u8;
+typedef signed short s16;
+typedef unsigned short u16;
+typedef signed int s32;
+typedef unsigned int u32;
+typedef signed long long s64;
+typedef unsigned long long u64;
+typedef volatile s8 vs8;
+typedef volatile u8 vu8;
+typedef volatile s16 vs16;
+typedef volatile u16 vu16;
+typedef volatile s32 vs32;
+typedef volatile u32 vu32;
+typedef volatile s64 vs64;
+typedef volatile u64 vu64;
+typedef float f32;
+typedef double f64;
+typedef s32 b32;
+typedef struct 
+{
+  short s[12];
+} TextBox;
+typedef struct 
+{
+  u8 pad0[0x20];
+  s32 w;
+  u16 h;
+  u8 pad26[0x1E];
+  s32 tip;
+} ItemsMenu;
+struct Scr
+{
+  s32 pad[1];
+  s32 x;
+};
+extern struct Scr D_0013E500[];
 
 
 
+extern s32 D_0015ED88[] __attribute__((section(".sdata")));
 
 
 
-extern struct M2c_D_0013E500 D_0013E500;
-extern s32 D_0015ED88[];
-extern s32 D_001601B8;
-extern s32 D_001601BC;
-extern u8 D_001602A0[];
-extern s32 func_001F4280();
-extern s32 func_001F4398();
-extern s32 func_001F6940();
-extern s32 func_001F6A60();
-extern s32 func_001F7580();
-extern s32 func_001FDD10();
-extern s32 func_00200E08();
-extern s32 func_0020D330();
-extern s32 func_00215248();
-extern s32 func_00215290();
-extern s32 func_00215300();
-extern s32 memset();
-extern s32 sprintf();
-extern s32 strchr();
-extern s32 strcpy();
-extern s32 strlen();
-s32 draw_items_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021eb20");
+extern s32 D_001601B8 __attribute__((sda));
 
-s32 draw_items_menu(struct M2c_arg0 *arg0) {    u16 sp84;
-u8 sp_slot[0x110];    u16 sp86;
-    u16 sp8E;
-    s32 sp80;
-    s16 sp88;
-    s16 sp8A;
-    u16 sp92;
-    s32 spA0;
-    u16 spA2;
-    s16 spA4;
-    s16 spA6;
-    s16 spB0;
-    s16 spB2;
-    s32 temp_16_124;
-    s32 temp_16_137;
-    s32 temp_16_150;
-    s32 temp_17_122;
-    s32 temp_17_135;
-    s32 temp_17_148;
-    s32 temp_4_10;
-    s32 var_3_74;
-    u32 temp_2_67;
-    u8 *var_4_75;
-    struct M2c_var_5_79 *var_5_79;
 
-    temp_4_10 = arg0->unk44;
-    if (temp_4_10 == 0) {
-        goto block_2;
+
+extern s32 D_001601BC __attribute__((sda));
+extern char D_001602A0[];
+extern void func_001F4280(s32);
+extern void func_001F4398(void);
+
+
+
+extern void font_print_right(s32, s32, u64, char *, s32) __asm__("FUN_001f6940");
+
+
+
+extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
+extern void func_001F7580(TextBox *, u64, char *, s32);
+extern char *func_001FDD10(s32);
+extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void func_0020D330(s32, s32);
+extern s32 func_00215248(void);
+extern s32 func_00215290(void);
+extern s32 func_00215300(void);
+extern void *memset(void *, s32, u32);
+extern int sprintf(char *, const char *, ...);
+extern char *strchr(const char *, int);
+extern char *strcpy(char *, const char *);
+extern u32 strlen(const char *);
+s32 FUN_0021eb20(ItemsMenu *m);
+static inline int inline_fn(s32 arg0, int arg1)
+{
+  return arg0 + arg1;
+}
+static inline char *padd(char *a, int n)
+{
+  return a + n;
+}
+static inline int idiv(s32 a, int n)
+{
+  return a / n;
+}
+
+s32 FUN_0021eb20(ItemsMenu *m)
+{
+  char buf[0x80];
+  char *p;
+  char *q;
+  char *r;
+  char *fmt;
+  s32 len;
+  s32 k;
+  s32 x;
+  s32 y;
+  s32 new_var;
+  if (m->tip != 0)
+  {
+    func_0020D330(m->tip, 1);
+  }
+  func_001F4280(0);
+  k = 3;
+  {
+    TextBox c = {{0, m->h, 8, m->w / k, 0, 0, 0, 0, 0x10, 5}};
+    c.s[4] = inline_fn(c.s[2], c.s[3]) >> 1;
+    strcpy(buf, func_001FDD10(0x4F4E));
+    if (D_0015ED88[0] == k)
+    {
+      p = strchr(buf, 0x2D);
+      if (p != 0)
+      {
+        len = strlen(buf);
+        q = buf + len;
+        if (p < q)
+        {
+          r = q;
+          do
+          {
+            r[1] = *q;
+            r--;
+            q = r;
+            len--;
+          }
+          while (p < q);
+        }
+        buf[inline_fn(len, 1)] = 0x20;
+      }
     }
-    func_0020D330(temp_4_10, 1);
-block_2:
-    func_001F4280(0);
-    memset(&spA0, 0, 0x18);
-    spA4 = 8;
-    spA2 = arg0->unk24;
-    spB0 = 0x10;
-    spB2 = 5;
-    spA6 = (s16) ((s32) arg0->unk20 / 3);
-    /* m2c-unknown:  unknown instruction: ldl $v0, 0xa7($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: ldr $v0, 0xa0($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: ldl $v1, 0xaf($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: ldr $v1, 0xa8($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: ldl $a1, 0xb7($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: ldr $a1, 0xb0($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: sdl $v0, 0x87($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: sdr $v0, 0x80($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: sdl $v1, 0x8f($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: sdr $v1, 0x88($sp_slot)  */
-    /* m2c-unknown:  unknown instruction: sdl $a1, 0x97($sp_slot)  */
-    sp88 = (s16) ((s32) (sp84 + sp86) >> 1);
-    strcpy(sp_slot, func_001FDD10(0x4F4E, 0 /*  unknown instruction: sdr $a1, 0x90($sp_slot)  */));
-    if (D_0015ED88[0] != 3) {
-        goto block_8;
-    }
-    temp_2_67 = strchr(sp_slot, 0x2D);
-    if (temp_2_67 == 0) {
-        goto block_9;
-    }
-    var_3_74 = strlen(sp_slot);
-    var_4_75 = sp_slot + var_3_74;
-    if (temp_2_67 >= (u32) var_4_75) {
-        goto block_7;
-    }
-    var_5_79 = var_4_75;
-loop_6:
-    var_5_79->unk1 = (u8) *var_4_75;
-    var_5_79 -= 1;
-    var_4_75 = var_5_79;
-    var_3_74 -= 1;
-    if (temp_2_67 < (u32) var_4_75) {
-        goto loop_6;
-    }
-block_7:
-    *(s32 *)((u8 *)(var_3_74 + sp_slot) + 0x1) = 0x20;
-block_8:
-block_9:
-    func_001F7580(&sp80, (0x8000 << 0x10) | 0xC0C0, sp_slot, -1);
-    sp92 ^= 4;
-    sp8A = (s16) ((s32) (D_0013E500.unk4 - sp8E) >> 1);
-    func_001F7580(&sp80, (0x8000 << 0x10) | 0xC0C0, sp_slot, -1);
-    temp_17_122 = D_001601B8 + 0xC8;
-    temp_16_124 = D_001601BC + 0x1D;
-    func_001F6940(temp_17_122, temp_16_124, 0x8000 << 0x10, func_001FDD10(0x4F4F), -1);
-    temp_17_135 = D_001601B8 + 0xC8;
-    temp_16_137 = D_001601BC + 0x36;
-    func_001F6940(temp_17_135, temp_16_137, 0x8000 << 0x10, func_001FDD10(0x4F50), -1);
-    temp_17_148 = D_001601B8 + 0xC8;
-    temp_16_150 = D_001601BC + 0x54;
-    func_001F6940(temp_17_148, temp_16_150, 0x8000 << 0x10, func_001FDD10(0x4F51), -1);
-    func_001F6940(0xC8, 0x1D, (0x80FF << 0x10) | 0xA888, func_001FDD10(0x4F4F), -1);
-    func_001F6940(0xC8, 0x36, (0x80FF << 0x10) | 0xA888, func_001FDD10(0x4F50), -1);
-    func_001F6940(0xC8, 0x54, (0x80FF << 0x10) | 0xA888, func_001FDD10(0x4F51), -1);
-    sprintf(sp_slot, D_001602A0, func_00215290());
-    func_001F6A60(D_001601B8 + 0xF0, D_001601BC + 0x1D, 0x8000 << 0x10, sp_slot, -1);
-    func_001F6A60(0xF0, 0x1D, (0x80FF << 0x10) | 0xA888, sp_slot, -1);
-    sprintf(sp_slot, D_001602A0, func_00215300() * 4);
-    func_001F6A60(D_001601B8 + 0xF0, D_001601BC + 0x36, 0x8000 << 0x10, sp_slot, -1);
-    func_001F6A60(0xF0, 0x36, (0x80FF << 0x10) | 0xA888, sp_slot, -1);
-    sprintf(sp_slot, D_001602A0, func_00215248());
-    func_001F6A60(D_001601B8 + 0xF0, D_001601BC + 0x54, 0x8000 << 0x10, sp_slot, -1);
-    func_001F6A60(0xF0, 0x54, (0x80FF << 0x10) | 0xA888, sp_slot, -1);
-    func_00200E08(D_001601B8 + 0xD0, D_001601BC + 0x4D, D_001601B8 + 0xF2, D_001601BC + 0x50, 0x8000 << 0x10, 0);
-    func_00200E08(0xD0, 0x4D, 0xF2, 0x50, (0x80FF << 0x10) | 0xA888, 0);
-    func_001F4398();
-    return 8;
+    func_001F7580(&c, 0x8000C0C0L, buf, -1);
+    c.s[9] ^= 4;
+    c.s[5] = (D_0013E500[0].x - c.s[7]) >> 1;
+    func_001F7580(&c, 0x8000C0C0L, buf, -1);
+  }
+  x = inline_fn(D_001601B8, 0xC8);
+  y = inline_fn(D_001601BC, 0x1D);
+  font_print_right(x, y, 0x80000000L, func_001FDD10(0x4F4F), -1);
+  x = inline_fn(D_001601B8, 0xC8);
+  y = inline_fn(D_001601BC, 0x36);
+  font_print_right(x, y, 0x80000000L, func_001FDD10(0x4F50), -1);
+  x = inline_fn(D_001601B8, 0xC8);
+  y = inline_fn(D_001601BC, 0x54);
+  font_print_right(x, y, 0x80000000L, func_001FDD10(0x4F51), -1);
+  font_print_right(0xC8, 0x1D, 0x80FFA888L, func_001FDD10(0x4F4F), -1);
+  font_print_right(0xC8, 0x36, 0x80FFA888L, func_001FDD10(0x4F50), -1);
+  font_print_right(0xC8, 0x54, 0x80FFA888L, func_001FDD10(0x4F51), -1);
+  new_var = func_00215290();
+  sprintf(buf, D_001602A0, new_var);
+  font_print_left(inline_fn(D_001601B8, 0xF0), inline_fn(D_001601BC, 0x1D), 0x80000000L, buf, -1);
+  font_print_left(0xF0, 0x1D, 0x80FFA888L, buf, -1);
+  sprintf(buf, D_001602A0, func_00215300() * 4);
+  font_print_left(inline_fn(D_001601B8, 0xF0), inline_fn(D_001601BC, 0x36), 0x80000000L, buf, -1);
+  font_print_left(0xF0, 0x36, 0x80FFA888L, buf, -1);
+  sprintf(buf, D_001602A0, func_00215248());
+  font_print_left(inline_fn(D_001601B8, 0xF0), inline_fn(D_001601BC, 0x54), 0x80000000L, buf, -1);
+  font_print_left(0xF0, 0x54, 0x80FFA888L, buf, -1);
+  func_00200E08(inline_fn(D_001601B8, 0xD0), inline_fn(D_001601BC, 0x4D), inline_fn(D_001601B8, 0xF2), inline_fn(D_001601BC, 0x50), 0x80000000L, 0);
+  func_00200E08(0xD0, 0x4D, 0xF2, 0x50, 0x80FFA888L, 0);
+  func_001F4398();
+  return 8;
 }
 #endif /* NON_MATCHING */

@@ -5,97 +5,62 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/audio/draw_sound_menu/FUN_0021ce00.s", FUN_0021ce00);
 #else
 #include "types.h"
-struct M2c_arg0 {
-    u8 pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
-    u8 pad_28[0x18];
-    s32 unk40;
-};
+
+typedef struct {
+    u8 pad0[0x20];
+    s32 w;
+    s32 h;
+    u8 pad28[0x18];
+    s32 sel;
+} Menu;
 
 extern s32 D_0015EDE8;
 extern s32 D_0015EDEC;
 extern s32 D_0015EDF0;
-extern s32 func_001F4280();
-extern s32 func_001F4398();
-extern s32 func_001F6530();
-extern s32 func_001F6940();
-extern s32 func_001FDD10();
-extern s32 func_001FF960();
-extern s32 func_00200958();
-extern s32 func_00200E08();
-s32 draw_sound_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021ce00");
 
-s32 draw_sound_menu(struct M2c_arg0 *arg0) {
-    s32 sp10;
-    s32 sp14;
-    s32 sp18;
-    s32 sp1C;
-    s32 sp20;
-    s64 sp28;
-    s32 sp30;
-    s32 sp34;
-    s32 temp_16_175;
-    s32 temp_16_47;
-    s32 temp_17_21;
-    s32 temp_19_23;
-    s32 temp_20_24;
-    s32 temp_21_52;
-    s32 temp_22_38;
-    s32 temp_23_49;
-    s32 temp_2_36;
-    s32 temp_3_151;
-    s32 temp_3_85;
-    s32 temp_5_28;
-    s32 temp_6_88;
-    s32 temp_7_152;
-    s64 temp_16_37;
-    s64 temp_20_116;
-    s64 temp_20_63;
-    s64 temp_5_112;
-    s64 temp_6_183;
-    s64 temp_6_32;
+extern void func_001F4280(s32);
+extern void func_001F4398(void);
+extern void *func_001FDD10(s32);
+extern void font_print_right(s32, s32, u64, void *, s32) __asm__("FUN_001f6940");
+extern void font_print_large(s32, s32, u64, void *, s32) __asm__("FUN_001f6530");
+extern s32 func_001FF960(s32, s32);
+extern void draw_hud_sprite_rect(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_00200958");
+extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 
-    temp_17_21 = (s32) arg0->unk20 >> 1;
-    temp_19_23 = (s32) arg0->unk24 >> 2;
+s32 draw_sound_menu(Menu *m) __asm__("FUN_0021ce00");
+
+s32 draw_sound_menu(Menu *m)
+{
+    s32 x;
+    s32 y;
+    s32 lx;
+    s32 bx;
+    s32 fx;
+    s32 vx;
+    s32 len;
+
+    y = m->h >> 2;
+    x = m->w >> 1;
     func_001F4280(0);
-    temp_20_24 = temp_19_23 - 8;
-    sp10 = temp_17_21 - 8;
-    temp_5_28 = temp_17_21 + 9;
-    temp_6_32 = (0x8020 << 0x10) | 0xFFFF;
-    sp14 = temp_17_21 + 7;
-    sp18 = temp_5_28;
-    temp_16_37 = (arg0->unk40 == 0) ? temp_6_32 : ((0x80FF << 0x10) | 0xA888);
-    temp_2_36 = func_001FDD10(0x5212, temp_5_28, temp_6_32);
-    temp_22_38 = temp_19_23 - 6;
-    sp1C = temp_17_21 + 0x4A;
-    temp_16_47 = temp_19_23 * 2;
-    temp_23_49 = temp_16_47 - 8;
-    sp20 = sp18 * 0x10;
-    temp_21_52 = temp_16_47 - 6;
-    func_001F6940(sp10, temp_20_24, temp_16_37, temp_2_36, -1);
-    temp_20_63 = (0x8020 << 0x10) | 0xFFFF;
-    func_00200E08(sp14, temp_20_24, arg0->unk20 - 0x3F, temp_19_23 + 8, (0x8069 << 0x10) | 0x6969, 0);
-    func_00200E08(sp18, temp_22_38, arg0->unk20 - 0x41, temp_19_23 + 6, (0x8038 << 0x10) | 0x3838, 0);
-    sp30 = temp_17_21 + 8;
-    temp_3_85 = (arg0->unk20 - sp1C) * *(s32 *)0x15EDF0;
-    sp28 = temp_20_63;
-    temp_6_88 = temp_3_85 > -1;
-    func_00200958(func_001FF960(0xE99E, 8, temp_6_88, -1), sp20, temp_22_38 * 0x10, (temp_17_21 + (((s32) ((temp_6_88 != 0) ? temp_3_85 : (temp_3_85 + 0x3FF)) >> 0xA) + 8)) * 0x10, (temp_19_23 + 5) * 0x10, 0, 0xA0, 0x1F0, 0x150, 0x80);
-    temp_5_112 = (0x80FF << 0x10) | 0xA888;
-    temp_20_116 = ((arg0->unk40 ^ 1) != 0) ? temp_5_112 : temp_20_63;
-    func_001F6940(sp10, temp_23_49, temp_20_116, func_001FDD10(0x5213, (s32) temp_5_112), -1);
-    func_00200E08(sp14, temp_23_49, arg0->unk20 - 0x3F, temp_16_47 + 8, (0x8069 << 0x10) | 0x6969, 0);
-    func_00200E08(sp18, temp_21_52, arg0->unk20 - 0x41, temp_16_47 + 6, (0x8038 << 0x10) | 0x3838, 0);
-    temp_3_151 = (arg0->unk20 - sp1C) * D_0015EDEC;
-    temp_7_152 = temp_3_151 > -1;
-    sp34 = temp_7_152;
-    func_00200958(func_001FF960(0xE99E, 9, sp1C, temp_7_152), sp20, temp_21_52 * 0x10, (temp_17_21 + (((s32) ((temp_7_152 != 0) ? temp_3_151 : (temp_3_151 + 0x3FF)) >> 0xA) + 8)) * 0x10, (temp_16_47 + 5) * 0x10, 0, 0xA0, 0x1F0, 0x150, 0x80);
-    temp_16_175 = (temp_19_23 * 3) - 8;
-    temp_6_183 = ((arg0->unk40 ^ 2) != 0) ? ((0x80FF << 0x10) | 0xA888) : sp28;
-    sp28 = temp_6_183;
-    func_001F6940(sp10, temp_16_175, temp_6_183, func_001FDD10(0x5214), -1);
-    func_001F6530(sp30, temp_16_175, (0x80FF << 0x10) | 0xA888, func_001FDD10((*(s32 *)0x15EDE8 == 0) ? 0x5215 : 0x5216), -1);
+    lx = x - 8;
+    bx = x + 7;
+    fx = x + 9;
+    vx = x + 0x4A;
+
+    font_print_right(lx, y - 8, m->sel == 0 ? 0x8020FFFF : 0x80FFA888, func_001FDD10(0x5212), -1);
+    func_00200E08(bx, y - 8, m->w - 0x3F, y + 8, 0x80696969, 0);
+    func_00200E08(fx, y - 6, m->w - 0x41, y + 6, 0x80383838, 0);
+    len = (m->w - vx) * D_0015EDF0 / 1024;
+    draw_hud_sprite_rect(func_001FF960(0xE99E, 8), fx << 4, (y - 6) << 4, (x + 8 + len) << 4, (y + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
+
+    font_print_right(lx, y * 2 - 8, m->sel == 1 ? 0x8020FFFF : 0x80FFA888, func_001FDD10(0x5213), -1);
+    func_00200E08(bx, y * 2 - 8, m->w - 0x3F, y * 2 + 8, 0x80696969, 0);
+    func_00200E08(fx, y * 2 - 6, m->w - 0x41, y * 2 + 6, 0x80383838, 0);
+    len = (m->w - vx) * D_0015EDEC / 1024;
+    draw_hud_sprite_rect(func_001FF960(0xE99E, 9), fx << 4, (y * 2 - 6) << 4, (x + 8 + len) << 4, (y * 2 + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
+
+    font_print_right(lx, y * 3 - 8, m->sel == 2 ? 0x8020FFFF : 0x80FFA888, func_001FDD10(0x5214), -1);
+    font_print_large(x + 8, y * 3 - 8, 0x80FFA888, func_001FDD10(D_0015EDE8 != 0 ? 0x5216 : 0x5215), -1);
     func_001F4398();
     return 2;
 }

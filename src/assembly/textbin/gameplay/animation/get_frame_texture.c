@@ -56,8 +56,10 @@ s64 get_frame_texture(s32 frame_id) {
     s32 return_base;
     s32 return_mode;
     s64 return_mask;
-    s64 return_top;
     s32 return_shift;
+    s64 ret;
+    s64 tex0;
+    s64 return_top;
 
     frame = (struct FrameTextureRef *)(frame_id * 4 + D_0019A3E8.unk20);
     texture_page = (struct FrameTexturePage *)(D_0019A3E8.unk28 + frame->texture * 8);
@@ -111,22 +113,19 @@ s64 get_frame_texture(s32 frame_id) {
         D_0015F458 += 1;
     }
 
-    return_width = image_page->width;
-    return_base = image_page->base;
-    return_shift = return_width - 6;
+    return_shift = image_page->width - 6;
     if (return_shift < 0) {
         return_shift = 0;
     }
-    return_mask = (s32)(1 << return_shift);
-    return_top = 0x8000;
-    return_mode = return_base < (D_0015EE8C >> 8) ? 0x1B : 0x13;
-    return return_base |
-           ((return_mask << 14)) |
-           (return_mode << 20) |
-           ((s64)return_width << 26) |
-           ((s64)image_page->height << 30) |
-           ((s64)texture_page->base << 37) |
-           (return_top << 19) |
-           (((s64)-1) << 63);
+    return_mode = image_page->base < (D_0015EE8C >> 8) ? 0x1B : 0x13;
+    ret = image_page->base | ((s64)(1 << return_shift) << 14);
+    ret |= (s64)return_mode << 20;
+    ret |= (s64)image_page->width << 26;
+    ret |= (s64)image_page->height << 30;
+    tex0 = (s64)texture_page->base << 37;
+    tex0 |= (s64)0x8000 << 19;
+    ret |= tex0;
+    ret |= (s64)-1 << 63;
+    return ret;
 }
 #endif /* NON_MATCHING */

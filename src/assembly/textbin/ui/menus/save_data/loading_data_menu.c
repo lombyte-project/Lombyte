@@ -96,9 +96,7 @@ extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern s32 InitializeGlobalStateEntry();
 extern s32 func_001FBAB8();
 extern s32 func_0022DA68();
-s32 loading_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_002232d8");
-
-s32 loading_data_menu(struct M2c_arg0 *arg0)
+s32 FUN_002232d8(struct M2c_arg0 *arg0)
 {
   s32 temp_19_15;
   s32 mobj_unk38;
@@ -107,7 +105,6 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
   s32 e8_scale;
   s32 e7_scale;
   struct M2c_D_0013E550 *init_unk;
-
   temp_19_15 = arg0->unk40;
   if (D_001D5BF0.unk128 != 0)
   {
@@ -128,6 +125,7 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
       D_0013E550.unk48 = e8_scale;
       D_0013E550.unk50 = e8_scale;
       D_0013E550.unk54 = ((s32) (D_0015EDF0 * 7)) / 10;
+      e7_scale = ((s32) (D_0015EDF0 * 7)) / 10;
       D_0013E550.unk5C = D_0015EDF0;
       D_0013E550.unk58 = e7_scale;
       asm volatile("" : : "r"(init_unk));
@@ -153,7 +151,8 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
     {
       D_001D5BF0.unk8 = mobj_unk38;
     }
-    else if (D_001D5BF0.unk124 == 0)
+    else
+      if (D_001D5BF0.unk124 == 0)
     {
       return -1;
     }
@@ -163,7 +162,7 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
     D_001D5BF0.unk8 = D_001D5BF0.unk4->unk38;
     return 0;
   }
-  if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0) && (D_0013D290.unk8 == 2))
+  if (((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) && (D_0013D290.unk8 == 2))
   {
     if (arg0->unk30 & 1)
     {
@@ -184,8 +183,7 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
       arg0->unk40 = (s32) (sub_unk40 + 1);
     }
     D_0015EE34 = arg0->unk40;
-    if (((flags & 0x40) && (D_0013D290.unk8 == 2)) &&
-        ((*((s32 *) (((u8 *) &D_0013D290) + (arg0->unk40 * 0x1C) + 0x20))) >= 0))
+    if (((flags & 0x40) && (D_0013D290.unk8 == 2)) && ((*((s32 *) ((((u8 *) (&D_0013D290)) + (arg0->unk40 * 0x1C)) + 0x20))) >= 0))
     {
       func_0022DA68(0, 0x11, arg0->unk14);
       D_0013D290.unkC0 = 0;

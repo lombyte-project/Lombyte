@@ -4,37 +4,93 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021fdc8/FUN_0021fdc8.s", FUN_0021fdc8);
 #else
-#include "rnc/fun_0021fdc8_types.h"
 #include "types.h"
+struct M2c_D_0013D290 {
+    u8 pad_0[0x8];
+    s32 unk8;
+    u8 pad_C[0xC8];
+    s32 unkD4;
+    u8 pad_D8[0x4];
+    s32 unkDC;
+};
 
+struct M2c_D_001D5BF4 {
+    u8 pad_0[0x40];
+    struct M2c_D_001D5BF4_unk40 * unk40;
+};
 
+struct M2c_D_001D5BF4_unk40 {
+    u8 pad_0[0x3C];
+    s32 unk3C;
+    s32 unk40;
+};
 
+struct M2c_arg0 {
+    u8 pad_0[0x30];
+    s32 unk30;
+    s32 unk34;
+    u8 pad_38[0x8];
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+    s32 unk60;
+};
 
+struct M2c_temp_2_207 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_2_215 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_2_295 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_2_303 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_2_355 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_2_363 {
+    s32 unk0;
+    s32 unk4;
+};
 
+struct M2c_temp_4_139 {
+    u8 pad_0[0x34];
+    s32 unk34;
+    u8 pad_38[0x8];
+    s32 unk40;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
+struct M2c_temp_4_80 {
+    u8 pad_0[0x3C];
+    s32 unk3C;
+    s32 unk40;
+    u8 pad_44[0x4];
+    s32 unk48;
+};
 
 extern struct M2c_D_0013D290 D_0013D290;
 extern u8 D_0013D408[];
 extern s32 D_001516D8;
 extern s32 D_0015ED88;
-extern s32 D_001A0314;
+extern s32 D_001A0314[];
 extern struct M2c_D_001D5BF4 *D_001D5BF4[];
 extern s32 func_001F96F8();
 extern s32 func_0020B618();
@@ -43,7 +99,7 @@ extern s32 func_00225D88();
 extern s32 func_00225DD8();
 extern s32 func_00225E20();
 s32 FUN_0021fdc8(struct M2c_arg0 *arg0) {
-u8 sp_slot[0x70];    s32 *temp_16_236;
+u8 sp_slot[0x20];    s32 *temp_16_236;
     s32 temp_16_140;
     s32 temp_16_48;
     s32 temp_16_50;
@@ -88,7 +144,7 @@ u8 sp_slot[0x70];    s32 *temp_16_236;
         }
     } else {
         if (temp_5_11 & 2) {
-            var_16_16 = D_001A0314;
+            var_16_16 = D_001A0314[0];
         } else if (temp_5_11 & 4) {
             var_16_16 = D_001D5BF4[0]->unk40->unk3C;
         } else if (temp_5_11 & 0x100) {
@@ -155,7 +211,7 @@ block_28:
         case 0:
             temp_4_176 = arg0->unk48;
             if (temp_4_176 != 0) {
-                if (*(s32 *)0x1516D8 == 0) {
+                if (*(s16 *)0x1516D8 == 0) {
                     temp_19_183 = var_16_16 * 8;
                     if (*(s32 *)((u8 *)(temp_19_183 + arg0->unk30) + 0x4) != 0) {
                         var_18_191 = temp_4_176;
@@ -191,7 +247,7 @@ block_78:
         case 1:
         case 3:
         case 5:
-            if (*(s32 *)0x1516D8 == 0) {
+            if (*(s16 *)0x1516D8 == 0) {
                 if (temp_2_153 & 0x20) {
                     temp_16_236 = ((u8 *)arg0) + 0x48 + ((arg0->unk44 == 3) * 4);
                     func_00225E20(*temp_16_236, temp_2_153);
@@ -212,7 +268,7 @@ block_78:
                     temp_4_258 = arg0->unk4C;
                     if (temp_4_258 == 0) {
                         arg0->unk44 = 0;
-                    } else if (*(s32 *)0x1516D8 == 0) {
+                    } else if (*(s16 *)0x1516D8 == 0) {
                         temp_19_271 = var_16_16 * 8;
                         if (*(s32 *)((u8 *)(temp_19_271 + arg0->unk30) + 0x4) != 0) {
                             var_18_279 = temp_4_258;
@@ -249,7 +305,7 @@ block_78:
                 if (var_16_16 != arg0->unk50) {
                     temp_4_321 = arg0->unk48;
                     if (temp_4_321 != 0) {
-                        if (*(s32 *)0x1516D8 == 0) {
+                        if (*(s16 *)0x1516D8 == 0) {
                             temp_19_331 = var_16_16 * 8;
                             if (*(s32 *)((u8 *)(temp_19_331 + arg0->unk30) + 0x4) != 0) {
                                 var_18_339 = temp_4_321;

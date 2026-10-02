@@ -5,111 +5,61 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225ac0/FUN_00225ac0.s", FUN_00225ac0);
 #else
 #include "types.h"
-struct M2c_D_001D5BF0 {
-    u8 pad_0[0x108];
-    s32 unk108;
-    s32 unk10C;
-};
 
-struct M2c_var_2_23 {
-    s32 unk0;
-    s32 unk4;
-};
+struct FrameBuf { s32 addr; s32 flag; };
+struct GameState { u8 pad0[0x108]; s32 buf_b; s32 buf_a; };
 
-struct M2c_var_3_44 {
-    s32 unk0;
-    s32 unk4;
-};
+extern struct GameState D_001D5BF0;
+extern struct FrameBuf D_001D60B8[5];
 
-struct M2c_var_3_65 {
-    s32 unk0;
-    s32 unk4;
-};
+void FUN_00225ac0(s32 mode) {
+    s32 a;
+    s32 b;
+    s32 n1;
+    s32 n2;
+    s32 n3;
+    s32 i;
+    s32 end;
+    struct FrameBuf *p;
 
-struct M2c_var_3_85 {
-    s32 unk0;
-    s32 unk4;
-};
-
-extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern u8 D_001D60B8[];
-void FUN_00225ac0(s32 arg0) {
-    struct M2c_var_2_23 *var_2_23;
-    s32 temp_6_57;
-    s32 temp_9_20;
-    s32 var_10_11;
-    s32 var_2_60;
-    s32 var_2_9;
-    s32 var_4_18;
-    s32 var_4_24;
-    s32 var_4_45;
-    s32 var_4_68;
-    s32 var_5_8;
-    s32 var_7_7;
-    s32 var_8_5;
-    struct M2c_var_3_44 *var_3_44;
-    struct M2c_var_3_65 *var_3_65;
-    struct M2c_var_3_85 *var_3_85;
-
-    var_8_5 = D_001D5BF0.unk10C;
-    var_7_7 = D_001D5BF0.unk108;
-    if (arg0 == 0) {
-        var_5_8 = 1;
-        var_2_9 = 0;
-        var_10_11 = 0;
+    b = D_001D5BF0.buf_b;
+    a = D_001D5BF0.buf_a;
+    if (mode == 0) {
+        n1 = 1;
+        n2 = 0;
+        n3 = 0;
     } else {
-        var_5_8 = 2;
-        var_2_9 = 1;
-        var_10_11 = 2;
+        n1 = 2;
+        n2 = 1;
+        n3 = 2;
     }
-    temp_9_20 = var_5_8 + var_2_9;
-    if (var_5_8 > 0) {
-        var_2_23 = D_001D60B8;
-        var_4_24 = var_5_8;
-        do {
-            var_2_23->unk0 = var_7_7;
-            var_4_24 -= 1;
-            var_2_23->unk4 = 0;
-            var_7_7 += 0x11800;
-            var_2_23 += 1;
-        } while (var_4_24 != 0);
-        var_4_18 = var_5_8;
+    end = n1;
+    i = 0;
+    if (n1 > 0) {
+        p = D_001D60B8;
+        for (i = n1; i != 0; i--) {
+            p->addr = b;
+            p->flag = 0;
+            b += 0x11800;
+            p++;
+        }
+        i = n1;
     }
-    if (var_4_18 < temp_9_20) {
-        var_3_44 = (var_4_18 * 8) + D_001D60B8;
-        var_4_45 = temp_9_20 - var_4_18;
-        do {
-            var_3_44->unk0 = var_8_5;
-            var_4_45 -= 1;
-            var_3_44->unk4 = 0;
-            var_8_5 += 0x11800;
-            var_3_44 += 1;
-        } while (var_4_45 != 0);
-        var_4_18 = temp_9_20;
+    end += n2;
+    for (; i < end; i++) {
+        D_001D60B8[i].addr = a;
+        D_001D60B8[i].flag = 0;
+        a += 0x11800;
     }
-    temp_6_57 = temp_9_20; temp_6_57 += var_10_11;
-    var_2_60 = var_4_18 < 5;
-    if (var_4_18 < temp_6_57) {
-        var_3_65 = (var_4_18 * 8) + D_001D60B8;
-        var_4_68 = temp_6_57 - var_4_18;
-        do {
-            var_3_65->unk0 = var_7_7;
-            var_4_68 -= 1;
-            var_3_65->unk4 = 1;
-            var_7_7 += 0x4F000;
-            var_3_65 += 1;
-        } while (var_4_68 != 0);
-        var_4_18 = temp_6_57;
-        var_2_60 = var_4_18 < 5;
+    end += n3;
+    for (; i < end; i++) {
+        D_001D60B8[i].addr = b;
+        D_001D60B8[i].flag = 1;
+        b += 0x4F000;
     }
-    if (var_2_60 != 0) {
-        var_3_85 = (var_4_18 * 8) + D_001D60B8;
-        do {
-            var_3_85->unk4 = 0;
-            var_4_18 += 1;
-            var_3_85->unk0 = 0;
-            var_3_85 += 1;
-        } while (var_4_18 < 5);
+    for (; i < 5; i++) {
+        D_001D60B8[i].flag = 0;
+        D_001D60B8[i].addr = 0;
     }
 }
 #endif /* NON_MATCHING */

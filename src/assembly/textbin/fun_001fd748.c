@@ -5,152 +5,126 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001fd748/FUN_001fd748.s", FUN_001fd748);
 #else
 #include "types.h"
-struct M2c_D_001A00F0 {
-    u8 pad_0[0x224];
-    s32 unk224;
-};
 
-struct M2c_sp20 {
-    s32 unk0;
-    s32 unk4;
-    u8 pad_8[0x4];
-    s32 unkC;
-};
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 dx;
+    s32 dy;
+} Marker;
+
+typedef struct {
+    s32 text;
+    s32 pad4[2];
+} MarkerText;
+
+typedef struct {
+    u8 pad0[0x224];
+    s32 sel;
+} MapState;
 
 extern u8 D_0013DD40[];
 extern u8 D_0013DD58[];
 extern s32 D_0015ED80;
 extern s32 D_0015F438;
-extern s32 D_0015F690;
-extern struct M2c_D_001A00F0 D_001A00F0;
-extern u8 D_001DDD44[];
-extern u8 D_001DDE28[];
-extern s32 func_001F4280();
-extern s32 func_001F4398();
-extern s32 func_001F6250();
-extern s32 func_001F6530();
-extern s32 func_001F96F8();
-extern s32 func_001F9B20();
-extern s32 func_001FDD10();
-extern s32 func_001FF960();
-extern s32 func_001FFC30();
-extern s32 func_00200258();
-extern s32 func_00200C80();
-extern s32 func_00200E08();
-extern s32 func_00233980();
-void FUN_001fd748(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-u8 sp_slot[0xD0];    s32 sp10;
-    s32 sp14;
-    s32 sp18;
-    s32 sp1C;
-    struct M2c_sp20 *sp20;
-    s32 *temp_21_165;
-    s32 *temp_5_194;
-    s32 temp_16_135;
-    s32 temp_16_224;
-    s32 temp_16_45;
-    s32 temp_17_125;
-    s32 temp_17_208;
-    s32 temp_17_46;
-    s32 temp_18_211;
-    s32 temp_19_167;
-    s32 temp_19_177;
-    s32 temp_20_166;
-    s32 temp_20_176;
-    s32 temp_21_231;
-    s32 temp_21_242;
-    s32 temp_23_178;
-    s32 temp_2_210;
-    s32 temp_2_214;
-    s32 temp_3_295;
-    s32 temp_4_297;
-    s32 var_30_107;
-    s32 var_5_91;
+extern s32 D_0015F690 __attribute__((sda));
+extern MapState D_001A00F0;
+extern MarkerText D_001DDD44[];
+extern Marker D_001DDE28[];
+extern void func_001F4280(s32);
+extern void func_001F4398(void);
+extern s32 func_001F6250(u8 *, s32);
+extern void func_001F6530(s32, s32, u64, u8 *, s32);
+extern s32 func_001F96F8(s32);
+extern f32 func_001F9B20(f32 *);
+extern u8 *func_001FDD10(s32);
+extern s32 func_001FF960(s32, s32);
+extern void func_001FFC30(s32, s32, s32, s32, s32, s32);
+extern void func_00200258(s32, s32, s32, s32, s32, s32, s32, s32);
+extern void func_00200C80(s32, s32, s32, s32, u64, s32);
+extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void func_00233980(s32, u64);
 
-    sp10 = 1;
+void FUN_001fd748(s32 x0, s32 x1, s32 y0, s32 y1)
+{
+    f32 v[4];
+    s32 i;
+    s32 mode;
+    s32 w;
+    s32 h;
+    s32 px;
+    s32 py;
+    s32 x;
+    s32 y;
+    s32 bx;
+    s32 by;
+    s32 d;
+    s32 t;
+    s32 wid;
+    s32 a;
+    s32 m;
+    u8 *text;
+    s32 tex;
+
     func_001F4280(0);
-    sp1C = 0x10;
-    func_00233980(0x42, (0x8000 << 0x18) | 0x44);
+    func_00233980(0x42, 0x8000000044);
     func_00233980(0x47, 0x4B);
-    func_00200E08(0, 0, 0x200, 0x1C0, 0x8000 << 0x10, 0);
-    temp_16_45 = (arg1 - arg0) * 0x10;
-    temp_17_46 = (arg3 - arg2) * 0x10;
-    func_00200258(func_001FF960(0xE99A, 0xE), 0, 0, temp_16_45, temp_17_46, 0, 0, 0x80);
+    func_00200E08(0, 0, 0x200, 0x1C0, 0x80000000, 0);
+    tex = func_001FF960(0xE99A, 0xE);
+    w = (x1 - x0) * 16;
+    h = (y1 - y0) * 16;
+    func_00200258(tex, 0, 0, w, h, 0, 0, 0x80);
     func_00233980(8, 0);
-    func_00200258(func_001FF960(0xE99A, 0xF), 0, 0, temp_16_45, temp_17_46, *(s32 *)0x15F438 & 0xFFF, 0, 0x80);
+    func_00200258(func_001FF960(0xE99A, 0xF), 0, 0, w, h, D_0015F438 & 0xFFF, 0, 0x80);
     func_00233980(8, 5);
-    sp20 = D_001DDE28 + 0x10;
-loop_1:
-    if (sp20->unk0 == 0) {
-        goto block_13;
+    for (i = 1; i < 20; i++) {
+        if (*(volatile s32 *)&D_001DDE28[i].x == 0) {
+            continue;
+        }
+        mode = 3;
+        if (D_0013DD58[i] == 0) {
+            mode = 2;
+            if (D_0013DD40[i] == 0) {
+                mode = 0;
+            }
+        }
+        if (mode == 0) {
+            continue;
+        }
+        px = D_001DDE28[i].x;
+        py = D_001DDE28[i].y;
+        if (D_0015ED80 != 0) {
+            py = py * 0x1C0 / 0x1A0;
+        }
+        if (mode == 3 || (mode == 2 && D_0015F438 % (func_001F96F8(0x16) + func_001F96F8(8)) < func_001F96F8(0x16))) {
+            func_001FFC30(func_001FF960(0xE99A, 0xC), px - 5, py - 5, 10, 10, 0x80);
+        }
+        if (i == D_001A00F0.sel) {
+            x = px + D_001DDE28[i].dx;
+            y = py + D_001DDE28[i].dy;
+            v[1] = D_001DDE28[i].dy;
+            v[0] = D_001DDE28[i].dx;
+            d = func_001F9B20(v) * 1000.0f;
+            t = d - 8000;
+            bx = x + (px - x) * t / d;
+            by = y + (py - y) * t / d;
+            text = func_001FDD10(D_001DDD44[i].text);
+            wid = func_001F6250(text, -1);
+            if (D_001DDE28[i].dx <= -1) {
+                a = x - wid;
+            } else {
+                a = x + wid;
+            }
+            func_00200C80(bx + 1, by + 1, x + 1, y + 1, 0x80000000, 0);
+            func_00200C80(x + 1, y + 1, a + 1, y + 1, 0x80000000, 0);
+            m = (a < x) ? a : x;
+            func_001F6530(m + 1, y - D_0015F690 + 1, 0x80000000, text, -1);
+            func_00200C80(bx, by, x, y, 0x80F0F0F0, 0);
+            func_00200C80(x, y, a, y, 0x80F0F0F0, 0);
+            func_001F6530(m, y - D_0015F690, 0x80F0F0F0, text, -1);
+            func_001FFC30(func_001FF960(0xE99A, 0xD), px - 10, py - 10, 20, 20, 0x80);
+        }
     }
-    var_5_91 = 3;
-    if (*(sp10 + D_0013DD58) != 0) {
-        goto block_4;
-    }
-    var_5_91 = (*(sp10 + D_0013DD40) == 0) ? 0 : 2;
-block_4:
-    if (var_5_91 == 0) {
-        goto block_13;
-    }
-    sp14 = sp20->unk0;
-    var_30_107 = sp20->unk4;
-    if (*(s32 *)0x15ED80 == 0) {
-        goto block_7;
-    }
-    var_30_107 = (s32) (var_30_107 * 0x1C0) / 416;
-block_7:
-    if (var_5_91 == 3) {
-        goto block_10;
-    }
-    if (var_5_91 != 2) {
-        goto block_11;
-    }
-    temp_17_125 = func_001F96F8(0x16, var_5_91);
-    temp_16_135 = (s32) *(s32 *)0x15F438 % (s32) (temp_17_125 + func_001F96F8(8));
-    if (temp_16_135 >= func_001F96F8(0x16)) {
-        goto block_11;
-    }
-block_10:
-    func_001FFC30(func_001FF960(0xE99A, 0xC), sp14 - 5, var_30_107 - 5, 0xA, 0xA, 0x80);
-block_11:
-    if (sp10 != D_001A00F0.unk224) {
-        goto block_14;
-    }
-    temp_21_165 = sp1C + (D_001DDE28 + 8);
-    temp_20_166 = sp20->unkC;
-    temp_19_167 = *temp_21_165;
-    temp_20_176 = var_30_107 + temp_20_166;
-    temp_19_177 = sp14 + temp_19_167;
-    temp_23_178 = temp_20_176 + 1;
-    sp18 = temp_19_177 + 1;
-    func_001F9B20(sp_slot, (f32) temp_19_167, (f32) temp_20_166);
-    temp_5_194 = D_001DDD44 + (sp10 * 0xC);
-    temp_17_208 = temp_19_177 + ((s32) ((sp14 - temp_19_177) * 0x4479E0C0) / 1148846080);
-    temp_18_211 = temp_20_176 + ((s32) ((var_30_107 - temp_20_176) * 0x4479E0C0) / 1148846080);
-    temp_2_210 = func_001FDD10(*temp_5_194, temp_5_194);
-    temp_2_214 = func_001F6250(temp_2_210, -1);
-    temp_16_224 = (*temp_21_165 <= -1) ? (temp_19_177 - temp_2_214) : (temp_19_177 + temp_2_214);
-    temp_21_231 = temp_16_224;
-    func_00200C80(temp_17_208 + 1, temp_18_211 + 1, sp18, temp_23_178, 0x8000 << 0x10, 0);
-    func_00200C80(sp18, temp_23_178, temp_16_224 + 1, temp_23_178, 0x8000 << 0x10, 0);
-    temp_21_242 = (temp_16_224 >= temp_19_177) ? temp_19_177 : temp_21_231;
-    func_001F6530(temp_21_242 + 1, (temp_20_176 - D_0015F690) + 1, 0x8000 << 0x10, temp_2_210, -1);
-    func_00200C80(temp_17_208, temp_18_211, temp_19_177, temp_20_176, (0x80F0 << 0x10) | 0xF0F0, 0);
-    func_00200C80(temp_19_177, temp_20_176, temp_16_224, temp_20_176, (0x80F0 << 0x10) | 0xF0F0, 0);
-    func_001F6530(temp_21_242, temp_20_176 - D_0015F690, (0x80F0 << 0x10) | 0xF0F0, temp_2_210, -1);
-    func_001FFC30(func_001FF960(0xE99A, 0xD), sp14 - 0xA, var_30_107 - 0xA, 0x14, 0x14, 0x80);
-block_13:
-block_14:
-    temp_3_295 = sp10 + 1;
-    sp20 += 0x10;
-    temp_4_297 = sp1C + 0x10;
-    sp10 = temp_3_295;
-    sp1C = temp_4_297;
-    if (temp_3_295 < 0x14) {
-        goto loop_1;
-    }
-    func_001F4398(temp_4_297);
-    return;
+    func_001F4398();
 }
 #endif /* NON_MATCHING */

@@ -5,58 +5,62 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227548/FUN_00227548.s", FUN_00227548);
 #else
 #include "types.h"
-/* SN ProDG ee-gcc 2.95.3 matched TU. */
+#include "eetypes.h"
+struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
+struct TagPtr { struct DmaTag *p; };
+struct Rec { s32 count; s32 x4; f32 f8; f32 fC; u128 v10; };
+extern struct TagPtr D_00160F00;
+struct Flag { s32 v; };
+extern struct Flag D_0015ED80;
+extern u8 D_001D7EC0[];
+extern u8 D_001D7E50[];
+extern s32 D_001603A0;
+extern void func_002271D0(void);
+extern void func_00226FB8(f32 *, f32);
+extern u8 *func_002270E8(u8 *);
+extern void func_00228520(f32 *, f32 *);
+extern void func_00227A08(u32, s32, s32);
+extern void func_00227140(s32, s32, s32);
+extern s32 func_00233980(s32, s64);
+extern void func_00227378(s32);
+void FUN_00227548(u8 *rec) {
+    f32 a[4];
+    f32 b[4];
+    f32 c[4];
+    struct Rec *r;
+    s32 i;
 
-extern void func_003A6C58(void *a0, void *a1, void *a2);
-extern int D_00747A30;
-extern unsigned char D_0044A920[];
-extern unsigned char D_0044A940[];
-extern unsigned char D_0044A958[];
-extern unsigned char D_005E8640[];
-extern void cRelSys_unlinkNoFree(void *a0, int a1);
-extern void func_00297660(void);
-extern void cEventConfig_setEventNo(void *a0, int a1);
-extern unsigned char D_00586B30[];
-
-__attribute__((section(".text.LoadDisplayText_297450")))
-void FUN_00227548(void *a0) {
-    unsigned char *s0 = (unsigned char *)a0;
-    char buf[0x40];
-    unsigned long b = *(unsigned char *)(s0 + 8);
-    int a1;
-    if ((b >> 7) == 0) {
-        if (D_00747A30 & 0x400) {
-            func_003A6C58(buf, D_0044A920, D_0044A940);
-        } else {
-            func_003A6C58(buf, D_0044A958, D_0044A940);
+    func_002271D0();
+    r = (struct Rec *)rec;
+    D_00160F00.p->w0 = 0x30000007;
+    D_00160F00.p->addr = (u32)(D_0015ED80.v != 0 ? D_001D7EC0 : D_001D7E50);
+    D_00160F00.p->w2 = 0x13000000;
+    D_00160F00.p->w3 = 0x50000007;
+    b[1] = b[0] = a[1] = a[0] = 0.0f;
+    D_00160F00.p++;
+    while (r->count != 0) {
+        rec += 0x20;
+        *(u128 *)c = r->v10;
+        func_00226FB8(c, 1000.0f);
+        a[2] = r->fC;
+        b[2] = r->f8;
+        for (i = 0; i < r->count; i++) {
+            rec = func_002270E8(rec);
+            func_00228520(a, b);
+            func_00227A08(0x70000000, D_001603A0, r->x4);
+            func_00227140(2, 1, 2);
+            func_00227140(1, 0, 2);
         }
-        a1 = *(int *)(s0 + 0x10);
-        if (a1 != 0) {
-            cRelSys_linkNoAlloc(D_005E8640, a1, buf, 2);
-            *(int *)(s0 + 8) = *(int *)(s0 + 8) | 0x80;
-        }
+        r = (struct Rec *)rec;
     }
-}
-
-__attribute__((section(".text.ClearDisplayText_2974F0")))
-void ClearDisplayText_2974F0(void *a0) {
-    unsigned char *s0 = (unsigned char *)a0;
-    unsigned long v0 = *(unsigned char *)(s0 + 8);
-    if (v0 >> 7) {
-        cRelSys_unlinkNoFree(D_005E8640, 2);
-        *(int *)(s0 + 8) = *(int *)(s0 + 8) & -0x81;
+    if (D_0015ED80.v) {
+        func_00233980(0x4C, 0x80080);
+    } else {
+        func_00233980(0x4C, 0x80070);
     }
-}
-
-__attribute__((section(".text.InitSubState_2975F8")))
-void InitSubState_2975F8(void *a0, int a1) {
-    unsigned char *s0 = (unsigned char *)a0;
-    unsigned long t = *(int *)(s0 + 8);
-    if (((t >> 1) & 1) == 0) {
-        func_00297660();
-        *(int *)(s0 + 0x18) = a1;
-        cEventConfig_setEventNo(D_00586B30, a1);
-        *(int *)(s0 + 8) = *(int *)(s0 + 8) | 2;
-    }
+    func_00233980(0x42, 0x2000000064LL);
+    func_00227378(0);
+    func_00233980(0x47, 0x5360B);
+    func_00233980(0x42, 0x8000000044LL);
 }
 #endif /* NON_MATCHING */

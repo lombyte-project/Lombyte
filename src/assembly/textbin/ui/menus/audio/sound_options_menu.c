@@ -5,142 +5,128 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/audio/sound_options_menu/FUN_0021cb30.s", FUN_0021cb30);
 #else
 #include "types.h"
-/* sn-2.95.3-136 matched TU. */
+#include "sda.h"
 
-extern void *SearchData(void *a, void *b, int c);
-extern void cModel_setTextureExchange(void *self, void *tex, int tbl, int n);
-extern char D_0044B4A8[];
-extern char D_0044B4B0[];
+struct M2c_D_0013C940 {
+    u8 pad_0[0x1C0];
+    s32 unk1C0;
+    s32 unk1C4;
+};
 
-/* sn-2.95.3-136 matched TU. */
+struct M2c_D_0013E550 {
+    u8 pad_0[0x48];
+    s32 unk48;
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+};
 
+struct M2c_D_001D5BF0 {
+    u8 pad_0[0x4];
+    struct M2c_D_001D5BF0_unk4 *unk4;
+    s32 unk8;
+    u8 pad_C[0x118];
+    s32 unk124;
+};
 
+struct M2c_D_001D5BF0_unk4 {
+    u8 pad_0[0x38];
+    s32 unk38;
+};
 
+struct M2c_arg0 {
+    u8 pad_0[0x14];
+    s32 unk14;
+    u8 pad_18[0x18];
+    s32 unk30;
+    u8 pad_34[0xC];
+    s32 unk40;
+};
 
+extern struct M2c_D_0013C940 D_0013C940;
+extern struct M2c_D_0013E550 D_0013E550;
+extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern s32 D_001D5D14 NOT_SDA;
+extern s32 *D_001D5BF4 NOT_SDA;
+extern s32 D_0015EDEC MACRO_ADDR;
+extern s32 D_0015EDF0 MACRO_ADDR;
+extern s32 D_0015EDE8 MACRO_ADDR;
+extern s32 D_001A0314 NOT_SDA;
+extern s32 *D_001601E0 __attribute__((sda));
+extern s32 func_0022DA68(s32 arg0, s32 arg1, s32 arg2);
+void snd_set_playback_mode(s32 arg0) __asm__("FUN_0012e240");
 
+s32 sound_options_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021cb30");
 
-__attribute__((section(".text.cObjSimple__SetTexChange")))
-void sound_options_menu(void *a0, int a1) __asm__("FUN_0021cb30");
+s32 sound_options_menu(struct M2c_arg0 *arg0) {
+    s32 var_40;
+    s32 *music;
+    s32 var_EDE8;
+    s32 var_EDEC;
+    s32 var_EDF0;
 
-void sound_options_menu(void *a0, int a1) {
-    char *s0 = (char *)a0;
-    volatile int s1 = a1;
-    void *m;
-    int val;
-
-    if (*(unsigned char *)(s0 + 0x4D0) == 0) {
-        m = SearchData(*(void **)(s0 + 0x304), &D_0044B4A8, 0);
-        if (m == 0) {
-            m = SearchData(*(void **)(s0 + 0x304), &D_0044B4B0, 0);
-        }
-    } else {
-        m = SearchData(*(void **)(s0 + 0x304), &D_0044B4A8, *(int *)(s0 + 0x4D4));
-        if (m == 0) {
-            m = SearchData(*(void **)(s0 + 0x304), &D_0044B4B0, *(int *)(s0 + 0x4D4));
-        }
-    }
-    switch (*(unsigned short *)(s0 + 0x2FE)) {
-    case 0x227: {
-        char *p0 = *(char **)(s0 + 0x304);
-        volatile int f0 = *(int *)(p0 + 0x44);
-        val = f0 + (int)p0;
-        break;
-    }
-    case 0x228: {
-        char *p1 = *(char **)(s0 + 0x304);
-        int f1 = *(int *)(p1 + 0x48);
-        val = f1 + (int)p1;
-        break;
-    }
-    case 0x229: {
-        char *p2 = *(char **)(s0 + 0x304);
-        int f2 = *(int *)(p2 + 0x4C);
-        val = f2 + (int)p2;
-        break;
-    }
-    case 0x22A: {
-        char *p3 = *(char **)(s0 + 0x304);
-        int f3 = *(int *)(p3 + 0x50);
-        val = f3 + (int)p3;
-        break;
-    }
-    case 0x22B: {
-        char *p4 = *(char **)(s0 + 0x304);
-        int f4 = *(int *)(p4 + 0x54);
-        val = f4 + (int)p4;
-        break;
-    }
-    case 0x22C: {
-        char *p5 = *(char **)(s0 + 0x304);
-        int f5 = *(int *)(p5 + 0x58);
-        val = f5 + (int)p5;
-        break;
-    }
-    case 0x22D: {
-        char *p6 = *(char **)(s0 + 0x304);
-        int f6 = *(int *)(p6 + 0x78);
-        val = f6 + (int)p6;
-        break;
-    }
-    case 0x22E: {
-        char *p7 = *(char **)(s0 + 0x304);
-        int f7 = *(int *)(p7 + 0x70);
-        val = f7 + (int)p7;
-        break;
-    }
-    case 0x243: {
-        char *p8 = *(char **)(s0 + 0x304);
-        int f8 = *(int *)(p8 + 0x80);
-        val = f8 + (int)p8;
-        break;
-    }
-    case 0x24A: {
-        char *p9 = *(char **)(s0 + 0x304);
-        int f9 = *(int *)(p9 + 0x64);
-        val = f9 + (int)p9;
-        break;
-    }
-    case 0x24B: {
-        char *p10 = *(char **)(s0 + 0x304);
-        int f10 = *(int *)(p10 + 0x6C);
-        val = f10 + (int)p10;
-        break;
-    }
-    case 0x24C: {
-        char *p11 = *(char **)(s0 + 0x304);
-        int f11 = *(int *)(p11 + 0x74);
-        val = f11 + (int)p11;
-        break;
-    }
-    case 0x24D: {
-        char *p12 = *(char **)(s0 + 0x304);
-        int f12 = *(int *)(p12 + 0x7C);
-        val = f12 + (int)p12;
-        break;
-    }
-    case 0x24E: {
-        char *p13 = *(char **)(s0 + 0x304);
-        int f13 = *(int *)(p13 + 0x88);
-        val = f13 + (int)p13;
-        break;
-    }
-    case 0x271:
-    case 0x272:
-    case 0x273: {
-        char *p14 = *(char **)(s0 + 0x304);
-        int f14 = *(int *)(p14 + 0x5C);
-        val = f14 + (int)p14;
-        break;
-    }
-    default:
-        val = 0;
-        break;
-    }
-    if (m != 0) {
-        if (val != 0) {
-            *(int *)(s0 + 0x254) = *(int *)(s0 + 0x254) | 0x10000000;
-            cModel_setTextureExchange(s0, m, val, s1);
+    if (D_0013C940.unk1C4 & 0xD00) {
+        if (D_001D5D14 == 0) {
+            return 1;
         }
     }
+    if (D_0013C940.unk1C4 & 0x10) {
+        s32 temp = D_001D5BF0.unk4->unk38;
+
+        if (temp != 0) {
+            D_001D5BF0.unk8 = temp;
+        } else if (D_001D5BF0.unk124 == 0) {
+            return -1;
+        }
+    }
+    var_40 = arg0->unk40;
+    if (D_0013C940.unk1C4 & 0x1000) {
+        arg0->unk40 = (var_40 + 2) % 3;
+    }
+    if (D_0013C940.unk1C4 & 0x4000) {
+        arg0->unk40 = (arg0->unk40 + 1) % 3;
+    }
+    if ((arg0->unk40 != var_40) || (D_001D5BF4[0x20] != 0)) {
+        func_0022DA68(1, 0x11, arg0->unk14);
+        if (arg0->unk30 & 0x20) {
+            D_001A0314 = D_001601E0[arg0->unk40];
+        }
+    }
+    var_EDEC = D_0015EDEC;
+    var_EDF0 = D_0015EDF0;
+    music = &D_0015EDF0;
+    if (D_0013C940.unk1C0 & 0x2000) {
+        if (arg0->unk40 == 0) {
+            D_0015EDF0 = (0x400 < D_0015EDF0 + 3) ? 0x400 : D_0015EDF0 + 3;
+        }
+        if (arg0->unk40 == 1) {
+            D_0015EDEC = (0x400 < D_0015EDEC + 3) ? 0x400 : D_0015EDEC + 3;
+        }
+    }
+    if (D_0013C940.unk1C0 & 0x8000) {
+        if (arg0->unk40 == 0) {
+            D_0015EDF0 = (D_0015EDF0 - 3 <= 0) ? 0 : D_0015EDF0 - 3;
+        }
+        if (arg0->unk40 == 1) {
+            D_0015EDEC = (D_0015EDEC - 3 <= 0) ? 0 : D_0015EDEC - 3;
+        }
+    }
+    if ((var_EDEC != D_0015EDEC) || (var_EDF0 != *music)) {
+        D_0013E550.unk50 = D_0015EDEC;
+        D_0013E550.unk4C = D_0015EDEC;
+        D_0013E550.unk48 = *music * 8 / 10;
+        D_0013E550.unk54 = D_0013E550.unk58 = *music * 7 / 10;
+        D_0013E550.unk5C = *music;
+    }
+    if (D_0013C940.unk1C4 & 0x40) {
+        if (arg0->unk40 == 2) {
+            D_0015EDE8 = !D_0015EDE8;
+        }
+        snd_set_playback_mode(!D_0015EDE8);
+        func_0022DA68(0, 0x11, arg0->unk14);
+    }
+    return 0;
 }
 #endif /* NON_MATCHING */

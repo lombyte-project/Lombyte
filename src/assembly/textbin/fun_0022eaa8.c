@@ -4,409 +4,326 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022eaa8/FUN_0022eaa8.s", FUN_0022eaa8);
 #else
-#include "rnc/fun_0022eaa8_types.h"
 #include "types.h"
+#include "eetypes.h"
+#include "sda.h"
+#include "qcopy.h"
 
+typedef union { u128 q; f32 f[4]; } Vec4;
+typedef struct { Vec4 v[4]; } Mat4;
 
+typedef struct {
+    u8 pad00[0xC];
+    u8 count;          /* 0x0C */
+    u8 pad0D[0x24 - 0x0D];
+    f32 scale;         /* 0x24 */
+    u8 pad28[0x48 - 0x28];
+    s32 frames[1];     /* 0x48 */
+} Model;
 
+typedef struct {
+    u8 pad00[0x10];
+    Vec4 pos;          /* 0x10 */
+    Model *model;      /* 0x20 */
+} ObjHead;
 
+typedef struct {
+    u8 pad00[0x10];
+    u8 pos[0x14];      /* 0x10 */
+    Model *model;      /* 0x24 */
+    u8 pad28[4];
+    f32 fade;          /* 0x2C */
+    u8 pad30[2];
+    s16 unk32;         /* 0x32 */
+    u16 flags;         /* 0x34 */
+    u8 pad36[0x50 - 0x36];
+    u8 unk50;          /* 0x50 */
+    u8 unk51;
+    u8 unk52;
+    u8 unk53;
+    f32 blend;         /* 0x54 */
+    u8 pad58[0x68 - 0x58];
+    u8 *unk68;         /* 0x68 */
+    u8 *unk6C;         /* 0x6C */
+    u8 pad70;
+    u8 unk71;
+    u8 unk72;
+    u8 pad73[5];
+    u8 *verts;         /* 0x78 */
+} Obj;
 
+typedef struct {
+    u8 pad00[0x34];
+    s32 time;          /* 0x34 */
+    s32 frame;         /* 0x38 */
+    s32 unk3C;         /* 0x3C */
+    s16 end;           /* 0x40 */
+    u8 pad42[2];
+    s16 count;         /* 0x44 */
+    u8 pad46[0x58 - 0x46];
+    s32 unk58;         /* 0x58 */
+    s32 unk5C;         /* 0x5C */
+    s32 words[0x46];   /* 0x60 */
+    Obj *objs[1];      /* 0x178 */
+} Transfer;
 
+typedef struct {
+    u8 pad00[0x50];
+    s32 idx;           /* 0x50 */
+    s32 len;           /* 0x54 */
+    s32 mode;          /* 0x58 */
+    s32 state;         /* 0x5C */
+    u8 pad60[0xC0 - 0x60];
+    Vec4 trailA[32];   /* 0xC0 */
+    Vec4 trailB[32];   /* 0x2C0 */
+} Scene;
 
+typedef struct {
+    u8 pad00[0xB0];
+    f32 unkB0;
+} Display;
 
+typedef struct {
+    s32 off;
+    s32 flag;
+} Entry;
 
+typedef struct {
+    u8 pad00[4];
+    s32 base;          /* 0x04 */
+    u8 pad08[0x50 - 0x08];
+    s32 tbl[5];        /* 0x50 */
+} Bank;
 
+typedef struct {
+    u8 pad00[4];
+    s32 unk4;
+    s32 unk8;
+    u8 pad0C[8];
+    Bank *bank;        /* 0x14 */
+} Level;
 
+typedef struct {
+    u32 w0;
+    u32 w1;
+} Word2;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-extern struct M2c_D_0013DD40 D_0013DD40;
-extern u8 D_0013DD43;
-extern struct M2c_D_0013E030 D_0013E030;
+extern u8 D_0013DD40[];
+extern u8 D_0013DD43[];
+extern Scene D_0013E030;
 extern u8 D_0013E5C0[];
 extern s32 D_0015ED5C;
 extern s32 D_0015ED84;
-extern s32 D_0015EE48;
-extern s32 D_0015EE4A;
-extern f32 D_0015F43C;
-extern s32 D_0015F618;
-extern s32 D_00160404;
-extern u8 D_00160460[];
-extern s32 D_001604E0;
-extern u8 D_001604F0[];
-extern u8 D_00160500[];
+extern s16 D_0015EE48 __attribute__((sda));
+#define D_0015EE4A (*(s16 *)0x0015EE4A)
+extern f32 D_0015F43C MACRO_ADDR;
+extern s32 D_0015F618 MACRO_ADDR;
+extern f32 D_00160404 MACRO_ADDR;
+extern u8 D_00160460[] MACRO_ADDR;
+extern s32 D_001604E0 __attribute__((sda));
+extern s32 D_001604F0 __attribute__((sda));
+extern s32 D_00160500 __attribute__((sda));
 extern s32 D_00160F0C;
-extern struct M2c_D_0018CB20 D_0018CB20;
-extern u8 D_0018CC98[];
-extern struct M2c_D_0018CD00 D_0018CD00;
-extern struct M2c_D_001940C0 D_001940C0;
-extern u8 D_001D9A30[];
-extern u8 D_001D9AE0[];
-extern u8 D_001D9B30[];
-extern u8 D_001D9B48[];
-extern s32 FillTransferWords();
-extern s32 ReadGlobalTableEntry();
-extern s32 func_0012DC80();
-extern s32 func_0012E308();
-extern s32 func_0012EB00();
-extern s32 func_001E9428();
-extern s32 func_001E9430();
-extern s32 func_001F2D98();
-extern s32 func_001F96F8();
-extern s32 func_001F98D0();
-extern s32 func_001F9A10();
-extern void func_001F9A68();
-extern s32 func_001FA6C0();
-extern s32 func_002049F0();
-extern s32 func_0020C828();
-extern s32 func_0020C880();
-extern s32 func_0020CCA8();
-extern s32 func_0020DEF8();
-extern s32 func_0022DE10();
-extern s32 rand();
-/* retail small-data globals, declared to GAS before the body */
-__asm__(".extern D_0015EE48, 2");
-__asm__(".extern D_0015F43C, 4");
-__asm__(".extern D_0015F618, 4");
-__asm__(".extern D_00160404, 4");
-__asm__(".extern D_001604E0, 4");
-__asm__(".extern D_001604F0, 4");
-__asm__(".extern D_00160500, 4");
+extern Transfer D_0018CB20;
+extern Transfer D_0018CB20_b[] __asm__("D_0018CB20");
+extern Transfer D_0018CB20_c[] __asm__("D_0018CB20");
+extern Obj *D_0018CC98[];
+extern Display D_0018CD00;
+extern Level D_001940C0;
+extern Word2 D_001D9A30[];
+extern u128 D_001D9AE0[];
+extern f32 D_001D9B30[];
+extern f32 D_001D9B48[];
+
+extern void FillTransferWords(void *, s32, s32);
+extern void ReadGlobalTableEntry(void);
+extern void func_0012DC80(void);
+extern void func_0012E308(s32, s32, s32, s32, s32, s32, s32, void *);
+extern void func_0012EB00(void);
+extern void func_001E9428(void);
+extern void func_001E9430(void);
+extern void func_001F2D98(void);
+extern s32 func_001F96F8(s32);
+extern u32 func_001F98D0(void *, void *, s32);
+extern void func_001F9A10(void *, void *, void *);
+extern void func_001F9A68(void *, void *, f32);
+extern f32 func_001FA6C0(s32);
+extern void func_002049F0(s32) __asm__("FUN_002049f0");
+extern void func_0020C828(Obj *);
+extern void func_0020C880(Obj *, s32);
+extern void func_0020CCA8(Obj *, s32, void *);
+extern void func_0020DEF8(Obj *);
+extern void func_0022DE10(void);
+extern s32 rand(void);
 
 void FUN_0022eaa8(void) {
-u8 sp_slot[0x170];    s64 sp10;
-    s32 sp20;
-    s64 sp50;
-    s32 sp60;
-    s64 sp90;
-    s64 *spA0;
-    s32 *spA4;
-    s64 *spA8;
-    s32 *spAC;
-    s32 spB0;
-    s64 *spB4;
-    s32 *temp_16_279;
-    f32 temp_f0_27;
-    register f32 temp_f0_360 asm("$22");
-    f32 temp_f1_239;
-    f32 var_f20_248;
-    s16 var_4_295;
-    s32 *temp_4_177;
-    s32 *var_3_503;
-    s32 temp_16_357;
-    register s32 temp_17_328 asm("s1");
-    s32 temp_18_330;
-    s32 temp_19_344;
-    s32 temp_20_342;
-    s32 temp_2_337;
-    s32 temp_3_426;
-    s32 temp_4_227;
-    s32 temp_4_31;
-    s32 temp_6_334;
-    s32 var_16_84;
-    s32 var_23_322;
-    s32 var_2_130;
-    s32 var_2_314;
-    s32 var_5_296;
-    s32 var_5_504;
-    s32 var_6_481;
-    s32 var_7_438;
-    s32 var_8_168;
-    void **var_17_86;
-    struct M2c_var_5_183 *var_5_183;
-    void **var_7_164;
-    struct M2c_temp_21_323 *temp_21_323;
-    s32 *temp_2_189;
-    struct M2c_temp_3_88 *temp_3_88;
-    struct M2c_temp_3_95 *temp_3_95;
-    struct M2c_temp_5_324 *temp_5_324;
-    struct M2c_temp_5_333 *temp_5_333;
-    register struct M2c_temp_5_91 * temp_5_91 asm("s0");
-    s32 *temp_6_182;
-    struct M2c_temp_7_398 *temp_7_398;
+    Vec4 a;
+    Vec4 b;
+    Mat4 m1;
+    Mat4 m2;
+    Transfer *t;
+    Scene *s;
+    u16 two;
+    Obj *obj;
+    Obj *o;
+    s32 r;
+    Model *mdl;
+    Bank *bank;
+    u8 *base;
+    s32 *tp;
+    Entry *e;
+    s32 i;
+    s32 i2;
+    s32 i3;
+    s32 add;
+    u8 *fb;
+    f32 g;
+    s32 j;
+    s32 k;
+    s32 n;
+    s32 q;
+    s32 hp;
+    s32 h;
+    s32 frame;
+    u8 *v;
+    s32 lo;
+    s32 hi;
+    f32 f;
+    f32 scale;
 
     func_001E9430();
-    temp_f0_27 = D_0015F43C - 0.25f;
-    __asm__ volatile ("" : "+f" (temp_f0_27));
-    __asm__ volatile ("" : "+f" (temp_f0_27));
-    temp_4_31 = D_0018CB20.unk34 + 1;
-    D_0018CB20.unk38 = (s32) (D_0018CB20.unk38 + 1);
-    D_0018CB20.unk34 = temp_4_31;
-    D_0015F43C = temp_f0_27;
-    if (!(temp_f0_27 < 0.0f)) {
-        goto block_2;
+    D_0015F43C -= 0.25f;
+    D_0018CB20.frame++;
+    D_0018CB20.time++;
+    if (D_0015F43C < 0.0f) {
+        D_0015F43C = 0.0f;
     }
-    D_0015F43C = 0.0f;
-block_2:
-    if (temp_4_31 != 1) {
-        goto block_7;
+    if (D_0018CB20.time == 1) {
+        if (D_0015ED84 != 0 && (D_0015ED84 != 1 || D_0013DD43[0] != 0)) {
+            ReadGlobalTableEntry();
+            func_0012E308(D_0015ED5C, D_0013E030.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
+            func_0012EB00();
+            func_0012DC80();
+        }
     }
-    if (*(s32 *)0x15ED84 == 0) {
-        goto block_8;
+    if (D_0018CB20.time >= D_0018CB20.end) {
+        for (i2 = 0; i2 < D_0018CB20.count; i2++) {
+            o = D_0018CB20.objs[i2];
+            if (o != 0) {
+                o->model->count--;
+                o->model->frames[o->model->count] = 0;
+                func_0020C828(o);
+            }
+        }
+        if (D_0015ED84 != 0 && (D_0015ED84 != 1 || D_0013DD43[0] != 0) && D_0015EE48 < 3) {
+            D_0013E030.state = 0;
+        }
+        if (D_0013E030.state < 2) {
+            if (D_0013E030.state == 0) {
+                r = (rand() >> 16) % 3 + 1;
+                D_0013E030.mode = (D_0013E030.mode + r) & 3;
+            } else {
+                D_0013E030.mode = 4;
+            }
+            D_0013E030.idx = 0;
+            D_0013E030.len = 0;
+            D_0013E030.state++;
+            qcopy(&D_001604F0, &D_001604E0);
+            FillTransferWords(&D_0018CB20, 0, 0x1C0);
+            D_0018CB20.unk58 = D_001940C0.unk4 + D_00160F0C;
+            D_0018CB20.unk5C = D_001940C0.unk8 + D_00160F0C;
+            bank = D_001940C0.bank;
+            tp = &bank->tbl[0];
+            tp += D_0013E030.mode;
+            base = (u8 *)bank + bank->base;
+            e = (Entry *)(base + *tp);
+            for (i3 = 0; i3 < 0x46 && e->flag != 0; i3++, e++) {
+                add = 0x800;
+                D_0018CB20.words[i3] = (s32)(*tp + base) + (e->off + add);
+            }
+            func_002049F0(0);
+        } else {
+            if (D_0015EE4A != 0) {
+                D_0015EE4A = 0;
+            }
+            D_0015F618 = 1;
+            return;
+        }
+    } else if (D_0018CB20.frame >= 0x60) {
+        func_002049F0(++D_0018CB20.unk3C);
     }
-    if (*(s32 *)0x15ED84 != temp_4_31) {
-        goto block_6;
-    }
-    if (*(s32 *)0x13DD43 == 0) {
-        goto block_8;
-    }
-block_6:
-    ReadGlobalTableEntry(temp_4_31, &D_0018CB20);
-    func_0012E308(*(s32 *)0x15ED5C, D_0013E030.unk58, 0x400, 0, 0, 0, 0, D_0013E5C0);
-    func_0012EB00();
-    func_0012DC80();
-block_7:
-block_8:
-    if (D_0018CB20.unk34 >= D_0018CB20.unk40) {
-        goto block_10;
-    }
-    goto block_34;
-block_10:
-    var_16_84 = 0;
-    if (D_0018CB20.unk44 <= 0) {
-        goto block_16;
-    }
-    var_17_86 = ((u8 *)&D_0018CB20) + 0x178;
-loop_13:
-    temp_3_88 = *(s32 **)var_17_86;
-    if (temp_3_88 == NULL) {
-        goto block_15;
-    }
-    temp_5_91 = temp_3_88->unk24;
-    temp_5_91->unkC = (u8) (temp_5_91->unkC - 1);
-    temp_3_95 = temp_3_88->unk24;
-    *(s32 *)((u8 *)(((u8 *)temp_3_95) + ((u32)temp_3_95->unkC * 4)) + 0x48) = 0;
-    func_0020C828(temp_3_88, temp_5_91);
-block_15:
-    var_16_84 += 1;
-    var_17_86 += 4;
-    if (var_16_84 < D_0018CB20.unk44) {
-        goto loop_13;
-    }
-block_16:
-    if (*(s32 *)0x15ED84 == 0) {
-        goto block_21;
-    }
-    if (*(s32 *)0x15ED84 != 1) {
-        goto block_19;
-    }
-    if (D_0013DD43 == 0) {
-        goto block_21;
-    }
-block_19:
-    if (D_0015EE48 >= 3) {
-        goto block_21;
-    }
-    D_0013E030.unk5C = 0;
-block_21:
-    if (D_0013E030.unk5C >= 2) {
-        goto block_31;
-    }
-    if (D_0013E030.unk5C == 0) {
-        goto block_24;
-    }
-    var_2_130 = 4;
-    goto block_26;
-block_24:
-    var_2_130 = (D_0013E030.unk58 + (((s32) (rand() >> 0x10) % 3) + 1)) & 3;
-block_26:
-    D_0013E030.unk58 = var_2_130;
-    D_0013E030.unk50 = 0;
-    D_0013E030.unk54 = 0;
-    D_0013E030.unk5C = (s32) (D_0013E030.unk5C + 1);
-    *(s32 *)D_001604F0 = D_001604E0;
-    FillTransferWords(&D_0018CB20, 0, 0x1C0);
-    var_7_164 = D_00160F0C;
-    var_8_168 = 0;
-    D_0018CB20.unk58 = (void *) (D_001940C0.unk4 + var_7_164);
-    D_0018CB20.unk5C = (void *) (D_001940C0.unk8 + var_7_164);
-    temp_4_177 = D_001940C0.unk14 + 0x50 + (D_0013E030.unk58 * 4);
-    temp_6_182 = D_001940C0.unk14 + D_001940C0.unk14->unk4;
-    var_5_183 = temp_6_182 + *temp_4_177;
-    if (var_5_183->unk4 == 0) {
-        goto block_30;
-    }
-    var_7_164 = ((u8 *)&D_0018CB20) + 0x60;
-loop_28:
-    temp_2_189 = *(s32 **)var_5_183;
-    var_8_168 += 1;
-    var_5_183 += 8;
-    *var_7_164 = temp_6_182 + *temp_4_177 + ((u32)temp_2_189 + 0x800);
-    var_7_164 += 4;
-    if (var_8_168 >= 0x46) {
-        goto block_30;
-    }
-    if (var_5_183->unk4 != 0) {
-        goto loop_28;
-    }
-block_30:
-    func_002049F0(0, var_5_183, temp_6_182, var_7_164, var_8_168);
-    goto block_36;
-block_31:
-    if (D_0015EE4A == 0) {
-        goto block_33;
-    }
-    D_0015EE4A = 0;
-block_33:
-    *(s32 *)0x15F618 = 1;
-    return;
-block_34:
-    if (D_0018CB20.unk38 < 0x60) {
-        goto block_36;
-    }
-    temp_4_227 = D_0018CB20.unk3C + 1;
-    D_0018CB20.unk3C = temp_4_227;
-    func_002049F0(temp_4_227, &D_0018CB20);
-block_36:
     func_0022DE10();
-    temp_f1_239 = *((D_0013E030.unk58 * 4) + D_001D9B48);
-    if (!(D_0018CD00.unkB0 < temp_f1_239)) {
-        goto block_38;
+    if (D_0018CD00.unkB0 < D_001D9B48[D_0013E030.mode]) {
+        D_0018CD00.unkB0 = D_001D9B48[D_0013E030.mode];
     }
-    D_0018CD00.unkB0 = temp_f1_239;
-block_38:
-    func_001F2D98(&D_0018CD00);
-    var_f20_248 = 1.0f;
-    if (D_0013E030.unk58 != 4) {
-        goto block_40;
+    func_001F2D98();
+    scale = 1.0f;
+    if (D_0013E030.mode == 4) {
+        scale = (f32)(D_0018CB20.end - D_0018CB20.time) / (f32)D_0018CB20.end;
+        func_001F9A68(&a, &D_00160500, scale);
+        func_001F9A10(&D_001604F0, &D_001604F0, &a);
     }
-    var_f20_248 = (f32) (D_0018CB20.unk40 - D_0018CB20.unk34) / (f32) D_0018CB20.unk40;
-    func_001F9A68(sp_slot, D_00160500, &D_0018CB20, var_f20_248);
-    func_001F9A10(D_001604F0, D_001604F0, sp_slot);
-block_40:
-    temp_16_279 = (D_0013E030.unk58 * 0x10) + D_001D9AE0;
-    func_001F9A68(D_00160460, temp_16_279, (void *)(u32) ((f32) (D_0018CB20.unk34 - func_001F96F8(0x78)) * 20.0f * var_f20_248));
-    var_4_295 = D_0018CB20.unk44;
-    var_5_296 = 0;
-    D_00160404 = *((D_0013E030.unk58 * 4) + D_001D9B30);
-    if (var_4_295 <= 0) {
-        goto block_58;
+    func_001F9A68(D_00160460, &D_001D9AE0[D_0013E030.mode],
+                  (f32)(D_0018CB20.time - func_001F96F8(0x78)) * 20.0f * scale);
+    D_00160404 = D_001D9B30[D_0013E030.mode];
+    for (i = 0; i < D_0018CB20.count; i++) {
+        obj = D_0018CC98[i];
+        for (j = 0; j < 2; j++) {
+            frame = D_0018CB20.frame;
+            lo = frame >> 1;
+            hi = lo + 1;
+            mdl = obj->model;
+            fb = (u8 *)mdl->frames[mdl->count - 1] + 0x1C;
+            h = *(s32 *)(fb + lo * 4) + 0x10;
+            hp = *(s32 *)(fb + hi * 4) + 0x10;
+            f = func_001FA6C0(frame & 1) * 0.5f + (f32)j * 0.25f;
+            obj->blend = f;
+            v = obj->verts;
+            func_001F9A68(&a, v + lo * 16, 1.0f - f);
+            func_001F9A68(&b, v + hi * 16, obj->blend);
+            two = 2;
+            func_001F9A10(obj->pos, &a, &b);
+            obj->unk52 = 2;
+            obj->unk53 = two;
+            obj->unk50 = 0;
+            obj->unk51 = 0;
+            func_0020C880(obj, two);
+            func_001F98D0(obj->unk68 + 0x10, (void *)h, 0x20);
+            func_001F98D0(obj->unk6C + 0x10, (void *)hp, 0x20);
+            obj->unk32 = 0x1FF;
+            obj->unk72 = 0xFF;
+            obj->unk71 = 0xFF;
+            func_0020DEF8(obj);
+            obj->unk52 = obj->model->count - 1;
+            obj->unk53 = obj->model->count - 1;
+            func_0020CCA8(obj, 1, &m1);
+            func_0020CCA8(obj, 2, &m2);
+            D_0013E030.idx = (D_0013E030.idx + 1) & 0x1F;
+            if (D_0013E030.len < 0x20) {
+                D_0013E030.len++;
+            }
+            q = D_0013E030.idx;
+            qcopy(&D_0013E030.trailA[q], &m1.v[3]);
+            qcopy(&D_0013E030.trailB[q], &m2.v[3]);
+            if (D_0013E030.mode == 4) {
+                if (D_0015ED84 == 0 || (D_0015ED84 == 1 && D_0013DD40[3] == 0)) {
+                    obj->flags |= 1;
+                    D_0013E030.len = 0;
+                }
+                if (D_0018CB20.time > D_0018CB20.end - 0x38) {
+                    obj->fade = obj->model->scale * ((f32)(D_0018CB20.end - D_0018CB20.time) * 0.017857144f);
+                    for (n = 0; n < 3; n++) {
+                        D_001D9A30[n].w0 = (D_001D9A30[n].w0 & 0xFFFFFF)
+                            | ((D_0018CB20_b[0].end - D_0018CB20_c[0].time) << 24);
+                    }
+                } else {
+                    for (n = 0; n < 3; n++) {
+                        D_001D9A30[n].w0 = (D_001D9A30[n].w0 & 0xFFFFFF) | 0x38000000;
+                    }
+                }
+            }
+        }
     }
-    spA0 = &sp10;
-    spA4 = &sp20;
-    spAC = &sp60;
-    spA8 = &sp50;
-    spB4 = &sp90;
-    var_2_314 = 0 * 4;
-loop_42:
-    spB0 = var_5_296 + 1;
-    var_23_322 = 0;
-    temp_21_323 = *(s32 *)(var_2_314 + D_0018CC98);
-loop_43:
-    temp_5_324 = temp_21_323->unk24;
-    temp_17_328 = (s32) D_0018CB20.unk38 >> 1;
-    temp_18_330 = temp_17_328 + 1;
-    temp_5_333 = ((u8 *)temp_5_324) + ((temp_5_324->unkC - 1) * 4);
-    temp_6_334 = temp_17_328 * 4;
-    temp_2_337 = temp_5_333->unk48 + 0x1C;
-    temp_20_342 = *(s32 *)(temp_2_337 + (temp_18_330 * 4)) + 0x10;
-    temp_19_344 = *(s32 *)(temp_2_337 + temp_6_334) + 0x10;
-    temp_16_357 = temp_21_323->unk78;
-    temp_f0_360 = (func_001FA6C0(D_0018CB20.unk38 & 1, temp_5_333, temp_6_334) * 0.5f) + ((f32) var_23_322 * 0.25f);
-    temp_21_323->unk54 = temp_f0_360;
-    func_001F9A68(sp_slot, temp_16_357 + (temp_17_328 * 0x10), (void *)(u32) (1.0f - temp_f0_360));
-    func_001F9A68(spA0, temp_16_357 + (temp_18_330 * 0x10), (void *)(u32) temp_21_323->unk54);
-    func_001F9A10(((u8 *)temp_21_323) + 0x10, sp_slot, spA0);
-    temp_21_323->unk52 = 2;
-    temp_21_323->unk53 = 2;
-    temp_21_323->unk50 = 0;
-    temp_21_323->unk51 = 0;
-    func_0020C880(temp_21_323, 2);
-    func_001F98D0(temp_21_323->unk68 + 0x10, temp_19_344, 0x20);
-    func_001F98D0(temp_21_323->unk6C + 0x10, temp_20_342, 0x20);
-    temp_21_323->unk72 = 0xFF;
-    temp_21_323->unk71 = 0xFF;
-    temp_21_323->unk32 = 0x1FF;
-    func_0020DEF8(temp_21_323);
-    temp_7_398 = temp_21_323->unk24;
-    temp_21_323->unk52 = (s8) (temp_7_398->unkC - 1);
-    temp_21_323->unk53 = (s8) (temp_7_398->unkC - 1);
-    func_0020CCA8(temp_21_323, 1, spA4, temp_7_398);
-    func_0020CCA8(temp_21_323, 2, spAC);
-    D_0013E030.unk50 = (s32) ((D_0013E030.unk50 + 1) & 0x1F);
-    if (D_0013E030.unk54 >= 0x20) {
-        goto block_45;
-    }
-    D_0013E030.unk54 = (s32) (D_0013E030.unk54 + 1);
-block_45:
-    temp_3_426 = D_0013E030.unk50 * 0x10;
-    *(s32 *)(temp_3_426 + (((u8 *)&D_0013E030) + 0xC0)) = *spA8;
-    *(s32 *)(temp_3_426 + (((u8 *)&D_0013E030) + 0x2C0)) = *spB4;
-    var_4_295 = (s16) D_0013E030.unk58;
-    var_7_438 = var_23_322 + 1;
-    if (var_4_295 != 4) {
-        goto block_56;
-    }
-    if (*(s32 *)0x15ED84 == 0) {
-        goto block_49;
-    }
-    if (*(s32 *)0x15ED84 != 1) {
-        goto block_50;
-    }
-    if (D_0013DD40.unk3 != 0) {
-        goto block_50;
-    }
-block_49:
-    temp_21_323->unk34 = (u16) (temp_21_323->unk34 | 1);
-    D_0013E030.unk54 = 0;
-block_50:
-    if ((D_0018CB20.unk40 - 0x38) >= D_0018CB20.unk34) {
-        goto block_54;
-    }
-    var_4_295 = (s16) D_001D9A30;
-    var_7_438 = var_23_322 + 1;
-    var_6_481 = 2;
-    temp_21_323->unk2C = (f32) (temp_21_323->unk24->unk24 * ((f32) (D_0018CB20.unk40 - D_0018CB20.unk34) * 0.017857144f));
-loop_52:
-    var_6_481 -= 1;
-    *(s32 *)var_4_295 = (s32) ((*(s32 *)var_4_295 & 0xFFFFFF) | ((D_0018CB20.unk40 - D_0018CB20.unk34) << 0x18));
-    var_4_295 += 8;
-    if (var_6_481 >= 0) {
-        goto loop_52;
-    }
-    goto block_56;
-block_54:
-    var_7_438 = var_23_322 + 1;
-    var_4_295 = 0xFFFFFF;
-    var_3_503 = D_001D9A30;
-    var_5_504 = 2;
-loop_55:
-    var_5_504 -= 1;
-    *var_3_503 = (*var_3_503 & 0xFFFFFF) | 0x38000000;
-    var_3_503 += 8;
-    if (var_5_504 >= 0) {
-        goto loop_55;
-    }
-block_56:
-    var_23_322 = var_7_438;
-    if (var_23_322 < 2) {
-        goto loop_43;
-    }
-    var_5_296 = spB0;
-    var_2_314 = var_5_296 * 4;
-    if (var_5_296 < D_0018CB20.unk44) {
-        goto loop_42;
-    }
-block_58:
-    func_001E9428((s32 *) var_4_295, var_5_296);
-    return;
+    func_001E9428();
 }
-
-extern void func_0022EAA8(void) __attribute__((alias("FUN_0022eaa8")));
 #endif /* NON_MATCHING */

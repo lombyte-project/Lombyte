@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_system/FUN_0012da28.s", FUN_0012da28);
 #else
 #include "types.h"
+#include "sda.h"
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
@@ -28,25 +29,19 @@ extern u8 D_00153C50[];
 extern u8 D_00153C78[];
 extern struct SifClientDataStartSound D_0015EBC0;
 extern struct SifClientDataStartSound D_0015EBE8;
-extern s32 D_0015ECA0;
-extern s32 D_0015ECA4;
-extern s32 D_0015ECA8;
-extern s32 D_0015ECAC;
-extern s32 D_0015ECB0;
-extern s32 D_0015ECB4;
-extern s32 D_0015ECB8;
-extern s32 D_0015ECBC;
-extern s32 D_0015ECC8;
-extern s32 D_0015ECD0;
-extern s64 D_0015ECD8;
-extern s32 D_0015ED00;
+extern s32 D_0015ECA0 __attribute__((sda));
+extern s32 D_0015ECA4 MACRO_ADDR;
+extern s32 D_0015ECA8 __attribute__((sda));
+extern s32 D_0015ECAC MACRO_ADDR;
+extern s32 D_0015ECB0 __attribute__((sda));
+extern s32 D_0015ECB4 MACRO_ADDR;
+extern s32 D_0015ECB8 __attribute__((sda));
+extern s32 D_0015ECBC MACRO_ADDR;
+extern s32 D_0015ECC8 __attribute__((sda));
+extern s32 D_0015ECD0 __attribute__((sda));
+extern s64 D_0015ECD8 MACRO_ADDR;
+extern s32 D_0015ED00 MACRO_ADDR;
 
-__asm__(".extern D_0015ECA0, 4");
-__asm__(".extern D_0015ECA8, 4");
-__asm__(".extern D_0015ECB0, 4");
-__asm__(".extern D_0015ECB8, 4");
-__asm__(".extern D_0015ECC8, 4");
-__asm__(".extern D_0015ECD0, 4");
 
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);
@@ -57,19 +52,17 @@ void snd_start_sound_system(void) __asm__("FUN_0012da28");
 
 void snd_start_sound_system(void) {
     s32 ret;
-    s32 count;
     s32 wait;
     s32 command_arg;
 
     D_0015ECA0 = (s32)(u32)D_00133280;
     D_0015ECA4 = (s32)(u32)D_00134280;
-    D_0015ECB8 = (s32)(u32)D_00137280;
     D_0015ECBC = (s32)(u32)D_001376C0;
-    D_0015ECB0 = (s32)(u32)D_00135280;
+    D_0015ECB8 = (s32)(u32)D_00137280;
     D_0015ECB4 = (s32)(u32)D_00136280;
+    D_0015ECB0 = (s32)(u32)D_00135280;
     sceSifInitRpc(0);
 
-    count = 0x2710;
     for (;;) {
         ret = sceSifBindRpc(&D_0015EBC0, 0x123456, 0);
         if (ret < 0) {
@@ -77,7 +70,8 @@ void snd_start_sound_system(void) {
             for (;;) {
             }
         }
-        for (wait = count - 1; wait != -1; --wait) {
+        command_arg = 10000;
+        for (command_arg--; command_arg != -1; command_arg--) {
         }
         if (D_0015EBC0.status != 0) {
             break;
@@ -96,7 +90,8 @@ void snd_start_sound_system(void) {
             for (;;) {
             }
         }
-        for (wait = count - 1; wait != -1; --wait) {
+        command_arg = 10000;
+        for (command_arg--; command_arg != -1; command_arg--) {
         }
         if (D_0015EBE8.status != 0) {
             break;
@@ -104,11 +99,11 @@ void snd_start_sound_system(void) {
     }
 
     *(s32 *)D_00133280 = 0;
-    D_00137B00.unk0 = 0;
     *(s32 *)D_00134280 = 0;
-    D_0015ECAC = 0xFFC;
+    D_00137B00.unk0 = 0;
     D_00137B00.unk10 = 0;
     D_0015ECA8 = 0xFFC;
+    D_0015ECAC = 0xFFC;
     command_arg = (s32)(u32)&D_00137B00;
     func_0012E548(0, 4, &command_arg);
 }

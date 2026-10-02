@@ -28,18 +28,18 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
         goto block_5;
     }
     sp4 = (u8 *)arg0 + 0x6BC;
+    sp8 = (u8 *)arg0 + 0x6C0;
     if (*(s32 *)((u8 *)sp4 + arg1 * 0x140) <= 0) {
         goto block_6;
     }
-    sp8 = (u8 *)arg0 + 0x6C0;
     for (i = 0; ; i++) {
         base1 = (u8 *)arg0 + 0x5B8;
         base2 = (u8 *)arg0 + 0x5C8;
         idx = i * 4 + sp0 * 0x140;
         jdx = i * 0x1C;
         p = (u8 *)arg0 + (sp0 * 0x140 + 0x590);
-        ((s32 (*)(u8 *))*(s32 *)(base1 + idx))(p + (jdx + 0x48));
-        ((s32 (*)(u8 *))*(s32 *)(base2 + idx))(p + (jdx + 0xB8));
+        ((void (*)(u8 *))*(s32 *)(base1 + idx))(p + (jdx + 0x48));
+        ((void (*)(u8 *))*(s32 *)(base2 + idx))(p + (jdx + 0xB8));
         if (i >= *(s32 *)((u8 *)sp4 + sp0 * 0x140)) {
             break;
         }

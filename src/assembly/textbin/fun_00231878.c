@@ -5,171 +5,101 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231878/FUN_00231878.s", FUN_00231878);
 #else
 #include "types.h"
+#include "eetypes.h"
 
-struct M2c_D_001940C0
-{
-  u8 pad_0[0x14];
-  s32 unk14;
+typedef struct { u128 data[6]; } sceGsLoadImage;
+
+struct M2c_D_001940C0 {
+    u8 pad_0[0x14];
+    s32 unk14;
 };
-struct M2c_temp_19_42
-{
-  u8 pad_0[0x4];
-  s32 unk4;
+
+struct M2c_temp_3_12 {
+    u8 pad_0[0x1388];
+    s32 unk1388;
+    s32 unk138C;
 };
-struct M2c_temp_22_47
-{
-  u8 pad_0[0x8];
-  s32 unk8;
-};
-struct M2c_temp_23_51
-{
-  u8 pad_0[0x8];
-  s32 unk8;
-};
-struct M2c_temp_3_12
-{
-  u8 pad_0[0x1388];
-  s32 unk1388;
-  s32 unk138C;
-};
+
 extern u8 D_00137B80[];
 extern s32 D_0015EE74;
 extern s32 D_0015EE78;
 extern s32 D_0015EE8C;
 extern struct M2c_D_001940C0 D_001940C0;
-extern void FlushCache();
-extern void func_00120558();
-extern void func_0020B618();
-extern void func_00216728();
-extern void sceCdSync();
-extern void sceGsExecLoadImage();
-extern void sceGsSetDefLoadImage();
-inline s32 inline_fn(s32 arg0)
-{
-  return arg0;
-}
+extern void FlushCache(s32 a0);
+extern s32 sceCdSync(s32 a0);
+extern s32 sceGsExecLoadImage(sceGsLoadImage *img, s32 addr);
+extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 x, s32 y, s32 w, s32 h, s32 a4, s32 a6, s32 a7);
+extern s32 func_00120558(s32 a0, s32 a1);
+extern s32 func_0020B618(s32 a0, s32 a1);
+extern s32 func_00216728(s32 a0, s32 a1, s32 a2, s32 a3);
 
-void FUN_00231878(s32 arg0, s32 arg1, s32 arg2, s64 *arg3, s64 *arg4, s64 *arg5)
-{
-  s32 sp0;
-  u8 sp_slot[0x130];
-  s32 sp10;
-  s32 sp14;
-  s32 sp4;
-  s32 sp8;
-  s32 spC;
-  s32 sp20;
-  int new_var;
-  s64 *sp80;
-  s64 *sp84;
-  s32 *var_18_54;
-  s32 var_17_70;
-  s32 var_21_25;
-  s32 var_2_72;
-  s32 var_2_90;
-  s64 temp_5_195;
-  s64 temp_8_186;
-  struct M2c_temp_19_42 *temp_19_42;
-  struct M2c_temp_22_47 *temp_22_47;
-  struct M2c_temp_23_51 *temp_23_51;
-  struct M2c_temp_3_12 *temp_3_12;
-  s32 *var_16_145;
-  temp_3_12 = D_00137B80 - (-(arg0 * 8));
-  var_21_25 = 0;
-  sp80 = arg4;
-  sp84 = arg5;
-  func_00216728(D_001940C0.unk14 + 0x100000, temp_3_12->unk1388, temp_3_12->unk138C, D_001940C0.unk14);
-  sceCdSync(0);
-  FlushCache(0);
-  func_0020B618(D_001940C0.unk14 + 0x100000, D_001940C0.unk14);
-  FlushCache(0);
-  temp_19_42 = D_001940C0.unk14;
-  temp_22_47 = ((u8 *) temp_19_42) + (arg2 * 4);
-  D_0015EE78 = D_0015EE8C;
-  temp_23_51 = ((u8 *) temp_19_42) + (arg1 * 4);
-  D_0015EE74 = D_0015EE8C;
-  var_18_54 = sp_slot;
-  loop_1:
-  if (var_21_25 != 0)
-  {
-    goto block_3;
-  }
+void FUN_00231878(s32 arg0, s32 arg1, s32 arg2, s64 *arg3, s32 *arg4, s32 *arg5) {
+    s32 v[6];
+    sceGsLoadImage img;
+    s32 *p4;
+    s32 *p5;
+    s32 i;
+    s32 *q;
+    s32 size;
+    s32 addr;
+    s32 t;
+    s32 *e1;
+    s32 *e2;
+    u8 *p8;
+    struct M2c_D_001940C0 *st;
 
-  sceGsSetDefLoadImage(&sp20, inline_fn((s32) (D_0015EE74 << 8)) >> 0x10, 1, 0, 0, 0, 0x10, 0x10);
-  var_17_70 = 0x400;
-  var_2_72 = temp_19_42->unk4;
-  goto block_11;
-  block_3:
-  if (var_21_25 != 1)
-  {
-    goto block_5;
-  }
-
-  sceGsSetDefLoadImage(&sp20, ((s32) (D_0015EE74 << 8)) >> 0x10, 1, 0x13, 0, 0, 0x40, 0x40);
-  var_17_70 = 0x1000;
-  var_2_90 = temp_19_42->unk4;
-  goto block_13;
-  block_5:
-  if (var_21_25 != 2)
-  {
-    goto block_7;
-  }
-
-  sceGsSetDefLoadImage(&sp20, ((s32) (D_0015EE74 << 8)) >> 0x10, 1, 0, 0, 0, 0x10, 0x10);
-  var_17_70 = 0x400;
-  var_2_72 = temp_23_51->unk8;
-  goto block_11;
-  block_7:
-  if (var_21_25 != 3)
-  {
-    goto block_9;
-  }
-
-  sceGsSetDefLoadImage(&sp20, ((s32) (D_0015EE74 << 8)) >> 0x10, 8, 0x13, 0, 0, 0x200, 0x40);
-  var_17_70 = 0x8000;
-  var_2_90 = temp_23_51->unk8;
-  goto block_13;
-  block_9:
-  if (var_21_25 != 4)
-  {
-    goto block_12;
-  }
-
-  sceGsSetDefLoadImage(&sp20, ((s32) (D_0015EE74 << 8)) >> 0x10, 1, 0, 0, 0, 0x10, 0x10);
-  var_17_70 = 0x400;
-  var_2_72 = temp_22_47->unk8;
-  block_11:
-  var_16_145 = (((u8 *) temp_19_42) + var_2_72) + 0x20;
-
-  goto block_14;
-  block_12:
-  sceGsSetDefLoadImage(&sp20, ((s32) (D_0015EE74 << 8)) >> 0x10, 8, 0x13, 0, 0, 0x200, 0x40);
-
-  var_17_70 = 0x8000;
-  var_2_90 = temp_22_47->unk8;
-  block_13:
-  var_16_145 = (((u8 *) temp_19_42) + var_2_90) + 0x420;
-
-  block_14:
-  var_21_25 += 1;
-
-  FlushCache(0);
-  sceGsExecLoadImage(&sp20, var_16_145);
-  func_00120558(0, 0);
-  *var_18_54 = ((s32) D_0015EE74) >> 8;
-  D_0015EE74 += var_17_70;
-  var_18_54 += 1;
-  if (var_21_25 < 6)
-  {
-    goto loop_1;
-  }
-  temp_8_186 = 0xB000 << 0x13;
-  temp_5_195 = (-1) << 0x3F;
-  *arg3 = ((sp4 | 0x19304000) | ((((s64) sp0) << 0x25) | temp_8_186)) | temp_5_195;
-  new_var = 0x25;
-  *sp80 = ((spC | 0x25320000) | ((((s64) sp8) << new_var) | temp_8_186)) | temp_5_195;
-  var_17_70 = (s64) sp10;
-  *sp84 = ((sp14 | 0x25320000) | ((var_17_70 << new_var) | temp_8_186)) | temp_5_195;
-  return;
+    p4 = (s32 *)arg4;
+    p5 = (s32 *)arg5;
+    st = &D_001940C0;
+    p8 = D_00137B80 + arg0 * 8;
+    i = 0;
+    func_00216728(st->unk14 + 0x100000, ((struct M2c_temp_3_12 *)p8)->unk1388,
+        ((struct M2c_temp_3_12 *)p8)->unk138C, st->unk14);
+    sceCdSync(0);
+    FlushCache(0);
+    func_0020B618(st->unk14 + 0x100000, st->unk14);
+    FlushCache(0);
+    t = st->unk14;
+    e1 = (s32 *)((u8 *)t + arg1 * 4);
+    e2 = (s32 *)((u8 *)t + arg2 * 4);
+    D_0015EE78 = D_0015EE8C;
+    D_0015EE74 = D_0015EE8C;
+    q = v;
+    for (i = 0; i < 6; i++) {
+        if (i == 0) {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
+            size = 0x400;
+            addr = (s32)((u8 *)t + *(s32 *)((u8 *)t + 4)) + 0x20;
+        } else if (i == 1) {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 1, 0x13, 0, 0, 0x40, 0x40);
+            size = 0x1000;
+            addr = (s32)((u8 *)t + *(s32 *)((u8 *)t + 4)) + 0x420;
+        } else if (i == 2) {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
+            size = 0x400;
+            addr = (s32)((u8 *)t + e1[2]) + 0x20;
+        } else if (i == 3) {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
+            size = 0x8000;
+            addr = (s32)((u8 *)t + e1[2]) + 0x420;
+        } else if (i == 4) {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
+            size = 0x400;
+            addr = (s32)((u8 *)t + e2[2]) + 0x20;
+        } else {
+            sceGsSetDefLoadImage(&img, (D_0015EE74 << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
+            size = 0x8000;
+            addr = (s32)((u8 *)t + e2[2]) + 0x420;
+        }
+        FlushCache(0);
+        sceGsExecLoadImage(&img, addr);
+        func_00120558(0, 0);
+        *q = D_0015EE74 >> 8;
+        D_0015EE74 = D_0015EE74 + size;
+        q++;
+    }
+    *arg3 = (v[1] | 0x19304000) | (((s64)v[0] << 37) | ((s64)0xB000 << 19)) | (((s64)-1) << 63);
+    *(s64 *)p4 = (v[3] | 0x25320000) | (((s64)v[2] << 37) | ((s64)0xB000 << 19)) | (((s64)-1) << 63);
+    *(s64 *)p5 = (v[5] | 0x25320000) | (((s64)v[4] << 37) | ((s64)0xB000 << 19)) | (((s64)-1) << 63);
 }
 #endif /* NON_MATCHING */

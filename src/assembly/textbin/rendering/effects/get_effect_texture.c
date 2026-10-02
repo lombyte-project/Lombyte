@@ -4,56 +4,62 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/effects/get_effect_texture/FUN_001f44b8.s", FUN_001f44b8);
 #else
-#include "rnc/rendering_effects_get_effect_texture_types.h"
 #include "types.h"
 
+struct EffectEntry {
+    s64 handle;
+    u16 tile_x;
+    u16 tile_y;
+    s16 off;
+    s16 size;
+};
 
-
+struct TexEntry { s32 data; s16 flags; s16 cbp; s32 clut; u8 tw; u8 th; s16 tbp; };
 
 extern s32 D_0015EE74;
 extern s32 D_0015F458;
 extern s32 D_0015F460;
-extern u8 D_0018D040[];
-extern u8 D_0018D440[];
-s64 get_effect_texture(s32 arg0) __asm__("FUN_001f44b8");
+extern struct TexEntry D_0018D040[];
+extern struct EffectEntry D_0018D440[];
 
-s64 get_effect_texture(s32 arg0) {
-    s16 temp_7_14;
-    s32 temp_11_27;
-    s32 temp_12_22;
-    s32 temp_2_19;
-    s32 temp_6_24;
-    s32 temp_6_61;
-    s32 var_3_8;
-    s64 temp_2_51;
-    struct M2c_temp_10_10 *temp_10_10;
-    struct M2c_temp_2_64 *temp_2_64;
+s64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
 
-    var_3_8 = arg0 * 0x10;
-    temp_10_10 = var_3_8 + D_0018D440;
-    if (temp_10_10->unk0 == 0) {
-        temp_7_14 = temp_10_10->unkC;
-        temp_2_19 = temp_7_14 - 6;
-        temp_12_22 = (s32) D_0015EE74 >> 8;
-        temp_6_24 = D_0015EE74 + 0x400;
-        temp_11_27 = temp_6_24 >> 8;
-        temp_2_51 = temp_11_27 | ((1 << ((temp_2_19 <= -1) ? 0 : temp_2_19)) << 0xE) | (((s64) ((s64) (u16) temp_10_10->unkC << 0x30) >> 0x16) | 0x01300000) | ((s64) ((s64) temp_10_10->unkE << 0x30) >> 0x12) | (((s64) temp_12_22 << 0x25) | (0x8000 << 0x13)) | (-1 << 0x3F);
-        D_0015EE74 = temp_6_24 + (1 << (temp_7_14 + (s16) temp_10_10->unkE));
-        temp_10_10->unk0 = temp_2_51;
+s64 get_effect_texture(s32 index) {
+    struct EffectEntry *e;
+    struct TexEntry *d;
+    s32 offset;
+    s32 shift;
+    s32 cbp;
+    s32 base;
+    s32 tbp;
+    s64 desc;
+
+    e = &D_0018D440[index];
+    if (e->handle == 0) {
+        offset = e->off;
+        shift = offset - 6;
+        cbp = D_0015EE74 >> 8;
+        base = D_0015EE74 + 0x400;
+        tbp = base >> 8;
+        desc = tbp | ((u64)(1 << ((shift <= -1) ? 0 : shift)) << 14)
+             | ((u64)(u16)e->off << 26 | 0x1300000)
+             | ((u64)(u16)e->size << 30)
+             | ((u64)cbp << 37 | (u64)1 << 34)
+             | (u64)1 << 63;
+        D_0015EE74 = base + (1 << (offset + e->size));
+        e->handle = desc;
         if (D_0015F458 < 0x40) {
-            temp_6_61 = D_0015F458 * 0x10;
-            temp_2_64 = temp_6_61 + D_0018D040;
-            temp_2_64->unk6 = (s16) temp_12_22;
-            temp_2_64->unk0 = (s32) (D_0015F460 + (temp_10_10->unkA * 0x10));
-            temp_2_64->unk4 = 0;
-            *(s32 *)((u8 *)(D_0018D040 + temp_6_61) + 0x8) = (s32) (D_0015F460 + (temp_10_10->unk8 * 0x10));
-            temp_2_64->unkE = (s16) temp_11_27;
-            temp_2_64->unkC = (u8) temp_10_10->unkC;
-            temp_2_64->unkD = (u8) temp_10_10->unkE;
+            d = &D_0018D040[D_0015F458];
+            d->cbp = cbp;
+            d->data = D_0015F460 + e->tile_y * 0x10;
+            d->flags = 0;
+            *(s32 *)((u8 *)D_0018D040 + D_0015F458 * 0x10 + 8) = D_0015F460 + e->tile_x * 0x10;
+            d->tw = (u8)e->off;
+            d->th = (u8)e->size;
+            d->tbp = tbp;
             D_0015F458 += 1;
         }
-        var_3_8 = arg0 * 0x10;
     }
-    return *(var_3_8 + D_0018D440);
+    return D_0018D440[index].handle;
 }
 #endif /* NON_MATCHING */

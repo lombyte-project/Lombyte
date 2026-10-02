@@ -4,75 +4,95 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00224e18/FUN_00224e18.s", FUN_00224e18);
 #else
-#include "rnc/fun_00224e18_types.h"
-#include "types.h"
+/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_002260A8). */
+#include "qcopy.h"
+extern void func_001FA2B8(void *, void *);
+extern char D_001863D0[];
+extern char D_001863D0_a[] __asm__("D_001863D0");
+extern char D_001D5E50[];
+extern char D_001D5E10[];
+extern int func_0020D580(void *);
+extern void func_0020DEF8(void *);
+extern void func_0020CCA8(int, int, void *);
+extern void func_00214128(void *);
+extern void func_0020E098(void *);
+extern void func_001E9480(void *, void *, int, int, int);
+extern void func_0020CB88(int, void *);
+extern void func_0020CB10(int, int, void *);
+typedef struct {
+    char pad00[0x10];
+    float pos[4];       /* 0x10 */
+    char pad20[4];
+    int sound;          /* 0x24 */
+    char pad28[0x28];
+    int x50;            /* 0x50 */
+    int x54;            /* 0x54 */
+    char pad58[0x10];
+    char *x68;          /* 0x68 */
+    char *x6C;          /* 0x6C */
+    char pad70[8];
+    char **cls;         /* 0x78 */
+    char pad7C[0x2A];
+    short oclass;       /* 0xA6 */
+    char padA8[0x18];
+    float mtx[16];      /* 0xC0 */
+} PauseMoby;
 
+void FUN_00224e18(void *arg0) {
+    PauseMoby *m = arg0;
+    char **cls = m->cls;
+    float mtx[16];
+    int id = *(int *)(*cls + 0x44);
+    int self;
+    int syncA;
+    int syncB;
+    char *p;
+    char *q;
+    int snd;
 
-
-
-
-
-extern u8 D_001863D0[];
-extern struct M2c_D_001D5E10 D_001D5E10;
-extern struct M2c_D_001D5E50 D_001D5E50;
-extern s32 func_001E9480();
-extern s32 func_001FA2B8();
-extern s32 func_0020CB10();
-extern s32 func_0020CB88();
-extern s32 func_0020CCA8();
-extern s32 func_0020D580();
-extern s32 func_0020DEF8();
-extern s32 func_0020E098();
-extern s32 func_00214128();
-void FUN_00224e18(struct M2c_arg0 *arg0) {
-u8 sp_slot[0xD0];    s64 sp30;
-    s32 temp_18_17;
-u8 *temp_19_27;
-    s32 var_20_38;
-    s32 var_21_39;
-    void **temp_16_14;
-    s32 *temp_16_34;
-
-    temp_16_14 = arg0->unk78;
-    temp_18_17 = *(s32 *)((u8 *)(*temp_16_14) + 0x44);
-    func_0020D580();
-    func_0020DEF8(arg0);
-    temp_19_27 = (s32) arg0 == *(s32 *)((u8 *)(*temp_16_14) + 0x5C);
-    func_0020CCA8(temp_18_17, (temp_19_27 == 0) ? 2 : 3, sp_slot, 2);
-    arg0->unk10 = (s64) sp30;
-    temp_16_34 = ((u8 *)arg0 + (0xC0));
-    var_20_38 = 0;
-    func_001FA2B8(temp_16_34, sp_slot);
-    var_21_39 = 0;
-    func_00214128(temp_16_34);
-    func_0020E098(arg0);
-    if (D_001D5E50.unk1 != 0) {
-        var_20_38 = 1;
-        func_0020CB88(temp_18_17, &D_001D5E50);
+    func_0020D580(m);
+    func_0020DEF8(m);
+    self = m == *(PauseMoby **)(*cls + 0x5C);
+    func_0020CCA8(id, self ? 3 : 2, mtx);
+    qcopy(m->pos, &mtx[12]);
+    func_001FA2B8(m->mtx, mtx);
+    func_00214128(m->mtx);
+    func_0020E098(m);
+    syncA = 0;
+    syncB = 0;
+    if ((unsigned char)D_001D5E50[1] != 0) {
+        syncA = 1;
+        func_0020CB88(id, D_001D5E50);
     }
-    if (D_001D5E10.unk1 != 0) {
-        var_21_39 = 1;
-        func_0020CB88(temp_18_17, &D_001D5E10);
+    if ((unsigned char)D_001D5E10[1] != 0) {
+        syncB = 1;
+        func_0020CB88(id, D_001D5E10);
     }
-    if (temp_19_27 == 0) {
-
+    if (!self) {
+        p = D_001863D0;
+        q = D_001863D0_a;
+        snd = m->sound;
+    } else {
+        q = D_001863D0_a;
+        p = D_001863D0;
+        snd = m->sound;
     }
-    func_001E9480(D_001863D0, D_001863D0, arg0->unk24, 0, temp_18_17);
-    arg0->unk6C = D_001863D0;
-    arg0->unk68 = D_001863D0;
-    if (var_20_38 != 0) {
-        func_0020CB10(temp_18_17, 0x17, &D_001D5E50);
-        D_001D5E50.unk28 = 0;
-        D_001D5E50.unk20 = 0;
-        D_001D5E50.unk24 = 0;
+    func_001E9480(q, p, snd, 0, id);
+    m->x68 = p;
+    m->x6C = p;
+    if (syncA) {
+        func_0020CB10(id, 0x17, D_001D5E50);
+        *(int *)(D_001D5E50 + 0x20) = 0;
+        *(int *)(D_001D5E50 + 0x24) = 0;
+        *(int *)(D_001D5E50 + 0x28) = 0;
     }
-    if (var_21_39 != 0) {
-        func_0020CB10(temp_18_17, 0x16, &D_001D5E10);
-        D_001D5E10.unk28 = 0;
-        D_001D5E10.unk20 = 0;
-        D_001D5E10.unk24 = 0;
+    if (syncB) {
+        func_0020CB10(id, 0x16, D_001D5E10);
+        *(int *)(D_001D5E10 + 0x20) = 0;
+        *(int *)(D_001D5E10 + 0x24) = 0;
+        *(int *)(D_001D5E10 + 0x28) = 0;
     }
-    arg0->unk50 = 0;
-    arg0->unk54 = 0;
+    m->x54 = 0;
+    m->x50 = 0;
 }
 #endif /* NON_MATCHING */

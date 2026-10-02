@@ -4,112 +4,125 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f92b0/FUN_001f92b0.s", FUN_001f92b0);
 #else
-#include "rnc/fun_001f92b0_types.h"
 #include "types.h"
+#include "qcopy.h"
 
+typedef struct { f32 x, y, z, w; } Vec4;
 
+typedef struct {
+    Vec4 pos;
+    s16 life;
+    s16 alpha;
+    u8 pad14[4];
+    f32 angle;
+    f32 size;
+} Spark;
 
+typedef struct {
+    u8 pad0[0x1A8];
+    f32 zofs;
+    u8 pad1AC[0x64];
+    f32 proj;
+} Camera;
 
+struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
+struct TagPtr { struct DmaTag *p; };
 
-
-
-
-
-
-extern s32 D_001608E0;
-extern struct M2c_D_00160F00 *D_00160F00;
+extern struct TagPtr D_00160F00;
+extern char D_001608E0[];
 extern u8 D_00187080[];
-extern struct M2c_D_0018CD00 D_0018CD00;
-extern u8 D_0018CE80[];
-extern u8 D_0018ED00[];
-extern s32 FillTransferWords();
-extern s32 func_001F44B8();
-extern s32 func_001F9958();
-extern s32 func_001F9A28();
-extern s32 func_001F9A68();
-extern s32 func_001F9A98();
-extern s32 func_001F9AF0();
-extern s32 func_001F9D20();
-extern s32 func_001F9DC8();
-extern s32 func_001F9DE0();
-extern s32 func_001FA6C0();
+extern Camera D_0018CD00;
+extern s32 D_0018CE80;
+extern Spark D_0018ED00[];
+extern void FillTransferWords(void *, s32, s32);
+extern long func_001F44B8(s32);
+extern s32 func_001F9958(Vec4 *);
+extern void func_001F9A28(Vec4 *, void *, void *);
+extern void func_001F9A68(Vec4 *, Vec4 *, f32);
+extern void func_001F9A98(Vec4 *, Vec4 *, void *);
+extern f32 func_001F9AF0(Vec4 *);
+extern void func_001F9D20(Vec4 *, Vec4 *, void *);
+extern f32 func_001F9DC8(f32);
+extern f32 func_001F9DE0(f32);
+extern f32 func_001FA6C0(s32);
 extern s32 func_001FA6D0(f32);
-extern void func_00233980(s32, s64);
-void FUN_001f92b0(void) {    s32 sp0;
-u8 sp_slot[0xE0];    s32 sp4;
-    s32 sp8;
-    f32 spC;
-    s32 sp10;
-    f32 temp_f20_133;
-    f32 var_f0_102;
-    f32 var_f21_52;
-    s32 temp_17_89;
-    s32 temp_19_108;
-    s32 var_21_14;
-    s64 temp_16_95;
-    s64 temp_17_145;
-    s64 temp_18_138;
-    s64 temp_20_87;
-    struct M2c_temp_16_167 *temp_16_167;
-    struct M2c_temp_18_34 *temp_18_34;
-    struct M2c_temp_5_160 *temp_5_160;
+extern void func_00233980(s32, u64);
 
-    var_21_14 = 0;
-    func_00233980(0x42, (0x8000 << 0x18) | 0x48);
-    do {
-        temp_18_34 = (var_21_14 << 5) + D_0018ED00;
-        if (temp_18_34->unk10 > 0) {
-            func_001F9A28(sp_slot, temp_18_34, D_00187080);
-            spC = 1.0f;
-            var_f21_52 = func_001F9AF0(sp_slot);
-            func_001F9A68(sp_slot, sp_slot, 1024.0f);
-            func_001F9D20(sp_slot, sp_slot, ((u8 *)D_00187080 - (u8 *)0x100));
-            func_001F9A98(&sp10, sp_slot, D_0018CE80);
-            if (func_001F9958(&sp10) != 0) {
-                FillTransferWords(temp_18_34, 0, 0x20);
-            } else {
-                func_001F9A68(sp_slot, sp_slot, D_0018CD00.unk210 / spC);
-                temp_20_87 = (temp_18_34->unk12 << 0x18) | 0x808080;
-                temp_17_89 = func_001FA6D0(sp0 * 16.0f) + 0x8000;
-                temp_16_95 = func_001FA6D0(sp4 * 16.0f) + 0x8000;
-                var_f0_102 = 18.0f;
-                temp_19_108 = (func_001FA6D0((sp8 * 0.9997f) + D_0018CD00.unk1A8) << 0x20) | (temp_16_95 << 0x10) | temp_17_89;
-                if ((var_f21_52 > 18.0f) || (var_f0_102 = 2.0f, (var_f21_52 < 2.0f))) {
-                    var_f21_52 = var_f0_102;
-                }
-                temp_f20_133 = temp_18_34->unk1C * (func_001FA6C0(temp_18_34->unk12 + 0x10) * 0.015625f) * ((24.0f - var_f21_52) * 16.0f);
-                temp_18_138 = func_001FA6D0(temp_f20_133 * func_001F9DE0(temp_18_34->unk18));
-                temp_17_145 = func_001FA6D0(temp_f20_133 * func_001F9DC8(temp_18_34->unk18));
-                D_00160F00->unk0 = 0x10000009;
-                D_00160F00->unk4 = 0;
-                D_00160F00->unk8 = 0;
-                D_00160F00->unkC = 0x50000009;
-                temp_5_160 = D_00160F00;
-                D_00160F00 = ((u8 *)temp_5_160 + (0x10));
-                temp_5_160->unk10 = (s64) D_001608E0;
-                temp_16_167 = ((u8 *)temp_5_160 + (0x20));
-                D_00160F00 = temp_16_167;
-                temp_5_160->unk20 = 5;
-                temp_16_167->unk8 = func_001F44B8(0x13, temp_5_160);
-                temp_16_167->unk10 = 0x154;
-                temp_16_167->unk28 = (s64) ((temp_17_145 << 0x10) + temp_19_108 + temp_18_138);
-                temp_16_167->unk38 = 0x200;
-                temp_16_167->unk40 = (s64) ((temp_18_138 * -0x10000) + temp_19_108 + temp_17_145);
-                temp_16_167->unk50 = 0x02000000;
-                temp_16_167->unk58 = (s64) (((temp_18_138 << 0x10) + temp_19_108) - temp_17_145);
-                temp_16_167->unk60 = temp_20_87;
-                temp_16_167->unk68 = 0x02000200;
-                temp_16_167->unk70 = (s64) (((temp_17_145 * -0x10000) + temp_19_108) - temp_18_138);
-                temp_16_167->unk78 = 0;
-                temp_16_167->unk18 = temp_20_87;
-                temp_16_167->unk20 = 0;
-                temp_16_167->unk30 = temp_20_87;
-                temp_16_167->unk48 = temp_20_87;
-                D_00160F00 += 0x80;
-            }
+void FUN_001f92b0(void)
+{
+    Vec4 v;
+    Vec4 w;
+    f32 dist;
+    f32 r;
+    s32 i;
+    Spark *pt;
+    long col;
+    long x;
+    s32 y;
+    long xy;
+    s32 s;
+    s32 c;
+    struct DmaTag *base;
+    long *p;
+    Spark *arr;
+
+    func_00233980(0x42, 0x8000000048);
+    for (i = 0; i < 16; i++) {
+        arr = D_0018ED00;
+        pt = arr + i;
+        if (pt->life <= 0) {
+            continue;
         }
-        var_21_14 += 1;
-    } while (var_21_14 < 0x10);
-    func_00233980(0x42, (0x8000 << 0x18) | 0x44);
+        func_001F9A28(&v, pt, D_00187080);
+        v.w = 1.0f;
+        dist = func_001F9AF0(&v);
+        func_001F9A68(&v, &v, 1024.0f);
+        func_001F9D20(&v, &v, D_00187080 - 0x100);
+        func_001F9A98(&w, &v, &D_0018CE80);
+        if (func_001F9958(&w) != 0) {
+            FillTransferWords(pt, 0, 0x20);
+            continue;
+        }
+        func_001F9A68(&v, &v, D_0018CD00.proj / v.w);
+        col = (pt->alpha << 24) | 0x808080;
+        x = func_001FA6D0(v.x * 16.0f) + 0x8000;
+        y = func_001FA6D0(v.y * 16.0f) + 0x8000;
+        xy = ((long)func_001FA6D0(v.z * 0.9997f + D_0018CD00.zofs) << 32) | ((long)y << 16) | x;
+        if (dist > 18.0f) {
+            dist = 18.0f;
+        } else if (dist < 2.0f) {
+            dist = 2.0f;
+        }
+        r = pt->size * (func_001FA6C0(pt->alpha + 16) * 0.015625f) * ((24.0f - dist) * 16.0f);
+        s = func_001FA6D0(r * func_001F9DE0(pt->angle));
+        c = func_001FA6D0(r * func_001F9DC8(pt->angle));
+        D_00160F00.p->w0 = 0x10000009;
+        D_00160F00.p->addr = 0;
+        D_00160F00.p->w2 = 0;
+        D_00160F00.p->w3 = 0x50000009;
+        base = D_00160F00.p;
+        D_00160F00.p = base + 1;
+        qcopy(base + 1, D_001608E0);
+        p = (long *)(base + 2);
+        D_00160F00.p = base + 2;
+        p[0] = 5;
+        p[1] = func_001F44B8(0x13);
+        p[2] = 0x154;
+        p[3] = col;
+        p[4] = 0;
+        p[5] = xy + (c << 16) + s;
+        p[6] = col;
+        p[7] = 0x200;
+        p[8] = xy + (-s << 16) + c;
+        p[9] = col;
+        p[10] = 0x2000000;
+        p[11] = xy + (s << 16) - c;
+        p[12] = col;
+        p[13] = 0x2000200;
+        p[14] = xy + (-c << 16) - s;
+        p[15] = 0;
+        D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x80);
+    }
+    func_00233980(0x42, 0x8000000044);
 }
 #endif /* NON_MATCHING */

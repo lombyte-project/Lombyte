@@ -60,67 +60,66 @@ extern s32 func_001FED30();
 
 void mode_freeze_init(u32 arg0, s32 arg1) __asm__("FUN_001fbab8");
 
+extern struct St D_00193300_far __asm__("D_00193300") __attribute__((section(".data")));
 void mode_freeze_init(u32 arg0, s32 arg1) {
-    struct T16 *t16;
-    struct T3a *t3a;
-    struct T3b *t3b;
-    struct T16b *t16b;
-    u8 *pbase;
+    struct St *st;
 
     if (D_0015F604 != 3) {
         func_0012E3E8(0x1D);
         InitializeRenderState(0);
     }
-    pbase = (u8 *)&D_00193300 - 0x3300;
-    D_00193300.unk14 = (s32) D_0015F604;
+    D_00193300.unk14 = D_0015F604;
     D_00193300.unk18 = arg1;
     D_0015F604 = 4;
     D_00193300.unk0 = arg0;
     switch (arg0) {
     case 0:
-        D_00193300.unk8 = func_001FDD10(0x4F6E, &D_00193300);
-        D_00193300.unkC = func_001FDD10(0x5248);
-        D_00193300.unk10 = func_001FDD10(0x5249);
-        D_00193300.unk28 = 0;
-        D_00193300.unk4 = D_00193300.unk1C = D_00193300.unk20 = D_00193300.unk24 = 0;
-        return;
+        st = &D_00193300;
+        st->unk8 = (s32)func_001FDD10(0x4F6E);
+        st->unkC = (s32)func_001FDD10(0x5248);
+        st->unk10 = (s32)func_001FDD10(0x5249);
+        st->unk4 = 0;
+        st->unk1C = 0;
+        st->unk20 = 0;
+        st->unk24 = 0;
+        st->unk28 = 0;
+        break;
     case 2:
-        t3a = (void *) (pbase + 0x3300);
-        t3a->unk8 = func_001FDD10(0x524A);
-        t3a->unk4 = t3a->unkC = 0;
-        return;
+        D_00193300.unk8 = (s32)func_001FDD10(0x524A);
+        D_00193300.unkC = 0;
+        D_00193300.unk4 = 0;
+        break;
     case 1:
     case 4:
-        t16 = (void *) (pbase + 0x3300);
-        t16->unk8 = func_001FDD10(0x5229);
-        t16->unkC = func_001FDD10(0x4EE0);
-        t16->unk10 = func_001FDD10(0x524A);
-        t16->unk4 = 0;
-        return;
+        st = &D_00193300;
+        st->unk8 = (s32)func_001FDD10(0x5229);
+        st->unkC = (s32)func_001FDD10(0x4EE0);
+        st->unk10 = (s32)func_001FDD10(0x524A);
+        st->unk4 = 0;
+        break;
     case 5:
-        t16b = (void *) (pbase + 0x3300);
         func_001FED30(0x4E2B);
-        t16b->unk4 = func_001F96F8(0x1E);
-        t16b->unk20 = 0;
-        t16b->unk24 = func_001F96F8(0x1E);
-        return;
+        st = &D_00193300;
+        st->unk4 = func_001F96F8(0x1E);
+        st->unk20 = 0;
+        st->unk24 = func_001F96F8(0x1E);
+        break;
     case 3:
-        t16b = (void *) (pbase + 0x3300);
-        t16b->unk4 = func_001F96F8(0x1E);
-        t16b->unk20 = 0;
-        t16b->unk24 = func_001F96F8(0x1E);
-        return;
+        st = &D_00193300;
+        st->unk4 = func_001F96F8(0x1E);
+        st->unk20 = 0;
+        st->unk24 = func_001F96F8(0x1E);
+        break;
     case 6:
-        t3b = (void *) (pbase + 0x3300);
-        t3b->unk4 = func_001F96F8(0x1E);
-        t3b->unk1C = 0;
-        return;
+        D_00193300.unk4 = func_001F96F8(0x1E);
+        D_00193300.unk1C = 0;
+        break;
     default:
         D_00193300.unk8 = 0;
-        D_00193300.unk4 = 0x78;
         D_00193300.unkC = 0;
         D_00193300.unk10 = 0;
-        return;
+        D_00193300.unk4 = 0x78;
+        break;
     }
 }
 #endif /* NON_MATCHING */

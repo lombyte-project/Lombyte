@@ -6,209 +6,146 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/sce_mpeg_demux_pss_ring/sceMpegDemuxPssRing.s", sceMpegDemuxPssRing);
 #else
 #include "types.h"
-struct M2c_arg0 {
-    u8 pad_0[0x40];
-    struct M2c_temp_20_22 * unk40;
-};
 
-struct M2c_sp {
-    u8 pad_0[0x18];
-    s32 unk18;
-};
+/* libmpeg: demultiplex the PSS (MPEG-2 program stream) data of a ring
+   buffer and hand each PES packet to the callback registered for its
+   stream id; returns the number of bytes consumed. */
 
-struct M2c_sp30 {
-    u8 pad_0[0x18];
-    s32 unk18;
-    u8 pad_1C[0xC];
-    s32 unk28;
-    u8 pad_2C[0x4];
-    s32 unk30;
-    u8 pad_34[0x4];
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-};
+typedef struct {
+    u8 pad0[0x18];
+    u64 pos;
+    u8 pad20[0x10];
+} SysBit;
 
-struct M2c_temp_16_115 {
-    s32 unk0;
-    u8 pad_4[0x4];
-    s32 unk8;
-    u8 pad_C[0x4];
-    s32 unk10;
-    s32 unk14;
-};
+typedef struct {
+    s32 v[6];
+} PackHdr;
 
-struct M2c_temp_20_22 {
-    u8 pad_0[0x44];
-    s32 unk44;
-    s32 unk48;
-};
+typedef struct {
+    u64 id;
+    s32 len;
+    s32 scrambling;
+    s64 pts;
+    s64 dts;
+    s32 data;
+    s32 datalen;
+    s32 header;
+    s32 pad2C;
+} PesHdr;
 
-struct M2c_temp_2_40 {
-    s32 unk0;
-    u8 pad_4[0xC];
-    s32 unk10;
-    s32 unk14;
-};
+typedef struct {
+    PackHdr pack;
+    PesHdr pes;
+} PssHdr;
 
-extern s32 GetSysbitPointer();
-extern s32 SignExtendPackedValue();
-extern s32 _PES_packet();
-extern s32 _pack_header();
-extern s32 _sysbitInit();
-extern void sp30();
-extern void temp_16_115();
-s32 sceMpegDemuxPssRing(s32 arg1, struct M2c_arg0 *arg0, s32 arg2, s32 arg3, s32 arg4) {
-u8 sp_slot[0x150];    struct M2c_sp30 sp30;
-    s32 sp80;
-    s32 sp84;
-    s32 sp88;
-    s32 sp8C;
-    s64 sp90;
-    s64 sp98;
-    s32 (*spA0)(void *, s32 *, s32, s32);
-    s32 spA4;
-    s32 spA8;
-    s32 spAC;
-    s32 (*temp_7_89)(void *, s32 *, s32, void *, s32);
-    s32 temp_2_135;
-    s32 temp_2_80;
-    s32 temp_4_105;
-    s32 temp_4_29;
-    s32 temp_7_139;
-    s32 temp_8_84;
-    s32 var_19_106;
-    s32 var_19_14;
-    s32 var_21_10;
-    s32 var_2_178;
-    u32 var_22_33;
-    u64 temp_3_175;
-    struct M2c_temp_16_115 *temp_16_115;
-    struct M2c_temp_20_22 *temp_20_22;
-    struct M2c_temp_2_40 *temp_2_40;
+typedef struct {
+    s32 type;
+    u8 *header;
+    u8 *data;
+    u32 len;
+    s64 pts;
+    s64 dts;
+} sceMpegCbDataStr;
 
-    var_21_10 = 1;
-    var_19_14 = 0;
-    temp_20_22 = arg0->unk40;
-    spA0 = NULL;
-    spA8 = temp_20_22->unk44;
-    _sysbitInit(sp_slot, arg3, arg4);
-    spA4 = 0;
-    temp_4_29 = temp_20_22->unk48;
-    spAC = 0;
-    if (temp_4_29 <= 0) {
-        goto block_7;
+typedef s32 (*sceMpegCallback)(void *mp, sceMpegCbDataStr *cbstr, void *data);
+
+typedef struct {
+    u64 id;
+    u64 mask;
+    sceMpegCallback func;
+    void *data;
+} StreamCb;
+
+typedef struct {
+    u8 pad0[0x44];
+    StreamCb *tbl;
+    s32 n;
+} MpegSys;
+
+typedef struct {
+    u8 pad0[0x40];
+    MpegSys *sys;
+} sceMpeg;
+
+extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
+extern s32 SignExtendPackedValue(SysBit *bs, s32 n);
+extern u8 *GetSysbitPointer(SysBit *bs, s32 pos);
+extern s32 _pack_header(SysBit *bs, PackHdr *pack);
+extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
+
+int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize)
+{
+    SysBit bs;
+    PssHdr hdr;
+    SysBit *b;
+    PssHdr *h;
+    sceMpegCbDataStr cb;
+    sceMpegCallback cbfunc;
+    void *cbdata;
+    StreamCb *tbl;
+    int ret;
+    int i;
+    int cont;
+    MpegSys *sys;
+
+    cont = 1;
+    h = &hdr;
+    b = &bs;
+    sys = mp->sys;
+    cbfunc = 0;
+    tbl = sys->tbl;
+    _sysbitInit(b, start, bufstart, bufsize);
+    cbdata = 0;
+    ret = 0;
+    i = 0;
+    if (i < sys->n) {
+        do {
+            if (tbl[i].id == 0xBDFF000000) {
+                cbdata = tbl[i].data;
+                cbfunc = tbl[i].func;
+            }
+            if (cbfunc != 0) {
+                break;
+            }
+            i++;
+        } while (i < sys->n);
     }
-    var_22_33 = arg2 * 8;
-loop_2:
-    temp_2_40 = spA8 + (var_19_14 * 0x18);
-    if (temp_2_40->unk0 != (0xBDFF << 0x18)) {
-        goto block_4;
-    }
-    spA4 = temp_2_40->unk14;
-    spA0 = temp_2_40->unk10;
-block_4:
-    var_19_14 += 1;
-    if (spA0 != NULL) {
-        goto block_8;
-    }
-    if (var_19_14 < temp_4_29) {
-        goto loop_2;
-    }
-    goto block_8;
-block_7:
-    var_22_33 = arg2 * 8;
-block_8:
-loop_9:
-    if (SignExtendPackedValue(sp_slot, 0x20) != 0x1BA) {
-        goto loop_25;
-    }
-    _pack_header(sp_slot, &sp30);
-    goto loop_25;
-block_12:
-    sp80 = 6;
-    sp84 = GetSysbitPointer(sp_slot, sp30.unk40, temp_4_105);
-    temp_2_80 = GetSysbitPointer(sp_slot, sp30.unk38);
-    temp_8_84 = sp30.unk3C;
-    sp90 = sp30.unk28;
-    temp_7_89 = temp_16_115->unk10;
-    sp88 = temp_2_80;
-    sp8C = temp_8_84;
-    sp98 = sp30.unk30;
-    var_21_10 = temp_7_89(arg0, &sp80, temp_16_115->unk14, temp_7_89, temp_8_84);
-    goto block_20;
-block_13:
-    _PES_packet(temp_20_22, sp_slot, &sp30 + 0x18);
-    if (var_22_33 < (u64) *(s32 *)((u8 *)sp_slot + 0x18)) {
-        goto loop_26;
-    }
-    temp_4_105 = temp_20_22->unk48;
-    var_19_106 = 0;
-    if (temp_4_105 <= 0) {
-        goto block_20;
-    }
-loop_16:
-    temp_16_115 = spA8 + (var_19_106 * 0x18);
-    if (temp_16_115->unk0 != (sp30.unk18 & temp_16_115->unk8)) {
-        goto block_18;
-    }
-    goto block_12;
-block_18:
-    var_19_106 += 1;
-    if (var_19_106 < temp_4_105) {
-        goto loop_16;
-    }
-block_20:
-    if (var_19_106 != temp_20_22->unk48) {
-        goto block_23;
-    }
-    if (spA0 == NULL) {
-        goto block_23;
-    }
-    sp80 = 6;
-    sp84 = GetSysbitPointer(sp_slot, sp30.unk40);
-    temp_2_135 = GetSysbitPointer(sp_slot, sp30.unk38);
-    temp_7_139 = sp30.unk3C;
-    sp90 = sp30.unk28;
-    sp88 = temp_2_135;
-    sp8C = temp_7_139;
-    sp98 = sp30.unk30;
-    var_21_10 = spA0(arg0, &sp80, spA4, temp_7_139);
-block_23:
-    if (var_21_10 == 0) {
-        goto loop_26;
-    }
-    spAC = (s32) ((s64) (*(s32 *)((u8 *)sp_slot + 0x18) << 0x1D) >> 0x20);
-loop_25:
-loop_26:
-    if (SignExtendPackedValue(sp_slot, 0x18) != 1) {
-        goto block_32;
-    }
-    if (SignExtendPackedValue(sp_slot, 0x20) == 0x1BA) {
-        goto block_32;
-    }
-    if (SignExtendPackedValue(sp_slot, 0x20) == 0x1B9) {
-        goto block_32;
-    }
-    temp_3_175 = *(s32 *)((u8 *)sp_slot + 0x18);
-    var_2_178 = var_22_33 < temp_3_175;
-    if (temp_3_175 >= var_22_33) {
-        goto block_33;
-    }
-    if (var_21_10 != 0) {
-        goto block_13;
-    }
-    goto block_33;
-block_32:
-    var_2_178 = var_22_33 < (u64) *(s32 *)((u8 *)sp_slot + 0x18);
-block_33:
-    if (var_2_178 != 0) {
-        goto block_35;
-    }
-    if (SignExtendPackedValue(sp_slot, 0x20) == 0x1BA) {
-        goto loop_9;
-    }
-block_35:
-    return spAC;
+    do {
+        if (SignExtendPackedValue(b, 32) == 0x1BA) {
+            _pack_header(b, &h->pack);
+        }
+        while (SignExtendPackedValue(b, 24) == 1 && SignExtendPackedValue(b, 32) != 0x1BA &&
+               SignExtendPackedValue(b, 32) != 0x1B9 && b->pos < size * 8 && cont) {
+            _PES_packet(sys, b, &h->pes);
+            if (b->pos > size * 8) {
+                continue;
+            }
+            for (i = 0; i < sys->n; i++) {
+                if ((h->pes.id & tbl[i].mask) == tbl[i].id) {
+                    cb.type = 6;
+                    cb.header = GetSysbitPointer(b, h->pes.header);
+                    cb.data = GetSysbitPointer(b, h->pes.data);
+                    cb.len = h->pes.datalen;
+                    cb.pts = h->pes.pts;
+                    cb.dts = h->pes.dts;
+                    cont = tbl[i].func(mp, &cb, tbl[i].data);
+                    break;
+                }
+            }
+            if (i == sys->n && cbfunc != 0) {
+                cb.type = 6;
+                cb.header = GetSysbitPointer(b, h->pes.header);
+                cb.data = GetSysbitPointer(b, h->pes.data);
+                cb.len = h->pes.datalen;
+                cb.pts = h->pes.pts;
+                cb.dts = h->pes.dts;
+                cont = cbfunc(mp, &cb, cbdata);
+            }
+            if (cont) {
+                ret = b->pos >> 3;
+            }
+        }
+    } while (b->pos <= size * 8 && SignExtendPackedValue(b, 32) == 0x1BA);
+    return ret;
 }
 #endif /* NON_MATCHING */

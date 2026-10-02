@@ -4,308 +4,256 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s", FUN_002196b8);
 #else
-#include "rnc/fun_002196b8_types.h"
 #include "types.h"
+#include "eetypes.h"
+#include "qcopy.h"
 
+typedef union { u128 q; f32 f[4]; } Vec4;
 
+typedef struct {
+    u8 pad0[0x50];
+    int x;      /* 0x50 */
+    int y;      /* 0x54 */
+    int w;      /* 0x58 */
+    int h;      /* 0x5C */
+} Frame;
 
+typedef struct {
+    u8 pad0[0x78];
+    Frame *frame;   /* 0x78 */
+} Slot;
 
+typedef struct Panel Panel;
+struct Panel {
+    u8 pad0[4];
+    int (*draw)(Panel *);   /* 0x04 */
+    u8 pad8[8];
+    int flags;              /* 0x10 */
+    u8 pad14[4];
+    int x;                  /* 0x18 */
+    int y;                  /* 0x1C */
+    int w;                  /* 0x20 */
+    int h;                  /* 0x24 */
+};
 
+typedef struct {
+    u8 pad0[4];
+    u8 *panels;             /* 0x04 */
+    u8 pad8[0xD0];
+    int xD8;                /* 0xD8 */
+} Game;
 
+extern long D_0015EED0;
+extern void *D_0015FF18[];
+extern int D_001601B0 __attribute__((sda));
+extern int D_001CE2C0[];
+extern Game D_001D5BF0;
+extern Slot *D_001D5D90[];
 
+extern void FUN_00233980(int, long);
+extern void func_0020D278(void);
+extern void func_0020D1F0(void);
+extern void func_0020D218(void);
+extern void func_0020D330(void *, int);
+extern void func_00218D10(void);
+extern void func_001F2260(void);
+extern void func_00237A78(Vec4 *, Vec4 *, int *, int *, int *, int *);
+extern void func_00200E08(int, int, int, int, u64, int);
+extern void func_001F7888(int, int, int, f32);
+extern void func_00200F90(int, int, int, int, u64, u32, int);
+extern void func_001F7978(void);
+extern void func_001F5450(int, int, int, int, int, int, int, int, long, long);
+extern void func_0020D248(void);
+extern void func_0020D3B0(void);
+extern void func_001F4280(int);
+extern void func_00223E28(Slot *);
+extern void func_001F4398(void);
 
+void FUN_002196b8(void)
+{
+    Vec4 mat[4];
+    Vec4 unused[5];
+    Vec4 a;
+    Vec4 b;
+    int w;
+    int h;
+    int x;
+    int y;
+    Panel **list;
+    Slot *slot;
+    Panel *p;
+    Frame *f;
+    Frame *fr;
+    int i;
+    int j;
+    int pass;
+    int k;
+    int n;
+    int flags;
+    int fw;
+    int fh;
+    int tw;
+    int th;
+    int sw;
+    int sh;
+    int r;
+    int u;
+    int v;
+    int uw;
+    Slot **slots;
+    int vh;
+    int fx;
+    int fy;
 
-
-
-
-
-
-
-
-extern s32 D_0015EED0;
-extern s32 D_0015FF18[];
-extern s32 D_001601B0;
-extern u8 D_001CE2C0[];
-extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern u8 D_001D5D90[];
-extern void func_001F2260();
-extern void func_001F4280();
-extern void func_001F4398();
-extern void func_001F5450();
-extern void func_001F7888();
-extern void func_001F7978();
-extern void func_00200E08();
-extern void func_00200F90();
-extern void func_0020D1F0();
-extern void func_0020D218();
-extern void func_0020D248();
-extern void func_0020D278();
-extern void func_0020D330();
-extern void func_0020D3B0();
-extern void func_00218D10();
-extern void func_00223E28();
-extern void func_00233980();
-extern void func_00237A78();
-/* retail small-data globals, declared to GAS before the body */
-__asm__(".extern D_001601B0, 4");
-
-void FUN_002196b8(void) {    s32 temp_6_200;
-    s64 sp10;
-    s64 sp20;
-    s64 sp30;
-    s64 sp40;
-    s64 spA0;
-    s64 spB0;
-    s32 spC0;
-    s32 spC4;
-    s32 spC8;
-    s32 spCC;
-    void **spD0;
-    s32 spD4;
-    s32 spD8;
-    s32 spDC;
-    s32 spE0;
-    s32 spE4;
-s32 *var_17_435;
-    s32 *var_18_32;
-    s32 temp_16_311;
-    s32 temp_17_337;
-    s32 temp_18_336;
-    s32 temp_19_334;
-    s32 temp_20_296;
-    s32 temp_21_295;
-    s32 temp_22_333;
-    s32 temp_23_241;
-    s32 temp_30_242;
-    s32 temp_4_338;
-    s32 temp_5_190;
-    s32 temp_5_339;
-    s32 var_16_14;
-    s32 var_16_170;
-    s32 var_16_264;
-    s32 var_16_428;
-    s32 var_17_238;
-    s32 var_17_320;
-    s32 var_18_316;
-    s32 var_18_65;
-    s32 var_19_317;
-    s32 var_22_315;
-    s32 var_2_173;
-    s32 var_2_221;
-    u32 temp_2_327;
-    u32 temp_3_328;
-    void **temp_2_70;
-    void **var_17_38;
-    void **var_17_73;
-    void **var_18_434;
-    void **var_19_63;
-    struct M2c_temp_16_91 *temp_16_91;
-    struct M2c_temp_2_124 *temp_2_124;
-    struct M2c_temp_3_229 *temp_3_229;
-    struct M2c_temp_4_187 *temp_4_187;
-    struct M2c_temp_4_306 *temp_4_306;
-    s32 *temp_4_43;
-    struct M2c_temp_4_75 *temp_4_75;
-    struct M2c_temp_7_182 *temp_7_182;
-
-    var_16_14 = 0;
-    func_00233980(0x47, 0x5360B);
+    FUN_00233980(0x47, 0x5360B);
     func_0020D278();
     func_0020D1F0();
     func_0020D218();
-    var_18_32 = D_001CE2C0;
     func_0020D330(D_0015FF18[0], 4);
     func_00218D10();
     func_001F2260();
-    var_17_38 = D_001D5D90;
-    do {
-        if (*var_18_32 != 0) {
-            temp_4_43 = *var_17_38;
-            if ((temp_4_43 != NULL) && ((var_16_14 != 6) || (D_001D5BF0.unkD8 != 0))) {
-                func_0020D330(temp_4_43, 1);
-            }
+    for (i = 0; i < 14; i++) {
+        if (D_001CE2C0[i] != 0 && D_001D5D90[i] != 0 && (i != 6 || D_001D5BF0.xD8 != 0)) {
+            func_0020D330(D_001D5D90[i], 1);
         }
-        var_16_14 += 1;
-        var_17_38 += 4;
-        var_18_32 += 4;
-    } while (var_16_14 < 0xE);
-    var_19_63 = D_001D5D90;
-    var_18_65 = 0;
-    temp_2_70 = (D_001D5BF0.unk4 == 0) ? NULL : (D_001D5BF0.unk4 + 0x44);
-    spD0 = temp_2_70;
-    var_17_73 = temp_2_70;
-    do {
-        temp_4_75 = *var_19_63;
-        if ((temp_4_75 != NULL) && (((s32 *)D_001CE2C0 + var_18_65) != 0) && ((var_18_65 != 6) || (D_001D5BF0.unkD8 != 0))) {
-            temp_16_91 = temp_4_75->unk78;
-            sp10 = temp_16_91->unk0;
-            sp20 = temp_16_91->unk10;
-            sp30 = temp_16_91->unk20;
-            sp40 = temp_16_91->unk30;
-            spA0 = sp10;
-            spB0 = sp40;
-            func_00237A78(&spA0, &spB0, &spC0, &spC4, &spC8, &spCC);
-            spC8 += 1;
-            spCC += 1;
-            if (spD0 != NULL) {
-                temp_2_124 = *var_17_73;
-                if (temp_2_124 != NULL) {
-                    temp_2_124->unk20 = spC0;
-                    *(s32 *)((u8 *)(*var_17_73) + 0x24) = spC4;
-                    *(s32 *)((u8 *)(*var_17_73) + 0x18) = spC8;
-                    *(s32 *)((u8 *)(*var_17_73) + 0x1C) = spCC;
-                }
-            }
-            temp_16_91->unk50 = spC8;
-            temp_16_91->unk54 = spCC;
-            temp_16_91->unk58 = spC0;
-            temp_16_91->unk5C = spC4;
-            func_00200E08(spC8 + 1, spCC + 1, (spC8 + spC0) - 1, (spCC + spC4) - 1, D_001601B0, 0);
+    }
+
+    list = D_001D5BF0.panels != 0 ? (Panel **)(D_001D5BF0.panels + 0x44) : 0;
+    for (j = 0; j < 14; j++) {
+        slot = D_001D5D90[j];
+        if (slot == 0 || D_001CE2C0[j] == 0 || (j == 6 && D_001D5BF0.xD8 == 0)) {
+            continue;
         }
-        var_18_65 += 1;
-        var_17_73 += 4;
-        var_19_63 += 4;
-    } while (var_18_65 < 0xE);
-    spD4 = 0;
-    do {
-        var_16_170 = 0;
-        spE0 = spD4 + 1;
-        var_2_173 = 0 * 4;
-loop_20:
-        spE4 = var_16_170 + 1;
-        temp_7_182 = *(s32 *)(var_2_173 + D_001D5D90);
-        if ((temp_7_182 != NULL) && (spD0 != NULL) && (temp_4_187 = *(s32 *)(var_2_173 + spD0), (temp_4_187 != NULL)) && (temp_5_190 = temp_4_187->unk10, ((temp_5_190 & 4) == 0)) && (*(s32 *)(var_2_173 + D_001CE2C0) != 0) && (temp_6_200 = temp_4_187->unk4, (temp_6_200 != NULL)) && ((var_16_170 != 6) || (D_001D5BF0.unkD8 != 0))) {
-            if (spD4 == 0) {
-                spE4 = var_16_170 + 1;
-                if (temp_5_190 & 2) {
-                    goto block_31;
-                }
-                goto block_62;
+        f = slot->frame;
+        qcopy(&mat[0], (Vec4 *)f + 0);
+        qcopy(&mat[1], (Vec4 *)f + 1);
+        qcopy(&mat[2], (Vec4 *)f + 2);
+        qcopy(&mat[3], (Vec4 *)f + 3);
+        a.q = mat[0].q;
+        b.q = mat[3].q;
+        func_00237A78(&a, &b, &w, &h, &x, &y);
+        x++;
+        y++;
+        if (list != 0 && list[j] != 0) {
+            list[j]->w = w;
+            list[j]->h = h;
+            list[j]->x = x;
+            list[j]->y = y;
+        }
+        f->x = x;
+        f->y = y;
+        f->w = w;
+        f->h = h;
+        func_00200E08(x + 1, y + 1, x + w - 1, y + h - 1, D_001601B0, 0);
+    }
+
+    for (pass = 0; pass < 2; pass++) {
+        for (k = 0; k < 14; k++) {
+            slots = D_001D5D90;
+            slot = slots[k];
+            if (slot == 0 || list == 0) {
+                continue;
             }
-block_31:
-            var_2_221 = temp_5_190 & 1;
-            if (spD4 == 1) {
-                spE4 = var_16_170 + 1;
-                if (!(temp_5_190 & 2)) {
-                    var_2_221 = temp_5_190 & 1;
-                    goto block_34;
-                }
-                goto block_62;
+            p = list[k];
+            if (p == 0) {
+                continue;
             }
-block_34:
-            if (var_2_221 == 0) {
-                temp_3_229 = temp_7_182->unk78;
-                spE4 = var_16_170 + 1;
-                var_17_238 = 7;
-                temp_23_241 = temp_3_229->unk58;
-                temp_30_242 = temp_3_229->unk5C;
-                spD8 = temp_3_229->unk50;
-                spDC = temp_3_229->unk54;
-                if (temp_23_241 > 0x80) {
-                    do {
-                        var_17_238 += 1;
-                    } while ((1 << var_17_238) < temp_23_241);
+            flags = p->flags;
+            if (flags & 4) {
+                continue;
+            }
+            if (D_001CE2C0[k] == 0 || p->draw == 0) {
+                continue;
+            }
+            if (k == 6 && D_001D5BF0.xD8 == 0) {
+                continue;
+            }
+            if (pass == 0 && !(flags & 2)) {
+                continue;
+            }
+            if (pass == 1 && (flags & 2)) {
+                continue;
+            }
+            if (flags & 1) {
+                p->draw(p);
+                continue;
+            }
+            fr = slot->frame;
+            fx = fr->x;
+            fy = fr->y;
+            fw = fr->w;
+            fh = fr->h;
+            tw = 7;
+            while ((1 << tw) < fw) {
+                tw++;
+            }
+            th = 7;
+            while ((1 << th) < fh) {
+                th++;
+            }
+            while (tw + th >= 18) {
+                th--;
+            }
+            func_001F7888(tw, th, pass != 0, 1.0f);
+            sh = 1 << th;
+            sw = 1 << tw;
+            func_00200F90(0, 0, sw, sh, D_001601B0, 0, 0);
+            r = list[k]->draw(list[k]);
+            func_001F7978();
+            if (r & 1) {
+                continue;
+            }
+            u = 0;
+            uw = sw;
+            v = 0;
+            vh = sh;
+            if (r & 2) {
+                uw = fw;
+                vh = fh;
+            } else if (r & 8) {
+                u = (uw - fw) / 2;
+                v = (vh - fh) / 2;
+                uw -= u;
+                vh -= v;
+                if (sw < uw) {
+                    uw = sw;
                 }
-                var_16_264 = 7;
-                if (temp_30_242 > 0x80) {
-                    var_16_264 = 8;
-loop_43:
-                    if ((1 << var_16_264) < temp_30_242) {
-                        var_16_264 += 1;
-                        goto loop_43;
-                    }
+                if (sh < vh) {
+                    vh = sh;
                 }
-loop_48:
-                if ((var_17_238 + var_16_264) >= 0x12) {
-                    var_16_264 -= 1;
-                    goto loop_48;
+                if (u < 0) {
+                    u = 0;
                 }
-                func_001F7888(var_17_238, var_16_264, spD4 != 0, temp_7_182, 0x3F800000);
-                temp_21_295 = 1 << var_16_264;
-                temp_20_296 = 1 << var_17_238;
-                func_00200F90(0, 0, temp_20_296, temp_21_295, D_001601B0, 0, 0);
-                temp_4_306 = *(s32 *)(var_2_173 + spD0);
-                temp_16_311 = ((s32 (*)())(temp_4_306->unk4))(temp_4_306);
-                func_001F7978();
-                if (!(temp_16_311 & 1)) {
-                    var_22_315 = 0;
-                    var_18_316 = temp_20_296;
-                    var_19_317 = 0;
-                    var_17_320 = temp_21_295;
-                    if (temp_16_311 & 2) {
-                        var_18_316 = temp_23_241;
-                        var_17_320 = temp_30_242;
-                        goto block_61;
-                    }
-                    temp_2_327 = var_18_316 - temp_23_241;
-                    if (temp_16_311 & 8) {
-                        temp_3_328 = var_17_320 - temp_30_242;
-                        temp_22_333 = (s32) (temp_2_327 + (temp_2_327 >> 0x1F)) >> 1;
-                        temp_19_334 = (s32) (temp_3_328 + (temp_3_328 >> 0x1F)) >> 1;
-                        temp_18_336 = var_18_316 - temp_22_333;
-                        temp_17_337 = var_17_320 - temp_19_334;
-                        temp_4_338 = temp_22_333 > -1;
-                        temp_5_339 = temp_19_334 > -1;
-                        var_18_316 = (temp_20_296 < temp_18_336) ? temp_20_296 : temp_18_336;
-                        var_17_320 = (temp_21_295 < temp_17_337) ? temp_21_295 : temp_17_337;
-                        var_22_315 = (temp_4_338 == 0) ? 0 : temp_22_333;
-                        var_19_317 = (temp_5_339 == 0) ? 0 : temp_19_334;
-                        goto block_61;
-                    }
-                    if (temp_16_311 & 4) {
-                        if (temp_23_241 < temp_30_242) {
-                            var_22_315 = ((s32) (var_18_316 + ((u32) var_18_316 >> 0x1F)) >> 1) - ((s32) (temp_23_241 * var_18_316) / (s32) (temp_30_242 * 2));
-                            var_18_316 -= var_22_315;
-                        } else {
-                            var_19_317 = ((s32) (var_17_320 + ((u32) var_17_320 >> 0x1F)) >> 1) - ((s32) (temp_30_242 * var_17_320) / (s32) (temp_23_241 * 2));
-                            var_17_320 -= var_19_317;
-                        }
-                        goto block_61;
-                    }
-                    var_16_170 = spE4;
-                    if (temp_16_311 & 0x10) {
-block_61:
-                        func_00233980(0x42, (0x8000 << 0x18) | 0x64);
-                        func_00233980(0x47, 0x43);
-                        func_001F5450(spD8, spDC, temp_23_241, temp_30_242, var_22_315, var_19_317, var_18_316 - var_22_315, var_17_320 - var_19_317, (0x8080 << 0x10) | 0x8080, D_0015EED0);
-                        goto block_62;
-                    }
+                if (v < 0) {
+                    v = 0;
+                }
+            } else if (r & 4) {
+                if (fw < fh) {
+                    u = uw / 2 - fw * uw / (fh * 2);
+                    uw -= u;
                 } else {
-                    goto block_62;
+                    v = vh / 2 - fh * vh / (fw * 2);
+                    vh -= v;
                 }
-            } else {
-                spE4 = var_16_170 + 1;
-                ((s32 (*)())temp_6_200)(temp_4_187, temp_5_190, temp_6_200, temp_7_182);
-                goto block_62;
+            } else if (!(r & 0x10)) {
+                continue;
             }
-        } else {
-block_62:
-            var_16_170 = spE4;
+            FUN_00233980(0x42, 0x8000000064L);
+            FUN_00233980(0x47, 0x43);
+            func_001F5450(fx, fy, fw, fh, u, v, uw - u, vh - v, 0x80808080L, D_0015EED0);
         }
-        var_2_173 = var_16_170 * 4;
-        if (var_16_170 < 0xE) {
-            goto loop_20;
-        }
-        if (spD4 == 0) {
+        if (pass == 0) {
             func_0020D248();
             func_0020D3B0();
         }
-        spD4 = spE0;
-    } while (spE0 < 2);
-    var_16_428 = 0;
+    }
+
     func_001F4280(0);
-    var_18_434 = D_001D5D90;
-    var_17_435 = D_001CE2C0;
-    do {
-        if ((*var_17_435 != 0) && ((var_16_428 != 6) || (D_001D5BF0.unkD8 != 0))) {
-            func_00223E28(*var_18_434);
+    for (n = 0; n < 14; n++) {
+        if (D_001CE2C0[n] != 0 && (n != 6 || D_001D5BF0.xD8 != 0)) {
+            func_00223E28(slots[n]);
         }
-        var_16_428 += 1;
-        var_18_434 += 4;
-        var_17_435 += 4;
-    } while (var_16_428 < 0xE);
+    }
     func_001F4398();
 }
-
-extern void func_002196B8(void) __attribute__((alias("FUN_002196b8")));
 #endif /* NON_MATCHING */

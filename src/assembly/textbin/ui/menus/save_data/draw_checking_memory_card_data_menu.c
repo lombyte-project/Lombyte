@@ -4,159 +4,137 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu/FUN_00220348.s", FUN_00220348);
 #else
-#include "rnc/ui_menus_save_data_draw_checking_memory_card_data_menu_types.h"
 #include "types.h"
 
+struct Box {
+    s16 v[12];
+};
 
+struct Entry {
+    u8 pad0[4];
+    s16 type;
+    s16 id;
+    u8 pad8[2];
+};
 
+struct Level {
+    u8 pad0[0x48];
+    struct Entry *entries;
+};
 
+struct Planet {
+    u8 pad0[0x40];
+    struct Level *level;
+};
 
+struct MemMenu {
+    u8 pad0[0x20];
+    s32 w;
+    s32 h;
+    u8 pad28[0xC];
+    s32 flags;
+    s32 texw;
+    s32 texh;
+    u8 pad40[4];
+    s32 state;
+    s32 tex0;
+    s32 tex1;
+    s32 entry[2];
+};
 
+struct McState {
+    u8 pad0[8];
+    s32 phase;
+    u8 padC[0xC8];
+    s32 unkD4;
+    u8 padD8[4];
+    s32 unkDC;
+};
 
+struct Game {
+    u8 pad0[0x128];
+    s32 hasText;
+    s32 textId;
+};
 
+struct Screen {
+    u8 pad0[0x160];
+    s16 w;
+    s16 h;
+};
 
-
-
-
-
-
-extern struct M2c_D_0013D290 D_0013D290;
-extern u8 D_0013D388[];
+extern struct McState D_0013D290;
+extern struct Game D_001D5BF0;
+extern struct Planet *D_001D5BF4;
 extern u8 D_0013D4C0[];
-extern struct M2c_D_00151780 D_00151780;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern s32 D_001D5BF4;
-extern void func_001F4280();
-extern s32 func_001F4398();
-extern s32 func_001F5450();
-extern void func_001F75F0();
-extern s32 func_001FDD10();
-extern s32 func_00204CF0();
-extern s32 memset();
-s32 draw_checking_memory_card_data_menu(struct M2c_arg0 *arg0, s32 *arg1, s32 *arg2) __asm__("FUN_00220348");
+extern u8 D_0013D388[];
+extern struct Screen D_00151780;
+extern void func_001F4280(s32);
+extern void func_001F4398(void);
+extern s32 func_001FDD10(s32);
+extern void memset(void *, s32, u32);
+extern void func_001F75F0(struct Box *, u64, s32, s32);
+extern s32 func_00204CF0(s32);
+extern void func_001F5450(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64);
 
-s32 draw_checking_memory_card_data_menu(struct M2c_arg0 *arg0, s32 *arg1, s32 *arg2) {    u16 sp1E;
-u8 sp_slot[0x90];    u16 sp10;
-    u16 sp12;
-    u16 sp14;
-    u16 sp16;
-    u16 sp18;
-    u16 sp1A;
-    u16 sp22;
-    s16 sp30;
-    s16 sp32;
-    s16 sp34;
-    s16 sp36;
-    s16 sp38;
-    s16 sp3A;
-    s16 sp40;
-    s16 sp42;
-    struct M2c_var_5_0 *var_5_0;
-    s32 temp_17_41;
-    s32 temp_2_12;
-    s32 temp_3_9;
-    s32 var_2_20;
-    s32 var_4_170;
-    s32 var_4_35;
-    u16 temp_8_107;
-    u16 temp_9_104;
-    struct M2c_var_6_0 *var_6_0;
+s32 draw_checking_memory_card_data_menu(struct MemMenu *m) __asm__("FUN_00220348");
 
-    var_5_0 = arg1;
-    var_6_0 = arg2;
-    temp_3_9 = arg0->unk44;
-    temp_2_12 = arg0->unk34;
-    if (temp_3_9 < 2) {
-        if (temp_2_12 & 0x100) {
-            var_2_20 = 2;
-            if (D_0013D290.unk8 == 2) {
-                if (D_0013D290.unkD4 < 3) {
-                    var_2_20 = 2;
-                    if (D_0013D290.unkDC >= 0) {
-                        goto block_5;
-                    }
-                    /* Duplicate return node #19. Try simplifying control flow for better match */
-                    return var_2_20;
-                }
-block_5:
-                func_001F4280(0, &D_0013D290);
-                var_4_35 = 0x4FB9;
-                if (D_001D5BF0.unk128 != 0) {
-                    var_4_35 = D_001D5BF0.unk12C;
-                }
-                temp_17_41 = func_001FDD10(var_4_35);
-                memset(&sp30, 0, 0x18);
-                sp32 = arg0->unk24 + 1;
-                sp34 = 1;
-                sp36 = arg0->unk20 + 1;
-                sp38 = (s16) ((s32) arg0->unk20 >> 1);
-                sp40 = 0x10;
-                sp42 = 5;
-                sp30 = 1;
-                sp3A = 5;
-                /* m2c-unknown:  unknown instruction: ldl $v0, 0x37($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: ldr $v0, 0x30($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: ldl $v1, 0x3f($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: ldr $v1, 0x38($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: ldl $a4, 0x47($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: ldr $a4, 0x40($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: sdl $v0, 0x17($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: sdr $v0, 0x10($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: sdl $v1, 0x1f($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: sdr $v1, 0x18($sp_slot)  */
-                /* m2c-unknown:  unknown instruction: sdl $a4, 0x27($sp_slot)  */
-                func_001F75F0(&sp10, 0x8000 << 0x10, temp_17_41, -1, 0 /*  unknown instruction: sdr $a4, 0x20($sp_slot)  */, 1U);
-                sp1A = (u16) ((s32) ((s32) arg0->unk24 - sp1E) >> 1);
-                sp22 ^= 4;
-                func_001F75F0(&sp10, 0x8000 << 0x10, temp_17_41, -1);
-                temp_9_104 = sp12 - 1;
-                temp_8_107 = sp18 - 1;
-                sp10 -= 1;
-                sp16 -= 1;
-                sp12 = temp_9_104;
-                sp14 -= 1;
-                sp18 = temp_8_107;
-                sp1A -= 1;
-                func_001F75F0(&sp10, (0x80FF << 0x10) | 0xA888, temp_17_41, -1, temp_8_107, temp_9_104);
-                func_001F4398();
-                return 2;
-            }
-            /* Duplicate return node #19. Try simplifying control flow for better match */
-            return var_2_20;
+s32 draw_checking_memory_card_data_menu(struct MemMenu *m) {
+    struct Box tmp;
+    s16 box[12];
+    struct Entry *e;
+    s32 txt;
+    s32 tex;
+
+    if (m->state < 2) {
+        if (!(m->flags & 0x100)) {
+            return 1;
         }
-        goto block_13;
-    }
-    if (temp_2_12 & 4) {
-        var_6_0 = D_001D5BF4;
-        var_5_0 = var_6_0->unk40->unk48 + (*(((u8 *)arg0 + (0x50 ))+ ((temp_3_9 >= 4) * 4)) * 0xA);
-        if (var_5_0->unk4 == 0) {
-            var_2_20 = 1;
-            if (*(var_5_0->unk6 + D_0013D4C0) != 0) {
-                goto block_11;
-            }
-            /* Duplicate return node #19. Try simplifying control flow for better match */
-            return var_2_20;
+        if (D_0013D290.phase != 2) {
+            return 2;
         }
-block_11:
-        if (var_5_0->unk4 == 1) {
-            if (*(var_5_0->unk6 + D_0013D388) == 0) {
-block_13:
-                return 1;
-            }
-            goto block_14;
+        if (D_0013D290.unkD4 < 3 && D_0013D290.unkDC < 0) {
+            return 2;
         }
-        goto block_14;
+        func_001F4280(0);
+        txt = func_001FDD10(D_001D5BF0.hasText ? D_001D5BF0.textId : 0x4FB9);
+        memset(box, 0, sizeof(box));
+        box[1] = m->h + 1;
+        box[0] = 1;
+        box[2] = 1;
+        box[3] = m->w + 1;
+        box[4] = m->w >> 1;
+        box[5] = 5;
+        box[8] = 16;
+        box[9] = 5;
+        tmp = *(struct Box *)box;
+        func_001F75F0(&tmp, 0x80000000, txt, -1);
+        tmp.v[5] = (m->h - tmp.v[7]) >> 1;
+        tmp.v[9] ^= 4;
+        func_001F75F0(&tmp, 0x80000000, txt, -1);
+        tmp.v[0]--;
+        tmp.v[1]--;
+        tmp.v[2]--;
+        tmp.v[3]--;
+        tmp.v[4]--;
+        tmp.v[5]--;
+        func_001F75F0(&tmp, 0x80FFA888, txt, -1);
+        func_001F4398();
+        return 2;
     }
-block_14:
-    func_001F4280(0, var_5_0, var_6_0);
-    if (arg0->unk44 >= 4) {
-        var_4_170 = arg0->unk4C;
-    } else {
-        var_4_170 = arg0->unk48;
+    if (m->flags & 4) {
+        e = &D_001D5BF4->level->entries[*(s32 *)((u8 *)m->entry + (((m->state < 4) ^ 1) << 2))];
+        if (e->type == 0 && D_0013D4C0[e->id] == 0) {
+            return 1;
+        }
+        if (e->type == 1 && D_0013D388[e->id] == 0) {
+            return 1;
+        }
     }
-    func_001F5450(0, 0, D_00151780.unk160, D_00151780.unk162, 0, 0, arg0->unk38, arg0->unk3C, (0x8080 << 0x10) | 0x8080, func_00204CF0(var_4_170));
+    func_001F4280(0);
+    tex = func_00204CF0(m->state < 4 ? m->tex0 : m->tex1);
+    func_001F5450(0, 0, D_00151780.w, D_00151780.h, 0, 0, m->texw, m->texh, 0x80808080, tex);
     func_001F4398();
-    var_2_20 = 0x10;
-    return var_2_20;
+    return 0x10;
 }
 #endif /* NON_MATCHING */

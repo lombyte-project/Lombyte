@@ -4,282 +4,305 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00230f60/FUN_00230f60.s", FUN_00230f60);
 #else
-#include "rnc/fun_00230f60_types.h"
 #include "types.h"
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
 
+typedef struct {
+    s32 tex;        /* 0x00 */
+    s32 data;       /* 0x04 */
+    s32 texCount;   /* 0x08 */
+    s32 texInfo;    /* 0x0C */
+    s32 mobyCount;  /* 0x10 */
+    s32 mobys;      /* 0x14 */
+    s32 classCount; /* 0x18 */
+    s32 classes;    /* 0x1C */
+    s32 partCount;  /* 0x20 */
+    s32 parts;      /* 0x24 */
+    s32 pointCount; /* 0x28 */
+    s32 points;     /* 0x2C */
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    s32 unk3C;
+    s32 unk40;
+    s32 unk44;
+    s32 sky;        /* 0x48 */
+    s32 unk4C;
+    s32 scenes[5];  /* 0x50 */
+    s32 sound;      /* 0x64 */
+} LevelHeader;
 
+typedef struct {
+    s32 offset;
+    u16 id;
+    u16 pad;
+    s32 pad8[2];
+} ClassEntry;
 
+typedef struct {
+    s32 offset;
+    s32 oclass;
+    s32 pad8[2];
+    u8 body[0x10];
+} MobyEntry;
 
+typedef struct {
+    s32 offset;
+    s32 size;
+} Chunk;
 
+typedef struct {
+    u8 pad0[0x20];
+    s32 unk20;
+    s16 unk24;
+    u8 pad26[0x2A];
+    s32 unk50;
+    s32 unk54;
+    s32 unk58;
+    s32 unk5C;
+} GameState;
 
+typedef struct {
+    u8 pad0[4];
+    s32 unk4;
+    s32 unk8;
+    u8 padC[8];
+    u8 *buffer;
+    s32 unk18;
+} MemInfo;
 
+typedef struct {
+    u8 pad0[0x58];
+    s32 unk58;
+    s32 unk5C;
+    s32 chunks[70];
+} SceneInfo;
 
+typedef struct {
+    u8 pad0[0x13B8];
+    s32 lsn;
+    s32 sectors;
+} DiscInfo;
 
-
-
-
-
-
-
-
-
-
-
-
-extern struct M2c_D_00137B80 D_00137B80;
-extern s32 D_0013DD43;
-extern struct M2c_D_0013E030 D_0013E030;
-extern u8 D_001413D0[];
-extern u8 D_0015ED5C[];
+extern GameState D_0013E030;
+extern f32 D_0015F43C;
+extern s32 D_001413D0[];
+extern s32 D_00160F0C;
+extern s32 D_0015F618;
+extern s32 D_0015F440;
+extern s32 D_0015EE8C;
+extern s32 D_0015EE78;
+extern s32 D_0015EE74;
+extern u8 D_00194180[];
+extern u8 D_001B3AC0[];
+extern u8 D_001B6880[];
+extern u8 D_001B6180[];
+extern MemInfo D_001940C0;
+extern DiscInfo D_00137B80;
+extern s64 D_0019E6C0[];
+extern s32 D_0015FF08;
+extern s32 D_001B5980[];
+extern u8 D_001CAAC0[];
+extern s32 D_0015FF00;
+extern s32 D_0015F460;
 extern s32 D_0015ED84;
 extern s32 D_0015ED88;
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
-extern s32 D_0015EE8C;
-extern f32 D_0015F43C;
-extern s32 D_0015F440;
-extern s32 D_0015F460;
-extern s32 D_0015F618;
-extern s32 D_0015FF00;
-extern s32 D_0015FF08;
-extern struct M2c_D_0015FF18 *D_0015FF18;
-extern s32 D_0015FF1C;
-extern s32 D_0015FF20;
-extern s32 D_0015FF28;
-extern s32 D_0015FF30;
-extern s32 D_001600AC;
-extern s32 D_001600B0;
-extern s32 D_001600B4;
-extern s32 D_001600B8;
-extern s32 D_001600BC;
-extern s32 D_001604E0;
-extern s32 D_001604F0;
-extern s32 D_00160580;
-extern s32 D_00160588;
-extern s32 D_00160F0C;
-extern u8 D_00186310[];
-extern u8 D_00186350[];
-extern struct M2c_D_0018CB20 D_0018CB20;
-extern struct M2c_D_001940C0 D_001940C0;
-extern u8 D_00194180[];
-extern u8 D_0019BDC0[];
+extern s64 D_00160580;
+extern s64 D_00160588;
 extern u8 D_0019C1C0[];
 extern u8 D_0019C3C0[];
-extern struct M2c_D_0019E6C0 D_0019E6C0;
-extern u8 D_001B3AC0[];
-extern u8 D_001B5980[];
-extern u8 D_001B6180[];
-extern u8 D_001B6880[];
-extern u8 D_001CAAC0[];
-extern u8 D_001CD780[];
+extern u8 D_0019BDC0[];
 extern u8 D_001D9740[];
-extern void FUN_0022dd78();
-extern void FillTransferWords();
-extern void FlushCache();
-extern void func_0012DC80();
-extern void func_0012E088();
-extern void func_0012E1A8();
-extern void func_001F2C60();
-extern void func_001F2D98();
-extern void func_001F37E8();
-extern void func_001F4A58();
-extern s32 func_001F96F8();
-extern s32 func_001F97A0();
-extern void func_001F9810();
-extern void func_001F98D0();
-extern void func_002015D8();
-extern void func_00202270();
-extern void func_002026C8();
-extern void func_00202800();
-extern void func_002028E0();
-extern void func_00203120();
-extern void func_00203640();
-extern void func_002049F0();
-extern s32 func_0020B618();
-extern void func_00216728();
-extern void func_002335D0();
-extern s32 rand();
-extern void sceCdSync();
-extern void sceGsSyncV();
-/* retail small-data globals, declared to GAS before the body */
-__asm__(".extern D_0015F440, 4");
-__asm__(".extern D_0015F460, 4");
-__asm__(".extern D_0015FF00, 4");
-__asm__(".extern D_0015FF08, 4");
-__asm__(".extern D_001600B8, 4");
-__asm__(".extern D_001600BC, 4");
-__asm__(".extern D_001604E0, 4");
-__asm__(".extern D_001604F0, 4");
-__asm__(".extern D_00160588, 8");
+extern u8 *D_0015FF18;
+extern u8 *D_0015FF1C;
+extern u8 *D_0015FF28;
+extern u8 *D_001600AC;
+extern s32 D_001600B4;
+extern u8 *D_0015FF20;
+extern s32 D_001600B0;
+extern s32 D_001600B8;
+extern u8 D_001CD780[];
+extern s32 D_0015FF30;
+extern s32 D_001600BC;
+extern s64 D_001604E0 __attribute__((sda));
+extern s64 D_001604F0 __attribute__((sda));
+extern u8 D_0013DD43[];
+extern SceneInfo D_0018CB20;
+extern u8 D_00186310[];
+extern u8 D_00186350[];
+extern u32 D_0015ED5C;
 
-void FUN_00230f60(void) {    u64 sp0;
-u8 sp_slot[0xC0];    s32 *temp_16_257;
-    s32 *temp_18_145;
-    struct M2c_var_16_149 *var_16_149;
-    s32 *temp_7_377;
-    s32 temp_16_228;
-    s32 temp_16_231;
-    s32 temp_23_97;
-    s32 temp_2_157;
-    s32 temp_2_187;
-    s32 temp_2_253;
-    s32 temp_2_321;
-    s32 temp_3_144;
-    s32 temp_3_156;
-    s32 temp_5_370;
-    s32 var_17_175;
-    s32 var_19_24;
-    s32 var_2_386;
-    s32 var_8_384;
-    void **var_17_150;
-    void **var_6_372;
-    s32 *temp_16_283;
-    s32 *temp_17_223;
-    struct M2c_temp_20_100 *temp_20_100;
-    s32 *temp_21_130;
-    s32 *temp_22_141;
-    struct M2c_var_16_182 *var_16_182;
-    struct M2c_var_5_381 *var_5_381;
+extern void init_mem_slots(void) __asm__("FUN_002015d8");
+extern void FillTransferWords(void *dst, s32 value, s32 size);
+extern void init_view_context(void) __asm__("FUN_001f2c60");
+extern void func_001F2D98(void);
+extern void vu1_init_chain(void) __asm__("FUN_002335d0");
+extern s32 submit_audio_stream_io_request(void *buf, u32 lsn, u32 sectors) __asm__("FUN_00216728");
+extern s32 func_001F96F8(s32);
+extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
+extern s32 sceCdSync(s32);
+extern void FlushCache(s32);
+extern s32 func_0020B618(void *, void *);
+extern void upload_texture_images(s32 arg0, s32 count, s32 p) __asm__("FUN_00203120");
+extern s32 func_001F97A0(s32);
+extern void func_001F98D0(void *, void *, s32);
+extern void relocate_sky_definition(s32 f) __asm__("FUN_002028e0");
+extern void register_moby_class(s32 moby, s32 arg1, s32 arg2, s32 oclass) __asm__("FUN_00203640");
+extern void unpack_point_records(s32 src, s32 count) __asm__("FUN_00202800");
+extern void parse_particle_textures(s32 hdr, s32 base, s32 src, s32 count) __asm__("FUN_002026c8");
+extern s32 func_00202270(s32, void *);
+extern void func_001F9810(void *, s32);
+extern void reset_callback_registries(void) __asm__("FUN_001f37e8");
+extern s32 rand(void);
+extern void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
+extern void snd_bank_load_from_ee_cb(s32 cmd, void *arg, s64 data) __asm__("FUN_0012e088");
+extern void func_0022DD78();
+extern s32 sceGsSyncV(s32);
+extern s32 func_0012DC80(void);
+extern void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
 
-    var_19_24 = 0;
-    D_0013E030.unk24 = -1;
+void FUN_00230f60(void)
+{
+    s64 buf[4];
+    LevelHeader *h;
+    s32 data;
+    s32 texBase;
+    ClassEntry *ce;
+    ClassEntry *e;
+    s32 *out;
+    MobyEntry *me;
+    s32 *tbl;
+    s32 last;
+    s32 mem;
+    u8 *p;
+    s32 *scene;
+    s32 *q;
+    Chunk *c;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 t;
+    s32 r;
+
     D_0013E030.unk20 = 4;
+    D_0013E030.unk24 = -1;
     D_0015F43C = 1.0f;
-    *(s32 *)D_001413D0 = 0;
+    D_001413D0[0] = 0;
     D_00160F0C = 0x100000;
     D_0015F618 = 0;
     D_0015F440 = 0;
-    func_002015D8(4, D_001413D0, 0x100000);
-    D_0015EE78 = D_0015EE8C;
+    init_mem_slots();
     D_0015EE74 = D_0015EE8C;
+    D_0015EE78 = D_0015EE8C;
     FillTransferWords(D_00194180, 0x87654321, 0x10);
     FillTransferWords(D_001B3AC0, -1, 0x800);
     FillTransferWords(D_001B6880, -1, 0xE00);
     FillTransferWords(D_001B6180, 0, 0xE0);
-    func_001F2C60();
+    init_view_context();
     func_001F2D98();
-    func_002335D0();
-    func_00216728(D_001940C0.unk14 + 0x400000, D_00137B80.unk13B8, D_00137B80.unk13BC);
-    func_001F4A58(func_001F96F8(0xC));
+    vu1_init_chain();
+    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000, D_00137B80.lsn, D_00137B80.sectors);
+    fade_to_black(func_001F96F8(0xC));
     sceCdSync(0);
     FlushCache(0);
-    temp_23_97 = func_0020B618(D_001940C0.unk14 + 0x400000, D_001940C0.unk14);
+    mem = func_0020B618(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
     FlushCache(0);
-    temp_20_100 = D_001940C0.unk14;
-    func_00203120(((u8 *)temp_20_100) + temp_20_100->unk0, temp_20_100->unk8, ((u8 *)temp_20_100) + temp_20_100->unkC);
-    temp_21_130 = ((u8 *)temp_20_100) + temp_20_100->unk4;
-    D_0019E6C0.unk0 = (s64) (((s32) (D_0015EE8C + temp_20_100->unk40) >> 8) | 0x1D308000 | (((s64) ((s32) (D_0015EE8C + temp_20_100->unk44) >> 8) << 0x25) | (0xB800 << 0x13)) | (-1 << 0x3F));
-    D_0019E6C0.unk10 = (s64) ((((0x8000 << 0x14) | 0x8000) << 0x13) | 0x4000);
-    temp_22_141 = temp_21_130 + temp_20_100->unk30;
-    D_0019E6C0.unk8 = (s64) ((0xFFA0 << 0x20) | 0xE0);
-    temp_3_144 = temp_20_100->unk18;
-    temp_18_145 = ((u8 *)temp_20_100) + temp_20_100->unk1C;
-    D_0015FF08 = temp_3_144;
-    if (temp_3_144 > 0) {
-        var_16_149 = temp_18_145;
-        var_17_150 = D_001B5980;
-        do {
-            var_19_24 += 1;
-            temp_3_156 = var_16_149->unk0;
-            temp_2_157 = func_001F97A0(var_16_149->unk4) << 0x1C;
-            var_16_149 += 0x10;
-            *var_17_150 = temp_22_141 + temp_3_156 + temp_2_157;
-            var_17_150 += 4;
-        } while (var_19_24 < D_0015FF08);
+    h = (LevelHeader *)D_001940C0.buffer;
+    upload_texture_images((s32)h + h->tex, h->texCount, (s32)h + h->texInfo);
+    data = (s32)h + h->data;
+    texBase = data + h->unk30;
+    D_0019E6C0[0] = (s32)((D_0015EE8C + h->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) | ((s64)((D_0015EE8C + h->unk44) >> 8) << 37) | 0x8000000000000000LL;
+    D_0019E6C0[1] = 0x0000FFA0000000E0LL;
+    D_0019E6C0[2] = 0x0040000400004000LL;
+    ce = (ClassEntry *)((s32)h + h->classes);
+    D_0015FF08 = h->classCount;
+    for (i = 0; i < D_0015FF08; i++) {
+        D_001B5980[i] = texBase + ce[i].offset + (func_001F97A0(ce[i].id) << 28);
     }
-    var_17_175 = 0;
-    func_001F98D0(D_001CAAC0, temp_18_145, D_0015FF08 * 0x10);
-    func_002028E0(temp_21_130 + temp_20_100->unk48);
-    var_16_182 = ((u8 *)temp_20_100) + temp_20_100->unk14;
+    func_001F98D0(D_001CAAC0, ce, D_0015FF08 * 16);
+    relocate_sky_definition(data + h->sky);
+    me = (MobyEntry *)((s32)h + h->mobys);
     D_0015FF00 = 0;
-    if (temp_20_100->unk10 > 0) {
-        do {
-            temp_2_187 = var_16_182->unk0;
-            var_17_175 += 1;
-            func_00203640((temp_2_187 == 0) ? NULL : (temp_21_130 + temp_2_187), ((u8 *)temp_20_100) + temp_20_100->unk1C, ((u8 *)var_16_182) + 0x10, var_16_182->unk4);
-            var_16_182 += 0x20;
-        } while (var_17_175 < temp_20_100->unk10);
+    for (j = 0; j < h->mobyCount; j++) {
+        register_moby_class(me->offset == 0 ? 0 : data + me->offset, (s32)h + h->classes,
+                            (s32)me->body, me->oclass);
+        me++;
     }
-    D_0015F460 = temp_21_130 + temp_20_100->unk38;
-    func_00202800(((u8 *)temp_20_100) + temp_20_100->unk2C, temp_20_100->unk28);
-    func_002026C8(((u8 *)temp_20_100) + temp_20_100->unk3C, temp_21_130 + temp_20_100->unk34, ((u8 *)temp_20_100) + temp_20_100->unk24, temp_20_100->unk20);
-    temp_17_223 = temp_21_130 + temp_20_100->unk4C;
-    temp_16_228 = D_0015ED88 - 1;
-    temp_16_231 = (temp_16_228 <= -1) ? 0 : temp_16_228;
-    func_00202270(temp_17_223 + *(s32 *)((u8 *)((D_0015ED84 * 4) + temp_17_223) + 0x4), sp_slot);
-    D_00160580 = sp0;
-    func_00202270(temp_17_223 + *(s32 *)((u8 *)((((temp_16_231 * 0x13) + D_0015ED84) * 4) + temp_17_223) + 0x50), sp_slot);
-    temp_2_253 = D_0015EE74 + 0x2000;
-    D_0015EE78 = temp_2_253;
-    temp_16_257 = D_001940C0.unk14 + temp_23_97;
-    D_001940C0.unk18 = temp_16_257;
-    D_0015EE74 = temp_2_253;
-    D_00160588 = sp0;
-    func_001F9810(D_0019C1C0, 0x100, sp0);
+    D_0015F460 = data + h->unk38;
+    unpack_point_records((s32)h + h->points, h->pointCount);
+    {
+        s32 base = data + h->unk34;
+        s32 src = (s32)h + h->parts;
+
+        parse_particle_textures((s32)h + h->unk3C, base, src, h->partCount);
+    }
+    tbl = (s32 *)(data + h->unk4C);
+    last = D_0015ED88 - 1;
+    if (last < 0) {
+        last = 0;
+    }
+    func_00202270((s32)tbl + tbl[D_0015ED84 + 1], buf);
+    D_00160580 = buf[0];
+    func_00202270((s32)tbl + tbl[last * 19 + D_0015ED84 + 0x14], buf);
+    t = D_0015EE74 + 0x2000;
+    p = D_001940C0.buffer + mem;
+    D_0015EE78 = t;
+    D_001940C0.unk18 = (s32)p;
+    D_0015EE74 = t;
+    D_00160588 = buf[0];
+    func_001F9810(D_0019C1C0, 0x100);
     func_001F9810(D_0019C3C0, 0x180);
     func_001F9810(D_0019BDC0, 0x400);
     func_001F98D0(D_0019BDC0, D_001D9740, 0x40);
-    D_0015FF18 = temp_16_257;
-    FillTransferWords(temp_16_257, 0, 0x4000);
-    temp_16_283 = temp_16_257 + 0x4000;
+    D_0015FF18 = p;
+    FillTransferWords(p, 0, 0x4000);
+    p += 0x4000;
     D_0015FF1C = D_0015FF18;
-    D_0015FF18->unk20 = 0xFF;
-    D_0015FF28 = temp_16_283;
-    D_001600AC = temp_16_283 + 0x2000;
+    D_0015FF18[0x20] = 0xFF;
+    D_0015FF28 = p;
+    p += 0x2000;
+    D_001600AC = p;
     D_001600B4 = -1;
     D_0015FF20 = D_0015FF18 + 0x3F00;
     D_001600B0 = 0;
     D_001600B8 = 0;
     func_001F9810(D_001CD780, 0x200);
-    func_001F37E8();
+    reset_callback_registries();
     D_0015FF30 = 0x1F4;
     D_001600BC = 0x1F4000;
-    temp_2_321 = (rand() >> 0x10) & 3;
+    r = (rand() >> 16) & 3;
     D_0013E030.unk5C = 0;
-    D_0013E030.unk58 = temp_2_321;
+    D_0013E030.unk58 = r;
     D_0013E030.unk50 = 0;
     D_0013E030.unk54 = 0;
-    D_001604F0 = D_001604E0;
-    if ((D_0015ED84 == 0) || ((D_0015ED84 == 1) && (D_0013DD43 == 0))) {
-        D_0013E030.unk5C = 2;
+    qcopy(&D_001604F0, &D_001604E0);
+    if (D_0015ED84 == 0 || (D_0015ED84 == 1 && D_0013DD43[0] == 0)) {
         D_0013E030.unk58 = 4;
+        D_0013E030.unk5C = 2;
     }
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     FillTransferWords(D_00186350, 0, 0x40);
-    temp_5_370 = D_00160F0C + 0xFFFA0000;
-    var_6_372 = D_001940C0.unk8 + temp_5_370;
-    D_0018CB20.unk5C = var_6_372;
-    D_0018CB20.unk58 = (s32) (D_001940C0.unk4 + temp_5_370);
-    temp_7_377 = ((u8 *)temp_20_100) + 0x50 + (D_0013E030.unk58 * 4);
-    D_00160F0C = temp_5_370;
-    var_5_381 = temp_21_130 + *temp_7_377;
-    var_8_384 = 0;
-    if (var_5_381->unk4 != 0) {
-        var_6_372 = ((u8 *)&D_0018CB20) + 0x60;
-        var_2_386 = var_5_381->unk0;
-loop_12:
-        var_8_384 += 1;
-        var_5_381 += 8;
-        *var_6_372 = temp_21_130 + *temp_7_377 + (var_2_386 + 0x800);
-        var_6_372 += 4;
-        if (var_8_384 < 0x46) {
-            if (var_5_381->unk4 != 0) {
-                var_2_386 = var_5_381->unk0;
-                goto loop_12;
-            }
-        }
+    D_00160F0C -= 0x60000;
+    D_0018CB20.unk58 = D_001940C0.unk4 + D_00160F0C;
+    scene = h->scenes;
+    q = &scene[D_0013E030.unk58];
+    D_0018CB20.unk5C = D_001940C0.unk8 + D_00160F0C;
+    c = (Chunk *)(data + *q);
+    for (k = 0; k < 70 && c->size != 0; k++) {
+        { s32 off = c->offset + 0x800; D_0018CB20.chunks[k] = data + *q + off; }
+        c++;
     }
-    func_002049F0(0, var_5_381, var_6_372, temp_7_377, var_8_384);
-    *(s32 *)D_0015ED5C = 0xFFFFFFFF;
-    func_0012E088(temp_21_130 + temp_20_100->unk64, FUN_0022dd78, (u64) ((s64) D_0015ED5C << 0x20) >> 0x20);
+    parse_space_scene_chunk(0);
+    D_0015ED5C = 0xFFFFFFFF;
+    snd_bank_load_from_ee_cb(data + h->sound, func_0022DD78, (u32)&D_0015ED5C);
     do {
         FlushCache(0);
         sceGsSyncV(0);
         func_0012DC80();
-    } while (*(s32 *)D_0015ED5C == 0xFFFFFFFF);
-    func_0012E1A8();
+    } while (D_0015ED5C == 0xFFFFFFFF);
+    snd_resolve_bank_xrefs();
 }
-
-extern void func_00230F60(void) __attribute__((alias("FUN_00230f60")));
 #endif /* NON_MATCHING */

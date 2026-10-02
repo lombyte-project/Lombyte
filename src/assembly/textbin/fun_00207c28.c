@@ -5,34 +5,34 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00207c28/FUN_00207c28.s", FUN_00207c28);
 #else
 #include "types.h"
-
-extern void func_001F97E8(void *, s32, s32);
-extern void func_001F98D0(void *, void *, s32);
-
-void FUN_00207c28(u8 *destination, u8 *bit_source, u8 *run_source) {
-    u8 *destination_end;
-    u8 *expanded;
-    u8 *chunk_end;
-    u8 *read;
-    volatile u8 *write;
-    u8 *copy_read;
-    u8 *copy_write;
-    u8 state;
-    s32 run_length;
-    u8 value;
-    u32 bit_count;
-    u32 packed;
+extern int FillTransferWords();
+extern s32 func_001F98D0();
+void FUN_00207c28(unsigned char *destination, unsigned char *bit_source, unsigned char *run_source) {
+    unsigned char *destination_end;
+    unsigned char *expanded;
+    unsigned char *chunk_end;
+    unsigned char *read;
+    volatile unsigned char *write;
+    unsigned char *copy_read;
+    unsigned char *copy_write;
+    unsigned char state;
+    int run_length;
+    unsigned char value;
+    unsigned int bit_count;
+    unsigned int packed;
+    unsigned char *end;
 
     destination_end = destination + 0x8000;
-    expanded = (u8 *)0x6FFFE000;
+    end = (unsigned char *)0x70002000;
     state = 1;
     bit_count = *bit_source >> 1;
     bit_source++;
-    func_001F97E8((void *)0x70000000, 0, 0x2400);
+    FillTransferWords((void *)0x70000000, 0, 0x2400);
+    expanded = (unsigned char *)0x70000000;
 
     for (;;) {
         chunk_end = destination + 0x400;
-        do {
+    next_run:
             expanded += *run_source++;
             run_length = *run_source++;
             if (run_length != 0) {
@@ -48,46 +48,46 @@ void FUN_00207c28(u8 *destination, u8 *bit_source, u8 *run_source) {
                     bit_count--;
                 } while (run_length != 0);
             }
-        } while (expanded < (u8 *)0x70002000);
+        if (expanded < end) goto next_run;
 
-        read = (u8 *)0x70000000;
-        write = (u8 *)0x70000000;
-        while (read < (u8 *)0x70002000) {
+        read = (unsigned char *)0x70000000;
+        write = (unsigned char *)0x70000000;
+        do {
             packed = *read++;
             *write = packed;
-            packed |= (u32)*read++ << 1;
+            packed |= (unsigned int)*read++ << 1;
             *write = packed;
-            packed |= (u32)*read++ << 2;
+            packed |= (unsigned int)*read++ << 2;
             *write = packed;
-            packed |= (u32)*read++ << 3;
+            packed |= (unsigned int)*read++ << 3;
             *write = packed;
-            packed |= (u32)*read++ << 4;
+            packed |= (unsigned int)*read++ << 4;
             *write = packed;
-            packed |= (u32)*read++ << 5;
+            packed |= (unsigned int)*read++ << 5;
             *write = packed;
-            packed |= (u32)*read++ << 6;
+            packed |= (unsigned int)*read++ << 6;
             *write = packed;
-            packed |= (u32)*read++ << 7;
+            packed |= (unsigned int)*read++ << 7;
             *write = packed;
             write++;
-        }
+        } while (read < end);
 
         func_001F98D0(destination, (void *)0x70000000, 0x400);
         destination = chunk_end;
-        if (destination == destination_end) {
+        if (chunk_end == destination_end) {
             return;
         }
 
-        func_001F97E8((void *)0x70000000, 0, 0x2000);
-        copy_read = (u8 *)0x70002000;
-        copy_write = (u8 *)0x70000000;
-        if (expanded > (u8 *)0x70002000) {
-            while (copy_read < expanded) {
+        FillTransferWords((void *)0x70000000, 0, 0x2000);
+        copy_read = (unsigned char *)0x70002000;
+        copy_write = (unsigned char *)0x70000000;
+        if (expanded > end) {
+            do {
                 value = *copy_read++;
                 *copy_write++ = value;
-            }
+            } while (copy_read < expanded);
         }
-        func_001F97E8((void *)0x70002000, 0, 0x400);
+        FillTransferWords((void *)0x70002000, 0, 0x400);
         expanded -= 0x2000;
     }
 }

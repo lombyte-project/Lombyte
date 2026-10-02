@@ -6,6 +6,23 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001ee4b0/FUN_001ee4b0.s
 #else
 #include "types.h"
 
+struct Fog {
+    u8 pad0[0x50];
+    s32 flags;
+    s32 color0;
+    s32 color1;
+    f32 near0;
+    f32 far0;
+    f32 lo0;
+    f32 hi0;
+    f32 near1;
+    f32 far1;
+    f32 lo1;
+    f32 hi1;
+    u8 pad7C[4];
+};
+
+extern struct Fog D_0019ADC0[];
 extern u8 D_0015F484;
 extern u8 D_0015F485;
 extern u8 D_0015F486;
@@ -13,49 +30,41 @@ extern f32 D_0015F488;
 extern f32 D_0015F48C;
 extern f32 D_0015F490;
 extern f32 D_0015F494;
+extern s32 func_00212C28(void *, f32 *, s32 *);
+extern s32 func_001FA6D0(f32);
 
-struct M2c_D_0019ADC0 {
-    u8 pad_0[0x50];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    f32 unk5C;
-    f32 unk60;
-    f32 unk64;
-    f32 unk68;
-    f32 unk6C;
-    f32 unk70;
-    f32 unk74;
-    f32 unk78;
-    u8 pad_7C[4];
-};
-
-extern struct M2c_D_0019ADC0 D_0019ADC0[];
-extern s32 func_00212C28(void *a0, f32 *a1, s32 *a2);
-extern s32 FUN_001FA6D0(f32 fparg0);
-
-void FUN_001ee4b0(void *arg0) {
-    f32 f;
+void FUN_001ee4b0(void *pos) {
+    f32 t;
     s32 idx;
-    s32 q;
-    s32 w;
-    struct M2c_D_0019ADC0 *pal;
+    struct Fog *f;
+    u32 a;
+    u32 b;
+    s32 c0;
+    s32 c1;
+    f32 u;
+    s32 x;
+    s32 y;
 
-    if (func_00212C28(arg0, &f, &idx) == 0) {
+    if (func_00212C28(pos, &t, &idx) == 0) {
         return;
     }
-    pal = &D_0019ADC0[idx];
-    if ((pal->unk50 & 2) == 0) {
+    f = &D_0019ADC0[idx];
+    if (!(f->flags & 2)) {
         return;
     }
-    q = FUN_001FA6D0(f * 255.0f);
-    w = 255 - q;
-    D_0015F486 = (u8)(((((pal->unk58 >> 16) & 0xFF) * q) + (((pal->unk54 >> 16) & 0xFF) * w)) >> 8);
-    D_0015F484 = (u8)((((pal->unk58 & 0xFF) * q) + ((pal->unk54 & 0xFF) * w)) >> 8);
-    D_0015F485 = (u8)(((((pal->unk58 >> 8) & 0xFF) * q) + (((pal->unk54 >> 8) & 0xFF) * w)) >> 8);
-    D_0015F488 = (pal->unk6C * f + pal->unk5C * (1.0f - f)) * 1024.0f;
-    D_0015F48C = ((pal->unk74 * f + pal->unk64 * (1.0f - f)) + 1024.0f) * 1024.0f;
-    D_0015F490 = 255.0f - ((pal->unk70 * f + pal->unk60 * (1.0f - f)) * 255.0f);
-    D_0015F494 = 255.0f - ((pal->unk78 * f + pal->unk68 * (1.0f - f)) * 255.0f);
+    a = func_001FA6D0(t * 255.0f);
+    b = 255 - a;
+    u = 1.0f - t;
+    c0 = f->color1;
+    c1 = f->color0;
+    x = ((c0 & 0xFF) * a + (c1 & 0xFF) * b) >> 8;
+    y = (((c0 >> 8) & 0xFF) * a + ((c1 >> 8) & 0xFF) * b) >> 8;
+    D_0015F486 = (((c0 >> 16) & 0xFF) * a + ((c1 >> 16) & 0xFF) * b) >> 8;
+    D_0015F484 = x;
+    D_0015F485 = y;
+    D_0015F488 = (f->near1 * t + f->near0 * u) * 1024.0f;
+    D_0015F48C = (f->lo1 * t + f->lo0 * u) * 1024.0f;
+    D_0015F490 = 255.0f - (f->far1 * t + f->far0 * u) * 255.0f;
+    D_0015F494 = 255.0f - (f->hi1 * t + f->hi0 * u) * 255.0f;
 }
 #endif /* NON_MATCHING */

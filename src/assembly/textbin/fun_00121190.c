@@ -29,136 +29,95 @@ struct M2c_D_00159990
   s32 unk24;
 };
 extern s32 D_001312D0[];
-extern s32 D_001312EC;
-extern s32 D_00131304;
-extern u8 D_001324C0[];
+extern volatile s32 D_001312EC[];
+extern s32 D_00131304[];
+extern struct M2c_D_00159990 D_00159990;
+extern s32 D_001599D0[];
+extern s32 D_001324C0[];
 extern u8 D_00152F80[];
 extern u8 D_00152F90[];
 extern u8 D_00152FB0[];
-extern struct M2c_D_00159990 D_00159990;
-extern u8 D_001599D0[];
-extern u8 D_FFFFF[];
 extern s32 PollSema();
-extern s32 SignalSema();
-extern unsigned long cmd_sem_init();
+extern void SignalSema();
+extern void cmd_sem_init();
 extern s32 sceCdSyncS();
-extern s32 scePrintf();
+extern void scePrintf();
 extern s32 sceSifBindRpc();
+extern void sceSifInitRpc();
+extern void sceSifWriteBackDCache();
 extern s32 sceSifCallRpc();
-extern s32 sceSifInitRpc();
-extern s32 sceSifWriteBackDCache();
-s32 FUN_00121190(s32 arg0)
+s32 FUN_00121190(s32 mode)
 {
-  s32 *var_2_46;
-  int new_var;
-  s32 *var_2_65;
-  s32 temp_16_129;
-  s32 var_2_28;
-  s32 *new_var2;
-  s32 *new_var3;
-  if (D_001312D0[0] <= 0)
+  s32 spin;
+  s32 result;
+  if (D_001312D0[0] > 0)
   {
-    goto block_2;
+    scePrintf(D_00152F80);
   }
-  scePrintf(D_00152F80);
-  block_2:
   cmd_sem_init();
-
-  new_var = 1;
-  var_2_28 = 6;
-  if (D_001312EC != PollSema(D_001312EC))
+  if (D_001312EC[0] != PollSema(D_001312EC[0]))
   {
-    goto block_27;
+    return 6;
   }
   if (sceCdSyncS(1) != 0)
   {
-    do
-    {
-      goto block_23;
-    }
-    while (0);
+    goto fail;
   }
-  new_var2 = D_001312D0;
   sceSifInitRpc(0);
-  if ((*((s32 *) 0x131304)) >= 0)
+  if (D_00131304[0] < 0)
   {
-    goto block_19;
+    for (;;)
+    {
+      if (sceSifBindRpc(&D_00159990, 0x8000059A, 0) < 0)
+      {
+        if (D_001312D0[0] > 0)
+        {
+          scePrintf(D_00152F90);
+        }
+        for (spin = 0x100000; spin != (-1); spin--)
+        {
+        }
+
+        continue;
+      }
+      if (D_00159990.unk24 != 0)
+      {
+        break;
+      }
+      for (spin = 0x100000; spin != (-1); spin--)
+      {
+      }
+
+    }
+
+    if (mode)
+    {
+      D_00131304[0] = 0;
+    }
+    else
+    {
+      D_00131304[0] = 0;
+    }
   }
-  goto loop_9;
-  block_7:
-  loop_8:
-  if (((void *) (-new_var)) != var_2_46)
-  {
-    goto loop_8;
-  }
-
-
-  loop_9:
-  if (sceSifBindRpc(&D_00159990, 0x8000059A, 0) < 0)
-  {
-    goto block_11;
-  }
-
-  goto block_17;
-  block_11:
-  var_2_65 = D_FFFFF;
-
-  if (new_var2[0] <= 0)
-  {
-    goto block_14;
-  }
-  scePrintf(D_00152F90);
-  var_2_65 = (void *) 0x100000;
-  block_14:
-  loop_15:
-  if (((void *) (-new_var)) != var_2_65)
-  {
-    goto loop_15;
-  }
-
-
-  goto loop_9;
-  block_17:
-  var_2_46 = D_FFFFF;
-
-  if (D_00159990.unk24 == 0)
-  {
-    goto block_7;
-  }
-  *((s32 *) 0x131304) = 0;
-  new_var3 = (s32 *) D_001599D0;
-  goto block_20;
-  block_19:
-  block_20:
-  *new_var3 = arg0;
-
-
+  D_001599D0[0] = mode;
   sceSifWriteBackDCache(D_001599D0, 4);
-  if (sceSifCallRpc(&D_00159990, 0, 0, D_001599D0, 4, (s32) D_001324C0, 4, 0, 0) < 0)
+  if (sceSifCallRpc(&D_00159990, 0, 0, D_001599D0, 4, D_001324C0, 4, 0, 0) < 0)
   {
-    goto block_22;
+    fail:
+    SignalSema(D_001312EC[0]);
+
+    if (mode == 8)
+    {
+      return -1;
+    }
+    return 6;
   }
-  goto block_24;
-  block_22:
-  block_23:
-  SignalSema(D_001312EC);
-
-
-  return ((arg0 ^ 8) != 0) ? (6) : (-1);
-  block_24:
-  if (new_var2[0] <= 0)
+  if (D_001312D0[0] > 0)
   {
-    goto block_26;
+    scePrintf(D_00152FB0);
   }
-
-  scePrintf(D_00152FB0);
-  block_26:
-  temp_16_129 = *((volatile u32 *) (((u32) D_001324C0) | 0x20000000));
-
-  SignalSema(D_001312EC);
-  var_2_28 = temp_16_129;
-  block_27:
-  return var_2_28;
-
+  result = *((s32 *) (((u32) D_001324C0) | 0x20000000));
+  SignalSema(D_001312EC[0]);
+  return result;
 }
 #endif /* NON_MATCHING */

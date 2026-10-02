@@ -32,13 +32,17 @@ s32 FUN_0021a1e0(void) {
     struct Ids ids;
     struct Texts texts;
     struct MenuEntry *e;
+    int nv;
     s32 n;
     s32 i;
     s32 id;
 
+    nv = 0;
     ids = D_001E8728;
     texts = D_001E8748;
+    do {
     n = 0;
+    do {
     for (i = 0; i < 12; i++) {
         id = ids.v[i];
         if (id != -1 && D_0015EDC0[id] != 0) {
@@ -50,6 +54,8 @@ s32 FUN_0021a1e0(void) {
             n++;
         }
     }
+    } while (0);
+    } while (nv);
     D_001D3B10[n].text = 0;
     return 0;
 }

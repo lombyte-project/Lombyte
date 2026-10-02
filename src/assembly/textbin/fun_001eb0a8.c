@@ -4,170 +4,137 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001eb0a8/FUN_001eb0a8.s", FUN_001eb0a8);
 #else
-#include "rnc/fun_001eb0a8_types.h"
 #include "types.h"
 
+typedef struct { f32 x, y, z, w; } Vec4 __attribute__((aligned(16)));
 
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;
+    u8 pad20[0x30];
+    u8 k0;
+    u8 k1;
+    u8 pad52[2];
+    f32 t;
+    u8 pad58[0x19];
+    u8 b71;
+    u8 pad72[0xD];
+    u8 b7F;
+    u8 pad80[0x26];
+    s16 hA6;
+} Actor;
 
+typedef struct {
+    u8 pad0[0x78];
+    Vec4 *keys;
+} ActorKeys;
 
-extern s32 D_0013CAE4[];
+typedef struct {
+    u8 pad0[0x34];
+    s32 time;
+    s32 frame;
+    s32 index;
+    s16 len;
+    u8 pad42[2];
+    s16 count;
+    u8 pad46[0x132];
+    Actor *actors[1];
+} Cutscene;
+
+extern Cutscene D_0018CB20;
+extern f32 D_0015F43C;
+extern s32 D_0015F604;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
-extern s32 D_0015EF58[];
-extern s32 D_0015F43C[];
-extern s32 D_0015F604;
-extern struct M2c_D_0018CB20 D_0018CB20;
-extern void InitializeTransferCommand();
-extern void func_001E9410();
-extern void func_001E9428();
-extern void func_001E9430();
-extern void func_001EAF88();
-extern s32 func_001F96F8();
-extern void func_001F9A10();
-extern void func_001F9A68();
-extern void func_001F9DC8();
-extern s32 func_001FA6C0();
-extern void func_001FCE28();
-extern void func_002049F0();
-extern void func_0020C880();
-extern void func_0020DEF8();
-extern void func_002192A8();
-extern void func_0022CA50();
-void FUN_001eb0a8(void) {
-    u8 sp_slot[0xA0]; s32 sp10;
-    f32 temp_f0_25;
-    f32 temp_f0_80;
-    s32 temp_16_85;
-    s32 temp_2_134;
-    s32 temp_2_208;
-    s32 temp_2_71;
-    s32 temp_3_200;
-    s32 temp_3_28;
-    s32 temp_4_29;
-    s32 temp_4_52;
-    s32 var_18_57;
-    void **var_21_66;
-    struct M2c_temp_17_70 *temp_17_70;
+extern s32 D_0015EF58;
+extern s32 D_0013CAE4[];
+extern void InitializeTransferCommand(void);
+extern void func_001E9410(Actor *);
+extern void func_001E9428(void);
+extern void func_001E9430(void);
+extern void func_001EAF88(void);
+extern s32 func_001F96F8(s32);
+extern void func_001F9A10(Vec4 *, Vec4 *, Vec4 *);
+extern void func_001F9A68(Vec4 *, Vec4 *, f32);
+extern f32 func_001F9DC8(f32);
+extern f32 func_001FA6C0(s32);
+extern void func_001FCE28(void);
+extern void func_002049F0(s32);
+extern void func_0020C880(Actor *);
+extern void func_0020DEF8(Actor *);
+extern void func_002192A8(void);
+extern void func_0022CA50(void);
+
+void FUN_001eb0a8(void)
+{
+    Vec4 a;
+    Vec4 b;
+    Actor *act;
+    Vec4 *keys;
+    s32 i;
+    s32 k;
 
     func_001E9430();
-    temp_f0_25 = D_0015F43C[0] - 0.0625f;
-    temp_3_28 = D_0018CB20.unk38 + 1;
-    temp_4_29 = D_0018CB20.unk34 + 1;
-    D_0018CB20.unk38 = temp_3_28;
-    D_0018CB20.unk34 = temp_4_29;
-    D_0015F43C[0] = temp_f0_25;
-    if (!(temp_f0_25 < 0.0f)) {
-        goto block_2;
+    D_0015F43C -= 0.0625f;
+    D_0018CB20.frame++;
+    D_0018CB20.time++;
+    if (D_0015F43C < 0.0f) {
+        D_0015F43C = 0.0f;
     }
-    D_0015F43C[0] = 0.0f;
-block_2:
-    if (temp_4_29 < D_0018CB20.unk40) {
-        goto block_4;
+    if (D_0018CB20.time >= D_0018CB20.len) {
+        D_0018CB20.index = 0;
+        D_0018CB20.time = 0;
+        func_002049F0(0);
+    } else if (D_0018CB20.frame >= 0x60) {
+        func_002049F0(++D_0018CB20.index);
     }
-    D_0018CB20.unk3C = 0;
-    D_0018CB20.unk34 = 0;__asm__ volatile ("" : : "r" (&D_0018CB20));
-    
-    func_002049F0(0, &D_0018CB20);
-    goto block_6;
-block_4:
-    if (temp_3_28 < 0x60) {
-        goto block_6;
-    }
-    temp_4_52 = D_0018CB20.unk3C + 1;
-    D_0018CB20.unk3C = temp_4_52;
-    func_002049F0(temp_4_52, &D_0018CB20);
-block_6:
-    var_18_57 = 0;
     func_001EAF88();
-    if (D_0018CB20.unk44 <= 0) {
-        goto block_11;
+    for (i = 0; i < D_0018CB20.count; i++) {
+        act = D_0018CB20.actors[i];
+        k = D_0018CB20.frame >> 1;
+        act->k0 = k;
+        act->k1 = k + 1;
+        func_0020C880(act);
+        act->t = func_001FA6C0(D_0018CB20.frame & 1) * 0.5f;
+        keys = ((ActorKeys *)act)->keys;
+        func_001F9A68(&a, &keys[act->k0], 1.0f - act->t);
+        func_001F9A68(&b, &keys[act->k1], act->t);
+        func_001F9A10(&act->pos, &a, &b);
+        act->b71 = 0xFF;
+        func_0020DEF8(act);
+        act->b7F = 0;
+        if (act->hA6 == 0) {
+            func_001E9410(act);
+        }
     }
-    var_21_66 = ((u8 *)&D_0018CB20) + 0x178;
-loop_8:
-    temp_17_70 = *(s32 **)var_21_66;
-    temp_2_71 = (s32) D_0018CB20.unk38 >> 1;
-    temp_17_70->unk50 = (u8) temp_2_71;
-    temp_17_70->unk51 = (u8) (temp_2_71 + 1);
-    func_0020C880(temp_17_70);
-    temp_f0_80 = func_001FA6C0(D_0018CB20.unk38 & 1) * 0.5f;
-    temp_16_85 = temp_17_70->unk78;
-    temp_17_70->unk54 = temp_f0_80;
-    func_001F9A68(sp_slot, temp_16_85 + ((u32)temp_17_70->unk50 * 0x10), 1.0f - temp_f0_80);
-    func_001F9A68(&sp10, temp_16_85 + ((u32)temp_17_70->unk51 * 0x10), temp_17_70->unk54);
-    func_001F9A10(((u8 *)temp_17_70) + 0x10, sp_slot, &sp10);
-    temp_17_70->unk71 = 0xFF;
-    func_0020DEF8(temp_17_70);
-    temp_17_70->unk7F = 0;
-    if (temp_17_70->unkA6 != 0) {
-        goto block_10;
-    }
-    func_001E9410(temp_17_70);
-block_10:
-    var_18_57 += 1;
-    var_21_66 += 4;
-    if (var_18_57 < D_0018CB20.unk44) {
-        goto loop_8;
-    }
-block_11:
     func_001E9428();
-    if (*(s32 *)0x15F604 != 0) {
-        goto block_19;
+    if (D_0015F604 == 0) {
+        D_0015EF58++;
+        if (func_001F96F8(0x3C) < D_0015EF58) {
+            if (++D_0015EF50 > 0x40) {
+                D_0015EF50 = 0x40;
+            }
+        }
+        if (func_001F96F8(0x78) < D_0015EF58) {
+            D_0015EF54 = (s32)(func_001F9DC8((D_0015EF58 - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
+        }
+        if (D_0013CAE4[0] & 0x840) {
+            InitializeTransferCommand();
+        }
+        func_0022CA50();
+    } else if (D_0015F604 == 3) {
+        D_0015EF58 = func_001F96F8(0x3C);
+        if ((D_0015EF50 -= 0x10) < 0) {
+            D_0015EF50 = 0;
+        }
+        if ((D_0015EF54 -= 0x10) < 0) {
+            D_0015EF54 = 0;
+        }
+        func_002192A8();
+        func_0022CA50();
+    } else if (D_0015F604 == 4) {
+        func_001FCE28();
+        func_0022CA50();
     }
-    D_0015EF58[0] += 1;
-    if (func_001F96F8(0x3C) >= D_0015EF58[0]) {
-        goto block_15;
-    }
-    temp_2_134 = D_0015EF50 + 1;
-    D_0015EF50 = temp_2_134;
-    if (temp_2_134 < 0x41) {
-        goto block_15;
-    }
-    D_0015EF50 = 0x40;
-block_15:
-    if (func_001F96F8(0x78) >= D_0015EF58[0]) {
-        goto block_17;
-    }
-    func_001F9DC8(0x3C, ((f32) ((s32) (D_0015EF58[0] - func_001F96F8(0x78)) % 60) * 0.10471976f) + -3.1415927f);
-    D_0015EF54 = 0x42000060;
-block_17:
-    if (!(D_0013CAE4[0] & 0x840)) {
-        goto block_25;
-    }
-    InitializeTransferCommand();
-    goto block_25;
-block_19:
-    if (*(s32 *)0x15F604 != 3) {
-        goto block_26;
-    }
-    D_0015EF58[0] = func_001F96F8(0x3C);
-    temp_3_200 = D_0015EF50 - 0x10;
-    D_0015EF50 = temp_3_200;
-    if (temp_3_200 >= 0) {
-        goto block_22;
-    }
-    D_0015EF50 = 0;
-block_22:
-    temp_2_208 = D_0015EF54 - 0x10;
-    D_0015EF54 = temp_2_208;
-    if (temp_2_208 >= 0) {
-        goto block_24;
-    }
-    D_0015EF54 = 0;
-block_24:
-    func_002192A8();
-block_25:
-    func_0022CA50();
-    goto block_28;
-block_26:
-    if (*(s32 *)0x15F604 != 4) {
-        goto block_29;
-    }
-    func_001FCE28();
-    func_0022CA50();
-block_28:
-block_29:
-    return;
 }
-
-extern void func_001EB0A8(void) __attribute__((alias("FUN_001eb0a8")));
 #endif /* NON_MATCHING */
