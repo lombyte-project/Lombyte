@@ -345,8 +345,8 @@ extern DispatchRec D_001E8F80[];
 
 
 extern int FUN_001f44b8(int);
-extern float func_001F9DC8(float);
-extern float func_001F9DE0(float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float FUN_001fa580(float, float);
 extern void FUN_001f5ab0(float, float, float, float, float, int, int, int, int, int, int, int,
                            float, float);

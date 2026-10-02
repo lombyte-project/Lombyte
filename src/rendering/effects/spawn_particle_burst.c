@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/effects.c, func_001EE3B0). */
 extern int func_001F44B8(int);
-extern float func_001F9DC8(float);
-extern float func_001F9DE0(float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA580(float, float);
 extern void FUN_001f5ab0(float, float, float, float, float, int, int, int, int, int, int, int,
                            float, float);
@@ -47,10 +47,10 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2)
     case 1: {
         float tmp[6];
 
-        tmp[0] = func_001F9DE0(angle) * forty * *(float *)(p + 0x10);
-        tmp[1] = func_001F9DC8(angle) * forty * *(float *)(p + 0x10);
-        tmp[4] = func_001F9DC8(angle) * forty * *(float *)(p + 0x10);
-        tmp[5] = func_001F9DE0(angle) * -forty * *(float *)(p + 0x10);
+        tmp[0] = fast_sin(angle) * forty * *(float *)(p + 0x10);
+        tmp[1] = fast_cos(angle) * forty * *(float *)(p + 0x10);
+        tmp[4] = fast_cos(angle) * forty * *(float *)(p + 0x10);
+        tmp[5] = fast_sin(angle) * -forty * *(float *)(p + 0x10);
 
         k = *(float *)(p + 0x10) * forty;
         FUN_001f5ab0(arg1, arg2, k, k, angle,

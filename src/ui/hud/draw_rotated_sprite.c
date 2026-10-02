@@ -34,8 +34,8 @@ extern struct ScreenOfs D_0013E500;
 extern struct TexBank D_0019A3E8;
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f32 ang) __asm__("FUN_00200600");
 
@@ -52,10 +52,10 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
 
     pos.x = x;
     pos.y = y;
-    sz.x = cy * func_001F9DE0(ang);
-    sz.y = cy * func_001F9DC8(ang);
-    off.x = -cx * func_001F9DC8(ang);
-    off.y = cx * func_001F9DE0(ang);
+    sz.x = cy * fast_sin(ang);
+    sz.y = cy * fast_cos(ang);
+    off.x = -cx * fast_cos(ang);
+    off.y = cx * fast_sin(ang);
     FUN_001f9a10(&p0, &pos, &sz);
     FUN_001f9a28(&p0, &p0, &off);
     FUN_001f9a10(&p1, &pos, &sz);

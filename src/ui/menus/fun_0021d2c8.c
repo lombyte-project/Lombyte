@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MenuHelpTextState {
     u8 pad_0[0x38];
-    s32 unk38;
+    s32 saved_text_count;
     u8 pad_3C[0x14];
-    s32 unk50;
-    s32 unk54;
+    s32 load_state;
+    s32 saved_text_table;
 };
 
 extern s16 D_001516D8[];
@@ -12,19 +12,21 @@ extern s32 D_0015F6A0[];
 extern s32 D_001996FC[];
 extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
 extern s32 func_00225AC0();
-s32 FUN_0021d2c8(struct M2c_arg0 *arg0) {
-    register s32 temp_5_19;
-    register s32 v38;
+s32 restore_menu_help_text(struct MenuHelpTextState *menu) __asm__("FUN_0021d2c8");
 
-    if ((D_001516D8[0] != 0) && (arg0->unk50 == 1)) {
+s32 restore_menu_help_text(struct MenuHelpTextState *menu) {
+    register s32 saved_text_table;
+    register s32 saved_text_count;
+
+    if ((D_001516D8[0] != 0) && (menu->load_state == 1)) {
         request_audio_stream_break();
     }
     func_00225AC0(1);
-    temp_5_19 = arg0->unk54;
-    if (temp_5_19 != 0) {
-        v38 = arg0->unk38;
-        *(s32 *)0x15F6A0 = temp_5_19;
-        D_001996FC[0] = v38;
+    saved_text_table = menu->saved_text_table;
+    if (saved_text_table != 0) {
+        saved_text_count = menu->saved_text_count;
+        *(s32 *)0x15F6A0 = saved_text_table;
+        D_001996FC[0] = saved_text_count;
     }
     return 0;
 }

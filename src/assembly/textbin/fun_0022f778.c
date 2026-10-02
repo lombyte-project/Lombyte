@@ -77,7 +77,7 @@ extern s32 func_001F9AD8();
 extern f32 func_001F9B48(void *, void *);
 extern f32 func_001F9B80(void *, void *, void *);
 extern void func_001F9CF8(void *, void *, void *);
-extern f32 func_001F9DC8(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 func_001F9E90(f32, f32);
 extern f32 func_001FA580(f32, f32);
 extern f32 func_001FA5C8(f32, f32);
@@ -96,7 +96,7 @@ extern s32 func_00214E58(void *, s32, void *, void *, s32, f32);
 extern s32 func_00215B10();
 extern s32 func_002168A8();
 extern s32 func_00217B88();
-extern s32 func_00218D78();
+extern s32 pause_all_sounds();
 extern s32 func_0022CA50();
 extern s32 func_0022DC50();
 extern s32 func_0022EAA8();
@@ -323,7 +323,7 @@ block_35:
                     } while (temp_2_251 != 0xFF);
                 }
                 if (D_0013E030.unk20 == 0) {
-                    func_00218D78(0, var_5_227, 0x4A);
+                    pause_all_sounds(0, var_5_227, 0x4A);
                     D_001D5BF0[0] = 0xE;
                     D_0015F618 = 1;
                     return;
@@ -477,7 +477,7 @@ block_83:
                     func_001F4600(&func_0022DF40, temp_18_399);
                     if (D_0013E030.unk20 == 0) {
                         if (D_0018CB20.unk34 < func_001F96F8(0x168)) {
-                            var_4_628 = (s32) (func_001F9DC8(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
+                            var_4_628 = (s32) (fast_cos(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
                             if (temp_18_399->unkA6 == 0x215) {
                                 var_2_634 = (var_4_628 >> 1) | (var_4_628 << 8) | (var_4_628 << 0x10);
                             } else {
@@ -528,7 +528,7 @@ block_102:
                             func_0022F5B0(temp_18_399, D_0015ED6C * -4.0f);
                             func_0022F5B0(temp_18_399, D_0015ED6C * -3.0f);
                         }
-                        temp_4_775 = (s32) (func_001F9DC8(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
+                        temp_4_775 = (s32) (fast_cos(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
                         if (temp_18_399->unkA6 == 0x215) {
                             var_2_781 = (temp_4_775 >> 1) | (temp_4_775 << 8) | (temp_4_775 << 0x10);
                         } else {
@@ -555,7 +555,7 @@ block_102:
                             }
                             goto block_122;
                         }
-                        var_4_628 = (s32) (func_001F9DC8(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
+                        var_4_628 = (s32) (fast_cos(func_001FA6C0((D_0018CB20.unk34 & 0x3F) - 0x20) * 0.09817477f) * 80.0f) + 0x78;
                         if (temp_18_399->unkA6 == 0x215) {
                             var_2_634 = (var_4_628 >> 1) | (var_4_628 << 8) | (var_4_628 << 0x10);
                         } else {
@@ -699,7 +699,7 @@ block_123:
                 if (temp_16_1239 < func_001F96F8(0x96)) {
                     temp_f20_1249 = func_001FA6C0(temp_17_1234->unk24);
                     temp_16_1264 = temp_17_1234->unk24;
-                    var_f20_1267 = (1.0f - func_001F9DC8(temp_f20_1249 * (3.1415927f / func_001FA6C0(func_001F96F8(0x78))))) * 0.5f;
+                    var_f20_1267 = (1.0f - fast_cos(temp_f20_1249 * (3.1415927f / func_001FA6C0(func_001F96F8(0x78))))) * 0.5f;
                     if (temp_16_1264 < func_001F96F8(0x78)) {
                         var_f20_1267 = 1.0f;
                     }
@@ -823,10 +823,10 @@ extern void func_0022F778(void) __attribute__((alias("FUN_0022f778")));
 typedef unsigned int u128 __attribute__((mode(TI)));
 
 typedef union {
-    u128 q;
-    f32 f[4];
-    u8 b[16];
-} Vec4;
+    u128 quadword;
+    f32 components[4];
+    u8 bytes[16];
+} Vector4;
 
 typedef struct {
     u8 pad0[6];
@@ -835,152 +835,152 @@ typedef struct {
     u8 count;          /* 0x0C */
     u8 padD[0x48 - 0xD];
     s32 frames[1];     /* 0x48 */
-} Model;
+} RenderModel;
 
-typedef struct Moby {
+typedef struct ResidentRenderObject {
     u8 pad0[0x10];
-    Vec4 pos;          /* 0x10 */
+    Vector4 position;          /* 0x10 */
     u8 state;          /* 0x20 */
     u8 pad21[3];
-    Model *model;      /* 0x24 */
+    RenderModel *model;      /* 0x24 */
     u8 pad28[0xA];
-    s16 unk32;         /* 0x32 */
+    s16 selected_index;         /* 0x32 */
     u16 flags;         /* 0x34 */
     u8 pad36[2];
     s64 unk38;         /* 0x38 */
-    Vec4 rot;          /* 0x40 */
-    u8 unk50;
-    u8 unk51;
-    u8 unk52;
-    u8 unk53;
+    Vector4 rotation;          /* 0x40 */
+    u8 current_frame;
+    u8 next_frame;
+    u8 selected_a;
+    u8 selected_b;
     f32 blend;         /* 0x54 */
     u8 pad58[0x71 - 0x58];
-    u8 unk71;
-    u8 unk72;
+    u8 cached_selector;
+    u8 opacity;
     u8 unk73;
     u8 pad74[4];
-    u8 *verts;         /* 0x78 */
+    u8 *animation_positions;         /* 0x78 */
     u8 pad7C[3];
     u8 unk7F;
     u8 pad80[0x10];
     s32 color;         /* 0x90 */
     s32 unk94;         /* 0x94 */
     u8 pad98[0xE];
-    s16 oclass;        /* 0xA6 */
+    s16 class_id;        /* 0xA6 */
     u8 padA8[0xA];
     s16 unkB2;         /* 0xB2 */
     u8 padB4[8];
     u8 unkBC;          /* 0xBC */
     u8 padBD[3];
-    Vec4 mtx[4];       /* 0xC0 */
-} Moby;
+    Vector4 transform[4];       /* 0xC0 */
+} ResidentRenderObject;
 
 typedef struct {
-    Vec4 pos;
-    f32 rot[4];
-} Frame;
+    Vector4 position;
+    f32 rotation[4];
+} CameraKeyframe;
 
 typedef struct {
     u8 pad0[0x34];
     s32 time;          /* 0x34 */
     s32 frame;         /* 0x38 */
-    s32 unk3C;         /* 0x3C */
+    s32 sequence_frame;         /* 0x3C */
     s16 end;           /* 0x40 */
     u8 pad42[2];
     s16 count;         /* 0x44 */
     u8 pad46[0x54 - 0x46];
-    Frame *frames;     /* 0x54 */
+    CameraKeyframe *frames;     /* 0x54 */
     u8 pad58[0x178 - 0x58];
-    Moby *objs[1];     /* 0x178 */
-} Transfer;
+    ResidentRenderObject *objects[1];     /* 0x178 */
+} ResidentPlaybackState;
 
 typedef struct {
-    Moby *player;      /* 0x00 */
+    ResidentRenderObject *player;      /* 0x00 */
     u8 pad4[4];
-    Moby *unk8;        /* 0x08 */
+    ResidentRenderObject *attachment;        /* 0x08 */
     u8 padC[4];
-    Moby *m10;         /* 0x10 */
-    Moby *m14;         /* 0x14 */
+    ResidentRenderObject *companion_a;         /* 0x10 */
+    ResidentRenderObject *companion_b;         /* 0x14 */
     u8 pad18[8];
     s32 state;         /* 0x20 */
     s16 timer;         /* 0x24 */
-    s16 idx;           /* 0x26 */
+    s16 content_variant;           /* 0x26 */
     s16 skip;          /* 0x28 */
     u8 pad2A[2];
     s16 unk2C;         /* 0x2C */
     u8 pad2E[2];
     s32 path;          /* 0x30 */
-    s32 from;          /* 0x34 */
-    s32 to;            /* 0x38 */
-    f32 t;             /* 0x3C */
+    s32 source_camera_index;          /* 0x34 */
+    s32 destination_camera_index;            /* 0x38 */
+    f32 path_progress;             /* 0x3C */
     f32 speed;         /* 0x40 */
-    f32 len;           /* 0x44 */
+    f32 path_segment_length;           /* 0x44 */
     f32 blend;         /* 0x48 */
-    f32 blendVel;      /* 0x4C */
+    f32 interpolation_velocity;      /* 0x4C */
     s32 trail;         /* 0x50 */
-    s32 trailLen;      /* 0x54 */
+    s32 history_count;      /* 0x54 */
     u8 pad58[8];
-    Vec4 unk60;        /* 0x60 */
-    Vec4 unk70;        /* 0x70 */
-    Vec4 startPos;     /* 0x80 */
-    Vec4 pathPos;      /* 0x90 */
-    Vec4 startRot;     /* 0xA0 */
+    Vector4 unk60;        /* 0x60 */
+    Vector4 unk70;        /* 0x70 */
+    Vector4 startPos;     /* 0x80 */
+    Vector4 pathPos;      /* 0x90 */
+    Vector4 startRot;     /* 0xA0 */
     f32 unkB0;
     f32 rotY;          /* 0xB4 */
     f32 rotZ;          /* 0xB8 */
     f32 unkBC;
-    Vec4 trailA[32];   /* 0xC0 */
-    Vec4 trailB[32];   /* 0x2C0 */
-} Cutscene;
+    Vector4 trailA[32];   /* 0xC0 */
+    Vector4 trailB[32];   /* 0x2C0 */
+} ResidentCinematicState;
 
 typedef struct {
-    s32 n;
+    s32 point_index;
     s32 pad[3];
-    Vec4 p[1];         /* 0x10: x, y, z, angle */
-} Path;
+    Vector4 p[1];         /* 0x10: x, y, z, angle */
+} ScriptedPath;
 
 typedef struct {
     u8 pad0[0x30];
-    Vec4 pos;          /* 0x30 */
+    Vector4 position;          /* 0x30 */
     u8 pad40[0x34];
     f32 rotY;          /* 0x74 */
     f32 rotZ;          /* 0x78 */
     u8 pad7C[4];
-} CamNode;
+} CameraBlendNode;
 
 typedef struct {
     u8 pad0[0x140];
-    Vec4 pos;          /* 0x140 */
-    Vec4 unk150;       /* 0x150 */
+    Vector4 position;          /* 0x140 */
+    Vector4 unk150;       /* 0x150 */
     u8 pad160[0x350 - 0x160];
-    Vec4 fwd;          /* 0x350 */
-    Vec4 right;        /* 0x360 */
-    Vec4 up;           /* 0x370 */
-} Camera;
+    Vector4 forward;          /* 0x350 */
+    Vector4 right;        /* 0x360 */
+    Vector4 up;           /* 0x370 */
+} ResidentCameraState;
 
 typedef struct {
     u8 pad0[0x1C];
     s32 unk1C;
     u8 pad20[0x3A];
     u16 unk5A;
-} Sound;
+} DialoguePlaybackState;
 
 typedef struct {
     u8 pad0[0x2080];
-    Moby *unk2080;
-} Level;
+    ResidentRenderObject *reference_object;
+} LevelObjectState;
 
 typedef struct {
-    Vec4 a;
-    Vec4 b;
-} VecPair;
+    Vector4 a;
+    Vector4 b;
+} PositionPair;
 
 extern s32 D_0013CAE4[];
 extern u8 D_0013D4C0[];
-extern Cutscene D_0013E030;
-extern Level D_0013F350;
+extern ResidentCinematicState D_0013E030;
+extern LevelObjectState D_0013F350;
 extern u8 D_001413F5[];
-extern Sound D_001516D0;
+extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
@@ -992,17 +992,17 @@ extern f32 D_0015F440;
 extern s32 D_0015F5B0;
 extern s32 D_0015F604;
 extern s32 D_0015F618[1];
-extern Moby *D_0015FF1C;
-extern CamNode *D_00160034;
+extern ResidentRenderObject *D_0015FF1C;
+extern CameraBlendNode *D_00160034;
 extern s32 D_00160510[1] __attribute__((sda));
-extern Camera D_00186F40;
-extern Transfer D_0018CB20;
+extern ResidentCameraState D_00186F40;
+extern ResidentPlaybackState D_0018CB20;
 extern f32 D_0018CDB0[4];
-extern Path *D_001CC3B0[];
+extern ScriptedPath *D_001CC3B0[];
 extern s32 D_001D5BF0 NOT_SDA;
-extern VecPair D_001D99B0[];
-extern Vec4 D_001D9C80[];
-extern Vec4 D_001D9CB0[];
+extern PositionPair D_001D99B0[];
+extern Vector4 D_001D9C80[];
+extern Vector4 D_001D9CB0[];
 extern u8 D_0022E1B0[];
 
 extern void CalculateDmaTransferAddress(void);
@@ -1017,89 +1017,91 @@ extern void func_001E93F0(void *, void *, s32, s32, s32);
 extern void func_001E93F8(void *);
 extern void func_001E9400(void *);
 extern void func_001E9408(void);
-extern void func_001E9410(Moby *);
-extern void func_001E9418(Moby *);
+extern void func_001E9410(ResidentRenderObject *);
+extern void func_001E9418(ResidentRenderObject *);
 extern void func_001E9420(void);
 extern void func_001E9428(void);
 extern void func_001E9430(void);
 extern void func_001E9438(void);
 extern void func_001E9440(void *, void *, s32, s32);
-extern void func_001E9450(Moby *, Moby *);
-extern void func_001EDAA8(void);
-extern void func_001F2D98(void);
-extern void func_001F4600(void *, Moby *) __asm__("FUN_001f4600");
-extern void func_001F47B8(void *, Moby *) __asm__("FUN_001f47b8");
-extern void func_001F4A58(s32);
+extern void func_001E9450(ResidentRenderObject *, ResidentRenderObject *);
+extern void update_camera(void) __asm__("func_001EDAA8");
+extern void update_view_context(void) __asm__("func_001F2D98");
+extern void enqueue_callback_list_1(void *, ResidentRenderObject *) __asm__("FUN_001f4600");
+extern void enqueue_callback_list_4(void *, ResidentRenderObject *) __asm__("FUN_001f47b8");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern f32 func_001F96E8(f32);
-extern s32 func_001F96F8(s32);
-extern f32 func_001F99C0(f32);
+extern s32 scale_ticks(s32) __asm__("func_001F96F8");
+extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
 extern void func_001F99F8(void *);
-extern void func_001F9A10(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void func_001F9A40(void *, void *, void *, f32);
-extern void func_001F9A68(void *, void *, f32);
-extern void func_001F9AD8(void *, void *, void *);
-extern f32 func_001F9B48(void *, void *);
+extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 func_001F9B80(void *, void *, void *);
 extern void func_001F9CF8(void *, void *, void *);
-extern f32 func_001F9DC8(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 func_001F9E90(f32, f32);
-extern f32 func_001FA580(f32, f32);
-extern f32 func_001FA5C8(f32, f32);
-extern f32 func_001FA6C0(s32);
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void func_00201A28(void);
-extern void func_002049F0(s32) __asm__("FUN_002049f0");
-extern Moby *func_0020C4F8(s32);
-extern void func_0020C828(Moby *);
-extern void func_0020C880(Moby *);
+extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
+extern ResidentRenderObject *func_0020C4F8(s32);
+extern void func_0020C828(ResidentRenderObject *);
+extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void func_0020CFD0(void);
-extern void func_0020DEF8(Moby *);
-extern void func_00212E28(void);
-extern void func_00213700(Moby *);
-extern void func_00213F38(f32 *, f32 *, f32, f32, f32, f32);
-extern void func_00214E58(Path *, s32, void *, void *, s32, f32);
-extern void func_00215B10(void) __asm__("FUN_00215b10");
-extern void func_002168A8(s32) __asm__("FUN_002168a8");
+extern void refresh_resident_object_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
+extern void update_visible_resident_objects(void) __asm__("func_00212E28");
+extern void update_moby_shadow_range(ResidentRenderObject *) __asm__("func_00213700");
+extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern void sample_camera_path(ScriptedPath *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
+extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern void func_00217B88(void);
-extern void func_00218D78(s32) __asm__("FUN_00218d78");
+extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern void func_0022CA50(void);
 extern void func_0022DC50(void);
-extern void func_0022EAA8(void);
-extern void func_0022F5B0(Moby *, f32);
-extern void func_0022DF40();
-extern void func_0022E420();
-extern void func_002327A0();
+extern void update_level_gameplay_frame(void) __asm__("func_0022EAA8");
+extern void func_0022F5B0(ResidentRenderObject *, f32);
+extern void draw_light_flare() __asm__("func_0022DF40");
+extern void build_resident_indexed_texture_warp_meshes() __asm__("func_0022E420");
+extern void render_environment_mapped_object() __asm__("func_002327A0");
 
-void FUN_0022f778(void) {
-    Vec4 m[4];
-    s32 flag;
-    s32 limit;
+void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
+
+void update_resident_gameplay_state(void) {
+    Vector4 scratch_vectors[4];
+    s32 keyframe_flags;
+    s32 ticks_per_bank;
     s32 skip;
-    s32 i;
-    s32 n;
-    Moby *o;
-    Moby *mb;
-    Moby *obj;
-    s32 cnt;
-    s32 lim;
-    Moby *pl;
-    s32 j;
-    f32 g;
-    Frame *fr;
-    f32 *rot;
-    u8 *verts;
-    s32 lo;
-    Path *path;
-    f32 ang;
-    f32 maxc;
-    f32 k;
-    f32 f;
+    s32 object_index;
+    s32 point_index;
+    ResidentRenderObject *object;
+    ResidentRenderObject *object_cursor;
+    ResidentRenderObject *expired_object;
+    s32 release_index;
+    s32 bank_tick_limit;
+    ResidentRenderObject *player;
+    s32 path_point_index;
+    f32 camera_blend_step;
+    CameraKeyframe *keyframe;
+    f32 *keyframe_angles;
+    u8 *animation_positions;
+    s32 current_frame;
+    ScriptedPath *path;
+    f32 segment_angle;
+    f32 maximum_turn;
+    f32 turn_scale;
+    f32 blend;
 
     D_0013E030.timer++;
     switch (D_0013E030.state) {
     case 0:
     case 8:
         func_001E9430();
-        func_00212E28();
+        update_visible_resident_objects();
         func_0022DC50();
         func_001E9420();
         func_00217B88();
@@ -1109,13 +1111,13 @@ void FUN_0022f778(void) {
         if (D_0015F43C < 0.0f) {
             D_0015F43C = 0.0f;
         }
-        limit = D_0015ED80 ? 0x50 : 0x60;
+        ticks_per_bank = D_0015ED80 ? 0x50 : 0x60;
         skip = D_0013E030.skip;
-        if ((D_0013CAE4[0] & 0x50) && func_001F96F8(30) < D_0018CB20.time && D_0015F43C == 0.0f) {
-            if (D_0013E030.state == 0 && D_0018CB20.time < func_001F96F8(D_00160510[D_0013E030.idx] - 30)) {
+        if ((D_0013CAE4[0] & 0x50) && scale_ticks(30) < D_0018CB20.time && D_0015F43C == 0.0f) {
+            if (D_0013E030.state == 0 && D_0018CB20.time < scale_ticks(D_00160510[D_0013E030.content_variant] - 30)) {
                 skip = 1;
             }
-            if (D_0013E030.state == 8 && D_0018CB20.time < D_0018CB20.end - func_001F96F8(30)) {
+            if (D_0013E030.state == 8 && D_0018CB20.time < D_0018CB20.end - scale_ticks(30)) {
                 skip = 1;
             }
         }
@@ -1124,14 +1126,14 @@ void FUN_0022f778(void) {
                 D_001516D0.unk5A = 5;
             }
             if (D_0013E030.state == 0) {
-                D_0018CB20.time = func_001F96F8(D_00160510[D_0013E030.idx]);
-                D_0018CB20.unk3C = D_0018CB20.time / limit;
-                func_002049F0(D_0018CB20.unk3C);
-                D_0018CB20.frame = D_0018CB20.time % limit;
+                D_0018CB20.time = scale_ticks(D_00160510[D_0013E030.content_variant]);
+                D_0018CB20.sequence_frame = D_0018CB20.time / ticks_per_bank;
+                parse_space_scene_chunk(D_0018CB20.sequence_frame);
+                D_0018CB20.frame = D_0018CB20.time % ticks_per_bank;
                 if (D_0013E030.skip) {
                     D_0013E030.skip = 0;
                 } else {
-                    func_001F4A58(4);
+                    fade_to_black(4);
                 }
                 D_0015F43C = 1.0f;
             } else {
@@ -1144,26 +1146,26 @@ void FUN_0022f778(void) {
             }
             CalculateDmaTransferAddress();
             D_0018CDB0[0] = 0.63f;
-            func_001F2D98();
-            for (cnt = 0; cnt < D_0018CB20.count; cnt++) {
-                obj = D_0018CB20.objs[cnt];
-                if (obj != 0) {
-                    obj->model->count--;
-                    obj->model->frames[obj->model->count] = 0;
-                    func_0020C828(obj);
+            update_view_context();
+            for (release_index = 0; release_index < D_0018CB20.count; release_index++) {
+                expired_object = D_0018CB20.objects[release_index];
+                if (expired_object != 0) {
+                    expired_object->model->count--;
+                    expired_object->model->frames[expired_object->model->count] = 0;
+                    func_0020C828(expired_object);
                 }
-                if (D_0013E030.unk8 != 0) {
-                    func_0020C828(D_0013E030.unk8);
+                if (D_0013E030.attachment != 0) {
+                    func_0020C828(D_0013E030.attachment);
                 }
             }
             D_0013E030.player->flags &= ~1;
-            for (mb = D_0015FF1C; mb->state != 0xFF; mb++) {
-                if (!(mb->state & 0x80) && (mb->oclass == 0x4A || mb->oclass == 0xCB)) {
-                    mb->flags &= ~0x80;
+            for (object_cursor = D_0015FF1C; object_cursor->state != 0xFF; object_cursor++) {
+                if (!(object_cursor->state & 0x80) && (object_cursor->class_id == 0x4A || object_cursor->class_id == 0xCB)) {
+                    object_cursor->flags &= ~0x80;
                 }
             }
             if (D_0013E030.state == 0) {
-                func_00218D78(0);
+                pause_all_sounds(0);
                 D_001D5BF0 = 0xE;
                 D_0015F618[0] = 1;
                 return;
@@ -1180,179 +1182,179 @@ void FUN_0022f778(void) {
             func_001E9440(&D_0013E030.unk60, &D_0013E030.unk70, 0, 1);
             return;
         }
-        lim = D_0015ED80 ? 0x50 : 0x60;
-        if (D_0018CB20.frame >= lim) {
-            func_002049F0(++D_0018CB20.unk3C);
+        bank_tick_limit = D_0015ED80 ? 0x50 : 0x60;
+        if (D_0018CB20.frame >= bank_tick_limit) {
+            parse_space_scene_chunk(++D_0018CB20.sequence_frame);
         }
-        fr = &D_0018CB20.frames[D_0018CB20.frame];
-        rot = fr->rot;
-        flag = fr->pos.b[12];
-        D_0018CDB0[0] = rot[3];
-        func_001F2D98();
-        qcopy(&D_00186F40.pos, &fr->pos);
-        func_001F9CF8(&D_00186F40.pos, &D_00186F40.pos, D_0013E030.player->mtx);
-        func_001F9A10(&D_00186F40.pos, &D_00186F40.pos, &D_0013E030.player->pos);
-        ang = func_001FA580(rot[2], D_0013E030.player->rot.f[2]);
-        sceVu0UnitMatrix(m);
-        SceVu0RotMatrixX(m, m, fr->rot[0]);
-        SceVu0RotMatrixY(m, m, rot[1]);
-        sceVu0RotMatrixZ(m, m, ang);
-        D_00186F40.fwd.f[0] = -m[2].f[0];
-        D_00186F40.right.f[0] = -m[0].f[0];
-        D_00186F40.up.f[0] = m[1].f[0];
-        D_00186F40.fwd.f[1] = -m[2].f[1];
-        D_00186F40.right.f[1] = -m[0].f[1];
-        D_00186F40.up.f[1] = m[1].f[1];
-        D_00186F40.fwd.f[2] = -m[2].f[2];
-        D_00186F40.right.f[2] = -m[0].f[2];
-        D_00186F40.up.f[2] = m[1].f[2];
+        keyframe = &D_0018CB20.frames[D_0018CB20.frame];
+        keyframe_angles = keyframe->rotation;
+        keyframe_flags = keyframe->position.bytes[12];
+        D_0018CDB0[0] = keyframe_angles[3];
+        update_view_context();
+        qcopy(&D_00186F40.position, &keyframe->position);
+        func_001F9CF8(&D_00186F40.position, &D_00186F40.position, D_0013E030.player->transform);
+        add_vectors(&D_00186F40.position, &D_00186F40.position, &D_0013E030.player->position);
+        segment_angle = fast_add_rotations(keyframe_angles[2], D_0013E030.player->rotation.components[2]);
+        sceVu0UnitMatrix(scratch_vectors);
+        SceVu0RotMatrixX(scratch_vectors, scratch_vectors, keyframe->rotation[0]);
+        SceVu0RotMatrixY(scratch_vectors, scratch_vectors, keyframe_angles[1]);
+        sceVu0RotMatrixZ(scratch_vectors, scratch_vectors, segment_angle);
+        D_00186F40.forward.components[0] = -scratch_vectors[2].components[0];
+        D_00186F40.right.components[0] = -scratch_vectors[0].components[0];
+        D_00186F40.up.components[0] = scratch_vectors[1].components[0];
+        D_00186F40.forward.components[1] = -scratch_vectors[2].components[1];
+        D_00186F40.right.components[1] = -scratch_vectors[0].components[1];
+        D_00186F40.up.components[1] = scratch_vectors[1].components[1];
+        D_00186F40.forward.components[2] = -scratch_vectors[2].components[2];
+        D_00186F40.right.components[2] = -scratch_vectors[0].components[2];
+        D_00186F40.up.components[2] = scratch_vectors[1].components[2];
         if (D_0015EDB4 != 0) {
-            func_001F9AD8(&D_00186F40.right, &D_00186F40.up, &D_00186F40.fwd);
+            fast_vec_cross(&D_00186F40.right, &D_00186F40.up, &D_00186F40.forward);
         }
-        for (i = 0; i < D_0018CB20.count; i++) {
-            o = D_0018CB20.objs[i];
-            lo = D_0018CB20.frame >> 1;
-            o->unk50 = lo;
-            o->unk51 = lo + 1;
-            func_0020C880(o);
-            o->blend = func_001FA6C0(D_0018CB20.frame & 1) * 0.5f;
-            if (flag != 0 && (D_0018CB20.frame & 1)) {
-                o->blend = 1.0f;
+        for (object_index = 0; object_index < D_0018CB20.count; object_index++) {
+            object = D_0018CB20.objects[object_index];
+            current_frame = D_0018CB20.frame >> 1;
+            object->current_frame = current_frame;
+            object->next_frame = current_frame + 1;
+            update_moby_animation_state(object);
+            object->blend = convert_integer_to_float(D_0018CB20.frame & 1) * 0.5f;
+            if (keyframe_flags != 0 && (D_0018CB20.frame & 1)) {
+                object->blend = 1.0f;
             }
-            verts = o->verts;
-            func_001F9A68(&m[0], verts + o->unk50 * 16, 1.0f - o->blend);
-            func_001F9A68(&m[1], verts + o->unk51 * 16, o->blend);
-            func_001F9A10(&o->pos, &m[0], &m[1]);
-            func_001F9CF8(&o->pos, &o->pos, D_0013E030.player->mtx);
-            func_001F9A10(&o->pos, &o->pos, &D_0013E030.player->pos);
-            o->rot.f[2] = D_0013E030.player->rot.f[2];
-            o->unk71 = 0xFF;
-            func_0020DEF8(o);
-            if (o->oclass == 0) {
+            animation_positions = object->animation_positions;
+            scale_vector(&scratch_vectors[0], animation_positions + object->current_frame * 16, 1.0f - object->blend);
+            scale_vector(&scratch_vectors[1], animation_positions + object->next_frame * 16, object->blend);
+            add_vectors(&object->position, &scratch_vectors[0], &scratch_vectors[1]);
+            func_001F9CF8(&object->position, &object->position, D_0013E030.player->transform);
+            add_vectors(&object->position, &object->position, &D_0013E030.player->position);
+            object->rotation.components[2] = D_0013E030.player->rotation.components[2];
+            object->cached_selector = 0xFF;
+            refresh_resident_object_spatial_bounds(object);
+            if (object->class_id == 0) {
                 if (D_0013E030.state == 0) {
                     if (D_0015ED84 == 10 && D_0013D4C0[6] == 0) {
-                        o->unk7F = 0;
-                    } else if (D_0018CB20.time <= func_001F96F8(0x3E)) {
-                        o->unk7F = 0x18;
+                        object->unk7F = 0;
+                    } else if (D_0018CB20.time <= scale_ticks(0x3E)) {
+                        object->unk7F = 0x18;
                     } else {
-                        o->unk7F = 0;
+                        object->unk7F = 0;
                     }
-                } else if (func_001F96F8(360) < D_0018CB20.time) {
+                } else if (scale_ticks(360) < D_0018CB20.time) {
                     if (D_0015ED84 == 10 && D_0013D4C0[6] == 0) {
-                        o->unk7F = 0;
+                        object->unk7F = 0;
                     } else {
-                        o->unk7F = 0x18;
+                        object->unk7F = 0x18;
                     }
                 } else {
-                    o->unk7F = 0;
+                    object->unk7F = 0;
                 }
-            } else if (o->oclass == 10) {
+            } else if (object->class_id == 10) {
                 if (D_0013E030.state == 0) {
-                    if (D_0018CB20.time <= func_001F96F8(350)) {
-                        o->unk7F = 0x18;
+                    if (D_0018CB20.time <= scale_ticks(350)) {
+                        object->unk7F = 0x18;
                     } else {
-                        o->unk7F = 0;
+                        object->unk7F = 0;
                     }
-                } else if (D_0018CB20.time <= func_001F96F8(524)) {
-                    o->unk7F = 0;
+                } else if (D_0018CB20.time <= scale_ticks(524)) {
+                    object->unk7F = 0;
                 } else {
-                    o->unk7F = 0x18;
+                    object->unk7F = 0x18;
                 }
             }
-            if (o->unk7F != 0) {
-                func_00213700(o);
+            if (object->unk7F != 0) {
+                update_moby_shadow_range(object);
             }
-            if (o->oclass == 10) {
-                func_001E9418(o);
+            if (object->class_id == 10) {
+                func_001E9418(object);
             }
-            if (o->oclass == 0) {
-                func_001E9410(o);
+            if (object->class_id == 0) {
+                func_001E9410(object);
                 if ((D_0015ED84 == 10 && D_0013D4C0[6] != 0) || D_0015ED84 == 13) {
-                    if (D_0013E030.unk8 == 0) {
-                        D_0013E030.unk8 = func_0020C4F8(0x509);
-                        D_0013E030.unk8->unk32 = 0x40;
-                        D_0013E030.unk8->flags |= 0x806;
-                        D_0013E030.unk8->unk38 = o->unk38;
-                        if (D_0013E030.unk8->model->unk6 != 0) {
-                            D_0013E030.unk8->unk73 = 0x18;
+                    if (D_0013E030.attachment == 0) {
+                        D_0013E030.attachment = func_0020C4F8(0x509);
+                        D_0013E030.attachment->selected_index = 0x40;
+                        D_0013E030.attachment->flags |= 0x806;
+                        D_0013E030.attachment->unk38 = object->unk38;
+                        if (D_0013E030.attachment->model->unk6 != 0) {
+                            D_0013E030.attachment->unk73 = 0x18;
                         }
                     }
-                    func_001E9450(o, D_0013E030.unk8);
+                    func_001E9450(object, D_0013E030.attachment);
                 }
             }
-            if ((u16)o->oclass - 0x213U < 3) {
-                func_001F47B8(func_002327A0, o);
-                func_001F4600(func_0022DF40, o);
+            if ((u16)object->class_id - 0x213U < 3) {
+                enqueue_callback_list_4(render_environment_mapped_object, object);
+                enqueue_callback_list_1(draw_light_flare, object);
                 if (D_0013E030.state == 0) {
-                    if (D_0018CB20.time < func_001F96F8(360)) {
-                        s32 c = (s32)(func_001F9DC8(func_001FA6C0((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
-                        if (o->oclass == 0x215) {
-                            o->color = (c >> 1) | (c << 8) | (c << 16);
+                    if (D_0018CB20.time < scale_ticks(360)) {
+                        s32 color_intensity = (s32)(fast_cos(convert_integer_to_float((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
+                        if (object->class_id == 0x215) {
+                            object->color = (color_intensity >> 1) | (color_intensity << 8) | (color_intensity << 16);
                         } else {
-                            o->color = c | (c << 8) | (c << 16);
+                            object->color = color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
-                    } else if (D_0018CB20.time < func_001F96F8(0x1F8)) {
-                        s32 c = (s32)(((f32)D_0018CB20.time - func_001F96E8(360.0f)) * (D_0015ED60 * 1.25f));
-                        if (c >= 256) {
-                            c = 255;
+                    } else if (D_0018CB20.time < scale_ticks(0x1F8)) {
+                        s32 color_intensity = (s32)(((f32)D_0018CB20.time - func_001F96E8(360.0f)) * (D_0015ED60 * 1.25f));
+                        if (color_intensity >= 256) {
+                            color_intensity = 255;
                         }
-                        if (o->oclass == 0x215) {
-                            o->color = (c << 8) | (c << 16);
+                        if (object->class_id == 0x215) {
+                            object->color = (color_intensity << 8) | (color_intensity << 16);
                         } else {
-                            o->color = c | (c << 8) | (c << 16);
+                            object->color = color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
-                        if (func_001F96F8(0x1A4) < D_0018CB20.time) {
+                        if (scale_ticks(0x1A4) < D_0018CB20.time) {
                             D_0013E030.player->unkBC = (s32)(((f32)D_0018CB20.time - func_001F96E8(420.0f)) * (D_0015ED60 * 1.2f));
                             D_0013E030.player->unkB2 = 0;
-                            func_001F4600(D_0022E1B0, D_0013E030.player);
+                            enqueue_callback_list_1(D_0022E1B0, D_0013E030.player);
                         }
-                        if (func_001F96F8(0x1D0) < D_0018CB20.time) {
+                        if (scale_ticks(0x1D0) < D_0018CB20.time) {
                             D_0015F440 += 0.025f;
                             if (D_0015F440 > 1.0f) {
                                 D_0015F440 = 1.0f;
                             }
                         }
                     } else {
-                        o->color = 0xA0A0A0;
+                        object->color = 0xA0A0A0;
                         D_0015F440 -= 0.025f;
                         if (D_0015F440 < 0.0f) {
                             D_0015F440 = 0.0f;
                         }
                     }
-                } else if (D_0018CB20.time < func_001F96F8(0xF0)) {
-                    s32 c;
-                    if (D_0018CB20.time < func_001F96F8(0xC8)) {
-                        func_0022F5B0(o, D_0015ED6C * -4.0f);
-                        func_0022F5B0(o, D_0015ED6C * -3.0f);
+                } else if (D_0018CB20.time < scale_ticks(0xF0)) {
+                    s32 color_intensity;
+                    if (D_0018CB20.time < scale_ticks(0xC8)) {
+                        func_0022F5B0(object, D_0015ED6C * -4.0f);
+                        func_0022F5B0(object, D_0015ED6C * -3.0f);
                     }
-                    c = (s32)(func_001F9DC8(func_001FA6C0((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
-                    if (o->oclass == 0x215) {
-                        o->color = (c >> 1) | (c << 8) | (c << 16);
+                    color_intensity = (s32)(fast_cos(convert_integer_to_float((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
+                    if (object->class_id == 0x215) {
+                        object->color = (color_intensity >> 1) | (color_intensity << 8) | (color_intensity << 16);
                     } else {
-                        o->color = c | (c << 8) | (c << 16);
+                        object->color = color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
-                    o->unkBC = 0x32;
-                    o->unkB2 = 10;
-                    func_001F4600(D_0022E1B0, o);
-                } else if (D_0018CB20.time <= func_001F96F8(360)) {
-                    s32 c;
-                    if (D_0018CB20.time < func_001F96F8(300)) {
+                    object->unkBC = 0x32;
+                    object->unkB2 = 10;
+                    enqueue_callback_list_1(D_0022E1B0, object);
+                } else if (D_0018CB20.time <= scale_ticks(360)) {
+                    s32 color_intensity;
+                    if (D_0018CB20.time < scale_ticks(300)) {
                         D_0013E030.player->unkBC = (s32)((func_001F96E8(300.0f) - (f32)D_0018CB20.time) * (D_0015ED60 * 1.5f));
                         D_0013E030.player->unkB2 = 0;
-                        func_001F4600(D_0022E1B0, D_0013E030.player);
+                        enqueue_callback_list_1(D_0022E1B0, D_0013E030.player);
                     }
-                    c = (s32)((func_001F96E8(360.0f) - (f32)D_0018CB20.time) * (D_0015ED60 * 1.25f));
-                    if (o->oclass == 0x215) {
-                        o->color = (c << 8) | (c << 16);
+                    color_intensity = (s32)((func_001F96E8(360.0f) - (f32)D_0018CB20.time) * (D_0015ED60 * 1.25f));
+                    if (object->class_id == 0x215) {
+                        object->color = (color_intensity << 8) | (color_intensity << 16);
                     } else {
-                        o->color = c | (c << 8) | (c << 16);
+                        object->color = color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
                 } else {
-                    s32 c = (s32)(func_001F9DC8(func_001FA6C0((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
-                    if (o->oclass == 0x215) {
-                        o->color = (c >> 1) | (c << 8) | (c << 16);
+                    s32 color_intensity = (s32)(fast_cos(convert_integer_to_float((D_0018CB20.time & 0x3F) - 32) * 0.09817477f) * 80.0f) + 120;
+                    if (object->class_id == 0x215) {
+                        object->color = (color_intensity >> 1) | (color_intensity << 8) | (color_intensity << 16);
                     } else {
-                        o->color = c | (c << 8) | (c << 16);
+                        object->color = color_intensity | (color_intensity << 8) | (color_intensity << 16);
                     }
                 }
             }
@@ -1365,141 +1367,141 @@ void FUN_0022f778(void) {
 
     case 3:
         func_001E9430();
-        func_00212E28();
+        update_visible_resident_objects();
         func_0022DC50();
         func_001E9420();
         func_00217B88();
         if (D_0013E030.timer == 0) {
             InitializeRenderState(0);
-            func_002168A8(0);
-            D_001516D0.unk1C = D_0013E030.idx + 0x9C4F;
-            func_001F4A58(func_001F96F8(12));
+            update_audio_stream_until_idle(0);
+            D_001516D0.unk1C = D_0013E030.content_variant + 0x9C4F;
+            fade_to_black(scale_ticks(12));
             while ((s16)D_001516D0.unk5A != 3) {
                 func_0022CA50();
                 sceGsSyncV(0);
             }
-            func_00215B10();
-            D_0013E030.player->unk52 = 1;
-            D_0013E030.player->unk53 = 2;
+            continue_audio_stream_if_ready();
+            D_0013E030.player->selected_a = 1;
+            D_0013E030.player->selected_b = 2;
             D_0013E030.player->blend = 0.0f;
-            func_0020C880(D_0013E030.player);
-            D_0013E030.player->unk72 = 0xFF;
+            update_moby_animation_state(D_0013E030.player);
+            D_0013E030.player->opacity = 0xFF;
             D_0013E030.player->unk94 = 0;
             if (D_0013E030.path >= 0) {
-                D_0013E030.m10 = func_0020C4F8(0);
-                D_0013E030.m10->unk32 = 0x1FF;
-                D_0013E030.m10->unk72 = 0xFF;
-                D_0013E030.m10->unk94 = 0;
-                D_0013E030.m10->flags |= 6;
-                D_0013E030.m10->unk38 = D_0013F350.unk2080->unk38;
-                D_0013E030.m14 = func_0020C4F8(10);
-                D_0013E030.m14->unk32 = 0x1FF;
-                D_0013E030.m14->unk72 = 0xFF;
-                D_0013E030.m14->unk94 = 0;
-                D_0013E030.m14->flags |= 6;
-                D_0013E030.m14->unk38 = D_0013F350.unk2080->unk38;
+                D_0013E030.companion_a = func_0020C4F8(0);
+                D_0013E030.companion_a->selected_index = 0x1FF;
+                D_0013E030.companion_a->opacity = 0xFF;
+                D_0013E030.companion_a->unk94 = 0;
+                D_0013E030.companion_a->flags |= 6;
+                D_0013E030.companion_a->unk38 = D_0013F350.reference_object->unk38;
+                D_0013E030.companion_b = func_0020C4F8(10);
+                D_0013E030.companion_b->selected_index = 0x1FF;
+                D_0013E030.companion_b->opacity = 0xFF;
+                D_0013E030.companion_b->unk94 = 0;
+                D_0013E030.companion_b->flags |= 6;
+                D_0013E030.companion_b->unk38 = D_0013F350.reference_object->unk38;
             }
-            func_001E93F0(&D_00186F40.pos, &D_00186F40.unk150, 1, 0, 0);
+            func_001E93F0(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
             D_0013E030.blend = 0.0f;
-            D_0013E030.blendVel = 0.0f;
+            D_0013E030.interpolation_velocity = 0.0f;
             if (D_0013E030.path >= 0) {
                 path = D_001CC3B0[D_0013E030.path];
-                maxc = D_0013E030.blend;
-                path->p[0].f[3] = maxc;
-                for (j = 1; j < path->n - 1; j++) {
-                    ang = func_001F9E90(path->p[j].f[0] - path->p[j - 1].f[0], path->p[j].f[1] - path->p[j - 1].f[1]);
-                    path->p[j].f[3] = func_001FA5C8(func_001F9E90(path->p[j + 1].f[0] - path->p[j].f[0], path->p[j + 1].f[1] - path->p[j].f[1]), ang);
-                    if (maxc < func_001F99C0(path->p[j].f[3])) {
-                        maxc = func_001F99C0(path->p[j].f[3]);
+                maximum_turn = D_0013E030.blend;
+                path->p[0].components[3] = maximum_turn;
+                for (path_point_index = 1; path_point_index < path->point_index - 1; path_point_index++) {
+                    segment_angle = func_001F9E90(path->p[path_point_index].components[0] - path->p[path_point_index - 1].components[0], path->p[path_point_index].components[1] - path->p[path_point_index - 1].components[1]);
+                    path->p[path_point_index].components[3] = fast_subtract_rotations(func_001F9E90(path->p[path_point_index + 1].components[0] - path->p[path_point_index].components[0], path->p[path_point_index + 1].components[1] - path->p[path_point_index].components[1]), segment_angle);
+                    if (maximum_turn < AbsoluteFloat(path->p[path_point_index].components[3])) {
+                        maximum_turn = AbsoluteFloat(path->p[path_point_index].components[3]);
                     }
                 }
-                ang = func_001F9E90(path->p[path->n - 1].f[0] - path->p[path->n - 2].f[0], path->p[path->n - 1].f[1] - path->p[path->n - 2].f[1]);
-                path->p[path->n - 1].f[3] = func_001FA5C8(func_001F9E90(path->p[0].f[0] - path->p[path->n - 1].f[0], path->p[0].f[1] - path->p[path->n - 1].f[1]), ang);
-                k = 0.34906584f / maxc;
-                for (n = 0; n < path->n; n++) {
-                    path->p[n].f[3] *= k;
+                segment_angle = func_001F9E90(path->p[path->point_index - 1].components[0] - path->p[path->point_index - 2].components[0], path->p[path->point_index - 1].components[1] - path->p[path->point_index - 2].components[1]);
+                path->p[path->point_index - 1].components[3] = fast_subtract_rotations(func_001F9E90(path->p[0].components[0] - path->p[path->point_index - 1].components[0], path->p[0].components[1] - path->p[path->point_index - 1].components[1]), segment_angle);
+                turn_scale = 0.34906584f / maximum_turn;
+                for (point_index = 0; point_index < path->point_index; point_index++) {
+                    path->p[point_index].components[3] *= turn_scale;
                 }
-                D_0013E030.len = func_001F9B48(&path->p[0], &path->p[1]);
-                D_0013E030.t = 0.0f;
+                D_0013E030.path_segment_length = distance_xyz(&path->p[0], &path->p[1]);
+                D_0013E030.path_progress = 0.0f;
                 D_0013E030.speed = 0.0f;
                 D_0013E030.trail = 0;
-                D_0013E030.trailLen = 0;
-                pl = D_0013E030.player;
-                qcopy(&D_0013E030.startPos, &pl->pos);
+                D_0013E030.history_count = 0;
+                player = D_0013E030.player;
+                qcopy(&D_0013E030.startPos, &player->position);
                 qcopy(&D_0013E030.pathPos, &path->p[0]);
-                qcopy(&D_0013E030.startRot, &pl->rot);
-                D_0013E030.rotY = func_001F9E90(func_001F9B80(&path->p[1], &path->p[0], &D_0013E030.startPos), path->p[0].f[2] - path->p[1].f[2]);
-                D_0013E030.rotZ = func_001F9E90(path->p[1].f[0] - path->p[0].f[0], path->p[1].f[1] - path->p[0].f[1]);
+                qcopy(&D_0013E030.startRot, &player->rotation);
+                D_0013E030.rotY = func_001F9E90(func_001F9B80(&path->p[1], &path->p[0], &D_0013E030.startPos), path->p[0].components[2] - path->p[1].components[2]);
+                D_0013E030.rotZ = func_001F9E90(path->p[1].components[0] - path->p[0].components[0], path->p[1].components[1] - path->p[0].components[1]);
             }
         }
-        if (D_0013E030.from >= 0 && D_0013E030.to >= 0) {
-            g = D_0015ED70 * 0.666f;
-            func_00213F38(&D_0013E030.blend, &D_0013E030.blendVel, 1.0f, g, g, D_0015ED6C * 0.5f);
-            func_001F9A40(&m[0], &D_00160034[D_0013E030.from].pos, &D_00160034[D_0013E030.to].pos, D_0013E030.blend);
-            func_001F99F8(&m[1]);
-            m[1].f[1] = func_001FA5C8(D_00160034[D_0013E030.to].rotY, D_00160034[D_0013E030.from].rotY) * D_0013E030.blend;
-            m[1].f[1] = func_001FA580(D_00160034[D_0013E030.from].rotY, m[1].f[1]);
-            m[1].f[2] = func_001FA5C8(D_00160034[D_0013E030.to].rotZ, D_00160034[D_0013E030.from].rotZ) * D_0013E030.blend;
-            m[1].f[2] = func_001FA580(D_00160034[D_0013E030.from].rotZ, m[1].f[2]);
-            func_001E93F8(&m[0]);
-            func_001E9400(&m[1]);
+        if (D_0013E030.source_camera_index >= 0 && D_0013E030.destination_camera_index >= 0) {
+            camera_blend_step = D_0015ED70 * 0.666f;
+            advance_accelerated_scalar(&D_0013E030.blend, &D_0013E030.interpolation_velocity, 1.0f, camera_blend_step, camera_blend_step, D_0015ED6C * 0.5f);
+            func_001F9A40(&scratch_vectors[0], &D_00160034[D_0013E030.source_camera_index].position, &D_00160034[D_0013E030.destination_camera_index].position, D_0013E030.blend);
+            func_001F99F8(&scratch_vectors[1]);
+            scratch_vectors[1].components[1] = fast_subtract_rotations(D_00160034[D_0013E030.destination_camera_index].rotY, D_00160034[D_0013E030.source_camera_index].rotY) * D_0013E030.blend;
+            scratch_vectors[1].components[1] = fast_add_rotations(D_00160034[D_0013E030.source_camera_index].rotY, scratch_vectors[1].components[1]);
+            scratch_vectors[1].components[2] = fast_subtract_rotations(D_00160034[D_0013E030.destination_camera_index].rotZ, D_00160034[D_0013E030.source_camera_index].rotZ) * D_0013E030.blend;
+            scratch_vectors[1].components[2] = fast_add_rotations(D_00160034[D_0013E030.source_camera_index].rotZ, scratch_vectors[1].components[2]);
+            func_001E93F8(&scratch_vectors[0]);
+            func_001E9400(&scratch_vectors[1]);
         }
         if (D_0013E030.path >= 0) {
-            if (D_0013E030.timer < func_001F96F8(150)) {
-                f = (1.0f - func_001F9DC8(func_001FA6C0(D_0013E030.timer) * (3.1415927f / func_001FA6C0(func_001F96F8(120))))) * 0.5f;
-                if (D_0013E030.timer >= func_001F96F8(120)) {
-                    f = 1.0f;
+            if (D_0013E030.timer < scale_ticks(150)) {
+                blend = (1.0f - fast_cos(convert_integer_to_float(D_0013E030.timer) * (3.1415927f / convert_integer_to_float(scale_ticks(120))))) * 0.5f;
+                if (D_0013E030.timer >= scale_ticks(120)) {
+                    blend = 1.0f;
                 }
-                D_0013E030.player->blend = f;
-                func_001F9A40(&D_0013E030.player->pos, &D_0013E030.startPos, &D_0013E030.pathPos, f);
-                D_0013E030.player->rot.f[0] = 0.0f;
-                D_0013E030.player->rot.f[1] = func_001FA580(D_0013E030.startRot.f[1], func_001FA5C8(D_0013E030.rotY, D_0013E030.startRot.f[1]) * f);
-                D_0013E030.player->rot.f[2] = func_001FA580(D_0013E030.startRot.f[2], func_001FA5C8(D_0013E030.rotZ, D_0013E030.startRot.f[2]) * f);
+                D_0013E030.player->blend = blend;
+                func_001F9A40(&D_0013E030.player->position, &D_0013E030.startPos, &D_0013E030.pathPos, blend);
+                D_0013E030.player->rotation.components[0] = 0.0f;
+                D_0013E030.player->rotation.components[1] = fast_add_rotations(D_0013E030.startRot.components[1], fast_subtract_rotations(D_0013E030.rotY, D_0013E030.startRot.components[1]) * blend);
+                D_0013E030.player->rotation.components[2] = fast_add_rotations(D_0013E030.startRot.components[2], fast_subtract_rotations(D_0013E030.rotZ, D_0013E030.startRot.components[2]) * blend);
                 if (D_0015F43C > 0.0f) {
                     D_0015F43C -= 0.125f;
                     if (D_0015F43C < 0.0f) {
                         D_0015F43C = 0.0f;
                     }
                 }
-                if (f < 1.0f) {
+                if (blend < 1.0f) {
                     func_0022F5B0(D_0013E030.player, D_0015ED6C * -3.75f);
                 }
             } else {
-                Path *pth;
+                ScriptedPath *active_path;
                 D_0013E030.speed += 0.8f;
-                pth = D_001CC3B0[D_0013E030.path];
+                active_path = D_001CC3B0[D_0013E030.path];
                 if (D_0013E030.speed > 100.0f) {
                     D_0013E030.speed = 100.0f;
                 }
                 if ((D_0013CAE4[0] & 0x50) && D_0015F43C < 0.0625f) {
                     D_0015F43C = 0.0625f;
                 }
-                if ((f32)(pth->n - 6) < D_0013E030.t && D_0015F43C < 0.0625f) {
+                if ((f32)(active_path->point_index - 6) < D_0013E030.path_progress && D_0015F43C < 0.0625f) {
                     D_0015F43C = 0.0625f;
                 }
-                if (D_0013E030.idx < 2) {
+                if (D_0013E030.content_variant < 2) {
                     D_0013E030.player->unkBC = 0x32;
                     D_0013E030.player->unkB2 = 10;
-                    func_001F4600(D_0022E1B0, D_0013E030.player);
+                    enqueue_callback_list_1(D_0022E1B0, D_0013E030.player);
                 }
-                D_0013E030.t += D_0013E030.speed * D_0015ED6C / D_0013E030.len;
-                if ((f32)(pth->n - 1) < D_0013E030.t || D_0015F43C >= 1.0f) {
+                D_0013E030.path_progress += D_0013E030.speed * D_0015ED6C / D_0013E030.path_segment_length;
+                if ((f32)(active_path->point_index - 1) < D_0013E030.path_progress || D_0015F43C >= 1.0f) {
                     D_0015F5B0 = 1;
                     D_0015F618[0] = 1;
                 } else {
-                    func_00214E58(pth, 1, &D_0013E030.player->pos, &D_0013E030.player->rot, 0, D_0013E030.t);
-                    D_0013E030.player->rot.f[0] = D_0013E030.player->rot.f[3];
+                    sample_camera_path(active_path, 1, &D_0013E030.player->position, &D_0013E030.player->rotation, 0, D_0013E030.path_progress);
+                    D_0013E030.player->rotation.components[0] = D_0013E030.player->rotation.components[3];
                     D_0013E030.trail = (D_0013E030.trail + 1) & 0x1F;
-                    if (D_0013E030.trailLen < 0x20) {
-                        D_0013E030.trailLen++;
+                    if (D_0013E030.history_count < 0x20) {
+                        D_0013E030.history_count++;
                     }
-                    func_001F9CF8(&D_0013E030.trailA[D_0013E030.trail], &D_001D99B0[D_0013E030.idx].a, D_0013E030.player->mtx);
-                    func_001F9A10(&D_0013E030.trailA[D_0013E030.trail], &D_0013E030.trailA[D_0013E030.trail], &D_0013E030.player->pos);
-                    D_0013E030.trailA[D_0013E030.trail].f[3] = 1.0f;
-                    func_001F9CF8(&D_0013E030.trailB[D_0013E030.trail], &D_001D99B0[D_0013E030.idx].b, D_0013E030.player->mtx);
-                    func_001F9A10(&D_0013E030.trailB[D_0013E030.trail], &D_0013E030.trailB[D_0013E030.trail], &D_0013E030.player->pos);
-                    D_0013E030.trailB[D_0013E030.trail].f[3] = 1.0f;
-                    func_001F4600(func_0022E420, D_0013E030.player);
+                    func_001F9CF8(&D_0013E030.trailA[D_0013E030.trail], &D_001D99B0[D_0013E030.content_variant].a, D_0013E030.player->transform);
+                    add_vectors(&D_0013E030.trailA[D_0013E030.trail], &D_0013E030.trailA[D_0013E030.trail], &D_0013E030.player->position);
+                    D_0013E030.trailA[D_0013E030.trail].components[3] = 1.0f;
+                    func_001F9CF8(&D_0013E030.trailB[D_0013E030.trail], &D_001D99B0[D_0013E030.content_variant].b, D_0013E030.player->transform);
+                    add_vectors(&D_0013E030.trailB[D_0013E030.trail], &D_0013E030.trailB[D_0013E030.trail], &D_0013E030.player->position);
+                    D_0013E030.trailB[D_0013E030.trail].components[3] = 1.0f;
+                    enqueue_callback_list_1(build_resident_indexed_texture_warp_meshes, D_0013E030.player);
                     if (D_0015F43C > 0.0f) {
                         D_0015F43C += 0.0625f;
                         if (D_0015F43C > 1.0f) {
@@ -1509,23 +1511,23 @@ void FUN_0022f778(void) {
                 }
             }
             {
-                Moby *p = D_0013E030.player;
-                Moby *m = D_0013E030.m10;
-                qcopy(&m->rot, &p->rot);
-                func_001F9CF8(&m->pos, &D_001D9C80[D_0013E030.idx], p->mtx);
+                ResidentRenderObject *p = D_0013E030.player;
+                ResidentRenderObject *scratch_vectors = D_0013E030.companion_a;
+                qcopy(&scratch_vectors->rotation, &p->rotation);
+                func_001F9CF8(&scratch_vectors->position, &D_001D9C80[D_0013E030.content_variant], p->transform);
             }
-            func_001F9A10(&D_0013E030.m10->pos, &D_0013E030.m10->pos, &D_0013E030.player->pos);
-            func_0020DEF8(D_0013E030.m10);
+            add_vectors(&D_0013E030.companion_a->position, &D_0013E030.companion_a->position, &D_0013E030.player->position);
+            refresh_resident_object_spatial_bounds(D_0013E030.companion_a);
             {
-                Moby *m = D_0013E030.m14;
-                Moby *p = D_0013E030.player;
-                qcopy(&m->rot, &p->rot);
-                func_001F9CF8(&m->pos, &D_001D9CB0[D_0013E030.idx], p->mtx);
+                ResidentRenderObject *scratch_vectors = D_0013E030.companion_b;
+                ResidentRenderObject *p = D_0013E030.player;
+                qcopy(&scratch_vectors->rotation, &p->rotation);
+                func_001F9CF8(&scratch_vectors->position, &D_001D9CB0[D_0013E030.content_variant], p->transform);
             }
-            func_001F9A10(&D_0013E030.m14->pos, &D_0013E030.m14->pos, &D_0013E030.player->pos);
-            func_0020DEF8(D_0013E030.m14);
+            add_vectors(&D_0013E030.companion_b->position, &D_0013E030.companion_b->position, &D_0013E030.player->position);
+            refresh_resident_object_spatial_bounds(D_0013E030.companion_b);
         }
-        func_001EDAA8();
+        update_camera();
         func_0022CA50();
         func_00201A28();
         func_0020CFD0();
@@ -1533,7 +1535,7 @@ void FUN_0022f778(void) {
         break;
 
     case 4:
-        func_0022EAA8();
+        update_level_gameplay_frame();
         break;
     case 1:
     case 2:

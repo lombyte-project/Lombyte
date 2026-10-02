@@ -6,95 +6,97 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00202d78/FUN_00202d78.s
 #else
 #include "types.h"
 
-struct DrawIn {
+struct ResidentRenderTextureDefinition {
     u8 pad_0[4];
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
+    s16 width;
+    s16 height;
+    s16 draw_control_count;
+    s16 texture_block_offset;
+    s16 mip_block_offset_0;
+    s16 mip_block_offset_1;
 };
 
 extern s32 D_0015EE8C;
 extern u64 D_0019E6C0[];
 extern u64 D_0019E6D8[];
-extern s32 func_001F97A0(s32);
+extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 
-void FUN_00202d78(u64 *q, struct DrawIn *in, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6)
+void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderTextureDefinition *texture, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index) __asm__("FUN_00202d78");
+
+void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderTextureDefinition *texture, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index)
 {
-    s32 lo;
-    s32 hi;
-    s32 r1;
-    s32 r2;
-    s32 g;
-    s32 x0;
-    s32 x1;
-    s32 y;
-    u64 *src;
-    u64 t;
-    u64 u;
-    u64 v;
-    u64 w;
-    s32 wd;
+    s32 width_units_128;
+    s32 width_units_64;
+    s32 width_log2;
+    s32 height_log2;
+    s32 gs_block_base;
+    s32 texture_block;
+    s32 mip_block_1;
+    s32 mip_block_0;
+    u64 *fallback_packet;
+    u64 texture_word;
+    u64 texture_address_word;
+    u64 mip_word;
+    u64 mip_address_word;
+    s32 draw_control_count;
 
-    hi = in->unk4 >> 6;
-    lo = in->unk4 >> 7;
-    if (hi <= 0) {
-        hi = 1;
+    width_units_64 = texture->width >> 6;
+    width_units_128 = texture->width >> 7;
+    if (width_units_64 <= 0) {
+        width_units_64 = 1;
     }
-    if (lo <= 0) {
-        lo = 1;
+    if (width_units_128 <= 0) {
+        width_units_128 = 1;
     }
-    r1 = func_001F97A0(in->unk4);
-    r2 = func_001F97A0(in->unk6);
-    g = D_0015EE8C >> 8;
-    x1 = in->unkE + g;
-    x0 = in->unkA + g;
-    y = in->unkC + g;
-    wd = in->unk8;
-    if (a6 >= 0) {
-        t = ((u64)a3 << 6) | 0x20;
-        t = ((u64)(wd - 1) << 2) | t;
-        t |= (u64)a2 << 32;
-        q[0] = t;
-        q += 2;
-        q[0] = a4 | ((u64)a5 << 2) | ((u64)a6 << 24);
-        q += 2;
-        t = ((u64)r1 << 26) | 0x1300000;
-        t = ((u64)hi << 14) | t;
-        t |= (u64)r2 << 30;
-        u = ((u64)x0 << 37) | ((u64)0x8000 << 19);
-        t |= u;
-        t |= (u64)-1 << 63;
-        v = ((u64)lo << 14) | ((u64)y << 20);
-        w = ((u64)x1 << 40) | ((u64)0x8000 << 19);
-        v |= w;
-        v |= (u64)0x8000 << 39;
-        q[0] = t;
-        q[2] = v;
-    } else if (a6 < -1) {
-        src = D_0019E6C0;
-        if (a6 == -3) {
-            src = D_0019E6D8;
+    width_log2 = highest_set_bit_index(texture->width);
+    height_log2 = highest_set_bit_index(texture->height);
+    gs_block_base = D_0015EE8C >> 8;
+    mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
+    texture_block = texture->texture_block_offset + gs_block_base;
+    mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
+    draw_control_count = texture->draw_control_count;
+    if (material_index >= 0) {
+        texture_word = ((u64)draw_shift << 6) | 0x20;
+        texture_word = ((u64)(draw_control_count - 1) << 2) | texture_word;
+        texture_word |= (u64)draw_high << 32;
+        packet[0] = texture_word;
+        packet += 2;
+        packet[0] = material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
+        packet += 2;
+        texture_word = ((u64)width_log2 << 26) | 0x1300000;
+        texture_word = ((u64)width_units_64 << 14) | texture_word;
+        texture_word |= (u64)height_log2 << 30;
+        texture_address_word = ((u64)texture_block << 37) | ((u64)0x8000 << 19);
+        texture_word |= texture_address_word;
+        texture_word |= (u64)-1 << 63;
+        mip_word = ((u64)width_units_128 << 14) | ((u64)mip_block_0 << 20);
+        mip_address_word = ((u64)mip_block_1 << 40) | ((u64)0x8000 << 19);
+        mip_word |= mip_address_word;
+        mip_word |= (u64)0x8000 << 39;
+        packet[0] = texture_word;
+        packet[2] = mip_word;
+    } else if (material_index < -1) {
+        fallback_packet = D_0019E6C0;
+        if (material_index == -3) {
+            fallback_packet = D_0019E6D8;
         }
-        t = ((u64)a2 << 32) | 0x20;
-        t = ((u64)a3 << 6) | t;
-        q[0] = t;
-        q += 2;
-        q[0] = 5;
-        q += 2;
-        q[0] = src[0];
-        q[2] = src[2];
+        texture_word = ((u64)draw_high << 32) | 0x20;
+        texture_word = ((u64)draw_shift << 6) | texture_word;
+        packet[0] = texture_word;
+        packet += 2;
+        packet[0] = 5;
+        packet += 2;
+        packet[0] = fallback_packet[0];
+        packet[2] = fallback_packet[2];
     } else {
-        t = ((u64)a2 << 32) | 0x20;
-        t = ((u64)a3 << 6) | t;
-        q[0] = t;
-        q += 2;
-        q[0] = 5;
-        q += 2;
-        q[0] = ((((u64)0x8000 << 29) | 0x9980) << 19) | 0x7FFB;
-        q[2] = 0;
+        texture_word = ((u64)draw_high << 32) | 0x20;
+        texture_word = ((u64)draw_shift << 6) | texture_word;
+        packet[0] = texture_word;
+        packet += 2;
+        packet[0] = 5;
+        packet += 2;
+        packet[0] = ((((u64)0x8000 << 29) | 0x9980) << 19) | 0x7FFB;
+        packet[2] = 0;
     }
 }
 #endif /* NON_MATCHING */

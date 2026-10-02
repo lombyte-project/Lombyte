@@ -24,95 +24,97 @@ typedef volatile u64 vu64;
 typedef float f32;
 typedef double f64;
 typedef s32 b32;
-struct M2c_D_0013D290
+struct LevelOverlayState
 {
   u8 pad_0[0xD4];
-  s32 unkD4;
+  s32 stage;
   u8 pad_D8[0x4];
-  s32 unkDC;
+  s32 selection;
 };
-struct M2c_D_0013E030
+struct LevelRenderState
 {
   u8 pad_0[0x58];
-  s32 unk58;
+  s32 mode;
 };
-struct M2c_D_0013E500
+struct LevelDisplayState
 {
   u8 pad_0[0x4];
-  s32 unk4;
+  s32 screen_height;
 };
-struct M2c_D_0018CD00
+struct LevelProjectionState
 {
   u8 pad_0[0xB0];
-  f32 unkB0;
+  f32 projection_scale;
 };
-extern struct M2c_D_0013D290 D_0013D290;
+extern struct LevelOverlayState D_0013D290;
 extern u8 D_0013DD43[];
-extern struct M2c_D_0013E030 D_0013E030;
-extern struct M2c_D_0013E500 D_0013E500;
+extern struct LevelRenderState D_0013E030;
+extern struct LevelDisplayState D_0013E500;
 extern s32 D_0015ED84;
 extern s32 D_0015F438;
 extern f32 D_0015F43C;
 extern s32 D_0015F620;
 extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];
-extern struct M2c_D_0018CD00 D_0018CD00;
+extern struct LevelProjectionState D_0018CD00;
 extern void AppendDmaTag(u32);
 extern void func_001F2260();
-extern void func_001F2D98();
+extern void update_view_context() __asm__("func_001F2D98");
 extern void func_001F3868();
 extern void func_001F4280(s32);
 extern void func_001F4398();
-extern s64 func_001F44B8(s32);
-extern void func_001F5210(s32, s32, s32, s32);
-extern void func_001F5450(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64);
-extern s32 func_001FA6D0(f32);
-extern void func_001FB368();
-extern void FUN_00200600(s32, s32, s64, f32, f32, f32, f32, f32);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void append_gif_transfer_packet() __asm__("func_001FB368");
+extern void draw_rotated_sprite(s32, s32, s64, f32, f32, f32, f32, f32) __asm__("FUN_00200600");
 extern void func_0020CC60(void);
 extern void func_0020CEF8();
 extern void func_0020D460(void);
-extern void func_0022B288();
-extern void func_0022E420(s32);
-extern void func_0022E8C8();
-extern void func_0022EA08(s32);
-extern void func_002327A0(s32);
-extern void func_002337B0(s32);
-extern void func_00233980(s32, s64);
+extern void draw_sky_shells() __asm__("func_0022B288");
+extern void build_resident_indexed_texture_warp_meshes(s32) __asm__("func_0022E420");
+extern void draw_resident_textured_quad() __asm__("func_0022E8C8");
+extern void draw_resident_textured_banner(s32) __asm__("func_0022EA08");
+extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 
 
-extern struct M2c_D_0013E500 D_0013E500_far __asm__("D_0013E500") __attribute__((section(".data")));
-void FUN_0022f288(void)
+extern struct LevelDisplayState D_0013E500_far __asm__("D_0013E500") __attribute__((section(".data")));
+void render_level_frame(void) __asm__("FUN_0022f288");
+
+void render_level_frame(void)
 {
-  f32 a;
-  f32 b;
-  f32 c;
-  s32 u;
-  s64 q;
+  f32 rotation_angle;
+  f32 screen_y;
+  f32 quad_extent;
+  s32 overlay_alpha;
+  s64 unused_texture;
   f32 fov;
-  struct M2c_D_0013E500 *scr;
-  s64 new_var;
-  func_001FB368();
+  struct LevelDisplayState *display_state;
+  s64 texture;
+  append_gif_transfer_packet();
   func_001F2260();
   func_0020CC60();
   func_001F3868();
-  fov = D_0018CD00.unkB0;
+  fov = D_0018CD00.projection_scale;
   D_0015F620 = -1;
   if (fov < 0.63f)
   {
-    D_0018CD00.unkB0 = 0.63f;
+    D_0018CD00.projection_scale = 0.63f;
   }
-  func_001F2D98();
+  update_view_context();
   func_001F2260();
-  func_0022B288();
-  D_0018CD00.unkB0 = fov;
-  func_001F2D98();
+  draw_sky_shells();
+  D_0018CD00.projection_scale = fov;
+  update_view_context();
   func_001F2260();
-  if (D_0013E030.unk58 == 4)
+  if (D_0013E030.mode == 4)
   {
     func_001F4280(1);
-    func_0022E8C8();
+    draw_resident_textured_quad();
     func_001F4398();
   }
   func_0020D460();
@@ -120,31 +122,31 @@ void FUN_0022f288(void)
   func_001F4280(1);
   if ((D_0015ED84 != 0) && ((D_0015ED84 != 1) || (D_0013DD43[0] != 0)))
   {
-    func_0022E420(D_0018CC98[0]);
+    build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
   }
-  if ((D_0013E030.unk58 == 4) && (D_0018CB54[0] >= 0x3D))
+  if ((D_0013E030.mode == 4) && (D_0018CB54[0] >= 0x3D))
   {
-    u = (D_0018CB54[0] - 0x3C) * 2;
-    if (u >= 0x81)
+    overlay_alpha = (D_0018CB54[0] - 0x3C) * 2;
+    if (overlay_alpha >= 0x81)
     {
-      u = 0x80;
+      overlay_alpha = 0x80;
     }
-    func_0022EA08(u);
+    draw_resident_textured_banner(overlay_alpha);
   }
   if ((D_0015ED84 != 0) && ((D_0015ED84 != 1) || (D_0013DD43[0] != 0)))
   {
-    func_002327A0(D_0018CC98[0]);
+    render_environment_mapped_object(D_0018CC98[0]);
   }
-  if ((D_0013D290.unkD4 >= 3) || (D_0013D290.unkDC >= 0))
+  if ((D_0013D290.stage >= 3) || (D_0013D290.selection >= 0))
   {
-    func_00233980(0x47, 0x3004B);
-    c = 272.0f;
-    new_var = func_001F44B8(2);
-    scr = &D_0013E500_far;
-    func_001F5450(0x2C, scr->unk4 - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40, 0x80808080, new_var);
-    b = (scr->unk4 - 0x40) * 16;
-    a = ((D_0015F438 % 55) * (-6.2831855f)) / 55.0f;
-    FUN_00200600(0x40, 0x40, func_001F44B8(3), 1216.0f, b, c, c, a);
+    vu1_add_g_sregister(0x47, 0x3004B);
+    quad_extent = 272.0f;
+    texture = get_effect_texture(2);
+    display_state = &D_0013E500_far;
+    draw_textured_quad(0x2C, display_state->screen_height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40, 0x80808080, texture);
+    screen_y = (display_state->screen_height - 0x40) * 16;
+    rotation_angle = ((D_0015F438 % 55) * (-6.2831855f)) / 55.0f;
+    draw_rotated_sprite(0x40, 0x40, get_effect_texture(3), 1216.0f, screen_y, quad_extent, quad_extent, rotation_angle);
   }
   func_001F4398();
   if (D_0015F43C > 0.0f)
@@ -153,9 +155,9 @@ void FUN_0022f288(void)
     {
       D_0015F43C = 1.0f;
     }
-    func_001F5210(0, 0, 0, func_001FA6D0(D_0015F43C * 128.0f));
+    emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_0015F43C * 128.0f));
   }
-  func_002337B0(0x10);
+  vu1_sync_chain(0x10);
   func_0020CEF8();
 }
 #endif /* NON_MATCHING */

@@ -66,7 +66,7 @@ extern Vec4 D_001DE710[3];
 extern struct { u8 pad0[0x10]; s32 mul; s32 far_int; s32 near_int; u8 pad1c[0x44]; Vec4 v[3]; u8 pad90[0x10]; s32 x; s32 y; } D_001DE740;
 
 extern f32 func_001F9E90(f32, f32);
-extern f32 func_001F9DC8(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern void func_001F9838(void *, void *, s32);
 extern void func_00233068(void);
 
@@ -102,10 +102,10 @@ void update_view_context(void) {
     v = &D_0018CD00;
     v->aspect_x = v->scr_x / v->width;
     v->aspect_y = v->scr_y / v->height;
-    v->fov.f[2] = 1.0f / func_001F9DC8(func_001F9E90(1.0f, v->fov.f[0]));
-    v->fov.f[3] = 1.0f / func_001F9DC8(func_001F9E90(1.0f, v->fov.f[1]));
-    a = 1.0f / func_001F9DC8(func_001F9E90(1.0f, v->fov.f[0] * v->aspect_x));
-    b = 1.0f / func_001F9DC8(func_001F9E90(1.0f, v->fov.f[1] * v->aspect_y));
+    v->fov.f[2] = 1.0f / fast_cos(func_001F9E90(1.0f, v->fov.f[0]));
+    v->fov.f[3] = 1.0f / fast_cos(func_001F9E90(1.0f, v->fov.f[1]));
+    a = 1.0f / fast_cos(func_001F9E90(1.0f, v->fov.f[0] * v->aspect_x));
+    b = 1.0f / fast_cos(func_001F9E90(1.0f, v->fov.f[1] * v->aspect_y));
     a /= v->fov.f[2];
     b /= v->fov.f[3];
     v->unk1D0.f[0] = v->aspect_x;

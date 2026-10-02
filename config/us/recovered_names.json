@@ -2867,7 +2867,7 @@
     },
     {
       "name": "viBufAddDMA__FP5ViBuf",
-      "unit": "assembly/textbin/video/decoder/vi_buf_add_dma",
+      "unit": "video/decoder/vi_buf_add_dma",
       "unit_size": "0x1fc",
       "match": "fragment",
       "address": "0x23bf70",
@@ -16908,8 +16908,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/video/decoder/vi_buf_add_dma",
-        "source_path": "src/assembly/textbin/video/decoder/vi_buf_add_dma.c",
+        "unit": "video/decoder/vi_buf_add_dma",
+        "source_path": "src/video/decoder/vi_buf_add_dma.c",
         "address": "0x0023bf70",
         "current_name": "FUN_0023bf70",
         "proposed_name": "vi_buf_add_dma",

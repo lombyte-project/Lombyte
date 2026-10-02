@@ -72,7 +72,7 @@ typedef struct
   s16 tbp;
   s16 cbp;
   s16 mbp;
-} TexEntry;
+} ResidentRenderTextureDefinition;
 typedef struct 
 {
   s16 size;
@@ -83,18 +83,18 @@ typedef struct
   s16 tbp1;
   s16 tbp2;
   s16 tbp3;
-} EnvTex;
+} ShrubMipTextureDefinition;
 typedef struct 
 {
-  s32 w0;
-  s32 w4;
+  s32 draw_high;
+  s32 draw_shift;
   u8 pad8[8];
-  s32 w10;
-  s32 w14;
+  s32 material_base;
+  s32 material_shift;
   u8 pad18[8];
-  s32 w20;
+  s32 material_index;
   u8 pad24[0x1C];
-} GsBlock;
+} ShrubRenderPacket;
 typedef struct 
 {
   u8 pad0[0x10];
@@ -109,120 +109,122 @@ typedef struct
     s32 w[2];
   } tex0;
   u64 miptbp1;
-} EnvRegs;
+} ShrubMipPacket;
 typedef struct 
 {
   s32 count;
-  s32 skip;
-} GroupHead;
+  s32 packet_offset_quadwords;
+} ShrubRenderGroupHeader;
 typedef struct 
 {
   u8 pad0[0x10];
-  GroupHead head;
-} Group;
+  ShrubRenderGroupHeader group_header;
+} ShrubRenderGroup;
 typedef struct 
 {
-  Group *group;
+  ShrubRenderGroup *group;
   s32 pad4;
-} GroupRef;
+} ShrubRenderGroupReference;
 typedef struct 
 {
   u8 pad0[0x10];
   f32 scale;
   u8 pad14[2];
-  s16 unk16;
-  s32 unk18;
-  EnvRegs *env;
+  s16 runtime_count;
+  s32 runtime_data;
+  ShrubMipPacket *mip_packet;
   u8 pad20[6];
-  u16 id;
-  s16 ngroups;
+  u16 class_slot;
+  s16 group_count;
   u8 pad2A[2];
-  s32 unk2C;
+  s32 packed_geometry;
   u8 pad30[0x10];
-  GroupRef groups[1];
-} Model;
+  ShrubRenderGroupReference groups[1];
+} ShrubRenderClass;
 typedef union 
 {
   u128 q;
   u8 b[16];
-} Map16;
+} MaterialMap;
 extern s32 D_001603CC;
 extern u8 D_001D80B0[];
 extern s16 D_001D8030[];
-extern Model *D_001D7F30[];
+extern ShrubRenderClass *D_001D7F30[];
 extern s32 D_001D8CB0[];
-extern Map16 D_001D92B0[];
+extern MaterialMap D_001D92B0[];
 extern s32 D_0015EE8C;
 extern u64 D_0019E540[];
-extern s32 func_001FA6D0(f32);
-extern s32 func_001F97A0(s32);
-void FUN_00203b08(Model *model, TexEntry *tex, u128 *map, EnvTex *envtex, s32 cls)
+extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
+extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+void register_shrub_render_class(ShrubRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, ShrubMipTextureDefinition *mip_texture, s32 class_id) __asm__("FUN_00203b08");
+
+void register_shrub_render_class(ShrubRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, ShrubMipTextureDefinition *mip_texture, s32 class_id)
 {
   s32 i;
   s32 j;
   s32 k;
-  s32 m;
-  s32 r;
-  s32 tbw[4];
-  s32 lo0;
-  s32 hi0;
-  s32 lo10;
-  s32 hi10;
-  s64 tw;
-  s64 cw;
-  u64 lw;
-  u64 lh;
-  s32 base;
-  Map16 *slot;
-  EnvRegs *env;
-  GroupHead *head;
-  GsBlock *blk;
-  TexEntry *e;
-  u64 d0;
-  u64 d1;
-  u64 d2;
-  u64 d3;
-  D_001D80B0[cls] = D_001603CC;
-  D_001D8030[D_001603CC] = cls;
-  D_001D7F30[D_001603CC] = model;
-  model->id = D_001603CC;
-  r = func_001FA6D0(model->scale * 1024.0f);
+  s32 material_index;
+  s32 fixed_threshold;
+  s32 mip_width_units[4];
+  s32 draw_high;
+  s32 draw_shift;
+  s32 material_base;
+  s32 material_shift;
+  s64 width_units_64;
+  s64 width_units_128;
+  u64 width_log2;
+  u64 height_log2;
+  s32 gs_block_base;
+  MaterialMap *slot_materials;
+  ShrubMipPacket *mip_packet;
+  ShrubRenderGroupHeader *group_header;
+  ShrubRenderPacket *packet;
+  ResidentRenderTextureDefinition *texture;
+  u64 draw_word;
+  u64 material_word;
+  u64 mip_word;
+  u64 texture_word;
+  D_001D80B0[class_id] = D_001603CC;
+  D_001D8030[D_001603CC] = class_id;
+  D_001D7F30[D_001603CC] = render_class;
+  render_class->class_slot = D_001603CC;
+  fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
   j = D_001603CC++;
-  D_001D8CB0[j] = r;
-  model->unk18 = 0;
-  model->unk16 = 0;
-  if (model->unk2C != 0)
+  D_001D8CB0[j] = fixed_threshold;
+  render_class->runtime_data = 0;
+  render_class->runtime_count = 0;
+  if (render_class->packed_geometry != 0)
   {
-    model->unk2C += (s32) model;
+    render_class->packed_geometry += (s32) render_class;
   }
-  for (i = 0; i < model->ngroups; i++)
+  for (i = 0; i < render_class->group_count; i++)
   {
-    model->groups[i].group = (Group *) (((s32) model->groups[i].group) + ((s32) model));
+    render_class->groups[i].group = (ShrubRenderGroup *) (((s32) render_class->groups[i].group) + ((s32) render_class));
   }
 
-  if (model->env != 0)
+  if (render_class->mip_packet != 0)
   {
-    env = (EnvRegs *) (((s32) model->env) + ((s32) model));
-    model->env = env;
-    lo10 = env->tex1.w[0];
-    hi10 = env->tex1.w[1];
-    if (envtex != 0)
+    mip_packet = (ShrubMipPacket *) (((s32) render_class->mip_packet) + ((s32) render_class));
+    render_class->mip_packet = mip_packet;
+    material_base = mip_packet->tex1.w[0];
+    material_shift = mip_packet->tex1.w[1];
+    if (mip_texture != 0)
     {
       for (i = 0; i < 4; i++)
       {
-        tbw[i] = envtex->size >> (i + 6);
-        if (tbw[i] <= 0)
+        mip_width_units[i] = mip_texture->size >> (i + 6);
+        if (mip_width_units[i] <= 0)
         {
-          tbw[i] = 1;
+          mip_width_units[i] = 1;
         }
       }
 
-      lw = func_001F97A0(envtex->size);
-      lh = func_001F97A0(envtex->h);
-      env->tex1.d = ((((u64) (envtex->w - 1)) << 2) | ((((u64) hi10) << 6) | 0x20)) | (((u64) lo10) << 32);
-      base = D_0015EE8C >> 8;
-      env->tex0.d = ((((((u64) (envtex->tbp + base)) | (((u64) tbw[0]) << 14)) | ((((u64) lw) << 26) | 0x1300000)) | (((u64) lh) << 30)) | ((((u64) (envtex->cbp + base)) << 37) | (((u64) 1) << 34))) | (((u64) 1) << 63);
-      env->miptbp1 = ((((((u64) (envtex->tbp1 + base)) | (((u64) tbw[1]) << 14)) | (((u64) (envtex->tbp2 + base)) << 20)) | (((u64) tbw[2]) << 34)) | (((u64) (envtex->tbp3 + base)) << 40)) | (((u64) tbw[3]) << 54);
+      width_log2 = highest_set_bit_index(mip_texture->size);
+      height_log2 = highest_set_bit_index(mip_texture->h);
+      mip_packet->tex1.d = ((((u64) (mip_texture->w - 1)) << 2) | ((((u64) material_shift) << 6) | 0x20)) | (((u64) material_base) << 32);
+      gs_block_base = D_0015EE8C >> 8;
+      mip_packet->tex0.d = ((((((u64) (mip_texture->tbp + gs_block_base)) | (((u64) mip_width_units[0]) << 14)) | ((((u64) width_log2) << 26) | 0x1300000)) | (((u64) height_log2) << 30)) | ((((u64) (mip_texture->cbp + gs_block_base)) << 37) | (((u64) 1) << 34))) | (((u64) 1) << 63);
+      mip_packet->miptbp1 = ((((((u64) (mip_texture->tbp1 + gs_block_base)) | (((u64) mip_width_units[1]) << 14)) | (((u64) (mip_texture->tbp2 + gs_block_base)) << 20)) | (((u64) mip_width_units[2]) << 34)) | (((u64) (mip_texture->tbp3 + gs_block_base)) << 40)) | (((u64) mip_width_units[3]) << 54);
     }
     else
     {
@@ -230,63 +232,63 @@ void FUN_00203b08(Model *model, TexEntry *tex, u128 *map, EnvTex *envtex, s32 cl
       {
       }
 
-      d1 = ((D_0019E540[(k * 3) + 1] & 0x1C) | ((((u64) hi10) << 6) | 0x20)) | (((u64) lo10) << 32);
-      env->tex0.d = D_0019E540[k * 3];
-      env->miptbp1 = D_0019E540[(k * 3) + 2];
-      env->tex1.d = d1;
+      material_word = ((D_0019E540[(k * 3) + 1] & 0x1C) | ((((u64) material_shift) << 6) | 0x20)) | (((u64) material_base) << 32);
+      mip_packet->tex0.d = D_0019E540[k * 3];
+      mip_packet->miptbp1 = D_0019E540[(k * 3) + 2];
+      mip_packet->tex1.d = material_word;
     }
   }
-  slot = &D_001D92B0[D_001D80B0[cls]];
-  slot->q = *map;
-  for (i = 0; i < model->ngroups; i++)
+  slot_materials = &D_001D92B0[D_001D80B0[class_id]];
+  slot_materials->q = *material_map;
+  for (i = 0; i < render_class->group_count; i++)
   {
-    head = &model->groups[i].group->head;
-    blk = (GsBlock *) ((((u8 *) head) + (head->skip * 16)) + 0x10);
-    for (j = 0; j < head->count; j++)
+    group_header = &render_class->groups[i].group->group_header;
+    packet = (ShrubRenderPacket *) ((((u8 *) group_header) + (group_header->packet_offset_quadwords * 16)) + 0x10);
+    for (j = 0; j < group_header->count; j++)
     {
-      m = slot->b[blk->w20];
-      lo0 = blk->w0;
-      hi0 = blk->w4;
-      lo10 = blk->w10;
-      hi10 = blk->w14;
-      if (tex != 0)
+      material_index = slot_materials->b[packet->material_index];
+      draw_high = packet->draw_high;
+      draw_shift = packet->draw_shift;
+      material_base = packet->material_base;
+      material_shift = packet->material_shift;
+      if (textures != 0)
       {
-        e = &tex[m];
-        lo10 = ((s16) e->size) >> 6;
-        tw = lo10;
-        cw = ((s16) e->size) >> 7;
-        if (tw <= 0)
+        texture = &textures[material_index];
+        material_base = ((s16) texture->size) >> 6;
+        width_units_64 = material_base;
+        width_units_128 = ((s16) texture->size) >> 7;
+        if (width_units_64 <= 0)
         {
-          tw = 1;
+          width_units_64 = 1;
         }
-        if (cw <= 0)
+        if (width_units_128 <= 0)
         {
-          cw = 1;
+          width_units_128 = 1;
         }
-        lw = func_001F97A0((s16) e->size);
-        lh = func_001F97A0(e->h);
-        base = D_0015EE8C >> 8;
-        d0 = ((((u64) (e->w - 1)) << 2) | ((((u64) hi0) << 6) | 0x20)) | (((u64) lo0) << 32);
-        d1 = (lo10 | (((u64) hi10) << 2)) | (((u64) m) << 24);
-        d2 = ((cw << 14) | (((u64) (e->cbp + base)) << 20)) | ((((u64) (e->mbp + base)) << 40) | (((u64) 1) << 34));
-        d2 |= ((u64) 1) << 54;
-        d3 = (((tw << 14) | ((lw << 26) | 0x1300000)) | (lh << 30)) | ((((u64) (e->tbp + base)) << 37) | (((u64) 1) << 34));
-        d3 |= ((u64) 1) << 63;
-        *((u64 *) (&blk->w0)) = d0;
-        *((u64 *) (&blk->w10)) = d1;
-        *((u64 *) (&blk->w20)) = d2;
-        *((u64 *) (((u8 *) blk) + 0x30)) = d3;
+        width_log2 = highest_set_bit_index((s16) texture->size);
+        height_log2 = highest_set_bit_index(texture->h);
+        gs_block_base = D_0015EE8C >> 8;
+        draw_word = ((((u64) (texture->w - 1)) << 2) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+        material_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
+        mip_word = ((width_units_128 << 14) | (((u64) (texture->cbp + gs_block_base)) << 20)) | ((((u64) (texture->mbp + gs_block_base)) << 40) | (((u64) 1) << 34));
+        mip_word |= ((u64) 1) << 54;
+        texture_word = (((width_units_64 << 14) | ((width_log2 << 26) | 0x1300000)) | (height_log2 << 30)) | ((((u64) (texture->tbp + gs_block_base)) << 37) | (((u64) 1) << 34));
+        texture_word |= ((u64) 1) << 63;
+        *((u64 *) (&packet->draw_high)) = draw_word;
+        *((u64 *) (&packet->material_base)) = material_word;
+        *((u64 *) (&packet->material_index)) = mip_word;
+        *((u64 *) (((u8 *) packet) + 0x30)) = texture_word;
       }
       else
       {
-        d0 = ((D_0019E540[(m * 3) + 1] & 0x1C) | ((((u64) hi0) << 6) | 0x20)) | (((u64) lo0) << 32);
-        d1 = (lo10 | (((u64) hi10) << 2)) | (((u64) m) << 24);
-        *((u64 *) (&blk->w0)) = d0;
-        *((u64 *) (&blk->w10)) = d1;
-        *((u64 *) (&blk->w20)) = D_0019E540[(m * 3) + 2];
-        *((u64 *) (((u8 *) blk) + 0x30)) = D_0019E540[m * 3];
+        draw_word = ((D_0019E540[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+        material_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
+        *((u64 *) (&packet->draw_high)) = draw_word;
+        *((u64 *) (&packet->material_base)) = material_word;
+        *((u64 *) (&packet->material_index)) = D_0019E540[(material_index * 3) + 2];
+        *((u64 *) (((u8 *) packet) + 0x30)) = D_0019E540[material_index * 3];
       }
-      blk++;
+      packet++;
     }
 
   }

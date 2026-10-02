@@ -8,34 +8,34 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002327a0/FUN_002327a0.s
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef float FVec4[4] __attribute__((aligned(16)));
+typedef float FloatVector4[4] __attribute__((aligned(16)));
 
 typedef struct {
     u128 q;
-} QWord;
+} Quadword;
 
 typedef struct {
-    s16 vert;
+    s16 vertex_index;
     s16 pad;
-} QuadCorner;
+} QuadCornerIndex;
 
 typedef struct {
-    QuadCorner c[4];
-} Quad;
+    QuadCornerIndex corners[4];
+} IndexedQuad;
 
 typedef struct {
     u8 pad0[0x10];
-    float x;
-    float y;
+    float position_x;
+    float position_y;
     u8 pad18[0x8E];
-    s16 oClass;
-} Moby;
+    s16 class_id;
+} EnvironmentMappedObject;
 
 typedef struct {
     u8 pad0[0x140];
-    float x;
-    float y;
-} Player;
+    float position_x;
+    float position_y;
+} EnvironmentCameraState;
 
 extern s32 D_0013E050[];
 extern s32 D_0015F604;
@@ -45,105 +45,107 @@ extern s32 D_001604AC __attribute__((sda));
 extern s32 D_00160520[2] __attribute__((sda));
 extern s32 D_00160530[2] __attribute__((sda));
 extern s32 D_00160540[2] __attribute__((sda));
-extern QWord *D_00160550[2] __attribute__((sda));
-extern QWord *D_00160560[2] __attribute__((sda));
-extern Quad *D_00160570[2] __attribute__((sda));
-extern Player D_00186F40;
-extern FVec4 D_00187080;
-extern QWord D_001DC4E0[];
+extern Quadword *D_00160550[2] __attribute__((sda));
+extern Quadword *D_00160560[2] __attribute__((sda));
+extern IndexedQuad *D_00160570[2] __attribute__((sda));
+extern EnvironmentCameraState D_00186F40;
+extern FloatVector4 D_00187080;
+extern Quadword D_001DC4E0[];
 extern float D_001DCB40[][2];
 extern float D_001DCE70[][2];
 
-extern unsigned long func_001F44B8(int);
-extern void func_001F7D30(void *, int, int);
-extern int func_001F96F8(int);
+extern unsigned long get_effect_texture(int) __asm__("func_001F44B8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern int scale_ticks(int) __asm__("func_001F96F8");
 extern void func_001F9740(s32 *);
-extern float func_001F9988(float);
+extern float square_root_float(float) __asm__("func_001F9988");
 extern float AbsoluteFloat(float) __asm__("func_001F99C0");
-extern void func_001F9A28(void *, void *, void *);
-extern void func_001F9A68(void *, void *, float);
-extern float func_001F9AB0(void *, void *);
-extern void func_001F9BF8(void *, void *, float);
-extern void func_001F9D20(void *, void *, void *);
-extern float func_001FA6C0(int);
-extern void func_0020CCA8(Moby *, int, void *);
+extern void subtract_vectors(void *, void *, void *) __asm__("func_001F9A28");
+extern void scale_vector(void *, void *, float) __asm__("func_001F9A68");
+extern float vector_dot_product(void *, void *) __asm__("func_001F9AB0");
+extern void normalize_vector(void *, void *, float) __asm__("func_001F9BF8");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
+extern void calculate_object_transform(EnvironmentMappedObject *, int, void *) __asm__("func_0020CCA8");
 
-void FUN_002327a0(Moby *moby) {
-    QWord m[4];
+void render_environment_mapped_object(EnvironmentMappedObject *object) __asm__("FUN_002327a0");
+
+void render_environment_mapped_object(EnvironmentMappedObject *object) {
+    Quadword quad_positions[4];
     int colors[4];
-    float uv[4][2];
-    unsigned long pkt[4];
-    FVec4 mtx[4];
-    FVec4 nrm;
-    FVec4 refl;
-    FVec4 dir;
-    Quad *quads;
-    QWord *verts;
-    QWord *normals;
-    int nquads;
-    int nverts;
-    int idx;
+    float texture_coordinates[4][2];
+    unsigned long quad_state[4];
+    FloatVector4 object_transform[4];
+    FloatVector4 normal;
+    FloatVector4 reflection;
+    FloatVector4 view_direction;
+    IndexedQuad *indexed_quads;
+    Quadword *positions;
+    Quadword *normals;
+    int quad_count;
+    int vertex_count;
+    int class_index;
     int color;
-    int flag;
-    int tex;
-    float t;
-    float s;
-    float x;
-    float y;
-    int i;
-    int j;
+    int mapping_enabled;
+    int unused_texture_index;
+    float transition_fraction;
+    float sphere_denominator;
+    float new_u;
+    float new_v;
+    int element_index;
+    int corner_index;
 
-    idx = moby->oClass - 0x212;
-    verts = D_00160560[idx];
-    normals = D_00160550[idx];
-    quads = D_00160570[idx];
-    nquads = D_00160540[idx];
-    nverts = D_00160530[idx];
+    class_index = object->class_id - 0x212;
+    positions = D_00160560[class_index];
+    normals = D_00160550[class_index];
+    indexed_quads = D_00160570[class_index];
+    quad_count = D_00160540[class_index];
+    vertex_count = D_00160530[class_index];
     if (D_0015F604 == 6 && D_0013E050[0] == 4) {
-        pkt[1] = func_001F44B8(1);
+        quad_state[1] = get_effect_texture(1);
     } else {
-        pkt[1] = func_001F44B8(0x15);
+        quad_state[1] = get_effect_texture(0x15);
     }
-    flag = 0;
-    color = D_00160520[idx];
-    pkt[2] = 0xFF9000000260;
-    pkt[3] = 0x8000000044;
-    pkt[0] = 0;
+    mapping_enabled = 0;
+    color = D_00160520[class_index];
+    quad_state[2] = 0xFF9000000260;
+    quad_state[3] = 0x8000000044;
+    quad_state[0] = 0;
     colors[3] = color;
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    func_0020CCA8(moby, 0, mtx);
+    calculate_object_transform(object, 0, object_transform);
     if (D_0015F604 != 0 ||
-        (AbsoluteFloat(D_00186F40.x - moby->x) < 16.0f && AbsoluteFloat(D_00186F40.y - moby->y) < 16.0f)) {
-        flag = 1;
+        (AbsoluteFloat(D_00186F40.position_x - object->position_x) < 16.0f && AbsoluteFloat(D_00186F40.position_y - object->position_y) < 16.0f)) {
+        mapping_enabled = 1;
     }
     if (D_0015F604 == 6 && D_0013E050[0] == 4) {
-        flag = 0;
+        mapping_enabled = 0;
     }
-    if (flag != 0 || D_001604A4 == 1) {
+    if (mapping_enabled != 0 || D_001604A4 == 1) {
         D_001604A8 = 1;
         func_001F9740(&D_001604AC);
-        t = func_001FA6C0(D_001604AC) / func_001FA6C0(func_001F96F8(0x3C));
-        for (i = 0; i < nverts; i++) {
-            func_001F9D20(&D_001DC4E0[i], &verts[i], mtx);
-            func_001F9A28(dir, &D_001DC4E0[i], D_00187080);
-            func_001F9BF8(dir, dir, 1.0f);
-            func_001F9D20(nrm, &normals[i], mtx);
-            func_001F9BF8(nrm, nrm, 0.1f);
-            func_001F9A68(refl, nrm, func_001F9AB0(nrm, dir) * 2.0f);
-            func_001F9A28(refl, dir, refl);
-            func_001F9BF8(refl, refl, 1.0f);
-            refl[2] += 1.0f;
-            s = func_001F9988(refl[2] * 2.0f) * 2.0f;
+        transition_fraction = convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_ticks(0x3C));
+        for (element_index = 0; element_index < vertex_count; element_index++) {
+            transform_vector(&D_001DC4E0[element_index], &positions[element_index], object_transform);
+            subtract_vectors(view_direction, &D_001DC4E0[element_index], D_00187080);
+            normalize_vector(view_direction, view_direction, 1.0f);
+            transform_vector(normal, &normals[element_index], object_transform);
+            normalize_vector(normal, normal, 0.1f);
+            scale_vector(reflection, normal, vector_dot_product(normal, view_direction) * 2.0f);
+            subtract_vectors(reflection, view_direction, reflection);
+            normalize_vector(reflection, reflection, 1.0f);
+            reflection[2] += 1.0f;
+            sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
             if (D_001604A4 == 1 || D_001604AC == 0) {
-                D_001DCB40[i][0] = refl[0] / s + 0.5f;
-                D_001DCB40[i][1] = refl[1] / s + 0.5f;
+                D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
             } else {
-                x = refl[0] / s + 0.5f;
-                D_001DCB40[i][0] = x + (D_001DCE70[i][0] - x) * t;
-                y = refl[1] / s + 0.5f;
-                D_001DCB40[i][1] = y + (D_001DCE70[i][1] - y) * t;
+                new_u = reflection[0] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][0] = new_u + (D_001DCE70[element_index][0] - new_u) * transition_fraction;
+                new_v = reflection[1] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][1] = new_v + (D_001DCE70[element_index][1] - new_v) * transition_fraction;
             }
         }
         if (D_001604A4 == 1) {
@@ -152,27 +154,27 @@ void FUN_002327a0(Moby *moby) {
     } else {
         if (D_001604A8 == 1) {
             D_001604A8 = 0;
-            for (i = 0; i < nverts; i++) {
-                D_001DCE70[i][0] = D_001DCB40[i][0];
-                D_001DCE70[i][1] = D_001DCB40[i][1];
-                func_001F9D20(&D_001DC4E0[i], &verts[i], mtx);
+            for (element_index = 0; element_index < vertex_count; element_index++) {
+                D_001DCE70[element_index][0] = D_001DCB40[element_index][0];
+                D_001DCE70[element_index][1] = D_001DCB40[element_index][1];
+                transform_vector(&D_001DC4E0[element_index], &positions[element_index], object_transform);
             }
         } else {
-            for (i = 0; i < nverts; i++) {
-                func_001F9D20(&D_001DC4E0[i], &verts[i], mtx);
+            for (element_index = 0; element_index < vertex_count; element_index++) {
+                transform_vector(&D_001DC4E0[element_index], &positions[element_index], object_transform);
             }
         }
-        D_001604AC = func_001F96F8(0x3C);
+        D_001604AC = scale_ticks(0x3C);
     }
-    for (i = 0; i < nquads; i++) {
-        for (j = 0; j < 4; j++) {
-            int k = quads[i].c[j].vert;
+    for (element_index = 0; element_index < quad_count; element_index++) {
+        for (corner_index = 0; corner_index < 4; corner_index++) {
+            int vertex_index = indexed_quads[element_index].corners[corner_index].vertex_index;
 
-            qcopy(&m[j], &D_001DC4E0[k]);
-            uv[j][0] = D_001DCB40[k][0];
-            uv[j][1] = D_001DCB40[k][1];
+            qcopy(&quad_positions[corner_index], &D_001DC4E0[vertex_index]);
+            texture_coordinates[corner_index][0] = D_001DCB40[vertex_index][0];
+            texture_coordinates[corner_index][1] = D_001DCB40[vertex_index][1];
         }
-        func_001F7D30(m, 0, 0);
+        draw_geometry_quad(quad_positions, 0, 0);
     }
 }
 #endif /* NON_MATCHING */

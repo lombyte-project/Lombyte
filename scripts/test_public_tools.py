@@ -1227,6 +1227,90 @@ class CheckUnitTests(unittest.TestCase):
         self.assertIn("return 1;", staged)
         self.assertNotIn("INCLUDE_ASM", staged)
 
+    def test_refreshes_oracle_rule_after_staging_c(self):
+        with tempfile.TemporaryDirectory() as name:
+            tmp = Path(name)
+            self._repo(tmp)
+            ws = self._workspace(tmp)
+            ninja_file = ws / "config/us/build.ninja"
+            ninja_file.write_text(f"build build/src/{self.unit}.c.o: include-asm source.c\n")
+            calls = []
+
+            def run(command, **kwargs):
+                calls.append(command)
+                if command[0] == self.check.sys.executable:
+                    self.assertEqual(kwargs["cwd"], str(ws))
+                    self.assertNotIn("INCLUDE_ASM", (ws / f"src/{self.unit}.c").read_text())
+                    ninja_file.write_text(f"build build/src/{self.unit}.c.o: game-compiler source.c\n")
+                return self.simple(returncode=0, stdout="", stderr="")
+
+            with (
+                mock.patch.object(self.check, "ROOT", tmp),
+                mock.patch.object(self.check, "find_ninja", return_value="ninja"),
+                mock.patch.object(self.check.subprocess, "run", run),
+                mock.patch.object(self.check, "objdiff_report", return_value=self.simple(
+                    returncode=0, stdout=json.dumps(self._payload(100.0)), stderr="")),
+                contextlib.redirect_stdout(io.StringIO()),
+            ):
+                self.assertEqual(self.check.main([self.unit, "--workspace", str(ws)]), 0)
+                staged_source = ws / f"src/{self.unit}.c"
+                os.utime(staged_source, ns=(1_000_000_000, 1_000_000_000))
+                self.assertEqual(self.check.main([self.unit, "--workspace", str(ws)]), 0)
+                self.assertEqual(staged_source.stat().st_mtime_ns, 1_000_000_000)
+            self.assertEqual(calls[0], [self.check.sys.executable, str(ws / "configure.py"), "config/us/rnc1.us.yaml"])
+            self.assertEqual(len(calls), 3)  # Configure once, then build each measurement.
+            self.assertIn("INCLUDE_ASM", (tmp / f"src/{self.unit}.c").read_text())
+
+    def test_reconfigure_uses_baseline_assembler_default_and_preserves_override(self):
+        with mock.patch.dict(os.environ, {"SN_TOOLCHAIN_ROOT": ""}):
+            self.assertEqual(self.check.build_environment()["SN_TOOLCHAIN_ROOT"],
+                             str(self.check.ROOT / "tools/compilers/ee-gcc-2.95.2"))
+        with mock.patch.dict(os.environ, {"SN_TOOLCHAIN_ROOT": "/custom/sn"}):
+            self.assertEqual(self.check.build_environment()["SN_TOOLCHAIN_ROOT"], "/custom/sn")
+
+    def test_keeps_other_compiler_routes(self):
+        for rule in ("game-compiler", "sdk-compiler", "sdk-compiler-patched"):
+            with self.subTest(rule=rule), tempfile.TemporaryDirectory() as name:
+                tmp = Path(name)
+                self._repo(tmp)
+                ws = self._workspace(tmp)
+                (ws / "config/us/build.ninja").write_text(
+                    f"build build/src/{self.unit}.c.o: {rule} source.c\n")
+                with (
+                    mock.patch.object(self.check, "ROOT", tmp),
+                    mock.patch.object(self.check, "find_ninja", return_value="ninja"),
+                    mock.patch.object(self.check.subprocess, "run", return_value=self.simple(
+                        returncode=0, stdout="", stderr="")) as run,
+                    mock.patch.object(self.check, "objdiff_report", return_value=self.simple(
+                        returncode=0, stdout=json.dumps(self._payload(100.0)), stderr="")),
+                    contextlib.redirect_stdout(io.StringIO()),
+                ):
+                    self.assertEqual(self.check.main([self.unit, "--workspace", str(ws)]), 0)
+                self.assertEqual(run.call_count, 1)
+                self.assertEqual(run.call_args.args[0][0], "ninja")
+
+    def test_configuration_failure_does_not_score_stale_object(self):
+        with tempfile.TemporaryDirectory() as name:
+            tmp = Path(name)
+            self._repo(tmp)
+            ws = self._workspace(tmp)
+            (ws / "config/us/build.ninja").write_text(
+                f"build build/src/{self.unit}.c.o: include-asm source.c\n")
+            with (
+                mock.patch.object(self.check, "ROOT", tmp),
+                mock.patch.object(self.check, "find_ninja", return_value="ninja"),
+                mock.patch.object(self.check.subprocess, "run", return_value=self.simple(
+                    returncode=1, stdout="", stderr="configuration failed")) as run,
+                mock.patch.object(self.check, "objdiff_report") as diff,
+                contextlib.redirect_stdout(io.StringIO()) as stdout,
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                code = self.check.main([self.unit, "--workspace", str(ws), "--json"])
+            self.assertEqual(code, 2)
+            self.assertEqual(json.loads(stdout.getvalue())["unmeasurable_reason"], "configure-failed")
+            self.assertEqual(run.call_count, 1)
+            diff.assert_not_called()
+
     def test_reports_mismatch_and_scores(self):
         with tempfile.TemporaryDirectory() as name:
             tmp = Path(name)

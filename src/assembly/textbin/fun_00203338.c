@@ -8,28 +8,28 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203338/FUN_00203338.s
 #include "eetypes.h"
 
 typedef struct {
-    s32 w0;
-    s32 w4;
+    s32 draw_high;
+    s32 draw_shift;
     u8 pad8[0x8];
-    s32 w10;
-    s32 w14;
+    s32 material_base;
+    s32 material_shift;
     u8 pad18[0x8];
-    s32 w20;
+    s32 material_index;
     u8 pad24[0x1C];
-} Block;
+} ResidentRenderPacket;
 
 typedef struct {
     s32 blocks;
     s32 count;
     s32 unk8;
     s32 unkC;
-} Chunk;
+} ResidentRenderGroup;
 
 typedef struct {
-    u8 b0;
+    u8 first_selector;
     u8 pad1[0xB];
-    s32 unkC;
-} Remap;
+    s32 target;
+} MaterialRun;
 
 typedef struct {
     u8 pad0[0x10];
@@ -37,148 +37,150 @@ typedef struct {
     u8 pad11[3];
     s32 unk14;
     u8 pad18[4];
-    s32 offs[1];
-} Sub;
+    s32 entry_offsets[1];
+} NestedRenderTable;
 
 typedef struct {
-    s32 chunks;
-    u8 n0;
-    u8 n1;
-    u8 n2;
+    s32 groups;
+    u8 group_count_0;
+    u8 group_count_1;
+    u8 group_count_2;
     u8 pad7[5];
-    u8 nsub;
+    u8 nested_table_count;
     u8 padD[3];
     s32 unk10;
     s32 unk14;
     s32 unk18;
-    s32 *unk1C;
-    s32 unk20;
+    s32 *counted_pointers;
+    s32 material_runs;
     u8 pad24[4];
     s32 unk28;
     u8 pad2C[0x1C];
-    s32 subs[1];
-} Header;
+    s32 nested_tables[1];
+} ResidentClassRenderHeader;
 
 typedef union {
     u128 q;
     u8 b[16];
-} Map16;
+} MaterialMap;
 
 extern u8 D_001B3AC0[];
-extern Map16 D_001B6880[];
+extern MaterialMap D_001B6880[];
 
-extern void func_00202D78(Block *, void *, s32, s32, s32, s32, s32);
-extern void set_up_vis_gif_viewer(Block *q, s32 n, s32 prim, s32 a3, s32 t0, s32 mode) __asm__("FUN_00202fd0");
+extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32, s32) __asm__("func_00202D78");
+extern void set_up_vis_gif_viewer(ResidentRenderPacket *q, s32 group_count, s32 prim, s32 a3, s32 t0, s32 material_index) __asm__("FUN_00202fd0");
 
-void FUN_00203338(Header *hdr, u8 *tex, u8 *map, s32 cls) {
-    s32 n;
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures, u8 *material_map, s32 class_id) __asm__("FUN_00203338");
+
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures, u8 *material_map, s32 class_id) {
+    s32 group_count;
     s32 i;
     s32 j;
     s32 k;
-    s32 cnt;
-    Chunk *c;
-    Chunk *c1;
-    Remap *r;
-    u8 *p;
-    Sub *sub;
-    s32 *o;
-    Map16 *slot;
-    Block *blk;
-    s32 w;
-    s32 lo;
-    s32 mode;
-    s32 num;
+    s32 packet_extent;
+    ResidentRenderGroup *group;
+    ResidentRenderGroup *relocation_group;
+    MaterialRun *material_run;
+    u8 *selector;
+    NestedRenderTable *nested_table;
+    s32 *entry_offset;
+    MaterialMap *slot_materials;
+    ResidentRenderPacket *packet;
+    s32 packed_extent;
+    s32 packet_start;
+    s32 material_index;
+    s32 pointer_count;
     s32 m;
     s32 q;
     s32 t;
 
-    n = hdr->n0 + hdr->n1 + hdr->n2;
-    if (hdr->chunks != 0) {
-        hdr->chunks = (s32)hdr + hdr->chunks;
-        c1 = (Chunk *)hdr->chunks;
-        if (n != 0) {
-            k = n;
+    group_count = header->group_count_0 + header->group_count_1 + header->group_count_2;
+    if (header->groups != 0) {
+        header->groups = (s32)header + header->groups;
+        relocation_group = (ResidentRenderGroup *)header->groups;
+        if (group_count != 0) {
+            k = group_count;
             do {
-                c1->blocks += (s32)hdr;
-                c1->unk8 += (s32)hdr;
+                relocation_group->blocks += (s32)header;
+                relocation_group->unk8 += (s32)header;
                 k--;
-                c1++;
+                relocation_group++;
             } while (k != 0);
         }
     }
-    if (hdr->unk10 != 0) {
-        hdr->unk10 = (s32)hdr + hdr->unk10;
+    if (header->unk10 != 0) {
+        header->unk10 = (s32)header + header->unk10;
     }
-    if (hdr->unk14 != 0) {
-        hdr->unk14 = (s32)hdr + hdr->unk14;
+    if (header->unk14 != 0) {
+        header->unk14 = (s32)header + header->unk14;
     }
-    if (hdr->unk18 != 0) {
-        hdr->unk18 = (s32)hdr + hdr->unk18;
+    if (header->unk18 != 0) {
+        header->unk18 = (s32)header + header->unk18;
     }
-    if (hdr->unk1C != 0) {
-        hdr->unk1C = (s32 *)((u8 *)hdr + (s32)hdr->unk1C);
-        num = hdr->unk1C[0];
-        for (m = 0; m < num; m++) {
-            hdr->unk1C[m + 1] += (s32)hdr;
+    if (header->counted_pointers != 0) {
+        header->counted_pointers = (s32 *)((u8 *)header + (s32)header->counted_pointers);
+        pointer_count = header->counted_pointers[0];
+        for (m = 0; m < pointer_count; m++) {
+            header->counted_pointers[m + 1] += (s32)header;
         }
     }
-    if (hdr->unk20 != 0) {
-        hdr->unk20 = (s32)hdr + hdr->unk20;
-        r = (Remap *)hdr->unk20;
+    if (header->material_runs != 0) {
+        header->material_runs = (s32)header + header->material_runs;
+        material_run = (MaterialRun *)header->material_runs;
         do {
-            r->unkC += (s32)hdr;
-            p = &r->b0;
-            if (r->b0 != 0xFF) {
+            material_run->target += (s32)header;
+            selector = &material_run->first_selector;
+            if (material_run->first_selector != 0xFF) {
                 do {
-                    *p = map[*p];
-                    p++;
-                } while (*p != 0xFF);
+                    *selector = material_map[*selector];
+                    selector++;
+                } while (*selector != 0xFF);
             }
-        } while (r->unkC >= 0 && (r++, 1));
+        } while (material_run->target >= 0 && (material_run++, 1));
     }
-    if (hdr->unk28 != 0) {
-        hdr->unk28 = (s32)hdr + hdr->unk28;
+    if (header->unk28 != 0) {
+        header->unk28 = (s32)header + header->unk28;
     }
-    for (q = 0; q < hdr->nsub; q++) {
-        if (hdr->subs[q] != 0) {
-            sub = (Sub *)((u8 *)hdr + hdr->subs[q]);
-            hdr->subs[q] = (s32)sub;
-            if (sub->unk14 != 0) {
-                sub->unk14 = (s32)hdr + sub->unk14;
+    for (q = 0; q < header->nested_table_count; q++) {
+        if (header->nested_tables[q] != 0) {
+            nested_table = (NestedRenderTable *)((u8 *)header + header->nested_tables[q]);
+            header->nested_tables[q] = (s32)nested_table;
+            if (nested_table->unk14 != 0) {
+                nested_table->unk14 = (s32)header + nested_table->unk14;
             }
-            if (sub->count != 0) {
+            if (nested_table->count != 0) {
                 t = 0;
-                o = sub->offs;
+                entry_offset = nested_table->entry_offsets;
                 do {
-                    *o = (s32)hdr + *o;
+                    *entry_offset = (s32)header + *entry_offset;
                     t++;
-                    o++;
-                } while (t < sub->count);
+                    entry_offset++;
+                } while (t < nested_table->count);
             }
         }
     }
 
-    i = D_001B3AC0[cls];
-    slot = &D_001B6880[i];
-    c = (Chunk *)hdr->chunks;
-    slot->q = *(u128 *)map;
-    for (i = 0; i < n; i++, c++) {
-        w = c->count;
-        cnt = w >> 16;
-        lo = w & 0xFFFF;
-        c->count = lo;
-        blk = (Block *)(c->blocks + (lo - cnt) * 16);
-        for (j = 0; j < cnt; j += 4) {
-            mode = blk->w20;
-            if (mode >= 0) {
-                mode = slot->b[mode];
+    i = D_001B3AC0[class_id];
+    slot_materials = &D_001B6880[i];
+    group = (ResidentRenderGroup *)header->groups;
+    slot_materials->q = *(u128 *)material_map;
+    for (i = 0; i < group_count; i++, group++) {
+        packed_extent = group->count;
+        packet_extent = packed_extent >> 16;
+        packet_start = packed_extent & 0xFFFF;
+        group->count = packet_start;
+        packet = (ResidentRenderPacket *)(group->blocks + (packet_start - packet_extent) * 16);
+        for (j = 0; j < packet_extent; j += 4) {
+            material_index = packet->material_index;
+            if (material_index >= 0) {
+                material_index = slot_materials->b[material_index];
             }
-            if (tex != NULL) {
-                func_00202D78(blk, tex + mode * 16, blk->w0, blk->w4, blk->w10, blk->w14, mode);
+            if (textures != NULL) {
+                build_indexed_resident_render_packet(packet, textures + material_index * 16, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
             } else {
-                set_up_vis_gif_viewer(blk, blk->w0, blk->w4, blk->w10, blk->w14, mode);
+                set_up_vis_gif_viewer(packet, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
             }
-            blk++;
+            packet++;
         }
     }
 }
