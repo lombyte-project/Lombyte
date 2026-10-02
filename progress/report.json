@@ -1,6 +1,6 @@
 {
   "measures": {
-    "fuzzy_match_percent": 16.334517,
+    "fuzzy_match_percent": 16.355484,
     "total_code": "3521568",
     "matched_code": "502136",
     "matched_code_percent": 14.258876,
@@ -3629,7 +3629,7 @@
     {
       "name": "game/unclassified",
       "measures": {
-        "fuzzy_match_percent": 56.282041,
+        "fuzzy_match_percent": 57.532884,
         "total_code": "47568",
         "matched_code": "0",
         "matched_code_percent": 0.0,
@@ -3906,7 +3906,7 @@
         {
           "name": "FUN_0021a328",
           "size": "2252",
-          "fuzzy_match_percent": 61.5293,
+          "fuzzy_match_percent": 87.9503,
           "address": "1020312",
           "metadata": {
             "virtual_address": "1159848"
@@ -7491,7 +7491,7 @@
     {
       "name": "game/rendering",
       "measures": {
-        "fuzzy_match_percent": 95.365662,
+        "fuzzy_match_percent": 96.079463,
         "total_code": "20084",
         "matched_code": "15464",
         "matched_code_percent": 76.996614,
@@ -7660,7 +7660,7 @@
         {
           "name": "draw_dialog_text",
           "size": "4564",
-          "fuzzy_match_percent": 80.2375,
+          "fuzzy_match_percent": 83.3786,
           "address": "38600",
           "metadata": {
             "virtual_address": "1035216"
@@ -48793,7 +48793,7 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 86.085996,
+        "fuzzy_match_percent": 86.302496,
         "total_code": "341044",
         "matched_code": "220496",
         "matched_code_percent": 64.653241,
@@ -48810,7 +48810,7 @@
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 83.166279,
+        "fuzzy_match_percent": 83.446233,
         "total_code": "263744",
         "matched_code": "160352",
         "matched_code_percent": 60.79835,
