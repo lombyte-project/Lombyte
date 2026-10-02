@@ -30,7 +30,76 @@ void FUN_L13_00306148(char *moby) {
     FUN_L00_0025e450(moby, vector, moby + 0x10, 0.0f, 0.0f, 5, 1, 5,
                        0.0f, 0.0f, 0.0f, 1.0f, 0, 0.0f, 0, 1, -1, 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003061c8.s", FUN_L13_003061c8);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307660), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char *func_0020D348_m_c(int);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b20(void *);
+extern float FUN_001f9e90(float, float);
+extern int FUN_001f96f8(int);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_00250df8(void *);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+extern char *func_0020D348_m_c(int) __asm__("FUN_0020c4f8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg)
+{
+    char *m;
+    char *p;
+    float d;
+    m = func_0020D348_m_c(0x4D6);
+    if (m != 0) {
+        *(int *)(m + 0x40) = 0;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x31] = 1;
+        p = *(char **)(m + 0x78);
+        d = FUN_001f9b20(dir);
+        *(float *)(m + 0x44) = -FUN_001f9e90(d, dir[2]);
+        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
+        qcopy(m + 0x10, pos);
+        qcopy(p + 0x10, pos);
+        qcopy(p, dir);
+        blend_moby_animation(m, 1, 0, FUN_001f96f8(5));
+        *(short *)(m + 0x34) = 0x208;
+        *(int *)(p + 0x24) = 1;
+        *(void **)(p + 0x20) = arg;
+        *(float *)(p + 0x28) = speed;
+        m[0x23] = 0x10;
+        *(int *)(p + 0x2C) = func_001FA898_r(speed / FUN_001f9af0(p) + 1.0f);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00306300.s", FUN_L13_00306300);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003073c8.s", FUN_L13_003073c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00307b10.s", FUN_L13_00307b10);

@@ -57,7 +57,98 @@ void FUN_L00_002e9518(char *o, float *x, float *y) {
     *x = D_161CEC_2e9518;
     *y = D_161CF0_2e9518;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9720.s", FUN_L00_002e9720);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
+
+extern char D_L00_00166E10[];
+extern float FUN_001f9ab0(void *, void *);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9df8(float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern short D_L00_00161CF4_d __asm__("D_L00_00161CF4") __attribute__((sda));
+extern short D_L00_00161CF8_d __asm__("D_L00_00161CF8") __attribute__((sda));
+extern short D_L00_00161CFC_d __asm__("D_L00_00161CFC") __attribute__((sda));
+extern short D_L00_00161D00_d __asm__("D_L00_00161D00") __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(float *, float *, float *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L00_002e9518_c(char *, float *, float *) __asm__("FUN_L00_002e9518");
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L00_002e9720(int arg) {
+    char *m = (char *)arg;
+    char *d = *(char **)(m + 0x70);
+    float t0[4];
+    float t1[4];
+    float t2[4];
+    float t3[4];
+    float t4[4];
+    float t5[4];
+    float t6[4];
+    float t7[4];
+    float t8[4];
+    float tb[4];
+    float x, bc, e, e1, y, h, r, i, s, len;
+    char *base = D_L00_00166E10;
+    char *up = base + 0x20;
+    char *base2;
+    char *fw;
+    char *p130 = d + 0x130;
+    char *p140 = d + 0x140;
+    char *p1d0 = d + 0x1D0;
+    FUN_001f9a10(d, d + 0x90, p130);
+    x = *(float *)(p130 + 0x2C);
+    x -= *(float *)(p1d0 + 0x30);
+    bc = FUN_001f9af0(p140);
+    FUN_L00_002e9518_c(m, &tb[0], &tb[1]);
+    bc = cam_interp_values(d + 0x158, bc, x, tb[0], tb[1], 0.0f);
+    e1 = FUN_001f9ab0(p130, up);
+    y = FUN_001f9df8(e1 / x);
+    h = FUN_001f9ab0(p140, up);
+    r = FUN_001f9df8(h / bc);
+    i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC_d, *(float *)&D_L00_00161D00_d, 0.0f);
+    FUN_001f9a68(t0, up, e1);
+    FUN_001f9a28(t1, p130, t0);
+    FUN_001f9a68(t2, up, h);
+    FUN_001f9a28(t3, p140, t2);
+    e = FUN_001f9ab0(t1, t3);
+    x = FUN_001f9af0(t1);
+    x = x * FUN_001f9af0(t3);
+    r = 1.5707964f - FUN_001f9df8(e / x);
+    x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4_d, *(float *)&D_L00_00161CF8_d, 0.0f);
+    fast_vec_cross(t4, t3, up);
+    s = (FUN_001f9ab0(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
+    base2 = D_L00_00166E10;
+    fw = base2 + 0x30;
+    build_look_at_matrix(t5, t3, up, x * s);
+    fast_vec_cross(t4, up, t5);
+    build_look_at_matrix(t5, t5, t4, i);
+    FUN_001f9bf8(p140, t5, bc);
+    FUN_001f9a68(t6, up, *(float *)(p130 + 0x30));
+    FUN_001f9a10(t7, t6, d + 0xA0);
+    e = FUN_001f9ab0(p140, fw);
+    len = FUN_001f9af0(p140);
+    if (len != 0.0f) {
+        x = 1.5707964f - FUN_001f9df8(e / len);
+        if (AbsoluteFloat(x) < 0.2617994f) {
+            fast_vec_cross(t8, p140, fw);
+            build_look_at_matrix(p140, p140, t8, FUN_001fa5c8(0.2617994f, AbsoluteFloat(x)));
+            *(float *)(p130 + 0x28) = 0.0f;
+            *(float *)(p130 + 0x20) = 0.0f;
+            *(float *)(p130 + 0x24) = 0.0f;
+        }
+    }
+    FUN_001f9a10(m + 0x30, t7, p130 + 0x10);
+}
 extern int *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
 extern float FUN_001f9af0_9aa0(void *) __asm__("FUN_001f9af0");
@@ -92,7 +183,7 @@ extern void FUN_L00_002e89b0(int, float *, float *);
 extern void FUN_L00_002e8bb8(int, float, float);
 extern void FUN_L00_002e8f40(int);
 extern void FUN_L00_002e9010(int);
-extern void FUN_L00_002e9720(int);
+extern void FUN_L00_002e9720_u(int) __asm__("FUN_L00_002e9720");
 extern void FUN_L00_002e9aa0(int);
 
 void FUN_L00_002e9bb0(int a) {
@@ -102,7 +193,7 @@ void FUN_L00_002e9bb0(int a) {
     FUN_L00_002e89b0(a, &v[0], &v[1]);
     FUN_L00_002e8bb8(a, v[0], v[1]);
     FUN_L00_002e7d20(a);
-    FUN_L00_002e9720(a);
+    FUN_L00_002e9720_u(a);
     FUN_L00_002e8378(a);
     FUN_L00_002e9010(a);
 }

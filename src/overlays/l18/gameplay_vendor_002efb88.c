@@ -215,7 +215,52 @@ void FUN_L18_002f1d08(int a, int b) {
         }
     } while (++i < ((Blk *)D_L18_001C6200[D_L18_001C6500[a]])->n);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1e68.s", FUN_L18_002f1e68);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3268), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550[];
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_0028d8c0(void *, int);
+extern unsigned char *D_L18_0015FFD8;
+extern void FUN_L18_002f1fd8(void);
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+
+void FUN_L18_002f1e68(unsigned char *m)
+{
+    int *d = *(int **)(m + 0x78);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        ((float *)d)[3] = 1.0f;
+        break;
+    case 1:
+        enqueue_callback_list_1_alt(FUN_L18_002f1fd8, m);
+        if (FUN_L00_0028d8c0(m, d[1]) == 0) {
+            d[1] = FUN_0022da68(0, 4, (int)m);
+        }
+        if (d[0] != -1) {
+            unsigned char *o = D_L18_0015FFD8 + (d[0] << 8);
+            if (*(short *)(o + 0xA6) == 0x267 && o[0x20] >= 3) {
+                *(int *)(m + 0x94) = 0;
+                m[0x20] = 2;
+                if (FUN_L00_0028d8c0(m, d[1]) != 0) {
+                    int i = d[1];
+                    if (i != -1) {
+                        char *e = D_0013E550 + i * 0x70;
+                        if (*(unsigned char **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
+                            release_voice_slot(i);
+                        }
+                    }
+                    d[1] = -1;
+                }
+            }
+        }
+        break;
+    case 2:
+        approach_value((float *)(d + 3), 0.0f, D_0015ED6C + D_0015ED6C);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f1fd8.s", FUN_L18_002f1fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f2310.s", FUN_L18_002f2310);
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F39F8), where it is exact; names translated to the US level program. */
