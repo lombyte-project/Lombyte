@@ -76,7 +76,7 @@ SCORES = REPO / "build" / "progress" / "fuzzy_scores.json"
 # A unit carries every category it belongs to (decomp.dev sums a category
 # over the units that list it): executable units ``boot`` and ``game``/``sdk``,
 # overlay functions ``overlays`` and ``shared`` or ``levels`` + ``level_NN``.
-CATEGORIES = (("boot", "Boot executable"), ("game", "Game"), ("sdk", "Sony SDK"),
+CATEGORIES = (("boot", "Boot executable"), ("game", "Game"), ("sdk", "SDK"),
               ("overlays", "Level overlays"), ("shared", "Shared level code"),
               ("levels", "Per-level code"))
 LEVEL_CATEGORIES = tuple((f"level_{i:02d}", f"Level {i:02d}") for i in range(19))
