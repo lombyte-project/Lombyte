@@ -1075,14 +1075,65 @@ void FUN_L00_002347c0(void) {
         *(short *)(base + 0x1F6) = 4;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00234808.s", FUN_L00_00234808);
+typedef struct {
+    char p0[0x11D0]; char *m11D0, *m11D4; char p11D8[0x1220 - 0x11D8]; char *m1220;
+    char p1224[0x1D90 - 0x1224]; u8 b1D90, b1D91; char p1D92[0x1DA0 - 0x1D92]; char v1DA0[0x10];
+    char p1DB0[0x22E8 - 0x1DB0]; f32 f22E8, f22EC, f22F0;
+} P_234808;
+extern P_234808 D_0013F350_234808 __asm__("D_0013F350");
+extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
+extern f32 D_0015ED6C_234808 __asm__("D_0015ED6C");
+f32 FUN_001fa580_234808(f32, f32) __asm__("FUN_001fa580");
+f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
+s32 FUN_001fa6e0_234808(s32, s32, f32) __asm__("FUN_001fa6e0");
+void FUN_0020cb10_234808(void *, s32, void *) __asm__("FUN_0020cb10");
+void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
+#define G D_0013F350_234808
+#define X D_L00_0015F5C4_234808
+#define DD D_0015ED6C_234808
+void FUN_L00_00234808(void) {
+    char *m0, *m1, *m2;
+    f32 k;
+    s32 a, b;
+    f32 t;
+    m0 = G.m11D0;
+    if (m0) {
+        if (X == 2) G.f22E8 = FUN_001fa580_234808(G.f22E8, DD * 1.2217305f);
+        else G.f22E8 = FUN_001fa580_234808(G.f22E8, DD * 2.0943952f);
+        *(s32 *)(m0 + 0x90) = FUN_001fa6e0_234808(0xD2D2D2, 0x285050, FUN_001f9de0_234808(G.f22E8) * 0.5f + 0.5f);
+    }
+    m1 = G.m11D4;
+    if (m1) {
+        if (X != 2) {
+            f32 v;
+            G.f22EC = v = FUN_001fa580_234808(G.f22EC, DD * 2.9670596f);
+            b = 0x1EE628;
+            if (0.0f < v && v < 1.9198622f) b = 0x1E1ED2;
+            *(s32 *)(m1 + 0x90) = FUN_001fa6e0_234808(*(s32 *)(m1 + 0x90), b, 0.07f);
+        } else {
+            f32 v;
+            G.f22EC = v = FUN_001fa580_234808(G.f22EC, DD * 1.5707964f);
+            *(s32 *)(m1 + 0x90) = FUN_001fa6e0_234808(0x1E1ED2, 0x1E1E50, FUN_001f9de0_234808(v) * 0.5f + 0.5f);
+        }
+    }
+    m2 = G.m1220;
+    if (m2) {
+        if (X == 2) G.f22F0 = FUN_001fa580_234808(G.f22EC, DD * 1.3962634f);
+        else G.f22F0 = FUN_001fa580_234808(G.f22EC, DD * 1.9198622f);
+            *(s32 *)(m2 + 0x90) = FUN_001fa6e0_234808(0xAAC8AA, 0x965050, FUN_001f9de0_234808(G.f22F0) * 0.5f + 0.5f);
+        if (m2) {
+            if (!G.b1D91) FUN_0020cb10_234808(m2, 0, &G.b1D90);
+            else FUN_L00_001fff28_234808(G.v1DA0, 0, G.f22F0);
+        }
+    }
+}
 /* in state 2 or 6: flag the matching mobys, update, then clear bit 0 of three mobys */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002352D0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016C860[];
 extern void FUN_L00_00209240(int);
 extern void FUN_L00_0020f580(void);
-extern void FUN_L00_00234808(void);
+extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
 
 void FUN_L00_00234a50(int a0) {
     char *d;
@@ -1100,7 +1151,7 @@ void FUN_L00_00234a50(int a0) {
         }
         FUN_L00_00209240(a0);
         FUN_L00_0020f580();
-        FUN_L00_00234808();
+        FUN_L00_00234808_u();
         base = D_0013F350;
         t = *(char **)(base + 0x11D0);
         if (t != 0) {

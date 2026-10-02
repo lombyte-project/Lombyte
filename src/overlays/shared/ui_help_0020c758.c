@@ -395,7 +395,85 @@ void FUN_L00_0020e360(s32 a, s32 b) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020e4c8.s", FUN_L00_0020e4c8);
+typedef struct {
+    u8 p0[0xD08];
+    u8 *slot[2];
+    u8 p1[0xD14 - 0xD10];
+    s32 iD14;
+    u8 p2[0x2080 - 0xD18];
+    u8 *p2080;
+    u8 p3[0x208C - 0x2084];
+    u8 *w208C;
+    u8 p4[0x20A4 - 0x2090];
+    u8 b20A4;
+    u8 p5[3];
+    u8 b20A8;
+    u8 b20A9;
+    u8 b20AA;
+    u8 b20AB;
+    u8 p6[0x2294 - 0x20AC];
+    s32 i2294;
+    s32 i2298;
+    u8 p7[0x22C8 - 0x229C];
+    s16 h22C8;
+} PS_20e4c8;
+
+typedef struct {
+    u8 p0[0x18];
+    s32 f18;
+    u8 p1[0x24 - 0x1C];
+    s32 f24;
+    s32 f28;
+    s32 f2C;
+    s32 f30;
+    u8 p2[0x4C - 0x34];
+} ID_20e4c8;
+
+extern PS_20e4c8 D_0013F350_e4c8 __asm__("D_0013F350");
+extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
+extern s32 D_L00_0015F6A0[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
+extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
+extern u8 *FUN_L00_0024f028(u8 *, s32);
+extern void FUN_L00_0024f0e8(u8 *, u8 **);
+extern void FUN_L00_0024f3e0(u8 *, u8 *, s32, s32, s32, s32);
+extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
+
+void FUN_L00_0020e4c8(void) {
+    s32 t, v19, v20, v21, i;
+    u8 *o;
+    PS_20e4c8 *P;
+    t = FUN_L00_0020d498_c(0);
+    if (t == -1 || t == 0) return;
+    P = &D_0013F350_e4c8;
+    P->i2298 = t;
+    v19 = D_L00_00179AC0_c[t].f24;
+    v21 = D_L00_00179AC0_c[t].f28;
+    if ((s32)P->w208C == 12) v21 = D_L00_00179AC0_c[t].f2C;
+    P->b20A8 = 1;
+    { s32 k = D_L00_00179AC0_c[t].f30; P->b20AA = k; }
+    v20 = FUN_001f96f8_c(10);
+    if (D_L00_00179AC0_c[t].f18 == 0) v20 = FUN_001f96f8_c(11);
+    if (P->w208C == 0 && P->h22C8 == 0) {
+        P->i2294 = v19;
+        FUN_L00_002323b8_c(v19, 0, (f32)v20);
+        return;
+    }
+    if (v21 == -1) return;
+    for (i = 0; i < 2 && (i != 1 || D_0013F350_e4c8.b20AB == 2); i++) {
+        if (D_0013F350_e4c8.slot[i] != 0) {
+            FUN_L00_0024f0e8(D_0013F350_e4c8.p2080, &D_0013F350_e4c8.slot[i]);
+        }
+        o = FUN_L00_0024f028(D_0013F350_e4c8.p2080, D_L00_0015F6A0[i]);
+        D_0013F350_e4c8.slot[i] = o;
+        if (o != 0) {
+            D_0013F350_e4c8.i2294 = v21;
+            D_0013F350_e4c8.iD14 = 0;
+            *(f32 *)(o + 8) = 1.0f;
+            FUN_L00_0024f3e0(D_0013F350_e4c8.p2080, o, D_0013F350_e4c8.i2294, 0, v20, 1);
+        }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
