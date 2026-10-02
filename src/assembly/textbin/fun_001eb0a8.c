@@ -56,7 +56,7 @@ extern void func_001EAF88(void);
 extern s32 func_001F96F8(s32);
 extern void func_001F9A10(Vec4 *, Vec4 *, Vec4 *);
 extern void func_001F9A68(Vec4 *, Vec4 *, f32);
-extern f32 func_001F9DC8(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 func_001FA6C0(s32);
 extern void func_001FCE28(void);
 extern void func_002049F0(s32);
@@ -116,7 +116,7 @@ void FUN_001eb0a8(void)
             }
         }
         if (func_001F96F8(0x78) < D_0015EF58) {
-            D_0015EF54 = (s32)(func_001F9DC8((D_0015EF58 - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
+            D_0015EF54 = (s32)(fast_cos((D_0015EF58 - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
         }
         if (D_0013CAE4[0] & 0x840) {
             InitializeTransferCommand();

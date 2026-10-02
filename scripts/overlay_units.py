@@ -7,7 +7,7 @@ there only after the byte proof) and pending while its line there is an
 ``INCLUDE_ASM`` stub. ``exe`` rows are the executable's own functions and are
 counted with the executable, not here.
 
-Needs no retail bytes, so ``gen_progress_report.py --check`` and the map
+Needs no retail bytes, so ``gen_progress_report.py`` and the map
 work from the repository alone.
 """
 from __future__ import annotations

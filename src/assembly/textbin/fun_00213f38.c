@@ -24,69 +24,71 @@ typedef volatile u64 vu64;
 typedef float f32;
 typedef double f64;
 typedef s32 b32;
-extern f32 func_001F99C0(f32);
-extern f32 func_001F9988(f32);
-extern void func_00213ED8(f32 *, f32, f32);
-f32 FUN_00213f38(f32 *arg0, f32 *arg1, f32 fparg0, f32 fparg1, f32 fparg2, f32 fparg3)
+extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
+extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
+f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step, f32 braking_step, f32 maximum_speed) __asm__("FUN_00213f38");
+
+f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step, f32 braking_step, f32 maximum_speed)
 {
-  f32 d;
-  f32 h;
-  f32 s;
-  f32 a;
-  f32 b;
-  f32 v;
-  d = fparg0 - (*arg0);
-  if ((((*arg1) * d) >= 0.0f) && (d != 0.0f))
+  f32 distance;
+  f32 stopping_distance;
+  f32 distance_or_next_value;
+  f32 desired_velocity;
+  f32 velocity_step;
+  f32 desired_speed;
+  distance = target - (*value);
+  if ((((*velocity) * distance) >= 0.0f) && (distance != 0.0f))
   {
-    h = (((*arg1) * (*arg1)) / fparg2) * 0.5f;
-    if (func_001F99C0(d) < h)
+    stopping_distance = (((*velocity) * (*velocity)) / braking_step) * 0.5f;
+    if (AbsoluteFloat(distance) < stopping_distance)
     {
-      s = func_001F99C0(d);
-      s = s + func_001F99C0(*arg1);
-      if (h < s)
+      distance_or_next_value = AbsoluteFloat(distance);
+      distance_or_next_value = distance_or_next_value + AbsoluteFloat(*velocity);
+      if (stopping_distance < distance_or_next_value)
       {
-        a = 0.0f;
-        b = fparg2;
-        func_00213ED8(arg1, a, b);
+        desired_velocity = 0.0f;
+        velocity_step = braking_step;
+        approach_value(velocity, desired_velocity, velocity_step);
       }
       else
       {
-        func_00213ED8(arg1, 0.0f, fparg2 * 1.1f);
+        approach_value(velocity, 0.0f, braking_step * 1.1f);
         goto tail;
       }
     }
     else
     {
-      v = func_001F9988((2.0f * fparg2) * d);
-      if (fparg3 < v)
+      desired_speed = square_root_scalar((2.0f * braking_step) * distance);
+      if (maximum_speed < desired_speed)
       {
-        v = fparg3;
+        desired_speed = maximum_speed;
       }
-      if (d < 0.0f)
+      if (distance < 0.0f)
       {
-        a = -v;
-        b = fparg1;
-        func_00213ED8(arg1, a, b);
+        desired_velocity = -desired_speed;
+        velocity_step = acceleration_step;
+        approach_value(velocity, desired_velocity, velocity_step);
       }
       else
       {
-        func_00213ED8(arg1, v, fparg1);
+        approach_value(velocity, desired_speed, acceleration_step);
       }
     }
     tail:
-    s = func_001F99C0(d);
+    distance_or_next_value = AbsoluteFloat(distance);
 
-    if (func_001F99C0(*arg1) < s)
+    if (AbsoluteFloat(*velocity) < distance_or_next_value)
     {
-      *arg0 = (*arg0) + (*arg1);
-      return *arg1;
+      *value = (*value) + (*velocity);
+      return *velocity;
     }
-    *arg0 = fparg0;
-    return d;
+    *value = target;
+    return distance;
   }
-  func_00213ED8(arg1, 0.0f, fparg2);
-  s = (*arg0) + (*arg1);
-  *arg0 = s;
-  return *arg1;
+  approach_value(velocity, 0.0f, braking_step);
+  distance_or_next_value = (*value) + (*velocity);
+  *value = distance_or_next_value;
+  return *velocity;
 }
 #endif /* NON_MATCHING */

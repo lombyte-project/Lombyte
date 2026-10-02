@@ -7,8 +7,8 @@ extern char D_0019BDC0[];
 extern char D_0019C1C0[];
 extern char D_0019C3C0[];
 extern float func_001FA580(float, float);
-extern float func_001F9DC8(float);
-extern float func_001F9DE0(float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_00201ba8(int);
 extern void FUN_00201f58(int);
@@ -24,8 +24,8 @@ void update_all_point_lights(void) {
     *(float *)(l + 0x344) = 0.8f;
     *(float *)(l + 0x348) = 0.8f;
     ang = func_001FA580(*(float *)D_00187098, -0.8f);
-    *(float *)(l + 0x350) = func_001F9DC8(ang) * 0.866f;
-    *(float *)(l + 0x354) = func_001F9DE0(ang) * 0.866f;
+    *(float *)(l + 0x350) = fast_cos(ang) * 0.866f;
+    *(float *)(l + 0x354) = fast_sin(ang) * 0.866f;
     *(float *)(l + 0x358) = -0.5f;
     *(int *)(l + 0x35C) = 0;
     for (i = 0; i < 8; i++) {

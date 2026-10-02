@@ -37,8 +37,8 @@ extern u8 D_001D5EA8[];
 extern s32 func_001F99F8();
 extern s32 func_001F9A10();
 extern s32 func_001F9CF8();
-extern s32 func_001F9DC8();
-extern s32 func_001F9DE0();
+extern s32 fast_cos() __asm__("func_001F9DC8");
+extern s32 fast_sin() __asm__("func_001F9DE0");
 extern s32 func_001FA030();
 extern s32 func_001FA2B8();
 extern s32 func_001FA328();
@@ -97,7 +97,7 @@ void FUN_00225180(struct M2c_arg0 *arg0) {
     if (*temp_4_126 != 0.0f) {
         func_00213F38(temp_4_126, temp_3_125 + D_001D5EA8, 0, 0x3F800000, D_0015ED70 * 6.0f, D_0015ED6C[0] * 6.0f);
     }
-    func_001F9CF8(sp_slot, sp_slot, ((u8 *)temp_17_18) + 0xC0, (func_001F9DE0(temp_f22_124, func_001F9DE0(temp_f24_118, func_001F9DC8(temp_f24_118)), 0.0f) * 0.25f) + 0.5f + *(s32 *)((arg0->unkBC * 4) + D_001D5E90));
+    func_001F9CF8(sp_slot, sp_slot, ((u8 *)temp_17_18) + 0xC0, (fast_sin(temp_f22_124, fast_sin(temp_f24_118, fast_cos(temp_f24_118)), 0.0f) * 0.25f) + 0.5f + *(s32 *)((arg0->unkBC * 4) + D_001D5E90));
     temp_4_171 = ((u8 *)arg0) + 0x10;
     func_001F9A10(temp_4_171, temp_4_171, sp_slot);
     func_001F99F8(&sp40);

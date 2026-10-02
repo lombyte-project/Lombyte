@@ -2181,7 +2181,7 @@ segments:
           - [0x13ce94, textbin, text_gap_0023bf14_before_fun_0023bf18]
           - [0x13ce98, c, video/decoder/vi_buf_end_put]
           - [0x13ceec, textbin, text_gap_0023bf6c_after_fun_0023bf18]
-          - [0x13cef0, c, assembly/textbin/video/decoder/vi_buf_add_dma]
+          - [0x13cef0, c, video/decoder/vi_buf_add_dma]
           - [0x13d0ec, textbin, text_gap_0023c16c_before_fun_0023c170]
           - [0x13d0f0, c, video/decoder/vi_buf_stop_dma]
           - [0x13d200, c, assembly/textbin/video/decoder/vi_buf_restart_dma]

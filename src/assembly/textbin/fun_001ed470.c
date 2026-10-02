@@ -15,124 +15,126 @@ typedef union {
 
 struct Moby {
     u8 pad0[0x18];
-    f32 unk18;
+    f32 tracked_value;
     u8 pad1C[0x8A];
-    s16 unkA6;
+    s16 oclass;
 };
 
 struct Player {
     u8 pad0[0x80];
     Vec4 pos;
     u8 pad90[0x8];
-    f32 unk98;
+    f32 history_sample;
     u8 pad9C[0x1F4];
-    Vec4 unk290;
+    Vec4 target_direction;
     u8 pad2A0[0x5C];
-    struct Moby *unk2FC;
+    struct Moby *selected_object;
     u8 pad300[0x1D84];
-    s32 unk2084;
+    s32 secondary_mode;
     u8 pad2088[0x1FC];
-    s32 unk2284;
+    s32 primary_mode;
 };
 
-struct CamColl {
+struct CameraTrackingState {
     Vec4 pos;
-    f32 vel;
+    f32 position_velocity;
     u8 pad14[0xC];
-    Vec4 dir;
-    Vec4 unk30;
-    Vec4 unk40;
-    f32 dir_vel[4];
-    Vec4 unk60;
-    Vec4 unk70;
-    Vec4 unk80;
-    Vec4 unk90;
-    f32 unkA0;
-    f32 unkA4;
-    f32 unkA8;
-    f32 hist[5];
+    Vec4 direction;
+    Vec4 target_direction;
+    Vec4 previous_target_direction;
+    f32 direction_velocity[4];
+    Vec4 previous_target_position;
+    Vec4 displacement;
+    Vec4 perpendicular_displacement;
+    Vec4 projected_displacement;
+    f32 distance;
+    f32 perpendicular_distance;
+    f32 forward_distance;
+    f32 sample_history[5];
     u8 padC0[0x14];
-    struct Moby *unkD4;
-    f32 unkD8;
-    f32 unkDC;
+    struct Moby *tracked_object;
+    f32 tracked_value;
+    f32 tracked_delta;
 };
 
 extern struct Player D_0013F350;
-extern struct CamColl D_001870D0;
+extern struct CameraTrackingState D_001870D0;
 
 extern f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32 *vel) __asm__("FUN_001ebd78");
 extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
-extern void FUN_001f9a28(void *out, void *a, void *b);
-extern void FUN_001f9a68(void *out, void *a, f32 s);
-extern f32 FUN_001f9ab0(void *a, void *b);
-extern f32 FUN_001f9af0(void *a);
-extern void FUN_001f9bf8(void *out, void *a, f32 len);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_001ed470(void) {
-    Vec4 dir;
-    Vec4 proj;
-    struct CamColl *cam;
-    f32 d;
+void update_camera_tracking_state(void) __asm__("FUN_001ed470");
+
+void update_camera_tracking_state(void) {
+    Vec4 direction;
+    Vec4 projected_displacement;
+    struct CameraTrackingState *tracking;
+    f32 forward_distance;
     s32 i;
-    struct Moby *m;
+    struct Moby *tracked_object;
 
-    cam = &D_001870D0;
-    FUN_001f9bf8(&dir, &D_0013F350.unk290, -1.0f);
-    qcopy(&cam->unk40, &cam->unk30);
-    qcopy(&cam->unk30, &dir);
-    if (FUN_001f9ab0(&cam->dir, &dir) < -0.98f) {
-        dir.f[0] += 0.2f;
-        dir.f[1] += 0.2f;
-        dir.f[2] += 0.2f;
+    tracking = &D_001870D0;
+    normalize_vector_xyz(&direction, &D_0013F350.target_direction, -1.0f);
+    qcopy(&tracking->previous_target_direction, &tracking->target_direction);
+    qcopy(&tracking->target_direction, &direction);
+    if (dot_vectors_xyz(&tracking->direction, &direction) < -0.98f) {
+        direction.f[0] += 0.2f;
+        direction.f[1] += 0.2f;
+        direction.f[2] += 0.2f;
     }
-    cam->dir.f[0] = cam_interp_values(cam->dir.f[0], dir.f[0], 0.015f, 0.2f, 0.0f, &cam->dir_vel[0]);
-    cam->dir.f[1] = cam_interp_values(cam->dir.f[1], dir.f[1], 0.015f, 0.2f, 0.0f, &cam->dir_vel[1]);
-    cam->dir.f[2] = cam_interp_values(cam->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f, &cam->dir_vel[2]);
-    FUN_001f9bf8(&cam->dir, &cam->dir, 1.0f);
+    tracking->direction.f[0] = cam_interp_values(tracking->direction.f[0], direction.f[0], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[0]);
+    tracking->direction.f[1] = cam_interp_values(tracking->direction.f[1], direction.f[1], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[1]);
+    tracking->direction.f[2] = cam_interp_values(tracking->direction.f[2], direction.f[2], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[2]);
+    normalize_vector_xyz(&tracking->direction, &tracking->direction, 1.0f);
 
-    FUN_001f9a28(&cam->unk70, &D_0013F350.pos, &cam->unk60);
-    cam->unkA0 = FUN_001f9af0(&cam->unk70);
-    d = FUN_001f9ab0(&cam->unk70, &dir);
-    cam->unkA8 = d;
-    FUN_001f9bf8(&proj, &dir, d);
-    qcopy(&cam->unk90, &proj);
-    FUN_001f9a28(&cam->unk80, &cam->unk70, &proj);
-    cam->unkA4 = FUN_001f9af0(&cam->unk80);
-    FUN_001f9a68(&cam->unk80, &cam->unk80, 1.0f / cam->unkA4);
-    qcopy(&cam->unk60, &D_0013F350.pos);
+    subtract_vector_xyz(&tracking->displacement, &D_0013F350.pos, &tracking->previous_target_position);
+    tracking->distance = vector_length_xyz(&tracking->displacement);
+    forward_distance = dot_vectors_xyz(&tracking->displacement, &direction);
+    tracking->forward_distance = forward_distance;
+    normalize_vector_xyz(&projected_displacement, &direction, forward_distance);
+    qcopy(&tracking->projected_displacement, &projected_displacement);
+    subtract_vector_xyz(&tracking->perpendicular_displacement, &tracking->displacement, &projected_displacement);
+    tracking->perpendicular_distance = vector_length_xyz(&tracking->perpendicular_displacement);
+    scale_vector_xyz(&tracking->perpendicular_displacement, &tracking->perpendicular_displacement, 1.0f / tracking->perpendicular_distance);
+    qcopy(&tracking->previous_target_position, &D_0013F350.pos);
 
-    if (D_0013F350.unk2284 != 0x50 || D_0013F350.unk2084 == 0x11) {
-        cam->pos.f[0] = D_0013F350.pos.f[0];
-        cam->pos.f[1] = D_0013F350.pos.f[1];
-        cam->pos.f[2] = cam_interp_values(cam->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f, &cam->vel);
-        cam->pos.f[3] = D_0013F350.pos.f[2];
+    if (D_0013F350.primary_mode != 0x50 || D_0013F350.secondary_mode == 0x11) {
+        tracking->pos.f[0] = D_0013F350.pos.f[0];
+        tracking->pos.f[1] = D_0013F350.pos.f[1];
+        tracking->pos.f[2] = cam_interp_values(tracking->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f, &tracking->position_velocity);
+        tracking->pos.f[3] = D_0013F350.pos.f[2];
     } else {
-        cam->pos.f[0] = D_0013F350.pos.f[0];
-        cam->pos.f[1] = D_0013F350.pos.f[1];
+        tracking->pos.f[0] = D_0013F350.pos.f[0];
+        tracking->pos.f[1] = D_0013F350.pos.f[1];
     }
 
     for (i = 0; i < 4; i++) {
-        cam->hist[i] = cam->hist[i + 1];
+        tracking->sample_history[i] = tracking->sample_history[i + 1];
     }
-    cam->hist[i] = D_0013F350.unk98;
+    tracking->sample_history[i] = D_0013F350.history_sample;
 
-    m = D_0013F350.unk2FC;
-    if (m != NULL && m->unkA6 != 0x4BA && m->unkA6 != 0x336) {
-        if (m == cam->unkD4) {
-            cam->unkDC = m->unk18 - cam->unkD8;
-            if (AbsoluteFloat(cam->unkDC) < 0.001f) {
-                cam->unkDC = 0.0f;
+    tracked_object = D_0013F350.selected_object;
+    if (tracked_object != NULL && tracked_object->oclass != 0x4BA && tracked_object->oclass != 0x336) {
+        if (tracked_object == tracking->tracked_object) {
+            tracking->tracked_delta = tracked_object->tracked_value - tracking->tracked_value;
+            if (AbsoluteFloat(tracking->tracked_delta) < 0.001f) {
+                tracking->tracked_delta = 0.0f;
             }
-            cam->unkD8 = cam->unkD4->unk18;
+            tracking->tracked_value = tracking->tracked_object->tracked_value;
         } else {
-            cam->unkD4 = m;
-            cam->unkDC = 0.0f;
-            cam->unkD8 = m->unk18;
+            tracking->tracked_object = tracked_object;
+            tracking->tracked_delta = 0.0f;
+            tracking->tracked_value = tracked_object->tracked_value;
         }
     } else {
-        cam->unkDC = 0.0f;
-        cam->unkD4 = NULL;
-        cam->unkD8 = D_0013F350.pos.f[2];
+        tracking->tracked_delta = 0.0f;
+        tracking->tracked_object = NULL;
+        tracking->tracked_value = D_0013F350.pos.f[2];
     }
 }
 #endif /* NON_MATCHING */

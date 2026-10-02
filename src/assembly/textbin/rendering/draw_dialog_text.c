@@ -90,7 +90,7 @@ extern void func_001F6AF0(int, int, long, char *, int);
 extern void func_001F7090(TextBox *, long, char *, int, int, void *);
 extern void func_001F7580(TextBox *, long, char *, int);
 extern int func_001F96F8(int);
-extern float func_001F9DE0(float);
+extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA6C0(int);
 extern int func_001FA6D0(float);
 extern int func_001FA6E0(int, int, float);
@@ -343,7 +343,7 @@ void FUN_001fbc50(void) {
 
     case 0:
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                              func_001F9DE0((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
+                              fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
                                   * 0.5f + 0.5f);
         scale = (float)D_00193300.blink * 0.125f;
         if (scale > 1.0f) {
@@ -431,14 +431,14 @@ void FUN_001fbc50(void) {
     case 2:
         func_001F6060(0x64, 0xA0, 0xB0, 0x150,
                       func_001FA6E0(D_0015F524, D_0015F528,
-                                    func_001F9DE0((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
+                                    fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
                                         * 0.5f + 0.5f));
         func_001F6AF0(0x100, 0x7A, 0x8000C0C0, D_00193300.line1, -1);
         break;
 
     default:
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                              func_001F9DE0((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
+                              fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
                                   * 0.5f + 0.5f);
         func_001F6060(0x50, D_0015F4EC + 0x1A, 0xB0, 0x150, pulse);
         if (D_00193300.line1 != 0) {

@@ -42,8 +42,8 @@ extern void func_001F9A68(Vec4 *, Vec4 *, f32);
 extern void func_001F9A98(Vec4 *, Vec4 *, void *);
 extern f32 func_001F9AF0(Vec4 *);
 extern void func_001F9D20(Vec4 *, Vec4 *, void *);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 func_001FA6C0(s32);
 extern s32 func_001FA6D0(f32);
 extern void func_00233980(s32, u64);
@@ -94,8 +94,8 @@ void FUN_001f92b0(void)
             dist = 2.0f;
         }
         r = pt->size * (func_001FA6C0(pt->alpha + 16) * 0.015625f) * ((24.0f - dist) * 16.0f);
-        s = func_001FA6D0(r * func_001F9DE0(pt->angle));
-        c = func_001FA6D0(r * func_001F9DC8(pt->angle));
+        s = func_001FA6D0(r * fast_sin(pt->angle));
+        c = func_001FA6D0(r * fast_cos(pt->angle));
         D_00160F00.p->w0 = 0x10000009;
         D_00160F00.p->addr = 0;
         D_00160F00.p->w2 = 0;

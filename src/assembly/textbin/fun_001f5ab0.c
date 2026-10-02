@@ -35,8 +35,8 @@ extern struct ScreenOfs D_0013E500;
 extern void func_001F9A10(void *, void *, void *);
 extern void func_001F9A28(void *, void *, void *);
 extern void func_001F9A68(void *, void *, f32);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern s32 func_001FA6D0(f32);
 
 void FUN_001f5ab0(s32 x, s32 y, s64 buf, s64 z, s32 clr, u8 flipx, u8 flipy, f32 px, f32 py, f32 sy, f32 sx, f32 ang, f32 u, f32 v)
@@ -75,11 +75,11 @@ void FUN_001f5ab0(s32 x, s32 y, s64 buf, s64 z, s32 clr, u8 flipx, u8 flipy, f32
     pos.x = px;
     pos.y = py;
     nu = 1.0f - u;
-    sz.x = sx * func_001F9DE0(ang);
+    sz.x = sx * fast_sin(ang);
     nv = 1.0f - v;
-    sz.y = sx * func_001F9DC8(ang);
-    off.x = sy * func_001F9DC8(ang);
-    off.y = -sy * func_001F9DE0(ang);
+    sz.y = sx * fast_cos(ang);
+    off.x = sy * fast_cos(ang);
+    off.y = -sy * fast_sin(ang);
     func_001F9A68(&t, &sz, nv);
     func_001F9A10(&p0, &pos, &t);
     func_001F9A68(&t, &off, nu);

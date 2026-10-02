@@ -1,26 +1,28 @@
 #include "types.h"
 struct Moby { u8 pad0[0x50]; u64 tag; u8 pad58[0x4E]; s16 oclass; };
-struct Item { u8 pad0[0x50]; u64 tag; };
-struct Owner { u8 pad0[0x44]; struct Item *items[24]; u8 held[24]; };
+struct MenuPreviewObject { u8 pad0[0x50]; u64 tag; };
+struct MenuPreviewObjects { u8 pad0[0x44]; struct MenuPreviewObject *items[24]; u8 held[24]; };
 extern s32 D_001D5020[];
-extern void func_0020D330(void *, s32);
-s32 FUN_0021ddf8(struct Owner *o) {
+extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
+s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
+
+s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
     s32 i;
-    u8 *first;
+    u8 *first_object;
 
     for (i = 0; i < 24; i++) {
-        if (o->items[i] == 0) {
+        if (preview->items[i] == 0) {
             continue;
         }
-        if (o->held[i] != 0) {
+        if (preview->held[i] != 0) {
             continue;
         }
         if (D_001D5020[i] == 0) {
             continue;
         }
-        if (i == 7 && ((struct Moby *)o->items[7])->oclass == 0x4A) {
-            first = (u8 *)o->items[0];
-            if (first[0x52] != first[0x53]) {
+        if (i == 7 && ((struct Moby *)preview->items[7])->oclass == 0x4A) {
+            first_object = (u8 *)preview->items[0];
+            if (first_object[0x52] != first_object[0x53]) {
                 continue;
             }
         }
@@ -33,15 +35,15 @@ s32 FUN_0021ddf8(struct Owner *o) {
         case 10:
         case 11:
         case 12:
-            if ((o->items[0]->tag & 0xFFFF0000) == 0x99990000
-                && (u8)o->items[0]->tag >= 0x4D && (u8)o->items[0]->tag < 0x92) {
+            if ((preview->items[0]->tag & 0xFFFF0000) == 0x99990000
+                && (u8)preview->items[0]->tag >= 0x4D && (u8)preview->items[0]->tag < 0x92) {
                 continue;
             }
             break;
         }
-        func_0020D330(o->items[i], 1);
+        draw_moby_list(preview->items[i], 1);
     }
     return 4;
 }
 
-extern __typeof__(FUN_0021ddf8) func_0021DDF8 __attribute__((alias("FUN_0021ddf8")));
+extern __typeof__(draw_menu_preview_objects) func_0021DDF8 __attribute__((alias("FUN_0021ddf8")));
