@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 16.355484,
+    "fuzzy_match_percent": 16.359625,
     "total_code": "3521568",
-    "matched_code": "502136",
-    "matched_code_percent": 14.258876,
+    "matched_code": "504660",
+    "matched_code_percent": 14.330548,
     "total_functions": 4191,
-    "matched_functions": 2083,
-    "matched_functions_percent": 49.701742,
-    "complete_code": "502136",
-    "complete_code_percent": 14.258876,
+    "matched_functions": 2087,
+    "matched_functions_percent": 49.797184,
+    "complete_code": "504660",
+    "complete_code_percent": 14.330548,
     "total_units": 437,
     "complete_units": 125
   },
@@ -230,15 +230,15 @@
     {
       "name": "sdk/library",
       "measures": {
-        "fuzzy_match_percent": 96.039121,
+        "fuzzy_match_percent": 96.324143,
         "total_code": "51168",
-        "matched_code": "39140",
-        "matched_code_percent": 76.493121,
+        "matched_code": "41664",
+        "matched_code_percent": 81.425891,
         "total_functions": 162,
-        "matched_functions": 141,
-        "matched_functions_percent": 87.037037,
-        "complete_code": "39140",
-        "complete_code_percent": 76.493121,
+        "matched_functions": 145,
+        "matched_functions_percent": 89.506173,
+        "complete_code": "41664",
+        "complete_code_percent": 81.425891,
         "total_units": 1,
         "complete_units": 0
       },
@@ -696,7 +696,7 @@
         {
           "name": "sceOpen",
           "size": "644",
-          "fuzzy_match_percent": 91.0807,
+          "fuzzy_match_percent": 100.0,
           "address": "39128",
           "metadata": {
             "virtual_address": "117760"
@@ -714,7 +714,7 @@
         {
           "name": "sceLseek",
           "size": "568",
-          "fuzzy_match_percent": 95.1761,
+          "fuzzy_match_percent": 100.0,
           "address": "40160",
           "metadata": {
             "virtual_address": "118792"
@@ -723,7 +723,7 @@
         {
           "name": "sceRead",
           "size": "608",
-          "fuzzy_match_percent": 96.25,
+          "fuzzy_match_percent": 100.0,
           "address": "40728",
           "metadata": {
             "virtual_address": "119360"
@@ -732,7 +732,7 @@
         {
           "name": "sceWrite",
           "size": "704",
-          "fuzzy_match_percent": 94.5739,
+          "fuzzy_match_percent": 100.0,
           "address": "41336",
           "metadata": {
             "virtual_address": "119968"
@@ -48793,15 +48793,15 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 86.302496,
+        "fuzzy_match_percent": 86.345258,
         "total_code": "341044",
-        "matched_code": "220496",
-        "matched_code_percent": 64.653241,
+        "matched_code": "223020",
+        "matched_code_percent": 65.393322,
         "total_functions": 1201,
-        "matched_functions": 1054,
-        "matched_functions_percent": 87.7602,
-        "complete_code": "220496",
-        "complete_code_percent": 64.653241,
+        "matched_functions": 1058,
+        "matched_functions_percent": 88.093256,
+        "complete_code": "223020",
+        "complete_code_percent": 65.393322,
         "total_units": 116,
         "complete_units": 76
       }
@@ -48827,15 +48827,15 @@
       "id": "sdk",
       "name": "Sony SDK",
       "measures": {
-        "fuzzy_match_percent": 96.047931,
+        "fuzzy_match_percent": 96.236599,
         "total_code": "77300",
-        "matched_code": "60144",
-        "matched_code_percent": 77.805951,
+        "matched_code": "62668",
+        "matched_code_percent": 81.071151,
         "total_functions": 298,
-        "matched_functions": 267,
-        "matched_functions_percent": 89.597315,
-        "complete_code": "60144",
-        "complete_code_percent": 77.805951,
+        "matched_functions": 271,
+        "matched_functions_percent": 90.939597,
+        "complete_code": "62668",
+        "complete_code_percent": 81.071151,
         "total_units": 11,
         "complete_units": 6
       }
