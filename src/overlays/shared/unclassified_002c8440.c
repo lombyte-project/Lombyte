@@ -25,7 +25,236 @@ void FUN_L00_002c92d8(char *a) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c9348.s", FUN_L00_002c9348);
+#include "eetypes.h"
+#include "sda.h"
+#include "qcopy.h"
+
+typedef union {
+    u128 q;
+    f32 f[4];
+} V4;
+
+typedef struct {
+    u8 pad00[0x70];
+    void *unk70;
+    u8 pad74[0xB0 - 0x74];
+} Node;
+
+typedef struct {
+    u8 pad00[0x10];
+    void *unk10;
+    void *unk14;
+    u8 pad18[0x64 - 0x18];
+    u16 unk64;
+    u16 unk66;
+    u8 pad68[0x70 - 0x68];
+    s32 unk70;
+    u32 unk74;
+    f32 unk78;
+} Sub;
+
+typedef struct {
+    u8 pad00[0x10];
+    u32 unk10;
+} Part;
+
+typedef struct {
+    V4 v;
+    f32 t1;
+    f32 t2;
+    f32 t3;
+} Loc;
+
+typedef struct {
+    u8 pad00[0x10];
+    V4 pos;
+    u8 unk20;
+    u8 pad21[0x24 - 0x21];
+    Part *unk24;
+    u8 pad28[0x30 - 0x28];
+    u8 unk30;
+    u8 unk31;
+    u16 unk32;
+    u16 flags34;
+    u8 pad36[0x38 - 0x36];
+    u64 unk38;
+    V4 dir;
+    u8 pad50[0x58 - 0x50];
+    f32 unk58;
+    u8 pad5C[0x78 - 0x5C];
+    Sub *unk78;
+    u8 pad7C[0x94 - 0x7C];
+    u32 unk94;
+    u8 pad98[0xA6 - 0x98];
+    s16 unkA6;
+    u8 padA8[0xBC - 0xA8];
+    u8 unkBC;
+} Moby;
+
+typedef struct {
+    u8 pad00[4];
+    u8 f4;
+    u8 f5;
+    u8 f6;
+} Opt;
+
+typedef struct {
+    u8 pad00[0xC];
+    Opt *unk0C;
+} Holder;
+
+typedef struct {
+    u8 pad00[0x10];
+    V4 pos;
+    u8 pad20[0x34 - 0x20];
+    u16 flags34;
+    u8 pad36[0x38 - 0x36];
+    u64 unk38;
+    u8 pad40[0x78 - 0x40];
+    Holder *unk78;
+} State;
+
+typedef struct {
+    u8 pad00[0x28];
+    f32 f28;
+    u8 pad2C[0x40 - 0x2C];
+    V4 v40;
+} Data;
+
+typedef struct {
+    u8 pad00[0x80];
+    f32 f80;
+    f32 f84;
+} GState;
+
+extern GState D_0013F350;
+extern u8 D_0013E520[];
+extern Data D_L00_00173E40;
+extern Moby *D_L00_001DD100[];
+extern Node D_L00_001DD150[];
+extern u8 D_L00_001DDF10[];
+extern s32 D_L00_00161854 __attribute__((sda));
+extern s32 D_L00_00161854_b __asm__("D_L00_00161854") __attribute__((sda));
+extern u32 D_L00_00161840[1] __attribute__((sda));
+
+extern void *CreateMoby(int) __asm__("FUN_0020c4f8");
+extern f32 FUN_002132a8(f32, f32);
+extern void FUN_001f99f8(void *);
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 FUN_00213508(void *, int, f32);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9988(f32);
+extern s32 FUN_0022da68_c(s32, s32, void *) __asm__("FUN_0022da68");
+extern s32 FUN_001f96f8(s32);
+extern s32 FUN_L00_00257b90(s32, s32);
+extern f32 FUN_001fa6c0(int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void *FUN_002141f8(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void FUN_L00_002502f0(void *, u8, u8, u8);
+extern void FUN_L00_00269b70(void *, int, int, int, int, f32, f32);
+extern void FUN_001f97e8(void *, int, int);
+extern void FUN_L00_002c92d8_c(void *) __asm__("FUN_L00_002c92d8");
+extern void FUN_L00_00250df8(void *);
+
+Moby *FUN_L00_002c9348(State *a) {
+    Moby *n;
+    Sub *s2;
+    Loc loc;
+    Moby *p;
+    void *q;
+    Opt *o;
+    f32 g;
+    f32 c1;
+    f32 sn;
+
+    n = (Moby *)CreateMoby(0x10E);
+    if (n != NULL) {
+        n->unk30 = 0x7F;
+        n->unk32 = 0x7F;
+        n->unk31 = 1;
+        s2 = n->unk78;
+        if ((a->flags34 & 0x20) != 0) {
+            o = a->unk78->unk0C;
+            if (o != NULL) {
+                FUN_L00_002502f0(n, o->f4, o->f5, o->f6);
+            } else {
+                n->unk38 = a->unk38;
+            }
+        } else {
+            n->unk38 = a->unk38;
+        }
+        n->unk58 = FUN_002132a8(0.85f, 1.15f);
+        qcopy(&n->pos, &a->pos);
+        FUN_001f99f8(&n->dir);
+        n->dir.f[2] = FUN_001f9e90(n->pos.f[0] - D_0013F350.f80,
+                                 n->pos.f[1] - D_0013F350.f84);
+        g = FUN_00213508(&n->pos, 0, 0.5f);
+        if (n->pos.f[2] <= g) {
+            n->pos.f[2] = g;
+            n->pos.f[2] = D_L00_00173E40.f28;
+            qcopy(&loc.v, (u8 *)&D_L00_00173E40 + 0x40);
+            c1 = FUN_001f9dc8(n->dir.f[2]);
+            sn = FUN_001f9de0(n->dir.f[2]);
+            loc.t1 = loc.v.f[0] * c1 + loc.v.f[1] * sn;
+            c1 = FUN_001f9dc8(n->dir.f[2]);
+            sn = FUN_001f9de0(n->dir.f[2]);
+            loc.t2 = loc.v.f[1] * c1 - loc.v.f[0] * sn;
+            loc.t3 = loc.v.f[2];
+            g = FUN_001f9e90(FUN_001f9988(loc.t1 * loc.t1 + loc.t3 * loc.t3), loc.t2);
+            n->dir.f[0] = -g;
+            n->dir.f[1] = FUN_001f9e90(loc.t3, loc.t1);
+        }
+        n->unk94 = n->unk24->unk10;
+        FUN_0022da68_c(1, 0, n);
+        n->unk20 = 1;
+        s2->unk66 = 0;
+        s2->unk64 = FUN_L00_00257b90(FUN_001f96f8(0x78), FUN_001f96f8(0x12C));
+        g = FUN_001fa6c0(D_0013E520[0x15]);
+        s2->unk70 = -1;
+        s2->unk78 = g * 3.0f + 1.0f;
+        s2->unk74 = D_0013E520[0x15];
+        n->unkBC = s2->unk74;
+        FUN_L00_00257470(a, 0, -1);
+        q = FUN_002141f8(a);
+        if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
+            *(u8 *)((u8 *)q + 0xE) = 2;
+        } else {
+            mark_moby_for_removal(a);
+        }
+        c1 = 0.0f;
+        FUN_L00_00269b70(&n->pos, 0x7F, 0x7F, 0x7F, FUN_001f96f8(0xF), 1000000.0f, c1);
+        FUN_001f97e8(s2, 0, 0x20);
+        p = D_L00_001DD100[D_L00_00161854];
+        if (p != NULL && p->unkA6 == 0x10E && p->unk20 != 0xFE && p->unk20 != 0xFD) {
+            if (p->unk20 == 5) {
+                s2->unk78 = c1;
+                n->flags34 &= ~0x20;
+            } else if (!s2->unk74) {
+                s2->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
+                s2->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+                n->flags34 |= 0x1020;
+                ((Node *)s2->unk14)->unk70 = (void *)D_L00_00161840;
+            }
+            D_L00_001DD100[D_L00_00161854]->unk78->unk70 = (void *)1;
+        } else if (!s2->unk74) {
+            s2->unk14 = (void *)&D_L00_001DD150[D_L00_00161854];
+            s2->unk10 = (void *)(D_L00_001DDF10 + D_L00_00161854 * 0x60);
+            n->flags34 |= 0x1020;
+            ((Node *)s2->unk14)->unk70 = (void *)D_L00_00161840;
+        }
+        FUN_L00_002c92d8_c(s2->unk14);
+        D_L00_001DD100[D_L00_00161854] = n;
+        D_L00_00161854_b = D_L00_00161854 + 1;
+        D_L00_00161854 = (D_L00_00161854 + 1) % 20;
+        if (s2->unk74) {
+            n->flags34 &= ~0x20;
+        }
+        FUN_L00_00250df8(n);
+    }
+    return n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 #define NOT_SDA
 

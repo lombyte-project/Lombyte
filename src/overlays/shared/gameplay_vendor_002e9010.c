@@ -286,7 +286,93 @@ void FUN_L00_002e9ef0(char *p) {
     FUN_L00_002e9dd0(p);
     *(short *)(p + 0x7E) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e9f38.s", FUN_L00_002e9f38);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V;
+typedef struct {
+    float a, va, b, vb, ang, z, vz;
+} S_9f38;
+typedef struct { u8 pad0[0x14C]; float f14C; u8 pad1[0x308 - 0x150]; s16 s308; u8 pad2[0x2080 - 0x30A]; u8 *p2080; u8 pad3[0x2090 - 0x2084]; int i2090; u8 pad4[0x20A5 - 0x2094]; u8 b20A5; } P350;
+typedef struct { u8 pad0[0x100]; float f100, f104, f108, f10C; u8 pad1[0x1A0 - 0x110]; int i1A0; } C940;
+typedef struct { u8 pad0[0x270]; s16 s270; } G680;
+extern P350 D_0013F350_c __asm__("D_0013F350");
+extern C940 D_0013C940;
+extern G680 D_L00_00166C80_c __asm__("D_L00_00166C80");
+extern int D_0015EDDC;
+extern float D_L00_00161DC0 __attribute__((sda));
+extern float D_L00_00161DC4 __attribute__((sda));
+extern float D_L00_00161DC8 __attribute__((sda));
+extern float D_L00_00161DCC __attribute__((sda));
+extern float D_L00_00161DD0 __attribute__((sda));
+void FUN_L00_002e9cc0_c(void *) __asm__("FUN_L00_002e9cc0");
+void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
+void FUN_001f9ad8(void *, void *, void *);
+void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
+float FUN_001fa6c0(int);
+float FUN_001f99c0(float);
+float FUN_001ebd78(float, float, float, float, float, float *);
+void FUN_00214890(void *, void *, void *, float);
+float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
+float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
+int FUN_L00_001f0d60(void *, int, void *, float);
+void FUN_L00_002e9f38(u8 *o) {
+    V up;
+    V side;
+    V d;
+    S_9f38 *st;
+    float t, r, k;
+    st = *(S_9f38 **)(o + 0x70);
+    FUN_L00_002e9cc0_c(o);
+    FUN_001f9bf8_c(&up, D_0013F350_c.p2080 + 0xE0, 1.0f);
+    if (D_L00_00166C80_c.s270 == 0 && D_0013F350_c.b20A5 == 0) D_0013F350_c.b20A5 = 1;
+    t = -D_0013C940.f108;
+    if (t == 0.0f) t = -D_0013C940.f100;
+    if (t == 0.0f) t = FUN_001fa6c0((D_0013C940.i1A0 >> 15) & 1);
+    if (t == 0.0f) t = -FUN_001fa6c0((D_0013C940.i1A0 >> 13) & 1);
+    r = FUN_001f99c0(st->a);
+    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
+    st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
+    if (r != 0.0f) FUN_00214890(o, o, &up, k * r);
+    if (D_0013F350_c.f14C != 0.0f && D_0013F350_c.s308 == 0)
+        FUN_00214890(o, o, &up, D_0013F350_c.f14C);
+    t = -D_0013C940.f10C;
+    if (t == 0.0f) t = -D_0013C940.f104;
+    if (t == 0.0f) t = FUN_001fa6c0((D_0013C940.i1A0 >> 12) & 1);
+    if (t == 0.0f) t = -FUN_001fa6c0((D_0013C940.i1A0 >> 14) & 1);
+    if (D_L00_00166C80_c.s270 != 0 && D_0013F350_c.i2090 == 2) t = 0.0f;
+    if (D_0015EDDC == 0) t = -t;
+    r = FUN_001f99c0(st->b);
+    k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
+    st->b = FUN_001ebd78(st->b, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
+    if (st->b != 0.0f) {
+        float a, n, z;
+        FUN_001f9ad8(&side, o, &up);
+        a = k * st->b;
+        n = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
+        if (1.1170107f < n && FUN_001f99c0(st->ang) < n)
+            a += (0.0f - a) * (FUN_001fa5c8_c(n, 1.1170107f) / 0.3490659f);
+        if (n >= 1.1152654f && st->ang > 0.0f)
+            st->z = FUN_001ebd78(st->z, 0.5f, 0.005f, 0.2f, 0.0f, &st->vz);
+        else
+            st->z = FUN_001ebd78(st->z, 0.0f, 0.005f, 0.2f, 0.0f, &st->vz);
+        z = 0.0f;
+        d.f[0] = *(float *)(o + 0);
+        d.f[1] = *(float *)(o + 4);
+        d.f[3] = z;
+        d.f[2] = z;
+        FUN_001f9bf8_c(&d, &d, st->z);
+        FUN_001f9a10_c(o + 0x30, o + 0x30, &d);
+        if (FUN_L00_001f0d60(o + 0x30, 0x12, D_0013F350_c.p2080, 0.3f))
+            st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
+        n = FUN_001fa580_c(st->ang, a);
+        if (FUN_001f99c0(n) > 1.4660766f)
+            { float m = 1.4660766f; if (!(z < n)) m = -1.4660766f; a = FUN_001fa5c8_c(m, st->ang); }
+        FUN_00214890(o, o, &side, a);
+        st->ang = FUN_001fa580_c(st->ang, a);
+    }
+    FUN_001f9bf8_c(o, o, 1.0f);
+    FUN_001f9ad8(o + 0x10, o, &up);
+    FUN_001f9bf8_c(o + 0x10, o + 0x10, 1.0f);
+    FUN_001f9ad8(o + 0x20, o + 0x10, o);
+}
 /* FUN_L00_002ea488 -- camera-state steering: either replays the scripted
  * look (state 0x51 or the moby's own state) or steers toward the current
  * camera target, bailing out when the two are already within 80 degrees.

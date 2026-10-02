@@ -85,7 +85,118 @@ void FUN_L00_002395b0(char *p) {
     D_L00_0015FAB0.c = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239630.s", FUN_L00_00239630);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239810.s", FUN_L00_00239810);
+typedef struct { s16 x; s16 y; } Pt;
+typedef struct {
+    u8 pad0[0x50]; s32 x; u8 pad54[4]; s32 ret; u8 pad5c[0x14];
+    u8 ab[2]; u8 pad72[6]; s32 cnt; u8 pad7c[4]; s16 *p;
+} Hud;
+typedef struct { u8 p0[0x2084]; s32 w2084; u8 p2088[0x20A4 - 0x2088]; u8 b20A4; u8 p20A5[0x22AC - 0x20A5]; s32 w22AC; } GS;
+extern GS D_0013F350_c __asm__("D_0013F350");
+
+extern f32 FUN_001fa6c0(s32);
+extern s32 FUN_001fa6d0(f32);
+extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
+extern void FUN_001ffe18(s32, s32, s32, s32, s32, s32);
+extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
+extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
+extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((sda));
+extern s32 D_0015EDA0;
+extern s32 D_L00_0015F808 __attribute__((sda));
+extern s32 D_L00_0015F7F0 __attribute__((sda));
+extern s32 D_L00_0015F820 __attribute__((sda));
+extern s32 D_L00_0015F810 __attribute__((sda));
+extern s32 D_L00_0015F80C __attribute__((sda));
+extern s32 D_L00_0015F81C __attribute__((sda));
+extern s32 D_L00_0015F7F8[1] __attribute__((sda));
+extern Pt D_L00_0017E478[];
+extern Pt D_L00_0017E460[];
+
+s32 FUN_L00_00239810(Hud *m)
+{
+    s32 x;
+    s32 y;
+    s32 cnt;
+    f32 f21;
+    f32 f22;
+    s32 alpha;
+    s32 w;
+    s16 *p;
+    s32 sel;
+    Pt *tab;
+    s32 mode;
+    s32 a;
+    s32 b;
+    s32 x0;
+    s32 yy;
+    s32 h1;
+    s32 h2;
+    s32 i;
+    s32 r;
+    Pt *e;
+    u8 *q;
+
+    if (D_0013F350_c.b20A4 == 2) goto out;
+    if (D_0013F350_c.w2084 == 0x32) goto out;
+    x = m->x;
+    if (D_0015ED80_c != 0) y = D_L00_0015F808 + 10;
+    else y = D_L00_0015F808 + 0x12;
+    cnt = m->cnt;
+    q = m->ab;
+    if (q[0] == 0) goto out;
+    f21 = FUN_001fa6c0(q[0]) / FUN_001fa6c0(D_L00_0015F7F0);
+    if (1.0f < f21) f21 = 1.0f;
+    else if (f21 < 0.0f) f21 = 0.0f;
+    f22 = FUN_001fa6c0(q[1]) / FUN_001fa6c0(D_L00_0015F7F0);
+    if (1.0f < f22) f22 = 1.0f;
+    else if (f22 < 0.0f) f22 = 0.0f;
+    alpha = FUN_001fa6d0(f22 * 128.0f);
+    w = FUN_001fa6d0((f32)D_L00_0015F820 * f21);
+    p = m->p;
+    sel = p[0] >> 1;
+    mode = D_0015EDA0;
+    if (cnt == 0) sel = 0x1E;
+    if (D_0013F350_c.b20A4 == 1) mode = D_0013F350_c.w22AC;
+    if (mode == 8) {
+        tab = D_L00_0017E478;
+        a = FUN_001fa6d0(f21 * 48.0f);
+        b = FUN_001fa6d0(f21 * 48.0f);
+    } else if (mode == 5) {
+        tab = D_L00_0017E460;
+        a = FUN_001fa6d0(f21 * 32.0f);
+        b = FUN_001fa6d0(f21 * 16.0f);
+    } else {
+        b = 0;
+        tab = (Pt *)D_L00_0015F7F8;
+        a = FUN_001fa6d0(f21 * 48.0f);
+    }
+    yy = y + D_L00_0015F810;
+    h1 = FUN_001ff960_c(0x7580, 1);
+    h2 = FUN_001ff960_c(0x7580, 0);
+    FUN_001ffe18(h1, x + a, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    FUN_001ffc30_c(h2, x - a, yy, a * 2, D_L00_0015F81C, w);
+    FUN_001ffc30_c(h1, x - a - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    if (b != 0) {
+        yy += D_L00_0015F80C;
+        FUN_001ffe18(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+        x0 = x - b;
+        FUN_001ffc30_c(h2, x0, yy, b * 2, D_L00_0015F81C, w);
+        FUN_001ffc30_c(h1, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    }
+    for (i = 0; i < mode; i++) {
+        r = FUN_001ff960_c(0x7536, sel);
+        FUN_L00_0023b120_c(m, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+        if (sel != 0x1E) {
+            r = FUN_001ff960_c(0x7536, 0x1E);
+            FUN_L00_0023b120_c(m, r, x + tab[i].x, y + tab[i].y, 1, alpha);
+            r = FUN_001ff960_c(0x7536, 0x1F);
+            FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22, FUN_001fa6d0((f32)(p[1] >> 4) * f22));
+            if (cnt == i + 1) sel = 0x1E;
+            else sel = (sel + 6) % 30;
+        }
+    }
+out:
+    return m->ret;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
