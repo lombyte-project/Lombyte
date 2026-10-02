@@ -199,9 +199,8 @@ python3 rebuild-iso.py \
 
 | Target           | Effect                                                          |
 | :--------------- | :-------------------------------------------------------------- |
-| `make check`     | the public CI checks (tests, script parse, progress report check) without a full build |
-| `make progress`  | regenerate `progress/report.json` after `make elf`              |
-| `.venv/bin/python scripts/generate_treemap.py` | regenerate the progress map (`assets/decomp_map.svg`, `.json`) after `make progress` |
+| `make check`     | the public CI checks (tests, script parse) and a preview of the progress report and map in `build/progress/`, without a full build |
+| `make progress`  | optional, after `make elf`: re-measure C_FUZZY into `progress/fuzzy_scores.json` and preview the report and map |
 | `make iso`       | patch the verified ELF into a copy of the first `dumps/*.iso`   |
 | `make overlays`  | compile `src/overlays/` (needs the generated overlay asm, see [overlays.md](overlays.md)) |
 | `make clean-iso` | remove the rebuilt ISO                                          |

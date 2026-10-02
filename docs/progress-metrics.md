@@ -13,7 +13,8 @@ of scope. How the overlays are counted is in [Level overlays](#level-overlays).
 
 This document deliberately carries **no percentages**: they are regenerated from
 the build and would be stale the moment they were written down. Read the current
-figures from `assets/decomp_map.svg`, from `progress/report.json`, or from
+figures from the [progress map](https://github.com/mateuszklysz/Lombyte/blob/progress/decomp_map.svg),
+the [report](https://github.com/mateuszklysz/Lombyte/blob/progress/report.json), or from
 [decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) — never from prose.
 
 ## Exact bytes are not enough: the source must be C
@@ -51,7 +52,7 @@ comparison against the original through `./verify-baseline.sh` (see
 
 ## The progress map
 
-`assets/decomp_map.svg` has two parts. The **drawer** at the top is the boot
+The map (`decomp_map.svg`, published on the `progress` branch by CI) has two parts. The **drawer** at the top is the boot
 executable: its own C_EXACT percentage over its group treemap, dimmed to a
 texture (every logical group is a tile sized by its bytes; the colour is the
 group's state). Below it the **tree** lists the shared level code first and then
@@ -63,15 +64,16 @@ is intentional low-level assembly only, and **dark steel** to **copper** is
 pending C by its exact coverage.
 
 ```sh
-.venv/bin/python scripts/generate_treemap.py
+python3 scripts/generate_treemap.py   # preview in build/progress/decomp_map.svg
 ```
 
-Pass `--workspace build/baseline` to also measure the pending C bodies and report
-C_FUZZY alongside C_EXACT. The same progress is published on
-[decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) from the committed objdiff-format report
-`progress/report.json`; regenerate it with `make progress` after `make elf`. The
-`progress` workflow only checks, validates and uploads that file — it never
-builds the game.
+Neither the map nor the objdiff-format report behind
+[decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) is committed. The
+`progress` workflow regenerates both from the tree on every push to `main`
+(publishing them on the `progress` branch) and on every pull request (posting
+the change as a comment); it never builds the game. C_FUZZY comes from
+`progress/fuzzy_scores.json`, which `make progress` refreshes after `make elf`;
+`--workspace build/baseline` on either script measures it directly.
 
 ## What counts as intentional assembly
 
@@ -101,7 +103,7 @@ cannot start before the game file is in place.
 
 A candidate's score in the tooling repository is measured on the route its bank
 records, which need not be the route the public build uses. The public number in
-`progress/report.json` is measured through the public harness, on whichever build
+the published report is measured through the public harness, on whichever build
 rule `config/us/rnc1.us.yaml` and the generated `config/us/build.ninja` select for
 that unit. When those differ the two numbers differ, and the public one is the one
 the report shows.
@@ -138,8 +140,8 @@ The overlays count in the headline C_EXACT with these rules:
 - there is no intentional-asm class in the overlays yet: everything is
   recoverable until a function is shown to be hand-written VU/MMI code.
 
-`progress/report.json` keeps the executable and the overlays apart in its
+The report (`report.json`) keeps the executable and the overlays apart in its
 categories: `boot` (= `game` + `sdk`), `overlays` (= `shared` + `levels`), and
-one `level_NN` per level. `assets/decomp_map.json` (schema
+one `level_NN` per level. `decomp_map.json` (schema
 `rnc-public-progress-v3`) has the same split as `boot`, `overlays` and
 `total`; its top-level fields describe the total.

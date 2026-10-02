@@ -177,11 +177,18 @@ def parse_address(value) -> int | None:
 
 
 def committed_function_scores(path: Path) -> dict[object, float]:
-    """Read per-function scores from either flat or grouped report v2 JSON."""
+    """Read per-function scores from ``progress/fuzzy_scores.json``
+    (``rnc-fuzzy-scores-v1``) or from a flat or grouped report v2 JSON."""
     if not path.is_file():
         return {}
     report = json.loads(path.read_text())
     scores: dict[object, float] = {}
+    if "scores" in report:
+        for key, value in report["scores"].items():
+            address = parse_address(key)
+            if address is not None:
+                scores[address] = float(value)
+        return scores
     for unit in report.get("units", []):
         functions = unit.get("functions") or []
         for function in functions:
@@ -194,3 +201,23 @@ def committed_function_scores(path: Path) -> dict[object, float]:
         if len(functions) == 1 and unit.get("name"):
             scores[unit["name"]] = float(functions[0].get("fuzzy_match_percent", 0.0))
     return scores
+
+
+def write_fuzzy_scores(path: Path, report: dict) -> int:
+    """Keep the measured similarity of every partly matched function.
+
+    The scores need a local build to measure, so they are the one progress
+    input CI cannot recompute; everything else is derived from the tree.
+    """
+    scores = {}
+    for unit in report.get("units", []):
+        for function in unit.get("functions") or []:
+            score = float(function.get("fuzzy_match_percent", 0.0))
+            address = parse_address((function.get("metadata") or {}).get("virtual_address"))
+            if address is not None and 0.0 < score < 100.0:
+                scores[f"0x{address:08x}"] = score
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"schema": "rnc-fuzzy-scores-v1",
+                                "scores": dict(sorted(scores.items()))}, indent=1) + "\n",
+                    encoding="utf-8")
+    return len(scores)

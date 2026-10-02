@@ -9,13 +9,15 @@
 
 .PHONY: elf iso clean-iso check progress overlays
 
-check: ## Run the public CI checks locally (tests, script parse)
+check: ## Run the public CI checks locally (tests, script parse, progress report)
 	python3 scripts/test_public_tools.py -v
 	python3 -m py_compile scripts/*.py
-	python3 scripts/gen_progress_report.py --check
+	python3 scripts/gen_progress_report.py
+	python3 scripts/generate_treemap.py
 
-progress: ## Regenerate progress/report.json for decomp.dev (after `make elf`)
+progress: ## Optional, after `make elf`: re-measure C_FUZZY into progress/fuzzy_scores.json and preview the report and map in build/progress/
 	$${VENV:-.venv}/bin/python scripts/gen_progress_report.py --workspace "$${BASELINE_ROOT:-build/baseline}"
+	$${VENV:-.venv}/bin/python scripts/generate_treemap.py
 
 elf: ## Rebuild the boot ELF byte-for-byte (full baseline + SHA gate)
 	./verify-baseline.sh
