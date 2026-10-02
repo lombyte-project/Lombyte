@@ -118,7 +118,31 @@ void FUN_L02_002d3dd0(void *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5658.s", FUN_L02_002d5658);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5728.s", FUN_L02_002d5728);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int D_L02_0015FFD8; /* no foreign declaration */
+extern int D_L02_001ABE40[];
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002d5728(char *arg) {
+    short *p;
+    if (((unsigned char *)arg)[0x21] != 0xFF) {
+        p = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+        do {
+            char *o = (char *)D_L02_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            if (*(short *)(o + 0xA6) == 0x244) {
+                char *d = *(char **)(o + 0x78);
+                float f = FUN_001f96b0(random_float_between_alt(240.0f, 300.0f));
+                if ((float)*(short *)(d + 0x25E) < f) {
+                    *(short *)(d + 0x25E) = func_001FA898_r(f);
+                }
+            }
+        } while (*p++ >= 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d57f8.s", FUN_L02_002d57f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5a68.s", FUN_L02_002d5a68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5c88.s", FUN_L02_002d5c88);

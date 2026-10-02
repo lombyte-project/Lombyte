@@ -2,5 +2,104 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0023c7a0.s", FUN_L11_0023c7a0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Per-frame update of the player state flags from the current state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/help_0023CD98.c: func_L11_0023CD98), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern int D_0015ED84; /* no foreign declaration */
+extern int FUN_001f0b58(void);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void FUN_001f9810(void *, int);
+extern void FUN_L00_0020b930(void);
+extern void FUN_L11_0024db50(int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L11_0023c7a0(void) {
+    char *g = (char *)D_0013F350;
+    unsigned char saved;
+    int state;
+    saved = *(unsigned char *)(g + 0x12ED);
+    state = *(short *)(g + 0x12E0);
+    FUN_001f9810(g + 0x12E0, 0x10);
+    *(unsigned char *)(g + 0x12ED) = saved;
+    *(short *)(g + 0x12E0) = -1;
+    *(unsigned char *)(g + 0x20A9) = 0;
+    *(short *)(g + 0x308) = 0;
+    if (state == -1) return;
+    if (state == 2) {
+        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
+            *(unsigned char *)(g + 0x12E7) = 1;
+            if (*(unsigned char *)(g + 0x20A4) == 0) {
+                if (*(int *)(g + 0x10E0) != 0 && *(short *)(*(int *)(g + 0x10E0) + 0xA6) == 0xAD)
+                    *(short *)(g + 0x308) = 1;
+            }
+        }
+    }
+    if (state == 0xE) {
+        char *a = (char *)D_0013F350;
+        *(unsigned char *)(a + 0x12E4) = 1;
+        *(float *)(a + 0x22A4) = 0.2f;
+        *(float *)(a + 0x2F0) = *(float *)(a + 0x2D8) + 0.2f;
+    }
+    if (state == 0) {
+        char *b = (char *)D_0013F350;
+        char *b2;
+        float v = *(float *)(b + 0x2F0) - *(float *)(b + 0x2D8);
+        *(float *)(b + 0x22A4) = v;
+        if (v < 0.85f && 0.25f < v) *(unsigned char *)(b + 0x20A9) = 1;
+        b2 = (char *)D_0013F350;
+        *(unsigned char *)(b2 + 0x12E4) = 1;
+    }
+    if (D_0015ED84 == 0xD) {
+        char *c = (char *)D_0013F350;
+        if (*(int *)(c + 0x2084) != 0x7B) {
+            if (FUN_L00_001f0d60(*(float *)(c + 0x234) + 0.03f, c + 0xD0, 2, 0)) {
+                if (FUN_001f0b58() == 0xB) {
+                    FUN_L11_0024db50(0x7B, 1);
+                    return;
+                }
+            }
+        }
+    }
+    if (state == 0xB) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EB) = 1;
+    }
+    if (state == 0xD) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EC) = 1;
+    }
+    if (state == 8) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EA) = 1;
+    }
+    if (state == 9) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EE) = 1;
+    }
+    if (state == 0xC) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EA) = 1;
+    }
+    {
+        char *h = (char *)D_0013F350;
+        if (*(unsigned char *)(h + 0x12EC)) {
+            if (*(int *)(h + 0x2084) != 0x7F) {
+                float e = AbsoluteFloat(*(float *)(h + 0x2F0) - (*(float *)(h + 0x88) + 0.25f));
+                if (e < 1.0f) {
+                    if (*(float *)(h + 0x2F0) - *(float *)(h + 0x88) > 0.0f) {
+                        if (*(float *)(h + 0x108) < 0.0f) {
+                            FUN_L00_0020b930();
+                            FUN_L11_0024db50(0x7F, 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00246b70.s", FUN_L11_00246b70);

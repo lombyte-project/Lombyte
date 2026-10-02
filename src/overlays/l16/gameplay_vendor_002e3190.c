@@ -66,13 +66,7 @@ void FUN_L16_002e4a58(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5010.s", FUN_L16_002e5010);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5258.s", FUN_L16_002e5258);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e54a0.s", FUN_L16_002e54a0);
-#define NOT_SDA
-
-#define MACRO_ADDR
-
-/* Start the vendor moby's turn and mark it active. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6908), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float value;
@@ -86,6 +80,79 @@ typedef struct {
     char pad7C[0x40];
     unsigned char active;
 } Level16VendorTurnMoby;
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013F3D0[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
+extern int FUN_001f9740(int *);
+extern int FUN_001fa6e0(float, int, int);
+extern short D_L16_00161DF0 __attribute__((sda));
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_0022da68(int, int, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+void FUN_L16_002e56e0_c(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
+extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
+extern int func_0022ED80_6908(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002e54a0(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    char *base;
+    float v[4];
+    float f;
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        *(float *)d = random_angle_radians_alt();
+        break;
+    case 1:
+        if (FUN_001f9740((int *)(d + 4))) {
+            g = D_0013F3D0;
+            if (FUN_001f9b80(m + 0x10, g) < 4.0f) {
+                base = g - 0x80;
+                if (*(int *)(base + 0x2084) == 0x28 && *(int *)(base + 0x5A8) != -1) {
+                    FUN_001f9cf8(v, &D_L16_00161DF0, m + 0xC0);
+                    FUN_001f9a10(v, v, m + 0x10);
+                    FUN_001f9a28(v, v, g);
+                    FUN_001f9cf8(v, v, g - 0x40);
+                    if (AbsoluteFloat(v[1]) < 0.1f) {
+                        if ((v[0] > 0.0f && *(int *)(base + 0x5A8) == 3) ||
+                            (v[0] < 0.0f && *(int *)(base + 0x5A8) == 2)) {
+                            func_L16_002E6B48_6908(m);
+                            func_0022ED80_6908(1, 0, m);
+                        }
+                    }
+                }
+            }
+        }
+        if (FUN_L00_0025a420(m, 0x330000, 0)) {
+            func_L16_002E6B48_6908(m);
+            func_0022ED80_6908(0, 0, m);
+            m[0xA4] = 0xFF;
+        }
+        break;
+    }
+    *(float *)d = FUN_001fa580(*(float *)d, D_0015ED6C * 12.566371f);
+    f = (FUN_001f9de0(*(float *)d) + 1.0f) * 0.5f;
+    if (m[0xBC]) {
+        *(int *)(m + 0x90) = FUN_001fa6e0(f, 0x80208020, 0x80202020);
+    } else {
+        *(int *)(m + 0x90) = FUN_001fa6e0(f, 0x80202080, 0x80202020);
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Start the vendor moby's turn and mark it active. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
+
+
 
 void FUN_L16_002e56e0(Level16VendorTurnMoby *moby) {
     moby->data->value = -3.1415925f;
@@ -147,8 +214,89 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7e00.s", FUN_L16_002e7e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e84e8.s", FUN_L16_002e84e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e88d0.s", FUN_L16_002e88d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8970.s", FUN_L16_002e8970);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9D48), where it is exact; names translated to the US level program. */
+
+void FUN_L16_002e88d0(unsigned char *moby)
+{
+    switch (moby[0x20]) {
+    case 0:
+        {
+            float size = *(float *)(moby + 0x2C) * 4.0f;
+            int ff = 0xFF;
+            int twohundred = 0x200;
+            moby[0x20] = 1;
+            moby[0x30] = ff;
+            *(short *)(moby + 0x32) = twohundred;
+            *(float *)(moby + 0x18) = 160.0f;
+            *(float *)(moby + 0x2C) = size;
+        }
+        break;
+    case 1:
+        *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), D_0015ED6C * -0.2617993950843811f);
+        break;
+    }
+}
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern char *FUN_L16_002e8b08(int);
+extern int FUN_001f96f8(int);
+extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L16_002e0e28(void *);
+extern void FUN_L16_002c44f0(void *, void *);
+extern void FUN_L16_002e0de0(void *);
+f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+
+void FUN_L16_002e8970(char *moby) {
+    char *g = D_0013F3D0;
+    char *data = *(char **)(moby + 0x78);
+    char *target;
+    int n;
+    float pos[4];
+    if (!is_point_inside_clip_volume(g, *(int *)(data + 8))) return;
+    target = D_L16_0015FFD8 + (*(int *)(data + 4) << 8);
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        *(int *)(data + 0xC) = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x168));
+        break;
+    case 1:
+        if (FUN_001f9b80(g, target + 0x10) > 3.0f) {
+            if (FUN_L16_002e8b08(*(int *)data) != 0) {
+                if (FUN_001f9740_c(data + 0xC)) {
+                    moby[0x20] = 2;
+                    FUN_L16_002e0de0(target);
+                    *(int *)(data + 0xC) = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x168));
+                }
+            }
+        }
+        break;
+    case 2:
+        n = FUN_L16_002e0e28(target);
+        switch (n) {
+        case 0:
+            moby[0x20] = 1;
+            break;
+        case 2:
+            moby[0x20] = 1;
+        {
+            char *other = FUN_L16_002e8b08(*(int *)data);
+            if (other != 0) {
+                qcopy(pos, target + 0x10);
+                pos[2] += 1.0f;
+                pos[2] = probe_ground_height(pos, 0, 0.5f);
+                FUN_L16_002c44f0(other, pos);
+            }
+        }
+            break;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b08.s", FUN_L16_002e8b08);
 /* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */

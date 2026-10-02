@@ -82,7 +82,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292d10.s", FUN_L03_00292d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002953f8.s", FUN_L03_002953f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029c9d0.s", FUN_L03_0029c9d0);
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
+
+extern int D_L03_0015F5CC; /* no foreign declaration */
+extern int FUN_L00_0028d8c0(void *, int);
+
+void FUN_L03_0029c9d0(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (moby[0x20] == 0) {
+        *(int *)(data + 0x150) = -1;
+        return;
+    }
+    if ((D_L03_0015F5CC & 7) != (((int)moby >> 8) & 7)) return;
+    if (*(short *)(data + 0x14A) != 0) return;
+    if (*(int *)(data + 0x150) >= 0) {
+        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x150)) != 0) return;
+    }
+    switch (*(short *)(moby + 0xA6)) {
+    case 0x75:
+    case 0x78:
+        *(int *)(data + 0x150) = FUN_0022da68(0, 4, (int)moby);
+        break;
+    case 0x4B:
+    case 0x73:
+    case 0x74:
+    case 0x76:
+    case 0x77:
+        *(int *)(data + 0x150) = FUN_0022da68(1, 4, (int)moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029caa8.s", FUN_L03_0029caa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029cff0.s", FUN_L03_0029cff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);

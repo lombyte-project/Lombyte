@@ -2,7 +2,28 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e690.s", FUN_L11_0030e690);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
+
+extern char D_L11_001DA880[];
+extern int D_L11_0015FFD8; /* no foreign declaration */
+extern short *D_L11_001AC240[];
+
+void FUN_L11_0030e690(char *moby) {
+    short *p = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
+    int base = D_L11_0015FFD8;
+    do {
+        int i = (*p & 0x7FFF) * 256;
+        char *e = (char *)(i + base);
+        char *s;
+        *(float *)(e + 0x18) = *(float *)(moby + 0x18);
+        s = D_L11_001DA880 + *(int *)(*(char **)(e + 0x78) + 4) * 0x1190;
+        *(float *)(s + 8) = *(float *)(moby + 0x18);
+    } while (*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #define NOT_SDA

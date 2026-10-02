@@ -55,7 +55,7 @@ unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f) {
 extern float D_0015ED6C;
 extern float FUN_001fa580(float, float);
 extern void FUN_L16_002c9568(char *);
-extern void FUN_L16_002c9650(char *);
+extern void FUN_L16_002c9650_u(char *) __asm__("FUN_L16_002c9650");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -76,7 +76,7 @@ void FUN_L16_002c9480(unsigned char *m) {
     }
     case 1:
         *(float *)(m + 0x48) = FUN_001fa580(*(float *)(m + 0x48), D_0015ED6C * 4.1887903f);
-        FUN_L16_002c9650((char *)m);
+        FUN_L16_002c9650_u((char *)m);
         break;
     }
 }
@@ -350,7 +350,59 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a3f38.s", FUN_L16_002a3f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c3d38.s", FUN_L16_002c3d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c44f0.s", FUN_L16_002c44f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9650.s", FUN_L16_002c9650);
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAA18), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float a[4];
+    float b[4];
+    int c[4];
+    float d[4];
+} L16SpriteData;
+
+extern char D_L16_001671C0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
+extern int FUN_001fa6e0(float, int, int);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
+extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
+
+void FUN_L16_002c9650(char *m) {
+    L16SpriteData *p = *(L16SpriteData **)(m + 0x78);
+    float d[4] __attribute__((aligned(16)));
+    float e[4] __attribute__((aligned(16)));
+    int i, col;
+    float f;
+
+    *(float *)(m + 0x18) += 0.1f;
+    FUN_001f9a28(d, D_L16_001671C0, m + 0x10);
+    FUN_001f9bf8(d, d, -0.3f);
+    FUN_001f9bf8(e, d, 0.1f);
+    FUN_001f9a10(d, d, m + 0x10);
+    *(float *)(m + 0x18) -= 0.1f;
+    for (i = 0; i < 4; i++) {
+        float h = p->a[i] + p->b[i];
+        p->a[i] = h;
+        if (255.0f <= h) {
+            p->a[i] = h - 255.0f;
+        } else if (h <= 0.0f) {
+            p->a[i] = h + 255.0f;
+        }
+        if (FUN_001f9740_c(&p->c[i])) {
+            p->c[i] = FUN_001f96f8(0xFF);
+        }
+        f = ConvertIntegerToFloat(FUN_001f96f8(0xFF) - p->c[i]);
+        f = f / (float)FUN_001f96f8(0xFF);
+        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, AbsoluteFloat(0.5f - f));
+        FUN_L00_00272f68(d, col, func_001FA898_caa18(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        FUN_001f9a10(d, d, e);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9878.s", FUN_L16_002c9878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9a50.s", FUN_L16_002c9a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
@@ -373,5 +425,29 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5e80.s", FUN_L16_002d5e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ef8.s", FUN_L16_002d5ef8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d6260.s", FUN_L16_002d6260);
+/* Computes a moby's direction vectors from its table entry. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7628), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_001B0930[];
+extern char D_0013F3D0[];
+extern int D_L16_001600EC; /* no foreign declaration */
+extern short D_L16_00161A8C_d __asm__("D_L16_00161A8C") __attribute__((sda));
+extern void FUN_001f99f8(void *);
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_001f9cf8(void *, void *, void *);
+
+void FUN_L16_002d6260(char *moby, void *out1, float *out2) {
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    char *entry = D_L16_001600EC + (*(int *)data << 7);
+    char *tbl = D_L16_001B0930[*(int *)(data + 0xC)];
+    FUN_001f9a28(v, D_0013F3D0, entry + 0x30);
+    v[3] = 0;
+    FUN_001f9cf8(v, v, entry + 0x40);
+    FUN_00213f38((v[1] + 1.0f) * 0.5f, D_0015ED70, D_0015ED70, D_0015ED6C + D_0015ED6C, (float *)(data + 0x1C), (float *)(data + 0x20));
+    FUN_001f9a40(out1, tbl + 0x10, tbl + 0x20, *(float *)(data + 0x1C));
+    FUN_001f99f8(out2);
+    out2[1] = *(float *)&D_L16_00161A8C_d;
+    out2[2] = *(float *)(moby + 0x48);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e0e28.s", FUN_L16_002e0e28);

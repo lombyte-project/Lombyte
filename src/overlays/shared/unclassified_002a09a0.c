@@ -127,7 +127,33 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     return d;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3f78.s", FUN_L16_002d3f78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4070.s", FUN_L16_002d4070);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_001B0930[];
+extern float FUN_001fa5c8(float, float);
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L16_002d4070(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
+    float angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
+    float delta = FUN_001fa5c8(angle, *(float *)(moby + 0x48));
+    if (delta < 0.78539819f && -0.78539819f < delta) {
+        if ((unsigned char)moby[0x53] != 1) {
+            blend_moby_animation(moby, 1, 0, FUN_001f96f8(0x14));
+        }
+    } else if (delta < 0.0f) {
+        if (*(unsigned short *)(moby + 0x34) & 0x8000) {
+            if ((unsigned char)moby[0x53] != 4) blend_moby_animation(moby, 4, 0, FUN_001f96f8(0x14));
+        } else {
+            if ((unsigned char)moby[0x53] != 5) blend_moby_animation(moby, 5, 0, FUN_001f96f8(0x14));
+        }
+    } else if (*(unsigned short *)(moby + 0x34) & 0x8000) {
+        if ((unsigned char)moby[0x53] != 5) blend_moby_animation(moby, 5, 0, FUN_001f96f8(0x14));
+    } else {
+        if ((unsigned char)moby[0x53] != 4) blend_moby_animation(moby, 4, 0, FUN_001f96f8(0x14));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d41f8.s", FUN_L16_002d41f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4590.s", FUN_L16_002d4590);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4908.s", FUN_L16_002d4908);

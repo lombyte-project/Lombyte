@@ -45,7 +45,235 @@ char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eace8.s", FUN_L17_002eace8);
+/* Walks the moby list: picks the on-screen target, marks targetable mobys and points an arrow at the nearest pickup. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC7D8), where it is exact; names translated to the US level program. */
+
+extern char *D_L17_0015FFE4;
+extern char D_L17_001678D0[];
+extern char D_L17_001D9AC0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern float D_L17_001678E0[];
+extern float FUN_001f9988(float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9de0(float);
+extern float FUN_001fa580(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_L00_0025e310(float);
+extern int D_L17_0015F5CC;
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L17_00162188_d __asm__("D_L17_00162188") __attribute__((sda));
+extern unsigned char D_0013E500[];
+extern unsigned char D_0013F3D0[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
+extern void FUN_L17_002eaae0(char *, char *, char *, int, long, int);
+extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, float f2, char *cur, char *g) {
+    float v[4];
+    float w[4];
+    float mat[16];
+    float u[4];
+    int sx, sy, tx, ty;
+    char *m;
+    char *ret;
+    int flag;
+    char *near;
+    int best;
+    int *scr;
+    float bestd;
+    int dx, dy, r, d2;
+    float x, y, ang, dd, dist, h, k, s, t;
+
+    m = D_L17_0015FFE4;
+    best = 0x7FFFFFFF;
+    ret = 0;
+    *(int *)(p + 0xE8) = 0;
+    flag = 0;
+    bestd = 100000.0f;
+    near = 0;
+    while (m != 0) {
+        scr = (int *)(D_0013E500);
+        if ((*(unsigned short *)(m + 0x34) & 0x1000) && *(unsigned char *)(m + 0x31) != 0 && m != 0 &&
+            *(char **)(m + 0x24) != 0 && *(short *)(*(char **)(m + 0x24) + 0x46) == 5) {
+            FUN_L11_00311210(m + 0x10, &sx, &sy, 0);
+            dx = sx - *(int *)(p + 0xE0);
+            dy = sy - *(int *)(p + 0xE4);
+            if (dx < 0) dx = -dx;
+            if (dy < 0) dy = -dy;
+            qcopy(v, D_L17_001678E0);
+            FUN_001f9a68(v, D_L17_001678E0, *(float *)(m + 0xC) / 1280.0f);
+            FUN_001f9a10(v, v, m + 0x10);
+            FUN_L11_00311210(v, &tx, &ty, 0);
+            tx -= sx;
+            ty -= sy;
+            r = func_001FA898_r(FUN_001f9988(ConvertIntegerToFloat(tx * tx + ty * ty))) + 0x1C;
+            if (dx < r && dy < r) {
+                if (cur != 0) {
+                    if (m == cur) {
+                        best = 0;
+                        ret = m;
+                    }
+                } else if (m != g) {
+                    d2 = dx * dx + dy * dy;
+                    if (d2 < best) {
+                        ret = m;
+                        best = d2;
+                    }
+                }
+            }
+        }
+        switch (*(short *)(m + 0xA6)) {
+        case 0xE0:
+        case 0x4C2:
+            FUN_L17_002eaae0(a3, a2, m, 2, 0x70808080, *(int *)(p + 0x104));
+            break;
+        case 0xE4:
+        case 0x4C4:
+            FUN_L17_002eaae0(a3, a2, m, 2, 0x70808080, *(int *)(p + 0x104));
+            break;
+        case 0x52:
+            FUN_L17_002eaae0(a3, a2, m, 1, 0x70004080, *(int *)(p + 0x104));
+            break;
+        case 0x53:
+            FUN_L17_002eaae0(a3, a2, m, 1, 0x70007080, *(int *)(p + 0x104));
+            break;
+        case 0x184:
+        case 0x191:
+        case 0x3EB:
+        case 0x504:
+            project_to_screen(v, m + 0x10);
+            if (*(short *)(m + 0xA6) != 0x184) {
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
+                    }
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
+                    }
+                }
+            }
+            if (*(short *)(m + 0xA6) != 0x191) {
+                *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
+            }
+            FUN_L17_002eaae0(a3, a2, m, 0, 0x70808080, *(int *)(p + 0x104));
+            break;
+        case 0x15B:
+            qcopy(w, m + 0x10);
+            w[2] += 4.0f;
+            project_to_screen(v, w);
+            if (*(unsigned char *)(m + 0x31) != 0) {
+                flag = 1;
+                {
+                    float x = (v[0] - scr[4]) * 0.0625f;
+                    float y = (v[1] - scr[5]) * 0.0625f;
+                    float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                    FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
+                }
+                {
+                    float x = (v[0] - scr[4]) * 0.0625f;
+                    float y = (v[1] - scr[5]) * 0.0625f;
+                    float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                    FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
+                }
+            }
+            dd = FUN_001f9b48(m + 0x10, D_0013F3D0);
+            if (dd < bestd) {
+                near = m;
+                bestd = dd;
+            }
+            FUN_L17_002eaae0(a3, (char *)w, m, 0, 0x70808080, *(int *)(p + 0x104));
+            *(int *)(p + 0xE8) = *(int *)(p + 0xE8) + 1;
+            break;
+        case 0x6F:
+        case 0x4BE:
+            if (!(*(unsigned short *)(m + 0x34) & 1)) {
+                project_to_screen(v, m + 0x10);
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                    }
+                }
+                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+            }
+            break;
+        case 0x4BF:
+            if (!(*(unsigned short *)(m + 0x34) & 1) && *(unsigned char *)(m + 0x20) >= 2) {
+                project_to_screen(v, m + 0x10);
+                if (*(unsigned char *)(m + 0x31) != 0) {
+                    {
+                        float x = (v[0] - scr[4]) * 0.0625f;
+                        float y = (v[1] - scr[5]) * 0.0625f;
+                        float ang = FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 20.0f);
+                        FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
+                    }
+                }
+                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+            }
+            break;
+        case 0x185: case 0x186: case 0x187: case 0x188:
+        case 0x189: case 0x18A: case 0x18B: case 0x18C:
+        case 0x18F: case 0x190:
+        case 0x534: case 0x535: case 0x536: case 0x537:
+        case 0x538: case 0x539: case 0x53A:
+            break;
+        default:
+            if (m != 0 && *(char **)(m + 0x24) != 0 && *(short *)(*(char **)(m + 0x24) + 0x46) == 5) {
+                FUN_L17_002eaae0(a3, a2, m, 1, 0x70808080, *(int *)(p + 0x104));
+            }
+            break;
+        }
+        m = *(char **)(m + 0x28);
+    }
+    if (flag == 0 && near != 0) {
+        char *np;
+        char *ap;
+        qcopy(u, near + 0x10);
+        np = near + 0x10;
+        u[2] += 4.0f;
+        ap = (char *)a + 0x10;
+        project_to_screen(w, u);
+        FUN_001fa2d8(mat, D_L17_001678D0);
+        FUN_001f9a28(v, np, D_0013F3D0);
+        FUN_001f9d20(v, v, mat);
+        v[0] = -v[1];
+        v[1] = -v[2];
+        v[2] = 0.0f;
+        FUN_001f9bf8(v, v, 160.0f);
+        ang = FUN_001fa580(FUN_001f9e90(v[0], v[1]), 1.5707964f);
+        v[0] += 256.0f;
+        v[1] += 208.0f;
+        dist = FUN_001f9b48(ap, np);
+        h = AbsoluteFloat(FUN_001fa5c8(FUN_001f9e90(*(float *)(near + 0x10) - *(float *)((char *)a + 0x10),
+                                                          *(float *)(near + 0x14) - *(float *)((char *)a + 0x14)),
+                                        *(float *)(p + 0x38)));
+        k = AbsoluteFloat(FUN_001fa5c8(-FUN_001f9e90(FUN_001f9b80(ap, np),
+                                                           *(float *)(near + 0x18) - *(float *)((char *)a + 0x18)),
+                                        *(float *)(p + 0x34)));
+        s = FUN_001f9988(h * h + k * k);
+        t = FUN_001fa580(*(float *)(p + 0x114), 0.1f / (s / 3.1415927f));
+        *(float *)(p + 0x114) = t;
+        FUN_L13_002b7d50(&D_L17_00162188_d, 3, 0xFFFFF3,
+                          (func_001FA898_r((FUN_001f9de0(t) + 1.4f) * 53.0f) << 24) | 0x8000,
+                          v[0], v[1], 240.0f / dist + 1.5f, ang);
+    }
+    return (int)ret;
+}
 #include "qcopy.h"
 
 /* picks the moby to home in on, keeping or dropping the current target */
@@ -58,7 +286,7 @@ extern char D_L17_001676D0[] __attribute__((section(".data")));
 extern short D_L17_0016216C __attribute__((sda));
 extern int FUN_001f9740(void *);
 extern int FUN_001f96f8(int);
-extern int FUN_L17_002eace8(int, char *, char *, char *, float, float, float, char *, char *);
+extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, char *, char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(char **)((char *)(p) + (o)))
 #define H(p, o) (*(short *)((char *)(p) + (o)))
@@ -97,7 +325,7 @@ take:
     W(p, 0x88) = 0;
 skip:
     qcopy(v, D_L17_001676D0);
-    r = (char *)FUN_L17_002eace8(a, p, D_L17_001676D0 - 0x10, (char *)v, 0.19634955f, 0.19634955f, 255.0f, P(p, 0x88), g);
+    r = (char *)FUN_L17_002eace8_u(a, p, D_L17_001676D0 - 0x10, (char *)v, 0.19634955f, 0.19634955f, 255.0f, P(p, 0x88), g);
     if ((r != P(p, 0x88) && W(p, 0x8C) >= 0x1F5) || FLAG == 0) {
         W(p, 0xEC) = 0;
         W(p, 0x128) = -1;
@@ -342,6 +570,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f04d0.s", FUN_L17_002f04d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0948.s", FUN_L17_002f0948);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f10c8.s", FUN_L17_002f10c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1940.s", FUN_L17_002f1940);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f20d8.s", FUN_L17_002f20d8);
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
+
+s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
+
+void FUN_L17_002f20d8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int mode = *(int *)(data + 0x94);
+    switch (mode) {
+    case 0:
+        *(int *)(data + 0x80) = 0;
+        break;
+    case 1:
+        *(int *)(data + 0x80) = mode;
+        break;
+    }
+    switch (*(int *)(data + 0x80)) {
+    case 0:
+        try_set_help_message(0xA, 0x426C);
+        break;
+    case 1:
+    case 4:
+        try_set_help_message(0xA, 0x426B);
+        break;
+    case 2:
+        try_set_help_message(0xA, 0x1786);
+        break;
+    case 3:
+        try_set_help_message(0xA, 0x1784);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2180.s", FUN_L17_002f2180);
 

@@ -24,7 +24,61 @@ void FUN_L16_002e3050(char *moby)
     *(float *)(data + 0x144) = *(float *)(data + 0x17C);
     FUN_L00_002628d8(moby, data + 0xE0, 2, a, b);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5708.s", FUN_L16_002e5708);
+/* Updates a moby effect and advances it when its linked object is ready. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001fa580(float, float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L16_002e5cd0(int);
+extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
+extern short D_L16_00161E04_d __asm__("D_L16_00161E04") __attribute__((sda));
+extern short D_L16_00161E08_d __asm__("D_L16_00161E08") __attribute__((sda));
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L16_002e58d8(void);
+extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002e5708(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float cycle;
+    int i;
+    float *p;
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        m[0x30] = 0xFF;
+        break;
+    case 1:
+        cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04_d * D_0015ED6C;
+        *(float *)(d + 0xC) = cycle;
+        if (cycle > 1.0f) *(float *)(d + 0xC) = cycle - 1.0f;
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x24)) == 0) {
+            *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
+        }
+        *(float *)(d + 8) = FUN_001fa580(*(float *)(d + 8),
+                            *(float *)&D_L16_00161E00_d * 0.017453292f * D_0015ED6C);
+        p = (float *)(d + 0x10);
+        for (i = 0; i < 4; i++) {
+            p[i] = FUN_001fa580(p[i],
+                   ((float *)&D_L16_00161E08_d)[i] * 0.017453292f * D_0015ED6C);
+        }
+        if (m[0x31]) enqueue_callback_list_1_alt(FUN_L16_002e58d8, m);
+        if (*(int *)(d + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
+            *(int *)(m + 0x94) = 0;
+            m[0x20] = 2;
+            FUN_L16_002e5d30_c(*(int *)(d + 0x20));
+        }
+        break;
+    case 2:
+        if (!FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
+            m[0x20] = 1;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */

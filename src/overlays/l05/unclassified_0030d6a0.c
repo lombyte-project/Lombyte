@@ -88,7 +88,39 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318b98.s", FUN_L05_00318b98);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
+extern int D_L05_0015F5C4;
+extern short D_L05_00161F08_d __asm__("D_L05_00161F08") __attribute__((sda));
+
+void FUN_L05_00318b98(unsigned char *moby) {
+    float v;
+    char *data = *(char **)(moby + 0x78);
+    int g;
+    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L05_00161F08_d;
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        *(float *)data = random_angle_radians_alt();
+        *(float *)(data + 4) = *(float *)(moby + 0x18);
+        break;
+    case 1:
+        g = D_L05_0015F5C4;
+        if (g == 2) {
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+        } else {
+            moby[0x31] = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+        }
+        v = FUN_001fa580(*(float *)data, D_0015ED6C * 0.87266463f);
+        *(float *)data = v;
+        *(float *)(moby + 0x18) = *(float *)(data + 4) + FUN_001f9de0(v);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318c78.s", FUN_L05_00318c78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003193a8.s", FUN_L05_003193a8);

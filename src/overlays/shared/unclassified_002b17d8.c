@@ -213,7 +213,52 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3920.s", FUN_L14_002b3920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b39a0.s", FUN_L14_002b39a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3a20.s", FUN_L14_002b3a20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d96e0.s", FUN_L14_002d96e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d9870.s", FUN_L14_002d9870);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002DAC00), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
+
+int FUN_L14_002d9870(int i)
+{
+    unsigned char *moby = (unsigned char *)(D_L14_0015FFD8 + i * 256);
+    int *data = *(int **)(moby + 0x78);
+    int r = 0;
+    if (moby[0x20] == 0) {
+        moby[0x20] = 5;
+        set_moby_animation(moby, 1, 0);
+    } else {
+        r = moby[0x20] == 6;
+    }
+    data[2] = FUN_001f96f8(0x3C);
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dea98.s", FUN_L14_002dea98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfd10.s", FUN_L14_002dfd10);

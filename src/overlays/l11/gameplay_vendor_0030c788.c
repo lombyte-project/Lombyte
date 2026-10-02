@@ -128,7 +128,38 @@ void FUN_L11_00310028(unsigned char *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310180.s", FUN_L11_00310180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310698.s", FUN_L11_00310698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311710.s", FUN_L11_00311710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311948.s", FUN_L11_00311948);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
+
+extern float FUN_L11_00311a88(void *, void *);
+extern int D_L11_0015FFD8; /* no foreign declaration */
+extern int FUN_L11_00318050(char *moby, void **out);
+extern short *D_L11_001AC240[];
+extern void FUN_L11_00311be8(void *, void *, void *);
+
+void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
+    void *best = 0;
+    float bestd = 1000.0f;
+    short *p;
+    void *list[12];
+    FUN_L11_00311be8(a0, a1 + 0xE8, a1 + 0xEA);
+    if (a4 != 0) {
+        if (FUN_L11_00311a88(a0, a4) < bestd) return a4;
+    }
+    p = D_L11_001AC240[*(short *)(a1 + 0x108)];
+    if (p == 0) return 0;
+    do {
+        char *m = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L11_0015FFD8);
+        if (m[0x20] >= 0) {
+            int n = FUN_L11_00318050(m, list);
+            int i;
+            for (i = 1; i < n; i++) {
+                float d = FUN_L11_00311a88(a0, list[i]);
+                if (d < bestd) { best = list[i]; bestd = d; }
+            }
+        }
+    } while (*p++ >= 0);
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311a88.s", FUN_L11_00311a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311be8.s", FUN_L11_00311be8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);

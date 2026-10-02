@@ -7,7 +7,62 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9780.s", FUN_L18_002f9780);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9a98.s", FUN_L18_002f9a98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9c20.s", FUN_L18_002f9c20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa250.s", FUN_L18_002fa250);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FB6B0), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__("FUN_L00_0026d000");
+
+void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
+    char v0[16];
+    char v1[16];
+    int i;
+    char *m;
+    char *p;
+    int x;
+    int k2, k7f;
+    qcopy(v0, a);
+    qcopy(v1, b);
+    for (i = 1; i >= 0; i--) {
+        m = (char *)random_integer_below(16);
+        m = func_L00_0026DEA0_c(v0, random_integer_below(2) ? -(int)m : (int)m, c, 0.0f, 1.0f, 0.9f, f0, 0x7F204080);
+        p = m + 0x20;
+        if (m) {
+            *(short *)(m + 0xA) = FUN_001f96f8(15);
+            m[9] = func_001FA898_r(4.0f) + 0x40;
+            *(int *)(p + 4) = 2;
+            p[0xA] = 0x7F;
+            p[0xB] = m[0xA];
+        }
+    }
+    x = 16;
+    k2 = 2;
+    k7f = 0x7F;
+    i = 2;
+    do {
+        int y = x;
+        x = -x;
+        m = func_L00_0026DEA0_c(v1, y, c, 0.0f, 1.0f, 0.97f, f1, 0x7FFFFFFF);
+        p = m + 0x20;
+        if (m) {
+            m[9] = func_001FA898_r(4.0f) + 0x40;
+            *(short *)(m + 0xA) = FUN_001f96f8(4);
+            m[8] = random_integer_below(0xFF);
+            *(int *)(p + 4) = k2;
+            p[0xA] = k7f;
+            p[0xB] = m[0xA];
+        }
+    } while (--i >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa640.s", FUN_L18_002fa640);
 #define NOT_SDA
 
@@ -108,11 +163,87 @@ void FUN_L18_002fa8e0(L18VM_a8e0 *moby) {
         DeleteMoby(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fad28.s", FUN_L18_002fad28);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FC188), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad[0x30];
+    unsigned int n;
+    char pad2[0x178 - 0x34];
+    char *arr[5];
+} ML;
+
+typedef struct { char pad[0x20]; unsigned char state; char pad2[0xF]; unsigned char v; } M2;
+
+extern ML D_L18_0016D260;
+extern int D_L18_0015F5C4;
+extern short D_L18_00162578_d __asm__("D_L18_00162578") __attribute__((sda));
+extern short D_L18_0016257C_d __asm__("D_L18_0016257C") __attribute__((sda));
+extern short D_L18_00162580_d __asm__("D_L18_00162580") __attribute__((sda));
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+
+void FUN_L18_002fad28(M2 *m) {
+    char buf[16];
+    char buf2[16];
+    char buf3[16];
+    int idx;
+    char *p;
+    switch (m->state) {
+    case 0:
+        m->v = 0xFF;
+        m->state = 1;
+        break;
+    case 1:
+        if (D_L18_0015F5C4 == 2) {
+            if (D_L18_0016D260.n < 4) {
+                idx = 0;
+                if (D_L18_0016D260.n == 0 || D_L18_0016D260.n == D_L18_0015F5C4 || D_L18_0016D260.n == 3) idx = 3;
+                if (D_L18_0016D260.n == 1) idx = 4;
+                p = D_L18_0016D260.arr[idx];
+                FUN_L00_0024f7c8(p, 8, buf);
+                FUN_L00_0024f7c8(p, 9, buf2);
+                FUN_001f9a28(buf3, buf, buf2);
+                FUN_001f9bf8(buf3, buf3, *(float *)&D_L18_00162578_d);
+                FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C_d, *(float *)&D_L18_00162580_d);
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fbb98.s", FUN_L18_002fbb98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc4e0.s", FUN_L18_002fc4e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc668.s", FUN_L18_002fc668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc7e0.s", FUN_L18_002fc7e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fca98.s", FUN_L18_002fca98);
+#include "sda.h"
+
+/* For each listed moby of matching type, spawns effects at five points. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
+
+extern int D_L18_0015FFD8 MACRO_ADDR;
+extern short D_L18_00162654;
+extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L18_002fca98(unsigned char *moby) {
+    unsigned short *p = D_L18_001AC240_c[moby[0x21]];
+    if (p != 0) {
+        while (1) {
+            unsigned char *obj = D_L18_0015FFD8 + ((p[0] & 0x7FFF) << 8);
+            unsigned short *next = p + 1;
+            if (*(short *)(obj + 0xA6) == 0x772 && obj[0x20] != 0 && obj[0x20] < 6) {
+                int i;
+                int col = (*(int *)(obj + 0x90) & 0xFFFFFF) + (*(int *)&D_L18_00162654 << 24);
+                float v[4];
+                for (i = 2; i < 5; i++) {
+                    FUN_L00_0024f7c8(obj, i, v);
+                    FUN_L00_00263618(v, col, 0.175f, 0.08f);
+                }
+            }
+            if (*(short *)p < 0) break;
+            p = next;
+        }
+    }
+}

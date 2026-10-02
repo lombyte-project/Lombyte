@@ -31,7 +31,24 @@ void FUN_L10_002e0138(unsigned char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e01a8.s", FUN_L10_002e01a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e17c0.s", FUN_L10_002e17c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e1cb0.s", FUN_L10_002e1cb0);
+/* Stores a value into each table entry listed for this moby's index. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
+
+extern int FUN_001f96f8(int);
+extern short D_L10_00161E00_d __asm__("D_L10_00161E00") __attribute__((sda));
+
+void FUN_L10_002e1cb0(unsigned char *moby) {
+    short *p;
+    if (moby[0x21] != 0xFF) {
+        p = D_L10_001ABCC0[moby[0x21]];
+        if (p != 0) {
+            do {
+                int idx = *(unsigned short *)p & 0x7FFF;
+                ((char *)D_L10_0015FFD8)[(idx << 8) + 0xBC] = FUN_001f96f8(*(int *)&D_L10_00161E00_d);
+            } while (*p++ >= 0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e1d38.s", FUN_L10_002e1d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3a90.s", FUN_L10_002e3a90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3ef0.s", FUN_L10_002e3ef0);

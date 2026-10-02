@@ -2,7 +2,75 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_0021dd30.s", FUN_L14_0021dd30);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Resolve the hero's surface reaction for the frame from the previous state and flags. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/help_0021E3A8.c: func_L14_0021E3A8), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84; /* no foreign declaration */
+extern int FUN_001f0b58(void);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern unsigned char D_0013F350[];
+extern void FUN_001f9810(void *, int);
+extern void FUN_L00_0020b930(void);
+extern void FUN_L14_0022ff58(int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L14_0021dd30(void) {
+    char *h;
+    char *g = (char *)D_0013F350;
+    int keep = *(unsigned char *)(g + 0x12ED);
+    int st = *(short *)(g + 0x12E0);
+    FUN_001f9810(g + 0x12E0, 0x10);
+    *(unsigned char *)(g + 0x12ED) = keep;
+    *(short *)(g + 0x12E0) = -1;
+    *(unsigned char *)(g + 0x20A9) = 0;
+    *(short *)(g + 0x308) = 0;
+    if (st == -1) return;
+    if (st == 2) {
+        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
+            *(unsigned char *)(g + 0x12E7) = 1;
+            if (*(unsigned char *)(g + 0x20A4) == 0) {
+                char *p = *(char **)(g + 0x10E0);
+                if (p != 0 && *(short *)(p + 0xA6) == 0xAD) {
+                    *(short *)(g + 0x308) = 1;
+                }
+            }
+        }
+    }
+    if (D_0015ED84 == 0xD) {
+        char *q = (char *)D_0013F350;
+        if (*(int *)(q + 0x2084) != 0x7B) {
+            if (FUN_L00_001f0d60(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
+                if (FUN_001f0b58() == 0xB) {
+                    FUN_L14_0022ff58(0x7B, 1);
+                    return;
+                }
+            }
+        }
+    }
+    if (st == 0xB) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12EB) = 1; }
+    if (st == 2) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12E7) = 1; }
+    if (st == 7) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12E2) = 1; }
+    if (st == 0xD) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12EC) = 1; }
+    if (st == 8) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12EA) = 1; }
+    if (st == 9) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12EE) = 1; }
+    if (st == 0xC) { char *q = (char *)D_0013F350; *(unsigned char *)(q + 0x12EA) = 1; }
+    h = (char *)D_0013F350;
+    if (*(unsigned char *)(h + 0x12EC) != 0) {
+        if (*(int *)(h + 0x2084) == 0x7F) return;
+        if (AbsoluteFloat(*(float *)(h + 0x2F0) - (*(float *)(h + 0x88) + 0.25f)) < 1.0f) {
+            if (*(float *)(h + 0x2F0) - *(float *)(h + 0x88) > 0.0f) {
+                if (*(float *)(h + 0x108) < 0.0f) {
+                    FUN_L00_0020b930();
+                    FUN_L14_0022ff58(0x7F, 1);
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00222aa8.s", FUN_L14_00222aa8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00222f38.s", FUN_L14_00222f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00228cd0.s", FUN_L14_00228cd0);

@@ -438,7 +438,19 @@ s32 FUN_L01_00233940(s32 mode) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0023c710.s", FUN_L01_0023c710);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002405a0.s", FUN_L01_002405a0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
+
+void FUN_L01_002405a0(void)
+{
+    switch ((unsigned char)D_0013E533[0x2EC1]) {
+    case 0:
+        FUN_L01_0023cf98(0, 1);
+        break;
+    case 3:
+        FUN_L01_0023cf98(0x53, 1);
+        break;
+    }
+}
 extern u8 D_0013F350_242198[] __asm__("D_0013F350");
 extern u8 D_0013F4A0_242198[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_242198 __asm__("D_0015ED6C");

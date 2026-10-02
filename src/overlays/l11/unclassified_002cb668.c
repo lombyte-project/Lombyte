@@ -309,4 +309,24 @@ int FUN_L11_0030a830(unsigned char *arg) {
 void FUN_L11_0030a840(unsigned char *arg) {
     *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a850.s", FUN_L11_0030a850);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
+
+extern int D_L11_0015FFD8; /* no foreign declaration */
+extern int FUN_L11_00316128(char *);
+extern short *D_L11_001AC240[];
+extern short D_L11_0015FFF4;
+
+int FUN_L11_0030a850(char *m) {
+    int idx = *(short *)(*(char **)(m + 0x78) + 0xB4);
+    short *p;
+    if (idx < 0 || *(int *)&D_L11_0015FFF4 < idx) return 1;
+    p = D_L11_001AC240[idx];
+    if (p == 0) return 1;
+    do {
+        char *o = (char *)(((*p & 0x7FFF) << 8) + D_L11_0015FFD8);
+        if (o[0x20] >= 0 && *(short *)(o + 0xA6) == 0x4DE) {
+            if (FUN_L11_00316128(o) == 0) return 0;
+        }
+    } while (*p++ >= 0);
+    return 1;
+}
