@@ -3,7 +3,56 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb790.s", FUN_L11_002cb790);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00308670.s", FUN_L11_00308670);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
+
+extern char *D_L11_0015FFE4;
+extern float FUN_001f9988(float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+
+char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
+    char *best = 0;
+    char *q;
+    char *p = D_L11_0015FFE4;
+    float bestd = 10.0f;
+    while (p != 0) {
+        if ((*(unsigned short *)(p + 0x34) & 0x1000) && p != 0 && *(char **)(p + 0x24) != 0 && *(short *)(*(char **)(p + 0x24) + 0x46) == 5) {
+            float d;
+            q = p + 0x10;
+            d = FUN_001f9b80(pos, q);
+            if (d < maxd) {
+                float tmp[4];
+                float ra, rb, y, score;
+                qcopy(tmp, q);
+                tmp[2] = tmp[2] + 0.4f;
+                ra = FUN_001fa688(aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
+                ra = ra * ra;
+                if (ra < r1 * r1) {
+                    y = FUN_001fa688(aim[1], FUN_001f9e90(d, tmp[2] - pos[2]));
+                    rb = y * y;
+                    if (rb < r2 * r2) {
+                        score = ra * rb * 30.0f;
+                        score = score + FUN_001f9988(FUN_001f9b48(pos, tmp));
+                        if (score < bestd) {
+                            bestd = score;
+                            best = p;
+                        }
+                    }
+                }
+            }
+        }
+        p = *(char **)(p + 0x28);
+    }
+    return best;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

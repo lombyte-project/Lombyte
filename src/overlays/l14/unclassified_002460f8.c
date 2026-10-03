@@ -284,7 +284,53 @@ void FUN_L14_002aead8(u8 *moby)
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aeba0.s", FUN_L14_002aeba0);
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFDE0), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float FUN_001f9e90(float, float);
+extern int FUN_001fa728_c(char *, float) __asm__("FUN_001fa728");
+extern void FUN_0020cca8_c(char *, int, void *) __asm__("FUN_0020cca8");
+extern void FUN_L00_001fff28(void *, int, float);
+extern void FUN_L14_002ae260(void);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+
+int FUN_L14_002aeba0(char *moby, int flag) {
+    int ok = 0;
+    char *data = *(char **)(moby + 0x78);
+    float w[4];
+    float v[4];
+    float t;
+    subtract_vector_xyz(v, data + 0x170, data + 0xD0);
+    scale_vector_xyz(v, v, 0.5f);
+    add_vector_xyz(w, data + 0xD0, v);
+    w[3] = vector_length_xyz(v) + 2.0f;
+    if (FUN_001fa728_c((char *)w, ConvertIntegerToFloat(*(short *)(moby + 0x32))) >= 0) {
+        FUN_0020cca8_c(moby, 1, data + 0xA0);
+        ok = 1;
+        normalize_vector_xyz(data + 0xA0, data + 0xA0, 1.0f);
+        normalize_vector_xyz(data + 0xB0, data + 0xB0, 1.0f);
+        normalize_vector_xyz(data + 0xC0, data + 0xC0, 1.0f);
+        t = fast_subtract_rotations(FUN_001f9e90(v[0], v[1]), *(float *)(moby + 0x48));
+        FUN_L00_001fff28(data + 0xF0, 2, t);
+        *(float *)(data + 0x1BC) = t;
+        t = -FUN_001f9e90(vector_length_xy(v), v[2]);
+        FUN_L00_001fff28(data + 0x130, 1, t);
+        *(float *)(data + 0x1C0) = t;
+        qcopy(data + 0x90, data + 0x170);
+        if (flag != 0) {
+            enqueue_callback_list_1(FUN_L14_002ae260, moby);
+            *(int *)(data + 0x20C) |= 2;
+        }
+    }
+    return ok;
+}
 extern s32 FUN_001fa6d0(f32 f);
 extern s32 D_L14_00161418 __attribute__((sda));
 extern s32 D_L14_001D8210[];

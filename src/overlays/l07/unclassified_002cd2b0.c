@@ -424,13 +424,64 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030c508.s", FUN_L07_0030c508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd48.s", FUN_L07_0030cd48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dbb0.s", FUN_L07_0030dbb0);
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030EF90), where it is exact; names translated to the US level program. */
+
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+
+unsigned char *FUN_L07_0030dbb0(int a, void *pos, int b, float f0, float f1, float f2, float f3, float f4) {
+    unsigned char *moby = (unsigned char *)func_0020D348_m(0x416);
+    if (moby != 0) {
+        char *data;
+        char *g;
+        char *h;
+        data = *(char **)(moby + 0x78);
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        qcopy(moby + 0x10, pos);
+        *(int *)(data + 0x14) = a;
+        *(float *)(data + 4) = f1;
+        *(float *)(data + 0x10) = f2;
+        *(float *)(data + 0xC) = f3;
+        *(float *)data = f0;
+        *(float *)(data + 8) = f0;
+        *(int *)(data + 0x18) = b;
+        *(float *)(data + 0x1C) = f4;
+        *(unsigned short *)(moby + 0x34) |= 0x200;
+        g = D_L07_00166E40;
+        h = g - 0x140;
+        *(float *)(h + 0x160) = 0.3f - FUN_001f9b80(moby + 0x10, g) / 100.0f;
+        *(int *)(h + 0x168) = scale_game_frames(0x14);
+        FUN_L00_00250df8(moby);
+        FUN_0022da68(0, 0, (int)moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eb38.s", FUN_L07_0030eb38);
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FF18), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b48(void *, void *);
+
+void FUN_L07_0030eb38(char *data) {
+    int i, count;
+    if (data != 0) {
+        count = *(int *)data;
+        i = 0;
+        if (count > 0) {
+            do {
+                int o = i * 16;
+                int next = (i + 1) % count;
+                *(float *)(data + o + 0x1C) = FUN_001f9b48(data + (o + 0x10), data + (next * 16 + 0x10));
+                i++;
+                count = *(int *)data;
+            } while (i < count);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);

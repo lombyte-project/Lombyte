@@ -417,7 +417,101 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf738.s", FUN_L16_002cf738);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf7a8.s", FUN_L16_002cf7a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf850.s", FUN_L16_002cf850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf9f8.s", FUN_L16_002cf9f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d0058.s", FUN_L16_002d0058);
+/* Adjust animation and pitch to the remaining time in a jump. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1420), where it is exact; names translated to the US level program. */
+
+typedef struct { char header[0x10]; float points[1][4]; } L16LeapPath;
+
+typedef struct {
+    char pad0[0x268]; float height; char pad26C[0xC]; float target_height;
+    char pad27C[0x44]; char *path; char pad2C4[4]; float vertical_speed;
+    char pad2CC[0x18]; int timer; char pad2E8[0xC]; short node;
+    char pad2F6[2]; float pitch_speed; char pad2FC[2]; short sequence;
+} L16LeapData;
+
+typedef struct {
+    char pad0[0x44]; float pitch; char pad48[0xA];
+    unsigned char animation, next_animation; char pad54[4]; float animation_speed;
+    char pad5C[0x14]; unsigned char flags; char pad71[7]; L16LeapData *data;
+} L16LeapMoby;
+
+extern float D_0015ED64;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_002595a0(float *, float *, float, float, float);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+void FUN_L00_002371e0(void);
+extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
+
+void FUN_L16_002d0058(L16LeapMoby *m) {
+    float root0, root1;
+    float pitch;
+    L16LeapData *d = m->data;
+    pitch = 0.0f;
+    if (d->timer == 0) {
+        int next;
+        float distance;
+        next = FUN_L00_0025d7a0(d->path, d->node, 1, 1) * 16;
+        distance = FUN_001f9b80(d->path + (d->node * 16 + 0x10), d->path + (next + 0x10));
+        pitch = FUN_001f9e90(distance, *(float *)(d->path + next + 0x18) - ((L16LeapPath *)d->path)->points[d->node][2]);
+    }
+    FUN_L00_0025bc98(&m->pitch, &d->pitch_speed, 0, pitch, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, D_0015ED6C * 3.14159265f);
+    if (d->timer != 0) {
+        float duration;
+        float acceleration;
+        if (m->next_animation != 5 && scale_game_frames(3) > d->timer) {
+            func_L00_00237B70_anim(m, 5, 4, scale_game_frames(5));
+            d->sequence = -1;
+        }
+        acceleration = D_0015ED70 * 21.0f * -0.5f;
+        duration = 30.0f;
+        if (FUN_L00_002595a0(&root0, &root1, acceleration, d->vertical_speed - acceleration, d->height - d->target_height) > 0 && root0 > 0.0f) {
+            duration = func_001FA898_caa18(root0);
+        }
+        if (scale_game_frames(7) < d->timer && scale_game_frames(11) > d->timer && m->next_animation == 5 && (float)scale_game_frames(27) < duration) {
+            short sequence;
+            int chosen;
+            chosen = FUN_L00_00257b90(0, 3) + 1;
+            d->sequence = chosen;
+            sequence = chosen;
+            func_L00_00237B70_anim(m, sequence, 3, scale_game_frames(7));
+        }
+        if (d->sequence != -1) {
+            if (m->animation == m->next_animation) {
+                float frame = compute_interpolated_record_value(m);
+                if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
+                    float speed = 30.0f / duration;
+                    if (speed > 1.7f) speed = 1.7f;
+                    if (speed < 0.3f) speed = 0.3f;
+                    m->animation_speed = speed;
+                }
+            }
+            if (d->sequence != -1) {
+                if (duration < (float)scale_game_frames(5)) {
+                    func_L00_00237B70_anim(m, 5, 0x33, scale_game_frames(5));
+                    d->sequence = -1;
+                } else if (m->flags & 2) {
+                    func_L00_00237B70_anim(m, 5, 0x1C, scale_game_frames(7));
+                    d->sequence = -1;
+                }
+            }
+        }
+        if (m->animation == m->next_animation && m->animation == 5 && duration != 0.0f) {
+            float remaining;
+            remaining = 50.0f;
+            remaining -= compute_interpolated_record_value(m);
+            remaining /= duration;
+            m->animation_speed = remaining;
+        }
+    } else {
+        m->animation_speed = 1.0f;
+        if ((m->flags & 2) && m->next_animation != 0) {
+            func_L00_00237B70_anim(m, 0, 0, scale_game_frames(8));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d04a0.s", FUN_L16_002d04a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d59e0.s", FUN_L16_002d59e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ad0.s", FUN_L16_002d5ad0);

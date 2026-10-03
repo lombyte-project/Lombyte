@@ -72,7 +72,54 @@ void FUN_L08_00307b90(int arg) {
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307cf0.s", FUN_L08_00307cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003085f0.s", FUN_L08_003085f0);
+/* While the player is within range, scatters spawned particles around the moby on a random disc. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_L08_001675C0[];
+extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float D_L08_00162364;
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern void FUN_L08_00272cb8(void *, void *, void *, float);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L08_003085f0(char *moby) {
+    float v[4];
+    float pos[4];
+    float w[4];
+    float o[4];
+    char *d = *(char **)(moby + 0x78);
+    int i;
+    subtract_vector_xyz(v, D_L08_001675C0, moby + 0x10);
+    v[2] = 0.0f;
+    if (dot_vectors_xyz(v, v) < *(float *)(d + 4) * *(float *)(d + 4)) {
+        float a, b, r;
+        i = 0;
+        r = *(float *)(d + 0x24) * D_0015ED6C;
+        *(u128 *)pos = *(u128 *)(moby + 0x10);
+        a = (*(float *)(d + 0x28) - 180.0f) / 180.0f * 3.1415927f;
+        b = (*(float *)(d + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
+        for (; i < *(int *)(d + 0x14); i++) {
+            float ang, rad;
+            *(u128 *)v = *(u128 *)pos;
+            ang = random_float_between_alt(a, b);
+            rad = random_float_between_alt(*(float *)(d + 0xC), *(float *)(d + 8));
+            v[0] = v[0] + fast_cos(ang) * rad;
+            v[1] = v[1] + fast_sin(ang) * rad;
+            subtract_vector_xyz(w, v, D_L08_001675C0);
+            if (!(vector_length_xy(w) <= *(float *)(d + 0x10))) {
+                o[0] = D_L08_00162360[0] + random_float_between_alt(-r, r);
+                o[1] = D_L08_00162364 + random_float_between_alt(-r, r);
+                o[2] = -(random_float_between_alt(*(float *)(d + 0x18), *(float *)(d + 0x1C)) * D_0015ED6C);
+                o[3] = 0.0f;
+                FUN_L08_00272cb8(v, *(void **)d, o, *(float *)(moby + 0x18) - *(float *)(d + 0x20));
+            }
+        }
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_00167600_d __asm__("D_L08_00167600") __attribute__((section(".data")));

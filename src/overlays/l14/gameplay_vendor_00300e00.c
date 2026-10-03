@@ -70,7 +70,74 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305408.s", FUN_L14_00305408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305600.s", FUN_L14_00305600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305680.s", FUN_L14_00305680);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305b18.s", FUN_L14_00305b18);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Updates and draws four scrolling particle streaks for an Oltanis moby. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306FA0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float pad[2];
+    float z;
+    float pad2[5];
+    float a[4];
+    float b[4];
+    int t[4];
+    float c[4];
+} FxData14;
+
+extern char D_L14_001674C0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int FUN_001fa6e0(int, int, float);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void tick_countdown_32(void *) __asm__("func_001F9740");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001F9908_r(int *arg0) __asm__("FUN_001f9740");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L14_00305b18(char *p) {
+    float v[8];
+    FxData14 *m = *(FxData14 **)(p + 0x78);
+    float *a;
+    int *t;
+    int i, j, c, k;
+    float f, g;
+    j = 0;
+    m->z += 0.1f;
+    subtract_vector_xyz(v, D_L14_001674C0, m);
+    t = m->t;
+    a = m->a;
+    normalize_vector_xyz(v, v, -0.3f);
+    normalize_vector_xyz(&v[4], v, 0.1f);
+    add_vector_xyz(v, v, m);
+    m->z -= 0.1f;
+    for (i = 3; i >= 0; i--) {
+        f = *a + m->b[j];
+        *a = f;
+        if (f >= 255.0f) {
+            *a = f - 255.0f;
+        } else if (f <= 0.0f) {
+            *a = f + 255.0f;
+        }
+        if (func_001F9908_r(t)) {
+            m->t[j] = scale_game_frames(255);
+        }
+        t++;
+        g = ConvertIntegerToFloat(scale_game_frames(255) - m->t[j]);
+        g = g / (float)scale_game_frames(255);
+        c = FUN_001fa6e0(0x4040FFFF, 0x1040FFFF, AbsoluteFloat(0.5f - g));
+        k = func_001FA898_r(*a++);
+        FUN_L00_00272f68(m->c[j], v, c, k, 0x35, 1, 2, 0);
+        j++;
+        add_vector_xyz(v, v, &v[4]);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305d28.s", FUN_L14_00305d28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003061d8.s", FUN_L14_003061d8);
 #define NOT_SDA

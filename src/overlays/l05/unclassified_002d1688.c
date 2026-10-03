@@ -214,7 +214,51 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7020.s", FUN_L05_002d7020);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002dac80.s", FUN_L05_002dac80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db018.s", FUN_L05_002db018);
+/* Emits up to two particle effects around the moby, each in a random direction. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
+
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L01_00287158(float *, float, float, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L05_002db018(unsigned char *moby) {
+    float v[3];
+    if (moby[0x31] != 0) {
+        if (random_integer_below(0x13) == 0) {
+            float a = random_angle_radians();
+            float z = 0.0f;
+            float b = random_float_between_alt(z, 0.1f);
+            float c = random_float_between_alt(z, 0.5f);
+            float e = random_float_between_alt(0.5f, 1.0f);
+            int s = func_001FA898_r(random_float_between_alt(120.0f, 180.0f));
+            v[0] = fast_cos(a) * b;
+            v[1] = fast_sin(a) * b;
+            v[2] = z;
+            add_vector_xyz(v, v, moby + 0x10);
+            FUN_L01_00287158(v, c, e, 0x30002028, 0x2020, scale_game_frames(s));
+        }
+        if (random_integer_below(4) == 0) {
+            float a = random_angle_radians();
+            float z = 0.0f;
+            float b = random_float_between_alt(z, 0.1f);
+            float c = random_float_between_alt(z, 1.75f);
+            float e = random_float_between_alt(1.75f, 2.25f);
+            int s = func_001FA898_r(random_float_between_alt(120.0f, 180.0f));
+            v[0] = fast_cos(a) * b;
+            v[1] = fast_sin(a) * b;
+            v[2] = z;
+            add_vector_xyz(v, v, moby + 0x10);
+            FUN_L01_00287158(v, c, e, 0x20002020, 0x2030, scale_game_frames(s));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db238.s", FUN_L05_002db238);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);

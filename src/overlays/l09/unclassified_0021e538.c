@@ -5,10 +5,105 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e8c0.s", FUN_L09_0021e8c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c2500.s", FUN_L09_002c2500);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
+
+typedef int uq __attribute__((mode(TI)));
+
+extern char *func_0020D348_m(int);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+char *FUN_L09_002c2500(char *src, char *pos, int cls) {
+    char *m = func_0020D348_m(cls);
+    if (m) {
+        uq v0;
+        uq v1;
+        char *p = m + 0x10;
+        char *d;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        d = *(char **)(m + 0x78);
+        m[0x31] = 1;
+        m[0x20] = 1;
+        qcopy(p, pos);
+        qcopy(d + 0x10, pos);
+        *(char **)(d + 0x2C) = src;
+        FUN_L00_00250df8(m);
+        FUN_L00_0024f7c8(m, 0, &v0);
+        subtract_vector_xyz(&v1, pos, &v0);
+        FUN_001f9cf8(&v1, &v1, src + 0xC0);
+        add_vector_xyz(p, pos, &v1);
+        qcopy(m + 0x40, src + 0x40);
+        *(uq *)(m + 0xC0) = *(uq *)(src + 0xC0);
+        *(uq *)(m + 0xD0) = *(uq *)(src + 0xD0);
+        *(uq *)(m + 0xE0) = *(uq *)(src + 0xE0);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c2610.s", FUN_L09_002c2610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c26c8.s", FUN_L09_002c26c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ea528.s", FUN_L09_002ea528);
+/* spawns a debris moby with randomized velocity toward a point */
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
+
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern float D_L09_00166F40[];
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+
+char *FUN_L09_002ea528(char *owner, float *vec) {
+    char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
+    if (moby != 0) {
+        char *d = *(char **)(moby + 0x78);
+        char *o = *(char **)(owner + 0x78);
+        char *dv;
+        float len;
+        *(float *)d = random_float_between_alt(-2.0f, 2.0f);
+        *(float *)(d + 4) = random_float_between_alt(-2.0f, 2.0f);
+        *(float *)(d + 8) = random_float_between_alt(-2.0f, 2.0f);
+        dv = d + 0x20;
+        add_vector_xyz(dv, d, o);
+        normalize_vector_xyz(d, d, D_0015ED6C * 50.0f);
+        add_vector_xyz(d, d, vec);
+        scale_vector_xyz(d, d, D_0015ED60 * -0.7f + 1.0f);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        *(int *)(d + 0x4C) = 2;
+        moby[0x23] = 0x7F;
+        {
+            float v = *(float *)(owner + 0x2C) * random_float_between_alt(0.125f, 0.25f);
+            *(float *)(moby + 0x2C) = v;
+            *(float *)(d + 0x50) = v;
+        }
+        *(float *)(d + 0x40) = random_float_between_alt(-0.05235988f, 0.05235988f);
+        *(float *)(d + 0x44) = random_float_between_alt(-0.05235988f, 0.05235988f);
+        subtract_vector_xyz(moby + 0x10, dv, D_L09_00166F40);
+        len = vector_length_xyz(moby + 0x10);
+        if (100.0f < len) {
+            normalize_vector_xyz(moby + 0x10, moby + 0x10, 100.0f);
+            add_vector_xyz(moby + 0x10, moby + 0x10, D_L09_00166F40);
+            *(float *)(moby + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
+        } else {
+            qcopy(moby + 0x10, dv);
+            *(float *)(moby + 0x2C) = *(float *)(d + 0x50);
+        }
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ea778.s", FUN_L09_002ea778);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaa50.s", FUN_L09_002eaa50);
 #define NOT_SDA

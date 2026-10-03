@@ -96,8 +96,117 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9000.s", FUN_L10_002d9000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d90a8.s", FUN_L10_002d90a8);
+/* Test whether a point lies within a box around a moby, in the moby's local frame. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
+
+typedef int u128_2DA3C0 __attribute__((mode(TI)));
+
+extern short D_L10_00161C0C_d __asm__("D_L10_00161C0C") __attribute__((sda));
+extern short D_L10_00161C10_d __asm__("D_L10_00161C10") __attribute__((sda));
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+int FUN_L10_002d9000(char *m, float *p) {
+    float a[4] __attribute__((aligned(16)));
+    float t10[16] __attribute__((aligned(16)));
+    float t50[4] __attribute__((aligned(16)));
+    float t60[4] __attribute__((aligned(16)));
+    *(u128_2DA3C0 *)a = *(u128_2DA3C0 *)p;
+    FUN_001fa2d8(t10, m + 0xC0);
+    subtract_vector_xyz(t60, a, m + 0x10);
+    *(u128_2DA3C0 *)t50 = *(u128_2DA3C0 *)t60;
+    FUN_001f9d20(t50, t50, t10);
+    if (AbsoluteFloat(t50[0]) < *(float *)&D_L10_00161C10_d) {
+        return AbsoluteFloat(t50[1]) < *(float *)&D_L10_00161C0C_d;
+    }
+    return 0;
+}
+/* update for a moby that glides between two heights and sets a flag */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_0013D388[];
+extern char D_L10_001DD160[];
+extern float FUN_001f96b0(float);
+extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
+extern u128 D_0013F3D0;
+extern u128 D_L10_00167240;
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L10_002d90a8(unsigned char *m) {
+    int *d = *(int **)(m + 0x78);
+    u128 v[2];
+    int it;
+    int flag;
+    int hit;
+    if (d == 0) {
+        DebugPrint_alt(D_L10_001DD160, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+        mark_moby_for_removal(m);
+        return;
+    }
+    switch (m[0x20]) {
+    case 0:
+        *(u128 *)d = *(u128 *)(m + 0x10);
+        m[0x20] = 2;
+        break;
+    case 1:
+        flag = 0;
+        {
+            float f = *(float *)(m + 0x18) - 4.0f / FUN_001f96b0(20.0f);
+            *(float *)(m + 0x18) = f;
+            if (f <= *(float *)(d + 2)) {
+                *(float *)(m + 0x18) = *(float *)(d + 2);
+                m[0x20] = 2;
+            }
+        }
+        if (d[4] != -1) {
+            if (FUN_L00_002591d0(&it, d[4], 0, 0)) {
+                do {
+                    v[0] = *(u128 *)(it + 0x10);
+                    if (FUN_L10_002d9000_c(m, &v[0])) {
+                        flag = 1;
+                        break;
+                    }
+                } while (FUN_L00_002592b8(&it, it, 0, 0));
+            }
+        }
+        hit = 0;
+        if (flag == 0) {
+            v[0] = D_L10_00167240;
+            if (FUN_L10_002d9000_c(m, &v[0]) == 0) {
+                v[1] = D_0013F3D0;
+                if (FUN_L10_002d9000_c(m, &v[1]) == 0) goto done;
+            }
+        }
+        hit = 1;
+    done:
+        if (hit) m[0x20] = 3;
+        break;
+    case 2:
+        break;
+    case 3: {
+        float f = 4.0f / FUN_001f96b0(20.0f);
+        float g = *(float *)(m + 0x18) + f;
+        float h;
+        *(float *)(m + 0x18) = g;
+        h = *(float *)(d + 2) + 4.0f;
+        if (h <= g) {
+            *(float *)(m + 0x18) = h;
+            m[0x20] = 4;
+            if (d[5] != -1) D_0013D388[d[5] + 0x4C] = 1;
+        }
+        break;
+    }
+    case 4:
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d92b8.s", FUN_L10_002d92b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d9eb8.s", FUN_L10_002d9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);

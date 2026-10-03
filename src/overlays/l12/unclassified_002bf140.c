@@ -49,7 +49,70 @@ int FUN_L12_002e17f8(Level12VendorStateMoby *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1878.s", FUN_L12_002e1878);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e18e8.s", FUN_L12_002e18e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e19a8.s", FUN_L12_002e19a8);
+#include "qcopy.h"
+
+/* Scatters 27 particles around a point with random offsets and velocities. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2CB8), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C;
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L12_00161888_d __asm__("D_L12_00161888") __attribute__((sda));
+extern short D_L12_0016188C_d __asm__("D_L12_0016188C") __attribute__((sda));
+extern short D_L12_00161890_d __asm__("D_L12_00161890") __attribute__((sda));
+extern short D_L12_00161894_d __asm__("D_L12_00161894") __attribute__((sda));
+extern short D_L12_00161898_d __asm__("D_L12_00161898") __attribute__((sda));
+extern short D_L12_0016189C_d __asm__("D_L12_0016189C") __attribute__((sda));
+extern short D_L12_001618A0_d __asm__("D_L12_001618A0") __attribute__((sda));
+extern short D_L12_001618A4_d __asm__("D_L12_001618A4") __attribute__((sda));
+extern short D_L12_001618AC_d __asm__("D_L12_001618AC") __attribute__((sda));
+extern short D_L12_001618B0_d __asm__("D_L12_001618B0") __attribute__((sda));
+extern short D_L12_001618B4_d __asm__("D_L12_001618B4") __attribute__((sda));
+extern short D_L12_001618B8_d __asm__("D_L12_001618B8") __attribute__((sda));
+extern short D_L12_001618BC_d __asm__("D_L12_001618BC") __attribute__((sda));
+extern short D_L12_001618C0_d __asm__("D_L12_001618C0") __attribute__((sda));
+extern short D_L12_001618C4_d __asm__("D_L12_001618C4") __attribute__((sda));
+extern short D_L12_001618C8_d __asm__("D_L12_001618C8") __attribute__((sda));
+extern short D_L12_001618CC_d __asm__("D_L12_001618CC") __attribute__((sda));
+extern void FUN_001f99f8(void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L12_002e19a8(void *pos) {
+    float v[4];
+    float w[4];
+    float v3[4];
+    float v4[4];
+    float r;
+    int i;
+    int a, b, c;
+    *(u128 *)v = *(u128 *)pos;
+    i = 0x1A;
+    do {
+        r = random_angle_radians();
+        qcopy(w, v);
+        w[2] = w[2] + random_float_between_alt(-0.25f, -0.75f);
+        w[0] = w[0] + random_float_between_alt(-0.25f, 0.25f);
+        w[1] = w[1] + random_float_between_alt(-0.25f, 0.25f);
+        FUN_001f99f8(v3);
+        v4[0] = fast_cos(r) * (random_float_between_alt(*(float *)&D_L12_00161898_d, *(float *)&D_L12_0016189C_d) * D_0015ED6C);
+        v4[1] = fast_sin(r) * (random_float_between_alt(*(float *)&D_L12_00161898_d, *(float *)&D_L12_0016189C_d) * D_0015ED6C);
+        *(int *)&v4[2] = 0;
+        v3[2] = random_float_between_alt(*(float *)&D_L12_00161888_d, *(float *)&D_L12_0016188C_d) * D_0015ED6C;
+        v4[2] = random_float_between_alt(*(float *)&D_L12_00161890_d, *(float *)&D_L12_00161894_d) * D_0015ED6C;
+        v3[3] = *(float *)&D_L12_001618A0_d;
+        v4[3] = *(float *)&D_L12_001618A4_d;
+        a = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618AC_d, (float)*(int *)&D_L12_001618B0_d));
+        b = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618B4_d, (float)*(int *)&D_L12_001618B8_d));
+        c = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618BC_d, (float)*(int *)&D_L12_001618C0_d));
+        FUN_00218888(w, v3, v4, *(int *)&D_L12_001618C4_d, *(int *)&D_L12_001618C8_d, a, b, c, *(int *)&D_L12_001618CC_d);
+    } while (--i >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1be0.s", FUN_L12_002e1be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e2eb8.s", FUN_L12_002e2eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
@@ -228,7 +291,65 @@ void FUN_L12_002eae00(char *moby) {
     *(float *)(moby + 0x40) = FUN_L00_00258110((float *)(data + 0x98), *(float *)(moby + 0x40), b, k1, d1, m1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eaf68.s", FUN_L12_002eaf68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb220.s", FUN_L12_002eb220);
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L12_002eb220(char *m) {
+    int st;
+    float fv;
+    int res;
+    char *d;
+    char *r;
+    float a, b, p, q;
+    d = *(char **)(m + 0x78);
+    fv = 0.0f;
+    r = FUN_L00_0025a420(m, 0x330000, 0);
+    res = FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+    if (st != 1 && *(unsigned char *)(m + 0x20) != 6 &&
+        *(short *)(*(char **)(r + 0x20) + 0xA6) != 0xB8 &&
+        *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x199) {
+        float t;
+        if (*(short *)(*(char **)(r + 0x20) + 0xA6) == 0x1CA) fv = 10.0f;
+        t = *(float *)(d + 0x20) - fv;
+        *(float *)(d + 0x20) = t;
+        if (res == 1 || t <= 0.0f) {
+            FUN_0022da68(2, 0, (int)m);
+            *(unsigned char *)(m + 0x20) = 6;
+        } else if (res != 0xB) {
+            *(unsigned char *)(d + 0x67) = 0xB4;
+            FUN_L00_0025d458(m, (short *)(d + 0x60));
+            if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(m + 0x20) != 5) {
+                a = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(r + 0), *(float *)(m + 0x14) - *(float *)(r + 4));
+                b = fast_subtract_rotations(a, *(float *)(m + 0x48));
+                p = fast_cos(b) * 0.08726646f;
+                q = fast_sin(b) * -0.34906584f;
+                if (AbsoluteFloat(*(float *)(m + 0x40)) < AbsoluteFloat(q)) {
+                    *(float *)(m + 0x40) = q;
+                    *(float *)(d + 0x98) = 0.0f;
+                }
+                if (AbsoluteFloat(*(float *)(m + 0x44)) < AbsoluteFloat(p)) {
+                    *(float *)(m + 0x44) = p;
+                    *(float *)(d + 0x9C) = 0.0f;
+                }
+                *(float *)(d + 0x94) = D_0015ED6C * 4.0f;
+                *(short *)(d + 0x8E) = scale_game_frames(0x3C);
+                *(unsigned char *)(m + 0xBC) = *(unsigned char *)(m + 0x20);
+                *(unsigned char *)(m + 0x20) = 5;
+                FUN_0022da68(1, 0, (int)m);
+            }
+        }
+    }
+    *(unsigned char *)(m + 0xA4) = 0xFF;
+    FUN_L00_0025d538(m, d + 0x60);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb570.s", FUN_L12_002eb570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebca8.s", FUN_L12_002ebca8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebea8.s", FUN_L12_002ebea8);

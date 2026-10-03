@@ -3,7 +3,39 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003058a8.s", FUN_L13_003058a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305988.s", FUN_L13_00305988);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Initializes a Gemlik moby from its data block, copying transforms and resetting state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00306E20), where it is exact; names translated to the US level program. */
+
+typedef int u128_306E20 __attribute__((mode(TI)));
+
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L13_00305988(char *moby, char *pos, int arg2, float arg3) {
+    char *d = *(char **)(moby + 0x78);
+    char *s = *(char **)(d + 0x20);
+    char *mp;
+    *(float *)(d + 0x28) = arg3;
+    qcopy(moby + 0x40, s + 0x40);
+    mp = moby + 0x10;
+    *(u128_306E20 *)(moby + 0xC0) = *(u128_306E20 *)(s + 0xC0);
+    *(u128_306E20 *)(moby + 0xD0) = *(u128_306E20 *)(s + 0xD0);
+    *(u128_306E20 *)(moby + 0xE0) = *(u128_306E20 *)(s + 0xE0);
+    FUN_L00_0024f7c8(*(void **)(d + 0x20), *(short *)(d + 0x26), mp);
+    qcopy(d + 0x10, mp);
+    qcopy(d, pos);
+    *(int *)(d + 0x2C) = arg2;
+    moby[0x20] = 0;
+    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    FUN_L00_00250df8(moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305a58.s", FUN_L13_00305a58);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");

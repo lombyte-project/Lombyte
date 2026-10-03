@@ -5,7 +5,70 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d36e0.s", FUN_L08_002d36e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3d78.s", FUN_L08_002d3d78);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Steers a moby along its path state and lifts it clear of the ground. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L08_00174670[];
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int FUN_L08_002025d0(void *, int, int, void *, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L08_002d3d78(char *m) {
+    char *s = *(char **)(m + 0x78);
+    float f = vector_length_xyz((float *)(s + 0x40)) - D_0015ED70 * 6.0f;
+    float lim = D_0015ED6C * 3.0f;
+    float t;
+    float d;
+    float tmp[4];
+    float *v;
+    if (lim < f) {
+        f = lim;
+    } else if (f < 0.0f) {
+        f = 0.0f;
+    }
+    v = (float *)(s + 0x40);
+    normalize_vector_xyz(v, v, f);
+    add_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), v);
+    *(float *)(s + 0x204) = fast_add_rotations(*(float *)(s + 0x204), *(float *)(s + 0x20C));
+    t = *(float *)(s + 0x1C8) + *(float *)(s + 0x208) * fast_sin(*(float *)(s + 0x204));
+    if (*(short *)(s + 0x216)) t += *(float *)(s + 0x200);
+    d = t - *(float *)(m + 0x18);
+    {
+        float l2 = D_0015ED6C * 3.0f;
+        if (l2 < d) {
+            d = l2;
+        } else {
+            l2 = -l2;
+            if (d < l2) d = l2;
+        }
+    }
+    *(float *)(s + 0x48) = d;
+    qcopy(tmp, (float *)(m + 0x10));
+    tmp[2] += 0.5f;
+    if (FUN_L08_002025d0(tmp, 0x190, 0, m, 0)) {
+        float z;
+        subtract_vector_xyz(tmp, D_L08_00174670, (float *)(m + 0x10));
+        z = D_0015ED6C * 3.0f;
+        if (z < tmp[2]) {
+            tmp[2] = z;
+        } else if (tmp[2] < -z) {
+            tmp[2] = -z;
+        }
+        add_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), tmp);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

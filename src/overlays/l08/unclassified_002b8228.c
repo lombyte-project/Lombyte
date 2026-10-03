@@ -76,7 +76,30 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002daa10.s", FUN_L08_002daa10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc0c8.s", FUN_L08_002dc0c8);
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
+
+extern char D_L08_001DB280[];
+extern int D_L08_001B0CB0[];
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L08_002dc0c8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int *t = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
+    if (*t == 8) {
+        char *q = D_L08_001DB280;
+        char *mat = moby + 0xC0;
+        char *pos = moby + 0x10;
+        char *p = (char *)t + 0x10;
+        int i;
+        for (i = 7; i >= 0; i--) {
+            FUN_001f9cf8(p, q, mat);
+            q += 0x10;
+            add_vector_xyz(p, p, pos);
+            p += 0x10;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc648.s", FUN_L08_002dc648);
 #define NOT_SDA

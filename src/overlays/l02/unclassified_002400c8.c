@@ -166,7 +166,26 @@ void FUN_L02_002d6118(unsigned char *moby, void *position, float *direction) {
     *(float *)(moby + 0x48) = FUN_001f9e90(direction[0], direction[1]);
     FUN_L00_00250df8(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d6210.s", FUN_L02_002d6210);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7648), where it is exact; names translated to the US level program. */
+
+extern char D_L02_0015FFD8_c __asm__("D_L02_0015FFD8");
+extern void *FUN_L00_002dbb20(void *);
+
+void *FUN_L02_002d6210(char *moby) {
+    void *r = FUN_L00_002dbb20(moby);
+    if (r) {
+        int idx;
+        moby[0x20] = 9;
+        idx = *(int *)(*(char **)(moby + 0x78) + 0x288);
+        if (idx >= 0) {
+            char *o = *(char **)(*(int *)&D_L02_0015FFD8_c + idx * 256 + 0x78);
+            (*(int *)(o + 0x14C))--;
+        }
+    } else if (((unsigned char *)moby)[0x20] == 9) {
+        moby[0x20] = 1;
+    }
+    return r;
+}
 #include "qcopy.h"
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
@@ -338,11 +357,162 @@ void FUN_L02_002df0b0(char *moby)
     FUN_L00_00250df8(*(char **)(d + 0x84));
     FUN_L00_00250df8(*(char **)(d + 0x88));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df1a8.s", FUN_L02_002df1a8);
+/* State machine for a moby that picks a new animation each time the previous one finishes. */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550[];
+extern int FUN_0022da68(int, int, int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L02_00161C68_d __asm__("D_L02_00161C68") __attribute__((sda));
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L02_002df1a8(unsigned char *moby) {
+    int *d = *(int **)(moby + 0x78);
+    *(float *)(moby + 0x58) = *(float *)&D_L02_00161C68_d;
+    switch (moby[0x53]) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+        if (moby[0x70] & 2) {
+            int idx;
+            *(int *)(moby + 0x54) = 0;
+            if (moby[0x53] != moby[0xBC]) {
+                blend_moby_animation(moby, moby[0xBC], 0, 0);
+            }
+            idx = d[0];
+            if (idx != -1) {
+                char *e = D_0013E550 + idx * 0x70;
+                if (*(unsigned char **)(e + 0x88) == moby && ((unsigned char *)e)[0x74] != 0) {
+                    release_voice_slot(idx);
+                }
+            }
+            d[0] = -1;
+            FUN_0022da68(1, 0, (int)moby);
+            moby[0xBC] = func_001FA898_r(FUN_001f96b0(random_float_between_alt(180.0f, 240.0f)));
+        }
+        break;
+    case 0:
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            if (moby[0x53] != 1) {
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
+            }
+            moby[0xBC] = 2;
+            d[0] = FUN_0022da68(0, 4, (int)moby);
+        }
+        break;
+    case 2:
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            if (random_integer_below(0xFF) & 1) {
+                if (moby[0x53] != 3) {
+                    blend_moby_animation(moby, 3, 0, scale_game_frames(10));
+                }
+                moby[0xBC] = 4;
+            } else {
+                if (moby[0x53] != 7) {
+                    blend_moby_animation(moby, 7, 0, scale_game_frames(10));
+                }
+                moby[0xBC] = 0;
+            }
+            d[0] = FUN_0022da68(0, 4, (int)moby);
+        }
+        break;
+    case 4:
+        if (FUN_L00_001fefc8(moby + 0xBC)) {
+            if (moby[0x53] != 5) {
+                blend_moby_animation(moby, 5, 0, scale_game_frames(10));
+            }
+            moby[0xBC] = 2;
+            d[0] = FUN_0022da68(0, 4, (int)moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df730.s", FUN_L02_002df730);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df948.s", FUN_L02_002df948);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dffc8.s", FUN_L02_002dffc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0138.s", FUN_L02_002e0138);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
+
+extern char D_L02_0015FFD8_c2 __asm__("D_L02_0015FFD8");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern void FUN_L00_0025f730(void *a, float x);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L02_002dffc8(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float a[4];
+    float b[4];
+    switch (moby[0x20]) {
+    case 0:
+        qcopy(d, moby + 0x10);
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (*(int *)(d + 0x10) >= 0) {
+            unsigned char *o = (unsigned char *)((*(int *)(d + 0x10) << 8) + *(int *)&D_L02_0015FFD8_c2);
+            short c = *(short *)(o + 0xA6);
+            if (c == 0x267 || c == 0x23F) {
+                if (o[0x20] == 4) {
+                    moby[0x20] = 2;
+                    FUN_0022da68(0, 0, (int)moby);
+                }
+            }
+        }
+        break;
+    case 2:
+        normalize_vector_xyz(a, moby + 0xD0, 2.0f);
+        add_vector_xyz(a, d, a);
+        subtract_vector_xyz(b, a, moby + 0x10);
+        FUN_L00_0025f730(b, D_0015ED6C + D_0015ED6C);
+        add_vector_xyz(moby + 0x10, moby + 0x10, b);
+        if (vector_length_xyz(b) == 0.0f) {
+            FUN_0022da68(1, 0, (int)moby);
+            moby[0x20] = 3;
+        }
+        break;
+    }
+}
+/* moves a moby through three states: latch position, wait for a peer to reach state 4, then slide toward it */
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1570), where it is exact; names translated to the US level program. */
+
+extern char D_L02_0015FFD8_c3 __asm__("D_L02_0015FFD8");
+
+void FUN_L02_002e0138(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        qcopy(data, moby + 0x10);
+        moby[0x20] = 1;
+        break;
+    case 1: {
+        int id = *(int *)(data + 0x10);
+        if (id >= 0) {
+            char *m = (char *)((id << 8) + *(int *)&D_L02_0015FFD8_c3);
+            int t = *(short *)(m + 0xA6);
+            if (t == 0x267 || t == 0x23F) {
+                if (((unsigned char *)m)[0x20] == 4) moby[0x20] = 2;
+            }
+        }
+        break;
+    }
+    case 2: {
+        float a[4];
+        float b[4];
+        char *pos = moby + 0x10;
+        normalize_vector_xyz(a, moby + 0xD0, -2.0f);
+        add_vector_xyz(a, data, a);
+        subtract_vector_xyz(b, a, pos);
+        FUN_L00_0025f730(b, D_0015ED6C + D_0015ED6C);
+        add_vector_xyz(pos, pos, b);
+        if (vector_length_xyz(b) == 0.0f) moby[0x20] = 3;
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0280.s", FUN_L02_002e0280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0720.s", FUN_L02_002e0720);

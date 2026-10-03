@@ -30,7 +30,39 @@ void *FUN_L11_00316210(unsigned char *arg) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316320.s", FUN_L11_00316320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317678.s", FUN_L11_00317678);
+#include "qcopy.h"
+
+/* Orients a moby along a path of three points read from its data table. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00318AE8), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float FUN_001f9b80(float *, float *);
+extern float FUN_001f9e90(float, float);
+extern void FUN_001f9a40(void *, void *, void *, float);
+
+void FUN_L11_00317678(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    int i = *(int *)(d + 0x68);
+    char *t = *(char **)(d + 0xF0);
+    int n;
+    float a[4];
+    float b[4];
+    float c[4];
+    float *pb;
+    float *pc;
+    float x, y, z;
+    qcopy(a, t + i * 16 + 0x10);
+    n = *(int *)t;
+    qcopy(pb = b, t + (i + 1) % n * 16 + 0x10);
+    qcopy(pc = c, t + (i + 2) % n * 16 + 0x10);
+    x = FUN_001f9e90(a[0] - b[0], a[1] - b[1]);
+    y = FUN_001f9e90(b[0] - c[0], b[1] - c[1]);
+    z = FUN_001f9e90(FUN_001f9b80(a, pb), b[2] - a[2]);
+    *(float *)(moby + 0x44) = fast_add_rotations(fast_subtract_rotations(FUN_001f9e90(FUN_001f9b80(pb, pc), c[2] - b[2]), z) * *(float *)(d + 0x6C), z);
+    *(float *)(moby + 0x48) = fast_add_rotations(fast_subtract_rotations(y, x) * *(float *)(d + 0x6C), x);
+    FUN_001f9a40(moby + 0x10, a, pb, *(float *)(d + 0x6C));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317820.s", FUN_L11_00317820);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317c98.s", FUN_L11_00317c98);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */

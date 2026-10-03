@@ -346,7 +346,61 @@ void FUN_L02_002fa770(void) {
     }
     s->a = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa7c8.s", FUN_L02_002fa7c8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBC00), where it is exact; names translated to the US level program. */
+
+extern char D_0013CA44[];
+extern char D_0013F3D0[];
+extern char D_L02_00167280_c[] __asm__("D_L02_00167280");
+extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
+extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern short D_L02_0016238C;
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L02_002fa7c8(char *m) {
+    float v[4];
+    char *g = D_L02_00167280_c;
+    char *p = *(char **)(g + 0x180);
+    char *h;
+    float d;
+    float f;
+    float ang;
+    if (*(short *)(p + 0x86) == 0) {
+        if (!(0.05f < AbsoluteFloat(*(float *)(D_0013CA44)))) {
+            h = g + 0x380;
+            subtract_vector_xyz(v, m + 0x10, D_0013F3D0);
+            d = vector_length_xyz(v);
+            if (d < 22.0f) {
+                if (0.0f < d) {
+                    if (d < *(float *)(h + 8)) {
+                        if (0.0f < v[2]) {
+                            ang = 1.5707964f - approximate_arcsine(dot_vectors_xyz(p, v) / d);
+                            if (ang < 1.1170107f) {
+                                subtract_vector_xyz(v, m + 0x10, p + 0x30);
+                                d = vector_length_xyz(v);
+                                if (d == 0.0f) {
+                                    d = 0.0001f;
+                                }
+                                ang = 1.5707964f - approximate_arcsine(dot_vectors_xyz(p, v) / d);
+                                if (ang < 0.62831855f) {
+                                    f = *(float *)(h + 0xC) + *(float *)&D_L02_0016238C;
+                                    *(char **)(g + 0x380) = p;
+                                    *(float *)(h + 8) = d;
+                                    *(char **)(h + 4) = m;
+                                    *(float *)(h + 0xC) = f;
+                                    if (1.0f < f) {
+                                        *(float *)(h + 0xC) = 1.0f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */

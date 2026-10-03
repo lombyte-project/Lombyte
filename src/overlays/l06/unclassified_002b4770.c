@@ -437,8 +437,101 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3ad8.s", FUN_L06_002f3ad8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4130.s", FUN_L06_002f4130);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4390.s", FUN_L06_002f4390);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f54a0.s", FUN_L06_002f54a0);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
+
+extern char D_001404A8[];
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern short D_L06_00161CF0_d __asm__("D_L06_00161CF0") __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L06_002f4390(char *m)
+{
+    struct {
+        int pad0[2];
+        float f8;
+        float fC;
+        char *owner;
+        int flags;
+        char b18;
+        char b19;
+        short s1A;
+        float f1C;
+        int i20;
+    } q;
+    float v[4];
+    float w[4];
+    char *d;
+    float sp;
+    int fl;
+
+    fl = 0x10000;
+    if (*(int *)(D_001404A8) != 6) fl = 0x10001;
+    q.flags = fl;
+    d = *(char **)(m + 0x78);
+    q.owner = m;
+    q.f1C = 1.0f;
+    q.i20 = 1;
+    FUN_001f99f8(&q);
+    q.f8 = 1.0f;
+    q.fC = 5627.9248046875f;
+    q.b18 = 3;
+    q.b19 = 1;
+    q.s1A = *(unsigned short *)(m + 0xA6);
+    sp = (*(float *)(d + 0x70) * 60.0f - (float)*(int *)(d + 0x88)) * (*(float *)&D_L06_00161CEC_d * D_0015ED6C);
+    if (*(float *)&D_L06_00161CF0_d < sp) sp = *(float *)&D_L06_00161CF0_d;
+    normalize_vector_xyz(v, m + 0xD0, 0.125f);
+    add_vector_xyz(v, v, m + 0x10);
+    v[2] = v[2] + 0.125f;
+    w[0] = fast_cos(*(float *)(m + 0x48)) * sp;
+    w[1] = fast_sin(*(float *)(m + 0x48)) * sp;
+    w[2] = 0;
+    add_vector_xyz(w, w, v);
+    FUN_001efa68(v, w, 0, m, &q);
+    normalize_vector_xyz(v, m + 0xD0, -0.125f);
+    add_vector_xyz(v, v, m + 0x10);
+    v[2] = v[2] + 0.125f;
+    w[0] = fast_cos(*(float *)(m + 0x48)) * sp;
+    w[1] = fast_sin(*(float *)(m + 0x48)) * sp;
+    w[2] = 0;
+    add_vector_xyz(w, w, v);
+    FUN_001efa68(v, w, 0, m, &q);
+}
+/* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
+
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern void FUN_L00_00250df8(void *);
+
+void FUN_L06_002f54a0(char *a) {
+    char *data = *(char **)(a + 0x78);
+    char **p;
+    int i;
+    a[0xBC] = 1;
+    if (*(unsigned char *)(a + 0x20) == 6) {
+        a[0x20] = 2;
+        a[0x31] = 1;
+        *(unsigned short *)(a + 0x34) &= 0xFFFE;
+        *(int *)(data + 0x14) = 0;
+        *(float *)(a + 0x40) = fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
+        FUN_L00_00250df8(a);
+        p = (char **)(data + 0x24);
+        for (i = 0; i < 7; i++) {
+            char *c = p[i];
+            char *d;
+            c[0x20] = 3;
+            d = *(char **)(c + 0x78);
+            *(unsigned short *)(p[i] + 0x34) &= 0xFFFE;
+            p[i][0x31] = 1;
+            *(int *)(d + 0x14) = 0;
+            *(float *)(p[i] + 0x40) = fast_subtract_rotations(*(float *)(d + 0x10), *(float *)(d + 0x14));
+            FUN_L00_00250df8(p[i]);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f55a0.s", FUN_L06_002f55a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f5d78.s", FUN_L06_002f5d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f6470.s", FUN_L06_002f6470);

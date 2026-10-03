@@ -24,7 +24,43 @@ void FUN_L15_00200788(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002007d8.s", FUN_L15_002007d8);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern float D_0015ED6C;
+extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section(".data")));
+extern unsigned char D_0013F350[];
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L15_002007d8(void) {
+    unsigned char *base = D_0013F350;
+    if (*(int *)(base + 0x2084) == 0x6B && *(short *)(base + 0x8BC) == 0) {
+        char *m;
+        float v[4];
+        float w[16];
+        FUN_L00_00262b00(1.1f, D_0015ED6C * 5.2359877f, *(char **)(base + 0x2080),
+                          (float *)(base + 0x6A8), (float *)(base + 0x6AC));
+        m = *(char **)(base + 0x86C);
+        if (m != 0) {
+            char *cam;
+            cam = *(char **)(base + 0x2080);
+            qcopy(m + 0x10, cam + 0x10);
+            *(u128 *)v = 0;
+            v[2] = 0.21f;
+            FUN_001f9cf8(v, v, cam + 0xC0);
+            FUN_001fa050(w, &D_L15_0017ACC0_d);
+            FUN_001f9d20(v, v, w);
+            add_vector_xyz(*(char **)(base + 0x86C) + 0x10, *(char **)(base + 0x86C) + 0x10, v);
+        }
+    }
+}
 #include "qcopy.h"
 
 /* Reset the help prompt state and show the default message unless the level is in a special phase. */

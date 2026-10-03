@@ -76,7 +76,63 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2048.s", FUN_L13_002c2048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c25b8.s", FUN_L13_002c25b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2d30.s", FUN_L13_002c2d30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c37e0.s", FUN_L13_002c37e0);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L13_002c37e0(unsigned char *moby, unsigned char *d, float *fp) {
+    if (*(unsigned char *)(moby + 0x20) != 3) {
+        int cnt;
+        float vec[4];
+        char *t = FUN_L00_0025a420(moby, 0x330000, 0);
+        switch (FUN_L00_0025a478(moby, t, fp, 0, &cnt, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *fp = 0;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (cnt >= 2) {
+            if (*fp <= *(float *)(t + 0x2C)) {
+                *fp = 0;
+                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                d[0x67] = 0x78;
+                FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                moby[0x20] = 3;
+            } else {
+                *fp = *fp - *(float *)(t + 0x2C);
+                d[0x67] = 0xFA;
+                *(short *)(d + 0x26) = scale_game_frames(0x3C);
+                FUN_L00_0025d458(moby, (short *)(d + 0x60));
+                normalize_vector_xyz(vec, t + 0x10, 0.1f);
+                add_vector_xyz(moby + 0x10, moby + 0x10, vec);
+                FUN_L00_00257d78(vec, -0.1f, 0.1f);
+                add_vector_xyz(moby + 0x10, moby + 0x10, vec);
+            }
+            moby[0xA4] = 0xFF;
+        } else {
+            moby[0xA4] = 0xFF;
+        }
+    }
+    FUN_L00_0025d538(moby, d + 0x60);
+}
 /* steers a moby's pitch toward a target with a spring, then damps and clamps it */
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
 
@@ -100,7 +156,35 @@ void FUN_L13_002c3988(char *moby, char *d, float p2, float p3) {
     *(float *)(moby + 0x40) = *(float *)(moby + 0x40) * 0.98f;
     FUN_L00_0025e310(*(float *)(moby + 0x40));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3ac8.s", FUN_L13_002c3ac8);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float FUN_001f9b48(void *, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
+    int best = start;
+    int i = 0;
+    float bestd = 1e11f;
+    while (i < *tbl / 2) {
+        int j = (start + i) % *tbl;
+        float d = FUN_001f9b48(tbl + 4 + j * 4, pt);
+        float s = AbsoluteFloat(d - ref) + ConvertIntegerToFloat(i) * 0.4f;
+        if (s < bestd + ConvertIntegerToFloat(i) * 0.1f) {
+            bestd = d;
+            best = j;
+        }
+        j = (*tbl + start - i) % *tbl;
+        d = FUN_001f9b48(tbl + 4 + j * 4, pt);
+        s = AbsoluteFloat(d - ref) + ConvertIntegerToFloat(i) * 0.4f;
+        if (s < bestd) {
+            bestd = d;
+            best = j;
+        }
+        i++;
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3c88.s", FUN_L13_002c3c88);
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C5190), where it is exact; names translated to the US level program. */
 
@@ -127,10 +211,104 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ce688.s", FUN_L13_002ce688);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cecb8.s", FUN_L13_002cecb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cefc0.s", FUN_L13_002cefc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1140.s", FUN_L13_002e1140);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
+
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 rand();
+
+char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
+    char *moby = func_0020D348_m(0x584);
+    if (moby != 0) {
+        char *d;
+        float r;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        d = *(char **)(moby + 0x78);
+        *(unsigned short *)(moby + 0x32) = *(unsigned short *)(owner + 0x32);
+        moby[0x31] = 1;
+        moby[0x20] = 2;
+        moby[0xBC] = 0;
+        moby[0x72] = 0;
+        qcopy(moby + 0x10, pos);
+        qcopy(d, vec);
+        *(float *)(moby + 0x2C) = f;
+        *(char **)(d + 0x48) = owner;
+        *(int *)(d + 0x40) = 1;
+        *(short *)(d + 0x4C) = scale_game_frames(0x1E);
+        *(short *)(d + 0x4E) = a3;
+        *(int *)(moby + 0x94) = 0;
+        r = random_float_between_alt(-30.0f, 30.0f) * 0.017453292f * D_0015ED6C;
+        switch (rand() % 3) {
+        case 0: *(float *)(d + 0x30) = r; break;
+        case 1: *(float *)(d + 0x34) = r; break;
+        case 2: *(float *)(d + 0x38) = r; break;
+        }
+        r = random_float_between_alt(-180.0f, 180.0f) * 0.017453292f * D_0015ED6C;
+        switch (rand() % 3) {
+        case 0: *(float *)(d + 0x30) = r; break;
+        case 1: *(float *)(d + 0x34) = r; break;
+        case 2: *(float *)(d + 0x38) = r; break;
+        }
+        *(float *)(moby + 0x40) = random_angle_radians();
+        *(float *)(moby + 0x44) = random_angle_radians();
+        *(float *)(moby + 0x48) = random_angle_radians();
+        FUN_L00_00250df8(moby);
+        FUN_L00_0025d1b8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1348.s", FUN_L13_002e1348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1638.s", FUN_L13_002e1638);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e4300.s", FUN_L13_002e4300);
+/* runs one step of a moby's timed state and reports whether the timer ran out */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
+
+int FUN_L13_002e4300(char *m, char *arg, float *t) {
+    char *r = FUN_L00_0025a420(m, 0x330000, 0);
+    int n;
+    int result = 0;
+    char *e;
+    switch (FUN_L00_0025a478(m, r, t, 0, &n, 0, 0, 4)) {
+    case 0:
+        break;
+    case 1:
+        *(int *)t = 0;
+        break;
+    case 2:
+        *(int *)t = 0;
+        break;
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+        break;
+    }
+    e = arg + 0x60;
+    if (n >= 2) {
+        float lim = *(float *)(r + 0x2C);
+        unsigned short fl;
+        if (*t <= lim) {
+            *(int *)t = 0;
+            fl = *(unsigned short *)(m + 0x34);
+            *(unsigned short *)(m + 0x34) = fl & 0xEFFF;
+            *(unsigned char *)(arg + 0x67) = 0x78;
+            FUN_L00_0025d458(m, (short *)e);
+            result = 1;
+        } else {
+            *t = *t - lim;
+            *(unsigned char *)(arg + 0x67) = 0xFA;
+            *(short *)(arg + 0x26) = scale_game_frames(0x3C);
+            FUN_L00_0025d458(m, (short *)e);
+        }
+    }
+    *(unsigned char *)(m + 0xA4) = 0xFF;
+    FUN_L00_0025d538(m, e);
+    return result;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e4448.s", FUN_L13_002e4448);
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
@@ -246,4 +424,36 @@ void FUN_L13_002ea330(char *a, char *b, float f) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea400.s", FUN_L13_002ea400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea540.s", FUN_L13_002ea540);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea6b8.s", FUN_L13_002ea6b8);
+/* computes a velocity vector for a moby from the camera/player and spawns a projectile */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos, char *vec) __asm__("FUN_L13_002c1f28");
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
+    float v0[4], v1[4], v2[4], v3[4], v4[4];
+    char *x;
+    unsigned char *r;
+    FUN_L00_0024f7c8(a, 0xE, v0);
+    x = D_0013F350;
+    if (*(char **)(x + 0x15F0) != 0 && *(short *)(*(char **)(x + 0x15F0) + 0xA6) == 0x45) {
+        FUN_L13_002ea330_c((char *)v2, (char *)v0, D_0015ED6C * 20.0f);
+        subtract_vector_xyz(v3, v2, v0);
+        normalize_vector_xyz(v1, v3, D_0015ED6C * 20.0f);
+        normalize_vector_xyz(v4, *(char **)(x + 0x15F0) + 0xD0, random_float_between_alt(-(D_0015ED6C * 30.0f), D_0015ED6C * 30.0f));
+        normalize_vector_xyz(v3, *(char **)(x + 0x15F0) + 0xE0, random_float_between_alt(-(D_0015ED6C * 30.0f), D_0015ED6C * 30.0f));
+        add_vector_xyz(v4, v4, v3);
+        normalize_vector_xyz(v4, v4, random_float_between_alt(D_0015ED6C * 5.0f, D_0015ED6C * 30.0f));
+        add_vector_xyz(v1, v1, v4);
+    } else {
+        FUN_L00_00257d78(v1, D_0015ED6C * 0.0f, D_0015ED6C * 30.0f);
+    }
+    add_vector_xyz(v1, v1, b + 0x70);
+    r = FUN_L13_002c1f28_c(a, (char *)v0, (char *)v1);
+    if (r) FUN_0022da68(3, 0, (int)a);
+    return r;
+}

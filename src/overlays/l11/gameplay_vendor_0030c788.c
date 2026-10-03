@@ -130,7 +130,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310698.s", FUN_L11_00310698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311710.s", FUN_L11_00311710);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
 
-extern float FUN_L11_00311a88(void *, void *);
+extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
@@ -143,7 +143,7 @@ void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
     void *list[12];
     FUN_L11_00311be8(a0, a1 + 0xE8, a1 + 0xEA);
     if (a4 != 0) {
-        if (FUN_L11_00311a88(a0, a4) < bestd) return a4;
+        if (FUN_L11_00311a88_u(a0, a4) < bestd) return a4;
     }
     p = D_L11_001AC240[*(short *)(a1 + 0x108)];
     if (p == 0) return 0;
@@ -153,14 +153,49 @@ void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
             int n = FUN_L11_00318050(m, list);
             int i;
             for (i = 1; i < n; i++) {
-                float d = FUN_L11_00311a88(a0, list[i]);
+                float d = FUN_L11_00311a88_u(a0, list[i]);
                 if (d < bestd) { best = list[i]; bestd = d; }
             }
         }
     } while (*p++ >= 0);
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311a88.s", FUN_L11_00311a88);
+/* squared distance from a point to a projected target, or a large value when out of range */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
+
+extern char D_L11_001679E0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float FUN_001f9988(float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+float FUN_L11_00311a88(void *moby_v, void *o_v) {
+    char *moby = moby_v;
+    char *o = o_v;
+    char *data = *(char **)(moby + 0x78);
+    if (*(unsigned char *)(o + 0x31) != 0) {
+        char v[16];
+        int ax, ay, cx, cy;
+        int dx, dy, t;
+        FUN_L11_00311210(o + 0x10, &ax, &ay, 0);
+        dx = ax - *(int *)(data + 0xE0);
+        dy = ay - *(int *)(data + 0xE4);
+        if (dx < 0) dx = -dx;
+        if (dy < 0) dy = -dy;
+        qcopy(v, D_L11_001679E0);
+        scale_vector_xyz(v, D_L11_001679E0, *(float *)(o + 0xC) / 1280.0f);
+        add_vector_xyz(v, v, o + 0x10);
+        FUN_L11_00311210(v, &cx, &cy, 0);
+        cx = cx - ax;
+        cy = cy - ay;
+        t = func_001FA898_r(FUN_001f9988(ConvertIntegerToFloat(cx * cx + cy * cy))) + 0x1C;
+        if (dx < t && dy < t) return (float)(dx * dx + dy * dy);
+    }
+    return 10000.0f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311be8.s", FUN_L11_00311be8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);

@@ -43,7 +43,62 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c52b8.s", FUN_L15_002c52b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c6900.s", FUN_L15_002c6900);
+/* Steps a moby's countdown from a helper's output, then aims it at its target. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float FUN_001f9e90(float, float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L15_002c6900(char *m) {
+    int st;
+    float fv;
+    int res;
+    char *d;
+    char *r;
+    float a, b, p, q;
+    d = *(char **)(m + 0x78);
+    fv = 0.0f;
+    r = FUN_L00_0025a420(m, 0x330000, 0);
+    res = FUN_L00_0025a478(m, r, d + 0x20, 0, &st, &fv, 0, 4);
+    if (st != 1 && *(unsigned char *)(m + 0x20) != 7 && *(unsigned char *)(m + 0x20) != 0x40) {
+        float t = *(float *)(d + 0x20) - fv;
+        *(float *)(d + 0x20) = t;
+        if (res == 1 || t <= 0.0f) {
+            *(unsigned char *)(m + 0x20) = 7;
+        } else if (res != 0xB) {
+            *(unsigned char *)(d + 0x67) = 0xB4;
+            FUN_L00_0025d458(m, (short *)(d + 0x60));
+            if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(m + 0x20) != 6) {
+                a = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(r + 0), *(float *)(m + 0x14) - *(float *)(r + 4));
+                b = fast_subtract_rotations(a, *(float *)(m + 0x48));
+                p = fast_cos(b) * 0.08726646f;
+                q = fast_sin(b) * -0.34906584f;
+                if (AbsoluteFloat(*(float *)(m + 0x40)) < AbsoluteFloat(q)) {
+                    *(float *)(m + 0x40) = q;
+                    *(float *)(d + 0x174) = 0.0f;
+                }
+                if (AbsoluteFloat(*(float *)(m + 0x44)) < AbsoluteFloat(p)) {
+                    *(float *)(m + 0x44) = p;
+                    *(float *)(d + 0x178) = 0.0f;
+                }
+                *(float *)(d + 0x170) = D_0015ED6C * 4.0f;
+                *(short *)(d + 0x16A) = scale_game_frames(0x3C);
+                *(unsigned char *)(m + 0xBC) = *(unsigned char *)(m + 0x20);
+                *(unsigned char *)(m + 0x20) = 6;
+            }
+        }
+    }
+    *(unsigned char *)(m + 0xA4) = 0xFF;
+    FUN_L00_0025d538(m, d + 0x60);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf110.s", FUN_L15_002cf110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf3a8.s", FUN_L15_002cf3a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);

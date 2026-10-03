@@ -3,7 +3,48 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c4f0.s", FUN_L04_0024c4f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c660.s", FUN_L04_0024c660);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* closest point on a line to a point: writes the point, returns the parameter */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
+
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
+    float d0[4];
+    float d1[4];
+    float d2[4];
+    float d3[4];
+    float det, t, r;
+
+    subtract_vector_xyz(d0, b, a);
+    subtract_vector_xyz(d2, a, c);
+    d3[0] = d0[1];
+    d3[1] = -d0[0];
+    add_vector_xyz(d3, c, d3);
+    subtract_vector_xyz(d1, c, d3);
+    det = d0[1] * d1[0] - d0[0] * d1[1];
+    if (AbsoluteFloat(det) < 0.0001f) {
+        qcopy(dst, a);
+        return 0.0f;
+    }
+    det = 1.0f / det;
+    t = d1[1] * d2[0] - d1[0] * d2[1];
+    t = t * det;
+    r = t;
+    if (r < 0.0f) r = 0.0f;
+    if (1.0f < r) r = 1.0f;
+    scale_vector_xyz(dst, d0, r);
+    add_vector_xyz(dst, dst, a);
+    return t;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -16,7 +57,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c660.s", FUN_L04_0024c660);
 extern float FUN_001f9af0(void *);
 extern int FUN_L04_0024c4f0(float *, float *, int);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_L04_0024c660(float *, float *, float *, float *);
+extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
 int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
     float tmp[4];
@@ -27,7 +68,7 @@ int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
     best = 0;
     for (i = 0; i < n; i++) {
         float d;
-        FUN_L04_0024c660(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
+        FUN_L04_0024c660_u(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
         FUN_001f9a28(diff, p, tmp);
         d = FUN_001f9af0(diff);
         if (i == 0 || d < best) {

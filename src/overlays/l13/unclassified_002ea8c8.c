@@ -5,7 +5,47 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea8c8.s", FUN_L13_002ea8c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eac00.s", FUN_L13_002eac00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eb098.s", FUN_L13_002eb098);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ecd10.s", FUN_L13_002ecd10);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EE148), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *func_0020D348_m(int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L13_002ecd10(char *src, int arg, int id) {
+    char *moby = func_0020D348_m(id);
+    if (moby != 0) {
+        char *data;
+        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(src + 0x2C) /
+                  *(float *)(*(char **)(src + 0x24) + 0x24);
+        data = *(char **)(moby + 0x78);
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(float *)(moby + 0x2C) = f;
+        *(int *)(data + 0x44) = arg;
+        FUN_L00_0024f7c8(src, arg, moby + 0x10);
+        *(char **)(data + 0x3C) = src;
+        FUN_L00_00250df8(moby);
+        qcopy(moby + 0x40, src + 0x40);
+        *(u128 *)(moby + 0xC0) = *(u128 *)(src + 0xC0);
+        *(u128 *)(moby + 0xD0) = *(u128 *)(src + 0xD0);
+        *(u128 *)(moby + 0xE0) = *(u128 *)(src + 0xE0);
+        *(int *)(data + 0x40) = scale_game_frames(0x258);
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed4a8.s", FUN_L13_002ed4a8);

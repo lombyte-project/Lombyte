@@ -154,6 +154,163 @@ void FUN_L16_002d4070(char *moby) {
         if ((unsigned char)moby[0x53] != 4) blend_moby_animation(moby, 4, 0, FUN_001f96f8(0x14));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d41f8.s", FUN_L16_002d41f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4590.s", FUN_L16_002d4590);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d4908.s", FUN_L16_002d4908);
+/* Spawn randomized hit particles at joint two, with extra bursts for distant hits. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D55C0), where it is exact; names translated to the US level program. */
+
+typedef struct {int values[6];} L16ParticleChoices;
+
+extern L16ParticleChoices D_L16_001E8300,D_L16_001E8618;
+extern L16ParticleChoices D_L16_001E8600,D_L16_001E8318;
+extern char D_L16_001671C0[],D_0013E633[];
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_00257b90(int,int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L16_0015F5D0;
+extern void FUN_001f99f8(void *);
+extern void FUN_L00_0024f7c8(void *,int,void *);
+extern void FUN_L00_0026a9f0(void *,void *,int,int,int,int,int,int,float,float);
+extern void FUN_L00_002ac910(void *,void *,void *,float,int,int,int,int,int);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L16_002d41f8(void *m) {
+    float delta[4],velocity[4],position[4];
+    L16ParticleChoices first,second;
+    float distance,range,delay;
+    int count;
+    void *origin;
+    float *joint=position;
+    void *movement;
+    FUN_L00_0024f7c8(m,2,joint);
+    subtract_vector_xyz(delta,D_L16_001671C0,joint);
+    FUN_001f99f8(velocity);
+    distance=vector_length_xyz(delta);
+    if(distance<8.0f) count=truncate_float_to_s32(distance)+2;
+    else count=10;
+    range=0.0f;
+    if(distance<7.0f) range=7.0f-distance;
+    origin=position;
+    movement=velocity;
+    if(count>0) {
+    int remaining=count;
+    do {
+        float sample;
+        int *a,*b,duration1,duration2;
+        remaining--;
+        sample=random_float_between_alt(8.0f,10.0f);
+        first=D_L16_001E8300;
+        second=D_L16_001E8318;
+        delay=sample*D_0015ED6C-range*D_0015ED6C;
+        a=&first.values[random_integer_below(6)];
+        b=&second.values[random_integer_below(6)];
+        {int lo=scale_game_frames(15),hi=scale_game_frames(20);
+        duration1=FUN_L00_00257b90(lo,hi);
+        }
+        {int lo=scale_game_frames(25),hi=scale_game_frames(30);
+        duration2=FUN_L00_00257b90(lo,hi);
+        }
+        FUN_L00_0026a9f0(origin,movement,*a,*b,duration1,duration2,0,0,400000.0f,delay);
+    } while(remaining!=0);
+    }
+    if(*(float *)&D_L16_0015F5D0<0.95f && distance>9.0f) {
+        FUN_L00_002ac910(m,origin,movement,4.0f,scale_game_frames(15),127,127,127,32);
+        FUN_L00_002ac910(m,origin,movement,4.0f,scale_game_frames(24),127,32,0,32);
+    }
+    FUN_L00_002ac910(m,origin,movement,4.0f,scale_game_frames(20),127,64,0,48);
+    FUN_L00_002ac910(m,origin,movement,3.5f,scale_game_frames(27),96,16,0,64);
+    FUN_L00_002ac910(m,origin,movement,3.0f,scale_game_frames(29),32,0,0,32);
+}
+/* Aim paired joints toward the owner or player, then smooth their rotations. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
+
+extern char D_L16_00167240[],D_0013F420[];
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED64;
+extern void FUN_001f9cf8(void*,void*,void*);
+extern void FUN_001fa2d8(void*,void*);
+extern void FUN_L00_002628d8(char*,char*,int,float,float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L16_002d4590(char *m) {
+    float position[4],target[4],matrix[16],delta[4],aim[4],aimDelta[4],velocity[4];
+    char *d=*(char**)(m+0x78);
+    if(*(int*)(d+0x114)!=2) {
+        float *savedTarget,*savedMatrix;
+        float yaw,pitch;
+        qcopy(position,m+0x10);position[2]+=2.0f;
+        if(*(short*)(*(char**)(d+0x110)+0xA6)==0) qcopy(target,D_0013F420);
+        else qcopy(target,d+0xD0);
+        savedTarget=target;
+        FUN_001fa2d8(matrix,m+0xC0);
+        subtract_vector_xyz(delta,savedTarget,position);
+        FUN_001f9cf8(delta,delta,matrix);
+        yaw=FUN_001f9e90(delta[0],delta[1]);
+        pitch=-FUN_001f9e90(vector_length_xy(delta),delta[2]);
+        if(yaw>0.7853982f) yaw=0.7853982f;
+        else if(yaw<-0.7853982f) yaw=-0.7853982f;
+        if(pitch>0.7853982f) pitch=0.7853982f;
+        else if(pitch<-0.7853982f) pitch=-0.7853982f;
+        {float halfYaw=yaw*0.5f,halfPitch=pitch*0.5f;
+        *(float *)(d+0x198)=halfYaw;*(float *)(d+0x194)=halfPitch;*(float *)(d+0x218)=halfYaw;*(float *)(d+0x214)=halfPitch;}
+        if((unsigned int)(*(unsigned char*)(m+0x20)-4)<2) {
+            float yaw2,pitch2,bound;
+            normalize_vector_xyz(aim,m+0xC0,1.0f);
+            normalize_vector_xyz(velocity,m+0xD0,0.5f);
+            add_vector_xyz(aim,aim,position);
+            add_vector_xyz(aim,aim,velocity);
+            subtract_vector_xyz(aimDelta,savedTarget,aim);
+            savedMatrix=matrix;
+            FUN_001f9cf8(aimDelta,aimDelta,savedMatrix);
+            pitch2=-FUN_001f9e90(vector_length_xy(aimDelta),aimDelta[2]);
+            yaw2=-FUN_001f9e90(aimDelta[0],aimDelta[1]);
+            bound=0.7853982f;
+            if(pitch2>bound || pitch2<(bound=-0.7853982f)) pitch2=bound;
+            if(yaw2>0.34906584f) yaw2=0.34906584f;
+            else if(yaw2<-0.34906584f) yaw2=-0.34906584f;
+            *(float *)(d+0x294)=pitch2;*(float *)(d+0x298)=yaw2;
+        }
+    }
+    FUN_L00_002628d8(m,d+0x130,1,D_0015ED64*0.03f,D_0015ED64*0.3f);
+    FUN_L00_002628d8(m,d+0x1B0,2,D_0015ED64*0.03f,D_0015ED64*0.3f);
+    FUN_L00_002628d8(m,d+0x230,3,D_0015ED64*0.03f,D_0015ED64*0.3f);
+}
+/* Emit randomized joint particles while the moby is active. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void*,void*,void*,int,int,int,int,int,int);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6e0(int,int,float);
+extern void FUN_0020cca8(void*,int,void*);
+extern void FUN_L00_00257d78(float*,float,float);
+
+void FUN_L16_002d4908(char *m) {
+    float matrix[16],velocity[4],acceleration[4],scatter[4];
+    int i;
+    if(*(unsigned char*)(m+0x31)==0 || *(unsigned char*)(m+0x20)==10) return;
+    for(i=0;i<2;i++) {
+        float speed,z;
+        int color1,color2,time1,time2,time3;
+        if(random_float_between_alt(0.0f,1.0f)>0.75f) continue;
+        FUN_0020cca8(m,i+4,matrix);
+        speed=(random_float_between_alt(-0.2f,0.2f)+1.0f)*-3.0f*D_0015ED6C;
+        normalize_vector_xyz(velocity,matrix+8,speed);
+        {float component=(random_float_between_alt(-0.2f,0.2f)+1.0f)*-2.0f;
+        z=component*D_0015ED6C;}
+        FUN_001f99f8(acceleration);
+        acceleration[2]=z;
+        z=random_float_between_alt(-1.5f,1.5f)*D_0015ED6C;
+        FUN_L00_00257d78(scatter,z,z);
+        add_vector_xyz(acceleration,acceleration,scatter);
+        velocity[3]=random_float_between_alt(0.2f,0.2f);
+        acceleration[3]=random_float_between_alt(0.4f,0.4f);
+        color1=FUN_001fa6e0(0x801010FF,0x801080FF,random_float_between_alt(0.0f,1.0f));
+        color2=FUN_001fa6e0(0x400000C0,0x4030FFFF,random_float_between_alt(0.0f,1.0f));
+        time1=truncate_float_to_s32(FUN_001f96b0((random_float_between_alt(-0.1f,0.1f)+1.0f)*5.0f));
+        time2=truncate_float_to_s32(FUN_001f96b0((random_float_between_alt(-0.1f,0.1f)+1.0f)*20.0f));
+        time3=truncate_float_to_s32(FUN_001f96b0((random_float_between_alt(-0.1f,0.1f)+1.0f)*20.0f));
+        FUN_00218888(matrix+12,velocity,acceleration,color1,color2,time1,time2,time3,-1);
+    }
+}

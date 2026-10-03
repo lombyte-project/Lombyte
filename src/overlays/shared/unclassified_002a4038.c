@@ -16,7 +16,16 @@ void FUN_L02_002a40d0(char *arg) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a46e0.s", FUN_L02_002a46e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002cb978.s", FUN_L02_002cb978);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
+
+extern unsigned int D_L02_0015FFDC;
+
+void FUN_L02_002cb978(char *moby) {
+    if ((unsigned int)moby < D_L02_0015FFDC) {
+        *(int *)(moby + 0x58) = 0;
+        *(unsigned short *)(moby + 0x34) |= 0x40;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8910.s", FUN_L02_002d8910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8ad0.s", FUN_L02_002d8ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d92f0.s", FUN_L02_002d92f0);

@@ -19,7 +19,38 @@ void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
                                      point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880(moby, a, b, c, angle);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ae0.s", FUN_L15_00299ae0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029ACC0), where it is exact; names translated to the US level program. */
+
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(float *, float *);
+extern float FUN_001fa688(float, float);
+extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+
+int FUN_L15_00299ae0(char *moby, float *point, float arg) {
+    float *fp = (float *)(moby + 0x48);
+    char *d = *(char **)(moby + 0x78);
+    float vec[4];
+    float a;
+    float ang;
+    a = FUN_001f9e90(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
+    FUN_L00_0025be00(fp, (float *)(d + 0x138), a, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 6.981317f);
+    ang = FUN_001f9e90(point[0] - *(float *)(moby + 0x10), point[1] - *(float *)(moby + 0x14));
+    if (FUN_001fa688(*(float *)(moby + 0x48), ang) < 0.7853982f) {
+        approach_value(d + 0x134, arg, D_0015ED70 * 9.0f);
+    } else {
+        approach_value(d + 0x134, 0.0f, D_0015ED70 * 9.0f);
+    }
+    vec[0] = fast_cos(*(float *)(moby + 0x48)) * *(float *)(d + 0x134);
+    vec[1] = fast_sin(*(float *)(moby + 0x48)) * *(float *)(d + 0x134);
+    vec[2] = -(D_0015ED6C * 0.5f);
+    FUN_L00_00258830((int)moby, (int)vec, 0.5f, 0.5f, 0.0f, 0);
+    return FUN_001f9b80((float *)(moby + 0x10), point) < 0.2f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299dd8.s", FUN_L15_00299dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
@@ -122,4 +153,27 @@ void FUN_L15_002cbba0(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbc30.s", FUN_L15_002cbc30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbd88.s", FUN_L15_002cbd88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d6770.s", FUN_L15_002d6770);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_0013F350[];
+extern int FUN_001f0b58(void);
+extern int FUN_L00_0020d568(void);
+f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+
+int FUN_L15_002d6770(void) {
+    char *p;
+    float vec[4];
+    float h;
+    if (FUN_L00_0020d568() != 0) return 1;
+    p = D_0013F350;
+    if ((unsigned)(*(int *)(p + 0x2084) - 0x18) < 2) {
+        *(u128 *)vec = *(u128 *)(p + 0x80);
+        vec[2] = vec[2] + 2.0f;
+        h = probe_ground_height(vec, 0, 0.5f);
+        if (FUN_001f0b58() != 0) return 0;
+        if (*(float *)(p + 0x88) <= h) return 1;
+    }
+    return 0;
+}

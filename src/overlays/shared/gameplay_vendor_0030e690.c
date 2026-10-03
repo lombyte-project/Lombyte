@@ -66,9 +66,124 @@ void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
     *outx = func_001FA898_r((p[0] - (float)g[4]) * 0.0625f);
     *outy = func_001FA898_r((p[1] - (float)g[5]) * 0.0625f) + yoff;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003112b8.s", FUN_L11_003112b8);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
+
+typedef int u128_312780 __attribute__((mode(TI)));
+
+extern float D_0015ED6C;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern short D_L11_00161FF4_d __asm__("D_L11_00161FF4") __attribute__((sda));
+extern short D_L11_001621C8_d __asm__("D_L11_001621C8") __attribute__((sda));
+extern short D_L11_001621D8_d __asm__("D_L11_001621D8") __attribute__((sda));
+extern short D_L11_001621E8_d __asm__("D_L11_001621E8") __attribute__((sda));
+extern short D_L11_001621F8_d __asm__("D_L11_001621F8") __attribute__((sda));
+extern short D_L11_00162208_d __asm__("D_L11_00162208") __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_0025f8e0(float *v, float s);
+extern void FUN_L01_0028a7a8(void *, float *, float *, void *, int);
+
+void FUN_L11_003112b8(void *m, char *t) {
+    int i;
+    for (i = 1; i < 3; i++) {
+        float vel[4];
+        float pos[4];
+        float a[4];
+        float b[4];
+        float c[4];
+        float scale;
+
+        *(u128_312780 *)vel = 0;
+        scale = *(float *)(t + 0x64) / *(float *)&D_L11_00161FF4_d;
+        if (scale > 1.0f) {
+            scale = 1.0f;
+        } else if (scale < 0.35f) {
+            scale = 0.35f;
+        }
+        FUN_L00_0024f7c8(m, i, pos);
+        pos[3] = 0.0f;
+        qcopy(a, pos);
+        qcopy(b, pos);
+        qcopy(c, pos);
+        FUN_L00_0025f8e0(a, *(float *)(t + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
+        FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
+        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+        FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
+        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+        FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
+        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) * scale;
+        FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
+        if (*(float *)(t + 0xC4) > 0.5f) {
+            FUN_L00_0025f8e0(a, *(float *)(t + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
+            FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+            FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+            FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) * scale;
+            FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+            FUN_L01_0028a7a8(m, a, vel, &D_L11_001621F8_d, 1);
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+            FUN_L01_0028a7a8(m, pos, vel, &D_L11_00162208_d, 1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319670.s", FUN_L11_00319670);
+/* Advances a trail ring buffer and records two offset points each fourth frame. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
+
+typedef int u128_31AAE0 __attribute__((mode(TI)));
+
+extern int D_L11_0015F5CC;
+extern int FUN_L11_003192c8();
+extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+extern void f49(void *, void *) __asm__("FUN_001f4600");
+extern void cb(void) __asm__("FUN_L11_003192c8");
+
+void FUN_L11_00319670(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float v[4];
+    float w[4];
+    int t;
+    if ((D_L11_0015F5CC & 3) == 0) {
+        int cnt;
+        float lim = *(float *)&D_L11_001623F0_d;
+        cnt = *(int *)(d + 0x2C0);
+        *(int *)(d + 0x2C4) = (*(int *)(d + 0x2C4) + 1) % 16;
+        if ((float)cnt < lim) {
+            *(int *)(d + 0x2C0) = cnt + 1;
+        }
+    }
+    *(u128_31AAE0 *)v = 0;
+    v[1] = 0.7f;
+    v[0] = -1.2f;
+    v[2] = 0.3f;
+    FUN_001f9cf8(v, v, moby + 0xC0);
+    add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
+    *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0xCC) = 1.0f;
+    *(u128_31AAE0 *)w = 0;
+    w[0] = -1.2f;
+    w[1] = -0.7f;
+    w[2] = 0.3f;
+    FUN_001f9cf8(w, w, moby + 0xC0);
+    add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
+    t = D_L11_0015F5CC;
+    *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0x1CC) = 1.0f;
+    if (t != 0) {
+        int *p = *(int **)(d + 0x2C8);
+        if (t != *p) {
+            *p = t;
+            f49(cb, moby);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a1c0.s", FUN_L11_0031a1c0);
 
 

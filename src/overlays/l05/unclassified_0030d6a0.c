@@ -2,8 +2,125 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030d6a0.s", FUN_L05_0030d6a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030dc68.s", FUN_L05_0030dc68);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* records, for entry arg, which of the 48 entries sit one grid step away */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float x;
+    float y;
+    int pad;
+    char n[0x14];
+    char rest[0x1170];
+} Ent;
+
+extern Ent D_L05_001D6880[];
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L05_0030d6a0(int arg) {
+    int i;
+    Ent *t = D_L05_001D6880;
+    for (i = 0; i < 48; i++) {
+        if (arg != i) {
+            Ent *e = &t[arg];
+            float x = e->x - t[i].x;
+            float y = e->y - t[i].y;
+            if (AbsoluteFloat(x) < 0.1f) {
+                if (AbsoluteFloat(y - 16.0f) < 0.1f) e->n[0] = i;
+                if (AbsoluteFloat(y + 16.0f) < 0.1f) e->n[2] = i;
+            } else if (AbsoluteFloat(y) < 0.1f) {
+                if (AbsoluteFloat(x - 16.0f) < 0.1f) e->n[1] = i;
+                if (AbsoluteFloat(x + 16.0f) < 0.1f) e->n[3] = i;
+            } else {
+                if (AbsoluteFloat(x - 16.0f) < 0.1f) {
+                    if (AbsoluteFloat(x - 16.0f) < 0.1f) e->n[5] = i;
+                    if (AbsoluteFloat(x + 16.0f) < 0.1f) e->n[7] = i;
+                } else if (AbsoluteFloat(x + 16.0f) < 0.1f) {
+                    if (AbsoluteFloat(x - 16.0f) < 0.1f) e->n[4] = i;
+                    if (AbsoluteFloat(x + 16.0f) < 0.1f) e->n[6] = i;
+                }
+            }
+        }
+    }
+}
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550[];
+extern char D_L05_001671C0[];
+extern float FUN_001f9b48(void *, void *);
+extern int D_L05_0015F5CC;
+extern int FUN_0022da68();
+extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8") __attribute__((sda));
+extern short D_L05_00161D38_d __asm__("D_L05_00161D38") __attribute__((sda));
+extern void FUN_L05_0030de90(void);
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L05_0030dc68(char *m) {
+    char *data = *(char **)(m + 0x78);
+    int state = *(unsigned char *)(m + 0x20);
+    char *base;
+    char *tab;
+    char *pos;
+    char *q;
+    char *o;
+    float d;
+    int idx;
+    switch (state) {
+    case 0:
+        *(unsigned short *)(m + 0x34) |= 1;
+        *(unsigned char *)(m + 0x20) = 1;
+        *(unsigned char *)(m + 0x31) = 0;
+        **(int **)(data + 4) = -1;
+        break;
+    case 1:
+        if (*(int *)&D_L05_00161D38_d != D_L05_0015F5CC) {
+            *(int *)&D_L05_00161D38_d = D_L05_0015F5CC;
+            enqueue_callback_list_1(FUN_L05_0030de90, m);
+        }
+        pos = m + 0x10;
+        tab = D_L05_001671C0;
+        if (FUN_001f9b48(pos, tab) < 64.0f) {
+            idx = **(int **)(data + 4);
+            if (idx >= 0) {
+                base = D_0013E550;
+                o = *(char **)(base + idx * 0x70 + 0x88);
+                if (o != 0) {
+                    if (*(short *)(o + 0xA6) == 0x346) {
+                        if (o != m) {
+                            if (*(unsigned char *)(o + 0x20) == state) {
+                                d = FUN_001f9b48(pos, tab);
+                                if (!(d < FUN_001f9b48(o + 0x10, tab))) goto after;
+                            }
+                            q = base + 0x90;
+                            *(char **)(base + **(int **)(data + 4) * 0x70 + 0x88) = m;
+                            qcopy(**(int **)(data + 4) * 0x70 + q, pos);
+                        }
+                        goto after;
+                    }
+                }
+            }
+            **(int **)(data + 4) = func_0022ED80_i(0, 4, m);
+        }
+    after:
+        if (*(int *)data >= 0) {
+            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)data * 256 + 0xBC] != 0) {
+                func_0022ED80_i(1, 0, m);
+                *(int *)(m + 0x94) = 0;
+                *(unsigned char *)(m + 0x20) = 2;
+            }
+        }
+        break;
+    case 2:
+        if (*(int *)(m + 0x94) != 0) *(int *)(m + 0x94) = 0;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e1f8.s", FUN_L05_0030e1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);

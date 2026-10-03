@@ -3,7 +3,27 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312dc8.s", FUN_L07_00312dc8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Starts the effect with an angle ramped from the moby's timer, capped at pi. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L07_00312948(char *, int, float, float, float, float, float);
+
+void FUN_L07_00312dc8(char *moby)
+{
+    char *data = *(char **)(moby + 0x78);
+    float ang;
+    if (*(float *)(data + 0x1C8) < 0.8f) {
+        ang = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
+        if (ang > 3.14159274f) ang = 3.14159274f;
+    } else {
+        ang = 3.14159274f;
+    }
+    FUN_L07_00312948(moby, 0, 1.0f, 5.8f, ang, 1.0f, *(float *)(data + 0x1C8));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313350.s", FUN_L07_00313350);

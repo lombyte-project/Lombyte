@@ -2,4 +2,52 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0027f5f0.s", FUN_L08_0027f5f0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_002803B8.c: func_L08_002803B8), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L08_001B29A4_d __asm__("D_L08_001B29A4") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
+    float v[4];
+    unsigned char *p;
+    float *vp = v;
+    *(u128 *)v = *(u128 *)vel;
+    p = FUN_L00_002678b8(0x49);
+    if (p != 0) {
+        float s = 0.0f;
+        int c = 0;
+        switch (kind) {
+        case 0:
+            c = 0x20;
+            s = 0.12f;
+            random_float_between_alt(0.25f, 0.25f);
+            break;
+        case 1:
+            c = 0xD;
+            s = 0.5f;
+            random_float_between_alt(1.0f, 1.0f);
+            break;
+        }
+        *(short *)(p + 0xA) = scale_game_frames(0x37);
+        *(int *)(p + 4) = (c << 24) | 0xFFFFFF;
+        p[9] = func_001FA898_r(4.0f) + 0x20;
+        p[3] = 0x48;
+        p[1] = 0;
+        p[2] = D_L08_001B29A4_d[kind];
+        *(float *)(p + 0xC) = s * 210000.0f;
+        p[8] = (int)random_float_between_alt(0.0f, 360.0f);
+        *(u128 *)(p + 0x10) = *(u128 *)pos;
+        *(u128 *)(p + 0x20) = *(u128 *)vp;
+        *(float *)(p + 0x2C) = f;
+    }
+}

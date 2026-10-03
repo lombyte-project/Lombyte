@@ -56,4 +56,17 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
         *(unsigned short *)(child + 0x34) &= 0xFFBE;
     *(unsigned short *)(child + 0x34) |= 6;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027ba70.s", FUN_L12_0027ba70);
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027CA68), where it is exact; names translated to the US level program. */
+
+extern char *D_L12_001B0930[];
+
+void FUN_L12_0027ba70(int idx) {
+    char *p;
+    int i;
+    if (idx == -1) return;
+    p = D_L12_001B0930[idx];
+    for (i = 0; i < *(int *)p - 1; i++) {
+        int o = i * 16;
+        *(float *)(p + o + 0x1C) = FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
+    }
+}

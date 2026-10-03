@@ -6,7 +6,49 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003033a0.s", FUN_L09_003033a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303b30.s", FUN_L09_00303b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303d10.s", FUN_L09_00303d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_003041d0.s", FUN_L09_003041d0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00305580), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *D_L09_0015FFE4;
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+
+char *FUN_L09_003041d0(char *self, char *pos, int bone) {
+    char *best = 0;
+    float bestd = 1000000000.0f;
+    char tmp[16];
+    char vec[16];
+    char *m;
+    char *tp = tmp;
+    *(u128 *)tmp = *(u128 *)pos;
+    for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
+        if (m == self) continue;
+        if (m != 0 && *(unsigned char *)(m + 0x20) != 0xFE && *(unsigned char *)(m + 0x20) != 0xFD) {
+            if (*(short *)(m + 0xA6) == 0x49D || *(short *)(m + 0xA6) == 0x494 || *(short *)(m + 0xA6) == 0x4A0) {
+                float d;
+                if (bone != -1) {
+                    FUN_L00_0024f7c8(m, bone, vec);
+                    d = FUN_001f9b48(tp, vec);
+                } else {
+                    d = FUN_001f9b48(tp, m + 0x10);
+                }
+                if (d < bestd) {
+                    bestd = d;
+                    best = m;
+                }
+            }
+        }
+    }
+    if (best == 0) return 0;
+    if (bestd < 0.5f) return best;
+    if (*(short *)(best + 0xA6) == 0x4A0 && bestd < 10.0f) return best;
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304360.s", FUN_L09_00304360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304c80.s", FUN_L09_00304c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);

@@ -4,7 +4,50 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030b618.s", FUN_L01_0030b618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c898.s", FUN_L01_0030c898);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
+
+typedef int uq __attribute__((mode(TI)));
+
+extern char *func_0020D348_m(int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+
+char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float d) {
+    uq p;
+    char *cp = (char *)&p;
+    char *m;
+    p = *(uq *)pos;
+    m = func_0020D348_m(0x661);
+    if (m) {
+        char *e = *(char **)(m + 0x78);
+        int t;
+        *(char **)(e + 0x10) = owner;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x31] = 1;
+        *(long *)(m + 0x38) = *(long *)(owner + 0x38);
+        *(float *)(m + 0x44) = d;
+        *(float *)(m + 0x48) = c;
+        *(int *)(m + 0x40) = 0;
+        qcopy(m + 0x10, cp);
+        *(float *)(e + 8) = a;
+        *(float *)(e + 0xC) = b;
+        *(int *)e = 0;
+        *(int *)(e + 4) = 0;
+        t = scale_game_frames(0x23);
+        *(short *)(e + 0x14) = t;
+        *(short *)(e + 0x16) = t;
+        m[0x23] = 0x40;
+        *(unsigned short *)(m + 0x34) |= 0xA00;
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 0.5f;
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
 #define NOT_SDA
 

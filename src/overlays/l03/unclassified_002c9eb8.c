@@ -73,5 +73,41 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb30.s", FUN_L03_002dcb30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcbc8.s", FUN_L03_002dcbc8);
+/* Shows a help message for the mode, then keeps a hud queue entry alive. */
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_00235dc0(void);
+extern void FUN_L00_00235e18(int, int);
+extern void FUN_L00_002371e0(void);
+extern void FUN_L00_00237200(void);
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
+
+void FUN_L03_002dcbc8(char *m, int mode) {
+    char *d = *(char **)(m + 0x78);
+    int h;
+    switch (mode) {
+    case 1:
+        try_set_help_message(8, 0xBCE);
+        break;
+    case 2:
+        try_set_help_message(8, 0xBCF);
+        break;
+    case 3:
+        try_set_help_message(8, 0xBCB);
+        break;
+    case 4:
+        try_set_help_message(8, 0xBCD);
+        break;
+    default:
+        try_set_help_message(8, -1);
+        break;
+    }
+    h = *(int *)(d + 0xA4);
+    if (h == -1) {
+        *(int *)(d + 0xA4) = queue_animation_update(0xC, 0, (int)FUN_L00_00235dc0, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
+    } else {
+        FUN_L00_00235e18(h, 0xA);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dccc0.s", FUN_L03_002dccc0);

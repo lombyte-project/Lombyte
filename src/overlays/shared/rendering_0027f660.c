@@ -90,7 +90,50 @@ int FUN_L01_0028b878(char *p)
     return next;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b8c8.s", FUN_L01_0028b8c8);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern void *FUN_L01_0028b7b0(void *, int);
+extern void *memset(void *, int, unsigned int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
+
+void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
+    void *p[3];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    float d1, d2, m, len;
+    float wa, wb;
+    func_001153FC_c(p, 0, 12);
+    p[0] = FUN_L01_0028b7b0(l, *l + idx - 1);
+    p[1] = FUN_L01_0028b7b0(l, *l + idx);
+    p[2] = FUN_L01_0028b7b0(l, *l + idx + 1);
+    {
+        wb = (1.0f - a) * (b + 1.0f) * 0.5f;
+        wa = (1.0f - a) * (1.0f - b) * 0.5f;
+    }
+    d1 = FUN_001f9b48(p[0], p[1]);
+    d2 = FUN_001f9b48(p[1], p[2]);
+    if (d1 < d2) m = d1; else m = d2;
+    subtract_vector_xyz(v1, p[1], p[0]);
+    scale_vector_xyz(v1, v1, wb);
+    subtract_vector_xyz(v2, p[2], p[1]);
+    scale_vector_xyz(v2, v2, wa);
+    add_vector_xyz(v3, v1, v2);
+    m = m * 1.1f;
+    len = vector_length_xyz(v3);
+    if (m < len) {
+        normalize_vector_xyz(out, v3, m);
+    } else {
+        *(u128 *)out = *(u128 *)v3;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
