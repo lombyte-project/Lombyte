@@ -85,5 +85,17 @@ Slot *FUN_L00_0024f028(char *o, int id) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f190.s", FUN_L00_0024f190);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f3e0.s", FUN_L00_0024f3e0);
+typedef struct { u8 pad[0x20]; u8 b20, b21, b22, b23; s32 i24; f32 f28; f32 f2c; } S;
+typedef struct { u8 pad[0x51]; u8 b51, b52, b53; } A;
+extern void FUN_L00_0024f190(void);
+void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
+    a1->b22 = a0->b53;
+    a1->b20 = a0->b51;
+    a1->b23 = a2;
+    a1->b21 = a3;
+    a1->f28 = 1.0f;
+    a1->f2c = 1.0f / (f32)a4;
+    a1->i24 = 0;
+    if (a5) FUN_L00_0024f190();
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f440.s", FUN_L00_0024f440);

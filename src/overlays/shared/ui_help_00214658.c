@@ -517,7 +517,187 @@ void FUN_L00_00233ba0(void *, void *, float);
 void FUN_001f9a10(void *, void *, void *);
 void FUN_001f99f8(void *);
 void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else FUN_001f99f8(g); }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002167d0.s", FUN_L00_002167d0);
+typedef int ti_167d0 __attribute__((mode(TI)));
+typedef union { ti_167d0 q; f32 f[4]; } V4 __attribute__((aligned(16)));
+
+typedef struct {
+    char p0[0x88];
+    f32 f88;
+    char p8C[0x98 - 0x8C];
+    f32 f98;
+    char p9C[0xE0 - 0x9C];
+    f32 fE0[4];
+    char pF0[0x160 - 0xF0];
+    f32 f160;
+    char p164[0x180 - 0x164];
+    f32 f180;
+    char p184[0x190 - 0x184];
+    f32 f190;
+    char p194[0x198 - 0x194];
+    s32 i198;
+    char p19C[0x2D8 - 0x19C];
+    f32 f2D8;
+    char p2DC[0x2E4 - 0x2DC];
+    f32 f2E4;
+    char p2E8[0x3B0 - 0x2E8];
+    f32 f3B0;
+    f32 f3B4;
+    char p3B8[0x920 - 0x3B8];
+    V4 f920;
+    f32 f930;
+    char p934[0x2084 - 0x934];
+    s32 i2084;
+    char p2088[0x229C - 0x2088];
+    f32 f229C;
+} G_167d0;
+
+typedef struct { char p0[0x270]; f32 f270; f32 f274; char p278[0x2E0 - 0x278]; f32 f2E0; } H;
+
+extern G_167d0 D_0013F350_167d0 __asm__("D_0013F350");
+extern char D_0013F430[];
+extern char D_0013F480[];
+extern f32 D_0015ED6C;
+extern f32 D_0015ED64;
+extern f32 D_0015ED70;
+extern s32 D_0013CB14[];
+
+extern void FUN_L00_002118c8_c(s32, f32) __asm__("FUN_L00_002118c8");
+extern void FUN_L00_00211e30(s32, f32, f32, f32);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern void FUN_L00_002132b8(f32, f32);
+extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
+extern f32 FUN_001f9b20(void *);
+extern s32 FUN_001f96f8(s32);
+extern f32 FUN_001f9ab0(void *, void *);
+extern f32 FUN_001f9af0(void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_L00_00212318(s32);
+extern f32 FUN_001f99c0(f32);
+
+void FUN_L00_002167d0(void) {
+    G_167d0 *m;
+    H *q;
+    V4 *r;
+    V4 v0, v1, v2, v3, v4;
+    G_167d0 *g;
+    f32 f20, f21, f22, a, b, c, d, e, h, k;
+
+    FUN_L00_002118c8_c(0, 1.0f);
+    f20 = 0.2f;
+    FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * f20, D_0015ED6C * 3.66519141f);
+    if (D_0013F350_167d0.i2084 == 0x13) {
+        if (D_0013F350_167d0.f229C < f20) {
+            D_0013F350_167d0.f180 = D_0013F350_167d0.f98;
+        }
+        D_0013F350_167d0.f190 = 0.4f;
+    } else if (D_0013F350_167d0.i2084 == 0x15) {
+        D_0013F350_167d0.f190 = 0.0f;
+    }
+    f20 = 5.9f;
+    v0.f[0] = FUN_001f9dc8(D_0013F350_167d0.f180) * D_0013F350_167d0.f190 * (D_0015ED6C * f20);
+    h = FUN_001f9de0(D_0013F350_167d0.f180) * D_0013F350_167d0.f190;
+    v0.f[2] = 0.0f;
+    d = D_0015ED6C;
+    f20 = d * f20;
+    v0.f[1] = h * f20;
+    qcopy(&v1, &v0);
+    f21 = v0.f[2];
+    if (f21 < D_0013F350_167d0.f930) {
+        FUN_L00_002132b8(0.7f, d * f21);
+        qcopy(&v2, &D_0013F350_167d0.f920);
+        FUN_001f9a10_c(&v0, &v0, &D_0013F350_167d0.f920);
+        FUN_001f99f8_c(&D_0013F350_167d0.f920);
+    }
+    f20 = -(D_0013F350_167d0.fE0[0] * v0.f[0] + D_0013F350_167d0.fE0[1] * v0.f[1]);
+    if (f21 < f20) {
+        f20 = f20 / FUN_001f9b20(&v0);
+        f20 = f20 / FUN_001f9b20(D_0013F350_167d0.fE0);
+    }
+    if (1.0f < f20) {
+        f20 = 1.0f;
+    }
+    if (f20 < f21) {
+        f20 = f21;
+    }
+    f21 = D_0015ED70 * 2.45f * D_0013F350_167d0.f190;
+    f21 = f21 + (D_0015ED70 + D_0015ED70) * f20;
+    if (D_0013CB14[0]) {
+        f21 = D_0015ED70 * 1.1f;
+    }
+    if (D_0013F350_167d0.i2084 == 0x13 && D_0013F350_167d0.i198 < FUN_001f96f8(0xF) && D_0013F350_167d0.f160 < D_0015ED6C * 3.0f) {
+        f21 = D_0015ED70 * 11.0f;
+    }
+    if (D_0015ED6C * 5.9f < D_0013F350_167d0.f160) {
+        f21 = D_0015ED70 * 13.0f;
+    }
+    e = D_0013F350_167d0.f930;
+    f22 = 0.0f;
+    if (f22 < e) {
+        f20 = -FUN_001f9ab0(&v1, &v2);
+        e = FUN_001f9af0(&v1);
+        if (f22 < e) {
+            f20 = f20 / e;
+        }
+        b = FUN_001f9b20(&v2);
+        a = (b - f20) / b;
+        c = D_0015ED70 * 3.0f;
+        b = c * a;
+        if (D_0013F350_167d0.f229C < 0.3f) {
+            if (b < c) {
+                b = c;
+            }
+        }
+        if (f21 < b) {
+            f21 = b;
+        }
+    }
+    FUN_001f9a28(&v3, &v0, D_0013F480);
+    v3.f[2] = 0.0f;
+    if (f21 < FUN_001f9af0(&v3)) {
+        FUN_001f9bf8(&v3, &v3, f21);
+    }
+    r = (V4 *)(D_0013F480 - 0x50);
+    FUN_001f9a10_c(r, D_0013F480, &v3);
+    q = (H *)(D_0013F480 - 0x130);
+    if (0.0872664601f < q->f2E0) {
+        f21 = FUN_001f9e90_c(q->f270, q->f274);
+        f20 = D_0015ED6C;
+        f20 = f20 * 8.0f;
+        f20 = f20 * q->f2E0;
+        f20 = f20 / 0.785398185f;
+        f22 = D_0015ED70 * 8.5f * q->f2E0 / 0.785398185f;
+        v3.f[0] = FUN_001f9dc8(f21) * f20;
+        v3.f[1] = FUN_001f9de0(f21) * f20;
+        v3.f[2] = 0.0f;
+        FUN_001f9a28(&v4, &v3, r);
+        v4.f[2] = 0.0f;
+        if (f22 < FUN_001f9af0(&v4)) {
+            FUN_001f9bf8(&v4, &v4, f22);
+        }
+        FUN_001f9a10_c(r, r, &v4);
+    }
+    qcopy(&v3, D_0013F430);
+    v3.f[2] = 0.0f;
+    m = (G_167d0 *)(D_0013F430 - 0xE0);
+    m->f3B0 = FUN_001f9ab0(&v3, &v0);
+    k = FUN_001f9af0(&v0);
+    if (0.0f < k) {
+        m->f3B0 = m->f3B0 / (k * (D_0015ED6C * 5.9f));
+    }
+    FUN_L00_00212318(0);
+    if (m->f3B4 < 0.0174532924f && 0.0872664601f < m->f2E4) {
+        FUN_001f9a68(D_0013F430, D_0013F430, FUN_001f9dc8(m->f2E4));
+    }
+    D_0013F350_167d0.f3B4 = D_0013F350_167d0.f2E4;
+    if (FUN_001f99c0(D_0013F350_167d0.f88 - D_0013F350_167d0.f2D8) < 0.15f) {
+        D_0013F350_167d0.f88 = D_0013F350_167d0.f2D8;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -2,4 +2,5 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d1b8.s", FUN_L00_0025d1b8);
+typedef struct { u8 pad[0x38]; s64 v; } S;
+extern u8 D_001413D0[]; void FUN_L00_0025d1b8(S *p, s64 v) { v = (*(S**)&D_001413D0[0])->v; p->v = v; }
