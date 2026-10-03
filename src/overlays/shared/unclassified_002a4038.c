@@ -2,17 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4058.s", FUN_L02_002a4058);
+extern u8 D_L02_001CB9C0[];
+extern float D_L02_001CB500f[] __asm__("D_L02_001CB500");
+extern s32 D_L02_001612A0 __attribute__((sda));
+extern s32 D_L02_001612A4;
+extern s32 D_L02_001612A8;
+extern s32 D_L02_001612AC;
+
+void FUN_L02_002a4058(char *arg, int val, float scale) {
+    int i;
+    float *p;
+    float *q;
+    float *base;
+    arg[0x3F] = val;
+    *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
+    *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
+    *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
+    *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
+    p = (float *)(D_L02_001CB9C0 + 0x10);
+    base = D_L02_001CB500f;
+    q = base + 4;
+    for (i = 0xF7; i >= 0; i--) {
+        *p = *q * scale;
+        p++;
+        q++;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002a4058(char *arg, int val);
+extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
 void FUN_L02_002a40d0(char *arg) {
-    FUN_L02_002a4058(arg, 0x80);
+    FUN_L02_002a4058_u(arg, 0x80);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 #include "sda.h"

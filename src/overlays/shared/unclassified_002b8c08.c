@@ -2,7 +2,28 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8c08.s", FUN_L01_002b8c08);
+extern f32 D_L01_001CAD00[];
+
+void FUN_L01_002b8c08(f32 *pos)
+{
+    volatile f32 *dst = (volatile f32 *)0x70002000;
+    f32 y = pos[1] + D_L01_001CAD00[3];
+    s32 i, j;
+    for (i = 0; i < 17; i++) {
+        f32 x = pos[0] + D_L01_001CAD00[2];
+        f32 *row = (f32 *)0x70000010 + (i + 1) * 24;
+        for (j = 0; j < 17; j++) {
+            *dst = x;
+            dst += 1;
+            *dst = y;
+            dst += 1;
+            *dst = row[j] + pos[2];
+            dst += 1;
+            x += D_L01_001CAD00[4];
+        }
+        y += D_L01_001CAD00[5];
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8cb0.s", FUN_L01_002b8cb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b9eb0.s", FUN_L01_002b9eb0);
@@ -144,7 +165,107 @@ int FUN_L01_002f1d18(char *m, int a, int b, float f) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2b68.s", FUN_L01_002f2b68);
+extern float FUN_L00_00258110_w7(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
+extern int FUN_001f96f8_w7(int) __asm__("FUN_001f96f8");
+extern void blend_moby_animation_w7(void *m, int a, int b, int c) __asm__("FUN_00212f90");
+extern float D_0015ED70_w7 __asm__("D_0015ED70");
+extern char D_001404A8_w7[] __asm__("D_001404A8");
+extern unsigned char D_0013D4C5_w7 __asm__("D_0013D4C5") __attribute__((section(".data")));
+
+void FUN_L01_002f2b68(unsigned char *m) {
+    char *d;
+    if (m == 0) return;
+    d = *(char **)(m + 0x78);
+    if (d != 0) {
+        if (m[0x20] != 0) {
+            if (D_0013D4C5_w7 != 0) {
+                if (*(int *)D_001404A8_w7 == 5) {
+                    float s = D_0015ED70_w7;
+                    *(float *)(m + 0x48) = FUN_L00_00258110_w7((float *)(d + 4), *(float *)(m + 0x48), *(float *)d, s * 6.2831855f, s * 5.7595863f, 0.0f);
+                }
+            }
+        }
+    }
+    switch (m[0x20]) {
+    case 0:
+        if (m[0x53] != 0) {
+            blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(0));
+        }
+        m[0x20] = 1;
+        *(float *)d = *(float *)(m + 0x48);
+        break;
+    case 1:
+        if ((unsigned char)(m[0xBC] - 3) < 3) {
+            if (m[0x53] != 1) {
+                blend_moby_animation_w7(m, 1, 0, FUN_001f96f8_w7(10));
+            }
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (m[0x70] & 2) {
+            if (m[0x53] != 2) {
+                blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        if ((unsigned char)(m[0xBC] - 4) < 2) {
+            if (m[0x53] != 3) {
+                blend_moby_animation_w7(m, 3, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 4;
+        } else if (m[0xBC] == 7 || m[0xBC] == 1) {
+            if (m[0x53] != 6) {
+                blend_moby_animation_w7(m, 6, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 7;
+        }
+        break;
+    case 4:
+        if (m[0x70] & 2) {
+            if (m[0x53] != 4) {
+                blend_moby_animation_w7(m, 4, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 5;
+        }
+        break;
+    case 5:
+        if (m[0xBC] == 3 || m[0xBC] == 6 || m[0xBC] == 7 || m[0xBC] == 1) {
+            if (m[0x53] != 5) {
+                blend_moby_animation_w7(m, 5, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 6;
+        }
+        break;
+    case 6:
+        if (m[0x70] & 2) {
+            if (m[0xBC] == 7 || m[0xBC] == 1) {
+                if (m[0x53] != 6) {
+                    blend_moby_animation_w7(m, 6, 0, FUN_001f96f8_w7(3));
+                }
+                m[0x20] = 7;
+            } else {
+                if (m[0x53] != 2) {
+                    blend_moby_animation_w7(m, 2, 0, FUN_001f96f8_w7(3));
+                }
+                m[0x20] = 3;
+            }
+        }
+        break;
+    case 7:
+        if (m[0x70] & 2) {
+            if (m[0x53] != 0) {
+                blend_moby_animation_w7(m, 0, 0, FUN_001f96f8_w7(3));
+            }
+            m[0x20] = 1;
+        }
+        break;
+    case 8:
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */

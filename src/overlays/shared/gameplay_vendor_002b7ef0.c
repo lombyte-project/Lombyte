@@ -110,4 +110,8 @@ void FUN_L01_002b80d0(float *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8288.s", FUN_L01_002b8288);
+extern void FUN_L00_002a3ec8(void *, int, int);
+
+void FUN_L01_002b8288(void *a, int b) {
+    FUN_L00_002a3ec8(a, b, 0);
+}

@@ -5,7 +5,36 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307ba8.s", FUN_L09_00307ba8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307d68.s", FUN_L09_00307d68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a9e8.s", FUN_L09_0030a9e8);
+extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
+extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
+extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
+
+void FUN_L09_0030a9e8(unsigned char *a0, char *a1)
+{
+    char *r;
+    int st;
+    float f;
+
+    r = FUN_L00_0025a420_c(a0, 0xC30000, 0);
+    FUN_L00_0025a478_c(a0, r, a1 + 0x20, 0, &st, 0, 0, 4);
+    if (st >= 2) {
+        f = *(float *)(a1 + 0x20) - *(float *)(r + 0x2C);
+        *(float *)(a1 + 0x20) = f;
+        if (0.0f < f) {
+            a1[0x67] = 0x5A;
+            FUN_L00_0025d458_c(a0, a1 + 0x60);
+        } else {
+            FUN_L00_00257470_c(a0, 0, -1);
+            a0[0x20] = 2;
+            a1[0x67] = 0x78;
+            FUN_L00_0025d458_c(a0, a1 + 0x60);
+        }
+    }
+    a0[0xA4] = 0xFF;
+    FUN_L00_0025d538_c(a0, a1 + 0x60);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

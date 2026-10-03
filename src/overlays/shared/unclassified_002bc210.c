@@ -2,7 +2,50 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bc210.s", FUN_L12_002bc210);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* draw a list of effect entries into the scratchpad */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
+
+extern char D_L12_001CB7A0[];
+struct Pkt611c0 { int *p; };
+extern struct Pkt611c0 D_L12_001611C0;
+extern int FUN_001fa728(char *, float);
+extern void FUN_001f76a0(void);
+extern void FUN_L01_0021fa98(int, int, int, int, int, int);
+extern void FUN_L12_002667fc(int, int, int, int);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
+    char *list = list_;
+    int i;
+    int *sp;
+    int idx;
+    vu1_add_g_sregister(6, tex0);
+    vu1_add_g_sregister(7, tex1);
+    D_L12_001611C0.p[0] = 0x30000009;
+    D_L12_001611C0.p[1] = (int)D_L12_001CB7A0;
+    D_L12_001611C0.p[2] = 0;
+    D_L12_001611C0.p[3] = 0x50000009;
+    D_L12_001611C0.p += 4;
+    FUN_001f76a0();
+    sp = (int *)0x70000000;
+    for (i = 0xB3; i >= 0; i--) {
+        *sp++ = 0x80808080;
+    }
+    if (count > 0) {
+        for (i = count; i != 0; i--) {
+            idx = FUN_001fa728(list, 256.0f);
+            if (idx != -1) {
+                FUN_L12_002667fc(*(int *)(list + 0x1C), *(int *)(list + 0x10), *(int *)(list + 0x18), 0x70001000);
+                FUN_L01_0021fa98(*(int *)(list + 0x1C), *(int *)(list + 0x10), 0x70000000, *(int *)(list + 0x14), 0x70001000, idx == 0);
+            }
+            list += 0x20;
+        }
+    }
+}
 typedef struct {
     char pad0[0x44];
     short count;
@@ -45,8 +88,8 @@ void FUN_L12_002e6b60(char *moby) {
 
 extern char D_L12_001F5480[];
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void FUN_L12_002bc210(void *, int, int, int);
+extern void FUN_L12_002bc210_u(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void FUN_L12_002e71b0(void) {
-    FUN_L12_002bc210(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
+    FUN_L12_002bc210_u(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
 }

@@ -141,9 +141,62 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b5e0.s", FUN_L01_0028b5e0);
+int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
+    int idx0 = -1;
+    int idx1 = -1;
+    float best0 = 10000.0f;
+    float best1 = 10000.0f;
+    float d_init = FUN_001f9b48(a0 + 0x10, pt);
+    int i;
+
+    for (i = 0; i < list->count; i++) {
+        float d_pt = FUN_001f9b48(list->e[i], pt);
+        float d_a0 = FUN_001f9b48(list->e[i], a0 + 0x10);
+        if (d_a0 < best0) {
+            best0 = d_a0;
+            idx0 = i;
+        }
+        if (d_pt < d_init) {
+            if (d_pt < best1) {
+                best1 = d_pt;
+                idx1 = i;
+            }
+        }
+    }
+    if (idx1 != -1) {
+        if (idx0 == idx1) {
+            qcopy(out, list->e[idx0]);
+            return idx0;
+        }
+        if (idx0 < idx1) {
+            qcopy(out, list->e[idx0 + 1]);
+            return idx0 + 1;
+        }
+        qcopy(out, list->e[idx0 - 1]);
+        return idx0 - 1;
+    }
+    qcopy(out, pt);
+    return -1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b828.s", FUN_L01_0028b828);
+typedef struct {
+    char pad0[4];
+    signed char f4;
+    char pad1[0x10 - 5];
+    int *f10;
+} T_28b828;
+
+int FUN_L01_0028b828(T_28b828 *a, int b) {
+    int n;
+    n = (a->f4 < 0) ? 0 : (*a->f10 - 1);
+    if (b < 0) {
+        return n + b;
+    }
+    if (n < b) {
+        return b % (n + 1);
+    }
+    return b;
+}
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */

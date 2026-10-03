@@ -42,8 +42,42 @@ void FUN_L10_002e3de8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9028.s", FUN_L10_002e9028);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e91b8.s", FUN_L10_002e91b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a50.s", FUN_L10_002f5a50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a78.s", FUN_L10_002f5a78);
+extern char *D_L10_0015EF50;
+
+void FUN_L10_002f5a50(int i) {
+    unsigned char *q;
+    q = *(unsigned char **)(D_L10_0015EF50 + i * 0x20 + 0x1C);
+    q[0x38] = 1;
+    q[0x39] = 0;
+}
+extern char *D_L10_0015EF50_5a78 __asm__("D_L10_0015EF50");
+extern char D_0013F3D0_5a78[] __asm__("D_0013F3D0");
+extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
+extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
+extern int FUN_L00_0025fa38_5a78(void *, int) __asm__("FUN_L00_0025fa38");
+extern int FUN_L00_0025faf0_5a78(float *, int) __asm__("FUN_L00_0025faf0");
+extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_00259740");
+
+int FUN_L10_002f5a78(char *moby)
+{
+    unsigned char *e = *(unsigned char **)(D_L10_0015EF50_5a78 + *(short *)(moby + 0x84) * 32 + 0x1C);
+
+    if (*(int *)(e + 0x0C) >= 0) {
+        if (FUN_00214720_5a78(D_0013F3D0_5a78, *(int *)(e + 0x0C))) return 1;
+    } else if (*(int *)(e + 0x10) >= 0) {
+        if (FUN_L00_0025fa38_5a78(D_0013F3D0_5a78, *(int *)(e + 0x10))) return 1;
+    } else if (*(int *)(e + 0x08) >= 0) {
+        if (FUN_L00_0025faf0_5a78((float *)D_0013F3D0_5a78, *(int *)(e + 0x08))) return 1;
+    } else if (*(int *)(e + 0x14) >= 0) {
+        int i = *(int *)(e + 0x14);
+        if (FUN_L00_00259740_5a78((float *)D_0013F3D0_5a78,
+                                  (float *)(D_L10_001B0930_5a78[i] + 0x10),
+                                  *(int *)D_L10_001B0930_5a78[i])) return 1;
+    } else if (e[0x38] != 0 && e[0x39] == 0) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #include "sda.h"
@@ -52,7 +86,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 
 extern char *D_L10_0015F050 __asm__("D_L10_0015EF50") MACRO_ADDR;
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern int FUN_L10_002f5a78(char *, char *);
+extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
 int FUN_L10_002f65f8(char *a, char *b) {
     unsigned char *d = *(unsigned char **)(D_L10_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
@@ -67,7 +101,7 @@ int FUN_L10_002f65f8(char *a, char *b) {
     if (b != 0 && *(short *)(b + 0x7E) == 0 && (unsigned char)b[0x7C] >= (unsigned char)a[0x7C]) {
         return 0;
     }
-    if (FUN_L10_002f5a78(a, b) == 0) {
+    if (FUN_L10_002f5a78_u(a, b) == 0) {
         return 0;
     }
     x = *(int *)(d + 0x48);

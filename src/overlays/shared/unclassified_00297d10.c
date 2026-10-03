@@ -30,7 +30,51 @@ char *FUN_L06_002d8510(char *owner) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d85a0.s", FUN_L06_002d85a0);
+extern int D_L06_0015F5CC_c __asm__("D_L06_0015F5CC");
+extern float FUN_001f9de0(float);
+extern int FUN_001fa6e0(int, int, float);
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_001fefc8(void *);
+extern void FUN_0020c828(void *);
+extern void FUN_L06_002d8178(void *, void *);
+extern void FUN_L06_002d8738(void);
+extern void FUN_001f4600(int, int);
+
+void FUN_L06_002d85a0(unsigned char *moby) {
+    char *p = FUN_L00_0025a420(moby, 0x10000, 0);
+    float tmp[4];
+    int t;
+    float f;
+
+    moby[0xA4] = 0xFF;
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        t = D_L06_0015F5CC_c;
+        f = (float)(t % 150) / 150.0f * 2.0f * 3.14159274f;
+        if (f > 3.14159274f) {
+            f -= 6.28318548f;
+        }
+        f = (FUN_001f9de0(f) + 1.0f) * 0.5f;
+        *(int *)(moby + 0x90) = FUN_001fa6e0(0x80464646, 0x80828282, f);
+        if (p != 0) {
+            FUN_L06_002d8178(moby, p);
+        }
+        if (moby[0x31] != 0) {
+            FUN_001f4600((int)FUN_L06_002d8738, (int)moby);
+        }
+        break;
+    case 2:
+        qcopy(tmp, moby + 0x10);
+        tmp[2] += 0.3f;
+        if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
+            FUN_0020c828(moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
@@ -211,7 +255,19 @@ int FUN_L06_002ea6a8(unsigned char *moby) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea7c8.s", FUN_L06_002ea7c8);
+extern s32 FUN_L00_002dbe20(void *);
+
+s32 FUN_L06_002ea7c8(unsigned char *p) {
+    u8 t;
+    s32 r;
+    r = FUN_L00_002dbe20(p);
+    t = p[0x20];
+    if (t != 0x10) {
+        p[0xBC] = t;
+        p[0x20] = 0x10;
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f0040.s", FUN_L06_002f0040);
 /* scores a target moby by distance, heading differences and flags */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */

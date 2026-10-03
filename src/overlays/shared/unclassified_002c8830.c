@@ -2,7 +2,25 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb790.s", FUN_L11_002cb790);
+extern char D_0013F3D0_b7[] __asm__("D_0013F3D0");
+extern unsigned char D_0013D389_b7[] __asm__("D_0013D389");
+extern char D_L11_00179B18_b7[] __asm__("D_L11_00179B18");
+extern char D_L11_0021A900_b7[] __asm__("D_L11_0021A900");
+extern int D_L11_0015F640_b7 __asm__("D_L11_0015F640");
+extern float FUN_001f9b48_b7(void *, void *) __asm__("FUN_001f9b48");
+extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
+extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
+extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
+
+void FUN_L11_002cb790(char *a0)
+{
+    if (FUN_001f9b48_b7(a0 + 0x10, D_0013F3D0_b7) < 2.0f) {
+        D_0013D389_b7[0] = 1;
+        FUN_00116248_b7(D_L11_00179B18_b7, D_L11_0021A900_b7);
+        D_L11_0015F640_b7 = FUN_001f96f8_b7(0xB4);
+        FUN_0020c828_b7(a0);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
