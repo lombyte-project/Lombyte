@@ -211,7 +211,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
+/* D_L16_0015FFD8 is declared sda above (FUN_L16_002e2b60 loads it off $gp), but
+   here retail loads it absolute: reach it from a neighbour, past whose size the
+   assembler no longer uses $gp. */
+extern float D_L16_00161D78_far __asm__("D_L16_00161D78");
+#define D_L16_0015FFD8 (((char **)&D_L16_00161D78_far)[-(0x161D78 - 0x15FFD8) / 4])
 extern char D_0013E533[];
 extern float FUN_001f9b48(void *);
 extern short *D_L16_001ABCC0[];

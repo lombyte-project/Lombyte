@@ -373,8 +373,10 @@ unsigned char *FUN_L00_002d3838(unsigned char *s, void *b, int c, void *d)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3a10.s", FUN_L00_002d3a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
-extern float D_0015ED70_2d54c8 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+/* D_0015ED70 is declared sda above (FUN_L00_002d0538), but here retail loads it
+   absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
+#define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])
 float FUN_001f9e90_2d54c8(float, float) __asm__("FUN_001f9e90");
 float FUN_001f9b48_2d54c8(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001fa580_2d54c8(float, float) __asm__("FUN_001fa580");
