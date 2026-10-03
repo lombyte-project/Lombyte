@@ -27,7 +27,47 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3fa0.s", FUN_L16_002e3fa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e43e0.s", FUN_L16_002e43e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4900.s", FUN_L16_002e4900);
+#include "sda.h"
+#include "qcopy.h"
+extern float func_001F9D10_e4900(void *, void *) __asm__("FUN_001f9b48");
+extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC") MACRO_ADDR;
+extern unsigned char D_0013D5C8_b_e4900[] __asm__("D_0013D4C0");
+void FUN_L16_002e4900(void *moby_v) {
+    char *moby = moby_v;
+    char *data = *(char **)(moby + 0x78);
+    int *list = (int *)(data + 0x80);
+    int i;
+    int idx;
+    char *g;
+    *(short *)(data + 0xAC) = -1;
+    for (i = 0; i < 3; i++) {
+        if (func_001F9D10_e4900(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) < 1.0f) {
+            *(short *)(data + 0xAC) = i;
+        }
+    }
+    {
+    if (D_0013D5C8_b_e4900[0x21] != 0 || *(short *)(data + 0xAC) == 2) {
+        int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        moby[0x31] = 1;
+        *(int *)(moby + 0x94) = v;
+        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xFFFE;
+        moby[0x20] = 1;
+    } else {
+        moby[0x20] = 6;
+        moby[0x31] = 0;
+        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) | 1;
+        *(int *)(moby + 0x94) = 0;
+    }
+    }
+    {
+        int *selected = list;
+        selected += *(short *)(data + 0xAC);
+        idx = *selected << 7;
+    }
+    g = D_L16_001601AC_slots_e4900;
+    qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
+    qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
+}
 /* Pick the path for the current segment and set the travel speeds from its length. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
 

@@ -482,7 +482,190 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5cf8.s", FUN_L18_002d5cf8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6600.s", FUN_L18_002d6600);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x10];
+    int i10;
+    char pad1[0x10];
+    float f24;
+} L18Cls_q;
+
+typedef struct {
+    char pad0[0x10];
+    float f10;
+    char *p14;
+    char *p18;
+    char *p1C;
+    float f20;
+    float f24;
+    float f28;
+    float f2C;
+    int i30;
+    float f34;
+    int i38;
+} L18E_q;
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child_q;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child_q *child;
+    char pad7C[0x14];
+    int f90;
+} Obj_q;
+
+extern char *D_L18_00174858_q __asm__("D_L18_00174858") __attribute__((section(".data")));
+extern char *func_0020D348_m_q(int) __asm__("FUN_0020c4f8");
+extern char D_0013F350_q[] __asm__("D_0013F350");
+extern float D_0015ED6C_q __asm__("D_0015ED6C");
+extern float D_0015ED70_d __asm__("D_0015ED70");
+extern float FUN_001fa580_q(float, float) __asm__("FUN_001fa580");
+extern float FUN_00213f38_q(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern int D_L18_0015F5C4_d __asm__("D_L18_0015F5C4");
+extern int D_L18_0016D290_q __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int FUN_001f9740_q(int *) __asm__("FUN_001f9740");
+extern short D_L18_00161998_d __asm__("D_L18_00161998") __attribute__((sda));
+extern short D_L18_0016199C_d __asm__("D_L18_0016199C") __attribute__((sda));
+extern short D_L18_001619A0_d __asm__("D_L18_001619A0") __attribute__((sda));
+extern void FUN_001f9a10_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9bf8_q(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_0022da68_q(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L00_00250df8_q(void *) __asm__("FUN_L00_00250df8");
+f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
+void mmr_q(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L18_002d6600(char *moby) {
+    L18E_q *d = *(L18E_q **)(moby + 0x78);
+    *(float *)(moby + 0x2C) = (*(L18Cls_q **)(moby + 0x24))->f24 * *(float *)&D_L18_00161998_d;
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0: {
+        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 1.0f;
+        *(int *)(moby + 0x94) = 0;
+        *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
+        qcopy(d, moby + 0x10);
+        if (D_L18_00174858_q != 0) {
+            d->i38 = 1;
+        }
+        {
+            char *a = func_0020D348_m_q(0x6EB);
+            a[0x30] = 0x40;
+            *(short *)(a + 0x32) = 0x56;
+            a[0x31] = 1;
+            *(short *)(a + 0x32) = 0x56;
+            *(float *)(a + 0x2C) = (*(L18Cls_q **)(a + 0x24))->f24 * *(float *)&D_L18_00161998_d;
+            qcopy(a + 0x10, d);
+            qcopy(a + 0x40, moby + 0x40);
+            FUN_L00_00250df8_q(a);
+            d->p1C = a;
+        }
+        d->p14 = func_0020D348_m_q(0x6F0);
+        d->p14[0x30] = 0x40;
+        *(short *)(d->p14 + 0x32) = 0x56;
+        d->p14[0x31] = 1;
+        *(float *)(d->p14 + 0x2C) = (*(L18Cls_q **)(d->p14 + 0x24))->f24 * *(float *)&D_L18_00161998_d;
+        {
+        char *q = d->p14;
+        qcopy(q + 0x40, moby + 0x40);
+        FUN_L00_00250df8_q(q);
+        }
+        d->p18 = func_0020D348_m_q(0x6F0);
+        d->p18[0x30] = 0x40;
+        *(short *)(d->p18 + 0x32) = 0x40;
+        d->p18[0x31] = 1;
+        *(float *)(d->p18 + 0x2C) = (*(L18Cls_q **)(d->p18 + 0x24))->f24 * *(float *)&D_L18_00161998_d;
+        {
+        char *q = d->p18;
+        qcopy(q + 0x40, moby + 0x40);
+        *(float *)(d->p18 + 0x48) = FUN_001fa580_q(*(float *)(q + 0x48), 3.1415901f);
+        FUN_L00_00250df8_q(d->p18);
+        }
+        ((unsigned char *)moby)[0x20] = 1;
+        {
+            float t = *(float *)(moby + 0x18);
+            float u = *(float *)&D_L18_001619A0_d;
+            d->f10 = t;
+            d->f34 = u;
+        }
+        *(int *)(moby + 0x94) = (*(L18Cls_q **)(moby + 0x24))->i10;
+        break;
+    }
+    case 1: {
+        float v[4];
+        if (D_L18_0015F5C4_d == 2) {
+            if (d->i38 != 0) {
+                if (D_L18_0016D290_q == 3) {
+                    if (d->p14 != 0) mmr_q(d->p14);
+                    if (d->p18 != 0) mmr_q(d->p18);
+                    if (d->p1C != 0) mmr_q(d->p1C);
+                    mmr_q(moby);
+                }
+            }
+        }
+        if (d->f24 != 0.0f) {
+            if ((d->i30 == 0 && FUN_001f9740_q((int *)&d->f2C) == 2) ||
+                (D_L18_0015F5C4_d == 2 && D_L18_0016D290_q >= 4)) {
+                FUN_0022da68_q(0, 0, (int)moby);
+                d->f24 = 0;
+            }
+            {
+                char *b = D_0013F350_q;
+                if (*(short *)(b + 0x30E) == 0 && *(int *)(b + 0x2084) == 0x22) {
+                    FUN_0022da68_q(0, 0, (int)moby);
+                    d->f24 = 0;
+                }
+            }
+        }
+        if (d->f24 != 0.0f) {
+            if (d->f20 != d->f24) {
+                FUN_00213f38_q(&d->f20, &d->f28, d->f24, D_0015ED70_d * 4.0f, D_0015ED70_d * 4.0f, D_0015ED6C_q * 4.0f);
+            } else {
+                float k = D_0015ED70_d;
+                FUN_00213f38_q(&d->f34, &d->f28, *(float *)&D_L18_0016199C_d, k * 16.0f, k * 4.0f, D_0015ED6C_q * 8.0f);
+            }
+        } else if (d->f34 != *(float *)&D_L18_001619A0_d) {
+            float k = D_0015ED70_d;
+            FUN_00213f38_q(&d->f34, &d->f28, *(float *)&D_L18_001619A0_d, k * 16.0f, k * 4.0f, D_0015ED6C_q * 8.0f);
+        } else {
+            FUN_00213f38_q(&d->f20, &d->f28, d->f24, D_0015ED70_d * 4.0f, D_0015ED70_d * 4.0f, D_0015ED6C_q * 4.0f);
+        }
+        if (d->p14 != 0) {
+            FUN_001f9bf8_q(d->p14 + 0x10, d->p14 + 0xD0, -d->f20);
+            FUN_001f9bf8_q(v, d->p14 + 0xE0, -d->f20 * 0.2f);
+            FUN_001f9a10_q(d->p14 + 0x10, d->p14 + 0x10, v);
+            FUN_001f9a10_q(d->p14 + 0x10, d->p14 + 0x10, d);
+            FUN_L00_00250df8_q(d->p14);
+        }
+        if (d->p18 != 0) {
+            FUN_001f9bf8_q(d->p18 + 0x10, d->p18 + 0xD0, -d->f20);
+            FUN_001f9bf8_q(v, d->p18 + 0xE0, -d->f20 * 0.2f);
+            FUN_001f9a10_q(d->p18 + 0x10, d->p18 + 0x10, v);
+            FUN_001f9a10_q(d->p18 + 0x10, d->p18 + 0x10, d);
+            FUN_L00_00250df8_q(d->p18);
+        }
+        *(float *)(moby + 0x18) = d->f10 + d->f34;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
 /* Of the mobys of class 0x247 in list idx, the one nearest to pos (within
    255 units), or 0. The second spelling of the table base keeps the

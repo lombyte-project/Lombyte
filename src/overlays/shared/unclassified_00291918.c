@@ -197,7 +197,72 @@ void FUN_L03_002ce238(char *m) {
     *(unsigned char *)(m + 0xA4) = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3cd8.s", FUN_L03_002d3cd8);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320B50), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern float D_L03_0015F580[] MACRO_ADDR;
+extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern void FUN_L01_002787a0(void *);
+void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L03_002d3cd8(unsigned char *m) {
+    int flag = 0;
+    float z;
+    char *p, *pos, *vel;
+    char *x = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (x != 0) {
+            if (*(float *)(x + 0x2C) > 0.0f) flag = 1;
+        }
+        if (flag) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_0022da68(0, 0, (int)m);
+        z = 0.0f;
+        p = D_L03_0015F580;
+        pos = m + 0x10;
+        FUN_L01_002787a0(m);
+        vel = m + 0x40;
+        FUN_L00_00263fd8(m, 0x727, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(m, 0x728, pos, vel, 0, 0, z, p, p, p);
+        FUN_L00_00263fd8(m, 0x729, pos, vel, 0, 0, z, p, p, p);
+        mark_moby_for_removal_c(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d47c0.s", FUN_L03_002d47c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d5208.s", FUN_L03_002d5208);
 typedef struct {

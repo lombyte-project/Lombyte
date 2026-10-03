@@ -224,7 +224,264 @@ void FUN_L11_003191c0(char *moby) {
     c2 = FUN_001fa6e0(*(int *)&D_L11_001623BC_d, *(int *)&D_L11_001623C0_d, random_float_between_alt(0.0f, 1.0f));
     FUN_00218888(moby + 0x10, v0, v1, c1, c2, *(int *)&D_L11_001623C4_d, *(int *)&D_L11_001623C8_d, *(int *)&D_L11_001623CC_d, *(int *)&D_L11_001623A8_d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319838.s", FUN_L11_00319838);
+#include "sda.h"
+
+/* UpdateMoby 1319: a flying craft that circles, follows a path, strafes the player and fires. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ACA8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq *seqs[1]; /* 0x48 */
+} AnimClass;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim;
+
+extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
+extern char *FUN_L11_0030f5a8(void *position, void *vector, int id);
+extern char D_0013F3D0[];
+extern char D_00141C18[];
+extern char D_L11_001B0EB0[];
+extern char D_L11_001F14B0[];
+extern char D_L11_001F14C0[];
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
+extern float D_L11_0015F580[] MACRO_ADDR;
+extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
+extern float D_L11_001677D0_c[] __asm__("D_L11_001677D0");
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_L11_0015F5CC MACRO_ADDR;
+extern int FUN_001fa728(char *, float);
+extern int random_integer_below_c2(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L11_001623D0_d __asm__("D_L11_001623D0") __attribute__((sda));
+extern void FUN_0022da68(int, int, int);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void FUN_L00_0025f730(void *a, float x);
+extern void FUN_L11_00319670(void *);
+extern void FUN_L11_0031a1c0(void *);
+extern void FUN_L11_0031a438(void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+void FUN_L11_00319838(unsigned char *moby) {
+    float s0[4];
+    float s10[4];
+    float s20[4];
+    float s30[4];
+    float m40[4];
+    float m50[4];
+    float m60[4];
+    float s70[4];
+    float s80[4];
+    float s90[4];
+    float sA0[4];
+    float sB0[4];
+    float c0;
+    char *d = *(char **)(moby + 0x78);
+    float f;
+    float len;
+    char *p;
+
+    FUN_L11_0031a1c0(moby);
+    switch (moby[0x20]) {
+    case 0:
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x30] = 0xFF;
+        if (*(int *)(d + 0x88) == 0) {
+            moby[0x20] = 1;
+            *(float *)(d + 0x6C) = FUN_L00_00257c48(0.3f, 0.5f);
+            *(float *)(d + 0x70) = random_angle_radians();
+            *(float *)(d + 0x74) = FUN_L00_00257c48(60.0f, 120.0f) * 0.017453292f * D_0015ED6C;
+            *(float *)(d + 0x78) = random_float_between_alt(8.0f, 12.0f);
+        } else {
+            moby[0x20] = 4;
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+        }
+        break;
+    case 1:
+    case 2:
+        FUN_L11_00319670(moby);
+        *(float *)(d + 0x68) += *(float *)(d + 0x6C);
+        if (*(float *)(d + 0x68) > 1.0f) {
+            *(float *)(d + 0x68) -= 1.0f;
+            *(int *)(d + 0x64) = (*(int *)(d + 0x64) + 1) % **(int **)(D_L11_001B0EB0 + *(int *)(d + 0x60) * 4);
+        } else if (*(float *)(d + 0x68) < 0.0f) {
+            *(float *)(d + 0x68) += 1.0f;
+            *(int *)(d + 0x64) = (*(int *)(d + 0x64) + **(int **)(D_L11_001B0EB0 + *(int *)(d + 0x60) * 4) - 1) % **(int **)(D_L11_001B0EB0 + *(int *)(d + 0x60) * 4);
+        }
+        fast_add_rotations(*(float *)(d + 0x70), *(float *)(d + 0x74));
+        FUN_L11_0031a438(moby);
+        if (moby[0x20] == 2) {
+            FUN_L00_0025f090(moby, moby + 0x10, -1, 2.0f, 13.0f);
+            if (random_integer_below_c2(2)) {
+                FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C4);
+            } else {
+                FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C2);
+            }
+            FUN_0022da68(1, 0, (int)moby);
+            *(unsigned short *)(D_00141C18) = 0xFFFF;
+            moby[0x20] = 3;
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+        } else if (moby[0x31] == 0) {
+            if (FUN_001f9b48(moby + 0x10, D_0013F3D0) < 32.0f) {
+                moby[0x20] = 3;
+                *(int *)(moby + 0x94) = 0;
+                *(unsigned short *)(moby + 0x34) |= 1;
+            }
+        }
+        break;
+    case 3:
+        qcopy(s0, moby + 0x10);
+        s0[3] = 3.0f;
+        if (FUN_001fa728((char *)(moby + 0x10), 512.0f) == -1) {
+            if (FUN_001f9b48(moby + 0x10, D_0013F3D0) > 32.0f) {
+                *(int *)(d + 0x84) += 1;
+                if (scale_game_frames(60) < *(int *)(d + 0x84)) {
+                    moby[0x20] = 1;
+                    if (moby[0x53]) {
+                        blend_moby_animation_c(moby, 0, 0, scale_game_frames(10));
+                    }
+                    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+                    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+                }
+            } else {
+                *(int *)(d + 0x84) = 0;
+            }
+        } else {
+            *(int *)(d + 0x84) = 0;
+        }
+        break;
+    case 4:
+        break;
+    case 5:
+        c0 = 0.0f;
+        qcopy(s30, D_L11_001677D0_c);
+        s30[0] = 0.0f;
+        if (s30[1] > 0.2617994f) {
+            s30[1] = 0.2617994f;
+        } else if (s30[1] < -0.2617994f) {
+            s30[1] = -0.2617994f;
+        }
+        vu_euler_rotation_basis(m40, s30);
+        subtract_vector_xyz(s20, D_0013F3D0, d + 0xB0);
+        qcopy(d + 0xB0, D_0013F3D0);
+        add_vector_xyz(moby + 0x10, moby + 0x10, s20);
+        f = fast_add_rotations(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
+        normalize_vector_xyz(s0, m50, fast_sin(f) * 8.0f);
+        add_vector_xyz(s10, D_L11_001677C0_c, s0);
+        normalize_vector_xyz(s0, m60, fast_cos(f) * 8.0f);
+        add_vector_xyz(s10, s10, s0);
+        normalize_vector_xyz(s0, m40, 20.0f);
+        add_vector_xyz(s10, s10, s0);
+        subtract_vector_xyz(s0, s10, moby + 0x10);
+        len = vector_length_xyz(s0);
+        if ((D_0013F3D0)[0x158F] & 2) {
+            advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, D_0015ED70 + D_0015ED70, D_0015ED70 * 20.0f, D_0015ED6C);
+        } else if (moby[0xBC]) {
+            advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, D_0015ED70 + D_0015ED70, D_0015ED70 * 20.0f, D_0015ED6C * 15.0f);
+        } else {
+            advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, D_0015ED70 + D_0015ED70, D_0015ED70 * 20.0f, D_0015ED6C * 5.0f);
+        }
+        FUN_L00_0025f730(s0, *(float *)(d + 0x6C));
+        add_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), s0);
+        if (moby[0xBC]) {
+            if (moby[0x31]) {
+                *(int *)(d + 0x98) += 1;
+            }
+            if (FUN_001f9b48(s10, (float *)(moby + 0x10)) < 2.0f) {
+                moby[0xBC] = 0;
+            } else if (scale_game_frames(120) < *(int *)(d + 0x98)) {
+                moby[0xBC] = 0;
+            }
+        } else {
+            float *tgt = (float *)(D_0013F3D0);
+            float *yaw = (float *)(moby + 0x48);
+            float *pitch = (float *)(moby + 0x44);
+            float ang;
+            subtract_vector_xyz(s70, tgt, (float *)(moby + 0x10));
+            ang = FUN_001f9e90(s70[0], s70[1]);
+            FUN_L00_0025be00(yaw, (float *)(d + 0x8C), ang, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 12.566371f);
+            ang = -FUN_001f9e90(vector_length_xy(s70), s70[2]);
+            FUN_L00_0025be00(pitch, (float *)(d + 0x90), ang, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 12.566371f);
+            if (D_L11_0015F5CC % 10 == 0) {
+                FUN_0022da68(2, 0, (int)moby);
+                approach_value((float *)(d + 0x94), 0.0f, 0.25f);
+                normalize_vector_xyz(sB0, s20, *(float *)(d + 0x94));
+                add_vector_xyz(sB0, sB0, tgt);
+                if (D_L11_0015F5CC % 20 == 0) {
+                    transform_vector_by_basis(sA0, D_L11_001F14B0, moby + 0xC0);
+                } else {
+                    transform_vector_by_basis(sA0, D_L11_001F14C0, moby + 0xC0);
+                }
+                add_vector_xyz(sA0, sA0, (float *)(moby + 0x10));
+                subtract_vector_xyz(s80, sB0, sA0);
+                normalize_vector_xyz(s90, s80, *(float *)&D_L11_001623D0_d * D_0015ED6C);
+                add_vector_xyz(s90, s90, s20);
+                p = FUN_L11_00308f48((int)moby, s90, sA0, 128.0f, -1.0f, 10.0f);
+                if (p) {
+                    subtract_vector_xyz(s90, s90, s20);
+                    *(float *)(p + 0x44) = -FUN_001f9e90(vector_length_xy(s90), s90[2]);
+                    *(float *)(p + 0x48) = FUN_001f9e90(s90[0], s90[1]);
+                }
+            }
+            if (moby[0x31] == 0) {
+                moby[0x20] = 4;
+                *(int *)(moby + 0x94) = 0;
+                *(unsigned short *)(moby + 0x34) |= 1;
+            }
+        }
+        break;
+    case 6:
+        *(unsigned short *)(D_00141C18) = 0xFFFF;
+        subtract_vector_xyz(s0, D_0013F3D0, d + 0xB0);
+        qcopy(d + 0xB0, D_0013F3D0);
+        add_vector_xyz(moby + 0x10, moby + 0x10, s0);
+        FUN_L00_0025f090(moby, moby + 0x10, -1, 2.0f, 13.0f);
+        if (random_integer_below_c2(2)) {
+            FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C4);
+        } else {
+            FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C2);
+        }
+        FUN_0022da68(1, 0, (int)moby);
+        moby[0x20] = 4;
+        *(int *)(moby + 0x94) = 0;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a758.s", FUN_L11_0031a758);
 extern char *D_L11_0015FFD8;
 extern char D_0013E533[];
@@ -302,7 +559,48 @@ char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ae68.s", FUN_L11_0031ae68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031b098.s", FUN_L11_0031b098);
+#define NOT_SDA __attribute__((section(".data")))
+
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C508), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f96b0(float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L11_00162428_d __asm__("D_L11_00162428") __attribute__((sda));
+extern short D_L11_0016242C_d __asm__("D_L11_0016242C") __attribute__((sda));
+extern short D_L11_00162430_d __asm__("D_L11_00162430") __attribute__((sda));
+extern short D_L11_00162434_d __asm__("D_L11_00162434") __attribute__((sda));
+extern short D_L11_00162438_d __asm__("D_L11_00162438") __attribute__((sda));
+extern short D_L11_0016243C_d __asm__("D_L11_0016243C") __attribute__((sda));
+extern short D_L11_00162440_d __asm__("D_L11_00162440") __attribute__((sda));
+extern short D_L11_00162444_d __asm__("D_L11_00162444") __attribute__((sda));
+extern short D_L11_00162448_d __asm__("D_L11_00162448") __attribute__((sda));
+extern short D_L11_0016244C_d __asm__("D_L11_0016244C") __attribute__((sda));
+extern short D_L11_00162450_d __asm__("D_L11_00162450") __attribute__((sda));
+extern short D_L11_00162454_d __asm__("D_L11_00162454") __attribute__((sda));
+extern void clear_vector(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L11_0031b098(char *m) {
+    float v1[4];
+    float v2[4];
+    char *d;
+    int c0, c1, c2, c3, c4;
+    d = *(char **)(m + 0x78);
+    FUN_L00_00257d78(v1, 0.0f, *(float *)&D_L11_00162428_d * D_0015ED6C);
+    add_vector_xyz(v1, v1, d);
+    clear_vector(v2);
+    v2[2] = random_float_between_alt(*(float *)&D_L11_0016242C_d, *(float *)&D_L11_00162430_d) * D_0015ED6C;
+    v1[3] = *(float *)&D_L11_00162434_d;
+    v2[3] = *(float *)&D_L11_00162438_d;
+    c0 = FUN_001fa6e0(*(int *)&D_L11_0016243C_d, *(int *)&D_L11_00162440_d, random_float_between_alt(0.0f, 1.0f));
+    c1 = FUN_001fa6e0(*(int *)&D_L11_00162444_d, *(int *)&D_L11_00162448_d, random_float_between_alt(0.0f, 1.0f));
+    c2 = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L11_0016244C_d * 0.8f, (float)*(int *)&D_L11_0016244C_d * 1.2f)));
+    c3 = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L11_00162450_d * 0.8f, (float)*(int *)&D_L11_00162450_d * 1.2f)));
+    c4 = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L11_00162454_d * 0.8f, (float)*(int *)&D_L11_00162454_d * 1.2f)));
+    FUN_00218888(m + 0x10, v1, v2, c0, c1, c2, c3, c4, -1);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
 
 extern int D_L11_001FF750[];

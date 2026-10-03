@@ -2,7 +2,33 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4168.s", FUN_L05_002d4168);
+#include "sda.h"
+#include "qcopy.h"
+extern struct Moby *func_0020D348_m_d4168(int) __asm__("FUN_0020c4f8");
+extern int func_001F9850_d4168(int) __asm__("FUN_001f96f8");
+extern float D_0015EE6C_d4168 __asm__("D_0015ED6C") MACRO_ADDR;
+char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
+    char *moby = (char *)func_0020D348_m_d4168(0x5C3);
+    if (moby != 0) {
+        char *d = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        *(float *)(moby + 0x48) = f0;
+        *(float *)(moby + 0x44) = f1;
+        moby[0x20] = 0;
+        *(int *)d = owner;
+        qcopy(moby + 0x10, pos);
+        *(float *)(d + 0x10) = D_0015EE6C_d4168 * 30.0f * 0.7f;
+        *(int *)(d + 8) = arg;
+        *(int *)(d + 0x14) = 0;
+        *(int *)(d + 0x18) = 0;
+        *(short *)(d + 6) = 0;
+        *(float *)(moby + 0x2C) *= 2.3f;
+        *(short *)(d + 4) = func_001F9850_d4168(0x12C);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
 #define NOT_SDA
 

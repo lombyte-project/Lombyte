@@ -730,7 +730,55 @@ void FUN_L18_002f7ab0(Level18VendorMobyShort *moby) {
         moby->substate = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7ad8.s", FUN_L18_002f7ad8);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8F38), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x18];
+    float f18;
+    char pad1C[4];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char substate;
+    char pad32[2];
+    unsigned short flags;
+    char pad36[0x0A];
+    float f40;
+} M;
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern int D_L18_0015F5C4 MACRO_ADDR;
+extern int D_L18_0015F5CC MACRO_ADDR;
+extern int D_L18_001623A0 MACRO_ADDR;
+extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
+
+void FUN_L18_002f7ad8(M *moby) {
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+    case 1:
+        if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) ||
+            (D_L18_0015F5CC < 5 && D_L18_001623A0 != 0 && moby->f40 == 0.0f)) {
+            moby->state = 2;
+            moby->flags |= 1;
+            moby->substate = 0;
+        }
+        break;
+    case 2:
+        if (D_L18_001623A0 != 0 && moby->f40 == 0.0f) {
+            float d = 101.6f - moby->f18;
+            moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
+            moby->f18 += d + d;
+        }
+        if (D_L18_0015F5C4 != 2) {
+            moby->substate = 1;
+            moby->state = 1;
+            moby->flags &= 0xFFFE;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7c40.s", FUN_L18_002f7c40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8050.s", FUN_L18_002f8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8658.s", FUN_L18_002f8658);

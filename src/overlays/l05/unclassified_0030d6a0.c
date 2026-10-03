@@ -200,7 +200,48 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316990.s", FUN_L05_00316990);
+#include "sda.h"
+
+/* For every moby sharing this one's class: arms the marker record, and notifies it while the level flag is set. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x44];
+    short n;
+    char pad1[0x132];
+    char *m[1];
+} G;
+
+extern G D_L05_0016CC60;
+extern int D_L05_0015F5C4 MACRO_ADDR;
+extern short D_L05_00161ED0_d __asm__("D_L05_00161ED0") __attribute__((sda));
+extern unsigned char D_0015EDB0[] MACRO_ADDR;
+extern unsigned char D_L05_0017C8A0[];
+extern void FUN_L05_00316810(char *, int);
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L05_00316990(char *arg) {
+    if (D_L05_0015F5C4 == 2 && (D_0015EDB0[0] != 0 || *(int *)&D_L05_00161ED0_d != 0)) {
+        int i;
+        for (i = 0; i < D_L05_0016CC60.n; i++) {
+            char *moby = D_L05_0016CC60.m[i];
+            if (*(short *)(moby + 0xA6) == *(short *)(arg + 0xA6)) {
+                if (D_0015EDB0[0] != 0) {
+                    unsigned char *q = D_L05_0017C8A0;
+                    if (q[1] == 0) {
+                        attach_manipulator(moby, 0, q);
+                        *(float *)(q + 0x20) = 2.75f;
+                        *(float *)(q + 0x24) = 2.75f;
+                        *(float *)(q + 0x28) = 2.75f;
+                    }
+                }
+                if (*(int *)&D_L05_00161ED0_d != 0) {
+                    FUN_L05_00316810(moby, *(int *)(arg + 0x78));
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);

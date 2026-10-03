@@ -622,7 +622,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d59e0.s", FUN_L16_002d59e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ad0.s", FUN_L16_002d5ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5e80.s", FUN_L16_002d5e80);
+extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
+extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
+extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
+extern short D_L16_00161A88_5e80 __asm__("D_L16_00161A88") __attribute__((sda));
+extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002d5e80(char *m) {
+    char *d = *(char **)(m + 0x78);
+    if (*(int *)(d + 8) == 0) {
+        if (FUN_001f99a8_5e80(*(int *)&D_L16_00161A88_5e80 - D_L16_0015F5CC_g5e80) >= 4) {
+            *(int *)&D_L16_00161A88_5e80 = D_L16_0015F5CC_g5e80;
+            FUN_0022da68_5e80(0, 0, m);
+        }
+    }
+    *(int *)(d + 8) = FUN_001f96f8_5e80(5);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ef8.s", FUN_L16_002d5ef8);
 /* Computes a moby's direction vectors from its table entry. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7628), where it is exact; names translated to the US level program. */

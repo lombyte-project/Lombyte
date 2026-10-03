@@ -10,11 +10,11 @@
 
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013E533[];
-extern void FUN_L00_002c1778(void *);
+extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
 
 void FUN_L00_002c1718(char *m) {
     if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
-        FUN_L00_002c1778(m);
+        FUN_L00_002c1778_u(m);
     } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(D_0013E533 + 0x1EBD)) {
         m[0xBC] = 1;
     } else {
@@ -519,7 +519,54 @@ void FUN_L00_002c82f0(Vec4_2c82f0 *a, u8 *m, void *c) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bffa8.s", FUN_L00_002bffa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c1778.s", FUN_L00_002c1778);
+extern const float D_L00_00161828_2c1778 __asm__("D_L00_00161828") __attribute__((sda));
+extern float D_L00_00161830_2c1778 __asm__("D_L00_00161830") __attribute__((sda));
+extern float D_L00_00173E68_2c1778 __asm__("D_L00_00173E68") __attribute__((section(".data")));
+extern int D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
+extern unsigned char D_0013F350_2c1778[] __asm__("D_0013F350");
+void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");
+float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
+float FUN_001f9b80_2c1778(void *, void *) __asm__("FUN_001f9b80");
+float FUN_001f99c0_2c1778(float) __asm__("FUN_001f99c0");
+void FUN_L00_00260860_2c1778(int, int) __asm__("FUN_L00_00260860");
+float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
+void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
+
+void FUN_L00_002c1778(void *mv)
+{
+    unsigned char *m = mv;
+    unsigned char *P;
+    switch (m[0x20]) {
+    case 0:
+        FUN_00213508_2c1778(m + 0x10, 0, 0.5f);
+        *(float *)(m + 0x40) = 1.5707964f;
+        *(float *)(m + 0x44) = 3.1415927f;
+        *(float *)(m + 0x18) = D_L00_00173E68_2c1778 + D_L00_00161828_2c1778;
+        m[0x20] = 1;
+        break;
+    case 1:
+        { float r = FUN_001fa580_2c1778(*(float *)(m + 0x48), D_L00_00161830_2c1778); int t = D_L00_0015F5CC_2c1778[0];
+        *(float *)(m + 0x48) = r;
+        if (t % 10 == 0) {
+            P = D_0013F350_2c1778;
+            if (*(int *)(P + 0x22A8)) {
+                if (FUN_001f9b80_2c1778(m + 0x10, P + 0x80) < 1.0f) {
+                    if (FUN_001f99c0_2c1778(*(float *)(m + 0x18) - *(float *)(P + 0x88)) < 2.0f) {
+                        FUN_L00_00260860_2c1778(0x1A, 1);
+                        m[0x20] = 2;
+                    }
+                }
+            }
+        }
+        }
+        break;
+    case 2:
+        FUN_00213ed8_2c1778(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
+        if (*(float *)(m + 0x2C) == 0.0f)
+            FUN_0020c828_2c1778(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c1ad0.s", FUN_L00_002c1ad0);
 /*
  * TODO(route): this body is DONE - it is byte-identical to retail under the

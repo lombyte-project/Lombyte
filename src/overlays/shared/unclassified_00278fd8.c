@@ -151,8 +151,78 @@ void FUN_L15_002cbba0(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbc30.s", FUN_L15_002cbc30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbd88.s", FUN_L15_002cbd88);
+#include "sda.h"
+
+/* per-frame update of the level's looping effect: ramp the gauge, then start, run or stop the draw callback */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float D_0015ED6C MACRO_ADDR;
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L15_002cbac0();
+extern short D_0015ED84_d __asm__("D_0015ED84") __attribute__((sda));
+extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8") __attribute__((sda));
+extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));
+extern short D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
+extern short D_L15_00161AC4_d __asm__("D_L15_00161AC4") __attribute__((sda));
+extern short D_L15_00161AC8_d __asm__("D_L15_00161AC8") __attribute__((sda));
+extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+
+void FUN_L15_002cbc30(void *arg) {
+    char *base = D_0013F350;
+    if (*(int *)(base + 0x2084) == 0x65) {
+        approach_value(&D_L15_00161ABC_d, 0.0f, D_0015ED6C * 2);
+        FUN_L15_002cbac0(arg, 0);
+    } else if (*(int *)&D_L15_00161AB8_d != 0
+               && (*(int *)&D_0015ED84_d != 0xF || 240.0f < *(float *)(base + 0x84))) {
+        approach_value(&D_L15_00161ABC_d, 1.0f, D_0015ED6C * 2);
+    } else {
+        approach_value(&D_L15_00161ABC_d, 0.0f, D_0015ED6C * 2);
+    }
+    if (*(float *)&D_L15_00161ABC_d != 0.0f) {
+        *(int *)&D_L15_00161AC0_d = 1;
+        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8_d, *(int *)&D_L15_00161AC4_d) == 0) {
+            *(int *)&D_L15_00161AC4_d = FUN_0022da68(5, 0x11, (int)arg);
+            *(void **)&D_L15_00161AC8_d = arg;
+        }
+        enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, arg);
+    } else {
+        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8_d, *(int *)&D_L15_00161AC4_d) != 0) {
+            release_voice_slot(*(int *)&D_L15_00161AC4_d);
+            *(int *)&D_L15_00161AC8_d = 0;
+            *(int *)&D_L15_00161AC4_d = -1;
+        }
+        *(int *)&D_L15_00161AC0_d = 0;
+    }
+}
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_L15_0015F5CC MACRO_ADDR;
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L15_00161ACC_d __asm__("D_L15_00161ACC") __attribute__((sda));
+extern short D_L15_00161AD0_d __asm__("D_L15_00161AD0") __attribute__((sda));
+extern short D_L15_00161AD4_d __asm__("D_L15_00161AD4") __attribute__((sda));
+extern signed char D_L15_00161ACF[] MACRO_ADDR;
+void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L15_002cbd88(void) {
+    int n = scale_game_frames(*(int *)&D_L15_00161AD4_d);
+    float d = ConvertIntegerToFloat(n);
+    float s = fast_sin((float)(D_L15_0015F5CC % n) / d * 6.28318f);
+    float v = *(float *)&D_L15_00161ABC_d + *(float *)&D_L15_00161AD0_d * s;
+    int r;
+    int k;
+    if (v < 0.0f) v = 0.0f;
+    r = func_001FA898_r((float)D_L15_00161ACF[0] * v);
+    k = *(int *)&D_L15_00161ACC_d;
+    emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));

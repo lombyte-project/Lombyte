@@ -271,4 +271,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7930.s", FUN_L06_002f7930);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7ab8.s", FUN_L06_002f7ab8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7c68.s", FUN_L06_002f7c68);
+#include "sda.h"
+
+/* Spawn forty particles at the moby with randomised parameters. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F9098), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C MACRO_ADDR;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern short D_L06_00161E84_d __asm__("D_L06_00161E84") __attribute__((sda));
+extern short D_L06_00161E88_d __asm__("D_L06_00161E88") __attribute__((sda));
+extern short D_L06_00161E98_d __asm__("D_L06_00161E98") __attribute__((sda));
+extern short D_L06_00161E9C_d __asm__("D_L06_00161E9C") __attribute__((sda));
+extern short D_L06_00161EA0_d __asm__("D_L06_00161EA0") __attribute__((sda));
+extern short D_L06_00161EA4_d __asm__("D_L06_00161EA4") __attribute__((sda));
+extern short D_L06_00161EA8_d __asm__("D_L06_00161EA8") __attribute__((sda));
+extern short D_L06_00161EAC_d __asm__("D_L06_00161EAC") __attribute__((sda));
+extern unsigned char D_L06_00161E94_d __asm__("D_L06_00161E94") __attribute__((sda));
+extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+
+void FUN_L06_002f7c68(char *m) {
+    float buf[4];
+    int i;
+    for (i = 0x27; i >= 0; i--) {
+        float f;
+        int r;
+        int c;
+        int v;
+        FUN_L00_00257d78(buf, *(float *)&D_L06_00161E84_d * D_0015ED6C, *(float *)&D_L06_00161E88_d * D_0015ED6C);
+        f = random_float_between_alt(*(float *)&D_L06_00161EA8_d, *(float *)&D_L06_00161EAC_d);
+        if (random_integer_below(2) != 0) {
+            r = FUN_001fa6e0(*(int *)&D_L06_00161E98_d, *(int *)&D_L06_00161E9C_d, random_float_between_alt(0.0f, 1.0f));
+        } else {
+            r = FUN_001fa6e0(*(int *)&D_L06_00161EA0_d, *(int *)&D_L06_00161EA4_d, random_float_between_alt(0.0f, 1.0f));
+        }
+        c = D_L06_00161E94_d;
+        v = random_integer_below(0xFF);
+        FUN_L00_002730e0(m + 0x10, f, buf, r, c, (unsigned char)v, 0);
+    }
+}

@@ -63,7 +63,39 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
         }
     } while (--i >= 0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fa640.s", FUN_L18_002fa640);
+#include "sda.h"
+
+/* State machine: waits for level flags, then turns the moby around and back. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern int D_L18_0015F5C4 MACRO_ADDR;
+extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
+
+void FUN_L18_002fa640(char *moby) {
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) {
+            *(unsigned short *)(moby + 0x34) |= 1;
+            moby[0x31] = 0;
+            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), 3.1415927f);
+            moby[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (D_L18_0015F5C4 != 2) {
+            unsigned short fl = *(unsigned short *)(moby + 0x34);
+            moby[0x20] = 3;
+            fl &= 0xFFFE;
+            moby[0x31] = 1;
+            *(unsigned short *)(moby + 0x34) = fl;
+        }
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
