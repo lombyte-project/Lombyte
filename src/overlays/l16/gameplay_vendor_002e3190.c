@@ -221,7 +221,7 @@ typedef struct {
 extern char D_L16_001671C0[];
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025be00(float *,float *,float,float,float,float);
-extern float FUN_L16_002e6428(void *,void *);
+extern float FUN_L16_002e6428_u(void *,void *) __asm__("FUN_L16_002e6428");
 extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L00_002dc9f0(void *,void *);
 extern s32 rand();
@@ -265,7 +265,7 @@ void FUN_L16_002e5e08(char *m) {
         break;
     case 2: case 3: break;
     case 4:
-        if(FUN_L16_002e6428(m,d+0x180)<1.25f) {
+        if(FUN_L16_002e6428_u(m,d+0x180)<1.25f) {
             *(unsigned char *)(m + 0x20)=5;
             if(*(unsigned char *)(m + 0x53)!=1) blend_moby_animation(m,1,0,scale_game_frames(20));
         } else if(*(int *)(d + 0x1C4)==2) *(unsigned char *)(m + 0x20)=6;
@@ -283,7 +283,7 @@ void FUN_L16_002e5e08(char *m) {
         break;
     }
     case 6:
-        if(FUN_L16_002e6428(m,d+0x1D0)<1.0f) {
+        if(FUN_L16_002e6428_u(m,d+0x1D0)<1.0f) {
             *(unsigned char *)(m + 0x20)=1;
             if(*(unsigned char *)(m + 0x53)!=2) blend_moby_animation(m,2,0,scale_game_frames(20));
         } else if(*(int *)(d + 0x1C4)!=2) *(unsigned char *)(m + 0x20)=4;
@@ -301,7 +301,46 @@ void FUN_L16_002e5e08(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6428.s", FUN_L16_002e6428);
+/* Steers and moves a moby toward a target point, returning the distance. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7890), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015ED6C ,D_0015EE70;
+extern float D_0015EE6C ,D_0015ED70_c __asm__("D_0015ED70");
+extern float FUN_001f9e90_c(float,float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025be00_c(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern void FUN_L00_00258830(void *, void *, float, float, float, int);
+extern void FUN_L00_00261d78(float, void *, void *, void *);
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern float func_00214D88_7890(float *, float, float, float, float, float *) __asm__("FUN_00213f38");
+
+float FUN_L16_002e6428(void *m_v, void *t_v) {
+    char *m = m_v;
+    float *t = t_v;
+    char *d = *(char **)(m + 0x78);
+    float vel;
+    float vec[4];
+    float dist;
+    float oldz;
+    float a = FUN_001f9e90_c(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
+    a = fast_add_rotations(a, *(float *)(d + 0x1F8));
+    oldz = *(float *)(m + 0x18);
+    vel = 0.0f;
+    dist = FUN_001f9b48(m + 0x10, t);
+    FUN_L00_0025be00_c((float *)(m + 0x48), (float *)(d + 0x1F4), a,
+                         D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f,
+                         D_0015ED6C * 12.566371f);
+    func_00214D88_7890(&vel, dist,
+                   D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f,
+                   D_0015ED6C * 4.0f, (float *)(d + 0x204));
+    normalize_vector_xyz(vec, m + 0xC0, *(float *)(d + 0x204));
+    vec[2] = *(float *)(d + 0x208) - D_0015ED70_c * 10.0f;
+    FUN_L00_00258830(m, vec, 0.5f, 0.5f, 0.0f, 0x10);
+    FUN_L00_00261d78(0.333f, *(void **)(d + 0x1F0), m + 0x10, m + 0x10);
+    *(float *)(d + 0x208) = oldz - *(float *)(m + 0x18);
+    return dist;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6808.s", FUN_L16_002e6808);
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
@@ -349,7 +388,49 @@ void FUN_L16_002e7168(char *moby)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7208.s", FUN_L16_002e7208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7a30.s", FUN_L16_002e7a30);
+/* Emits a particle near an active moby when the target is close. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int D_L16_0015F5CC;
+extern short D_L16_00161E98_d __asm__("D_L16_00161E98") __attribute__((sda));
+extern short D_L16_00161E9C_d __asm__("D_L16_00161E9C") __attribute__((sda));
+extern short D_L16_00161EA0_d __asm__("D_L16_00161EA0") __attribute__((sda));
+extern short D_L16_00161EA4_d __asm__("D_L16_00161EA4") __attribute__((sda));
+extern short D_L16_00161EA8_d __asm__("D_L16_00161EA8") __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+void FUN_L00_0026ced0(u128 *p, u128 *q, int c, int d, int n, float s);
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+extern void func_L00_0026DD70_emit(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
+
+void FUN_L16_002e7a30(unsigned char *m, void *v) {
+    float input[4];
+    float offset[4];
+    float out[4];
+    float velocity[4];
+    float a, b, size, r, final_size;
+    *(u128 *)input = *(u128 *)v;
+    if ((unsigned char)m[0x31] == 0) return;
+    if ((D_L16_0015F5CC & 1) != (((int)m >> 8) & 1)) return;
+    if (!(FUN_001f9b48(m + 0x10, D_L16_001671C0) < 75.0f)) return;
+    r = FUN_001f9b48(m + 0x10, input);
+    scale_vector_xyz(out, m + 0xC0, *(float *)&D_L16_00161EA0_d * r);
+    size = *(float *)&D_L16_00161EA4_d;
+    size *= D_0015ED6C;
+    normalize_vector_xyz(offset, m + 0xC0, -0.5f);
+    add_vector_xyz(offset, offset, m + 0x10);
+    a = random_angle_radians();
+    b = random_angle_radians();
+    build_spherical_offset(velocity, size, a, b);
+    add_vector_xyz(velocity, velocity, out);
+    final_size = *(float *)&D_L16_00161EA8_d;
+    final_size *= 210000.0f;
+    func_L00_0026DD70_emit(offset, velocity, *(int *)&D_L16_00161E98_d,
+                        *(int *)&D_L16_00161E9C_d, final_size, scale_game_frames(0x23));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7e00.s", FUN_L16_002e7e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);

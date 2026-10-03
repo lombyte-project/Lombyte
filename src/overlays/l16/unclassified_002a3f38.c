@@ -161,7 +161,7 @@ extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
 extern int FUN_L16_002cf738(void *);
 extern void FUN_0022da68(int, int, void *);
 extern void FUN_0022d798(int);
-extern void FUN_L16_002cf7a8(void);
+extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
@@ -180,7 +180,7 @@ void FUN_L16_002cf4a8(char *moby) {
         case 1:
             if (FUN_L16_002cf738(moby) != 0) {
                 data[2] = state;
-                enqueue_callback_list_1_alt(FUN_L16_002cf7a8, moby);
+                enqueue_callback_list_1_alt(FUN_L16_002cf7a8_u, moby);
                 if (FUN_L00_0028d8c0(moby, data[3]) == 0) {
                     data[3] = func_0022ED80_i(0, 4, moby);
                 }
@@ -403,18 +403,123 @@ void FUN_L16_002c9650(char *m) {
         FUN_001f9a10(d, d, e);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9878.s", FUN_L16_002c9878);
+/* Updates a linked moby's movement and follows it while its state is active. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAC40), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED6C ,D_0015EE70;
+extern float D_0015EE6C ,D_0015ED70_c __asm__("D_0015ED70");
+extern short D_L16_0016198C_d __asm__("D_L16_0016198C") __attribute__((sda));
+extern void FUN_L16_002c9a50(unsigned char *);
+extern void FUN_L16_002c9c38_c(int, void *) __asm__("FUN_L16_002c9c38");
+extern void FUN_L16_002c9cd0();
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+
+void FUN_L16_002c9878(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float vec[4];
+    float target;
+    int one = 1;
+    switch (m[0x20]) {
+    case 0:
+        *(int *)(d + 0x5C) |= 4;
+        m[0x31] = 0;
+        *(unsigned short *)(m + 0x34) |= one;
+        if (*(int *)(d + 0x60) == -1) {
+            *(unsigned short *)(m + 0x34) |= 2;
+        } else {
+            m[0x20] = 2;
+        }
+        *(int *)(d + 0x74) = -1;
+        break;
+    case 2:
+        target = -(*(float *)&D_L16_0016198C_d * D_0015ED6C);
+        if (*(float *)(d + 0x6C) != target) {
+            approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
+            normalize_vector_xyz(vec, m + 0xC0, *(float *)(d + 0x6C));
+            FUN_L16_002c9c38_c(m[0x21], vec);
+        }
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x68))) m[0x20] = one;
+        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
+        break;
+    case 1:
+        target = *(float *)&D_L16_0016198C_d * D_0015ED6C;
+        if (*(float *)(d + 0x6C) != target) {
+            approach_value((float *)(d + 0x6C), target, D_0015ED70_c * 12.0f);
+            normalize_vector_xyz(vec, m + 0xC0, *(float *)(d + 0x6C));
+            FUN_L16_002c9c38_c(m[0x21], vec);
+        }
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x64))) m[0x20] = 2;
+        enqueue_callback_list_1_alt(FUN_L16_002c9cd0, m);
+        break;
+    }
+    if (m[0x20]) FUN_L16_002c9a50(m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9a50.s", FUN_L16_002c9a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cddb8.s", FUN_L16_002cddb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ced20.s", FUN_L16_002ced20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cee70.s", FUN_L16_002cee70);
+/* spins the level's rotating parts by the current angle and queues the draw callback */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0238), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern int *D_L16_001ABCC0_c2[] __asm__("D_L16_001ABCC0");
+extern short D_L16_001619DC;
+extern void FUN_L16_002cef60();
+
+void FUN_L16_002cee70(char *moby) {
+    short *p;
+    float f;
+    char *m;
+    char *data;
+    if (((unsigned char *)moby)[0x21] != 0xFF) {
+        f = *(float *)&D_L16_001619DC * 0.017453292f * D_0015ED6C;
+        p = (short *)D_L16_001ABCC0_c2[((unsigned char *)moby)[0x21]];
+        do {
+again:
+            m = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
+            if (*(short *)(m + 0xA6) != 0x21D) goto again;
+            data = *(char **)(m + 0x78);
+            *(int *)(data + 0x118) = D_L16_0015F5CC;
+            *(float *)(data + 0x11C) = fast_add_rotations(*(float *)(data + 0x11C), f);
+        } while (*p++ >= 0);
+        enqueue_callback_list_1_alt(FUN_L16_002cef60, moby);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf198.s", FUN_L16_002cf198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf678.s", FUN_L16_002cf678);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf738.s", FUN_L16_002cf738);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf7a8.s", FUN_L16_002cf7a8);
+/* Draw each linked pair once per generation. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B70), where it is exact; names translated to the US level program. */
+
+extern int *D_L16_001ABCC0_c3[] __asm__("D_L16_001ABCC0");
+extern void FUN_L16_002cf850(char*,char*);
+
+void FUN_L16_002cf7a8(char *arg) {
+    short *p=(short *)D_L16_001ABCC0_c3[*(unsigned char *)(arg+0x21)];
+    if (p) {
+        do {
+            char *m=D_L16_0015FFD8+((*(unsigned short *)p&0x7FFF)<<8);
+            if (*(short *)(m+0xA6)==0x228) {
+                char *data=*(char **)(m+0x78);
+                int generation=D_L16_0015F5CC;
+                if (*(int *)(data+4)!=generation) {
+                    char *partner=*(char **)data;
+                    if (partner) {
+                        char *otherData=*(char **)(partner+0x78);
+                        *(int *)(data+4)=generation;
+                        *(int *)(otherData+4)=generation;
+                        FUN_L16_002cf850(m,partner);
+                    }
+                }
+            }
+        } while (*p++>=0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf850.s", FUN_L16_002cf850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf9f8.s", FUN_L16_002cf9f8);
 /* Adjust animation and pitch to the remaining time in a jump. */
