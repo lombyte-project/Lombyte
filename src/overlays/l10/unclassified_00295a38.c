@@ -151,7 +151,68 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c7a20.s", FUN_L10_002c7a20);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550[];
+extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern void *FUN_L00_0026fd28(char *a, char *b, unsigned char c, int d);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector(void *) __asm__("func_001F99F8");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int tick_countdown_32(void *) __asm__("func_001F9740");
+
+void FUN_L10_002c7a20(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float d[16];
+    float v[4];
+    float r[4];
+    float s[4];
+    switch (moby[0x20]) {
+    case 0:
+        *(int *)(data + 0x10) = -1;
+        if (tick_countdown_32((int *)(data + 0xC))) {
+            *(int *)(data + 0xC) = *(int *)(data + 4);
+            moby[0x20] = 1;
+        }
+        break;
+    case 1:
+        qcopy(v, moby + 0x10);
+        FUN_001fa050(d, (float *)(moby + 0x40));
+        clear_vector(r);
+        r[2] = *(float *)data * 3.0f * D_0015ED6C_c;
+        FUN_001f9d20(r, r, d);
+        scale_vector_xyz(s, r, 0.33f);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        add_vector_xyz(v, v, s);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        add_vector_xyz(v, v, s);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x10)) == 0) {
+            *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
+        }
+        if (tick_countdown_32((int *)(data + 0xC))) {
+            int k;
+            *(int *)(data + 0xC) = *(int *)(data + 8);
+            moby[0x20] = 0;
+            k = *(int *)(data + 0x10);
+            if (k != -1) {
+                unsigned char *e = (unsigned char *)D_0013E550 + k * 0x70;
+                if (*(unsigned char **)(e + 0x88) == moby && e[0x74] != 0) {
+                    release_voice_slot(k);
+                }
+            }
+            *(int *)(data + 0x10) = -1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);

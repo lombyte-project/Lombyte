@@ -4,8 +4,222 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f32f0.s", FUN_L17_002f32f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f3848.s", FUN_L17_002f3848);
+#include "sda.h"
+
+/* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
+
+typedef int u128_2F4E30 __attribute__((mode(TI)));
+
+typedef struct {
+    u128_2F4E30 m[4];
+    int col[4];
+    float uv[8];
+    int q[8];
+} Pkt;
+
+extern char D_L17_00167740[] __asm__("D_L17_001676C0");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015EE7C __asm__("D_0015ED7C") MACRO_ADDR;
+extern float D_L17_0016D464 __asm__("D_L17_0016D3E4") NOT_SDA;
+extern float D_L17_001DE2C8[] __asm__("D_L17_001DDFF8");
+extern float D_L17_001DE310[] __asm__("D_L17_001DE040");
+extern float D_L17_001DE370[] __asm__("D_L17_001DE0A0");
+extern float D_L17_001DE388[] __asm__("D_L17_001DE0B8");
+extern float D_L17_001DE3A0[] __asm__("D_L17_001DE0D0");
+extern float D_L17_001E7340[] __asm__("D_L17_001E6FA0");
+extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_c(float) __asm__("FUN_001f9de0");
+extern int D_L17_001DE2E0[] __asm__("D_L17_001DE010");
+extern int D_L17_001DE2F8[] __asm__("D_L17_001DE028");
+extern int D_L17_001DE358[] __asm__("D_L17_001DE088");
+extern int FUN_001fa6e0(int, int, float);
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern short D_L17_00162438 __asm__("D_L17_001623B8") __attribute__((sda));
+extern short D_L17_00162440 __asm__("D_L17_001623C0") __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+void vu1_add_g_sregister_c(s32 register_id, s64 value) __asm__("FUN_00233980");
+
+void FUN_L17_002f32f0(char *moby) {
+    Pkt pkt;
+    u128_2F4E30 vv[4];
+    char *data = *(char **)(moby + 0x78);
+    char *pos;
+    int i;
+    int k;
+    int j;
+    u128_2F4E30 *vb;
+    float *pu;
+    float *pv;
+    vu1_add_g_sregister_c(0x47, 0x513F1);
+    vb = &vv[2];
+    pos = data + 0x10;
+    pu = &pkt.uv[0];
+    pv = &pkt.uv[1];
+    D_L17_0016D464 = 8192000.0f;
+    *(float *)(data + 0x14) = -8000.0f;
+    for (i = 0; i < 2; i++) {
+        subtract_vector_xyz(vb, data, pos);
+        subtract_vector_xyz(&vv[0], data, D_L17_00167740);
+        subtract_vector_xyz(&vv[1], pos, D_L17_00167740);
+        cross_vectors_xyz(&vv[0], &vv[0], vb);
+        normalize_vector_xyz(&vv[0], &vv[0], D_L17_001DE388[i]);
+        cross_vectors_xyz(&vv[1], &vv[1], vb);
+        normalize_vector_xyz(&vv[1], &vv[1], *(float *)(data + 0x28));
+        *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
+        *(long *)&pkt.q[6] = 0x0000008000000048LL;
+        *(long *)&pkt.q[0] = 0;
+        pkt.col[3] = *(int *)&D_L17_00162438;
+        pkt.col[2] = *(int *)&D_L17_00162438;
+        pkt.col[1] = *(int *)&D_L17_00162438;
+        pkt.col[0] = *(int *)&D_L17_00162438;
+        {
+            float *qu = &pkt.uv[0];
+            float *qv = &pkt.uv[1];
+            int m;
+            for (m = 0; m < 4; m++) {
+                qu[m * 2] = D_L17_001E7340[m * 2];
+                qv[m * 2] = D_L17_001E7340[m * 2 + 1];
+            }
+        }
+        subtract_vector_xyz(&vv[3], data, &vv[0]);
+        pkt.m[0] = vv[3];
+        add_vector_xyz(&vv[3], data, &vv[0]);
+        pkt.m[1] = vv[3];
+        subtract_vector_xyz(&vv[3], pos, &vv[1]);
+        pkt.m[2] = vv[3];
+        add_vector_xyz(&vv[3], pos, &vv[1]);
+        pkt.m[3] = vv[3];
+        *(long *)&pkt.q[2] = get_effect_texture_alt(D_L17_001DE358[i]);
+        for (j = 0; j < 4; j++) {
+            pu[j * 2] = D_L17_001E7340[j * 2] + D_L17_001DE370[i];
+            pv[j * 2] = D_L17_001E7340[j * 2 + 1];
+        }
+        D_L17_001DE370[i] += *(float *)((char *)&D_L17_00162440 + i * 4) * D_0015EE7C;
+        draw_geometry_quad(&pkt, 0, 0);
+    }
+    *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
+    for (k = 0; k < 5; k++) {
+        float s = D_L17_001DE2C8[k];
+        float ang = D_L17_001DE3A0[k];
+        float x = *(float *)(data + 0x10) - s * 0.5f;
+        float z;
+        ((float *)&pkt)[0] = x;
+        ((float *)&pkt)[1] = *(float *)(data + 0x14) + 1000.0f;
+        z = *(float *)(data + 0x18) + s * 0.5f;
+        ((float *)&pkt)[3] = 1.0f;
+        ((float *)&pkt)[2] = z;
+        pkt.m[3] = pkt.m[0];
+        pkt.m[2] = pkt.m[0];
+        pkt.m[1] = pkt.m[0];
+        ((float *)&pkt)[0] = x + 0.0f;
+        ((float *)&pkt)[2] = z + 0.0f;
+        ((float *)&pkt)[4] = ((float *)&pkt)[4] + 0.0f;
+        ((float *)&pkt)[6] = ((float *)&pkt)[6] - s;
+        ((float *)&pkt)[8] = ((float *)&pkt)[8] + s;
+        ((float *)&pkt)[10] = ((float *)&pkt)[10] + 0.0f;
+        ((float *)&pkt)[12] = ((float *)&pkt)[12] + s;
+        ((float *)&pkt)[14] = ((float *)&pkt)[14] - s;
+        pkt.uv[0] = fast_sin_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
+        pkt.uv[1] = fast_cos_c(fast_add_rotations(ang, 4.712389f)) * 0.5f + 0.5f;
+        pkt.uv[2] = fast_sin_c(fast_add_rotations(ang, 3.1415927f)) * 0.5f + 0.5f;
+        pkt.uv[3] = fast_cos_c(fast_add_rotations(ang, 3.1415927f)) * 0.5f + 0.5f;
+        pkt.uv[4] = fast_sin_c(ang) * 0.5f + 0.5f;
+        pkt.uv[5] = fast_cos_c(ang) * 0.5f + 0.5f;
+        pkt.uv[6] = fast_sin_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
+        pkt.uv[7] = fast_cos_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
+        {
+            int c = FUN_001fa6e0(D_L17_001DE2E0[k], D_L17_001DE2F8[k], D_L17_001DE310[k]);
+            pkt.col[3] = c;
+            pkt.col[2] = c;
+            pkt.col[1] = c;
+            pkt.col[0] = c;
+        }
+        draw_geometry_quad(&pkt, 0, 0);
+    }
+    vu1_add_g_sregister_c(0x47, 0x5360B);
+}
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern float D_L17_001DE2B0[] __asm__("D_L17_001DDFE0");
+extern float D_L17_001DE328[] __asm__("D_L17_001DE058");
+extern float D_L17_001DE340[] __asm__("D_L17_001DE070");
+extern float D_L17_0015F718_m __asm__("D_L17_0015F638") __attribute__((section(".sdata")));
+extern short D_L17_00162450 __asm__("D_L17_001623D0") __attribute__((sda));
+extern short D_L17_00162454 __asm__("D_L17_001623D4") __attribute__((sda));
+extern short D_L17_00162458 __asm__("D_L17_001623D8") __attribute__((sda));
+extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+void FUN_L17_002f3848(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float t0[4];
+    float t1[4];
+    float t2[4];
+    int i;
+    if (*(int *)(d + 0x4C) != -1) {
+        char *g = D_0013E633 - 0x80;
+        if (*(int *)(g + 0x2084) != 0x32 || *(char **)(g + 0x15F0) == 0 || *(short *)(*(char **)(g + 0x15F0) + 0xA6) != 0x563) {
+            if (is_point_inside_clip_volume(D_0013E633 + 0x0, *(int *)(d + 0x4C))) {
+                D_L17_0015F718_m = 150.0f;
+                goto done;
+            }
+        }
+        D_L17_0015F718_m = 10.0f;
+    }
+done:
+    if (moby[0x20] == 0) {
+        moby[0x20] = 1;
+        for (i = 0; i < 5; i++) {
+            D_L17_001DE3A0[i] = (float)i * 25.0f;
+        }
+        qcopy(d, moby + 0x10);
+        build_spherical_offset(t0, (*(float *)&D_L17_00162454 + *(float *)&D_L17_00162450) / *(float *)&D_L17_00162458, *(float *)(moby + 0x48), 0.0f);
+        build_spherical_offset(t1, *(float *)&D_L17_00162450 / *(float *)&D_L17_00162458, *(float *)(d + 0x44), 0.0f);
+        add_vector_xyz(t2, t0, t1);
+        *(u128 *)t0 = *(u128 *)t2;
+        add_vector_xyz(t2, d, t0);
+        *(u128 *)(d + 0x10) = *(u128 *)t2;
+        moby[0x30] = 0xFF;
+        *(float *)(d + 0x10) -= 300.0f;
+    } else {
+        for (i = 0; i < 5; i++) {
+            D_L17_001DE310[i] += D_L17_001DE340[i] * D_L17_001DE328[i] * D_0015EE7C;
+            if (1.0f < D_L17_001DE310[i]) {
+                D_L17_001DE310[i] = 1.0f;
+                D_L17_001DE328[i] = -1.0f;
+            }
+            if (D_L17_001DE310[i] < 0.0f) {
+                D_L17_001DE310[i] = 0.0f;
+                D_L17_001DE328[i] = 1.0f;
+            }
+        }
+        for (i = 0; i < 5; i++) {
+            D_L17_001DE3A0[i] = fast_add_rotations(D_L17_001DE3A0[i], D_L17_001DE2B0[i] * 0.1f * D_0015EE7C);
+        }
+        for (i = 0; i < 2; i++) {
+            D_L17_001DE370[i] += ((float *)&D_L17_00162440)[i] * D_0015EE7C;
+            if (1.0f <= D_L17_001DE370[i]) {
+                D_L17_001DE370[i] -= 1.0f;
+            }
+            if (D_L17_001DE370[i] < 0.0f) {
+                D_L17_001DE370[i] += 1.0f;
+            }
+        }
+        enqueue_callback_list_1_alt(FUN_L17_002f32f0_c, moby);
+    }
+}
 #include "sda.h"
 
 #include "qcopy.h"

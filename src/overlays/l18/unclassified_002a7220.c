@@ -494,7 +494,7 @@ extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001fa2d8(void *, void *);
 extern void FUN_L18_002d5488(void *, void *);
-extern void FUN_L18_002d5610(void *, void *);
+extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
 extern void FUN_L18_002d5768(void);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -553,7 +553,7 @@ void FUN_L18_002d5050(char *moby) {
             }
         }
         if (d->c == d->end || r) {
-            FUN_L18_002d5610(moby, v10);
+            FUN_L18_002d5610_u(moby, v10);
             mark_moby_for_removal_c(moby);
         } else if (d->flags & 2) {
             f = (float)(d->end - d->c);
@@ -565,7 +565,33 @@ void FUN_L18_002d5050(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5610.s", FUN_L18_002d5610);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6A00), where it is exact; names translated to the US level program. */
+
+typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
+typedef int TId5610 __attribute__((mode(TI)));
+
+extern unsigned char D_001413F4_d5610[] __asm__("D_001413F4");
+extern short D_L18_0016196C __attribute__((sda));
+
+void FUN_L18_002d5610(void *m, void *src) {
+    char *moby = m;
+    float q[4];
+    float *qp = q;
+    int flags;
+    float a, b, c, d, e;
+    *(TId5610 *)qp = *(TId5610 *)src;
+    flags = *(int *)(*(char **)(moby + 0x78) + 0x38);
+    c = (flags & 1) ? 2.0f : 0.75f;
+    a = (flags & 1) ? 4.0f : 2.0f;
+    b = (flags & 1) ? 2.0f : 1.0f;
+    d = (flags & 4) ? 0.0f : 1.5f;
+    func_L00_0025F4A8_alt(moby, qp, moby + 0x10, d, 1.0f, 0x14, 6, 0x20, a, b, 9.0f, c, 1, 5.0f, 0, 0, -1, 0);
+    if (d != 0.0f) {
+        if (D_001413F4_d5610[0] == 2) {
+            FUN_L00_002598b0((int)moby, 2.0f, moby + 0x10, 2, *(float *)&D_L18_0016196C, 1.0f, 0, 1, 0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */

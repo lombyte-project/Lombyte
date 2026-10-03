@@ -104,7 +104,65 @@ void FUN_L16_002e4a58(char *moby) {
     *(float *)(d + 0xC4) = a * inv;
     *(float *)(d + 0xC8) = b * inv;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5010.s", FUN_L16_002e5010);
+/* Moves the moby through its trigger states and checks its local bounds. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L16_001D9750[];
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_L16_0015F5CC_c __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
+extern int FUN_001fa6e0(float, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L16_00161DD8_x __asm__("D_L16_00161DD8") __attribute__((sda));
+extern short D_L16_00161DDC_x __asm__("D_L16_00161DDC") __attribute__((sda));
+extern short D_L16_00161DE0_x __asm__("D_L16_00161DE0") __attribute__((sda));
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_0022da68(int, int, void *);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern int tick_countdown_32(void *) __asm__("func_001F9740");
+extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002e5010(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    float pos[16];
+    float mat[4];
+    float f;
+    int period = scale_game_frames(30);
+    f = ConvertIntegerToFloat(D_L16_0015F5CC_c % period) / ConvertIntegerToFloat(period);
+    *(int *)(m + 0x90) = FUN_001fa6e0(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
+                                      *(int *)&D_L16_00161DDC_x, *(int *)&D_L16_00161DE0_x);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        m[0x30] = 0xFF;
+        break;
+    case 1:
+        g = D_0013F3D0;
+        if (FUN_001f9b48(m + 0x10, g) < 16.0f) {
+            FUN_001fa2d8(pos, m + 0xC0);
+            subtract_vector_xyz(mat, g, m + 0x10);
+            FUN_001f9d20(mat, mat, pos);
+            if (D_L16_001D9750[0] < mat[0] && mat[0] < D_L16_001D9750[1] &&
+                D_L16_001D9750[2] < mat[1] && mat[1] < D_L16_001D9750[3] &&
+                D_L16_001D9750[4] < mat[2] && mat[2] < D_L16_001D9750[5]) {
+                m[0xBC] = 1;
+                m[0x20] = 2;
+                *(int *)d = scale_game_frames(*(int *)&D_L16_00161DD8_x);
+                func_0022ED80_6478(1, 0, m);
+            }
+        }
+        break;
+    case 2:
+        if (tick_countdown_32((int *)d)) {
+            m[0x20] = 1;
+            m[0xBC] = 0;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5258.s", FUN_L16_002e5258);
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6908), where it is exact; names translated to the US level program. */
 
@@ -683,7 +741,68 @@ void FUN_L16_002e8d40(void) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e93b0.s", FUN_L16_002e93b0);
+/* Compute bounding spheres for one mesh and register their renderer. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA828), where it is exact; names translated to the US level program. */
+
+typedef struct {float x,y,z,radius;} L16SingleSphere;
+
+extern void FUN_L16_002e9270(void);
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+extern short D_L16_00162000_bounds __asm__("D_L16_00161F40") __attribute__((sda));
+extern short D_L16_00162020_bounds __asm__("D_L16_00161F60") __attribute__((sda));
+extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80") __attribute__((section(".sdata")));
+
+void FUN_L16_002e93b0(unsigned char *m) {
+    int i, j;
+    float maxx, maxy, maxz, minx, miny, minz;
+    float p[4];
+    float *out;
+    float *verts;
+    int count;
+    switch (m[0x20]) {
+    case 0: {
+        for (i = 0; i <= 0; i++) {
+            maxx = maxy = maxz = -1024.0f;
+            minx = miny = minz = 1024.0f;
+            {int k;
+            for (k=0;k<((int*)&D_L16_00162000_bounds)[i];k++) {
+                float x,y,z;
+                verts=((float**)&D_L16_00162020_bounds)[i]+k*3;
+                x = verts[0];
+                if (x > maxx) maxx = x;
+                y = verts[1];
+                if (y > maxy) maxy = y;
+                z = verts[2];
+                if (z > maxz) maxz = z;
+                if (x < minx) minx = x;
+                if (y < miny) miny = y;
+                if (z < minz) minz = z;
+            }
+            }
+            {L16SingleSphere *sphere = D_L16_00161F60_bounds + i;
+            sphere->radius=0.0f;
+            sphere->x=(maxx+minx)*0.5f;
+            sphere->y=(maxy+miny)*0.5f;
+            sphere->z=(maxz+minz)*0.5f;}
+            for (j = 0; j < ((int*)&D_L16_00162000_bounds)[i]; j++) {
+                float dist;
+                out = (float*)(D_L16_00161F60_bounds + i);
+                p[0] = ((float**)&D_L16_00162020_bounds)[i][j * 3 + 0];
+                p[1] = ((float**)&D_L16_00162020_bounds)[i][j * 3 + 1];
+                p[2] = ((float**)&D_L16_00162020_bounds)[i][j * 3 + 2];
+                dist = FUN_001f9b48(p, out);
+                if (dist > out[3]) out[3] = dist;
+            }
+        }
+        m[0x20] = 1;
+        m[0x30] = *(unsigned short *)(m+0x32) = 255;
+        break;
+    }
+    case 1:
+        enqueue_callback_list_1(FUN_L16_002e9270, m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e98e0.s", FUN_L16_002e98e0);
 /* Sets up the draw state then runs both per-slot calls over three entries. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
