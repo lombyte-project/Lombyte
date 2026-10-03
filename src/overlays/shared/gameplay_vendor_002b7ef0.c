@@ -2,7 +2,15 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b7ef0.s", FUN_L01_002b7ef0);
+extern float D_L01_001CAE60[];
+
+void FUN_L01_002b7ef0(float s) {
+    unsigned int i;
+    float k = s / D_L01_001CAE60[16];
+    for (i = 0; i < 0x5C; i++) {
+        D_L01_001CAE60[i] = D_L01_001CAE60[i] * k;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -110,4 +118,8 @@ void FUN_L01_002b80d0(float *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8288.s", FUN_L01_002b8288);
+extern void FUN_L00_002a3ec8(void *, int, int);
+
+void FUN_L01_002b8288(void *a, int b) {
+    FUN_L00_002a3ec8(a, b, 0);
+}

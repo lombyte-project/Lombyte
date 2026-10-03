@@ -37,7 +37,30 @@ void FUN_L03_002de370(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8628.s", FUN_L03_002e8628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8730.s", FUN_L03_002e8730);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8870.s", FUN_L03_002e8870);
+extern char D_0013E533[];
+extern int D_L03_0015EF50;
+extern char D_L03_00166EC0[];
+extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
+
+int FUN_L03_002e8870(char *a0, char *a1) {
+    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(a0 + 0x84) << 5));
+    char *sub = *(char **)(entry + 0x1C);
+    char *q;
+    int five;
+    if (*(int *)(a0 + 0x74) != 4) return 0;
+    if (a1 != 0 && *(short *)(a1 + 0x7E) == 0 && !(*(unsigned char *)(a0 + 0x7C) > *(unsigned char *)(a1 + 0x7C))) return 0;
+    if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
+        if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0) return 1;
+        q = D_L03_00166EC0 - 0x140;
+        five = *(int *)(q + 0x180);
+        *(unsigned char *)(q + 0x273) = 0;
+        *(short *)(five + 0x7E) = 2;
+        *(float *)(q + 0x294) = 0.018f;
+        *(float *)(q + 0x288) = 0.018f;
+        return 1;
+    }
+    return 0;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];

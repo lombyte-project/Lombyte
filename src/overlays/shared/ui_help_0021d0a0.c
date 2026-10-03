@@ -4,7 +4,62 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0021d0a0.s", FUN_L06_0021d0a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0021e1a0.s", FUN_L06_0021e1a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00227cf8.s", FUN_L06_00227cf8);
+#include "qcopy.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+extern unsigned char D_0013F350_227cf8[] __asm__("D_0013F350");
+extern s32 D_L06_0015F5C4_227cf8 __asm__("D_L06_0015F5C4");
+extern void FUN_0020c828_227cf8(void *) __asm__("FUN_0020c828");
+extern void FUN_L00_00205538_227cf8(void) __asm__("FUN_L00_00205538");
+extern void FUN_L00_00206c08_227cf8(void) __asm__("FUN_L00_00206c08");
+extern void FUN_L00_00232628_227cf8(void) __asm__("FUN_L00_00232628");
+extern void FUN_L06_002356a0_227cf8(int, int) __asm__("FUN_L06_002356a0");
+
+void FUN_L06_00227cf8(void) {
+    unsigned char *g = D_0013F350_227cf8;
+    unsigned char *m;
+    if (g[0x20A4] == 1) {
+        *(int *)(g + 0x22AC) = *(int *)(g + 0x22A8);
+        *(int *)(g + 0x22A8) = *(s16 *)(g + 0x22B0);
+        if (*(void **)(g + 0x1620)) {
+            FUN_0020c828_227cf8(*(void **)(g + 0x1620));
+            *(void **)(g + 0x1620) = 0;
+        }
+        if (*(void **)(g + 0x1624)) {
+            FUN_0020c828_227cf8(*(void **)(g + 0x1624));
+            *(void **)(g + 0x1624) = 0;
+        }
+    }
+    {
+    unsigned char *g2 = D_0013F350_227cf8;
+    FUN_L00_00205538_227cf8();
+    g2[0x20A4] = 0;
+    m = *(unsigned char **)(g2 + 0xA84);
+    if (m) {
+        *(u16 *)(m + 0x34) &= ~6;
+    }
+    *(void **)(g2 + 0xA84) = 0;
+    if (*(void **)(g2 + 0xA8C)) {
+        FUN_0020c828_227cf8(*(void **)(g2 + 0xA8C));
+        *(void **)(g2 + 0xA8C) = 0;
+    }
+    FUN_L00_00206c08_227cf8();
+    {
+        unsigned char *o = *(unsigned char **)(g2 + 0xA88);
+        *(unsigned char **)(g2 + 0x2080) = o;
+        qcopy(o + 0x10, g2 + 0x80);
+        *(int *)(o + 0x98) = 0;
+    }
+    *(float *)(g2 + 0xA94) = 1.0f;
+    FUN_L00_00232628_227cf8();
+    if (*(int *)(g2 + 0x2084) != 100 || (D_L06_0015F5C4_227cf8 != 2 && D_L06_0015F5C4_227cf8 != 6)) {
+        FUN_L06_002356a0_227cf8(0, 1);
+    }
+    }
+}
 #include "qcopy.h"
 
 #define NOT_SDA

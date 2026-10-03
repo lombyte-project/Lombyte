@@ -43,9 +43,262 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0a98.s", FUN_L16_002a0a98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0dc0.s", FUN_L16_002a0dc0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9af0(void *);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float D_L16_001613E0 __attribute__((sda));
+extern float D_L16_001613E4 __attribute__((sda));
+
+char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, float unused) {
+    char *m = (char *)func_0020D348_m(0x32);
+    char *d;
+    float len, x, t, y;
+    if (m) {
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        m[0x20] = 0;
+        *(unsigned long *)(m + 0x38) = *(unsigned long *)(owner + 0x38);
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * 3.0f;
+        qcopy(m + 0x10, pos);
+        d = *(char **)(m + 0x78);
+        qcopy(d, vec);
+        qcopy(d + 0x10, vel);
+        *(int *)(d + 0x30) = c;
+        *(int *)(d + 0x20) = c;
+        len = FUN_001f9af0(vec);
+        x = D_L16_001613E0;
+        *(float *)(d + 0x24) = len;
+        t = random_float_between_alt(-x, x) * 0.017453292f;
+        y = D_L16_001613E4;
+        *(float *)(d + 0x28) = t;
+        *(float *)(d + 0x2C) = random_float_between_alt(0.0f, y) * 0.017453292f;
+        *(int *)(d + 0x34) = 0;
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)vec, *(float *)(vec + 4));
+        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(vec), *(float *)(vec + 8));
+        m[0x31] = 0;
+        *(unsigned short *)(m + 0x34) |= 1;
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d2cf0.s", FUN_L16_002d2cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d38b0.s", FUN_L16_002d38b0);
+/* Handle damage and knockback, then update the pursuit target and timer. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D4C78), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad00[0x20];
+    float health;
+    char pad24[0x14];
+    int reset_timer;
+    char pad3C[0x24];
+    short damage[3];
+    unsigned char pad66;
+    unsigned char animation;
+    char pad68[8];
+    float knockback[4];
+    float impulse_time;
+    float vertical_impulse;
+    float forward_impulse;
+    float lateral_impulse;
+    int sound_timer;
+    int active;
+    float damping;
+    char pad9C[0x11];
+    unsigned char pending;
+    char padAE[0x12];
+    float blend_start;
+    float blend_end;
+    char padC8[8];
+    float target[4];
+    char padE0[0x30];
+    int owner;
+    int pursuit_mode;
+    char pad118[0xC];
+    float pursuit_range;
+    char pad128[4];
+    int path_index;
+    char pad130[0x1B0];
+    int pursuit_timer;
+    char pad2E4[0x24];
+    int reward_hits;
+} L16DamageData;
+
+typedef int q16_2d38b0 __attribute__((mode(TI)));
+
+typedef struct {
+    q16_2d38b0 vector;
+    int status;
+    float amount;
+    float angle;
+    float fatal_angle;
+} L16DamageScratch;
+
+typedef struct {
+    char pad00[0x2080];
+    int owner;
+    char pad2084[8];
+    int mode;
+    char pad2090[0x14];
+    unsigned char difficulty;
+} L16DamageResident;
+
+typedef struct { unsigned char pad00[0x1D]; unsigned char awarded; } L16DamageReward;
+
+extern char *D_L16_001B0930[];
+extern char *FUN_L00_0025a420(void *, int, int);
+extern unsigned char D_0013D408[];
+extern char D_0013F350[];
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b80(void *, void *);
+extern int D_0015ED84;
+extern int D_0015EE10 __attribute__((sda));
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_0025fcb8(float, char *, void *);
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L16_002d3f78(void *, int, int);
+extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
+s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+
+void FUN_L16_002d38b0(char *m) {
+    L16DamageScratch scratch;
+    L16DamageData *d = *(L16DamageData **)(m + 0x78);
+    char *hit;
+    unsigned int response;
+    float range;
+    float time_scale;
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24);
+    scratch.amount = 0.0f;
+    hit = FUN_L00_0025a420(m, 0x330000, 0);
+    if (hit) {
+        if (*(char **)(hit + 0x20)) {
+            char *source = *(char **)(hit + 0x20);
+            hit = *(short *)(source + 0xA6) != 0x31 ? hit : 0;
+        }
+    }
+    response = FUN_L00_0025a478(m, hit, &d->health, 0, &scratch.status, &scratch.amount, 0, 4);
+    if (scratch.status != 1 && ((unsigned char *)m)[0x20] != 9) {
+        FUN_L16_002d3f78(m, 0x12C, 0x168);
+        if (hit && *(char **)(hit + 0x20) &&
+            *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
+            d->reward_hits = 0;
+        }
+        d->health -= scratch.amount;
+        if (d->health <= 0.0f) response = 1;
+        d->sound_timer = truncate_float_to_s32(512.0f);
+        d->impulse_time = D_0015ED70 * 20.0f;
+        d->damping = 0.5f;
+        d->vertical_impulse = 0.0f;
+        d->active = 1;
+        d->pending = 0;
+        switch (response) {
+        case 9:
+        case 10:
+            d->animation = 0xFA;
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8: {
+            float impulse = D_0015ED6C * 6.0f;
+            char *source;
+            d->blend_start = -1.0f;
+            d->blend_end = -1.0f;
+            d->forward_impulse = impulse;
+            d->lateral_impulse = impulse;
+            source = *(char **)(hit + 0x20);
+            {
+                float heading = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(source + 0x10),
+                *(float *)(m + 0x14) - *(float *)(source + 0x14));
+                scratch.vector = *(q16_2d38b0 *)(hit + 0x10);
+                scratch.angle = heading;
+            }
+            FUN_L00_0025ab48(&scratch.vector, &scratch.angle, &d->forward_impulse, &d->lateral_impulse);
+            FUN_L00_0025c558(scratch.angle, m, d->knockback, 6, 1, 0);
+            m[0x20] = 8;
+            d->animation = 0x78;
+            break;
+        }
+        case 1:
+        case 2: {
+            char *source;
+            if (D_0015ED84 == 18 && d->reward_hits) {
+                ++*(int *)&D_0015EE10;
+                if (*(int *)&D_0015EE10 >= 10) {
+                    if (D_0013D408[0x1D] == 0) {
+                        D_0013D408[0x1D] = 1;
+                        allocate_voice_for_bank_entry(1, 0, 0);
+                        FUN_L00_00263d40(0x53D6, -1);
+                    }
+                }
+            }
+            time_scale = D_0015ED70 * 20.0f;
+            *(unsigned short *)(m + 0x34) &= 0xEFFF;
+            d->impulse_time = time_scale;
+            if (((L16DamageResident *)D_0013F350)->difficulty == 2) {
+                float impulse = D_0015ED6C;
+                *(float *)(m + 0x58) = 0.5f;
+                d->forward_impulse = impulse * 24.0f;
+                d->lateral_impulse = impulse * 8.0f;
+            } else {
+                float impulse = D_0015ED6C * 8.0f;
+                d->forward_impulse = impulse;
+                d->lateral_impulse = impulse;
+            }
+            d->blend_start = -1.0f;
+            d->blend_end = -1.0f;
+            source = *(char **)(hit + 0x20);
+            {
+                float heading = FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(source + 0x10),
+                *(float *)(m + 0x14) - *(float *)(source + 0x14));
+                scratch.vector = *(q16_2d38b0 *)(hit + 0x10);
+                scratch.fatal_angle = heading;
+            }
+            FUN_L00_0025ab48(&scratch.vector, &scratch.fatal_angle, &d->forward_impulse, &d->lateral_impulse);
+            FUN_L00_0025c558(scratch.fatal_angle, m, d->knockback, 7, 1, 0);
+            m[0x20] = 9;
+            d->animation = 0xF0;
+            FUN_L00_00257470(m, 0, -1);
+            break;
+        }
+        case 0:
+        case 11:
+        default:
+            break;
+        }
+        FUN_L00_0025d458(m, d->damage);
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    FUN_L00_0025d538(m, d->damage);
+    tick_countdown_32(&d->pursuit_timer);
+    if (d->reset_timer) {
+        d->pursuit_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between_alt(180.0f, 240.0f)));
+    }
+    d->reset_timer = 0;
+    range = 255.0f;
+    if (d->pursuit_timer == 0) range = d->pursuit_range;
+    if (((L16DamageResident *)D_0013F350)->mode == 22) {
+        d->pursuit_mode = 2;
+    } else if (d->path_index >= 0 && d->pursuit_timer == 0) {
+        char *path = D_L16_001B0930[d->path_index];
+        FUN_L00_0025ff38(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
+    } else {
+        FUN_L00_0025fcb8(24.0f, m, d->target);
+    }
+    if (range < FUN_001f9b80(m + 0x10, d->target)) d->pursuit_mode = 2;
+    if (d->owner == 0) d->owner = ((L16DamageResident *)D_0013F350)->owner;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {

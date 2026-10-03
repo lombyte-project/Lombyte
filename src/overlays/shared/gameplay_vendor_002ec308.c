@@ -305,7 +305,24 @@ void FUN_L02_002f6598(float x, float y, float z) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fa6d8.s", FUN_L02_002fa6d8);
+typedef struct {
+    int a;
+    int b;
+    float c;
+    int d;
+    void (*e)(void);
+} S_2fa6d8;
+
+extern S_2fa6d8 D_L02_00167600_2fa6d8 __asm__("D_L02_00167600");
+extern void FUN_L02_002fa710_c(void) __asm__("FUN_L02_002fa710");
+
+void FUN_L02_002fa6d8(void) {
+    D_L02_00167600_2fa6d8.a = 0;
+    D_L02_00167600_2fa6d8.b = 0;
+    D_L02_00167600_2fa6d8.c = 10000.0f;
+    D_L02_00167600_2fa6d8.d = 0;
+    D_L02_00167600_2fa6d8.e = FUN_L02_002fa710_c;
+}
 /* Start the timed effect while its duration is nonzero. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 

@@ -209,10 +209,90 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2f60.s", FUN_L14_002b2f60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3418.s", FUN_L14_002b3418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b35d8.s", FUN_L14_002b35d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3920.s", FUN_L14_002b3920);
+extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
+extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
+
+int FUN_L14_002b3920(int a0)
+{
+    int count = 0;
+    short *p;
+
+    if (a0 == -1) return 0;
+    p = D_L14_001ABF40_3920[a0];
+    if (p == 0) return 0;
+    do {
+        unsigned short v = *(unsigned short *)p;
+        unsigned char *other = (unsigned char *)(D_L14_0015FFD8_3920 + ((v & 0x7FFF) << 8));
+        if (*(short *)(other + 0xA6) == 0x1C) {
+            if ((unsigned char)(other[0x20] - 5) <= 1) count++;
+        }
+    } while (*p++ >= 0);
+    return count;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b39a0.s", FUN_L14_002b39a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3a20.s", FUN_L14_002b3a20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d96e0.s", FUN_L14_002d96e0);
+#define NOT_SDA __attribute__((section(".data")))
+
+extern u8 D_001413F4[] __asm__("D_001413F4");
+extern u8 *D_L14_00167500 NOT_SDA;
+extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
+extern s32 FUN_001f9740(void *);
+extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
+
+void FUN_L14_002d96e0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (D_001413F4[0] == 2) {
+        *(s32 *)(moby + 0x94) = 0;
+    } else {
+        *(s32 *)(moby + 0x94) = *(s32 *)(*(char **)(moby + 0x24) + 0x10);
+    }
+    switch ((u8)moby[0x20]) {
+    case 0:
+        if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
+            moby[0x20] = 1;
+            *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
+        }
+        break;
+    case 1:
+        if (FUN_001f9740(data + 8) != 0) {
+            moby[0x20] = 2;
+            set_moby_animation_c(moby, 1, 0);
+        }
+        break;
+    case 2:
+        if ((moby[0x70] & 2) != 0) {
+            moby[0x20] = 3;
+            set_moby_animation_c(moby, 2, 0);
+        }
+        break;
+    case 3:
+        if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
+            set_moby_animation_c(moby, 0, 0);
+            moby[0x20] = 4;
+        }
+        break;
+    case 4:
+        break;
+    case 5:
+        if ((moby[0x70] & 2) != 0) {
+            moby[0x20] = 6;
+            set_moby_animation_c(moby, 2, 0);
+        }
+        break;
+    case 6:
+        if (FUN_001f9740(data + 8) != 0) {
+            set_moby_animation_c(moby, 3, 0);
+            moby[0x20] = 7;
+        }
+        break;
+    case 7:
+        if ((moby[0x70] & 2) != 0) {
+            moby[0x20] = 0;
+            set_moby_animation_c(moby, 0, 0);
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002DAC00), where it is exact; names translated to the US level program. */
 
 typedef struct {

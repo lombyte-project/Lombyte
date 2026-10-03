@@ -120,7 +120,132 @@ void FUN_L00_002d0538(u8 *a) {
     FUN_L00_00257470_2d0538(a, 0x100, -1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d09b8.s", FUN_L00_002d09b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d1428.s", FUN_L00_002d1428);
+#include "qcopy.h"
+typedef struct V2d1428 { f32 x, y, z, w; } __attribute__((aligned(16))) V2d1428;
+typedef struct M2d1428 M2d1428;
+typedef struct O2d1428 {
+    u8 p0[0x40]; V2d1428 vel; u8 p50[0x10]; u8 v60[0x40]; struct M2d1428 *next; struct M2d1428 *parent;
+    u8 pa8[4]; s32 flags; f32 fB0; s32 iB4; u8 pb8[0x18]; V2d1428 vD0; u8 vE0[0x10]; void *path; f32 fF4;
+} O2d1428;
+struct M2d1428 {
+    u8 p0[0x10]; V2d1428 pos; u8 state; u8 p21[0x15]; s16 h36; V2d1428 v40; u8 p50[0x28]; O2d1428 *vars;
+    u8 p7c[0x2A]; s16 oclass; u8 pa8[0x14]; u8 bBC; u8 pbd[3]; u8 vC0[0x10];
+};
+typedef struct P2d1428 { u8 p0[0x3C]; u32 flags; } P2d1428;
+extern s32 D_L00_0015F5CC;
+extern f32 D_0015ED70_alt __asm__("FUN_0015ED70");
+extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
+typedef struct G2d1428 { u8 p0[0x80]; V2d1428 v80; u8 p90[0x190]; f32 f220; u8 p224[0x10]; f32 f234; } G2d1428;
+extern G2d1428 D_0013F350;
+extern V2d1428 D_L00_00173E60;
+s32 FUN_L00_0025e3b8(M2d1428 *);
+void FUN_001f9a28(void *, void *, void *);
+void FUN_001f9cf8(void *, void *, void *);
+void FUN_001f9a10(void *, void *, void *);
+f32 FUN_001f99c0(f32);
+f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
+f32 FUN_00213ed8(f32 *, f32, f32);
+s32 FUN_001efa68(void *, void *, s32, s32, s32);
+void FUN_L00_002d09b8(M2d1428 *, s32, s32);
+void FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
+void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
+P2d1428 *FUN_L00_002603d0(void *);
+void FUN_L00_00260738(void *, void *, void *, void *);
+
+void FUN_L00_002d1428(M2d1428 *m) {
+    O2d1428 *o;
+    M2d1428 *p, *n, *next;
+    V2d1428 e, g, c2, a, b, c, d, h;
+    f32 f, v;
+    s32 hit;
+
+    o = m->vars;
+    if (o->iB4 == D_L00_0015F5CC) return;
+    p = m;
+    do { next = p; p = next->vars->parent; } while (p != 0);
+    p = next;
+    do {
+        m = p;
+        o = m->vars;
+        p = o->next;
+        if (!(o->flags & 4)) o->flags &= ~0x10;
+        o->flags &= ~4;
+        if (!FUN_L00_0025e3b8(m)) return;
+        if (o->flags & 2) return;
+        o->iB4 = D_L00_0015F5CC;
+        if (m->state == 0) continue;
+        FUN_001f9a28(&a, &D_0013F350.v80, &m->pos);
+        FUN_001f9cf8(&a, &a, m->vC0);
+        if (FUN_001f99c0(a.x) < 0.55f && FUN_001f99c0(a.y) < 0.55f && a.z < 0.0f &&
+            -(D_0013F350.f220 + D_0013F350.f234) < a.z) {
+            switch (m->state) {
+            case 1:
+            case 5:
+                FUN_L00_002d09b8(m, m->oclass == 0x1F9, 0);
+                FUN_L00_002d0538_c(m);
+                break;
+            }
+        }
+        f = D_0015ED70_alt;
+        o->vel.z -= f * 9.8f;
+        o->vel.z = (o->vel.z < -0.3f) ? -0.3f : o->vel.z;
+        o->vel.z = (0.3f < o->vel.z) ? 0.3f : o->vel.z;
+        if (o->path) {
+            if (o->parent == 0) {
+                o->vel.w -= f * 10.0f;
+                if (FUN_00213ed8(&o->fF4, 0.0f, FUN_001f99c0(o->vel.w)) == 0.0f) o->vel.w = 0.0f;
+            } else {
+                o->vel.w -= f * 10.0f;
+                if (FUN_00213ed8(&o->fF4, o->parent->vars->fF4 + 1.0f, FUN_001f99c0(o->vel.w)) == 0.0f) *(s32 *)&o->vel.w = 0;
+            }
+            qcopy(&b, &o->vD0);
+            b.z += o->fF4;
+            if (m) m->h36 = 0x7F80;
+            qcopy(&c, &m->pos);
+            qcopy(&d, &m->v40);
+            FUN_L00_002604f0(m, o->path, &b, o->vE0, &m->pos, &m->v40);
+            if (FUN_L00_002603d0(o->path)->flags & 4) {
+                qcopy(&o->vD0, &b);
+                o->vD0.z -= o->fF4;
+            }
+            FUN_001f9a28(&h, &m->pos, &c);
+            h.w = o->vel.w;
+            qcopy(&o->vel, &h);
+            FUN_L00_00260738(o->v60, &o->vel, &d, &m->v40);
+            continue;
+        }
+        if (o->parent == 0) {
+            qcopy(&e, &m->pos);
+            qcopy(&g, &m->pos);
+            e.z += o->fB0 * 0.75f;
+            g.z += o->vel.z;
+            hit = FUN_001efa68(&e, &g, 2, 0, 0);
+            qcopy(&c2, &D_L00_00173E60);
+        } else {
+            qcopy(&c2, &o->parent->pos);
+            c2.z += 1.0f;
+            hit = 0;
+            if (m->pos.z + o->vel.z < c2.z) hit = 1;
+        }
+        if (hit != 0) {
+        f = FUN_001f9af0_c(&o->vel);
+            if (D_0015ED6C_c * 0.5f < f) {
+                if (m->oclass == 0x1F9 && m->state == 1) {
+                    m->bBC = 0;
+                    m->state = 5;
+                } else if ((n = o->parent) != 0 && n->oclass == 0x1F9 && n->state == 1) {
+                    n->state = 5;
+                    o->parent->bBC = 0;
+                }
+            }
+            m->pos.z = c2.z;
+            o->vel.z = 0.0f;
+        } else {
+            o->flags |= 4;
+            FUN_001f9a10(&m->pos, &m->pos, &o->vel);
+        }
+    } while (p != 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d19b0.s", FUN_L00_002d19b0);
 typedef struct M2d1e80 { u8 p0[0x20]; u8 state; u8 p21[0x10]; u8 vis; u8 p32[2]; u16 flags; u8 p36[0x42]; s32 *vars; u8 p7c[0x40]; u8 bc; } M2d1e80;
 extern s32 D_L00_0015F5C4;
@@ -248,8 +373,10 @@ unsigned char *FUN_L00_002d3838(unsigned char *s, void *b, int c, void *d)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3a10.s", FUN_L00_002d3a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
-extern float D_0015ED70_2d54c8 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+/* D_0015ED70 is declared sda above (FUN_L00_002d0538), but here retail loads it
+   absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
+#define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])
 float FUN_001f9e90_2d54c8(float, float) __asm__("FUN_001f9e90");
 float FUN_001f9b48_2d54c8(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001fa580_2d54c8(float, float) __asm__("FUN_001fa580");

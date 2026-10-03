@@ -139,7 +139,29 @@ void FUN_L06_0030be60(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bef8.s", FUN_L06_0030bef8);
+extern char *mk_b(int) __asm__("FUN_0020c4f8");
+extern float FUN_001fa6c0(int);
+
+typedef int uq_b __attribute__((mode(TI)));
+
+void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
+    uq_b v;
+    char *vp = (char *)&v;
+    unsigned char *m;
+    v = *(uq_b *)src;
+    m = (unsigned char *)mk_b(0x76A);
+    if (m) {
+        char *e = *(char **)(m + 0x78);
+        float f;
+        qcopy(m + 0x10, vp);
+        f = FUN_001fa6c0(a1);
+        *(int *)(e + 0xC) = a3;
+        *(int *)(e + 0x8) = a2;
+        *(float *)(e + 0x4) = 2.0f / f;
+        m[0x30] = 0xFF;
+        m[0x20] = 1;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bfa8.s", FUN_L06_0030bfa8);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 

@@ -2,17 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a4058.s", FUN_L02_002a4058);
+extern u8 D_L02_001CB9C0[];
+extern float D_L02_001CB500f[] __asm__("D_L02_001CB500");
+extern s32 D_L02_001612A0 __attribute__((sda));
+extern s32 D_L02_001612A4;
+extern s32 D_L02_001612A8;
+extern s32 D_L02_001612AC;
+
+void FUN_L02_002a4058(char *arg, int val, float scale) {
+    int i;
+    float *p;
+    float *q;
+    float *base;
+    arg[0x3F] = val;
+    *(s32 *)(D_L02_001CB9C0 + 0x0) = D_L02_001612A0;
+    *(s32 *)(D_L02_001CB9C0 + 0x4) = D_L02_001612A4;
+    *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
+    *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
+    p = (float *)(D_L02_001CB9C0 + 0x10);
+    base = D_L02_001CB500f;
+    q = base + 4;
+    for (i = 0xF7; i >= 0; i--) {
+        *p = *q * scale;
+        p++;
+        q++;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
 
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L02_002a4058(char *arg, int val);
+extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
 void FUN_L02_002a40d0(char *arg) {
-    FUN_L02_002a4058(arg, 0x80);
+    FUN_L02_002a4058_u(arg, 0x80);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 #include "sda.h"
@@ -107,7 +132,130 @@ void FUN_L02_002d92f0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da6c0.s", FUN_L02_002da6c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da938.s", FUN_L02_002da938);
+extern s32 D_L02_0015F5CC;
+extern f32 D_L02_00161B60 __attribute__((sda));
+extern char *D_L02_00161AEC __attribute__((sda));
+extern char *D_L02_00161AF0 __attribute__((sda));
+extern char *D_L02_00161AF4 __attribute__((sda));
+extern char *D_L02_00161AF8 __attribute__((sda));
+extern char *D_L02_00161AFC __attribute__((sda));
+extern char *D_L02_00161B00 __attribute__((sda));
+extern char *D_L02_00161B04 __attribute__((sda));
+extern char *D_L02_00161B08 __attribute__((sda));
+extern s32 D_L02_00161B64 __attribute__((sda));
+
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9dc8(f32);
+extern s32 FUN_001fa6d0(f32);
+extern s32 FUN_001f44b8(s32);
+extern void FUN_L02_0020bc88(void *, void *, void *, s32, s32);
+
+typedef unsigned long long u64_t;
+
+#define NEG20(dst, e) { s32 q_ = (e); q_ = q_ << 20; (dst) += (u64_t)(u32)(-q_ + 0x80000000u); }
+#define LO4(dst, e)   { s32 q_ = (e); q_ = (q_ << 4) + 0x8000; (dst) += (u64_t)q_; }
+
+void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
+    u64_t m[4];
+    s32 a4[4];
+    s32 p4[4];
+    s32 t;
+    s32 off;
+    s32 tex;
+    f32 f24, f25, f26, f27, f28, f29, f30, f31;
+    f32 s0;
+
+    t = FUN_001fa6d0((f32)D_L02_0015F5CC * D_L02_00161B60);
+    off = (t % 512) << 16;
+    a4[3] = d;
+    a4[2] = d;
+    a4[1] = d;
+    a4[0] = d;
+    p4[0] = (s32)(D_L02_00161AEC + off);
+    p4[1] = (s32)(D_L02_00161AF0 + off);
+    p4[2] = (s32)(D_L02_00161AF4 + off);
+    p4[3] = (s32)(D_L02_00161AF8 + off);
+
+    f25 = FUN_001f9de0(a) * b;
+    f24 = FUN_001f9dc8(a) * b;
+    f28 = FUN_001f9de0(a) * c;
+    f27 = FUN_001f9dc8(a) * c;
+    s0 = FUN_001f9dc8(a);
+    f29 = f25 + s0 * 2.0f;
+    s0 = FUN_001f9dc8(a);
+    f25 = f25 - s0 * 2.0f;
+    s0 = FUN_001f9de0(a);
+    f26 = f24 - s0 * 2.0f;
+    s0 = FUN_001f9de0(a);
+    f24 = f24 + s0 * 2.0f;
+    s0 = FUN_001f9dc8(a);
+    f31 = f28 + s0 * 2.0f;
+    s0 = FUN_001f9dc8(a);
+    f28 = f28 - s0 * 2.0f;
+    s0 = FUN_001f9de0(a);
+    f30 = f27 - s0 * 2.0f;
+    s0 = FUN_001f9de0(a);
+    f27 = f27 + s0 * 2.0f;
+
+    m[3] = 0xFFFFF000000000ULL;
+    m[2] = 0xFFFFF000000000ULL;
+    m[1] = 0xFFFFF000000000ULL;
+    m[0] = 0xFFFFF000000000ULL;
+
+    NEG20(m[0], FUN_001fa6d0(f26));
+    LO4(m[0], FUN_001fa6d0(f29));
+    NEG20(m[1], FUN_001fa6d0(f24));
+    LO4(m[1], FUN_001fa6d0(f25));
+    NEG20(m[2], FUN_001fa6d0(f30));
+    LO4(m[2], FUN_001fa6d0(f31));
+    NEG20(m[3], FUN_001fa6d0(f27));
+    LO4(m[3], FUN_001fa6d0(f28));
+
+    tex = FUN_001f44b8(D_L02_00161B64);
+    FUN_L02_0020bc88(m, p4, a4, tex, 0);
+
+    p4[0] = (s32)D_L02_00161AFC;
+    p4[1] = (s32)D_L02_00161B00;
+    p4[2] = (s32)D_L02_00161B04;
+    p4[3] = (s32)D_L02_00161B08;
+
+    f25 = FUN_001f9de0(a) * b;
+    f24 = FUN_001f9dc8(a) * b;
+    f28 = FUN_001f9de0(a) * c;
+    f27 = FUN_001f9dc8(a) * c;
+    s0 = FUN_001f9dc8(a);
+    f29 = f25 + s0 * 5.0f;
+    s0 = FUN_001f9dc8(a);
+    f25 = f25 - s0 * 5.0f;
+    s0 = FUN_001f9de0(a);
+    f26 = f24 - s0 * 5.0f;
+    s0 = FUN_001f9de0(a);
+    f24 = f24 + s0 * 5.0f;
+    s0 = FUN_001f9dc8(a);
+    f31 = f28 + s0 * 5.0f;
+    s0 = FUN_001f9dc8(a);
+    f28 = f28 - s0 * 5.0f;
+    s0 = FUN_001f9de0(a);
+    f30 = f27 - s0 * 5.0f;
+    s0 = FUN_001f9de0(a);
+    f27 = f27 + s0 * 5.0f;
+
+    m[3] = 0xFFFFF000000000ULL;
+    m[2] = 0xFFFFF000000000ULL;
+    m[1] = 0xFFFFF000000000ULL;
+    m[0] = 0xFFFFF000000000ULL;
+
+    NEG20(m[0], FUN_001fa6d0(f26));
+    LO4(m[0], FUN_001fa6d0(f29));
+    NEG20(m[1], FUN_001fa6d0(f24));
+    LO4(m[1], FUN_001fa6d0(f25));
+    NEG20(m[2], FUN_001fa6d0(f30));
+    LO4(m[2], FUN_001fa6d0(f31));
+    NEG20(m[3], FUN_001fa6d0(f27));
+    LO4(m[3], FUN_001fa6d0(f28));
+
+    FUN_L02_0020bc88(m, p4, a4, tex, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);

@@ -3,7 +3,95 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e22d8.s", FUN_L16_002e22d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2b60.s", FUN_L16_002e2b60);
+#include "qcopy.h"
+
+extern float D_L16_00161D78_sda __asm__("D_L16_00161D78") __attribute__((sda));
+extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8") __attribute__((sda));
+extern u8 D_001413F4[];
+extern s32 D_001413DC[];
+extern char *D_L16_001B0930[];
+extern u8 D_0013E550[];
+extern u8 D_0013F350[];
+extern float D_0015ED6C_e __asm__("D_0015ED6C");
+
+typedef struct { char pad[0x74]; u8 active; char pad75[0x13]; char *owner; } L16Slot_e;
+
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_0022d798(int);
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_0025a478(void *, char *, void *, int, int *, float *, int, int);
+extern float FUN_L00_00257c48(float, float);
+extern void FUN_0020c828(char *);
+extern int FUN_001f96f8(int);
+extern void FUN_L00_0025d458(void *, void *);
+extern void FUN_L00_0025d538(void *, void *);
+extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
+
+typedef struct { s32 status; float amount; } L16Hit_e;
+
+/* Update interaction ownership, damage responses and pursuit tracking. */
+void FUN_L16_002e2b60(char *m) {
+    L16Hit_e hit;
+    char *d = *(char **)(m + 0x78);
+    float zero;
+    char *record;
+    int response;
+
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L16_00161D78_sda;
+    if ((unsigned int)(*(unsigned char *)(m + 0x20) - 2) < 4) {
+        if (!FUN_L00_0028d8c0(m, *(int *)(d + 0x190))) *(int *)(d + 0x190) = FUN_0022da68_i(0, 4, m);
+    } else if (FUN_L00_0028d8c0(m, *(int *)(d + 0x190))) {
+        int slot = *(int *)(d + 0x190);
+        if (slot != -1) {
+            L16Slot_e *s = (L16Slot_e *)(D_0013E550 + slot * 0x70);
+            if (s->owner == m && s->active != 0) FUN_0022d798(slot);
+        }
+        *(int *)(d + 0x190) = -1;
+    }
+    hit.amount = zero = 0.0f;
+    record = FUN_L00_0025a420(m, 0x330000, 0);
+    response = FUN_L00_0025a478(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
+    if (hit.status != 1 && *(unsigned char *)(m + 0x20) != 8) {
+        *(float *)(d + 0x20) -= hit.amount;
+        if (*(float *)(d + 0x20) <= zero || (D_001413F4[0] == 2 && hit.amount >= 2.0f)) response = 1;
+        if (response > 0) {
+            if (response >= 3) {
+                if (response < 9) {
+                    FUN_0022da68_i(3, 0, m);
+                    *(unsigned char *)(d + 0x67) = 120;
+                    *(float *)(d + 0x188) = FUN_L00_00257c48(30.0f, 50.0f) * 0.017453292f * D_0015ED6C_e;
+                }
+            } else {
+                FUN_0022da68_i(3, 0, m);
+                if (D_001413F4[0] != 2) FUN_0022da68_i(2, 0, m);
+                {
+                    int *child = (int *)(d + 0xC0), count = 3;
+                    do {
+                        char *pool = D_L16_0015FFD8_sda;
+                        if (*child >= 0) FUN_0020c828(pool + (*child << 8));
+                        child++;
+                    } while (--count >= 0);
+                }
+                *(unsigned char *)(m + 0x20) = 8;
+                *(int *)(d + 0x160) = FUN_001f96f8(90);
+                *(unsigned char *)(d + 0x67) = 120;
+            }
+        }
+        FUN_L00_0025d458(m, d + 0x60);
+    }
+    *(unsigned char *)(m + 0xA4) = 255;
+    FUN_L00_0025d538(m, d + 0x60);
+    if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
+        char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
+        FUN_L00_0025ff38(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);
+    } else *(int *)(d + 0xB4) = 2;
+    if (*(int *)(d + 0xB0) == 0) {
+        char *player = D_0013F350;
+        *(int *)(d + 0xB0) = *(int *)(player + 0x2080);
+        qcopy(d + 0x70, player + 0x80);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -123,7 +211,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
+/* D_L16_0015FFD8 is declared sda above (FUN_L16_002e2b60 loads it off $gp), but
+   here retail loads it absolute: reach it from a neighbour, past whose size the
+   assembler no longer uses $gp. */
+extern float D_L16_00161D78_far __asm__("D_L16_00161D78");
+#define D_L16_0015FFD8 (((char **)&D_L16_00161D78_far)[-(0x161D78 - 0x15FFD8) / 4])
 extern char D_0013E533[];
 extern float FUN_001f9b48(void *);
 extern short *D_L16_001ABCC0[];
