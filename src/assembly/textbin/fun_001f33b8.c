@@ -6,81 +6,88 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f33b8/FUN_001f33b8.s
 #else
 #include "types.h"
 
-struct M2c_D_0013E500 {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
+struct ProjectionScreenState {
+    s32 viewport_width;
+    s32 viewport_height;
+    s32 half_width;
+    s32 half_height;
+    s32 left_origin;
+    s32 top_origin;
+    s32 right_extent;
+    s32 bottom_extent;
 };
 
-struct M2c_D_0018CD00 {
+struct ProjectionConfiguration {
     u8 pad_0[0xA0];
-    f32 unkA0;
-    f32 unkA4;
+    f32 near_clip;
+    f32 far_clip;
     u8 pad_A8[0x8];
-    f32 unkB0;
+    f32 horizontal_fov;
     u8 pad_B4[0x14C];
-    f32 unk200;
-    f32 unk204;
-    f32 unk208;
-    f32 unk20C;
+    f32 projection_half_width;
+    f32 projection_half_height;
+    f32 screen_scale_x;
+    f32 screen_scale_y;
     u8 pad_210[0x8];
-    f32 unk218;
-    f32 unk21C;
+    f32 fog_near_distance;
+    f32 fog_far_distance;
     u8 pad_220[0x8];
-    f32 unk228;
-    f32 unk22C;
+    f32 fog_near_intensity;
+    f32 fog_far_intensity;
 };
 
-extern struct M2c_D_0013E500 D_0013E500;
-extern struct M2c_D_0018CD00 D_0018CD00;
-extern f32 func_001FA6C0();
-extern void func_001F2D98();
-void FUN_001f33b8(s32 arg0, s32 arg1, f32 fparg0, f32 fparg1, f32 fparg2, f32 fparg3, f32 fparg4) {
-    s64 a0v;
-    s32 t9;
-    s32 t10;
-    s32 va;
-    s32 vb;
-    s32 vd;
-    s32 v1c;
-    f32 k;
-    f32 half;
-    f32 q;
+extern struct ProjectionScreenState screen_offsets __asm__("D_0013E500");
+extern struct ProjectionConfiguration view_context __asm__("D_0018CD00");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern void update_view_context(void) __asm__("func_001F2D98");
+void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov, f32 fog_near_distance, f32 fog_far_distance, f32 fog_near_intensity, f32 fog_far_intensity) __asm__("FUN_001f33b8");
 
-    a0v = arg0;
-    t10 = (s32)arg1 >> 1;
-    t9 = (s32)arg0 >> 1;
-    v1c = (t10 + 0x800) << 4;
-    vb = 0x800 - t10;
-    vd = t9 + 0x800;
-    va = 0x800 - t9;
-    D_0013E500.unk1C = v1c;
-    D_0018CD00.unkB0 = fparg0;
-    D_0013E500.unk0 = (s32)a0v;
-    D_0013E500.unk10 = va << 4;
-    D_0013E500.unk14 = vb << 4;
-    D_0013E500.unk18 = vd << 4;
-    D_0018CD00.unkA0 = 32.0f;
-    D_0018CD00.unkA4 = 524288.0f;
-    D_0013E500.unk4 = arg1;
-    k = 0.5f;
-    D_0013E500.unk8 = t9;
-    D_0013E500.unkC = t10;
-    half = func_001FA6C0(arg0, va << 4, vb << 4, vd << 4) * k;
-    D_0018CD00.unk200 = half;
-    q = func_001FA6C0(arg1) * k;
-    D_0018CD00.unk22C = fparg4;
-    D_0018CD00.unk218 = fparg1;
-    D_0018CD00.unk21C = fparg2;
-    D_0018CD00.unk228 = fparg3;
-    D_0018CD00.unk20C = q * 4.0f;
-    D_0018CD00.unk208 = D_0018CD00.unk200 * 4.0f;
-    D_0018CD00.unk204 = q;
-    func_001F2D98();
+void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov, f32 fog_near_distance, f32 fog_far_distance, f32 fog_near_intensity, f32 fog_far_intensity) {
+    struct ProjectionScreenState *screen;
+    s64 saved_width;
+    s32 half_width;
+    s32 half_height;
+    s32 left_origin;
+    s32 top_origin;
+    s32 right_extent;
+    s32 bottom_extent;
+    f32 half_scale;
+    f32 projection_half_width;
+    f32 projection_half_height;
+
+    screen = &screen_offsets;
+    saved_width = viewport_width;
+    half_height = (s32)viewport_height >> 1;
+    half_width = (s32)viewport_width >> 1;
+    bottom_extent = (half_height + 0x800) << 4;
+    top_origin = 0x800 - half_height;
+    right_extent = half_width + 0x800;
+    left_origin = 0x800 - half_width;
+    screen->bottom_extent = bottom_extent;
+    view_context.horizontal_fov = horizontal_fov;
+    screen->viewport_width = (s32)saved_width;
+    screen->left_origin = left_origin << 4;
+    screen->top_origin = top_origin << 4;
+    screen->right_extent = right_extent << 4;
+    view_context.near_clip = 32.0f;
+    view_context.far_clip = 524288.0f;
+    screen->viewport_height = viewport_height;
+    half_scale = 0.5f;
+    screen->half_height = half_height;
+    screen->half_width = half_width;
+    projection_half_width = convert_integer_to_float(viewport_width) * half_scale;
+    view_context.projection_half_width = projection_half_width;
+    projection_half_height = convert_integer_to_float(viewport_height) * half_scale;
+    view_context.fog_far_intensity = fog_far_intensity;
+    view_context.fog_near_distance = fog_near_distance;
+    view_context.fog_far_distance = fog_far_distance;
+    view_context.fog_near_intensity = fog_near_intensity;
+    view_context.screen_scale_y = projection_half_height * 4.0f;
+    view_context.screen_scale_x = view_context.projection_half_width * 4.0f;
+    view_context.projection_half_height = projection_half_height;
+    update_view_context();
 }
+
+extern __typeof__(configure_graphics_projection) func_001F33B8 __attribute__((alias("FUN_001f33b8")));
+
 #endif /* NON_MATCHING */

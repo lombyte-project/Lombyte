@@ -4,26 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00213f38/FUN_00213f38.s", FUN_00213f38);
 #else
-
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
 extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
 extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
@@ -91,4 +72,7 @@ f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 accele
   *value = distance_or_next_value;
   return *velocity;
 }
+
+extern __typeof__(advance_accelerated_scalar) func_00213F38 __attribute__((alias("FUN_00213f38")));
+
 #endif /* NON_MATCHING */
