@@ -704,12 +704,47 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a9aa0.s", FUN_L00_002a9aa0);
+typedef int u128_q __attribute__((mode(TI)));
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m_q(int) __asm__("func_0020D348_m");
+extern int D_L00_0015F320_q __asm__("D_L00_0015F320");
+extern int D_L00_0015F324_q __asm__("D_L00_0015F324");
+extern int D_L00_0015F330_q __asm__("D_L00_0015F330");
+extern int D_L00_0015F334_q __asm__("D_L00_0015F334");
+extern int FUN_L00_0023e5e0_q(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
+extern long D_L00_0015F328_q __asm__("D_L00_0015F328");
+extern long D_L00_0015F338_q __asm__("D_L00_0015F338");
+extern short D_L00_001613C8_q __asm__("D_L00_001613C8") __attribute__((sda));
+
+void *FUN_L00_002a9aa0(int unused, float *pos) {
+    char *m = func_0020D348_m_q(0x5F3);
+    if (m != 0 && *(int *)&D_L00_001613C8_q == 0) {
+        char *d;
+        m[0x20] = 0;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        d = *(char **)(m + 0x78);
+        *(u128_q *)(m + 0x10) = *(u128_q *)pos;
+        D_L00_0015F324_q = 0xFF;
+        D_L00_0015F334_q = 0xFFFFFF;
+        D_L00_0015F338_q = 0x1F00000042L;
+        *(int *)&D_L00_001613C8_q = (int)m;
+        D_L00_0015F328_q = 0;
+        D_L00_0015F320_q = 0;
+        D_L00_0015F330_q = 0;
+        *(int *)(d + 0x10) = 0;
+        *(short *)(d + 0x2C) = FUN_L00_0023e5e0_q(pos, 0.0f, 0.0f, 0);
+    }
+    return m;
+}
 typedef int q128_2a9b80 __attribute__((mode(TI)));
 extern u8 *D_L00_001613C8 __attribute__((sda));
-void FUN_L00_002a9aa0(void *, q128_2a9b80 *);
+void FUN_L00_002a9aa0_u(void *, q128_2a9b80 *) __asm__("FUN_L00_002a9aa0");
 void FUN_L00_002a9b80(void *a, q128_2a9b80 *v) { q128_2a9b80 t = *v; u8 *p; u8 *q; u8 *g;
- g = D_L00_001613C8; if (g == 0) { FUN_L00_002a9aa0(a, &t); g = D_L00_001613C8; if (g == 0) return; }
+ g = D_L00_001613C8; if (g == 0) { FUN_L00_002a9aa0_u(a, &t); g = D_L00_001613C8; if (g == 0) return; }
  p = D_L00_001613C8; q = *(u8 **)(p + 0x78);
  if (*(s16 *)(p + 0xA6) == 0x5F3) { *(q128_2a9b80 *)(p + 0x10) = t; *(s16 *)(q + 0x2E) = 1; } }
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */

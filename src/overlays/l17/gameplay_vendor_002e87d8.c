@@ -170,7 +170,165 @@ void FUN_L17_002e87d8(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e8e08.s", FUN_L17_002e8e08);
+typedef int u128_q __attribute__((mode(TI)));
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Updates moby 1368: a drone that drifts toward the hero, tags what it hits and sprays sparks until its timer runs out. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA8F8), where it is exact; names translated to the US level program. */
+
+extern char D_L17_00174740_q[] __asm__("D_L17_00174740") __attribute__((section(".data")));
+extern char D_L17_00174760_q[] __asm__("D_L17_00174760") __attribute__((section(".data")));
+extern float D_0015ED6C_q __asm__("D_0015ED6C");
+extern float FUN_001f9b80_q(void *, void *) __asm__("FUN_001f9b80");
+extern float FUN_001f9e90_q(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001fa688_q(float, float) __asm__("FUN_001fa688");
+extern float random_float_between_alt_q(float, float) __asm__("FUN_002132a8");
+extern int D_0015ED84_q __asm__("D_0015ED84");
+extern int D_0015EEA4_q __asm__("D_0015EEA4");
+extern int FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int random_integer_below_q(int) __asm__("FUN_00213260");
+extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
+extern unsigned char *FUN_L00_002730e0_q(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
+extern unsigned char *FUN_L17_0026fdd0_q(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
+extern unsigned char D_0013F420_x_q[] __asm__("D_0013F420");
+extern unsigned char D_0013F350_x_q[] __asm__("D_0013F350");
+extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
+extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz_q(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_q(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
+void FUN_L00_00259888(char *a, int b, int c, float d, void *q);
+void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void mmr_q_q(struct Obj *obj) __asm__("FUN_0020c828");
+extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale, void *src) __asm__("FUN_L00_00259888");
+
+void FUN_L17_002e8e08(char *moby) {
+    float a[4];
+    float b[4];
+    float c[4];
+    float e[4];
+    float f[4];
+    float w[12];
+    char *d = *(char **)(moby + 0x78);
+    char *t;
+    char *g;
+    char *g2;
+    char *r;
+    int step;
+    int hit;
+    int n;
+
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(short *)(moby + 0x32) = 0;
+        moby[0x31] = 0;
+        t = d + 0x10;
+        *(u128_q *)e = *(u128_q *)(D_0013F420_x_q);
+        e[2] = e[2] - 0.5f;
+        if (FUN_001f9b80_q(e, t) < 8.0f) {
+            FUN_001f9a40_q(t, e, t, 0.99f);
+        }
+        if (FUN_001f9b80_q(moby + 0x10, t) > 4.0f) {
+            if (FUN_001fa688_q(*(float *)(moby + 0x48),
+                              FUN_001f9e90_q(*(float *)(d + 0x10) - *(float *)(moby + 0x10),
+                                                *(float *)(d + 0x14) - *(float *)(moby + 0x14))) < 0.7853982f) {
+                subtract_vector_xyz_q(c, t, moby + 0x10);
+                normalize_vector_xyz_q(d, c, *(float *)(d + 0x40));
+            }
+        }
+        scale_vector_xyz_q(c, d, -20.0f);
+        step = 0;
+        add_vector_xyz_q(a, moby + 0x10, d);
+        add_vector_xyz_q(b, moby + 0x10, c);
+        FUN_001f9a40_q(f, a, moby + 0x10, 0.5f);
+        if (*(int *)(d + 0x38) < 0x3C) {
+            step = (0x3C - *(int *)(d + 0x38)) >> 2;
+        }
+        FUN_L17_0026fdd0_q((char *)a, 1, step);
+        FUN_L17_0026fdd0_q((char *)f, 1, step);
+        FUN_L17_0026fdd0_q((char *)a, 0, step);
+        b[2] = b[2] + 0.25f;
+        func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, d);
+        *(short *)((char *)w + 0x1A) = *(short *)(moby + 0xA6);
+        qcopy(moby + 0x10, a);
+        r = D_L17_00174740_q;
+        *(int *)(r + 0x18) = 0;
+        if (FUN_001efa68_q(b, a, 0, moby, w) != 0 || FUN_L00_001f0d60_q(0.5f, moby + 0x10, 0, moby) != 0) {
+            hit = *(int *)(r + 0x18);
+            if (hit != 0) {
+                if (hit != *(int *)(d + 0x3C)) {
+                    g = (char *)D_0013F350_x_q;
+                    if (*(short *)(g + 0x308) != 0 && hit == *(int *)(g + 0x2080)) {
+                        unsigned char *rec = D_00141968_x_q;
+                        if (*(unsigned short *)(rec + 0x458) == 0) {
+                            (*(unsigned short *)(rec + 0x458))++;
+                            n = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            if (*(unsigned short *)(rec + 0x45A) < n) {
+                                *(unsigned short *)(rec + 0x45A) = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            }
+                            *(int *)(rec + 0x45C) = *(int *)(rec + 0x45C) | (1 << D_0015ED84_q) | 0x80000000;
+                        }
+                    }
+                    qcopy(moby + 0x10, D_L17_00174760_q);
+                    FUN_L00_002598b0_q((int)moby, 0.75f, moby + 0x10, 1, 6.0f, 0.0f, 0, 1, 0);
+                    g2 = (char *)D_0013F350_x_q;
+                    if (*(short *)(g2 + 0x308) != 0 && *(int *)(D_L17_00174760_q - 8) == *(int *)(g2 + 0x2080)) {
+                        unsigned char *rec = D_00141968_x_q;
+                        if (*(unsigned short *)(rec + 0x458) == 0) {
+                            (*(unsigned short *)(rec + 0x458))++;
+                            n = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            if (*(unsigned short *)(rec + 0x45A) < n) {
+                                *(unsigned short *)(rec + 0x45A) = scale_game_frames_q(D_0015EEA4_q) / 600;
+                            }
+                            *(int *)(rec + 0x45C) = *(int *)(rec + 0x45C) | (1 << D_0015ED84_q) | 0x80000000;
+                        }
+                    }
+                    *(int *)(d + 0x38) = scale_game_frames_q(0x1E);
+                    moby[0x20] = 1;
+                    return;
+                }
+            } else if (FUN_001f9b80_q(moby + 0x10, *(char **)(d + 0x3C) + 0x10) > 10.0f) {
+                qcopy(moby + 0x10, r + 0x20);
+                *(int *)(d + 0x38) = scale_game_frames_q(0x1E);
+                moby[0x20] = 1;
+                return;
+            }
+        }
+        if (scale_game_frames_q(0x46) < *(int *)(d + 0x38)) {
+            if (*(float *)(moby + 0x10) > 890.0f || *(float *)(moby + 0x14) > 890.0f || *(float *)(moby + 0x18) > 890.0f
+                || *(float *)(moby + 0x10) < 80.0f || *(float *)(moby + 0x10) < 80.0f
+                || *(float *)(moby + 0x14) < 80.0f || *(float *)(moby + 0x18) < 80.0f) {
+                *(int *)(d + 0x38) = scale_game_frames_q(0x46);
+            }
+        }
+        if (tick_countdown_32_q(d + 0x38) != 0
+            || *(float *)(moby + 0x10) > 968.0f || *(float *)(moby + 0x14) > 968.0f || *(float *)(moby + 0x18) > 968.0f
+            || *(float *)(moby + 0x10) < 10.0f || *(float *)(moby + 0x10) < 10.0f
+            || *(float *)(moby + 0x14) < 10.0f || *(float *)(moby + 0x18) < 10.0f) {
+            mmr_q_q(moby);
+        }
+        break;
+    case 1: {
+        float x = random_float_between_alt_q(D_0015ED6C_q + D_0015ED6C_q, D_0015ED6C_q * 10.0f);
+        float y = random_float_between_alt_q(-3.1415927f, 3.1415927f);
+        build_spherical_offset_q(a, x, y, random_float_between_alt_q(-3.1415927f, 3.1415927f));
+        FUN_L00_002730e0_q((float *)(moby + 0x10), (char *)a, 0x60FF3020, 0xF, random_integer_below_q(0xFF), 0, 3.0f);
+        if (tick_countdown_32_q(d + 0x38) != 0) {
+            mmr_q_q(moby);
+        }
+        break;
+    }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
