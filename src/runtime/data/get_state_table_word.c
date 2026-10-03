@@ -4,9 +4,9 @@ struct M2c_arg0 {
     s32 unk50004;
 };
 
-void GetStateTableWord(struct M2c_arg0 *arg0, s32 arg1) {
-    register s32 temp_2_5 __asm__("v0");
-    register s32 result __asm__("a2");
+s32 GetStateTableWord(struct M2c_arg0 *arg0, s32 arg1) {
+    s32 temp_2_5;
+    s32 result;
 
     temp_2_5 = arg0->unk50004;
     result = temp_2_5;
@@ -15,4 +15,5 @@ void GetStateTableWord(struct M2c_arg0 *arg0, s32 arg1) {
     }
     result -= temp_2_5;
     arg0->unk50004 = result;
+    return temp_2_5;
 }
