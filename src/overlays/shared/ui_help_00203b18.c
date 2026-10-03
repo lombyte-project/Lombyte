@@ -347,7 +347,7 @@ void FUN_L00_00216f10(void);
 void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
 void FUN_L00_0020a318(void);
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
-void FUN_L00_0020ac98(void);
+void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
 void FUN_L00_0020a9e8(void);
 void FUN_L00_002056a8(void);
 void FUN_L00_002059d8(void);
@@ -393,7 +393,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_0020b1d8_u();
     FUN_L00_0020a318();
     FUN_L00_0020a540_u();
-    FUN_L00_0020ac98();
+    FUN_L00_0020ac98_u();
     FUN_L00_0020a9e8();
     FUN_L00_002056a8();
     FUN_L00_002059d8();
@@ -1458,7 +1458,106 @@ void FUN_L00_0020a540(void) {
     P.f114 = P.f274 * 0.55f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a9e8.s", FUN_L00_0020a9e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020ac98.s", FUN_L00_0020ac98);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_001ABD80[] __asm__("D_L00_001ABA00");
+extern char D_L00_0017A780[] __asm__("D_L00_0017A680");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern float D_0015EE64 __asm__("D_0015ED64") MACRO_ADDR;
+extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
+extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001fa688(float, float);
+extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC") MACRO_ADDR;
+extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int FUN_002141f8(char *);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern unsigned char D_0013E633[] __asm__("D_0013F3D0") NOT_SDA;
+extern void FUN_L00_00233660(float *, float, float, float);
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+void FUN_L00_0020a1e0(float a, float b);
+
+void FUN_L00_0020ac98(void) {
+    char *g1 = (char *)D_0013E633 - 0x80;
+    char *g2, *g3, *g4, *g5, *g6;
+    int i;
+    char *m;
+    char *best;
+    float bestPri, bestDist;
+    float v[8];
+    char *q;
+    char *info, *info2, *p, *t;
+    float f20, f21, s;
+    int mode = *(int *)(g1 + 0x208C);
+    if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
+        *(int *)(g1 + 0x2274) = 0;
+        return;
+    }
+    g2 = (char *)D_0013E633 - 0x80;
+    if (*(unsigned char *)(*(int *)(g2 + 0x2080) + 0x53) == 0x54) return;
+    if (D_L00_0015F6B0 % 7 == 0) {
+        bestDist = 100000000.0f;
+        bestPri = 0.0f;
+        best = 0;
+        for (i = 0; (m = D_L00_001ABD80[i]) != 0; i++) {
+            info = (char *)FUN_002141f8(m);
+            if (info != 0) {
+                float d, a, sc, pri;
+                d = FUN_001f9b80_c(D_0013E633 + 0x0, m + 0x10);
+                if ((float)*(unsigned char *)(info + 0x38) < d) continue;
+                g3 = (char *)D_0013E633 - 0x80;
+                a = FUN_001fa688(FUN_001f9e90_c(*(float *)(m + 0x10) - *(float *)(g3 + 0x80), *(float *)(m + 0x14) - *(float *)(g3 + 0x84)), *(float *)(g3 + 0x98));
+                if (1.91986215f < a) continue;
+                if (1.04719758f < AbsoluteFloat(FUN_001f9e90_c(FUN_001f9b80_c(m + 0x10, D_0013E633 + 0x0), *(float *)(g3 + 0x88) - *(float *)(m + 0x18)))) continue;
+                sc = a * d + d;
+                if ((int)m == *(int *)(g3 + 0x2274)) {
+                    sc -= 1.5f;
+                    if (sc < 0.0f) sc = 0.0f;
+                }
+                pri = (float)*(unsigned char *)(info + 0x39);
+                if (bestPri < pri) goto upd;
+                if (sc < bestDist) {
+                upd:
+                    if (pri > bestPri) bestPri = pri;
+                    bestDist = sc;
+                    best = m;
+                }
+            }
+        }
+        g4 = (char *)D_0013E633 - 0x80;
+        *(char **)(g4 + 0x2274) = best;
+    }
+    g5 = (char *)D_0013E633 - 0x80;
+    if (*(int *)(g5 + 0x2274) == 0) return;
+    FUN_L00_00233660(v, 0.0f, 0.0f, 1.2f);
+    q = (char *)&v[4];
+    qcopy(q, *(char **)(g5 + 0x2274) + 0x10);
+    v[6] += 0.5f;
+    if (FUN_001efa68_ac98(v, q, 2, 0, 0)) *(int *)(g5 + 0x2274) = 0;
+    t = *(char **)(g5 + 0x2274);
+    if (t == 0) return;
+    qcopy(v, t + 0x10);
+    info2 = (char *)FUN_002141f8(t);
+    if (info2 != 0) v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
+    FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
+    f20 = fast_subtract_rotations(FUN_001f9e90_c(v[0] - v[4], v[1] - v[5]), *(float *)(g5 + 0x98));
+    f21 = FUN_001f9e90_c(FUN_001f9b80_c(v, q), v[6] - v[2]);
+    if (f20 > 1.02974427f) f20 = 1.02974427f;
+    else if (f20 < -1.02974427f) f20 = -1.02974427f;
+    if (f21 > 0.610865235f) f21 = 0.610865235f;
+    if (f21 < -0.436332315f) f21 = -0.436332315f;
+    g6 = (char *)D_0013E633 - 0x80;
+    if (scale_game_frames(0x4D) - scale_game_frames(0x32) < *(int *)(g6 + 0x1C0)) {
+        if (f20 > 0.296705961f) f20 = 0.296705961f;
+        else if (f20 < -0.296705961f) f20 = -0.296705961f;
+        f21 = 0.0f;
+    }
+    FUN_L00_0020a1e0(D_0015EE64 * 0.021f, D_0015EE64 * 0.27f);
+    p = D_L00_0017A780;
+    *(float *)(p + 0x274) = f21;
+    *(float *)(p + 0x278) = f20 * 0.7f;
+    FUN_L00_0020a1e0(D_0015EE64 * 0.014f, D_0015EE64 * 0.3f);
+    *(float *)(p + 0x1C8) = *(float *)(p + 0x278) * 0.55f;
+}
 typedef struct {
     u8 p0[0x2C0]; f32 f2C0, f2C4, f2C8, f2CC, f2D0, f2D4;
     u8 p2D8[0x308 - 0x2D8]; s16 h308;

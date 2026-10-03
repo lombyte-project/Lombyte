@@ -40,7 +40,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ca420.s", FUN_L04_002ca420);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002cdda0.s", FUN_L04_002cdda0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1608.s", FUN_L04_002d1608);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
+
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+
+void FUN_L04_002d1608(void *m) {
+    char pos[16];
+    char vec[16];
+    clear_vector(vec);
+    FUN_L00_0024f7c8(m, 12, pos);
+    func_L00_0025F4A8_alt(m, vec, pos, 0.0f, 0.0f, 10, 3, 4,
+                          2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d16b8.s", FUN_L04_002d16b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d6f68.s", FUN_L04_002d6f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);

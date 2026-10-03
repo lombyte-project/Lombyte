@@ -194,7 +194,44 @@ void FUN_L11_00318ed8(char *m) {
     v4[3] = *(float *)&D_L11_001623A4_d;
     FUN_00218888(v0, v3, v4, *(int *)&D_L11_0016238C_d, *(int *)&D_L11_00162390_d, *(int *)&D_L11_00162394_d, *(int *)&D_L11_00162398_d, *(int *)&D_L11_0016239C_d, *(int *)&D_L11_001623A8_d);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00319028.s", FUN_L11_00319028);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
+extern float D_L11_001677C0_q[] __asm__("D_L11_001677C0") __attribute__((section(".data")));
+extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
+extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
+extern short D_L11_00162384_q __asm__("D_L11_00162384") __attribute__((sda));
+extern short D_L11_00162410_q __asm__("D_L11_00162410") __attribute__((sda));
+extern short D_L11_00162414_q __asm__("D_L11_00162414") __attribute__((sda));
+extern short D_L11_00162380_q __asm__("D_L11_00162380") __attribute__((sda));
+extern unsigned char *FUN_L00_00272f68_q(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode) __asm__("FUN_L00_00272f68");
+extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz_q(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_q(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
+
+void FUN_L11_00319028(char *moby) {
+    float v0[4];
+    float v1[4];
+    char *data = *(char **)(moby + 0x78);
+    unsigned char *q;
+    float *p = (float *)(moby + 0x10);
+    int i;
+    subtract_vector_xyz_q(v0, D_L11_001677C0_q, p);
+    q = (unsigned char *)(data + 0x10);
+    normalize_vector_xyz_q(v0, v0, -0.3f);
+    normalize_vector_xyz_q(v1, v0, 0.1f);
+    add_vector_xyz_q(v0, v0, p);
+    for (i = 0; i < 4; i++) {
+        int a = FUN_001fa6e0_q(*(int *)&D_L11_00162380_q, *(int *)&D_L11_00162384_q, (float)i * 0.333f);
+        unsigned char c;
+        q[0] += q[4];
+        c = func_001FA898_r_q((float)q[0]);
+        FUN_L00_00272f68_q(*(float *)(data + 0x1C) * ConvertIntegerToFloat_q(q[8]) * 0.025f, v0, a, c, 0x35, 1, 2, 0);
+        q++;
+        add_vector_xyz_q(v0, v0, v1);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A630), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);

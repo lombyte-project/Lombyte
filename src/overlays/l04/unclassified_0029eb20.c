@@ -147,7 +147,42 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba448.s", FUN_L04_002ba448);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba520.s", FUN_L04_002ba520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1d70.s", FUN_L04_002c1d70);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C30F0), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013E550[];
+extern void FUN_0022da68(int, int, char *);
+extern void FUN_L00_00257470(void *, int, int);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+
+void FUN_L04_002c1d70(char *moby)
+{
+    float pos[4];
+    float vec[4];
+    char *data = *(char **)(moby + 0x78);
+    int idx;
+    int r;
+
+    clear_vector(vec);
+    idx = *(int *)(data + 0x238);
+    if (idx != -1) {
+        char *e = (char *)D_0013E550 + idx * 0x70;
+        if (*(char **)(e + 0x88) == moby) {
+            if (*(unsigned char *)(e + 0x74) != 0)
+                release_voice_slot(idx);
+        }
+    }
+    r = -1;
+    *(int *)(data + 0x238) = r;
+    FUN_L00_00257470(moby, 0, -1);
+    FUN_L00_0024f7c8(moby, 5, pos);
+    func_L00_0025F4A8_alt(moby, vec, pos, 0.0f, 0.0f, 10, 3, 4,
+                          2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f, 1, 1, r, 0);
+    FUN_0022da68(1, 0, moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c2270.s", FUN_L04_002c2270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
