@@ -38,18 +38,18 @@ typedef struct {
 } EnvironmentCameraState;
 
 extern s32 D_0013E050[];
-extern s32 D_0015F604;
+extern s32 game_stage __asm__("D_0015F604");
 extern s32 D_001604A4 __attribute__((sda));
 extern s32 D_001604A8 __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));
-extern s32 D_00160520[2] __attribute__((sda));
-extern s32 D_00160530[2] __attribute__((sda));
-extern s32 D_00160540[2] __attribute__((sda));
-extern Quadword *D_00160550[2] __attribute__((sda));
-extern Quadword *D_00160560[2] __attribute__((sda));
-extern IndexedQuad *D_00160570[2] __attribute__((sda));
+extern s32 environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));
+extern s32 environment_mesh_vertex_counts[2] __asm__("D_00160530") __attribute__((sda));
+extern s32 environment_mesh_quad_counts[2] __asm__("D_00160540") __attribute__((sda));
+extern Quadword *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sda));
+extern Quadword *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
+extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
 extern EnvironmentCameraState D_00186F40;
-extern FloatVector4 D_00187080;
+extern FloatVector4 camera_position __asm__("D_00187080");
 extern Quadword D_001DC4E0[];
 extern float D_001DCB40[][2];
 extern float D_001DCE70[][2];
@@ -95,18 +95,18 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     int corner_index;
 
     class_index = object->class_id - 0x212;
-    positions = D_00160560[class_index];
-    normals = D_00160550[class_index];
-    indexed_quads = D_00160570[class_index];
-    quad_count = D_00160540[class_index];
-    vertex_count = D_00160530[class_index];
-    if (D_0015F604 == 6 && D_0013E050[0] == 4) {
+    positions = environment_mesh_positions[class_index];
+    normals = environment_mesh_normals[class_index];
+    indexed_quads = environment_mesh_quads[class_index];
+    quad_count = environment_mesh_quad_counts[class_index];
+    vertex_count = environment_mesh_vertex_counts[class_index];
+    if (game_stage == 6 && D_0013E050[0] == 4) {
         quad_state[1] = get_effect_texture(1);
     } else {
         quad_state[1] = get_effect_texture(0x15);
     }
     mapping_enabled = 0;
-    color = D_00160520[class_index];
+    color = environment_mesh_colors[class_index];
     quad_state[2] = 0xFF9000000260;
     quad_state[3] = 0x8000000044;
     quad_state[0] = 0;
@@ -115,11 +115,11 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[1] = color;
     colors[0] = color;
     calculate_object_transform(object, 0, object_transform);
-    if (D_0015F604 != 0 ||
+    if (game_stage != 0 ||
         (AbsoluteFloat(D_00186F40.position_x - object->position_x) < 16.0f && AbsoluteFloat(D_00186F40.position_y - object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
-    if (D_0015F604 == 6 && D_0013E050[0] == 4) {
+    if (game_stage == 6 && D_0013E050[0] == 4) {
         mapping_enabled = 0;
     }
     if (mapping_enabled != 0 || D_001604A4 == 1) {
@@ -128,7 +128,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
         transition_fraction = convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_ticks(0x3C));
         for (element_index = 0; element_index < vertex_count; element_index++) {
             transform_vector(&D_001DC4E0[element_index], &positions[element_index], object_transform);
-            subtract_vectors(view_direction, &D_001DC4E0[element_index], D_00187080);
+            subtract_vectors(view_direction, &D_001DC4E0[element_index], camera_position);
             normalize_vector(view_direction, view_direction, 1.0f);
             transform_vector(normal, &normals[element_index], object_transform);
             normalize_vector(normal, normal, 0.1f);
@@ -177,4 +177,5 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     }
 }
 extern __typeof__(render_environment_mapped_object) func_002327A0 __attribute__((alias("FUN_002327a0")));
+
 #endif /* NON_MATCHING */

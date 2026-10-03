@@ -52,7 +52,7 @@ struct FogRegs2 { u8 pad0[0x28]; s32 mul; s32 max; s32 far_int; s32 near_int; };
 struct Clip { Vec4 constants[3]; };
 
 extern s32 D_0015ED80;
-extern struct View D_0018CD00;
+extern struct View view_context __asm__("D_0018CD00");
 extern Vec4 D_0018CFC0[4];
 extern f32 D_00160720[4];
 extern f32 D_00160B30;
@@ -93,11 +93,11 @@ void update_view_context(void) {
 
     depth_scale = -8388080.0f;
     if (D_0015ED80 != 0) {
-        D_0018CD00.fov.f[1] = D_0018CD00.fov.f[0] * 0.756f;
+        view_context.fov.f[1] = view_context.fov.f[0] * 0.756f;
     } else {
-        D_0018CD00.fov.f[1] = D_0018CD00.fov.f[0] * 0.775f;
+        view_context.fov.f[1] = view_context.fov.f[0] * 0.775f;
     }
-    view = &D_0018CD00;
+    view = &view_context;
     view->aspect_x = view->scr_x / view->width;
     view->aspect_y = view->scr_y / view->height;
     view->fov.f[2] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0]));
@@ -208,7 +208,7 @@ void update_view_context(void) {
     view->unkC = 0;
     qzero(&view->regs[0]);
 
-    packet_view = &D_0018CD00;
+    packet_view = &view_context;
     packet_view->gif[0].i[0] = *(s32 *)&packet_view->fog_mul;
     packet_view->gif[0].i[1] = 0x303E4000;
     packet_view->gif[0].i[2] = 0x412;
@@ -242,4 +242,5 @@ void update_view_context(void) {
     qcopy(&D_001DEA40[1], &packet_view->screen_bias);
 }
 extern __typeof__(update_view_context) func_001F2D98 __attribute__((alias("FUN_001f2d98")));
+
 #endif /* NON_MATCHING */

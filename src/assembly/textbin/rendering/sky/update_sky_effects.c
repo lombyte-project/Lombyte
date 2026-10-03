@@ -38,7 +38,7 @@ struct SkyEffect {
     f32 size;
 };
 
-extern struct LevelSkyEffectData *D_0016045C;
+extern struct LevelSkyEffectData *level_sky_effect_data __asm__("D_0016045C");
 extern u8 D_001D96E0[];
 extern void func_001160C8(s32);
 extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
@@ -73,15 +73,15 @@ void update_sky_effects(void) {
     struct SkyEffect *effect;
     s16 *angles;
 
-    D_0016045C->relocation_state = 0;
+    level_sky_effect_data->relocation_state = 0;
     func_001F9FC8(D_001D96E0);
     sky_draw_shell(0);
     sky_draw_shell(1);
-    if (D_0016045C->effect_count == 0) {
-        D_0016045C->effect_count = 0x100;
+    if (level_sky_effect_data->effect_count == 0) {
+        level_sky_effect_data->effect_count = 0x100;
         initialization_index = 0;
         func_001160C8(0x3039);
-        if (D_0016045C->effect_count <= 0) {
+        if (level_sky_effect_data->effect_count <= 0) {
             goto end;
         }
         base_color = 0x30505050;
@@ -89,7 +89,7 @@ void update_sky_effects(void) {
         random_color_enabled = 1;
         effect_flags = 0x48;
 initialize_next_effect:
-        effect = &D_0016045C->effects[initialization_index];
+        effect = &level_sky_effect_data->effects[initialization_index];
         if (initialization_index >= 0xF6) {
             effect->randomize_color = 0;
             angles = &effect->state.angles.azimuth;
@@ -123,18 +123,18 @@ initialize_next_effect:
             }
         }
         initialization_index += 1;
-        if (initialization_index < D_0016045C->effect_count) {
+        if (initialization_index < level_sky_effect_data->effect_count) {
             goto initialize_next_effect;
         }
     }
-    if (D_0016045C->effect_count <= 0) {
+    if (level_sky_effect_data->effect_count <= 0) {
         goto end;
     }
     radius = 50.0f;
     angle_step = 0.0015339808f;
     effect_index = 0;
 update_next_effect:
-    effect = &D_0016045C->effects[effect_index];
+    effect = &level_sky_effect_data->effects[effect_index];
     if (effect->randomize_color == 0) {
         angles = &effect->state.angles.azimuth;
         effect->state.angles.azimuth = (s16) (effect->state.angles.azimuth + 1);
@@ -156,7 +156,7 @@ update_next_effect:
         effect->color = effect->state.base_color + (((random_bits & 0x1F00) << 0xA) + 0xFFDFDFE0) + ((random_bits & 0x1F0) << 6) + ((random_bits & 0x1F) << 2);
     }
     effect_index += 1;
-    if (effect_index < D_0016045C->effect_count) {
+    if (effect_index < level_sky_effect_data->effect_count) {
         goto update_next_effect;
     }
 end:
@@ -167,4 +167,5 @@ end:
 }
 
 extern __typeof__(update_sky_effects) func_0022AE70 __attribute__((alias("FUN_0022ae70")));
+
 #endif /* NON_MATCHING */

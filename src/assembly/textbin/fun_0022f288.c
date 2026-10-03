@@ -4,7 +4,6 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022f288/FUN_0022f288.s", FUN_0022f288);
 #else
-
 #include "types.h"
 
 struct LevelOverlayState
@@ -31,15 +30,15 @@ struct LevelProjectionState
 };
 extern struct LevelOverlayState D_0013D290;
 extern u8 D_0013DD43[];
-extern struct LevelRenderState D_0013E030;
-extern struct LevelDisplayState D_0013E500;
-extern s32 D_0015ED84;
-extern s32 D_0015F438;
-extern f32 D_0015F43C;
+extern struct LevelRenderState level_render_state __asm__("D_0013E030");
+extern struct LevelDisplayState screen_offsets __asm__("D_0013E500");
+extern s32 current_level_index __asm__("D_0015ED84");
+extern s32 game_frame_counter __asm__("D_0015F438");
+extern f32 sequence_fade __asm__("D_0015F43C");
 extern s32 D_0015F620;
 extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];
-extern struct LevelProjectionState D_0018CD00;
+extern struct LevelProjectionState view_context __asm__("D_0018CD00");
 extern void AppendDmaTag(u32);
 extern void func_001F2260();
 extern void update_view_context() __asm__("func_001F2D98");
@@ -79,19 +78,19 @@ void render_level_frame(void)
   func_001F2260();
   func_0020CC60();
   func_001F3868();
-  saved_projection_scale = D_0018CD00.projection_scale;
+  saved_projection_scale = view_context.projection_scale;
   D_0015F620 = -1;
   if (saved_projection_scale < 0.63f)
   {
-    D_0018CD00.projection_scale = 0.63f;
+    view_context.projection_scale = 0.63f;
   }
   update_view_context();
   func_001F2260();
   draw_sky_shells();
-  D_0018CD00.projection_scale = saved_projection_scale;
+  view_context.projection_scale = saved_projection_scale;
   update_view_context();
   func_001F2260();
-  if (D_0013E030.mode == 4)
+  if (level_render_state.mode == 4)
   {
     func_001F4280(1);
     draw_resident_textured_quad();
@@ -100,11 +99,11 @@ void render_level_frame(void)
   func_0020D460();
   AppendDmaTag(0x02080000);
   func_001F4280(1);
-  if ((D_0015ED84 != 0) && ((D_0015ED84 != 1) || (D_0013DD43[0] != 0)))
+  if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0)))
   {
     build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
   }
-  if ((D_0013E030.mode == 4) && (D_0018CB54[0] >= 0x3D))
+  if ((level_render_state.mode == 4) && (D_0018CB54[0] >= 0x3D))
   {
     overlay_alpha = (D_0018CB54[0] - 0x3C) * 2;
     if (overlay_alpha >= 0x81)
@@ -113,7 +112,7 @@ void render_level_frame(void)
     }
     draw_resident_textured_banner(overlay_alpha);
   }
-  if ((D_0015ED84 != 0) && ((D_0015ED84 != 1) || (D_0013DD43[0] != 0)))
+  if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0)))
   {
     render_environment_mapped_object(D_0018CC98[0]);
   }
@@ -125,20 +124,21 @@ void render_level_frame(void)
     display_state = &D_0013E500_far;
     draw_textured_quad(0x2C, display_state->screen_height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40, 0x80808080, texture);
     screen_y = (display_state->screen_height - 0x40) * 16;
-    rotation_angle = ((D_0015F438 % 55) * (-6.2831855f)) / 55.0f;
+    rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
     draw_rotated_sprite(0x40, 0x40, get_effect_texture(3), 1216.0f, screen_y, quad_extent, quad_extent, rotation_angle);
   }
   func_001F4398();
-  if (D_0015F43C > 0.0f)
+  if (sequence_fade > 0.0f)
   {
-    if (D_0015F43C > 1.0f)
+    if (sequence_fade > 1.0f)
     {
-      D_0015F43C = 1.0f;
+      sequence_fade = 1.0f;
     }
-    emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_0015F43C * 128.0f));
+    emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence_fade * 128.0f));
   }
   vu1_sync_chain(0x10);
   func_0020CEF8();
 }
 extern __typeof__(render_level_frame) func_0022F288 __attribute__((alias("FUN_0022f288")));
+
 #endif /* NON_MATCHING */

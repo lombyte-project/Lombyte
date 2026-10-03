@@ -57,8 +57,8 @@ struct CameraTrackingState {
     f32 tracked_delta;
 };
 
-extern struct Player D_0013F350;
-extern struct CameraTrackingState D_001870D0;
+extern struct Player player_state __asm__("D_0013F350");
+extern struct CameraTrackingState camera_tracking_state __asm__("D_001870D0");
 
 extern f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32 *vel) __asm__("FUN_001ebd78");
 extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
@@ -75,11 +75,11 @@ void update_camera_tracking_state(void) {
     Vec4 projected_displacement;
     struct CameraTrackingState *tracking;
     f32 forward_distance;
-    s32 i;
+    s32 history_index;
     struct Moby *tracked_object;
 
-    tracking = &D_001870D0;
-    normalize_vector_xyz(&direction, &D_0013F350.target_direction, -1.0f);
+    tracking = &camera_tracking_state;
+    normalize_vector_xyz(&direction, &player_state.target_direction, -1.0f);
     qcopy(&tracking->previous_target_direction, &tracking->target_direction);
     qcopy(&tracking->target_direction, &direction);
     if (dot_vectors_xyz(&tracking->direction, &direction) < -0.98f) {
@@ -92,7 +92,7 @@ void update_camera_tracking_state(void) {
     tracking->direction.f[2] = cam_interp_values(tracking->direction.f[2], direction.f[2], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[2]);
     normalize_vector_xyz(&tracking->direction, &tracking->direction, 1.0f);
 
-    subtract_vector_xyz(&tracking->displacement, &D_0013F350.pos, &tracking->previous_target_position);
+    subtract_vector_xyz(&tracking->displacement, &player_state.pos, &tracking->previous_target_position);
     tracking->distance = vector_length_xyz(&tracking->displacement);
     forward_distance = dot_vectors_xyz(&tracking->displacement, &direction);
     tracking->forward_distance = forward_distance;
@@ -101,24 +101,24 @@ void update_camera_tracking_state(void) {
     subtract_vector_xyz(&tracking->perpendicular_displacement, &tracking->displacement, &projected_displacement);
     tracking->perpendicular_distance = vector_length_xyz(&tracking->perpendicular_displacement);
     scale_vector_xyz(&tracking->perpendicular_displacement, &tracking->perpendicular_displacement, 1.0f / tracking->perpendicular_distance);
-    qcopy(&tracking->previous_target_position, &D_0013F350.pos);
+    qcopy(&tracking->previous_target_position, &player_state.pos);
 
-    if (D_0013F350.primary_mode != 0x50 || D_0013F350.secondary_mode == 0x11) {
-        tracking->pos.f[0] = D_0013F350.pos.f[0];
-        tracking->pos.f[1] = D_0013F350.pos.f[1];
-        tracking->pos.f[2] = cam_interp_values(tracking->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f, &tracking->position_velocity);
-        tracking->pos.f[3] = D_0013F350.pos.f[2];
+    if (player_state.primary_mode != 0x50 || player_state.secondary_mode == 0x11) {
+        tracking->pos.f[0] = player_state.pos.f[0];
+        tracking->pos.f[1] = player_state.pos.f[1];
+        tracking->pos.f[2] = cam_interp_values(tracking->pos.f[2], player_state.pos.f[2], 0.0075f, 0.175f, 0.0f, &tracking->position_velocity);
+        tracking->pos.f[3] = player_state.pos.f[2];
     } else {
-        tracking->pos.f[0] = D_0013F350.pos.f[0];
-        tracking->pos.f[1] = D_0013F350.pos.f[1];
+        tracking->pos.f[0] = player_state.pos.f[0];
+        tracking->pos.f[1] = player_state.pos.f[1];
     }
 
-    for (i = 0; i < 4; i++) {
-        tracking->sample_history[i] = tracking->sample_history[i + 1];
+    for (history_index = 0; history_index < 4; history_index++) {
+        tracking->sample_history[history_index] = tracking->sample_history[history_index + 1];
     }
-    tracking->sample_history[i] = D_0013F350.history_sample;
+    tracking->sample_history[history_index] = player_state.history_sample;
 
-    tracked_object = D_0013F350.selected_object;
+    tracked_object = player_state.selected_object;
     if (tracked_object != NULL && tracked_object->oclass != 0x4BA && tracked_object->oclass != 0x336) {
         if (tracked_object == tracking->tracked_object) {
             tracking->tracked_delta = tracked_object->tracked_value - tracking->tracked_value;
@@ -134,7 +134,10 @@ void update_camera_tracking_state(void) {
     } else {
         tracking->tracked_delta = 0.0f;
         tracking->tracked_object = NULL;
-        tracking->tracked_value = D_0013F350.pos.f[2];
+        tracking->tracked_value = player_state.pos.f[2];
     }
 }
+
+extern __typeof__(update_camera_tracking_state) func_001ED470 __attribute__((alias("FUN_001ed470")));
+
 #endif /* NON_MATCHING */

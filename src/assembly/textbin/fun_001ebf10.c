@@ -36,7 +36,7 @@ typedef struct CameraRecord {
 
 typedef struct {
     u8 pad0[0x1D];
-    u8 kind;
+    u8 descriptor_kind;
 } CameraDescriptorInfo;
 
 typedef struct {
@@ -64,11 +64,11 @@ struct CameraTransitionState {
     s32 snapshot_pending;
 };
 
-extern struct CameraTransitionState D_00186F40;
-extern CameraDescriptor *D_0015EF90;
-extern s32 D_0015ED84;
-extern u8 D_00189650[];
-extern s32 D_0018C32C;
+extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
+extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 previous_camera_record_storage[] __asm__("D_00189650");
+extern s32 camera_position_publication_suppressed __asm__("D_0018C32C");
 
 extern void backup_current_cam(void) __asm__("func_001EBC90");
 extern void update_moby(CameraRecord *next_camera) __asm__("func_001EBEC8");
@@ -84,93 +84,93 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     f32 transition_duration;
     f32 *previous_position;
     Vec4 *position;
-    s32 kind = 0;
-    s32 mode;
+    s32 descriptor_kind = 0;
+    s32 previous_transition_state;
 
-    descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
-    previous_camera = D_00186F40.current;
-    mode = previous_camera->transition_state;
+    descriptor = camera_descriptors[next_camera->descriptor_index].descriptor;
+    previous_camera = camera_transition_state.current;
+    previous_transition_state = previous_camera->transition_state;
     if (descriptor != 0) {
-        kind = descriptor->kind;
+        descriptor_kind = descriptor->descriptor_kind;
     }
-    if (mode == 4) {
+    if (previous_transition_state == 4) {
         next_camera->activation_blocked = 1;
-        position = &next_camera->pos;
-    } else if (mode == 2 || kind == 1 || kind == 5) {
-        if (kind == 1) {
+    } else if (previous_transition_state == 2 || descriptor_kind == 1 || descriptor_kind == 5) {
+        if (descriptor_kind == 1) {
             transition_duration = next_camera->transition_duration;
-            D_00186F40.transition_mode = 0;
+            camera_transition_state.transition_mode = 0;
             if (transition_duration > 0.0f) {
-                D_00186F40.configured_rotation_rate = transition_duration;
-                D_00186F40.configured_position_rate = transition_duration;
+                camera_transition_state.configured_position_rate = transition_duration;
+                camera_transition_state.configured_rotation_rate = transition_duration;
             } else {
-                D_00186F40.configured_position_rate = 0.018f;
-                D_00186F40.configured_rotation_rate = 0.018f;
+                camera_transition_state.configured_position_rate = 0.018f;
+                camera_transition_state.configured_rotation_rate = 0.018f;
             }
-        } else if (kind == 5) {
+        } else if (descriptor_kind == 5) {
             transition_duration = next_camera->transition_duration;
-            D_00186F40.transition_mode = 2;
+            camera_transition_state.transition_mode = 2;
             if (transition_duration > 0.0f) {
-                D_00186F40.configured_frames = convert_float_to_word(transition_duration);
+                camera_transition_state.configured_frames = convert_float_to_word(transition_duration);
             } else {
-                D_00186F40.configured_frames = 40;
+                camera_transition_state.configured_frames = 40;
             }
         }
-        if (D_00186F40.transition_phase == 0) {
-            D_00186F40.transition_phase = 1;
+        if (camera_transition_state.transition_phase == 0) {
+            camera_transition_state.transition_phase = 1;
         } else {
-            D_00186F40.transition_phase = 2;
+            camera_transition_state.transition_phase = 2;
         }
-        position = &next_camera->pos;
-    } else if (mode == 3 || mode == 5 || kind == 3 || kind == 6) {
+    } else if (previous_transition_state == 3 || previous_transition_state == 5 || descriptor_kind == 3 || descriptor_kind == 6) {
         qcopy(&next_camera->pos, &previous_camera->pos);
         qcopy(&next_camera->m0, &previous_camera->m0);
         qcopy(&next_camera->m1, &previous_camera->m1);
         qcopy(&next_camera->m2, &previous_camera->m2);
         next_camera->handoff_state = 2;
-        position = &next_camera->pos;
-        if (previous_camera->transition_state == 5 || kind == 6) {
+        if (previous_camera->transition_state == 5 || descriptor_kind == 6) {
             transition_duration = next_camera->transition_duration;
-            D_00186F40.transition_mode = 0;
+            camera_transition_state.transition_mode = 0;
             if (transition_duration > 0.0f) {
-                D_00186F40.configured_rotation_rate = transition_duration;
-                D_00186F40.configured_position_rate = transition_duration;
+                camera_transition_state.configured_position_rate = transition_duration;
+                camera_transition_state.configured_rotation_rate = transition_duration;
             } else {
-                D_00186F40.configured_position_rate = 0.018f;
-                D_00186F40.configured_rotation_rate = 0.018f;
-                if (D_0015ED84 == 1) {
-                    D_00186F40.configured_position_rate = 0.01f;
-                    D_00186F40.configured_rotation_rate = 0.01f;
+                camera_transition_state.configured_position_rate = 0.018f;
+                camera_transition_state.configured_rotation_rate = 0.018f;
+                if (current_level_index == 1) {
+                    camera_transition_state.configured_position_rate = 0.01f;
+                    camera_transition_state.configured_rotation_rate = 0.01f;
                 }
             }
-            if (D_00186F40.transition_phase == 0) {
-                D_00186F40.transition_phase = 1;
+            if (camera_transition_state.transition_phase == 0) {
+                camera_transition_state.transition_phase = 1;
             } else {
-                D_00186F40.transition_phase = 2;
+                camera_transition_state.transition_phase = 2;
             }
         }
     } else {
         next_camera->activation_blocked = 1;
-        position = &next_camera->pos;
     }
 
+    position = &next_camera->pos;
     previous_camera->transition_state = 0;
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
-    D_00186F40.previous = previous_camera;
-    copy_blocks_16_forward(D_00189650, D_00189650 - 0x280, 0x280);
-    D_00186F40.previous->saved_state = D_00189650;
-    D_00186F40.current = next_camera;
-    next_camera->saved_state = D_00189650 - 0x280;
-    D_00186F40.snapshot_pending = 0;
+    camera_transition_state.previous = previous_camera;
+    copy_blocks_16_forward(previous_camera_record_storage, previous_camera_record_storage - 0x280, 0x280);
+    camera_transition_state.previous->saved_state = previous_camera_record_storage;
+    camera_transition_state.current = next_camera;
+    next_camera->saved_state = previous_camera_record_storage - 0x280;
+    camera_transition_state.snapshot_pending = 0;
     update_moby(next_camera);
     backup_current_cam();
-    if (D_0018C32C == 0) {
-        qcopy(&D_00186F40.published_position, position);
+    if (camera_position_publication_suppressed == 0) {
+        qcopy(&camera_transition_state.published_position, position);
     }
     previous_position = next_camera->previous_position;
     previous_position[0] = next_camera->pos.x;
     previous_position[1] = position->y;
     previous_position[2] = position->z;
 }
+
+extern __typeof__(switch_active_camera_record) func_001EBF10 __attribute__((alias("FUN_001ebf10")));
+
 #endif /* NON_MATCHING */
