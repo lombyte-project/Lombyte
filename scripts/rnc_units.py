@@ -103,11 +103,18 @@ def load_recovered_full(config_dir: Path) -> dict[str, str]:
 
 
 def source_symbol(source: Path) -> str | None:
-    """First function name (or INCLUDE_ASM symbol) in a unit source, or None."""
+    """First function name (or INCLUDE_ASM symbol) in a unit source, or None.
+
+    A non-static definition wins: units often open with static inline helpers
+    (``IsNaN`` in the SDK float code) that are not the unit's own function.
+    """
     text = source.read_text(errors="replace")
-    match = FUNC_DEF_RE.search(text)
-    if match:
-        return match.group(1)
+    matches = list(FUNC_DEF_RE.finditer(text))
+    for match in matches:
+        if not re.match(r"\s*static\b", match.group(0)):
+            return match.group(1)
+    if matches:
+        return matches[0].group(1)
     match = INCLUDE_ASM_RE.search(text)
     return match.group(1) if match else None
 
