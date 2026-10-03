@@ -207,7 +207,8 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
     return da70_25dcd8(e, g, 0.0f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e310.s", FUN_L00_0025e310);
+extern f32 FUN_L00_00200228(void *, f32);
+f32 FUN_L00_0025e310(f32 a) { f32 out; f32 x; f32 pi = 3.14159274f; f32 tp = 6.2831855f; x = a + pi; x /= tp; x = FUN_L00_00200228(&out, x); x *= tp; return x - pi; }
 #define NOT_SDA
 
 #define MACRO_ADDR
