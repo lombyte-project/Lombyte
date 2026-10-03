@@ -61,7 +61,41 @@ extern void FUN_L01_002b91c8(char *, int);
 void FUN_L01_002fd0c0(void) {
     FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff028.s", FUN_L01_002ff028);
+/* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x44];
+    short n;
+    char pad1[0x132];
+    char *m[1];
+} G_q;
+
+extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
+extern int D_L01_0015F5C4_q __asm__("D_L01_0015F5C4");
+extern short D_L01_00161D30_q __asm__("D_L01_00161D30") __attribute__((sda));
+extern unsigned char D_0015EDB0_s __asm__("D_0015EDB0");
+extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
+extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L01_002ff028(char *a) {
+    if (D_L01_0015F5C4_q == 2 && D_0015EDB0_s != 0) {
+        int i;
+        for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
+            char *moby = D_L01_0016CCE0_q.m[i];
+            short c = *(short *)(moby + 0xA6);
+            if (c == *(short *)(a + 0xA6) || c == 0x32B) {
+                unsigned char *q = D_L01_0017C8C0_q;
+                if (q[1] == 0) {
+                    attach_manipulator_q(moby, 0, q);
+                    *(float *)(q + 0x20) = *(float *)&D_L01_00161D30_q;
+                    *(float *)(q + 0x24) = *(float *)&D_L01_00161D30_q;
+                    *(float *)(q + 0x28) = *(float *)&D_L01_00161D30_q;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff118.s", FUN_L01_002ff118);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);

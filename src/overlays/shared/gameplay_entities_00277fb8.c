@@ -3,7 +3,38 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002783a8.s", FUN_L01_002783a8);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Places the marker at a moby's position offset along its heading by scale. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279398), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x10];
+    float p[4];
+    float q[2];
+    float a;
+    char pad1[0x1A];
+    short f;
+} GG_q;
+
+extern GG_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0") __attribute__((section(".data")));
+extern f32 fast_add_rotations_q(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float fast_cos_q(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_q(float) __asm__("FUN_001f9de0");
+extern void clear_vector_q(void *) __asm__("FUN_001f99f8");
+
+void FUN_L01_002783a8(float scale, char *moby) {
+    D_L01_0016CCE0_q.f = 1;
+    qcopy(D_L01_0016CCE0_q.p, moby + 0x10);
+    D_L01_0016CCE0_q.p[0] += fast_cos_q(*(float *)(moby + 0x48)) * scale;
+    D_L01_0016CCE0_q.p[1] += fast_sin_q(*(float *)(moby + 0x48)) * scale;
+    clear_vector_q(D_L01_0016CCE0_q.q);
+    D_L01_0016CCE0_q.a = fast_add_rotations_q(*(float *)(moby + 0x48), 3.14159274101257324f);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

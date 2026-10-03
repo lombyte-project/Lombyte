@@ -52,7 +52,57 @@ int FUN_L15_00299ae0(char *moby, float *point, float arg) {
     return FUN_001f9b80((float *)(moby + 0x10), point) < 0.2f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299dd8.s", FUN_L15_00299dd8);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b48(void *, void *);
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L15_001ABE40[];
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+
+int FUN_L15_00299dd8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int best = 0;
+    float bd;
+    float a[4];
+    float b[4];
+    short *p;
+    int idx = *(int *)(d + 0x17C);
+    if (idx == -1) return 0;
+    p = (short *)D_L15_001ABE40[idx];
+    if (p == 0) return 0;
+    qcopy(a, m + 0x10);
+    a[2] += 1.0f;
+    bd = 0.0f;
+    do {
+        int id = *(unsigned short *)p & 0x7FFF;
+        char *o = (char *)((id << 8) + D_L15_0015FFD8_m);
+        if (*(short *)(o + 0xA6) == 0x27B && *(unsigned char *)(o + 0x20) >= 6 && *(unsigned char *)(o + 0x20) < 0x10) {
+            float f = FUN_001fa688(*(float *)(m + 0x48),
+                FUN_001f9e90(*(float *)(o + 0x10) - *(float *)(m + 0x10), *(float *)(o + 0x14) - *(float *)(m + 0x14)));
+            unsigned char st = ((char *)((id << 8) + D_L15_0015FFD8_m))[0x20];
+            if (st == 7 || st == 0xF) *(short *)(d + 0x194) = 1;
+            if (*(short *)(d + 0x194) != 0 || f < 1.2217305f) {
+                qcopy(b, (char *)((id << 8) + D_L15_0015FFD8_m) + 0x10);
+                a[2] += 1.0f;
+                if (FUN_001efa68(a, b, 2, 0, 0) == 0) {
+                    float dist = FUN_001f9b48(a, b);
+                    if (best == 0 || dist < bd) {
+                        bd = dist;
+                        best = D_L15_0015FFD8_m + (id << 8);
+                    }
+                }
+            }
+        }
+    } while (*p++ >= 0);
+    if (*(short *)(d + 0x194) == 0) {
+        if (bd > 8.0f) best = 0;
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
@@ -106,7 +156,39 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7628.s", FUN_L15_002a7628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbac0.s", FUN_L15_002cbac0);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
+
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
+extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section(".data")));
+extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
+extern short D_L15_00161ABC_q __asm__("D_L15_00161ABC") __attribute__((sda));
+
+void FUN_L15_002cbac0(char *m, int a) {
+    char *d = *(char **)(m + 0x78);
+    int flag;
+    short *p;
+    if (a == -1) {
+        *(int *)&D_L15_00161ABC_q = 0;
+        a = 0;
+    }
+    flag = a != 0;
+    if (((unsigned char *)m)[0x21] == 0xFF) {
+        *(int *)(d + 0x18) = scale_game_frames_q(a);
+        *(int *)(d + 8) = flag;
+        return;
+    }
+    p = (short *)D_L15_001ABE40_q[((unsigned char *)m)[0x21]];
+    if (p) {
+        do {
+            char *o = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L15_0015FFD8_m);
+            if (*(short *)(o + 0xA6) == 0x198) {
+                char *e = *(char **)(o + 0x78);
+                *(int *)(e + 8) = flag;
+                *(int *)(e + 0x18) = scale_game_frames_q(a);
+            }
+        } while (*p++ >= 0);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -160,7 +242,7 @@ extern char D_0013F350[];
 extern float D_0015ED6C MACRO_ADDR;
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L15_002cbac0();
+extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
 extern short D_0015ED84_d __asm__("D_0015ED84") __attribute__((sda));
 extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8") __attribute__((sda));
 extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));
@@ -175,7 +257,7 @@ void FUN_L15_002cbc30(void *arg) {
     char *base = D_0013F350;
     if (*(int *)(base + 0x2084) == 0x65) {
         approach_value(&D_L15_00161ABC_d, 0.0f, D_0015ED6C * 2);
-        FUN_L15_002cbac0(arg, 0);
+        FUN_L15_002cbac0_u(arg, 0);
     } else if (*(int *)&D_L15_00161AB8_d != 0
                && (*(int *)&D_0015ED84_d != 0xF || 240.0f < *(float *)(base + 0x84))) {
         approach_value(&D_L15_00161ABC_d, 1.0f, D_0015ED6C * 2);

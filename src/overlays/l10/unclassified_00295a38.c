@@ -279,4 +279,52 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd650.s", FUN_L10_002dd650);
+#include "sda.h"
+
+/* Collectible trigger: deletes itself once taken, else watches for its toucher. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
+
+extern L10State D_L10_001BB6B0;
+extern char D_L10_00178580[];
+extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_L10_001BA950[];
+extern unsigned char D_0014C190[] NOT_SDA;
+void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L10_002dd650(char *m) {
+    int i;
+    char *e;
+    float w[16];
+    float v[4];
+    unsigned short id = *(unsigned short *)(m + 0xB2);
+    if (D_L10_001BB6B0.collected[(short)id] != 0
+        || (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
+        mark_moby_for_removal_d650(m);
+        return;
+    }
+    *(short *)(m + 0x32) = 0x80;
+    e = D_L10_00178580;
+    for (i = 0; i < 0x40; i++, e += 0x40) {
+        if (*(char **)(e + 0x34) == m) {
+            if (*(int *)(e + 0x24) & 0x20000) {
+                char *o = *(char **)(e + 0x20);
+                if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
+                    subtract_vector_xyz(v, m + 0x10, o + 0x10);
+                    FUN_001fa2d8(w, m + 0xC0);
+                    FUN_001f9d20(v, v, w);
+                    if (v[0] > 0.25f) {
+                        *(int *)(D_0014C190 + (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + (D_0015ED84_m << 8))) |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                        D_L10_001BA950[(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                        mark_moby_for_removal_d650(m);
+                        return;
+                    }
+                    *(int *)(e + 0x34) = 0;
+                } else {
+                    *(int *)(e + 0x34) = 0;
+                }
+            }
+        }
+    }
+}

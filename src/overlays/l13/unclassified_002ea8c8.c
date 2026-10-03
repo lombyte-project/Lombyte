@@ -72,5 +72,102 @@ void FUN_L13_002f3750(Level13VendorMoby *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f3778.s", FUN_L13_002f3778);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8880.s", FUN_L13_002f8880);
+/* State machine: waits for a linked moby to reach one of a set of states, then pushes states onto linked mobys. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9D18), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child_q;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child_q *child;
+    char pad7C[0x14];
+    int f90;
+} Obj_q;
+
+extern char D_L13_001F51B0_q[] __asm__("D_L13_001F51B0") __attribute__((section(".data")));
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
+extern int DebugPrint_alt_q() __asm__("FUN_001e93b0");
+void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
+
+void FUN_L13_002f8880(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *m = 0;
+    int idx = *(int *)data;
+    int found;
+    int i;
+    if (idx != -1) {
+        m = D_L13_0015FFD8_m + (idx << 8);
+    }
+    switch (data[0x1C]) {
+    case 0:
+        if (m == 0) {
+            DebugPrint_alt_q(D_L13_001F51B0_q, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
+            mmr_q(moby);
+        } else if (data[0x1D] != 0) {
+            data[0x1C] = 1;
+        } else {
+            data[0x1C] = 2;
+        }
+        break;
+    case 1:
+        found = 0;
+        for (i = 0; i < 6; i++) {
+            if ((unsigned char)m[0x20] == (data + i)[0xA]) {
+                found = 1;
+                break;
+            }
+        }
+        if (found) {
+            int idx2 = *(int *)(data + 0x10);
+            if (idx2 != -1) {
+                char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
+                if (data[0x15] != -1) o[0x20] = data[0x15];
+                if (data[0x17] != -1) o[0xBC] = data[0x17];
+            }
+            if (data[0x19] != -1) moby[0x20] = data[0x19];
+            if (data[0x1B] != -1) moby[0xBC] = data[0x1B];
+            data[0x1C] = 2;
+        }
+        break;
+    case 2:
+        found = 0;
+        for (i = 0; i < 6; i++) {
+            if ((unsigned char)m[0x20] == (data + i)[4]) {
+                found = 1;
+                break;
+            }
+        }
+        if (found) {
+            int idx2 = *(int *)(data + 0x10);
+            if (idx2 != -1) {
+                char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
+                if (data[0x14] != -1) o[0x20] = data[0x14];
+                if (data[0x16] != -1) o[0xBC] = data[0x16];
+            }
+            if (data[0x18] != -1) moby[0x20] = data[0x18];
+            if (data[0x1A] != -1) moby[0xBC] = data[0x1A];
+            data[0x1C] = 1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f8a78.s", FUN_L13_002f8a78);

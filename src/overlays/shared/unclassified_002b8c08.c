@@ -146,7 +146,41 @@ int FUN_L01_002f1d18(char *m, int a, int b, float f) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2b68.s", FUN_L01_002f2b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5040.s", FUN_L01_002f5040);
+/* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
+extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz_q(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+
+void FUN_L01_002f5040(char *moby, float *out) {
+    float v[4];
+    float a[4];
+    float c[4];
+    float d[4];
+    float b[4];
+    float m[16];
+    char *data;
+    *(u128 *)v = 0;
+    v[0] = 1.0f;
+    data = *(char **)(moby + 0x78);
+    if (*(float *)(data + 0x130) != 0.0f || *(float *)(data + 0x134) != 0.0f) {
+        FUN_001fa050_q(m, (float *)(moby + 0x40));
+        FUN_001f9d20_q(a, v, m);
+        *(u128 *)b = *(u128 *)a;
+        b[2] = b[2] - 1.0f;
+        cross_vectors_xyz_q(c, a, b);
+        cross_vectors_xyz_q(d, a, c);
+        scale_vector_xyz_q(c, c, *(float *)(data + 0x130));
+        scale_vector_xyz_q(d, d, *(float *)(data + 0x134));
+        add_vector_xyz_q(out, out, c);
+        add_vector_xyz_q(out, out, d);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f5168.s", FUN_L01_002f5168);
 
 

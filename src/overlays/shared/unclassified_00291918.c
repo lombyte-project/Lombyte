@@ -264,7 +264,30 @@ void FUN_L03_002d3cd8(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d47c0.s", FUN_L03_002d47c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d5208.s", FUN_L03_002d5208);
+/* Spawns a class 0x350 moby and fills its data block from a position, vector and parameters. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002D65D0), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m5208(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L03_002d5208(char *a, char *pos, int c, int d, float f)
+{
+    char *m = (char *)func_0020D348_m5208(0x350);
+    char *data;
+    if (m != 0) {
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x7E;
+        *(unsigned char *)(m + 0x31) = 1;
+        *(unsigned char *)(m + 0x20) = 1;
+        data = *(char **)(m + 0x78);
+        qcopy(m + 0x10, pos);
+        qcopy(data, a);
+        *(float *)(data + 0xC) = f;
+        *(int *)(data + 0x14) = d;
+        *(int *)(data + 0x10) = c;
+        *(int *)(data + 0x18) = 0;
+    }
+    return m;
+}
 typedef struct {
     char pad0[0x44];
     short count;
