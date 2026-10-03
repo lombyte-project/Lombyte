@@ -5,25 +5,8 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022f288/FUN_0022f288.s", FUN_0022f288);
 #else
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
+
 struct LevelOverlayState
 {
   u8 pad_0[0xD4];
@@ -80,8 +63,6 @@ extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
-
-
 extern struct LevelDisplayState D_0013E500_far __asm__("D_0013E500") __attribute__((section(".data")));
 void render_level_frame(void) __asm__("FUN_0022f288");
 
@@ -91,24 +72,23 @@ void render_level_frame(void)
   f32 screen_y;
   f32 quad_extent;
   s32 overlay_alpha;
-  s64 unused_texture;
-  f32 fov;
+  f32 saved_projection_scale;
   struct LevelDisplayState *display_state;
   s64 texture;
   append_gif_transfer_packet();
   func_001F2260();
   func_0020CC60();
   func_001F3868();
-  fov = D_0018CD00.projection_scale;
+  saved_projection_scale = D_0018CD00.projection_scale;
   D_0015F620 = -1;
-  if (fov < 0.63f)
+  if (saved_projection_scale < 0.63f)
   {
     D_0018CD00.projection_scale = 0.63f;
   }
   update_view_context();
   func_001F2260();
   draw_sky_shells();
-  D_0018CD00.projection_scale = fov;
+  D_0018CD00.projection_scale = saved_projection_scale;
   update_view_context();
   func_001F2260();
   if (D_0013E030.mode == 4)
@@ -160,4 +140,5 @@ void render_level_frame(void)
   vu1_sync_chain(0x10);
   func_0020CEF8();
 }
+extern __typeof__(render_level_frame) func_0022F288 __attribute__((alias("FUN_0022f288")));
 #endif /* NON_MATCHING */

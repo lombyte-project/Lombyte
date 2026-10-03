@@ -6,92 +6,93 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_cheats_menu/F
 #else
 #include "types.h"
 
-struct Box {
+struct FontWindow {
     s16 v[12];
 };
 
-struct Cheat {
-    s32 name;
-    u8 *flag;
-    s32 on;
-    s32 off;
-    s32 pad10;
+struct CheatMenuEntry {
+    s32 text_id;
+    u8 *enabled_flag;
+    s32 enabled_text_id;
+    s32 disabled_text_id;
+    s32 unk10;
 };
 
-struct CheatMenu {
+struct CheatsMenu {
     u8 pad0[0x20];
-    s32 w;
-    s32 h;
+    s32 width;
+    s32 height;
     u8 pad28[8];
     s32 flags;
-    struct Cheat *list;
-    s32 sel;
+    struct CheatMenuEntry *entries;
+    s32 selected_entry;
 };
 
-extern void func_00233980(s32, u64);
-extern void func_001F4280(s32);
-extern void func_001F4398(void);
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void func_001153FC(void *, s32, u32);
-extern s32 func_001FDD10(s32);
-extern void func_001F7580(struct Box *, u64, s32, s32);
-extern void func_001F6530(s32, s32, u64, s32, s32);
-extern void func_001F6940(s32, s32, u64, s32, s32);
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern void font_print_window_regular(struct FontWindow *, u64, char *, s32) __asm__("func_001F7580");
+extern void font_print_large(s32, s32, u64, char *, s32) __asm__("func_001F6530");
+extern void font_print_right(s32, s32, u64, char *, s32) __asm__("func_001F6940");
 
-s32 draw_cheats_menu(struct CheatMenu *m) __asm__("FUN_00221030");
+s32 draw_cheats_menu(struct CheatsMenu *menu) __asm__("FUN_00221030");
 
-s32 draw_cheats_menu(struct CheatMenu *m) {
-    struct Box tmp;
-    s16 box[12];
-    struct Cheat *c;
-    struct Cheat *p;
-    s32 n;
-    s32 i;
-    s32 step;
-    s32 y;
+s32 draw_cheats_menu(struct CheatsMenu *menu) {
+    struct FontWindow text_window;
+    s16 window_fields[12];
+    struct CheatMenuEntry *entry;
+    struct CheatMenuEntry *unused_entry;
+    s32 entry_count;
+    s32 entry_index;
+    s32 line_spacing;
+    s32 draw_y;
     s32 color;
-    s32 on;
-    s32 j;
+    s32 enabled;
+    s32 draw_index;
 
-    func_00233980(0x47, 0x2004B);
-    func_001F4280(0);
-    if ((m->flags & 1) && m->list->name == 0) {
-        func_001153FC(box, 0, sizeof(box));
-        box[1] = m->h + 1;
-        box[3] = m->w + 1;
-        box[4] = m->w >> 1;
-        box[0] = 1;
-        box[2] = 1;
-        box[5] = m->h / 3;
-        box[8] = 16;
-        box[9] = 1;
+    vu1_add_g_sregister(0x47, 0x2004B);
+    setup_gif_paging(0);
+    if ((menu->flags & 1) && menu->entries->text_id == 0) {
+        func_001153FC(window_fields, 0, sizeof(window_fields));
+        window_fields[1] = menu->height + 1;
+        window_fields[3] = menu->width + 1;
+        window_fields[4] = menu->width >> 1;
+        window_fields[0] = 1;
+        window_fields[2] = 1;
+        window_fields[5] = menu->height / 3;
+        window_fields[8] = 16;
+        window_fields[9] = 1;
 
-        tmp = *(struct Box *)box;
-        func_001F7580(&tmp, 0x80FFA888, func_001FDD10(0x4FC0), -1);
+        text_window = *(struct FontWindow *)window_fields;
+        font_print_window_regular(&text_window, 0x80FFA888, get_help_message_text(0x4FC0), -1);
     }
-    n = 0;
-    while (m->list[n].name != 0) {
-        n++;
+    entry_count = 0;
+    while (menu->entries[entry_count].text_id != 0) {
+        entry_count++;
     }
-    step = m->h / (n + 1);
-    y = step - 8;
-    i = 0;
-    j = 0;
-    if (m->list[0].name != 0) {
+    line_spacing = menu->height / (entry_count + 1);
+    draw_y = line_spacing - 8;
+    entry_index = 0;
+    draw_index = 0;
+    if (menu->entries[0].text_id != 0) {
         do {
-            c = &m->list[j];
-            color = i == m->sel ? 0x8020FFFF : 0x80FFA888;
-            on = 0;
-            if (c->flag != 0) {
-                on = *c->flag;
+            entry = &menu->entries[draw_index];
+            color = entry_index == menu->selected_entry ? 0x8020FFFF : 0x80FFA888;
+            enabled = 0;
+            if (entry->enabled_flag != 0) {
+                enabled = *entry->enabled_flag;
             }
-            func_001F6530(0xC, y, color, func_001FDD10(c->name), -1);
-            func_001F6940(m->w - 0xC, y, 0x80FFA888, func_001FDD10(on ? c->on : c->off), -1);
-            y += step;
-            j++;
-            i++;
-        } while (m->list[i].name != 0);
+            font_print_large(0xC, draw_y, color, get_help_message_text(entry->text_id), -1);
+            font_print_right(menu->width - 0xC, draw_y, 0x80FFA888, get_help_message_text(enabled ? entry->enabled_text_id : entry->disabled_text_id), -1);
+            draw_y += line_spacing;
+            draw_index++;
+            entry_index++;
+        } while (menu->entries[entry_index].text_id != 0);
     }
-    func_001F4398();
+    do_gif_paging();
     return 2;
 }
+extern __typeof__(draw_cheats_menu) func_00221030 __attribute__((alias("FUN_00221030")));
 #endif /* NON_MATCHING */

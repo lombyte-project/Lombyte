@@ -4,62 +4,82 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/effects/get_effect_texture/FUN_001f44b8.s", FUN_001f44b8);
 #else
+
 #include "types.h"
 
-struct EffectEntry {
-    s64 handle;
-    u16 tile_x;
-    u16 tile_y;
-    s16 off;
-    s16 size;
+struct EffectTextureDefinition {
+    s64 tex0;
+    u16 texel_offset_quadwords;
+    u16 palette_offset_quadwords;
+    s16 width_log2;
+    s16 height_log2;
 };
 
-struct TexEntry { s32 data; s16 flags; s16 cbp; s32 clut; u8 tw; u8 th; s16 tbp; };
+struct TextureUploadPacket {
+    s32 palette_address;
+    s16 reserved_zero;
+    s16 palette_block_offset;
+    s32 texel_address;
+    u8 width_log2;
+    u8 height_log2;
+    s16 texel_block_offset;
+};
 
-extern s32 D_0015EE74;
-extern s32 D_0015F458;
-extern s32 D_0015F460;
-extern struct TexEntry D_0018D040[];
-extern struct EffectEntry D_0018D440[];
+extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
+extern s32 pending_texture_upload_count __asm__("D_0015F458");
+extern s32 level_texture_payload_address __asm__("D_0015F460");
+extern struct TextureUploadPacket pending_texture_uploads[] __asm__("D_0018D040");
+extern struct EffectTextureDefinition effect_texture_definitions[] __asm__("D_0018D440");
 
 s64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
 
 s64 get_effect_texture(s32 index) {
-    struct EffectEntry *e;
-    struct TexEntry *d;
-    s32 offset;
-    s32 shift;
-    s32 cbp;
-    s32 base;
-    s32 tbp;
-    s64 desc;
+    struct EffectTextureDefinition *texture;
+    struct TextureUploadPacket *upload;
+    s32 width_log2;
+    s32 buffer_width_shift;
+    s32 palette_block_offset;
+    s32 texel_address;
+    s32 texel_block_offset;
+    s64 tex0_word;
+    s64 width_bits;
+    s64 palette_bits;
 
-    e = &D_0018D440[index];
-    if (e->handle == 0) {
-        offset = e->off;
-        shift = offset - 6;
-        cbp = D_0015EE74 >> 8;
-        base = D_0015EE74 + 0x400;
-        tbp = base >> 8;
-        desc = tbp | ((u64)(1 << ((shift <= -1) ? 0 : shift)) << 14)
-             | ((u64)(u16)e->off << 26 | 0x1300000)
-             | ((u64)(u16)e->size << 30)
-             | ((u64)cbp << 37 | (u64)1 << 34)
-             | (u64)1 << 63;
-        D_0015EE74 = base + (1 << (offset + e->size));
-        e->handle = desc;
-        if (D_0015F458 < 0x40) {
-            d = &D_0018D040[D_0015F458];
-            d->cbp = cbp;
-            d->data = D_0015F460 + e->tile_y * 0x10;
-            d->flags = 0;
-            *(s32 *)((u8 *)D_0018D040 + D_0015F458 * 0x10 + 8) = D_0015F460 + e->tile_x * 0x10;
-            d->tw = (u8)e->off;
-            d->th = (u8)e->size;
-            d->tbp = tbp;
-            D_0015F458 += 1;
+    texture = &effect_texture_definitions[index];
+    if (texture->tex0 == 0) {
+        width_log2 = texture->width_log2;
+        buffer_width_shift = width_log2 - 6;
+        palette_block_offset = gs_texture_allocation_cursor >> 8;
+        texel_address = gs_texture_allocation_cursor + 0x400;
+        texel_block_offset = texel_address >> 8;
+        tex0_word = texel_block_offset;
+        tex0_word |= ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
+        /* Retail sign-extends each 16-bit exponent before packing TEX0. */
+        width_bits = ((s64)((u64)(u16)texture->width_log2 << 48) >> 22);
+        width_bits |= 0x1300000;
+        tex0_word |= width_bits;
+        tex0_word |= (s64)((u64)(u16)texture->height_log2 << 48) >> 18;
+        palette_bits = (u64)palette_block_offset << 37;
+        palette_bits |= (u64)1 << 34;
+        tex0_word |= palette_bits;
+        tex0_word |= (u64)1 << 63;
+        gs_texture_allocation_cursor = texel_address + (1 << (width_log2 + texture->height_log2));
+        texture->tex0 = tex0_word;
+        if (pending_texture_upload_count < 0x40) {
+            upload = &pending_texture_uploads[pending_texture_upload_count];
+            upload->palette_block_offset = palette_block_offset;
+            upload->palette_address = level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
+            upload->reserved_zero = 0;
+            *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count * 0x10 + 8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
+            upload->width_log2 = (u8)texture->width_log2;
+            upload->height_log2 = (u8)texture->height_log2;
+            upload->texel_block_offset = texel_block_offset;
+            pending_texture_upload_count += 1;
         }
     }
-    return D_0018D440[index].handle;
+    return effect_texture_definitions[index].tex0;
 }
+
+extern __typeof__(get_effect_texture) func_001F44B8 __attribute__((alias("FUN_001f44b8")));
+
 #endif /* NON_MATCHING */

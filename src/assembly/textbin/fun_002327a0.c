@@ -54,10 +54,10 @@ extern Quadword D_001DC4E0[];
 extern float D_001DCB40[][2];
 extern float D_001DCE70[][2];
 
-extern unsigned long get_effect_texture(int) __asm__("func_001F44B8");
+extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern int scale_ticks(int) __asm__("func_001F96F8");
-extern void func_001F9740(s32 *);
+extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern float square_root_float(float) __asm__("func_001F9988");
 extern float AbsoluteFloat(float) __asm__("func_001F99C0");
 extern void subtract_vectors(void *, void *, void *) __asm__("func_001F9A28");
@@ -74,7 +74,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     Quadword quad_positions[4];
     int colors[4];
     float texture_coordinates[4][2];
-    unsigned long quad_state[4];
+    u64 quad_state[4];
     FloatVector4 object_transform[4];
     FloatVector4 normal;
     FloatVector4 reflection;
@@ -87,7 +87,6 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     int class_index;
     int color;
     int mapping_enabled;
-    int unused_texture_index;
     float transition_fraction;
     float sphere_denominator;
     float new_u;
@@ -125,7 +124,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     }
     if (mapping_enabled != 0 || D_001604A4 == 1) {
         D_001604A8 = 1;
-        func_001F9740(&D_001604AC);
+        tick_countdown_32(&D_001604AC);
         transition_fraction = convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_ticks(0x3C));
         for (element_index = 0; element_index < vertex_count; element_index++) {
             transform_vector(&D_001DC4E0[element_index], &positions[element_index], object_transform);
@@ -177,4 +176,5 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
         draw_geometry_quad(quad_positions, 0, 0);
     }
 }
+extern __typeof__(render_environment_mapped_object) func_002327A0 __attribute__((alias("FUN_002327a0")));
 #endif /* NON_MATCHING */

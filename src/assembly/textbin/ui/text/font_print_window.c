@@ -10,178 +10,179 @@ struct Glyph {
     u8 u;
     u8 v;
     s8 top;
-    s8 adv;
+    s8 advance;
 };
 
-struct FontWin {
+struct FontWindow {
     s16 top;
     s16 bottom;
     s16 left;
     s16 right;
     s16 x;
     s16 y;
-    s16 w;
-    s16 h;
-    s16 line_h;
+    s16 text_width;
+    s16 text_height;
+    s16 line_height;
     u16 flags;
-    s16 ofs_x;
-    s16 ofs_y;
+    s16 offset_x;
+    s16 offset_y;
 };
 
-struct ScreenOfs { s32 w; s32 h; };
+struct ScreenOfs { s32 width; s32 height; };
 
-extern s32 D_0015F4A0;
-extern s32 D_0015F49C[];
-extern s32 D_0018CAF8[];
+extern s32 font_window_active __asm__("D_0015F4A0");
+extern s32 font_color_codes_enabled[] __asm__("D_0015F49C");
+extern s32 font_palette_colors[] __asm__("D_0018CAF8");
 extern struct ScreenOfs D_0013E500;
-extern void func_00233A40(s32, s32, s32, s32);
-extern s32 func_001F6200(u8 *, s32, struct Glyph *);
-extern void func_001F62B0(s32, s32, u64, u8 *, s32, s64, struct Glyph *);
+extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
+extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
+extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("func_001F62B0");
 extern void func_001F6638(s32, u8 *, s32, s64, struct Glyph *, f32, f32, f32);
 
-void font_print_window(struct FontWin *w, u64 color, u8 *str, s32 n, s64 tex, struct Glyph *glyphs) __asm__("FUN_001f7090");
+void font_print_window(struct FontWindow *window, u64 color, u8 *text, s32 character_limit, s64 texture, struct Glyph *glyphs) __asm__("FUN_001f7090");
 
-void font_print_window(struct FontWin *w, u64 color, u8 *str, s32 n, s64 tex, struct Glyph *glyphs) {
-    s16 start[32];
-    s16 end[32];
-    s16 colors[32];
-    s32 total;
-    s32 total0;
-    s32 retried;
-    s32 maxlines;
-    s32 lastw;
-    s32 count;
-    s32 next;
-    s32 curcolor;
-    s32 pos;
-    s32 wrap;
-    s32 wsum;
-    s32 adv;
-    s32 e;
-    s32 a;
-    s32 b;
-    s32 three;
-    s32 k;
+void font_print_window(struct FontWindow *window, u64 color, u8 *text, s32 character_limit, s64 texture, struct Glyph *glyphs) {
+    s16 line_starts[32];
+    s16 line_ends[32];
+    s16 line_colors[32];
+    s32 wrap_width;
+    s32 initial_wrap_width;
+    s32 using_initial_width;
+    s32 initial_line_count;
+    s32 last_line_width;
+    s32 line_count;
+    s32 next_line_count;
+    s32 current_color;
+    s32 position;
+    s32 break_position;
+    s32 line_width;
+    s32 advance;
+    s32 right_width;
+    s32 left_width;
+    s32 balance_divisor;
+    s32 line_index;
     s32 y;
-    s32 len;
+    s32 line_length;
     s32 width;
-    u8 *p;
-    f32 fx;
-    struct FontWin *win;
+    f32 draw_x;
+    struct FontWindow *win;
 
-    func_00233A40(w->left, w->right - 1, w->top, w->bottom - 1);
-    D_0015F4A0 = 1;
-    if ((w->flags ^ 1) & 1) {
-        total = w->right - w->x;
+    vu1_set_scissor(window->left, window->right - 1, window->top, window->bottom - 1);
+    font_window_active = 1;
+    if ((window->flags ^ 1) & 1) {
+        wrap_width = window->right - window->x;
     } else {
-        a = w->right - w->x;
-        b = w->x - w->left;
-        if (a < b) {
-            b = a;
+        right_width = window->right - window->x;
+        left_width = window->x - window->left;
+        if (right_width < left_width) {
+            left_width = right_width;
         }
-        total = b * 2;
+        wrap_width = left_width * 2;
     }
-    total0 = total;
-    curcolor = 0;
-    retried = 0;
-    maxlines = 0;
-    lastw = 0;
-    three = 3;
+    initial_wrap_width = wrap_width;
+    current_color = 0;
+    using_initial_width = 0;
+    initial_line_count = 0;
+    last_line_width = 0;
+    balance_divisor = 3;
 retry:
-    count = 0;
-    pos = 0;
-    while (pos != n && str[pos] != 0) {
-            next = count + 1;
-            start[count] = pos;
-            colors[count] = curcolor;
-            wrap = pos;
-            wsum = 0;
-            if (total > 0) {
+    line_count = 0;
+    position = 0;
+    while (position != character_limit && text[position] != 0) {
+            next_line_count = line_count + 1;
+            line_starts[line_count] = position;
+            line_colors[line_count] = current_color;
+            break_position = position;
+            line_width = 0;
+            if (wrap_width > 0) {
                 do {
-                    if (str[pos] == ' ' || str[pos] < 0x10) {
-                        wrap = pos;
+                    if (text[position] == ' ' || text[position] < 0x10) {
+                        break_position = position;
                     }
-                    if (D_0015F49C[0] != 0 && (str[pos] >= 8 && str[pos] < 0x10)) {
-                        curcolor = str[pos] - 8;
+                    if (font_color_codes_enabled[0] != 0 && (text[position] >= 8 && text[position] < 0x10)) {
+                        current_color = text[position] - 8;
                     }
-                    if (str[pos] < 2) {
+                    if (text[position] < 2) {
                         break;
                     }
-                    adv = glyphs[str[pos++]].adv;
-                    if (adv != 0) {
-                        wsum += adv;
+                    advance = glyphs[text[position++]].advance;
+                    if (advance != 0) {
+                        line_width += advance;
                     }
-                } while (wsum < total);
+                } while (line_width < wrap_width);
             }
-            end[count] = wrap;
-            if (end[count] == start[count]) {
-                end[count] = pos;
+            line_ends[line_count] = break_position;
+            if (line_ends[line_count] == line_starts[line_count]) {
+                line_ends[line_count] = position;
             }
-            pos = end[count];
-            if (str[pos] == ' ' || str[pos] < 0x10) {
-                end[count]--;
+            position = line_ends[line_count];
+            if (text[position] == ' ' || text[position] < 0x10) {
+                line_ends[line_count]--;
             }
-            count = next;
-            if (str[pos] == 0) {
+            line_count = next_line_count;
+            if (text[position] == 0) {
+                /* Retail saves this width before testing whether to rebalance. */
+                last_line_width = line_width;
                 break;
-                lastw = wsum;
             }
-            pos++;
+            position++;
     }
-    if (!retried && count >= 2) {
-        if (maxlines == 0) {
-            maxlines = count;
-        }
-        if (maxlines < count) {
-            total = total0;
-            retried = 1;
+    if (!using_initial_width && initial_line_count == 0) {
+        initial_line_count = line_count;
+    }
+    if (!using_initial_width && line_count >= 2) {
+        if (initial_line_count < line_count) {
+            wrap_width = initial_wrap_width;
+            using_initial_width = 1;
             goto retry;
         }
-        if (lastw < total / three) {
-            total -= 0x10;
+        if (last_line_width < wrap_width / balance_divisor) {
+            wrap_width -= 0x10;
             goto retry;
         }
     }
 
-    win = w;
-    len = win->line_h * count;
-    win->w = 0;
+    win = window;
+    line_length = win->line_height * line_count;
+    win->text_width = 0;
     y = win->y;
-    win->h = len;
+    win->text_height = line_length;
     if (win->flags & 2) {
-        y -= len >> 1;
+        y -= line_length >> 1;
     }
-    for (k = 0; k < count; k++, y += win->line_h) {
-        if (y + win->line_h < win->top) {
+    for (line_index = 0; line_index < line_count; line_index++, y += win->line_height) {
+        if (y + win->line_height < win->top) {
             continue;
         }
         if (win->bottom < y) {
             continue;
         }
-        len = end[k] - start[k] + 1;
-        width = func_001F6200(str + start[k], len, glyphs);
-        if (win->w < width) {
-            win->w = width;
+        line_length = line_ends[line_index] - line_starts[line_index] + 1;
+        width = measure_text_width(text + line_starts[line_index], line_length, glyphs);
+        if (win->text_width < width) {
+            win->text_width = width;
         }
         if (win->flags & 4) {
             continue;
         }
-        D_0018CAF8[0] = color;
+        font_palette_colors[0] = color;
         if (win->flags & 8) {
             if (win->flags & 1) {
-                fx = (f32)(win->x - (width >> 1)) + (f32)win->ofs_x * 0.0625f;
+                draw_x = (f32)(win->x - (width >> 1)) + (f32)win->offset_x * 0.0625f;
             } else {
-                fx = (f32)win->x + (f32)win->ofs_x * 0.0625f;
+                draw_x = (f32)win->x + (f32)win->offset_x * 0.0625f;
             }
-            func_001F6638(D_0018CAF8[colors[k]], str + start[k], len, tex, glyphs,
-                          fx, (f32)y + (f32)win->ofs_y * 0.0625f, 1.0f);
+            func_001F6638(font_palette_colors[line_colors[line_index]], text + line_starts[line_index], line_length, texture, glyphs,
+                          draw_x, (f32)y + (f32)win->offset_y * 0.0625f, 1.0f);
         } else if (win->flags & 1) {
-            func_001F62B0(win->x - (width >> 1), y, D_0018CAF8[colors[k]], str + start[k], len, tex, glyphs);
+            font_print(win->x - (width >> 1), y, font_palette_colors[line_colors[line_index]], text + line_starts[line_index], line_length, texture, glyphs);
         } else {
-            func_001F62B0(win->x, y, D_0018CAF8[colors[k]], str + start[k], len, tex, glyphs);
+            font_print(win->x, y, font_palette_colors[line_colors[line_index]], text + line_starts[line_index], line_length, texture, glyphs);
         }
     }
-    D_0015F4A0 = 0;
-    func_00233A40(0, D_0013E500.w - 1, 0, D_0013E500.h - 1);
+    font_window_active = 0;
+    vu1_set_scissor(0, D_0013E500.width - 1, 0, D_0013E500.height - 1);
 }
+
+extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));
 #endif /* NON_MATCHING */
