@@ -5,73 +5,19 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203730/FUN_00203730.s", FUN_00203730);
 #else
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
+#include "qcopy.h"
+#include "eetypes.h"
 
-
-
-typedef u32 qword[4] __attribute__((aligned(16)));
-
-
-
-typedef s64 dword[2] __attribute__((aligned(16)));
-
-
-
-typedef s32 s128 __attribute__((mode(TI), aligned(16)));
-
-
-
-typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-
-
-
-typedef s32 sceVu0IVECTOR[4] __attribute__((aligned(16)));
-
-
-
-typedef f32 sceVu0FVECTOR[4] __attribute__((aligned(16)));
-
-
-
-typedef f32 sceVu0FMATRIX[4][4] __attribute__((aligned(16)));
-typedef union 
-{
-  u128 ul128;
-  u64 ul64[2];
-  u32 ui32[4];
-  f32 fl32[4];
-  u16 us16[8];
-  u8 uc8[16];
-  sceVu0FVECTOR fv;
-  sceVu0IVECTOR iv;
-} Q_WORDDATA;
 typedef struct 
 {
   u8 pad0[4];
-  u16 size;
-  s16 h;
-  s16 w;
-  s16 tbp;
-  s16 cbp;
-  s16 mbp;
+  u16 width;
+  s16 height;
+  s16 draw_control_count;
+  s16 texture_block_offset;
+  s16 mip_block_offset_0;
+  s16 mip_block_offset_1;
 } ResidentRenderTextureDefinition;
 typedef struct 
 {
@@ -119,34 +65,36 @@ typedef union
   u128 q;
   u8 b[16];
 } MaterialMap;
-extern s32 D_00160F4C;
-extern s16 D_001E1900[];
-extern u8 D_001E1A00[];
-extern ObjectRenderClass *D_001E1700[];
-extern s32 D_001E2E00[];
-extern MaterialMap D_001E3600[];
-extern s32 D_0015EE8C;
-extern u64 D_0019E540[];
+extern s32 registered_object_render_class_count __asm__("D_00160F4C");
+extern s16 object_render_class_ids[] __asm__("D_001E1900");
+extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
+extern ObjectRenderClass *object_render_classes[] __asm__("D_001E1700");
+extern s32 object_render_class_fixed_thresholds[] __asm__("D_001E2E00");
+extern MaterialMap object_render_class_material_maps[] __asm__("D_001E3600");
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
+extern u64 resident_material_templates[] __asm__("D_0019E540");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 void register_object_render_class(ObjectRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, s32 class_id) __asm__("FUN_00203730");
 
 void register_object_render_class(ObjectRenderClass *render_class, ResidentRenderTextureDefinition *textures, u128 *material_map, s32 class_id)
 {
-  s32 i;
-  int mip_address_word;
-  s32 j;
-  s32 k;
+  s32 stream_index;
+  s32 entry_index;
+  s32 record_index;
   s32 material_index;
   s32 draw_high;
   s32 draw_shift;
   s32 material_base;
   s32 material_shift;
-  s64 width_units_64;
-  s64 width_units_128;
+  s32 width_units_64;
+  s32 width_units_128;
   u64 width_log2;
   u64 height_log2;
   s32 gs_block_base;
+  s32 texture_block;
+  s32 mip_block_0;
+  s32 mip_block_1;
   s32 fixed_threshold;
   MaterialMap *slot_materials;
   ObjectRenderRecord *record;
@@ -156,23 +104,23 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   u64 tex1_word;
   u64 mip_word;
   u64 clamp_word;
-  D_001E1900[D_00160F4C] = class_id;
-  D_001E1A00[class_id] = D_00160F4C;
-  D_001E1700[D_00160F4C] = render_class;
-  render_class->class_slot = D_00160F4C;
+  object_render_class_ids[registered_object_render_class_count] = class_id;
+  object_render_class_slot_by_id[class_id] = registered_object_render_class_count;
+  object_render_classes[registered_object_render_class_count] = render_class;
+  render_class->class_slot = registered_object_render_class_count;
   fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
-  j = D_00160F4C++;
-  D_001E2E00[j] = fixed_threshold;
+  entry_index = registered_object_render_class_count++;
+  object_render_class_fixed_thresholds[entry_index] = fixed_threshold;
   render_class->runtime_data = 0;
   render_class->runtime_index = 0;
-  for (i = 0; i < 3; i++)
+  for (stream_index = 0; stream_index < 3; stream_index++)
   {
-    if (render_class->streams[i] != 0)
+    if (render_class->streams[stream_index] != 0)
     {
-      render_class->streams[i] = (RenderStreamEntry *) (((s32) render_class->streams[i]) + ((s32) render_class));
-      for (j = 0; j < render_class->stream_counts[i]; j++)
+      render_class->streams[stream_index] = (RenderStreamEntry *) (((s32) render_class->streams[stream_index]) + ((s32) render_class));
+      for (entry_index = 0; entry_index < render_class->stream_counts[stream_index]; entry_index++)
       {
-        render_class->streams[i][j].offset += (s32) render_class->streams[i];
+        render_class->streams[stream_index][entry_index].offset += (s32) render_class->streams[stream_index];
       }
 
     }
@@ -180,21 +128,21 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
 
   render_class->packed_normals += (s32) render_class;
   render_class->records = (ObjectRenderRecord *) (((s32) render_class->records) + ((s32) render_class));
-  slot_materials = &D_001E3600[D_001E1A00[class_id]];
+  slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
   record = render_class->records;
-  slot_materials->q = *material_map;
-  for (k = 0; k < render_class->record_count; k++)
+  qcopy(slot_materials, material_map);
+  for (record_index = 0; record_index < render_class->record_count; record_index++)
   {
     draw_high = record->tex1.w[0];
-    material_index = slot_materials->b[k];
+    material_index = slot_materials->b[record_index];
     draw_shift = record->tex1.w[1];
     material_base = record->clamp.w[0];
     material_shift = record->clamp.w[1];
     if (textures != 0)
     {
       texture = &textures[material_index];
-      width_units_64 = ((s16) texture->size) >> 6;
-      width_units_128 = ((s16) texture->size) >> 7;
+      width_units_64 = ((s16) texture->width) >> 6;
+      width_units_128 = ((s16) texture->width) >> 7;
       if (width_units_64 <= 0)
       {
         width_units_64 = 1;
@@ -203,16 +151,19 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
       {
         width_units_128 = 1;
       }
-      width_log2 = highest_set_bit_index((s16) texture->size);
-      height_log2 = highest_set_bit_index(texture->h);
-      gs_block_base = D_0015EE8C >> 8;
+      width_log2 = highest_set_bit_index((s16) texture->width);
+      height_log2 = highest_set_bit_index(texture->height);
+      gs_block_base = gs_texture_allocation_base >> 8;
+      texture_block = texture->texture_block_offset + gs_block_base;
+      mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
+      mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
       tex0_word = (((u64) width_units_64) << 14) | ((((u64) width_log2) << 26) | 0x1300000);
       tex0_word |= ((u64) height_log2) << 30;
-      tex0_word |= (((u64) (texture->tbp + gs_block_base)) << 37) | (((u64) 1) << 34);
+      tex0_word |= (((u64) texture_block) << 37) | (((u64) 1) << 34);
       tex0_word |= ((u64) 1) << 63;
-      tex1_word = ((((u64) (texture->w - 1)) << 2) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
-      mip_address_word = (((u64) (texture->mbp + gs_block_base)) << 40) | (((u64) 1) << 34);
-      mip_word = ((((u64) width_units_128) << 14) | (((u64) (texture->cbp + gs_block_base)) << 20)) | mip_address_word;
+      tex1_word = ((((u64) (texture->draw_control_count - 1)) << 2) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+      /* Keep the block address and enable bits above bit 31. */
+      mip_word = ((((u64) width_units_128) << 14) | (((u64) mip_block_0) << 20)) | ((((u64) mip_block_1) << 40) | (((u64) 1) << 34));
       mip_word |= ((u64) 1) << 54;
       clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
       record->tex0 = tex0_word;
@@ -222,11 +173,11 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
     }
     else
     {
-      tex1_word = ((D_0019E540[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+      tex1_word = ((resident_material_templates[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
       clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
-      record->tex0 = D_0019E540[material_index * 3];
+      record->tex0 = resident_material_templates[material_index * 3];
       record->tex1.d = tex1_word;
-      record->mip = D_0019E540[(material_index * 3) + 2];
+      record->mip = resident_material_templates[(material_index * 3) + 2];
       record->clamp.d = clamp_word;
     }
     record->end = 0;
@@ -234,4 +185,7 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   }
 
 }
+
+extern __typeof__(register_object_render_class) func_00203730 __attribute__((alias("FUN_00203730")));
+
 #endif /* NON_MATCHING */

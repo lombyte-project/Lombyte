@@ -6,60 +6,70 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225ac0/FUN_00225ac0.s
 #else
 #include "types.h"
 
-struct FrameBuf { s32 addr; s32 flag; };
-struct GameState { u8 pad0[0x108]; s32 buf_b; s32 buf_a; };
+struct GraphicsBufferDescriptor {
+    s32 address;
+    s32 flags;
+};
+struct MenuGraphicsBuffers {
+    u8 pad00[0x108];
+    s32 primary_buffer;
+    s32 secondary_buffer;
+};
 
-extern struct GameState D_001D5BF0;
-extern struct FrameBuf D_001D60B8[5];
+extern struct MenuGraphicsBuffers menu_graphics_buffers __asm__("D_001D5BF0");
+extern struct GraphicsBufferDescriptor graphics_buffer_descriptors[5] __asm__("D_001D60B8");
 
-void FUN_00225ac0(s32 mode) {
-    s32 a;
-    s32 b;
-    s32 n1;
-    s32 n2;
-    s32 n3;
-    s32 i;
-    s32 end;
-    struct FrameBuf *p;
+void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
 
-    b = D_001D5BF0.buf_b;
-    a = D_001D5BF0.buf_a;
+/* Mode zero uses one primary buffer; nonzero mode uses the 2/1/2 layout. */
+void initialize_graphics_buffer_descriptors(s32 mode) {
+    s32 secondary_address;
+    s32 primary_address;
+    s32 primary_count;
+    s32 secondary_count;
+    s32 streaming_count;
+    s32 index;
+    s32 end_index;
+    struct GraphicsBufferDescriptor *descriptor;
+
+    primary_address = menu_graphics_buffers.primary_buffer;
+    secondary_address = menu_graphics_buffers.secondary_buffer;
     if (mode == 0) {
-        n1 = 1;
-        n2 = 0;
-        n3 = 0;
+        primary_count = 1;
+        secondary_count = 0;
+        streaming_count = 0;
     } else {
-        n1 = 2;
-        n2 = 1;
-        n3 = 2;
+        primary_count = 2;
+        secondary_count = 1;
+        streaming_count = 2;
     }
-    end = n1;
-    i = 0;
-    if (n1 > 0) {
-        p = D_001D60B8;
-        for (i = n1; i != 0; i--) {
-            p->addr = b;
-            p->flag = 0;
-            b += 0x11800;
-            p++;
+    end_index = primary_count;
+    index = 0;
+    if (primary_count > 0) {
+        descriptor = graphics_buffer_descriptors;
+        for (index = primary_count; index != 0; index--) {
+            descriptor->address = primary_address;
+            descriptor->flags = 0;
+            primary_address += 0x11800;
+            descriptor++;
         }
-        i = n1;
+        index = primary_count;
     }
-    end += n2;
-    for (; i < end; i++) {
-        D_001D60B8[i].addr = a;
-        D_001D60B8[i].flag = 0;
-        a += 0x11800;
+    end_index += secondary_count;
+    for (; index < end_index; index++) {
+        graphics_buffer_descriptors[index].address = secondary_address;
+        graphics_buffer_descriptors[index].flags = 0;
+        secondary_address += 0x11800;
     }
-    end += n3;
-    for (; i < end; i++) {
-        D_001D60B8[i].addr = b;
-        D_001D60B8[i].flag = 1;
-        b += 0x4F000;
+    end_index += streaming_count;
+    for (; index < end_index; index++) {
+        graphics_buffer_descriptors[index].address = primary_address;
+        graphics_buffer_descriptors[index].flags = 1;
+        primary_address += 0x4F000;
     }
-    for (; i < 5; i++) {
-        D_001D60B8[i].flag = 0;
-        D_001D60B8[i].addr = 0;
+    for (; index < 5; index++) {
+        graphics_buffer_descriptors[index].flags = 0;
+        graphics_buffer_descriptors[index].address = 0;
     }
 }
 #endif /* NON_MATCHING */

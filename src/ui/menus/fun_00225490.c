@@ -1,46 +1,48 @@
 #include "types.h"
-struct RenderResource {
+struct PreviewMobyResource {
     u8 pad0[6];
-    u8 flags;
+    u8 class_flags;
 };
-struct RenderEntry {
+struct PreviewMoby {
     u8 pad0[0x20];
     u8 state;
     u8 pad21[3];
-    struct RenderResource *resource;
+    struct PreviewMobyResource *resource;
     u8 pad28[8];
-    u8 mode;
-    u8 enabled;
-    u16 index;
+    u8 culling_radius;
+    u8 force_visible;
+    u16 control;
     u8 pad34[0x3F];
-    u8 size;
+    u8 state_73;
 };
-extern u8 D_001B3AC0[];
-extern struct RenderEntry *func_0020C4F8(s32);
-extern void func_0020DEF8(struct RenderEntry *);
-extern void PackRenderCommandFields(struct RenderEntry *, s32, s32, s32, s32);
+extern u8 moby_class_slots[] __asm__("D_001B3AC0");
+extern struct PreviewMoby *func_0020C4F8(s32);
+extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
+extern void PackRenderCommandFields(struct PreviewMoby *, s32, s32, s32, s32);
 
-struct RenderEntry *FUN_00225490(s32 index) {
-    struct RenderEntry *entry;
-    struct RenderEntry *result;
+struct PreviewMoby *create_menu_preview_moby(s32 oclass) __asm__("FUN_00225490");
+
+struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
+    struct PreviewMoby *moby;
+    struct PreviewMoby *result;
     u8 unset = 0xFF;
-    if (D_001B3AC0[index] == unset) return 0;
+    if (moby_class_slots[oclass] == unset) return 0;
     {
-        entry = func_0020C4F8(index);
-        if (entry != 0) {
-            entry->index = unset;
-            entry->mode = unset;
-            entry->state = 0;
-            entry->enabled = 1;
-            func_0020DEF8(entry);
-            PackRenderCommandFields(entry, 0x202020, 0xE, 0xE, 0);
-            if (entry->resource->flags != 0) {
-                entry->size = 0x18;
+        moby = func_0020C4F8(oclass);
+        if (moby != 0) {
+            moby->control = unset;
+            moby->culling_radius = unset;
+            moby->state = 0;
+            moby->force_visible = 1;
+            refresh_moby_spatial_bounds(moby);
+            PackRenderCommandFields(moby, 0x202020, 0xE, 0xE, 0);
+            if (moby->resource->class_flags != 0) {
+                moby->state_73 = 0x18;
             }
         }
-        result = entry;
+        result = moby;
     }
     return result;
 }
 
-extern struct RenderEntry *func_00225490(s32 index) __attribute__((alias("FUN_00225490")));
+extern struct PreviewMoby *func_00225490(s32 oclass) __attribute__((alias("FUN_00225490")));

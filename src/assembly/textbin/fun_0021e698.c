@@ -6,75 +6,79 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021e698/FUN_0021e698.s
 #else
 #include "types.h"
 
-struct Vec3 {
+struct PreviewPosition {
     f32 x;
     f32 y;
     f32 z;
 };
 
-struct Anchor {
-    f32 x[2];
+struct ItemPreviewPlacement {
+    f32 alternate_x;
+    f32 normal_x;
     f32 y;
     f32 z;
-    u8 pad10[8];
-    f32 side;
-    f32 fwd;
+    u8 pad10[8]; /* Per-item record stride is 0x20. */
+    f32 side_offset;
+    f32 forward_offset;
 };
 
-struct Owner {
+struct ItemPreviewBinding {
     u8 pad0[0x30];
     s32 flags;
     u8 pad34[4];
-    f32 rot;
+    f32 rotation_angle;
 };
 
-struct Link {
-    struct Owner *owner;
+struct ItemPreviewVars {
+    struct ItemPreviewBinding *owner;
     u8 pad4[8];
-    s32 index;
+    s32 item_index;
 };
 
-struct Obj {
+struct ItemPreviewMoby {
     u8 pad0[0x10];
     f32 x;
     f32 y;
     f32 z;
     u8 pad1C[0x2C];
-    f32 rot;
+    f32 rotation_z;
     u8 pad4C[0x2C];
-    struct Link *link;
+    struct ItemPreviewVars *preview_vars;
 };
 
-struct Base {
+struct PreviewCamera {
     u8 pad0[0x140];
-    struct Vec3 pos;
+    struct PreviewPosition pos;
 };
 
-extern struct Base D_00186F40;
-extern struct Anchor D_001E0408[];
+extern struct PreviewCamera preview_camera __asm__("D_00186F40");
+extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
-void FUN_0021e698(struct Obj *o) {
-    struct Owner *w = o->link->owner;
-    s32 i = o->link->index;
-    struct Anchor *a;
-    f32 side;
-    f32 fwd;
-    f32 c;
-    f32 s;
-    f32 nfwd;
+void update_item_preview_transform(struct ItemPreviewMoby *moby) __asm__("FUN_0021e698");
 
-    o->rot = w->rot;
-    o->x = (&D_00186F40.pos)->x + ((w->flags & 1) ? D_001E0408[i].x[0] : D_001E0408[i].x[1]);
-    o->y = (&D_00186F40.pos)->y + D_001E0408[i].y;
-    o->z = (&D_00186F40.pos)->z + D_001E0408[i].z;
-    fwd = D_001E0408[i].fwd;
-    side = D_001E0408[i].side;
-    c = fast_cos(o->rot);
-    nfwd = -fwd;
-    s = fast_sin(o->rot);
-    o->x += nfwd * s + side * c;
-    o->y += fwd * c + side * s;
+/* Position the selected item relative to the preview camera, then rotate
+   its two placement offsets in the X/Y plane. */
+void update_item_preview_transform(struct ItemPreviewMoby *moby) {
+    struct ItemPreviewBinding *preview = moby->preview_vars->owner;
+    s32 item_index = moby->preview_vars->item_index;
+    f32 side_offset;
+    f32 forward_offset;
+    f32 cosine;
+    f32 sine;
+    f32 negative_forward_offset;
+
+    moby->rotation_z = preview->rotation_angle;
+    moby->x = (&preview_camera.pos)->x + ((preview->flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
+    moby->y = (&preview_camera.pos)->y + preview_placements[item_index].y;
+    moby->z = (&preview_camera.pos)->z + preview_placements[item_index].z;
+    forward_offset = preview_placements[item_index].forward_offset;
+    side_offset = preview_placements[item_index].side_offset;
+    cosine = fast_cos(moby->rotation_z);
+    negative_forward_offset = -forward_offset;
+    sine = fast_sin(moby->rotation_z);
+    moby->x += negative_forward_offset * sine + side_offset * cosine;
+    moby->y += forward_offset * cosine + side_offset * sine;
 }
 #endif /* NON_MATCHING */

@@ -1,9 +1,11 @@
 #include "types.h"
-struct M2c_arg0 {
+struct ItemPreviewRotation {
     u8 pad_0[0x48];
-    f32 unk48;
+    f32 rotation_z;
 };
-extern f32 func_001FA580(f32, f32);
-void FUN_0021e1f8(struct M2c_arg0 *arg0) {
-    arg0->unk48 = func_001FA580(arg0->unk48, 0.01f);
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+void rotate_item_preview_moby(struct ItemPreviewRotation *moby) __asm__("FUN_0021e1f8");
+
+void rotate_item_preview_moby(struct ItemPreviewRotation *moby) {
+    moby->rotation_z = fast_add_rotations(moby->rotation_z, 0.01f);
 }

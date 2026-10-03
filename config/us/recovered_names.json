@@ -9055,7 +9055,7 @@
           },
           {
             "kind": "source_analysis",
-            "note": "Selects two resource-table pointers from the object type and, for some types, the current level identifier."
+            "note": "Reuses the active class resource or decompresses its registered WAD into a 0x18000-byte decode buffer; publishes the resource and original +0x2C word by class slot, prepares its render data, copies nonnegative runtime indices, and patches texture state for purchased gold weapons."
           }
         ],
         "logical_group_confidence": "medium"
@@ -14039,8 +14039,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "ui/menus/fun_002265d8",
-        "source_path": "src/ui/menus/fun_002265d8.c",
+        "unit": "ui/menus/queue_preview_animation",
+        "source_path": "src/ui/menus/queue_preview_animation.c",
         "address": "0x002265d8",
         "current_name": "FUN_002265d8",
         "proposed_name": null,
@@ -14056,8 +14056,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00226670",
-        "source_path": "src/ui/menus/fun_00226670.c",
+        "unit": "ui/menus/advance_preview_animation_queue",
+        "source_path": "src/ui/menus/advance_preview_animation_queue.c",
         "address": "0x00226670",
         "current_name": "FUN_00226670",
         "proposed_name": null,
@@ -14073,8 +14073,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00226718",
-        "source_path": "src/ui/menus/fun_00226718.c",
+        "unit": "ui/menus/clear_preview_animation_queue",
+        "source_path": "src/ui/menus/clear_preview_animation_queue.c",
         "address": "0x00226718",
         "current_name": "FUN_00226718",
         "proposed_name": null,
@@ -14090,8 +14090,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002267b8",
-        "source_path": "src/ui/menus/fun_002267b8.c",
+        "unit": "ui/menus/clear_preview_resource_bindings",
+        "source_path": "src/ui/menus/clear_preview_resource_bindings.c",
         "address": "0x002267b8",
         "current_name": "FUN_002267b8",
         "proposed_name": null,

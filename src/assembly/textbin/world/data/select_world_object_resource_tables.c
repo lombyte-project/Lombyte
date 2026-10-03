@@ -4,104 +4,111 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/select_world_object_resource_tables/FUN_00204a40.s", FUN_00204a40);
 #else
-/* Ported from rac1-decomp, the PAL decompilation notes (func_00205270, loaders.c). */
+#include "types.h"
+/* Verified against the US retail body at 0x00204a40. */
 #include "sda.h"
 
 typedef struct {
     char pad00[0x10];
-    int cls;
+    s32 class_id;
     char pad14[0x38];
 } GadgetRec;
 
-/* A moby class: +0x00 the sequences, +0x06 the sequence count, +0x07
-   the one to patch, +0x28 the 0x20-byte per-bank entries, +0x2C the
-   collision data. */
+/* Render groups at +0; the third group count and patch selector are at +6/+7.
+   The runtime table at +0x28 has 0x20-byte entries. The +0x2C meaning is unresolved. */
 typedef struct {
-    char *seqs;
+    char *render_groups;
     char pad04[2];
-    unsigned char seqCount;
-    unsigned char seq;
-} MobyClassHdr;
+    u8 third_render_group_count;
+    u8 patch_group_index;
+} ClassResourceHeader;
 
-extern int D_0015FF44 MACRO_ADDR;
-extern int D_0015FF48 MACRO_ADDR;
-extern int D_0015FF4C MACRO_ADDR;
-extern int D_0015FF50 MACRO_ADDR;
-extern int D_001CBAC0[];
-extern int D_001CBB20[];
-extern char D_001CBBE0[][0x10];
-extern short D_001CBD60[][0x10];
-extern char D_001CAAC0[];
-typedef struct { char pad[0x10]; char *p10; } Lvl;
-extern Lvl D_001940C0;
-extern unsigned char D_001B3AC0[] NOT_SDA;
-extern char *D_001B3200[] NOT_SDA;
-extern int D_001B6180[];
-extern GadgetRec D_001863D0[];
-extern unsigned char D_0013E520[];
-extern long D_0019E6F0[];
-extern void FlushCache(int);
-extern void func_0020B618(int, void *);
-extern void func_00203338(void *, void *, void *, int);
+extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
+extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
+extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
+extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
+extern s32 class_resource_ids[] __asm__("D_001CBAC0");
+extern s32 compressed_class_resources[] __asm__("D_001CBB20");
+extern char class_material_maps[][0x10] __asm__("D_001CBBE0");
+extern s16 class_runtime_indices[][0x10] __asm__("D_001CBD60");
+extern char resident_indexed_textures[] __asm__("D_001CAAC0");
+typedef struct {
+    u8 pad0[0x10];
+    char *decode_buffers;
+} LevelResourceBuffers;
+extern LevelResourceBuffers level_resource_buffers __asm__("D_001940C0");
+extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0") NOT_SDA;
+extern char *resident_class_resources[] __asm__("D_001B3200") NOT_SDA;
+/* Per-slot copy of the resource +0x2C word; its narrower meaning is unresolved. */
+extern s32 D_001B6180[];
+extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
+extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
+extern u64 gold_weapon_texture_state[] __asm__("D_0019E6F0");
+extern void FlushCache(s32);
+extern void decompress_wad(s32, void *) __asm__("func_0020B618");
+extern void prepare_resident_class_render_data(void *, void *, void *, s32) __asm__("func_00203338");
 
-void select_world_object_resource_tables(int cls, int mode) __asm__("FUN_00204a40");
+void select_world_object_resource_tables(s32 class_id, s32 buffer_index) __asm__("FUN_00204a40");
 
-void select_world_object_resource_tables(int cls, int mode) {
-    int i;
-    int n;
-    char *data;
-    int slot;
-    char **pp;
-    int flag;
-    int j;
+void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
+    s32 runtime_index;
+    s32 resource_table_index;
+    char *resource_data;
+    s32 class_slot;
+    s32 resource_tag;
+    s32 vendor_item_index;
 
-    if (D_0015FF4C >= 0 && D_001CBAC0[D_0015FF4C] == cls) {
+    if (active_class_resource_index >= 0 && class_resource_ids[active_class_resource_index] == class_id) {
         return;
     }
-    for (D_0015FF4C = 0; D_0015FF4C < D_0015FF48; D_0015FF4C++) {
-        if (D_001CBAC0[D_0015FF4C] == cls) {
+    for (active_class_resource_index = 0; active_class_resource_index < class_resource_count; active_class_resource_index++) {
+        if (class_resource_ids[active_class_resource_index] == class_id) {
             break;
         }
     }
-    if (mode == -1) {
-        mode = D_0015FF50 == 0;
+    if (buffer_index == -1) {
+        buffer_index = active_decode_buffer == 0;
     }
-    D_0015FF50 = mode;
-    data = D_001940C0.p10 + mode * 0x18000;
+    active_decode_buffer = buffer_index;
+    resource_data = level_resource_buffers.decode_buffers + buffer_index * 0x18000;
     FlushCache(0);
-    func_0020B618(D_001CBB20[D_0015FF4C], data);
+    decompress_wad(compressed_class_resources[active_class_resource_index], resource_data);
     FlushCache(0);
-    D_001B3200[slot = D_001B3AC0[cls]] = data;
-    D_001B6180[slot] = *(int *)(data + 0x2C);
-    func_00203338(data, D_001CAAC0, D_001CBBE0[D_0015FF4C], cls);
-    n = D_0015FF4C;
-    flag = D_0015FF44;
-    for (i = 0; i < 16; i++) {
-        short v = D_001CBD60[n][i];
-        if (v >= 0) {
-            *(short *)(*(char **)(D_001B3200[slot] + 0x28) + i * 0x20 + 0x1A) = v;
-            *(int *)(*(char **)(D_001B3200[slot] + 0x28) + i * 0x20 + 0x1C) = flag;
+    resident_class_resources[class_slot = resident_class_slot_by_id[class_id]] = resource_data;
+    D_001B6180[class_slot] = *(s32 *)(resource_data + 0x2C);
+    prepare_resident_class_render_data(resource_data, resident_indexed_textures, class_material_maps[active_class_resource_index], class_id);
+    resource_table_index = active_class_resource_index;
+    resource_tag = runtime_resource_tag;
+    for (runtime_index = 0; runtime_index < 16; runtime_index++) {
+        s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
+        if (runtime_entry_index >= 0) {
+            *(s16 *)(*(char **)(resident_class_resources[class_slot] + 0x28) + runtime_index * 0x20 + 0x1A) = runtime_entry_index;
+            *(s32 *)(*(char **)(resident_class_resources[class_slot] + 0x28) + runtime_index * 0x20 + 0x1C) = resource_tag;
         }
     }
-    for (j = 0; j < 0x25; j++) {
-        if (D_001863D0[j].cls == cls) {
-            MobyClassHdr *h;
-            char *seq;
-            char *e;
+    for (vendor_item_index = 0; vendor_item_index < 0x25; vendor_item_index++) {
+        if (vendor_item_definitions[vendor_item_index].class_id == class_id) {
+            ClassResourceHeader *resource_header;
+            char *render_group;
+            char *patch_packet;
 
-            if (D_0013E520[j] == 0) {
+            if (gold_weapon_purchased[vendor_item_index] == 0) {
                 return;
             }
-            h = (MobyClassHdr *)D_001B3200[slot];
-            if (h->seqCount == 0) {
+            resource_header = (ClassResourceHeader *)resident_class_resources[class_slot];
+            if (resource_header->third_render_group_count == 0) {
                 return;
             }
-            seq = h->seqs + h->seq * 0x10;
-            e = *(char **)seq + (*(int *)(seq + 4) - 4) * 0x10;
-            *(long *)(e + 0x20) = D_0019E6F0[0];
-            *(long *)(e + 0x30) = D_0019E6F0[2];
+            render_group = resource_header->render_groups + resource_header->patch_group_index * 0x10;
+            patch_packet = *(char **)render_group + (*(s32 *)(render_group + 4) - 4) * 0x10;
+            *(u64 *)(patch_packet + 0x20) = gold_weapon_texture_state[0];
+            *(u64 *)(patch_packet + 0x30) = gold_weapon_texture_state[2];
             return;
         }
     }
 }
+
+extern void func_00204A40(s32 class_id, s32 buffer_index)
+    __attribute__((alias("FUN_00204a40")));
+
 #endif /* NON_MATCHING */

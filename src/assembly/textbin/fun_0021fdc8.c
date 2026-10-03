@@ -5,343 +5,311 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021fdc8/FUN_0021fdc8.s", FUN_0021fdc8);
 #else
 #include "types.h"
-struct M2c_D_0013D290 {
+
+typedef struct {
+    s32 values[6];
+} LanguageResourceOffsets;
+extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
+
+struct SavePreviewState {
     u8 pad_0[0x8];
-    s32 unk8;
+    s32 menu_mode;
     u8 pad_C[0xC8];
-    s32 unkD4;
+    s32 card_operation_state;
     u8 pad_D8[0x4];
-    s32 unkDC;
+    s32 pending_card_operation;
 };
 
-struct M2c_D_001D5BF4 {
+struct MenuPreviewContext {
     u8 pad_0[0x40];
-    struct M2c_D_001D5BF4_unk40 * unk40;
+    struct MenuSelectionState *selection;
 };
 
-struct M2c_D_001D5BF4_unk40 {
-    u8 pad_0[0x3C];
-    s32 unk3C;
-    s32 unk40;
+struct MenuSelectionState {
+    u8 pad0[0x34];
+    s32 item_table_address;
+    u8 pad38[4];
+    s32 selected_group;
+    s32 selected_item;
+    u8 pad44[4];
+    s32 group_table_address;
 };
 
-struct M2c_arg0 {
+struct MenuResourceStream {
     u8 pad_0[0x30];
-    s32 unk30;
-    s32 unk34;
+    s32 entry_table_address;
+    s32 flags;
     u8 pad_38[0x8];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
+    s32 language_base_address;
+    s32 state;
+    s32 primary_buffer;
+    s32 secondary_buffer;
+    s32 primary_resource_index;
+    s32 secondary_resource_index;
+    s32 fixed_resource_index;
+    s32 elapsed_frames;
+    s32 read_offset;
 };
 
-struct M2c_temp_2_207 {
-    s32 unk0;
-    s32 unk4;
+struct MenuResourceEntry {
+    s32 sector;
+    s32 sector_count;
 };
 
-struct M2c_temp_2_215 {
-    s32 unk0;
-    s32 unk4;
-};
+extern struct SavePreviewState save_preview_state __asm__("D_0013D290");
+extern u8 skill_point_completed[] __asm__("D_0013D408");
+extern s16 cd_read_active[] __asm__("D_001516D8");
+extern s32 dialogue_language_column __asm__("D_0015ED88");
+extern s32 menu_resource_selection[] __asm__("D_001A0314");
+extern struct MenuPreviewContext *menu_preview_context[] __asm__("D_001D5BF4");
+extern s32 scale_game_frames() __asm__("func_001F96F8");
+extern s32 decompress_wad() __asm__("func_0020B618");
+extern s32 start_audio_stream_read() __asm__("func_00216788");
+/* Retail keeps separate flag-selected call sites for this shared read helper. */
+extern s32 start_audio_stream_read_alternate() __asm__("FUN_00216788");
+extern s32 get_stream_buffer_size() __asm__("func_00225D88");
+extern s32 mark_stream_buffer_read_active() __asm__("func_00225DD8");
+extern s32 clear_record_flag_by_key() __asm__("func_00225E20");
+s32 update_menu_resource_stream(struct MenuResourceStream *stream) __asm__("FUN_0021fdc8");
 
-struct M2c_temp_2_295 {
-    s32 unk0;
-    s32 unk4;
-};
+s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
+    LanguageResourceOffsets language_offsets;
+    s32 *completed_buffer_slot;
+    s32 primary_entry_offset;
+    s32 secondary_entry_offset;
+    s32 replacement_entry_offset;
+    s32 stream_flags;
+    s32 primary_read_offset;
+    s32 secondary_read_offset;
+    s32 replacement_read_offset;
+    s32 stream_state;
+    s32 primary_buffer;
+    s32 completed_buffer;
+    s32 secondary_buffer;
+    s32 replacement_buffer;
+    s32 selection_flags;
+    s32 resource_index;
+    s32 primary_read_address;
+    s32 secondary_read_address;
+    s32 replacement_read_address;
+    s32 primary_read_started;
+    s32 next_state;
+    s32 secondary_read_started;
+    s32 replacement_read_started;
+    struct MenuResourceEntry *primary_entry;
+    struct MenuResourceEntry *primary_entry_alternate;
+    struct MenuResourceEntry *secondary_entry;
+    struct MenuResourceEntry *secondary_entry_alternate;
+    struct MenuResourceEntry *replacement_entry;
+    struct MenuResourceEntry *replacement_entry_alternate;
+    struct MenuSelectionState *item_selection;
+    struct MenuSelectionState *group_selection;
 
-struct M2c_temp_2_303 {
-    s32 unk0;
-    s32 unk4;
-};
-
-struct M2c_temp_2_355 {
-    s32 unk0;
-    s32 unk4;
-};
-
-struct M2c_temp_2_363 {
-    s32 unk0;
-    s32 unk4;
-};
-
-struct M2c_temp_4_139 {
-    u8 pad_0[0x34];
-    s32 unk34;
-    u8 pad_38[0x8];
-    s32 unk40;
-};
-
-struct M2c_temp_4_80 {
-    u8 pad_0[0x3C];
-    s32 unk3C;
-    s32 unk40;
-    u8 pad_44[0x4];
-    s32 unk48;
-};
-
-extern struct M2c_D_0013D290 D_0013D290;
-extern u8 D_0013D408[];
-extern s32 D_001516D8;
-extern s32 D_0015ED88;
-extern s32 D_001A0314[];
-extern struct M2c_D_001D5BF4 *D_001D5BF4[];
-extern s32 func_001F96F8();
-extern s32 func_0020B618();
-extern s32 func_00216788();
-extern s32 func_00225D88();
-extern s32 func_00225DD8();
-extern s32 func_00225E20();
-s32 FUN_0021fdc8(struct M2c_arg0 *arg0) {
-u8 sp_slot[0x20];    s32 *temp_16_236;
-    s32 temp_16_140;
-    s32 temp_16_48;
-    s32 temp_16_50;
-    s32 temp_19_183;
-    s32 temp_19_271;
-    s32 temp_19_331;
-    s32 temp_2_153;
-    s32 temp_2_198;
-    s32 temp_2_286;
-    s32 temp_2_346;
-    s32 temp_3_165;
-    s32 temp_4_176;
-    s32 temp_4_239;
-    s32 temp_4_258;
-    s32 temp_4_321;
-    s32 temp_5_11;
-    s32 var_16_16;
-    s32 var_18_191;
-    s32 var_18_279;
-    s32 var_18_339;
-    s32 var_2_209;
-    s32 var_2_221;
-    s32 var_2_297;
-    s32 var_2_357;
-    struct M2c_temp_2_207 *temp_2_207;
-    struct M2c_temp_2_215 *temp_2_215;
-    struct M2c_temp_2_295 *temp_2_295;
-    struct M2c_temp_2_303 *temp_2_303;
-    struct M2c_temp_2_355 *temp_2_355;
-    struct M2c_temp_2_363 *temp_2_363;
-    struct M2c_temp_4_139 *temp_4_139;
-    struct M2c_temp_4_80 *temp_4_80;
-
-    temp_5_11 = arg0->unk34;
-    arg0->unk5C = (s32) (arg0->unk5C + 1);
-    if (temp_5_11 & 1) {
-        var_16_16 = arg0->unk58;
-        if (var_16_16 == -1) {
-
-        } else {
-            goto block_28;
+    selection_flags = stream->flags;
+    stream->elapsed_frames = (s32) (stream->elapsed_frames + 1);
+    if (selection_flags & 1) {
+        resource_index = stream->fixed_resource_index;
+        if (resource_index != -1) {
+            goto process_stream_state;
         }
     } else {
-        if (temp_5_11 & 2) {
-            var_16_16 = D_001A0314[0];
-        } else if (temp_5_11 & 4) {
-            var_16_16 = D_001D5BF4[0]->unk40->unk3C;
-        } else if (temp_5_11 & 0x100) {
-            temp_16_48 = D_001D5BF4[0]->unk40->unk40;
-            temp_16_50 = (temp_16_48 <= -1) ? 0 : temp_16_48;
-            var_16_16 = (temp_16_50 >= 5) ? 4 : temp_16_50;
-            if (D_0013D290.unkD4 < 3) {
-                if (D_0013D290.unkDC < 0) {
-                    if (arg0->unk44 == -1) {
-                        arg0->unk44 = 0;
+        if (selection_flags & 2) {
+            resource_index = menu_resource_selection[0];
+        } else if (selection_flags & 4) {
+            resource_index = menu_preview_context[0]->selection->selected_group;
+        } else if (selection_flags & 0x100) {
+            resource_index = menu_preview_context[0]->selection->selected_item;
+            if (resource_index < 0) {
+                resource_index = 0;
+            }
+            if (resource_index >= 5) {
+                resource_index = 4;
+            }
+            if (save_preview_state.card_operation_state < 3) {
+                if (save_preview_state.pending_card_operation < 0) {
+                    if (stream->state == -1) {
+                        stream->state = 0;
                     }
-                    var_16_16 = *(s32 *)((u8 *)((var_16_16 * 0x1C) + &D_0013D290) + 0x20);
-                    if (var_16_16 == -1) {
-                        arg0->unk44 = var_16_16;
+                    resource_index = *(s32 *)((u8 *)&save_preview_state + resource_index * 0x1C + 0x20);
+                    if (resource_index == -1) {
+                        stream->state = resource_index;
                     }
-                    if (D_0013D290.unk8 != 2) {
-                        arg0->unk44 = -1;
+                    if (save_preview_state.menu_mode != 2) {
+                        stream->state = -1;
                     }
                 } else {
-                    goto block_21;
+                    goto disable_stream;
                 }
             } else {
-                goto block_20;
+                goto disable_stream;
             }
-        } else if (temp_5_11 & 8) {
-            temp_4_80 = D_001D5BF4[0]->unk40;
-            var_16_16 = (s32) *(s16 *)((u8 *)((temp_4_80->unk3C * 0xA) + temp_4_80->unk48) + 0x8);
-            if (temp_4_80->unk40 == 0) {
-block_20:
-block_21:
-                arg0->unk44 = -1;
+        } else if (selection_flags & 8) {
+            group_selection = menu_preview_context[0]->selection;
+            resource_index = (s32) *(s16 *)((u8 *)((group_selection->selected_group * 0xA) + group_selection->group_table_address) + 0x8);
+            if (group_selection->selected_item == 0) {
+disable_stream:
+                stream->state = -1;
             }
-        } else if (temp_5_11 & 0x400) {
-            var_16_16 = (s32) ((s32) arg0->unk5C / func_001F96F8(0x12C, temp_5_11)) % 19;
-        } else if (temp_5_11 & 0x1000) {
-            /* m2c-unknown:  unknown instruction: ldl $v1, 0x7($a4)  */
-            /* m2c-unknown:  unknown instruction: ldr $v1, ($a4)  */
-            /* m2c-unknown:  unknown instruction: ldl $a2, 0xf($a4)  */
-            /* m2c-unknown:  unknown instruction: ldr $a2, 0x8($a4)  */
-            /* m2c-unknown:  unknown instruction: ldl $a3, 0x17($a4)  */
-            /* m2c-unknown:  unknown instruction: ldr $a3, 0x10($a4)  */
-            /* m2c-unknown:  unknown instruction: sdl $v1, 0x7($sp_slot)  */
-            /* m2c-unknown:  unknown instruction: sdr $v1, ($sp_slot)  */
-            /* m2c-unknown:  unknown instruction: sdl $a2, 0xf($sp_slot)  */
-            /* m2c-unknown:  unknown instruction: sdr $a2, 0x8($sp_slot)  */
-            /* m2c-unknown:  unknown instruction: sdl $a3, 0x17($sp_slot)  */
-            /* m2c-unknown:  unknown instruction: sdr $a3, 0x10($sp_slot)  */
-            var_16_16 = *(s32 *)arg0->unk40 + *(sp_slot + (D_0015ED88 * 4));
+        } else if (selection_flags & 0x400) {
+            resource_index = (s32) ((s32) stream->elapsed_frames / scale_game_frames(0x12C)) % 19;
+        } else if (selection_flags & 0x1000) {
+            language_offsets = menu_language_resource_offsets;
+            resource_index = *(s32 *)stream->language_base_address + language_offsets.values[dialogue_language_column];
         } else {
-            temp_4_139 = D_001D5BF4[0]->unk40;
-            temp_16_140 = temp_4_139->unk40;
-            var_16_16 = (temp_16_140 <= -1) ? 0 : temp_16_140;
-            if (temp_5_11 & 0x4000) {
-                var_16_16 = ((*(s32 *)((u8 *)(temp_4_139->unk34 + (var_16_16 * 0xC)) + 0x2) ^ 2) == 0) ? 9 : var_16_16;
+            item_selection = menu_preview_context[0]->selection;
+            resource_index = item_selection->selected_item;
+            if (resource_index < 0) {
+                resource_index = 0;
+            }
+            if (selection_flags & 0x4000) {
+                resource_index = (*(s16 *)((u8 *)(item_selection->item_table_address + (resource_index * 0xC)) + 0x2) == 2) ? 9 : resource_index;
             }
         }
-block_28:
-        temp_2_153 = arg0->unk34;
-        if (temp_2_153 & 0x2000) {
-            var_16_16 = (*(s32 *)(var_16_16 + D_0013D408) == 0) ? 0x1E : var_16_16;
+process_stream_state:
+        stream_flags = stream->flags;
+        if (stream_flags & 0x2000) {
+            resource_index = (skill_point_completed[resource_index] == 0) ? 0x1E : resource_index;
         }
-        temp_3_165 = arg0->unk44;
-        switch (temp_3_165) {
+        stream_state = stream->state;
+        switch (stream_state) {
         case 0:
-            temp_4_176 = arg0->unk48;
-            if (temp_4_176 != 0) {
-                if (*(s16 *)0x1516D8 == 0) {
-                    temp_19_183 = var_16_16 * 8;
-                    if (*(s32 *)((u8 *)(temp_19_183 + arg0->unk30) + 0x4) != 0) {
-                        var_18_191 = temp_4_176;
-                        if (arg0->unk34 & 0x20) {
-                            temp_2_198 = func_00225D88(temp_4_176, temp_2_153) - (*(s32 *)((u8 *)(temp_19_183 + arg0->unk30) + 0x4) << 0xB);
-                            arg0->unk60 = temp_2_198;
-                            var_18_191 += temp_2_198;
+            primary_buffer = stream->primary_buffer;
+            if (primary_buffer != 0) {
+                if (cd_read_active[0] == 0) {
+                    primary_entry_offset = resource_index * 8;
+                    if (*(s32 *)((u8 *)(primary_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                        primary_read_address = primary_buffer;
+                        if (stream->flags & 0x20) {
+                            primary_read_offset = get_stream_buffer_size(primary_buffer) - (*(s32 *)((u8 *)(primary_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                            stream->read_offset = primary_read_offset;
+                            primary_read_address += primary_read_offset;
                         }
-                        if (arg0->unk34 & 0x10) {
-                            temp_2_207 = temp_19_183 + arg0->unk30;
-                            var_2_209 = func_00216788(var_18_191, temp_2_207->unk0, temp_2_207->unk4);
+                        if (stream->flags & 0x10) {
+                            primary_entry = (struct MenuResourceEntry *)(primary_entry_offset + stream->entry_table_address);
+                            primary_read_started = start_audio_stream_read(primary_read_address, primary_entry->sector, primary_entry->sector_count);
                         } else {
-                            temp_2_215 = temp_19_183 + arg0->unk30;
-                            var_2_209 = func_00216788(var_18_191, temp_2_215->unk0, temp_2_215->unk4);
+                            primary_entry_alternate = (struct MenuResourceEntry *)(primary_entry_offset + stream->entry_table_address);
+                            primary_read_started = start_audio_stream_read_alternate(primary_read_address, primary_entry_alternate->sector, primary_entry_alternate->sector_count);
                         }
-                        var_2_221 = -1;
-                        if (var_2_209 == 0) {
-block_80:
-                            arg0->unk44 = var_2_221;
-                        } else {
-block_77:
-                            func_00225DD8(arg0->unk48);
-                            arg0->unk50 = var_16_16;
-block_78:
-                            arg0->unk44 = (s32) (arg0->unk44 + 1);
+                        if (primary_read_started == 0) {
+                            stream->state = -1;
+                            return 0;
                         }
+                        goto publish_primary_read;
                     }
                 }
-            } else {
-            default:
             }
             break;
         case 1:
         case 3:
         case 5:
-            if (*(s16 *)0x1516D8 == 0) {
-                if (temp_2_153 & 0x20) {
-                    temp_16_236 = ((u8 *)arg0) + 0x48 + ((arg0->unk44 == 3) * 4);
-                    func_00225E20(*temp_16_236, temp_2_153);
-                    temp_4_239 = *temp_16_236;
-                    func_0020B618(temp_4_239 + arg0->unk60, temp_4_239);
-                    arg0->unk60 = 0;
+            if (cd_read_active[0] == 0) {
+                completed_buffer_slot = (s32 *)((u8 *)stream + 0x48);
+                if (stream_flags & 0x20) {
+                    completed_buffer_slot += stream->state == 3;
+                    clear_record_flag_by_key(*completed_buffer_slot);
+                    completed_buffer = *completed_buffer_slot;
+                    decompress_wad(completed_buffer + stream->read_offset, completed_buffer);
+                    stream->read_offset = 0;
                 }
-                var_2_221 = arg0->unk44 + 1;
-                goto block_80;
+                next_state = stream->state + 1;
+                goto set_stream_state;
             }
             break;
         case 6:
-            arg0->unk44 = 2;
+            stream->state = 2;
             /* fallthrough */
         case 2:
-            if (var_16_16 != arg0->unk50) {
-                if (var_16_16 != arg0->unk54) {
-                    temp_4_258 = arg0->unk4C;
-                    if (temp_4_258 == 0) {
-                        arg0->unk44 = 0;
-                    } else if (*(s16 *)0x1516D8 == 0) {
-                        temp_19_271 = var_16_16 * 8;
-                        if (*(s32 *)((u8 *)(temp_19_271 + arg0->unk30) + 0x4) != 0) {
-                            var_18_279 = temp_4_258;
-                            if (arg0->unk34 & 0x20) {
-                                temp_2_286 = func_00225D88(temp_4_258, temp_2_153) - (*(s32 *)((u8 *)(temp_19_271 + arg0->unk30) + 0x4) << 0xB);
-                                arg0->unk60 = temp_2_286;
-                                var_18_279 += temp_2_286;
+            if (resource_index != stream->primary_resource_index) {
+                if (resource_index != stream->secondary_resource_index) {
+                    secondary_buffer = stream->secondary_buffer;
+                    if (secondary_buffer == 0) {
+                        stream->state = 0;
+                    } else if (cd_read_active[0] == 0) {
+                        secondary_entry_offset = resource_index * 8;
+                        if (*(s32 *)((u8 *)(secondary_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                            secondary_read_address = secondary_buffer;
+                            if (stream->flags & 0x20) {
+                                secondary_read_offset = get_stream_buffer_size(secondary_buffer) - (*(s32 *)((u8 *)(secondary_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                                stream->read_offset = secondary_read_offset;
+                                secondary_read_address += secondary_read_offset;
                             }
-                            if (arg0->unk34 & 0x10) {
-                                temp_2_295 = temp_19_271 + arg0->unk30;
-                                var_2_297 = func_00216788(var_18_279, temp_2_295->unk0, temp_2_295->unk4);
-    __asm__ volatile ("" : "+r" (var_2_297));
+                            if (stream->flags & 0x10) {
+                                secondary_entry = (struct MenuResourceEntry *)(secondary_entry_offset + stream->entry_table_address);
+                                secondary_read_started = start_audio_stream_read(secondary_read_address, secondary_entry->sector, secondary_entry->sector_count);
                             } else {
-                                temp_2_303 = temp_19_271 + arg0->unk30;
-                                var_2_297 = func_00216788(var_18_279, temp_2_303->unk0, temp_2_303->unk4);
+                                secondary_entry_alternate = (struct MenuResourceEntry *)(secondary_entry_offset + stream->entry_table_address);
+                                secondary_read_started = start_audio_stream_read_alternate(secondary_read_address, secondary_entry_alternate->sector, secondary_entry_alternate->sector_count);
                             }
-                            var_2_221 = -1;
-                            if (var_2_297 != 0) {
-                                func_00225DD8(arg0->unk4C);
-                                arg0->unk54 = var_16_16;
-                                goto block_78;
+                            next_state = -1;
+                            if (secondary_read_started != 0) {
+                                mark_stream_buffer_read_active(stream->secondary_buffer);
+                                stream->secondary_resource_index = resource_index;
+                                goto advance_stream_state;
                             }
-                            goto block_80;
+                            goto set_stream_state;
                         }
                     }
                 } else {
-                    var_2_221 = 4;
-                    goto block_80;
+                    next_state = 4;
+                    goto set_stream_state;
                 }
             }
             break;
         case 4:
-            if (var_16_16 != arg0->unk54) {
-                if (var_16_16 != arg0->unk50) {
-                    temp_4_321 = arg0->unk48;
-                    if (temp_4_321 != 0) {
-                        if (*(s16 *)0x1516D8 == 0) {
-                            temp_19_331 = var_16_16 * 8;
-                            if (*(s32 *)((u8 *)(temp_19_331 + arg0->unk30) + 0x4) != 0) {
-                                var_18_339 = temp_4_321;
-                                if (arg0->unk34 & 0x20) {
-                                    temp_2_346 = func_00225D88(temp_4_321, temp_2_153) - (*(s32 *)((u8 *)(temp_19_331 + arg0->unk30) + 0x4) << 0xB);
-                                    arg0->unk60 = temp_2_346;
-                                    var_18_339 += temp_2_346;
+            if (resource_index != stream->secondary_resource_index) {
+                if (resource_index != stream->primary_resource_index) {
+                    replacement_buffer = stream->primary_buffer;
+                    if (replacement_buffer != 0) {
+                        if (cd_read_active[0] == 0) {
+                            replacement_entry_offset = resource_index * 8;
+                            if (*(s32 *)((u8 *)(replacement_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                                replacement_read_address = replacement_buffer;
+                                if (stream->flags & 0x20) {
+                                    replacement_read_offset = get_stream_buffer_size(replacement_buffer) - (*(s32 *)((u8 *)(replacement_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                                    stream->read_offset = replacement_read_offset;
+                                    replacement_read_address += replacement_read_offset;
                                 }
-                                if (arg0->unk34 & 0x10) {
-                                    temp_2_355 = temp_19_331 + arg0->unk30;
-                                    var_2_357 = func_00216788(var_18_339, temp_2_355->unk0, temp_2_355->unk4);
+                                if (stream->flags & 0x10) {
+                                    replacement_entry = (struct MenuResourceEntry *)(replacement_entry_offset + stream->entry_table_address);
+                                    replacement_read_started = start_audio_stream_read(replacement_read_address, replacement_entry->sector, replacement_entry->sector_count);
                                 } else {
-                                    temp_2_363 = temp_19_331 + arg0->unk30;
-                                    var_2_357 = func_00216788(var_18_339, temp_2_363->unk0, temp_2_363->unk4);
+                                    replacement_entry_alternate = (struct MenuResourceEntry *)(replacement_entry_offset + stream->entry_table_address);
+                                    replacement_read_started = start_audio_stream_read_alternate(replacement_read_address, replacement_entry_alternate->sector, replacement_entry_alternate->sector_count);
                                 }
-                                var_2_221 = -1;
-                                if (var_2_357 != 0) {
-                                    goto block_77;
+                                next_state = -1;
+                                if (replacement_read_started != 0) {
+                                    goto publish_primary_read;
                                 }
-                                goto block_80;
+                                goto set_stream_state;
                             }
                         }
                     } else {
-                        var_2_221 = -1;
-                        goto block_80;
+                        next_state = -1;
+                        goto set_stream_state;
                     }
                 } else {
-                    var_2_221 = 2;
-                    goto block_80;
+                    next_state = 2;
+                    goto set_stream_state;
                 }
             }
+            break;
+        default:
             break;
         }
     }
     return 0;
+publish_primary_read:
+    mark_stream_buffer_read_active(stream->primary_buffer);
+    stream->primary_resource_index = resource_index;
+advance_stream_state:
+    stream->state = stream->state + 1;
+    return 0;
+set_stream_state:
+    stream->state = next_state;
+    return 0;
 }
 
-extern s32 func_0021FDC8(struct M2c_arg0 *arg0) __attribute__((alias("FUN_0021fdc8")));
+extern s32 func_0021FDC8(struct MenuResourceStream *stream) __attribute__((alias("FUN_0021fdc8")));
+
 #endif /* NON_MATCHING */

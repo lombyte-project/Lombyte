@@ -1,51 +1,46 @@
 #include "types.h"
-struct M2c_D_001D5BF4 {
+struct PreviewMenuGame {
     u8 pad_0[0x40];
-    struct M2c_temp_2_12 * unk40;
+    struct PreviewItemSelection * selection;
 };
 
-struct M2c_arg0 {
+struct ItemPreviewPair {
     u8 pad_0[0x44];
-    s32 unk44;
-    s32 unk48;
+    s32 primary_moby;
+    s32 secondary_moby;
 };
 
-struct M2c_temp_2_12 {
+struct PreviewItemSelection {
     u8 pad_0[0x3C];
-    s32 unk3C;
+    s32 index;
     u8 pad_40[0x8];
-    s32 unk48;
+    s32 table_address;
 };
 
-extern u8 D_0013D4C0[];
-extern struct M2c_D_001D5BF4 *D_001D5BF4[];
-extern s32 func_0020D330();
-s32 FUN_0021e608(struct M2c_arg0 *arg0) {
-    s32 temp_4_21;
-    s32 temp_4_29;
-    struct M2c_temp_2_12 *temp_2_12;
+extern u8 available_preview_items[] __asm__("D_0013D4C0");
+extern struct PreviewMenuGame *preview_menu_games[] __asm__("D_001D5BF4");
+extern s32 draw_moby_list() __asm__("func_0020D330");
+s32 draw_available_item_preview_mobys(struct ItemPreviewPair *preview) __asm__("FUN_0021e608");
 
-    temp_2_12 = D_001D5BF4[0]->unk40;
-    if (*(*(s16 *)((u8 *)((temp_2_12->unk3C * 0xA) + temp_2_12->unk48) + 0x6) + D_0013D4C0) == 0) {
-        goto block_2;
+s32 draw_available_item_preview_mobys(struct ItemPreviewPair *preview) {
+    s32 primary_moby;
+    s32 secondary_moby;
+    struct PreviewItemSelection *selection;
+
+    selection = preview_menu_games[0]->selection;
+    if (available_preview_items[*(s16 *)((u8 *)((selection->index * 0xA)
+                                              + selection->table_address) + 0x6)] == 0) {
+        return 0;
     }
-    temp_4_21 = arg0->unk44;
-    goto block_4;
-block_2:
-    return 0;
-block_4:
-    if (temp_4_21 == 0) {
-        goto block_6;
+    primary_moby = preview->primary_moby;
+    if (primary_moby != 0) {
+        draw_moby_list(primary_moby, 1);
     }
-    func_0020D330(temp_4_21, 1);
-block_6:
-    temp_4_29 = arg0->unk48;
-    if (temp_4_29 == 0) {
-        goto block_8;
+    secondary_moby = preview->secondary_moby;
+    if (secondary_moby != 0) {
+        draw_moby_list(secondary_moby, 1);
     }
-    func_0020D330(temp_4_29, 1);
-block_8:
     return 8;
 }
 
-/* ACCEPTED: attempt-2 (sn-O2) direct 100/100/100; spurious trailing call args dropped (callee FUN_0020D330 reads a0/a1 only). */
+/* draw_moby_list reads only the Moby address and selection arguments. */

@@ -1,56 +1,39 @@
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00225FB8). */
 #include "qcopy.h"
-extern void func_001FA2B8(void *, void *);
-extern char D_001863D0[];
-extern char D_001863D0_a[] __asm__("D_001863D0");
-extern int FUN_0020d580(void *);
-extern void FUN_0020def8(void *);
-extern void func_0020CCA8(int, int, void *);
-extern void func_00214128(void *);
-extern void FUN_0020e098(void *);
-extern void func_001E9480(void *, void *, int, int, int);
-typedef struct {
-    char pad00[0x10];
-    float pos[4];       /* 0x10 */
-    char pad20[4];
-    int sound;          /* 0x24 */
-    char pad28[0x28];
-    int x50;            /* 0x50 */
-    int x54;            /* 0x54 */
-    char pad58[0x10];
-    char *x68;          /* 0x68 */
-    char *x6C;          /* 0x6C */
-    char pad70[8];
-    char **cls;         /* 0x78 */
-    char pad7C[0x2A];
-    short oclass;       /* 0xA6 */
-    char padA8[0x18];
-    float mtx[16];      /* 0xC0 */
-} PauseMoby;
-/* Moby update: refresh its matrix from bone 4 of its class (+0x44),
-   copying the translation row to the position, re-register it, start
-   its idle sound (6 for class 0x1B1, else 0) on the D_001863D0 table
-   and reset the sound fields. */
-void FUN_00224d28(PauseMoby *m) {
-    float mtx[16];
-    int id = *(int *)(*m->cls + 0x44);
+#include "rnc/pause_moby_types.h"
+extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
+extern char preview_binding_table[] __asm__("D_001863D0");
+extern char preview_binding_table_alias[] __asm__("D_001863D0");
+extern int advance_moby_animation(void *) __asm__("FUN_0020d580");
+extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
+extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
+extern void normalize_vector_triplet(void *) __asm__("func_00214128");
+extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
+extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");
+/* Advance animation and publish bone 4's pose. Class 0x1B1 selects the
+   alternate arguments to the retail's empty pose hook. */
+void update_menu_preview_animation_transform(PauseMoby *moby) __asm__("FUN_00224d28");
 
-    FUN_0020d580(m);
-    FUN_0020def8(m);
-    func_0020CCA8(id, 4, mtx);
-    qcopy(m->pos, &mtx[12]);
-    func_001FA2B8(m->mtx, mtx);
-    func_00214128(m->mtx);
-    FUN_0020e098(m);
-    if (m->oclass == 0x1B1) {
-        func_001E9480(D_001863D0_a, D_001863D0, m->sound, 6, id);
+void update_menu_preview_animation_transform(PauseMoby *moby) {
+    f32 transform[16];
+    s32 source_moby_address = *(int *)(*moby->vars + 0x44);
+
+    advance_moby_animation(moby);
+    refresh_moby_spatial_bounds(moby);
+    build_moby_bone_transform(source_moby_address, 4, transform);
+    qcopy(moby->pos, &transform[12]);
+    copy_matrix3x4(moby->basis, transform);
+    normalize_vector_triplet(moby->basis);
+    refresh_moby_spatial_bounds_from_basis(moby);
+    if (moby->oclass == 0x1B1) {
+        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address, 6, source_moby_address);
     } else {
-        func_001E9480(D_001863D0_a, D_001863D0, m->sound, 0, id);
+        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address, 0, source_moby_address);
     }
-    m->x50 = 0;
-    m->x68 = D_001863D0;
-    m->x54 = 0;
-    m->x6C = D_001863D0;
+    moby->binding_state = 0;
+    moby->primary_binding = preview_binding_table;
+    moby->binding_blend_word = 0;
+    moby->secondary_binding = preview_binding_table;
 }
 
-extern __typeof__(FUN_00224d28) func_00224D28 __attribute__((alias("FUN_00224d28")));
+extern __typeof__(update_menu_preview_animation_transform) func_00224D28 __attribute__((alias("FUN_00224d28")));

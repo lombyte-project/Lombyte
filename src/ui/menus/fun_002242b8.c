@@ -12,7 +12,7 @@ struct MenuPreviewResources {
 extern struct MenuPreviewResources D_001D5BF0;
 extern s32 delete_moby() __asm__("FUN_00225530");
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
-extern s32 FUN_002267b8();
+extern void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 
 s32 release_menu_preview_objects(s32 preview_address) __asm__("FUN_002242b8");
 
@@ -37,7 +37,7 @@ s32 release_menu_preview_objects(s32 preview_address) {
     resources->unkC8 = 0xFF;
     resources->unkC9 = 0xFF;
     resources->unkCA = 0;
-    FUN_002267b8();
+    clear_preview_resource_bindings();
     resource_slot = ((u8 *)resources + 0xB0);
     do {
         resources_remaining -= 1;

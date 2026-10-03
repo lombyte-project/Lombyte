@@ -13,7 +13,7 @@ extern int FUN_00224fc0();
 extern int FillTransferWords();
 extern int func_00225490();
 extern int FUN_00225ac0();
-extern int FUN_00226718();
+extern s32 clear_preview_animation_queue(void) __asm__("FUN_00226718");
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
 
 int initialize_menu_preview_objects(char *preview) __asm__("FUN_002240c8");
@@ -26,7 +26,7 @@ int initialize_menu_preview_objects(char *preview) {
     int i, j;
 
     FUN_00225ac0(1);
-    FUN_00226718();
+    clear_preview_animation_queue();
     {
         unsigned char *g = D_001D5BF0;
 

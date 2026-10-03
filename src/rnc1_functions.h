@@ -129,6 +129,6 @@ void Func001E9460(void) __asm__("func_001E9460");
 int Func001E9468(void) __asm__("func_001E9468");
 void Func001E9470(void) __asm__("func_001E9470");
 void Func001E9478(void) __asm__("func_001E9478");
-void Func001E9480(void) __asm__("func_001E9480");
+void noop_callback_s(void) __asm__("func_001E9480");
 
 #endif

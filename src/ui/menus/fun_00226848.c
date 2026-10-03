@@ -1,83 +1,70 @@
-#include "types.h"
+#include "rnc/preview_animation.h"
 
-struct M2c_D_001D5BF0
-{
-  u8 pad_0[0xA8];
-  s32 unkA8;
-  s32 unkAC;
-};
-struct M2c_var_21_27
-{
-  s32 unk0;
-  s32 unk4;
-};
-extern u8 D_001B3200[];
-extern u8 D_001B3AC0[];
-extern u8 D_001D59D8[];
-extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern u8 D_001D5CA0[];
-extern u8 D_001D5D38[];
+extern u8 moby_class_resources[] __asm__("D_001B3200");
+extern u8 class_resource_slots[] __asm__("D_001B3AC0");
+extern u8 preview_resource_bindings[] __asm__("D_001D59D8");
+extern PreviewAnimationStreamState preview_stream_state __asm__("D_001D5BF0");
+extern u8 preview_resource_buffers[] __asm__("D_001D5CA0");
+extern u8 preview_resource_ids[] __asm__("D_001D5D38");
 extern s32 LookupResourceEntry();
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
-extern s32 func_0020B618();
-extern s32 func_00225D88();
-extern s32 func_00232F20();
-void FUN_00226848(s32 arg0, s32 arg1)
+extern s32 decompress_wad() __asm__("func_0020B618");
+extern s32 get_stream_buffer_size() __asm__("func_00225D88");
+extern s32 stash_receive_data() __asm__("func_00232F20");
+void load_preview_resource_bindings(s32 first_resource, s32 resource_count) __asm__("FUN_00226848");
+
+void load_preview_resource_bindings(s32 first_resource, s32 resource_count)
 {
-  s32 sp0;
-  register s32 *temp_3_76 asm("v1");
-  s32 temp_16_63;
-  s32 temp_17_58;
-  s32 temp_18_51;
-  s32 temp_19_47;
-  s32 temp_22_38;
-  s32 temp_3_54;
-  s32 var_16_32;
-  register s32 var_20_10 asm("s4");
-  s32 var_23_26;
-  u8 temp_30_34;
-  s32 *var_21_27;
-  sp0 = arg1;
-  var_20_10 = 0;
-  D_001D5BF0.unkAC = sp0;
-  D_001D5BF0.unkA8 = arg0;
-  if (sp0 > 0)
-  {
-    var_23_26 = arg0 * 4;
-    var_21_27 = (s32 *) (D_001D59D8 + (arg0 * 8));
-    do
-    {
-      var_16_32 = 0;
-      temp_30_34 = D_001B3AC0[var_21_27[0]];
-      temp_22_38 = var_21_27[1];
-      if (sp0 == 2)
-      {
-        if (var_20_10 == 1)
-        {
-          var_16_32 = 1;
-        }
-        else
-        {
-          var_16_32 = 0;
-        }
-      }
-      var_21_27 += 2;
-      temp_19_47 = *((s32 *) (D_001D5D38 + var_23_26));
-      var_23_26 += 4;
-      temp_18_51 = LookupResourceEntry(temp_19_47) * 0x10;
-      temp_3_54 = (var_20_10 + var_16_32) * 4;
-      var_20_10 += 1;
-      temp_17_58 = *((s32 *) (D_001D5CA0 + temp_3_54));
-      temp_16_63 = (temp_17_58 + func_00225D88(temp_17_58)) - temp_18_51;
-      func_00232F20(temp_16_63, temp_19_47, 0, -1, 0);
-      func_0020B618(temp_16_63, temp_17_58);
-      {
-        register s32 off asm("a0") = temp_22_38 * 4;
-        temp_3_76 = (temp_30_34 * 4) + D_001B3200;
-        *((s32 *) (((u8 *) ((*temp_3_76) + off)) + 0x48)) = temp_17_58;
-      }
-      relocate_asset_entry_pointers(*temp_3_76, temp_22_38);
+    s32 count;
+    register s32 *class_resource_slot;
+    s32 read_address;
+    s32 buffer_address;
+    s32 compressed_size;
+    s32 resource_id;
+    s32 animation_index;
+    s32 buffer_offset;
+    s32 buffer_skip;
+    /* Existing counter pin is still required for the retail register allocation. */
+    register s32 resource_index asm("s4");
+    s32 resource_offset;
+    u8 class_slot;
+    PreviewResourceBinding *binding;
+
+    count = resource_count;
+    resource_index = 0;
+    preview_stream_state.resource_count = count;
+    preview_stream_state.resource_first = first_resource;
+    if (count > 0) {
+        resource_offset = first_resource * 4;
+        binding = (PreviewResourceBinding *) (preview_resource_bindings + (first_resource * 8));
+        do {
+            buffer_skip = 0;
+            class_slot = class_resource_slots[binding->class_id];
+            animation_index = binding->animation_index;
+            /* Two bindings use resource buffers 0 and 2. */
+            if (count == 2) {
+                if (resource_index == 1) {
+                    buffer_skip = 1;
+                } else {
+                    buffer_skip = 0;
+                }
+            }
+            binding += 1;
+            resource_id = *((s32 *) (preview_resource_ids + resource_offset));
+            resource_offset += 4;
+            compressed_size = LookupResourceEntry(resource_id) * 0x10;
+            buffer_offset = (resource_index + buffer_skip) * 4;
+            resource_index += 1;
+            buffer_address = *((s32 *) (preview_resource_buffers + buffer_offset));
+            read_address = (buffer_address + get_stream_buffer_size(buffer_address)) - compressed_size;
+            stash_receive_data(read_address, resource_id, 0, -1, 0);
+            decompress_wad(read_address, buffer_address);
+            {
+                register s32 animation_offset = animation_index * 4;
+                class_resource_slot = (class_slot * 4) + moby_class_resources;
+                *((s32 *) (((u8 *) ((*class_resource_slot) + animation_offset)) + 0x48)) = buffer_address;
+            }
+            relocate_asset_entry_pointers(*class_resource_slot, animation_index);
+        } while (resource_index < count);
     }
-    while (var_20_10 < sp0);
-  }
 }

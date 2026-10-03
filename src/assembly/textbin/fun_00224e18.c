@@ -6,93 +6,78 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00224e18/FUN_00224e18.s
 #else
 /* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
-extern void func_001FA2B8(void *, void *);
-extern char D_001863D0[];
-extern char D_001863D0_a[] __asm__("D_001863D0");
-extern char D_001D5E50[];
-extern char D_001D5E10[];
-extern int func_0020D580(void *);
-extern void func_0020DEF8(void *);
-extern void func_0020CCA8(int, int, void *);
-extern void func_00214128(void *);
-extern void func_0020E098(void *);
-extern void func_001E9480(void *, void *, int, int, int);
-extern void func_0020CB88(int, void *);
-extern void func_0020CB10(int, int, void *);
-typedef struct {
-    char pad00[0x10];
-    float pos[4];       /* 0x10 */
-    char pad20[4];
-    int sound;          /* 0x24 */
-    char pad28[0x28];
-    int x50;            /* 0x50 */
-    int x54;            /* 0x54 */
-    char pad58[0x10];
-    char *x68;          /* 0x68 */
-    char *x6C;          /* 0x6C */
-    char pad70[8];
-    char **cls;         /* 0x78 */
-    char pad7C[0x2A];
-    short oclass;       /* 0xA6 */
-    char padA8[0x18];
-    float mtx[16];      /* 0xC0 */
-} PauseMoby;
+#include "rnc/pause_moby_types.h"
+extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
+extern char preview_binding_table[] __asm__("D_001863D0");
+extern char preview_binding_table_alias[] __asm__("D_001863D0");
+extern char first_preview_manipulator[] __asm__("D_001D5E50");
+extern char second_preview_manipulator[] __asm__("D_001D5E10");
+extern int advance_moby_animation(void *) __asm__("func_0020D580");
+extern void refresh_moby_spatial_bounds(void *) __asm__("func_0020DEF8");
+extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
+extern void normalize_vector_triplet(void *) __asm__("func_00214128");
+extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
+extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");
+extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
+extern void attach_manipulator(int, int, void *) __asm__("func_0020CB10");
 
-void FUN_00224e18(void *arg0) {
-    PauseMoby *m = arg0;
-    char **cls = m->cls;
-    float mtx[16];
-    int id = *(int *)(*cls + 0x44);
-    int self;
-    int syncA;
-    int syncB;
-    char *p;
-    char *q;
-    int snd;
+void update_menu_preview_pose_and_attachments(void *preview) __asm__("FUN_00224e18");
 
-    func_0020D580(m);
-    func_0020DEF8(m);
-    self = m == *(PauseMoby **)(*cls + 0x5C);
-    func_0020CCA8(id, self ? 3 : 2, mtx);
-    qcopy(m->pos, &mtx[12]);
-    func_001FA2B8(m->mtx, mtx);
-    func_00214128(m->mtx);
-    func_0020E098(m);
-    syncA = 0;
-    syncB = 0;
-    if ((unsigned char)D_001D5E50[1] != 0) {
-        syncA = 1;
-        func_0020CB88(id, D_001D5E50);
+void update_menu_preview_pose_and_attachments(void *preview) {
+    PauseMoby *moby = preview;
+    char **vars = moby->vars;
+    f32 transform[16];
+    s32 source_moby_address = *(int *)(*vars + 0x44);
+    s32 is_source_moby;
+    s32 first_attachment_active;
+    s32 second_attachment_active;
+    char *binding_table;
+    char *binding_table_alias;
+    s32 resource_address;
+
+    advance_moby_animation(moby);
+    refresh_moby_spatial_bounds(moby);
+    is_source_moby = moby == *(PauseMoby **)(*vars + 0x5C);
+    build_moby_bone_transform(source_moby_address, is_source_moby ? 3 : 2, transform);
+    qcopy(moby->pos, &transform[12]);
+    copy_matrix3x4(moby->basis, transform);
+    normalize_vector_triplet(moby->basis);
+    refresh_moby_spatial_bounds_from_basis(moby);
+    first_attachment_active = 0;
+    second_attachment_active = 0;
+    if ((unsigned char)first_preview_manipulator[1] != 0) {
+        first_attachment_active = 1;
+        detach_manipulator(source_moby_address, first_preview_manipulator);
     }
-    if ((unsigned char)D_001D5E10[1] != 0) {
-        syncB = 1;
-        func_0020CB88(id, D_001D5E10);
+    if ((unsigned char)second_preview_manipulator[1] != 0) {
+        second_attachment_active = 1;
+        detach_manipulator(source_moby_address, second_preview_manipulator);
     }
-    if (!self) {
-        p = D_001863D0;
-        q = D_001863D0_a;
-        snd = m->sound;
+    if (!is_source_moby) {
+        binding_table = preview_binding_table;
+        binding_table_alias = preview_binding_table_alias;
+        resource_address = moby->resource_address;
     } else {
-        q = D_001863D0_a;
-        p = D_001863D0;
-        snd = m->sound;
+        binding_table_alias = preview_binding_table_alias;
+        binding_table = preview_binding_table;
+        resource_address = moby->resource_address;
     }
-    func_001E9480(q, p, snd, 0, id);
-    m->x68 = p;
-    m->x6C = p;
-    if (syncA) {
-        func_0020CB10(id, 0x17, D_001D5E50);
-        *(int *)(D_001D5E50 + 0x20) = 0;
-        *(int *)(D_001D5E50 + 0x24) = 0;
-        *(int *)(D_001D5E50 + 0x28) = 0;
+    noop_callback_s(binding_table_alias, binding_table, resource_address, 0, source_moby_address);
+    moby->primary_binding = binding_table;
+    moby->secondary_binding = binding_table;
+    if (first_attachment_active) {
+        attach_manipulator(source_moby_address, 0x17, first_preview_manipulator);
+        *(int *)(first_preview_manipulator + 0x20) = 0;
+        *(int *)(first_preview_manipulator + 0x24) = 0;
+        *(int *)(first_preview_manipulator + 0x28) = 0;
     }
-    if (syncB) {
-        func_0020CB10(id, 0x16, D_001D5E10);
-        *(int *)(D_001D5E10 + 0x20) = 0;
-        *(int *)(D_001D5E10 + 0x24) = 0;
-        *(int *)(D_001D5E10 + 0x28) = 0;
+    if (second_attachment_active) {
+        attach_manipulator(source_moby_address, 0x16, second_preview_manipulator);
+        *(int *)(second_preview_manipulator + 0x20) = 0;
+        *(int *)(second_preview_manipulator + 0x24) = 0;
+        *(int *)(second_preview_manipulator + 0x28) = 0;
     }
-    m->x54 = 0;
-    m->x50 = 0;
+    moby->binding_blend_word = 0;
+    moby->binding_state = 0;
 }
 #endif /* NON_MATCHING */

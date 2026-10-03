@@ -1,6 +1,6 @@
 #include "rnc1_functions.h"
 
-void Func001E9480(void)
+void noop_callback_s(void)
 {
     return;
 }

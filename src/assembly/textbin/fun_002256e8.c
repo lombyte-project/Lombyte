@@ -8,164 +8,166 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002256e8/FUN_002256e8.s
 
 typedef struct {
     u8 pad_0[0x20];
-    u8 sub;
+    u8 phase;
     u8 pad_21[0x52 - 0x21];
-    u8 b52;
-    u8 b53;
+    u8 primary_animation;
+    u8 secondary_animation;
     u8 pad_54[0x70 - 0x54];
-    u8 flags;
+    u8 transition_flags;
     u8 pad_71[0xBC - 0x71];
-    u8 cnt;
-} Track;
+    u8 elapsed_frames;
+} StreamedAnimationMoby;
 
 typedef struct {
     u8 pad_0[0x48];
-    u8 *ptrs[4];
-} Obj;
+    u8 *animation_tables[4];
+} StreamedClassResource;
 
 typedef struct {
-    s32 off;
+    s32 offset;
     s32 pad;
-} Hdr;
+} AnimationTableHeader;
 
 typedef struct {
     u8 pad_0[0x34];
     s32 state;
     s32 pad_38;
-    u8 *base;
-    s32 off;
-    Track *t;
-} Stream;
+    u8 *buffer;
+    s32 read_offset;
+    StreamedAnimationMoby *moby;
+} MobyAnimationStream;
 
-extern s32 D_00137B80[];
-extern s16 D_001516D8[];
-extern s32 D_001516EC[];
-extern s16 D_0015172A[];
-extern s32 D_0015ED88;
-extern s32 D_0015EE20;
-extern Obj *D_001B3200[];
-extern u8 D_001B4265[];
-extern u8 D_001D5CBB[];
+extern s32 level_archive[] __asm__("D_00137B80");
+extern s16 cd_read_active[] __asm__("D_001516D8");
+extern s32 queued_dialogue_id[] __asm__("D_001516EC");
+extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
+extern s32 dialogue_language __asm__("D_0015ED88");
+extern s32 alternate_animation_sequence __asm__("D_0015EE20");
+extern StreamedClassResource *moby_class_resources[] __asm__("D_001B3200");
+extern u8 streamed_moby_class_slot[] __asm__("D_001B4265");
+extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
 
-extern s32 func_001F96F8(s32) __asm__("FUN_001f96f8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
-extern void func_0020B618(u8 *, u8 *) __asm__("FUN_0020b618");
+extern void decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern s32 FUN_00225dd8(u8 *);
 
-s32 fun_002256e8(Stream *s) __asm__("FUN_002256e8");
+s32 update_streamed_moby_animation(MobyAnimationStream *stream) __asm__("FUN_002256e8");
 
-s32 fun_002256e8(Stream *s) {
-    Track *t;
-    Hdr *h;
-    Obj **obj;
-    s32 off;
-    s32 i;
-    s32 n;
-    s32 k;
+s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
+    StreamedAnimationMoby *moby;
+    AnimationTableHeader *header;
+    StreamedClassResource **class_resource;
+    s32 table_index;
+    s32 dialogue_column;
+    u8 *animation_table;
+    s32 animation_index;
 
-    switch (s->state) {
+    switch (stream->state) {
     case 0:
-        if (D_001516D8[0] != 0) {
+        if (cd_read_active[0] != 0) {
             break;
         }
-        i = 0x4F000 - (D_00137B80[0x1614 / 4] << 11);
-        if (start_audio_stream_read(s->base + i, D_00137B80[0x1610 / 4], D_00137B80[0x1614 / 4]) != 0) {
-            s->off = i;
-            s->state = 1;
-            D_001D5CBB[0] = 1;
-            FUN_00225dd8(s->base);
+        table_index = 0x4F000 - (level_archive[0x1614 / 4] << 11);
+        if (start_audio_stream_read(stream->buffer + table_index, level_archive[0x1610 / 4], level_archive[0x1614 / 4]) != 0) {
+            stream->read_offset = table_index;
+            stream->state = 1;
+            animation_asset_read_active[0] = 1;
+            FUN_00225dd8(stream->buffer);
             return 0;
         }
-        s->state = 3;
+        stream->state = 3;
         break;
     case 1:
-        if (D_001516D8[0] != 0) {
+        /* Decompress the completed read and relocate three animation tables. */
+        if (cd_read_active[0] != 0) {
             break;
         }
-        D_001D5CBB[0] = 0;
-        func_0020B618(s->base + s->off, s->base);
-        obj = &D_001B3200[D_001B4265[0]];
-        h = (Hdr *)s->base;
-        i = 0;
+        animation_asset_read_active[0] = 0;
+        decompress_wad(stream->buffer + stream->read_offset, stream->buffer);
+        class_resource = &moby_class_resources[streamed_moby_class_slot[0]];
+        header = (AnimationTableHeader *)stream->buffer;
+        table_index = 0;
     next:
-        n = (s32)(s->base + h[i].off);
-        i++;
-        (*obj)->ptrs[i] = (u8 *)n;
-        relocate_asset_entry_pointers(*obj, i);
-        if (i < 3) {
+        animation_table = stream->buffer + header[table_index].offset;
+        table_index++;
+        (*class_resource)->animation_tables[table_index] = animation_table;
+        relocate_asset_entry_pointers(*class_resource, table_index);
+        if (table_index < 3) {
             goto next;
         }
-        s->state = 2;
-        if (D_0015EE20 == 0) {
-            s->t->sub = 0;
+        stream->state = 2;
+        if (alternate_animation_sequence == 0) {
+            stream->moby->phase = 0;
         } else {
-            s->t->sub = 4;
+            stream->moby->phase = 4;
         }
-        s->t->cnt = 0;
+        stream->moby->elapsed_frames = 0;
         break;
     case 2:
-        t = s->t;
-        switch (t->sub) {
+        /* Even phases queue dialogue; odd phases wait for animation completion. */
+        moby = stream->moby;
+        switch (moby->phase) {
         case 0:
         case 2:
         case 4:
-            n = D_0015ED88 - 1;
-            if (n < 0) {
-                n = 0;
+            dialogue_column = dialogue_language - 1;
+            if (dialogue_column < 0) {
+                dialogue_column = 0;
             }
-            k = t->sub >> 1;
-            if (t->cnt == 0) {
-                D_001516EC[0] = k * 6 + n + 60000;
+            animation_index = moby->phase >> 1;
+            if (moby->elapsed_frames == 0) {
+                queued_dialogue_id[0] = animation_index * 6 + dialogue_column + 60000;
             }
-            t->cnt++;
-            if (t->cnt > func_001F96F8(0x78)) {
-                t->cnt = func_001F96F8(0x78);
+            moby->elapsed_frames++;
+            if (moby->elapsed_frames > scale_game_frames(0x78)) {
+                moby->elapsed_frames = scale_game_frames(0x78);
             }
-            if (t->cnt < func_001F96F8(0x78)) {
+            if (moby->elapsed_frames < scale_game_frames(0x78)) {
                 return 0;
             }
-            if (D_0015172A[0] != 3) {
+            if (dialogue_playback_phase[0] != 3) {
                 return 0;
             }
-            t->cnt = 0;
-            t->sub++;
-            blend_moby_animation(t, k + 1, 0, func_001F96F8(0x18));
+            moby->elapsed_frames = 0;
+            moby->phase++;
+            blend_moby_animation(moby, animation_index + 1, 0, scale_game_frames(0x18));
             break;
         case 1:
         case 3:
         case 5:
-            if (t->cnt == 0 && t->b52 == t->b53) {
+            if (moby->elapsed_frames == 0 && moby->primary_animation == moby->secondary_animation) {
                 continue_audio_stream_if_ready();
-                t->cnt = 1;
+                moby->elapsed_frames = 1;
             }
-            if (t->flags & 2) {
-                if (t->sub == 1) {
-                    t->sub = t->sub + 1;
+            if (moby->transition_flags & 2) {
+                if (moby->phase == 1) {
+                    moby->phase = moby->phase + 1;
                 } else {
-                    t->sub = 6;
+                    moby->phase = 6;
                 }
-                t->cnt = 0;
-                blend_moby_animation(t, 0, 0, func_001F96F8(0x18));
+                moby->elapsed_frames = 0;
+                blend_moby_animation(moby, 0, 0, scale_game_frames(0x18));
                 break;
             }
             break;
         case 6:
-            t->cnt++;
-            if (t->cnt > func_001F96F8(0xF0)) {
-                t->cnt = func_001F96F8(0xF0);
+            moby->elapsed_frames++;
+            if (moby->elapsed_frames > scale_game_frames(0xF0)) {
+                moby->elapsed_frames = scale_game_frames(0xF0);
             }
-            if (t->cnt < func_001F96F8(0xF0)) {
+            if (moby->elapsed_frames < scale_game_frames(0xF0)) {
                 return 0;
             }
-            if (D_0015EE20 == 0) {
-                t->sub = 0;
+            if (alternate_animation_sequence == 0) {
+                moby->phase = 0;
             } else {
-                t->sub = 4;
+                moby->phase = 4;
             }
-            t->cnt = 0;
+            moby->elapsed_frames = 0;
             break;
         }
         break;

@@ -133,15 +133,15 @@ extern float D_001D5E90[];
 extern s32 D_001D5EA8[];
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
-extern void func_00204A40(s32, s32);
+extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void func_0020CB10(s32, s32, AnimGroup *);
 extern void func_0020CB88(s32, AnimGroup *);
 extern void func_00212F90(void *, int, int, int);
 extern Moby *func_00225490(s32);
 extern Moby *func_00225530(Moby *);
 extern void func_00225E70(s32, Moby *, Moby *, s32 *, s32 *, s32 *);
-extern s32 func_002265D8(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32);
-extern void func_00226718(void);
+extern s32 queue_preview_animation(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_002265D8");
+extern s32 clear_preview_animation_queue(void) __asm__("func_00226718");
 extern void func_00224B70();
 extern void func_00224D28();
 extern void func_00224E18();
@@ -187,7 +187,7 @@ s32 load_hand_gadget(Hand *h)
       func_001E9470(0, 0);
     }
     D_0015FF50 = D_001D5BF0.x118 == 0;
-    func_00204A40(cls0, -1);
+    select_world_object_resource_tables(cls0, -1);
     D_001D5BF0.x11C = cls0;
     D_001D5BF0.x118 = D_0015FF50;
     D_001D5BF0.x140 = cls0;
@@ -393,11 +393,11 @@ s32 load_hand_gadget(Hand *h)
   if (((gadget != D_001D5BF0.cur) && (gadget > 0)) && (gadget < 0x24))
   {
     D_001D5BF0.cur = gadget;
-    func_00226718();
-    func_002265D8(D_001D52E8[gadget].x8 + D_001D5BF0.xCC, 0, D_001D52E8[gadget].xC, gadget, D_001D52E8[gadget].x10, D_001D52E8[gadget].x18, D_001D52E8[gadget].x1C, D_001D52E8[gadget].x20, D_001D52E8[gadget].x24, D_001D52E8[gadget].x28, D_001D52E8[gadget].x2C, D_001D52E8[gadget].x0, D_001D52E8[gadget].x4);
+    clear_preview_animation_queue();
+    queue_preview_animation(D_001D52E8[gadget].x8 + D_001D5BF0.xCC, 0, D_001D52E8[gadget].xC, gadget, D_001D52E8[gadget].x10, D_001D52E8[gadget].x18, D_001D52E8[gadget].x1C, D_001D52E8[gadget].x20, D_001D52E8[gadget].x24, D_001D52E8[gadget].x28, D_001D52E8[gadget].x2C, D_001D52E8[gadget].x0, D_001D52E8[gadget].x4);
     if (D_001D52E8[gadget].xC != 0)
     {
-      func_002265D8(D_001D52E8[gadget].x14 + D_001D5BF0.xCC, 2, 0, gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
+      queue_preview_animation(D_001D52E8[gadget].x14 + D_001D5BF0.xCC, 2, 0, gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
     }
   }
   for (i = 0; i < 0x18; i++)
