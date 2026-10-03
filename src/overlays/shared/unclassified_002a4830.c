@@ -548,8 +548,8 @@ int FUN_L00_002a7d90(void) {
     return r;
 }
 extern int D_L00_00173E58 __attribute__((section(".data")));
-char *FUN_L00_002603d0(int);
-int FUN_L00_002a7de0(void) { char *p = FUN_L00_002603d0(D_L00_00173E58); if (p && (*(unsigned short *)(p + 0x1e) & 2)) return 1; return 0; }
+char *FUN_L00_0025c338(int);
+int FUN_L00_002a7de0(void) { char *p = FUN_L00_0025c338(D_L00_00173E58); if (p && (*(unsigned short *)(p + 0x1e) & 2)) return 1; return 0; }
 typedef int ti_2a7e20 __attribute__((mode(TI)));
 extern float rndf_2a7e20(float, float) __asm__("FUN_002132a8");
 extern int rndi_2a7e20(int) __asm__("FUN_00213260");

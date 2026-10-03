@@ -465,6 +465,9 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a7a8.s", FUN_L00_0023a7a8);
+#else
 int FUN_L00_0023a7a8(char *m) {
     char buf[16];
     char *q = m + 0x70;
@@ -511,6 +514,7 @@ int FUN_L00_0023a7a8(char *m) {
     }
     return *(int *)(m + 0x58);
 }
+#endif /* NON_MATCHING */
 typedef struct {
     unsigned short id;
     unsigned short n;

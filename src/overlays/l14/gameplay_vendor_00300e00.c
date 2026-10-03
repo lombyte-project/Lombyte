@@ -13,6 +13,9 @@ extern u8 *D_L14_00167500;
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
  * constants, and set both floats on the record itself. */
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003135b8.s", FUN_L14_003135b8);
+#else
 void FUN_L14_003135b8(u8 *arg0)
 {
     u8 *g = D_L14_00167500;
@@ -30,15 +33,20 @@ void FUN_L14_003135b8(u8 *arg0)
     *(f32 *)(p + 0xA0) = 7.0f;
     *(f32 *)(p + 0xB0) = 2.0f;
 }
+#endif /* NON_MATCHING */
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
  * object's field at 0x7E as 3. */
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003167e0.s", FUN_L14_003167e0);
+#else
 void FUN_L14_003167e0(u8 *arg0)
 {
     if (D_001413DC != 0x0F) {
         *(s16 *)(arg0 + 0x7E) = 3;
     }
 }
+#endif /* NON_MATCHING */
 
 
 extern u8 *FUN_0020c4f8(s32);

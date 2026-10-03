@@ -4,8 +4,8 @@
 *.chd
 *.zso
 config/us/SCUS_971.99
-# Level code overlays (records, manifests, generated asm): restored from the
-# private tooling checkout by its setup, never committed here
+# Level code overlays (records, manifests, generated asm): extracted from your
+# own disc image by scripts/overlay-extract.py, never committed here
 config/us/overlays/
 
 # Disc images / build output (drop a legally owned dump into dumps/)

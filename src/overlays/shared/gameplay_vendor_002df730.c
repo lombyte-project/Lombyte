@@ -1406,6 +1406,9 @@ extern int D_L00_00161D90_2e89b0 __asm__("D_L00_00161D90") __attribute__((sda));
 extern G_2e89b0 D_00141848_2e89b0 __asm__("D_00141848");
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e89b0.s", FUN_L00_002e89b0);
+#else
 void FUN_L00_002e89b0(char *o, float *a, float *b) {
     S_2e89b0 *s = (S_2e89b0 *)(*(char **)(o + 0x70) + 0x1A8);
     G_2e89b0 *g;
@@ -1455,6 +1458,7 @@ void FUN_L00_002e89b0(char *o, float *a, float *b) {
         }
     }
 }
+#endif /* NON_MATCHING */
 typedef float V_2e8bb8[4] __attribute__((aligned(16)));
 extern float D_L00_00161CAC_2e8bb8 __asm__("D_L00_00161CAC") __attribute__((sda));
 extern float D_L00_00161CB0_2e8bb8 __asm__("D_L00_00161CB0") __attribute__((sda));

@@ -375,6 +375,9 @@ extern signed char D_L15_00161ACF[] MACRO_ADDR;
 void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cbd88.s", FUN_L15_002cbd88);
+#else
 void FUN_L15_002cbd88(void) {
     int n = scale_game_frames(*(int *)&D_L15_00161AD4_d);
     float d = ConvertIntegerToFloat(n);
@@ -387,6 +390,7 @@ void FUN_L15_002cbd88(void) {
     k = *(int *)&D_L15_00161ACC_d;
     emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
 }
+#endif /* NON_MATCHING */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));

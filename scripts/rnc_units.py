@@ -25,6 +25,7 @@ FUNC_DEF_RE = re.compile(
 )
 INCLUDE_ASM_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*([A-Za-z_]\w*)\s*\)')
 ADDR_SYMBOL_RE = re.compile(r"^(?:FUN_|func_|D_|DAT_)[0-9A-Fa-f]+$")
+OVERLAY_NAME = re.compile(r"^FUN_L\d{2}_[0-9a-f]{8}$")
 
 CONFIG_PATH = Path("config") / "us" / "rnc1.us.yaml"
 CATEGORY_PATH = Path("config") / "us" / "unit_categories.json"
