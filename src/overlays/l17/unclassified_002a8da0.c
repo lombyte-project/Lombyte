@@ -53,7 +53,67 @@ void FUN_L17_002cbc10(char *m) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a8da0.s", FUN_L17_002a8da0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a95b8.s", FUN_L17_002a95b8);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+typedef int u128_a95b8 __attribute__((mode(TI)));
+typedef struct {
+    char pad[0x40];
+    unsigned int w[4];
+    struct { float a, b; } f[4];
+    long z70;
+    long z78;
+    long q80;
+    long q88;
+} S_a95b8;
+extern void func_001F9BF0_a95b8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_001F9CA0_a95b8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void func_L00_001FF4B0_a95b8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
+extern void func_001F9BD8_a95b8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
+extern char D_L17_00167740_a95b8[] __asm__("D_L17_001676C0");
+extern struct { float a, b; } D_L17_001E6620_a95b8[4] __asm__("D_L17_001E6320");
+void FUN_L17_002a95b8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    S_a95b8 s;
+    char m1[16];
+    char m2[16];
+    char m3[16];
+    char m0[16];
+    int i;
+    func_001F9BF0_a95b8(m3, d + 0x10, d + 0x20);
+    func_001F9BF0_a95b8(m1, d + 0x10, D_L17_00167740_a95b8);
+    func_001F9BF0_a95b8(m2, d + 0x20, D_L17_00167740_a95b8);
+    func_001F9CA0_a95b8(m1, m1, m3);
+    func_L00_001FF4B0_a95b8(m1, m1, *(float *)(d + 0x4C));
+    func_001F9CA0_a95b8(m2, m2, m3);
+    func_L00_001FF4B0_a95b8(m2, m2, *(float *)(d + 0x4C));
+    s.z78 = func_001F4868_a95b8(0xE);
+    s.q80 = 0xFF9000000260L;
+    s.q88 = 0x8000000048L;
+    s.z70 = 0;
+    s.w[3] = 0x80243278;
+    s.w[2] = 0x80243278;
+    s.w[1] = 0x80243278;
+    s.w[0] = 0x80243278;
+    for (i = 0; i < 4; i++) {
+        s.f[i].a = D_L17_001E6620_a95b8[i].a;
+        s.f[i].b = D_L17_001E6620_a95b8[i].b;
+    }
+    func_001F9BF0_a95b8(m0, d + 0x10, m1);
+    *(u128_a95b8 *)(s.pad + 0) = *(u128_a95b8 *)m0;
+    func_001F9BD8_a95b8(m0, d + 0x10, m1);
+    *(u128_a95b8 *)(s.pad + 0x10) = *(u128_a95b8 *)m0;
+    func_001F9BF0_a95b8(m0, d + 0x20, m2);
+    *(u128_a95b8 *)(s.pad + 0x20) = *(u128_a95b8 *)m0;
+    func_001F9BD8_a95b8(m0, d + 0x20, m2);
+    *(u128_a95b8 *)(s.pad + 0x30) = *(u128_a95b8 *)m0;
+    func_L00_001FD1D8_a95b8(&s, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cb310.s", FUN_L17_002cb310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d77f0.s", FUN_L17_002d77f0);

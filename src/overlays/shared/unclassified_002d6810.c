@@ -103,7 +103,48 @@ void FUN_L15_002d77c0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d79e8.s", FUN_L15_002d79e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d7bb0.s", FUN_L15_002d7bb0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d8710.s", FUN_L15_002d8710);
+extern float D_0015ED60_8710 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
+extern char D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
+extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8") __attribute__((section(".sdata")));
+extern int D_L15_00161CCA_8710 __asm__("D_L15_00161CCA") __attribute__((section(".sdata")));
+extern int D_L15_00161CCC_8710 __asm__("D_L15_00161CCC") __attribute__((section(".sdata")));
+extern int D_L15_00161CCE_8710 __asm__("D_L15_00161CCE") __attribute__((section(".sdata")));
+extern short D_L15_00161C58_8710 __asm__("D_L15_00161C58") __attribute__((sda));
+extern short D_L15_00161C54_8710 __asm__("D_L15_00161C54") __attribute__((sda));
+extern short D_L15_00161C3C_8710 __asm__("D_L15_00161C3C") __attribute__((sda));
+extern short D_L15_00161C44_8710 __asm__("D_L15_00161C44") __attribute__((sda));
+extern short D_L15_00161C64_8710 __asm__("D_L15_00161C64") __attribute__((sda));
+extern short D_L15_00161C68_8710 __asm__("D_L15_00161C68") __attribute__((sda));
+extern short D_L15_00161C9C_8710 __asm__("D_L15_00161C9C") __attribute__((sda));
+extern short D_L15_00161C6C_8710 __asm__("D_L15_00161C6C") __attribute__((sda));
+extern short D_L15_00161C70_8710 __asm__("D_L15_00161C70") __attribute__((sda));
+extern short D_L15_00161C74_8710 __asm__("D_L15_00161C74") __attribute__((sda));
+extern short D_L15_00161C78_8710 __asm__("D_L15_00161C78") __attribute__((sda));
+extern short D_L15_00161CA0_8710 __asm__("D_L15_00161CA0") __attribute__((sda));
+extern void FUN_L00_002baae0_8710(char *, int, int, int, float, float, float) __asm__("FUN_L00_002baae0");
+extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
+#define F(x) (*(float *)&(x))
+void FUN_L15_002d8710(char *moby) {
+    float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * D_0015ED60_8710;
+    F(D_L15_00161C54_8710) = v;
+    if (v <= -8.0f) {
+        F(D_L15_00161C54_8710) = v + 8.0f;
+    }
+    FUN_L00_002baae0_8710(D_L15_001D3750_8710, W(D_L15_00161C3C_8710), W(D_L15_00161C44_8710), 0x14,
+                      F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));
+    FUN_L00_002baae0_8710(D_L15_001D3750_8710 + 0x140, W(D_L15_00161C6C_8710), W(D_L15_00161C70_8710), 0x14,
+                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), F(D_L15_00161CA0_8710));
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710, *(short *)&D_L15_00161CC8_8710, 5,
+                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA_8710, *(short *)&D_L15_00161CCA_8710, 5,
+                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC_8710, *(short *)&D_L15_00161CCC_8710, 5,
+                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE_8710, *(short *)&D_L15_00161CCE_8710, 5,
+                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
+    FUN_L15_002d8e48_8710(moby);
+}
 typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
 typedef struct { float u, v; } UV2d8e48;
 typedef struct {

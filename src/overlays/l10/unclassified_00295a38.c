@@ -21,7 +21,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *arg0);
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L10_002d8058();
+extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern short D_L10_00161BF0_d __asm__("D_L10_00161BF0") __attribute__((sda));
 extern short D_L10_00161BF4_d __asm__("D_L10_00161BF4") __attribute__((sda));
 extern short D_L10_00161BF8_d __asm__("D_L10_00161BF8") __attribute__((sda));
@@ -47,7 +47,7 @@ void FUN_L10_002d8c00(char *moby) {
         float r = random_float_between_alt(*(float *)&D_L10_00161BFC_d, *(float *)&D_L10_00161C00_d) * 0.017453292f;
         build_spherical_offset(a, random_float_between_alt(*(float *)&D_L10_00161C04_d, *(float *)&D_L10_00161C08_d) * D_0015ED6C, q, r);
         FUN_001f9a10(b, moby + 0x10, a);
-        FUN_L10_002d8058(moby, b, a);
+        FUN_L10_002d8058_u(moby, b, a);
         FUN_0022da68(0, 0, (int)moby);
         *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
     }
@@ -218,7 +218,37 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
+#ifndef NOT_SDA
+#endif
+#ifndef MACRO_ADDR
+#endif
+struct Swirl_d8058 { char pad[0x18]; float a; float b; };
+extern char *func_0020D348_d8058(int) __asm__("FUN_0020c4f8");
+extern float func_002140F8_d8058(float, float) __asm__("FUN_002132a8");
+extern int func_001F9850_d8058(int) __asm__("FUN_001f96f8");
+extern void func_L00_00251E30_d8058(void *) __asm__("FUN_L00_00250df8");
+extern short D_L10_00161C6C_d8058 __asm__("D_L10_00161BEC") __attribute__((sda));
+extern float D_0015EE6C_d8058 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+int FUN_L10_002d8058(int owner, char *pos, char *vec) {
+    char *moby = func_0020D348_d8058(0x3AA);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0x7F;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(int *)(data + 0x10) = owner;
+        *(short *)(data + 0x16) = 0;
+        qcopy(moby + 0x10, pos);
+        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161C6C_d8058;
+        qcopy(data, vec);
+        ((struct Swirl_d8058 *)data)->a = func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
+        ((struct Swirl_d8058 *)data)->b = func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
+        *(short *)(data + 0x14) = func_001F9850_d8058(0x3C);
+        func_L00_00251E30_d8058(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
