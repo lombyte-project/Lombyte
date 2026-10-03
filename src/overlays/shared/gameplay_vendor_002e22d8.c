@@ -4,7 +4,46 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e22d8.s", FUN_L16_002e22d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2b60.s", FUN_L16_002e2b60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2e88.s", FUN_L16_002e2e88);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Advance a path segment and ease the remaining travel distance. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar_q(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern float D_0015ED6C_q __asm__("D_0015ED6C");
+extern float D_L16_00161D84_q __asm__("D_L16_00161D84") __attribute__((sda));
+extern float FUN_001f9b48_q(void *) __asm__("FUN_001f9b48");
+extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
+extern short D_0015ED70, D_L16_00161E40_q __asm__("D_L16_00161E40");
+extern short D_L16_00161E44, D_L16_00161D80_q __asm__("D_L16_00161D80") __attribute__((sda));
+extern void sample_camera_path_q(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
+extern void func_00215CA8_path42_q(float,void*,int,void*,void*,int) __asm__("FUN_00214e58");
+extern float func_001F9D10_path42_q(void*,void*) __asm__("FUN_001f9b48");
+extern float func_00214D88_path42_q(float,float,float,float,float*,float*) __asm__("FUN_00213f38");
+
+int FUN_L16_002e2e88(char *m, char *path) {
+    char *d = *(char **)(m+0x78);
+    float progress = (float)*(int *)(d+0x168) + *(float *)(d+0x16C) + *(float *)(d+0x170) / *(float *)(d+0x174);
+    int index = truncate_float_to_s32_q(progress);
+    float speed;
+    float distance, rate;
+    char *position;
+    *(int *)(d+0x168)=index;
+    *(float *)(d+0x16C)=progress-(float)index;
+    if(index<*(int *)path-1) {
+    position=m+0x10;
+    func_00215CA8_path42_q(progress,path,0,position,m+0x40,0);
+    *(float *)(d+0x194)=*(float *)(m+0x18);
+    speed=0.0f;
+    distance=func_001F9D10_path42_q(position,path+(*(int *)path<<4));
+    rate=D_L16_00161D84_q**(float *)&D_0015ED70;
+    func_00214D88_path42_q(distance,rate,rate,*(float *)&D_L16_00161D80_q*D_0015ED6C_q,&speed,(float *)(d+0x170));
+    return 0;
+    }
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2fa0.s", FUN_L16_002e2fa0);
 #define NOT_SDA
 

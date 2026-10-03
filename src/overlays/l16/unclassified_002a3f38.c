@@ -476,7 +476,75 @@ remove:
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c3d38.s", FUN_L16_002c3d38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c44f0.s", FUN_L16_002c44f0);
+typedef int u128_q __attribute__((mode(TI)));
+
+/* Spawns effects around a moby when a nearby position is valid. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C57E8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C ,D_0015EE70_q __asm__("D_0015EE70");
+extern float random_angle_radians_q(void) __asm__("FUN_00213308");
+extern float random_float_between_alt_q(float,float) __asm__("FUN_002132a8");
+extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
+extern short D_L16_001618E8_q __asm__("D_L16_001618E8") __attribute__((sda));
+extern short D_L16_001618EC_q __asm__("D_L16_001618EC") __attribute__((sda));
+extern short D_L16_001618F0_q __asm__("D_L16_001618F0") __attribute__((sda));
+extern short D_L16_001618F4_q __asm__("D_L16_001618F4") __attribute__((sda));
+extern short D_L16_001618F8_q __asm__("D_L16_001618F8") __attribute__((sda));
+extern short D_L16_001618FC_q __asm__("D_L16_001618FC") __attribute__((sda));
+extern void *FUN_L00_002cbf68_q(void *, void *, void *) __asm__("FUN_L00_002cbf68");
+extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
+extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
+void blend_moby_animation_q(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+extern void func_00215C00_57_q(float,float,float,void*) __asm__("FUN_00214db0");
+extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002c44f0(unsigned char *m, void *p) {
+    float origin[4];
+    float pos[4];
+    float vel[4];
+    float out[4];
+    float a, b, radius, speed;
+    int i;
+    char *d;
+    *(u128_q*)origin=*(u128_q*)p;
+    {
+        float *start = origin;
+        qcopy(m + 0x10, start);
+        qcopy(pos, start);
+    }
+    origin[2] += 0.3f;
+    if (FUN_L00_001f0d60_q(0.2f, pos, 0, m)) {
+        float *effectPosition = out;
+        float *effectVelocity = vel;
+        i = 3;
+        do {
+            radius = random_float_between_alt_q(*(float *)&D_L16_001618F8_q, *(float *)&D_L16_001618FC_q);
+            a = random_angle_radians_q();
+            b = random_angle_radians_q();
+            func_00215C00_57_q(radius, a, b, effectPosition);
+            out[2] += *(float *)&D_L16_001618F4_q;
+            add_vector_xyz_q(effectPosition, effectPosition, m + 0x10);
+            speed = random_float_between_alt_q(*(float *)&D_L16_001618EC_q * D_0015ED6C,
+                                   *(float *)&D_L16_001618F0_q * D_0015ED6C);
+            b = random_angle_radians_q();
+            func_00215C00_57_q(speed, b, *(float *)&D_L16_001618E8_q * 0.017453292f, effectVelocity);
+            speed = random_float_between_alt_q(3.5f, 5.5f);
+            vel[2] = speed * D_0015ED6C;
+            FUN_L00_002cbf68_q(m, effectPosition, effectVelocity);
+        } while (--i >= 0);
+        func_0022ED80_57_q(1, 0, m);
+    } else {
+        d = *(char **)(m + 0x78);
+        *(float *)(d + 0x78) = 1.0f;
+        if (m[0x53] != 2) blend_moby_animation_q(m, 2, 0, 1);
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x1000) & 0xFFBE;
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        m[0x20] = 4;
+        *(short *)(d + 0x66) = scale_game_frames_q(0xB4);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAA18), where it is exact; names translated to the US level program. */
 

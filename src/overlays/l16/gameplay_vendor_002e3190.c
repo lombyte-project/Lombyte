@@ -329,7 +329,67 @@ void FUN_L16_002e5010(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5258.s", FUN_L16_002e5258);
+/* Moves the moby through its trigger states and checks its local bounds. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E66C0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
+extern float D_L16_001D9768_q[] __asm__("D_L16_001D9768") __attribute__((section(".data")));
+extern float FUN_001f9b48_q(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_sin_q(float) __asm__("FUN_001f9de0");
+extern int D_L16_0015F5CC_q __asm__("D_L16_0015F5CC");
+extern int FUN_001fa6e0_q(float, int, int) __asm__("FUN_001fa6e0");
+extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
+extern short D_L16_00161DE4_q __asm__("D_L16_00161DE4");
+extern short D_L16_00161DE8_q __asm__("D_L16_00161DE8") __attribute__((sda));
+extern short D_L16_00161DEC_q __asm__("D_L16_00161DEC") __attribute__((sda));
+extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void FUN_001fa2d8_q(void *, void *) __asm__("FUN_001fa2d8");
+extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
+extern void subtract_vector_xyz_q(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
+extern int func_0022ED80_66C0_q(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002e5258(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    float pos[16];
+    float mat[4];
+    float f;
+    int period = scale_game_frames_q(30);
+    f = ConvertIntegerToFloat_q(D_L16_0015F5CC_q % period) / ConvertIntegerToFloat_q(period);
+    *(int *)(m + 0x90) = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
+                                      *(int *)&D_L16_00161DE8_q, *(int *)&D_L16_00161DEC_q);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        m[0x30] = 0xFF;
+        break;
+    case 1:
+        g = D_0013F3D0_q;
+        if (FUN_001f9b48_q(m + 0x10, g) < 16.0f) {
+            FUN_001fa2d8_q(pos, m + 0xC0);
+            subtract_vector_xyz_q(mat, g, m + 0x10);
+            mat[3] = 0.0f;
+            FUN_001f9d20_q(mat, mat, pos);
+            if (D_L16_001D9768_q[0] < mat[0] && mat[0] < D_L16_001D9768_q[1] &&
+                D_L16_001D9768_q[2] < mat[1] && mat[1] < D_L16_001D9768_q[3] &&
+                D_L16_001D9768_q[4] < mat[2] && mat[2] < D_L16_001D9768_q[5]) {
+                func_0022ED80_66C0_q(1, 0, m);
+                m[0xBC] = 1;
+                m[0x20] = 2;
+                *(int *)d = scale_game_frames_q(*(int *)&D_L16_00161DE4_q);
+            }
+        }
+        break;
+    case 2:
+        if (tick_countdown_32_q((int *)d)) {
+            m[0x20] = 1;
+            m[0xBC] = 0;
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6908), where it is exact; names translated to the US level program. */
 
 typedef struct {
