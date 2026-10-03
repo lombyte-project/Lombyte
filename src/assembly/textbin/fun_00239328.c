@@ -6,79 +6,84 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00239328/FUN_00239328.s
 #else
 #include "types.h"
 
-extern s32 D_001E6620[];
-extern s32 D_001E6640[];
-extern void func_00233980(s32, u64);
-extern s32 func_00213260(s32);
+extern s32 vendor_flash_timers[] __asm__("D_001E6620");
+extern s32 vendor_scroll_timers[] __asm__("D_001E6640");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
-extern s64 func_001F44B8(s32);
-extern f32 func_001FA6C0(s32);
-extern void func_001F55D8(s32, s32, s32, s32, u64, s64, f32, f32, f32, f32);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern void append_subpixel_textured_screen_quad(s32, s32, s32, s32, u64, s64, f32, f32, f32, f32) __asm__("func_001F55D8");
 
-void FUN_00239328(s32 k, f32 w, f32 h) {
-    s32 t;
-    s32 a;
-    s32 alpha;
-    f32 rx;
-    f32 ry;
-    f32 zero;
-    f32 f;
-    f32 hh;
-    s32 x0;
-    s32 y0;
-    s32 x1;
-    s32 y1;
+void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width, f32 capture_height) __asm__("FUN_00239328");
 
-    func_00233980(0x47, 0x32003);
-    if (D_001E6620[k] != 0 || k == 0) {
-        if (D_001E6620[k] != 0) {
-            D_001E6620[k] += 2;
+void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width, f32 capture_height) {
+    s32 flash_timer;
+    s32 scroll_alpha;
+    s32 flash_alpha;
+    f32 random_u;
+    f32 random_v;
+    f32 zero_offset;
+    f32 scroll_offset;
+    f32 overlay_height;
+    s32 overlay_width;
+    s32 unused_y0;
+    s32 unused_x1;
+    s32 unused_y1;
+
+    vu1_add_g_sregister(0x47, 0x32003);
+    if (vendor_flash_timers[pass_index] != 0 || pass_index == 0) {
+        if (vendor_flash_timers[pass_index] != 0) {
+            vendor_flash_timers[pass_index] += 2;
         }
-        t = D_001E6620[k];
-        if (k == 0) {
-            if (t < 0x18) {
-                t = 0x18;
+        flash_timer = vendor_flash_timers[pass_index];
+        if (pass_index == 0) {
+            if (flash_timer < 0x18) {
+                flash_timer = 0x18;
             }
         }
-        zero = 0.0f;
-        rx = func_00213260(200);
-        ry = func_00213260(200);
-        alpha = 0x80 - SubtractIntegerWithClamp(t - 0x80);
-        func_00233980(8, 0);
-        alpha *= 2;
-        if (alpha > 0x80) alpha = 0x80;
-        func_00233980(0x42, ((u64)alpha << 32) | 0x68);
-        func_001F55D8(rx + zero, ry + zero, w + rx, h + ry, 0x808080, func_001F44B8(0x1A), zero, zero, w, h);
-        if (D_001E6620[k] >= 0x100) {
-            D_001E6620[k] = 0;
+        zero_offset = 0.0f;
+        random_u = random_integer_below(200);
+        random_v = random_integer_below(200);
+        flash_alpha = 0x80 - SubtractIntegerWithClamp(flash_timer - 0x80);
+        vu1_add_g_sregister(8, 0);
+        flash_alpha *= 2;
+        if (flash_alpha > 0x80) flash_alpha = 0x80;
+        vu1_add_g_sregister(0x42, ((u64)flash_alpha << 32) | 0x68);
+        append_subpixel_textured_screen_quad(random_u + zero_offset, random_v + zero_offset, capture_width + random_u, capture_height + random_v, 0x808080, get_effect_texture(0x1A), zero_offset, zero_offset, capture_width, capture_height);
+        if (vendor_flash_timers[pass_index] >= 0x100) {
+            vendor_flash_timers[pass_index] = 0;
         }
     }
-    if (D_001E6620[k] == 0 && func_00213260(700) == 0) {
-        D_001E6620[k] = 2;
+    if (vendor_flash_timers[pass_index] == 0 && random_integer_below(700) == 0) {
+        vendor_flash_timers[pass_index] = 2;
     }
-    func_00233980(8, 0);
-    func_00233980(0x42, 0x8000000044ULL);
-    if (k > 0) {
-        if (D_001E6640[k] != 0) {
-            D_001E6640[k] += 2;
-            x0 = w;
-            a = 0x100 - SubtractIntegerWithClamp(D_001E6640[k] - 0x100);
-            if (a > 0x50) {
-                a = 0x50;
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x42, 0x8000000044ULL);
+    if (pass_index > 0) {
+        if (vendor_scroll_timers[pass_index] != 0) {
+            vendor_scroll_timers[pass_index] += 2;
+            overlay_width = capture_width;
+            scroll_alpha = 0x100 - SubtractIntegerWithClamp(vendor_scroll_timers[pass_index] - 0x100);
+            if (scroll_alpha > 0x50) {
+                scroll_alpha = 0x50;
             }
-            f = -(func_001FA6C0(0x200 - D_001E6640[k]) * 0.03125f);
-            hh = h + 16.0f;
-            func_001F55D8(0, 0, x0, (s32)(hh * 1.5f), (a << 24) | 0x505050, func_001F44B8(0x1C), 0.0f, f, w, hh);
-            if (D_001E6640[k] >= 0x200) {
-                D_001E6640[k] = 0;
+            scroll_offset = -(convert_integer_to_float(0x200 - vendor_scroll_timers[pass_index]) * 0.03125f);
+            overlay_height = capture_height + 16.0f;
+            append_subpixel_textured_screen_quad(0, 0, overlay_width, (s32)(overlay_height * 1.5f), (scroll_alpha << 24) | 0x505050, get_effect_texture(0x1C), 0.0f, scroll_offset, capture_width, overlay_height);
+            if (vendor_scroll_timers[pass_index] >= 0x200) {
+                vendor_scroll_timers[pass_index] = 0;
             }
-        } else if (func_00213260(360) == 0) {
-            D_001E6640[k] = 2;
+        } else if (random_integer_below(360) == 0) {
+            vendor_scroll_timers[pass_index] = 2;
         }
     }
-    if (k == 6) {
-        zero = 0.0f;
-        func_001F55D8(0, 0, 0x40, 0x40, 0x80808080, func_001F44B8(0x19), zero, zero, w, h);
+    if (pass_index == 6) {
+        zero_offset = 0.0f;
+        append_subpixel_textured_screen_quad(0, 0, 0x40, 0x40, 0x80808080, get_effect_texture(0x19), zero_offset, zero_offset, capture_width, capture_height);
     }
 }
+
+extern __typeof__(render_vendor_capture_texture_overlays_pass) func_00239328 __attribute__((alias("FUN_00239328")));
+
 #endif /* NON_MATCHING */
