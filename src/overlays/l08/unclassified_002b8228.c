@@ -101,7 +101,37 @@ void FUN_L08_002dc0c8(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc648.s", FUN_L08_002dc648);
+/* Per-frame update: ease the angle and position fields toward their targets. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar_q(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern f32 fast_add_rotations_q(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015ED6C_q __asm__("D_0015ED6C");
+extern float D_0015ED70_q __asm__("D_0015ED70");
+extern void sample_camera_path_q(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
+float AbsoluteFloat_q(float input) __asm__("FUN_001f99c0");
+
+int FUN_L08_002dc648(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *path;
+    float a = D_0015ED70_q * 0.1f;
+    float b = D_0015ED6C_q * 0.08f;
+    path = *(int **)(d + 0x120);
+    advance_accelerated_scalar_q((float *)(d + 0xE4), (float *)(d + 0xE8), *(float *)(d + 0x104), a, a, b);
+    *(float *)(d + 0x110) = fast_add_rotations_q(*(float *)(d + 0x110), *(float *)(d + 0xE8) * 50.0f);
+    sample_camera_path_q(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xE4) * (float)(*path - 1));
+    *(int *)(d + 0x74) = 0;
+    if (AbsoluteFloat_q(*(float *)(d + 0xE4) - *(float *)(d + 0x104)) < 0.2f) {
+        advance_accelerated_scalar_q((float *)(d + 0x108), (float *)(d + 0x10C), 3.14159f, D_0015ED70_q * 2.0943952f, D_0015ED70_q * 2.0943952f, D_0015ED6C_q * 6.2831855f);
+    } else {
+        *(int *)(d + 0x108) = 0;
+    }
+    if (*(float *)(d + 0x104) == 0.0f) {
+        *(float *)(d + 0x78) = fast_add_rotations_q(*(float *)(d + 0x78), 3.14159f);
+    }
+    *(float *)(d + 0x78) = fast_add_rotations_q(*(float *)(d + 0x78), *(float *)(d + 0x108));
+    return *(float *)(d + 0xE4) == *(float *)(d + 0x104);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
