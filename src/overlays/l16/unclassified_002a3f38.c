@@ -346,7 +346,135 @@ void FUN_L16_002e0de0(unsigned char *moby) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a3f38.s", FUN_L16_002a3f38);
+#include "sda.h"
+
+/* Advance a homing spark, emit its trail, and test its collision or impact state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002A50F0), where it is exact; names translated to the US level program. */
+
+typedef int L16SparkQuad __attribute__((mode(TI)));
+
+typedef union { L16SparkQuad quad; float f[4]; } L16SparkVector;
+
+typedef struct {float direction[4]; void *owner;int flags;unsigned char kind,enabled;unsigned short cls;float scale;int active;} L16SparkQuery;
+
+typedef struct {char pad[0x18];char *moby;int count;float position[4];} L16SparkHit;
+
+extern char *D_L16_001B255C __attribute__((section(".data")));
+extern char *FUN_L00_002712b8(void*,void*,int,int,int,int,float,float,float,float,float);
+extern char D_0013F350[];
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED6C MACRO_ADDR,D_0015EE70 MACRO_ADDR;
+extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR,D_0015ED70 MACRO_ADDR;
+extern float FUN_001f9b80_c(void*,void*) __asm__("FUN_001f9b80");
+extern float FUN_001f9e90_c(float,float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt_c(float,float) __asm__("FUN_002132a8");
+extern int D_L16_0015F580_spark __asm__("D_L16_0015F580"); /* no foreign declaration */
+extern int D_L16_00174240; /* no foreign declaration */
+extern int FUN_001efa68();
+extern int FUN_001f9770(void*);
+extern s32 scale_game_frames_c(s32) __asm__("FUN_001f96f8");
+extern void FUN_001f9c48(void*,void*,float);
+extern void FUN_L00_0026cbb0(void*,void*,int,int,int,int,float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void mark_moby_for_removal_a3f38(void *obj) __asm__("FUN_0020c828");
+extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
+extern float func_L00_0025CCF0_spark(void*,void*,float,float,float,float,int) __asm__("FUN_L00_0025bc98");
+extern int func_L00_001EFFF0_spark(void*,void*,int,void*,void*) __asm__("FUN_001efa68");
+
+void FUN_L16_002a3f38(unsigned char *m) {
+    L16SparkVector desired,previous,velocity,random;
+    L16SparkQuery query;
+    char *d=*(char**)(m+0x78);
+    void *position;
+    void *matrix;
+    char *particle;
+    char *player;
+    float yaw,pitch;
+    switch(m[0x20]) {
+    case 0: {
+        float step,time;
+        step=D_0015ED6C;
+        time=D_0015ED70;
+        position=m+0x10;
+        (*(unsigned short *)(d+6))++;
+        approach_value((float *)(d+0x10),step*30.0f,time*70.0f);
+        if(*(void**)(d+8) && *(short*)(d+6)>scale_game_frames_c(7)) {
+            qcopy(desired.f,*(char**)(d+8)+0x10);
+            desired.f[2]+=0.7f;
+            yaw=FUN_001f9e90_c(desired.f[0]-*(float*)(m+0x10),desired.f[1]-*(float*)(m+0x14));
+            pitch=-FUN_001f9e90_c(FUN_001f9b80_c(position,desired.f),desired.f[2]-*(float*)(m+0x18));
+            func_L00_0025CCF0_spark(m+0x48,d+0x14,yaw,0.03f,0.3f,D_0015ED6C*9.599310874938965f,0);
+            func_L00_0025CCF0_spark(m+0x44,d+0x18,pitch,0.03f,0.3f,D_0015ED6C*9.599310874938965f,0);
+        }
+        build_spherical_offset(desired.f,*(float*)(d+0x10),*(float*)(m+0x48),-*(float*)(m+0x44));
+        random.quad=0;
+        random.f[0]=random_float_between_alt_c(-1.0f,1.0f);
+        random.f[1]=random_float_between_alt_c(-1.0f,1.0f);
+        random.f[2]=random_float_between_alt_c(-1.0f,1.0f);
+        velocity.quad=random.quad;
+        normalize_vector_xyz(velocity.f,velocity.f,random_float_between_alt_c(0.1f,0.2f)*D_0015ED6C);
+        normalize_vector_xyz(previous.f,desired.f,-random_float_between_alt_c(D_0015ED6C*0.1f,D_0015ED6C));
+        add_vector_xyz(velocity.f,velocity.f,previous.f);
+        normalize_vector_xyz(previous.f,desired.f,random_float_between_alt_c(0.0f,1.0f)* *(float*)(d+0x10));
+        add_vector_xyz(previous.f,previous.f,position);
+        particle=FUN_L00_002712b8(previous.f,velocity.f,scale_game_frames_c(60),127,0x606060,3,40000.0f,1000.0f,1.0f,-0.0002f,0.0f);
+        if(particle) {
+            unsigned char cls=*(unsigned char*)D_L16_001B255C;
+            particle[3]=0x44;
+            particle[2]=cls;
+        }
+        matrix=m+0xC0;
+        FUN_L00_002712b8(position,velocity.f,scale_game_frames_c(6),127,0xB0B0B0,3,40000.0f,1000.0f,1.0f,-0.0004f,0.0f);
+        random.quad=0;
+        random.f[2]=0.02f;
+        transform_vector_by_basis(random.f,random.f,matrix);
+        build_look_at_matrix(random.f,random.f,matrix,random_angle_radians());
+        FUN_L00_0026cbb0(previous.f,random.f,0x4F007FFF,0x1FFFFFFF,scale_game_frames_c(5),1,20000.0f);
+        qcopy(previous.f,position);
+        add_vector_xyz(position,position,desired.f);
+        if(*(float*)(m+0x10)<2.0f || *(float*)(m+0x14)<2.0f || *(float*)(m+0x18)<2.0f)goto remove;
+        { int impact_state;
+        query.flags=0x830000;
+        impact_state=1;
+        query.owner=m;
+        query.scale=1.0f;
+        query.active=impact_state;
+        qcopy(query.direction,desired.f);
+        FUN_001f9c48(query.direction,query.direction,1.0f);
+        player=D_0013F350;
+        query.direction[2]=1.0f;
+        query.direction[3]=5627.9248046875f;
+        query.kind=3;
+        query.cls=*(unsigned short*)(m+0xA6);
+        query.enabled=impact_state;
+        if(func_L00_001EFFF0_spark(previous.f,position,0,*(void**)(player+0x2080),&query)) {
+            L16SparkHit *result=&D_L16_001742C0_hit;
+            char *hit=result->moby;
+            if(hit) {
+                if(hit==*(char**)(player+0x2080) || hit==*(char**)d)break;
+            } else if(result->count<=0)break;
+            qcopy(position,result->position);
+            m[0x20]=impact_state;
+        } else if(FUN_001f9770(d+4) || FUN_001f9b80_c(position,player+0x80)>60.0f) {
+remove:
+            mark_moby_for_removal_a3f38(m);
+        }
+        }
+        break;
+    }
+    case 1:
+        func_L00_0025F4A8_alt(m,&D_L16_0015F580_spark,0,0.0f,0.0f,3,3,5,1.0f,0.5f,4.0f,0.7f,0,7.0f,0,0,-1,0);
+        mark_moby_for_removal_a3f38(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c3d38.s", FUN_L16_002c3d38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c44f0.s", FUN_L16_002c44f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);

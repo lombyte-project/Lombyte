@@ -320,7 +320,123 @@ void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002a7220.s", FUN_L18_002a7220);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A8400), where it is exact; names translated to the US level program. */
+
+typedef struct { float v[4]; } __attribute__((aligned(16))) QVa840;
+typedef int TIa7220 __attribute__((mode(TI)));
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char D_0013F410[];
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED6C MACRO_ADDR;
+extern float FUN_001f9e90(float, float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001f9770(void *);
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern unsigned char *D_L18_001B2ADC;
+extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+void mark_moby_for_removal_a7220(void *obj) __asm__("FUN_0020c828");
+extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") __attribute__((section(".data")));
+
+void FUN_L18_002a7220(char *moby) {
+    float a[4];
+    char c[0x30];
+    float b[4];
+    float d[4];
+    float e[4];
+    float f[4];
+    char *data = *(char **)(moby + 0x78);
+    float *p;
+    float f20, f1;
+    char *t;
+
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), D_0015ED6C * 6.2831855f);
+    if (*(short *)(data + 0x12) != 0) {
+        f20 = vector_length_xyz(data);
+        subtract_vector_xyz(data, D_0013F410, moby + 0x10);
+        f1 = vector_length_xyz(data);
+        if (f20 < f1) {
+            normalize_vector_xyz(data, data, f20);
+            *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
+            *(float *)(moby + 0x44) = -FUN_001f9e90(vector_length_xy(data), *(float *)(data + 8));
+        } else if (f1 < 0.1f) {
+            mark_moby_for_removal_a7220(moby);
+            return;
+        }
+    }
+    add_vector_xyz(a, moby + 0x10, data);
+    t = *(char **)(data + 0x14);
+    if (t != 0 && *(short *)(t + 0xA6) == 0x2E && ((unsigned char *)t)[0x20] != 0xFE
+        && ((unsigned char *)t)[0x20] != 0xFD) {
+        subtract_vector_xyz(b, moby + 0x10, t + 0x10);
+        b[2] = 0.0f;
+        normalize_vector_xyz(b, b, 2.0f);
+        b[3] = 5627.925f;
+    } else {
+        normalize_vector_xyz(b, data, 2.0f);
+    }
+    FUN_L00_00259888(c, (int)moby, 1, b, 2.0f);
+    *(short *)(c + 0x1A) = *(unsigned short *)(moby + 0xA6);
+    if (FUN_001efa68(moby + 0x10, a, 0, *(void **)(data + 0x14), c) != 0 || FUN_001f9770(data + 0x10) != 0) {
+        func_L00_0025F4A8_alt(moby, data, moby + 0x10, 1.5f, 1.0f, 10, 6, 4, 1.0f, 0.5f, 9.0f, 0.5f, 0, 0.0f, 0, 0, -1, 0);
+        mark_moby_for_removal_a7220(moby);
+    } else {
+        unsigned char *r;
+        qcopy(moby + 0x10, a);
+        FUN_L00_00257d78(d, D_0015ED6C * 0.1f, D_0015ED6C * 0.2f);
+        scale_vector_xyz(e, data, random_float_between_alt(0.0f, 1.0f));
+        add_vector_xyz(e, e, moby + 0x10);
+        r = FUN_L00_002712b8(e, d, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        if (r != 0) {
+            r[2] = *D_L18_001B2DDC_c;
+            r[3] = 0x44;
+        }
+        *(TIa7220 *)f = 0;
+        f[2] = 0.02f;
+        transform_vector_by_basis(f, f, moby + 0xC0);
+        FUN_L00_0026cbb0(e, f, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
@@ -361,33 +477,7 @@ typedef struct {
     int flags;
 } L18D;
 
-typedef struct {
-    char v[16]; char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
-typedef struct {
-    char pad0[0x10];
-    char pos[0x10];
-    unsigned char b20;
-    char pad21[0xB];
-    float f2C;
-    unsigned char b30;
-    unsigned char b31;
-    short s32;
-    unsigned short h34;
-    char pad36[0x12];
-    float f48;
-    char pad4C[0x2C];
-    Child *child;
-    char pad7C[0x14];
-    int f90;
-} Obj;
 
 extern char *D_L18_00174858;
 extern char D_001413D4[];
