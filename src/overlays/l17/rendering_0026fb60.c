@@ -43,4 +43,59 @@ unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec) {
     }
     return p;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_0026fdd0.s", FUN_L17_0026fdd0);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat_q(s32) __asm__("func_001FA6C0");
+extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
+extern int random_integer_below_q(int) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L17_001B2A54_q __asm__("D_L17_001B2A54") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
+extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
+    unsigned char *p;
+    int n;
+    if (mode)
+        n = 5 - step;
+    else
+        n = 0xF - step;
+    if (n >= 0) {
+        p = FUN_L00_002678b8_q(0x50);
+        if (p != 0) {
+            qcopy(p + 0x10, pos);
+            p[9] = func_001FA898_r_q(1.0f) + 0x70;
+            *(int *)(p + 0x20) = mode;
+            if (mode == 0) {
+                int d = 0xF - step;
+                *(int *)(p + 4) = 0x60FF3020;
+                p[3] = 0x48;
+                *(float *)(p + 0xC) = 630000.0f;
+                *(short *)(p + 0xA) = d;
+                if (step != 0) {
+                    float a = ConvertIntegerToFloat_q((short)d - 1);
+                    *(int *)(p + 4) = FUN_001fa6e0_q(0x603F1008, *(int *)(p + 4), a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                }
+            } else {
+                int d = 5 - step;
+                *(int *)(p + 4) = 0x80D0A080;
+                p[3] = 0x44;
+                *(float *)(p + 0xC) = 420000.0f;
+                *(short *)(p + 0xA) = d;
+                if (step != 0) {
+                    float a = ConvertIntegerToFloat_q((short)d - 1);
+                    *(int *)(p + 4) = FUN_001fa6e0_q(0x30FFFFFF, *(int *)(p + 4), a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                }
+            }
+            p[1] = 0;
+            p[8] = random_integer_below_q(0xFF);
+            p[2] = *D_L17_001B2A54_q;
+        }
+        return p;
+    }
+    return 0;
+}
