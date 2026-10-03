@@ -8,14 +8,16 @@ extern void FUN_001f9c90(void *, void *, float);
 /* Aim the vector from the frame at D_00187080 toward arg0+0x20, scaled to
    3/4 and 64, and return the line test from arg1 to its end. The int
    return keeps retail's argument order for FUN_001f9a10. */
-int FUN_0022c658(void *arg0, void *arg1) {
-    float v[4];
+int test_voice_occlusion(void *voice, void *listener_position) __asm__("FUN_0022c658");
 
-    FUN_001f9a28(v, (char *)arg0 + 0x20, D_00187080);
-    FUN_001f9a68(v, v, 0.75f);
-    FUN_001f9c90(v, v, 64.0f);
-    FUN_001f9a10(v, v, D_00187080);
-    return FUN_001efa68(arg1, v, 0x82, *(int *)((char *)arg0 + 0x18), 0);
+int test_voice_occlusion(void *voice, void *listener_position) {
+    float test_position[4];
+
+    FUN_001f9a28(test_position, (char *)voice + 0x20, D_00187080);
+    FUN_001f9a68(test_position, test_position, 0.75f);
+    FUN_001f9c90(test_position, test_position, 64.0f);
+    FUN_001f9a10(test_position, test_position, D_00187080);
+    return FUN_001efa68(listener_position, test_position, 0x82, *(int *)((char *)voice + 0x18), 0);
 }
 
-extern __typeof__(FUN_0022c658) func_0022C658 __attribute__((alias("FUN_0022c658")));
+extern __typeof__(test_voice_occlusion) func_0022C658 __attribute__((alias("FUN_0022c658")));

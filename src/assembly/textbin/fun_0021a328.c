@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s", FUN_0021a328);
 #else
 #include "types.h"
+
 #include "sda.h"
 
 typedef struct {
@@ -13,68 +14,68 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x20];
-    int w;          /* 0x20 */
-    int h;          /* 0x24 */
+    s32 width;          /* 0x20 */
+    s32 height;          /* 0x24 */
     u8 pad28[8];
     int flags;      /* 0x30 */
-    int textId;     /* 0x34 */
-    unsigned int stride; /* 0x38 */
-    int scroll;     /* 0x3C */
+    int text_id;     /* 0x34 */
+    unsigned int text_stride; /* 0x38 */
+    int scroll_offset;     /* 0x3C */
     u8 pad40[4];
-    int timer;      /* 0x44 */
-    int cur;        /* 0x48 */
-    int sub;        /* 0x4C */
-} Widget;
+    int fade_timer;      /* 0x44 */
+    int cached_value;        /* 0x48 */
+    int value_variant;        /* 0x4C */
+} ConfiguredTextLabel;
 
 typedef struct {
     u8 pad0[4];
-    short a;        /* 0x4 */
-    short b;        /* 0x6 */
+    short texture_group;        /* 0x4 */
+    short item_id;        /* 0x6 */
     u8 pad8[2];
-} PageEntry;
+} MenuGridEntry;
 
 typedef struct {
-    short id;
+    short item_id;
     u8 pad2[10];
-} PageItem;
+} MenuListEntry;
 
 typedef struct {
     u8 pad0[0x34];
-    PageItem *items;   /* 0x34 */
+    MenuListEntry *items;   /* 0x34 */
     u8 pad38[4];
-    int sel;           /* 0x3C */
-    int sel2;          /* 0x40 */
+    int cursor;           /* 0x3C */
+    int selected_entry;          /* 0x40 */
     u8 pad44[4];
-    PageEntry *entries; /* 0x48 */
-} Page;
+    MenuGridEntry *entries; /* 0x48 */
+} MenuDescriptor;
 
 typedef struct {
     u8 pad0[0x40];
-    Page *page;
-} Game;
+    MenuDescriptor *page;
+} MenuPage;
 
-extern int D_0013CAE0[];
-extern u8 D_0013D388[];
-extern u8 D_0013D408[];
-extern u8 D_0013D4C0[];
-extern u8 D_0013E520[];
-extern int D_0015ED80 __attribute__((sda));
-extern int D_0015ED84 __attribute__((sda));
-extern int D_001601B0 __attribute__((sda));
-extern int D_001601B4 __attribute__((sda));
-extern int D_001601B8 __attribute__((sda));
-extern int D_001601BC __attribute__((sda));
-extern int D_00160258 __attribute__((sda));
-extern int D_00160268 __attribute__((sda));
-extern char D_00160270[];
-extern char D_00160278[];
-extern char D_00160280[];
-extern char D_00160288[];
-extern int D_001A0314[];
-extern Game *D_001D5BF4[];
-extern u8 D_001DF050[];
-extern u8 D_001DF3F0[];
-extern u8 D_001DF790[];
+extern int menu_input_repeat_state[] __asm__("D_0013CAE0");
+extern u8 alternate_item_available[] __asm__("D_0013D388");
+extern u8 item_unlocked[] __asm__("D_0013D408");
+extern u8 item_available[] __asm__("D_0013D4C0");
+extern u8 item_text_variant[] __asm__("D_0013E520");
+extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
+extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
+extern int menu_text_color __asm__("D_001601B0") __attribute__((sda));
+extern int menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
+extern int text_shadow_x __asm__("D_001601B8") __attribute__((sda));
+extern int text_shadow_y __asm__("D_001601BC") __attribute__((sda));
+extern int text_vertical_inset __asm__("D_00160258") __attribute__((sda));
+extern int text_line_spacing __asm__("D_00160268") __attribute__((sda));
+extern char empty_label_text[] __asm__("D_00160270");
+extern char unavailable_label_text[] __asm__("D_00160278");
+extern char label_format[] __asm__("D_00160280");
+extern char fallback_label_text[] __asm__("D_00160288");
+extern int selected_level_index[] __asm__("D_001A0314");
+extern MenuPage *active_menu_page[] __asm__("D_001D5BF4");
+extern u8 normal_font_metrics[] __asm__("D_001DF050");
+extern u8 small_font_metrics[] __asm__("D_001DF3F0");
+extern u8 large_font_metrics[] __asm__("D_001DF790");
 
 extern void func_001F4280(int);
 extern void func_001F4398(void);
@@ -91,234 +92,239 @@ extern void FUN_00233980(int, long);
 extern void *memset(void *, int, unsigned int);
 extern int sprintf(char *, const char *, ...);
 
-int FUN_0021a328(Widget *w)
+int render_configured_text_label(ConfiguredTextLabel *label) __asm__("FUN_0021a328");
+
+int render_configured_text_label(ConfiguredTextLabel *label)
 {
-    char buf[64];
+    char formatted_text[64];
     u8 *font;
-    int fontId;
+    int font_texture_index;
     char *text;
-    int sub;
-    int idx;
+    int value_variant;
+    int value_index;
     int flags;
-    int mode;
+    int draw_flags;
     int x;
     int y;
-    int style;
-    long col;
+    int text_style;
+    long texture_tex0;
     long color;
-    int t;
-    Page *page;
-    PageEntry *e;
-    u8 *tbl;
-    int id;
+    int remaining_frames;
+    MenuDescriptor *page;
+    MenuGridEntry *entry;
+    u8 *availability_table;
+    int item_id;
 
-    font = D_001DF050;
-    fontId = 1;
-    text = D_00160270;
-    sub = 0;
-    flags = w->flags;
+    font = normal_font_metrics;
+    font_texture_index = 1;
+    text = empty_label_text;
+    value_variant = 0;
+    flags = label->flags;
     if (flags & 8) {
-        fontId = 3;
-        font = D_001DF790;
+        font_texture_index = 3;
+        font = large_font_metrics;
     }
     if (flags & 0x10) {
-        fontId = 2;
-        font = D_001DF3F0;
+        font_texture_index = 2;
+        font = small_font_metrics;
     }
     FUN_00233980(0x42, 0x44);
     FUN_00233980(0x47, 0x2004B);
-    flags = w->flags;
+    flags = label->flags;
     if (flags & 0x20) {
-        idx = D_0015ED84 - 1;
-        if ((unsigned int)idx >= 0x12) {
-            idx = -1;
+        value_index = current_level_index - 1;
+        if ((unsigned int)value_index >= 0x12) {
+            value_index = -1;
         }
     } else if (flags & 0x40) {
-        idx = D_001A0314[0] - 1;
+        value_index = selected_level_index[0] - 1;
     } else if (flags & 4) {
-        if (w->timer < func_001F96F8(D_001601B4)) {
-            w->timer = func_001F96F8(D_001601B4);
+        if (label->fade_timer < func_001F96F8(menu_fade_duration)) {
+            label->fade_timer = func_001F96F8(menu_fade_duration);
         }
-        idx = 0;
-        w->cur = 0;
-        w->sub = 0;
+        value_index = 0;
+        label->cached_value = 0;
+        label->value_variant = 0;
     } else if (flags & 0x80) {
-        idx = D_001D5BF4[0]->page->sel2;
+        value_index = active_menu_page[0]->page->selected_entry;
         if (flags & 0x8000) {
-            sub = D_0015ED80 != 0;
+            value_variant = pal_mode != 0;
         }
     } else if (flags & 0x100) {
-        page = D_001D5BF4[0]->page;
-        e = &page->entries[page->sel];
-        if (e->a == 0) {
-            tbl = D_0013D4C0;
+        page = active_menu_page[0]->page;
+        entry = &page->entries[page->cursor];
+        if (entry->texture_group == 0) {
+            availability_table = item_available;
         } else {
-            tbl = D_0013D388;
+            availability_table = alternate_item_available;
         }
-        if (tbl[e->b] == 0) {
-            idx = -1;
+        if (availability_table[entry->item_id] == 0) {
+            value_index = -1;
         } else {
-            idx = page->sel;
+            value_index = page->cursor;
         }
     } else if (flags & 0x1000) {
-        page = D_001D5BF4[0]->page;
-        idx = page->sel2;
+        page = active_menu_page[0]->page;
+        value_index = page->selected_entry;
         {
-            short sid = page->items[idx].id;
-            w->textId = 0xFFFF;
-            func_001FECC8(sid, 1, (u16 *)&w->textId);
+            short sid = page->items[value_index].item_id;
+            label->text_id = 0xFFFF;
+            func_001FECC8(sid, 1, (u16 *)&label->text_id);
         }
     } else {
-        page = D_001D5BF4[0]->page;
-        id = page->entries[page->sel].b;
-        sub = D_0013E520[id] != 0;
-        idx = id;
+        page = active_menu_page[0]->page;
+        item_id = page->entries[page->cursor].item_id;
+        value_variant = item_text_variant[item_id] != 0;
+        value_index = item_id;
     }
 
-    if (w->timer == -1) {
-        w->timer = func_001F96F8(D_001601B4);
-        w->cur = idx;
-        w->sub = sub;
+    if (label->fade_timer == -1) {
+        label->fade_timer = func_001F96F8(menu_fade_duration);
+        label->cached_value = value_index;
+        label->value_variant = value_variant;
     }
-    if (idx != w->cur) {
-        if (func_001F96F8(D_001601B4) < w->timer) {
-            w->timer = func_001F96F8(D_001601B4);
+    if (value_index != label->cached_value) {
+        if (func_001F96F8(menu_fade_duration) < label->fade_timer) {
+            label->fade_timer = func_001F96F8(menu_fade_duration);
         }
-        t = w->timer;
-        t = t < 1 ? 0 : t - 1;
-        t = t < 1 ? 0 : t - 1;
-        t = t < 1 ? 0 : t - 1;
-        w->timer = t;
-        if (t != 0) {
-            idx = w->cur;
-            sub = w->sub;
+        remaining_frames = label->fade_timer;
+        remaining_frames = remaining_frames < 1 ? 0 : remaining_frames - 1;
+        remaining_frames = remaining_frames < 1 ? 0 : remaining_frames - 1;
+        remaining_frames = remaining_frames < 1 ? 0 : remaining_frames - 1;
+        label->fade_timer = remaining_frames;
+        if (remaining_frames != 0) {
+            value_index = label->cached_value;
+            value_variant = label->value_variant;
         } else {
-            w->cur = idx;
-            w->sub = sub;
-            w->flags &= ~0x400;
-            w->scroll = 0;
+            label->cached_value = value_index;
+            label->value_variant = value_variant;
+            label->flags &= ~0x400;
+            label->scroll_offset = 0;
         }
     } else {
-        w->timer += 3;
+        label->fade_timer += 3;
     }
 
-    flags = w->flags;
+    flags = label->flags;
     if (flags & 4) {
-        if (w->textId == 0) {
+        if (label->text_id == 0) {
             return 1;
         }
-        text = func_001FDD10(w->textId);
+        text = func_001FDD10(label->text_id);
     } else if (flags & 0x1000) {
-        if (w->textId == 0xFFFF) {
+        if (label->text_id == 0xFFFF) {
             return 1;
         }
-        text = func_001FDD10(w->textId);
-    } else if ((flags & 0x100) && idx == -1) {
-        text = D_00160278;
-    } else if (w->textId != 0) {
-        text = func_001FDD10(((int *)w->textId + sub)[idx * w->stride / sizeof(int)]);
+        text = func_001FDD10(label->text_id);
+    } else if ((flags & 0x100) && value_index == -1) {
+        text = unavailable_label_text;
+    } else if (label->text_id != 0) {
+        text = func_001FDD10(((int *)label->text_id + value_variant)[value_index * label->text_stride / sizeof(int)]);
     }
-    if (!(w->flags & 0x11E4) && D_0013D4C0[idx] == 0) {
-        text = D_00160278;
+    if (!(label->flags & 0x11E4) && item_available[value_index] == 0) {
+        text = unavailable_label_text;
     }
-    if (w->flags & 0x200) {
-        id = *((int *)w->textId + idx * w->stride / sizeof(int));
-        if (id != 0x4ED2 && id != 0x4ED9 && id != 0x4EDD) {
-            sprintf(buf, D_00160280, func_001FDD10(0x4ECC), text);
-            text = buf;
+    if (label->flags & 0x200) {
+        item_id = *((int *)label->text_id + value_index * label->text_stride / sizeof(int));
+        if (item_id != 0x4ED2 && item_id != 0x4ED9 && item_id != 0x4EDD) {
+            sprintf(formatted_text, label_format, func_001FDD10(0x4ECC), text);
+            text = formatted_text;
         }
     }
 
-    flags = w->flags;
-    mode = flags;
+    flags = label->flags;
+    draw_flags = flags;
     x = 4;
     y = 4;
-    if ((mode & 0x4004) == 0x4004 && w->textId == 0x523E) {
-        mode |= 1;
+    if ((draw_flags & 0x4004) == 0x4004 && label->text_id == 0x523E) {
+        draw_flags |= 1;
         y = 12;
     }
-    if ((flags & 0x800) && D_0013D408[idx] == 0) {
-        mode |= 3;
+    if ((flags & 0x800) && item_unlocked[value_index] == 0) {
+        draw_flags |= 3;
         text = func_001FDD10(0x4F54);
     }
     if (text == 0) {
-        text = D_00160288;
+        text = fallback_label_text;
     }
-    style = 8;
-    if (mode & 1) {
-        style = 9;
-        x = w->w / 2;
+    text_style = 8;
+    if (draw_flags & 1) {
+        text_style = 9;
+        x = label->width / 2;
     }
-    if (mode & 2) {
-        style |= 2;
-        y = w->h / 2;
+    if (draw_flags & 2) {
+        text_style |= 2;
+        y = label->height / 2;
     }
     func_001F4280(0);
-    col = func_001F44B8(fontId);
+    texture_tex0 = func_001F44B8(font_texture_index);
     {
-        TextBox c = { { D_00160258, w->h - D_00160258, 1, w->w - 4, x,
-                        y - (w->scroll >> 4), [8] = D_00160268, style,
-                        [11] = -(w->scroll & 0xF) } };
+        TextBox c = { { text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4, x,
+                        y - (label->scroll_offset >> 4), [8] = text_line_spacing, text_style,
+                        [11] = -(label->scroll_offset & 0xF) } };
 
-        if (w->flags & 0x10000) {
-            c.s[1] = w->h - 1;
+        if (label->flags & 0x10000) {
+            c.s[1] = label->height - 1;
         }
-        color = func_0021B6D8(w->timer, func_001FA6E0(D_001601B0, 0x80FFA888, 0.5f), 0x80FFA888);
+        color = func_0021B6D8(label->fade_timer, func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
         c.s[9] |= 4;
-        func_001F7090(&c, color, text, -1, col, font);
+        func_001F7090(&c, color, text, -1, texture_tex0, font);
         c.s[9] ^= 4;
-        flags = w->flags;
+        flags = label->flags;
         if (!(flags & 0x2000) && c.s[7] + 4 >= c.s[1] - c.s[0]) {
             if (!(flags & 0x400)) {
-                w->flags = flags | 0x400;
-                w->scroll = -(w->h * 8);
+                label->flags = flags | 0x400;
+                label->scroll_offset = -(label->height * 8);
             }
-        } else if (w->flags & 0x400) {
-            w->scroll = 0;
-            w->flags ^= 0x400;
+        } else if (label->flags & 0x400) {
+            label->scroll_offset = 0;
+            label->flags ^= 0x400;
         }
-        c.s[5] = y - (w->scroll >> 4);
-        c.s[0] += D_001601BC;
-        c.s[1] += D_001601BC;
-        c.s[2] += D_001601B8;
-        c.s[3] += D_001601B8;
-        c.s[4] += D_001601B8;
-        c.s[5] += D_001601BC;
+        c.s[5] = y - (label->scroll_offset >> 4);
+        c.s[0] += text_shadow_y;
+        c.s[1] += text_shadow_y;
+        c.s[2] += text_shadow_x;
+        c.s[3] += text_shadow_x;
+        c.s[4] += text_shadow_x;
+        c.s[5] += text_shadow_y;
         DisableGlobalStateFlag();
-        func_001F7090(&c, 0x80000000L, text, -1, col, font);
+        func_001F7090(&c, 0x80000000L, text, -1, texture_tex0, font);
         EnableGlobalStateFlag();
-        c.s[0] -= D_001601BC;
-        c.s[1] -= D_001601BC;
-        c.s[2] -= D_001601B8;
-        c.s[3] -= D_001601B8;
-        c.s[4] -= D_001601B8;
-        c.s[5] -= D_001601BC;
-        func_001F7090(&c, color, text, -1, col, font);
-        if (w->flags & 0x400) {
-            c.s[5] += c.s[7] + D_00160268 * 3;
-            c.s[0] += D_001601BC;
-            c.s[1] += D_001601BC;
-            c.s[2] += D_001601B8;
-            c.s[3] += D_001601B8;
-            c.s[4] += D_001601B8;
-            c.s[5] += D_001601BC;
+        c.s[0] -= text_shadow_y;
+        c.s[1] -= text_shadow_y;
+        c.s[2] -= text_shadow_x;
+        c.s[3] -= text_shadow_x;
+        c.s[4] -= text_shadow_x;
+        c.s[5] -= text_shadow_y;
+        func_001F7090(&c, color, text, -1, texture_tex0, font);
+        if (label->flags & 0x400) {
+            c.s[5] += c.s[7] + text_line_spacing * 3;
+            c.s[0] += text_shadow_y;
+            c.s[1] += text_shadow_y;
+            c.s[2] += text_shadow_x;
+            c.s[3] += text_shadow_x;
+            c.s[4] += text_shadow_x;
+            c.s[5] += text_shadow_y;
             DisableGlobalStateFlag();
-            func_001F7090(&c, 0x80000000L, text, -1, col, font);
+            func_001F7090(&c, 0x80000000L, text, -1, texture_tex0, font);
             EnableGlobalStateFlag();
-            c.s[0] -= D_001601BC;
-            c.s[1] -= D_001601BC;
-            c.s[2] -= D_001601B8;
-            c.s[3] -= D_001601B8;
-            c.s[4] -= D_001601B8;
-            c.s[5] -= D_001601BC;
-            func_001F7090(&c, color, text, -1, col, font);
-            if (w->flags & 0x400) {
-                w->scroll += (D_0013CAE0[0] & 1) ? 10 : 3;
-                w->scroll %= (c.s[7] + D_00160268 * 3) * 16;
+            c.s[0] -= text_shadow_y;
+            c.s[1] -= text_shadow_y;
+            c.s[2] -= text_shadow_x;
+            c.s[3] -= text_shadow_x;
+            c.s[4] -= text_shadow_x;
+            c.s[5] -= text_shadow_y;
+            func_001F7090(&c, color, text, -1, texture_tex0, font);
+            if (label->flags & 0x400) {
+                label->scroll_offset += (menu_input_repeat_state[0] & 1) ? 10 : 3;
+                label->scroll_offset %= (c.s[7] + text_line_spacing * 3) * 16;
             }
         }
     }
     func_001F4398();
     return 2;
 }
+
+extern __typeof__(render_configured_text_label) func_0021A328 __attribute__((alias("FUN_0021a328")));
+
 #endif /* NON_MATCHING */

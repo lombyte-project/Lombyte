@@ -14,11 +14,11 @@ struct DmaTag {
     u32 vif1;
 };
 
-struct TagPtr {
+struct RenderPacketCursor {
     struct DmaTag *p;
 };
 
-struct ScreenOffset {
+struct ScreenOffsets {
     u8 pad0[0x10];
     s32 x;
     s32 y;
@@ -45,7 +45,7 @@ typedef struct {
 typedef struct {
     s32 cell;
     s32 pad[3];
-} MapMark;
+} MapHighlightedCell;
 
 typedef struct {
     u8 pad0[0x8];
@@ -57,7 +57,7 @@ typedef struct {
     s32 enabled;       /* 0x24 */
     u8 pad28[0x4];
     s32 show_markers;    /* 0x2C */
-    MapMark marks[8];  /* 0x30 */
+    MapHighlightedCell marks[8];  /* 0x30 */
     u8 padB0[0x4];
     f32 zoom[20];      /* 0xB4 */
     s32 offset_x[20];     /* 0x104 */
@@ -66,7 +66,7 @@ typedef struct {
     s32 selected_map;           /* 0x228 */
     u8 pad22C[0x14];
     s32 texture_address;           /* 0x240 */
-} MapState;
+} MapOverlayState;
 
 typedef struct {
     u8 pad0[0x80];
@@ -76,7 +76,7 @@ typedef struct {
     f32 angle;    /* 0x98 */
     u8 pad9C[0x1FF0];
     s32 mode;     /* 0x208C */
-} Player;
+} MapPlayerState;
 
 typedef struct {
     s16 pad0;
@@ -91,9 +91,9 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x20];
-    MapTextureReference *refs;     /* 0x20 */
-    MapTextureInfo *infos;   /* 0x24 */
-} MapTextureBank;
+    MapTextureReference *references;     /* 0x20 */
+    MapTextureInfo *textures;   /* 0x24 */
+} MapTextureTables;
 
 typedef struct {
     s16 s[12];
@@ -108,11 +108,11 @@ typedef struct {
 
 #define SPR ((MapIconBounds *)0x70000000)
 
-extern struct TagPtr D_00160F00;
-extern struct ScreenOffset D_0013E500;
-extern MapState D_001A00F0;
-extern Player D_0013F350;
-extern MapTextureBank D_0019A3E8;
+extern struct RenderPacketCursor D_00160F00;
+extern struct ScreenOffsets D_0013E500;
+extern MapOverlayState D_001A00F0;
+extern MapPlayerState D_0013F350;
+extern MapTextureTables D_0019A3E8;
 extern u8 D_0013D5BC[];
 extern u16 D_001518D2[];
 extern s32 D_0015ED84;
@@ -138,20 +138,20 @@ extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void func_00200600(f32, f32, f32, f32, f32, s32, s32, u64);
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
-extern void func_00208280(s32, void *);
-extern void func_00208408(f32 *, f32 *, s32, f32, f32);
-extern void func_00208508(s32, s32, s32, s32);
+extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
+extern void world_to_map_coords(f32 *, f32 *, s32, f32, f32) __asm__("func_00208408");
+extern void draw_map_markers(s32, s32, s32, s32) __asm__("func_00208508");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void *memset(void *, s32, u32);
 
 void draw_map_overlay(void) __asm__("FUN_00205640");
 
-extern MapState D_001A00F0_far __asm__("D_001A00F0") __attribute__((section(".data")));
+extern MapOverlayState D_001A00F0_far __asm__("D_001A00F0") __attribute__((section(".data")));
 void draw_map_overlay(void) {
     union {
         u8 b[0x80];
         f32 f[2];
-    } buf;
+    } label_buffer;
     FontWindow text_window;
     s32 rx0, ry0, rx1, ry1;
     struct DmaTag *tag;
@@ -167,17 +167,17 @@ void draw_map_overlay(void) {
     s32 dx, dy;
     s32 i, j;
     s32 cell, cell_y, cell_x;
-    MapMark *mk;
+    MapHighlightedCell *highlighted_cell;
     MapIconBounds *r;
     MapIconBounds *icon_bounds;
-    MapIcon *ic;
-    MapTextureInfo *ti;
+    MapIcon *icon;
+    MapTextureInfo *texture_info;
     f32 zoom;
-    f32 scale;
-    f32 k;
+    f32 icon_scale;
+    f32 icon_size_multiplier;
     f32 s;
-    f32 fx, fy;
-    s32 ox0, ox1, oy0, oy1;
+    f32 icon_center_x, icon_center_y;
+    s32 pan_x, map_extent, pan_y, oy1;
     s32 ax, ay, bx, by;
     s32 id, frame_index, texture_width;
     f32 angle, sprite_width, sprite_height, center_x, center_y;
@@ -206,15 +206,15 @@ void draw_map_overlay(void) {
     ry0 = 0x800;
     mirror_sign = D_0015EDB4 ? -1 : 1;
     zoom = D_001A00F0.zoom[D_001A00F0.selected_map];
-    oy0 = zoom * (f32)(D_001A00F0.offset_y[D_001A00F0.selected_map] >> 15);
-    ox1 = zoom * 8192.0f;
-    ox0 = zoom * (f32)(D_001A00F0.offset_x[D_001A00F0.selected_map] >> 15);
+    pan_y = zoom * (f32)(D_001A00F0.offset_y[D_001A00F0.selected_map] >> 15);
+    map_extent = zoom * 8192.0f;
+    pan_x = zoom * (f32)(D_001A00F0.offset_x[D_001A00F0.selected_map] >> 15);
     tile_size = zoom * 512.0f;
     tile_limit = tile_size + 0x2000;
-    rx0 -= ox0 * mirror_sign;
-    ry0 -= oy0;
-    rx1 = rx0 + ox1 * mirror_sign;
-    ry1 = ry0 + ox1;
+    rx0 -= pan_x * mirror_sign;
+    ry0 -= pan_y;
+    rx1 = rx0 + map_extent * mirror_sign;
+    ry1 = ry0 + map_extent;
     left_tile_count = (rx0 + tile_size - 1) / tile_size;
     top_tile_count = (ry0 + tile_size - 1) / tile_size;
     right_tile_count = (tile_limit - rx1 - 1) / tile_size;
@@ -292,15 +292,15 @@ void draw_map_overlay(void) {
 
     if (D_001A00F0.icons != 0) {
         icon_bounds = SPR;
-        scale = (D_001A00F0.zoom[D_001A00F0.selected_map] * 2.0f + 5.0f) / 13.0f;
+        icon_scale = (D_001A00F0.zoom[D_001A00F0.selected_map] * 2.0f + 5.0f) / 13.0f;
         if (!(D_001A00F0.icons[0].flags & 4)) {
             MapIconBounds *r;
             s32 i;
-            MapIcon *ic;
-            f32 k;
+            MapIcon *icon;
+            f32 icon_size_multiplier;
             s32 image_index;
-            f32 fx, fy;
-            MapTextureInfo *ti;
+            f32 icon_center_x, icon_center_y;
+            MapTextureInfo *texture_info;
             f32 s;
             s32 texture_id;
             
@@ -308,23 +308,23 @@ void draw_map_overlay(void) {
             i = 0;
             do {
                 if (D_001A00F0.icons[i].active != 0 && (texture_id = D_001A00F0.icons[i].texture_id) != 0 && !(D_001A00F0.icons[i].flags & 1)) {
-                    k = 1.0f;
+                    icon_size_multiplier = 1.0f;
                     if (D_001A00F0.icons[i].flags & 0x80) {
-                        k = 1.5f;
+                        icon_size_multiplier = 1.5f;
                     }
                     image_index = find_valid_animation_frame_index(texture_id, D_001A00F0.icons[i].frame_index);
-                    fx = (f32)rx0 + D_001A00F0.icons[i].x * (f32)(rx1 - rx0);
-                    fy = (f32)ry0 + D_001A00F0.icons[i].y * (f32)(ry1 - ry0);
-                    ti = &D_0019A3E8.infos[D_0019A3E8.refs[image_index].image_index];
+                    icon_center_x = (f32)rx0 + D_001A00F0.icons[i].x * (f32)(rx1 - rx0);
+                    icon_center_y = (f32)ry0 + D_001A00F0.icons[i].y * (f32)(ry1 - ry0);
+                    texture_info = &D_0019A3E8.textures[D_0019A3E8.references[image_index].image_index];
                     if (D_001A00F0.icons[i].flags & 0x200) {
                         s = D_001A00F0.zoom[D_001A00F0.selected_map];
                     } else {
-                        s = scale;
+                        s = icon_scale;
                     }
-                    icon_bounds[i].x0 = fx - k * s * (f32)(1 << (ti->width_exponent + 3));
-                    icon_bounds[i].x1 = (f32)icon_bounds[i].x0 + k * s * (f32)(1 << (ti->width_exponent + 4));
-                    icon_bounds[i].y0 = fy - k * s * (f32)(1 << (ti->height_exponent + 3));
-                    icon_bounds[i].y1 = (f32)icon_bounds[i].y0 + k * s * (f32)(1 << (ti->height_exponent + 4));
+                    icon_bounds[i].x0 = icon_center_x - icon_size_multiplier * s * (f32)(1 << (texture_info->width_exponent + 3));
+                    icon_bounds[i].x1 = (f32)icon_bounds[i].x0 + icon_size_multiplier * s * (f32)(1 << (texture_info->width_exponent + 4));
+                    icon_bounds[i].y0 = icon_center_y - icon_size_multiplier * s * (f32)(1 << (texture_info->height_exponent + 3));
+                    icon_bounds[i].y1 = (f32)icon_bounds[i].y0 + icon_size_multiplier * s * (f32)(1 << (texture_info->height_exponent + 4));
                 }
                 i++;
             } while (!(D_001A00F0.icons[i].flags & 4));
@@ -332,21 +332,21 @@ void draw_map_overlay(void) {
 
         {
             s32 i, j;
-            s32 ox0, ox1, oy0, oy1;
+            s32 pan_x, map_extent, pan_y, oy1;
             s32 ax, ay, bx, by;
-            MapIcon *ic;
+            MapIcon *icon;
 
             for (i = 0; !(D_001A00F0.icons[i + 1].flags & 4); i++) {
                 if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 || (D_001A00F0.icons[i].flags & 3)) {
                     continue;
                 }
                 for (j = i + 1; !(D_001A00F0.icons[j].flags & 4); j++) {
-                    ox0 = icon_bounds[j].x1 - icon_bounds[i].x0;
-                    if (ox0 <= 0) continue;
-                    ox1 = icon_bounds[i].x1 - icon_bounds[j].x0;
-                    if (ox1 <= 0) continue;
-                    oy0 = icon_bounds[j].y1 - icon_bounds[i].y0;
-                    if (oy0 <= 0) continue;
+                    pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
+                    if (pan_x <= 0) continue;
+                    map_extent = icon_bounds[i].x1 - icon_bounds[j].x0;
+                    if (map_extent <= 0) continue;
+                    pan_y = icon_bounds[j].y1 - icon_bounds[i].y0;
+                    if (pan_y <= 0) continue;
                     oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
                     if (oy1 <= 0) continue;
                     if (D_001A00F0.icons[j].active == 0 || D_001A00F0.icons[j].texture_id == 0 || (D_001A00F0.icons[j].flags & 3)) {
@@ -356,15 +356,15 @@ void draw_map_overlay(void) {
                     ay = 0;
                     bx = 0;
                     by = 0;
-                    if (ox0 <= ox1 && ox0 <= oy0 && ox0 <= oy1) {
-                        ax = ox0 >> 1;
-                        bx = ax - ox0;
-                    } else if (ox1 <= oy0 && ox1 <= oy1) {
-                        bx = ox1 >> 1;
-                        ax = bx - ox1;
-                    } else if (oy0 <= oy1) {
-                        ay = oy0 >> 1;
-                        by = ay - oy0;
+                    if (pan_x <= map_extent && pan_x <= pan_y && pan_x <= oy1) {
+                        ax = pan_x >> 1;
+                        bx = ax - pan_x;
+                    } else if (map_extent <= pan_y && map_extent <= oy1) {
+                        bx = map_extent >> 1;
+                        ax = bx - map_extent;
+                    } else if (pan_y <= oy1) {
+                        ay = pan_y >> 1;
+                        by = ay - pan_y;
                     } else {
                         by = oy1 >> 1;
                         ay = by - oy1;
@@ -396,7 +396,7 @@ void draw_map_overlay(void) {
                     if (D_001A00F0.icons[i].flags & 0x200) {
                         s = D_001A00F0.zoom[D_001A00F0.selected_map];
                     } else {
-                        s = scale;
+                        s = icon_scale;
                     }
                         if (D_001A00F0.icons[i].flags & 0x100) {
                         angle = D_001A00F0.icons[i].angle;
@@ -449,7 +449,7 @@ void draw_map_overlay(void) {
                             label_y = ((label_offset_y > 0 ? icon_bounds[i].y1 : icon_bounds[i].y0) >> 4) - label_height / 2 + label_offset_y;
                         }
                         func_001F5F18(label_y, label_y + label_height, label_x, label_x + label_width, 0x40);
-                        func_00208280(i, &buf);
+                        format_menu_item_text(i, &label_buffer);
                         memset(&text_window, 0, sizeof(text_window));
                         text_window.s[8] = 0xF;
                         text_window.s[1] = label_y + label_height;
@@ -459,7 +459,7 @@ void draw_map_overlay(void) {
                         text_window.s[9] = 1;
                         text_window.s[0] = label_y;
                         text_window.s[2] = label_x;
-                        font_print_window_small(&text_window, 0x80FFA888, &buf, -1);
+                        font_print_window_small(&text_window, 0x80FFA888, &label_buffer, -1);
                     }
                 }
                 i++;
@@ -469,7 +469,7 @@ void draw_map_overlay(void) {
     }
 
     {
-        MapState *m = &D_001A00F0;
+        MapOverlayState *m = &D_001A00F0;
 
     if (D_0015ED84 == m->selected_map) {
         s32 image_index;
@@ -486,27 +486,27 @@ void draw_map_overlay(void) {
             angle = func_001FA580(angle, 1.5707964f);
         }
         if (D_0015FD60 != 0) {
-            func_00208408(&buf.f[0], &buf.f[1], D_0015ED84 + 100, D_0013F350.x, D_0013F350.y);
+            world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84 + 100, D_0013F350.x, D_0013F350.y);
             angle = func_001FA580(angle, 1.5707964f);
         } else {
-            func_00208408(&buf.f[0], &buf.f[1], D_0015ED84, D_0013F350.x, D_0013F350.y);
+            world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84, D_0013F350.x, D_0013F350.y);
         }
-        buf.f[0] = (f32)rx0 + buf.f[0] * (f32)(rx1 - rx0);
-        buf.f[1] = (f32)ry0 + buf.f[1] * (f32)(ry1 - ry0);
+        label_buffer.f[0] = (f32)rx0 + label_buffer.f[0] * (f32)(rx1 - rx0);
+        label_buffer.f[1] = (f32)ry0 + label_buffer.f[1] * (f32)(ry1 - ry0);
         if (D_0015EDB4 != 0) {
             angle = func_001FA5C8(-func_001FA580(angle, 1.5707964f), 1.5707964f);
         }
         {
             f32 sz = s * 256.0f;
 
-            func_00200600(buf.f[0], buf.f[1], sz, sz, angle, 0x40, 0x40, get_frame_texture(image_index));
+            func_00200600(label_buffer.f[0], label_buffer.f[1], sz, sz, angle, 0x40, 0x40, get_frame_texture(image_index));
         }
     }
     }
     do_gif_paging();
     if (D_001A00F0.grid != 0) {
         setup_gif_paging(0);
-        func_00208508(rx0, ry0, rx1, ry1);
+        draw_map_markers(rx0, ry0, rx1, ry1);
         do_gif_paging();
     }
 }

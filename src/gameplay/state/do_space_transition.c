@@ -5,7 +5,7 @@ extern struct M2c_D_0013D290 D_0013D290;
 extern struct M2c_D_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
 extern struct M2c_D_0013E030 D_0013E030;
-extern struct M2c_D_001516D0 D_001516D0;
+extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern s32 D_0015ED88;
@@ -83,7 +83,7 @@ void do_space_transition(void)
     func_0012DC80();
     func_0022DCD0();
     func_00215EE8();
-    D_001516D0.unkB = 1;
+    D_001516D0.updates_suspended = 1;
     if (D_0015F634 != 0) {
         FUN_0012e1d8(D_0015F634->unk1C);
         func_0012E1A8();
@@ -109,7 +109,7 @@ void do_space_transition(void)
         D_0015ED84 = D_0015F600;
         func_002043B0();
         sceCdSync(0);
-        D_001516D0.unkB = 0;
+        D_001516D0.updates_suspended = 0;
         func_00233D90();
         return;
     }
@@ -213,7 +213,7 @@ void do_space_transition(void)
         }
     }
     sceCdSync(0);
-    D_001516D0.unkB = 0;
+    D_001516D0.updates_suspended = 0;
     func_00233D90();
 }
 

@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-#include "rnc/d_001516d0.h"
+#include "rnc/music_stream_state.h"
 
 struct M2c_D_001A00F0 {
     u8 pad_0[0x2A0];

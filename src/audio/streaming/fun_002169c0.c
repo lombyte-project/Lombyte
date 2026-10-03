@@ -1,22 +1,24 @@
 #include "types.h"
-struct Handle { u32 id; u8 pad4[6]; s16 state; };
-struct Vec3s { s16 x; s16 y; s16 z; };
-struct Game { u8 pad0[0x38]; struct Vec3s a; u8 pad3e[0x16]; struct Vec3s b; };
-extern struct Game D_001516D0;
+struct MusicChannelHandle { u32 handle; u8 pad4[6]; s16 state; };
+struct MusicTrackParameters { s16 track; s16 volume; s16 flags; };
+struct MusicStartParameters { u8 pad0[0x38]; struct MusicTrackParameters primary; u8 pad3e[0x16]; struct MusicTrackParameters secondary; };
+extern struct MusicStartParameters D_001516D0;
 extern void func_00215970(s32, s32, s32);
-void FUN_002169c0(u32 id, s64 arg) {
-    struct Handle *h = (struct Handle *)(s32)arg;
+void music_secondary_start_callback(u32 handle, s64 context) __asm__("FUN_002169c0");
 
-    if (h != 0) {
-        h->id = id;
-        if (id != 0) {
-            if (h->state == 1) {
-                h->state = 2;
+void music_secondary_start_callback(u32 handle, s64 context) {
+    struct MusicChannelHandle *channel = (struct MusicChannelHandle *)(s32)context;
+
+    if (channel != 0) {
+        channel->handle = handle;
+        if (handle != 0) {
+            if (channel->state == 1) {
+                channel->state = 2;
             }
         } else {
-            func_00215970(D_001516D0.b.x, D_001516D0.b.z, D_001516D0.b.y);
+            func_00215970(D_001516D0.secondary.track, D_001516D0.secondary.flags, D_001516D0.secondary.volume);
         }
     }
 }
 
-extern __typeof__(FUN_002169c0) func_002169C0 __attribute__((alias("FUN_002169c0")));
+extern __typeof__(music_secondary_start_callback) func_002169C0 __attribute__((alias("FUN_002169c0")));
