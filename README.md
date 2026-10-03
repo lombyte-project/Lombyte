@@ -2,7 +2,12 @@
   <img src="assets/lombyte-logo.png" alt="Lombyte" width="150">
 </p>
 
-<h3 align="center"> Lombyte Project </h3>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/lombyte-title-dark.svg">
+    <img src="assets/lombyte-title-light.svg" alt="Lombyte Project" height="48">
+  </picture>
+</p>
 
 <p align="center">
   <a href="https://decomp.dev/mateuszklysz/Lombyte"><img src="https://img.shields.io/badge/decomp.dev-Progress-de812f?style=flat-square&logo=hackthebox&logoColor=de812f&labelColor=0d1117" alt="decomp.dev progress"></a>
