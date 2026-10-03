@@ -15,7 +15,47 @@ void FUN_L02_002a40d0(char *arg) {
     FUN_L02_002a4058(arg, 0x80);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a46e0.s", FUN_L02_002a46e0);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
+
+extern char D_L02_0016D040[];
+extern float D_L02_001612F8 MACRO_ADDR;
+extern float D_L02_001612FC MACRO_ADDR;
+extern float D_L02_00161300 MACRO_ADDR;
+extern float D_L02_00161304 MACRO_ADDR;
+extern int *D_L02_001611C0 MACRO_ADDR;
+extern void FUN_001f2260(void);
+extern void FUN_00233938(int);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+void append_texture_transfer_packet(void) __asm__("FUN_001fb680");
+
+void FUN_L02_002a46e0(void) {
+    char *b;
+    long *g;
+    int *q;
+    FUN_00233938(0x13000000);
+    b = D_L02_0016D040;
+    *(float *)(b + 0x218) = D_L02_001612F8;
+    *(float *)(b + 0x21C) = D_L02_001612FC;
+    *(float *)(b + 0x228) = D_L02_00161300;
+    *(float *)(b + 0x22C) = D_L02_00161304;
+    update_view_context();
+    FUN_001f2260();
+    (*(int * volatile *)&D_L02_001611C0)[0] = 0x10000002;
+    (*(int * volatile *)&D_L02_001611C0)[1] = 0;
+    (*(int * volatile *)&D_L02_001611C0)[2] = 0x11000000;
+    (*(int * volatile *)&D_L02_001611C0)[3] = 0x50000002;
+    q = *(int * volatile *)&D_L02_001611C0;
+    D_L02_001611C0 = q + 4;
+    g = (long *)(q + 4);
+    g[0] = 0x1000000000008001L;
+    g[1] = 0xE;
+    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) | ((long)*(int *)(b + 0x238) << 16);
+    g[3] = 0x3D;
+    D_L02_001611C0 = q + 12;
+    append_texture_transfer_packet();
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 
 extern unsigned int D_L02_0015FFDC;

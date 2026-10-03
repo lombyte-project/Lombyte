@@ -541,7 +541,35 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fb148.s", FUN_L06_002fb148);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_0016016C __asm__("D_L06_001600EC") MACRO_ADDR;
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+
+void FUN_L06_002fb148(char *moby) {
+    float v0[4], m[4], v1[4];
+    char *data = *(char **)(moby + 0x78);
+    char *base = D_L06_0016016C + (*(int *)(data + 0xF8) << 7);
+    *(int *)(data + 0x118) = 0;
+    FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 0);
+    qcopy(v0, moby + 0x10);
+    v0[2] = *(float *)(D_0013E633 + 0x8) + 2.0f;
+    normalize_vector_xyz(v1, moby + 0xC0, 8.0f);
+    add_vector_xyz(v0, v0, v1);
+    clear_vector(m);
+    m[2] = FUN_001f9e90(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
+    m[1] = -FUN_001f9e90(FUN_001f9b80(v0, moby + 0x10), *(float *)(moby + 0x18) - v0[2]) - 0.5235988f;
+    FUN_L00_002eaaa0(v0, m, 1, 0, 0);
+    FUN_L00_002ea9d8(v0);
+    FUN_L00_002ea9d8(m);
+    *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbc88.s", FUN_L06_002fbc88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc640.s", FUN_L06_002fc640);

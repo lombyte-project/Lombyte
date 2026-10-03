@@ -46,4 +46,37 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a50.s", FUN_L10_002f5a50);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5a78.s", FUN_L10_002f5a78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f65f8.s", FUN_L10_002f65f8);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
+
+extern char *D_L10_0015F050 __asm__("D_L10_0015EF50") MACRO_ADDR;
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern int FUN_L10_002f5a78(char *, char *);
+
+int FUN_L10_002f65f8(char *a, char *b) {
+    unsigned char *d = *(unsigned char **)(D_L10_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
+    int x;
+    int y;
+    if (d[0x39] != 0) {
+        return -1;
+    }
+    if (d[0x38] != 0 && *(short *)(b + 0x86) != 0x13) {
+        return 1;
+    }
+    if (b != 0 && *(short *)(b + 0x7E) == 0 && (unsigned char)b[0x7C] >= (unsigned char)a[0x7C]) {
+        return 0;
+    }
+    if (FUN_L10_002f5a78(a, b) == 0) {
+        return 0;
+    }
+    x = *(int *)(d + 0x48);
+    if (x >= 0 && *(int *)(D_0013E633 + 0x200C) != x) {
+        return 0;
+    }
+    y = *(int *)(d + 0x44);
+    if (y >= 0 && *(int *)(D_0013E633 + 0x2004) != y) {
+        return 0;
+    }
+    return 1;
+}

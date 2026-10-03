@@ -74,7 +74,36 @@ void FUN_L01_002e30b8(int unused, void *out)
     FUN_001f9bf8(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
     FUN_001f9a10(out, scratch, base + 0x80);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3110.s", FUN_L01_002e3110);
+#include "sda.h"
+
+/* Builds a camera-relative transform for a moby and steps its height. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002E4488), where it is exact; names translated to the US level program. */
+
+typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+
+extern char D_0013F450[] __asm__("D_0013F350");
+extern float D_L01_00174368 __asm__("D_L01_001742E8") __attribute__((section(".data")));
+extern float D_L01_001DEE10[] __asm__("D_L01_001DEB40");
+extern int FUN_L00_002583f0(Vs *p, int x, int y, float f, float g);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L01_002e3110(char *a, char *m) {
+    Vs t0;
+    Vs t1;
+    char *g = D_0013F450;
+    normalize_vector_xyz(&t0, *(char **)(g + 0x2080) + 0xD0, 1.1f);
+    normalize_vector_xyz(&t1, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    add_vector_xyz(m, &t0, &t1);
+    add_vector_xyz(m, m, g + 0x80);
+    if (*(int *)(m + 0x68) == 0) {
+        if (FUN_L00_002583f0((Vs *)m, (int)a, 0, D_L01_001DEE10[0], 2.0f)) {
+            *(float *)(m + 8) = D_L01_00174368;
+        }
+    } else {
+        *(float *)(m + 8) = *(float *)(m + 8) + 1.0f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3208.s", FUN_L01_002e3208);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e32a8.s", FUN_L01_002e32a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e35a8.s", FUN_L01_002e35a8);

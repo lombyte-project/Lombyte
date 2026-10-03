@@ -264,7 +264,38 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f37d0.s", FUN_L06_002f37d0);
+#include "sda.h"
+
+/* for each moby in a search list with the owner's id, start three effects on its data */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L06_002f37d0(char *owner) {
+    int list;
+    float f = 0.057f;
+    int i;
+    char *d;
+    char *p;
+    if (D_0015EEB0[3] != 0) f = 0.114f;
+    FUN_L00_002591d0(&list, ((unsigned char *)owner)[0x21], 0, 0);
+    while (list != 0) {
+        if (*(unsigned char *)(list + 0x31) != 0) {
+            d = *(char **)(list + 0x78);
+            if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
+                p = d + 0x140;
+                for (i = 2; i >= 0; i--) {
+                    FUN_L00_00263618(p, *(int *)(d + 0x290), f, 0.08f);
+                    p += 0x10;
+                }
+            }
+        }
+        FUN_L00_002592b8(&list, list, 0, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f38c8.s", FUN_L06_002f38c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
