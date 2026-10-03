@@ -141,7 +141,57 @@ void FUN_L15_0029aba8(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ae18.s", FUN_L15_0029ae18);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float FUN_001f96b0(float);
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L15_00161418 __attribute__((sda));
+extern short D_L15_00161428 __attribute__((sda));
+extern short D_L15_00161438 __attribute__((sda));
+extern short D_L15_00161448 __attribute__((sda));
+extern short D_L15_0016141C __attribute__((sda));
+extern short D_L15_00161420 __attribute__((sda));
+extern short D_L15_00161424 __attribute__((sda));
+extern short D_L15_0016142C __attribute__((sda));
+extern short D_L15_00161430 __attribute__((sda));
+extern short D_L15_00161434 __attribute__((sda));
+extern short D_L15_0016143C __attribute__((sda));
+extern short D_L15_00161440 __attribute__((sda));
+extern short D_L15_00161444 __attribute__((sda));
+extern short D_L15_0016144C __attribute__((sda));
+extern short D_L15_00161454 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L15_0029ae18(char *moby) {
+    float v2[4];
+    float v0[4];
+    float v1[4];
+    char *data = *(char **)(moby + 0x78);
+    float s;
+    int a, b, c;
+    s = *(float *)&D_L15_00161440;
+    s *= D_0015ED6C_c;
+    scale_vector_xyz(v0, data, *(float *)&D_L15_00161448);
+    FUN_L00_00257d78(v2, s, s);
+    add_vector_xyz(v0, v0, v2);
+    s = *(float *)&D_L15_00161444;
+    s *= D_0015ED6C_c;
+    scale_vector_xyz(v1, data, *(float *)&D_L15_0016144C);
+    FUN_L00_00257d78(v2, s, s);
+    add_vector_xyz(v1, v1, v2);
+    v0[3] = *(float *)&D_L15_00161420;
+    v1[3] = *(float *)&D_L15_00161424;
+    a = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L15_00161428, *(float *)&D_L15_0016142C)));
+    b = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L15_00161430, *(float *)&D_L15_00161434)));
+    c = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L15_00161438, *(float *)&D_L15_0016143C)));
+    FUN_00218888(moby + 0x10, v0, v1, *(int *)&D_L15_00161418, *(int *)&D_L15_0016141C, a, b, c, *(int *)&D_L15_00161454);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029af88.s", FUN_L15_0029af88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ead0.s", FUN_L15_0029ead0);
