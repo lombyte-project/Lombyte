@@ -544,7 +544,48 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6960.s", FUN_L18_002f6960);
+#include "sda.h"
+
+/* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
+
+extern char *D_L18_0016016C __asm__("D_L18_001600EC") MACRO_ADDR;
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
+extern float FUN_001f9b80(void *, void *);
+extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
+extern short D_L18_00162408 __asm__("D_L18_00162378") __attribute__((sda));
+extern short D_L18_0016240C __asm__("D_L18_0016237C") __attribute__((sda));
+extern void FUN_L00_0025f730(void *a, float x);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
+
+void FUN_L18_002f6960(char *m) {
+    float v[4];
+    char *d = *(char **)(m + 0x78);
+    char *b = D_0013E633 + 0x0;
+    float t;
+    float lo, hi;
+    subtract_vector_xyz(v, b, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
+    v[2] = 0.0f;
+    if (*(int *)(b + 0x200C) == 0xF) {
+        FUN_L00_0025f730(v, *(float *)&D_L18_0016240C);
+    } else {
+        FUN_L00_0025f730(v, *(float *)&D_L18_00162408);
+    }
+    add_vector_xyz(v, v, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
+    t = *(float *)(D_0013E633 + 0xE0);
+    t += (FUN_001f9b80(m + 0x10, v) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC * (D_0015EE6C * 4.75f);
+    hi = D_0015EE6C * 20.0f;
+    lo = D_0015EE6C * 4.75f;
+    if (t > hi) {
+        t = hi;
+    } else if (t < lo) {
+        t = lo;
+    }
+    FUN_L18_002f6878_c(m, t, v);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
 extern int D_L18_001AC240[];

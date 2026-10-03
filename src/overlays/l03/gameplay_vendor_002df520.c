@@ -36,7 +36,39 @@ void FUN_L03_002ebb00(void *arg) {
     *(float *)(m + 0x34) = v2[1];
     *(float *)(m + 0x38) = v2[2];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebc58.s", FUN_L03_002ebc58);
+#include "qcopy.h"
+
+/* smooths the moby's data floats and rebuilds its orientation axes */
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
+
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern char D_L03_00166F40[];
+extern short D_L03_00161E70 __attribute__((sda));
+extern short D_L03_00161E74 __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
+
+void FUN_L03_002ebc58(void *arg) {
+    char *m = arg;
+    char *d = *(char **)(m + 0x70);
+    float *p = (float *)(d + 0xB0);
+    float a[4];
+    float b[4];
+    float c[4];
+    qcopy(b, d);
+    p[2] = cam_interp_values(d + 0xBC, p[2], *(float *)(D_0013E633 + 0x8), *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
+    normalize_vector_xyz(c, D_L03_00166F40, p[5]);
+    add_vector_xyz(b, c, b);
+    subtract_vector_xyz(a, b, m + 0x30);
+    normalize_vector_xyz(m, a, 1.0f);
+    qcopy(m + 0x40, m);
+    cross_vectors_xyz(m + 0x10, m, D_L03_00166F40 - 0x10);
+    normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
+    cross_vectors_xyz(m + 0x20, m + 0x10, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
 #define NOT_SDA
 
@@ -45,13 +77,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
 extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
-extern void FUN_L03_002ebc58(void *);
+extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
 void NoOpMainCallback(void *) __asm__("FUN_001e93e8");
 
 void FUN_L03_002ebdb0(void *arg) {
     FUN_L03_002ebb00_u(arg);
     NoOpMainCallback(arg);
-    FUN_L03_002ebc58(arg);
+    FUN_L03_002ebc58_u(arg);
 }
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 

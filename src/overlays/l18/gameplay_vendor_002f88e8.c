@@ -4,7 +4,50 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f88e8.s", FUN_L18_002f88e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9780.s", FUN_L18_002f9780);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9a98.s", FUN_L18_002f9a98);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L18_00162454;
+extern float D_L18_00162450;
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_L18_0015F5CC;
+extern int D_L18_00162458;
+extern int D_L18_0016245C;
+extern int D_L18_00162460;
+extern int FUN_001fa6e0(int, int, float);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L18_00162500_x __asm__("D_L18_00162500") __attribute__((sda));
+extern void FUN_L00_00263618(void *, int, float, float);
+extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern float D_L18_001624E4_b __asm__("D_L18_00162454");
+extern float D_L18_001624E0_b __asm__("D_L18_00162450");
+
+void FUN_L18_002f9a98(void *moby) {
+    char a[16];
+    char b[32];
+    char c[16];
+    char d[16];
+    char e[16];
+    int n = scale_game_frames(D_L18_00162460);
+    float f = ConvertIntegerToFloat(D_L18_0015F5CC % n);
+    int h;
+    f = f / ConvertIntegerToFloat(n);
+    f = f * 6.18318f;
+    f = fast_sin(f - 3.14159f);
+    h = FUN_001fa6e0(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);
+    build_moby_bone_transform(moby, 1, b);
+    scale_vector_xyz(e, c, *(float*)&D_L18_00162500_x);
+    subtract_vector_xyz(a, d, e);
+    FUN_L00_00263618(a, h, D_L18_00162450, D_L18_00162454);
+    build_moby_bone_transform(moby, 2, b);
+    scale_vector_xyz(e, c, *(float*)&D_L18_00162500_x);
+    subtract_vector_xyz(a, d, e);
+    FUN_L00_00263618(a, h, D_L18_001624E0_b, D_L18_001624E4_b);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9c20.s", FUN_L18_002f9c20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
 #define NOT_SDA
