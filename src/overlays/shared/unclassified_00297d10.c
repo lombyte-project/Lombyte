@@ -264,11 +264,165 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f37d0.s", FUN_L06_002f37d0);
+#include "sda.h"
+
+/* for each moby in a search list with the owner's id, start three effects on its data */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L06_002f37d0(char *owner) {
+    int list;
+    float f = 0.057f;
+    int i;
+    char *d;
+    char *p;
+    if (D_0015EEB0[3] != 0) f = 0.114f;
+    FUN_L00_002591d0(&list, ((unsigned char *)owner)[0x21], 0, 0);
+    while (list != 0) {
+        if (*(unsigned char *)(list + 0x31) != 0) {
+            d = *(char **)(list + 0x78);
+            if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
+                p = d + 0x140;
+                for (i = 2; i >= 0; i--) {
+                    FUN_L00_00263618(p, *(int *)(d + 0x290), f, 0.08f);
+                    p += 0x10;
+                }
+            }
+        }
+        FUN_L00_002592b8(&list, list, 0, 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f38c8.s", FUN_L06_002f38c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7930.s", FUN_L06_002f7930);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7ab8.s", FUN_L06_002f7ab8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7c68.s", FUN_L06_002f7c68);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F8EE8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013E550[];
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_0028d8c0(void *, int);
+extern short D_L06_00161E74 __attribute__((sda));
+extern short D_L06_00161E78 __attribute__((sda));
+extern short D_L06_00161E7C __attribute__((sda));
+extern short D_L06_00161E80 __attribute__((sda));
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L06_002f7c68_c(char *m) __asm__("FUN_L06_002f7c68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L06_002f7ab8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    if (FUN_L00_0025a420(m, 0x330000, 0) != 0) {
+        int idx;
+        FUN_L06_002f7c68_c(m);
+        FUN_0022da68(1, 0, (int)m);
+        idx = *(int *)(d + 0x60);
+        if (idx != -1) {
+            char *e = D_0013E550 + idx * 0x70;
+            if (*(char **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
+                release_voice_slot(idx);
+            }
+        }
+        *(int *)(d + 0x60) = -1;
+        mark_moby_for_removal(m);
+        return;
+    }
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
+        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L06_00161E80;
+        *(char **)d = d + 0x20;
+        m[0x20] = 1;
+        *(unsigned short *)(m + 0x34) |= 0x20;
+        *(int *)(d + 0x60) = -1;
+    case 1: {
+        float a0 = *(float *)&D_L06_00161E74 * 0.017453292f * D_0015ED6C_c;
+        float a1, a2;
+        float x = fast_add_rotations(*(float *)(m + 0x40), a0);
+        a1 = *(float *)&D_L06_00161E78 * 0.017453292f * D_0015ED6C_c;
+        *(float *)(m + 0x40) = x;
+        x = fast_add_rotations(*(float *)(m + 0x44), a1);
+        a2 = *(float *)&D_L06_00161E7C * 0.017453292f * D_0015ED6C_c;
+        *(float *)(m + 0x44) = x;
+        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), a2);
+    }
+    }
+    if (FUN_L00_0028d8c0(m, *(int *)(d + 0x60)) == 0) {
+        *(int *)(d + 0x60) = FUN_0022da68(0, 4, (int)m);
+    }
+}
+#include "sda.h"
+
+/* Spawn forty particles at the moby with randomised parameters. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F9098), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C MACRO_ADDR;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern short D_L06_00161E84_d __asm__("D_L06_00161E84") __attribute__((sda));
+extern short D_L06_00161E88_d __asm__("D_L06_00161E88") __attribute__((sda));
+extern short D_L06_00161E98_d __asm__("D_L06_00161E98") __attribute__((sda));
+extern short D_L06_00161E9C_d __asm__("D_L06_00161E9C") __attribute__((sda));
+extern short D_L06_00161EA0_d __asm__("D_L06_00161EA0") __attribute__((sda));
+extern short D_L06_00161EA4_d __asm__("D_L06_00161EA4") __attribute__((sda));
+extern short D_L06_00161EA8_d __asm__("D_L06_00161EA8") __attribute__((sda));
+extern short D_L06_00161EAC_d __asm__("D_L06_00161EAC") __attribute__((sda));
+extern unsigned char D_L06_00161E94_d __asm__("D_L06_00161E94") __attribute__((sda));
+extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+
+void FUN_L06_002f7c68(char *m) {
+    float buf[4];
+    int i;
+    for (i = 0x27; i >= 0; i--) {
+        float f;
+        int r;
+        int c;
+        int v;
+        FUN_L00_00257d78(buf, *(float *)&D_L06_00161E84_d * D_0015ED6C, *(float *)&D_L06_00161E88_d * D_0015ED6C);
+        f = random_float_between_alt(*(float *)&D_L06_00161EA8_d, *(float *)&D_L06_00161EAC_d);
+        if (random_integer_below(2) != 0) {
+            r = FUN_001fa6e0(*(int *)&D_L06_00161E98_d, *(int *)&D_L06_00161E9C_d, random_float_between_alt(0.0f, 1.0f));
+        } else {
+            r = FUN_001fa6e0(*(int *)&D_L06_00161EA0_d, *(int *)&D_L06_00161EA4_d, random_float_between_alt(0.0f, 1.0f));
+        }
+        c = D_L06_00161E94_d;
+        v = random_integer_below(0xFF);
+        FUN_L00_002730e0(m + 0x10, f, buf, r, c, (unsigned char)v, 0);
+    }
+}

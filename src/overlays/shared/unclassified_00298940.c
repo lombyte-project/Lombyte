@@ -3,5 +3,38 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298940.s", FUN_L10_00298940);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002cc1b8.s", FUN_L10_002cc1b8);
+#include "sda.h"
+#include "qcopy.h"
+extern struct Moby *func_0020D348_m_cc1b8(int) __asm__("FUN_0020c4f8");
+extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
+extern float func_001F9D10_cc1b8(void *, void *) __asm__("FUN_001f9b48");
+extern float func_L00_001FF860_cc1b8(float, float) __asm__("FUN_001f9e90");
+extern float func_001F9CE8_cc1b8(void *) __asm__("FUN_001f9b20");
+extern void func_L00_00251E30_cc1b8(void *) __asm__("FUN_L00_00250df8");
+extern char D_0013E633_cc1b8[] __asm__("D_0013F3D0");
+char *FUN_L10_002cc1b8(float scale, void *vel, void *pos, int a, int b, int c) {
+    char *m = (char *)func_0020D348_m_cc1b8(0x333);
+    char *d;
+    if (m) {
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * scale;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x7E;
+        d = *(char **)(m + 0x78);
+        m[0x31] = 1;
+        m[0x20] = 1;
+        qcopy(m + 0x10, pos);
+        qcopy(d, vel);
+        *(int *)(d + 0x18) = func_001F9850_cc1b8(c);
+        *(int *)(d + 0x10) = a;
+        *(int *)(d + 0x14) = b;
+        *(int *)(d + 0x28) = 0;
+        *(float *)(d + 0x38) = func_001F9D10_cc1b8(m + 0x10, D_0013E633_cc1b8);
+        *(int *)(d + 0x30) = 0;
+        *(int *)(d + 0x34) = 0;
+        *(float *)(m + 0x48) = func_L00_001FF860_cc1b8(*(float *)d, *(float *)(d + 4));
+        *(float *)(m + 0x44) = -func_L00_001FF860_cc1b8(func_001F9CE8_cc1b8(d), *(float *)(d + 8));
+        func_L00_00251E30_cc1b8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002cc2e8.s", FUN_L10_002cc2e8);

@@ -73,7 +73,34 @@ void FUN_L01_0030d260(void *unused, float *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d5f0.s", FUN_L01_0030d5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030dda0.s", FUN_L01_0030dda0);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_L01_001620E0 __attribute__((sda));
+extern char D_L01_001620F0 __attribute__((sda));
+extern char D_L01_00162100 __attribute__((sda));
+extern float D_0015ED6C MACRO_ADDR;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);
+
+void FUN_L01_0030dda0(char *m) {
+    if (*(unsigned char *)(m + 0x31) != 0) {
+        float buf[4];
+        float v[4];
+        float z[4];
+        *(u128 *)z = 0;
+        z[2] = -(random_float_between_alt(1.0f, 2.0f) * D_0015ED6C);
+        *(u128 *)v = *(u128 *)z;
+        FUN_L00_0024f7c8(m, 0, buf);
+        FUN_L01_0028a7a8(m, buf, v, &D_L01_001620E0, 1);
+        FUN_L01_0028a7a8(m, buf, v, &D_L01_001620F0, 1);
+        FUN_L01_0028a7a8(m, buf, v, &D_L01_00162100, 1);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -260,7 +260,53 @@ int FUN_L14_002d9870(int i)
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dea98.s", FUN_L14_002dea98);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern float D_0015ED60 MACRO_ADDR;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L14_00161B08_x __asm__("D_L14_00161B08") __attribute__((sda));
+extern short D_L14_00161B0C_x __asm__("D_L14_00161B0C") __attribute__((sda));
+extern short D_L14_00161B10_x __asm__("D_L14_00161B10") __attribute__((sda));
+extern short D_L14_00161B14_x __asm__("D_L14_00161B14") __attribute__((sda));
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
+    unsigned char *m = func_0020D348_m(0x145);
+    char *d;
+    char *g;
+    float vec[8];
+    if (m != 0) {
+        d = *(char **)(m + 0x78);
+        *(char **)(d + 0x24) = owner;
+        qcopy(m + 0x10, pos);
+        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
+        m[0x20] = 0;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        g = D_0013F3D0;
+        subtract_vector_xyz(vec, m + 0x10, g);
+        g = g + 0x210;
+        vec[2] = 0.0f;
+        normalize_vector_xyz(vec, vec, random_float_between_alt(*(float *)&D_L14_00161B08_x * D_0015ED60, *(float *)&D_L14_00161B0C_x * D_0015ED60));
+        cross_vectors_xyz(vec + 4, g, vec);
+        build_look_at_matrix(d, vec, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
+        *(float *)(d + 8) = random_float_between_alt(*(float *)&D_L14_00161B10_x * D_0015ED60, *(float *)&D_L14_00161B14_x * D_0015ED60);
+        *(float *)(d + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
+        *(float *)(d + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
+        *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, 0.017453292f);
+        *(int *)(d + 0x20) = scale_game_frames(200);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dfd10.s", FUN_L14_002dfd10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e03b8.s", FUN_L14_002e03b8);

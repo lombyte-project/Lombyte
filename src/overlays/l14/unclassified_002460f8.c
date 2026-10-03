@@ -486,7 +486,26 @@ void FUN_L14_002b55b0(char *moby) {
     }
     *(int *)(data + 0x10C) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5730.s", FUN_L14_002b5730);
+#include "sda.h"
+
+/* steer a moby's position toward a target and update its velocity */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6980), where it is exact; names translated to the US level program. */
+
+extern float atan_5730(float, float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025b8c0_5730(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
+extern void steer_5730(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
+
+extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
+int FUN_L14_002b5730(char *moby, char *a1, int a2, int a3, float *v, float *vel,
+                      float f12, float f13, float f14, float f15, float f16, float f17, float f18) {
+    float tmp[3];
+    int r = FUN_L00_0025d808_5730(a1, tmp, a2, a3, 0);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x10), v, tmp[0], f13, f14, f15);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x14), v + 1, tmp[1], f13, f14, f15);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x18), v + 2, tmp[2], f13, f14, f15);
+    steer_5730(moby, vel, atan_5730(v[0], v[1]), f16, f17, f18);
+    return r != 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5850.s", FUN_L14_002b5850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);
@@ -539,4 +558,102 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d7490.s", FUN_L14_002d7490);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de1f8.s", FUN_L14_002de1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de2b8.s", FUN_L14_002de2b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002dee28.s", FUN_L14_002dee28);
+#include "sda.h"
+
+/* Updates a gem-lock sentry: picks up a sound slot and fires when the player is near. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002E0228), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int D_L14_0015F7EC __asm__("D_L14_0015F70C") MACRO_ADDR;
+extern int FUN_001fa728_dee28(char *, float) __asm__("FUN_001fa728");
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern void FUN_L14_002df080(char *);
+extern void FUN_L14_002df138(char *);
+extern void FUN_L14_002dfc58(char *);
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L14_002dee28(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *x;
+    float v[4];
+    float w[4];
+    int idx;
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        if (*(int *)(data + 0x1F4) == -1 || *(int *)(data + 0x1F8) == -1 || *(int *)(data + 0x1FC) == -1 || *(int *)(data + 0x200) < 0) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        FUN_L14_002df080(moby);
+        moby[0x20] = 1;
+        *(int *)(data + 0x204) = -1;
+        break;
+    case 1:
+        x = D_0013E633 - 0x80;
+        if (*(int *)(x + 0x208C) != 0xF
+            || (*(int *)(x + 0x560) != *(int *)((*(int *)(data + 0x1F4) << 5) + D_L14_0015F7EC + 0x10)
+                && *(int *)(x + 0x560) != *(int *)((*(int *)(data + 0x1F8) << 5) + D_L14_0015F7EC + 0x10)
+                && *(int *)(x + 0x560) != *(int *)((*(int *)(data + 0x1FC) << 5) + D_L14_0015F7EC + 0x10))) {
+            if (16.0f < AbsoluteFloat(*(float *)(x + 0x80) - *(float *)(moby + 0x10))) goto end;
+            if (16.0f < AbsoluteFloat(*(float *)(x + 0x84) - *(float *)(moby + 0x14))) goto end;
+        }
+        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x204)) == 0) {
+            *(int *)(data + 0x204) = FUN_L00_0028dc90(6, 4, (int)moby, 0xD3);
+        }
+        FUN_L14_002dfc58(moby);
+        v[0] = fast_cos(*(float *)(moby + 0x48)) * 3.125f;
+        v[1] = fast_sin(*(float *)(moby + 0x48)) * 3.125f;
+        v[2] = 0.0f;
+        add_vector_xyz(v, moby + 0x10, v);
+        qcopy(w, v);
+        w[3] = 4.5f;
+        if (FUN_001fa728_dee28((char *)w, 64.0f) >= 0) {
+            FUN_L14_002df138(moby);
+        }
+        return;
+    }
+end:
+    idx = *(int *)(data + 0x204);
+    if (idx >= 0) {
+        if (idx != -1) {
+            char *e = D_0013E633 - 0xE80 + idx * 0x70;
+            if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                release_voice_slot(idx);
+            }
+        }
+        *(int *)(data + 0x204) = -1;
+    }
+}

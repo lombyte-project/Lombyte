@@ -7,7 +7,73 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002feb40.s", FUN_L06_002feb40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff100.s", FUN_L06_002ff100);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff978.s", FUN_L06_002ff978);
+#include "sda.h"
+
+/* Spawns a burst of effects for each pair of ready entries in the moby's table. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float FUN_001f96b0(float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L06_00162004 __attribute__((sda));
+extern short D_L06_00162008 __attribute__((sda));
+extern short D_L06_0016200C __attribute__((sda));
+extern short D_L06_00162010 __attribute__((sda));
+extern short D_L06_00162014 __attribute__((sda));
+extern short D_L06_00162018 __attribute__((sda));
+extern short D_L06_0016201C __attribute__((sda));
+extern short D_L06_00162020 __attribute__((sda));
+extern short D_L06_00162024 __attribute__((sda));
+extern short D_L06_00162028 __attribute__((sda));
+extern short D_L06_0016202C __attribute__((sda));
+extern short D_L06_00162030 __attribute__((sda));
+extern short D_L06_00162034 __attribute__((sda));
+extern short D_L06_00162038 __attribute__((sda));
+extern short D_L06_0016203C __attribute__((sda));
+extern short D_L06_00162040 __attribute__((sda));
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L06_002ff978(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int i, n;
+    for (i = 0; i < 15; i = n) {
+        float f21, f22;
+        int s18, s19, s17;
+        int s10[4];
+        float v[4], w[4];
+        char *p;
+        int off = i * 16;
+        n = i + 1;
+        if (*(float *)(data + off + 0x23C) < 0.99f && *(float *)(data - (-(n * 16)) + 0x23C) < 0.99f) { continue; }
+        if (*(float *)&D_L06_0016203C < random_float_between_alt(0.0f, 1.0f)) { continue; }
+        f21 = random_angle_radians();
+        f22 = random_angle_radians();
+        v[0] = fast_cos(f21) * random_float_between_alt(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+        v[1] = fast_sin(f21) * random_float_between_alt(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+        v[2] = 0;
+        w[0] = fast_cos(f22) * random_float_between_alt(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+        w[1] = fast_sin(f22) * random_float_between_alt(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+        w[2] = 0;
+        v[2] = random_float_between_alt(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
+        w[2] = random_float_between_alt(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
+        s18 = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L06_00162014, *(float *)&D_L06_00162018)));
+        s19 = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L06_0016201C, *(float *)&D_L06_00162020)));
+        s17 = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L06_00162024, *(float *)&D_L06_00162028)));
+        scale_vector_xyz(v, v, 1.0f / (float)s18);
+        v[3] = *(float *)&D_L06_0016200C;
+        scale_vector_xyz(w, w, 1.0f / (float)s17);
+        w[3] = *(float *)&D_L06_00162010;
+        p = data + (off + 0x230);
+        FUN_001f9a40(s10, p, p, random_float_between_alt(0.0f, 1.0f));
+        FUN_00218888(s10, v, w, *(int *)&D_L06_00162004, *(int *)&D_L06_00162008, s18, s19, s17, *(int *)&D_L06_00162040);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

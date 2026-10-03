@@ -264,7 +264,40 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303e50.s", FUN_L05_00303e50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303f80.s", FUN_L05_00303f80);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+typedef struct { char p0[0x10]; char pos[0x10]; unsigned char state; char p1[0x13]; unsigned short flags; char p2[0xCA]; } Ent_03f80;
+extern float func_001F9D10_03f80(void *, void *) __asm__("FUN_001f9b48");
+extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
+extern Ent_03f80 *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
+extern short D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
+char *FUN_L05_00303f80(char *self, int idx) {
+    short *list = D_L05_001AC040_03f80[idx];
+    float best = 120.0f;
+    char *res = 0;
+    if (list == 0) {
+        return 0;
+    }
+    {
+        do {
+            int i = *(unsigned short *)list & 0x7FFF;
+            if (D_L05_00160098_m_03f80[i].flags & 0x1000) {
+                if (D_L05_00160098_m_03f80[i].state < 0x7F) {
+                    float d = func_001F9D10_03f80(D_L05_00160098_m_03f80[i].pos, self + 0x10);
+                    if (d < best) {
+                        best = d;
+                        res = *(char **)&D_L05_00160098_03f80 + (i << 8);
+                    }
+                }
+            }
+        } while (*list++ >= 0);
+    }
+    return res;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);

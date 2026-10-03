@@ -61,7 +61,41 @@ extern void FUN_L01_002b91c8(char *, int);
 void FUN_L01_002fd0c0(void) {
     FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff028.s", FUN_L01_002ff028);
+/* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x44];
+    short n;
+    char pad1[0x132];
+    char *m[1];
+} G_q;
+
+extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
+extern int D_L01_0015F5C4_q __asm__("D_L01_0015F5C4");
+extern short D_L01_00161D30_q __asm__("D_L01_00161D30") __attribute__((sda));
+extern unsigned char D_0015EDB0_s __asm__("D_0015EDB0");
+extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
+extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L01_002ff028(char *a) {
+    if (D_L01_0015F5C4_q == 2 && D_0015EDB0_s != 0) {
+        int i;
+        for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
+            char *moby = D_L01_0016CCE0_q.m[i];
+            short c = *(short *)(moby + 0xA6);
+            if (c == *(short *)(a + 0xA6) || c == 0x32B) {
+                unsigned char *q = D_L01_0017C8C0_q;
+                if (q[1] == 0) {
+                    attach_manipulator_q(moby, 0, q);
+                    *(float *)(q + 0x20) = *(float *)&D_L01_00161D30_q;
+                    *(float *)(q + 0x24) = *(float *)&D_L01_00161D30_q;
+                    *(float *)(q + 0x28) = *(float *)&D_L01_00161D30_q;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff118.s", FUN_L01_002ff118);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
@@ -78,7 +112,7 @@ extern short D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
 extern short D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
 extern short D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
 extern void FUN_L01_00308550(char *);
-extern void FUN_L01_003089f0(char *);
+extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L01_00308380(char *moby) {
@@ -99,12 +133,58 @@ void FUN_L01_00308380(char *moby) {
     }
     FUN_L01_00308550(moby);
     if (random_integer_below(*(int *)&D_L01_00161F50_d) == 0) {
-        FUN_L01_003089f0(moby);
+        FUN_L01_003089f0_u(moby);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308550.s", FUN_L01_00308550);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003087e0.s", FUN_L01_003087e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003089f0.s", FUN_L01_003089f0);
+#include "sda.h"
+
+/* builds three jittered offsets and fires the same effect at each accumulated point */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C MACRO_ADDR;
+extern int random_integer_below_c(int) __asm__("FUN_00213260");
+extern short D_L01_00161F54_d __asm__("D_L01_00161F54") __attribute__((sda));
+extern short D_L01_00161F58_d __asm__("D_L01_00161F58") __attribute__((sda));
+extern short D_L01_00161F5C_d __asm__("D_L01_00161F5C") __attribute__((sda));
+extern short D_L01_00161F60_d __asm__("D_L01_00161F60") __attribute__((sda));
+extern short D_L01_00161F64_d __asm__("D_L01_00161F64") __attribute__((sda));
+extern short D_L01_00161F68_d __asm__("D_L01_00161F68") __attribute__((sda));
+extern short D_L01_00161F6C_d __asm__("D_L01_00161F6C") __attribute__((sda));
+extern short D_L01_00161F70_d __asm__("D_L01_00161F70") __attribute__((sda));
+extern short D_L01_00161F74_d __asm__("D_L01_00161F74") __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+
+void FUN_L01_003089f0(char *m) {
+    float v[4];
+    float w[4];
+    float u[4];
+    float t;
+    int i;
+    int c;
+    int c2;
+    if (*(unsigned char *)(m + 0x20) == 1) {
+        scale_vector_xyz(v, m, 0.0009765625f);
+    } else {
+        FUN_L00_0024f7c8(m, 0, v);
+    }
+    t = D_0015ED6C;
+    FUN_L00_00257d78(w, *(float *)&D_L01_00161F54_d * t, *(float *)&D_L01_00161F58_d * t);
+    c = *(unsigned char *)&D_L01_00161F64_d;
+    FUN_L00_002730e0(v, w, *(int *)&D_L01_00161F68_d, c, random_integer_below_c(0xFF) & 0xFF, 0, *(float *)&D_L01_00161F70_d);
+    for (i = 2; i >= 0; i--) {
+        t = D_0015ED6C;
+        FUN_L00_00257d78(u, *(float *)&D_L01_00161F5C_d * t, *(float *)&D_L01_00161F60_d * t);
+        add_vector_xyz(w, w, u);
+        c2 = *(unsigned char *)&D_L01_00161F64_d;
+        FUN_L00_002730e0(v, w, *(int *)&D_L01_00161F6C_d, c2, random_integer_below_c(0xFF) & 0xFF, 0, *(float *)&D_L01_00161F74_d);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309F00), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */

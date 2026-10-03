@@ -21,7 +21,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *arg0);
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L10_002d8058();
+extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern short D_L10_00161BF0_d __asm__("D_L10_00161BF0") __attribute__((sda));
 extern short D_L10_00161BF4_d __asm__("D_L10_00161BF4") __attribute__((sda));
 extern short D_L10_00161BF8_d __asm__("D_L10_00161BF8") __attribute__((sda));
@@ -47,7 +47,7 @@ void FUN_L10_002d8c00(char *moby) {
         float r = random_float_between_alt(*(float *)&D_L10_00161BFC_d, *(float *)&D_L10_00161C00_d) * 0.017453292f;
         build_spherical_offset(a, random_float_between_alt(*(float *)&D_L10_00161C04_d, *(float *)&D_L10_00161C08_d) * D_0015ED6C, q, r);
         FUN_001f9a10(b, moby + 0x10, a);
-        FUN_L10_002d8058(moby, b, a);
+        FUN_L10_002d8058_u(moby, b, a);
         FUN_0022da68(0, 0, (int)moby);
         *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
     }
@@ -80,19 +80,175 @@ char *FUN_L10_002dd848(char *owner) {
     return moby;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295a38.s", FUN_L10_00295a38);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+typedef int u128_95a38 __attribute__((mode(TI)));
+extern int func_001E9730_95a38() __asm__("FUN_001e93b0");
+extern void func_0020D678_95a38(void *) __asm__("FUN_0020c828");
+extern float func_001F9878_95a38(float) __asm__("FUN_001f96b0");
+extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
+extern int func_001F9908_95a38(int *) __asm__("FUN_001f9740");
+extern int func_0022ED80_95a38(int, int, int) __asm__("FUN_0022da68");
+extern char D_L10_001DC810_95a38[] __asm__("D_L10_001DC510");
+void FUN_L10_00295a38(char *m) {
+    char *d = *(char **)(m + 0x78);
+    if (d == 0) {
+        func_001E9730_95a38(D_L10_001DC810_95a38, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+        func_0020D678_95a38(m);
+        return;
+    }
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        d[0x28] = 4;
+        *(short *)(d + 0x3E) = 5;
+        *(int *)(d + 0x20) = 0;
+        *(short *)(d + 0x24) = 0;
+        *(u128_95a38 *)(d + 0xA0) = *(u128_95a38 *)(m + 0x10);
+        m[0x20] = 1;
+        break;
+    case 1: {
+        float lim;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.5f / func_001F9878_95a38(45.0f);
+        lim = *(float *)(d + 0xA8) + 1.5f;
+        if (lim <= *(float *)(m + 0x18)) {
+            *(float *)(m + 0x18) = lim;
+            m[0x20] = 2;
+            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        }
+        break;
+    }
+    case 2:
+        if (func_001F9908_95a38((int *)(d + 0xB0))) {
+            func_0022ED80_95a38(0, 0, (int)m);
+            m[0x20] = 3;
+        }
+        break;
+    case 3: {
+        float lim;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) - 1.5f / func_001F9878_95a38(45.0f);
+        lim = *(float *)(d + 0xA8);
+        if (*(float *)(m + 0x18) <= lim) {
+            *(float *)(m + 0x18) = lim;
+            m[0x20] = 4;
+            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        }
+        break;
+    }
+    case 4:
+        if (func_001F9908_95a38((int *)(d + 0xB0))) {
+            func_0022ED80_95a38(0, 0, (int)m);
+            m[0x20] = 1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c7a20.s", FUN_L10_002c7a20);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
+
+extern char D_0013E550[];
+extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern void *FUN_L00_0026fd28(char *a, char *b, unsigned char c, int d);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector(void *) __asm__("func_001F99F8");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int tick_countdown_32(void *) __asm__("func_001F9740");
+
+void FUN_L10_002c7a20(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float d[16];
+    float v[4];
+    float r[4];
+    float s[4];
+    switch (moby[0x20]) {
+    case 0:
+        *(int *)(data + 0x10) = -1;
+        if (tick_countdown_32((int *)(data + 0xC))) {
+            *(int *)(data + 0xC) = *(int *)(data + 4);
+            moby[0x20] = 1;
+        }
+        break;
+    case 1:
+        qcopy(v, moby + 0x10);
+        FUN_001fa050(d, (float *)(moby + 0x40));
+        clear_vector(r);
+        r[2] = *(float *)data * 3.0f * D_0015ED6C_c;
+        FUN_001f9d20(r, r, d);
+        scale_vector_xyz(s, r, 0.33f);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        add_vector_xyz(v, v, s);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        add_vector_xyz(v, v, s);
+        FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
+        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x10)) == 0) {
+            *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
+        }
+        if (tick_countdown_32((int *)(data + 0xC))) {
+            int k;
+            *(int *)(data + 0xC) = *(int *)(data + 8);
+            moby[0x20] = 0;
+            k = *(int *)(data + 0x10);
+            if (k != -1) {
+                unsigned char *e = (unsigned char *)D_0013E550 + k * 0x70;
+                if (*(unsigned char **)(e + 0x88) == moby && e[0x74] != 0) {
+                    release_voice_slot(k);
+                }
+            }
+            *(int *)(data + 0x10) = -1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8058.s", FUN_L10_002d8058);
+#ifndef NOT_SDA
+#endif
+#ifndef MACRO_ADDR
+#endif
+struct Swirl_d8058 { char pad[0x18]; float a; float b; };
+extern char *func_0020D348_d8058(int) __asm__("FUN_0020c4f8");
+extern float func_002140F8_d8058(float, float) __asm__("FUN_002132a8");
+extern int func_001F9850_d8058(int) __asm__("FUN_001f96f8");
+extern void func_L00_00251E30_d8058(void *) __asm__("FUN_L00_00250df8");
+extern short D_L10_00161C6C_d8058 __asm__("D_L10_00161BEC") __attribute__((sda));
+extern float D_0015EE6C_d8058 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+int FUN_L10_002d8058(int owner, char *pos, char *vec) {
+    char *moby = func_0020D348_d8058(0x3AA);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0x7F;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(int *)(data + 0x10) = owner;
+        *(short *)(data + 0x16) = 0;
+        qcopy(moby + 0x10, pos);
+        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161C6C_d8058;
+        qcopy(data, vec);
+        ((struct Swirl_d8058 *)data)->a = func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
+        ((struct Swirl_d8058 *)data)->b = func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
+        *(short *)(data + 0x14) = func_001F9850_d8058(0x3C);
+        func_L00_00251E30_d8058(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
@@ -214,4 +370,52 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd650.s", FUN_L10_002dd650);
+#include "sda.h"
+
+/* Collectible trigger: deletes itself once taken, else watches for its toucher. */
+/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
+
+extern L10State D_L10_001BB6B0;
+extern char D_L10_00178580[];
+extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_L10_001BA950[];
+extern unsigned char D_0014C190[] NOT_SDA;
+void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L10_002dd650(char *m) {
+    int i;
+    char *e;
+    float w[16];
+    float v[4];
+    unsigned short id = *(unsigned short *)(m + 0xB2);
+    if (D_L10_001BB6B0.collected[(short)id] != 0
+        || (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
+        mark_moby_for_removal_d650(m);
+        return;
+    }
+    *(short *)(m + 0x32) = 0x80;
+    e = D_L10_00178580;
+    for (i = 0; i < 0x40; i++, e += 0x40) {
+        if (*(char **)(e + 0x34) == m) {
+            if (*(int *)(e + 0x24) & 0x20000) {
+                char *o = *(char **)(e + 0x20);
+                if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
+                    subtract_vector_xyz(v, m + 0x10, o + 0x10);
+                    FUN_001fa2d8(w, m + 0xC0);
+                    FUN_001f9d20(v, v, w);
+                    if (v[0] > 0.25f) {
+                        *(int *)(D_0014C190 + (((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + (D_0015ED84_m << 8))) |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                        D_L10_001BA950[(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+                        mark_moby_for_removal_d650(m);
+                        return;
+                    }
+                    *(int *)(e + 0x34) = 0;
+                } else {
+                    *(int *)(e + 0x34) = 0;
+                }
+            }
+        }
+    }
+}

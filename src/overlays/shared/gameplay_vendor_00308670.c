@@ -4,4 +4,43 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308670.s", FUN_L12_00308670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308708.s", FUN_L12_00308708);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308918.s", FUN_L12_00308918);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_00309CF8), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x40]; float vx, vy; } MO;
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015ED6C MACRO_ADDR;
+extern int FUN_L00_0025c698(void *, void *);
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L12_00308918(char *m) {
+    int st;
+    char *d;
+    char *p;
+    int r;
+    MO *mo = (MO *)m;
+    char v[16];
+    st = *(unsigned char *)(m + 0x53);
+    d = *(char **)(m + 0x78);
+    if (st == 1) {
+        p = d + 0x20;
+        r = FUN_L00_0025c698(m, p);
+        mo->vx = fast_add_rotations(mo->vx, D_0015ED6C * 4.3633232f);
+        mo->vy = fast_add_rotations(mo->vy, D_0015ED6C * 4.3633232f);
+        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        if (r & 0x61) {
+            qcopy(v, m + 0x10);
+            ((float *)v)[2] += 1.0f;
+            func_L00_0025F4A8_alt(m, p, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f,
+                                  1, st, -1, 0);
+            mark_moby_for_removal(m);
+        } else if (*(float *)(m + 0x18) < 5.0f) {
+            mark_moby_for_removal(m);
+        }
+    }
+}

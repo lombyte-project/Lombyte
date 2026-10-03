@@ -100,7 +100,75 @@ void FUN_L15_002eabd8(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eac90.s", FUN_L15_002eac90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb6b8.s", FUN_L15_002eb6b8);
+#define NOT_SDA __attribute__((section(".data")))
+
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
+
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern char D_L15_00162190[];
+extern char D_L15_0016CE60[];
+extern int sprintf_alt(char *str, const char *fmt, ...) __asm__("FUN_00116248");
+extern int strlen_alt(char *) __asm__("FUN_001166cc");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L15_00162180_d __asm__("D_L15_00162180") __attribute__((sda));
+extern short D_L15_00162184_d __asm__("D_L15_00162184") __attribute__((sda));
+extern short D_L15_00162188_d __asm__("D_L15_00162188") __attribute__((sda));
+extern short D_L15_0016218C_d __asm__("D_L15_0016218C") __attribute__((sda));
+void font_print_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6530");
+
+void FUN_L15_002eb6b8(void) {
+    char buf[0x50];
+    int flag = 0;
+    int val = 0;
+    char *s = D_L15_0016CE60;
+    int n;
+    char *s2;
+    char *s3;
+    if (*(int *)(s + 0x30) == 3) {
+        if (scale_game_frames(0xB5) < *(int *)(s + 0x34)) {
+            if (*(int *)(s + 0x34) < scale_game_frames(0x104)) {
+                flag = 1;
+                sprintf_alt(buf, D_L15_00162190, get_help_message_text(0x526A));
+                val = (*(int *)(s + 0x34) - scale_game_frames(0xB5)) >> 2;
+            }
+        }
+        s2 = D_L15_0016CE60;
+        if (scale_game_frames(0x1C2) < *(int *)(s2 + 0x34)) {
+            if (*(int *)(s2 + 0x34) < scale_game_frames(0x280)) {
+                flag = 1;
+                sprintf_alt(buf, D_L15_00162190, get_help_message_text(0x526B));
+                val = (*(int *)(s2 + 0x34) - scale_game_frames(0x1C2)) >> 2;
+            }
+        }
+        s3 = D_L15_0016CE60;
+        if (scale_game_frames(0x2EE) < *(int *)(s3 + 0x34)) {
+            if (*(int *)(s3 + 0x34) < scale_game_frames(0x3A2)) {
+                flag = 1;
+                sprintf_alt(buf, D_L15_00162190, get_help_message_text(0x526C));
+                val = (*(int *)(s3 + 0x34) - scale_game_frames(0x2EE)) >> 2;
+            }
+        }
+    } else if (*(int *)(s + 0x30) == 4) {
+        if (scale_game_frames(0x8FC) < *(int *)(s + 0x34)) {
+            if (*(int *)(s + 0x34) < scale_game_frames(0x960)) {
+                flag = 1;
+                sprintf_alt(buf, D_L15_00162190, get_help_message_text(0x526E));
+                val = (*(int *)(s + 0x34) - scale_game_frames(0x8FC)) >> 2;
+            }
+        }
+    }
+    if (flag == 0) return;
+    n = strlen_alt(buf);
+    if (val < n) {
+        n = val;
+    } else if (n < val) {
+        if ((n - val) & 4) n = n - 1;
+    }
+    font_print_large((void *)(*(int *)&D_L15_00162180_d + 1), (void *)(*(int *)&D_L15_00162184_d + 1), (void *)*(int *)&D_L15_0016218C_d, buf, (void *)n);
+    font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d, (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
+}
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 

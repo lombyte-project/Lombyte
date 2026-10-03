@@ -2,6 +2,48 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00279f00.s", FUN_L08_00279f00);
+#include "sda.h"
+
+/* Spawns an effect moby at the position of moby a. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
+
+extern char D_L08_001675C0[];
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L08_00160200_x __asm__("D_L08_00160200") __attribute__((sda));
+extern short D_L08_00160204_x __asm__("D_L08_00160204") __attribute__((sda));
+extern short D_L08_00160208_x __asm__("D_L08_00160208") __attribute__((sda));
+extern unsigned char *D_L08_001B291C_x __asm__("D_L08_001B291C") __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L08_00279f00(char *a)
+{
+    float v[4];
+    unsigned char *m = FUN_L00_002678b8(0x27);
+    char *p;
+    char *q;
+    if (m != 0) {
+        p = a + 0x10;
+        q = (char *)m + 0x20;
+        subtract_vector_xyz(v, p, D_L08_001675C0);
+        normalize_vector_xyz(v, v, *(float *)&D_L08_00160208_x);
+        add_vector_xyz(m + 0x10, p, v);
+        *(int *)(m + 4) = *(int *)&D_L08_00160204_x;
+        m[9] = func_001FA898_r(4.0f) + 0x40;
+        m[3] = 0x48;
+        m[1] = 0;
+        m[2] = *D_L08_001B291C_x;
+        *(float *)(m + 0xC) = *(float *)&D_L08_00160200_x;
+        *(short *)(m + 0xA) = scale_game_frames(0x1E);
+        *(float *)(m + 0x20) = 255.0f;
+        *(char **)(q + 4) = a;
+        *(int *)(q + 8) = 0;
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0027b450.s", FUN_L08_0027b450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0027fe00.s", FUN_L08_0027fe00);

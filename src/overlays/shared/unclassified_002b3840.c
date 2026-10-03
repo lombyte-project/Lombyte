@@ -2,7 +2,33 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d4168.s", FUN_L05_002d4168);
+#include "sda.h"
+#include "qcopy.h"
+extern struct Moby *func_0020D348_m_d4168(int) __asm__("FUN_0020c4f8");
+extern int func_001F9850_d4168(int) __asm__("FUN_001f96f8");
+extern float D_0015EE6C_d4168 __asm__("D_0015ED6C") MACRO_ADDR;
+char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
+    char *moby = (char *)func_0020D348_m_d4168(0x5C3);
+    if (moby != 0) {
+        char *d = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        *(float *)(moby + 0x48) = f0;
+        *(float *)(moby + 0x44) = f1;
+        moby[0x20] = 0;
+        *(int *)d = owner;
+        qcopy(moby + 0x10, pos);
+        *(float *)(d + 0x10) = D_0015EE6C_d4168 * 30.0f * 0.7f;
+        *(int *)(d + 8) = arg;
+        *(int *)(d + 0x14) = 0;
+        *(int *)(d + 0x18) = 0;
+        *(short *)(d + 6) = 0;
+        *(float *)(moby + 0x2C) *= 2.3f;
+        *(short *)(d + 4) = func_001F9850_d4168(0x12C);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
 #define NOT_SDA
 
@@ -193,7 +219,35 @@ void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
     d->s[2] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319510.s", FUN_L05_00319510);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
+extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L05_00319208");
+extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC") MACRO_ADDR;
+void FUN_L05_00319510(void *moby_v)
+{
+    char *moby = moby_v;
+    char *data = *(char **)(moby + 0x78);
+    char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
+    char *position;
+    if (spawn != 0) {
+        int index;
+        char *slot=data;
+        char *entry;
+        position=spawn+0x10;
+        slot+=*(short *)(data+0xB4)<<2;
+        index=*(int *)(slot+0x80)<<7;
+        entry=D_L16_001601AC_m_19510;
+        qcopy(position, (void *)(index+(int)entry+0x30));
+        qcopy(spawn + 0x40, (void *)(index+(int)entry+0x70));
+        func_L16_002E5D68_19510(spawn);
+    }
+    *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 #define NOT_SDA
 

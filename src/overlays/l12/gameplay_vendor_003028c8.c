@@ -106,7 +106,71 @@ void FUN_L12_00307ab8(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003081b0.s", FUN_L12_003081b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003093c8.s", FUN_L12_003093c8);
+#include "sda.h"
+
+/* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern char D_0013D388[];
+extern char D_0013F3D0[] NOT_SDA;
+extern char D_L12_0016CCF0[];
+extern int D_L12_0015F5C4 MACRO_ADDR;
+extern int D_L12_0015F5CC MACRO_ADDR;
+extern void FUN_L00_00298840(int);
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L12_003093c8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *base;
+    char *p;
+    char *q;
+    if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
+        base = D_0013D388;
+        if (*(unsigned char *)(*(int *)(data + 4) + base + 0x5C) != 0) {
+            mark_moby_for_removal(moby);
+            return;
+        }
+        p = D_0013F3D0;
+        if (is_point_inside_clip_volume(p, *(int *)data) != 0) {
+            *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
+            qcopy(D_L12_0016CCF0, p);
+            q = D_L12_0016CCF0 - 0x10;
+            *(float *)(q + 0x18) = *(float *)(p + 0x258);
+            qcopy(D_L12_0016CCF0 + 0x10, p + 0x10);
+            *(short *)(q + 0x46) = 1;
+            FUN_L00_00298840(*(int *)(data + 8));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030be68.s", FUN_L12_0030be68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030bff0.s", FUN_L12_0030bff0);

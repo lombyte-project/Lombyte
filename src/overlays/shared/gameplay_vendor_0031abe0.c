@@ -2,7 +2,44 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031abe0.s", FUN_L05_0031abe0);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
+
+extern char D_001413DC[];
+extern char D_L05_0015F580[] MACRO_ADDR;
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int FUN_001fa728(char *, float);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag, int col, float *vel);
+
+void FUN_L05_0031abe0(char *moby) {
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        ((unsigned char *)moby)[0x30] = 0x80;
+        *(unsigned short *)(moby + 0x34) |= 0x41;
+        moby[0x20] = 1;
+        break;
+    case 1: {
+        float v[4];
+        int i;
+        qcopy(v, moby + 0x10);
+        v[3] = 8.0f;
+        if (FUN_001fa728((char *)v, 128.0f) != -1) {
+            if (*(int *)(D_001413DC) == 0x16) {
+                for (i = 0; i < 3; i++) {
+                    float a = random_angle_radians();
+                    float b = random_angle_radians();
+                    FUN_L00_002743a8(a, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1, 0x7F, 0);
+                }
+            }
+        }
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031c8e0.s", FUN_L05_0031c8e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031cf58.s", FUN_L05_0031cf58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031d160.s", FUN_L05_0031d160);

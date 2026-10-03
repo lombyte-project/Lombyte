@@ -15,7 +15,47 @@ void FUN_L02_002a40d0(char *arg) {
     FUN_L02_002a4058(arg, 0x80);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a46e0.s", FUN_L02_002a46e0);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
+
+extern char D_L02_0016D040[];
+extern float D_L02_001612F8 MACRO_ADDR;
+extern float D_L02_001612FC MACRO_ADDR;
+extern float D_L02_00161300 MACRO_ADDR;
+extern float D_L02_00161304 MACRO_ADDR;
+extern int *D_L02_001611C0 MACRO_ADDR;
+extern void FUN_001f2260(void);
+extern void FUN_00233938(int);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+void append_texture_transfer_packet(void) __asm__("FUN_001fb680");
+
+void FUN_L02_002a46e0(void) {
+    char *b;
+    long *g;
+    int *q;
+    FUN_00233938(0x13000000);
+    b = D_L02_0016D040;
+    *(float *)(b + 0x218) = D_L02_001612F8;
+    *(float *)(b + 0x21C) = D_L02_001612FC;
+    *(float *)(b + 0x228) = D_L02_00161300;
+    *(float *)(b + 0x22C) = D_L02_00161304;
+    update_view_context();
+    FUN_001f2260();
+    (*(int * volatile *)&D_L02_001611C0)[0] = 0x10000002;
+    (*(int * volatile *)&D_L02_001611C0)[1] = 0;
+    (*(int * volatile *)&D_L02_001611C0)[2] = 0x11000000;
+    (*(int * volatile *)&D_L02_001611C0)[3] = 0x50000002;
+    q = *(int * volatile *)&D_L02_001611C0;
+    D_L02_001611C0 = q + 4;
+    g = (long *)(q + 4);
+    g[0] = 0x1000000000008001L;
+    g[1] = 0xE;
+    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) | ((long)*(int *)(b + 0x238) << 16);
+    g[3] = 0x3D;
+    D_L02_001611C0 = q + 12;
+    append_texture_transfer_packet();
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 
 extern unsigned int D_L02_0015FFDC;
@@ -28,7 +68,42 @@ void FUN_L02_002cb978(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8910.s", FUN_L02_002d8910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8ad0.s", FUN_L02_002d8ad0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d92f0.s", FUN_L02_002d92f0);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void func_001F9BF0_d92f0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
+extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
+extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
+extern char D_0013E633_d92f0[] __asm__("D_0013F3D0");
+extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C") MACRO_ADDR;
+void FUN_L02_002d92f0(char *moby) {
+    float v[4];
+    char *g;
+    float f;
+    float lim;
+    char *p;
+    func_L00_00250800_d92f0(moby, 0, v);
+    g = D_0013E633_d92f0;
+    func_001F9BF0_d92f0(v, v, g);
+    func_L00_002607A8_d92f0(v, D_0015EE6C_d92f0 * 4.0f);
+    func_001F9BD8_d92f0(g, g, v);
+    f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
+    f = func_001FA790_d92f0(f, *(float *)(g + 0x18));
+    lim = D_0015EE6C_d92f0 * 6.2831855f;
+    if (lim < f) {
+        f = lim;
+    } else if (f < -lim) {
+        f = -lim;
+    }
+    p = D_0013E633_d92f0 - 0x80;
+    *(float *)(p + 0x98) = func_001FA748_d92f0(f, *(float *)(p + 0x98));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da6c0.s", FUN_L02_002da6c0);
@@ -97,4 +172,52 @@ void FUN_L02_002ea7d0(char *moby) {
     d[15] = 2.5f;
     d[14] = 3.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea8b0.s", FUN_L02_002ea8b0);
+#include "sda.h"
+typedef struct {
+    float a[4];
+    float b[4];
+    int c[4];
+    float d[4];
+} L02SpriteData_ea8b0;
+extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_001FF4B0_ea8b0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F9908_ea8b0(int *) __asm__("FUN_001f9740");
+extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
+extern float func_001FA888_ea8b0(int) __asm__("FUN_001fa6c0");
+extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
+extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
+extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern int func_001FA898_2ebce8_ea8b0(float) __asm__("FUN_001fa6d0");
+extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
+void FUN_L02_002ea8b0(char *m) {
+    L02SpriteData_ea8b0 *p = *(L02SpriteData_ea8b0 **)(m + 0x78);
+    float d[4] __attribute__((aligned(16)));
+    float e[4] __attribute__((aligned(16)));
+    int i, col;
+    float f;
+
+    *(float *)(m + 0x18) += 0.5f;
+    func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, m + 0x10);
+    func_L00_001FF4B0_ea8b0(d, d, -0.3f);
+    func_L00_001FF4B0_ea8b0(e, d, 0.1f);
+    func_001F9BD8_ea8b0(d, d, m + 0x10);
+    *(float *)(m + 0x18) -= 0.5f;
+    for (i = 0; i < 4; i++) {
+        float h = p->a[i] + p->b[i];
+        p->a[i] = h;
+        if (255.0f <= h) {
+            p->a[i] = h - 255.0f;
+        } else if (h <= 0.0f) {
+            p->a[i] = h + 255.0f;
+        }
+        if (func_001F9908_ea8b0(&p->c[i])) {
+            p->c[i] = func_001F9850_ea8b0(0xFF);
+        }
+        f = func_001FA888_ea8b0(func_001F9850_ea8b0(0xFF) - p->c[i]);
+        f = f / (float)func_001F9850_ea8b0(0xFF);
+        col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - f));
+        func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        func_001F9BD8_ea8b0(d, d, e);
+    }
+}

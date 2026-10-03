@@ -39,9 +39,81 @@ void FUN_L01_0027f660(char *pos, char *vel) {
         qcopy(q, vel);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00280970.s", FUN_L01_00280970);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern unsigned char *func_00218928_80970(int) __asm__("FUN_L00_002678b8");
+extern float func_L00_00258C80_80970(float, float) __asm__("FUN_L00_00257c48");
+extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
+extern int func_002140B0_80970(int) __asm__("FUN_00213260");
+extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
+extern unsigned char *D_L01_001B2838_80970 __asm__("D_L01_001B2538") __attribute__((section(".data")));
+char *FUN_L01_00280970(int a, char *b) {
+    char *p = func_00218928_80970(0xE);
+    int r;
+    int *q;
+    if (p) {
+        qcopy(p + 0x10, b + 0x10);
+        *(float *)(p + 0x10) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(float *)(p + 0x14) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(float *)(p + 0x18) += func_L00_00258C80_80970(0.0f, 0.03f);
+        *(int *)(p + 4) = -1;
+        r = func_001FA898_r_80970(4.0f);
+        p[9] = r - 0x60;
+        p[1] = 0;
+        p[3] = 0x48;
+        *(float *)(p + 0xC) = 29400.0f;
+        p[8] = func_002140B0_80970(0xFF);
+        p[2] = *D_L01_001B2838_80970;
+        *(short *)(p + 0xA) = func_001F9850_80970(6);
+        q = (int *)(p + 0x20);
+        q[2] = (int)b;
+        q[1] = 1;
+        if (a == 0) {
+            q[0] = 0;
+        } else if (func_002140B0_80970(2)) {
+            q[0] = a;
+        } else {
+            q[0] = -a;
+        }
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00285768.s", FUN_L01_00285768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00287158.s", FUN_L01_00287158);
+#ifndef NOT_SDA
+#endif
+#ifndef MACRO_ADDR
+#endif
+extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
+extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
+extern int func_002140B0_87158(int) __asm__("FUN_00213260");
+extern float func_001FA888_87158(int) __asm__("FUN_001fa6c0");
+extern unsigned char *D_L01_001B28D0_87158 __asm__("D_L01_001B25D0") __attribute__((section(".data")));
+unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) {
+    unsigned char *r = func_00218928_87158(0x34);
+    if (r != 0) {
+        char *v = (char *)r + 0x20;
+        qcopy(r + 0x10, a);
+        *(float *)(r + 0x18) += 0.05f;
+        *(int *)(r + 4) = b;
+        r[3] = 0x44;
+        r[9] = func_001FA898_87158(4.0f) + 0x20;
+        r[1] = 1;
+        r[2] = *D_L01_001B28D0_87158;
+        *(short *)(r + 0xA) = d;
+        *(float *)(r + 0xC) = f * 210000.0f;
+        r[8] = func_002140B0_87158(0xFF);
+        *(int *)(v + 8) = b;
+        *(int *)(v + 0xC) = c;
+        *(float *)v = f;
+        *(float *)(v + 4) = g;
+        *(float *)(v + 0x10) = 1.0f / func_001FA888_87158(d);
+    }
+    return r;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b410.s", FUN_L01_0028b410);
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */

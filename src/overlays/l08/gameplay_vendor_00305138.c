@@ -2,7 +2,49 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00305138.s", FUN_L08_00305138);
+#define NOT_SDA __attribute__((section(".data")))
+
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/* triggers objects matching the moby's class */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
+
+struct G {
+    char pad0[0x30];
+    int a;
+    int b;
+    char pad1[0xC];
+    short n;
+    char pad2[0x132];
+    char *objs[1];
+};
+
+extern float D_L08_0015F59C;
+extern float D_L08_0015F5A0;
+extern int D_L08_0015F5C4;
+extern struct G D_L08_0016D060;
+extern volatile unsigned char D_0015EDB0[1];
+extern unsigned char D_L08_0017CC40[];
+extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+
+void FUN_L08_00305138(char *moby) {
+    int i;
+    if (D_L08_0015F5C4 == 2 && D_0015EDB0[0]) {
+        if (D_L08_0016D060.a == 3 && D_L08_0016D060.b >= 0x1BA && D_L08_0016D060.b < 0x284) {
+            D_L08_0015F59C = 1.0f;
+            D_L08_0015F5A0 = -0.3f;
+        }
+        for (i = 0; i < D_L08_0016D060.n; i++) {
+            char *o = D_L08_0016D060.objs[i];
+            if (*(short *)(o + 0xA6) == *(short *)(moby + 0xA6) && D_L08_0017CC40[1] == 0) {
+                attach_manipulator(o, 0, D_L08_0017CC40);
+                *(float *)(D_L08_0017CC40 + 0x20) = 2.75f;
+                *(float *)(D_L08_0017CC40 + 0x24) = 2.75f;
+                *(float *)(D_L08_0017CC40 + 0x28) = 2.75f;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00305270.s", FUN_L08_00305270);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003063f0.s", FUN_L08_003063f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);

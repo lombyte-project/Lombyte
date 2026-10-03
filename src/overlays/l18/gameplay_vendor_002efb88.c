@@ -544,7 +544,48 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6960.s", FUN_L18_002f6960);
+#include "sda.h"
+
+/* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
+
+extern char *D_L18_0016016C __asm__("D_L18_001600EC") MACRO_ADDR;
+extern char D_0013E633[] __asm__("D_0013F3D0");
+extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
+extern float FUN_001f9b80(void *, void *);
+extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
+extern short D_L18_00162408 __asm__("D_L18_00162378") __attribute__((sda));
+extern short D_L18_0016240C __asm__("D_L18_0016237C") __attribute__((sda));
+extern void FUN_L00_0025f730(void *a, float x);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
+
+void FUN_L18_002f6960(char *m) {
+    float v[4];
+    char *d = *(char **)(m + 0x78);
+    char *b = D_0013E633 + 0x0;
+    float t;
+    float lo, hi;
+    subtract_vector_xyz(v, b, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
+    v[2] = 0.0f;
+    if (*(int *)(b + 0x200C) == 0xF) {
+        FUN_L00_0025f730(v, *(float *)&D_L18_0016240C);
+    } else {
+        FUN_L00_0025f730(v, *(float *)&D_L18_00162408);
+    }
+    add_vector_xyz(v, v, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
+    t = *(float *)(D_0013E633 + 0xE0);
+    t += (FUN_001f9b80(m + 0x10, v) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC * (D_0015EE6C * 4.75f);
+    hi = D_0015EE6C * 20.0f;
+    lo = D_0015EE6C * 4.75f;
+    if (t > hi) {
+        t = hi;
+    } else if (t < lo) {
+        t = lo;
+    }
+    FUN_L18_002f6878_c(m, t, v);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
 extern int D_L18_001AC240[];
@@ -730,7 +771,55 @@ void FUN_L18_002f7ab0(Level18VendorMobyShort *moby) {
         moby->substate = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7ad8.s", FUN_L18_002f7ad8);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8F38), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x18];
+    float f18;
+    char pad1C[4];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char substate;
+    char pad32[2];
+    unsigned short flags;
+    char pad36[0x0A];
+    float f40;
+} M;
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern int D_L18_0015F5C4 MACRO_ADDR;
+extern int D_L18_0015F5CC MACRO_ADDR;
+extern int D_L18_001623A0 MACRO_ADDR;
+extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
+
+void FUN_L18_002f7ad8(M *moby) {
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+    case 1:
+        if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) ||
+            (D_L18_0015F5CC < 5 && D_L18_001623A0 != 0 && moby->f40 == 0.0f)) {
+            moby->state = 2;
+            moby->flags |= 1;
+            moby->substate = 0;
+        }
+        break;
+    case 2:
+        if (D_L18_001623A0 != 0 && moby->f40 == 0.0f) {
+            float d = 101.6f - moby->f18;
+            moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
+            moby->f18 += d + d;
+        }
+        if (D_L18_0015F5C4 != 2) {
+            moby->substate = 1;
+            moby->state = 1;
+            moby->flags &= 0xFFFE;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7c40.s", FUN_L18_002f7c40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8050.s", FUN_L18_002f8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8658.s", FUN_L18_002f8658);

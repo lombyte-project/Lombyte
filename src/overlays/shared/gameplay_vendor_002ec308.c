@@ -470,4 +470,19 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fc298.s", FUN_L02_002fc298);
+#define NOT_SDA __attribute__((section(".data")))
+
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
+
+extern char *D_L02_0015EF50_c298 __asm__("D_L02_0015EF50") MACRO_ADDR;
+extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
+extern int FUN_L02_002fb9c8(char *);
+
+int FUN_L02_002fc298(char *moby) {
+    char *cam = *(char **)(D_L02_0015EF50_c298 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(cam + 0x20) >= 0) FUN_L02_002fb9c8(moby);
+    *(int *)(cam + 0x50) = 0;
+    return 0;
+}

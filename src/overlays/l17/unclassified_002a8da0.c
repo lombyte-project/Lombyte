@@ -53,9 +53,151 @@ void FUN_L17_002cbc10(char *m) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a8da0.s", FUN_L17_002a8da0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a95b8.s", FUN_L17_002a95b8);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+typedef int u128_a95b8 __attribute__((mode(TI)));
+typedef struct {
+    char pad[0x40];
+    unsigned int w[4];
+    struct { float a, b; } f[4];
+    long z70;
+    long z78;
+    long q80;
+    long q88;
+} S_a95b8;
+extern void func_001F9BF0_a95b8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_001F9CA0_a95b8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void func_L00_001FF4B0_a95b8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
+extern void func_001F9BD8_a95b8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
+extern char D_L17_00167740_a95b8[] __asm__("D_L17_001676C0");
+extern struct { float a, b; } D_L17_001E6620_a95b8[4] __asm__("D_L17_001E6320");
+void FUN_L17_002a95b8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    S_a95b8 s;
+    char m1[16];
+    char m2[16];
+    char m3[16];
+    char m0[16];
+    int i;
+    func_001F9BF0_a95b8(m3, d + 0x10, d + 0x20);
+    func_001F9BF0_a95b8(m1, d + 0x10, D_L17_00167740_a95b8);
+    func_001F9BF0_a95b8(m2, d + 0x20, D_L17_00167740_a95b8);
+    func_001F9CA0_a95b8(m1, m1, m3);
+    func_L00_001FF4B0_a95b8(m1, m1, *(float *)(d + 0x4C));
+    func_001F9CA0_a95b8(m2, m2, m3);
+    func_L00_001FF4B0_a95b8(m2, m2, *(float *)(d + 0x4C));
+    s.z78 = func_001F4868_a95b8(0xE);
+    s.q80 = 0xFF9000000260L;
+    s.q88 = 0x8000000048L;
+    s.z70 = 0;
+    s.w[3] = 0x80243278;
+    s.w[2] = 0x80243278;
+    s.w[1] = 0x80243278;
+    s.w[0] = 0x80243278;
+    for (i = 0; i < 4; i++) {
+        s.f[i].a = D_L17_001E6620_a95b8[i].a;
+        s.f[i].b = D_L17_001E6620_a95b8[i].b;
+    }
+    func_001F9BF0_a95b8(m0, d + 0x10, m1);
+    *(u128_a95b8 *)(s.pad + 0) = *(u128_a95b8 *)m0;
+    func_001F9BD8_a95b8(m0, d + 0x10, m1);
+    *(u128_a95b8 *)(s.pad + 0x10) = *(u128_a95b8 *)m0;
+    func_001F9BF0_a95b8(m0, d + 0x20, m2);
+    *(u128_a95b8 *)(s.pad + 0x20) = *(u128_a95b8 *)m0;
+    func_001F9BD8_a95b8(m0, d + 0x20, m2);
+    *(u128_a95b8 *)(s.pad + 0x30) = *(u128_a95b8 *)m0;
+    func_L00_001FD1D8_a95b8(&s, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cb310.s", FUN_L17_002cb310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d77f0.s", FUN_L17_002d77f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d7cf0.s", FUN_L17_002d7cf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002dc3f8.s", FUN_L17_002dc3f8);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Updates moby 835: a timed effect that spawns a spray of particles and deletes itself. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002DD8D0), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *D_L17_00174758;
+extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
+extern float D_0015ED6C MACRO_ADDR;
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_L00_001f2868();
+extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern short D_L17_00161D2C __attribute__((sda));
+extern short D_L17_00161D30 __attribute__((sda));
+extern unsigned char D_0013F350[];
+extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+f32 resolve_camera_surface_height(struct CameraProbePosition *position, s32 optional_output) __asm__("FUN_002135f0");
+void FUN_L00_00259888(char *a, int b, int c, float d, void *q);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale, void *src) __asm__("FUN_L00_00259888");
+extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+
+void FUN_L17_002dc3f8(char *m) {
+    float v[4];
+    float w[12];
+    float pos[4];
+    float q[4];
+    float d[4];
+    float t[4];
+    int out;
+    char *data = *(char **)(m + 0x78);
+    char *r;
+    char *g;
+    float yy;
+    int i;
+    clear_vector(v);
+    r = FUN_L00_0025a420(m, 0x230000, 0);
+    FUN_L00_0025a478(m, r, data + 0x20, 0, &out, 0, 0, 4);
+    if (out >= 2 && r != 0 && *(short *)(*(char **)(r + 0x20) + 0xA6) != 0x343) {
+        func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1, -1, 0);
+        mark_moby_for_removal(m);
+        return;
+    }
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        *(float *)(data + 0x60) = random_angle_radians();
+        *(int *)(data + 0x64) = 0;
+        *(unsigned char *)(m + 0x20) = 1;
+        break;
+    case 1:
+        FUN_L00_00262b00(*(float *)&D_L17_00161D2C, *(float *)&D_L17_00161D30 * 0.017453292f * D_0015ED6C, m, (float *)(data + 0x60), (float *)(data + 0x64));
+        func_L00_0025A8C0_alt(w, (int)m, 0x10001, 1.0f, v);
+        qcopy(pos, m + 0x10);
+        pos[2] = pos[2] + 0.75f;
+        g = (char *)D_0013F350;
+        if (*(char **)(g + 0x23C) == m || *(char **)(g + 0x240) == m || func_L00_001F2BE8_alt(1.0f, pos, 0x10, m, w)) {
+            if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
+                func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1, -1, 0);
+                *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.0f;
+                yy = resolve_camera_surface_height((float *)(m + 0x10), q);
+                *(float *)(m + 0x18) = *(float *)(m + 0x18) - 1.0f;
+                i = 0x95;
+                do {
+                    *(u128 *)t = 0;
+                    t[0] = random_float_between_alt(-1.0f, 1.0f);
+                    t[1] = random_float_between_alt(-1.0f, 1.0f);
+                    t[2] = random_float_between_alt(-0.5f, 2.0f);
+                    *(u128 *)d = *(u128 *)t;
+                    normalize_vector_xyz(d, d, random_float_between_alt(D_0015ED6C * 4.0f, D_0015ED6C * 8.0f));
+                    FUN_L00_0026f080(m + 0x10, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f, yy);
+                } while (--i >= 0);
+                mark_moby_for_removal(m);
+            }
+        }
+        break;
+    }
+}
