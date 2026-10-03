@@ -426,7 +426,45 @@ void FUN_L16_002e7168(char *moby)
     FUN_L16_002de3b8(100.0f);
     FUN_L01_0027a248(0, 8);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7208.s", FUN_L16_002e7208);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
+extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
+extern void func_L00_00264DB8_e7208(int, int) __asm__("FUN_L00_00263d40");
+extern char D_0013E633_e7208[] __asm__("D_0013F3D0");
+extern char D_0013D50F_e7208[] __asm__("D_0013D408");
+void FUN_L16_002e7208(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    switch (*(int *)(data + 8)) {
+    case 0: {
+        char *g = D_0013E633_e7208;
+        if (func_00215570_e7208(g, *(int *)data) != 0) {
+            if (*(int *)(g + 0x200C) == 0xF) {
+                *(int *)(data + 8) = 1;
+            }
+        }
+        break;
+    }
+    case 1: {
+        char *h = D_0013E633_e7208 - 0x80;
+        if (*(int *)(h + 0x2084) == 0x42) {
+            *(int *)(data + 8) = 0;
+        } else if (func_00215570_e7208(h + 0x80, *(int *)(data + 4)) != 0) {
+            unsigned char *f = (unsigned char *)D_0013D50F_e7208;
+            if (f[0x19] == 0) {
+                f[0x19] = 1;
+                func_0022EE28_e7208(1, 0, 0);
+                func_L00_00264DB8_e7208(0x53D6, -1);
+            }
+        }
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
 /* Emits a particle near an active moby when the target is close. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */

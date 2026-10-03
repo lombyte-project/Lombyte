@@ -248,7 +248,29 @@ void FUN_L14_003087c0(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00314f00.s", FUN_L14_00314f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315920.s", FUN_L14_00315920);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern int func_L10_002F6E38_15920(void *) __asm__("FUN_L10_002f5a78");
+extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50") MACRO_ADDR;
+extern char D_0013E633_15920[] __asm__("D_001413DC");
+int FUN_L14_00315920(char *a, char *b) {
+    char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(a + 0x84) * 32 + 0x1C);
+    int t, u;
+    if (*(unsigned char *)(rec + 0x38) != 0) return -1;
+    if (b != 0 && *(short *)(b + 0x7E) == 0) {
+        if (*(int *)(D_0013E633_15920) != 15) return 0;
+    }
+    if (func_L10_002F6E38_15920(a) == 0) return 0;
+    t = *(int *)(rec + 0x48);
+    if (t >= 0 && *(int *)(D_0013E633_15920) != t) return 0;
+    u = *(int *)(rec + 0x44);
+    if (u >= 0 && *(int *)(D_0013E633_15920 - 0x8) != u) return 0;
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315d48.s", FUN_L14_00315d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00316748.s", FUN_L14_00316748);

@@ -78,7 +78,7 @@ extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(void *);
 extern void FUN_L01_00228000(void);
 extern void FUN_L01_00228e38(void);
-extern void FUN_L01_0022cd48(void);
+extern void FUN_L01_0022cd48_u(void) __asm__("FUN_L01_0022cd48");
 extern void FUN_L01_0022d090(void);
 extern void FUN_L01_00242930(void);
 extern void NoOpMainCallback_alt(void *) __asm__("FUN_001e93e8");
@@ -102,7 +102,7 @@ void FUN_L01_00228870(void) {
     }
     FUN_L00_00232670();
     FUN_L00_00211670();
-    FUN_L01_0022cd48();
+    FUN_L01_0022cd48_u();
     FUN_L01_0022d090();
     FUN_L01_00242930();
     if (*(unsigned char *)(g + 0x20A4) != 0) {
@@ -140,7 +140,98 @@ void FUN_L01_00228870(void) {
     FUN_L00_00208b60();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022cd48.s", FUN_L01_0022cd48);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern void func_001F99D8_2cd48(void *, int) __asm__("FUN_001f9810");
+extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int func_L00_001F3958_2cd48(void) __asm__("FUN_001f0b58");
+extern void func_L01_0023D688_2cd48(int, int) __asm__("FUN_L01_0023cf98");
+extern float func_001F9B88_2cd48(float) __asm__("FUN_001f99c0");
+extern void func_L00_0020BFA8_2cd48(void) __asm__("FUN_L00_0020b930");
+extern unsigned char D_0013E633_2cd48[] __asm__("D_0013F350");
+extern int D_0015EE84_m_2cd48 __asm__("D_0015ED84") MACRO_ADDR;
+void FUN_L01_0022cd48(void) {
+    char *p = (char *)D_0013E633_2cd48;
+    int v;
+    int x;
+    unsigned char saved = *(unsigned char *)(p + 0x12ED);
+    v = *(short *)(p + 0x12E0);
+    func_001F99D8_2cd48(p + 0x12E0, 0x10);
+    *(unsigned char *)(p + 0x12ED) = saved;
+    *(short *)(p + 0x12E0) = -1;
+    *(unsigned char *)(p + 0x20A9) = 0;
+    *(short *)(p + 0x308) = 0;
+    if (v == -1) return;
+    if (v == 2) {
+        if (*(short *)(p + 0x30C) == 0 || *(float *)(p + 0x2DC) < 0.3f) {
+            *(unsigned char *)(p + 0x12E7) = 1;
+            if (*(unsigned char *)(p + 0x20A4) == 0) {
+                char *o = *(char **)(p + 0x10E0);
+                if (o != 0 && *(short *)(o + 0xA6) == 0xAD) *(short *)(p + 0x308) = 1;
+            }
+        }
+    }
+    if (v == 0xE) {
+        char *q = (char *)D_0013E633_2cd48;
+        *(unsigned char *)(q + 0x12E4) = 1;
+        *(float *)(q + 0x22A4) = 0.2f;
+        *(float *)(q + 0x2F0) = *(float *)(q + 0x2D8) + 0.2f;
+    }
+    if (v == 0) {
+        char *q = (char *)D_0013E633_2cd48;
+        *(float *)(q + 0x22A4) = *(float *)(q + 0x2F0) - *(float *)(q + 0x2D8);
+        if (*(float *)(q + 0x22A4) < 0.85f) {
+            if (*(float *)(q + 0x22A4) > 0.25f) *(unsigned char *)(q + 0x20A9) = 1;
+        }
+        q = (char *)D_0013E633_2cd48;
+        *(unsigned char *)(q + 0x12E4) = 1;
+    }
+    if (D_0015EE84_m_2cd48 == 0xD) {
+        char *q = (char *)D_0013E633_2cd48;
+        if (*(int *)(q + 0x2084) != 0x7B) {
+            if (func_L00_001F10E0_2cd48(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
+                if (func_L00_001F3958_2cd48() == 0xB) {
+                    func_L01_0023D688_2cd48(0x7B, 1);
+                    return;
+                }
+            }
+        }
+    }
+    if (v == 0xB) { char *q = (char *)D_0013E633_2cd48; q[0x12EB] = 1; }
+    if (v == 4) { char *q = (char *)D_0013E633_2cd48; q[0x12E3] = 1; }
+    if (v == 0xD) { char *q = (char *)D_0013E633_2cd48; q[0x12EC] = 1; }
+    if (v == 8) { char *q = (char *)D_0013E633_2cd48; q[0x12EA] = 1; }
+    if (v == 9) { char *q = (char *)D_0013E633_2cd48; q[0x12EE] = 1; }
+    if (v == 0xC) { char *q = (char *)D_0013E633_2cd48; q[0x12EA] = 1; }
+    {
+    char *q = (char *)D_0013E633_2cd48;
+    if (*(unsigned char *)(q + 0x12E3) != 0 && *(int *)(q + 0x300) != 0) {
+        x = *(int *)(q + 0x208C);
+        if (x != 0x10 && x != 0x14 && x != 7) {
+            func_L01_0023D688_2cd48(0x31, 1);
+            return;
+        }
+    }
+    {
+    char *r = (char *)D_0013E633_2cd48;
+    if (*(unsigned char *)(r + 0x12EC) != 0) {
+        if (*(int *)(r + 0x2084) == 0x7F) return;
+        if (func_001F9B88_2cd48(*(float *)(r + 0x2F0) - (*(float *)(r + 0x88) + 0.25f)) < 1.0f) {
+            if (*(float *)(r + 0x2F0) - *(float *)(r + 0x88) > 0.0f) {
+                if (*(float *)(r + 0x108) < 0.0f) {
+                    func_L00_0020BFA8_2cd48();
+                    func_L01_0023D688_2cd48(0x7F, 1);
+                }
+            }
+        }
+    }
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */

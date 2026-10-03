@@ -4,4 +4,16 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0022b728.s", FUN_L02_0022b728);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00230988.s", FUN_L02_00230988);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00237478.s", FUN_L02_00237478);
+#include "sda.h"
+extern char D_0013E633_37478[] __asm__("D_0013F3D0");
+extern float D_0015EE6C_37478 __asm__("D_0015ED6C") MACRO_ADDR;
+extern void FUN_L02_0022b728(int, int);
+
+void FUN_L02_00237478(void)
+{
+    if (*(float *)(D_0013E633_37478 + 0xE0) < D_0015EE6C_37478 * 2.7f) {
+        FUN_L02_0022b728(0, 1);
+    } else {
+        FUN_L02_0022b728(3, 1);
+    }
+}

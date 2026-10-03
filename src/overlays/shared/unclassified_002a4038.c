@@ -28,7 +28,42 @@ void FUN_L02_002cb978(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8910.s", FUN_L02_002d8910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8ad0.s", FUN_L02_002d8ad0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d92f0.s", FUN_L02_002d92f0);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void func_001F9BF0_d92f0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
+extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
+extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
+extern char D_0013E633_d92f0[] __asm__("D_0013F3D0");
+extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C") MACRO_ADDR;
+void FUN_L02_002d92f0(char *moby) {
+    float v[4];
+    char *g;
+    float f;
+    float lim;
+    char *p;
+    func_L00_00250800_d92f0(moby, 0, v);
+    g = D_0013E633_d92f0;
+    func_001F9BF0_d92f0(v, v, g);
+    func_L00_002607A8_d92f0(v, D_0015EE6C_d92f0 * 4.0f);
+    func_001F9BD8_d92f0(g, g, v);
+    f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
+    f = func_001FA790_d92f0(f, *(float *)(g + 0x18));
+    lim = D_0015EE6C_d92f0 * 6.2831855f;
+    if (lim < f) {
+        f = lim;
+    } else if (f < -lim) {
+        f = -lim;
+    }
+    p = D_0013E633_d92f0 - 0x80;
+    *(float *)(p + 0x98) = func_001FA748_d92f0(f, *(float *)(p + 0x98));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da6c0.s", FUN_L02_002da6c0);

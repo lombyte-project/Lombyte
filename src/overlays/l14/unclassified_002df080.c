@@ -235,7 +235,40 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1140.s", FUN_L14_002f1140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f12f0.s", FUN_L14_002f12f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f13f8.s", FUN_L14_002f13f8);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
+void FUN_L14_002f13f8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int v = *(short *)(data + 0xB4);
+    if (*(unsigned char *)(moby + 0x20) == 5) {
+        v = *(short *)(data + 0xB6);
+    }
+    switch (v) {
+    case 0:
+        func_00215F80_f13f8(4, 0x53ED);
+        break;
+    case 1:
+        func_00215F80_f13f8(4, 0x53EE);
+        break;
+    case 2:
+        func_00215F80_f13f8(4, 0x53EE);
+        break;
+    case 3:
+        func_00215F80_f13f8(4, 0x53EE);
+        break;
+    case 4:
+        func_00215F80_f13f8(4, 0x1399);
+        break;
+    default:
+        func_00215F80_f13f8(4, 0x139B);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fba20.s", FUN_L14_002fba20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc0f0.s", FUN_L14_002fc0f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc3e8.s", FUN_L14_002fc3e8);

@@ -219,7 +219,35 @@ void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
     d->s[2] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319510.s", FUN_L05_00319510);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
+extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L05_00319208");
+extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC") MACRO_ADDR;
+void FUN_L05_00319510(void *moby_v)
+{
+    char *moby = moby_v;
+    char *data = *(char **)(moby + 0x78);
+    char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
+    char *position;
+    if (spawn != 0) {
+        int index;
+        char *slot=data;
+        char *entry;
+        position=spawn+0x10;
+        slot+=*(short *)(data+0xB4)<<2;
+        index=*(int *)(slot+0x80)<<7;
+        entry=D_L16_001601AC_m_19510;
+        qcopy(position, (void *)(index+(int)entry+0x30));
+        qcopy(spawn + 0x40, (void *)(index+(int)entry+0x70));
+        func_L16_002E5D68_19510(spawn);
+    }
+    *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 #define NOT_SDA
 

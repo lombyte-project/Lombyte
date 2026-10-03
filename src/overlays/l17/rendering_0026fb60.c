@@ -2,5 +2,45 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_0026fb60.s", FUN_L17_0026fb60);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+#include "qcopy.h"
+extern int func_002140B0_6fb60(int) __asm__("FUN_00213260");
+extern int func_001F9850_6fb60(int) __asm__("FUN_001f96f8");
+extern unsigned char *func_00218928_6fb60(int) __asm__("FUN_L00_002678b8");
+extern void func_001F9BF0_6fb60(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L17_001B2D54_6fb60 __asm__("D_L17_001B2A54") NOT_SDA;
+unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec) {
+    int r = func_002140B0_6fb60(5);
+    unsigned char a = func_001F9850_6fb60(r + 2);
+    unsigned char b = func_002140B0_6fb60(0xFF);
+    unsigned char *p = func_00218928_6fb60(0x4F);
+    if (p != 0) {
+        char *d = (char *)p + 0x20;
+        qcopy(p + 0x10, pos);
+        *(float *)(d + 0x10) = vec[0];
+        *(float *)(d + 0x14) = vec[1];
+        *(float *)(d + 0x18) = vec[2];
+        if (parent != 0) {
+            func_001F9BF0_6fb60(d, p + 0x10, parent + 0x10);
+            *(short *)(p + 0xA) = a;
+        } else {
+            *(short *)(p + 0xA) = a << 2;
+        }
+        *(char **)(d + 0x1C) = parent;
+        *(int *)(p + 4) = 0x604040FF;
+        p[9] = func_001FA898_r_6fb60(1.0f) + 0x20;
+        p[3] = 0x48;
+        *(float *)(p + 0xC) = 42000.0f;
+        p[8] = b;
+        p[1] = 0;
+        p[2] = *D_L17_001B2D54_6fb60;
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_0026fdd0.s", FUN_L17_0026fdd0);

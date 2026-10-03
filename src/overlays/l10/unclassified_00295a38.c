@@ -80,7 +80,72 @@ char *FUN_L10_002dd848(char *owner) {
     return moby;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295a38.s", FUN_L10_00295a38);
+#ifndef NOT_SDA
+#define NOT_SDA __attribute__((section(".data")))
+#endif
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+typedef int u128_95a38 __attribute__((mode(TI)));
+extern int func_001E9730_95a38() __asm__("FUN_001e93b0");
+extern void func_0020D678_95a38(void *) __asm__("FUN_0020c828");
+extern float func_001F9878_95a38(float) __asm__("FUN_001f96b0");
+extern int func_001F9850_95a38(int) __asm__("FUN_001f96f8");
+extern int func_001F9908_95a38(int *) __asm__("FUN_001f9740");
+extern int func_0022ED80_95a38(int, int, int) __asm__("FUN_0022da68");
+extern char D_L10_001DC810_95a38[] __asm__("D_L10_001DC510");
+void FUN_L10_00295a38(char *m) {
+    char *d = *(char **)(m + 0x78);
+    if (d == 0) {
+        func_001E9730_95a38(D_L10_001DC810_95a38, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+        func_0020D678_95a38(m);
+        return;
+    }
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        d[0x28] = 4;
+        *(short *)(d + 0x3E) = 5;
+        *(int *)(d + 0x20) = 0;
+        *(short *)(d + 0x24) = 0;
+        *(u128_95a38 *)(d + 0xA0) = *(u128_95a38 *)(m + 0x10);
+        m[0x20] = 1;
+        break;
+    case 1: {
+        float lim;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.5f / func_001F9878_95a38(45.0f);
+        lim = *(float *)(d + 0xA8) + 1.5f;
+        if (lim <= *(float *)(m + 0x18)) {
+            *(float *)(m + 0x18) = lim;
+            m[0x20] = 2;
+            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        }
+        break;
+    }
+    case 2:
+        if (func_001F9908_95a38((int *)(d + 0xB0))) {
+            func_0022ED80_95a38(0, 0, (int)m);
+            m[0x20] = 3;
+        }
+        break;
+    case 3: {
+        float lim;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) - 1.5f / func_001F9878_95a38(45.0f);
+        lim = *(float *)(d + 0xA8);
+        if (*(float *)(m + 0x18) <= lim) {
+            *(float *)(m + 0x18) = lim;
+            m[0x20] = 4;
+            *(int *)(d + 0xB0) = func_001F9850_95a38(0x78);
+        }
+        break;
+    }
+    case 4:
+        if (func_001F9908_95a38((int *)(d + 0xB0))) {
+            func_0022ED80_95a38(0, 0, (int)m);
+            m[0x20] = 1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
