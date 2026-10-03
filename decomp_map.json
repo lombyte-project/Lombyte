@@ -10,7 +10,7 @@
   "bytes_intentional_asm": 96348,
   "bytes_pending_c": 2810200,
   "c_exact_percent_of_recoverable": 20.206,
-  "c_fuzzy_percent_of_recoverable": 23.2027,
+  "c_fuzzy_percent_of_recoverable": 23.2025,
   "boot": {
     "units_total": 1452,
     "groups_total": 128,
@@ -22,7 +22,7 @@
     "bytes_intentional_asm": 96348,
     "bytes_pending_c": 113376,
     "c_exact_percent_of_recoverable": 66.7807,
-    "c_fuzzy_percent_of_recoverable": 97.7035,
+    "c_fuzzy_percent_of_recoverable": 97.7017,
     "groups": [
       {
         "name": "game/unclassified",
@@ -37,7 +37,7 @@
         "bytes_pending_c": 45516,
         "bytes_intentional_asm": 66252,
         "c_exact_percent_of_recoverable": 1.3267,
-        "c_fuzzy_percent_of_recoverable": 92.8432
+        "c_fuzzy_percent_of_recoverable": 93.8869
       },
       {
         "name": "sdk/library",
@@ -52,7 +52,7 @@
         "bytes_pending_c": 8668,
         "bytes_intentional_asm": 14528,
         "c_exact_percent_of_recoverable": 83.0597,
-        "c_fuzzy_percent_of_recoverable": 98.3327
+        "c_fuzzy_percent_of_recoverable": 98.0904
       },
       {
         "name": "game/ui/menus",
@@ -67,7 +67,7 @@
         "bytes_pending_c": 2352,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 93.0315,
-        "c_fuzzy_percent_of_recoverable": 99.9204
+        "c_fuzzy_percent_of_recoverable": 98.8065
       },
       {
         "name": "game/rendering",
@@ -262,7 +262,7 @@
         "bytes_pending_c": 2232,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 58.3582,
-        "c_fuzzy_percent_of_recoverable": 99.3903
+        "c_fuzzy_percent_of_recoverable": 99.6045
       },
       {
         "name": "sdk/rpc",
@@ -532,7 +532,7 @@
         "bytes_pending_c": 2040,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 0.0,
-        "c_fuzzy_percent_of_recoverable": 99.1549
+        "c_fuzzy_percent_of_recoverable": 99.1941
       },
       {
         "name": "sdk/input",
@@ -4514,6 +4514,6 @@
     "bytes_intentional_asm": 96348,
     "bytes_pending_c": 2810200,
     "c_exact_percent_of_recoverable": 20.206,
-    "c_fuzzy_percent_of_recoverable": 23.2027
+    "c_fuzzy_percent_of_recoverable": 23.2025
   }
 }
