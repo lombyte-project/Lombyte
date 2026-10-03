@@ -6,96 +6,102 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s
 #else
 #include "types.h"
 
-struct MenuPacket {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
+struct TextRegion {
+    s16 top;
+    s16 bottom;
+    s16 left;
+    s16 right;
+    s16 anchor_x;
+    s16 anchor_y;
     u8 padC[2];
-    u16 unkE;
-    s16 unk10;
-    u16 unk12;
+    u16 rendered_height;
+    s16 line_advance;
+    u16 flags;
     u8 pad14[4];
 };
 
-struct Slot {
-    s32 id;
-    s32 kind;
+struct VendorSelectionEntry {
+    s32 item_index;
+    s32 purchase_kind;
     u8 pad8[0xC];
 };
 
-struct Shop {
+struct VendorState {
     u8 pad0[0x40];
-    s32 hard;
+    s32 discount_ammo_pricing;
     u8 pad44[0x14];
-    s32 cur;
-    s32 open;
+    s32 selected_entry;
+    s32 selection_active;
     u8 pad60[0x70];
-    struct Slot slots[1];
+    struct VendorSelectionEntry entries[1];
 };
 
-struct Goal {
-    s32 bolts;
-    s32 boltsHard;
-    u16 cost;
-    u16 costHard;
+struct VendorItemPricing {
+    s32 purchase_price;
+    s32 discounted_purchase_price;
+    u16 ammo_price;
+    u16 discounted_ammo_price;
     u16 pad0C;
-    u16 need;
+    u16 ammo_capacity;
     u8 pad10[8];
 };
 
-extern struct Shop D_001E63C0;
-extern struct Goal D_001DFFB0[];
-extern s32 D_0013D428[];
-extern u8 D_0013D4E3[];
-extern s32 D_0015ED98;
-extern void func_001FB8F0(s32, s32, s32, s32, s32, s32, u32);
-extern s32 func_001FDD10(s32);
-extern void func_001F75F0(void *, u64, void *, s32);
+extern struct VendorState vendor_state __asm__("D_001E63C0");
+extern struct VendorItemPricing vendor_item_prices[] __asm__("D_001DFFB0");
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
+extern u8 discount_purchase_pricing[] __asm__("D_0013D4E3");
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
 extern void *memset(void *, s32, u32);
 
-void FUN_00238f08(s32 arg0, s32 w, s32 h) {
-    struct MenuPacket pkt;
-    s32 cost;
-    s32 msg;
+void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 target_height) __asm__("FUN_00238f08");
 
-    func_001FB8F0(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    memset(&pkt, 0, 0x18);
-    pkt.unk2 = h;
-    pkt.unk6 = w;
-    pkt.unk8 = w >> 1;
-    pkt.unkA = (h >> 1) - 7;
-    pkt.unk10 = 0x10;
-    pkt.unk12 = 1;
-    if (D_001E63C0.open != 0) {
-        if (D_001E63C0.slots[D_001E63C0.cur].kind == 1 && D_0013D428[D_001E63C0.slots[D_001E63C0.cur].id] >= D_001DFFB0[D_001E63C0.slots[D_001E63C0.cur].id].need) {
-            msg = 0x5233;
-        } else if (D_001E63C0.slots[D_001E63C0.cur].kind == 1) {
-            if (D_001E63C0.hard != 0) {
-                cost = D_001DFFB0[D_001E63C0.slots[D_001E63C0.cur].id].costHard;
+void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 target_height) {
+    struct TextRegion region;
+    s32 price;
+    s32 evaluated_message_id;
+
+    draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    memset(&region, 0, 0x18);
+    region.bottom = target_height;
+    region.right = target_width;
+    region.anchor_x = target_width >> 1;
+    region.anchor_y = (target_height >> 1) - 7;
+    region.line_advance = 0x10;
+    region.flags = 1;
+    if (vendor_state.selection_active != 0) {
+        if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 && weapon_ammo_counts[vendor_state.entries[vendor_state.selected_entry].item_index] >= vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].ammo_capacity) {
+            evaluated_message_id = 0x5233;
+        } else if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1) {
+            if (vendor_state.discount_ammo_pricing != 0) {
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].discounted_ammo_price;
             } else {
-                cost = D_001DFFB0[D_001E63C0.slots[D_001E63C0.cur].id].cost;
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].ammo_price;
             }
-            msg = D_0015ED98 < cost ? 0x5234 : 0x5233;
+            evaluated_message_id = current_bolt_count >= price ? 0x5234 : 0x5233;
         } else {
-            if (D_0013D4E3[0] != 0) {
-                cost = D_001DFFB0[D_001E63C0.slots[D_001E63C0.cur].id].boltsHard;
+            if (discount_purchase_pricing[0] != 0) {
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].discounted_purchase_price;
             } else {
-                cost = D_001DFFB0[D_001E63C0.slots[D_001E63C0.cur].id].bolts;
+                price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].purchase_price;
             }
-            msg = D_0015ED98 < cost ? 0x524E : 0x5233;
+            evaluated_message_id = current_bolt_count >= price ? 0x524E : 0x5233;
         }
     } else {
-        msg = 0x5234;
+        evaluated_message_id = 0x5234;
     }
-    if (msg != 0) {
-        pkt.unk12 |= 4;
-        func_001F75F0(&pkt, 0x80F0F0F0, func_001FDD10(0x5234), -1);
-        pkt.unk12 ^= 4;
-        pkt.unkA = (h - (s16)pkt.unkE) >> 1;
-        func_001F75F0(&pkt, 0x80F0F0F0, func_001FDD10(0x5234), -1);
+    /* Retail evaluates the selection above, then always displays Buy. */
+    if (evaluated_message_id != 0) {
+        region.flags |= 4;
+        font_print_window_small(&region, 0x80F0F0F0, get_help_message_text(0x5234), -1);
+        region.flags ^= 4;
+        region.anchor_y = (target_height - (s16)region.rendered_height) >> 1;
+        font_print_window_small(&region, 0x80F0F0F0, get_help_message_text(0x5234), -1);
     }
 }
+
+extern __typeof__(render_vendor_buy_label_pass) func_00238F08 __attribute__((alias("FUN_00238f08")));
+
 #endif /* NON_MATCHING */

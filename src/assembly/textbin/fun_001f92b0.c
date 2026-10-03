@@ -10,119 +10,124 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f92b0/FUN_001f92b0.s
 typedef struct { f32 x, y, z, w; } Vec4;
 
 typedef struct {
-    Vec4 pos;
-    s16 life;
+    Vec4 position;
+    s16 active_count;
     s16 alpha;
     u8 pad14[4];
     f32 angle;
-    f32 size;
-} Spark;
+    f32 radius_scale;
+} BillboardRecord;
 
 typedef struct {
     u8 pad0[0x1A8];
-    f32 zofs;
+    f32 depth_offset;
     u8 pad1AC[0x64];
-    f32 proj;
-} Camera;
+    f32 projection_scale;
+} BillboardViewContext;
 
 struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
 struct TagPtr { struct DmaTag *p; };
 
-extern struct TagPtr D_00160F00;
-extern char D_001608E0[];
-extern u8 D_00187080[];
-extern Camera D_0018CD00;
-extern s32 D_0018CE80;
-extern Spark D_0018ED00[];
+extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
+extern char billboard_quad_header[] __asm__("D_001608E0");
+extern u8 camera_position[] __asm__("D_00187080");
+extern BillboardViewContext view_context __asm__("D_0018CD00");
+extern s32 clip_transform __asm__("D_0018CE80");
+extern BillboardRecord billboard_records[] __asm__("D_0018ED00");
 extern void FillTransferWords(void *, s32, s32);
-extern long func_001F44B8(s32);
-extern s32 func_001F9958(Vec4 *);
-extern void func_001F9A28(Vec4 *, void *, void *);
-extern void func_001F9A68(Vec4 *, Vec4 *, f32);
-extern void func_001F9A98(Vec4 *, Vec4 *, void *);
-extern f32 func_001F9AF0(Vec4 *);
-extern void func_001F9D20(Vec4 *, Vec4 *, void *);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern s32 is_vector_outside_clip(Vec4 *) __asm__("func_001F9958");
+extern void fast_vec_sub(Vec4 *, void *, void *) __asm__("func_001F9A28");
+extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
+extern void transform_clip_vector(Vec4 *, Vec4 *, void *) __asm__("func_001F9A98");
+extern f32 fast_vec_length(Vec4 *) __asm__("func_001F9AF0");
+extern void transform_vector(Vec4 *, Vec4 *, void *) __asm__("func_001F9D20");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 func_001FA6C0(s32);
-extern s32 func_001FA6D0(f32);
-extern void func_00233980(s32, u64);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
-void FUN_001f92b0(void)
+void append_billboard_batch(void) __asm__("FUN_001f92b0");
+
+void append_billboard_batch(void)
 {
-    Vec4 v;
-    Vec4 w;
-    f32 dist;
-    f32 r;
-    s32 i;
-    Spark *pt;
-    long col;
-    long x;
+    Vec4 projected_position;
+    Vec4 clip_position;
+    f32 distance;
+    f32 radius;
+    s32 record_index;
+    BillboardRecord *record;
+    s64 color;
+    s64 x;
     s32 y;
-    long xy;
-    s32 s;
-    s32 c;
-    struct DmaTag *base;
-    long *p;
-    Spark *arr;
+    s64 packed_position;
+    s32 sine_offset;
+    s32 cosine_offset;
+    struct DmaTag *tag;
+    s64 *packet_words;
+    BillboardRecord *records;
 
-    func_00233980(0x42, 0x8000000048);
-    for (i = 0; i < 16; i++) {
-        arr = D_0018ED00;
-        pt = arr + i;
-        if (pt->life <= 0) {
+    vu1_add_g_sregister(0x42, 0x8000000048);
+    for (record_index = 0; record_index < 16; record_index++) {
+        records = billboard_records;
+        record = records + record_index;
+        if (record->active_count <= 0) {
             continue;
         }
-        func_001F9A28(&v, pt, D_00187080);
-        v.w = 1.0f;
-        dist = func_001F9AF0(&v);
-        func_001F9A68(&v, &v, 1024.0f);
-        func_001F9D20(&v, &v, D_00187080 - 0x100);
-        func_001F9A98(&w, &v, &D_0018CE80);
-        if (func_001F9958(&w) != 0) {
-            FillTransferWords(pt, 0, 0x20);
+        fast_vec_sub(&projected_position, record, camera_position);
+        projected_position.w = 1.0f;
+        distance = fast_vec_length(&projected_position);
+        fast_vec_scale(&projected_position, &projected_position, 1024.0f);
+        transform_vector(&projected_position, &projected_position, camera_position - 0x100);
+        transform_clip_vector(&clip_position, &projected_position, &clip_transform);
+        if (is_vector_outside_clip(&clip_position) != 0) {
+            FillTransferWords(record, 0, 0x20);
             continue;
         }
-        func_001F9A68(&v, &v, D_0018CD00.proj / v.w);
-        col = (pt->alpha << 24) | 0x808080;
-        x = func_001FA6D0(v.x * 16.0f) + 0x8000;
-        y = func_001FA6D0(v.y * 16.0f) + 0x8000;
-        xy = ((long)func_001FA6D0(v.z * 0.9997f + D_0018CD00.zofs) << 32) | ((long)y << 16) | x;
-        if (dist > 18.0f) {
-            dist = 18.0f;
-        } else if (dist < 2.0f) {
-            dist = 2.0f;
+        fast_vec_scale(&projected_position, &projected_position, view_context.projection_scale / projected_position.w);
+        color = (record->alpha << 24) | 0x808080;
+        x = convert_float_to_integer(projected_position.x * 16.0f) + 0x8000;
+        y = convert_float_to_integer(projected_position.y * 16.0f) + 0x8000;
+        packed_position = ((s64)convert_float_to_integer(projected_position.z * 0.9997f + view_context.depth_offset) << 32) | ((s64)y << 16) | x;
+        if (distance > 18.0f) {
+            distance = 18.0f;
+        } else if (distance < 2.0f) {
+            distance = 2.0f;
         }
-        r = pt->size * (func_001FA6C0(pt->alpha + 16) * 0.015625f) * ((24.0f - dist) * 16.0f);
-        s = func_001FA6D0(r * fast_sin(pt->angle));
-        c = func_001FA6D0(r * fast_cos(pt->angle));
-        D_00160F00.p->w0 = 0x10000009;
-        D_00160F00.p->addr = 0;
-        D_00160F00.p->w2 = 0;
-        D_00160F00.p->w3 = 0x50000009;
-        base = D_00160F00.p;
-        D_00160F00.p = base + 1;
-        qcopy(base + 1, D_001608E0);
-        p = (long *)(base + 2);
-        D_00160F00.p = base + 2;
-        p[0] = 5;
-        p[1] = func_001F44B8(0x13);
-        p[2] = 0x154;
-        p[3] = col;
-        p[4] = 0;
-        p[5] = xy + (c << 16) + s;
-        p[6] = col;
-        p[7] = 0x200;
-        p[8] = xy + (-s << 16) + c;
-        p[9] = col;
-        p[10] = 0x2000000;
-        p[11] = xy + (s << 16) - c;
-        p[12] = col;
-        p[13] = 0x2000200;
-        p[14] = xy + (-c << 16) - s;
-        p[15] = 0;
-        D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x80);
+        radius = record->radius_scale * (convert_integer_to_float(record->alpha + 16) * 0.015625f) * ((24.0f - distance) * 16.0f);
+        sine_offset = convert_float_to_integer(radius * fast_sin(record->angle));
+        cosine_offset = convert_float_to_integer(radius * fast_cos(record->angle));
+        render_packet_cursor.p->w0 = 0x10000009;
+        render_packet_cursor.p->addr = 0;
+        render_packet_cursor.p->w2 = 0;
+        render_packet_cursor.p->w3 = 0x50000009;
+        tag = render_packet_cursor.p;
+        render_packet_cursor.p = tag + 1;
+        qcopy(tag + 1, billboard_quad_header);
+        packet_words = (s64 *)(tag + 2);
+        render_packet_cursor.p = tag + 2;
+        packet_words[0] = 5;
+        packet_words[1] = get_effect_texture(0x13);
+        packet_words[2] = 0x154;
+        packet_words[3] = color;
+        packet_words[4] = 0;
+        packet_words[5] = packed_position + (cosine_offset << 16) + sine_offset;
+        packet_words[6] = color;
+        packet_words[7] = 0x200;
+        packet_words[8] = packed_position + (-sine_offset << 16) + cosine_offset;
+        packet_words[9] = color;
+        packet_words[10] = 0x2000000;
+        packet_words[11] = packed_position + (sine_offset << 16) - cosine_offset;
+        packet_words[12] = color;
+        packet_words[13] = 0x2000200;
+        packet_words[14] = packed_position + (-cosine_offset << 16) - sine_offset;
+        packet_words[15] = 0;
+        render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x80);
     }
-    func_00233980(0x42, 0x8000000044);
+    vu1_add_g_sregister(0x42, 0x8000000044);
 }
+
+extern __typeof__(append_billboard_batch) func_001F92B0 __attribute__((alias("FUN_001f92b0")));
+
 #endif /* NON_MATCHING */
