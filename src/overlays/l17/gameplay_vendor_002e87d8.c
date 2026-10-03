@@ -597,7 +597,71 @@ void FUN_L17_002ec150(char *moby, char *obj) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec360.s", FUN_L17_002ec360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002edf10.s", FUN_L17_002edf10);
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EFA20), where it is exact; names translated to the US level program. */
+
+extern char *D_L17_001600EC __attribute__((section(".sdata")));
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") __attribute__((section(".sdata")));
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L17_002edf10(char *moby, float *a, float *b) {
+    char *d = *(char **)(moby + 0x78);
+    float v[4];
+    float zz, dist, tmp, hi, lo, f, t, k, r, s;
+    unsigned char *base;
+    scale_vector_xyz(v, d + 0x10, *(float *)(d + 0x64) * (float)scale_game_frames(0x3C));
+    add_vector_xyz(v, v, moby + 0x10);
+    zz = v[2];
+    subtract_vector_xyz(v, v, (*(int *)(d + 0x12C) << 7) + D_L17_001600EC + 0x30);
+    dist = vector_length_xy(v);
+    tmp = vector_length_xy((*(int *)(d + 0x12C) << 7) + D_L17_001600EC);
+    hi = *(float *)(D_L17_001600EC_t[*(int *)(d + 0x12C)] + 0x28);
+    lo = *(float *)(D_L17_001600EC_t[*(int *)(d + 0x12C)] + 0x38);
+    t = hi + lo;
+    k = -hi + lo;
+    f = fast_add_rotations(FUN_001f9e90(v[0], v[1]), 3.141590118408203f);
+    if (tmp - 10.0f < dist) {
+        r = (dist - tmp + 10.0f) / 10.0f;
+        s = fast_subtract_rotations(f, *(float *)(d + 0x38));
+        if (r > 1.0f) r = 1.0f; else if (r < 0.0f) r = 0.0f;
+        if (s > 0.0f) {
+            *a = (-1.0f - *a) * r + *a;
+        } else {
+            *a = (1.0f - *a) * r + *a;
+        }
+        base = D_0013F350_c;
+        base[0x160F] |= 2;
+    }
+    if (t - 10.0f < zz) {
+        float q, w;
+        q = (zz - t + 10.0f) / 10.0f;
+        w = (0.5235987901687622f - *(float *)(d + 0x34)) / 0.5235987901687622f;
+        if (q > 1.0f) q = 1.0f; else if (q < 0.0f) q = 0.0f;
+        if (w > 1.0f) w = 1.0f; else if (w < 0.0f) w = 0.0f;
+        q = q * w;
+        *b = (-1.0f - *b) * q + *b;
+        {
+            unsigned char *p = D_0013F350_c;
+            p[0x160F] |= 2;
+        }
+    } else if (zz < k + 10.0f) {
+        float q, w;
+        q = (k - zz + 10.0f) / 10.0f;
+        w = (*(float *)(d + 0x34) + 0.5235987901687622f) / 0.5235987901687622f;
+        if (q > 1.0f) q = 1.0f; else if (q < 0.0f) q = 0.0f;
+        if (w > 1.0f) w = 1.0f; else if (w < 0.0f) w = 0.0f;
+        q = q * w;
+        *b = (1.0f - *b) * q + *b;
+        {
+            unsigned char *p = D_0013F350_c;
+            p[0x160F] |= 2;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ee2b0.s", FUN_L17_002ee2b0);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FastVecAdd(void *, void *, void *) __asm__("FUN_001f9a10");

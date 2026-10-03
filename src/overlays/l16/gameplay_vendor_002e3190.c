@@ -26,7 +26,173 @@ void FUN_L16_002e36e8(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3fa0.s", FUN_L16_002e3fa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e43e0.s", FUN_L16_002e43e0);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Update the moving pickup, interpolate its path transitions, and manage its sound handle. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5848), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad00[0x30];
+    float position[4];
+    char pad40[0x30];
+    float direction[4];
+} L16PickupPose;
+
+extern L16PickupPose *D_L16_001600EC __attribute__((section(".sdata")));
+extern char *FUN_L05_00319598(void *, int);
+extern char D_0013CAE4[];
+extern char D_0013E550[];
+extern char D_0013F350[];
+extern float advance_accelerated_scalar_c(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float D_0015ED6C MACRO_ADDR,D_0015EE70_c __asm__("D_0015EE70") __attribute__((section(".sdata")));
+extern float D_0015EE6C MACRO_ADDR,D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L05_003195f8(char *);
+extern short D_L16_0015F594;
+extern unsigned char D_0013D4E1 __attribute__((section(".data")));
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_0022da68(int, int, void *);
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L05_00319510(void *);
+extern void FUN_L05_00319690(char *);
+extern void FUN_L05_00319740(char *);
+extern void FUN_L05_003198e8(char *);
+extern void FUN_L16_002e4900_c(void *) __asm__("FUN_L16_002e4900");
+extern void FUN_L16_002e4a58_c(char *) __asm__("FUN_L16_002e4a58");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
+
+void FUN_L16_002e43e0(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    char *g;
+    char *g2;
+    float z;
+    char *m;
+    char *e;
+    L16PickupPose *tab;
+    float *qa;
+    int h;
+    int s;
+    qcopy(v00, moby + 0x10);
+    qcopy(v10, moby + 0x40);
+    FUN_L00_00266858(moby, (*(unsigned short *)(moby + 0x34) ^ 1) & 1);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(short *)(d + 0xAA) = -1;
+        FUN_L16_002e4900_c(moby);
+        break;
+    case 1:
+        g = D_0013F350;
+        if (*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) {
+            FUN_001fa2d8(v30, moby + 0xC0);
+            subtract_vector_xyz(v70, g + 0x80, moby + 0x10);
+            v70[3] = 0;
+            FUN_001f9d20(v70, v70, v30);
+            if (AbsoluteFloat(v70[1]) < 1.2f) {
+                FUN_L16_002e4a58_c(moby);
+                FUN_L05_00319690(moby);
+                if ((*(int *)(D_0013CAE4) & 0x10) && *(int *)&D_L16_0015F594 == 8) {
+                    moby[0x20] = 3;
+                    m = FUN_L05_00319598(moby, *(short *)(d + 0xAE));
+                    if (m != 0) {
+                        m[0x20] = 2;
+                        *(unsigned short *)(m + 0x34) |= 1;
+                        m[0x31] = 0;
+                        *(int *)(m + 0x94) = 0;
+                    }
+                }
+            }
+        }
+        break;
+    case 3:
+        advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, D_0015ED6C * 0.5f, (float *)(d + 0xB0), (float *)(d + 0xB4));
+        qa = v30;
+        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xAC) * 4)));
+        tab = D_L16_001600EC;
+        qcopy(qa, tab[s].position);
+        qcopy(v50, tab[s].direction);
+        z = 0.0f;
+        func_00215CA8_f5848(z, *(int **)(d + 0xA4), 0, v40, v60, 0);
+        FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xB0));
+        *(float *)(d + 0x74) = fast_add_rotations(fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xB0), v50[1]);
+        *(float *)(d + 0x78) = fast_add_rotations(fast_subtract_rotations(v60[2], v50[2]) * *(float *)(d + 0xB0), v50[2]);
+        if (1.0f <= *(float *)(d + 0xB0)) {
+            *(float *)(d + 0xB0) = z;
+            *(float *)(d + 0xB4) = z;
+            moby[0x20] = 4;
+        }
+        break;
+    case 4:
+        if (FUN_L05_003195f8(moby)) {
+            *(int *)(d + 0xB0) = 0;
+            *(int *)(d + 0xB4) = 0;
+            moby[0x20] = 5;
+        }
+        break;
+    case 5:
+        advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, D_0015ED6C * 0.5f, (float *)(d + 0xB0), (float *)(d + 0xB4));
+        qa = v40;
+        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xAE) * 4)));
+        tab = D_L16_001600EC;
+        qcopy(qa, tab[s].position);
+        qcopy(v60, tab[s].direction);
+        sample_camera_path(*(int **)(d + 0xA4), 0, v30, v50, 0, (float)**(int **)(d + 0xA4));
+        FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xB0));
+        *(float *)(d + 0x74) = fast_add_rotations(fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xB0), v50[1]);
+        *(float *)(d + 0x78) = fast_add_rotations(fast_subtract_rotations(v60[2], v50[2]) * *(float *)(d + 0xB0), v50[2]);
+        if (1.0f <= *(float *)(d + 0xB0)) {
+            *(int *)(d + 0xB0) = 0;
+            *(int *)(d + 0xB4) = 0;
+            moby[0x20] = 1;
+            FUN_L05_00319510(moby);
+        }
+        break;
+    case 6:
+        if (D_0013D4E1) {
+            char *model = *(char **)(moby + 0x24);
+            unsigned short flags = *(unsigned short *)(moby + 0x34);
+            int value = *(int *)(model + 0x10);
+            moby[0x31] = 1;
+            *(int *)(moby + 0x94) = value;
+            *(unsigned short *)(moby + 0x34) = flags & 0xFFFE;
+            moby[0x20] = 1;
+        }
+        break;
+    }
+    FUN_L05_00319740(moby);
+    if (*(unsigned char *)(moby + 0x20) >= 3 && *(unsigned char *)(moby + 0x20) <= 5) {
+        g2 = D_0013F350;
+        *(short *)(g2 + 0x1F2) = 2;
+        *(short *)(g2 + 0x1F4) = 2;
+        FUN_L05_003198e8(moby);
+        if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xAA)) == 0) {
+            *(short *)(d + 0xAA) = func_0022ED80_i(0, 4, moby);
+        }
+    } else if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xAA)) != 0) {
+        h = *(short *)(d + 0xAA);
+        if (h != -1) {
+            e = D_0013E550 + h * 0x70;
+            if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                release_voice_slot(h);
+            }
+        }
+        *(short *)(d + 0xAA) = -1;
+    }
+    subtract_vector_xyz(v20, moby + 0x10, v00);
+    FUN_L00_00260738(d + 0x20, v20, v10, moby + 0x40);
+}
 #include "sda.h"
 #include "qcopy.h"
 extern float func_001F9D10_e4900(void *, void *) __asm__("FUN_001f9b48");
