@@ -8,17 +8,17 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN
 #include "sda.h"
 
 struct DmaTag {
-    u32 w0;
+    u32 dma_control;
     u32 addr;
-    u32 w2;
-    u32 w3;
+    u32 vif0;
+    u32 vif1;
 };
 
 struct TagPtr {
     struct DmaTag *p;
 };
 
-struct ScreenOfs {
+struct ScreenOffset {
     u8 pad0[0x10];
     s32 x;
     s32 y;
@@ -28,13 +28,13 @@ typedef struct {
     s16 id;      /* 0x00 */
     u16 pad02;
     u16 flags;   /* 0x04 */
-    u16 tex;     /* 0x06 */
-    s16 frame;   /* 0x08 */
+    u16 texture_id;     /* 0x06 */
+    s16 frame_index;   /* 0x08 */
     u16 pad0A[2];
-    u16 w;       /* 0x0E */
-    s16 h;       /* 0x10 */
-    s16 xoff;    /* 0x12 */
-    s16 yoff;    /* 0x14 */
+    u16 label_width;       /* 0x0E */
+    s16 label_height;       /* 0x10 */
+    s16 label_offset_x;    /* 0x12 */
+    s16 label_offset_y;    /* 0x14 */
     u16 pad16;
     f32 x;       /* 0x18 */
     f32 y;       /* 0x1C */
@@ -49,23 +49,23 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x8];
-    s32 marks_on;      /* 0x08 */
+    s32 marks_enabled;      /* 0x08 */
     u8 padC[0xC];
     s32 z;             /* 0x18 */
     s32 grid;          /* 0x1C */
     MapIcon *icons;    /* 0x20 */
     s32 enabled;       /* 0x24 */
     u8 pad28[0x4];
-    s32 show_marks;    /* 0x2C */
+    s32 show_markers;    /* 0x2C */
     MapMark marks[8];  /* 0x30 */
     u8 padB0[0x4];
     f32 zoom[20];      /* 0xB4 */
-    s32 ofs_x[20];     /* 0x104 */
-    s32 ofs_y[20];     /* 0x154 */
+    s32 offset_x[20];     /* 0x104 */
+    s32 offset_y[20];     /* 0x154 */
     u8 pad1A4[0x84];
-    s32 cur;           /* 0x228 */
+    s32 selected_map;           /* 0x228 */
     u8 pad22C[0x14];
-    s32 tbp;           /* 0x240 */
+    s32 texture_address;           /* 0x240 */
 } MapState;
 
 typedef struct {
@@ -80,39 +80,39 @@ typedef struct {
 
 typedef struct {
     s16 pad0;
-    s16 img;
-} TexRef;
+    s16 image_index;
+} MapTextureReference;
 
 typedef struct {
     u8 pad0[6];
-    u8 lw;
-    u8 lh;
-} TexInfo;
+    u8 width_exponent;
+    u8 height_exponent;
+} MapTextureInfo;
 
 typedef struct {
     u8 pad0[0x20];
-    TexRef *refs;     /* 0x20 */
-    TexInfo *infos;   /* 0x24 */
-} TexBank;
+    MapTextureReference *refs;     /* 0x20 */
+    MapTextureInfo *infos;   /* 0x24 */
+} MapTextureBank;
 
 typedef struct {
     s16 s[12];
-} TextBox;
+} FontWindow;
 
 typedef struct {
     s32 x0;
     s32 y0;
     s32 x1;
     s32 y1;
-} Rect;
+} MapIconBounds;
 
-#define SPR ((Rect *)0x70000000)
+#define SPR ((MapIconBounds *)0x70000000)
 
 extern struct TagPtr D_00160F00;
-extern struct ScreenOfs D_0013E500;
+extern struct ScreenOffset D_0013E500;
 extern MapState D_001A00F0;
 extern Player D_0013F350;
-extern TexBank D_0019A3E8;
+extern MapTextureBank D_0019A3E8;
 extern u8 D_0013D5BC[];
 extern u16 D_001518D2[];
 extern s32 D_0015ED84;
@@ -127,15 +127,15 @@ extern f32 D_0015FD94 __attribute__((sda));
 extern u8 D_001E8068[];
 
 extern void func_001F0C50(s32, s32, s32, u8 *);
-extern void func_001F4280(s32);
-extern void func_001F4398(void);
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void func_001F5F18(s32, s32, s32, s32, s32);
-extern void func_001F75F0(void *, u64, void *, s32);
+extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
 extern f32 func_001FA580(f32, f32);
 extern f32 func_001FA5C8(f32, f32);
-extern s32 func_001FF960(s32, s32);
-extern u64 func_001FFA10(s32);
-extern void func_00200080(s32, s32, s32, s32, s32, s32);
+extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
+extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void func_00200600(f32, f32, f32, f32, f32, s32, s32, u64);
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 extern void func_00208280(s32, void *);
@@ -152,26 +152,26 @@ void draw_map_overlay(void) {
         u8 b[0x80];
         f32 f[2];
     } buf;
-    TextBox tb;
+    FontWindow text_window;
     s32 rx0, ry0, rx1, ry1;
     struct DmaTag *tag;
-    u64 *q;
-    u64 tex;
-    u64 tex2;
-    s32 cbp;
-    s32 sign;
-    s32 tile;
-    s32 nx0, ny0, nx1, ny1;
+    u64 *packet_words;
+    u64 background_tex0;
+    u64 map_tex0;
+    s32 palette_block;
+    s32 mirror_sign;
+    s32 tile_size;
+    s32 left_tile_count, top_tile_count, right_tile_count, bottom_tile_count;
     s32 x0, y0, x1, y1;
     s32 u, v;
     s32 dx, dy;
     s32 i, j;
-    s32 cell, col, row;
+    s32 cell, cell_y, cell_x;
     MapMark *mk;
-    Rect *r;
-    Rect *spr;
+    MapIconBounds *r;
+    MapIconBounds *icon_bounds;
     MapIcon *ic;
-    TexInfo *ti;
+    MapTextureInfo *ti;
     f32 zoom;
     f32 scale;
     f32 k;
@@ -179,152 +179,152 @@ void draw_map_overlay(void) {
     f32 fx, fy;
     s32 ox0, ox1, oy0, oy1;
     s32 ax, ay, bx, by;
-    s32 id, frame, size;
-    f32 ang, sx, sy, cx, cy;
-    s16 w;
-    s32 h, xo, yo;
-    s32 lx, ly;
-    s32 img;
+    s32 id, frame_index, texture_width;
+    f32 angle, sprite_width, sprite_height, center_x, center_y;
+    s16 label_width;
+    s32 label_height, label_offset_x, label_offset_y;
+    s32 label_x, label_y;
+    s32 image_index;
     s32 flip;
-    s32 tid;
-    s32 lim;
+    s32 texture_id;
+    s32 tile_limit;
 
     if (D_001A00F0.enabled == 0) {
         u8 *font = D_001E8068;
 
-        func_001F4280(0);
+        setup_gif_paging(0);
         func_001F0C50(0x100, (s16)D_001518D2[0] >> 1, 0x80909090, font);
-        func_001F4398();
+        do_gif_paging();
         return;
     }
-    if (D_001A00F0.cur < 0) {
+    if (D_001A00F0.selected_map < 0) {
         return;
     }
 
     rx0 = 0x1000;
-    func_001F4280(0);
+    setup_gif_paging(0);
     ry0 = 0x800;
-    sign = D_0015EDB4 ? -1 : 1;
-    zoom = D_001A00F0.zoom[D_001A00F0.cur];
-    oy0 = zoom * (f32)(D_001A00F0.ofs_y[D_001A00F0.cur] >> 15);
+    mirror_sign = D_0015EDB4 ? -1 : 1;
+    zoom = D_001A00F0.zoom[D_001A00F0.selected_map];
+    oy0 = zoom * (f32)(D_001A00F0.offset_y[D_001A00F0.selected_map] >> 15);
     ox1 = zoom * 8192.0f;
-    ox0 = zoom * (f32)(D_001A00F0.ofs_x[D_001A00F0.cur] >> 15);
-    tile = zoom * 512.0f;
-    lim = tile + 0x2000;
-    rx0 -= ox0 * sign;
+    ox0 = zoom * (f32)(D_001A00F0.offset_x[D_001A00F0.selected_map] >> 15);
+    tile_size = zoom * 512.0f;
+    tile_limit = tile_size + 0x2000;
+    rx0 -= ox0 * mirror_sign;
     ry0 -= oy0;
-    rx1 = rx0 + ox1 * sign;
+    rx1 = rx0 + ox1 * mirror_sign;
     ry1 = ry0 + ox1;
-    nx0 = (rx0 + tile - 1) / tile;
-    ny0 = (ry0 + tile - 1) / tile;
-    nx1 = (lim - rx1 - 1) / tile;
-    ny1 = (lim - ry1 - 1) / tile;
-    x0 = rx0 - tile * nx0;
-    y0 = ry0 - tile * ny0;
-    x1 = rx1 + tile * nx1;
-    y1 = ry1 + tile * ny1;
-    u = ((nx0 + nx1) << 9) + 0x2000;
-    v = ((ny0 + ny1) << 9) + 0x2000;
+    left_tile_count = (rx0 + tile_size - 1) / tile_size;
+    top_tile_count = (ry0 + tile_size - 1) / tile_size;
+    right_tile_count = (tile_limit - rx1 - 1) / tile_size;
+    bottom_tile_count = (tile_limit - ry1 - 1) / tile_size;
+    x0 = rx0 - tile_size * left_tile_count;
+    y0 = ry0 - tile_size * top_tile_count;
+    x1 = rx1 + tile_size * right_tile_count;
+    y1 = ry1 + tile_size * bottom_tile_count;
+    u = ((left_tile_count + right_tile_count) << 9) + 0x2000;
+    v = ((top_tile_count + bottom_tile_count) << 9) + 0x2000;
 
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x47, 0);
-    D_00160F00.p->w0 = 0x10000005;
+    D_00160F00.p->dma_control = 0x10000005;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000005;
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000005;
     D_00160F00.p++;
-    tex = func_001FFA10(func_001FF960(0xE999, D_001A00F0.cur));
-    q = (u64 *)D_00160F00.p;
-    q[0] = 0x7400000000008001;
-    q[1] = 0x5353106;
-    q[2] = tex;
-    q[3] = 0x156;
-    q[4] = 0x80808080;
-    q[5] = 0;
-    q[6] = ((x0 + D_0013E500.x) - 8) | ((u64)((y0 + D_0013E500.y) - 8) << 16) |
+    background_tex0 = get_frame_texture(find_valid_animation_frame_index(0xE999, D_001A00F0.selected_map));
+    packet_words = (u64 *)D_00160F00.p;
+    packet_words[0] = 0x7400000000008001;
+    packet_words[1] = 0x5353106;
+    packet_words[2] = background_tex0;
+    packet_words[3] = 0x156;
+    packet_words[4] = 0x80808080;
+    packet_words[5] = 0;
+    packet_words[6] = ((x0 + D_0013E500.x) - 8) | ((u64)((y0 + D_0013E500.y) - 8) << 16) |
            ((u64)D_001A00F0.z << 32);
-    q[7] = u | ((u64)v << 16);
-    q[8] = ((x1 + D_0013E500.x) - 8) | ((u64)((y1 + D_0013E500.y) - 8) << 16) |
+    packet_words[7] = u | ((u64)v << 16);
+    packet_words[8] = ((x1 + D_0013E500.x) - 8) | ((u64)((y1 + D_0013E500.y) - 8) << 16) |
            ((u64)D_001A00F0.z << 32);
-    q[9] = 0;
+    packet_words[9] = 0;
     D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x50);
     vu1_add_g_sregister(8, 5);
     vu1_add_g_sregister(0x47, 0x60B);
 
-    cbp = (tex >> 37) & 0x3FFF;
-    D_00160F00.p->w0 = 0x10000005;
+    palette_block = (background_tex0 >> 37) & 0x3FFF;
+    D_00160F00.p->dma_control = 0x10000005;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000005;
-    tex2 = (u64)((D_001A00F0.tbp >> 8) | (8 << 14) | (0x13 << 20) | (9 << 26)) | ((u64)9 << 30) | ((u64)1 << 34) | ((u64)cbp << 37) | ((long)4 << 61);
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000005;
+    map_tex0 = (u64)((D_001A00F0.texture_address >> 8) | (8 << 14) | (0x13 << 20) | (9 << 26)) | ((u64)9 << 30) | ((u64)1 << 34) | ((u64)palette_block << 37) | ((long)0x8000000000000000ULL);
     tag = D_00160F00.p;
     D_00160F00.p = tag + 1;
-    q = (u64 *)(tag + 1);
-    q[0] = 0x7400000000008001;
-    q[1] = 0x5353106;
-    q[2] = tex2;
-    q[3] = 0x156;
-    q[4] = 0x80808080;
-    q[5] = 0;
-    q[6] = ((rx0 + D_0013E500.x) - 8) | ((u64)((ry0 + D_0013E500.y) - 8) << 16) |
+    packet_words = (u64 *)(tag + 1);
+    packet_words[0] = 0x7400000000008001;
+    packet_words[1] = 0x5353106;
+    packet_words[2] = map_tex0;
+    packet_words[3] = 0x156;
+    packet_words[4] = 0x80808080;
+    packet_words[5] = 0;
+    packet_words[6] = ((rx0 + D_0013E500.x) - 8) | ((u64)((ry0 + D_0013E500.y) - 8) << 16) |
            ((u64)D_001A00F0.z << 32);
-    q[7] = 0x20002000;
-    q[8] = ((rx1 + D_0013E500.x) - 8) | ((u64)((ry1 + D_0013E500.y) - 8) << 16) |
+    packet_words[7] = 0x20002000;
+    packet_words[8] = ((rx1 + D_0013E500.x) - 8) | ((u64)((ry1 + D_0013E500.y) - 8) << 16) |
            ((u64)D_001A00F0.z << 32);
-    q[9] = 0;
+    packet_words[9] = 0;
     D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x50);
     vu1_add_g_sregister(0x47, 0x360B);
 
-    if (D_001A00F0.show_marks != 0 && D_001A00F0.marks_on != 0) {
+    if (D_001A00F0.show_markers != 0 && D_001A00F0.marks_enabled != 0) {
         dx = rx1 - rx0;
         dy = ry1 - ry0;
         for (i = 0; i < 8; i++) {
             cell = D_001A00F0.marks[i].cell;
             if (cell >= 0) {
-                row = cell % 16;
-                col = cell / 16;
-                func_00200E08(rx0 + row * dx / 16, ry0 + col * dy / 16,
-                              rx0 + (row + 1) * dx / 16, ry0 + (col + 1) * dy / 16,
+                cell_x = cell % 16;
+                cell_y = cell / 16;
+                func_00200E08(rx0 + cell_x * dx / 16, ry0 + cell_y * dy / 16,
+                              rx0 + (cell_x + 1) * dx / 16, ry0 + (cell_y + 1) * dy / 16,
                               0x20000000, 1);
             }
         }
     }
 
     if (D_001A00F0.icons != 0) {
-        spr = SPR;
-        scale = (D_001A00F0.zoom[D_001A00F0.cur] * 2.0f + 5.0f) / 13.0f;
+        icon_bounds = SPR;
+        scale = (D_001A00F0.zoom[D_001A00F0.selected_map] * 2.0f + 5.0f) / 13.0f;
         if (!(D_001A00F0.icons[0].flags & 4)) {
-            Rect *r;
+            MapIconBounds *r;
             s32 i;
             MapIcon *ic;
             f32 k;
-            s32 img;
+            s32 image_index;
             f32 fx, fy;
-            TexInfo *ti;
+            MapTextureInfo *ti;
             f32 s;
-            s32 tid;
+            s32 texture_id;
             
 
             i = 0;
             do {
-                if (D_001A00F0.icons[i].active != 0 && (tid = D_001A00F0.icons[i].tex) != 0 && !(D_001A00F0.icons[i].flags & 1)) {
+                if (D_001A00F0.icons[i].active != 0 && (texture_id = D_001A00F0.icons[i].texture_id) != 0 && !(D_001A00F0.icons[i].flags & 1)) {
                     k = 1.0f;
                     if (D_001A00F0.icons[i].flags & 0x80) {
                         k = 1.5f;
                     }
-                    img = func_001FF960(tid, D_001A00F0.icons[i].frame);
+                    image_index = find_valid_animation_frame_index(texture_id, D_001A00F0.icons[i].frame_index);
                     fx = (f32)rx0 + D_001A00F0.icons[i].x * (f32)(rx1 - rx0);
                     fy = (f32)ry0 + D_001A00F0.icons[i].y * (f32)(ry1 - ry0);
-                    ti = &D_0019A3E8.infos[D_0019A3E8.refs[img].img];
+                    ti = &D_0019A3E8.infos[D_0019A3E8.refs[image_index].image_index];
                     if (D_001A00F0.icons[i].flags & 0x200) {
-                        s = D_001A00F0.zoom[D_001A00F0.cur];
+                        s = D_001A00F0.zoom[D_001A00F0.selected_map];
                     } else {
                         s = scale;
                     }
-                    spr[i].x0 = fx - k * s * (f32)(1 << (ti->lw + 3));
-                    spr[i].x1 = (f32)spr[i].x0 + k * s * (f32)(1 << (ti->lw + 4));
-                    spr[i].y0 = fy - k * s * (f32)(1 << (ti->lh + 3));
-                    spr[i].y1 = (f32)spr[i].y0 + k * s * (f32)(1 << (ti->lh + 4));
+                    icon_bounds[i].x0 = fx - k * s * (f32)(1 << (ti->width_exponent + 3));
+                    icon_bounds[i].x1 = (f32)icon_bounds[i].x0 + k * s * (f32)(1 << (ti->width_exponent + 4));
+                    icon_bounds[i].y0 = fy - k * s * (f32)(1 << (ti->height_exponent + 3));
+                    icon_bounds[i].y1 = (f32)icon_bounds[i].y0 + k * s * (f32)(1 << (ti->height_exponent + 4));
                 }
                 i++;
             } while (!(D_001A00F0.icons[i].flags & 4));
@@ -337,19 +337,19 @@ void draw_map_overlay(void) {
             MapIcon *ic;
 
             for (i = 0; !(D_001A00F0.icons[i + 1].flags & 4); i++) {
-                if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].tex == 0 || (D_001A00F0.icons[i].flags & 3)) {
+                if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 || (D_001A00F0.icons[i].flags & 3)) {
                     continue;
                 }
                 for (j = i + 1; !(D_001A00F0.icons[j].flags & 4); j++) {
-                    ox0 = spr[j].x1 - spr[i].x0;
+                    ox0 = icon_bounds[j].x1 - icon_bounds[i].x0;
                     if (ox0 <= 0) continue;
-                    ox1 = spr[i].x1 - spr[j].x0;
+                    ox1 = icon_bounds[i].x1 - icon_bounds[j].x0;
                     if (ox1 <= 0) continue;
-                    oy0 = spr[j].y1 - spr[i].y0;
+                    oy0 = icon_bounds[j].y1 - icon_bounds[i].y0;
                     if (oy0 <= 0) continue;
-                    oy1 = spr[i].y1 - spr[j].y0;
+                    oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
                     if (oy1 <= 0) continue;
-                    if (D_001A00F0.icons[j].active == 0 || D_001A00F0.icons[j].tex == 0 || (D_001A00F0.icons[j].flags & 3)) {
+                    if (D_001A00F0.icons[j].active == 0 || D_001A00F0.icons[j].texture_id == 0 || (D_001A00F0.icons[j].flags & 3)) {
                         continue;
                     }
                     ax = 0;
@@ -369,14 +369,14 @@ void draw_map_overlay(void) {
                         by = oy1 >> 1;
                         ay = by - oy1;
                     }
-                    spr[i].x0 += ax;
-                    spr[i].x1 += ax;
-                    spr[i].y0 += ay;
-                    spr[i].y1 += ay;
-                    spr[j].x0 += bx;
-                    spr[j].x1 += bx;
-                    spr[j].y0 += by;
-                    spr[j].y1 += by;
+                    icon_bounds[i].x0 += ax;
+                    icon_bounds[i].x1 += ax;
+                    icon_bounds[i].y0 += ay;
+                    icon_bounds[i].y1 += ay;
+                    icon_bounds[j].x0 += bx;
+                    icon_bounds[j].x1 += bx;
+                    icon_bounds[j].y0 += by;
+                    icon_bounds[j].y1 += by;
                 }
             }
         }
@@ -387,79 +387,79 @@ void draw_map_overlay(void) {
         i = 0;
         if (!(D_001A00F0.icons[0].flags & 4)) {
             do {
-                if (D_001A00F0.icons[i].active != 0 && !(D_001A00F0.icons[i].flags & 1) && (id = D_001A00F0.icons[i].tex) != 0) {
-                    frame = D_001A00F0.icons[i].frame;
+                if (D_001A00F0.icons[i].active != 0 && !(D_001A00F0.icons[i].flags & 1) && (id = D_001A00F0.icons[i].texture_id) != 0) {
+                    frame_index = D_001A00F0.icons[i].frame_index;
                     if (D_001A00F0.icons[i].flags & 0x40) {
-                        func_00200E08(spr[i].x0 - 0x20, spr[i].y0 - 0x20, spr[i].x1 + 0x20, spr[i].y1 + 0x20,
+                        func_00200E08(icon_bounds[i].x0 - 0x20, icon_bounds[i].y0 - 0x20, icon_bounds[i].x1 + 0x20, icon_bounds[i].y1 + 0x20,
                                       0x80000000, 1);
                     }
                     if (D_001A00F0.icons[i].flags & 0x200) {
-                        s = D_001A00F0.zoom[D_001A00F0.cur];
+                        s = D_001A00F0.zoom[D_001A00F0.selected_map];
                     } else {
                         s = scale;
                     }
                         if (D_001A00F0.icons[i].flags & 0x100) {
-                        ang = D_001A00F0.icons[i].angle;
-                        size = 0x20;
-                        sy = s * 256.0f;
-                        sx = sy;
+                        angle = D_001A00F0.icons[i].angle;
+                        texture_width = 0x20;
+                        sprite_height = s * 256.0f;
+                        sprite_width = sprite_height;
                         if (D_001A00F0.icons[i].flags & 0x400) {
-                            ang = func_001FA580(ang, 1.5707964f);
-                            size = 0x40;
-                            sx = s * D_0015FD88;
-                            sy = s * D_0015FD8C;
+                            angle = func_001FA580(angle, 1.5707964f);
+                            texture_width = 0x40;
+                            sprite_width = s * D_0015FD88;
+                            sprite_height = s * D_0015FD8C;
                             if (*(s32 *)(D_0013D5BC + D_001A00F0.icons[i].id * 16) & 2) {
-                                frame++;
+                                frame_index++;
                             }
                         }
                         if (D_001A00F0.icons[i].flags & 0x800) {
-                            ang = func_001FA580(ang, 1.5707964f);
-                            size = 0x40;
-                            sx = s * D_0015FD80;
-                            sy = s * D_0015FD84;
+                            angle = func_001FA580(angle, 1.5707964f);
+                            texture_width = 0x40;
+                            sprite_width = s * D_0015FD80;
+                            sprite_height = s * D_0015FD84;
                             if (*(s32 *)(D_0013D5BC + D_001A00F0.icons[i].id * 16) & 2) {
-                                frame++;
+                                frame_index++;
                             }
                         }
                         if (D_001A00F0.icons[i].flags & 0x1000) {
-                            ang = func_001FA580(ang, 1.5707964f);
-                            sx = s * D_0015FD90;
-                            sy = s * D_0015FD94;
+                            angle = func_001FA580(angle, 1.5707964f);
+                            sprite_width = s * D_0015FD90;
+                            sprite_height = s * D_0015FD94;
                         }
-                        cx = (f32)(spr[i].x0 + spr[i].x1) * 0.5f;
-                        cy = (f32)(spr[i].y0 + spr[i].y1) * 0.5f;
-                        func_00200600(cx, cy, sx, sy, ang, size, 0x20, func_001FFA10(func_001FF960(id, frame)));
+                        center_x = (f32)(icon_bounds[i].x0 + icon_bounds[i].x1) * 0.5f;
+                        center_y = (f32)(icon_bounds[i].y0 + icon_bounds[i].y1) * 0.5f;
+                        func_00200600(center_x, center_y, sprite_width, sprite_height, angle, texture_width, 0x20, get_frame_texture(find_valid_animation_frame_index(id, frame_index)));
                     } else {
-                        func_00200080(func_001FF960(id, frame), spr[i].x0, spr[i].y0, spr[i].x1 - spr[i].x0,
-                                      spr[i].y1 - spr[i].y0, 0x80);
+                        draw_hud_sprite_subpixel(find_valid_animation_frame_index(id, frame_index), icon_bounds[i].x0, icon_bounds[i].y0, icon_bounds[i].x1 - icon_bounds[i].x0,
+                                      icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
                     }
                         if (D_001A00F0.icons[i].flags & 0x10) {
-                        w = D_001A00F0.icons[i].w;
-                        xo = D_001A00F0.icons[i].xoff;
-                        h = D_001A00F0.icons[i].h;
-                        yo = D_001A00F0.icons[i].yoff;
-                        if (xo == 0) {
-                            lx = ((spr[i].x0 + spr[i].x1) >> 5) - w / 2;
+                        label_width = D_001A00F0.icons[i].label_width;
+                        label_offset_x = D_001A00F0.icons[i].label_offset_x;
+                        label_height = D_001A00F0.icons[i].label_height;
+                        label_offset_y = D_001A00F0.icons[i].label_offset_y;
+                        if (label_offset_x == 0) {
+                            label_x = ((icon_bounds[i].x0 + icon_bounds[i].x1) >> 5) - label_width / 2;
                         } else {
-                            lx = ((xo > 0 ? spr[i].x1 : spr[i].x0) >> 4) - w / 2 + xo;
+                            label_x = ((label_offset_x > 0 ? icon_bounds[i].x1 : icon_bounds[i].x0) >> 4) - label_width / 2 + label_offset_x;
                         }
-                        if (yo == 0) {
-                            ly = ((spr[i].y0 + spr[i].y1) >> 5) - h / 2;
+                        if (label_offset_y == 0) {
+                            label_y = ((icon_bounds[i].y0 + icon_bounds[i].y1) >> 5) - label_height / 2;
                         } else {
-                            ly = ((yo > 0 ? spr[i].y1 : spr[i].y0) >> 4) - h / 2 + yo;
+                            label_y = ((label_offset_y > 0 ? icon_bounds[i].y1 : icon_bounds[i].y0) >> 4) - label_height / 2 + label_offset_y;
                         }
-                        func_001F5F18(ly, ly + h, lx, lx + w, 0x40);
+                        func_001F5F18(label_y, label_y + label_height, label_x, label_x + label_width, 0x40);
                         func_00208280(i, &buf);
-                        memset(&tb, 0, sizeof(tb));
-                        tb.s[8] = 0xF;
-                        tb.s[1] = ly + h;
-                        tb.s[3] = lx + w;
-                        tb.s[4] = lx + w / 2;
-                        tb.s[5] = ly + 4;
-                        tb.s[9] = 1;
-                        tb.s[0] = ly;
-                        tb.s[2] = lx;
-                        func_001F75F0(&tb, 0x80FFA888, &buf, -1);
+                        memset(&text_window, 0, sizeof(text_window));
+                        text_window.s[8] = 0xF;
+                        text_window.s[1] = label_y + label_height;
+                        text_window.s[3] = label_x + label_width;
+                        text_window.s[4] = label_x + label_width / 2;
+                        text_window.s[5] = label_y + 4;
+                        text_window.s[9] = 1;
+                        text_window.s[0] = label_y;
+                        text_window.s[2] = label_x;
+                        font_print_window_small(&text_window, 0x80FFA888, &buf, -1);
                     }
                 }
                 i++;
@@ -471,43 +471,44 @@ void draw_map_overlay(void) {
     {
         MapState *m = &D_001A00F0;
 
-    if (D_0015ED84 == m->cur) {
-        s32 img;
+    if (D_0015ED84 == m->selected_map) {
+        s32 image_index;
         f32 s;
-        f32 ang;
+        f32 angle;
         s32 flip;
         
 
-        img = func_001FF960(0xE99A, 5);
-        s = ((m->zoom[m->cur] * 4.0f + 10.0f) * 0.75f) / 13.0f;
-        ang = D_0013F350.angle;
+        image_index = find_valid_animation_frame_index(0xE99A, 5);
+        s = ((m->zoom[m->selected_map] * 4.0f + 10.0f) * 0.75f) / 13.0f;
+        angle = D_0013F350.angle;
         flip = D_0013F350.mode == 0xF;
         if (flip) {
-            ang = func_001FA580(ang, 1.5707964f);
+            angle = func_001FA580(angle, 1.5707964f);
         }
         if (D_0015FD60 != 0) {
             func_00208408(&buf.f[0], &buf.f[1], D_0015ED84 + 100, D_0013F350.x, D_0013F350.y);
-            ang = func_001FA580(ang, 1.5707964f);
+            angle = func_001FA580(angle, 1.5707964f);
         } else {
             func_00208408(&buf.f[0], &buf.f[1], D_0015ED84, D_0013F350.x, D_0013F350.y);
         }
         buf.f[0] = (f32)rx0 + buf.f[0] * (f32)(rx1 - rx0);
         buf.f[1] = (f32)ry0 + buf.f[1] * (f32)(ry1 - ry0);
         if (D_0015EDB4 != 0) {
-            ang = func_001FA5C8(-func_001FA580(ang, 1.5707964f), 1.5707964f);
+            angle = func_001FA5C8(-func_001FA580(angle, 1.5707964f), 1.5707964f);
         }
         {
             f32 sz = s * 256.0f;
 
-            func_00200600(buf.f[0], buf.f[1], sz, sz, ang, 0x40, 0x40, func_001FFA10(img));
+            func_00200600(buf.f[0], buf.f[1], sz, sz, angle, 0x40, 0x40, get_frame_texture(image_index));
         }
     }
     }
-    func_001F4398();
+    do_gif_paging();
     if (D_001A00F0.grid != 0) {
-        func_001F4280(0);
+        setup_gif_paging(0);
         func_00208508(rx0, ry0, rx1, ry1);
-        func_001F4398();
+        do_gif_paging();
     }
 }
+extern __typeof__(draw_map_overlay) func_00205640 __attribute__((alias("FUN_00205640")));
 #endif /* NON_MATCHING */

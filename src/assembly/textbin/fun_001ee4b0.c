@@ -22,14 +22,14 @@ struct CameraEnvironmentRegion {
     u8 pad7C[4];
 };
 
-extern struct CameraEnvironmentRegion D_0019ADC0[];
-extern u8 D_0015F484;
-extern u8 D_0015F485;
-extern u8 D_0015F486;
-extern f32 D_0015F488;
-extern f32 D_0015F48C;
-extern f32 D_0015F490;
-extern f32 D_0015F494;
+extern struct CameraEnvironmentRegion camera_environment_regions[] __asm__("D_0019ADC0");
+extern u8 fog_color_red __asm__("D_0015F484");
+extern u8 fog_color_green __asm__("D_0015F485");
+extern u8 fog_color_blue __asm__("D_0015F486");
+extern f32 fog_near_distance __asm__("D_0015F488");
+extern f32 fog_far_distance __asm__("D_0015F48C");
+extern f32 fog_near_intensity __asm__("D_0015F490");
+extern f32 fog_far_intensity __asm__("D_0015F494");
 extern s32 find_camera_environment_region(void *, f32 *, s32 *) __asm__("func_00212C28");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 
@@ -50,7 +50,7 @@ void update_camera_environment_from_regions(void *position) {
     if (find_camera_environment_region(position, &blend, &region_index) == 0) {
         return;
     }
-    region = &D_0019ADC0[region_index];
+    region = &camera_environment_regions[region_index];
     if (!(region->flags & 2)) {
         return;
     }
@@ -61,12 +61,15 @@ void update_camera_environment_from_regions(void *position) {
     negative_color = region->negative_color;
     red = ((positive_color & 0xFF) * positive_weight + (negative_color & 0xFF) * negative_weight) >> 8;
     green = (((positive_color >> 8) & 0xFF) * positive_weight + ((negative_color >> 8) & 0xFF) * negative_weight) >> 8;
-    D_0015F486 = (((positive_color >> 16) & 0xFF) * positive_weight + ((negative_color >> 16) & 0xFF) * negative_weight) >> 8;
-    D_0015F484 = red;
-    D_0015F485 = green;
-    D_0015F488 = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
-    D_0015F48C = (region->positive_depth_end * blend + region->negative_depth_end * inverse_blend) * 1024.0f;
-    D_0015F490 = 255.0f - (region->positive_value_start * blend + region->negative_value_start * inverse_blend) * 255.0f;
-    D_0015F494 = 255.0f - (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
+    fog_color_blue = (((positive_color >> 16) & 0xFF) * positive_weight + ((negative_color >> 16) & 0xFF) * negative_weight) >> 8;
+    fog_color_red = red;
+    fog_color_green = green;
+    fog_near_distance = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
+    fog_far_distance = (region->positive_depth_end * blend + region->negative_depth_end * inverse_blend) * 1024.0f;
+    fog_near_intensity = 255.0f - (region->positive_value_start * blend + region->negative_value_start * inverse_blend) * 255.0f;
+    fog_far_intensity = 255.0f - (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
 }
+
+extern __typeof__(update_camera_environment_from_regions) func_001EE4B0 __attribute__((alias("FUN_001ee4b0")));
+
 #endif /* NON_MATCHING */

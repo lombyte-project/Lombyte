@@ -1,22 +1,16 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231bd8/FUN_00231bd8.s", FUN_00231bd8);
-#else
-#include "types.h"
 #include "sda.h"
 
 typedef struct {
     u8 pad_0[0xD4];
-    s32 xD4;
+    s32 stage;
     s32 pad_D8;
-    s32 xDC;
+    s32 selection;
 } SaveInfo;
 
 typedef struct {
     u8 pad_0[0xC];
-    s32 y;
+    s32 half_height;
 } ScreenOfs;
 
 extern u8 D_0013CDD0[];
@@ -41,7 +35,7 @@ extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
 extern s32 service_level_archive_load(void) __asm__("func_00204428");
 extern void run_state_handler(void) __asm__("func_00208840");
 extern void memcard_update_state(void) __asm__("func_002093D8");
-extern void append_scrolling_textured_quad(s32, s32, s32, s32, s32, u64, f32, f32, f32, f32) __asm__("func_002316E8");
+extern void append_scrolling_textured_quad(s32, s32, s32, s32, u64, u64, f32, f32, f32, f32) __asm__("func_002316E8");
 extern void prepare_loading_slide_textures(s32, s32, s32, u64 *, u64 *, u64 *) __asm__("func_00231878");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
@@ -71,7 +65,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
     }
     sceGsSyncV(0);
     vu1_init_chain();
-    for (frame = 0; frame < duration_ticks && D_0013D290.xD4 < 3 && D_0013D290.xDC < 0; frame++) {
+    for (frame = 0; frame < duration_ticks && D_0013D290.stage < 3 && D_0013D290.selection < 0; frame++) {
         alpha = 0x80;
         reset_gs_registers();
         append_draw_buffer_packet();
@@ -91,21 +85,21 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
         }
         scroll_phase = convert_integer_to_float(frame % 600) * 0.0016666667f;
         if (first_slide == second_slide) {
-            append_scrolling_textured_quad(0, D_0013E500.y - 0x20, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
+            append_scrolling_textured_quad(0, D_0013E500.half_height - 0x20, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
                           scroll_phase + 0.0f, scroll_phase + 0.4f);
-            draw_textured_quad(0, D_0013E500.y - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
+            draw_textured_quad(0, D_0013E500.half_height - 0x20, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
         } else {
             scroll_start = scroll_phase + 0.0f;
             scroll_end = scroll_phase + 0.4f;
-            append_scrolling_textured_quad(0, D_0013E500.y - 0x2E, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start,
+            append_scrolling_textured_quad(0, D_0013E500.half_height - 0x2E, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start,
                           scroll_end);
-            draw_textured_quad(0, D_0013E500.y - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
+            draw_textured_quad(0, D_0013E500.half_height - 0x2E, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, first_texture);
             if (frame > 0x40) {
                 if (frame < 0x60) {
                     alpha = (frame - 0x40) * 4;
                 }
-                append_scrolling_textured_quad(0, D_0013E500.y, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start, scroll_end);
-                draw_textured_quad(0, D_0013E500.y, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, second_texture);
+                append_scrolling_textured_quad(0, D_0013E500.half_height, 0x200, 0x40, (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f, scroll_start, scroll_end);
+                draw_textured_quad(0, D_0013E500.half_height, 0x200, 0x40, 0, 0, 0x200, 0x40, 0x80808080, second_texture);
             }
         }
         memcard_update_state();
@@ -127,4 +121,5 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
     }
     fade_to_black(2);
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(play_level_loading_slides) func_00231BD8 __attribute__((alias("FUN_00231bd8")));

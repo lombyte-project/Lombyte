@@ -74,8 +74,8 @@ typedef struct {
     s32 mode;          /* 0x58 */
     s32 state;         /* 0x5C */
     u8 pad60[0xC0 - 0x60];
-    Vector4 trailA[32];   /* 0xC0 */
-    Vector4 trailB[32];   /* 0x2C0 */
+    Vector4 primary_history_positions[32];   /* 0xC0 */
+    Vector4 secondary_history_positions[32];   /* 0x2C0 */
 } LevelRenderState;
 
 typedef struct {
@@ -110,13 +110,13 @@ typedef struct {
 
 extern u8 D_0013DD40[];
 extern u8 D_0013DD43[];
-extern LevelRenderState D_0013E030;
+extern LevelRenderState level_render_state __asm__("D_0013E030");
 extern u8 D_0013E5C0[];
 extern s32 D_0015ED5C;
-extern s32 D_0015ED84;
+extern s32 current_level_index __asm__("D_0015ED84");
 extern s16 D_0015EE48 __attribute__((sda));
 #define D_0015EE4A (*(s16 *)0x0015EE4A)
-extern f32 D_0015F43C MACRO_ADDR;
+extern f32 sequence_fade __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 D_0015F618 MACRO_ADDR;
 extern f32 D_00160404 MACRO_ADDR;
 extern u8 D_00160460[] MACRO_ADDR;
@@ -124,11 +124,11 @@ extern s32 D_001604E0 __attribute__((sda));
 extern s32 D_001604F0 __attribute__((sda));
 extern s32 D_00160500 __attribute__((sda));
 extern s32 D_00160F0C;
-extern LevelGameplayState D_0018CB20;
+extern LevelGameplayState render_sequence __asm__("D_0018CB20");
 extern LevelGameplayState D_0018CB20_b[] __asm__("D_0018CB20");
 extern LevelGameplayState D_0018CB20_c[] __asm__("D_0018CB20");
 extern LevelRenderObject *D_0018CC98[];
-extern LevelProjectionState D_0018CD00;
+extern LevelProjectionState view_context __asm__("D_0018CD00");
 extern LevelRenderArchive D_001940C0;
 extern ColorPair D_001D9A30[];
 extern u128 D_001D9AE0[];
@@ -194,54 +194,54 @@ void update_level_gameplay_frame(void) {
     f32 scale;
 
     func_001E9430();
-    D_0015F43C -= 0.25f;
-    D_0018CB20.frame++;
-    D_0018CB20.time++;
-    if (D_0015F43C < 0.0f) {
-        D_0015F43C = 0.0f;
+    sequence_fade -= 0.25f;
+    render_sequence.frame++;
+    render_sequence.time++;
+    if (sequence_fade < 0.0f) {
+        sequence_fade = 0.0f;
     }
-    if (D_0018CB20.time == 1) {
-        if (D_0015ED84 != 0 && (D_0015ED84 != 1 || D_0013DD43[0] != 0)) {
+    if (render_sequence.time == 1) {
+        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0)) {
             ReadGlobalTableEntry();
-            func_0012E308(D_0015ED5C, D_0013E030.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
+            func_0012E308(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
             func_0012EB00();
             func_0012DC80();
         }
     }
-    if (D_0018CB20.time >= D_0018CB20.end) {
-        for (expired_object_index = 0; expired_object_index < D_0018CB20.count; expired_object_index++) {
-            expired_object = D_0018CB20.objects[expired_object_index];
+    if (render_sequence.time >= render_sequence.end) {
+        for (expired_object_index = 0; expired_object_index < render_sequence.count; expired_object_index++) {
+            expired_object = render_sequence.objects[expired_object_index];
             if (expired_object != 0) {
                 expired_object->model->count--;
                 expired_object->model->frames[expired_object->model->count] = 0;
                 func_0020C828(expired_object);
             }
         }
-        if (D_0015ED84 != 0 && (D_0015ED84 != 1 || D_0013DD43[0] != 0) && D_0015EE48 < 3) {
-            D_0013E030.state = 0;
+        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0) && D_0015EE48 < 3) {
+            level_render_state.state = 0;
         }
-        if (D_0013E030.state < 2) {
-            if (D_0013E030.state == 0) {
+        if (level_render_state.state < 2) {
+            if (level_render_state.state == 0) {
                 mode_advance = (rand() >> 16) % 3 + 1;
-                D_0013E030.mode = (D_0013E030.mode + mode_advance) & 3;
+                level_render_state.mode = (level_render_state.mode + mode_advance) & 3;
             } else {
-                D_0013E030.mode = 4;
+                level_render_state.mode = 4;
             }
-            D_0013E030.history_index = 0;
-            D_0013E030.history_count = 0;
-            D_0013E030.state++;
+            level_render_state.history_index = 0;
+            level_render_state.history_count = 0;
+            level_render_state.state++;
             qcopy(&D_001604F0, &D_001604E0);
-            FillTransferWords(&D_0018CB20, 0, 0x1C0);
-            D_0018CB20.source_begin = D_001940C0.source_begin_offset + D_00160F0C;
-            D_0018CB20.source_end = D_001940C0.source_end_offset + D_00160F0C;
+            FillTransferWords(&render_sequence, 0, 0x1C0);
+            render_sequence.source_begin = D_001940C0.source_begin_offset + D_00160F0C;
+            render_sequence.source_end = D_001940C0.source_end_offset + D_00160F0C;
             archive_table = D_001940C0.archive_table;
             scene_offset = &archive_table->scene_offsets[0];
-            scene_offset += D_0013E030.mode;
+            scene_offset += level_render_state.mode;
             archive_data = (u8 *)archive_table + archive_table->data_offset;
             archive_entry = (RenderArchiveEntry *)(archive_data + *scene_offset);
             for (prepared_frame_index = 0; prepared_frame_index < 0x46 && archive_entry->available != 0; prepared_frame_index++, archive_entry++) {
                 payload_offset = 0x800;
-                D_0018CB20.prepared_frames[prepared_frame_index] = (s32)(*scene_offset + archive_data) + (archive_entry->offset + payload_offset);
+                render_sequence.prepared_frames[prepared_frame_index] = (s32)(*scene_offset + archive_data) + (archive_entry->offset + payload_offset);
             }
             parse_space_scene_chunk(0);
         } else {
@@ -251,27 +251,27 @@ void update_level_gameplay_frame(void) {
             D_0015F618 = 1;
             return;
         }
-    } else if (D_0018CB20.frame >= 0x60) {
-        parse_space_scene_chunk(++D_0018CB20.sequence_frame);
+    } else if (render_sequence.frame >= 0x60) {
+        parse_space_scene_chunk(++render_sequence.sequence_frame);
     }
     build_object_rotation_matrix();
-    if (D_0018CD00.projection_scale < D_001D9B48[D_0013E030.mode]) {
-        D_0018CD00.projection_scale = D_001D9B48[D_0013E030.mode];
+    if (view_context.projection_scale < D_001D9B48[level_render_state.mode]) {
+        view_context.projection_scale = D_001D9B48[level_render_state.mode];
     }
     update_view_context();
     scale = 1.0f;
-    if (D_0013E030.mode == 4) {
-        scale = (f32)(D_0018CB20.end - D_0018CB20.time) / (f32)D_0018CB20.end;
+    if (level_render_state.mode == 4) {
+        scale = (f32)(render_sequence.end - render_sequence.time) / (f32)render_sequence.end;
         scale_vector(&first_position, &D_00160500, scale);
         add_vectors(&D_001604F0, &D_001604F0, &first_position);
     }
-    scale_vector(D_00160460, &D_001D9AE0[D_0013E030.mode],
-                  (f32)(D_0018CB20.time - scale_ticks(0x78)) * 20.0f * scale);
-    D_00160404 = D_001D9B30[D_0013E030.mode];
-    for (object_index = 0; object_index < D_0018CB20.count; object_index++) {
+    scale_vector(D_00160460, &D_001D9AE0[level_render_state.mode],
+                  (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
+    D_00160404 = D_001D9B30[level_render_state.mode];
+    for (object_index = 0; object_index < render_sequence.count; object_index++) {
         object = D_0018CC98[object_index];
         for (subframe = 0; subframe < 2; subframe++) {
-            frame = D_0018CB20.frame;
+            frame = render_sequence.frame;
             current_frame = frame >> 1;
             next_frame = current_frame + 1;
             model = object->model;
@@ -300,20 +300,20 @@ void update_level_gameplay_frame(void) {
             object->selected_b = object->model->count - 1;
             calculate_object_transform(object, 1, &first_transform);
             calculate_object_transform(object, 2, &second_transform);
-            D_0013E030.history_index = (D_0013E030.history_index + 1) & 0x1F;
-            if (D_0013E030.history_count < 0x20) {
-                D_0013E030.history_count++;
+            level_render_state.history_index = (level_render_state.history_index + 1) & 0x1F;
+            if (level_render_state.history_count < 0x20) {
+                level_render_state.history_count++;
             }
-            history_slot = D_0013E030.history_index;
-            qcopy(&D_0013E030.trailA[history_slot], &first_transform.rows[3]);
-            qcopy(&D_0013E030.trailB[history_slot], &second_transform.rows[3]);
-            if (D_0013E030.mode == 4) {
-                if (D_0015ED84 == 0 || (D_0015ED84 == 1 && D_0013DD40[3] == 0)) {
+            history_slot = level_render_state.history_index;
+            qcopy(&level_render_state.primary_history_positions[history_slot], &first_transform.rows[3]);
+            qcopy(&level_render_state.secondary_history_positions[history_slot], &second_transform.rows[3]);
+            if (level_render_state.mode == 4) {
+                if (current_level_index == 0 || (current_level_index == 1 && D_0013DD40[3] == 0)) {
                     object->flags |= 1;
-                    D_0013E030.history_count = 0;
+                    level_render_state.history_count = 0;
                 }
-                if (D_0018CB20.time > D_0018CB20.end - 0x38) {
-                    object->fade = object->model->base_scale * ((f32)(D_0018CB20.end - D_0018CB20.time) * 0.017857144f);
+                if (render_sequence.time > render_sequence.end - 0x38) {
+                    object->fade = object->model->base_scale * ((f32)(render_sequence.end - render_sequence.time) * 0.017857144f);
                     for (color_index = 0; color_index < 3; color_index++) {
                         D_001D9A30[color_index].w0 = (D_001D9A30[color_index].w0 & 0xFFFFFF)
                             | ((D_0018CB20_b[0].end - D_0018CB20_c[0].time) << 24);
@@ -328,4 +328,7 @@ void update_level_gameplay_frame(void) {
     }
     func_001E9428();
 }
+
+extern __typeof__(update_level_gameplay_frame) func_0022EAA8 __attribute__((alias("FUN_0022eaa8")));
+
 #endif /* NON_MATCHING */

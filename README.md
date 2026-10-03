@@ -1,5 +1,12 @@
 <p align="center">
-  <img src="assets/lombyte-logo.png" alt="Lombyte" width="440">
+  <img src="assets/lombyte-logo.png" alt="Lombyte" width="150">
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/lombyte-title-dark.svg">
+    <img src="assets/lombyte-title-light.svg" alt="Lombyte Project" height="48">
+  </picture>
 </p>
 
 <p align="center">

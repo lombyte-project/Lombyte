@@ -10,46 +10,46 @@ typedef struct { f32 x, y, z, w; } Vec4 __attribute__((aligned(16)));
 
 typedef struct {
     u8 pad0[0x10];
-    Vec4 pos;
+    Vec4 position;
     u8 pad20[0x30];
-    u8 k0;
-    u8 k1;
+    u8 current_frame;
+    u8 next_frame;
     u8 pad52[2];
-    f32 t;
+    f32 frame_fraction;
     u8 pad58[0x19];
-    u8 b71;
+    u8 cached_frame;
     u8 pad72[0xD];
-    u8 b7F;
+    u8 update_enabled;
     u8 pad80[0x26];
-    s16 hA6;
-} Actor;
+    s16 class_id;
+} RenderSequenceActor;
 
 typedef struct {
     u8 pad0[0x78];
-    Vec4 *keys;
-} ActorKeys;
+    Vec4 *animation_positions;
+} RenderSequenceSidecar;
 
 typedef struct {
     u8 pad0[0x34];
     s32 time;
     s32 frame;
-    s32 index;
-    s16 len;
+    s32 sequence_frame;
+    s16 end_time;
     u8 pad42[2];
     s16 count;
     u8 pad46[0x132];
-    Actor *actors[1];
-} Cutscene;
+    RenderSequenceActor *actors[1];
+} RenderSequenceState;
 
-extern Cutscene D_0018CB20;
-extern f32 D_0015F43C;
-extern s32 D_0015F604;
-extern s32 D_0015EF50;
-extern s32 D_0015EF54;
-extern s32 D_0015EF58;
+extern RenderSequenceState render_sequence __asm__("D_0018CB20");
+extern f32 sequence_fade __asm__("D_0015F43C");
+extern s32 game_stage __asm__("D_0015F604");
+extern s32 intro_overlay_alpha __asm__("D_0015EF50");
+extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
+extern s32 intro_overlay_timer __asm__("D_0015EF58");
 extern s32 D_0013CAE4[];
 extern void InitializeTransferCommand(void);
-extern void func_001E9410(Actor *);
+extern void func_001E9410(RenderSequenceActor *);
 extern void func_001E9428(void);
 extern void func_001E9430(void);
 extern void func_001EAF88(void);
@@ -60,81 +60,88 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 func_001FA6C0(s32);
 extern void func_001FCE28(void);
 extern void func_002049F0(s32);
-extern void func_0020C880(Actor *);
-extern void func_0020DEF8(Actor *);
+extern void func_0020C880(RenderSequenceActor *);
+extern void func_0020DEF8(RenderSequenceActor *);
 extern void func_002192A8(void);
 extern void func_0022CA50(void);
 
-void FUN_001eb0a8(void)
+void update_gameplay_frame(void) __asm__("FUN_001eb0a8");
+
+void update_gameplay_frame(void)
 {
-    Vec4 a;
-    Vec4 b;
-    Actor *act;
-    Vec4 *keys;
-    s32 i;
-    s32 k;
+    Vec4 first_position;
+    Vec4 next_position;
+    RenderSequenceActor *actor;
+    Vec4 *animation_positions;
+    s32 actor_index;
+    s32 frame_index;
+    f32 frame_fraction;
 
     func_001E9430();
-    D_0015F43C -= 0.0625f;
-    D_0018CB20.frame++;
-    D_0018CB20.time++;
-    if (D_0015F43C < 0.0f) {
-        D_0015F43C = 0.0f;
+    sequence_fade -= 0.0625f;
+    render_sequence.frame++;
+    render_sequence.time++;
+    if (sequence_fade < 0.0f) {
+        sequence_fade = 0.0f;
     }
-    if (D_0018CB20.time >= D_0018CB20.len) {
-        D_0018CB20.index = 0;
-        D_0018CB20.time = 0;
+    if (render_sequence.time >= render_sequence.end_time) {
+        render_sequence.sequence_frame = 0;
+        render_sequence.time = 0;
         func_002049F0(0);
-    } else if (D_0018CB20.frame >= 0x60) {
-        func_002049F0(++D_0018CB20.index);
+    } else if (render_sequence.frame >= 0x60) {
+        func_002049F0(++render_sequence.sequence_frame);
     }
     func_001EAF88();
-    for (i = 0; i < D_0018CB20.count; i++) {
-        act = D_0018CB20.actors[i];
-        k = D_0018CB20.frame >> 1;
-        act->k0 = k;
-        act->k1 = k + 1;
-        func_0020C880(act);
-        act->t = func_001FA6C0(D_0018CB20.frame & 1) * 0.5f;
-        keys = ((ActorKeys *)act)->keys;
-        func_001F9A68(&a, &keys[act->k0], 1.0f - act->t);
-        func_001F9A68(&b, &keys[act->k1], act->t);
-        func_001F9A10(&act->pos, &a, &b);
-        act->b71 = 0xFF;
-        func_0020DEF8(act);
-        act->b7F = 0;
-        if (act->hA6 == 0) {
-            func_001E9410(act);
+    for (actor_index = 0; actor_index < render_sequence.count; actor_index++) {
+        actor = render_sequence.actors[actor_index];
+        frame_index = render_sequence.frame >> 1;
+        actor->current_frame = frame_index;
+        actor->next_frame = frame_index + 1;
+        func_0020C880(actor);
+        frame_fraction = func_001FA6C0(render_sequence.frame & 1) * 0.5f;
+        actor->frame_fraction = frame_fraction;
+        animation_positions = ((RenderSequenceSidecar *)actor)->animation_positions;
+        func_001F9A68(&first_position, &animation_positions[actor->current_frame], 1.0f - frame_fraction);
+        func_001F9A68(&next_position, &animation_positions[actor->next_frame], frame_fraction);
+        func_001F9A10(&actor->position, &first_position, &next_position);
+        actor->cached_frame = 0xFF;
+        func_0020DEF8(actor);
+        actor->update_enabled = 0;
+        if (actor->class_id == 0) {
+            func_001E9410(actor);
         }
     }
     func_001E9428();
-    if (D_0015F604 == 0) {
-        D_0015EF58++;
-        if (func_001F96F8(0x3C) < D_0015EF58) {
-            if (++D_0015EF50 > 0x40) {
-                D_0015EF50 = 0x40;
+    if (game_stage == 0) {
+        intro_overlay_timer++;
+        if (func_001F96F8(0x3C) < intro_overlay_timer) {
+            if (++intro_overlay_alpha > 0x40) {
+                intro_overlay_alpha = 0x40;
             }
         }
-        if (func_001F96F8(0x78) < D_0015EF58) {
-            D_0015EF54 = (s32)(fast_cos((D_0015EF58 - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
+        if (func_001F96F8(0x78) < intro_overlay_timer) {
+            language_intro_overlay_alpha = (s32)(fast_cos((intro_overlay_timer - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
         }
         if (D_0013CAE4[0] & 0x840) {
             InitializeTransferCommand();
         }
         func_0022CA50();
-    } else if (D_0015F604 == 3) {
-        D_0015EF58 = func_001F96F8(0x3C);
-        if ((D_0015EF50 -= 0x10) < 0) {
-            D_0015EF50 = 0;
+    } else if (game_stage == 3) {
+        intro_overlay_timer = func_001F96F8(0x3C);
+        if ((intro_overlay_alpha -= 0x10) < 0) {
+            intro_overlay_alpha = 0;
         }
-        if ((D_0015EF54 -= 0x10) < 0) {
-            D_0015EF54 = 0;
+        if ((language_intro_overlay_alpha -= 0x10) < 0) {
+            language_intro_overlay_alpha = 0;
         }
         func_002192A8();
         func_0022CA50();
-    } else if (D_0015F604 == 4) {
+    } else if (game_stage == 4) {
         func_001FCE28();
         func_0022CA50();
     }
 }
+
+extern __typeof__(update_gameplay_frame) func_001EB0A8 __attribute__((alias("FUN_001eb0a8")));
+
 #endif /* NON_MATCHING */
