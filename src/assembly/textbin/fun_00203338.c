@@ -165,8 +165,8 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
 
     class_slot = resident_class_slot_by_id[class_id];
     slot_materials = &resident_class_material_maps[class_slot];
-    group = (ResidentRenderGroup *)header->groups;
     qcopy(slot_materials, material_map);
+    group = (ResidentRenderGroup *)header->groups;
     for (group_index = 0; group_index < group_count; group_index++, group++) {
         /* High half counts encoded quadwords; low half locates the packet end. */
         packed_extent = group->count;

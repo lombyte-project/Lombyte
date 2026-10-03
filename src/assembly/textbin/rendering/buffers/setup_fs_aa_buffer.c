@@ -88,22 +88,22 @@ typedef struct {
     GsDrawEnv1 draw0;    /* 0x040 */
     GifTag giftag1;      /* 0x0C0 */
     GsDrawEnv1 draw1;    /* 0x0D0 */
-    s16 w;               /* 0x150 */
-    s16 h;               /* 0x152 */
+    s16 display_width;               /* 0x150 */
+    s16 display_height;               /* 0x152 */
     s16 psm;             /* 0x154 */
     s16 fbp0;            /* 0x156 */
-    s16 dw;              /* 0x158 */
-    s16 dh;              /* 0x15A */
-    s16 x15C;            /* 0x15C */
+    s16 storage_width;              /* 0x158 */
+    s16 storage_height;              /* 0x15A */
+    s16 storage_psm;            /* 0x15C */
     s16 fbp1;            /* 0x15E */
     s16 pad160[2];
-    s16 x164;            /* 0x164 */
+    s16 reserved164;            /* 0x164 */
     s16 pad166;
-    s16 dx;              /* 0x168 */
-    s16 dy;              /* 0x16A */
+    s16 display_offset_x;              /* 0x168 */
+    s16 display_offset_y;              /* 0x16A */
     s16 zpsm;            /* 0x16C */
     s16 zbp;             /* 0x16E */
-    s32 x170;            /* 0x170 */
+    s32 reserved170;            /* 0x170 */
 } FsAaBuf;
 
 extern FsAaBuf D_00151780;
@@ -127,31 +127,31 @@ extern u8 D_0013CDD0_b[] __asm__("D_0013CDD0");
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
 extern s32 sceGsSetDefDrawEnv(GsDrawEnv1 *, s16, s16, s16, s16, s16);
 
-void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) __asm__("FUN_001fa978");
+void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width, s32 storage_height, s32 display_offset_x, s32 display_offset_y) __asm__("FUN_001fa978");
 
-void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
-    u64 *q;
-    s32 i;
-    s32 a, b, c;
+void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width, s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
+    u64 *packet_word;
+    s32 strip_index;
+    s32 left_x, next_x, right_x;
 
     D_0015EEB8 = &D_00151780;
-    D_00151780.w = w;
-    D_00151780.h = h;
-    D_00151780.dw = dw;
-    D_00151780.dh = dh;
-    D_00151780.dx = dx;
-    D_00151780.dy = dy;
-    D_00151780.x170 = 0;
-    D_00151780.x15C = 0;
+    D_00151780.display_width = display_width;
+    D_00151780.display_height = display_height;
+    D_00151780.storage_width = storage_width;
+    D_00151780.storage_height = storage_height;
+    D_00151780.display_offset_x = display_offset_x;
+    D_00151780.display_offset_y = display_offset_y;
+    D_00151780.reserved170 = 0;
+    D_00151780.storage_psm = 0;
     D_00151780.psm = 0;
-    D_00151780.x164 = 0;
+    D_00151780.reserved164 = 0;
     D_00151780.fbp0 = D_0015EE84 >> 13;
     D_00151780.zbp = D_0015EE88 >> 13;
     D_00151780.fbp1 = D_0015EE80 >> 13;
     D_00151780.zpsm = 0x31;
-    sceGsSetDefDispEnv(&D_00151780, 0, dw, dh, dx, dy);
+    sceGsSetDefDispEnv(&D_00151780, 0, storage_width, storage_height, display_offset_x, display_offset_y);
     D_0015EEB8->disp.dispfb.FBP = D_00151780.fbp1;
-    sceGsSetDefDrawEnv(&D_0015EEB8->draw0, D_00151780.psm, D_00151780.w, D_00151780.h, 3,
+    sceGsSetDefDrawEnv(&D_0015EEB8->draw0, D_00151780.psm, D_00151780.display_width, D_00151780.display_height, 3,
                        D_00151780.zpsm);
     D_0015EEB8->draw0.frame1.FBP = D_00151780.fbp0;
     D_0015EEB8->draw0.zbuf1 = (u64)D_00151780.zbp | ((u64)(D_00151780.zpsm & 0xF) << 24);
@@ -160,7 +160,7 @@ void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
     D_0015EEB8->giftag0.EOP = 1;
     D_0015EEB8->giftag0.NREG = 1;
     D_0015EEB8->giftag0.REGS0 = 0xE;
-    sceGsSetDefDrawEnv(&D_0015EEB8->draw1, D_00151780.x15C, D_00151780.dw, D_00151780.dh, 0, 0);
+    sceGsSetDefDrawEnv(&D_0015EEB8->draw1, D_00151780.storage_psm, D_00151780.storage_width, D_00151780.storage_height, 0, 0);
     D_0015EEB8->draw1.zbuf1 = (u64)1 << 32;
     D_0015EEB8->draw1.frame1.FBP = D_00151780.fbp1;
     *(u128 *)&D_0015EEB8->giftag1 = 0;
@@ -177,26 +177,26 @@ void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
     D_00151B60[5] = 8;
     D_00151B60[6] = 0x100000261;
     D_00151B60[7] = 0x14;
-    D_00151B60[8] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->w >> 6) & 0x3F) << 14) |
+    D_00151B60[8] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->display_width >> 6) & 0x3F) << 14) |
                     ((u64)D_0015EEB8->psm << 20) | 0xEA8000000;
     D_00151B60[9] = 6;
     D_00151B60[10] = 0x4400000000008010;
     D_00151B60[11] = 0x5353;
-    q = &D_00151B60[12];
-    for (i = 0; i < 16; i++) {
-        *q++ = i * D_0015EEB8->w;
-        *q++ = (i * D_0015EEB8->dw + 0x8000 - (D_0015EEB8->dw << 3)) |
-               ((u64)(0x7FF8 - (D_0015EEB8->dh << 3)) << 16);
-        *q++ = (i + 1) * D_0015EEB8->w | ((u64)D_0015EEB8->h << 20);
-        *q++ = ((i + 1) * D_0015EEB8->dw + 0x8000 - (D_0015EEB8->dw << 3)) |
-               ((u64)((D_0015EEB8->dh << 3) + 0x7FF8) << 16);
+    packet_word = &D_00151B60[12];
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = strip_index * D_0015EEB8->display_width;
+        *packet_word++ = (strip_index * D_0015EEB8->storage_width + 0x8000 - (D_0015EEB8->storage_width << 3)) |
+               ((u64)(0x7FF8 - (D_0015EEB8->storage_height << 3)) << 16);
+        *packet_word++ = (strip_index + 1) * D_0015EEB8->display_width | ((u64)D_0015EEB8->display_height << 20);
+        *packet_word++ = ((strip_index + 1) * D_0015EEB8->storage_width + 0x8000 - (D_0015EEB8->storage_width << 3)) |
+               ((u64)((D_0015EEB8->storage_height << 3) + 0x7FF8) << 16);
     }
     D_00151B60[76] = 0x4400000000008001;
     D_00151B60[77] = 0x4410;
     D_00151B60[78] = 0x181;
     D_00151B60[79] = 0x80000000;
-    D_00151B60[80] = 0x6FF8 | ((u64)(0x7FF8 - (D_0015EEB8->dh << 3)) << 16);
-    D_00151B60[81] = 0x6FF8 | ((u64)((D_0015EEB8->dh << 3) + 0x7FF8) << 16);
+    D_00151B60[80] = 0x6FF8 | ((u64)(0x7FF8 - (D_0015EEB8->storage_height << 3)) << 16);
+    D_00151B60[81] = 0x6FF8 | ((u64)((D_0015EEB8->storage_height << 3) + 0x7FF8) << 16);
 
     D_00151DF0[0] = 0x308B400000000001;
     D_00151DF0[1] = 0xEEE;
@@ -204,21 +204,21 @@ void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
     D_00151DF0[3] = 0x47;
     D_00151DF0[4] = 0x100000261;
     D_00151DF0[5] = 0x14;
-    D_00151DF0[6] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->w >> 6) & 0x3F) << 14) |
+    D_00151DF0[6] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->display_width >> 6) & 0x3F) << 14) |
                     ((u64)D_0015EEB8->psm << 20) | 0xEA8000000;
     D_00151DF0[7] = 6;
     D_00151DF0[8] = 0x4400000000008010;
     D_00151DF0[9] = 0x5353;
-    q = &D_00151DF0[10];
-    a = 0x6FF8;
-    b = 0x71F8;
-    for (i = 0; i < 16; i++) {
-        *q++ = i * D_0015EEB8->w;
-        *q++ = a | ((u64)(0x7FF8 - (D_0015EEB8->dh << 3)) << 16);
-        a += 0x200;
-        *q++ = (i + 1) * D_0015EEB8->w | 0x1A000000;
-        *q++ = b | ((u64)((D_0015EEB8->dh << 3) + 0x7FF8) << 16);
-        b += 0x200;
+    packet_word = &D_00151DF0[10];
+    left_x = 0x6FF8;
+    next_x = 0x71F8;
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = strip_index * D_0015EEB8->display_width;
+        *packet_word++ = left_x | ((u64)(0x7FF8 - (D_0015EEB8->storage_height << 3)) << 16);
+        left_x += 0x200;
+        *packet_word++ = (strip_index + 1) * D_0015EEB8->display_width | 0x1A000000;
+        *packet_word++ = next_x | ((u64)((D_0015EEB8->storage_height << 3) + 0x7FF8) << 16);
+        next_x += 0x200;
     }
 
     D_00151900[0] = 0x408B400000000001;
@@ -229,23 +229,23 @@ void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
     D_00151900[5] = 8;
     D_00151900[6] = 0x100000261;
     D_00151900[7] = 0x14;
-    D_00151900[8] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->w >> 6) & 0x3F) << 14) |
+    D_00151900[8] = ((u64)D_0015EEB8->fbp0 << 5) | ((u64)((D_0015EEB8->display_width >> 6) & 0x3F) << 14) |
                     ((u64)D_0015EEB8->psm << 20) | 0xEA8000000;
     D_00151900[9] = 6;
     D_00151900[10] = 0x4400000000008010;
     D_00151900[11] = 0x5353;
-    q = &D_00151900[12];
-    a = 0x7000;
-    b = 0x200;
-    c = 0x7200;
-    for (i = 0; i < 16; i++) {
-        *q++ = i << 9;
-        *q++ = a | ((u64)(0x8000 - (D_0015EEB8->h << 3)) << 16);
-        a += 0x200;
-        *q++ = b | ((u64)D_0015EEB8->h << 20);
-        b += 0x200;
-        *q++ = c | ((u64)((D_0015EEB8->h << 3) + 0x7FF0) << 16);
-        c += 0x200;
+    packet_word = &D_00151900[12];
+    left_x = 0x7000;
+    next_x = 0x200;
+    right_x = 0x7200;
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = strip_index << 9;
+        *packet_word++ = left_x | ((u64)(0x8000 - (D_0015EEB8->display_height << 3)) << 16);
+        left_x += 0x200;
+        *packet_word++ = next_x | ((u64)D_0015EEB8->display_height << 20);
+        next_x += 0x200;
+        *packet_word++ = right_x | ((u64)((D_0015EEB8->display_height << 3) + 0x7FF0) << 16);
+        right_x += 0x200;
     }
 
     D_00152040[0] = 0x1000000000000001;
@@ -258,34 +258,35 @@ void setup_fs_aa_buffer(s32 w, s32 h, s32 dw, s32 dh, s32 dx, s32 dy) {
     D_00152040[7] = 0x80008000;
     D_00152040[8] = 0x2400000000008010;
     D_00152040[9] = 0x44;
-    q = &D_00152040[10];
-    a = 0x6FF8;
-    b = 0x71F8;
-    for (i = 0; i < 16; i++) {
-        *q++ = a | ((u64)(0x7FF8 - (D_0015EEB8->h << 3)) << 16);
-        a += 0x200;
-        *q++ = b | ((u64)((D_0015EEB8->h << 3) + 0x7FF8) << 16);
-        b += 0x200;
+    packet_word = &D_00152040[10];
+    left_x = 0x6FF8;
+    next_x = 0x71F8;
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = left_x | ((u64)(0x7FF8 - (D_0015EEB8->display_height << 3)) << 16);
+        left_x += 0x200;
+        *packet_word++ = next_x | ((u64)((D_0015EEB8->display_height << 3) + 0x7FF8) << 16);
+        next_x += 0x200;
     }
 
-    q = &D_0013CC90[8];
-    a = 0x6FF8;
-    b = 0x71F8;
-    for (i = 0; i < 16; i++) {
-        *q++ = a | ((u64)(0x7FF8 - (D_0015EEB8->h << 3)) << 16);
-        a += 0x200;
-        *q++ = b | ((u64)((D_0015EEB8->h << 3) + 0x7FF8) << 16);
-        b += 0x200;
+    packet_word = &D_0013CC90[8];
+    left_x = 0x6FF8;
+    next_x = 0x71F8;
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = left_x | ((u64)(0x7FF8 - (D_0015EEB8->display_height << 3)) << 16);
+        left_x += 0x200;
+        *packet_word++ = next_x | ((u64)((D_0015EEB8->display_height << 3) + 0x7FF8) << 16);
+        next_x += 0x200;
     }
 
-    q = &D_0013CDD0[8];
-    a = 0x6FF8;
-    b = 0x71F8;
-    for (i = 0; i < 16; i++) {
-        *q++ = a | ((u64)(0x7FF8 - (D_0015EEB8->dh << 3)) << 16);
-        a += 0x200;
-        *q++ = b | ((u64)((D_0015EEB8->dh << 3) + 0x7FF8) << 16);
-        b += 0x200;
+    packet_word = &D_0013CDD0[8];
+    left_x = 0x6FF8;
+    next_x = 0x71F8;
+    for (strip_index = 0; strip_index < 16; strip_index++) {
+        *packet_word++ = left_x | ((u64)(0x7FF8 - (D_0015EEB8->storage_height << 3)) << 16);
+        left_x += 0x200;
+        *packet_word++ = next_x | ((u64)((D_0015EEB8->storage_height << 3) + 0x7FF8) << 16);
+        next_x += 0x200;
     }
 }
+extern __typeof__(setup_fs_aa_buffer) func_001FA978 __attribute__((alias("FUN_001fa978")));
 #endif /* NON_MATCHING */

@@ -87,8 +87,8 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   s32 draw_shift;
   s32 material_base;
   s32 material_shift;
-  s32 width_units_64;
-  s32 width_units_128;
+  s64 width_units_64;
+  s64 width_units_128;
   u64 width_log2;
   u64 height_log2;
   s32 gs_block_base;
