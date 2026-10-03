@@ -5,7 +5,276 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0021b698.s", FUN_L02_0021b698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0021ff70.s", FUN_L02_0021ff70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002203e8.s", FUN_L02_002203e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002216a0.s", FUN_L02_002216a0);
+#include "qcopy.h"
+typedef int Q __attribute__((mode(TI)));
+typedef union { Q q; f32 f[4]; } V;
+extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern u8 D_0013F5E0[] __attribute__((section(".data")));
+extern u8 D_0013F5F0[] __attribute__((section(".data")));
+extern u8 D_0013F610[] __attribute__((section(".data")));
+extern u8 D_L02_00174440[] __attribute__((section(".data")));
+extern u8 D_L02_00174460[] __attribute__((section(".data")));
+extern s32 D_0015ED84;
+
+void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
+void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
+s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 FUN_L00_001f3608(void);
+s32 FUN_001f0b58(void);
+f32 FUN_002135f0(void *, void *);
+s32 FUN_L00_0025e3b8(s32);
+u8 *FUN_002141f8(s32);
+f32 FUN_001f9b48(void *, void *);
+void FUN_00125180(void *, void *);
+f32 FUN_L00_00233d30(void *);
+f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
+void FUN_001f9a28(void *, void *, void *);
+f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
+void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
+void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+void FUN_L00_00216078(void *, void *);
+void FUN_L00_002335c8(void *, f32, f32, f32);
+f32 FUN_001f99c0(f32);
+
+typedef struct {
+    u8 pad88[0x88];
+    f32 xF88;
+    u8 pad234[0x1a8];
+    f32 xF234;
+    u8 pad270[0x38];
+    s32 xI270;
+    s32 xI274;
+    f32 xF278;
+    u8 pad298[0x1c];
+    f32 xF298;
+    u8 pad2c0[0x24];
+    union { f32 f[2]; s32 i[2]; } a2c0;
+    union { f32 f[2]; s32 i[2]; } a2c8;
+    union { f32 f[2]; s32 i[2]; } a2d0;
+    union { f32 F; s32 I; } u2d8;
+    f32 xF2dc;
+    union { f32 F; s32 I; } u2e0;
+    union { f32 F; s32 I; } u2e4;
+    union { f32 F; s32 I; } u2e8;
+    f32 xF2ec;
+    f32 xF2f0;
+    f32 xF2f4;
+    s32 xI2f8;
+    s32 xI2fc;
+    s32 xI300;
+    u8 pad30a[0x6];
+    s16 xH30a;
+    union { s16 H; u16 U; } u30c;
+    union { s16 H; u16 U; } u30e;
+    u8 pada80[0x770];
+    s32 xIa80;
+    u8 pad12e0[0x85c];
+    s16 xH12e0;
+    u8 pad12ed[0xb];
+    u8 xB12ed;
+    u8 pad2080[0xd92];
+    s32 xI2080;
+    s32 xI2084;
+    u8 pad208c[0x4];
+    s32 xI208c;
+    u8 pad20b3[0x23];
+    u8 xB20b3;
+} GS;
+extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
+#define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
+#define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))
+#define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
+#define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
+#define GB(o) (D_0013F350_c2[o])
+typedef struct {
+    u8 pad0[0x18];
+    s32 i18;
+    s32 i1C;
+    union { Q q; f32 f[4]; } v20;
+    u8 pad30[0x10];
+    f32 f40;
+    f32 f44;
+} HS;
+extern HS HH __asm__("D_L02_00174440") __attribute__((section(".data")));
+#define HI(o) (*(s32 *)(D_L02_00174440 + (o)))
+#define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
+
+void FUN_L02_002216a0(void) {
+    V v0, v10, v20, v30, v40, v50, v60;
+    f32 f;
+    s32 r;
+    s32 i;
+    f32 a;
+    u8 *p;
+    
+    s32 k;
+    f32 g;
+
+    GG.xF278 = 1.0f;
+    GG.u30e.U++;
+    GG.u30c.U++;
+    GG.xI270 = 0;
+    GG.xI274 = 0;
+    GG.u2e0.I = 0;
+    GG.u2d8.I = 0;
+    FUN_001f99f8_c((u8 *)&GG + 0x2A0);
+    GG.xH30a = 0;
+    GG.xF2dc = 32.0f;
+    GG.xI2fc = 0;
+    if (GG.xI2f8 != 0) {
+        GG.xI2f8++;
+    }
+    k = 0;
+    if (GG.xB20b3) k = 1;
+    g = GG.xF234 * 2.2f;
+    if (GG.xI208c == 2) {
+        g = GG.xF234 * 2.9f;
+    }
+    FUN_L00_002126b8_c(&v10, &v0, k, g, -48.0f);
+    if (FUN_001efa68(&v10, &v0, 2, GG.xI2080, 0) == 0) {
+        goto tail;
+    }
+    r = FUN_L00_001f3608();
+    if (r == -1) {
+        r = 3;
+    }
+    GG.xB12ed = r;
+    GG.xH12e0 = FUN_001f0b58();
+    if (GG.xH12e0 == 0) {
+        GG.xF2f0 = FUN_002135f0(D_L02_00174460, (u8 *)&GG + 0x280);
+        if (GG.xF88 < GG.xF2f0 && GG.xI2f8 <= 0) {
+            GG.xI2f8 = 1;
+        }
+        if (FUN_001efa68(&v10, &v0, 0x24, GG.xI2080, 0) == 0) {
+            goto d1;
+        }
+        r = FUN_L00_001f3608();
+        if (D_0015ED84 == 1 || D_0015ED84 == 0x12) {
+            r = 3;
+        }
+        GG.xB12ed = r;
+    }
+    if (GG.xH12e0 == 0xD) {
+        GG.xF2f0 = HH.v20.f[2];
+        v10.f[2] = HH.v20.f[2] - 0.01f;
+        if (FUN_001efa68(&v10, &v0, 4, GG.xI2080, 0) == 0) {
+            goto d1;
+        }
+    }
+    if (GG.xH12e0 == 3) {
+        GG.xF2f4 = HH.v20.f[2];
+        v10.f[2] = HH.v20.f[2] - 0.01f;
+        if (FUN_001efa68(&v10, &v0, 4, GG.xI2080, 0) == 0) {
+            goto d1;
+        }
+    }
+    if (GG.xH12e0 == 0xB) {
+        GG.xF2f4 = HH.v20.f[2];
+        goto d1;
+    }
+    if (HH.i18 != 0) {
+        if (FUN_L00_0025e3b8(HH.i18)) {
+            GG.xH30a = 1;
+        }
+        p = FUN_002141f8(HH.i18);
+        if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
+            GG.xH30a = 1;
+        }
+    }
+    if (HH.i1C > 0) {
+        qcopy((u8 *)&GG + 0x2A0, &HH.v20);
+        GG.u2d8.F = HH.v20.f[2];
+        GG.xF2dc = FUN_001f9b48((u8 *)&GG + 0x80, ((u8 *)&GG + 0x2A0));
+        GG.xI2fc = HH.i18;
+        FUN_00125180((u8 *)&GG + 0x270, (u8 *)&HH.f40);
+        GG.u2e0.F = FUN_L00_00233d30((u8 *)&HH.f40);
+        GG.xF2ec = FUN_001f9e90_c(HH.f40, HH.f44);
+        FUN_001f9a28(&v20, ((u8 *)&GG + 0x2A0), (u8 *)&GG + 0x80);
+        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&GG + 0x270)) {
+            GG.xF2dc = -GG.xF2dc;
+        }
+        if (GG.xF2dc < 0.02f) {
+            GG.u30c.H = 0;
+            if (GG.u2e0.F <= 0.87266463f || GG.xB20b3 == 1 || GG.xI208c == 0x16) {
+                GG.u30e.H = 0;
+                GG.xIa80 = HH.i18;
+            }
+        }
+    }
+tail:
+    if (GG.u30e.H != 0) {
+        GG.xI300 = 0;
+    } else {
+        GG.xI300++;
+        qcopy((u8 *)&GG + 0x2B0, (u8 *)&GG + 0x2A0);
+    }
+    if (GG.xF88 > GG.xF2f0) {
+        GG.xI2f8 = 0;
+    }
+d1:
+    FUN_001f99f8_c(((u8 *)&GG + 0x290));
+    switch (GG.xB20b3) {
+    case 0:
+        GG.xF298 = -1.0f;
+        break;
+    case 1:
+        qcopy((u8 *)&GG + 0x290, ((u8 *)&GG + 0x290) - 0x20);
+        FUN_001f9a68_c(((u8 *)&GG + 0x290), ((u8 *)&GG + 0x290), -1.0f);
+        break;
+    case 2:
+        FUN_001f9a28(((u8 *)&GG + 0x290), ((u8 *)&GG + 0x290) - 0x1E0, ((u8 *)&GG + 0x290) - 0x210);
+        FUN_001f9bf8_c(((u8 *)&GG + 0x290), ((u8 *)&GG + 0x290), 1.0f);
+        break;
+    }
+    GG.u2e4.I = 0;
+    GG.u2e8.I = 0;
+    GG.a2d0.i[0] = 0;
+    GG.a2d0.i[1] = 0;
+    GG.a2c8.i[0] = 0;
+    GG.a2c8.i[1] = 0;
+    GG.a2c0.i[0] = 0;
+    GG.a2c0.i[1] = 0;
+    if (GG.xI208c == 0xF || GG.xI208c == 0x15 || GG.xI208c == 6 || GG.xI208c == 4 || GG.xI208c == 5 || GG.xI208c == 3) {
+        return;
+    }
+    if (!(GG.xF2dc < 0.25f)) {
+        return;
+    }
+    FUN_L00_00216078((u8 *)&GG + 0x270, &v20);
+    if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
+        GG.u2e4.F = v20.f[1];
+    }
+    if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
+        GG.u2e8.F = v20.f[0];
+    }
+    for (i = 0; i < 2; i++) {
+        a = 1.5707964f;
+        if (i == 1) {
+            a = -a;
+        }
+        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
+        if (FUN_001efa68(&v30, &v0, 0x22, GG.xI2080, 0)) {
+            f = HH.v20.f[2] - GG.u2d8.F;
+            GG.a2c0.f[i] = f;
+            if (0.4f < FUN_001f99c0(f)) {
+                GG.a2c0.f[i] = 0.0f;
+            }
+            FUN_00125180(&v60, (u8 *)&HH.f40);
+            FUN_L00_00216078(&v60, &v50);
+            if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
+                GG.a2c8.f[i] = v50.f[1];
+            }
+            if (-0.78539819f < v50.f[0] && v50.f[0] < 0.78539819f) {
+                GG.a2d0.f[i] = v50.f[0];
+            }
+        } else {
+            GG.a2c0.i[i] = 0;
+            GG.a2c8.f[i] = GG.u2e4.F;
+            GG.a2d0.f[i] = GG.u2e8.F;
+        }
+    }
+}
 typedef unsigned int u128_222270 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
 typedef struct {

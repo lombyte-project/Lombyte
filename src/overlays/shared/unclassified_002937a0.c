@@ -271,6 +271,84 @@ void FUN_L08_002f12a0(int idx)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1378.s", FUN_L08_002f1378);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f5830.s", FUN_L08_002f5830);
+extern int FUN_001f9740(int *);
+extern void FUN_001fa050(void *, void *);
+extern float FUN_002132a8(float, float);
+extern void FUN_001f9bf8(void *, void *, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6d0(float);
+extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+
+extern s32 D_L08_00161F74 __attribute__((sda));
+extern s32 D_L08_00161F78 __attribute__((sda));
+extern f32 D_L08_00161F7C __attribute__((sda));
+extern f32 D_L08_00161F80 __attribute__((sda));
+extern f32 D_L08_00161F84 __attribute__((sda));
+extern f32 D_L08_00161F88 __attribute__((sda));
+extern s32 D_L08_00161F8C __attribute__((sda));
+extern s32 D_L08_00161F90 __attribute__((sda));
+extern s32 D_L08_00161F94 __attribute__((sda));
+extern s32 D_L08_00161F98 __attribute__((sda));
+extern f32 D_L08_00161F9C __attribute__((sda));
+extern f32 D_L08_00161FA0 __attribute__((sda));
+extern f32 D_L08_00161FA4 __attribute__((sda));
+extern f32 D_L08_00161FA8 __attribute__((sda));
+
+void FUN_L08_002f5830(char *m) {
+    f32 v0[4], v1[4], c[4], d[4], e[16];
+    char *v;
+    s32 s0, s16, s2;
+
+    v = *(char **)(m + 0x78);
+    if (FUN_001f9740((int *)(v + 0x3C)) == 0) return;
+    if (*(s32 *)(v + 0x38) != 0) {
+        *(s32 *)(v + 0x3C) = D_L08_00161F98;
+        FUN_001fa050(e, m + 0x40);
+        qcopy(c, m + 0x10);
+        c[0] += FUN_002132a8(-0.05f, 0.05f);
+        c[1] += FUN_002132a8(-0.05f, 0.05f);
+        c[0] += FUN_002132a8(-0.05f, 0.05f);
+        FUN_002132a8(-0.17453292f, 0.17453292f);
+        FUN_001f9bf8(v0, e, FUN_002132a8(D_L08_00161F80, D_L08_00161F80 * 1.2f) * D_0015ED6C);
+        FUN_001f9bf8(d, e + 4, FUN_002132a8(-D_L08_00161FA4, D_L08_00161FA4) * D_0015ED6C);
+        FUN_001f9a10(v0, v0, d);
+        v0[2] += FUN_002132a8(D_L08_00161F7C, D_L08_00161F7C * 1.2f) * D_0015ED6C;
+        qcopy(v1, v0);
+        FUN_001f9bf8(v1, e, FUN_002132a8(D_L08_00161F88, D_L08_00161F88 * 1.5f) * D_0015ED6C);
+        FUN_001f9bf8(d, e + 4, FUN_002132a8(-D_L08_00161FA8, D_L08_00161FA8) * D_0015ED6C);
+        FUN_001f9a10(v1, v1, d);
+        v1[2] += FUN_002132a8(D_L08_00161F84, D_L08_00161F84 * 1.5f) * D_0015ED6C;
+        v0[3] = D_L08_00161F9C;
+        v1[3] = D_L08_00161FA0;
+        s0 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
+        s16 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
+        s2 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
+        FUN_00218888(c, v0, v1, D_L08_00161F74, D_L08_00161F78, s0, s16, s2, -1);
+    } else {
+        *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
+        FUN_001fa050(e, m + 0x40);
+        qcopy(c, m + 0x10);
+        c[0] += FUN_002132a8(-0.05f, 0.05f);
+        c[1] += FUN_002132a8(-0.05f, 0.05f);
+        c[2] += FUN_002132a8(-0.05f, 0.05f);
+        FUN_002132a8(-0.17453292f, 0.17453292f);
+        FUN_001f9bf8(v0, e, FUN_002132a8(*(f32 *)(v + 0x18), *(f32 *)(v + 0x18) * 1.2f) * D_0015ED6C);
+        FUN_001f9bf8(d, e + 4, FUN_002132a8(-*(f32 *)(v + 0x30), *(f32 *)(v + 0x30)) * D_0015ED6C);
+        FUN_001f9a10(v0, v0, d);
+        v0[2] += FUN_002132a8(*(f32 *)(v + 0x1C), *(f32 *)(v + 0x1C) * 1.2f) * D_0015ED6C;
+        qcopy(v1, v0);
+        FUN_001f9bf8(v1, e, FUN_002132a8(*(f32 *)(v + 0x20), *(f32 *)(v + 0x20) * 1.5f) * D_0015ED6C);
+        FUN_001f9bf8(d, e + 4, FUN_002132a8(-*(f32 *)(v + 0x34), *(f32 *)(v + 0x34)) * D_0015ED6C);
+        FUN_001f9a10(v1, v1, d);
+        v1[2] += FUN_002132a8(*(f32 *)(v + 0x24), *(f32 *)(v + 0x24) * 1.5f) * D_0015ED6C;
+        v0[3] = *(f32 *)(v + 0x28);
+        v1[3] = *(f32 *)(v + 0x2C);
+        s0 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)*(s32 *)(v + 0x08), (f32)*(s32 *)(v + 0x08) * 1.2f)));
+        s16 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)*(s32 *)(v + 0x0C), (f32)*(s32 *)(v + 0x0C) * 1.2f)));
+        s2 = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8((f32)*(s32 *)(v + 0x10), (f32)*(s32 *)(v + 0x10) * 1.2f)));
+        FUN_00218888(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00301158.s", FUN_L08_00301158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003024d8.s", FUN_L08_003024d8);
