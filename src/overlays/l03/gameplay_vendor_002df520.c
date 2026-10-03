@@ -6,7 +6,36 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002df520.s", FUN_L03_002df520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e01d0.s", FUN_L03_002e01d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002eb7e0.s", FUN_L03_002eb7e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002eb978.s", FUN_L03_002eb978);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebb00.s", FUN_L03_002ebb00);
+#include "sda.h"
+extern void func_L00_001FF4B0_ebb00(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
+extern void func_001F9BD8_ebb00(void *, void *, void *) __asm__("FUN_001f9a10");
+extern char D_0013E633_ebb00[] __asm__("D_0013F350");
+void FUN_L03_002ebb00(void *arg) {
+    char *m = arg;
+    char *d = *(char **)(m + 0x70);
+    char *a = d + 0xD0;
+    char *b = d + 0xF0;
+    char *g = D_0013E633_ebb00;
+    float v3[4];
+    float v1[4];
+    float v2[4];
+    char *h;
+    if (*(int *)(g + 0x2284) != 0x50 || *(int *)(g + 0x2084) == 0x11) {
+        *(float *)(b + 0x34) = *(float *)(g + 0x88);
+    }
+    func_L00_001FF4B0_ebb00(v1, D_0013E633_ebb00 + 0x290, -*(float *)(a + 0x10));
+    func_L00_001FF4B0_ebb00(v3, b, -*(float *)a);
+    h = D_0013E633_ebb00;
+    *(float *)d = func_001EC120_ebb00(d + 0x10, *(float *)d, *(float *)(h + 0x80), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
+    *(float *)(d + 4) = func_001EC120_ebb00(d + 0x14, *(float *)(d + 4), *(float *)(h + 0x84), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
+    *(float *)(d + 8) = func_001EC120_ebb00(d + 0x18, *(float *)(d + 8), *(float *)(b + 0x34), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
+    func_001F9BD8_ebb00(v2, d, v1);
+    func_001F9BD8_ebb00(v2, v2, v3);
+    *(float *)(m + 0x30) = v2[0];
+    *(float *)(m + 0x34) = v2[1];
+    *(float *)(m + 0x38) = v2[2];
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebc58.s", FUN_L03_002ebc58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
 #define NOT_SDA
@@ -15,12 +44,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
 
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
-extern void FUN_L03_002ebb00(void *);
+extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58(void *);
 void NoOpMainCallback(void *) __asm__("FUN_001e93e8");
 
 void FUN_L03_002ebdb0(void *arg) {
-    FUN_L03_002ebb00(arg);
+    FUN_L03_002ebb00_u(arg);
     NoOpMainCallback(arg);
     FUN_L03_002ebc58(arg);
 }

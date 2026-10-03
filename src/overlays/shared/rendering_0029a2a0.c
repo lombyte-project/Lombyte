@@ -2,5 +2,33 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029a2a0.s", FUN_L07_0029a2a0);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
+
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern unsigned char *D_L07_001B21CC_x __asm__("D_L07_001B21CC") __attribute__((section(".data")));
+extern void *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
+    unsigned char *p = FUN_L00_002678b8(0x33);
+    if (p != 0) {
+        char *b = (char *)p + 0x20;
+        char *a = (char *)p + 0x10;
+        qcopy(a, pos);
+        qcopy(b, vec);
+        *(int *)(p + 4) = 0x5E806040;
+        p[9] = func_001FA898_r(4.0f) + 0x40;
+        p[3] = 0x48;
+        p[1] = 0;
+        p[8] = 0;
+        p[2] = *D_L07_001B21CC_x;
+        *(short *)(p + 0xA) = 0x78;
+        *(float *)(p + 0xC) = 6300.0f;
+    }
+    return p;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0029b8d8.s", FUN_L07_0029b8d8);
