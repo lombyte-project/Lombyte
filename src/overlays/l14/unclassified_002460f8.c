@@ -486,7 +486,26 @@ void FUN_L14_002b55b0(char *moby) {
     }
     *(int *)(data + 0x10C) = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5730.s", FUN_L14_002b5730);
+#include "sda.h"
+
+/* steer a moby's position toward a target and update its velocity */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6980), where it is exact; names translated to the US level program. */
+
+extern float atan_5730(float, float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025b8c0_5730(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
+extern void steer_5730(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
+
+extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
+int FUN_L14_002b5730(char *moby, char *a1, int a2, int a3, float *v, float *vel,
+                      float f12, float f13, float f14, float f15, float f16, float f17, float f18) {
+    float tmp[3];
+    int r = FUN_L00_0025d808_5730(a1, tmp, a2, a3, 0);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x10), v, tmp[0], f13, f14, f15);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x14), v + 1, tmp[1], f13, f14, f15);
+    FUN_L00_0025b8c0_5730((float *)(moby + 0x18), v + 2, tmp[2], f13, f14, f15);
+    steer_5730(moby, vel, atan_5730(v[0], v[1]), f16, f17, f18);
+    return r != 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5850.s", FUN_L14_002b5850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);

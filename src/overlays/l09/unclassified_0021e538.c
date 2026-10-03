@@ -278,4 +278,57 @@ void FUN_L09_002f0040(char *moby)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002f86a0.s", FUN_L09_002f86a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00300888.s", FUN_L09_00300888);
+/* UpdateMoby_1000: timer and sound bookkeeping */
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84_m __asm__("D_0015ED84");
+extern int D_0015EEA4_q __asm__("D_0015EEA4");
+extern int D_L09_0015F5CC_q __asm__("D_L09_0015F5CC");
+extern int D_L09_001613C8_q __asm__("D_L09_001613C8");
+extern int FUN_L00_00203908_q(int a, int b) __asm__("FUN_L00_00203908");
+extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
+extern unsigned char D_0013D408_q[] __asm__("D_0013D408") __attribute__((section(".data")));
+extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
+extern unsigned char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern unsigned char D_00141968_q[] __asm__("D_00141968") __attribute__((section(".data")));
+extern void FUN_L00_00263d40_q(int arg0, int arg1) __asm__("FUN_L00_00263d40");
+s32 allocate_voice_for_bank_entry_q(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+s32 is_point_inside_clip_volume_q(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+
+void FUN_L09_00300888(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    unsigned char *q;
+    unsigned char *b;
+    unsigned short *tp;
+    int n;
+    if (D_L09_0015F5CC_q > 0) {
+        if (D_L09_001613C8_q == 0) {
+            q = D_0013D408_q;
+            if (q[0xE] == 0) {
+                q[0xE] = 1;
+                allocate_voice_for_bank_entry_q(1, 0, 0);
+                FUN_L00_00263d40_q(0x53D6, -1);
+                D_L09_001613C8_q = 0;
+            } else {
+                D_L09_001613C8_q = 0;
+            }
+        } else {
+            D_L09_001613C8_q = 0;
+        }
+    }
+    b = D_00141968_q;
+    tp = (unsigned short *)(b + 0x2D8);
+    if (*tp == 0) {
+        if (D_0013D4C2_q[9] != 0) {
+            (*tp)++;
+        }
+        n = scale_game_frames_q(D_0015EEA4_q) / 600;
+        if (*(unsigned short *)(b + 0x2DA) < n) {
+            *(unsigned short *)(b + 0x2DA) = scale_game_frames_q(D_0015EEA4_q) / 600;
+        }
+        *(int *)(b + 0x2DC) = *(int *)(b + 0x2DC) | (1 << D_0015ED84_m) | 0x80000000;
+        if (is_point_inside_clip_volume_q(D_0013F3D0_q, *data) != 0) {
+            FUN_L00_00203908_q(0x2329, 0x5B);
+        }
+    }
+}

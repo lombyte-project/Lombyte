@@ -2,7 +2,174 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e87d8.s", FUN_L17_002e87d8);
+#include "sda.h"
+
+/* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *D_L17_00160058 __asm__("D_L17_0015FFD8") MACRO_ADDR;
+extern char D_L17_00167740[] __asm__("D_L17_001676C0");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4") MACRO_ADDR;
+extern int FUN_0022da68(int, int, int);
+extern int FUN_L00_0028d8c0(void *, int);
+extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+float AbsoluteFloat_c(float input) __asm__("FUN_001f99c0");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L17_002e87d8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float tmp[4];
+    float ang;
+    float k;
+    float k2;
+    float f;
+    int idx;
+
+    if ((*(int *)(d + ((0x18)))) == -1 || (*(int *)(d + ((0x1C)))) == -1) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (D_L17_0015F6A8 == 2) return;
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        if ((*(short *)(m + 0xA6)) == 0x550 || (*(short *)(m + 0xA6)) == 0x551 || (*(short *)(m + 0xA6)) == 0x553 || (*(short *)(m + 0xA6)) == 0x557 || (*(short *)(m + 0xA6)) == 0x55D) {
+            m[0xBC] = 1;
+        }
+        *(u128 *)d = *(u128 *)(m + 0x10);
+        m[0x20] = 1;
+        break;
+    case 2:
+        if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
+            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+        }
+        k = D_0015EE6C * 3.0f;
+        f = (*(float *)(d + ((0x14))));
+        if (*(unsigned char *)(m + 0xBC) == 0) k = -k;
+        (*(float *)(d + ((0x14)))) = f + k;
+        if ((*(short *)(m + 0xA6)) == 0x55C || (*(short *)(m + 0xA6)) == 0x55D || (*(short *)(m + 0xA6)) == 0x557 || (*(short *)(m + 0xA6)) == 0x559) {
+            ang = fast_add_rotations(1.5707964f, *(float *)(m + 0x48));
+            v[0] = fast_cos(ang) * (*(float *)(d + ((0x14))));
+            v[1] = fast_sin(ang) * (*(float *)(d + ((0x14))));
+            v[2] = 0.0f;
+        } else {
+            v[0] = fast_cos(*(float *)(m + 0x48)) * (*(float *)(d + ((0x14))));
+            v[1] = fast_sin(*(float *)(m + 0x48)) * (*(float *)(d + ((0x14))));
+            v[2] = 0.0f;
+        }
+        add_vector_xyz(tmp, d, v);
+        *(u128 *)(m + 0x10) = *(u128 *)tmp;
+        if (AbsoluteFloat_c((*(float *)(d + ((0x14))))) > 2.0f) {
+            idx = (*(int *)(d + ((0x20))));
+            if (idx != -1) {
+                char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+                if (*(char **)(e + 0x88) == m) {
+                    if (*(unsigned char *)(e + 0x74) != 0) release_voice_slot(idx);
+                }
+            }
+            (*(int *)(d + ((0x20)))) = -1;
+            m[0x20] = 4;
+        }
+        break;
+    case 1:
+        (*(float *)(d + ((0x14)))) = 0.0f;
+        idx = (*(int *)(d + ((0x20))));
+        if (idx != -1) {
+            char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+            if (*(char **)(e + 0x88) == m) {
+                if (*(unsigned char *)(e + 0x74) != 0) release_voice_slot(idx);
+            }
+        }
+        (*(int *)(d + ((0x20)))) = -1;
+        if (AbsoluteFloat_c(*(float *)(m + 0x40)) < 0.7853982f || *(short *)(D_0013E633 + 0x288) != 0) {
+            if (is_point_inside_clip_volume(D_0013E633 + 0x0, (*(int *)(d + ((0x18))))) == 0) {
+                if ((*(int *)(d + ((0x10)))) == -1) break;
+                if (is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18))))) == 0) break;
+            }
+            if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
+                (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+            }
+            m[0x20] = 2;
+        }
+        break;
+    case 3:
+        break;
+    case 4:
+        idx = (*(int *)(d + ((0x20))));
+        if (idx != -1) {
+            char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+            if (*(char **)(e + 0x88) == m) {
+                if (*(unsigned char *)(e + 0x74) != 0) release_voice_slot(idx);
+            }
+        }
+        (*(int *)(d + ((0x20)))) = -1;
+        if (is_point_inside_clip_volume(D_0013E633 + 0x0, (*(int *)(d + ((0x1C)))))) break;
+        if (is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x1C)))))) break;
+        if ((*(int *)(d + ((0x10)))) != -1 && is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18)))))) break;
+        if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
+            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+        }
+        m[0x20] = 5;
+        break;
+    case 5:
+        if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
+            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+        }
+        if (is_point_inside_clip_volume(D_0013E633 + 0x0, (*(int *)(d + ((0x18))))) || is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x18)))))
+            || ((*(int *)(d + ((0x10)))) != -1 && is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18))))))) {
+            m[0x20] = 2;
+            break;
+        }
+        f = AbsoluteFloat_c((*(float *)(d + ((0x14)))));
+        k2 = D_0015EE6C * 3.0f;
+        if (f > k2) {
+            float g = (*(float *)(d + ((0x14))));
+            float r;
+            if (*(unsigned char *)(m + 0xBC) == 0) {
+                float n = -k2;
+                r = g - n;
+            } else {
+                r = g - k2;
+            }
+            (*(float *)(d + ((0x14)))) = r;
+        } else {
+            (*(float *)(d + ((0x14)))) = 0.0f;
+        }
+        if ((*(short *)(m + 0xA6)) == 0x55C || (*(short *)(m + 0xA6)) == 0x55D || (*(short *)(m + 0xA6)) == 0x557 || (*(short *)(m + 0xA6)) == 0x559) {
+            ang = fast_add_rotations(1.5707964f, *(float *)(m + 0x48));
+            v[0] = fast_cos(ang) * (*(float *)(d + ((0x14))));
+            v[1] = fast_sin(ang) * (*(float *)(d + ((0x14))));
+            v[2] = 0.0f;
+        } else {
+            v[0] = fast_cos(*(float *)(m + 0x48)) * (*(float *)(d + ((0x14))));
+            v[1] = fast_sin(*(float *)(m + 0x48)) * (*(float *)(d + ((0x14))));
+            v[2] = 0.0f;
+        }
+        add_vector_xyz(tmp, d, v);
+        *(u128 *)(m + 0x10) = *(u128 *)tmp;
+        if ((*(float *)(d + ((0x14)))) == 0.0f) {
+            idx = (*(int *)(d + ((0x20))));
+            if (idx != -1) {
+                char *e = (char *)D_0013E633 - 0xE80 + idx * 0x70;
+                if (*(char **)(e + 0x88) == m) {
+                    if (*(unsigned char *)(e + 0x74) != 0) release_voice_slot(idx);
+                }
+            }
+            (*(int *)(d + ((0x20)))) = -1;
+            m[0x20] = 1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002e8e08.s", FUN_L17_002e8e08);
 #define NOT_SDA
 

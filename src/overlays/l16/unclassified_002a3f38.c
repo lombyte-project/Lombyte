@@ -513,7 +513,40 @@ void FUN_L16_002c9a50(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cddb8.s", FUN_L16_002cddb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ced20.s", FUN_L16_002ced20);
+#include "sda.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D00E8), where it is exact; names translated to the US level program. */
+
+typedef int L16MoveQuad __attribute__((mode(TI)));
+
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float D_0015ED6C MACRO_ADDR,D_0015EE70 MACRO_ADDR;
+extern float D_0015EE6C MACRO_ADDR,D_0015ED70 MACRO_ADDR;
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+int FUN_L16_002ced20(char *moby, void *vec, float angle) {
+    float a[4] __attribute__((aligned(16)));
+    float b[4] __attribute__((aligned(16)));
+    float speed;
+    float dist;
+    char *data = *(char **)(moby + 0x78);
+    *(L16MoveQuad *)a = *(L16MoveQuad *)vec;
+    FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x100), angle, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
+    speed = 0.0f;
+    subtract_vector_xyz(b, a, moby + 0x10);
+    dist = vector_length_xyz(b);
+    advance_accelerated_scalar(dist, D_0015ED70 * 12.0f, D_0015ED70 * 12.0f, D_0015ED6C * 6.0f, &speed, (float *)(data + 0xFC));
+    normalize_vector_xyz(b, b, *(float *)(data + 0xFC));
+    add_vector_xyz(moby + 0x10, moby + 0x10, b);
+    if (dist < 0.05f) {
+        if (*(float *)(data + 0xFC) < 0.005f) return 1;
+        else return 0;
+    }
+    return 0;
+}
 /* spins the level's rotating parts by the current angle and queues the draw callback */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0238), where it is exact; names translated to the US level program. */
 

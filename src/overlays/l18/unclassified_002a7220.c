@@ -478,7 +478,112 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5610.s", FUN_L18_002d5610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5cf8.s", FUN_L18_002d5cf8);
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; /* 0x10 */
+} AnimSeq_q;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq_q *seqs[1]; /* 0x48 */
+} AnimClass_q;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass_q *pClass;       /* 0x24 */
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;     /* 0x50 */
+    unsigned char nextFrame; /* 0x51 */
+    unsigned char seq;       /* 0x52 */
+    unsigned char prevSeq;   /* 0x53 */
+    char _pad54[0x5C - 0x54];
+    float unk5C;             /* 0x5C */
+    char _pad60[0x68 - 0x60];
+    float *frameData;        /* 0x68 */
+    char _pad6C[4];
+    unsigned char unk70;     /* 0x70 */
+} MobyAnim_q;
+
+extern f32 vector_length_xy_q(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED70_q __asm__("D_0015ED70");
+extern float FUN_001f9e90_q(float, float) __asm__("FUN_001f9e90");
+extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
+extern int *D_L18_001AC240_q[] __asm__("D_L18_001AC240") __attribute__((section(".data")));
+extern int D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
+extern short D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
+extern void FUN_001f9c48_q(void *, void *, float) __asm__("FUN_001f9c48");
+extern void FUN_0022da68_q(int, int, int) __asm__("FUN_0022da68");
+extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz_q(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_q(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
+    float v[4];
+    float r;
+    float g;
+    char *found = 0;
+    short *p = (short *)D_L18_001AC240_q[idx];
+    char *moby;
+    char *data;
+    char *d2;
+    if (p == 0) {
+        return 0;
+    }
+    {
+        char *base = D_L18_0015FFD8_m;
+        unsigned short s;
+        do {
+            s = *p;
+            {
+                char *m = base + ((s & 0x7FFF) << 8);
+                if (*(short *)(m + 0xA6) == 0x238) {
+                    if (((unsigned char *)m)[0x20] == 5) {
+                        found = m;
+                    }
+                }
+            }
+            p++;
+        } while ((short)s >= 0);
+    }
+    moby = found;
+    if (moby != 0) {
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 1;
+        *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xFFBE) | 0x1000;
+        moby[0xBC] = 0;
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        if (((unsigned char *)moby)[0x53] != 0) {
+            blend_moby_animation_q(moby, 0, 0, 1);
+        }
+        qcopy(moby + 0x10, p6);
+        r = *(float *)&D_L18_00161994_q;
+        *(int *)(moby + 0x40) = 0;
+        *(float *)(moby + 0x44) = -r;
+        p7[2] = p7[2] + 0.75f;
+        subtract_vector_xyz_q(v, p7, p6);
+        FUN_001f9c48_q(v, v, vector_length_xy_q(v) - *(float *)&D_L18_00161994_q);
+        add_vector_xyz_q(v, v, p6);
+        data = *(char **)(moby + 0x78);
+        qcopy(data + 0x170, v);
+        subtract_vector_xyz_q(data + 0x180, v, p6);
+        *(int *)(data + 0x188) = 0;
+        normalize_vector_xyz_q(data + 0x180, data + 0x180, f);
+        g = D_0015ED70_q * 10.0f;
+        *(short *)(data + 0xC8) = 0;
+        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(p6, v, 0, f, -g);
+        *(float *)(moby + 0x48) = FUN_001f9e90_q(*(float *)(data + 0x180), *(float *)(data + 0x184));
+        *(int *)(data + 0x194) = a8;
+        *(int *)(data + 0x198) = a0;
+        *(int *)(data + 0x19C) = 0;
+        FUN_0022da68_q(0, 0, (int)moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
