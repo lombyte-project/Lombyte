@@ -3,7 +3,9 @@ extern char D_0013D290[];
 extern int D_0015EEB4 MACRO_ADDR;
 extern int D_0015EEB0 MACRO_ADDR;
 
-void FUN_00208dd8(void) {
+void save_card_state_new_card(void) __asm__("FUN_00208dd8");
+
+void save_card_state_new_card(void) {
     char *s;
     int f = D_0015EEB4;
     int t = f & ~4;
@@ -27,4 +29,4 @@ void FUN_00208dd8(void) {
     if (*(int *)(s + 0xF4) != 0) D_0015EEB0 = 1;
 }
 
-extern __typeof__(FUN_00208dd8) func_00208DD8 __attribute__((alias("FUN_00208dd8")));
+extern __typeof__(save_card_state_new_card) func_00208DD8 __attribute__((alias("FUN_00208dd8")));

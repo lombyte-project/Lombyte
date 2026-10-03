@@ -11,7 +11,10 @@ extern s32 D_0018CAF8[];
 extern s32 D_0015F49C;
 extern void FUN_001f5450(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, u64 color, u64 extra);
 
-s32 FUN_001f6cb8(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
+s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
+                 struct Glyph *font) __asm__("FUN_001f6cb8");
+
+s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
                  struct Glyph *font) {
     s32 i;
     s32 j;
@@ -67,4 +70,4 @@ s32 FUN_001f6cb8(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 l
     return cy - y + 16;
 }
 
-extern __typeof__(FUN_001f6cb8) func_001F6CB8 __attribute__((alias("FUN_001f6cb8")));
+extern __typeof__(font_print_wrapped) func_001F6CB8 __attribute__((alias("FUN_001f6cb8")));

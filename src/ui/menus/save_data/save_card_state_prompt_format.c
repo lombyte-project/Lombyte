@@ -5,7 +5,9 @@ extern int D_0015EEB4;
 extern int D_0015EEB0 MACRO_ADDR;
 extern int D_0015F5E8;
 
-void FUN_00208a78(void) {
+void save_card_state_prompt_format(void) __asm__("FUN_00208a78");
+
+void save_card_state_prompt_format(void) {
     char *s = D_0013D290;
     int f;
     if (*(int *)(s + 0x1C) != -2) {
@@ -28,4 +30,4 @@ void FUN_00208a78(void) {
     }
 }
 
-extern __typeof__(FUN_00208a78) func_00208A78 __attribute__((alias("FUN_00208a78")));
+extern __typeof__(save_card_state_prompt_format) func_00208A78 __attribute__((alias("FUN_00208a78")));

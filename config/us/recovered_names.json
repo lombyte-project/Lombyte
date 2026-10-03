@@ -6873,14 +6873,14 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/fonts/fun_001f6cb8",
-        "source_path": "src/ui/fonts/fun_001f6cb8.c",
+        "unit": "ui/text/font_print_wrapped",
+        "source_path": "src/ui/text/font_print_wrapped.c",
         "address": "0x001f6cb8",
         "current_name": "FUN_001f6cb8",
-        "proposed_name": null,
+        "proposed_name": "font_print_wrapped",
         "logical_group": "ui/text",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -6896,19 +6896,23 @@
                 "logical_group": "ui/text"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Word-wrapped text print into an x/y/width/height box with an explicit texture and glyph table, returning the height used; same calling pattern as font_print_window_*. The _small wrapper passes get_effect_texture(2) and D_001DF3F0, the small-font pair used by font_print_small and font_print_window_small."
           }
         ],
-        "logical_group_confidence": "low"
+        "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001f6fd0",
-        "source_path": "src/rendering/fun_001f6fd0.c",
+        "unit": "ui/text/font_print_wrapped_small",
+        "source_path": "src/ui/text/font_print_wrapped_small.c",
         "address": "0x001f6fd0",
         "current_name": "FUN_001f6fd0",
-        "proposed_name": null,
-        "logical_group": "rendering",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "proposed_name": "font_print_wrapped_small",
+        "logical_group": "ui/text",
+        "status": "proposed",
+        "confidence": "high",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -6924,9 +6928,13 @@
                 "logical_group": "ui/text"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Wrapper that calls font_print_wrapped with get_effect_texture(2) and D_001DF3F0, the small-font pair used by font_print_small and font_print_window_small."
           }
         ],
-        "logical_group_confidence": "low"
+        "logical_group_confidence": "high"
       },
       {
         "unit": "assembly/textbin/ui/text/font_print_window",
@@ -9637,12 +9645,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/run_state_handler",
-        "source_path": "src/ui/menus/run_state_handler.c",
+        "unit": "ui/menus/save_data/run_state_handler",
+        "source_path": "src/ui/menus/save_data/run_state_handler.c",
         "address": "0x00208840",
         "current_name": "FUN_00208840",
         "proposed_name": "run_state_handler",
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/save_data",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -12376,12 +12384,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/update_item_preview_moby",
-        "source_path": "src/ui/menus/update_item_preview_moby.c",
+        "unit": "ui/menus/item_preview/update_item_preview_moby",
+        "source_path": "src/ui/menus/item_preview/update_item_preview_moby.c",
         "address": "0x0021df98",
         "current_name": "FUN_0021df98",
         "proposed_name": "update_item_preview_moby",
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/item_preview",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -13046,12 +13054,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/draw_pause_ring",
-        "source_path": "src/ui/menus/draw_pause_ring.c",
+        "unit": "ui/menus/pause/draw_pause_ring",
+        "source_path": "src/ui/menus/pause/draw_pause_ring.c",
         "address": "0x00220b20",
         "current_name": "FUN_00220b20",
         "proposed_name": "draw_pause_ring",
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/pause",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -13747,12 +13755,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00225180",
-        "source_path": "src/assembly/textbin/fun_00225180.c",
+        "unit": "ui/menus/item_preview/update_ammo_preview_transform",
+        "source_path": "src/ui/menus/item_preview/update_ammo_preview_transform.c",
         "address": "0x00225180",
         "current_name": "FUN_00225180",
         "proposed_name": null,
-        "logical_group": "unclassified",
+        "logical_group": "ui/menus/item_preview",
         "status": "unresolved",
         "confidence": "unresolved",
         "evidence": [],
@@ -14039,12 +14047,12 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "ui/menus/queue_preview_animation",
-        "source_path": "src/ui/menus/queue_preview_animation.c",
+        "unit": "ui/menus/item_preview/queue_preview_animation",
+        "source_path": "src/ui/menus/item_preview/queue_preview_animation.c",
         "address": "0x002265d8",
         "current_name": "FUN_002265d8",
         "proposed_name": null,
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/item_preview",
         "status": "unresolved",
         "confidence": "unresolved",
         "evidence": [
@@ -14056,12 +14064,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/advance_preview_animation_queue",
-        "source_path": "src/ui/menus/advance_preview_animation_queue.c",
+        "unit": "ui/menus/item_preview/advance_preview_animation_queue",
+        "source_path": "src/ui/menus/item_preview/advance_preview_animation_queue.c",
         "address": "0x00226670",
         "current_name": "FUN_00226670",
         "proposed_name": null,
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/item_preview",
         "status": "unresolved",
         "confidence": "unresolved",
         "evidence": [
@@ -14073,12 +14081,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/clear_preview_animation_queue",
-        "source_path": "src/ui/menus/clear_preview_animation_queue.c",
+        "unit": "ui/menus/item_preview/clear_preview_animation_queue",
+        "source_path": "src/ui/menus/item_preview/clear_preview_animation_queue.c",
         "address": "0x00226718",
         "current_name": "FUN_00226718",
         "proposed_name": null,
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/item_preview",
         "status": "unresolved",
         "confidence": "unresolved",
         "evidence": [
@@ -14090,12 +14098,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/clear_preview_resource_bindings",
-        "source_path": "src/ui/menus/clear_preview_resource_bindings.c",
+        "unit": "ui/menus/item_preview/clear_preview_resource_bindings",
+        "source_path": "src/ui/menus/item_preview/clear_preview_resource_bindings.c",
         "address": "0x002267b8",
         "current_name": "FUN_002267b8",
         "proposed_name": null,
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/item_preview",
         "status": "unresolved",
         "confidence": "unresolved",
         "evidence": [
@@ -18732,12 +18740,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/find_next_pause_page",
-        "source_path": "src/ui/menus/find_next_pause_page.c",
+        "unit": "ui/menus/pause/find_next_pause_page",
+        "source_path": "src/ui/menus/pause/find_next_pause_page.c",
         "address": "0x0021b7a8",
         "current_name": "FUN_0021b7a8",
         "proposed_name": "find_next_pause_page",
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/pause",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -18876,12 +18884,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/build_pause_item_list",
-        "source_path": "src/ui/menus/build_pause_item_list.c",
+        "unit": "ui/menus/pause/build_pause_item_list",
+        "source_path": "src/ui/menus/pause/build_pause_item_list.c",
         "address": "0x002215f8",
         "current_name": "FUN_002215f8",
         "proposed_name": "build_pause_item_list",
-        "logical_group": "ui/menus",
+        "logical_group": "ui/menus/pause",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -19211,6 +19219,142 @@
         "source_path": "src/ui/menus/save_data/save_card_state_save_failed.c",
         "status": "proposed",
         "unit": "ui/menus/save_data/save_card_state_save_failed"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_wait_for_card",
+        "source_path": "src/ui/menus/save_data/save_card_state_wait_for_card.c",
+        "address": "0x002089d0",
+        "current_name": "FUN_002089d0",
+        "proposed_name": "save_card_state_wait_for_card",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 4 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 4 \"CS_WAIT_FOR_CARD\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_unformatted",
+        "source_path": "src/ui/menus/save_data/save_card_state_unformatted.c",
+        "address": "0x00208a38",
+        "current_name": "FUN_00208a38",
+        "proposed_name": "save_card_state_unformatted",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 5 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 5 \"CS_UNFORMATTED\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_prompt_format",
+        "source_path": "src/ui/menus/save_data/save_card_state_prompt_format.c",
+        "address": "0x00208a78",
+        "current_name": "FUN_00208a78",
+        "proposed_name": "save_card_state_prompt_format",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 6 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 6 \"CS_PROMPT_FORMAT\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_checking_save",
+        "source_path": "src/ui/menus/save_data/save_card_state_checking_save.c",
+        "address": "0x00208c00",
+        "current_name": "FUN_00208c00",
+        "proposed_name": "save_card_state_checking_save",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 11 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 11 \"CS_CHECKING_SAVE\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_no_save",
+        "source_path": "src/ui/menus/save_data/save_card_state_no_save.c",
+        "address": "0x00208c70",
+        "current_name": "FUN_00208c70",
+        "proposed_name": "save_card_state_no_save",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 12 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 12 \"CS_NOSAVE\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_create_save_pending",
+        "source_path": "src/ui/menus/save_data/save_card_state_create_save_pending.c",
+        "address": "0x00208d20",
+        "current_name": "FUN_00208d20",
+        "proposed_name": "save_card_state_create_save_pending",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 14 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 14 \"CS_CREATE_SAVE_PENDING\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_new_card",
+        "source_path": "src/ui/menus/save_data/save_card_state_new_card.c",
+        "address": "0x00208dd8",
+        "current_name": "FUN_00208dd8",
+        "proposed_name": "save_card_state_new_card",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 16 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 16 \"CS_NEWCARD\"."
+          }
+        ],
+        "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/save_data/save_card_state_prompt_begin_unformatted",
+        "source_path": "src/ui/menus/save_data/save_card_state_prompt_begin_unformatted.c",
+        "address": "0x00208fa0",
+        "current_name": "FUN_00208fa0",
+        "proposed_name": "save_card_state_prompt_begin_unformatted",
+        "logical_group": "ui/menus/save_data",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "retail_string_table",
+            "note": "Slot 23 of the memory-card handler table at 0x001A0438 (dispatched by run_state_handler); the parallel state-name table at 0x001A03D0 names slot 23 \"CS_PROMPT_BEGIN_UNFORMATTED\"."
+          }
+        ],
+        "logical_group_confidence": "high"
       }
     ]
   }
