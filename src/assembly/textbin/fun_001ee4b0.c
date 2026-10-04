@@ -42,11 +42,15 @@ void update_camera_environment_from_regions(void *position) {
     struct CameraEnvironmentRegion *region;
     u32 positive_weight;
     u32 negative_weight;
-    s32 positive_color;
     s32 negative_color;
+    s32 positive_color;
     f32 inverse_blend;
-    s32 red;
-    s32 green;
+    u32 red;
+    u32 green;
+    u32 positive_red;
+    u32 negative_red;
+    u32 positive_green;
+    u32 negative_green;
 
     if (find_camera_environment_region(position, &blend, &region_index) == 0) {
         return;
@@ -60,9 +64,13 @@ void update_camera_environment_from_regions(void *position) {
     inverse_blend = 1.0f - blend;
     positive_color = region->positive_color;
     negative_color = region->negative_color;
-    red = ((positive_color & 0xFF) * positive_weight + (negative_color & 0xFF) * negative_weight) >> 8;
-    green = (((positive_color >> 8) & 0xFF) * positive_weight + ((negative_color >> 8) & 0xFF) * negative_weight) >> 8;
-    fog_color_blue = (((positive_color >> 16) & 0xFF) * positive_weight + ((negative_color >> 16) & 0xFF) * negative_weight) >> 8;
+    positive_red = (positive_color & 0xFF) * positive_weight;
+    positive_green = ((positive_color >> 8) & 0xFF) * positive_weight;
+    negative_red = (negative_color & 0xFF) * negative_weight;
+    negative_green = ((negative_color >> 8) & 0xFF) * negative_weight;
+    red = (s32)(positive_red + negative_red) >> 8;
+    green = (s32)(positive_green + negative_green) >> 8;
+    fog_color_blue = (s32)(((positive_color >> 16) & 0xFF) * positive_weight + ((negative_color >> 16) & 0xFF) * negative_weight) >> 8;
     fog_color_red = red;
     fog_color_green = green;
     fog_near_distance = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
