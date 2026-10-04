@@ -127,7 +127,7 @@ void FUN_L16_002c9c38(int index, void *arg) {
     }
 }
 extern int D_L16_001ABCC0[];
-extern int D_L16_0015FFD8_ref __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ceca8, 116 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -138,7 +138,7 @@ void FUN_L16_002ceca8(int idx) {
         do {
             char *moby;
         again:
-            moby = D_L16_0015FFD8_ref + ((*p & 0x7FFF) << 8);
+            moby = D_L16_0015FFD8_d + ((*p & 0x7FFF) << 8);
             if (*(short *)(moby + 0xA6) != 0x21D) goto again;
             {
                 int two = 2;

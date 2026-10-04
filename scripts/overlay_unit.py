@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import rnc_overlays as ov
@@ -63,13 +64,14 @@ def ninja(*targets: str) -> subprocess.CompletedProcess:
                           capture_output=True, text=True)
 
 
-def ensure_configured() -> str | None:
+def ensure_configured(force: bool = False) -> str | None:
+    """Write build/overlays/build.ninja when missing (always with FORCE, so a
+    new or renamed source file is picked up)."""
     if not ov.ASM_DIR.is_dir():
         return ("config/us/overlays/asm is missing: run "
                 "`python3 scripts/overlay-extract.py --iso <your disc image>` first")
-    if not (BUILD / "build.ninja").is_file():
-        python = ROOT / ".venv/bin/python"
-        proc = subprocess.run([str(python), "configure.py", "--overlays"], cwd=ROOT,
+    if force or not (BUILD / "build.ninja").is_file():
+        proc = subprocess.run([sys.executable, "configure.py", "--overlays"], cwd=ROOT,
                               capture_output=True, text=True)
         if proc.returncode:
             return proc.stdout + proc.stderr
@@ -138,7 +140,7 @@ def print_check(result: dict) -> None:
 
 def verify_all() -> int:
     """Every function in C under src/overlays must be byte-exact."""
-    problem = ensure_configured()
+    problem = ensure_configured(force=True)
     if problem:
         print(problem)
         return 2

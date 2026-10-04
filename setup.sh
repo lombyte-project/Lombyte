@@ -513,6 +513,8 @@ if [[ "$BUILD" == 1 ]]; then
     fi
     make elf
     install_overlays
+elif [[ -n "$ISO" && ! -d config/us/overlays/asm ]]; then
+    warn "level overlays skipped: they are extracted after the first make elf; rerun without --no-build"
 fi
 
 cat <<EOF

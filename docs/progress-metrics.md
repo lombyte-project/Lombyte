@@ -136,7 +136,7 @@ The overlays count in the headline C_EXACT with these rules:
 - a shared or level function is **C_EXACT** when its C is in `src/overlays/`,
   where it is put only after the byte proof (compiled on the game compiler
   route, placed at its address in the level, byte for byte the level's text,
-  method `overlay-place-bytes-v1`); it is **pending** while its line there is
+  method `overlay-place-bytes-v1`, `make overlays`); it is **pending** while its line there is
   an `INCLUDE_ASM` stub. Overlay functions carry no C_FUZZY: a stub counts 0;
 - there is no intentional-asm class in the overlays yet: everything is
   recoverable until a function is shown to be hand-written VU/MMI code.

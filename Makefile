@@ -1,8 +1,9 @@
 # Lombyte — Ratchet & Clank (PS2, USA) matching decompilation
 #
 # The boot ELF is recompiled and must match retail byte-for-byte (full-ELF
-# SHA gate); `make overlays` proves the level overlay C function by function. `make iso` patches it into a copy of your legally owned
-# disc image, leaving the raw game data untouched.
+# SHA gate); `make overlays` proves the level overlay C function by function.
+# `make iso` patches the ELF into a copy of your legally owned disc image,
+# leaving the raw game data untouched.
 #
 # Setup: put a legally owned disc dump in dumps/ (e.g. dumps/game.iso) and
 # install the toolchain (docs/building.md). Then run `make elf`.
