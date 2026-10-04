@@ -72,6 +72,7 @@ void update_sky_effects(void) {
     f32 radius;
     f32 angle_step;
     struct SkyEffect *effect;
+    struct LevelSkyEffectData *sky_data;
     s16 *angles;
 
     level_sky_effect_data->relocation_state = 0;
@@ -83,15 +84,16 @@ void update_sky_effects(void) {
         level_sky_effect_data->effect_count = 0x100;
         initialization_index = 0;
         func_001160C8(0x3039);
-        if (level_sky_effect_data->effect_count <= 0) {
+        sky_data = level_sky_effect_data;
+        if (sky_data->effect_count < 1) {
             goto end;
         }
-        base_color = 0x30505050;
         radius = 50.0f;
         random_color_enabled = 1;
         effect_flags = 0x48;
+        base_color = 0x30505050;
         while (1) {
-            effect = &level_sky_effect_data->effects[initialization_index];
+            effect = &sky_data->effects[initialization_index];
             if (initialization_index >= 0xF6) {
                 effect->randomize_color = 0;
                 angles = &effect->state.angles.azimuth;
@@ -99,8 +101,8 @@ void update_sky_effects(void) {
                 angles[1] = (s16) (rand() >> 0x10);
                 /* Retail stores the float bits 0x3E23D70A. */
                 effect->size = 0.16f;
-                effect->texture_index = random_color_enabled;
                 effect->flags = effect_flags;
+                effect->texture_index = random_color_enabled;
             } else {
                 effect->randomize_color = random_color_enabled;
                 color_delta = random_integer_below(0x100);
@@ -110,7 +112,9 @@ void update_sky_effects(void) {
                 effect->angle = func_00213308();
                 effect->size = convert_integer_to_float(random_integer_below(0x18) + 0x20) * 0.00390625f;
                 azimuth = fast_add_rotations(-3.0f, func_00213308() * 0.2f);
-                elevation = func_00213308() * 0.09f + 1.2f;
+                elevation = func_00213308();
+                elevation = elevation * 0.09f;
+                elevation = elevation + 1.2f;
                 trig_product = fast_cos(azimuth);
                 trig_product = trig_product * fast_sin(elevation);
                 trig_product = trig_product * radius;
@@ -129,26 +133,28 @@ void update_sky_effects(void) {
                 }
             }
             initialization_index += 1;
-            if (initialization_index >= level_sky_effect_data->effect_count) {
+            sky_data = level_sky_effect_data;
+            if (initialization_index >= sky_data->effect_count) {
                 break;
             }
         }
-        effect_count = level_sky_effect_data->effect_count;
     }
+    sky_data = level_sky_effect_data;
+    effect_count = sky_data->effect_count;
     if (effect_count <= 0) {
         goto end;
     }
-    radius = 50.0f;
     angle_step = 0.0015339808f;
+    radius = 50.0f;
     effect_index = 0;
 update_next_effect:
-    effect = &level_sky_effect_data->effects[effect_index];
+    effect = &sky_data->effects[effect_index];
     if (effect->randomize_color == 0) {
         angles = &effect->state.angles.azimuth;
         effect->state.angles.azimuth = (s16) (effect->state.angles.azimuth + 1);
         angles[1] = (u16) (angles[1] + 1);
         azimuth = convert_integer_to_float((effect->state.angles.azimuth & 0xFFF) - 0x800) * angle_step;
-        elevation = convert_integer_to_float((effect->state.angles.elevation & 0xFFF) - 0x800) * angle_step;
+        elevation = convert_integer_to_float((angles[1] & 0xFFF) - 0x800) * angle_step;
         trig_product = fast_cos(azimuth);
         trig_product = trig_product * fast_sin(elevation);
         trig_product = trig_product * radius;
@@ -174,7 +180,8 @@ update_next_effect:
         effect->color = color_value;
     }
     effect_index += 1;
-    if (effect_index < level_sky_effect_data->effect_count) {
+    sky_data = level_sky_effect_data;
+    if (effect_index < sky_data->effect_count) {
         goto update_next_effect;
     }
 end:
