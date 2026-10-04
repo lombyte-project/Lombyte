@@ -35,7 +35,7 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     s16 line_colors[32];
     s32 wrap_width;
     s32 initial_wrap_width;
-    s32 using_initial_width;
+    u8 using_initial_width;
     s32 initial_line_count;
     s32 last_line_width;
     s32 line_count;
@@ -111,25 +111,31 @@ retry:
             if (text[position] == 0) {
                 /* Retail saves this width before testing whether to rebalance. */
                 last_line_width = line_width;
-                break;
+                goto after_scan;
             }
             position++;
     }
-    if (!using_initial_width && initial_line_count == 0) {
+after_scan:
+    if (using_initial_width) {
+        goto layout;
+    }
+    if (initial_line_count == 0) {
         initial_line_count = line_count;
     }
-    if (!using_initial_width && line_count >= 2) {
-        if (initial_line_count < line_count) {
-            wrap_width = initial_wrap_width;
-            using_initial_width = 1;
-            goto retry;
-        }
-        if (last_line_width < wrap_width / balance_divisor) {
-            wrap_width -= 0x10;
-            goto retry;
-        }
+    if (line_count < 2) {
+        goto layout;
+    }
+    if (initial_line_count < line_count) {
+        wrap_width = initial_wrap_width;
+        using_initial_width = 1;
+        goto retry;
+    }
+    if (last_line_width < wrap_width / balance_divisor) {
+        wrap_width -= 0x10;
+        goto retry;
     }
 
+layout:
     draw_window = window;
     line_length = draw_window->line_advance * line_count;
     draw_window->measured_width = 0;
