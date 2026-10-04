@@ -168,6 +168,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag1.NLOOP = 8;
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
+    packet_word = &fs_aa_transfer_words[12];
     active_fs_aa_buffer->giftag1.REGS0 = 0xE;
 
     fs_aa_transfer_words[0] = 0x408B400000000001;
@@ -183,7 +184,6 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_transfer_words[9] = 6;
     fs_aa_transfer_words[10] = 0x4400000000008010;
     fs_aa_transfer_words[11] = 0x5353;
-    packet_word = &fs_aa_transfer_words[12];
     strip_index = 0;
     do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
