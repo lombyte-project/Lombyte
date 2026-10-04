@@ -43,7 +43,7 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
     for (;;) {
         character = (u8)*text;
         if (character == 0) {
-            break;
+            return;
         }
         text++;
         glyph_index = (s32)character - 0x20;
