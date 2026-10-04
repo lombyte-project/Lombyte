@@ -352,7 +352,76 @@ void FUN_L06_002f37d0(char *owner) {
         FUN_L00_002592b8(&list, list, 0, 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f38c8.s", FUN_L06_002f38c8);
+extern float add_angle(f32, f32) __asm__("FUN_001fa580");
+extern float FUN_001f9de0_c(float) __asm__("FUN_001f9de0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int FUN_001fa6e0_c(int, int, float) __asm__("FUN_001fa6e0");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_001f4600_c(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L06_002f37d0_c(void *) __asm__("FUN_L06_002f37d0");
+
+extern float D_0015ED6C MACRO_ADDR;
+extern int D_L06_0015F5CC_c2 __asm__("D_L06_0015F5CC");
+
+void FUN_L06_002f38c8(char *obj)
+{
+    char *d;
+    int tint;
+    int i;
+    f32 f20;
+    int r, g, b, a;
+
+    if (*(unsigned char *)(obj + 0x21) == 0xFF) {
+        return;
+    }
+    d = *(char **)(obj + 0x78);
+    tint = 0x3228AAAA;
+    if (*(unsigned char *)(obj + 0x20) == 3 || *(unsigned char *)(obj + 0x20) == 6) {
+        tint = 0x3228AA28;
+    } else if (*(unsigned char *)(obj + 0x20) == 5 || *(unsigned char *)(obj + 0x20) == 9) {
+        tint = 0x322828AA;
+    } else if (*(unsigned char *)(obj + 0x20) == 7) {
+        tint = 0x32AA2828;
+    }
+
+    *(f32 *)(d + 0x28C) = add_angle(*(f32 *)(d + 0x28C), D_0015ED6C * 2.9670596f);
+    f20 = 0.5f * FUN_001f9de0_c(*(f32 *)(d + 0x28C)) + 1.0f;
+
+    r = tint & 0xFF;
+    b = (tint >> 16) & 0xFF;
+    g = (tint >> 8) & 0xFF;
+    a = ((unsigned int)tint) >> 24;
+
+    r = truncate_float_to_s32((f32)r * f20);
+    if (r >= 0x100) r = 0xFF;
+    g = truncate_float_to_s32((f32)g * f20);
+    if (g >= 0x100) g = 0xFF;
+    b = truncate_float_to_s32((f32)b * f20);
+    if (b >= 0x100) b = 0xFF;
+
+    {
+        int packed = a << 24;
+        packed |= b << 16;
+        packed |= g << 8;
+        packed |= r;
+        *(int *)(obj + 0x90) = FUN_001fa6e0_c(*(int *)(obj + 0x90), packed, 0.1f);
+    }
+
+    for (i = 0; i < 3; i++) {
+        FUN_L00_0024f7c8(obj, i + 1, d + 0x140 + i * 0x10);
+    }
+    {
+        int dv = D_L06_0015F5CC_c2;
+        *(int *)(d + 0x290) = *(int *)(obj + 0x90);
+        if (dv != 0) {
+        int *p = *(int **)(d + 0x294);
+        if (dv != *p) {
+            *p = dv;
+            FUN_001f4600_c(FUN_L06_002f37d0_c, obj);
+        }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
