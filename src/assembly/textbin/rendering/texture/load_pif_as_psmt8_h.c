@@ -61,7 +61,6 @@ void load_pif_as_psmt8_h(void *image, void *registers, int texel_destination, in
     u64 *out = registers;
     int palette_block_offset;
     s64 tex0_word;
-    u64 dimension_word;
     s64 field_word;
 
     FillTransferWords(&upload, 0, sizeof(upload));
@@ -92,8 +91,7 @@ void load_pif_as_psmt8_h(void *image, void *registers, int texel_destination, in
     wait_for_graphics_pipeline_idle(0, 0);
     field_word = (s64)0x1B << 20;
     tex0_word = (s64)upload.texel_block_offset | ((s64)upload.buffer_width << 14);
-    dimension_word = ((s64)upload.width_log2 << 26) | field_word;
-    tex0_word |= dimension_word;
+    tex0_word |= ((s64)upload.width_log2 << 26) | field_word;
     tex0_word |= (s64)upload.height_log2 << 30;
     field_word = ((s64)palette_block_offset << 37) | ((s64)1 << 34);
     tex0_word |= field_word;
