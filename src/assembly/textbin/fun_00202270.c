@@ -116,7 +116,8 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
         upload.mip_sizes[mip_index] = upload.mip_sizes[mip_index - 1] >> 2;
         upload.mip_addresses[mip_index] = upload.mip_addresses[mip_index - 1] + upload.mip_sizes[mip_index - 1];
     }
-    for (mip_index = 0; mip_index < tex->mip_level_count; mip_index++) {
+    mip_index = 0;
+    if (tex->mip_level_count > 0) do {
         *buffer_width = tex->width >> (mip_index + 6);
         if (*buffer_width <= 0) {
             *buffer_width = 1;
@@ -132,7 +133,8 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
             allocation_bytes = 0x100;
         }
         gs_texture_allocation_cursor += allocation_bytes;
-    }
+        mip_index++;
+    } while (mip_index < tex->mip_level_count);
     tex0_word = upload.texture_block_offsets[0];
     tex0_word |= (u64)upload.buffer_widths[0] << 14;
     tex0_word |= (u64)tex->pixel_storage_format << 20;
