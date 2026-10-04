@@ -40,3 +40,5 @@ s32 calculate_voice_distance_volume(struct VoiceVolumeDefinition *definition, f3
   volume_range = func_001FA6C0(definition->near_volume - definition->far_volume);
   return definition->far_volume + truncate_float_to_s32(((far_distance - distance) * volume_range) / (far_distance - near_distance));
 }
+/* Recovered original symbol name. */
+extern __typeof__(calculate_voice_distance_volume) sound_GetFade__FP8SoundDeffff __attribute__((alias("FUN_0022c6f8")));
