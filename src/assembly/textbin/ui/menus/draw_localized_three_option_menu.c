@@ -41,9 +41,9 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     s32 draw_y;
 
     font_texture_index = 1;
-    maximum_text_width = 0;
     setup_gif_paging(0);
     line_spacing = menu->height / 5;
+    maximum_text_width = 0;
     sprintf(text_buffer, get_help_message_text(0x522F), count_nonzero_entries_up_to_40(), 0x28);
     measured_width = measure_text_width_regular(text_buffer, -1);
     if (maximum_text_width < measured_width) {
