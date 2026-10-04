@@ -47,7 +47,7 @@ extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("func_0012E088");
 extern void snd_resolve_bank_xrefs() __asm__("func_0012E1A8");
 extern s32 snd_unload_bank(s32) __asm__("func_0012E1D8");
 extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern void submit_audio_stream_io_request(s32, s32, s32) __asm__("func_00216728");
+extern s32 submit_audio_stream_io_request(void *, u32, u32) __asm__("func_00216728");
 extern s32 sceCdBreak();
 extern s32 sceCdGetError();
 extern s32 sceCdSync(s32);
@@ -116,21 +116,18 @@ s32 service_level_archive_load(void) {
         goto submit_archive_read;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        sound_archive_buffer = D_0015EE54;
-        level_archive_sectors = next_disc_entry->sector_count;
-        archive_start_or_sectors = next_disc_entry->start_sector;
-        shared_archive_buffer = sound_archive_buffer;
-        archive_start_or_bytes = archive_start_or_sectors;
-        archive_start_or_sectors = level_archive_sectors;
+        shared_archive_buffer = D_0015EE54;
+        archive_start_or_bytes = next_disc_entry->start_sector;
+        archive_start_or_sectors = next_disc_entry->sector_count;
 submit_archive_read:
-        submit_audio_stream_io_request((s32)shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
+        submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
         } else {
-            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
         }
         D_0015EE48 = D_0015EE48 + 1;
         break;
