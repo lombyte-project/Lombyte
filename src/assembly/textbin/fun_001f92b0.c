@@ -39,7 +39,7 @@ extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern s32 is_vector_outside_clip(Vec4 *) __asm__("func_001F9958");
 extern void fast_vec_sub(Vec4 *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
-extern void transform_clip_vector(Vec4 *, Vec4 *, void *) __asm__("func_001F9A98");
+extern void multiply_vector_components(Vec4 *, Vec4 *, void *) __asm__("func_001F9A98");
 extern f32 fast_vec_length(Vec4 *) __asm__("func_001F9AF0");
 extern void transform_vector(Vec4 *, Vec4 *, void *) __asm__("func_001F9D20");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -80,7 +80,7 @@ void append_billboard_batch(void)
         distance = fast_vec_length(&projected_position);
         fast_vec_scale(&projected_position, &projected_position, 1024.0f);
         transform_vector(&projected_position, &projected_position, camera_position - 0x100);
-        transform_clip_vector(&clip_position, &projected_position, &clip_transform);
+        multiply_vector_components(&clip_position, &projected_position, &clip_transform);
         if (is_vector_outside_clip(&clip_position) != 0) {
             FillTransferWords(record, 0, 0x20);
             continue;
