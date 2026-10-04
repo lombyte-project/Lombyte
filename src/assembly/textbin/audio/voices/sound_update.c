@@ -147,8 +147,8 @@ s32 sound_update(void) {
     s32 handle;
     s32 command_flags;
 
-    water_height = 0.0f;
     underwater = D_001872D4;
+    water_height = 0.0f;
     if (underwater != 0) {
         water_height = D_0013F640[0];
     }
@@ -224,6 +224,7 @@ s32 sound_update(void) {
         }
         moby = D_0013E550.voices[slot_index].moby;
         owner_removed = 0;
+        /* The retail state check releases an owner in either removal state. */
         if (moby != NULL && (moby->state == 0xFE || moby->state == 0xFD)) {
             owner_removed = 1;
         }
