@@ -6,15 +6,15 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021b858/FUN_0021b858.s
 #else
 #include "types.h"
 
-typedef struct Widget Widget;
+typedef struct MenuGrid MenuGrid;
 
 typedef struct {
     u8 pad0[6];
     s16 item;
     u8 pad8[2];
-} MenuEntry;
+} MenuGridEntry;
 
-struct Widget {
+struct MenuGrid {
     u8 pad0[0x14];
     s32 sound;
     u8 pad18[0x18];
@@ -23,20 +23,20 @@ struct Widget {
     s32 cursor;
     s32 rows;
     s32 cols;
-    MenuEntry *entries;
-    Widget *up;
-    Widget *down;
-    Widget *left;
-    Widget *right;
+    MenuGridEntry *entries;
+    MenuGrid *up;
+    MenuGrid *down;
+    MenuGrid *left;
+    MenuGrid *right;
 };
 
 typedef struct {
     u8 pad0[0x38];
-    s32 back;
+    s32 back_page;
     u8 pad3C[0x4];
-    Widget *focus;
+    MenuGrid *focus;
     u8 pad44[0x3C];
-    Widget *next;
+    MenuGrid *next;
 } MenuPage;
 
 typedef struct {
@@ -44,100 +44,102 @@ typedef struct {
     MenuPage *page;
     s32 result;
     u8 padC[0x24];
-    s32 equip[0x3D];
+    s32 equipped_items[0x3D];
     s32 busy;
     u8 pad128[0xC];
-    s32 hideA;
-    s32 hideB;
+    s32 hide_small_grid;
+    s32 hide_large_grid;
 } MenuState;
 
 typedef struct {
     u8 pad0[0x1C4];
     s32 pressed;
-} PadState;
+} MenuControllerState;
 
 typedef struct {
     u8 pad0[0x8];
     s32 slot;
     u8 padC[0x40];
-} ItemInfo;
+} MenuItemInfo;
 
 typedef struct {
     u8 pad0[0x1FF5];
-    u8 flag;
+    u8 gadget_enabled;
     u8 pad1FF6;
-    u8 count;
-} GameSave;
+    u8 gadget_count;
+} MenuPlayerState;
 
-extern PadState D_0013C940;
-extern u8 D_0013D4C0[];
-extern GameSave D_0013F350;
-extern ItemInfo D_001863D0[];
-extern MenuState D_001D5BF0;
+extern MenuControllerState controller_state __asm__("D_0013C940");
+extern u8 item_available[] __asm__("D_0013D4C0");
+extern MenuPlayerState player_state __asm__("D_0013F350");
+extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
+extern MenuState menu_state __asm__("D_001D5BF0");
 extern s32 func_001E9468();
 extern s32 func_0022DA68();
 
-s32 FUN_0021b858(Widget *w) {
+s32 update_menu_grid_selection(MenuGrid *grid) __asm__("FUN_0021b858");
+
+s32 update_menu_grid_selection(MenuGrid *grid) {
     s32 width;
     s32 height;
     s32 cursor;
     s32 row;
-    s32 col;
+    s32 column_index;
     s32 column;
-    s32 skip;
-    s32 nrows;
-    s32 back;
+    s32 hidden;
+    s32 next_rows;
+    s32 back_page;
     s32 total;
-    s32 m;
-    s32 n;
-    Widget *next;
-    MenuEntry *entry;
+    s32 next_column_count;
+    s32 next_columns;
+    MenuGrid *next;
+    MenuGridEntry *entry;
     s32 slot;
 
-    if (D_001D5BF0.page->focus != w) {
+    if (menu_state.page->focus != grid) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.busy == 0) {
+    if ((controller_state.pressed & 0xD00) && menu_state.busy == 0) {
         return 1;
     }
-    if (D_0013C940.pressed & 0x10) {
-        back = D_001D5BF0.page->back;
-        if (back != 0) {
-            D_001D5BF0.result = back;
-        } else if (D_001D5BF0.busy == 0) {
+    if (controller_state.pressed & 0x10) {
+        back_page = menu_state.page->back_page;
+        if (back_page != 0) {
+            menu_state.result = back_page;
+        } else if (menu_state.busy == 0) {
             return -1;
         }
     }
 
-    width = w->cols;
-    cursor = w->cursor;
-    height = w->rows;
+    width = grid->cols;
+    cursor = grid->cursor;
+    height = grid->rows;
     row = cursor / width;
-    col = cursor % width;
-    column = col;
+    column_index = cursor % width;
+    column = column_index;
 
-    if (D_0013C940.pressed & 0x1000) {
+    if (controller_state.pressed & 0x1000) {
         if (row != 0) {
-            w->cursor = cursor - width;
-        } else if (w->up != NULL) {
-            next = w;
+            grid->cursor = cursor - width;
+        } else if (grid->up != NULL) {
+            next = grid;
             do {
                 next = next->up;
-                nrows = next->rows;
-                n = next->cols;
-                skip = 0;
-                if (D_001D5BF0.hideA != 0 && (next->flags & 8)) {
-                    skip = 1;
+                next_rows = next->rows;
+                next_columns = next->cols;
+                hidden = 0;
+                if (menu_state.hide_small_grid != 0 && (next->flags & 8)) {
+                    hidden = 1;
                 }
-                if (D_001D5BF0.hideB != 0 && (next->flags & 4)) {
-                    skip = 1;
+                if (menu_state.hide_large_grid != 0 && (next->flags & 4)) {
+                    hidden = 1;
                 }
-            } while (skip);
-            D_001D5BF0.page->next = next;
-            if (n == 5 && w->cols == 3) {
+            } while (hidden);
+            menu_state.page->next = next;
+            if (next_columns == 5 && grid->cols == 3) {
                 column++;
             }
-            if (n == 3 && w->cols == 5) {
+            if (next_columns == 3 && grid->cols == 5) {
                 column--;
                 if (column > 2) {
                     column = 2;
@@ -145,33 +147,33 @@ s32 FUN_0021b858(Widget *w) {
                     column = 0;
                 }
             }
-            next->cursor = (nrows - 1) * n + (column < n - 1 ? column : n - 1);
-        } else if (!(w->flags & 0x8000)) {
-            w->cursor = width * (height - 1) + cursor;
+            next->cursor = (next_rows - 1) * next_columns + (column < next_columns - 1 ? column : next_columns - 1);
+        } else if (!(grid->flags & 0x8000)) {
+            grid->cursor = width * (height - 1) + cursor;
         }
     }
 
-    if (D_0013C940.pressed & 0x4000) {
+    if (controller_state.pressed & 0x4000) {
         if (row + 1 < height) {
-            w->cursor = w->cursor + width;
-        } else if (w->down != NULL) {
-            next = w;
+            grid->cursor = grid->cursor + width;
+        } else if (grid->down != NULL) {
+            next = grid;
             do {
                 next = next->down;
-                m = next->cols;
-                skip = 0;
-                if (D_001D5BF0.hideA != 0 && (next->flags & 8)) {
-                    skip = 1;
+                next_column_count = next->cols;
+                hidden = 0;
+                if (menu_state.hide_small_grid != 0 && (next->flags & 8)) {
+                    hidden = 1;
                 }
-                if (D_001D5BF0.hideB != 0 && (next->flags & 4)) {
-                    skip = 1;
+                if (menu_state.hide_large_grid != 0 && (next->flags & 4)) {
+                    hidden = 1;
                 }
-            } while (skip);
-            D_001D5BF0.page->next = next;
-            if (m == 5 && w->cols == 3) {
+            } while (hidden);
+            menu_state.page->next = next;
+            if (next_column_count == 5 && grid->cols == 3) {
                 column++;
             }
-            if (m == 3 && w->cols == 5) {
+            if (next_column_count == 3 && grid->cols == 5) {
                 column--;
                 if (column > 2) {
                     column = 2;
@@ -179,60 +181,63 @@ s32 FUN_0021b858(Widget *w) {
                     column = 0;
                 }
             }
-            next->cursor = column < m - 1 ? column : m - 1;
-        } else if (!(w->flags & 0x8000)) {
-            w->cursor = w->cursor - w->cols * (w->rows - 1);
+            next->cursor = column < next_column_count - 1 ? column : next_column_count - 1;
+        } else if (!(grid->flags & 0x8000)) {
+            grid->cursor = grid->cursor - grid->cols * (grid->rows - 1);
         }
     }
 
-    if (D_0013C940.pressed & 0x8000) {
+    if (controller_state.pressed & 0x8000) {
         if (column != 0) {
-            w->cursor = w->cursor - 1;
-        } else if (w->left != NULL) {
-            D_001D5BF0.page->next = w->left;
-        } else if (!(w->flags & 0x8000)) {
-            w->cursor += w->cols - 1;
+            grid->cursor = grid->cursor - 1;
+        } else if (grid->left != NULL) {
+            menu_state.page->next = grid->left;
+        } else if (!(grid->flags & 0x8000)) {
+            grid->cursor += grid->cols - 1;
         }
     }
 
-    if (D_0013C940.pressed & 0x2000) {
+    if (controller_state.pressed & 0x2000) {
         if (column + 1 < width) {
-            w->cursor = w->cursor + 1;
-        } else if (w->right != NULL) {
-            D_001D5BF0.page->next = w->right;
-        } else if (!(w->flags & 0x8000)) {
-            w->cursor -= w->cols - 1;
+            grid->cursor = grid->cursor + 1;
+        } else if (grid->right != NULL) {
+            menu_state.page->next = grid->right;
+        } else if (!(grid->flags & 0x8000)) {
+            grid->cursor -= grid->cols - 1;
         }
     }
 
-    if (w->cursor != cursor || D_001D5BF0.page->next != NULL) {
-        func_0022DA68(1, 0x11, w->sound);
+    if (grid->cursor != cursor || menu_state.page->next != NULL) {
+        func_0022DA68(1, 0x11, grid->sound);
     }
 
-    if ((D_0013C940.pressed & 0x40) && ((w->flags ^ 1) & 1)) {
-        entry = &w->entries[w->cursor];
-        if (entry->item != 0 && D_0013D4C0[entry->item] != 0) {
-            slot = D_001863D0[entry->item].slot;
-            func_0022DA68(0, 0x11, w->sound);
-            if (D_001D5BF0.equip[slot] == entry->item && slot != 0 && slot != 3) {
-                D_001D5BF0.equip[slot] = 0;
+    if ((controller_state.pressed & 0x40) && ((grid->flags ^ 1) & 1)) {
+        entry = &grid->entries[grid->cursor];
+        if (entry->item != 0 && item_available[entry->item] != 0) {
+            slot = menu_item_info[entry->item].slot;
+            func_0022DA68(0, 0x11, grid->sound);
+            if (menu_state.equipped_items[slot] == entry->item && slot != 0 && slot != 3) {
+                menu_state.equipped_items[slot] = 0;
             } else if (entry->item == 0x18) {
-                if (func_001E9468(0x18) != 0 && D_001D5BF0.state == 3) {
-                    n = func_001E9468(0x18);
-                    D_0013F350.flag = 1;
-                    total = D_0013F350.count + n;
+                if (func_001E9468(0x18) != 0 && menu_state.state == 3) {
+                    next_columns = func_001E9468(0x18);
+                    player_state.gadget_enabled = 1;
+                    total = player_state.gadget_count + next_columns;
                     if (total > 6) {
                         total = 6;
                     }
-                    D_0013F350.count = total;
+                    player_state.gadget_count = total;
                 }
             } else {
-                D_001D5BF0.equip[slot] = entry->item;
+                menu_state.equipped_items[slot] = entry->item;
             }
         } else {
-            func_0022DA68(2, 0x11, w->sound);
+            func_0022DA68(2, 0x11, grid->sound);
         }
     }
     return 0;
 }
+
+extern __typeof__(update_menu_grid_selection) func_0021B858 __attribute__((alias("FUN_0021b858")));
+
 #endif /* NON_MATCHING */

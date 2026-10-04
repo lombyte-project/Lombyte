@@ -5,62 +5,68 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227548/FUN_00227548.s", FUN_00227548);
 #else
 #include "types.h"
+
 #include "eetypes.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-struct Rec { s32 count; s32 x4; f32 f8; f32 fC; u128 v10; };
-extern struct TagPtr D_00160F00;
-struct Flag { s32 v; };
-extern struct Flag D_0015ED80;
-extern u8 D_001D7EC0[];
-extern u8 D_001D7E50[];
-extern s32 D_001603A0;
-extern void func_002271D0(void);
+struct GraphicsDmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
+struct RenderPacketCursor { struct GraphicsDmaTag *p; };
+struct GraphicsSetupRecord { s32 command_count; s32 command_flags; f32 second_depth; f32 first_depth; u128 direction; };
+extern struct RenderPacketCursor render_packet_cursor __asm__("D_00160F00");
+struct VideoModeState { s32 v; };
+extern struct VideoModeState pal_mode __asm__("D_0015ED80");
+extern u8 pal_graphics_setup_packet[] __asm__("D_001D7EC0");
+extern u8 ntsc_graphics_setup_packet[] __asm__("D_001D7E50");
+extern s32 graphics_setup_word __asm__("D_001603A0");
+extern void append_fullscreen_setup_strips(void) __asm__("func_002271D0");
 extern void func_00226FB8(f32 *, f32);
 extern u8 *func_002270E8(u8 *);
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
 extern void func_00227140(s32, s32, s32);
-extern s32 func_00233980(s32, s64);
-extern void func_00227378(s32);
-void FUN_00227548(u8 *rec) {
-    f32 a[4];
-    f32 b[4];
-    f32 c[4];
-    struct Rec *r;
-    s32 i;
+extern void emit_gs_register_write(s32, s64) __asm__("func_00233980");
+extern void append_fullscreen_clear_strips(s64) __asm__("func_00227378");
+void submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
 
-    func_002271D0();
-    r = (struct Rec *)rec;
-    D_00160F00.p->w0 = 0x30000007;
-    D_00160F00.p->addr = (u32)(D_0015ED80.v != 0 ? D_001D7EC0 : D_001D7E50);
-    D_00160F00.p->w2 = 0x13000000;
-    D_00160F00.p->w3 = 0x50000007;
-    b[1] = b[0] = a[1] = a[0] = 0.0f;
-    D_00160F00.p++;
-    while (r->count != 0) {
-        rec += 0x20;
-        *(u128 *)c = r->v10;
-        func_00226FB8(c, 1000.0f);
-        a[2] = r->fC;
-        b[2] = r->f8;
-        for (i = 0; i < r->count; i++) {
-            rec = func_002270E8(rec);
-            func_00228520(a, b);
-            func_00227A08(0x70000000, D_001603A0, r->x4);
+void submit_graphics_setup_command_stream(u8 *command_stream) {
+    f32 first_vector[4];
+    f32 second_vector[4];
+    f32 direction[4];
+    struct GraphicsSetupRecord *record;
+    s32 command_index;
+
+    append_fullscreen_setup_strips();
+    record = (struct GraphicsSetupRecord *)command_stream;
+    render_packet_cursor.p->w0 = 0x30000007;
+    render_packet_cursor.p->addr = (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
+    render_packet_cursor.p->w2 = 0x13000000;
+    render_packet_cursor.p->w3 = 0x50000007;
+    second_vector[1] = second_vector[0] = first_vector[1] = first_vector[0] = 0.0f;
+    render_packet_cursor.p++;
+    while (record->command_count != 0) {
+        command_stream += 0x20;
+        *(u128 *)direction = record->direction;
+        func_00226FB8(direction, 1000.0f);
+        first_vector[2] = record->first_depth;
+        second_vector[2] = record->second_depth;
+        for (command_index = 0; command_index < record->command_count; command_index++) {
+            command_stream = func_002270E8(command_stream);
+            func_00228520(first_vector, second_vector);
+            func_00227A08(0x70000000, graphics_setup_word, record->command_flags);
             func_00227140(2, 1, 2);
             func_00227140(1, 0, 2);
         }
-        r = (struct Rec *)rec;
+        record = (struct GraphicsSetupRecord *)command_stream;
     }
-    if (D_0015ED80.v) {
-        func_00233980(0x4C, 0x80080);
+    if (pal_mode.v) {
+        emit_gs_register_write(0x4C, 0x80080);
     } else {
-        func_00233980(0x4C, 0x80070);
+        emit_gs_register_write(0x4C, 0x80070);
     }
-    func_00233980(0x42, 0x2000000064LL);
-    func_00227378(0);
-    func_00233980(0x47, 0x5360B);
-    func_00233980(0x42, 0x8000000044LL);
+    emit_gs_register_write(0x42, 0x2000000064LL);
+    append_fullscreen_clear_strips(0);
+    emit_gs_register_write(0x47, 0x5360B);
+    emit_gs_register_write(0x42, 0x8000000044LL);
 }
+
+extern __typeof__(submit_graphics_setup_command_stream) func_00227548 __attribute__((alias("FUN_00227548")));
+
 #endif /* NON_MATCHING */

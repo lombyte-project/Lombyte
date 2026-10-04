@@ -6,57 +6,64 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a1e0/FUN_0021a1e0.s
 #else
 #include "types.h"
 
-struct Ids {
+struct LabelSelectorTable {
     s32 v[8];
 };
 
-struct Texts {
+struct LabelTextTable {
     s32 v[7];
 };
 
-struct MenuEntry {
+struct ConfiguredLabelEntry {
     s32 text;
     u8 *flag;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s32 first_message;
+    s32 second_message;
+    s32 value;
 };
 
-extern struct Ids D_001E8728;
-extern struct Texts D_001E8748;
-extern u8 D_0015EDC0[];
-extern u8 D_0015EDB0[];
-extern struct MenuEntry D_001D3B10[];
+extern struct LabelSelectorTable label_selector_table __asm__("D_001E8728");
+extern struct LabelTextTable label_text_table __asm__("D_001E8748");
+extern u8 selector_available[] __asm__("D_0015EDC0");
+extern u8 selector_values[] __asm__("D_0015EDB0");
+extern struct ConfiguredLabelEntry configured_label_entries[] __asm__("D_001D3B10");
 
-s32 FUN_0021a1e0(void) {
-    struct Ids ids;
-    struct Texts texts;
-    struct MenuEntry *e;
-    int nv;
-    s32 n;
-    s32 i;
-    s32 id;
+s32 rebuild_configured_text_label_list(void) __asm__("FUN_0021a1e0");
 
-    nv = 0;
-    ids = D_001E8728;
-    texts = D_001E8748;
+s32 rebuild_configured_text_label_list(void) {
+    struct LabelSelectorTable selectors;
+    struct LabelTextTable text_ids;
+    struct ConfiguredLabelEntry *entry;
+    int repeat;
+    s32 entry_count;
+    s32 source_index;
+    s32 selector;
+
+    repeat = 0;
+    selectors = label_selector_table;
+    text_ids = label_text_table;
     do {
-    n = 0;
+    entry_count = 0;
     do {
-    for (i = 0; i < 12; i++) {
-        id = ids.v[i];
-        if (id != -1 && D_0015EDC0[id] != 0) {
-            D_001D3B10[n].flag = &D_0015EDB0[id];
-            D_001D3B10[n].text = ids.v[i + 8];
-            D_001D3B10[n].unk8 = 0x4F5A;
-            D_001D3B10[n].unkC = 0x4F5B;
-            D_001D3B10[n].unk10 = 0;
-            n++;
+    /* Retail scans twelve selectors despite copying eight selector words and
+       seven text words. Preserve that original overrun while this stays pending. */
+    for (source_index = 0; source_index < 12; source_index++) {
+        selector = selectors.v[source_index];
+        if (selector != -1 && selector_available[selector] != 0) {
+            configured_label_entries[entry_count].flag = &selector_values[selector];
+            configured_label_entries[entry_count].text = selectors.v[source_index + 8];
+            configured_label_entries[entry_count].first_message = 0x4F5A;
+            configured_label_entries[entry_count].second_message = 0x4F5B;
+            configured_label_entries[entry_count].value = 0;
+            entry_count++;
         }
     }
     } while (0);
-    } while (nv);
-    D_001D3B10[n].text = 0;
+    } while (repeat);
+    configured_label_entries[entry_count].text = 0;
     return 0;
 }
+
+extern __typeof__(rebuild_configured_text_label_list) func_0021A1E0 __attribute__((alias("FUN_0021a1e0")));
+
 #endif /* NON_MATCHING */

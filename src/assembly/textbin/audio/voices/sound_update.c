@@ -12,73 +12,73 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/voices/sound_update/F
 typedef union {
     u128 q;
     f32 f[4];
-} Vec4;
+} VoiceVector;
 
 typedef struct {
     u8 pad00[0x18];
-    u8 unk18;
-    u8 unk19;
-    s16 unk1A;
-    s32 unk1C;
-} SoundDef;
+    u8 source_state;
+    u8 attenuation_flags;
+    s16 sound_index;
+    s32 bank_handle;
+} VoiceDefinition;
 
 typedef struct {
     u8 pad00[0x10];
-    Vec4 pos;
-    u8 unk20;
+    VoiceVector position;
+    u8 state;
     u8 pad21[0x9F];
-    Vec4 unkC0;
-} SoundMoby;
+    VoiceVector rotation;
+} VoiceMoby;
 
 typedef struct {
     u32 handle;      /* 0x00 */
     u8 state;        /* 0x04 */
     u8 flags;        /* 0x05 */
     u8 pad06[2];
-    SoundDef *def;   /* 0x08 */
+    VoiceDefinition *definition;   /* 0x08 */
     s32 pad0C;
     s32 volume;      /* 0x10 */
-    s32 unk14;       /* 0x14 */
-    SoundMoby *moby; /* 0x18 */
-    s32 unk1C;       /* 0x1C */
-    Vec4 pos;        /* 0x20 */
-    Vec4 unk30;      /* 0x30 */
-    u32 hist_pos;    /* 0x40 */
-    u8 hist[36];     /* 0x44 */
+    s32 pitch_bend;       /* 0x14 */
+    VoiceMoby *moby; /* 0x18 */
+    s32 owner_context;     /* 0x1C */
+    VoiceVector position;        /* 0x20 */
+    VoiceVector position_offset;      /* 0x30 */
+    u32 occlusion_history_position;    /* 0x40 */
+    u8 occlusion_history[36];     /* 0x44 */
     u8 pad68[8];
-} Voice;
+} VoiceSlot;
 
 typedef struct {
-    Vec4 cam_hist[4];   /* 0x000 */
-    s32 cam_pos;        /* 0x040 */
+    VoiceVector listener_history[4];   /* 0x000 */
+    s32 listener_history_position;        /* 0x040 */
     s32 pad44;
-    s32 vol48;          /* 0x048 */
-    s32 vol4C;
-    s32 vol50;
-    s32 vol54;
-    s32 vol58;
-    s32 vol5C;
+    s32 group_0_volume;          /* 0x048 */
+    s32 group_1_volume;
+    s32 group_2_volume;
+    s32 group_3_volume;
+    s32 group_4_volume;
+    s32 group_5_volume;
     s32 pad60;
-    s32 unk64;          /* 0x064 */
-    u8 unk68;
-    u8 unk69;
-    u8 unk6A;
-    u8 unk6B;
-    s32 unk6C;          /* 0x06C */
-    Voice voices[30];   /* 0x070 */
+    s32 reverb_depth;          /* 0x064 */
+    u8 reverb_type;
+    u8 reverb_delay;
+    u8 reverb_feedback;
+    u8 reverb_commands;
+    s32 pending_commands;          /* 0x06C */
+    VoiceSlot voices[30];   /* 0x070 */
     s32 padD90[2];
-    s32 unkD98;         /* 0xD98 */
+    s32 occlusion_frame;         /* 0xD98 */
     s32 padD9C;
-    Vec4 unkDA0[6];     /* 0xDA0 */
-} SoundState;
+    VoiceVector occlusion_samples[6];     /* 0xDA0 */
+} VoiceRuntimeState;
 
-extern SoundState D_0013E550;
+extern VoiceRuntimeState D_0013E550;
 extern f32 D_0013F640[];
 extern f32 D_0015ED6C;
 extern s32 D_0015F5E8;
 extern s32 D_0015F604;
 extern s32 D_0015F60C;
-extern Vec4 D_00187080;
+extern VoiceVector D_00187080;
 extern u8 D_00187290[];
 extern s32 D_001872D4;
 
@@ -86,319 +86,320 @@ extern s32 ComputeByteStringHash(u8 *, s32);
 extern int ComputeSectorIndex(int arg0);
 extern void FillTransferWords(void *, s32, s32);
 extern void ReadGlobalTableEntry(void);
-extern void func_0012DC80() __asm__("FUN_0012dc80");
-extern void func_0012E208() __asm__("FUN_0012e208");
-extern void func_0012E308() __asm__("FUN_0012e308");
-extern void func_0012E368() __asm__("FUN_0012e368");
-extern void func_0012E448() __asm__("FUN_0012e448");
-extern void func_0012E4C0() __asm__("FUN_0012e4c0");
-extern void func_0012EB00() __asm__("FUN_0012eb00");
-extern void func_0012EF68() __asm__("FUN_0012ef68");
-extern void func_0012EFE0() __asm__("FUN_0012efe0");
-extern void func_001F9A10(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void func_001F9A28(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern void func_001F9A68(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
+extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
+extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
+extern void snd_stop_sound(s32) __asm__("FUN_0012e368");
+extern void snd_sound_is_still_playing_cb() __asm__("FUN_0012e448");
+extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
+extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
+extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("FUN_0012ef68");
+extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
+extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
 extern f32 func_001F9AB0(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 func_001F9AF0(void *a) __asm__("FUN_001f9af0");
-extern void func_001F9BF8(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void func_001F9CF8(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
 extern void func_001FA2D8(void *out, void *a) __asm__("FUN_001fa2d8");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void func_00216290() __asm__("FUN_00216290");
-extern void func_0022C5A8(void *) __asm__("FUN_0022c5a8");
-extern u8 func_0022C658(Voice *, void *) __asm__("FUN_0022c658");
-extern s32 func_0022C7E8(Voice *, Vec4 *) __asm__("FUN_0022c7e8");
-extern s32 func_0022C830(Voice *, Vec4 *, void *) __asm__("FUN_0022c830");
-extern void FUN_0022dd90();
-extern void FUN_0022ddd8();
+extern void music_update() __asm__("FUN_00216290");
+extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
+extern u8 test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
+extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
+extern s32 calculate_voice_pan(VoiceSlot *, VoiceVector *, void *) __asm__("FUN_0022c830");
+extern void voice_start_callback() __asm__("FUN_0022dd90");
+extern void voice_update_callback() __asm__("FUN_0022ddd8");
 
 s32 sound_update(void) __asm__("FUN_0022ca50");
 
 s32 sound_update(void) {
-    Vec4 occl;
-    Vec4 vel;
-    Vec4 delta;
+    VoiceVector listener_occlusion_position;
+    VoiceVector listener_velocity;
+    VoiceVector relative_velocity;
     s32 flags[30];
-    s32 vols[30];
-    f32 dots[30];
-    Vec4 dir;
-    Vec4 mat[4];
-    s32 i;
+    s32 voice_volumes[30];
+    f32 radial_velocities[30];
+    VoiceVector direction;
+    VoiceVector listener_matrix[4];
+    s32 slot_index;
     s32 underwater;
-    f32 *pdots;
-    Vec4 *pvel;
-    Vec4 *pmat;
-    s32 *pflags;
-    s32 *pvols;
-    SoundState *s;
-    SoundMoby *moby;
-    Vec4 *rel;
-    Vec4 *d;
-    f32 water_z;
-    s32 cur;
-    s32 next;
-    s32 n;
-    s32 vol;
-    s32 j;
-    s32 k;
-    s32 m;
-    s32 dead;
-    s32 ratio;
-    s32 count;
-    s32 mode;
+    f32 *radial_velocity_values;
+    VoiceVector *velocity;
+    VoiceVector *matrix;
+    s32 *voice_flags;
+    s32 *volumes;
+    VoiceRuntimeState *runtime;
+    VoiceMoby *moby;
+    VoiceVector *relative;
+    VoiceVector *unit_direction;
+    f32 water_height;
+    s32 history_index;
+    s32 previous_history_index;
+    s32 listener_sample_count;
+    s32 group_volume;
+    s32 history_offset;
+    s32 sample_index;
+    s32 repeat_index;
+    s32 owner_removed;
+    s32 distance_volume;
+    s32 occluded_samples;
+    s32 parameter_mask;
     s32 pan;
-    s32 pitch;
-    s32 prio;
+    s32 pitch_modifier;
+    s32 pitch_bend;
     s32 handle;
-    s32 f;
+    s32 command_flags;
 
-    water_z = 0.0f;
+    water_height = 0.0f;
     underwater = D_001872D4;
     if (underwater != 0) {
-        water_z = D_0013F640[0];
+        water_height = D_0013F640[0];
     }
-    func_0012DC80();
+    snd_flush_sound_commands();
 
-    if (D_0013E550.unk6B & 8) {
-        func_0012EF68(2, 0, 0, 0, 0);
-    } else if (D_0013E550.unk6B & 0x13) {
-        func_0012EF68(2, D_0013E550.unk68, D_0013E550.unk64, D_0013E550.unk69, D_0013E550.unk6A);
-    } else if (D_0013E550.unk6B & 4) {
-        func_0012EFE0(2, D_0013E550.unk64, 0xC, 3);
+    if (D_0013E550.reverb_commands & 8) {
+        snd_set_reverb_ex(2, 0, 0, 0, 0);
+    } else if (D_0013E550.reverb_commands & 0x13) {
+        snd_set_reverb_ex(2, D_0013E550.reverb_type, D_0013E550.reverb_depth, D_0013E550.reverb_delay, D_0013E550.reverb_feedback);
+    } else if (D_0013E550.reverb_commands & 4) {
+        snd_auto_reverb(2, D_0013E550.reverb_depth, 0xC, 3);
     }
-    D_0013E550.unk6B = 0;
+    D_0013E550.reverb_commands = 0;
 
     if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
-        func_0022C5A8(&occl);
+        clamp_voice_position_to_collision(&listener_occlusion_position);
     }
 
-    qzero(&vel);
-    s = &D_0013E550;
-    cur = (s->cam_pos + 1) % 4;
-    s->cam_pos = cur;
-    qcopy(&s->cam_hist[cur], &D_00187080);
+    qzero(&listener_velocity);
+    runtime = &D_0013E550;
+    history_index = (runtime->listener_history_position + 1) % 4;
+    runtime->listener_history_position = history_index;
+    qcopy(&runtime->listener_history[history_index], &D_00187080);
 
-    pvel = &vel;
-    pflags = flags;
-    pdots = dots;
-    pmat = mat;
-    pvols = vols;
-    n = 0;
-    next = (cur + 3) % 4;
-    if (next != cur) {
+    velocity = &listener_velocity;
+    voice_flags = flags;
+    radial_velocity_values = radial_velocities;
+    matrix = listener_matrix;
+    volumes = voice_volumes;
+    listener_sample_count = 0;
+    previous_history_index = (history_index + 3) % 4;
+    if (previous_history_index != history_index) {
         do {
-            func_001F9A28(&delta, &s->cam_hist[cur], &s->cam_hist[next]);
-            if (!(func_001F9AF0(&delta) < D_0015ED6C * 60.0f)) {
+            subtract_vector_xyz(&relative_velocity, &runtime->listener_history[history_index], &runtime->listener_history[previous_history_index]);
+            if (!(vector_length_xyz(&relative_velocity) < D_0015ED6C * 60.0f)) {
                 break;
             }
-            n++;
-            func_001F9A10(pvel, pvel, &delta);
-            cur = next;
-            next = (cur + 3) % 4;
-        } while (next != s->cam_pos);
+            listener_sample_count++;
+            add_vector_xyz(velocity, velocity, &relative_velocity);
+            history_index = previous_history_index;
+            previous_history_index = (history_index + 3) % 4;
+        } while (previous_history_index != runtime->listener_history_position);
     }
-    if (n >= 2) {
-        func_001F9A68(pvel, pvel, 1.0f / ConvertIntegerToFloat(n));
+    if (listener_sample_count >= 2) {
+        scale_vector_xyz(velocity, velocity, 1.0f / ConvertIntegerToFloat(listener_sample_count));
     }
 
     if (D_0015F604 == 2) {
-        func_0012E208(1, 0);
-        func_0012E208(0, D_0013E550.vol48 / 2);
-        func_0012E208(3, D_0013E550.vol54 / 2);
+        snd_set_master_volume(1, 0);
+        snd_set_master_volume(0, D_0013E550.group_0_volume / 2);
+        snd_set_master_volume(3, D_0013E550.group_3_volume / 2);
     } else {
-        vol = D_0013E550.vol4C;
+        group_volume = D_0013E550.group_1_volume;
         if (underwater) {
-            vol = vol * 3 / 5;
+            group_volume = group_volume * 3 / 5;
         }
-        func_0012E208(1, vol);
-        func_0012E208(0, D_0013E550.vol48);
-        func_0012E208(3, D_0013E550.vol54);
+        snd_set_master_volume(1, group_volume);
+        snd_set_master_volume(0, D_0013E550.group_0_volume);
+        snd_set_master_volume(3, D_0013E550.group_3_volume);
     }
-    func_0012E208(2, D_0013E550.vol50);
-    func_0012E208(4, D_0013E550.vol58);
-    func_0012E208(5, D_0013E550.vol5C);
+    snd_set_master_volume(2, D_0013E550.group_2_volume);
+    snd_set_master_volume(4, D_0013E550.group_4_volume);
+    snd_set_master_volume(5, D_0013E550.group_5_volume);
 
-    FillTransferWords(pflags, 0, 0x78);
-    FillTransferWords(pvols, 0, 0x78);
-    FillTransferWords(pdots, 0, 0x78);
+    FillTransferWords(voice_flags, 0, 0x78);
+    FillTransferWords(volumes, 0, 0x78);
+    FillTransferWords(radial_velocity_values, 0, 0x78);
 
-    for (i = 0; i < 30; i++) {
-        if (D_0013E550.voices[i].state != 7) {
-            if (D_0013E550.voices[i].handle == 0) {
+    for (slot_index = 0; slot_index < 30; slot_index++) {
+        if (D_0013E550.voices[slot_index].state != 7) {
+            if (D_0013E550.voices[slot_index].handle == 0) {
                 continue;
             }
-            if (D_0013E550.voices[i].handle == -1) {
+            if (D_0013E550.voices[slot_index].handle == -1) {
                 continue;
             }
         }
-        moby = D_0013E550.voices[i].moby;
-        dead = 0;
-        if (moby != NULL && (moby->unk20 == 0xFE || moby->unk20 == 0xFD)) {
-            dead = 1;
+        moby = D_0013E550.voices[slot_index].moby;
+        owner_removed = 0;
+        if (moby != NULL && (moby->state == 0xFE || moby->state == 0xFD)) {
+            owner_removed = 1;
         }
-        if (dead) {
-            D_0013E550.voices[i].moby = NULL;
+        if (owner_removed) {
+            D_0013E550.voices[slot_index].moby = NULL;
         }
-        if (D_0013E550.voices[i].state == 4 || (D_0013E550.voices[i].state != 6 && dead && D_0013E550.voices[i].def->unk18 != 0)) {
-            pflags[i] = 0x20;
+        if (D_0013E550.voices[slot_index].state == 4 || (D_0013E550.voices[slot_index].state != 6 && owner_removed && D_0013E550.voices[slot_index].definition->source_state != 0)) {
+            voice_flags[slot_index] = 0x20;
             continue;
         }
-        if (D_0015F604 != 0 && D_0015F604 != 2 && D_0015F604 != 6 && D_0013E550.voices[i].state != 7) {
-            pflags[i] = 0x10;
+        if (D_0015F604 != 0 && D_0015F604 != 2 && D_0015F604 != 6 && D_0013E550.voices[slot_index].state != 7) {
+            voice_flags[slot_index] = 0x10;
             continue;
         }
 
-        if (D_0013E550.voices[i].moby != NULL && !(D_0013E550.voices[i].flags & 8)) {
-            if (D_0013E550.voices[i].flags & 0x40) {
-                func_001F9CF8(&dir, &D_0013E550.voices[i].unk30, &moby->unkC0);
-                func_001F9A10(&dir, &dir, &moby->pos);
-                func_001F9A28(&delta, &dir, &D_0013E550.voices[i].pos);
-                qcopy(&D_0013E550.voices[i].pos, &dir);
+        if (D_0013E550.voices[slot_index].moby != NULL && !(D_0013E550.voices[slot_index].flags & 8)) {
+            if (D_0013E550.voices[slot_index].flags & 0x40) {
+                func_001F9CF8(&direction, &D_0013E550.voices[slot_index].position_offset, &moby->rotation);
+                add_vector_xyz(&direction, &direction, &moby->position);
+                subtract_vector_xyz(&relative_velocity, &direction, &D_0013E550.voices[slot_index].position);
+                qcopy(&D_0013E550.voices[slot_index].position, &direction);
             } else {
-                D_0013E550.voices[i].pos.f[2] -= 1.0f;
-                func_001F9A28(&delta, &D_0013E550.voices[i].moby->pos, &D_0013E550.voices[i].pos);
-                qcopy(&D_0013E550.voices[i].pos, &D_0013E550.voices[i].moby->pos);
-                D_0013E550.voices[i].pos.f[2] += 1.0f;
+                D_0013E550.voices[slot_index].position.f[2] -= 1.0f;
+                subtract_vector_xyz(&relative_velocity, &D_0013E550.voices[slot_index].moby->position, &D_0013E550.voices[slot_index].position);
+                qcopy(&D_0013E550.voices[slot_index].position, &D_0013E550.voices[slot_index].moby->position);
+                D_0013E550.voices[slot_index].position.f[2] += 1.0f;
             }
         } else {
-            qzero(&delta);
+            qzero(&relative_velocity);
         }
-        rel = &delta;
-        d = &dir;
-        func_001F9A28(rel, rel, pvel);
-        func_001F9A28(d, &D_00187080, &D_0013E550.voices[i].pos);
-        func_001F9BF8(d, d, 1.0f);
-        pdots[i] = func_001F9AB0(d, rel);
+        relative = &relative_velocity;
+        unit_direction = &direction;
+        subtract_vector_xyz(relative, relative, velocity);
+        subtract_vector_xyz(unit_direction, &D_00187080, &D_0013E550.voices[slot_index].position);
+        normalize_vector_xyz(unit_direction, unit_direction, 1.0f);
+        radial_velocity_values[slot_index] = func_001F9AB0(unit_direction, relative);
 
-        if (!(D_0013E550.voices[i].flags & 0x10)) {
-            ratio = func_0022C7E8(&D_0013E550.voices[i], &D_0013E550.voices[i].pos);
-            pvols[i] = ratio * D_0013E550.voices[i].volume / 1024;
-            if (!(D_0013E550.voices[i].def->unk19 & 2)) {
-                pflags[i] |= 8;
+        if (!(D_0013E550.voices[slot_index].flags & 0x10)) {
+            distance_volume = calculate_voice_volume(&D_0013E550.voices[slot_index], &D_0013E550.voices[slot_index].position);
+            volumes[slot_index] = distance_volume * D_0013E550.voices[slot_index].volume / 1024;
+            if (!(D_0013E550.voices[slot_index].definition->attenuation_flags & 2)) {
+                voice_flags[slot_index] |= 8;
             }
         } else {
-            ratio = 0x400;
-            pvols[i] = D_0013E550.voices[i].volume;
+            distance_volume = 0x400;
+            volumes[slot_index] = D_0013E550.voices[slot_index].volume;
         }
-        if (underwater && !(D_0013E550.voices[i].def->unk19 & 4) && water_z < D_0013E550.voices[i].pos.f[2]) {
-            pvols[i] /= 2;
+        if (underwater && !(D_0013E550.voices[slot_index].definition->attenuation_flags & 4) && water_height < D_0013E550.voices[slot_index].position.f[2]) {
+            volumes[slot_index] /= 2;
         }
-        pflags[i] |= 1;
-        if (ratio < 0x20 && pvols[i] < 0x20 && (D_0013E550.voices[i].flags & 4)) {
-            pflags[i] = 0x20;
+        voice_flags[slot_index] |= 1;
+        if (distance_volume < 0x20 && volumes[slot_index] < 0x20 && (D_0013E550.voices[slot_index].flags & 4)) {
+            voice_flags[slot_index] = 0x20;
             continue;
         }
-        if (!(D_0013E550.voices[i].flags & 1)) {
-            pflags[i] |= 2;
-            if (!(D_0013E550.voices[i].flags & 0x20)) {
-                pflags[i] |= 4;
+        if (!(D_0013E550.voices[slot_index].flags & 1)) {
+            voice_flags[slot_index] |= 2;
+            if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
+                voice_flags[slot_index] |= 4;
             }
         }
     }
 
-    for (i = 0; i < 30; i++) {
-        if (!(pflags[i] & 8)) {
+    for (slot_index = 0; slot_index < 30; slot_index++) {
+        if (!(voice_flags[slot_index] & 8)) {
             continue;
         }
-        if (D_0013E550.voices[i].state == 7) {
+        if (D_0013E550.voices[slot_index].state == 7) {
             if ((D_0015F604 != 0 && D_0015F604 != 2) || D_0015F5E8 != 0) {
                 continue;
             }
-            if (D_0015F60C != D_0013E550.unkD98) {
-                for (j = 0; j < 6; j++) {
-                    func_0022C5A8(&D_0013E550.unkDA0[j]);
+            if (D_0015F60C != D_0013E550.occlusion_frame) {
+                for (history_offset = 0; history_offset < 6; history_offset++) {
+                    clamp_voice_position_to_collision(&D_0013E550.occlusion_samples[history_offset]);
                 }
-                D_0013E550.unkD98 = D_0015F60C;
+                D_0013E550.occlusion_frame = D_0015F60C;
             }
-            count = 0;
-            for (j = 0, k = 0; j < 36; j += 6, k++) {
-                D_0013E550.voices[i].hist[j] = func_0022C658(&D_0013E550.voices[i], &D_0013E550.unkDA0[k]);
-                for (m = 1; m < 6; m++) {
-                    D_0013E550.voices[i].hist[j + m] = D_0013E550.voices[i].hist[j];
+            occluded_samples = 0;
+            for (history_offset = 0, sample_index = 0; history_offset < 36; history_offset += 6, sample_index++) {
+                D_0013E550.voices[slot_index].occlusion_history[history_offset] = test_voice_occlusion(&D_0013E550.voices[slot_index], &D_0013E550.occlusion_samples[sample_index]);
+                for (repeat_index = 1; repeat_index < 6; repeat_index++) {
+                    D_0013E550.voices[slot_index].occlusion_history[history_offset + repeat_index] = D_0013E550.voices[slot_index].occlusion_history[history_offset];
                 }
-                if (D_0013E550.voices[i].hist[j]) {
-                    count += 6;
+                if (D_0013E550.voices[slot_index].occlusion_history[history_offset]) {
+                    occluded_samples += 6;
                 }
             }
-            if (count >= 36) {
-                pvols[i] = 0;
-            } else if (count >= 19) {
-                pvols[i] = (36 - count) * pvols[i] / 18;
+            if (occluded_samples >= 36) {
+                volumes[slot_index] = 0;
+            } else if (occluded_samples >= 19) {
+                volumes[slot_index] = (36 - occluded_samples) * volumes[slot_index] / 18;
             }
         } else {
             if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
-                D_0013E550.voices[i].hist_pos = (D_0013E550.voices[i].hist_pos + 1) % 36;
-                f = (i ^ D_0015F60C) & 1;
-                if (!(D_0013E550.voices[i].flags & 4)) {
-                    f = ((D_0015F60C ^ i) & 3) == 0;
+                D_0013E550.voices[slot_index].occlusion_history_position = (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
+                /* Active sources test every other frame; other voices every fourth. */
+                command_flags = (slot_index ^ D_0015F60C) & 1;
+                if (!(D_0013E550.voices[slot_index].flags & 4)) {
+                    command_flags = ((D_0015F60C ^ slot_index) & 3) == 0;
                 }
-                if (f) {
-                    D_0013E550.voices[i].hist[D_0013E550.voices[i].hist_pos] = func_0022C658(&D_0013E550.voices[i], &occl);
+                if (command_flags) {
+                    D_0013E550.voices[slot_index].occlusion_history[D_0013E550.voices[slot_index].occlusion_history_position] = test_voice_occlusion(&D_0013E550.voices[slot_index], &listener_occlusion_position);
                 } else {
-                    D_0013E550.voices[i].hist[D_0013E550.voices[i].hist_pos] = D_0013E550.voices[i].hist[(D_0013E550.voices[i].hist_pos + 35) % 36];
+                    D_0013E550.voices[slot_index].occlusion_history[D_0013E550.voices[slot_index].occlusion_history_position] = D_0013E550.voices[slot_index].occlusion_history[(D_0013E550.voices[slot_index].occlusion_history_position + 35) % 36];
                 }
             }
-            count = ComputeByteStringHash(D_0013E550.voices[i].hist, 36);
-            if (count >= 36) {
-                pvols[i] = 0;
-            } else if (count >= 19) {
-                pvols[i] = (36 - count) * pvols[i] / 18;
+            occluded_samples = ComputeByteStringHash(D_0013E550.voices[slot_index].occlusion_history, 36);
+            if (occluded_samples >= 36) {
+                volumes[slot_index] = 0;
+            } else if (occluded_samples >= 19) {
+                volumes[slot_index] = (36 - occluded_samples) * volumes[slot_index] / 18;
             }
         }
     }
 
-    func_001FA2D8(pmat, D_00187290);
-    for (i = 0; i < 30; i++) {
-        f = pflags[i];
-        if (f == 0) {
+    func_001FA2D8(matrix, D_00187290);
+    for (slot_index = 0; slot_index < 30; slot_index++) {
+        command_flags = voice_flags[slot_index];
+        if (command_flags == 0) {
             continue;
         }
-        handle = D_0013E550.voices[i].handle;
-        D_0013E550.voices[i].handle = -1;
-        if (f & 0x20) {
-            if (D_0013E550.voices[i].state == 7) {
-                D_0013E550.voices[i].state = 0;
-                D_0013E550.voices[i].moby = NULL;
-                D_0013E550.voices[i].unk1C = 0;
+        handle = D_0013E550.voices[slot_index].handle;
+        D_0013E550.voices[slot_index].handle = -1;
+        if (command_flags & 0x20) {
+            if (D_0013E550.voices[slot_index].state == 7) {
+                D_0013E550.voices[slot_index].state = 0;
+                D_0013E550.voices[slot_index].moby = NULL;
+                D_0013E550.voices[slot_index].owner_context = 0;
             } else {
-                func_0012E368(handle);
-                D_0013E550.voices[i].state = 6;
-                func_0012E448(handle, FUN_0022ddd8, &D_0013E550.voices[i]);
+                snd_stop_sound(handle);
+                D_0013E550.voices[slot_index].state = 6;
+                snd_sound_is_still_playing_cb(handle, voice_update_callback, &D_0013E550.voices[slot_index]);
             }
-        } else if (f & 0x10) {
-            func_0012E448(handle, FUN_0022ddd8, &D_0013E550.voices[i]);
+        } else if (command_flags & 0x10) {
+            snd_sound_is_still_playing_cb(handle, voice_update_callback, &D_0013E550.voices[slot_index]);
         } else {
-            prio = D_0013E550.voices[i].unk14;
-            mode = prio ? 0x11 : 1;
+            pitch_bend = D_0013E550.voices[slot_index].pitch_bend;
+            parameter_mask = pitch_bend ? 0x11 : 1;
             pan = 0;
-            pitch = 0;
-            if (f & 2) {
-                pan = func_0022C830(&D_0013E550.voices[i], &D_0013E550.voices[i].pos, pmat);
-                mode |= 6;
+            pitch_modifier = 0;
+            if (command_flags & 2) {
+                pan = calculate_voice_pan(&D_0013E550.voices[slot_index], &D_0013E550.voices[slot_index].position, matrix);
+                parameter_mask |= 6;
             }
-            if (pflags[i] & 4) {
-                mode |= 8;
-                pitch = ComputeSectorIndex(truncate_float_to_s32(pdots[i] * 300.0f));
+            if (voice_flags[slot_index] & 4) {
+                parameter_mask |= 8;
+                pitch_modifier = ComputeSectorIndex(truncate_float_to_s32(radial_velocity_values[slot_index] * 300.0f));
             }
-            if (underwater && !(D_0013E550.voices[i].def->unk19 & 8)) {
-                mode |= 8;
-                pitch -= 0x5F4;
+            if (underwater && !(D_0013E550.voices[slot_index].definition->attenuation_flags & 8)) {
+                parameter_mask |= 8;
+                pitch_modifier -= 0x5F4;
             }
-            if (D_0013E550.voices[i].state != 7) {
-                func_0012E4C0(handle, mode, pvols[i], pan, pitch, prio, FUN_0022ddd8, &D_0013E550.voices[i]);
+            if (D_0013E550.voices[slot_index].state != 7) {
+                snd_set_sound_params_cb(handle, parameter_mask, volumes[slot_index], pan, pitch_modifier, pitch_bend, voice_update_callback, &D_0013E550.voices[slot_index]);
             } else {
-                D_0013E550.voices[i].state = 1;
-                func_0012E308(D_0013E550.voices[i].def->unk1C, D_0013E550.voices[i].def->unk1A, pvols[i], pan, pitch, prio, FUN_0022dd90, &D_0013E550.voices[i]);
+                D_0013E550.voices[slot_index].state = 1;
+                snd_play_sound_vol_pan_pmpb(D_0013E550.voices[slot_index].definition->bank_handle, D_0013E550.voices[slot_index].definition->sound_index, volumes[slot_index], pan, pitch_modifier, pitch_bend, voice_start_callback, &D_0013E550.voices[slot_index]);
             }
         }
     }
 
-    func_00216290();
-    func_0012EB00();
-    func_0012DC80();
+    music_update();
+    snd_reset_state_and_flush_commands();
+    snd_flush_sound_commands();
     ReadGlobalTableEntry();
-    D_0013E550.unk6C = 0;
+    D_0013E550.pending_commands = 0;
     return 0;
 }
 #endif /* NON_MATCHING */

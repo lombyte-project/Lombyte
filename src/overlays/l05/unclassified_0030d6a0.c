@@ -199,10 +199,10 @@ void FUN_L05_00316070(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316810.s", FUN_L05_00316810);
 #include "sda.h"
 
-/* For every moby sharing this one's class: arms the marker record, and notifies it while the level flag is set. */
+/* Applies breast growth (D_L05_00161ED0) and big-head manipulators to
+ * matching-class cutscene instances of the hoverboard girl. */
 /* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -242,7 +242,6 @@ void FUN_L05_00316990(char *arg) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316ab8.s", FUN_L05_00316ab8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
