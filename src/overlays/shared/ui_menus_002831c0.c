@@ -3,36 +3,3 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);
-typedef struct { s32 a, b, c; } P002833d0;
-typedef struct { u8 p0[0x10]; f32 x, y, z; u8 p1c[0x18]; s16 x34; u8 p36[0x12]; f32 x48; u8 p4c[0x28]; void *x74; P002833d0 *x78; } E002833d0;
-typedef struct { u8 p0[0x34]; s32 x34; u8 p38[4]; s32 x3c; u8 p40[4]; E002833d0 *x44; } O002833d0;
-typedef struct { u8 p[0x140]; f32 x, y, z; } G002833d0;
-extern G002833d0 D_L00_00166C80;
-E002833d0 *FUN_00225490(s32);
-s32 FUN_00225c18(s32);
-void FUN_L00_00283900(void);
-s32 FUN_L00_002833d0(O002833d0 *o) {
-    E002833d0 *e = FUN_00225490(0x7A5);
-    o->x34 = 0;
-    if (e) {
-        G002833d0 *g;
-        P002833d0 *p;
-        o->x44 = e;
-        e->x34 = 0;
-        g = &D_L00_00166C80;
-        e->x = g->x + 2.2f;
-        e->y = g->y + 0.0f;
-        e->z = g->z + -1.6f;
-        e->x48 = 3.1415927f;
-        e->x74 = FUN_L00_00283900;
-        p = e->x78;
-        p->a = (s32)o;
-        p->b = 0;
-        p->c = 0;
-    } else {
-        o->x34 = 3;
-    }
-    o->x3c = FUN_00225c18(1);
-    if (o->x3c == 0) o->x34 = 3;
-    return 0;
-}

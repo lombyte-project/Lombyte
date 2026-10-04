@@ -2,13 +2,5 @@
 #include "types.h"
 #include "asm.h"
 
-extern s32 D_00141EA0[];
-s32 FUN_L00_0027a6a8(u8 *a) {
-    s32 *s = (s32 *)(a + 0x30);
-    s32 *d = D_00141EA0;
-    s32 i;
-    for (i = 7; i >= 0; i--) *d++ = *s++;
-    return 0;
-}
 extern int D_0015EDF0 __attribute__((section(".sdata")));
 extern int D_0013E5A0 __attribute__((section(".data")));
