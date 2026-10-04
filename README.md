@@ -20,9 +20,9 @@
 </p>
 
 > [!NOTE]
-> Yes, this project is AI-driven— that’s pretty obvious... <br>
-> While AI does the heavy lifting, I maintain full control over architecture, tooling choices, <br>
-> and overall direction, with every single PR manually reviewed and verified before merging.
+> Yes, this project is AI-assisted— that’s pretty obvious. <br>
+> AI helps me get more done, but I make the decisions and guide the project. <br>
+> I put a lot of time and care into getting things right. Every PR and issue is manually reviewed.
 
 > [!WARNING]
 > Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
