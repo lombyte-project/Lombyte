@@ -8,23 +8,18 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/fast_normali
 #define PI 3.1415927f
 f32 fast_normalize_angle(f32 angle) __asm__("FUN_001fa610");
 f32 fast_normalize_angle(f32 angle) {
-    f32 wrapped_angle;
-    f32 pi;
-    f32 negative_pi;
-    pi = PI;
-    negative_pi = -PI;
-    wrapped_angle = angle;
-    /* Preserve the retail unordered comparison, including its NaN loop. */
-    if (!(wrapped_angle < pi)) {
-        do {
-            wrapped_angle = (wrapped_angle - pi) - pi;
-        } while (!(wrapped_angle < pi));
-    }
-    if (wrapped_angle < negative_pi) {
-        do {
-            wrapped_angle = (wrapped_angle + pi) + pi;
-        } while (wrapped_angle < negative_pi);
-    }
+    f32 pi = PI;
+    f32 negative_pi = -PI;
+    f32 wrapped_angle = angle;
+    if (wrapped_angle < pi) goto negative_wrap;
+positive_wrap:
+    wrapped_angle = (wrapped_angle - pi) - pi;
+    if (!(wrapped_angle < pi)) goto positive_wrap;
+negative_wrap:
+    if (!(wrapped_angle < negative_pi)) return wrapped_angle;
+negative_loop:
+    wrapped_angle = (wrapped_angle + pi) + pi;
+    if (wrapped_angle < negative_pi) goto negative_loop;
     return wrapped_angle;
 }
 
