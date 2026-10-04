@@ -24,7 +24,9 @@ extern void func_00233980(s32, u64);
 extern void func_001F52A0(s32, s32, s32, s32, u64);
 
 
-void FUN_001f4fb8(void) {
+void draw_screen_effect(void) __asm__("FUN_001f4fb8");
+
+void draw_screen_effect(void) {
     s32 i;
     s16 w;
     u64 mask;
@@ -70,4 +72,6 @@ void FUN_001f4fb8(void) {
     }
 }
 
-extern __typeof__(FUN_001f4fb8) func_001F4FB8 __attribute__((alias("FUN_001f4fb8")));
+extern __typeof__(draw_screen_effect) func_001F4FB8 __attribute__((alias("FUN_001f4fb8")));
+/* Recovered original symbol name. */
+extern __typeof__(draw_screen_effect) DrawScreenEffect__Fv __attribute__((alias("FUN_001f4fb8")));

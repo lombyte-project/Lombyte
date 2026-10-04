@@ -508,20 +508,16 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551b8.s", FUN_L05_002551b8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551d0.s", FUN_L05_002551d0);
+int FUN_L05_002551d0(void) {
+    char *p = D_0013F350;
+    int f = *(unsigned char *)(p + 0x8CE);
+    if (*(short *)(p + 0x884) == 0) { int r = 0x7D; if (f == 0) r = 0x52; return r; }
+    { return f == 0 ? 0x68 : 0x7E; }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* returns 0x7E when arg is nonzero, else 0x68 */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00237B00.c: func_L05_002559DC), where it is exact; names translated to the US level program. */
-
-int FUN_L05_002551f4(int arg) {
-    int r = 0x7E;
-    if (arg == 0)
-        r = 0x68;
-    return r;
-}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00255208.s", FUN_L05_00255208);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 

@@ -137,7 +137,66 @@ void FUN_L01_00308380(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308550.s", FUN_L01_00308550);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003087e0.s", FUN_L01_003087e0);
+typedef struct { f32 x, y, z, w; } V4_3087e0;
+
+#include "qcopy.h"
+
+extern f32 FUN_0020c9e0(void *);
+extern f32 FUN_001fa580_c(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0_c(f32) __asm__("FUN_001f9de0");
+extern f32 FUN_001fa5c8(f32, f32);
+extern void add_vector_xyz_87e0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f99f8(f32 *);
+extern void FUN_001f9a40(f32 *, void *, void *, f32);
+extern void FUN_L00_002ea9d8(void *);
+extern u8 *D_L01_001600EC;
+extern u8 D_0013F350_87e0[] __asm__("D_0013F350");
+
+void FUN_L01_003087e0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    V4_3087e0 v;
+    V4_3087e0 m;
+    V4_3087e0 a;
+    V4_3087e0 b;
+    f32 t;
+    f32 f22;
+
+    if (*(unsigned char *)(moby + 0x52) == 1) {
+        t = FUN_0020c9e0(moby);
+    } else {
+        t = 170.0f;
+    }
+    f22 = t / 170.0f;
+    if (*(s32 *)(data + 4) == -1 || *(s32 *)(data + 8) == -1) {
+        f32 ang;
+        f32 five = 5.0f;
+        u8 *g = D_0013F350_87e0;
+        ang = FUN_001fa580_c(f22 * 0.6981316804885864f - 0.3490658402442932f, *(f32 *)(g + 0x98));
+        v.x = FUN_001f9dc8(ang) * five;
+        v.y = FUN_001f9de0_c(ang) * five;
+        v.z = 0.0f;
+        add_vector_xyz_87e0(&v.x, &v.x, (f32 *)(g + 0x80));
+        v.z += 1.0f;
+        FUN_001f99f8(&m.x);
+        m.z = FUN_001fa580_c(ang, 3.141590118408203f);
+        m.y = f22 * -0.17000000178813934f;
+    } else {
+        FUN_001f9a40(&v.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
+                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, f22);
+        {
+            u8 *base = D_L01_001600EC;
+
+            qcopy(&a, base + *(s32 *)(data + 4) * 128 + 0x70);
+            qcopy(&b, base + *(s32 *)(data + 8) * 128 + 0x70);
+        }
+        m.z = FUN_001fa580_c(FUN_001fa5c8(b.z, a.z) * f22, a.z);
+        m.y = FUN_001fa580_c(FUN_001fa5c8(b.y, a.y) * f22, a.y);
+        m.x = FUN_001fa580_c(FUN_001fa5c8(b.x, a.x) * f22, a.x);
+    }
+    FUN_L00_002ea9d8(&v.x);
+    FUN_L00_002ea9d8(&m.x);
+}
 #include "sda.h"
 
 /* builds three jittered offsets and fires the same effect at each accumulated point */

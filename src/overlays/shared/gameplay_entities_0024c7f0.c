@@ -2,4 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_0024c7f0.s", FUN_L10_0024c7f0);
+extern char D_L10_0015F580[] __attribute__((section(".sdata")));
+extern void FUN_L00_00259bc8(unsigned char *, int, int, void *, void *, float);
+
+void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f) {
+    FUN_L00_00259bc8(m, x, y, p, D_L10_0015F580, f);
+}

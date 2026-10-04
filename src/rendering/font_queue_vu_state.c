@@ -28,7 +28,9 @@ extern void FUN_001fa378(void *, u8 *, f32 (*)[4]);
 extern void func_00233830(u8 *, s32);
 extern void func_00233C90(void);
 
-void FUN_001f76a0(void)
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void font_queue_vu_state(void)
 {
     f32 m[4][4];
     struct DmaTag *base;
@@ -78,4 +80,6 @@ void FUN_001f76a0(void)
     func_00233C90();
 }
 
-extern __typeof__(FUN_001f76a0) func_001F76A0 __attribute__((alias("FUN_001f76a0")));
+extern __typeof__(font_queue_vu_state) func_001F76A0 __attribute__((alias("FUN_001f76a0")));
+/* Recovered original symbol name. */
+extern __typeof__(font_queue_vu_state) FontQueueVUState __attribute__((alias("FUN_001f76a0")));

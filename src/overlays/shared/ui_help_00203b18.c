@@ -94,7 +94,19 @@ int FUN_L00_00205000(int a) {
     }
 }
 s32 FUN_L00_002050b8(s32 a) { return a; }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002050c0.s", FUN_L00_002050c0);
+extern char D_0013F350_c2[] __asm__("D_0013F350");
+void FUN_L00_00234e00(void);
+void FUN_L00_002050c0(s32 n) {
+    if (n) {
+        char *g = D_0013F350_c2;
+        int v;
+        if (n >= 2) n = 1;
+        v = *(int *)(g + 0x22a8) - n;
+        *(int *)(g + 0x22a8) = v;
+        if (v < 0) *(int *)(g + 0x22a8) = 0;
+        FUN_L00_00234e00();
+    }
+}
 extern s32 D_001413D0[];
 extern s32 D_001404D4[];
 extern s32 D_001403E0[];

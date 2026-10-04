@@ -175,7 +175,107 @@ void FUN_L00_002395b0(char *p) {
     D_L00_0015FAB0.b = 0;
     D_L00_0015FAB0.c = 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239630.s", FUN_L00_00239630);
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Updates the health HUD element: advances the wobble counters in its HudCounter (+0x80), clamps the target (+0x78) to +0x08, and steps the two digits (+0x70, +0x71) up or down. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x8];
+    int unk08;
+    int *unk0C;
+    char pad10[0x38];
+    short unk48;
+    short unk4A;
+    char pad4C[0x4];
+    int unk50;
+    int unk54;
+    int w;
+    int h;
+    int flags;
+    char pad64[0x8];
+    int unk6C;
+    unsigned char cnt[4];
+    int unk74;
+    int unk78;
+    int unk7C;
+    void *unk80;
+} HudElem;
+
+typedef struct {
+    short unk0;
+    short unk2;
+    short unk4;
+    short unk6;
+} HudCounter;
+
+extern int FUN_L00_0023aaa8(char *);
+extern short D_L00_0015F7F0_d __asm__("D_L00_0015F7F0") __attribute__((sda));
+
+void FUN_L00_00239630(HudElem *e) {
+    unsigned char *c = e->cnt;
+    HudCounter *h;
+    HudCounter *g;
+    int t;
+    int max;
+
+    if (e->unk0C != 0) {
+        t = *e->unk0C;
+        e->unk78 = t > -1 ? t : 0;
+        h = e->unk80;
+        h->unk0 = (h->unk0 + 1) % 60;
+        h->unk2 += h->unk4;
+        h->unk4 += h->unk6;
+        if (h->unk4 > 60) {
+            h->unk4 = 60;
+        } else if (h->unk4 < -60) {
+            h->unk4 = -60;
+        }
+        if (h->unk2 >= 0x800) {
+            if (h->unk4 > 0) {
+                h->unk6 = -1;
+            }
+        }
+        if (h->unk2 >= 0x1000) {
+            h->unk2 = 0xFFF;
+        }
+        g = h;
+        if (g->unk2 < 0x7FF) {
+            if (g->unk4 < 0) {
+                g->unk6 = 1;
+            }
+        }
+        if (g->unk2 < 0) {
+            g->unk2 = 0;
+        }
+        if (e->unk78 > e->unk08) {
+            e->unk78 = e->unk08;
+        }
+    }
+    if (e->unk74 != e->unk78 || e->unk74 == 1) {
+        e->unk7C = FUN_001f96f8(0x78);
+        e->unk74 = e->unk78;
+    }
+    if (e->unk7C >= FUN_001f96f8(5)) {
+        if (*(int *)&D_L00_0015F7F0_d > c[0]) {
+            c[0]++;
+        } else if (c[1] < *(int *)&D_L00_0015F7F0_d) {
+            c[1]++;
+        }
+    } else {
+        e->unk6C = 1;
+        if (c[1] != 0) {
+            c[1]--;
+        } else if (c[0] != 0) {
+            c[0]--;
+        } else {
+            e->unk6C = -6;
+        }
+    }
+    FUN_L00_0023aaa8((char *)e + 0x40);
+}
 typedef struct { s16 x; s16 y; } Pt;
 typedef struct {
     u8 pad0[0x50]; s32 x; u8 pad54[4]; s32 ret; u8 pad5c[0x14];
@@ -297,34 +397,7 @@ out:
    clears the first. */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x8];
-    int unk08;
-    int *unk0C;
-    char pad10[0x38];
-    short unk48;
-    short unk4A;
-    char pad4C[0x4];
-    int unk50;
-    int unk54;
-    int w;
-    int h;
-    int flags;
-    char pad64[0x8];
-    int unk6C;
-    unsigned char cnt[4];
-    int unk74;
-    int unk78;
-    int unk7C;
-    void *unk80;
-} HudElem;
 
-typedef struct {
-    short unk0;
-    short unk2;
-    short unk4;
-    short unk6;
-} HudCounter;
 
 extern HudCounter D_L00_0015FAB8;
 extern void FUN_L00_0023a760(HudElem *);

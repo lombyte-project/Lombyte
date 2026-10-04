@@ -30,12 +30,6 @@ void FUN_L04_002d3580(char *m) {
         m[0x20] = 1;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002E2B90), where it is exact; names translated to the US level program. */
-
-float FUN_L04_002e17b0(void) {
-    return -2.55f;
-}
-
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ca420.s", FUN_L04_002ca420);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002cdda0.s", FUN_L04_002cdda0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
@@ -59,7 +53,16 @@ void FUN_L04_002d1608(void *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d16b8.s", FUN_L04_002d16b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d6f68.s", FUN_L04_002d6f68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d7e90.s", FUN_L04_002d7e90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1768.s", FUN_L04_002e1768);
+float FUN_L04_002e1768(char *moby) {
+    switch (*(short *)(moby + 0xA6)) {
+    case 0x44D:
+    case 0x5FC:
+        return 1.3f;
+    case 0x5FB:
+        return -2.55f;
+    }
+    return -2.05f;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1d00.s", FUN_L04_002e1d00);

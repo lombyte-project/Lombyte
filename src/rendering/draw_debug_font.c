@@ -7,7 +7,9 @@ extern s32 func_001F8FF0();
 extern void func_00233980(s32, s64);
 /* retail small-data globals, declared to GAS before the body */
 
-void FUN_001f79a8(void) {
+void draw_debug_font(void) __asm__("FUN_001f79a8");
+
+void draw_debug_font(void) {
     if (D_0015F478 != 0) {
         func_00233980(8, 5);
         func_00233980(0x14, 0x61);
@@ -22,4 +24,6 @@ void FUN_001f79a8(void) {
     }
 }
 
-extern __typeof__(FUN_001f79a8) func_001F79A8 __attribute__((alias("FUN_001f79a8")));
+extern __typeof__(draw_debug_font) func_001F79A8 __attribute__((alias("FUN_001f79a8")));
+/* Recovered original symbol name. */
+extern __typeof__(draw_debug_font) drawDebugFont __attribute__((alias("FUN_001f79a8")));

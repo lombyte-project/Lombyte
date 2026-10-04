@@ -30,4 +30,53 @@ void FUN_L00_00266858(s32 a, s32 b) {
     s32 i = FUN_L00_002667d0_u(a, b);
     if (i != -1) D_0013D5B0[i].d = b;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002668a0.s", FUN_L00_002668a0);
+typedef struct {
+    u8 pad0[4];
+    s16 f04;
+    u8 pad6[2];
+    u8 f08;
+    u8 f09;
+    u8 padA[0x2C];
+    s16 f36;
+    u32 f38;
+    u32 f3C;
+} Out002668a0;
+
+typedef struct {
+    s32 a;
+    s32 b;
+    s32 c;
+    s32 d;
+} E002668a0;
+
+typedef struct {
+    u8 pad0[6];
+    u16 f06;
+    s16 f08;
+} P002668a0;
+
+extern E002668a0 D_0013D5B0_c[] __asm__("D_0013D5B0");
+extern P002668a0 *D_L00_001B1678[];
+extern s32 D_L00_0015F5CC;
+extern s32 FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
+s32 FUN_L00_002668a0(void *p, u8 *out_p)
+{
+    Out002668a0 *out;
+    s32 i;
+    unsigned long long k;
+    P002668a0 *q;
+
+    out = (Out002668a0 *)out_p;
+    i = FUN_L00_002667d0_c(p);
+    if (i == -1) { return -1; }
+    if (D_L00_001B1678[i] == 0) { return -1; }
+    out->f09 = 1;
+    out->f38 = D_L00_0015F5CC;
+    out->f04 = -1;
+    out->f36 = 0;
+    q = D_L00_001B1678[i];
+    out->f3C = (u32)q;
+    if (D_0013D5B0_c[i].d != 0 && q->f08 == 0) { out->f36 = q->f06; }
+    out->f08 = ((u8 *)out->f3C)[out->f36 * 0x1C + (k = 0x10)] & 1;
+    return i;
+}

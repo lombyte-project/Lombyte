@@ -39,7 +39,6 @@ targets, `lui`, `$gp` and memory offsets) masked.
 `NN` and the address are the function's place in the lowest-numbered level
 that has it. Level data is `D_LNN_XXXXXXXX` (0x15EF00 and up), jump tables
 `jtbl_LNN_XXXXXXXX`; anything below 0x15EF00 keeps the executable's name.
-Hand-confirmed starts no rule finds are in `confirmed-starts.tsv`.
 
 ## Sources and the proof
 

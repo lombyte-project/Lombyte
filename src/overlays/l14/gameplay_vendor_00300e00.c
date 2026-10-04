@@ -174,20 +174,23 @@ void FUN_L14_00305b18(char *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305d28.s", FUN_L14_00305d28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003061d8.s", FUN_L14_003061d8);
-#define NOT_SDA
-
-#define MACRO_ADDR
-
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00307680), where it is exact; names translated to the US level program. */
-
-void FUN_L14_003061f8(int unused, char *moby) {
-    char *d = *(char **)(moby + 0x78);
-    d[0x28] = 4;
-    *(int *)(d + 0x20) = 0;
-    *(short *)(d + 0x24) = 0;
-    *(short *)(d + 0x3E) = 0;
-    moby[0x20] = 1;
+void FUN_L14_003061d8(void *arg) {
+    char *moby = arg;
+    char *d;
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        d = *(char **)(moby + 0x78);
+        d[0x28] = 4;
+        *(int *)(d + 0x20) = 0;
+        *(short *)(d + 0x24) = 0;
+        *(short *)(d + 0x3E) = 0;
+        moby[0x20] = 1;
+        break;
+    case 2:
+        *(short *)(*(char **)(moby + 0x78) + 0x3E) = 5;
+        moby[0x20] = 3;
+        break;
+    }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);

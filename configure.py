@@ -130,7 +130,7 @@ ROUTE_EXCEPTIONS = {
     "ui/menus/fun_00226848": "cc_ee_gcc_patched",
     # Promoted by the decomp workbench: exact only under the patched
     # 991111 profile (fresh SN/EE-GCC 2.9 measurements are lower).
-    "audio/sound/fun_0022c6f8": "cc_ee_gcc_patched",
+    "audio/sound/calculate_voice_distance_volume": "cc_ee_gcc_patched",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
     # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
@@ -278,7 +278,7 @@ GAME_COMPILER_FLAG_UNITS = {
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
     "ui/menus/fun_00225490": "-fno-schedule-insns",
-    "audio/sound/fun_0022c7e8": "-fno-schedule-insns",
+    "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
     # FUN_002075e8: retail materializes the zero return before `jr $ra` and
     # leaves the delay slot empty; the default pass moves that assignment into
     # the slot.  100/100/100 with this option (2026-10-03).

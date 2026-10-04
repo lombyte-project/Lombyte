@@ -46,15 +46,6 @@ void FUN_L03_002d3c40(char *m) {
     FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * 0.0174532925f * D_0015ED6C, m, (float *)(d + 0xEC), (float *)(d + 0xE8));
     FUN_L00_00262b80(m, d + 0xF0, d + 0xF4, D_L03_00161AF8, D_L03_00161AFC * 0.0174532925f * D_0015ED6C, D_L03_00161B00 * 0.0174532925f * D_0015ED6C);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF10), where it is exact; names translated to the US level program. */
-
-int FUN_L03_002dcb48(unsigned char *moby, char *data) {
-    if (moby[0x20] && *(int *)(data + 0x7C) == 1) {
-        return 1;
-    }
-    return 0;
-}
-
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
@@ -72,7 +63,16 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db198.s", FUN_L03_002db198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db280.s", FUN_L03_002db280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002db558.s", FUN_L03_002db558);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dbd90.s", FUN_L03_002dbd90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002dcb30.s", FUN_L03_002dcb30);
+int FUN_L03_002dcb30(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    if (*(short *)(moby + 0xA6) != 0x3F4) {
+        return 0;
+    }
+    if (moby[0x20] && *(int *)(data + 0x7C) == 1) {
+        return 1;
+    }
+    return 0;
+}
 /* Shows a help message for the mode, then keeps a hud queue entry alive. */
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
