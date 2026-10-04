@@ -3,8 +3,35 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f2e78.s", FUN_L17_002f2e78);
 #include "sda.h"
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
+extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4") MACRO_ADDR;
+extern struct {
+    int pad0[12];
+    int v;
+    int pad1[81];
+    int tbl[3];
+} D_L17_002f2e78_g __asm__("D_L17_0016D160");
+extern void FUN_L00_002637f8_p() __asm__("FUN_L00_002637f8");
+
+void FUN_L17_002f2e78(unsigned char *m) {
+    switch (m[0x20]) {
+    case 0:
+        m[0x30] = 0xFF;
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (D_L17_002f2e78_state == 2) {
+            int v = D_L17_002f2e78_g.v;
+            int i;
+            if (v != 0 && v != D_L17_002f2e78_state) return;
+            i = 0;
+            if (v == 0 || v == D_L17_002f2e78_state) i = 2;
+            FUN_L00_002637f8_p(D_L17_002f2e78_g.tbl[i]);
+        }
+        break;
+    }
+}
 
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
 /* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
