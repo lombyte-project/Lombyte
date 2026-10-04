@@ -104,7 +104,6 @@ void transition_do_transition(void) __asm__("FUN_001eb798");
 void transition_do_transition(void) {
     WadHeader *hdr;
     u8 *p;
-    s32 size;
     s32 n;
     s32 level;
     s32 wait;
@@ -120,8 +119,9 @@ void transition_do_transition(void) {
     transition_load_wad();
     p = (u8 *)D_001940C8;
     hdr = (WadHeader *)p;
-    /* Six descriptors occupy the first 0x60 bytes; chunks 1..5 precede chunk 0. */
-    p += 0x60;
+    /* The first 0x60 bytes are reserved; six descriptors start at offset 0x20. */
+    /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
+    p = (u8 *)hdr + 0x60;
     D_0015EE4C = hdr;
     hdr->chunk[1].size = func_00216828(p, tbl->src[1].a, tbl->src[1].b);
     hdr->chunk[1].off = p - (u8 *)hdr;
