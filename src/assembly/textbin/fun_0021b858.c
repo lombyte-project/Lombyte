@@ -122,7 +122,7 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
        column before the following direction checks. */
     if (controller_state.pressed_buttons & 0x1000) {
         if (row != 0) {
-            grid->cursor = cursor - column_count;
+            grid->cursor -= column_count;
         } else if (grid->up != NULL) {
             next = grid;
             do {
