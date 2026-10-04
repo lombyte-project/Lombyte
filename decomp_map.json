@@ -3670,10 +3670,17 @@
           },
           {
             "file": "src/overlays/l05/unclassified_0030d6a0.c",
-            "functions": 29,
+            "functions": 27,
             "matching_c": 7,
-            "bytes_total": 23136,
+            "bytes_total": 20484,
             "bytes_matching_c": 2152
+          },
+          {
+            "file": "src/overlays/l05/hoverboard_girl.c",
+            "functions": 2,
+            "matching_c": 0,
+            "bytes_total": 2652,
+            "bytes_matching_c": 0
           },
           {
             "file": "src/overlays/l05/gameplay_vendor_0031bf40.c",

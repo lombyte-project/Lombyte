@@ -410,14 +410,15 @@
 <text x="44" y="456" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">05 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Rilgar</tspan><tspan fill="#a6adc8"> &#183; Blackwater City: canals and the hoverboard race</tspan></text>
 <text x="790" y="456" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">6.9%</text>
 <text x="790" y="472" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">21/73 fn &#183; 133,896 B</text>
-<rect x="44.00" y="464" width="28.40" height="10" rx="1" fill="#a05f26" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00239fc0.c: 3/4 functions matching C, 4,576/6,124 B</title></rect>
-<rect x="73.40" y="464" width="136.89" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00244a70.c: 0/1 functions matching C, 0/29,516 B</title></rect>
-<rect x="211.30" y="464" width="80.27" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_0024cee8.c: 0/1 functions matching C, 0/17,308 B</title></rect>
-<rect x="292.57" y="464" width="103.54" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00255960.c: 0/1 functions matching C, 0/22,324 B</title></rect>
-<rect x="397.11" y="464" width="2.86" height="10" rx="1" fill="#764e2b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/rendering_0029bbe0.c: 1/2 functions matching C, 324/616 B</title></rect>
-<rect x="400.96" y="464" width="149.69" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_002d1688.c: 10/33 functions matching C, 2,188/32,276 B</title></rect>
-<rect x="551.66" y="464" width="107.30" height="10" rx="1" fill="#3e3831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_0030d6a0.c: 7/29 functions matching C, 2,152/23,136 B</title></rect>
-<rect x="659.96" y="464" width="12.04" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay_vendor_0031bf40.c: 0/2 functions matching C, 0/2,596 B</title></rect>
+<rect x="44.00" y="464" width="28.36" height="10" rx="1" fill="#a05f26" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00239fc0.c: 3/4 functions matching C, 4,576/6,124 B</title></rect>
+<rect x="73.36" y="464" width="136.67" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00244a70.c: 0/1 functions matching C, 0/29,516 B</title></rect>
+<rect x="211.03" y="464" width="80.14" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_0024cee8.c: 0/1 functions matching C, 0/17,308 B</title></rect>
+<rect x="292.17" y="464" width="103.37" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/ui_help_00255960.c: 0/1 functions matching C, 0/22,324 B</title></rect>
+<rect x="396.54" y="464" width="2.85" height="10" rx="1" fill="#764e2b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/rendering_0029bbe0.c: 1/2 functions matching C, 324/616 B</title></rect>
+<rect x="400.40" y="464" width="149.45" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_002d1688.c: 10/33 functions matching C, 2,188/32,276 B</title></rect>
+<rect x="550.85" y="464" width="94.85" height="10" rx="1" fill="#3f3831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_0030d6a0.c: 7/27 functions matching C, 2,152/20,484 B</title></rect>
+<rect x="646.70" y="464" width="12.28" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/hoverboard_girl.c: 0/2 functions matching C, 0/2,652 B</title></rect>
+<rect x="659.98" y="464" width="12.02" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay_vendor_0031bf40.c: 0/2 functions matching C, 0/2,596 B</title></rect>
 <path d="M 24 496 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="496" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="500" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">06 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Nebula G34</tspan><tspan fill="#a6adc8"> &#183; Blarg Tactical Research Station: zero-gravity corridors</tspan></text>
@@ -574,5 +575,5 @@
 <rect x="623.43" y="1036" width="48.57" height="10" rx="1" fill="#463b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002f88e8.c: 8/18 functions matching C, 2,168/12,096 B</title></rect>
 <line x1="10" y1="1064.0" x2="790" y2="1064.0" stroke="#3a3632" stroke-width="1" opacity="0.8"/>
 <text x="10" y="1078" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 66.8% &#183; overlays 16.3% &#183; 747,636 of 3,618,168 B in C</text>
-<text x="790" y="1078" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-10-03 &#183; scripts/generate_treemap.py</text>
+<text x="790" y="1078" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-10-04 &#183; scripts/generate_treemap.py</text>
 </svg>
