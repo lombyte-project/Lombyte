@@ -234,9 +234,9 @@ void update_level_gameplay_frame(void) {
             render_sequence.source_begin = D_001940C0.source_begin_offset + D_00160F0C;
             render_sequence.source_end = D_001940C0.source_end_offset + D_00160F0C;
             archive_table = D_001940C0.archive_table;
+            archive_data = (u8 *)archive_table + archive_table->data_offset;
             scene_offset = &archive_table->scene_offsets[0];
             scene_offset += level_render_state.mode;
-            archive_data = (u8 *)archive_table + archive_table->data_offset;
             archive_entry = (RenderArchiveEntry *)(archive_data + *scene_offset);
             for (prepared_frame_index = 0; prepared_frame_index < 0x46 && archive_entry->available != 0; prepared_frame_index++, archive_entry++) {
                 payload_offset = 0x800;
