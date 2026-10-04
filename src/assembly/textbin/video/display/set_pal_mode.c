@@ -95,6 +95,7 @@ void set_pal_mode(void)
         image_buffer_address = 0x280000;
         func_001FA978(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
+    /* Retail sign-extends the 16-bit dimensions before halving them. */
     screen_offsets.width = fs_aa_buffer.width;
     screen_offsets.half_width = fs_aa_buffer.width >> 1;
     screen_offsets.half_height = fs_aa_buffer.height >> 1;
