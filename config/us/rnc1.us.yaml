@@ -2098,7 +2098,7 @@ segments:
           - [0x13a0dc, textbin, text_gap_0023915c_before_fun_00239160]
           - [0x13a0e0, c, gameplay/vendor/fun_00239160]
           - [0x13a29c, textbin, text_gap_0023931c_after_fun_00239160]
-          - [0x13a2a8, c, assembly/textbin/fun_00239328]
+          - [0x13a2a8, c, textbin/fun_00239328]
           - [0x13a60c, textbin, text_gap_0023968c_before_fun_00239690]
           - [0x13a610, c, gameplay/vendor/fun_00239690]
           - [0x13a6cc, textbin, text_gap_0023974c_before_fun_00239750]
