@@ -75,7 +75,7 @@ void update_gameplay_frame(void)
     Vec4 *animation_positions;
     s32 actor_index;
     s32 frame_index;
-    f32 half = 0.5f;
+    f32 half;
     f32 fade;
 
     func_001E9430();
@@ -94,6 +94,7 @@ void update_gameplay_frame(void)
         func_002049F0(++render_sequence.sequence_frame);
     }
     func_001EAF88();
+    half = 0.5f;
     for (actor_index = 0; actor_index < render_sequence.count; actor_index++) {
         actor = render_sequence.actors[actor_index];
         frame_index = render_sequence.frame >> 1;
