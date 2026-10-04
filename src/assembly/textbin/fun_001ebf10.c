@@ -82,6 +82,8 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     CameraRecord *previous_camera;
     CameraDescriptorInfo *descriptor;
     f32 transition_duration;
+    f32 mode_one_duration;
+    f32 handoff_duration;
     f32 *previous_position;
     Vec4 *position;
     s32 descriptor_kind = 0;
@@ -97,11 +99,11 @@ void switch_active_camera_record(CameraRecord *next_camera) {
         next_camera->activation_blocked = 1;
     } else if (previous_transition_state == 2 || descriptor_kind == 1 || descriptor_kind == 5) {
         if (descriptor_kind == 1) {
-            transition_duration = next_camera->transition_duration;
+            mode_one_duration = next_camera->transition_duration;
             camera_transition_state.transition_mode = 0;
-            if (transition_duration > 0.0f) {
-                camera_transition_state.configured_position_rate = transition_duration;
-                camera_transition_state.configured_rotation_rate = transition_duration;
+            if (mode_one_duration > 0.0f) {
+                camera_transition_state.configured_position_rate = mode_one_duration;
+                camera_transition_state.configured_rotation_rate = mode_one_duration;
             } else {
                 camera_transition_state.configured_position_rate = 0.018f;
                 camera_transition_state.configured_rotation_rate = 0.018f;
@@ -127,11 +129,11 @@ void switch_active_camera_record(CameraRecord *next_camera) {
         qcopy(&next_camera->m2, &previous_camera->m2);
         next_camera->handoff_state = 2;
         if (previous_camera->transition_state == 5 || descriptor_kind == 6) {
-            transition_duration = next_camera->transition_duration;
+            handoff_duration = next_camera->transition_duration;
             camera_transition_state.transition_mode = 0;
-            if (transition_duration > 0.0f) {
-                camera_transition_state.configured_position_rate = transition_duration;
-                camera_transition_state.configured_rotation_rate = transition_duration;
+            if (handoff_duration > 0.0f) {
+                camera_transition_state.configured_position_rate = handoff_duration;
+                camera_transition_state.configured_rotation_rate = handoff_duration;
             } else {
                 camera_transition_state.configured_position_rate = 0.018f;
                 camera_transition_state.configured_rotation_rate = 0.018f;
@@ -163,7 +165,7 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     update_moby(next_camera);
     backup_current_cam();
     if (camera_position_publication_suppressed == 0) {
-        qcopy(&camera_transition_state.published_position, position);
+        qcopy(&camera_transition_state.published_position, &next_camera->pos);
     }
     previous_position = next_camera->previous_position;
     previous_position[0] = next_camera->pos.x;
