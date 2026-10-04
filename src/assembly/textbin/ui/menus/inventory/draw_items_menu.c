@@ -4,12 +4,12 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/inventory/draw_items_menu/FUN_0021eb20.s", FUN_0021eb20);
 #else
+#include "types.h"
+
+typedef struct { s16 s[12]; } FontWindow;
 
 #include "types.h"
-typedef struct 
-{
-  short s[12];
-} FontWindow;
+
 typedef struct 
 {
   u8 pad0[0x20];
@@ -50,7 +50,7 @@ extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
 extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
-extern void func_0020D330(s32, s32);
+extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
 extern s32 compute_clamped_count_difference(void) __asm__("func_00215248");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
@@ -89,7 +89,7 @@ s32 draw_items_menu(ItemsMenu *menu)
   s32 collected_count;
   if (menu->help_tip != 0)
   {
-    func_0020D330(menu->help_tip, 1);
+    draw_moby_list(menu->help_tip, 1);
   }
   setup_gif_paging(0);
   column_divisor = 3;

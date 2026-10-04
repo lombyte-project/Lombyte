@@ -126,17 +126,17 @@ extern f32 D_0015FD90 __attribute__((sda));
 extern f32 D_0015FD94 __attribute__((sda));
 extern u8 D_001E8068[];
 
-extern void func_001F0C50(s32, s32, s32, u8 *);
+extern void print_debug_text_centered(s32, s32, s32, u8 *) __asm__("func_001F0C50");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern void func_001F5F18(s32, s32, s32, s32, s32);
+extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("func_001F5F18");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
-extern f32 func_001FA580(f32, f32);
-extern f32 func_001FA5C8(f32, f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
-extern void func_00200600(f32, f32, f32, f32, f32, s32, s32, u64);
+extern void draw_rotated_sprite(f32, f32, f32, f32, f32, s32, s32, u64) __asm__("func_00200600");
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
 extern void world_to_map_coords(f32 *, f32 *, s32, f32, f32) __asm__("func_00208408");
@@ -193,7 +193,7 @@ void draw_map_overlay(void) {
         u8 *font = D_001E8068;
 
         setup_gif_paging(0);
-        func_001F0C50(0x100, (s16)D_001518D2[0] >> 1, 0x80909090, font);
+        print_debug_text_centered(0x100, (s16)D_001518D2[0] >> 1, 0x80909090, font);
         do_gif_paging();
         return;
     }
@@ -404,7 +404,7 @@ void draw_map_overlay(void) {
                         sprite_height = s * 256.0f;
                         sprite_width = sprite_height;
                         if (D_001A00F0.icons[i].flags & 0x400) {
-                            angle = func_001FA580(angle, 1.5707964f);
+                            angle = fast_add_rotations(angle, 1.5707964f);
                             texture_width = 0x40;
                             sprite_width = s * D_0015FD88;
                             sprite_height = s * D_0015FD8C;
@@ -413,7 +413,7 @@ void draw_map_overlay(void) {
                             }
                         }
                         if (D_001A00F0.icons[i].flags & 0x800) {
-                            angle = func_001FA580(angle, 1.5707964f);
+                            angle = fast_add_rotations(angle, 1.5707964f);
                             texture_width = 0x40;
                             sprite_width = s * D_0015FD80;
                             sprite_height = s * D_0015FD84;
@@ -422,13 +422,13 @@ void draw_map_overlay(void) {
                             }
                         }
                         if (D_001A00F0.icons[i].flags & 0x1000) {
-                            angle = func_001FA580(angle, 1.5707964f);
+                            angle = fast_add_rotations(angle, 1.5707964f);
                             sprite_width = s * D_0015FD90;
                             sprite_height = s * D_0015FD94;
                         }
                         center_x = (f32)(icon_bounds[i].x0 + icon_bounds[i].x1) * 0.5f;
                         center_y = (f32)(icon_bounds[i].y0 + icon_bounds[i].y1) * 0.5f;
-                        func_00200600(center_x, center_y, sprite_width, sprite_height, angle, texture_width, 0x20, get_frame_texture(find_valid_animation_frame_index(id, frame_index)));
+                        draw_rotated_sprite(center_x, center_y, sprite_width, sprite_height, angle, texture_width, 0x20, get_frame_texture(find_valid_animation_frame_index(id, frame_index)));
                     } else {
                         draw_hud_sprite_subpixel(find_valid_animation_frame_index(id, frame_index), icon_bounds[i].x0, icon_bounds[i].y0, icon_bounds[i].x1 - icon_bounds[i].x0,
                                       icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
@@ -448,7 +448,7 @@ void draw_map_overlay(void) {
                         } else {
                             label_y = ((label_offset_y > 0 ? icon_bounds[i].y1 : icon_bounds[i].y0) >> 4) - label_height / 2 + label_offset_y;
                         }
-                        func_001F5F18(label_y, label_y + label_height, label_x, label_x + label_width, 0x40);
+                        draw_ui_frame(label_y, label_y + label_height, label_x, label_x + label_width, 0x40);
                         format_menu_item_text(i, &label_buffer);
                         memset(&text_window, 0, sizeof(text_window));
                         text_window.s[8] = 0xF;
@@ -483,23 +483,23 @@ void draw_map_overlay(void) {
         angle = D_0013F350.angle;
         flip = D_0013F350.mode == 0xF;
         if (flip) {
-            angle = func_001FA580(angle, 1.5707964f);
+            angle = fast_add_rotations(angle, 1.5707964f);
         }
         if (D_0015FD60 != 0) {
             world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84 + 100, D_0013F350.x, D_0013F350.y);
-            angle = func_001FA580(angle, 1.5707964f);
+            angle = fast_add_rotations(angle, 1.5707964f);
         } else {
             world_to_map_coords(&label_buffer.f[0], &label_buffer.f[1], D_0015ED84, D_0013F350.x, D_0013F350.y);
         }
         label_buffer.f[0] = (f32)rx0 + label_buffer.f[0] * (f32)(rx1 - rx0);
         label_buffer.f[1] = (f32)ry0 + label_buffer.f[1] * (f32)(ry1 - ry0);
         if (D_0015EDB4 != 0) {
-            angle = func_001FA5C8(-func_001FA580(angle, 1.5707964f), 1.5707964f);
+            angle = fast_subtract_rotations(-fast_add_rotations(angle, 1.5707964f), 1.5707964f);
         }
         {
             f32 sz = s * 256.0f;
 
-            func_00200600(label_buffer.f[0], label_buffer.f[1], sz, sz, angle, 0x40, 0x40, get_frame_texture(image_index));
+            draw_rotated_sprite(label_buffer.f[0], label_buffer.f[1], sz, sz, angle, 0x40, 0x40, get_frame_texture(image_index));
         }
     }
     }

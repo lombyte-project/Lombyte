@@ -24,11 +24,11 @@ extern u8 D_00135280[];
 extern u8 D_00136280[];
 extern u8 D_00137280[];
 extern u8 D_001376C0[];
-extern struct StartSoundWork D_00137B00;
+extern struct StartSoundWork sound_read_work __asm__("D_00137B00");
 extern u8 D_00153C50[];
 extern u8 D_00153C78[];
-extern struct SifClientDataStartSound D_0015EBC0;
-extern struct SifClientDataStartSound D_0015EBE8;
+extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
+extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
 extern s32 D_0015ECA0 __attribute__((sda));
 extern s32 D_0015ECA4 MACRO_ADDR;
 extern s32 D_0015ECA8 __attribute__((sda));
@@ -46,7 +46,7 @@ extern s32 D_0015ED00 MACRO_ADDR;
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);
 extern s32 printf(const char *, ...);
-extern s32 func_0012E548(s32, s32, void *);
+extern s32 snd_send_iop_command_and_wait(s32, s32, void *) __asm__("func_0012E548");
 
 s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 
@@ -63,7 +63,7 @@ s32 snd_start_sound_system(void) {
     sceSifInitRpc(0);
 
     for (;;) {
-        bind_result = sceSifBindRpc(&D_0015EBC0, 0x123456, 0);
+        bind_result = sceSifBindRpc(&sound_command_client, 0x123456, 0);
         if (bind_result < 0) {
             printf((const char *)D_00153C50, D_00153C78, 0x73);
             for (;;) {
@@ -72,7 +72,7 @@ s32 snd_start_sound_system(void) {
         command_arg = 10000;
         for (command_arg--; command_arg != -1; command_arg--) {
         }
-        if (D_0015EBC0.server != NULL) {
+        if (sound_command_client.server != NULL) {
             break;
         }
     }
@@ -83,7 +83,7 @@ s32 snd_start_sound_system(void) {
     D_0015ED00 = 0;
 
     for (;;) {
-        bind_result = sceSifBindRpc(&D_0015EBE8, 0x123457, 0);
+        bind_result = sceSifBindRpc(&sound_stream_client, 0x123457, 0);
         if (bind_result < 0) {
             printf((const char *)D_00153C50, D_00153C78, 0x88);
             for (;;) {
@@ -92,18 +92,18 @@ s32 snd_start_sound_system(void) {
         command_arg = 10000;
         for (command_arg--; command_arg != -1; command_arg--) {
         }
-        if (D_0015EBE8.server != NULL) {
+        if (sound_stream_client.server != NULL) {
             break;
         }
     }
 
     *(s32 *)D_00133280 = 0;
     *(s32 *)D_00134280 = 0;
-    D_00137B00.read_active = 0;
-    D_00137B00.read_error = 0;
+    sound_read_work.read_active = 0;
+    sound_read_work.read_error = 0;
     D_0015ECA8 = 0xFFC;
     D_0015ECAC = 0xFFC;
-    command_arg = (s32)(u32)&D_00137B00;
-    return func_0012E548(0, 4, &command_arg);
+    command_arg = (s32)(u32)&sound_read_work;
+    return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }
 #endif /* NON_MATCHING */

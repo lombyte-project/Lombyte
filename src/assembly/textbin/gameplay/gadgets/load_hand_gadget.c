@@ -4,26 +4,8 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/gadgets/load_hand_gadget/FUN_00224368.s", FUN_00224368);
 #else
+#include "types.h"
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
 typedef struct Moby
 {
   u8 pad00[0x20];
@@ -38,377 +20,379 @@ typedef struct Moby
   u8 pad7C[0x2A];
   s16 oclass;
   u8 padA8[0x14];
-  u8 slot;
+  u8 ammo_moby_slot;
 } Moby;
-typedef struct Hand
+typedef struct HandGadgetState
 {
   u8 pad00[0x44];
-  s32 id;
+  s32 source_moby_address;
   u8 pad48[4];
-  Moby *m4C;
-  Moby *m50;
-  Moby *m54;
-  Moby *m58;
-  Moby *m5C;
+  Moby *pose_moby;
+  Moby *animation_moby;
+  Moby *class_pose_moby;
+  Moby *first_attachment_moby;
+  Moby *second_attachment_moby;
   s32 x60;
   s32 x64;
   s32 x68;
-  Moby *m6C;
-  Moby *m70;
-  Moby *m74;
-  Moby *ammo[8];
+  Moby *class_0197_moby;
+  Moby *class_0266_moby;
+  Moby *class_026a_moby;
+  Moby *ammo_mobys[8];
   u8 pad98[0xC];
   u8 timers[0x18];
-} Hand;
-typedef struct GadgetRec
+} HandGadgetState;
+typedef struct HandGadgetDefinition
 {
   u8 pad00[0x10];
   s32 oclass;
   u8 pad14[0x38];
-} GadgetRec;
-typedef struct HandState
+} HandGadgetDefinition;
+typedef struct HandGadgetSelection
 {
   u8 pad00[0x1C];
-  s32 cur;
+  s32 current_gadget;
   u8 pad20[0x10];
-  s32 left;
-  s32 x34;
-  s32 x38;
-  s32 x3C;
+  s32 selected_gadget;
+  s32 attachment_gadget;
+  s32 animation_gadget;
+  s32 pose_gadget;
   u8 pad40[0x8C];
-  s32 xCC;
+  s32 animation_base;
   u8 padD0[0x48];
-  s32 x118;
-  s32 x11C;
-  s32 x120;
+  s32 resource_request_state;
+  s32 active_resource_class;
+  s32 requested_resource_class;
   u8 pad124[0x1C];
-  s32 x140;
-  s32 x144;
-} HandState;
-typedef struct AnimGroup
+  s32 last_requested_resource_class;
+  s32 last_resource_request_state;
+} HandGadgetSelection;
+typedef struct HandGadgetManipulator
 {
   u8 pad0;
   u8 active;
   u8 pad2[0x1E];
-  float x20;
-  float x24;
-  float x28;
-} AnimGroup;
-typedef struct SetRec
+  float rotation_x;
+  float rotation_y;
+  float rotation_z;
+} HandGadgetManipulator;
+typedef struct HandGadgetAnimation
 {
-  s32 x0;
-  s32 x4;
-  s32 x8;
-  s32 xC;
-  s32 x10;
-  s32 x14;
-  s32 x18;
-  s32 x1C;
-  s32 x20;
-  s32 x24;
-  s32 x28;
-  s32 x2C;
-} SetRec;
-extern u8 D_0013D4C0[];
-extern u8 D_0013E520[];
-typedef struct Game
+  s32 resource_first;
+  s32 resource_count;
+  s32 primary_animation;
+  s32 delay_frames;
+  s32 item_animation;
+  s32 secondary_animation;
+  s32 attachment0_class;
+  s32 attachment0_animation;
+  s32 attachment1_class;
+  s32 attachment1_animation;
+  s32 attachment2_class;
+  s32 attachment2_animation;
+} HandGadgetAnimation;
+extern u8 gadget_available[] __asm__("D_0013D4C0");
+extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
+typedef struct HandGadgetPlayerState
 {
   u8 pad0[0x10B8];
-  s32 x10B8;
+  s32 equipped_gadget;
   u8 pad10BC[0xF3A];
-  u8 x1FF6;
-  u8 x1FF7;
-} Game;
-extern Game D_0013F350;
-extern s32 D_0015FF50;
-extern GadgetRec D_001863D0[];
-extern u8 *D_001B3200[];
-extern u8 D_001B3AC0[];
-extern SetRec D_001D52E8[];
-extern HandState D_001D5BF0;
-extern AnimGroup D_001D5DD0;
-extern AnimGroup D_001D5E10;
-extern AnimGroup D_001D5E50;
-extern float D_001D5E90[];
-extern s32 D_001D5EA8[];
+  u8 ammo_used;
+  u8 ammo_capacity;
+} HandGadgetPlayerState;
+extern HandGadgetPlayerState player_state __asm__("D_0013F350");
+extern s32 resource_request_state __asm__("D_0015FF50");
+extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
+extern u8 *moby_class_resources[] __asm__("D_001B3200");
+extern u8 moby_class_slots[] __asm__("D_001B3AC0");
+extern HandGadgetAnimation gadget_animations[] __asm__("D_001D52E8");
+extern HandGadgetSelection gadget_selection __asm__("D_001D5BF0");
+extern HandGadgetManipulator class_pose_manipulator __asm__("D_001D5DD0");
+extern HandGadgetManipulator first_attachment_manipulator __asm__("D_001D5E10");
+extern HandGadgetManipulator second_attachment_manipulator __asm__("D_001D5E50");
+extern float ammo_preview_offsets[] __asm__("D_001D5E90");
+extern s32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
-extern void func_0020CB10(s32, s32, AnimGroup *);
-extern void func_0020CB88(s32, AnimGroup *);
+extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("func_0020CB10");
+extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
 extern void func_00212F90(void *, int, int, int);
-extern Moby *func_00225490(s32);
-extern Moby *func_00225530(Moby *);
-extern void func_00225E70(s32, Moby *, Moby *, s32 *, s32 *, s32 *);
+extern Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
+extern Moby *delete_moby(Moby *) __asm__("func_00225530");
+extern void update_preview_animation_and_attachments(s32, Moby *, Moby *, s32 *, s32 *, s32 *) __asm__("func_00225E70");
 extern s32 queue_preview_animation(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_002265D8");
 extern s32 clear_preview_animation_queue(void) __asm__("func_00226718");
-extern void func_00224B70();
-extern void func_00224D28();
-extern void func_00224E18();
-extern void func_00224FC0();
-extern void func_002250F0();
-extern void func_00225180();
-s32 load_hand_gadget(Hand *h) __asm__("FUN_00224368");
+extern void update_menu_preview_class_pose() __asm__("func_00224B70");
+extern void update_menu_preview_animation_transform() __asm__("func_00224D28");
+extern void update_menu_preview_pose_and_attachments() __asm__("func_00224E18");
+extern void update_menu_preview_animation_pose() __asm__("func_00224FC0");
+extern void update_menu_preview_class_transform() __asm__("func_002250F0");
+extern void update_ammo_preview_transform() __asm__("func_00225180");
+s32 load_hand_gadget(HandGadgetState *hand) __asm__("FUN_00224368");
 
-s32 load_hand_gadget(Hand *h)
+s32 load_hand_gadget(HandGadgetState *hand)
 {
-  Moby *m;
-  s32 cur0;
-  s32 cur1;
-  s32 cur2;
-  s32 cur3;
-  s32 cur4;
-  s32 cur5;
-  s32 cur6;
-  s32 cls;
-  s32 cls0;
-  s32 idx;
-  s32 gadget;
-  s32 i;
-  SetRec *rec;
-  float *scale;
-  s32 same;
-  Moby **slot;
-  gadget = 0;
-  m = h->m54;
-  cur0 = (m != 0) ? (m->oclass) : (-1);
-  idx = D_001D5BF0.left;
-  cls0 = D_001863D0[idx].oclass;
-  same = cls0 == D_001D5BF0.x120;
-  if ((cur0 != cls0) && same)
+  Moby *moby;
+  s32 previous_selected_class;
+  s32 previous_animation_class;
+  s32 previous_attachment_class;
+  s32 previous_pose_class;
+  s32 previous_class_0197;
+  s32 previous_class_0266;
+  s32 previous_class;
+  s32 requested_class;
+  s32 selected_class;
+  s32 selected_gadget;
+  s32 loaded_gadget;
+  s32 slot_index;
+  s32 velocity_offset;
+  HandGadgetAnimation *animation;
+  float *ammo_offset;
+  s32 selected_class_ready;
+  Moby **ammo_moby_slot;
+  loaded_gadget = 0;
+  moby = hand->class_pose_moby;
+  previous_selected_class = (moby != 0) ? (moby->oclass) : (-1);
+  selected_gadget = gadget_selection.selected_gadget;
+  selected_class = gadget_definitions[selected_gadget].oclass;
+  selected_class_ready = selected_class == gadget_selection.requested_resource_class;
+  if ((previous_selected_class != selected_class) && selected_class_ready)
   {
-    func_00225530(m);
-    if (D_001D5DD0.active)
+    delete_moby(moby);
+    if (class_pose_manipulator.active)
     {
-      func_0020CB88(h->id, &D_001D5DD0);
+      detach_manipulator(hand->source_moby_address, &class_pose_manipulator);
     }
-    if ((D_0013F350.x10B8 != 0) && (idx != D_0013F350.x10B8))
+    if ((player_state.equipped_gadget != 0) && (selected_gadget != player_state.equipped_gadget))
     {
       func_001E9470(0, 0);
     }
-    D_0015FF50 = D_001D5BF0.x118 == 0;
-    select_world_object_resource_tables(cls0, -1);
-    D_001D5BF0.x11C = cls0;
-    D_001D5BF0.x118 = D_0015FF50;
-    D_001D5BF0.x140 = cls0;
-    D_001D5BF0.x144 = D_0015FF50;
-    D_001B3200[D_001B3AC0[cls0]][0xD] = 0;
-    m = func_00225490(cls0);
-    if (m != 0)
+    resource_request_state = gadget_selection.resource_request_state == 0;
+    select_world_object_resource_tables(selected_class, -1);
+    gadget_selection.active_resource_class = selected_class;
+    gadget_selection.resource_request_state = resource_request_state;
+    gadget_selection.last_requested_resource_class = selected_class;
+    gadget_selection.last_resource_request_state = resource_request_state;
+    moby_class_resources[moby_class_slots[selected_class]][0xD] = 0;
+    moby = create_menu_preview_moby(selected_class);
+    if (moby != 0)
     {
-      gadget = idx;
-      if (D_0013E520[gadget])
+      loaded_gadget = selected_gadget;
+      if (gold_weapon_purchased[loaded_gadget])
       {
-        func_001E9478(m, h->id);
+        func_001E9478(moby, hand->source_moby_address);
       }
-      *m->vars = h;
-      m->update = func_00224B70;
-      m->update_kind = 4;
-      if (gadget == 0x12)
+      *moby->vars = hand;
+      moby->update = update_menu_preview_class_pose;
+      moby->update_kind = 4;
+      if (loaded_gadget == 0x12)
       {
-        func_0020CB10(h->id, 0, &D_001D5DD0);
-        D_001D5DD0.x20 = 0;
-        D_001D5DD0.x24 = 0;
-        D_001D5DD0.x28 = 0;
+        attach_manipulator(hand->source_moby_address, 0, &class_pose_manipulator);
+        class_pose_manipulator.rotation_x = 0;
+        class_pose_manipulator.rotation_y = 0;
+        class_pose_manipulator.rotation_z = 0;
       }
     }
-    h->m54 = m;
+    hand->class_pose_moby = moby;
   }
-  m = h->m50;
-  cur1 = (m != 0) ? (m->oclass) : (-1);
-  cls = D_001863D0[D_001D5BF0.x38].oclass;
-  if (cur1 != cls)
+  moby = hand->animation_moby;
+  previous_animation_class = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = gadget_definitions[gadget_selection.animation_gadget].oclass;
+  if (previous_animation_class != requested_class)
   {
-    m = func_00225530(m);
-    if (cls != (-1))
+    moby = delete_moby(moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        gadget = D_001D5BF0.x38;
-        *m->vars = h;
-        m->update = func_00224D28;
-        m->update_kind = 4;
+        loaded_gadget = gadget_selection.animation_gadget;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_animation_transform;
+        moby->update_kind = 4;
       }
     }
-    h->m50 = m;
+    hand->animation_moby = moby;
   }
-  m = h->m58;
-  cur2 = (m != 0) ? (m->oclass) : (-1);
-  cls = D_001863D0[D_001D5BF0.x34].oclass;
-  if (cur2 != cls)
+  moby = hand->first_attachment_moby;
+  previous_attachment_class = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = gadget_definitions[gadget_selection.attachment_gadget].oclass;
+  if (previous_attachment_class != requested_class)
   {
-    m = func_00225530(m);
-    if (D_001D5E10.active)
+    moby = delete_moby(moby);
+    if (first_attachment_manipulator.active)
     {
-      func_0020CB88(h->id, &D_001D5E10);
+      detach_manipulator(hand->source_moby_address, &first_attachment_manipulator);
     }
-    if (D_001D5E50.active)
+    if (second_attachment_manipulator.active)
     {
-      func_0020CB88(h->id, &D_001D5E50);
+      detach_manipulator(hand->source_moby_address, &second_attachment_manipulator);
     }
-    if (cls != (-1))
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        gadget = D_001D5BF0.x34;
-        *m->vars = h;
-        m->update = func_00224E18;
-        m->update_kind = 4;
-        func_0020CB10(h->id, 0x16, &D_001D5E10);
-        func_0020CB10(h->id, 0x17, &D_001D5E50);
-        D_001D5E50.x28 = (D_001D5E10.x28 = (D_001D5E50.x24 = (D_001D5E50.x20 = (D_001D5E10.x24 = (D_001D5E10.x20 = 0.01f)))));
+        loaded_gadget = gadget_selection.attachment_gadget;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_pose_and_attachments;
+        moby->update_kind = 4;
+        attach_manipulator(hand->source_moby_address, 0x16, &first_attachment_manipulator);
+        attach_manipulator(hand->source_moby_address, 0x17, &second_attachment_manipulator);
+        second_attachment_manipulator.rotation_z = (first_attachment_manipulator.rotation_z = (second_attachment_manipulator.rotation_y = (second_attachment_manipulator.rotation_x = (first_attachment_manipulator.rotation_y = (first_attachment_manipulator.rotation_x = 0.01f)))));
       }
     }
-    h->m58 = m;
-    m = func_00225530(h->m5C);
-    if (cls != (-1))
+    hand->first_attachment_moby = moby;
+    moby = delete_moby(hand->second_attachment_moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        *m->vars = h;
-        m->update = func_00224E18;
-        m->update_kind = 4;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_pose_and_attachments;
+        moby->update_kind = 4;
       }
     }
-    h->m5C = m;
+    hand->second_attachment_moby = moby;
   }
-  m = h->m4C;
-  cur3 = (m != 0) ? (m->oclass) : (-1);
-  cls = D_001863D0[D_001D5BF0.x3C].oclass;
-  if (cur3 != cls)
+  moby = hand->pose_moby;
+  previous_pose_class = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = gadget_definitions[gadget_selection.pose_gadget].oclass;
+  if (previous_pose_class != requested_class)
   {
-    m = func_00225530(m);
-    if (cls != (-1))
+    moby = delete_moby(moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        *m->vars = h;
-        m->update = func_00224FC0;
-        m->update_kind = 4;
-        if (m->oclass == 0x25F)
+        *moby->vars = hand;
+        moby->update = update_menu_preview_animation_pose;
+        moby->update_kind = 4;
+        if (moby->oclass == 0x25F)
         {
-          if (m->anim != 6)
+          if (moby->anim != 6)
           {
-            func_00212F90(m, 6, 0, 10);
+            func_00212F90(moby, 6, 0, 10);
           }
-          m->state = 8;
+          moby->state = 8;
         }
       }
     }
-    h->m4C = m;
+    hand->pose_moby = moby;
   }
-  m = h->m6C;
-  cur4 = (m != 0) ? (m->oclass) : (-1);
-  cls = (D_0013D4C0[0x23]) ? (0x197) : (-1);
-  if (cur4 != cls)
+  moby = hand->class_0197_moby;
+  previous_class_0197 = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = (gadget_available[0x23]) ? (0x197) : (-1);
+  if (previous_class_0197 != requested_class)
   {
-    m = func_00225530(m);
-    if (cls != (-1))
+    moby = delete_moby(moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        *m->vars = h;
-        m->update = func_002250F0;
-        m->update_kind = 4;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_class_transform;
+        moby->update_kind = 4;
       }
     }
-    h->m6C = m;
+    hand->class_0197_moby = moby;
   }
-  m = h->m70;
-  cur5 = (m != 0) ? (m->oclass) : (-1);
-  cls = (D_0013D4C0[0x21]) ? (0x266) : (-1);
-  if (cur5 != cls)
+  moby = hand->class_0266_moby;
+  previous_class_0266 = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = (gadget_available[0x21]) ? (0x266) : (-1);
+  if (previous_class_0266 != requested_class)
   {
-    m = func_00225530(m);
-    if (cls != (-1))
+    moby = delete_moby(moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        *m->vars = h;
-        m->update = func_002250F0;
-        m->update_kind = 4;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_class_transform;
+        moby->update_kind = 4;
       }
     }
-    h->m70 = m;
+    hand->class_0266_moby = moby;
   }
-  m = h->m74;
-  cur6 = (m != 0) ? (m->oclass) : (-1);
-  cls = (D_0013D4C0[0x22]) ? (0x26A) : (-1);
-  if (cur6 != cls)
+  moby = hand->class_026a_moby;
+  previous_class = (moby != 0) ? (moby->oclass) : (-1);
+  requested_class = (gadget_available[0x22]) ? (0x26A) : (-1);
+  if (previous_class != requested_class)
   {
-    m = func_00225530(m);
-    if (cls != (-1))
+    moby = delete_moby(moby);
+    if (requested_class != (-1))
     {
-      m = func_00225490(cls);
-      if (m != 0)
+      moby = create_menu_preview_moby(requested_class);
+      if (moby != 0)
       {
-        *m->vars = h;
-        m->update = func_002250F0;
-        m->update_kind = 4;
+        *moby->vars = hand;
+        moby->update = update_menu_preview_class_transform;
+        moby->update_kind = 4;
       }
     }
-    h->m74 = m;
+    hand->class_026a_moby = moby;
   }
-  i = 0;
-  scale = D_001D5E90;
-  slot = h->ammo;
+  slot_index = 0;
+  ammo_offset = ammo_preview_offsets;
+  ammo_moby_slot = hand->ammo_mobys;
   do
   {
-    m = *slot;
-    cur6 = (m != 0) ? (m->oclass) : (-1);
-    cls = (i < D_0013F350.x1FF7) ? (0x1DF) : (-1);
-    if (cur6 != cls)
+    moby = *ammo_moby_slot;
+    previous_class = (moby != 0) ? (moby->oclass) : (-1);
+    requested_class = (slot_index < player_state.ammo_capacity) ? (0x1DF) : (-1);
+    if (previous_class != requested_class)
     {
-      m = func_00225530(m);
-      if (cls != (-1))
+      moby = delete_moby(moby);
+      if (requested_class != (-1))
       {
-        m = func_00225490(cls);
-        *scale = (i < D_0013F350.x1FF6) ? (0.0f) : (3.0f);
-        D_001D5EA8[i] = 0;
-        if (m != 0)
+        moby = create_menu_preview_moby(requested_class);
+        velocity_offset = slot_index * 4;
+        *ammo_offset = (slot_index < player_state.ammo_used) ? (0.0f) : (3.0f);
+        *(s32 *)((u8 *)ammo_preview_velocities + velocity_offset) = 0;
+        if (moby != 0)
         {
-          *m->vars = h;
-          m->update = func_00225180;
-          m->update_kind = 4;
-          m->slot = i;
+          *moby->vars = hand;
+          moby->update = update_ammo_preview_transform;
+          moby->update_kind = 4;
+          moby->ammo_moby_slot = slot_index;
         }
       }
-      i++;
-      *slot = m;
-      i++;
+      slot_index++;
+      *ammo_moby_slot = moby;
     }
     else
     {
+      slot_index++;
     }
-    slot++;
-    scale++;
+    ammo_moby_slot++;
+    ammo_offset++;
   }
-  while (i < 8);
-  if (((gadget != D_001D5BF0.cur) && (gadget > 0)) && (gadget < 0x24))
+  while (slot_index < 8);
+  if (((loaded_gadget != gadget_selection.current_gadget) && (loaded_gadget > 0)) && (loaded_gadget < 0x24))
   {
-    D_001D5BF0.cur = gadget;
+    gadget_selection.current_gadget = loaded_gadget;
     clear_preview_animation_queue();
-    queue_preview_animation(D_001D52E8[gadget].x8 + D_001D5BF0.xCC, 0, D_001D52E8[gadget].xC, gadget, D_001D52E8[gadget].x10, D_001D52E8[gadget].x18, D_001D52E8[gadget].x1C, D_001D52E8[gadget].x20, D_001D52E8[gadget].x24, D_001D52E8[gadget].x28, D_001D52E8[gadget].x2C, D_001D52E8[gadget].x0, D_001D52E8[gadget].x4);
-    if (D_001D52E8[gadget].xC != 0)
+    queue_preview_animation(gadget_animations[loaded_gadget].primary_animation + gadget_selection.animation_base, 0, gadget_animations[loaded_gadget].delay_frames, loaded_gadget, gadget_animations[loaded_gadget].item_animation, gadget_animations[loaded_gadget].attachment0_class, gadget_animations[loaded_gadget].attachment0_animation, gadget_animations[loaded_gadget].attachment1_class, gadget_animations[loaded_gadget].attachment1_animation, gadget_animations[loaded_gadget].attachment2_class, gadget_animations[loaded_gadget].attachment2_animation, gadget_animations[loaded_gadget].resource_first, gadget_animations[loaded_gadget].resource_count);
+    if (gadget_animations[loaded_gadget].delay_frames != 0)
     {
-      queue_preview_animation(D_001D52E8[gadget].x14 + D_001D5BF0.xCC, 2, 0, gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
+      queue_preview_animation(gadget_animations[loaded_gadget].secondary_animation + gadget_selection.animation_base, 2, 0, loaded_gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
     }
   }
-  for (i = 0; i < 0x18; i++)
+  for (slot_index = 0; slot_index < 0x18; slot_index++)
   {
-    if (h->timers[i] != 0)
+    if (hand->timers[slot_index] != 0)
     {
-      h->timers[i]--;
+      hand->timers[slot_index]--;
     }
   }
 
-  func_00225E70(h->id, h->m54, h->m50, &h->x60, &h->x64, &h->x68);
+  update_preview_animation_and_attachments(hand->source_moby_address, hand->class_pose_moby, hand->animation_moby, &hand->x60, &hand->x64, &hand->x68);
   return 0;
 }
 #endif /* NON_MATCHING */

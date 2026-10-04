@@ -4,117 +4,99 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/decoder/initialize_audio_system/FUN_0023a7c0.s", FUN_0023a7c0);
 #else
+#include "types.h"
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
-struct AudioState
+struct AudioDecoderState
 {
   u8 pad0[0xD90F8];
   s32 dmac_handler_id;
   s32 intc_handler_id;
 };
-struct ThreadArgs
+struct AudioDecoderThreadArgs
 {
   u8 pad0[4];
   void (*entry)();
   void *stack;
-  s32 stackSize;
+  s32 stack_size;
   void *gp;
   s32 priority;
   u8 pad18[8];
-  s32 gsTag;
+  s32 gs_tag;
   u8 pad24[0xC];
 };
-extern s32 D_00161208;
-extern struct AudioState *D_0016120C;
-extern s32 D_00161210;
+extern s32 decoder_buffer_address __asm__("D_00161208");
+extern struct AudioDecoderState *decoder_state __asm__("D_0016120C");
+extern s32 decoder_thread_id __asm__("D_00161210");
 extern u8 D_00166C00[];
-extern u8 D_001E8AF0[];
-extern void func_0023B5F0();
-extern void func_0023B728();
+extern u8 movie_open_error_text[] __asm__("D_001E8AF0");
+extern void video_callback() __asm__("func_0023B5F0");
+extern void pcm_callback() __asm__("func_0023B728");
 extern void func_0023B3D8();
 
 
 
-extern void func_0023B540() __asm__("FUN_0023b540");
-extern void func_0023CE28();
-extern s32 func_0023B940(struct AudioState *);
+extern void handle_end_image() __asm__("FUN_0023b540");
+extern void run_video_decoder() __asm__("func_0023CE28");
+extern s32 func_0023B940(struct AudioDecoderState *);
 extern void sceMpegInit(void);
-extern s32 func_0023CAC8(void *, u32, u32, void *, u32, u32, void *, u32);
-extern s32 func_0023ABD0(void *, void *, u32, u32);
-extern s32 func_0023CBD0(void *, u32, u32, void *, struct AudioState *);
-extern void func_0023D190(void *, u32, u32, u32);
-extern s32 CreateThread(struct ThreadArgs *);
+extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *, u32) __asm__("func_0023CAC8");
+extern s32 audio_dec_create(void *, void *, u32, u32) __asm__("func_0023ABD0");
+extern s32 video_dec_set_stream(void *, u32, u32, void *, struct AudioDecoderState *) __asm__("func_0023CBD0");
+extern void vo_buf_create(void *, u32, u32, u32) __asm__("func_0023D190");
+extern s32 CreateThread(struct AudioDecoderThreadArgs *);
 extern s32 _StartThread(s32, void *);
 extern s32 func_0023BA48(void *, s32, s32);
 extern s32 DebugPrint(void *);
 extern s32 AddIntcHandler(s32, void *, s32);
-extern s32 func_00119090(s32);
+extern s32 enable_intc(s32) __asm__("func_00119090");
 extern s32 AddDmacHandler(s32, void *, s32);
-extern s32 func_00119160(s32);
-s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2);
-s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0023a7c0");
+extern s32 enable_dmac(s32) __asm__("func_00119160");
+s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context);
+s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context) __asm__("FUN_0023a7c0");
 
-s32 initialize_audio_system(s32 arg0, s32 arg1, s32 arg2)
+s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context)
 {
-  struct ThreadArgs th;
-  s32 tid;
+  struct AudioDecoderThreadArgs decoder_thread;
+  s32 thread_id;
   *((volatile s32 *) 0x1000E000) |= 3;
   *((volatile s32 *) 0x1000E010) = 4;
-  func_0023B940(D_0016120C);
+  func_0023B940(decoder_state);
   sceMpegInit();
-  func_0023CAC8(((u8 *) D_0016120C) + 0xD9048, D_00161208 + 0x1C85C0, 0xEB768, ((u8 *) D_0016120C) + 0x52040, D_00161208 + 0x1C7180, 0x100, ((u8 *) D_0016120C) + 0xD6040, 0x200);
-  func_0023ABD0(((u8 *) D_0016120C) + 0xD9100, ((u8 *) D_0016120C) + 0x50040, 0x2000, D_00161208 + 0x1C8190);
-  func_0023CBD0(((u8 *) D_0016120C) + 0xD9048, 0, 0, func_0023B5F0, D_0016120C);
-  func_0023CBD0(((u8 *) D_0016120C) + 0xD9048, 3, arg2, func_0023B728, D_0016120C);
-  func_0023D190(((u8 *) D_0016120C) + 0xD9168, (D_00161208 & 0x0FFFFFFF) | 0x20000000, D_00161208 + 0x1A0000, 2);
-  th.stack = ((u8 *) D_0016120C) + 0xD2040;
-  th.entry = func_0023CE28;
-  th.stackSize = 0x4000;
-  th.gp = D_00166C00;
-  th.priority = 1;
-  th.gsTag = 0;
-  tid = CreateThread(&th);
-  D_00161210 = tid;
-  _StartThread(tid, ((u8 *) D_0016120C) + 0xD9048);
-  if (func_0023BA48(((u8 *) D_0016120C) + 0xD9040, arg0, arg1) == 0)
+  video_dec_create(((u8 *) decoder_state) + 0xD9048, decoder_buffer_address + 0x1C85C0, 0xEB768, ((u8 *) decoder_state) + 0x52040, decoder_buffer_address + 0x1C7180, 0x100, ((u8 *) decoder_state) + 0xD6040, 0x200);
+  audio_dec_create(((u8 *) decoder_state) + 0xD9100, ((u8 *) decoder_state) + 0x50040, 0x2000, decoder_buffer_address + 0x1C8190);
+  video_dec_set_stream(((u8 *) decoder_state) + 0xD9048, 0, 0, video_callback, decoder_state);
+  video_dec_set_stream(((u8 *) decoder_state) + 0xD9048, 3, callback_context, pcm_callback, decoder_state);
+  vo_buf_create(((u8 *) decoder_state) + 0xD9168, (decoder_buffer_address & 0x0FFFFFFF) | 0x20000000, decoder_buffer_address + 0x1A0000, 2);
+  decoder_thread.stack = ((u8 *) decoder_state) + 0xD2040;
+  decoder_thread.entry = run_video_decoder;
+  decoder_thread.stack_size = 0x4000;
+  decoder_thread.gp = D_00166C00;
+  decoder_thread.priority = 1;
+  decoder_thread.gs_tag = 0;
+  thread_id = CreateThread(&decoder_thread);
+  decoder_thread_id = thread_id;
+  _StartThread(thread_id, ((u8 *) decoder_state) + 0xD9048);
+  if (func_0023BA48(((u8 *) decoder_state) + 0xD9040, stream_source, source_mode) == 0)
   {
-    if (arg1)
+    if (source_mode)
     {
-      arg2 = 0;
-      DebugPrint(D_001E8AF0);
+      callback_context = 0;
+      DebugPrint(movie_open_error_text);
     }
     else
     {
-      arg2 = 0;
-      DebugPrint(D_001E8AF0);
+      callback_context = 0;
+      DebugPrint(movie_open_error_text);
     }
   }
   else
   {
-    arg2 = 1;
+    callback_context = 1;
   }
-  D_0016120C->intc_handler_id = AddIntcHandler(2, func_0023B3D8, 0);
-  func_00119090(2);
-  D_0016120C->dmac_handler_id = AddDmacHandler(2, func_0023B540, 0);
-  func_00119160(2);
-  return arg2;
+  decoder_state->intc_handler_id = AddIntcHandler(2, func_0023B3D8, 0);
+  enable_intc(2);
+  decoder_state->dmac_handler_id = AddDmacHandler(2, handle_end_image, 0);
+  enable_dmac(2);
+  return callback_context;
 }
 #endif /* NON_MATCHING */

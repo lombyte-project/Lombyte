@@ -25,10 +25,10 @@ void update_menu_preview_pose_and_attachments(void *preview) __asm__("FUN_00224e
 
 void update_menu_preview_pose_and_attachments(void *preview) {
     PauseMoby *moby = preview;
-    char **vars = moby->vars;
+    char **preview_vars = moby->vars;
     f32 transform[16];
-    s32 source_moby_address = *(int *)(*vars + 0x44);
-    s32 is_source_moby;
+    s32 source_moby_address = *(int *)(*preview_vars + 0x44);
+    s32 is_second_preview_moby;
     s32 first_attachment_active;
     s32 second_attachment_active;
     char *binding_table;
@@ -37,8 +37,8 @@ void update_menu_preview_pose_and_attachments(void *preview) {
 
     advance_moby_animation(moby);
     refresh_moby_spatial_bounds(moby);
-    is_source_moby = moby == *(PauseMoby **)(*vars + 0x5C);
-    build_moby_bone_transform(source_moby_address, is_source_moby ? 3 : 2, transform);
+    is_second_preview_moby = moby == *(PauseMoby **)(*preview_vars + 0x5C);
+    build_moby_bone_transform(source_moby_address, is_second_preview_moby ? 3 : 2, transform);
     qcopy(moby->pos, &transform[12]);
     copy_matrix3x4(moby->basis, transform);
     normalize_vector_triplet(moby->basis);
@@ -53,7 +53,7 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         second_attachment_active = 1;
         detach_manipulator(source_moby_address, second_preview_manipulator);
     }
-    if (!is_source_moby) {
+    if (!is_second_preview_moby) {
         binding_table = preview_binding_table;
         binding_table_alias = preview_binding_table_alias;
         resource_address = moby->resource_address;

@@ -5,20 +5,10 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s", FUN_00238f08);
 #else
 #include "types.h"
+#include "rnc/text_region.h"
 
-struct TextRegion {
-    s16 top;
-    s16 bottom;
-    s16 left;
-    s16 right;
-    s16 anchor_x;
-    s16 anchor_y;
-    u8 padC[2];
-    u16 rendered_height;
-    s16 line_advance;
-    u16 flags;
-    u8 pad14[4];
-};
+typedef struct TextRegion FontWindow;
+
 
 struct VendorSelectionEntry {
     s32 item_index;
@@ -59,7 +49,7 @@ extern void *memset(void *, s32, u32);
 void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 target_height) __asm__("FUN_00238f08");
 
 void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 target_height) {
-    struct TextRegion region;
+    FontWindow region;
     s32 price;
     s32 evaluated_message_id;
 

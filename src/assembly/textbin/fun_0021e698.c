@@ -48,7 +48,7 @@ struct ItemPreviewMoby {
 
 struct PreviewCamera {
     u8 pad0[0x140];
-    struct PreviewPosition pos;
+    struct PreviewPosition position;
 };
 
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
@@ -67,18 +67,18 @@ void update_item_preview_transform(struct ItemPreviewMoby *moby) {
     f32 forward_offset;
     f32 cosine;
     f32 sine;
-    f32 negative_forward_offset;
+    f32 negated_forward_offset;
 
     moby->rotation_z = preview->rotation_angle;
-    moby->x = (&preview_camera.pos)->x + ((preview->flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
-    moby->y = (&preview_camera.pos)->y + preview_placements[item_index].y;
-    moby->z = (&preview_camera.pos)->z + preview_placements[item_index].z;
+    moby->x = (&preview_camera.position)->x + ((preview->flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
+    moby->y = (&preview_camera.position)->y + preview_placements[item_index].y;
+    moby->z = (&preview_camera.position)->z + preview_placements[item_index].z;
     forward_offset = preview_placements[item_index].forward_offset;
     side_offset = preview_placements[item_index].side_offset;
     cosine = fast_cos(moby->rotation_z);
-    negative_forward_offset = -forward_offset;
+    negated_forward_offset = -forward_offset;
     sine = fast_sin(moby->rotation_z);
-    moby->x += negative_forward_offset * sine + side_offset * cosine;
+    moby->x += negated_forward_offset * sine + side_offset * cosine;
     moby->y += forward_offset * cosine + side_offset * sine;
 }
 #endif /* NON_MATCHING */

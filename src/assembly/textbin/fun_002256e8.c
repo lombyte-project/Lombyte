@@ -8,14 +8,14 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002256e8/FUN_002256e8.s
 
 typedef struct {
     u8 pad_0[0x20];
-    u8 phase;
+    u8 moby_state;
     u8 pad_21[0x52 - 0x21];
     u8 primary_animation;
     u8 secondary_animation;
     u8 pad_54[0x70 - 0x54];
     u8 transition_flags;
     u8 pad_71[0xBC - 0x71];
-    u8 elapsed_frames;
+    u8 animation_frame_counter;
 } StreamedAnimationMoby;
 
 typedef struct {
@@ -25,7 +25,7 @@ typedef struct {
 
 typedef struct {
     s32 offset;
-    s32 pad;
+    s32 reserved4;
 } AnimationTableHeader;
 
 typedef struct {
@@ -101,16 +101,16 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         }
         stream->state = 2;
         if (alternate_animation_sequence == 0) {
-            stream->moby->phase = 0;
+            stream->moby->moby_state = 0;
         } else {
-            stream->moby->phase = 4;
+            stream->moby->moby_state = 4;
         }
-        stream->moby->elapsed_frames = 0;
+        stream->moby->animation_frame_counter = 0;
         break;
     case 2:
         /* Even phases queue dialogue; odd phases wait for animation completion. */
         moby = stream->moby;
-        switch (moby->phase) {
+        switch (moby->moby_state) {
         case 0:
         case 2:
         case 4:
@@ -118,56 +118,56 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             if (dialogue_column < 0) {
                 dialogue_column = 0;
             }
-            animation_index = moby->phase >> 1;
-            if (moby->elapsed_frames == 0) {
+            animation_index = moby->moby_state >> 1;
+            if (moby->animation_frame_counter == 0) {
                 queued_dialogue_id[0] = animation_index * 6 + dialogue_column + 60000;
             }
-            moby->elapsed_frames++;
-            if (moby->elapsed_frames > scale_game_frames(0x78)) {
-                moby->elapsed_frames = scale_game_frames(0x78);
+            moby->animation_frame_counter++;
+            if (moby->animation_frame_counter > scale_game_frames(0x78)) {
+                moby->animation_frame_counter = scale_game_frames(0x78);
             }
-            if (moby->elapsed_frames < scale_game_frames(0x78)) {
+            if (moby->animation_frame_counter < scale_game_frames(0x78)) {
                 return 0;
             }
             if (dialogue_playback_phase[0] != 3) {
                 return 0;
             }
-            moby->elapsed_frames = 0;
-            moby->phase++;
+            moby->animation_frame_counter = 0;
+            moby->moby_state++;
             blend_moby_animation(moby, animation_index + 1, 0, scale_game_frames(0x18));
             break;
         case 1:
         case 3:
         case 5:
-            if (moby->elapsed_frames == 0 && moby->primary_animation == moby->secondary_animation) {
+            if (moby->animation_frame_counter == 0 && moby->primary_animation == moby->secondary_animation) {
                 continue_audio_stream_if_ready();
-                moby->elapsed_frames = 1;
+                moby->animation_frame_counter = 1;
             }
             if (moby->transition_flags & 2) {
-                if (moby->phase == 1) {
-                    moby->phase = moby->phase + 1;
+                if (moby->moby_state == 1) {
+                    moby->moby_state = moby->moby_state + 1;
                 } else {
-                    moby->phase = 6;
+                    moby->moby_state = 6;
                 }
-                moby->elapsed_frames = 0;
+                moby->animation_frame_counter = 0;
                 blend_moby_animation(moby, 0, 0, scale_game_frames(0x18));
                 break;
             }
             break;
         case 6:
-            moby->elapsed_frames++;
-            if (moby->elapsed_frames > scale_game_frames(0xF0)) {
-                moby->elapsed_frames = scale_game_frames(0xF0);
+            moby->animation_frame_counter++;
+            if (moby->animation_frame_counter > scale_game_frames(0xF0)) {
+                moby->animation_frame_counter = scale_game_frames(0xF0);
             }
-            if (moby->elapsed_frames < scale_game_frames(0xF0)) {
+            if (moby->animation_frame_counter < scale_game_frames(0xF0)) {
                 return 0;
             }
             if (alternate_animation_sequence == 0) {
-                moby->phase = 0;
+                moby->moby_state = 0;
             } else {
-                moby->phase = 4;
+                moby->moby_state = 4;
             }
-            moby->elapsed_frames = 0;
+            moby->animation_frame_counter = 0;
             break;
         }
         break;
