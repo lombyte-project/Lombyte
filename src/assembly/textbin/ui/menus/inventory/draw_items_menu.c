@@ -94,7 +94,7 @@ s32 draw_items_menu(ItemsMenu *menu)
   setup_gif_paging(0);
   column_divisor = 3;
   {
-    FontWindow text_window = {{0, menu->height, 8, menu->width / column_divisor, 0, 0, 0, 0, 0x10, 5}};
+    FontWindow text_window = {{0, menu->height, 8, divide_coordinate(menu->width, column_divisor), 0, 0, 0, 0, 0x10, 5}};
     text_window.s[4] = add_offset(text_window.s[2], text_window.s[3]) >> 1;
     strcpy(text_buffer, get_help_message_text(0x4F4E));
     if (D_0015ED88[0] == column_divisor)
