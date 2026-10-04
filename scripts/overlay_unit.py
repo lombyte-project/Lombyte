@@ -1,4 +1,4 @@
-"""check-unit and verify-overlays for level overlay functions (FUN_LNN_xxxxxxxx).
+"""check-unit and `make overlays` for level overlay functions (FUN_LNN_xxxxxxxx).
 
 A pending overlay function keeps its stub as the oracle and its C under
 ``#else``, exactly like an executable unit:
@@ -170,3 +170,7 @@ def verify_all() -> int:
         return 1
     print(f"PASS: all {total} overlay functions in C match retail")
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(verify_all())

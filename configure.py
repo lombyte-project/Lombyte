@@ -1748,7 +1748,7 @@ def build_overlays() -> Path:
     - obj/<path>.c.o: as written, stubs included (the game compiler's driver
       and GNU as, the executable's include-asm route);
     - c/<path>.c.o: its C only (INCLUDE_ASM lines dropped), on the game route
-      (cc1, Ps2EeAs) as retail was built; scripts/verify-overlays.py proves
+      (cc1, Ps2EeAs) as retail was built; scripts/overlay_unit.py proves
       every function in it against the level text.
 
     stage/<name>.c.o is the same game route for one function staged by

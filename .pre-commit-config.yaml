@@ -37,14 +37,14 @@ repos:
         # Limit trimming to ordinary horizontal whitespace; license files use
         # form-feed page breaks that must not be rewritten.
         args: [--markdown-linebreak-ext=md, "--chars= \t"]
-        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|(?:configure|rebuild-iso)\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
+        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|configure\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
       - id: end-of-file-fixer
-        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|(?:configure|rebuild-iso)\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
+        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|configure\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
       - id: fix-byte-order-marker
-        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|(?:configure|rebuild-iso)\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
+        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|configure\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
       - id: mixed-line-ending
         args: [--fix=lf]
-        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|(?:configure|rebuild-iso)\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
+        files: ^(?!(?:src|include|config|scripts|tools|build|dumps|extracted|patches)/|configure\.py$|^verify-baseline\.sh$|^Makefile$|^assets/).+
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys, --no-ensure-ascii]
         files: \.json$
