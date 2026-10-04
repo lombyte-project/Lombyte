@@ -72,7 +72,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         r = 0;
         if (f->d4_madr != f->data) {
             r = 3;
-            if ((f->d4_madr ^ (f->data + datasize)) == 0) {
+            if (f->d4_madr == f->data + datasize) {
                 r = 0;
             }
         }
