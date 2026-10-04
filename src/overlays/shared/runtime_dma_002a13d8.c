@@ -2,7 +2,33 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a13f0.s", FUN_L00_002a13f0);
+int FUN_L00_002a13f0(float *a, float v) {
+    int bit = 1;
+    int r = 0;
+    int i;
+    float *p = a + 12;
+    for (i = 0; i < 2; i++, p++) {
+        float x = p[4], y = p[6];
+        if (x <= y) {
+            if (x <= v && v <= y) r |= bit;
+        } else {
+            if (x <= v || v <= y) r |= bit;
+        }
+        bit <<= 1;
+        x = p[-2]; y = p[0];
+        if (x <= y) {
+            if (x <= v && v <= y) r |= bit;
+        } else {
+            if (x <= v || v <= y) r |= bit;
+        }
+        bit <<= 1;
+    }
+    if (r == 0) {
+        if (v < a[6] || a[6] + 1.0f < v) r |= bit;
+        if (v < a[7] || a[7] + 1.0f < v) r |= bit << 1;
+    }
+    return r;
+}
 void FUN_L00_001fff28(void *, s32, f32);
 void FUN_L00_002a1538(u8 *a0) {
     s32 i;
