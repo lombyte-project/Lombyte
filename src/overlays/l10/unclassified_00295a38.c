@@ -6,11 +6,6 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D8F34), where it is exact; names translated to the US level program. */
-
-void FUN_L10_002d7b74(char *a, float f) {
-    *(float *)(a + 0x18) = f;
-}
 /* update: on a timer, fire a projectile from the moby's angle, then rearm the timer */
 /* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
 
@@ -215,8 +210,17 @@ void FUN_L10_002c7a20(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9958.s", FUN_L10_002c9958);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b18.s", FUN_L10_002d7b18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b48.s", FUN_L10_002d7b48);
+void FUN_L10_002d7b18(char *a, float t) {
+    float c = *(float *)(a + 0x18);
+    float d = t - c;
+    if (0.1f < d) {
+        *(float *)(a + 0x18) = c + 0.1f;
+    } else if (d < -0.1f) {
+        *(float *)(a + 0x18) = c - 0.1f;
+    } else {
+        *(float *)(a + 0x18) = t;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
 #ifndef NOT_SDA
 #endif

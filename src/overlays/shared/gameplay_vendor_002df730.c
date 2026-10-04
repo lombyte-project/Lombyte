@@ -1281,8 +1281,21 @@ void FUN_L00_002e8490(float f) {
 }
 extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e84b8(float a, float b) { char *p = D_L00_00166E00_002e84b8; if (*(short *)(p + 0x86) == 0) { char *q = *(char **)(p + 0x70) + 0x130;  *(short *)(q + 0x3e) = 1; *(float *)(q + 0x4c) = a; *(float *)(q + 0x54) = b; } }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e84f0.s", FUN_L00_002e84f0);
-void FUN_L00_002e8534(void *u, char *p, float a) { *(volatile float *)(p + 0xB4) = a; }
+extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00168FC0 __attribute__((section(".data")));
+void FUN_L00_002e84f0(int add, float a, float b) {
+    char *p = D_L00_00166E00_c3;
+    if (*(short *)(p + 0x86) == 0) {
+        char *q = *(char **)(p + 0x70) + 0x40;
+        *(short *)(q + 0xDA) = 1;
+        *(float *)(q + 0xB8) = b;
+        if (add) {
+            *(float *)(q + 0xB4) = *(float *)(D_L00_00168FC0 + 0xF0) + a;
+        } else {
+            *(float *)(q + 0xB4) = a;
+        }
+    }
+}
 typedef struct { char pad[0x10]; short h; } S2e8568b;
 typedef struct { char pad[0x70]; S2e8568b *p; char pad2[0x12]; short f86; } S2e8568;
 extern S2e8568 *D_L00_00166E00;

@@ -6,43 +6,6 @@
 
 #define MACRO_ADDR
 
-/* Menu hit test: x in [58, 86] and a flag clear. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/menu_00249720.c: func_L00_00249750), where it is exact; names translated to the US level program. */
-
-int FUN_L00_00248d38(float a, float b, float x) {
-    int flag;
-    if (x >= 58.0f && x <= 86.0f) {
-        if (flag == 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-int FUN_L00_00248dc8(float a, float b, float c) { return 95.0f <= c; }
-s32 FUN_L00_00249758(f32 a, f32 b, f32 c) { return c < 29.0f; }
-int FUN_L00_002499ec(float a, float b, float c) { return c <= 180.0f; }
-#define NOT_SDA
-
-#define MACRO_ADDR
-
-/* Ported from rac1-decomp (PAL, src/overlays/shared/menu_00249720.c: func_L00_0024A460), where it is exact; names translated to the US level program. */
-
-extern unsigned char D_0013D3DF[];
-
-int FUN_L00_00249a48(float a, float b, float x) {
-    return x <= 180.0f && D_0013D3DF[0] != 0;
-}
-#define NOT_SDA
-
-#define MACRO_ADDR
-
-/* Ported from rac1-decomp (PAL, src/overlays/shared/menu_00249720.c: func_L00_0024A570), where it is exact; names translated to the US level program. */
-
-extern unsigned char D_0013D3E2[];
-
-int FUN_L00_00249b58(float a, float b, float x) {
-    return x >= 233.0f && x <= 235.0f && D_0013D3E2[0] != 0;
-}
 extern s32 D_0015ED84;
 extern s32 D_L00_001C44B8[];
 extern s32 D_L00_001791B8[];
@@ -52,21 +15,5 @@ void FUN_L00_0024a798(s32 v, s32 i) {
         D_L00_001791B8[i] = v;
     }
 }
-struct Menu_0024ac88 { char pad0[0x1C]; int sel; char pad1[0xBC-0x20]; int saved; char pad2[0xF4-0xC0]; int f4; };
-extern int D_0015EEB0_0024ac88 __asm__("D_0015EEB0") __attribute__((section(".sdata")));
-extern struct Menu_0024ac88 D_0013D290_0024ac88 __asm__("D_0013D290");
-#include "sda.h"
-extern s32 D_0015EEB4 MACRO_ADDR;
-extern s32 D_0015EEB0 MACRO_ADDR;
-extern s32 D_0013D290[];
-extern s32 D_0015EEB0;
-extern int D_0015EEB0 __attribute__((section(".sdata")));
-extern int D_0015EEB4;
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d08.s", FUN_L00_00248d08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00248d88.s", FUN_L00_00248d88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249728.s", FUN_L00_00249728);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249998.s", FUN_L00_00249998);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249a18.s", FUN_L00_00249a18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249af8.s", FUN_L00_00249af8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249d80.s", FUN_L00_00249d80);
