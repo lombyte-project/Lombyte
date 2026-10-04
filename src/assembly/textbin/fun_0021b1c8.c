@@ -63,6 +63,7 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
   s32 font_height;
   s32 entry_count;
   MenuItem *entry;
+  MenuItem *scan_entry;
   s32 entry_index;
   s32 selected_entry;
   s32 enabled;
@@ -117,23 +118,19 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
   y = (row_height - (font_height / 2)) - 1;
   if (menu->flags & 0x4000)
   {
-    entry = menu->items;
-    if (entry->text_id != 0)
+    if (menu->items[0].text_id != 0)
     {
       entry_index = 0;
       selection_index = 0;
-      for (;;)
+      scan_entry = &menu->items[entry_index];
+      do
       {
-        text_width = measure_text_width(get_help_message_text(entry->text_id), -1, glyphs);
+        text_width = measure_text_width(get_help_message_text(scan_entry->text_id), -1, glyphs);
         entry_index++;
         selection_index++;
         maximum_text_width = (maximum_text_width < text_width) ? (text_width) : (maximum_text_width);
-        if (menu->items[selection_index].text_id == 0)
-        {
-          break;
-        }
-        entry = &menu->items[entry_index];
-      }
+        scan_entry = &menu->items[entry_index];
+      } while (menu->items[selection_index].text_id != 0);
 
     }
   }
