@@ -925,5 +925,52 @@ void FUN_L00_00217368(int a, int n) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217450.s", FUN_L00_00217450);
+typedef unsigned int u128_217450 __attribute__((mode(TI), aligned(16)));
+typedef union { u128_217450 q; float f[4]; } V_217450;
+extern char D_0013F3D0_217450[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern float D_0015ED6C_217450 __asm__("D_0015ED6C");
+extern int D_0015ED84_217450 __asm__("D_0015ED84");
+extern int FUN_001f96f8_217450(int) __asm__("FUN_001f96f8");
+extern float FUN_002132a8_217450(float, float) __asm__("FUN_002132a8");
+extern int FUN_001fa6d0_217450(float) __asm__("FUN_001fa6d0");
+extern float FUN_00213308_217450(void) __asm__("FUN_00213308");
+extern void FUN_00214db0_217450(void *, float, float, float) __asm__("FUN_00214db0");
+extern float FUN_001f9dc8_217450(float) __asm__("FUN_001f9dc8");
+extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");
+extern void FUN_L00_00269958_217450(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+
+void FUN_L00_00217450(void) {
+    V_217450 pos[1];
+    V_217450 out;
+    int t;
+    int i;
+    char *q;
+    char *g;
+    int a, b;
+    float s, ang, e, r;
+
+    t = FUN_001f96f8_217450(0x28);
+    q = D_0013F3D0_217450;
+    g = q - 0x80;
+    i = 9;
+    do {
+        a = FUN_001fa6d0_217450(FUN_002132a8_217450(4200.0f, 7350.0f) / 1000.0f);
+        b = FUN_001fa6d0_217450(FUN_002132a8_217450(21000.0f, 31500.002f) / 1000.0f);
+        s = FUN_002132a8_217450(D_0015ED6C_217450 * 0.15f, D_0015ED6C_217450 * 0.7f);
+        qcopy(pos, q);
+        if (D_0015ED84_217450 != 6) {
+            pos[0].f[2] = *(float *)(g + 0x2F4);
+        }
+        i--;
+        ang = FUN_00213308_217450();
+        e = FUN_002132a8_217450(0.34906584f, 1.3962634f);
+        r = FUN_002132a8_217450(0.05f, *(float *)(g + 0x234) + 0.2f);
+        FUN_00214db0_217450(&out, s, ang, e);
+        pos[0].f[0] += FUN_001f9dc8_217450(ang) * r;
+        pos[0].f[1] += FUN_001f9de0_217450(ang) * r;
+        FUN_L00_00269958_217450(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
+    } while (i >= 0);
+    if (!ang) {
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00217658.s", FUN_L00_00217658);

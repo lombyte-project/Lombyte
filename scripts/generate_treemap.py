@@ -1262,6 +1262,8 @@ def main(argv=None) -> int:
         fuzzy_percent = fuzzy_progress(units, scores)
 
     overlays = overlay_functions(repo)
+    overlay_asm = [f for f in overlays if f["asm"]]
+    overlays = [f for f in overlays if not f["asm"]]
     levels = load_levels(repo)
     svg, height = render_svg(
         units,
@@ -1362,6 +1364,8 @@ def main(argv=None) -> int:
         "bytes_matching_c": ov_exact_bytes,
         "bytes_pending_c": ov_bytes - ov_exact_bytes,
         "c_exact_percent_of_recoverable": round(100.0 * ov_exact_bytes / ov_bytes, 4) if ov_bytes else 0.0,
+        "intentional_asm": len(overlay_asm),
+        "bytes_intentional_asm": sum(f["size"] for f in overlay_asm),
         "shared": next((branch_stats(b) for b in branches if b["category"] == "shared"), None),
         "levels": [branch_stats(b) for b in branches if b["category"] != "shared"],
     }
@@ -1370,14 +1374,15 @@ def main(argv=None) -> int:
     total_fuzzy = None
     if fuzzy_percent is not None and all_recoverable:
         total_fuzzy = (fuzzy_percent * recoverable + 100.0 * ov_exact_bytes) / all_recoverable
+    ov_asm_bytes = sum(f["size"] for f in overlay_asm)
     total_stats = {
-        "units_total": len(units) + len(overlays),
+        "units_total": len(units) + len(overlays) + len(overlay_asm),
         "matching_c": len(exact) + ov_exact,
-        "intentional_asm": len(asm),
+        "intentional_asm": len(asm) + len(overlay_asm),
         "pending_c": len(pending) + len(overlays) - ov_exact,
-        "bytes_total": total + ov_bytes,
+        "bytes_total": total + ov_bytes + ov_asm_bytes,
         "bytes_matching_c": all_exact,
-        "bytes_intentional_asm": asm_bytes,
+        "bytes_intentional_asm": asm_bytes + ov_asm_bytes,
         "bytes_pending_c": all_recoverable - all_exact,
         "c_exact_percent_of_recoverable": round(100.0 * all_exact / all_recoverable, 4) if all_recoverable else 0.0,
         "c_fuzzy_percent_of_recoverable": round(total_fuzzy, 4) if total_fuzzy is not None else None,

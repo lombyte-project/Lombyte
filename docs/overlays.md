@@ -45,6 +45,9 @@ that has it. Level data is `D_LNN_XXXXXXXX` (0x15EF00 and up), jump tables
 `src/overlays/` files follow link order, one file per run between two
 executable units (about 32 KB), named after that unit and its first
 function. A function is pending while its stub is the compiled code.
+Retail hand asm (VU0/COP2, MMI, `addi`) is listed as `overlays/<name>`
+under `intentional_asm` in `config/us/unit_categories.json` and stays out
+of C_EXACT, as in the executable.
 
 A function is exact when its C, compiled as retail game code was (game
 compiler `cc1`, then `Ps2EeAs`) and placed at its address with every symbol
