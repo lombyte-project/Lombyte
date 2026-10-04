@@ -61,8 +61,8 @@ extern void sceScfGetLocalTimefromRTC(u8 *clock);
 void FUN_00226b08(s32 slot) {
     s32 saved;
     s32 count;
-    s32 flag4;
-    s32 flag5;
+    u8 flag4;
+    u8 flag5;
     s32 *p;
     s32 *items = (s32 *)0x70000150;
     u8 *bytes;
