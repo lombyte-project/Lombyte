@@ -339,7 +339,8 @@ void draw_map_overlay(void) {
             /* The flag-4 entry terminates the list. Separate overlapping icon
                bounds before either icon is drawn, using half of the smallest
                positive edge distance for each pair. */
-            for (i = 0; !(D_001A00F0.icons[i + 1].flags & 4); i++) {
+            for (i = 0; ; i++) {
+                if (D_001A00F0.icons[i + 1].flags & 4) break;
                 if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 || (D_001A00F0.icons[i].flags & 3)) {
                     continue;
                 }
