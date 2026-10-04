@@ -186,6 +186,8 @@ def build_report(scores: dict[object, float]) -> dict:
 
     levels = load_levels(REPO)
     for function in overlay_functions(REPO):
+        if function["asm"]:
+            continue
         category = category_of(function)
         functions.append({
             "owner": f"overlays/{function['name']}",
