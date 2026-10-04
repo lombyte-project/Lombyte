@@ -65,7 +65,42 @@ u8 *FUN_L14_00306158(u8 *self)
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00300e00.s", FUN_L14_00300e00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003014e0.s", FUN_L14_003014e0);
+#include "sda.h"
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
+extern char *FUN_0020c4f8_c(int) __asm__("FUN_0020c4f8");
+extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
+extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
+extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
+extern float D_L14_00162098_g __asm__("D_L14_00162098") __attribute__((sda));
+
+char *FUN_L14_003014e0(int a0, float *a1, float *a2, int a3, float f) {
+    char *moby = FUN_0020c4f8_c(0x4A9);
+    float t, u;
+    unsigned short g;
+    if (moby != 0) {
+        char *d = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(int *)(d + 0x24) = a0;
+        qcopy(moby + 0x10, a1);
+        qcopy(d + 0x10, a2);
+        g = D_L14_0016208C_g;
+        *(float *)(d + 0x1C) = f;
+        *(int *)(d + 0x20) = a3;
+        *(unsigned short *)(d + 0x28) = g;
+        *(short *)(d + 0x2A) = 0;
+        *(int *)(moby + 0x40) = 0;
+        *(int *)(moby + 0x44) = 0;
+        t = FUN_001f9e90_a(a2[0], a2[1]);
+        u = *(float *)(moby + 0x2C) * D_L14_00162098_g;
+        *(float *)(moby + 0x48) = t;
+        *(float *)(moby + 0x2C) = u;
+        FUN_L00_00250df8_f(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305408.s", FUN_L14_00305408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305600.s", FUN_L14_00305600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305680.s", FUN_L14_00305680);
