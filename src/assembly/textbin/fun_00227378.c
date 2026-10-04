@@ -63,6 +63,7 @@ void append_fullscreen_clear_strips(s64 color) {
     dimensions = &fs_aa_buffer;
     display_width = dimensions->display_width;
     display_height = dimensions->display_height;
+    /* Retail truncates signed display width toward zero before packing strips. */
     dividend = (display_width > -1) ? display_width : (display_width + 0x1F);
     strip_count = dividend >> 5;
     render_packet_cursor[0]->dma_control = (strip_count + 5) | 0x10000000;
@@ -91,8 +92,8 @@ void append_fullscreen_clear_strips(s64 color) {
         left_x = negative_half_width + 0x8000;
         right_x = negative_half_width + 0x8200;
         packed_bottom_y = (s64)bottom_y << 16;
-        strip_index = 0;
         vertices = (struct StripVertices *)((u8 *)base + 0x60);
+        strip_index = 0;
         do {
             first_vertex = (s64)left_x | packed_top_y;
             second_vertex = (s64)right_x | packed_bottom_y;
