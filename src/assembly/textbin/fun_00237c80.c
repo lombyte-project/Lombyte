@@ -20,7 +20,7 @@ struct ProjectionScreenOrigin {
 };
 
 extern u8 camera_position[] __asm__("D_00187080");
-extern struct ProjectionViewport view_context __asm__("D_0018CD00");
+extern u8 view_context[] __asm__("D_0018CD00");
 extern struct ProjectionScreenOrigin screen_offsets __asm__("D_0013E500");
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
@@ -33,6 +33,8 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     f32 first_projected[4] __attribute__((aligned(16)));
     f32 opposite_projected[4] __attribute__((aligned(16)));
     f32 *opposite_pointer;
+    f32 scale_x;
+    f32 scale_y;
 
     opposite_pointer = opposite_projected;
     *(u128 *)first_projected = *first;
@@ -49,14 +51,16 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     first_projected[1] *= 1.0f / first_projected[3];
     opposite_pointer[0] *= 1.0f / opposite_pointer[3];
     opposite_pointer[1] *= 1.0f / opposite_pointer[3];
-    first_projected[0] *= view_context.scale_x;
-    opposite_pointer[0] *= view_context.scale_x;
-    first_projected[1] *= view_context.scale_y;
-    opposite_pointer[1] *= view_context.scale_y;
+    scale_y = *(f32 *)(view_context + 0x194);
+    scale_x = *(f32 *)(view_context + 0x190);
+    first_projected[0] *= scale_x;
+    opposite_pointer[0] *= scale_x;
+    first_projected[1] *= scale_y;
+    opposite_pointer[1] *= scale_y;
     *x = first_projected[0] * 0.25f + (f32)screen_offsets.x;
     *y = first_projected[1] * 0.25f + (f32)screen_offsets.y;
     *width = (opposite_pointer[0] - first_projected[0]) * 0.25f;
-    *height = (opposite_projected[1] - first_projected[1]) * 0.25f;
+    *height = (opposite_pointer[1] - first_projected[1]) * 0.25f;
 }
 
 extern __typeof__(project_graphics_bounds_float) func_00237C80 __attribute__((alias("FUN_00237c80")));
