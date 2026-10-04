@@ -21,7 +21,11 @@ extern struct GraphicsBufferDescriptor graphics_buffer_descriptors[5] __asm__("D
 
 void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
 
-/* Mode zero uses one primary buffer; nonzero mode uses the 2/1/2 layout. */
+/* Mode zero writes one primary descriptor and clears four entries.
+ * Nonzero mode writes two primary descriptors, one secondary descriptor,
+ * and two further primary descriptors. Address strides are 0x11800 for
+ * the first two groups and 0x4F000 for the final group. The second word
+ * is zero except for the final group, where it is one. */
 void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 secondary_address;
     s32 primary_address;
