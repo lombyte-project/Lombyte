@@ -608,7 +608,38 @@ void FUN_L17_002f5260(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f5390.s", FUN_L17_002f5390);
+/* Update moby 1876: waits for a trigger, then plays an effect and finishes. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
+
+extern float D_L17_0015F580[] __attribute__((section(".sdata")));
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
+void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L17_002f5390(unsigned char *m) {
+    int flag = 0;
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (r) {
+            if (*(float *)(r + 0x2C) > 0.0f) flag = 1;
+        }
+        if (flag) m[0x20] = 2;
+        break;
+    case 2:
+        allocate_voice_for_target_entry(0, 0, (int)m);
+        FUN_L00_00257470(m, 0, -1);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263fd8((char *)m, 0x753, (float *)(m + 0x10), m + 0x40, 0, 0, D_L17_0015F580, D_L17_0015F580, 0.0f, D_L17_0015F580);
+        FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
+        FUN_L01_00278e20(m, 0x755);
+        mark_moby_for_removal_c(m);
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

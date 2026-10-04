@@ -42,7 +42,68 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002a0a98.s", FUN_L16_002a0a98);
+/* Steer a projectile toward its target and emit its impact effects. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001671C0_c[] __asm__("D_L16_001671C0");
+extern char D_0013E633[];
+extern char D_L16_00167240_c[] __asm__("D_L16_00167240");
+extern char D_001413F4[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern float FUN_001f9b48(void *);
+extern int FUN_001efa68(void*,void*,int,void*,void*);
+extern int FUN_L00_0028dc90(int,int,int,int);
+extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
+extern void FUN_001f9a40(void*,void*,void*,float);
+extern void FUN_L00_002598b0(int,float,void*,int,float,float,int,int,int);
+extern void FUN_L00_0025e450(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int);
+extern void FUN_L15_0029ae18(char*);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
+
+void FUN_L16_002a0a98(char *m) {
+    float desired[4],next[4],delta[4],blend[4];
+    char *d=*(char**)(m+0x78);
+    void *remaining;
+    float yaw,pitch;
+    if(*(int*)(d+0x34)==0 && func_001F9D10_2E7198(m+0x10,D_L16_001671C0_c)<15.0f) {
+        *(int*)(d+0x34)=1;FUN_L00_0028dc90(5,0,(int)m,0x54C);
+    }
+    if(*(unsigned char*)(m+0x20)!=0) return;
+    FUN_L15_0029ae18(m);
+    subtract_vector_xyz(delta,d+0x10,m+0x10);
+    yaw=FUN_001f9e90(delta[0],delta[1]);
+    pitch=FUN_001f9e90(vector_length_xy(delta),delta[2]);
+    yaw=fast_add_rotations(yaw,*(float *)(d+0x28));
+    pitch=fast_add_rotations(pitch,*(float *)(d+0x2C));
+    if(pitch>1.2217305f) pitch=1.2217305f;
+    else if(pitch<-1.2217305f) pitch=-1.2217305f;
+    build_spherical_offset(desired,*(float *)(d+0x24),yaw,pitch);
+    if(tick_countdown_32_alt((int*)(d+0x20))==0) {
+        float a=ConvertIntegerToFloat(*(int*)(d+0x20));
+        float b=ConvertIntegerToFloat(*(int*)(d+0x30));
+        FUN_001f9a40(blend,desired,d,a/b);
+        add_vector_xyz(next,m+0x10,blend);
+        *(float *)(m+0x48)=FUN_001f9e90(blend[0],blend[1]);
+        *(float *)(m+0x44)=-FUN_001f9e90(vector_length_xy(blend),blend[2]);
+    } else {
+        add_vector_xyz(next,m+0x10,desired);
+        *(float *)(m+0x48)=yaw;*(float *)(m+0x44)=pitch;
+    }
+    remaining=delta;
+    if(FUN_001efa68((m+0x10),next,0,m,0)!=0 || vector_length_xyz(remaining)<*(float *)(d+0x24)) {
+        if(*(unsigned char*)(D_001413F4)==2) FUN_L00_002598b0((int)m,2.0f,(m+0x10),3,2.0f,1.0f,0,1,0);
+        FUN_L00_0028dc90(4,0,(int)m,0x54C);
+        FUN_L00_0025e450(m,d,(m+0x10),4.0f,4.0f,10,3,16,4.0f,2.0f,9.0f,-1,1.0f,15.0f,1,1,-1,0);
+        mark_moby_for_removal(m);
+    } else qcopy((m+0x10),next);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
