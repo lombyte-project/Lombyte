@@ -2270,10 +2270,17 @@
         },
         {
           "file": "src/overlays/shared/ui_text_002377b8.c",
-          "functions": 23,
-          "matching_c": 16,
-          "bytes_total": 14108,
-          "bytes_matching_c": 5520
+          "functions": 18,
+          "matching_c": 11,
+          "bytes_total": 12208,
+          "bytes_matching_c": 3620
+        },
+        {
+          "file": "src/overlays/shared/ui_text_0023a7a8.c",
+          "functions": 5,
+          "matching_c": 5,
+          "bytes_total": 1900,
+          "bytes_matching_c": 1900
         },
         {
           "file": "src/overlays/shared/ui_hud_0023b120.c",
@@ -2914,10 +2921,10 @@
         },
         {
           "file": "src/overlays/shared/unclassified_00278fd8.c",
-          "functions": 33,
-          "matching_c": 12,
-          "bytes_total": 32208,
-          "bytes_matching_c": 3104
+          "functions": 31,
+          "matching_c": 10,
+          "bytes_total": 31840,
+          "bytes_matching_c": 2736
         },
         {
           "file": "src/overlays/shared/unclassified_00295100.c",
@@ -3123,6 +3130,13 @@
           "bytes_matching_c": 1320
         },
         {
+          "file": "src/overlays/shared/unclassified_002cbd88.c",
+          "functions": 2,
+          "matching_c": 2,
+          "bytes_total": 368,
+          "bytes_matching_c": 368
+        },
+        {
           "file": "src/overlays/shared/unclassified_002cfcb8.c",
           "functions": 29,
           "matching_c": 14,
@@ -3173,10 +3187,10 @@
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002df730.c",
-          "functions": 66,
-          "matching_c": 48,
-          "bytes_total": 32408,
-          "bytes_matching_c": 13576
+          "functions": 63,
+          "matching_c": 45,
+          "bytes_total": 30784,
+          "bytes_matching_c": 11952
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002e22d8.c",
@@ -3198,6 +3212,13 @@
           "matching_c": 2,
           "bytes_total": 2648,
           "bytes_matching_c": 532
+        },
+        {
+          "file": "src/overlays/shared/gameplay_vendor_002e89b0.c",
+          "functions": 3,
+          "matching_c": 3,
+          "bytes_total": 1624,
+          "bytes_matching_c": 1624
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002e9010.c",
