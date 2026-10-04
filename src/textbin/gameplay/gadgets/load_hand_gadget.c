@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/gadgets/load_hand_gadget/FUN_00224368.s", FUN_00224368);
-#else
 #include "types.h"
 
 typedef struct Moby
@@ -116,11 +113,11 @@ extern s32 ammo_preview_velocities[] __asm__("D_001D5EA8");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
-extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("func_0020CB10");
+extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
 extern void func_00212F90(void *, int, int, int);
 extern Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern Moby *delete_moby(Moby *) __asm__("func_00225530");
+extern Moby *delete_moby(Moby *) __asm__("FUN_00225530");
 extern void update_preview_animation_and_attachments(s32, Moby *, Moby *, s32 *, s32 *, s32 *) __asm__("func_00225E70");
 extern s32 queue_preview_animation(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_002265D8");
 extern s32 clear_preview_animation_queue(void) __asm__("func_00226718");
@@ -363,13 +360,9 @@ s32 load_hand_gadget(HandGadgetState *hand)
           moby->ammo_moby_slot = slot_index;
         }
       }
-      slot_index++;
       *ammo_moby_slot = moby;
     }
-    else
-    {
-      slot_index++;
-    }
+    slot_index++;
     ammo_moby_slot++;
     ammo_offset++;
   }
@@ -395,4 +388,3 @@ s32 load_hand_gadget(HandGadgetState *hand)
   update_preview_animation_and_attachments(hand->source_moby_address, hand->class_pose_moby, hand->animation_moby, &hand->x60, &hand->x64, &hand->x68);
   return 0;
 }
-#endif /* NON_MATCHING */
