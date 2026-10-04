@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/effects/get_effec
 #include "types.h"
 
 struct EffectTextureDefinition {
-    s64 tex0;
+    u64 tex0;
     u16 texel_offset_quadwords;
     u16 palette_offset_quadwords;
     s16 width_log2;
@@ -31,9 +31,9 @@ extern s32 level_texture_payload_address __asm__("D_0015F460");
 extern struct TextureUploadPacket pending_texture_uploads[] __asm__("D_0018D040");
 extern struct EffectTextureDefinition effect_texture_definitions[] __asm__("D_0018D440");
 
-s64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
+u64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
 
-s64 get_effect_texture(s32 index) {
+u64 get_effect_texture(s32 index) {
     struct EffectTextureDefinition *texture;
     struct TextureUploadPacket *upload;
     s32 width_log2;
@@ -41,7 +41,7 @@ s64 get_effect_texture(s32 index) {
     s32 palette_block_offset;
     s32 texel_address;
     s32 texel_block_offset;
-    s64 tex0_word;
+    u64 tex0_word;
     s64 width_bits;
     s64 palette_bits;
     s32 pending_texture_upload_count_snapshot;
