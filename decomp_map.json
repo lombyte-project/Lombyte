@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4442,
-  "matching_c": 2603,
+  "matching_c": 2605,
   "intentional_asm": 251,
-  "pending_c": 1588,
+  "pending_c": 1586,
   "bytes_total": 3618168,
-  "bytes_matching_c": 747900,
+  "bytes_matching_c": 748296,
   "bytes_intentional_asm": 96348,
-  "bytes_pending_c": 2773920,
-  "c_exact_percent_of_recoverable": 21.2362,
-  "c_fuzzy_percent_of_recoverable": 24.2252,
+  "bytes_pending_c": 2773524,
+  "c_exact_percent_of_recoverable": 21.2474,
+  "c_fuzzy_percent_of_recoverable": 24.2364,
   "boot": {
     "units_total": 1452,
     "groups_total": 128,
@@ -1948,12 +1948,12 @@
   },
   "overlays": {
     "functions_total": 2990,
-    "matching_c": 1532,
-    "pending_c": 1458,
+    "matching_c": 1534,
+    "pending_c": 1456,
     "bytes_total": 3180524,
-    "bytes_matching_c": 519716,
-    "bytes_pending_c": 2660808,
-    "c_exact_percent_of_recoverable": 16.3406,
+    "bytes_matching_c": 520112,
+    "bytes_pending_c": 2660412,
+    "c_exact_percent_of_recoverable": 16.353,
     "shared": {
       "id": "shared",
       "index": null,
@@ -4188,12 +4188,12 @@
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
         "functions": 127,
-        "matching_c": 36,
-        "pending_c": 91,
+        "matching_c": 37,
+        "pending_c": 90,
         "bytes_total": 149888,
-        "bytes_matching_c": 8140,
-        "bytes_pending_c": 141748,
-        "c_exact_percent_of_recoverable": 5.4307,
+        "bytes_matching_c": 8376,
+        "bytes_pending_c": 141512,
+        "c_exact_percent_of_recoverable": 5.5882,
         "files": [
           {
             "file": "src/overlays/l14/ui_help_0021dd30.c",
@@ -4240,9 +4240,9 @@
           {
             "file": "src/overlays/l14/gameplay_vendor_00300e00.c",
             "functions": 25,
-            "matching_c": 9,
+            "matching_c": 10,
             "bytes_total": 15896,
-            "bytes_matching_c": 1572
+            "bytes_matching_c": 1808
           },
           {
             "file": "src/overlays/l14/gameplay_vendor_0030621c.c",
@@ -4380,12 +4380,12 @@
         "planet": "Veldin Orbit",
         "description": "Drek's Fleet: the flagship boarding",
         "functions": 56,
-        "matching_c": 30,
-        "pending_c": 26,
+        "matching_c": 31,
+        "pending_c": 25,
         "bytes_total": 139620,
-        "bytes_matching_c": 21100,
-        "bytes_pending_c": 118520,
-        "c_exact_percent_of_recoverable": 15.1124,
+        "bytes_matching_c": 21260,
+        "bytes_pending_c": 118360,
+        "c_exact_percent_of_recoverable": 15.227,
         "files": [
           {
             "file": "src/overlays/l17/ui_help_002020a8.c",
@@ -4446,9 +4446,9 @@
           {
             "file": "src/overlays/l17/gameplay_vendor_002f26d0.c",
             "functions": 12,
-            "matching_c": 9,
+            "matching_c": 10,
             "bytes_total": 9352,
-            "bytes_matching_c": 6920
+            "bytes_matching_c": 7080
           }
         ]
       },
@@ -4534,14 +4534,14 @@
   },
   "total": {
     "units_total": 4442,
-    "matching_c": 2603,
+    "matching_c": 2605,
     "intentional_asm": 251,
-    "pending_c": 1588,
+    "pending_c": 1586,
     "bytes_total": 3618168,
-    "bytes_matching_c": 747900,
+    "bytes_matching_c": 748296,
     "bytes_intentional_asm": 96348,
-    "bytes_pending_c": 2773920,
-    "c_exact_percent_of_recoverable": 21.2362,
-    "c_fuzzy_percent_of_recoverable": 24.2252
+    "bytes_pending_c": 2773524,
+    "c_exact_percent_of_recoverable": 21.2474,
+    "c_fuzzy_percent_of_recoverable": 24.2364
   }
 }
