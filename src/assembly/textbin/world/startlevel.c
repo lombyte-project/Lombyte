@@ -186,6 +186,7 @@ void startlevel(void) {
     DebugPrint(D_001E76C0);
     bank = func_0022D708(D_00137B80[0x14E0 / 4]);
     func_0012E1A8();
+    /* Retail publishes the slot base at 0x001e99d8, then the count at 0x001e99e0. */
     D_0015F634 = D_00186100;
     D_00186100[0].bank = bank;
     D_00186100[1].bank = bank;
