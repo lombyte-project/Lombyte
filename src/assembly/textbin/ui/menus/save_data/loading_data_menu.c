@@ -101,10 +101,10 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
         return 0;
       }
       memory_card_state.loaded_save_ready = 1;
-      scaled_volume_80 = ((s32) (sound_volume * 8)) / 10;
+      mixer_state.group_0_volume = ((s32) (sound_volume * 8)) / 10;
       mixer_state.group_1_volume = music_volume;
       scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
-      mixer_state.group_0_volume = scaled_volume_80;
+      scaled_volume_80 = mixer_state.group_0_volume;
       mixer_state.group_2_volume = scaled_volume_80;
       mixer_state.group_3_volume = ((s32) (sound_volume * 7)) / 10;
       scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
