@@ -115,9 +115,9 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     u8 *availability_table;
     int item_id;
 
+    text = empty_label_text;
     font = normal_font_metrics;
     font_texture_index = 1;
-    text = empty_label_text;
     value_variant = 0;
     flags = label->flags;
     if (flags & 8) {
