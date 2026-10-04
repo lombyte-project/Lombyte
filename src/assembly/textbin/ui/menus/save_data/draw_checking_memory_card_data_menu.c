@@ -125,7 +125,7 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         return 2;
     }
     if (menu->flags & 4) {
-        entry_offset = ((state < 4) ^ 1) << 2;
+        entry_offset = (state >= 4) << 2;
         entry = &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
         if (entry->type == 0 && item_available[entry->id] == 0) {
             return 1;
