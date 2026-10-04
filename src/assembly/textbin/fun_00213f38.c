@@ -12,8 +12,9 @@ f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 accele
 
 /* Advance value toward target while retaining velocity between calls. Brake
    when motion points away from the target; otherwise choose a desired speed
-   from the stopping distance and snap to target when the next step reaches it.
-   The return value is the displacement applied during this call. */
+   from velocity squared divided by twice the braking step. Near the stopping
+   distance, one path brakes at 1.1 times the usual step. Snap to target when
+   the next step reaches it. Return the displacement applied this call. */
 f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step, f32 braking_step, f32 maximum_speed)
 {
   f32 distance;
