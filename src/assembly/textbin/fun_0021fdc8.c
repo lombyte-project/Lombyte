@@ -195,10 +195,11 @@ process_stream_state:
                             primary_read_started = start_audio_stream_read_alternate(primary_read_address, primary_entry_alternate->sector, primary_entry_alternate->sector_count);
                         }
                         if (primary_read_started == 0) {
-                            next_state = -1;
-                            goto set_stream_state;
+                            stream->state = -1;
+                        } else {
+                            goto publish_primary_read;
                         }
-                        goto publish_primary_read;
+                        break;
                     }
                 }
             }
