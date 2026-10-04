@@ -67,6 +67,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
     s32 text_x;
     u8 *label_text;
     s32 texture_index;
+    u8 visit_state;
 
     setup_gif_paging(0);
     vu1_add_g_sregister(0x42, 0x8000000044);
@@ -84,7 +85,8 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
             continue;
         }
         availability = 3;
-        if (g_abLevelVisitState[level_index] == 0) {
+        visit_state = g_abLevelVisitState[level_index];
+        if (visit_state == 0) {
             availability = 2;
             if (D_0013DD40[level_index] == 0) {
                 availability = 0;
