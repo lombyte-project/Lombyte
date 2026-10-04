@@ -458,7 +458,7 @@ class RebuildIsoExtentTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.rebuild = load_module("rnc_rebuild_iso", ROOT / "rebuild-iso.py")
+        cls.rebuild = load_module("rnc_rebuild_iso", ROOT / "scripts/rebuild-iso.py")
 
     @classmethod
     def _record(cls, name: str, lba: int, size: int) -> bytes:

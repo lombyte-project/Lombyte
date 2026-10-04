@@ -26,12 +26,12 @@ elf: ## Rebuild the boot ELF byte-for-byte (full baseline + SHA gate)
 
 overlays: ## Build src/overlays and prove every overlay function in C against retail (docs/overlays.md)
 	$${VENV:-.venv}/bin/python configure.py --overlays
-	$${VENV:-.venv}/bin/python scripts/verify-overlays.py
+	$${VENV:-.venv}/bin/python scripts/overlay_unit.py
 
 iso: elf ## Patch the rebuilt boot ELF into a copy of the disc image
 	@iso="$$(ls dumps/*.iso 2>/dev/null | head -1)"; \
 	test -n "$$iso" || { echo "no dumps/*.iso found; place a legally owned dump in dumps/" >&2; exit 1; }; \
-	python3 rebuild-iso.py --iso "$$iso"
+	python3 scripts/rebuild-iso.py --iso "$$iso"
 
 clean-iso:
 	@rm -f "build/Ratchet & Clank (USA) - rebuilt.iso"

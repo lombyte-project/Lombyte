@@ -189,7 +189,7 @@ matches your own. The output is
 To patch an already-built ELF with explicit paths:
 
 ```sh
-python3 rebuild-iso.py \
+python3 scripts/rebuild-iso.py \
   --iso dumps/game.iso \
   --elf "$BASELINE_ROOT/config/us/build/SCUS_971.99" \
   --out build/rebuilt.iso

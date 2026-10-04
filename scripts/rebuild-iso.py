@@ -12,7 +12,7 @@ Because the matching decompilation reproduces the boot ELF byte-for-byte
 (full-ELF SHA gate), the patched ISO is byte-identical to the original.
 
 Usage:
-  python3 rebuild-iso.py [--iso dumps/....iso] [--elf PATH] [--out build/....iso]
+  python3 scripts/rebuild-iso.py [--iso dumps/....iso] [--elf PATH] [--out build/....iso]
 
 If --elf is omitted, the script looks for the reconstructed boot ELF in the
 baseline workspace (build/baseline/config/us/build/SCUS_971.99 in the checkout,
@@ -30,7 +30,7 @@ import pathlib
 import struct
 import sys
 
-ROOT = pathlib.Path(__file__).resolve().parent
+ROOT = pathlib.Path(__file__).resolve().parent.parent
 RETAIL_SHA = "e050581032e4bb3f20341307da5b69b76f1574910519155380ea771e55c3c0c9"
 
 
