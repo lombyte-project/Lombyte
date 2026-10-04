@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4408,
-  "matching_c": 2603,
-  "intentional_asm": 251,
-  "pending_c": 1554,
+  "matching_c": 2608,
+  "intentional_asm": 301,
+  "pending_c": 1499,
   "bytes_total": 3616452,
-  "bytes_matching_c": 750992,
-  "bytes_intentional_asm": 96348,
-  "bytes_pending_c": 2769112,
-  "c_exact_percent_of_recoverable": 21.3344,
-  "c_fuzzy_percent_of_recoverable": 24.3249,
+  "bytes_matching_c": 755908,
+  "bytes_intentional_asm": 123320,
+  "bytes_pending_c": 2737224,
+  "c_exact_percent_of_recoverable": 21.6398,
+  "c_fuzzy_percent_of_recoverable": 24.6534,
   "boot": {
     "units_total": 1453,
     "groups_total": 128,
@@ -1947,25 +1947,27 @@
     ]
   },
   "overlays": {
-    "functions_total": 2955,
-    "matching_c": 1531,
-    "pending_c": 1424,
-    "bytes_total": 3178740,
-    "bytes_matching_c": 522740,
-    "bytes_pending_c": 2656000,
-    "c_exact_percent_of_recoverable": 16.4449,
+    "functions_total": 2905,
+    "matching_c": 1536,
+    "pending_c": 1369,
+    "bytes_total": 3151768,
+    "bytes_matching_c": 527656,
+    "bytes_pending_c": 2624112,
+    "c_exact_percent_of_recoverable": 16.7416,
+    "intentional_asm": 50,
+    "bytes_intentional_asm": 26972,
     "shared": {
       "id": "shared",
       "index": null,
       "planet": "Shared code",
       "description": "functions present in two or more levels",
-      "functions": 1619,
-      "matching_c": 1021,
-      "pending_c": 598,
-      "bytes_total": 1150360,
-      "bytes_matching_c": 340944,
-      "bytes_pending_c": 809416,
-      "c_exact_percent_of_recoverable": 29.638,
+      "functions": 1571,
+      "matching_c": 1025,
+      "pending_c": 546,
+      "bytes_total": 1124640,
+      "bytes_matching_c": 345164,
+      "bytes_pending_c": 779476,
+      "c_exact_percent_of_recoverable": 30.6911,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -1997,9 +1999,9 @@
         },
         {
           "file": "src/overlays/shared/unclassified_001ee1b0.c",
-          "functions": 7,
+          "functions": 2,
           "matching_c": 2,
-          "bytes_total": 11692,
+          "bytes_total": 1284,
           "bytes_matching_c": 1284
         },
         {
@@ -2060,17 +2062,10 @@
         },
         {
           "file": "src/overlays/shared/unclassified_001fd108.c",
-          "functions": 20,
+          "functions": 3,
           "matching_c": 2,
-          "bytes_total": 1984,
+          "bytes_total": 340,
           "bytes_matching_c": 324
-        },
-        {
-          "file": "src/overlays/shared/unclassified_001ff230.c",
-          "functions": 1,
-          "matching_c": 0,
-          "bytes_total": 16,
-          "bytes_matching_c": 0
         },
         {
           "file": "src/overlays/shared/ui_help_001ff938.c",
@@ -2081,9 +2076,9 @@
         },
         {
           "file": "src/overlays/shared/math_rotations_00200228.c",
-          "functions": 2,
+          "functions": 1,
           "matching_c": 0,
-          "bytes_total": 80,
+          "bytes_total": 24,
           "bytes_matching_c": 0
         },
         {
@@ -2109,9 +2104,9 @@
         },
         {
           "file": "src/overlays/shared/unclassified_002025d0.c",
-          "functions": 2,
+          "functions": 1,
           "matching_c": 0,
-          "bytes_total": 72,
+          "bytes_total": 8,
           "bytes_matching_c": 0
         },
         {
@@ -2145,9 +2140,9 @@
         {
           "file": "src/overlays/shared/ui_help_00214658.c",
           "functions": 20,
-          "matching_c": 15,
+          "matching_c": 16,
           "bytes_total": 12944,
-          "bytes_matching_c": 8312
+          "bytes_matching_c": 8832
         },
         {
           "file": "shared",
@@ -2169,13 +2164,6 @@
           "matching_c": 3,
           "bytes_total": 6000,
           "bytes_matching_c": 1296
-        },
-        {
-          "file": "src/overlays/shared/unclassified_0021fa98.c",
-          "functions": 1,
-          "matching_c": 0,
-          "bytes_total": 784,
-          "bytes_matching_c": 0
         },
         {
           "file": "src/overlays/shared/ui_help_00220b80.c",
@@ -2368,9 +2356,9 @@
         },
         {
           "file": "src/overlays/shared/unclassified_0024d8d0.c",
-          "functions": 3,
+          "functions": 1,
           "matching_c": 0,
-          "bytes_total": 792,
+          "bytes_total": 40,
           "bytes_matching_c": 0
         },
         {
@@ -2409,13 +2397,6 @@
           "bytes_matching_c": 616
         },
         {
-          "file": "src/overlays/shared/unclassified_0024f748.c",
-          "functions": 3,
-          "matching_c": 0,
-          "bytes_total": 2204,
-          "bytes_matching_c": 0
-        },
-        {
           "file": "src/overlays/shared/gameplay_entities_0024f698.c",
           "functions": 1,
           "matching_c": 1,
@@ -2438,9 +2419,9 @@
         },
         {
           "file": "src/overlays/shared/rendering_commands_002502f0.c",
-          "functions": 3,
+          "functions": 2,
           "matching_c": 0,
-          "bytes_total": 176,
+          "bytes_total": 96,
           "bytes_matching_c": 0
         },
         {
@@ -2451,18 +2432,18 @@
           "bytes_matching_c": 100
         },
         {
-          "file": "src/overlays/shared/unclassified_00250df8.c",
-          "functions": 8,
+          "file": "src/overlays/shared/unclassified_00252570.c",
+          "functions": 1,
           "matching_c": 1,
-          "bytes_total": 7424,
-          "bytes_matching_c": 852
+          "bytes_total": 124,
+          "bytes_matching_c": 124
         },
         {
-          "file": "src/overlays/shared/unclassified_00252570.c",
-          "functions": 6,
+          "file": "src/overlays/shared/unclassified_00250df8.c",
+          "functions": 2,
           "matching_c": 1,
-          "bytes_total": 2692,
-          "bytes_matching_c": 124
+          "bytes_total": 1448,
+          "bytes_matching_c": 852
         },
         {
           "file": "src/overlays/shared/math_random_00257b90.c",
@@ -2484,13 +2465,6 @@
           "matching_c": 14,
           "bytes_total": 5928,
           "bytes_matching_c": 4672
-        },
-        {
-          "file": "src/overlays/shared/unclassified_00258090.c",
-          "functions": 2,
-          "matching_c": 0,
-          "bytes_total": 628,
-          "bytes_matching_c": 0
         },
         {
           "file": "src/overlays/shared/gameplay_entities_00259710.c",
@@ -2668,13 +2642,6 @@
           "bytes_matching_c": 404
         },
         {
-          "file": "src/overlays/shared/unclassified_002667fc.c",
-          "functions": 1,
-          "matching_c": 0,
-          "bytes_total": 216,
-          "bytes_matching_c": 0
-        },
-        {
           "file": "src/overlays/shared/ui_menus_00266d60.c",
           "functions": 3,
           "matching_c": 3,
@@ -2683,9 +2650,9 @@
         },
         {
           "file": "src/overlays/shared/input_pad_002678b8.c",
-          "functions": 4,
+          "functions": 1,
           "matching_c": 0,
-          "bytes_total": 844,
+          "bytes_total": 8,
           "bytes_matching_c": 0
         },
         {
@@ -2717,6 +2684,13 @@
           "bytes_matching_c": 16468
         },
         {
+          "file": "src/overlays/shared/unclassified_00258090.c",
+          "functions": 1,
+          "matching_c": 0,
+          "bytes_total": 512,
+          "bytes_matching_c": 0
+        },
+        {
           "file": "src/overlays/shared/rendering_view_00275690.c",
           "functions": 1,
           "matching_c": 1,
@@ -2726,9 +2700,9 @@
         {
           "file": "src/overlays/shared/audio_voices_00276368.c",
           "functions": 5,
-          "matching_c": 0,
+          "matching_c": 1,
           "bytes_total": 5856,
-          "bytes_matching_c": 0
+          "bytes_matching_c": 1772
         },
         {
           "file": "src/overlays/shared/gameplay_state_00276a48.c",
@@ -3153,9 +3127,9 @@
         {
           "file": "src/overlays/shared/unclassified_002d7f88.c",
           "functions": 37,
-          "matching_c": 25,
+          "matching_c": 26,
           "bytes_total": 29756,
-          "bytes_matching_c": 6592
+          "bytes_matching_c": 6800
         },
         {
           "file": "src/overlays/shared/unclassified_00297d10.c",
@@ -3174,9 +3148,9 @@
         {
           "file": "src/overlays/shared/gameplay_vendor_002df730.c",
           "functions": 62,
-          "matching_c": 46,
+          "matching_c": 47,
           "bytes_total": 30784,
-          "bytes_matching_c": 12096
+          "bytes_matching_c": 13816
         },
         {
           "file": "src/overlays/shared/gameplay_vendor_002e22d8.c",
@@ -3341,13 +3315,13 @@
         "index": 1,
         "planet": "Novalis",
         "description": "Tobruk Crater: a village under Blarg attack",
-        "functions": 64,
+        "functions": 63,
         "matching_c": 38,
-        "pending_c": 26,
-        "bytes_total": 114792,
+        "pending_c": 25,
+        "bytes_total": 114480,
         "bytes_matching_c": 16736,
-        "bytes_pending_c": 98056,
-        "c_exact_percent_of_recoverable": 14.5794,
+        "bytes_pending_c": 97744,
+        "c_exact_percent_of_recoverable": 14.6191,
         "files": [
           {
             "file": "src/overlays/l01/ui_help_00233de0.c",
@@ -3368,13 +3342,6 @@
             "functions": 1,
             "matching_c": 0,
             "bytes_total": 19120,
-            "bytes_matching_c": 0
-          },
-          {
-            "file": "src/overlays/l01/unclassified_00262618.c",
-            "functions": 1,
-            "matching_c": 0,
-            "bytes_total": 312,
             "bytes_matching_c": 0
           },
           {
@@ -3689,19 +3656,19 @@
         "index": 6,
         "planet": "Nebula G34",
         "description": "Blarg Tactical Research Station: zero-gravity corridors",
-        "functions": 81,
+        "functions": 80,
         "matching_c": 30,
-        "pending_c": 51,
-        "bytes_total": 134256,
+        "pending_c": 50,
+        "bytes_total": 133316,
         "bytes_matching_c": 9936,
-        "bytes_pending_c": 124320,
-        "c_exact_percent_of_recoverable": 7.4008,
+        "bytes_pending_c": 123380,
+        "c_exact_percent_of_recoverable": 7.453,
         "files": [
           {
             "file": "src/overlays/l06/unclassified_00216b88.c",
-            "functions": 2,
+            "functions": 1,
             "matching_c": 0,
-            "bytes_total": 948,
+            "bytes_total": 8,
             "bytes_matching_c": 0
           },
           {
@@ -4288,12 +4255,12 @@
         "planet": "Kalebo III",
         "description": "Gadgetron headquarters and the hoverboard finals",
         "functions": 87,
-        "matching_c": 50,
-        "pending_c": 37,
+        "matching_c": 51,
+        "pending_c": 36,
         "bytes_total": 129728,
-        "bytes_matching_c": 21548,
-        "bytes_pending_c": 108180,
-        "c_exact_percent_of_recoverable": 16.6101,
+        "bytes_matching_c": 22244,
+        "bytes_pending_c": 107484,
+        "c_exact_percent_of_recoverable": 17.1466,
         "files": [
           {
             "file": "src/overlays/l16/ui_help_002097a0.c",
@@ -4326,9 +4293,9 @@
           {
             "file": "src/overlays/l16/unclassified_002a3f38.c",
             "functions": 43,
-            "matching_c": 26,
+            "matching_c": 27,
             "bytes_total": 22452,
-            "bytes_matching_c": 9044
+            "bytes_matching_c": 9740
           },
           {
             "file": "src/overlays/l16/gameplay_vendor_002e3190.c",
@@ -4499,14 +4466,14 @@
   },
   "total": {
     "units_total": 4408,
-    "matching_c": 2603,
-    "intentional_asm": 251,
-    "pending_c": 1554,
+    "matching_c": 2608,
+    "intentional_asm": 301,
+    "pending_c": 1499,
     "bytes_total": 3616452,
-    "bytes_matching_c": 750992,
-    "bytes_intentional_asm": 96348,
-    "bytes_pending_c": 2769112,
-    "c_exact_percent_of_recoverable": 21.3344,
-    "c_fuzzy_percent_of_recoverable": 24.3249
+    "bytes_matching_c": 755908,
+    "bytes_intentional_asm": 123320,
+    "bytes_pending_c": 2737224,
+    "c_exact_percent_of_recoverable": 21.6398,
+    "c_fuzzy_percent_of_recoverable": 24.6534
   }
 }
