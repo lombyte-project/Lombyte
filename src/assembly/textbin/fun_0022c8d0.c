@@ -5,85 +5,88 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022c8d0/FUN_0022c8d0.s", FUN_0022c8d0);
 #else
 #include "types.h"
-struct M2c_D_0013E550 {
+#include "qzero.h"
+struct VoicePoolInitializationState {
     u8 pad_0[0x40];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
+    s32 listener_history_position;
+    s32 reserved44;
+    s32 group_0_volume;
+    s32 group_1_volume;
+    s32 group_2_volume;
+    s32 group_3_volume;
+    s32 group_4_volume;
+    s32 group_5_volume;
     u8 pad_60[0x10];
-    s32 unk70;
+    s32 handle;
 };
 
-struct M2c_var_3_18 {
+struct VoicePoolInitializationWindow {
     u8 pad_0[0x70];
-    s32 unk70;
-    s32 unk74;
+    s32 handle;
+    u8 state;  /* Only the byte at offset 0x74 is cleared. */
 };
 
-extern struct M2c_D_0013E550 D_0013E550;
+extern struct VoicePoolInitializationState D_0013E550;
 extern s32 D_0015EDE8[];
 extern s32 D_0015EDEC;
 extern s32 D_0015EDF0;
-extern s32 func_0012DA28();
-extern s32 func_0012E208();
-extern s32 func_0012E240();
-extern s32 func_0012E280();
-extern s32 func_0012E2B8();
-extern s32 func_0012EFA8();
-extern s32 func_00215390();
-void FUN_0022c8d0(void) {
-    s64 *temp_4_21;
-    s64 *var_2_8;
-    struct M2c_var_3_18 *var_3_18;
-    s32 temp_lo_66;
-    s32 temp_lo_71;
-    s32 var_3_4;
+extern s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
+extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
+extern void snd_set_playback_mode(s32) __asm__("FUN_0012e240");
+extern void snd_set_mixer_mode(s32, s32) __asm__("FUN_0012e280");
+extern void snd_set_group_voice_range(s32, s32, s32) __asm__("FUN_0012e2b8");
+extern void snd_pre_alloc_reverb_work_area(s32, s32) __asm__("FUN_0012efa8");
+extern void reset_music(void) __asm__("FUN_00215390");
+void initialize_gameplay_sound_system(void) __asm__("FUN_0022c8d0");
 
-    var_3_4 = 3;
-    var_2_8 = &D_0013E550;
+void initialize_gameplay_sound_system(void) {
+    u8 *slot_end;
+    u8 *header_block;
+    struct VoicePoolInitializationWindow *slot_window;
+    s32 scaled_volume_80;
+    s32 scaled_volume_70;
+    s32 header_block_index;
+
+    header_block_index = 3;
+    header_block = (u8 *)&D_0013E550;
     do {
-        *var_2_8 = 0;
-        var_3_4 -= 1;
-        var_2_8 += 2;
-    } while (var_3_4 >= 0);
-    var_3_18 = &D_0013E550;
-    D_0013E550.unk40 = 0;
-    D_0013E550.unk44 = 0;
-    temp_4_21 = ((u8 *)&D_0013E550 + 0xD20);
-    D_0013E550.unk70 = 0;
+        qzero(header_block);
+        header_block_index -= 1;
+        header_block += 16;
+    } while (header_block_index >= 0);
+    slot_window = (struct VoicePoolInitializationWindow *)&D_0013E550;
+    D_0013E550.listener_history_position = 0;
+    D_0013E550.reserved44 = 0;
+    slot_end = ((u8 *)&D_0013E550 + 0xD20);
+    D_0013E550.handle = 0;
 loop_3:
-    var_3_18->unk74 = 0;
-    var_3_18 += 0x70;
-    if ((s32) var_3_18 < (s32) temp_4_21) {
-        var_3_18->unk70 = 0;
+    slot_window->state = 0;
+    slot_window = (struct VoicePoolInitializationWindow *)((u8 *)slot_window + 0x70);
+    if ((s32)slot_window < (s32)slot_end) {
+        slot_window->handle = 0;
         goto loop_3;
     }
-    func_0012DA28(temp_4_21);
-    func_0012E240(D_0015EDE8[0] == 0);
-    func_0012E280(0, 1);
-    func_0012EFA8(2, 4);
-    func_0012E2B8(1, 0x18, 0x2F);
-    func_0012E2B8(2, 0x18, 0x2F);
-    func_0012E2B8(4, 0x18, 0x2F);
-    temp_lo_66 = (s32) (*(s32 *)0x15EDF0 * 8) / 10;
-    D_0013E550.unk4C = (s32) *(s32 *)0x15EDEC;
-    temp_lo_71 = (s32) (*(s32 *)0x15EDF0 * 7) / 10;
-    D_0013E550.unk48 = temp_lo_66;
-    D_0013E550.unk50 = temp_lo_66;
-    D_0013E550.unk54 = temp_lo_71;
-    D_0013E550.unk58 = temp_lo_71;
-    D_0013E550.unk5C = (s32) *(s32 *)0x15EDF0;
-    func_00215390(0xA, *(s32 *)0x15EDF0, temp_lo_66, 0xA);
-    func_0012E208(0, D_0013E550.unk48);
-    func_0012E208(1, D_0013E550.unk4C);
-    func_0012E208(2, D_0013E550.unk50);
-    func_0012E208(3, D_0013E550.unk54);
-    func_0012E208(4, D_0013E550.unk58);
-    func_0012E208(5, D_0013E550.unk5C);
+    snd_start_sound_system();
+    snd_set_playback_mode(D_0015EDE8[0] == 0);
+    snd_set_mixer_mode(0, 1);
+    snd_pre_alloc_reverb_work_area(2, 4);
+    snd_set_group_voice_range(1, 0x18, 0x2F);
+    snd_set_group_voice_range(2, 0x18, 0x2F);
+    snd_set_group_voice_range(4, 0x18, 0x2F);
+    scaled_volume_80 = (s32) (*(s32 *)0x15EDF0 * 8) / 10;
+    D_0013E550.group_1_volume = (s32) *(s32 *)0x15EDEC;
+    scaled_volume_70 = (s32) (*(s32 *)0x15EDF0 * 7) / 10;
+    D_0013E550.group_0_volume = scaled_volume_80;
+    D_0013E550.group_2_volume = scaled_volume_80;
+    D_0013E550.group_3_volume = scaled_volume_70;
+    D_0013E550.group_4_volume = scaled_volume_70;
+    D_0013E550.group_5_volume = (s32) *(s32 *)0x15EDF0;
+    reset_music();
+    snd_set_master_volume(0, D_0013E550.group_0_volume);
+    snd_set_master_volume(1, D_0013E550.group_1_volume);
+    snd_set_master_volume(2, D_0013E550.group_2_volume);
+    snd_set_master_volume(3, D_0013E550.group_3_volume);
+    snd_set_master_volume(4, D_0013E550.group_4_volume);
+    snd_set_master_volume(5, D_0013E550.group_5_volume);
 }
 #endif /* NON_MATCHING */

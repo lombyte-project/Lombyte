@@ -1,40 +1,42 @@
 #include "types.h"
-struct M2c_temp_3_11 {
+
+/* This window includes the pool header; state is slot-relative offset 4. */
+struct VoiceReleaseWindow {
     u8 pad_0[0x74];
-    u8 unk74;
+    u8 state;
     u8 pad_auto_75[3];
     u8 pad_78[0x10];
-    s32 unk88;
-    s32 unk8C;
+    s32 owner;
+    s32 owner_context;
 };
 
 extern u8 D_0013E550[];
-void release_voice_slot(s32 arg0) __asm__("FUN_0022d798");
+void release_voice_slot(s32 slot_index) __asm__("FUN_0022d798");
 
-void release_voice_slot(s32 arg0) {
-    u8 temp_5_12;
-    struct M2c_temp_3_11 *temp_3_11;
+void release_voice_slot(s32 slot_index) {
+    u8 state;
+    struct VoiceReleaseWindow *slot;
 
-    if (arg0 < 0) {
-        goto block_6;
+    if (slot_index < 0) {
+        goto done;
     }
-    temp_3_11 = (arg0 * 0x70) + D_0013E550;
-    temp_5_12 = temp_3_11->unk74;
-    if (temp_5_12 != 7) {
-        goto block_3;
+    slot = (struct VoiceReleaseWindow *)((slot_index * 0x70) + D_0013E550);
+    state = slot->state;
+    if (state != 7) {
+        goto request_release;
     }
-    temp_3_11->unk88 = 0;
-    temp_3_11->unk8C = 0;
-    temp_3_11->unk74 = 0U;
+    slot->owner = 0;
+    slot->owner_context = 0;
+    slot->state = 0U;
     return;
-block_3:
-    if (temp_5_12 == 0) {
-        goto block_6;
+request_release:
+    if (state == 0) {
+        goto done;
     }
-    if (temp_5_12 == 6) {
-        goto block_6;
+    if (state == 6) {
+        goto done;
     }
-    temp_3_11->unk74 = 4U;
-block_6:
+    slot->state = 4U;
+done:
     return;
 }

@@ -7,47 +7,47 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/audio/sound_option
 #include "types.h"
 #include "sda.h"
 
-struct M2c_D_0013C940 {
+struct SoundMenuInput {
     u8 pad_0[0x1C0];
-    s32 unk1C0;
-    s32 unk1C4;
+    s32 held_buttons;
+    s32 pressed_buttons;
 };
 
-struct M2c_D_0013E550 {
+struct SoundMenuMixer {
     u8 pad_0[0x48];
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
+    s32 group_0_volume;
+    s32 group_1_volume;
+    s32 group_2_volume;
+    s32 group_3_volume;
+    s32 group_4_volume;
+    s32 group_5_volume;
 };
 
-struct M2c_D_001D5BF0 {
+struct SoundMenuNavigation {
     u8 pad_0[0x4];
-    struct M2c_D_001D5BF0_unk4 *unk4;
+    struct SoundMenuNavigationEntry *unk4;
     s32 unk8;
     u8 pad_C[0x118];
     s32 unk124;
 };
 
-struct M2c_D_001D5BF0_unk4 {
+struct SoundMenuNavigationEntry {
     u8 pad_0[0x38];
     s32 unk38;
 };
 
-struct M2c_arg0 {
+struct SoundMenu {
     u8 pad_0[0x14];
-    s32 unk14;
+    s32 owner;
     u8 pad_18[0x18];
-    s32 unk30;
+    s32 flags;
     u8 pad_34[0xC];
-    s32 unk40;
+    s32 selected_option;
 };
 
-extern struct M2c_D_0013C940 D_0013C940;
-extern struct M2c_D_0013E550 D_0013E550;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct SoundMenuInput D_0013C940;
+extern struct SoundMenuMixer D_0013E550;
+extern struct SoundMenuNavigation D_001D5BF0;
 extern s32 D_001D5D14 NOT_SDA;
 extern s32 *D_001D5BF4 NOT_SDA;
 extern s32 D_0015EDEC MACRO_ADDR;
@@ -55,77 +55,78 @@ extern s32 D_0015EDF0 MACRO_ADDR;
 extern s32 D_0015EDE8 MACRO_ADDR;
 extern s32 D_001A0314 NOT_SDA;
 extern s32 *D_001601E0 __attribute__((sda));
-extern s32 func_0022DA68(s32 arg0, s32 arg1, s32 arg2);
-void snd_set_playback_mode(s32 arg0) __asm__("FUN_0012e240");
+extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index, s32 owner) __asm__("func_0022DA68");
+void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
 
-s32 sound_options_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021cb30");
+s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
 
-s32 sound_options_menu(struct M2c_arg0 *arg0) {
-    s32 var_40;
-    s32 *music;
-    s32 var_EDE8;
-    s32 var_EDEC;
-    s32 var_EDF0;
+s32 sound_options_menu(struct SoundMenu *menu) {
+    s32 previous_selection;
+    s32 *first_volume;
+    s32 previous_playback_mode;
+    s32 previous_second_volume;
+    s32 previous_first_volume;
 
-    if (D_0013C940.unk1C4 & 0xD00) {
+    if (D_0013C940.pressed_buttons & 0xD00) {
         if (D_001D5D14 == 0) {
             return 1;
         }
     }
-    if (D_0013C940.unk1C4 & 0x10) {
-        s32 temp = D_001D5BF0.unk4->unk38;
+    if (D_0013C940.pressed_buttons & 0x10) {
+        s32 navigation_value = D_001D5BF0.unk4->unk38;
 
-        if (temp != 0) {
-            D_001D5BF0.unk8 = temp;
+        if (navigation_value != 0) {
+            D_001D5BF0.unk8 = navigation_value;
         } else if (D_001D5BF0.unk124 == 0) {
             return -1;
         }
     }
-    var_40 = arg0->unk40;
-    if (D_0013C940.unk1C4 & 0x1000) {
-        arg0->unk40 = (var_40 + 2) % 3;
+    previous_selection = menu->selected_option;
+    if (D_0013C940.pressed_buttons & 0x1000) {
+        menu->selected_option = (previous_selection + 2) % 3;
     }
-    if (D_0013C940.unk1C4 & 0x4000) {
-        arg0->unk40 = (arg0->unk40 + 1) % 3;
+    if (D_0013C940.pressed_buttons & 0x4000) {
+        menu->selected_option = (menu->selected_option + 1) % 3;
     }
-    if ((arg0->unk40 != var_40) || (D_001D5BF4[0x20] != 0)) {
-        func_0022DA68(1, 0x11, arg0->unk14);
-        if (arg0->unk30 & 0x20) {
-            D_001A0314 = D_001601E0[arg0->unk40];
+    if ((menu->selected_option != previous_selection) || (D_001D5BF4[0x20] != 0)) {
+        allocate_voice_for_target_entry(1, 0x11, menu->owner);
+        if (menu->flags & 0x20) {
+            D_001A0314 = D_001601E0[menu->selected_option];
         }
     }
-    var_EDEC = D_0015EDEC;
-    var_EDF0 = D_0015EDF0;
-    music = &D_0015EDF0;
-    if (D_0013C940.unk1C0 & 0x2000) {
-        if (arg0->unk40 == 0) {
+    previous_second_volume = D_0015EDEC;
+    previous_first_volume = D_0015EDF0;
+    first_volume = &D_0015EDF0;
+    if (D_0013C940.held_buttons & 0x2000) {
+        if (menu->selected_option == 0) {
             D_0015EDF0 = (0x400 < D_0015EDF0 + 3) ? 0x400 : D_0015EDF0 + 3;
         }
-        if (arg0->unk40 == 1) {
+        if (menu->selected_option == 1) {
             D_0015EDEC = (0x400 < D_0015EDEC + 3) ? 0x400 : D_0015EDEC + 3;
         }
     }
-    if (D_0013C940.unk1C0 & 0x8000) {
-        if (arg0->unk40 == 0) {
+    if (D_0013C940.held_buttons & 0x8000) {
+        if (menu->selected_option == 0) {
             D_0015EDF0 = (D_0015EDF0 - 3 <= 0) ? 0 : D_0015EDF0 - 3;
         }
-        if (arg0->unk40 == 1) {
+        if (menu->selected_option == 1) {
             D_0015EDEC = (D_0015EDEC - 3 <= 0) ? 0 : D_0015EDEC - 3;
         }
     }
-    if ((var_EDEC != D_0015EDEC) || (var_EDF0 != *music)) {
-        D_0013E550.unk50 = D_0015EDEC;
-        D_0013E550.unk4C = D_0015EDEC;
-        D_0013E550.unk48 = *music * 8 / 10;
-        D_0013E550.unk54 = D_0013E550.unk58 = *music * 7 / 10;
-        D_0013E550.unk5C = *music;
+    if ((previous_second_volume != D_0015EDEC) || (previous_first_volume != *first_volume)) {
+        /* Retail assigns both groups 1 and 2 from the second slider here. */
+        D_0013E550.group_2_volume = D_0015EDEC;
+        D_0013E550.group_1_volume = D_0015EDEC;
+        D_0013E550.group_0_volume = *first_volume * 8 / 10;
+        D_0013E550.group_3_volume = D_0013E550.group_4_volume = *first_volume * 7 / 10;
+        D_0013E550.group_5_volume = *first_volume;
     }
-    if (D_0013C940.unk1C4 & 0x40) {
-        if (arg0->unk40 == 2) {
+    if (D_0013C940.pressed_buttons & 0x40) {
+        if (menu->selected_option == 2) {
             D_0015EDE8 = !D_0015EDE8;
         }
         snd_set_playback_mode(!D_0015EDE8);
-        func_0022DA68(0, 0x11, arg0->unk14);
+        allocate_voice_for_target_entry(0, 0x11, menu->owner);
     }
     return 0;
 }

@@ -1,10 +1,10 @@
 #include "types.h"
-#include "rnc/d_001516d0.h"
+#include "rnc/music_stream_state.h"
 
 struct Tracks { u8 pad[0xF00]; s32 h[1][6]; };
 extern struct Tracks D_00137B80;
 extern s32 D_0015ED88;
-extern struct M2c_D_001516D0 D_001516D0;
+extern struct MusicStreamState D_001516D0;
 extern u8 D_002169C0[];
 extern s32 func_0012EC08();
 
@@ -15,15 +15,15 @@ void music_start_track_50000(s32 arg0, s32 arg1, s32 arg2) {
 
     handle = D_00137B80.h[arg0 - 50000][D_0015ED88];
     if (handle != 0) {
-        if (D_001516D0.unk50 == 0) {
-            *(u32 *)&D_001516D0.unk50 = 0xFFFFFFFF;
-            D_001516D0.unk5A = 1;
-            D_001516D0.unk54 = arg0;
-            D_001516D0.unk58 = arg1;
-            D_001516D0.unk64 = 10;
-            D_001516D0.unk68 = 48000;
-            D_001516D0.unk56 = arg2;
-            D_001516D0.unk60 = 0;
+        if (D_001516D0.secondary_handle == 0) {
+            *(u32 *)&D_001516D0.secondary_handle = 0xFFFFFFFF;
+            D_001516D0.secondary_state = 1;
+            D_001516D0.secondary_track = arg0;
+            D_001516D0.secondary_flags = arg1;
+            D_001516D0.secondary_poll_interval = 10;
+            D_001516D0.secondary_remaining_time = 48000;
+            D_001516D0.secondary_volume = arg2;
+            D_001516D0.secondary_crossfade_enabled = 0;
             func_0012EC08(handle, 0, 0, 0, (s16)arg2, 0, 2, 0, 0x21,
                           D_002169C0,
                           (u64)((s64)(((u8 *)&D_001516D0 + 0x50)) << 0x20) >> 0x20);

@@ -1,52 +1,54 @@
 #include "types.h"
-struct M2c_arg2 {
+struct VoiceTarget {
     u8 pad_0[0x24];
-    struct M2c_temp_2_11 * unk24;
+    struct VoiceTargetClass * voice_class;
 };
 
-struct M2c_temp_2_11 {
+struct VoiceTargetClass {
     u8 pad_0[0xD];
-    u8 unkD;
+    u8 voice_count;
     u8 pad_E[0x1A];
-    s32 unk28;
+    s32 definitions;
 };
 
-struct M2c_temp_3_37 {
+struct VoiceTargetPoolWindow {
     u8 pad_0[0x7E];
-    s16 unk7E;
+    s16 entry_index;
     u8 pad_80[0x8];
-    s32 unk88;
+    s32 owner;
 };
 
 extern u8 D_0013E550[];
 extern s32 func_0022D7F0();
-s32 FUN_0022da68(s32 arg0, s32 arg1, struct M2c_arg2 *arg2) {
-    struct M2c_temp_2_11 *temp_2_11;
-    s32 temp_2_29;
-    s32 temp_3_14;
-    struct M2c_temp_3_37 *temp_3_37;
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) __asm__("FUN_0022da68");
 
-    if (arg2 == NULL) {
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) {
+    struct VoiceTargetClass *voice_class;
+    s32 slot_index;
+    s32 definitions;
+    struct VoiceTargetPoolWindow *slot;
+
+    if (target == NULL) {
         return -1;
     }
-    temp_2_11 = arg2->unk24;
-    if (temp_2_11 == NULL) {
+    voice_class = target->voice_class;
+    if (voice_class == NULL) {
         return -1;
     }
-    temp_3_14 = temp_2_11->unk28;
-    if (temp_3_14 == 0) {
+    definitions = voice_class->definitions;
+    if (definitions == 0) {
         return -1;
     }
-    if (arg0 >= (s32) temp_2_11->unkD) {
+    if (entry_index >= (s32) voice_class->voice_count) {
         return -1;
     }
-    temp_2_29 = func_0022D7F0(temp_3_14 + (arg0 << 5), arg1, arg2, 0, 0x400);
-    if (temp_2_29 >= 0) {
-        temp_3_37 = (struct M2c_temp_3_37 *)((temp_2_29 * 0x70) + (s32) D_0013E550);
-        temp_3_37->unk88 = arg2;
-        temp_3_37->unk7E = arg0;
+    slot_index = func_0022D7F0(definitions + (entry_index << 5), flags, target, 0, 0x400);
+    if (slot_index >= 0) {
+        slot = (struct VoiceTargetPoolWindow *)((slot_index * 0x70) + (s32) D_0013E550);
+        slot->owner = target;
+        slot->entry_index = entry_index;
     }
-    return temp_2_29;
+    return slot_index;
 }
 
-extern __typeof__(FUN_0022da68) func_0022DA68 __attribute__((alias("FUN_0022da68")));
+extern __typeof__(allocate_voice_for_target_entry) func_0022DA68 __attribute__((alias("FUN_0022da68")));

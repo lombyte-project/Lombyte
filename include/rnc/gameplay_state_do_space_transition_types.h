@@ -34,7 +34,7 @@ struct M2c_D_0013E030
   u8 pad_28[0x2];
 };
 
-#include "rnc/d_001516d0.h"
+#include "rnc/music_stream_state.h"
 
 struct M2c_D_0015F634
 {

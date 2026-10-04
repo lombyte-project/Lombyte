@@ -7,7 +7,7 @@ typedef struct {
 } PadBind;
 
 extern struct M2c_D_00137B80 D_00137B80;
-extern struct M2c_D_001516D0 D_001516D0;
+extern struct MusicStreamState D_001516D0;
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern s32 D_001D5CF8[];
 extern PadBind D_001D60B8[];
@@ -29,7 +29,7 @@ s32 FUN_0021d1f8(struct M2c_arg0 *arg0)
         }
     }
     arg0->unk50 = 0;
-    if (D_001516D0.unk8 == 0) {
+    if (D_001516D0.pending_start_state == 0) {
         if (start_audio_stream_read(D_001D5CF8[0], D_00137B80.unk1528, D_00137B80.unk152C) != 0) {
             arg0->unk50 = 1;
         } else {

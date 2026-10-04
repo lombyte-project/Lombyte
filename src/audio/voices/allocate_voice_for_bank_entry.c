@@ -1,29 +1,31 @@
 #include "types.h"
-struct M2c_temp_3_30 {
+
+/* These offsets include the 0x70-byte pool header before each slot. */
+struct VoiceBankEntryWindow {
     u8 pad_0[0x7E];
-    s16 unk7E;
+    s16 linked_index;
     u8 pad_80[0x8];
-    s32 unk88;
+    s32 owner;
 };
 
 extern u8 D_0013E550[];
 extern s32 D_0015F5B4;
 extern u8 *D_0015F634;
-extern s32 func_0022D7F0();
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+extern s32 allocate_voice_slot(u8 *, s32, s32, s32, s32) __asm__("func_0022D7F0");
+s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) {
-    s32 temp_2_22;
-    struct M2c_temp_3_30 *temp_3_30;
+s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) {
+    s32 slot_index;
+    struct VoiceBankEntryWindow *slot;
 
-    if (arg1 >= D_0015F5B4) {
+    if (entry_index >= D_0015F5B4) {
         return -1;
     }
-    temp_2_22 = func_0022D7F0(D_0015F634 + (arg1 << 5), arg0, arg2, 0, 0x400);
-    if (temp_2_22 >= 0) {
-        temp_3_30 = (struct M2c_temp_3_30 *)(D_0013E550 + temp_2_22 * 0x70);
-        temp_3_30->unk88 = arg2;
-        temp_3_30->unk7E = arg1;
+    slot_index = allocate_voice_slot(D_0015F634 + (entry_index << 5), flags, owner, 0, 0x400);
+    if (slot_index >= 0) {
+        slot = (struct VoiceBankEntryWindow *)(D_0013E550 + slot_index * 0x70);
+        slot->owner = owner;
+        slot->linked_index = entry_index;
     }
-    return temp_2_22;
+    return slot_index;
 }
