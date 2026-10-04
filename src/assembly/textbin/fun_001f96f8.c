@@ -11,7 +11,7 @@ s32 scale_game_frames(s32 frames) {
     f32 scaled_frames;
     /* Retail forms this bias with 0.25f + 0.25f in the FPU accumulator. */
     scaled_frames = 0.5f;
-    scaled_frames = scaled_frames + (f32) frames * game_time_scale;
+    scaled_frames += (f32) frames * game_time_scale;
     return (s32) scaled_frames;
 }
 
