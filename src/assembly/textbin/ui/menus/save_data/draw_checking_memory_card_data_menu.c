@@ -72,10 +72,10 @@ extern struct ScreenDimensions screen_dimensions __asm__("D_00151780");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void memset(void *, s32, u32);
+extern void *memset(void *, s32, u32) __asm__("func_001153FC");
 extern void font_print_window_small(FontWindow *, u64, char *, s32) __asm__("func_001F75F0");
-extern s64 func_00204CF0(s32);
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern u64 func_00204CF0(s32);
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("func_001F5450");
 
 s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) __asm__("FUN_00220348");
 
@@ -84,9 +84,11 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
     s16 window_fields[12];
     struct MemoryCardMenuEntry *entry;
     char *text;
-    s64 texture;
+    u64 texture;
+    s32 state = menu->state;
+    s32 entry_offset;
 
-    if (menu->state < 2) {
+    if (state < 2) {
         if (!(menu->flags & 0x100)) {
             return 1;
         }
@@ -123,7 +125,8 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         return 2;
     }
     if (menu->flags & 4) {
-        entry = &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + (((menu->state < 4) ^ 1) << 2))];
+        entry_offset = ((state < 4) ^ 1) << 2;
+        entry = &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
         if (entry->type == 0 && item_available[entry->id] == 0) {
             return 1;
         }

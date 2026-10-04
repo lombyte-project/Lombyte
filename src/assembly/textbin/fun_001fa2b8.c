@@ -10,7 +10,7 @@ void copy_matrix3x4(volatile struct Matrix3x4 *destination,
                    const volatile struct Matrix3x4 *source)
     __asm__("FUN_001fa2b8");
 
-/* Copy all three matrix columns. */
+/* Copy the three 16-byte basis columns; retain all source values before stores. */
 void copy_matrix3x4(volatile struct Matrix3x4 *destination,
                    const volatile struct Matrix3x4 *source) {
     u128 first;

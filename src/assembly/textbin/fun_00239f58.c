@@ -42,8 +42,10 @@ extern f32 func_001FA6C0(s32);
 extern void func_001F9AD8(f32 *, f32 *, f32 *);
 extern void func_001F9BF8(f32 *, f32 *, f32);
 
-/* Height banks are 0x5C0 bytes; each tile is 0x1190 bytes. Cell 15 uses
-   the dedicated edge/corner samples. Both outputs are optional. */
+/* Each tile is 0x1190 bytes, with three 0x5C0-byte sample banks. The rounded
+   cell indices use signed fractions, so interpolation can extrapolate on
+   either side of a sample. Cell 15 uses dedicated edge and corner samples.
+   Either output may be omitted without suppressing a successful lookup. */
 s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) __asm__("FUN_00239f58");
 
 s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {

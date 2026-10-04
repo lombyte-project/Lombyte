@@ -128,7 +128,10 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
         }
     }
     if (controller_state.pressed & 0x40) {
-        switch (menu->items[menu->selected_entry].action) {
+        items = menu->items;
+        selected_entry = menu->selected_entry;
+        action = items[selected_entry].action;
+        switch (action) {
         case 0:
             break;
         case 1:
@@ -154,7 +157,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
             }
             break;
         case 6:
-            message_index = menu->items[menu->selected_entry].param.h.hi;
+            message_index = items[selected_entry].param.h.hi;
             if (message_index != 0) {
                 menu_state.action_message = menu_action_messages[message_index];
             }

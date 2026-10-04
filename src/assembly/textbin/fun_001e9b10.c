@@ -216,7 +216,7 @@ extern void func_00237370(void *);
 
 
 u8 *FUN_001e9b10(LevelHeader *hdr) {
-    u8 *p;
+    u8 *p = D_001940D8;
     u8 *c;
     u8 *lc;
     u8 *sc;
@@ -259,7 +259,6 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     Ent100 *e;
     Shrub *o;
 
-    p = D_001940D8;
     FillTransferWords(D_0013F350, 0, 0x2310);
     FillTransferWords(D_00186F40, 0, 0x3A0);
     FillTransferWords(D_001AAA40, 0, 0x180);
@@ -418,10 +417,10 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     if (D_001603D0 != 0) {
         FillTransferWords(D_001603E0, 0, size4);
     }
-    lastTie = -1;
-    D_001603D8 = &D_001603D4[D_001603D0];
-    D_00160AB0.x4 = D_001603E0;
     p2 = p + 0x4000;
+    lastTie = -1;
+    D_00160AB0.x4 = D_001603E0;
+    D_001603D8 = &D_001603D4[D_001603D0];
     for (i = 0; i < D_001603D0; i++) {
         tie = &D_001603D4[i];
         cls = D_001D80B0[*(s32 *)tc];

@@ -172,7 +172,7 @@ void register_shrub_render_class(ShrubRenderClass *render_class, ResidentRenderT
       height_log2 = highest_set_bit_index(mip_texture->height);
       mip_packet->tex1.d = ((((u64) (mip_texture->draw_control_count - 1)) << 2) | ((((u64) material_shift) << 6) | 0x20)) | (((u64) material_base) << 32);
       gs_block_base = gs_texture_allocation_base >> 8;
-      mip_packet->tex0.d = ((((((u64) (mip_texture->palette_block_offset + gs_block_base)) | (((u64) mip_width_units[0]) << 14)) | ((((u64) width_log2) << 26) | 0x1300000)) | (((u64) height_log2) << 30)) | ((((u64) (mip_texture->texture_block_offset + gs_block_base)) << 37) | (((u64) 1) << 34))) | (((u64) 1) << 63);
+      mip_packet->tex0.d = ((u64)(mip_texture->palette_block_offset + gs_block_base)) | ((u64)mip_width_units[0] << 14) | ((u64)width_log2 << 26) | 0x1300000ULL | ((u64)height_log2 << 30) | ((u64)(mip_texture->texture_block_offset + gs_block_base) << 37) | (1ULL << 34) | (1ULL << 63);
       mip_packet->miptbp1 = ((((((u64) (mip_texture->mip_block_offset_0 + gs_block_base)) | (((u64) mip_width_units[1]) << 14)) | (((u64) (mip_texture->mip_block_offset_1 + gs_block_base)) << 20)) | (((u64) mip_width_units[2]) << 34)) | (((u64) (mip_texture->mip_block_offset_2 + gs_block_base)) << 40)) | (((u64) mip_width_units[3]) << 54);
     }
     else

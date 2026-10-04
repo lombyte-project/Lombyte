@@ -43,7 +43,6 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     FontWindow text_window;
     s16 window_fields[12];
     struct CheatMenuEntry *entry;
-    struct CheatMenuEntry *unused_entry;
     s32 entry_count;
     s32 entry_index;
     s32 line_spacing;

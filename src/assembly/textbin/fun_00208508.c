@@ -55,9 +55,8 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     u8 width_log2;
     u8 height_log2;
 
-    remaining = map_marker_state.marker_count;
     marker = map_marker_state.markers;
-    remaining--;
+    remaining = map_marker_state.marker_count - 1;
     for (; remaining != -1; remaining--) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x, marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
@@ -68,7 +67,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
             if (marker->texture_group == -1) {
                 append_screen_sprite(screen_x - marker_half_size, screen_y - marker_half_size,
                                      screen_x + marker_half_size, screen_y + marker_half_size,
-                                     marker->texture_variant_or_color, 1);
+                                     (u32)marker->texture_variant_or_color, 1);
             } else {
                 f32 scale;
 

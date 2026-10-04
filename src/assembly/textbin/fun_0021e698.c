@@ -58,8 +58,9 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 void update_item_preview_transform(struct ItemPreviewMoby *moby) __asm__("FUN_0021e698");
 
-/* Position the selected item relative to the preview camera, then rotate
-   its two placement offsets in the X/Y plane. */
+/* Position the selected item relative to the preview camera. Owner flag bit 0
+   selects alternate_x; otherwise use normal_x. Rotate the side and forward
+   offsets in the X/Y plane after adding the unrotated placement position. */
 void update_item_preview_transform(struct ItemPreviewMoby *moby) {
     struct ItemPreviewBinding *preview = moby->preview_vars->owner;
     s32 item_index = moby->preview_vars->item_index;

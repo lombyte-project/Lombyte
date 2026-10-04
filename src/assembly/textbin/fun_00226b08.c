@@ -6,12 +6,11 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00226b08/FUN_00226b08.s
 #else
 #include "types.h"
 
-/* Reloads the level state while keeping the persistent parts: saves the
-   save-game blocks to the scratchpad, runs the reset (func_00209370),
-   copies them back (only the listed bytes of D_0013D4C0, and the
-   D_00141EA0 slots whose item is still owned), bumps the session count,
-   restores the two unlock flags, rereads the clock, then optionally
-   restarts at checkpoint `slot`. */
+/* Preserves selected state across func_00209370 using scratchpad copies.
+   Only listed bytes of D_0013D4C0 are restored; each D_00141EA0 entry is
+   cleared when its referenced byte is zero. The two saved flags are then
+   restored, the counter is advanced, the clock is refreshed, and a
+   nonnegative slot updates the checkpoint state. */
 
 typedef struct {
     u8 pad0[0x14];

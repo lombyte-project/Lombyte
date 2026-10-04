@@ -24,19 +24,16 @@ extern u8 D_00135280[];
 extern u8 D_00136280[];
 extern u8 D_00137280[];
 extern u8 D_001376C0[];
-extern struct StartSoundWork sound_read_work __asm__("D_00137B00");
 extern u8 D_00153C50[];
 extern u8 D_00153C78[];
 extern struct SifClientDataStartSound sound_command_client __asm__("D_0015EBC0");
 extern struct SifClientDataStartSound sound_stream_client __asm__("D_0015EBE8");
-extern s32 D_0015ECA0 __attribute__((sda));
-extern s32 D_0015ECA4 MACRO_ADDR;
+extern struct StartSoundWork sound_read_work __asm__("D_00137B00");
+extern u8 *D_0015ECA0[2] __attribute__((sda));
 extern s32 D_0015ECA8 __attribute__((sda));
 extern s32 D_0015ECAC MACRO_ADDR;
-extern s32 D_0015ECB0 __attribute__((sda));
-extern s32 D_0015ECB4 MACRO_ADDR;
-extern s32 D_0015ECB8 __attribute__((sda));
-extern s32 D_0015ECBC MACRO_ADDR;
+extern u8 *D_0015ECB0[2] __attribute__((sda));
+extern u8 *D_0015ECB8[2] __attribute__((sda));
 extern s32 D_0015ECC8 __attribute__((sda));
 extern s32 D_0015ECD0 __attribute__((sda));
 extern s64 D_0015ECD8 MACRO_ADDR;
@@ -54,12 +51,12 @@ s32 snd_start_sound_system(void) {
     s32 bind_result;
     s32 command_arg;
 
-    D_0015ECA0 = (s32)(u32)D_00133280;
-    D_0015ECA4 = (s32)(u32)D_00134280;
-    D_0015ECBC = (s32)(u32)D_001376C0;
-    D_0015ECB8 = (s32)(u32)D_00137280;
-    D_0015ECB4 = (s32)(u32)D_00136280;
-    D_0015ECB0 = (s32)(u32)D_00135280;
+    D_0015ECA0[0] = D_00133280;
+    D_0015ECA0[1] = D_00134280;
+    D_0015ECB8[0] = D_00137280;
+    D_0015ECB8[1] = D_001376C0;
+    D_0015ECB0[0] = D_00135280;
+    D_0015ECB0[1] = D_00136280;
     sceSifInitRpc(0);
 
     for (;;) {

@@ -69,7 +69,7 @@ extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0");
 extern MaterialMap resident_class_material_maps[] __asm__("D_001B6880");
 
 extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32, s32) __asm__("func_00202D78");
-extern void set_up_vis_gif_viewer(ResidentRenderPacket *nested_table_index, s32 group_count, s32 prim, s32 a3, s32 t0, s32 material_index) __asm__("FUN_00202fd0");
+extern void build_template_resident_render_packet(ResidentRenderPacket *packet, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index) __asm__("FUN_00202fd0");
 
 void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures, u8 *material_map, s32 class_id) __asm__("FUN_00203338");
 
@@ -151,8 +151,8 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
             if (nested_table->optional_data_14 != 0) {
                 nested_table->optional_data_14 = (s32)header + nested_table->optional_data_14;
             }
+            nested_entry_index = 0;
             if (nested_table->count != 0) {
-                nested_entry_index = 0;
                 entry_offset = nested_table->entry_offsets;
                 do {
                     *entry_offset = (s32)header + *entry_offset;
@@ -182,7 +182,7 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
             if (textures != NULL) {
                 build_indexed_resident_render_packet(packet, textures + material_index * 16, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
             } else {
-                set_up_vis_gif_viewer(packet, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
+                build_template_resident_render_packet(packet, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
             }
             packet++;
         }

@@ -96,6 +96,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     s32 is_type2;
     struct ItemPreviewVars *preview_vars;
     s32 is_type1;
+    s32 item_two_difference;
     f32 offset;
     f32 camera_x;
 
@@ -150,8 +151,10 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             }
         }
         moby = create_menu_preview_moby(oclass);
-        animation_index = 6;
-        if (item_index != 2) {
+        item_two_difference = item_index ^ 2;
+        if (item_two_difference == 0) {
+            animation_index = 6;
+        } else {
             animation_index = 1;
         }
         if (moby != 0) {

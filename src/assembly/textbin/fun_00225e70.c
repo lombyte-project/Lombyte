@@ -122,6 +122,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             PreviewAnimationStreamState *stream = &preview_stream_state;
             u8 *loaded_animation = stream->loaded_animation;
 
+            /* Retail uses the Boolean opposite-buffer index here. */
             if (loaded_animation[stream->read_buffer_index] == animation_id || loaded_animation[stream->read_buffer_index == 0] == animation_id) {
                 preview_animation_requests[0].status = 2;
             } else if (animation_id < stream->streamed_animation_base) {

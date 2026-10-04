@@ -65,6 +65,7 @@ void append_fullscreen_setup_strips(void)
   packet_words[8] = 0x2400000000000000 | (strip_count | 0x8000);
   packet_words[9] = 0x44;
   strip_index = 0;
+  /* Each strip writes two packed 64-bit XY coordinates. */
   if (strip_count > 0) {
     negative_half_width = -(display_width * 8);
     top_y = (u64)(0x8000 - display_height * 8) << 16;
@@ -82,6 +83,7 @@ void append_fullscreen_setup_strips(void)
       goto loop;
     }
   }
+  /* The cursor is already past the DMA tag at this point. */
   do {
     render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x50 + strip_count * 0x10);
   } while (0);

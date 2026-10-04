@@ -44,18 +44,18 @@ extern s32 func_0023CDE0();
 extern s32 func_0023D1F8();
 s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) __asm__("FUN_0023a460");
 
-s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) {    s32 sp0;
-u8 sp_slot[0xA0];    s32 sp4;
+s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) {
+    s32 sp0;
+    s32 sp4;
     s32 temp_2_111;
     s32 temp_2_120;
     s32 temp_2_99;
     s32 temp_3_92;
-    s32 temp_4_74;
+    u64 temp_4_74;
     s32 var_18_22;
     s32 var_19_25;
     s32 var_21_10;
     s32 var_22_8;
-    s32 var_2_130;
     s32 var_2_44;
 
     var_22_8 = 0;
@@ -97,8 +97,11 @@ block_10:
         goto block_13;
     }
 block_12:
-    temp_4_74 = (0x8000 << 0x1C) | 0xF;
-    var_2_44 = (((D_0013C940.unk1A0 & temp_4_74) ^ temp_4_74) != 0) ? 0 : 1;
+    temp_4_74 = 0x8000000000FULL;
+    var_2_44 = 1;
+    if (((*(u64 *)&D_0013C940.unk1A0 & temp_4_74) ^ temp_4_74) != 0) {
+        var_2_44 = 0;
+    }
 block_13:
     if (var_2_44 == 0) {
         goto block_15;
@@ -106,7 +109,7 @@ block_13:
     var_22_8 = 1;
     func_0023CC70(D_0016120C + 0xD9048);
 block_15:
-    temp_3_92 = func_0023B960(arg1, sp_slot);
+    temp_3_92 = func_0023B960(arg1, &sp0);
     if (var_19_25 <= 0) {
         goto block_18;
     }
@@ -128,11 +131,9 @@ block_18:
     func_0023BA20(arg1, temp_2_120);
 block_20:
     func_0023ABA0();
-    var_2_130 = var_18_22 < 5;
     if (var_21_10 != 0) {
         goto loop_25;
     }
-    var_2_130 = var_18_22 < 5;
     if (func_0023D1F8(D_0016120C + 0xD9168) == 0) {
         goto loop_25;
     }
@@ -143,9 +144,8 @@ block_20:
     func_0023B590(1);
     func_0023ACB8(D_0016120C + 0xD9100);
 loop_24:
-    var_2_130 = var_18_22 < 5;
 loop_25:
-    if (var_2_130 != 0) {
+    if (var_18_22 < 5) {
         goto loop_30;
     }
     if (func_0023CC80(arg0) != 3) {

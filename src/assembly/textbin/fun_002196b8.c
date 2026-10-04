@@ -44,7 +44,7 @@ typedef struct {
 } PanelRenderState;
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
-extern void *resident_object_pool[] __asm__("D_0015FF18");
+extern void *resident_object_pool __asm__("D_0015FF18");
 extern s32 panel_clear_color __asm__("D_001601B0") __attribute__((sda));
 extern s32 panel_slot_enabled[] __asm__("D_001CE2C0");
 extern PanelRenderState panel_render_state __asm__("D_001D5BF0");
@@ -111,7 +111,7 @@ void render_level_effects_and_screen_sprites(void)
     func_0020D278();
     func_0020D1F0();
     func_0020D218();
-    func_0020D330(resident_object_pool[0], 4);
+    func_0020D330(resident_object_pool, 4);
     func_00218D10();
     func_001F2260();
     for (effect_slot_index = 0; effect_slot_index < 14; effect_slot_index++) {

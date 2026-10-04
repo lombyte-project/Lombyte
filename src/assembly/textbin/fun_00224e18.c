@@ -54,12 +54,12 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         detach_manipulator(source_moby_address, second_preview_manipulator);
     }
     if (!is_second_preview_moby) {
-        binding_table = preview_binding_table;
         binding_table_alias = preview_binding_table_alias;
+        binding_table = preview_binding_table;
         resource_address = moby->resource_address;
     } else {
-        binding_table_alias = preview_binding_table_alias;
         binding_table = preview_binding_table;
+        binding_table_alias = preview_binding_table_alias;
         resource_address = moby->resource_address;
     }
     noop_callback_s(binding_table_alias, binding_table, resource_address, 0, source_moby_address);

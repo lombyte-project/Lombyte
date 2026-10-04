@@ -143,9 +143,9 @@ initialize_slot:
     slot->voice.definition = definition;
     slot->voice.source_value = (u16) definition->source_value;
     slot->voice.linked_index = -1;
-    slot->voice.reserved1C = 0;
     slot->voice.volume = volume;
     slot->voice.owner = 0;
+    slot->voice.reserved1C = 0;
     qzero(&voice_pool.voices[slot_index].position_offset);
     if (position != NULL) {
         goto set_position;

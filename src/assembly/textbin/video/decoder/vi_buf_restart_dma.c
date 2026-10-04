@@ -46,29 +46,29 @@ s32 vi_buf_restart_dma(ViBuf *f) {
     s32 u;
     s32 r1;
     s32 r2;
-    u32 var_18;
-    u32 var_20;
-    u32 var_21;
-    u32 var_19;
+    u32 dmaAddress;
+    u32 dmaTadr;
+    u32 dmaQwc;
+    u32 dmaChcr;
     u32 bp;
 
     ifc = (f->ipu_bp >> 8) & 0xF;
     off = (f->ipu_bp >> 16) & 3;
     off = off + ifc;
-    var_18 = f->d4_madr - (off << 4);
-    var_21 = f->d4_qwc + off;
-    var_19 = f->d4_chcr | 0x100;
-    var_20 = f->d4_tadr;
+    dmaAddress = f->d4_madr - (off << 4);
+    dmaQwc = f->d4_qwc + off;
+    dmaChcr = f->d4_chcr | 0x100;
+    dmaTadr = f->d4_tadr;
     bp = f->ipu_bp & 0x7F;
 
     WaitSema(f->sema);
 
-    if (var_18 < f->data) {
+    if (dmaAddress < f->data) {
         s32 datasize;
         datasize = f->n << 11;
-        var_21 = (f->data - var_18) >> 4;
-        var_20 = f->tag & 0x0FFFFFFF;
-        var_18 = var_18 + datasize;
+        dmaQwc = (f->data - dmaAddress) >> 4;
+        dmaTadr = f->tag & 0x0FFFFFFF;
+        dmaAddress = dmaAddress + datasize;
         r = 0;
         if (f->d4_madr != f->data) {
             r = 3;
@@ -77,7 +77,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
             }
         }
         r = r << 28;
-        var_19 = (f->d4_chcr & 0x0FFFFFFF) | r | 0x100;
+        dmaChcr = (f->d4_chcr & 0x0FFFFFFF) | r | 0x100;
         datasize = f->n - f->dmaStart;
         if (datasize % f->n < 0 || datasize % f->n >= f->readBytes) {
             f->dmaStart = f->n - 1;
@@ -86,7 +86,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
     } else {
         s32 datasize;
         r1 = func_0023BAF8(f, f->d4_madr);
-        r2 = func_0023BAF8(f, var_18);
+        r2 = func_0023BAF8(f, dmaAddress);
         if (r1 != r2) {
             dir = 3;
             datasize = f->n << 11;
@@ -96,10 +96,10 @@ s32 vi_buf_restart_dma(ViBuf *f) {
                 dir = 0;
             }
             chcr = f->d4_chcr & 0x0FFFFFFF;
-            var_21 = (f->data + (r1 << 11) - var_18) >> 4;
-            var_20 = ((r1 << 4) + f->tag) & 0x0FFFFFFF;
+            dmaQwc = (f->data + (r1 << 11) - dmaAddress) >> 4;
+            dmaTadr = ((r1 << 4) + f->tag) & 0x0FFFFFFF;
             dir = dir << 28;
-            var_19 = chcr | dir | 0x100;
+            dmaChcr = chcr | dir | 0x100;
             r = ((r2 + f->n) - f->dmaStart) % f->n;
             if (r < 0 || (((r2 + f->n) - f->dmaStart) % f->n) >= f->readBytes) {
                 f->readBytes = f->readBytes + 1;
@@ -126,11 +126,11 @@ s32 vi_buf_restart_dma(ViBuf *f) {
             }
         }
     }
-    DGET(0x1000B410) = var_18;
-    DGET(0x1000B430) = var_20;
-    DGET(0x1000B420) = var_21;
+    DGET(0x1000B410) = dmaAddress;
+    DGET(0x1000B430) = dmaTadr;
+    DGET(0x1000B420) = dmaQwc;
     if (f->readBytes != 0) {
-        func_0023BBB0(var_19);
+        func_0023BBB0(dmaChcr);
     }
     DGET(0x10002010) = f->ipu_ctrl;
     f->active = 1;

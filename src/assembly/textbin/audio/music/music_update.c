@@ -18,9 +18,9 @@ extern s32 func_001F9740(void *);
 extern void music_start_track_by_id(s32, s32, s32) __asm__("func_00215970");
 extern void music_preseek_track(s32, s32, s32) __asm__("func_00215B68");
 extern void music_start_track(s32, s32, s32) __asm__("func_00215C40");
-extern void func_00215D18(s32, s32, s32);
+extern void music_start_track_body(s32, s32, s32) __asm__("func_00215D18");
 extern s32 music_transition(s32, s32, s32, s32) __asm__("func_00215E00");
-extern void func_002160A8(void *);
+extern void music_update_stream(void *) __asm__("func_002160A8");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("func_00216788");
 
 void music_update(void) __asm__("FUN_00216290");
@@ -39,7 +39,7 @@ void music_update(void) {
             music_start_track(music_state.primary_track, (s16)music_state.primary_flags, music_state.primary_volume);
         } else if (music_state.primary_state != 9 && music_state.primary_handle != 0) {
             if (music_state.primary_handle != 0xFFFFFFFF && music_state.primary_state == 8) {
-                func_00215D18(music_state.primary_track, music_state.primary_flags, music_state.primary_volume);
+                music_start_track_body(music_state.primary_track, music_state.primary_flags, music_state.primary_volume);
             }
         }
     }
@@ -102,9 +102,9 @@ void music_update(void) {
             break;
         }
     }
-    func_002160A8(&music_state.primary_handle);
-    func_002160A8(&music_state.transition_handle);
-    func_002160A8(&music_state.secondary_handle);
+    music_update_stream(&music_state.primary_handle);
+    music_update_stream(&music_state.transition_handle);
+    music_update_stream(&music_state.secondary_handle);
     if (music_state.stop_pending != 0) {
         if (snd_stream_safe_cd_sync(1) == 0) {
             music_state.pending_start_state = 0;

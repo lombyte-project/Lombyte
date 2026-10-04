@@ -200,13 +200,12 @@ void update_level_gameplay_frame(void) {
     if (sequence_fade < 0.0f) {
         sequence_fade = 0.0f;
     }
-    if (render_sequence.time == 1) {
-        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0)) {
-            ReadGlobalTableEntry();
-            func_0012E308(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
-            func_0012EB00();
-            func_0012DC80();
-        }
+    if (render_sequence.time == 1 && current_level_index != 0 &&
+        (current_level_index != 1 || D_0013DD43[0] != 0)) {
+        ReadGlobalTableEntry();
+        func_0012E308(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
+        func_0012EB00();
+        func_0012DC80();
     }
     if (render_sequence.time >= render_sequence.end) {
         for (expired_object_index = 0; expired_object_index < render_sequence.count; expired_object_index++) {

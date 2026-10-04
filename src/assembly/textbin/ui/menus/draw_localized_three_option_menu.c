@@ -20,7 +20,7 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
-extern void sprintf(char *, const char *, s32, s32);
+extern s32 sprintf(char *, const char *, ...) __asm__("func_00116248");
 extern s32 measure_text_width_regular(char *, s32) __asm__("func_001F6250");
 extern void func_001F61F8(void);
 extern void func_001F61E8(void);
@@ -41,7 +41,6 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     s32 draw_y;
 
     font_texture_index = 1;
-    glyphs = 0;
     maximum_text_width = 0;
     setup_gif_paging(0);
     line_spacing = menu->height / 5;

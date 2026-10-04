@@ -27,7 +27,7 @@ struct VoicePoolInitializationWindow {
 };
 
 extern struct VoicePoolInitializationState voice_pool __asm__("D_0013E550");
-extern s32 playback_mode[] __asm__("D_0015EDE8");
+extern s32 playback_mode __asm__("D_0015EDE8");
 extern s32 music_volume __asm__("D_0015EDEC");
 extern s32 sound_volume __asm__("D_0015EDF0");
 extern s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
@@ -67,7 +67,7 @@ loop_3:
         goto loop_3;
     }
     snd_start_sound_system();
-    snd_set_playback_mode(playback_mode[0] == 0);
+    snd_set_playback_mode(playback_mode == 0);
     snd_set_mixer_mode(0, 1);
     snd_pre_alloc_reverb_work_area(2, 4);
     snd_set_group_voice_range(1, 0x18, 0x2F);
@@ -76,10 +76,10 @@ loop_3:
     scaled_volume_80 = (s32) (*(s32 *)0x15EDF0 * 8) / 10;
     voice_pool.group_1_volume = (s32) *(s32 *)0x15EDEC;
     scaled_volume_70 = (s32) (*(s32 *)0x15EDF0 * 7) / 10;
-    voice_pool.group_0_volume = scaled_volume_80;
     voice_pool.group_2_volume = scaled_volume_80;
-    voice_pool.group_3_volume = scaled_volume_70;
+    voice_pool.group_0_volume = scaled_volume_80;
     voice_pool.group_4_volume = scaled_volume_70;
+    voice_pool.group_3_volume = scaled_volume_70;
     voice_pool.group_5_volume = (s32) *(s32 *)0x15EDF0;
     reset_music();
     snd_set_master_volume(0, voice_pool.group_0_volume);

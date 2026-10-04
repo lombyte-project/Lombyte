@@ -118,6 +118,8 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
     column_index = cursor % column_count;
     column = column_index;
 
+    /* Process every pressed direction in order; a page change can also adjust
+       column before the following direction checks. */
     if (controller_state.pressed_buttons & 0x1000) {
         if (row != 0) {
             grid->cursor = cursor - column_count;

@@ -16,11 +16,11 @@ struct Glyph {
     s8 advance;
 };
 
-struct FontScreenDimensions { s32 width; s32 height; };
-
 extern s32 font_window_active __asm__("D_0015F4A0");
 extern s32 font_color_codes_enabled[] __asm__("D_0015F49C");
 extern s32 font_palette_colors[] __asm__("D_0018CAF8");
+struct FontScreenDimensions { s32 width; s32 height; };
+
 extern struct FontScreenDimensions D_0013E500;
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
@@ -60,9 +60,9 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     if ((window->flags ^ TEXT_REGION_CENTER_HORIZONTALLY) & TEXT_REGION_CENTER_HORIZONTALLY) {
         wrap_width = window->right - window->anchor_x;
     } else {
-        right_width = window->right - window->anchor_x;
         left_width = window->anchor_x - window->left;
-        if (right_width < left_width) {
+        right_width = window->right - window->anchor_x;
+        if (left_width > right_width) {
             left_width = right_width;
         }
         wrap_width = left_width * 2;

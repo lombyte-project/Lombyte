@@ -42,6 +42,7 @@ void append_fullscreen_clear_strips(s64 color) __asm__("FUN_00227378");
 void append_fullscreen_clear_strips(s64 color) {
     struct ClearStripPacket *base;
     struct ClearStripPacket *packet_cursor;
+    s64 *commands;
     struct StripVertices *vertices;
     struct FullScreenAntiAliasingDimensions *dimensions;
     s32 strip_count;
@@ -72,15 +73,16 @@ void append_fullscreen_clear_strips(s64 color) {
     packet_cursor = (struct ClearStripPacket *)((u8 *)base + 0x10);
     render_packet_cursor[0] = packet_cursor;
     base->gif_tag = 0x1000000000000001;
-    base->gif_registers = 0xE;
-    base->test_value = 0x3D801;
-    base->test_register = 0x47;
-    base->primitive_tag = 0x2400000000000001;
-    base->primitive_registers = 0x10;
-    base->primitive = 0x146;
-    base->color = color;
-    base->vertex_tag = (s64)(strip_count | 0x8000) | 0x2400000000000000;
-    base->vertex_registers = 0x44;
+    commands = (s64 *)packet_cursor;
+    commands[1] = 0xE;
+    commands[2] = 0x3D801;
+    commands[3] = 0x47;
+    commands[4] = 0x2400000000000001;
+    commands[5] = 0x10;
+    commands[6] = 0x146;
+    commands[7] = color;
+    commands[8] = (s64)(strip_count | 0x8000) | 0x2400000000000000;
+    commands[9] = 0x44;
     if (strip_count > 0) {
         bottom_y = display_height * 8 + 0x7FF0;
         top_y = 0x8000 - display_height * 8;

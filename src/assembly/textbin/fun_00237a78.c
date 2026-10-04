@@ -6,10 +6,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00237a78/FUN_00237a78.s
 #else
 #include "types.h"
 #include "eetypes.h"
-struct ProjectionScreenOrigin { u8 pad[8]; s32 x; s32 y; };
-struct ProjectionViewport { u8 pad[0x190]; f32 scale_x; f32 scale_y; };
-extern struct ProjectionScreenOrigin screen_offsets __asm__("D_0013E500");
-extern struct ProjectionViewport view_context __asm__("D_0018CD00");
+extern u8 screen_offsets[] __asm__("D_0013E500");
+extern u8 view_context[] __asm__("D_0018CD00");
 extern u8 camera_position[] __asm__("D_00187080");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -22,6 +20,8 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     f32 first_projected[4] __attribute__((aligned(16)));
     f32 opposite_projected[4] __attribute__((aligned(16)));
     f32 *opposite_pointer = opposite_projected;
+    f32 scale_x;
+    f32 scale_y;
 
     *(u128 *)first_projected = *(u128 *)first;
     *(u128 *)opposite_projected = *(u128 *)opposite;
@@ -37,12 +37,14 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     first_projected[1] *= 1.0f / first_projected[3];
     opposite_projected[0] *= 1.0f / opposite_pointer[3];
     opposite_pointer[1] *= 1.0f / opposite_pointer[3];
-    first_projected[0] *= view_context.scale_x;
-    first_projected[1] *= view_context.scale_y;
-    opposite_projected[0] *= view_context.scale_x;
-    opposite_pointer[1] *= view_context.scale_y;
-    *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_offsets.x);
-    *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_offsets.y);
+    scale_x = *(f32 *)(view_context + 0x190);
+    scale_y = *(f32 *)(view_context + 0x194);
+    first_projected[0] *= scale_x;
+    first_projected[1] *= scale_y;
+    opposite_projected[0] *= scale_x;
+    opposite_pointer[1] *= scale_y;
+    *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)*(s32 *)(screen_offsets + 8));
+    *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)*(s32 *)(screen_offsets + 12));
     *width = convert_float_to_integer((opposite_projected[0] - first_projected[0]) * 0.25f);
     *height = convert_float_to_integer((opposite_pointer[1] - first_projected[1]) * 0.25f);
 }

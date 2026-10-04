@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00206bd8/FUN_00206bd8.s", FUN_00206bd8);
-#else
 #include "types.h"
 
 #include "eetypes.h"
@@ -51,10 +48,10 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
         if (func_001F9B80(&position, &region_center) <= 7.0f) {
             return 1;
         }
-        if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) == 0) {
-            return 0;
+        if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) && region_enabled[0]) {
+            return 1;
         }
-        return region_enabled[0] != 0;
+        return 0;
     } else {
         special_state = 0;
         if ((u32)(player_state.active_state - 0x11) < 2 || player_state.region_mode == 1) {
@@ -69,7 +66,4 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
     }
     return 0;
 }
-
 extern __typeof__(passes_projected_region_callback_0) func_00206BD8 __attribute__((alias("FUN_00206bd8")));
-
-#endif /* NON_MATCHING */

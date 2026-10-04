@@ -60,7 +60,7 @@ extern s32 D_0015F618;
 extern u8 D_0016034C MACRO_ADDR;
 extern SoundCue D_001862B0[];
 extern TransferState D_0018CB20;
-extern struct { WadHeader *p; } D_001940C8;
+extern WadHeader *D_001940C8;
 
 extern void InitializeResourceEntry(void);
 extern void QueueDmaTransfer(s32 index);
@@ -118,8 +118,9 @@ void transition_do_transition(void) {
     func_00209370();
     tbl = &D_00137B80;
     transition_load_wad();
-    p = (u8 *)D_001940C8.p;
+    p = (u8 *)D_001940C8;
     hdr = (WadHeader *)p;
+    /* Six descriptors occupy the first 0x60 bytes; chunks 1..5 precede chunk 0. */
     p += 0x60;
     D_0015EE4C = hdr;
     hdr->chunk[1].size = func_00216828(p, tbl->src[1].a, tbl->src[1].b);

@@ -153,15 +153,12 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     } else if (flags & 0x100) {
         page = active_menu_page[0]->page;
         entry = &page->entries[page->cursor];
-        if (entry->texture_group == 0) {
-            availability_table = item_available;
-        } else {
-            availability_table = alternate_item_available;
-        }
-        if (availability_table[entry->item_id] == 0) {
-            value_index = -1;
-        } else {
+        item_id = entry->item_id;
+        availability_table = entry->texture_group == 0 ? item_available : alternate_item_available;
+        if (availability_table[item_id] != 0) {
             value_index = page->cursor;
+        } else {
+            value_index = -1;
         }
     } else if (flags & 0x1000) {
         page = active_menu_page[0]->page;

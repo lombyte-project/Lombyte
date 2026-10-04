@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f55d8/FUN_001f55d8.s", FUN_001f55d8);
-#else
 #include "types.h"
 #include "qcopy.h"
 
@@ -16,9 +13,9 @@ extern struct ScreenOfs screen_offsets __asm__("D_0013E500");
 extern char textured_quad_header[] __asm__("D_00160840");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
-void append_subpixel_textured_screen_quad(s32 texture_u, s32 texture_v, s32 texture_width, s32 texture_height, s64 color, s64 texture_tex0, f32 screen_x, f32 screen_y, f32 screen_width, f32 screen_height) __asm__("FUN_001f55d8");
+void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width, f32 screen_height, s32 texture_u, s32 texture_v, s32 texture_width, s32 texture_height, s64 color, s64 texture_tex0) __asm__("FUN_001f55d8");
 
-void append_subpixel_textured_screen_quad(s32 texture_u, s32 texture_v, s32 texture_width, s32 texture_height, s64 color, s64 texture_tex0, f32 screen_x, f32 screen_y, f32 screen_width, f32 screen_height)
+void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width, f32 screen_height, s32 texture_u, s32 texture_v, s32 texture_width, s32 texture_height, s64 color, s64 texture_tex0)
 {
     struct DmaTag *tag;
     u64 *packet_words;
@@ -29,11 +26,12 @@ void append_subpixel_textured_screen_quad(s32 texture_u, s32 texture_v, s32 text
     s32 texture_right;
     s32 texture_left;
     s32 texture_bottom;
+    f32 screen_scale = 16.0f;
 
-    left = convert_float_to_integer(screen_x * 16.0f) + screen_offsets.x - 8;
-    right = convert_float_to_integer((screen_width + screen_x) * 16.0f) + screen_offsets.x - 8;
-    top = convert_float_to_integer(screen_y * 16.0f) + screen_offsets.y - 8;
-    bottom = convert_float_to_integer((screen_y + screen_height) * 16.0f) + screen_offsets.y - 8;
+    left = convert_float_to_integer(screen_x * screen_scale) + screen_offsets.x - 8;
+    right = convert_float_to_integer((screen_x + screen_width) * screen_scale) + screen_offsets.x - 8;
+    top = convert_float_to_integer(screen_y * screen_scale) + screen_offsets.y - 8;
+    bottom = convert_float_to_integer((screen_y + screen_height) * screen_scale) + screen_offsets.y - 8;
     texture_right = (texture_u + texture_width) << 4;
     texture_left = texture_u << 4;
     texture_bottom = texture_v + texture_height;
@@ -62,5 +60,3 @@ void append_subpixel_textured_screen_quad(s32 texture_u, s32 texture_v, s32 text
 }
 
 extern __typeof__(append_subpixel_textured_screen_quad) func_001F55D8 __attribute__((alias("FUN_001f55d8")));
-
-#endif /* NON_MATCHING */

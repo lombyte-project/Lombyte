@@ -117,11 +117,11 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
   y = (row_height - (font_height / 2)) - 1;
   if (menu->flags & 0x4000)
   {
-    if (menu->items[0].text_id != 0)
+    entry = menu->items;
+    if (entry->text_id != 0)
     {
       entry_index = 0;
       selection_index = 0;
-      entry = &menu->items[entry_index];
       for (;;)
       {
         text_width = measure_text_width(get_help_message_text(entry->text_id), -1, glyphs);

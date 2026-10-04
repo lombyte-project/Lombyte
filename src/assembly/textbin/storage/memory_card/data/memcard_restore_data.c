@@ -46,7 +46,7 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
     s32 errors;
     s32 total;
     s32 i;
-    s32 n;
+    s32 copySize;
     u8 *dst;
 
     if (func_0020AD38(buf) == 0) {
@@ -71,25 +71,25 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
         }
         e = (struct RestoreEntry *)(((u32)i << 4) + (u32)tbl);
         if (e->data != 0) {
-            s32 bsize = ((struct RestoreBlock *)buf)->size;
+            s32 blockSize = ((struct RestoreBlock *)buf)->size;
 
             dst = e->data + slot * e->size;
-            if (e->size == bsize) {
-                n = e->size;
-                bsize = 1;
-                e->status = bsize;
-            } else if (bsize < e->size) {
-                n = bsize;
+            if (e->size == blockSize) {
+                copySize = e->size;
+                blockSize = 1;
+                e->status = blockSize;
+            } else if (blockSize < e->size) {
+                copySize = blockSize;
                 e->status = -1;
             } else {
-                n = e->size;
+                copySize = e->size;
                 e->status = -2;
             }
-            if (memcmp(dst, ((struct RestoreBlock *)buf)->data, n) != 0) {
+            if (memcmp(dst, ((struct RestoreBlock *)buf)->data, copySize) != 0) {
                 D_0015FE90++;
             }
-            func_001F9838(dst, ((struct RestoreBlock *)buf)->data, n);
-            total += ((n + 3) & ~3) + 8;
+            func_001F9838(dst, ((struct RestoreBlock *)buf)->data, copySize);
+            total += ((copySize + 3) & ~3) + 8;
         } else {
         missing:
             errors++;

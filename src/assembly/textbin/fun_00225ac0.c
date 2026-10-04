@@ -30,6 +30,7 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 streaming_count;
     s32 index;
     s32 end_index;
+    u32 clear_remaining;
     struct GraphicsBufferDescriptor *descriptor;
 
     primary_address = menu_graphics_buffers.primary_buffer;
@@ -62,14 +63,23 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
         secondary_address += 0x11800;
     }
     end_index += streaming_count;
-    for (; index < end_index; index++) {
-        graphics_buffer_descriptors[index].address = primary_address;
-        graphics_buffer_descriptors[index].flags = 1;
-        primary_address += 0x4F000;
+    clear_remaining = index < 5;
+    if (index < end_index) {
+        for (; index < end_index; index++) {
+            graphics_buffer_descriptors[index].address = primary_address;
+            graphics_buffer_descriptors[index].flags = 1;
+            primary_address += 0x4F000;
+        }
+        clear_remaining = index < 5;
     }
-    for (; index < 5; index++) {
-        graphics_buffer_descriptors[index].flags = 0;
-        graphics_buffer_descriptors[index].address = 0;
+    if (clear_remaining) {
+        descriptor = graphics_buffer_descriptors + index;
+        do {
+            descriptor->flags = 0;
+            descriptor->address = 0;
+            descriptor++;
+            index++;
+        } while (index < 5);
     }
 }
 #endif /* NON_MATCHING */

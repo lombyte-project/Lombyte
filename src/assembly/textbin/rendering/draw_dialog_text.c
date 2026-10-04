@@ -154,8 +154,11 @@ void draw_dialog_text(void) {
         mode5_color = func_001FA6E0(D_0015F4F0, D_0015F4F4, mode5_fade);
         strncpy((char *)0x70000000, get_help_message_text(0x4E2B), 0x400);
         text_cursor = (u8 *)0x70000000;
-        while (*text_cursor >= 2) {
-            text_cursor++;
+        /* Split at the first control byte, then consume consecutive separators. */
+        if (*text_cursor >= 2) {
+            do {
+                text_cursor++;
+            } while (*text_cursor >= 2);
         }
         while (*text_cursor == 1) {
             *text_cursor = 0;

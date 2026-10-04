@@ -16,9 +16,9 @@ extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
-void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale) __asm__("FUN_00238310");
+void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 scale) __asm__("FUN_00238310");
 
-void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale) {
+void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 scale) {
     s64 texture;
     s32 cursor_x;
     s32 cursor_y;
@@ -33,7 +33,6 @@ void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale
     s32 texture_u;
     s32 glyph_width;
     s32 glyph_height;
-    s32 glyph_advance_offset;
     u8 character;
 
     cursor_x = start_x;
@@ -42,7 +41,7 @@ void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale
     texture = get_frame_texture(find_valid_animation_frame_index(0xE935, 0));
 
     for (;;) {
-        character = *text;
+        character = (u8)*text;
         if (character == 0) {
             break;
         }
@@ -59,19 +58,18 @@ void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale
         }
 
         if (glyph_index < 0x3B) {
-            glyph_advance_offset = glyph_index * 4;
             {
                 volatile s32 *glyph_entry;
                 glyph_entry = capture_glyph_coordinates + glyph_index;
                 if (*glyph_entry != -1 || glyph_index == 0) {
                     if (blink_next_glyph != 0) {
+                        skip_draw = blink_next_glyph != 0;
                         blink_next_glyph = 0;
                         long_blink_period = scale_game_frames(0x1E);
                         short_blink_period = scale_game_frames(0xA);
                         blink_period = long_blink_period + short_blink_period;
                         start_y = game_frame_counter % blink_period;
                         long_blink_period = scale_game_frames(0xA);
-                        skip_draw = 1;
                         if (start_y >= long_blink_period) {
                             skip_draw = 0;
                         }
@@ -93,7 +91,7 @@ void render_capture_scrolling_text(u8 *text, s32 start_x, s32 start_y, f32 scale
                         }
                     }
 
-                    cursor_x += convert_float_to_integer(convert_integer_to_float(*(s32 *)((u8 *)capture_glyph_advances + glyph_advance_offset)) * scale);
+                    cursor_x += convert_float_to_integer(convert_integer_to_float(capture_glyph_advances[glyph_index]) * scale);
                 }
             }
         }
