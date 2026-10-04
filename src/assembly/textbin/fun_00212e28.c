@@ -15,12 +15,13 @@ extern void advance_resident_object_animation(struct Moby *) __asm__("func_0020D
 extern void refresh_resident_object_spatial_bounds(struct Moby *) __asm__("func_0020DEF8");
 void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 
+/* Animation can replace the callback; the callback and bounds refresh can
+ * mutate flags or the list link. Read each field at its point of use. */
 void update_visible_resident_objects(void) {
     struct Moby *moby;
     void (*update_callback)(struct Moby *);
 
-    visible_moby_list = build_resident_visibility_list();
-    moby = visible_moby_list;
+    moby = visible_moby_list = build_resident_visibility_list();
     while (moby != 0) {
         if (moby->state >= 0) {
             if (!(moby->flags & 0x40)) {
