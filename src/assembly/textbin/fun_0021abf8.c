@@ -94,7 +94,6 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
     MenuItem *items;
     MenuItem *entry;
     s32 selected_entry;
-    s32 action;
 
     focused = menu_state.screen->focus == menu;
     for (entry_index = 0; menu->items[entry_index].type != 0; entry_index++) {
@@ -130,8 +129,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
     if (controller_state.pressed & 0x40) {
         items = menu->items;
         selected_entry = menu->selected_entry;
-        action = items[selected_entry].action;
-        switch (action) {
+        switch (items[selected_entry].action) {
         case 0:
             break;
         case 1:
@@ -157,6 +155,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
             }
             break;
         case 6:
+            /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = items[selected_entry].param.h.hi;
             if (message_index != 0) {
                 menu_state.action_message = menu_action_messages[message_index];
