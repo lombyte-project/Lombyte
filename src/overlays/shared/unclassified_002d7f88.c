@@ -643,7 +643,26 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df3d8.s", FUN_L00_002df3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df4a8.s", FUN_L00_002df4a8);
+extern s32 D_L00_0015F5CC __attribute__((sda));
+typedef struct { char pad[8]; s32 **p; } S09;
+typedef struct { char pad[0x78]; S09 *s; } M09;
+typedef void (*CB09)(M09 *);
+void FUN_L00_002df3d8(M09 *);
+void FUN_001f4600(CB09, M09 *);
+void FUN_L00_002df4a8(M09 *m) {
+    u8 b;
+    s32 v;
+    S09 *s;
+    b = m->pad[0x21];
+    if (b == 0xFF) return;
+    s = m->s;
+    v = D_L00_0015F5CC;
+    if (v == 0) return;
+    if (v != *s->p) {
+        *s->p = v;
+        FUN_001f4600(FUN_L00_002df3d8, m);
+    }
+}
 /* update for the pulsing colour object */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
 
@@ -656,7 +675,7 @@ extern short D_L00_00161B90_d __asm__("D_L00_00161B90") __attribute__((sda));
 extern short D_L00_00161B94_d __asm__("D_L00_00161B94") __attribute__((sda));
 extern short D_L00_00161B98_d __asm__("D_L00_00161B98") __attribute__((sda));
 extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_L00_002df4a8(void *);
+extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
 void FUN_L00_002df4f8(char *m) {
     char *p = *(char **)(m + 0x78);
@@ -678,7 +697,7 @@ void FUN_L00_002df4f8(char *m) {
         t = hi << 24 | b << 16;
         t |= g << 8;
         *(int *)(p + 4) = t | r;
-        FUN_L00_002df4a8(m);
+        FUN_L00_002df4a8_u(m);
         FUN_L00_002502f0(m, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
         break;
     }

@@ -207,7 +207,20 @@ void FUN_L00_0025a120(char *o) {
         *(int *)(o + 0x88) = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025a420.s", FUN_L00_0025a420);
+struct Ent_z { s32 a[13]; u8 *f34; s32 b[2]; };
+extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") __attribute__((section(".data")));
+static inline u8 load_u8_0025a420(u8 *p) { return *p; }
+struct Ent_z *FUN_L00_0025a420(u8 *p, s32 mask, s32 flag) {
+    struct Ent_z *e;
+    u8 *a = p + 0xA4;
+    u8 i = load_u8_0025a420(a);
+    if (load_u8_0025a420(a) == 0xFF) return 0;
+    e = &D_L00_00178100_c[i];
+    if (e->f34 != p) return 0;
+    if (e->a[9] & mask) return e;
+    if (!flag) e->f34[0xA4] = 0xFF;
+    return 0;
+}
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_25a478 q; f32 f[4]; } V_25a478;
 typedef struct { u8 pad0[0xA6]; s16 hA6; } T_25a478;
