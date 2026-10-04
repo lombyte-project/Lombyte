@@ -642,12 +642,33 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df3d8.s", FUN_L00_002df3d8);
+extern s32 D_0015ED84_c __asm__("D_0015ED84");
+int FUN_L00_002591d0(void *, s32, s32, s32);
+int FUN_L00_002592b8(void *, s32, s32, s32);
+void FUN_L00_00263618(void *, void *, f32, f32);
+void FUN_L00_002df3d8(u8 *p) {
+    u8 *it[2] __attribute__((aligned(16)));
+    f32 s = 1.2f;
+    if (D_0015ED84_c == 0 || D_0015ED84_c == 0x12) {
+        s = 1.0f;
+    }
+    FUN_L00_002591d0(it, p[0x21], 0, 0);
+    while (it[0] != 0) {
+        u8 *q = it[0];
+        if (q[0x31] != 0) {
+            void **m = *(void ***)(q + 0x78);
+            if (*(s16 *)(q + 0xA6) == *(s16 *)(p + 0xA6)) {
+                FUN_L00_00263618(q + 0x10, m[1], s, 0.5f);
+            }
+        }
+        FUN_L00_002592b8(it, it[0], 0, 0);
+    }
+}
 extern s32 D_L00_0015F5CC __attribute__((sda));
 typedef struct { char pad[8]; s32 **p; } S09;
 typedef struct { char pad[0x78]; S09 *s; } M09;
 typedef void (*CB09)(M09 *);
-void FUN_L00_002df3d8(M09 *);
+void FUN_L00_002df3d8_u(M09 *) __asm__("FUN_L00_002df3d8");
 void FUN_001f4600(CB09, M09 *);
 void FUN_L00_002df4a8(M09 *m) {
     u8 b;
@@ -660,7 +681,7 @@ void FUN_L00_002df4a8(M09 *m) {
     if (v == 0) return;
     if (v != *s->p) {
         *s->p = v;
-        FUN_001f4600(FUN_L00_002df3d8, m);
+        FUN_001f4600(FUN_L00_002df3d8_u, m);
     }
 }
 /* update for the pulsing colour object */

@@ -718,7 +718,280 @@ void FUN_L00_002e48a0(void *out) {
     FUN_001f9a10(a, a, b);
     FUN_001f9a68(out, g + 0x30, FUN_001f9ab0(g + 0x30, a));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e4930.s", FUN_L00_002e4930);
+/* camera attach mode transitions: picks the next state from the player's state and arms its timers */
+/* Migrated from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5DE0). */
+
+typedef struct {
+    float v00[4];
+    float v10[4];
+    float v20[4];
+    float v30[4];
+    char pad40[0x84];
+    unsigned char state;
+    unsigned char prev;
+    short timer;
+    float invTimer;
+    float invMove;
+    float dist;
+    short moveTimer;
+    char padD6;
+    unsigned char hit;
+} CamAttach;
+
+extern int D_001413D4 __attribute__((section(".data")));
+extern int D_001413DC __attribute__((section(".data")));
+extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern float D_L00_00166EEC __attribute__((section(".data")));
+extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L00_00161D24 __attribute__((sda));
+extern short D_L00_00161D38 __attribute__((sda));
+extern short D_L00_00161D3C __attribute__((sda));
+extern short D_L00_00161D40 __attribute__((sda));
+extern short D_L00_00161D48 __attribute__((sda));
+extern short D_L00_00161D4C __attribute__((sda));
+extern short D_L00_00161D50 __attribute__((sda));
+extern short D_L00_00161D54 __attribute__((sda));
+extern short D_L00_00161D58 __attribute__((sda));
+extern short D_L00_00161D5C __attribute__((sda));
+extern short D_L00_00161D60 __attribute__((sda));
+extern short D_L00_00161D64 __attribute__((sda));
+extern short D_L00_00161D68 __attribute__((sda));
+extern short D_L00_00161D6C __attribute__((sda));
+extern short D_L00_00161D78 __attribute__((sda));
+extern short D_L00_00161D7C __attribute__((sda));
+extern void FUN_L00_002e48a0_c(void *out, float f) __asm__("FUN_L00_002e48a0");
+
+void FUN_L00_002e4930(char *m) {
+    char *d = *(char **)(m + 0x70);
+    CamAttach *e = (CamAttach *)(d + 0x40);
+    char *q;
+    float inv, x, y;
+    int t;
+
+    if (e->state == 0) {
+        char *p0 = D_0013F350;
+        if (*(int *)(p0 + 0x208C) == 2) {
+            e->prev = e->state;
+            e->state = 1;
+            e->timer = D_L00_00161D3C;
+            e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        } else {
+            char *p1 = D_0013F350;
+            if (*(int *)(p1 + 0x2084) == 0xF && D_L00_00166EEC == 0.0f) {
+                e->prev = e->state;
+                e->state = 3;
+                e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D4C);
+                e->invMove = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+                e->timer = D_L00_00161D50;
+                inv = 1.0f / ConvertIntegerToFloat_c(e->timer);
+                e->dist = *(float *)&D_L00_00161D58;
+                e->hit = 0;
+                x = *(float *)&D_L00_00161D58;
+                e->invTimer = inv;
+                FUN_L00_002e48a0_c(e->v30, x);
+                qcopy(e->v20, e->v10);
+            } else {
+                char *p2 = D_0013F350;
+                if (*(int *)(p2 + 0x2084) == 0xC && D_L00_00166EEC == 0.0f) {
+                    e->prev = e->state;
+                    e->state = 8;
+                    e->timer = D_L00_00161D60;
+                    e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+                } else {
+                    char *p3 = D_0013F350;
+                    if (*(int *)(p3 + 0x2084) == 0xB && D_L00_00166EEC == 0.0f) {
+                        e->prev = e->state;
+                        e->state = 6;
+                        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+                        e->invMove = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+                        e->timer = D_L00_00161D50;
+                        inv = 1.0f / ConvertIntegerToFloat_c(e->timer);
+                        e->dist = *(float *)&D_L00_00161D48;
+                        e->hit = 0;
+                        x = *(float *)&D_L00_00161D48;
+                        e->invTimer = inv;
+                        FUN_L00_002e48a0_c(e->v30, x);
+                        qcopy(e->v20, e->v10);
+                    } else {
+                        char *p4 = D_0013F350;
+                        if ((*(int *)(p4 + 0x2084) == 0xD || *(int *)(p4 + 0x2084) == 0xE) && D_L00_00166EEC == 0.0f) {
+                            e->prev = e->state;
+                            e->state = 5;
+                            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D5C);
+                            e->invMove = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+                            e->timer = D_L00_00161D60;
+                            inv = 1.0f / ConvertIntegerToFloat_c(e->timer);
+                            e->dist = *(float *)&D_L00_00161D68;
+                            e->hit = 0;
+                            x = *(float *)&D_L00_00161D68;
+                            e->invTimer = inv;
+                            FUN_L00_002e48a0_c(e->v30, x);
+                            qcopy(e->v20, e->v10);
+                        } else {
+                            char *p5 = D_0013F350;
+                            if (*(int *)(p5 + 0x208C) == 4 && D_L00_00166EEC == 0.0f) {
+                                e->prev = e->state;
+                                e->state = 2;
+                                e->timer = D_L00_00161D38;
+                                e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
+    if (e->state != 9 && e->state != 1 && D_001413D4 == 0x14) {
+        float r;
+        e->prev = e->state;
+        e->state = 9;
+        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C);
+        r = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+        y = *(float *)&D_L00_00161D7C;
+        e->hit = 0;
+        e->timer = 0;
+        x = *(float *)&D_L00_00161D7C;
+        e->invTimer = 1.0f;
+        e->dist = y;
+        e->invMove = r;
+        FUN_L00_002e48a0_c(e->v30, x);
+        qcopy(e->v20, e->v10);
+        return;
+    }
+    if ((e->state == 1 || e->state == 2) && D_001413DC != 4 && D_001413DC != 2) {
+        e->timer = 0;
+        e->invTimer = 1.0f;
+        e->state = 0;
+        return;
+    }
+    if (e->state == 7) {
+        char *p = D_0013F350;
+        if (*(short *)(p + 0x41E) == 0) {
+            e->prev = e->state;
+            e->state = 6;
+            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+            e->invMove = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+            e->timer = D_L00_00161D50;
+            inv = 1.0f / ConvertIntegerToFloat_c(e->timer);
+            e->dist = *(float *)&D_L00_00161D48;
+            e->hit = 0;
+            x = *(float *)&D_L00_00161D48;
+            e->invTimer = inv;
+            FUN_L00_002e48a0_c(e->v30, x);
+            qcopy(e->v20, e->v10);
+            return;
+        }
+        if (*(int *)(p + 0x208C) == 2) {
+            e->prev = e->state;
+            e->state = 1;
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+            return;
+        }
+    }
+    if (e->state == 4 && D_001413DC != 4) {
+        if (D_001413DC == 2) {
+            e->prev = 4;
+            e->state = 1;
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        } else {
+            e->prev = 4;
+            e->state = 0;
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        }
+        return;
+    }
+    if (e->state == 3 && D_001413D4 == 0xB) {
+        e->prev = e->state;
+        e->state = 6;
+        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+        e->invMove = 1.0f / ConvertIntegerToFloat_c(e->moveTimer);
+        e->timer = D_L00_00161D50;
+        inv = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        e->dist = *(float *)&D_L00_00161D48;
+        e->hit = 0;
+        x = *(float *)&D_L00_00161D48;
+        e->invTimer = inv;
+        FUN_L00_002e48a0_c(e->v30, x);
+        qcopy(e->v20, e->v10);
+        return;
+    }
+    if (e->state == 5 && D_001413D4 == 0xC) {
+        e->prev = e->state;
+        e->state = 8;
+        e->timer = D_L00_00161D60;
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if (e->state == 8 && D_001413D4 != 0xC) {
+        e->prev = e->state;
+        e->state = 0;
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if (e->state == 6 && D_001413D4 != 0xB) {
+        e->prev = e->state;
+        e->state = 0;
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if ((e->state == 3 || e->state == 5) && D_001413DC != 4) {
+        e->prev = e->state;
+        e->state = 0;
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if (e->state == 9) {
+        char *p = D_0013F350;
+        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+            goto to_one;
+        }
+    }
+    if (e->state == 0xA) {
+        char *p = D_0013F350;
+        if (*(int *)(p + 0x208C) == 2 || *(short *)(p + 0x30C) >= scale_game_frames(0x37)) {
+            float r;
+        to_one:
+            e->prev = e->state;
+            e->state = 1;
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            r = 1.0f / ConvertIntegerToFloat_c(e->timer);
+            t = *(int *)&D_L00_00161D24;
+            e->invTimer = r;
+            q = *(char **)(m + 0x70);
+            *(short *)(q + 0x20) = scale_game_frames(t);
+            qcopy(m + 0x40, m);
+            return;
+        }
+    }
+    if (e->state == 9 && D_001413D4 != 0x14) {
+        e->prev = e->state;
+        e->state = 0xA;
+        e->timer = D_L00_00161D78;
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if (e->state == 0xA && FUN_001f9770_c2(&e->moveTimer)) {
+        e->prev = e->state;
+        e->state = 0;
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+        return;
+    }
+    if (e->state == 5 && D_001413D4 == 0x10) {
+        e->prev = e->state;
+        e->state = 0;
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D64);
+        e->invTimer = 1.0f / ConvertIntegerToFloat_c(e->timer);
+    }
+}
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
 

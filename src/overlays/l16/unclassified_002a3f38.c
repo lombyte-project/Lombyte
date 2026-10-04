@@ -475,7 +475,112 @@ remove:
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c3d38.s", FUN_L16_002c3d38);
+/* Migrated from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C5030). */
+
+typedef struct {
+    char v[16]; char padv[16];
+    float f20;
+    char pad24[4];
+    float f28;
+    char pad2C[4];
+    int f30;
+    int f34;
+} Child;
+
+typedef struct {
+    char pad0[0x10];
+    char pos[0x10];
+    unsigned char b20;
+    char pad21[0xB];
+    float f2C;
+    unsigned char b30;
+    unsigned char b31;
+    short s32;
+    unsigned short h34;
+    char pad36[0x12];
+    float f48;
+    char pad4C[0x2C];
+    Child *child;
+    char pad7C[0x14];
+    int f90;
+} Obj;
+
+extern char *D_L16_001B0930[];
+extern float D_0015ED6C ,D_0015EE70;
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80_c2(void*,void*) __asm__("FUN_001f9b80");
+extern int FUN_001fa728(char *, float);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+extern char D_0013F3D0[];
+extern char D_001413DC[];
+
+void FUN_L16_002c3d38(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *path = D_L16_001B0930[*(int *)(data + 4)];
+    switch (moby[0x20]) {
+    case 0:
+        if (*(int *)data == -1 || *(int *)(data + 4) == -1) {
+            mark_moby_for_removal_c(moby);
+            break;
+        }
+        *(float *)(data + 0xC) = *(float *)(data + 8) * D_0015ED6C / FUN_001f9b48(path + 0x10, path + 0x20);
+        moby[0x20] = 1;
+        moby[0x30] = 100;
+        moby[0xBC] = 0;
+        break;
+    case 1: {
+        char *g = (char *)D_0013F350;
+        if (*(int *)(g + 0x208C) != 15) break;
+        if (is_point_inside_clip_volume(g + 0xD0, *(int *)data)) {
+            moby[0x20] = 2;
+            *(short *)(data + 0x16) = 0;
+        }
+        break;
+    }
+    case 2:
+        *(float *)(data + 0x10) += *(float *)(data + 0xC);
+        if ((float)(*(int *)path - 1) <= *(float *)(data + 0x10)) {
+            moby[0x30] = 0xFF;
+            moby[0x20] = 3;
+        } else {
+            sample_camera_path((int *)path, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(data + 0x10));
+        }
+        if (moby[0xBC]) *(int *)(moby + 0x94) = 0;
+        if (!FUN_L00_0028d8c0(moby, *(short *)(data + 0x14))) {
+            *(short *)(data + 0x14) = func_0022ED80_i(0, 4, moby);
+        }
+        if (*(short *)(data + 0x16) == 0 && FUN_001f9b80_c2(moby + 0x10, (char *)D_0013F3D0) < 7.0f) {
+            *(short *)(data + 0x16) = 1;
+            allocate_voice_for_target_entry(1, 0, moby);
+        }
+        break;
+    case 3:
+        if (moby[0x31] == 0) {
+            moby[0x31] = 0;
+            *(int *)(moby + 0x94) = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+        }
+        if (*(int *)((char *)D_001413DC) != 15) {
+            float pos[4];
+            qcopy(pos, path + 0x10);
+            pos[3] = 3.0f;
+            if (FUN_001fa728((char *)pos, 64.0f) == -1) {
+                moby[0xBC] = 0;
+                *(int *)(data + 0x10) = 0;
+                sample_camera_path((int *)path, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(data + 0x10));
+                moby[0x31] = 1;
+                *(unsigned short *)(moby + 0x34) &= ~1;
+                *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+                *(short *)(data + 0x16) = 0;
+                moby[0x20] = 1;
+            }
+        }
+        break;
+    }
+}
 typedef int u128_q __attribute__((mode(TI)));
 
 /* Spawns effects around a moby when a nearby position is valid. */
