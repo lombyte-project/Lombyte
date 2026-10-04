@@ -87,10 +87,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
     Vector4 *secondary_current;
     Vector4 *secondary_next;
 
-    if (game_stage == 6 && level_render_state.display_mode == 4) {
-        quad.texture = get_effect_texture(0);
-    } else {
+    if (game_stage != 6 || level_render_state.display_mode != 4) {
         quad.texture = get_effect_texture(0x13);
+    } else {
+        quad.texture = get_effect_texture(0);
     }
     quad.texture_state = 0xFF9000000260;
     quad.primitive = 0x8000000048;
