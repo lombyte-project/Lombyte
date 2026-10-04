@@ -98,7 +98,7 @@ extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
 extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
-extern f32 func_001F9AB0(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void func_001F9CF8(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
@@ -269,7 +269,7 @@ s32 sound_update(void) {
         subtract_vector_xyz(relative, relative, velocity);
         subtract_vector_xyz(unit_direction, &D_00187080, &D_0013E550.voices[slot_index].position);
         normalize_vector_xyz(unit_direction, unit_direction, 1.0f);
-        radial_velocity_values[slot_index] = func_001F9AB0(unit_direction, relative);
+        radial_velocity_values[slot_index] = dot_vectors_xyz(unit_direction, relative);
 
         if (!(D_0013E550.voices[slot_index].flags & 0x10)) {
             distance_volume = calculate_voice_volume(&D_0013E550.voices[slot_index], &D_0013E550.voices[slot_index].position);

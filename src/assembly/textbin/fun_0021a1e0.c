@@ -7,11 +7,11 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a1e0/FUN_0021a1e0.s
 #include "types.h"
 
 struct LabelSelectorTable {
-    s32 v[8];
+    s32 values[8];
 };
 
 struct LabelTextTable {
-    s32 v[7];
+    s32 values[7];
 };
 
 struct ConfiguredLabelEntry {
@@ -48,10 +48,10 @@ s32 rebuild_configured_text_label_list(void) {
     /* Retail scans twelve selectors despite copying eight selector words and
        seven text words. Preserve that original overrun while this stays pending. */
     for (source_index = 0; source_index < 12; source_index++) {
-        selector = selectors.v[source_index];
+        selector = selectors.values[source_index];
         if (selector != -1 && selector_available[selector] != 0) {
             configured_label_entries[entry_count].flag = &selector_values[selector];
-            configured_label_entries[entry_count].text = selectors.v[source_index + 8];
+            configured_label_entries[entry_count].text = selectors.values[source_index + 8];
             configured_label_entries[entry_count].first_message = 0x4F5A;
             configured_label_entries[entry_count].second_message = 0x4F5B;
             configured_label_entries[entry_count].value = 0;

@@ -52,7 +52,7 @@ struct ItemPreviewMenuState {
     s32 requested_class;
     u8 pad124[0x1C];
     s32 last_requested_class;
-    s32 last_request_frame;
+    s32 last_resource_request_state;
 };
 struct PreviewCamera { u8 pad0[0x140]; f32 x; f32 y; f32 z; };
 struct PreviewClassResource { u8 pad0[0xD]; u8 state_0d; };
@@ -63,7 +63,7 @@ extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
-extern s32 game_frame __asm__("D_0015FF50");
+extern s32 resource_request_state __asm__("D_0015FF50");
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
 extern struct PreviewClassResource *moby_class_resources[] __asm__("D_001B3200");
 extern void update_item_preview_transform() __asm__("func_0021E698");
@@ -143,7 +143,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             }
             if (oclass != preview_menu_state.active_class) {
                 select_world_object_resource_tables(oclass, preview_menu_state.class_state == 0);
-                preview_menu_state.last_request_frame = game_frame;
+                preview_menu_state.last_resource_request_state = resource_request_state;
                 preview_menu_state.last_requested_class = oclass;
                 preview_menu_state.requested_class = oclass;
                 moby_class_resources[moby_class_slots[oclass]]->state_0d = 0;

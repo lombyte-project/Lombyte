@@ -5,17 +5,17 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_cheats_menu/FUN_00221030.s", FUN_00221030);
 #else
 #include "types.h"
+#include "rnc/text_region.h"
 
-struct FontWindow {
-    s16 v[12];
-};
+typedef struct TextRegion FontWindow;
+
 
 struct CheatMenuEntry {
     s32 text_id;
     u8 *enabled_flag;
     s32 enabled_text_id;
     s32 disabled_text_id;
-    s32 unk10;
+    s32 reserved10;
 };
 
 struct CheatsMenu {
@@ -33,14 +33,14 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void func_001153FC(void *, s32, u32);
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void font_print_window_regular(struct FontWindow *, u64, char *, s32) __asm__("func_001F7580");
+extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
 extern void font_print_large(s32, s32, u64, char *, s32) __asm__("func_001F6530");
 extern void font_print_right(s32, s32, u64, char *, s32) __asm__("func_001F6940");
 
 s32 draw_cheats_menu(struct CheatsMenu *menu) __asm__("FUN_00221030");
 
 s32 draw_cheats_menu(struct CheatsMenu *menu) {
-    struct FontWindow text_window;
+    FontWindow text_window;
     s16 window_fields[12];
     struct CheatMenuEntry *entry;
     struct CheatMenuEntry *unused_entry;
@@ -65,7 +65,7 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
         window_fields[8] = 16;
         window_fields[9] = 1;
 
-        text_window = *(struct FontWindow *)window_fields;
+        text_window = *(FontWindow *)window_fields;
         font_print_window_regular(&text_window, 0x80FFA888, get_help_message_text(0x4FC0), -1);
     }
     entry_count = 0;

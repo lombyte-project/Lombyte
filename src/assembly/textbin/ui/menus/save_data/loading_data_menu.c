@@ -4,134 +4,113 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/loading_data_menu/FUN_002232d8.s", FUN_002232d8);
 #else
+#include "types.h"
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
-struct M2c_D_0013C940
+struct LoadMenuControllerState
 {
   u8 pad_0[0x1B4];
-  s32 unk1B4;
+  s32 held_buttons;
   u8 pad_1B8[0xC];
-  s32 unk1C4;
+  s32 pressed_buttons;
 };
-struct M2c_D_0013D290
+struct LoadMenuMemoryCardState
 {
   u8 pad_0[0x8];
-  s32 unk8;
+  s32 phase;
   u8 pad_C[0x8];
-  s32 unk14;
+  s32 selected_save_slot;
   u8 pad_18[0xA8];
-  s32 unkC0;
+  s32 load_state;
   u8 pad_C4[0x10];
-  s32 unkD4;
+  s32 card_operation_state;
   u8 pad_D8[0x4];
-  s32 unkDC;
-  s32 unkE0;
-  s32 unkE4;
+  s32 pending_card_operation;
+  s32 card_operation_progress;
+  s32 load_failed;
   u8 pad_E8[0xC];
-  s32 unkF4;
+  s32 loaded_save_ready;
 };
-struct M2c_D_0013E550
+struct LoadMenuMixerState
 {
   u8 pad_0[0x48];
-  s32 unk48;
-  s32 unk4C;
-  s32 unk50;
-  s32 unk54;
-  s32 unk58;
-  s32 unk5C;
+  s32 group_0_volume;
+  s32 group_1_volume;
+  s32 group_2_volume;
+  s32 group_3_volume;
+  s32 group_4_volume;
+  s32 group_5_volume;
 };
-struct M2c_D_001D5BF0
+struct LoadMenuState
 {
   u8 pad_0[0x4];
-  struct M2c_D_001D5BF0_unk4 *unk4;
-  s32 unk8;
+  struct LoadMenuPage *page;
+  s32 next_page;
   u8 pad_C[0x118];
-  s32 unk124;
-  s32 unk128;
-  s32 unk12C;
+  s32 busy;
+  s32 load_pending;
+  s32 status_text_id;
 };
-struct M2c_D_001D5BF0_unk4
+struct LoadMenuPage
 {
   u8 pad_0[0x38];
-  s32 unk38;
+  s32 back_page;
 };
-struct M2c_arg0
+struct LoadMenuDescriptor
 {
   u8 pad_0[0x14];
-  s32 unk14;
+  s32 sound_owner;
   u8 pad_18[0x18];
-  s32 unk30;
-  u8 pad_34[0xC];
-  s32 unk40;
-};
-extern struct M2c_D_0013C940 D_0013C940;
-extern struct M2c_D_0013D290 D_0013D290;
-extern s32 D_0013E05A;
-extern struct M2c_D_0013E550 D_0013E550;
-extern s32 D_0015ED84;
-extern s32 D_0015EDEC;
-extern s32 D_0015EDF0;
-extern s32 D_0015EE34;
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern s32 InitializeGlobalStateEntry();
-extern s32 func_001FBAB8();
-extern s32 func_0022DA68();
-s32 loading_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_002232d8");
-
-s32 loading_data_menu(struct M2c_arg0 *arg0)
-{
-  s32 temp_19_15;
-  s32 mobj_unk38;
-  s32 sub_unk40;
   s32 flags;
-  s32 e8_scale;
-  s32 e7_scale;
-  struct M2c_D_0013E550 *init_unk;
-  temp_19_15 = arg0->unk40;
-  if (D_001D5BF0.unk128 != 0)
+  u8 pad_34[0xC];
+  s32 selected_save_slot;
+};
+extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
+extern struct LoadMenuMemoryCardState memory_card_state __asm__("D_0013D290");
+extern s32 D_0013E05A;
+extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
+extern s32 current_level_index __asm__("D_0015ED84");
+extern s32 music_volume __asm__("D_0015EDEC");
+extern s32 sound_volume __asm__("D_0015EDF0");
+extern s32 selected_save_slot __asm__("D_0015EE34");
+extern s32 mode_freeze_state __asm__("D_0015EEB0");
+extern s32 mode_freeze_flags __asm__("D_0015EEB4");
+extern struct LoadMenuState menu_state __asm__("D_001D5BF0");
+extern void InitializeGlobalStateEntry(s32);
+extern s32 mode_freeze_init() __asm__("func_001FBAB8");
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+s32 loading_data_menu(struct LoadMenuDescriptor *menu) __asm__("FUN_002232d8");
+
+s32 loading_data_menu(struct LoadMenuDescriptor *menu)
+{
+  s32 previous_save_slot;
+  s32 back_page;
+  s32 next_save_slot;
+  s32 buttons;
+  s32 scaled_volume_80;
+  s32 scaled_volume_70;
+  previous_save_slot = menu->selected_save_slot;
+  if (menu_state.load_pending != 0)
   {
-    if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0))
+    if ((memory_card_state.card_operation_state < 3) && (memory_card_state.pending_card_operation < 0))
     {
-      D_001D5BF0.unk128 = 0;
-      if (D_0013D290.unkE4 != 0)
+      menu_state.load_pending = 0;
+      if (memory_card_state.load_failed != 0)
       {
-        D_0015EEB4 |= 0x100;
-        func_001FBAB8(3, D_001D5BF0.unk4);
+        mode_freeze_flags |= 0x100;
+        mode_freeze_init(3, menu_state.page);
         return 0;
       }
-      init_unk = &D_0013E550;
-      D_0013D290.unkF4 = 1;
-      e8_scale = ((s32) (D_0015EDF0 * 8)) / 10;
-      D_0013E550.unk4C = *((s32 *) 0x15EDEC);
-      e7_scale = ((s32) (D_0015EDF0 * 7)) / 10;
-      D_0013E550.unk48 = e8_scale;
-      D_0013E550.unk50 = e8_scale;
-      D_0013E550.unk54 = ((s32) (D_0015EDF0 * 7)) / 10;
-      e7_scale = ((s32) (D_0015EDF0 * 7)) / 10;
-      D_0013E550.unk5C = D_0015EDF0;
-      D_0013E550.unk58 = e7_scale;
-      asm volatile("" : : "r"(init_unk));
-      InitializeGlobalStateEntry(D_0015ED84, init_unk, D_0015EDF0, 0xA, 0xA, e8_scale);
+      memory_card_state.loaded_save_ready = 1;
+      scaled_volume_80 = ((s32) (sound_volume * 8)) / 10;
+      mixer_state.group_1_volume = *((s32 *) 0x15EDEC);
+      scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
+      mixer_state.group_0_volume = scaled_volume_80;
+      mixer_state.group_2_volume = scaled_volume_80;
+      mixer_state.group_3_volume = ((s32) (sound_volume * 7)) / 10;
+      scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
+      mixer_state.group_5_volume = sound_volume;
+      mixer_state.group_4_volume = scaled_volume_70;
+      InitializeGlobalStateEntry(current_level_index);
       *((s16 *) 0x13E05A) = 0;
     }
     else
@@ -139,68 +118,68 @@ s32 loading_data_menu(struct M2c_arg0 *arg0)
       return 0;
     }
   }
-  if (D_0013C940.unk1C4 & 0xD00)
+  if (controller_state.pressed_buttons & 0xD00)
   {
-    if (D_001D5BF0.unk124 == 0)
+    if (menu_state.busy == 0)
     {
       return 1;
     }
   }
-  if (D_0013C940.unk1C4 & 0x10)
+  if (controller_state.pressed_buttons & 0x10)
   {
-    mobj_unk38 = D_001D5BF0.unk4->unk38;
-    if (mobj_unk38 != 0)
+    back_page = menu_state.page->back_page;
+    if (back_page != 0)
     {
-      D_001D5BF0.unk8 = mobj_unk38;
+      menu_state.next_page = back_page;
     }
     else
-      if (D_001D5BF0.unk124 == 0)
+      if (menu_state.busy == 0)
     {
       return -1;
     }
   }
-  if ((D_0015EEB0 != 0x10) && (D_0015EEB0 != 1))
+  if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1))
   {
-    D_001D5BF0.unk8 = D_001D5BF0.unk4->unk38;
+    menu_state.next_page = menu_state.page->back_page;
     return 0;
   }
-  if (((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) && (D_0013D290.unk8 == 2))
+  if (((memory_card_state.card_operation_state < 3) && (memory_card_state.pending_card_operation < 0)) && (memory_card_state.phase == 2))
   {
-    if (arg0->unk30 & 1)
+    if (menu->flags & 1)
     {
-      flags = D_0013C940.unk1B4;
+      buttons = controller_state.held_buttons;
     }
     else
     {
-      flags = D_0013C940.unk1C4;
+      buttons = controller_state.pressed_buttons;
     }
-    arg0->unk40 = (s32) D_0015EE34;
-    if ((flags & 0x1000) && (D_0015EE34 != 0))
+    menu->selected_save_slot = (s32) selected_save_slot;
+    if ((buttons & 0x1000) && (selected_save_slot != 0))
     {
-      arg0->unk40 = (s32) (D_0015EE34 - 1);
+      menu->selected_save_slot = (s32) (selected_save_slot - 1);
     }
-    sub_unk40 = arg0->unk40;
-    if ((flags & 0x4000) && (sub_unk40 < 4))
+    next_save_slot = menu->selected_save_slot;
+    if ((buttons & 0x4000) && (next_save_slot < 4))
     {
-      arg0->unk40 = (s32) (sub_unk40 + 1);
+      menu->selected_save_slot = (s32) (next_save_slot + 1);
     }
-    D_0015EE34 = arg0->unk40;
-    if (((flags & 0x40) && (D_0013D290.unk8 == 2)) && ((*((s32 *) ((((u8 *) (&D_0013D290)) + (arg0->unk40 * 0x1C)) + 0x20))) >= 0))
+    selected_save_slot = menu->selected_save_slot;
+    if (((buttons & 0x40) && (memory_card_state.phase == 2)) && ((*((s32 *) ((((u8 *) (&memory_card_state)) + (menu->selected_save_slot * 0x1C)) + 0x20))) >= 0))
     {
-      func_0022DA68(0, 0x11, arg0->unk14);
-      D_0013D290.unkC0 = 0;
-      D_0013D290.unk14 = (s32) arg0->unk40;
-      if (D_0013D290.unkDC < 0)
+      allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
+      memory_card_state.load_state = 0;
+      memory_card_state.selected_save_slot = (s32) menu->selected_save_slot;
+      if (memory_card_state.pending_card_operation < 0)
       {
-        D_0013D290.unkE0 = 0;
-        D_0013D290.unkDC = 0xD;
+        memory_card_state.card_operation_progress = 0;
+        memory_card_state.pending_card_operation = 0xD;
       }
-      D_001D5BF0.unk128 = 1;
-      D_001D5BF0.unk12C = 0x4FB6;
+      menu_state.load_pending = 1;
+      menu_state.status_text_id = 0x4FB6;
     }
-    if (arg0->unk40 != temp_19_15)
+    if (menu->selected_save_slot != previous_save_slot)
     {
-      func_0022DA68(1, 0x11, arg0->unk14);
+      allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);
     }
   }
   return 0;

@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00239780/FUN_00239780.s
 #include "types.h"
 #include "eetypes.h"
 
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union { u128 q; f32 f[4]; } CaptureVector;
 struct CaptureBoundsAdjustment { f32 first_origin; f32 second_origin; f32 first_extent; f32 second_extent; };
 
 extern struct CaptureBoundsAdjustment capture_bounds_adjustments[] __asm__("D_001E6218");
@@ -44,51 +44,51 @@ extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s
 void render_vendor_capture_pass_sequence(s32 capture_context) __asm__("FUN_00239780");
 
 void render_vendor_capture_pass_sequence(s32 capture_context) {
-    Vec4 first_edge;
-    Vec4 second_edge;
-    Vec4 origin;
-    Vec4 attachment_points[3];
+    CaptureVector first_edge;
+    CaptureVector second_edge;
+    CaptureVector origin;
+    CaptureVector attachment_points[3];
     s32 point_indices[3];
-    Vec4 temporary;
-    Vec4 capture_corners[9];
-    Vec4 first_corner;
-    Vec4 opposite_corner;
+    CaptureVector scaled_edge_offset;
+    CaptureVector capture_corners[9];
+    CaptureVector first_corner;
+    CaptureVector opposite_corner;
     f32 outer_width, outer_height, outer_x, outer_y;
     f32 inner_width, inner_height, inner_x, inner_y;
     s32 pass_index;
     f32 edge_length;
     f32 transition_factor;
     s64 texture_tex0;
-    Vec4 *points;
-    s32 *indices;
-    Vec4 *origin_pointer;
-    Vec4 *corners;
+    CaptureVector *attachment_point_buffer;
+    s32 *attachment_point_indices;
+    CaptureVector *origin_pointer;
+    CaptureVector *corner_buffer;
 
-    points = attachment_points;
-    indices = point_indices;
+    attachment_point_buffer = attachment_points;
+    attachment_point_indices = point_indices;
     origin_pointer = &origin;
     for (pass_index = 0; pass_index < 6; pass_index++) {
         do {
             point_indices[0] = pass_index * 4;
             point_indices[1] = pass_index * 4 + 1;
             point_indices[2] = pass_index * 4 + 2;
-            transform_attachment_points(capture_context, 3, indices, points);
-            origin_pointer->q = points->q;
+            transform_attachment_points(capture_context, 3, attachment_point_indices, attachment_point_buffer);
+            origin_pointer->q = attachment_point_buffer->q;
         } while (0);
-        fast_vec_sub(&first_edge, &attachment_points[1], points);
-        fast_vec_sub(&second_edge, &attachment_points[2], points);
+        fast_vec_sub(&first_edge, &attachment_points[1], attachment_point_buffer);
+        fast_vec_sub(&second_edge, &attachment_points[2], attachment_point_buffer);
         edge_length = fast_vec_length(&first_edge);
-        scale_vector_to_length(&temporary, &first_edge, capture_bounds_adjustments[pass_index].first_origin);
-        fast_vec_add(origin_pointer, origin_pointer, &temporary);
+        scale_vector_to_length(&scaled_edge_offset, &first_edge, capture_bounds_adjustments[pass_index].first_origin);
+        fast_vec_add(origin_pointer, origin_pointer, &scaled_edge_offset);
         scale_vector_to_length(&first_edge, &first_edge, edge_length - 2.0f * capture_bounds_adjustments[pass_index].first_extent);
         edge_length = fast_vec_length(&second_edge);
-        scale_vector_to_length(&temporary, &second_edge, capture_bounds_adjustments[pass_index].second_origin);
-        fast_vec_add(origin_pointer, origin_pointer, &temporary);
+        scale_vector_to_length(&scaled_edge_offset, &second_edge, capture_bounds_adjustments[pass_index].second_origin);
+        fast_vec_add(origin_pointer, origin_pointer, &scaled_edge_offset);
         scale_vector_to_length(&second_edge, &second_edge, edge_length - 2.0f * capture_bounds_adjustments[pass_index].second_extent);
-        fast_vec_add(&temporary, origin_pointer, &first_edge);
-        fast_vec_add(&temporary, &temporary, &second_edge);
-        project_graphics_bounds_float(origin_pointer, &temporary, &outer_width, &outer_height, &outer_x, &outer_y);
-        corners = capture_corners;
+        fast_vec_add(&scaled_edge_offset, origin_pointer, &first_edge);
+        fast_vec_add(&scaled_edge_offset, &scaled_edge_offset, &second_edge);
+        project_graphics_bounds_float(origin_pointer, &scaled_edge_offset, &outer_width, &outer_height, &outer_x, &outer_y);
+        corner_buffer = capture_corners;
         if (capture_primary_transition.v != 0 || capture_secondary_transition_active != 0) {
             transition_factor = 1.0f;
             if (capture_secondary_transition_active != 0) {
@@ -98,15 +98,15 @@ void render_vendor_capture_pass_sequence(s32 capture_context) {
                 transition_factor = convert_integer_to_float(capture_primary_transition_step) * 0.125f;
             }
             edge_length = fast_vec_length(&first_edge);
-            scale_vector_to_length(&temporary, &first_edge, edge_length * (1.0f - transition_factor) * 0.5f);
+            scale_vector_to_length(&scaled_edge_offset, &first_edge, edge_length * (1.0f - transition_factor) * 0.5f);
             scale_vector_to_length(&first_edge, &first_edge, edge_length * transition_factor);
-            fast_vec_add(origin_pointer, origin_pointer, &temporary);
+            fast_vec_add(origin_pointer, origin_pointer, &scaled_edge_offset);
             edge_length = fast_vec_length(&second_edge);
-            scale_vector_to_length(&temporary, &second_edge, edge_length * (1.0f - transition_factor) * 0.5f);
+            scale_vector_to_length(&scaled_edge_offset, &second_edge, edge_length * (1.0f - transition_factor) * 0.5f);
             scale_vector_to_length(&second_edge, &second_edge, edge_length * transition_factor);
-            fast_vec_add(origin_pointer, origin_pointer, &temporary);
+            fast_vec_add(origin_pointer, origin_pointer, &scaled_edge_offset);
         }
-        corners->q = origin_pointer->q;
+        corner_buffer->q = origin_pointer->q;
         fast_vec_add(&capture_corners[1], origin_pointer, &first_edge);
         fast_vec_add(&capture_corners[2], origin_pointer, &second_edge);
         fast_vec_add(&capture_corners[3], &capture_corners[2], &first_edge);

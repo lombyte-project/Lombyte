@@ -25,20 +25,20 @@ struct SoundMenuMixer {
 
 struct SoundMenuNavigation {
     u8 pad_0[0x4];
-    struct SoundMenuNavigationEntry *unk4;
-    s32 unk8;
+    struct SoundMenuNavigationEntry *page;
+    s32 next_page;
     u8 pad_C[0x118];
-    s32 unk124;
+    s32 busy;
 };
 
 struct SoundMenuNavigationEntry {
     u8 pad_0[0x38];
-    s32 unk38;
+    s32 back_page;
 };
 
 struct SoundMenu {
     u8 pad_0[0x14];
-    s32 owner;
+    s32 sound_owner;
     u8 pad_18[0x18];
     s32 flags;
     u8 pad_34[0xC];
@@ -55,7 +55,7 @@ extern s32 D_0015EDF0 MACRO_ADDR;
 extern s32 D_0015EDE8 MACRO_ADDR;
 extern s32 D_001A0314 NOT_SDA;
 extern s32 *D_001601E0 __attribute__((sda));
-extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index, s32 owner) __asm__("func_0022DA68");
+extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index, s32 sound_owner) __asm__("func_0022DA68");
 void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
 
 s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
@@ -73,11 +73,11 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         }
     }
     if (D_0013C940.pressed_buttons & 0x10) {
-        s32 navigation_value = D_001D5BF0.unk4->unk38;
+        s32 navigation_value = D_001D5BF0.page->back_page;
 
         if (navigation_value != 0) {
-            D_001D5BF0.unk8 = navigation_value;
-        } else if (D_001D5BF0.unk124 == 0) {
+            D_001D5BF0.next_page = navigation_value;
+        } else if (D_001D5BF0.busy == 0) {
             return -1;
         }
     }
@@ -89,7 +89,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         menu->selected_option = (menu->selected_option + 1) % 3;
     }
     if ((menu->selected_option != previous_selection) || (D_001D5BF4[0x20] != 0)) {
-        allocate_voice_for_target_entry(1, 0x11, menu->owner);
+        allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);
         if (menu->flags & 0x20) {
             D_001A0314 = D_001601E0[menu->selected_option];
         }
@@ -126,7 +126,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
             D_0015EDE8 = !D_0015EDE8;
         }
         snd_set_playback_mode(!D_0015EDE8);
-        allocate_voice_for_target_entry(0, 0x11, menu->owner);
+        allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
     }
     return 0;
 }

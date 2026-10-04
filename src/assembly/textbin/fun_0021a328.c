@@ -77,18 +77,18 @@ extern u8 normal_font_metrics[] __asm__("D_001DF050");
 extern u8 small_font_metrics[] __asm__("D_001DF3F0");
 extern u8 large_font_metrics[] __asm__("D_001DF790");
 
-extern void func_001F4280(int);
-extern void func_001F4398(void);
-extern long func_001F44B8(int);
+extern void setup_gif_paging(int) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
+extern long get_effect_texture(int) __asm__("func_001F44B8");
 extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
 extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
-extern void func_001F7090(TextBox *, long, char *, int, long, u8 *);
-extern int func_001F96F8(int);
+extern void font_print_window(TextBox *, long, char *, int, long, u8 *) __asm__("func_001F7090");
+extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern long func_001FA6E0(int, int, float);
-extern char *func_001FDD10(int);
-extern int func_001FECC8(short, int, u16 *);
+extern char *get_help_message_text(int) __asm__("func_001FDD10");
+extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
 extern long func_0021B6D8(int, long, int);
-extern void FUN_00233980(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
 extern int sprintf(char *, const char *, ...);
 
@@ -128,8 +128,8 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         font_texture_index = 2;
         font = small_font_metrics;
     }
-    FUN_00233980(0x42, 0x44);
-    FUN_00233980(0x47, 0x2004B);
+    vu1_add_g_sregister(0x42, 0x44);
+    vu1_add_g_sregister(0x47, 0x2004B);
     flags = label->flags;
     if (flags & 0x20) {
         value_index = current_level_index - 1;
@@ -139,8 +139,8 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     } else if (flags & 0x40) {
         value_index = selected_level_index[0] - 1;
     } else if (flags & 4) {
-        if (label->fade_timer < func_001F96F8(menu_fade_duration)) {
-            label->fade_timer = func_001F96F8(menu_fade_duration);
+        if (label->fade_timer < scale_game_frames(menu_fade_duration)) {
+            label->fade_timer = scale_game_frames(menu_fade_duration);
         }
         value_index = 0;
         label->cached_value = 0;
@@ -169,7 +169,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         {
             short sid = page->items[value_index].item_id;
             label->text_id = 0xFFFF;
-            func_001FECC8(sid, 1, (u16 *)&label->text_id);
+            find_help_entry(sid, 1, (u16 *)&label->text_id);
         }
     } else {
         page = active_menu_page[0]->page;
@@ -179,13 +179,13 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     }
 
     if (label->fade_timer == -1) {
-        label->fade_timer = func_001F96F8(menu_fade_duration);
+        label->fade_timer = scale_game_frames(menu_fade_duration);
         label->cached_value = value_index;
         label->value_variant = value_variant;
     }
     if (value_index != label->cached_value) {
-        if (func_001F96F8(menu_fade_duration) < label->fade_timer) {
-            label->fade_timer = func_001F96F8(menu_fade_duration);
+        if (scale_game_frames(menu_fade_duration) < label->fade_timer) {
+            label->fade_timer = scale_game_frames(menu_fade_duration);
         }
         remaining_frames = label->fade_timer;
         remaining_frames = remaining_frames < 1 ? 0 : remaining_frames - 1;
@@ -210,16 +210,16 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         if (label->text_id == 0) {
             return 1;
         }
-        text = func_001FDD10(label->text_id);
+        text = get_help_message_text(label->text_id);
     } else if (flags & 0x1000) {
         if (label->text_id == 0xFFFF) {
             return 1;
         }
-        text = func_001FDD10(label->text_id);
+        text = get_help_message_text(label->text_id);
     } else if ((flags & 0x100) && value_index == -1) {
         text = unavailable_label_text;
     } else if (label->text_id != 0) {
-        text = func_001FDD10(((int *)label->text_id + value_variant)[value_index * label->text_stride / sizeof(int)]);
+        text = get_help_message_text(((int *)label->text_id + value_variant)[value_index * label->text_stride / sizeof(int)]);
     }
     if (!(label->flags & 0x11E4) && item_available[value_index] == 0) {
         text = unavailable_label_text;
@@ -227,7 +227,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     if (label->flags & 0x200) {
         item_id = *((int *)label->text_id + value_index * label->text_stride / sizeof(int));
         if (item_id != 0x4ED2 && item_id != 0x4ED9 && item_id != 0x4EDD) {
-            sprintf(formatted_text, label_format, func_001FDD10(0x4ECC), text);
+            sprintf(formatted_text, label_format, get_help_message_text(0x4ECC), text);
             text = formatted_text;
         }
     }
@@ -242,7 +242,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     }
     if ((flags & 0x800) && item_unlocked[value_index] == 0) {
         draw_flags |= 3;
-        text = func_001FDD10(0x4F54);
+        text = get_help_message_text(0x4F54);
     }
     if (text == 0) {
         text = fallback_label_text;
@@ -256,8 +256,8 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         text_style |= 2;
         y = label->height / 2;
     }
-    func_001F4280(0);
-    texture_tex0 = func_001F44B8(font_texture_index);
+    setup_gif_paging(0);
+    texture_tex0 = get_effect_texture(font_texture_index);
     {
         TextBox c = { { text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4, x,
                         y - (label->scroll_offset >> 4), [8] = text_line_spacing, text_style,
@@ -268,7 +268,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         }
         color = func_0021B6D8(label->fade_timer, func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
         c.s[9] |= 4;
-        func_001F7090(&c, color, text, -1, texture_tex0, font);
+        font_print_window(&c, color, text, -1, texture_tex0, font);
         c.s[9] ^= 4;
         flags = label->flags;
         if (!(flags & 0x2000) && c.s[7] + 4 >= c.s[1] - c.s[0]) {
@@ -288,7 +288,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         c.s[4] += text_shadow_x;
         c.s[5] += text_shadow_y;
         DisableGlobalStateFlag();
-        func_001F7090(&c, 0x80000000L, text, -1, texture_tex0, font);
+        font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
         EnableGlobalStateFlag();
         c.s[0] -= text_shadow_y;
         c.s[1] -= text_shadow_y;
@@ -296,7 +296,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         c.s[3] -= text_shadow_x;
         c.s[4] -= text_shadow_x;
         c.s[5] -= text_shadow_y;
-        func_001F7090(&c, color, text, -1, texture_tex0, font);
+        font_print_window(&c, color, text, -1, texture_tex0, font);
         if (label->flags & 0x400) {
             c.s[5] += c.s[7] + text_line_spacing * 3;
             c.s[0] += text_shadow_y;
@@ -306,7 +306,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
             c.s[4] += text_shadow_x;
             c.s[5] += text_shadow_y;
             DisableGlobalStateFlag();
-            func_001F7090(&c, 0x80000000L, text, -1, texture_tex0, font);
+            font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
             EnableGlobalStateFlag();
             c.s[0] -= text_shadow_y;
             c.s[1] -= text_shadow_y;
@@ -314,14 +314,14 @@ int render_configured_text_label(ConfiguredTextLabel *label)
             c.s[3] -= text_shadow_x;
             c.s[4] -= text_shadow_x;
             c.s[5] -= text_shadow_y;
-            func_001F7090(&c, color, text, -1, texture_tex0, font);
+            font_print_window(&c, color, text, -1, texture_tex0, font);
             if (label->flags & 0x400) {
                 label->scroll_offset += (menu_input_repeat_state[0] & 1) ? 10 : 3;
                 label->scroll_offset %= (c.s[7] + text_line_spacing * 3) * 16;
             }
         }
     }
-    func_001F4398();
+    do_gif_paging();
     return 2;
 }
 
