@@ -431,7 +431,50 @@ void FUN_L00_00272438(unsigned char *m) {
     t = *pos;
     FUN_L00_0025a9f8_272438(q->p14, (void *)&t, D_L00_00177F00_272438, r, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002725d8.s", FUN_L00_002725d8);
+typedef struct { u8 *o; u8 *b; s32 k; f32 f; } S_2725d8;
+typedef struct {
+    u8 b0;
+    u8 b1;
+    u8 b2;
+    u8 b3;
+    s32 w4;
+    u8 b8;
+    u8 b9;
+    u8 padA[2];
+    s32 wC;
+    u8 v10[16];
+    u8 v20[12];
+    f32 f2C;
+    S_2725d8 s;
+} P_2725d8;
+extern u8 *D_L00_001B215C __attribute__((section(".data")));
+P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
+s32 FUN_001fa6d0(f32);
+void FUN_L00_0024f7c8_c(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
+P_2725d8 *FUN_L00_002725d8(u8 *a0, u8 *a1, s32 a2, s32 a3, f32 a4, f32 a5) {
+    P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
+    a3++;
+    a3--;
+    if (p) {
+        S_2725d8 *s;
+        p->w4 = a2;
+        p->wC = a3;
+        p->b9 = FUN_001fa6d0(0.4f) + 0x20;
+        p->b3 = 0x48;
+        p->b1 = 3;
+        p->b2 = *D_L00_001B215C;
+        FUN_L00_0024f7c8_c(a0, a1, p->v10);
+        qcopy(p->v20, p->v10);
+        p->f2C = a5;
+        *(f32 *)((u8 *)p + 0x1C) = a4;
+        s = &p->s;
+        p->s.o = a0;
+        s->k = *(s16 *)(a0 + 0xA6);
+        s->b = a1;
+        s->f = a4;
+    }
+    return p;
+}
 typedef unsigned int u128_2726d8 __attribute__((mode(TI), aligned(16)));
 typedef struct { u8 *owner; s32 x4; s32 x8; f32 xC; } Q_2726d8;
 typedef struct {
