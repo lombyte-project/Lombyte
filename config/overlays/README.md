@@ -6,7 +6,6 @@ Names, sizes, addresses and hashes only: no game bytes.
 - `us/level-table.json`: each level's byte offset and size on the USA disc.
 - `us/index.json`, `us/level-NN.json`: each level's records, entry point and hashes.
 - `us/functions.tsv`: the function catalogue.
-- `us/confirmed-starts.tsv`: function starts confirmed by hand.
 - `us/levels.json`: planet name and description per level (progress map).
 - `us/names/level-NN.json`: naming evidence carried over from the executable.
 

@@ -1,9 +1,0 @@
-# level	address	name	size	why
-# Function starts a human confirmed, for the ones no rule finds. A level links
-# the whole program, so it holds functions nothing in that level calls (no jal
-# target, no dispatch record, no jalr table, no callback address), and a start
-# only the old shape heuristics saw is a fragment as often as not
-# (docs/overlays.md, issue #31). The evidence for a row is promoted C that
-# compiles to exactly these bytes and a start no branch of the preceding row
-# reaches: a tail that compiles alone is still a tail. 0 rows, 0 bytes. Drop a
-# row once a rule explains the start.
