@@ -57,7 +57,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
 
     marker = map_marker_state.markers;
     remaining = map_marker_state.marker_count - 1;
-    for (; remaining != -1; remaining--) {
+    while (remaining != -1) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x, marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
         offset_y = (s32)((f32)(bottom - top) * normalized_y);
@@ -85,6 +85,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
             }
         }
         marker++;
+        remaining--;
     }
 }
 
