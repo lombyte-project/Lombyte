@@ -589,7 +589,7 @@ void FUN_L18_002f6960(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
 extern int D_L18_001AC240[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f6fa8, 124 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -598,7 +598,7 @@ void FUN_L18_002f6fa8(int unused, int idx)
     short *p = D_L18_001AC240[idx];
     if (p != 0) {
         do {
-            unsigned char *m = D_L00_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            unsigned char *m = D_L18_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
             if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
                 unsigned short flags = *(unsigned short *)(m + 0x34);
                 *(int *)(m + 0x94) = 0;
@@ -611,7 +611,7 @@ void FUN_L18_002f6fa8(int unused, int idx)
 }
 
 extern int D_L18_001AC240[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f7028, 140 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -620,7 +620,7 @@ void FUN_L18_002f7028(int a0, int idx) {
     short *p = D_L18_001AC240[idx];
     if (p != 0) {
         do {
-            unsigned char *m = D_L00_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+            unsigned char *m = D_L18_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
             if (m != 0 && m[0x20] != 0xFE && m[0x20] != 0xFD) {
                 m[0x31] = 1;
                 *(unsigned short *)(m + 0x34) &= 0xFFFE;

@@ -2,7 +2,7 @@
 # One-command contributor setup for Lombyte.
 #
 #   ./setup.sh                 # install everything, then rebuild and verify the ELF
-#   ./setup.sh --iso game.iso  # also take the boot ELF from your own disc image
+#   ./setup.sh --iso game.iso  # also take the boot ELF and level overlays from your own disc image
 #   ./setup.sh --no-build      # install only
 #
 # Linux and WSL run natively. macOS (and any host with Docker) runs the same
@@ -13,7 +13,8 @@
 # the toolchain from public mirrors used by the PS2 decompilation community,
 # checks every file against a pinned SHA-256, builds the game compiler from
 # its GPL source and patch stack (patches/sce-991111b), and takes the retail
-# boot ELF only from a disc image or file you provide.
+# boot ELF and level overlays only from a disc image or file you provide, into
+# gitignored paths.
 set -Eeuo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
@@ -232,7 +233,13 @@ check_installed() {
         LABEL="PE runner (wine)";                                   check command -v wine
     fi
     LABEL="retail boot ELF (config/us/SCUS_971.99)";            check sha_ok "$ELF_TARGET" "$ELF_SHA"
-    [[ "$ok" == 1 ]]
+    [[ "$ok" == 1 ]] || return 1
+    # optional: overlay work needs the disc image (scripts/overlay-extract.py)
+    if [[ -d "$ROOT/config/us/overlays/asm" ]]; then
+        printf 'OK    level overlays (config/us/overlays)\n'
+    else
+        printf 'SKIP  level overlays (config/us/overlays): needs --iso\n'
+    fi
 }
 if [[ "$MODE" == check ]]; then
     check_installed && say "everything is in place; run: make elf"
@@ -468,6 +475,19 @@ EOF
     fi
 }
 
+install_overlays() {
+    [[ -d config/us/overlays/asm ]] && return
+    if [[ -z "$ISO" ]]; then
+        ISO=$(ls dumps/*.iso 2>/dev/null | head -1 || true)
+    fi
+    if [[ -z "$ISO" ]]; then
+        warn "no disc image: skipping the level overlays (run ./setup.sh --iso PATH to work on them)"
+        return
+    fi
+    say "extracting the level overlays from $(basename -- "$ISO") (about 10 minutes)"
+    .venv/bin/python scripts/overlay-extract.py --iso "$ISO"
+}
+
 # --------------------------------------------------------------------- run
 mkdir -p "$DOWNLOADS" "$STAGE"
 say "Lombyte setup in $ROOT"
@@ -492,6 +512,9 @@ if [[ "$BUILD" == 1 ]]; then
         export EE_GCC_PATCHED_ROOT="$TOOLS/ee-gcc2.9-991111-01-patched"
     fi
     make elf
+    install_overlays
+elif [[ -n "$ISO" && ! -d config/us/overlays/asm ]]; then
+    warn "level overlays skipped: they are extracted after the first make elf; rerun without --no-build"
 fi
 
 cat <<EOF
@@ -500,4 +523,5 @@ Setup complete. Next steps (see CONTRIBUTING.md):
   make elf                                          rebuild and verify the boot ELF
   python3 scripts/list-functions.py --score          pick a function
   python3 scripts/check-unit.py <unit>               compare your C with retail
+  make overlays                                     build and verify the level overlays
 EOF

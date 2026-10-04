@@ -1823,5 +1823,48 @@ class RenameCatalogUnitTests(unittest.TestCase):
         self.assertEqual(self.tool.find_duplicate_catalog_units(payload), [])
 
 
+class NoGameDataTests(unittest.TestCase):
+    """Nothing cut from the disc (ELF, overlay records, their asm) is tracked."""
+
+    def test_no_tracked_game_data(self):
+        listed = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True,
+                                text=True)
+        if listed.returncode:
+            self.skipTest("not a git checkout")
+        bad = [p for p in listed.stdout.splitlines()
+               if p.startswith(("config/us/overlays/", "config/us/expected/",
+                                "config/us/asm/", "dumps/", "build/"))
+               and not p.endswith("README.md")
+               or p.endswith((".s", ".S", ".bin", ".iso", ".elf", ".o"))
+               or p == "config/us/SCUS_971.99"]
+        self.assertEqual(bad, [])
+
+
+class OverlayStageTests(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        self.unit = load_module("overlay_unit", ROOT / "scripts/overlay_unit.py")
+
+    def test_guarded_body_is_staged_and_other_stubs_dropped(self):
+        text = textwrap.dedent("""\
+            #include "asm.h"
+            INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00000010.s", FUN_L00_00000010);
+            #ifndef NON_MATCHING
+            INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00000020.s", FUN_L00_00000020);
+            #else
+            void FUN_L00_00000020(void) {}
+            #endif /* NON_MATCHING */
+            """)
+        staged, how = self.unit.stage("FUN_L00_00000020", text)
+        self.assertIn("void FUN_L00_00000020(void) {}", staged)
+        self.assertNotIn("INCLUDE_ASM", staged)
+        self.assertNotIn("NON_MATCHING", staged)
+        self.assertIn("guard", how)
+
+    def test_bare_stub_has_no_c(self):
+        text = 'INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00000010.s", FUN_L00_00000010);\n'
+        self.assertIsNone(self.unit.stage("FUN_L00_00000010", text)[0])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,7 @@
 #include "asm.h"
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e08, 108 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -13,7 +13,7 @@ void FUN_L06_002d9e08(int index)
     short *p = D_L06_001ABFC0[index];
     if (p != 0) {
         do {
-            char *moby = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L00_0015FFD8);
+            char *moby = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if (*(short *)(moby + 0xA6) == 0x16F) {
                 moby[0x20] = 2;
                 *(float *)(*(char **)(moby + 0x78) + 0x28) = 1.0f;
@@ -23,7 +23,7 @@ void FUN_L06_002d9e08(int index)
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e78, 100 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -32,7 +32,7 @@ void FUN_L06_002d9e78(int idx)
     short *p = D_L06_001ABFC0[idx];
     if (p != 0) {
         do {
-            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L00_0015FFD8);
+            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if (*(short *)(moby + 0xA6) == 0x16F) {
                 char *data = *(char **)(moby + 0x78);
                 moby[0x20] = 2;
@@ -43,7 +43,7 @@ void FUN_L06_002d9e78(int idx)
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002e9e30, 108 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -51,7 +51,7 @@ extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
 void FUN_L06_002e9e30(int index) {
     short *p = D_L06_001ABFC0[index];
     do {
-        char *moby = D_L00_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        char *moby = D_L06_0015FFD8_d + ((*(unsigned short *)p & 0x7FFF) << 8);
         if ((unsigned char)moby[0x20] < 0x7F) {
             unsigned short flags = *(unsigned short *)(moby + 0x34);
             moby[0x20] = 15;
@@ -64,7 +64,7 @@ void FUN_L06_002e9e30(int index) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45a0, 80 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -73,7 +73,7 @@ void FUN_L06_002f45a0(int idx)
 {
     short *p = D_L06_001ABFC0[idx];
     do {
-        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L00_0015FFD8);
+        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
         if ((unsigned char)moby[0x20] == 4) {
             moby[0x20] = 0;
         }
@@ -81,7 +81,7 @@ void FUN_L06_002f45a0(int idx)
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45f0, 72 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -90,7 +90,7 @@ void FUN_L06_002f45f0(int idx)
 {
     short *p = D_L06_001ABFC0[idx];
     do {
-        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L00_0015FFD8);
+        char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
         moby[0x20] = 4;
     } while (*p++ >= 0);
 }
@@ -148,7 +148,7 @@ void FUN_L06_002f53e8(char *moby)
     }
 }
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9698, 96 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -158,7 +158,7 @@ void FUN_L06_002f9698(char *arg)
     if (table != 0) {
         short *p = table;
         do {
-            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L00_0015FFD8);
+            char *moby = (char *)(((*p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if ((unsigned char)moby[0x20] == 1) {
                 moby[0x20] = 2;
             }
@@ -224,7 +224,7 @@ float FUN_L06_002f96f8(char *self) {
     return FUN_001fa580(FUN_001fa580(lo, FUN_001fa688(hi, lo) * 0.5f), ang);
 }
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9948, 100 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -233,7 +233,7 @@ void FUN_L06_002f9948(int idx)
     short *p = D_L06_001ABFC0[idx];
     if (p != 0) {
         do {
-            char *moby = D_L00_0015FFD8 + ((*p & 0x7FFF) << 8);
+            char *moby = D_L06_0015FFD8_d + ((*p & 0x7FFF) << 8);
             unsigned short flags = *(unsigned short *)(moby + 0x34);
             moby[0x20] = 0x12;
             flags |= 1;
@@ -245,7 +245,7 @@ void FUN_L06_002f9948(int idx)
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f99b0, 120 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -255,7 +255,7 @@ void FUN_L06_002f99b0(int index)
     short *p = D_L06_001ABFC0[index];
     if (p != 0) {
         do {
-            char *moby = (char *)((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L00_0015FFD8;
+            char *moby = (char *)((*(unsigned short *)p & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d;
             if ((unsigned char)moby[0x20] == 0x12) {
                 unsigned short flags = *(unsigned short *)(moby + 0x34);
                 moby[0x20] = 0;

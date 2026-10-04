@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fda30.s", FUN_L06_002fda30);
 extern int D_L06_001ABFC0[];
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -16,7 +16,7 @@ void FUN_L06_002ffc38(int idx)
     short *p = D_L06_001ABFC0[idx];
     if (p != 0) {
         do {
-            char *moby = D_L00_0015FFD8 + ((*p & 0x7FFF) << 8);
+            char *moby = D_L06_0015FFD8_d + ((*p & 0x7FFF) << 8);
             if ((unsigned char)moby[0x20] < 0x7F) {
                 unsigned short flags = *(unsigned short *)(moby + 0x34);
                 moby[0x20] = 0x11;

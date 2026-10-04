@@ -1740,16 +1740,19 @@ OVERLAYS_BUILD = Path("build/overlays")
 
 
 def build_overlays() -> Path:
-    """Write build/overlays/build.ninja: every src/overlays/**/*.c compiled to
-    build/overlays/obj/<same path>.o.
+    """Write build/overlays/build.ninja for the level overlays (docs/overlays.md).
 
-    The level overlays (docs/overlays.md) are a build of their own: the
-    objects are never linked, the executable's build.ninja, linker script and
-    verify-baseline.sh do not see them. Every file goes through the game
-    compiler's driver (its cc1, GNU as) with the executable's game-code flags,
-    so a file may hold both C and INCLUDE_ASM stubs of the retail assembly
-    under config/us/overlays/asm/. Whether a function's C is exact is proved
-    separately, on the candidate, by the tooling's `decomp try`.
+    The objects are never linked; the executable's build does not see them.
+    Each src/overlays file is built twice:
+
+    - obj/<path>.c.o: as written, stubs included (the game compiler's driver
+      and GNU as, the executable's include-asm route);
+    - c/<path>.c.o: its C only (INCLUDE_ASM lines dropped), on the game route
+      (cc1, Ps2EeAs) as retail was built; scripts/verify-overlays.py proves
+      every function in it against the level text.
+
+    stage/<name>.c.o is the same game route for one function staged by
+    scripts/check-unit.py.
     """
     sources = sorted(OVERLAYS_SRC.glob("**/*.c"))
     if not sources:
@@ -1762,28 +1765,62 @@ def build_overlays() -> Path:
     asm_dir = Path("config/us/overlays/asm")
     if not asm_dir.is_dir():
         raise SystemExit(
-            f"{asm_dir} is missing: the overlay assembly is restored from the retail "
-            "records by the tooling setup (docs/overlays.md)"
+            f"{asm_dir} is missing: run `python3 scripts/overlay-extract.py --iso "
+            "<your disc image>` (or ./setup.sh) first"
         )
+    sn_root = Path(SN_TOOLCHAIN_ROOT or ROOT / "tools/compilers/ee-gcc-2.95.2")
     OVERLAYS_BUILD.mkdir(parents=True, exist_ok=True)
-    game_root = os.path.relpath(_game_compiler_root(), OVERLAYS_BUILD)
+    (OVERLAYS_BUILD / "padless-asm.py").write_text(PADLESS_ASM_HELPER)
+    game_root = _game_compiler_root()
     rel_root = os.path.relpath(ROOT, OVERLAYS_BUILD)
+    includes = (f"-I{game_root}/include -I{rel_root}/src -I{rel_root}/include "
+                f"-Wa,-I{rel_root}/include -Wa,-I{rel_root}")
+    ee_assembler = _windows_exe(str(sn_root / "ee/bin/Ps2EeAs.exe"))
     ninja_path = OVERLAYS_BUILD / "build.ninja"
     ninja = ninja_syntax.Writer(open(str(ninja_path), "w"), width=9999)
     ninja.rule(
         "overlay-cc",
         description="overlay-cc $in",
+        command=f"{game_root}/ee-gcc -c {includes} {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out",
+    )
+    ninja.rule(
+        "c-only",
+        description="c-only $in",
+        # a file of stubs only would leave no .text for padless-asm.py
+        command="{ grep -v INCLUDE_ASM $in; echo 'void overlay_c_only_anchor(void) {}'; } > $out",
+    )
+    work = "${out}.work"
+    ninja.rule(
+        "overlay-game",
+        description="overlay-game $in",
         command=(
-            f"{game_root}/ee-gcc -c -I{game_root}/include -I{rel_root}/src "
-            f"-I{rel_root}/include -Wa,-I{rel_root}/include -Wa,-I{rel_root} "
-            f"{LANG_DEFINE} {COMPILER_FLAGS} $in -o $out"
+            f"mkdir -p {work} && "
+            f"{game_root}/ee-gcc -S {includes} {LANG_DEFINE} -DMATCHING_DECOMP -O2 $in -o {work}/cand.s && "
+            f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-final.s none && "
+            f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
+            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-final.s && "
+            f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
         ),
     )
+
+    def game_edge(out: str, src: str) -> None:
+        path = str((OVERLAYS_BUILD / out).resolve()) + ".work"
+        ninja.build(outputs=[out], rule="overlay-game", inputs=[src],
+                    implicit=["padless-asm.py"], variables={"work_win": _win_path(path)})
+
     objects = []
     for src in sources:
-        obj = Path("obj") / src.relative_to(OVERLAYS_SRC).with_suffix(".c.o")
-        objects.append(str(obj))
-        ninja.build(outputs=[str(obj)], rule="overlay-cc", inputs=[f"{rel_root}/{src}"])
+        rel = src.relative_to(OVERLAYS_SRC)
+        obj, c_only = f"obj/{rel}.o", f"c/{rel}"
+        ninja.build(outputs=[obj], rule="overlay-cc", inputs=[f"{rel_root}/{src}"])
+        ninja.build(outputs=[c_only], rule="c-only", inputs=[f"{rel_root}/{src}"])
+        game_edge(f"{c_only}.o", c_only)
+        objects += [obj, f"{c_only}.o"]
+    catalogue = Path("config/overlays/us/functions.tsv")
+    for line in catalogue.read_text().splitlines():
+        parts = line.split("\t")
+        if len(parts) > 1 and parts[1] in ("shared", "level"):
+            game_edge(f"stage/{parts[0]}.c.o", f"stage/{parts[0]}.c")
     ninja.build(outputs=["overlays"], rule="phony", inputs=objects)
     ninja.default(["overlays"])
     ninja.close()

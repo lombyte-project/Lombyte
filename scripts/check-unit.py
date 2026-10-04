@@ -4,7 +4,8 @@
 Usage:
   python3 scripts/check-unit.py <unit> [--workspace DIR] [--json]
 
-``<unit>`` is a configured unit path such as ``assembly/textbin/runtime/memory/clear_u64_value``; a
+``<unit>`` is a configured unit path such as ``assembly/textbin/runtime/memory/clear_u64_value``,
+or a level overlay function such as ``FUN_L00_002e0988`` (docs/overlays.md); a
 leading ``src/`` and a trailing ``.c`` are accepted.  When the file keeps its
 assembly oracle under ``#ifndef NON_MATCHING``, the C body under ``#else`` is
 staged into the workspace and measured alone, so the source tree keeps its
@@ -18,6 +19,7 @@ only inside it.
 Usage examples:
   python3 scripts/check-unit.py assembly/textbin/runtime/memory/clear_u64_value
   python3 scripts/check-unit.py assembly/runtime/dma/dma_to_spr --workspace build/baseline
+  python3 scripts/check-unit.py FUN_L00_002e0988
 """
 
 from __future__ import annotations
@@ -337,8 +339,30 @@ def print_result(result: dict) -> None:
     print("Edit the C body, then run this command again.")
 
 
+def check_overlay(name: str, as_json: bool) -> int:
+    try:
+        import elftools  # noqa: F401
+    except ImportError:
+        venv = ROOT / ".venv" / "bin" / "python"
+        if venv.is_file() and Path(sys.executable) != venv:
+            os.execv(str(venv), [str(venv), *sys.argv])
+        return error("pyelftools is missing; install requirements.txt into .venv")
+    import overlay_unit
+
+    result = overlay_unit.check(name)
+    if as_json:
+        print(json.dumps(result, indent=2))
+    else:
+        overlay_unit.print_check(result)
+    if "error" in result:
+        return 2
+    return 0 if result["ok"] else 1
+
+
 def main(argv=None) -> int:
     args = parse_args(argv)
+    if rnc_units.OVERLAY_NAME.match(args.unit.strip()):
+        return check_overlay(args.unit.strip(), args.json)
     unit = normalize_unit(args.unit)
     if unit is None:
         return error(f"invalid unit path: {args.unit!r}")

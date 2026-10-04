@@ -73,7 +73,7 @@ void FUN_L18_002d6280(unsigned char *arg) {
     *(unsigned short *)(arg + 0x34) = flags;
 }
 extern int D_L18_001AC240[];
-extern short D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d6d50, 108 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -81,7 +81,7 @@ extern short D_L00_0015FFD8 __attribute__((section(".sdata")));
 void FUN_L18_002d6d50(int idx) {
     short *p = (short *)D_L18_001AC240[idx];
     if (p != 0) {
-        char *base = *(char **)&D_L00_0015FFD8;
+        char *base = *(char **)&D_L18_0015FFD8_d;
         do {
             int off = (*p & 0x7FFF) << 8;
             char *moby = (char *)off + (int)base;

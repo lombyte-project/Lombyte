@@ -18,6 +18,7 @@ Usage:
   python3 scripts/list-functions.py --score --limit 50 --filter textbin
   python3 scripts/list-functions.py --all           # include units with no C yet
   python3 scripts/list-functions.py --json
+  python3 scripts/list-functions.py --overlays      # pending level overlay functions
 """
 
 from __future__ import annotations
@@ -42,6 +43,11 @@ INDEX_SCHEMA = "rnc-pending-similarity-v1"
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--overlays",
+        action="store_true",
+        help="list pending level overlay functions (FUN_LNN_*) instead",
     )
     parser.add_argument(
         "--all",
@@ -238,8 +244,29 @@ def write_index(path: Path, units: list[dict], workspace: Path, audit: Path | No
     print(f"wrote {path} ({payload['count']} units, schema {INDEX_SCHEMA})", file=sys.stderr)
 
 
+def list_overlays(args) -> int:
+    import overlay_units
+
+    pending = [f for f in overlay_units.overlay_functions(ROOT) if not f["exact"] and f["file"]]
+    if args.filter:
+        needle = args.filter.lower()
+        pending = [f for f in pending if needle in (f["name"] + f["file"]).lower()]
+    pending.sort(key=lambda f: (f["size"], f["name"]))
+    shown = pending[: args.limit] if args.limit else pending
+    if args.json:
+        print(json.dumps(shown, indent=2))
+        return 0
+    for f in shown:
+        print(f"{f['size']:>6} B  {f['name']}  {f['kind']:<6} {f['file']}")
+    print(f"\n{len(shown)} of {len(pending)} pending overlay functions; "
+          "check one with: python3 scripts/check-unit.py <name>")
+    return 0
+
+
 def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.overlays:
+        return list_overlays(args)
     all_units = rnc_units.classify_units(ROOT)
     listed = [unit for unit in all_units if unit["category"] == "pending"]
     if args.filter:

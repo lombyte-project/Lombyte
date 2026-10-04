@@ -3,15 +3,15 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00265170.s", FUN_L13_00265170);
-extern int D_L00_0015FFD8 __attribute__((section(".sdata")));
-extern int D_L17_0015FFE0 __attribute__((section(".sdata")));
+extern int D_L13_0015FFD8_d __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0") __attribute__((section(".sdata")));
 /* 0x002651c8, 268 bytes.
  * Ported from rac1-decomp (PAL), where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets flag bits and a data pointer on every live object in the pool whose id appears in a zero-terminated list.
 void FUN_L13_002651c8(short *ids, int a, int b, int c) {
     char *m;
-    for (m = D_L00_0015FFD8; m <= D_L17_0015FFE0; m += 0x100) {
+    for (m = D_L13_0015FFD8_d; m <= D_L13_0015FFE0_d; m += 0x100) {
         int n;
         for (n = 0; ids[n] != 0 && ids[n] < 0x800 && n < 0xE0; n++) {
             if (*(short *)(m + 0xA6) == ids[n] && m[0x20] >= 0) {

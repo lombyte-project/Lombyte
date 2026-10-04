@@ -5,10 +5,10 @@
 
 /* Oltanis (level 14) vendor code.  Both bodies below were written from the
  * retail disassembly and reproduce it byte for byte on the game compiler
- * route (cc1 sce-991111b + GNU as, -O2 -G2). */
+ * route (cc1, Ps2EeAs). */
 
-extern int D_001413DC;
-extern u8 *D_L14_00167500;
+extern int D_001413DC __attribute__((section(".data")));
+extern u8 *D_L14_00167500 __attribute__((section(".data")));
 
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
