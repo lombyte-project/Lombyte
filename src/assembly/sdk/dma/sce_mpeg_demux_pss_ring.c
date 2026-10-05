@@ -89,20 +89,20 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     MpegSys *sys;
 
     cont = 1;
-    h = &hdr;
-    b = &bs;
-    sys = mp->sys;
     cbfunc = 0;
+    h = &hdr;
+    sys = mp->sys;
     tbl = sys->tbl;
-    _sysbitInit(b, start, bufstart, bufsize);
+    _sysbitInit(&bs, start, bufstart, bufsize);
     cbdata = 0;
     ret = 0;
     i = 0;
+    b = &bs;
     if (i < sys->n) {
         do {
             if (tbl[i].id == 0xBDFF000000) {
-                cbdata = tbl[i].data;
                 cbfunc = tbl[i].func;
+                cbdata = tbl[i].data;
             }
             if (cbfunc != 0) {
                 break;
@@ -110,7 +110,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
             i++;
         } while (i < sys->n);
     }
-    do {
+    for (;;) {
         if (SignExtendPackedValue(b, 32) == 0x1BA) {
             _pack_header(b, &h->pack);
         }
@@ -121,7 +121,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 continue;
             }
             for (i = 0; i < sys->n; i++) {
-                if ((h->pes.id & tbl[i].mask) == tbl[i].id) {
+                if (tbl[i].id == (h->pes.id & tbl[i].mask)) {
                     cb.type = 6;
                     cb.header = GetSysbitPointer(b, h->pes.header);
                     cb.data = GetSysbitPointer(b, h->pes.data);
@@ -145,7 +145,10 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 ret = b->pos >> 3;
             }
         }
-    } while (b->pos <= size * 8 && SignExtendPackedValue(b, 32) == 0x1BA);
+        if (b->pos > size * 8 || SignExtendPackedValue(b, 32) != 0x1BA) {
+            break;
+        }
+    }
     return ret;
 }
 #endif /* NON_MATCHING */
