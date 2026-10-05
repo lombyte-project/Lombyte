@@ -172,8 +172,8 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
       clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
       record->tex0 = tex0_word;
       record->tex1.d = tex1_word;
-      record->mip = mip_word;
       record->clamp.d = clamp_word;
+      record->mip = mip_word;
     }
     else
     {
