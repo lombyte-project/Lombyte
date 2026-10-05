@@ -19,14 +19,12 @@ struct DmaChanRegs {
     s32 chcnt;     /* 0x80 */
 };
 
-u32 WriteDmaChannel(s32 sadr, s32 dar, s32 chcnt) {
+void WriteDmaChannel(s32 sadr, s32 dar, s32 chcnt) {
     volatile struct DmaChanRegs *d = (volatile struct DmaChanRegs *)0x1000D000;
-    u32 read;
     d->chcnt = dar;
     d->sadr = sadr;
     d->dar = chcnt;
     d->chcr = 0x100;
-    read = *(volatile u32 *)0x20100000;
-    return 0x100;
+    *(volatile u32 *)0x20100000;
 }
 #endif /* NON_MATCHING */
