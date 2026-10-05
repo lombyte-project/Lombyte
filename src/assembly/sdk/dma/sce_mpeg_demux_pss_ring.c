@@ -87,6 +87,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     int i;
     int cont;
     MpegSys *sys;
+    int headerpos;
 
     cont = 1;
     cbfunc = 0;
@@ -122,8 +123,9 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
             }
             for (i = 0; i < sys->n; i++) {
                 if (tbl[i].id == (h->pes.id & tbl[i].mask)) {
+                    headerpos = h->pes.header;
                     cb.type = 6;
-                    cb.header = GetSysbitPointer(b, h->pes.header);
+                    cb.header = GetSysbitPointer(b, headerpos);
                     cb.data = GetSysbitPointer(b, h->pes.data);
                     cb.len = h->pes.datalen;
                     cb.pts = h->pes.pts;
@@ -133,8 +135,9 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 }
             }
             if (i == sys->n && cbfunc != 0) {
+                headerpos = h->pes.header;
                 cb.type = 6;
-                cb.header = GetSysbitPointer(b, h->pes.header);
+                cb.header = GetSysbitPointer(b, headerpos);
                 cb.data = GetSysbitPointer(b, h->pes.data);
                 cb.len = h->pes.datalen;
                 cb.pts = h->pes.pts;
