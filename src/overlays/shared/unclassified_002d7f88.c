@@ -609,7 +609,57 @@ void FUN_L00_002defe0(int arg0) {
         enqueue_callback_list_1(FUN_L00_002dd8e8, arg0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df048.s", FUN_L00_002df048);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* pull each active entry's marker toward its target, then update the rest */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E04F8), where it is exact; names translated to the US level program. */
+
+typedef struct { short idx; short pad; float f; int pad2[3]; char *p; } E04;
+
+typedef float VQ[4] __attribute__((aligned(16)));
+
+extern E04 D_L00_001E4C80[];
+extern char D_L00_001E5F30[];
+extern char D_L00_001E5F40[];
+extern float vector_length_xyz(void *);
+extern short D_L00_00161B40 __attribute__((sda));
+extern short D_L00_00161B44 __attribute__((sda));
+extern short D_L00_00161B50 __attribute__((sda));
+extern void FUN_L00_002defe0(int);
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+void normalize_vector_xyz(void *, void *, f32);
+
+void FUN_L00_002df048(int arg0) {
+    VQ a, b, c;
+    int i;
+    float len;
+    char *p;
+
+    *(int *)&D_L00_00161B40 = 1;
+    *(float *)&D_L00_00161B50 = *(float *)&D_L00_00161B50 * 0.5f;
+    *(int *)&D_L00_00161B44 = 1;
+    for (i = 0; i < 200; i++) {
+        p = D_L00_001E4C80[i].p;
+        if (p != 0) {
+            D_L00_001E4C80[i].p = 0;
+            subtract_vector_xyz(a, D_L00_001E5F30 + D_L00_001E4C80[i].idx * 16, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
+            len = vector_length_xyz(a);
+            scale_vector_xyz(a, a, D_L00_001E4C80[i].f / len);
+            add_vector_xyz(b, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16, a);
+            subtract_vector_xyz(c, p + 0x10, b);
+            normalize_vector_xyz(c, c, 0.03f);
+            scale_vector_xyz(a, a, 0.1f / len);
+            add_vector_xyz(p + 0x30, c, a);
+            *(short *)(p + 0xA) = 0x46;
+        }
+    }
+    FUN_L00_002defe0(arg0);
+}
 typedef struct { u8 pad[0x46]; s16 h46; } T_2df1e0;
 typedef struct { u8 pad[0x10]; u8 v10[0x10]; u8 b20; u8 pad2[3]; T_2df1e0 *p24; } O_2df1e0;
 typedef struct { u8 pad[0x80]; u8 v80[0x2000]; void *p2080; } G_2df1e0;

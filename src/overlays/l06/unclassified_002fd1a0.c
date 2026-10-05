@@ -173,4 +173,84 @@ void FUN_L06_00305000(char *m) {
     FUN_001f9a10(Q, Q, m + 0x10);
     FUN_001efa68(P, Q, 0, (int)m, (int)A);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305170.s", FUN_L06_00305170);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* draws four copies of a model transformed by a table, then spawns a part for each */
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */
+
+extern float D_L06_001FE890[];
+extern int D_L06_00162234;
+extern int D_L06_00162238;
+extern int get_effect_texture(int);
+extern short D_L06_001621C4 __attribute__((sda));
+extern short D_L06_001621C8 __attribute__((sda));
+extern short D_L06_001621C0 __attribute__((sda));
+extern short D_L06_001621CC __attribute__((sda));
+extern short D_L06_001621E0 __attribute__((sda));
+extern short D_L06_001621E4 __attribute__((sda));
+extern short D_L06_001621F4 __attribute__((sda));
+extern short D_L06_001621F8 __attribute__((sda));
+extern short D_L06_00162208 __attribute__((sda));
+extern void FUN_001f9ff8(float *, float);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_L06_00216b88(int *, float *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void font_queue_vu_state(void);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L06_00305170(char *m) {
+    float a[16];
+    float b[16];
+    float mat[5][16];
+    int s[10];
+    char *data;
+    float *m0;
+    int *sp;
+    float *pp;
+    float *tp;
+    float *mp;
+    int i;
+    int j;
+    data = *(char **)(m + 0x78);
+    FUN_001fa050(a, (float *)(m + 0x40));
+    FUN_001f9ff8(b, *(float *)&D_L06_00162208);
+    FUN_001fa378(a, a, b);
+    vu1_add_g_sregister(6, get_effect_texture(0xE));
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) | ((long)*(int *)&D_L06_001621C8 << 4) | ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
+    font_queue_vu_state();
+    m0 = mat[0];
+    sp = s;
+    pp = mat[0] + 12;
+    tp = D_L06_001FE890;
+    mp = m0;
+    for (i = 0; i < 4; i++) {
+        FUN_001fa050(mp, tp);
+        tp += 4;
+        FUN_001fa378(mp, a, mp);
+        mp += 16;
+        add_vector_xyz(pp, pp, m + 0x10);
+        pp[2] += (float)i * 1.7f + 0.6f;
+        pp[3] = 1.0f;
+        pp += 16;
+    }
+    s[0] = D_L06_00162234;
+    s[2] = (int)(data + 0xF00);
+    s[1] = D_L06_00162238;
+    s[3] = *(int *)&D_L06_001621E0;
+    s[4] = *(int *)&D_L06_001621E4;
+    *(float *)&s[7] = *(float *)&D_L06_001621F4;
+    *(float *)&s[8] = *(float *)&D_L06_001621F8;
+    s[5] = 0x1E;
+    s[6] = (int)data;
+    pp = m0;
+    for (j = 3; j >= 0; j--) {
+        FUN_L06_00216b88(sp, pp);
+        pp += 16;
+    }
+}

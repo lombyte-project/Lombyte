@@ -45,3 +45,6 @@ l02/ui_help_0021b698.c
 l12/unclassified_002ec720.c
 l13/unclassified_002ea8c8.c
 l17/unclassified_002a8da0.c
+l06/unclassified_002fd1a0.c
+shared/rendering_002712b8.c
+shared/unclassified_002d7f88.c
