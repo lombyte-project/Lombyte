@@ -47,7 +47,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
     s32 small;
     s32 handle;
     s32 intr;
-    u32 *p;
+    volatile u32 *p;
 
     total = img->w * img->h;
     cbarg[0] = 2;
@@ -65,8 +65,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
     dma.addr = img->dest & 0x0FFFFFFF;
     if (dma.count > 0xFFFF) {
         handle = AddDmacHandlerSecondary(4, D_0012A5D8, 0, &dma);
-        p = (u32 *)0x1000E010;
-        __asm__("" : "+r"(p));
+        p = (volatile u32 *)0x1000E010;
         *p = 0x10;
         func_00119160(4);
         intr = DIntr();
