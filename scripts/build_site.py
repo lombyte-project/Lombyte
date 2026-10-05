@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build the GitHub Pages site: copy site/ to build/site and fill in the
-progress numbers from report.json and decomp_map.svg (the `progress` branch).
+progress numbers from report.json (the `progress` branch);
+images come from assets/ and the progress branch, as in the README.
 
 usage: build_site.py PROGRESS_DIR [SITE_URL]
 """
@@ -27,7 +28,7 @@ values = {
 
 shutil.rmtree(out, ignore_errors=True)
 shutil.copytree("site", out)
-shutil.copy(progress / "decomp_map.svg", out / "decomp_map.svg")
+shutil.copy("assets/lombyte-logo.png", out)
 for name in ("index.html", "robots.txt", "sitemap.xml"):
     text = (out / name).read_text()
     for key, value in values.items():
