@@ -1,10 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-/* Exact SDK/library unit sceTtyWrite; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/sce_tty_write/sceTtyWrite.s", sceTtyWrite);
-#else
 #include "types.h"
 
 struct M2c_D_00154A50 {
@@ -32,7 +28,7 @@ extern u8 D_00154A80[];
 extern s32 CallDebugCharacter(s32, s32);
 extern s32 DIntr();
 extern s32 EnableInterrupts();
-extern s32 SceDeci2Poll(s32);
+extern void SceDeci2Poll(s32);
 
 s32 sceTtyWrite(s8 *arg0, s32 arg1)
 {
@@ -75,8 +71,8 @@ s32 sceTtyWrite(s8 *arg0, s32 arg1)
         D_00154A50.unk4 = var_17_14 + 0xC;
         var_6_26->unk0 = D_00154A50.unk4;
         if (CallDebugCharacter(D_00154A50.unk0, var_6_26->unk7) < 0) {
+            *(s32 *) &D_00154A50.unkC = 0;
             EnableInterrupts();
-            D_00154A50.unkC = 0;
             return -1;
         }
         if (D_00154A50.unkC != 0) {
@@ -89,4 +85,3 @@ s32 sceTtyWrite(s8 *arg0, s32 arg1)
     }
     return -1;
 }
-#endif /* NON_MATCHING */

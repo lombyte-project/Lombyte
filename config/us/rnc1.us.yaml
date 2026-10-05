@@ -272,7 +272,7 @@ segments:
           - [0x1a58c, textbin, text_gap_0011958c_c]
           - [0x1a590, c, sdk/debug/sce_tty_handler]
           - [0x1a724, textbin, text_gap_00119610_post_sdk_worker]
-          - [0x1a728, c, assembly/sdk/debug/sce_tty_write]
+          - [0x1a728, c, sdk/debug/sce_tty_write]
           - [0x1a878, c, sdk/debug/sce_tty_read]
           - [0x1a948, c, sdk/debug/sce_tty_init]
           - [0x1aa04, textbin, text_gap_001199c8_post_sdk_worker]
