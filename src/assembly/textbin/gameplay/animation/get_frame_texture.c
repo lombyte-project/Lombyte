@@ -52,6 +52,8 @@ u64 get_frame_texture(s32 frame_id) {
     struct FramePalettePage *palette_page;
     struct FrameImagePage *image_page;
     struct GifTexturePacket *packet;
+    struct GifTexturePacket *initial_packet;
+    struct GifTexturePacket *palette_packet;
     u32 packet_offset;
     u32 queued_transfer;
     s32 image_upload_count;
@@ -72,14 +74,14 @@ u64 get_frame_texture(s32 frame_id) {
     if (palette_page->gs_block_offset == 0 || image_page->gs_block_offset == 0) {
         packet_offset = pending_texture_upload_count * 0x10;
         palette_source_address = palette_page->source_address;
-        packet = (struct GifTexturePacket *)((u8 *)pending_texture_uploads + packet_offset);
-        packet->palette_address = palette_source_address;
-        packet->reserved_zero = 0;
-        packet->palette_block_offset = 0x3FF0;
+        initial_packet = pending_texture_uploads + pending_texture_upload_count;
+        initial_packet->palette_address = palette_source_address;
+        initial_packet->reserved_zero = 0;
+        initial_packet->palette_block_offset = 0x3FF0;
         *(s32 *)((u8 *)pending_texture_uploads + packet_offset + 8) = palette_page->source_address;
-        packet->image_width = 5;
-        packet->image_height = 5;
-        packet->image_base = 0x3FF0;
+        initial_packet->image_width = 5;
+        initial_packet->image_height = 5;
+        initial_packet->image_base = 0x3FF0;
     }
 
     if (palette_page->gs_block_offset == 0) {
@@ -87,10 +89,10 @@ u64 get_frame_texture(s32 frame_id) {
         gs_texture_allocation_cursor += 0x400;
         if (pending_texture_upload_count < 0x40) {
             queued_transfer = 1;
-            packet = pending_texture_uploads + pending_texture_upload_count;
-            packet->palette_address = palette_page->source_address;
-            packet->reserved_zero = 0;
-            packet->palette_block_offset = palette_page->gs_block_offset;
+            palette_packet = pending_texture_uploads + pending_texture_upload_count;
+            palette_packet->palette_address = palette_page->source_address;
+            palette_packet->reserved_zero = 0;
+            palette_packet->palette_block_offset = palette_page->gs_block_offset;
         }
     }
 
