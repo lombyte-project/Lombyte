@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/sce_tty_write/sceTtyWrite
 #include "types.h"
 
 struct M2c_D_00154A50 {
-    s32 unk0;           /* deci2 handle from sceDeci2Open */
+    volatile s32 unk0;  /* deci2 handle from sceDeci2Open */
     volatile s32 unk4;  /* published payload length */
     volatile s32 unk8;
     volatile s32 unkC;  /* busy flag, also written by sceTtyHandler */
@@ -29,10 +29,10 @@ struct Mmio {
 
 extern struct M2c_D_00154A50 D_00154A50;
 extern u8 D_00154A80[];
-extern s32 CallDebugCharacter();
+extern s32 CallDebugCharacter(s32, s32);
 extern s32 DIntr();
 extern s32 EnableInterrupts();
-extern s32 SceDeci2Poll();
+extern s32 SceDeci2Poll(s32);
 
 s32 sceTtyWrite(s8 *arg0, s32 arg1)
 {
@@ -73,8 +73,8 @@ s32 sceTtyWrite(s8 *arg0, s32 arg1)
             var_20_8 = var_20_8 + 1;
         } while (var_17_14 < 0x100);
         D_00154A50.unk4 = var_17_14 + 0xC;
-        *(u16 *) ((u8 *) D_00154A50.unk10 + 0x0) = D_00154A50.unk4;
-        if (CallDebugCharacter(D_00154A50.unk0, *(s8 *) ((u8 *) D_00154A50.unk10 + 7), var_6_26) < 0) {
+        var_6_26->unk0 = D_00154A50.unk4;
+        if (CallDebugCharacter(D_00154A50.unk0, var_6_26->unk7) < 0) {
             EnableInterrupts();
             D_00154A50.unkC = 0;
             return -1;
