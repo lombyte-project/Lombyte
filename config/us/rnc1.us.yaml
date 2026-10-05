@@ -576,7 +576,7 @@ segments:
           - [0x26198, c, assembly/sdk/library/sce_vu0_unit_matrix]
           - [0x261c0, c, assembly/sdk/library/scevu0ecossin]
           - [0x26234, textbin, text_gap_00125240_post_sdk_worker]
-          - [0x26238, textbin, contaminated_sce_vu0_rot_matrix_z_oracle]
+          - [0x26238, c, assembly/sdk/library/sceVu0RotMatrixZ]
           - [0x262dc, textbin, text_gap_001252b8_post_sdk_worker]
           - [0x262e0, c, assembly/sdk/math/rotations/sce_vu0_rot_matrix_x]
           - [0x26388, c, assembly/sdk/math/rotations/sce_vu0_rot_matrix_y]
