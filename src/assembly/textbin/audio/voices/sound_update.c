@@ -172,8 +172,6 @@ s32 sound_update(void) {
     D_0013E550.listener_history_position = history_index;
     qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
 
-    voice_flags = flags;
-    volumes = voice_volumes;
     listener_sample_count = 0;
     previous_history_index = (history_index + 3) % 4;
     if (previous_history_index != history_index) {
@@ -209,6 +207,8 @@ s32 sound_update(void) {
     snd_set_master_volume(4, D_0013E550.group_4_volume);
     snd_set_master_volume(5, D_0013E550.group_5_volume);
 
+    volumes = voice_volumes;
+    voice_flags = flags;
     FillTransferWords(voice_flags, 0, 0x78);
     FillTransferWords(volumes, 0, 0x78);
     FillTransferWords(radial_velocities, 0, 0x78);
