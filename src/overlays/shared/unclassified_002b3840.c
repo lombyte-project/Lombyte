@@ -80,7 +80,7 @@ typedef struct {
 
 extern char D_0013F350[];
 extern short D_L05_0015FFD8;
-extern void FUN_L05_002f81b8(void *);
+extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L05_002f8080(char *m) {
@@ -106,9 +106,53 @@ void FUN_L05_002f8080(char *m) {
         if (m[0x70] & 2) blend_moby_animation(m, 2, 0, 0);
         break;
     }
-    FUN_L05_002f81b8(m);
+    FUN_L05_002f81b8_u(m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f81b8.s", FUN_L05_002f81b8);
+/* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float fsin_p(float) __asm__("FUN_001f9de0");
+extern float approach_value(float *p, float target, float maxstep);
+extern float fast_add_rotations(float, float);
+extern int lerp_p(int, int, float) __asm__("FUN_001fa6e0");
+extern short D_L05_001618C0 __attribute__((sda));
+extern short D_L05_001618C4 __attribute__((sda));
+extern short D_L05_001618C8 __attribute__((sda));
+extern short D_L05_001618CC __attribute__((sda));
+extern short D_L05_001618D0 __attribute__((sda));
+extern short D_0015EE6C_s __asm__("D_0015ED6C");
+
+void FUN_L05_002f81b8(void *mv) {
+    char *moby = mv;
+    char *base = D_0013F350;
+    char *data = *(char **)(moby + 0x78);
+    int r;
+    float s;
+    if (*(char **)(base + 0x2FC) == moby) {
+        approach_value((float *)(data + 0x1C), 1.0f, D_0015ED6C + D_0015ED6C);
+        if (*(int *)(base + 0x1090) != 0) {
+            if (*(int *)(base + 0x10B8) == 0x16) ((unsigned char *)moby)[0xBC] = 1;
+            else ((unsigned char *)moby)[0xBC] = 0;
+        } else {
+            ((unsigned char *)moby)[0xBC] = 0;
+        }
+    } else {
+        approach_value((float *)(data + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
+    }
+    if (*(float *)(data + 0x1C) != 0.0f) {
+        s = fast_add_rotations(*(float *)(data + 0x18), D_0015ED6C * 6.2831855f);
+        *(float *)(data + 0x18) = s;
+        if (((unsigned char *)moby)[0xBC] == 1) {
+            r = lerp_p(*(int *)&D_L05_001618C4, *(int *)&D_L05_001618C8, (fsin_p(s) + 1.0f) * 0.5f);
+        } else {
+            r = lerp_p(*(int *)&D_L05_001618CC, *(int *)&D_L05_001618D0, (fsin_p(s) + 1.0f) * 0.5f);
+        }
+        *(int *)(moby + 0x90) = lerp_p(*(int *)&D_L05_001618C0, r, *(float *)(data + 0x1C));
+    } else {
+        *(int *)(moby + 0x90) = *(int *)&D_L05_001618C0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307010.s", FUN_L05_00307010);
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */

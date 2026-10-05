@@ -167,4 +167,96 @@ void FUN_L08_00308f68(int x) {
         FUN_L00_001fde98(a[i], c[i], e[i], D_L08_001F8560, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003097b0.s", FUN_L08_003097b0);
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
+
+extern Pair D_L08_001623F8[] __attribute__((sda));
+extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));
+extern Pair D_L08_001F8548[];
+extern char D_L08_001675C0[];
+extern char D_L08_001F01C8[];
+extern char D_L08_001F4C48[];
+extern char D_L08_001F4C60[];
+extern char D_L08_001F8528[];
+extern char D_L08_001F8550[];
+extern float D_L08_00162384;
+extern float D_L08_00162388;
+extern float D_L08_0016238C;
+extern float vector_length_xyz(void *);
+extern int D_L08_001623F0;
+extern int FUN_001fa728(char *, float);
+extern int truncate_float_to_s32();
+extern short D_L08_00162380 __attribute__((sda));
+extern short D_L08_001623C4 __attribute__((sda));
+extern short D_L08_001623E8 __attribute__((sda));
+extern short D_L08_001623C8 __attribute__((sda));
+extern void FUN_L08_002f0dc8(void);
+extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void FUN_L08_002f1158(void *, float, float, float, void *);
+extern void FUN_L08_002f12a0(int);
+extern void FUN_L08_002f1378(int);
+extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_003097b0(unsigned char *moby) {
+    int i;
+    float v[4];
+    float w[4];
+    float d;
+
+    switch (moby[0x20]) {
+    case 0:
+        if (*(int *)&D_L08_001623C4 == 0) {
+            FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
+            FUN_L08_002f0f68(&D_L08_001623E8, 2, &D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            FUN_L08_002f0f68(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
+            *(int *)&D_L08_001623C4 = 1;
+        }
+        moby[0x20] = 1;
+        for (i = 0; i < 3; i++) {
+            D_L08_001F8548[i].a = 0;
+            D_L08_001F8548[i].b = 0;
+            D_L08_00162408_c[1].a = 0;
+            D_L08_00162408_c[1].b = 0;
+        }
+        for (i = 0; i < 2; i++) {
+            D_L08_001623F8[i].a = 0;
+            *(float *)&D_L08_001623F8[i].b = i * 0.4f;
+        }
+        for (i = 0; i < 1; i++) {
+            D_L08_00162408_c[i].a = 0;
+            *(float *)&D_L08_00162408_c[i].b = i * 0.4f;
+        }
+        break;
+    case 1:
+        v[0] = *(float *)&D_L08_00162380;
+        v[1] = D_L08_00162384;
+        v[2] = D_L08_00162388;
+        v[3] = D_L08_0016238C;
+        if (FUN_001fa728((char *)v, 1000.0f) >= 0) {
+            w[0] = *(float *)&D_L08_00162380;
+            w[1] = D_L08_00162384;
+            w[2] = D_L08_00162388;
+            w[3] = 1.0f;
+            subtract_vector_xyz(w, D_L08_001675C0, w);
+            d = vector_length_xyz(w);
+            if (d <= 84.0f) {
+                FUN_L08_002f12a0(0);
+                FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_00162408_c[1]);
+                FUN_L08_002f12a0(2);
+                if (d < 20.0f) {
+                    *(unsigned char *)&D_L08_001623F0 = 0xFF;
+                } else if (d < 84.0f) {
+                    *(char *)&D_L08_001623F0 = func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                } else {
+                    *(char *)&D_L08_001623F0 = 0;
+                }
+            }
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(1);
+            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+        }
+        break;
+    }
+}
