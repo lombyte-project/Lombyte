@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203338/FUN_00203338.s", FUN_00203338);
-#else
 #include "types.h"
 #include "qcopy.h"
 #include "eetypes.h"
@@ -151,14 +148,8 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
             if (nested_table->optional_data_14 != 0) {
                 nested_table->optional_data_14 = (s32)header + nested_table->optional_data_14;
             }
-            nested_entry_index = 0;
-            if (nested_table->count != 0) {
-                entry_offset = nested_table->entry_offsets;
-                do {
-                    *entry_offset = (s32)header + *entry_offset;
-                    nested_entry_index++;
-                    entry_offset++;
-                } while (nested_entry_index < nested_table->count);
+            for (nested_entry_index = 0; nested_entry_index < nested_table->count; nested_entry_index++) {
+                nested_table->entry_offsets[nested_entry_index] = (s32)header + nested_table->entry_offsets[nested_entry_index];
             }
         }
     }
@@ -190,5 +181,3 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
 }
 
 extern __typeof__(prepare_resident_class_render_data) func_00203338 __attribute__((alias("FUN_00203338")));
-
-#endif /* NON_MATCHING */

@@ -1291,7 +1291,7 @@ segments:
           - [0x10409c, textbin, text_gap_0020311c_before_fun_00203120]
           - [0x1040a0, c, world/loaders/upload_texture_images]
           - [0x104260, c, runtime/relocation/relocate_asset_entry_pointers]
-          - [0x1042b8, c, assembly/textbin/fun_00203338]
+          - [0x1042b8, c, textbin/fun_00203338]
           - [0x1045bc, textbin, text_gap_0020363c_before_fun_00203640]
           - [0x1045c0, c, world/loaders/register_moby_class]
           - [0x1046ac, textbin, text_gap_0020372c_after_fun_00203640]
