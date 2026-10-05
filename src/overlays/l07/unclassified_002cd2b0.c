@@ -413,8 +413,343 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
     return moby[0x20];
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cd2b0.s", FUN_L07_002cd2b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002cdb28.s", FUN_L07_002cdb28);
+#define F(p, o) (*(float *)((p) + (o)))
+
+/* Moves a moby along a path, easing between nodes and tracking the hero. */
+extern char *D_L07_001B0530[];
+extern float FUN_001f96b0(float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L01_00277fb8(void *);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_002223f8(int, int);
+extern void FUN_L00_00227638(void);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern char D_0013F3D0[];
+extern char D_0013E550[];
+
+#define F(p, o) (*(float *)((p) + (o)))
+
+void FUN_L07_002cd2b0(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *hero;
+    char *path;
+    float orig[4], delta[4], tmp[4];
+    if (*(int *)(data + 0xB4) == -1) {
+        return;
+    }
+    path = D_L07_001B0530[*(int *)(data + 0xB4)];
+    qcopy(orig, moby + 0x10);
+    FUN_001f9770(data + 0xBA);
+    if (moby[0x20] == 0) {
+        float f;
+        char *pts;
+        data[0x28] = 4;
+        *(short *)(data + 0x3E) = 5;
+        *(int *)(data + 0x20) = 0;
+        *(short *)(data + 0x24) = 0;
+        f = 0.0f;
+        if ((moby[0xBC] = data[0xA0]) == 0) {
+            f = 1.0f;
+        }
+        F(data, 0xA4) = f;
+        pts = path + 0x10;
+        qcopy((moby + 0x10), func_001FA898_r(f) ? pts + (*(int *)path - 1) * 16 : pts);
+        *(short *)(data + 0xBA) = 0;
+        *(int *)(data + 0xA8) = 0;
+        *(int *)(data + 0xBC) = 0;
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        *(int *)(data + 0xC4) = -1;
+    }
+    switch (moby[0xBC]) {
+    case 0: {
+        char *cls = *(char **)(moby + 0x24);
+        float t = F(moby, 0x2C) - F(cls, 0x24) / 60.0f;
+        F(moby, 0x2C) = t;
+        if (t < 0.0f) {
+            F(moby, 0x2C) = F(cls, 0x24);
+            qcopy((moby + 0x10), path + 0x10);
+            moby[0xBC] = 1;
+            F(data, 0xA4) = 0.0f;
+        }
+        break;
+    }
+    case 1:
+        if (*(short *)(data + 0xB8) != 0) {
+            if (FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0) {
+                    if (FUN_L01_00277fb8(moby)) {
+                        FUN_L00_002223f8(0x72, 1);
+                    }
+                }
+                moby[0xBC] = 2;
+                F(data, 0xAC) = 1.0f / FUN_001f96b0(F(data, 0xB0) * 60.0f);
+                *(short *)(data + 0xB8) = 0;
+            }
+        }
+        break;
+    case 2:
+        if (*(short *)(data + 0xBA) != 0
+            || (F(data, 0xBC) < 0.0f
+                && FUN_001f9b80((moby + 0x10), hero = ((char *)&D_0013F3D0)) < 2.0f
+                && AbsoluteFloat(F(hero -= 0x80, 0x88) - F(moby, 0x18)) < 4.0f
+                && F(moby, 0x18) - F(hero, 0x88) > 1.0f)) {
+            int r;
+            if (*(short *)(data + 0xBA) == 0) {
+                *(short *)(data + 0xBA) = scale_game_frames(30);
+            }
+            r = *(int *)(data + 0xC4);
+            *(int *)(data + 0xA8) = 0;
+            if (r != -1) {
+                unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
+                    release_voice_slot(r);
+                }
+            }
+            *(int *)(data + 0xC4) = -1;
+        } else {
+            int i;
+            float f20, t;
+            char *q;
+            if (!FUN_L00_0028d8c0(moby, *(int *)(data + 0xC4))) {
+                *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
+            }
+            F(data, 0xA8) += F(data, 0xAC) * D_0015ED6C;
+            if (AbsoluteFloat(F(data, 0xA8)) > AbsoluteFloat(F(data, 0xAC))) {
+                F(data, 0xA8) = F(data, 0xAC);
+            }
+            F(data, 0xA4) = F(data, 0xA4) + F(data, 0xA8);
+            if (0.5f < AbsoluteFloat(F(data, 0xA4) - 0.5f)) {
+                int r;
+                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                    FUN_L00_00227638();
+                }
+                if (0.0f < F(data, 0xAC)) {
+                    moby[0xBC] = 0;
+                    F(data, 0xA4) = 1.0f;
+                } else {
+                    moby[0xBC] = 1;
+                    F(data, 0xA4) = 0.0f;
+                }
+                *(int *)(data + 0xA8) = 0;
+                *(short *)(data + 0xBA) = scale_game_frames(15);
+                r = *(int *)(data + 0xC4);
+                if (r != -1) {
+                    unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                    if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
+                        release_voice_slot(r);
+                    }
+                }
+                *(int *)(data + 0xC4) = -1;
+            }
+            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            i = func_001FA898_r(f20 * F(data, 0xA4));
+            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            t = ConvertIntegerToFloat(i);
+            f20 *= F(data, 0xA4);
+            f20 -= t;
+            if (i == *(int *)path - 1) {
+                qcopy((moby + 0x10), path + 0x10 + i * 16);
+            } else {
+                q = path + 0x10 + i * 16;
+                subtract_vector_xyz(tmp, path + 0x20 + i * 16, q);
+                scale_vector_xyz(tmp, tmp, f20);
+                add_vector_xyz((moby + 0x10), tmp, q);
+            }
+            F(data, 0xBC) = F(moby, 0x18) - orig[2];
+        }
+        break;
+    }
+    subtract_vector_xyz(delta, (moby + 0x10), orig);
+    FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
+    if (!FUN_L01_00277fb8(moby)) {
+        if (2.0f < FUN_001f9b80((moby + 0x10), ((char *)&D_0013F3D0))) {
+            if (*(short *)(data + 0xBA) == 0) {
+                *(short *)(data + 0xB8) = 1;
+            }
+        }
+    }
+}
+/* Moves a moby along a path between its two ends, hidden while its gate byte is set. */
+extern char *D_L07_001B0530[];
+extern float FUN_001f96b0(float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L01_00277fb8(void *);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_L07_0015FC88[] __attribute__((section(".sdata")));
+extern void FUN_L00_002223f8(int, int);
+extern void FUN_L00_00227638(void);
+extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern char D_0013F3D0[];
+extern char D_0013E550[];
+
+void FUN_L07_002cdb28(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *hero;
+    char *path;
+    float orig[4], delta[4], tmp[4];
+    if (D_L07_0015FC88[moby[0xB0]] != 0xFF) {
+        *(int *)(moby + 0x94) = 0;
+        *(unsigned short *)(moby + 0x34) |= 0x41;
+        return;
+    }
+    if (*(int *)(data + 0xB4) == -1) {
+        return;
+    }
+    path = D_L07_001B0530[*(int *)(data + 0xB4)];
+    qcopy(orig, moby + 0x10);
+    FUN_001f9770(data + 0xBA);
+    if (moby[0x20] == 0) {
+        float f;
+        char *pts;
+        data[0x28] = 4;
+        *(short *)(data + 0x3E) = 5;
+        *(int *)(data + 0x20) = 0;
+        *(short *)(data + 0x24) = 0;
+        f = 0.0f;
+        if ((moby[0xBC] = data[0xA0]) == 0) {
+            f = 1.0f;
+        }
+        *(float *)(data + 0xA4) = f;
+        pts = path + 0x10;
+        qcopy((moby + 0x10), func_001FA898_r(f) ? pts + (*(int *)path - 1) * 16 : pts);
+        *(short *)(data + 0xBA) = 0;
+        *(int *)(data + 0xA8) = 0;
+        *(int *)(data + 0xBC) = 0;
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        *(int *)(data + 0xC4) = -1;
+        *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    }
+    switch (moby[0xBC]) {
+    case 0: {
+        char *cls = *(char **)(moby + 0x24);
+        float t = *(float *)(moby + 0x2C) - *(float *)(cls + 0x24) / 60.0f;
+        *(float *)(moby + 0x2C) = t;
+        if (t < 0.0f) {
+            *(float *)(moby + 0x2C) = *(float *)(cls + 0x24);
+            qcopy((moby + 0x10), path + 0x10);
+            moby[0xBC] = 1;
+            *(float *)(data + 0xA4) = 0.0f;
+        }
+        break;
+    }
+    case 1:
+        if (*(short *)(data + 0xB8) != 0) {
+            if (FUN_L01_00277fb8(moby)) {
+                if (*(int *)(data + 0xC8) == 0) {
+                    if (FUN_L01_00277fb8(moby)) {
+                        FUN_L00_002223f8(0x72, 1);
+                    }
+                }
+                moby[0xBC] = 2;
+                *(float *)(data + 0xAC) = 1.0f / FUN_001f96b0(*(float *)(data + 0xB0) * 60.0f);
+                *(short *)(data + 0xB8) = 0;
+            }
+        }
+        break;
+    case 2:
+        if (*(short *)(data + 0xBA) != 0
+            || (*(float *)(data + 0xBC) < 0.0f
+                && FUN_001f9b80((moby + 0x10), hero = ((char *)&D_0013F3D0)) < 2.0f
+                && AbsoluteFloat(*(float *)((hero -= 0x80) + 0x88) - *(float *)(moby + 0x18)) < 4.0f
+                && *(float *)(moby + 0x18) - *(float *)(hero + 0x88) > 1.0f)) {
+            int r;
+            if (*(short *)(data + 0xBA) == 0) {
+                *(short *)(data + 0xBA) = scale_game_frames(30);
+            }
+            r = *(int *)(data + 0xC4);
+            *(int *)(data + 0xA8) = 0;
+            if (r != -1) {
+                unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
+                    release_voice_slot(r);
+                }
+            }
+            *(int *)(data + 0xC4) = -1;
+        } else {
+            int i;
+            float f20, t;
+            char *q;
+            if (!FUN_L00_0028d8c0(moby, *(int *)(data + 0xC4))) {
+                *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
+            }
+            *(float *)(data + 0xA8) += *(float *)(data + 0xAC) * D_0015ED6C;
+            if (AbsoluteFloat(*(float *)(data + 0xA8)) > AbsoluteFloat(*(float *)(data + 0xAC))) {
+                *(float *)(data + 0xA8) = *(float *)(data + 0xAC);
+            }
+            *(float *)(data + 0xA4) = *(float *)(data + 0xA4) + *(float *)(data + 0xA8);
+            if (0.5f < AbsoluteFloat(*(float *)(data + 0xA4) - 0.5f)) {
+                int r;
+                if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
+                    FUN_L00_00227638();
+                }
+                if (0.0f < *(float *)(data + 0xAC)) {
+                    moby[0xBC] = 3;
+                    *(float *)(data + 0xA4) = 1.0f;
+                } else {
+                    moby[0xBC] = 1;
+                    *(float *)(data + 0xA4) = 0.0f;
+                }
+                *(int *)(data + 0xA8) = 0;
+                *(short *)(data + 0xBA) = scale_game_frames(15);
+                r = *(int *)(data + 0xC4);
+                if (r != -1) {
+                    unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                    if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
+                        release_voice_slot(r);
+                    }
+                }
+                *(int *)(data + 0xC4) = -1;
+            }
+            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            i = func_001FA898_r(f20 * *(float *)(data + 0xA4));
+            f20 = ConvertIntegerToFloat(*(int *)path - 1);
+            t = ConvertIntegerToFloat(i);
+            f20 *= *(float *)(data + 0xA4);
+            f20 -= t;
+            if (i == *(int *)path - 1) {
+                qcopy((moby + 0x10), path + 0x10 + i * 16);
+            } else {
+                q = path + 0x10 + i * 16;
+                subtract_vector_xyz(tmp, path + 0x20 + i * 16, q);
+                scale_vector_xyz(tmp, tmp, f20);
+                add_vector_xyz((moby + 0x10), tmp, q);
+            }
+            *(float *)(data + 0xBC) = *(float *)(moby + 0x18) - orig[2];
+        }
+        break;
+    case 3:
+        if (!FUN_L01_00277fb8(moby)) {
+            moby[0xBC] = 0;
+        }
+        break;
+    }
+    subtract_vector_xyz(delta, (moby + 0x10), orig);
+    FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
+    if (!FUN_L01_00277fb8(moby)) {
+        if (2.0f < FUN_001f9b80((moby + 0x10), ((char *)&D_0013F3D0))) {
+            if (*(short *)(data + 0xBA) == 0) {
+                *(short *)(data + 0xB8) = 1;
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030af40.s", FUN_L07_0030af40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);

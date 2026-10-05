@@ -587,7 +587,63 @@ void FUN_L18_002f6960(char *m) {
     FUN_L18_002f6878_c(m, t, v);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6aa0.s", FUN_L18_002f6aa0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f6e10.s", FUN_L18_002f6e10);
+/* Finds the nearest moby in the self's list within range and returns it. */
+extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern int FUN_L18_002d8858(void *obj);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short *D_L18_001AC240_c2[] __asm__("D_L18_001AC240");
+extern short D_L18_00162338 __attribute__((sda));
+extern short D_L18_0016233C __attribute__((sda));
+extern void FUN_L18_002d8888(void *, int, int);
+
+unsigned char *FUN_L18_002f6e10(char *self) {
+    char *data = *(char **)(self + 0x78);
+    short *p = D_L18_001AC240_c2[*(int *)(data + 0x398)];
+    unsigned char *best = 0;
+    float bestd = 1024.0f;
+    float v[4];
+    if (p == 0) {
+        return 0;
+    }
+    goto start;
+    for (;;) {
+start:
+    {
+        int off = (*(unsigned short *)p & 0x7FFF) << 8;
+        unsigned char *m = (unsigned char *)((int)off + (int)D_L18_0015FFD8);
+        if (*(short *)(m + 0xA6) == 0x24B) {
+            char *c = data + 0x3C0;
+            unsigned char *q;
+            FUN_L18_002d8858(m);
+            q = D_L18_0015FFD8 + off;
+            if (FUN_001f9b80(q + 0x10, c) < *(float *)&D_L18_00162338) {
+                unsigned char *r;
+                int a, b;
+                float dot;
+
+                subtract_vector_xyz(v, q + 0x10, c);
+                r = D_L18_0015FFD8 + off;
+                a = scale_game_frames(0x3C);
+                b = scale_game_frames(*(int *)&D_L18_0016233C);
+                FUN_L18_002d8888(r, a, b);
+                dot = dot_vectors_xyz(v, self + 0xC0);
+                if (0.333f < dot) {
+                    float d = vector_length_xyz(v);
+                    if (d < bestd) {
+                        bestd = d;
+                        best = q;
+                    }
+                }
+            }
+        }
+    }
+        if (*p++ < 0) {
+            break;
+        }
+    }
+    return best;
+}
 extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f6fa8, 124 bytes.

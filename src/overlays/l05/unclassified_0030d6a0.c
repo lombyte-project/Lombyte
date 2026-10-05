@@ -196,7 +196,35 @@ void FUN_L05_00316070(char *moby) {
     }
     if (none) FUN_L03_00291918(D_L05_00211B20);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
+/* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
+extern char D_0013E533[];
+extern char D_L05_00211B28[];
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC") __attribute__((sda));
+extern void FUN_L02_002a40d0(void *, float);
+void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+extern char D_001413DC[];
+extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
+extern float D_L05_00211E60_3175D8[] __asm__("D_L05_00211B20");
+
+void FUN_L05_00316110(char *moby) {
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        FUN_L02_002a40d0(D_L05_00211E60_3175D8, 1.0f);
+        moby[0x20] = 1;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        break;
+    case 1:
+        if (*(int *)(((char *)&D_001413DC)) == 0x16) {
+            D_L05_00211E60_3175D8[2] = fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
+        } else {
+            D_L05_00211E60_3175D8[2] = fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+        }
+        enqueue_callback_list_1(func_L05_00317538_3175D8, moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 #include "sda.h"

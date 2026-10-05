@@ -181,4 +181,63 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dd3c0.s", FUN_L08_002dd3c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de3e0.s", FUN_L08_002de3e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de528.s", FUN_L08_002de528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002de848.s", FUN_L08_002de848);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dec90.s", FUN_L08_002dec90);
+/* Spawns a burst of particles at an offset from the moby, with random sizes and colours from level tuning values. */
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float D_0015ED6C;
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L08_00161A48 __attribute__((sda));
+extern short D_L08_00161A4C __attribute__((sda));
+extern short D_L08_00161A50 __attribute__((sda));
+extern short D_L08_00161A54 __attribute__((sda));
+extern short D_L08_00161A58 __attribute__((sda));
+extern short D_L08_00161A5C __attribute__((sda));
+extern short D_L08_00161A60 __attribute__((sda));
+extern short D_L08_00161A64 __attribute__((sda));
+extern short D_L08_00161A68 __attribute__((sda));
+extern short D_L08_00161A6C __attribute__((sda));
+extern short D_L08_00161A70 __attribute__((sda));
+extern short D_L08_00161A74 __attribute__((sda));
+extern short D_L08_00161A78 __attribute__((sda));
+extern short D_L08_00161A7C __attribute__((sda));
+extern short D_L08_00161A80 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_002dec90(char *m, char *pos) {
+    float v10[4];
+    float v20[4];
+    float v30[4];
+    float v40[4];
+    float v50[4];
+    float v60[4];
+    int a, b, c, d, e;
+    char *r;
+    subtract_vector_xyz(v30, m + 0x10, pos);
+    *(u128 *)v60 = 0;
+    v60[0] = -2.3f;
+    v60[2] = 0.3f;
+    transform_vector_by_basis(v50, v60, m + 0xC0);
+    add_vector_xyz(v50, v50, m + 0x10);
+    scale_vector_xyz(v10, v30, *(float *)&D_L08_00161A48);
+    scale_vector_xyz(v20, v30, *(float *)&D_L08_00161A4C);
+    FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L08_00161A50 * D_0015ED6C);
+    add_vector_xyz(v20, v20, v40);
+    v10[3] = random_float_between_alt(*(float *)&D_L08_00161A64, *(float *)&D_L08_00161A68);
+    v20[3] = random_float_between_alt(*(float *)&D_L08_00161A6C, *(float *)&D_L08_00161A70);
+    a = FUN_001fa6e0(*(int *)&D_L08_00161A74, *(int *)&D_L08_00161A78, random_float_between_alt(0.0f, 1.0f));
+    b = FUN_001fa6e0(*(int *)&D_L08_00161A7C, *(int *)&D_L08_00161A80, random_float_between_alt(0.0f, 1.0f));
+    c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A54 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+    d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A58 * (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+    e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A5C * (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+    r = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
+    if (r != 0) {
+        r[9] = func_001FA898_r(8.0f) - 0x70;
+    }
+}

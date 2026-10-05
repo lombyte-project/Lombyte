@@ -593,7 +593,114 @@ void FUN_L18_002d5610(void *m, void *src) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5768.s", FUN_L18_002d5768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5918.s", FUN_L18_002d5918);
+/* Moby update: hovers, drifts toward the player and plays its animations by state. */
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern float D_0015ED70;
+extern float FUN_001f9b48(void *, void *);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_001413D0[];
+extern float D_0015ED70_b __asm__("D_0015ED70");
+extern int FUN_L00_0025fcb8(char *, char *, float);
+extern int FUN_L00_002dc9f0(void *, void *);
+extern int scale_game_frames_i(int) __asm__("FUN_001f96f8");
+extern short D_L18_00161988 __attribute__((sda));
+extern float D_L18_00161994 __attribute__((sda));
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void FUN_L18_002d5f20(void *);
+extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
+extern short D_L18_00161A6C __asm__("D_0015ED6C");
+extern float D_L18_6C_m __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+
+void FUN_L18_002d5918(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    FUN_L18_002d5f20(moby);
+    switch (moby[0x20]) {
+    case 0:
+        *(int *)(moby + 0x94) = 0;
+        *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x41) & 0xEFFF;
+        *(void **)(data + 0xD0) = &D_L18_00161988;
+        *(float *)(data + 0x30) = 0.05f;
+        moby[0x20] = 5;
+        break;
+    case 1:
+        add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x180);
+        *(float *)(data + 0x188) -= D_0015ED70 * 10.0f;
+        if (*(float *)(moby + 0x18) < *(float *)(data + 0x178)) {
+            *(float *)(moby + 0x18) = *(float *)(data + 0x178);
+            moby[0x20] = 2;
+            *(float *)(data + 0x188) = -(D_L18_00161994 * 2.0f * D_L18_6C_m);
+        }
+        break;
+    case 2: {
+        float d = approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * D_0015ED70);
+        *(float *)(moby + 0x44) += d;
+        v[0] = fast_cos(*(float *)(moby + 0x48)) * d;
+        v[1] = fast_sin(*(float *)(moby + 0x48)) * d;
+        v[2] = 0.0f;
+        add_vector_xyz(moby + 0x10, moby + 0x10, v);
+        if (*(float *)(data + 0x188) == 0.0f) {
+            if (moby[0x53] != 1) {
+                blend_moby_animation_alt(moby, 1, 0, scale_game_frames_i(12));
+            }
+            moby[0x20] = 3;
+            moby[0xA4] = 0xFF;
+        }
+        break;
+    }
+    case 3:
+        if (moby[0x53] == 1 && (moby[0x70] & 2)) {
+            blend_moby_animation_alt(moby, 2, 0, scale_game_frames_i(12));
+        }
+        if (moby[0x31]) {
+            char buf[0x50];
+            float b[4];
+            int r = FUN_L00_0025fcb8((char *)moby, buf, 6.0f);
+            char *hit;
+            
+            char *vel;
+            if (r == 2) return;
+            hit = *(char **)(buf + 0x40);
+            if (hit == 0) return;
+            if (FUN_001f9b80(moby + 0x10, hit + 0x10) < 6.0f) {
+                float lim2 = *(float *)&D_L18_00161A6C * 3.0f;
+                float lim = D_0015ED70 * 6.0f;
+                qcopy(b, moby + 0x10);
+                subtract_vector_xyz(v, *(char **)(buf + 0x40) + 0x10, moby + 0x10);
+                v[2] = -(D_0015ED70_b * 10.0f);
+                if (lim < vector_length_xy(v)) {
+                    FUN_001f9c48(v, v, lim);
+                }
+                vel = data + 0x40;
+                add_vector_xyz(vel, vel, v);
+                if (lim2 < vector_length_xy(vel)) {
+                    FUN_001f9c48(vel, vel, lim2);
+                }
+                FUN_L00_00258830((int)moby, (int)vel, 0.0f, 0.5f, 0.0f, 0);
+                subtract_vector_xyz(vel, moby + 0x10, b);
+                if (0.0f < *(float *)(data + 0x48)) {
+                    *(float *)(data + 0x48) = 0.0f;
+                } else if (*(float *)(data + 0x48) < -lim2) {
+                    *(float *)(data + 0x48) = -lim2;
+                }
+                if (*(char **)(buf + 0x40) != (char *)D_001413D0[0]) {
+                    if (FUN_001f9b48(*(char **)(buf + 0x40) + 0x10, moby + 0x10) < 2.0f) {
+                        *(int *)(data + 0x19C) = 1;
+                    }
+                }
+            }
+        }
+        break;
+    case 4:
+        if (FUN_L00_002dc9f0(moby, data + 0x110)) {
+            moby[0x20] = 3;
+            *(short *)(data + 0xC8) = 0;
+        }
+        break;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -940,7 +1047,72 @@ void FUN_L18_002d7fd0(unsigned char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8050.s", FUN_L18_002d8050);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d8888.s", FUN_L18_002d8888);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d88b8.s", FUN_L18_002d88b8);
+/* Spawns a random ring of particles around the moby. */
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int FUN_001fa6e0(int, int, float);
+extern int random_integer_below_c(int) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L18_00161A68 __attribute__((sda));
+extern short D_L18_00161A6C_c __asm__("D_L18_00161A6C") __attribute__((sda));
+extern short D_L18_00161A70 __attribute__((sda));
+extern short D_L18_00161A74 __attribute__((sda));
+extern short D_L18_00161A78 __attribute__((sda));
+extern short D_L18_00161A7C __attribute__((sda));
+extern short D_L18_00161A80 __attribute__((sda));
+extern short D_L18_00161A84 __attribute__((sda));
+extern short D_L18_00161A88 __attribute__((sda));
+extern short D_L18_00161A8C __attribute__((sda));
+extern short D_L18_00161A90 __attribute__((sda));
+extern short D_L18_00161A94 __attribute__((sda));
+extern short D_L18_00161A98 __attribute__((sda));
+extern short D_L18_00161A9C __attribute__((sda));
+extern short D_L18_00161AA0 __attribute__((sda));
+extern short D_L18_00161AA4 __attribute__((sda));
+extern short D_L18_00161AA8 __attribute__((sda));
+extern short D_L18_00161AB4 __attribute__((sda));
+extern void FUN_001f9a00(void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L18_002d88b8(char *moby) {
+    float v[4];
+    float m[4];
+    float a[4];
+    float b[4];
+    float c[4];
+    int n;
+    float r;
+    float ang;
+    int i0, i1, i2, i3, i4;
+    char *mat = moby + 0xC0;
+    int i;
+
+    n = random_integer_below_c(5) + 5;
+    r = random_float_between_alt(1.0f, 2.5f);
+    ang = random_angle_radians();
+    v[0] = fast_cos(ang) * r;
+    v[1] = fast_sin(ang) * r;
+    v[2] = 0.0f;
+    transform_vector_by_basis(v, v, mat);
+    add_vector_xyz(v, v, moby + 0x10);
+    FUN_001f9a00(m);
+    transform_vector_by_basis(m, m, mat);
+    for (i = 0; i < n; i++) {
+        FUN_L00_00257d78(c, 0.0f, (*(float *)&(D_L18_00161A78)) * D_0015ED6C);
+        normalize_vector_xyz(a, m, (*(float *)&(D_L18_00161A68)) * (random_float_between_alt(-(*(float *)&(D_L18_00161A74)), (*(float *)&(D_L18_00161A74))) + 1.0f) * D_0015ED6C);
+        add_vector_xyz(a, a, c);
+        normalize_vector_xyz(b, a, (*(float *)&(D_L18_00161A6C_c)) * (random_float_between_alt(-(*(float *)&(D_L18_00161A74)), (*(float *)&(D_L18_00161A74))) + 1.0f) * D_0015ED6C);
+        b[2] = b[2] - (*(float *)&(D_L18_00161A70)) * D_0015ED6C;
+        a[3] = random_float_between_alt((*(float *)&(D_L18_00161A8C)), (*(float *)&(D_L18_00161A90)));
+        b[3] = random_float_between_alt((*(float *)&(D_L18_00161A94)), (*(float *)&(D_L18_00161A98)));
+        i0 = FUN_001fa6e0((*(int *)&(D_L18_00161A9C)), (*(int *)&(D_L18_00161AA0)), random_float_between_alt(0.0f, 1.0f));
+        i1 = FUN_001fa6e0((*(int *)&(D_L18_00161AA4)), (*(int *)&(D_L18_00161AA8)), random_float_between_alt(0.0f, 1.0f));
+        i2 = func_001FA898_r(FUN_001f96b0((float)(*(int *)&(D_L18_00161A7C)) * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        i3 = func_001FA898_r(FUN_001f96b0((float)(*(int *)&(D_L18_00161A80)) * (random_float_between_alt(-(*(float *)&(D_L18_00161A88)), (*(float *)&(D_L18_00161A88))) + 1.0f)));
+        i4 = func_001FA898_r(FUN_001f96b0((float)(*(int *)&(D_L18_00161A84)) * (random_float_between_alt(-(*(float *)&(D_L18_00161A88)), (*(float *)&(D_L18_00161A88))) + 1.0f)));
+        FUN_00218888(v, a, b, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002db460.s", FUN_L18_002db460);
 /* Allocate an object, init its fields and child record. */
 /* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DCD28), where it is exact; names translated to the US level program. */
