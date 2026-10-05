@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/input/sce_pad2_set_button_order/scePad2SetButtonOrder.s", scePad2SetButtonOrder);
+#else
 #include "types.h"
 struct M2c_var_5_0 { s32 unk0; s32 unk4; s32 unk8; s32 unkC; };
 s32 scePad2SetButtonOrder(u8 *arg0, s32 *arg1) {
@@ -30,3 +35,5 @@ s32 scePad2SetButtonOrder(u8 *arg0, s32 *arg1) {
     } while (var_6_6 < 0x28);
     return 1;
 }
+
+#endif /* NON_MATCHING */

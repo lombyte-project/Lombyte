@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/ui/menus/fun_00226848/FUN_00226848.s", FUN_00226848);
+#else
 #include "rnc/preview_animation.h"
 
 extern u8 moby_class_resources[] __asm__("D_001B3200");
@@ -68,3 +73,5 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count)
         } while (resource_index < count);
     }
 }
+
+#endif /* NON_MATCHING */

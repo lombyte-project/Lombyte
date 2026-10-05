@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/outputframe/_outputFrame.s", _outputFrame);
+#else
 #include "types.h"
 struct M2c_arg0 {
     u8 pad_0[0xF8];
@@ -55,3 +60,5 @@ void _outputFrame(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
         arg0->unkF8 = 2;
     }
 }
+
+#endif /* NON_MATCHING */

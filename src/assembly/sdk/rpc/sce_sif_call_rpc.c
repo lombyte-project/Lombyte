@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_call_rpc/sceSifCallRpc.s", sceSifCallRpc);
+#else
 typedef signed char s8;
 typedef unsigned char u8;
 typedef signed short s16;
@@ -131,3 +136,5 @@ s32 sceSifCallRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
     return 0;
   }
 }
+
+#endif /* NON_MATCHING */

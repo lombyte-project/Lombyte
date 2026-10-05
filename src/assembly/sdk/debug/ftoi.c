@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/ftoi/ftoi.s", ftoi);
+#else
 /* ftoi b2 */
 
 #include "types.h"
@@ -36,3 +41,5 @@ s64 ftoi(s64 arg) {
         return (s64)w >> 0x20;
     }
 }
+
+#endif /* NON_MATCHING */

@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/animation/set_moby_animation/FUN_00212ed8.s", FUN_00212ed8);
+#else
 #include "types.h"
 struct Anim { u8 pad0[0x10]; u8 count; };
 struct AnimSet { u8 pad0[0x48]; struct Anim *anims[1]; };
@@ -40,3 +45,5 @@ void set_moby_animation(struct Obj *o, s32 sel, s32 idx) {
 }
 
 extern __typeof__(set_moby_animation) func_00212ED8 __attribute__((alias("FUN_00212ed8")));
+
+#endif /* NON_MATCHING */

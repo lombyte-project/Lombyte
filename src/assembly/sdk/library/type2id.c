@@ -1,3 +1,8 @@
+#include "asm.h"
+
+#ifndef NON_MATCHING
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/type2id/_type2id.s", _type2id);
+#else
 /* type2id exact recovery: named c1 + empty-asm barrier on shift after its initial 0 keeps the
    cg `shift = 0` assignment alive (branch-likely delay fill), reproducing retail scheduling. */
 
@@ -57,3 +62,5 @@ s64 _type2id(u32 id, s64 value)
   }
   return (s64) result;
 }
+
+#endif /* NON_MATCHING */
