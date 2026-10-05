@@ -55,13 +55,12 @@ extern void _sceFs_Rcv_Intr();
 s32 sceFsInit(void) {
     s32 irq_state;
     s32 countdown;
-    struct FsRequest *init_request;
     struct FsRequest *rpc_command;
     struct FsSemaSlot *sema_slot;
     u8 *sema_end;
+    struct FsRequest *init_request = D_00158000;
     struct FsWord4 response_word;
 
-    init_request = &D_00158000[0];
     sceSifInitRpc(0);
     init_request->field0 = 0;
     init_request->field4 = 0;
