@@ -17,7 +17,7 @@ extern volatile s32 D_001312E0[];
 extern volatile s32 D_001312E8[];
 extern s32 D_001312EC[];
 extern volatile s32 D_001312F0[];
-extern s32 CreateSema();
+extern s32 CreateSema(struct Sema *);
 void cmd_sem_init(void) {
     struct Sema sema;
 
