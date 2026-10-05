@@ -228,17 +228,17 @@ void render_level_effects_and_screen_sprites(void)
                 texture_top = (texture_bottom - frame_height) / 2;
                 texture_right -= texture_left;
                 texture_bottom -= texture_top;
-                if (texture_width < texture_right) {
-                    texture_right = texture_width;
-                }
-                if (texture_height < texture_bottom) {
-                    texture_bottom = texture_height;
-                }
                 if (texture_left < 0) {
                     texture_left = 0;
                 }
+                if (texture_width < texture_right) {
+                    texture_right = texture_width;
+                }
                 if (texture_top < 0) {
                     texture_top = 0;
+                }
+                if (texture_height < texture_bottom) {
+                    texture_bottom = texture_height;
                 }
             } else if (draw_result & 4) {
                 if (frame_width < frame_height) {
