@@ -194,12 +194,12 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
                ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
         strip_index++;
     } while (strip_index < 16);
-    fs_aa_transfer_words[76] = 0x4400000000008001;
+    packet_word[0] = 0x4400000000008001;
     fs_aa_transfer_words[77] = 0x4410;
-    fs_aa_transfer_words[78] = 0x181;
-    fs_aa_transfer_words[79] = 0x80000000;
+    packet_word[2] = 0x181;
+    packet_word[3] = 0x80000000;
     fs_aa_transfer_words[80] = 0x6FF8 | ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
-    fs_aa_transfer_words[81] = 0x6FF8 | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
+    packet_word[5] = 0x6FF8 | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
 
     fs_aa_resample_words[0] = 0x308B400000000001;
     fs_aa_resample_words[1] = 0xEEE;
