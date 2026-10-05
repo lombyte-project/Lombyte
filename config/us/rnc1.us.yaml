@@ -569,7 +569,7 @@ segments:
           - [0x25eb8, c, sdk/input/sce_pad2_get_side]
           - [0x25f1c, textbin, text_gap_00124f38_post_sdk_worker]
           - [0x25f20, c, sdk/input/sce_pad2_check_dma]
-          - [0x25fa0, c, assembly/sdk/input/sce_pad2_set_button_order]
+          - [0x25fa0, c, sdk/input/sce_pad2_set_button_order]
           - [0x26050, textbin, text_gap_00125020_post_sdk_worker]
           - [0x26058, c, sdk/input/sce_vib_get_profile]
           - [0x260d8, textbin, text_gap_001250d8_post_sdk_worker]
