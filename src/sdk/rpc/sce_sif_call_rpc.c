@@ -1,9 +1,5 @@
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_call_rpc/sceSifCallRpc.s",
-            sceSifCallRpc);
-#else
 typedef signed char s8;
 typedef unsigned char u8;
 typedef signed short s16;
@@ -14,15 +10,16 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct SifRpcClient {
-    s32 packet;
-    s32 request_id;
+struct SifRpcClient
+{
+  volatile s32 packet;
+  volatile s32 request_id;
     s32 semaphore_id;
     u8 pad_C[0x8];
     s32 server_buffer;
     u8 pad_18[0x4];
     s32 end_callback;
-    s32 end_argument;
+  volatile s32 end_argument;
     s32 server;
 };
 struct SifRpcPacket {
@@ -116,5 +113,3 @@ s32 sceSifCallRpc(struct SifRpcClient *arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
         return 0;
     }
 }
-
-#endif /* NON_MATCHING */

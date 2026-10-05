@@ -324,7 +324,7 @@ segments:
           - [0x1bf78, c, sdk/rpc/sce_sif_bind_rpc]
           - [0x1c0b8, c, sdk/callbacks/handle_sif_rpc_call]
           - [0x1c144, textbin, text_gap_0011aff8_post_sdk_worker_tail_0011b1c4]
-          - [0x1c148, c, assembly/sdk/rpc/sce_sif_call_rpc]
+          - [0x1c148, c, sdk/rpc/sce_sif_call_rpc]
           - [0x1c334, textbin, text_gap_0011b1c8_post_sdk_worker]
           - [0x1c338, c, sdk/rpc/sce_sif_check_stat_rpc]
           - [0x1c374, textbin, text_gap_0011adac_post_stat]
