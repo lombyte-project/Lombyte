@@ -19,7 +19,7 @@ GPL. Full text: [`licenses/GPL-2.0.txt`](licenses/GPL-2.0.txt).
 ## rac1-decomp (PAL decompilation)
 
 Some functions in `src/` are C written by the
-[rac1-decomp](https://github.com/Lynder063/rac1-decomp) project for the PAL
+[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project for the PAL
 release of the game, ported to this build by an agreed exchange between the
 two projects. Each such file names its origin in its first line
 (`Ported from rac1-decomp, the PAL decompilation (<file>, <function>)`).

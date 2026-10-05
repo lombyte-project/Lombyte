@@ -70,7 +70,7 @@ Work-in-progress C is also welcome when it preserves the matching baseline. Do n
 - [objdiff](https://github.com/encounter/objdiff) — object-level comparison.
 - [splat](https://github.com/ethteck/splat) and [spimdisasm](https://github.com/Decompollaborate/spimdisasm) — executable splitting and disassembly.
 - [Himuro](https://github.com/Mikompilation/Himuro) — PS2 decompilation research and reference EE-GCC toolchain work used by Lombyte's matching compiler profiles.
-- [bordplate/RC1](https://github.com/bordplate/RC1) & [Lynder063/rac1-decomp](https://github.com/Lynder063/rac1-decomp) — used as a reference for symbols, structs, and function logic (credited inline in the source).
+- [bordplate/RC1](https://github.com/bordplate/RC1) & [OpenRAC/rac1-decomp](https://github.com/OpenRAC/rac1-decomp) — used as a reference for symbols, structs, and function logic (credited inline in the source).
 - The PS2 reverse-engineering and decompilation communities for the tools and research that make matching projects possible.
 
 <h3>License</h3>
