@@ -73,7 +73,6 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
         if (e->data != 0) {
             s32 entrySize = e->size;
             s32 blockSize = ((struct RestoreBlock *)buf)->size;
-
             dst = e->data + slot * entrySize;
             if (e->size == blockSize) {
                 copySize = e->size;
