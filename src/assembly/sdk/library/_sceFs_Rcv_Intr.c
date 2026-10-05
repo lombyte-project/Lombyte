@@ -63,8 +63,8 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     FsRcvRead *r;
     u8 *pkt;
     u8 *d;
-    s32 idx;
     u32 *bank = D_0012FC90;
+    s32 idx;
     s32 i;
     u32 ret;
     u32 n;
@@ -74,7 +74,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         idx = arg[3];
     }
     *bank = idx;
-    pkt = D_00157500 + idx * 0x440;
+    pkt = D_00157500 + (u32)idx * 0x440;
     pkt = (u8 *)((u32)pkt | 0x20000000);
     src = (FsRcvHead *)pkt;
     h.ret = src->ret;
