@@ -108,8 +108,8 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
       mixer_state.group_2_volume = scaled_volume_80;
       mixer_state.group_3_volume = ((s32) (sound_volume * 7)) / 10;
       scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
-      mixer_state.group_5_volume = sound_volume;
       mixer_state.group_4_volume = scaled_volume_70;
+      mixer_state.group_5_volume = sound_volume;
       InitializeGlobalStateEntry(current_level_index);
       D_0013E05A = 0;
     }
