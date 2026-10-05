@@ -225,8 +225,13 @@ s32 sound_update(void) {
         moby = D_0013E550.voices[slot_index].moby;
         owner_removed = 0;
         /* The retail state check releases an owner in either removal state. */
-        if (moby != NULL && (moby->state == 0xFE || moby->state == 0xFD)) {
+        if (moby != NULL) {
+            u8 owner_state = moby->state;
+            if (owner_state == 0xFE) goto owner_removed_label;
+            if (owner_state != 0xFD) goto owner_checked_label;
+        owner_removed_label:
             owner_removed = 1;
+        owner_checked_label:;
         }
         if (owner_removed) {
             D_0013E550.voices[slot_index].moby = NULL;
