@@ -46,7 +46,7 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
 void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 screen_y, s32 texture_width_log2, s32 texture_height_log2, s32 screen_width, s32 screen_height, s32 texture_u, s32 texture_v,
                   s32 alpha) {
     struct SpritePacket *tag;
-    s64 *packet_words;
+    u64 *packet_words;
     s64 packed_first_uv = texture_u | ((s64)texture_v << 16);
 
     render_packet_cursor.p->dma_word0 = 0x10000005;
@@ -54,7 +54,7 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
     render_packet_cursor.p->dma_word2 = 0;
     render_packet_cursor.p->dma_word3 = 0x50000005;
     tag = render_packet_cursor.p;
-    packet_words = (s64 *)((u8 *)tag + 0x10);
+    packet_words = (u64 *)((u8 *)tag + 0x10);
     render_packet_cursor.p = (struct SpritePacket *)packet_words;
     tag->gif_tag = 0x7400000000008001;
     packet_words[2] = tex0;
