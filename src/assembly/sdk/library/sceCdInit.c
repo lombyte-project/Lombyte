@@ -65,6 +65,7 @@ int sceCdInit(int init_mode)
     }
     sceSifInitRpc(0);
     owner = GetThreadId();
+    rbuf = D_001324C0;
     count = *(volatile s32 *)D_00131310 + 1;
     *(volatile s32 *)D_001312E4 = 1;
     D_001312FC[0] = -1;
@@ -76,7 +77,6 @@ int sceCdInit(int init_mode)
     D_00131310[0] = count;
     D_0013130C[0] = -1;
     *(volatile s32 *)D_00159750 = owner;
-    rbuf = D_001324C0;
     while (1) {
         r = sceSifBindRpc(&D_00159968, 0x80000592, 0);
         if (r < 0) {
