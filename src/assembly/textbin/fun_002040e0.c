@@ -81,7 +81,7 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
     ResidentRenderTextureDefinition *texture;
     s32 record_count;
     s32 record_index;
-    s32 packet_index;
+    u32 packet_index;
     s32 texture_index;
     s32 draw_high;
     s32 draw_shift;
@@ -111,20 +111,21 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
     /* Serialized packet-data offsets are relative to the record table. */
     if (record_count > 0) {
         TfragRenderRecord *record = records;
+        s32 remaining = record_count;
         do {
             record->data = (u8 *)records + (s32)record->data;
             record++;
-        } while (--record_count != 0);
+        } while (--remaining != 0);
     }
     for (record_index = 0; record_index < tfrag_render_record_count.count; record_index++) {
         for (packet_index = 0; packet_index < tfrag_render_records[record_index].count; packet_index++) {
             packet = (GifAD *)(tfrag_render_records[record_index].data + tfrag_render_records[record_index].material_packet_offset + packet_index * 0x50);
             texture_index = ((TfragMaterialPacket *)packet)->texture_index;
-            material_base = ((TfragMaterialPacket *)packet)->material_base;
             draw_high = ((TfragMaterialPacket *)packet)->draw_high;
-            texture = &textures[texture_index];
-            draw_shift = ((TfragMaterialPacket *)packet)->draw_shift;
             material_shift = ((TfragMaterialPacket *)packet)->material_shift;
+            material_base = ((TfragMaterialPacket *)packet)->material_base;
+            draw_shift = ((TfragMaterialPacket *)packet)->draw_shift;
+            texture = &textures[texture_index];
             width = texture->width;
             width_units_64 = width >> 6;
             width_units_128 = width >> 7;
