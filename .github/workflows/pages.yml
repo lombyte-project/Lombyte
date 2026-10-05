@@ -1,5 +1,7 @@
-# GitHub Pages site (site/ + numbers from the `progress` branch).
-# Runs after every progress run on main, so the page follows the latest report.
+# GitHub Pages site. Its sources live on the `pages` branch; this workflow
+# builds them with the logo and commits from main and the numbers from the
+# `progress` branch. Runs after every progress run on main and when the
+# `pages` branch asks for it (workflow_dispatch).
 name: pages
 
 on:
@@ -30,12 +32,16 @@ jobs:
         with:
           ref: main
           fetch-depth: 5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: pages
+          path: build/pages
       - name: Fetch the progress report
         run: |
           git fetch --depth=1 origin progress
           mkdir -p build/progress
           git show FETCH_HEAD:report.json > build/progress/report.json
-      - run: pip install pillow && python3 scripts/build_site.py build/progress
+      - run: pip install pillow && python3 build/pages/build_site.py build/progress
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:
