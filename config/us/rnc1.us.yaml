@@ -738,7 +738,7 @@ segments:
           - [0x2da9c, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb1c]
           - [0x2daa0, c, assembly/sdk/callbacks/report_mpeg_picture_temporal_scalable_unsupported]
           - [0x2daac, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb2c]
-          - [0x2dab0, c, assembly/sdk/callbacks/suspend_mpeg_decoder_ipu_dma]
+          - [0x2dab0, c, sdk/callbacks/suspend_mpeg_decoder_ipu_dma]
           - [0x2dabc, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb3c]
           - [0x2dac0, c, assembly/sdk/callbacks/resume_mpeg_decoder_ipu_dma]
           - [0x2dacc, textbin, text_gap_0012ca60_post_sdk_worker_tail_0012cb4c]
