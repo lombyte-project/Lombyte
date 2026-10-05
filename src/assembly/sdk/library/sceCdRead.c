@@ -28,7 +28,7 @@ extern u8 D_00120788[];
 extern s32 D_001312D0[];
 extern u32 D_001312E8[];
 extern u32 D_001312F0[];
-extern u32 D_001312F4[];
+extern volatile u32 D_001312F4[];
 extern u32 D_00131314[];
 extern struct M2c_D_001313C0 D_001313C0;
 extern u8 D_001323C0[];
