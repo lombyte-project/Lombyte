@@ -72,10 +72,10 @@ void sceSifInitCmd(void) {
     EnableInterrupts();
     return;
 block_3:
+    *(s32 *)D_0012FC04 = 1;
     ipval = 0x20;
     temp_6_30 = (s32) D_00154D80 | 0x20000000;
     temp_5_29 = (s32) D_00154E00 | 0x20000000;
-    *(s32 *)D_0012FC04 = 1;
     D_00154E58.unk0 = temp_6_30;
     D_00154E58.unk1C = D_00154F80;
     D_00154E58.unk4 = temp_5_29;
