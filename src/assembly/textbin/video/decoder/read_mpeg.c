@@ -87,7 +87,7 @@ block_5:
     if (D_0015EE20 != 0) {
         goto block_10;
     }
-    if (D_0015EED8 != 0) {
+    if (*(volatile s32 *)&D_0015EED8 != 0) {
         goto block_10;
     }
     if (D_0015ED84 > 0) {
