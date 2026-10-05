@@ -29,6 +29,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: main
+          fetch-depth: 5
       - name: Fetch the progress report
         run: |
           git fetch --depth=1 origin progress

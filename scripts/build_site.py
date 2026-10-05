@@ -6,9 +6,11 @@ images come from assets/ and the progress branch, as in the README.
 usage: build_site.py PROGRESS_DIR [SITE_URL]
 """
 import datetime
+import html
 import json
 import pathlib
 import shutil
+import subprocess
 import sys
 
 progress = pathlib.Path(sys.argv[1])
@@ -16,7 +18,26 @@ site = sys.argv[2] if len(sys.argv) > 2 else "https://mateuszklysz.github.io/Lom
 out = pathlib.Path("build/site")
 
 m = json.loads((progress / "report.json").read_text())["measures"]
+REPO = "https://github.com/mateuszklysz/Lombyte"
+
+
+def commits_bar(count=5):
+    """Announcement bar with the latest commits on the checked-out branch."""
+    log = subprocess.run(
+        ["git", "log", f"-{count}", "--format=%H%x09%cs%x09%s"],
+        capture_output=True, text=True, check=True,
+    ).stdout.splitlines()
+    items = "".join(
+        f'<li><a href="{REPO}/commit/{sha}"><time datetime="{day}">{day}</time>'
+        f"{html.escape(subject)}</a></li>"
+        for sha, day, subject in (line.split("\t", 2) for line in log)
+    )
+    return (f'<aside class="bar" aria-label="Latest commits"><strong>Latest on main</strong>'
+            f"<ol>{items}</ol></aside>")
+
+
 values = {
+    "@COMMITS@": commits_bar(),
     "@SITE@": site,
     "@DATE@": datetime.date.today().isoformat(),
     "@C_EXACT@": f"{float(m['matched_code_percent']):.2f}",
