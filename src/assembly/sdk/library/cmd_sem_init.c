@@ -12,10 +12,10 @@ struct Sema {
     s32 attr;
     s32 option;
 };
-extern s32 D_001312E0[];
+extern volatile s32 D_001312E0[];
 extern volatile s32 D_001312E8[];
 extern s32 D_001312EC[];
-extern s32 D_001312F0[];
+extern volatile s32 D_001312F0[];
 extern s32 CreateSema();
 void cmd_sem_init(void) {
     struct Sema sema;
