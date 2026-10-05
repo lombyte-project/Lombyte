@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022f288/FUN_0022f288.s", FUN_0022f288);
-#else
 #include "types.h"
 
 struct LevelOverlayState
@@ -50,14 +47,14 @@ extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
-extern void draw_rotated_sprite(s32, s32, s64, f32, f32, f32, f32, f32) __asm__("FUN_00200600");
-extern void func_0020CC60(void);
+extern void draw_rotated_sprite(f32, f32, f32, f32, s32, s32, s64, f32) __asm__("FUN_00200600");
+extern void func_0020CC60(void) __asm__("FUN_0020cc60");
 extern void func_0020CEF8();
 extern void func_0020D460(void);
 extern void draw_sky_shells() __asm__("func_0022B288");
 extern void build_resident_indexed_texture_warp_meshes(s32) __asm__("func_0022E420");
 extern void draw_resident_textured_quad() __asm__("func_0022E8C8");
-extern void draw_resident_textured_banner(s32) __asm__("func_0022EA08");
+extern void draw_resident_textured_banner(s32) __asm__("FUN_0022ea08");
 extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
@@ -127,7 +124,7 @@ void render_level_frame(void)
     rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
     /* The frame counter contributes only the sprite angle modulo 55. */
     /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
-    draw_rotated_sprite(0x40, 0x40, get_effect_texture(3), 1216.0f, screen_y, quad_extent, quad_extent, rotation_angle);
+    draw_rotated_sprite(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40, get_effect_texture(3), rotation_angle);
   }
   func_001F4398();
   if (sequence_fade > 0.0f)
@@ -142,5 +139,3 @@ void render_level_frame(void)
   func_0020CEF8();
 }
 extern __typeof__(render_level_frame) func_0022F288 __attribute__((alias("FUN_0022f288")));
-
-#endif /* NON_MATCHING */

@@ -2017,7 +2017,7 @@ segments:
           - [0x12f988, c, gameplay/space/fun_0022ea08]
           - [0x12fa28, c, assembly/textbin/fun_0022eaa8]
           - [0x130204, textbin, text_gap_0022f284_before_fun_0022f288]
-          - [0x130208, c, assembly/textbin/fun_0022f288]
+          - [0x130208, c, textbin/fun_0022f288]
           - [0x130530, c, rendering/effects/fun_0022f5b0]
           - [0x1306f8, c, assembly/textbin/fun_0022f778]
           - [0x131e64, textbin, text_gap_00230ee4_before_fun_00230ee8]
