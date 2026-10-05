@@ -97,7 +97,6 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     struct ItemPreviewVars *preview_vars;
     s32 is_type1;
     s32 item_two_difference;
-    f32 offset;
     f32 camera_x;
     volatile f32 *camera_position;
 
@@ -165,14 +164,13 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             preview->primary_moby = moby;
             moby->flags = 0;
             camera_position = &preview_camera.x;
-            camera_x = camera_position[0];
+            camera_x = preview_camera.x;
             if (use_alternate_x) {
                 moby->x = camera_x + preview_placements[item_index].alternate_x;
             } else {
                 moby->x = camera_x + preview_placements[item_index].normal_x;
             }
-            offset = preview_placements[item_index].y;
-            moby->y = preview_camera.y + offset;
+            moby->y = preview_camera.y + preview_placements[item_index].y;
             moby->z = camera_position[2] + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
