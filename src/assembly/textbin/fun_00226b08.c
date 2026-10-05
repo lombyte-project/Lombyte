@@ -44,7 +44,7 @@ extern u8 D_0013D4C0[];
 extern u8 D_0013E520[];
 extern u8 D_0014BEC0[];
 extern s32 D_00141EA0[];
-extern u8 D_0015EDD0[];
+extern u8 D_0015EDD0[] MACRO_ADDR;
 extern s32 D_0015EDA0;
 extern s32 D_0015ED98;
 extern u8 D_0015EE1C;
