@@ -965,14 +965,104 @@ void FUN_L16_002e8d40(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8e80.s", FUN_L16_002e8e80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e9270.s", FUN_L16_002e9270);
+/* Bounding spheres for one mesh (three entries), then the renderer callback; same source as FUN_L16_002e93b0 without the 0x30/0x32 stores. */
+typedef struct {float x,y,z,radius;} L16SingleSphere_2e8e80;
+
+void enqueue_callback_list_1_2e8e80(int arg0, int arg1) __asm__("FUN_001f4600");
+extern short D_L16_00162000_bounds_2e8e80 __asm__("D_L16_00161EF0") __attribute__((sda));
+extern short D_L16_00162020_bounds_2e8e80 __asm__("D_L16_00161F00") __attribute__((sda));
+extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600") __attribute__((section(".data")));
+
+extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
+void FUN_L16_002e8e80(unsigned char *m) {
+    int i, j;
+    float maxx, maxy, maxz, minx, miny, minz;
+    float p[4];
+    float *out;
+    float *verts;
+    int count;
+    switch (m[0x20]) {
+    case 0: {
+        for (i = 0; i <= 2; i++) {
+            maxx = maxy = maxz = -1024.0f;
+            minx = miny = minz = 1024.0f;
+            {int k;
+            for (k=0;k<((int*)&D_L16_00162000_bounds_2e8e80)[i];k++) {
+                float x,y,z;
+                verts=((float**)&D_L16_00162020_bounds_2e8e80)[i]+k*3;
+                x = verts[0];
+                if (x > maxx) maxx = x;
+                y = verts[1];
+                if (y > maxy) maxy = y;
+                z = verts[2];
+                if (z > maxz) maxz = z;
+                if (x < minx) minx = x;
+                if (y < miny) miny = y;
+                if (z < minz) minz = z;
+            }
+            }
+            {L16SingleSphere_2e8e80 *base = D_L16_00161F60_bounds_2e8e80; L16SingleSphere_2e8e80 *sphere = base + i;
+            sphere->radius=0.0f;
+            sphere->x=(maxx+minx)*0.5f;
+            sphere->y=(maxy+miny)*0.5f;
+            sphere->z=(maxz+minz)*0.5f;}
+            for (j = 0; j < ((int*)&D_L16_00162000_bounds_2e8e80)[i]; j++) {
+                float dist;
+                out = (float*)(D_L16_00161F60_bounds_2e8e80 + i);
+                p[0] = ((float**)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 0];
+                p[1] = ((float**)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 1];
+                p[2] = ((float**)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 2];
+                dist = FUN_001f9b48(p, out);
+                if (dist > out[3]) out[3] = dist;
+            }
+        }
+        m[0x20] = 1;
+        break;
+    }
+    case 1:
+        enqueue_callback_list_1_2e8e80(FUN_L16_002e8d40_c, m);
+        break;
+    }
+}
+/* Sets up the draw state, then draws the one entry of the level's table; same source as FUN_L16_002e8d40. */
+
+extern char D_L16_00161F80_t[][16] __asm__("D_L16_00161F80") __attribute__((section(".sdata")));
+extern char D_L16_001DDC80_t[] __asm__("D_L16_001DDC80") __attribute__((section(".data")));
+extern int get_effect_texture_2e9270(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161F40_t __asm__("D_L16_00161F40") __attribute__((sda));
+extern short D_L16_00161F60_t __asm__("D_L16_00161F60") __attribute__((sda));
+extern short D_L16_00161F68_t __asm__("D_L16_00161F68") __attribute__((sda));
+extern short D_L16_00161F70_t __asm__("D_L16_00161F70") __attribute__((sda));
+extern short D_L16_00161F78_t __asm__("D_L16_00161F78") __attribute__((sda));
+extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
+
+void FUN_L16_002e9270(void) {
+    int *a = (int *)&D_L16_00161F40_t;
+    int *b = (int *)&D_L16_00161F60_t;
+    int *c = (int *)&D_L16_00161F68_t;
+    int *d = (int *)&D_L16_00161F70_t;
+    int *e = (int *)&D_L16_00161F78_t;
+    int i;
+
+    vu1_add_g_sregister_2e9270(6, get_effect_texture_2e9270(0x29));
+    vu1_add_g_sregister_2e9270(0x42, 0x4000000064);
+    vu1_add_g_sregister_2e9270(8, 0);
+    vu1_add_g_sregister_2e9270(0x14, 0xFF9000000260);
+    FUN_001f76a0();
+    for (i = 0; i < 1; i++) {
+        if (FUN_001fa728(D_L16_00161F80_t[i], 512.0f) != -1) {
+            FUN_L16_002e8b98_t(a[i], d[i], b[i], c[i], D_L16_001DDC80_t);
+            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DDC80_t, 1);
+        }
+    }
+}
 /* Compute bounding spheres for one mesh and register their renderer. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA828), where it is exact; names translated to the US level program. */
 
 typedef struct {float x,y,z,radius;} L16SingleSphere;
 
-extern void FUN_L16_002e9270(void);
+extern void FUN_L16_002e9270_u(void) __asm__("FUN_L16_002e9270");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern short D_L16_00162000_bounds __asm__("D_L16_00161F40") __attribute__((sda));
 extern short D_L16_00162020_bounds __asm__("D_L16_00161F60") __attribute__((sda));
@@ -1025,11 +1115,69 @@ void FUN_L16_002e93b0(unsigned char *m) {
         break;
     }
     case 1:
-        enqueue_callback_list_1(FUN_L16_002e9270, m);
+        enqueue_callback_list_1(FUN_L16_002e9270_u, m);
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e98e0.s", FUN_L16_002e98e0);
+/* Bounding spheres for one mesh (two or three entries), then the renderer callback; same source as FUN_L16_002e93b0. */
+typedef struct {float x,y,z,radius;} L16SingleSphere_2e98e0;
+
+void enqueue_callback_list_1_2e98e0(int arg0, int arg1) __asm__("FUN_001f4600");
+extern short D_L16_00162000_bounds_2e98e0 __asm__("D_L16_00161F90") __attribute__((sda));
+extern short D_L16_00162020_bounds_2e98e0 __asm__("D_L16_00161F98") __attribute__((sda));
+extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0") __attribute__((section(".data")));
+
+void FUN_L16_002e98e0(unsigned char *m) {
+    int i, j;
+    float maxx, maxy, maxz, minx, miny, minz;
+    float p[4];
+    float *out;
+    float *verts;
+    int count;
+    switch (m[0x20]) {
+    case 0: {
+        for (i = 0; i <= 1; i++) {
+            maxx = maxy = maxz = -1024.0f;
+            minx = miny = minz = 1024.0f;
+            {int k;
+            for (k=0;k<((int*)&D_L16_00162000_bounds_2e98e0)[i];k++) {
+                float x,y,z;
+                verts=((float**)&D_L16_00162020_bounds_2e98e0)[i]+k*3;
+                x = verts[0];
+                if (x > maxx) maxx = x;
+                y = verts[1];
+                if (y > maxy) maxy = y;
+                z = verts[2];
+                if (z > maxz) maxz = z;
+                if (x < minx) minx = x;
+                if (y < miny) miny = y;
+                if (z < minz) minz = z;
+            }
+            }
+            {L16SingleSphere_2e98e0 *base = D_L16_00161F60_bounds_2e98e0; L16SingleSphere_2e98e0 *sphere = base + i;
+            sphere->radius=0.0f;
+            sphere->x=(maxx+minx)*0.5f;
+            sphere->y=(maxy+miny)*0.5f;
+            sphere->z=(maxz+minz)*0.5f;}
+            for (j = 0; j < ((int*)&D_L16_00162000_bounds_2e98e0)[i]; j++) {
+                float dist;
+                out = (float*)(D_L16_00161F60_bounds_2e98e0 + i);
+                p[0] = ((float**)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 0];
+                p[1] = ((float**)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 1];
+                p[2] = ((float**)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 2];
+                dist = FUN_001f9b48(p, out);
+                if (dist > out[3]) out[3] = dist;
+            }
+        }
+        m[0x20] = 1;
+        m[0x30] = *(unsigned short *)(m+0x32) = 255;
+        break;
+    }
+    case 1:
+        enqueue_callback_list_1_2e98e0(FUN_L16_002e8d40, m);
+        break;
+    }
+}
 /* Sets up the draw state then runs both per-slot calls over three entries. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
 
@@ -1057,4 +1205,62 @@ void FUN_L16_002e9ce0(void) {
         FUN_L00_001fde98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FF8_d)[i], D_L16_001E28D0, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ea128.s", FUN_L16_002ea128);
+/* Bounding spheres for one mesh (two or three entries), then the renderer callback; same source as FUN_L16_002e93b0. */
+typedef struct {float x,y,z,radius;} L16SingleSphere_2ea128;
+
+void enqueue_callback_list_1_2ea128(int arg0, int arg1) __asm__("FUN_001f4600");
+extern short D_L16_00162000_bounds_2ea128 __asm__("D_L16_00162008") __attribute__((sda));
+extern short D_L16_00162020_bounds_2ea128 __asm__("D_L16_00162018") __attribute__((sda));
+extern L16SingleSphere_2ea128 D_L16_00161F60_bounds_2ea128[] __asm__("D_L16_001E5390") __attribute__((section(".data")));
+
+void FUN_L16_002ea128(unsigned char *m) {
+    int i, j;
+    float maxx, maxy, maxz, minx, miny, minz;
+    float p[4];
+    float *out;
+    float *verts;
+    int count;
+    switch (m[0x20]) {
+    case 0: {
+        for (i = 0; i <= 2; i++) {
+            maxx = maxy = maxz = -1024.0f;
+            minx = miny = minz = 1024.0f;
+            {int k;
+            for (k=0;k<((int*)&D_L16_00162000_bounds_2ea128)[i];k++) {
+                float x,y,z;
+                verts=((float**)&D_L16_00162020_bounds_2ea128)[i]+k*3;
+                x = verts[0];
+                if (x > maxx) maxx = x;
+                y = verts[1];
+                if (y > maxy) maxy = y;
+                z = verts[2];
+                if (z > maxz) maxz = z;
+                if (x < minx) minx = x;
+                if (y < miny) miny = y;
+                if (z < minz) minz = z;
+            }
+            }
+            {L16SingleSphere_2ea128 *base = D_L16_00161F60_bounds_2ea128; L16SingleSphere_2ea128 *sphere = base + i;
+            sphere->radius=0.0f;
+            sphere->x=(maxx+minx)*0.5f;
+            sphere->y=(maxy+miny)*0.5f;
+            sphere->z=(maxz+minz)*0.5f;}
+            for (j = 0; j < ((int*)&D_L16_00162000_bounds_2ea128)[i]; j++) {
+                float dist;
+                out = (float*)(D_L16_00161F60_bounds_2ea128 + i);
+                p[0] = ((float**)&D_L16_00162020_bounds_2ea128)[i][j * 3 + 0];
+                p[1] = ((float**)&D_L16_00162020_bounds_2ea128)[i][j * 3 + 1];
+                p[2] = ((float**)&D_L16_00162020_bounds_2ea128)[i][j * 3 + 2];
+                dist = FUN_001f9b48(p, out);
+                if (dist > out[3]) out[3] = dist;
+            }
+        }
+        m[0x20] = 1;
+        m[0x30] = *(unsigned short *)(m+0x32) = 255;
+        break;
+    }
+    case 1:
+        enqueue_callback_list_1_2ea128(FUN_L16_002e8d40, m);
+        break;
+    }
+}
