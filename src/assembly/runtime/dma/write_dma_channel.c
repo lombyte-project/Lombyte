@@ -27,6 +27,6 @@ u32 WriteDmaChannel(s32 sadr, s32 dar, s32 chcnt) {
     d->dar = chcnt;
     d->chcr = 0x100;
     read = *(volatile u32 *)0x20100000;
-    return read | 1;
+    return 0x100;
 }
 #endif /* NON_MATCHING */
