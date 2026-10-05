@@ -39,8 +39,9 @@ void _sequenceHeader(struct M2c_arg0 *arg0) {
     temp_2_12 = temp_2_24;
     temp_2_8 = temp_2_12 >> 1;
     temp_2_12 >>= 0xC;
+    temp_2_8 &= 0x3FF;
     arg0->unk134 = temp_2_12;
-    arg0->unk138 = temp_2_8 & 0x3FF;
+    arg0->unk138 = temp_2_8;
     temp_2_33 = _nextBit(arg0, 1);
     arg0->unk840 = temp_2_33;
     if (temp_2_33 != 0) {
@@ -110,8 +111,8 @@ block_6:
         var_2_40 = (s32) (temp_30_15->unk128 + 0xF) >> 4;
     }
     temp_30_15->unk130 = var_2_40;
-    temp_22_48 = var_2_40 * 0x10;
-    temp_23_51 = temp_30_15->unk12C * 0x10;
+    temp_22_48 = var_2_40 << 4;
+    temp_23_51 = temp_30_15->unk12C << 4;
     if (temp_23_51 == arg0->unk0) {
         var_2_53 = ((u8 *)temp_30_15 + 0x528);
         if (temp_22_48 == arg0->unk4) {
@@ -120,8 +121,8 @@ block_6:
     }
     var_2_53 = ((u8 *)temp_30_15 + 0x528);
     {
-        arg0->unk4 = temp_22_48;
         arg0->unk0 = temp_23_51;
+        arg0->unk4 = temp_22_48;
         sp44 = var_2_53;
         temp_17_63 = ((u8 *)temp_30_15 + (0x108));
         sp30 = ((u8 *)temp_30_15 + (0x320));
