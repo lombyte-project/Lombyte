@@ -2,7 +2,90 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0022de30.s", FUN_L12_0022de30);
+/* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
+extern char D_0013F350[];
+extern void FUN_001f9810(void *, int);
+extern void FUN_L00_0020b930(void);
+extern void FUN_L12_002400d0(int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L12_0022de30(void) {
+    char *g = (char *)D_0013F350;
+    unsigned char saved;
+    int state;
+    saved = *(unsigned char *)(g + 0x12ED);
+    state = *(short *)(g + 0x12E0);
+    FUN_001f9810(g + 0x12E0, 0x10);
+    *(unsigned char *)(g + 0x12ED) = saved;
+    *(short *)(g + 0x12E0) = -1;
+    *(unsigned char *)(g + 0x20A9) = 0;
+    *(short *)(g + 0x308) = 0;
+    if (state == -1) return;
+    if (state == 2) {
+        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
+            *(unsigned char *)(g + 0x12E7) = 1;
+            if (*(unsigned char *)(g + 0x20A4) == 0) {
+                if (*(int *)(g + 0x10E0) != 0 && *(short *)(*(int *)(g + 0x10E0) + 0xA6) == 0xAD)
+                    *(short *)(g + 0x308) = 1;
+            }
+        }
+    }
+    if (state == 0xE) {
+        char *a = (char *)D_0013F350;
+        *(unsigned char *)(a + 0x12E4) = 1;
+        *(float *)(a + 0x22A4) = 0.2f;
+        *(float *)(a + 0x2F0) = *(float *)(a + 0x2D8) + 0.2f;
+    }
+    if (state == 0) {
+        char *b = (char *)D_0013F350;
+        char *b2;
+        float v = *(float *)(b + 0x2F0) - *(float *)(b + 0x2D8);
+        *(float *)(b + 0x22A4) = v;
+        if (v < 0.85f && 0.25f < v) *(unsigned char *)(b + 0x20A9) = 1;
+        b2 = (char *)D_0013F350;
+        *(unsigned char *)(b2 + 0x12E4) = 1;
+    }
+    if (state == 2) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12E7) = 1;
+    }
+    if (state == 7) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12E2) = 1;
+    }
+    if (state == 0xD) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EC) = 1;
+    }
+    if (state == 8) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EA) = 1;
+    }
+    if (state == 9) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EE) = 1;
+    }
+    if (state == 0xC) {
+        char *d = (char *)D_0013F350;
+        *(unsigned char *)(d + 0x12EA) = 1;
+    }
+    {
+        char *h = (char *)D_0013F350;
+        if (*(unsigned char *)(h + 0x12EC)) {
+            if (*(int *)(h + 0x2084) != 0x7F) {
+                float e = AbsoluteFloat(*(float *)(h + 0x2F0) - (*(float *)(h + 0x88) + 0.25f));
+                if (e < 1.0f) {
+                    if (*(float *)(h + 0x2F0) - *(float *)(h + 0x88) > 0.0f) {
+                        if (*(float *)(h + 0x108) < 0.0f) {
+                            FUN_L00_0020b930();
+                            FUN_L12_002400d0(0x7F, 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 #include "qcopy.h"
 #define P D_0013F350_231ae0
 /* Same source as the exact FUN_L01_00231ae0, with a b12E2/i300 branch. */
