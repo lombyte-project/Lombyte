@@ -13,7 +13,7 @@ struct Sema {
     s32 option;
 };
 extern s32 D_001312E0[];
-extern s32 D_001312E8[];
+extern volatile s32 D_001312E8[];
 extern s32 D_001312EC[];
 extern s32 D_001312F0[];
 extern s32 CreateSema();
@@ -25,10 +25,9 @@ void cmd_sem_init(void) {
         return;
     }
     sema.option = 0;
-    sema.max_count = 1;
     sema.init_count = 1;
+    sema.max_count = 1;
     r1 = CreateSema(&sema);
-    __asm__("" : "+r"(r1));
     D_001312E8[0] = r1;
     D_001312EC[0] = CreateSema(&sema);
     sema.init_count = 0;
