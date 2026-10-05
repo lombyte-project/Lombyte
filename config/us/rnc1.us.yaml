@@ -460,7 +460,7 @@ segments:
           - [0x2183c, textbin, text_gap_00120828_post_sdk_worker]
           - [0x21840, c, sdk/library/cdvd_exit]
           - [0x218d4, textbin, text_gap_001208c0_post_sdk_worker_prefix_00120954]
-          - [0x218e0, c, assembly/sdk/callbacks/dispatch_native_cd_power_event]
+          - [0x218e0, c, sdk/callbacks/dispatch_native_cd_power_event]
           - [0x2191c, textbin, text_gap_001208c0_post_sdk_worker_tail_0012099c]
           - [0x21920, c, sdk/library/PowerOffCB]
           - [0x21998, textbin, text_gap_00120a18_before_fun_00120a28]
