@@ -35,7 +35,7 @@ typedef struct ResidentRenderObject {
     s16 selected_index;         /* 0x32 */
     u16 flags;         /* 0x34 */
     u8 pad36[2];
-    s64 unk38;         /* 0x38 */
+    s64 lifetime_stamp;         /* 0x38 */
     Vector4 rotation;          /* 0x40 */
     u8 current_frame;
     u8 next_frame;
@@ -122,7 +122,7 @@ typedef struct {
 } ResidentCinematicState;
 
 typedef struct {
-    s32 point_index;
+    s32 point_count;
     s32 pad[3];
     Vector4 p[1];         /* 0x10: x, y, z, angle */
 } ScriptedPath;
@@ -462,7 +462,7 @@ void update_resident_gameplay_state(void) {
                         level_render_state.attachment = func_0020C4F8(0x509);
                         level_render_state.attachment->selected_index = 0x40;
                         level_render_state.attachment->flags |= 0x806;
-                        level_render_state.attachment->unk38 = object->unk38;
+                        level_render_state.attachment->lifetime_stamp = object->lifetime_stamp;
                         if (level_render_state.attachment->model->unk6 != 0) {
                             level_render_state.attachment->unk73 = 0x18;
                         }
@@ -581,13 +581,13 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_a->opacity = 0xFF;
                 level_render_state.companion_a->unk94 = 0;
                 level_render_state.companion_a->flags |= 6;
-                level_render_state.companion_a->unk38 = D_0013F350.reference_object->unk38;
+                level_render_state.companion_a->lifetime_stamp = D_0013F350.reference_object->lifetime_stamp;
                 level_render_state.companion_b = func_0020C4F8(10);
                 level_render_state.companion_b->selected_index = 0x1FF;
                 level_render_state.companion_b->opacity = 0xFF;
                 level_render_state.companion_b->unk94 = 0;
                 level_render_state.companion_b->flags |= 6;
-                level_render_state.companion_b->unk38 = D_0013F350.reference_object->unk38;
+                level_render_state.companion_b->lifetime_stamp = D_0013F350.reference_object->lifetime_stamp;
             }
             func_001E93F0(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
             level_render_state.blend = 0.0f;
@@ -596,17 +596,17 @@ void update_resident_gameplay_state(void) {
                 path = D_001CC3B0[level_render_state.path];
                 maximum_turn = level_render_state.blend;
                 path->p[0].components[3] = maximum_turn;
-                for (path_point_index = 1; path_point_index < path->point_index - 1; path_point_index++) {
+                for (path_point_index = 1; path_point_index < path->point_count - 1; path_point_index++) {
                     segment_angle = func_001F9E90(path->p[path_point_index].components[0] - path->p[path_point_index - 1].components[0], path->p[path_point_index].components[1] - path->p[path_point_index - 1].components[1]);
                     path->p[path_point_index].components[3] = fast_subtract_rotations(func_001F9E90(path->p[path_point_index + 1].components[0] - path->p[path_point_index].components[0], path->p[path_point_index + 1].components[1] - path->p[path_point_index].components[1]), segment_angle);
                     if (maximum_turn < AbsoluteFloat(path->p[path_point_index].components[3])) {
                         maximum_turn = AbsoluteFloat(path->p[path_point_index].components[3]);
                     }
                 }
-                segment_angle = func_001F9E90(path->p[path->point_index - 1].components[0] - path->p[path->point_index - 2].components[0], path->p[path->point_index - 1].components[1] - path->p[path->point_index - 2].components[1]);
-                path->p[path->point_index - 1].components[3] = fast_subtract_rotations(func_001F9E90(path->p[0].components[0] - path->p[path->point_index - 1].components[0], path->p[0].components[1] - path->p[path->point_index - 1].components[1]), segment_angle);
+                segment_angle = func_001F9E90(path->p[path->point_count - 1].components[0] - path->p[path->point_count - 2].components[0], path->p[path->point_count - 1].components[1] - path->p[path->point_count - 2].components[1]);
+                path->p[path->point_count - 1].components[3] = fast_subtract_rotations(func_001F9E90(path->p[0].components[0] - path->p[path->point_count - 1].components[0], path->p[0].components[1] - path->p[path->point_count - 1].components[1]), segment_angle);
                 turn_scale = 0.34906584f / maximum_turn;
-                for (point_index = 0; point_index < path->point_index; point_index++) {
+                for (point_index = 0; point_index < path->point_count; point_index++) {
                     path->p[point_index].components[3] *= turn_scale;
                 }
                 level_render_state.path_segment_length = distance_xyz(&path->p[0], &path->p[1]);
@@ -664,7 +664,7 @@ void update_resident_gameplay_state(void) {
                 if ((D_0013CAE4[0] & 0x50) && sequence_fade < 0.0625f) {
                     sequence_fade = 0.0625f;
                 }
-                if ((f32)(active_path->point_index - 6) < level_render_state.path_progress && sequence_fade < 0.0625f) {
+                if ((f32)(active_path->point_count - 6) < level_render_state.path_progress && sequence_fade < 0.0625f) {
                     sequence_fade = 0.0625f;
                 }
                 if (level_render_state.content_variant < 2) {
@@ -673,7 +673,7 @@ void update_resident_gameplay_state(void) {
                     enqueue_callback_list_1(D_0022E1B0, level_render_state.player);
                 }
                 level_render_state.path_progress += level_render_state.speed * D_0015ED6C / level_render_state.path_segment_length;
-                if ((f32)(active_path->point_index - 1) < level_render_state.path_progress || sequence_fade >= 1.0f) {
+                if ((f32)(active_path->point_count - 1) < level_render_state.path_progress || sequence_fade >= 1.0f) {
                     D_0015F5B0 = 1;
                     D_0015F618[0] = 1;
                 } else {
@@ -735,5 +735,4 @@ void update_resident_gameplay_state(void) {
 }
 
 extern __typeof__(update_resident_gameplay_state) func_0022F778 __attribute__((alias("FUN_0022f778")));
-
 #endif /* NON_MATCHING */
