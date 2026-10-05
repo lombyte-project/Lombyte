@@ -36,7 +36,7 @@ extern u8 D_00132480[];
 extern u8 D_00132490[];
 extern u8 D_00152FC8[];
 extern u8 D_00152FE0[];
-extern s32 SignalSema();
+extern s32 SignalSema(u32 semaphore);
 extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
