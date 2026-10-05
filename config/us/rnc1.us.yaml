@@ -919,7 +919,7 @@ segments:
           - [0xebed0, c, runtime/dma/queue_dma_transfer]
           - [0xebf08, c, gameplay/camera/transition_update_movie_camera]
           - [0xec024, textbin, text_gap_001eb0a4_after_fun_001eaf88]
-          - [0xec028, c, assembly/textbin/fun_001eb0a8]
+          - [0xec028, c, textbin/fun_001eb0a8]
           - [0xec38c, textbin, text_gap_001eb40c_before_fun_001eb410]
           - [0xec390, c, gameplay/state/transition_default_draw]
           - [0xec6c0, c, gameplay/state/is_active_state_entry]

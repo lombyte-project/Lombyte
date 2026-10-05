@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001eb0a8/FUN_001eb0a8.s", FUN_001eb0a8);
-#else
 #include "types.h"
 
 typedef struct {
@@ -61,7 +58,7 @@ extern void func_001F9A68(Vec4 *, Vec4 *, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 func_001FA6C0(s32);
 extern void update_mode_freeze(void) __asm__("func_001FCE28");
-extern void parse_space_scene_chunk(s32) __asm__("func_002049F0");
+extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void update_moby_animation_state(RenderSequenceActor *) __asm__("func_0020C880");
 extern void func_0020DEF8(RenderSequenceActor *);
 extern void func_002192A8(void);
@@ -77,7 +74,6 @@ void update_gameplay_frame(void) {
     s32 actor_index;
     f32 fade;
     f32 half;
-    u8 frame_index;
 
     func_001E9430();
     fade = sequence_fade - 0.0625f;
@@ -96,10 +92,11 @@ void update_gameplay_frame(void) {
     }
     transition_update_movie_camera();
     for (actor_index = 0; actor_index < render_sequence.count; actor_index++) {
+        u8 frame_index;
         half = 0.5f;
         actor = render_sequence.actors[actor_index];
         frame_index = render_sequence.frame >> 1;
-        actor->current_frame = frame_index;
+        actor->current_frame = render_sequence.frame >> 1;
         actor->next_frame = frame_index + 1;
         update_moby_animation_state(actor);
         actor->frame_fraction = func_001FA6C0(render_sequence.frame & 1) * half;
@@ -154,7 +151,4 @@ void update_gameplay_frame(void) {
         sound_update();
     }
 }
-
 extern __typeof__(update_gameplay_frame) func_001EB0A8 __attribute__((alias("FUN_001eb0a8")));
-
-#endif /* NON_MATCHING */
