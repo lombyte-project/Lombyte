@@ -13,8 +13,8 @@ extern s32 _Error();
 
 void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
     s32 sp0;
-    u8 *sp4;
     u8 *sp8;
+    u8 *sp4;
     u8 *base1;
     u8 *base2;
     u8 *var30;
@@ -22,9 +22,11 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
     s32 idx;
     s32 jdx;
     s32 i;
+    u8 *slot;
 
     sp0 = arg1;
-    if (*(s32 *)((u8 *)arg0 + 0x6C8 + arg1 * 0x140) == 0) {
+    slot = (u8 *)arg0 + arg1 * 0x140;
+    if (*(s32 *)(slot + 0x6C8) == 0) {
         goto block_5;
     }
     sp4 = (u8 *)arg0 + 0x6BC;
