@@ -9,8 +9,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f33b8/FUN_001f33b8.s
 struct ProjectionScreenState {
     s32 viewport_width;
     s32 viewport_height;
-    s32 half_width;
     s32 half_height;
+    s32 half_width;
     s32 left_origin;
     s32 top_origin;
     s32 right_extent;
@@ -54,11 +54,11 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     screen_offsets.bottom_extent = (half_height + 0x800) << 4;
     screen_offsets.top_origin = (0x800 - half_height) << 4;
     screen_offsets.right_extent = (half_width + 0x800) << 4;
+    view_context.horizontal_fov = horizontal_fov;
     view_context.near_clip = 32.0f;
     view_context.far_clip = 524288.0f;
-    screen_offsets.viewport_width = viewport_width;
     screen_offsets.viewport_height = viewport_height;
-    view_context.horizontal_fov = horizontal_fov;
+    screen_offsets.viewport_width = viewport_width;
     view_context.projection_half_width = convert_integer_to_float(viewport_width) * 0.5f;
     projection_half_height = convert_integer_to_float(viewport_height) * 0.5f;
     view_context.projection_half_height = projection_half_height;
