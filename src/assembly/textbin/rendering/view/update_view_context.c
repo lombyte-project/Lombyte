@@ -160,6 +160,7 @@ void update_view_context(void) {
     D_00160720[0] = 0.5f / 210000.0f;
     D_00160720[1] = -0.5f / 210000.0f;
     D_00160720[2] = 0.5f;
+    D_00160720[3] = viewport_width / (horizontal_fov * 210000.0f);
     view->proj[0] = viewport_width / (horizontal_fov * projection_near_clip);
     view->proj[1] = 0;
     view->proj[2] = 0;
@@ -176,7 +177,6 @@ void update_view_context(void) {
     view->proj[13] = 0;
     view->proj[14] = -2.0f * projection_near_clip * far_clip / (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
     view->proj[15] = 0;
-    D_00160720[3] = viewport_width / (horizontal_fov * 210000.0f);
     func_001F9838(view->proj2, view->proj, 0x40);
     view->proj2[11] = 1.0f / view->near_clip;
     func_001F9838(view->proj3, view->proj2, 0x40);
