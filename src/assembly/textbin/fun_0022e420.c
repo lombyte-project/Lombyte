@@ -15,7 +15,7 @@ struct GeometryQuad {
     Vector4 positions[4];         /* 0x00 */
     u32 colors[4];        /* 0x40 */
     f32 texture_coordinates[4][2];      /* 0x50 */
-    u64 reserved;            /* 0x70 */
+    volatile u64 reserved;            /* 0x70 */
     u64 texture;            /* 0x78 */
     u64 texture_state;            /* 0x80 */
     u64 primitive;            /* 0x88 */
