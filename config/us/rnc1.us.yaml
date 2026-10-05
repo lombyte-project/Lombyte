@@ -2143,7 +2143,7 @@ segments:
           - [0x13b70c, textbin, text_gap_0023a78c_before_fun_0023a790]
           - [0x13b710, c, audio/decoder/is_audio_ok]
           - [0x13b73c, textbin, text_gap_0023a7bc_after_fun_0023a790]
-          - [0x13b740, c, assembly/textbin/audio/decoder/initialize_audio_system]
+          - [0x13b740, c, textbin/audio/decoder/initialize_audio_system]
           - [0x13b9e4, textbin, text_gap_0023aa64_before_fun_0023aa68]
           - [0x13b9e8, c, audio/decoder/terminate_audio_system]
           - [0x13baf4, textbin, text_gap_0023ab74_before_fun_0023ab78]
