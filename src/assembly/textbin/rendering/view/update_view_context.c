@@ -123,8 +123,8 @@ void update_view_context(void) {
     qcopy(&D_0018CFC0[2], &view->clip_scale);
     qcopy(&D_0018CFC0[3], &view->clip_distances);
 
-    far_bits = *(s32 *)&view->fog_far_int;
     near_bits = *(s32 *)&view->fog_near_int;
+    far_bits = *(s32 *)&view->fog_far_int;
     fog_distance_range = view->fog_far_dist - view->fog_near_dist;
     fog_intensity_range = view->fog_far_int - view->fog_near_int;
     fog_multiplier = fog_intensity_range * near_clip / fog_distance_range;
@@ -132,10 +132,10 @@ void update_view_context(void) {
     view->fog_add = (view->fog_near_int * view->fog_far_dist - view->fog_far_int * view->fog_near_dist) / fog_distance_range;
     view->fog_slope = fog_distance_slope;
     view->fog_base = view->fog_near_int - view->fog_near_dist / 1024.0f * fog_distance_slope;
-    D_001E6B70[0] = fog_multiplier;
-    D_001DFF50[0] = fog_multiplier;
-    D_00160B30 = fog_multiplier;
     view->fog_mul = fog_multiplier;
+    D_00160B30 = fog_multiplier;
+    D_001DFF50[0] = fog_multiplier;
+    D_001E6B70[0] = fog_multiplier;
     mul_bits = *(s32 *)&view->fog_mul;
     D_001DE740.mul = mul_bits;
     D_001DE740.far_int = far_bits;
