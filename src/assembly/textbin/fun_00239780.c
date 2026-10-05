@@ -56,6 +56,7 @@ void render_vendor_capture_pass_sequence(s32 capture_context) {
     f32 outer_width, outer_height, outer_x, outer_y;
     f32 inner_width, inner_height, inner_x, inner_y;
     s32 pass_index;
+    s32 point_base;
     f32 edge_length;
     f32 transition_factor;
     s64 texture_tex0;
@@ -69,9 +70,10 @@ void render_vendor_capture_pass_sequence(s32 capture_context) {
     origin_pointer = &origin;
     for (pass_index = 0; pass_index < 6; pass_index++) {
         do {
-            point_indices[0] = pass_index * 4;
-            point_indices[1] = pass_index * 4 + 1;
-            point_indices[2] = pass_index * 4 + 2;
+            point_base = pass_index * 4;
+            point_indices[0] = point_base;
+            point_indices[1] = point_base + 1;
+            point_indices[2] = point_base + 2;
             transform_attachment_points(capture_context, 3, attachment_point_indices, attachment_point_buffer);
             origin_pointer->q = attachment_point_buffer->q;
         } while (0);
