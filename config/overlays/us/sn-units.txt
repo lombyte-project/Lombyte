@@ -35,3 +35,4 @@ shared/ui_help_00231d08.c
 shared/unclassified_002937a0.c
 shared/unclassified_0029f990.c
 l14/ui_help_0022ff58.c
+l06/ui_help_002356a0.c
