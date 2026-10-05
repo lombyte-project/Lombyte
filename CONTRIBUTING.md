@@ -181,9 +181,9 @@ game data for C_EXACT, which follows from the tree, so on every
 run it generates the objdiff report (`scripts/gen_progress_report.py`) and the
 progress map (`scripts/generate_treemap.py`), validates the report with objdiff
 and uploads it as the `SCUS_971.99_report` artifact that
-[decomp.dev](https://decomp.dev/mateuszklysz/Lombyte) reads. On `main` it also
+[decomp.dev](https://decomp.dev/lombyte-project/lombyte) reads. On `main` it also
 publishes `report.json`, `decomp_map.svg` and `decomp_map.json` on the
-[`progress`](https://github.com/mateuszklysz/Lombyte/tree/progress) branch,
+[`progress`](https://github.com/lombyte-project/lombyte/tree/progress) branch,
 which the README shows. On a pull request it compares the report with that
 branch and [`progress-comment.yml`](.github/workflows/progress-comment.yml)
 posts the result as one comment, updated on every push. None of these files is

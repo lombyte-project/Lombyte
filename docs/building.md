@@ -7,7 +7,7 @@ takes the boot executable from your own disc image, and rebuilds the game
 byte-for-byte:
 
 ```sh
-git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
+git clone https://github.com/lombyte-project/lombyte.git && cd lombyte
 ./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
 ```
 
