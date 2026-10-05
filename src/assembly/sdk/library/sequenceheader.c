@@ -21,27 +21,28 @@ extern s32 _setDefaultQM();
 extern s32 _waitIpuIdle();
 
 void _sequenceHeader(struct M2c_arg0 *arg0) {
-    u32 temp_2_8;
+    s32 temp_2_8;
     u32 temp_2_12;
     u32 temp_2_24;
     u32 temp_2_33;
     u32 temp_2_54;
+    u32 temp_vbv;
 
     arg0->unkD4 = 0;
     temp_2_12 = _nextBit(arg0, 0x20);
     temp_2_8 = (temp_2_12 >> 8) & 0xFFF;
     arg0->unk124 = (u32)temp_2_12 >> 0x14;
     arg0->unk128 = temp_2_8;
-    if ((s32)temp_2_8 >= 0xAF1) {
+    if (temp_2_8 >= 0xAF1) {
         _Error(arg0, D_00153AE8);
     }
     temp_2_24 = _nextBit(arg0, 0x1E);
     temp_2_12 = temp_2_24;
-    temp_2_8 = temp_2_12 >> 1;
+    temp_vbv = temp_2_12 >> 1;
     temp_2_12 >>= 0xC;
-    temp_2_8 &= 0x3FF;
+    temp_vbv &= 0x3FF;
     arg0->unk134 = temp_2_12;
-    arg0->unk138 = temp_2_8;
+    arg0->unk138 = temp_vbv;
     temp_2_33 = _nextBit(arg0, 1);
     arg0->unk840 = temp_2_33;
     if (temp_2_33 != 0) {
