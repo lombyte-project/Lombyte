@@ -82,6 +82,7 @@ void set_pal_mode(void) {
     u64 zbuf;
     u64 frame;
     u64 scissor;
+    s32 display_width;
 
     FlushCache(0);
     if (pal_mode != 0) {
@@ -98,8 +99,9 @@ void set_pal_mode(void) {
         setup_fs_aa_buffer(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
-    screen_offsets.width = fs_aa_buffer.width;
-    screen_offsets.half_width = fs_aa_buffer.width >> 1;
+    display_width = fs_aa_buffer.width;
+    screen_offsets.width = display_width;
+    screen_offsets.half_width = display_width >> 1;
     screen_offsets.half_height = fs_aa_buffer.height >> 1;
     screen_offsets.bottom = (screen_offsets.half_height + 0x800) << 4;
     screen_offsets.height = fs_aa_buffer.height;
