@@ -48,15 +48,11 @@ extern s32 sceSifCallRpc();
 s32 FUN_00121190(s32 mode) {
     s32 response;
     s32 bind_wait_counter;
-    s32 semaphore_id;
-    s32 poll_result;
     if (D_001312D0[0] > 0) {
         scePrintf(D_00152F80);
     }
     cmd_sem_init();
-    semaphore_id = D_001312EC[0];
-    poll_result = PollSema(semaphore_id);
-    if (D_001312EC[0] != poll_result) {
+    if (D_001312EC[0] != PollSema(D_001312EC[0])) {
         return 6;
     }
     if (sceCdSyncS(1) != 0) {
