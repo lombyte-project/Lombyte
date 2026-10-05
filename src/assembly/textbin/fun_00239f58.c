@@ -80,8 +80,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_x -= func_001FA6C0(column) * surface_height_grid.cell_width;
     fraction_x /= surface_height_grid.cell_width;
     fraction_y -= func_001FA6C0(row) * surface_height_grid.cell_height;
-    /* Retain the rounded-cell remainder before selecting its sample bank. */
-    fraction_y = fraction_y / surface_height_grid.cell_height;
+    /* Divide the signed remainder after rounding the row, before choosing the sample bank. */
+    fraction_y /= surface_height_grid.cell_height;
     h00 = tile->layers[surface_height_layer].samples[row][column];
     if (column == 15) {
         h10 = tile->layers[surface_height_layer].right_edge[row];
