@@ -92,7 +92,9 @@ retry:
                         break;
                     }
                     advance = glyphs[text[position++]].advance;
-                    line_width += advance;
+                    if (advance != 0) {
+                        line_width += advance;
+                    }
                 } while (line_width < wrap_width);
             }
             line_ends[line_count] = break_position;
