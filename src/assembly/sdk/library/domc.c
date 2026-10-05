@@ -24,7 +24,7 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
     s32 i;
 
     sp0 = arg1;
-    if (*(s32 *)((u8 *)arg0 + arg1 * 0x140 + 0x6C8) == 0) {
+    if (*(s32 *)((u8 *)arg0 + 0x6C8 + arg1 * 0x140) == 0) {
         goto block_5;
     }
     sp4 = (u8 *)arg0 + 0x6BC;
@@ -40,7 +40,7 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
         p = (u8 *)arg0 + (sp0 * 0x140 + 0x590);
         ((void (*)(u8 *))*(s32 *)(base1 + idx))(p + (jdx + 0x48));
         ((void (*)(u8 *))*(s32 *)(base2 + idx))(p + (jdx + 0xB8));
-        if (i >= *(s32 *)((u8 *)sp4 + sp0 * 0x140)) {
+        if (i + 1 >= *(s32 *)((u8 *)sp4 + sp0 * 0x140)) {
             break;
         }
     }
