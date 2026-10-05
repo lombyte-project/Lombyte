@@ -155,7 +155,7 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a4dc8.s", FUN_L00_002a4dc8);
+int FUN_L00_002a4dc8(int a) { int t = D_L00_00161390; D_L00_00161390 = t + a; return t; }
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *FUN_0020c4f8(int);

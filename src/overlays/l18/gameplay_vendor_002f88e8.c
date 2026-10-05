@@ -288,7 +288,44 @@ void FUN_L18_002fad28(M2 *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fbb98.s", FUN_L18_002fbb98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc4e0.s", FUN_L18_002fc4e0);
+#include "eetypes.h"
+
+/* Turns and accelerates the moby toward a target point and returns the remaining distance. */
+typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
+
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(float *, float *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void FUN_L00_00261d78(float, void *, void *, void *);
+
+float FUN_L18_002fc4e0(char *self, float *src) {
+    QVec a;
+    float v[4];
+    float b[4];
+    float z = 0.0f;
+    float h = 0.5f;
+    char *o = *(char **)(self + 0x78);
+    float dist;
+    *(u128 *)&a = *(u128 *)src;
+    {
+        float d = fast_add_rotations(FUN_001f9e90(a.v[0] - *(float *)(self + 0x10), a.v[1] - *(float *)(self + 0x14)), *(float *)(o + 0x1EC));
+        FUN_L00_0025be00((float *)(self + 0x48), (float *)(o + 0x1E8), d, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f, D_0015ED6C * 6.2831855f);
+    }
+    b[0] = z;
+    dist = FUN_001f9b80((float *)(self + 0x10), a.v);
+    advance_accelerated_scalar(b, (float *)(o + 0x1F0), dist, D_0015ED70 * 6.0f, D_0015ED70 * 6.0f, D_0015ED6C * 5.0f);
+    v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
+    v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
+    v[2] = -(D_0015ED6C + D_0015ED6C);
+    FUN_L00_00258830((int)self, (int)v, h, h, z, 0);
+    FUN_L00_00261d78(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
+    return dist;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc668.s", FUN_L18_002fc668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc7e0.s", FUN_L18_002fc7e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);

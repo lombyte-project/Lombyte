@@ -419,7 +419,62 @@ void FUN_L14_002b4340(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4500.s", FUN_L14_002b4500);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4670.s", FUN_L14_002b4670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b46e8.s", FUN_L14_002b46e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5290.s", FUN_L14_002b5290);
+/* Same source as the exact FUN_L14_002b4340: skips states 0 and 9, keeps the model scale, and hit reactions play animation 2. */
+extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern void FUN_00212f90(void *, int, int, int);
+extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
+
+void FUN_L14_002b5290(unsigned char *m) {
+    unsigned char *d = *(unsigned char **)(m + 0x78);
+    int loc0;
+    float f4;
+    char *q;
+    int k;
+    float t;
+    if (m[0x20] == 0 || m[0x20] == 9) return;
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24);
+    f4 = 0.0f;
+    q = FUN_L00_0025a420(m, 0x330000, 0);
+    if (q != 0) {
+        if (*(int *)(q + 0x20) != 0) {
+            int a = *(short *)(*(int *)(q + 0x20) + 0xA6);
+            if (a == *(short *)(m + 0xA6) || a == 0x370) q = 0;
+        }
+    }
+    k = FUN_L00_0025a478_c(m, q, d + 0x20, 0, &loc0, &f4, 0, 4);
+    if (loc0 != 1 && *(unsigned char *)(m + 0x20) != 9) {
+        t = *(float *)(d + 0x20) - f4;
+        *(float *)(d + 0x20) = t;
+        if (t <= 0.0f) k = 1;
+        switch (k) {
+        case 0:
+        case 11:
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            FUN_00212f90(m, 2, 0, 5);
+            *(float *)(m + 0x58) = 1.75f;
+        case 9:
+        case 10:
+            d[0x67] = 0xFA;
+            break;
+        case 1:
+        case 2:
+            m[0x20] = 9;
+            *(unsigned short *)(m + 0x34) &= 0xEFFF;
+            d[0x67] = 0xFA;
+            FUN_L00_00257470(m, 0, -1);
+            break;
+        }
+        FUN_L00_0025d458_c(m, d + 0x60);
+    }
+    m[0xA4] = 0xFF;
+    FUN_L00_0025d538(m, d + 0x60);
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");

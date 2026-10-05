@@ -46,7 +46,59 @@ void FUN_L08_00305138(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00305270.s", FUN_L08_00305270);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003063f0.s", FUN_L08_003063f0);
+#include "sda.h"
+
+/* triggers objects matching the moby's class, with per-segment settings */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003078B0), where it is exact; names translated to the US level program. */
+
+struct G_3063f0 {
+    char pad0[0x30];
+    int a;
+    int b;
+    char pad1[0xC];
+    short n;
+    char pad2[0x132];
+    char *objs[1];
+};
+
+extern float D_L08_0015F59C_c __asm__("D_L08_0015F59C") __attribute__((section(".sdata")));
+extern float D_L08_0015F5A0_c __asm__("D_L08_0015F5A0") __attribute__((section(".sdata")));
+extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
+extern short D_L08_00162300_d __asm__("D_L08_00162300") __attribute__((sda));
+extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
+extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
+extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
+
+void FUN_L08_003063f0(char *moby) {
+    int i;
+    if (D_L08_0015F5C4_c == 2 && D_0015EDB0_c[0]) {
+        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
+            D_L08_0015F59C_c = 1.0f;
+            D_L08_0015F5A0_c = -0.2f;
+        }
+        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x47E && D_L08_0016D060_d.b < 0x5F1) {
+            D_L08_0015F59C_c = 1.0f;
+            D_L08_0015F5A0_c = 0.5f;
+        }
+        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x5FA && D_L08_0016D060_d.b < 0x6AE) {
+            D_L08_0015F59C_c = 1.0f;
+            D_L08_0015F5A0_c = -0.1f;
+        }
+        for (i = 0; i < D_L08_0016D060_d.n; i++) {
+            char *o = D_L08_0016D060_d.objs[i];
+            if (*(short *)(o + 0xA6) == *(short *)(moby + 0xA6) || *(short *)(o + 0xA6) == 0x306) {
+                if (D_L08_0017CC40_d[1] == 0) {
+                    float f;
+                    attach_manipulator(o, 0, D_L08_0017CC40_d);
+                    f = *(float *)&D_L08_00162300_d;
+                    *(float *)(D_L08_0017CC40_d + 0x20) = f;
+                    *(float *)(D_L08_0017CC40_d + 0x24) = f;
+                    *(float *)(D_L08_0017CC40_d + 0x28) = f;
+                }
+            }
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);

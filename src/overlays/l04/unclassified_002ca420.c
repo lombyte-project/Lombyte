@@ -65,4 +65,55 @@ float FUN_L04_002e1768(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e17d8.s", FUN_L04_002e17d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1a10.s", FUN_L04_002e1a10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e1d00.s", FUN_L04_002e1d00);
+/* Same source as the exact FUN_L10_00298940, with a 0.25 lift and the draw skipped in mode 2. */
+typedef struct {
+    float pad0[4];
+    float a[4];
+    float b[4];
+    int c[4];
+    float d[4];
+} L10SpriteData_298940;
+extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
+extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
+extern float func_001FA888_298940(int) __asm__("FUN_001fa6c0");
+extern int func_001FA8A8_298940(int, int, float) __asm__("FUN_001fa6e0");
+extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
+extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
+extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
+extern int D_L04_0015F5C4_t __asm__("D_L04_0015F5C4");
+void FUN_L04_002e1d00(char *m) {
+    L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
+    float d[4] __attribute__((aligned(16)));
+    float e[4] __attribute__((aligned(16)));
+    int i, col;
+    float f;
+
+    *(float *)(m + 0x18) += 0.25f;
+    func_001F9BF0_298940(d, D_L10_00167240_298940, m + 0x10);
+    func_L00_001FF4B0_298940(d, d, -0.3f);
+    func_L00_001FF4B0_298940(e, d, 0.1f);
+    func_001F9BD8_298940(d, d, m + 0x10);
+    *(float *)(m + 0x18) -= 0.25f;
+    for (i = 0; i < 4; i++) {
+        float h = p->a[i] + p->b[i];
+        p->a[i] = h;
+        if (255.0f <= h) {
+            p->a[i] = h - 255.0f;
+        } else if (h <= 0.0f) {
+            p->a[i] = h + 255.0f;
+        }
+        if (func_001F9908_298940(&p->c[i])) {
+            p->c[i] = func_001F9850_298940(0xFF);
+        }
+        f = func_001FA888_298940(func_001F9850_298940(0xFF) - p->c[i]);
+        f = f / (float)func_001F9850_298940(0xFF);
+        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - f));
+        if (D_L04_0015F5C4_t != 2)
+            func_L00_00273E08_298940(d, col, func_001FA898_298940(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        func_001F9BD8_298940(d, d, e);
+    }
+}

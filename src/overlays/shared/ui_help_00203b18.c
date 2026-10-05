@@ -667,17 +667,85 @@ void FUN_L00_00207c48(void) {
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_00208318), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013F350[];
-extern void FUN_L00_00207d40(void);
+extern void FUN_L00_00207d40_u(void) __asm__("FUN_L00_00207d40");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void FUN_L00_00207d00(void) {
     char *g = D_0013F350;
     if (*(short *)(g + 0x1EB2) == 0) {
         *(short *)(g + 0x1EB2) = 1;
-        enqueue_callback_list_1(FUN_L00_00207d40, *(int *)(g + 0x2080));
+        enqueue_callback_list_1(FUN_L00_00207d40_u, *(int *)(g + 0x2080));
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00207d40.s", FUN_L00_00207d40);
+typedef struct { f32 f[4]; } V_207d40;
+typedef struct {
+    u8 p0[0x162C]; f32 f162C; u8 p1[0x1D50 - 0x1630]; V_207d40 v1D50[3]; V_207d40 v1D80; V_207d40 v1D90[4];
+    V_207d40 v1DD0[8]; s32 i1E50[8]; f32 f1E70[8]; f32 f1E90[8]; s16 h1EB0; u8 p2[0x20A4 - 0x1EB2]; u8 b20A4;
+    u8 p3[0x22D8 - 0x20A5]; s16 h22D8; u8 p4[0x22E4 - 0x22DA]; s32 i22E4; u8 p5[0x22FC - 0x22E8]; s16 h22FC;
+    u8 p6[2]; s32 i2300;
+} P_207d40;
+extern P_207d40 D_0013F350_207d40 __asm__("D_0013F350") __attribute__((section(".data")));
+extern s32 D_L00_0015F5C4_207d40 __asm__("D_L00_0015F5C4");
+extern f32 D_0015ED60_207d40 __asm__("D_0015ED60");
+extern void FUN_L00_00263618_207d40(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
+extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
+extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
+#define P D_0013F350_207d40
+
+void FUN_L00_00207d40(void) {
+    f32 k;
+    int i;
+    int st;
+    int n;
+    int mode;
+    V_207d40 *v;
+
+    mode = D_L00_0015F5C4_207d40;
+    if (mode == 2 || mode == 6) {
+        for (i = 0; i < P.h1EB0; i++)
+            FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+        return;
+    }
+    st = P.b20A4;
+    if (st == 3) {
+        int j;
+        n = P.i22E4;
+        v = P.v1D50;
+        for (j = 2; j >= 0; j--) {
+            FUN_L00_00263618_207d40(v, n, 0.2f, 0.08f);
+            v++;
+        }
+        return;
+    }
+    if (st == 0) {
+        if ((FUN_L00_0020d498_207d40(3) == 3 || FUN_L00_0020d498_207d40(3) == 2) && P.h22D8 == 0) {
+            P.v1D80.f[2] += 0.015f;
+            FUN_L00_00263618_207d40(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
+            P.v1D80.f[2] -= 0.015f;
+        }
+        for (i = 0; i < P.h1EB0; i++)
+            FUN_L00_00263618_207d40(&P.v1DD0[i], P.i1E50[i], P.f1E70[i], P.f1E90[i]);
+        return;
+    }
+    if (st == 2) {
+        P.v1D80.f[2] -= 0.07f;
+        FUN_L00_00263618_207d40(&P.v1D80, 0x300000C0, 0.25f, 0.08f);
+        P.v1D80.f[2] += 0.07f;
+        return;
+    }
+    if (st == 1) {
+        k = 0.07f;
+        if (P.h22FC) k = 0.101500004529953f;
+        if (*(u8 *)0x15EDB3) {
+            P.v1D80.f[2] -= 0.01f;
+            k *= 1.7f;
+        } else {
+            P.v1D80.f[2] -= 0.02f;
+        }
+        FUN_00213ed8_207d40(&P.f162C, k, D_0015ED60_207d40 * 0.003f);
+        FUN_L00_00263618_207d40(&P.v1D80, P.i2300, P.f162C, 0.08f);
+    }
+}
 #include "eetypes.h"
 typedef struct { char pad[0x1dd0]; u128 pos[8]; int b[8]; float x[8]; float y[8]; short n; } G_00208038;
 extern G_00208038 D_0013F350_00208038 __asm__("D_0013F350");

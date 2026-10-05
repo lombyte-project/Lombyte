@@ -252,7 +252,66 @@ void FUN_L11_002f3350(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309378.s", FUN_L11_00309378);
+/* Same source as the exact FUN_L13_002e6a58, spawning class 0x40A, without the target class store and the closing effect. */
+typedef struct {
+    char _pad00[0x10];
+    unsigned char nframes; } AnimSeq_309378;
+
+typedef struct {
+    char _pad00[0x48];
+    AnimSeq_309378 *seqs[1]; } AnimClass_309378;
+
+typedef struct {
+    char _pad00[0x24];
+    AnimClass_309378 *pClass;           char _pad28[0x50 - 0x28];
+    unsigned char frame;         unsigned char nextFrame;     unsigned char seq;           unsigned char prevSeq;       char _pad54[0x5C - 0x54];
+    float unk5C;                 char _pad60[0x68 - 0x60];
+    float *frameData;            char _pad6C[4];
+    unsigned char unk70;     } MobyAnim_309378;
+
+extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern void *FUN_002141f8(char *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+
+unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, int arg, float scale) {
+    unsigned char *moby = func_0020D348_m(0x40A);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(char **)(data + 0x20) = src;
+        *(char **)(data + 0x24) = target;
+        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x40, vec);
+        if (target != 0) {
+            char *e;
+            e = FUN_002141f8(target);
+            if (e != 0) {
+                *(unsigned short *)(e + 0x1E) |= 0x80;
+            }
+        }
+        *(int *)(data + 0x28) = arg;
+        *(float *)(data + 0x2C) = scale;
+        *(int *)(data + 0x30) = 0;
+        *(int *)(data + 0x34) = 0;
+        build_spherical_offset(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
+        if (moby[0x53] != 1) {
+            blend_moby_animation_309378(moby, 1, 0, 10);
+        }
+        add_vector_xyz(moby + 0x10, moby + 0x10, data);
+        if (*(char **)(data + 0x24) != 0) {
+            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        }
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
+                                  (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 

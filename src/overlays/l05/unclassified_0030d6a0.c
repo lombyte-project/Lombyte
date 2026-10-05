@@ -196,7 +196,35 @@ void FUN_L05_00316070(char *moby) {
     }
     if (none) FUN_L03_00291918(D_L05_00211B20);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316110.s", FUN_L05_00316110);
+/* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
+extern char D_0013E533[];
+extern char D_L05_00211B28[];
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC") __attribute__((sda));
+extern void FUN_L02_002a40d0(void *, float);
+void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+extern char D_001413DC[];
+extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
+extern float D_L05_00211E60_3175D8[] __asm__("D_L05_00211B20");
+
+void FUN_L05_00316110(char *moby) {
+    switch ((unsigned char)moby[0x20]) {
+    case 0:
+        FUN_L02_002a40d0(D_L05_00211E60_3175D8, 1.0f);
+        moby[0x20] = 1;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        break;
+    case 1:
+        if (*(int *)(((char *)&D_001413DC)) == 0x16) {
+            D_L05_00211E60_3175D8[2] = fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
+        } else {
+            D_L05_00211E60_3175D8[2] = fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+        }
+        enqueue_callback_list_1(func_L05_00317538_3175D8, moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00316258.s", FUN_L05_00316258);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 #include "sda.h"
@@ -278,7 +306,207 @@ void FUN_L05_00318b98(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318c78.s", FUN_L05_00318c78);
+/* Same source as the exact FUN_L16_002e43e0, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
+typedef struct {
+    char pad00[0x30];
+    float position[4];
+    char pad40[0x30];
+    float direction[4];
+} PickupPose_318c78;
+
+extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC") __attribute__((section(".sdata")));
+extern char *FUN_L05_00319598(void *, int);
+extern char D_0013CAE4[];
+extern char D_0013F350[];
+extern float advance_accelerated_scalar_c(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern int FUN_L00_0028d8c0(void *, int);
+extern int FUN_L05_003195f8(char *);
+extern int D_0015ED84;
+extern unsigned char D_0014C050[][16];
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_0022da68_c(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern void FUN_L00_00266858(void *, int);
+extern void FUN_L05_00319510(void *);
+extern void FUN_L05_00319690(char *);
+extern void FUN_L05_00319740(char *);
+extern void FUN_L05_003198e8(char *);
+extern void FUN_L05_00319208(void *);
+extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
+
+void FUN_L05_00318c78(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    char *g;
+    char *g2;
+    float z;
+    char *m;
+    char *e;
+    PickupPose_318c78 *tab;
+    float *qa;
+    int h;
+    int s;
+    qcopy(v00, moby + 0x10);
+    qcopy(v10, moby + 0x40);
+    FUN_L00_00266858(moby, (*(unsigned short *)(moby + 0x34) ^ 1) & 1);
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(short *)(d + 0xB2) = *(short *)(d + 0xB0) = -1;
+        FUN_L05_00319208(moby);
+        break;
+    case 1:
+        g = D_0013F350;
+        if (*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) {
+            FUN_001fa2d8(v30, moby + 0xC0);
+            subtract_vector_xyz(v70, g + 0x80, moby + 0x10);
+            v70[3] = 0;
+            FUN_001f9d20(v70, v70, v30);
+            if (AbsoluteFloat(v70[1]) < 1.2f && v70[0] < 1.0f && v70[0] > -0.75f) {
+                FUN_L05_003193a8_u(moby);
+                FUN_L05_00319690(moby);
+                if (*(int *)(D_0013CAE4) & 0x10) {
+                    moby[0x20] = 3;
+                    m = FUN_L05_00319598(moby, *(short *)(d + 0xB6));
+                    if (m != 0) {
+                        m[0x20] = 2;
+                        *(unsigned short *)(m + 0x34) |= 1;
+                        m[0x31] = 0;
+                        *(int *)(m + 0x94) = 0;
+                    }
+                }
+            }
+        }
+        break;
+    case 3:
+        advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, D_0015ED6C * 0.5f, (float *)(d + 0xC0), (float *)(d + 0xC4));
+        qa = v30;
+        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xB4) * 4)));
+        tab = D_L05_001600EC_p;
+        qcopy(qa, tab[s].position);
+        qcopy(v50, tab[s].direction);
+        z = 0.0f;
+        func_00215CA8_f5848(z, *(int **)(d + 0xAC), 0, v40, v60, 0);
+        FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xC0));
+        *(float *)(d + 0x74) = fast_add_rotations(fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xC0), v50[1]);
+        *(float *)(d + 0x78) = fast_add_rotations(fast_subtract_rotations(v60[2], v50[2]) * *(float *)(d + 0xC0), v50[2]);
+        if (1.0f <= *(float *)(d + 0xC0)) {
+            *(float *)(d + 0xC0) = z;
+            *(float *)(d + 0xC4) = z;
+            moby[0x20] = 4;
+        }
+        break;
+    case 4:
+        if (FUN_L05_003195f8(moby)) {
+            *(int *)(d + 0xC0) = 0;
+            *(int *)(d + 0xC4) = 0;
+            moby[0x20] = 5;
+        }
+        break;
+    case 5:
+        advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, D_0015ED6C * 0.5f, (float *)(d + 0xC0), (float *)(d + 0xC4));
+        qa = v40;
+        s = *(int *)(d + 0x80 - (-(*(short *)(d + 0xB6) * 4)));
+        tab = D_L05_001600EC_p;
+        qcopy(qa, tab[s].position);
+        qcopy(v60, tab[s].direction);
+        sample_camera_path(*(int **)(d + 0xAC), 0, v30, v50, 0, (float)**(int **)(d + 0xAC));
+        FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xC0));
+        *(float *)(d + 0x74) = fast_add_rotations(fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xC0), v50[1]);
+        *(float *)(d + 0x78) = fast_add_rotations(fast_subtract_rotations(v60[2], v50[2]) * *(float *)(d + 0xC0), v50[2]);
+        if (1.0f <= *(float *)(d + 0xC0)) {
+            *(int *)(d + 0xC0) = 0;
+            *(int *)(d + 0xC4) = 0;
+            moby[0x20] = 1;
+            FUN_L05_00319510(moby);
+        }
+        break;
+    case 6:
+        if (D_0014C050[D_0015ED84][*(int *)(d + 0xB8)] == 0xFF || D_0014C050[D_0015ED84][*(int *)(d + 0xBC)] == 0xFF) {
+            char *model = *(char **)(moby + 0x24);
+            unsigned short flags = *(unsigned short *)(moby + 0x34);
+            int value = *(int *)(model + 0x10);
+            moby[0x31] = 1;
+            *(int *)(moby + 0x94) = value;
+            *(unsigned short *)(moby + 0x34) = flags & 0xFFFE;
+            moby[0x20] = 1;
+        }
+        break;
+    }
+    FUN_L05_00319740(moby);
+    if (*(unsigned char *)(moby + 0x20) >= 3 && *(unsigned char *)(moby + 0x20) <= 5) {
+        g2 = D_0013F350;
+        *(short *)(g2 + 0x1F2) = 2;
+        *(short *)(g2 + 0x1F4) = 2;
+        FUN_L05_003198e8(moby);
+        if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xB2)) == 0) {
+            *(short *)(d + 0xB2) = func_0022ED80_i(0, 4, moby);
+        }
+    } else if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xB2)) != 0) {
+        h = *(short *)(d + 0xB2);
+        if (h != -1) {
+            e = D_0013E550 + h * 0x70;
+            if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+                release_voice_slot(h);
+            }
+        }
+        *(short *)(d + 0xB2) = -1;
+    }
+    subtract_vector_xyz(v20, moby + 0x10, v00);
+    FUN_L00_00260738(d + 0x20, v20, v10, moby + 0x40);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003193a8.s", FUN_L05_003193a8);
+/* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
+extern float D_0015ED70;
+
+void FUN_L05_003193a8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float inv, a, b, r;
+    switch (*(short *)(d + 0xB4)) {
+    case 0:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x94)];
+        *(short *)(d + 0xB6) = 1;
+        break;
+    case 1:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x98)];
+        *(short *)(d + 0xB6) = 0;
+        break;
+    case 2:
+        if (D_0014C050[D_0015ED84][*(int *)(d + 0xB8)] != 0xFF) {
+            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x9C)];
+            *(short *)(d + 0xB6) = 3;
+        } else {
+            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA4)];
+            *(short *)(d + 0xB6) = 4;
+        }
+        break;
+    case 3:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA0)];
+        *(short *)(d + 0xB6) = 2;
+        break;
+    case 4:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA8)];
+        *(short *)(d + 0xB6) = 2;
+        break;
+    }
+    p = *(char **)(d + 0xAC);
+    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    a = D_0015ED6C * 20.0f;
+    b = D_0015ED70 * 5.0f;
+    inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
+    *(int *)(d + 0xC4) = 0;
+    *(int *)(d + 0xC0) = 0;
+    *(float *)(d + 0xD4) = a * inv;
+    *(float *)(d + 0xD8) = b * inv;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319c28.s", FUN_L05_00319c28);
