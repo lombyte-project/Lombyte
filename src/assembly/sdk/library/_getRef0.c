@@ -75,8 +75,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
     ye = &d->mc[d->cur].y[n];
     ce = &d->mc[d->cur].c[n];
     if (fieldpred) {
-        y = (dy >> 1) * 2 + by;
-        y += sfield + yofs;
+        y = (((dy >> 1) * 2) + by) + (sfield + yofs);
     } else {
         y = (dy >> 1) + by;
         y += sfield + yofs;
@@ -87,8 +86,8 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
     mb += ym;
     xr = x - xm * 16;
     yr = y - ym * 16;
-    ye->addr = work + (dfield + yofs) * 32;
     ye->x = xr;
+    ye->addr = work + (dfield + yofs) * 32;
     yh = dy & 1;
     xh = dx & 1;
     if (yh) {
@@ -114,11 +113,11 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
     ye->step = 16 << fieldpred;
     ye->p0 = buf + yr * 16;
     ye->p1 = buf + yr * 16 + 0x300;
+    yidx = (avg << 2) | xh << 1 | yh;
     avg <<= 2;
-    yidx = avg | xh << 1 | yh;
 
-    cdx = dx / 2;
     cdy = dy / 2;
+    cdx = dx / 2;
     ch = h >> 1;
     cx = (cdx >> 1) + (bx >> 1);
     if (fieldpred) {
@@ -132,8 +131,8 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
     cym = cy >> 3;
     cxr = cx - cxm * 8;
     cyr = cy - cym * 8;
-    ce->addr = work + 0x200 + (dfield + (yofs >> 1)) * 16;
     ce->x = cxr;
+    ce->addr = work + 0x200 + (dfield + (yofs >> 1)) * 16;
     if ((cdy & 1)) {
         if (cyr + (ch << fieldpred) >= 8) {
             k = (8 >> fieldpred) - (cyr >> fieldpred) - 1;
