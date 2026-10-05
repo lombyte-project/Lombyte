@@ -25,7 +25,8 @@ s64 ftoi(s64 arg) {
     input = (u64)input | ((u64)0x8000 << 0x25);
     if (exp < 0) {
         exp = -exp;
-        input = (u64)input >> (exp - 2);
+        /* dsrlv masks its shift count; exp == 1 therefore shifts by 63. */
+        input = (u64)input >> ((exp - 2) & 63);
         if ((input & 3) == 3) {
             input = ((u64)input >> 2) + 1;
         } else {
@@ -34,6 +35,7 @@ s64 ftoi(s64 arg) {
     } else {
         input = (u64)input << exp;
     }
+done:
     return (s32)input;
 }
 
