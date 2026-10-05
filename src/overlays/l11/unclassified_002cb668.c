@@ -166,7 +166,59 @@ int FUN_L11_002d2340(char *moby, char *other) {
     return FUN_L01_00276fe8(buf, n, d->b[d->idx], moby + 0x10, other, d->e, 0.2f) != 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2460.s", FUN_L11_002d2460);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d25e8.s", FUN_L11_002d25e8);
+/* Tests whether a moby can drop onto the ground, writing the landing point. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
+
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern int FUN_001efa68(void *, void *, int, void *, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void FUN_L00_00259710(void *a);
+extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
+
+int FUN_L11_002d25e8(char *m, float *out) {
+    char *s = *(char **)(m + 0x78);
+    int *p = (int *)(s + 0xF8);
+    int i;
+    int found = 0;
+    float a[4];
+    float b[4];
+    float g;
+    for (i = 0; i < 2; i++) {
+        if (is_point_inside_clip_volume(m + 0x10, *p)) {
+            found = 1;
+            break;
+        }
+        p++;
+    }
+    if (found) {
+        float *pos = (float *)(m + 0x10);
+        subtract_vector_xyz(a, out, pos);
+        if (vector_length_xyz(a) > 4.0f) normalize_vector_xyz(a, a, 4.0f);
+        add_vector_xyz(a, a, pos);
+        {
+            int *q = D_L11_001B0EB0[*(int *)(s - (-(*(int *)(s + 0x158) * 4)) + 0x60)];
+            if (FUN_L00_00259740(a, q + 4, *q)) {
+                a[2] += 5.0f;
+                g = func_L00_0025A748_f(a);
+                if (AbsoluteFloat(g - *(float *)(m + 0x18)) > 0.5f) {
+                    qcopy(b, pos);
+                    b[2] += 0.15f;
+                    a[2] = g + 0.15f;
+                    if (FUN_001efa68(b, a, 2, m, 0)) {
+                        a[2] = g;
+                        qcopy(out, a);
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);

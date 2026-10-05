@@ -81,7 +81,46 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292890.s", FUN_L03_00292890);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292d10.s", FUN_L03_00292d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002953f8.s", FUN_L03_002953f8);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002965A0), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L03_002953f8(char *moby) {
+    float a[4];
+    float v[4];
+    char *data;
+    char *p;
+    char *q;
+    char *d1;
+    char *d0;
+    data = *(char **)(moby + 0x78);
+    if ((*(unsigned short *)(moby + 0x34) & 2) == 0) {
+        p = moby + 0x10;
+        d0 = data + 0xA0;
+        d1 = data + 0xB0;
+        q = moby + 0x40;
+        if (((unsigned char *)moby)[0x20] == 0) {
+            *(int *)(data + 0x60) = 0;
+            *(short *)(data + 0x64) = 0;
+            data[0x68] = 4;
+            *(short *)(data + 0x7E) = 0xD;
+            FUN_L00_0024f7c8(moby, 0, v);
+            *(float *)(data + 0xC4) = FUN_001f9b48(p, v);
+            qcopy(d0, p);
+            qcopy(d1, q);
+            *(int *)(data + 0x5C) = 3;
+            ((unsigned char *)moby)[0x30] = *(short *)(moby + 0x32) = 0xFF;
+        }
+        subtract_vector_xyz(a, p, d0);
+        FUN_L00_00260738(data + 0x20, a, d1, q);
+        qcopy(d0, p);
+        qcopy(d1, q);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */

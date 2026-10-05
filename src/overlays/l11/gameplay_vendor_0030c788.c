@@ -48,7 +48,32 @@ char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f660.s", FUN_L11_0030f660);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fd98.s", FUN_L11_0030fd98);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+char *FUN_L11_0030fd98(char *owner) {
+    char *moby = func_0020D348_m(0x4C3);
+    if (moby != 0) {
+        char *data;
+        data = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        moby[0xBC] = 0;
+        qcopy(moby + 0x10, owner + 0x10);
+        qcopy(moby + 0x40, owner + 0x40);
+        *(char **)(data + 0x70) = owner;
+        if ((unsigned char)moby[0x53] != 2) {
+            blend_moby_animation_c(moby, 2, 0xD, 0);
+        }
+        FUN_L00_00250df8(moby);
+        FUN_L00_0025d1b8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fe50.s", FUN_L11_0030fe50);
 /* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 

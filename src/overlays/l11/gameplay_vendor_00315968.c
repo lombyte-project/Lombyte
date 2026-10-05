@@ -93,7 +93,57 @@ void FUN_L11_00318488(char *m) {
     *(float *)(d + 0x20) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
     *(float *)(d + 0x24) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00318b30.s", FUN_L11_00318b30);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
+
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L11_00162388_d __asm__("D_L11_00162388") __attribute__((sda));
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
+extern void FUN_L11_00319028_c(char *moby) __asm__("FUN_L11_00319028");
+extern void FUN_L11_003191c0_c(char *moby) __asm__("FUN_L11_003191c0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void tick_countdown_32(void *) __asm__("func_001F9740");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
+
+void FUN_L11_00318b30(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    float *vp;
+    FUN_L11_00319028_c((char *)moby);
+    switch (moby[0x20]) {
+    case 1:
+        if (func_001F9908_i(data + 0x20)) {
+            float *p = *(float **)(moby + 0x24);
+            float n = (float)scale_game_frames(0x14);
+            float a = p[9];
+            float b = (*(float **)(moby + 0x24))[9] / n;
+            p = (float *)(data + 0x1C);
+            approach_value((float *)(moby + 0x2C), a, b);
+            approach_value(p, *(float *)&D_L11_00162388_d, *(float *)&D_L11_00162388_d / (float)scale_game_frames(0x14));
+        }
+        if (func_001F9908_i(data + 0x28)) {
+            mark_moby_for_removal(moby);
+        }
+        break;
+    case 2: {
+        char *pos = (char *)moby + 0x10;
+        FUN_L11_003191c0_c((char *)moby);
+        vp = v;
+        qcopy(vp, pos);
+        add_vector_xyz(pos, pos, data);
+        if (func_001F9908_i(data + 0x20) ||
+            FUN_001efa68(vp, (char *)moby + 0x10, 0, moby, 0) ||
+            FUN_L00_001f2868(0.333f, (char *)moby + 0x10, 0, *(void **)(data + 0x24), 0)) {
+            FUN_L00_0025e450(moby, data, (char *)moby + 0x10, 1.5f, 2.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal(moby);
+        }
+        break;
+    }
+    }
+}
 #include "qcopy.h"
 
 /* Spawns a spark effect moby from a source moby, initialises its particle bytes and warms it up. */
@@ -571,7 +621,27 @@ char *FUN_L11_0031a7d8(int list) {
     } while (*s++ >= 0);
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031aa80.s", FUN_L11_0031aa80);
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
+
+extern int FUN_L01_0026e008(int, int);
+extern unsigned char D_0013D408[];
+extern void FUN_L00_00263d40(int, int);
+extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L11_0031aa80(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    if (data[0] == -1) {
+        mark_moby_for_removal(moby);
+    } else if (data[1] != -1 && FUN_L01_0026e008(data[1], -1) == 0) {
+        unsigned char *g = D_0013D408;
+        if (g[0x13] == 0) {
+            g[0x13] = 1;
+            allocate_voice_for_bank_entry_alt(1, 0, 0);
+            FUN_L00_00263d40(0x53d6, -1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ab08.s", FUN_L11_0031ab08);
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");

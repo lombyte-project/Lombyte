@@ -70,7 +70,65 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ea748.s", FUN_L15_002ea748);
+/* UpdateMoby_1388 (names.tsv role). Every frame: func_001FA748 on the heading at +0x48 with
+ * frame time * pi/2, and the +0x2C scale from the model's +0x24 value. State 0: runs
+ * func_L00_002D80A0, then deletes the moby if flag byte 0xD is set, else raises it by 1.0
+ * and goes to state 1. State 1: when the hero (D_0013E633 + 0xE9D) is within 3.0, sets
+ * flags 0x41, calls func_L00_00299B68(5) and goes to state 2. State 2: once the level flag
+ * is no longer 2, starts the exit sequence and goes to state 3. State 3: deletes the moby. */
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBB38), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float FUN_001f9b80(void *, void *);
+extern int D_L15_0015F5C4;
+extern int D_L15_0015F640;
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L15_00162078_d __asm__("D_L15_00162078") __attribute__((sda));
+extern unsigned char D_0013D4FD[];
+extern unsigned char D_0013F3D0[];
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_00298840(int);
+extern void FUN_L00_002d6bf0(char *);
+extern void FUN_L10_00298940(char *);
+int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L15_002ea748(unsigned char *m) {
+    *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), D_0015ED6C * 1.5707964f);
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L15_00162078_d;
+    switch (m[0x20]) {
+    case 0:
+        FUN_L00_002d6bf0((char *)m);
+        if (D_0013D4FD[0xD] != 0) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        m[0x20] = 1;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.0f;
+        break;
+    case 1:
+        FUN_L10_00298940((char *)m);
+        if (FUN_001f9b80(m + 0x10, D_0013F3D0) < 3.0f) {
+            *(unsigned short *)(m + 0x34) |= 0x41;
+            FUN_L00_00298840(5);
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (D_L15_0015F5C4 != 2) {
+            FUN_L00_00263d40(0x3AA3, -1);
+            D_L15_0015F640 = scale_game_frames(0xB4);
+            FUN_L00_00260860(0x22, 1);
+            memcard_save_data(0, -1);
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
 /* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
@@ -189,7 +247,34 @@ void FUN_L15_002eb928(char *moby)
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb9e0.s", FUN_L15_002eb9e0);
+/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *func_0020D348_m(int);
+extern int FUN_L00_0025d1b8();
+extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
+extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
+extern void func_L00_00251E30_u(void *) __asm__("FUN_L00_00250df8");
+
+char *FUN_L15_002eb9e0(char *pos, char *vec) {
+    char tmp[32] __attribute__((aligned(16)));
+    char *p = tmp;
+    char *m;
+    *(u128 *)tmp = *(u128 *)pos;
+    *(u128 *)(tmp + 0x10) = *(u128 *)vec;
+    m = func_0020D348_c(0x594);
+    if (m != 0) {
+        func_L00_0025E210_u(m);
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        qcopy(m + 0x10, p);
+        *(u128 *)(m + 0x40) = *(u128 *)(tmp + 0x10);
+        func_L00_00251E30_u(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);

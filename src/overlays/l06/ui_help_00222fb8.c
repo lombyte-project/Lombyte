@@ -2,7 +2,86 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00222fb8.s", FUN_L06_00222fb8);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350_c[] __asm__("D_0013F350");
+extern void FUN_001f9810(void *, int);
+extern void FUN_L00_0020b930(void);
+extern void FUN_L06_002356a0(int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L06_00222fb8(void) {
+    char *g = (D_0013F350_c);
+    char *g1;
+    char *g2;
+    char *g3;
+    int u = *(unsigned char *)(g + 0x12ED);
+    int w = *(short *)(g + 0x12E0);
+    FUN_001f9810(g + 0x12E0, 0x10);
+    *(unsigned char *)(g + 0x12ED) = u;
+    *(short *)(g + 0x12E0) = -1;
+    *(unsigned char *)(g + 0x20A9) = 0;
+    *(short *)(g + 0x308) = 0;
+    if (w == -1) return;
+    if (w == 2) {
+        if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
+            *(unsigned char *)(g + 0x12E7) = 1;
+            if (*(unsigned char *)(g + 0x20A4) == 0) {
+                char *m = *(char **)(g + 0x10E0);
+                if (m != 0 && *(short *)(m + 0xA6) == 0xAD) *(short *)(g + 0x308) = 1;
+            }
+        }
+    }
+    if (w == 0xD) {
+        char *gx = (D_0013F350_c);
+        *(unsigned char *)(gx + 0x12EC) = 1;
+    }
+    if (w == 1) {
+        char *gx = (D_0013F350_c);
+        *(unsigned char *)(gx + 0x12E5) = 1;
+    }
+    if (w == 8) {
+        char *gx = (D_0013F350_c);
+        *(unsigned char *)(gx + 0x12EA) = 1;
+    }
+    if (w == 9) {
+        char *gx = (D_0013F350_c);
+        *(unsigned char *)(gx + 0x12EE) = 1;
+    }
+    if (w == 0xC) {
+        char *gx = (D_0013F350_c);
+        *(unsigned char *)(gx + 0x12EA) = 1;
+    }
+    g1 = (D_0013F350_c);
+    if (*(unsigned char *)(g1 + 0x12E5) != 0) {
+        if (*(int *)(g1 + 0x300) != 0 && *(unsigned char *)(g1 + 0x20A4) == 1 && *(int *)(g1 + 0x2084) != 0x7D) {
+            FUN_L06_002356a0(0x7D, 1);
+            return;
+        }
+        g2 = (D_0013F350_c);
+        if (*(unsigned char *)(g2 + 0x12E5) != 0) {
+            if (*(int *)(g2 + 0x300) != 0) {
+                if (*(int *)(g2 + 0x2084) != 0x3C || *(short *)(g2 + 0x41E) != 0) {
+                    FUN_L00_0020b930();
+                    if (*(int *)(g2 + 0x22A8) != 0) {
+                        FUN_L06_002356a0(0x3C, 1);
+                    } else {
+                        FUN_L06_002356a0(0x7C, 1);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+    g3 = (D_0013F350_c);
+    if (*(unsigned char *)(g3 + 0x12EC) == 0) return;
+    if (*(int *)(g3 + 0x2084) == 0x7F) return;
+    if (!(AbsoluteFloat(*(float *)(g3 + 0x2F0) - (*(float *)(g3 + 0x88) + 0.25f)) < 1.0f)) return;
+    if (!(0.0f < *(float *)(g3 + 0x2F0) - *(float *)(g3 + 0x88))) return;
+    if (!(*(float *)(g3 + 0x108) < 0.0f)) return;
+    FUN_L00_0020b930();
+    FUN_L06_002356a0(0x7F, 1);
+}
 #include "qcopy.h"
 #define G D_0013F350_8
 

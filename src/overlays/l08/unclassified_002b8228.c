@@ -73,7 +73,56 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0f0.s", FUN_L08_002da0f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002daa10.s", FUN_L08_002daa10);
+/* Picks the best candidate moby from the moby's list by heading and distance.
+ * Exact since tools/ps2eeas_nops.py puts the hazard nop after the shared bc1fl's label. */
+/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DBD88), where it is exact; names translated to the US level program. */
+
+extern char *D_L08_0015FFD8;
+extern char D_0013F350[];
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001fa688(float, float);
+extern short *D_L08_001AC040[];
+
+char *FUN_L08_002daa10(char *moby) {
+    short *t = D_L08_001AC040[(unsigned char)moby[0x21]];
+    char *best;
+    char *p;
+    float bestD, bestA;
+    int idx;
+    char *base;
+    if (t == 0) return 0;
+    best = 0;
+    idx = *(unsigned short *)t & 0x7FFF;
+    p = D_L08_0015FFD8 + (idx << 8);
+    bestA = 0.0f;
+    bestD = bestA;
+    for (;;) {
+        if (*(short *)(p + 0xA6) != 0x14D && *(unsigned char *)(p + 0xBC) == 0) {
+            float ang, d, a;
+            a = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
+                                  *(float *)(p + 0x14) - *(float *)(moby + 0x14));
+            base = D_0013F350;
+            ang = FUN_001fa688(a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
+                                                     *(float *)(base + 0x84) - *(float *)(moby + 0x14)));
+            d = FUN_001f9b48(moby + 0x10, p + 0x10);
+            if (ang < 1.5707964f) {
+                if (bestA < ang) {
+                    best = p;
+                    bestD = d;
+                    bestA = ang;
+                }
+            } else if ((d >= 16.0f && (d < bestD || bestD < 16.0f)) || (d < 16.0f && bestD < d)) {
+                best = p;
+                bestD = d;
+                bestA = ang;
+            }
+        }
+        if (*t < -1) return best;
+        t++;
+        idx = *(unsigned short *)t & 0x7FFF;
+        p = D_L08_0015FFD8 + (idx << 8);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
 /* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */

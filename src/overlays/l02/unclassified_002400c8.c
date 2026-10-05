@@ -331,7 +331,41 @@ void FUN_L02_002dd370(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002def80.s", FUN_L02_002def80);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern short D_L02_00161C30_d __asm__("D_L02_00161C30") __attribute__((sda));
+extern short D_L02_00161C34_d __asm__("D_L02_00161C34") __attribute__((sda));
+extern short D_L02_00161C38_d __asm__("D_L02_00161C38") __attribute__((sda));
+extern short D_L02_00161C3C_d __asm__("D_L02_00161C3C") __attribute__((sda));
+
+void FUN_L02_002def80(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    advance_accelerated_scalar((float *)(*(char **)(d + 0x84) + 0x18), (float *)(d + 0x8C),
+                  *(float *)(moby + 0x18) + *(float *)(d + 0x94),
+                  *(float *)&D_L02_00161C34_d * D_0015ED70,
+                  *(float *)&D_L02_00161C38_d * D_0015ED70,
+                  *(float *)&D_L02_00161C30_d * D_0015ED6C);
+    advance_accelerated_scalar((float *)(*(char **)(d + 0x88) + 0x18), (float *)(d + 0x90),
+                  *(float *)(moby + 0x18) + *(float *)(d + 0x98),
+                  *(float *)&D_L02_00161C34_d * D_0015ED70,
+                  *(float *)&D_L02_00161C38_d * D_0015ED70,
+                  *(float *)&D_L02_00161C30_d * D_0015ED6C);
+    {
+        float r0 = fast_add_rotations(*(float *)(moby + 0x48),
+                      (*(float *)(*(char **)(d + 0x84) + 0x18) - *(float *)(moby + 0x18)) * *(float *)&D_L02_00161C3C_d * 0.017453292f);
+        float k = *(float *)&D_L02_00161C3C_d;
+        *(float *)(*(char **)(d + 0x84) + 0x48) = r0;
+        *(float *)(*(char **)(d + 0x88) + 0x48) =
+            fast_add_rotations(*(float *)(moby + 0x48),
+                      (*(float *)(*(char **)(d + 0x88) + 0x18) - *(float *)(moby + 0x18)) * k * 0.017453292f);
+    }
+    FUN_L00_00250df8(*(void **)(d + 0x84));
+    FUN_L00_00250df8(*(void **)(d + 0x88));
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
@@ -514,5 +548,55 @@ void FUN_L02_002e0138(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0280.s", FUN_L02_002e0280);
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E16B8), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_0025c698(void *, void *);
+extern short D_L02_00161C9C_d __asm__("D_L02_00161C9C") __attribute__((sda));
+extern short D_L02_00161CA0_d __asm__("D_L02_00161CA0") __attribute__((sda));
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void clear_vector(void *) __asm__("func_001F99F8");
+void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L02_002e0280(char *moby) {
+    float u[4];
+    float v[4];
+    char *d = *(char **)(moby + 0x78);
+    int i;
+    float *vp;
+    int r;
+    int s;
+    char *c;
+    switch (((unsigned char *)moby)[0x20]) {
+    case 1:
+        clear_vector(u);
+        if (FUN_L00_0025c698(moby, d) & 1) {
+            moby[0x20] = 2;
+        }
+        vp = v;
+        i = 2;
+        do {
+            qcopy(vp, moby + 0x10);
+            v[2] += random_float_between_alt(0.0f, 0.5f);
+            v[0] += random_float_between_alt(-0.15f, 0.15f);
+            v[1] += random_float_between_alt(-0.15f, 0.15f);
+            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x28));
+            s = FUN_L00_00257b90(0x14, 0x28);
+            FUN_L00_00269958(vp, u, *(int *)&D_L02_00161C9C_d, *(int *)&D_L02_00161CA0_d, r, 0x28, s, 1);
+            i--;
+        } while (i >= 0);
+        break;
+    case 2:
+        c = *(char **)(d + 0x60);
+        qcopy(c + 0x10, moby + 0x10);
+        c[0x20] = 0x11;
+        blend_moby_animation_c(*(char **)(d + 0x60), 5, 0, 1);
+        *(int *)(*(char **)(d + 0x60) + 0x94) = *(int *)(*(char **)(*(char **)(d + 0x60) + 0x24) + 0x10);
+        *(float *)(*(char **)(d + 0x60) + 0x58) = 1.0f;
+        FUN_L00_00250df8(*(char **)(d + 0x60));
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0720.s", FUN_L02_002e0720);

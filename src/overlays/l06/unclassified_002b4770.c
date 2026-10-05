@@ -431,12 +431,112 @@ void FUN_L06_002fd088(char *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002b4770.s", FUN_L06_002b4770);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d9d10.s", FUN_L06_002d9d10);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L06_002d9d10(unsigned char *moby) {
+    char *data;
+    data = *(char **)(moby + 0x78);
+    switch (moby[0x20]) {
+    case 0: {
+        char *p = (char *)moby + 0x10;
+        char *q;
+        qcopy(data, p);
+        q = data + 0x10;
+        normalize_vector_xyz(q, moby + 0xD0, 11.0f);
+        add_vector_xyz(q, q, p);
+        moby[0x20] = 1;
+        break;
+    }
+    case 2: {
+        float a = (&D_0015ED6C)[1] * 10.0f;
+        advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x24), *(float *)(data + 0x28), a, a, D_0015ED6C * 20.0f);
+        FUN_001f9a40(moby + 0x10, data, data + 0x10, *(float *)(data + 0x20));
+        if (*(float *)(data + 0x20) == *(float *)(data + 0x28)) moby[0x20] = 1;
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3ad8.s", FUN_L06_002f3ad8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4130.s", FUN_L06_002f4130);
+/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int pad0;
+    int pad4;
+    float f8;
+    float fC;
+    void *m;
+    int flags;
+    char b18;
+    char b19;
+    unsigned short h1A;
+    float f1C;
+    int i20;
+} Sx;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vx;
+
+extern char D_001404A8[];
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern short D_L06_00161CF0_d __asm__("D_L06_00161CF0") __attribute__((sda));
+extern void clear_vector_c(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L06_002f4130(char *m) {
+    Sx s;
+    Vx a;
+    Vx b;
+    int i;
+    char *pos = m + 0x10;
+    int one = 1;
+    char *d;
+    int n;
+    float f25, f27, cur, prev, ang, ra, rb;
+    d = *(char **)(m + 0x78);
+    n = func_001FA898_r(*(float *)&D_L06_00161CF0_d / (*(float *)&D_L06_00161CEC_d * D_0015ED6C) * 0.25f);
+    f25 = *(float *)(d + 0x80) * (float)n;
+    f27 = *(float *)&D_L06_00161CF0_d * 0.25f;
+    cur = *(float *)&D_L06_00161CF0_d;
+    ang = fast_subtract_rotations(*(float *)(d + 0x7C), f25 * 4.0f);
+    s.m = m;
+    s.f1C = 1.0f;
+    s.flags = *(int *)(D_001404A8) != 6 ? 0x10001 : 0x10000;
+    s.i20 = one;
+    clear_vector_c(&s);
+    s.f8 = 1.0f;
+    s.fC = 5627.9248f;
+    s.b18 = 3;
+    s.b19 = one;
+    s.h1A = *(unsigned short *)(m + 0xA6);
+    for (i = 3; i >= 0; i--) {
+        prev = cur;
+        ra = fast_add_rotations(*(float *)(d + 0x84), *(float *)(d + 0x64) * 0.017453292f * fast_sin(ang));
+        cur -= f27;
+        ang = fast_add_rotations(ang, f25);
+        rb = fast_add_rotations(*(float *)(d + 0x84), *(float *)(d + 0x64) * 0.017453292f * fast_sin(ang));
+        a.x = fast_cos(ra) * prev;
+        a.y = fast_sin(ra) * prev;
+        a.z = 0.0f;
+        b.x = fast_cos(rb) * cur;
+        b.y = fast_sin(rb) * cur;
+        b.z = 0.0f;
+        add_vector_xyz(&a, &a, pos);
+        add_vector_xyz(&b, &b, pos);
+        FUN_001efa68(&a, &b, 0, m, &s);
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
 
 extern char D_001404A8[];

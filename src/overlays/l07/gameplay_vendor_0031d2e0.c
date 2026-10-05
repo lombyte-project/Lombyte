@@ -4,4 +4,54 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031d2e0.s", FUN_L07_0031d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031eba8.s", FUN_L07_0031eba8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031f900.s", FUN_L07_0031f900);
+/* Level moby state machine: UpdateMoby_1789: spawn state then position three points.
+ * Matched using lever: g - (-(idx * 4)) + 0x178 fixes addu operand order. */
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
+
+extern char D_L07_0016C8E0[];
+extern int D_L07_0015F5C4;
+extern short D_L07_00161CD8_d __asm__("D_L07_00161CD8") __attribute__((sda));
+extern short D_L07_00161CDC_d __asm__("D_L07_00161CDC") __attribute__((sda));
+extern short D_L07_00161CE0_d __asm__("D_L07_00161CE0") __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L07_0031f900(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L07_0015F5C4 == 2) {
+            char *g = D_L07_0016C8E0;
+            int s = *(int *)(g + 0x30);
+            if (s == 1 || s == 2) {
+                float a0[4], a1[4], a2[4], b0[4], b1[4], b2[4], c0[4], c1[4], c2[4];
+                int idx = 0;
+                char *o;
+                if (s == 1) idx = 3;
+                if (s == 2) idx = 4;
+                o = *(char **)(g - (-(idx * 4)) + 0x178);
+                FUN_L00_0024f7c8(o, 0, a0);
+                FUN_L00_0024f7c8(o, 3, b0);
+                subtract_vector_xyz(c0, a0, b0);
+                normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_0024f7c8(o, 1, a1);
+                FUN_L00_0024f7c8(o, 4, b1);
+                subtract_vector_xyz(c1, a1, b1);
+                normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_0024f7c8(o, 2, a2);
+                FUN_L00_0024f7c8(o, 5, b2);
+                subtract_vector_xyz(c2, a2, b2);
+                normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+            }
+        }
+        break;
+    }
+}

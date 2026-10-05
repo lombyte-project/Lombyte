@@ -26,7 +26,33 @@ void FUN_L07_00312dc8(char *moby)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313350.s", FUN_L07_00313350);
+/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314730), where it is exact; names translated to the US level program. */
+
+void *FUN_L07_00313350(void *unused, void *dp, void *op) {
+    char *data = dp;
+    int *out = op;
+    int n = 0;
+    int a = *(int *)(data + 0x170);
+    int b, c, d, e, f;
+    if (a != -1) out[n++] = a;
+    b = *(int *)(data + 0x174);
+    if (b != -1) out[n++] = b;
+    c = *(int *)(data + 0x178);
+    if (c != -1) out[n++] = c;
+    if ((((unsigned char)data[0x19C] ^ 1) & 1)) {
+        d = *(int *)(data + 0x17C);
+        if (d != -1) out[n++] = d;
+    }
+    if (!((unsigned char)data[0x19C] & 2)) {
+        e = *(int *)(data + 0x180);
+        if (e != -1) out[n++] = e;
+    }
+    if (!((unsigned char)data[0x19C] & 4)) {
+        f = *(int *)(data + 0x184);
+        if (f != -1) out[n++] = f;
+    }
+    return (void *)n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313420.s", FUN_L07_00313420);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
@@ -49,11 +75,11 @@ void FUN_L07_00313920(float *out, float value) {
 extern char *D_L07_001B0530[];
 extern int FUN_L01_00276fe8(void *, void *, int, float, void *, void *, void *);
 extern int FUN_L01_0028b510(void *, void *, float);
-extern void *FUN_L07_00313350(void *, void *, void *);
+extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_00313350");
 
 void FUN_L07_00313988(char *m, char *a, void *b, void *c) {
     float v[8];
-    void *r = FUN_L07_00313350(m, a, v);
+    void *r = FUN_L07_00313350_u(m, a, v);
     if (FUN_L01_00276fe8(v, r, *(int *)(a + 0x188), 0.0f, m + 0x10, b, c)) return;
     {
         int i = FUN_L01_0028b510(b, D_L07_001B0530[*(int *)(a + 0x290)], 0.0f);

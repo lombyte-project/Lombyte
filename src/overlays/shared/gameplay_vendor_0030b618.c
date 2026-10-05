@@ -230,7 +230,41 @@ void FUN_L01_00316e88(float a, float b) {
     *(float *)(d + 0x48) = b;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319f18.s", FUN_L01_00319f18);
+/* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_00319f18(char *moby) {
+    float a[4];
+    float b[4];
+    unsigned char *data = *(unsigned char **)(moby + 8);
+    subtract_vector_xyz(a, D_0013F3D0_c, moby + 0x40);
+    a[3] = 0;
+    transform_vector_by_basis(b, a, moby + 0x50);
+    if (AbsoluteFloat(b[0]) <= 1.0f && AbsoluteFloat(b[1]) <= 1.0f && AbsoluteFloat(b[2]) <= 1.0f) {
+        float t = (b[0] + 1.0f) * 0.5f;
+        int v = func_001FA898_r(ConvertIntegerToFloat(*(int *)(data + 4)) * t);
+        int w = *(int *)(data + 4);
+        if (!(w < v)) w = v;
+        FUN_L01_002a1a90((int)moby, data[0], w, data[1], data[2]);
+        data[3] = 1;
+    } else if (data[3] != 0) {
+        if (b[0] > 0.0f) {
+            FUN_L01_002a1a90(0, data[0], *(int *)(data + 4), data[1], data[2]);
+        } else {
+            FUN_L01_002a1a90((int)moby, 0, 0, 0, 0);
+        }
+        data[3] = 0;
+    }
+}
 extern char D_0013E5E0[];
 extern char D_L01_00167240[];
 extern int FUN_L00_0028ddd8(int, int, int, int);

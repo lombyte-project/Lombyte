@@ -345,7 +345,47 @@ char *FUN_L13_002e8438(char *owner) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e84d8.s", FUN_L13_002e84d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e86f8.s", FUN_L13_002e86f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8920.s", FUN_L13_002e8920);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8b58.s", FUN_L13_002e8b58);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern int D_L13_0015F5CC;
+extern int D_L13_001D3538[];
+extern int FUN_L00_00257b90(int, int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_0025f8e0(float *v, float s);
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L13_002e8b58(char *moby) {
+    u128 zv;
+    float a[4];
+    int i;
+    for (i = 0; D_L13_001D3538[i] != -1; i++) {
+        float s;
+        int r, k;
+        u128 *z = &zv;
+        zv = 0;
+        s = *(float *)(moby + 0x2C) / (*(float *)(*(char **)(moby + 0x24) + 0x24) * 4.0f);
+        s = s * random_float_between_alt(0.8f, 1.1f);
+        FUN_L00_0024f7c8(moby, D_L13_001D3538[i], a);
+        FUN_L00_0025f8e0(a, s * 1.4f);
+        if (D_L13_0015F5CC & 1) {
+            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
+            k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * s);
+            FUN_L00_00269958(a, z, 0xDF000FFF, 0xCF, r, k, -100, 1);
+        } else {
+            if (*(unsigned char *)(moby + 0xBC) != 0) {
+                if (random_integer_below(0xC) != 0) continue;
+            }
+            r = scale_game_frames(FUN_L00_00257b90(0x14, 0x32));
+            k = func_001FA898_r(random_float_between_alt(600.0f, 800.0f) * s);
+            FUN_L00_00269958(a, z, 0x8000FFFF, 0x80, r, k, -100, 1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8d28.s", FUN_L13_002e8d28);
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EA450), where it is exact; names translated to the US level program. */

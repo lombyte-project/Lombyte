@@ -3,7 +3,53 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002979d8.s", FUN_L15_002979d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AA60), where it is exact; names translated to the US level program. */
+
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+
+int FUN_L15_00299880(unsigned char *moby, char *d, int a, int b, float angle) {
+    float n = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
+    float v;
+    int ret = 1;
+    *(int *)(d + 0x144) = 0;
+    *(float *)(d + 0x170) = *(float *)(moby + 0x48);
+    *(float *)(d + 0x174) = angle;
+    *(float *)(d + 0x178) = n;
+    d[0x15C] = a;
+    d[0x15D] = b;
+    if (n > 2.0943952f || n < -2.0943952f) {
+        moby[0x20] = 8;
+        v = *(float *)(d + 0x178);
+        if (v > 0.0f) {
+            *(float *)(d + 0x178) = v + -6.2831855f;
+        }
+        if (moby[0x53] != 0xC) {
+            blend_moby_animation_c(moby, 0xC, 0, scale_game_frames(10));
+        }
+
+    } else if (n < -0.7853982f) {
+        moby[0x20] = 6;
+        if (moby[0x53] != 0xA) {
+            blend_moby_animation_c(moby, 0xA, 0, scale_game_frames(10));
+        }
+
+    } else if (n > 0.7853982f) {
+        moby[0x20] = 7;
+        if (moby[0x53] != 0xB) {
+            blend_moby_animation_c(moby, 0xB, 0, scale_game_frames(10));
+        }
+
+    } else {
+        moby[0x20] = a;
+        if (moby[0x53] != b) {
+            blend_moby_animation_c(moby, b, 0, scale_game_frames(10));
+        }
+        ret = 0;
+    }
+    return ret;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -11,13 +57,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299880.s", FUN_L15_00299880);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9e90(float, float);
-extern void FUN_L15_00299880(void *, void *, void *, void *, float);
+extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
 
 void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
 {
     float angle = FUN_001f9e90(point[0] - *(float *)(moby + 0x10),
                                      point[1] - *(float *)(moby + 0x14));
-    FUN_L15_00299880(moby, a, b, c, angle);
+    FUN_L15_00299880_u(moby, a, b, c, angle);
 }
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029ACC0), where it is exact; names translated to the US level program. */
 
@@ -258,7 +304,71 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2bf0.s", FUN_L15_002a2bf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a35d8.s", FUN_L15_002a35d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7628.s", FUN_L15_002a7628);
+/* Builds a screen-space quad from the moby's offset and draws it. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
+
+typedef int u128_2A8850 __attribute__((mode(TI)));
+
+typedef struct {
+    float v[4][4];
+    int col[4];
+    float uv[4][2];
+    long a, b, c, d;
+} Quad;
+
+extern float D_L15_001673C0[4];
+extern float D_L15_001E27F0[];
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L15_002a7628(char *moby) {
+    float B[4];
+    float A[4];
+    Quad q;
+    float F[4];
+    float E[4];
+    float C[4];
+    float D[4];
+    char *d = *(char **)(moby + 0x78);
+    int i;
+    subtract_vector_xyz(A, d + 0x10, moby + 0x10);
+    *(u128_2A8850 *)B = *(u128_2A8850 *)A;
+    normalize_vector_xyz(B, B, 0.5f);
+    *(u128_2A8850 *)C = *(u128_2A8850 *)(moby + 0x10);
+    FUN_L00_001ff290(D, C, B);
+    subtract_vector_xyz(E, C, d + 0x10);
+    subtract_vector_xyz(A, C, D_L15_001673C0);
+    subtract_vector_xyz(F, d + 0x10, D_L15_001673C0);
+    cross_vectors_xyz(A, A, E);
+    normalize_vector_xyz(A, A, 0.1f);
+    cross_vectors_xyz(F, F, E);
+    normalize_vector_xyz(F, F, 0.1f);
+    q.b = get_effect_texture_alt(0xE);
+    q.c = 0xFF9000000260L;
+    q.d = 0x8000000048L;
+    q.a = 0;
+    q.col[3] = 0x80243278;
+    q.col[2] = 0x80243278;
+    q.col[1] = 0x80243278;
+    q.col[0] = 0x80243278;
+    for (i = 0; i < 4; i++) {
+        q.uv[i][0] = D_L15_001E27F0[i * 2];
+        q.uv[i][1] = D_L15_001E27F0[i * 2 + 1];
+    }
+    subtract_vector_xyz(D, C, A);
+    *(u128_2A8850 *)q.v[0] = *(u128_2A8850 *)D;
+    add_vector_xyz(D, C, A);
+    *(u128_2A8850 *)q.v[1] = *(u128_2A8850 *)D;
+    subtract_vector_xyz(D, d + 0x10, F);
+    *(u128_2A8850 *)q.v[2] = *(u128_2A8850 *)D;
+    add_vector_xyz(D, d + 0x10, F);
+    *(u128_2A8850 *)q.v[3] = *(u128_2A8850 *)D;
+    draw_geometry_quad(&q, 0, 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */

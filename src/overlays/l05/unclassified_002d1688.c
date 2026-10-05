@@ -305,7 +305,86 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305898.s", FUN_L05_00305898);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030bdd8.s", FUN_L05_0030bdd8);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float FUN_001f96b0(float);
+extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern short D_L05_00161CD4_d __asm__("D_L05_00161CD4") __attribute__((sda));
+extern short D_L05_00161CD8_d __asm__("D_L05_00161CD8") __attribute__((sda));
+extern short D_L05_00161CDC_d __asm__("D_L05_00161CDC") __attribute__((sda));
+extern short D_L05_00161CE0_d __asm__("D_L05_00161CE0") __attribute__((sda));
+extern short D_L05_00161CE4_d __asm__("D_L05_00161CE4") __attribute__((sda));
+extern short D_L05_00161CE8_d __asm__("D_L05_00161CE8") __attribute__((sda));
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L05_0030bdd8(unsigned char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float v[4];
+    float w[4];
+    float d[4];
+    char *p;
+    char *q;
+    float *r;
+    float k;
+    float t;
+    switch (moby[0x20]) {
+    case 0:
+        *(int *)(data + 0x78) = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L05_00161CE4_d, (float)*(int *)&D_L05_00161CE8_d)));
+        *(float *)(data + 0x60) = random_angle_radians();
+        *(float *)(data + 0x6C) = random_angle_radians();
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (tick_countdown_32_alt((int *)(data + 0x78))) {
+            allocate_voice_for_target_entry_alt(0, 0, (int)moby);
+            *(int *)(data + 0x78) = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L05_00161CE4_d, (float)*(int *)&D_L05_00161CE8_d)));
+        }
+        p = (char *)moby + 0x10;
+        qcopy(v, p);
+        r = w;
+        q = (char *)moby + 0x40;
+        qcopy(r, q);
+        t = fast_add_rotations(*(float *)(data + 0x60), *(float *)&D_L05_00161CD4_d * 0.017453292f * D_0015ED6C);
+        k = *(float *)&D_L05_00161CD8_d * 0.017453292f * D_0015ED6C;
+        *(float *)(data + 0x60) = t;
+        *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
+        *(float *)(moby + 0x44) = *(float *)&D_L05_00161CDC_d * 0.017453292f * fast_sin(*(float *)(data + 0x60));
+        *(float *)(moby + 0x40) = *(float *)&D_L05_00161CE0_d * 0.017453292f * fast_sin(*(float *)(data + 0x6C));
+        subtract_vector_xyz(d, p, v);
+        FUN_L00_00260738(data + 0x20, d, r, q);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030bf98.s", FUN_L05_0030bf98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030ca80.s", FUN_L05_0030ca80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030d5c0.s", FUN_L05_0030d5c0);
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
+
+extern char D_L05_001D6880[];
+extern int D_L05_0015FFD8;
+extern short *D_L05_001ABCC0[];
+
+void FUN_L05_0030d5c0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    short *p = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
+    char (*base)[256] = (char (*)[256])D_L05_0015FFD8;
+    do {
+        int idx = *p & 0x7FFF;
+        char *m = (char *)(idx * 256 + (int)base);
+        if (*(short *)(m + 0xA6) == 0x33F) {
+            char *d2 = *(char **)(m + 0x78);
+            char *q;
+            float f;
+            if (*(int *)(data + 0xC) != 0 || *(float *)(d2 + 4) == *(float *)(data + 4)) {
+                f = *(float *)(moby + 0x18);
+            } else {
+                f = *(float *)(d2 + 4) + (*(float *)(moby + 0x18) - *(float *)(data + 4));
+            }
+            *(float *)(m + 0x18) = f;
+            q = D_L05_001D6880 + *(int *)(d2 + 0x14) * 0x1190;
+            *(float *)(q + 8) = *(float *)(base[idx] + 0x18);
+        }
+    } while (*p++ >= 0);
+}

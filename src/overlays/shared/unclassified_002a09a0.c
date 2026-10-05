@@ -226,7 +226,7 @@ extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_00263d40(int, int);
-extern void FUN_L16_002d3f78(void *, int, int);
+extern void FUN_L16_002d3f78_u(void *, int, int) __asm__("FUN_L16_002d3f78");
 extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -248,7 +248,7 @@ void FUN_L16_002d38b0(char *m) {
     }
     response = FUN_L00_0025a478(m, hit, &d->health, 0, &scratch.status, &scratch.amount, 0, 4);
     if (scratch.status != 1 && ((unsigned char *)m)[0x20] != 9) {
-        FUN_L16_002d3f78(m, 0x12C, 0x168);
+        FUN_L16_002d3f78_u(m, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) &&
             *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
             d->reward_hits = 0;
@@ -440,7 +440,37 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     FUN_001f9a10(p, p, vec);
     return d;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d3f78.s", FUN_L16_002d3f78);
+/* Randomize the timers of active mobys in the selected linked group. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5340), where it is exact; names translated to the US level program. */
+
+typedef struct {char pad00[0x2E0];int timer;} L16GroupTimer;
+
+typedef struct {char pad00[0x20];signed char state;unsigned char group;char pad22[0x56];L16GroupTimer *data;} L16GroupMoby;
+
+extern char *D_L16_0015FFD8;
+extern short *D_L16_001ABCC0[];
+extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
+extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
+
+void FUN_L16_002d3f78(void *arg, int lower, int upper) {
+    L16GroupMoby *m = arg;
+    L16GroupTimer *d;
+    short *p;
+    if (m->group == 255) {
+        d=m->data;
+        d->timer=func_001FA898_timer(func_001F9878_timer(random_float_between_alt((float)lower,(float)upper)));
+    } else {
+        L16GroupMoby *other;
+        p=D_L16_001ABCC0[m->group];
+next:
+        other=(L16GroupMoby *)(((*(unsigned short *)p&0x7FFF)<<8)+(int)D_L16_0015FFD8);
+        if (other->state>=0) {
+            d=other->data;
+            d->timer=func_001FA898_timer(func_001F9878_timer(random_float_between_alt((float)lower,(float)upper)));
+        }
+        if (*p++ >= 0) goto next;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];

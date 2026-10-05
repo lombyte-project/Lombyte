@@ -3,4 +3,43 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031d5c8.s", FUN_L05_0031d5c8);
+/* UpdateMoby_1550 (names.tsv role). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,
+ * while the level flag is 2 and the word at +0x30 of D_L05_0016CD60 is 10 or 11, passes one
+ * entry of that table to func_L00_00264870. The index select `s < t ? 0 : 3` is kept as retail
+ * has it (it always gives 3 here since t < 2). The two state stores have to be written in
+ * the order 0x30, 0x20 to come out as retail's. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031EAD8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x44];
+    short n;
+    char pad1[0x132];
+    char *m[1];
+} G;
+
+extern G D_L05_0016CC60;
+extern int D_L05_0015F5C4;
+extern void FUN_L00_002637f8(int);
+
+void FUN_L05_0031d5c8(unsigned char *m) {
+    unsigned int s = m[0x20];
+    unsigned int t;
+    G *g;
+    switch (s) {
+    case 0:
+        m[0x30] = 0xFF;
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (D_L05_0015F5C4 == 2) {
+            g = &D_L05_0016CC60;
+            t = *(int *)((char *)g + 0x30) - 10;
+            if (t < 2) {
+                int k = 3;
+                if (s < t) k = 0;
+                FUN_L00_002637f8((int)g->m[k]);
+            }
+        }
+        break;
+    }
+}

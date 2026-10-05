@@ -125,7 +125,58 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e1f8.s", FUN_L05_0030e1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f218.s", FUN_L05_0030f218);
+/* Scatters points along a range, placing each one with a heading and radius. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_0015ED6C;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L05_00161DB4_d __asm__("D_L05_00161DB4") __attribute__((sda));
+extern short D_L05_00161DB8_d __asm__("D_L05_00161DB8") __attribute__((sda));
+extern short D_L05_00161DBC_d __asm__("D_L05_00161DBC") __attribute__((sda));
+extern short D_L05_00161DC0_d __asm__("D_L05_00161DC0") __attribute__((sda));
+extern short D_L05_00161DC4_d __asm__("D_L05_00161DC4") __attribute__((sda));
+extern short D_L05_00161DC8_d __asm__("D_L05_00161DC8") __attribute__((sda));
+extern short D_L05_00161DCC_d __asm__("D_L05_00161DCC") __attribute__((sda));
+extern short D_L05_00161DD0_d __asm__("D_L05_00161DD0") __attribute__((sda));
+extern void FUN_L05_0029bbe0(float, void *, void *, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L05_0030f218(char *obj, float a, float b) {
+    float v[4];
+    float w[4];
+    float ground, x, y, t, u;
+    int i, j, k, m, n;
+    clear_vector(v);
+    v[2] = *(float *)&D_L05_00161DC8_d * D_0015ED6C;
+    ground = v[2] * 0.75f * ConvertIntegerToFloat(*(int *)&D_L05_00161DB8_d);
+    j = 0;
+    for (i = j; (float)i < (b - a) / *(float *)&D_L05_00161DB4_d; i++) {
+        float fi = (float)j;
+        x = random_float_between_alt(fi, *(float *)&D_L05_00161DD0_d);
+        y = random_angle_radians();
+        w[0] = fast_cos(y) * x;
+        w[1] = fast_sin(y) * x;
+        w[2] = fi;
+        add_vector_xyz(w, obj + 0x10, w);
+        w[2] = random_float_between_alt(a, b) - ground;
+        t = random_float_between_alt((a + b) * 0.5f, b) - ground;
+        if (t < w[2]) w[2] = t;
+        u = random_float_between_alt(*(float *)&D_L05_00161DBC_d, *(float *)&D_L05_00161DC0_d);
+        k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
+        m = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4_d));
+        n = *(int *)&D_L05_00161DCC_d;
+        FUN_L05_0029bbe0(u, w, v, k, m, n);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);

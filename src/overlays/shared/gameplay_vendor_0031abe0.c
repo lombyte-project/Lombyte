@@ -61,7 +61,51 @@ char *FUN_L05_0031d160(unsigned char *a0)
     }
     return (char *)m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329358.s", FUN_L05_00329358);
+/* Sets up a moby's vector from the level table and clamps its height for the current state. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_0013F350[];
+extern char D_0013F5E0[];
+extern float FUN_001f9b80(float *, float *);
+extern int D_0015ED84;
+extern void FUN_001f9d20(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L05_00329358(char *moby) {
+    float v[4];
+    char *d = *(char **)(moby + 0x70);
+    float *p = (float *)(d + 0x80);
+    *(u128 *)v = 0;
+    v[2] = 0.7f;
+    FUN_001f9d20(v, v, D_0013F350);
+    add_vector_xyz(p, D_0013F350 + 0x80, v);
+    qcopy(d + 0x1D0, p);
+    if (D_0015ED84 == 5) {
+        float w[4];
+        *(u128 *)w = 0;
+        w[0] = 286.16f;
+        w[1] = 447.82f;
+        w[2] = 63.37f;
+        w[3] = 1.0f;
+        if (FUN_001f9b80(w, p) < 48.0f) {
+            if (p[2] < 62.4f) {
+                p[2] = 62.4f;
+            }
+        } else {
+            if (p[2] < 67.2f) {
+                p[2] = 67.2f;
+            }
+        }
+    } else if (D_0015ED84 == 0x10) {
+        if (p[2] < 77.5f) {
+            p[2] = 77.5f;
+        }
+    }
+    normalize_vector_xyz(p + 8, D_0013F5E0, -1.0f);
+}
 extern char *D_L05_00167200 __attribute__((section(".data")));
 void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, float g, float h) {
     char *o = D_L05_00167200;
