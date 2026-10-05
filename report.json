@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 24.653407,
+    "fuzzy_match_percent": 24.654441,
     "total_code": "3493132",
-    "matched_code": "755908",
-    "matched_code_percent": 21.639835,
+    "matched_code": "757404",
+    "matched_code_percent": 21.682662,
     "total_functions": 4107,
-    "matched_functions": 2608,
-    "matched_functions_percent": 63.501339,
-    "complete_code": "755908",
-    "complete_code_percent": 21.639835,
+    "matched_functions": 2611,
+    "matched_functions_percent": 63.574385,
+    "complete_code": "757404",
+    "complete_code_percent": 21.682662,
     "total_units": 432,
     "complete_units": 155
   },
@@ -3654,15 +3654,15 @@
     {
       "name": "game/unclassified",
       "measures": {
-        "fuzzy_match_percent": 93.886924,
+        "fuzzy_match_percent": 93.965227,
         "total_code": "46128",
-        "matched_code": "612",
-        "matched_code_percent": 1.326743,
+        "matched_code": "2108",
+        "matched_code_percent": 4.569892,
         "total_functions": 50,
-        "matched_functions": 1,
-        "matched_functions_percent": 2.0,
-        "complete_code": "612",
-        "complete_code_percent": 1.326743,
+        "matched_functions": 4,
+        "matched_functions_percent": 8.0,
+        "complete_code": "2108",
+        "complete_code_percent": 4.569892,
         "total_units": 1,
         "complete_units": 0
       },
@@ -3686,9 +3686,9 @@
           }
         },
         {
-          "name": "FUN_001ee338",
+          "name": "render_queued_rotated_sprites",
           "size": "364",
-          "fuzzy_match_percent": 97.5604,
+          "fuzzy_match_percent": 100.0,
           "address": "840104",
           "metadata": {
             "virtual_address": "979640"
@@ -3713,9 +3713,9 @@
           }
         },
         {
-          "name": "FUN_001f55d8",
+          "name": "append_subpixel_textured_screen_quad",
           "size": "560",
-          "fuzzy_match_percent": 97.2429,
+          "fuzzy_match_percent": 100.0,
           "address": "869448",
           "metadata": {
             "virtual_address": "1008984"
@@ -3839,9 +3839,9 @@
           }
         },
         {
-          "name": "FUN_00206bd8",
+          "name": "passes_projected_region_callback_0",
           "size": "572",
-          "fuzzy_match_percent": 97.9371,
+          "fuzzy_match_percent": 100.0,
           "address": "940616",
           "metadata": {
             "virtual_address": "1080152"
@@ -47911,15 +47911,15 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 97.702172,
+        "fuzzy_match_percent": 97.712753,
         "total_code": "341364",
-        "matched_code": "228252",
-        "matched_code_percent": 66.864696,
+        "matched_code": "229748",
+        "matched_code_percent": 67.302938,
         "total_functions": 1202,
-        "matched_functions": 1072,
-        "matched_functions_percent": 89.184692,
-        "complete_code": "228252",
-        "complete_code_percent": 66.864696,
+        "matched_functions": 1075,
+        "matched_functions_percent": 89.434276,
+        "complete_code": "229748",
+        "complete_code_percent": 67.302938,
         "total_units": 117,
         "complete_units": 79
       }
@@ -47928,15 +47928,15 @@
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 97.489102,
+        "fuzzy_match_percent": 97.50278,
         "total_code": "264064",
-        "matched_code": "164748",
-        "matched_code_percent": 62.389421,
+        "matched_code": "166244",
+        "matched_code_percent": 62.95595,
         "total_functions": 904,
-        "matched_functions": 799,
-        "matched_functions_percent": 88.384956,
-        "complete_code": "164748",
-        "complete_code_percent": 62.389421,
+        "matched_functions": 802,
+        "matched_functions_percent": 88.716814,
+        "complete_code": "166244",
+        "complete_code_percent": 62.95595,
         "total_units": 106,
         "complete_units": 73
       }
