@@ -42,9 +42,9 @@ extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern s32 sceSifWriteBackDCache();
-s32 sceCdRead(s32 arg0, s32 arg1, s32 *arg2, struct M2c_arg3 *arg3) {
-    s32 var_5_50;
-    s32 temp_7_46;
+s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct M2c_arg3 *pMode) {
+    s32 byteCount;
+    s32 dataPattern;
     struct M2c_D_001313C0 *st = &D_001313C0;
 
     if (D_001312F4[0] & 1) {
@@ -57,37 +57,37 @@ block_2:
     if (func_00120A28(4) == 0) {
         return 0;
     }
-    st->unk0 = arg0;
-    st->unk4 = arg1;
-    st->unk8 = arg2;
-    st->unkC = (u8) arg3->unk0;
-    st->unkD = (u8) arg3->unk1;
-    st->unkE = (u8) arg3->unk2;
+    st->unk0 = dwSector;
+    st->unk4 = dwSectorCount;
+    st->unk8 = pDestination;
+    st->unkC = (u8) pMode->unk0;
+    st->unkD = (u8) pMode->unk1;
+    st->unkE = (u8) pMode->unk2;
     st->unk10 = D_001323C0;
     st->unk14 = D_00132480;
-    temp_7_46 = arg3->unk2;
-    if (temp_7_46 == 1) {
+    dataPattern = pMode->unk2;
+    if (dataPattern == 1) {
         goto block_7;
     }
-    var_5_50 = arg1 << 0xB;
-    if (temp_7_46 < 2) {
+    byteCount = dwSectorCount << 0xB;
+    if (dataPattern < 2) {
         goto block_9;
     }
-    if (temp_7_46 == 2) {
+    if (dataPattern == 2) {
         goto block_8;
     }
     goto block_9;
 block_7:
-    var_5_50 = (s32)(((u32)arg1 << 3) * 0x123U);
+    byteCount = (s32)(((u32)dwSectorCount << 3) * 0x123U);
     goto block_9;
 block_8:
-    var_5_50 = arg1 * 0x924;
+    byteCount = dwSectorCount * 0x924;
 block_9:
     *(s32 *)D_00132480 = 0;
     if (D_001312F4[0] & 2) {
         goto block_11;
     }
-    sceSifWriteBackDCache(arg2, var_5_50);
+    sceSifWriteBackDCache(pDestination, byteCount);
 block_11:
     sceSifWriteBackDCache(D_001323C0, 0x90);
     sceSifWriteBackDCache(st, 0x18);
