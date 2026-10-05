@@ -23,9 +23,9 @@ extern void _dispatchMpegCallback(void *, MpegCallbackArgument *);
 extern void _sendIpuCommand(struct MpegQuantizerState *, s32);
 extern void _waitIpuIdle(struct MpegQuantizerState *);
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, s32 source_address) __asm__("_setDefaultQM");
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) __asm__("_setDefaultQM");
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, s32 source_address) {
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) {
     s32 interrupts_enabled;
     MpegCallbackArgument callback;
 

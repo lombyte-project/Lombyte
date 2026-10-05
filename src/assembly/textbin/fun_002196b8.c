@@ -106,6 +106,7 @@ void render_level_effects_and_screen_sprites(void)
     s32 texture_bottom;
     s32 frame_x;
     s32 frame_y;
+    s32 width_for_panel;
 
     FUN_00233980(0x47, 0x5360B);
     func_0020D278();
@@ -120,10 +121,19 @@ void render_level_effects_and_screen_sprites(void)
         }
     }
 
-    panels = panel_render_state.panels != 0 ? (RenderPanel **)(panel_render_state.panels + 0x44) : 0;
+    panels = 0;
+    if (panel_render_state.panels != 0) {
+        panels = (RenderPanel **)(panel_render_state.panels + 0x44);
+    }
     for (projection_slot_index = 0; projection_slot_index < 14; projection_slot_index++) {
         slot = panel_slots[projection_slot_index];
-        if (slot == 0 || panel_slot_enabled[projection_slot_index] == 0 || (projection_slot_index == 6 && panel_render_state.special_slot_enabled == 0)) {
+        if (slot == 0) {
+            continue;
+        }
+        if (panel_slot_enabled[projection_slot_index] == 0) {
+            continue;
+        }
+        if (projection_slot_index == 6 && panel_render_state.special_slot_enabled == 0) {
             continue;
         }
         projected_frame = slot->frame;
@@ -134,10 +144,11 @@ void render_level_effects_and_screen_sprites(void)
         first_corner.q = frame_vectors[0].q;
         opposite_corner.q = frame_vectors[3].q;
         func_00237A78(&first_corner, &opposite_corner, &projected_width, &projected_height, &screen_x, &screen_y);
+        width_for_panel = projected_width;
         screen_x++;
         screen_y++;
         if (panels != 0 && panels[projection_slot_index] != 0) {
-            panels[projection_slot_index]->projected_width = projected_width;
+            panels[projection_slot_index]->projected_width = width_for_panel;
             panels[projection_slot_index]->projected_height = projected_height;
             panels[projection_slot_index]->screen_x = screen_x;
             panels[projection_slot_index]->screen_y = screen_y;
@@ -197,8 +208,8 @@ void render_level_effects_and_screen_sprites(void)
                 texture_height_log2--;
             }
             func_001F7888(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
-            texture_height = 1 << texture_height_log2;
             texture_width = 1 << texture_width_log2;
+            texture_height = 1 << texture_height_log2;
             func_00200F90(0, 0, texture_width, texture_height, panel_clear_color, 0, 0);
             draw_result = panels[draw_slot_index]->draw(panels[draw_slot_index]);
             func_001F7978();
@@ -217,17 +228,17 @@ void render_level_effects_and_screen_sprites(void)
                 texture_top = (texture_bottom - frame_height) / 2;
                 texture_right -= texture_left;
                 texture_bottom -= texture_top;
-                if (texture_width < texture_right) {
-                    texture_right = texture_width;
-                }
-                if (texture_height < texture_bottom) {
-                    texture_bottom = texture_height;
-                }
                 if (texture_left < 0) {
                     texture_left = 0;
                 }
+                if (texture_width < texture_right) {
+                    texture_right = texture_width;
+                }
                 if (texture_top < 0) {
                     texture_top = 0;
+                }
+                if (texture_height < texture_bottom) {
+                    texture_bottom = texture_height;
                 }
             } else if (draw_result & 4) {
                 if (frame_width < frame_height) {
@@ -250,8 +261,9 @@ void render_level_effects_and_screen_sprites(void)
         }
     }
 
+    final_slot_index = 0;
     func_001F4280(0);
-    for (final_slot_index = 0; final_slot_index < 14; final_slot_index++) {
+    for (; final_slot_index < 14; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 && (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
             func_00223E28(slots[final_slot_index]);
         }

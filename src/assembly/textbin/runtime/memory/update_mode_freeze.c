@@ -281,17 +281,18 @@ void update_mode_freeze(void)
 
       case 3:
       {
-        if (D_00193300.unk24 != 0)
+        struct S_00193300 *st = &D_00193300;
+        if (st->unk24 != 0)
         {
-          D_00193300.unk24--;
+          st->unk24--;
           break;
         }
-        if (D_00193300.unk20 != 0)
+        if (st->unk20 != 0)
         {
-          D_00193300.unk20--;
+          st->unk20--;
           break;
         }
-          if (D_00193300.unk1C == 2)
+          if (st->unk1C == 2)
           {
             if (D_0013F350.unk880 != (-1))
             {

@@ -72,7 +72,6 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     s32 pitch_bend_min;
     s32 slot_index;
     s32 result;
-    s32 slot_available;
     s32 slot_limit;
     s32 pitch_bend;
     u8 *state;
@@ -83,18 +82,16 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     VoicePoolWindow *position_slot;
 
     source_inactive = definition->source_state == 0;
-    if (flags & 4) {
-        goto require_active_source;
-    }
-    result = -1;
-    if (source_inactive == 0) {
-        goto return_result;
-    }
-    goto choose_slot_limit;
-require_active_source:
-    result = -1;
-    if (source_inactive != 0) {
-        goto return_result;
+    if ((flags & 4) == 0) {
+        result = -1;
+        if (!source_inactive) {
+            goto return_result;
+        }
+    } else {
+        result = -1;
+        if (source_inactive) {
+            goto return_result;
+        }
     }
 choose_slot_limit:
     slot_limit = 0x1A;
@@ -117,7 +114,6 @@ find_free_slot:
     if (slot_limit == 0) {
         goto allocation_failed;
     }
-    slot_available = slot_index < slot_limit;
     if (voice_pool.voices[0].state == 0) {
         goto initialize_slot;
     }
@@ -134,9 +130,8 @@ scan_next_slot:
     slot_index += 1;
     goto scan_next_slot;
 slot_found:
-    slot_available = slot_index < slot_limit;
 initialize_slot:
-    if (slot_available == 0) {
+    if (slot_index >= slot_limit) {
         goto allocation_failed;
     }
     slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
@@ -172,10 +167,13 @@ calculate_volume:
         goto commit_if_audible;
     }
     volume_offset = slot_index * 0x70;
-    volume = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset), (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
+    result = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset), (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
+    goto check_calculated_volume;
 commit_if_audible:
-    result = -1;
-    if (volume < 0x20) {
+    result = volume;
+check_calculated_volume:
+    if (result < 0x20) {
+        result = -1;
         goto return_result;
     }
     committed_slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);

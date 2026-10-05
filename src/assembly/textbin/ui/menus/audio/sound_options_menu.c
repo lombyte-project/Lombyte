@@ -114,14 +114,14 @@ s32 sound_options_menu(struct SoundMenu *menu) {
             D_0015EDEC = (D_0015EDEC - 3 <= 0) ? 0 : D_0015EDEC - 3;
         }
     }
-    if ((previous_second_volume != D_0015EDEC) || (previous_first_volume != *first_volume)) {
+    if ((previous_first_volume != *first_volume) || (previous_second_volume != D_0015EDEC)) {
         /* Retail assigns both groups 1 and 2 from the second slider here. */
         D_0013E550.group_0_volume = *first_volume * 8 / 10;
-        D_0013E550.group_2_volume = D_0013E550.group_1_volume = D_0015EDEC;
+        D_0013E550.group_5_volume = *first_volume;
+        D_0013E550.group_1_volume = D_0013E550.group_2_volume = D_0015EDEC;
         scaled_first_volume = *first_volume * 7 / 10;
         D_0013E550.group_4_volume = scaled_first_volume;
-        D_0013E550.group_5_volume = *first_volume;
-        D_0013E550.group_3_volume = scaled_first_volume;
+        D_0013E550.group_3_volume = *first_volume * 7 / 10;
     }
     if (D_0013C940.pressed_buttons & 0x40) {
         if (menu->selected_option == 2) {

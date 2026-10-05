@@ -220,6 +220,7 @@ void transition_load_wad(void) {
     FlushCache(0);
     hdr = (WadHeader *)D_001940C0.hdr;
     func_00203120((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
+    /* Retail forms the two texture addresses from header offsets 0x70 and 0x74. */
     t = 0x1D308000 | (s64)((D_0015EE8C + hdr->x70) >> 8);
     u = ((s64)((D_0015EE8C + hdr->x74) >> 8) << 37) | ((s64)0xB800 << 19);
     D_0019E6C0[0] = (u | t) | ((s64)-1 << 63);
@@ -325,10 +326,10 @@ void transition_load_wad(void) {
     func_002049F0(0);
     D_0015EF60 = D_001940C0.x1C;
     func_00216828(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
-    D_0015EF64_far = D_0015EF60;
+    D_0015EF64 = D_0015EF60;
     D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
-    for (i = 0; i < 8; i++) {
-        QueueDmaTransfer(i);
+    for (k = 0; k < 8; k++) {
+        QueueDmaTransfer(k);
         j = 0;
         if (D_001996D0.count > 0) {
             te = D_0015F6A0;
@@ -340,6 +341,7 @@ void transition_load_wad(void) {
         }
     }
     QueueDmaTransfer(0);
+    /* Retail uses lbu here; its signed-negative branch cannot fire. */
     i = D_001B3AC0[0x472];
     if (i >= 0) {
         D_001B3200[i]->x28 = D_001861E0;

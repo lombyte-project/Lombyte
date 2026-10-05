@@ -75,6 +75,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     FlushCache(0);
     decompress_wad(compressed_class_resources[active_class_resource_index], resource_data);
     FlushCache(0);
+    /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
     resident_class_resources[class_slot = resident_class_slot_by_id[class_id]] = resource_data;
     D_001B6180[class_slot] = *(s32 *)(resource_data + 0x2C);
     prepare_resident_class_render_data(resource_data, resident_indexed_textures, class_material_maps[active_class_resource_index], class_id);

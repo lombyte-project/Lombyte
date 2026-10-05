@@ -74,9 +74,9 @@ void update_gameplay_frame(void)
     RenderSequenceActor *actor;
     Vec4 *animation_positions;
     s32 actor_index;
-    s32 frame_index;
-    f32 half = 0.5f;
     f32 fade;
+    f32 half;
+    s32 frame_index;
 
     func_001E9430();
     fade = sequence_fade - 0.0625f;
@@ -95,14 +95,19 @@ void update_gameplay_frame(void)
     }
     func_001EAF88();
     for (actor_index = 0; actor_index < render_sequence.count; actor_index++) {
+        half = 0.5f;
         actor = render_sequence.actors[actor_index];
         frame_index = render_sequence.frame >> 1;
         actor->current_frame = frame_index;
-        actor->next_frame = frame_index + 1;
+        actor->next_frame = (render_sequence.frame >> 1) + 1;
         func_0020C880(actor);
         actor->frame_fraction = func_001FA6C0(render_sequence.frame & 1) * half;
         animation_positions = ((RenderSequenceSidecar *)actor)->animation_positions;
-        func_001F9A68(&first_position, &animation_positions[actor->current_frame], 1.0f - actor->frame_fraction);
+        {
+            f32 remaining_fraction = 1.0f;
+            remaining_fraction -= actor->frame_fraction;
+            func_001F9A68(&first_position, &animation_positions[actor->current_frame], remaining_fraction);
+        }
         func_001F9A68(&next_position, &animation_positions[actor->next_frame], actor->frame_fraction);
         func_001F9A10(&actor->position, &first_position, &next_position);
         actor->cached_frame = 0xFF;

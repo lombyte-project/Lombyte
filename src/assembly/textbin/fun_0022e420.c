@@ -15,7 +15,7 @@ struct GeometryQuad {
     Vector4 positions[4];         /* 0x00 */
     u32 colors[4];        /* 0x40 */
     f32 texture_coordinates[4][2];      /* 0x50 */
-    u64 reserved;            /* 0x70 */
+    volatile u64 reserved;            /* 0x70 */
     u64 texture;            /* 0x78 */
     u64 texture_state;            /* 0x80 */
     u64 primitive;            /* 0x88 */
@@ -87,13 +87,14 @@ void build_resident_indexed_texture_warp_meshes(void) {
     Vector4 *secondary_current;
     Vector4 *secondary_next;
 
-    if (game_stage == 6 && level_render_state.display_mode == 4) {
-        quad.texture = get_effect_texture(0);
-    } else {
+    if (game_stage != 6 || level_render_state.display_mode != 4) {
         quad.texture = get_effect_texture(0x13);
+    } else {
+        quad.texture = get_effect_texture(0);
     }
     quad.texture_state = 0xFF9000000260;
     quad.primitive = 0x8000000048;
+    quad.reserved = 0;
     for (uv_vertex = 0; uv_vertex < 4; uv_vertex++) {
         quad.texture_coordinates[uv_vertex][0] = warp_texture_coordinates[uv_vertex][0];
         quad.texture_coordinates[uv_vertex][1] = warp_texture_coordinates[uv_vertex][1];
@@ -105,8 +106,8 @@ void build_resident_indexed_texture_warp_meshes(void) {
         primary_current = get_primary_history_position(history_index);
         secondary_current = &level_render_state.secondary_history_positions[history_index];
         for (strip = 0; strip < 2; strip++) {
-            quad.reserved = 0;
             strip_offset = strip * 32;
+            quad.reserved = 0;
             primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
             subtract_vectors(&cross_strip_differences[0], secondary_current, primary_current);
             subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);

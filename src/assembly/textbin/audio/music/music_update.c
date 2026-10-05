@@ -75,6 +75,7 @@ void music_update(void) {
                 music_state.crossfade_state = 3;
                 music_state.primary_state = 5;
             } else if (music_state.primary_state != 9) {
+                /* The callback receives the old handle; mark its slot pending before submission. */
                 *(u32 *)&music_state.primary_handle = 0xFFFFFFFF;
                 snd_set_sound_params_cb(handle, 5, fade_volume, 0, 0, 0, (s32)set_sound_handle_id, (s32)&music_state.primary_handle);
             }

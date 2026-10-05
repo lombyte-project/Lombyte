@@ -22,22 +22,26 @@ extern s32 _waitIpuIdle();
 
 void _sequenceHeader(struct M2c_arg0 *arg0) {
     u32 temp_2_8;
-    s32 temp_2_12;
+    u32 temp_2_12;
     u32 temp_2_24;
     u32 temp_2_33;
     u32 temp_2_54;
 
     arg0->unkD4 = 0;
-    temp_2_8 = _nextBit(arg0, 0x20);
-    temp_2_12 = (temp_2_8 >> 8) & 0xFFF;
-    arg0->unk124 = (u32) (temp_2_8 >> 0x14);
-    arg0->unk128 = temp_2_12;
-    if (temp_2_12 >= 0xAF1) {
+    temp_2_12 = _nextBit(arg0, 0x20);
+    temp_2_8 = (temp_2_12 >> 8) & 0xFFF;
+    arg0->unk124 = (u32)temp_2_12 >> 0x14;
+    arg0->unk128 = temp_2_8;
+    if ((s32)temp_2_8 >= 0xAF1) {
         _Error(arg0, D_00153AE8);
     }
     temp_2_24 = _nextBit(arg0, 0x1E);
-    arg0->unk134 = (u32) (temp_2_24 >> 0xC);
-    arg0->unk138 = (s32) ((temp_2_24 >> 1) & 0x3FF);
+    temp_2_12 = temp_2_24;
+    temp_2_8 = temp_2_12 >> 1;
+    temp_2_12 >>= 0xC;
+    temp_2_8 &= 0x3FF;
+    arg0->unk134 = temp_2_12;
+    arg0->unk138 = temp_2_8;
     temp_2_33 = _nextBit(arg0, 1);
     arg0->unk840 = temp_2_33;
     if (temp_2_33 != 0) {
@@ -89,11 +93,11 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     temp_6_16 = temp_30_15->unk848;
     if (temp_6_16 == 0) {
         temp_30_15->unk174 = 3;
-        temp_30_15->unk17C = 1;
-        temp_30_15->unk144 = 5;
         temp_30_15->unk13C = 1;
         temp_30_15->unk140 = 1;
         temp_30_15->unk188 = 1;
+        temp_30_15->unk17C = 1;
+        temp_30_15->unk144 = 5;
     }
     temp_30_15->unk12C = (s32) ((s32) (temp_30_15->unk124 + 0xF) >> 4);
     if (temp_6_16 != 0) {
@@ -107,12 +111,18 @@ block_6:
         var_2_40 = (s32) (temp_30_15->unk128 + 0xF) >> 4;
     }
     temp_30_15->unk130 = var_2_40;
-    temp_22_48 = var_2_40 * 0x10;
-    temp_23_51 = temp_30_15->unk12C * 0x10;
-    var_2_53 = ((u8 *)temp_30_15 + (0x528));
-    if ((temp_23_51 != arg0->unk0) || (var_2_53 = ((u8 *)temp_30_15 + (0x528)), (temp_22_48 != arg0->unk4))) {
-        arg0->unk4 = temp_22_48;
+    temp_22_48 = var_2_40 << 4;
+    temp_23_51 = temp_30_15->unk12C << 4;
+    if (temp_23_51 == arg0->unk0) {
+        var_2_53 = ((u8 *)temp_30_15 + 0x528);
+        if (temp_22_48 == arg0->unk4) {
+            return;
+        }
+    }
+    var_2_53 = ((u8 *)temp_30_15 + 0x528);
+    {
         arg0->unk0 = temp_23_51;
+        arg0->unk4 = temp_22_48;
         sp44 = var_2_53;
         temp_17_63 = ((u8 *)temp_30_15 + (0x108));
         sp30 = ((u8 *)temp_30_15 + (0x320));
@@ -122,7 +132,7 @@ block_6:
         temp_21_73 = ((u8 *)temp_30_15 + (0x2B8));
         sp38 = ((u8 *)temp_30_15 + (0x3F0));
         temp_18_75 = temp_22_48 >> 1;
-        temp_16_77 = (u32) (temp_23_51 * (temp_22_48 * 0x180)) >> 8;
+        temp_16_77 = (u32) ((0x180 * temp_22_48) * temp_23_51) >> 8;
         sp3C = ((u8 *)temp_30_15 + (0x458));
         sp40 = ((u8 *)temp_30_15 + (0x4C0));
         func_0012BC10(temp_17_63);

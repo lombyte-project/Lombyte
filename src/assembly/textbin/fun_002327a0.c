@@ -139,14 +139,15 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
             sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
             if (D_001604A4 == 1 || D_001604AC == 0) {
                 D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
-            } else {
-                new_v = D_001DCE70[element_index][0];
-                new_u = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][0] = new_u + (new_v - new_u) * transition_fraction;
                 new_v = reflection[1] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][1] = new_v + (D_001DCE70[element_index][1] - new_v) * transition_fraction;
+            } else {
+                new_u = D_001DCE70[element_index][0];
+                new_v = reflection[0] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][0] = new_v + (new_u - new_v) * transition_fraction;
+                new_v = reflection[1] / sphere_denominator + 0.5f;
+                new_v = new_v + (D_001DCE70[element_index][1] - new_v) * transition_fraction;
             }
+            D_001DCB40[element_index][1] = new_v;
         }
         if (D_001604A4 == 1) {
             D_001604A4 = 2;

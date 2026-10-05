@@ -31,7 +31,7 @@ struct LevelArchiveHeader {
 extern struct LevelArchiveDiscTable D_00137B80;
 extern s16 D_0013E056[];
 extern s32 D_0015ED58 MACRO_ADDR;
-extern s32 D_0015ED5C MACRO_ADDR;
+extern u32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
@@ -47,7 +47,7 @@ extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("func_0012E088");
 extern void snd_resolve_bank_xrefs() __asm__("func_0012E1A8");
 extern s32 snd_unload_bank(s32) __asm__("func_0012E1D8");
 extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern void submit_audio_stream_io_request(s32, s32, s32) __asm__("func_00216728");
+extern s32 submit_audio_stream_io_request(void *, u32, u32) __asm__("func_00216728");
 extern s32 sceCdBreak();
 extern s32 sceCdGetError();
 extern s32 sceCdSync(s32);
@@ -58,6 +58,7 @@ s32 service_level_archive_load(void) {
     s32 stage;
     s32 retry_stage;
     s32 archive_start_or_bytes;
+    s32 sound_aligned_bytes;
     s32 level_archive_sectors;
     s32 archive_start_or_sectors;
     s32 shared_start_sector;
@@ -99,12 +100,12 @@ s32 service_level_archive_load(void) {
     switch (stage) {
     case 0:
         if (D_0015ED80 != 0) {
-            archive_start_or_bytes = ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes = ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         } else {
-            archive_start_or_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
-        sound_archive_buffer = D_1FF8000 - archive_start_or_bytes;
         disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
+        sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
         level_archive_sectors = disc_entry->sector_count;
         level_archive_buffer = sound_archive_buffer - (((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000);
         archive_start_or_sectors = D_00137B80.shared_sector_count;
@@ -113,25 +114,21 @@ s32 service_level_archive_load(void) {
         D_0015EE54 = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;
         D_0015EE4C = (struct LevelArchiveHeader *)shared_archive_buffer;
-        goto submit_archive_read;
+        submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
+        D_0015EE48 = D_0015EE48 + 1;
+        break;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        sound_archive_buffer = D_0015EE54;
-        level_archive_sectors = next_disc_entry->sector_count;
-        archive_start_or_sectors = next_disc_entry->start_sector;
-        shared_archive_buffer = sound_archive_buffer;
-        archive_start_or_bytes = archive_start_or_sectors;
-        archive_start_or_sectors = level_archive_sectors;
-submit_archive_read:
-        submit_audio_stream_io_request((s32)shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
+        submit_audio_stream_io_request(D_0015EE54, next_disc_entry->start_sector, next_disc_entry->sector_count);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
         } else {
-            submit_audio_stream_io_request((s32)D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
         }
+increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 3:
@@ -151,8 +148,7 @@ submit_archive_read:
         }
         snd_unload_bank(D_0015ED5C);
         D_0015ED5C = 0;
-        D_0015EE48 = D_0015EE48 + 1;
-        break;
+        goto increment_stage;
     case 5:
         if (snd_flush_sound_commands() != 0) {
             return 0;
@@ -165,7 +161,7 @@ submit_archive_read:
             return 0;
         }
         shared_header = D_0015EE4C;
-        D_0015ED5C = -1;
+        D_0015ED5C = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header, (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
         D_0015EE48 = D_0015EE48 + 1;
         break;
@@ -173,7 +169,7 @@ submit_archive_read:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        if (D_0015ED5C == -1) {
+        if ((u32)D_0015ED5C == 0xFFFFFFFFU) {
             return 0;
         }
         snd_resolve_bank_xrefs();

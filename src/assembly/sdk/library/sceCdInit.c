@@ -56,22 +56,26 @@ int sceCdInit(int init_mode)
     int stat;
     int a;
     int b;
+    int owner;
+    int count;
     u8 *rbuf;
 
     if (sceCdSyncS(1) != 0) {
         return 0;
     }
     sceSifInitRpc(0);
-    D_00159750[0] = GetThreadId();
-    D_001312E4[0] = 1;
+    owner = GetThreadId();
+    count = *(volatile s32 *)D_00131310 + 1;
+    *(volatile s32 *)D_001312E4 = 1;
     D_001312FC[0] = -1;
     D_00131300[0] = -1;
     D_001312F8[0] = -1;
     D_00131308[0] = -1;
     D_00131304[0] = -1;
     D_001312F4[0] = 0;
-    D_00131310[0]++;
+    D_00131310[0] = count;
     D_0013130C[0] = -1;
+    *(volatile s32 *)D_00159750 = owner;
     rbuf = D_001324C0;
     while (1) {
         r = sceSifBindRpc(&D_00159968, 0x80000592, 0);
@@ -99,8 +103,8 @@ int sceCdInit(int init_mode)
         }
     }
     stat = *(s32 *)((u32)(rbuf + 0xC) | 0x20000000);
-    a = *(s32 *)((u32)(rbuf + 4) | 0x20000000);
     b = *(s32 *)((u32)(rbuf + 8) | 0x20000000);
+    a = *(s32 *)((u32)(rbuf + 4) | 0x20000000);
     ret = 1;
     if (stat == 0xFF) {
     } else if (stat == 0xFE) {
@@ -110,7 +114,7 @@ int sceCdInit(int init_mode)
             ret = 2;
         }
     }
-    D_001312E4[0] = 0;
+    *(volatile s32 *)D_001312E4 = 0;
     switch (init_mode) {
     case 0:
     case 1:
@@ -120,8 +124,8 @@ int sceCdInit(int init_mode)
             scePrintf(D_00152F70);
         }
         cdvd_exit();
-        D_001312E8[0] = -1;
-        D_001312EC[0] = -1;
+        *(volatile s32 *)D_001312E8 = -1;
+        *(volatile s32 *)D_001312EC = -1;
         D_001312E0[0] = -1;
         return ret;
     }

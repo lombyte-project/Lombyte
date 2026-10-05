@@ -52,6 +52,7 @@ void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 tar
     FontWindow region;
     s32 price;
     s32 evaluated_message_id;
+    s32 affordable_message_id;
 
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     memset(&region, 0, 0x18);
@@ -70,14 +71,16 @@ void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 tar
             } else {
                 price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].ammo_price;
             }
-            evaluated_message_id = current_bolt_count >= price ? 0x5234 : 0x5233;
+            affordable_message_id = 0x5234;
+            evaluated_message_id = price <= current_bolt_count ? affordable_message_id : 0x5233;
         } else {
             if (discount_purchase_pricing[0] != 0) {
                 price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].discounted_purchase_price;
             } else {
                 price = vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].purchase_price;
             }
-            evaluated_message_id = current_bolt_count >= price ? 0x524E : 0x5233;
+            affordable_message_id = 0x524E;
+            evaluated_message_id = price <= current_bolt_count ? affordable_message_id : 0x5233;
         }
     } else {
         evaluated_message_id = 0x5234;

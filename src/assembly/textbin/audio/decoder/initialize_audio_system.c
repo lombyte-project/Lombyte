@@ -68,6 +68,7 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
   video_dec_set_stream(((u8 *) decoder_state) + 0xD9048, 0, 0, video_callback, decoder_state);
   video_dec_set_stream(((u8 *) decoder_state) + 0xD9048, 3, callback_context, pcm_callback, decoder_state);
   vo_buf_create(((u8 *) decoder_state) + 0xD9168, (decoder_buffer_address & 0x0FFFFFFF) | 0x20000000, decoder_buffer_address + 0x1A0000, 2);
+  /* Retail fills only these descriptor fields before CreateThread. */
   decoder_thread.stack = ((u8 *) decoder_state) + 0xD2040;
   decoder_thread.entry = run_video_decoder;
   decoder_thread.stack_size = 0x4000;

@@ -75,10 +75,10 @@ void append_fullscreen_setup_strips(void)
     bottom_y = (u64)(display_height * 8 + 0x7FF0) << 16;
   loop:
     *strip_words++ = left_x | top_y;
+    strip_index++;
     *strip_words++ = right_x | bottom_y;
     right_x += 0x200;
     left_x += 0x200;
-    strip_index++;
     if (strip_index < strip_count) {
       goto loop;
     }

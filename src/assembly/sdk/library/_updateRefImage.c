@@ -158,7 +158,8 @@ check_previous_fields:
     secondary_reference = state->previous_bottom_field;
 check_secondary_reference:
     references_ready = reference_status;
-    if (secondary_reference->status != 1) references_ready = 0;
+    reference_status = secondary_reference->status;
+    if (reference_status != 1) references_ready = 0;
     goto select_picture_after_reference_check;
 swap_references:
     if (force_reorder != 0) {

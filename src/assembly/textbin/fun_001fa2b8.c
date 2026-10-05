@@ -17,7 +17,7 @@ void copy_matrix3x4(volatile struct Matrix3x4 *destination,
     u128 second;
     u128 third;
 
-    /* Read every source column before writing any destination column. */
+    /* Load all 48 bytes before storing so overlapping matrices copy correctly. */
     first = source->columns[0];
     second = source->columns[1];
     third = source->columns[2];

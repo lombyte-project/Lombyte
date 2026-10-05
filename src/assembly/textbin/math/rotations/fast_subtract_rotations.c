@@ -8,15 +8,16 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/fast_subtrac
 #define PI 3.1415927f
 f32 fast_subtract_rotations(f32 angle, f32 delta) __asm__("FUN_001fa5c8");
 f32 fast_subtract_rotations(f32 angle, f32 delta) {
-    f32 difference;
-    difference = angle - delta;
+    f32 difference = angle - delta;
+    f32 sum = difference + PI;
+    f32 wrapped_angle = difference;
     if (!(difference < PI)) {
-        difference = (difference - PI) - PI;
+        wrapped_angle = (wrapped_angle - PI) - PI;
     }
-    if (difference < -PI) {
-        difference = (difference + PI) + PI;
+    if (sum < 0.0f) {
+        wrapped_angle = sum + PI;
     }
-    return difference;
+    return wrapped_angle;
 }
 
 extern __typeof__(fast_subtract_rotations) func_001FA5C8 __attribute__((alias("FUN_001fa5c8")));

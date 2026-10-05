@@ -95,6 +95,7 @@ void set_pal_mode(void)
         image_buffer_address = 0x280000;
         func_001FA978(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
+    /* Retail sign-extends the 16-bit dimensions before halving them. */
     screen_offsets.width = fs_aa_buffer.width;
     screen_offsets.half_width = fs_aa_buffer.width >> 1;
     screen_offsets.half_height = fs_aa_buffer.height >> 1;
@@ -108,18 +109,18 @@ void set_pal_mode(void)
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     frame = (draw_buffer_address >> 13) | ((u64)(screen_offsets.width >> 6) << 16);
     scissor = ((u64)(screen_offsets.width - 1) << 16) | ((u64)(screen_offsets.height - 1) << 48);
-    draw_environment.scissor2 = scissor;
+    draw_environment.scissor1 = scissor;
     depth_buffer_register = zbuf;
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
     second_image_buffer_address = image_buffer_address;
     draw_environment.frame2 = frame;
-    draw_environment.xyoffset1 = screen_offsets.left | ((u64)screen_offsets.top << 32);
     draw_environment.xyoffset2 = screen_offsets.left | ((u64)screen_offsets.top << 32);
+    draw_environment.xyoffset1 = screen_offsets.left | ((u64)screen_offsets.top << 32);
     draw_environment.zbuf1 = zbuf;
     draw_environment.zbuf2 = zbuf;
     draw_environment.frame1 = frame;
-    draw_environment.scissor1 = scissor;
+    draw_environment.scissor2 = scissor;
     FlushCache(0);
     func_001FB2D0();
     func_001FB368();

@@ -57,6 +57,7 @@ s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) {
     s32 var_21_10;
     s32 var_22_8;
     s32 var_2_44;
+    struct M2c_D_0013C940 *pad_state;
 
     var_22_8 = 0;
     var_21_10 = 0;
@@ -79,13 +80,14 @@ block_2:
         goto block_13;
     }
 block_5:
+    pad_state = &D_0013C940;
     if (D_0015EEA0 != 0) {
         goto block_10;
     }
     if (D_0015EE20 != 0) {
         goto block_10;
     }
-    if (D_0015EED8 != 0) {
+    if (*(volatile s32 *)&D_0015EED8 != 0) {
         goto block_10;
     }
     if (D_0015ED84 > 0) {
@@ -93,13 +95,13 @@ block_5:
     }
 block_10:
     var_2_44 = 1;
-    if (D_0013C940.unk1A4 & 0x800) {
+    if (pad_state->unk1A4 & 0x800) {
         goto block_13;
     }
 block_12:
     temp_4_74 = 0x8000000000FULL;
     var_2_44 = 1;
-    if (((*(u64 *)&D_0013C940.unk1A0 & temp_4_74) ^ temp_4_74) != 0) {
+    if ((*(u64 *)&pad_state->unk1A0 & temp_4_74) != temp_4_74) {
         var_2_44 = 0;
     }
 block_13:
@@ -145,32 +147,19 @@ block_20:
     func_0023ACB8(D_0016120C + 0xD9100);
 loop_24:
 loop_25:
-    if (var_18_22 < 5) {
-        goto loop_30;
-    }
-    if (func_0023CC80(arg0) != 3) {
+    if (var_18_22 >= 5 && func_0023CC80(arg0) != 3) {
         goto block_2;
     }
-    goto loop_30;
-block_29:
-    func_0023ABA0();
-    func_0023A770();
-loop_30:
-    if (func_0023CD08(arg0) == 0) {
-        goto block_29;
+    while (func_0023CD08(arg0) == 0) {
+        arg1 = (struct M2c_arg1 *)3;
+        func_0023ABA0();
+        func_0023A770();
     }
-    goto loop_33;
-block_32:
-    func_0023ABA0();
-    func_0023A770();
-loop_33:
-    if (func_0023CDE0(arg0) != 0) {
-        goto block_35;
+    arg1 = (struct M2c_arg1 *)3;
+    while (func_0023CDE0(arg0) == 0 && func_0023CC80(arg0) != (s32)arg1) {
+        func_0023ABA0();
+        func_0023A770();
     }
-    if (func_0023CC80(arg0) != 3) {
-        goto block_32;
-    }
-block_35:
     func_0023B5E0();
     func_0023AD10(D_0016120C + 0xD9100);
     func_0012E208(5, D_0013E550.unk5C);

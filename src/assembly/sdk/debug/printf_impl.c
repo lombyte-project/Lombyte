@@ -22,6 +22,7 @@ void _printf(const char *fmt, char *ap)
     s32 n;
     unsigned long d;
     u8 ch;
+    char second;
     s64 v;
     s32 ie;
 
@@ -35,9 +36,10 @@ again:
         switch ((char)(*fmt - '0')) {
         case 0:
             n = fmt[1] - '0';
+            second = fmt[2];
             if ((u8)n < 10) {
-                if ((u32)(fmt[2] - '0') < 10) {
-                    n = n * 10 - '0' + fmt[2];
+                if ((u32)(second - '0') < 10) {
+                    n = n * 10 + (second - '0');
                     fmt += 2;
                     if (n >= 32) {
                         n = 31;
@@ -45,7 +47,7 @@ again:
                 } else {
                     fmt += 1;
                 }
-                pad = &buf[31] - n;
+                pad = &buf[31 - n];
                 while (n > 0) {
                     buf[31 - n] = '0';
                     n--;

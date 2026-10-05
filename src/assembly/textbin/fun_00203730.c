@@ -135,7 +135,7 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
   record = render_class->records;
   qcopy(slot_materials, material_map);
-  for (record_index = 0; record_index < render_class->record_count; record_index++)
+  for (record_index = 0; record_index < render_class->record_count; )
   {
     draw_high = record->tex1.w[0];
     material_index = slot_materials->b[record_index];
@@ -158,9 +158,9 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
       width_log2 = highest_set_bit_index((s16) texture->width);
       height_log2 = highest_set_bit_index(texture->height);
       gs_block_base = gs_texture_allocation_base >> 8;
-      texture_block = texture->texture_block_offset + gs_block_base;
-      mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
       mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
+      mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
+      texture_block = texture->texture_block_offset + gs_block_base;
       tex0_word = (((u64) width_units_64) << 14) | ((((u64) width_log2) << 26) | 0x1300000);
       tex0_word |= ((u64) height_log2) << 30;
       tex0_word |= (((u64) texture_block) << 37) | (((u64) 1) << 34);
@@ -172,19 +172,20 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
       clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
       record->tex0 = tex0_word;
       record->tex1.d = tex1_word;
-      record->mip = mip_word;
       record->clamp.d = clamp_word;
+      record->mip = mip_word;
     }
     else
     {
       tex1_word = ((resident_material_templates[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
-      clamp_word = (material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
+      clamp_word = (((u64) material_index) << 24) | (material_base | (((u64) material_shift) << 2));
       record->tex0 = resident_material_templates[material_index * 3];
       record->tex1.d = tex1_word;
       record->mip = resident_material_templates[(material_index * 3) + 2];
       record->clamp.d = clamp_word;
     }
     record->end = 0;
+    record_index++;
     record++;
   }
 

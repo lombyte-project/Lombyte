@@ -49,6 +49,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     s32 screen_x;
     s32 screen_y;
     s32 remaining;
+    s32 one = 1;
     s32 texture_index;
     s16 *references;
     u8 *texture;
@@ -57,7 +58,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
 
     marker = map_marker_state.markers;
     remaining = map_marker_state.marker_count - 1;
-    for (; remaining != -1; remaining--) {
+    while (remaining != -1) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x, marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
         offset_y = (s32)((f32)(bottom - top) * normalized_y);
@@ -70,6 +71,7 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
                                      (u32)marker->texture_variant_or_color, 1);
             } else {
                 f32 scale;
+                f32 full_width_scaled;
 
                 texture_index = resolve_indexed_texture_variant(marker->texture_group, marker->texture_variant_or_color);
                 references = map_texture_tables.references;
@@ -77,14 +79,16 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
                 width_log2 = texture[6];
                 height_log2 = texture[7];
                 scale = (2.0f * marker_scale_by_level[selected_map_state.selected_level] + 5.0f) / 13.0f;
+                full_width_scaled = scale * (f32)(one << (width_log2 + 4));
                 append_indexed_screen_sprite(texture_index,
-                    screen_x - (s32)(scale * (f32)(1 << (width_log2 + 3))),
-                    screen_y - (s32)(scale * (f32)(1 << (height_log2 + 3))),
-                    (s32)(scale * (f32)(1 << (width_log2 + 4))),
-                    (s32)(scale * (f32)(1 << (height_log2 + 4))), 0x80);
+                    screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
+                    screen_y - (s32)(scale * (f32)(one << (height_log2 + 3))),
+                    (s32)full_width_scaled,
+                    (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
             }
         }
         marker++;
+        remaining--;
     }
 }
 

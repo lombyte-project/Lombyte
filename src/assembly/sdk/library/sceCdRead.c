@@ -26,10 +26,10 @@ struct M2c_arg3 {
 
 extern u8 D_00120788[];
 extern s32 D_001312D0[];
-extern u32 D_001312E8[];
-extern u32 D_001312F0[];
-extern u32 D_001312F4[];
-extern u32 D_00131314[];
+extern volatile u32 D_001312E8[];
+extern volatile u32 D_001312F0[];
+extern volatile u32 D_001312F4[];
+extern volatile u32 D_00131314[];
 extern struct M2c_D_001313C0 D_001313C0;
 extern u8 D_001323C0[];
 extern u8 D_00132480[];
@@ -43,7 +43,6 @@ extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern s32 sceSifWriteBackDCache();
 s32 sceCdRead(s32 arg0, s32 arg1, s32 *arg2, struct M2c_arg3 *arg3) {
-    s32 var_2_53;
     s32 var_5_50;
     s32 temp_7_46;
     struct M2c_D_001313C0 *st = &D_001313C0;
@@ -74,21 +73,21 @@ block_2:
     if (temp_7_46 < 2) {
         goto block_9;
     }
-    var_2_53 = 0x924;
     if (temp_7_46 == 2) {
         goto block_8;
     }
     goto block_9;
 block_7:
-    var_2_53 = 0x918;
+    var_5_50 = (s32)(((u32)arg1 << 3) * 0x123U);
+    goto block_9;
 block_8:
-    var_5_50 = arg1 * var_2_53;
+    var_5_50 = arg1 * 0x924;
 block_9:
     *(s32 *)D_00132480 = 0;
     if (D_001312F4[0] & 2) {
         goto block_11;
     }
-    sceSifWriteBackDCache(arg2, var_5_50, 1, temp_7_46, D_00132480);
+    sceSifWriteBackDCache(arg2, var_5_50);
 block_11:
     sceSifWriteBackDCache(D_001323C0, 0x90);
     sceSifWriteBackDCache(st, 0x18);

@@ -95,8 +95,8 @@ s32 snd_start_sound_system(void) {
     }
 
     *(s32 *)D_00133280 = 0;
-    *(s32 *)D_00134280 = 0;
     sound_read_work.read_active = 0;
+    *(s32 *)D_00134280 = 0;
     sound_read_work.read_error = 0;
     D_0015ECA8 = 0xFFC;
     D_0015ECAC = 0xFFC;

@@ -335,15 +335,18 @@ void draw_map_overlay(void) {
             s32 pan_x, map_extent, pan_y, oy1;
             s32 ax, ay, bx, by;
             MapIcon *icon;
+            s32 inner_offset;
 
             /* The flag-4 entry terminates the list. Separate overlapping icon
                bounds before either icon is drawn, using half of the smallest
                positive edge distance for each pair. */
-            for (i = 0; !(D_001A00F0.icons[i + 1].flags & 4); i++) {
+            i = 0;
+            if (!(D_001A00F0.icons[1].flags & 4)) do {
                 if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 || (D_001A00F0.icons[i].flags & 3)) {
-                    continue;
+                    goto next_outer_icon;
                 }
-                for (j = i + 1; !(D_001A00F0.icons[j].flags & 4); j++) {
+                inner_offset = (i + 1) * sizeof(MapIcon);
+                for (j = i + 1; !(D_001A00F0.icons[j].flags & 4); j++, inner_offset += sizeof(MapIcon)) {
                     pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                     if (pan_x <= 0) continue;
                     map_extent = icon_bounds[i].x1 - icon_bounds[j].x0;
@@ -352,7 +355,8 @@ void draw_map_overlay(void) {
                     if (pan_y <= 0) continue;
                     oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
                     if (oy1 <= 0) continue;
-                    if (D_001A00F0.icons[j].active == 0 || D_001A00F0.icons[j].texture_id == 0 || (D_001A00F0.icons[j].flags & 3)) {
+                    icon = (MapIcon *)((u8 *)D_001A00F0.icons + inner_offset);
+                    if (icon->active == 0 || icon->texture_id == 0 || (icon->flags & 3)) {
                         continue;
                     }
                     ax = 0;
@@ -381,7 +385,9 @@ void draw_map_overlay(void) {
                     icon_bounds[j].y0 += by;
                     icon_bounds[j].y1 += by;
                 }
-            }
+next_outer_icon:
+                i++;
+            } while (!(D_001A00F0.icons[i + 1].flags & 4));
         }
 
         {

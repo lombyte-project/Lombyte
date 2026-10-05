@@ -9,6 +9,9 @@ struct TexEntry { u32 data; s16 page; u8 log_w; u8 log_h; };
 struct TexCounts { u8 pad0[0x14]; s32 mid_ends[8]; s32 ends[16]; s32 loaded[16]; };
 struct TexTable { u8 pad0[0x18]; struct TexCounts *counts; u8 pad1C[8]; struct TexEntry *entries; struct TexEntry *mids; };
 extern struct TexTable D_0019A3E8;
+extern struct TexTable hud_texture_table __asm__("D_0019A3E8");
+extern struct TexCounts *hud_texture_counts __asm__("D_0019A400");
+#define depth_buffer_address (*(s32 *)0x0015EE88)
 extern void link_hud_bank(s32, s32) __asm__("FUN_001fefc0");
 extern void hud_send_texture(u32, s32, s32, s32, s32, s32) __asm__("FUN_00200b10");
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001ff128");
@@ -26,8 +29,8 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
     if (D_0019A3E8.counts->loaded[bank] == 0) {
         link_hud_bank(0, base);
     }
-    addr = *(s32 *)0x0015EE88;
-    previous_counts = D_0019A3E8.counts;
+    addr = depth_buffer_address;
+    previous_counts = hud_texture_counts;
     if (bank != 0) {
         i = previous_counts->ends[bank - 1];
     } else {

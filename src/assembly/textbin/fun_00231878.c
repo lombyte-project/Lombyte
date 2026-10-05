@@ -50,16 +50,17 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     u64 image_bits;
     s32 *first_slide_offsets;
     s32 *second_slide_offsets;
-    u8 *disc_entry;
+    s32 disc_start_sector;
+    s32 disc_sector_count;
     struct CommonArchiveMemory *archive_memory;
 
     first_output = first_texture;
     second_output = second_texture;
     archive_memory = &D_001940C0;
-    disc_entry = D_00137B80 + language_index * 8;
     upload_index = 0;
-    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000), ((struct LoadingSlideDiscEntry *)disc_entry)->start_sector,
-        ((struct LoadingSlideDiscEntry *)disc_entry)->sector_count);
+    disc_start_sector = *(s32 *)(D_00137B80 + 0x1388 + language_index * 8);
+    disc_sector_count = ((struct LoadingSlideDiscEntry *)(D_00137B80 + language_index * 8))->sector_count;
+    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000), disc_start_sector, disc_sector_count);
     sceCdSync(0);
     FlushCache(0);
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
@@ -104,11 +105,11 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         texture_base_output++;
     }
     /* Each TEX0 combines an image base with its paired palette base. */
-    image_bits = (u64)(texture_bases[1] | 0x19304000);
     texture_bits = ((u64)texture_bases[0] << 37) | (0xB000ULL << 19);
+    image_bits = (u64)(texture_bases[1] | 0x19304000);
     *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
     *first_output = (texture_bases[3] | 0x25320000) | (((u64)texture_bases[2] << 37) | (0xB000ULL << 19)) | (1ULL << 63);
-    *second_output = (texture_bases[5] | 0x25320000) | (((u64)texture_bases[4] << 37) | (0xB000ULL << 19)) | (1ULL << 63);
+    *second_output = (((u64)texture_bases[4] << 37) | (0xB000ULL << 19)) | (texture_bases[5] | 0x25320000) | (1ULL << 63);
 }
 
 extern __typeof__(prepare_loading_slide_textures) func_00231878 __attribute__((alias("FUN_00231878")));

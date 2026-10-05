@@ -53,6 +53,9 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         second_attachment_active = 1;
         detach_manipulator(source_moby_address, second_preview_manipulator);
     }
+    /* Both retail paths pass the same table address. Keep their distinct
+       source expressions and the load of resource_address inside each path:
+       the retail code branches here and rejoins before the callback. */
     if (!is_second_preview_moby) {
         binding_table_alias = preview_binding_table_alias;
         binding_table = preview_binding_table;
