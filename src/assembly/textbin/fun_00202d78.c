@@ -85,15 +85,14 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
         if (material_index == -3) {
             fallback_packet = alternate_special_material_template;
         }
-        draw_control_word = ((u64)draw_shift << 6) | ((u64)draw_high << 32) | 0x20;
-        packet[0] = draw_control_word;
+        packet[0] = ((u64)draw_shift << 6) | 0x20 | ((u64)draw_high << 32);
         packet += 2;
         packet[0] = 5;
         packet += 2;
         packet[0] = fallback_packet[0];
         packet[2] = fallback_packet[2];
     } else {
-        draw_control_word = ((u64)draw_shift << 6) | ((u64)draw_high << 32) | 0x20;
+        draw_control_word = ((u64)draw_shift << 6) | 0x20 | ((u64)draw_high << 32);
         packet[0] = draw_control_word;
         packet += 2;
         packet[0] = 5;
