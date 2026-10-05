@@ -11,15 +11,18 @@ f32 fast_normalize_angle(f32 angle) {
     f32 pi = PI;
     f32 negative_pi = -PI;
     f32 wrapped_angle = angle;
-    if (wrapped_angle < pi) goto negative_wrap;
-positive_wrap:
-    wrapped_angle = (wrapped_angle - pi) - pi;
-    if (!(wrapped_angle < pi)) goto positive_wrap;
-negative_wrap:
-    if (!(wrapped_angle < negative_pi)) return wrapped_angle;
-negative_loop:
-    wrapped_angle = (wrapped_angle + pi) + pi;
-    if (wrapped_angle < negative_pi) goto negative_loop;
+    for (;;) {
+        if (wrapped_angle < pi) break;
+        wrapped_angle = (wrapped_angle - pi) - pi;
+        if (!(wrapped_angle < pi)) continue;
+        break;
+    }
+    for (;;) {
+        if (!(wrapped_angle < negative_pi)) break;
+        wrapped_angle = (wrapped_angle + pi) + pi;
+        if (wrapped_angle < negative_pi) continue;
+        break;
+    }
     return wrapped_angle;
 }
 
