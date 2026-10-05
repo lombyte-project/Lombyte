@@ -351,7 +351,55 @@ void FUN_L12_002eb220(char *m) {
     FUN_L00_0025d538(m, d + 0x60);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb570.s", FUN_L12_002eb570);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebca8.s", FUN_L12_002ebca8);
+/* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
+extern char D_0013D408[];
+extern char D_001413D4[];
+extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern short D_0015EE04 __attribute__((sda));
+extern short D_L12_001619B4 __attribute__((sda));
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
+extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void clear_vector(void *) __asm__("func_001F99F8");
+s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+
+void FUN_L12_002ebca8(char *m, int flag) {
+    char *d = *(char **)(m + 0x78);
+    float a[4];
+    float b[4];
+    unsigned char *q;
+    if (FUN_L00_0025a420(m, 0xA30000, 0) != 0) {
+        if (*(int *)(D_001413D4) != 0x32) {
+            *(int *)&D_0015EE04 += 1;
+            if (*(int *)&D_0015EE04 >= 5) {
+                q = (unsigned char *)(D_0013D408);
+                if (q[0x15] == 0) {
+                    q[0x15] = 1;
+                    allocate_voice_for_bank_entry(1, 0, 0);
+                    FUN_L00_00263d40(0x53D6, -1);
+                }
+            }
+        }
+        qcopy(a, m + 0x10);
+        clear_vector(b);
+        FUN_L00_00260a88(m, 0x1F, 0x4A, 2, -1);
+        *(int *)(d + 0xA4) = scale_game_frames(500);
+        FUN_L00_0025e450(m, b, a, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, -1, 3.0f, 15.0f, 1, 1, -1, 0);
+    }
+    *(unsigned char *)(m + 0xA4) = 0xFF;
+    if (*(int *)&D_L12_001619B4 != 0 && flag != 0) {
+        *(int *)(m + 0x94) = 0;
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
+    }
+    if (*(int *)(d + 0xA4) == 0 && (*(unsigned short *)(m + 0x34) & 1) == 0) return;
+    if (tick_countdown_32_alt((int *)(d + 0xA4)) != 0 && flag != 0 && *(int *)&D_L12_001619B4 == 0) {
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) & 0xFFBE) | 0x1000;
+    } else {
+        *(int *)(m + 0x94) = 0;
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebea8.s", FUN_L12_002ebea8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec1d0.s", FUN_L12_002ec1d0);
 

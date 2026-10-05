@@ -907,7 +907,7 @@ extern char *FUN_L18_002a75f0(char *owner, float *pos, float *vec, int arg3);
 extern char *func_0020D348_m(int);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int FUN_L18_002f8658();
+extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L18_0016247C_d __asm__("D_L18_0016247C") __attribute__((sda));
@@ -1028,4 +1028,55 @@ void FUN_L18_002f7c40(M1454 *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8050.s", FUN_L18_002f8050);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f8658.s", FUN_L18_002f8658);
+/* Steers the moby along its path toward the next node, slowing on sharp turns. */
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001fa688(float, float);
+extern int *D_L18_001B0EB0[];
+extern float D_0015ED6C_g __asm__("D_0015ED6C");
+extern int random_integer_below_c(int) __asm__("FUN_00213260");
+extern short D_L18_00162478 __attribute__((sda));
+extern short D_L18_00162480 __attribute__((sda));
+extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L18_002f8658(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float t[4];
+    float v[4];
+    float ang, f, z, sc;
+    char *p;
+    qcopy(t, (char *)D_L18_001B0EB0[*(int *)(d + 0x100)] + *(int *)(d + 0x120) * 16 + 0x10);
+    ang = FUN_001f9e90(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
+    FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0x128), ang, D_0015ED70 * 3.1415927f, D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f);
+    f = *(float *)&D_L18_00162478 * D_0015ED6C;
+    if (FUN_001fa688(ang, *(float *)(m + 0x48)) > 0.2617994f) {
+        f = D_0015ED6C_g;
+    }
+    approach_value((float *)(d + 0x12C), f, D_0015ED70);
+    z = 0.0f;
+    normalize_vector_xyz(v, m + 0xC0, *(float *)(d + 0x12C));
+    FUN_L00_00258830((int)m, (int)v, 0.5f, 0.5f, z, 0);
+    if (FUN_001f9b48(m + 0x10, t) < 1.0f) {
+        int k = random_integer_below_c(*D_L18_001B0EB0[*(int *)(d + 0x100)] - 1) + 1;
+        *(int *)(d + 0x120) = (*(int *)(d + 0x120) + k) % *D_L18_001B0EB0[*(int *)(d + 0x100)];
+    }
+    sc = *(float *)(d + 0x12C) / (*(float *)&D_L18_00162480 * D_0015ED6C);
+    if (sc > 2.0f) sc = 2.0f;
+    else if (sc < z) sc = z;
+    p = *(char **)(d + 0x138);
+    if (p) {
+        char *q;
+        *(float *)(p + 0x58) = sc;
+        q = *(char **)(d + 0x138);
+        qcopy(q + 0x40, m + 0x40);
+        qcopy(q + 0x10, m + 0x10);
+    }
+    p = *(char **)(d + 0x13C);
+    if (p) {
+        char *q;
+        *(float *)(p + 0x58) = sc;
+        q = *(char **)(d + 0x13C);
+        qcopy(q + 0x40, m + 0x40);
+        qcopy(q + 0x10, m + 0x10);
+    }
+}
