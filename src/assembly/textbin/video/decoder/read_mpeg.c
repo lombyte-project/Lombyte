@@ -53,6 +53,7 @@ s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) {
     s32 var_22_8;
     s32 var_2_44;
     struct M2c_D_0013C940 *pad_state;
+    struct M2c_D_0013C940 *mask_state;
 
     var_22_8 = 0;
     var_21_10 = 0;
@@ -94,9 +95,10 @@ block_10:
         goto block_13;
     }
 block_12:
+    mask_state = &D_0013C940;
     temp_4_74 = 0x8000000000FULL;
     var_2_44 = 1;
-    if ((*(u64 *)&pad_state->unk1A0 & temp_4_74) != temp_4_74) {
+    if ((*(u64 *)&mask_state->unk1A0 & temp_4_74) != temp_4_74) {
         var_2_44 = 0;
     }
 block_13:
