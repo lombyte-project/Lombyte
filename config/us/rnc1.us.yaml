@@ -638,7 +638,7 @@ segments:
           - [0x2a2e0, c, sdk/library/_copyrightExtension]
           - [0x2a370, c, sdk/library/decpicture]
           - [0x2a43c, textbin, text_gap_001293f0_post_sdk_worker]
-          - [0x2a440, c, assembly/sdk/library/outputframe]
+          - [0x2a440, c, sdk/library/outputframe]
           - [0x2a4d0, c, assembly/sdk/library/_updateRefImage]
           - [0x2a784, textbin, text_gap_00129550_post_sdk_worker]
           - [0x2a788, c, sdk/library/is_out_size_ok]
