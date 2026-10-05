@@ -77,8 +77,8 @@ loop_3:
     scaled_volume_70 = (sound_volume * 7) / 10;
     voice_pool.group_2_volume = scaled_volume_80;
     voice_pool.group_0_volume = scaled_volume_80;
-    voice_pool.group_4_volume = scaled_volume_70;
     voice_pool.group_3_volume = scaled_volume_70;
+    voice_pool.group_4_volume = scaled_volume_70;
     voice_pool.group_5_volume = sound_volume;
     reset_music();
     snd_set_master_volume(0, voice_pool.group_0_volume);
