@@ -77,8 +77,8 @@ block_3:
     temp_6_30 = (s32) D_00154D80 | 0x20000000;
     temp_5_29 = (s32) D_00154E00 | 0x20000000;
     D_00154E58.unk0 = temp_6_30;
-    D_00154E58.unk1C = D_00154F80;
     D_00154E58.unk4 = temp_5_29;
+    D_00154E58.unk1C = D_00154F80;
     handlers = (struct M2c_var_3_42 *)&D_00154E80;
     var_3_42 = handlers;
     D_00154E58.unk8 = 0;
