@@ -15,7 +15,9 @@
 #   and upload it as SCUS_971.99_report, the artifact decomp.dev reads from
 #   main (registering the repository on decomp.dev is a one-time manual step);
 # * push to main: publish report.json, decomp_map.svg, decomp_map.json and
-#   fuzzy_scores.json on the `progress` branch, which the README shows;
+#   fuzzy_scores.json on the `progress` branch, which the README shows, then
+#   ask the website (lombyte-project.github.io) to rebuild through the
+#   SITE_DISPATCH_TOKEN secret;
 # * pull request: compare with the report on `progress` and hand the Markdown
 #   to progress-comment.yml, which posts it (that workflow has the write
 #   token, so comments work for pull requests from forks too).
@@ -76,6 +78,7 @@ jobs:
 
       - name: Validate the report with objdiff
         run: |
+          if [ -z "$SITE_DISPATCH_TOKEN" ]; then echo "no SITE_DISPATCH_TOKEN"; exit 0; fi
           curl --fail --location --retry 3 -o "$RUNNER_TEMP/objdiff-cli" \
             https://github.com/encounter/objdiff/releases/download/v3.8.0/objdiff-cli-linux-x86_64
           echo "bc1e047126f9c6914bd1695798175234642ab9eaf45e886f841b59a4231e1a81  $RUNNER_TEMP/objdiff-cli" | sha256sum --check
@@ -180,3 +183,13 @@ jobs:
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
               commit -q -m "progress @ ${GITHUB_SHA::7}"
           git push -q origin progress
+      - name: Rebuild the website
+        env:
+          SITE_DISPATCH_TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$SITE_DISPATCH_TOKEN" ]; then echo "no SITE_DISPATCH_TOKEN"; exit 0; fi
+          curl --fail --silent --show-error -X POST \
+            -H "Authorization: Bearer $SITE_DISPATCH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/lombyte-project/lombyte-project.github.io/dispatches \
+            -d '{"event_type":"progress-updated"}'
