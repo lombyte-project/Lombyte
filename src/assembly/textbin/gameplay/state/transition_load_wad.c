@@ -326,10 +326,10 @@ void transition_load_wad(void) {
     func_002049F0(0);
     D_0015EF60 = D_001940C0.x1C;
     func_00216828(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
-    D_0015EF64_far = D_0015EF60;
+    D_0015EF64 = D_0015EF60;
     D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
-    for (i = 0; i < 8; i++) {
-        QueueDmaTransfer(i);
+    for (k = 0; k < 8; k++) {
+        QueueDmaTransfer(k);
         j = 0;
         if (D_001996D0.count > 0) {
             te = D_0015F6A0;
