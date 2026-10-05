@@ -1,10 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-/* Exact SDK/library unit sceMpegDemuxPssRing; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/sce_mpeg_demux_pss_ring/sceMpegDemuxPssRing.s", sceMpegDemuxPssRing);
-#else
 #include "types.h"
 
 /* libmpeg: demultiplex the PSS (MPEG-2 program stream) data of a ring
@@ -80,8 +76,8 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     SysBit *b;
     PssHdr *h;
     sceMpegCbDataStr cb;
-    sceMpegCallback cbfunc;
-    void *cbdata;
+    sceMpegCallback cbfunc = 0;
+    void *cbdata = 0;
     StreamCb *tbl;
     int ret;
     int i;
@@ -90,12 +86,10 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     int headerpos;
 
     cont = 1;
-    cbfunc = 0;
     h = &hdr;
     sys = mp->sys;
     tbl = sys->tbl;
     _sysbitInit(&bs, start, bufstart, bufsize);
-    cbdata = 0;
     ret = 0;
     i = 0;
     b = &bs;
@@ -154,4 +148,3 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     }
     return ret;
 }
-#endif /* NON_MATCHING */

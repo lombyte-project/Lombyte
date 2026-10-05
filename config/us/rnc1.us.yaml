@@ -672,7 +672,7 @@ segments:
           - [0x2babc, textbin, text_gap_0012a984_post_sysbit]
           - [0x2bac0, c, assembly/sdk/library/type2id]
           - [0x2bb48, textbin, text_gap_0012ab40_post_sdk_worker]
-          - [0x2bb50, c, assembly/sdk/dma/sce_mpeg_demux_pss_ring]
+          - [0x2bb50, c, sdk/dma/sce_mpeg_demux_pss_ring]
           - [0x2be48, c, sdk/dma/sce_mpeg_add_str_callback]
           - [0x2bf3c, textbin, text_gap_0012aec8_post_sdk_worker]
           - [0x2bf40, c, sdk/library/_pack_header]
