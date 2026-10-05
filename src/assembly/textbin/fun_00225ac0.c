@@ -34,7 +34,7 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 streaming_count;
     s32 index;
     s32 end_index;
-    u32 clear_remaining;
+    s32 clear_remaining;
     struct GraphicsBufferDescriptor *descriptor;
 
     primary_address = menu_graphics_buffers.primary_buffer;
@@ -72,9 +72,8 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
             graphics_buffer_descriptors[index].flags = 1;
             primary_address += 0x4F000;
         }
-        clear_remaining = index < 5;
     }
-    if (clear_remaining) {
+    if (clear_remaining && index < 5) {
         descriptor = graphics_buffer_descriptors + index;
         do {
             descriptor->flags = 0;
