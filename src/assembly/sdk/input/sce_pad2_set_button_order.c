@@ -29,8 +29,8 @@ s32 scePad2SetButtonOrder(u8 *profile, s32 *order) {
     bitIndex = 0;
     do {
         if (((s32)*profileByte >> bitPosition) & 1) {
-            capability->present = 1;
             capability->byteIndex = byteIndex;
+            capability->present = 1;
             capability->bitIndex = bitIndex;
             if ((u32)(capabilityIndex - 0x10) < 0x10U) {
                 capability->width = 8;
