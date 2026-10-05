@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lombyte: Ratchet &amp; Clank Decompilation (PS2)</title>
-<meta name="description" content="Lombyte is an open-source, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2, rebuilding the original game code in readable C. @C_EXACT@% of the code matched so far.">
+<title>Lombyte – Ratchet and Clank Decompilation (PS2)</title>
+<meta name="description" content="Lombyte is an open-source Ratchet and Clank decompilation: a byte-matching rebuild of Ratchet &amp; Clank (2002) for PlayStation 2, rebuilding the original game code in readable C. @C_EXACT@% of the code matched so far.">
 <meta name="keywords" content="Ratchet and Clank decompilation, Ratchet &amp; Clank decomp, Lombyte, PS2 decompilation, Ratchet and Clank source code, matching decompilation, reverse engineering">
 <meta name="author" content="Mateusz Kłysz">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -20,6 +20,11 @@
 <meta property="og:image" content="@SITE@lombyte-logo.png">
 <meta property="og:image:alt" content="Lombyte logo">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lombyte – Ratchet and Clank Decompilation">
+<meta name="twitter:description" content="A byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2.">
+<meta property="og:locale" content="en_US">
+<link rel="preload" as="image" href="hero.jpg" fetchpriority="high">
+<link rel="preconnect" href="https://raw.githubusercontent.com">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -29,7 +34,7 @@
       "@id": "@SITE@#website",
       "url": "@SITE@",
       "name": "Lombyte",
-      "alternateName": ["Lombyte Project", "Ratchet & Clank Decompilation"],
+      "alternateName": ["Lombyte Project", "Ratchet and Clank Decompilation", "Ratchet & Clank Decompilation"],
       "inLanguage": "en"
     },
     {
@@ -38,6 +43,7 @@
       "alternateName": "Ratchet & Clank Decompilation",
       "description": "Byte-matching decompilation of Ratchet & Clank (2002) for PlayStation 2, reconstructing the original game code in readable C.",
       "url": "@SITE@",
+      "sameAs": ["https://github.com/mateuszklysz/Lombyte", "https://decomp.dev/mateuszklysz/Lombyte"],
       "codeRepository": "https://github.com/mateuszklysz/Lombyte",
       "programmingLanguage": ["C", "MIPS assembly"],
       "runtimePlatform": "PlayStation 2",
@@ -70,7 +76,7 @@ main{max-width:860px;margin:0 auto;padding:0 16px 40px}
 main>section:first-child{margin-top:16px}
 header img{width:132px;height:auto}
 h1{margin:16px 0 4px;font-size:2.4rem;font-weight:600;letter-spacing:-.01em}
-.sub{margin:0;color:var(--orange);font-size:1.15rem;font-weight:600}
+.sub{display:block;margin-top:4px;color:var(--orange);font-size:1.15rem;font-weight:600}
 .lead{max-width:600px;margin:18px auto 0;color:var(--muted)}
 .links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:28px 0 0}
 .links a{padding:8px 16px;border:1px solid var(--line);border-radius:6px;color:var(--chrome);text-decoration:none;font-size:.95rem}
@@ -111,10 +117,9 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
 <body>
 @COMMITS@
 <header class="hero">
-    <img src="lombyte-logo.png" alt="Lombyte logo" width="1024" height="1036">
-    <h1>Lombyte</h1>
-    <p class="sub">Ratchet &amp; Clank decompilation</p>
-    <p class="lead">A work-in-progress, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2. The original game code is rebuilt in readable C that compiles to the exact same bytes.</p>
+    <img src="logo-256.png" alt="Lombyte, the Ratchet and Clank decompilation project logo" width="256" height="259" fetchpriority="high">
+    <h1>Lombyte <span class="sub">Ratchet and Clank decompilation</span></h1>
+    <p class="lead">Lombyte is a work-in-progress, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2. The original game code is rebuilt in readable C that compiles to the exact same bytes.</p>
     <nav class="links">
       <a class="primary" href="https://github.com/mateuszklysz/Lombyte">Source on GitHub</a>
       <a href="https://decomp.dev/mateuszklysz/Lombyte">Progress on decomp.dev</a>

@@ -35,7 +35,7 @@ jobs:
           git fetch --depth=1 origin progress
           mkdir -p build/progress
           git show FETCH_HEAD:report.json > build/progress/report.json
-      - run: python3 scripts/build_site.py build/progress
+      - run: pip install pillow && python3 scripts/build_site.py build/progress
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:

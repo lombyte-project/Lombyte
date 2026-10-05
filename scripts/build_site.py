@@ -50,6 +50,9 @@ values = {
 shutil.rmtree(out, ignore_errors=True)
 shutil.copytree("site", out)
 shutil.copy("assets/lombyte-logo.png", out)
+# Small logo for the page itself (the full one stays for icons and previews).
+from PIL import Image  # noqa: E402
+Image.open("assets/lombyte-logo.png").resize((256, 259), Image.LANCZOS).save(out / "logo-256.png", optimize=True)
 for name in ("index.html", "robots.txt", "sitemap.xml"):
     text = (out / name).read_text()
     for key, value in values.items():
