@@ -51,12 +51,10 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
     end_index = primary_count;
     index = 0;
     if (primary_count > 0) {
-        descriptor = graphics_buffer_descriptors;
-        for (index = primary_count; index != 0; index--) {
-            descriptor->address = primary_address;
-            descriptor->flags = 0;
+        for (index = 0; index < primary_count; index++) {
+            graphics_buffer_descriptors[index].address = primary_address;
+            graphics_buffer_descriptors[index].flags = 0;
             primary_address += 0x11800;
-            descriptor++;
         }
         index = primary_count;
     }
