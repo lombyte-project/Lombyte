@@ -49,7 +49,7 @@ extern s32 _sceFsIobSemaMK();
 extern s32 sceSifAddCmdHandler();
 extern s32 sceSifBindRpc();
 extern s32 sceSifCallRpc();
-extern s32 sceSifInitRpc();
+extern void sceSifInitRpc(u32 mode);
 extern void _sceFs_Rcv_Intr();
 
 s32 sceFsInit(void) {
