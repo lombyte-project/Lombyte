@@ -35,7 +35,8 @@ s64 ftoi(s64 arg) {
     } else {
         input = (u64)input << exp;
     }
-    return (s32)input;
+    input = (s32)input;
+    return input;
 }
 
 #endif /* NON_MATCHING */
