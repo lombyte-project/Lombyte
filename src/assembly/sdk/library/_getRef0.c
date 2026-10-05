@@ -70,7 +70,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
     int yidx;
 
     work = d->work;
-    x = (dx >> 1) + bx;
+    x = bx + (dx >> 1);
     n = d->mc[d->cur].n;
     ye = &d->mc[d->cur].y[n];
     ce = &d->mc[d->cur].c[n];
@@ -110,9 +110,9 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
         }
     }
     buf = d->mc[d->cur].buf + n * 0x600;
-    ye->step = 16 << fieldpred;
     ye->p0 = buf + yr * 16;
     ye->p1 = buf + yr * 16 + 0x300;
+    ye->step = 16 << fieldpred;
     yidx = (avg << 2) | xh << 1 | yh;
     avg <<= 2;
 
