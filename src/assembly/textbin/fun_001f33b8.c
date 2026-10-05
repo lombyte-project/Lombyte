@@ -47,11 +47,11 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     f32 projection_half_height;
 
     half_height = viewport_height >> 1;
-    screen_offsets.half_height = half_height;
-    screen_offsets.bottom_extent = (half_height + 0x800) << 4;
     half_width = viewport_width >> 1;
+    screen_offsets.half_height = half_height;
     screen_offsets.half_width = half_width;
     screen_offsets.left_origin = (0x800 - half_width) << 4;
+    screen_offsets.bottom_extent = (half_height + 0x800) << 4;
     screen_offsets.top_origin = (0x800 - half_height) << 4;
     screen_offsets.right_extent = (half_width + 0x800) << 4;
     view_context.near_clip = 32.0f;
@@ -61,13 +61,13 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     view_context.horizontal_fov = horizontal_fov;
     view_context.projection_half_width = convert_integer_to_float(viewport_width) * 0.5f;
     projection_half_height = convert_integer_to_float(viewport_height) * 0.5f;
-    view_context.screen_scale_y = projection_half_height * 4.0f;
-    view_context.screen_scale_x = view_context.projection_half_width * 4.0f;
-    view_context.fog_near_intensity = fog_near_intensity;
-    view_context.fog_near_distance = fog_near_distance;
-    view_context.fog_far_intensity = fog_far_intensity;
-    view_context.fog_far_distance = fog_far_distance;
     view_context.projection_half_height = projection_half_height;
+    view_context.screen_scale_x = view_context.projection_half_width * 4.0f;
+    view_context.screen_scale_y = projection_half_height * 4.0f;
+    view_context.fog_far_intensity = fog_far_intensity;
+    view_context.fog_near_distance = fog_near_distance;
+    view_context.fog_far_distance = fog_far_distance;
+    view_context.fog_near_intensity = fog_near_intensity;
     update_view_context();
 }
 
