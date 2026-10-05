@@ -11,8 +11,7 @@ f32 fast_difference_between_rotations(f32 first_angle, f32 second_angle) {
     f32 difference = first_angle - second_angle;
     f32 pi = pi_values[0];
     difference = fabsf(difference);
-    if (difference < pi) {
-    } else {
+    if (!(difference < pi)) {
         pi = pi + pi;
         difference = pi - difference;
     }
