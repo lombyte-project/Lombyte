@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021e698/FUN_0021e698.s", FUN_0021e698);
-#else
 #include "types.h"
 
 struct PreviewPosition {
@@ -37,7 +34,7 @@ struct ItemPreviewVars {
 
 struct ItemPreviewMoby {
     u8 pad0[0x10];
-    f32 x;
+    volatile f32 x;
     f32 y;
     f32 z;
     u8 pad1C[0x2C];
@@ -48,7 +45,9 @@ struct ItemPreviewMoby {
 
 struct PreviewCamera {
     u8 pad0[0x140];
-    struct PreviewPosition position;
+    f32 x;
+    f32 y;
+    f32 z;
 };
 
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
@@ -69,11 +68,16 @@ void update_item_preview_transform(struct ItemPreviewMoby *moby) {
     f32 cosine;
     f32 sine;
     f32 negated_forward_offset;
+    s32 flags = preview->flags;
+    f32 y_offset;
+    struct PreviewCamera *camera;
 
     moby->rotation_z = preview->rotation_angle;
-    moby->x = (&preview_camera.position)->x + ((preview->flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
-    moby->y = (&preview_camera.position)->y + preview_placements[item_index].y;
-    moby->z = (&preview_camera.position)->z + preview_placements[item_index].z;
+    moby->x = preview_camera.x + ((flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
+    camera = &preview_camera;
+    y_offset = preview_placements[item_index].y;
+    moby->y = camera->y + y_offset;
+    moby->z = camera->z + preview_placements[item_index].z;
     forward_offset = preview_placements[item_index].forward_offset;
     side_offset = preview_placements[item_index].side_offset;
     cosine = fast_cos(moby->rotation_z);
@@ -82,4 +86,3 @@ void update_item_preview_transform(struct ItemPreviewMoby *moby) {
     moby->x += negated_forward_offset * sine + side_offset * cosine;
     moby->y += forward_offset * cosine + side_offset * sine;
 }
-#endif /* NON_MATCHING */
