@@ -72,6 +72,7 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     while (menu->entries[entry_count].text_id != 0) {
         entry_count++;
     }
+    /* Retail keeps row spacing in s8 and the entry offset in s7. */
     line_spacing = menu->height / (entry_count + 1);
     draw_y = line_spacing - 8;
     entry_index = 0;
