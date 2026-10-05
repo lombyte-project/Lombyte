@@ -100,10 +100,10 @@ void set_pal_mode(void)
     screen_offsets.half_width = fs_aa_buffer.width >> 1;
     screen_offsets.half_height = fs_aa_buffer.height >> 1;
     screen_offsets.bottom = (screen_offsets.half_height + 0x800) << 4;
+    screen_offsets.height = fs_aa_buffer.height;
     screen_offsets.left = (0x800 - screen_offsets.half_width) << 4;
     screen_offsets.right = (screen_offsets.half_width + 0x800) << 4;
     screen_offsets.top = (0x800 - screen_offsets.half_height) << 4;
-    screen_offsets.height = fs_aa_buffer.height;
     FlushCache(0);
     func_00120558(0, 0);
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
