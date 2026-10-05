@@ -146,17 +146,18 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_buffer.storage_psm = 0;
     fs_aa_buffer.psm = 0;
     fs_aa_buffer.reserved164 = 0;
+    fs_aa_buffer.zpsm = 0x31;
+    fs_aa_buffer.fbp1 = display_buffer_address >> 13;
     fs_aa_buffer.fbp0 = draw_buffer_address >> 13;
     fs_aa_buffer.zbp = depth_buffer_address >> 13;
-    fs_aa_buffer.fbp1 = display_buffer_address >> 13;
-    fs_aa_buffer.zpsm = 0x31;
     sceGsSetDefDispEnv(&fs_aa_buffer, 0, storage_width, storage_height, display_offset_x, display_offset_y);
     active_fs_aa_buffer->disp.dispfb.FBP = fs_aa_buffer.fbp1;
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw0, fs_aa_buffer.psm, fs_aa_buffer.display_width, fs_aa_buffer.display_height, 3,
                        fs_aa_buffer.zpsm);
     active_fs_aa_buffer->draw0.frame1.FBP = fs_aa_buffer.fbp0;
     active_fs_aa_buffer->draw0.zbuf1 = (u64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
-    *(volatile u128 *)&active_fs_aa_buffer->giftag0 = 0;
+    *(volatile u64 *)&active_fs_aa_buffer->giftag0 = 0;
+    *((volatile u64 *)&active_fs_aa_buffer->giftag0 + 1) = 0;
     active_fs_aa_buffer->giftag0.NLOOP = 8;
     active_fs_aa_buffer->giftag0.EOP = 1;
     active_fs_aa_buffer->giftag0.NREG = 1;
@@ -187,7 +188,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     strip_index = 0;
     do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
-        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
+        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width + (0x8000 - (active_fs_aa_buffer->storage_width << 3))) |
                ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ = (strip_index + 1) * active_fs_aa_buffer->display_width | ((u64)active_fs_aa_buffer->display_height << 20);
         *packet_word++ = ((strip_index + 1) * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
