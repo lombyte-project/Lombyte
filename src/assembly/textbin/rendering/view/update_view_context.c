@@ -183,9 +183,9 @@ void update_view_context(void) {
     view->proj3[0] /= view->scr_x;
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;
-    view->proj3[14] /= depth_scale;
     view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
     view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
+    view->proj3[14] /= depth_scale;
     view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
     view->screen_scale.f[0] = view->scr_x;
@@ -195,8 +195,8 @@ void update_view_context(void) {
     view->screen_bias.f[0] = 2048.0f;
     view->screen_bias.f[1] = 2048.0f;
     view->screen_bias.f[2] = 8388112.0f;
-    view->screen_bias.f[3] = view->fog_add;
     view->inverse_projection_scale.f[0] = view->scr_x / view->proj[0];
+    view->screen_bias.f[3] = view->fog_add;
     view->inverse_projection_scale.f[1] = view->scr_y / view->proj[5];
     view->inverse_projection_scale.f[2] = depth_scale / view->proj[10];
     view->inverse_projection_scale.f[3] = view->fog_mul;
