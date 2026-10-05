@@ -530,7 +530,7 @@ segments:
           - [0x24b68, c, sdk/storage/memory_card/mc_delay_thread]
           - [0x24bac, textbin, text_gap_00123be8_post_sdk_worker]
           - [0x24bb0, c, sdk/storage/memory_card/sce_mc_sync]
-          - [0x24c90, c, assembly/sdk/callbacks/fun_00123d10]
+          - [0x24c90, c, sdk/callbacks/fun_00123d10]
           - [0x24ce4, textbin, text_gap_00123c30_post_sdk_worker_tail_00123d64]
           - [0x24ce8, c, sdk/storage/memory_card/sce_mc_get_info]
           - [0x24e64, textbin, text_gap_00123d68_post_sdk_worker]
