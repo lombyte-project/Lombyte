@@ -1,9 +1,8 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00230f60/FUN_00230f60.s", FUN_00230f60);
-#else
+void initialize_level_runtime(void) __asm__("FUN_00230f60");
+
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -251,9 +250,9 @@ void initialize_level_runtime(void)
     upload_mip_texture((s32)texture_offsets + texture_offsets[language_index * 19 + D_0015ED84 + 0x14], texture_packet);
     texture_cursor = D_0015EE74 + 0x2000;
     allocation_cursor = D_001940C0.buffer + archive_size;
-    D_0015EE78 = texture_cursor;
-    D_001940C0.unk18 = (s32)allocation_cursor;
     D_0015EE74 = texture_cursor;
+    D_001940C0.unk18 = (s32)allocation_cursor;
+    D_0015EE78 = texture_cursor;
     D_00160588 = texture_packet[0];
     clear_blocks_16(D_0019C1C0, 0x100);
     clear_blocks_16(D_0019C3C0, 0x180);
@@ -290,11 +289,11 @@ void initialize_level_runtime(void)
     FillTransferWords(D_00186350, 0, 0x40);
     scene_offsets = header->scenes;
     workspace_offset = D_00160F0C - 0x60000;
+    scene_offset = &scene_offsets[D_0013E030.unk58];
     D_0018CB20.unk58 = D_001940C0.unk4 + workspace_offset;
     D_0018CB20.unk5C = D_001940C0.unk8 + workspace_offset;
-    scene_offset = &scene_offsets[D_0013E030.unk58];
     D_00160F0C = workspace_offset;
-    scene_chunk = (Chunk *)(data_base + *scene_offset);
+    scene_chunk = (Chunk *)(data_base + scene_offsets[D_0013E030.unk58]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
         { s32 chunk_offset = scene_chunk->offset + 0x800; D_0018CB20.chunks[k] = data_base + *scene_offset + chunk_offset; }
@@ -310,4 +309,5 @@ void initialize_level_runtime(void)
     } while (D_0015ED5C == 0xFFFFFFFF);
     snd_resolve_bank_xrefs();
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(initialize_level_runtime) func_00230F60 __attribute__((alias("FUN_00230f60")));

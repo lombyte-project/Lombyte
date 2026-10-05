@@ -2023,7 +2023,7 @@ segments:
           - [0x1306f8, c, assembly/textbin/fun_0022f778]
           - [0x131e64, textbin, text_gap_00230ee4_before_fun_00230ee8]
           - [0x131e68, c, gameplay/state/dispatch_game_state_update]
-          - [0x131ee0, c, assembly/textbin/fun_00230f60]
+          - [0x131ee0, c, textbin/fun_00230f60]
           - [0x132588, c, gameplay/space/fun_00231608]
           - [0x132668, c, ui/hud/fun_002316e8]
           - [0x1327f4, textbin, text_gap_00231874_after_fun_002316e8]
