@@ -109,7 +109,7 @@ void set_pal_mode(void)
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     frame = (draw_buffer_address >> 13) | ((u64)(screen_offsets.width >> 6) << 16);
     scissor = ((u64)(screen_offsets.width - 1) << 16) | ((u64)(screen_offsets.height - 1) << 48);
-    draw_environment.scissor2 = scissor;
+    draw_environment.scissor1 = scissor;
     depth_buffer_register = zbuf;
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
@@ -120,7 +120,7 @@ void set_pal_mode(void)
     draw_environment.zbuf1 = zbuf;
     draw_environment.zbuf2 = zbuf;
     draw_environment.frame1 = frame;
-    draw_environment.scissor1 = scissor;
+    draw_environment.scissor2 = scissor;
     FlushCache(0);
     func_001FB2D0();
     func_001FB368();
