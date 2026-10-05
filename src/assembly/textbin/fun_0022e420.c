@@ -94,6 +94,7 @@ void build_resident_indexed_texture_warp_meshes(void) {
     }
     quad.texture_state = 0xFF9000000260;
     quad.primitive = 0x8000000048;
+    quad.reserved = 0;
     for (uv_vertex = 0; uv_vertex < 4; uv_vertex++) {
         quad.texture_coordinates[uv_vertex][0] = warp_texture_coordinates[uv_vertex][0];
         quad.texture_coordinates[uv_vertex][1] = warp_texture_coordinates[uv_vertex][1];
@@ -105,8 +106,8 @@ void build_resident_indexed_texture_warp_meshes(void) {
         primary_current = get_primary_history_position(history_index);
         secondary_current = &level_render_state.secondary_history_positions[history_index];
         for (strip = 0; strip < 2; strip++) {
-            quad.reserved = 0;
             strip_offset = strip * 32;
+            quad.reserved = 0;
             primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
             subtract_vectors(&cross_strip_differences[0], secondary_current, primary_current);
             subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);
