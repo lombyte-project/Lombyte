@@ -64,7 +64,6 @@ s32 sceSifCallRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
   not_sync = arg2 & 2;
   arg0->unk20 = arg_sp0;
   arg0->unk0 = (s32) temp_2_23;
-  __asm__ __volatile__("" ::: "memory");
   arg0->unk4 = new_var;
   arg0->unk1C = arg7;
   temp_2_23->unk20 = arg1;
