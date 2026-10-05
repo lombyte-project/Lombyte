@@ -1722,7 +1722,7 @@ segments:
           - [0x11b12c, textbin, text_gap_0021a1ac_before_fun_0021a1e0]
           - [0x11b130, c, ui/menus/set_pause_action_list]
           - [0x11b15c, textbin, text_gap_0021a1dc_after_fun_0021a1b0]
-          - [0x11b160, c, assembly/textbin/fun_0021a1e0]
+          - [0x11b160, c, textbin/fun_0021a1e0]
           - [0x11b284, textbin, text_gap_0021a304_after_fun_0021a1e0]
           - [0x11b288, c, ui/menus/fun_0021a308]
           - [0x11b290, c, ui/menus/fun_0021a310]

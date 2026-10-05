@@ -1,10 +1,8 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a1e0/FUN_0021a1e0.s", FUN_0021a1e0);
-#else
 #include "types.h"
+#include "sda.h"
 
 struct LabelSelectorTable {
     s32 values[8];
@@ -24,8 +22,8 @@ struct ConfiguredLabelEntry {
 
 extern struct LabelSelectorTable label_selector_table __asm__("D_001E8728");
 extern struct LabelTextTable label_text_table __asm__("D_001E8748");
-extern u8 selector_available[] __asm__("D_0015EDC0");
-extern u8 selector_values[] __asm__("D_0015EDB0");
+extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
+extern u8 selector_values[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern struct ConfiguredLabelEntry configured_label_entries[] __asm__("D_001D3B10");
 
 s32 rebuild_configured_text_label_list(void) __asm__("FUN_0021a1e0");
@@ -65,5 +63,3 @@ s32 rebuild_configured_text_label_list(void) {
 }
 
 extern __typeof__(rebuild_configured_text_label_list) func_0021A1E0 __attribute__((alias("FUN_0021a1e0")));
-
-#endif /* NON_MATCHING */
