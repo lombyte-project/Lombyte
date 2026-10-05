@@ -19,7 +19,6 @@ extern volatile s32 D_001312F0[];
 extern s32 CreateSema();
 void cmd_sem_init(void) {
     struct Sema sema;
-    s32 r1;
 
     if ((D_001312E8[0] != -1) && (D_001312EC[0] != -1)) {
         return;
@@ -27,8 +26,7 @@ void cmd_sem_init(void) {
     sema.option = 0;
     sema.init_count = 1;
     sema.max_count = 1;
-    r1 = CreateSema(&sema);
-    D_001312E8[0] = r1;
+    D_001312E8[0] = CreateSema(&sema);
     D_001312EC[0] = CreateSema(&sema);
     sema.init_count = 0;
     D_001312E0[0] = CreateSema(&sema);
