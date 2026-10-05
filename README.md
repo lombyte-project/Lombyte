@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://decomp.dev/mateuszklysz/Lombyte"><img src="https://img.shields.io/badge/decomp.dev-Progress-de812f?style=flat-square&logo=hackthebox&logoColor=de812f&labelColor=0d1117" alt="decomp.dev progress"></a>
+  <a href="https://decomp.dev/lombyte-project/lombyte"><img src="https://img.shields.io/badge/decomp.dev-Progress-de812f?style=flat-square&logo=hackthebox&logoColor=de812f&labelColor=0d1117" alt="decomp.dev progress"></a>
   <a href="docs/building.md"><img src="https://img.shields.io/badge/Build-Guide-c3cbd8?style=flat-square&logo=gnubash&logoColor=c3cbd8&labelColor=0d1117" alt="Build guide"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/Contributing-Guide-c3cbd8?style=flat-square&logo=github&logoColor=c3cbd8&labelColor=0d1117" alt="Contributing guide"></a>
 </p>
@@ -31,8 +31,8 @@
 <h3>Decompilation progress</h3>
 
 <p align="center">
-  <a href="https://decomp.dev/mateuszklysz/Lombyte">
-    <img src="https://raw.githubusercontent.com/mateuszklysz/Lombyte/progress/decomp_map.svg" alt="Lombyte decompilation progress" width="100%">
+  <a href="https://decomp.dev/lombyte-project/lombyte">
+    <img src="https://raw.githubusercontent.com/lombyte-project/lombyte/progress/decomp_map.svg" alt="Lombyte decompilation progress" width="100%">
   </a>
 </p>
 
@@ -57,7 +57,7 @@ Contributions to matching C, recovered names, types, and documentation are welco
 <h4>Quick setup</h4>
 
 ```sh
-git clone https://github.com/mateuszklysz/Lombyte.git && cd Lombyte
+git clone https://github.com/lombyte-project/lombyte.git && cd lombyte
 ./setup.sh --iso /path/to/your-ratchet-and-clank-usa.iso
 ```
 
