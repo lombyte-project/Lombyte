@@ -79,13 +79,18 @@ h1{margin:16px 0 4px;font-size:2.4rem;font-weight:600;letter-spacing:-.01em}
 section{margin-top:56px}
 h2{margin:0 0 16px;font-size:1.25rem;font-weight:600}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:0;padding:0;list-style:none}
-.stats li{padding:16px;background:var(--plate);border-radius:8px}
+.stats li{padding:16px}
+.tile{background:#0d1117;border:1px solid #21262d;border-radius:8px}
 .stats b{display:block;color:var(--orange);font-size:1.8rem;font-weight:600;line-height:1.2}
 .stats span{color:var(--muted);font-size:.9rem}
 .map{display:block;margin-top:16px}
 .map img{display:block;width:100%;height:auto;border-radius:8px}
 .note{color:var(--muted);font-size:.9rem}
-dl{margin:0}dt{font-weight:600;margin-top:14px}dd{margin:2px 0 0;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:0;padding:0;list-style:none}
+.cards li{padding:20px;border-top:2px solid var(--orange)}
+.cards h3{margin:6px 0 8px;font-size:1.05rem;font-weight:600}
+.cards p{margin:0;color:var(--muted);font-size:.95rem}
+.tag{color:var(--orange);font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 a{color:var(--orange)}
 .bar{display:flex;gap:12px;align-items:center;padding:9px 16px;font-size:.85rem;color:#000;background:repeating-linear-gradient(-45deg,var(--orange) 0 14px,#c96a1c 14px 28px);overflow:hidden;white-space:nowrap}
 .bar strong{flex:none;padding:2px 8px;background:#000;color:var(--orange);border-radius:4px;font-weight:700}
@@ -95,12 +100,12 @@ a{color:var(--orange)}
 .hero{padding:56px 16px 72px;text-align:center;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.5) 55%,#000),url(hero.jpg) center 70%/cover no-repeat;text-shadow:0 1px 6px rgba(0,0,0,.8)}
 .hero .lead{color:var(--chrome)}
 .links a{background:rgba(0,0,0,.55);backdrop-filter:blur(4px)}
-.stats li{position:relative;overflow:hidden;transition:transform .15s ease-out;transform:perspective(600px) rotateX(var(--rx,0)) rotateY(var(--ry,0))}
-.stats li::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 60%)}
-.stats li:hover::after{opacity:1}
+.tile{position:relative;overflow:hidden;transition:transform .15s ease-out;transform:perspective(600px) rotateX(var(--rx,0)) rotateY(var(--ry,0))}
+.tile::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 60%)}
+.tile:hover::after{opacity:1}
 footer p{margin:6px 0}
 footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;text-align:center}
-@media (max-width:520px){h1{font-size:2rem}.hero{padding-top:36px}}
+@media (max-width:520px){.cards{grid-template-columns:1fr}h1{font-size:2rem}.hero{padding-top:36px}}
 </style>
 </head>
 <body>
@@ -122,9 +127,9 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
   <section aria-labelledby="progress">
     <h2 id="progress">Decompilation progress</h2>
     <ul class="stats">
-      <li><b>@C_EXACT@%</b><span>code matched exactly</span></li>
-      <li><b>@FUNCS_DONE@</b><span>of @FUNCS@ functions matched</span></li>
-      <li><b>@UNITS_DONE@</b><span>of @UNITS@ units complete</span></li>
+      <li class="tile"><b>@C_EXACT@%</b><span>code matched exactly</span></li>
+      <li class="tile"><b>@FUNCS_DONE@</b><span>of @FUNCS@ functions matched</span></li>
+      <li class="tile"><b>@UNITS_DONE@</b><span>of @UNITS@ units complete</span></li>
     </ul>
     <a class="map" href="https://decomp.dev/mateuszklysz/Lombyte"><img src="https://raw.githubusercontent.com/mateuszklysz/Lombyte/progress/decomp_map.svg" alt="Map of Ratchet &amp; Clank decompilation progress by unit" loading="lazy"></a>
     <p class="note">Updated automatically from the main branch on @DATE@.</p>
@@ -132,14 +137,12 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
 
   <section aria-labelledby="about">
     <h2 id="about">About the project</h2>
-    <dl>
-      <dt>What is Lombyte?</dt>
-      <dd>A matching decompilation of Ratchet &amp; Clank for PS2: every function is rewritten in C until the original compiler produces identical machine code.</dd>
-      <dt>Does it include the game?</dt>
-      <dd>No. Lombyte contains no game data, executables or disc images. You need your own copy of the USA release (SCUS_971.99).</dd>
-      <dt>Is this a PC port?</dt>
-      <dd>Not yet. A fully matching decompilation comes first; a native port is the long-term goal.</dd>
-    </dl>
+    <ul class="cards">
+      <li class="tile"><span class="tag">01 · Goal</span><h3>What is Lombyte?</h3><p>A matching decompilation of Ratchet &amp; Clank for PS2: every function is rewritten in C until the original compiler produces identical machine code.</p></li>
+      <li class="tile"><span class="tag">02 · Legal</span><h3>Does it include the game?</h3><p>No. Lombyte contains no game data, executables or disc images. You need your own copy of the USA release (SCUS_971.99).</p></li>
+      <li class="tile"><span class="tag">03 · Future</span><h3>Is this a PC port?</h3><p>Not yet. A fully matching decompilation comes first; a native port is the long-term goal.</p></li>
+      <li class="tile"><span class="tag">04 · Join</span><h3>Can I help?</h3><p>Yes. Pick a function, match it and open a pull request. The <a href="https://github.com/mateuszklysz/Lombyte/blob/main/CONTRIBUTING.md">contributing guide</a> covers the setup.</p></li>
+    </ul>
   </section>
 
   <footer>
@@ -148,7 +151,7 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
 </main>
 <script>
 if (matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
-  for (const tile of document.querySelectorAll(".stats li")) {
+  for (const tile of document.querySelectorAll(".tile")) {
     tile.addEventListener("pointermove", e => {
       const r = tile.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
       tile.style.setProperty("--ry", (x - .5) * 12 + "deg");
