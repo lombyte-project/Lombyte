@@ -29,11 +29,10 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count)
     s32 animation_index;
     s32 buffer_offset;
     s32 buffer_skip;
-    /* Existing counter pin is still required for the retail register allocation. */
-    register s32 resource_index asm("s4");
     s32 resource_offset;
     u8 class_slot;
     PreviewResourceBinding *binding;
+    s32 resource_index;
 
     count = resource_count;
     resource_index = 0;
