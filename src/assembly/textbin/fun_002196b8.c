@@ -261,8 +261,9 @@ void render_level_effects_and_screen_sprites(void)
         }
     }
 
+    final_slot_index = 0;
     func_001F4280(0);
-    for (final_slot_index = 0; final_slot_index < 14; final_slot_index++) {
+    for (; final_slot_index < 14; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 && (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
             func_00223E28(slots[final_slot_index]);
         }
