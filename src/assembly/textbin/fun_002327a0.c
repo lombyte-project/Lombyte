@@ -141,9 +141,9 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
                 D_001DCB40[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
                 new_v = reflection[1] / sphere_denominator + 0.5f;
             } else {
-                new_v = D_001DCE70[element_index][0];
-                new_u = reflection[0] / sphere_denominator + 0.5f;
-                D_001DCB40[element_index][0] = new_u + (new_v - new_u) * transition_fraction;
+                new_u = D_001DCE70[element_index][0];
+                new_v = reflection[0] / sphere_denominator + 0.5f;
+                D_001DCB40[element_index][0] = new_v + (new_u - new_v) * transition_fraction;
                 new_v = reflection[1] / sphere_denominator + 0.5f;
                 new_v = new_v + (D_001DCE70[element_index][1] - new_v) * transition_fraction;
             }
