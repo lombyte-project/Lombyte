@@ -118,18 +118,18 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
   y = (row_height - (font_height / 2)) - 1;
   if (menu->flags & 0x4000)
   {
-    if (menu->items[0].text_id != 0)
+    scan_entry = menu->items;
+    if (scan_entry[0].text_id != 0)
     {
       entry_index = 0;
       selection_index = 0;
-      scan_entry = &menu->items[entry_index];
       do
       {
-        text_width = measure_text_width(get_help_message_text(scan_entry->text_id), -1, glyphs);
+        text_width = measure_text_width(get_help_message_text(scan_entry[entry_index].text_id), -1, glyphs);
         entry_index++;
         selection_index++;
         maximum_text_width = (maximum_text_width < text_width) ? (text_width) : (maximum_text_width);
-        scan_entry = &menu->items[entry_index];
+        scan_entry = menu->items;
       } while (menu->items[selection_index].text_id != 0);
 
     }
@@ -158,7 +158,7 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
       {
         selected_entry = menu->selected_entry == selection_index;
       }
-      selected_item = &menu->items[entry_index];
+      selected_item = (MenuItem *)((u32)(entry_index * sizeof(MenuItem)) + (u32)menu->items);
       enabled = selected_item->enabled != 0;
       if (menu->flags & 2)
       {
