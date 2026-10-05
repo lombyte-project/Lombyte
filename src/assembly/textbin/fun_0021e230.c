@@ -59,7 +59,7 @@ struct PreviewClassResource { u8 pad0[0xD]; u8 state_0d; };
 
 extern struct ItemPreviewMenuState preview_menu_state __asm__("D_001D5BF0");
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
-extern struct PreviewCamera preview_camera __asm__("D_00186F40");
+extern volatile struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
@@ -99,7 +99,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     s32 item_two_difference;
     f32 offset;
     f32 camera_x;
-    f32 *camera_position;
+    volatile f32 *camera_position;
 
     selection = preview_menu_state.game->selection;
     item_index = *(s16 *)(selection->table + selection->index * 10 + 6);
