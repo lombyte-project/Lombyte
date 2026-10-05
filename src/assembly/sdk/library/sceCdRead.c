@@ -78,7 +78,7 @@ block_2:
     }
     goto block_9;
 block_7:
-    var_5_50 = arg1 * 0x918;
+    var_5_50 = (s32)(((u32)arg1 << 3) * 0x123U);
     goto block_9;
 block_8:
     var_5_50 = arg1 * 0x924;
