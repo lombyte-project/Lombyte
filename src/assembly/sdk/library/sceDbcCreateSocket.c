@@ -14,6 +14,7 @@ s32 sceDbcCreateSocket(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     s32 even;
     s32 odd;
     state->unk28 = arg1;
+    i = 0;
     even = arg0->unk0;
     state->unk2C = arg2;
     state->unk0 = even;
@@ -21,7 +22,10 @@ s32 sceDbcCreateSocket(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     even = arg0->unk8; state->unk8 = even;
     odd = arg0->unkC; state->unkC = odd;
     even = arg0->unk10; state->unk10 = even;
-    for (i = 0; i < 0x10; i++) { state->pad_14[i] = src[i]; }
+    do {
+        state->pad_14[i] = src[i];
+        i++;
+    } while (i < 0x10);
     if (sceSifCallRpc(D_0015B008, 0x80000901, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) < 0) {
         func_00124A20(D_00153578);
         return 0;
