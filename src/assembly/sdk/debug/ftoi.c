@@ -20,21 +20,21 @@ s64 ftoi(s64 arg) {
     if (exp >= 0xD) {
         return 0x270F;
     }
-    t = v << 0xC;
-    input = t >> 0xC;
-    v = input | ((u64)0x8000 << 0x25);
+    t = (u64)input << 0xC;
+    input = (u64)t >> 0xC;
+    input = (u64)input | ((u64)0x8000 << 0x25);
     if (exp < 0) {
         exp = -exp;
-        v = v >> (exp - 2);
-        if ((v & 3) == 3) {
-            v = (v >> 2) + 1;
+        input = (u64)input >> (exp - 2);
+        if ((input & 3) == 3) {
+            input = ((u64)input >> 2) + 1;
         } else {
-            v = (v >> 2);
+            input = (u64)input >> 2;
         }
     } else {
-        v = v << exp;
+        input = (u64)input << exp;
     }
-    return (s64)(v << 0x20) >> 0x20;
+    return (s32)input;
 }
 
 #endif /* NON_MATCHING */
