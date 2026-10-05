@@ -44,6 +44,7 @@ s64 get_effect_texture(s32 index) {
     s64 tex0_word;
     s64 width_bits;
     s64 palette_bits;
+    s32 pending_texture_upload_count_snapshot;
 
     texture = &effect_texture_definitions[index];
     if (texture->tex0 == 0) {
@@ -52,6 +53,7 @@ s64 get_effect_texture(s32 index) {
         palette_block_offset = gs_texture_allocation_cursor >> 8;
         texel_address = gs_texture_allocation_cursor + 0x400;
         texel_block_offset = texel_address >> 8;
+        pending_texture_upload_count_snapshot = pending_texture_upload_count;
         tex0_word = texel_block_offset;
         tex0_word |= ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
         /* Retail sign-extends each 16-bit exponent before packing TEX0. */
@@ -65,16 +67,16 @@ s64 get_effect_texture(s32 index) {
         tex0_word |= (u64)1 << 63;
         gs_texture_allocation_cursor = texel_address + (1 << (width_log2 + texture->height_log2));
         texture->tex0 = tex0_word;
-        if (pending_texture_upload_count < 0x40) {
-            upload = &pending_texture_uploads[pending_texture_upload_count];
-            upload->palette_block_offset = palette_block_offset;
+        if (pending_texture_upload_count_snapshot < 0x40) {
+            upload = &pending_texture_uploads[pending_texture_upload_count_snapshot];
             upload->palette_address = level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
+            upload->palette_block_offset = palette_block_offset;
             upload->reserved_zero = 0;
-            *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count * 0x10 + 8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
+            *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count_snapshot * 0x10 + 8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
             upload->width_log2 = (u8)texture->width_log2;
             upload->height_log2 = (u8)texture->height_log2;
             upload->texel_block_offset = texel_block_offset;
-            pending_texture_upload_count += 1;
+            pending_texture_upload_count = pending_texture_upload_count_snapshot + 1;
         }
     }
     return effect_texture_definitions[index].tex0;

@@ -24,7 +24,7 @@ typedef struct {
 } LevelMapSelection;
 
 extern u8 D_0013DD40[];
-extern u8 D_0013DD58[];
+extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
@@ -84,7 +84,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
             continue;
         }
         availability = 3;
-        if (D_0013DD58[level_index] == 0) {
+        if (g_abLevelVisitState[level_index] == 0) {
             availability = 2;
             if (D_0013DD40[level_index] == 0) {
                 availability = 0;

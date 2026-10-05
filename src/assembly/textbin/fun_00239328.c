@@ -27,9 +27,6 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
     f32 scroll_offset;
     f32 overlay_height;
     s32 overlay_width;
-    s32 unused_y0;
-    s32 unused_x1;
-    s32 unused_y1;
 
     vu1_add_g_sregister(0x47, 0x32003);
     if (vendor_flash_timers[pass_index] != 0 || pass_index == 0) {
@@ -38,13 +35,14 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
         }
         flash_timer = vendor_flash_timers[pass_index];
         if (pass_index == 0) {
+            /* The floor changes this frame's opacity, not the stored timer. */
             if (flash_timer < 0x18) {
                 flash_timer = 0x18;
             }
         }
-        zero_offset = 0.0f;
         random_u = random_integer_below(200);
         random_v = random_integer_below(200);
+        zero_offset = 0.0f;
         flash_opacity = 0x80 - SubtractIntegerWithClamp(flash_timer - 0x80);
         vu1_add_g_sregister(8, 0);
         flash_opacity *= 2;
@@ -79,6 +77,7 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
         }
     }
     if (pass_index == 6) {
+        /* The known capture coordinator supplies only passes zero through five. */
         zero_offset = 0.0f;
         append_subpixel_textured_screen_quad(0, 0, 0x40, 0x40, 0x80808080, get_effect_texture(0x19), zero_offset, zero_offset, capture_width, capture_height);
     }

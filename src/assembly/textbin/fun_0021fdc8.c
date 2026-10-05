@@ -104,14 +104,16 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
     struct MenuResourceEntry *replacement_entry_alternate;
     struct MenuSelectionState *item_selection;
     struct MenuSelectionState *group_selection;
+    u8 *item_table_entry;
 
     selection_flags = stream->flags;
     stream->elapsed_frames = (s32) (stream->elapsed_frames + 1);
     if (selection_flags & 1) {
         resource_index = stream->fixed_resource_index;
-        if (resource_index != -1) {
-            goto process_stream_state;
+        if (resource_index == -1) {
+            return 0;
         }
+        goto process_stream_state;
     } else {
         if (selection_flags & 2) {
             resource_index = menu_resource_selection[0];
@@ -162,12 +164,13 @@ disable_stream:
                 resource_index = 0;
             }
             if (selection_flags & 0x4000) {
-                resource_index = (*(s16 *)((u8 *)(item_selection->item_table_address + (resource_index * 0xC)) + 0x2) == 2) ? 9 : resource_index;
+                item_table_entry = (u8 *)item_selection->item_table_address;
+                item_table_entry += resource_index * 0xC;
+                resource_index = (*(s16 *)(item_table_entry + 2) == 2) ? 9 : resource_index;
             }
         }
 process_stream_state:
-        stream_flags = stream->flags;
-        if (stream_flags & 0x2000) {
+        if (stream->flags & 0x2000) {
             resource_index = (skill_point_completed[resource_index] == 0) ? 0x1E : resource_index;
         }
         stream_state = stream->state;
@@ -192,8 +195,8 @@ process_stream_state:
                             primary_read_started = start_audio_stream_read_alternate(primary_read_address, primary_entry_alternate->sector, primary_entry_alternate->sector_count);
                         }
                         if (primary_read_started == 0) {
-                            stream->state = -1;
-                            return 0;
+                            next_state = -1;
+                            goto set_stream_state;
                         }
                         goto publish_primary_read;
                     }
@@ -205,6 +208,7 @@ process_stream_state:
         case 5:
             if (cd_read_active[0] == 0) {
                 completed_buffer_slot = (s32 *)((u8 *)stream + 0x48);
+                stream_flags = stream->flags;
                 if (stream_flags & 0x20) {
                     completed_buffer_slot += stream->state == 3;
                     clear_record_flag_by_key(*completed_buffer_slot);

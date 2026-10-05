@@ -8,8 +8,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227548/FUN_00227548.s
 
 #include "eetypes.h"
 struct GraphicsDmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct RenderPacketCursor { struct GraphicsDmaTag *p; };
 struct GraphicsSetupRecord { s32 command_count; s32 command_flags; f32 second_depth; f32 first_depth; u128 direction; };
+struct RenderPacketCursor { struct GraphicsDmaTag *p; };
 extern struct RenderPacketCursor render_packet_cursor __asm__("D_00160F00");
 struct VideoModeState { s32 v; };
 extern struct VideoModeState pal_mode __asm__("D_0015ED80");
@@ -39,6 +39,7 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     render_packet_cursor.p->addr = (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
     render_packet_cursor.p->w2 = 0x13000000;
     render_packet_cursor.p->w3 = 0x50000007;
+    /* Remaining vector components are filled from each setup record. */
     second_vector[1] = second_vector[0] = first_vector[1] = first_vector[0] = 0.0f;
     render_packet_cursor.p++;
     while (record->command_count != 0) {

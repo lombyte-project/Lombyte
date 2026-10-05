@@ -191,6 +191,9 @@ void transition_load_wad(void) {
     WadClass30 *c30;
     WadSound *snd;
     TextEntry *te;
+    u8 *lookupHeader;
+    u8 *lookupSource;
+    u8 *lookupRange;
     s32 k_800 = 0x800;
     s64 t;
     s64 u;
@@ -217,9 +220,9 @@ void transition_load_wad(void) {
     FlushCache(0);
     hdr = (WadHeader *)D_001940C0.hdr;
     func_00203120((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
-    t = (s64)((D_0015EE8C + hdr->x70) >> 8) | 0x1D308000;
+    t = 0x1D308000 | (s64)((D_0015EE8C + hdr->x70) >> 8);
     u = ((s64)((D_0015EE8C + hdr->x74) >> 8) << 37) | ((s64)0xB800 << 19);
-    D_0019E6C0[0] = (t | u) | ((s64)-1 << 63);
+    D_0019E6C0[0] = (u | t) | ((s64)-1 << 63);
     data = (u8 *)hdr + hdr->data;
     D_0019E6C0[2] = 0x0040000400004000;
     base = data + hdr->x60;
@@ -287,15 +290,18 @@ void transition_load_wad(void) {
     }
     D_0015F460 = (s32)(data + hdr->x68);
     func_00202800((u8 *)hdr + hdr->x5C, hdr->x58);
-    func_002026C8((u8 *)hdr + hdr->x6C, data + hdr->x64, (u8 *)hdr + hdr->x54, hdr->x50);
+    lookupSource = data + hdr->x64;
+    lookupRange = (u8 *)hdr + hdr->x54;
+    lookupHeader = (u8 *)hdr + hdr->x6C;
+    func_002026C8(lookupHeader, lookupSource, lookupRange, hdr->x50);
     sceGsSetDefLoadImage(li, (D_0015EE74 << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
     FlushCache(0);
     sceGsExecLoadImage(li, data + hdr->x84);
     func_00120558(0, 0);
     D_001940C0.x18 = (s32)D_001940C0.hdr + size;
     v = D_0015EE74;
-    D_0015EF48 = (v >> 8) | 0x20010000 | (s64)0xB800 << 19;
     D_0015EE78 = v + 0x20000;
+    D_0015EF48 = (v >> 8) | 0x20010000 | (s64)0xB800 << 19;
     D_0015EE74 = v + 0x20000;
     D_001940C0.x1C = func_001E9B10(data + hdr->x7C);
     FillTransferWords(&D_0018CB20, 0, 0x1C0);

@@ -20,47 +20,16 @@ struct St {
     s32 unk28;
 };
 
-struct T16 {
-    u8 pad0[4];
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-};
-
-struct T3a {
-    u8 pad0[4];
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-};
-
-struct T3b {
-    u8 pad0[4];
-    s32 unk4;
-    u8 pad8[0x14];
-    s32 unk1C;
-};
-
-struct T16b {
-    u8 pad0[4];
-    s32 unk4;
-    u8 pad8[0x18];
-    s32 unk20;
-    s32 unk24;
-};
-
 extern s32 D_0015F604;
 extern struct St D_00193300;
 extern s32 func_0012E3E8();
 extern s32 InitializeRenderState();
-extern s32 func_001F96F8();
+extern s32 func_001F96F8(s32);
 extern s32 func_001FDD10();
 extern s32 func_001FED30();
 
 void mode_freeze_init(u32 arg0, s32 arg1) __asm__("FUN_001fbab8");
 
-extern struct St D_00193300_far __asm__("D_00193300") __attribute__((section(".data")));
 void mode_freeze_init(u32 arg0, s32 arg1) {
     struct St *st;
 

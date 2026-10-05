@@ -58,6 +58,7 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
 {
   struct AudioDecoderThreadArgs decoder_thread;
   s32 thread_id;
+  s32 opened;
   *((volatile s32 *) 0x1000E000) |= 3;
   *((volatile s32 *) 0x1000E010) = 4;
   func_0023B940(decoder_state);
@@ -78,25 +79,17 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
   _StartThread(thread_id, ((u8 *) decoder_state) + 0xD9048);
   if (func_0023BA48(((u8 *) decoder_state) + 0xD9040, stream_source, source_mode) == 0)
   {
-    if (source_mode)
-    {
-      callback_context = 0;
-      DebugPrint(movie_open_error_text);
-    }
-    else
-    {
-      callback_context = 0;
-      DebugPrint(movie_open_error_text);
-    }
+    opened = 0;
+    DebugPrint(movie_open_error_text);
   }
   else
   {
-    callback_context = 1;
+    opened = 1;
   }
   decoder_state->intc_handler_id = AddIntcHandler(2, func_0023B3D8, 0);
   enable_intc(2);
   decoder_state->dmac_handler_id = AddDmacHandler(2, handle_end_image, 0);
   enable_dmac(2);
-  return callback_context;
+  return opened;
 }
 #endif /* NON_MATCHING */

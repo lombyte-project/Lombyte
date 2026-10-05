@@ -123,8 +123,9 @@ void render_level_frame(void)
     texture = get_effect_texture(2);
     display_state = &D_0013E500_far;
     draw_textured_quad(0x2C, display_state->screen_height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40, 0x80808080, texture);
-    screen_y = (display_state->screen_height - 0x40) * 16;
+    screen_y = (f32)((display_state->screen_height - 0x40) * 16);
     rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
+    /* The frame counter contributes only the sprite angle modulo 55. */
     draw_rotated_sprite(0x40, 0x40, get_effect_texture(3), 1216.0f, screen_y, quad_extent, quad_extent, rotation_angle);
   }
   func_001F4398();

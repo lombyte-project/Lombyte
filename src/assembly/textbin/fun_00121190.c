@@ -23,15 +23,15 @@ typedef volatile u64 vu64;
 typedef float f32;
 typedef double f64;
 typedef s32 b32;
-struct M2c_D_00159990
+struct NativeCdDiskReadyRpcClient
 {
   u8 pad_0[0x24];
-  s32 unk24;
+  s32 server;
 };
 extern s32 D_001312D0[];
 extern volatile s32 D_001312EC[];
 extern s32 D_00131304[];
-extern struct M2c_D_00159990 D_00159990;
+extern struct NativeCdDiskReadyRpcClient D_00159990;
 extern s32 D_001599D0[];
 extern s32 D_001324C0[];
 extern u8 D_00152F80[];
@@ -48,8 +48,8 @@ extern void sceSifWriteBackDCache();
 extern s32 sceSifCallRpc();
 s32 FUN_00121190(s32 mode)
 {
-  s32 spin;
-  s32 result;
+  s32 bind_wait_counter;
+  s32 response;
   if (D_001312D0[0] > 0)
   {
     scePrintf(D_00152F80);
@@ -74,17 +74,17 @@ s32 FUN_00121190(s32 mode)
         {
           scePrintf(D_00152F90);
         }
-        for (spin = 0x100000; spin != (-1); spin--)
+        for (bind_wait_counter = 0x100000; bind_wait_counter != (-1); bind_wait_counter--)
         {
         }
 
         continue;
       }
-      if (D_00159990.unk24 != 0)
+      if (D_00159990.server != 0)
       {
         break;
       }
-      for (spin = 0x100000; spin != (-1); spin--)
+      for (bind_wait_counter = 0x100000; bind_wait_counter != (-1); bind_wait_counter--)
       {
       }
 
@@ -116,8 +116,8 @@ s32 FUN_00121190(s32 mode)
   {
     scePrintf(D_00152FB0);
   }
-  result = *((s32 *) (((u32) D_001324C0) | 0x20000000));
+  response = *((s32 *) (((u32) D_001324C0) | 0x20000000));
   SignalSema(D_001312EC[0]);
-  return result;
+  return response;
 }
 #endif /* NON_MATCHING */

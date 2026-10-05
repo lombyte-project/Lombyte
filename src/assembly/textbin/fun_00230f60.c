@@ -287,12 +287,13 @@ void initialize_level_runtime(void)
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     FillTransferWords(D_00186350, 0, 0x40);
-    D_00160F0C -= 0x60000;
-    D_0018CB20.unk58 = D_001940C0.unk4 + D_00160F0C;
     scene_offsets = header->scenes;
+    D_00160F0C -= 0x60000;
     scene_offset = &scene_offsets[D_0013E030.unk58];
+    D_0018CB20.unk58 = D_001940C0.unk4 + D_00160F0C;
     D_0018CB20.unk5C = D_001940C0.unk8 + D_00160F0C;
     scene_chunk = (Chunk *)(data_base + *scene_offset);
+    /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
         { s32 chunk_offset = scene_chunk->offset + 0x800; D_0018CB20.chunks[k] = data_base + *scene_offset + chunk_offset; }
         scene_chunk++;

@@ -66,7 +66,7 @@ struct LoadMenuDescriptor
 };
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 extern struct LoadMenuMemoryCardState memory_card_state __asm__("D_0013D290");
-extern s32 D_0013E05A;
+extern s16 D_0013E05A;
 extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
 extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 music_volume __asm__("D_0015EDEC");
@@ -102,7 +102,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
       }
       memory_card_state.loaded_save_ready = 1;
       scaled_volume_80 = ((s32) (sound_volume * 8)) / 10;
-      mixer_state.group_1_volume = *((s32 *) 0x15EDEC);
+      mixer_state.group_1_volume = music_volume;
       scaled_volume_70 = ((s32) (sound_volume * 7)) / 10;
       mixer_state.group_0_volume = scaled_volume_80;
       mixer_state.group_2_volume = scaled_volume_80;
@@ -111,7 +111,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
       mixer_state.group_5_volume = sound_volume;
       mixer_state.group_4_volume = scaled_volume_70;
       InitializeGlobalStateEntry(current_level_index);
-      *((s16 *) 0x13E05A) = 0;
+      D_0013E05A = 0;
     }
     else
     {

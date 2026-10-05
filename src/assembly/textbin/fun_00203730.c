@@ -89,8 +89,8 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   s32 material_shift;
   s64 width_units_64;
   s64 width_units_128;
-  u64 width_log2;
-  u64 height_log2;
+  s32 width_log2;
+  s32 height_log2;
   s32 gs_block_base;
   s32 texture_block;
   s32 mip_block_0;
@@ -104,6 +104,8 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
   u64 tex1_word;
   u64 mip_word;
   u64 clamp_word;
+  s32 packed_normals_offset;
+  s32 records_offset;
   object_render_class_ids[registered_object_render_class_count] = class_id;
   object_render_class_slot_by_id[class_id] = registered_object_render_class_count;
   object_render_classes[registered_object_render_class_count] = render_class;
@@ -126,8 +128,10 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
     }
   }
 
-  render_class->packed_normals += (s32) render_class;
-  render_class->records = (ObjectRenderRecord *) (((s32) render_class->records) + ((s32) render_class));
+  packed_normals_offset = render_class->packed_normals;
+  records_offset = (s32) render_class->records;
+  render_class->packed_normals = packed_normals_offset + (s32) render_class;
+  render_class->records = (ObjectRenderRecord *) (records_offset + (s32) render_class);
   slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
   record = render_class->records;
   qcopy(slot_materials, material_map);

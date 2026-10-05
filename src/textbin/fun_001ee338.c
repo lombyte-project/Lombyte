@@ -1,13 +1,10 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001ee338/FUN_001ee338.s", FUN_001ee338);
-#else
 #include "types.h"
 #include "qcopy.h"
 
-/* The queue of glows to draw this frame: 0x30-byte records, the count
+/* The queue of rotated sprites to draw this frame: 0x30-byte records, the count
    at +0xC0. */
 typedef struct {
     f32 position[4];
@@ -34,9 +31,9 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
 extern void spawn_particle_burst(void *, f32, f32) __asm__("func_001EE008");
 
-/* Draws every queued glow whose moby is live (not in state 0xFE/0xFD):
+/* Draws every queued sprite with a resource outside states 0xFE and 0xFD:
    at its projected screen position (func_001F2070, then relative to the
-   D_0013E500 offset in 1/16 units) or, for off-screen ones, at the
+   D_0013E500 offset in 1/16 units) or, for unprojected ones, at the
    screen centre; then empties the queue. Camera mode 0x72 discards it. */
 void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");
 
@@ -53,8 +50,16 @@ void render_queued_rotated_sprites(void) {
         screen_center[1] = convert_integer_to_float(screen_offsets[3]);
         for (record_index = 0; record_index < rotated_sprite_queue.count; record_index++) {
             QueuedRotatedSprite *record = &rotated_sprite_queue.records[record_index];
+            s32 resource_state;
 
-            if (record->resource == 0 || record->resource[0x20] == 0xFE || record->resource[0x20] == 0xFD) {
+            if (record->resource == 0) {
+                continue;
+            }
+            resource_state = record->resource[0x20];
+            if (resource_state == 0xFE) {
+                continue;
+            }
+            if (resource_state == 0xFD) {
                 continue;
             }
             if (record->project_position != 0) {
@@ -69,7 +74,4 @@ void render_queued_rotated_sprites(void) {
         rotated_sprite_queue.count = 0;
     }
 }
-
 extern __typeof__(render_queued_rotated_sprites) func_001EE338 __attribute__((alias("FUN_001ee338")));
-
-#endif /* NON_MATCHING */

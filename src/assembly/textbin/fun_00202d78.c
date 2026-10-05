@@ -28,7 +28,7 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
     s32 width_units_128;
     s32 width_units_64;
     s32 width_log2;
-    s32 height_log2;
+    s64 height_log2;
     s32 gs_block_base;
     s32 texture_block;
     s32 mip_block_1;
@@ -40,7 +40,7 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
     u64 mip_word;
     u64 mip_address_word;
     s32 draw_control_count;
-    s64 control_base = material_base;
+    s32 control_base = material_base;
 
     width_units_64 = texture->width >> 6;
     width_units_128 = texture->width >> 7;
@@ -59,7 +59,9 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
     /* Preserve sparse writes: every other 64-bit packet word is untouched. */
     draw_control_count = texture->draw_control_count;
     if (material_index >= 0) {
-        draw_control_word = ((u64)draw_shift << 6) | 0x20;
+        draw_control_word = (u64)draw_shift;
+        draw_control_word <<= 6;
+        draw_control_word |= 0x20;
         draw_control_word = ((u64)(draw_control_count - 1) << 2) | draw_control_word;
         draw_control_word |= (u64)draw_high << 32;
         packet[0] = draw_control_word;

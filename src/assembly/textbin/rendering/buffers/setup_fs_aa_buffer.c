@@ -131,7 +131,7 @@ extern s32 sceGsSetDefDrawEnv(GsDrawEnv1 *, s16, s16, s16, s16, s16);
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width, s32 storage_height, s32 display_offset_x, s32 display_offset_y) __asm__("FUN_001fa978");
 
 void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width, s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
-    u64 *packet_word;
+    volatile u64 *packet_word;
     s32 strip_index;
     s32 left_x, next_x, right_x;
 
@@ -156,7 +156,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
                        fs_aa_buffer.zpsm);
     active_fs_aa_buffer->draw0.frame1.FBP = fs_aa_buffer.fbp0;
     active_fs_aa_buffer->draw0.zbuf1 = (u64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
-    *(u128 *)&active_fs_aa_buffer->giftag0 = 0;
+    *(volatile u128 *)&active_fs_aa_buffer->giftag0 = 0;
     active_fs_aa_buffer->giftag0.NLOOP = 8;
     active_fs_aa_buffer->giftag0.EOP = 1;
     active_fs_aa_buffer->giftag0.NREG = 1;
@@ -164,7 +164,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw1, fs_aa_buffer.storage_psm, fs_aa_buffer.storage_width, fs_aa_buffer.storage_height, 0, 0);
     active_fs_aa_buffer->draw1.zbuf1 = (u64)1 << 32;
     active_fs_aa_buffer->draw1.frame1.FBP = fs_aa_buffer.fbp1;
-    *(u128 *)&active_fs_aa_buffer->giftag1 = 0;
+    *(volatile u128 *)&active_fs_aa_buffer->giftag1 = 0;
     active_fs_aa_buffer->giftag1.NLOOP = 8;
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
@@ -184,14 +184,16 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_transfer_words[10] = 0x4400000000008010;
     fs_aa_transfer_words[11] = 0x5353;
     packet_word = &fs_aa_transfer_words[12];
-    for (strip_index = 0; strip_index < 16; strip_index++) {
+    strip_index = 0;
+    do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
         *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
                ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ = (strip_index + 1) * active_fs_aa_buffer->display_width | ((u64)active_fs_aa_buffer->display_height << 20);
         *packet_word++ = ((strip_index + 1) * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
                ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
-    }
+        strip_index++;
+    } while (strip_index < 16);
     fs_aa_transfer_words[76] = 0x4400000000008001;
     fs_aa_transfer_words[77] = 0x4410;
     fs_aa_transfer_words[78] = 0x181;

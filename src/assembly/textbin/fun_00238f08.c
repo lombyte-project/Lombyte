@@ -44,7 +44,7 @@ extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
-extern void *memset(void *, s32, u32);
+extern void *memset(void *, s32, u32) __asm__("func_001153FC");
 
 void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 target_height) __asm__("FUN_00238f08");
 
@@ -62,7 +62,7 @@ void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 tar
     region.line_advance = 0x10;
     region.flags = 1;
     if (vendor_state.selection_active != 0) {
-        if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 && weapon_ammo_counts[vendor_state.entries[vendor_state.selected_entry].item_index] >= vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].ammo_capacity) {
+        if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 && vendor_item_prices[vendor_state.entries[vendor_state.selected_entry].item_index].ammo_capacity <= weapon_ammo_counts[vendor_state.entries[vendor_state.selected_entry].item_index]) {
             evaluated_message_id = 0x5233;
         } else if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1) {
             if (vendor_state.discount_ammo_pricing != 0) {

@@ -35,7 +35,7 @@ typedef struct {
 } MipTextureUpload;
 
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
-extern void FillTransferWords(void *dst, s32 value, s32 size);
+extern void FillTransferWords(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);

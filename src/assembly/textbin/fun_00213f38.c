@@ -10,6 +10,10 @@ extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
 f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step, f32 braking_step, f32 maximum_speed) __asm__("FUN_00213f38");
 
+/* Advance value toward target while retaining velocity between calls. Brake
+   when motion points away from the target; otherwise choose a desired speed
+   from the stopping distance and snap to target when the next step reaches it.
+   The return value is the displacement applied during this call. */
 f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step, f32 braking_step, f32 maximum_speed)
 {
   f32 distance;

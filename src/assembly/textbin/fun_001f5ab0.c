@@ -61,17 +61,17 @@ void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 textu
     f32 inverse_pivot_v;
 
     if (flip_u != 0) {
-        texture_left = texture_width << 4;
+        texture_left = ((u32)texture_width << 4);
         texture_right = 0x10;
     } else {
-        texture_right = texture_width << 4;
+        texture_right = ((u32)texture_width << 4);
         texture_left = 0x10;
     }
     if (flip_v != 0) {
-        texture_top = texture_height << 20;
+        texture_top = ((u32)texture_height << 20);
         texture_bottom = 0x100000;
     } else {
-        texture_bottom = texture_height << 20;
+        texture_bottom = ((u32)texture_height << 20);
         texture_top = 0x100000;
     }
     center.x = center_x;

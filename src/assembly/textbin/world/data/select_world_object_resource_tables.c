@@ -61,6 +61,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     if (active_class_resource_index >= 0 && class_resource_ids[active_class_resource_index] == class_id) {
         return;
     }
+    /* Retail leaves the index at class_resource_count if the class is absent. */
     for (active_class_resource_index = 0; active_class_resource_index < class_resource_count; active_class_resource_index++) {
         if (class_resource_ids[active_class_resource_index] == class_id) {
             break;
@@ -79,6 +80,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     prepare_resident_class_render_data(resource_data, resident_indexed_textures, class_material_maps[active_class_resource_index], class_id);
     resource_table_index = active_class_resource_index;
     resource_tag = runtime_resource_tag;
+    /* Retail reloads the published resource pointer for each enabled entry. */
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {

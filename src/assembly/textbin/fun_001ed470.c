@@ -75,6 +75,8 @@ void update_camera_tracking_state(void) {
     Vec4 projected_displacement;
     struct CameraTrackingState *tracking;
     f32 forward_distance;
+    f32 direction_stiffness;
+    f32 direction_damping;
     s32 history_index;
     struct Moby *tracked_object;
 
@@ -83,13 +85,16 @@ void update_camera_tracking_state(void) {
     qcopy(&tracking->previous_target_direction, &tracking->target_direction);
     qcopy(&tracking->target_direction, &direction);
     if (dot_vectors_xyz(&tracking->direction, &direction) < -0.98f) {
+        /* Only the local damping target is perturbed; the published target stays normalized. */
         direction.f[0] += 0.2f;
         direction.f[1] += 0.2f;
         direction.f[2] += 0.2f;
     }
-    tracking->direction.f[0] = cam_interp_values(tracking->direction.f[0], direction.f[0], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[0]);
-    tracking->direction.f[1] = cam_interp_values(tracking->direction.f[1], direction.f[1], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[1]);
-    tracking->direction.f[2] = cam_interp_values(tracking->direction.f[2], direction.f[2], 0.015f, 0.2f, 0.0f, &tracking->direction_velocity[2]);
+    direction_stiffness = 0.015f;
+    direction_damping = 0.2f;
+    tracking->direction.f[0] = cam_interp_values(tracking->direction.f[0], direction.f[0], direction_stiffness, direction_damping, 0.0f, &tracking->direction_velocity[0]);
+    tracking->direction.f[1] = cam_interp_values(tracking->direction.f[1], direction.f[1], direction_stiffness, direction_damping, 0.0f, &tracking->direction_velocity[1]);
+    tracking->direction.f[2] = cam_interp_values(tracking->direction.f[2], direction.f[2], direction_stiffness, direction_damping, 0.0f, &tracking->direction_velocity[2]);
     normalize_vector_xyz(&tracking->direction, &tracking->direction, 1.0f);
 
     subtract_vector_xyz(&tracking->displacement, &player_state.pos, &tracking->previous_target_position);
@@ -100,9 +105,11 @@ void update_camera_tracking_state(void) {
     qcopy(&tracking->projected_displacement, &projected_displacement);
     subtract_vector_xyz(&tracking->perpendicular_displacement, &tracking->displacement, &projected_displacement);
     tracking->perpendicular_distance = vector_length_xyz(&tracking->perpendicular_displacement);
+    /* Retail divides by zero here when the perpendicular displacement vanishes. */
     scale_vector_xyz(&tracking->perpendicular_displacement, &tracking->perpendicular_displacement, 1.0f / tracking->perpendicular_distance);
     qcopy(&tracking->previous_target_position, &player_state.pos);
 
+    /* Primary mode 0x50 skips the height update unless secondary mode is 0x11. */
     if (player_state.primary_mode != 0x50 || player_state.secondary_mode == 0x11) {
         tracking->pos.f[0] = player_state.pos.f[0];
         tracking->pos.f[1] = player_state.pos.f[1];

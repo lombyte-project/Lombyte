@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00207c28/FUN_00207c28.s
 #else
 #include "types.h"
 
-extern void FillTransferWords(void *, s32, s32);
+extern void FillTransferWords(void *, s32, s32) __asm__("func_001F97E8");
 extern void copy_blocks_16_forward(void *, void *, s32) __asm__("func_001F98D0");
 void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *span_stream) __asm__("FUN_00207c28");
 

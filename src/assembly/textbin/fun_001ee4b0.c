@@ -33,6 +33,7 @@ extern f32 fog_far_intensity __asm__("D_0015F494");
 extern s32 find_camera_environment_region(void *, f32 *, s32 *) __asm__("func_00212C28");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 
+/* The color blend uses weights summing to 255 and shifts the sums by eight. */
 void update_camera_environment_from_regions(void *position) __asm__("FUN_001ee4b0");
 
 void update_camera_environment_from_regions(void *position) {

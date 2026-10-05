@@ -284,14 +284,13 @@ void update_mode_freeze(void)
         if (D_00193300.unk24 != 0)
         {
           D_00193300.unk24--;
+          break;
         }
-        else
-          if (D_00193300.unk20 != 0)
+        if (D_00193300.unk20 != 0)
         {
           D_00193300.unk20--;
+          break;
         }
-        else
-        {
           if (D_00193300.unk1C == 2)
           {
             if (D_0013F350.unk880 != (-1))
@@ -324,7 +323,6 @@ void update_mode_freeze(void)
               D_0013F350.unk890->unkBC = 3;
             }
           }
-        }
       }
         break;
 
