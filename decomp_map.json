@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4408,
-  "matching_c": 2658,
+  "matching_c": 2665,
   "intentional_asm": 301,
-  "pending_c": 1449,
+  "pending_c": 1442,
   "bytes_total": 3616452,
-  "bytes_matching_c": 796784,
+  "bytes_matching_c": 1023156,
   "bytes_intentional_asm": 123320,
-  "bytes_pending_c": 2696348,
-  "c_exact_percent_of_recoverable": 22.81,
-  "c_fuzzy_percent_of_recoverable": 25.7818,
+  "bytes_pending_c": 2469976,
+  "c_exact_percent_of_recoverable": 29.2905,
+  "c_fuzzy_percent_of_recoverable": 32.2623,
   "boot": {
     "units_total": 1453,
     "groups_total": 128,
@@ -1948,12 +1948,12 @@
   },
   "overlays": {
     "functions_total": 2905,
-    "matching_c": 1583,
-    "pending_c": 1322,
+    "matching_c": 1590,
+    "pending_c": 1315,
     "bytes_total": 3151768,
-    "bytes_matching_c": 567036,
-    "bytes_pending_c": 2584732,
-    "c_exact_percent_of_recoverable": 17.991,
+    "bytes_matching_c": 793408,
+    "bytes_pending_c": 2358360,
+    "c_exact_percent_of_recoverable": 25.1734,
     "intentional_asm": 50,
     "bytes_intentional_asm": 26972,
     "shared": {
@@ -1962,12 +1962,12 @@
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1571,
-      "matching_c": 1032,
-      "pending_c": 539,
+      "matching_c": 1033,
+      "pending_c": 538,
       "bytes_total": 1124640,
-      "bytes_matching_c": 350636,
-      "bytes_pending_c": 774004,
-      "c_exact_percent_of_recoverable": 31.1776,
+      "bytes_matching_c": 389960,
+      "bytes_pending_c": 734680,
+      "c_exact_percent_of_recoverable": 34.6742,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -2154,9 +2154,9 @@
         {
           "file": "src/overlays/shared/ui_help_00217970.c",
           "functions": 1,
-          "matching_c": 0,
+          "matching_c": 1,
           "bytes_total": 39324,
-          "bytes_matching_c": 0
+          "bytes_matching_c": 39324
         },
         {
           "file": "src/overlays/shared/ui_help_0021d0a0.c",
@@ -3657,12 +3657,12 @@
         "planet": "Nebula G34",
         "description": "Blarg Tactical Research Station: zero-gravity corridors",
         "functions": 80,
-        "matching_c": 33,
-        "pending_c": 47,
+        "matching_c": 34,
+        "pending_c": 46,
         "bytes_total": 133316,
-        "bytes_matching_c": 11920,
-        "bytes_pending_c": 121396,
-        "c_exact_percent_of_recoverable": 8.9412,
+        "bytes_matching_c": 38020,
+        "bytes_pending_c": 95296,
+        "c_exact_percent_of_recoverable": 28.5187,
         "files": [
           {
             "file": "src/overlays/l06/unclassified_00216b88.c",
@@ -3674,9 +3674,9 @@
           {
             "file": "src/overlays/l06/ui_help_00222fb8.c",
             "functions": 7,
-            "matching_c": 5,
+            "matching_c": 6,
             "bytes_total": 32348,
-            "bytes_matching_c": 5636
+            "bytes_matching_c": 31736
           },
           {
             "file": "src/overlays/l06/ui_help_002356a0.c",
@@ -3792,19 +3792,19 @@
         "planet": "Batalia",
         "description": "Fort Krontos: a war zone with turrets and tanks",
         "functions": 77,
-        "matching_c": 22,
-        "pending_c": 55,
+        "matching_c": 23,
+        "pending_c": 54,
         "bytes_total": 154164,
-        "bytes_matching_c": 6704,
-        "bytes_pending_c": 147460,
-        "c_exact_percent_of_recoverable": 4.3486,
+        "bytes_matching_c": 36908,
+        "bytes_pending_c": 117256,
+        "c_exact_percent_of_recoverable": 23.9407,
         "files": [
           {
             "file": "src/overlays/l08/ui_help_0021d9c0.c",
             "functions": 2,
-            "matching_c": 1,
+            "matching_c": 2,
             "bytes_total": 31064,
-            "bytes_matching_c": 860
+            "bytes_matching_c": 31064
           },
           {
             "file": "src/overlays/l08/ui_help_00230b38.c",
@@ -4127,19 +4127,19 @@
         "planet": "Oltanis",
         "description": "Gorda City Ruins: a bombed city in a storm",
         "functions": 125,
-        "matching_c": 41,
-        "pending_c": 84,
+        "matching_c": 42,
+        "pending_c": 83,
         "bytes_total": 149888,
-        "bytes_matching_c": 10600,
-        "bytes_pending_c": 139288,
-        "c_exact_percent_of_recoverable": 7.0719,
+        "bytes_matching_c": 35732,
+        "bytes_pending_c": 114156,
+        "c_exact_percent_of_recoverable": 23.8391,
         "files": [
           {
             "file": "src/overlays/l14/ui_help_0021dd30.c",
             "functions": 4,
-            "matching_c": 3,
+            "matching_c": 4,
             "bytes_total": 27264,
-            "bytes_matching_c": 2132
+            "bytes_matching_c": 27264
           },
           {
             "file": "src/overlays/l14/ui_help_0022ff58.c",
@@ -4255,12 +4255,12 @@
         "planet": "Kalebo III",
         "description": "Gadgetron headquarters and the hoverboard finals",
         "functions": 87,
-        "matching_c": 55,
-        "pending_c": 32,
+        "matching_c": 56,
+        "pending_c": 31,
         "bytes_total": 129728,
-        "bytes_matching_c": 24336,
-        "bytes_pending_c": 105392,
-        "c_exact_percent_of_recoverable": 18.7593,
+        "bytes_matching_c": 60388,
+        "bytes_pending_c": 69340,
+        "c_exact_percent_of_recoverable": 46.5497,
         "files": [
           {
             "file": "src/overlays/l16/ui_help_002097a0.c",
@@ -4272,9 +4272,9 @@
           {
             "file": "src/overlays/l16/ui_help_00214598.c",
             "functions": 1,
-            "matching_c": 0,
+            "matching_c": 1,
             "bytes_total": 36052,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 36052
           },
           {
             "file": "src/overlays/l16/ui_help_0021e398.c",
@@ -4312,12 +4312,12 @@
         "planet": "Veldin Orbit",
         "description": "Drek's Fleet: the flagship boarding",
         "functions": 56,
-        "matching_c": 35,
-        "pending_c": 21,
+        "matching_c": 36,
+        "pending_c": 20,
         "bytes_total": 139620,
-        "bytes_matching_c": 28384,
-        "bytes_pending_c": 111236,
-        "c_exact_percent_of_recoverable": 20.3295,
+        "bytes_matching_c": 64552,
+        "bytes_pending_c": 75068,
+        "c_exact_percent_of_recoverable": 46.2341,
         "files": [
           {
             "file": "src/overlays/l17/ui_help_002020a8.c",
@@ -4329,9 +4329,9 @@
           {
             "file": "src/overlays/l17/ui_help_00214760.c",
             "functions": 1,
-            "matching_c": 0,
+            "matching_c": 1,
             "bytes_total": 36168,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 36168
           },
           {
             "file": "src/overlays/l17/ui_help_0021e530.c",
@@ -4390,12 +4390,12 @@
         "planet": "Veldin",
         "description": "Kyzil Plateau again: the Deplanetizer and Drek",
         "functions": 115,
-        "matching_c": 69,
-        "pending_c": 46,
+        "matching_c": 70,
+        "pending_c": 45,
         "bytes_total": 154416,
-        "bytes_matching_c": 24952,
-        "bytes_pending_c": 129464,
-        "c_exact_percent_of_recoverable": 16.1589,
+        "bytes_matching_c": 58344,
+        "bytes_pending_c": 96072,
+        "c_exact_percent_of_recoverable": 37.7836,
         "files": [
           {
             "file": "src/overlays/l18/ui_help_00213b40.c",
@@ -4407,9 +4407,9 @@
           {
             "file": "src/overlays/l18/ui_help_0021eac8.c",
             "functions": 1,
-            "matching_c": 0,
+            "matching_c": 1,
             "bytes_total": 33392,
-            "bytes_matching_c": 0
+            "bytes_matching_c": 33392
           },
           {
             "file": "src/overlays/l18/ui_help_00227dd0.c",
@@ -4466,14 +4466,14 @@
   },
   "total": {
     "units_total": 4408,
-    "matching_c": 2658,
+    "matching_c": 2665,
     "intentional_asm": 301,
-    "pending_c": 1449,
+    "pending_c": 1442,
     "bytes_total": 3616452,
-    "bytes_matching_c": 796784,
+    "bytes_matching_c": 1023156,
     "bytes_intentional_asm": 123320,
-    "bytes_pending_c": 2696348,
-    "c_exact_percent_of_recoverable": 22.81,
-    "c_fuzzy_percent_of_recoverable": 25.7818
+    "bytes_pending_c": 2469976,
+    "c_exact_percent_of_recoverable": 29.2905,
+    "c_fuzzy_percent_of_recoverable": 32.2623
   }
 }
