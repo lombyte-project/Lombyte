@@ -116,7 +116,171 @@ void FUN_L17_002a95b8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cb310.s", FUN_L17_002cb310);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d77f0.s", FUN_L17_002d77f0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */
+
+typedef int u128_2D8CC8 __attribute__((mode(TI)));
+
+struct Blk {
+    int a0;
+    int a1;
+    float f8;
+    float fC;
+    void *p10;
+    int v14;
+    char c18;
+    char c19;
+    short h1A;
+    float f1C;
+    int i20;
+    int pad[3];
+};
+
+extern float ConvertIntegerToFloat(int);
+extern float D_0015ED6C;
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b48(void *, void *);
+extern float dot_vectors_xyz(void *, void *);
+extern float fast_add_rotations(float, float);
+extern float random_float_between(float, float);
+extern float vector_length_xyz(void *);
+extern float wrap_angle(float);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001fa728(char *, float);
+extern int FUN_L00_0020d568(void);
+extern int rand(void);
+extern int random_integer_below(int);
+extern int truncate_float_to_s32();
+extern short D_L17_00161B78 __attribute__((sda));
+extern short D_L17_00161B7C __attribute__((sda));
+extern short D_L17_00161B80 __attribute__((sda));
+extern short D_L17_00161B84 __attribute__((sda));
+extern short D_L17_00161B88 __attribute__((sda));
+extern short D_L17_00161B8C __attribute__((sda));
+extern short D_L17_00161B90 __attribute__((sda));
+extern short D_L17_00161B94 __attribute__((sda));
+extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale);
+extern unsigned char D_0013F3D0[];
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa298(void *, void *);
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L17_002d7cf0(void);
+extern void build_spherical_offset(void *, float, float, float);
+extern void enqueue_callback_list_1(void *, void *);
+extern void normalize_vector_triplet(void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *);
+extern void vu_euler_rotation_basis(void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L17_002d77f0(char *m) {
+    u128_2D8CC8 sp0[1];
+    u128_2D8CC8 sp10[1];
+    struct Blk blk;
+    u128_2D8CC8 mat1[3];
+    u128_2D8CC8 mat2[4];
+    u128_2D8CC8 spC0[1];
+    u128_2D8CC8 spD0[1];
+    u128_2D8CC8 spE0[1];
+    u128_2D8CC8 spF0[1];
+    u128_2D8CC8 sp100[1];
+    int j;
+    int k;
+    float *d;
+    float len;
+    float g;
+    float f21;
+    float f20;
+    int c;
+    char *w;
+
+    d = *(float **)(m + 0x78);
+    if (FUN_L00_0020d568() != 0) {
+        switch (*(unsigned char *)(m + 0x20)) {
+        case 0:
+            *(unsigned char *)(m + 0x30) = 0xFF;
+            *(unsigned char *)(m + 0x20) = 1;
+            d[1] = d[0] * *(float *)&D_L17_00161B78 * 0.017453292f * D_0015ED6C;
+            break;
+        case 1:
+            *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), d[1]);
+            enqueue_callback_list_1(FUN_L17_002d7cf0, m);
+            break;
+        }
+        subtract_vector_xyz(sp0, D_0013F3D0, (m + 0x10));
+        if (dot_vectors_xyz(sp0, (m + 0xC0)) > 0.0f) {
+            normalize_vector_xyz(sp10, (m + 0xC0), 1.0f);
+        } else {
+            normalize_vector_xyz(sp10, (m + 0xC0), -1.0f);
+        }
+        {
+        int i;
+        blk.p10 = m;
+        blk.v14 = 0x10001;
+        blk.i20 = 1;
+        blk.c18 = 1;
+        blk.f1C = 1.0f;
+        blk.f8 = 1.0f;
+        blk.fC = 5627.9248046875f;
+        blk.c19 = 1;
+        blk.h1A = *(unsigned short *)(m + 0xA6);
+        vu_euler_rotation_basis(mat1, m + 0x40);
+        normalize_vector_triplet(mat1);
+        FUN_001fa298(mat2, mat1);
+        i = 0;
+        do {
+            j = 0;
+            do {
+                f21 = wrap_angle(*(float *)&D_L17_00161B80 * 0.017453292f * ConvertIntegerToFloat(j) * 0.5f) - *(float *)&D_L17_00161B80 * 0.017453292f;
+                g = *(float *)&D_L17_00161B7C * 0.017453292f;
+                build_spherical_offset(spC0, *(float *)&D_L17_00161B84, 1.5707964f, fast_add_rotations(fast_add_rotations(g, wrap_angle(ConvertIntegerToFloat(i) * 2.0943952f)), f21));
+                FUN_001f9d20(spC0, spC0, mat2);
+                FUN_L00_001ff290(spD0, spC0, (m + 0x10));
+                if (FUN_001f9b48((m + 0x10), D_0013F3D0) < 30.0f) {
+                    FUN_001efa68((m + 0x10), spC0, 9, m, &blk);
+                }
+                spD0[0] = *(u128_2D8CC8 *)(m + 0x10);
+                *(float *)((char *)spD0 + 0xC) = *(float *)&D_L17_00161B84;
+                if (FUN_001fa728((char *)spD0, 20.0f) != -1 && (j == 0 || j == 4)) {
+                    spF0[0] = 0;
+                    *(float *)((char *)spF0 + 8) = 12.0f;
+                    transform_vector_by_basis(spF0, spF0, (m + 0xC0));
+                    {
+                        for (k = 0; k < *(int *)&D_L17_00161B88; k++) {
+                            f20 = -1.0f;
+                            if (rand() & 1) f20 = 1.0f;
+                            c = func_001FA898_r(FUN_001f96b0(random_float_between(*(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
+                            if (c <= 0) c = 1;
+                            subtract_vector_xyz(sp100, spC0, (m + 0x10));
+                            spF0[0] = sp100[0];
+                            scale_vector_xyz(spF0, spF0, f20);
+                            len = vector_length_xyz(spF0);
+                            if (f20 < 0.0f) spE0[0] = spC0[0];
+                            else spE0[0] = *(u128_2D8CC8 *)(m + 0x10);
+                            scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
+                            w = (char *)sp100;
+                            FUN_L00_001ff290(w, spE0, spF0);
+                            f20 = D_0015ED6C;
+                            f20 *= 10.0f;
+                            normalize_vector_xyz(spF0, spF0, random_float_between(f20, len / ConvertIntegerToFloat(c * 4)));
+                            FUN_L00_002730e0((float *)spE0, (char *)spF0, *(int *)&D_L17_00161B94, c & 0xFF, random_integer_below(0xFF) & 0xFF, 0, *(float *)&D_L17_00161B8C);
+                        }
+                    }
+                }
+                j++;
+            } while (j < 5);
+            i++;
+        } while (i < 3);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d7cf0.s", FUN_L17_002d7cf0);
 #include "sda.h"
 

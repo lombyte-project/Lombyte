@@ -71,7 +71,76 @@ void FUN_L13_002f3750(Level13VendorMoby *moby) {
         moby->flags |= 3;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002f3778.s", FUN_L13_002f3778);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Per-frame update: awards a stat/flag when its linked moby is gone, then sets a flag byte from a test. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern int D_0015ED84;
+extern int D_0015EEA4;
+extern int D_L13_0015F5C4;
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_00179710[];
+extern int FUN_L00_00203908(int a, int b);
+extern int is_point_inside_clip_volume(void *, int);
+extern int scale_game_frames(int);
+extern unsigned char D_0013D407[];
+extern unsigned char D_0014161B[];
+extern char D_001413DC[];
+extern char D_00141968[];
+extern char D_0013F3D0[];
+extern char D_00141CE4[];
+
+void FUN_L13_002f3778(char *moby) {
+    char *data;
+    unsigned char *p;
+    ((unsigned char *)moby)[0x30] = 0xFF;
+    data = *(char **)(moby + 0x78);
+    if (D_L13_00179710[0] == 0 && D_L13_00179710[9] == -1) {
+        unsigned int v = *(unsigned int *)(((char *)&D_001413DC));
+        if ((v < 2 || v == 9) ? D_L13_0015F5C4 == 0 : 0) {
+            int idx = *(int *)(data + 4);
+            char *m;
+            if (idx != -1) {
+                m = D_L13_0015FFD8_m + (idx << 8);
+                if (m != 0 && *(short *)(m + 0xA6) == 0xAA) {
+                    int s = (unsigned char)m[0x20];
+                    if (s == 0xFE) goto join;
+                    if (s != 0xFD) goto direct;
+                }
+            }
+        join:
+            p = D_0013D407 + 0xB9;
+            if (p[0xB] != 0 || p[0xD] != 0) {
+                unsigned char *q = ((char *)&D_00141968);
+                unsigned int h = *(unsigned short *)(q + 0x378);
+                if (h <= 0xFFFE) {
+                    *(unsigned short *)(q + 0x378) = h + 1;
+                }
+                if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(q + 0x37A)) {
+                    *(unsigned short *)(q + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
+                }
+                *(unsigned int *)(q + 0x37C) = *(unsigned int *)(q + 0x37C) | (1 << D_0015ED84) | 0x80000000;
+            } else {
+            direct:
+                if (is_point_inside_clip_volume(((char *)&D_0013F3D0), *(int *)data) != 0) {
+                    if (*(int *)(((char *)&D_00141CE4)) >= 0) {
+                        FUN_L00_00203908(0x32C8, 0x6F);
+                    }
+                }
+            }
+        }
+    }
+    if (is_point_inside_clip_volume(((char *)&D_0013F3D0), *(int *)(data + 8)) != 0) {
+        (((char *)&D_0013F3D0))[0x224B] = 0;
+    } else {
+        (((char *)&D_0013F3D0))[0x224B] = 1;
+    }
+}
 /* State machine: waits for a linked moby to reach one of a set of states, then pushes states onto linked mobys. */
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9D18), where it is exact; names translated to the US level program. */
 

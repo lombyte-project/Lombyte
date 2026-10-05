@@ -3,7 +3,75 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec720.s", FUN_L12_002ec720);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ecac0.s", FUN_L12_002ecac0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EDE40), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float v[16];
+    int c[4];
+    float uv[8];
+    long g[4];
+} Quad;
+
+extern char D_L12_001F5B20[];
+extern float fast_cos(float);
+extern float fast_sin(float);
+extern int FUN_001fa6e0(int, int, float);
+extern int get_effect_texture(int);
+extern short D_L12_00161A10 __attribute__((sda));
+extern short D_L12_00161A14 __attribute__((sda));
+extern short D_L12_00161A0C __attribute__((sda));
+extern short D_L12_00161A18 __attribute__((sda));
+extern short D_L12_00161A1C __attribute__((sda));
+extern short D_L12_00161A20 __attribute__((sda));
+extern short D_L12_00161A24 __attribute__((sda));
+extern void FUN_001fa298(void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+
+void FUN_L12_002ecac0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    Quad q;
+    float m[12];
+    float pos[4];
+    float a, b;
+    int i, col;
+    FUN_001fa298(m, moby + 0xC0);
+    qcopy(pos, moby + 0x10);
+    pos[2] = pos[2] + *(float *)(data + 8);
+    pos[3] = 1.0f;
+    q.g[1] = get_effect_texture(0x10);
+    q.g[0] = 0;
+    q.g[2] = 0xFF9000000260UL;
+    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) | ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) | (0x8000L << 24);
+    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+    for (i = 0; i < 4; i++) {
+        q.uv[i * 2] = 0.5f;
+        *(&q.uv[i * 2] + 1) = 0.5f;
+        q.c[i] = col;
+        qcopy(&q.v[i * 4], D_L12_001F5B20 + i * 16);
+    }
+    for (a = -0.4f; a < 0.36f; a += 0.1f) {
+        b = a + 0.1f;
+        q.v[9] = a;
+        q.v[1] = a;
+        q.v[13] = b;
+        q.v[5] = b;
+        if (moby[0xBC] & 1) {
+            q.v[2] = -fast_cos(a * *(float *)&D_L12_00161A24) + 2.0f;
+            q.v[6] = -fast_cos(b * *(float *)&D_L12_00161A24) + 2.0f;
+        } else {
+            q.v[2] = fast_cos(a * *(float *)&D_L12_00161A24);
+            q.v[6] = fast_cos(b * *(float *)&D_L12_00161A24);
+        }
+        draw_geometry_quad(&q, m, 0);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -42,3 +42,6 @@ l05/ui_help_0024cee8.c
 l16/ui_help_0021e398.c
 l01/ui_help_00233de0.c
 l02/ui_help_0021b698.c
+l12/unclassified_002ec720.c
+l13/unclassified_002ea8c8.c
+l17/unclassified_002a8da0.c
