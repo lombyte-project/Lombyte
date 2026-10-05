@@ -141,8 +141,8 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
             tex0_word = ((width_units_64 << 14) | (((s64)width_log2 << 26) | ((s64)0x13 << 20))) |
                 ((s64)height_log2 << 30) | ((s64)(texture->clut + gs_block_base) << 37) |
                 ((s64)1 << 34) | (1ULL << 63);
-            tex1_word = ((s64)(texture->draw_control_count - 1) << 2) | ((s64)draw_shift << 6) |
-                0x20ULL | ((s64)draw_high << 32);
+            tex1_word = (((s64)(texture->draw_control_count - 1) << 2) |
+                ((s64)draw_shift << 6) | 0x20ULL) | ((s64)draw_high << 32);
             clamp_word = (s64)material_base | ((s64)material_shift << 2) | ((s64)texture_index << 24);
             mip_word = (width_units_128 << 14) | ((s64)(texture->mip_block_offset_0 + gs_block_base) << 20) |
                 ((s64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
