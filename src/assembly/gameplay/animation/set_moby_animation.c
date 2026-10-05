@@ -16,11 +16,9 @@ void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8")
 
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) {
     struct Anim **slot;
-    /* retail register file: a0 = &anims[sel], v0 = anim pointer / o->cur,
-       a1 = count / o->next */
-    register struct Anim **anims __asm__("$4");
-    register s32 n __asm__("$5");
-    register s32 v __asm__("$2");
+    struct Anim **anims;
+    s32 n;
+    s32 v;
 
     anims = o->set->anims;
     slot = &anims[sel];
