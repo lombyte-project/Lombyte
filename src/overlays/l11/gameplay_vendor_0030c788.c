@@ -274,6 +274,71 @@ void FUN_L11_003126f8(char *moby, char *d) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00312838.s", FUN_L11_00312838);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313290.s", FUN_L11_00313290);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00313f60.s", FUN_L11_00313f60);
+#include "sda.h"
+/* Same source as the exact FUN_L17_002edf10, with its path index at 0x104 and a fixed floor of 250. */
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float FUN_001f9e90(float, float);
+
+extern char *D_L11_001600EC __attribute__((section(".sdata")));
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") __attribute__((section(".sdata")));
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_0013F350_c[] __asm__("D_0013F350");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L11_00313f60(char *moby, float *a, float *b) {
+    char *d = *(char **)(moby + 0x78);
+    float v[4];
+    float zz, dist, tmp, hi, lo, f, t, k, r, s;
+    unsigned char *base;
+    scale_vector_xyz(v, d + 0x10, *(float *)(d + 0x64) * (float)scale_game_frames(0x3C));
+    add_vector_xyz(v, v, moby + 0x10);
+    zz = v[2];
+    subtract_vector_xyz(v, v, (*(int *)(d + 0x104) << 7) + D_L11_001600EC + 0x30);
+    dist = vector_length_xy(v);
+    tmp = vector_length_xy((*(int *)(d + 0x104) << 7) + D_L11_001600EC);
+    hi = *(float *)(D_L17_001600EC_t[*(int *)(d + 0x104)] + 0x28);
+    lo = *(float *)(D_L17_001600EC_t[*(int *)(d + 0x104)] + 0x38);
+    t = hi + lo;
+    f = fast_add_rotations(FUN_001f9e90(v[0], v[1]), 3.141590118408203f);
+    if (tmp - 10.0f < dist) {
+        r = (dist - tmp + 10.0f) / 10.0f;
+        s = fast_subtract_rotations(f, *(float *)(d + 0x38));
+        if (r > 1.0f) r = 1.0f; else if (r < 0.0f) r = 0.0f;
+        if (s > 0.0f) {
+            *a = (-1.0f - *a) * r + *a;
+        } else {
+            *a = (1.0f - *a) * r + *a;
+        }
+        base = D_0013F350_c;
+        base[0x160F] |= 2;
+    }
+    if (t - 10.0f < zz) {
+        float q, w;
+        q = (zz - t + 10.0f) / 10.0f;
+        w = (0.5235987901687622f - *(float *)(d + 0x34)) / 0.5235987901687622f;
+        if (q > 1.0f) q = 1.0f; else if (q < 0.0f) q = 0.0f;
+        if (w > 1.0f) w = 1.0f; else if (w < 0.0f) w = 0.0f;
+        q = q * w;
+        *b = (-1.0f - *b) * q + *b;
+        {
+            unsigned char *p = D_0013F350_c;
+            p[0x160F] |= 2;
+        }
+    } else if (zz < 260.0f) {
+        float q, w;
+        q = (250.0f - zz + 10.0f) / 10.0f;
+        w = (*(float *)(d + 0x34) + 0.5235987901687622f) / 0.5235987901687622f;
+        if (q > 1.0f) q = 1.0f; else if (q < 0.0f) q = 0.0f;
+        if (w > 1.0f) w = 1.0f; else if (w < 0.0f) w = 0.0f;
+        q = q * w;
+        *b = (1.0f - *b) * q + *b;
+        {
+            unsigned char *p = D_0013F350_c;
+            p[0x160F] |= 2;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00314318.s", FUN_L11_00314318);
 

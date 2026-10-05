@@ -309,7 +309,7 @@ extern void FUN_L05_00319690(char *);
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
 extern void FUN_L05_00319208(void *);
-extern void FUN_L05_003193a8(char *);
+extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -344,7 +344,7 @@ void FUN_L05_00318c78(char *moby) {
             v70[3] = 0;
             FUN_001f9d20(v70, v70, v30);
             if (AbsoluteFloat(v70[1]) < 1.2f && v70[0] < 1.0f && v70[0] > -0.75f) {
-                FUN_L05_003193a8(moby);
+                FUN_L05_003193a8_u(moby);
                 FUN_L05_00319690(moby);
                 if (*(int *)(D_0013CAE4) & 0x10) {
                     moby[0x20] = 3;
@@ -437,5 +437,48 @@ void FUN_L05_00318c78(char *moby) {
     FUN_L00_00260738(d + 0x20, v20, v10, moby + 0x40);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003193a8.s", FUN_L05_003193a8);
+/* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
+extern float D_0015ED70;
+
+void FUN_L05_003193a8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float inv, a, b, r;
+    switch (*(short *)(d + 0xB4)) {
+    case 0:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x94)];
+        *(short *)(d + 0xB6) = 1;
+        break;
+    case 1:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x98)];
+        *(short *)(d + 0xB6) = 0;
+        break;
+    case 2:
+        if (D_0014C050[D_0015ED84][*(int *)(d + 0xB8)] != 0xFF) {
+            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0x9C)];
+            *(short *)(d + 0xB6) = 3;
+        } else {
+            *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA4)];
+            *(short *)(d + 0xB6) = 4;
+        }
+        break;
+    case 3:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA0)];
+        *(short *)(d + 0xB6) = 2;
+        break;
+    case 4:
+        *(char **)(d + 0xAC) = D_L05_001B0930[*(int *)(d + 0xA8)];
+        *(short *)(d + 0xB6) = 2;
+        break;
+    }
+    p = *(char **)(d + 0xAC);
+    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    a = D_0015ED6C * 20.0f;
+    b = D_0015ED70 * 5.0f;
+    inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
+    *(int *)(d + 0xC4) = 0;
+    *(int *)(d + 0xC0) = 0;
+    *(float *)(d + 0xD4) = a * inv;
+    *(float *)(d + 0xD8) = b * inv;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319c28.s", FUN_L05_00319c28);

@@ -233,7 +233,46 @@ void FUN_L14_002ef630(u8 *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef6f0.s", FUN_L14_002ef6f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1140.s", FUN_L14_002f1140);
+/* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
+extern char *D_L14_001B0BB0_c2[] __asm__("D_L14_001B0BB0");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b48(void *, void *);
+
+void FUN_L14_002f1140(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *p;
+    float inv, a, b, r;
+    switch (*(short *)(d + 0xB4)) {
+    case 0:
+        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x94)];
+        *(short *)(d + 0xB6) = 1;
+        break;
+    case 1:
+        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x98)];
+        *(short *)(d + 0xB6) = 0;
+        break;
+    case 2:
+        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0x9C)];
+        *(short *)(d + 0xB6) = 3;
+        break;
+    case 3:
+        *(char **)(d + 0xAC) = D_L14_001B0BB0_c2[*(int *)(d + 0xA0)];
+        *(short *)(d + 0xB6) = 0;
+        break;
+    case 4:
+        break;
+    }
+    p = *(char **)(d + 0xAC);
+    r = FUN_001f9b48(p + 0x10, p + 0x20);
+    a = D_0015ED6C * 5.0f;
+    b = D_0015ED70 * 2.5f;
+    inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
+    *(int *)(d + 0xC4) = 0;
+    *(int *)(d + 0xC0) = 0;
+    *(float *)(d + 0xD4) = a * inv;
+    *(float *)(d + 0xD8) = b * inv;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f12f0.s", FUN_L14_002f12f0);
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
