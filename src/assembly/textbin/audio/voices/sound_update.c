@@ -168,7 +168,9 @@ s32 sound_update(void) {
     }
 
     qzero(&listener_velocity);
-    history_index = (D_0013E550.listener_history_position + 1) % 4;
+    { s32 *history_position = &D_0013E550.listener_history_position;
+    history_index = *history_position + 1;
+    history_index %= 4; }
     D_0013E550.listener_history_position = history_index;
     qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
 
@@ -207,8 +209,8 @@ s32 sound_update(void) {
     snd_set_master_volume(4, D_0013E550.group_4_volume);
     snd_set_master_volume(5, D_0013E550.group_5_volume);
 
-    volumes = voice_volumes;
     voice_flags = flags;
+    volumes = voice_volumes;
     FillTransferWords(voice_flags, 0, 0x78);
     FillTransferWords(volumes, 0, 0x78);
     FillTransferWords(radial_velocities, 0, 0x78);
