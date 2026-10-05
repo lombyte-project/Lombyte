@@ -28,11 +28,11 @@ void _sequenceHeader(struct M2c_arg0 *arg0) {
     u32 temp_2_54;
 
     arg0->unkD4 = 0;
-    temp_2_8 = _nextBit(arg0, 0x20);
-    temp_2_12 = temp_2_8;
+    temp_2_12 = _nextBit(arg0, 0x20);
     temp_2_8 = (temp_2_12 >> 8) & 0xFFF;
     arg0->unk124 = (u32)temp_2_12 >> 0x14;
-    if ((arg0->unk128 = temp_2_8) >= 0xAF1) {
+    arg0->unk128 = temp_2_8;
+    if ((s32)temp_2_8 >= 0xAF1) {
         _Error(arg0, D_00153AE8);
     }
     temp_2_24 = _nextBit(arg0, 0x1E);
