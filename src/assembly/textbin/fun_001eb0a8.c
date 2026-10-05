@@ -76,7 +76,7 @@ void update_gameplay_frame(void)
     s32 actor_index;
     f32 fade;
     f32 half;
-    s32 frame_index;
+    u8 frame_index;
 
     func_001E9430();
     fade = sequence_fade - 0.0625f;
@@ -99,7 +99,7 @@ void update_gameplay_frame(void)
         actor = render_sequence.actors[actor_index];
         frame_index = render_sequence.frame >> 1;
         actor->current_frame = frame_index;
-        actor->next_frame = (render_sequence.frame >> 1) + 1;
+        actor->next_frame = frame_index + 1;
         func_0020C880(actor);
         actor->frame_fraction = func_001FA6C0(render_sequence.frame & 1) * half;
         animation_positions = ((RenderSequenceSidecar *)actor)->animation_positions;
