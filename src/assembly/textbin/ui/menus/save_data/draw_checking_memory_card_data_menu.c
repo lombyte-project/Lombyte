@@ -84,7 +84,6 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
     s16 window_fields[12];
     struct MemoryCardMenuEntry *entry;
     char *text;
-    u64 texture;
     s32 state = menu->state;
     s32 entry_offset;
 
@@ -135,8 +134,7 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         }
     }
     setup_gif_paging(0);
-    texture = func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture);
-    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0, menu->texture_width, menu->texture_height, 0x80808080, texture);
+    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0, menu->texture_width, menu->texture_height, 0x80808080, func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture));
     do_gif_paging();
     return 0x10;
 }
