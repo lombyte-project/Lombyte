@@ -150,7 +150,7 @@ extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void func_0020C828(LevelRenderObject *);
-extern void func_0020C880(LevelRenderObject *, s32);
+extern void func_0020C880(LevelRenderObject *);
 extern void calculate_object_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void func_0020DEF8(LevelRenderObject *);
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
@@ -288,7 +288,7 @@ void update_level_gameplay_frame(void) {
             object->selected_b = transform_count;
             object->state_a = 0;
             object->state_b = 0;
-            func_0020C880(object, transform_count);
+            func_0020C880(object);
             func_001F98D0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
             func_001F98D0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
             object->selected_index = 0x1FF;
