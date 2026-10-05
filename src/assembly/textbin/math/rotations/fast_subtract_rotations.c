@@ -12,10 +12,10 @@ f32 fast_subtract_rotations(f32 angle, f32 delta) {
     f32 sum = difference + PI;
     f32 wrapped_angle = difference;
     if (!(difference < PI)) {
-        wrapped_angle = wrapped_angle - PI - PI;
+        wrapped_angle = (wrapped_angle - PI) - PI;
     }
     if (sum < 0.0f) {
-        wrapped_angle = wrapped_angle + PI + PI;
+        wrapped_angle = sum + PI;
     }
     return wrapped_angle;
 }
