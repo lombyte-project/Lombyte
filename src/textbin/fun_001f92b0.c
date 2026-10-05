@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f92b0/FUN_001f92b0.s", FUN_001f92b0);
-#else
 #include "types.h"
 #include "qcopy.h"
 
@@ -80,7 +77,7 @@ void append_billboard_batch(void)
         distance = fast_vec_length(&projected_position);
         fast_vec_scale(&projected_position, &projected_position, 1024.0f);
         transform_vector(&projected_position, &projected_position, camera_position - 0x100);
-        multiply_vector_components(&clip_position, &projected_position, &clip_transform);
+        multiply_vector_components(&clip_position, &projected_position, (char *)&view_context + 0x180);
         if (is_vector_outside_clip(&clip_position) != 0) {
             FillTransferWords(record, 0, 0x20);
             continue;
@@ -129,5 +126,3 @@ void append_billboard_batch(void)
 }
 
 extern __typeof__(append_billboard_batch) func_001F92B0 __attribute__((alias("FUN_001f92b0")));
-
-#endif /* NON_MATCHING */

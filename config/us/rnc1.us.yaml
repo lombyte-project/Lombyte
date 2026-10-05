@@ -1090,7 +1090,7 @@ segments:
           - [0xf9924, c, assembly/textbin/fun_001f89a4]
           - [0xf9f70, c, assembly/textbin/fun_001f8ff0]
           - [0xfa228, textbin, text_gap_001f92a8_after_fun_001f8ff0]
-          - [0xfa230, c, assembly/textbin/fun_001f92b0]
+          - [0xfa230, c, textbin/fun_001f92b0]
           - [0xfa5c8, textbin, text_gap_001f9648_after_fun_001f92b0]
           - [0xfa630, c, assembly/math/multiply_global_factor_ed64]
           - [0xfa640, textbin, text_gap_001f96c0]
