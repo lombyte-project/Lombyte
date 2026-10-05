@@ -22,23 +22,25 @@ extern s32 _waitIpuIdle();
 
 void _sequenceHeader(struct M2c_arg0 *arg0) {
     u32 temp_2_8;
-    s32 temp_2_12;
+    u32 temp_2_12;
     u32 temp_2_24;
     u32 temp_2_33;
     u32 temp_2_54;
 
     arg0->unkD4 = 0;
     temp_2_8 = _nextBit(arg0, 0x20);
-    temp_2_12 = (temp_2_8 >> 8) & 0xFFF;
-    temp_2_8 >>= 0x14;
-    arg0->unk124 = temp_2_8;
-    if ((arg0->unk128 = temp_2_12) >= 0xAF1) {
+    temp_2_12 = temp_2_8;
+    temp_2_8 = (temp_2_12 >> 8) & 0xFFF;
+    arg0->unk124 = (u32)temp_2_12 >> 0x14;
+    if ((arg0->unk128 = temp_2_8) >= 0xAF1) {
         _Error(arg0, D_00153AE8);
     }
     temp_2_24 = _nextBit(arg0, 0x1E);
-    arg0->unk138 = (s32) ((temp_2_24 >> 1) & 0x3FF);
-    temp_2_24 >>= 0xC;
-    arg0->unk134 = temp_2_24;
+    temp_2_12 = temp_2_24;
+    temp_2_8 = temp_2_12 >> 1;
+    temp_2_12 >>= 0xC;
+    arg0->unk134 = temp_2_12;
+    arg0->unk138 = temp_2_8 & 0x3FF;
     temp_2_33 = _nextBit(arg0, 1);
     arg0->unk840 = temp_2_33;
     if (temp_2_33 != 0) {
@@ -90,9 +92,9 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     temp_6_16 = temp_30_15->unk848;
     if (temp_6_16 == 0) {
         temp_30_15->unk174 = 3;
-        temp_30_15->unk188 = 1;
         temp_30_15->unk13C = 1;
         temp_30_15->unk140 = 1;
+        temp_30_15->unk188 = 1;
         temp_30_15->unk17C = 1;
         temp_30_15->unk144 = 5;
     }
