@@ -31,13 +31,12 @@ struct M2c_arg0
   s32 unk1DC;
 };
 extern u8 D_00153AB8[];
-extern s32 _Error();
-extern s32 _dispRefImage();
-extern s32 _dispRefImageField();
+extern s32 _Error(struct M2c_arg0 *, u8 *, s32);
+extern s32 _dispRefImage(struct M2c_arg0 *, s32, s32, s32);
+extern s32 _dispRefImageField(struct M2c_arg0 *, s32, s32, s32);
 void _lastFrame(struct M2c_arg0 *arg0)
 {
-  register s32 count asm("a2");
-  s32 next;
+  s32 count;
   count = arg0->unk118;
   if (arg0->unk120 != 0)
   {
@@ -45,7 +44,6 @@ void _lastFrame(struct M2c_arg0 *arg0)
   }
   else
   {
-    next = count - 1;
     if (arg0->unk174 == 3)
     {
       _dispRefImage(arg0, arg0->unk1BC, count - 1, count - 1);
