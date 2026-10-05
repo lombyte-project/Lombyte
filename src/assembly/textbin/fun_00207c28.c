@@ -48,7 +48,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
                 if (control_remaining == 0) {
                     do {
                         control_remaining = *control_stream++;
-                        bit_value = bit_value == 0;
+                        bit_value = !bit_value;
                     } while (control_remaining == 0);
                 }
                 *expanded_cursor++ = bit_value;
