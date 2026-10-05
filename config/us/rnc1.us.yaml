@@ -740,7 +740,7 @@ segments:
           - [0x2daac, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb2c]
           - [0x2dab0, c, sdk/callbacks/suspend_mpeg_decoder_ipu_dma]
           - [0x2dabc, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb3c]
-          - [0x2dac0, c, assembly/sdk/callbacks/resume_mpeg_decoder_ipu_dma]
+          - [0x2dac0, c, sdk/callbacks/resume_mpeg_decoder_ipu_dma]
           - [0x2dacc, textbin, text_gap_0012ca60_post_sdk_worker_tail_0012cb4c]
           - [0x2dad0, c, sdk/dma/set_d3_chcr]
           - [0x2db34, textbin, text_gap_0012c2f0_d3]
