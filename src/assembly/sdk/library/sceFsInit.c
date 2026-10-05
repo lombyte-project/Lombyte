@@ -62,7 +62,7 @@ s32 sceFsInit(void) {
     struct FsWord4 response_word;
 
     sceSifInitRpc(0);
-    init_request->field0 = 0;
+    D_00158000[0].field0 = 0;
     init_request->field4 = 0;
     irq_state = DIntr();
     sceSifAddCmdHandler(0x80000011, &_sceFs_Rcv_Intr, D_00157FC0);
