@@ -62,7 +62,7 @@ f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 accele
         return distance;
     }
     approach_value(velocity, 0.0f, braking_step);
-    *value = (distance_or_next_value = (*value) + (*velocity));
+  *value = (distance_or_next_value = *value + *velocity, distance_or_next_value);
     return *velocity;
 }
 
