@@ -8,9 +8,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f96f8/FUN_001f96f8.s
 extern f32 game_time_scale __asm__("D_0015ED68") __attribute__((sda));
 s32 scale_game_frames(s32 frames) __asm__("FUN_001f96f8");
 s32 scale_game_frames(s32 frames) {
-    f32 scaled_frames;
-    /* Retail forms this bias with 0.25f + 0.25f in the FPU accumulator. */
-    scaled_frames = 0.5f;
+    f32 scaled_frames = 0.25f;
+    scaled_frames += 0.25f;
     scaled_frames += (f32) frames * game_time_scale;
     return (s32) scaled_frames;
 }
