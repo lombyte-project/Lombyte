@@ -31,11 +31,7 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
     }
     addr = depth_buffer_address;
     previous_counts = hud_texture_counts;
-    if (bank != 0) {
-        i = previous_counts->ends[bank - 1];
-    } else {
-        i = 0;
-    }
+    i = bank != 0 ? previous_counts->ends[bank - 1] : 0;
     end = D_0019A3E8.counts->ends[bank];
     for (; i < end; i++) {
         page = addr >> 8;
