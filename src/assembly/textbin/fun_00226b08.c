@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00226b08/FUN_00226b08.s", FUN_00226b08);
 #else
 #include "types.h"
+#include "sda.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
    Only listed bytes of D_0013D4C0 are restored; each D_00141EA0 entry is
@@ -49,7 +50,7 @@ extern s32 D_0015ED98;
 extern u8 D_0015EE1C;
 extern u8 D_0015EE1D;
 extern s32 D_0015EE20;
-extern u8 D_0015EE98[];
+extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 D_001D5BA0[];
 
 extern void func_001F9838(void *dst, void *src, s32 size);
