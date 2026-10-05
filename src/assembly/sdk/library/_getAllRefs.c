@@ -71,6 +71,7 @@ void _getAllRefs(Decoder *d, int bx, int by, int mb_type, int motion_type,
             }
         } else {
             currentfield = d->picture_structure == 2;
+            /* Keep the retail stack order: two field choices per reference set. */
             refs[0][0] = d->field[0][0];
             refs[0][1] = d->field[1][0];
             refs[1][0] = d->field[0][1];
