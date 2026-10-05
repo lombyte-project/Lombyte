@@ -47,7 +47,7 @@ u64 get_effect_texture(s32 index) {
     s32 pending_texture_upload_count_snapshot;
 
     texture = &effect_texture_definitions[index];
-    if (texture->tex0 == 0) {
+    if ((width_bits = texture->tex0) == 0) {
         width_log2 = texture->width_log2;
         buffer_width_shift = width_log2 - 6;
         palette_block_offset = gs_texture_allocation_cursor >> 8;
@@ -57,8 +57,7 @@ u64 get_effect_texture(s32 index) {
         tex0_word = texel_block_offset;
         tex0_word |= ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
         /* Retail sign-extends each 16-bit exponent before packing TEX0. */
-        width_bits = ((s64)((u64)(u16)texture->width_log2 << 48) >> 22);
-        width_bits |= 0x1300000;
+        width_bits = ((s64)((u64)(u16)texture->width_log2 << 48) >> 22) | 0x1300000;
         tex0_word |= width_bits;
         tex0_word |= (s64)((u64)(u16)texture->height_log2 << 48) >> 18;
         palette_bits = (u64)palette_block_offset << 37;
