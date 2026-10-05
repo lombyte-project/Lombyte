@@ -19,7 +19,6 @@ void update_visible_resident_objects(void) __asm__("FUN_00212e28");
  * mutate flags or the list link. Read each field at its point of use. */
 void update_visible_resident_objects(void) {
     struct Moby *moby;
-    void (*update_callback)(struct Moby *);
 
     moby = visible_moby_list = build_resident_visibility_list();
     while (moby != 0) {
@@ -27,9 +26,8 @@ void update_visible_resident_objects(void) {
             if (!(moby->flags & 0x40)) {
                 advance_resident_object_animation(moby);
             }
-            update_callback = moby->update_callback;
-            if (update_callback != 0) {
-                update_callback(moby);
+            if (moby->update_callback != 0) {
+                moby->update_callback(moby);
             }
             if (!(moby->flags & 0x4)) {
                 refresh_resident_object_spatial_bounds(moby);
