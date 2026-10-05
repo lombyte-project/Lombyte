@@ -172,7 +172,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 moby->x = camera_x + preview_placements[item_index].normal_x;
             }
             offset = preview_placements[item_index].y;
-            moby->y = camera_position[1] + offset;
+            moby->y = preview_camera.y + offset;
             moby->z = camera_position[2] + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
