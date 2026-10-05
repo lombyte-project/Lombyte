@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021b1c8/FUN_0021b1c8.s", FUN_0021b1c8);
-#else
 #include "types.h"
 
 typedef struct 
@@ -200,9 +197,7 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
         x = half_width - (maximum_text_width >> 1);
       }
       func_001F61F8();
-      shadow_x = x + text_shadow_x;
-      ;
-      font_print(shadow_x, y + text_shadow_y, 0x80000000L, text_id, -1, get_effect_texture(font_texture_index), glyphs);
+      font_print(x + text_shadow_x, y + text_shadow_y, 0x80000000L, text_id, -1, get_effect_texture(font_texture_index), glyphs);
       func_001F61E8();
       if (menu->flags & 0x80)
       {
@@ -221,8 +216,7 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
         {
           func_001F61E8();
         }
-        secondary_text = get_help_message_text(menu->items[entry_index].secondary_text_id);
-        font_print(x, y, color, secondary_text, -1, get_effect_texture(font_texture_index), glyphs);
+        font_print(x, y, color, get_help_message_text(menu->items[entry_index].secondary_text_id), -1, get_effect_texture(font_texture_index), glyphs);
         y += row_height;
       }
       if (menu->flags & 0x80)
@@ -239,5 +233,3 @@ s32 render_localized_ui_entry_list(MenuDescriptor *menu)
 }
 
 extern __typeof__(render_localized_ui_entry_list) func_0021B1C8 __attribute__((alias("FUN_0021b1c8")));
-
-#endif /* NON_MATCHING */
