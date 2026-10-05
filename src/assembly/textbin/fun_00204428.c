@@ -31,7 +31,7 @@ struct LevelArchiveHeader {
 extern struct LevelArchiveDiscTable D_00137B80;
 extern s16 D_0013E056[];
 extern s32 D_0015ED58 MACRO_ADDR;
-extern s32 D_0015ED5C MACRO_ADDR;
+extern u32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
@@ -128,6 +128,7 @@ s32 service_level_archive_load(void) {
         } else {
             submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
         }
+increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 3:
@@ -147,8 +148,7 @@ s32 service_level_archive_load(void) {
         }
         snd_unload_bank(D_0015ED5C);
         D_0015ED5C = 0;
-        D_0015EE48 = D_0015EE48 + 1;
-        break;
+        goto increment_stage;
     case 5:
         if (snd_flush_sound_commands() != 0) {
             return 0;
@@ -161,7 +161,7 @@ s32 service_level_archive_load(void) {
             return 0;
         }
         shared_header = D_0015EE4C;
-        D_0015ED5C = -1;
+        D_0015ED5C = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header, (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
         D_0015EE48 = D_0015EE48 + 1;
         break;
@@ -169,7 +169,7 @@ s32 service_level_archive_load(void) {
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
-        if (D_0015ED5C == -1) {
+        if ((u32)D_0015ED5C == 0xFFFFFFFFU) {
             return 0;
         }
         snd_resolve_bank_xrefs();
