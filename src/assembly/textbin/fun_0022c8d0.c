@@ -48,11 +48,13 @@ void initialize_gameplay_sound_system(void) {
     s32 scaled_volume_70;
     s32 header_block_index;
 
-    for (header_block_index = 3, header_block = voice_pool_header;
-         header_block_index >= 0;
-         header_block_index -= 1, header_block += 16) {
+    header_block_index = 3;
+    header_block = voice_pool_header;
+    do {
         qzero(header_block);
-    }
+        header_block_index -= 1;
+        header_block += 16;
+    } while (header_block_index >= 0);
     voice_pool.listener_history_position = 0;
     voice_pool.reserved44 = 0;
     slot_window = (struct VoicePoolInitializationWindow *)&voice_pool;
