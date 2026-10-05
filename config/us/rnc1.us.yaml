@@ -732,7 +732,7 @@ segments:
           - [0x2da6c, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012caec]
           - [0x2da70, c, assembly/sdk/callbacks/report_mpeg_sequence_scalable_unsupported]
           - [0x2da7c, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cafc]
-          - [0x2da80, c, assembly/sdk/callbacks/report_unknown_mpeg_extension]
+          - [0x2da80, c, sdk/callbacks/report_unknown_mpeg_extension]
           - [0x2da8c, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb0c]
           - [0x2da90, c, sdk/callbacks/report_mpeg_picture_spatial_scalable_unsupported]
           - [0x2da9c, textbin, text_gap_0012ca60_post_sdk_worker_prefix_0012cb1c]
