@@ -122,7 +122,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         break;
     }
     if (h.ret.v < 0) {
-        h.ret.v = -h.ret.v;
+        h.ret.v = -(u32)h.ret.v;
         ret = h.ret.v;
         for (i = 0; i < 32; i++) {
             if (D_0012FC10[i] == ret) {
