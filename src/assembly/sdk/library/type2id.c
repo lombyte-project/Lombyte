@@ -27,8 +27,10 @@ s64 _type2id(u32 id, s64 value) {
         type_mask = ((u64)0xFFFF000000);
         if (field == type_mask)
             goto ca;
-        if (type_mask < field)
+        if (type_mask < field) {
+            shift = 0;
             goto done;
+        }
         if (field == ((u64)0xFF00000000))
             goto cb;
         goto done;
