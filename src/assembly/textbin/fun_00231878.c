@@ -109,7 +109,7 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     image_bits = (u64)(texture_bases[1] | 0x19304000);
     *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
     *first_output = (texture_bases[3] | 0x25320000) | (((u64)texture_bases[2] << 37) | (0xB000ULL << 19)) | (1ULL << 63);
-    *second_output = (texture_bases[5] | 0x25320000) | (((u64)texture_bases[4] << 37) | (0xB000ULL << 19)) | (1ULL << 63);
+    *second_output = (((u64)texture_bases[4] << 37) | (0xB000ULL << 19)) | (texture_bases[5] | 0x25320000) | (1ULL << 63);
 }
 
 extern __typeof__(prepare_loading_slide_textures) func_00231878 __attribute__((alias("FUN_00231878")));
