@@ -45,6 +45,7 @@ void append_fullscreen_setup_strips(void)
 
   display_width = fs_aa_buffer.display_width;
   display_height = fs_aa_buffer.display_height;
+  /* Retail divides the signed display width, truncating toward zero. */
   strip_count = display_width / 32;
   func_00233980(0x42, 0x64);
   render_packet_cursor.p->w0 = (strip_count + 5) | 0x10000000;
