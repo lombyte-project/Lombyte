@@ -335,17 +335,15 @@ void draw_map_overlay(void) {
             s32 pan_x, map_extent, pan_y, oy1;
             s32 ax, ay, bx, by;
             MapIcon *icon;
-            s32 outer_offset, inner_offset;
+            s32 inner_offset;
 
             /* The flag-4 entry terminates the list. Separate overlapping icon
                bounds before either icon is drawn, using half of the smallest
                positive edge distance for each pair. */
-            for (i = 0; ; i++) {
-                if (D_001A00F0.icons[i + 1].flags & 4) break;
-                outer_offset = i * sizeof(MapIcon);
-                icon = (MapIcon *)((u8 *)D_001A00F0.icons + outer_offset);
-                if (icon->active == 0 || icon->texture_id == 0 || (icon->flags & 3)) {
-                    continue;
+            i = 0;
+            if (!(D_001A00F0.icons[1].flags & 4)) do {
+                if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 || (D_001A00F0.icons[i].flags & 3)) {
+                    goto next_outer_icon;
                 }
                 inner_offset = (i + 1) * sizeof(MapIcon);
                 for (j = i + 1; !(D_001A00F0.icons[j].flags & 4); j++, inner_offset += sizeof(MapIcon)) {
@@ -387,7 +385,9 @@ void draw_map_overlay(void) {
                     icon_bounds[j].y0 += by;
                     icon_bounds[j].y1 += by;
                 }
-            }
+next_outer_icon:
+                i++;
+            } while (!(D_001A00F0.icons[i + 1].flags & 4));
         }
 
         {
