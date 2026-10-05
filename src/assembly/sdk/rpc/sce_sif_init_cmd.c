@@ -81,12 +81,13 @@ block_3:
     D_00154E58.unk4 = temp_5_29;
     handlers = (struct M2c_var_3_42 *)&D_00154E80;
     var_3_42 = handlers;
-    D_00154E58.unk10 = ipval;
     D_00154E58.unk8 = 0;
+
     var_16_46 = 0x1F;
     D_00154E58.unkC = &D_00154E80;
-    D_00154E58.unk18 = 0;
     D_00154E58.unk14 = 0;
+    D_00154E58.unk18 = 0;
+    D_00154E58.unk10 = ipval;
 loop_4:
     var_3_42->unk0 = 0;
     var_16_46 -= 1;
