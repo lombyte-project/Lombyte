@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001ee4b0/FUN_001ee4b0.s", FUN_001ee4b0);
-#else
 #include "types.h"
 
 struct CameraEnvironmentRegion {
@@ -51,6 +48,8 @@ void update_camera_environment_from_regions(void *position) {
     u32 negative_red;
     u32 positive_green;
     u32 negative_green;
+    u32 positive_blue;
+    u32 negative_blue;
 
     if (find_camera_environment_region(position, &blend, &region_index) == 0) {
         return;
@@ -66,11 +65,13 @@ void update_camera_environment_from_regions(void *position) {
     negative_color = region->negative_color;
     positive_red = (positive_color & 0xFF) * positive_weight;
     positive_green = ((positive_color >> 8) & 0xFF) * positive_weight;
+    positive_blue = (positive_color >> 16) & 0xFF;
     negative_red = (negative_color & 0xFF) * negative_weight;
     negative_green = ((negative_color >> 8) & 0xFF) * negative_weight;
+    negative_blue = (negative_color >> 16) & 0xFF;
     red = (s32)(positive_red + negative_red) >> 8;
     green = (s32)(positive_green + negative_green) >> 8;
-    fog_color_blue = (s32)(((positive_color >> 16) & 0xFF) * positive_weight + ((negative_color >> 16) & 0xFF) * negative_weight) >> 8;
+    fog_color_blue = (s32)(positive_blue * positive_weight + negative_blue * negative_weight) >> 8;
     fog_color_red = red;
     fog_color_green = green;
     fog_near_distance = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
@@ -78,7 +79,4 @@ void update_camera_environment_from_regions(void *position) {
     fog_near_intensity = 255.0f - (region->positive_value_start * blend + region->negative_value_start * inverse_blend) * 255.0f;
     fog_far_intensity = 255.0f - (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
 }
-
 extern __typeof__(update_camera_environment_from_regions) func_001EE4B0 __attribute__((alias("FUN_001ee4b0")));
-
-#endif /* NON_MATCHING */

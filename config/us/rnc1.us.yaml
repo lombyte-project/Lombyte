@@ -966,7 +966,7 @@ segments:
           - [0xef2a4, textbin, text_gap_001ee324_before_fun_001ee338]
           - [0xef2b8, c, textbin/fun_001ee338]
           - [0xef424, textbin, text_gap_001ee4a4_before_fun_001ee4b0]
-          - [0xef430, c, assembly/textbin/fun_001ee4b0]
+          - [0xef430, c, textbin/fun_001ee4b0]
           - [0xef5bc, textbin, text_gap_001ee63c_after_fun_001ee4b0]
           - [0xef5d0, c, assembly/textbin/fun_001ee650]
           - [0xf0948, c, assembly/textbin/fun_001ef9c8]
