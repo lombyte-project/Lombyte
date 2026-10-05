@@ -233,7 +233,7 @@ void register_shrub_render_class(ShrubRenderClass *render_class, ResidentRenderT
       }
       else
       {
-        draw_word = ((resident_material_templates[(material_index * 3) + 1] & 0x1C) | ((((u64) draw_shift) << 6) | 0x20)) | (((u64) draw_high) << 32);
+        draw_word = (((u64) draw_high) << 32) | (((u64) draw_shift) << 6) | 0x20 | (resident_material_templates[(material_index * 3) + 1] & 0x1C);
         material_word = (packet_material_base | (((u64) material_shift) << 2)) | (((u64) material_index) << 24);
         *((u64 *) (((u8 *) packet) + 0x30)) = resident_material_templates[material_index * 3];
         *((u64 *) (&packet->draw_high)) = draw_word;
