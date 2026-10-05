@@ -87,7 +87,7 @@ block_9:
     if (D_001312F4[0] & 2) {
         goto block_11;
     }
-    sceSifWriteBackDCache(arg2, var_5_50, 1, temp_7_46, D_00132480);
+    sceSifWriteBackDCache(arg2, var_5_50);
 block_11:
     sceSifWriteBackDCache(D_001323C0, 0x90);
     sceSifWriteBackDCache(st, 0x18);
