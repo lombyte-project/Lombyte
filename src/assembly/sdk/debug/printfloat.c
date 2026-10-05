@@ -34,13 +34,15 @@ void printfloat(f64 x)
     }
     if (dpcmp_f(x, *(f64 *)0x00152798) < 0) {
         format = D_00152780;
-        for (; dpcmp_f(x, *(f64 *)0x001527A0) < 0; exponent--) {
+        while (dpcmp_f(x, *(f64 *)0x001527A0) < 0) {
+            exponent--;
             x = dpmul_f(x, 10.0);
         }
     } else {
         format = D_00152780;
         if (dpcmp_f(x, 1.0) >= 0) {
-            for (; dpcmp_f(x, 1.0) >= 0; exponent++) {
+            while (dpcmp_f(x, 1.0) >= 0) {
+                exponent++;
                 x = dpdiv_f(x, 10.0);
             }
         }
