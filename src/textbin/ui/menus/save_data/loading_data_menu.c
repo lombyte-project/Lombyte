@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/loading_data_menu/FUN_002232d8.s", FUN_002232d8);
-#else
 #include "types.h"
 
 struct LoadMenuControllerState
@@ -66,7 +63,7 @@ struct LoadMenuDescriptor
 };
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 extern struct LoadMenuMemoryCardState memory_card_state __asm__("D_0013D290");
-extern s16 D_0013E05A;
+extern s16 D_0013E05A[];
 extern struct LoadMenuMixerState mixer_state __asm__("D_0013E550");
 extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 music_volume __asm__("D_0015EDEC");
@@ -111,7 +108,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
       mixer_state.group_4_volume = scaled_volume_70;
       mixer_state.group_5_volume = sound_volume;
       InitializeGlobalStateEntry(current_level_index);
-      D_0013E05A = 0;
+      D_0013E05A[0] = 0;
     }
     else
     {
@@ -162,9 +159,10 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
     if ((buttons & 0x4000) && (next_save_slot < 4))
     {
       menu->selected_save_slot = (s32) (next_save_slot + 1);
+      next_save_slot = ((volatile struct LoadMenuDescriptor *) menu)->selected_save_slot;
     }
-    selected_save_slot = menu->selected_save_slot;
-    if (((buttons & 0x40) && (memory_card_state.phase == 2)) && ((*((s32 *) ((((u8 *) (&memory_card_state)) + (menu->selected_save_slot * 0x1C)) + 0x20))) >= 0))
+    selected_save_slot = next_save_slot;
+    if (((buttons & 0x40) && (memory_card_state.phase == 2)) && ((*((s32 *) ((((u8 *) (&memory_card_state)) + (next_save_slot * 0x1C)) + 0x20))) >= 0))
     {
       allocate_voice_for_target_entry(0, 0x11, menu->sound_owner);
       memory_card_state.load_state = 0;
@@ -184,4 +182,3 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu)
   }
   return 0;
 }
-#endif /* NON_MATCHING */

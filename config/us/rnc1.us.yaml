@@ -1864,7 +1864,7 @@ segments:
           - [0x123ed4, textbin, text_gap_00222f54_before_fun_00222f58]
           - [0x123ed8, c, ui/menus/fun_00222f58]
           - [0x123f08, c, ui/menus/save_data/saving_data_menu]
-          - [0x124258, c, assembly/textbin/ui/menus/save_data/loading_data_menu]
+          - [0x124258, c, textbin/ui/menus/save_data/loading_data_menu]
           - [0x124534, textbin, text_gap_002235b4_after_fun_002232d8]
           - [0x124538, c, ui/menus/save_data/saving_data_menu2]
           - [0x124960, c, ui/menus/fun_002239e0]
