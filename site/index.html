@@ -8,7 +8,7 @@
 <meta name="keywords" content="Ratchet and Clank decompilation, Ratchet &amp; Clank decomp, Lombyte, PS2 decompilation, Ratchet and Clank source code, matching decompilation, reverse engineering">
 <meta name="author" content="Mateusz Kłysz">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#000000">
 <link rel="canonical" href="@SITE@">
 <link rel="icon" type="image/png" href="lombyte-logo.png">
 <link rel="apple-touch-icon" href="lombyte-logo.png">
@@ -62,12 +62,12 @@
 }
 </script>
 <style>
-:root{--bg:#0d1117;--plate:#3a3632;--orange:#de812f;--orange2:#d87620;--text:#e8edf5;--muted:#a6adc8;--chrome:#c3cbd8;--line:#30363d}
+:root{--bg:#000;--plate:#3a3632;--orange:#de812f;--orange2:#d87620;--text:#e8edf5;--muted:#a6adc8;--chrome:#c3cbd8;--line:#26262b}
 *{box-sizing:border-box}
 html{background:var(--bg)}
 body{margin:0;color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif}
-main{max-width:860px;margin:0 auto;padding:56px 16px 40px}
-header{text-align:center}
+main{max-width:860px;margin:0 auto;padding:0 16px 40px}
+main>section:first-child{margin-top:16px}
 header img{width:132px;height:auto}
 h1{margin:16px 0 4px;font-size:2.4rem;font-weight:600;letter-spacing:-.01em}
 .sub{margin:0;color:var(--orange);font-size:1.15rem;font-weight:600}
@@ -87,20 +87,25 @@ h2{margin:0 0 16px;font-size:1.25rem;font-weight:600}
 .note{color:var(--muted);font-size:.9rem}
 dl{margin:0}dt{font-weight:600;margin-top:14px}dd{margin:2px 0 0;color:var(--muted)}
 a{color:var(--orange)}
-.bar{display:flex;gap:10px;align-items:center;padding:8px 16px;font-size:.85rem;color:var(--text);background:repeating-linear-gradient(-45deg,#1b1714 0 12px,var(--plate) 12px 24px);border-bottom:2px solid var(--orange);overflow:hidden;white-space:nowrap}
-.bar strong{color:var(--orange);font-weight:600;flex:none}
-.bar ol{display:flex;gap:20px;margin:0;padding:0;list-style:none;overflow:hidden;mask-image:linear-gradient(90deg,#000 85%,transparent)}
-.bar a{color:var(--text);text-decoration:none}.bar a:hover{color:var(--orange)}
-.bar time{color:var(--muted);margin-right:6px}
+.bar{display:flex;gap:12px;align-items:center;padding:9px 16px;font-size:.85rem;color:#000;background:repeating-linear-gradient(-45deg,var(--orange) 0 14px,#c96a1c 14px 28px);overflow:hidden;white-space:nowrap}
+.bar strong{flex:none;padding:2px 8px;background:#000;color:var(--orange);border-radius:4px;font-weight:700}
+.bar ol{display:flex;gap:24px;margin:0;padding:0;list-style:none;overflow:hidden;mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.bar a{color:#000;font-weight:600;text-decoration:none}.bar a:hover{text-decoration:underline}
+.bar time{margin-right:6px;font-weight:400;opacity:.75}
+.hero{padding:56px 16px 72px;text-align:center;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.5) 55%,#000),url(hero.jpg) center 70%/cover no-repeat;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.hero .lead{color:var(--chrome)}
+.links a{background:rgba(0,0,0,.55);backdrop-filter:blur(4px)}
+.stats li{position:relative;overflow:hidden;transition:transform .15s ease-out;transform:perspective(600px) rotateX(var(--rx,0)) rotateY(var(--ry,0))}
+.stats li::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 60%)}
+.stats li:hover::after{opacity:1}
 footer p{margin:6px 0}
 footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;text-align:center}
-@media (max-width:520px){h1{font-size:2rem}main{padding-top:36px}}
+@media (max-width:520px){h1{font-size:2rem}.hero{padding-top:36px}}
 </style>
 </head>
 <body>
 @COMMITS@
-<main>
-  <header>
+<header class="hero">
     <img src="lombyte-logo.png" alt="Lombyte logo" width="1024" height="1036">
     <h1>Lombyte</h1>
     <p class="sub">Ratchet &amp; Clank decompilation</p>
@@ -109,9 +114,10 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
       <a class="primary" href="https://github.com/mateuszklysz/Lombyte">Source on GitHub</a>
       <a href="https://decomp.dev/mateuszklysz/Lombyte">Progress on decomp.dev</a>
       <a href="https://github.com/mateuszklysz/Lombyte/blob/main/CONTRIBUTING.md">Contribute</a>
-      <a href="https://discord.gg/sxDTE4q9">Discord</a>
+      <a href="https://discord.gg/sxDTE4q9">Contact</a>
     </nav>
-  </header>
+</header>
+<main>
 
   <section aria-labelledby="progress">
     <h2 id="progress">Decompilation progress</h2>
@@ -137,9 +143,22 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
   </section>
 
   <footer>
-    <p><a href="https://discord.gg/sxDTE4q9">Join the Lombyte Discord</a> for direct contact.</p>
     <p>Lombyte is an unofficial fan project. Trademarks, logos and names of third parties mentioned on this site belong to their respective owners and are used only to identify the original work. Their use does not imply any affiliation with, or endorsement by, those owners.</p>
   </footer>
 </main>
+<script>
+if (matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+  for (const tile of document.querySelectorAll(".stats li")) {
+    tile.addEventListener("pointermove", e => {
+      const r = tile.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      tile.style.setProperty("--ry", (x - .5) * 12 + "deg");
+      tile.style.setProperty("--rx", (.5 - y) * 12 + "deg");
+      tile.style.setProperty("--gx", x * 100 + "%");
+      tile.style.setProperty("--gy", y * 100 + "%");
+    });
+    tile.addEventListener("pointerleave", () => { tile.style.removeProperty("--rx"); tile.style.removeProperty("--ry"); });
+  }
+}
+</script>
 </body>
 </html>
