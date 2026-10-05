@@ -48,15 +48,17 @@ extern void sceSifWriteBackDCache();
 extern s32 sceSifCallRpc();
 s32 FUN_00121190(s32 mode)
 {
-  s32 bind_wait_counter;
   s32 response;
+  s32 bind_wait_counter;
+  s32 semaphore_id;
   s32 poll_result;
   if (D_001312D0[0] > 0)
   {
     scePrintf(D_00152F80);
   }
   cmd_sem_init();
-  poll_result = PollSema(D_001312EC[0]);
+  semaphore_id = D_001312EC[0];
+  poll_result = PollSema(semaphore_id);
   if (D_001312EC[0] != poll_result)
   {
     return 6;
