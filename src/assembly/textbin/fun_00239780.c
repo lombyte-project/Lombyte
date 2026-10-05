@@ -118,7 +118,7 @@ void render_vendor_capture_pass_sequence(s32 capture_context) {
         configure_capture_target(9, 7, 1.0f);
         draw_centered_capture_background(0x200, 0x200);
         vu1_add_g_sregister(0x42, 0x8000000064LL);
-        switch (pass_index) {
+        switch (point_base >> 2) {
         case 0:
             update_scrolling_status_message(capture_context);
             break;
