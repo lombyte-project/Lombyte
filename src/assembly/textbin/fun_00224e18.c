@@ -55,7 +55,9 @@ void update_menu_preview_pose_and_attachments(void *preview) {
     }
     /* Both retail paths pass the same table address. Keep their distinct
        source expressions and the load of resource_address inside each path:
-       the retail code branches here and rejoins before the callback. */
+       the retail code branches here and rejoins before the callback.
+       The unmatched table-address LUI instructions at 0x00224F00,
+       0x00224F04, and 0x00224F08 differ only in register allocation. */
     if (!is_second_preview_moby) {
         binding_table_alias = preview_binding_table_alias;
         binding_table = preview_binding_table;
