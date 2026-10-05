@@ -90,7 +90,8 @@ void load_pif_as_psmt8_h(void *image, void *registers, int texel_destination, in
     sceGsExecLoadImage(&load_image, upload.image);
     wait_for_graphics_pipeline_idle(0, 0);
     field_word = (s64)0x1B << 20;
-    tex0_word = (s64)upload.texel_block_offset | ((s64)upload.buffer_width << 14);
+    tex0_word = (s64)upload.texel_block_offset;
+    tex0_word |= (s64)upload.buffer_width << 14;
     tex0_word |= ((s64)upload.width_log2 << 26) | field_word;
     tex0_word |= (s64)upload.height_log2 << 30;
     field_word = ((s64)palette_block_offset << 37) | ((s64)1 << 34);
