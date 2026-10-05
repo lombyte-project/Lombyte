@@ -97,7 +97,30 @@ int FUN_L12_002e17f8(Level12VendorStateMoby *moby) {
     return result;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1878.s", FUN_L12_002e1878);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e18e8.s", FUN_L12_002e18e8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
+
+extern int random_integer_below(int);
+extern int scale_game_frames(int);
+extern void blend_moby_animation(void *, int, int, int);
+
+void FUN_L12_002e18e8(unsigned char *moby) {
+    switch (random_integer_below(2)) {
+    case 0:
+        if (moby[0x53] != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(8));
+        break;
+    case 1:
+        if (moby[0x53] != 0xF) blend_moby_animation(moby, 0xF, 0, scale_game_frames(8));
+        break;
+    default:
+        if (moby[0x53] != 0x10) blend_moby_animation(moby, 0x10, 0, scale_game_frames(8));
+        break;
+    }
+}
 #include "qcopy.h"
 
 /* Scatters 27 particles around a point with random offsets and velocities. */

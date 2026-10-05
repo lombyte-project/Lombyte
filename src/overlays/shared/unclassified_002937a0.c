@@ -221,7 +221,43 @@ void FUN_L08_002f0c18(int a) {
         FUN_L00_001fde98(D_L08_001DDF40[i], D_L08_001E2798[i], D_L08_001E2828[i], D_L08_001E8360, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0f68.s", FUN_L08_002f0f68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
+
+extern float ConvertIntegerToFloat(int);
+extern int truncate_float_to_s32(float);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g, float b, float a) {
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < counts[i]; j++) {
+            int w = tabs[i][j];
+            int c0 = w & 0xFF;
+            int c1 = (w & 0xFF00) >> 8;
+            int c2 = ((unsigned)w >> 16) & 0xFF;
+            int c3 = (unsigned)w >> 24;
+            float fr, fg, fb, fa;
+            if (flat == 0) {
+                fr = r * ConvertIntegerToFloat(c0);
+                fg = g * ConvertIntegerToFloat(c1);
+                fb = b * ConvertIntegerToFloat(c2);
+                fa = a * ConvertIntegerToFloat(c3);
+            } else {
+                fr = r * 255.0f;
+                fg = g * 255.0f;
+                fb = b * 255.0f;
+                fa = a * ConvertIntegerToFloat(c3);
+            }
+            tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) + (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
+        }
+    }
+}
 /* advance a 2-D wrapped phase by a and b and write scaled sines */
 /* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
 

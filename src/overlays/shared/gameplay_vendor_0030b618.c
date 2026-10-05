@@ -97,7 +97,7 @@ extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 extern int D_L01_0015F5C4 __attribute__((sda));
 
 typedef union { u128_w22c q; float f[4]; } V4_w22c;
-extern V4_w22c D_0013F3D0;
+extern V4_w22c D_0013F3D0_u __asm__("D_0013F3D0");
 
 void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c v;
@@ -115,7 +115,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                          D_L01_00162084, 2.0f, 3.1415927f, 3.1415927f);
     if (e != 0) {
         *(char **)(state + 0x60) = e;
-        if (D_0013F3D0.f[2] + 1.1f < *(float *)(moby + 0x18)) {
+        if (D_0013F3D0_u.f[2] + 1.1f < *(float *)(moby + 0x18)) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (FUN_001fa688(*(float *)(moby + 0x48), t) < 0.5235988f) {
@@ -289,4 +289,41 @@ void FUN_L01_0031a078(int a0) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0031a128.s", FUN_L01_0031a128);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* sound instance update: fade/stop test against a listener distance */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern float AbsoluteFloat(float);
+extern void FUN_L01_0027a248(int, int);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *);
+
+void FUN_L01_0031a128(int *moby) {
+    float v[8];
+    int *p = (int *)moby[2];
+    if (((unsigned *)p)[3] != 0xFFFFFFFF) {
+        subtract_vector_xyz(v, D_0013F3D0, (char *)moby + 0x40);
+        v[3] = 0;
+        transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
+        if (AbsoluteFloat(v[4]) <= 1.0f && AbsoluteFloat(v[5]) <= 1.0f && AbsoluteFloat(v[6]) <= 1.0f) {
+            p[2] = 1;
+            return;
+        }
+        if (p[2] != 0) {
+            short *s = (short *)p;
+            if (s[7] == -1) s[7] = s[6];
+            if (s[6] == -1) s[6] = s[7];
+            if (v[4] > 0) {
+                FUN_L01_0027a248(p[1], s[7]);
+            } else {
+                FUN_L01_0027a248(p[0], s[6]);
+            }
+            p[2] = 0;
+        }
+    }
+}

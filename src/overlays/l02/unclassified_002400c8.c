@@ -117,7 +117,36 @@ void FUN_L02_002d3dd0(void *moby) {
     FUN_L02_002d3c98(moby, 8, 9, *(int *)&D_L02_001619F8_d);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5658.s", FUN_L02_002d5658);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6A90), where it is exact; names translated to the US level program. */
+
+extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L02_001ABE40[];
+extern int random_integer_below(int);
+
+int FUN_L02_002d5658(void *argp) {
+    char *arg = argp;
+    int result = 0;
+    short *p;
+    if (((unsigned char *)arg)[0x21] == 0xFF) {
+        return 0;
+    }
+    p = (short *)D_L02_001ABE40[((unsigned char *)arg)[0x21]];
+    do {
+        int idx = (*(unsigned short *)p & 0x7FFF) << 8;
+        char *o = (char *)(idx + D_L02_0015FFD8_m);
+        if (*(short *)(o + 0xA6) == 0x29C && ((unsigned char *)o)[0x20] < 0x7F) {
+            if (result == 0 || (random_integer_below(0xFF) & 1)) {
+                result = D_L02_0015FFD8_m + idx;
+            }
+        }
+    } while (*p++ >= 0);
+    return result;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f96b0(float);
@@ -191,7 +220,6 @@ extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7778), where it is exact; names translated to the US level program. */
 
-extern int FUN_L02_002d5658(void *);
 extern void FUN_L02_002d3dd0(void *);
 
 void FUN_L02_002d6340(unsigned char *moby) {

@@ -202,7 +202,7 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef5a8.s", FUN_L14_002ef5a8);
 extern u8 D_L14_001E03B0[];
 extern u8 *D_L14_001B0BB0[];
-extern u8 D_0013F350[];
+extern u8 D_0013F350_u[] __asm__("D_0013F350");
 extern void FUN_001f9cf8(u8 *, u8 *, u8 *);
 extern void FUN_001f9a10(u8 *, u8 *, u8 *);
 
@@ -227,15 +227,48 @@ void FUN_L14_002ef630(u8 *moby)
         *(f32 *)(dst + 0xC) = one;
         dst += 0x10;
     } while (i >= 0);
-    x = D_0013F350;
+    x = D_0013F350_u;
     *(s16 *)(x + 0x22DA) = *(u16 *)(data + 0x114);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef6f0.s", FUN_L14_002ef6f0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float AbsoluteFloat(float);
+extern float fast_add_rotations(float, float);
+extern float fast_sin(float);
+extern int D_0015ED6C; /* no foreign declaration */
+extern int FUN_001fa6e0(int, int, float);
+extern int truncate_float_to_s32();
+extern short D_0015EE6C_s __asm__("D_0015ED6C");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L14_002ef6f0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *x = D_0013F350;
+    if (AbsoluteFloat(*(float *)(moby + 0x10) - *(float *)(x + 0x80)) > 40.0f ||
+        AbsoluteFloat(*(float *)(moby + 0x14) - *(float *)(x + 0x84)) > 40.0f) {
+        *(int *)(moby + 0x90) = FUN_001fa6e0(*(int *)(moby + 0x90), 0x80303030, 0.1f);
+    } else {
+        int i, col;
+        float a = fast_add_rotations(*(float *)(data + 0x138), *(float *)&D_0015EE6C_s * 6.2831855f);
+        *(float *)(data + 0x138) = a;
+        i = func_001FA898_r((fast_sin(a) * 4.0f - 3.0f) * 128.0f);
+        if (i > 0x80) i = 0x80;
+        else if (i < 0x20) i = 0x20;
+        col = (i << 16) | 0x80000000 | (i << 8) | i;
+        *(int *)(moby + 0x90) = FUN_001fa6e0(*(int *)(moby + 0x90), col, 0.1f);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f0538.s", FUN_L14_002f0538);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f1040.s", FUN_L14_002f1040);
 /* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
 extern char *D_L14_001B0BB0_c2[] __asm__("D_L14_001B0BB0");
-extern float D_0015ED6C;
+extern float D_0015ED6C_u __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern float FUN_001f9b48(void *, void *);
 
@@ -265,7 +298,7 @@ void FUN_L14_002f1140(char *moby) {
     }
     p = *(char **)(d + 0xAC);
     r = FUN_001f9b48(p + 0x10, p + 0x20);
-    a = D_0015ED6C * 5.0f;
+    a = D_0015ED6C_u * 5.0f;
     b = D_0015ED70 * 2.5f;
     inv = 1.0f / (r * (float)**(int **)(d + 0xAC));
     *(int *)(d + 0xC4) = 0;

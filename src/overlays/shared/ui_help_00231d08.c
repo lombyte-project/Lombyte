@@ -66,11 +66,53 @@ void FUN_L00_00231d08(void) {
     seq = buf[1];
     blend_moby_animation(b, seq, 0, FUN_001f96f8(7));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00231db0.s", FUN_L00_00231db0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_00232608), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    short seq;
+    unsigned char key;
+    unsigned char unk3;
+} SeqEntry;
+
+extern SeqEntry D_L00_0017BBD0[];
+extern SeqEntry D_L00_0017BBF0[];
+extern int FUN_L00_0020d498(int);
+extern short D_L00_0015F6B8;
+
+int FUN_L00_00231db0(int key, int *out) {
+    SeqEntry *tbl;
+    int i;
+
+    if (FUN_L00_0020d498(3) == 2) {
+        tbl = D_L00_0017BBF0;
+    } else if (FUN_L00_0020d498(3) == 3) {
+        tbl = D_L00_0017BBD0;
+    } else {
+        int mode = FUN_L00_0020d498(3);
+        tbl = (SeqEntry *)&D_L00_0015F6B8;
+        if (mode != 4) {
+            tbl = 0;
+        }
+    }
+    if (tbl != 0) {
+        for (i = 0; tbl[i].seq != -1; i++) {
+            if (key == tbl[i].key) {
+                *out = tbl[i].seq;
+                return 1;
+            }
+        }
+    }
+    *out = 0;
+    return 0;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0020d498(int);
-extern int FUN_L00_00231db0();
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L00_00231e78(int id, int arg, float t) {

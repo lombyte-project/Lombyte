@@ -222,11 +222,41 @@ void FUN_L13_0030ad38(char *moby, float *p, float *q) {
     base = D_0013E533 + 0xE1D;
     q[2] = FUN_001f9e90(*(float *)(base + 0xD0) - p[0], *(float *)(base + 0xD4) - p[1]);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030ae68.s", FUN_L13_0030ae68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_002db890(char *);
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern short *D_L13_001ABB40[];
+
+int FUN_L13_0030ae68(int idx, int arg)
+{
+    short *q = D_L13_001ABB40[idx];
+    short *p;
+    int count = 0;
+    if (q == 0) return 0;
+    p = q;
+    do {
+        int id = *p & 0x7FFF;
+        char *m = (char *)(id << 8) + (int)D_L13_0015FFD8_m;
+        if (m[0x20] >= 0) {
+            char *f = FUN_L00_002db890(m);
+            if (f == 0 || *(short *)(f + 0x68) < 4) {
+                if (arg == -1 || *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
+                    count++;
+                }
+            }
+        }
+    } while (*p++ >= 0);
+    return count;
+}
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C408), where it is exact; names translated to the US level program. */
 
-extern int FUN_L13_0030ae68(int, int);
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
 void FUN_L13_0030af50(char *moby) {

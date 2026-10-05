@@ -1004,7 +1004,45 @@ void FUN_L16_002d0058(L16LeapMoby *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d04a0.s", FUN_L16_002d04a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d59e0.s", FUN_L16_002d59e0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Move the moby toward a target along a slerped path until the parameter reaches its goal. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6DA8), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C ,D_0015EE70;
+extern float D_0015EE6C ,D_0015ED70;
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *);
+extern void add_vector_xyz(void*,void*,void*);
+extern void normalize_vector_xyz(void*,void*,float);
+
+void FUN_L16_002d59e0(unsigned char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *pos;
+    char buf[16];
+    switch (moby[0x20]) {
+    case 0:
+        qcopy(d, moby + 0x10);
+        moby[0x20] = 2;
+        break;
+    case 1:
+        pos = (char *)moby + 0x10;
+        qcopy(pos, d);
+        advance_accelerated_scalar(*(float *)(d + 0x14), D_0015ED70 * 4.0f, D_0015ED70 * 4.0f, D_0015ED6C * 8.0f, (float *)(d + 0x18), (float *)(d + 0x10));
+        normalize_vector_xyz(buf, moby + 0xC0, *(float *)(d + 0x18));
+        add_vector_xyz(pos, pos, buf);
+        if (*(float *)(d + 0x18) == *(float *)(d + 0x14)) {
+            moby[0x20] = 2;
+        }
+        break;
+    case 2:
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ad0.s", FUN_L16_002d5ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);

@@ -37,4 +37,39 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0027b268.s", FUN_L12_0027b268);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C260), where it is exact; names translated to the US level program. */
+
+extern char *D_L12_0015FFD8;
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_00214598(void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void vu_euler_rotation_basis(void *, void *);
+
+void FUN_L12_0027b268(char *moby, char *arr, int n) {
+    float m0[12];
+    float m1[16];
+    float m2[16];
+    int i;
+    vu_euler_rotation_basis(m0, moby + 0x40);
+    FUN_001fa2d8(m1, m0);
+    for (i = 0; i < n; i++) {
+        char *p = arr + i * 0x30;
+        int idx = *(int *)(p + 0x20);
+        if (idx != -1) {
+            char *o = D_L12_0015FFD8 + (idx << 8);
+            subtract_vector_xyz(p, o + 0x10, moby + 0x10);
+            FUN_001f9d20(p, p, m1);
+            FUN_001fa050(m2, o + 0x40);
+            FUN_001fa378(m2, m1, m2);
+            FUN_00214598(m2, p + 0x10);
+        }
+    }
+}
