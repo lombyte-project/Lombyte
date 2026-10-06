@@ -162,7 +162,68 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302400.s", FUN_L06_00302400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302578.s", FUN_L06_00302578);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302fd8.s", FUN_L06_00302fd8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Picks the next selection state from the menu mode, then queues the matching sound. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00304418), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84;
+extern int D_0015EE1C;
+extern int D_0015EE1D;
+extern int FUN_L00_00203908(int a, int b);
+extern unsigned char D_0014C050[];
+extern unsigned short D_00141C00 __attribute__((section(".data")));
+extern void try_set_help_message(int, int);
+
+void FUN_L06_00302fd8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    switch (*(int *)(d + 0xBC)) {
+    case 0: {
+        int idx = D_0015ED84 << 4;
+        int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)D_0014C050);
+        if (a != 0xFF) {
+            *(int *)(d + 0x9C) = 0;
+        } else {
+            int b = *(unsigned char *)(*(int *)(d + 0xFC) + idx + (int)D_0014C050);
+            if (b == a) {
+                *(int *)(d + 0x9C) = 3;
+            } else {
+                *(int *)(d + 0x9C) = -1;
+            }
+        }
+        break;
+    }
+    case 1:
+        *(int *)(d + 0x9C) = 1;
+        break;
+    case 2:
+        *(int *)(d + 0x9C) = 4;
+        break;
+    }
+    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 && (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
+        FUN_L00_00203908(0x177A, 0x53);
+        *(int *)(d + 0x9C) = -1;
+        return;
+    }
+    switch (*(int *)(d + 0x9C)) {
+    case 0:
+        try_set_help_message(10, 0x1782);
+        break;
+    case 1:
+    case 4:
+        try_set_help_message(10, 0x1785);
+        break;
+    case 2:
+        try_set_help_message(10, 0x1786);
+        break;
+    case 3:
+        try_set_help_message(10, 0x1784);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
