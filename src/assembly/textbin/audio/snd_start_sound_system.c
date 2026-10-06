@@ -97,7 +97,7 @@ s32 snd_start_sound_system(void) {
     sound_read_work.read_error = 0;
     D_0015ECA8 = 0xFFC;
     D_0015ECAC = 0xFFC;
-    command_arg = (s32)(u32)&sound_read_work;
+    command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }
 #endif /* NON_MATCHING */
