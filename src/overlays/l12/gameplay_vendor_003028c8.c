@@ -67,7 +67,88 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003076e0.s", FUN_L12_003076e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00307840.s", FUN_L12_00307840);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b80(void *, void *);
+extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
+extern int FUN_001f9770(void *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L12_003076e0(char *);
+extern void FUN_L12_00307ab8(char *m);
+extern void blend_moby_animation(void *, int, int, int);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L12_00307840(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *slots;
+    int i;
+    FUN_L12_00307ab8(m);
+    slots = (int *)(d + 0xC0);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        for (i = 0; i < 12; i++) {
+            if (slots[i] != -1) {
+                char *o = (char *)(D_L12_0015FFD8_m + (slots[i] << 8));
+                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD) {
+                    mark_moby_for_removal(o);
+                }
+            }
+        }
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (*(int *)(d + 0xB4) != 2) {
+            if (FUN_001f9b80(m + 0x10, d + 0x70) < *(float *)(d + 0xF8)) {
+                m[0x20] = 2;
+            }
+        }
+        break;
+    case 2:
+        if (((unsigned char *)m)[0x53] != 1) {
+            blend_moby_animation(m, 1, 0, scale_game_frames(2));
+        }
+        if (m[0x70] & 2) {
+            if (((unsigned char *)m)[0x53] != 2) {
+                blend_moby_animation(m, 2, 0, scale_game_frames(2));
+            }
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        if (FUN_001f9770(d + 0xFC)) {
+            if (slots[*(int *)(d + 0xF0)] != -1) {
+                FUN_L12_003076e0(m);
+                m[0xBC] = ((unsigned char *)m)[0xBC] == 0;
+                *(short *)(d + 0xFC) = scale_game_frames(0x28);
+            }
+            *(int *)(d + 0xF0) += 1;
+        }
+        if (*(int *)(d + 0xF0) == 12 || slots[*(int *)(d + 0xF0)] == -1) {
+            m[0x20] = 4;
+        }
+        break;
+    case 4:
+        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        if (((unsigned char *)m)[0x53] != 3) {
+            blend_moby_animation(m, 3, 0, scale_game_frames(2));
+        }
+        if (m[0x70] & 2) {
+            if (((unsigned char *)m)[0x53] != 0) {
+                blend_moby_animation(m, 0, 0, scale_game_frames(2));
+            }
+            m[0x20] = 5;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
 #include "qcopy.h"
 
 /* per-frame update of a moby's timer and approach state */
@@ -146,7 +227,7 @@ extern int D_L12_0015F5C4 MACRO_ADDR;
 extern int D_L12_0015F5CC MACRO_ADDR;
 extern void FUN_L00_00298840(int);
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_003093c8(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -156,7 +237,7 @@ void FUN_L12_003093c8(char *moby) {
     if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
         base = D_0013D388;
         if (*(unsigned char *)(*(int *)(data + 4) + base + 0x5C) != 0) {
-            mark_moby_for_removal(moby);
+            mark_moby_for_removal_u(moby);
             return;
         }
         p = D_0013F3D0;

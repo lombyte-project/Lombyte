@@ -52,6 +52,7 @@
       "ui_help_00253a18.c"
     ],
     "l12": [
+      "gameplay_vendor_003028c8.c",
       "ui_help_0022de30.c",
       "ui_help_002400d0.c",
       "ui_help_002461f0.c",
