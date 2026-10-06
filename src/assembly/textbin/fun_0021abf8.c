@@ -129,7 +129,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
     if (controller_state.pressed & 0x40) {
         items = menu->items;
         selected_entry = menu->selected_entry;
-        switch (items[selected_entry].action) {
+        switch (menu->items[menu->selected_entry].action) {
         case 0:
             break;
         case 1:
