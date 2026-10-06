@@ -48,3 +48,4 @@ l17/unclassified_002a8da0.c
 l06/unclassified_002fd1a0.c
 shared/rendering_002712b8.c
 shared/unclassified_002d7f88.c
+l16/gameplay_vendor_002e3190.c
