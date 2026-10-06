@@ -1396,9 +1396,6 @@ void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *
     *(int *)(data + 0x78) = a8;
     *(int *)(D_0013E633 + 0x140) = scale_game_frames(a6);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
-#else
 /* Maps states 2 and 3 to results 1 and 2; all other states return 0. */
 s32 FUN_L18_002dfba0(const u8 *moby)
 {
@@ -1413,7 +1410,6 @@ s32 FUN_L18_002dfba0(const u8 *moby)
     }
     return result;
 }
-#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
