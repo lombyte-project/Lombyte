@@ -39,38 +39,34 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     u64 value;
 
     state = GetCoreDataTable();
-    mode = state->wMode;
-    if ((u32)(mode - 2) < 2) {
-        kernel_horizontal = kernel_vertical = kernel_width = kernel_height = 0;
-    } else if (checkModelVersion() != 0) {
+    if ((u32)(state->wMode - 2) >= 2 && checkModelVersion() != 0) {
         InvokeKernelSyscall0080((s16)state->wMode, &kernel_horizontal, &kernel_vertical,
                                  &kernel_width, &kernel_height);
-        mode = state->wMode;
     } else {
-        kernel_horizontal = kernel_vertical = kernel_width = kernel_height = 0;
-        mode = state->wMode;
+        kernel_height = 0;
+        kernel_width = 0;
+        kernel_vertical = 0;
+        kernel_horizontal = 0;
     }
+    mode = state->wMode;
 
     output->pmode = 0x66;
-    if (state->nSInterlace == 0) {
-        output->smode2 = 2;
-    } else if (state->nSFrame_mode == 0) {
-        output->smode2 = 1;
-    } else {
-        output->smode2 = 3;
+    value = 2;
+    if (state->nSInterlace != 0) {
+        value = 3;
+        if (state->nSFrame_mode == 0) value = 1;
     }
+    output->smode2 = value;
     output->dispfb = ((u64)(pixel_storage_format & 15) << 15) |
                      ((u64)(((width + 63) >> 6) & 63) << 9);
 
-    if (mode == 2 || mode == 3) {
+    if (mode == 2) {
         if (state->nSInterlace == 1) {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(s64)(scale * width - 1) << 32) |
-                    ((u64)((horizontal_offset * scale + kernel_horizontal +
-                             (mode == 2 ? 0x27c : 0x290)) & 0xfff)) |
-                    ((u64)((vertical_offset + kernel_vertical +
-                             (mode == 2 ? 0x32 : 0x48)) & 0xfff) << 12);
+                    ((u64)((horizontal_offset * scale + kernel_horizontal + 0x27c) & 0xfff)) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12);
             if (state->nSFrame_mode == 0) {
                 value |= (u64)(s64)(height - 1) << 44;
             } else {
@@ -81,10 +77,29 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)(s64)(scale * width - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((horizontal_offset * scale + kernel_horizontal +
-                             (mode == 2 ? 0x27c : 0x290)) & 0xfff)) |
-                    ((u64)((vertical_offset + kernel_vertical +
-                             (mode == 2 ? 0x19 : 0x24)) & 0xfff) << 12);
+                    ((u64)((horizontal_offset * scale + kernel_horizontal + 0x27c) & 0xfff)) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12);
+        }
+        output->display = value;
+    } else if (mode == 3) {
+        if (state->nSInterlace == 1) {
+            scale = (width + 0x9ff) / width;
+            value = ((u64)(s64)(scale - 1) << 23) |
+                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)((horizontal_offset * scale + kernel_horizontal + 0x290) & 0xfff)) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12);
+            if (state->nSFrame_mode == 0) {
+                value |= (u64)(s64)(height - 1) << 44;
+            } else {
+                value |= (u64)(s64)(height * 2 - 1) << 44;
+            }
+        } else {
+            scale = (width + 0x9ff) / width;
+            value = ((u64)(s64)(height - 1) << 44) |
+                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)(s64)(scale - 1) << 23) |
+                    ((u64)((horizontal_offset * scale + kernel_horizontal + 0x290) & 0xfff)) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12);
         }
         output->display = value;
     } else if (mode == 0x50) {
