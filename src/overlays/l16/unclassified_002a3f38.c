@@ -979,7 +979,7 @@ extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void *FUN_L16_002d5db0(int, void *);
+void *FUN_L16_002d5db0(int index, void *position);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00259888(void *, void *, int, float, void *);
@@ -2004,7 +2004,31 @@ void *FUN_L16_002d5bc8(int index, int secondary) {
         if (*p++ < 0) return nearest;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
+
+
+
+/* The linked moby of class 0x28A nearest a position, within 37 units. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7178), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern float FUN_001f9b48(void *, void *);
+extern int *D_L16_001ABCC0[];
+
+void *FUN_L16_002d5db0(int index, void *position) {
+    short *p = (short *)D_L16_001ABCC0[index];
+    char *nearest = 0;
+    float distance = 37.0f;
+    char *moby;
+    float d;
+    if (!p) return 0;
+    while (1) {
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (*(short *)(moby + 0xA6) != 0x28A) continue;
+        d = FUN_001f9b48(position, moby + 0x10);
+        if (d < distance) {distance = d; nearest = moby;}
+        if (*p++ < 0) return nearest;
+    }
+}
 extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
