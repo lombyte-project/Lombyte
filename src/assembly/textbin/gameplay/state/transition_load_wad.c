@@ -223,10 +223,10 @@ void transition_load_wad(void) {
     upload_texture_images((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
     /* Retail forms the two texture addresses from header offsets 0x70 and 0x74. */
     t = 0x1D308000 | (u64)((s64)((D_0015EE8C + hdr->x70) >> 8));
-    u = ((u64)((s64)((hdr->x74 + D_0015EE8C) >> 8)) << 37) | ((u64)0xB800 << 19);
+    u = ((u64)((s64)((D_0015EE8C + hdr->x74) >> 8)) << 37) | ((u64)0xB800 << 19);
     data = (u8 *)hdr + hdr->data;
     base = data + hdr->x60;
-    D_0019E6C0[0] = (u | t) | ((u64)1 << 63);
+    D_0019E6C0[0] = (t | u) | ((u64)1 << 63);
     D_0019E6C0[1] = 0xFFA0000000E0;
     D_0019E6C0[2] = 0x0040000400004000;
 
