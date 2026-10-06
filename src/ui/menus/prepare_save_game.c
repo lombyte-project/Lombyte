@@ -13,19 +13,19 @@ extern void sceScfGetLocalTimefromRTC(void *);
 extern void FUN_00208770(void);
 extern void func_00207B08(void *);
 
-void prepare_save_game(int arg0, int arg1) __asm__("FUN_002269c0");
+void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");
 
-void prepare_save_game(int arg0, int arg1) {
+void prepare_save_game(int save_data, int slot) {
     char *b = D_0013D290;
     int saving = 1;
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     FUN_00208770();
     func_00207B08(D_00141EC0 + (D_0015ED84 << 11));
-    memcard_make_whole_save((char *)arg0);
+    memcard_make_whole_save((char *)save_data);
     *(int *)(b + 0xF4) = saving;
-    *(int *)(b + 0xEC) = arg0;
-    *(int *)(b + 0x14) = arg1;
+    *(int *)(b + 0xEC) = save_data;
+    *(int *)(b + 0x14) = slot;
     *(int *)(b + 0xC0) = 0;
     if (*(int *)(b + 0xDC) < 0) {
         *(int *)(b + 0xE0) = 0;

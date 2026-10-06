@@ -35,7 +35,7 @@ extern s32 D_00132E70[];
 extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
 
-void _flushBuf(FlushBufContext *arg0, s32 arg1) {
+void _flushBuf(FlushBufContext *context, s32 arg1) {
     s32 value;
     s32 counter;
     u32 command;
@@ -48,7 +48,7 @@ void _flushBuf(FlushBufContext *arg0, s32 arg1) {
     if ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000) {
         do {
             if (counter++ >= 0x1389) {
-                _dispatchMpegCbNodata(arg0->unk858);
+                _dispatchMpegCbNodata(context->unk858);
                 counter = 0;
             }
         } while ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000);
@@ -58,8 +58,8 @@ void _flushBuf(FlushBufContext *arg0, s32 arg1) {
     *(volatile u32 *)0x10002000 = command;
     index = command >> 0x1C;
     table_value = D_00132E70[index];
-    arg0->unk818 = table_value;
-    idle_result = _waitIpuIdle64(arg0, &D_00132E70[index]);
-    arg0->unk838 = (s32)idle_result;
-    arg0->unk83C = 0x20;
+    context->unk818 = table_value;
+    idle_result = _waitIpuIdle64(context, &D_00132E70[index]);
+    context->unk838 = (s32)idle_result;
+    context->unk83C = 0x20;
 }

@@ -39,39 +39,39 @@ extern char D_001B2C00[];
    resets unk54, clears unk70 bit 1, stores 1/func_001FA6C0(arg3) into
    unk5C, and copies a not-yet-named byte (offset 0x11) out of
    pClass->seqs[arg1] into unk7C. */
-void blend_moby_animation_ex(MobyAnim *arg0, int arg1, int arg2, int arg3,
-                             int arg4) __asm__("FUN_002130d8");
+void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int blend_frames,
+                             int options) __asm__("FUN_002130d8");
 
-void blend_moby_animation_ex(MobyAnim *arg0, int arg1, int arg2, int arg3, int arg4) {
+void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int blend_frames, int options) {
     int slot;
     int flags;
     unsigned char oldSeq;
     float scale;
 
-    if (*(float *)((char *)arg0 + 0x54) > 0.025f || *(int *)((char *)arg0 + 0x60) != 0 ||
-        *(int *)((char *)arg0 + 0x64) != 0 || (arg4 & 4)) {
-        slot = find_or_allocate_id_slot((int)arg0);
+    if (*(float *)((char *)moby + 0x54) > 0.025f || *(int *)((char *)moby + 0x60) != 0 ||
+        *(int *)((char *)moby + 0x64) != 0 || (options & 4)) {
+        slot = find_or_allocate_id_slot((int)moby);
         if (slot >= 0) {
-            flags = (arg4 & 1) ? (slot | 0x100) : slot;
-            FUN_0020ede8(arg0, (arg4 & 2) ? (flags | 0x200) : flags);
-            qcopy(D_001B2C00 + slot * 0x10, (char *)arg0 + 0xF0);
-            oldSeq = arg0->seq;
+            flags = (options & 1) ? (slot | 0x100) : slot;
+            FUN_0020ede8(moby, (options & 2) ? (flags | 0x200) : flags);
+            qcopy(D_001B2C00 + slot * 0x10, (char *)moby + 0xF0);
+            oldSeq = moby->seq;
             if (oldSeq != 0xFF) {
-                *(unsigned char *)((char *)arg0 + 0xA5) = oldSeq;
+                *(unsigned char *)((char *)moby + 0xA5) = oldSeq;
             }
-            arg0->seq = 0xFF;
-            arg0->frame = slot;
+            moby->seq = 0xFF;
+            moby->frame = slot;
         }
     }
-    arg0->nextFrame = arg2;
-    arg0->prevSeq = arg1;
-    update_moby_animation_state(arg0);
-    *(float *)((char *)arg0 + 0x58) = 1.0f;
-    scale = 1.0f / func_001FA6C0(arg3);
-    *(float *)((char *)arg0 + 0x54) = 0.0f;
-    arg0->unk70 = (unsigned char)(arg0->unk70 & 0xFD);
-    arg0->unk5C = scale;
-    *(unsigned char *)((char *)arg0 + 0x7C) = *((unsigned char *)arg0->pClass->seqs[arg1] + 0x11);
+    moby->nextFrame = frame_index;
+    moby->prevSeq = new_seq;
+    update_moby_animation_state(moby);
+    *(float *)((char *)moby + 0x58) = 1.0f;
+    scale = 1.0f / func_001FA6C0(blend_frames);
+    *(float *)((char *)moby + 0x54) = 0.0f;
+    moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
+    moby->unk5C = scale;
+    *(unsigned char *)((char *)moby + 0x7C) = *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
 }
 
 extern __typeof__(blend_moby_animation_ex) func_002130D8 __attribute__((alias("FUN_002130d8")));

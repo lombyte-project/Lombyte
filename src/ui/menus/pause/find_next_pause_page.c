@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021C790). */
 #include "sda.h"
 extern char D_001D5BF0[] NOT_SDA;
-/* Pause page link walk: with arg1 clear, follow arg0's +0x4C chain for
+/* Pause page link walk: with reverse clear, follow arg0's +0x4C chain for
    as long as the current page is skippable (bit 8 of its +0x30 flags
    while D_001D5BF0+0x134 is set, or bit 4 while +0x138 is set), and if
    it moved at all, make the page it stopped on the current one's +0x80.
@@ -9,13 +9,13 @@ extern char D_001D5BF0[] NOT_SDA;
    own copy is why GCSE leaves its +0x138 load in the loop (only +0x134,
    read first in the body, is hoisted by loop.c), and the last block's
    copy is retail's kept %hi. */
-int find_next_pause_page(char *arg0, int arg1) __asm__("FUN_0021b7a8");
+int find_next_pause_page(char *arg0, int reverse) __asm__("FUN_0021b7a8");
 
-int find_next_pause_page(char *arg0, int arg1) {
+int find_next_pause_page(char *arg0, int reverse) {
     int ok = 0;
     int found = 0;
 
-    if (arg1 != 0) {
+    if (reverse != 0) {
         return 0;
     }
     {

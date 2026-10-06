@@ -20,33 +20,33 @@ struct M2c_arg0 {
     s32 unk1E4;
 };
 
-extern s32 _dispRefImage(struct M2c_arg0 *arg0, s32 arg1, s32 arg2);
-extern s32 _dispRefImageField(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3);
-void _outputFrame(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
+extern s32 _dispRefImage(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2);
+extern s32 _dispRefImageField(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2, s32 arg3);
+void _outputFrame(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2) {
     s32 var_5_14;
     s32 var_5_24;
     s32 var_6_27;
 
     if (arg2 != 0) {
-        if (arg0->unk174 == 3) {
-            if (arg0->unk150 == 3) {
-                var_5_14 = arg0->unk1C4;
+        if (mpeg->unk174 == 3) {
+            if (mpeg->unk150 == 3) {
+                var_5_14 = mpeg->unk1C4;
             } else {
-                var_5_14 = arg0->unk1B8;
+                var_5_14 = mpeg->unk1B8;
             }
-            _dispRefImage(arg0, var_5_14, arg1 - 1);
+            _dispRefImage(mpeg, var_5_14, arg1 - 1);
         } else {
-            if (arg0->unk150 == 3) {
-                var_5_24 = arg0->unk1D4;
-                var_6_27 = arg0->unk1E4;
+            if (mpeg->unk150 == 3) {
+                var_5_24 = mpeg->unk1D4;
+                var_6_27 = mpeg->unk1E4;
             } else {
-                var_5_24 = arg0->unk1C8;
-                var_6_27 = arg0->unk1D8;
+                var_5_24 = mpeg->unk1C8;
+                var_6_27 = mpeg->unk1D8;
             }
-            _dispRefImageField(arg0, var_5_24, var_6_27, arg1 - 1);
+            _dispRefImageField(mpeg, var_5_24, var_6_27, arg1 - 1);
         }
     }
-    if (arg0->unkF8 == 1) {
-        arg0->unkF8 = 2;
+    if (mpeg->unkF8 == 1) {
+        mpeg->unkF8 = 2;
     }
 }

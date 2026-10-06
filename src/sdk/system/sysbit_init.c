@@ -14,14 +14,14 @@ typedef struct SysbitState {
 
 extern void _sysbitFlush(SysbitState *ctx, s32 amount);
 
-void _sysbitInit(SysbitState *ctx, s32 arg1, s32 arg2, s32 arg3) {
+void _sysbitInit(SysbitState *ctx, s32 arg1, s32 base_addr, s32 size) {
     ctx->field8 = arg1;
     ctx->bit_pointer = arg1;
     ctx->bits = 0;
     ctx->cnt = 0;
     ctx->total = 0;
-    ctx->base = arg2;
-    ctx->limit = arg2 + arg3;
-    ctx->wrap_base = arg3;
+    ctx->base = base_addr;
+    ctx->limit = base_addr + size;
+    ctx->wrap_base = size;
     _sysbitFlush(ctx, 0);
 }

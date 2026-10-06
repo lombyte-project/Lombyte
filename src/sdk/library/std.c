@@ -27,24 +27,24 @@ extern void __sread();
 extern void __sseek();
 extern void __swrite();
 extern void func_00116408();
-void std(struct M2c_arg0 *arg0, s16 arg1, s16 arg2, s32 arg3) {
+void std(struct M2c_arg0 *fp, s16 flags, s16 fd, s32 reent) {
     int new_var2;
     struct M2c_arg0 *new_var;
-    arg0->unk54 = arg3;
-    new_var = arg0;
-    new_var->unkC = (unsigned long)arg1;
-    new_var->unkE = arg2;
-    arg0->unk20 = &__sread;
+    fp->unk54 = reent;
+    new_var = fp;
+    new_var->unkC = (unsigned long)flags;
+    new_var->unkE = fd;
+    fp->unk20 = &__sread;
     new_var->unk24 = &__swrite;
     new_var->unk28 = &__sseek;
     new_var->unk2C = &func_00116408;
     do {
         new_var2 = 0;
-        arg0->unk0 = new_var2;
-        arg0->unk4 = new_var2;
+        fp->unk0 = new_var2;
+        fp->unk4 = new_var2;
         new_var->unk8 = new_var2;
         new_var->unk10 = new_var2;
-        arg0->unk18 = new_var2;
+        fp->unk18 = new_var2;
     } while (0);
-    new_var->unk1C = arg0;
+    new_var->unk1C = fp;
 }

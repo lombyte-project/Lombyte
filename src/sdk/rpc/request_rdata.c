@@ -29,12 +29,12 @@ extern void isceSifSendCmd();
 void _request_rdata(struct M2c_arg0 *arg0, s32 arg1) {
     s32 a;
     s32 b;
-    struct M2c_temp_2_7 *temp_2_7;
-    temp_2_7 = GetRpcPacket(arg1);
+    struct M2c_temp_2_7 *packet;
+    packet = GetRpcPacket(arg1);
     a = (s32)arg0->unk14;
     b = (s32)arg0->unk1C;
-    temp_2_7->unk14 = a;
-    temp_2_7->unk1C = b;
-    temp_2_7->unk20 = 0x8000000C;
-    isceSifSendCmd(0x80000008, temp_2_7, 0x40, arg0->unk20, arg0->unk24, arg0->unk28);
+    packet->unk14 = a;
+    packet->unk1C = b;
+    packet->unk20 = 0x8000000C;
+    isceSifSendCmd(0x80000008, packet, 0x40, arg0->unk20, arg0->unk24, arg0->unk28);
 }

@@ -57,7 +57,7 @@ extern u8 D_001D5208[];
 extern u8 D_001D5298[];
 extern u8 D_001D52B0[];
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-s32 FUN_002223f0(struct Menu *arg0) {
+s32 FUN_002223f0(struct Menu *menu) {
     int flag;
     s32 n;
 
@@ -74,21 +74,21 @@ s32 FUN_002223f0(struct Menu *arg0) {
             }
         }
     }
-    n = arg0->unk40;
-    arg0->unk40 = n - 1;
+    n = menu->unk40;
+    menu->unk40 = n - 1;
     if (flag) {
-        arg0->unk40 = n - 2;
+        menu->unk40 = n - 2;
     }
-    if (arg0->unk40 < 0) {
-        arg0->unk40 = 0;
+    if (menu->unk40 < 0) {
+        menu->unk40 = 0;
     }
-    switch (arg0->unk50) {
+    switch (menu->unk50) {
     case 0:
-        arg0->unk50 = arg0->unk50 + 1;
-        arg0->unk40 = scale_game_frames(0xB4);
-        arg0->unk3C = 0;
+        menu->unk50 = menu->unk50 + 1;
+        menu->unk40 = scale_game_frames(0xB4);
+        menu->unk3C = 0;
         D_001D2AF4[0] = 0x50A9;
-        arg0->str = (s32)D_001D5098;
+        menu->str = (s32)D_001D5098;
         break;
 
     case 1:
@@ -100,9 +100,9 @@ s32 FUN_002223f0(struct Menu *arg0) {
     case 12:
 
     case 16:
-        if (arg0->unk40 == 0) {
-            arg0->unk54 = 0;
-            arg0->unk50 = *(volatile u32 *)(&arg0->unk50) + 1;
+        if (menu->unk40 == 0) {
+            menu->unk54 = 0;
+            menu->unk50 = *(volatile u32 *)(&menu->unk50) + 1;
         }
         break;
 
@@ -115,98 +115,98 @@ s32 FUN_002223f0(struct Menu *arg0) {
     case 13:
 
     case 17:
-        n = arg0->unk3C;
-        arg0->unk3C = n + 0xA;
+        n = menu->unk3C;
+        menu->unk3C = n + 0xA;
         if (flag) {
-            arg0->unk3C = n + 0x14;
+            menu->unk3C = n + 0x14;
         }
-        if (arg0->unk54 != 0) {
-            arg0->unk40 = scale_game_frames(0xB4);
-            arg0->unk50 = arg0->unk50 + 1;
+        if (menu->unk54 != 0) {
+            menu->unk40 = scale_game_frames(0xB4);
+            menu->unk50 = menu->unk50 + 1;
         }
         break;
 
     case 4:
-        if (arg0->unk40 == 0) {
-            arg0->unk50 = 5;
-            arg0->unk40 = scale_game_frames(0xB4);
-            arg0->unk3C = 0;
+        if (menu->unk40 == 0) {
+            menu->unk50 = 5;
+            menu->unk40 = scale_game_frames(0xB4);
+            menu->unk3C = 0;
             D_001D2AF4[0] = 0x50D6;
-            arg0->str = (s32)D_001D5148;
+            menu->str = (s32)D_001D5148;
         }
         break;
 
     case 3:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x50D4;
-            arg0->str = 0x50D5;
-            arg0->unk40 = scale_game_frames(0xF0);
-            arg0->unk3C = 0;
-            arg0->unk50 = arg0->unk50 + 1;
+            menu->str = 0x50D5;
+            menu->unk40 = scale_game_frames(0xF0);
+            menu->unk3C = 0;
+            menu->unk50 = menu->unk50 + 1;
         }
         break;
 
     case 7:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x5106;
-            arg0->str = (s32)D_001D5208;
-            arg0->unk40 = scale_game_frames(0xF0);
-            arg0->unk3C = 0;
-            arg0->unk50 = arg0->unk50 + 1;
+            menu->str = (s32)D_001D5208;
+            menu->unk40 = scale_game_frames(0xF0);
+            menu->unk3C = 0;
+            menu->unk50 = menu->unk50 + 1;
         }
         break;
 
     case 10:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0x5136;
-            arg0->str = 0x5137;
-            arg0->unk40 = scale_game_frames(0xF0);
-            arg0->unk3C = 0;
-            arg0->unk50 = arg0->unk50 + 1;
+            menu->str = 0x5137;
+            menu->unk40 = scale_game_frames(0xF0);
+            menu->unk3C = 0;
+            menu->unk50 = menu->unk50 + 1;
         }
         break;
 
     case 11:
-        if (arg0->unk40 == 0) {
-            arg0->unk40 = scale_game_frames(0xB4);
-            arg0->unk3C = 0;
+        if (menu->unk40 == 0) {
+            menu->unk40 = scale_game_frames(0xB4);
+            menu->unk3C = 0;
             D_001D2AF4[0] = 0x5138;
-            arg0->str = (s32)D_001D5298;
-            arg0->unk50 = 0xC;
+            menu->str = (s32)D_001D5298;
+            menu->unk50 = 0xC;
         }
         break;
 
     case 14:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0;
-            arg0->str = 0x5143;
-            arg0->unk40 = scale_game_frames(0xF0);
-            arg0->unk3C = 0;
-            arg0->unk50 = arg0->unk50 + 1;
+            menu->str = 0x5143;
+            menu->unk40 = scale_game_frames(0xF0);
+            menu->unk3C = 0;
+            menu->unk50 = menu->unk50 + 1;
         }
         break;
 
     case 15:
-        if (arg0->unk40 == 0) {
-            arg0->unk40 = scale_game_frames(0xB4);
-            arg0->unk3C = 0;
+        if (menu->unk40 == 0) {
+            menu->unk40 = scale_game_frames(0xB4);
+            menu->unk3C = 0;
             D_001D2AF4[0] = 0x5144;
-            arg0->str = (s32)D_001D52B0;
-            arg0->unk50 = 0x10;
+            menu->str = (s32)D_001D52B0;
+            menu->unk50 = 0x10;
         }
         break;
 
     case 18:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0;
-            arg0->str = 0x5175;
-            arg0->unk50 = arg0->unk50 + 1;
-            arg0->unk40 = scale_game_frames(0x12C);
+            menu->str = 0x5175;
+            menu->unk50 = menu->unk50 + 1;
+            menu->unk40 = scale_game_frames(0x12C);
         }
         break;
 
     case 19:
-        if (arg0->unk40 == 0) {
+        if (menu->unk40 == 0) {
             if (D_001D5BF0.unkDC != 0) {
                 return 1;
             }

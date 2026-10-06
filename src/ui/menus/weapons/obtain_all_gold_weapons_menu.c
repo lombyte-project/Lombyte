@@ -28,9 +28,9 @@ extern void *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222948");
+s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *menu) __asm__("FUN_00222948");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
+s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *menu) {
     struct MenuPacket packet;
     struct MenuPacket tmp;
     void *tex;
@@ -39,8 +39,8 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     s16 pos_x = 0x18;
 
     func_001153FC(&tmp, 0, 0x18);
-    tmp.unk2 = arg0->unk24;
-    tmp.unk6 = arg0->unk20;
+    tmp.unk2 = menu->unk24;
+    tmp.unk6 = menu->unk20;
     tmp.unk10 = 0x10;
     packet = tmp;
     setup_gif_paging(0);

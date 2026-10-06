@@ -3,25 +3,25 @@ extern void func_00115248(void *, const void *, s32);
 extern s32 func_0023B810(s32, s32, s32, s32, s32, s32, s32, s32)
     __attribute__((alias("FUN_0023b810")));
 
-s32 copy_video_buffer_region(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
-                             s32 arg7) __asm__("FUN_0023b810");
+s32 copy_video_buffer_region(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
+                             s32 src_b_len) __asm__("FUN_0023b810");
 
-s32 copy_video_buffer_region(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
-                             s32 arg7) {
-    if (arg1 + arg3 < arg5 + arg7) {
+s32 copy_video_buffer_region(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
+                             s32 src_b_len) {
+    if (dst_a_len + dst_b_len < src_a_len + src_b_len) {
         return 0;
     }
-    if (arg5 >= arg1) {
-        func_00115248(arg0, arg4, arg1);
-        func_00115248(arg2, arg4 + arg1, arg5 - arg1);
-        func_00115248((arg2 + arg5) - arg1, arg6, arg7);
-    } else if (arg7 >= arg1 - arg5) {
-        func_00115248(arg0, arg4, arg5);
-        func_00115248(arg0 + arg5, arg6, arg1 - arg5);
-        func_00115248(arg2, (arg6 + arg1) - arg5, arg7 - (arg1 - arg5));
+    if (src_a_len >= dst_a_len) {
+        func_00115248(dst_a, src_a, dst_a_len);
+        func_00115248(dst_b, src_a + dst_a_len, src_a_len - dst_a_len);
+        func_00115248((dst_b + src_a_len) - dst_a_len, src_b, src_b_len);
+    } else if (src_b_len >= dst_a_len - src_a_len) {
+        func_00115248(dst_a, src_a, src_a_len);
+        func_00115248(dst_a + src_a_len, src_b, dst_a_len - src_a_len);
+        func_00115248(dst_b, (src_b + dst_a_len) - src_a_len, src_b_len - (dst_a_len - src_a_len));
     } else {
-        func_00115248(arg0, arg4, arg5);
-        func_00115248(arg0 + arg5, arg6, arg7);
+        func_00115248(dst_a, src_a, src_a_len);
+        func_00115248(dst_a + src_a_len, src_b, src_b_len);
     }
-    return arg5 + arg7;
+    return src_a_len + src_b_len;
 }

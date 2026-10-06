@@ -21,9 +21,9 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 func_001FA6C0(s32);
 
-void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) __asm__("FUN_001ed360");
+void apply_camera_shake(struct M2c_arg0 *shake, s32 arg1) __asm__("FUN_001ed360");
 
-void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
+void apply_camera_shake(struct M2c_arg0 *shake, s32 arg1) {
     f32 sp_slot[4];
     f32 v1;
     f32 v2;
@@ -33,21 +33,21 @@ void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
     s32 v5;
 
     if (D_001870C0[0] != 0 && D_001870C0[0]->unk86 == 6) {
-        arg0->unk8 = 0;
-        arg0->unkC = 0;
+        shake->unk8 = 0;
+        shake->unkC = 0;
     } else {
-        v5 = arg0->unk8;
+        v5 = shake->unk8;
         if (v5 != 0) {
-            if (arg0->unkC < v5) {
-                arg0->unkC = v5;
+            if (shake->unkC < v5) {
+                shake->unkC = v5;
             }
-            func_001F9740(&arg0->unk8);
-            v1 = func_001FA6C0(arg0->unk8);
-            v2 = func_001FA6C0(arg0->unkC);
+            func_001F9740(&shake->unk8);
+            v1 = func_001FA6C0(shake->unk8);
+            v2 = func_001FA6C0(shake->unkC);
             v3 = v1 / v2;
-            v4 = fast_cos(fast_normalize_angle(2.0f * func_001FA6C0(arg0->unk8)));
-            val = arg0->unk0 * v4 * v3 * v3;
-            arg0->unk4 = val;
+            v4 = fast_cos(fast_normalize_angle(2.0f * func_001FA6C0(shake->unk8)));
+            val = shake->unk0 * v4 * v3 * v3;
+            shake->unk4 = val;
             if (arg1 == 0) {
                 FUN_001f9bf8(sp_slot, D_001872B0, val);
             } else {
@@ -55,7 +55,7 @@ void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
             }
             FUN_001f9a10(D_00187080, D_00187080, sp_slot);
         } else {
-            arg0->unkC = 0;
+            shake->unkC = 0;
         }
     }
 }

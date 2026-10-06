@@ -5,9 +5,9 @@
 
 #include "types.h"
 
-s32 BcdToTime(s32 arg0) {
-    u32 temp_2_3;
+s32 BcdToTime(s32 bcd) {
+    u32 low_byte;
 
-    temp_2_3 = arg0 & 0xFF;
-    return (temp_2_3 - ((temp_2_3 >> 4) * 6)) & 0xFF;
+    low_byte = bcd & 0xFF;
+    return (low_byte - ((low_byte >> 4) * 6)) & 0xFF;
 }

@@ -23,7 +23,7 @@ extern float func_001FA6C0(int);
 void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
 
 void start_camera_blend(void *arg) {
-    char *arg0 = arg;
+    char *src = arg;
     char *r = D_001871B0;
     char local0[16];
     char local1[16];
@@ -33,11 +33,11 @@ void start_camera_blend(void *arg) {
     if (*(short *)r == 1) {
         sub = r[3];
         if (sub == 0) {
-            qcopy(r + 0x50, arg0 + 0x30);
-            func_002144D8(r + 0x60, arg0);
+            qcopy(r + 0x50, src + 0x30);
+            func_002144D8(r + 0x60, src);
         } else if (sub == 2) {
-            qcopy(r + 0xC0, arg0 + 0x30);
-            func_002144D8(r + 0xD0, arg0);
+            qcopy(r + 0xC0, src + 0x30);
+            func_002144D8(r + 0xD0, src);
             capture_camera_orientation();
         } else {
             char *g = D_0013F350;
@@ -45,9 +45,9 @@ void start_camera_blend(void *arg) {
             FUN_001f9bf8(local0, *(char **)(g + 0x2080) + 0xC0, 1.0f);
             FUN_001f9bf8(local1, *(char **)(g + 0x2080) + 0xD0, 1.0f);
             FUN_001f9bf8(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
-            compute_camera_angles((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
+            compute_camera_angles((float *)(r + 0x70), src + 0x30, *(char **)(r - 0xF0) + 0x30,
                                   local0, local1, local2);
-            func_002144D8(r + 0xB0, arg0);
+            func_002144D8(r + 0xB0, src);
             qcopy(r + 0xD0, r + 0xB0);
         }
     } else {

@@ -58,15 +58,15 @@ extern void _sceSifCmdIntrHdlr();
  * handshake. The cold path polls register 4 until bit 0x20000 is set. */
 void sceSifInitCmd(void) {
     u32 ipval;
-    struct M2c_var_3_42 *var_3_42;
+    struct M2c_var_3_42 *handler_entry;
     struct M2c_var_3_42 *handlers;
-    s32 *var_2_61;
-    s32 temp_2_113;
+    s32 *buf_word;
+    s32 remote_reg;
     s32 temp_2_141;
     s32 temp_5_29;
     s32 temp_6_30;
-    s32 var_16_46;
-    s32 var_16_59;
+    s32 handler_remaining;
+    s32 buf_remaining;
 
     DIntr();
     if (*(s32 *)D_0012FC04 == 0) {
@@ -83,29 +83,29 @@ block_3:
     D_00154E58.unk4 = temp_5_29;
     D_00154E58.unk1C = D_00154F80;
     handlers = (struct M2c_var_3_42 *)&D_00154E80;
-    var_3_42 = handlers;
+    handler_entry = handlers;
     D_00154E58.unk8 = 0;
 
-    var_16_46 = 0x1F;
+    handler_remaining = 0x1F;
     D_00154E58.unkC = &D_00154E80;
     D_00154E58.unk14 = 0;
     D_00154E58.unk18 = 0;
     D_00154E58.unk10 = ipval;
 loop_4:
-    var_3_42->unk0 = 0;
-    var_16_46 -= 1;
-    var_3_42->unk4 = 0;
-    var_3_42 += 1;
-    if (var_16_46 >= 0) {
+    handler_entry->unk0 = 0;
+    handler_remaining -= 1;
+    handler_entry->unk4 = 0;
+    handler_entry += 1;
+    if (handler_remaining >= 0) {
         goto loop_4;
     }
-    var_16_59 = 0x1F;
-    var_2_61 = D_00154F80 + 0x7C;
+    buf_remaining = 0x1F;
+    buf_word = D_00154F80 + 0x7C;
 loop_6:
-    *var_2_61 = 0;
-    var_16_59 -= 1;
-    var_2_61 -= 1;
-    if (var_16_59 >= 0) {
+    *buf_word = 0;
+    buf_remaining -= 1;
+    buf_word -= 1;
+    if (buf_remaining >= 0) {
         goto loop_6;
     }
     handlers[0].unk0 = FUN_0011a448;
@@ -128,9 +128,9 @@ loop_6:
     }
     D_00154E54[0] = AddDmacHandler(5, &_sceSifCmdIntrHdlr, 0);
     enable_dmac(5);
-    temp_2_113 = sceSifGetReg(0x80000000);
-    D_00154E58.unk8 = temp_2_113;
-    if (temp_2_113 == 0) {
+    remote_reg = sceSifGetReg(0x80000000);
+    D_00154E58.unk8 = remote_reg;
+    if (remote_reg == 0) {
         goto block_14;
     }
     D_00154E40.unk10 = D_00154D80;

@@ -19,31 +19,31 @@ extern s32 Rfu116SetSyscallMid();
 extern void FindKernelAddress();
 extern void KernelCopyRdata();
 void InitSystemCallTableAddress(void) {
-    s32 var_18_32;
-    s32 var_19_26;
+    s32 copy_cursor;
+    s32 find_cursor;
     s32 var_2_36;
-    u32 var_16_33;
-    u32 var_17_31;
+    u32 copy_addr;
+    u32 find_addr;
     Rfu116SetSyscallMid(D_00130310.unk0, D_00130310.unk4);
     Rfu116SetSyscallMid(D_00130310.unk8, D_00130310.unkC);
-    var_19_26 = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &FindKernelAddress);
-    var_17_31 = var_19_26 - 0x20C;
-    var_18_32 = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &KernelCopyRdata);
-    var_16_33 = var_18_32 - 0x168;
-    if (var_17_31 != var_16_33) {
+    find_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &FindKernelAddress);
+    find_addr = find_cursor - 0x20C;
+    copy_cursor = InvokeKernelSyscall0083_Rfu(0x80000000, 0x80080000, &KernelCopyRdata);
+    copy_addr = copy_cursor - 0x168;
+    if (find_addr != copy_addr) {
         ;
         do {
-            if ((var_17_31 < var_16_33) != 0) {
-                var_19_26 =
-                    InvokeKernelSyscall0083_Rfu(var_19_26 + 4, 0x80080000, &FindKernelAddress);
-                var_17_31 = var_19_26 - 0x20C;
+            if ((find_addr < copy_addr) != 0) {
+                find_cursor =
+                    InvokeKernelSyscall0083_Rfu(find_cursor + 4, 0x80080000, &FindKernelAddress);
+                find_addr = find_cursor - 0x20C;
             } else {
-                var_18_32 =
-                    InvokeKernelSyscall0083_Rfu(var_18_32 + 4, 0x80080000, &KernelCopyRdata);
-                var_16_33 = var_18_32 - 0x168;
+                copy_cursor =
+                    InvokeKernelSyscall0083_Rfu(copy_cursor + 4, 0x80080000, &KernelCopyRdata);
+                copy_addr = copy_cursor - 0x168;
             }
-            var_2_36 = var_17_31 < var_16_33;
-        } while (var_17_31 != var_16_33);
+            var_2_36 = find_addr < copy_addr;
+        } while (find_addr != copy_addr);
     }
-    D_00130308[0] = var_17_31;
+    D_00130308[0] = find_addr;
 }

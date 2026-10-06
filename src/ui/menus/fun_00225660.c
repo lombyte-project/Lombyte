@@ -12,18 +12,18 @@ struct M2c_arg0 {
 extern struct M2c_D_001516D0 D_001516D0;
 extern s32 delete_moby() __asm__("FUN_00225530");
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
-s32 FUN_00225660(struct M2c_arg0 *arg0) {
-    s32 *var_16_10;
-    s32 var_17_8;
+s32 FUN_00225660(struct M2c_arg0 *menu) {
+    s32 *slot;
+    s32 remaining;
 
-    var_17_8 = 0x17;
-    var_16_10 = ((u8 *)arg0 + (0x44));
+    remaining = 0x17;
+    slot = ((u8 *)menu + (0x44));
     do {
-        var_17_8 -= 1;
-        *var_16_10 = delete_moby(*var_16_10);
-        var_16_10 += 1;
-    } while (var_17_8 >= 0);
-    arg0->unk3C = complete_stream_buffer_transfer(arg0->unk3C);
+        remaining -= 1;
+        *slot = delete_moby(*slot);
+        slot += 1;
+    } while (remaining >= 0);
+    menu->unk3C = complete_stream_buffer_transfer(menu->unk3C);
     if ((u32)(D_001516D0.unk5A - 6) >= 2U) {
         D_001516D0.unk5A = 5U;
     }

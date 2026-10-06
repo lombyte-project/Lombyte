@@ -24,13 +24,13 @@ extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
 
 void update_hud(void) {
-    s32 temp_2_27;
+    s32 update_fn;
     short new_var2;
-    u8 *var_16_23;
-    s32 temp_16_90;
+    u8 *slot;
+    s32 text_color;
     s32 temp_2_59;
     s32 temp_2_76;
-    s32 var_17_25;
+    s32 remaining;
     if (D_0019A3E8.unk30 == 0) {
         goto block_2;
     }
@@ -44,22 +44,22 @@ block_2:
     D_0019A3E8.unk30 = 0;
     return;
 block_5:
-    var_16_23 = D_00199B60;
+    slot = D_00199B60;
 
     D_0019A3E8.unkC = 0xFFFFF0;
-    var_17_25 = 0xC;
+    remaining = 0xC;
 loop_6:
-    temp_2_27 = ((struct M2c_var_16_23 *)var_16_23)->unk18;
+    update_fn = ((struct M2c_var_16_23 *)slot)->unk18;
 
-    if (temp_2_27 == 0) {
+    if (update_fn == 0) {
         goto block_8;
     }
-    ((s32(*)())temp_2_27)(var_16_23);
+    ((s32(*)())update_fn)(slot);
 block_8:
-    var_17_25 -= 1;
+    remaining -= 1;
 
-    var_16_23 += 0x90;
-    if (var_17_25 >= 0) {
+    slot += 0x90;
+    if (remaining >= 0) {
         goto loop_6;
     }
     if (D_0015F680 != 0) {
@@ -92,16 +92,16 @@ block_15:
     }
     D_0015F684 = 0;
 block_17:
-    temp_16_90 = (D_0015F684 << 0x18) + 0xF0F0F0;
+    text_color = (D_0015F684 << 0x18) + 0xF0F0F0;
 
-    draw_framed_text(0x100, D_0015F688, temp_16_90, D_001993D8);
+    draw_framed_text(0x100, D_0015F688, text_color, D_001993D8);
     if (D_00199428[0] == 0) {
         goto block_20;
     }
     if (D_0015F680 < 0x3E9) {
         goto block_21;
     }
-    draw_framed_text(0x100, D_0015F688, temp_16_90, D_00199428);
+    draw_framed_text(0x100, D_0015F688, text_color, D_00199428);
 block_20:
 block_21:
     if (D_0015F680 == 0) {

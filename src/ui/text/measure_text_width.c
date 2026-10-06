@@ -1,8 +1,8 @@
 #include "types.h"
 
-s32 measure_text_width(u8 *arg0, s32 arg1, s32 arg2) __asm__("FUN_001f6200");
+s32 measure_text_width(u8 *text, s32 max_chars, s32 glyph_table) __asm__("FUN_001f6200");
 
-s32 measure_text_width(u8 *arg0, s32 arg1, s32 arg2) {
+s32 measure_text_width(u8 *text, s32 max_chars, s32 glyph_table) {
     s32 total;
     s32 count;
     s8 value;
@@ -11,19 +11,19 @@ s32 measure_text_width(u8 *arg0, s32 arg1, s32 arg2) {
 
     total = 0;
     count = 0;
-    if (arg1 == 0)
+    if (max_chars == 0)
         goto done;
-    if (*arg0 == 0)
+    if (*text == 0)
         goto done;
-    p = arg0;
+    p = text;
     do {
         index = *p;
         p++;
         count++;
-        value = *(s8 *)(arg2 + index * 4 + 3);
+        value = *(s8 *)(glyph_table + index * 4 + 3);
         if (value != 0)
             total += value;
-    } while (count != arg1 && *p != 0);
+    } while (count != max_chars && *p != 0);
 done:
     return total;
 }

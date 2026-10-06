@@ -30,46 +30,46 @@ extern s32 DIntr();
 extern s32 EnableInterrupts();
 extern void SceDeci2Poll(s32);
 
-s32 sceTtyWrite(s8 *arg0, s32 arg1) {
-    s32 var_20_8;  /* characters consumed -> return value */
-    s32 var_18_12; /* countdown, hits -1 after len+1 tests */
-    s32 var_17_14; /* bytes resident in the payload window */
-    s8 *var_16_16; /* source cursor */
-    struct Mmio *var_6_26;
-    u8 *var_4_32; /* payload cursor */
+s32 sceTtyWrite(s8 *text, s32 text_len) {
+    s32 written_count;  /* characters consumed -> return value */
+    s32 remaining; /* countdown, hits -1 after len+1 tests */
+    s32 window_bytes; /* bytes resident in the payload window */
+    s8 *src; /* source cursor */
+    struct Mmio *mmio;
+    u8 *dst; /* payload cursor */
 
-    var_20_8 = 0;
-    var_18_12 = arg1;
-    var_17_14 = 0;
-    var_16_16 = arg0;
+    written_count = 0;
+    remaining = text_len;
+    window_bytes = 0;
+    src = text;
     if (D_00154A50.unkC == 0) {
         DIntr();
         D_00154A50.unkC = 1;
-        var_6_26 = (struct Mmio *)((u32)D_00154A80 | 0x20000000);
-        D_00154A50.unk10 = (s32)var_6_26;
-        var_4_32 = var_6_26->data;
+        mmio = (struct Mmio *)((u32)D_00154A80 | 0x20000000);
+        D_00154A50.unk10 = (s32)mmio;
+        dst = mmio->data;
         do {
-            var_18_12 = var_18_12 - 1;
-            if (var_18_12 == -1) {
+            remaining = remaining - 1;
+            if (remaining == -1) {
                 break;
             }
-            if (*var_16_16 == 0xA) {
-                *var_4_32 = 0xD;
-                var_17_14 = var_17_14 + 1;
-                var_4_32 = var_4_32 + 1;
-                if (var_17_14 >= 0x100) {
+            if (*src == 0xA) {
+                *dst = 0xD;
+                window_bytes = window_bytes + 1;
+                dst = dst + 1;
+                if (window_bytes >= 0x100) {
                     break;
                 }
             }
-            *var_4_32 = (u8)*var_16_16;
-            var_17_14 = var_17_14 + 1;
-            var_16_16 = var_16_16 + 1;
-            var_4_32 = var_4_32 + 1;
-            var_20_8 = var_20_8 + 1;
-        } while (var_17_14 < 0x100);
-        D_00154A50.unk4 = var_17_14 + 0xC;
-        var_6_26->unk0 = D_00154A50.unk4;
-        if (CallDebugCharacter(D_00154A50.unk0, var_6_26->unk7) < 0) {
+            *dst = (u8)*src;
+            window_bytes = window_bytes + 1;
+            src = src + 1;
+            dst = dst + 1;
+            written_count = written_count + 1;
+        } while (window_bytes < 0x100);
+        D_00154A50.unk4 = window_bytes + 0xC;
+        mmio->unk0 = D_00154A50.unk4;
+        if (CallDebugCharacter(D_00154A50.unk0, mmio->unk7) < 0) {
             *(s32 *)&D_00154A50.unkC = 0;
             EnableInterrupts();
             return -1;
@@ -80,7 +80,7 @@ s32 sceTtyWrite(s8 *arg0, s32 arg1) {
             } while (D_00154A50.unkC != 0);
         }
         EnableInterrupts();
-        return var_20_8;
+        return written_count;
     }
     return -1;
 }

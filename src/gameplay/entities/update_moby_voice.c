@@ -15,23 +15,23 @@ extern u8 D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
-void update_moby_voice(struct M2c_arg0 *arg0) __asm__("FUN_0020c940");
+void update_moby_voice(struct M2c_arg0 *moby) __asm__("FUN_0020c940");
 
-void update_moby_voice(struct M2c_arg0 *arg0) {
+void update_moby_voice(struct M2c_arg0 *moby) {
     s32 idx;
     struct M2c_temp_3_16 *e;
 
-    if (arg0->unk7D != 0xFF) {
-        idx = arg0->unk7D;
+    if (moby->unk7D != 0xFF) {
+        idx = moby->unk7D;
         e = (struct M2c_temp_3_16 *)(idx * 0x70 + D_0013E550);
-        if (e->unk88 != (s32)arg0) {
-            arg0->unk7D = 0xFF;
-        } else if (e->unk7E != arg0->unk7C) {
+        if (e->unk88 != (s32)moby) {
+            moby->unk7D = 0xFF;
+        } else if (e->unk7E != moby->unk7C) {
             release_voice_slot(idx);
-            arg0->unk7D = 0xFF;
+            moby->unk7D = 0xFF;
         }
-    } else if (arg0->unk7C != 0xFF) {
-        arg0->unk7D = allocate_voice_for_target_entry(arg0->unk7C, 4, arg0);
+    } else if (moby->unk7C != 0xFF) {
+        moby->unk7D = allocate_voice_for_target_entry(moby->unk7C, 4, moby);
     }
 }
 

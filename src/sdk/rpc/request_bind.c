@@ -35,23 +35,23 @@ extern s32 GetRpcPacket();
 extern s32 SearchSvdata();
 extern void isceSifSendCmd();
 void _request_bind(struct M2c_arg0 *arg0, s32 arg1) {
-    struct M2c_temp_2_10 *temp_2_10;
+    struct M2c_temp_2_10 *packet;
     s32 new_var;
-    struct M2c_temp_2_21 *temp_2_21;
-    temp_2_10 = GetRpcPacket(arg1);
+    struct M2c_temp_2_21 *svdata;
+    packet = GetRpcPacket(arg1);
     new_var = (s32)arg0->unk14;
-    temp_2_10->unk1C = (s32)arg0->unk1C;
-    temp_2_10->unk14 = new_var;
-    temp_2_10->unk20 = 0x80000009;
-    temp_2_21 = SearchSvdata(arg0->unk20, arg1);
-    if (temp_2_21 == 0) {
-        temp_2_10->unk24 = 0;
-        temp_2_10->unk28 = 0;
-        temp_2_10->unk2C = 0;
+    packet->unk1C = (s32)arg0->unk1C;
+    packet->unk14 = new_var;
+    packet->unk20 = 0x80000009;
+    svdata = SearchSvdata(arg0->unk20, arg1);
+    if (svdata == 0) {
+        packet->unk24 = 0;
+        packet->unk28 = 0;
+        packet->unk2C = 0;
     } else {
-        temp_2_10->unk24 = temp_2_21;
-        temp_2_10->unk28 = (s32)temp_2_21->unk8;
-        temp_2_10->unk2C = (s32)temp_2_21->unk14;
+        packet->unk24 = svdata;
+        packet->unk28 = (s32)svdata->unk8;
+        packet->unk2C = (s32)svdata->unk14;
     }
-    isceSifSendCmd(0x80000008, temp_2_10, 0x40, 0, 0, 0);
+    isceSifSendCmd(0x80000008, packet, 0x40, 0, 0, 0);
 }

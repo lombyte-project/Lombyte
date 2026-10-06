@@ -16,9 +16,9 @@ extern void FlushCache(s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
-s32 snd_bank_load_by_loc(s32 arg0, s32 arg1) __asm__("FUN_0012df20");
+s32 snd_bank_load_by_loc(s32 location, s32 arg1) __asm__("FUN_0012df20");
 
-s32 snd_bank_load_by_loc(s32 arg0, s32 arg1) {
+s32 snd_bank_load_by_loc(s32 location, s32 arg1) {
     D_0015EC88 = 0;
     if (D_0015ECC8 != 0) {
         printf(D_00153DA8);
@@ -30,7 +30,7 @@ s32 snd_bank_load_by_loc(s32 arg0, s32 arg1) {
     }
     D_00137B40[1] = arg1;
     D_0015ED00 = 0xFFFFFFFF;
-    D_00137B40[0] = arg0;
+    D_00137B40[0] = location;
     while (SceSifCheckStatRpc(D_0015EBE8) != 0) {
         printf(D_00153D20);
         snd_flush_sound_commands();

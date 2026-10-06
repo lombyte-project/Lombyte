@@ -10,7 +10,7 @@ extern s32 func_0011CAE0();
 extern s32 memcpy();
 extern s32 sceSifCallRpc();
 #define SIFCMD ((struct M2c_D_00158200 *)D_00158200)
-s32 _sceSifLoadModuleBuffer(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
+s32 _sceSifLoadModuleBuffer(s32 arg0, s32 size, s32 src, s32 *result_out) {
     s32 var_2_18;
     s32 temp;
 
@@ -22,13 +22,13 @@ s32 _sceSifLoadModuleBuffer(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
         return 0xFFFEFFFC;
     }
     SIFCMD->unk0 = arg0;
-    if (arg2 != 0) {
-        if (arg1 >= 0xFD) {
-            memcpy(D_00158200 + 0x104, (void *)arg2, 0xFC);
+    if (src != 0) {
+        if (size >= 0xFD) {
+            memcpy(D_00158200 + 0x104, (void *)src, 0xFC);
             SIFCMD->unk4 = 0xFC;
         } else {
-            memcpy(D_00158200 + 0x104, (void *)arg2, arg1);
-            SIFCMD->unk4 = arg1;
+            memcpy(D_00158200 + 0x104, (void *)src, size);
+            SIFCMD->unk4 = size;
         }
     } else {
         SIFCMD->unk4 = 0;
@@ -37,6 +37,6 @@ s32 _sceSifLoadModuleBuffer(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
         return 0xFFFEFFFF;
     }
     temp = SIFCMD->unk0;
-    *arg3 = SIFCMD->unk4;
+    *result_out = SIFCMD->unk4;
     return temp;
 }

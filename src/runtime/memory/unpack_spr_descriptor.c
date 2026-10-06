@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/core/001236F0.c, func_00123BA0). */
 /*
- * Unpack a scratchpad-resident descriptor: arg0 is forced into the SPR
+ * Unpack a scratchpad-resident descriptor: descriptor is forced into the SPR
  * window (| 0x20000000), then two counted byte runs are copied out of
  * it -- the one at +0x10 to the pointer at +0x8 for the count at +0x0,
  * and the one at +0x50 to the pointer at +0xC for the count at +0x4.

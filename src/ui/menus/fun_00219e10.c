@@ -1,9 +1,9 @@
 #include "types.h"
 
 /* Pause list handler (func_0022DA68's family): one `char *` pad local per
-   block. The cursor at arg0+0x3C moves on 0x1000/0x4000 within
-   arg0+0x40, with a notify on change; then the scroll (arg0+0x60) is
-   clamped around the cursor and the bar position at arg0+0x5C derived
+   block. The cursor at menu+0x3C moves on 0x1000/0x4000 within
+   menu+0x40, with a notify on change; then the scroll (menu+0x60) is
+   clamped around the cursor and the bar position at menu+0x5C derived
    from it, or pinned to 0x60. The re-reads of 0x3C and 0x60 are how
    retail's reloads come out; the page size q - 2 is formed after the
    clamp, and each arm stores the bar position itself. The page size is a
@@ -17,7 +17,7 @@ extern s32 D_001D5D14[];
 extern u8 D_001D5BF0[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
-int FUN_00219e10(char *arg0) {
+int FUN_00219e10(char *menu) {
     {
         char *pad = D_0013C940;
         if (*(int *)(pad + 0x1C4) & 0xD00) {
@@ -41,42 +41,42 @@ int FUN_00219e10(char *arg0) {
     {
         char *pad3 = D_0013C940;
         int v = *(int *)(pad3 + 0x1C4);
-        int old = *(int *)(arg0 + 0x3C);
+        int old = *(int *)(menu + 0x3C);
 
         if ((v & 0x1000) && old != 0) {
-            *(int *)(arg0 + 0x3C) = old - 1;
+            *(int *)(menu + 0x3C) = old - 1;
         }
         if (v & 0x4000) {
-            int c = *(int *)(arg0 + 0x3C) + 1;
-            if (c < *(int *)(arg0 + 0x40)) {
-                *(int *)(arg0 + 0x3C) = c;
+            int c = *(int *)(menu + 0x3C) + 1;
+            if (c < *(int *)(menu + 0x40)) {
+                *(int *)(menu + 0x3C) = c;
             }
         }
-        if (*(int *)(arg0 + 0x3C) != old) {
-            allocate_voice_for_target_entry(1, 0x11, *(int *)(arg0 + 0x14));
+        if (*(int *)(menu + 0x3C) != old) {
+            allocate_voice_for_target_entry(1, 0x11, *(int *)(menu + 0x14));
         }
     }
     {
-        int t = *(int *)(arg0 + 0x24) * 16;
+        int t = *(int *)(menu + 0x24) * 16;
 
-        if (t / 0x260 >= *(int *)(arg0 + 0x40)) {
-            *(int *)(arg0 + 0x5C) = 0x60;
+        if (t / 0x260 >= *(int *)(menu + 0x40)) {
+            *(int *)(menu + 0x5C) = 0x60;
         } else {
             int q = (t - 0x28) / 0x260;
             int n;
 
-            int c = *(volatile int *)(arg0 + 0x3C);
-            if (*(int *)(arg0 + 0x60) >= c) {
-                *(int *)(arg0 + 0x60) = c - 1;
-                if (*(int *)(arg0 + 0x60) < 0) {
-                    *(int *)(arg0 + 0x60) = 0;
+            int c = *(volatile int *)(menu + 0x3C);
+            if (*(int *)(menu + 0x60) >= c) {
+                *(int *)(menu + 0x60) = c - 1;
+                if (*(int *)(menu + 0x60) < 0) {
+                    *(int *)(menu + 0x60) = 0;
                 }
             }
             n = q - 2;
-            if (*(int *)(arg0 + 0x60) < *(int *)(arg0 + 0x3C) - n) {
-                *(int *)(arg0 + 0x60) = *(int *)(arg0 + 0x3C) - n;
+            if (*(int *)(menu + 0x60) < *(int *)(menu + 0x3C) - n) {
+                *(int *)(menu + 0x60) = *(int *)(menu + 0x3C) - n;
             }
-            *(int *)(arg0 + 0x5C) = 0x190 - *(int *)(arg0 + 0x60) * 0x260;
+            *(int *)(menu + 0x5C) = 0x190 - *(int *)(menu + 0x60) * 0x260;
         }
     }
     return 0;

@@ -9,14 +9,14 @@ struct M2c_temp_4_15 {
 extern u8 D_0013E550[];
 extern s32 D_0015F5B4;
 
-s32 is_active_state_entry(s32 arg0, s32 arg1) __asm__("FUN_001eb740");
+s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 
-s32 is_active_state_entry(s32 arg0, s32 arg1) {
+s32 is_active_state_entry(s32 entry_index, s32 id) {
     struct M2c_temp_4_15 *e;
 
-    if (arg0 >= 0) {
-        e = (struct M2c_temp_4_15 *)(arg0 * 0x70 + D_0013E550);
-        if (e->unk7E == arg1 + D_0015F5B4) {
+    if (entry_index >= 0) {
+        e = (struct M2c_temp_4_15 *)(entry_index * 0x70 + D_0013E550);
+        if (e->unk7E == id + D_0015F5B4) {
             if ((u32)(e->unk74 - 1) < 2) {
                 return 1;
             }

@@ -35,9 +35,9 @@ extern void FUN_001f9a68(void *a, s64 b, f32 c);
 extern void FUN_001f9d20(void *a, void *b, void *c);
 extern void FUN_001f9fc8(void *a);
 extern void FUN_001fa378(void *a, void *b, void *c);
-void project_to_screen(struct M2c_arg0 *arg0, s32 arg1) __asm__("FUN_001f2070");
+void project_to_screen(struct M2c_arg0 *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
-void project_to_screen(struct M2c_arg0 *arg0, s32 arg1) {
+void project_to_screen(struct M2c_arg0 *screen_out, s32 world_pos) {
     struct Locals_001f2070 L;
     f32 scale;
     f32 y;
@@ -48,17 +48,17 @@ void project_to_screen(struct M2c_arg0 *arg0, s32 arg1) {
     L.v34 = -D_00186F40.unk144 * 1024.0f;
     L.v38 = -D_00186F40.unk148 * 1024.0f;
     FUN_001fa378(&L.v40, (u8 *)&D_00186F40 + 0x40, &L);
-    FUN_001f9a68(&L.blk80, arg1, 1024.0f);
+    FUN_001f9a68(&L.blk80, world_pos, 1024.0f);
     L.v8C = 1.0f;
     FUN_001f9d20(&L.v90, &L.blk80, &L.v40);
     scale = D_0018CF10[0] / L.v9C;
-    arg0->unk8 = L.v98 * 0.0009765625f;
+    screen_out->unk8 = L.v98 * 0.0009765625f;
     x = L.v90 * scale + 2048.0f;
     y = L.v94 * scale + 2048.0f;
     L.v90 = x;
     L.v94 = y;
-    arg0->unk0 = x * 16.0f;
-    arg0->unk4 = y * 16.0f;
+    screen_out->unk0 = x * 16.0f;
+    screen_out->unk4 = y * 16.0f;
 }
 
 extern __typeof__(project_to_screen) func_001F2070 __attribute__((alias("FUN_001f2070")));

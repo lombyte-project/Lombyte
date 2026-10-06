@@ -24,50 +24,50 @@ extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
-s32 sceSifBindRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
+s32 sceSifBindRpc(struct M2c_arg0 *client, s32 rpc_number, s32 mode) {
     s32 sema_param[6];
-    s32 temp_2_31;
-    struct M2c_temp_2_15 *temp_2_15;
+    s32 sema_id;
+    struct M2c_temp_2_15 *packet;
 
-    arg0->unk10 = 0;
-    arg0->unk24 = 0;
-    temp_2_15 = (struct M2c_temp_2_15 *)get_available_rpc_packet(D_00156800);
-    if (temp_2_15 == NULL) {
+    client->unk10 = 0;
+    client->unk24 = 0;
+    packet = (struct M2c_temp_2_15 *)get_available_rpc_packet(D_00156800);
+    if (packet == NULL) {
         return -1;
     }
-    arg0->unk4 = (s32)temp_2_15->unk18;
-    arg0->unk0 = (s32)temp_2_15;
-    temp_2_15->unk20 = arg1;
-    temp_2_15->unk14 = (s32)temp_2_15;
-    temp_2_15->unk1C = (s32)arg0;
-    if (arg2 & 1) {
+    client->unk4 = (s32)packet->unk18;
+    client->unk0 = (s32)packet;
+    packet->unk20 = rpc_number;
+    packet->unk14 = (s32)packet;
+    packet->unk1C = (s32)client;
+    if (mode & 1) {
         goto block_7;
     }
     sema_param[1] = 1;
     sema_param[2] = 0;
-    temp_2_31 = CreateSema(sema_param);
-    arg0->unk8 = temp_2_31;
-    if (temp_2_31 >= 0) {
+    sema_id = CreateSema(sema_param);
+    client->unk8 = sema_id;
+    if (sema_id >= 0) {
         goto block_4;
     }
-    func_0011AD90(temp_2_15);
+    func_0011AD90(packet);
     return -3;
 block_4:
-    if (sceSifSendCmd(0x80000009, temp_2_15, 0x40, 0, 0, 0) != 0) {
+    if (sceSifSendCmd(0x80000009, packet, 0x40, 0, 0, 0) != 0) {
         goto block_6;
     }
-    func_0011AD90(temp_2_15);
-    DeleteSema(arg0->unk8);
+    func_0011AD90(packet);
+    DeleteSema(client->unk8);
     return -2;
 block_6:
-    WaitSema(arg0->unk8);
-    DeleteSema(arg0->unk8);
+    WaitSema(client->unk8);
+    DeleteSema(client->unk8);
     return 0;
 block_7:
-    arg0->unk8 = -1;
-    if (sceSifSendCmd(0x80000009, temp_2_15, 0x40, 0, 0, 0) != 0) {
+    client->unk8 = -1;
+    if (sceSifSendCmd(0x80000009, packet, 0x40, 0, 0, 0) != 0) {
         return 0;
     }
-    func_0011AD90(temp_2_15);
+    func_0011AD90(packet);
     return -2;
 }

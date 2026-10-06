@@ -4,16 +4,16 @@ struct M2c_arg0 {
     s32 unk50004;
 };
 
-s32 GetStateTableWord(struct M2c_arg0 *arg0, s32 arg1) {
-    s32 temp_2_5;
+s32 GetStateTableWord(struct M2c_arg0 *table, s32 requested) {
+    s32 taken;
     s32 result;
 
-    temp_2_5 = arg0->unk50004;
-    result = temp_2_5;
-    if (arg1 < temp_2_5) {
-        temp_2_5 = arg1;
+    taken = table->unk50004;
+    result = taken;
+    if (requested < taken) {
+        taken = requested;
     }
-    result -= temp_2_5;
-    arg0->unk50004 = result;
-    return temp_2_5;
+    result -= taken;
+    table->unk50004 = result;
+    return taken;
 }

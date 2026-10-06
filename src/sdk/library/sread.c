@@ -28,20 +28,20 @@ struct M2c_arg0 {
 };
 
 extern s64 reentrant_read() __asm__("func_00116108");
-s64 __sread(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
-    register s32 temp_3_14;
+s64 __sread(struct M2c_arg0 *fp, s32 buf, s32 len) {
+    register s32 bytes_read;
 
-    temp_3_14 =
-        (s32)reentrant_read(*(s32 *)((u8 *)arg0 + 0x54), *(s16 *)((u8 *)arg0 + 0xE), arg1, arg2);
-    if (temp_3_14 >= 0) {
+    bytes_read =
+        (s32)reentrant_read(*(s32 *)((u8 *)fp + 0x54), *(s16 *)((u8 *)fp + 0xE), buf, len);
+    if (bytes_read >= 0) {
         goto block_2;
     }
     goto block_4;
 block_2:
-    *(s32 *)((u8 *)arg0 + 0x50) = *(s32 *)((u8 *)arg0 + 0x50) + temp_3_14;
+    *(s32 *)((u8 *)fp + 0x50) = *(s32 *)((u8 *)fp + 0x50) + bytes_read;
     goto block_5;
 block_4:
-    arg0->unkC = (u16)(arg0->unkC & 0xEFFF);
+    fp->unkC = (u16)(fp->unkC & 0xEFFF);
 block_5:
-    return temp_3_14;
+    return bytes_read;
 }

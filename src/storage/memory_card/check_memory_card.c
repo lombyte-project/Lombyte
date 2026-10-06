@@ -24,16 +24,16 @@ extern s32 sceGsSyncV(s32);
 s32 check_memory_card(void) __asm__("FUN_00209168");
 
 s32 check_memory_card(void) {
-    s32 sp0;
-    s32 sp4;
-    s32 sp8;
-    s32 spC;
-    s32 sp10;
+    s32 card_type;
+    s32 free_blocks;
+    s32 format;
+    s32 cmd_code;
+    s32 result;
     s32 *blk;
     struct McDirBlk *dir;
 
     blk = &D_0013D290.unk0;
-    sp10 = sceMcGetInfo(blk[0], blk[1], &sp0, &sp4, &sp8);
+    result = sceMcGetInfo(blk[0], blk[1], &card_type, &free_blocks, &format);
 
     while (sceMcSync(1, D_0013D348, D_0013D348 + 4) == 0) {
         sceGsSyncV(0);
@@ -48,20 +48,20 @@ s32 check_memory_card(void) {
     if (dir->unkBC == -2) {
         return 0;
     }
-    if (sp0 != 2) {
+    if (card_type != 2) {
         return 1;
     }
-    if (sp8 == 0) {
+    if (format == 0) {
         return 0;
     }
-    sp10 = sceMcGetDir(D_0013D290.unk0, dir->unk4, D_0013D1D0, 0, -1, 0);
-    while (sceMcSync(1, &spC, &sp10) == 0) {
+    result = sceMcGetDir(D_0013D290.unk0, dir->unk4, D_0013D1D0, 0, -1, 0);
+    while (sceMcSync(1, &cmd_code, &result) == 0) {
         sceGsSyncV(0);
     }
-    if (sp10 > 0) {
+    if (result > 0) {
         return 0;
     }
-    if (sp4 < 0x15E) {
+    if (free_blocks < 0x15E) {
         return 2;
     }
     return 0;

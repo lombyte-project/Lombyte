@@ -6,14 +6,14 @@ struct Out {
     u64 a;
     u64 b;
 };
-s32 get_mpeg_timestamp(s32 arg0, struct Out *arg1) __asm__("FUN_0023d140");
+s32 get_mpeg_timestamp(s32 arg0, struct Out *out) __asm__("FUN_0023d140");
 
-s32 get_mpeg_timestamp(s32 arg0, struct Out *arg1) {
+s32 get_mpeg_timestamp(s32 arg0, struct Out *out) {
     u64 tmp[3];
 
     vi_buf_get_ts(D_0016120C + 0xD9090, tmp);
-    arg1->a = tmp[0];
-    arg1->b = tmp[1];
+    out->a = tmp[0];
+    out->b = tmp[1];
     return 1;
 }
 

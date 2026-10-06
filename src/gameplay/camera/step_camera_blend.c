@@ -19,11 +19,11 @@ extern void func_001FA2B8(void *, void *);
    (FUN_001fa400) into cam+0x50 and load it as the view matrix, then
    advance both blends by their rates times D_0015ED60, capped at 1.
    Returns 1 once both are complete. */
-int step_camera_blend(void *arg0, void *arg1) __asm__("FUN_001ecaf8");
+int step_camera_blend(void *to_blend, void *cam_blend) __asm__("FUN_001ecaf8");
 
-int step_camera_blend(void *arg0, void *arg1) {
-    float *to = arg0;
-    float *cam = arg1;
+int step_camera_blend(void *to_blend, void *cam_blend) {
+    float *to = to_blend;
+    float *cam = cam_blend;
     float m[4];
     float q[16];
     char *st;

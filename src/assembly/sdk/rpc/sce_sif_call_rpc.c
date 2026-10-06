@@ -45,8 +45,8 @@ extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
 extern s32 sceSifWriteBackDCache();
-s32 sceSifCallRpc(struct SifRpcClient *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
-                  s32 arg6, s32 arg7, s32 arg_sp0) {
+s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 send_buf, s32 send_size, s32 recv_buf,
+                  s32 recv_size, s32 end_func, s32 end_data) {
     s32 semaphore_parameters[6];
     struct SifRpcPacket *packet;
     s32 semaphore_id;
@@ -59,38 +59,38 @@ s32 sceSifCallRpc(struct SifRpcClient *arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
         return allocation_failure_result;
     }
     request_id = packet->request_id;
-    skip_cache_writeback = arg2 & 2;
-    arg0->end_argument = arg_sp0;
-    arg0->packet = (s32)packet;
-    arg0->request_id = request_id;
-    arg0->end_callback = arg7;
-    packet->rpc_number = arg1;
-    packet->send_size = arg4;
-    packet->receive_address = arg5;
-    packet->receive_size = arg6;
+    skip_cache_writeback = mode & 2;
+    client->end_argument = end_data;
+    client->packet = (s32)packet;
+    client->request_id = request_id;
+    client->end_callback = end_func;
+    packet->rpc_number = rpc_number;
+    packet->send_size = send_size;
+    packet->receive_address = recv_buf;
+    packet->receive_size = recv_size;
     packet->packet_address = (s32)packet;
-    packet->server = arg0->server;
-    packet->client = (s32)arg0;
+    packet->server = client->server;
+    packet->client = (s32)client;
     if (!skip_cache_writeback) {
-        if (arg3 == arg5) {
-            sceSifWriteBackDCache(arg3, (arg4 >= arg6) ? (arg4) : (arg6));
+        if (send_buf == recv_buf) {
+            sceSifWriteBackDCache(send_buf, (send_size >= recv_size) ? (send_size) : (recv_size));
         } else {
-            if (arg4 > 0) {
-                sceSifWriteBackDCache(arg3, arg4);
+            if (send_size > 0) {
+                sceSifWriteBackDCache(send_buf, send_size);
             }
-            if (arg6 > 0) {
-                sceSifWriteBackDCache(arg5, arg6);
+            if (recv_size > 0) {
+                sceSifWriteBackDCache(recv_buf, recv_size);
             }
         }
     }
-    if (arg2 & 1) {
-        if (arg7 == 0) {
+    if (mode & 1) {
+        if (end_func == 0) {
             packet->completion_mode = 0;
         } else {
             packet->completion_mode = 1;
         }
-        arg0->semaphore_id = -1;
-        if (sceSifSendCmd(0x8000000A, packet, 0x40, arg3, arg0->server_buffer, arg4) != 0) {
+        client->semaphore_id = -1;
+        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) != 0) {
             return 0;
         } else {
             func_0011AD90(packet);
@@ -100,19 +100,19 @@ s32 sceSifCallRpc(struct SifRpcClient *arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
         semaphore_parameters[1] = 1;
         semaphore_parameters[2] = 0;
         semaphore_id = CreateSema(semaphore_parameters);
-        arg0->semaphore_id = semaphore_id;
+        client->semaphore_id = semaphore_id;
         if (semaphore_id < 0) {
             func_0011AD90(packet);
             return -3;
         }
         packet->completion_mode = 1;
-        if (sceSifSendCmd(0x8000000A, packet, 0x40, arg3, arg0->server_buffer, arg4) == 0) {
-            DeleteSema(arg0->semaphore_id);
+        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) == 0) {
+            DeleteSema(client->semaphore_id);
             func_0011AD90(packet);
             return -2;
         }
-        WaitSema(arg0->semaphore_id);
-        DeleteSema(arg0->semaphore_id);
+        WaitSema(client->semaphore_id);
+        DeleteSema(client->semaphore_id);
         return 0;
     }
 }

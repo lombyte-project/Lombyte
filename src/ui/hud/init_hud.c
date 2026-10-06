@@ -16,28 +16,28 @@ extern s32 queue_animation_update() __asm__("func_001FF308");
 void init_hud(void) __asm__("FUN_001fee88");
 
 void init_hud(void) {
-    s32 var_17_14;
+    s32 slot_index;
     s32 *temp_2_41;
-    struct M2c_var_16_16 *var_16_16;
+    struct M2c_var_16_16 *slot;
 
-    var_17_14 = 0;
+    slot_index = 0;
     {
         u8 *base = D_00199B60;
-        var_16_16 = (struct M2c_var_16_16 *)((u8 *)base + 0x24);
+        slot = (struct M2c_var_16_16 *)((u8 *)base + 0x24);
     }
     D_0019A3E8[0] = 0;
     D_0019A3E8[1] = 0;
     do {
-        var_16_16->unk40 = -1;
-        *(s32 *)((u8 *)var_16_16 - 0x4) = 0x10000;
-        queue_animation_update(var_17_14, 0xFFFF, 0, 0, 0, 0, 1);
-        var_17_14 += 1;
-        var_16_16->unk58 = 0;
-        var_16_16->unk48 = -6;
-        *(s32 *)((u8 *)var_16_16 - 0x20) = 0;
-        var_16_16->unk0 = 0;
-        var_16_16 = (struct M2c_var_16_16 *)((u8 *)var_16_16 + 0x90);
-    } while (var_17_14 < 0xD);
+        slot->unk40 = -1;
+        *(s32 *)((u8 *)slot - 0x4) = 0x10000;
+        queue_animation_update(slot_index, 0xFFFF, 0, 0, 0, 0, 1);
+        slot_index += 1;
+        slot->unk58 = 0;
+        slot->unk48 = -6;
+        *(s32 *)((u8 *)slot - 0x20) = 0;
+        slot->unk0 = 0;
+        slot = (struct M2c_var_16_16 *)((u8 *)slot + 0x90);
+    } while (slot_index < 0xD);
     temp_2_41 = D_0015FA00;
     if (temp_2_41 == NULL) {
         D_0015FA00 = hud_heap_alloc(0x2800, 0, D_0015F6D8, 0x115);

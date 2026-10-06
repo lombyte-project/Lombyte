@@ -11,21 +11,21 @@ struct E {
 };
 extern struct E D_00199B60[];
 
-void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
+void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 
-void set_animation_parameter(s32 arg0, s32 arg1) {
+void set_animation_parameter(s32 anim_id, s32 value) {
     s32 i;
     struct E *e;
 
     for (i = 0; i < 13; i++) {
-        if (D_00199B60[i].unk64 == arg0) {
+        if (D_00199B60[i].unk64 == anim_id) {
             break;
         }
     }
     if (i < 13) {
-        D_00199B60[i].unk24 = arg1;
+        D_00199B60[i].unk24 = value;
         if (D_00199B60[i].unk68 == 0) {
-            D_00199B60[i].unk4 = arg1;
+            D_00199B60[i].unk4 = value;
         }
     }
 }

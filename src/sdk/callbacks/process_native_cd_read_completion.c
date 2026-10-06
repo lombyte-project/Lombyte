@@ -4,12 +4,12 @@
 #include "types.h"
 
 extern s32 D_00131314[];
-extern void handle_cd_read_callback(s32 *arg0) __asm__("FUN_001206d8");
+extern void handle_cd_read_callback(s32 *descriptor) __asm__("FUN_001206d8");
 
-void process_native_cd_read_completion(void *arg0) __asm__("FUN_00120788");
+void process_native_cd_read_completion(void *descriptor) __asm__("FUN_00120788");
 
-void process_native_cd_read_completion(void *arg0) {
-    u8 *packet = (u8 *)((u32)arg0 | 0x20000000);
+void process_native_cd_read_completion(void *descriptor) {
+    u8 *packet = (u8 *)((u32)descriptor | 0x20000000);
     u8 *source;
     u8 *destination;
     s32 i;

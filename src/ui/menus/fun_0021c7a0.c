@@ -37,7 +37,7 @@ extern struct M2c_D_001D5BF4 *D_001D5BF4[];
 extern s32 scale_game_frames() __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
-s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
+s32 FUN_0021c7a0(struct M2c_arg0 *menu) {
     s16 id;
     s32 *slots;
     s32 *scan;
@@ -51,17 +51,17 @@ s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
     table = D_001D5BF4[0]->unk40;
     index = table->unk3C;
     id = *((s16 *)(((u8 *)(table->unk48 + (index * 0xA))) + 0x6));
-    start_index = arg0->unk50;
+    start_index = menu->unk50;
     if (D_0013C940.unk1C4 & 8) {
-        arg0->unk50 = (start_index + 1) % 8;
+        menu->unk50 = (start_index + 1) % 8;
     }
     if (D_0013C940.unk1C4 & 4) {
-        tmp = arg0->unk50;
-        arg0->unk50 = (tmp + 7) % 8;
+        tmp = menu->unk50;
+        menu->unk50 = (tmp + 7) % 8;
     }
-    cur = arg0->unk50;
+    cur = menu->unk50;
     if (cur != start_index) {
-        allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
+        allocate_voice_for_target_entry(1, 0x11, menu->unk14);
     }
     if (id != 0) {
         if (D_0013D4C0[id] != 0 && (D_0013C940.unk1C4 & 0x40)) {
@@ -72,10 +72,10 @@ s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
             if ((s32)D_00141848.unkAA < tmp) {
                 D_00141848.unkAA = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
-            slots = arg0->unk30;
+            slots = menu->unk30;
             D_00141848.unkAC = (s32)((D_00141848.unkAC | (1 << D_0015ED84)) | 0x80000000);
             i = 0;
-            if (arg0->unk30[0] != id) {
+            if (menu->unk30[0] != id) {
                 scan = slots;
             loop_17:
                 i += 1;
@@ -89,11 +89,11 @@ s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
             } else {
             block_19:
                 if (i < 8) {
-                    arg0->unk30[i] = 0;
+                    menu->unk30[i] = 0;
                 }
             }
-            arg0->unk30[arg0->unk50] = (s32)id;
-            arg0->unk50 = (arg0->unk50 + 1) % 8;
+            menu->unk30[menu->unk50] = (s32)id;
+            menu->unk50 = (menu->unk50 + 1) % 8;
         }
     }
     return 0;

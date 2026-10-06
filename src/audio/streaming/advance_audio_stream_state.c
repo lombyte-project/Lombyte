@@ -16,47 +16,47 @@ extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED88;
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 
-s32 advance_audio_stream_state(struct M2c_arg0 *arg0) __asm__("FUN_00220648");
+s32 advance_audio_stream_state(struct M2c_arg0 *stream) __asm__("FUN_00220648");
 
-s32 advance_audio_stream_state(struct M2c_arg0 *arg0) {
+s32 advance_audio_stream_state(struct M2c_arg0 *stream) {
 
-    switch (arg0->unk44) {
+    switch (stream->unk44) {
     case 0:
-        if (arg0->unk48 == 0 || D_001516D0.pending_start_state != 0) {
+        if (stream->unk48 == 0 || D_001516D0.pending_start_state != 0) {
             break;
         }
         if (D_00137B80.e2C8[D_0015ED88].b == 0) {
             break;
         }
-        if (start_audio_stream_read(arg0->unk48, D_00137B80.e2C8[D_0015ED88].a,
+        if (start_audio_stream_read(stream->unk48, D_00137B80.e2C8[D_0015ED88].a,
                                     D_00137B80.e2C8[D_0015ED88].b) != 0) {
-            arg0->unk44 = arg0->unk44 + 1;
+            stream->unk44 = stream->unk44 + 1;
         } else {
-            arg0->unk44 = -1;
+            stream->unk44 = -1;
         }
         break;
     case 1:
         if (D_001516D0.pending_start_state == 0) {
-            arg0->unk44 = 2;
+            stream->unk44 = 2;
         }
         break;
     case 2:
-        if (arg0->unk4C == 0 || D_001516D0.pending_start_state != 0) {
+        if (stream->unk4C == 0 || D_001516D0.pending_start_state != 0) {
             break;
         }
         if (D_00137B80.e2F8[D_0015ED88].b == 0) {
             break;
         }
-        if (start_audio_stream_read(arg0->unk4C, D_00137B80.e2F8[D_0015ED88].a,
+        if (start_audio_stream_read(stream->unk4C, D_00137B80.e2F8[D_0015ED88].a,
                                     D_00137B80.e2F8[D_0015ED88].b) != 0) {
-            arg0->unk44 = arg0->unk44 + 1;
+            stream->unk44 = stream->unk44 + 1;
         } else {
-            arg0->unk44 = -1;
+            stream->unk44 = -1;
         }
         break;
     case 3:
         if (D_001516D0.pending_start_state == 0) {
-            arg0->unk44 = 4;
+            stream->unk44 = 4;
         }
         break;
     }
