@@ -47,8 +47,8 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     scale_y = view_context[101];
     scale_x = view_context[100];
     first_projected[0] *= scale_x;
-    opposite_pointer[0] *= scale_x;
     first_projected[1] *= scale_y;
+    opposite_pointer[0] *= scale_x;
     opposite_pointer[1] *= scale_y;
     *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_offsets.x);
     *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_offsets.y);
