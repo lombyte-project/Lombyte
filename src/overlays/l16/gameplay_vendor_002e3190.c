@@ -226,7 +226,49 @@ void FUN_L16_002e36e8(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3fa0.s", FUN_L16_002e3fa0);
+
+
+
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_001B0930[];
+extern float AbsoluteFloat(float);
+extern float D_0015ED6C ,D_0015EE70;
+extern float FUN_001f9e90(float,float);
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int FUN_L00_0025d808();
+extern float D_L16_00161D90 __attribute__((sda));
+extern float D_L16_00161D94 __attribute__((sda));
+extern float D_L16_00161D98 __attribute__((sda));
+extern void subtract_vector_xyz(void *, void *, void *);
+void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
+extern int func_L00_0025E860_path54(char*,float*,float*,float*,int,float) __asm__("FUN_L00_0025d808");
+extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
+extern char *D_L16_001B0C30_path54[] __asm__("D_L16_001B0930");
+
+int FUN_L16_002e3fa0(char *moby) {
+    float pos[4];
+    float delta[4];
+    char *data = *(char **)(moby + 0x78);
+    float t = D_L16_00161D90 * D_0015ED6C;
+    int r;
+    char *path;
+    if ((unsigned char)moby[0x20] == 5)
+        path = D_L16_001B0C30_path54[*(int *)(data + 0xDC)];
+    else
+        path = D_L16_001B0C30_path54[*(int *)(data + 0xD8)];
+    r = func_L00_0025E860_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0,t);
+    FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(data + 0xE4), pos[0], D_L16_00161D94, D_L16_00161D98, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(data + 0xE8), pos[1], D_L16_00161D94, D_L16_00161D98, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x18), (float *)(data + 0xEC), pos[2], D_L16_00161D94, D_L16_00161D98, 0.0f);
+    subtract_vector_xyz(delta, pos, moby + 0x10);
+    if (AbsoluteFloat(delta[0]) > 0.01f) {
+        if (AbsoluteFloat(delta[1]) > 0.01f) {
+            func_L00_002592B0_path54(moby, FUN_001f9e90(delta[0], delta[1]), (float *)(data + 0xF0), D_L16_00161D94, D_L16_00161D98, 0.0f);
+        }
+    }
+    return r;
+}
 #include "sda.h"
 
 #include "qcopy.h"
