@@ -5,7 +5,14 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315968.s", FUN_L11_00315968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00315f58.s", FUN_L11_00315f58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316090.s", FUN_L11_00316090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316128.s", FUN_L11_00316128);
+s32 FUN_L11_00316128(const u8 *moby)
+{
+    u32 s = moby[0x20];
+    if (s == 0x14 || s == 0xB || s == 0x12 || s == 0xC) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316160.s", FUN_L11_00316160);
 #define NOT_SDA
 
