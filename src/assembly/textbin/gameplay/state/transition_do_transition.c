@@ -112,6 +112,7 @@ void transition_do_transition(void) {
     s32 i;
     s32 old;
     Globals137B80 *tbl;
+    u32 align_mask = 0xFFFFFFF0;
 
     D_0015ED84 = 0;
     *(volatile u32 *)0x10000010 = 0x83;
@@ -127,19 +128,19 @@ void transition_do_transition(void) {
     D_0015EE4C = hdr;
     hdr->chunk[1].size = load(p, tbl->src[1].a, tbl->src[1].b);
     hdr->chunk[1].off = p - (u8 *)hdr;
-    p += (hdr->chunk[1].size + 0xF) & 0xFFFFFFF0;
+    p += (hdr->chunk[1].size + 0xF) & align_mask;
     hdr->chunk[2].size = load(p, tbl->src[2].a, tbl->src[2].b);
     hdr->chunk[2].off = p - (u8 *)hdr;
-    p += (hdr->chunk[2].size + 0xF) & 0xFFFFFFF0;
+    p += (hdr->chunk[2].size + 0xF) & align_mask;
     hdr->chunk[3].size = load(p, tbl->src[3].a, tbl->src[3].b);
     hdr->chunk[3].off = p - (u8 *)hdr;
-    p += (hdr->chunk[3].size + 0xF) & 0xFFFFFFF0;
+    p += (hdr->chunk[3].size + 0xF) & align_mask;
     hdr->chunk[4].size = load(p, tbl->src[4].a, tbl->src[4].b);
     hdr->chunk[4].off = p - (u8 *)hdr;
-    p += (hdr->chunk[4].size + 0xF) & 0xFFFFFFF0;
+    p += (hdr->chunk[4].size + 0xF) & align_mask;
     hdr->chunk[5].size = load(p, tbl->src[5].a, tbl->src[5].b);
     hdr->chunk[5].off = p - (u8 *)hdr;
-    p += (hdr->chunk[5].size + 0xF) & 0xFFFFFFF0;
+    p += (hdr->chunk[5].size + 0xF) & align_mask;
     hdr->chunk[0].size = load(p, tbl->src[0].a, tbl->src[0].b);
     hdr->chunk[0].off = p - (u8 *)hdr;
     InitializeResourceEntry();
