@@ -39,20 +39,20 @@ extern s32 video_dec_is_flushed() __asm__("func_0023CDE0");
 extern s32 func_0023D1F8();
 s32 read_mpeg(s32 video_dec, struct M2c_arg1 *arg1, s32 *cd_stream) __asm__("FUN_0023a460");
 
-s32 read_mpeg(s32 video_dec, struct M2c_arg1 *arg1, s32 *cd_stream) {
-    s32 write_ptr;
-    s32 read_ptr;
-    s32 buf_avail;
-    s32 bytes_decoded;
-    s32 bytes_read;
-    s32 buf_space;
-    u64 button_mask;
-    s32 decode_remaining;
-    s32 read_remaining;
-    s32 audio_started;
-    s32 skipped;
-    s32 skip_requested;
-    struct M2c_D_0013C940 *pad_state;
+s32 read_mpeg(s32 arg0, struct M2c_arg1 *arg1, s32 *arg2) {
+    s32 sp0;
+    s32 sp4;
+    s32 temp_2_111;
+    s32 temp_2_120;
+    s32 temp_2_99;
+    s32 temp_3_92;
+    u64 temp_4_74;
+    s32 var_18_22;
+    s32 var_19_25;
+    s32 var_21_10;
+    s32 var_22_8;
+    s32 var_2_44;
+    struct M2c_D_0013C940 *mask_state;
 
     skipped = 0;
     audio_started = 0;
@@ -75,7 +75,6 @@ block_2:
         goto block_13;
     }
 block_5:
-    pad_state = &D_0013C940;
     if (D_0015EEA0 != 0) {
         goto block_10;
     }
@@ -89,15 +88,16 @@ block_5:
         goto block_12;
     }
 block_10:
-    skip_requested = 1;
-    if (pad_state->unk1A4 & 0x800) {
+    var_2_44 = 1;
+    if (D_0013C940.unk1A4 & 0x800) {
         goto block_13;
     }
 block_12:
-    button_mask = 0x8000000000FULL;
-    skip_requested = 1;
-    if ((*(u64 *)&pad_state->unk1A0 & button_mask) != button_mask) {
-        skip_requested = 0;
+    mask_state = &D_0013C940;
+    temp_4_74 = 0x8000000000FULL;
+    var_2_44 = 1;
+    if ((*(u64 *)&mask_state->unk1A0 & temp_4_74) != temp_4_74) {
+        var_2_44 = 0;
     }
 block_13:
     if (skip_requested == 0) {
@@ -158,7 +158,7 @@ loop_25:
     }
     func_0023B5E0();
     audio_dec_reset(D_0016120C + 0xD9100);
-    snd_set_master_volume(5, D_0013E550.unk5C);
+    snd_set_master_volume(5, *(s32 *)((u8 *)&D_0013E550 + 0x5C));
     snd_flush_sound_commands();
     return skipped;
 }

@@ -23,7 +23,7 @@ struct VoicePoolInitializationState {
 struct VoicePoolInitializationWindow {
     u8 pad_0[0x70];
     s32 handle;
-    u8 state; /* Only the byte at offset 0x74 is cleared. */
+    u8 state;  /* Only the byte at offset 0x74 is cleared. */
 };
 
 extern struct VoicePoolInitializationState voice_pool __asm__("D_0013E550");
@@ -48,13 +48,11 @@ void initialize_gameplay_sound_system(void) {
     s32 scaled_volume_70;
     s32 header_block_index;
 
-    header_block_index = 3;
     header_block = voice_pool_header;
-    do {
+    for (header_block_index = 0; header_block_index < 4; header_block_index += 1) {
         qzero(header_block);
-        header_block_index -= 1;
         header_block += 16;
-    } while (header_block_index >= 0);
+    }
     voice_pool.listener_history_position = 0;
     voice_pool.reserved44 = 0;
     slot_window = (struct VoicePoolInitializationWindow *)&voice_pool;

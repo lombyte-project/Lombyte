@@ -49,6 +49,7 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
                                    f32 fog_near_intensity, f32 fog_far_intensity) {
     s32 half_width;
     s32 half_height;
+    struct ProjectionConfiguration *context = &view_context;
     f32 projection_half_height;
 
     half_height = viewport_height >> 1;
@@ -59,20 +60,20 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     screen_offsets.bottom_extent = (s32)((u32)(half_height + 0x800) << 4);
     screen_offsets.top_origin = (s32)((u32)(0x800 - half_height) << 4);
     screen_offsets.right_extent = (s32)((u32)(half_width + 0x800) << 4);
-    view_context.horizontal_fov = horizontal_fov;
-    view_context.near_clip = 32.0f;
-    view_context.far_clip = 524288.0f;
+    context->horizontal_fov = horizontal_fov;
+    context->near_clip = 32.0f;
+    context->far_clip = 524288.0f;
     screen_offsets.viewport_height = viewport_height;
     screen_offsets.viewport_width = viewport_width;
-    view_context.projection_half_width = convert_integer_to_float(viewport_width) * 0.5f;
+    context->projection_half_width = convert_integer_to_float(viewport_width) * 0.5f;
     projection_half_height = convert_integer_to_float(viewport_height) * 0.5f;
-    view_context.projection_half_height = projection_half_height;
-    view_context.screen_scale_x = view_context.projection_half_width * 4.0f;
-    view_context.screen_scale_y = projection_half_height * 4.0f;
-    view_context.fog_far_intensity = fog_far_intensity;
-    view_context.fog_near_distance = fog_near_distance;
-    view_context.fog_far_distance = fog_far_distance;
-    view_context.fog_near_intensity = fog_near_intensity;
+    context->projection_half_height = projection_half_height;
+    context->screen_scale_x = context->projection_half_width * 4.0f;
+    context->screen_scale_y = projection_half_height * 4.0f;
+    context->fog_far_intensity = fog_far_intensity;
+    context->fog_near_distance = fog_near_distance;
+    context->fog_far_distance = fog_far_distance;
+    context->fog_near_intensity = fog_near_intensity;
     update_view_context();
 }
 

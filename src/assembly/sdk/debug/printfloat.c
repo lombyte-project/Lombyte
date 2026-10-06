@@ -10,9 +10,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/printfloat/printfloat.s",
 extern char D_00152780[];
 extern char D_00152788[];
 extern char D_00152790[];
-extern f64 D_00152798;
-extern f64 D_001527A0;
-extern f64 D_001527A8;
 extern void *D_0012FC00 __attribute__((section(".data")));
 extern s32 dpcmp_f(f64 left, f64 right) __asm__("dpcmp");
 extern f64 dpsub_f(f64 left, f64 right) __asm__("dpsub");
@@ -31,21 +28,21 @@ void printfloat(f64 x) {
         x = dpsub_f(0.0, x);
         ((void (*)(s32))D_0012FC00)(0x2D);
     }
-    /* These absolute loads keep the constants out of GP-relative delay slots. */
-    if (dpcmp_f(x, *(f64 *)0x00152798) < 0) {
-        while (dpcmp_f(x, *(f64 *)0x001527A0) < 0) {
-            exponent--;
+    /* Absolute loads avoid GP-relative references in the call delay slots. */
+    if (dpcmp_f(x, 0.1) < 0) {
+        while (dpcmp_f(x, 0.1) < 0) {
+            exponent -= 1;
             x = dpmul_f(x, 10.0);
         }
     } else {
         if (dpcmp_f(x, 1.0) >= 0) {
             while (dpcmp_f(x, 1.0) >= 0) {
-                exponent++;
+                exponent += 1;
                 x = dpdiv_f(x, 10.0);
             }
         }
     }
-    significand = ftoi(__fixunsdfdi(dpmul_f(x, *(f64 *)0x001527A8)));
+    significand = ftoi(__fixunsdfdi(dpmul_f(x, 1000000.0)));
     kprintf(D_00152780, significand);
     if (exponent >= 0) {
         kprintf(D_00152788, exponent);

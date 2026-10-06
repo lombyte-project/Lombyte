@@ -101,7 +101,8 @@ void _printf(const char *fmt, char *ap) {
                     do {
                         d = v & 0xF;
                         ch = (d < 10) ? d + '0' : d + 'a' - 10;
-                        *--p = ch;
+                    --p;
+                    *p = ch;
                         v = (u64)v >> 4;
                     } while (v != 0);
                 }

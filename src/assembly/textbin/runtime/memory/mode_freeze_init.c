@@ -71,15 +71,15 @@ void mode_freeze_init(u32 mode, s32 arg1) {
     case 5:
         push_help_history(0x4E2B);
         st = &D_00193300;
-        /* Retail stores unk4 before clearing unk20 between the two calls. */
-        st->unk4 = scale_game_frames(0x1E);
-        st->unk20 = 0;
+        /* Preserve the retail order of the two writes before the next call. */
+        *(volatile s32 *)&st->unk4 = scale_game_frames(0x1E);
+        *(volatile s32 *)&st->unk20 = 0;
         st->unk24 = scale_game_frames(0x1E);
         break;
     case 3:
         st = &D_00193300;
-        st->unk4 = scale_game_frames(0x1E);
-        st->unk20 = 0;
+        *(volatile s32 *)&st->unk4 = scale_game_frames(0x1E);
+        *(volatile s32 *)&st->unk20 = 0;
         st->unk24 = scale_game_frames(0x1E);
         break;
     case 6:

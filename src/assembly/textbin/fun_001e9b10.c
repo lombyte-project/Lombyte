@@ -412,6 +412,8 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     }
     p2 = p + 0x4000;
     lastTie = -1;
+    /* Retail 0x001ea2a4-0x001ea2c4 publishes the tie data pointer,
+       the end of the tie array, and the next pool base in this order. */
     D_00160AB0.x4 = D_001603E0;
     D_001603D8 = &D_001603D4[D_001603D0];
     for (i = 0; i < D_001603D0; i++) {

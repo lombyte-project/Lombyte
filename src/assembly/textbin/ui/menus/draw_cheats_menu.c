@@ -45,11 +45,11 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     struct CheatMenuEntry *entry;
     s32 entry_count;
     s32 entry_index;
+    s32 draw_index;
     s32 draw_y;
     s32 line_spacing;
     s32 color;
     s32 enabled;
-    s32 draw_index;
 
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);

@@ -90,7 +90,7 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
     yh = dy & 1;
     xh = dx & 1;
     if (yh) {
-        if (yr + (h << fieldpred) >= 16) {
+        if (15 < yr + (h << fieldpred)) {
             k = (16 >> fieldpred) - (yr >> fieldpred) - 1;
             ye->n0 = k;
             ye->n1 = h - k;

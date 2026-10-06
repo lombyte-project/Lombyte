@@ -75,9 +75,9 @@ void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 textu
     vertical_edge.x = quad_height * fast_sin(angle);
     inverse_pivot_v = 1.0f - pivot_v;
     vertical_edge.y = quad_height * fast_cos(angle);
-    inverse_pivot_u = 1.0f - pivot_u;
     horizontal_edge.x = quad_width * fast_cos(angle);
     horizontal_edge.y = -quad_width * fast_sin(angle);
+    inverse_pivot_u = 1.0f - pivot_u;
     fast_vec_scale(&temporary, &vertical_edge, inverse_pivot_v);
     fast_vec_add(&top_left, &center, &temporary);
     fast_vec_scale(&temporary, &horizontal_edge, inverse_pivot_u);

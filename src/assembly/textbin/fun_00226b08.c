@@ -84,8 +84,10 @@ void FUN_00226b08(s32 slot) {
     bytes = (u8 *)0x70000030;
     load_and_initialize_level_chunk();
     func_001F9838(D_0013E520, (void *)0x70000000, 0x28);
-    for (p = D_001D5BA0; *p != -1; p++) {
+    p = D_001D5BA0;
+    while (*p != -1) {
         D_0013D4C0[*p] = bytes[*p];
+        p++;
     }
     func_001F9838(D_0013D428, (void *)0x70000060, 0x94);
     func_001F9838(D_0014BEC0, (void *)0x70000100, 0x50);

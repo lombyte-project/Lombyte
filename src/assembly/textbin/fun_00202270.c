@@ -50,6 +50,7 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
     MipTextureUpload upload;
     sceGsLoadImage load_image;
     s32 mip_index;
+    s32 indexed_pixel_format;
     s32 allocation_bytes;
     s32 *buffer_width;
     u64 tex0_word;
@@ -67,8 +68,9 @@ s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) {
         break;
     case 0x13:
     case 0x14:
+        indexed_pixel_format = ((volatile MipTextureHeader *)tex)->pixel_storage_format;
         upload.palette_address = (s32)tex->data;
-        if (((volatile MipTextureHeader *)tex)->pixel_storage_format == 0x14) {
+        if (indexed_pixel_format == 0x14) {
             if (tex->palette_storage_format == 0) {
                 upload.palette_size = 0x40;
             } else {

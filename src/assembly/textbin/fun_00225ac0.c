@@ -25,7 +25,8 @@ void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
  * Nonzero mode writes two primary descriptors, one secondary descriptor,
  * and two further primary descriptors. Address strides are 0x11800 for
  * the first two groups and 0x4F000 for the final group. The second word
- * is zero except for the final group, where it is one. */
+ * is zero except for the final group, where it is one. The address words
+ * and flag value have no further meaning established by this function. */
 void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 secondary_address;
     s32 primary_address;
@@ -74,7 +75,7 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
         }
         clear_remaining = end_index < 5;
     }
-    if (clear_remaining == 1) {
+    if (clear_remaining & 1) {
         descriptor = graphics_buffer_descriptors + index;
         do {
             descriptor->flags = 0;

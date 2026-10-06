@@ -175,6 +175,7 @@ void update_level_gameplay_frame(void) {
     LevelRenderObject *object;
     LevelRenderObject *expired_object;
     s32 mode_advance;
+    volatile s32 sound_bank;
     RenderModel *model;
     RenderArchiveTable *archive_table;
     u8 *archive_data;
@@ -185,6 +186,8 @@ void update_level_gameplay_frame(void) {
     s32 prepared_frame_index;
     s32 payload_offset;
     u8 *frame_offsets;
+    s32 *current_frame_pointer;
+    s32 *next_frame_pointer;
     f32 unused_fraction;
     s32 subframe;
     s32 unused_index;
@@ -209,8 +212,9 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || D_0013DD43[0] != 0)) {
         ReadGlobalTableEntry();
-        snd_play_sound_vol_pan_pmpb(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0,
-                                    D_0013E5C0);
+        sound_bank = D_0015ED5C;
+        mode_advance = level_render_state.mode;
+        snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, D_0013E5C0);
         snd_reset_state_and_flush_commands();
         snd_flush_sound_commands();
     }
@@ -287,8 +291,10 @@ void update_level_gameplay_frame(void) {
             next_frame = current_frame + 1;
             model = object->model;
             frame_offsets = (u8 *)model->frames[model->count - 1] + 0x1C;
-            current_frame_payload = *(s32 *)(frame_offsets + current_frame * 4) + 0x10;
-            next_frame_payload = *(s32 *)(frame_offsets + next_frame * 4) + 0x10;
+            current_frame_pointer = (s32 *)(frame_offsets + current_frame * 4);
+            next_frame_pointer = (s32 *)(frame_offsets + next_frame * 4);
+            current_frame_payload = *current_frame_pointer + 0x10;
+            next_frame_payload = *next_frame_pointer + 0x10;
             blend = convert_integer_to_float(frame & 1) * 0.5f + (f32)subframe * 0.25f;
             object->blend = blend;
             animation_positions = object->animation_positions;

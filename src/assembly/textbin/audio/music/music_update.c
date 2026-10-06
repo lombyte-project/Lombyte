@@ -12,7 +12,7 @@ extern struct MusicStreamState music_state __asm__("D_001516D0");
 extern u8 D_00151704[];
 extern void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32, s32,
                                     s32) __asm__("func_0012E4C0");
-extern s32 set_sound_handle_id() __asm__("func_00216B68");
+extern void set_sound_handle_id(u32, s64) __asm__("func_00216B68");
 extern void snd_continue_vag_stream(s32) __asm__("func_0012ECA0");
 extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

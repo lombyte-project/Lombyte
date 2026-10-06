@@ -48,7 +48,6 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
     s32 small;
     s32 handle;
     s32 intr;
-    volatile u32 *p;
 
     total = img->w * img->h;
     cbarg[0] = 2;
@@ -67,8 +66,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
     if (dma.count > 0xFFFF) {
         /* The handler receives the stack DMA state; the first transfer uses 0xFFFF QWC. */
         handle = AddDmacHandlerSecondary(4, D_0012A5D8, 0, &dma);
-        p = (volatile u32 *)0x1000E010;
-        *p = 0x10;
+        *(volatile u32 *)0x1000E010 = 0x10;
         enable_dmac(4);
         intr = DIntr();
         *(volatile u32 *)0x1000B410 = dma.addr;

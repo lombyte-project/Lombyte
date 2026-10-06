@@ -90,7 +90,7 @@ extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
 extern long func_0021B6D8(int, long, int);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
-extern int sprintf(char *, const char *, ...);
+extern int sprintf(char *, const char *, ...) __asm__("func_00116248");
 
 int render_configured_text_label(ConfiguredTextLabel *label) __asm__("FUN_0021a328");
 
@@ -109,6 +109,8 @@ int render_configured_text_label(ConfiguredTextLabel *label) {
     long texture_tex0;
     long color;
     int remaining_frames;
+    int visible_height;
+    int text_extent;
     MenuDescriptor *page;
     MenuGridEntry *entry;
     u8 *availability_table;
@@ -118,12 +120,11 @@ int render_configured_text_label(ConfiguredTextLabel *label) {
     font = normal_font_metrics;
     font_texture_index = 1;
     value_variant = 0;
-    flags = label->flags;
-    if (flags & 8) {
+    if (label->flags & 8) {
         font_texture_index = 3;
         font = large_font_metrics;
     }
-    if (flags & 0x10) {
+    if (label->flags & 0x10) {
         font_texture_index = 2;
         font = small_font_metrics;
     }
@@ -270,7 +271,9 @@ int render_configured_text_label(ConfiguredTextLabel *label) {
         font_print_window(&c, color, text, -1, texture_tex0, font);
         c.s[9] ^= 4;
         flags = label->flags;
-        if (!(flags & 0x2000) && c.s[7] + 4 >= c.s[1] - c.s[0]) {
+        text_extent = c.s[7] + 4;
+        visible_height = c.s[1] - c.s[0];
+        if (!(flags & 0x2000) && text_extent >= visible_height) {
             if (!(flags & 0x400)) {
                 label->flags = flags | 0x400;
                 label->scroll_offset = -(label->height * 8);

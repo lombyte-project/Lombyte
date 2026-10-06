@@ -82,6 +82,8 @@ s32 draw_items_menu(ItemsMenu *menu) {
     setup_gif_paging(0);
     column_divisor = 3;
     {
+        /* Retail initializes the 24-byte text window with the menu height,
+       signed width / 3, and the 0x10 and 5 fields before drawing the title. */
         FontWindow text_window = {{0, menu->height, window_left,
                                    divide_coordinate(menu->width, column_divisor), 0, 0, 0, 0, 0x10,
                                    5}};
@@ -92,11 +94,14 @@ s32 draw_items_menu(ItemsMenu *menu) {
             if (hyphen != 0) {
                 text_length = strlen(text_buffer);
                 source_end = text_buffer + text_length;
-                for (destination_end = source_end; hyphen < source_end;
-                     source_end = destination_end) {
-                    destination_end[1] = *source_end;
-                    destination_end--;
-                    text_length--;
+                if (hyphen < source_end) {
+                    destination_end = source_end;
+                    do {
+                        destination_end[1] = *source_end;
+                        destination_end--;
+                        text_length--;
+                        source_end = destination_end;
+                    } while (hyphen < source_end);
                 }
                 text_buffer[add_offset(text_length, 1)] = 0x20;
             }

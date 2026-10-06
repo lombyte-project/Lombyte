@@ -129,9 +129,9 @@ void register_object_render_class(ObjectRenderClass *render_class,
     render_class->packed_normals = packed_normals_offset + (s32)render_class;
     render_class->records = (ObjectRenderRecord *)(records_offset + (s32)render_class);
     slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
-    record = render_class->records;
     qcopy(slot_materials, material_map);
-    for (record_index = 0; record_index < render_class->record_count;) {
+    record = (ObjectRenderRecord *)(records_offset + (s32)render_class);
+    for (record_index = 0; record_index < render_class->record_count; record_index++, record++) {
         draw_high = record->tex1.w[0];
         material_index = slot_materials->b[record_index];
         draw_shift = record->tex1.w[1];
@@ -175,15 +175,13 @@ void register_object_render_class(ObjectRenderClass *render_class,
                          ((((u64)draw_shift) << 6) | 0x20)) |
                         (((u64)draw_high) << 32);
             clamp_word =
-                (((u64)material_index) << 24) | (material_base | (((u64)material_shift) << 2));
+                (((u64)material_shift) << 2) | (((u64)material_index) << 24) | material_base;
             record->tex0 = resident_material_templates[material_index * 3];
             record->tex1.d = tex1_word;
             record->mip = resident_material_templates[(material_index * 3) + 2];
             record->clamp.d = clamp_word;
         }
         record->end = 0;
-        record_index++;
-        record++;
     }
 }
 

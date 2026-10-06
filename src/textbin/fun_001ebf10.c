@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001ebf10/FUN_001ebf10.s", FUN_001ebf10);
-#else
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -44,9 +41,9 @@ extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40"
 extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
 extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 previous_camera_record_storage[] __asm__("D_00189650");
-extern s32 camera_position_publication_suppressed __asm__("D_0018C32C");
+extern s32 camera_position_publication_suppressed[] __asm__("D_0018C32C");
 
-extern void backup_current_cam(void) __asm__("func_001EBC90");
+extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
 extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
 extern s32 convert_float_to_word(f32 transition_duration) __asm__("func_001FA6D0");
@@ -143,7 +140,8 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     camera_transition_state.snapshot_pending = 0;
     camera_run_setup_to_new_cam(next_camera);
     backup_current_cam();
-    if (camera_position_publication_suppressed == 0) {
+    /* The callbacks run before this flag is read; previous_position is updated either way. */
+    if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_transition_state.published_position, &next_camera->pos);
     }
     previous_position = &next_camera->prev_pos.x;
@@ -151,7 +149,4 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_position[1] = position->y;
     previous_position[2] = position->z;
 }
-
 extern __typeof__(switch_active_camera_record) func_001EBF10 __attribute__((alias("FUN_001ebf10")));
-
-#endif /* NON_MATCHING */

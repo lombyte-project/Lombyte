@@ -82,6 +82,7 @@ void set_pal_mode(void) {
     u64 zbuf;
     u64 frame;
     u64 scissor;
+    s32 display_width;
 
     FlushCache(0);
     if (pal_mode != 0) {
@@ -98,8 +99,9 @@ void set_pal_mode(void) {
         setup_fs_aa_buffer(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
-    screen_offsets.width = fs_aa_buffer.width;
-    screen_offsets.half_width = fs_aa_buffer.width >> 1;
+    display_width = fs_aa_buffer.width;
+    screen_offsets.width = display_width;
+    screen_offsets.half_width = display_width >> 1;
     screen_offsets.half_height = fs_aa_buffer.height >> 1;
     screen_offsets.bottom = (screen_offsets.half_height + 0x800) << 4;
     screen_offsets.height = fs_aa_buffer.height;
@@ -116,12 +118,11 @@ void set_pal_mode(void) {
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
     second_image_buffer_address = image_buffer_address;
-    draw_environment.frame2 = frame;
-    draw_environment.xyoffset2 = screen_offsets.left | ((u64)screen_offsets.top << 32);
+    draw_environment.frame2 = draw_environment.frame1 = frame;
     draw_environment.xyoffset1 = screen_offsets.left | ((u64)screen_offsets.top << 32);
+    draw_environment.xyoffset2 = screen_offsets.left | ((u64)screen_offsets.top << 32);
     draw_environment.zbuf1 = zbuf;
     draw_environment.zbuf2 = zbuf;
-    draw_environment.frame1 = frame;
     draw_environment.scissor2 = scissor;
     FlushCache(0);
     append_draw_environment_packet();

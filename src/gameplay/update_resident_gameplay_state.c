@@ -334,6 +334,7 @@ void update_resident_gameplay_state(void) {
             CalculateDmaTransferAddress();
             D_0018CDB0[0] = 0.63f;
             update_view_context();
+            /* Retail releases the attachment once per sequence object, even when that object is null. */
             for (release_index = 0; release_index < render_sequence.count; release_index++) {
                 expired_object = render_sequence.objects[release_index];
                 if (expired_object != 0) {

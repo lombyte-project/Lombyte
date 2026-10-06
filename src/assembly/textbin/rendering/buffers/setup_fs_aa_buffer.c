@@ -258,8 +258,10 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     left_x = 0x7000;
     next_x = 0x200;
     right_x = 0x7200;
-    for (strip_index = 0; strip_index < 16; strip_index++) {
-        *packet_word++ = strip_index << 9;
+    strip_index = 0;
+    do {
+        *packet_word++ = strip_index * 0x200;
+        strip_index++;
         *packet_word++ =
             left_x | ((u64)(0x8000 - (active_fs_aa_buffer->display_height << 3)) << 16);
         left_x += 0x200;
@@ -268,7 +270,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         *packet_word++ =
             right_x | ((u64)((active_fs_aa_buffer->display_height << 3) + 0x7FF0) << 16);
         right_x += 0x200;
-    }
+    } while (strip_index < 16);
 
     fs_aa_clear_words[0] = 0x1000000000000001;
     fs_aa_clear_words[1] = 0xE;
