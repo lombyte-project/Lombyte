@@ -4,7 +4,73 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea4e8.s", FUN_L10_002ea4e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea7b0.s", FUN_L10_002ea7b0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBB70), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern char D_L10_00167240[];
+extern float D_0015ED6C;
+extern float FUN_001f9b48(void *, void *);
+extern float random_float_between(float a, float b);
+extern int FUN_001f9770(void *);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_001fa728(char *, float);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern float D_L10_00161FBC __attribute__((sda));
+extern float D_L10_00161FC0 __attribute__((sda));
+extern float D_L10_00161FC4 __attribute__((sda));
+extern float D_L10_00161FC8 __attribute__((sda));
+extern float D_L10_00161FCC __attribute__((sda));
+extern float D_L10_00161FD0 __attribute__((sda));
+extern float D_L10_00161FD4 __attribute__((sda));
+extern int D_L10_00161FD8 __attribute__((sda));
+extern int D_L10_00161FDC __attribute__((sda));
+extern int D_L10_00161FE0 __attribute__((sda));
+extern float D_L10_00161FE4 __attribute__((sda));
+extern int D_L10_00161FF8 __attribute__((sda));
+extern int D_L10_00161FFC __attribute__((sda));
+extern int D_L10_00161FE8 __attribute__((sda));
+extern int D_L10_00161FEC __attribute__((sda));
+extern int D_L10_00161FF0 __attribute__((sda));
+extern int D_L10_00161FF4 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void clear_vector(void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L10_002ea7b0(void *pos, short *timer) {
+    float p[4];
+    float vel[4];
+    float acc[4];
+    float s;
+    int a, b, c, c1;
+    if (32.0f < FUN_001f9b48(D_L10_00167240, pos)) return;
+    qcopy(p, pos);
+    p[2] += 6.0f;
+    p[3] = 5.0f;
+    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0) return;
+    if (!FUN_001f9770(timer)) return;
+    clear_vector(vel);
+    vel[2] = D_L10_00161FBC * D_0015ED6C;
+    FUN_L00_00257d78(acc, 0.0f, D_L10_00161FC4 * D_0015ED6C);
+    acc[2] += D_L10_00161FC0 * D_0015ED6C;
+    vel[3] = random_float_between(D_L10_00161FC8, D_L10_00161FCC);
+    acc[3] = random_float_between(D_L10_00161FD0, D_L10_00161FD4);
+    s = random_float_between(1.0f - D_L10_00161FE4, D_L10_00161FE4 + 1.0f);
+    a = func_001FA898_r((float)D_L10_00161FD8 * s);
+    b = func_001FA898_r((float)D_L10_00161FDC * s);
+    c = func_001FA898_r((float)D_L10_00161FE0 * s);
+    c1 = FUN_001fa6e0(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
+    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), a, b, c, -1);
+    *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eaa08.s", FUN_L10_002eaa08);
 #define NOT_SDA
 
