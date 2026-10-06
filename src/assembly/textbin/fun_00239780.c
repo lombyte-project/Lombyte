@@ -81,7 +81,7 @@ void render_vendor_capture_pass_sequence(s32 capture_context) {
     origin_pointer = &origin;
     for (pass_index = 0; pass_index < 6; pass_index++) {
         do {
-            point_base = pass_index * 4;
+            point_base = pass_index << 2;
             point_indices[0] = point_base;
             point_indices[1] = point_base + 1;
             point_indices[2] = point_base + 2;
