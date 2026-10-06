@@ -175,7 +175,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
                          ((((u64)draw_shift) << 6) | 0x20)) |
                         (((u64)draw_high) << 32);
             clamp_word =
-                (((u64)material_index) << 24) | (material_base | (((u64)material_shift) << 2));
+                (((u64)material_shift) << 2) | (((u64)material_index) << 24) | material_base;
             record->tex0 = resident_material_templates[material_index * 3];
             record->tex1.d = tex1_word;
             record->mip = resident_material_templates[(material_index * 3) + 2];
