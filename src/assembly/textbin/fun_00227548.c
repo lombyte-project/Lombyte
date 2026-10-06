@@ -58,7 +58,7 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     /* Remaining vector components are filled from each setup record. */
     first_vector[1] = first_vector[0] = 0.0f;
     second_vector[1] = second_vector[0] = 0.0f;
-    render_packet_cursor.p++;
+    render_packet_cursor.p += 1;
     while (record->command_count != 0) {
         command_stream += 0x20;
         *(u128 *)direction = record->direction;
