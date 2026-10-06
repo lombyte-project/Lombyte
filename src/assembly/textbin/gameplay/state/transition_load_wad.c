@@ -185,7 +185,6 @@ void transition_load_wad(void) {
     s32 i;
     s32 j;
     s32 k;
-    s32 cnt;
     s32 v;
     s32 *out;
     WadTex *tex;
@@ -197,8 +196,8 @@ void transition_load_wad(void) {
     u8 *lookupSource;
     u8 *lookupRange;
     s32 k_800 = 0x800;
-    s64 t;
-    s64 u;
+    u64 t;
+    u64 u;
 
     D_0015EF58 = 0;
     i = 0;
@@ -223,18 +222,17 @@ void transition_load_wad(void) {
     hdr = (WadHeader *)D_001940C0.hdr;
     upload_texture_images((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
     /* Retail forms the two texture addresses from header offsets 0x70 and 0x74. */
-    t = 0x1D308000 | (s64)((D_0015EE8C + hdr->x70) >> 8);
-    u = ((s64)((D_0015EE8C + hdr->x74) >> 8) << 37) | ((s64)0xB800 << 19);
-    D_0019E6C0[0] = (u | t) | ((s64)-1 << 63);
+    t = 0x1D308000 | (u64)((s64)((D_0015EE8C + hdr->x70) >> 8));
+    u = ((u64)((s64)((D_0015EE8C + hdr->x74) >> 8)) << 37) | ((u64)0xB800 << 19);
+    D_0019E6C0[0] = (u | t) | ((u64)1 << 63);
     data = (u8 *)hdr + hdr->data;
     D_0019E6C0[2] = 0x0040000400004000;
     base = data + hdr->x60;
     D_0019E6C0[1] = 0xFFA0000000E0;
 
     tex = (WadTex *)((u8 *)hdr + hdr->x34);
-    cnt = hdr->n30;
-    D_00160E94 = cnt;
-    if (cnt > 0) {
+    D_00160E94 = hdr->n30;
+    if (D_00160E94 > 0) {
         do {
             D_001E0900[i] = (s32)base + tex[i].offset + (func_001F97A0(tex[i].x4) << 28);
             i++;
@@ -242,9 +240,8 @@ void transition_load_wad(void) {
     }
     k = 0;
     tex = (WadTex *)((u8 *)hdr + hdr->x3C);
-    cnt = hdr->n38;
-    D_0015FF08 = cnt;
-    if (cnt > 0) {
+    D_0015FF08 = hdr->n38;
+    if (D_0015FF08 > 0) {
         do {
             D_001B5980[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
             k++;
@@ -252,9 +249,8 @@ void transition_load_wad(void) {
     }
     k = 0;
     tex = (WadTex *)((u8 *)hdr + hdr->x44);
-    cnt = hdr->n40;
-    D_00160F64 = cnt;
-    if (cnt > 0) {
+    D_00160F64 = hdr->n40;
+    if (D_00160F64 > 0) {
         do {
             D_001E2600[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
             k++;
@@ -262,9 +258,8 @@ void transition_load_wad(void) {
     }
     k = 0;
     tex = (WadTex *)((u8 *)hdr + hdr->x4C);
-    cnt = hdr->n48;
-    D_001603EC = cnt;
-    if (cnt > 0) {
+    D_001603EC = hdr->n48;
+    if (D_001603EC > 0) {
         do {
             D_001D84B0[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
             k++;
