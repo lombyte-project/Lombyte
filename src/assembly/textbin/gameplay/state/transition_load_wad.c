@@ -272,18 +272,18 @@ void transition_load_wad(void) {
     D_0015FF00 = 0;
     D_00160F4C = 0;
     D_001603CC = 0;
-    for (i = 0; i < hdr->n18; i++) {
+    for (k = 0; k < hdr->n18; k++) {
         register_moby_class(c20->offset != 0 ? data + c20->offset : 0, (u8 *)hdr + hdr->x3C,
                             c20->x10, c20->x4);
         c20++;
     }
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x24);
-    for (i = 0; i < hdr->n20; i++) {
+    for (k = 0; k < hdr->n20; k++) {
         register_object_render_class(data + c20->offset, (u8 *)hdr + hdr->x44, c20->x10, c20->x4);
         c20++;
     }
     c30 = (WadClass30 *)((u8 *)hdr + hdr->x2C);
-    for (i = 0; i < hdr->n28; i++) {
+    for (k = 0; k < hdr->n28; k++) {
         register_shrub_render_class(data + c30->offset, (u8 *)hdr + hdr->x4C, c30->x10, c30->x20,
                                     c30->x4);
         c30++;
@@ -307,10 +307,10 @@ void transition_load_wad(void) {
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     v = D_001940C0.x1C;
-    k = v + 0x40000;
+    i = v + 0x40000;
     D_0018CB20.x58 = v;
-    D_0018CB20.x5C = k;
-    D_001940C0.x1C = k + 0x40000;
+    D_0018CB20.x5C = i;
+    D_001940C0.x1C = i + 0x40000;
     snd = (WadSound *)(data + hdr->x80);
     j = 0;
     if (snd->size != 0) {
