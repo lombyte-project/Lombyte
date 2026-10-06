@@ -62,7 +62,7 @@ extern s32 D_0015F618;
 extern u8 D_0016034C MACRO_ADDR;
 extern SoundCue D_001862B0[];
 extern TransferState D_0018CB20;
-extern WadHeader *D_001940C8;
+extern WadHeader *volatile D_001940C8[];
 
 extern void InitializeResourceEntry(void);
 extern void QueueDmaTransfer(s32 index);
@@ -120,13 +120,14 @@ void transition_do_transition(void) {
     load_and_initialize_level_chunk();
     tbl = &D_00137B80;
     transition_load_wad();
-    p = (u8 *)D_001940C8;
+    p = (u8 *)D_001940C8[0];
     hdr = (WadHeader *)p;
     /* The first 0x60 bytes are reserved; six descriptors start at offset 0x20. */
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
     p = (u8 *)hdr + 0x60;
     D_0015EE4C = hdr;
-    hdr->chunk[1].size = load(p, tbl->src[1].a, tbl->src[1].b);
+    hdr->chunk[1].size =
+        load(p, ((volatile ChunkSrc *)&tbl->src[1])->a, ((volatile ChunkSrc *)&tbl->src[1])->b);
     hdr->chunk[1].off = p - (u8 *)hdr;
     p += (hdr->chunk[1].size + 0xF) & align_mask;
     hdr->chunk[2].size = load(p, tbl->src[2].a, tbl->src[2].b);
