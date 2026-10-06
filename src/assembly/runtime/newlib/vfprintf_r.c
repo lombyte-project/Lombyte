@@ -1,14 +1,14 @@
 /* Derived from newlib (1999 vfprintf.c); see licenses/COPYING.NEWLIB.txt. */
 #include "types.h"
 #include "asm.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/runtime/newlib/vfprintf_r/FUN_00116e20.s",
             FUN_00116e20);
 #else
 #include "types.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 typedef char *va_list;
 #define _REENT D_0012F76C[0]
