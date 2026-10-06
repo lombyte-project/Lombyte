@@ -35,6 +35,9 @@
       "ui_help_00230b38.c",
       "ui_help_002370d8.c"
     ],
+    "l10": [
+      "gameplay_vendor_002df270.c"
+    ],
     "l11": [
       "ui_help_0023c7a0.c",
       "ui_help_0024db50.c",
