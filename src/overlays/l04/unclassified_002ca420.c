@@ -55,7 +55,7 @@ void FUN_L04_002d1608(void *m) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D2A98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D2A98), where it is exact; names translated to the US level program. */
 
 typedef int w128 __attribute__((mode(TI)));
 

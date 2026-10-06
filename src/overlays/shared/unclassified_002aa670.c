@@ -8,7 +8,7 @@
 #include "qcopy.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
 
 typedef int Q910 __attribute__((mode(TI)));
 
