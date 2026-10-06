@@ -71,10 +71,8 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     s32 previous_second_volume;
     s32 scaled_second_volume;
 
-    if (D_0013C940.pressed_buttons & 0xD00) {
-        if (D_001D5D14 == 0) {
-            return 1;
-        }
+    if ((D_0013C940.pressed_buttons & 0xD00) && (D_001D5D14 == 0)) {
+        return 1;
     }
     if (D_0013C940.pressed_buttons & 0x10) {
         s32 navigation_value = D_001D5BF0.page->back_page;
