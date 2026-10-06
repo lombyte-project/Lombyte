@@ -738,7 +738,82 @@ void FUN_L14_002d7198(char *moby)
     FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), moby + 0x10, data + 0x64, data + 0x68, 0, *(float *)&D_L14_00161A30_d * D_0015ED6C);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d7490.s", FUN_L14_002d7490);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_00274948(void *, void *, int, void *);
+extern char D_L14_001674C0[];
+extern char D_L14_001809C0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L14_0015F580[] __attribute__((section(".sdata")));
+extern float random_float_between(float a, float b);
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern float D_L14_00161A60 __attribute__((sda));
+extern void FUN_00213358(void *, float, float);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L14_002d71f0(void);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+
+void FUN_L14_002d7490(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float p[4];
+    float v[4];
+    float w[4];
+    char *q;
+    int i;
+    FUN_L00_0024f7c8(m, 1, p);
+    subtract_vector_xyz(v, p, D_L14_001674C0);
+    normalize_vector_xyz(v, v, -0.5f);
+    add_vector_xyz(d + 0xE0, p, v);
+    if ((unsigned int)(((unsigned char *)m)[0x20] - 3) < 3) {
+        p[2] += 1.0f;
+        if (*(int *)(d + 0xF0) == -1) {
+            *(int *)(d + 0xF0) = FUN_L00_0023e738(p, D_L14_00161A60, 0.0f, 0.5f, 0.5f, 1.0f);
+        }
+        if (*(int *)(d + 0xF0) >= 0) {
+            char *e = D_L14_001809C0 + *(int *)(d + 0xF0) * 32;
+            qcopy(e + 0x10, p);
+            *(float *)(e + 0x1C) = D_L14_00161A60;
+        }
+        p[2] -= 1.0f;
+    }
+    FUN_00213358(w, 0.005f, 0.03f);
+    q = FUN_L00_00274948(p, w, 0x7F, m);
+    if (q != 0) {
+        *(float *)(q + 0xC) = random_float_between(6000.0f, 32000.0f);
+    }
+    for (i = 0; i < 3; i++) {
+        char *e;
+        int t;
+        q = FUN_L00_00274948(p, D_L14_0015F580, 0x7F, m);
+        if (q == 0) continue;
+        e = q + 0x20;
+        if (i == 2 && random_integer_below(8) == 0) {
+            *(float *)(q + 0xC) = 180000.0f;
+        } else {
+            *(float *)(q + 0xC) = random_float_between(80000.0f, 120000.0f);
+        }
+        t = scale_game_frames(2);
+        *(short *)(q + 0xA) = t;
+        *(float *)(e + 0x10) = 1.0f / ConvertIntegerToFloat((short)t);
+        *(int *)(e + 0x18) = 0x7F7F7F;
+        *(short *)(e + 0x16) = 3;
+    }
+    FUN_L00_0024f7c8(m, 6, d + 0x200);
+    enqueue_callback_list_1(FUN_L14_002d71f0, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de1f8.s", FUN_L14_002de1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de2b8.s", FUN_L14_002de2b8);
 #include "sda.h"
