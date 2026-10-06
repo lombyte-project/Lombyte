@@ -156,7 +156,9 @@ set up without it.
 
    The retail listing is `config/us/overlays/asm/<name>.s`.
 3. Check: `python3 scripts/check-unit.py FUN_L00_002678b8` until it prints
-   `Object matches (promotable)`.
+   `Object matches (promotable)`. If the game compiler cannot reach it,
+   add the file to `config/overlays/us/sn-units.json` (SN compiler) and
+   check again.
 4. Promote: delete the `#ifndef`/`INCLUDE_ASM`/`#else` lines and the `#endif`.
    There is no file move and no yaml change.
 5. `make overlays` must end with `PASS`. Open a pull request
