@@ -190,7 +190,8 @@ void startlevel(void) {
     DebugPrint(D_001E76C0);
     bank = load_audio_bank_by_location(D_00137B80[0x14E0 / 4]);
     snd_resolve_bank_xrefs();
-    /* Retail publishes the slot base at 0x001e99d8, then the count at 0x001e99e0. */
+    /* Retail stores the slot base at 0x001e99d8, then the count at 0x001e99e0.
+       The managed compiler reverses these two stores despite this C order. */
     D_0015F634 = D_00186100;
     D_00186100[0].bank = bank;
     D_00186100[1].bank = bank;
