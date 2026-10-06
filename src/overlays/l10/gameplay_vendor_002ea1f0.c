@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eaa08.s", FUN_L10_002eaa08);
 #define MACRO_ADDR
 
 /* update: wait for state 1, then act on the level's current mode */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EC098), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EC098), where it is exact; names translated to the US level program. */
 
 struct L10Data {
     char pad0[0x30];
@@ -47,7 +47,7 @@ void FUN_L10_002eacd8(char *m) {
     }
 }
 /* Update for moby class 1855: waits, arms, then fires an effect and deletes itself. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_0022da68(int, int, int);
@@ -75,7 +75,7 @@ void FUN_L10_002eb6f0(char *m) {
     }
 }
 /* per-frame update: wait for a condition, then run, then clean up */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECBA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECBA0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");

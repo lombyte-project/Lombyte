@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
@@ -24,7 +24,7 @@ float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[4]; } Vq __attribute__((aligned(16)));
 
@@ -45,7 +45,7 @@ void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
 #define MACRO_ADDR
 
 /* Spawns one particle per point found by func_L00_0025BCF8, at a random offset about A1. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D3F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D3F0), where it is exact; names translated to the US level program. */
 
 typedef struct { float v[4]; } V4 __attribute__((aligned(16)));
 

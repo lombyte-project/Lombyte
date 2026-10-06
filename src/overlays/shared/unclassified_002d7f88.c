@@ -260,7 +260,7 @@ int FUN_L00_002d9f78(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[16]; } V __attribute__((aligned(16)));
 
@@ -284,7 +284,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da058.s", FUN_L00_002da058);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 int FUN_L00_002da1e0(char *a) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0xC);
@@ -593,7 +593,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
 
 extern short D_L00_001E6008[];
 extern void FUN_L00_002dd8e8(void);
@@ -615,7 +615,7 @@ void FUN_L00_002defe0(int arg0) {
 #define MACRO_ADDR
 
 /* pull each active entry's marker toward its target, then update the rest */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E04F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E04F8), where it is exact; names translated to the US level program. */
 
 typedef struct { short idx; short pad; float f; int pad2[3]; char *p; } E04;
 
@@ -735,7 +735,7 @@ void FUN_L00_002df4a8(M09 *m) {
     }
 }
 /* update for the pulsing colour object */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f9de0(float);

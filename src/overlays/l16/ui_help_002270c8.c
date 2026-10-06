@@ -10,7 +10,7 @@
 #include "qcopy.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 16 build). */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/help_00227818.c: func_L16_00227818), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00227818.c: func_L16_00227818), where it is exact; names translated to the US level program. */
 
 typedef struct { char p0[0x44]; int f44; int f48; char p1[0x10]; float f5C; int f60; char p2[0xC]; } Rec70;
 

@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -50,7 +50,7 @@ void FUN_L10_002e3de8(char *moby) {
  * hero+0x50, rotates it with the matrix from func_001FA4A0(moby + 0xC0), and if that point lies
  * in the box -5 < x < 5, 0 < z < 8 sets hero byte 0x224B to (y < 0.5), else (y > 0) clears
  * D_0014171B. Then queues func_L10_002EA578. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
 extern float FUN_001f9b48(void *, void *);
@@ -133,7 +133,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
 extern char *D_L10_0015F050 __asm__("D_L10_0015EF50") MACRO_ADDR;
 extern char D_0013E633[] __asm__("D_0013F3D0");

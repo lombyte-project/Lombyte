@@ -5,7 +5,7 @@
 #include "sda.h"
 
 /* Moves a level-17 platform moby between its stops along its heading, with a looping sound. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -179,7 +179,7 @@ typedef int u128_q __attribute__((mode(TI)));
 #include "qcopy.h"
 
 /* Updates moby 1368: a drone that drifts toward the hero, tags what it hits and sprays sparks until its timer runs out. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA8F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA8F8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_00174740_q[] __asm__("D_L17_00174740") __attribute__((section(".data")));
 extern char D_L17_00174760_q[] __asm__("D_L17_00174760") __attribute__((section(".data")));
@@ -336,7 +336,7 @@ void FUN_L17_002e8e08(char *moby) {
 #include "qcopy.h"
 
 /* spawns the class-0x558 object from src at pos, sets its state block and aims it along the vector v */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EAFC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EAFC8), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b80(void *, void *);
@@ -371,7 +371,7 @@ char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
 /* Walks the moby list: picks the on-screen target, marks targetable mobys and points an arrow at the nearest pickup. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC7D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC7D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L17_0015FFE4;
 extern char D_L17_001678D0[];
@@ -602,7 +602,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
 #include "qcopy.h"
 
 /* picks the moby to home in on, keeping or dropping the current target */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED258), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED258), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013C940[];
 extern unsigned char D_00140946[];
@@ -686,7 +686,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb9a8.s", FUN_L17_002eb9a8);
 #define MACRO_ADDR
 
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9740(void *);
 extern int FUN_0022da68(int, int, int);
@@ -722,7 +722,7 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
 /* Fires a projectile from the moby when the trigger is ready and the player presses a button. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDC40), where it is exact; names translated to the US level program. */
 
 extern int FUN_L13_002e6a58(void *, void *, int, void *, float, int);
 extern short D_L17_00162074_d __asm__("D_L17_00162074") __attribute__((sda));
@@ -755,7 +755,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ec360.s", FUN_L17_002ec360);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EFA20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EFA20), where it is exact; names translated to the US level program. */
 
 extern char *D_L17_001600EC __attribute__((section(".sdata")));
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -1007,7 +1007,7 @@ extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xD0];
@@ -1035,7 +1035,7 @@ void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
                                                  D_0013F350.y - *(float *)(temp + 4));
     *(int *)(state + 4) = 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001B0DB0[];
 extern char D_L17_001D9F70[];
@@ -1057,7 +1057,7 @@ void FUN_L17_002eea70(char *moby) {
     }
 }
 /* UpdateMoby for class 1382: hides or shows the moby by its clip volumes, then runs its state machine. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0678), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0678), where it is exact; names translated to the US level program. */
 
 typedef int u128_2F0678 __attribute__((mode(TI)));
 
@@ -1465,7 +1465,7 @@ void FUN_L17_002eeb68(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efa48.s", FUN_L17_002efa48);
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1858), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1858), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C;
@@ -1494,7 +1494,7 @@ int FUN_L17_002efd48(char *moby, float *target, float speed) {
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -1544,7 +1544,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f04d0.s", FUN_L17_002f04d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0948.s", FUN_L17_002f0948);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f10c8.s", FUN_L17_002f10c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f1940.s", FUN_L17_002f1940);
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F3C18), where it is exact; names translated to the US level program. */
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 

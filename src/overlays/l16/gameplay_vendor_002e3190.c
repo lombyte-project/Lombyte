@@ -10,7 +10,7 @@
 #include "qcopy.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad00[0xC]; float radius; char pad10[0x30]; } L16WatchActivation;
 
@@ -209,7 +209,7 @@ void FUN_L16_002e3190(L16WatchMoby *m) {
 #define MACRO_ADDR
 
 /* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
@@ -232,7 +232,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3fa0.s", FUN_L16_002e3fa0);
 #include "qcopy.h"
 
 /* Update the moving pickup, interpolate its path transitions, and manage its sound handle. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5848), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5848), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad00[0x30];
@@ -436,7 +436,7 @@ void FUN_L16_002e4900(void *moby_v) {
     qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
 }
 /* Pick the path for the current segment and set the travel speeds from its length. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
 extern float D_0015ED6C;
@@ -472,7 +472,7 @@ void FUN_L16_002e4a58(char *moby) {
     *(float *)(d + 0xC8) = b * inv;
 }
 /* Moves the moby through its trigger states and checks its local bounds. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6478), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -531,7 +531,7 @@ void FUN_L16_002e5010(unsigned char *m) {
     }
 }
 /* Moves the moby through its trigger states and checks its local bounds. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E66C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E66C0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
@@ -591,7 +591,7 @@ void FUN_L16_002e5258(unsigned char *m) {
         break;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6908), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E6908), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float value;
@@ -675,7 +675,7 @@ void FUN_L16_002e54a0(unsigned char *m) {
 #define MACRO_ADDR
 
 /* Start the vendor moby's turn and mark it active. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
 
 
 
@@ -687,7 +687,7 @@ void FUN_L16_002e56e0(Level16VendorTurnMoby *moby) {
 #include "qcopy.h"
 
 /* Update the wandering helper's motion, animations, interaction and damage states. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7270), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7270), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -827,7 +827,7 @@ void FUN_L16_002e5e08(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
 /* Steers and moves a moby toward a target point, returning the distance. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7890), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7890), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -867,7 +867,7 @@ float FUN_L16_002e6428(void *m_v, void *t_v) {
     return dist;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6808.s", FUN_L16_002e6808);
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
 extern short D_L16_0015F638;
 extern void FUN_L01_0027a248(int, int);
@@ -891,7 +891,7 @@ void FUN_L16_002e70c0(char *moby) {
     FUN_L16_002de3b8(76.0f);
     FUN_L01_0027a248(2, 6);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002e7168(char *moby)
 {
@@ -952,7 +952,7 @@ void FUN_L16_002e7208(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
 /* Emits a particle near an active moby when the target is close. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -998,7 +998,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7e00.s", FUN_L16_002e7e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e84e8.s", FUN_L16_002e84e8);
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9D48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9D48), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002e88d0(unsigned char *moby)
 {
@@ -1022,7 +1022,7 @@ void FUN_L16_002e88d0(unsigned char *moby)
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
 extern char *FUN_L16_002e8b08(int);
@@ -1083,7 +1083,7 @@ void FUN_L16_002e8970(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b08.s", FUN_L16_002e8b08);
 /* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float x, y, z;
@@ -1130,7 +1130,7 @@ void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) {
     }
 }
 /* Sets up the draw state, then draws the three entries of the level's table. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
 
 extern char D_L16_001DC600[][16] __attribute__((section(".data")));
 extern char D_L16_001DC630[] __attribute__((section(".data")));
@@ -1259,7 +1259,7 @@ void FUN_L16_002e9270(void) {
     }
 }
 /* Compute bounding spheres for one mesh and register their renderer. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA828), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA828), where it is exact; names translated to the US level program. */
 
 typedef struct {float x,y,z,radius;} L16SingleSphere;
 
@@ -1380,7 +1380,7 @@ void FUN_L16_002e98e0(unsigned char *m) {
     }
 }
 /* Sets up the draw state then runs both per-slot calls over three entries. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
 
 extern char D_L16_001E28D0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");

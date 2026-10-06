@@ -39,7 +39,7 @@ void FUN_L03_002ebb00(void *arg) {
 #include "qcopy.h"
 
 /* smooths the moby's data floats and rebuilds its orientation axes */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern char D_L03_00166F40[];
@@ -74,7 +74,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
 extern void FUN_L03_002ebb00_u(void *) __asm__("FUN_L03_002ebb00");
 extern void FUN_L03_002ebc58_u(void *) __asm__("FUN_L03_002ebc58");
@@ -85,7 +85,7 @@ void FUN_L03_002ebdb0(void *arg) {
     NoOpMainCallback(arg);
     FUN_L03_002ebc58_u(arg);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int D_L03_0015EF50;

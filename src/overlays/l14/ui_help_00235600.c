@@ -10,7 +10,7 @@
 #include "qcopy.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 14 build). */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/help_00235DC8.c: func_L14_00235DC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/help_00235DC8.c: func_L14_00235DC8), where it is exact; names translated to the US level program. */
 
 typedef struct { char p0[0x44]; int f44; int f48; char p1[0x10]; float f5C; int f60; char p2[0xC]; } Rec70;
 

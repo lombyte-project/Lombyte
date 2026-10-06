@@ -81,7 +81,7 @@ s32 FUN_L00_002e02e0(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern int D_L00_0015F404;
@@ -618,7 +618,7 @@ void FUN_L00_002e4430(char *o) {
     FUN_001f9a10_002e4430(q + 0x90, b, p);
 }
 /* angle between a direction and an axis, signed */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E5A30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5A30), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166E10[];
 extern float FUN_001f9ab0(void *, void *);
@@ -651,7 +651,7 @@ float FUN_L00_002e4580(char *a, float f) {
     }
     return r;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E5B68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5B68), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[4]; } Vq4 __attribute__((aligned(16)));
 
@@ -993,7 +993,7 @@ void FUN_L00_002e4930(char *m) {
     }
 }
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9af0(void *);
@@ -1370,7 +1370,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
 
 /* Only for arg1==1: true when arg2 is past the edge plane
    (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
 
 typedef float V[4] __attribute__((aligned(16)));
 
@@ -1582,7 +1582,7 @@ void FUN_L00_002e8590(float a, float b) {
         if (b != 0.0f) *(float *)(q + 0xE0) = b;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 
@@ -1602,7 +1602,7 @@ void FUN_L00_002e8648(void) {
 extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e8680(void) { char *p = D_L00_00166E00_002e8680; if (*(short *)(p + 0x86) == 0) { char *q = *(char **)(p + 0x70) + 0x1a8; *(int *)(q + 0x10) |= 3; } }
 /* Measures the signed angle between two offsets of an object's data relative to an axis, and (within the limit) stores a scaled blend in the object's data. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002E9B60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9B60), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa5c8(float, float);
 extern float FUN_L00_00257e20(float a, float b, float c, float d, float t);

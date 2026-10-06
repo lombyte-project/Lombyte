@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002eb098.s", FUN_L13_002eb098);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EE148), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EE148), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -54,7 +54,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed4a8.s", FUN_L13_002ed4a8);
 #define MACRO_ADDR
 
 /* Clear a vendor moby's field and set its flags unless it is the current target. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4BE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4BE8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x34];
@@ -77,7 +77,7 @@ void FUN_L13_002f3750(Level13VendorMoby *moby) {
 #define MACRO_ADDR
 
 /* Per-frame update: awards a stat/flag when its linked moby is gone, then sets a flag byte from a test. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int D_0015ED84;
@@ -142,7 +142,7 @@ void FUN_L13_002f3778(char *moby) {
     }
 }
 /* State machine: waits for a linked moby to reach one of a set of states, then pushes states onto linked mobys. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9D18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9D18), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];

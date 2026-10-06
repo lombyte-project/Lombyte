@@ -563,7 +563,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a620.s", FUN_L00_0028a620);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[];

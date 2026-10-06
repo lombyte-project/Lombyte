@@ -97,7 +97,7 @@ void FUN_L16_002e2b60(char *m) {
 #define MACRO_ADDR
 
 /* Advance a path segment and ease the remaining travel distance. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar_q(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern float D_0015ED6C_q __asm__("D_0015ED6C");
@@ -137,7 +137,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2fa0.s", FUN_L16_002e2fa0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED64;
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
@@ -152,7 +152,7 @@ void FUN_L16_002e3050(char *moby)
     FUN_L00_002628d8(moby, data + 0xE0, 2, a, b);
 }
 /* Updates a moby effect and advances it when its linked object is ready. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001fa580(float, float);
@@ -209,7 +209,7 @@ void FUN_L16_002e5708(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e58d8.s", FUN_L16_002e58d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e5cd0.s", FUN_L16_002e5cd0);
 /* picks the nearest moby in a list (skipping class 0x5A3) and acts on it */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E7198), where it is exact; names translated to the US level program. */
 
 /* D_L16_0015FFD8 is declared sda above (FUN_L16_002e2b60 loads it off $gp), but
    here retail loads it absolute: reach it from a neighbour, past whose size the

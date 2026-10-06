@@ -3,7 +3,7 @@
 #include "asm.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
 
 typedef struct { char p0[0x10]; int f10; char p14[0x4C - 0x14]; } R_2afd00;
 

@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* finds the first of eight linked entries whose direction lines up with the moby */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
 
 extern char D_L08_001675C0[];
 extern float FUN_001f9ab0(void *, void *);
@@ -37,7 +37,7 @@ int FUN_L08_002e0228(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
 
 extern void FUN_L08_00230b38(int, int);
 
@@ -47,7 +47,7 @@ void FUN_L08_002e1698(char *arg) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E3010), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E3010), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern char D_0013E533[];
@@ -72,7 +72,7 @@ void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
     return m;
 }
 /* builds a basis from a direction vector and writes the orientation into the moby */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f99f8(void *);
 extern void FUN_001fa050(float *, float *);
@@ -101,7 +101,7 @@ void FUN_L08_002e4db8(char *a, float *v) {
     n[15] = 42.0f;
 }
 /* spawns the child mobys this object owns and fills its part table */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9B60), where it is exact; names translated to the US level program. */
 
 extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
 
@@ -147,7 +147,7 @@ void FUN_L08_002e8788(char *moby) {
     } while (i < 8);
 }
 /* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
 extern float FUN_001fa580(float, float);
@@ -182,7 +182,7 @@ void FUN_L08_002e8ba0(char *a) {
         if (m != 0) FUN_L00_00250df8(m);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
 
 extern short D_L08_00161D38_d __asm__("D_L08_00161D38") __attribute__((sda));
 extern void FUN_001f9a68(void *, void *, float);
@@ -238,7 +238,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e5188.s", FUN_L08_002e5188);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e88d8.s", FUN_L08_002e88d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8cd0.s", FUN_L08_002e8cd0);
 /* Builds the moby's part hierarchy: body, head, arms and eight trailing segments. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EA930), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EA930), where it is exact; names translated to the US level program. */
 
 void *FUN_L08_002e1c98_c2(char *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
 

@@ -9,7 +9,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
 typedef struct { int a; int b; int c; char pad[0x20]; } T2C_22BE40;
 
@@ -1460,7 +1460,7 @@ int FUN_L02_0022b728(int a, int b) {
 #include "qcopy.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 02 build). */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/help_0022BE40.c: func_L02_002310F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_002310F0), where it is exact; names translated to the US level program. */
 
 typedef struct { int a; int b; int c; char pad[0x20]; } T2C_22BE40_u;
 

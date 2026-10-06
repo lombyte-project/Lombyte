@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260AB0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260AB0), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } Vp __attribute__((aligned(16)));
 
@@ -37,7 +37,7 @@ int FUN_L00_0025fa38(void *p, int i) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
 extern int D_L00_001600F4;

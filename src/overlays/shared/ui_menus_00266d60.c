@@ -21,7 +21,7 @@ u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/stream_002670E0.c: func_L00_00267C48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/stream_002670E0.c: func_L00_00267C48), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);

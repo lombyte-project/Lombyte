@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031d2e0.s", FUN_L07_0031d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031eba8.s", FUN_L07_0031eba8);
 /* Level moby state machine: UpdateMoby_1789: spawn state then position three points.
  * Matched using lever: g - (-(idx * 4)) + 0x178 fixes addu operand order. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
 
 extern char D_L07_0016C8E0[];
 extern int D_L07_0015F5C4;

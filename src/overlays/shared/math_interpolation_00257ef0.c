@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001fa580(float, float);
@@ -25,7 +25,7 @@ extern void FastVecSub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258FA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258FA8), where it is exact; names translated to the US level program. */
 
 void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
     float tmp[4];
@@ -48,7 +48,7 @@ void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001fa580(float, float);
@@ -412,7 +412,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002592b8.s", FUN_L00_002592b8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
 int FUN_L00_00259430(int *p, int b) {
     int w = *p;
@@ -425,7 +425,7 @@ int FUN_L00_00259430(int *p, int b) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -443,7 +443,7 @@ float FUN_L00_00259468(float *a, float *b, int *out, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);

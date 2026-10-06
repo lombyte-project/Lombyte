@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316160.s", FUN_L11_00316160);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00317680), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00317680), where it is exact; names translated to the US level program. */
 
 extern void *FUN_L00_002dbb20(void *);
 
@@ -33,7 +33,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003172c0.s", FUN_L11_003172c0);
 #include "qcopy.h"
 
 /* Orients a moby along a path of three points read from its data table. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00318AE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00318AE8), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -65,7 +65,7 @@ void FUN_L11_00317678(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317820.s", FUN_L11_00317820);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00317c98.s", FUN_L11_00317c98);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003194C0), where it is exact; names translated to the US level program. */
 
 int FUN_L11_00318050(char *moby, void **out) {
     char *data = *(char **)(moby + 0x78);
@@ -79,7 +79,7 @@ int FUN_L11_00318050(char *moby, void **out) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003181f0.s", FUN_L11_003181f0);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -93,7 +93,7 @@ void FUN_L11_00318488(char *m) {
     *(float *)(d + 0x20) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
     *(float *)(d + 0x24) = random_float_between_alt(20.0f, 60.0f) * 0.017453292f * D_0015ED6C;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
@@ -147,7 +147,7 @@ void FUN_L11_00318b30(unsigned char *moby) {
 #include "qcopy.h"
 
 /* Spawns a spark effect moby from a source moby, initialises its particle bytes and warms it up. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A180), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
@@ -188,7 +188,7 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A2E8), where it is exact; names translated to the US level program. */
 
 void FUN_L11_00318e78(char *arg, void *src) {
     char *dst = *(char **)(arg + 0x78);
@@ -198,7 +198,7 @@ void FUN_L11_00318e78(char *arg, void *src) {
 #include "qcopy.h"
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A308), where it is exact; names translated to the US level program. */
 
 void FUN_L11_00318e98(char *arg, void *src) {
     char *dst;
@@ -208,7 +208,7 @@ void FUN_L11_00318e98(char *arg, void *src) {
     *(int *)(dst + 0x20) = scale_ticks(0x3C);
 }
 /* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float FUN_001f9dc8(float);
@@ -244,7 +244,7 @@ void FUN_L11_00318ed8(char *m) {
     v4[3] = *(float *)&D_L11_001623A4_d;
     FUN_00218888(v0, v3, v4, *(int *)&D_L11_0016238C_d, *(int *)&D_L11_00162390_d, *(int *)&D_L11_00162394_d, *(int *)&D_L11_00162398_d, *(int *)&D_L11_0016239C_d, *(int *)&D_L11_001623A8_d);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A498), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat_q(s32) __asm__("FUN_001fa6c0");
 extern float D_L11_001677C0_q[] __asm__("D_L11_001677C0") __attribute__((section(".data")));
@@ -282,7 +282,7 @@ void FUN_L11_00319028(char *moby) {
         add_vector_xyz_q(v0, v0, v1);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A630), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A630), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern int FUN_001fa6e0(int, int, float);
@@ -314,7 +314,7 @@ void FUN_L11_003191c0(char *moby) {
 #include "sda.h"
 
 /* UpdateMoby 1319: a flying craft that circles, follows a path, strafes the player and fires. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ACA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ACA8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -621,7 +621,7 @@ char *FUN_L11_0031a7d8(int list) {
     } while (*s++ >= 0);
     return 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
@@ -643,7 +643,7 @@ void FUN_L11_0031aa80(char *moby) {
     }
 }
 /* Bubble update: rises to the surface, then pops and fades, drifting with its velocity. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BF78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BF78), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED70;
 extern float approach_value(float *p, float target, float maxstep);
@@ -725,7 +725,7 @@ void FUN_L11_0031ab08(char *m) {
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
     char *moby = CreateMoby(0x5F4);
@@ -749,7 +749,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ae68.s", FUN_L11_0031ae68);
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C508), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C508), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f96b0(float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -787,7 +787,7 @@ void FUN_L11_0031b098(char *m) {
     c4 = func_001FA898_r(FUN_001f96b0(random_float_between_alt((float)*(int *)&D_L11_00162454_d * 0.8f, (float)*(int *)&D_L11_00162454_d * 1.2f)));
     FUN_00218888(m + 0x10, v1, v2, c0, c1, c2, c3, c4, -1);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
 
 extern int D_L11_001FF750[];
 extern int D_L11_001FF770[];

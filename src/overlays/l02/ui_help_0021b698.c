@@ -746,7 +746,7 @@ s32 FUN_L02_00222270(s32 mode) {
 #include "qcopy.h"
 
 /* Hero state machine: per-frame movement and physics for the current hero state (level 02 build). */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/help_0021BC90.c: func_L02_00226338), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/help_0021BC90.c: func_L02_00226338), where it is exact; names translated to the US level program. */
 
 typedef int u128c __attribute__((mode(TI)));
 typedef struct Moby {

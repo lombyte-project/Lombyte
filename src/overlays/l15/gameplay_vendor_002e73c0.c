@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
@@ -46,7 +46,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *, void *);
 
@@ -76,7 +76,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
  * and goes to state 1. State 1: when the hero (D_0013E633 + 0xE9D) is within 3.0, sets
  * flags 0x41, calls func_L00_00299B68(5) and goes to state 2. State 2: once the level flag
  * is no longer 2, starts the exit sequence and goes to state 3. State 3: deletes the moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBB38), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBB38), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float FUN_001f9b80(void *, void *);
@@ -130,7 +130,7 @@ void FUN_L15_002ea748(unsigned char *m) {
     }
 }
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float FUN_001f96b0(float);
@@ -162,7 +162,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char D_L15_00162190[];
@@ -228,7 +228,7 @@ void FUN_L15_002eb6b8(void) {
     font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d, (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern short D_L15_00162198_d __asm__("D_L15_00162198") __attribute__((sda));
@@ -247,7 +247,7 @@ void FUN_L15_002eb928(char *moby)
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -285,7 +285,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
 /* tests several indexed conditions of a moby's entry in the table */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_0015EF50;
 extern char D_0013E533[];
@@ -323,7 +323,7 @@ int FUN_L15_002f85a8(char *moby) {
     return 0;
 }
 /* tests whether the target lies within a cone of the player's axis */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_001600EC;
 extern char D_L15_00167410[];

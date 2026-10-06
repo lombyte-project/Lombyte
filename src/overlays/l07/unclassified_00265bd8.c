@@ -9,7 +9,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 #define MACRO_ADDR
 
 /* Register the level draw callback for the target moby in state four. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/initonce_002664F0.c: func_L07_002664F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/initonce_002664F0.c: func_L07_002664F0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xA6];

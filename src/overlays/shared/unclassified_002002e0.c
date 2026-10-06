@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/fastfunc_001FEF78.c: func_L00_002004C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_002004C0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
 extern float FUN_001fa5c8(float, float);

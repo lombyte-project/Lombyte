@@ -5,7 +5,7 @@
 #include "sda.h"
 
 /* Spawns an effect moby at the position of moby a. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
 
 extern char D_L08_001675C0[];
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

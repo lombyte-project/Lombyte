@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F2F0;
 extern int D_L00_0015F2F4;
@@ -532,7 +532,7 @@ void FUN_L00_00299560(s32 i) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002995d0.s", FUN_L00_002995d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
 
 extern char D_0013D290[];
 extern int D_L00_00161048;
@@ -585,7 +585,7 @@ void FUN_L00_00299c00(void) {
     FUN_002335a0();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
 extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));

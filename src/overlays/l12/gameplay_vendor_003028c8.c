@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
 extern float FUN_001fa580(float, float);
@@ -40,7 +40,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 #define MACRO_ADDR
 
 /* Scale and play the vendor cue while its counter is below the limit. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xAC];
@@ -71,7 +71,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00307840.s", FUN_L12_00307840);
 #include "qcopy.h"
 
 /* per-frame update of a moby's timer and approach state */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
@@ -109,7 +109,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 #include "sda.h"
 
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];

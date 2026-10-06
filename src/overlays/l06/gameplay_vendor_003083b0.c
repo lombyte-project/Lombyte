@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00308c68.s", FUN_L06_00308c68);
 #include "qcopy.h"
 
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
 extern float FUN_001f96b0(float);
@@ -46,7 +46,7 @@ void FUN_L06_00309240(int idx) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A788), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A788), where it is exact; names translated to the US level program. */
 
 extern char D_L06_0016CFE0[];
 extern int D_L06_0015F5C4;

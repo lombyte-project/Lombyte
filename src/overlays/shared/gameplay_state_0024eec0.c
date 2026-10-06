@@ -31,7 +31,7 @@ void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
 void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
     int i;
@@ -46,7 +46,7 @@ void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250060), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250060), where it is exact; names translated to the US level program. */
 
 typedef struct Slot {
     short id;

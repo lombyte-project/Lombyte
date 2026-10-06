@@ -74,7 +74,7 @@ void FUN_L00_0020cf58(void) {
 
 /* OUT = the camera-space point (0.3, 0, 1.34) in world space
    (func_L00_00233EE0). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00233660(float *, float, float, float);
 
@@ -138,7 +138,7 @@ int FUN_L00_0020d498(int i) {
 #define MACRO_ADDR
 
 /* Whether func_L00_0020DB30(ARG) is one of 10, 17, 20 or 25. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 
@@ -226,7 +226,7 @@ int FUN_L00_0020d5d0(int mode, float *out) {
    +0x21AC) in the 32-float ring at D_0013F450 + 0x2128 whose newest
    entry is +0x21A8. The ring as a struct array gives retail's base-first
    index add. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020DCF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020DCF0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x2128];
@@ -541,7 +541,7 @@ void FUN_L00_0020e4c8(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern int FUN_L00_00205000(int);
@@ -569,7 +569,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020ea80.s", FUN_L00_0020ea80);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_0020F750), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020F750), where it is exact; names translated to the US level program. */
 
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -596,7 +596,7 @@ void FUN_L00_0020fca8(int i, int v) { char *e; { char *f = D_0013F350 + i * 0x50
 
 /* For events 9, 11, 13, 16 and 23: sets the short at D_0013F450 +
    0x22CE to 3 and +0x1DC to func_001F9850(70). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern int FUN_001f96f8(int);
@@ -622,7 +622,7 @@ void FUN_L00_0020fd80(int id) {
 
 /* For events 9, 11, 13-16, 18, 19, 22, 23 and 26: sets the short at
    D_0013F450 + 0x1DA to func_001F9850(70). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern int FUN_001f96f8(int);
@@ -659,7 +659,7 @@ s32 FUN_L00_0020fe30(void) {
     return 0;
 }
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x10B8];
@@ -1152,7 +1152,7 @@ void FUN_L00_00210b30(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9c48(float *, float *, float);
 
@@ -1517,7 +1517,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211670.s", FUN_L00_00211670);
 #define MACRO_ADDR
 
 /* The xy length of the vector at D_0013F450 + 0x1D20, capped at 1. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern float FUN_001f9b20(void *);
@@ -1536,7 +1536,7 @@ float FUN_L00_00211830(void) {
 
 /* Whether T lies in the window that ends at D_0013F450 + 0xAA8 and is
    +0xAAC long (T before the end, within that length of it). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211F28), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -1634,7 +1634,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00211be8.s", FUN_L00_00211be8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern void FUN_001fa050(void *, void *);
@@ -1674,7 +1674,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
@@ -1692,7 +1692,7 @@ void FUN_L00_00211e30(int a, float x, float y, float z) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED64;
 extern float D_0015ED6C;
@@ -1757,7 +1757,7 @@ extern float FastCos(float) __asm__("FUN_001f9dc8");
    arg0 (falling back to +0x98 above pi) and +0x2E4, or, when +0x20B3 is
    set, a flat vector (r,0,0) rotated by the matrix func_001FA218 builds
    from the +0x2080 table's +0x40 axis. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00212790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212790), where it is exact; names translated to the US level program. */
 
 extern float FastSin(float) __asm__("FUN_001f9de0");
 extern void func_001F9EE8(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -2230,7 +2230,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212ff0.s", FUN_L00_00212ff0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001f9af0(void *);
@@ -2382,7 +2382,7 @@ s32 FUN_L00_002133a8(s32 mode) {
     }
     return 1;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_00213E60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213E60), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int x, y, z, w;
@@ -2411,7 +2411,7 @@ void FUN_L00_002137a8(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00213880.s", FUN_L00_00213880);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002144A0), where it is exact; names translated to the US level program. */
 
 void FUN_L00_00213de8(float s) {
     char *p = D_0013E533 + 0xF1D;

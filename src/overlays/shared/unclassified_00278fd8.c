@@ -3,7 +3,7 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002979d8.s", FUN_L15_002979d8);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AA60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AA60), where it is exact; names translated to the US level program. */
 
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -54,7 +54,7 @@ int FUN_L15_00299880(unsigned char *moby, char *d, int a, int b, float angle) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9e90(float, float);
 extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
@@ -65,7 +65,7 @@ void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c)
                                      point[1] - *(float *)(moby + 0x14));
     FUN_L15_00299880_u(moby, a, b, c, angle);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029ACC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029ACC0), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C;
@@ -102,7 +102,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
@@ -151,7 +151,7 @@ int FUN_L15_00299dd8(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ff8.s", FUN_L15_00299ff8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a0d0.s", FUN_L15_0029a0d0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -173,7 +173,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a570.s", FUN_L15_0029a570);
 #define MACRO_ADDR
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
@@ -187,7 +187,7 @@ void FUN_L15_0029aba8(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -243,7 +243,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ead0.s", FUN_L15_0029ead0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2488.s", FUN_L15_002a2488);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -305,7 +305,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a35d8.s", FUN_L15_002a35d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
 /* Builds a screen-space quad from the moby's offset and draws it. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
 
 typedef int u128_2A8850 __attribute__((mode(TI)));
 
@@ -371,7 +371,7 @@ void FUN_L15_002a7628(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section(".data")));
@@ -404,7 +404,7 @@ void FUN_L15_002cbac0(char *m, int a) {
         } while (*p++ >= 0);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
 
 
 
@@ -428,7 +428,7 @@ void FUN_L15_002cbba0(unsigned char *moby) {
 #include "sda.h"
 
 /* per-frame update of the level's looping effect: ramp the gauge, then start, run or stop the draw callback */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern float D_0015ED6C MACRO_ADDR;

@@ -8,7 +8,7 @@ void FUN_L00_00259710(void *a) { FUN_00213508(a, 0x20, 0.5f); }
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
 int FUN_L00_00259740(float *p, float *v, int n) {
     int r = 0;
@@ -31,7 +31,7 @@ int FUN_L00_00259830(char *a) { char *p = *(char **)(a + 0x94); if (p && *(int *
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f99f8(void *);
 
@@ -144,7 +144,7 @@ int FUN_L00_00259d08(void *a, void *b, void *c, void *d, void *e, int f, int n) 
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025AFA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025AFA8), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[4]; } Vk __attribute__((aligned(16)));
 
@@ -182,7 +182,7 @@ void FUN_L00_00259fe8(unsigned char *m, float r) {
     D_L00_0016E080_00259fe8[D_L00_0015F434_00259fe8].u_00259fe8.f[3] = r * y;
     D_L00_0015F434_00259fe8++;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
 
 extern int D_L00_00173E40_25a120[] __asm__("D_L00_00173E40");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -462,7 +462,7 @@ void FUN_L00_0025ab48(q128 *v, float *ang, float *s1, float *s2) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025BC48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025BC48), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } Vc0 __attribute__((aligned(16)));
 
@@ -580,7 +580,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
 extern float FUN_001fa5c8(float, float);
@@ -593,7 +593,7 @@ float FUN_L00_0025b750(float a, float b, float c) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
 
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 

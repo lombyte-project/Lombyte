@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
 #define MACRO_ADDR
 
 /* Starts the effect with an angle ramped from the moby's timer, capped at pi. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L07_00312948(char *, int, float, float, float, float, float);
 
@@ -26,7 +26,7 @@ void FUN_L07_00312dc8(char *moby)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314730), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314730), where it is exact; names translated to the US level program. */
 
 void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     char *data = dp;
@@ -60,7 +60,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
 
 void FUN_L07_00313920(float *out, float value) {
     float neg = -value;
@@ -70,7 +70,7 @@ void FUN_L07_00313920(float *out, float value) {
 #include "qcopy.h"
 
 /* Finds where a path leaves the object's current segment and copies the point out. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D68), where it is exact; names translated to the US level program. */
 
 extern char *D_L07_001B0530[];
 extern int FUN_L01_00276fe8(void *, void *, int, float, void *, void *, void *);
@@ -92,7 +92,7 @@ void FUN_L07_00313988(char *m, char *a, void *b, void *c) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313af0.s", FUN_L07_00313af0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00313d30.s", FUN_L07_00313d30);
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -150,7 +150,7 @@ int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, in
     }
     return 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00315338), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00315338), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED64;
 extern float FUN_001fa5c8(float, float);
@@ -220,7 +220,7 @@ extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
 
 void FUN_L07_00319698(char *arg, char *other) {
     char *dst = *(char **)(arg + 0x78);

@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258BC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258BC8), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
 
@@ -20,7 +20,7 @@ int FUN_L00_00257b90(int lo, int hi) {
 /* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
    (bits 16-27 of the RNG word) for the magnitude and bit 16 for the
    sign. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258C80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258C80), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
 

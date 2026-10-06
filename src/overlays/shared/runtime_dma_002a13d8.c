@@ -46,7 +46,7 @@ void FUN_L00_002a1538(u8 *a0) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9988(float);
 
@@ -70,7 +70,7 @@ float FUN_L00_002a15c8(char *a, char *b) {
     return res;
 }
 /* Steps the walk cycle state machine: picks the next walk, run, turn, jump or landing sequence from speed, heading and foot height. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2900), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2900), where it is exact; names translated to the US level program. */
 
 typedef struct WalkSeqClass {
     char pad00[0x48];

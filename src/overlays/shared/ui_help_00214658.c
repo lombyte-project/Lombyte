@@ -703,7 +703,7 @@ void FUN_L00_002167d0(void) {
 #define MACRO_ADDR
 
 /* passes a pointer chosen by a mode byte to func_0022ED80, copying a vector first in mode 3 */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int FUN_0022da68(int, int, int);
@@ -726,7 +726,7 @@ int FUN_L00_00216de8(int a, int b) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_002175D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_002175D0), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
 
@@ -765,7 +765,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
     } while (n < 8);
 }
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9770(void *);
 extern int FUN_L00_00216de8();
@@ -899,7 +899,7 @@ void FUN_L00_00217118(float a, float b)
         FUN_L00_00213de8_217118(0.0f);
 }
 /* Initialise the pool once, then for each of the first n entries of type 5 or 9 halve and apply its position. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 
 extern int *D_L00_00177F00[];
 extern void FUN_L00_002336e8(float *dst, float *src, float h);

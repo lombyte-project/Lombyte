@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float x;
@@ -48,7 +48,7 @@ void FUN_L05_0030d6a0(int arg) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
 extern char D_L05_001671C0[];
@@ -126,7 +126,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e1f8.s", FUN_L05_0030e1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
 /* Scatters points along a range, placing each one with a heading and radius. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED6C;
@@ -186,7 +186,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003156d0.s", FUN_L05_003156d0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
 
 extern short D_L05_00161EC0_d __asm__("D_L05_00161EC0") __attribute__((sda));
 extern short D_L05_00161EC4_d __asm__("D_L05_00161EC4") __attribute__((sda));
@@ -205,7 +205,7 @@ void FUN_L05_00315ee0(char *a, char *b, char *c) {
     *(float *)(c + 8) = *(float *)(a + 0x48);
     *(float *)(c + 4) = t * 0.017453292f;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
 extern float FUN_001f9dc8(float);
@@ -227,7 +227,7 @@ void FUN_L05_00315f70(char *moby) {
         ang = FUN_001fa580(ang, step);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001671C0[];
 extern char D_L05_00211B20[];
@@ -282,7 +282,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 
 /* Applies breast growth (D_L05_00161ED0) and big-head manipulators to
  * matching-class cutscene instances of the hoverboard girl. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];
@@ -324,7 +324,7 @@ void FUN_L05_00316990(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");

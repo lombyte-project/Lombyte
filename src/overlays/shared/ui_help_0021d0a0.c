@@ -151,7 +151,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002348d0.s", FUN_L06_002348d0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_0021D6B8.c: func_L06_00239CD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0021D6B8.c: func_L06_00239CD0), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E533[];
 extern void FUN_L06_002356a0(int, int);

@@ -8,7 +8,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002FD198), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002FD198), where it is exact; names translated to the US level program. */
 
 extern void func_00233AB8(void) __asm__("FUN_L07_002ba260");
 
@@ -20,7 +20,7 @@ void FUN_L07_002fbdb8(char *arg) {
 #include "qcopy.h"
 
 /* spawns a moby of class 0x370 at a position moving along a direction */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C918), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C918), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -89,7 +89,7 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
     return m;
 }
 /* spawns a moby with random velocity and copies position */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030CE70), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_L00_00257c48(float lo, float hi);
@@ -123,7 +123,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
 
 extern char D_L07_00166E40[];
 extern void register_audio_stream_callback(void) __asm__("FUN_L07_0030d420");
@@ -146,7 +146,7 @@ void FUN_L07_0030d440(unsigned char *moby) {
     }
 }
 /* Slows and steers a moby toward another when it is below and close in height. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -168,7 +168,7 @@ void FUN_L07_0030e0e0(char *a, char *b, char *c) {
         }
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F5D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F5D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L07_0015FFE4;
 extern char D_0013E533[];
@@ -204,7 +204,7 @@ void FUN_L07_0030e1f8(unsigned char *m) {
     }
 }
 /* Spawn the class 0x419 effect moby at a position with a data block, and start its particle. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F750), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F750), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
 
@@ -232,7 +232,7 @@ char *FUN_L07_0030e370(char *pos, char *vec, int arg) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FFA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FFA8), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00259710(void *);
 
@@ -246,7 +246,7 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
     if (delta > 0.68f) return 0;
     return 1;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -273,7 +273,7 @@ void FUN_L07_0030ec58(char *arg) {
     }
 }
 /* Step a moby's velocity toward a target: gravity when above a height, then ease and clamp. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003104D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003104D8), where it is exact; names translated to the US level program. */
 
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
@@ -292,7 +292,7 @@ void FUN_L07_0030f0f8(char *a, char *b, float f12, float f13, float f14) {
         FUN_001f9a68(q, q, 0.5f);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003105C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003105C0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -319,7 +319,7 @@ int FUN_L07_0030f1e0(char *moby, char *obj, float a, float lo, float up, float h
 }
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
 
 extern int D_L07_00173ED8 __attribute__((section(".data")));
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -334,7 +334,7 @@ int FUN_L07_0030f4d0(void *moby, int id, float scale) {
 }
 extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003134B8), where it is exact; names translated to the US level program. */
 
 void FUN_L07_003120d8(char *moby) {
     float distance = FastVecDist(moby + 0x10, D_L07_00166E40);
@@ -344,7 +344,7 @@ void FUN_L07_003120d8(char *moby) {
     *(int *)(state + 0x168) = 0x14;
     *(float *)(state + 0x160) = ((80.0f - distance) / 80.0f) * 0.1f;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313530), where it is exact; names translated to the US level program. */
 
 extern char D_L07_00180340[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -381,7 +381,7 @@ void FUN_L07_00312150(char *a) {
     }
 }
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9740(int *arg0);
 extern int FUN_0022da68(int, int, int);
@@ -808,7 +808,7 @@ void FUN_L07_0030cd48(int arg) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030EF90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030EF90), where it is exact; names translated to the US level program. */
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
@@ -846,7 +846,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FF18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FF18), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 

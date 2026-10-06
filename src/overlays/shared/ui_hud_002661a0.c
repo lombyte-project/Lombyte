@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x8];
@@ -40,7 +40,7 @@ void FUN_L05_002661a0(HudElem *e) {
     e->h = 0x80;
     e->unk4A = 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 

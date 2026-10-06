@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dfc38.s", FUN_L10_002dfc38);
 #define MACRO_ADDR
 
 /* Sets every listed entity in state 1 to state 2. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E14F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E14F8), where it is exact; names translated to the US level program. */
 
 typedef struct { char p0[0x10]; float x; float y; char p1[8]; unsigned char state; char p2[0xDF]; } Ent;
 
@@ -32,7 +32,7 @@ void FUN_L10_002e0138(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e01a8.s", FUN_L10_002e01a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e17c0.s", FUN_L10_002e17c0);
 /* Stores a value into each table entry listed for this moby's index. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern short D_L10_00161E00_d __asm__("D_L10_00161E00") __attribute__((sda));
@@ -57,7 +57,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3ef0.s", FUN_L10_002e3ef0);
 #define MACRO_ADDR
 
 /* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */
 
 
 extern Ent *D_L10_0015FFD8;

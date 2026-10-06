@@ -3,7 +3,7 @@
 #include "asm.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0015F7C8[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");

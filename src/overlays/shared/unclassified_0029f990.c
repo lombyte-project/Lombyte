@@ -9,7 +9,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[4][4];

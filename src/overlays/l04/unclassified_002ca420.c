@@ -9,7 +9,7 @@
 #include "qcopy.h"
 
 /* UpdateMoby_584 */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_0025d1b8(void *);
@@ -36,7 +36,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
 
 extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -52,7 +52,7 @@ void FUN_L04_002d1608(void *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d16b8.s", FUN_L04_002d16b8);
 /* update: blend two keyframes of a path and write the result to a position */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
 
 extern char *D_L04_0015FFD8;
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");

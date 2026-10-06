@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED70;
@@ -61,7 +61,7 @@ int FUN_L03_002e8870(char *a0, char *a1) {
     }
     return 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int D_L03_0015EF50;

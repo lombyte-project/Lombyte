@@ -53,7 +53,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb5b0.s", FUN_L01_002fb5b0);
 #define MACRO_ADDR
 
 /* Register this level's vendor data set. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001E34C0[];
 extern void FUN_L01_002b91c8(char *, int);
@@ -62,7 +62,7 @@ void FUN_L01_002fd0c0(void) {
     FUN_L01_002b91c8(D_L01_001E34C0, 0x15);
 }
 /* Resets the marker record's scale once, for mobys of the caller's class or class 0x32B. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00300400), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];
@@ -101,7 +101,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00307ca0.s", FUN_L01_00307ca0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
@@ -200,7 +200,7 @@ void FUN_L01_003087e0(char *moby) {
 #include "sda.h"
 
 /* builds three jittered offsets and fires the same effect at each accumulated point */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C MACRO_ADDR;
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
@@ -244,7 +244,7 @@ void FUN_L01_003089f0(char *m) {
         FUN_L00_002730e0(v, w, *(int *)&D_L01_00161F6C_d, c2, random_integer_below_c(0xFF) & 0xFF, 0, *(float *)&D_L01_00161F74_d);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309F00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309F00), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L01_001BA950[];
@@ -262,7 +262,7 @@ void FUN_L01_00308b28(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00309FB0). */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309FB0). */
 
 typedef struct L01Moby L01Moby;
 
@@ -480,7 +480,7 @@ void FUN_L01_00308bd8(char *moby) {
 #include "qcopy.h"
 
 /* Places the three child mobys at this moby's position and orients each from its data. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030A6A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A6A8), where it is exact; names translated to the US level program. */
 
 extern short D_L01_00161F78_d __asm__("D_L01_00161F78") __attribute__((sda));
 extern short D_L01_00161F80_d __asm__("D_L01_00161F80") __attribute__((sda));
@@ -513,7 +513,7 @@ void FUN_L01_003092d0(char *m) {
     }
 }
 /* Picks a per-stage table by the current stage number and passes the entry for the moby's index on. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030A808), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A808), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L01_00201600[];
@@ -551,7 +551,7 @@ void FUN_L01_00309430(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_003094f0.s", FUN_L01_003094f0);
 /* Mark the parent and its three attached objects active. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030ABC0), where it is exact; names translated to the US level program. */
 
 
 typedef struct {

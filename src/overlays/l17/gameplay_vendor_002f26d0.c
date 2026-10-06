@@ -4,7 +4,7 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
 #include "sda.h"
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
 extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4") MACRO_ADDR;
 extern struct {
     int pad0[12];
@@ -34,7 +34,7 @@ void FUN_L17_002f2e78(unsigned char *m) {
 }
 
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
 
 typedef int u128_2F4E30 __attribute__((mode(TI)));
 
@@ -172,7 +172,7 @@ void FUN_L17_002f32f0(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -252,7 +252,7 @@ done:
 #include "qcopy.h"
 
 /* UpdateMoby 1843: a flying fleet craft that circles, follows a path, strafes the player and fires. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -514,7 +514,7 @@ void FUN_L17_002f40d8(unsigned char *moby) {
 #include "qcopy.h"
 
 /* Finds the listed moby of type 0x733 in state 4 and launches it along a rotated vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
 
 
 
@@ -576,7 +576,7 @@ char *FUN_L17_002f4fb8(int list) {
     return 0;
 }
 /* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_0022da68(int, int, int);
@@ -609,7 +609,7 @@ void FUN_L17_002f5260(unsigned char *m) {
     }
 }
 /* Update moby 1876: waits for a trigger, then plays an effect and finishes. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
 
 extern float D_L17_0015F580[] __attribute__((section(".sdata")));
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
@@ -645,7 +645,7 @@ void FUN_L17_002f5390(unsigned char *m) {
 #define MACRO_ADDR
 
 /* Projects each direction pair into 2D texture coordinates (reflection mapping). */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z; } V3;
 
@@ -689,7 +689,7 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DE8A0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
@@ -717,7 +717,7 @@ void FUN_L17_002f5690(void) {
         FUN_L00_001fde98(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162410_d)[i], p, 1);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DF6A0[];
 extern short D_L17_00162420_d __asm__("D_L17_00162420") __attribute__((sda));
@@ -743,7 +743,7 @@ void FUN_L17_002f59a8(void) {
     }
 }
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 
 void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
     float a[4];

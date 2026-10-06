@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003058a8.s", FUN_L13_003058a8);
 #include "qcopy.h"
 
 /* Initializes a Gemlik moby from its data block, copying transforms and resetting state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00306E20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00306E20), where it is exact; names translated to the US level program. */
 
 typedef int u128_306E20 __attribute__((mode(TI)));
 
@@ -44,7 +44,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307550), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307550), where it is exact; names translated to the US level program. */
 
 void FUN_L13_003060b8(char *moby) {
     char vector[16];
@@ -52,7 +52,7 @@ void FUN_L13_003060b8(char *moby) {
     func_L00_0025F4A8_alt(moby, vector, moby + 0x10, 2.0f, 1.0f, 12, 4, 18,
                            4.0f, 3.0f, 1.0f, 2.0f, 0, 20.0f, 1, 1, -1, 0);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_003075E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_003075E0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
 
@@ -64,7 +64,7 @@ void FUN_L13_00306148(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307660), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307660), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -191,7 +191,7 @@ void FUN_L13_0030a488(int arg) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a6d8.s", FUN_L13_0030a6d8);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C1F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C1F0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001f9dc8(float);
@@ -227,7 +227,7 @@ void FUN_L13_0030ad38(char *moby, float *p, float *q) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
@@ -255,7 +255,7 @@ int FUN_L13_0030ae68(int idx, int arg)
     return count;
 }
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C408), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C408), where it is exact; names translated to the US level program. */
 
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
@@ -285,7 +285,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bfb0.s", FUN_L13_0030bfb0);
 #include "qcopy.h"
 
 /* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_00259a88(void *, void *);
@@ -315,7 +315,7 @@ void FUN_L13_0030c060(char *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D600), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D600), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float D_0015ED6C;

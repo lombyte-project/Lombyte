@@ -57,7 +57,7 @@ void FUN_L12_002bf770(int arg) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 extern void FUN_L01_0026e090(int, int);
@@ -79,7 +79,7 @@ int FUN_L12_002e16b8(unsigned char *moby) {
 #define MACRO_ADDR
 
 /* Move the vendor moby to state eight unless it is in state nine or eleven. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x20];
@@ -102,7 +102,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1878.s", FUN_L12_002e1878);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
 
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
@@ -124,7 +124,7 @@ void FUN_L12_002e18e8(unsigned char *moby) {
 #include "qcopy.h"
 
 /* Scatters 27 particles around a point with random offsets and velocities. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2CB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2CB8), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -192,7 +192,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3528.s", FUN_L12_002e3528);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3948.s", FUN_L12_002e3948);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern short D_L12_00161914_d __asm__("D_L12_00161914") __attribute__((sda));
@@ -225,7 +225,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3ed8.s", FUN_L12_002e3ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e6c48.s", FUN_L12_002e6c48);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8588), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00167240[];
 extern void FUN_L12_002e71b0(void);
@@ -248,7 +248,7 @@ void FUN_L12_002e7208(unsigned char *moby) {
     }
 }
 /* Forward the vendor parameters with fixed range and scale values. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8610), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E8610), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
 
@@ -257,7 +257,7 @@ void FUN_L12_002e7290(void *a, void *b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e81e0.s", FUN_L12_002e81e0);
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa5c8(float, float);
 extern float FUN_001f9e90(float, float);
@@ -277,7 +277,7 @@ void FUN_L12_002e8608(char *moby, float *pos) {
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 /* Release the vendor moby and any child it owns. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x248];
@@ -301,7 +301,7 @@ void FUN_L12_002e86d0(Level12VendorMoby *moby) {
     }
     DeleteMoby(moby);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
 extern void *FUN_L04_002ce080(void *, void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -326,7 +326,7 @@ void FUN_L12_002e8720(unsigned char *moby) {
     }
 }
 /* Initialize two vendor vectors using the global scale. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9B30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9B30), where it is exact; names translated to the US level program. */
 
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED70;
@@ -339,7 +339,7 @@ void FUN_L12_002e87b0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e8808.s", FUN_L12_002e8808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
 /* Springs the moby's two rotation angles toward a heading taken from its data's direction vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
@@ -363,7 +363,7 @@ void FUN_L12_002eae00(char *moby) {
     *(float *)(moby + 0x40) = FUN_L00_00258110((float *)(data + 0x98), *(float *)(moby + 0x40), b, k1, d1, m1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eaf68.s", FUN_L12_002eaf68);
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC5A0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");

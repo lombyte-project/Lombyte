@@ -7,7 +7,7 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* triggers objects matching the moby's class */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
 
 struct G {
     char pad0[0x30];
@@ -49,7 +49,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00305270.s", FUN_L08_00305270);
 #include "sda.h"
 
 /* triggers objects matching the moby's class, with per-segment settings */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003078B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003078B0), where it is exact; names translated to the US level program. */
 
 struct G_3063f0 {
     char pad0[0x30];
@@ -107,7 +107,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003084d8.s", FUN_L08_003084d8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -142,7 +142,7 @@ void FUN_L08_00308c90(char *moby) {
 #define MACRO_ADDR
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
 
 typedef struct { int a, b; } Pair;
 
@@ -167,7 +167,7 @@ void FUN_L08_00308f68(int x) {
         FUN_L00_001fde98(a[i], c[i], e[i], D_L08_001F8560, 1);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
 extern Pair D_L08_001623F8[] __attribute__((sda));
 extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));

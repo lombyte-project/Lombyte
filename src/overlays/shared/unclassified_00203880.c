@@ -24,7 +24,7 @@ s32 FUN_L00_00203908(s32 a, s32 b) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00203E98.c: func_L00_00203FB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00203FB8), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015F660;
 extern char D_L00_00179410[];

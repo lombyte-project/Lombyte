@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
  * entry of that table to func_L00_00264870. The index select `s < t ? 0 : 3` is kept as retail
  * has it (it always gives 3 here since t < 2). The two state stores have to be written in
  * the order 0x30, 0x20 to come out as retail's. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031EAD8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031EAD8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];

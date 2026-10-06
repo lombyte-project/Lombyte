@@ -9,7 +9,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/help_002284E0.c: func_L18_002284E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/help_002284E0.c: func_L18_002284E0), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 

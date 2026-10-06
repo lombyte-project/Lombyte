@@ -35,7 +35,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
 #define MACRO_ADDR
 
 /* Runs func_L05_002F62E8 for each entry of list i until an entry without the top bit set. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
 
 extern int *D_L05_001ABCC0[];
 extern void FUN_L05_002f4f60(int, int, int);
@@ -50,7 +50,7 @@ void FUN_L05_002f5190(int a, int b, int i, int c) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f5200.s", FUN_L05_002f5200);
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F9478), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -109,7 +109,7 @@ void FUN_L05_002f8080(char *m) {
     FUN_L05_002f81b8_u(m);
 }
 /* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float fsin_p(float) __asm__("FUN_001f9de0");
@@ -156,7 +156,7 @@ void FUN_L05_002f81b8(void *mv) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f87a8.s", FUN_L05_002f87a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307010.s", FUN_L05_00307010);
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
@@ -241,7 +241,7 @@ void FUN_L05_00317398(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_00319B58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_00319B58), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int id;
@@ -298,7 +298,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 #define MACRO_ADDR
 
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
 
 extern float FUN_00213f38(float, float, float, float, float *, float *);
 extern void FUN_00214e58(int *, int, void *, float *, int, float);
@@ -312,7 +312,7 @@ int FUN_L05_003195f8(char *m) {
     return *(float *)(d + 0xC0) >= 1.0f;
 }
 /* Plays the sound that goes with the moby's current variant. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
@@ -329,7 +329,7 @@ void FUN_L05_00319690(char *moby) {
 #include "qcopy.h"
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
@@ -359,7 +359,7 @@ void FUN_L05_00319740(char *moby) {
     else if (*(float *)(moby + 0x44) < -0.17453292f) *(float *)(moby + 0x44) = -0.17453292f;
 }
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
 extern char D_0013F350[];

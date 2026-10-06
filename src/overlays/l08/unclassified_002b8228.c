@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L08_00279f00(char *);
@@ -36,7 +36,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b82a0.s", FUN_L08_002b82a0);
 #include "qcopy.h"
 
 /* Spawns a moby of class 0xF8 at a position and facing derived from a vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D35E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D35E8), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9e90(float, float);
@@ -75,7 +75,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0f0.s", FUN_L08_002da0f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
 /* Picks the best candidate moby from the moby's list by heading and distance.
  * Exact since tools/ps2eeas_nops.py puts the hazard nop after the shared bc1fl's label. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DBD88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DBD88), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_0015FFD8;
 extern char D_0013F350[];
@@ -125,7 +125,7 @@ char *FUN_L08_002daa10(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dbdb0.s", FUN_L08_002dbdb0);
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
 
 extern char D_L08_001DB280[];
 extern int D_L08_001B0CB0[];
@@ -151,7 +151,7 @@ void FUN_L08_002dc0c8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc180.s", FUN_L08_002dc180);
 /* Per-frame update: ease the angle and position fields toward their targets. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar_q(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations_q(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -185,7 +185,7 @@ int FUN_L08_002dc648(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDB68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDB68), where it is exact; names translated to the US level program. */
 
 extern int D_L08_001B0CB0[];
 
@@ -202,7 +202,7 @@ void FUN_L08_002dc7f0(char *moby) {
     }
 }
 /* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
 
 char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
     char *moby = func_0020D348_m(0x1A9);

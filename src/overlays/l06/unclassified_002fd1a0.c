@@ -37,7 +37,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -88,7 +88,7 @@ void FUN_L06_00300df0(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 
 void FUN_L06_00300f70(char *arg, void *a, void *b) {
     char *dst = *(char **)(arg + 0x78);
@@ -104,7 +104,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302fd8.s", FUN_L06_00302fd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
@@ -123,7 +123,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
 extern void FUN_0022da68(int, int, void *);
 
@@ -136,7 +136,7 @@ void FUN_L06_003047b8(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003047f8.s", FUN_L06_003047f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
 
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern short D_L06_001621E8_d __asm__("D_L06_001621E8") __attribute__((sda));
@@ -179,7 +179,7 @@ void FUN_L06_00305000(char *m) {
 #define MACRO_ADDR
 
 /* draws four copies of a model transformed by a table, then spawns a part for each */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */
 
 extern float D_L06_001FE890[];
 extern int D_L06_00162234;

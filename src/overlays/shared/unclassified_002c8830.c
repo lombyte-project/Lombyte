@@ -27,7 +27,7 @@ void FUN_L11_002cb790(char *a0)
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
 
 extern char *D_L11_0015FFE4;
 extern float FUN_001f9988(float);
@@ -78,7 +78,7 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
 #include "qcopy.h"
 
 /* spawns a moby of class 0x3F1 aimed along a direction */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9af0(void *);
@@ -123,7 +123,7 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003089d0.s", FUN_L11_003089d0);
 /* spawns a streak moby aimed along a direction with the given size and colour */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A318), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z) {
     char *m = func_0020D348_m(0x3F9);

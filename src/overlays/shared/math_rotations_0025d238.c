@@ -213,7 +213,7 @@ f32 FUN_L00_0025e310(f32 a) { f32 out; f32 x; f32 pi = 3.14159274f; f32 tp = 6.2
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
@@ -242,7 +242,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f3e8.s", FUN_L00_0025f3e8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -256,7 +256,7 @@ void FUN_L00_0025f730(void *a, float x) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015FFD8;
 

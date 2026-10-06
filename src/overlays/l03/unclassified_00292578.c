@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E370), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E370), where it is exact; names translated to the US level program. */
 
 extern char D_L03_00166EC0[];
 extern float FUN_001f9b48(void *, void *);
@@ -50,7 +50,7 @@ void FUN_L03_0029d1b8(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
 int FUN_L03_002c5b78(unsigned char *moby) {
     if (moby && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(short *)(moby + 0xA6) == 0x23D && moby[0x20] == 5) {
@@ -58,7 +58,7 @@ int FUN_L03_002c5b78(unsigned char *moby) {
     }
     return 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
 f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
 
@@ -83,7 +83,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00294c08.s", FUN_L03_00294c08);
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002965A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002965A0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00260738(char *, void *, void *, void *);
@@ -121,7 +121,7 @@ void FUN_L03_002953f8(char *moby) {
         qcopy(d1, q);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */
 extern int FUN_L00_0028d8c0(void *, int);
@@ -152,7 +152,7 @@ void FUN_L03_0029c9d0(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029caa8.s", FUN_L03_0029caa8);
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E1A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E1A8), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -196,7 +196,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6a20.s", FUN_L03_002c6a20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6d98.s", FUN_L03_002c6d98);
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C81E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C81E0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];

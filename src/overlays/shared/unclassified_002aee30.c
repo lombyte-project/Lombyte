@@ -9,7 +9,7 @@
 #include "qcopy.h"
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char D_L04_001D2C90[];
 extern short D_L04_001618B0_d __asm__("D_L04_001618B0") __attribute__((sda));
@@ -32,7 +32,7 @@ void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     FUN_001f9a10(v10, v10, a + 0x10);
     FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d, *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 
 extern short D_L04_001618C0_d __asm__("D_L04_001618C0") __attribute__((sda));
 extern short D_L04_001618C4_d __asm__("D_L04_001618C4") __attribute__((sda));

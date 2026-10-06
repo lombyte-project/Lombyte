@@ -364,7 +364,7 @@ void FUN_L00_002be890(void *mv) {
 #include "qcopy.h"
 
 /* Nudge a position and ask the level helper about it, lowering a global on success. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFDB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFDB8), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } Vx __attribute__((aligned(16)));
 
@@ -397,7 +397,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -413,7 +413,7 @@ void FUN_L00_002beb90(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -427,7 +427,7 @@ void FUN_L00_002bebc8(char *a) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
 
 void FUN_L00_002bec00(char *a) {
     char *g = D_0013F350;
@@ -442,7 +442,7 @@ void FUN_L00_002bec00(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -660,7 +660,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     return best;
 }
 /* Steps a vector by n repeated additions of the normalised difference. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);

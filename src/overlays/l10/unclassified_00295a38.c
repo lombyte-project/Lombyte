@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* update: on a timer, fire a projectile from the moby's angle, then rearm the timer */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001fa580(float, float);
@@ -54,7 +54,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 
@@ -148,7 +148,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -257,7 +257,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
 /* Test whether a point lies within a box around a moby, in the moby's local frame. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
 
 typedef int u128_2DA3C0 __attribute__((mode(TI)));
 
@@ -284,7 +284,7 @@ int FUN_L10_002d9000(char *m, float *p) {
     return 0;
 }
 /* update for a moby that glides between two heights and sets a flag */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -377,7 +377,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
 #include "sda.h"
 
 /* Collectible trigger: deletes itself once taken, else watches for its toucher. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 

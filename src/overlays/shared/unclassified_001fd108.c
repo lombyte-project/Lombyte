@@ -14,7 +14,7 @@ int FUN_L00_001fe990(u128 *v, int b, float x) { u128 t; u128 *tp = &t; char *e; 
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/drawquad_001FD1D8.c: func_L00_001FE9C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/drawquad_001FD1D8.c: func_L00_001FE9C8), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x10]; short life; unsigned short ang; char pad2[4]; float f; char pad3[4]; } P;
 

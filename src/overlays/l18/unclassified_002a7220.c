@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Switch to state four while active, then restore the saved state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x20];
@@ -29,7 +29,7 @@ int FUN_L18_002d6190(Level18VendorMoby *moby) {
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7670), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7670), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -95,7 +95,7 @@ void FUN_L18_002d6d50(int idx) {
 }
 
 /* Initialize the vendor action mode and scale. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D81B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D81B0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x24];
@@ -114,7 +114,7 @@ void FUN_L18_002d6dc0(Level18VendorActionMoby *moby) {
     data->mode = 5;
     data->scale = 1.5f;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9358), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0028d8c0(void *, int);
 s32 allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
@@ -130,7 +130,7 @@ void FUN_L18_002d7f68(unsigned char *arg, int value) {
     }
 }
 /* turns the moby's heading toward a target, clamped per state, and updates its hover offset */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9B00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D9B00), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
@@ -168,7 +168,7 @@ void FUN_L18_002d8710(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x20];
@@ -185,7 +185,7 @@ int FUN_L18_002d8858(Level18State *obj) {
     return 0;
 }
 /* UpdateMoby_628 */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD650), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD650), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
@@ -233,7 +233,7 @@ void FUN_L18_002dc260(char *moby) {
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD7D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD7D0), where it is exact; names translated to the US level program. */
 
 char *FUN_L18_002dc3e0(void *owner, void *vector, float value) {
     char *moby = CreateMoby(0x274);
@@ -252,7 +252,7 @@ char *FUN_L18_002dc3e0(void *owner, void *vector, float value) {
 #define MACRO_ADDR
 
 /* Read the vendor moby's current float value. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18/vendor_002A8400.c: func_L18_002E0F80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002E0F80), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x60];
@@ -269,7 +269,7 @@ float FUN_L18_002dfb90(Level18VendorFloatMoby *moby) {
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E36B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E36B0), where it is exact; names translated to the US level program. */
 
 extern void func_001FA1F8(void *, void *) __asm__("FUN_001fa030");
 
@@ -288,7 +288,7 @@ char *FUN_L18_002e22c0(void *vector) {
     }
     return moby;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB4E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB4E0), where it is exact; names translated to the US level program. */
 
 char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
     char *moby = CreateMoby(0x3D7);
@@ -306,7 +306,7 @@ char *FUN_L18_002ea0f0(void *owner, void *vector, int value) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB558), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB558), where it is exact; names translated to the US level program. */
 
 void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active, float speed) {
     char *data = *(char **)(arg + 0x78);
@@ -322,7 +322,7 @@ void FUN_L18_002ea168(unsigned char *arg, void *src, void *position, int active,
 
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A8400), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A8400), where it is exact; names translated to the US level program. */
 
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVa840;
 typedef int TIa7220 __attribute__((mode(TI)));
@@ -437,7 +437,7 @@ void FUN_L18_002a7220(char *moby) {
         FUN_L00_0026cbb0(e, f, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(10), 1, 20000.0f);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
@@ -465,7 +465,7 @@ char *FUN_L18_002a75f0(char *owner, float *pos, float *vec, int arg3) {
     }
     return moby;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6440), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6440), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x24];
@@ -565,7 +565,7 @@ void FUN_L18_002d5050(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6A00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6A00), where it is exact; names translated to the US level program. */
 
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
 typedef int TId5610 __attribute__((mode(TI)));
@@ -701,7 +701,7 @@ void FUN_L18_002d5918(unsigned char *moby) {
         break;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D70E8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -810,7 +810,7 @@ char *FUN_L18_002d5cf8(float f, int a0, int idx, float *p6, float *p7, int a8) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5f20.s", FUN_L18_002d5f20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6108.s", FUN_L18_002d6108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d62e8.s", FUN_L18_002d62e8);
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D79F0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x10];
@@ -998,7 +998,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
 /* Of the mobys of class 0x247 in list idx, the one nearest to pos (within
    255 units), or 0. The second spelling of the table base keeps the
    address out of the loop's $gp-relative reload in the bc1f delay slot. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D8070), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D8070), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern int *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
@@ -1024,7 +1024,7 @@ char *FUN_L18_002d6c80(void *pos, int idx) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d7b20.s", FUN_L18_002d7b20);
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -1113,7 +1113,7 @@ void FUN_L18_002d88b8(char *moby) {
         FUN_00218888(v, a, b, i0, i1, i2, i3, i4, (*(int *)&(D_L18_00161AB4)));
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DC850), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DC850), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
@@ -1236,7 +1236,7 @@ void FUN_L18_002db460(char *moby) {
     }
 }
 /* Allocate an object, init its fields and child record. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DCD28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DCD28), where it is exact; names translated to the US level program. */
 
 extern short D_L18_00161BF8_d __asm__("D_L18_00161BF8") __attribute__((sda));
 extern short D_L18_00161BFC_d __asm__("D_L18_00161BFC") __attribute__((sda));
@@ -1265,7 +1265,7 @@ void FUN_L18_002db938(char *pos, float *vec, int arg, float fa, float fb) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dba20.s", FUN_L18_002dba20);
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD270), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
 extern float FUN_001f9dc8(float);
@@ -1307,7 +1307,7 @@ void FUN_L18_002dbe80(char *moby) {
         q = FUN_001fa580(q, step);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD4B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD4B8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -1347,7 +1347,7 @@ void FUN_L18_002dc0c8(char *moby, void *a1, void *a2) {
                           random_integer_below(0xFF) & 0xFF, 0, *(float *)&D_L18_00161C88_d);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD848), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD848), where it is exact; names translated to the US level program. */
 
 extern short D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
 
@@ -1365,7 +1365,7 @@ void FUN_L18_002dc458(char *moby, void *pos, float f)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dc4b8.s", FUN_L18_002dc4b8);
 /* UpdateMoby state machine for the vendor moby (state at +0x20). */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E09F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E09F8), where it is exact; names translated to the US level program. */
 
 extern char D_001413D4_q[] __asm__("D_001413D4") __attribute__((section(".data")));
 extern f32 approach_value_q(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -1495,7 +1495,7 @@ void FUN_L18_002df608(char *moby) {
 }
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E0E90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E0E90), where it is exact; names translated to the US level program. */
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_0015EE70 __asm__("D_0015ED70") MACRO_ADDR;
@@ -1521,7 +1521,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002dfba0.s", FUN_L18_002dfba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

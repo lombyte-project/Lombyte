@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262360.s", FUN_L00_00262360);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
@@ -32,7 +32,7 @@ void FUN_L00_00262480(char *a, float x, float y, float z) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
 void FUN_L00_00262500(int a, char *b) {
     if (*(int *)(b + 0x13C) == 0) {
@@ -140,7 +140,7 @@ void FUN_L00_00262608(S_262608 *s, int dec)
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -202,7 +202,7 @@ void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb)
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
@@ -215,7 +215,7 @@ void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
     *q = t;
     *(float *)(a + 0x18) += t;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 

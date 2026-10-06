@@ -5,7 +5,7 @@
 #include "qcopy.h"
 
 /* Builds a matrix that rolls by roll around the direction dir and writes it to out. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/mobyutil_0026B0E8.c: func_L08_0026B0E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/mobyutil_0026B0E8.c: func_L08_0026B0E8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9e90(float, float);
 extern void FUN_001f9d20(void *, void *, void *);

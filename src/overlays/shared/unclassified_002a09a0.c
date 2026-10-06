@@ -8,7 +8,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
@@ -43,7 +43,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
     return moby;
 }
 /* Steer a projectile toward its target and emit its impact effects. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
 
 extern char D_L16_001671C0_c[] __asm__("D_L16_001671C0");
 extern char D_0013E633[];
@@ -104,7 +104,7 @@ void FUN_L16_002a0a98(char *m) {
         mark_moby_for_removal(m);
     } else qcopy((m+0x10),next);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -145,7 +145,7 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, floa
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d2cf0.s", FUN_L16_002d2cf0);
 /* Handle damage and knockback, then update the pursuit target and timer. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D4C78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D4C78), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad00[0x20];
@@ -360,7 +360,7 @@ void FUN_L16_002d38b0(char *m) {
     if (range < FUN_001f9b80(m + 0x10, d->target)) d->pursuit_mode = 2;
     if (d->owner == 0) d->owner = ((L16DamageResident *)D_0013F350)->owner;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
     char *data = *(char **)(moby + 0x78);
@@ -368,7 +368,7 @@ void FUN_L16_002d3dc0(char *moby, void *owner, void *position, char *vector) {
     qcopy(data + 0x2C0, position);
     *(float *)(data + 0x2CC) = *(float *)(vector + 8);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -417,7 +417,7 @@ void FUN_L16_002d3de0(char *moby, int arg) {
     }
 }
 /* steers the moby's vector toward the target and returns the distance */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5280), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5280), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED70;
 extern float FUN_001f9b48(void *);
@@ -441,7 +441,7 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     return d;
 }
 /* Randomize the timers of active mobys in the selected linked group. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5340), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5340), where it is exact; names translated to the US level program. */
 
 typedef struct {char pad00[0x2E0];int timer;} L16GroupTimer;
 
@@ -471,7 +471,7 @@ next:
         if (*p++ >= 0) goto next;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
 extern float FUN_001fa5c8(float, float);
@@ -499,7 +499,7 @@ void FUN_L16_002d4070(char *moby) {
     }
 }
 /* Spawn randomized hit particles at joint two, with extra bursts for distant hits. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D55C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D55C0), where it is exact; names translated to the US level program. */
 
 typedef struct {int values[6];} L16ParticleChoices;
 
@@ -567,7 +567,7 @@ void FUN_L16_002d41f8(void *m) {
     FUN_L00_002ac910(m,origin,movement,3.0f,scale_game_frames(29),32,0,0,32);
 }
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
 
 extern char D_L16_00167240[],D_0013F420[];
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -622,7 +622,7 @@ void FUN_L16_002d4590(char *m) {
     FUN_L00_002628d8(m,d+0x230,3,D_0015ED64*0.03f,D_0015ED64*0.3f);
 }
 /* Emit randomized joint particles while the moby is active. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void*,void*,void*,int,int,int,int,int,int);
 extern float FUN_001f96b0(float);

@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -30,7 +30,7 @@ void FUN_L15_002cbd88(void) {
     k = *(int *)&D_L15_00161ACC_d;
     emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 

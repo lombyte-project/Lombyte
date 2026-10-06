@@ -32,7 +32,7 @@ void FUN_L02_002a4058(char *arg, int val, float scale) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L02_002a4058");
 
@@ -42,7 +42,7 @@ void FUN_L02_002a40d0(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0016D040[];
 extern float D_L02_001612F8 MACRO_ADDR;
@@ -81,7 +81,7 @@ void FUN_L02_002a46e0(void) {
     D_L02_001611C0 = q + 12;
     append_texture_transfer_packet();
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 
 extern unsigned int D_L02_0015FFDC;
 
@@ -260,7 +260,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);
 /* Re-arms the matching entry of the moby list when the level mode is 2. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002E2110), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002E2110), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];
@@ -294,7 +294,7 @@ void FUN_L02_002e0cd8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");

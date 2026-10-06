@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -61,7 +61,7 @@ void FUN_L04_002a5a08(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
 
 
@@ -78,7 +78,7 @@ void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c) {
     }
 }
 /* Spawns an effect on the moby at its marker vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB700), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB700), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f99f8(float *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -92,7 +92,7 @@ void FUN_L04_002ba470(char *moby) {
     FUN_L00_0025e450(moby, v, w, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, -1, 1.5f, 15.0f, 1, 1, -1, 0);
 }
 /* Check that a moby's spot is clear of the other mobys of class 0x154. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3218), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3218), where it is exact; names translated to the US level program. */
 
 extern char *D_L04_0015FFE4;
 extern float FUN_001f9b80(float *, float *);
@@ -128,7 +128,7 @@ int FUN_L04_002c1e98(char *moby) {
 }
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
 
 extern void FUN_L04_002c46d0(void *);
 
@@ -145,7 +145,7 @@ void FUN_L04_002c4808(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029eb20.s", FUN_L04_0029eb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
 void FUN_L04_002ba448(char *arg, float f) {
     char *data = *(char **)(arg + 0x78);
@@ -158,7 +158,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba520.s", FUN_L04_002ba520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C30F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C30F0), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E550_u[] __asm__("D_0013E550");
 extern void FUN_0022da68(int, int, char *);
@@ -201,7 +201,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
 #include "qcopy.h"
 
 /* Update of the circular saw enemy: hit reaction, state machine (idle, chase, patrol, attack), movement and gravity. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C35F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C35F0), where it is exact; names translated to the US level program. */
 
 typedef int u128_35F0 __attribute__((mode(TI)));
 
@@ -966,7 +966,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41e0.s", FUN_L04_002c41e0);
 #include "qcopy.h"
 
 /* Blarg trooper update: takes hits, walks its path toward the target, fires, and keeps its gun moby attached. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5BD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5BD0), where it is exact; names translated to the US level program. */
 
 typedef int u128_5BD0 __attribute__((mode(TI)));
 

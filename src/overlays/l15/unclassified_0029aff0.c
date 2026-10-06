@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Nudge a moby's field 0x48 toward a signed step depending on a linked moby's state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001fa580(float, float);
@@ -44,7 +44,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c52b8.s", FUN_L15_002c52b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");

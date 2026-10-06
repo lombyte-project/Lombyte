@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C918), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C918), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");

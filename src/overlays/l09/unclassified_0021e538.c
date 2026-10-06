@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
 
 typedef int uq __attribute__((mode(TI)));
 
@@ -50,7 +50,7 @@ char *FUN_L09_002c2500(char *src, char *pos, int cls) {
     }
     return m;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
 
 extern char *D_L09_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
@@ -75,7 +75,7 @@ char *FUN_L09_002c2610(void *pos, int type, float *dist) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c26c8.s", FUN_L09_002c26c8);
 /* spawns a debris moby with randomized velocity toward a point */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
 
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_0015ED60;
@@ -135,7 +135,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaa50.s", FUN_L09_002eaa50);
 #include "qcopy.h"
 
 /* ticks a fading drifting moby: decays its velocity, follows it and eases its rotation */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60;
 extern float D_0015ED70;
@@ -177,7 +177,7 @@ void FUN_L09_002ead30(unsigned char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaea8.s", FUN_L09_002eaea8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eb970.s", FUN_L09_002eb970);
 /* spawns a moby of the given class at a source moby's position */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
@@ -216,7 +216,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 
@@ -241,7 +241,7 @@ char *FUN_L09_002ee380(char *owner, void *position, float angle) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ef430.s", FUN_L09_002ef430);
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F0AA0), where it is exact; names translated to the US level program. */
 
 extern char D_L09_001F3080[];
 extern char D_L09_001F63C0[];
@@ -286,7 +286,7 @@ char *FUN_L09_002efda8(char *owner, void *position, float angle) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efe48.s", FUN_L09_002efe48);
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -301,7 +301,7 @@ void FUN_L09_002f0040(char *moby)
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002f86a0.s", FUN_L09_002f86a0);
 /* UpdateMoby_1000: timer and sound bookkeeping */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_0015EEA4_q __asm__("D_0015EEA4");

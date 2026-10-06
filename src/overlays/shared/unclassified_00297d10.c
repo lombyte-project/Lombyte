@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
 #include "qcopy.h"
 
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 
@@ -77,7 +77,7 @@ void FUN_L06_002d85a0(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8738.s", FUN_L06_002d8738);
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -98,7 +98,7 @@ char *FUN_L06_002d8b98(char *owner) {
     }
     return moby;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002D9FF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9FF0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9de0(float);
 extern int D_L06_0015F5CC; /* no foreign declaration */
@@ -117,7 +117,7 @@ void FUN_L06_002d8c20(char *moby) {
         *(int *)(moby + 0x90) = FUN_001fa6e0(*(int *)(moby + 0x90), 0x80464646, 0.1f);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002E7578), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E7578), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_002d6bf0(char *);
 
@@ -130,7 +130,7 @@ void FUN_L06_002e6148(char *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e8678.s", FUN_L06_002e8678);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e94f0.s", FUN_L06_002e94f0);
 /* Build an orthogonal frame from two vectors and apply it to the matrix at moby+0xC0. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9ab0(void *, void *);
 extern short D_L06_00161C00_d __asm__("D_L06_00161C00") __attribute__((sda));
@@ -158,7 +158,7 @@ void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     FUN_001fa400(A, A, B, *(float *)&D_L06_00161C00_d);
     FUN_001fa480(A, m);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
 
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -179,7 +179,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9b60.s", FUN_L06_002e9b60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9f30.s", FUN_L06_002e9f30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea198.s", FUN_L06_002ea198);
 /* burst of 20 sparks around a point with random velocity and colour */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -209,7 +209,7 @@ void FUN_L06_002ea498(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea5e0.s", FUN_L06_002ea5e0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -276,7 +276,7 @@ s32 FUN_L06_002ea7c8(unsigned char *p) {
 #include "qcopy.h"
 
 /* Update function of the gadgebot (moby class 857): waits by its dispenser, then follows, attacks and returns to the hero along the level's paths. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F1470), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -1195,7 +1195,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
     d->f2E0.q = *(u128 *)moby->pos;
 }
 /* scores a target moby by distance, heading differences and flags */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00167400[];
 extern float FUN_001f9b80(void *, void *);
@@ -1226,7 +1226,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2910.s", FUN_L06_002f2910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f32f0.s", FUN_L06_002f32f0);
 /* Scores a candidate target and keeps it if it beats the best so far. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
 void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float thresh) {
     float dist = FUN_001f9b80(a + 0x10, c + 0x10);
@@ -1248,7 +1248,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
 #include "sda.h"
 
 /* for each moby in a search list with the owner's id, start three effects on its data */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
@@ -1351,7 +1351,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7930.s", FUN_L06_002f7930);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F8EE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8EE8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];
@@ -1440,7 +1440,7 @@ void FUN_L06_002f7ab8(char *m) {
 #include "sda.h"
 
 /* Spawn forty particles at the moby with randomised parameters. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9548.c: func_L06_002F9098), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F9098), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C MACRO_ADDR;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");

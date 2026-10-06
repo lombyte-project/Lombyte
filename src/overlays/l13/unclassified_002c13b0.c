@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c1528.s", FUN_L13_002c1528);
 #include "qcopy.h"
 
 /* Spawns a moby of class 0x53 at a position, with its data block filled in. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C31B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C31B0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -76,7 +76,7 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2048.s", FUN_L13_002c2048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c25b8.s", FUN_L13_002c25b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c2d30.s", FUN_L13_002c2d30);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
@@ -134,7 +134,7 @@ void FUN_L13_002c37e0(unsigned char *moby, unsigned char *d, float *fp) {
     FUN_L00_0025d538(moby, d + 0x60);
 }
 /* steers a moby's pitch toward a target with a spring, then damps and clamps it */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -156,7 +156,7 @@ void FUN_L13_002c3988(char *moby, char *d, float p2, float p3) {
     *(float *)(moby + 0x40) = *(float *)(moby + 0x40) * 0.98f;
     FUN_L00_0025e310(*(float *)(moby + 0x40));
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
@@ -185,7 +185,7 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
     }
     return best;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
 extern char D_0013F350[];
@@ -236,7 +236,7 @@ int FUN_L13_002c3c88(char *m, char *d, int aim) {
     }
     return wrapped;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C5190), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C5190), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001fa580(float, float);
@@ -261,7 +261,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c7f38.s", FUN_L13_002c7f38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ce688.s", FUN_L13_002ce688);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cecb8.s", FUN_L13_002cecb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002cefc0.s", FUN_L13_002cefc0);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -310,7 +310,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1348.s", FUN_L13_002e1348);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1638.s", FUN_L13_002e1638);
 /* runs one step of a moby's timed state and reports whether the timer ran out */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
 int FUN_L13_002e4300(char *m, char *arg, float *t) {
     char *r = FUN_L00_0025a420(m, 0x330000, 0);
@@ -367,7 +367,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
@@ -395,7 +395,7 @@ char *FUN_L13_002e8438(char *owner) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e84d8.s", FUN_L13_002e84d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e86f8.s", FUN_L13_002e86f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8920.s", FUN_L13_002e8920);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -438,7 +438,7 @@ void FUN_L13_002e8b58(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e8d28.s", FUN_L13_002e8d28);
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EA450), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EA450), where it is exact; names translated to the US level program. */
 
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -456,7 +456,7 @@ void FUN_L13_002e9018(char *m, char *p, float a, float b) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e9160.s", FUN_L13_002e9160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e9408.s", FUN_L13_002e9408);
 /* Launches the child moby held in slot idx of p: spins it off with random-ish velocities and clears the slot. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EAAB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EAAB8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9a68(void *, void *, float);
@@ -497,7 +497,7 @@ void FUN_L13_002e9680(void *unused, char *p, int idx) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e97e0.s", FUN_L13_002e97e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e9a48.s", FUN_L13_002e9a48);
 /* Steers a moby toward the hero: scales by distance and orients it with the hero's angles. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -512,7 +512,7 @@ void FUN_L13_002ea330(char *a, char *b, float f) {
     build_spherical_offset(a, dist / (k + f) * k, y, -x);
     FUN_001f9a10(a, a, *(char **)(base + 0x15F0) + 0x10);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB838), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB838), where it is exact; names translated to the US level program. */
 
 extern void FUN_L13_002ea330_c2(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 
@@ -541,7 +541,7 @@ float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea540.s", FUN_L13_002ea540);
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos, char *vec) __asm__("FUN_L13_002c1f28");

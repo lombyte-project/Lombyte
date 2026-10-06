@@ -6,7 +6,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
 extern char D_001413DC[];
 extern char D_L05_0015F580[] MACRO_ADDR;
@@ -42,7 +42,7 @@ void FUN_L05_0031abe0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031c8e0.s", FUN_L05_0031c8e0);
 /* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
 
 typedef int ti_31e468 __attribute__((mode(TI)));
 
@@ -134,7 +134,7 @@ char *FUN_L05_0031d160(unsigned char *a0)
     return (char *)m;
 }
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -202,7 +202,7 @@ void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, floa
     }
 }
 /* Places the camera moby relative to the hero's target and builds its look-at basis. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032AA50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032AA50), where it is exact; names translated to the US level program. */
 
 extern void FUN_L05_00329358_c(void *) __asm__("FUN_L05_00329358");
 
@@ -248,7 +248,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section(".data")));
 extern void FUN_002144d8(void *, void *);

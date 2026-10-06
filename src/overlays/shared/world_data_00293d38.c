@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/stash_00295010.c: func_L00_00295010), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/stash_00295010.c: func_L00_00295010), where it is exact; names translated to the US level program. */
 
 typedef struct { char *base; int limit; int unk8; int unkC; } StashSlot;
 

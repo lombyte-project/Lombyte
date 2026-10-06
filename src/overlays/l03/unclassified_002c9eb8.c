@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 
@@ -20,7 +20,7 @@ void FUN_L03_002cc828(unsigned char *arg) {
     }
     arg[0xA4] = 0xFF;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
 void FUN_L03_002d3100(void *arg, int mode) {
     if (mode == 1) {
@@ -30,7 +30,7 @@ void FUN_L03_002d3100(void *arg, int mode) {
     }
 }
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float D_L03_00161AF0 __attribute__((sda));
@@ -74,7 +74,7 @@ int FUN_L03_002dcb30(unsigned char *moby) {
     return 0;
 }
 /* Shows a help message for the mode, then keeps a hud queue entry alive. */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00235dc0(void);
 extern void FUN_L00_00235e18(int, int);

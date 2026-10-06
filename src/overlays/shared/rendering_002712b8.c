@@ -226,7 +226,7 @@ unsigned char *FUN_L00_00271b18(u128 *a, u128 *b, float x) { unsigned char *m = 
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -249,7 +249,7 @@ void FUN_L00_00271be8(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
@@ -342,7 +342,7 @@ void FUN_L00_00271ec8(u8 *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
@@ -874,7 +874,7 @@ void FUN_L00_00273448(P_273448 *p) {
     vscl_273448(v, v, e->f14);
     vadd_273448(p->pos, a, v);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -905,7 +905,7 @@ unsigned char *FUN_L00_00273708(void *a, int b, int c) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1023,7 +1023,7 @@ unsigned char *FUN_L00_002741a0(void *a, int color, float s, float z) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
@@ -1272,7 +1272,7 @@ kill:
     *(u32 *)(p + 4) = (FUN_001fa6d0_274a70(FUN_001fa6c0_274a70(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) * FUN_001fa6c0_274a70(*(s16 *)(q + 0x14))) << 24) | *(u32 *)(q + 0x18);
 }
 /* spawns a particle at pos with a colour byte taken from a table and a heading */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1298,7 +1298,7 @@ unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1422,7 +1422,7 @@ unsigned char *FUN_L00_00275158(void *a, void *b, int n, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1505,7 +1505,7 @@ void FUN_L00_00275320(O_275320 *o) {
 #define MACRO_ADDR
 
 /* Update a particle following a parent moby with a scaled offset. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
 
 extern float ConvertIntegerToFloat(int);
 extern float D_0015ED60;

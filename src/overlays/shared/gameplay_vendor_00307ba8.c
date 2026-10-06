@@ -40,7 +40,7 @@ void FUN_L09_0030a9e8(unsigned char *a0, char *a1)
 #define MACRO_ADDR
 
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L01_0026e008(int, int);
 
@@ -64,7 +64,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030ab80.s", FUN_L09_0030ab80);
 #include "qcopy.h"
 
 /* Spawns a moby of class 0x75E and initialises its data. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C6B30.c: func_L09_0030C658), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C658), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -94,7 +94,7 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
     }
     return m;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C6B30.c: func_L09_0030C790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C790), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 

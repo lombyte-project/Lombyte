@@ -206,7 +206,7 @@ void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int
 #include "qcopy.h"
 
 /* Spawns a break-effect fragment moby of class cls from src, and initialises its motion data. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00261B00.c: func_L00_00265050), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00265050), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x11];

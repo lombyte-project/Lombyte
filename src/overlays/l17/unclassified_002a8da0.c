@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Steps a moby's countdown from a helper's output and retires it when it runs out. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CD088), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CD088), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
@@ -122,7 +122,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002cbd38.s", FUN_L17_002cbd38);
 #define MACRO_ADDR
 
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */
 
 typedef int u128_2D8CC8 __attribute__((mode(TI)));
 
@@ -287,7 +287,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d7cf0.s", FUN_L17_002d7cf0);
 #include "qcopy.h"
 
 /* Updates moby 835: a timed effect that spawns a spray of particles and deletes itself. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002DD8D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002DD8D0), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 

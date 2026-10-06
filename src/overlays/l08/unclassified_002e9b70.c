@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
 /* Draws three rows of HUD elements with their colours. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
 extern int D_L08_00161DD0 __attribute__((sda));
 extern int D_L08_00161DD4;
@@ -52,7 +52,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 #define MACRO_ADDR
 
 /* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

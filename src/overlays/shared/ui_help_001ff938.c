@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001ff938.s", FUN_L15_001ff938);
 #define MACRO_ADDR
 
 /* Show the indexed help prompt when its flag and message are active. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_00200D20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D20), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E05A[];
 extern unsigned char D_0013E533[];
@@ -26,7 +26,7 @@ void FUN_L15_00200788(void) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -64,7 +64,7 @@ void FUN_L15_002007d8(void) {
 #include "qcopy.h"
 
 /* Reset the help prompt state and show the default message unless the level is in a special phase. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_002092E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_002092E0), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015F5C4;
 extern void FUN_L00_00205538(void);
@@ -276,7 +276,7 @@ void FUN_L15_0020a328(int force) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00215e58.s", FUN_L15_00215e58);
 /* Select the message associated with the current help mode. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L15_00216c38(int, int);
 

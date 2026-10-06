@@ -325,7 +325,7 @@ void FUN_L00_002b3c50(X *x) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 
@@ -436,7 +436,7 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016CA40[] __attribute__((section(".data")));
 extern int D_L00_0015F30C;
@@ -623,7 +623,7 @@ void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
     FUN_0020e098(*(unsigned char **)(o + 0x20));
 }
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
 
 typedef struct { int v[6]; } V6;
 

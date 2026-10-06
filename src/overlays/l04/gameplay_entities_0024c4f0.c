@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c4f0.s", FUN_L04_0024c4f0);
 #include "qcopy.h"
 
 /* closest point on a line to a point: writes the point, returns the parameter */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
 
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -52,7 +52,7 @@ float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
 #include "qcopy.h"
 
 /* finds the closest point on a polygon's edges to a point, returns whether the first test hit */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D790), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
 extern int FUN_L04_0024c4f0(float *, float *, int);

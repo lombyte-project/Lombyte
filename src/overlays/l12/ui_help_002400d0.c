@@ -9,7 +9,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/help_002407C0.c: func_L12_002407C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/help_002407C0.c: func_L12_002407C0), where it is exact; names translated to the US level program. */
 
 typedef struct { int a; int b; int c; char pad[0x20]; } T2C_2407C0;
 

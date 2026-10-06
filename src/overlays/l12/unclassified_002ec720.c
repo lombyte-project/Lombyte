@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec720.s", FUN_L12_002ec720);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EDE40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EDE40), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[16];
@@ -78,7 +78,7 @@ void FUN_L12_002ecac0(char *moby) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);

@@ -260,7 +260,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 
@@ -277,7 +277,7 @@ int FUN_L00_002cadc0(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
@@ -300,7 +300,7 @@ int FUN_L00_002cae60(char *m, int a, int b, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbe20(void *);
 
@@ -647,7 +647,7 @@ void FUN_L00_002cdcc0(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002725d8(void *, int, float, float, unsigned, unsigned);
 
@@ -661,7 +661,7 @@ void FUN_L00_002cde78(char *m) {
     }
 }
 /* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CF3D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF3D8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern int D_L00_0015FFE4;

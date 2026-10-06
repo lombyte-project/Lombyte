@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Mark every moby of class 0x1B1 in the active level. */
-/* Ported from rac1-decomp (PAL, src/overlays/l02/initonce_00240A00.c: func_L02_00240A00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02/initonce_00240A00.c: func_L02_00240A00), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x34];
@@ -37,7 +37,7 @@ void FUN_L02_002400c8(void) {
         }
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59D8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L02_002a40d0(void *);
 
@@ -47,7 +47,7 @@ void FUN_L02_002a47f8(void) {
 }
 extern void write_dma_channel(void *, int, int) __asm__("FUN_001f9928");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
 extern char D_L02_001CB400[];
 extern void FUN_L02_002a40f0(void *);
@@ -73,7 +73,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
 #include "qcopy.h"
 
 /* Transforms two table vectors by the moby's matrix and passes them on. */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
 
 extern float D_L02_001D3230[][4] __attribute__((section(".data")));
 extern short D_L02_001619C0 __attribute__((sda));
@@ -101,7 +101,7 @@ void FUN_L02_002d3c98(char *moby, int a, int b, int d) {
     FUN_001f9a10(vb, vb, moby + 0x10);
     FUN_L02_002d3a50(moby, va, vb, d, pa[3] * *(float *)&D_L02_001619D0, pb[3] * *(float *)&D_L02_001619D0);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D51D0), where it is exact; names translated to the US level program. */
 
 extern short D_L02_001619EC_d __asm__("D_L02_001619EC") __attribute__((sda));
 extern short D_L02_001619F0_d __asm__("D_L02_001619F0") __attribute__((sda));
@@ -122,7 +122,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6A90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6A90), where it is exact; names translated to the US level program. */
 
 extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L02_001ABE40[];
@@ -147,7 +147,7 @@ int FUN_L02_002d5658(void *argp) {
     } while (*p++ >= 0);
     return result;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6B60), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -177,7 +177,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5a68.s", FUN_L02_002d5a68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d5c88.s", FUN_L02_002d5c88);
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9e90(float, float);
 extern void FUN_L00_00250df8(void *);
@@ -195,7 +195,7 @@ void FUN_L02_002d6118(unsigned char *moby, void *position, float *direction) {
     *(float *)(moby + 0x48) = FUN_001f9e90(direction[0], direction[1]);
     FUN_L00_00250df8(moby);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7648), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7648), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0015FFD8_c __asm__("D_L02_0015FFD8");
 extern void *FUN_L00_002dbb20(void *);
@@ -218,7 +218,7 @@ void *FUN_L02_002d6210(char *moby) {
 #include "qcopy.h"
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7778), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7778), where it is exact; names translated to the US level program. */
 
 extern void FUN_L02_002d3dd0(void *);
 
@@ -239,7 +239,7 @@ void FUN_L02_002d6340(unsigned char *moby) {
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D77F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D77F8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -287,7 +287,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d85b8.s", FUN_L02_002d85b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dbd38.s", FUN_L02_002dbd38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc2c8.s", FUN_L02_002dc2c8);
 /* UpdateMoby_656: steps the moby's animation state from 0/2 (when flagged) and 1/3 (when the timer runs out) */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DDE48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DDE48), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -326,7 +326,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcfe0.s", FUN_L02_002dcfe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -359,7 +359,7 @@ void FUN_L02_002dd370(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -394,7 +394,7 @@ void FUN_L02_002def80(char *moby) {
     FUN_L00_00250df8(*(void **)(d + 0x84));
     FUN_L00_00250df8(*(void **)(d + 0x88));
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
 extern short D_L02_00161C3C_d __asm__("D_L02_00161C3C") __attribute__((sda));
@@ -420,7 +420,7 @@ void FUN_L02_002df0b0(char *moby)
     FUN_L00_00250df8(*(char **)(d + 0x88));
 }
 /* State machine for a moby that picks a new animation each time the previous one finishes. */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
 extern int FUN_0022da68(int, int, int);
@@ -495,7 +495,7 @@ void FUN_L02_002df1a8(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df730.s", FUN_L02_002df730);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df948.s", FUN_L02_002df948);
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0015FFD8_c2 __asm__("D_L02_0015FFD8");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -540,7 +540,7 @@ void FUN_L02_002dffc8(unsigned char *moby) {
     }
 }
 /* moves a moby through three states: latch position, wait for a peer to reach state 4, then slide toward it */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1570), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1570), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0015FFD8_c3 __asm__("D_L02_0015FFD8");
 
@@ -576,7 +576,7 @@ void FUN_L02_002e0138(char *moby) {
     }
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E16B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E16B8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025c698(void *, void *);

@@ -79,7 +79,7 @@ u8 *FUN_L00_002851c0(s32 a, s32 id) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
 
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 

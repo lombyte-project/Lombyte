@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
@@ -34,7 +34,7 @@ void FUN_L02_002ec308(char *self) {
     }
 }
 /* Refreshes a moby's three sub-objects, packs its colour bytes, and queues a redraw when the global changed. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
 
 extern int D_L02_0015F5CC;
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -76,7 +76,7 @@ void FUN_L02_002ec3f0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
 /* Spawns three particles around a moby with randomized direction, speed and colour. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015ED6C __attribute__((section(".sdata")));
@@ -243,7 +243,7 @@ void FUN_L02_002ed658(char *m, void *arg1) {
     }
 }
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_0022da68(int, int, int);
@@ -273,7 +273,7 @@ void FUN_L02_002f1f60(char *m) {
     }
 }
 /* Store the selected value only while this level object is inactive. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F79A8), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_00167400;
 
@@ -285,7 +285,7 @@ void FUN_L02_002f6570(int value) {
     }
 }
 /* Update the active object's coordinates without replacing zero fields. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002F79D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F79D0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_00167400_d __asm__("D_L02_00167400") __attribute__((section(".data")));
 
@@ -324,7 +324,7 @@ void FUN_L02_002fa6d8(void) {
     D_L02_00167600_2fa6d8.e = FUN_L02_002fa710_c;
 }
 /* Start the timed effect while its duration is nonzero. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 
 extern float D_L02_0016760C __attribute__((section(".data")));
 extern void FUN_L00_002e84f0(int, float, float);
@@ -337,7 +337,7 @@ void FUN_L02_002fa710(void) {
         FUN_L02_001fc008(FUN_L02_002fa770);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int a;
@@ -363,7 +363,7 @@ void FUN_L02_002fa770(void) {
     }
     s->a = 0;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FBC00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBC00), where it is exact; names translated to the US level program. */
 
 extern char D_0013CA44[];
 extern char D_0013F3D0[];
@@ -420,7 +420,7 @@ void FUN_L02_002fa7c8(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_0015EF50;
 extern char D_L02_00167410[] __attribute__((section(".data")));
@@ -491,7 +491,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_0015EF50_c298 __asm__("D_L02_0015EF50") MACRO_ADDR;
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;

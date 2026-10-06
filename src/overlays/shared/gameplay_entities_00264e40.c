@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
 void FUN_L02_00264e40(char *moby) {
     int *p = (int *)(moby + 0x18);
@@ -17,7 +17,7 @@ void FUN_L02_00264e40(char *moby) {
     *(short *)(moby + 0x1C) = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0025D750.c: func_L02_002661E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_002661E8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_001f2868(float, void *, int, int, int);
 

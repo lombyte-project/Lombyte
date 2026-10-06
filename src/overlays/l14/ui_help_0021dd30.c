@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Resolve the hero's surface reaction for the frame from the previous state and flags. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/help_0021E3A8.c: func_L14_0021E3A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/help_0021E3A8.c: func_L14_0021E3A8), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_001f0b58(void);

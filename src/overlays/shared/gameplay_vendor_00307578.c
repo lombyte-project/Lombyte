@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
 #define MACRO_ADDR
 
 /* state transitions of a moby depending on its id at 0xA6 */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void FUN_0022da68(int, int, int);
@@ -40,7 +40,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 #include "qcopy.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];
@@ -118,7 +118,7 @@ void FUN_L06_00309860(char *self) {
     }
 }
 /* UpdateMoby: state 0 deletes, state 1 draws and times out */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_0030D2A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_0030D2A0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L06_0030bfa8(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
@@ -163,7 +163,7 @@ void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bfa8.s", FUN_L06_0030bfa8);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015EF50;
 

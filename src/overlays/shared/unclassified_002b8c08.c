@@ -241,7 +241,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
 #define MACRO_ADDR
 
 /* spawns two bursts of particles around a point */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern char D_L01_00167240[];
@@ -292,7 +292,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0bd8.s", FUN_L01_002e0bd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern void FUN_001f9bf8(void *, void *, float);
@@ -307,7 +307,7 @@ void FUN_L01_002e30b8(int unused, void *out)
 #include "sda.h"
 
 /* Builds a camera-relative transform for a moby and steps its height. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002E4488), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4488), where it is exact; names translated to the US level program. */
 
 typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 
@@ -421,7 +421,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efbf8.s", FUN_L01_002efbf8);
 #define MACRO_ADDR
 
 /* runs the moby update and sets its state byte */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
@@ -545,7 +545,7 @@ void FUN_L01_002f2b68(unsigned char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f2eb8.s", FUN_L01_002f2eb8);
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 

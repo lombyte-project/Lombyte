@@ -99,7 +99,7 @@ void FUN_L06_002f45f0(int idx)
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 
 extern void FUN_0022da68(int, int, int);
 
@@ -120,7 +120,7 @@ void FUN_L06_002f5360(char *moby) {
     }
 }
 /* Switches a moby from state 6 to 8 and sets its ten children to state 9. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6818), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6818), where it is exact; names translated to the US level program. */
 
 void FUN_L06_002f53e8(char *moby)
 {
@@ -171,7 +171,7 @@ void FUN_L06_002f9698(char *arg)
 #define MACRO_ADDR
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
 extern char D_0013E533[];
@@ -271,7 +271,7 @@ void FUN_L06_002f99b0(int index)
 #include "qcopy.h"
 
 /* raise each listed moby's position z by a fixed amount and notify it */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L06_002e9d10(void *, void *);
@@ -294,7 +294,7 @@ void FUN_L06_002fb090(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern char D_L06_00167540[] __attribute__((section(".data")));
@@ -345,7 +345,7 @@ int FUN_L06_002fb2a8(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 
 extern int *D_L06_001B0C30[];
 extern void FUN_L00_002eac18(int);
@@ -358,7 +358,7 @@ void FUN_L06_002fb4b0(char *arg) {
     FUN_L00_002eac18(2);
 }
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00167540[];
 extern float D_0015ED6C;
@@ -399,7 +399,7 @@ int FUN_L06_002fb668(char *moby) {
     return 0;
 }
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
 
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void FUN_L06_002fd1a0(void);
@@ -431,7 +431,7 @@ void FUN_L06_002fd088(char *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002b4770.s", FUN_L06_002b4770);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -464,7 +464,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3ad8.s", FUN_L06_002f3ad8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int pad0;
@@ -537,7 +537,7 @@ void FUN_L06_002f4130(char *m) {
         FUN_001efa68(&a, &b, 0, m, &s);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
 
 extern char D_001404A8[];
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -601,7 +601,7 @@ void FUN_L06_002f4390(char *m)
     FUN_001efa68(v, w, 0, m, &q);
 }
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
 
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern void FUN_L00_00250df8(void *);
@@ -643,7 +643,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0016016C __asm__("D_L06_001600EC") MACRO_ADDR;
 extern char D_0013E633[] __asm__("D_0013F3D0");

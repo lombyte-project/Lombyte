@@ -3,7 +3,7 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 

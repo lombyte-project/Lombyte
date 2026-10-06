@@ -210,7 +210,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00305580), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00305580), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -259,7 +259,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
 #include "qcopy.h"
 
 /* spawn a moby copying position, rotation and data word from owner */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
@@ -296,7 +296,7 @@ extern float FastSubRots(float, float) __asm__("FUN_001fa5c8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 
 void FUN_L09_0030a238(float *dst, float a, float b, float scale) {
     float v = FastSubRots(b, a) * scale;

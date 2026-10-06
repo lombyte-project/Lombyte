@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
 
 extern char *D_L12_0015FFD8;
 extern void FUN_001f9a10(void *, void *, void *);
@@ -42,7 +42,7 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C260), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C260), where it is exact; names translated to the US level program. */
 
 extern char *D_L12_0015FFD8;
 extern void FUN_001f9d20(void *, void *, void *);

@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002215c8.s", FUN_L00_002215c8);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED64;
 extern float D_0015ED6C;
@@ -66,7 +66,7 @@ void FUN_L00_00221b68(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern int FUN_L00_00221df8(void);
@@ -184,7 +184,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00222158.s", FUN_L00_00222158);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00222B80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222B80), where it is exact; names translated to the US level program. */
 
 typedef struct { int a; int b; int c; char pad[0x20]; } T2C_222B80;
 
@@ -2443,7 +2443,7 @@ int FUN_L00_002223f8(int a, int b) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00227E08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E08), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E533[];
 
@@ -2459,7 +2459,7 @@ void FUN_L00_00227638(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern unsigned char D_0013E533[];
@@ -2485,7 +2485,7 @@ int FUN_L00_002276c0(void) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00227778.s", FUN_L00_00227778);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
 
 extern float D_L00_00173E68 __attribute__((section(".data")));
 extern int D_L00_0015F5CC;
@@ -2641,7 +2641,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00227fa0.s", FUN_L00_00227fa0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */
 
 extern int D_0013A4E0[];
 extern int FUN_L00_00221d98(void);
@@ -2678,7 +2678,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00228c18.s", FUN_L00_00228c18);
 /* Deletes and clears any moby cached at D_0013F450+0x1614, then clears
    flag bits 0x41 on the two moby pointers cached at +0x1180 and +0x1184,
    when set. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_00221A98.c: func_L00_00229778), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229778), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");

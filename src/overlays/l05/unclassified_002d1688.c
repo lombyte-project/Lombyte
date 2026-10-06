@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
@@ -32,7 +32,7 @@ void FUN_L05_002d6f48(unsigned char *moby) {
         FUN_L00_002592b8((int *)&it, (int)it, 0, 0);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern short D_L05_001613D0_d __asm__("D_L05_001613D0") __attribute__((sda));
@@ -47,7 +47,7 @@ void FUN_L05_002d7890(char *moby, int *path) {
     FUN_00214e58(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
     *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E533[];
@@ -82,7 +82,7 @@ extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 
@@ -101,7 +101,7 @@ char *FUN_L05_002f8718(char *owner) {
     return moby;
 }
 /* Moves a point along a looped path of 16-byte nodes stored in the moby's data. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00308188), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00308188), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -119,7 +119,7 @@ void FUN_L05_00306d30(char *moby, int idx, float *out) {
     out[1] = out[1] + FUN_001f9de0(a) * 0.0f;
 }
 /* advances a moby's path waypoint until it reaches one flagged 2.0 */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003087B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003087B0), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
 extern int FUN_L00_0025d7a0(char *, int, int, int);
@@ -150,12 +150,12 @@ void FUN_L05_00307358(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
 
 int FUN_L05_00307470(int arg) {
     return arg == 5 ? 6 : arg;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088D8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -215,7 +215,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002dac80.s", FUN_L05_002dac80);
 /* Emits up to two particle effects around the moby, each in a random direction. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
 
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -302,7 +302,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[4];
@@ -357,7 +357,7 @@ void FUN_L05_00305898(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float FUN_001f96b0(float);
@@ -412,7 +412,7 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030bf98.s", FUN_L05_0030bf98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030ca80.s", FUN_L05_0030ca80);
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001D6880[];
 extern int D_L05_0015FFD8;

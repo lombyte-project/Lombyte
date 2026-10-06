@@ -10,7 +10,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 #define MACRO_ADDR
 
 /* Attach the callback during the six active phases of this level event. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/initonce_00246A90.c: func_L14_00246A90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/initonce_00246A90.c: func_L14_00246A90), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x30];
@@ -79,7 +79,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aba80.s", FUN_L14_002aba80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac2b8.s", FUN_L14_002ac2b8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -161,7 +161,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ada18.s", FUN_L14_002ada18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002add48.s", FUN_L14_002add48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae0a8.s", FUN_L14_002ae0a8);
 /* Draws the moby's glow quad, pulled toward the camera so it is not hidden by the moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF4A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF4A0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float m[4][4];
@@ -241,7 +241,7 @@ void FUN_L14_002ae260(char *m) {
     draw_geometry_quad(&pk, 0, 0);
 }
 /* Measures the segments of the moby's three paths, sums two of them and places it on the first two. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF688), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF688), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern int *D_L14_001B0BB0[];
@@ -290,7 +290,7 @@ void FUN_L14_002ae448(char *m) {
         *(float *)(d + 0x1CC) = 0.0f;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF918), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF918), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int *D_L14_001B0BB0[];
@@ -319,7 +319,7 @@ void FUN_L14_002ae6d8(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae7d8.s", FUN_L14_002ae7d8);
 /* Picks a target point from a list or searches for one, then eases the moby's position toward it per axis. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -361,7 +361,7 @@ extern void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 /* 0x002AEA08, 208 bytes.  Per-frame update of a moby's aim and turn state from
  * level tuning constants.  The ten constants are small data ($gp-relative),
  * declared with __attribute__((sda)).
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFC48), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002aea08(u8 *moby)
@@ -391,7 +391,7 @@ extern void FUN_001f9bf8(u8 *, u8 *, f32);
 /* 0x002AEAD8, 200 bytes.  Checks a flag and a position test, then sets up
  * three vectors in the moby data.  The 16-byte copy is the qcopy idiom
  * (include/qcopy.h).
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFD18), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002aead8(u8 *moby)
@@ -412,7 +412,7 @@ void FUN_L14_002aead8(u8 *moby)
         }
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFDE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFDE0), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -467,7 +467,7 @@ extern s32 D_L14_001D80C8[];
 /* 0x002AED50, 212 bytes.  Advances the blink phase and fades each light
  * entry's alpha up and down.  Its counter and its 1.0f constant are small
  * data ($gp-relative), declared with __attribute__((sda)).
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFF90), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002aed50(u8 *moby)
@@ -494,7 +494,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aee28.s", FUN_L14_002aee28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aef28.s", FUN_L14_002aef28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002af048.s", FUN_L14_002af048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3bf0.s", FUN_L14_002b3bf0);
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 
 void FUN_L14_002b4340(unsigned char *m) {
     unsigned char *d = *(unsigned char **)(m + 0x78);
@@ -603,7 +603,7 @@ void FUN_L14_002b5290(unsigned char *m) {
     m[0xA4] = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern short D_L14_00161538_d __asm__("D_L14_00161538") __attribute__((sda));
@@ -630,7 +630,7 @@ void FUN_L14_002b5428(char *moby) {
     FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), t, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160), *(float *)&D_L14_00161544_d, *(float *)&D_L14_00161548_d);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int *D_L14_001B0BB0[];
@@ -647,7 +647,7 @@ void FUN_L14_002b5530(char *moby) {
     }
 }
 /* Recomputes the per-segment lengths of three paths held by the moby, then clears a counter. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6800), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6800), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 
@@ -672,7 +672,7 @@ void FUN_L14_002b55b0(char *moby) {
 #include "sda.h"
 
 /* steer a moby's position toward a target and update its velocity */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6980), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6980), where it is exact; names translated to the US level program. */
 
 extern float atan_5730(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025b8c0_5730(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -697,7 +697,7 @@ extern void FUN_0022d798(s32 idx);
 
 /* 0x002B5C98, 124 bytes.  Clears a moby's link to its slot entry, releasing
  * the slot if it still points back here.
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002B6EE8), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002b5c98(u8 *moby)
@@ -724,7 +724,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6358.s", FUN_L14_002d6358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d64d0.s", FUN_L14_002d64d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6570.s", FUN_L14_002d6570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern int D_L14_0015F70C;
@@ -744,7 +744,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de2b8.s", FUN_L14_002de2b8);
 #include "sda.h"
 
 /* Updates a gem-lock sentry: picks up a sound slot and fires when the player is near. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002E0228), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002E0228), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];

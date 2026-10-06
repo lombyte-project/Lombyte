@@ -4,7 +4,7 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_001B0CB0[];
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -56,7 +56,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 #include "qcopy.h"
 
 /* Steers a moby along its path state and lifts it clear of the ground. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -117,7 +117,7 @@ void FUN_L08_002d3d78(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -232,7 +232,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
 #define MACRO_ADDR
 
 /* Runs the two per-entry update calls over a 13-entry table. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
 typedef struct { int a, b; } Pair;
 
@@ -271,7 +271,7 @@ void FUN_L08_002f0c18(int a) {
 #define MACRO_ADDR
 
 /* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
 
 extern float ConvertIntegerToFloat(int);
 extern int truncate_float_to_s32(float);
@@ -303,7 +303,7 @@ void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g
     }
 }
 /* advance a 2-D wrapped phase by a and b and write scaled sines */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED7C;
 extern float FUN_001f9de0(float);

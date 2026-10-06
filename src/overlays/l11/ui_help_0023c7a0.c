@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Per-frame update of the player state flags from the current state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/help_0023CD98.c: func_L11_0023CD98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_0023CD98.c: func_L11_0023CD98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350_c[] __asm__("D_0013F350");
 extern int D_0015ED84; /* no foreign declaration */

@@ -47,7 +47,7 @@ unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat_q(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");

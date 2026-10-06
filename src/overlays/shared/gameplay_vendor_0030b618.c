@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
 
 typedef int uq __attribute__((mode(TI)));
 
@@ -54,7 +54,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
 #define MACRO_ADDR
 
 /* offset a position by two camera-relative vectors, then raise z by 1 */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);
@@ -148,7 +148,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -179,7 +179,7 @@ void FUN_L01_0030dda0(char *m) {
 #define MACRO_ADDR
 
 /* Initialize both consecutive effect entries. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
@@ -193,7 +193,7 @@ void FUN_L01_0030de68(char *moby) {
     }
 }
 /* Attach two effect entries and register their update callback. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0030de68(char *moby);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -214,7 +214,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
@@ -231,7 +231,7 @@ void FUN_L01_00316e88(float a, float b) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
 /* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -295,7 +295,7 @@ void FUN_L01_0031a078(int a0) {
 #define MACRO_ADDR
 
 /* sound instance update: fade/stop test against a listener distance */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
 extern float AbsoluteFloat(float);

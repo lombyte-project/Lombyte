@@ -4,7 +4,7 @@
 
 /* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the
  * moby's data block and clears four fields.
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002E0480), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002df080(u8 *moby)
@@ -36,7 +36,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df138.s", FUN_L14_002df138);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60;
 extern void FUN_L14_002df510(void *, void *, int, int, int);
@@ -72,7 +72,7 @@ typedef struct {
 
 /* 0x002DFC58, 184 bytes.  If the moby's check passes, builds an effect
  * request on the stack and submits it.
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c:
  * func_L14_002E1058), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002dfc58(u8 *moby)
@@ -105,7 +105,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ec810.s", FUN_L14_002ec810);
 #include "qcopy.h"
 
 /* Spawn a projectile moby at a, aimed along b, with two parameters. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE150), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE150), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -171,7 +171,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee6b0.s", FUN_L14_002ee6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
@@ -235,7 +235,7 @@ int FUN_L14_002ef150(char *m) {
     return 0;
 }
 /* Springs the moby's position (and, while moving, its rotation) toward its current path point. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0868), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0868), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c4[] __asm__("D_L14_001B0BB0");
 
@@ -270,7 +270,7 @@ void FUN_L14_002ef3e0(char *m) {
 #define MACRO_ADDR
 
 /* Select the vendor moby's state from its value and mark it initialized. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0A00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0A00), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xAC];
@@ -300,7 +300,7 @@ extern void FUN_001f9a10(u8 *, u8 *, u8 *);
 
 /* 0x002EF630, 192 bytes.  Rebuilds the 11 vectors of a table entry from the
  * moby's matrix and position.
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c:
  * func_L14_002F0AB8), where it is exact; names translated to the US level
  * program. */
 void FUN_L14_002ef630(u8 *moby)
@@ -327,7 +327,7 @@ void FUN_L14_002ef630(u8 *moby)
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern float AbsoluteFloat(float);
@@ -436,7 +436,7 @@ void FUN_L14_002f13f8(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fba20.s", FUN_L14_002fba20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc0f0.s", FUN_L14_002fc0f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc3e8.s", FUN_L14_002fc3e8);
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDD18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDD18), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
 extern float FUN_001f9b48(void *, void *);

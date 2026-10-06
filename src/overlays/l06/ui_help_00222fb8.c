@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350_c[] __asm__("D_0013F350");
 extern void FUN_001f9810(void *, int);
@@ -337,7 +337,7 @@ void FUN_L06_00228360(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/help_00223630.c: func_L06_002291D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_002291D8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float D_0015ED6C;

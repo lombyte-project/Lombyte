@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/pause_0029C2A0.c: func_L01_0029C2A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/pause_0029C2A0.c: func_L01_0029C2A0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int key;

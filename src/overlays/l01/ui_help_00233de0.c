@@ -190,7 +190,7 @@ void FUN_L01_00234b40(void) {
 #include "qcopy.h"
 
 /* Hero state machine: per-frame movement and physics for the current hero state (level 01 build). */
-/* Ported from rac1-decomp (PAL, src/overlays/l01_novalis/help_002343F8.c: func_L01_002377A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l01_novalis/help_002343F8.c: func_L01_002377A8), where it is exact; names translated to the US level program. */
 
 
 typedef struct {

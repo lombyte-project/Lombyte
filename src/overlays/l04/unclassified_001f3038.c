@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* index of the nearest of n vectors to a + 0x10 */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
 
@@ -33,7 +33,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
 #include "qcopy.h"
 
 /* steps a moby's position out of collision and aims it */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
 extern char D_L04_00173FF0[];
 extern float FUN_001f9e90(float, float);

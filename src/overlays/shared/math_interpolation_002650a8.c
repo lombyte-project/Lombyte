@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00266060.c: func_L13_00266060), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00266060.c: func_L13_00266060), where it is exact; names translated to the US level program. */
 
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern short *D_L13_001ABB40[];

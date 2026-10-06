@@ -68,7 +68,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
@@ -97,7 +97,7 @@ char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f660.s", FUN_L11_0030f660);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -124,7 +124,7 @@ char *FUN_L11_0030fd98(char *owner) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030fe50.s", FUN_L11_0030fe50);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -202,7 +202,7 @@ void FUN_L11_00310028(unsigned char *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310180.s", FUN_L11_00310180);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310698.s", FUN_L11_00310698);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311710.s", FUN_L11_00311710);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312E10), where it is exact; names translated to the US level program. */
 
 extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
@@ -235,7 +235,7 @@ void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
     return best;
 }
 /* squared distance from a point to a projected target, or a large value when out of range */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00312F50), where it is exact; names translated to the US level program. */
 
 extern char D_L11_001679E0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -308,7 +308,7 @@ void FUN_L11_003125a8(char *moby, char *obj, float p2, float p3) {
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
 /* on a pad press, fires the aimed shot and resets the cooldown */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00313BC0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
