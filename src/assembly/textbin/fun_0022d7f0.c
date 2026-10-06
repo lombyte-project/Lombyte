@@ -87,9 +87,10 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     s32 slot_index;
     s32 result;
     s32 slot_limit;
+    s32 slot_in_bounds;
     s32 pitch_bend;
     u8 *state;
-    u8 source_inactive;
+    s32 source_inactive;
     VoicePoolWindow *committed_slot;
     VoicePoolWindow *slot;
     VoicePoolWindow *pitch_slot;
@@ -97,18 +98,20 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
 
     source_inactive = definition->source_state == 0;
     if ((flags & 4) == 0) {
+        if ((source_inactive ^ 1) != 0) {
         result = -1;
-        if (source_inactive == 0) {
             goto return_result;
         }
-    } else {
-        result = -1;
-        if (source_inactive) {
-            goto return_result;
-        }
-    }
-choose_slot_limit:
     slot_limit = 0x1A;
+        goto check_moby;
+    } else {
+        if (source_inactive) {
+            result = -1;
+            goto return_result;
+        }
+        slot_limit = 0x1A;
+    }
+check_moby:
     if (moby == NULL) {
         goto find_free_slot;
     }
@@ -128,6 +131,7 @@ find_free_slot:
     if (slot_limit == 0) {
         goto allocation_failed;
     }
+    slot_in_bounds = slot_index < slot_limit;
     if (voice_pool.voices[0].state == 0) {
         goto slot_found;
     }
@@ -139,12 +143,13 @@ find_free_slot:
         }
         state += 0x70;
         if (*state == 0) {
+            slot_in_bounds = slot_index < slot_limit;
             break;
         }
         slot_index += 1;
     } while (1);
 slot_found:
-    if (slot_index >= slot_limit) {
+    if (!slot_in_bounds) {
         goto allocation_failed;
     }
     slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
