@@ -369,7 +369,82 @@ char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eaae0.s", FUN_L17_002eaae0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qzero.h"
+
+/* Draws one moby's icon on the radar: its offset from the viewer turned into the radar's frame, faded near the rim. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC5D0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    short tex;
+    short u;
+    short v;
+    short w;
+    short h;
+    short fA;
+    short x;
+    short y;
+} IconEC5D0;
+
+extern IconEC5D0 D_L17_001D9B38[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float vector_length_xyz(void *a);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern unsigned char D_0013E504[];
+extern unsigned char D_0015EDB4[4];
+extern void FUN_001fa050(float *, float *);
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, int tex) {
+    float turn[4];
+    float mat[16];
+    float delta[4];
+    float pos[4];
+    float len;
+    float side;
+    int x, y;
+    IconEC5D0 *t;
+
+    qzero(turn);
+    turn[2] = *(float *)(rot + 8);
+    turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
+    FUN_001fa050(mat, turn);
+    subtract_vector_xyz(delta, moby + 0x10, from);
+    delta[2] = 0.0f;
+    transform_vector(pos, delta, mat);
+    scale_vector_xyz(pos, pos, 0.0714285746f);
+    len = vector_length_xyz(pos);
+    side = 1.0f;
+    if (D_0015EDB4[0] != 0) {
+        side = -1.0f;
+    }
+    x = func_001FA898_r(side * pos[0]);
+    y = func_001FA898_r(-pos[1]);
+    if (len < 46.0f) {
+        if (len > 38.0f) {
+            float f;
+            len = 46.0f - len;
+            f = ConvertIntegerToFloat(((unsigned long)color >> 24) & 0xFF) * len;
+            color &= 0xFFFFFF;
+            color = (func_001FA898_r(f * 0.125f) << 24) | color;
+        }
+        t = &D_L17_001D9B38[icon];
+        y -= 0x50;
+        y += *(int *)(D_0013E504);
+        x += 0x1B0;
+        draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color, get_effect_texture(tex + 0x28 + t->tex));
+    }
+}
 /* Walks the moby list: picks the on-screen target, marks targetable mobys and points an arrow at the nearest pickup. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EC7D8), where it is exact; names translated to the US level program. */
 
@@ -395,7 +470,7 @@ extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
 extern void FUN_L11_00311210(void *, void *, void *, int);
 extern void FUN_L13_002b7d50(void *, int, int, long, float, float, float, float);
-extern void FUN_L17_002eaae0(char *, char *, char *, int, long, int);
+void FUN_L17_002eaae0(char *rot, char *from, char *moby, int icon, long color, int tex);
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
