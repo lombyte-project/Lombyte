@@ -3,7 +3,73 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea1f0.s", FUN_L10_002ea1f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002ea4e8.s", FUN_L10_002ea4e8);
+#include "qcopy.h"
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern char D_L10_00167240[];
+extern float D_0015ED6C;
+extern float FUN_001f9b48(void *, void *);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
+extern int FUN_001f9770(void *);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_001fa728(char *, float);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern float D_L10_00161F68 __attribute__((sda));
+extern float D_L10_00161F6C __attribute__((sda));
+extern float D_L10_00161F70 __attribute__((sda));
+extern float D_L10_00161F74 __attribute__((sda));
+extern float D_L10_00161F78 __attribute__((sda));
+extern float D_L10_00161F7C __attribute__((sda));
+extern float D_L10_00161F80 __attribute__((sda));
+extern int D_L10_00161F84 __attribute__((sda));
+extern int D_L10_00161F88 __attribute__((sda));
+extern int D_L10_00161F8C __attribute__((sda));
+extern float D_L10_00161F90 __attribute__((sda));
+extern int D_L10_00161F94 __attribute__((sda));
+extern int D_L10_00161F98 __attribute__((sda));
+extern int D_L10_00161F9C __attribute__((sda));
+extern int D_L10_00161FA0 __attribute__((sda));
+extern int D_L10_00161FA4 __attribute__((sda));
+extern int D_L10_00161FA8 __attribute__((sda));
+extern int D_L10_00161FAC __attribute__((sda));
+extern int D_L10_00161FB0 __attribute__((sda));
+extern int D_L10_00161FB4 __attribute__((sda));
+extern int D_L10_00161FB8 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
+    float p[4];
+    float vel[4];
+    float acc[4];
+    float s;
+    int a, b, c, c1;
+    if (*burst < 0) {
+        if (++*burst != 0) return;
+        *burst = func_001FA898_r(random_float_between((float)D_L10_00161FAC, (float)D_L10_00161FB0));
+    } else if (FUN_001f9770(burst)) {
+        *burst = -func_001FA898_r(random_float_between((float)D_L10_00161FB4, (float)D_L10_00161FB8));
+        return;
+    }
+    if (32.0f < FUN_001f9b48(D_L10_00167240, pos)) return;
+    qcopy(p, pos);
+    p[3] = 2.0f;
+    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0) return;
+    if (!FUN_001f9770(timer)) return;
+    clear_vector(vel);
+    vel[2] = D_L10_00161F68 * D_0015ED6C;
+    FUN_L00_00257d78(acc, 0.0f, D_L10_00161F70 * D_0015ED6C);
+    acc[2] += D_L10_00161F6C * D_0015ED6C;
+    vel[3] = random_float_between(D_L10_00161F74, D_L10_00161F78);
+    acc[3] = random_float_between(D_L10_00161F7C, D_L10_00161F80);
+    s = random_float_between(1.0f - D_L10_00161F90, D_L10_00161F90 + 1.0f);
+    a = func_001FA898_r((float)D_L10_00161F84 * s);
+    b = func_001FA898_r((float)D_L10_00161F88 * s);
+    c = func_001FA898_r((float)D_L10_00161F8C * s);
+    c1 = FUN_001fa6e0(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
+    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a, b, c, -1);
+    *timer = func_001FA898_r(random_float_between((float)D_L10_00161FA4, (float)D_L10_00161FA8));
+}
 
 #define NOT_SDA
 
