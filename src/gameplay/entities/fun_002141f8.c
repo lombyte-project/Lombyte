@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c, func_00215048). */
+/* Ported from rac1-decomp (src/game/mobyutil.c, func_00215048). */
 /* A goto into the first `return 0` gives retail's backward beqz; the two
    nops before it are short-loop padding (tools/ps2eeas_nops.py). */
 int FUN_002141f8(char *arg0) {

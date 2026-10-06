@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001EC5B8). */
+/* Ported from rac1-decomp (src/game/camera.c, func_001EC5B8). */
 #include "sda.h"
 typedef struct {
     char unk_00[0x10];

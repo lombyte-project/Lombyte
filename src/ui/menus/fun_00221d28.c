@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00222D70). */
+/* Ported from rac1-decomp (src/game/pause.c, func_00222D70). */
 #include "sda.h"
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_001D4528[];

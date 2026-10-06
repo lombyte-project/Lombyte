@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fda30.s", FUN_L06_002fda30);
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ffc38, 116 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002ffc38(int idx)
 {

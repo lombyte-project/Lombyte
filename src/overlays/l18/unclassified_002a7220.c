@@ -75,7 +75,7 @@ void FUN_L18_002d6280(unsigned char *arg) {
 extern int D_L18_001AC240[];
 extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d6d50, 108 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
 void FUN_L18_002d6d50(int idx) {

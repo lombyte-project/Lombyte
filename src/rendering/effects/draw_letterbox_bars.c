@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/draw.c, func_001F5148). */
+/* Ported from rac1-decomp (src/game/draw.c, func_001F5148). */
 
 #include "sda.h"
 #include "qcopy.h"

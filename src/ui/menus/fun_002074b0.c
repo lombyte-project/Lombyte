@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207CE0). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00207CE0). */
 /* The two unused float parameters put the threshold's argument in
    $f14 (floats count consecutively from $f12). The nops after the mtc1
    and the compare are ps2eeas's (tools/ps2eeas_nops.py). */

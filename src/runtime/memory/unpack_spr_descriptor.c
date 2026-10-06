@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/core/001236F0.c, func_00123BA0). */
+/* Ported from rac1-decomp (src/core/001236F0.c, func_00123BA0). */
 /*
  * Unpack a scratchpad-resident descriptor: arg0 is forced into the SPR
  * window (| 0x20000000), then two counted byte runs are copied out of

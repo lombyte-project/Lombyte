@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/missionfunc.c, func_0020CCD0). */
+/* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CCD0). */
 #include "sda.h"
 typedef struct { int a, b, c, d; } Rec16_C940;
 extern Rec16_C940 D_0013D5B0[];

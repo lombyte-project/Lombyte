@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/movie/disp.c, func_0023C5E0). */
+/* Ported from rac1-decomp (src/game/movie/disp.c, func_0023C5E0). */
 #include "sda.h"
 extern int D_0015EE84 MACRO_ADDR;
 extern void *D_0015EEB8 MACRO_ADDR;

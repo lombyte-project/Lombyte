@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c, func_00215650). */
+/* Ported from rac1-decomp (src/game/mobyutil.c, func_00215650). */
 #include "qcopy.h"
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001fa3c0(void *, void *, void *);

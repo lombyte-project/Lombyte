@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00208240). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00208240). */
 int FUN_00207a10(void) {
     return 1;
 }

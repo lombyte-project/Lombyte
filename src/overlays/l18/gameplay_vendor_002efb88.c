@@ -1961,7 +1961,7 @@ start:
 extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f6fa8, 124 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L18_002f6fa8(int unused, int idx)
 {
@@ -1983,7 +1983,7 @@ void FUN_L18_002f6fa8(int unused, int idx)
 extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f7028, 140 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a list of moby indices and resets the flags of each live moby.
 void FUN_L18_002f7028(int a0, int idx) {

@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/sound.c, func_0022F0A8). */
+/* Ported from rac1-decomp (src/game/sound.c, func_0022F0A8). */
 void voice_start_callback(int handle, long context) __asm__("FUN_0022dd90");
 
 void voice_start_callback(int handle, long context) {

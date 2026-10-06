@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00226D48). */
+/* Ported from rac1-decomp (src/game/pause.c, func_00226D48). */
 void FUN_00225ab8(void) {
 }
 

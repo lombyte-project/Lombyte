@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/loaders.c, func_00204FC0). */
+/* Ported from rac1-decomp (src/game/loaders.c, func_00204FC0). */
 
 #include "sda.h"
 

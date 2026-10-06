@@ -129,7 +129,7 @@ void FUN_L16_002c9c38(int index, void *arg) {
 extern int D_L16_001ABCC0[];
 extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ceca8, 116 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
 void FUN_L16_002ceca8(int idx) {

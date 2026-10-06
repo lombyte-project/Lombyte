@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021DA98). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021DA98). */
 #include "sda.h"
 extern unsigned char D_0013D4C2 NOT_SDA;
 extern char D_001D06D0[];

@@ -5,7 +5,7 @@
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e08, 108 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a moby index list and, for each moby of one type, sets its state to 2 and a float to 1.0.
 void FUN_L06_002d9e08(int index)
@@ -25,7 +25,7 @@ void FUN_L06_002d9e08(int index)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e78, 100 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002d9e78(int idx)
 {
@@ -45,7 +45,7 @@ void FUN_L06_002d9e78(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002e9e30, 108 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Switches every moby listed in a table into state 15 until a negative entry. */
 void FUN_L06_002e9e30(int index) {
@@ -66,7 +66,7 @@ void FUN_L06_002e9e30(int index) {
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45a0, 80 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Clears state 4 from every moby in the selected table. */
 void FUN_L06_002f45a0(int idx)
@@ -83,7 +83,7 @@ void FUN_L06_002f45a0(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45f0, 72 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Sets each moby in the selected table to state 4 until its terminal entry. */
 void FUN_L06_002f45f0(int idx)
@@ -150,7 +150,7 @@ void FUN_L06_002f53e8(char *moby)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9698, 96 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002f9698(char *arg)
 {
@@ -226,7 +226,7 @@ float FUN_L06_002f96f8(char *self) {
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9948, 100 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002f9948(int idx)
 {
@@ -247,7 +247,7 @@ void FUN_L06_002f9948(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f99b0, 120 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Resets every moby of a list that is in state 0x12.
 void FUN_L06_002f99b0(int index)

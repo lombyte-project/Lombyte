@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/core/00125630.c, func_00129C78). */
+/* Ported from rac1-decomp (src/core/00125630.c, func_00129C78). */
 typedef struct Slot1B8 {
     /* 0x00 */ void *unk00;
     /* 0x04 */ void *unk04;

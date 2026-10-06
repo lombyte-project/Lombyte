@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021FF80). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021FF80). */
 
 extern int D_001A00F0[];
 extern unsigned char D_0014BEC0[];

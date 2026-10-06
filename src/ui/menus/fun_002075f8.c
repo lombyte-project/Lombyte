@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207E28). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00207E28). */
 /* Returning the compare as `? 1 : 0` gives bc1t with the `li 1` in its
    slot; folded into `&&` it becomes bc1tl. The two nops, after the mtc1
    and after the compare, are ps2eeas's (tools/ps2eeas_nops.py). */

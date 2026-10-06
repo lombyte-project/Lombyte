@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00222FA8). */
+/* Ported from rac1-decomp (src/game/pause.c, func_00222FA8). */
 extern void func_001F4280(int);
 extern void func_001F4398(void);
 extern void func_001F68E8_c(int, int, long, void *, int) __asm__("func_001F6530");

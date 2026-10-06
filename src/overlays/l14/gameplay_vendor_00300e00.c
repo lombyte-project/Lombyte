@@ -222,7 +222,7 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 /* 0x00307a80, 84 bytes.
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c:
  * func_L14_00308F08), where it is exact; names translated to the US level
- * program. The size-matched PAL neighbour was the callback this one enqueues,
+ * program. The size-matched rac1-decomp neighbour was the callback this one enqueues,
  * not this body. */
 void FUN_L14_00307a80(unsigned char *moby) {
     switch (moby[0x20]) {

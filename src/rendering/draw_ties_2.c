@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/tiefunc.c, func_00236CA8). */
+/* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
 extern void FUN_001f98d0(void *, void *, int);
 extern int D_0018A2B0[];

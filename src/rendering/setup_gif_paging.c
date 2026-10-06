@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/draw.c, func_001F4630). */
+/* Ported from rac1-decomp (src/game/draw.c, func_001F4630). */
 #include "sda.h"
 extern int *D_00160F00 MACRO_ADDR;
 extern int *D_0015F450 MACRO_ADDR;

@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/movie/videodec.c, func_0023E298). */
+/* Ported from rac1-decomp (src/game/movie/videodec.c, func_0023E298). */
 #ifndef COMMON_H
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif /* STRUCTS_H */

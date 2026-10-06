@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/core/permcb.c, func_0012F308). */
+/* Ported from rac1-decomp (src/core/permcb.c, func_0012F308). */
 #include "sda.h"
 extern long D_0015ED40 MACRO_ADDR;
 extern long D_0015ED48 MACRO_ADDR;

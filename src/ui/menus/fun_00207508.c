@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207D38). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00207D38). */
 /* `(a && b) ? 1 : 0` gives retail's bc1f then bc1tl; the other arm is
    a plain `? 1 : 0`. */
 int FUN_00207508(int arg0, float unused1, float unused2, float arg1) {

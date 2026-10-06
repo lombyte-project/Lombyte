@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/transition.c, func_001EB338). */
+/* Ported from rac1-decomp (src/game/transition.c, func_001EB338). */
 
 #include "sda.h"
 #include "qcopy.h"

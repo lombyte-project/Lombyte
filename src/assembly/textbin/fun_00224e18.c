@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00224e18/FUN_00224e18.s", FUN_00224e18);
 #else
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_002260A8). */
+/* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
 #include "rnc/pause_moby_types.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");

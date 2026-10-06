@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/movie/audiodec.c, func_0023C390). */
+/* Ported from rac1-decomp (src/game/movie/audiodec.c, func_0023C390). */
 #include "sda.h"
 typedef struct {
     int state;           /* 0x00 */

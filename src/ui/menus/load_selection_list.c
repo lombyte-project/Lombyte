@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021D9C8). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021D9C8). */
 extern int D_00141EA0[];
 typedef struct {
     char pad[0x30];

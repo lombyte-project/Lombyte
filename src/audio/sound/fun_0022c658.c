@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/sound.c, func_0022D970). */
+/* Ported from rac1-decomp (src/game/sound.c, func_0022D970). */
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern int FUN_001efa68(void *, void *, int, int, int);

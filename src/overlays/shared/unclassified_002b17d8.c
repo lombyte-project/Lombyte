@@ -26,7 +26,7 @@ void FUN_L14_002b3268(char *moby) {
     }
 }
 /* 0x002b3318, 24 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Manipulate moby flags and clear field
 void FUN_L14_002b3318(char *moby) {
@@ -36,7 +36,7 @@ void FUN_L14_002b3318(char *moby) {
 }
 
 /* 0x002b3330, 36 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Clears two flag bits, sets another, and copies a word from the moby's linked record.
 void FUN_L14_002b3330(char *moby) {

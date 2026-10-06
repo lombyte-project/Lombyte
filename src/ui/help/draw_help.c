@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/help.c, func_001FF1B0). */
+/* Ported from rac1-decomp (src/game/help.c, func_001FF1B0). */
 #include "sda.h"
 typedef struct {
     int state;    /* 0x00 */

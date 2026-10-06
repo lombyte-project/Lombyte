@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/core/0012AC80.c, func_0012C8B0). */
+/* Ported from rac1-decomp (src/core/0012AC80.c, func_0012C8B0). */
 #define UNCMASK 0x0fffffff
 #define UNCBASE 0x20000000
 static inline void *UncAddr(void *val) {

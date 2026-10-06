@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c, func_00213F28). */
+/* Ported from rac1-decomp (src/game/mobyutil.c, func_00213F28). */
 #include "qcopy.h"
 extern int func_0020CC18(int v);
 typedef struct {

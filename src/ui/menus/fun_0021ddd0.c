@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021EDD8). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021EDD8). */
 #include "sda.h"
 extern unsigned char D_001413F4 NOT_SDA;
 static inline short pauseFlagState(void) {

@@ -218,7 +218,7 @@ int FUN_L01_0028b828(T_28b828 *a, int b) {
     return b;
 }
 /* 0x0028b878, 76 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 int FUN_L01_0028b878(char *p)
 {

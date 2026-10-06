@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/framebuf.c,
+/* Ported from rac1-decomp (src/game/framebuf.c,
    func_001FB608). */
 #include "sda.h"
 
