@@ -250,7 +250,7 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *, f
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float D_0015ED6C MACRO_ADDR,D_0015EE70_c __asm__("D_0015EE70") __attribute__((section(".sdata")));
-extern float D_0015EE6C MACRO_ADDR,D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015EE6C_u MACRO_ADDR,D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L05_003195f8(char *);
 extern short D_L16_0015F594;
@@ -832,7 +832,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C ,D_0015EE70;
-extern float D_0015EE6C ,D_0015ED70_c __asm__("D_0015ED70");
+extern float D_0015EE6C_u ,D_0015ED70_c __asm__("D_0015ED70");
 extern float FUN_001f9e90_c(float,float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025be00_c(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(void *, void *, float, float, float, int);
@@ -866,10 +866,286 @@ float FUN_L16_002e6428(void *m_v, void *t_v) {
     *(float *)(d + 0x208) = oldz - *(float *)(m + 0x18);
     return dist;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6808.s", FUN_L16_002e6808);
+
+
+
+#include "qcopy.h"
+
+/* Update the challenge NPC's interaction state and gaze. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E7C70), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[4];
+    short previous;
+    char pad6[2];
+    unsigned char flag;
+    char pad9[0x2D];
+    short mode;
+    int pending;
+} L16ChallengeActivation;
+
+typedef struct {
+    char pad00[0x20]; char activation[0x40]; char pad60[0x64];
+    float initial_yaw; int moving_timer, target_timer; float target[4];
+    char body[0x60]; char pad140[4]; float pitch, yaw; char pad14C[4];
+    float height; char pad154[0xC]; char head[0x60]; char pad1C0[8]; float head_yaw;
+} L16ChallengeData;
+
+typedef struct {
+    char pad00[0x10]; float position[4]; unsigned char state; char pad21[0xF];
+    unsigned char opacity, visible; char pad32[0x16]; float yaw; char pad4C[7];
+    unsigned char animation; char pad54[0x24]; L16ChallengeData *data;
+    char pad7C[3]; unsigned char distance_class; char pad80[0x3C]; unsigned char event;
+} L16ChallengeMoby;
+
+typedef struct {
+    char pad00[0x80]; float position[4]; char pad90[0x40]; float aim[4];
+    char padE0[0x20]; float velocity[4]; char pad110[0x798]; int points;
+    char pad8AC[0x17D8]; int state; char pad2088[4]; int mode;
+} L16ChallengePlayer;
+
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} L16ChallengeScratch;
+
+extern char D_0013D50F[], D_0014161B[];
+extern char D_0013E533[];
+extern char D_L16_001D9840[];
+extern char D_L16_001671C0[];
+extern char D_L16_001D9860[];
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9b80(void *, void *);
+extern float fast_add_rotations(float, float);
+extern float fast_subtract_rotations(float, float);
+extern float vector_length_xy(void *);
+extern float vector_length_xyz(void *);
+extern int D_0015EE6C[] __attribute__((section(".sdata")));
+extern volatile int D_0015EE6C_p __asm__("D_0015EE6C") __attribute__((section(".sdata")));
+extern int D_L16_0015F5CC;
+extern float D_L16_0015F638;
+extern int D_0015EEA4;
+extern int FUN_L00_00203908(int, int);
+extern int FUN_L00_00266448(void *, void *);
+extern int FUN_L00_002668a0(void *, void *);
+extern int allocate_voice_for_bank_entry(int, int, int);
+extern int memcard_save_data(int, int);
+extern int scale_game_frames(int);
+extern int tick_countdown_32_c(void *) __asm__("tick_countdown_32");
+extern unsigned char D_0013D4DE __attribute__((section(".data")));
+extern unsigned char D_0013D507 __attribute__((section(".data")));
+extern unsigned char D_0013D408[];
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_0025a120(void *);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_00299460(int);
+extern void FUN_L01_002783a8(float, void *);
+extern void FUN_L02_002e0cd8(void *);
+extern void FUN_L16_002e70c0(char *);
+extern void FUN_L16_002e7168(char *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void build_spherical_offset(void *, float, float, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern char D_0013F3D0[];
+extern char D_00141968[];
+extern char D_00141050[];
+extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
+
+void FUN_L16_002e6808(L16ChallengeMoby *m) {
+    L16ChallengeScratch scratch;
+    L16ChallengeData *d = m->data;
+    L16ChallengeActivation *activation = (L16ChallengeActivation *)d->activation;
+    float rate, head_rate;
+    int tracking;
+    if (m->visible && FUN_001f9b48(m->position, D_L16_001671C0) < 28.0f) {
+        FUN_L00_0025a120(m);
+        m->distance_class = 22;
+    }
+    FUN_L02_002e0cd8(m);
+    switch (m->state) {
+    case 0:
+        m->opacity = 255;
+        m->state = 1;
+        FUN_L00_002668a0(m, activation);
+        *(float *)((char *)d + 0x2C) = 3.7f;
+        d->initial_yaw = m->yaw;
+        if (*(int *)(D_0013D408 + 0x814) == 0) m->yaw = fast_add_rotations(m->yaw, 3.14159265f);
+        FUN_L16_002e7168((char *)m);
+        break;
+    case 1: {
+        if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode != 15)
+            D_L16_0015F638 = 115.0f;
+        else
+            D_L16_0015F638 = 100.0f;
+        if (FUN_L00_00266448(m, (char *)d + 0x20)) {
+            m->yaw = d->initial_yaw;
+            FUN_L01_002783a8(3.5f, m);
+            m->state = 2;
+        }
+        if (!D_0013D4DE && FUN_001f9b80(((char *)&D_0013F3D0), m->position) < 3.5f) {
+            int elapsed, period;
+            char *statistics;
+            elapsed = scale_game_frames(D_0015EE6C[14]);
+            period = 600;
+            statistics = ((char *)&D_00141968);
+            elapsed -= *(unsigned short *)(statistics + 0x43A) * period;
+            if (elapsed > (int)((float)scale_game_frames(18) * 60.0f) || *(unsigned short *)(statistics + 0x43A) * period == 0) {
+                FUN_L00_00203908(0x3E83, 0x87);
+            } else if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(statistics + 0x43A)) {
+                *(unsigned short *)(statistics + 0x43A) = scale_game_frames(D_0015EEA4) / 600;
+            }
+        }
+        if (activation->mode == 3) {
+            char *camera;
+            char *pose;
+            int pending;
+            pending = D_L16_0015F5CC;
+            activation->previous = (unsigned short)activation->mode;
+            activation->mode = 2;
+            activation->pending = pending;
+            m->event = 0;
+            pose = D_L16_001D9840;
+            FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
+            camera = ((char *)&D_00141050);
+            qcopy(camera, pose + 0x20);
+            qcopy(camera + 0x10, pose + 0x30);
+            m->state = 3;
+            FUN_L16_002e70c0((char *)m);
+        }
+        if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 22) {
+            m->state = 3;
+            FUN_L16_002e70c0((char *)m);
+        }
+        break;
+    }
+    case 2:
+        if (*(int *)&D_L16_0015F5C4 != 2) {
+            int previous;
+            m->state = 1;
+            previous = activation->previous;
+            if (previous == 4) {
+                FUN_L00_00299460(0);
+                m->state = previous;
+            }
+        }
+        break;
+    case 4:
+        if (*(int *)&D_L16_0015F5C4 == 0) {
+            m->state = 1;
+            FUN_L00_00260860(31, 1);
+            memcard_save_data(0, -1);
+        }
+        break;
+    case 3:
+    default: {
+        L16ChallengePlayer *player = (L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D);
+        unsigned char event;
+        if (player->points >= 4500) {
+            unsigned char *flags = D_0013D408;
+            if (!flags[0x1A]) {
+                flags[0x1A] = 1;
+                allocate_voice_for_bank_entry(1, 0, 0);
+                FUN_L00_00263d40(0x53D6, -1);
+            }
+            if (D_0015EE6C_p < 4500) D_0015EE6C_p = player->points;
+        }
+        if (((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->mode == 0) {
+            m->state = 1;
+            FUN_L16_002e7168((char *)m);
+        }
+        event = m->event;
+        if (event == 1) {
+            m->state = event;
+            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            m->event = 0;
+            if (!D_0013D507) {
+                int pending;
+                unsigned short previous;
+                previous = activation->mode;
+                pending = D_L16_0015F5CC;
+                activation->previous = previous;
+                activation->mode = 4;
+                activation->pending = pending;
+                activation->flag = event;
+            }
+            FUN_L16_002e7168((char *)m);
+        }
+        if (m->event == 2) {
+            m->state = 1;
+            FUN_L00_00216f90(D_L16_001D9860, D_L16_001D9860 + 0x10, 0, 1);
+            m->event = 0;
+            FUN_L16_002e7168((char *)m);
+        }
+        if (m->event == 3) {
+            char *camera;
+            char *pose = D_L16_001D9840;
+            m->event = 0;
+            FUN_L00_00216f90(pose, pose + 0x10, 0, 1);
+            camera = ((char *)&D_00141050);
+            qcopy(camera, pose + 0x20);
+            qcopy(camera + 0x10, pose + 0x30);
+        }
+        break;
+    }
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *player = (char *)&D_0013E633_challenge + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, player) < 8.0f &&
+            FUN_001f9e90_cf(m->yaw,
+                FUN_001fa688_cf(((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->aim[0] - m->position[0],
+                    ((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->aim[1] - m->position[1])) < 1.5707964f) {
+            if (vector_length_xyz(player + 0x80) > 0.01f) d->moving_timer = scale_game_frames(120);
+            else tick_countdown_32_c(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, (char *)&D_0013E633_challenge + 0xEED);
+        }
+        if (tick_countdown_32_c(&d->target_timer)) {
+            float heading;
+            d->target_timer = random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * 0.017453292f);
+            build_spherical_offset(d->target, 6.0f, heading, truncate_float_to_s32_cf(0.0f, 30.0f) * 0.017453292f);
+            add_vector_xyz(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, (char *)&D_0013E633_challenge + 0xEED);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f) yaw = 1.5707964f;
+        else if (yaw < -1.5707964f) yaw = -1.5707964f;
+        if (pitch > 0.5235988f) pitch = 0.5235988f;
+        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->yaw = yaw * 0.7f;
+        d->head_yaw = yaw * 0.3f;
+    }
+    if (D_0015EDB0_b) *(float *)((char *)d + 0x150) = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
-extern short D_L16_0015F638;
+extern short D_L16_0015F638_u __asm__("D_L16_0015F638");
 extern void FUN_L01_0027a248(int, int);
 extern void FUN_L13_002650a8(int, int, int, int);
 extern void FUN_L16_002de3b8(float f);
@@ -887,7 +1163,7 @@ void FUN_L16_002e70c0(char *moby) {
         FUN_L13_002650a8(*p, 0, 0, 0);
         p++;
     }
-    *(float *)&D_L16_0015F638 = 74.0f;
+    *(float *)&D_L16_0015F638_u = 74.0f;
     FUN_L16_002de3b8(76.0f);
     FUN_L01_0027a248(2, 6);
 }
