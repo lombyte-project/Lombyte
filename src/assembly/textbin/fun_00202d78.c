@@ -46,7 +46,6 @@ void build_indexed_resident_render_packet(u64 *packet,
     u64 mip_word;
     u64 mip_address_word;
     s32 draw_control_count;
-    s32 control_base = material_base;
 
     width_units_64 = texture->width >> 6;
     width_units_128 = texture->width >> 7;
@@ -72,7 +71,7 @@ void build_indexed_resident_render_packet(u64 *packet,
         draw_control_word |= (u64)draw_high << 32;
         packet[0] = draw_control_word;
         packet += 2;
-        packet[0] = control_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
+        packet[0] = material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
         packet += 2;
         texture_word = ((u64)width_log2 << 26) | 0x1300000;
         texture_word = ((u64)width_units_64 << 14) | texture_word;
