@@ -228,14 +228,14 @@ void FUN_L16_002cf5c8(char *moby) {
 typedef struct {
     char pad0[0x2C0];
     char *vectors;
-} Level16VendorVectorData;
+} Level16VendorVectorData_u;
 
 typedef struct {
     char pad0[0x78];
-    Level16VendorVectorData *data;
-} Level16VendorVectorMoby;
+    Level16VendorVectorData_u *data;
+} Level16VendorVectorMoby_u;
 
-void FUN_L16_002cf9d0(Level16VendorVectorMoby *moby, int index, void *out) {
+void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out) {
     qcopy(out, moby->data->vectors + index * 16 + 16);
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1310), where it is exact; names translated to the US level program. */
@@ -937,13 +937,13 @@ typedef struct {
     char pad27C[0x44]; char *path; char pad2C4[4]; float vertical_speed;
     char pad2CC[0x18]; int timer; char pad2E8[0xC]; short node;
     char pad2F6[2]; float pitch_speed; char pad2FC[2]; short sequence;
-} L16LeapData;
+} L16LeapData_u;
 
 typedef struct {
     char pad0[0x44]; float pitch; char pad48[0xA];
     unsigned char animation, next_animation; char pad54[4]; float animation_speed;
-    char pad5C[0x14]; unsigned char flags; char pad71[7]; L16LeapData *data;
-} L16LeapMoby;
+    char pad5C[0x14]; unsigned char flags; char pad71[7]; L16LeapData_u *data;
+} L16LeapMoby_u;
 
 extern float D_0015ED64;
 extern float FUN_001f9b80(void *, void *);
@@ -955,10 +955,10 @@ f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9
 void FUN_L00_002371e0(void);
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 
-void FUN_L16_002d0058(L16LeapMoby *m) {
+void FUN_L16_002d0058(L16LeapMoby_u *m) {
     float root0, root1;
     float pitch;
-    L16LeapData *d = m->data;
+    L16LeapData_u *d = m->data;
     pitch = 0.0f;
     if (d->timer == 0) {
         int next;
@@ -1022,7 +1022,353 @@ void FUN_L16_002d0058(L16LeapMoby *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d04a0.s", FUN_L16_002d04a0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Update the hoverboard race competitor: wait for the race, follow the path, leap, and emit spray. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1868), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x2C0];
+    char *vectors;
+} Level16VendorVectorData;
+
+typedef struct {
+    char pad0[0x78];
+    Level16VendorVectorData *data;
+} Level16VendorVectorMoby;
+
+typedef struct {
+    char pad0[0x268]; float height; char pad26C[0xC]; float target_height;
+    char pad27C[0x44]; char *path; char pad2C4[4]; float vertical_speed;
+    char pad2CC[0x18]; int timer; char pad2E8[0xC]; short node;
+    char pad2F6[2]; float pitch_speed; char pad2FC[2]; short sequence;
+} L16LeapData;
+
+typedef struct {
+    char pad0[0x44]; float pitch; char pad48[0xA];
+    unsigned char animation, next_animation; char pad54[4]; float animation_speed;
+    char pad5C[0x14]; unsigned char flags; char pad71[7]; L16LeapData *data;
+} L16LeapMoby;
+
+typedef struct { char pad0[0x140]; float position[4]; char pad150[8]; float yaw; } L16RacePlayer;
+
+extern L16RacePlayer D_L16_0015F580 __attribute__((section(".sdata")));
+extern int D_L16_0015F5CC;
+extern L16RacePlayer D_L16_00167080;
+extern int *D_L16_00178300[];
+extern char *FUN_L00_0025a420(void*,int,int);
+extern char D_0013E533[];
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_0015ED64;
+extern float D_0015ED6C ,D_0015EE70;
+extern float D_0015EE6C ,D_0015ED70;
+extern float FUN_001f9b80(void*,void*);
+extern float FUN_001f9e90(float,float);
+extern float FUN_001fa688(float, float);
+extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
+extern float approach_value(float *p, float target, float maxstep);
+extern float fast_add_rotations(float, float);
+extern float probe_ground_height(void *, int, float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern int D_00159F4C; /* no foreign declaration */
+extern int D_L16_00161A08_spark __asm__("D_L16_00161A08") __attribute__((sda));
+extern int D_L16_00161A0C __attribute__((sda));
+extern int D_0015EE3C __attribute__((sda));
+extern char *D_L16_001B0930[];
+extern int FUN_001f9770(void*);
+extern int FUN_L00_001f2868(float, void *, int, void *, void *);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int FUN_L00_0025e3b8(int);
+extern int FUN_L05_00307010();
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_0013D4DF __attribute__((section(".data")));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void FUN_L00_0025e450(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int);
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void FUN_L00_00263b38(void *, float);
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void FUN_L00_0026cbb0(void*,void*,int,int,int,int,float);
+extern void FUN_L16_002cf9f8(char *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index, void *out) __asm__("FUN_L16_002cf9d0");
+void FUN_L16_002cff48(char *moby);
+void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
+extern char D_001413DC[];
+extern char D_0013F350[];
+
+void FUN_L16_002d04a0(unsigned char *m) {
+    float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
+    char *d = *(char **)(m + 0x78);
+    char *g;
+    int i, n, next;
+    /* One mask for both collision calls. Held in a local it is one more instruction when GCSE sizes its
+       expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
+       with the literal at both calls every one of those slots is rotated by three. */
+    int mask = 0x30000;
+    float distance, duration, target, z, gap, speed, angle, scale, rate, limit, offset, slow;
+
+    /* No pointer locals: every address is written where it is used. The compiler caches them itself
+       (d + 0x1E0 from here on, the others at the top of the active state). */
+    FUN_L00_00263b38(d + 0x1E0, 2.5f);
+    switch (m[0x20]) {
+    case 0: {
+        float time;
+        char *path;
+
+        m[0x30] = 24;
+        *(unsigned short *)(m + 0x34) |= 0x41;
+        path = D_L16_001B0930[*(int *)(d + 0x2B0)];
+        *(char **)(d + 0x2C0) = path;
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)m, 0, pos);
+        qcopy(m + 0x10, pos);
+        qcopy(d + 0x260, m + 0x10);
+        *(int *)(m + 0x40) = 0;
+        *(int *)(m + 0x44) = 0;
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                                 *(float *)(path + 0x24) - *(float *)(path + 0x14));
+        *(unsigned char *)(d + 0x2B) = 1;
+        time = D_0015ED6C;
+        offset = (float)*(int *)(d + 0x2CC) * (time * 1.55f);
+        *(float *)(d + 0x2B4) = time * 17.0f + offset;
+        *(float *)(d + 0x2B8) = time * 24.0f + offset;
+        if (D_0013D4DF == 0) {
+            slow = (float)(D_0015EE3C - 5);
+            if (slow < 0.0f) {
+                slow = 0.0f;
+            }
+            slow = 1.0f - slow * 0.008f;
+            if (slow < 0.8f) {
+                slow = 0.8f;
+            }
+            *(float *)(d + 0x2B4) *= slow;
+            *(float *)(d + 0x2B8) *= slow;
+        }
+        *(float *)(d + 0x2E8) = random_angle_radians();
+        *(unsigned char *)(d + 0x29) = 0;
+        m[0x20] = 1;
+        break;
+    }
+    case 1:
+        if (*(int *)(((char *)&D_001413DC)) == 22) {
+            m[0x30] = 255;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            *(unsigned short *)(m + 0x34) &= ~0x41;
+            *(short *)(d + 0x2F4) = 0;
+            *(short *)(d + 0x2F6) = scale_game_frames(180);
+            *(int *)(d + 0x2C8) = 0;
+            *(int *)(d + 0x2C4) = 0;
+            *(int *)(d + 0x2E4) = 0;
+            *(int *)(d + 0x2DC) = 0;
+            *(int *)(d + 0x2BC) = 0;
+            if (*(int *)(d + 0x2CC) % 2 == 1) {
+                *(unsigned short *)(m + 0x34) |= 0x8000;
+            }
+            m[0xA4] = 255;
+            m[0x20] = 2;
+        }
+        break;
+    case 3:
+        if (*(int *)(((char *)&D_001413DC)) != 22) {
+            m[0x20] = 0;
+        } else {
+            int count = *(unsigned short *)(d + 0x2F2) + 1;
+            short timer = count;
+
+            *(short *)(d + 0x2F2) = count;
+            if (scale_game_frames(240) < timer) {
+                L16RacePlayer *player = &D_L16_00167080;
+
+                if (FUN_001fa688(FUN_001f9e90(*(float *)(m + 0x10) - player->position[0],
+                                                    *(float *)(m + 0x14) - player->position[1]),
+                                  player->yaw) > 1.5707964f) {
+                    *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+                    *(unsigned short *)(m + 0x34) &= ~0x41;
+                    m[0xA4] = 255;
+                    m[0x20] = 2;
+                }
+            }
+        }
+        break;
+    case 2:
+        g = ((char *)&D_0013F350);
+        if (*(int *)(g + 0x208C) != 22) {
+            m[0x20] = 0;
+            break;
+        }
+        if (FUN_L00_0025a420(m, mask, 0)) {
+            qcopy(pos, m + 0x10);
+            pos[2] += 0.5f;
+            FUN_L00_0025e450(m, &D_L16_0015F580, pos, 0.0f, 0.0f, 5, 15, 25, 2.5f, 1.5f, 4.0f, -1, 1.0f, 7.0f, 0, 9, -1, 0);
+            FUN_L00_00263e30(m, 0x655, 1, 0x656, 2, 2, 0);
+            FUN_L00_00263e30(m, 0x6FA, 1, 0x6FB, 1, 1, 0);
+            *(short *)(d + 0x2F2) = 0;
+            *(int *)(g + 0x8A8) += 250;
+            m[0x20] = 3;
+            *(int *)(m + 0x94) = 0;
+            *(unsigned short *)(m + 0x34) |= 0x41;
+            break;
+        }
+        m[0xA4] = 255;
+        FUN_L16_002cf9f8((char *)m);
+        FUN_L05_00307010((char *)m);
+        FUN_L16_002cff48((char *)m);
+        if (*(int *)(d + 0x2E4) != 0) {
+            (*(int *)(d + 0x2E4))++;
+            if (*(int *)(d + 0x2E4) < scale_game_frames(17)) {
+                i = *(short *)(d + 0x2F4);
+                distance = 0.0f;
+                while (i < *(short *)(d + 0x2F0)) {
+                    char *path;
+
+                    next = FUN_L00_0025d7a0(*(char **)(d + 0x2C0), i, 1, 1);
+                    path = *(char **)(d + 0x2C0);
+                    distance += FUN_001f9b80(path + (i * 16 + 16), path + (next * 16 + 16));
+                    i = next;
+                }
+                {
+                    short last = *(short *)(d + 0x2F0);
+                    short first = *(short *)(d + 0x2F4);
+                    char *path = *(char **)(d + 0x2C0);
+                    float rise = *(float *)(path - (-(last * 16)) + 0x18) - *(float *)(path - (-(first * 16)) + 0x18);
+
+                    duration = distance / *(float *)(d + 0x2BC);
+                    target = rise / duration + D_0015ED70 * 21.0f * duration * 0.5f;
+                }
+                if (*(float *)(d + 0x2C8) < 0.0f) {
+                    *(float *)(d + 0x2C8) = 0.0f;
+                }
+                approach_value((float *)(d + 0x2C8), target, D_0015ED70 * 110.0f);
+            }
+        }
+        FUN_L16_002d0058_c((L16LeapMoby *)m);
+        FUN_L16_002cf9d0_c((Level16VendorVectorMoby *)m, *(short *)(d + 0x2F4), pos);
+        angle = FUN_001f9e90(pos[0] - *(float *)(m + 0x10), pos[1] - *(float *)(m + 0x14));
+        FUN_L00_0025bc98(m + 0x48, d + 0x2C4, 0, angle, D_0015ED64 * 0.035f, D_0015ED64 * 0.3f, D_0015ED6C * 6.981317f);
+        if (*(float *)(d + 0x268) < pos[2] - 5.0f) {
+            *(float *)(d + 0x268) = pos[2];
+        }
+        delta[0] = fast_cos(*(float *)(m + 0x48)) * *(float *)(d + 0x2BC);
+        delta[1] = fast_sin(*(float *)(m + 0x48)) * *(float *)(d + 0x2BC);
+        delta[2] = 0.0f;
+        add_vector_xyz(d + 0x260, d + 0x260, delta);
+        scale_vector_xyz(ahead, delta, 3.0f);
+        add_vector_xyz(ahead, ahead, d + 0x260);
+        ahead[2] += 0.7f;
+        n = FUN_L00_001f2868(0.7f, ahead, 0, m, 0);
+        if (n) {
+            scale_vector_xyz(impact, delta, 7.0f);
+            for (i = 0; i < n; i++) {
+                if (FUN_L00_0025e3b8((int)D_L16_00178300[i])) {
+                    FUN_L00_00259bc8(D_L16_00178300[i], (int)m, mask, d + 0x260, impact, 1.0f);
+                }
+            }
+        }
+        z = probe_ground_height(d + 0x260, 0, 0.5f);
+        gap = *(float *)(d + 0x268) - z;
+        if (gap > 0.0f || *(float *)(d + 0x2C8) > 0.0f) {
+            *(float *)(d + 0x2C8) -= D_0015ED70 * 21.0f;
+        } else if (AbsoluteFloat(gap) < 0.5f) {
+            *(float *)(d + 0x2C8) = 0.0f;
+            *(float *)(d + 0x268) = z;
+            *(int *)(d + 0x2E4) = 0;
+        }
+        *(float *)(d + 0x268) += *(float *)(d + 0x2C8);
+        if (FUN_001f9770(d + 0x2F6)) {
+            speed = *(float *)(d + 0x2B4);
+            if (z < *(float *)(d + 0x268)) {
+                speed = D_0015ED6C * 19.0f;
+            }
+            g = ((char *)&D_0013F350);
+            if (*(int *)(g + 0x894) < scale_game_frames(700)) {
+                speed += D_0015ED6C * 3.0f;
+            }
+            if (*(short *)(g - (-(*(int *)(d + 0x2CC) * 2)) + 0x7C0) < *(int *)(g + 0x8C0)) {
+                speed -= D_0015ED6C;
+            } else {
+                speed += D_0015ED6C;
+            }
+            if (speed < *(float *)(d + 0x2BC)) {
+                approach_value((float *)(d + 0x2BC), speed, D_0015ED70 * 7.0f);
+            } else {
+                approach_value((float *)(d + 0x2BC), speed, D_0015ED70 * 15.0f);
+            }
+        } else {
+            approach_value((float *)(d + 0x2BC), *(float *)(d + 0x2B8), D_0015ED70 * 20.0f);
+        }
+        if (gap < 0.2f && *(float *)(d + 0x2C8) < 0.0f) {
+            *(float *)(d + 0x268) = z;
+            *(int *)(d + 0x2E4) = 0;
+        }
+        rate = *(float *)(d + 0x2C4);
+        limit = D_0015ED6C * 2.6179938f;
+        if (limit < rate) {
+            rate = limit;
+        } else if (rate < -limit) {
+            rate = -limit;
+        }
+        if (*(unsigned short *)(m + 0x34) & 0x8000) {
+            rate = -rate;
+        }
+        {
+            float coefficient = D_0015ED64;
+
+            *(float *)(d + 0x248) = rate * 30.0f;
+            *(float *)(d + 0xC8) = rate * 20.0f;
+            *(float *)(d + 0x1C8) = rate * 50.0f;
+            *(float *)(d + 0x144) = rate * 40.0f;
+            FUN_L00_002628d8(coefficient * 0.02f, coefficient * 0.3f, m, d + 0x1E0, 3);
+        }
+        FUN_L00_002628d8(D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, m, d + 0x60, 0);
+        FUN_L00_002628d8(D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, m, d + 0x160, 1);
+        FUN_L00_002628d8(D_0015ED64 * 0.015f, D_0015ED64 * 0.3f, m, d + 0xE0, 2);
+        qcopy(m + 0x10, d + 0x260);
+        {
+            float bob_time = D_0015ED6C;
+
+            *(float *)(m + 0x18) += 0.25f;
+            *(float *)(d + 0x2E8) = fast_add_rotations(*(float *)(d + 0x2E8), bob_time * 6.108652f);
+        }
+        *(float *)(m + 0x18) += fast_sin(*(float *)(d + 0x2E8)) * 0.08f;
+        subtract_vector_xyz(ahead, m + 0x10, d + 0x280);
+        qcopy(d + 0x280, m + 0x10);
+        FUN_L00_0024f7c8(m, (D_L16_0015F5CC & 1) | 4, impact);
+        angle = random_angle_radians();
+        scale = D_0015ED6C * 0.25f;
+        normalize_vector_xyz(spray, m + 0xE0, scale * fast_cos(angle));
+        normalize_vector_xyz(lateral, m + 0xD0, scale * fast_sin(angle));
+        add_vector_xyz(spray, spray, ahead);
+        add_vector_xyz(spray, spray, lateral);
+        qcopy(spray, ahead);
+        spray[3] = 120000.0f;
+        if (*(short *)(d + 0x2F6) == 0) {
+            int ticks = FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(13));
+
+            FUN_L00_00269958(impact, spray, D_L16_00161A08_spark, D_L16_00161A0C, ticks, 15, 15, 1);
+        } else {
+            int ticks;
+
+            scale_vector_xyz(dust, ahead, 0.92f);
+            ticks = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(18));
+            FUN_L00_00269958(impact, dust, 0x5032F0D2, D_L16_00161A0C, ticks, 30, 20, 1);
+            ticks = FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(17));
+            FUN_L00_0026cbb0(impact, spray, D_L16_00161A08_spark, D_L16_00161A0C, ticks, 1, 15000.0f);
+        }
+        break;
+    }
+}
 
 #define NOT_SDA
 
