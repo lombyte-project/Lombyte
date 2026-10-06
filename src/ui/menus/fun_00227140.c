@@ -1,7 +1,16 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-struct Mat { u8 pad[0x30]; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
+struct Mat {
+    u8 pad[0x30];
+};
 extern struct TagPtr D_00160F00;
 extern struct Mat D_001D7D90[];
 extern s32 D_00160360[2] __attribute__((sda));

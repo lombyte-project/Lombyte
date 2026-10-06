@@ -1,6 +1,19 @@
 #include "types.h"
-typedef struct { s64 pts; s64 dts; s32 pos; s32 len; } TimeStamp;
-typedef struct { u8 pad0[0x40]; s32 sema; u8 pad44[0xC]; TimeStamp *ts; s32 size_ts; s32 count_ts; s32 put_ts; } ViBuf;
+typedef struct {
+    s64 pts;
+    s64 dts;
+    s32 pos;
+    s32 len;
+} TimeStamp;
+typedef struct {
+    u8 pad0[0x40];
+    s32 sema;
+    u8 pad44[0xC];
+    TimeStamp *ts;
+    s32 size_ts;
+    s32 count_ts;
+    s32 put_ts;
+} ViBuf;
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
 extern void vi_buf_modify_pts(ViBuf *, TimeStamp *) __asm__("func_0023C6B8");

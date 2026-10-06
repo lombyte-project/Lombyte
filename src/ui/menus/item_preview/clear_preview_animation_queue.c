@@ -7,8 +7,7 @@ extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
 
 s32 clear_preview_animation_queue(void) __asm__("FUN_00226718");
 
-s32 clear_preview_animation_queue(void)
-{
+s32 clear_preview_animation_queue(void) {
     if (cd_read_active[0] != 0) {
         if (preview_stream_state.pending_buffer != 0) {
             request_audio_stream_break();
@@ -20,4 +19,5 @@ s32 clear_preview_animation_queue(void)
     return 0;
 }
 
-extern __typeof__(clear_preview_animation_queue) func_00226718 __attribute__((alias("FUN_00226718")));
+extern __typeof__(clear_preview_animation_queue) func_00226718
+    __attribute__((alias("FUN_00226718")));

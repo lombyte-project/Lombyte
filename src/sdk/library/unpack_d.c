@@ -54,14 +54,14 @@ typedef union {
 
 void __unpack_d(FLOUnion *src, FpNumber *dst);
 
-void __unpack_d(FLOUnion *src, FpNumber *dst)
-{
+void __unpack_d(FLOUnion *src, FpNumber *dst) {
     u64 fraction = src->value_raw & 0x000FFFFFFFFFFFFFULL;
     s32 exp = ((s32)(src->value_raw >> 52)) & 0x7FF;
     s32 sign = ((s32)(src->value_raw >> 63)) & 1;
     dst->sign = sign;
     if (exp == 0) {
-        do { } while (0);
+        do {
+        } while (0);
         dst->class = 2;
     } else if (exp == 0x7FF) {
         if (fraction == 0) {

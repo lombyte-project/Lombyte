@@ -10,10 +10,24 @@ void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 void FUN_L00_002772c0(int);
 void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
 void draw_dialog_text(void) __asm__("FUN_001fbc50");
-void FUN_L00_001f8ec8(void) { if (D_L00_0015F5D8 == 0) { if (FUN_L00_00201720() == 0) { append_gif_transfer_packet(); D_L00_0015F3F4 = 0x100ff; draw_debug_profiler(); } else if (FUN_L00_00201720() == 3) FUN_L00_002772c0(1); emit_rgba_draw_packet(0, 0, 0, 0x40); draw_dialog_text(); } }
+void FUN_L00_001f8ec8(void) {
+    if (D_L00_0015F5D8 == 0) {
+        if (FUN_L00_00201720() == 0) {
+            append_gif_transfer_packet();
+            D_L00_0015F3F4 = 0x100ff;
+            draw_debug_profiler();
+        } else if (FUN_L00_00201720() == 3)
+            FUN_L00_002772c0(1);
+        emit_rgba_draw_packet(0, 0, 0, 0x40);
+        draw_dialog_text();
+    }
+}
 extern s32 D_L00_0015F5D8;
 void FUN_L00_002772c0(s32);
-void FUN_L00_001f8f50(void) { if (D_L00_0015F5D8 == 0) FUN_L00_002772c0(0); }
+void FUN_L00_001f8f50(void) {
+    if (D_L00_0015F5D8 == 0)
+        FUN_L00_002772c0(0);
+}
 extern volatile s32 D_L00_0015F628 __attribute__((section(".sdata")));
 extern f32 D_L00_0015F3FC;
 extern s16 D_L00_0015F626;
@@ -28,10 +42,12 @@ void do_gif_paging(void) __asm__("FUN_001f4398");
 void FUN_L00_001f8f78(void) {
     s32 i;
     u8 *p;
-    if (D_L00_0015F5D8) return;
+    if (D_L00_0015F5D8)
+        return;
     FUN_L00_001fc558(D_L00_0015F628);
     if (0.0f < D_L00_0015F3FC) {
-        if (1.0f < D_L00_0015F3FC) D_L00_0015F3FC = 1.0f;
+        if (1.0f < D_L00_0015F3FC)
+            D_L00_0015F3FC = 1.0f;
         FUN_001f5210_c(0, 0, 0, truncate_float_to_s32(D_L00_0015F3FC * 128.0f));
     }
     reset_gs_registers();

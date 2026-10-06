@@ -15,6 +15,6 @@ s32 delete_moby(struct M2c_arg0 *arg0) {
         return 0;
     }
     mark_moby_for_removal();
-    arg0->unk38 = (s64) D_0015F60C;
+    arg0->unk38 = (s64)D_0015F60C;
     return 0;
 }

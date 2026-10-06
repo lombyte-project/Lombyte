@@ -20,4 +20,5 @@ void clamp_voice_position_to_collision(s32 position) {
     }
 }
 
-extern __typeof__(clamp_voice_position_to_collision) func_0022C5A8 __attribute__((alias("FUN_0022c5a8")));
+extern __typeof__(clamp_voice_position_to_collision) func_0022C5A8
+    __attribute__((alias("FUN_0022c5a8")));

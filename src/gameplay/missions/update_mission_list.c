@@ -1,10 +1,27 @@
 #include "types.h"
 struct MenuItem {
-    s16 id; s16 kind1; s32 value1; s16 kind2; u8 padA[2]; s32 value2; u16 flags; u8 pad12[0xA];
-    s16 (*callback)(void *); void *arg; s16 state; s16 result;
+    s16 id;
+    s16 kind1;
+    s32 value1;
+    s16 kind2;
+    u8 padA[2];
+    s32 value2;
+    u16 flags;
+    u8 pad12[0xA];
+    s16 (*callback)(void *);
+    void *arg;
+    s16 state;
+    s16 result;
 };
-struct MenuState { u8 pad0[0xC]; s32 available; struct MenuItem *items; };
-struct Level { u8 pad0[0x224]; s32 level; };
+struct MenuState {
+    u8 pad0[0xC];
+    s32 available;
+    struct MenuItem *items;
+};
+struct Level {
+    u8 pad0[0x224];
+    s32 level;
+};
 extern struct Level D_001A00F0;
 extern struct MenuItem *D_001A2B70[];
 extern struct MenuState D_001A2C10;

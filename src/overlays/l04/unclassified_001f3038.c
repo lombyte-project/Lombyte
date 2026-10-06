@@ -60,5 +60,6 @@ void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
             break;
         }
     }
-    *(float *)(a + 0x48) = fast_add_rotations(FUN_001f9e90(*(float *)(b + 0x10), *(float *)(b + 0x14)), 3.14159265f);
+    *(float *)(a + 0x48) =
+        fast_add_rotations(FUN_001f9e90(*(float *)(b + 0x10), *(float *)(b + 0x14)), 3.14159265f);
 }

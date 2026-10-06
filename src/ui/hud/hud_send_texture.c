@@ -1,13 +1,23 @@
 #include "types.h"
 #include "eetypes.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-typedef struct { u128 data[6]; } sceGsLoadImage;
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
+typedef struct {
+    u128 data[6];
+} sceGsLoadImage;
 extern struct TagPtr D_00160F00;
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern void FlushCache(s32);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
-void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) __asm__("FUN_00200b10");
+void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog,
+                      s32 immediate) __asm__("FUN_00200b10");
 
 void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) {
     sceGsLoadImage local;

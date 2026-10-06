@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fast_vec_normalize/FUN_001f9bf8.s", FUN_001f9bf8);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fast_vec_normalize/FUN_001f9bf8.s",
+            FUN_001f9bf8);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

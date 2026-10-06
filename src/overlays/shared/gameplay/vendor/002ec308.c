@@ -119,13 +119,23 @@ void FUN_L02_002eca30(char *m, void *arg1) {
         FUN_001f9a10(v20, v20, v40);
         v10[3] = random_float_between_alt(*(float *)&D_L02_00161FA0, *(float *)&D_L02_00161FA4);
         v20[3] = random_float_between_alt(*(float *)&D_L02_00161FA8, *(float *)&D_L02_00161FAC);
-        a = FUN_001fa6e0(*(int *)&D_L02_00161FB0, *(int *)&D_L02_00161FB4, random_float_between_alt(0.0f, 1.0f));
-        b = FUN_001fa6e0(*(int *)&D_L02_00161FB8, *(int *)&D_L02_00161FBC, random_float_between_alt(0.0f, 1.0f));
-        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F90 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F94 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
-        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161F98 * (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) + 1.0f)));
+        a = FUN_001fa6e0(*(int *)&D_L02_00161FB0, *(int *)&D_L02_00161FB4,
+                         random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_00161FB8, *(int *)&D_L02_00161FBC,
+                         random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161F90 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161F94 *
+            (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) +
+             1.0f)));
+        e = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161F98 *
+            (random_float_between_alt(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) +
+             1.0f)));
         p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
-        if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
+        if (p != 0)
+            p[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
 void FUN_L02_002ec308(char *self);
@@ -196,11 +206,20 @@ void FUN_L02_002ed420(char *m, void *arg1) {
         FUN_001f9a10(v20, v20, v40);
         v10[3] = random_float_between_alt(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8);
         v20[3] = random_float_between_alt(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
-        a = FUN_001fa6e0(*(int *)&D_L02_00162004, *(int *)&D_L02_00162008, random_float_between_alt(0.0f, 1.0f));
-        b = FUN_001fa6e0(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010, random_float_between_alt(0.0f, 1.0f));
-        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE8 * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
-        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FEC * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        a = FUN_001fa6e0(*(int *)&D_L02_00162004, *(int *)&D_L02_00162008,
+                         random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010,
+                         random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FE8 *
+            (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
+             1.0f)));
+        e = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FEC *
+            (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
+             1.0f)));
         p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
         if (p != 0) {
             p[9] = func_001FA898_r(8.0f) + 0x60;
@@ -229,13 +248,24 @@ void FUN_L02_002ed658(char *m, void *arg1) {
         FUN_001f9a68(v20, v30, *(float *)&D_L02_00162018);
         FUN_L00_00257d78(v40, 0.0f, *(float *)&D_L02_0016201C * D_0015ED6C);
         FUN_001f9a10(v20, v20, v40);
-        v10[3] = random_float_between_alt(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8) / 1.5f;
-        v20[3] = random_float_between_alt(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000) / 1.5f;
-        a = FUN_001fa6e0(*(int *)&D_L02_00162020, *(int *)&D_L02_00162024, random_float_between_alt(0.0f, 1.0f));
-        b = FUN_001fa6e0(*(int *)&D_L02_00162028, *(int *)&D_L02_0016202C, random_float_between_alt(0.0f, 1.0f));
-        c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-        d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FE8 * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
-        e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L02_00161FEC * (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) + 1.0f)));
+        v10[3] =
+            random_float_between_alt(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8) / 1.5f;
+        v20[3] =
+            random_float_between_alt(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000) / 1.5f;
+        a = FUN_001fa6e0(*(int *)&D_L02_00162020, *(int *)&D_L02_00162024,
+                         random_float_between_alt(0.0f, 1.0f));
+        b = FUN_001fa6e0(*(int *)&D_L02_00162028, *(int *)&D_L02_0016202C,
+                         random_float_between_alt(0.0f, 1.0f));
+        c = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FE4 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+        d = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FE8 *
+            (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
+             1.0f)));
+        e = func_001FA898_r(FUN_001f96b0(
+            (float)*(int *)&D_L02_00161FEC *
+            (random_float_between_alt(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
+             1.0f)));
         p = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
         if (p != 0) {
             p[9] = func_001FA898_r(8.0f) + 0x60;
@@ -260,8 +290,10 @@ void FUN_L02_002f1f60(char *m) {
         m[0x20] = 1;
         break;
     case 1:
-        if (r != 0 && *(float *)(r + 0x2C) > 0.0f) hit = 1;
-        if (hit) m[0x20] = 2;
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+            hit = 1;
+        if (hit)
+            m[0x20] = 2;
         break;
     case 2:
         allocate_voice_for_target_entry(0, 0, (int)m);
@@ -309,18 +341,19 @@ void FUN_L02_002f6598(float x, float y, float z) {
 /* stores two coordinate triples in the selected object data */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F9ED8), where it is exact; names translated to the US level program. */
 
-void FUN_L02_002f8aa0(float a, float b, float c,
-                       float d, float e, float f) {
+void FUN_L02_002f8aa0(float a, float b, float c, float d, float e, float f) {
     char *moby = D_L02_00167400_d;
     char *data = *(char **)(moby + 0x70);
     char *dst = data + 0x30;
     *(float *)(dst + 0x20) = e;
     *(float *)(dst + 0x24) = d;
     *(float *)(dst + 0x28) = f;
-    { char *other = *(char **)(moby + 0x70);
-    *(float *)(other + 0x10) = b;
-    *(float *)(other + 0x14) = a;
-    *(float *)(other + 0x18) = c; }
+    {
+        char *other = *(char **)(moby + 0x70);
+        *(float *)(other + 0x10) = b;
+        *(float *)(other + 0x14) = a;
+        *(float *)(other + 0x18) = c;
+    }
 }
 typedef struct {
     int a;
@@ -516,7 +549,8 @@ extern int FUN_L02_002fb9c8(char *);
 
 int FUN_L02_002fc298(char *moby) {
     char *cam = *(char **)(D_L02_0015EF50_c298 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(cam + 0x20) >= 0) FUN_L02_002fb9c8(moby);
+    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(cam + 0x20) >= 0)
+        FUN_L02_002fb9c8(moby);
     *(int *)(cam + 0x50) = 0;
     return 0;
 }

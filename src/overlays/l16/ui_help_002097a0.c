@@ -28,7 +28,8 @@ void FUN_L16_002097a0(void) {
     *(short *)(g + 0x12E0) = -1;
     *(unsigned char *)(g + 0x20A9) = 0;
     *(short *)(g + 0x308) = 0;
-    if (st == -1) return;
+    if (st == -1)
+        return;
     if (st == 2) {
         if (*(short *)(g + 0x30C) == 0 || *(float *)(g + 0x2DC) < 0.3f) {
             *(unsigned char *)(g + 0x12E7) = 1;
@@ -51,8 +52,10 @@ void FUN_L16_002097a0(void) {
         *(float *)(q + 0x22A4) = d;
         if (d < 0.85f && 0.25f < d)
             q[0x20A9] = 1;
-        {char *flag = D_0013F350;
-        flag[0x12E4] = 1;}
+        {
+            char *flag = D_0013F350;
+            flag[0x12E4] = 1;
+        }
         v = D_0015ED84;
     } else {
         v = D_0015ED84;
@@ -152,7 +155,10 @@ void FUN_L16_0020f8b0(void) {
     FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 typedef int Q __attribute__((mode(TI)));
-typedef union { Q q; f32 f[4]; } V;
+typedef union {
+    Q q;
+    f32 f[4];
+} V;
 extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_0013F5E0[] __attribute__((section(".data")));
 extern u8 D_0013F5F0[] __attribute__((section(".data")));
@@ -194,14 +200,35 @@ typedef struct {
     u8 pad298[0x1c];
     f32 xF298;
     u8 pad2c0[0x24];
-    union { f32 f[2]; s32 i[2]; } a2c0;
-    union { f32 f[2]; s32 i[2]; } a2c8;
-    union { f32 f[2]; s32 i[2]; } a2d0;
-    union { f32 F; s32 I; } u2d8;
+    union {
+        f32 f[2];
+        s32 i[2];
+    } a2c0;
+    union {
+        f32 f[2];
+        s32 i[2];
+    } a2c8;
+    union {
+        f32 f[2];
+        s32 i[2];
+    } a2d0;
+    union {
+        f32 F;
+        s32 I;
+    } u2d8;
     f32 xF2dc;
-    union { f32 F; s32 I; } u2e0;
-    union { f32 F; s32 I; } u2e4;
-    union { f32 F; s32 I; } u2e8;
+    union {
+        f32 F;
+        s32 I;
+    } u2e0;
+    union {
+        f32 F;
+        s32 I;
+    } u2e4;
+    union {
+        f32 F;
+        s32 I;
+    } u2e8;
     f32 xF2ec;
     f32 xF2f0;
     f32 xF2f4;
@@ -210,8 +237,14 @@ typedef struct {
     s32 xI300;
     u8 pad30a[0x6];
     s16 xH30a;
-    union { s16 H; u16 U; } u30c;
-    union { s16 H; u16 U; } u30e;
+    union {
+        s16 H;
+        u16 U;
+    } u30c;
+    union {
+        s16 H;
+        u16 U;
+    } u30e;
     u8 pada80[0x770];
     s32 xIa80;
     u8 pad12e0[0x85c];
@@ -236,7 +269,10 @@ typedef struct {
     u8 pad0[0x18];
     s32 i18;
     s32 i1C;
-    union { Q q; f32 f[4]; } v20;
+    union {
+        Q q;
+        f32 f[4];
+    } v20;
     u8 pad30[0x10];
     f32 f40;
     f32 f44;
@@ -252,7 +288,7 @@ void FUN_L16_0020ffb0(void) {
     s32 i;
     f32 a;
     u8 *p;
-    
+
     s32 k;
     f32 g;
 
@@ -271,7 +307,8 @@ void FUN_L16_0020ffb0(void) {
         GG.xI2f8++;
     }
     k = 0;
-    if (GG.xB20b3) k = 1;
+    if (GG.xB20b3)
+        k = 1;
     g = GG.xF234 * 2.2f;
     if (GG.xI208c == 2) {
         g = GG.xF234 * 2.9f;
@@ -376,7 +413,8 @@ d1:
     GG.a2c8.i[1] = 0;
     GG.a2c0.i[0] = 0;
     GG.a2c0.i[1] = 0;
-    if (GG.xI208c == 0xF || GG.xI208c == 0x15 || GG.xI208c == 6 || GG.xI208c == 4 || GG.xI208c == 5 || GG.xI208c == 3) {
+    if (GG.xI208c == 0xF || GG.xI208c == 0x15 || GG.xI208c == 6 || GG.xI208c == 4 ||
+        GG.xI208c == 5 || GG.xI208c == 3) {
         return;
     }
     if (!(GG.xF2dc < 0.25f)) {
@@ -448,7 +486,10 @@ typedef struct {
     u8 pad20B4[0x22DA - 0x20B4];
     s16 h22DA;
 } G_2133a8;
-typedef union { u128_2133a8 q; f32 f[4]; } V_2133a8;
+typedef union {
+    u128_2133a8 q;
+    f32 f[4];
+} V_2133a8;
 extern G_2133a8 G_2133a8v __asm__("D_0013F350");
 extern f32 D_0015ED60;
 extern u128_2133a8 coll_2133a8[] __asm__("D_L16_00174270") __attribute__((section(".data")));
@@ -486,7 +527,8 @@ s32 FUN_L16_00210b60(s32 mode) {
             f233660_2133a8(&v, 0.0f, 0.0f, 0.7f);
             vsub_2133a8(&v, &v, &G_2133a8v.pos);
         } else if (G_2133a8v.b20B3 != 0 || G_2133a8v.h1F8 != 0) {
-            if (G_2133a8v.b20B3 == 1 || G_2133a8v.h1F8 != 0 || (unsigned)(G_2133a8v.w208C - 0x15) < 2) {
+            if (G_2133a8v.b20B3 == 1 || G_2133a8v.h1F8 != 0 ||
+                (unsigned)(G_2133a8v.w208C - 0x15) < 2) {
                 f233810_2133a8(&v, &v, 0.6f);
             } else {
                 f2334d0_2133a8(&v, &v, -G_2133a8v.f224);
@@ -502,13 +544,17 @@ s32 FUN_L16_00210b60(s32 mode) {
     }
     for (i = 0; i < 8; i++) {
         if (G_2133a8v.b20B3 != 0) {
-            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.4f)) break;
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.4f))
+                break;
         } else if (G_2133a8v.w208C == 0x11) {
-            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, 0.6f)) break;
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, 0.6f))
+                break;
         } else if (G_2133a8v.w208C == 0x16) {
-            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.5f)) break;
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.5f))
+                break;
         } else if (G_2133a8v.w208C == 0xF) {
-            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.45f)) break;
+            if (!coll1_2133a8(&G_2133a8v.pos, mask, G_2133a8v.w2080, D_0015ED60 * 0.45f))
+                break;
         } else {
             s32 a;
             h = G_2133a8v.f220 - G_2133a8v.f224;
@@ -516,7 +562,8 @@ s32 FUN_L16_00210b60(s32 mode) {
                 h = 0.05f;
             }
             a = coll2_2133a8(&G_2133a8v.pos, mask, G_2133a8v.f234, G_2133a8v.w2080, h);
-            if (!(a | coll3_2133a8(&G_2133a8v.pos, G_2133a8v.f234))) break;
+            if (!(a | coll3_2133a8(&G_2133a8v.pos, G_2133a8v.f234)))
+                break;
         }
         c = coll_2133a8;
         qcopy(&G_2133a8v.pos, c);
@@ -530,9 +577,18 @@ s32 FUN_L16_00210b60(s32 mode) {
     h = vlen_2133a8(&w);
     if (G_2133a8v.f234 * 1.5f < h) {
         if (mode == 0xF) {
-            if (512.0f < w.f[0]) w.f[0] = 512.0f; else if (w.f[0] < -512.0f) w.f[0] = -512.0f;
-            if (512.0f < w.f[1]) w.f[1] = 512.0f; else if (w.f[1] < -512.0f) w.f[1] = -512.0f;
-            if (512.0f < w.f[2]) w.f[2] = 512.0f; else if (w.f[2] < -512.0f) w.f[2] = -512.0f;
+            if (512.0f < w.f[0])
+                w.f[0] = 512.0f;
+            else if (w.f[0] < -512.0f)
+                w.f[0] = -512.0f;
+            if (512.0f < w.f[1])
+                w.f[1] = 512.0f;
+            else if (w.f[1] < -512.0f)
+                w.f[1] = -512.0f;
+            if (512.0f < w.f[2])
+                w.f[2] = 512.0f;
+            else if (w.f[2] < -512.0f)
+                w.f[2] = -512.0f;
             vscl_2133a8(&w, &w, G_2133a8v.f234);
             vadd_2133a8(&G_2133a8v.pos, &old, &w);
         }

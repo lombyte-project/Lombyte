@@ -5,8 +5,7 @@ extern void measure_text_width(s32 arg0, s32 arg1, void *arg2) __asm__("func_001
 
 void measure_text_width_regular(s32 arg0, s32 arg1) __asm__("FUN_001f6250");
 
-void measure_text_width_regular(s32 arg0, s32 arg1)
-{
+void measure_text_width_regular(s32 arg0, s32 arg1) {
     measure_text_width(arg0, arg1, D_001DF050);
 }
 

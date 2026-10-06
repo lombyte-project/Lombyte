@@ -46,7 +46,10 @@ void FUN_L00_002500b8(char *o) {
     }
     off = idx * 0x30;
     e1 = (char *)(off + (int)D_L00_00160040);
-    PackRenderCommandFields(o, *(int *)(o + 0x80) = (*(int *)(e1 + 0x18) << 16) + (*(int *)(e1 + 0x14) << 8) + *(int *)(e1 + 0x10), 0, 0, 0);
+    PackRenderCommandFields(o,
+                            *(int *)(o + 0x80) = (*(int *)(e1 + 0x18) << 16) +
+                                                 (*(int *)(e1 + 0x14) << 8) + *(int *)(e1 + 0x10),
+                            0, 0, 0);
     *(int *)(o + 0x38) = *(int *)((char *)(off + (int)D_L00_00160040) + 0x1C);
     e2 = (char *)(off + (int)D_L00_00160040);
     if (*(unsigned char *)(e2 + 0x27) != 0) {

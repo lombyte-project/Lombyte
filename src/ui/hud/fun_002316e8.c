@@ -2,7 +2,9 @@
 #include "sda.h"
 #include "qcopy.h"
 
-struct TagPtr { int *p; };
+struct TagPtr {
+    int *p;
+};
 extern struct TagPtr D_00160F00;
 extern int D_0013E500[];
 extern char D_00160850[];
@@ -17,11 +19,11 @@ typedef union {
 
 /* Append a textured four-corner GIF packet. Screen coordinates use 12.4
    fixed point relative to the viewport origin; UV pairs stay as floats. */
-void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba,
-                  unsigned long tex, float u0, float u1, float v0, float v1) __asm__("FUN_002316e8");
+void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
+                  float u1, float v0, float v1) __asm__("FUN_002316e8");
 
-void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba,
-                  unsigned long tex, float u0, float u1, float v0, float v1) {
+void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
+                  float u1, float v0, float v1) {
     int x0 = x * 16 + D_0013E500[4] - 8;
     int x1 = (x + w) * 16 + D_0013E500[4] - 8;
     int y0 = y * 16 + D_0013E500[5] - 8;

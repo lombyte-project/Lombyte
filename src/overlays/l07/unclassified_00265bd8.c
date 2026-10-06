@@ -28,8 +28,7 @@ extern int D_0015ED84;
 extern void func_00233AB8(void *) __asm__("FUN_L07_002ba260");
 
 void FUN_L07_00265bd8(void) {
-    if (D_0015ED84 == 7 && D_L07_0016C8E0.state == 4 &&
-        D_L07_0016C8E0.moby != 0 &&
+    if (D_0015ED84 == 7 && D_L07_0016C8E0.state == 4 && D_L07_0016C8E0.moby != 0 &&
         D_L07_0016C8E0.moby->class_id == 0x214) {
         AddDrawCallback(func_00233AB8, D_L07_0016C8E0.moby);
     }

@@ -21,4 +21,5 @@ s32 promote_first_available_map_entry(void) {
     return i;
 }
 
-extern __typeof__(promote_first_available_map_entry) func_00204F60 __attribute__((alias("FUN_00204f60")));
+extern __typeof__(promote_first_available_map_entry) func_00204F60
+    __attribute__((alias("FUN_00204f60")));

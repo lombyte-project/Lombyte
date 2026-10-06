@@ -43,8 +43,11 @@ extern void FUN_L00_00262b80(char *, char *, char *, float, float, float);
 
 void FUN_L03_002d3c40(char *m) {
     char *d = *(char **)(m + 0x78);
-    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * 0.0174532925f * D_0015ED6C, m, (float *)(d + 0xEC), (float *)(d + 0xE8));
-    FUN_L00_00262b80(m, d + 0xF0, d + 0xF4, D_L03_00161AF8, D_L03_00161AFC * 0.0174532925f * D_0015ED6C, D_L03_00161B00 * 0.0174532925f * D_0015ED6C);
+    FUN_L00_00262b00(D_L03_00161AF0, D_L03_00161AF4 * 0.0174532925f * D_0015ED6C, m,
+                     (float *)(d + 0xEC), (float *)(d + 0xE8));
+    FUN_L00_00262b80(m, d + 0xF0, d + 0xF4, D_L03_00161AF8,
+                     D_L03_00161AFC * 0.0174532925f * D_0015ED6C,
+                     D_L03_00161B00 * 0.0174532925f * D_0015ED6C);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
@@ -127,7 +130,8 @@ extern void FUN_L00_00235dc0(void);
 extern void FUN_L00_00235e18(int, int);
 extern void FUN_L00_002371e0(void);
 extern void FUN_L00_00237200(void);
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
+                           s32 b) __asm__("FUN_001ff308");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L03_002dcbc8(char *m, int mode) {
@@ -152,7 +156,8 @@ void FUN_L03_002dcbc8(char *m, int mode) {
     }
     h = *(int *)(d + 0xA4);
     if (h == -1) {
-        *(int *)(d + 0xA4) = queue_animation_update(0xC, 0, (int)FUN_L00_00235dc0, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
+        *(int *)(d + 0xA4) = queue_animation_update(
+            0xC, 0, (int)FUN_L00_00235dc0, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
     } else {
         FUN_L00_00235e18(h, 0xA);
     }

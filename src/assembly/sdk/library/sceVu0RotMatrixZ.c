@@ -2,14 +2,15 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceVu0RotMatrixZ/FUN_001252b8.s", FUN_001252b8);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceVu0RotMatrixZ/FUN_001252b8.s",
+            FUN_001252b8);
 #else
 /* The polynomial coefficients are the vector loaded by the resident helper. */
 static const float *const sine_coefficients = (const float *)0x00132e00;
 
-void sceVu0RotMatrixZ(float output[4][4], const float input[4][4], float radians) __asm__("FUN_001252b8");
-void sceVu0RotMatrixZ(float output[4][4], const float input[4][4], float radians)
-{
+void sceVu0RotMatrixZ(float output[4][4], const float input[4][4],
+                      float radians) __asm__("FUN_001252b8");
+void sceVu0RotMatrixZ(float output[4][4], const float input[4][4], float radians) {
     float angle;
     float cosine;
     float sine;

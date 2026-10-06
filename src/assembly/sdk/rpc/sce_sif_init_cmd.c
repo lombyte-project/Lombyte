@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_init_cmd/sceSifInitCmd.s", sceSifInitCmd);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_init_cmd/sceSifInitCmd.s",
+            sceSifInitCmd);
 #else
 #include "types.h"
 struct M2c_D_00154E40 {
@@ -76,8 +77,8 @@ void sceSifInitCmd(void) {
 block_3:
     *(s32 *)D_0012FC04 = 1;
     ipval = 0x20;
-    temp_6_30 = (s32) D_00154D80 | 0x20000000;
-    temp_5_29 = (s32) D_00154E00 | 0x20000000;
+    temp_6_30 = (s32)D_00154D80 | 0x20000000;
+    temp_5_29 = (s32)D_00154E00 | 0x20000000;
     D_00154E58.unk0 = temp_6_30;
     D_00154E58.unk4 = temp_5_29;
     D_00154E58.unk1C = D_00154F80;
@@ -143,7 +144,7 @@ loop_15:
     temp_2_141 = sceSifGetReg(2);
     D_00154E58.unk8 = temp_2_141;
     sceSifSetReg(0x80000000, temp_2_141);
-    sceSifSetReg(0x80000001, (s32) &D_00154E58);
+    sceSifSetReg(0x80000001, (s32)&D_00154E58);
     D_00154E40.unk10 = D_00154D80;
     D_00154E40.unkC = 0;
     sceSifSendCmd(0x80000002, &D_00154E40, 0x14, 0, 0, 0);

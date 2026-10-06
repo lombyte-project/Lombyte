@@ -73,7 +73,8 @@ void update_item_preview_transform(struct ItemPreviewMoby *moby) {
     struct PreviewCamera *camera;
 
     moby->rotation_z = preview->rotation_angle;
-    moby->x = preview_camera.x + ((flags & 1) ? preview_placements[item_index].alternate_x : preview_placements[item_index].normal_x);
+    moby->x = preview_camera.x + ((flags & 1) ? preview_placements[item_index].alternate_x
+                                              : preview_placements[item_index].normal_x);
     camera = &preview_camera;
     y_offset = preview_placements[item_index].y;
     moby->y = camera->y + y_offset;

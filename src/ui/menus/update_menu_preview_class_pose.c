@@ -12,10 +12,10 @@ extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098
 extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");
 typedef struct {
     char pad00[0xC];
-    s32 bone_index;       /* 0x0C */
-    s32 oclass;           /* 0x10 */
+    s32 bone_index; /* 0x0C */
+    s32 oclass;     /* 0x10 */
     char pad14[4];
-    s32 normalize_basis;  /* 0x18 */
+    s32 normalize_basis; /* 0x18 */
     char pad1C[0x30];
 } PauseClassRecord;
 extern PauseClassRecord preview_class_records[] __asm__("D_001863D0");
@@ -61,7 +61,8 @@ void update_menu_preview_class_pose(void *preview) {
         detach_manipulator(source_moby_address, attachment);
     }
     if (reset_bindings) {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address, 0, source_moby_address);
+        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+                        0, source_moby_address);
         moby->primary_binding = preview_binding_table;
         moby->binding_blend_word = 0;
         moby->secondary_binding = preview_binding_table;
@@ -76,4 +77,5 @@ void update_menu_preview_class_pose(void *preview) {
     }
 }
 
-extern __typeof__(update_menu_preview_class_pose) func_00224B70 __attribute__((alias("FUN_00224b70")));
+extern __typeof__(update_menu_preview_class_pose) func_00224B70
+    __attribute__((alias("FUN_00224b70")));

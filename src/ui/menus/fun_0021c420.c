@@ -1,5 +1,9 @@
 #include "types.h"
-struct Obj { u8 pad0[0x30]; s32 slots[19]; s32 handle; };
+struct Obj {
+    u8 pad0[0x30];
+    s32 slots[19];
+    s32 handle;
+};
 extern s32 D_001A0314[];
 extern s32 D_001CF874[];
 extern s32 D_001CF758[];

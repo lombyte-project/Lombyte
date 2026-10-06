@@ -123,7 +123,8 @@ extern void FUN_L00_002132b8_235c08(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00212088_235c08(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_235c08(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void FUN_L00_002118c8_235c08(int, float) __asm__("FUN_L00_002118c8");
-extern f32 FUN_L00_0025bc98_235c08(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern f32 FUN_L00_0025bc98_235c08(float *, float *, int, float, float, float,
+                                   float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_002091d8_235c08(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_235c08(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void FUN_L00_00233708_235c08(void *, void *, f32) __asm__("FUN_L00_00233708");
@@ -132,7 +133,7 @@ extern void FUN_001f9c48_235c08(float *, float *, float) __asm__("FUN_001f9c48")
 extern void FUN_001f9a10_235c08(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00213e68_235c08(f32) __asm__("FUN_L00_00213e68");
 
-#define P D_0013F350_235c08
+#define P    D_0013F350_235c08
 #define ED64 D_0015ED64_235c08
 #define ED6C D_0015ED6C_235c08
 #define ED70 D_0015ED70_235c08
@@ -219,7 +220,8 @@ void FUN_L12_00235c08(void) {
     } else {
         if (state == 0x2D) {
             x = P.f98;
-            P.f188 = FUN_L00_0025bc98_235c08(&x, &P.f184, 0, P.f180, ED64 * 0.018f, ED64 * 0.2f, ED6C * 7.330383f);
+            P.f188 = FUN_L00_0025bc98_235c08(&x, &P.f184, 0, P.f180, ED64 * 0.018f, ED64 * 0.2f,
+                                             ED6C * 7.330383f);
             a = FUN_001fa5c8_235c08(x, P.f98);
             FUN_L00_002091d8_235c08(0.0f, 0.0f, a);
         } else {
@@ -231,7 +233,8 @@ void FUN_L12_00235c08(void) {
         if (P.f190 < D_L12_0017C250_235c08[0] * ED6C * 0.2f) {
             if (P.i208C == 2) {
                 d = P.f944;
-                if (P.b12E2) d = ED70 * 0.17f;
+                if (P.b12E2)
+                    d = ED70 * 0.17f;
                 speed = FUN_001f9b20_235c08(&P.vE0);
                 approach_value_235c08(0.0f, d, &speed);
                 FUN_001f9c48_235c08(P.vE0.f, P.vE0.f, speed);

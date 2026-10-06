@@ -5,7 +5,7 @@
 
 struct M2c_arg0 {
     u8 pad_0[0x40];
-    struct M2c_temp_16_12 * unk40;
+    struct M2c_temp_16_12 *unk40;
 };
 
 struct M2c_temp_16_12 {

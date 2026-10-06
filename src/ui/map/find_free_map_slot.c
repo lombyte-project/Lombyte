@@ -1,5 +1,8 @@
 #include "types.h"
-struct Slots { s32 used[5]; s32 owner[5]; };
+struct Slots {
+    s32 used[5];
+    s32 owner[5];
+};
 extern struct Slots D_001A0368;
 s32 find_free_map_slot(s32 reverse) __asm__("FUN_00204ef8");
 

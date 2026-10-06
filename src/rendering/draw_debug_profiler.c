@@ -134,8 +134,8 @@ void draw_debug_profiler(void) {
     f32 t;
     f32 div;
 
-    if (D_0016045C == NULL || D_0016045C->unk4 != 0 || ((D_0015F434 ^ 1) & 1) || D_0018A2B0.unk8 == 0 ||
-        D_0018C34C[0] != 0) {
+    if (D_0016045C == NULL || D_0016045C->unk4 != 0 || ((D_0015F434 ^ 1) & 1) ||
+        D_0018A2B0.unk8 == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
     func_001F2260();

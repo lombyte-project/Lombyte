@@ -2,16 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { u8 p[0x18E]; s16 h; s32 n; u8 p2[0x1E0 - 0x194]; u32 t[30]; } S_266d60;
+typedef struct {
+    u8 p[0x18E];
+    s16 h;
+    s32 n;
+    u8 p2[0x1E0 - 0x194];
+    u32 t[30];
+} S_266d60;
 extern S_266d60 D_0013C940_266d60 __asm__("D_0013C940");
 u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out) {
     s32 lim = D_0013C940_266d60.n;
     s32 i;
-    if (lim >= n) lim = n;
+    if (lim >= n)
+        lim = n;
     for (i = 1; i < lim + 1; i++) {
         s32 k = (D_0013C940_266d60.h - i + 30) % 30;
         if (D_0013C940_266d60.t[k] & mask) {
-            if (out) *out = i - 1;
+            if (out)
+                *out = i - 1;
             return D_0013C940_266d60.t[k] & mask;
         }
     }
@@ -36,6 +44,17 @@ int FUN_L00_00266e00(int a, int b, int c, int d) {
     }
     return r;
 }
-typedef struct { char pad[0x18E]; s16 head; s32 count; char pad2[0x2D0-0x194]; f32 v[30]; } Hist_266e80;
+typedef struct {
+    char pad[0x18E];
+    s16 head;
+    s32 count;
+    char pad2[0x2D0 - 0x194];
+    f32 v[30];
+} Hist_266e80;
 extern Hist_266e80 D_0013C940;
-f32 FUN_L00_00266e80(s32 n) { s32 m; if (D_0013C940.count < n) n = D_0013C940.count; return D_0013C940.v[(D_0013C940.head - n + 30) % 30]; }
+f32 FUN_L00_00266e80(s32 n) {
+    s32 m;
+    if (D_0013C940.count < n)
+        n = D_0013C940.count;
+    return D_0013C940.v[(D_0013C940.head - n + 30) % 30];
+}

@@ -22,7 +22,8 @@ union RegionVector {
 extern s32 func_00208818(s32, s32, s32, s32, s32, s32);
 extern f32 func_001F9B80(union RegionVector *, union RegionVector *);
 
-s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) __asm__("FUN_00206bd8");
+s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, f32 y,
+                                       f32 z) __asm__("FUN_00206bd8");
 
 s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
     s32 special_state;
@@ -48,7 +49,8 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
         if (func_001F9B80(&position, &region_center) <= 7.0f) {
             return 1;
         }
-        if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) && region_enabled[0]) {
+        if (func_00208818(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) &&
+            region_enabled[0]) {
             return 1;
         }
         return 0;
@@ -66,4 +68,5 @@ s32 passes_projected_region_callback_0(s32 projected_x, s32 projected_y, f32 x, 
     }
     return 0;
 }
-extern __typeof__(passes_projected_region_callback_0) func_00206BD8 __attribute__((alias("FUN_00206bd8")));
+extern __typeof__(passes_projected_region_callback_0) func_00206BD8
+    __attribute__((alias("FUN_00206bd8")));

@@ -96,7 +96,8 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
 
     if (grid->cols >= 2) {
         start_x = grid->margin_x;
-        column_step = D_00160290 + (font->w - (start_x + start_x) - D_00160290 * grid->cols) / (grid->cols - 1);
+        column_step = D_00160290 +
+                      (font->w - (start_x + start_x) - D_00160290 * grid->cols) / (grid->cols - 1);
     } else {
         column_step = 0.0f;
         start_x = (font->w - D_00160290) * 0.5f;
@@ -107,7 +108,8 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
         start_y = grid->margin_y;
     } else if (grid->rows >= 2) {
         start_y = grid->margin_y;
-        row_step = D_00160294 + (font->h - (start_y + start_y) - D_00160294 * grid->rows) / (grid->rows - 1);
+        row_step = D_00160294 +
+                   (font->h - (start_y + start_y) - D_00160294 * grid->rows) / (grid->rows - 1);
     } else {
         row_step = 0.0f;
         start_y = (font->h - D_00160294) * 0.5f;
@@ -130,9 +132,12 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
             left = scale * x;
             right = left + icon_width;
             if (focused && grid->selected_cell == cell - grid->cells) {
-                color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) | 0x80000000;
-                append_screen_sprite(left - 0x30, top - 0x30, right + 0x30, bottom + 0x30, color, 1);
-                append_screen_sprite(left - 0x10, top - 0x10, right + 0x10, bottom + 0x10, D_001601B0, 1);
+                color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) |
+                        0x80000000;
+                append_screen_sprite(left - 0x30, top - 0x30, right + 0x30, bottom + 0x30, color,
+                                     1);
+                append_screen_sprite(left - 0x10, top - 0x10, right + 0x10, bottom + 0x10,
+                                     D_001601B0, 1);
             }
             if (cell->kind == 0 ? D_0013D4C0[cell->id] : D_0013D388[cell->id]) {
                 frame_offset = 0;
@@ -151,7 +156,9 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
                         frame_offset = 2;
                     }
                 }
-                draw_hud_sprite_subpixel(find_valid_animation_frame_index(cell->icon, cell->frame + frame_offset), left, top, icon_width, icon_height, 0x80);
+                draw_hud_sprite_subpixel(
+                    find_valid_animation_frame_index(cell->icon, cell->frame + frame_offset), left,
+                    top, icon_width, icon_height, 0x80);
             }
             cell++;
             x += column_step;

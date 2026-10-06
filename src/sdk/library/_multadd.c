@@ -34,10 +34,10 @@ extern s32 InsertLinkObject();
 extern _Bigint *_Balloc();
 extern s32 memcpy();
 
-#define Bcopy(x, y) memcpy((char *)&x->_sign, (char *)&y->_sign, y->_wds * sizeof(s32) + 2 * sizeof(s32))
+#define Bcopy(x, y)                                                                                \
+    memcpy((char *)&x->_sign, (char *)&y->_sign, y->_wds * sizeof(s32) + 2 * sizeof(s32))
 
-_Bigint *_multadd(s32 ptr, _Bigint *b, s32 m, s32 a)
-{
+_Bigint *_multadd(s32 ptr, _Bigint *b, s32 m, s32 a) {
     s32 i, wds;
     u32 *x, y;
     u32 xi, z;

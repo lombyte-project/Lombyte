@@ -17,7 +17,8 @@ extern void FUN_00214a98(float *, int *);
 void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) {
+unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h,
+                                char *owner) {
     unsigned char *r = FUN_L00_002678b8(0x47);
     if (r != 0) {
         int *q, *q2;

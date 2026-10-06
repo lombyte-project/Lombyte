@@ -85,7 +85,8 @@ extern void *FUN_002141f8(void *);
 extern int FUN_001f96f8(int);
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 extern void *FUN_L01_0030d308(void *, void *, void *, float, float, float, float, float, float);
-extern void FUN_L01_0030c898_c(void *, void *, float, float, float, float) __asm__("FUN_L01_0030c898");
+extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
+                               float) __asm__("FUN_L01_0030c898");
 
 extern float D_L01_00162080 __attribute__((sda));
 extern float D_L01_00162084 __attribute__((sda));
@@ -96,7 +97,10 @@ extern float D_L01_00162094 __attribute__((sda));
 extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 extern int D_L01_0015F5C4 __attribute__((sda));
 
-typedef union { u128_w22c q; float f[4]; } V4_w22c;
+typedef union {
+    u128_w22c q;
+    float f[4];
+} V4_w22c;
 extern V4_w22c D_0013F3D0_u __asm__("D_0013F3D0");
 
 void FUN_L01_0030d5f0(char *moby, char *state) {
@@ -106,13 +110,13 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
     char *e;
     float a, b, c, d, t, dist;
 
-    if (FUN_001f9770(state + 0x54) == 0) return;
+    if (FUN_001f9770(state + 0x54) == 0)
+        return;
     FUN_L00_0024f7c8(moby, (state[0x56] & 1) + 1, &v);
     state[0x56] = state[0x56] ^ 1;
-    e = FUN_L01_0030d308(moby, &v, moby + 0x40,
-                         D_L01_00162088 * 0.017453292f,
-                         D_L01_0016208C * 0.017453292f,
-                         D_L01_00162084, 2.0f, 3.1415927f, 3.1415927f);
+    e = FUN_L01_0030d308(moby, &v, moby + 0x40, D_L01_00162088 * 0.017453292f,
+                         D_L01_0016208C * 0.017453292f, D_L01_00162084, 2.0f, 3.1415927f,
+                         3.1415927f);
     if (e != 0) {
         *(char **)(state + 0x60) = e;
         if (D_0013F3D0_u.f[2] + 1.1f < *(float *)(moby + 0x18)) {
@@ -123,8 +127,10 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                     char *r;
                     qcopy(&q, e + 0x10);
                     r = FUN_002141f8(e);
-                    if (r != 0) q.f[2] = q.f[2] + *(float *)(r + 0x10);
-                    else q.f[2] = q.f[2] + D_L01_00162094;
+                    if (r != 0)
+                        q.f[2] = q.f[2] + *(float *)(r + 0x10);
+                    else
+                        q.f[2] = q.f[2] + D_L01_00162094;
                     FUN_001f9a28(&p, &q, &v);
                     FUN_001f9bf8(&p, &p, D_L01_00162090);
                     FUN_001f9a10(&v, &v, &p);
@@ -223,8 +229,10 @@ void FUN_L01_00316e88(float a, float b) {
     char *m = D_L01_00167280_d;
     char *t;
     char *d;
-    if (*(short *)(m + 0x86) != 5) t = FUN_L00_001eb1f8(5);
-    else t = m;
+    if (*(short *)(m + 0x86) != 5)
+        t = FUN_L00_001eb1f8(5);
+    else
+        t = m;
     d = *(char **)(t + 0x70) + 0xE0;
     *(float *)(d + 0x44) = a;
     *(float *)(d + 0x48) = b;
@@ -253,7 +261,8 @@ void FUN_L01_00319f18(char *moby) {
         float t = (b[0] + 1.0f) * 0.5f;
         int v = func_001FA898_r(ConvertIntegerToFloat(*(int *)(data + 4)) * t);
         int w = *(int *)(data + 4);
-        if (!(w < v)) w = v;
+        if (!(w < v))
+            w = v;
         FUN_L01_002a1a90((int)moby, data[0], w, data[1], data[2]);
         data[3] = 1;
     } else if (data[3] != 0) {
@@ -310,14 +319,17 @@ void FUN_L01_0031a128(int *moby) {
         subtract_vector_xyz(v, D_0013F3D0, (char *)moby + 0x40);
         v[3] = 0;
         transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
-        if (AbsoluteFloat(v[4]) <= 1.0f && AbsoluteFloat(v[5]) <= 1.0f && AbsoluteFloat(v[6]) <= 1.0f) {
+        if (AbsoluteFloat(v[4]) <= 1.0f && AbsoluteFloat(v[5]) <= 1.0f &&
+            AbsoluteFloat(v[6]) <= 1.0f) {
             p[2] = 1;
             return;
         }
         if (p[2] != 0) {
             short *s = (short *)p;
-            if (s[7] == -1) s[7] = s[6];
-            if (s[6] == -1) s[6] = s[7];
+            if (s[7] == -1)
+                s[7] = s[6];
+            if (s[6] == -1)
+                s[6] = s[7];
             if (v[4] > 0) {
                 FUN_L01_0027a248(p[1], s[7]);
             } else {

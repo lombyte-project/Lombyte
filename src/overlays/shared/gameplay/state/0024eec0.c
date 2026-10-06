@@ -2,14 +2,25 @@
 #include "types.h"
 #include "asm.h"
 
-static __inline__ void qcopy(void *dst, void *src)
-{
+static __inline__ void qcopy(void *dst, void *src) {
     __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
 }
-typedef struct { float m[16]; } __attribute__((aligned(16))) Mtx;
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4;
-typedef struct { float a; float b; float pad[2]; Vec4 v; } Ent32;
-typedef struct { char h[0x10]; Ent32 e[1]; } Tbl;
+typedef struct {
+    float m[16];
+} __attribute__((aligned(16))) Mtx;
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) Vec4;
+typedef struct {
+    float a;
+    float b;
+    float pad[2];
+    Vec4 v;
+} Ent32;
+typedef struct {
+    char h[0x10];
+    Ent32 e[1];
+} Tbl;
 void FUN_001fa2d8(Mtx *, void *);
 void FUN_001f9a28(Vec4 *, void *, void *);
 void FUN_001f9d20(Vec4 *, Vec4 *, Mtx *);
@@ -39,7 +50,18 @@ void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
     int *t = *(int **)a;
     for (i = 0; i < n; i++, t += 4) {
         unsigned short *e = *(unsigned short **)t;
-        int c = ((unsigned char *)e)[2]; int cnt; e += 2; if (c != 0) { cnt = c; do { e[0] = e[0] + dx; e[1] = e[1] + dy; e += 2; cnt--; } while (cnt != 0); }
+        int c = ((unsigned char *)e)[2];
+        int cnt;
+        e += 2;
+        if (c != 0) {
+            cnt = c;
+            do {
+                e[0] = e[0] + dx;
+                e[1] = e[1] + dy;
+                e += 2;
+                cnt--;
+            } while (cnt != 0);
+        }
     }
 }
 #define NOT_SDA
@@ -119,7 +141,9 @@ void FUN_L00_0024f190_c(void *unused, unsigned char *a) {
                     a[0x22] = a[0x23];
                     a[0x21]++;
                     o = a[0x23] * 4;
-                    if (a[0x21] >= *(unsigned char *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + 0x10)) {
+                    if (a[0x21] >=
+                        *(unsigned char *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) +
+                                           0x10)) {
                         a[0x21] = 0;
                         a[5] |= 2;
                     }
@@ -129,7 +153,8 @@ void FUN_L00_0024f190_c(void *unused, unsigned char *a) {
                         o2 = a[0x22] * 4;
                         p = a[0x20] * 4;
                         *(float *)(a + 0x24) = f;
-                        g = **(float **)(*(int *)(*(unsigned char **)(a + 0x14) + o2 + 0x48) + p + 0x1C);
+                        g = **(float **)(*(int *)(*(unsigned char **)(a + 0x14) + o2 + 0x48) + p +
+                                         0x1C);
                         *(float *)(a + 0x2C) = g;
                         *(float *)(a + 0x24) = f * g;
                     }
@@ -142,19 +167,30 @@ void FUN_L00_0024f190_c(void *unused, unsigned char *a) {
     } else {
         int o = a[0x22] * 4;
         int p = a[0x20] * 4;
-        *(int *)(a + 0x38) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+        *(int *)(a + 0x38) =
+            *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
     }
     if (a[7]) {
         FUN_L00_0024f440(a, a[0x23], a[0x21], *(int *)(a + 0x3C));
     } else {
         int o = a[0x23] * 4;
         int p = a[0x21] * 4;
-        *(int *)(a + 0x3C) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+        *(int *)(a + 0x3C) =
+            *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
     }
     FUN_L00_00252990(a);
 }
-typedef struct { u8 pad[0x20]; u8 b20, b21, b22, b23; s32 i24; f32 f28; f32 f2c; } S;
-typedef struct { u8 pad[0x51]; u8 b51, b52, b53; } A;
+typedef struct {
+    u8 pad[0x20];
+    u8 b20, b21, b22, b23;
+    s32 i24;
+    f32 f28;
+    f32 f2c;
+} S;
+typedef struct {
+    u8 pad[0x51];
+    u8 b51, b52, b53;
+} A;
 void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     a1->b22 = a0->b53;
     a1->b20 = a0->b51;
@@ -163,6 +199,7 @@ void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     a1->f28 = 1.0f;
     a1->f2c = 1.0f / (f32)a4;
     a1->i24 = 0;
-    if (a5) FUN_L00_0024f190();
+    if (a5)
+        FUN_L00_0024f190();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f440.s", FUN_L00_0024f440);

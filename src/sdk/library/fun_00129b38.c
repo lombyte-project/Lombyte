@@ -2,31 +2,31 @@
 typedef struct Slot1B8 {
     /* 0x00 */ void *unk00;
     /* 0x04 */ void *unk04;
-    /* 0x08 */ int   unk08;
+    /* 0x08 */ int unk08;
     /* 0x0C */ void *unk0C;
-} Slot1B8;  /* 0x10 */
+} Slot1B8; /* 0x10 */
 typedef struct Handler {
     /* 0x00 */ void *fn;
-    /* 0x04 */ int   data;
-} Handler;  /* 0x8 */
+    /* 0x04 */ int data;
+} Handler; /* 0x8 */
 typedef struct Obj40 {
-    /* 0x000 */ char    unk000[0x4];
-    /* 0x004 */ int     unk004;
-    /* 0x008 */ int     unk008;
+    /* 0x000 */ char unk000[0x4];
+    /* 0x004 */ int unk004;
+    /* 0x008 */ int unk008;
     /* 0x00C */ Handler handlers[0x14];
-    /* 0x0AC */ int     unk0AC;
-    /* 0x0B0 */ char    unk0B0[0x68];
-    /* 0x118 */ int     unk118;
-    /* 0x11C */ char    unk11C[0x4];
-    /* 0x120 */ int     unk120;
-    /* 0x124 */ char    unk124[0x2C];
-    /* 0x150 */ int     unk150;
-    /* 0x154 */ char    unk154[0x20];
-    /* 0x174 */ int     unk174;
-    /* 0x178 */ char    unk178[0x40];
+    /* 0x0AC */ int unk0AC;
+    /* 0x0B0 */ char unk0B0[0x68];
+    /* 0x118 */ int unk118;
+    /* 0x11C */ char unk11C[0x4];
+    /* 0x120 */ int unk120;
+    /* 0x124 */ char unk124[0x2C];
+    /* 0x150 */ int unk150;
+    /* 0x154 */ char unk154[0x20];
+    /* 0x174 */ int unk174;
+    /* 0x178 */ char unk178[0x40];
     /* 0x1B8 */ Slot1B8 slots[3];
-    /* 0x1E8 */ char    unk1E8[0x638];
-    /* 0x820 */ int     unk820;
+    /* 0x1E8 */ char unk1E8[0x638];
+    /* 0x820 */ int unk820;
 } Obj40;
 /* Does the request at arg1 fit the heap described by arg0? A sized
    request (+0xE0 non-zero) has to fit both the byte budget at +0xDC and

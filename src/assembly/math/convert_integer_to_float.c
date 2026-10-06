@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/math/convert_integer_to_float/func_001FA6C0.s", func_001FA6C0);
+INCLUDE_ASM("config/us/expected/asm/assembly/math/convert_integer_to_float/func_001FA6C0.s",
+            func_001FA6C0);
 #else
 #include "types.h"
 

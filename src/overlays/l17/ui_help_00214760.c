@@ -20,14 +20,26 @@ struct PL {
     union {
         Vec v80;
         f32 f80;
-        struct { u8 pad[0x4]; f32 v; } f84;
-        struct { u8 pad[0x8]; f32 v; } f88;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } f84;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f88;
     } u80;
     union {
         Vec v90;
         f32 f90;
-        struct { u8 pad[0x4]; f32 v; } f94;
-        struct { u8 pad[0x8]; f32 v; } f98;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } f94;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f98;
     } u90;
     f32 fA0;
     f32 fA4;
@@ -35,23 +47,41 @@ struct PL {
     union {
         Vec vE0;
         f32 fE0;
-        struct { u8 pad[0x4]; f32 v; } fE4;
-        struct { u8 pad[0x8]; f32 v; } fE8;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } fE4;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } fE8;
     } uE0;
     union {
         Vec vF0;
         f32 fF0;
-        struct { u8 pad[0x4]; f32 v; } fF4;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } fF4;
     } uF0;
     union {
         Vec v100;
         f32 f100;
-        struct { u8 pad[0x4]; f32 v; } f104;
-        struct { u8 pad[0x8]; f32 v; } f108;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } f104;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f108;
     } u100;
     union {
         Vec v110;
-        struct { u8 pad[0x8]; f32 v; } f118;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f118;
     } u110;
     Vec v120;
     Vec v130;
@@ -87,8 +117,8 @@ struct PL {
     f32 f2F4;
     u8 pad2F8[0x4];
     union {
-        void * p2FC;
-        struct M * pm2FC;
+        void *p2FC;
+        struct M *pm2FC;
         s32 i2FC;
     } u2FC;
     u8 pad300[0x4];
@@ -138,7 +168,10 @@ struct PL {
     u8 pad4F4[0xC];
     union {
         Vec v500;
-        struct { u8 pad[0x8]; f32 v; } f508;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f508;
     } u500;
     Vec v510;
     Vec v520;
@@ -147,7 +180,7 @@ struct PL {
     f32 f550;
     f32 f554;
     u8 pad558[0x8];
-    void * p560;
+    void *p560;
     s32 i564;
     f32 f568;
     u8 pad56C[0x4];
@@ -160,7 +193,7 @@ struct PL {
     f32 f588;
     s32 i58C;
     s32 i590;
-    void * p594;
+    void *p594;
     s32 i598;
     f32 f59C;
     s32 i5A0;
@@ -174,10 +207,10 @@ struct PL {
     f32 f5CC;
     f32 f5D0;
     f32 f5D4;
-    struct M * pm5D8;
+    struct M *pm5D8;
     f32 f5DC;
     Vec v5E0;
-    void * p5F0;
+    void *p5F0;
     s32 i5F4;
     f32 f5F8;
     u8 pad5FC[0x4];
@@ -191,7 +224,7 @@ struct PL {
     u8 pad61C[0x7C];
     s32 i698;
     u8 pad69C[0x8];
-    struct M * pm6A4;
+    struct M *pm6A4;
     u8 pad6A8[0x238];
     s32 i8E0;
     f32 f8E4;
@@ -222,7 +255,7 @@ struct PL {
     f32 f954;
     u8 pad958[0x8];
     f32 f960;
-    struct M * pm964;
+    struct M *pm964;
     u8 pad968[0x4];
     f32 f96C;
     f32 f970;
@@ -231,7 +264,7 @@ struct PL {
     f32 f97C;
     f32 f980;
     u8 pad984[0x10];
-    struct M * pm994;
+    struct M *pm994;
     u8 pad998[0x4];
     s16 h99C;
     u8 pad99E[0x2];
@@ -254,7 +287,7 @@ struct PL {
     f32 f9E4;
     f32 f9E8;
     u8 pad9EC[0x68];
-    struct M * pmA54;
+    struct M *pmA54;
     s32 iA58;
     f32 fA5C;
     s32 iA60;
@@ -270,13 +303,13 @@ struct PL {
     u8 padAA0[0x8];
     f32 fAA8;
     u8 padAAC[0x5E4];
-    struct M * pm1090;
+    struct M *pm1090;
     u8 pad1094[0x14];
     s16 h10A8;
     u8 pad10AA[0xE];
     s32 i10B8;
     u8 pad10BC[0xC4];
-    struct M * pm1180;
+    struct M *pm1180;
     u8 pad1184[0x24];
     s32 i11A8;
     u8 pad11AC[0x136];
@@ -288,14 +321,17 @@ struct PL {
     u8 pad12E8[0x358];
     union {
         Vec v1640;
-        struct { u8 pad[0xC]; f32 v; } f164C;
+        struct {
+            u8 pad[0xC];
+            f32 v;
+        } f164C;
     } u1640;
     u8 pad1650[0x10];
     s32 i1660;
     u8 pad1664[0xC];
     Vec v1670;
     u8 pad1680[0xA00];
-    struct M * pm2080;
+    struct M *pm2080;
     s32 i2084;
     s32 i2088;
     u8 pad208C[0x4];
@@ -336,8 +372,14 @@ struct M {
     union {
         Vec v10;
         f32 f10;
-        struct { u8 pad[0x4]; f32 v; } f14;
-        struct { u8 pad[0x8]; f32 v; } f18;
+        struct {
+            u8 pad[0x4];
+            f32 v;
+        } f14;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f18;
     } u10;
     u8 pad20[0x3];
     u8 b23;
@@ -352,7 +394,10 @@ struct M {
     u8 pad38[0x8];
     union {
         Vec v40;
-        struct { u8 pad[0x8]; f32 v; } f48;
+        struct {
+            u8 pad[0x8];
+            f32 v;
+        } f48;
     } u40;
     u8 pad50[0x1];
     u8 b51;
@@ -361,7 +406,7 @@ struct M {
     u8 pad54[0x1C];
     u8 b70;
     u8 pad71[0x7];
-    struct M * pm78;
+    struct M *pm78;
     u8 pad7C[0x2A];
     s16 hA6;
     u8 padA8[0x18];
@@ -385,7 +430,10 @@ struct PADT {
     union {
         u64 d1A0;
         s32 i1A0;
-        struct { u8 pad[0x4]; s32 v; } i1A4;
+        struct {
+            u8 pad[0x4];
+            s32 v;
+        } i1A4;
     } u1A0;
     u8 pad1A8[0x2C];
     s32 i1D4;
@@ -534,12 +582,12 @@ extern void FUN_L00_0020a1e0(f32, f32);
 extern void FUN_L00_00209848(s32, s32);
 extern void FUN_L00_00209638(s32, s32);
 
-#define GROUND_FRICTION()                                                          \
-    {                                                                              \
-        f32 len;                                                                   \
-        P.uE0.fE8.v = 0.0f;                                                              \
-        len = FUN_001f9b20(&P.uE0.vE0);                                                \
-        FUN_L00_001ff600(D_0015ED60 * -0.07999998f * len + len, &P.uE0.vE0, &P.uE0.vE0);   \
+#define GROUND_FRICTION()                                                                          \
+    {                                                                                              \
+        f32 len;                                                                                   \
+        P.uE0.fE8.v = 0.0f;                                                                        \
+        len = FUN_001f9b20(&P.uE0.vE0);                                                            \
+        FUN_L00_001ff600(D_0015ED60 * -0.07999998f * len + len, &P.uE0.vE0, &P.uE0.vE0);           \
     }
 extern f32 FUN_001f9de0(f32);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -586,7 +634,13 @@ extern void FUN_L00_002335c8(void *, f32, f32, f32);
 extern f32 D_L17_001C45F0[];
 extern s32 FUN_L00_002598b0(struct M *, f32, void *, s32, f32, f32, s32, s32, s32);
 extern f32 FUN_001f9ab0(void *, void *);
-struct TBDB8 { u8 pad0[8]; f32 x08; f32 x0C; u8 pad10[8]; f32 x18; };
+struct TBDB8 {
+    u8 pad0[8];
+    f32 x08;
+    f32 x0C;
+    u8 pad10[8];
+    f32 x18;
+};
 extern struct TBDB8 D_L17_0017C6B8;
 extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00233708(void *, void *, f32);
@@ -616,7 +670,11 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32);
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
-struct T4C { u8 pad0[0x18]; s32 x18; u8 pad1C[0x30]; };
+struct T4C {
+    u8 pad0[0x18];
+    s32 x18;
+    u8 pad1C[0x30];
+};
 extern u8 D_L17_0017A3C0[];
 extern struct T4C D_L00_00179AC0_t[] __asm__("D_L17_0017A3C0");
 extern void FUN_L00_00271b18(void *, void *, f32);
@@ -648,8 +706,19 @@ void FUN_L17_00214760(void) {
     Vec vD0;
 
     switch (P.i2084) {
-    case 0x0: case 0x1: case 0x3: case 0x4: case 0x17: case 0x1D: case 0x1E:
-    case 0x1F: case 0x3D: case 0x70: case 0x71: case 0x72: case 0x80:
+    case 0x0:
+    case 0x1:
+    case 0x3:
+    case 0x4:
+    case 0x17:
+    case 0x1D:
+    case 0x1E:
+    case 0x1F:
+    case 0x3D:
+    case 0x70:
+    case 0x71:
+    case 0x72:
+    case 0x80:
         if (P.b20A9 != 0) {
             FUN_L00_00209540(0xF, 0x1E);
         }
@@ -690,7 +759,8 @@ void FUN_L17_00214760(void) {
         if (P.i2084 == 4 || P.i2084 == 0x17) {
             if (P.f229C > 0.2f || P.pm2080->b53 == 0xE || P.pm2080->b53 == 0xF) {
                 if (P.i2084 == 4) {
-                    FUN_L00_00211e30(0, D_0015ED64 * 0.002f, D_0015ED64 * 0.07f, D_0015ED6C * 6.981317f);
+                    FUN_L00_00211e30(0, D_0015ED64 * 0.002f, D_0015ED64 * 0.07f,
+                                     D_0015ED6C * 6.981317f);
                 } else if (P.i2084 == 0x17) {
                     FUN_L00_00211e98();
                 }
@@ -812,7 +882,9 @@ void FUN_L17_00214760(void) {
         }
         FUN_L00_00227d40();
         break;
-    case 0x33: case 0x34: case 0x35:
+    case 0x33:
+    case 0x34:
+    case 0x35:
         if (P.i2084 == 0x35) {
             FUN_L00_00216e48(5, P.pm2080, 0x13);
         } else {
@@ -841,7 +913,8 @@ void FUN_L17_00214760(void) {
             if (P.i198 == 1) {
                 FUN_L00_00209ca8(3, 0x10, 0);
                 if (D_L17_001612D0 != 0) {
-                    FUN_L00_002a3ec8(D_L17_001612D0, D_L17_001612D8, 0, P.u80.f80, P.u80.f84.v, 0.4f, -0.3f);
+                    FUN_L00_002a3ec8(D_L17_001612D0, D_L17_001612D8, 0, P.u80.f80, P.u80.f84.v,
+                                     0.4f, -0.3f);
                 }
                 P.h90A = scale_game_frames(70);
             }
@@ -980,8 +1053,7 @@ void FUN_L17_00214760(void) {
             }
             if (P.i2084 != 0x35 || !(PD.u1A0.i1A0 & 0xA)) {
                 P.f190 *= k;
-            }
-            ;
+            };
             if (FUN_001f9740(&D_0013F350_b.i8F0) != 0) {
                 s32 lo2;
                 s32 hi2;
@@ -1020,7 +1092,8 @@ void FUN_L17_00214760(void) {
                         v0.f[2] += random_float_between(0.0f, 0.03f);
                         qcopy(&v10, &P.u100.v100);
                         FUN_L00_00262cf0(&v10, &v10, D_0015ED6C * -0.75f, P.u90.f98.v, P.u90.f94.v);
-                        P.h8F8 = truncate_float_to_s32((D_0015ED6C * 7.0f - P.f194) / (D_0015ED6C * 7.0f) * scale_game_frames(5));
+                        P.h8F8 = truncate_float_to_s32((D_0015ED6C * 7.0f - P.f194) /
+                                                       (D_0015ED6C * 7.0f) * scale_game_frames(5));
                         FUN_L00_0026f080(&v0, &v10, random_float_between(6300.0f, 9450.0f), -1.0f);
                     }
                 }
@@ -1088,7 +1161,8 @@ void FUN_L17_00214760(void) {
         FUN_L06_002291d0(0);
         FUN_L00_00227d40();
         break;
-    case 0x6A: case 0x82: {
+    case 0x6A:
+    case 0x82: {
         f32 len = FUN_001f9af0(&P.v150);
         approach_value(&len, 0.0f, D_0015ED70 * 4.0f);
         FUN_001f9bf8(&P.v150, &P.v150, len);
@@ -1117,7 +1191,8 @@ void FUN_L17_00214760(void) {
         P.uE0.fE8.v = P.f8FC;
         break;
     }
-    case 0x36: case 0x37:
+    case 0x36:
+    case 0x37:
         if (P.i2084 == 0x37) {
             FUN_L00_00209540(0xF, 0x1E);
         }
@@ -1167,7 +1242,9 @@ void FUN_L17_00214760(void) {
         FUN_L06_002291d0(0);
         FUN_L00_00227d40();
         break;
-    case 0x38: case 0x39: case 0x3A:
+    case 0x38:
+    case 0x39:
+    case 0x3A:
         if (P.u2FC.pm2FC != NULL && P.u2FC.pm2FC->hA6 == 0x155) {
             f32 d;
             f32 lim;
@@ -1212,7 +1289,8 @@ void FUN_L17_00214760(void) {
         }
         break;
     }
-    case 0x24: case 0x2E:
+    case 0x24:
+    case 0x2E:
         FUN_L00_00217118(3.7f, 0.0f);
         P.f190 = 0.0f;
         FUN_L00_00212088(D_0015ED70 * 12.6f, D_0015ED70 * 12.6f);
@@ -1225,7 +1303,8 @@ void FUN_L17_00214760(void) {
             FUN_L00_002334d0(&P.uE0.vE0, &P.uE0.vE0, D_0015ED70 * 54.0f);
         }
         if (P.pm964 != NULL) {
-            P.f180 = FUN_001f9e90(P.pm964->u10.f10 - moby->u10.f10, P.pm964->u10.f14.v - moby->u10.f14.v);
+            P.f180 = FUN_001f9e90(P.pm964->u10.f10 - moby->u10.f10,
+                                  P.pm964->u10.f14.v - moby->u10.f14.v);
             FUN_L00_00211e30(0, D_0015ED64 * 0.02f, D_0015ED64 * 0.15f, D_0015ED6C * 6.2831855f);
         }
         break;
@@ -1240,12 +1319,15 @@ void FUN_L17_00214760(void) {
         }
         if (P.i2088 == 0) {
             approach_value(&P.f960, D_0015ED6C * 27.0f, D_0015ED70 * 80.0f);
-            P.f180 = FUN_001f9e90(P.pm964->u10.f10 - moby->u10.f10, P.pm964->u10.f14.v - moby->u10.f14.v);
+            P.f180 = FUN_001f9e90(P.pm964->u10.f10 - moby->u10.f10,
+                                  P.pm964->u10.f14.v - moby->u10.f14.v);
             FUN_L00_00211e30(0, D_0015ED64 * 0.03f, D_0015ED64 * 0.15f, D_0015ED6C * 7.330383f);
         } else if (P.i2088 == 1) {
             approach_value(&P.f960, 0.0f, D_0015ED70 * 42.0f);
         }
-        if (FUN_L00_002595a0(&hit, &hit2, -(D_0015ED70 * 42.0f) * 0.5f, P.f960, -(P.f970 - 1.9f)) > 0 && hit > 0.0f) {
+        if (FUN_L00_002595a0(&hit, &hit2, -(D_0015ED70 * 42.0f) * 0.5f, P.f960, -(P.f970 - 1.9f)) >
+                0 &&
+            hit > 0.0f) {
             P.f96C = hit;
             P.i2088 = 1;
         }
@@ -1255,7 +1337,8 @@ void FUN_L17_00214760(void) {
         if (P.i974 != 0) {
             FUN_L00_0025bc00(&P.u90.f94.v, 0, 0.0f, D_0015ED6C * 3.8397243f);
         } else {
-            f32 an = fast_add_rotations(-FUN_001f9e90(FUN_001f9b80(&P.u80.v80, &v0), v0.f[2] - P.u80.f88.v), 1.5707964f);
+            f32 an = fast_add_rotations(
+                -FUN_001f9e90(FUN_001f9b80(&P.u80.v80, &v0), v0.f[2] - P.u80.f88.v), 1.5707964f);
             FUN_L00_0025bc00(&P.u90.f94.v, 0, an, D_0015ED6C * 6.4577184f);
         }
         v20.f[0] = FUN_001f9dc8(fast_add_rotations(P.u90.f98.v, -1.5707964f)) * -0.57f;
@@ -1313,8 +1396,10 @@ void FUN_L17_00214760(void) {
         FUN_001f9d20(&v0, &v0, m80);
         v10.f[0] = -FUN_001f9e90(FUN_001f9988(v0.f[0] * v0.f[0] + v0.f[2] * v0.f[2]), v0.f[1]);
         v10.f[1] = FUN_001f9e90(v0.f[2], v0.f[0]);
-        FUN_L00_0025bc98(&P.u90.f94.v, v10.f[1], &P.fA4, 0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 9.599311f);
-        FUN_L00_0025bc98(&P.u90.f90, v10.f[0], &P.fA0, 0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 9.599311f);
+        FUN_L00_0025bc98(&P.u90.f94.v, v10.f[1], &P.fA4, 0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f,
+                         D_0015ED6C * 9.599311f);
+        FUN_L00_0025bc98(&P.u90.f90, v10.f[0], &P.fA0, 0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f,
+                         D_0015ED6C * 9.599311f);
         above = 1;
         if (!(P.u80.f88.v < P.pm994->u10.f18.v)) {
             above = 0;
@@ -1568,9 +1653,11 @@ void FUN_L17_00214760(void) {
                 }
                 P.f180 = P.fA5C;
                 if (ok) {
-                    FUN_L00_00211e30(1, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
+                    FUN_L00_00211e30(1, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f,
+                                     D_0015ED6C * 15.009831f);
                 } else {
-                    FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
+                    FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f,
+                                     D_0015ED6C * 15.009831f);
                 }
             } else {
                 s32 ok = 1;
@@ -1844,8 +1931,11 @@ void FUN_L17_00214760(void) {
             }
             P.f190 *= f;
         }
-        { f32 g = P.f229C + 0.35f;
-        FUN_L00_00211e30(0, D_0015ED64 * 0.025f * g, D_0015ED64 * 0.3f, D_0015ED6C * 5.2359877f * g); }
+        {
+            f32 g = P.f229C + 0.35f;
+            FUN_L00_00211e30(0, D_0015ED64 * 0.025f * g, D_0015ED64 * 0.3f,
+                             D_0015ED6C * 5.2359877f * g);
+        }
         FUN_L00_00212088(D_0015ED70 * 7.5f, D_0015ED70 * 8.5f);
         FUN_L00_002120d8(99999.0f);
         if (P.u2FC.i2FC != 0) {
@@ -1914,7 +2004,8 @@ void FUN_L17_00214760(void) {
                 FUN_L00_00211f38();
             } else {
                 f32 f = P.f229C + 0.35f;
-                FUN_L00_00211e30(0, D_0015ED64 * 0.005f * f, D_0015ED64 * 0.1f, D_0015ED6C * 4.712389f * f);
+                FUN_L00_00211e30(0, D_0015ED64 * 0.005f * f, D_0015ED64 * 0.1f,
+                                 D_0015ED6C * 4.712389f * f);
             }
         }
         FUN_L00_00215340();
@@ -1973,7 +2064,9 @@ void FUN_L17_00214760(void) {
             AN.f274 = FUN_001f99c0(a) * -0.09f;
             AN.f270 = FUN_001f99c0(a) * 0.08f;
         } else if (moby->b53 == 0x6D) {
-            f32 ang = fast_add_rotations(fast_subtract_rotations(FUN_001f9e90(P.u100.f100, P.u100.f104.v), P.u90.f98.v), 3.1415927f);
+            f32 ang = fast_add_rotations(
+                fast_subtract_rotations(FUN_001f9e90(P.u100.f100, P.u100.f104.v), P.u90.f98.v),
+                3.1415927f);
             f32 m = P.f164 / (D_0015ED6C * 3.0f) * 0.34906584f;
             f32 c;
             f32 s;
@@ -2035,7 +2128,8 @@ void FUN_L17_00214760(void) {
         d *= 9.0f;
         FUN_L00_0025bc98(&P.u90.f90, d * 0.5f, &P.f9E4, 0, 0.007f, 0.17f, D_0015ED6C * 1.2217305f);
         if (scale_game_frames(100) < P.i198) {
-            FUN_L00_0025bc98(&P.u90.f94.v, -P.f9D4, &P.f9E8, 0, D_0015ED64 * 0.035f, D_0015ED64 * 0.3f, D_0015ED6C * 1.9198622f);
+            FUN_L00_0025bc98(&P.u90.f94.v, -P.f9D4, &P.f9E8, 0, D_0015ED64 * 0.035f,
+                             D_0015ED64 * 0.3f, D_0015ED6C * 1.9198622f);
         }
         FUN_L00_0020a1e0(0.009f, 0.22f);
         FUN_L00_0020a1e0(0.04f, 0.2f);
@@ -2094,9 +2188,11 @@ void FUN_L17_00214760(void) {
         if (P.i5A8 == 2 || P.i5A8 == 3) {
             P.i5A8 = -1;
         }
-        FUN_L00_0025df68(P.p560, &P.u80.v80, &P.u500.v500, &P.i564, &P.f568, P.i584, 999.0f, 2.0f, 2.5f);
+        FUN_L00_0025df68(P.p560, &P.u80.v80, &P.u500.v500, &P.i564, &P.f568, P.i584, 999.0f, 2.0f,
+                         2.5f);
         if (P.i590 != 0) {
-            FUN_L00_0025df68(P.p594, &P.u80.v80, &P.v540, &P.i598, &P.f59C, P.i5A0, 999.0f, 2.0f, 2.5f);
+            FUN_L00_0025df68(P.p594, &P.u80.v80, &P.v540, &P.i598, &P.f59C, P.i5A0, 999.0f, 2.0f,
+                             2.5f);
         }
         near = 0;
         if (P.f2DC > 0.87f && P.i2084 != 0x29 && P.i2084 != 0x42 && P.i590 == 0) {
@@ -2132,8 +2228,11 @@ void FUN_L17_00214760(void) {
             qcopy(&v30, &P.u80.v80);
             si = P.i564;
             sf = P.f568;
-            if ((h | FUN_L00_0025d808(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 || P.i584 != 0) {
-                f32 a = fast_subtract_rotations(P.f57C, FUN_001f9e90(v30.f[0] - v20.f[0], v30.f[1] - v20.f[1])) * 0.37f;
+            if ((h | FUN_L00_0025d808(P.p560, &v30, &si, &sf, q + 0.1f, P.i584)) == 0 ||
+                P.i584 != 0) {
+                f32 a = fast_subtract_rotations(
+                            P.f57C, FUN_001f9e90(v30.f[0] - v20.f[0], v30.f[1] - v20.f[1])) *
+                        0.37f;
                 if (a > 0.7853982f) {
                     a = 0.7853982f;
                 }
@@ -2202,7 +2301,8 @@ void FUN_L17_00214760(void) {
                 f32 a = FUN_001f9e90(P.f550 - P.u80.f80, P.f554 - P.u80.f84.v);
                 if (fast_difference_between_rotations(P.u90.f98.v, a) < 1.5707964f) {
                     P.f180 = a;
-                    FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f, D_0015ED6C * 6.2831855f);
+                    FUN_L00_00211e30(0, D_0015ED64 * 0.04f, D_0015ED64 * 0.2f,
+                                     D_0015ED6C * 6.2831855f);
                 }
             }
             if (P.i590 != 0 && P.i5A4 <= scale_game_frames(48)) {
@@ -2255,8 +2355,12 @@ void FUN_L17_00214760(void) {
                 f32 a;
                 FUN_L00_002118c8(1.0f, 0);
                 a = fast_difference_between_rotations(P.f180, Q.f158);
-                if (fast_difference_between_rotations(a, 1.5707964f) < 1.2217305f || fast_difference_between_rotations(a, -1.5707964f) < 1.2217305f) {
-                    P.i5A8 = fast_difference_between_rotations(fast_subtract_rotations(P.f180, Q.f158), 1.5707964f) < 0.7853982f ? 2 : 3;
+                if (fast_difference_between_rotations(a, 1.5707964f) < 1.2217305f ||
+                    fast_difference_between_rotations(a, -1.5707964f) < 1.2217305f) {
+                    P.i5A8 = fast_difference_between_rotations(
+                                 fast_subtract_rotations(P.f180, Q.f158), 1.5707964f) < 0.7853982f
+                                 ? 2
+                                 : 3;
                 }
             }
             tt = 0.0f;
@@ -2388,7 +2492,8 @@ void FUN_L17_00214760(void) {
             f32 fl;
             f32 len;
             fl = -FUN_001f9af0(&v20);
-            FUN_L00_0025b8c0(&fl, &P.f618, 0.0f, D_0015ED64 * 0.05f, D_0015ED64 * 0.3f, D_0015ED6C * 10.0f);
+            FUN_L00_0025b8c0(&fl, &P.f618, 0.0f, D_0015ED64 * 0.05f, D_0015ED64 * 0.3f,
+                             D_0015ED6C * 10.0f);
             len = FUN_001f9af0(&v20);
             if (len < P.f618) {
                 P.f618 = len;
@@ -2479,8 +2584,10 @@ void FUN_L17_00214760(void) {
                 t = 0.43633232f;
             }
             qcopy(&v0, &P.u90.v90);
-            FUN_L00_0025bc98(&v0.f[1], t, &P.fA4, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, D_0015ED6C * 2.6179938f);
-            FUN_L00_0025bc98(&v0.f[0], 0.0f, &P.fA0, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, D_0015ED6C * 2.6179938f);
+            FUN_L00_0025bc98(&v0.f[1], t, &P.fA4, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f,
+                             D_0015ED6C * 2.6179938f);
+            FUN_L00_0025bc98(&v0.f[0], 0.0f, &P.fA0, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f,
+                             D_0015ED6C * 2.6179938f);
             FUN_L00_002091d8(P.fA0, P.fA4, 0.0f);
             if (P.f2DC > 1.0f) {
                 P.i2088 = 1;
@@ -2527,7 +2634,8 @@ void FUN_L17_00214760(void) {
         }
         FUN_L00_002118c8(P.f229C * m, 0);
         if (P.f229C > 0.2f && !(PD.u1A0.i1A0 & 3)) {
-            FUN_L00_00211e30(0, D_0015ED64 * 0.027f, D_0015ED64 * 0.3f, D_0015ED6C * 5.934119f * P.f229C);
+            FUN_L00_00211e30(0, D_0015ED64 * 0.027f, D_0015ED64 * 0.3f,
+                             D_0015ED6C * 5.934119f * P.f229C);
         }
         if (PD.u1A0.i1A0 & 3) {
             f32 o = P.f180;
@@ -2555,7 +2663,8 @@ void FUN_L17_00214760(void) {
             FUN_L00_002334d0(&P.uE0.vE0, &P.uE0.vE0, sp * 0.72f);
             P.f304 = P.uE0.fE8.v;
         } else {
-            FUN_L00_0025b8c0(&P.u80.f88.v, &P.f304, P.f2D8 + 0.17f, D_0015ED64 * 0.02f, D_0015ED64 * 0.35f, D_0015ED6C * 2.5f);
+            FUN_L00_0025b8c0(&P.u80.f88.v, &P.f304, P.f2D8 + 0.17f, D_0015ED64 * 0.02f,
+                             D_0015ED64 * 0.35f, D_0015ED6C * 2.5f);
         }
         break;
     }
@@ -2633,7 +2742,8 @@ void FUN_L17_00214760(void) {
             if (P.i198 == scale_game_frames(20)) {
                 FUN_L00_00209ca8(3, 0x10, 1);
                 if (D_L17_001612D0 != 0) {
-                    FUN_L00_002a3ec8(D_L17_001612D0, D_L17_001612D8, 0, P.u80.f80, P.u80.f84.v, 0.4f, 0.35f);
+                    FUN_L00_002a3ec8(D_L17_001612D0, D_L17_001612D8, 0, P.u80.f80, P.u80.f84.v,
+                                     0.4f, 0.35f);
                 }
             }
             if (P.fAA8 >= 4.0f && P.fAA8 <= 7.0f) {
@@ -2646,17 +2756,19 @@ void FUN_L17_00214760(void) {
             qcopy(&P.v400, &P.u80.v80);
         }
         if (P.i418 != 0 || (t198 < t420 && P.i2084 != 0xB && P.i2084 != 0x10 && P.i2084 != 0xC &&
-                             P.i2084 != 0x11 && P.i2084 != 0x1C && P.i2084 != 0x4C)) {
+                            P.i2084 != 0x11 && P.i2084 != 0x1C && P.i2084 != 0x4C)) {
             if (P.h4A8 != 0) {
                 FUN_L00_002167d0();
-                if (P.i2084 == 0xA && P.i198 < scale_game_frames(10) && P.f168 < D_0015ED6C * 7.0f) {
+                if (P.i2084 == 0xA && P.i198 < scale_game_frames(10) &&
+                    P.f168 < D_0015ED6C * 7.0f) {
                     P.uE0.fE0 += FUN_001f9dc8(P.u90.f98.v) * (D_0015ED6C * 0.7f);
                     P.uE0.fE4.v += FUN_001f9de0(P.u90.f98.v) * (D_0015ED6C * 0.7f);
                     qcopy(&P.v130, &P.uE0.vE0);
                 }
             } else {
                 f32 sv;
-                FUN_L00_00211e30(0, D_0015ED64 * 0.015f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
+                FUN_L00_00211e30(0, D_0015ED64 * 0.015f, D_0015ED64 * 0.2f,
+                                 D_0015ED6C * 15.009831f);
                 sv = P.f194;
                 if (P.i418 >= 2) {
                     P.f194 = sv * 0.4f;
@@ -2714,7 +2826,8 @@ void FUN_L17_00214760(void) {
         if (P.u80.f88.v < P.f410) {
             P.f410 = P.u80.f88.v;
         }
-        if (P.i198 > P.i420 && FUN_L00_00233a78(&P.uE0.vE0) < 0.001f && (P.h41C == 0 || P.i198 > P.i3D4)) {
+        if (P.i198 > P.i420 && FUN_L00_00233a78(&P.uE0.vE0) < 0.001f &&
+            (P.h41C == 0 || P.i198 > P.i3D4)) {
             P.h41E = 1;
             if (P.f3F8 != 0.0f) {
                 P.f4A0 = P.f3F8;
@@ -2739,7 +2852,8 @@ void FUN_L17_00214760(void) {
                 FUN_001f9a68(&v10, &P.u100.v100, 7.0f);
                 for (i = 0; i < n; i++) {
                     if (FUN_L00_0025e3b8(D_L17_00178800[i]) != 0) {
-                        FUN_L00_00259bc8(D_L17_00178800[i], P.pm2080, 0x10000, &P.u80.v80, &v10, 1.0f);
+                        FUN_L00_00259bc8(D_L17_00178800[i], P.pm2080, 0x10000, &P.u80.v80, &v10,
+                                         1.0f);
                     }
                 }
             }
@@ -2800,7 +2914,8 @@ void FUN_L17_00214760(void) {
             FUN_L00_00211e30(0, D_0015ED64 * 0.03f, D_0015ED64 * 0.3f, D_0015ED6C * 7.8539815f);
         } else if (P.b20A4 == 0) {
             if (P.i2088 == 1) {
-                FUN_L00_00211e30(0, D_0015ED64 * 0.016f, D_0015ED64 * 0.15f, D_0015ED6C * 9.948377f);
+                FUN_L00_00211e30(0, D_0015ED64 * 0.016f, D_0015ED64 * 0.15f,
+                                 D_0015ED6C * 9.948377f);
             } else {
                 FUN_L00_00211f38();
             }
@@ -2963,9 +3078,11 @@ void FUN_L17_00214760(void) {
             k = 0.0f;
         }
         if (P.f160 < sp * 0.5f) {
-            FUN_L00_00211e30(0, D_0015ED64 * 0.035f * g, D_0015ED64 * 0.15f, D_0015ED6C * 9.599311f * g);
+            FUN_L00_00211e30(0, D_0015ED64 * 0.035f * g, D_0015ED64 * 0.15f,
+                             D_0015ED6C * 9.599311f * g);
         } else {
-            FUN_L00_00211e30(0, D_0015ED64 * 0.008f * g, D_0015ED64 * 0.15f, D_0015ED6C * 9.948377f * g);
+            FUN_L00_00211e30(0, D_0015ED64 * 0.008f * g, D_0015ED64 * 0.15f,
+                             D_0015ED6C * 9.948377f * g);
         }
         FUN_L00_00212088(D_0015ED70 * 7.5f * k, D_0015ED70 * 8.5f);
         if (P.h3B8 != 0 && P.h308 == 0) {

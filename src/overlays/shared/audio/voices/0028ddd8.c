@@ -15,7 +15,8 @@ extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0
 
 int FUN_L00_0028ddd8(int a, int b, int c, int d) {
     int r;
-    if (a >= D_L00_0015F5F0) return -1;
+    if (a >= D_L00_0015F5F0)
+        return -1;
     r = allocate_voice_slot(D_L00_0015F5F4 + a * 32, b, 0, c + 0x40, d);
     if (r >= 0) {
         char *e = D_0013E533 + 0x1D + r * 0x70;
@@ -55,16 +56,25 @@ int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
     }
     return h;
 }
-typedef struct { s32 w[0x1C]; } E0028df38;
+typedef struct {
+    s32 w[0x1C];
+} E0028df38;
 extern E0028df38 D_0013E550[];
-s32 FUN_L00_0028df38(s32 i, s32 v) { E0028df38 *p = &D_0013E550[i]; p->w[0x21] = v; return 1; }
+s32 FUN_L00_0028df38(s32 i, s32 v) {
+    E0028df38 *p = &D_0013E550[i];
+    p->w[0x21] = v;
+    return 1;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F230), where it is exact; names translated to the US level program. */
 
-typedef struct { int k; int v; } TE;
+typedef struct {
+    int k;
+    int v;
+} TE;
 
 extern TE D_L00_001EA980[];
 

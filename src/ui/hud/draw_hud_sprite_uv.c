@@ -1,16 +1,41 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-struct Screen { u8 pad[0x10]; s32 offx; s32 offy; };
-struct HudIndex { s16 unk0; s16 slot; };
-struct HudTex { u8 pad[6]; u8 wlog; u8 hlog; };
-struct HudState { u8 pad[0xC]; s32 z; u8 pad10[0x10]; struct HudIndex *index; struct HudTex *tex; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
+struct Screen {
+    u8 pad[0x10];
+    s32 offx;
+    s32 offy;
+};
+struct HudIndex {
+    s16 unk0;
+    s16 slot;
+};
+struct HudTex {
+    u8 pad[6];
+    u8 wlog;
+    u8 hlog;
+};
+struct HudState {
+    u8 pad[0xC];
+    s32 z;
+    u8 pad10[0x10];
+    struct HudIndex *index;
+    struct HudTex *tex;
+};
 extern struct TagPtr D_00160F00;
 extern struct Screen D_0013E500;
 extern struct HudState D_0019A3E8;
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
-void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 alpha) __asm__("FUN_00200258");
+void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v,
+                        s32 alpha) __asm__("FUN_00200258");
 
 void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 alpha) {
     struct HudState *hud = &D_0019A3E8;
@@ -35,7 +60,8 @@ void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 al
     q[5] = u | ((u64)v << 16);
     q[6] = (x + D_0013E500.offx - 8) | ((u64)(y + D_0013E500.offy - 8) << 16) | ((u64)hud->z << 32);
     q[7] = (u + tw) | ((u64)(v + th) << 16);
-    q[8] = (x + w + D_0013E500.offx - 8) | ((u64)(y + h + D_0013E500.offy - 8) << 16) | ((u64)hud->z << 32);
+    q[8] = (x + w + D_0013E500.offx - 8) | ((u64)(y + h + D_0013E500.offy - 8) << 16) |
+           ((u64)hud->z << 32);
     q[9] = 0;
     D_00160F00.p += 5;
 }

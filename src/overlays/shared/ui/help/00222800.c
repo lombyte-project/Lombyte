@@ -42,7 +42,11 @@ typedef struct {
     u8 pad38[8];
 } T_8;
 
-typedef union { Q_8 q; f32 f[4]; s32 i[4]; } V_8;
+typedef union {
+    Q_8 q;
+    f32 f[4];
+    s32 i[4];
+} V_8;
 
 extern G_8 D_0013F350_8 __asm__("D_0013F350");
 extern s32 D_L08_0015F5C4_8 __asm__("D_L08_0015F5C4");
@@ -156,8 +160,8 @@ s32 FUN_L08_00222800(s32 arg) {
             }
             if (D_0015ED84_8 == 0xF || D_0015ED84_8 == 0x11) {
                 mob = G.p2280;
-                if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B
-                                 || *(s16 *)(mob + 0xA6) == 0x29D)) {
+                if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
+                                 *(s16 *)(mob + 0xA6) == 0x29D)) {
                     FUN_L00_00216de8_8(0x1C, 0);
                 }
             }

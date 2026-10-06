@@ -12,9 +12,9 @@ s32 GetRpcPacket(struct M2c_arg0 *arg0) {
     s32 remainder;
     s32 scaled;
     alias = arg0;
-    remainder = (s32) arg0->unk24 % (s32) alias->unk18;
+    remainder = (s32)arg0->unk24 % (s32)alias->unk18;
     scaled = remainder << 6;
     store = arg0;
-    store->unk24 = (s32) (remainder + 1);
+    store->unk24 = (s32)(remainder + 1);
     return store->unk14 + scaled;
 }

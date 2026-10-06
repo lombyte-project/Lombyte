@@ -22,8 +22,7 @@ extern void FinishMpegFrame(MpegDecoder *decoder) __asm__("_lastFrame");
 
 s32 _sceMpegFlush(MpegObject *mpeg) __asm__("_sceMpegFlush");
 
-s32 _sceMpegFlush(MpegObject *mpeg)
-{
+s32 _sceMpegFlush(MpegObject *mpeg) {
     MpegDecoder *decoder = mpeg->decoder;
     s32 result = 0;
 

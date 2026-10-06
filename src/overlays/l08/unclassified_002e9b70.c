@@ -48,7 +48,9 @@ void FUN_L08_002f0dc8(void) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
-typedef struct { int a, b; } Pair;
+typedef struct {
+    int a, b;
+} Pair;
 
 extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
@@ -131,7 +133,8 @@ void FUN_L08_002f1548(unsigned char *moby) {
                 if (d < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
                 } else if (d < 84.0f) {
-                    *(char *)&D_L08_00161E08 = func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                    *(char *)&D_L08_00161E08 =
+                        func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
                 } else {
                     *(char *)&D_L08_00161E08 = 0;
                 }
@@ -163,7 +166,8 @@ float FUN_L08_002f5d98(float x, char *arg) {
     char *t;
     int j;
     i = i % 8;
-    j = i + 1; j = j % 8;
+    j = i + 1;
+    j = j % 8;
     t = arg + 0x90;
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }

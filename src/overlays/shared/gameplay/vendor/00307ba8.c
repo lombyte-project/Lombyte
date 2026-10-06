@@ -6,13 +6,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307ba8.s", FUN_L09_00307ba8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307d68.s", FUN_L09_00307d68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
 extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
+                              int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
-void FUN_L09_0030a9e8(unsigned char *a0, char *a1)
-{
+void FUN_L09_0030a9e8(unsigned char *a0, char *a1) {
     char *r;
     int st;
     float f;
@@ -51,8 +51,8 @@ int FUN_L09_0030aae0(int unused, char *m) {
     m[0x91] = FUN_L01_0026e008(*(int *)(m + 0x94), -1);
     for (i = 0, slot = (char **)(m + 0xB0); i < 20; i++, slot++) {
         char *o = *slot;
-        if (o != 0 && *(short *)(o + 0xA6) == 0x75E &&
-            (unsigned char)o[0x20] != 0xFE && (unsigned char)o[0x20] != 0xFD) {
+        if (o != 0 && *(short *)(o + 0xA6) == 0x75E && (unsigned char)o[0x20] != 0xFE &&
+            (unsigned char)o[0x20] != 0xFD) {
             m[0x91]++;
         } else {
             last = i;
@@ -98,11 +98,10 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
 
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L09_0030b350(void *moby, char *data)
-{
+void FUN_L09_0030b350(void *moby, char *data) {
     char *other = *(char **)(data + 0x10);
-    if (other != 0 && *(short *)(other + 0xA6) == 0x75D &&
-        (unsigned char)other[0x20] != 0xFE && (unsigned char)other[0x20] != 0xFD) {
+    if (other != 0 && *(short *)(other + 0xA6) == 0x75D && (unsigned char)other[0x20] != 0xFE &&
+        (unsigned char)other[0x20] != 0xFD) {
         int index = (unsigned char)data[0x1C];
         char *base = *(char **)(other + 0x78);
         base += index * 4;

@@ -43,22 +43,50 @@ void FUN_L00_00262500(int a, char *b) {
         *(short *)(b + 0x130) = 0;
     }
 }
-typedef struct { u8 p0[0x23]; u8 x23; u8 p24[0xC]; u8 x30; u8 x31; u16 x32; s16 x34; u8 p36[2]; u64 x38; u8 p40[0x32]; u8 x72; u8 p73[0x21]; s32 x94; u8 p98[0xE]; s16 xa6; } E00262528;
-typedef struct { u8 p0[0x100]; s32 x100[4]; s32 x110[4]; E00262528 *x120[4]; u8 p130[4]; E00262528 *x134; s32 x138; } O00262528;
+typedef struct {
+    u8 p0[0x23];
+    u8 x23;
+    u8 p24[0xC];
+    u8 x30;
+    u8 x31;
+    u16 x32;
+    s16 x34;
+    u8 p36[2];
+    u64 x38;
+    u8 p40[0x32];
+    u8 x72;
+    u8 p73[0x21];
+    s32 x94;
+    u8 p98[0xE];
+    s16 xa6;
+} E00262528;
+typedef struct {
+    u8 p0[0x100];
+    s32 x100[4];
+    s32 x110[4];
+    E00262528 *x120[4];
+    u8 p130[4];
+    E00262528 *x134;
+    s32 x138;
+} O00262528;
 E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
 void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
     E00262528 *e;
-    if (o->x138 == 4) return;
-    if (b >= 9) return;
+    if (o->x138 == 4)
+        return;
+    if (b >= 9)
+        return;
     e = create_moby(o->x134->xa6);
-    if (e == 0) return;
+    if (e == 0)
+        return;
     e->x32 = o->x134->x32;
     e->x38 = o->x134->x38;
     e->x31 = 1;
     e->x34 = 0x80A;
     e->x30 = 0;
     e->x94 = 0;
-    if (e->xa6 == 0) e->x72 = 0;
+    if (e->xa6 == 0)
+        e->x72 = 0;
     e->x23 = a;
     o->x110[o->x138] = b;
     o->x100[o->x138] = a;
@@ -82,8 +110,7 @@ void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
 void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L00_00262608(S_262608 *s, int dec)
-{
+void FUN_L00_00262608(S_262608 *s, int dec) {
     unsigned char *src;
     unsigned char *o;
     int h, i, k, done;
@@ -160,12 +187,12 @@ void FUN_L00_00262840(char *o) {
 void FUN_0020cb88_2628d8(void *, void *) __asm__("FUN_0020cb88");
 void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
 float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
-float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
+float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float,
+                              int) __asm__("FUN_L00_0025bc98");
 void FUN_L00_00259f50_2628d8(void *, void *) __asm__("FUN_L00_00259f50");
 void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
-void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb)
-{
+void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb) {
     unsigned char *o = *(unsigned char **)(p + 0x78);
     float f;
     if (!o) {
@@ -176,11 +203,11 @@ void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb)
         p[1] = 0;
         *(void **)(p + 0x78) = m;
     }
-    if (*(float *)(p + 0x60) == 0.0f && *(float *)(p + 0x64) == 0.0f && *(float *)(p + 0x68) == 0.0f
-        && *(float *)(p + 0x70) == 1.0f
-        && FUN_001f99c0_2628d8(*(float *)(p + 0x40)) < 0.005f
-        && FUN_001f99c0_2628d8(*(float *)(p + 0x44)) < 0.005f
-        && FUN_001f99c0_2628d8(*(float *)(p + 0x48)) < 0.005f) {
+    if (*(float *)(p + 0x60) == 0.0f && *(float *)(p + 0x64) == 0.0f &&
+        *(float *)(p + 0x68) == 0.0f && *(float *)(p + 0x70) == 1.0f &&
+        FUN_001f99c0_2628d8(*(float *)(p + 0x40)) < 0.005f &&
+        FUN_001f99c0_2628d8(*(float *)(p + 0x44)) < 0.005f &&
+        FUN_001f99c0_2628d8(*(float *)(p + 0x48)) < 0.005f) {
         if (p[1])
             FUN_0020cb88_2628d8(m, p);
         return;

@@ -8,10 +8,9 @@ extern f32 func_001F9DF8(f32);
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 
 void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
-                  void *axis) __asm__("FUN_001ec530");
+                           void *axis) __asm__("FUN_001ec530");
 
-void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
-                  void *axis) {
+void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1, void *axis) {
     f32 diff[4];
     f32 proj[4];
     f32 perp[4];

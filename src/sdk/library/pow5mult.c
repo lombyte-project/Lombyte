@@ -96,12 +96,9 @@ extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
 extern void InsertLinkObject(struct _reent *, _Bigint *);
 
-_Bigint *
-_pow5mult(struct _reent *ptr, _Bigint *b, s32 k)
-{
+_Bigint *_pow5mult(struct _reent *ptr, _Bigint *b, s32 k) {
     _Bigint *b1, *p5, *p51;
     s32 i;
-
 
     if (i = k & 3)
         b = _multadd(ptr, b, D_001523B8[i - 1], 0);

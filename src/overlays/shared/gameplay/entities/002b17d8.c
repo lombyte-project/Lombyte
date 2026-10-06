@@ -61,11 +61,13 @@ void FUN_L14_002b3358(char *moby) {
     *(float *)(d + 0x25C) = *(float *)(d + 0x250);
     *(float *)(d + 0x258) = *(float *)(d + 0x250);
     *(float *)(d + 0x254) = *(float *)(d + 0x250);
-    if (*(int *)(d + 0x240) == -1) return;
+    if (*(int *)(d + 0x240) == -1)
+        return;
     p = (char *)D_L14_001B0BB0[*(int *)(d + 0x240)];
     for (i = 0; i < *(int *)p; i++) {
         int o = i * 16;
-        *(float *)(p + o + 0x1C) = FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
+        *(float *)(p + o + 0x1C) =
+            FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
@@ -96,11 +98,14 @@ void FUN_L14_002b37b0(char *a, float x) {
     float s = -*(float *)(d + 0x268);
     float r = fast_subtract_rotations(x, *(float *)(a + 0x48));
     s = fast_add_rotations(s, -r);
-    if (s > 1.2217304706573486f) s = 1.2217304706573486f;
-    else if (s < -1.2217304706573486f) s = -1.2217304706573486f;
+    if (s > 1.2217304706573486f)
+        s = 1.2217304706573486f;
+    else if (s < -1.2217304706573486f)
+        s = -1.2217304706573486f;
     {
         float k = D_0015ED70 * 12.566370964050293f;
-        FUN_L00_0025be00((float *)(d + 0x270), (float *)(d + 0x274), s, k, k, D_0015ED6C * 6.2831854820251465f);
+        FUN_L00_0025be00((float *)(d + 0x270), (float *)(d + 0x274), s, k, k,
+                         D_0015ED6C * 6.2831854820251465f);
     }
     FUN_L00_001fff28(d + 0x130, 2, *(float *)(d + 0x270));
 }
@@ -144,12 +149,15 @@ void FUN_L14_002fe900(char *moby) {
     *(int *)(data + 0xD0) = 0;
     *(int *)(data + 0xD4) = 0;
     qcopy(moby + 0x10, p + 0x10);
-    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
-    *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) = *(float *)(data + 0xEC) = 0.0f;
+    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10),
+                                           *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) =
+        *(float *)(data + 0xEC) = 0.0f;
     if (*(int *)(data + 0xFC) != 1) {
         p = D_L14_001B0BB0[*(int *)(data + 0xDC)];
         for (i = 0; i < *(int *)p - 1; i++) {
-            *(float *)(p + 0x1C + i * 0x10) = FUN_001f9b48(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
+            *(float *)(p + 0x1C + i * 0x10) =
+                FUN_001f9b48(p + 0x10 + i * 0x10, p + 0x20 + i * 0x10);
         }
     }
 }
@@ -212,19 +220,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b35d8.s", FUN_L14_002b35d8);
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 
-int FUN_L14_002b3920(int a0)
-{
+int FUN_L14_002b3920(int a0) {
     int count = 0;
     short *p;
 
-    if (a0 == -1) return 0;
+    if (a0 == -1)
+        return 0;
     p = D_L14_001ABF40_3920[a0];
-    if (p == 0) return 0;
+    if (p == 0)
+        return 0;
     do {
         unsigned short v = *(unsigned short *)p;
         unsigned char *other = (unsigned char *)(D_L14_0015FFD8_3920 + ((v & 0x7FFF) << 8));
         if (*(short *)(other + 0xA6) == 0x1C) {
-            if ((unsigned char)(other[0x20] - 5) <= 1) count++;
+            if ((unsigned char)(other[0x20] - 5) <= 1)
+                count++;
         }
     } while (*p++ >= 0);
     return count;
@@ -281,7 +291,8 @@ void FUN_L14_002b3a20(char *m) {
         float f = len - D_L14_00161500;
         if (f < s) {
             s = f;
-            if (f < 0.0f) s = 0.0f;
+            if (f < 0.0f)
+                s = 0.0f;
         }
         normalize_vector_xyz(w, v, s);
         add_vector_xyz(pos, pos, w);
@@ -370,7 +381,8 @@ void FUN_L14_002d96e0(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DAC00), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -399,8 +411,7 @@ typedef struct {
 
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
-int FUN_L14_002d9870(int i)
-{
+int FUN_L14_002d9870(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_0015FFD8 + i * 256);
     int *data = *(int **)(moby + 0x78);
     int r = 0;
@@ -426,7 +437,8 @@ extern short D_L14_00161B08_x __asm__("D_L14_00161B08") __attribute__((sda));
 extern short D_L14_00161B0C_x __asm__("D_L14_00161B0C") __attribute__((sda));
 extern short D_L14_00161B10_x __asm__("D_L14_00161B10") __attribute__((sda));
 extern short D_L14_00161B14_x __asm__("D_L14_00161B14") __attribute__((sda));
-extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern void build_look_at_matrix(void *dst, void *vec, void *axis,
+                                 float angle) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -449,10 +461,13 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
         subtract_vector_xyz(vec, m + 0x10, g);
         g = g + 0x210;
         vec[2] = 0.0f;
-        normalize_vector_xyz(vec, vec, random_float_between_alt(*(float *)&D_L14_00161B08_x * D_0015ED60, *(float *)&D_L14_00161B0C_x * D_0015ED60));
+        normalize_vector_xyz(vec, vec,
+                             random_float_between_alt(*(float *)&D_L14_00161B08_x * D_0015ED60,
+                                                      *(float *)&D_L14_00161B0C_x * D_0015ED60));
         cross_vectors_xyz(vec + 4, g, vec);
         build_look_at_matrix(d, vec, g, FUN_L00_00257c48(0.34906584f, 1.0471976f));
-        *(float *)(d + 8) = random_float_between_alt(*(float *)&D_L14_00161B10_x * D_0015ED60, *(float *)&D_L14_00161B14_x * D_0015ED60);
+        *(float *)(d + 8) = random_float_between_alt(*(float *)&D_L14_00161B10_x * D_0015ED60,
+                                                     *(float *)&D_L14_00161B14_x * D_0015ED60);
         *(float *)(d + 0x10) = FUN_L00_00257c48(0.0f, 0.008726646f);
         *(float *)(d + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, 0.017453292f);

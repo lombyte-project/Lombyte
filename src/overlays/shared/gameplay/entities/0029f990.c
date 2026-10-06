@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -21,12 +20,14 @@ typedef struct {
 extern float D_L00_001CA318[][4];
 extern float vector_length_xyz(void *);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void project_graphics_bounds_float(void *, void *, float *, float *, float *, float *) __asm__("FUN_00237c80");
+extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
+                                          float *) __asm__("FUN_00237c80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
-extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
+extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
+                                          char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
 
 void FUN_L00_0029f990(char *m) {
@@ -91,7 +92,9 @@ void FUN_L00_0029f990(char *m) {
 }
 #include "qcopy.h"
 typedef int q_29fcd0 __attribute__((mode(TI)));
-typedef struct { int a, b, c; } I3_29fcd0;
+typedef struct {
+    int a, b, c;
+} I3_29fcd0;
 extern I3_29fcd0 D_L00_00161178_29fcd0 __asm__("D_L00_00161178") __attribute__((section(".data")));
 extern long D_0015EED0_29fcd0 __asm__("D_0015EED0") __attribute__((section(".sdata")));
 void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
@@ -107,10 +110,10 @@ void FUN_L00_0029ead8_29fcd0(void *, int, int) __asm__("FUN_L00_0029ead8");
 void FUN_00239328_29fcd0(int, float, float) __asm__("FUN_00239328");
 void FUN_001f7978_29fcd0(void) __asm__("FUN_001f7978");
 void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
-void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
+void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
+                         long) __asm__("FUN_001f5450");
 
-void FUN_L00_0029fcd0(void *m)
-{
+void FUN_L00_0029fcd0(void *m) {
     q_29fcd0 d1[1];
     q_29fcd0 d2[1];
     q_29fcd0 base[1];
@@ -156,7 +159,9 @@ void FUN_L00_0029fcd0(void *m)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ff58.s", FUN_L00_0029ff58);
 #include "eetypes.h"
 #include "qzero.h"
-typedef struct { u128 q[3]; } Q3_2a02b0;
+typedef struct {
+    u128 q[3];
+} Q3_2a02b0;
 
 typedef struct {
     char pad[0x8];
@@ -177,7 +182,11 @@ typedef struct {
     char pad60[0x10];
     u128 f70;
     char pad80[0x50];
-    struct { s32 a; s32 b; s32 c[3]; } arr[4];
+    struct {
+        s32 a;
+        s32 b;
+        s32 c[3];
+    } arr[4];
 } A02b0_obj;
 
 typedef struct {
@@ -276,11 +285,13 @@ void FUN_L00_002a02b0(void) {
         *(f32 *)(p->f1C + 0x2C) = 0.14190800487995148f;
         if (p->f40 != 0) {
             qcopy(&p->f70, &D_L00_00166DD0[0]);
-            { u128 *s = &D_L00_00166DD0[32];
-            D_L00_00165F80[0] = s[0];
-            D_L00_00165F80[1] = s[1];
-            D_L00_00165F80[2] = s[2];
-            qzero(s); }
+            {
+                u128 *s = &D_L00_00166DD0[32];
+                D_L00_00165F80[0] = s[0];
+                D_L00_00165F80[1] = s[1];
+                D_L00_00165F80[2] = s[2];
+                qzero(s);
+            }
             qzero(D_L00_00166FE0);
             qzero(D_L00_00166FF0);
             D_L00_00166C80[0x350 / 4] = 1.0f;
@@ -308,7 +319,8 @@ void FUN_L00_002a02b0(void) {
         FUN_001f9810(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (D_001516D8[0] == 0) {
-            if (start_audio_stream_read(p->f18 + 0x80000, D_00137B80[0x198 / 4], D_00137B80[0x19C / 4]) != 0) {
+            if (start_audio_stream_read(p->f18 + 0x80000, D_00137B80[0x198 / 4],
+                                        D_00137B80[0x19C / 4]) != 0) {
                 D_L00_0016118C = 1;
             } else {
                 D_L00_0016118C = 0;

@@ -5,14 +5,15 @@ typedef struct {
     short id;            /* 0x04 */
     short unk06;
     short unk08;
-    short state;         /* 0x0A: low bits the state, 0x8000 paused */
-    short fade;          /* 0x0C: 0x8000 fading */
-    short fadeT;         /* 0x0E */
+    short state; /* 0x0A: low bits the state, 0x8000 paused */
+    short fade;  /* 0x0C: 0x8000 fading */
+    short fadeT; /* 0x0E */
 } MusicPlaying;
 extern void snd_stop_sound(int) __asm__("func_0012E368");
 extern void snd_pause_vag_stream(int) __asm__("FUN_0012ec70");
 extern int FUN_001f9770(void *);
-extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long), long) __asm__("FUN_0012ecd0");
+extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long),
+                                                 long) __asm__("FUN_0012ecd0");
 extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");
 extern void snd_is_vag_stream_buffered_cb(int, void (*)(int, long), long) __asm__("FUN_0012ed00");
 extern void music_remaining_time_callback(int, long) __asm__("FUN_00216bc0");
@@ -72,12 +73,14 @@ void music_update_stream(MusicPlaying *p) {
         if (p->state != 2 && p->state != 3) {
             h = p->handle;
             p->handle = 0xFFFFFFFF;
-            snd_get_vag_stream_time_remaining_cb(h, music_remaining_time_callback, (long)(unsigned int)p);
+            snd_get_vag_stream_time_remaining_cb(h, music_remaining_time_callback,
+                                                 (long)(unsigned int)p);
             snd_sound_is_still_playing_cb(h, set_sound_handle_id, (long)(unsigned int)p);
             return;
         }
         if (p->handle != 0xFFFFFFFF && p->state == 2) {
-            snd_is_vag_stream_buffered_cb(p->handle, music_channel_ready_callback, (long)(unsigned int)p);
+            snd_is_vag_stream_buffered_cb(p->handle, music_channel_ready_callback,
+                                          (long)(unsigned int)p);
         }
     } else if (p->state == 7 || p->handle == 0) {
         p->state = 0;

@@ -12,8 +12,7 @@ extern void subhour();
 extern void addhour();
 extern void encode_bcd_time_fields() __asm__("func_0012D428");
 
-void AdjustTime(struct AdjustTimeArg *arg0, s32 arg1)
-{
+void AdjustTime(struct AdjustTimeArg *arg0, s32 arg1) {
     s32 hour;
 
     decode_bcd_time_fields();

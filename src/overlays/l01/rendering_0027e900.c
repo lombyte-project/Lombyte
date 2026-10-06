@@ -38,8 +38,8 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *D_L01_001B2500[];
 
-void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode,
-                      f32 x, f32 y, f32 z, f32 w, f32 a, f32 r, f32 g, f32 b, f32 size) {
+void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32 x, f32 y, f32 z,
+                      f32 w, f32 a, f32 r, f32 g, f32 b, f32 size) {
     Spark *p;
     SparkBody *s;
     u128 v = *pos;

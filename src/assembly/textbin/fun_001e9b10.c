@@ -16,27 +16,27 @@ typedef union {
 
 typedef struct Shrub {
     f32 v[3];
-    f32 scale;          /* 0x0C */
+    f32 scale;              /* 0x0C */
     struct ShrubData *data; /* 0x10 */
-    f32 x14;            /* 0x14 */
-    s16 x18;            /* 0x18 */
-    u8 cls;             /* 0x1A */
-    u8 x1B;             /* 0x1B */
-    u16 x1C;            /* 0x1C */
-    u16 x1E;            /* 0x1E */
+    f32 x14;                /* 0x14 */
+    s16 x18;                /* 0x18 */
+    u8 cls;                 /* 0x1A */
+    u8 x1B;                 /* 0x1B */
+    u16 x1C;                /* 0x1C */
+    u16 x1E;                /* 0x1E */
 } Shrub;
 
 typedef struct Tie {
     f32 v[3];
-    f32 scale;          /* 0x0C */
-    f32 radius;         /* 0x10 */
+    f32 scale;  /* 0x0C */
+    f32 radius; /* 0x10 */
     u8 pad14[3];
-    u8 x17;             /* 0x17 */
-    s16 x18;            /* 0x18 */
-    u8 cls;             /* 0x1A */
-    u8 x1B;             /* 0x1B */
-    u16 x1C;            /* 0x1C */
-    u16 x1E;            /* 0x1E */
+    u8 x17;  /* 0x17 */
+    s16 x18; /* 0x18 */
+    u8 cls;  /* 0x1A */
+    u8 x1B;  /* 0x1B */
+    u16 x1C; /* 0x1C */
+    u16 x1E; /* 0x1E */
 } Tie;
 
 typedef struct FRow {
@@ -62,22 +62,22 @@ typedef struct TieData {
 
 typedef struct ShrubClass {
     u8 pad00[0x26];
-    u16 count;          /* 0x26 */
-    Shrub *first;       /* 0x28 */
+    u16 count;    /* 0x26 */
+    Shrub *first; /* 0x28 */
     u8 pad2C[4];
-    f32 x30[3];         /* 0x30 */
-    f32 scale;          /* 0x3C */
-    f32 x40;            /* 0x40 */
+    f32 x30[3]; /* 0x30 */
+    f32 scale;  /* 0x3C */
+    f32 x40;    /* 0x40 */
 } ShrubClass;
 
 typedef struct TieClass {
     u8 pad00[0xC];
-    f32 scale;          /* 0x0C */
+    f32 scale; /* 0x0C */
     u8 pad10[6];
-    u16 count;          /* 0x16 */
-    Tie *first;         /* 0x18 */
-    f32 *x1C;           /* 0x1C */
-    f32 x20;            /* 0x20 */
+    u16 count;  /* 0x16 */
+    Tie *first; /* 0x18 */
+    f32 *x1C;   /* 0x1C */
+    f32 x20;    /* 0x20 */
 } TieClass;
 
 typedef struct LevelHeader {
@@ -211,9 +211,6 @@ extern void func_0022A5E0(void *);
 extern void start_vif1_dma_transfer(void *) __asm__("func_002334D8");
 extern void func_00234F98(void *);
 extern void func_00237370(void *);
-
-
-
 
 u8 *FUN_001e9b10(LevelHeader *hdr) {
     u8 *p;

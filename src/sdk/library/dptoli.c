@@ -54,8 +54,7 @@ typedef union {
 
 void __unpack_d(FLOUnion *src, FpNumber *dst);
 
-s32 dptoli(u64 arg_a)
-{
+s32 dptoli(u64 arg_a) {
     FpNumber a;
     s32 tmp;
 

@@ -1,5 +1,9 @@
 #include "types.h"
-struct Vec3 { f32 x; f32 y; f32 z; };
+struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+};
 extern s32 D_001413D0[];
 extern struct Vec3 D_001CAA80;
 extern void FUN_0020d510(s32, f32 *);

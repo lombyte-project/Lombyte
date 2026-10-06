@@ -45,4 +45,5 @@ s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) {
     return 0;
 }
 
-extern __typeof__(create_rotating_preview_moby) func_0021EA48 __attribute__((alias("FUN_0021ea48")));
+extern __typeof__(create_rotating_preview_moby) func_0021EA48
+    __attribute__((alias("FUN_0021ea48")));

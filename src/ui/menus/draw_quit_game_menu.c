@@ -8,11 +8,10 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct M2c_arg0
-{
-  u8 pad_0[0x20];
-  s32 unk20;
-  s32 unk24;
+struct M2c_arg0 {
+    u8 pad_0[0x20];
+    s32 unk20;
+    s32 unk24;
 };
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
@@ -25,40 +24,40 @@ extern void vu1_add_g_sregister() __asm__("func_00233980");
 extern void func_001153FC();
 s32 draw_quit_game_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021e890");
 
-s32 draw_quit_game_menu(struct M2c_arg0 *arg0)
-{
-  unsigned long new_var;
-  s16 packet[0xC];
-  s32 temp_16_69;
-  s32 temp_17_18;
-  register s32 temp_17_81;
-  s32 temp_18_25;
-  s32 temp_2_73;
-  s32 temp_16_16;
-  temp_16_16 = arg0->unk20;
-  temp_17_18 = arg0->unk24;
-  func_001153FC(packet, 0, 0x18);
-  temp_18_25 = (s32) (temp_16_16 + (((u32) temp_16_16) >> 0x1F));
-  temp_18_25 = temp_18_25 >> 1;
-  packet[1] = temp_17_18;
-  packet[2] = 4;
-  packet[3] = temp_16_16 - 4;
-  packet[4] = temp_18_25;
-  packet[5] = 6;
-  packet[6] = temp_16_16;
-  packet[8] = 16;
-  packet[9] = 1;
-  packet[7] = temp_17_18;
-  setup_gif_paging(0);
-  new_var = 0x2004B;
-  vu1_add_g_sregister(0x47, new_var);
-  font_print_window_regular(packet, 0x80FFA888, get_help_message_text(0x4F6D), -1);
-  font_print_center(temp_18_25, temp_17_18 - 0x40, 0x80FFA888, get_help_message_text(0x4F3F), -1);
-  temp_16_69 = measure_text_width_regular(get_help_message_text(0x524B), -1);
-  temp_2_73 = measure_text_width_regular(get_help_message_text(0x524F), -1);
-  temp_17_81 = ((s32) (arg0->unk20 - ((temp_2_73 >= temp_16_69) ? (temp_2_73) : (temp_16_69)))) >> 1;
-  font_print_large(temp_17_81, temp_17_18 - 0x28, 0x80FFA888, get_help_message_text(0x524B), -1);
-  font_print_large(temp_17_81, temp_17_18 - 0x14, 0x80FFA888, get_help_message_text(0x524F), -1);
-  do_gif_paging();
-  return 2;
+s32 draw_quit_game_menu(struct M2c_arg0 *arg0) {
+    unsigned long new_var;
+    s16 packet[0xC];
+    s32 temp_16_69;
+    s32 temp_17_18;
+    register s32 temp_17_81;
+    s32 temp_18_25;
+    s32 temp_2_73;
+    s32 temp_16_16;
+    temp_16_16 = arg0->unk20;
+    temp_17_18 = arg0->unk24;
+    func_001153FC(packet, 0, 0x18);
+    temp_18_25 = (s32)(temp_16_16 + (((u32)temp_16_16) >> 0x1F));
+    temp_18_25 = temp_18_25 >> 1;
+    packet[1] = temp_17_18;
+    packet[2] = 4;
+    packet[3] = temp_16_16 - 4;
+    packet[4] = temp_18_25;
+    packet[5] = 6;
+    packet[6] = temp_16_16;
+    packet[8] = 16;
+    packet[9] = 1;
+    packet[7] = temp_17_18;
+    setup_gif_paging(0);
+    new_var = 0x2004B;
+    vu1_add_g_sregister(0x47, new_var);
+    font_print_window_regular(packet, 0x80FFA888, get_help_message_text(0x4F6D), -1);
+    font_print_center(temp_18_25, temp_17_18 - 0x40, 0x80FFA888, get_help_message_text(0x4F3F), -1);
+    temp_16_69 = measure_text_width_regular(get_help_message_text(0x524B), -1);
+    temp_2_73 = measure_text_width_regular(get_help_message_text(0x524F), -1);
+    temp_17_81 =
+        ((s32)(arg0->unk20 - ((temp_2_73 >= temp_16_69) ? (temp_2_73) : (temp_16_69)))) >> 1;
+    font_print_large(temp_17_81, temp_17_18 - 0x28, 0x80FFA888, get_help_message_text(0x524B), -1);
+    font_print_large(temp_17_81, temp_17_18 - 0x14, 0x80FFA888, get_help_message_text(0x524F), -1);
+    do_gif_paging();
+    return 2;
 }

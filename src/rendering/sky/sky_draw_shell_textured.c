@@ -79,7 +79,7 @@ void sky_draw_shell_textured(struct Shell *shell) {
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
             if (FUN_0022bf94(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
-                              (&shell->tiles[i])->unkC) == 0) {
+                             (&shell->tiles[i])->unkC) == 0) {
                 FUN_0022c208(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }
         }

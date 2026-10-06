@@ -16,11 +16,13 @@ s32 advance_preview_animation_queue(void) {
     request_address = base_address + 0x38;
     end_address = base_address + 0x1C0;
     do {
-        *(PreviewAnimationRequest *)request_address = *(PreviewAnimationRequest *)(request_address + 0x38);
+        *(PreviewAnimationRequest *)request_address =
+            *(PreviewAnimationRequest *)(request_address + 0x38);
         request_address += 0x38;
     } while (request_address < end_address);
     preview_request_count = preview_request_count_absolute - 1;
     return 0;
 }
 
-extern __typeof__(advance_preview_animation_queue) func_00226670 __attribute__((alias("FUN_00226670")));
+extern __typeof__(advance_preview_animation_queue) func_00226670
+    __attribute__((alias("FUN_00226670")));

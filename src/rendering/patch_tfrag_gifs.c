@@ -1,7 +1,20 @@
 #include "types.h"
-struct Tfrag { u32 tex0; u8 pad4[0x1F]; u8 tex; u8 pad24[0xC]; u32 tex1; u8 pad34[0x1C]; };
-struct TfragGroup { struct Tfrag *tfrags; s32 count; };
-struct TexRemap { s16 lo; s16 hi; };
+struct Tfrag {
+    u32 tex0;
+    u8 pad4[0x1F];
+    u8 tex;
+    u8 pad24[0xC];
+    u32 tex1;
+    u8 pad34[0x1C];
+};
+struct TfragGroup {
+    struct Tfrag *tfrags;
+    s32 count;
+};
+struct TexRemap {
+    s16 lo;
+    s16 hi;
+};
 extern struct TfragGroup D_001E0F00[];
 extern struct TexRemap D_001E0C00[];
 void patch_tfrag_gifs(void) __asm__("FUN_00233308");

@@ -8,8 +8,7 @@ extern s32 Kputs(s8 *text);
 
 void deci2Putchar(s32 c) __asm__("deci2Putchar");
 
-void deci2Putchar(s32 c)
-{
+void deci2Putchar(s32 c) {
     s32 index = D_0012FBFC[0];
 
     if (index >= 126) {

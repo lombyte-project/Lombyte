@@ -1,7 +1,23 @@
 #include "types.h"
-struct TexEntry { u32 data; s16 page; u8 log_w; u8 log_h; };
-struct TexCounts { u8 pad0[0x14]; s32 mid_ends[8]; s32 ends[16]; s32 loaded[16]; };
-struct TexTable { u8 pad0[0x18]; struct TexCounts *counts; u8 pad1C[8]; struct TexEntry *entries; struct TexEntry *mids; };
+struct TexEntry {
+    u32 data;
+    s16 page;
+    u8 log_w;
+    u8 log_h;
+};
+struct TexCounts {
+    u8 pad0[0x14];
+    s32 mid_ends[8];
+    s32 ends[16];
+    s32 loaded[16];
+};
+struct TexTable {
+    u8 pad0[0x18];
+    struct TexCounts *counts;
+    u8 pad1C[8];
+    struct TexEntry *entries;
+    struct TexEntry *mids;
+};
 extern struct TexTable D_0019A3E8;
 void link_hud_bank(s32 bank, u32 base) __asm__("FUN_001fefc0");
 

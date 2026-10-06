@@ -1,6 +1,12 @@
 #include "types.h"
-struct Moby { u8 pad0[0x86]; s16 coll; };
-struct CamColl { u8 pad0[0xC4]; void *moby; };
+struct Moby {
+    u8 pad0[0x86];
+    s16 coll;
+};
+struct CamColl {
+    u8 pad0[0xC4];
+    void *moby;
+};
 extern struct CamColl D_001870D0;
 extern void *func_001E9448(void *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -19,4 +25,5 @@ void handle_camera_collision_with_hero(struct Moby *hero) {
     }
 }
 
-extern __typeof__(handle_camera_collision_with_hero) func_001EBE68 __attribute__((alias("FUN_001ebe68")));
+extern __typeof__(handle_camera_collision_with_hero) func_001EBE68
+    __attribute__((alias("FUN_001ebe68")));

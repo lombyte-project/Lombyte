@@ -4,8 +4,7 @@ extern void SpinWait(s32);
 
 void start_vif1_dma_transfer(s32 arg0) __asm__("FUN_002334d8");
 
-void start_vif1_dma_transfer(s32 arg0)
-{
+void start_vif1_dma_transfer(s32 arg0) {
     if ((*(volatile u32 *)0x10008000 & 0x100) != 0) {
         do {
             SpinWait(0x10);

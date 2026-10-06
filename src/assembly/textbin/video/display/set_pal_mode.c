@@ -2,11 +2,14 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s", FUN_001f34e8);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s",
+            FUN_001f34e8);
 #else
 #include "types.h"
 
-typedef struct { long q[12]; } sceGsLoadImage __attribute__((aligned(16)));
+typedef struct {
+    long q[12];
+} sceGsLoadImage __attribute__((aligned(16)));
 
 typedef struct {
     s32 width;
@@ -72,8 +75,7 @@ extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, 
 
 void set_pal_mode(void) __asm__("FUN_001f34e8");
 
-void set_pal_mode(void)
-{
+void set_pal_mode(void) {
     sceGsLoadImage image_transfer;
     s32 tile_count;
     s32 tile_index;

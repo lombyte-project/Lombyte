@@ -12,7 +12,10 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022d7f0/FUN_0022d7f0.s
 
 /* The pool layout agrees with sound_update: a 0x70-byte header followed by
    thirty 0x70-byte voices. Position and position_offset are full quadwords. */
-typedef union { u128 q; f32 f[4]; } VoiceVector;
+typedef union {
+    u128 q;
+    f32 f[4];
+} VoiceVector;
 typedef struct {
     u8 pad0[0x10];
     s32 pitch_bend_min;
@@ -45,9 +48,15 @@ typedef struct {
     s32 history_position;
     u8 history[0x2C];
 } VoiceSlot;
-typedef struct { u8 header[0x70]; VoiceSlot voices[30]; } VoicePool;
+typedef struct {
+    u8 header[0x70];
+    VoiceSlot voices[30];
+} VoicePool;
 /* Retail accesses each selected voice relative to the pool base. */
-typedef struct { u8 header[0x70]; VoiceSlot voice; } VoicePoolWindow;
+typedef struct {
+    u8 header[0x70];
+    VoiceSlot voice;
+} VoicePoolWindow;
 typedef struct {
     u8 pad0[0x1090];
     VoiceMoby *secondary_moby;
@@ -55,7 +64,10 @@ typedef struct {
     VoiceMoby *primary_moby;
 } VoicePlayerState;
 
-typedef struct { VoiceVector value; u8 pad10[0x60]; } VoicePositionRecord;
+typedef struct {
+    VoiceVector value;
+    u8 pad10[0x60];
+} VoicePositionRecord;
 extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
 extern u8 voice_volume_records[] __asm__("D_0013E5C0");
 extern VoicePool voice_pool __asm__("D_0013E550");
@@ -64,9 +76,11 @@ extern void clear_voice_position(VoiceVector *) __asm__("func_001F99F8");
 extern s32 game_random_remainder(s32) __asm__("func_00213260");
 extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("func_0022C7E8");
 
-s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *, s32) __asm__("FUN_0022d7f0");
+s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
+                        s32) __asm__("FUN_0022d7f0");
 
-s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby, VoiceVector *position, s32 volume) {
+s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
+                        VoiceVector *position, s32 volume) {
     s32 volume_offset;
     s32 pitch_bend_max;
     s32 pitch_bend_min;
@@ -135,7 +149,7 @@ slot_found:
     }
     slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
     slot->voice.definition = definition;
-    slot->voice.source_value = (u16) definition->source_value;
+    slot->voice.source_value = (u16)definition->source_value;
     slot->voice.linked_index = -1;
     slot->voice.volume = volume;
     slot->voice.owner = 0;
@@ -166,7 +180,8 @@ calculate_volume:
         goto commit_if_audible;
     }
     volume_offset = slot_index * 0x70;
-    result = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset), (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
+    result = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset),
+                                    (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
     goto check_calculated_volume;
 commit_if_audible:
     result = volume;
@@ -182,7 +197,8 @@ check_calculated_volume:
     pitch_bend_max = definition->pitch_bend_max;
     pitch_bend_min = definition->pitch_bend_min;
     if (pitch_bend_max != pitch_bend_min) {
-        pitch_bend = game_random_remainder(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
+        pitch_bend =
+            game_random_remainder(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
     } else {
         pitch_bend = pitch_bend_max;
     }

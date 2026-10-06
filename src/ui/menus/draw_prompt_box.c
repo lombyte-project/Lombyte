@@ -36,8 +36,8 @@ int draw_prompt_box(char *arg0) {
         break;
     }
     {
-        TextBox c = { { 1, *(int *)(arg0 + 0x24) + 1, 1, *(int *)(arg0 + 0x20) + 1,
-                        *(int *)(arg0 + 0x20) >> 1, 5, 0, 0, 0x10, 5 } };
+        TextBox c = {{1, *(int *)(arg0 + 0x24) + 1, 1, *(int *)(arg0 + 0x20) + 1,
+                      *(int *)(arg0 + 0x20) >> 1, 5, 0, 0, 0x10, 5}};
 
         font_print_window_small(&c, 0x80000000L, text, -1);
         c.s[5] = (*(int *)(arg0 + 0x24) - c.s[7]) >> 1;

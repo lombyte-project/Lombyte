@@ -1,7 +1,10 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 
-struct Tracks { u8 pad[0xF00]; s32 h[1][6]; };
+struct Tracks {
+    u8 pad[0xF00];
+    s32 h[1][6];
+};
 extern struct Tracks D_00137B80;
 extern s32 D_0015ED88;
 extern struct MusicStreamState D_001516D0;
@@ -24,9 +27,9 @@ void music_start_track_50000(s32 track, s32 flags, s32 volume) {
             D_001516D0.secondary_remaining_time = 48000;
             D_001516D0.secondary_volume = volume;
             D_001516D0.secondary_crossfade_enabled = 0;
-            snd_play_vag_stream_by_loc_ex_cb(handle, 0, 0, 0, (s16)volume, 0, 2, 0, 0x21,
-                          D_002169C0,
-                          (u64)((s64)(((u8 *)&D_001516D0 + 0x50)) << 0x20) >> 0x20);
+            snd_play_vag_stream_by_loc_ex_cb(
+                handle, 0, 0, 0, (s16)volume, 0, 2, 0, 0x21, D_002169C0,
+                (u64)((s64)(((u8 *)&D_001516D0 + 0x50)) << 0x20) >> 0x20);
         }
     }
 }

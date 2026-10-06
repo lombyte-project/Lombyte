@@ -1,7 +1,19 @@
 #include "types.h"
-struct GifTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct GifTag *p; };
-struct Disp { u8 pad0[0x230]; s32 a; s32 b; s32 c; };
+struct GifTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct GifTag *p;
+};
+struct Disp {
+    u8 pad0[0x230];
+    s32 a;
+    s32 b;
+    s32 c;
+};
 extern struct TagPtr D_00160F00;
 extern u8 D_0013CFC0[];
 extern u8 D_0013CF10[];

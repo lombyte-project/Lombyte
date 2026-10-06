@@ -86,7 +86,8 @@ void build_occlusion_visibility(void) {
                     bx = 0.0f < D_00186F40.x - p[0];
                     by = 0.0f < D_00186F40.y - p[1];
                     bz = 0.0f < D_00186F40.z - p[2];
-                    FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10), 0x80);
+                    FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
+                                 0x80);
                 } else if (D_0018C32C[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {

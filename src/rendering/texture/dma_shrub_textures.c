@@ -1,7 +1,18 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TexState { u8 pad0[0x1C]; s32 count; s32 enabled; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TexState {
+    u8 pad0[0x1C];
+    s32 count;
+    s32 enabled;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 extern struct TagPtr D_00160F00;
 extern struct TagPtr D_001603F0;
 extern struct TexState D_0018A2B0;

@@ -24,7 +24,7 @@ s32 FUN_00225660(struct M2c_arg0 *arg0) {
         var_16_10 += 1;
     } while (var_17_8 >= 0);
     arg0->unk3C = complete_stream_buffer_transfer(arg0->unk3C);
-    if ((u32) (D_001516D0.unk5A - 6) >= 2U) {
+    if ((u32)(D_001516D0.unk5A - 6) >= 2U) {
         D_001516D0.unk5A = 5U;
     }
     return 0;

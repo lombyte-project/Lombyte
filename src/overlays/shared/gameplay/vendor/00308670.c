@@ -8,8 +8,7 @@ extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
 extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L12_00308670(char *a0)
-{
+char *FUN_L12_00308670(char *a0) {
     unsigned char *m = (unsigned char *)FUN_0020c4f8_8670(0x55B);
     if (m != 0) {
         char *d = *(char **)(m + 0x78);
@@ -33,12 +32,17 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308708.s", FUN_L12_00308708);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_00309CF8), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x40]; float vx, vy; } MO;
+typedef struct {
+    char pad[0x40];
+    float vx, vy;
+} MO;
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C MACRO_ADDR;
 extern int FUN_L00_0025c698(void *, void *);
-extern void func_L00_0025F4A8_alt(void*,void*,void*,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+                                  float, float, int, float, int, int, int,
+                                  int) __asm__("FUN_L00_0025e450");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_00308918(char *m) {
@@ -59,8 +63,8 @@ void FUN_L12_00308918(char *m) {
         if (r & 0x61) {
             qcopy(v, m + 0x10);
             ((float *)v)[2] += 1.0f;
-            func_L00_0025F4A8_alt(m, p, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f,
-                                  1, st, -1, 0);
+            func_L00_0025F4A8_alt(m, p, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
+                                  st, -1, 0);
             mark_moby_for_removal(m);
         } else if (*(float *)(m + 0x18) < 5.0f) {
             mark_moby_for_removal(m);

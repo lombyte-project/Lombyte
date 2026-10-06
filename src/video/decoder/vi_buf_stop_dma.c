@@ -1,8 +1,18 @@
 #include "types.h"
 #define DGET(a) (*(volatile u32 *)(a))
 typedef struct {
-    u8 pad0[0x1C]; u32 d4_madr; u32 d4_tadr; u32 d4_qwc; u32 d4_chcr;
-    u32 d3_madr; u32 d3_qwc; u32 d3_chcr; u32 ipu_bp; u32 ipu_ctrl; s32 sema; s32 active;
+    u8 pad0[0x1C];
+    u32 d4_madr;
+    u32 d4_tadr;
+    u32 d4_qwc;
+    u32 d4_chcr;
+    u32 d3_madr;
+    u32 d3_qwc;
+    u32 d3_chcr;
+    u32 ipu_bp;
+    u32 ipu_ctrl;
+    s32 sema;
+    s32 active;
 } ViBuf;
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);

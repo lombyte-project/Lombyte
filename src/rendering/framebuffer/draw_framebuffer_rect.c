@@ -15,7 +15,8 @@ extern struct TagPtr D_00160F00;
 extern void vu1_add_vif_code(s32) __asm__("func_00233938");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
-void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 color) __asm__("FUN_001fb8f0");
+void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy,
+                           u32 color) __asm__("FUN_001fb8f0");
 
 void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 color) {
     struct DmaTag *tag;

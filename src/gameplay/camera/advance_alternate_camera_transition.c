@@ -15,7 +15,8 @@ extern s32 D_0018C32C[];
 
 extern f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void derive_camera_orbit_parameters(f32 *, void *, void *, void *, void *, void *) __asm__("func_001EC530");
+extern void derive_camera_orbit_parameters(f32 *, void *, void *, void *, void *,
+                                           void *) __asm__("func_001EC530");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -33,10 +34,10 @@ extern void rotate_vector_by_quaternion(void *, void *, void *) __asm__("func_00
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
 extern void tick_countdown_32(void *) __asm__("func_001F9740");
 
-int advance_alternate_camera_transition(char *target_camera, f32 *transition_state) __asm__("FUN_001eccd8");
+int advance_alternate_camera_transition(char *target_camera,
+                                        f32 *transition_state) __asm__("FUN_001eccd8");
 
-int advance_alternate_camera_transition(char *target_camera, f32 *transition_state)
-{
+int advance_alternate_camera_transition(char *target_camera, f32 *transition_state) {
     CameraVector orbit_angles;
     CameraVector forward_axis;
     CameraVector horizontal_axis;
@@ -63,13 +64,15 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     if (*(s32 *)(transition_state + 3) <= 0) {
         return 1;
     }
-    step = 1.0f / cosine_interpolate(1.0f, (f32)*(s32 *)(transition_state + 5), (f32)*(s32 *)(transition_state + 3) * transition_state[4]);
+    step = 1.0f / cosine_interpolate(1.0f, (f32) * (s32 *)(transition_state + 5),
+                                     (f32) * (s32 *)(transition_state + 3) * transition_state[4]);
     if (D_001871B0[2] == 2) {
         qcopy(&focus_position, D_0013F3D0);
         qcopy(&forward_axis, transition_state + 8);
         qcopy(&vertical_axis, transition_state + 12);
         cross_vectors_xyz(&horizontal_axis, &forward_axis, &vertical_axis);
-        derive_camera_orbit_parameters(orbit_angles.v, target_camera + 0x30, &focus_position, &forward_axis, &horizontal_axis, &vertical_axis);
+        derive_camera_orbit_parameters(orbit_angles.v, target_camera + 0x30, &focus_position,
+                                       &forward_axis, &horizontal_axis, &vertical_axis);
     } else {
         qcopy(&focus_position, target_camera + 0x30);
         hero = D_0013F350;
@@ -97,14 +100,17 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     projection = dot_vectors_xyz(&rotation_matrix[2], target_camera);
     scale_vector_xyz(&axis_projection, &rotation_matrix[2], projection);
     subtract_vector_xyz(&projected_difference, target_camera, &axis_projection);
-    alignment_angle = 1.5707964f - approximate_arcsine(dot_vectors_xyz(&rotation_matrix[0], &projected_difference) / vector_length_xyz(&projected_difference));
+    alignment_angle = 1.5707964f - approximate_arcsine(
+                                       dot_vectors_xyz(&rotation_matrix[0], &projected_difference) /
+                                       vector_length_xyz(&projected_difference));
     roll_sign = -1.0f;
     if (dot_vectors_xyz(&projected_difference, &rotation_matrix[1]) >= 0.0f) {
         roll_sign = 1.0f;
     }
     alignment_angle = alignment_angle * roll_sign;
-    if (AbsoluteFloat(orbit_yaw_delta) > 1.5707964f
-        && ((orbit_yaw_delta >= 0.0f && roll_sign < 0.0f) || (orbit_yaw_delta < 0.0f && roll_sign >= 0.0f))) {
+    if (AbsoluteFloat(orbit_yaw_delta) > 1.5707964f &&
+        ((orbit_yaw_delta >= 0.0f && roll_sign < 0.0f) ||
+         (orbit_yaw_delta < 0.0f && roll_sign >= 0.0f))) {
         if (alignment_angle < 0.0f) {
             alignment_angle += 6.2831855f;
         } else {
@@ -123,17 +129,20 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     if (AbsoluteFloat(alignment_angle) < 1e-5f) {
         qcopy(&rotation_reference, &rotation_matrix[0]);
     } else {
-        build_quaternion_from_axis_angle(&rotation_quaternion, &rotation_matrix[2], alignment_angle);
+        build_quaternion_from_axis_angle(&rotation_quaternion, &rotation_matrix[2],
+                                         alignment_angle);
         rotate_vector_by_quaternion(&rotation_reference, &rotation_matrix[0], &rotation_quaternion);
     }
-    alignment_angle = 1.5707964f - approximate_arcsine(dot_vectors_xyz(&rotation_reference, target_camera));
+    alignment_angle =
+        1.5707964f - approximate_arcsine(dot_vectors_xyz(&rotation_reference, target_camera));
     projection = dot_vectors_xyz(&rotation_reference, target_camera + 0x20);
     tilt_sign = -1.0f;
     if (projection >= 0.0f) {
         tilt_sign = 1.0f;
     }
     alignment_angle *= tilt_sign;
-    build_look_at_matrix(&smoothed_axis_0, &smoothed_axis_0, &smoothed_axis_1, alignment_angle * step);
+    build_look_at_matrix(&smoothed_axis_0, &smoothed_axis_0, &smoothed_axis_1,
+                         alignment_angle * step);
     normalize_vector_xyz(D_00187290, &smoothed_axis_0, 1.0f);
     cross_vectors_xyz(D_00187290 + 0x10, D_00187290, D_0013F5E0);
     normalize_vector_xyz(D_00187290 + 0x10, D_00187290 + 0x10, -1.0f);
@@ -144,4 +153,5 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     return 0;
 }
 
-extern __typeof__(advance_alternate_camera_transition) func_001ECCD8 __attribute__((alias("FUN_001eccd8")));
+extern __typeof__(advance_alternate_camera_transition) func_001ECCD8
+    __attribute__((alias("FUN_001eccd8")));

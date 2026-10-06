@@ -1,7 +1,18 @@
 #include "types.h"
 
-struct OptItem { s32 text; u8 *value; s32 names[4]; };
-struct OptMenu { u8 pad0[0x20]; s32 x; s32 height; u8 pad28[0xC]; struct OptItem *items; s32 selected; };
+struct OptItem {
+    s32 text;
+    u8 *value;
+    s32 names[4];
+};
+struct OptMenu {
+    u8 pad0[0x20];
+    s32 x;
+    s32 height;
+    u8 pad28[0xC];
+    struct OptItem *items;
+    s32 selected;
+};
 
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -36,7 +47,8 @@ s32 FUN_00221460(struct OptMenu *m) {
             color = 0x80FFA888;
         }
         font_print_large(0xC, y, color, get_help_message_text(it->text), -1);
-        font_print_right(m->x - 0xC, y, 0x80FFA888, get_help_message_text(it->names[*it->value]), -1);
+        font_print_right(m->x - 0xC, y, 0x80FFA888, get_help_message_text(it->names[*it->value]),
+                         -1);
         y += step;
     }
     do_gif_paging();

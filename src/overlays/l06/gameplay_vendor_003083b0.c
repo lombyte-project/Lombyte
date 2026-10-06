@@ -36,7 +36,8 @@ void FUN_L06_00309240(int idx) {
                 if (FUN_001fa728((char *)v, 64.0f) >= 0) {
                     data = *(char **)(m + 0x78);
                     m[0x20] = 2;
-                    *(int *)(data + 0x28) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(30.0f, 60.0f)));
+                    *(int *)(data + 0x28) =
+                        func_001FA898_r(FUN_001f96b0(random_float_between_alt(30.0f, 60.0f)));
                 }
             }
         } while (*p++ >= 0);
@@ -53,8 +54,7 @@ extern int D_L06_0015F5C4;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_002637f8(int);
 
-void FUN_L06_00309348(unsigned char *moby)
-{
+void FUN_L06_00309348(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         moby[0x30] = 0xFF;
@@ -76,7 +76,8 @@ void FUN_L06_00309348(unsigned char *moby)
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -133,8 +134,10 @@ void FUN_L06_00309e08(char *self) {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+                         D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+                         D_L06_0015F580, D_L06_0015F580);
         m = mk_a(0x67D);
         if (m != 0) {
             m[0x31] = 1;

@@ -12,15 +12,13 @@
 
 typedef char *va_list;
 
-extern s32 Vfprintf(RncFile *file, const s8 *format, va_list arguments)
-    __asm__("func_00116DA8");
+extern s32 Vfprintf(RncFile *file, const s8 *format, va_list arguments) __asm__("func_00116DA8");
 extern s32 fflush(RncFile *file);
 
 #define __SNBF 0x0002
 #define __SERR 0x0040
 
-s32 __sbprintf(RncFile *fp, const s8 *fmt, va_list ap)
-{
+s32 __sbprintf(RncFile *fp, const s8 *fmt, va_list ap) {
     s32 ret;
     RncFile fake;
     u8 buf[1024];

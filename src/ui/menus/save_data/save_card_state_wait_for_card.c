@@ -19,7 +19,9 @@ void save_card_state_wait_for_card(void) {
         D_0015EEB0 = 9;
         return;
     }
-    if (v == -2) D_0015EEB0 = 5;
+    if (v == -2)
+        D_0015EEB0 = 5;
 }
 
-extern __typeof__(save_card_state_wait_for_card) func_002089D0 __attribute__((alias("FUN_002089d0")));
+extern __typeof__(save_card_state_wait_for_card) func_002089D0
+    __attribute__((alias("FUN_002089d0")));

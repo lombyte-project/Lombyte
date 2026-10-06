@@ -15,7 +15,7 @@ struct M2c_arg0 {
     s32 unkCC;
     s32 unkD0;
     u8 pad_D4[0x784];
-    struct M2c_temp_7_14 * unk858;
+    struct M2c_temp_7_14 *unk858;
 };
 
 struct M2c_arg1 {
@@ -50,19 +50,20 @@ void _dispRefImage(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1) {
     s32 *temp_7_9;
 
     temp_7_9 = arg0->unk858;
-    _getPtsDtsFlags(arg0, arg1, (s32 *) ((u8 *) temp_7_9 + 0x10), (s32 *) ((u8 *) temp_7_9 + 0x18), (s32 *) ((u8 *) temp_7_9 + 0x20));
+    _getPtsDtsFlags(arg0, arg1, (s32 *)((u8 *)temp_7_9 + 0x10), (s32 *)((u8 *)temp_7_9 + 0x18),
+                    (s32 *)((u8 *)temp_7_9 + 0x20));
     temp_7_14 = arg0->unk858;
-    arg0->unk80 = (s32) temp_7_14->unk10;
-    temp_6_28 = D_00132E98[(s32) (temp_7_14->unk20 >> 5) & 0xF];
-    arg0->unkCC = (s32) arg1->unk5C;
+    arg0->unk80 = (s32)temp_7_14->unk10;
+    temp_6_28 = D_00132E98[(s32)(temp_7_14->unk20 >> 5) & 0xF];
+    arg0->unkCC = (s32)arg1->unk5C;
     arg0->unk88 = temp_6_28;
-    arg0->unkD0 = (s32) arg1->unk60;
-    arg0->unkB4 = (s32) arg1->unk44;
-    arg0->unkB8 = (s32) arg1->unk48;
-    arg0->unkBC = (s32) arg1->unk4C;
-    arg0->unkC0 = (s32) arg1->unk50;
-    arg0->unkC4 = (s32) arg1->unk54;
-    arg0->unkC8 = (s32) arg1->unk58;
+    arg0->unkD0 = (s32)arg1->unk60;
+    arg0->unkB4 = (s32)arg1->unk44;
+    arg0->unkB8 = (s32)arg1->unk48;
+    arg0->unkBC = (s32)arg1->unk4C;
+    arg0->unkC0 = (s32)arg1->unk50;
+    arg0->unkC4 = (s32)arg1->unk54;
+    arg0->unkC8 = (s32)arg1->unk58;
     if (_isOutSizeOK(arg0, arg1) != 0) {
         if (arg1->unk28 == 1) {
             if (arg0->unkB0 != 0) {

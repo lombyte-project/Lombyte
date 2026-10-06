@@ -13,8 +13,7 @@ extern void FUN_L02_002a4058(void *, int, float);
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L07_002f8058(unsigned char *moby)
-{
+void FUN_L07_002f8058(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         moby[0x20] = 1;

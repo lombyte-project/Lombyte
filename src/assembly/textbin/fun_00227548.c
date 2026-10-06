@@ -7,11 +7,26 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227548/FUN_00227548.s
 #include "types.h"
 
 #include "eetypes.h"
-struct GraphicsDmaTag { u32 dma_control; u32 addr; u32 vif0; u32 vif1; };
-struct GraphicsSetupRecord { s32 command_count; s32 command_flags; f32 second_depth; f32 first_depth; u128 direction; };
-struct RenderPacketCursor { struct GraphicsDmaTag *p; };
+struct GraphicsDmaTag {
+    u32 dma_control;
+    u32 addr;
+    u32 vif0;
+    u32 vif1;
+};
+struct GraphicsSetupRecord {
+    s32 command_count;
+    s32 command_flags;
+    f32 second_depth;
+    f32 first_depth;
+    u128 direction;
+};
+struct RenderPacketCursor {
+    struct GraphicsDmaTag *p;
+};
 extern struct RenderPacketCursor render_packet_cursor __asm__("D_00160F00");
-struct VideoModeState { s32 v; };
+struct VideoModeState {
+    s32 v;
+};
 extern struct VideoModeState pal_mode __asm__("D_0015ED80");
 extern u8 pal_graphics_setup_packet[] __asm__("D_001D7EC0");
 extern u8 ntsc_graphics_setup_packet[] __asm__("D_001D7E50");
@@ -36,7 +51,8 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     append_fullscreen_setup_strips();
     record = (struct GraphicsSetupRecord *)command_stream;
     render_packet_cursor.p->dma_control = 0x30000007;
-    render_packet_cursor.p->addr = (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
+    render_packet_cursor.p->addr =
+        (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
     render_packet_cursor.p->vif0 = 0x13000000;
     render_packet_cursor.p->vif1 = 0x50000007;
     /* Remaining vector components are filled from each setup record. */
@@ -69,6 +85,7 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     emit_gs_register_write(0x42, 0x8000000044LL);
 }
 
-extern __typeof__(submit_graphics_setup_command_stream) func_00227548 __attribute__((alias("FUN_00227548")));
+extern __typeof__(submit_graphics_setup_command_stream) func_00227548
+    __attribute__((alias("FUN_00227548")));
 
 #endif /* NON_MATCHING */

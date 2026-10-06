@@ -54,48 +54,48 @@ void poll_pad_device_state(struct PadState *p) {
     r = scePad2GetState(p->socket);
     p->unk19C = r;
     if (r == 1) {
-    switch (p->unk198) {
-    case 0: {
-        n = scePad2GetButtonProfile(p->socket, buf);
-        if (*(u32 *)buf == 0xFFFFFFFF) {
-            p->unk1DC = 0x79;
-        } else {
-            p->unk1DC = 0;
-        }
-        if (n < 5) {
-            for (i = 0; i < n; i++) {
+        switch (p->unk198) {
+        case 0: {
+            n = scePad2GetButtonProfile(p->socket, buf);
+            if (*(u32 *)buf == 0xFFFFFFFF) {
+                p->unk1DC = 0x79;
+            } else {
+                p->unk1DC = 0;
+            }
+            if (n < 5) {
+                for (i = 0; i < n; i++) {
+                    p->unk180[i] = buf[i];
+                }
+                p->unk198 = 1;
+            } else {
+                p->unk198 = 2;
+                n = 0;
+            }
+            for (i = n; i < 4; i++) {
                 p->unk180[i] = buf[i];
             }
-            p->unk198 = 1;
-        } else {
-            p->unk198 = 2;
-            n = 0;
-        }
-        for (i = n; i < 4; i++) {
-            p->unk180[i] = buf[i];
-        }
-        n = sceVibGetProfile(p->socket, buf);
-        if (n < 5) {
-            for (i = 0; i < n; i++) {
+            n = sceVibGetProfile(p->socket, buf);
+            if (n < 5) {
+                for (i = 0; i < n; i++) {
+                    p->unk184[i] = buf[i];
+                }
+            } else {
+                n = 0;
+            }
+            for (i = n; i < 4; i++) {
                 p->unk184[i] = buf[i];
             }
-        } else {
-            n = 0;
+            clear_pad_input(p);
+            break;
         }
-        for (i = n; i < 4; i++) {
-            p->unk184[i] = buf[i];
+        case 1:
+            n = scePad2Read(p->socket, buf);
+            process_pad_input(p, buf, n);
+            break;
+        case 2:
+            clear_pad_input(p);
+            break;
         }
-        clear_pad_input(p);
-        break;
-    }
-    case 1:
-        n = scePad2Read(p->socket, buf);
-        process_pad_input(p, buf, n);
-        break;
-    case 2:
-        clear_pad_input(p);
-        break;
-    }
     } else {
         clear_pad_input(p);
         p->unk198 = 0;

@@ -26,7 +26,8 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     struct PreviewMoby *moby;
     struct PreviewMoby *result;
     u8 unset = 0xFF;
-    if (moby_class_slots[oclass] == unset) return 0;
+    if (moby_class_slots[oclass] == unset)
+        return 0;
     {
         moby = create_moby(oclass);
         if (moby != 0) {

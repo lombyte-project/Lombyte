@@ -23,4 +23,5 @@ s32 play_mpeg_movie(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     return 0;
 }
 
-extern s32 func_0023A3B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __attribute__((alias("FUN_0023a3b8")));
+extern s32 func_0023A3B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
+    __attribute__((alias("FUN_0023a3b8")));

@@ -2,15 +2,26 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { char pad09[0x86]; s16 id; char pad09b[0x18]; } Ent09;
+typedef struct {
+    char pad09[0x86];
+    s16 id;
+    char pad09b[0x18];
+} Ent09;
 extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 s32 FUN_L00_001eb1f8(s32 id) {
-    s32 p; s32 e; s16 v;
+    s32 p;
+    s32 e;
+    s16 v;
     p = (s32)&D_L00_00167150_u[0];
     e = p + 0x1E00;
     for (;;) {
         v = *(s16 *)(p + 0x86);
-        if (v != id) { p += 0xA0; if (p < e) continue; return 0; }
+        if (v != id) {
+            p += 0xA0;
+            if (p < e)
+                continue;
+            return 0;
+        }
         return p;
     }
 }
@@ -21,22 +32,40 @@ float FUN_L00_001eb328(float *p, float a, float b, float c, float d, float lim) 
     float t = FUN_001fa5c8_001eb328(b, a);
     *p = *p + (c * t - d * *p);
     if (lim != 0.0f) {
-        if (*p > lim) *p = lim;
-        else if (*p < -lim) *p = -lim;
+        if (*p > lim)
+            *p = lim;
+        else if (*p < -lim)
+            *p = -lim;
     }
-    if (*p > FUN_001f99c0_001eb328(t)) *p = FUN_001f99c0_001eb328(t);
-    else if (*p < -FUN_001f99c0_001eb328(t)) *p = -FUN_001f99c0_001eb328(t);
+    if (*p > FUN_001f99c0_001eb328(t))
+        *p = FUN_001f99c0_001eb328(t);
+    else if (*p < -FUN_001f99c0_001eb328(t))
+        *p = -FUN_001f99c0_001eb328(t);
     return FUN_001fa580_001eb328(a, *p);
 }
-typedef struct { char pad[0x7D]; u8 b; s16 h; } T001eb448;
-typedef struct { char pad[0x180]; T001eb448 *p; } S001eb448;
+typedef struct {
+    char pad[0x7D];
+    u8 b;
+    s16 h;
+} T001eb448;
+typedef struct {
+    char pad[0x180];
+    T001eb448 *p;
+} S001eb448;
 extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
-void FUN_L00_001eb448(void) { D_L00_00166C80_u.p->h = 1; D_L00_00166C80_u.p->b = 0; }
-typedef struct { s32 id; s32 pad[4]; } E5;
+void FUN_L00_001eb448(void) {
+    D_L00_00166C80_u.p->h = 1;
+    D_L00_00166C80_u.p->b = 0;
+}
+typedef struct {
+    s32 id;
+    s32 pad[4];
+} E5;
 extern E5 D_L00_001EA880[];
 s32 FUN_L00_001ed230(s32 id) {
     s32 n = 0;
-    while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id) n++;
+    while (D_L00_001EA880[n].id != -1 && D_L00_001EA880[n].id != id)
+        n++;
     return n;
 }
 #define NOT_SDA
@@ -48,7 +77,18 @@ s32 FUN_L00_001ed230(s32 id) {
 /* resets the camera behind the hero */
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S_u;
+typedef struct {
+    char pad[0x254];
+    int p;
+    char pad2[0x18];
+    short s;
+    char pad3[1];
+    char c;
+    char pad4[0x14];
+    float f0;
+    char pad5[8];
+    float f1;
+} S_u;
 
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
@@ -97,7 +137,18 @@ void FUN_L00_001ed280(void) {
 /* Exact match: needs -fno-force-mem (config/func_cflags.txt). */
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED6D8), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+typedef struct {
+    char pad[0x254];
+    int p;
+    char pad2[0x18];
+    short s;
+    char pad3[1];
+    char c;
+    char pad4[0x14];
+    float f0;
+    char pad5[8];
+    float f1;
+} S;
 
 typedef struct {
     char pad[0x74];
@@ -177,7 +228,8 @@ void FUN_L00_001ed358(void) {
             char *r;
             Elem *el;
             int h;
-            e = (char *)(i * 32); e = D_L00_0015EF50 + (int)e;
+            e = (char *)(i * 32);
+            e = D_L00_0015EF50 + (int)e;
             r = *(char **)(e + 0x1C);
             el = &D_L00_00167150[i];
             el->s84 = i;
@@ -253,14 +305,22 @@ int FUN_L00_001ed630(float *a) {
 }
 #include "qcopy.h"
 typedef int ti_1ed6a8 __attribute__((mode(TI)));
-typedef struct { char pad[0x140]; ti_1ed6a8 q; char pad2[0x30]; char *o; } C_1ed6a8;
+typedef struct {
+    char pad[0x140];
+    ti_1ed6a8 q;
+    char pad2[0x30];
+    char *o;
+} C_1ed6a8;
 extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern int D_16C06C_1ed6a8 __asm__("D_L00_0016C06C") __attribute__((section(".data")));
 extern ti_1ed6a8 D_173E70_1ed6a8 __asm__("D_L00_00173E70") __attribute__((section(".data")));
 extern ti_1ed6a8 D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".data")));
 extern int D_15EF5C_1ed6a8 __asm__("D_L00_0015EF5C") __attribute__((sda));
-typedef struct { char pad[0x2080]; int p2080; } P_1ed6a8;
+typedef struct {
+    char pad[0x2080];
+    int p2080;
+} P_1ed6a8;
 extern P_1ed6a8 D_13F350_1ed6a8 __asm__("D_0013F350");
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");

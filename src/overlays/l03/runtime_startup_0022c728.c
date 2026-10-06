@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -28,13 +27,18 @@ void FUN_L03_0022c728(void) {
     float w[4];
     float v[4];
     int i;
-    if (D_0015ED84_m != 3) return;
+    if (D_0015ED84_m != 3)
+        return;
     g = D_L03_0016C960;
-    if (*(int *)(g + 0x30) != 5) return;
-    if (scale_game_frames(900) >= *(int *)(g + 0x34)) return;
-    if (*(int *)(g + 0x34) >= scale_game_frames(1100)) return;
+    if (*(int *)(g + 0x30) != 5)
+        return;
+    if (scale_game_frames(900) >= *(int *)(g + 0x34))
+        return;
+    if (*(int *)(g + 0x34) >= scale_game_frames(1100))
+        return;
     m = *(char **)(g + 0x184);
-    if (m == 0) return;
+    if (m == 0)
+        return;
     for (i = 0; i < 4; i++) {
         float a, b;
         clear_vector(v);
@@ -43,6 +47,6 @@ void FUN_L03_0022c728(void) {
         b = random_angle_radians();
         build_spherical_offset(v, random_float_between(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
         FUN_L00_0026ced0(w, v, 0x80808080, 0x808080, 147000.0f,
-                          FUN_L00_00257b90(scale_game_frames(12), scale_game_frames(35)));
+                         FUN_L00_00257b90(scale_game_frames(12), scale_game_frames(35)));
     }
 }

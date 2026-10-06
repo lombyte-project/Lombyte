@@ -13,7 +13,8 @@ extern char D_L05_0015F580[] MACRO_ADDR;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_001fa728(char *, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag, int col, float *vel);
+extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
+                                       int col, float *vel);
 
 void FUN_L05_0031abe0(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
@@ -32,7 +33,8 @@ void FUN_L05_0031abe0(char *moby) {
                 for (i = 0; i < 3; i++) {
                     float a = random_angle_radians();
                     float b = random_angle_radians();
-                    FUN_L00_002743a8(a, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1, 0x7F, 0);
+                    FUN_L00_002743a8(a, b, (int)moby, D_L05_0015F580, scale_game_frames(0x28), 1,
+                                     0x7F, 0);
                 }
             }
         }
@@ -117,8 +119,7 @@ void FUN_L05_0031cf58(char *m) {
 extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L05_0031d160(unsigned char *a0)
-{
+char *FUN_L05_0031d160(unsigned char *a0) {
     unsigned char *m = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
     if (m != 0) {
         m[0x30] = a0[0x30];
@@ -254,8 +255,7 @@ extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section("
 extern void FUN_002144d8(void *, void *);
 extern void FUN_L05_003296e0(void *);
 
-void FUN_L05_0032a6e0(char *out)
-{
+void FUN_L05_0032a6e0(char *out) {
     char *src = D_L05_00167204_d;
     qcopy(out + 0x30, src + 0x30);
     qcopy(out, src);

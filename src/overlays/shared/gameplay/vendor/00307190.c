@@ -80,7 +80,8 @@ void FUN_L08_00307298(char *m) {
             normalize_vector_xyz(off, d, -0.1f);
             FUN_L00_001ff290(tmp, off, m + 0x10);
             a = scale_game_frames(FUN_L00_00257b90(0xF, 0x14));
-            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28, scale_game_frames(FUN_L00_00257b90(7, 0xA)), 1);
+            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
+                             scale_game_frames(FUN_L00_00257b90(7, 0xA)), 1);
         }
         add_vector_xyz(m + 0x10, m + 0x10, d);
         if (FUN_001efa68(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
@@ -92,7 +93,8 @@ void FUN_L08_00307298(char *m) {
                 m[0x20] = 2;
             }
         }
-        if (func_001F9908_i(d + 0x18) != 0) m[0x20] = 2;
+        if (func_001F9908_i(d + 0x18) != 0)
+            m[0x20] = 2;
         break;
     case 2:
         if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
@@ -121,12 +123,20 @@ void FUN_L08_00307b90(int arg) {
     float v[2];
     float t;
     if (arg == 0) {
-        a = 5.0f; b = 2.0f; c = 8.0f; d = 4.0f;
+        a = 5.0f;
+        b = 2.0f;
+        c = 8.0f;
+        d = 4.0f;
     } else {
-        a = 2.5f; b = 20.0f; c = 3.0f; d = 2.0f;
+        a = 2.5f;
+        b = 20.0f;
+        c = 3.0f;
+        d = 2.0f;
     }
-    if (*(float *)&D_L08_0016234C_d >= 0.0f) d = *(float *)&D_L08_0016234C_d;
-    if (*(float *)&D_L08_00162350_d >= 0.0f) c = *(float *)&D_L08_00162350_d;
+    if (*(float *)&D_L08_0016234C_d >= 0.0f)
+        d = *(float *)&D_L08_0016234C_d;
+    if (*(float *)&D_L08_00162350_d >= 0.0f)
+        c = *(float *)&D_L08_00162350_d;
     D_L08_00162360[0] = random_float_between_alt(-(a * D_0015ED6C), a * D_0015ED6C);
     D_L08_00162360[1] = random_float_between_alt(-(a * D_0015ED6C), a * D_0015ED6C);
     b = FUN_001f96b0(b);
@@ -178,7 +188,8 @@ void FUN_L08_003085f0(char *moby) {
             if (!(vector_length_xy(w) <= *(float *)(d + 0x10))) {
                 o[0] = D_L08_00162360[0] + random_float_between_alt(-r, r);
                 o[1] = D_L08_00162364 + random_float_between_alt(-r, r);
-                o[2] = -(random_float_between_alt(*(float *)(d + 0x18), *(float *)(d + 0x1C)) * D_0015ED6C);
+                o[2] = -(random_float_between_alt(*(float *)(d + 0x18), *(float *)(d + 0x1C)) *
+                         D_0015ED6C);
                 o[3] = 0.0f;
                 FUN_L08_00272cb8(v, *(void **)d, o, *(float *)(moby + 0x18) - *(float *)(d + 0x20));
             }

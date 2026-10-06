@@ -54,8 +54,8 @@ void FUN_L02_002ee890(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     moby[0x30] = 0xFF;
 
-    if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x17]) != 0
-        && *(unsigned int *)(((char *)&D_0013F3D0) + 0x200C) < 2) {
+    if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[0x17]) != 0 &&
+        *(unsigned int *)(((char *)&D_0013F3D0) + 0x200C) < 2) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x278) == 0 && D_001418E8 == 0) {
             int count = 0;
@@ -160,7 +160,8 @@ void FUN_L02_002ee890(unsigned char *moby) {
                 *(unsigned short *)(b + 0x80) = 0xFFFF;
             }
             h = g - 0x80;
-            if (*(int *)(h + 0x2084) != 0x2C && *(int *)(h + 0x2090) == 0x2C && *(int *)(h + 0x198) == 1) {
+            if (*(int *)(h + 0x2084) != 0x2C && *(int *)(h + 0x2090) == 0x2C &&
+                *(int *)(h + 0x198) == 1) {
                 data[0xC]++;
             }
             if (data[0xC] >= 2) {
@@ -175,7 +176,8 @@ void FUN_L02_002ee890(unsigned char *moby) {
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data[5]) != 0) {
             char *b = ((char *)&D_00141968);
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x8A) * 600;
-            if ((int)(scale_game_frames(0x12) * 60.0f) < t || *(unsigned short *)(b + 0x8A) * 600 == 0) {
+            if ((int)(scale_game_frames(0x12) * 60.0f) < t ||
+                *(unsigned short *)(b + 0x8A) * 600 == 0) {
                 FUN_L00_00203908(0x7D7, 0x11);
             } else {
                 int n = scale_game_frames(D_0015EEA4) / 600;
@@ -185,11 +187,13 @@ void FUN_L02_002ee890(unsigned char *moby) {
             }
         }
     }
-    if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] != 0 && is_point_inside_clip_volume(((char *)&D_0013F3D0), data[5]) != 0) {
+    if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] != 0 &&
+        is_point_inside_clip_volume(((char *)&D_0013F3D0), data[5]) != 0) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x90) != 0) {
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x92) * 600;
-            if ((int)(scale_game_frames(0x12) * 60.0f) < t || *(unsigned short *)(b + 0x92) * 600 == 0) {
+            if ((int)(scale_game_frames(0x12) * 60.0f) < t ||
+                *(unsigned short *)(b + 0x92) * 600 == 0) {
                 FUN_L00_00203908(0x7D8, 0x12);
             } else {
                 int n = scale_game_frames(D_0015EEA4) / 600;

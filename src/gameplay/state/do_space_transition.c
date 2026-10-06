@@ -58,8 +58,7 @@ extern s32 sceGsSyncV(s32);
 
 void do_space_transition(void) __asm__("FUN_00231ff0");
 
-void do_space_transition(void)
-{
+void do_space_transition(void) {
     s32 lvl;
     s32 ok;
     s32 done;

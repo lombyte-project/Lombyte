@@ -1,6 +1,13 @@
 #include "types.h"
-struct Chunk { u8 pad0[0x10]; s32 offset; };
-struct Loader { u8 pad0[0x10]; s32 dest; s32 sector; };
+struct Chunk {
+    u8 pad0[0x10];
+    s32 offset;
+};
+struct Loader {
+    u8 pad0[0x10];
+    s32 dest;
+    s32 sector;
+};
 extern struct Loader D_00137B80;
 extern s32 D_0015ED84;
 extern void calculate_ring_buffer_bounds(s32, struct Chunk **, s32 *) __asm__("func_001FD6E0");
@@ -20,4 +27,5 @@ void load_and_initialize_level_chunk(void) {
     D_0015ED84 = 0;
 }
 
-extern __typeof__(load_and_initialize_level_chunk) func_00209370 __attribute__((alias("FUN_00209370")));
+extern __typeof__(load_and_initialize_level_chunk) func_00209370
+    __attribute__((alias("FUN_00209370")));

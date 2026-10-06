@@ -9,4 +9,5 @@ void store_sound_bank_handle_callback(int handle, long context) {
     }
 }
 
-extern __typeof__(store_sound_bank_handle_callback) func_0022DD78 __attribute__((alias("FUN_0022dd78")));
+extern __typeof__(store_sound_bank_handle_callback) func_0022DD78
+    __attribute__((alias("FUN_0022dd78")));

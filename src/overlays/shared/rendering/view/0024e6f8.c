@@ -20,8 +20,7 @@ extern void FUN_001f9bf8(void *, void *, float);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
-void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag)
-{
+void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag) {
     float q[4];
     float d, l, ang;
     fast_vec_cross(q, b, a);

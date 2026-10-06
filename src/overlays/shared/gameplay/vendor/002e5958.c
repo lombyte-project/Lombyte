@@ -13,8 +13,7 @@ extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L15_002eac90(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L15_002eb0a0(char *moby)
-{
+void FUN_L15_002eb0a0(char *moby) {
     if (*(unsigned char *)(moby + 0x20) == 0) {
         FUN_L00_002502f0(moby, 0x40, 0x40, 0x40);
         moby[0x20] = 1;
@@ -32,7 +31,8 @@ void FUN_L15_002eb0a0(char *moby)
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -79,8 +79,10 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void FUN_L15_002ebd78(unsigned char *moby) {
     unsigned char *p;
     if (D_0015ED84 != 0xF) {
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C * 1.5707964f);
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L15_001621A0_d;
+        *(float *)(moby + 0x48) =
+            fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C * 1.5707964f);
+        *(float *)(moby + 0x2C) =
+            *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L15_001621A0_d;
         switch (moby[0x20]) {
         case 0:
             FUN_L02_002ea7d0(moby);

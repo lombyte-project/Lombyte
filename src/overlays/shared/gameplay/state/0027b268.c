@@ -37,7 +37,6 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
     }
 }
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR

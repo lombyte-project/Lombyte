@@ -1,8 +1,24 @@
 #include "types.h"
 
-struct SifDmaData { u32 data; u32 addr; u32 size; u32 mode; };
-struct StashEntry { s32 addr; s32 count; s32 tag; s32 pad; };
-struct Stash { s32 base; s32 size; u8 pad8[0x28]; s32 cur; s32 n; };
+struct SifDmaData {
+    u32 data;
+    u32 addr;
+    u32 size;
+    u32 mode;
+};
+struct StashEntry {
+    s32 addr;
+    s32 count;
+    s32 tag;
+    s32 pad;
+};
+struct Stash {
+    s32 base;
+    s32 size;
+    u8 pad8[0x28];
+    s32 cur;
+    s32 n;
+};
 
 extern struct Stash D_001DD1A0;
 extern struct StashEntry D_001DD1D8[];

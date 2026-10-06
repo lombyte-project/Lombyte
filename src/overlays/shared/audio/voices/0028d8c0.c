@@ -15,7 +15,8 @@ int FUN_L00_0028d8c0(int a, int i) {
         char *p = D_0013E533 + 0x1D + i * 0x70;
         if (*(int *)(p + 0x88) == a) {
             int t = *(unsigned char *)(p + 0x74);
-            if (t == 1 || t == 2) return 1;
+            if (t == 1 || t == 2)
+                return 1;
         }
     }
     return 0;

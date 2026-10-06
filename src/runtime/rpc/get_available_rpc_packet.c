@@ -30,7 +30,12 @@ void *get_available_rpc_packet(RpcData *rpc_data) {
     for (index = 0; index < len; index++, packet++) {
         if (!(packet->rec_id & 1)) {
             packet->rec_id = (index << 16) | 5;
-            if (++rpc_data->pid == 1) { rpc_data->pid++; rid = 1; } else { rid = rpc_data->pid; }
+            if (++rpc_data->pid == 1) {
+                rpc_data->pid++;
+                rid = 1;
+            } else {
+                rid = rpc_data->pid;
+            }
             packet->pkt_addr = packet;
             packet->rpc_id = rid;
             EnableInterrupts();

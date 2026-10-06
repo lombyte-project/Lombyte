@@ -67,16 +67,17 @@ void FUN_L02_002a46e0(void) {
     *(float *)(b + 0x22C) = D_L02_00161304;
     update_view_context();
     FUN_001f2260();
-    (*(int * volatile *)&D_L02_001611C0)[0] = 0x10000002;
-    (*(int * volatile *)&D_L02_001611C0)[1] = 0;
-    (*(int * volatile *)&D_L02_001611C0)[2] = 0x11000000;
-    (*(int * volatile *)&D_L02_001611C0)[3] = 0x50000002;
-    q = *(int * volatile *)&D_L02_001611C0;
+    (*(int *volatile *)&D_L02_001611C0)[0] = 0x10000002;
+    (*(int *volatile *)&D_L02_001611C0)[1] = 0;
+    (*(int *volatile *)&D_L02_001611C0)[2] = 0x11000000;
+    (*(int *volatile *)&D_L02_001611C0)[3] = 0x50000002;
+    q = *(int *volatile *)&D_L02_001611C0;
     D_L02_001611C0 = q + 4;
     g = (long *)(q + 4);
     g[0] = 0x1000000000008001L;
     g[1] = 0xE;
-    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) | ((long)*(int *)(b + 0x238) << 16);
+    g[2] = (long)*(int *)(b + 0x230) | ((long)*(int *)(b + 0x234) << 8) |
+           ((long)*(int *)(b + 0x238) << 16);
     g[3] = 0x3D;
     D_L02_001611C0 = q + 12;
     append_texture_transfer_packet();
@@ -243,8 +244,18 @@ extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L0
 
 typedef unsigned long long u64_t;
 
-#define NEG20(dst, e) { s32 q_ = (e); q_ = q_ << 20; (dst) += (u64_t)(u32)(-q_ + 0x80000000u); }
-#define LO4(dst, e)   { s32 q_ = (e); q_ = (q_ << 4) + 0x8000; (dst) += (u64_t)q_; }
+#define NEG20(dst, e)                                                                              \
+    {                                                                                              \
+        s32 q_ = (e);                                                                              \
+        q_ = q_ << 20;                                                                             \
+        (dst) += (u64_t)(u32)(-q_ + 0x80000000u);                                                  \
+    }
+#define LO4(dst, e)                                                                                \
+    {                                                                                              \
+        s32 q_ = (e);                                                                              \
+        q_ = (q_ << 4) + 0x8000;                                                                   \
+        (dst) += (u64_t)q_;                                                                        \
+    }
 
 void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     u64_t m[4];
@@ -364,7 +375,7 @@ extern float D_0015ED70;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9e90(float, float);
 extern unsigned char D_0014C050_a[] __asm__("D_0014C050");
-extern int D_0015ED84; /* no foreign declaration */
+extern int D_0015ED84;     /* no foreign declaration */
 extern int D_L02_0015F5CC; /* no foreign declaration */
 extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int FUN_L00_0025be00();
@@ -383,7 +394,8 @@ void FUN_L02_002fa7c8(char *m);
 extern unsigned char D_0014171B_x[] __asm__("D_0015ED84");
 extern void func_L02_002FBB10_c(char *) __asm__("FUN_L02_002fa6d8");
 extern void func_L02_002FBC00_c(char *) __asm__("FUN_L02_002fa7c8");
-extern float func_L00_0025CE58_f(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+extern float func_L00_0025CE58_f(float *, float, float *, float, float,
+                                 float) __asm__("FUN_L00_0025be00");
 
 void FUN_L02_002e0450(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -392,9 +404,10 @@ void FUN_L02_002e0450(char *m) {
     char *o;
     switch (((unsigned char *)m)[0x20]) {
     case 0:
-        if (*(int *)(d + 0x30) != -1
-            || (*(int *)(d + 0x3C) != -1 && (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0
-                && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD)) {
+        if (*(int *)(d + 0x30) != -1 ||
+            (*(int *)(d + 0x3C) != -1 &&
+             (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0 &&
+             ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD)) {
             ((unsigned char *)m)[0x30] = 0xFF;
             m[0x20] = 2;
             *(unsigned short *)(m + 0x34) |= 0x41;
@@ -408,32 +421,37 @@ void FUN_L02_002e0450(char *m) {
         if (*(short *)(m + 0xA6) == 0x323) {
             char *g = D_0013F350;
             float *rz = (float *)(m + 0x48);
-            float yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10), *(float *)(g + 0x84) - *(float *)(m + 0x14));
-            func_L00_0025CE58_f(rz, yaw, (float *)(d + 0x38), D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f, D_0015ED6C * 12.566371f);
+            float yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10),
+                                     *(float *)(g + 0x84) - *(float *)(m + 0x14));
+            func_L00_0025CE58_f(rz, yaw, (float *)(d + 0x38), D_0015ED70 * 6.2831855f,
+                                D_0015ED70 * 6.2831855f, D_0015ED6C * 12.566371f);
             if (D_L02_0015F5CC & 1) {
                 if (((unsigned char *)m)[0x31] != 0) {
                     float s = 1.0f;
                     int a;
-                    if (D_L02_0015F5CC & 4) s = -1.0f;
+                    if (D_L02_0015F5CC & 4)
+                        s = -1.0f;
                     normalize_vector_xyz(v, m + 0xD0, s * *(float *)&D_L02_00161CBC);
                     normalize_vector_xyz(w, v, -2.0f / FUN_001f96b0(*(float *)&D_L02_00161CB0));
                     add_vector_xyz(v, v, m + 0x10);
                     a = truncate_float_to_s32(FUN_001f96b0(*(float *)&D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(v, w, *(int *)&D_L02_00161CB4, a, random_integer_below(0xFF) & 0xFF, 0,
-                                      *(float *)&D_L02_00161CB8);
+                    FUN_L00_002730e0(v, w, *(int *)&D_L02_00161CB4, a,
+                                     random_integer_below(0xFF) & 0xFF, 0,
+                                     *(float *)&D_L02_00161CB8);
                 }
             }
         }
         {
             char *g2 = D_0013F350;
-            if (*(int *)(g2 + 0x2084) != 0x2C) func_L02_002FBC00_c(m);
+            if (*(int *)(g2 + 0x2084) != 0x2C)
+                func_L02_002FBC00_c(m);
         }
         break;
     case 2:
-        if (D_0014C050_a[*(int *)(d + 0x30) + (D_0015ED84 << 4)] != 0
-            || (*(int *)(d + 0x3C) != -1
-                && ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0
-                    || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD))) {
+        if (D_0014C050_a[*(int *)(d + 0x30) + (D_0015ED84 << 4)] != 0 ||
+            (*(int *)(d + 0x3C) != -1 &&
+             ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0 ||
+              ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD))) {
             *(unsigned short *)(m + 0x34) &= 0xFFBE;
             *(int *)(d + 0x30) = -1;
             m[0x20] = 0;
@@ -517,7 +535,8 @@ extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_ea8b0(int) __asm__("FUN_001fa6c0");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
 extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
-extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int,
+                                              float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_2ebce8_ea8b0(float) __asm__("FUN_001fa6d0");
 extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 void FUN_L02_002ea8b0(char *m) {
@@ -547,7 +566,8 @@ void FUN_L02_002ea8b0(char *m) {
         f = func_001FA888_ea8b0(func_001F9850_ea8b0(0xFF) - p->c[i]);
         f = f / (float)func_001F9850_ea8b0(0xFF);
         col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - f));
-        func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(p->a[i]) & 0xFF, 0x35, 1, 2, 0,
+                                p->d[i]);
         func_001F9BD8_ea8b0(d, d, e);
     }
 }

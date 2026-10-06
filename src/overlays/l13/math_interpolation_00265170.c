@@ -15,7 +15,8 @@ void FUN_L13_00265170(int id, int state) {
     if ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby) {
         do {
             if (*(short *)(moby + 0xA6) == id) {
-                if (moby[0x20] >= 0) moby[0x20] = state;
+                if (moby[0x20] >= 0)
+                    moby[0x20] = state;
             }
             moby += 0x100;
         } while ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby);
@@ -36,8 +37,10 @@ void FUN_L13_002651c8(short *ids, int a, int b, int c) {
                 unsigned short f;
                 if (a != -1) {
                     f = *(unsigned short *)(m + 0x34);
-                    if (a != 0) f &= 0xFFFD;
-                    else f |= 2;
+                    if (a != 0)
+                        f &= 0xFFFD;
+                    else
+                        f |= 2;
                     *(unsigned short *)(m + 0x34) = f;
                 }
                 if (b != -1) {
@@ -52,11 +55,12 @@ void FUN_L13_002651c8(short *ids, int a, int b, int c) {
                     *(unsigned short *)(m + 0x34) = f;
                 }
                 if (c != -1) {
-                    if (c != 0) *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-                    else *(int *)(m + 0x94) = 0;
+                    if (c != 0)
+                        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+                    else
+                        *(int *)(m + 0x94) = 0;
                 }
             }
         }
     }
 }
-

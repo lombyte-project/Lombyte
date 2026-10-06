@@ -71,17 +71,17 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         x = cx + fast_cos(t) * radius;
         y = cy + fast_sin(t) * radius;
         if (i == arg0->sel) {
-            u64 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40)
-                         * 0x10202) | 0x80000000;
+            u64 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) |
+                        0x80000000;
 
             append_screen_rect_packet((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,
-                          color, 0);
+                                      color, 0);
             append_screen_rect_packet((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
-                          D_001601B0, 0);
+                                      D_001601B0, 0);
         }
         if (arg0->slots[i] == 0) {
             append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
-                          0x40404040L, 0);
+                                      0x40404040L, 0);
         } else {
             s32 idx = arg0->slots[i];
             s32 id = find_valid_animation_frame_index(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
@@ -91,7 +91,8 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         i += 1;
     } while (i < 8);
     draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
-    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20, 0x80);
+    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20,
+                    0x80);
     font_print_large(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
     font_print_large(arg0->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
     do_gif_paging();

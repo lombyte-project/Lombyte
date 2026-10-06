@@ -1,7 +1,16 @@
 #include "types.h"
-struct MenuItem { u8 pad0[0xA]; s16 state; };
-struct Menu { u8 pad0[0x34]; struct MenuItem items[4]; };
-struct Labels { u8 pad0[0x14]; s32 text[4]; };
+struct MenuItem {
+    u8 pad0[0xA];
+    s16 state;
+};
+struct Menu {
+    u8 pad0[0x34];
+    struct MenuItem items[4];
+};
+struct Labels {
+    u8 pad0[0x14];
+    s32 text[4];
+};
 extern struct Menu D_001D2800;
 extern struct Labels D_001D2878;
 extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");

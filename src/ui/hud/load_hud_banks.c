@@ -109,15 +109,18 @@ void load_hud_banks(void) {
     }
     if (hb->bank->has5C) {
         u32 n3 = ALIGN64(f->chunk[3].size) >> 4;
-        hb->bank->unk9C = stash_send_data((void *)(f->chunk[3].offset + (s32)f), n3, n3, D_0015FBD0);
+        hb->bank->unk9C =
+            stash_send_data((void *)(f->chunk[3].offset + (s32)f), n3, n3, D_0015FBD0);
     }
     if (hb->bank->has60) {
         u32 n4 = ALIGN64(f->chunk[4].size) >> 4;
-        hb->bank->unkA0 = stash_send_data((void *)(f->chunk[4].offset + (s32)f), n4, n4, D_0015FBE0);
+        hb->bank->unkA0 =
+            stash_send_data((void *)(f->chunk[4].offset + (s32)f), n4, n4, D_0015FBE0);
     }
     if (hb->bank->has64) {
         u32 n5 = ALIGN64(f->chunk[5].size) >> 4;
-        hb->bank->unkA4 = stash_send_data((void *)(f->chunk[5].offset + (s32)f), n5, n5, D_0015FBF0);
+        hb->bank->unkA4 =
+            stash_send_data((void *)(f->chunk[5].offset + (s32)f), n5, n5, D_0015FBF0);
     }
 }
 

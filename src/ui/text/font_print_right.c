@@ -12,4 +12,5 @@ void font_print_right(s32 right_x, s32 y, s32 color, s32 text, s32 length) {
     font_print(x, y, color, text, length, get_effect_texture(1), D_001DF050);
 }
 
-extern void func_001F6940(s32 right_x, s32 y, s32 color, s32 text, s32 length) __attribute__((alias("FUN_001f6940")));
+extern void func_001F6940(s32 right_x, s32 y, s32 color, s32 text, s32 length)
+    __attribute__((alias("FUN_001f6940")));

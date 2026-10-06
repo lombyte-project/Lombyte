@@ -17,8 +17,7 @@ extern s32 _skipMB0();
 extern s32 _sliceA0();
 extern s32 _waitBdecOut();
 
-s32 _slice0(struct M2c_arg0 *mp, s32 nmb)
-{
+s32 _slice0(struct M2c_arg0 *mp, s32 nmb) {
     s32 blk[16];
     s32 mbx;
     s32 inc;

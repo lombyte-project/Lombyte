@@ -50,7 +50,8 @@ extern float func_L00_00258C80_80970(float, float) __asm__("FUN_L00_00257c48");
 extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_80970(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
-extern unsigned char *D_L01_001B2838_80970 __asm__("D_L01_001B2538") __attribute__((section(".data")));
+extern unsigned char *D_L01_001B2838_80970 __asm__("D_L01_001B2538")
+    __attribute__((section(".data")));
 char *FUN_L01_00280970(int a, char *b) {
     char *p = func_00218928_80970(0xE);
     int r;
@@ -91,7 +92,8 @@ extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_87158(int) __asm__("FUN_00213260");
 extern float func_001FA888_87158(int) __asm__("FUN_001fa6c0");
-extern unsigned char *D_L01_001B28D0_87158 __asm__("D_L01_001B25D0") __attribute__((section(".data")));
+extern unsigned char *D_L01_001B28D0_87158 __asm__("D_L01_001B25D0")
+    __attribute__((section(".data")));
 unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) {
     unsigned char *r = func_00218928_87158(0x34);
     if (r != 0) {
@@ -122,42 +124,54 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
 extern int D_L01_001B2628; /* no foreign declaration */
 extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern void FUN_001fa2d8(void *,void *);
+extern void FUN_001fa2d8(void *, void *);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
-unsigned char *FUN_L01_0028a7a8(char *m,char *pos,float *vel,char *cfg,int flag) {
- float v[4]; float mat[16];
- unsigned char *p=FUN_L00_002678b8(74);
- if(p) {
- char *q;
- p[9]=func_001FA898_r(4.0f)-0x60;
- if(flag) p[3]=0x48; else p[3]=0x44;
- p[1]=0;
- q=(char *)p+0x20;
- p[2]=**(unsigned char **)D_L01_001B2928_b;
- p[8]=rand(); *(int *)(p+0xc)=0;
- qcopy(p+0x10,pos);
- *(float *)q=vel[0]; *(float *)(q+4)=vel[1]; *(float *)(q+8)=vel[2];
- subtract_vector_xyz_c(v,pos,m+0x10);
- qzero(mat);qzero(mat+4);qzero(mat+8);qzero(mat+12);
- FUN_001fa2d8(mat,m+0xc0);
- transform_vector(v,v,mat);
- *(float *)(q+0x10)=v[0]; *(float *)(q+0x14)=v[1]; *(float *)(q+0x18)=v[2];
- *(char **)(q+0xc)=m; *(char **)(q+0x1c)=cfg;
- *(short *)(p+0xa)=*(unsigned short *)(cfg+0xc);
- *(int *)(p+4)=*(int *)cfg;
- }
- return p;
+unsigned char *FUN_L01_0028a7a8(char *m, char *pos, float *vel, char *cfg, int flag) {
+    float v[4];
+    float mat[16];
+    unsigned char *p = FUN_L00_002678b8(74);
+    if (p) {
+        char *q;
+        p[9] = func_001FA898_r(4.0f) - 0x60;
+        if (flag)
+            p[3] = 0x48;
+        else
+            p[3] = 0x44;
+        p[1] = 0;
+        q = (char *)p + 0x20;
+        p[2] = **(unsigned char **)D_L01_001B2928_b;
+        p[8] = rand();
+        *(int *)(p + 0xc) = 0;
+        qcopy(p + 0x10, pos);
+        *(float *)q = vel[0];
+        *(float *)(q + 4) = vel[1];
+        *(float *)(q + 8) = vel[2];
+        subtract_vector_xyz_c(v, pos, m + 0x10);
+        qzero(mat);
+        qzero(mat + 4);
+        qzero(mat + 8);
+        qzero(mat + 12);
+        FUN_001fa2d8(mat, m + 0xc0);
+        transform_vector(v, v, mat);
+        *(float *)(q + 0x10) = v[0];
+        *(float *)(q + 0x14) = v[1];
+        *(float *)(q + 0x18) = v[2];
+        *(char **)(q + 0xc) = m;
+        *(char **)(q + 0x1c) = cfg;
+        *(short *)(p + 0xa) = *(unsigned short *)(cfg + 0xc);
+        *(int *)(p + 4) = *(int *)cfg;
+    }
+    return p;
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_001B0930[];
 extern float FUN_001f9b48(void *, void *);
 
-void FUN_L01_0028b410(char *p)
-{
+void FUN_L01_0028b410(char *p) {
     int i;
     int off;
     char *q;
@@ -167,7 +181,8 @@ void FUN_L01_0028b410(char *p)
     for (i = 0; i < **(int **)(p + 0x10); i++) {
         q = *(char **)(p + 0x10);
         off = i << 4;
-        *(float *)(*(char **)(p + 0x10) + off + 0x1C) = FUN_001f9b48(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
+        *(float *)(*(char **)(p + 0x10) + off + 0x1C) =
+            FUN_001f9b48(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
         *(float *)(*(char **)(p + 0x10) + off + 0x18) += 0.5f;
         *(float *)(*(char **)(p + 0x10) + off + 0x18) -= 0.5f;
     }
@@ -256,8 +271,7 @@ int FUN_L01_0028b828(T_28b828 *a, int b) {
 /* 0x0028b878, 76 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-int FUN_L01_0028b878(char *p)
-{
+int FUN_L01_0028b878(char *p) {
     int max = 0;
     int next;
     if (p[4] >= 0) {
@@ -301,7 +315,10 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
     }
     d1 = FUN_001f9b48(p[0], p[1]);
     d2 = FUN_001f9b48(p[1], p[2]);
-    if (d1 < d2) m = d1; else m = d2;
+    if (d1 < d2)
+        m = d1;
+    else
+        m = d2;
     subtract_vector_xyz(v1, p[1], p[0]);
     scale_vector_xyz(v1, v1, wb);
     subtract_vector_xyz(v2, p[2], p[1]);

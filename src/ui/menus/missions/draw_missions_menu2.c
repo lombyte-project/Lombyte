@@ -75,7 +75,8 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
             if (flag) {
                 func_001F61F8();
             }
-            h = font_print_wrapped_small(0x10, off, arg0->unk20 - 0x11, 0x3E8, col, get_help_message_text(*p), -1);
+            h = font_print_wrapped_small(0x10, off, arg0->unk20 - 0x11, 0x3E8, col,
+                                         get_help_message_text(*p), -1);
             if (flag) {
                 func_001F61E8();
             }

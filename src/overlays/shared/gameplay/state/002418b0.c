@@ -11,22 +11,22 @@
 extern char *D_L04_00197480[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 
-float FUN_L04_002418b0(int a, unsigned int b)
-{
+float FUN_L04_002418b0(int a, unsigned int b) {
     char *entry;
     char *nested;
-    if (b >= 0xFF) return 0.0f;
+    if (b >= 0xFF)
+        return 0.0f;
     entry = D_L04_00197480[a] + b * 4;
     nested = *(char **)(entry + 0x48);
     return ConvertIntegerToFloat(*(short *)(*(char **)(nested + 0x1C) + 4)) * 0.0625f;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_00242868.c: func_L04_002428C8), where it is exact; names translated to the US level program. */
 
-float FUN_L04_00241910(int a, unsigned int b)
-{
+float FUN_L04_00241910(int a, unsigned int b) {
     char *entry;
     char *nested;
-    if (b >= 0xFF) return 0.0f;
+    if (b >= 0xFF)
+        return 0.0f;
     entry = D_L04_00197480[a] + b * 4;
     nested = *(char **)(entry + 0x48);
     nested += ((unsigned char)nested[0x10] - 1) * 4;

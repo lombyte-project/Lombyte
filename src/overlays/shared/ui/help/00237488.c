@@ -18,12 +18,16 @@ void FUN_L05_00237488(float *out, float *p, float step) {
     v[0] = -*(float *)(g + 0x1D20);
     v[1] = *(float *)(g + 0x1D24);
     approach_value(p + 2, v[0], step);
-    if (p[2] > 1.0f) p[2] = 1.0f;
-    if (p[2] < -1.0f) p[2] = -1.0f;
+    if (p[2] > 1.0f)
+        p[2] = 1.0f;
+    if (p[2] < -1.0f)
+        p[2] = -1.0f;
     out[0] = p[2];
     approach_value(p + 1, v[1], step);
-    if (p[1] > 1.0f) p[1] = 1.0f;
-    if (p[1] < -1.0f) p[1] = -1.0f;
+    if (p[1] > 1.0f)
+        p[1] = 1.0f;
+    if (p[1] < -1.0f)
+        p[1] = -1.0f;
     out[1] = p[1];
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0023b378.s", FUN_L05_0023b378);
@@ -65,7 +69,11 @@ typedef struct {
     int d[7];
 } Sel;
 
-typedef struct { char pad[0x20]; int f20; char pad2[0x28]; } ItemDef;
+typedef struct {
+    char pad[0x20];
+    int f20;
+    char pad2[0x28];
+} ItemDef;
 
 extern char D_0013C940[];
 extern char D_0013F350[];
@@ -138,21 +146,21 @@ void FUN_L05_0023dc88(int i) {
     }
     changed = 0;
     {
-    char *pad = D_0013C940;
-    if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(D_0013F350))->f20A6 != 0) {
-        if (i == 0) {
-            int v;
-            Sel *g = (Sel *)(D_0013F350);
-            v = *(int *)((char *)g + 0x10B8);
-            if (v != 8) {
-                if (g->f20A6 != 0 && v != 0 && v != 0x1F) {
-                    g->c[0] = v;
+        char *pad = D_0013C940;
+        if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(D_0013F350))->f20A6 != 0) {
+            if (i == 0) {
+                int v;
+                Sel *g = (Sel *)(D_0013F350);
+                v = *(int *)((char *)g + 0x10B8);
+                if (v != 8) {
+                    if (g->f20A6 != 0 && v != 0 && v != 0x1F) {
+                        g->c[0] = v;
+                    }
+                    ((Sel *)(D_0013F350))->b[i] = 8;
+                    changed = 1;
                 }
-                ((Sel *)(D_0013F350))->b[i] = 8;
-                changed = 1;
             }
         }
-    }
     }
     if (i == 0) {
         char *pad = D_0013C940;
@@ -209,12 +217,13 @@ void FUN_L05_0023dc88(int i) {
         Sel *g = (Sel *)(D_0013F350);
         Sel *h;
         Sel *h2;
-        if (g->f208C == 0x11 || g->f2084 == 0x76 || g->f2084 == 0x6A || g->f2084 == 0x82
-            || *(unsigned char *)((char *)g + 0x22CB) != 0) {
-            if (((int *)(D_00141660))[i] != 6
-                || (h2 = (Sel *)(D_0013F350), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+        if (g->f208C == 0x11 || g->f2084 == 0x76 || g->f2084 == 0x6A || g->f2084 == 0x82 ||
+            *(unsigned char *)((char *)g + 0x22CB) != 0) {
+            if (((int *)(D_00141660))[i] != 6 ||
+                (h2 = (Sel *)(D_0013F350), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
                 h = (Sel *)(D_0013F350);
-                if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->b[i] != 6 && D_0013D4C0[6] != 0) {
+                if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->b[i] != 6 &&
+                    D_0013D4C0[6] != 0) {
                     int v;
                     h->a[i] = 6;
                     flag6 = 1;
@@ -476,8 +485,9 @@ int FUN_L05_002515d0(void) {
         }
     }
     u = (char *)D_0013F350_c;
-    if (*(int *)(u + 0x208C) - 0x11 >= 2u && *(int *)(u + 0x208C) != 7 && *(int *)(u + 0x208C) != 0x14 && *(int *)(u + 0x2084) != 0x12
-        && (D_L05_0015F5CC & 0xF) == 0) {
+    if (*(int *)(u + 0x208C) - 0x11 >= 2u && *(int *)(u + 0x208C) != 7 &&
+        *(int *)(u + 0x208C) != 0x14 && *(int *)(u + 0x2084) != 0x12 &&
+        (D_L05_0015F5CC & 0xF) == 0) {
         scale = 4.0f;
         if ((D_L05_0015F5CC & 0x3F) == 0) {
             scale = 16.0f;
@@ -506,9 +516,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00251be8.s", FUN_L05_00251be8);
  * look-around when standing still. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254030), where it is exact; names translated to the US level program. */
 
-typedef struct { int bank; int seq; } SndPair_254030;
+typedef struct {
+    int bank;
+    int seq;
+} SndPair_254030;
 
-typedef struct { char pad[0x6E0]; int flags[6]; } Hero6E0_254030;
+typedef struct {
+    char pad[0x6E0];
+    int flags[6];
+} Hero6E0_254030;
 
 extern SndPair_254030 D_L05_00179BC0[];
 extern char D_0013CAE0[];
@@ -523,19 +539,23 @@ extern void FUN_L00_002325e0(int bank, int seq);
 void FUN_L05_00253850(void) {
     char *g = (char *)D_0013F350_c2;
     int pad;
-    *(short *)(g + 0x888) = truncate_float_to_s32(FUN_L00_00232b90(60.0f, *(float *)(g + 0x860), -1.0f));
+    *(short *)(g + 0x888) =
+        truncate_float_to_s32(FUN_L00_00232b90(60.0f, *(float *)(g + 0x860), -1.0f));
     if (((unsigned char *)g)[0x88D] != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
         g[0x88F] = 0;
-        if (pad & 8) g[0x88F] = 1;
-        else if (pad & 1) g[0x88F] = 2;
-        else if (pad & 2) g[0x88F] = 3;
+        if (pad & 8)
+            g[0x88F] = 1;
+        else if (pad & 1)
+            g[0x88F] = 2;
+        else if (pad & 2)
+            g[0x88F] = 3;
         {
             char *h = (char *)D_0013F350_c2;
             int a = ((unsigned char *)h)[0x88F] + 0x69;
             if (((unsigned char *)*(char **)(h + 0x2080))[0x53] != a) {
                 FUN_L00_002323b8(a, 2, (float)scale_game_frames(5));
                 FUN_L00_002325e0(D_L05_00179BC0[((unsigned char *)h)[0x88F]].bank,
-                                  D_L05_00179BC0[((unsigned char *)h)[0x88F]].seq);
+                                 D_L05_00179BC0[((unsigned char *)h)[0x88F]].seq);
             } else if ((float)*(int *)(h + 0xAB0) - 2.0f < *(float *)(h + 0xAA8)) {
                 ((Hero6E0_254030 *)h)->flags[((unsigned char *)h)[0x88F]] = 1;
                 *(int *)(h + 0x6F8) += 1;
@@ -544,18 +564,19 @@ void FUN_L05_00253850(void) {
     }
     {
         char *k = (char *)D_0013F350_c2;
-        if ((*(short *)(k + 0x30E) == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0)
-            && (unsigned int)(((unsigned char *)*(char **)(k + 0x2080))[0x53] - 0x69) < 4
-            && *(int *)(k + 0xA9C) == 0
-            && *(int *)(k + 0xAB0) < ((unsigned char *)*(char **)(k + 0x2080))[0x51]
-            && ((unsigned char *)*(char **)(k + 0x2080))[0x51] < *(int *)(k + 0xAB4)) {
+        if ((*(short *)(k + 0x30E) == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
+            (unsigned int)(((unsigned char *)*(char **)(k + 0x2080))[0x53] - 0x69) < 4 &&
+            *(int *)(k + 0xA9C) == 0 &&
+            *(int *)(k + 0xAB0) < ((unsigned char *)*(char **)(k + 0x2080))[0x51] &&
+            ((unsigned char *)*(char **)(k + 0x2080))[0x51] < *(int *)(k + 0xAB4)) {
             int t = *(short *)(k + 0x888);
             if (t > scale_game_frames(0x1E)) {
                 int x = FUN_L05_002551b8_c();
                 FUN_L00_002323b8(x, 9, (float)scale_game_frames(0x11));
             } else {
                 t = *(short *)(k + 0x888);
-                if (t < scale_game_frames(0xA)) t = scale_game_frames(0xA);
+                if (t < scale_game_frames(0xA))
+                    t = scale_game_frames(0xA);
                 FUN_L00_002323b8(FUN_L05_002551b8_c(), 0xD, (float)t);
             }
         }
@@ -589,7 +610,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
 extern unsigned char D_0013FC1E __attribute__((section(".data")));
 
 int FUN_L05_002551b8(void) {
-    unsigned char b = D_0013FC1E;  // selected help mode
+    unsigned char b = D_0013FC1E; // selected help mode
     int r = 0x7F;
     if (b == 0)
         r = 0x55;
@@ -598,7 +619,12 @@ int FUN_L05_002551b8(void) {
 int FUN_L05_002551d0(void) {
     char *p = D_0013F350;
     int f = *(unsigned char *)(p + 0x8CE);
-    if (*(short *)(p + 0x884) == 0) { int r = 0x7D; if (f == 0) r = 0x52; return r; }
+    if (*(short *)(p + 0x884) == 0) {
+        int r = 0x7D;
+        if (f == 0)
+            r = 0x52;
+        return r;
+    }
     { return f == 0 ? 0x68 : 0x7E; }
 }
 #define NOT_SDA

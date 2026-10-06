@@ -10,7 +10,9 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
 
 extern char D_L12_001CB7A0[];
-struct Pkt611c0 { int *p; };
+struct Pkt611c0 {
+    int *p;
+};
 extern struct Pkt611c0 D_L12_001611C0;
 extern int FUN_001fa728(char *, float);
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -39,8 +41,10 @@ void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
         for (i = count; i != 0; i--) {
             idx = FUN_001fa728(list, 256.0f);
             if (idx != -1) {
-                FUN_L12_002667fc(*(int *)(list + 0x1C), *(int *)(list + 0x10), *(int *)(list + 0x18), 0x70001000);
-                FUN_L01_0021fa98(*(int *)(list + 0x1C), *(int *)(list + 0x10), 0x70000000, *(int *)(list + 0x14), 0x70001000, idx == 0);
+                FUN_L12_002667fc(*(int *)(list + 0x1C), *(int *)(list + 0x10),
+                                 *(int *)(list + 0x18), 0x70001000);
+                FUN_L01_0021fa98(*(int *)(list + 0x1C), *(int *)(list + 0x10), 0x70000000,
+                                 *(int *)(list + 0x14), 0x70001000, idx == 0);
             }
             list += 0x20;
         }

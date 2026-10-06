@@ -83,7 +83,8 @@ extern float D_L00_00161CB0_2e8bb8 __asm__("D_L00_00161CB0") __attribute__((sda)
 extern float D_L00_00161CBC_2e8bb8 __asm__("D_L00_00161CBC") __attribute__((sda));
 extern float D_L00_00161CC0_2e8bb8 __asm__("D_L00_00161CC0") __attribute__((sda));
 extern float D_L00_00161CC4_2e8bb8 __asm__("D_L00_00161CC4") __attribute__((sda));
-extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
+    __attribute__((section(".data")));
 extern float FUN_001ebd78_2e8bb8(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern float FUN_001f99c0_2e8bb8(float) __asm__("FUN_001f99c0");
 extern void FUN_00214890_2e8bb8(void *, void *, void *, float) __asm__("FUN_00214890");
@@ -113,7 +114,8 @@ void FUN_L00_002e8bb8(unsigned char *o, float k, float in) {
     base = D_L00_00166E10_2e8bb8;
     s = e + 0x1A8;
     c = e + 0x130;
-    r = FUN_001ebd78_2e8bb8(e + 0x1AC, *(float *)(e + 0x1A8), k, D_L00_00161CAC_2e8bb8, D_L00_00161CB0_2e8bb8, 0.0f);
+    r = FUN_001ebd78_2e8bb8(e + 0x1AC, *(float *)(e + 0x1A8), k, D_L00_00161CAC_2e8bb8,
+                            D_L00_00161CB0_2e8bb8, 0.0f);
     *(float *)(e + 0x1A8) = r;
     *(float *)(c + 0x34) = *(float *)(s + 0x14) * r;
     if (in < -0.3f) {
@@ -135,7 +137,8 @@ void FUN_L00_002e8bb8(unsigned char *o, float k, float in) {
     } else {
         sel = D_L00_00161CBC_2e8bb8;
     }
-    *(float *)(s + 8) = FUN_001ebd78_2e8bb8(s + 0xC, *(float *)(s + 8), in, D_L00_00161CAC_2e8bb8, D_L00_00161CB0_2e8bb8, sel);
+    *(float *)(s + 8) = FUN_001ebd78_2e8bb8(s + 0xC, *(float *)(s + 8), in, D_L00_00161CAC_2e8bb8,
+                                            D_L00_00161CB0_2e8bb8, sel);
     lim = *(float *)(s + 8) * 0.69813168f;
     if (k == 0.0f) {
         FUN_00214890_2e8bb8(c, c, base + 0x20, *(float *)(s + 0x20));

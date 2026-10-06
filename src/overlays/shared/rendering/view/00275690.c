@@ -11,8 +11,7 @@
 extern int FUN_001fa728(char *, float);
 extern void FUN_001f9a80(void *, void *, float);
 
-void FUN_L01_00275690(char *vec, float scale)
-{
+void FUN_L01_00275690(char *vec, float scale) {
     char scratch[16];
     FUN_001f9a80(scratch, vec, 0.0009765625f);
     FUN_001fa728(scratch, scale);

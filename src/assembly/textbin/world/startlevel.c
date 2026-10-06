@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/startlevel/FUN_001e9658.s", FUN_001e9658);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/startlevel/FUN_001e9658.s",
+            FUN_001e9658);
 #else
 #include "types.h"
 #include "sda.h"
@@ -38,7 +39,10 @@ extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern s32 D_0015ED88;
 extern u8 D_24135F[];
-typedef struct { u8 pad[0x1A4]; s32 unk1A4; } PadState;
+typedef struct {
+    u8 pad[0x1A4];
+    s32 unk1A4;
+} PadState;
 extern PadState D_0013C940;
 extern s32 D_00139378[];
 extern s32 D_00139380[];
@@ -157,10 +161,10 @@ void startlevel(void) {
     D_0015EF5C = code;
     if (D_0015ED80 == 0) {
         play_mpeg_movie(D_00139378[0], D_00139378[1], (code + 0x3F) & ~0x3F,
-                      (code + 0x2C003F) & ~0x3F, 0);
+                        (code + 0x2C003F) & ~0x3F, 0);
     } else {
         play_mpeg_movie(D_00139380[0], D_00139380[1], (code + 0x3F) & ~0x3F,
-                      (code + 0x2C003F) & ~0x3F, 0);
+                        (code + 0x2C003F) & ~0x3F, 0);
     }
     D_0015EED8 = 0;
     fade_to_black(scale_game_frames(0x12));

@@ -60,7 +60,8 @@ s32 sceMcGetInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     D_00159A2C[0] = arg3;
     D_00159A30[0] = (u32)arg4;
     sceSifWriteBackDCache(D_00159F00, 0xC0);
-    temp_2_84 = sceSifCallRpc(&D_00159A00, 1, 1, &D_00159A80, 0x30, D_0015AFC0, 4, D_00123D10, D_00159F00);
+    temp_2_84 =
+        sceSifCallRpc(&D_00159A00, 1, 1, &D_00159A80, 0x30, D_0015AFC0, 4, D_00123D10, D_00159F00);
     if (temp_2_84 == 0) {
         D_00132DA8[0] = 1;
     } else {

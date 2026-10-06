@@ -14,7 +14,12 @@ extern u8 D_0013E550[];
 extern u8 D_0013F350[];
 extern float D_0015ED6C_e __asm__("D_0015ED6C");
 
-typedef struct { char pad[0x74]; u8 active; char pad75[0x13]; char *owner; } L16Slot_e;
+typedef struct {
+    char pad[0x74];
+    u8 active;
+    char pad75[0x13];
+    char *owner;
+} L16Slot_e;
 
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
@@ -28,7 +33,10 @@ extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 
-typedef struct { s32 status; float amount; } L16Hit_e;
+typedef struct {
+    s32 status;
+    float amount;
+} L16Hit_e;
 
 /* Update interaction ownership, damage responses and pursuit tracking. */
 void FUN_L16_002e2b60(char *m) {
@@ -40,12 +48,14 @@ void FUN_L16_002e2b60(char *m) {
 
     *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L16_00161D78_sda;
     if ((unsigned int)(*(unsigned char *)(m + 0x20) - 2) < 4) {
-        if (!FUN_L00_0028d8c0(m, *(int *)(d + 0x190))) *(int *)(d + 0x190) = FUN_0022da68_i(0, 4, m);
+        if (!FUN_L00_0028d8c0(m, *(int *)(d + 0x190)))
+            *(int *)(d + 0x190) = FUN_0022da68_i(0, 4, m);
     } else if (FUN_L00_0028d8c0(m, *(int *)(d + 0x190))) {
         int slot = *(int *)(d + 0x190);
         if (slot != -1) {
             L16Slot_e *s = (L16Slot_e *)(D_0013E550 + slot * 0x70);
-            if (s->owner == m && s->active != 0) release_voice_slot(slot);
+            if (s->owner == m && s->active != 0)
+                release_voice_slot(slot);
         }
         *(int *)(d + 0x190) = -1;
     }
@@ -54,22 +64,26 @@ void FUN_L16_002e2b60(char *m) {
     response = FUN_L00_0025a478(m, record, d + 0x20, 0, &hit.status, &hit.amount, 0, 4);
     if (hit.status != 1 && *(unsigned char *)(m + 0x20) != 8) {
         *(float *)(d + 0x20) -= hit.amount;
-        if (*(float *)(d + 0x20) <= zero || (D_001413F4[0] == 2 && hit.amount >= 2.0f)) response = 1;
+        if (*(float *)(d + 0x20) <= zero || (D_001413F4[0] == 2 && hit.amount >= 2.0f))
+            response = 1;
         if (response > 0) {
             if (response >= 3) {
                 if (response < 9) {
                     FUN_0022da68_i(3, 0, m);
                     *(unsigned char *)(d + 0x67) = 120;
-                    *(float *)(d + 0x188) = FUN_L00_00257c48(30.0f, 50.0f) * 0.017453292f * D_0015ED6C_e;
+                    *(float *)(d + 0x188) =
+                        FUN_L00_00257c48(30.0f, 50.0f) * 0.017453292f * D_0015ED6C_e;
                 }
             } else {
                 FUN_0022da68_i(3, 0, m);
-                if (D_001413F4[0] != 2) FUN_0022da68_i(2, 0, m);
+                if (D_001413F4[0] != 2)
+                    FUN_0022da68_i(2, 0, m);
                 {
                     int *child = (int *)(d + 0xC0), count = 3;
                     do {
                         char *pool = D_L16_0015FFD8_sda;
-                        if (*child >= 0) mark_moby_for_removal(pool + (*child << 8));
+                        if (*child >= 0)
+                            mark_moby_for_removal(pool + (*child << 8));
                         child++;
                     } while (--count >= 0);
                 }
@@ -85,7 +99,8 @@ void FUN_L16_002e2b60(char *m) {
     if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
         FUN_L00_0025ff38(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);
-    } else *(int *)(d + 0xB4) = 2;
+    } else
+        *(int *)(d + 0xB4) = 2;
     if (*(int *)(d + 0xB0) == 0) {
         char *player = D_0013F350;
         *(int *)(d + 0xB0) = *(int *)(player + 0x2080);
@@ -107,28 +122,31 @@ extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
 extern short D_0015ED70, D_L16_00161E40_q __asm__("D_L16_00161E40");
 extern short D_L16_00161E44, D_L16_00161D80_q __asm__("D_L16_00161D80") __attribute__((sda));
 extern void sample_camera_path_q(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
-extern void func_00215CA8_path42_q(float,void*,int,void*,void*,int) __asm__("FUN_00214e58");
-extern float func_001F9D10_path42_q(void*,void*) __asm__("FUN_001f9b48");
-extern float func_00214D88_path42_q(float,float,float,float,float*,float*) __asm__("FUN_00213f38");
+extern void func_00215CA8_path42_q(float, void *, int, void *, void *, int) __asm__("FUN_00214e58");
+extern float func_001F9D10_path42_q(void *, void *) __asm__("FUN_001f9b48");
+extern float func_00214D88_path42_q(float, float, float, float, float *,
+                                    float *) __asm__("FUN_00213f38");
 
 int FUN_L16_002e2e88(char *m, char *path) {
-    char *d = *(char **)(m+0x78);
-    float progress = (float)*(int *)(d+0x168) + *(float *)(d+0x16C) + *(float *)(d+0x170) / *(float *)(d+0x174);
+    char *d = *(char **)(m + 0x78);
+    float progress = (float)*(int *)(d + 0x168) + *(float *)(d + 0x16C) +
+                     *(float *)(d + 0x170) / *(float *)(d + 0x174);
     int index = truncate_float_to_s32_q(progress);
     float speed;
     float distance, rate;
     char *position;
-    *(int *)(d+0x168)=index;
-    *(float *)(d+0x16C)=progress-(float)index;
-    if(index<*(int *)path-1) {
-    position=m+0x10;
-    func_00215CA8_path42_q(progress,path,0,position,m+0x40,0);
-    *(float *)(d+0x194)=*(float *)(m+0x18);
-    speed=0.0f;
-    distance=func_001F9D10_path42_q(position,path+(*(int *)path<<4));
-    rate=D_L16_00161D84_q**(float *)&D_0015ED70;
-    func_00214D88_path42_q(distance,rate,rate,*(float *)&D_L16_00161D80_q*D_0015ED6C_q,&speed,(float *)(d+0x170));
-    return 0;
+    *(int *)(d + 0x168) = index;
+    *(float *)(d + 0x16C) = progress - (float)index;
+    if (index < *(int *)path - 1) {
+        position = m + 0x10;
+        func_00215CA8_path42_q(progress, path, 0, position, m + 0x40, 0);
+        *(float *)(d + 0x194) = *(float *)(m + 0x18);
+        speed = 0.0f;
+        distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
+        rate = D_L16_00161D84_q * *(float *)&D_0015ED70;
+        func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * D_0015ED6C_q,
+                               &speed, (float *)(d + 0x170));
+        return 0;
     }
     return 1;
 }
@@ -142,8 +160,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e2fa0.s", FUN_L16_002e2fa0);
 extern float D_0015ED64;
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
 
-void FUN_L16_002e3050(char *moby)
-{
+void FUN_L16_002e3050(char *moby) {
     float ticks = D_0015ED64;
     float a = ticks * 0.03f;
     float b = ticks * 0.3f;
@@ -180,18 +197,20 @@ void FUN_L16_002e5708(unsigned char *m) {
     case 1:
         cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04_d * D_0015ED6C;
         *(float *)(d + 0xC) = cycle;
-        if (cycle > 1.0f) *(float *)(d + 0xC) = cycle - 1.0f;
+        if (cycle > 1.0f)
+            *(float *)(d + 0xC) = cycle - 1.0f;
         if (FUN_L00_0028d8c0(m, *(int *)(d + 0x24)) == 0) {
             *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
         }
-        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8),
-                            *(float *)&D_L16_00161E00_d * 0.017453292f * D_0015ED6C);
+        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8), *(float *)&D_L16_00161E00_d *
+                                                                      0.017453292f * D_0015ED6C);
         p = (float *)(d + 0x10);
         for (i = 0; i < 4; i++) {
             p[i] = fast_add_rotations(p[i],
-                   ((float *)&D_L16_00161E08_d)[i] * 0.017453292f * D_0015ED6C);
+                                      ((float *)&D_L16_00161E08_d)[i] * 0.017453292f * D_0015ED6C);
         }
-        if (m[0x31]) enqueue_callback_list_1_alt(FUN_L16_002e58d8, m);
+        if (m[0x31])
+            enqueue_callback_list_1_alt(FUN_L16_002e58d8, m);
         if (*(int *)(d + 0x20) != -1 && FUN_L16_002e5cd0(*(int *)(d + 0x20))) {
             *(int *)(m + 0x94) = 0;
             m[0x20] = 2;

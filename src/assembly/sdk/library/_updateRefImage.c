@@ -3,7 +3,8 @@
 
 #ifndef NON_MATCHING
 /* Exact SDK/library unit _updateRefImage; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_updateRefImage/_updateRefImage.s", _updateRefImage);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_updateRefImage/_updateRefImage.s",
+            _updateRefImage);
 #else
 #include "types.h"
 struct MpegReferencePicture {
@@ -54,25 +55,25 @@ struct MpegReferenceState {
     s32 closed_group;
     s32 broken_link;
     u8 pad_1AC[0xC];
-    struct MpegReferencePicture * current_frame;
-    struct MpegReferencePicture * previous_frame;
-    struct MpegReferencePicture * selected_frame;
+    struct MpegReferencePicture *current_frame;
+    struct MpegReferencePicture *previous_frame;
+    struct MpegReferencePicture *selected_frame;
     struct MpegReferencePicture *reordered_frame;
-    struct MpegReferencePicture * current_top_field;
-    struct MpegReferencePicture * previous_top_field;
-    struct MpegReferencePicture * selected_top_field;
+    struct MpegReferencePicture *current_top_field;
+    struct MpegReferencePicture *previous_top_field;
+    struct MpegReferencePicture *selected_top_field;
     struct MpegReferencePicture *reordered_top_field;
-    struct MpegReferencePicture * current_bottom_field;
-    struct MpegReferencePicture * previous_bottom_field;
-    struct MpegReferencePicture * selected_bottom_field;
+    struct MpegReferencePicture *current_bottom_field;
+    struct MpegReferencePicture *previous_bottom_field;
+    struct MpegReferencePicture *selected_bottom_field;
     struct MpegReferencePicture *reordered_bottom_field;
     u8 pad_1E8[0x640];
     s64 presentation_timestamp;
     s64 decoding_timestamp;
 };
 
-
-s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) __asm__("_updateRefImage");
+s32 UpdateMpegReferenceImages(struct MpegReferenceState *state,
+                              s32 force_reorder) __asm__("_updateRefImage");
 
 s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) {
     s32 coding_type;
@@ -159,7 +160,8 @@ check_previous_fields:
 check_secondary_reference:
     references_ready = reference_status;
     reference_status = secondary_reference->status;
-    if (reference_status != 1) references_ready = 0;
+    if (reference_status != 1)
+        references_ready = 0;
     goto select_picture_after_reference_check;
 swap_references:
     if (force_reorder != 0) {
@@ -193,12 +195,16 @@ select_previous_references:
 check_predicted_fields:
     /* Forced reordering can reuse a ready previous field. Otherwise test
      * the current top/bottom pair, as in the retail branch at 0x00129704. */
-    primary_reference = (picture_structure == 1) ? state->previous_bottom_field : state->previous_top_field;
-    if (coding_type != 2) goto references_available;
-    if (force_reorder != 0 && primary_reference->status == 1) goto references_available;
+    primary_reference =
+        (picture_structure == 1) ? state->previous_bottom_field : state->previous_top_field;
+    if (coding_type != 2)
+        goto references_available;
+    if (force_reorder != 0 && primary_reference->status == 1)
+        goto references_available;
     primary_reference = state->current_top_field;
     reference_status = primary_reference->status;
-    if (reference_status != 1) goto select_picture;
+    if (reference_status != 1)
+        goto select_picture;
     primary_reference = state->current_bottom_field;
 check_primary_reference:
     if (primary_reference->status != reference_status) {

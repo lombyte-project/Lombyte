@@ -90,7 +90,8 @@ char *FUN_L08_002daa10(char *moby) {
     float bestD, bestA;
     int idx;
     char *base;
-    if (t == 0) return 0;
+    if (t == 0)
+        return 0;
     best = 0;
     idx = *(unsigned short *)t & 0x7FFF;
     p = D_L08_0015FFD8 + (idx << 8);
@@ -100,10 +101,11 @@ char *FUN_L08_002daa10(char *moby) {
         if (*(short *)(p + 0xA6) != 0x14D && *(unsigned char *)(p + 0xBC) == 0) {
             float ang, d, a;
             a = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
-                                  *(float *)(p + 0x14) - *(float *)(moby + 0x14));
+                             *(float *)(p + 0x14) - *(float *)(moby + 0x14));
             base = D_0013F350;
-            ang = fast_difference_between_rotations(a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
-                                                     *(float *)(base + 0x84) - *(float *)(moby + 0x14)));
+            ang = fast_difference_between_rotations(
+                a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
+                                *(float *)(base + 0x84) - *(float *)(moby + 0x14)));
             d = FUN_001f9b48(moby + 0x10, p + 0x10);
             if (ang < 1.5707964f) {
                 if (bestA < ang) {
@@ -117,7 +119,8 @@ char *FUN_L08_002daa10(char *moby) {
                 bestA = ang;
             }
         }
-        if (*t < -1) return best;
+        if (*t < -1)
+            return best;
         t++;
         idx = *(unsigned short *)t & 0x7FFF;
         p = D_L08_0015FFD8 + (idx << 8);
@@ -166,12 +169,17 @@ int FUN_L08_002dc648(char *m) {
     float a = D_0015ED70_q * 0.1f;
     float b = D_0015ED6C_q * 0.08f;
     path = *(int **)(d + 0x120);
-    advance_accelerated_scalar_q((float *)(d + 0xE4), (float *)(d + 0xE8), *(float *)(d + 0x104), a, a, b);
-    *(float *)(d + 0x110) = fast_add_rotations_q(*(float *)(d + 0x110), *(float *)(d + 0xE8) * 50.0f);
-    sample_camera_path_q(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xE4) * (float)(*path - 1));
+    advance_accelerated_scalar_q((float *)(d + 0xE4), (float *)(d + 0xE8), *(float *)(d + 0x104), a,
+                                 a, b);
+    *(float *)(d + 0x110) =
+        fast_add_rotations_q(*(float *)(d + 0x110), *(float *)(d + 0xE8) * 50.0f);
+    sample_camera_path_q(path, 0, d + 0x60, (float *)(d + 0x70), 0,
+                         *(float *)(d + 0xE4) * (float)(*path - 1));
     *(int *)(d + 0x74) = 0;
     if (AbsoluteFloat_q(*(float *)(d + 0xE4) - *(float *)(d + 0x104)) < 0.2f) {
-        advance_accelerated_scalar_q((float *)(d + 0x108), (float *)(d + 0x10C), 3.14159f, D_0015ED70_q * 2.0943952f, D_0015ED70_q * 2.0943952f, D_0015ED6C_q * 6.2831855f);
+        advance_accelerated_scalar_q((float *)(d + 0x108), (float *)(d + 0x10C), 3.14159f,
+                                     D_0015ED70_q * 2.0943952f, D_0015ED70_q * 2.0943952f,
+                                     D_0015ED6C_q * 6.2831855f);
     } else {
         *(int *)(d + 0x108) = 0;
     }
@@ -280,11 +288,18 @@ void FUN_L08_002dec90(char *m, char *pos) {
     add_vector_xyz(v20, v20, v40);
     v10[3] = random_float_between_alt(*(float *)&D_L08_00161A64, *(float *)&D_L08_00161A68);
     v20[3] = random_float_between_alt(*(float *)&D_L08_00161A6C, *(float *)&D_L08_00161A70);
-    a = FUN_001fa6e0(*(int *)&D_L08_00161A74, *(int *)&D_L08_00161A78, random_float_between_alt(0.0f, 1.0f));
-    b = FUN_001fa6e0(*(int *)&D_L08_00161A7C, *(int *)&D_L08_00161A80, random_float_between_alt(0.0f, 1.0f));
-    c = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A54 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-    d = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A58 * (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
-    e = func_001FA898_r(FUN_001f96b0((float)*(int *)&D_L08_00161A5C * (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+    a = FUN_001fa6e0(*(int *)&D_L08_00161A74, *(int *)&D_L08_00161A78,
+                     random_float_between_alt(0.0f, 1.0f));
+    b = FUN_001fa6e0(*(int *)&D_L08_00161A7C, *(int *)&D_L08_00161A80,
+                     random_float_between_alt(0.0f, 1.0f));
+    c = func_001FA898_r(
+        FUN_001f96b0((float)*(int *)&D_L08_00161A54 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+    d = func_001FA898_r(FUN_001f96b0(
+        (float)*(int *)&D_L08_00161A58 *
+        (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+    e = func_001FA898_r(FUN_001f96b0(
+        (float)*(int *)&D_L08_00161A5C *
+        (random_float_between_alt(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
     r = FUN_00218888(v50, v10, v20, a, b, c, d, e, -1);
     if (r != 0) {
         r[9] = func_001FA898_r(8.0f) - 0x70;

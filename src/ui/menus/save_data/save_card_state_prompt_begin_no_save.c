@@ -17,4 +17,5 @@ void save_card_state_prompt_begin_no_save(void) {
     }
 }
 
-extern __typeof__(save_card_state_prompt_begin_no_save) func_00208FE8 __attribute__((alias("FUN_00208fe8")));
+extern __typeof__(save_card_state_prompt_begin_no_save) func_00208FE8
+    __attribute__((alias("FUN_00208fe8")));

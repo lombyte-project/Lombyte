@@ -24,7 +24,7 @@ int update_menu_help_text_load(char *menu) {
     case 0:
         if (D_001516D8[0] == 0) {
             if (start_audio_stream_read(D_001D5CF8[0], D_00137B80[0x1528 / 4],
-                              D_00137B80[0x152C / 4]) != 0) {
+                                        D_00137B80[0x152C / 4]) != 0) {
                 *(int *)(menu + 0x50) = 1;
             } else {
                 *(int *)(menu + 0x50) = 3;

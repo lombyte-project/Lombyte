@@ -13,7 +13,9 @@ s32 snd_stream_safe_cd_get_error(s32 arg0) {
     return *(volatile s32 *)(p + 0x10);
 }
 
-extern __typeof__(snd_stream_safe_cd_get_error) func_0012EEF0 __attribute__((alias("FUN_0012eef0")));
+extern __typeof__(snd_stream_safe_cd_get_error) func_0012EEF0
+    __attribute__((alias("FUN_0012eef0")));
 
 /* Recovered original symbol name. */
-extern __typeof__(snd_stream_safe_cd_get_error) snd_StreamSafeCdGetError __attribute__((alias("FUN_0012eef0")));
+extern __typeof__(snd_stream_safe_cd_get_error) snd_StreamSafeCdGetError
+    __attribute__((alias("FUN_0012eef0")));

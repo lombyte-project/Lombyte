@@ -1,9 +1,30 @@
 #include "types.h"
-struct LevelRec { u8 pad0[6]; s16 id; u8 pad8[2]; };
-struct Level { u8 pad0[0x3C]; s32 cur; u8 pad40[8]; struct LevelRec *recs; };
-struct Game { u8 pad0[0x40]; struct Level *level; };
-struct Item { u8 pad0[0x44]; void *a; void *b; };
-struct Descriptor { u8 pad0[0x10]; s16 w; s16 h; u8 pad14[0xC]; };
+struct LevelRec {
+    u8 pad0[6];
+    s16 id;
+    u8 pad8[2];
+};
+struct Level {
+    u8 pad0[0x3C];
+    s32 cur;
+    u8 pad40[8];
+    struct LevelRec *recs;
+};
+struct Game {
+    u8 pad0[0x40];
+    struct Level *level;
+};
+struct Item {
+    u8 pad0[0x44];
+    void *a;
+    void *b;
+};
+struct Descriptor {
+    u8 pad0[0x10];
+    s16 w;
+    s16 h;
+    u8 pad14[0xC];
+};
 extern struct Game *D_001D5BF4[];
 extern u8 D_0013D4C0[];
 extern void PackImageDescriptor(struct Descriptor *, struct Item *);
@@ -31,7 +52,8 @@ s32 FUN_0021e110(struct Item *item) {
     PackImageDescriptor(&desc, item);
     desc.w = 0x10;
     desc.h = 3;
-    font_print_window_regular(&desc, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x4F4D), -1);
+    font_print_window_regular(&desc, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x4F4D),
+                              -1);
     do_gif_paging();
     return 2;
 }

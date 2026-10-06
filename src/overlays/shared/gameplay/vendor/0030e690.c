@@ -35,9 +35,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, int, int, int, int, int);
+extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, int, int, int, int,
+                             int);
 
-void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang) {
+void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
+                      float y, float s, float ang) {
     int h;
     float w;
     h = get_effect_texture(0x42);
@@ -109,25 +111,41 @@ void FUN_L11_003112b8(void *m, char *t) {
         FUN_L00_0025f8e0(a, *(float *)(t + 0xC4) * 0.02f + 0.02f);
         FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
         FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
-        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+        vel[0] =
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) *
+            scale;
         FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
-        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+        vel[0] =
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) *
+            scale;
         FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
-        vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) * scale;
+        vel[0] =
+            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) *
+            scale;
         FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
         if (*(float *)(t + 0xC4) > 0.5f) {
             FUN_L00_0025f8e0(a, *(float *)(t + 0xC4) * 0.02f + 0.01f);
             FUN_L00_0025f8e0(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
             FUN_L00_0025f8e0(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
+                       D_0015ED6C) *
+                     scale;
             FUN_L01_0028a7a8(m, a, vel, &D_L11_001621C8_d, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
+                       D_0015ED6C) *
+                     scale;
             FUN_L01_0028a7a8(m, b, vel, &D_L11_001621D8_d, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015ED6C) * scale;
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) *
+                       D_0015ED6C) *
+                     scale;
             FUN_L01_0028a7a8(m, c, vel, &D_L11_001621E8_d, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015ED6C) * scale;
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) *
+                       D_0015ED6C) *
+                     scale;
             FUN_L01_0028a7a8(m, a, vel, &D_L11_001621F8_d, 1);
-            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015ED6C) * scale;
+            vel[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) *
+                       D_0015ED6C) *
+                     scale;
             FUN_L01_0028a7a8(m, pos, vel, &D_L11_00162208_d, 1);
         }
     }
@@ -227,7 +245,8 @@ void FUN_L11_0031a1c0(char *m) {
             *(unsigned short *)(st + 0x157EA) = scale_game_frames(D_0015EEA4) / 600;
         }
         *(int *)(st + 0x157EC) = *(int *)(st + 0x157EC) | (1 << D_0015ED84_m) | 0x80000000;
-        if (D_0015ED84_m == 0xB && *(char **)(info + 0x20) != 0 && *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
+        if (D_0015ED84_m == 0xB && *(char **)(info + 0x20) != 0 &&
+            *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
             if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
                 D_0013D408[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
@@ -262,7 +281,6 @@ void FUN_L11_0031a1c0(char *m) {
         }
     }
 }
-
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310ad0.s", FUN_L11_00310ad0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a438.s", FUN_L11_0031a438);

@@ -1,7 +1,21 @@
 #include "types.h"
-struct Obj { u8 pad0[0xC]; void (*release)(struct Obj *, s32); };
-struct Owner { u8 pad0[0x44]; struct Obj *objs[14]; };
-struct GameState { s32 state; struct Owner *owner; u8 pad8[0xC]; s32 unk14; s32 unk18; u8 pad1C[0xF4]; s32 progress; };
+struct Obj {
+    u8 pad0[0xC];
+    void (*release)(struct Obj *, s32);
+};
+struct Owner {
+    u8 pad0[0x44];
+    struct Obj *objs[14];
+};
+struct GameState {
+    s32 state;
+    struct Owner *owner;
+    u8 pad8[0xC];
+    s32 unk14;
+    s32 unk18;
+    u8 pad1C[0xF4];
+    s32 progress;
+};
 extern struct GameState D_001D5BF0;
 extern s32 D_0015EE78;
 extern s32 D_001D5D90[];

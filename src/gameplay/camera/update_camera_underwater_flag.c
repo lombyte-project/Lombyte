@@ -47,4 +47,5 @@ void update_camera_underwater_flag(void) {
     }
 }
 
-extern __typeof__(update_camera_underwater_flag) func_001ED7F0 __attribute__((alias("FUN_001ed7f0")));
+extern __typeof__(update_camera_underwater_flag) func_001ED7F0
+    __attribute__((alias("FUN_001ed7f0")));

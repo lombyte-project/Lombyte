@@ -1,11 +1,37 @@
 #include "types.h"
 
-struct Display { u8 pad0[0x150]; s16 w; s16 h; };
-struct Screen { s32 w; s32 h; s32 hw; s32 hh; s32 x0; s32 y0; s32 x1; s32 y1; };
+struct Display {
+    u8 pad0[0x150];
+    s16 w;
+    s16 h;
+};
+struct Screen {
+    s32 w;
+    s32 h;
+    s32 hw;
+    s32 hh;
+    s32 x0;
+    s32 y0;
+    s32 x1;
+    s32 y1;
+};
 struct View {
-    u8 pad0[0xA0]; f32 unkA0; f32 unkA4; u8 padA8[8]; f32 unkB0; u8 padB4[0x14C];
-    f32 hw; f32 hh; f32 sx; f32 sy; u8 pad210[8]; s32 unk218; f32 unk21C; u8 pad220[8];
-    f32 unk228; s32 unk22C;
+    u8 pad0[0xA0];
+    f32 unkA0;
+    f32 unkA4;
+    u8 padA8[8];
+    f32 unkB0;
+    u8 padB4[0x14C];
+    f32 hw;
+    f32 hh;
+    f32 sx;
+    f32 sy;
+    u8 pad210[8];
+    s32 unk218;
+    f32 unk21C;
+    u8 pad220[8];
+    f32 unk228;
+    s32 unk22C;
 };
 
 extern struct Display D_00151780;

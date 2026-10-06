@@ -2,9 +2,22 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { char pad[0x50]; int sz[8]; char pad2[0x20]; void *p[8]; } T_234fd0;
-typedef struct { char pad[0x18]; T_234fd0 *t; } G_234fd0;
-typedef struct { char pad[0x10]; void *h; char pad2[0x104 - 0x14]; int off; } B_234fd0;
+typedef struct {
+    char pad[0x50];
+    int sz[8];
+    char pad2[0x20];
+    void *p[8];
+} T_234fd0;
+typedef struct {
+    char pad[0x18];
+    T_234fd0 *t;
+} G_234fd0;
+typedef struct {
+    char pad[0x10];
+    void *h;
+    char pad2[0x104 - 0x14];
+    int off;
+} B_234fd0;
 extern G_234fd0 D_L00_0017E4D8_234fd0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
 extern B_234fd0 D_L00_001B9CF0_234fd0 __asm__("D_L00_001B9CF0") __attribute__((section(".data")));
 extern int D_L00_0017E510_234fd0 __asm__("D_L00_0017E510") __attribute__((section(".data")));
@@ -18,24 +31,33 @@ void FUN_L00_00234fd0(int mode) {
     G_234fd0 *g = &D_L00_0017E4D8_234fd0;
     int off = D_L00_001B9CF0_234fd0.off;
     void *h = D_L00_001B9CF0_234fd0.h;
-    { int n1; if ((n1 = g->t->sz[1])) {
-        FUN_00232f20_234fd0(h, g->t->p[1], 0, D_L00_0017E510_234fd0 / 16, 0);
-        FUN_L00_0024d8d0_234fd0(h, off);
-        FUN_001fefc0_234fd0(0, off);
-        off += n1; }
+    {
+        int n1;
+        if ((n1 = g->t->sz[1])) {
+            FUN_00232f20_234fd0(h, g->t->p[1], 0, D_L00_0017E510_234fd0 / 16, 0);
+            FUN_L00_0024d8d0_234fd0(h, off);
+            FUN_001fefc0_234fd0(0, off);
+            off += n1;
+        }
     }
-    { int n3; if ((n3 = g->t->sz[3])) {
-        FUN_00232f20_234fd0(h, g->t->p[3], 0, D_L00_0017E518_234fd0 / 16, 0);
-        FUN_L00_0024d8d0_234fd0(h, off);
-        FUN_001fefc0_234fd0(2, off);
-        off += n3; }
+    {
+        int n3;
+        if ((n3 = g->t->sz[3])) {
+            FUN_00232f20_234fd0(h, g->t->p[3], 0, D_L00_0017E518_234fd0 / 16, 0);
+            FUN_L00_0024d8d0_234fd0(h, off);
+            FUN_001fefc0_234fd0(2, off);
+            off += n3;
+        }
     }
     if (mode == 0 || mode == 2) {
-        { int n4; if ((n4 = g->t->sz[4])) {
-            FUN_00232f20_234fd0(h, g->t->p[4], 0, D_L00_0017E51C_234fd0 / 16, 0);
-            FUN_L00_0024d8d0_234fd0(h, off);
-            FUN_001fefc0_234fd0(3, off);
-            off += n4; }
+        {
+            int n4;
+            if ((n4 = g->t->sz[4])) {
+                FUN_00232f20_234fd0(h, g->t->p[4], 0, D_L00_0017E51C_234fd0 / 16, 0);
+                FUN_L00_0024d8d0_234fd0(h, off);
+                FUN_001fefc0_234fd0(3, off);
+                off += n4;
+            }
         }
     }
     if ((unsigned)(mode - 1) < 2) {
@@ -47,9 +69,24 @@ void FUN_L00_00234fd0(int mode) {
         }
     }
 }
-typedef struct { int pad[5]; int a[8]; int b[16]; int c[8]; } T_235310;
-typedef struct { int v; short s; short pad; } E_235310;
-typedef struct { char pad[0x18]; T_235310 *t; char pad2[8]; E_235310 *a; E_235310 *b; } G_235310;
+typedef struct {
+    int pad[5];
+    int a[8];
+    int b[16];
+    int c[8];
+} T_235310;
+typedef struct {
+    int v;
+    short s;
+    short pad;
+} E_235310;
+typedef struct {
+    char pad[0x18];
+    T_235310 *t;
+    char pad2[8];
+    E_235310 *a;
+    E_235310 *b;
+} G_235310;
 extern G_235310 D_L00_0017E4D8 __attribute__((section(".data")));
 
 void FUN_L00_00235310(int n) {
@@ -60,13 +97,19 @@ void FUN_L00_00235310(int n) {
             D_L00_0017E4D8.a[j].s = 0;
         }
     }
-    if (n) s = D_L00_0017E4D8.t->a[n - 1]; else s = 0;
+    if (n)
+        s = D_L00_0017E4D8.t->a[n - 1];
+    else
+        s = 0;
     end = D_L00_0017E4D8.t->a[n];
     for (i = s; i < end; i++) {
         D_L00_0017E4D8.b[i].v -= d;
         D_L00_0017E4D8.b[i].v |= 0x80000000;
     }
-    if (n) s = D_L00_0017E4D8.t->b[n - 1]; else s = 0;
+    if (n)
+        s = D_L00_0017E4D8.t->b[n - 1];
+    else
+        s = 0;
     end = D_L00_0017E4D8.t->b[n];
     for (i = s; i < end; i++) {
         D_L00_0017E4D8.a[i].v -= d;

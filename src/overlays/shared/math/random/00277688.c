@@ -10,8 +10,7 @@
 
 extern s32 rand();
 
-float FUN_L09_00277688(float scale)
-{
+float FUN_L09_00277688(float scale) {
     int x = (rand() >> 16) & 0xFFF;
     float t = (float)x;
     t = t * (1.0f / 4096.0f);

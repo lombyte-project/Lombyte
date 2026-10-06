@@ -37,7 +37,7 @@ void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
     s32 v5;
 
     if (D_001870C0[0] != 0 && D_001870C0[0]->unk86 == 6) {
-                arg0->unk8 = 0;
+        arg0->unk8 = 0;
         arg0->unkC = 0;
     } else {
         v5 = arg0->unk8;

@@ -26,7 +26,8 @@ void save_card_state_new_card(void) {
         D_0015EEB0 = 3;
         return;
     }
-    if (*(int *)(s + 0xF4) != 0) D_0015EEB0 = 1;
+    if (*(int *)(s + 0xF4) != 0)
+        D_0015EEB0 = 1;
 }
 
 extern __typeof__(save_card_state_new_card) func_00208DD8 __attribute__((alias("FUN_00208dd8")));

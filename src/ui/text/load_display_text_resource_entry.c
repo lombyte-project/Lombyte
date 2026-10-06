@@ -36,4 +36,5 @@ void load_display_text_resource_entry(void *arg0, s32 *arg1) {
     FUN_001f9a68(arg0, &loc, scale);
 }
 
-extern __typeof__(load_display_text_resource_entry) func_00214BC0 __attribute__((alias("FUN_00214bc0")));
+extern __typeof__(load_display_text_resource_entry) func_00214BC0
+    __attribute__((alias("FUN_00214bc0")));

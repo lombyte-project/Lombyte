@@ -7,8 +7,7 @@ extern void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
 
 void send_to_spu(s32 *arg0, s32 arg1, s32 arg2, s32 arg3) __asm__("FUN_0023af18");
 
-void send_to_spu(s32 *arg0, s32 arg1, s32 arg2, s32 arg3)
-{
+void send_to_spu(s32 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     u32 descriptor[4];
     s32 dma_id;
 

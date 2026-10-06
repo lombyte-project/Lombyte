@@ -112,7 +112,8 @@ void switch_active_camera_record(CameraRecord *next_camera) {
             transition_duration = next_camera->transition_duration;
             camera_transition_state.transition_mode = 2;
             if (transition_duration > 0.0f) {
-                camera_transition_state.configured_frames = convert_float_to_word(transition_duration);
+                camera_transition_state.configured_frames =
+                    convert_float_to_word(transition_duration);
             } else {
                 camera_transition_state.configured_frames = 40;
             }
@@ -122,7 +123,8 @@ void switch_active_camera_record(CameraRecord *next_camera) {
         } else {
             camera_transition_state.transition_phase = 2;
         }
-    } else if (previous_transition_state == 3 || previous_transition_state == 5 || descriptor_kind == 3 || descriptor_kind == 6) {
+    } else if (previous_transition_state == 3 || previous_transition_state == 5 ||
+               descriptor_kind == 3 || descriptor_kind == 6) {
         qcopy(&next_camera->pos, &previous_camera->pos);
         qcopy(&next_camera->m0, &previous_camera->m0);
         qcopy(&next_camera->m1, &previous_camera->m1);
@@ -157,7 +159,8 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
     camera_transition_state.previous = previous_camera;
-    copy_blocks_16_forward(previous_camera_record_storage, previous_camera_record_storage - 0x280, 0x280);
+    copy_blocks_16_forward(previous_camera_record_storage, previous_camera_record_storage - 0x280,
+                           0x280);
     camera_transition_state.previous->saved_state = previous_camera_record_storage;
     camera_transition_state.current = next_camera;
     next_camera->saved_state = previous_camera_record_storage - 0x280;

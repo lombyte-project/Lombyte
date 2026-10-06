@@ -10,11 +10,14 @@ struct Glyph {
 extern s32 D_0015F4A0;
 extern s32 D_0015F49C;
 extern s32 D_0018CAF8[];
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
+                               s64) __asm__("func_001F5450");
 
-void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 texture, struct Glyph *glyphs) __asm__("FUN_001f62b0");
+void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 texture,
+                struct Glyph *glyphs) __asm__("FUN_001f62b0");
 
-void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 texture, struct Glyph *glyphs) {
+void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 texture,
+                struct Glyph *glyphs) {
     s32 character_count;
     u8 *cursor;
     u8 character;
@@ -43,18 +46,22 @@ void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 text
                 /* Characters 0x80..0xa7 also draw the glyph 0x40 entries later. */
                 if ((u8)(character + 0x80) < 0x28) {
                     overlay_glyph = (struct Glyph *)(((character + 0x40) << 2) + (s32)glyphs);
-                    draw_textured_quad(x + overlay_glyph->adv, y + overlay_glyph->top, 16, 16, overlay_glyph->u, overlay_glyph->v, 16, 16, color, texture);
+                    draw_textured_quad(x + overlay_glyph->adv, y + overlay_glyph->top, 16, 16,
+                                       overlay_glyph->u, overlay_glyph->v, 16, 16, color, texture);
                 }
                 /* Control glyphs use 24-pixel grayscale sprites. */
                 if (*cursor < 0x20) {
-                    gray_value = (s32)((color & 0xFF) + ((color >> 8) & 0xFF) + ((color >> 16) & 0xFF)) / 3;
+                    gray_value =
+                        (s32)((color & 0xFF) + ((color >> 8) & 0xFF) + ((color >> 16) & 0xFF)) / 3;
                     gray_color = (s32)(color & 0xFF000000);
                     gray_color += gray_value << 16;
                     gray_color += gray_value << 8;
                     gray_value += gray_color;
-                    draw_textured_quad(x, y + glyphs[*cursor].top, 24, 16, glyphs[*cursor].u, glyphs[*cursor].v, 24, 16, gray_value, texture);
+                    draw_textured_quad(x, y + glyphs[*cursor].top, 24, 16, glyphs[*cursor].u,
+                                       glyphs[*cursor].v, 24, 16, gray_value, texture);
                 } else if (*cursor > 0x20) {
-                    draw_textured_quad(x, y + glyphs[*cursor].top, 16, 16, glyphs[*cursor].u, glyphs[*cursor].v, 16, 16, color, texture);
+                    draw_textured_quad(x, y + glyphs[*cursor].top, 16, 16, glyphs[*cursor].u,
+                                       glyphs[*cursor].v, 16, 16, color, texture);
                 }
                 x += glyphs[*cursor].adv;
             }

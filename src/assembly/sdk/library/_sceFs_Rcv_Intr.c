@@ -3,7 +3,8 @@
 
 #ifndef NON_MATCHING
 /* Exact SDK/library unit _sceFs_Rcv_Intr; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_sceFs_Rcv_Intr/_sceFs_Rcv_Intr.s", _sceFs_Rcv_Intr);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_sceFs_Rcv_Intr/_sceFs_Rcv_Intr.s",
+            _sceFs_Rcv_Intr);
 #else
 #include "types.h"
 

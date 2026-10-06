@@ -89,14 +89,12 @@ typedef struct _Bigint {
 struct _reent;
 typedef s32 __Long;
 typedef u32 __ULong;
-#define Storeinc(a,b,c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
-#define Sign_Extend(a,b)
+#define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
+#define Sign_Extend(a, b)
 extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 Dcmp(_Bigint *, _Bigint *);
 
-_Bigint *
-__mdiff(struct _reent *ptr, _Bigint *a, _Bigint *b)
-{
+_Bigint *__mdiff(struct _reent *ptr, _Bigint *a, _Bigint *b) {
     _Bigint *c;
     s32 i, wa, wb;
     __Long borrow, y;

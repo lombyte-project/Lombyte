@@ -1,6 +1,13 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 extern struct TagPtr D_00160F00;
 extern struct TagPtr D_0015FF40;
 extern s32 D_0015FF3C;

@@ -20,9 +20,18 @@ struct M {
     u8 pad_110[0x14];
     s32 f124;
 };
-struct S { u8 pad_0[0x140]; float f140, f144, f148; };
-struct P { u8 pad_0[0x10]; u8 f10; };
-struct T { u8 pad_0[0x48]; struct P *tbl[1]; };
+struct S {
+    u8 pad_0[0x140];
+    float f140, f144, f148;
+};
+struct P {
+    u8 pad_0[0x10];
+    u8 f10;
+};
+struct T {
+    u8 pad_0[0x48];
+    struct P *tbl[1];
+};
 struct O2 {
     u8 pad_0[0x10];
     float f10, f14, f18;
@@ -61,7 +70,9 @@ void FUN_00218f98(void) {
     s32 i;
     s32 a, b, c, d;
     D_001D5BF0.f0 = 2;
-    D_001D5BF0.f4 = D_001D45C8; D_001D5BF0.f8 = D_001D45C8; D_001D5BF0.f124 = 0;
+    D_001D5BF0.f4 = D_001D45C8;
+    D_001D5BF0.f8 = D_001D45C8;
+    D_001D5BF0.f124 = 0;
     FUN_001f9a68((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);

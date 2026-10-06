@@ -9,28 +9,28 @@ void initialize_level_runtime(void) __asm__("FUN_00230f60");
 #include "sda.h"
 
 typedef struct {
-    s32 tex;        /* 0x00 */
+    s32 tex;         /* 0x00 */
     s32 data_offset; /* 0x04 */
-    s32 texCount;   /* 0x08 */
-    s32 texInfo;    /* 0x0C */
-    s32 mobyCount;  /* 0x10 */
-    s32 mobys;      /* 0x14 */
-    s32 classCount; /* 0x18 */
-    s32 classes;    /* 0x1C */
-    s32 partCount;  /* 0x20 */
-    s32 parts;      /* 0x24 */
-    s32 pointCount; /* 0x28 */
-    s32 points;     /* 0x2C */
+    s32 texCount;    /* 0x08 */
+    s32 texInfo;     /* 0x0C */
+    s32 mobyCount;   /* 0x10 */
+    s32 mobys;       /* 0x14 */
+    s32 classCount;  /* 0x18 */
+    s32 classes;     /* 0x1C */
+    s32 partCount;   /* 0x20 */
+    s32 parts;       /* 0x24 */
+    s32 pointCount;  /* 0x28 */
+    s32 points;      /* 0x2C */
     s32 unk30;
     s32 unk34;
     s32 unk38;
     s32 unk3C;
     s32 unk40;
     s32 unk44;
-    s32 sky;        /* 0x48 */
+    s32 sky; /* 0x48 */
     s32 unk4C;
-    s32 scenes[5];  /* 0x50 */
-    s32 sound;      /* 0x64 */
+    s32 scenes[5]; /* 0x50 */
+    s32 sound;     /* 0x64 */
 } LevelHeader;
 
 typedef struct {
@@ -164,8 +164,7 @@ extern void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
-void initialize_level_runtime(void)
-{
+void initialize_level_runtime(void) {
     s64 texture_packet[4];
     LevelHeader *header;
     s32 data_base;
@@ -205,31 +204,36 @@ void initialize_level_runtime(void)
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000, D_00137B80.lsn, D_00137B80.sectors);
+    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000, D_00137B80.lsn,
+                                   D_00137B80.sectors);
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);
     archive_size = func_0020B618(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
     FlushCache(0);
     header = (LevelHeader *)D_001940C0.buffer;
-    upload_texture_images((s32)header + header->tex, header->texCount, (s32)header + header->texInfo);
+    upload_texture_images((s32)header + header->tex, header->texCount,
+                          (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
     class_data_base = data_base + header->unk30;
-    D_0019E6C0[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) | ((s64)((D_0015EE8C + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
+    D_0019E6C0[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
+                    ((s64)((D_0015EE8C + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
     D_0019E6C0[1] = 0x0000FFA0000000E0LL;
     D_0019E6C0[2] = 0x0040000400004000LL;
     class_entries = (ClassEntry *)((s32)header + header->classes);
     D_0015FF08 = header->classCount;
     for (i = 0; i < D_0015FF08; i++) {
-        D_001B5980[i] = class_data_base + class_entries[i].offset + (highest_set_bit_index(class_entries[i].id) << 28);
+        D_001B5980[i] = class_data_base + class_entries[i].offset +
+                        (highest_set_bit_index(class_entries[i].id) << 28);
     }
     copy_blocks_16_forward(D_001CAAC0, class_entries, D_0015FF08 * 16);
     relocate_sky_definition(data_base + header->sky);
     moby_entry = (MobyEntry *)((s32)header + header->mobys);
     D_0015FF00 = 0;
     for (j = 0; j < header->mobyCount; j++) {
-        register_moby_class(moby_entry->offset == 0 ? 0 : data_base + moby_entry->offset, (s32)header + header->classes,
-                            (s32)moby_entry->body, moby_entry->oclass);
+        register_moby_class(moby_entry->offset == 0 ? 0 : data_base + moby_entry->offset,
+                            (s32)header + header->classes, (s32)moby_entry->body,
+                            moby_entry->oclass);
         moby_entry++;
     }
     D_0015F460 = data_base + header->unk38;
@@ -238,7 +242,8 @@ void initialize_level_runtime(void)
         s32 particle_data_base = data_base + header->unk34;
         s32 particle_entries = (s32)header + header->parts;
 
-        parse_particle_textures((s32)header + header->unk3C, particle_data_base, particle_entries, header->partCount);
+        parse_particle_textures((s32)header + header->unk3C, particle_data_base, particle_entries,
+                                header->partCount);
     }
     texture_offsets = (s32 *)(data_base + header->unk4C);
     language_index = D_0015ED88 - 1;
@@ -247,7 +252,9 @@ void initialize_level_runtime(void)
     }
     upload_mip_texture((s32)texture_offsets + texture_offsets[D_0015ED84 + 1], texture_packet);
     D_00160580 = texture_packet[0];
-    upload_mip_texture((s32)texture_offsets + texture_offsets[language_index * 19 + D_0015ED84 + 0x14], texture_packet);
+    upload_mip_texture((s32)texture_offsets +
+                           texture_offsets[language_index * 19 + D_0015ED84 + 0x14],
+                       texture_packet);
     texture_cursor = D_0015EE74 + 0x2000;
     allocation_cursor = D_001940C0.buffer + archive_size;
     D_0015EE74 = texture_cursor;
@@ -296,12 +303,16 @@ void initialize_level_runtime(void)
     scene_chunk = (Chunk *)(data_base + scene_offsets[D_0013E030.unk58]);
     /* The archive list is terminated by a zero size and the resident table holds 70 entries. */
     for (k = 0; k < 70 && scene_chunk->size != 0; k++) {
-        { s32 chunk_offset = scene_chunk->offset + 0x800; D_0018CB20.chunks[k] = data_base + *scene_offset + chunk_offset; }
+        {
+            s32 chunk_offset = scene_chunk->offset + 0x800;
+            D_0018CB20.chunks[k] = data_base + *scene_offset + chunk_offset;
+        }
         scene_chunk++;
     }
     parse_space_scene_chunk(0);
     D_0015ED5C = 0xFFFFFFFF;
-    snd_bank_load_from_ee_cb(data_base + header->sound, store_async_sound_bank_handle, (u32)&D_0015ED5C);
+    snd_bank_load_from_ee_cb(data_base + header->sound, store_async_sound_bank_handle,
+                             (u32)&D_0015ED5C);
     do {
         FlushCache(0);
         sceGsSyncV(0);

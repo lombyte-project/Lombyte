@@ -1,7 +1,19 @@
 #include "types.h"
-struct AnimDef { u16 id; u16 count; u16 start; u8 flags; u8 pad7; };
-struct FramePair { s16 a; s16 b; };
-struct FrameInfo { s32 word; s32 pad; };
+struct AnimDef {
+    u16 id;
+    u16 count;
+    u16 start;
+    u8 flags;
+    u8 pad7;
+};
+struct FramePair {
+    s16 a;
+    s16 b;
+};
+struct FrameInfo {
+    s32 word;
+    s32 pad;
+};
 struct AnimTable {
     s32 serial;
     u8 pad4[0x18];
@@ -34,4 +46,5 @@ s32 find_valid_animation_frame_index(s32 id, s32 frame) {
     return k;
 }
 
-extern __typeof__(find_valid_animation_frame_index) func_001FF960 __attribute__((alias("FUN_001ff960")));
+extern __typeof__(find_valid_animation_frame_index) func_001FF960
+    __attribute__((alias("FUN_001ff960")));

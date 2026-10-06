@@ -10,8 +10,7 @@ extern s32 func_0023D1E8();
 
 void run_video_decoder(s32 arg0) __asm__("FUN_0023ce28");
 
-void run_video_decoder(s32 arg0)
-{
+void run_video_decoder(s32 arg0) {
     vi_buf_reset(arg0 + 0x48);
     func_0023D1E8(D_0016120C + 0xD9168);
     decode_bitstream_0(arg0);

@@ -3,8 +3,7 @@
 extern int D_001596EC[];
 extern void run_global_constructors(void) __asm__("func_0011DC18");
 
-void UpdateRfuDispatchState(void)
-{
+void UpdateRfuDispatchState(void) {
     if (D_001596EC[0] == 0) {
         D_001596EC[0] = 1;
         run_global_constructors();

@@ -27,9 +27,15 @@ void FUN_L03_002ebb00(void *arg) {
     func_L00_001FF4B0_ebb00(v1, D_0013E633_ebb00 + 0x290, -*(float *)(a + 0x10));
     func_L00_001FF4B0_ebb00(v3, b, -*(float *)a);
     h = D_0013E633_ebb00;
-    *(float *)d = func_001EC120_ebb00(d + 0x10, *(float *)d, *(float *)(h + 0x80), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
-    *(float *)(d + 4) = func_001EC120_ebb00(d + 0x14, *(float *)(d + 4), *(float *)(h + 0x84), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
-    *(float *)(d + 8) = func_001EC120_ebb00(d + 0x18, *(float *)(d + 8), *(float *)(b + 0x34), *(float *)(d + 0x20), *(float *)(d + 0x24), *(float *)(d + 0x28));
+    *(float *)d =
+        func_001EC120_ebb00(d + 0x10, *(float *)d, *(float *)(h + 0x80), *(float *)(d + 0x20),
+                            *(float *)(d + 0x24), *(float *)(d + 0x28));
+    *(float *)(d + 4) =
+        func_001EC120_ebb00(d + 0x14, *(float *)(d + 4), *(float *)(h + 0x84), *(float *)(d + 0x20),
+                            *(float *)(d + 0x24), *(float *)(d + 0x28));
+    *(float *)(d + 8) =
+        func_001EC120_ebb00(d + 0x18, *(float *)(d + 8), *(float *)(b + 0x34), *(float *)(d + 0x20),
+                            *(float *)(d + 0x24), *(float *)(d + 0x28));
     func_001F9BD8_ebb00(v2, d, v1);
     func_001F9BD8_ebb00(v2, v2, v3);
     *(float *)(m + 0x30) = v2[0];
@@ -49,7 +55,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
+                      f32 vel) __asm__("FUN_001ebd78");
 
 void FUN_L03_002ebc58(void *arg) {
     char *m = arg;
@@ -59,7 +66,8 @@ void FUN_L03_002ebc58(void *arg) {
     float b[4];
     float c[4];
     qcopy(b, d);
-    p[2] = cam_interp_values(d + 0xBC, p[2], *(float *)(D_0013E633 + 0x8), *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
+    p[2] = cam_interp_values(d + 0xBC, p[2], *(float *)(D_0013E633 + 0x8),
+                             *(float *)&D_L03_00161E70, *(float *)&D_L03_00161E74, 0.0f);
     normalize_vector_xyz(c, D_L03_00166F40, p[5]);
     add_vector_xyz(b, c, b);
     subtract_vector_xyz(a, b, m + 0x30);
@@ -91,8 +99,7 @@ extern char D_0013E533[];
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
-void FUN_L03_002ebde8(char *moby)
-{
+void FUN_L03_002ebde8(char *moby) {
     char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
     char *sub = *(char **)(entry + 0x1C);
     int value = *(int *)(sub + 0xC);

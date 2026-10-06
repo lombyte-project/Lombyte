@@ -403,11 +403,35 @@ def prototype_signature(line: str, name: str) -> str:
     return " ".join(before.replace("*", " * ").split()) + "(" + ",".join(types) + ")"
 
 
+def join_declaration_lines(lines: list[str]) -> list[str]:
+    """Keep a declaration wrapped over several lines together as one entry."""
+    joined: list[str] = []
+    pending: list[str] = []
+    for line in lines:
+        if pending:
+            pending.append(line)
+            if ";" in line or "{" in line:
+                joined.append("".join(pending))
+                pending = []
+            continue
+        if (
+            re.match(r"^[ \t]*extern\b|^[A-Za-z_]", line)
+            and "(" in line
+            and ";" not in line
+            and "{" not in line
+        ):
+            pending = [line]
+            continue
+        joined.append(line)
+    joined.extend(pending)
+    return joined
+
+
 def rewrite_function_alias_references(
     text: str, aliases: dict[str, str]
 ) -> tuple[str, int, int, dict[str, int], dict[str, int], list[str]]:
     """Use semantic C identifiers while binding declarations to FUN_ symbols."""
-    lines = text.splitlines(keepends=True)
+    lines = join_declaration_lines(text.splitlines(keepends=True))
     declarations: dict[str, int] = {}
     declaration_updates = 0
     issues: list[str] = []
@@ -439,7 +463,7 @@ def rewrite_function_alias_references(
         canonical, semantic, identifier = found[0]
         semicolon = line.find(";")
         if semicolon < 0 or not re.search(
-            r"\b" + re.escape(identifier) + r"\s*\([^;\n]*\)", line[:semicolon]
+            r"\b" + re.escape(identifier) + r"\s*\([^;]*\)", line[:semicolon]
         ):
             issues.append(f"cannot parse extern declaration for {canonical}")
             continue

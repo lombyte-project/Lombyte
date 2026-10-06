@@ -20,4 +20,5 @@ void save_card_state_prompt_begin_unformatted(void) {
     }
 }
 
-extern __typeof__(save_card_state_prompt_begin_unformatted) func_00208FA0 __attribute__((alias("FUN_00208fa0")));
+extern __typeof__(save_card_state_prompt_begin_unformatted) func_00208FA0
+    __attribute__((alias("FUN_00208fa0")));

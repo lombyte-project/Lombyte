@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -23,12 +22,12 @@ typedef struct {
 extern char D_0013F3D0[];
 extern float FUN_001f9b80(void *, void *);
 extern float vector_length_xyz(void *);
-extern int D_L14_001600EC; /* no foreign declaration */
-extern int D_L14_001620B8; /* no foreign declaration */
-extern int D_L14_001620C8; /* no foreign declaration */
-extern int D_L14_001620CC; /* no foreign declaration */
-extern int D_L14_001620D0; /* no foreign declaration */
-extern int D_L14_001620D4; /* no foreign declaration */
+extern int D_L14_001600EC;   /* no foreign declaration */
+extern int D_L14_001620B8;   /* no foreign declaration */
+extern int D_L14_001620C8;   /* no foreign declaration */
+extern int D_L14_001620CC;   /* no foreign declaration */
+extern int D_L14_001620D0;   /* no foreign declaration */
+extern int D_L14_001620D4;   /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
 extern int FUN_001f9770(void *);
 extern int FUN_001fa728(void *, float);

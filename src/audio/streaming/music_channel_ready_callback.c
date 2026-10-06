@@ -8,4 +8,5 @@ void music_channel_ready_callback(int result, long context) {
     }
 }
 
-extern __typeof__(music_channel_ready_callback) func_00216990 __attribute__((alias("FUN_00216990")));
+extern __typeof__(music_channel_ready_callback) func_00216990
+    __attribute__((alias("FUN_00216990")));

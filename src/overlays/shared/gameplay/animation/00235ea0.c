@@ -65,7 +65,9 @@ void FUN_L00_00235ea0(HudElem *e) {
             d = d < 0 ? -d : d;
             if (d != 0) {
                 n = truncate_float_to_s32(FUN_001f9988(ConvertIntegerToFloat(d) / 25.0f) * 5.0f);
-                n = n < d * scale_game_frames(2) / scale_game_frames(10) ? d * scale_game_frames(2) / scale_game_frames(10) : n;
+                n = n < d * scale_game_frames(2) / scale_game_frames(10)
+                        ? d * scale_game_frames(2) / scale_game_frames(10)
+                        : n;
                 if (n >= 0x7A) {
                     n = 0x79;
                 } else if (n <= 0) {

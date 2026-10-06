@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/vi_buf_restart_dma/FUN_0023c280.s", FUN_0023c280);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/video/decoder/vi_buf_restart_dma/FUN_0023c280.s",
+    FUN_0023c280);
 #else
 #include "types.h"
 

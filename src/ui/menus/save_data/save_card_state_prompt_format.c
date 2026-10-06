@@ -30,4 +30,5 @@ void save_card_state_prompt_format(void) {
     }
 }
 
-extern __typeof__(save_card_state_prompt_format) func_00208A78 __attribute__((alias("FUN_00208a78")));
+extern __typeof__(save_card_state_prompt_format) func_00208A78
+    __attribute__((alias("FUN_00208a78")));

@@ -15,4 +15,5 @@ void music_primary_start_callback(int handle, long context) {
     }
 }
 
-extern __typeof__(music_primary_start_callback) func_00216B28 __attribute__((alias("FUN_00216b28")));
+extern __typeof__(music_primary_start_callback) func_00216B28
+    __attribute__((alias("FUN_00216b28")));

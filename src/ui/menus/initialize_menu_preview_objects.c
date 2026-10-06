@@ -88,4 +88,5 @@ int initialize_menu_preview_objects(char *preview) {
     return 0;
 }
 
-extern __typeof__(initialize_menu_preview_objects) func_002240C8 __attribute__((alias("FUN_002240c8")));
+extern __typeof__(initialize_menu_preview_objects) func_002240C8
+    __attribute__((alias("FUN_002240c8")));

@@ -15,7 +15,8 @@ extern unsigned char *FUN_L00_002678b8(int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x, float y, float z) {
+unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x,
+                                float y, float z) {
     unsigned char *e = FUN_L00_002678b8(0x44);
     if (e != 0) {
         char *p;

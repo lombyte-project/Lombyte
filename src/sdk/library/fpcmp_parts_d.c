@@ -45,26 +45,21 @@ typedef struct DoubleParts {
     u64 fraction;
 } DoubleParts;
 
-static __inline__ s32 IsNaN(const DoubleParts *value)
-{
+static __inline__ s32 IsNaN(const DoubleParts *value) {
     return __builtin_expect(value->classification < 2, 0);
 }
 
-static __inline__ s32 IsInfinity(const DoubleParts *value)
-{
+static __inline__ s32 IsInfinity(const DoubleParts *value) {
     return __builtin_expect(value->classification == 4, 0);
 }
 
-static __inline__ s32 IsZero(const DoubleParts *value)
-{
+static __inline__ s32 IsZero(const DoubleParts *value) {
     return value->classification == 2;
 }
 
-s32 CompareDoubleParts(DoubleParts *left, DoubleParts *right)
-    __asm__("__fpcmp_parts_d");
+s32 CompareDoubleParts(DoubleParts *left, DoubleParts *right) __asm__("__fpcmp_parts_d");
 
-s32 CompareDoubleParts(DoubleParts *left, DoubleParts *right)
-{
+s32 CompareDoubleParts(DoubleParts *left, DoubleParts *right) {
     if (IsNaN(left) || IsNaN(right)) {
         return 1;
     }

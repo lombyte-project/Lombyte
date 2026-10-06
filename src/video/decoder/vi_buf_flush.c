@@ -1,7 +1,12 @@
 #include "types.h"
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
-struct Stream { u8 pad0[0x14]; s32 pos; u8 pad18[0x28]; s32 sema; };
+struct Stream {
+    u8 pad0[0x14];
+    s32 pos;
+    u8 pad18[0x28];
+    s32 sema;
+};
 void vi_buf_flush(struct Stream *s) __asm__("FUN_0023c660");
 
 void vi_buf_flush(struct Stream *s) {

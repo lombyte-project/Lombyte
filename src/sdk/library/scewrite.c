@@ -50,8 +50,7 @@ extern s32 SignalSema(s32);
 extern void sceSifWriteBackDCache(void *, s32);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
-s32 sceWrite(s32 fd, u8 *buffer, s32 length)
-{
+s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
     struct FsWriteRequest *request;
     struct SifFileSlot *file_slot;
     struct SemaphoreParameters semaphore_parameters;

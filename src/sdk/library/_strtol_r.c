@@ -41,8 +41,7 @@ extern u64 __muldi3(u64, u64);
 #define isalpha(c) ((D_00152201[(c)] & (_U | _L)) != 0)
 #define isupper(c) ((D_00152201[(c)] & _U) != 0)
 
-s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 base)
-{
+s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 base) {
     register const s8 *s = nptr;
     register u64 acc;
     register s32 c;

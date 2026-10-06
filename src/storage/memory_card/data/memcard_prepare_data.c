@@ -15,8 +15,8 @@ struct SaveHeader {
 extern void FUN_001f9838(void *, void *, s32);
 extern s32 calculate_crc16(void *, s32) __asm__("func_0020ACC0");
 
-s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) __asm__("FUN_0020ad78");
-
+s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
+                         struct SaveBlock *blk) __asm__("FUN_0020ad78");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) {
     u8 *p;

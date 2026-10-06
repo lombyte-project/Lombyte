@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/audio/sound_options_menu/FUN_0021cb30.s", FUN_0021cb30);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/ui/menus/audio/sound_options_menu/FUN_0021cb30.s",
+    FUN_0021cb30);
 #else
 #include "types.h"
 #include "sda.h"
@@ -55,7 +57,8 @@ extern s32 D_0015EDF0 MACRO_ADDR;
 extern s32 D_0015EDE8 MACRO_ADDR;
 extern s32 D_001A0314 NOT_SDA;
 extern s32 *D_001601E0 __attribute__((sda));
-extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index, s32 sound_owner) __asm__("func_0022DA68");
+extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index,
+                                           s32 sound_owner) __asm__("func_0022DA68");
 void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
 
 s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");

@@ -11,18 +11,26 @@ int parse_occlusion_grid(int x, int y, int z) {
     int cz, cy, cx;
 
     cz = z - l[0];
-    if (cz < 0) return 0;
-    if (cz >= l[1]) return 0;
-    if (l[cz + 2] == 0) return 0;
+    if (cz < 0)
+        return 0;
+    if (cz >= l[1])
+        return 0;
+    if (l[cz + 2] == 0)
+        return 0;
     l = (unsigned short *)(grid + l[cz + 2] * 4);
     cy = y - l[0];
-    if (cy < 0) return 0;
-    if (cy >= l[1]) return 0;
-    if (l[cy + 2] == 0) return 0;
+    if (cy < 0)
+        return 0;
+    if (cy >= l[1])
+        return 0;
+    if (l[cy + 2] == 0)
+        return 0;
     l = (unsigned short *)(grid + l[cy + 2] * 4);
     cx = x - l[0];
-    if (cx < 0 || cx >= l[1]) return 0;
-    if (l[cx + 2] == 0xFFFF) return 0;
+    if (cx < 0 || cx >= l[1])
+        return 0;
+    if (l[cx + 2] == 0xFFFF)
+        return 0;
     return (int)(base + l[cx + 2] * 128);
 }
 

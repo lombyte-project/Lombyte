@@ -108,7 +108,8 @@ extern f32 approach_value_223450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void FUN_L00_002132b8_223450(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00212088_223450(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_223450(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern f32 FUN_L00_0025bc98_223450(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern f32 FUN_L00_0025bc98_223450(float *, float *, int, float, float, float,
+                                   float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_002091d8_223450(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void FUN_L00_00233708_223450(void *, void *, f32) __asm__("FUN_L00_00233708");
@@ -117,7 +118,7 @@ extern void FUN_001f9c48_223450(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_223450(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
 
-#define P D_0013F350_223450
+#define P    D_0013F350_223450
 #define ED64 D_0015ED64_223450
 #define ED6C D_0015ED6C_223450
 #define ED70 D_0015ED70_223450
@@ -204,7 +205,8 @@ void FUN_L02_00223450(void) {
     } else {
         if (state == 0x2D) {
             x = P.f98;
-            P.f188 = FUN_L00_0025bc98_223450(&x, &P.f184, 0, P.f180, ED64 * 0.018f, ED64 * 0.2f, ED6C * 7.330383f);
+            P.f188 = FUN_L00_0025bc98_223450(&x, &P.f184, 0, P.f180, ED64 * 0.018f, ED64 * 0.2f,
+                                             ED6C * 7.330383f);
             a = FUN_001fa5c8_223450(x, P.f98);
             FUN_L00_002091d8_223450(0.0f, 0.0f, a);
         } else {

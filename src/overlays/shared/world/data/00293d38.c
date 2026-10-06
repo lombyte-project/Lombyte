@@ -8,7 +8,12 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/stash_00295010.c: func_L00_00295010), where it is exact; names translated to the US level program. */
 
-typedef struct { char *base; int limit; int unk8; int unkC; } StashSlot;
+typedef struct {
+    char *base;
+    int limit;
+    int unk8;
+    int unkC;
+} StashSlot;
 
 extern StashSlot D_L00_001C12D8[];
 extern s32 sceSifSetDma(struct SifDmaTransfer *transfer, s32 priority);
@@ -16,10 +21,13 @@ extern s32 sceSifSetDma(struct SifDmaTransfer *transfer, s32 priority);
 int FUN_L00_00293d38(int arg, unsigned int slot, int off, int size) {
     int req[4];
     int lim;
-    if (slot >= 0x40) return -3;
+    if (slot >= 0x40)
+        return -3;
     lim = D_L00_001C12D8[slot].limit;
-    if (lim == 0) return -3;
-    if (lim < off + size) return -1;
+    if (lim == 0)
+        return -3;
+    if (lim < off + size)
+        return -1;
     req[0] = arg;
     req[1] = (int)(D_L00_001C12D8[slot].base + off * 16);
     req[2] = size * 16;

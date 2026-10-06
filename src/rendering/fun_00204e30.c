@@ -2,13 +2,13 @@
 #include "sda.h"
 
 typedef struct {
-    s32 addr;  /* +0 */
-    s16 unk4;  /* +4 */
-    s16 cbp;   /* +6 */
-    s32 unk8;  /* +8 */
-    u8 tw;     /* +C */
-    u8 th;     /* +D */
-    s16 tbp;   /* +E */
+    s32 addr; /* +0 */
+    s16 unk4; /* +4 */
+    s16 cbp;  /* +6 */
+    s32 unk8; /* +8 */
+    u8 tw;    /* +C */
+    u8 th;    /* +D */
+    s16 tbp;  /* +E */
 } TexSlot;
 
 extern s32 D_0015F458 MACRO_ADDR;
@@ -30,8 +30,8 @@ long FUN_00204e30(s32 tw, s32 th, s32 a2, s32 a3, s32 cbp, s32 tbp) {
     w = 1 << w;
     cbp >>= 8;
     tbp >>= 8;
-    reg = (long)tbp | ((long)w << 14) | ((long)0x13 << 20) | ((long)tw << 26)
-        | ((unsigned long)1 << 34) | ((long)cbp << 37) | ((long)4 << 61) | ((long)th << 30);
+    reg = (long)tbp | ((long)w << 14) | ((long)0x13 << 20) | ((long)tw << 26) |
+          ((unsigned long)1 << 34) | ((long)cbp << 37) | ((long)4 << 61) | ((long)th << 30);
     if (D_0015F458 < 0x40) {
         D_0018D040[D_0015F458].addr = a2;
         D_0018D040[D_0015F458].cbp = cbp;

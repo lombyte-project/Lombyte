@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/mode_freeze_init/FUN_001fbab8.s", FUN_001fbab8);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/runtime/memory/mode_freeze_init/FUN_001fbab8.s",
+    FUN_001fbab8);
 #else
 #include "types.h"
 

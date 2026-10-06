@@ -12,13 +12,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
 
 extern void FUN_L07_00312948(char *, int, float, float, float, float, float);
 
-void FUN_L07_00312dc8(char *moby)
-{
+void FUN_L07_00312dc8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float ang;
     if (*(float *)(data + 0x1C8) < 0.8f) {
         ang = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
-        if (ang > 3.14159274f) ang = 3.14159274f;
+        if (ang > 3.14159274f)
+            ang = 3.14159274f;
     } else {
         ang = 3.14159274f;
     }
@@ -34,22 +34,28 @@ void *FUN_L07_00313350(void *unused, void *dp, void *op) {
     int n = 0;
     int a = *(int *)(data + 0x170);
     int b, c, d, e, f;
-    if (a != -1) out[n++] = a;
+    if (a != -1)
+        out[n++] = a;
     b = *(int *)(data + 0x174);
-    if (b != -1) out[n++] = b;
+    if (b != -1)
+        out[n++] = b;
     c = *(int *)(data + 0x178);
-    if (c != -1) out[n++] = c;
+    if (c != -1)
+        out[n++] = c;
     if ((((unsigned char)data[0x19C] ^ 1) & 1)) {
         d = *(int *)(data + 0x17C);
-        if (d != -1) out[n++] = d;
+        if (d != -1)
+            out[n++] = d;
     }
     if (!((unsigned char)data[0x19C] & 2)) {
         e = *(int *)(data + 0x180);
-        if (e != -1) out[n++] = e;
+        if (e != -1)
+            out[n++] = e;
     }
     if (!((unsigned char)data[0x19C] & 4)) {
         f = *(int *)(data + 0x184);
-        if (f != -1) out[n++] = f;
+        if (f != -1)
+            out[n++] = f;
     }
     return (void *)n;
 }
@@ -80,11 +86,15 @@ extern void *FUN_L07_00313350_u(void *, void *, void *) __asm__("FUN_L07_0031335
 void FUN_L07_00313988(char *m, char *a, void *b, void *c) {
     float v[8];
     void *r = FUN_L07_00313350_u(m, a, v);
-    if (FUN_L01_00276fe8(v, r, *(int *)(a + 0x188), 0.0f, m + 0x10, b, c)) return;
+    if (FUN_L01_00276fe8(v, r, *(int *)(a + 0x188), 0.0f, m + 0x10, b, c))
+        return;
     {
         int i = FUN_L01_0028b510(b, D_L07_001B0530[*(int *)(a + 0x290)], 0.0f);
-        int j = FUN_L01_0028b510(D_L07_001B0530[*(int *)(a + 0x290)] + (i * 16 + 0x10), D_L07_001B0530[*(int *)(a + 0x188)], 0.0f);
-        if (FUN_L01_00276fe8(v, r, *(int *)(a + 0x188), 0.0f, m + 0x10, D_L07_001B0530[*(int *)(a + 0x188)] + (j * 16 + 0x10), c)) return;
+        int j = FUN_L01_0028b510(D_L07_001B0530[*(int *)(a + 0x290)] + (i * 16 + 0x10),
+                                 D_L07_001B0530[*(int *)(a + 0x188)], 0.0f);
+        if (FUN_L01_00276fe8(v, r, *(int *)(a + 0x188), 0.0f, m + 0x10,
+                             D_L07_001B0530[*(int *)(a + 0x188)] + (j * 16 + 0x10), c))
+            return;
         i = FUN_L01_0028b510(m + 0x10, D_L07_001B0530[*(int *)(a + 0x188)], 0.0f);
         qcopy(c, D_L07_001B0530[*(int *)(a + 0x188)] + i * 16 + 0x10);
     }
@@ -106,18 +116,18 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -262,7 +272,8 @@ void FUN_L07_00318e98(int arg0) {
         m = D_L07_0020C840[i].moby;
         if (m != 0) {
             D_L07_0020C840[i].moby = 0;
-            subtract_vector_xyz(a, D_L07_0020DDC0_v + D_L07_0020C840[i].idx * 16, D_L07_0020DB00 + D_L07_0020C840[i].idx * 16);
+            subtract_vector_xyz(a, D_L07_0020DDC0_v + D_L07_0020C840[i].idx * 16,
+                                D_L07_0020DB00 + D_L07_0020C840[i].idx * 16);
             len = vector_length_xyz(a);
             scale_vector_xyz(a, a, D_L07_0020C840[i].f / len);
             add_vector_xyz(b, D_L07_0020DB00 + D_L07_0020C840[i].idx * 16, a);

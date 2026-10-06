@@ -14,7 +14,7 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 sceGsSyncV(s32);
 
-#define VP (*(u8 * volatile *)&D_00160F00)
+#define VP (*(u8 *volatile *)&D_00160F00)
 
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 

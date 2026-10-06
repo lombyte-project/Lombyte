@@ -1,6 +1,14 @@
 #include "types.h"
-typedef struct { u8 trycount; u8 spindlctrl; u8 datapattern; u8 pad; } sceCdRMode;
-struct FileEntry { u32 lsn; u32 size; };
+typedef struct {
+    u8 trycount;
+    u8 spindlctrl;
+    u8 datapattern;
+    u8 pad;
+} sceCdRMode;
+struct FileEntry {
+    u32 lsn;
+    u32 size;
+};
 extern u8 D_0015ED58;
 extern struct FileEntry D_0013A448[];
 extern u8 D_0013A4E0[];

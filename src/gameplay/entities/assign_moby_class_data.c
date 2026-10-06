@@ -1,6 +1,13 @@
 #include "types.h"
-struct MapEntry { s32 id; s32 value; s32 extra; };
-struct Obj { u8 pad0[0x2C]; s32 extra; };
+struct MapEntry {
+    s32 id;
+    s32 value;
+    s32 extra;
+};
+struct Obj {
+    u8 pad0[0x2C];
+    s32 extra;
+};
 extern s32 D_0015FF00;
 extern struct Obj *D_001B3200[];
 extern s32 D_001B3580[];

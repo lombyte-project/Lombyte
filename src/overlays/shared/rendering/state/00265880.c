@@ -12,7 +12,10 @@ extern char D_001516D0[];
 
 void FUN_L00_00265880(int v) {
     char *b = D_001516D0;
-    if (*(short *)(b + 0x40) & 0x8000) *(short *)(b + 0x42) = v;
-    if (*(short *)(b + 0x78) & 0x8000) *(short *)(b + 0x7A) = v;
-    if (*(short *)(b + 0x5C) & 0x8000) *(short *)(b + 0x5E) = v;
+    if (*(short *)(b + 0x40) & 0x8000)
+        *(short *)(b + 0x42) = v;
+    if (*(short *)(b + 0x78) & 0x8000)
+        *(short *)(b + 0x7A) = v;
+    if (*(short *)(b + 0x5C) & 0x8000)
+        *(short *)(b + 0x5E) = v;
 }

@@ -34,27 +34,37 @@ int FUN_L00_0023a7a8(char *m) {
     int y = 0x12;
     int x, a, alpha, w, s16, tex, c1, wd, v74;
     float f21, f20;
-    if (D_0015ED80) y = 0xA;
+    if (D_0015ED80)
+        y = 0xA;
     x = *(int *)(m + 0x50);
-    if (*(unsigned char *)(m + 0x70) == 0) return *(int *)(m + 0x58);
+    if (*(unsigned char *)(m + 0x70) == 0)
+        return *(int *)(m + 0x58);
     {
         f20 = ConvertIntegerToFloat(*(unsigned char *)(m + 0x70));
         f21 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F91C_d);
-        if (f21 > 1.0f) f21 = 1.0f;
-        else if (f21 < 0.0f) f21 = 0.0f;
+        if (f21 > 1.0f)
+            f21 = 1.0f;
+        else if (f21 < 0.0f)
+            f21 = 0.0f;
         f20 = ConvertIntegerToFloat(*(unsigned char *)(q + 1));
         f20 = f20 / ConvertIntegerToFloat(*(int *)&D_L00_0015F920_d);
-        if (f20 > 1.0f) f20 = 1.0f;
-        else if (f20 < 0.0f) f20 = 0.0f;
+        if (f20 > 1.0f)
+            f20 = 1.0f;
+        else if (f20 < 0.0f)
+            f20 = 0.0f;
         alpha = truncate_float_to_s32(f21 * 128.0f);
         a = truncate_float_to_s32((float)alpha * 0.7f);
-        if (*(int *)(m + 8) < 100) w = *(int *)&D_L00_0015F924_d;
-        else w = *(int *)&D_L00_0015F928_d;
+        if (*(int *)(m + 8) < 100)
+            w = *(int *)&D_L00_0015F924_d;
+        else
+            w = *(int *)&D_L00_0015F928_d;
         x4 = x + 4;
         wd = x + truncate_float_to_s32((float)w * f21);
-        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20, a);
+        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
+                        a);
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, a);
-        draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20, 0x20, a);
+        draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20,
+                                0x20, a);
         tex = find_valid_animation_frame_index_alt(*(int *)m, 3);
         *(int *)(m + 0x44) = tex;
         FUN_L00_0023b120(m, tex, x, y, 0, alpha);
@@ -69,7 +79,8 @@ int FUN_L00_0023a7a8(char *m) {
             int tx = x + *(int *)&D_L00_0015F93C_d + w;
             font_print_right(tx + 1, y + *(int *)&D_L00_0015F940_d + 1, c1, buf, -1);
         }
-        font_print_right(x + *(int *)&D_L00_0015F93C_d + w, y + *(int *)&D_L00_0015F940_d, s16, buf, -1);
+        font_print_right(x + *(int *)&D_L00_0015F93C_d + w, y + *(int *)&D_L00_0015F940_d, s16, buf,
+                         -1);
     }
     return *(int *)(m + 0x58);
 }
@@ -109,7 +120,10 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
             r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
             k = t->n * 2;
             r = r % (k - 2);
-            if (r >= t->n) { int b = r + 2; r = k - b; }
+            if (r >= t->n) {
+                int b = r + 2;
+                r = k - b;
+            }
             r += t->base;
             break;
         case 3:
@@ -118,8 +132,11 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
                 r = (D_L00_0015F5CC_23aaa8 - o->start) / t->rate;
                 m = t->n * 2;
                 if (r < m - 2) {
-                    if (r >= t->n) { int b = r + 2; r = m - b; }
-            r += t->base;
+                    if (r >= t->n) {
+                        int b = r + 2;
+                        r = m - b;
+                    }
+                    r += t->base;
                 } else {
                     r = t->base;
                     a = FUN_001f96f8_23aaa8(0xA);
@@ -134,9 +151,23 @@ int FUN_L00_0023aaa8(O_23aaa8 *o) {
     o->frame = r;
     return r;
 }
-typedef struct E_23ac78 { int a; unsigned int flags; int b[3]; void (*cb)(struct E_23ac78 *); char pad[0x68 - 0x18]; int on; int lvl; char pad2[0x7C - 0x70]; int t; char pad3[0x90 - 0x80]; } E_23ac78;
+typedef struct E_23ac78 {
+    int a;
+    unsigned int flags;
+    int b[3];
+    void (*cb)(struct E_23ac78 *);
+    char pad[0x68 - 0x18];
+    int on;
+    int lvl;
+    char pad2[0x7C - 0x70];
+    int t;
+    char pad3[0x90 - 0x80];
+} E_23ac78;
 extern E_23ac78 D_L00_0017DC50[] __attribute__((section(".data")));
-typedef struct { int a; int b; } H_23ac78;
+typedef struct {
+    int a;
+    int b;
+} H_23ac78;
 extern H_23ac78 D_L00_0017E4D8 __attribute__((section(".data")));
 extern void FUN_L00_0023adb8(void);
 extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
@@ -157,9 +188,11 @@ int FUN_L00_0023ac78(int call) {
         }
         if (e->t > 0 && --e->t > 0) {
             n++;
-            if (e->lvl < 30) e->lvl++;
+            if (e->lvl < 30)
+                e->lvl++;
         } else {
-            if (e->lvl >= -5) e->lvl--;
+            if (e->lvl >= -5)
+                e->lvl--;
         }
         if (e->on && e->lvl == -6) {
             apply_pending_animation(e);
@@ -171,14 +204,21 @@ int FUN_L00_0023ac78(int call) {
     } while ((int)e < (int)(D_L00_0017DC50 + 13));
     return n;
 }
-typedef struct { char pad[8]; u16 h8; char pad2[4]; u16 hE; char pad3[8]; } T_23adb8;
+typedef struct {
+    char pad[8];
+    u16 h8;
+    char pad2[4];
+    u16 hE;
+    char pad3[8];
+} T_23adb8;
 extern unsigned char D_0013F350_23adb8[] __asm__("D_0013F350");
 extern int D_L00_0015F968_23adb8 __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C_23adb8 __asm__("D_L00_0015F96C") __attribute__((section(".sdata")));
 extern int D_L00_0015F970_23adb8 __asm__("D_L00_0015F970") __attribute__((section(".sdata")));
 extern T_23adb8 D_L00_001C40B0_23adb8[] __asm__("D_L00_001C40B0");
 extern int D_0013D428_23adb8[] __asm__("D_0013D428");
-extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
+extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
+                               int) __asm__("FUN_001ff308");
 extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");
 extern void FUN_L00_0023a760_23adb8(void) __asm__("FUN_L00_0023a760");
 extern void FUN_L00_0023cdb8_23adb8(void) __asm__("FUN_L00_0023cdb8");
@@ -200,13 +240,17 @@ void FUN_L00_0023adb8(void) {
     n = mode ? 0 : n;
     if (n != 0) {
         D_L00_0015F96C_23adb8 = n;
-        *(volatile int *)&D_L00_0015F970_23adb8 = FUN_001ff308_23adb8(0x10, n + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8, FUN_L00_0023a7a8_23adb8, &D_0013D428_23adb8[n], D_L00_001C40B0_23adb8[n].hE);
+        *(volatile int *)&D_L00_0015F970_23adb8 = FUN_001ff308_23adb8(
+            0x10, n + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
+            FUN_L00_0023a7a8_23adb8, &D_0013D428_23adb8[n], D_L00_001C40B0_23adb8[n].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970_23adb8 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970_23adb8, 0);
             D_L00_0015F970_23adb8 = k;
         }
-        *(s16 *)(g + 0x1634) = FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8, FUN_L00_0023a640_23adb8, g + 0x1630, 200);
+        *(s16 *)(g + 0x1634) =
+            FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
+                                FUN_L00_0023a640_23adb8, g + 0x1630, 200);
     } else {
         if (D_L00_0015F970_23adb8 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970_23adb8, 0);
@@ -218,4 +262,9 @@ void FUN_L00_00235878();
 extern int D_L00_0015F968 __attribute__((sda));
 extern int D_L00_0015F970 __attribute__((section(".sdata")));
 extern int D_L00_0015F96C __attribute__((section(".sdata")));
-void FUN_L00_0023aef8(void) { FUN_L00_00235878(); D_L00_0015F968 = 1; D_L00_0015F970 = -1; D_L00_0015F96C = 0; }
+void FUN_L00_0023aef8(void) {
+    FUN_L00_00235878();
+    D_L00_0015F968 = 1;
+    D_L00_0015F970 = -1;
+    D_L00_0015F96C = 0;
+}

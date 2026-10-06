@@ -69,8 +69,7 @@ extern u8 *GetSysbitPointer(SysBit *bs, s32 pos);
 extern s32 _pack_header(SysBit *bs, PackHdr *pack);
 extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
 
-int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize)
-{
+int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize) {
     SysBit bs;
     PssHdr hdr;
     SysBit *b;

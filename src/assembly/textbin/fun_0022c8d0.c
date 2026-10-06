@@ -23,7 +23,7 @@ struct VoicePoolInitializationState {
 struct VoicePoolInitializationWindow {
     u8 pad_0[0x70];
     s32 handle;
-    u8 state;  /* Only the byte at offset 0x74 is cleared. */
+    u8 state; /* Only the byte at offset 0x74 is cleared. */
 };
 
 extern struct VoicePoolInitializationState voice_pool __asm__("D_0013E550");

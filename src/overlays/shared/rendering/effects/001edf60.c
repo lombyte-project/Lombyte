@@ -4,14 +4,30 @@
 
 typedef int q128 __attribute__((mode(TI)));
 #include "qcopy.h"
-typedef struct { q128 pos; float f10; int f14; int f18; float f1c; int f20; short f24; short f26; float f28; int f2c; } E1edf60;
-typedef struct { E1edf60 e[4]; int count; } T1edf60;
+typedef struct {
+    q128 pos;
+    float f10;
+    int f14;
+    int f18;
+    float f1c;
+    int f20;
+    short f24;
+    short f26;
+    float f28;
+    int f2c;
+} E1edf60;
+typedef struct {
+    E1edf60 e[4];
+    int count;
+} T1edf60;
 extern int D_L00_0015F5C4;
 extern T1edf60 D_L00_00169040;
 void FUN_L00_001edf60(int a, int b, q128 *pos, int kind, int mode, float x, float y, float z) {
     E1edf60 *e;
-    if (D_L00_0015F5C4 == 2) return;
-    if (D_L00_00169040.count >= 3) return;
+    if (D_L00_0015F5C4 == 2)
+        return;
+    if (D_L00_00169040.count >= 3)
+        return;
     e = &D_L00_00169040.e[D_L00_00169040.count];
     e->f20 = a;
     e->f14 = b;
@@ -26,9 +42,12 @@ void FUN_L00_001edf60(int a, int b, q128 *pos, int kind, int mode, float x, floa
     }
     if (mode == -1) {
         if (kind != 13) {
-            if (kind < 13) goto done;
-            if (kind >= 40) goto done;
-            if (kind < 31) goto done;
+            if (kind < 13)
+                goto done;
+            if (kind >= 40)
+                goto done;
+            if (kind < 31)
+                goto done;
         }
         e->f2c = 2;
         e->f28 = 1.5707964f;

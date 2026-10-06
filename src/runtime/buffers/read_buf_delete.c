@@ -6,4 +6,5 @@ void NoOpStateCallback(void) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(NoOpStateCallback) readBufDelete__FP7ReadBuf __attribute__((alias("func_0023B958")));
+extern __typeof__(NoOpStateCallback) readBufDelete__FP7ReadBuf
+    __attribute__((alias("func_0023B958")));

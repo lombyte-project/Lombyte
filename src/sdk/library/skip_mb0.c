@@ -25,7 +25,8 @@ struct M2c_arg3 {
 
 extern u8 D_00153868[];
 extern s32 _Error(struct M2c_arg0 *a0, u8 *a1);
-s32 _skipMB0(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1, s32 *arg2, struct M2c_arg3 *arg3, s32 *arg4) {
+s32 _skipMB0(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1, s32 *arg2, struct M2c_arg3 *arg3,
+             s32 *arg4) {
     s32 temp_10_11;
     s32 temp_2_32;
     s32 var_9_6;

@@ -20,8 +20,10 @@ void FUN_L13_002650a8(int idx, int a, int b, int c) {
             char *m = (char *)(off + (int)D_L13_0015FFD8);
             if (m[0x20] >= 0) {
                 if (a != -1) {
-                    if (a) *(unsigned short *)(m + 0x34) &= 0xFFFD;
-                    else *(unsigned short *)(m + 0x34) |= 2;
+                    if (a)
+                        *(unsigned short *)(m + 0x34) &= 0xFFFD;
+                    else
+                        *(unsigned short *)(m + 0x34) |= 2;
                 }
                 if (b != -1) {
                     if (b) {
@@ -33,8 +35,10 @@ void FUN_L13_002650a8(int idx, int a, int b, int c) {
                     }
                 }
                 if (c != -1) {
-                    if (c) *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-                    else *(int *)(m + 0x94) = 0;
+                    if (c)
+                        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+                    else
+                        *(int *)(m + 0x94) = 0;
                 }
             }
         } while (*p++ >= 0);

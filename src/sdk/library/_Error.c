@@ -4,15 +4,12 @@ struct ErrorContext {
     unsigned char opaque;
 };
 
-#define FIELD(type, object, offset) \
-    (*(type *)((unsigned char *)(object) + (offset)))
+#define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
 
-void _dispatchMpegCallback(u32 state, int *arguments)
-    __asm__("_dispatchMpegCallback");
+void _dispatchMpegCallback(u32 state, int *arguments) __asm__("_dispatchMpegCallback");
 void JumpToImageSetup(int argument) __asm__("JumpToImageSetup");
 
-void _Error(struct ErrorContext *context, int argument)
-    __asm__("_Error");
+void _Error(struct ErrorContext *context, int argument) __asm__("_Error");
 
 void _Error(struct ErrorContext *context, int argument) {
     u32 state;

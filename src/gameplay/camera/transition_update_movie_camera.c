@@ -43,4 +43,5 @@ unsigned char transition_update_movie_camera(void) {
     return flag;
 }
 
-extern __typeof__(transition_update_movie_camera) func_001EAF88 __attribute__((alias("FUN_001eaf88")));
+extern __typeof__(transition_update_movie_camera) func_001EAF88
+    __attribute__((alias("FUN_001eaf88")));

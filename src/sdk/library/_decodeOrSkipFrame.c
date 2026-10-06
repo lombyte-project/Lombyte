@@ -3,7 +3,7 @@ struct M2c_arg0 {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x34];
-    struct M2c_temp_16_13 * unk40;
+    struct M2c_temp_16_13 *unk40;
 };
 struct M2c_temp_16_13 {
     u8 pad_0[0x4];
@@ -48,12 +48,12 @@ s32 _decodeOrSkipFrame(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     }
     _outputFrame(tmp, tmp->unk118, tmp->unk4);
     if ((tmp->unk174 != 3) && (flag == 0)) {
-        tmp->unk120 = (s32) (tmp->unk120 == 0);
+        tmp->unk120 = (s32)(tmp->unk120 == 0);
     }
-    arg0->unk8 = (s32) (tmp->unk118 - tmp->unkAC);
+    arg0->unk8 = (s32)(tmp->unk118 - tmp->unkAC);
     if (tmp->unk120 == 0) {
-        tmp->unk118 = (s32) (tmp->unk118 + 1);
-        tmp->unk4 = (s32) (tmp->unk4 + 1);
+        tmp->unk118 = (s32)(tmp->unk118 + 1);
+        tmp->unk4 = (s32)(tmp->unk4 + 1);
     }
     return ret;
 }

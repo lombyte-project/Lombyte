@@ -3,7 +3,8 @@
 
 #ifndef NON_MATCHING
 /* Exact SDK/library unit _csc_storeRefImage; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/csc_store_ref_image/_csc_storeRefImage.s", _csc_storeRefImage);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/csc_store_ref_image/_csc_storeRefImage.s",
+            _csc_storeRefImage);
 #else
 #include "types.h"
 
@@ -56,10 +57,10 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
         *(volatile u32 *)0x10002010 = 0x40000000;
     }
     small = total < 0x400;
-    while ((s32)*(volatile u32 *)0x10002010 < 0) {
+    while ((s32) * (volatile u32 *)0x10002010 < 0) {
     }
     _sendIpuCommand(d, 0);
-    while ((s32)*(volatile u32 *)0x10002010 < 0) {
+    while ((s32) * (volatile u32 *)0x10002010 < 0) {
     }
     dma.count = total * 0x18;
     dma.addr = img->dest & 0x0FFFFFFF;

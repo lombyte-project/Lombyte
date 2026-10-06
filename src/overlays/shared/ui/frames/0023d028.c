@@ -63,7 +63,10 @@ extern unsigned char D_0015EDD0[] __attribute__((sda));
 void FUN_L00_0023d3d8(int i) {
     int v = D_L00_001C3E98[i];
     int j;
-    if (v == 0) return;
-    for (j = 0; (D_0015EDD0[j] & 0x3F) != v && D_0015EDD0[j] != 0xFF; j++);
-    if (D_0015EDD0[j] == 0xFF) D_0015EDD0[j] = v;
+    if (v == 0)
+        return;
+    for (j = 0; (D_0015EDD0[j] & 0x3F) != v && D_0015EDD0[j] != 0xFF; j++)
+        ;
+    if (D_0015EDD0[j] == 0xFF)
+        D_0015EDD0[j] = v;
 }

@@ -10,8 +10,7 @@
 
 extern float FUN_001f9988(float);
 
-void FUN_L03_00250a78(float *p, float a, float b)
-{
+void FUN_L03_00250a78(float *p, float a, float b) {
     float root = FUN_001f9988((b + b) * p[4]);
     float x = (root + root) / p[4];
     p[7] = root;

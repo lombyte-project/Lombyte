@@ -8,7 +8,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276908.s", FUN_L00_00276908);
 #include "qcopy.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
-typedef union { u128d q; f32 f[4]; } V;
+typedef union {
+    u128d q;
+    f32 f[4];
+} V;
 
 typedef struct Mth Mth;
 typedef struct NO NO;
@@ -80,7 +83,10 @@ struct GameState {
     s32 unk140;
     s32 unk144;
 };
-typedef struct { u8 pad0[0x224]; s32 w224; } G841F0;
+typedef struct {
+    u8 pad0[0x224];
+    s32 w224;
+} G841F0;
 
 extern struct GameState D_L00_001B9CF0;
 extern Ent *D_L00_001B9E90[];
@@ -226,8 +232,7 @@ void FUN_L00_00276bd0(void) {
         return;
     }
     v = D_L00_001B9CF0.state;
-    if (v == 0 || v == 0xA || v == 0xE || v == 0x11 || v == 0x21 || v == 0x2D ||
-        v == 0x23) {
+    if (v == 0 || v == 0xA || v == 0xE || v == 0x11 || v == 0x21 || v == 0x2D || v == 0x23) {
         FUN_L00_00276368();
     }
     if ((D_0015EEB4 & 1) && !(D_L00_0015F5C8 < 8)) {
@@ -263,10 +268,10 @@ void FUN_L00_00276bd0(void) {
             }
         }
         flag = (D_L00_001B9CF0.unk8 == D_L00_001B9CF0.owner->unk38);
-        if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8 && D_L00_001B9CF0.owner != &D_L00_001B71F0 &&
-            D_L00_001B9CF0.owner != &D_L00_001B7DD0 && D_L00_001B9CF0.owner != &D_L00_001B80E0 &&
-            D_L00_001B9CF0.owner != &D_L00_001B63F8 && D_L00_001B9CF0.owner != &D_L00_001B78F0 &&
-            D_L00_001B9CF0.owner != &D_L00_001B6820) {
+        if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8 &&
+            D_L00_001B9CF0.owner != &D_L00_001B71F0 && D_L00_001B9CF0.owner != &D_L00_001B7DD0 &&
+            D_L00_001B9CF0.owner != &D_L00_001B80E0 && D_L00_001B9CF0.owner != &D_L00_001B63F8 &&
+            D_L00_001B9CF0.owner != &D_L00_001B78F0 && D_L00_001B9CF0.owner != &D_L00_001B6820) {
             if (D_L00_001B9CF0.state != 0x23) {
                 flag = flag ^ 1;
             }
@@ -277,7 +282,8 @@ void FUN_L00_00276bd0(void) {
             }
             if (flag) {
                 s32 n = D_L00_001B9CF0.owner->ids[j];
-                set_moby_animation(D_L00_001B9E90[j], n, D_L00_001B9E90[j]->unk24->unk48[n]->unk10 - 1);
+                set_moby_animation(D_L00_001B9E90[j], n,
+                                   D_L00_001B9E90[j]->unk24->unk48[n]->unk10 - 1);
                 D_L00_001B9E90[j]->unk58 = -1.0f;
             } else {
                 set_moby_animation(D_L00_001B9E90[j], D_L00_001B9CF0.unk8->ids[j], 0);

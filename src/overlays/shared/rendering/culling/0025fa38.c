@@ -8,7 +8,9 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260AB0), where it is exact; names translated to the US level program. */
 
-typedef struct { float x, y, z, w; } Vp __attribute__((aligned(16)));
+typedef struct {
+    float x, y, z, w;
+} Vp __attribute__((aligned(16)));
 
 extern char *D_L00_001600FC;
 extern float FUN_001f9b20(void *);
@@ -53,7 +55,8 @@ int FUN_L00_0025faf0(float *p, int idx) {
         FUN_001f9a28(a, p, e + 0x30);
         a[3] = 0;
         FUN_001f9cf8(b, a, e + 0x40);
-        if (FUN_001f9af0(b) < 1.0f) return 1;
+        if (FUN_001f9af0(b) < 1.0f)
+            return 1;
     }
     return 0;
 }

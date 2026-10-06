@@ -1,13 +1,23 @@
 #include "types.h"
 
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
 
-struct DmaTagCursor { struct DmaTag *tag; };
+struct DmaTagCursor {
+    struct DmaTag *tag;
+};
 extern struct DmaTagCursor D_00160F00;
 extern struct DmaTagCursor D_00160470;
 extern struct DmaTagCursor D_00160474;
 extern s32 D_0018A2B4[];
-struct SkyPagingState { s32 current_page; s32 next_page; };
+struct SkyPagingState {
+    s32 current_page;
+    s32 next_page;
+};
 extern struct SkyPagingState D_0015EE74;
 extern void FUN_0020b4a8(void);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");

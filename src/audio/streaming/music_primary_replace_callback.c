@@ -22,4 +22,5 @@ void music_primary_replace_callback(int result, long context) {
     }
 }
 
-extern __typeof__(music_primary_replace_callback) func_00216AD0 __attribute__((alias("FUN_00216ad0")));
+extern __typeof__(music_primary_replace_callback) func_00216AD0
+    __attribute__((alias("FUN_00216ad0")));

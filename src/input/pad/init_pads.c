@@ -1,6 +1,16 @@
 #include "types.h"
-typedef struct { s32 port; s32 slot; s32 number; u8 reserve[4]; } scePad2SocketParam;
-struct PadState { u8 pad0[0x194]; s32 socket; s32 unk198; s32 unk19C; };
+typedef struct {
+    s32 port;
+    s32 slot;
+    s32 number;
+    u8 reserve[4];
+} scePad2SocketParam;
+struct PadState {
+    u8 pad0[0x194];
+    s32 socket;
+    s32 unk198;
+    s32 unk19C;
+};
 extern scePad2SocketParam D_001CD760;
 extern struct PadState D_0013C940;
 extern s32 sceDbcInit(void);

@@ -7,8 +7,7 @@ typedef struct QueueState {
     unsigned char *write_cursor;
 } QueueState;
 
-void QueuePeekWriteDone(QueueState *queue)
-{
+void QueuePeekWriteDone(QueueState *queue) {
     unsigned char *next_cursor;
     u32 buffer_end_offset;
     queue->completed_count += 1;

@@ -23,7 +23,7 @@ struct M2c_arg0__func_0012C4C8 {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x38];
-    struct M2c_temp_30_15__func_0012C4C8 * unk40;
+    struct M2c_temp_30_15__func_0012C4C8 *unk40;
 };
 
 struct M2c_temp_30_15__func_0012C4C8 {

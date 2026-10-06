@@ -6,7 +6,10 @@ struct MenuControllerState {
     u8 pad1A8[0x1C];
     s32 pressed;
 };
-struct MenuCyclePage { u8 pad0[0x38]; s32 back; };
+struct MenuCyclePage {
+    u8 pad0[0x38];
+    s32 back;
+};
 struct MenuCycleState {
     u8 pad0[4];
     struct MenuCyclePage *page;

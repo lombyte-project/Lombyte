@@ -1,7 +1,11 @@
 #include "types.h"
 extern s32 D_0016120C;
 extern void vi_buf_get_ts(s32, u64 *) __asm__("func_0023C920");
-struct Out { u8 pad[8]; u64 a; u64 b; };
+struct Out {
+    u8 pad[8];
+    u64 a;
+    u64 b;
+};
 s32 get_mpeg_timestamp(s32 arg0, struct Out *arg1) __asm__("FUN_0023d140");
 
 s32 get_mpeg_timestamp(s32 arg0, struct Out *arg1) {

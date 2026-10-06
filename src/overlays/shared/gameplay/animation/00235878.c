@@ -24,7 +24,8 @@ typedef struct {
 } HudBank;
 
 extern HudBank D_L00_0017DC50[];
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
+                           s32 b) __asm__("FUN_001ff308");
 void apply_pending_animation(struct Anim *anim) __asm__("FUN_001ff418");
 
 void FUN_L00_00235878(void) {
@@ -135,26 +136,36 @@ void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
 /* updates numeric HUD values and dimensions from digit count */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236610), where it is exact; names translated to the US level program. */
 
-
-
 void FUN_L00_00235c80(HudElem *e) {
- int *value=e->unk0C;
- int digits;
- int v,flags,width;
- if(value && !((int)value&3)) {
- e->unk78=*value;
- if(e->unk08<e->unk78) e->unk78=e->unk08;
- e->unk74=e->unk78;
- } else { e->unk78=99999; e->unk74=99999; }
- v=e->unk08; digits=0; flags=e->flags; width=e->h;
- while(v>=10) { v/=10; digits++; }
- if(!(flags&3) && (flags&12)) {
- e->h=width+(digits+1)*12;
- if(e->w<14) e->w=14;
- } else {
- if(width<12) e->h=12;
- e->w+=(digits+1)*14;
- }
+    int *value = e->unk0C;
+    int digits;
+    int v, flags, width;
+    if (value && !((int)value & 3)) {
+        e->unk78 = *value;
+        if (e->unk08 < e->unk78)
+            e->unk78 = e->unk08;
+        e->unk74 = e->unk78;
+    } else {
+        e->unk78 = 99999;
+        e->unk74 = 99999;
+    }
+    v = e->unk08;
+    digits = 0;
+    flags = e->flags;
+    width = e->h;
+    while (v >= 10) {
+        v /= 10;
+        digits++;
+    }
+    if (!(flags & 3) && (flags & 12)) {
+        e->h = width + (digits + 1) * 12;
+        if (e->w < 14)
+            e->w = 14;
+    } else {
+        if (width < 12)
+            e->h = 12;
+        e->w += (digits + 1) * 14;
+    }
 }
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
@@ -195,7 +206,8 @@ s32 FUN_L00_00235e18(s32 key, s32 val) {
     T_235e18 *e;
     r = 1;
     for (i = 0; i < 13; i++) {
-        if (D_L00_0017DC50_235e18[i].key == key) break;
+        if (D_L00_0017DC50_235e18[i].key == key)
+            break;
     }
     if (i < 13 && D_L00_0017DC50_235e18[i].f68 == 0) {
         e = D_L00_0017DC50_235e18 + i;
@@ -209,7 +221,8 @@ extern int FUN_001fa6d0(float);
 extern float FUN_001f9988(float);
 extern void FUN_L00_0023aaa8(void *);
 
-void FUN_L00_00235ea0(e) HudElem *e; {
+void FUN_L00_00235ea0(e) HudElem *e;
+{
     unsigned char *c = e->cnt;
     int v;
     int cap;
@@ -234,7 +247,9 @@ void FUN_L00_00235ea0(e) HudElem *e; {
             d = t < 0 ? -t : t;
             if (d != 0) {
                 s = FUN_001fa6d0(FUN_001f9988(FUN_001fa6c0(d) / 25.0f) * 5.0f);
-                s = s < d * scale_game_frames(2) / scale_game_frames(10) ? d * scale_game_frames(2) / scale_game_frames(10) : s;
+                s = s < d * scale_game_frames(2) / scale_game_frames(10)
+                        ? d * scale_game_frames(2) / scale_game_frames(10)
+                        : s;
                 if (s >= 0x7A) {
                     s = 0x79;
                 } else if (s <= 0) {
@@ -320,5 +335,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236458.s", FUN_L00_00236458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002365a8.s", FUN_L00_002365a8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
 void FUN_L00_00235ea0();
-void FUN_L00_002371e0(void) { FUN_L00_00235ea0(); }
+void FUN_L00_002371e0(void) {
+    FUN_L00_00235ea0();
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237200.s", FUN_L00_00237200);

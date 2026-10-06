@@ -8,7 +8,6 @@ extern void _Error(void *pState, u8 *message);
 
 void report_mpeg_sequence_scalable_unsupported(void *pState) __asm__("FUN_0012caf0");
 
-void report_mpeg_sequence_scalable_unsupported(void *pState)
-{
+void report_mpeg_sequence_scalable_unsupported(void *pState) {
     _Error(pState, D_00153B48);
 }

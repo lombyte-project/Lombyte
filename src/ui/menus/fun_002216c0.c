@@ -1,8 +1,31 @@
 #include "types.h"
-struct Slot { s16 f0; s16 f2; s16 f4; s16 id; s16 f8; };
-struct Info { u8 pad[0x38]; u16 icon; u8 pad3a[6]; s16 a; u8 pad42[2]; s16 b; u8 pad46[6]; };
-struct Item { u16 icon; s16 unk2; s16 unk4; s16 id; s16 index; };
-struct Menu { u8 pad[0x40]; s32 count; };
+struct Slot {
+    s16 f0;
+    s16 f2;
+    s16 f4;
+    s16 id;
+    s16 f8;
+};
+struct Info {
+    u8 pad[0x38];
+    u16 icon;
+    u8 pad3a[6];
+    s16 a;
+    u8 pad42[2];
+    s16 b;
+    u8 pad46[6];
+};
+struct Item {
+    u16 icon;
+    s16 unk2;
+    s16 unk4;
+    s16 id;
+    s16 index;
+};
+struct Menu {
+    u8 pad[0x40];
+    s32 count;
+};
 extern struct Slot D_001CEC20[];
 extern struct Slot D_001CEC60[];
 extern struct Slot D_001CEC80[];

@@ -45,17 +45,23 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     float s;
     int a, b, c, c1;
     if (*burst < 0) {
-        if (++*burst != 0) return;
-        *burst = func_001FA898_r(random_float_between((float)D_L10_00161FAC, (float)D_L10_00161FB0));
+        if (++*burst != 0)
+            return;
+        *burst =
+            func_001FA898_r(random_float_between((float)D_L10_00161FAC, (float)D_L10_00161FB0));
     } else if (FUN_001f9770(burst)) {
-        *burst = -func_001FA898_r(random_float_between((float)D_L10_00161FB4, (float)D_L10_00161FB8));
+        *burst =
+            -func_001FA898_r(random_float_between((float)D_L10_00161FB4, (float)D_L10_00161FB8));
         return;
     }
-    if (32.0f < FUN_001f9b48(D_L10_00167240, pos)) return;
+    if (32.0f < FUN_001f9b48(D_L10_00167240, pos))
+        return;
     qcopy(p, pos);
     p[3] = 2.0f;
-    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0) return;
-    if (!FUN_001f9770(timer)) return;
+    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
+        return;
+    if (!FUN_001f9770(timer))
+        return;
     clear_vector(vel);
     vel[2] = D_L10_00161F68 * D_0015ED6C;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161F70 * D_0015ED6C);
@@ -67,7 +73,9 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     b = func_001FA898_r((float)D_L10_00161F88 * s);
     c = func_001FA898_r((float)D_L10_00161F8C * s);
     c1 = FUN_001fa6e0(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a, b, c, -1);
+    FUN_00218888(pos, vel, acc, c1,
+                 FUN_001fa6e0(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a,
+                 b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FA4, (float)D_L10_00161FA8));
 }
 
@@ -117,12 +125,15 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     float acc[4];
     float s;
     int a, b, c, c1;
-    if (32.0f < FUN_001f9b48(D_L10_00167240, pos)) return;
+    if (32.0f < FUN_001f9b48(D_L10_00167240, pos))
+        return;
     qcopy(p, pos);
     p[2] += 6.0f;
     p[3] = 5.0f;
-    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0) return;
-    if (!FUN_001f9770(timer)) return;
+    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
+        return;
+    if (!FUN_001f9770(timer))
+        return;
     clear_vector(vel);
     vel[2] = D_L10_00161FBC * D_0015ED6C;
     FUN_L00_00257d78(acc, 0.0f, D_L10_00161FC4 * D_0015ED6C);
@@ -134,7 +145,9 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     b = func_001FA898_r((float)D_L10_00161FDC * s);
     c = func_001FA898_r((float)D_L10_00161FE0 * s);
     c1 = FUN_001fa6e0(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), a, b, c, -1);
+    FUN_00218888(pos, vel, acc, c1,
+                 FUN_001fa6e0(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), a,
+                 b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eaa08.s", FUN_L10_002eaa08);
@@ -164,14 +177,17 @@ void FUN_L10_002eacd8(char *m) {
         break;
     case 1:
         if (D_L10_0015F5C4 == 2) {
-            if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 ||
-                D_L10_0016CCE0.mode == 6 || D_L10_0016CCE0.mode == 7) {
+            if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
+                D_L10_0016CCE0.mode == 7) {
                 int v = D_L10_0016CCE0.mode;
                 int i;
                 i = 0;
-                if (v == 3) i = 1;
-                else if (v == 5 || v == 6) i = 2;
-                else if (v == 7) i = 3;
+                if (v == 3)
+                    i = 1;
+                else if (v == 5 || v == 6)
+                    i = 2;
+                else if (v == 7)
+                    i = 3;
                 FUN_L00_002637f8(D_L10_0016CCE0.slot[i]);
             }
         }
@@ -195,8 +211,10 @@ void FUN_L10_002eb6f0(char *m) {
         m[0x20] = 1;
         break;
     case 1:
-        if (r != 0 && *(float *)(r + 0x2C) > 0.0f) hit = 1;
-        if (hit) m[0x20] = 2;
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+            hit = 1;
+        if (hit)
+            m[0x20] = 2;
         break;
     case 2:
         allocate_voice_for_target_entry(0, 0, (int)m);
@@ -221,9 +239,11 @@ void FUN_L10_002eb7e0(char *moby) {
         break;
     case 1:
         if (p != 0) {
-            if (0.0f < *(float *)(p + 0x2C)) ok = 1;
+            if (0.0f < *(float *)(p + 0x2C))
+                ok = 1;
         }
-        if (ok != 0) moby[0x20] = 2;
+        if (ok != 0)
+            moby[0x20] = 2;
         break;
     case 2:
         allocate_voice_for_target_entry(0, 0, (int)moby);

@@ -3,7 +3,7 @@
 
 extern s32 *D_00160F00[4] MACRO_ADDR; /* packet cursor, reloaded per store */
 extern s32 *D_00160F00_store;
-extern s32 D_0013E500[];               /* screen width, height */
+extern s32 D_0013E500[]; /* screen width, height */
 
 #define BASE D_00160F00[0]
 
@@ -26,7 +26,8 @@ void vu1_set_scissor(s32 x0, s32 x1, s32 y0, s32 y1) {
     BASE[5] = 0x10000000;
     BASE[6] = 14;
     BASE[7] = 0;
-    *(volatile long *)(BASE + 8) = (long)x0 | ((long)x1 << 16) | ((long)y0 << 32) | ((unsigned long)y1 << 48);
+    *(volatile long *)(BASE + 8) =
+        (long)x0 | ((long)x1 << 16) | ((long)y0 << 32) | ((unsigned long)y1 << 48);
     BASE[10] = 0x40;
     BASE[11] = 0;
     D_00160F00_store = BASE + 12;

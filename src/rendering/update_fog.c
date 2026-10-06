@@ -13,7 +13,10 @@ struct Display {
 };
 
 /* D_001872D4 is the fog-source selector, a field 0x2D4 into this block. */
-struct FogMode { u8 pad0[0x2D4]; s32 use_level_fog; };
+struct FogMode {
+    u8 pad0[0x2D4];
+    s32 use_level_fog;
+};
 
 extern struct FogMode D_00187000;
 

@@ -32,7 +32,8 @@ s32 sceDbcGetDepNumber(s32 arg0) {
     EnableInterrupts();
     if (((s32 *)D_0015B500)[arg0] == 1) {
         D_0015B080.unk0 = arg0;
-        if (sceSifCallRpc(D_0015B008, 0x80000903, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) < 0) {
+        if (sceSifCallRpc(D_0015B008, 0x80000903, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) <
+            0) {
             debug_print_stub(D_001535B8);
             return 0;
         }

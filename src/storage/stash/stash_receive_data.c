@@ -1,5 +1,10 @@
 #include "types.h"
-struct StashEntry { s32 addr; s32 count; s32 tag; s32 pad; };
+struct StashEntry {
+    s32 addr;
+    s32 count;
+    s32 tag;
+    s32 pad;
+};
 extern struct StashEntry D_001DD1D8[];
 extern u8 D_001DD1A8[];
 extern s32 LookupResourceEntry(s32);

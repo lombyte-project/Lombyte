@@ -44,4 +44,5 @@ void refresh_camera_control_flags(void) {
     }
 }
 
-extern __typeof__(refresh_camera_control_flags) func_001ED940 __attribute__((alias("FUN_001ed940")));
+extern __typeof__(refresh_camera_control_flags) func_001ED940
+    __attribute__((alias("FUN_001ed940")));

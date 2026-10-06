@@ -65,12 +65,18 @@ typedef union {
 extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0");
 extern MaterialMap resident_class_material_maps[] __asm__("D_001B6880");
 
-extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32, s32) __asm__("func_00202D78");
-extern void build_template_resident_render_packet(ResidentRenderPacket *packet, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index) __asm__("FUN_00202fd0");
+extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32,
+                                                 s32) __asm__("func_00202D78");
+extern void build_template_resident_render_packet(ResidentRenderPacket *packet, s32 draw_high,
+                                                  s32 draw_shift, s32 material_base,
+                                                  s32 material_shift,
+                                                  s32 material_index) __asm__("FUN_00202fd0");
 
-void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures, u8 *material_map, s32 class_id) __asm__("FUN_00203338");
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures,
+                                        u8 *material_map, s32 class_id) __asm__("FUN_00203338");
 
-void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures, u8 *material_map, s32 class_id) {
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures,
+                                        u8 *material_map, s32 class_id) {
     s32 group_count;
     s32 class_slot;
     s32 group_index;
@@ -141,15 +147,19 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
     if (header->runtime_table != 0) {
         header->runtime_table = (s32)header + header->runtime_table;
     }
-    for (nested_table_index = 0; nested_table_index < header->nested_table_count; nested_table_index++) {
+    for (nested_table_index = 0; nested_table_index < header->nested_table_count;
+         nested_table_index++) {
         if (header->nested_tables[nested_table_index] != 0) {
-            nested_table = (NestedRenderTable *)((u8 *)header + header->nested_tables[nested_table_index]);
+            nested_table =
+                (NestedRenderTable *)((u8 *)header + header->nested_tables[nested_table_index]);
             header->nested_tables[nested_table_index] = (s32)nested_table;
             if (nested_table->optional_data_14 != 0) {
                 nested_table->optional_data_14 = (s32)header + nested_table->optional_data_14;
             }
-            for (nested_entry_index = 0; nested_entry_index < nested_table->count; nested_entry_index++) {
-                nested_table->entry_offsets[nested_entry_index] = (s32)header + nested_table->entry_offsets[nested_entry_index];
+            for (nested_entry_index = 0; nested_entry_index < nested_table->count;
+                 nested_entry_index++) {
+                nested_table->entry_offsets[nested_entry_index] =
+                    (s32)header + nested_table->entry_offsets[nested_entry_index];
             }
         }
     }
@@ -171,13 +181,18 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
                 material_index = slot_materials->b[material_index];
             }
             if (textures != NULL) {
-                build_indexed_resident_render_packet(packet, textures + material_index * 16, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
+                build_indexed_resident_render_packet(
+                    packet, textures + material_index * 16, packet->draw_high, packet->draw_shift,
+                    packet->material_base, packet->material_shift, material_index);
             } else {
-                build_template_resident_render_packet(packet, packet->draw_high, packet->draw_shift, packet->material_base, packet->material_shift, material_index);
+                build_template_resident_render_packet(packet, packet->draw_high, packet->draw_shift,
+                                                      packet->material_base, packet->material_shift,
+                                                      material_index);
             }
             packet++;
         }
     }
 }
 
-extern __typeof__(prepare_resident_class_render_data) func_00203338 __attribute__((alias("FUN_00203338")));
+extern __typeof__(prepare_resident_class_render_data) func_00203338
+    __attribute__((alias("FUN_00203338")));

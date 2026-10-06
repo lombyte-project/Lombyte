@@ -27,11 +27,16 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
     }
     for (i = 1; i <= D_L00_001B0830_25fcb8[0]; i++) {
         p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_25fcb8[i] << 8);
-        if (p == 0) continue;
-        if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(p + 0x20) != 3) continue;
+        if (p == 0)
+            continue;
+        if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C)
+            continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFE)
+            continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFD)
+            continue;
+        if (*(unsigned char *)(p + 0x20) != 3)
+            continue;
         d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
         if (d < best) {
             m = p;
@@ -41,11 +46,16 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
     }
     for (j = 0; j < 20; j++) {
         p = D_L00_001DD100_25fcb8[j];
-        if (p == 0) continue;
-        if (*(short *)(p + 0xA6) != 0x10E) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(p + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(p + 0xBC) == 0) continue;
+        if (p == 0)
+            continue;
+        if (*(short *)(p + 0xA6) != 0x10E)
+            continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFE)
+            continue;
+        if (*(unsigned char *)(p + 0x20) == 0xFD)
+            continue;
+        if (*(unsigned char *)(p + 0xBC) == 0)
+            continue;
         d = FUN_001f9b80_25fcb8(a + 0x10, p + 0x10);
         if (d < best) {
             m = p;
@@ -88,7 +98,8 @@ void FUN_00214598(void *, void *);
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
     M4_260400 m, n;
     char *o = c338_p(a);
-    if (o == 0) return 0;
+    if (o == 0)
+        return 0;
     FUN_001fa050(m, o);
     FUN_001f9a10(v, b, o + 0x10);
     FUN_001f9a28(v, v, a + 0x10);
@@ -108,14 +119,16 @@ void FUN_001fa050_002604f0(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa298_002604f0(void *, void *) __asm__("FUN_001fa298");
 void FUN_001fa378_002604f0(void *, void *, void *) __asm__("FUN_001fa378");
 void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
-void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
+void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
+                               void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
 int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 t;
     u8 *r = FUN_L00_002603d0_002604f0(b);
-    if (!r) return 0;
+    if (!r)
+        return 0;
     FUN_001f9cf8_002604f0(e, c, b + 0xC0);
     FUN_001f9a10_002604f0(e, e, b + 0x10);
     FUN_001fa050_002604f0(m, d);
@@ -153,7 +166,8 @@ int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     float v[4];
     float w[4];
     float pad[12];
-    if (FUN_L00_002603d0(o) == 0) return 0;
+    if (FUN_L00_002603d0(o) == 0)
+        return 0;
     FUN_001f9a28(v, a, o + 0x10);
     FUN_001fa2d8(m, o + 0xC0);
     FUN_001f9d20(b, v, m);
@@ -187,19 +201,31 @@ void FUN_L00_002607d0(s32 id) {
     n = 0;
     if (D_0013DD40_2607d0[id] == 0) {
         for (i = 0; i < 20; i++) {
-            if (D_0013DD40_2607d0[i]) n++;
+            if (D_0013DD40_2607d0[i])
+                n++;
         }
         D_0013DD40_2607d0[id] = 1;
         D_0013D510_2607d0[n] = id;
-        if (id != *(volatile s32 *)&D_0015ED84_2607d0) FUN_L00_00262d38(id);
+        if (id != *(volatile s32 *)&D_0015ED84_2607d0)
+            FUN_L00_00262d38(id);
     }
 }
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[8]; unsigned short a; char pad2[8]; unsigned short b; char pad3[4]; } ItemRec;
+typedef struct {
+    char pad[8];
+    unsigned short a;
+    char pad2[8];
+    unsigned short b;
+    char pad3[4];
+} ItemRec;
 
-typedef struct { char pad[8]; int t; char pad2[0x40]; } ItemDef;
+typedef struct {
+    char pad[8];
+    int t;
+    char pad2[0x40];
+} ItemDef;
 
 extern ItemDef D_L00_00179AC0[] __attribute__((section(".data")));
 extern ItemRec D_L00_001C40B0[] __attribute__((section(".data")));

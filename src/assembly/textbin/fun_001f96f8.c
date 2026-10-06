@@ -10,8 +10,8 @@ s32 scale_game_frames(s32 frames) __asm__("FUN_001f96f8");
 s32 scale_game_frames(s32 frames) {
     f32 scaled_frames = 0.25f;
     scaled_frames += 0.25f;
-    scaled_frames += (f32) frames * game_time_scale;
-    return (s32) scaled_frames;
+    scaled_frames += (f32)frames * game_time_scale;
+    return (s32)scaled_frames;
 }
 
 extern __typeof__(scale_game_frames) func_001F96F8 __attribute__((alias("FUN_001f96f8")));

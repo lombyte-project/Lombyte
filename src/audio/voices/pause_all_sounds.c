@@ -24,8 +24,7 @@ extern void func_00226E58();
 
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
-void pause_all_sounds(s32 mode)
-{
+void pause_all_sounds(s32 mode) {
     char *g;
     snd_pause_all_sounds_in_group(0x1D);
     InitializeRenderState(0);
@@ -39,37 +38,37 @@ void pause_all_sounds(s32 mode)
     }
     {
         char *g = D_001D5BF0;
-        *(s32 *) (g + 0x134) = *(volatile s32 *) &D_0015ED84 == 0xD || D_0014161B != 0;
+        *(s32 *)(g + 0x134) = *(volatile s32 *)&D_0015ED84 == 0xD || D_0014161B != 0;
     }
     {
         char *g = D_001D5BF0;
-        *(s32 *) (g + 0x138) = D_0015ED84 == 0 || D_0015ED84 == 0xE;
+        *(s32 *)(g + 0x138) = D_0015ED84 == 0 || D_0015ED84 == 0xE;
     }
     {
         char *g = D_001D5BF0;
-        *(s32 *) (g + 0xD8) = D_0015EEA0 != 0 || D_0015EE20 != 0 || *(s32 *) (g + 0xF8) != 0;
+        *(s32 *)(g + 0xD8) = D_0015EEA0 != 0 || D_0015EE20 != 0 || *(s32 *)(g + 0xF8) != 0;
     }
     {
         char *g = D_001D5BF0;
         char *a = D_001CE5B8;
-        *(s32 *) (g + 0xDC) = mode == 0x23;
-        *(char **) (a + 0x38) = *(s32 *) (g + 0xD8) ? D_001CE798 : D_001CE748;
+        *(s32 *)(g + 0xDC) = mode == 0x23;
+        *(char **)(a + 0x38) = *(s32 *)(g + 0xD8) ? D_001CE798 : D_001CE748;
     }
     {
         char *g = D_001D5BF0;
         char *b = D_001CE748;
-        *(char **) (b + 0x3C) = *(s32 *) (g + 0xD8) ? D_001CE798 : D_001CE5B8;
+        *(char **)(b + 0x3C) = *(s32 *)(g + 0xD8) ? D_001CE798 : D_001CE5B8;
     }
     {
         char *g = D_001D5BF0;
         D_0015F604 = 3;
-        *(s32 *) g = mode;
-        *(s32 *) (g + 0xC) = 0;
-        *(s32 *) (g + 0x10) = 0;
-        *(s32 *) (g + 0x110) = 0;
+        *(s32 *)g = mode;
+        *(s32 *)(g + 0xC) = 0;
+        *(s32 *)(g + 0x10) = 0;
+        *(s32 *)(g + 0x110) = 0;
     }
     {
-        s32 m = *(volatile s32 *) &D_0015ED84;
+        s32 m = *(volatile s32 *)&D_0015ED84;
         if (m < 0x13) {
             D_001A0314[0] = m;
         } else {
@@ -81,8 +80,8 @@ void pause_all_sounds(s32 mode)
     func_00226E58();
     {
         char *g = D_001D5BF0;
-        *(s32 *) (g + 0x13C) = 1;
-        *(s32 *) (g + 0x140) = 0;
+        *(s32 *)(g + 0x13C) = 1;
+        *(s32 *)(g + 0x140) = 0;
     }
 }
 

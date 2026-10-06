@@ -44,7 +44,9 @@ void music_start_track_by_id(s32 arg0, s32 arg1, s32 arg2) {
                 D_001516D0.secondary_remaining_time = 48000;
                 D_001516D0.secondary_volume = arg2;
                 D_001516D0.secondary_crossfade_enabled = 0;
-                snd_play_vag_stream_by_loc_ex_cb(handle, 0, 0, 0, (s16) arg2, 0, 2, 0, 0x21, D_002169C0, (u64) ((s64) (((u8 *)&D_001516D0 + 0x50)) << 0x20) >> 0x20);
+                snd_play_vag_stream_by_loc_ex_cb(
+                    handle, 0, 0, 0, (s16)arg2, 0, 2, 0, 0x21, D_002169C0,
+                    (u64)((s64)(((u8 *)&D_001516D0 + 0x50)) << 0x20) >> 0x20);
             }
         }
     }

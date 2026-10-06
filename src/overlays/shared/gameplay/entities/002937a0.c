@@ -14,7 +14,8 @@ extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, in
 extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
+                               int) __asm__("FUN_L00_0025ff38");
 
 void FUN_L08_002d36e0(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -25,7 +26,8 @@ void FUN_L08_002d36e0(char *m) {
     idx = FUN_L00_0025a478(m, FUN_L00_0025a420(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
         *(float *)(d + 0x20) -= dmg;
-        if (*(float *)(d + 0x20) <= 0.0f) idx = 1;
+        if (*(float *)(d + 0x20) <= 0.0f)
+            idx = 1;
         if (idx < 12) {
             if (idx >= 0) {
                 FUN_L00_00257470(m, 0, -1);
@@ -87,7 +89,8 @@ void FUN_L08_002d3d78(char *m) {
     add_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), v);
     *(float *)(s + 0x204) = fast_add_rotations(*(float *)(s + 0x204), *(float *)(s + 0x20C));
     t = *(float *)(s + 0x1C8) + *(float *)(s + 0x208) * fast_sin(*(float *)(s + 0x204));
-    if (*(short *)(s + 0x216)) t += *(float *)(s + 0x200);
+    if (*(short *)(s + 0x216))
+        t += *(float *)(s + 0x200);
     d = t - *(float *)(m + 0x18);
     {
         float l2 = D_0015ED6C * 3.0f;
@@ -95,7 +98,8 @@ void FUN_L08_002d3d78(char *m) {
             d = l2;
         } else {
             l2 = -l2;
-            if (d < l2) d = l2;
+            if (d < l2)
+                d = l2;
         }
     }
     *(float *)(s + 0x48) = d;
@@ -131,25 +135,24 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 extern void *FUN_L00_002dbe20(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void *FUN_L08_002d4050(char *arg)
-{
+void *FUN_L08_002d4050(char *arg) {
     void *result = FUN_L00_002dbe20(arg);
     char *obj = *(char **)(arg + 0x78);
     arg[0x20] = 3;
@@ -169,7 +172,8 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_002d4108;
 extern u8 D_L08_001675C0_002d4108[] __asm__("D_L08_001675C0") __attribute__((section(".data")));
-extern float D_L08_001D1D80_002d4108[4][4] __asm__("D_L08_001D1D80") __attribute__((section(".data")));
+extern float D_L08_001D1D80_002d4108[4][4] __asm__("D_L08_001D1D80")
+    __attribute__((section(".data")));
 extern float D_L08_00161898_002d4108 __asm__("D_L08_00161898") __attribute__((sda));
 extern float D_L08_0016189C_002d4108 __asm__("D_L08_0016189C") __attribute__((sda));
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
@@ -234,7 +238,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
 /* Runs the two per-entry update calls over a 13-entry table. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
-typedef struct { int a, b; } Pair;
+typedef struct {
+    int a, b;
+} Pair;
 
 extern Pair D_L08_001E8348[];
 extern char D_L08_001E8360[];
@@ -249,10 +255,13 @@ void FUN_L08_002f0b40(int a) {
     int i;
     for (i = 0; i < 13; i++) {
         FUN_L08_00258090(D_L08_001E8360, D_L08_001E82A0[i], D_L08_001E2858[i], &D_L08_001E8348[a]);
-        FUN_L00_001fde98(D_L08_001E2858[i], D_L08_001E8268[i], D_L08_001E8310[i], D_L08_001E8360, 1);
+        FUN_L00_001fde98(D_L08_001E2858[i], D_L08_001E8268[i], D_L08_001E8310[i], D_L08_001E8360,
+                         1);
     }
 }
-typedef struct { int a, b; } Pair_002f0c18;
+typedef struct {
+    int a, b;
+} Pair_002f0c18;
 extern Pair_002f0c18 D_L08_00161E10[] __attribute__((section(".sdata")));
 extern int D_L08_001DDF40[];
 extern int D_L08_001E27C8[];
@@ -262,7 +271,8 @@ void FUN_L08_002f0c18(int a) {
     int i;
     for (i = 0; i < 11; i++) {
         FUN_L08_00258090(D_L08_001E8360, D_L08_001E27C8[i], D_L08_001DDF40[i], &D_L08_00161E10[a]);
-        FUN_L00_001fde98(D_L08_001DDF40[i], D_L08_001E2798[i], D_L08_001E2828[i], D_L08_001E8360, 1);
+        FUN_L00_001fde98(D_L08_001DDF40[i], D_L08_001E2798[i], D_L08_001E2828[i], D_L08_001E8360,
+                         1);
     }
 }
 
@@ -277,7 +287,8 @@ extern float ConvertIntegerToFloat(int);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g, float b, float a) {
+void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g, float b,
+                      float a) {
     int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < counts[i]; j++) {
@@ -298,7 +309,8 @@ void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g
                 fb = b * 255.0f;
                 fa = a * ConvertIntegerToFloat(c3);
             }
-            tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) + (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
+            tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) +
+                         (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
         }
     }
 }
@@ -326,15 +338,17 @@ void FUN_L08_002f1158(float *out, float *ph, float a, float b, float scale) {
     out[0] = FUN_001f9de0(ph[0] * 3.1415927f) * scale;
     out[1] = FUN_001f9de0(ph[1] * 3.1415927f) * scale;
 }
-typedef struct { float x; float y; } V2_12a0;
+typedef struct {
+    float x;
+    float y;
+} V2_12a0;
 
 extern V2_12a0 D_L08_001DB500_12a0[] __asm__("D_L08_001DB500");
 extern V2_12a0 D_L08_001E8348_12a0[] __asm__("D_L08_001E8348");
 extern float D_0015ED7C_12a0 __asm__("D_0015ED7C");
 extern float D_0015ED7C_12a0_b __asm__("D_0015ED7C");
 
-void FUN_L08_002f12a0(int idx)
-{
+void FUN_L08_002f12a0(int idx) {
     D_L08_001E8348_12a0[idx].x += D_L08_001DB500_12a0[idx].x * D_0015ED7C_12a0;
     if (D_L08_001E8348_12a0[idx].x > 1.0f) {
         D_L08_001E8348_12a0[idx].x -= 1.0f;
@@ -381,7 +395,8 @@ void FUN_L08_002f5830(char *m) {
     s32 s0, s16, s2;
 
     v = *(char **)(m + 0x78);
-    if (FUN_001f9740((int *)(v + 0x3C)) == 0) return;
+    if (FUN_001f9740((int *)(v + 0x3C)) == 0)
+        return;
     if (*(s32 *)(v + 0x38) != 0) {
         *(s32 *)(v + 0x3C) = D_L08_00161F98;
         FUN_001fa050(e, m + 0x40);
@@ -390,20 +405,25 @@ void FUN_L08_002f5830(char *m) {
         c[1] += random_float_between(-0.05f, 0.05f);
         c[0] += random_float_between(-0.05f, 0.05f);
         random_float_between(-0.17453292f, 0.17453292f);
-        FUN_001f9bf8(v0, e, random_float_between(D_L08_00161F80, D_L08_00161F80 * 1.2f) * D_0015ED6C);
+        FUN_001f9bf8(v0, e,
+                     random_float_between(D_L08_00161F80, D_L08_00161F80 * 1.2f) * D_0015ED6C);
         FUN_001f9bf8(d, e + 4, random_float_between(-D_L08_00161FA4, D_L08_00161FA4) * D_0015ED6C);
         FUN_001f9a10(v0, v0, d);
         v0[2] += random_float_between(D_L08_00161F7C, D_L08_00161F7C * 1.2f) * D_0015ED6C;
         qcopy(v1, v0);
-        FUN_001f9bf8(v1, e, random_float_between(D_L08_00161F88, D_L08_00161F88 * 1.5f) * D_0015ED6C);
+        FUN_001f9bf8(v1, e,
+                     random_float_between(D_L08_00161F88, D_L08_00161F88 * 1.5f) * D_0015ED6C);
         FUN_001f9bf8(d, e + 4, random_float_between(-D_L08_00161FA8, D_L08_00161FA8) * D_0015ED6C);
         FUN_001f9a10(v1, v1, d);
         v1[2] += random_float_between(D_L08_00161F84, D_L08_00161F84 * 1.5f) * D_0015ED6C;
         v0[3] = D_L08_00161F9C;
         v1[3] = D_L08_00161FA0;
-        s0 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
-        s16 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
-        s2 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
+        s0 = truncate_float_to_s32(
+            FUN_001f96b0(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
+        s16 = truncate_float_to_s32(
+            FUN_001f96b0(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
+        s2 = truncate_float_to_s32(
+            FUN_001f96b0(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
         FUN_00218888(c, v0, v1, D_L08_00161F74, D_L08_00161F78, s0, s16, s2, -1);
     } else {
         *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
@@ -413,20 +433,29 @@ void FUN_L08_002f5830(char *m) {
         c[1] += random_float_between(-0.05f, 0.05f);
         c[2] += random_float_between(-0.05f, 0.05f);
         random_float_between(-0.17453292f, 0.17453292f);
-        FUN_001f9bf8(v0, e, random_float_between(*(f32 *)(v + 0x18), *(f32 *)(v + 0x18) * 1.2f) * D_0015ED6C);
-        FUN_001f9bf8(d, e + 4, random_float_between(-*(f32 *)(v + 0x30), *(f32 *)(v + 0x30)) * D_0015ED6C);
+        FUN_001f9bf8(v0, e,
+                     random_float_between(*(f32 *)(v + 0x18), *(f32 *)(v + 0x18) * 1.2f) *
+                         D_0015ED6C);
+        FUN_001f9bf8(d, e + 4,
+                     random_float_between(-*(f32 *)(v + 0x30), *(f32 *)(v + 0x30)) * D_0015ED6C);
         FUN_001f9a10(v0, v0, d);
         v0[2] += random_float_between(*(f32 *)(v + 0x1C), *(f32 *)(v + 0x1C) * 1.2f) * D_0015ED6C;
         qcopy(v1, v0);
-        FUN_001f9bf8(v1, e, random_float_between(*(f32 *)(v + 0x20), *(f32 *)(v + 0x20) * 1.5f) * D_0015ED6C);
-        FUN_001f9bf8(d, e + 4, random_float_between(-*(f32 *)(v + 0x34), *(f32 *)(v + 0x34)) * D_0015ED6C);
+        FUN_001f9bf8(v1, e,
+                     random_float_between(*(f32 *)(v + 0x20), *(f32 *)(v + 0x20) * 1.5f) *
+                         D_0015ED6C);
+        FUN_001f9bf8(d, e + 4,
+                     random_float_between(-*(f32 *)(v + 0x34), *(f32 *)(v + 0x34)) * D_0015ED6C);
         FUN_001f9a10(v1, v1, d);
         v1[2] += random_float_between(*(f32 *)(v + 0x24), *(f32 *)(v + 0x24) * 1.5f) * D_0015ED6C;
         v0[3] = *(f32 *)(v + 0x28);
         v1[3] = *(f32 *)(v + 0x2C);
-        s0 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)*(s32 *)(v + 0x08), (f32)*(s32 *)(v + 0x08) * 1.2f)));
-        s16 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)*(s32 *)(v + 0x0C), (f32)*(s32 *)(v + 0x0C) * 1.2f)));
-        s2 = truncate_float_to_s32(FUN_001f96b0(random_float_between((f32)*(s32 *)(v + 0x10), (f32)*(s32 *)(v + 0x10) * 1.2f)));
+        s0 = truncate_float_to_s32(FUN_001f96b0(
+            random_float_between((f32) * (s32 *)(v + 0x08), (f32) * (s32 *)(v + 0x08) * 1.2f)));
+        s16 = truncate_float_to_s32(FUN_001f96b0(
+            random_float_between((f32) * (s32 *)(v + 0x0C), (f32) * (s32 *)(v + 0x0C) * 1.2f)));
+        s2 = truncate_float_to_s32(FUN_001f96b0(
+            random_float_between((f32) * (s32 *)(v + 0x10), (f32) * (s32 *)(v + 0x10) * 1.2f)));
         FUN_00218888(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
     }
 }

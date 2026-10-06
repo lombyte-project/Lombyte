@@ -45,8 +45,7 @@ extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_L00_00260a88(void *, int, int, int, int);
 
-void FUN_L01_002787a0(char *moby)
-{
+void FUN_L01_002787a0(char *moby) {
     int r = 0;
     if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
         r = 2;
@@ -66,7 +65,8 @@ void FUN_L01_00278e20(char *src, int oClass) {
     if (m != 0) {
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) * (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+        *(float *)(m + 0x2C) = *(float *)(m + 0x2C) *
+                               (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
         qcopy(m + 0x10, src + 0x10);
         qcopy(m + 0x40, src + 0x40);
         *(long *)(m + 0x38) = *(long *)(src + 0x38);

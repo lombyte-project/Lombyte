@@ -78,7 +78,9 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
                 *(short *)(p + 0xA) = d;
                 if (step != 0) {
                     float a = ConvertIntegerToFloat_q((short)d - 1);
-                    *(int *)(p + 4) = FUN_001fa6e0_q(0x603F1008, *(int *)(p + 4), a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                    *(int *)(p + 4) =
+                        FUN_001fa6e0_q(0x603F1008, *(int *)(p + 4),
+                                       a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
                 }
             } else {
                 int d = 5 - step;
@@ -88,7 +90,9 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
                 *(short *)(p + 0xA) = d;
                 if (step != 0) {
                     float a = ConvertIntegerToFloat_q((short)d - 1);
-                    *(int *)(p + 4) = FUN_001fa6e0_q(0x30FFFFFF, *(int *)(p + 4), a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
+                    *(int *)(p + 4) =
+                        FUN_001fa6e0_q(0x30FFFFFF, *(int *)(p + 4),
+                                       a / ConvertIntegerToFloat_q(*(short *)(p + 0xA)));
                 }
             }
             p[1] = 0;

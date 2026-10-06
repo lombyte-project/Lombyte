@@ -1,8 +1,18 @@
 #include "types.h"
 
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-struct GifPaging { struct DmaTag *start; struct DmaTag *end; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
+struct GifPaging {
+    struct DmaTag *start;
+    struct DmaTag *end;
+};
 extern struct TagPtr D_00160F00;
 extern struct GifPaging D_0015F450;
 extern s32 D_0018A2DC[];

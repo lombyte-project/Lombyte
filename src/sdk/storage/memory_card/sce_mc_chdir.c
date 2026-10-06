@@ -44,7 +44,8 @@ s32 sceMcChdir(s32 arg0, s32 arg1, s8 *arg2, s32 arg3) {
         strncpy((s8 *)((u8 *)&D_00159AB0 + 0x14), arg2, 0x3FF);
         *(u8 *)((u8 *)&D_00159AB0 + 0x413) = 0;
         sceSifWriteBackDCache(D_00159FC0, 0x400);
-        temp_2_64 = sceSifCallRpc(&D_00159A00, 0xC, 1, &D_00159AB0, 0x414, D_0015AFC0, 4, &mceStorePwd, arg3);
+        temp_2_64 = sceSifCallRpc(&D_00159A00, 0xC, 1, &D_00159AB0, 0x414, D_0015AFC0, 4,
+                                  &mceStorePwd, arg3);
         if (temp_2_64 == 0) {
             D_00132DA8[0] = 0xC;
         } else {

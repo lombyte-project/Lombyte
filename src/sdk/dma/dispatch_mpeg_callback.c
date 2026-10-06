@@ -1,6 +1,8 @@
 #include "types.h"
 struct MpegContext;
-struct MpegEvent { s32 type; };
+struct MpegEvent {
+    s32 type;
+};
 struct MpegCallback {
     s32 (*function)(struct MpegContext *, struct MpegEvent *, void *);
     void *data;

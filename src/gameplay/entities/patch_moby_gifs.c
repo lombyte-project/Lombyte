@@ -1,7 +1,16 @@
 #include "types.h"
-struct GifEntry { u8 tex[12]; s32 gif; };
-struct MobyClass { u8 pad0[0x20]; struct GifEntry *gifs; };
-struct TexRemap { s16 lo; s16 hi; };
+struct GifEntry {
+    u8 tex[12];
+    s32 gif;
+};
+struct MobyClass {
+    u8 pad0[0x20];
+    struct GifEntry *gifs;
+};
+struct TexRemap {
+    s16 lo;
+    s16 hi;
+};
 extern s32 D_001B6500[];
 extern struct MobyClass *D_001B3200[];
 extern struct TexRemap D_001B5D80[];

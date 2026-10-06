@@ -6,7 +6,9 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001eb0a8/FUN_001eb0a8.s
 #else
 #include "types.h"
 
-typedef struct { f32 x, y, z, w; } Vec4 __attribute__((aligned(16)));
+typedef struct {
+    f32 x, y, z, w;
+} Vec4 __attribute__((aligned(16)));
 
 typedef struct {
     u8 pad0[0x10];
@@ -67,8 +69,7 @@ extern void sound_update(void) __asm__("func_0022CA50");
 
 void update_gameplay_frame(void) __asm__("FUN_001eb0a8");
 
-void update_gameplay_frame(void)
-{
+void update_gameplay_frame(void) {
     Vec4 first_position;
     Vec4 next_position;
     RenderSequenceActor *actor;
@@ -106,9 +107,11 @@ void update_gameplay_frame(void)
         {
             f32 remaining_fraction = 1.0f;
             remaining_fraction -= actor->frame_fraction;
-            func_001F9A68(&first_position, &animation_positions[actor->current_frame], remaining_fraction);
+            func_001F9A68(&first_position, &animation_positions[actor->current_frame],
+                          remaining_fraction);
         }
-        func_001F9A68(&next_position, &animation_positions[actor->next_frame], actor->frame_fraction);
+        func_001F9A68(&next_position, &animation_positions[actor->next_frame],
+                      actor->frame_fraction);
         func_001F9A10(&actor->position, &first_position, &next_position);
         actor->cached_frame = 0xFF;
         func_0020DEF8(actor);
@@ -126,7 +129,11 @@ void update_gameplay_frame(void)
             }
         }
         if (scale_game_frames(0x78) < intro_overlay_timer) {
-            language_intro_overlay_alpha = (s32)(fast_cos((intro_overlay_timer - scale_game_frames(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
+            language_intro_overlay_alpha =
+                (s32)(fast_cos((intro_overlay_timer - scale_game_frames(0x78)) % 60 * 0.10471976f +
+                               -3.1415927f) *
+                      32.0f) +
+                0x60;
         }
         if (D_0013CAE4[0] & 0x840) {
             InitializeTransferCommand();

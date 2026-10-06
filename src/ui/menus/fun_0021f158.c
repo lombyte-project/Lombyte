@@ -3,7 +3,6 @@
 #include "rnc/ui/menus/fun_0021f158.h"
 #include "types.h"
 
-
 #include "rnc/ui/menus/fun_0021f158.h"
 #include "types.h"
 
@@ -14,7 +13,13 @@ extern u8 D_001602B8[];
 extern u8 D_001602C0[];
 extern u8 D_001602D0[];
 extern struct M2c_D_001D5BF4 *D_001D5BF4[];
-struct ImageEntry { u8 pad0[8]; u16 unk8; u8 padA[4]; u16 unkE; u8 pad10[8]; };
+struct ImageEntry {
+    u8 pad0[8];
+    u16 unk8;
+    u8 padA[4];
+    u16 unkE;
+    u8 pad10[8];
+};
 extern struct ImageEntry D_001DFFB0[];
 extern void PackImageDescriptor(s32 *, s32);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -24,7 +29,8 @@ extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 extern s32 sprintf();
 s32 FUN_0021f158(s32 arg0) {
-u8 sp_slot[0x50];    u8 descriptor[0x20];
+    u8 sp_slot[0x50];
+    u8 descriptor[0x20];
     s16 temp_4_20;
     s32 idx;
     s32 temp_17_38;
@@ -50,12 +56,13 @@ u8 sp_slot[0x50];    u8 descriptor[0x20];
         if (temp_17_38 < 0x3E8) {
             temp_4_77 = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
         } else {
-            temp_4_77 = sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
+            temp_4_77 =
+                sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
         }
-        if ((s32) temp_18_40 < 0x3E8) {
-            sprintf(temp_4_77, D_001602A0, (s32) temp_18_40);
+        if ((s32)temp_18_40 < 0x3E8) {
+            sprintf(temp_4_77, D_001602A0, (s32)temp_18_40);
         } else {
-            sprintf(temp_4_77, D_001602D0, (s32) temp_18_40 / 1000, (s32) temp_18_40 % 1000);
+            sprintf(temp_4_77, D_001602D0, (s32)temp_18_40 / 1000, (s32)temp_18_40 % 1000);
         }
     }
     setup_gif_paging(0);

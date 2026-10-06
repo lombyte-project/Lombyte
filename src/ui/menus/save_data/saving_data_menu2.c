@@ -61,7 +61,9 @@ typedef struct {
     s32 stage;
 } Widget;
 
-typedef struct __attribute__((packed)) { s64 v; } Unaligned64;
+typedef struct __attribute__((packed)) {
+    s64 v;
+} Unaligned64;
 
 extern PadState D_0013C940;
 extern SaveState D_0013D290;
@@ -181,7 +183,8 @@ s32 saving_data_menu2(Widget *w) {
         }
     } else if (pad & 0x20) {
         D_0013D290.unkF4 = 0;
-        fl = D_0015EEB4 & ~2; D_0015EEB4 = fl & ~4;
+        fl = D_0015EEB4 & ~2;
+        D_0015EEB4 = fl & ~4;
         load_and_initialize_level_chunk();
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;

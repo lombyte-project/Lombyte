@@ -40,4 +40,5 @@ void update_menu_preview_animation_pose(void *preview) {
     refresh_moby_spatial_bounds_from_basis(moby);
 }
 
-extern __typeof__(update_menu_preview_animation_pose) func_00224FC0 __attribute__((alias("FUN_00224fc0")));
+extern __typeof__(update_menu_preview_animation_pose) func_00224FC0
+    __attribute__((alias("FUN_00224fc0")));

@@ -74,9 +74,17 @@ void update_camera_environment_from_regions(void *position) {
     fog_color_blue = (s32)(positive_blue * positive_weight + negative_blue * negative_weight) >> 8;
     fog_color_red = red;
     fog_color_green = green;
-    fog_near_distance = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
-    fog_far_distance = (region->positive_depth_end * blend + region->negative_depth_end * inverse_blend) * 1024.0f;
-    fog_near_intensity = 255.0f - (region->positive_value_start * blend + region->negative_value_start * inverse_blend) * 255.0f;
-    fog_far_intensity = 255.0f - (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
+    fog_near_distance =
+        (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) *
+        1024.0f;
+    fog_far_distance =
+        (region->positive_depth_end * blend + region->negative_depth_end * inverse_blend) * 1024.0f;
+    fog_near_intensity = 255.0f - (region->positive_value_start * blend +
+                                   region->negative_value_start * inverse_blend) *
+                                      255.0f;
+    fog_far_intensity =
+        255.0f -
+        (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
 }
-extern __typeof__(update_camera_environment_from_regions) func_001EE4B0 __attribute__((alias("FUN_001ee4b0")));
+extern __typeof__(update_camera_environment_from_regions) func_001EE4B0
+    __attribute__((alias("FUN_001ee4b0")));

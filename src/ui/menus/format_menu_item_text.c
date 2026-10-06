@@ -1,7 +1,18 @@
 #include "types.h"
-struct TextEntry { u8 pad0[0xA]; s16 text_id; s16 item; u8 padE[0x1A]; };
-struct TextTable { u8 pad0[0x20]; struct TextEntry *entries; };
-struct Weapon { s32 name; u8 pad4[0x14]; };
+struct TextEntry {
+    u8 pad0[0xA];
+    s16 text_id;
+    s16 item;
+    u8 padE[0x1A];
+};
+struct TextTable {
+    u8 pad0[0x20];
+    struct TextEntry *entries;
+};
+struct Weapon {
+    s32 name;
+    u8 pad4[0x14];
+};
 extern struct TextTable D_001A00F0;
 extern struct Weapon D_001DFFB0[];
 extern char D_0015FDA0[];

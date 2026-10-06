@@ -6,19 +6,20 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s
 #else
 #include "types.h"
 
-#define SCE_GS_SET_TEX0(tbp, width_units_64, psm, width_log2, height_log2, tcc, tfx, cbp, cpsm, csm, csa, cld) \
+#define SCE_GS_SET_TEX0(tbp, width_units_64, psm, width_log2, height_log2, tcc, tfx, cbp, cpsm,    \
+                        csm, csa, cld)                                                             \
     ((u64)(tbp) | ((u64)(width_units_64) << 14) | ((u64)(psm) << 20) | ((u64)(width_log2) << 26) | \
-    ((u64)(height_log2) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) | \
-    ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
-#define SCE_GS_SET_TEX1(lcm, mxl, mmag, mmin, mtba, l, k) \
-    ((u64)(lcm) | ((u64)(mxl) << 2) | ((u64)(mmag) << 5) | ((u64)(mmin) << 6) | \
-    ((u64)(mtba) << 9) | ((u64)(l) << 19) | ((u64)(k) << 32))
-#define SCE_GS_SET_CLAMP(wms, wmt, minu, maxu, minv, maxv) \
-    ((u64)(wms) | ((u64)(wmt) << 2) | ((u64)(minu) << 4) | ((u64)(maxu) << 14) | \
-    ((u64)(minv) << 24) | ((u64)(maxv) << 34))
-#define SCE_GS_SET_MIPTBP1(tbp1, tbw1, tbp2, width_units_128, tbp3, tbw3) \
-    ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(width_units_128) << 34) | \
-    ((u64)(tbp3) << 40) | ((u64)(tbw3) << 54))
+     ((u64)(height_log2) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) |   \
+     ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
+#define SCE_GS_SET_TEX1(lcm, mxl, mmag, mmin, mtba, l, k)                                          \
+    ((u64)(lcm) | ((u64)(mxl) << 2) | ((u64)(mmag) << 5) | ((u64)(mmin) << 6) |                    \
+     ((u64)(mtba) << 9) | ((u64)(l) << 19) | ((u64)(k) << 32))
+#define SCE_GS_SET_CLAMP(wms, wmt, minu, maxu, minv, maxv)                                         \
+    ((u64)(wms) | ((u64)(wmt) << 2) | ((u64)(minu) << 4) | ((u64)(maxu) << 14) |                   \
+     ((u64)(minv) << 24) | ((u64)(maxv) << 34))
+#define SCE_GS_SET_MIPTBP1(tbp1, tbw1, tbp2, width_units_128, tbp3, tbw3)                          \
+    ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(width_units_128) << 34) |    \
+     ((u64)(tbp3) << 40) | ((u64)(tbw3) << 54))
 
 typedef struct {
     s32 texture_index;
@@ -62,20 +63,27 @@ typedef struct {
     f32 scale;
 } TfragRenderHeader;
 
-typedef struct { f32 far_range; f32 middle_range; f32 near_range; } TfragRenderRanges;
+typedef struct {
+    f32 far_range;
+    f32 middle_range;
+    f32 near_range;
+} TfragRenderRanges;
 extern TfragRenderRanges tfrag_render_ranges __asm__("D_00160EA0");
 extern TfragRenderRecord *tfrag_render_records __asm__("D_00160E8C");
-typedef struct { s32 count; } TfragRecordCount;
+typedef struct {
+    s32 count;
+} TfragRecordCount;
 extern TfragRecordCount tfrag_render_record_count __asm__("D_00160E90");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
-void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextureDefinition *textures) __asm__("FUN_002040e0");
+void initialize_tfrag_render_data(
+    TfragRenderHeader *header, ResidentRenderTextureDefinition *textures) __asm__("FUN_002040e0");
 
-void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextureDefinition *textures)
-{
+void initialize_tfrag_render_data(TfragRenderHeader *header,
+                                  ResidentRenderTextureDefinition *textures) {
     TfragRenderRecord *records;
     GifAD *packet;
     ResidentRenderTextureDefinition *texture;
@@ -118,8 +126,11 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
         } while (--remaining != 0);
     }
     for (record_index = 0; record_index < tfrag_render_record_count.count; record_index++) {
-        for (packet_index = 0; packet_index < tfrag_render_records[record_index].count; packet_index++) {
-            packet = (GifAD *)(tfrag_render_records[record_index].data + tfrag_render_records[record_index].material_packet_offset + packet_index * 0x50);
+        for (packet_index = 0; packet_index < tfrag_render_records[record_index].count;
+             packet_index++) {
+            packet = (GifAD *)(tfrag_render_records[record_index].data +
+                               tfrag_render_records[record_index].material_packet_offset +
+                               packet_index * 0x50);
             texture_index = ((TfragMaterialPacket *)packet)->texture_index;
             draw_high = ((TfragMaterialPacket *)packet)->draw_high;
             material_shift = ((TfragMaterialPacket *)packet)->material_shift;
@@ -139,14 +150,17 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
             height_log2 = highest_set_bit_index(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             tex0_word = ((width_units_64 << 14) | (((s64)width_log2 << 26) | ((s64)0x13 << 20))) |
-                ((s64)height_log2 << 30) | ((s64)(texture->clut + gs_block_base) << 37) |
-                ((s64)1 << 34) | (1ULL << 63);
-            tex1_word = (((s64)(texture->draw_control_count - 1) << 2) |
-                ((s64)draw_shift << 6) | 0x20ULL) | ((s64)draw_high << 32);
-            clamp_word = (s64)material_base | ((s64)material_shift << 2) | ((s64)texture_index << 24);
-            mip_word = (width_units_128 << 14) | ((s64)(texture->mip_block_offset_0 + gs_block_base) << 20) |
-                ((s64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
-                ((s64)1 << 34) | ((s64)1 << 54);
+                        ((s64)height_log2 << 30) | ((s64)(texture->clut + gs_block_base) << 37) |
+                        ((s64)1 << 34) | (1ULL << 63);
+            tex1_word =
+                (((s64)(texture->draw_control_count - 1) << 2) | ((s64)draw_shift << 6) | 0x20ULL) |
+                ((s64)draw_high << 32);
+            clamp_word =
+                (s64)material_base | ((s64)material_shift << 2) | ((s64)texture_index << 24);
+            mip_word = (width_units_128 << 14) |
+                       ((s64)(texture->mip_block_offset_0 + gs_block_base) << 20) |
+                       ((s64)(texture->mip_block_offset_1 + gs_block_base) << 40) | ((s64)1 << 34) |
+                       ((s64)1 << 54);
             /* Preserve the interleaved payload words; clear only the runtime
                address word at packet offset 0x40. */
             packet->data = tex0_word;
@@ -161,6 +175,7 @@ void initialize_tfrag_render_data(TfragRenderHeader *header, ResidentRenderTextu
     }
 }
 
-extern __typeof__(initialize_tfrag_render_data) func_002040E0 __attribute__((alias("FUN_002040e0")));
+extern __typeof__(initialize_tfrag_render_data) func_002040E0
+    __attribute__((alias("FUN_002040e0")));
 
 #endif /* NON_MATCHING */

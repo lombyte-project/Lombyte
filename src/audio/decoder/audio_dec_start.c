@@ -22,7 +22,8 @@ void audio_dec_start(struct M2c_arg0 *arg0) {
     temp_2_10 = arg0->unk4C;
     four = 0x400;
     u18 = arg0->unk18;
-    snd_start_movie_sound(arg0->unk48, ((copy = temp_2_10) / 0x400) * four, arg0->unk5C, arg0->unk14, u18);
+    snd_start_movie_sound(arg0->unk48, ((copy = temp_2_10) / 0x400) * four, arg0->unk5C,
+                          arg0->unk14, u18);
     arg0->unk0 = 2;
     /* Allocator-shape pair: GCC removes both stores (code-dead), but the
        read-modify-write sequence drives unk18's register choice to retail's

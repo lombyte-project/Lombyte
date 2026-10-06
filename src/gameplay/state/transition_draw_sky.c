@@ -12,7 +12,7 @@ void transition_draw_sky(void) {
     update_sky_effects();
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
-    vu1_add_g_sregister(0x4E, 0x01000000 | ((s32) D_0015EE88 >> 0xD));
+    vu1_add_g_sregister(0x4E, 0x01000000 | ((s32)D_0015EE88 >> 0xD));
 }
 
 extern __typeof__(transition_draw_sky) func_001E9AB8 __attribute__((alias("FUN_001e9ab8")));

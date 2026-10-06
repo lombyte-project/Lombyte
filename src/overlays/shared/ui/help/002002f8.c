@@ -47,7 +47,8 @@ void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L03_002002f8(void) {
     char *g = (char *)D_0013E533 + 0xE1D;
-    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
+    if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f ||
+        *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
         char *q;
         fade_to_black(scale_game_frames(0x10));
         q = (char *)D_0013E533 + 0xE1D;

@@ -14,8 +14,7 @@ extern float FUN_L09_00277688(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-void FUN_L09_00277758(float *out, float scale)
-{
+void FUN_L09_00277758(float *out, float scale) {
     float angle = random_angle_radians();
     float magnitude = FUN_L09_00277688(scale);
     clear_u64_value(out);

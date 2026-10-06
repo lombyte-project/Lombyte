@@ -26,9 +26,11 @@ void update_menu_preview_animation_transform(PauseMoby *moby) {
     normalize_vector_triplet(moby->basis);
     refresh_moby_spatial_bounds_from_basis(moby);
     if (moby->oclass == 0x1B1) {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address, 6, source_moby_address);
+        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+                        6, source_moby_address);
     } else {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address, 0, source_moby_address);
+        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+                        0, source_moby_address);
     }
     moby->binding_state = 0;
     moby->primary_binding = preview_binding_table;
@@ -36,4 +38,5 @@ void update_menu_preview_animation_transform(PauseMoby *moby) {
     moby->secondary_binding = preview_binding_table;
 }
 
-extern __typeof__(update_menu_preview_animation_transform) func_00224D28 __attribute__((alias("FUN_00224d28")));
+extern __typeof__(update_menu_preview_animation_transform) func_00224D28
+    __attribute__((alias("FUN_00224d28")));

@@ -1,6 +1,9 @@
 #include "types.h"
 #include "eetypes.h"
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
 extern s32 D_001A03A8[];
 extern f32 FUN_001f9b80(Vec4 *, Vec4 *);
 s32 FUN_00207a18(s32 x, s32 y) {

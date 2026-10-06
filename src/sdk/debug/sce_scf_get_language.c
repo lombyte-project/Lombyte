@@ -4,8 +4,7 @@ extern void GetOsdConfigParam(int *config);
 extern int IsT10K(void);
 extern u8 ScfLanguage[1] __asm__("D_001330D4") __attribute__((section(".data")));
 
-int sceScfGetLanguage(void)
-{
+int sceScfGetLanguage(void) {
     int config;
     int language;
 

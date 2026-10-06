@@ -8,39 +8,42 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
 
 typedef struct {
     u8 pad0[0x50];
-    s32 screen_x;      /* 0x50 */
-    s32 screen_y;      /* 0x54 */
-    s32 projected_width;      /* 0x58 */
-    s32 projected_height;      /* 0x5C */
+    s32 screen_x;         /* 0x50 */
+    s32 screen_y;         /* 0x54 */
+    s32 projected_width;  /* 0x58 */
+    s32 projected_height; /* 0x5C */
 } ProjectedPanelFrame;
 
 typedef struct {
     u8 pad0[0x78];
-    ProjectedPanelFrame *frame;   /* 0x78 */
+    ProjectedPanelFrame *frame; /* 0x78 */
 } PanelRenderSlot;
 
 typedef struct RenderPanel RenderPanel;
 struct RenderPanel {
     u8 pad0[4];
-    s32 (*draw)(RenderPanel *);   /* 0x04 */
+    s32 (*draw)(RenderPanel *); /* 0x04 */
     u8 pad8[8];
-    s32 flags;              /* 0x10 */
+    s32 flags; /* 0x10 */
     u8 pad14[4];
-    s32 screen_x;                  /* 0x18 */
-    s32 screen_y;                  /* 0x1C */
-    s32 projected_width;                  /* 0x20 */
-    s32 projected_height;                  /* 0x24 */
+    s32 screen_x;         /* 0x18 */
+    s32 screen_y;         /* 0x1C */
+    s32 projected_width;  /* 0x20 */
+    s32 projected_height; /* 0x24 */
 };
 
 typedef struct {
     u8 pad0[4];
-    u8 *panels;             /* 0x04 */
+    u8 *panels; /* 0x04 */
     u8 pad8[0xD0];
-    s32 special_slot_enabled;                /* 0xD8 */
+    s32 special_slot_enabled; /* 0xD8 */
 } PanelRenderState;
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
@@ -57,12 +60,14 @@ extern void stash_moby_class_dists(void) __asm__("func_0020D218");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 extern void func_00218D10(void);
 extern void func_001F2260(void);
-extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *) __asm__("func_00237A78");
+extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *,
+                                    s32 *) __asm__("func_00237A78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void func_001F7888(s32, s32, s32, f32);
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("func_00200F90");
 extern void begin_draw_frame(void) __asm__("func_001F7978");
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
+                               s64) __asm__("func_001F5450");
 extern void restore_moby_class_dists(void) __asm__("func_0020D248");
 extern void draw_mobys_clean_up(void) __asm__("func_0020D3B0");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -71,8 +76,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 
-void render_level_effects_and_screen_sprites(void)
-{
+void render_level_effects_and_screen_sprites(void) {
     Vec4 frame_vectors[4];
     Vec4 unused[5];
     Vec4 first_corner;
@@ -116,7 +120,8 @@ void render_level_effects_and_screen_sprites(void)
     func_00218D10();
     func_001F2260();
     for (effect_slot_index = 0; effect_slot_index < 14; effect_slot_index++) {
-        if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 && (effect_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
+        if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 &&
+            (effect_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
             draw_moby_list(panel_slots[effect_slot_index], 1);
         }
     }
@@ -143,7 +148,8 @@ void render_level_effects_and_screen_sprites(void)
         qcopy(&frame_vectors[3], (Vec4 *)projected_frame + 3);
         first_corner.q = frame_vectors[0].q;
         opposite_corner.q = frame_vectors[3].q;
-        project_graphics_bounds(&first_corner, &opposite_corner, &projected_width, &projected_height, &screen_x, &screen_y);
+        project_graphics_bounds(&first_corner, &opposite_corner, &projected_width,
+                                &projected_height, &screen_x, &screen_y);
         width_for_panel = projected_width;
         screen_x++;
         screen_y++;
@@ -157,7 +163,8 @@ void render_level_effects_and_screen_sprites(void)
         projected_frame->screen_y = screen_y;
         projected_frame->projected_width = projected_width;
         projected_frame->projected_height = projected_height;
-        append_screen_rect_packet(screen_x + 1, screen_y + 1, screen_x + projected_width - 1, screen_y + projected_height - 1, panel_clear_color, 0);
+        append_screen_rect_packet(screen_x + 1, screen_y + 1, screen_x + projected_width - 1,
+                                  screen_y + projected_height - 1, panel_clear_color, 0);
     }
 
     for (pass = 0; pass < 2; pass++) {
@@ -242,10 +249,12 @@ void render_level_effects_and_screen_sprites(void)
                 }
             } else if (draw_result & 4) {
                 if (frame_width < frame_height) {
-                    texture_left = texture_right / 2 - frame_width * texture_right / (frame_height * 2);
+                    texture_left =
+                        texture_right / 2 - frame_width * texture_right / (frame_height * 2);
                     texture_right -= texture_left;
                 } else {
-                    texture_top = texture_bottom / 2 - frame_height * texture_bottom / (frame_width * 2);
+                    texture_top =
+                        texture_bottom / 2 - frame_height * texture_bottom / (frame_width * 2);
                     texture_bottom -= texture_top;
                 }
             } else if (!(draw_result & 0x10)) {
@@ -253,7 +262,9 @@ void render_level_effects_and_screen_sprites(void)
             }
             vu1_add_g_sregister(0x42, 0x8000000064L);
             vu1_add_g_sregister(0x47, 0x43);
-            draw_textured_quad(frame_x, frame_y, frame_width, frame_height, texture_left, texture_top, texture_right - texture_left, texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
+            draw_textured_quad(frame_x, frame_y, frame_width, frame_height, texture_left,
+                               texture_top, texture_right - texture_left,
+                               texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
         }
         if (pass == 0) {
             restore_moby_class_dists();
@@ -264,13 +275,15 @@ void render_level_effects_and_screen_sprites(void)
     final_slot_index = 0;
     setup_gif_paging(0);
     for (; final_slot_index < 14; final_slot_index++) {
-        if (panel_slot_enabled[final_slot_index] != 0 && (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
+        if (panel_slot_enabled[final_slot_index] != 0 &&
+            (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
             draw_menu_flashing_panel(slots[final_slot_index]);
         }
     }
     do_gif_paging();
 }
 
-extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8 __attribute__((alias("FUN_002196b8")));
+extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8
+    __attribute__((alias("FUN_002196b8")));
 
 #endif /* NON_MATCHING */

@@ -34,14 +34,14 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
         goto block_6;
     }
     sp8 = (u8 *)arg0 + 0x6C0;
-    for (; ; i++) {
+    for (;; i++) {
         var30 = (u8 *)arg0 + 0x6B8;
         base2 = (u8 *)arg0 + 0x5C8;
         idx = i * 4 + sp0 * 0x140;
         jdx = i * 0x1C;
         p = (u8 *)arg0 + (sp0 * 0x140 + 0x590);
-        ((void (*)(u8 *))*(s32 *)((u8 *)arg0 + 0x5B8 + idx))(p + (jdx + 0x48));
-        ((void (*)(u8 *))*(s32 *)(base2 + idx))(p + (jdx + 0xB8));
+        ((void (*)(u8 *)) * (s32 *)((u8 *)arg0 + 0x5B8 + idx))(p + (jdx + 0x48));
+        ((void (*)(u8 *)) * (s32 *)(base2 + idx))(p + (jdx + 0xB8));
         if (i + 1 >= *(s32 *)(sp4 + sp0 * 0x140)) {
             break;
         }
@@ -75,7 +75,8 @@ block_13:
     func_001271D8(*(s32 *)(var30 + sp0 * 0x140), arg0->unk81C);
     return;
 block_16:
-    func_00127178(*(s32 *)(var30 + sp0 * 0x140), arg0->unk81C, *(s32 *)((u8 *)arg0 + sp0 * 0x140 + 0x594));
+    func_00127178(*(s32 *)(var30 + sp0 * 0x140), arg0->unk81C,
+                  *(s32 *)((u8 *)arg0 + sp0 * 0x140 + 0x594));
     return;
 }
 #endif /* NON_MATCHING */

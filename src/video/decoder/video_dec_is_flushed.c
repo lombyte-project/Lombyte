@@ -14,4 +14,5 @@ s32 video_dec_is_flushed(s32 arg0) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(video_dec_is_flushed) videoDecIsFlushed__FP8VideoDec __attribute__((alias("FUN_0023cde0")));
+extern __typeof__(video_dec_is_flushed) videoDecIsFlushed__FP8VideoDec
+    __attribute__((alias("FUN_0023cde0")));

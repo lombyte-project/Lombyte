@@ -7,8 +7,8 @@ struct M2c_arg0 {
     u8 unk53;
     f32 unk54;
     u8 pad_58[0x10];
-    struct M2c_var_4_12 * unk68;
-    struct M2c_temp_16_48 * unk6C;
+    struct M2c_var_4_12 *unk68;
+    struct M2c_temp_16_48 *unk6C;
 };
 
 struct M2c_temp_16_48 {
@@ -43,7 +43,7 @@ f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) {
     }
     u50 = arg0->unk50;
     u51 = arg0->unk51;
-    if ((u8) u51 >= (u8) u50) {
+    if ((u8)u51 >= (u8)u50) {
         temp_16_48 = arg0->unk6C;
         temp_f20_55 = func_001FA6C0(var_4_12->unk4) * (1.0f - arg0->unk54);
         return (temp_f20_55 + (func_001FA6C0(temp_16_48->unk4) * arg0->unk54)) * 0.0625f;

@@ -20,7 +20,6 @@
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
 
-
 /* Only mode is accessed here; the remaining SDK stat fields are opaque.
  * Retail reserves 0x70 bytes before the saved registers. */
 struct RncStatBuffer {
@@ -35,8 +34,7 @@ extern s32 reentrant_syscall_with_two_arguments() __asm__("func_00114000");
 extern s32 func_00118EC0();
 extern s32 __sseek(void *, s32, s32);
 
-void __smakebuf(RncFile *fp)
-{
+void __smakebuf(RncFile *fp) {
     u32 size, couldbetty;
     void *p;
     struct RncStatBuffer st;
@@ -46,7 +44,8 @@ void __smakebuf(RncFile *fp)
         fp->_bf._size = 1;
         return;
     }
-    if ((s16)fp->_file < 0 || reentrant_syscall_with_two_arguments(fp->_data, (s16)fp->_file, &st) < 0) {
+    if ((s16)fp->_file < 0 ||
+        reentrant_syscall_with_two_arguments(fp->_data, (s16)fp->_file, &st) < 0) {
         couldbetty = 0;
         size = 0x400;
         fp->_flags |= 0x800;

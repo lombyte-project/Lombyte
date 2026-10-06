@@ -26,8 +26,7 @@ extern s32 func_00218888(void *, void *, void *, s32, s32, s32, s32, s32, s32);
 
 void FUN_0022f5b0(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
-void FUN_0022f5b0(u8 *m, f32 z)
-{
+void FUN_0022f5b0(u8 *m, f32 z) {
     Vec4 vel;
     Vec4 vel2;
     Vec4 pos;
@@ -49,7 +48,8 @@ void FUN_0022f5b0(u8 *m, f32 z)
         a = scale_game_frames(4);
         b = scale_game_frames(4);
         c = scale_game_frames(4);
-        func_00218888(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, a, b, c + random_integer_below(scale_game_frames(4)), -1);
+        func_00218888(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, a, b,
+                      c + random_integer_below(scale_game_frames(4)), -1);
     }
 }
 

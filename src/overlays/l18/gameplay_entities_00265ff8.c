@@ -35,7 +35,8 @@ void FUN_L18_00265ff8(Level18Moby *moby, float scale) {
     if (effect == 0) {
         return;
     }
-    alpha = truncate_float_to_s32(FUN_001f9b48(D_0013E533 + 0xE9D, moby->position) * 8.0f * scale) - 1;
+    alpha =
+        truncate_float_to_s32(FUN_001f9b48(D_0013E533 + 0xE9D, moby->position) * 8.0f * scale) - 1;
     if (alpha >= 256) {
         alpha = 255;
     } else if (alpha < 0) {

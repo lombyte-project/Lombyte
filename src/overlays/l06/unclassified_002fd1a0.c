@@ -53,7 +53,8 @@ void FUN_L06_002fda30(char *m) {
                 short *p = list;
                 char *pos = m + 0x10;
                 do {
-                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8), pos)) {
+                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8),
+                                         pos)) {
                         found = 1.0f;
                         break;
                     }
@@ -73,8 +74,7 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".s
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002ffc38(int idx)
-{
+void FUN_L06_002ffc38(int idx) {
     short *p = D_L06_001ABFC0_u[idx];
     if (p != 0) {
         do {
@@ -203,7 +203,8 @@ void FUN_L06_00302fd8(char *m) {
         *(int *)(d + 0x9C) = 4;
         break;
     }
-    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 && (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
+    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 &&
+        (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
         FUN_L00_00203908(0x177A, 0x53);
         *(int *)(d + 0x9C) = -1;
         return;
@@ -233,8 +234,7 @@ extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L06_00304028(char *moby)
-{
+void FUN_L06_00304028(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
@@ -256,8 +256,7 @@ void FUN_L06_003047b8(char *arg) {
         allocate_voice_for_target_entry(0, 0, arg);
     }
 }
-s32 FUN_L06_003047f8(const u8 *moby)
-{
+s32 FUN_L06_003047f8(const u8 *moby) {
     u32 state = moby[0x20];
 
     if (state == 7) {
@@ -356,7 +355,9 @@ void FUN_L06_00305170(char *m) {
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
-    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) | ((long)*(int *)&D_L06_001621C8 << 4) | ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
+    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) |
+                                  ((long)*(int *)&D_L06_001621C8 << 4) |
+                                  ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
     m0 = mat[0];
     sp = s;

@@ -1,7 +1,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/cmd_sem_init/cmd_sem_init.s", cmd_sem_init);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/cmd_sem_init/cmd_sem_init.s",
+            cmd_sem_init);
 #else
 #include "types.h"
 struct Sema {

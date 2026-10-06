@@ -18,4 +18,5 @@ void initialize_alpha_lookup_table(void) {
     }
 }
 
-extern __typeof__(initialize_alpha_lookup_table) func_001F7A30 __attribute__((alias("FUN_001f7a30")));
+extern __typeof__(initialize_alpha_lookup_table) func_001F7A30
+    __attribute__((alias("FUN_001f7a30")));

@@ -43,7 +43,10 @@ void FUN_L00_0028e180(unsigned char *m) {
     if (m[0x20] != 0x2A) {
         if (m[0x31] != 0) {
             m[0xBC] += 2;
-            v = (int)(fast_cos(ConvertIntegerToFloat((unsigned char)m[0xBC] - 0x80) * 0.024543693f) * 50.0f) + 0x96;
+            v = (int)(fast_cos(ConvertIntegerToFloat((unsigned char)m[0xBC] - 0x80) *
+                               0.024543693f) *
+                      50.0f) +
+                0x96;
             if (*(short *)(m + 0xA6) == 0x215) {
                 *(int *)(m + 0x90) = (v >> 1) | (v << 8) | (v << 16);
             } else {

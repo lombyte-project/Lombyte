@@ -1,6 +1,12 @@
 #include "types.h"
-struct Manip { u8 pad0[8]; struct Manip *next; };
-struct Moby { u8 pad0[0x64]; struct Manip *manips; };
+struct Manip {
+    u8 pad0[8];
+    struct Manip *next;
+};
+struct Moby {
+    u8 pad0[0x64];
+    struct Manip *manips;
+};
 extern void FillTransferWords(void *, s32, s32);
 void detach_manipulator(struct Moby *moby, struct Manip *manip) __asm__("FUN_0020cb88");
 

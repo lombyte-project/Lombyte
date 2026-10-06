@@ -54,7 +54,7 @@ int FUN_00222768(char *arg0) {
             box[5] = ypos;
             box[11] = (*(int *)(arg0 + 0x3C) >> 4) & 0xF;
             font_print_window_regular(box, 0x80FFA888L,
-                          get_help_message_text((*(int **)(arg0 + 0x34))[i]), -1);
+                                      get_help_message_text((*(int **)(arg0 + 0x34))[i]), -1);
             ypos += box[7];
             ypos += 10;
         }
@@ -67,7 +67,8 @@ int FUN_00222768(char *arg0) {
     case 15:
     case 19:
         box[5] = *(int *)(arg0 + 0x1C) + 0x20;
-        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(arg0 + 0x34)), -1);
+        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(arg0 + 0x34)),
+                                  -1);
         break;
     case 0:
         break;

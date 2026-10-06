@@ -13,22 +13,28 @@ float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 float FUN_L00_0025bb38(int n, float x, float y) {
     float d = fast_subtract_rotations(x, y);
-    if (n == 0 || d * (float)n > 0.0f) return d;
-    if (AbsoluteFloat(d) <= 0.0017453292f) return 0.0f;
-    if (d > 0.0f) return d - 6.2831855f;
+    if (n == 0 || d * (float)n > 0.0f)
+        return d;
+    if (AbsoluteFloat(d) <= 0.0017453292f)
+        return 0.0f;
+    if (d > 0.0f)
+        return d - 6.2831855f;
     return d + 6.2831855f;
 }
 extern float bb38_fif(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
     float r = bb38_fif(a, o, *p);
-    if (lim < r) r = lim;
-    else if (r < -lim) r = -lim;
+    if (lim < r)
+        r = lim;
+    else if (r < -lim)
+        r = -lim;
     *p = fast_add_rotations(*p, r);
     bb38_fif(a, o, *p);
 }
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
-extern void FUN_L00_0025b798_0025bc98(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
+extern void FUN_L00_0025b798_0025bc98(float *, float, float, float,
+                                      float) __asm__("FUN_L00_0025b798");
 extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
@@ -37,7 +43,8 @@ float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, flo
     if (n == 2) {
         if ((0.0f < x && *p < 0.0f) || (x < 0.0f && 0.0f < *p)) {
             n = 1;
-            if (x < 0.0f) n = -1;
+            if (x < 0.0f)
+                n = -1;
         } else {
             n = 0;
         }
@@ -108,9 +115,11 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
     unsigned int y = truncate_float_to_s32(g * 255.0f) & 0xFF;
     unsigned int z = truncate_float_to_s32(b * 255.0f) & 0xFF;
     unsigned int w = truncate_float_to_s32(a * 255.0f);
-    {unsigned int q_ = x | (y << 8);
-    q_ |= (z << 16);
-    return q_ | (w << 24);}
+    {
+        unsigned int q_ = x | (y << 8);
+        q_ |= (z << 16);
+        return q_ | (w << 24);
+    }
 }
 #define NOT_SDA
 
@@ -120,9 +129,24 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
 
 void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
     int x, y;
-    if (mask & 1) { x = *b; y = *a; *a = x; *b = y; }
-    if (mask & 2) { x = *c; y = *b; *b = x; *c = y; }
-    if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
+    if (mask & 1) {
+        x = *b;
+        y = *a;
+        *a = x;
+        *b = y;
+    }
+    if (mask & 2) {
+        x = *c;
+        y = *b;
+        *b = x;
+        *c = y;
+    }
+    if (mask & 4) {
+        x = *a;
+        y = *c;
+        *c = x;
+        *a = y;
+    }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
 
@@ -132,7 +156,8 @@ unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     int v[3];
     unsigned a;
     unsigned t;
-    if (mask == 0) return c;
+    if (mask == 0)
+        return c;
     v[0] = c & 0xFF;
     v[1] = ((int)(c & 0xFF00)) >> 8;
     v[2] = (c >> 16) & 0xFF;

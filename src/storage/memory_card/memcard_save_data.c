@@ -92,11 +92,10 @@ int memcard_save_data(int slot, int flags) {
             *(int *)(q + 0xE0) = *(int *)(q + 0xC0);
         }
     }
-done:
-    {
-        char *r = D_0013D290;
-        return *(int *)(r + 0xDC) == 0xF;
-    }
+done: {
+    char *r = D_0013D290;
+    return *(int *)(r + 0xDC) == 0xF;
+}
 }
 
 extern __typeof__(memcard_save_data) func_0020B178 __attribute__((alias("FUN_0020b178")));

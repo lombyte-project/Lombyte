@@ -2,7 +2,12 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { s16 a; s16 b; s32 c; s32 d; } E_27adb0;
+typedef struct {
+    s16 a;
+    s16 b;
+    s32 c;
+    s32 d;
+} E_27adb0;
 extern s32 D_0015EE30;
 extern u8 D_00141E08[];
 extern u16 D_L00_00179452[];

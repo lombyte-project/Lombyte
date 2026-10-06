@@ -66,15 +66,21 @@ float FUN_001fa580_00258110(float, float) __asm__("FUN_001fa580");
 float FUN_L00_00258110(float *p, float a, float b, float c, float d, float lim) {
     float t = FUN_001fa5c8_00258110(b, a);
     float k = t / 0.15707964f;
-    if (k > 1.0f) k = 1.0f;
-    else if (k < -1.0f) k = -1.0f;
+    if (k > 1.0f)
+        k = 1.0f;
+    else if (k < -1.0f)
+        k = -1.0f;
     *p = *p + (c * k - d * *p);
     if (lim != 0.0f) {
-        if (*p > lim) *p = lim;
-        else if (*p < -lim) *p = -lim;
+        if (*p > lim)
+            *p = lim;
+        else if (*p < -lim)
+            *p = -lim;
     }
-    if (*p > FUN_001f99c0_00258110(t)) *p = FUN_001f99c0_00258110(t);
-    else if (*p < -FUN_001f99c0_00258110(t)) *p = -FUN_001f99c0_00258110(t);
+    if (*p > FUN_001f99c0_00258110(t))
+        *p = FUN_001f99c0_00258110(t);
+    else if (*p < -FUN_001f99c0_00258110(t))
+        *p = -FUN_001f99c0_00258110(t);
     return FUN_001fa580_00258110(a, *p);
 }
 extern float FUN_001f99c0(float);
@@ -83,8 +89,10 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
     float r = fast_subtract_rotations(t, *(float *)(m + 0x48));
     float k = r / 0.15707964f;
     float v;
-    if (1.0f < k) k = 1.0f;
-    else if (k < -1.0f) k = -1.0f;
+    if (1.0f < k)
+        k = 1.0f;
+    else if (k < -1.0f)
+        k = -1.0f;
     v = *ptr + (b * k - c * (*ptr));
     *ptr = v;
     if (limit != 0.0f) {
@@ -103,8 +111,15 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 }
 #include "eetypes.h"
 #include "qcopy.h"
-typedef union { u128 q; f32 f[4]; } V002583f0;
-typedef struct { u8 pad[0x18]; s32 x18; s32 x1c; } G002583f0;
+typedef union {
+    u128 q;
+    f32 f[4];
+} V002583f0;
+typedef struct {
+    u8 pad[0x18];
+    s32 x18;
+    s32 x1c;
+} G002583f0;
 extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
@@ -114,15 +129,22 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     t0.f[2] += up;
     qcopy(&t1, pos);
     t1.f[2] -= down;
-    if (t1.f[2] < 0.0f) t1.f[2] = 0.0f;
+    if (t1.f[2] < 0.0f)
+        t1.f[2] = 0.0f;
     r = FUN_001efa68(&t0, &t1, 0x22, a, 0);
-    if (D_L00_00173E40_u.x1c < 0) r = 0;
-    if (flag && D_L00_00173E40_u.x18 != 0) r = 0;
+    if (D_L00_00173E40_u.x1c < 0)
+        r = 0;
+    if (flag && D_L00_00173E40_u.x18 != 0)
+        r = 0;
     return r;
 }
 typedef int u128_258490 __attribute__((mode(TI)));
-typedef union { u128_258490 q; float f[4]; } V_258490;
-extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+typedef union {
+    u128_258490 q;
+    float f[4];
+} V_258490;
+extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
+    __attribute__((section(".data")));
 extern V_258490 D_L00_00173E60_258490 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern V_258490 D_L00_00173E70_258490 __asm__("D_L00_00173E70") __attribute__((section(".data")));
 extern float FUN_L00_00259710_258490(void *) __asm__("FUN_L00_00259710");
@@ -138,7 +160,8 @@ extern float FUN_001f9e90_258490(float, float) __asm__("FUN_001f9e90");
 extern void FUN_00125180_258490(void *, void *) __asm__("FUN_00125180");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) {
+int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim,
+                     float slope) {
     V_258490 d;
     V_258490 n;
     V_258490 a;
@@ -203,7 +226,8 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
                 break;
             }
-            ang = FUN_001f9e90_258490(FUN_001f9b80_258490(pos, q60), *(float *)(q40 + 0x28) - pos->f[2]);
+            ang = FUN_001f9e90_258490(FUN_001f9b80_258490(pos, q60),
+                                      *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
                 qcopy(pos, &D_L00_00173E70_258490);
                 ok = 0;
@@ -234,11 +258,16 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
-typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+typedef struct {
+    float a[4];
+} Vs __attribute__((aligned(16)));
 
 typedef int u128_94C8 __attribute__((mode(TI)));
 
-typedef union { u128_94C8 q; float f[4]; } V_94C8;
+typedef union {
+    u128_94C8 q;
+    float f[4];
+} V_94C8;
 
 extern V_94C8 D_L00_00173E70;
 extern float FUN_001f9e90(float, float);
@@ -254,7 +283,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) __asm__("FUN_L00_00258830");
+int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b,
+                       float c) __asm__("FUN_L00_00258830");
 int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
     Vs t0;
     Vs t1;
@@ -300,7 +330,8 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
         if (D_L00_00173E40[7] > 0) {
             float g;
             r |= 2;
-            g = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            g = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48),
+                             vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (g > 0.5f) {
                 r |= 4;
             }
@@ -398,11 +429,15 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec *out, f32 f) {
     len = FUN_001f9b20(&d);
     save.q = m->pos.q;
     t = sp * len;
-    if (sp < t) t = sp;
+    if (sp < t)
+        t = sp;
     c->f10 = c->f10 + t;
-    if (len < c->f10 * 10.0f) c->f10 = c->f10 - c->f20 * c->f10;
-    if (lim < c->f10) c->f10 = lim;
-    else if (c->f10 < -lim) c->f10 = -lim;
+    if (len < c->f10 * 10.0f)
+        c->f10 = c->f10 - c->f20 * c->f10;
+    if (lim < c->f10)
+        c->f10 = lim;
+    else if (c->f10 < -lim)
+        c->f10 = -lim;
     if (c->i38 & 4) {
         d.f[0] = FUN_001f9dc8_c(c->f4C) * c->f10;
         d.f[1] = FUN_001f9de0(c->f4C) * c->f10;
@@ -430,15 +465,20 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec *out, f32 f) {
                 q.f[2] = m->pos.f[2] - c->f30;
                 if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
                     h2 = g->f28;
-                    if (!(0.5f <= FUN_001f9e90(g->v40.f[2], FUN_001f9b20(&g->v40)))) goto done;
+                    if (!(0.5f <= FUN_001f9e90(g->v40.f[2], FUN_001f9b20(&g->v40))))
+                        goto done;
                     mask = 0x22;
-                    if (!(c->i38 & 8)) goto done;
-                    if (!(h2 < lim)) goto done;
+                    if (!(c->i38 & 8))
+                        goto done;
+                    if (!(h2 < lim))
+                        goto done;
                 } else {
                     mask = 0x22;
-                    if (!(c->i38 & 8)) goto done;
+                    if (!(c->i38 & 8))
+                        goto done;
                 }
-                if (h1 < lim) mask = 8;
+                if (h1 < lim)
+                    mask = 8;
             }
         }
     } else {
@@ -449,10 +489,12 @@ done:
         l2 = FUN_001f9b20(&d);
         FUN_001f9a68_c(&p, &d, 1.0f / l2);
         r = FUN_L00_00258ad0_c(m, &d, c->f04, c->i00, c->f30, c->i38);
-        if (r & 2) c->f18 = D_0015ED60 * -0.01f;
+        if (r & 2)
+            c->f18 = D_0015ED60 * -0.01f;
         if (r & 1) {
             mask |= 1;
-            if (d.f[0] * p.f[0] + d.f[1] * p.f[1] < l2 * 0.2f) mask |= 2;
+            if (d.f[0] * p.f[0] + d.f[1] * p.f[1] < l2 * 0.2f)
+                mask |= 2;
             h = probe_ground_height(&m->pos, 0, 0.5f);
             if (c->f08 < save.f[2] - h || c->f0C < h - save.f[2]) {
                 mask |= 0x22;
@@ -461,35 +503,44 @@ done:
         }
         qcopy(out, &d);
     } else {
-        if ((c->i38 ^ 1) & 1) c->f18 = D_0015ED60 * -0.01f;
+        if ((c->i38 ^ 1) & 1)
+            c->f18 = D_0015ED60 * -0.01f;
     }
-    if (len < c->f2C) mask |= 4;
+    if (len < c->f2C)
+        mask |= 4;
     return mask;
 }
 void FUN_001f99f8_259028(void *) __asm__("FUN_001f99f8");
 float FUN_001f9b48_259028(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
-void FUN_L00_00258278_259028(unsigned char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
+void FUN_L00_00258278_259028(unsigned char *, float *, float, float, float,
+                             float) __asm__("FUN_L00_00258278");
 float FUN_001fa688_259028(float, float) __asm__("FUN_001fa688");
 int FUN_001f9740_259028(void *) __asm__("FUN_001f9740");
 int FUN_001f96f8_259028(int) __asm__("FUN_001f96f8");
-int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *, float) __asm__("FUN_L00_00258b50");
+int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
+                            float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     int r = 0;
     float a, d;
     FUN_001f99f8_259028(out);
-    if (FUN_001f9b48_259028(m + 0x10, tgt) < *(float *)(c + 0x2C)) r = 4;
+    if (FUN_001f9b48_259028(m + 0x10, tgt) < *(float *)(c + 0x2C))
+        r = 4;
     a = FUN_001f9e90_259028(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
-    FUN_L00_00258278_259028(m, (float *)(c + 0x14), a, *(float *)(c + 0x3C), *(float *)(c + 0x40), *(float *)(c + 0x44));
+    FUN_L00_00258278_259028(m, (float *)(c + 0x14), a, *(float *)(c + 0x3C), *(float *)(c + 0x40),
+                            *(float *)(c + 0x44));
     d = FUN_001fa688_259028(a, *(float *)(m + 0x48));
-    if (*(float *)(c + 0x28) <= d) r |= 0x10;
+    if (*(float *)(c + 0x28) <= d)
+        r |= 0x10;
     FUN_001f9740_259028(c + 0x48);
     if (d < *(float *)(c + 0x28) && *(int *)(c + 0x48) < FUN_001f96f8_259028(4)) {
         *(int *)(c + 0x48) = FUN_001f96f8_259028(4);
     }
     if (*(int *)(c + 0x48) != 0) {
-        r |= FUN_L00_00258b50_259028(m, c, tgt, out, (*(float *)(c + 0x28) - d) / *(float *)(c + 0x28));
-        if (0.1f < d) r &= ~2;
+        r |= FUN_L00_00258b50_259028(m, c, tgt, out,
+                                     (*(float *)(c + 0x28) - d) / *(float *)(c + 0x28));
+        if (0.1f < d)
+            r &= ~2;
     }
     return r;
 }
@@ -504,7 +555,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002592b8.s", FUN_L00_002592b8);
 int FUN_L00_00259430(int *p, int b) {
     int w = *p;
     int v = (w >> 24) - b;
-    if (v < 0) v = 0;
+    if (v < 0)
+        v = 0;
     *p = (w & 0xFFFFFF) | (v << 24);
     return v == 0;
 }
@@ -559,5 +611,10 @@ int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
         *r1 = t;
         *r0 = (-b - s) / (a + a);
     }
-    { int r = 0; if (0.0f < d) r = 2; return r; }
+    {
+        int r = 0;
+        if (0.0f < d)
+            r = 2;
+        return r;
+    }
 }

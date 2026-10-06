@@ -2,45 +2,47 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_load_wad/FUN_001ea830.s", FUN_001ea830);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/gameplay/state/transition_load_wad/FUN_001ea830.s",
+    FUN_001ea830);
 #else
 #include "types.h"
 
 typedef struct {
-    s32 x0;             /* 0x00 */
-    s32 data;           /* 0x04 */
-    s32 x8;             /* 0x08 */
-    s32 xC;             /* 0x0C */
-    s32 x10;            /* 0x10 */
-    s32 x14;            /* 0x14 */
-    s32 n18;            /* 0x18 */
-    s32 x1C;            /* 0x1C */
-    s32 n20;            /* 0x20 */
-    s32 x24;            /* 0x24 */
-    s32 n28;            /* 0x28 */
-    s32 x2C;            /* 0x2C */
-    s32 n30;            /* 0x30 */
-    s32 x34;            /* 0x34 */
-    s32 n38;            /* 0x38 */
-    s32 x3C;            /* 0x3C */
-    s32 n40;            /* 0x40 */
-    s32 x44;            /* 0x44 */
-    s32 n48;            /* 0x48 */
-    s32 x4C;            /* 0x4C */
-    s32 x50;            /* 0x50 */
-    s32 x54;            /* 0x54 */
-    s32 x58;            /* 0x58 */
-    s32 x5C;            /* 0x5C */
-    s32 x60;            /* 0x60 */
-    s32 x64;            /* 0x64 */
-    s32 x68;            /* 0x68 */
-    s32 x6C;            /* 0x6C */
-    s32 x70;            /* 0x70 */
-    s32 x74;            /* 0x74 */
-    s32 x78;            /* 0x78 */
-    s32 x7C;            /* 0x7C */
-    s32 x80;            /* 0x80 */
-    s32 x84;            /* 0x84 */
+    s32 x0;   /* 0x00 */
+    s32 data; /* 0x04 */
+    s32 x8;   /* 0x08 */
+    s32 xC;   /* 0x0C */
+    s32 x10;  /* 0x10 */
+    s32 x14;  /* 0x14 */
+    s32 n18;  /* 0x18 */
+    s32 x1C;  /* 0x1C */
+    s32 n20;  /* 0x20 */
+    s32 x24;  /* 0x24 */
+    s32 n28;  /* 0x28 */
+    s32 x2C;  /* 0x2C */
+    s32 n30;  /* 0x30 */
+    s32 x34;  /* 0x34 */
+    s32 n38;  /* 0x38 */
+    s32 x3C;  /* 0x3C */
+    s32 n40;  /* 0x40 */
+    s32 x44;  /* 0x44 */
+    s32 n48;  /* 0x48 */
+    s32 x4C;  /* 0x4C */
+    s32 x50;  /* 0x50 */
+    s32 x54;  /* 0x54 */
+    s32 x58;  /* 0x58 */
+    s32 x5C;  /* 0x5C */
+    s32 x60;  /* 0x60 */
+    s32 x64;  /* 0x64 */
+    s32 x68;  /* 0x68 */
+    s32 x6C;  /* 0x6C */
+    s32 x70;  /* 0x70 */
+    s32 x74;  /* 0x74 */
+    s32 x78;  /* 0x78 */
+    s32 x7C;  /* 0x7C */
+    s32 x80;  /* 0x80 */
+    s32 x84;  /* 0x84 */
 } WadHeader;
 
 typedef struct {
@@ -72,9 +74,9 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x14];
-    u8 *hdr;            /* 0x14 */
-    s32 x18;            /* 0x18 */
-    s32 x1C;            /* 0x1C */
+    u8 *hdr; /* 0x14 */
+    s32 x18; /* 0x18 */
+    s32 x1C; /* 0x1C */
 } LoadState;
 
 typedef struct {
@@ -276,7 +278,8 @@ void transition_load_wad(void) {
     D_00160F4C = 0;
     D_001603CC = 0;
     for (i = 0; i < hdr->n18; i++) {
-        register_moby_class(c20->offset != 0 ? data + c20->offset : 0, (u8 *)hdr + hdr->x3C, c20->x10, c20->x4);
+        register_moby_class(c20->offset != 0 ? data + c20->offset : 0, (u8 *)hdr + hdr->x3C,
+                            c20->x10, c20->x4);
         c20++;
     }
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x24);
@@ -286,7 +289,8 @@ void transition_load_wad(void) {
     }
     c30 = (WadClass30 *)((u8 *)hdr + hdr->x2C);
     for (i = 0; i < hdr->n28; i++) {
-        register_shrub_render_class(data + c30->offset, (u8 *)hdr + hdr->x4C, c30->x10, c30->x20, c30->x4);
+        register_shrub_render_class(data + c30->offset, (u8 *)hdr + hdr->x4C, c30->x10, c30->x20,
+                                    c30->x4);
         c30++;
     }
     D_0015F460 = (s32)(data + hdr->x68);

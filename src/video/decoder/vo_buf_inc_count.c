@@ -1,6 +1,15 @@
 #include "types.h"
-typedef struct { s32 status; u8 pad4[0x138BC]; } VoData;
-typedef struct { s32 pad0; VoData *data; volatile s32 write; volatile s32 count; s32 size; } VoBuf;
+typedef struct {
+    s32 status;
+    u8 pad4[0x138BC];
+} VoData;
+typedef struct {
+    s32 pad0;
+    VoData *data;
+    volatile s32 write;
+    volatile s32 count;
+    s32 size;
+} VoBuf;
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
 void vo_buf_inc_count(VoBuf *f) __asm__("FUN_0023d210");

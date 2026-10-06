@@ -23,8 +23,8 @@ extern s32 _nextStartCode();
 extern s32 _peepBit();
 extern s32 _sliceB();
 
-s32 _sliceA0(struct MpegSliceDecoder *decoder, s32 unused, s32 *macroblock_address,
-             s32 *increment, volatile struct MpegMotionState *motion) {
+s32 _sliceA0(struct MpegSliceDecoder *decoder, s32 unused, s32 *macroblock_address, s32 *increment,
+             volatile struct MpegMotionState *motion) {
     s32 slice_extension;
     s32 start_code;
     s32 address_increment;
@@ -44,8 +44,10 @@ s32 _sliceA0(struct MpegSliceDecoder *decoder, s32 unused, s32 *macroblock_addre
         _Error(decoder, D_00153828, address_increment);
         return 1;
     }
-    *macroblock_address = (((((slice_extension << 7) + (start_code & 0xFF)) - 1)
-                              * decoder->macroblock_width) + address_increment) - 1;
+    *macroblock_address =
+        (((((slice_extension << 7) + (start_code & 0xFF)) - 1) * decoder->macroblock_width) +
+         address_increment) -
+        1;
     *increment = 1;
     decoder->slice_active = 1;
     motion->values[2] = 0;

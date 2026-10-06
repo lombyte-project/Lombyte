@@ -47,22 +47,33 @@ extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern float D_0013F3D0[];
 extern float D_L03_00166F30[];
-extern float FUN_L00_001eb328(void *,float,float,float,float,float);
-extern void FUN_L03_0024e6f8(float,float *,float *,float *,int);
+extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern void FUN_L03_0024e6f8(float, float *, float *, float *, int);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L03_002e8730(char *m) {
- float position[4] __attribute__((aligned(16))); float direction[4] __attribute__((aligned(16)));
- char *data=*(char **)(m+0x70); float *height=(float *)(data+0x10); char *result; float angle,t;
- qcopy(position,D_0013F3D0); position[2]+=height[19];
- result=m+0x40; subtract_vector_xyz(direction,position,m+0x30); normalize_vector_xyz(direction,direction,1.0f);
- angle=approximate_arcsine(dot_vectors_xyz(direction,m));
- t=FUN_L00_001eb328(data,0.0f,1.57079637f-angle,*(float *)(data+4),*(float *)(data+8),*(float *)(data+12));
- FUN_L03_0024e6f8(t,(float *)m,(float *)result,direction,1); normalize_vector_xyz(result,m,1.0f);
- qcopy(m,result);
- cross_vectors_xyz(m+0x10,m,D_L03_00166F30); normalize_vector_xyz(m+0x10,m+0x10,1.0f); cross_vectors_xyz(m+0x20,m+0x10,m);
+    float position[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    char *data = *(char **)(m + 0x70);
+    float *height = (float *)(data + 0x10);
+    char *result;
+    float angle, t;
+    qcopy(position, D_0013F3D0);
+    position[2] += height[19];
+    result = m + 0x40;
+    subtract_vector_xyz(direction, position, m + 0x30);
+    normalize_vector_xyz(direction, direction, 1.0f);
+    angle = approximate_arcsine(dot_vectors_xyz(direction, m));
+    t = FUN_L00_001eb328(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
+                         *(float *)(data + 8), *(float *)(data + 12));
+    FUN_L03_0024e6f8(t, (float *)m, (float *)result, direction, 1);
+    normalize_vector_xyz(result, m, 1.0f);
+    qcopy(m, result);
+    cross_vectors_xyz(m + 0x10, m, D_L03_00166F30);
+    normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
+    cross_vectors_xyz(m + 0x20, m + 0x10, m);
 }
 extern char D_0013E533[];
 extern int D_L03_0015EF50;
@@ -74,10 +85,14 @@ int FUN_L03_002e8870(char *a0, char *a1) {
     char *sub = *(char **)(entry + 0x1C);
     char *q;
     int five;
-    if (*(int *)(a0 + 0x74) != 4) return 0;
-    if (a1 != 0 && *(short *)(a1 + 0x7E) == 0 && !(*(unsigned char *)(a0 + 0x7C) > *(unsigned char *)(a1 + 0x7C))) return 0;
+    if (*(int *)(a0 + 0x74) != 4)
+        return 0;
+    if (a1 != 0 && *(short *)(a1 + 0x7E) == 0 &&
+        !(*(unsigned char *)(a0 + 0x7C) > *(unsigned char *)(a1 + 0x7C)))
+        return 0;
     if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
-        if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0) return 1;
+        if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)
+            return 1;
         q = D_L03_00166EC0 - 0x140;
         five = *(int *)(q + 0x180);
         *(unsigned char *)(q + 0x273) = 0;
@@ -94,8 +109,7 @@ extern char D_0013E533[];
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
-void FUN_L03_002e8980(char *moby)
-{
+void FUN_L03_002e8980(char *moby) {
     char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
     char *sub = *(char **)(entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {

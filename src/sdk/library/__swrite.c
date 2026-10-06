@@ -15,7 +15,7 @@ s64 __swrite(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     if (arg0->unkC & 0x100) {
         reentrant_syscall_with_three_arguments(arg0->unk54, arg0->unkE, 0, 2);
     }
-    arg0->unkC = (u16) (arg0->unkC & 0xEFFF);
+    arg0->unkC = (u16)(arg0->unkC & 0xEFFF);
     r = reentrant_write(arg0->unk54, arg0->unkE, arg1, arg2);
-    return (s64) (s32) (u32) r;
+    return (s64)(s32)(u32)r;
 }

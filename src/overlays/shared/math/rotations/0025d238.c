@@ -3,7 +3,10 @@
 #include "asm.h"
 
 #include "eetypes.h"
-typedef union { u128 q; f32 f[4]; } V0025d238;
+typedef union {
+    u128 q;
+    f32 f[4];
+} V0025d238;
 void FUN_001f9a28(void *, void *, void *);
 f32 FUN_001f99c0(f32);
 void FUN_001f9a68(void *, void *, f32);
@@ -28,13 +31,47 @@ void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
         p0++;
     }
 }
-typedef struct { short cur; short flag; unsigned char r, g, b; char pad; char pad2[4]; short lo; short hi; } S;
+typedef struct {
+    short cur;
+    short flag;
+    unsigned char r, g, b;
+    char pad;
+    char pad2[4];
+    short lo;
+    short hi;
+} S;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00250320(void *, int *, int *, int *);
-void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = scale_game_frames(s->lo); s->flag = 0; if (old != 0) { int n = scale_game_frames(s->lo); s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(scale_game_frames(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
-typedef struct { s16 t; s16 phase; u8 r0, g0, b0; u8 r1, g1, b1; u8 pad[2]; s16 d0; s16 d1; } S_25d538;
+void FUN_L00_0025d458(void *a, S *s) {
+    int old = s->cur;
+    if (old == 0 || s->flag != 0) {
+        s->cur = scale_game_frames(s->lo);
+        s->flag = 0;
+        if (old != 0) {
+            int n = scale_game_frames(s->lo);
+            s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(scale_game_frames(s->hi))));
+            if (s->cur <= 0)
+                s->cur = 1;
+        } else {
+            int x, y, z;
+            FUN_L00_00250320(a, &x, &y, &z);
+            s->r = x;
+            s->g = y;
+            s->b = z;
+        }
+    }
+}
+typedef struct {
+    s16 t;
+    s16 phase;
+    u8 r0, g0, b0;
+    u8 r1, g1, b1;
+    u8 pad[2];
+    s16 d0;
+    s16 d1;
+} S_25d538;
 f32 FUN_001fa6c0_25d538(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f9770_25d538(void *) __asm__("FUN_001f9770");
@@ -43,7 +80,8 @@ void FUN_L00_002502f0_25d538(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void FUN_L00_0025d538(s32 id, S_25d538 *s) {
     f32 d, f;
     s32 r, g, b;
-    if (s->t == 0) return;
+    if (s->t == 0)
+        return;
     if (FUN_001f9770_25d538(s)) {
         if (s->phase != 0) {
             FUN_L00_002502f0_25d538(id, s->r0, s->g0, s->b0);
@@ -55,21 +93,33 @@ void FUN_L00_0025d538(s32 id, S_25d538 *s) {
     if (s->phase == 0) {
         d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d0));
         f = (d - s->t) / d;
-        if (s->r1 != 0) r = FUN_001fa6d0_25d538(s->r0 + (s->r1 - s->r0) * f);
-        else r = s->r0;
-        if (s->g1 != 0) g = FUN_001fa6d0_25d538(s->g0 + (s->g1 - s->g0) * f);
-        else g = s->g0;
-        if (s->b1 != 0) b = FUN_001fa6d0_25d538(s->b0 + (s->b1 - s->b0) * f);
-        else b = s->b0;
+        if (s->r1 != 0)
+            r = FUN_001fa6d0_25d538(s->r0 + (s->r1 - s->r0) * f);
+        else
+            r = s->r0;
+        if (s->g1 != 0)
+            g = FUN_001fa6d0_25d538(s->g0 + (s->g1 - s->g0) * f);
+        else
+            g = s->g0;
+        if (s->b1 != 0)
+            b = FUN_001fa6d0_25d538(s->b0 + (s->b1 - s->b0) * f);
+        else
+            b = s->b0;
     } else {
         d = FUN_001fa6c0_25d538(FUN_001f96f8_25d538(s->d1));
         f = (d - s->t) / d;
-        if (s->r1 != 0) r = FUN_001fa6d0_25d538(s->r1 + (s->r0 - s->r1) * f);
-        else r = s->r0;
-        if (s->g1 != 0) g = FUN_001fa6d0_25d538(s->g1 + (s->g0 - s->g1) * f);
-        else g = s->g0;
-        if (s->b1 != 0) b = FUN_001fa6d0_25d538(s->b1 + (s->b0 - s->b1) * f);
-        else b = s->b0;
+        if (s->r1 != 0)
+            r = FUN_001fa6d0_25d538(s->r1 + (s->r0 - s->r1) * f);
+        else
+            r = s->r0;
+        if (s->g1 != 0)
+            g = FUN_001fa6d0_25d538(s->g1 + (s->g0 - s->g1) * f);
+        else
+            g = s->g0;
+        if (s->b1 != 0)
+            b = FUN_001fa6d0_25d538(s->b1 + (s->b0 - s->b1) * f);
+        else
+            b = s->b0;
     }
     FUN_L00_002502f0_25d538(id, r, g, b);
 }
@@ -79,16 +129,20 @@ s32 FUN_L00_0025d7a0(s32 *tab, s32 i, s32 d, s32 wrap) {
     } else {
         i += d;
         if (d < 0) {
-            if (i < 0) i = 0;
+            if (i < 0)
+                i = 0;
         } else {
-            if (tab[0] - 1 < i) i = tab[0] - 1;
+            if (tab[0] - 1 < i)
+                i = tab[0] - 1;
         }
     }
     return i;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025d808.s", FUN_L00_0025d808);
 typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
-typedef struct { float x, y, z, w_0025da70; } __attribute__((aligned(16))) Vec4_0025da70;
+typedef struct {
+    float x, y, z, w_0025da70;
+} __attribute__((aligned(16))) Vec4_0025da70;
 float FUN_001f99c0_0025da70(float) __asm__("FUN_001f99c0");
 void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
 void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
@@ -110,8 +164,7 @@ void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9c48_25db00(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
-float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
-{
+float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b) {
     float d[4];
     float n[4];
     T25db00_q c[1];
@@ -130,9 +183,12 @@ float FUN_L00_0025db00(float *out, float *p, T25db00_q *a, T25db00_q *b)
     out[0] = p[0] - k * n[0];
     out[1] = p[1] - k * n[1];
     *(int *)&out[2] = 0;
-    o = out; pa = (float *)a; pb = (float *)b;
+    o = out;
+    pa = (float *)a;
+    pb = (float *)b;
     for (i = 0; i < 2; i++) {
-        if ((o[i] > pa[i] && o[i] > pb[i]) || (o[i] < pa[i] && o[i] < pb[i])) break;
+        if ((o[i] > pa[i] && o[i] > pb[i]) || (o[i] < pa[i] && o[i] < pb[i]))
+            break;
     }
     if (i < 2) {
         if (FUN_001f9b80_25db00(out, a) < FUN_001f9b80_25db00(out, b)) {
@@ -165,8 +221,8 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
     float *o, *fa, *fb;
     float res, t, u;
     int i;
-    if (r > 0.0f && fabs_25dcd8(((float *)p)[2] - ((float *)a)[2]) < r
-        && fabs_25dcd8(((float *)p)[2] - ((float *)b)[2]) < r) {
+    if (r > 0.0f && fabs_25dcd8(((float *)p)[2] - ((float *)a)[2]) < r &&
+        fabs_25dcd8(((float *)p)[2] - ((float *)b)[2]) < r) {
         res = db00_25dcd8(out, p, a, b);
         r = dist_25dcd8(a, out);
         u = dist_25dcd8(a, b);
@@ -188,8 +244,10 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
     fa = (float *)a;
     o = (float *)out;
     do {
-        if (*o > *fa && *fb < *o) break;
-        if (*o < *fa && *o < *fb) break;
+        if (*o > *fa && *fb < *o)
+            break;
+        if (*o < *fa && *o < *fb)
+            break;
         i++;
         fb++;
         fa++;
@@ -208,7 +266,17 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 extern f32 FUN_L00_00200228(void *, f32);
-f32 FUN_L00_0025e310(f32 a) { f32 out; f32 x; f32 pi = 3.14159274f; f32 tp = 6.2831855f; x = a + pi; x /= tp; x = FUN_L00_00200228(&out, x); x *= tp; return x - pi; }
+f32 FUN_L00_0025e310(f32 a) {
+    f32 out;
+    f32 x;
+    f32 pi = 3.14159274f;
+    f32 tp = 6.2831855f;
+    x = a + pi;
+    x /= tp;
+    x = FUN_L00_00200228(&out, x);
+    x *= tp;
+    return x - pi;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -230,7 +298,8 @@ int FUN_L00_0025e368(char *a) {
 }
 s32 FUN_L00_0025e3f8(void *p) {
     s16 v = *(s16 *)((char *)p + 0xA6);
-    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 || v == 0xDF) {
+    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
+        v == 0xDF) {
         return 1;
     }
     return 0;
@@ -264,7 +333,8 @@ void FUN_L00_0025f780(int a, short *list, short max) {
     int k = ((a - D_L00_0015FFD8) << 8) >> 16;
     int i;
     for (i = 1; i <= list[0]; i++) {
-        if (list[i] == k) return;
+        if (list[i] == k)
+            return;
     }
     if (list[0] < max) {
         list[0]++;
@@ -272,8 +342,7 @@ void FUN_L00_0025f780(int a, short *list, short max) {
     }
 }
 extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
-void FUN_L00_0025f800(s32 p, s16 *a)
-{
+void FUN_L00_0025f800(s32 p, s16 *a) {
     s32 i;
     for (i = 1; i <= a[0]; i++) {
         if (D_L00_0015FFD8_c2 + (a[i] << 8) == p) {
@@ -283,15 +352,23 @@ void FUN_L00_0025f800(s32 p, s16 *a)
         }
     }
 }
-typedef struct { u8 pad[0x18]; s32 id; } V25f878;
-typedef struct { u8 pad[0x78]; V25f878 *p78; u8 pad7c[0x100 - 0x7C]; } M25f878;
+typedef struct {
+    u8 pad[0x18];
+    s32 id;
+} V25f878;
+typedef struct {
+    u8 pad[0x78];
+    V25f878 *p78;
+    u8 pad7c[0x100 - 0x7C];
+} M25f878;
 extern s16 D_L00_001B0770[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
 M25f878 *FUN_L00_0025f878(s32 id) {
     s32 i;
-        for (i = 1; i <= D_L00_001B0770[0]; i++) {
+    for (i = 1; i <= D_L00_001B0770[0]; i++) {
         M25f878 *o = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)D_L00_0015FFD8_c3);
-        if (o->p78->id == id) return o;
+        if (o->p78->id == id)
+            return o;
     }
     return 0;
 }
@@ -306,7 +383,7 @@ extern u8 *D_L00_0015FFE0 __attribute__((sda));
 s32 FUN_L00_0025e3b8(u8 *m) {
     u32 v;
     if (m == 0) {
-bad:
+    bad:
         return 0;
     }
     if (m < D_L00_0015FFD8_c) {

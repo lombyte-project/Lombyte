@@ -13,7 +13,8 @@ void FUN_L00_0024e7a8(void) {
     for (p = D_L00_0015FFDC; p < D_L00_0015FFE0; p += 0x100) {
         if ((p[0x20] >= 0xFE && D_L00_0015F5CC >= *(u64 *)(p + 0x38)) || flag) {
             D_L00_0015FFBC++;
-            if (p[0x20] == 0xFF) flag = 1;
+            if (p[0x20] == 0xFF)
+                flag = 1;
         }
     }
 }

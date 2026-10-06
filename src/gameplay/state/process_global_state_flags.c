@@ -21,8 +21,7 @@ extern void clear_scene_state_buffers(void) __asm__("func_00226F50");
 
 s32 process_global_state_flags(void) __asm__("FUN_00222290");
 
-s32 process_global_state_flags(void)
-{
+s32 process_global_state_flags(void) {
     u8 backup[4];
     u8 old_value;
     s32 i;

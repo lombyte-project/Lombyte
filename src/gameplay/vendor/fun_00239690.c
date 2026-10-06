@@ -1,6 +1,7 @@
 #include "types.h"
 extern void func_001FB440(s32, s32, s32);
-extern void configure_graphics_projection(s32, s32, f32, f32, f32, f32, f32) __asm__("func_001F33B8");
+extern void configure_graphics_projection(s32, s32, f32, f32, f32, f32,
+                                          f32) __asm__("func_001F33B8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void FUN_00239690(s32 arg0, s32 arg1, f32 fparg0) {
     s32 sum;

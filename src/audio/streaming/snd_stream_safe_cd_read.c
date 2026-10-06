@@ -30,4 +30,5 @@ s32 snd_stream_safe_cd_read(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 extern s32 func_0012ED58(s32 arg0, s32 arg1, s32 arg2) __attribute__((alias("FUN_0012ed58")));
-extern s32 snd_StreamSafeCdRead(s32 arg0, s32 arg1, s32 arg2) __attribute__((alias("FUN_0012ed58")));
+extern s32 snd_StreamSafeCdRead(s32 arg0, s32 arg1, s32 arg2)
+    __attribute__((alias("FUN_0012ed58")));

@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/select_world_object_resource_tables/FUN_00204a40.s", FUN_00204a40);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/data/"
+            "select_world_object_resource_tables/FUN_00204a40.s",
+            FUN_00204a40);
 #else
 #include "types.h"
 /* Verified against the US retail body at 0x00204a40. */
@@ -46,7 +48,8 @@ extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern u64 gold_weapon_texture_state[] __asm__("D_0019E6F0");
 extern void FlushCache(s32);
 extern void decompress_wad(s32, void *) __asm__("func_0020B618");
-extern void prepare_resident_class_render_data(void *, void *, void *, s32) __asm__("func_00203338");
+extern void prepare_resident_class_render_data(void *, void *, void *,
+                                               s32) __asm__("func_00203338");
 
 void select_world_object_resource_tables(s32 class_id, s32 buffer_index) __asm__("FUN_00204a40");
 
@@ -58,11 +61,13 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     s32 resource_tag;
     s32 vendor_item_index;
 
-    if (active_class_resource_index >= 0 && class_resource_ids[active_class_resource_index] == class_id) {
+    if (active_class_resource_index >= 0 &&
+        class_resource_ids[active_class_resource_index] == class_id) {
         return;
     }
     /* Retail leaves the index at class_resource_count if the class is absent. */
-    for (active_class_resource_index = 0; active_class_resource_index < class_resource_count; active_class_resource_index++) {
+    for (active_class_resource_index = 0; active_class_resource_index < class_resource_count;
+         active_class_resource_index++) {
         if (class_resource_ids[active_class_resource_index] == class_id) {
             break;
         }
@@ -78,15 +83,18 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
     resident_class_resources[class_slot = resident_class_slot_by_id[class_id]] = resource_data;
     D_001B6180[class_slot] = *(s32 *)(resource_data + 0x2C);
-    prepare_resident_class_render_data(resource_data, resident_indexed_textures, class_material_maps[active_class_resource_index], class_id);
+    prepare_resident_class_render_data(resource_data, resident_indexed_textures,
+                                       class_material_maps[active_class_resource_index], class_id);
     resource_table_index = active_class_resource_index;
     resource_tag = runtime_resource_tag;
     /* Retail reloads the published resource pointer for each enabled entry. */
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {
-            *(s16 *)(*(char **)(resident_class_resources[class_slot] + 0x28) + runtime_index * 0x20 + 0x1A) = runtime_entry_index;
-            *(s32 *)(*(char **)(resident_class_resources[class_slot] + 0x28) + runtime_index * 0x20 + 0x1C) = resource_tag;
+            *(s16 *)(*(char **)(resident_class_resources[class_slot] + 0x28) +
+                     runtime_index * 0x20 + 0x1A) = runtime_entry_index;
+            *(s32 *)(*(char **)(resident_class_resources[class_slot] + 0x28) +
+                     runtime_index * 0x20 + 0x1C) = resource_tag;
         }
     }
     for (vendor_item_index = 0; vendor_item_index < 0x25; vendor_item_index++) {
@@ -102,7 +110,8 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
             if (resource_header->third_render_group_count == 0) {
                 return;
             }
-            render_group = resource_header->render_groups + resource_header->patch_group_index * 0x10;
+            render_group =
+                resource_header->render_groups + resource_header->patch_group_index * 0x10;
             patch_packet = *(char **)render_group + (*(s32 *)(render_group + 4) - 4) * 0x10;
             *(u64 *)(patch_packet + 0x20) = gold_weapon_texture_state[0];
             *(u64 *)(patch_packet + 0x30) = gold_weapon_texture_state[2];

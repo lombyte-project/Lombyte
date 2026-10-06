@@ -1,7 +1,13 @@
 #include "types.h"
 struct IpuContext {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC;
-    s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
 };
 extern s32 SetD3Chcr();
 extern s32 SetD4Chcr();

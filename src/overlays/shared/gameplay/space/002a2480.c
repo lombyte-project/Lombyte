@@ -10,11 +10,11 @@
 extern char D_0013E030[];
 
 void FUN_L01_002a2480(void) {
- char *first=*(char **)D_0013E030;
- if(first!=0) {
- char *moby;
- *(unsigned short *)(first+0x34)&=0xfffc;
- moby=*(char **)D_0013E030;
- *(int *)(moby+0x94)=*(int *)(*(char **)(moby+0x24)+0x10);
- }
+    char *first = *(char **)D_0013E030;
+    if (first != 0) {
+        char *moby;
+        *(unsigned short *)(first + 0x34) &= 0xfffc;
+        moby = *(char **)D_0013E030;
+        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    }
 }

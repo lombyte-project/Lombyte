@@ -4,7 +4,10 @@
 
 #include "qcopy.h"
 typedef int ti_00284e50 __attribute__((mode(TI)));
-typedef struct { unsigned char h[0x404]; unsigned char f[0x7FF]; } B_00284e50;
+typedef struct {
+    unsigned char h[0x404];
+    unsigned char f[0x7FF];
+} B_00284e50;
 extern B_00284e50 D_L00_001BA620 __attribute__((section(".data")));
 extern B_00284e50 D_L00_001BB280 __attribute__((section(".data")));
 extern int D_L00_001BA4D0[] __attribute__((section(".data")));
@@ -32,8 +35,10 @@ void FUN_L00_00284e50(ti_00284e50 *a, ti_00284e50 *b) {
     lvl = D_0015ED84;
     for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
         v = *src;
-        if ((unsigned char)v == 0) continue;
-        if ((unsigned char)v != 1 && D_0014C050[lvl][(unsigned char)v - 2] != 0xFF) continue;
+        if ((unsigned char)v == 0)
+            continue;
+        if ((unsigned char)v != 1 && D_0014C050[lvl][(unsigned char)v - 2] != 0xFF)
+            continue;
         D_L00_001BB280.f[i] = v;
         D_0014C190[lvl][i >> 5] |= 1 << (i & 0x1F);
         D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
@@ -71,7 +76,8 @@ extern u8 *D_L00_0015FFDC;
 u8 *FUN_L00_002851c0(s32 a, s32 id) {
     u8 *p;
     for (p = D_L00_0015FFD8; p != D_L00_0015FFDC; p += 0x100) {
-        if (*(s16 *)(p + 0xB2) == id) return p;
+        if (*(s16 *)(p + 0xB2) == id)
+            return p;
     }
     return 0;
 }
@@ -81,7 +87,14 @@ u8 *FUN_L00_002851c0(s32 a, s32 id) {
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
 
-typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
+typedef struct {
+    int off;
+    int pad;
+    unsigned short len;
+    short kind;
+    short a;
+    short b;
+} Ent;
 
 extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
 extern void FUN_001f9838(int, void *, unsigned short);

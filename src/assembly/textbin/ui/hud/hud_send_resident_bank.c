@@ -2,12 +2,29 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/hud/hud_send_resident_bank/FUN_001ff128.s", FUN_001ff128);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/hud/hud_send_resident_bank/FUN_001ff128.s",
+            FUN_001ff128);
 #else
 #include "types.h"
-struct TexEntry { u32 data; s16 page; u8 log_w; u8 log_h; };
-struct TexCounts { u8 pad0[0x14]; s32 mid_ends[8]; s32 ends[16]; s32 loaded[16]; };
-struct TexTable { u8 pad0[0x18]; struct TexCounts *counts; u8 pad1C[8]; struct TexEntry *entries; struct TexEntry *mids; };
+struct TexEntry {
+    u32 data;
+    s16 page;
+    u8 log_w;
+    u8 log_h;
+};
+struct TexCounts {
+    u8 pad0[0x14];
+    s32 mid_ends[8];
+    s32 ends[16];
+    s32 loaded[16];
+};
+struct TexTable {
+    u8 pad0[0x18];
+    struct TexCounts *counts;
+    u8 pad1C[8];
+    struct TexEntry *entries;
+    struct TexEntry *mids;
+};
 extern struct TexTable D_0019A3E8;
 extern struct TexTable hud_texture_table __asm__("D_0019A3E8");
 extern struct TexCounts *hud_texture_counts __asm__("D_0019A400");

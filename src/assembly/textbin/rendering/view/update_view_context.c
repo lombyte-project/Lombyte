@@ -2,14 +2,20 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/view/update_view_context/FUN_001f2d98.s", FUN_001f2d98);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/rendering/view/update_view_context/FUN_001f2d98.s",
+    FUN_001f2d98);
 #else
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
 
-typedef union { u128 q; f32 f[4]; s32 i[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+    s32 i[4];
+} Vec4;
 
 struct View {
     s32 fog_color;
@@ -48,8 +54,16 @@ struct View {
     f32 fog_far_int;
 };
 
-struct FogRegs2 { u8 pad0[0x28]; s32 mul; s32 max; s32 far_int; s32 near_int; };
-struct Clip { Vec4 constants[3]; };
+struct FogRegs2 {
+    u8 pad0[0x28];
+    s32 mul;
+    s32 max;
+    s32 far_int;
+    s32 near_int;
+};
+struct Clip {
+    Vec4 constants[3];
+};
 
 extern s32 D_0015ED80;
 extern struct View view_context __asm__("D_0018CD00");
@@ -62,7 +76,17 @@ extern struct FogRegs2 D_001DE9B0;
 extern struct FogRegs2 D_001DEA00;
 extern Vec4 D_001DEA40[2];
 extern Vec4 D_001DE710[3];
-extern struct { u8 pad0[0x10]; s32 mul; s32 far_int; s32 near_int; u8 pad1c[0x44]; Vec4 constants[3]; u8 pad90[0x10]; s32 x; s32 y; } D_001DE740;
+extern struct {
+    u8 pad0[0x10];
+    s32 mul;
+    s32 far_int;
+    s32 near_int;
+    u8 pad1c[0x44];
+    Vec4 constants[3];
+    u8 pad90[0x10];
+    s32 x;
+    s32 y;
+} D_001DE740;
 
 extern f32 func_001F9E90(f32, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -129,7 +153,9 @@ void update_view_context(void) {
     fog_intensity_range = view->fog_far_int - view->fog_near_int;
     fog_multiplier = fog_intensity_range * near_clip / fog_distance_range;
     fog_distance_slope = fog_intensity_range / (fog_distance_range / 1024.0f);
-    view->fog_add = (view->fog_near_int * view->fog_far_dist - view->fog_far_int * view->fog_near_dist) / fog_distance_range;
+    view->fog_add =
+        (view->fog_near_int * view->fog_far_dist - view->fog_far_int * view->fog_near_dist) /
+        fog_distance_range;
     view->fog_slope = fog_distance_slope;
     view->fog_base = view->fog_near_int - view->fog_near_dist / 1024.0f * fog_distance_slope;
     view->fog_mul = fog_multiplier;
@@ -171,11 +197,13 @@ void update_view_context(void) {
     view->proj[7] = 0;
     view->proj[8] = 0;
     view->proj[9] = 0;
-    view->proj[10] = (far_clip + projection_near_clip) / (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
+    view->proj[10] = (far_clip + projection_near_clip) /
+                     (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
     view->proj[11] = 1.0f / projection_near_clip * projection_fog_multiplier;
     view->proj[12] = 0;
     view->proj[13] = 0;
-    view->proj[14] = -2.0f * projection_near_clip * far_clip / (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
+    view->proj[14] = -2.0f * projection_near_clip * far_clip /
+                     (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
     view->proj[15] = 0;
     func_001F9838(view->proj2, view->proj, 0x40);
     view->proj2[11] = 1.0f / view->near_clip;

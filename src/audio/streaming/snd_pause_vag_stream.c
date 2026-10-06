@@ -1,5 +1,6 @@
 #include "types.h"
-extern s32 snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a, s32 b) __asm__("func_0012E6E0");
+extern s32 snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a,
+                                        s32 b) __asm__("func_0012E6E0");
 void snd_pause_vag_stream(s32 arg0) __asm__("FUN_0012ec70");
 
 void snd_pause_vag_stream(s32 arg0) {

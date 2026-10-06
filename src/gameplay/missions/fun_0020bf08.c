@@ -3,7 +3,8 @@
 extern unsigned char D_0013D3E9 NOT_SDA;
 extern unsigned char D_0013DD4D NOT_SDA;
 int FUN_0020bf08(void) {
-    if (D_0013D3E9 != 0 && D_0013DD4D != 0) return 1;
+    if (D_0013D3E9 != 0 && D_0013DD4D != 0)
+        return 1;
     return 0;
 }
 

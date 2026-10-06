@@ -4,7 +4,9 @@
 #include "types.h"
 #include "qcopy.h"
 
-typedef struct { f32 x, y, z, w; } Vec4;
+typedef struct {
+    f32 x, y, z, w;
+} Vec4;
 
 typedef struct {
     Vec4 position;
@@ -22,8 +24,15 @@ typedef struct {
     f32 projection_scale;
 } BillboardViewContext;
 
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 
 extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern char billboard_quad_header[] __asm__("D_001608E0");
@@ -47,8 +56,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void append_billboard_batch(void) __asm__("FUN_001f92b0");
 
-void append_billboard_batch(void)
-{
+void append_billboard_batch(void) {
     Vec4 projected_position;
     Vec4 clip_position;
     f32 distance;
@@ -77,22 +85,28 @@ void append_billboard_batch(void)
         distance = fast_vec_length(&projected_position);
         fast_vec_scale(&projected_position, &projected_position, 1024.0f);
         transform_vector(&projected_position, &projected_position, camera_position - 0x100);
-        multiply_vector_components(&clip_position, &projected_position, (char *)&view_context + 0x180);
+        multiply_vector_components(&clip_position, &projected_position,
+                                   (char *)&view_context + 0x180);
         if (is_vector_outside_clip(&clip_position) != 0) {
             FillTransferWords(record, 0, 0x20);
             continue;
         }
-        fast_vec_scale(&projected_position, &projected_position, view_context.projection_scale / projected_position.w);
+        fast_vec_scale(&projected_position, &projected_position,
+                       view_context.projection_scale / projected_position.w);
         color = (record->alpha << 24) | 0x808080;
         x = convert_float_to_integer(projected_position.x * 16.0f) + 0x8000;
         y = convert_float_to_integer(projected_position.y * 16.0f) + 0x8000;
-        packed_position = ((s64)convert_float_to_integer(projected_position.z * 0.9997f + view_context.depth_offset) << 32) | ((s64)y << 16) | x;
+        packed_position = ((s64)convert_float_to_integer(projected_position.z * 0.9997f +
+                                                         view_context.depth_offset)
+                           << 32) |
+                          ((s64)y << 16) | x;
         if (distance > 18.0f) {
             distance = 18.0f;
         } else if (distance < 2.0f) {
             distance = 2.0f;
         }
-        radius = record->radius_scale * (convert_integer_to_float(record->alpha + 16) * 0.015625f) * ((24.0f - distance) * 16.0f);
+        radius = record->radius_scale * (convert_integer_to_float(record->alpha + 16) * 0.015625f) *
+                 ((24.0f - distance) * 16.0f);
         sine_offset = convert_float_to_integer(radius * fast_sin(record->angle));
         cosine_offset = convert_float_to_integer(radius * fast_cos(record->angle));
         render_packet_cursor.p->w0 = 0x10000009;

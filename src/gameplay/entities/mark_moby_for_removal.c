@@ -1,5 +1,10 @@
 #include "types.h"
-struct Obj { u8 pad0[0x20]; u8 state; u8 pad21[0x17]; s64 time; };
+struct Obj {
+    u8 pad0[0x20];
+    u8 state;
+    u8 pad21[0x17];
+    s64 time;
+};
 extern struct Obj *D_0015FF1C;
 extern s32 D_0015F60C;
 extern void func_0020DC20(struct Obj *, u32);

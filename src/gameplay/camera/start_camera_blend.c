@@ -2,8 +2,9 @@
 #include "sda.h"
 #include "qcopy.h"
 extern char D_0013F350[];
-extern void FUN_001f9bf8(void *dst, void *src, float len);    /* dst = normalize(src) * len */
-extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1, void *axis) __asm__("func_001EC530");
+extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
+extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
+                                  void *axis) __asm__("func_001EC530");
 extern char D_001871B0[];
 extern void capture_camera_orientation(void) __asm__("func_001EC710");
 extern void save_camera_vectors(void) __asm__("func_001EC7F0");
@@ -45,7 +46,7 @@ void start_camera_blend(void *arg) {
             FUN_001f9bf8(local1, *(char **)(g + 0x2080) + 0xD0, 1.0f);
             FUN_001f9bf8(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
             compute_camera_angles((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
-                          local0, local1, local2);
+                                  local0, local1, local2);
             func_002144D8(r + 0xB0, arg0);
             qcopy(r + 0xD0, r + 0xB0);
         }

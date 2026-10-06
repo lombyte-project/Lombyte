@@ -7,7 +7,10 @@
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
 extern char *D_L09_001B0630[];
-typedef struct { u8 pad0[0x454]; u8 collected[1]; } L09LevelState;
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} L09LevelState;
 extern L09LevelState D_L09_001BB3B0;
 extern s32 D_0014C190[][64];
 extern int D_0015ED84;
@@ -51,12 +54,14 @@ void FUN_L09_003033a0(unsigned char *moby) {
     path = D_L09_001B0630[*(int *)(data + 0xB4)];
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0xC0))
-            || D_L09_001BB3B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0
-            || (D_0014C190[D_0015ED84][(short)id >> 5] >> (id & 0x1F)) & 1) {
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0xC0)) ||
+            D_L09_001BB3B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0 ||
+            (D_0014C190[D_0015ED84][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
-                D_0014C190[D_0015ED84][(short)*(unsigned short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                D_L09_001BA650[(short)*(unsigned short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+                D_0014C190[D_0015ED84][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                    1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
+                D_L09_001BA650[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                    1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
                 *(int *)(data + 0xC0) = -1;
             }
             on = 1;
@@ -92,9 +97,9 @@ void FUN_L09_003033a0(unsigned char *moby) {
     case 0:
         if (on) {
             float far;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby))
-                || (far = FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16),
-                    FUN_001f9b48(D_0013F3D0, path + 0x10) < far)) {
+            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+                (far = FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16),
+                 FUN_001f9b48(D_0013F3D0, path + 0x10) < far)) {
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
                     FUN_L00_002223f8(0x72, 1);
                 }
@@ -107,9 +112,9 @@ void FUN_L09_003033a0(unsigned char *moby) {
     case 1:
         if (on) {
             float near;
-            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby))
-                || (near = FUN_001f9b48(D_0013F3D0, path + 0x10),
-                    FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16) < near)) {
+            if ((*(short *)(data + 0xB8) != 0 && FUN_L01_00277fb8(moby)) ||
+                (near = FUN_001f9b48(D_0013F3D0, path + 0x10),
+                 FUN_001f9b48(D_0013F3D0, path + *(int *)path * 16) < near)) {
                 if (*(int *)(data + 0xC8) == 0 && FUN_L01_00277fb8(moby)) {
                     FUN_L00_002223f8(0x72, 1);
                 }
@@ -121,11 +126,11 @@ void FUN_L09_003033a0(unsigned char *moby) {
         }
         break;
     case 2:
-        if (*(short *)(data + 0xBA) != 0
-            || (F(data, 0xBC) < 0.0f
-                && FUN_001f9b80((moby + 0x10), hero = ((char *)&D_0013F3D0)) < 2.0f
-                && AbsoluteFloat(F(hero -= 0x80, 0x88) - F(moby, 0x18)) < 4.0f
-                && F(moby, 0x18) - F(hero, 0x88) > 1.0f)) {
+        if (*(short *)(data + 0xBA) != 0 ||
+            (F(data, 0xBC) < 0.0f &&
+             FUN_001f9b80((moby + 0x10), hero = ((char *)&D_0013F3D0)) < 2.0f &&
+             AbsoluteFloat(F(hero -= 0x80, 0x88) - F(moby, 0x18)) < 4.0f &&
+             F(moby, 0x18) - F(hero, 0x88) > 1.0f)) {
             int r;
             if (*(short *)(data + 0xBA) == 0) {
                 *(short *)(data + 0xBA) = scale_game_frames(30);
@@ -215,10 +220,13 @@ extern int FUN_L00_0025e450();
 extern unsigned char D_0013E550_c[] __asm__("D_0013E550");
 extern void FUN_L09_00303b30(char *, char *, char *);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags, void *target) __asm__("FUN_0022da68");
+s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
+                                      void *target) __asm__("FUN_0022da68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_0022ED80_r(int, int, char *) __asm__("FUN_0022da68");
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+                                  float, float, int, float, int, int, int,
+                                  int) __asm__("FUN_L00_0025e450");
 
 void FUN_L09_00303d10(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -227,7 +235,8 @@ void FUN_L09_00303d10(char *m) {
     FUN_L09_00303b30(m, d, d + 0x20);
     switch (((unsigned char *)m)[0x20]) {
     case 0:
-        if (*(short *)(d + 0x76) != -1 && (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
+        if (*(short *)(d + 0x76) != -1 &&
+            (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
             mark_moby_for_removal(m);
             return;
         }
@@ -236,15 +245,16 @@ void FUN_L09_00303d10(char *m) {
         break;
     case 1:
         if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
-            if (*(int *)(d + 0x7C) == -1
-                || (FUN_L00_0028d8c0(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
+            if (*(int *)(d + 0x7C) == -1 ||
+                (FUN_L00_0028d8c0(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
                 *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
             }
         }
         if (((unsigned char *)m)[0xBC] == 1) {
             if (*(int *)(d + 0x78) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8 + (*(int *)(d + 0x78) << 8));
-                if (o[0x20] == 1) o[0xBC] = o[0x20];
+                if (o[0x20] == 1)
+                    o[0xBC] = o[0x20];
             }
             *(short *)(d + 0x74) = scale_game_frames(0xA);
             if (*(int *)(d + 0x7C) != -1) {
@@ -262,8 +272,9 @@ void FUN_L09_00303d10(char *m) {
         if (FUN_001f9770(d + 0x74)) {
             if (*(int *)(d + 0x70) != -1) {
                 unsigned char *o = (unsigned char *)(D_L09_0015FFD8 + (*(int *)(d + 0x70) << 8));
-                if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD
-                    && (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D || *(short *)(o + 0xA6) == 0x4A0)) {
+                if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD &&
+                    (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D ||
+                     *(short *)(o + 0xA6) == 0x4A0)) {
                     o[0x30] = 0xFF;
                     o[0xBC] = 1;
                 }
@@ -273,7 +284,8 @@ void FUN_L09_00303d10(char *m) {
         break;
     case 3:
         subtract_vector_xyz_c(v, D_L09_00166F40, m + 0x10);
-        func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0, 40.0f, 0, 1, -1, 0);
+        func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0,
+                              40.0f, 0, 1, -1, 0);
         mark_moby_for_removal(m);
         break;
     }
@@ -300,9 +312,12 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
     char *tp = tmp;
     *(u128 *)tmp = *(u128 *)pos;
     for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
-        if (m == self) continue;
-        if (m != 0 && *(unsigned char *)(m + 0x20) != 0xFE && *(unsigned char *)(m + 0x20) != 0xFD) {
-            if (*(short *)(m + 0xA6) == 0x49D || *(short *)(m + 0xA6) == 0x494 || *(short *)(m + 0xA6) == 0x4A0) {
+        if (m == self)
+            continue;
+        if (m != 0 && *(unsigned char *)(m + 0x20) != 0xFE &&
+            *(unsigned char *)(m + 0x20) != 0xFD) {
+            if (*(short *)(m + 0xA6) == 0x49D || *(short *)(m + 0xA6) == 0x494 ||
+                *(short *)(m + 0xA6) == 0x4A0) {
                 float d;
                 if (bone != -1) {
                     FUN_L00_0024f7c8(m, bone, vec);
@@ -317,9 +332,12 @@ char *FUN_L09_003041d0(char *self, char *pos, int bone) {
             }
         }
     }
-    if (best == 0) return 0;
-    if (bestd < 0.5f) return best;
-    if (*(short *)(best + 0xA6) == 0x4A0 && bestd < 10.0f) return best;
+    if (best == 0)
+        return 0;
+    if (bestd < 0.5f)
+        return best;
+    if (*(short *)(best + 0xA6) == 0x4A0 && bestd < 10.0f)
+        return best;
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304360.s", FUN_L09_00304360);

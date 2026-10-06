@@ -10,8 +10,7 @@
 
 extern int FUN_L03_002c6c60(void *);
 
-void FUN_L15_002d95a0(char *moby)
-{
+void FUN_L15_002d95a0(char *moby) {
     if (FUN_L03_002c6c60(moby)) {
         moby[0x20] = 1;
         *(float *)(moby + 0x18) += 1.5f;
@@ -83,7 +82,8 @@ void FUN_L15_002d77c0(char *moby) {
     int col;
 
     DrawUIFrame(W(D_L15_00161BE4) + W(D_L15_00161BD8), W(D_L15_00161BE8) + W(D_L15_00161BD8),
-                 W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4), W(D_L15_00161BF4));
+                W(D_L15_00161BEC) + W(D_L15_00161BD4), W(D_L15_00161BF0) + W(D_L15_00161BD4),
+                W(D_L15_00161BF4));
     v = FastSin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
@@ -122,7 +122,8 @@ extern short D_L15_00161C70_8710 __asm__("D_L15_00161C70") __attribute__((sda));
 extern short D_L15_00161C74_8710 __asm__("D_L15_00161C74") __attribute__((sda));
 extern short D_L15_00161C78_8710 __asm__("D_L15_00161C78") __attribute__((sda));
 extern short D_L15_00161CA0_8710 __asm__("D_L15_00161CA0") __attribute__((sda));
-extern void FUN_L00_002baae0_8710(char *, int, int, int, float, float, float) __asm__("FUN_L00_002baae0");
+extern void FUN_L00_002baae0_8710(char *, int, int, int, float, float,
+                                  float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void FUN_L15_002d8710(char *moby) {
@@ -132,21 +133,30 @@ void FUN_L15_002d8710(char *moby) {
         F(D_L15_00161C54_8710) = v + 8.0f;
     }
     FUN_L00_002baae0_8710(D_L15_001D3750_8710, W(D_L15_00161C3C_8710), W(D_L15_00161C44_8710), 0x14,
-                      F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));
-    FUN_L00_002baae0_8710(D_L15_001D3750_8710 + 0x140, W(D_L15_00161C6C_8710), W(D_L15_00161C70_8710), 0x14,
-                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), F(D_L15_00161CA0_8710));
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710, *(short *)&D_L15_00161CC8_8710, 5,
-                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA_8710, *(short *)&D_L15_00161CCA_8710, 5,
-                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC_8710, *(short *)&D_L15_00161CCC_8710, 5,
-                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE_8710, *(short *)&D_L15_00161CCE_8710, 5,
-                      F(D_L15_00161C74_8710), F(D_L15_00161C78_8710), 0.2f);
+                          F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));
+    FUN_L00_002baae0_8710(D_L15_001D3750_8710 + 0x140, W(D_L15_00161C6C_8710),
+                          W(D_L15_00161C70_8710), 0x14, F(D_L15_00161C74_8710),
+                          F(D_L15_00161C78_8710), F(D_L15_00161CA0_8710));
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710,
+                          *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_8710),
+                          F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA_8710,
+                          *(short *)&D_L15_00161CCA_8710, 5, F(D_L15_00161C74_8710),
+                          F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC_8710,
+                          *(short *)&D_L15_00161CCC_8710, 5, F(D_L15_00161C74_8710),
+                          F(D_L15_00161C78_8710), 0.2f);
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE_8710,
+                          *(short *)&D_L15_00161CCE_8710, 5, F(D_L15_00161C74_8710),
+                          F(D_L15_00161C78_8710), 0.2f);
     FUN_L15_002d8e48_8710(moby);
 }
-typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
-typedef struct { float u, v; } UV2d8e48;
+typedef struct {
+    float f[4];
+} __attribute__((aligned(16))) V2d8e48;
+typedef struct {
+    float u, v;
+} UV2d8e48;
 typedef struct {
     V2d8e48 corner[4];
     unsigned int color[4];

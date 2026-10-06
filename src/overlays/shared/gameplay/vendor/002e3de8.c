@@ -109,21 +109,25 @@ extern int FUN_L00_0025fa38_5a78(void *, int) __asm__("FUN_L00_0025fa38");
 extern int FUN_L00_0025faf0_5a78(float *, int) __asm__("FUN_L00_0025faf0");
 extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_00259740");
 
-int FUN_L10_002f5a78(char *moby)
-{
-    unsigned char *e = *(unsigned char **)(D_L10_0015EF50_5a78 + *(short *)(moby + 0x84) * 32 + 0x1C);
+int FUN_L10_002f5a78(char *moby) {
+    unsigned char *e =
+        *(unsigned char **)(D_L10_0015EF50_5a78 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
-        if (FUN_00214720_5a78(D_0013F3D0_5a78, *(int *)(e + 0x0C))) return 1;
+        if (FUN_00214720_5a78(D_0013F3D0_5a78, *(int *)(e + 0x0C)))
+            return 1;
     } else if (*(int *)(e + 0x10) >= 0) {
-        if (FUN_L00_0025fa38_5a78(D_0013F3D0_5a78, *(int *)(e + 0x10))) return 1;
+        if (FUN_L00_0025fa38_5a78(D_0013F3D0_5a78, *(int *)(e + 0x10)))
+            return 1;
     } else if (*(int *)(e + 0x08) >= 0) {
-        if (FUN_L00_0025faf0_5a78((float *)D_0013F3D0_5a78, *(int *)(e + 0x08))) return 1;
+        if (FUN_L00_0025faf0_5a78((float *)D_0013F3D0_5a78, *(int *)(e + 0x08)))
+            return 1;
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);
         if (FUN_L00_00259740_5a78((float *)D_0013F3D0_5a78,
                                   (float *)(D_L10_001B0930_5a78[i] + 0x10),
-                                  *(int *)D_L10_001B0930_5a78[i])) return 1;
+                                  *(int *)D_L10_001B0930_5a78[i]))
+            return 1;
     } else if (e[0x38] != 0 && e[0x39] == 0) {
         return 1;
     }

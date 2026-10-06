@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/data/memcard_restore_data/FUN_0020af20.s", FUN_0020af20);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/data/memcard_restore_data/"
+            "FUN_0020af20.s",
+            FUN_0020af20);
 #else
 #include "types.h"
 #include "sda.h"

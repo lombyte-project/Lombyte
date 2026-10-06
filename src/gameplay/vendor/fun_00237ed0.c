@@ -48,8 +48,7 @@ extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void FUN_00237ed0(Moby *m) __asm__("FUN_00237ed0");
 
-void FUN_00237ed0(Moby *m)
-{
+void FUN_00237ed0(Moby *m) {
     s32 r;
     s32 a;
 
@@ -98,7 +97,8 @@ void FUN_00237ed0(Moby *m)
         }
         break;
     case 4:
-        if (is_value_within_interpolated_window(m, D_00161030[D_001E63C0.pick]) != 0 && D_001610B4 != 0) {
+        if (is_value_within_interpolated_window(m, D_00161030[D_001E63C0.pick]) != 0 &&
+            D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }
@@ -111,7 +111,8 @@ void FUN_00237ed0(Moby *m)
         }
         break;
     case 5:
-        if (is_value_within_interpolated_window(m, D_00161038[D_001E63C0.pick]) != 0 && D_001610B4 != 0) {
+        if (is_value_within_interpolated_window(m, D_00161038[D_001E63C0.pick]) != 0 &&
+            D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }
@@ -124,7 +125,8 @@ void FUN_00237ed0(Moby *m)
         }
         break;
     case 6:
-        if (is_value_within_interpolated_window(m, D_00161040[D_001E63C0.pick]) != 0 && D_001610B4 != 0) {
+        if (is_value_within_interpolated_window(m, D_00161040[D_001E63C0.pick]) != 0 &&
+            D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
         }

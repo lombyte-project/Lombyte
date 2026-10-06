@@ -28,7 +28,7 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     do {
         snd_flush_sound_commands();
         FlushCache(0);
-check:;
+    check:;
     } while (D_0015EC80 != 0);
     StoreObjectIndex(D_00133100, 1);
     while (SceSifCheckStatRpc(D_0015EBC0) != 0) {
@@ -50,4 +50,5 @@ check:;
     return result;
 }
 
-extern __typeof__(snd_send_iop_command_and_wait) func_0012E548 __attribute__((alias("FUN_0012e548")));
+extern __typeof__(snd_send_iop_command_and_wait) func_0012E548
+    __attribute__((alias("FUN_0012e548")));

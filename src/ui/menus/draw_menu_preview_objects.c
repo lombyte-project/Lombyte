@@ -1,7 +1,19 @@
 #include "types.h"
-struct Moby { u8 pad0[0x50]; u64 tag; u8 pad58[0x4E]; s16 oclass; };
-struct MenuPreviewObject { u8 pad0[0x50]; u64 tag; };
-struct MenuPreviewObjects { u8 pad0[0x44]; struct MenuPreviewObject *items[24]; u8 held[24]; };
+struct Moby {
+    u8 pad0[0x50];
+    u64 tag;
+    u8 pad58[0x4E];
+    s16 oclass;
+};
+struct MenuPreviewObject {
+    u8 pad0[0x50];
+    u64 tag;
+};
+struct MenuPreviewObjects {
+    u8 pad0[0x44];
+    struct MenuPreviewObject *items[24];
+    u8 held[24];
+};
 extern s32 D_001D5020[];
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
@@ -35,8 +47,8 @@ s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
         case 10:
         case 11:
         case 12:
-            if ((preview->items[0]->tag & 0xFFFF0000) == 0x99990000
-                && (u8)preview->items[0]->tag >= 0x4D && (u8)preview->items[0]->tag < 0x92) {
+            if ((preview->items[0]->tag & 0xFFFF0000) == 0x99990000 &&
+                (u8)preview->items[0]->tag >= 0x4D && (u8)preview->items[0]->tag < 0x92) {
                 continue;
             }
             break;

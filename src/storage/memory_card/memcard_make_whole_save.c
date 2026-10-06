@@ -7,8 +7,7 @@ extern s32 memcard_prepare_data(u8 *, s32, u8 *) __asm__("func_0020AD78");
 
 void memcard_make_whole_save(u8 *arg0) __asm__("FUN_0020abb0");
 
-void memcard_make_whole_save(u8 *arg0)
-{
+void memcard_make_whole_save(u8 *arg0) {
     s32 index;
     s32 size;
 
@@ -17,8 +16,7 @@ void memcard_make_whole_save(u8 *arg0)
     arg0 += 8;
     arg0 += memcard_prepare_data(arg0, 0, D_001A04C0);
     index = 0;
-    do
-    {
+    do {
         size = memcard_prepare_data(arg0, index, D_001A07C0);
         arg0 += size;
         index++;

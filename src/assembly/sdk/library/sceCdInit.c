@@ -16,7 +16,7 @@ typedef struct {
     u8 pad28[0x10];
 } sceSifClientData;
 
-extern s32 D_001312D0[];   /* debug level */
+extern s32 D_001312D0[]; /* debug level */
 extern s32 D_001312E0[];
 extern s32 D_001312E4[];
 extern s32 D_001312E8[];
@@ -48,8 +48,7 @@ extern s32 sceSifCallRpc(sceSifClientData *cd, u32 fno, u32 mode, void *send, s3
 extern void sceSifInitRpc(u32 mode);
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 
-int sceCdInit(int init_mode)
-{
+int sceCdInit(int init_mode) {
     int ret;
     int r;
     int i;

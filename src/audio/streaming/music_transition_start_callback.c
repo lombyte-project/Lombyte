@@ -21,4 +21,5 @@ void music_transition_start_callback(int handle, long context) {
     }
 }
 
-extern __typeof__(music_transition_start_callback) func_00216A80 __attribute__((alias("FUN_00216a80")));
+extern __typeof__(music_transition_start_callback) func_00216A80
+    __attribute__((alias("FUN_00216a80")));

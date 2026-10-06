@@ -59,10 +59,10 @@ s32 FUN_0021c4c0(struct Menu *m) {
         struct Menu *owner = D_001D5BF0.cur->owner;
         old = D_001A00F0.level;
         if (owner != m) {
-        if (old < 20) {
-            m->choice[old] = -1;
-        }
-        return 0;
+            if (old < 20) {
+                m->choice[old] = -1;
+            }
+            return 0;
         }
     }
     if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.unk124 == 0) {

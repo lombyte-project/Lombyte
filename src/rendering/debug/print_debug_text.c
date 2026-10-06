@@ -1,5 +1,10 @@
 #include "types.h"
-struct DebugText { s32 x; s32 y; s32 color; char *text; };
+struct DebugText {
+    s32 x;
+    s32 y;
+    s32 color;
+    char *text;
+};
 /* The debug-text cursor this file owns: the function below reaches both
    gp-relative, which needs their definitions ahead of it. */
 char *D_0015F000 = (char *)0x0018A300;

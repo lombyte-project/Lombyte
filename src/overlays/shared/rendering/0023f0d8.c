@@ -15,10 +15,14 @@ extern int D_L00_0015FC98;
 extern int D_L00_0015FC9C;
 
 void FUN_L00_0023f0d8(char *p) {
-    D_L00_0015FC98 = *(int *)p; p += 4;
-    D_L00_0015FC9C = *(int *)p; p += 4;
-    D_L00_0015FCA0 = *(float *)p; p += 4;
-    D_L00_0015FCA4 = *(float *)p; p += 4;
+    D_L00_0015FC98 = *(int *)p;
+    p += 4;
+    D_L00_0015FC9C = *(int *)p;
+    p += 4;
+    D_L00_0015FCA0 = *(float *)p;
+    p += 4;
+    D_L00_0015FCA4 = *(float *)p;
+    p += 4;
     D_L00_0015FCA8 = p;
 }
 extern u32 D_L00_0015F43C;

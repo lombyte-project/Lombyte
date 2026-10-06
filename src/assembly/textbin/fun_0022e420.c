@@ -9,31 +9,34 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022e420/FUN_0022e420.s
 #include "sda.h"
 #include "qcopy.h"
 
-typedef union { u128 quadword; f32 components[4]; } Vector4;
+typedef union {
+    u128 quadword;
+    f32 components[4];
+} Vector4;
 
 struct GeometryQuad {
-    Vector4 positions[4];         /* 0x00 */
-    u32 colors[4];        /* 0x40 */
-    f32 texture_coordinates[4][2];      /* 0x50 */
-    volatile u64 reserved;            /* 0x70 */
-    u64 texture;            /* 0x78 */
-    u64 texture_state;            /* 0x80 */
-    u64 primitive;            /* 0x88 */
+    Vector4 positions[4];          /* 0x00 */
+    u32 colors[4];                 /* 0x40 */
+    f32 texture_coordinates[4][2]; /* 0x50 */
+    volatile u64 reserved;         /* 0x70 */
+    u64 texture;                   /* 0x78 */
+    u64 texture_state;             /* 0x80 */
+    u64 primitive;                 /* 0x88 */
 };
 
 typedef struct {
     u8 pad00[0x20];
-    s32 display_mode;         /* 0x20 */
+    s32 display_mode; /* 0x20 */
     u8 pad24[2];
-    s16 texture_variant;         /* 0x26 */
+    s16 texture_variant; /* 0x26 */
     u8 pad28[0x50 - 0x28];
-    s32 history_index;           /* 0x50 */
-    s32 history_count;           /* 0x54 */
+    s32 history_index; /* 0x50 */
+    s32 history_count; /* 0x54 */
     s32 mode;          /* 0x58 */
     s32 state;         /* 0x5C */
     u8 pad60[0xC0 - 0x60];
     Vector4 primary_history_positions[32];   /* 0xC0 */
-    Vector4 secondary_history_positions[32];   /* 0x2C0 */
+    Vector4 secondary_history_positions[32]; /* 0x2C0 */
 } LevelRenderState;
 
 typedef struct {
@@ -102,7 +105,8 @@ void build_resident_indexed_texture_warp_meshes(void) {
     for (page = 0; page < level_render_state.history_count - 1; page++) {
         history_index = (level_render_state.history_index - page + 0x1F) & 0x1F;
         primary_next = get_primary_history_position((history_index + 1) & 0x1F);
-        secondary_next = &level_render_state.secondary_history_positions[(history_index + 1) & 0x1F];
+        secondary_next =
+            &level_render_state.secondary_history_positions[(history_index + 1) & 0x1F];
         primary_current = get_primary_history_position(history_index);
         secondary_current = &level_render_state.secondary_history_positions[history_index];
         for (strip = 0; strip < 2; strip++) {
@@ -113,8 +117,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
             subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);
             subtract_vectors(&cross_strip_differences[2], secondary_next, primary_next);
             subtract_vectors(&cross_strip_differences[3], primary_next, secondary_next);
-            subtract_vectors(&edge_normals[1], primary_next + strip_offset, primary_current + strip_offset);
-            subtract_vectors(&edge_normals[3], primary_after_next + strip_offset, primary_next + strip_offset);
+            subtract_vectors(&edge_normals[1], primary_next + strip_offset,
+                             primary_current + strip_offset);
+            subtract_vectors(&edge_normals[3], primary_after_next + strip_offset,
+                             primary_next + strip_offset);
             if (page == 0) {
                 qcopy(&edge_normals[3], &edge_normals[1]);
             }
@@ -125,22 +131,35 @@ void build_resident_indexed_texture_warp_meshes(void) {
             for (vertex = 0; vertex < 4; vertex++) {
                 history_step = vertex >> 1;
                 progress = convert_integer_to_float(page + 1 - history_step) * 0.03125f;
-                quad.colors[vertex] = blend_colors(D_001D9A30[level_render_state.texture_variant * 2], D_001D9A34[level_render_state.texture_variant * 2], progress);
-                normalize_vector(&quad.positions[vertex], &edge_normals[vertex], (1.0f - progress * progress) * (&D_001604D0)[level_render_state.texture_variant]);
-                add_vectors(&quad.positions[vertex], &quad.positions[vertex], get_primary_history_position((history_index + history_step) & 0x1F) + strip_offset);
+                quad.colors[vertex] =
+                    blend_colors(D_001D9A30[level_render_state.texture_variant * 2],
+                                 D_001D9A34[level_render_state.texture_variant * 2], progress);
+                normalize_vector(&quad.positions[vertex], &edge_normals[vertex],
+                                 (1.0f - progress * progress) *
+                                     (&D_001604D0)[level_render_state.texture_variant]);
+                add_vectors(&quad.positions[vertex], &quad.positions[vertex],
+                            get_primary_history_position((history_index + history_step) & 0x1F) +
+                                strip_offset);
             }
             draw_geometry_quad(&quad, 0, 0);
             for (side_vertex = 0; side_vertex < 4; side_vertex++) {
                 side_history_step = side_vertex >> 1;
                 side_progress = convert_integer_to_float(page + 1 - side_history_step) * 0.03125f;
-                normalize_vector(&quad.positions[side_vertex], &cross_strip_differences[side_vertex], (1.0f - side_progress * side_progress) * (&D_001604D0)[level_render_state.texture_variant]);
-                add_vectors(&quad.positions[side_vertex], &quad.positions[side_vertex], get_primary_history_position((history_index + side_history_step) & 0x1F) + strip_offset);
+                normalize_vector(&quad.positions[side_vertex],
+                                 &cross_strip_differences[side_vertex],
+                                 (1.0f - side_progress * side_progress) *
+                                     (&D_001604D0)[level_render_state.texture_variant]);
+                add_vectors(
+                    &quad.positions[side_vertex], &quad.positions[side_vertex],
+                    get_primary_history_position((history_index + side_history_step) & 0x1F) +
+                        strip_offset);
             }
             draw_geometry_quad(&quad, 0, 0);
         }
     }
 }
 
-extern __typeof__(build_resident_indexed_texture_warp_meshes) func_0022E420 __attribute__((alias("FUN_0022e420")));
+extern __typeof__(build_resident_indexed_texture_warp_meshes) func_0022E420
+    __attribute__((alias("FUN_0022e420")));
 
 #endif /* NON_MATCHING */

@@ -60,9 +60,9 @@ block_2:
     st->unk0 = dwSector;
     st->unk4 = dwSectorCount;
     st->unk8 = pDestination;
-    st->unkC = (u8) pMode->unk0;
-    st->unkD = (u8) pMode->unk1;
-    st->unkE = (u8) pMode->unk2;
+    st->unkC = (u8)pMode->unk0;
+    st->unkD = (u8)pMode->unk1;
+    st->unkE = (u8)pMode->unk2;
     st->unk10 = D_001323C0;
     st->unk14 = D_00132480;
     dataPattern = pMode->unk2;

@@ -12,7 +12,7 @@ s32 FUN_002073b8(s32 arg0, s32 arg1, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 var_4_15;
 
     var_4_15 = 0;
-    if (((u32) (D_0013F350.unk208C - 0x11) < 2U) || (D_0013F350.unk12E4 == 1)) {
+    if (((u32)(D_0013F350.unk208C - 0x11) < 2U) || (D_0013F350.unk12E4 == 1)) {
         var_4_15 = 1;
     }
     if (var_4_15 != 0) {

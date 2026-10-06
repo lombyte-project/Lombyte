@@ -12,4 +12,5 @@ void execute_camera_post_update_callbacks(void) {
     D_0015EF8C = 0;
 }
 
-extern __typeof__(execute_camera_post_update_callbacks) func_001EBCF0 __attribute__((alias("FUN_001ebcf0")));
+extern __typeof__(execute_camera_post_update_callbacks) func_001EBCF0
+    __attribute__((alias("FUN_001ebcf0")));

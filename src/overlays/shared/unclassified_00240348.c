@@ -3,14 +3,21 @@
 #include "asm.h"
 
 #include "sda.h"
-typedef struct { s32 a, b, c, off; } Ent;
-typedef struct { s32 n; s32 pad[3]; Ent e[1]; } Tbl;
+typedef struct {
+    s32 a, b, c, off;
+} Ent;
+typedef struct {
+    s32 n;
+    s32 pad[3];
+    Ent e[1];
+} Tbl;
 extern u8 *D_L00_00173E40 NOT_SDA;
 extern Tbl *D_L00_0015F618 __attribute__((sda));
 void FUN_L00_00241728(s32 *h) {
     s32 i;
     Tbl *t;
-    if (h[0]) D_L00_00173E40 = (u8 *)h + h[0];
+    if (h[0])
+        D_L00_00173E40 = (u8 *)h + h[0];
     if (h[1]) {
         t = (Tbl *)((u8 *)h + h[1]);
         D_L00_0015F618 = t;

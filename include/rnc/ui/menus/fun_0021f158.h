@@ -5,7 +5,7 @@
 
 struct M2c_D_001D5BF4 {
     u8 pad_0[0x40];
-    struct M2c_temp_3_15 * unk40;
+    struct M2c_temp_3_15 *unk40;
 };
 
 struct M2c_temp_16_37 {

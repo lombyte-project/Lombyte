@@ -15,4 +15,5 @@ void save_card_state_format_pending(void) {
     D_0015EEB0 = 8;
 }
 
-extern __typeof__(save_card_state_format_pending) func_00208AF8 __attribute__((alias("FUN_00208af8")));
+extern __typeof__(save_card_state_format_pending) func_00208AF8
+    __attribute__((alias("FUN_00208af8")));

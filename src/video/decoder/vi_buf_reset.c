@@ -1,11 +1,29 @@
 #include "types.h"
 #include "eetypes.h"
-#define DPUT(a, v) (*(volatile u32 *)(a) = (v))
+#define DPUT(a, v)  (*(volatile u32 *)(a) = (v))
 #define DMA_ADDR(p) ((u32)(p) & 0x0FFFFFFF)
-typedef struct { s64 pts; s64 dts; s32 pos; s32 len; } TimeStamp;
 typedef struct {
-    u128 *data; u128 *tag; s32 n; s32 dmaStart; s32 dmaN; s32 readBytes; s32 buffSize; u8 pad1C[0x24];
-    s32 sema; s32 isActive; s64 totalBytes; TimeStamp *ts; s32 n_ts; s32 count_ts; s32 wt_ts;
+    s64 pts;
+    s64 dts;
+    s32 pos;
+    s32 len;
+} TimeStamp;
+typedef struct {
+    u128 *data;
+    u128 *tag;
+    s32 n;
+    s32 dmaStart;
+    s32 dmaN;
+    s32 readBytes;
+    s32 buffSize;
+    u8 pad1C[0x24];
+    s32 sema;
+    s32 isActive;
+    s64 totalBytes;
+    TimeStamp *ts;
+    s32 n_ts;
+    s32 count_ts;
+    s32 wt_ts;
 } ViBuf;
 extern void func_0023BC20(u128 *, u32, s32, s32);
 extern void set_dma_channel_4_control_register(s32) __asm__("FUN_0023bbb0");

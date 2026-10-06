@@ -72,7 +72,8 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             break;
         }
         table_index = 0x4F000 - (level_archive[0x1614 / 4] << 11);
-        if (start_audio_stream_read(stream->buffer + table_index, level_archive[0x1610 / 4], level_archive[0x1614 / 4]) != 0) {
+        if (start_audio_stream_read(stream->buffer + table_index, level_archive[0x1610 / 4],
+                                    level_archive[0x1614 / 4]) != 0) {
             stream->read_offset = table_index;
             stream->state = 1;
             animation_asset_read_active[0] = 1;
@@ -139,7 +140,8 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         case 1:
         case 3:
         case 5:
-            if (moby->animation_frame_counter == 0 && moby->primary_animation == moby->secondary_animation) {
+            if (moby->animation_frame_counter == 0 &&
+                moby->primary_animation == moby->secondary_animation) {
                 continue_audio_stream_if_ready();
                 moby->animation_frame_counter = 1;
             }

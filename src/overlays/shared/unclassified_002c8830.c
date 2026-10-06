@@ -12,8 +12,7 @@ extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 
-void FUN_L11_002cb790(char *a0)
-{
+void FUN_L11_002cb790(char *a0) {
     if (FUN_001f9b48_b7(a0 + 0x10, D_0013F3D0_b7) < 2.0f) {
         D_0013D389_b7[0] = 1;
         FUN_00116248_b7(D_L11_00179B18_b7, D_L11_0021A900_b7);
@@ -42,7 +41,8 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
     char *p = D_L11_0015FFE4;
     float bestd = 10.0f;
     while (p != 0) {
-        if ((*(unsigned short *)(p + 0x34) & 0x1000) && p != 0 && *(char **)(p + 0x24) != 0 && *(short *)(*(char **)(p + 0x24) + 0x46) == 5) {
+        if ((*(unsigned short *)(p + 0x34) & 0x1000) && p != 0 && *(char **)(p + 0x24) != 0 &&
+            *(short *)(*(char **)(p + 0x24) + 0x46) == 5) {
             float d;
             q = p + 0x10;
             d = FUN_001f9b80(pos, q);
@@ -51,7 +51,8 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
                 float ra, rb, y, score;
                 qcopy(tmp, q);
                 tmp[2] = tmp[2] + 0.4f;
-                ra = fast_difference_between_rotations(aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
+                ra = fast_difference_between_rotations(
+                    aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
                 ra = ra * ra;
                 if (ra < r1 * r1) {
                     y = fast_difference_between_rotations(aim[1], FUN_001f9e90(d, tmp[2] - pos[2]));
@@ -113,7 +114,8 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
         qcopy(m + 0x10, pos);
         *(int *)(d + 0x18) = *(int *)(d + 0x14) = func_001FA898_r(a / b);
         *(short *)(m + 0x34) = 0x200;
-        *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) *
+        *(float *)(m + 0x2C) =
+            *(float *)(*(char **)(m + 0x24) + 0x24) *
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
         m[0x23] = func_001FA898_r(*(float *)(d + 0x10) * 24.0f);
         FUN_L00_002502f0(m, 0xFF, 0xFF, 0xFF);

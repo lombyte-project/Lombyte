@@ -3,7 +3,9 @@
 #include "asm.h"
 
 char *FUN_L00_002603d0(char *m) {
-    if (m == 0) return 0;
-    if ((*(u16 *)(m + 0x34) & 0x20) == 0) return 0;
+    if (m == 0)
+        return 0;
+    if ((*(u16 *)(m + 0x34) & 0x20) == 0)
+        return 0;
     return *(char **)(*(char **)(m + 0x78) + 8);
 }

@@ -17,7 +17,8 @@ extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 s32 sceDbcSetWorkAddr(s32 arg0) {
     D_0015B080.unk4 = arg0;
-    if (sceSifCallRpc(D_0015B008, 0x80000904, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) < 0) {
+    if (sceSifCallRpc(D_0015B008, 0x80000904, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) <
+        0) {
         debug_print_stub(D_00153558);
         return 0;
     }

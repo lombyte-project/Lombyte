@@ -44,8 +44,7 @@ void FUN_L05_002661a0(HudElem *e) {
 
 extern char D_0013E533[];
 
-void FUN_L05_002661e8(char *moby)
-{
+void FUN_L05_002661e8(char *moby) {
     if (*(int *)(D_0013E533 + 0x2EA9) == 0x16) {
         *(int *)(moby + 0x7C) = scale_game_frames(0x1E);
         *(int *)(moby + 0x6C) = 5;

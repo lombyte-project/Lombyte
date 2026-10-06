@@ -9,8 +9,7 @@ typedef struct RenderState {
     u16 command_78;
 } RenderState;
 
-extern RenderState GlobalRenderState __asm__("D_001516D0")
-    __attribute__((section(".data")));
+extern RenderState GlobalRenderState __asm__("D_001516D0") __attribute__((section(".data")));
 
 void UpdateRenderStateCommand(void) __asm__("UpdateRenderStateCommand");
 

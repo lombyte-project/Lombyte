@@ -1,14 +1,32 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/animation/set_moby_animation/FUN_00212ed8.s", FUN_00212ed8);
+INCLUDE_ASM("config/us/expected/asm/assembly/gameplay/animation/set_moby_animation/FUN_00212ed8.s",
+            FUN_00212ed8);
 #else
 #include "types.h"
-struct Anim { u8 pad0[0x10]; u8 count; };
-struct AnimSet { u8 pad0[0x48]; struct Anim *anims[1]; };
+struct Anim {
+    u8 pad0[0x10];
+    u8 count;
+};
+struct AnimSet {
+    u8 pad0[0x48];
+    struct Anim *anims[1];
+};
 struct Obj {
-    u8 pad0[0x24]; struct AnimSet *set; u8 pad28[0x28];
-    u8 cur; u8 next; u8 sel; u8 sel2; u8 pad54[8]; f32 time; u8 pad60[8]; f32 *start; u8 pad6c[4]; u8 flags;
+    u8 pad0[0x24];
+    struct AnimSet *set;
+    u8 pad28[0x28];
+    u8 cur;
+    u8 next;
+    u8 sel;
+    u8 sel2;
+    u8 pad54[8];
+    f32 time;
+    u8 pad60[8];
+    f32 *start;
+    u8 pad6c[4];
+    u8 flags;
 };
 extern void update_moby_animation_state(struct Obj *) __asm__("func_0020C880");
 

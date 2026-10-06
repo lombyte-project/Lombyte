@@ -7,8 +7,7 @@ struct Object {
 
 Object *Func001154D0(Object *object, int index) __asm__("func_001154D0");
 
-Object *Func00115808(Object *unused, Object *object)
-    __asm__("func_00115808");
+Object *Func00115808(Object *unused, Object *object) __asm__("func_00115808");
 
 Object *Func00115808(Object *unused, Object *object) {
     Object *result = Func001154D0(unused, 1);

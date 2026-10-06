@@ -27,4 +27,3 @@ s32 is_value_within_interpolated_window(struct M2c_arg0 *arg0, f32 fparg0) {
     }
     return var_2_25;
 }
-

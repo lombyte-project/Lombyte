@@ -21,10 +21,16 @@ extern u64 special_material_template[] __asm__("D_0019E6C0");
 extern u64 alternate_special_material_template[] __asm__("D_0019E6D8");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 
-void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderTextureDefinition *texture, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index) __asm__("FUN_00202d78");
+void build_indexed_resident_render_packet(u64 *packet,
+                                          struct ResidentRenderTextureDefinition *texture,
+                                          s32 draw_high, s32 draw_shift, s32 material_base,
+                                          s32 material_shift,
+                                          s32 material_index) __asm__("FUN_00202d78");
 
-void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderTextureDefinition *texture, s32 draw_high, s32 draw_shift, s32 material_base, s32 material_shift, s32 material_index)
-{
+void build_indexed_resident_render_packet(u64 *packet,
+                                          struct ResidentRenderTextureDefinition *texture,
+                                          s32 draw_high, s32 draw_shift, s32 material_base,
+                                          s32 material_shift, s32 material_index) {
     s32 width_units_128;
     s32 width_units_64;
     s32 width_log2;
@@ -102,6 +108,7 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
     }
 }
 
-extern __typeof__(build_indexed_resident_render_packet) func_00202D78 __attribute__((alias("FUN_00202d78")));
+extern __typeof__(build_indexed_resident_render_packet) func_00202D78
+    __attribute__((alias("FUN_00202d78")));
 
 #endif /* NON_MATCHING */

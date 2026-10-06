@@ -14,8 +14,7 @@ extern PadBind D_001D60B8[];
 extern void initialize_graphics_buffer_descriptors(s32) __asm__("func_00225AC0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
-s32 FUN_0021d1f8(struct M2c_arg0 *arg0)
-{
+s32 FUN_0021d1f8(struct M2c_arg0 *arg0) {
     s32 i;
     struct M2c_D_001D5BF0 *g;
 

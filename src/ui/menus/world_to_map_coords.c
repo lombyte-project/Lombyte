@@ -1,5 +1,10 @@
 #include "types.h"
-struct ViewParams { f32 ox; f32 sx; f32 oy; f32 sy; };
+struct ViewParams {
+    f32 ox;
+    f32 sx;
+    f32 oy;
+    f32 sy;
+};
 extern s32 D_0015ED84;
 extern struct ViewParams D_0019E970[];
 void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) __asm__("FUN_00208408");

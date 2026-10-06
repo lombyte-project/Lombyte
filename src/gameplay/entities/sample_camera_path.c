@@ -2,7 +2,10 @@
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
 
 struct CameraPath {
     s32 count;
@@ -18,9 +21,11 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 
-void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) __asm__("FUN_00214e58");
+void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags,
+                        f32 progress) __asm__("FUN_00214e58");
 
-void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) {
+void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags,
+                        f32 progress) {
     Vec4 current_point;
     Vec4 next_point;
     Vec4 following_point;
@@ -80,9 +85,12 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
             next_bank = next_point.f[3];
         }
         *(s32 *)rotation = 0;
-        rotation[1] = -fast_add_rotations(fast_subtract_rotations(next_pitch, pitch) * fraction, pitch);
-        rotation[2] = fast_add_rotations(fast_subtract_rotations(next_heading, heading) * fraction, heading);
-        rotation[3] = -fast_add_rotations(fast_subtract_rotations(next_bank, bank) * fraction, bank);
+        rotation[1] =
+            -fast_add_rotations(fast_subtract_rotations(next_pitch, pitch) * fraction, pitch);
+        rotation[2] =
+            fast_add_rotations(fast_subtract_rotations(next_heading, heading) * fraction, heading);
+        rotation[3] =
+            -fast_add_rotations(fast_subtract_rotations(next_bank, bank) * fraction, bank);
     }
 }
 

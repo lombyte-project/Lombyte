@@ -89,7 +89,8 @@ s32 draw_save_slot_list(SaveMenu *menu) {
         } else {
             if (slot->id == -1) {
                 y += 0x10;
-                font_print_center_small(menu->width / 2, y, 0x80FFA888, get_help_message_text(0x5217), -1);
+                font_print_center_small(menu->width / 2, y, 0x80FFA888,
+                                        get_help_message_text(0x5217), -1);
                 y += 0x20;
             } else {
                 play_ticks = slot->time;
@@ -100,10 +101,12 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                     hours = 99;
                 }
                 sprintf(text, D_00160300, hours, minutes);
-                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 3), 4, y, 0x10, 0x10, 0x80);
+                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 3), 4, y, 0x10, 0x10,
+                                0x80);
                 font_print_small(0x16, y, color, text, -1);
                 if (slot->count != 0) {
-                    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 4), 0x4E, y, 0x10, 0x10, 0x80);
+                    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 4), 0x4E, y, 0x10,
+                                    0x10, 0x80);
                     sprintf(text, D_001602A0, slot->count < 100 ? slot->count : 99);
                     font_print_small(0x60, y, color, text, -1);
                 }
@@ -117,13 +120,16 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 } else if (bolts < 1000000) {
                     sprintf(text, D_001602D0, bolts / 1000, bolts % 1000);
                 } else {
-                    sprintf(text, D_00160310, bolts / 1000000, bolts % 1000000 / 1000, bolts % 1000);
+                    sprintf(text, D_00160310, bolts / 1000000, bolts % 1000000 / 1000,
+                            bolts % 1000);
                 }
-                draw_hud_sprite(find_valid_animation_frame_index(0x754F, 0xF), 4, y, 0x10, 0x10, 0x80);
+                draw_hud_sprite(find_valid_animation_frame_index(0x754F, 0xF), 4, y, 0x10, 0x10,
+                                0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
                 sprintf(text, D_00160320, slot->b16, slot->b15, slot->b17);
-                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 2), 4, y, 0x10, 0x10, 0x80);
+                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 2), 4, y, 0x10, 0x10,
+                                0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
             }

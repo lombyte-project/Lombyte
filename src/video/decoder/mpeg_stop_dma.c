@@ -53,8 +53,8 @@ typedef struct {
     int type;
 } sceMpegCbData;
 typedef struct {
-    sceMpeg mpeg;     /* 0x00 */
-    ViBuf vibuf;      /* 0x48 */
+    sceMpeg mpeg;       /* 0x00 */
+    ViBuf vibuf;        /* 0x48 */
     unsigned int state; /* 0xA8 */
     int sema;
     int hid_endimage;

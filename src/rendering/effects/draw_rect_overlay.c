@@ -3,7 +3,9 @@
 #include "sda.h"
 #include "qcopy.h"
 
-struct PacketCursor { int *p; };
+struct PacketCursor {
+    int *p;
+};
 extern struct PacketCursor D_00160F00_s __asm__("D_00160F00") MACRO_ADDR;
 #define D_00160F00 (D_00160F00_s.p)
 extern int D_0013E500[];
@@ -47,18 +49,14 @@ void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) {
         long *p;
         D_00160F00 = base + 4;
         p = (long *)D_00160F00;
-        p[0] = (x0 * 16 + D_0013E500[4] - 8)
-             | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16)
-             | ((long)0xFFFFF0 << 32);
-        p[1] = (x1 * 16 + D_0013E500[4] - 8)
-             | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16)
-             | ((long)0xFFFFF0 << 32);
-        p[2] = (x0 * 16 + D_0013E500[4] - 8)
-             | ((long)(y1 * 16 + D_0013E500[5] - 8) << 16)
-             | ((long)0xFFFFF0 << 32);
-        p[3] = (x1 * 16 + D_0013E500[4] - 8)
-             | ((long)(y1 * 16 + D_0013E500[5] - 8) << 16)
-             | ((long)0xFFFFF0 << 32);
+        p[0] = (x0 * 16 + D_0013E500[4] - 8) | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16) |
+               ((long)0xFFFFF0 << 32);
+        p[1] = (x1 * 16 + D_0013E500[4] - 8) | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16) |
+               ((long)0xFFFFF0 << 32);
+        p[2] = (x0 * 16 + D_0013E500[4] - 8) | ((long)(y1 * 16 + D_0013E500[5] - 8) << 16) |
+               ((long)0xFFFFF0 << 32);
+        p[3] = (x1 * 16 + D_0013E500[4] - 8) | ((long)(y1 * 16 + D_0013E500[5] - 8) << 16) |
+               ((long)0xFFFFF0 << 32);
     }
     D_00160F00 = (int *)((char *)D_00160F00 + 0x20);
 }

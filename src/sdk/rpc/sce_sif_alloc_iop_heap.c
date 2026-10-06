@@ -4,8 +4,7 @@ extern u8 D_00158040[];
 extern u8 D_00158080[];
 extern u8 D_001580C0[];
 extern s32 sceSifCallRpc();
-void *sceSifAllocIopHeap(s32 size)
-{
+void *sceSifAllocIopHeap(s32 size) {
     if (D_0012FCAC < 0)
         return 0;
     *(s32 *)D_001580C0 = size;

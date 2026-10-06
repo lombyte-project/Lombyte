@@ -61,9 +61,9 @@ void FUN_L01_002b7fe0(char *p, int n) {
             do {
                 if (*(unsigned short *)(q + 0x1E) != 0) {
                     FUN_L01_00261d78(q + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
-                                      q + (*(int *)&D_L01_0016121C_d * 0x5C0 + 0x50),
-                                      q + (*(int *)&D_L01_00161218_d * 0x5C0 + 0x50),
-                                      *(float *)&D_L01_00161224_d);
+                                     q + (*(int *)&D_L01_0016121C_d * 0x5C0 + 0x50),
+                                     q + (*(int *)&D_L01_00161218_d * 0x5C0 + 0x50),
+                                     *(float *)&D_L01_00161224_d);
                 }
                 k--;
                 q += 0x1190;

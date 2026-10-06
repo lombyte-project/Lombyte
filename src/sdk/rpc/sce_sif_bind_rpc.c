@@ -35,7 +35,7 @@ s32 sceSifBindRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     if (temp_2_15 == NULL) {
         return -1;
     }
-    arg0->unk4 = (s32) temp_2_15->unk18;
+    arg0->unk4 = (s32)temp_2_15->unk18;
     arg0->unk0 = (s32)temp_2_15;
     temp_2_15->unk20 = arg1;
     temp_2_15->unk14 = (s32)temp_2_15;

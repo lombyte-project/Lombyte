@@ -35,4 +35,5 @@ s32 complete_stream_buffer_transfer(s32 arg0) {
     return 0;
 }
 
-extern __typeof__(complete_stream_buffer_transfer) func_00225CD8 __attribute__((alias("FUN_00225cd8")));
+extern __typeof__(complete_stream_buffer_transfer) func_00225CD8
+    __attribute__((alias("FUN_00225cd8")));

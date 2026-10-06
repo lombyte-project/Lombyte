@@ -1,10 +1,8 @@
 extern int CreateSema(int *parameters) __asm__("CreateSema");
-extern void SetAlarm(int delay, void *callback, int semaphore)
-    __asm__("SetAlarm");
+extern void SetAlarm(int delay, void *callback, int semaphore) __asm__("SetAlarm");
 extern void WaitSema(int semaphore) __asm__("WaitSema");
 extern void DeleteSema(int semaphore) __asm__("DeleteSema");
-extern unsigned char AlarmCallback[1] __asm__("D_001205E8")
-    __attribute__((section(".data")));
+extern unsigned char AlarmCallback[1] __asm__("D_001205E8") __attribute__((section(".data")));
 
 void SceCdDelayThread(int delay) __asm__("sceCdDelayThread");
 

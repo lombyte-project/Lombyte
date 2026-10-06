@@ -6,7 +6,10 @@ extern u8 D_001603B0[];
 extern u8 D_001603C0[];
 extern s32 D_001603F0;
 extern s32 D_00160F00;
-struct M2c_D_0018A2D0 { s32 unk0; s32 pad[2]; };
+struct M2c_D_0018A2D0 {
+    s32 unk0;
+    s32 pad[2];
+};
 extern struct M2c_D_0018A2D0 D_0018A2D0;
 extern u8 D_001D8EB0[];
 extern void func_00118A80(s32);

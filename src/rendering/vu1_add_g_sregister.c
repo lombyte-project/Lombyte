@@ -16,10 +16,11 @@ void vu1_add_g_sregister(s32 register_id, s64 value) {
     PACKET_CURSOR[5] = 0x10000000;
     PACKET_CURSOR[6] = 14;
     PACKET_CURSOR[7] = 0;
-    *(volatile s64 *) (PACKET_CURSOR + 8) = value;
+    *(volatile s64 *)(PACKET_CURSOR + 8) = value;
     PACKET_CURSOR[10] = register_id;
     PACKET_CURSOR[11] = 0;
     D_00160F00_store = PACKET_CURSOR + 12;
 }
 
-extern s32 emit_gs_register_write(s32 register_id, s64 value) __attribute__((alias("FUN_00233980")));
+extern s32 emit_gs_register_write(s32 register_id, s64 value)
+    __attribute__((alias("FUN_00233980")));

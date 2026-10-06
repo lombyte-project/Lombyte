@@ -2,8 +2,13 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { float m[16]; } __attribute__((aligned(16))) Mtx;
-typedef struct { float r[12]; float t[4]; } __attribute__((aligned(16))) M4;
+typedef struct {
+    float m[16];
+} __attribute__((aligned(16))) Mtx;
+typedef struct {
+    float r[12];
+    float t[4];
+} __attribute__((aligned(16))) M4;
 void FUN_001fa298(Mtx *, void *);
 void FUN_00210850(char *, int, int, M4 *);
 void FUN_001fa378(void *, Mtx *, void *);

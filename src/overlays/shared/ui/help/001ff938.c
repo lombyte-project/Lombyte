@@ -46,7 +46,7 @@ void FUN_L15_002007d8(void) {
         float v[4];
         float w[16];
         FUN_L00_00262b00(1.1f, D_0015ED6C * 5.2359877f, *(char **)(base + 0x2080),
-                          (float *)(base + 0x6A8), (float *)(base + 0x6AC));
+                         (float *)(base + 0x6A8), (float *)(base + 0x6AC));
         m = *(char **)(base + 0x86C);
         if (m != 0) {
             char *cam;
@@ -175,7 +175,8 @@ void FUN_L15_00209450(void) {
         break;
     }
     if (P.i208C == 4) {
-        if (P.i198 > P.i420 && P.s41E == 0) P.f22C = P.f434;
+        if (P.i198 > P.i420 && P.s41E == 0)
+            P.f22C = P.f434;
     } else if (P.i2084 == 6) {
         P.f22C = 0.5f;
     } else if (P.i2084 == 4) {
@@ -186,19 +187,43 @@ void FUN_L15_00209450(void) {
     } else if (P.i2084 == 0x7F) {
         P.f230 = 0.8f;
     }
-    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 || FUN_001f9b80_209450(P.v210, P.v80) > P.f234 * 0.5f) {
+    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 ||
+        FUN_001f9b80_209450(P.v210, P.v80) > P.f234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         P_209450 *b = (P_209450 *)((u8 *)q - 0x220);
         approach_value_209450(b->f228, D_0015ED60_209450 * 0.02f, q);
         approach_value_209450(b->f22C, D_0015ED60_209450 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->f230, D_0015ED64_209450 * 0.02f, D_0015ED64_209450 * 0.3f, D_0015ED6C_209450 * 4.0f);
+        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->f230, D_0015ED64_209450 * 0.02f,
+                                D_0015ED64_209450 * 0.3f, D_0015ED6C_209450 * 4.0f);
     }
 }
 #undef P
-typedef struct { f32 f[4]; } V_20a328;
-typedef struct { u8 p0[0x98]; f32 f98; u8 p1[0xE0 - 0x9C]; V_20a328 vE0; u8 p2[0x240 - 0xF0]; s32 i240; u8 p3[0x308 - 0x244]; s16 h308;
-    u8 p4[0x2080 - 0x30A]; void *p2080; u8 p5[0x208C - 0x2084]; s32 i208C; u8 p6[0x20A4 - 0x2090]; u8 b20A4; } P_20a328;
-typedef struct { u8 p0[0x18]; s32 i18; s32 i1C; u8 p1[0x40 - 0x20]; V_20a328 v40; } X_20a328;
+typedef struct {
+    f32 f[4];
+} V_20a328;
+typedef struct {
+    u8 p0[0x98];
+    f32 f98;
+    u8 p1[0xE0 - 0x9C];
+    V_20a328 vE0;
+    u8 p2[0x240 - 0xF0];
+    s32 i240;
+    u8 p3[0x308 - 0x244];
+    s16 h308;
+    u8 p4[0x2080 - 0x30A];
+    void *p2080;
+    u8 p5[0x208C - 0x2084];
+    s32 i208C;
+    u8 p6[0x20A4 - 0x2090];
+    u8 b20A4;
+} P_20a328;
+typedef struct {
+    u8 p0[0x18];
+    s32 i18;
+    s32 i1C;
+    u8 p1[0x40 - 0x20];
+    V_20a328 v40;
+} X_20a328;
 extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") __attribute__((section(".data")));
 extern char D_0013F3D0_20a328[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") __attribute__((section(".data")));
@@ -224,8 +249,10 @@ void FUN_L15_0020a328(int force) {
     f32 off, k, c, ang, t;
     int r;
 
-    if (P.h308 != 0) return;
-    if (FUN_L00_002339d0_20a328(&P.vE0) < D_0015ED6C_20a328 * 0.1f) return;
+    if (P.h308 != 0)
+        return;
+    if (FUN_L00_002339d0_20a328(&P.vE0) < D_0015ED6C_20a328 * 0.1f)
+        return;
     off = 0.3700000047683716f;
     k = 0.5f;
     if ((u32)(P.i208C - 0x11) < 2) {
@@ -259,7 +286,8 @@ void FUN_L15_0020a328(int force) {
     FUN_001f9a10_20a328(&d1, &d1, &a);
     FUN_001f9a10_20a328(&d2, &d2, &b);
     r = -1;
-    if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C_20a328 > 0) r = FUN_001f0b58_20a328();
+    if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C_20a328 > 0)
+        r = FUN_001f0b58_20a328();
     ang = 0.0f;
     if (FUN_001efa68_20a328(&a, &d1, 4, P.p2080, 0) && X.i1C > 0)
         ang = FUN_001f9e90_20a328(X.v40.f[2], FUN_001f9b20_20a328(&X.v40));
@@ -282,8 +310,14 @@ extern void FUN_L15_00216c38(int, int);
 
 void FUN_L15_0021ab60(void) {
     switch (D_0013E533[0x2EC1]) {
-    case 0: FUN_L15_00216c38(0, 1); break;
-    case 2: FUN_L15_00216c38(0x5A, 1); break;
-    case 3: FUN_L15_00216c38(0x53, 1); break;
+    case 0:
+        FUN_L15_00216c38(0, 1);
+        break;
+    case 2:
+        FUN_L15_00216c38(0x5A, 1);
+        break;
+    case 3:
+        FUN_L15_00216c38(0x53, 1);
+        break;
     }
 }

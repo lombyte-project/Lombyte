@@ -2,16 +2,32 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { u8 p[6]; u8 lw; u8 lh; } R0023b120;
-typedef struct { s16 a; s16 k; } T0023b120;
-typedef struct { u8 p[0x20]; T0023b120 *tab; R0023b120 *rec; } G0023b120;
-typedef struct { u8 p[0x48]; s16 x; s16 y; } O0023b120;
+typedef struct {
+    u8 p[6];
+    u8 lw;
+    u8 lh;
+} R0023b120;
+typedef struct {
+    s16 a;
+    s16 k;
+} T0023b120;
+typedef struct {
+    u8 p[0x20];
+    T0023b120 *tab;
+    R0023b120 *rec;
+} G0023b120;
+typedef struct {
+    u8 p[0x48];
+    s16 x;
+    s16 y;
+} O0023b120;
 extern G0023b120 D_L00_0017E4D8;
 void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void FUN_L00_0023b120(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32 w0, h0, w, h;
     R0023b120 *r;
-    if (id < 0) return;
+    if (id < 0)
+        return;
     x += o->x;
     y += o->y;
     r = &D_L00_0017E4D8.rec[D_L00_0017E4D8.tab[id].k];
@@ -19,9 +35,22 @@ void FUN_L00_0023b120(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) 
     h0 = 1 << r->lh;
     w = w0;
     h = h0;
-    if (flags & 1) { x -= w >> 1; y -= h >> 1; }
-    if (flags & 2) { x += w >> 2; y += h >> 2; w >>= 1; h >>= 1; }
-    if (flags & 4) { x -= w0 >> 1; y -= h0 >> 1; w <<= 1; h <<= 1; }
+    if (flags & 1) {
+        x -= w >> 1;
+        y -= h >> 1;
+    }
+    if (flags & 2) {
+        x += w >> 2;
+        y += h >> 2;
+        w >>= 1;
+        h >>= 1;
+    }
+    if (flags & 4) {
+        x -= w0 >> 1;
+        y -= h0 >> 1;
+        w <<= 1;
+        h <<= 1;
+    }
     draw_hud_sprite(id, x, y, w, h, extra);
 }
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
@@ -53,12 +82,25 @@ void FUN_L00_0023b6c0(int tex, int x, int y, int w, int h, int a) {
     y += h;
     p[8] = (u64)(((x << 4) + s[4] - 8) | (((u64)((y << 4) + s[5] - 8)) << 16)) | ((u64)g[3] << 32);
     p[9] = 0;
-    *(char * volatile *)&D_L00_001611C0_23b6c0 += 0x50;
+    *(char *volatile *)&D_L00_001611C0_23b6c0 += 0x50;
 }
 typedef unsigned long u64_23bac0;
-typedef struct { unsigned char p[6]; unsigned char lw; unsigned char lh; } R_23bac0;
-typedef struct { short a; short k; } T_23bac0;
-typedef struct { unsigned char p[0xC]; int zc; unsigned char p10[0x10]; T_23bac0 *tab; R_23bac0 *rec; } G_23bac0;
+typedef struct {
+    unsigned char p[6];
+    unsigned char lw;
+    unsigned char lh;
+} R_23bac0;
+typedef struct {
+    short a;
+    short k;
+} T_23bac0;
+typedef struct {
+    unsigned char p[0xC];
+    int zc;
+    unsigned char p10[0x10];
+    T_23bac0 *tab;
+    R_23bac0 *rec;
+} G_23bac0;
 extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
@@ -83,17 +125,33 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
     p[4] = ((u64_23bac0)a << 24) | 0x7F7F7F;
     p[5] = ww << 4;
     s = D_0013E500_23bac0;
-    p[6] = (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) | ((u64_23bac0)g->zc << 32);
+    p[6] = (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) |
+           ((u64_23bac0)g->zc << 32);
     p[7] = (hh << 20) + (ww << 4);
-    p[8] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) | ((u64_23bac0)g->zc << 32);
+    p[8] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) | (((u64_23bac0)((y << 4) + s[5] - 8)) << 16)) |
+           ((u64_23bac0)g->zc << 32);
     p[9] = 0;
-    p[10] = (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) | ((u64_23bac0)g->zc << 32);
+    p[10] =
+        (u64_23bac0)(((x << 4) + s[4] - 8) | (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) |
+        ((u64_23bac0)g->zc << 32);
     p[11] = hh << 20;
-    p[12] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) | (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) | ((u64_23bac0)g->zc << 32);
+    p[12] = (u64_23bac0)((((x + w) << 4) + s[4] - 8) |
+                         (((u64_23bac0)(((y + h) << 4) + s[5] - 8)) << 16)) |
+            ((u64_23bac0)g->zc << 32);
     p[13] = 0;
-    *(char * volatile *)&D_L00_001611C0_23bac0 += 0x70;
+    *(char *volatile *)&D_L00_001611C0_23bac0 += 0x70;
 }
-typedef struct O23cdb8 { u8 pad0[0x8]; s32 max; s32 *src; u8 pad10[0x5C]; s32 f6C; u8 c[4]; s32 val; u8 pad78[4]; s32 timer; } O23cdb8;
+typedef struct O23cdb8 {
+    u8 pad0[0x8];
+    s32 max;
+    s32 *src;
+    u8 pad10[0x5C];
+    s32 f6C;
+    u8 c[4];
+    s32 val;
+    u8 pad78[4];
+    s32 timer;
+} O23cdb8;
 extern s32 D_L00_0015F91C __attribute__((sda));
 extern s32 D_L00_0015F920 __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -101,16 +159,23 @@ void FUN_L00_0023cdb8(O23cdb8 *p) {
     u8 *c = p->c;
     s32 v = *p->src;
     p->val = v;
-    if (p->max < v) p->val = p->max;
-    else if (v < 0) p->val = 0;
+    if (p->max < v)
+        p->val = p->max;
+    else if (v < 0)
+        p->val = 0;
     if (p->timer >= scale_game_frames(5)) {
         p->timer = scale_game_frames(5);
-        if (c[0] < D_L00_0015F91C) c[0]++;
-        else if (c[1] < D_L00_0015F920) c[1]++;
+        if (c[0] < D_L00_0015F91C)
+            c[0]++;
+        else if (c[1] < D_L00_0015F920)
+            c[1]++;
     } else {
         p->f6C = 1;
-        if (c[1] != 0) c[1]--;
-        else if (c[0] != 0) c[0]--;
-        else p->f6C = -6;
+        if (c[1] != 0)
+            c[1]--;
+        else if (c[0] != 0)
+            c[0]--;
+        else
+            p->f6C = -6;
     }
 }

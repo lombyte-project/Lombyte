@@ -48,8 +48,11 @@ void FUN_L12_002ecac0(char *moby) {
     q.g[1] = get_effect_texture(0x10);
     q.g[0] = 0;
     q.g[2] = 0xFF9000000260UL;
-    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) | ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) | (0x8000L << 24);
-    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) |
+             ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) |
+             (0x8000L << 24);
+    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20,
+                       (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         q.uv[i * 2] = 0.5f;
         *(&q.uv[i * 2] + 1) = 0.5f;

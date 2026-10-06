@@ -1,7 +1,15 @@
 #include "types.h"
-struct Fog { u8 pad0[4]; u32 color; u64 enable; };
+struct Fog {
+    u8 pad0[4];
+    u32 color;
+    u64 enable;
+};
 extern s32 D_0015EE88;
-struct View { u8 pad0[0x150]; s16 height; s16 width; };
+struct View {
+    u8 pad0[0x150];
+    s16 height;
+    s16 width;
+};
 extern struct View D_00151780;
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
@@ -21,4 +29,5 @@ void draw_fogged_fullscreen_sprite(struct Fog *fog) {
     }
 }
 
-extern __typeof__(draw_fogged_fullscreen_sprite) func_001F5138 __attribute__((alias("FUN_001f5138")));
+extern __typeof__(draw_fogged_fullscreen_sprite) func_001F5138
+    __attribute__((alias("FUN_001f5138")));

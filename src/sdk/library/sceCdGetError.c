@@ -15,7 +15,7 @@ s32 sceCdGetError(void) {
         SignalSema(D_001312EC[0]);
         return -1;
     }
-    error = *(u32 *)((u32) D_001324C0 | 0x20000000);
+    error = *(u32 *)((u32)D_001324C0 | 0x20000000);
     SignalSema(D_001312EC[0]);
     return error;
 }

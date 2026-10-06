@@ -11,18 +11,18 @@ typedef struct {
 } AnimClass;
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern float func_001FA6C0(int arg0);
@@ -43,8 +43,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) {
     if (arg2 >= n) {
         arg2 = n - 1;
     }
-    if (*(float *)((char *)arg0 + 0x54) > 0.025f ||
-        *(int *)((char *)arg0 + 0x60) != 0 ||
+    if (*(float *)((char *)arg0 + 0x54) > 0.025f || *(int *)((char *)arg0 + 0x60) != 0 ||
         *(int *)((char *)arg0 + 0x64) != 0) {
         slot = find_or_allocate_id_slot((int)arg0);
         if (slot >= 0) {
@@ -66,8 +65,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) {
     *(float *)((char *)arg0 + 0x54) = 0.0f;
     arg0->unk70 = (unsigned char)(arg0->unk70 & 0xFD);
     arg0->unk5C = scale;
-    *(unsigned char *)((char *)arg0 + 0x7C) =
-        *((unsigned char *)arg0->pClass->seqs[arg1] + 0x11);
+    *(unsigned char *)((char *)arg0 + 0x7C) = *((unsigned char *)arg0->pClass->seqs[arg1] + 0x11);
 }
 
 extern __typeof__(blend_moby_animation) func_00212F90 __attribute__((alias("FUN_00212f90")));

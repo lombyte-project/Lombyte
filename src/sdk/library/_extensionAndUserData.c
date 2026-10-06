@@ -1,6 +1,8 @@
 #include "types.h"
 typedef void (*ExtFunc)(void *);
-typedef struct { ExtFunc f[11]; } ExtTable;
+typedef struct {
+    ExtFunc f[11];
+} ExtTable;
 extern ExtTable D_001538B8;
 extern void _nextStartCode(void *);
 extern u32 _peepBit(void *, s32);

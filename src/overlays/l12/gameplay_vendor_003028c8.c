@@ -95,7 +95,8 @@ void FUN_L12_00307840(char *m) {
         for (i = 0; i < 12; i++) {
             if (slots[i] != -1) {
                 char *o = (char *)(D_L12_0015FFD8_m + (slots[i] << 8));
-                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD) {
+                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE &&
+                    ((unsigned char *)o)[0x20] != 0xFD) {
                     mark_moby_for_removal(o);
                 }
             }
@@ -193,7 +194,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -289,7 +291,8 @@ void FUN_L12_0030be68(char *m) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
             FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
-            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i], D_L12_00208B00, 1);
+            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i],
+                             D_L12_00208B00, 1);
         }
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));

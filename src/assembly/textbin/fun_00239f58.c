@@ -46,7 +46,8 @@ extern void func_001F9BF8(f32 *, f32 *, f32);
    cell indices use signed fractions, so interpolation can extrapolate on
    either side of a sample. Cell 15 uses dedicated edge and corner samples.
    Either output may be omitted without suppressing a successful lookup. */
-s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) __asm__("FUN_00239f58");
+s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y,
+                              f32 z) __asm__("FUN_00239f58");
 
 s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 x_tangent[4] __attribute__((aligned(16)));
@@ -105,7 +106,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     }
     if (height != NULL) {
         first_row_height = h00 + (h10 - h00) * fraction_x;
-        *height = first_row_height + ((h01 + (h11 - h01) * fraction_x) - first_row_height) * fraction_y + tile->z;
+        *height = first_row_height +
+                  ((h01 + (h11 - h01) * fraction_x) - first_row_height) * fraction_y + tile->z;
     }
     if (normal != NULL) {
         x_tangent[0] = surface_height_grid.cell_width;

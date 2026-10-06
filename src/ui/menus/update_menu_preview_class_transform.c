@@ -24,4 +24,5 @@ void update_menu_preview_class_transform(PauseMoby *moby) {
     refresh_moby_spatial_bounds_from_basis(moby);
 }
 
-extern __typeof__(update_menu_preview_class_transform) func_002250F0 __attribute__((alias("FUN_002250f0")));
+extern __typeof__(update_menu_preview_class_transform) func_002250F0
+    __attribute__((alias("FUN_002250f0")));

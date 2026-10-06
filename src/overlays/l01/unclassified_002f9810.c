@@ -74,7 +74,10 @@ void FUN_L01_002f9bf0(SwayMoby *m) {
     }
     m->rotz = fast_add_rotations(m->rotz, D_0015ED6C * -12.566371f * v->sway);
 }
-typedef union { u128 q; f32 f[4]; } BurstVec;
+typedef union {
+    u128 q;
+    f32 f[4];
+} BurstVec;
 
 typedef struct {
     u32 c[3];
@@ -130,8 +133,8 @@ void FUN_L01_002f9d80(BurstMoby *self) {
     s32 i;
 
     t = FUN_L00_0025a420_u(self, 0x830000, 0);
-    if (D_L01_001BB6B0.collected[self->id] != 0
-        || (D_0014C190[D_0015ED84][self->id >> 5] >> (self->id & 0x1F)) & 1) {
+    if (D_L01_001BB6B0.collected[self->id] != 0 ||
+        (D_0014C190[D_0015ED84][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
     }
     if (t != NULL && t->moby->oclass == 0x2AE) {
@@ -149,7 +152,8 @@ void FUN_L01_002f9d80(BurstMoby *self) {
             pos.f[2] = 0.0f;
             FUN_001f9bf8(&dir, &dir, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 20.0f));
             FUN_001f9a10(&pos, &pos, &self->pos);
-            FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)], FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
+            FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
+                             FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
         D_0014C190[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
         D_L01_001BA950[self->id >> 5] |= 1 << (self->id & 0x1F);
@@ -220,7 +224,10 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
 
 typedef struct {
     u128 vel;
@@ -282,8 +289,8 @@ void FUN_L01_002fa4c0(DropMoby *m) {
     b = b * FUN_001f96b0(ten);
     ((f32 *)&v->vel)[2] -= (a * zero + one) * 2.0f / b;
     FUN_001f9a10(pos, pos, &v->vel);
-    if (m->pos.f[0] < zero || m->pos.f[1] < zero || m->pos.f[2] < zero
-        || FUN_001f9b80(pos, D_L01_00167240) > 64.0f) {
+    if (m->pos.f[0] < zero || m->pos.f[1] < zero || m->pos.f[2] < zero ||
+        FUN_001f9b80(pos, D_L01_00167240) > 64.0f) {
         mark_moby_for_removal(m);
         return;
     }
@@ -356,7 +363,10 @@ void FUN_L01_002fac80(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fad68.s", FUN_L01_002fad68);
-typedef union { u128 q; f32 f[4]; } PendVec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} PendVec4;
 
 typedef struct {
     u8 pad0[0x60];
@@ -512,7 +522,8 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
             off.z = 0.0f;
             FUN_001f9a10(&off, &off, &m->pos);
             off.z += s * 1.2f;
-            FUN_L00_00263fd8(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f, &D_L01_0015F580);
+            FUN_L00_00263fd8(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+                             &D_L01_0015F580);
         }
         FUN_L01_00278e20(m, 0x718);
         mark_moby_for_removal(m);
@@ -556,7 +567,8 @@ void FUN_L01_002fed68(HoverMoby *m) {
         break;
     case 1:
         player = &D_0013F3D0;
-        if (FUN_001f9b80(v, player) < v->radius && FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
+        if (FUN_001f9b80(v, player) < v->radius &&
+            FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
             m->state = 2;
             if (m->oclass == 0x300) {
                 FUN_0022da68(0, 0, m);
@@ -572,8 +584,8 @@ void FUN_L01_002fed68(HoverMoby *m) {
         break;
     case 3:
         k = 1.1f;
-        if (FUN_001f9b80(v, &D_0013F3D0) > v->radius * k
-            && FUN_001f9b80(v, D_L01_00167240) > v->radius * k) {
+        if (FUN_001f9b80(v, &D_0013F3D0) > v->radius * k &&
+            FUN_001f9b80(v, D_L01_00167240) > v->radius * k) {
             m->state = 4;
             if (m->oclass == 0x300) {
                 FUN_0022da68(0, 0, m);
@@ -582,7 +594,8 @@ void FUN_L01_002fed68(HoverMoby *m) {
         break;
     case 4:
         player = &D_0013F3D0;
-        if (FUN_001f9b80(v, player) < v->radius && FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
+        if (FUN_001f9b80(v, player) < v->radius &&
+            FUN_001f99c0(m->pos.f[2] - player->f[2]) < 2.0f) {
             m->state = 2;
         } else {
             v->t -= 1.0f / FUN_001f96b0(20.0f);
@@ -638,7 +651,7 @@ void FUN_L01_002ff860(char *m) {
             } while (n != 0);
         }
         allocate_voice_for_target_entry(0, 0, (int)m);
-        for (k = 0x95; k >= 0; ) {
+        for (k = 0x95; k >= 0;) {
             float a, b;
             *(u128b *)v = 0;
             v[0] = -0.2f;
@@ -656,7 +669,8 @@ void FUN_L01_002ff860(char *m) {
             w[2] = 0;
             w[2] = random_float_between(w[2], 3.0f) * D_0015ED6C;
             a = random_float_between(125000.0f, 175000.0f);
-            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, a, scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
+            FUN_L00_0026ced0(v, w, 0x207F7F7F, 0x272727, a,
+                             scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
         }
         FUN_L01_002ffa90_c(m);
         mark_moby_for_removal(m);
@@ -667,7 +681,9 @@ typedef struct {
     u128 pos;
     u8 state;
     u8 pad21[0xF];
-    u8 b30; u8 b31; s16 h32;
+    u8 b30;
+    u8 b31;
+    s16 h32;
     u8 pad34[4];
     u64 d38;
     u128 rot;
@@ -740,7 +756,8 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
         FUN_001f9cf8(&vel, &vel, self->mtx);
         FUN_001f9a10(&pos, &pos, &self->pos);
         size = random_float_between(125000.0f, 175000.0f);
-        FUN_L00_0026ced0_u(&pos, &vel, 0x207F7F7F, 0x272727, size, FUN_001f96f8(FUN_L00_00257b90(0x2D, 0x3C)));
+        FUN_L00_0026ced0_u(&pos, &vel, 0x207F7F7F, 0x272727, size,
+                           FUN_001f96f8(FUN_L00_00257b90(0x2D, 0x3C)));
     }
 }
 typedef struct {
@@ -757,7 +774,9 @@ typedef struct {
     u128 pos;
     u8 pad20[0xC];
     f32 scale;
-    u8 b30; u8 b31; s16 h32;
+    u8 b30;
+    u8 b31;
+    s16 h32;
     u8 pad34[0xC];
     s32 w40;
     u8 pad44[4];
@@ -818,7 +837,9 @@ typedef struct {
     MobyClass *mclass;
     u8 pad28[4];
     f32 scale;
-    u8 b30; u8 b31; s16 h32;
+    u8 b30;
+    u8 b31;
+    s16 h32;
     u16 flags;
     u8 pad36[2];
     u64 d38;
@@ -903,9 +924,10 @@ void FUN_L01_003021b8(SpawnerMoby *m) {
             nv->fB4 = 13.0f;
             nv->w78 = 0;
             nv->w7C = 0;
-            FUN_L00_0025c558(n, nv->path, 5, 8, 0,
+            FUN_L00_0025c558(
+                n, nv->path, 5, 8, 0,
                 fast_add_rotations(FUN_001f9e90(D_0013F350.x - m->x, D_0013F350.y - m->y),
-                             3.1415927f));
+                                   3.1415927f));
             n->state = 9;
         }
         break;

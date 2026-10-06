@@ -24,7 +24,8 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
         }
         break;
     case 0x404:
-        if (m[0x20] == 1) m[0x20] = 2;
+        if (m[0x20] == 1)
+            m[0x20] = 2;
         break;
     case 0x542:
         m[0x20] = 2;
@@ -43,7 +44,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -100,9 +102,12 @@ void FUN_L06_00309860(char *self) {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
-        FUN_L00_00263fd8(self, 0x679, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x67a, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x67b, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self, 0x679, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+                         D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self, 0x67a, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+                         D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self, 0x67b, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+                         D_L06_0015F580, D_L06_0015F580);
         m = mk_a(0x678);
         if (m != 0) {
             m[0x31] = 1;

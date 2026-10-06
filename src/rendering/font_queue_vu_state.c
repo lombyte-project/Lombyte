@@ -1,8 +1,15 @@
 #include "types.h"
 #include "qcopy.h"
 
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 
 typedef struct {
     u8 pad0[0x190];
@@ -30,8 +37,7 @@ extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-void font_queue_vu_state(void)
-{
+void font_queue_vu_state(void) {
     f32 m[4][4];
     struct DmaTag *base;
     u8 *p;

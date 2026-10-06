@@ -11,4 +11,5 @@ int mpeg_restart_video_dma(void) {
 
 extern __typeof__(mpeg_restart_video_dma) func_0023D110 __attribute__((alias("FUN_0023d110")));
 /* Recovered original symbol name. */
-extern __typeof__(mpeg_restart_video_dma) mpegRestartVideoDMA__Fv __attribute__((alias("FUN_0023d110")));
+extern __typeof__(mpeg_restart_video_dma) mpegRestartVideoDMA__Fv
+    __attribute__((alias("FUN_0023d110")));

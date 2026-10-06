@@ -102,8 +102,8 @@ s32 draw_menu_text_list(Menu *menu) {
     }
     y = row_height - font_size / 2;
     {
-        TextBox box = { { 4, menu->height - 4, 0, menu->width - 2, 0,
-                          y - menu->scroll, 0, 0, font_size + 2 } };
+        TextBox box = {
+            {4, menu->height - 4, 0, menu->width - 2, 0, y - menu->scroll, 0, 0, font_size + 2}};
 
         glyph_texture = get_effect_texture(font_kind);
         for (i = 0; menu->items[i].text != 0; i++) {

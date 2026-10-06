@@ -93,7 +93,7 @@ extern s32 sceMcWrite(s32 fd, void *buf, s32 size);
 extern s32 sprintf(char *str, const char *format, ...);
 extern char *strcpy(char *, const char *);
 
-#define MC D_0013D290
+#define MC   D_0013D290
 #define CARD MC.card[MC.cur]
 
 void memcard_update_state(void) __asm__("FUN_002093d8");
@@ -1046,7 +1046,6 @@ void memcard_update_state(void) {
             break;
         }
         break;
-
     }
 }
 

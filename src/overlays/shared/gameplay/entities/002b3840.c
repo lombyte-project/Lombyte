@@ -64,18 +64,18 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 extern char D_0013F350[];
@@ -92,18 +92,22 @@ void FUN_L05_002f8080(char *m) {
     }
     switch ((unsigned char)m[0x53]) {
     case 0:
-        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 1) && !f)
+        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 1) &&
+            !f)
             blend_moby_animation(m, 1, 0, 0);
         break;
     case 2:
-        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 2) && !f)
+        if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_0015FFD8 + d[0] * 256 + 0xBC) & 2) &&
+            !f)
             blend_moby_animation(m, 3, 0, 0);
         break;
     case 3:
-        if (m[0x70] & 2) blend_moby_animation(m, 0, 0, 0);
+        if (m[0x70] & 2)
+            blend_moby_animation(m, 0, 0, 0);
         break;
     case 1:
-        if (m[0x70] & 2) blend_moby_animation(m, 2, 0, 0);
+        if (m[0x70] & 2)
+            blend_moby_animation(m, 2, 0, 0);
         break;
     }
     FUN_L05_002f81b8_u(m);
@@ -132,8 +136,10 @@ void FUN_L05_002f81b8(void *mv) {
     if (*(char **)(base + 0x2FC) == moby) {
         approach_value((float *)(data + 0x1C), 1.0f, D_0015ED6C + D_0015ED6C);
         if (*(int *)(base + 0x1090) != 0) {
-            if (*(int *)(base + 0x10B8) == 0x16) ((unsigned char *)moby)[0xBC] = 1;
-            else ((unsigned char *)moby)[0xBC] = 0;
+            if (*(int *)(base + 0x10B8) == 0x16)
+                ((unsigned char *)moby)[0xBC] = 1;
+            else
+                ((unsigned char *)moby)[0xBC] = 0;
         } else {
             ((unsigned char *)moby)[0xBC] = 0;
         }
@@ -209,7 +215,8 @@ void FUN_L05_00307010(char *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l1 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 0.5f && AbsoluteFloat(v[1]) < 2.5f && AbsoluteFloat(v[2]) < 2.5f) {
+                    if (AbsoluteFloat(v[0]) < 0.5f && AbsoluteFloat(v[1]) < 2.5f &&
+                        AbsoluteFloat(v[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
                         *(int *)(data + 0x264) = scale_game_frames(0x3C);
                     }
@@ -228,7 +235,8 @@ void FUN_L05_00307010(char *moby) {
                     FUN_001f9fc8(m);
                     FUN_001fa2d8(m, l2 + 0xC0);
                     FUN_001f9d20(v, v, m);
-                    if (AbsoluteFloat(v[0]) < 2.8f && AbsoluteFloat(v[1]) < 1.4f && AbsoluteFloat(v[2]) < 0.5f) {
+                    if (AbsoluteFloat(v[0]) < 2.8f && AbsoluteFloat(v[1]) < 1.4f &&
+                        AbsoluteFloat(v[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
                         *(int *)(data + 0x264) = scale_game_frames(0x3C);
                     }
@@ -355,22 +363,21 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
 extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L05_00319208");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC") MACRO_ADDR;
-void FUN_L05_00319510(void *moby_v)
-{
+void FUN_L05_00319510(void *moby_v) {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
     char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
     char *position;
     if (spawn != 0) {
         int index;
-        char *slot=data;
+        char *slot = data;
         char *entry;
-        position=spawn+0x10;
-        slot+=*(short *)(data+0xB4)<<2;
-        index=*(int *)(slot+0x80)<<7;
-        entry=D_L16_001601AC_m_19510;
-        qcopy(position, (void *)(index+(int)entry+0x30));
-        qcopy(spawn + 0x40, (void *)(index+(int)entry+0x70));
+        position = spawn + 0x10;
+        slot += *(short *)(data + 0xB4) << 2;
+        index = *(int *)(slot + 0x80) << 7;
+        entry = D_L16_001601AC_m_19510;
+        qcopy(position, (void *)(index + (int)entry + 0x30));
+        qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
         func_L16_002E5D68_19510(spawn);
     }
     *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
@@ -383,15 +390,18 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
 
-extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern float advance_accelerated_scalar(float, float, float, float, float *,
+                                        float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 int FUN_L05_003195f8(char *m) {
     char *d = *(char **)(m + 0x78);
     int *path;
-    advance_accelerated_scalar(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
+    advance_accelerated_scalar(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8),
+                               *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
     path = *(int **)(d + 0xAC);
-    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
+    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
+                       *(float *)(d + 0xC0) * (float)(*path - 1));
     return *(float *)(d + 0xC0) >= 1.0f;
 }
 /* Plays the sound that goes with the moby's current variant. */
@@ -401,12 +411,24 @@ s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void FUN_L05_00319690(char *moby) {
     switch (*(short *)(*(char **)(moby + 0x78) + 0xB6)) {
-    case 0: try_set_help_message(8, 0x13A5); break;
-    case 1: try_set_help_message(8, 0x1398); break;
-    case 2: try_set_help_message(8, 0x139A); break;
-    case 3: try_set_help_message(8, 0x139C); break;
-    case 4: try_set_help_message(8, 0x1399); break;
-    default: try_set_help_message(8, 0x139B); break;
+    case 0:
+        try_set_help_message(8, 0x13A5);
+        break;
+    case 1:
+        try_set_help_message(8, 0x1398);
+        break;
+    case 2:
+        try_set_help_message(8, 0x139A);
+        break;
+    case 3:
+        try_set_help_message(8, 0x139C);
+        break;
+    case 4:
+        try_set_help_message(8, 0x1399);
+        break;
+    default:
+        try_set_help_message(8, 0x139B);
+        break;
     }
 }
 #include "qcopy.h"
@@ -435,11 +457,16 @@ void FUN_L05_00319740(char *moby) {
     *(float *)(moby + 0x44) = t;
     s = fast_add_rotations(*(float *)(d + 0xD0), w);
     *(float *)(d + 0xD0) = s;
-    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
-    if (*(float *)(moby + 0x40) > 0.17453292f) *(float *)(moby + 0x40) = 0.17453292f;
-    else if (*(float *)(moby + 0x40) < -0.17453292f) *(float *)(moby + 0x40) = -0.17453292f;
-    if (*(float *)(moby + 0x44) > 0.17453292f) *(float *)(moby + 0x44) = 0.17453292f;
-    else if (*(float *)(moby + 0x44) < -0.17453292f) *(float *)(moby + 0x44) = -0.17453292f;
+    *(float *)(moby + 0x40) =
+        fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+    if (*(float *)(moby + 0x40) > 0.17453292f)
+        *(float *)(moby + 0x40) = 0.17453292f;
+    else if (*(float *)(moby + 0x40) < -0.17453292f)
+        *(float *)(moby + 0x40) = -0.17453292f;
+    if (*(float *)(moby + 0x44) > 0.17453292f)
+        *(float *)(moby + 0x44) = 0.17453292f;
+    else if (*(float *)(moby + 0x44) < -0.17453292f)
+        *(float *)(moby + 0x44) = -0.17453292f;
 }
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */

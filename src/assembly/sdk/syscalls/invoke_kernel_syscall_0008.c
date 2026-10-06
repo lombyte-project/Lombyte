@@ -2,4 +2,6 @@
 
 /* Exact Sony EE kernel syscall veneer 0008; no C wrapper preserves the ABI body. */
 
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/syscalls/invoke_kernel_syscall_0008/InvokeKernelSyscall0008.s", InvokeKernelSyscall0008);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/syscalls/invoke_kernel_syscall_0008/"
+            "InvokeKernelSyscall0008.s",
+            InvokeKernelSyscall0008);

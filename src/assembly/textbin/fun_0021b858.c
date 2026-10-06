@@ -149,7 +149,8 @@ s32 update_menu_grid_selection(MenuGrid *grid) {
                     column = 0;
                 }
             }
-            next->cursor = (next_rows - 1) * next_columns + (column < next_columns - 1 ? column : next_columns - 1);
+            next->cursor = (next_rows - 1) * next_columns +
+                           (column < next_columns - 1 ? column : next_columns - 1);
         } else if (!(grid->flags & 0x8000)) {
             grid->cursor = column_count * (row_count - 1) + cursor;
         }

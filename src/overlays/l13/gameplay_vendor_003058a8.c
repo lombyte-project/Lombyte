@@ -37,7 +37,9 @@ void FUN_L13_00305988(char *moby, char *pos, int arg2, float arg3) {
     FUN_L00_00250df8(moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305a58.s", FUN_L13_00305a58);
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+                                  float, float, int, float, int, int, int,
+                                  int) __asm__("FUN_L00_0025e450");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 #define NOT_SDA
@@ -49,18 +51,19 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L13_003060b8(char *moby) {
     char vector[16];
     clear_u64_value(vector);
-    func_L00_0025F4A8_alt(moby, vector, moby + 0x10, 2.0f, 1.0f, 12, 4, 18,
-                           4.0f, 3.0f, 1.0f, 2.0f, 0, 20.0f, 1, 1, -1, 0);
+    func_L00_0025F4A8_alt(moby, vector, moby + 0x10, 2.0f, 1.0f, 12, 4, 18, 4.0f, 3.0f, 1.0f, 2.0f,
+                          0, 20.0f, 1, 1, -1, 0);
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_003075E0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, float, int, float, int, int, int, int);
 
 void FUN_L13_00306148(char *moby) {
     char vector[16];
     clear_u64_value(vector);
-    FUN_L00_0025e450(moby, vector, moby + 0x10, 0.0f, 0.0f, 5, 1, 5,
-                       0.0f, 0.0f, 0.0f, 1.0f, 0, 0.0f, 0, 1, -1, 0);
+    FUN_L00_0025e450(moby, vector, moby + 0x10, 0.0f, 0.0f, 5, 1, 5, 0.0f, 0.0f, 0.0f, 1.0f, 0,
+                     0.0f, 0, 1, -1, 0);
 }
 #include "qcopy.h"
 
@@ -78,18 +81,18 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 extern char *func_0020D348_m_c(int);
@@ -103,8 +106,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 extern char *func_0020D348_m_c(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg)
-{
+char *FUN_L13_003061c8(float speed, float *pos, float *dir, void *arg) {
     char *m;
     char *p;
     float d;
@@ -165,7 +167,8 @@ void FUN_L13_00309370(char *m) {
     normalize_vector_xyz(d + 0x200, D_L13_00174180, 1.0f);
     FUN_L00_0024f7c8(m, 0, d + 0x1F0);
     for (i = 0; i < 16; i++) {
-        float a = (ConvertIntegerToFloat(i) * 0.0625f - 0.5f) * (*(float *)&D_L13_00161E80 * 0.017453292f);
+        float a = (ConvertIntegerToFloat(i) * 0.0625f - 0.5f) *
+                  (*(float *)&D_L13_00161E80 * 0.017453292f);
         v[0] = fast_cos(fast_add_rotations(a, *(float *)(m + 0x48))) * 0.5f;
         v[1] = fast_sin(fast_add_rotations(a, *(float *)(m + 0x48))) * 0.5f;
         v[2] = 0.0f;
@@ -213,18 +216,26 @@ void FUN_L13_0030a488(int arg) {
             float x = e->x - t[i].x;
             float y = e->y - t[i].y;
             if (AbsoluteFloat(x) < 0.1f) {
-                if (AbsoluteFloat(y - 16.0f) < 0.1f) e->n[0] = i;
-                if (AbsoluteFloat(y + 16.0f) < 0.1f) e->n[2] = i;
+                if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                    e->n[0] = i;
+                if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                    e->n[2] = i;
             } else if (AbsoluteFloat(y) < 0.1f) {
-                if (AbsoluteFloat(x - 16.0f) < 0.1f) e->n[1] = i;
-                if (AbsoluteFloat(x + 16.0f) < 0.1f) e->n[3] = i;
+                if (AbsoluteFloat(x - 16.0f) < 0.1f)
+                    e->n[1] = i;
+                if (AbsoluteFloat(x + 16.0f) < 0.1f)
+                    e->n[3] = i;
             } else {
                 if (AbsoluteFloat(x + 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f) e->n[5] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f) e->n[7] = i;
+                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                        e->n[5] = i;
+                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                        e->n[7] = i;
                 } else if (AbsoluteFloat(x - 16.0f) < 0.1f) {
-                    if (AbsoluteFloat(y - 16.0f) < 0.1f) e->n[4] = i;
-                    if (AbsoluteFloat(y + 16.0f) < 0.1f) e->n[6] = i;
+                    if (AbsoluteFloat(y - 16.0f) < 0.1f)
+                        e->n[4] = i;
+                    if (AbsoluteFloat(y + 16.0f) < 0.1f)
+                        e->n[6] = i;
                 }
             }
         }
@@ -273,12 +284,12 @@ extern char *FUN_L00_002db890(char *);
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
 extern short *D_L13_001ABB40[];
 
-int FUN_L13_0030ae68(int idx, int arg)
-{
+int FUN_L13_0030ae68(int idx, int arg) {
     short *q = D_L13_001ABB40[idx];
     short *p;
     int count = 0;
-    if (q == 0) return 0;
+    if (q == 0)
+        return 0;
     p = q;
     do {
         int id = *p & 0x7FFF;
@@ -286,7 +297,8 @@ int FUN_L13_0030ae68(int idx, int arg)
         if (m[0x20] >= 0) {
             char *f = FUN_L00_002db890(m);
             if (f == 0 || *(short *)(f + 0x68) < 4) {
-                if (arg == -1 || *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
+                if (arg == -1 ||
+                    *(unsigned char *)((char *)(id << 8) + (int)D_L13_0015FFD8_m + 0x20) != arg) {
                     count++;
                 }
             }
@@ -306,15 +318,21 @@ void FUN_L13_0030af50(char *moby) {
     char *base;
     for (i = 0; i < 8; i++) {
         if (*p != -1) {
-            if (FUN_L13_0030ae68(*p, -1) != 0) return;
+            if (FUN_L13_0030ae68(*p, -1) != 0)
+                return;
             p++;
         }
     }
     base = D_0013E533 + 0xE1D;
-    if (*(int *)(base + 0x15F0) != 0 && *(int *)(base + 0x2084) == 0x32) return;
-    if (*(int *)(d + 0x28) != -1 && is_point_inside_clip_volume_alt(base + 0x80, *(int *)(d + 0x28)) == 0) return;
-    if (*(int *)(d + 0x20) != -1) moby[0x20] = d[0x20];
-    if (*(int *)(d + 0x24) == -1) return;
+    if (*(int *)(base + 0x15F0) != 0 && *(int *)(base + 0x2084) == 0x32)
+        return;
+    if (*(int *)(d + 0x28) != -1 &&
+        is_point_inside_clip_volume_alt(base + 0x80, *(int *)(d + 0x28)) == 0)
+        return;
+    if (*(int *)(d + 0x20) != -1)
+        moby[0x20] = d[0x20];
+    if (*(int *)(d + 0x24) == -1)
+        return;
     moby[0xBC] = d[0x24];
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
@@ -350,7 +368,8 @@ void FUN_L13_0030bb70(char *m) {
         if (d[1] != -1) {
             path = D_L13_001B07B0[d[1]];
             for (i = 0; i < *(int *)path; i++) {
-                *(float *)(path + (i << 4) + 0x1C) = FUN_001f9b48(path + (i * 16 + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
+                *(float *)(path + (i << 4) + 0x1C) = FUN_001f9b48(
+                    path + (i * 16 + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
             }
         }
         d[2] = 0;
@@ -358,7 +377,8 @@ void FUN_L13_0030bb70(char *m) {
         m[0x20] = 1;
         d[4] = 0;
     }
-    if (d[0] == -1) return;
+    if (d[0] == -1)
+        return;
     o = (char *)(D_L13_0015FFD8_m + (d[0] << 8));
     if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
         mark_moby_for_removal(m);
@@ -366,7 +386,8 @@ void FUN_L13_0030bb70(char *m) {
     }
     if (((unsigned char *)o)[0x20] >= 7) {
         d[4]++;
-        if (d[1] == -1) return;
+        if (d[1] == -1)
+            return;
         pth = D_L13_001B07B0[d[1]];
         if (((unsigned char *)m)[0x20] == 1) {
             FUN_L00_0025df68(pth, o + 0x10, v, &idx, &t, 0, 100.0f, 1.0f, 0.0f);
@@ -395,14 +416,18 @@ void FUN_L13_0030bb70(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D2A8), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x30]; int state; char pad34[0x14C]; int target; } L13Action;
+typedef struct {
+    char pad[0x30];
+    int state;
+    char pad34[0x14C];
+    int target;
+} L13Action;
 
 extern L13Action D_L13_0016CB60;
 extern int D_L13_0015F5C4 __attribute__((section(".sdata")));
 extern void FUN_L00_002637f8(int);
 
-void FUN_L13_0030bdf0(unsigned char *moby)
-{
+void FUN_L13_0030bdf0(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         moby[0x30] = 0xFF;
@@ -414,7 +439,6 @@ void FUN_L13_0030bdf0(unsigned char *moby)
         }
         break;
     }
-
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
 

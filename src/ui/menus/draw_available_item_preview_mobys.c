@@ -1,7 +1,7 @@
 #include "types.h"
 struct PreviewMenuGame {
     u8 pad_0[0x40];
-    struct PreviewItemSelection * selection;
+    struct PreviewItemSelection *selection;
 };
 
 struct ItemPreviewPair {
@@ -28,8 +28,8 @@ s32 draw_available_item_preview_mobys(struct ItemPreviewPair *preview) {
     struct PreviewItemSelection *selection;
 
     selection = preview_menu_games[0]->selection;
-    if (available_preview_items[*(s16 *)((u8 *)((selection->index * 0xA)
-                                              + selection->table_address) + 0x6)] == 0) {
+    if (available_preview_items[*(
+            s16 *)((u8 *)((selection->index * 0xA) + selection->table_address) + 0x6)] == 0) {
         return 0;
     }
     primary_moby = preview->primary_moby;

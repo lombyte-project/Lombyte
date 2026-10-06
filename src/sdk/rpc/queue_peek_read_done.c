@@ -6,8 +6,7 @@ typedef struct QueueReadState {
     unsigned char *read_cursor;
 } QueueReadState;
 
-void QueuePeekReadDone(QueueReadState *queue)
-{
+void QueuePeekReadDone(QueueReadState *queue) {
     unsigned char *next_cursor;
     u32 buffer_end_offset;
     queue->completed_count -= 1;

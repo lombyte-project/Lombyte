@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -10,7 +9,10 @@
 /* Clears each set bit in a rectangle of a per-row bit grid, notifying for each. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/map_00270BE0.c: func_L07_00270BE0), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0xC]; unsigned char *p; } Grid_270248;
+typedef struct {
+    char pad[0xC];
+    unsigned char *p;
+} Grid_270248;
 extern Grid_270248 D_L07_00184270;
 extern int FUN_L00_00249d80(int);
 

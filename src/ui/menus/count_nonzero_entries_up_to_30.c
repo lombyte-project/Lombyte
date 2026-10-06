@@ -17,4 +17,5 @@ s32 count_nonzero_entries_up_to_30(void) {
     return (count < 0x1F) ? count : 0x1E;
 }
 
-extern __typeof__(count_nonzero_entries_up_to_30) func_00215348 __attribute__((alias("FUN_00215348")));
+extern __typeof__(count_nonzero_entries_up_to_30) func_00215348
+    __attribute__((alias("FUN_00215348")));

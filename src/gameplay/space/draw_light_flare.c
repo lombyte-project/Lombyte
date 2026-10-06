@@ -6,10 +6,10 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9cf8(void *, void *, void *);
 typedef struct {
-    float positions[4][4];     /* 0x00 */
-    int colors[4];       /* 0x40 */
-    char texture_coordinates[0x20];     /* 0x50 */
-    long gs_state[4];        /* 0x70 */
+    float positions[4][4];          /* 0x00 */
+    int colors[4];                  /* 0x40 */
+    char texture_coordinates[0x20]; /* 0x50 */
+    long gs_state[4];               /* 0x70 */
 } FlareQuad;
 extern char D_001D97B0[];
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
@@ -46,8 +46,8 @@ void draw_light_flare(char *object) {
     if (FUN_001fa820(scaled_position, &alpha, 32.0f) < 0) {
         return;
     }
-    if (D_0015F604 == 6 && D_0013E030.mode == 3
-        && D_0013E030.elapsed_ticks > scale_game_frames(150)) {
+    if (D_0015F604 == 6 && D_0013E030.mode == 3 &&
+        D_0013E030.elapsed_ticks > scale_game_frames(150)) {
         alpha -= (D_0013E030.elapsed_ticks - scale_game_frames(150)) * 4;
         if (alpha <= 0) {
             return;
@@ -68,7 +68,8 @@ void draw_light_flare(char *object) {
 
         quad.colors[corner_index] = ((alpha >> 1) << 24) | 0x808080;
         vertex_position = quad.positions[corner_index];
-        FUN_001f9cf8(vertex_position, D_001D97D0[D_0013E030.flare_variant][corner_index], object + 0xC0);
+        FUN_001f9cf8(vertex_position, D_001D97D0[D_0013E030.flare_variant][corner_index],
+                     object + 0xC0);
         add_vector_xyz(vertex_position, vertex_position, object + 0x10);
         vertex_position[2] = depth;
     }

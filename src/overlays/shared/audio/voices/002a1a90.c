@@ -10,8 +10,7 @@
 
 extern char D_0013E533[];
 
-void FUN_L01_002a1a90(int a, int b, int c, int d, int e)
-{
+void FUN_L01_002a1a90(int a, int b, int c, int d, int e) {
     char *p = D_0013E533 + 0x1D;
     *(int *)(p + 0x60) = a;
     if ((unsigned char)p[0x68] != b) {

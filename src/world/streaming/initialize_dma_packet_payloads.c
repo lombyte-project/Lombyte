@@ -26,4 +26,5 @@ void initialize_dma_packet_payloads(u8 *p) {
     }
 }
 
-extern __typeof__(initialize_dma_packet_payloads) func_00209298 __attribute__((alias("FUN_00209298")));
+extern __typeof__(initialize_dma_packet_payloads) func_00209298
+    __attribute__((alias("FUN_00209298")));

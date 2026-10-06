@@ -8,7 +8,7 @@ typedef struct {
 
 typedef struct {
     char pad00[6];
-    unsigned char unk06;  /* 0x06 */
+    unsigned char unk06; /* 0x06 */
     char pad07[5];
     unsigned char unk0C; /* 0x0C */
     char pad0D;
@@ -16,57 +16,57 @@ typedef struct {
     unsigned char unk0F; /* 0x0F */
     int unk10;           /* 0x10 */
     char pad14[0x10];
-    float unk24;         /* 0x24 */
+    float unk24; /* 0x24 */
     char pad28[0x18];
-    int unk40;           /* 0x40 */
+    int unk40;            /* 0x40 */
     unsigned short unk44; /* 0x44 */
     char pad46[2];
-    MobyISeq *seq;       /* 0x48 */
+    MobyISeq *seq; /* 0x48 */
 } MobyIClass;
 
 typedef struct {
     char pad00[0x21];
-    unsigned char unk21;   /* 0x21 */
-    unsigned char oClass;  /* 0x22 */
-    unsigned char unk23;   /* 0x23 */
-    MobyIClass *pClass;    /* 0x24 */
+    unsigned char unk21;  /* 0x21 */
+    unsigned char oClass; /* 0x22 */
+    unsigned char unk23;  /* 0x23 */
+    MobyIClass *pClass;   /* 0x24 */
     char pad28[4];
-    float unk2C;           /* 0x2C */
+    float unk2C; /* 0x2C */
     char pad30[4];
-    unsigned short flags;  /* 0x34 */
-    unsigned short unk36;  /* 0x36 */
-    unsigned long unk38;   /* 0x38 */
+    unsigned short flags; /* 0x34 */
+    unsigned short unk36; /* 0x36 */
+    unsigned long unk38;  /* 0x38 */
     char pad40[0x18];
-    float unk58;           /* 0x58 */
-    float unk5C;           /* 0x5C */
+    float unk58; /* 0x58 */
+    float unk5C; /* 0x5C */
     char pad60[0x11];
-    unsigned char unk71;   /* 0x71 */
-    unsigned char unk72;   /* 0x72 */
-    unsigned char unk73;   /* 0x73 */
-    int unk74;             /* 0x74 */
+    unsigned char unk71; /* 0x71 */
+    unsigned char unk72; /* 0x72 */
+    unsigned char unk73; /* 0x73 */
+    int unk74;           /* 0x74 */
     char pad78[4];
-    unsigned char unk7C;   /* 0x7C */
-    unsigned char unk7D;   /* 0x7D */
-    unsigned char unk7E;   /* 0x7E */
-    unsigned char unk7F;   /* 0x7F */
+    unsigned char unk7C; /* 0x7C */
+    unsigned char unk7D; /* 0x7D */
+    unsigned char unk7E; /* 0x7E */
+    unsigned char unk7F; /* 0x7F */
     char pad80[4];
-    int unk84;             /* 0x84 */
-    int unk88;             /* 0x88 */
+    int unk84; /* 0x84 */
+    int unk88; /* 0x88 */
     char pad8C[4];
-    int unk90;             /* 0x90 */
-    int unk94;             /* 0x94 */
+    int unk90; /* 0x90 */
+    int unk94; /* 0x94 */
     char pad98[8];
-    unsigned char unkA0;   /* 0xA0 */
-    unsigned char unkA1;   /* 0xA1 */
-    unsigned char unkA2;   /* 0xA2 */
-    unsigned char unkA3;   /* 0xA3 */
-    unsigned char unkA4;   /* 0xA4 */
+    unsigned char unkA0; /* 0xA0 */
+    unsigned char unkA1; /* 0xA1 */
+    unsigned char unkA2; /* 0xA2 */
+    unsigned char unkA3; /* 0xA3 */
+    unsigned char unkA4; /* 0xA4 */
     char padA5;
-    short unkA6;           /* 0xA6 */
-    int unkA8;             /* 0xA8 */
-    int unkAC;             /* 0xAC */
+    short unkA6; /* 0xA6 */
+    int unkA8;   /* 0xA8 */
+    int unkAC;   /* 0xAC */
     char padB0[0xD];
-    unsigned char unkBD;   /* 0xBD */
+    unsigned char unkBD; /* 0xBD */
     char padBE[0x42];
 } MobyI;
 

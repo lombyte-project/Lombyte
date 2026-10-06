@@ -35,7 +35,6 @@ struct MapHdr {
     s32 unk18;
 };
 
-
 struct MapEntry {
     s32 a;
     s32 b;
@@ -92,8 +91,7 @@ extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 draw_map_screen(struct Screen *arg0) __asm__("FUN_0021be60");
 
-s32 draw_map_screen(struct Screen *arg0)
-{
+s32 draw_map_screen(struct Screen *arg0) {
     s32 prev;
     s32 idx;
     s32 t;
@@ -178,11 +176,11 @@ s32 draw_map_screen(struct Screen *arg0)
         }
         func_0020B618_l(D_001A00F0.slot[slot], D_001A00F0.hdr);
         hdr = D_001A00F0.hdr;
-        pix = (u8 *) hdr + hdr->unk8;
-        pal = (u8 *) hdr + hdr->unkC;
+        pix = (u8 *)hdr + hdr->unk8;
+        pal = (u8 *)hdr + hdr->unkC;
         buf = select_next_stream_buffer(0);
         if (buf != 0) {
-            base = (u8 *) D_001A00F0.hdr;
+            base = (u8 *)D_001A00F0.hdr;
             a = base + hdr->unk0 + 8;
             if (D_001A00F0.cur == D_0015ED84) {
                 compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.unkC);
@@ -196,13 +194,16 @@ s32 draw_map_screen(struct Screen *arg0)
             }
         }
         if (!(arg0->unk34 & 0x80)) {
-            tbase = (u8 *) D_001A00F0.hdr;
+            tbase = (u8 *)D_001A00F0.hdr;
             tex = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;
             c = tbase + hdr->unk18 + 0x420;
-            D_001A00F0.unk258 = func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
-            D_001A00F0.unk260 = func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
-            D_001A00F0.unk268 = func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
+            D_001A00F0.unk258 =
+                func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
+            D_001A00F0.unk260 =
+                func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
+            D_001A00F0.unk268 =
+                func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
             if (buf != 0) {
                 func_00204E30(9, 9, pal, pal, 0x3FF000, D_001A00F0.unk240);
             }
@@ -211,7 +212,7 @@ s32 draw_map_screen(struct Screen *arg0)
         if (buf != 0) {
             complete_stream_buffer_transfer(buf);
         }
-        D_001A00F0.slot[0] = (s32) pix;
+        D_001A00F0.slot[0] = (s32)pix;
         D_001A00F0.loaded = D_001A00F0.cur;
         update_map_icons(D_001A00F0.cur, 0);
     }
@@ -231,7 +232,8 @@ s32 draw_map_screen(struct Screen *arg0)
             if (next != -1) {
                 k = (D_0015ED84 + D_001A00F0.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
-                    stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0, D_001A00F0.unk234, 0);
+                    stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0,
+                                       D_001A00F0.unk234, 0);
                     D_001A00F0.slot_size[pick] = D_001A00F0.unk234;
                 } else {
                     if (next & 0x100) {

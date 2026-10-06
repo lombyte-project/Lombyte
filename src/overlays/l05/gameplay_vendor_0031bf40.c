@@ -36,7 +36,8 @@ void FUN_L05_0031d5c8(unsigned char *m) {
             t = *(int *)((char *)g + 0x30) - 10;
             if (t < 2) {
                 int k = 3;
-                if (s < t) k = 0;
+                if (s < t)
+                    k = 0;
                 FUN_L00_002637f8((int)g->m[k]);
             }
         }

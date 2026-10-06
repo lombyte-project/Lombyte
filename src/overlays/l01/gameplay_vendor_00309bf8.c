@@ -27,7 +27,10 @@ void FUN_L01_00309bf8(void) {
     }
 }
 typedef struct {
-    u8 pad0[0x30]; u8 b30; u8 b31; s16 h32;
+    u8 pad0[0x30];
+    u8 b30;
+    u8 b31;
+    s16 h32;
 } FlagMoby;
 extern void FUN_L01_00309bf8(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
@@ -142,7 +145,8 @@ void FUN_L01_0030d0f0(TriggerMoby *obj) {
     case 2:
         allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
-        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f, &D_L01_0015F580);
+        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
+                         0.0f, &D_L01_0015F580);
         FUN_L01_00278e20(obj, 0x718);
         mark_moby_for_removal(obj);
         break;
@@ -209,8 +213,10 @@ void FUN_L01_0030f0e0(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 5; i++) {
-        FUN_L01_0030ef18(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i], D_L01_00208170);
-        FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170, 1);
+        FUN_L01_0030ef18(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i],
+                         D_L01_00208170);
+        FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170,
+                         1);
     }
 }
 typedef struct {

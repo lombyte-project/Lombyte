@@ -4,8 +4,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 
 f32 cosine_interpolate(s32 arg0, f32 from, f32 to, f32 t) __asm__("FUN_002133d0");
 
-f32 cosine_interpolate(s32 arg0, f32 from, f32 to, f32 t)
-{
+f32 cosine_interpolate(s32 arg0, f32 from, f32 to, f32 t) {
     if (t == 0.0f) {
         return from;
     }

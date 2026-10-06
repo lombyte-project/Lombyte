@@ -10,11 +10,14 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s32, s32, u64, s64) __asm__("func_001F55D8");
+extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s32, s32, u64,
+                                                 s64) __asm__("func_001F55D8");
 
-void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width, f32 capture_height) __asm__("FUN_00239328");
+void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width,
+                                                 f32 capture_height) __asm__("FUN_00239328");
 
-void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width, f32 capture_height) {
+void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_width,
+                                                 f32 capture_height) {
     s32 flash_timer;
     s32 scroll_opacity;
     s32 flash_opacity;
@@ -43,9 +46,13 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
         flash_opacity = 0x80 - SubtractIntegerWithClamp(flash_timer - 0x80);
         vu1_add_g_sregister(8, 0);
         flash_opacity *= 2;
-        if (flash_opacity > 0x80) flash_opacity = 0x80;
+        if (flash_opacity > 0x80)
+            flash_opacity = 0x80;
         vu1_add_g_sregister(0x42, ((u64)flash_opacity << 32) | 0x68);
-        append_subpixel_textured_screen_quad(0.0f, 0.0f, capture_width, capture_height, random_u + zero_offset, random_v + zero_offset, capture_width + random_u, capture_height + random_v, 0x808080, get_effect_texture(0x1A));
+        append_subpixel_textured_screen_quad(0.0f, 0.0f, capture_width, capture_height,
+                                             random_u + zero_offset, random_v + zero_offset,
+                                             capture_width + random_u, capture_height + random_v,
+                                             0x808080, get_effect_texture(0x1A));
         if (vendor_flash_timers[pass_index] >= 0x100) {
             vendor_flash_timers[pass_index] = 0;
         }
@@ -59,13 +66,18 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
         if (vendor_scroll_timers[pass_index] != 0) {
             vendor_scroll_timers[pass_index] += 2;
             overlay_width = capture_width;
-            scroll_opacity = 0x100 - SubtractIntegerWithClamp(vendor_scroll_timers[pass_index] - 0x100);
+            scroll_opacity =
+                0x100 - SubtractIntegerWithClamp(vendor_scroll_timers[pass_index] - 0x100);
             if (scroll_opacity > 0x50) {
                 scroll_opacity = 0x50;
             }
-            scroll_offset = -(convert_integer_to_float(0x200 - vendor_scroll_timers[pass_index]) * 0.03125f);
+            scroll_offset =
+                -(convert_integer_to_float(0x200 - vendor_scroll_timers[pass_index]) * 0.03125f);
             overlay_height = capture_height + 16.0f;
-            append_subpixel_textured_screen_quad(0.0f, scroll_offset, capture_width, overlay_height, 0, 0, overlay_width, (s32)(overlay_height * 1.5f), (scroll_opacity << 24) | 0x505050, get_effect_texture(0x1C));
+            append_subpixel_textured_screen_quad(0.0f, scroll_offset, capture_width, overlay_height,
+                                                 0, 0, overlay_width, (s32)(overlay_height * 1.5f),
+                                                 (scroll_opacity << 24) | 0x505050,
+                                                 get_effect_texture(0x1C));
             if (vendor_scroll_timers[pass_index] >= 0x200) {
                 vendor_scroll_timers[pass_index] = 0;
             }
@@ -75,7 +87,9 @@ void render_vendor_capture_texture_overlays_pass(s32 pass_index, f32 capture_wid
     }
     if (pass_index == 6) {
         /* The known capture coordinator supplies only passes zero through five. */
-        append_subpixel_textured_screen_quad(0.0f, 0.0f, capture_width, capture_height, 0, 0, 0x40, 0x40, 0x80808080, get_effect_texture(0x19));
+        append_subpixel_textured_screen_quad(0.0f, 0.0f, capture_width, capture_height, 0, 0, 0x40,
+                                             0x40, 0x80808080, get_effect_texture(0x19));
     }
 }
-extern __typeof__(render_vendor_capture_texture_overlays_pass) func_00239328 __attribute__((alias("FUN_00239328")));
+extern __typeof__(render_vendor_capture_texture_overlays_pass) func_00239328
+    __attribute__((alias("FUN_00239328")));

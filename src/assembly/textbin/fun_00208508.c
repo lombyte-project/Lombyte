@@ -28,7 +28,8 @@ struct MapTextureTables {
     u8 *textures;
 };
 extern struct MapMarkerState map_marker_state __asm__("D_001A00F0");
-extern struct MapMarkerState selected_map_state __asm__("D_001A00F0") __attribute__((section(".data")));
+extern struct MapMarkerState selected_map_state __asm__("D_001A00F0")
+    __attribute__((section(".data")));
 extern struct MapTextureTables map_texture_tables __asm__("D_0019A3E8") NOT_SDA;
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR;
@@ -59,7 +60,8 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     marker = map_marker_state.markers;
     remaining = map_marker_state.marker_count - 1;
     for (; remaining != -1; remaining--) {
-        world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x, marker->y);
+        world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x,
+                            marker->y);
         offset_x = (s32)((f32)(right - left) * normalized_x);
         offset_y = (s32)((f32)(bottom - top) * normalized_y);
         screen_x = left + offset_x;
@@ -73,18 +75,19 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
                 f32 scale;
                 f32 full_width_scaled;
 
-                texture_index = resolve_indexed_texture_variant(marker->texture_group, marker->texture_variant_or_color);
+                texture_index = resolve_indexed_texture_variant(marker->texture_group,
+                                                                marker->texture_variant_or_color);
                 references = map_texture_tables.references;
                 texture = map_texture_tables.textures + references[texture_index * 2 + 1] * 8;
                 width_log2 = texture[6];
                 height_log2 = texture[7];
-                scale = (2.0f * marker_scale_by_level[selected_map_state.selected_level] + 5.0f) / 13.0f;
+                scale = (2.0f * marker_scale_by_level[selected_map_state.selected_level] + 5.0f) /
+                        13.0f;
                 full_width_scaled = scale * (f32)(one << (width_log2 + 4));
-                append_indexed_screen_sprite(texture_index,
-                    screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
+                append_indexed_screen_sprite(
+                    texture_index, screen_x - (s32)(scale * (f32)(one << (width_log2 + 3))),
                     screen_y - (s32)(scale * (f32)(one << (height_log2 + 3))),
-                    (s32)full_width_scaled,
-                    (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
+                    (s32)full_width_scaled, (s32)(scale * (f32)(one << (height_log2 + 4))), 0x80);
             }
         }
         marker++;

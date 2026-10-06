@@ -14,8 +14,8 @@ void vi_buf_end_put(struct M2c_arg0 *arg0, s32 arg1) __asm__("FUN_0023bf18");
 
 void vi_buf_end_put(struct M2c_arg0 *arg0, s32 arg1) {
     FUN_001189b0(arg0->unk40);
-    arg0->unk14 = (s32) (arg0->unk14 + arg1);
-    arg0->unk48 = (s64) (arg1 + arg0->unk48);
+    arg0->unk14 = (s32)(arg0->unk14 + arg1);
+    arg0->unk48 = (s64)(arg1 + arg0->unk48);
     FUN_00118990(arg0->unk40);
 }
 

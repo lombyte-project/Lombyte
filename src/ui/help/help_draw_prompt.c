@@ -20,7 +20,8 @@ void help_draw_prompt(void) {
 
     D_001996D0.unk18 = 0x20;
     D_001996D0.unk1C = 0x20;
-    draw_ui_frame(D_001996D0.unk14 - 0x20, D_001996D0.unk14 + 0x20, D_001996D0.unk10 - 0x20, D_001996D0.unk10 + 0x20, 0x60);
+    draw_ui_frame(D_001996D0.unk14 - 0x20, D_001996D0.unk14 + 0x20, D_001996D0.unk10 - 0x20,
+                  D_001996D0.unk10 + 0x20, 0x60);
     if (D_001996D0.unk0 == 1 || D_001996D0.unk0 == 7) {
         alpha = D_001996D0.unk4 * 21;
     } else {
@@ -29,6 +30,6 @@ void help_draw_prompt(void) {
     if (alpha > 0x80) {
         alpha = 0x80;
     }
-    draw_textured_quad(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
-                  (u64)(alpha << 24 | 0x808080), get_effect_texture(4));
+    draw_textured_quad(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40,
+                       0x40, (u64)(alpha << 24 | 0x808080), get_effect_texture(4));
 }

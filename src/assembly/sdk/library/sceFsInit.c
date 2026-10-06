@@ -98,8 +98,7 @@ s32 sceFsInit(void) {
     rpc_command = &D_00156840[0];
     rpc_command->field0 = (s32)&D_00157500[0];
     rpc_command->field4 = (s32)&D_00157500[0x440];
-    if (sceSifCallRpc(&D_00157F80, 0xFF, 0, rpc_command, 8,
-                      (s32)D_001574C0, 8, 0, 0) < 0) {
+    if (sceSifCallRpc(&D_00157F80, 0xFF, 0, rpc_command, 8, (s32)D_001574C0, 8, 0, 0) < 0) {
         return 0xFFFEFFFF;
     }
 

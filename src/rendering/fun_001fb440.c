@@ -12,28 +12,30 @@
    sign-extends the halfword before masking as retail does. */
 typedef struct {
     char unk_000[0x160];
-    short w;        /* 0x160 */
-    short h;        /* 0x162 */
-    short psm;      /* 0x164 */
-    short fbp;      /* 0x166 */
+    short w;   /* 0x160 */
+    short h;   /* 0x162 */
+    short psm; /* 0x164 */
+    short fbp; /* 0x166 */
     short unk_168[2];
-    short zpsm;     /* 0x16C */
-    short zbp;      /* 0x16E */
+    short zpsm; /* 0x16C */
+    short zbp;  /* 0x16E */
 } FrameCfg;
 
 typedef struct {
-    unsigned long FBP:9;
-    unsigned long pad09:7;
-    unsigned long FBW:6;
-    unsigned long pad22:2;
-    unsigned long PSM:6;
-    unsigned long pad30:2;
-    unsigned long FBMSK:32;
+    unsigned long FBP : 9;
+    unsigned long pad09 : 7;
+    unsigned long FBW : 6;
+    unsigned long pad22 : 2;
+    unsigned long PSM : 6;
+    unsigned long pad30 : 2;
+    unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
 
 extern FrameCfg D_00151780;
 extern long D_0015EED0 MACRO_ADDR;
-struct TagPtr { int *p; };
+struct TagPtr {
+    int *p;
+};
 extern struct TagPtr D_00160F00;
 extern void FUN_001f9810(void *, int);
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
@@ -51,7 +53,8 @@ void FUN_001fb440(int a, int b, int c) {
     D_00151780.fbp = c >> 13;
     D_00151780.w = 1 << a;
     D_00151780.h = 1 << b;
-    D_0015EED0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) | ((unsigned long)b << 30) | ((unsigned long)1 << 34);
+    D_0015EED0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
+                 ((unsigned long)b << 30) | ((unsigned long)1 << 34);
     FUN_001f9810(D_00160F00.p, 0xF0);
     D_00160F00.p[0] = 0x1000000E;
     D_00160F00.p[1] = 0;

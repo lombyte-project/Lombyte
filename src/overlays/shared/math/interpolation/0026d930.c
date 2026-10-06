@@ -8,8 +8,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
-void FUN_L01_0026d930(char *p)
-{
+void FUN_L01_0026d930(char *p) {
     *(int *)(p + 0x0) = 0x280;
     *(float *)(p + 0x4) = 1.0f;
     *(float *)(p + 0x8) = 0.5f;
@@ -39,8 +38,7 @@ void FUN_L01_0026e090(int i, int v) {
         } while (*(short *)p++ >= 0);
     }
 }
-extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8")
-    __attribute__((section(".sdata")));
+extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
 /* 0x0026e0e0, 88 bytes.
  * Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c:
  * func_L01_0026F090), where it is exact; names translated to the US level
@@ -61,4 +59,3 @@ void FUN_L01_0026e0e0(int list, int state) {
         } while (*(short *)p++ >= 0);
     }
 }
-

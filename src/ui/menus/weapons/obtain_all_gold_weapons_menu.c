@@ -54,9 +54,11 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     packet.unkA = first_y;
     tex = find_valid_animation_frame_index(0xE99A, 6);
     draw_hud_sprite(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
-    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183), -1);
+    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183),
+                              -1);
     do_gif_paging();
     return 2;
 }
 
-extern __typeof__(obtain_all_gold_weapons_menu) func_00222948 __attribute__((alias("FUN_00222948")));
+extern __typeof__(obtain_all_gold_weapons_menu) func_00222948
+    __attribute__((alias("FUN_00222948")));

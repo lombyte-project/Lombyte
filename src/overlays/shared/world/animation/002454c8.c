@@ -2,9 +2,19 @@
 #include "types.h"
 #include "asm.h"
 
-typedef struct { s32 a, b; } P2;
-typedef struct { u8 pad[0x1530]; P2 x[14]; P2 y[1]; } Tab;
-typedef struct { u8 pad[0x5C]; u8 *buf; s32 ptr[70]; } H;
+typedef struct {
+    s32 a, b;
+} P2;
+typedef struct {
+    u8 pad[0x1530];
+    P2 x[14];
+    P2 y[1];
+} Tab;
+typedef struct {
+    u8 pad[0x5C];
+    u8 *buf;
+    s32 ptr[70];
+} H;
 extern s32 D_0015ED80;
 extern Tab D_00137B80;
 extern H D_L00_0016C860;
@@ -32,9 +42,19 @@ void FUN_L00_002454c8(s32 i) {
         } while (n < 70 && e[1] != 0);
     }
 }
-typedef struct { s32 a, b; } P2_245610;
-typedef struct { u8 pad[0x12E8]; P2_245610 x[10]; P2_245610 y[1]; } Tab_245610;
-typedef struct { u8 pad[0x5C]; u8 *buf; s32 ptr[70]; } H_245610;
+typedef struct {
+    s32 a, b;
+} P2_245610;
+typedef struct {
+    u8 pad[0x12E8];
+    P2_245610 x[10];
+    P2_245610 y[1];
+} Tab_245610;
+typedef struct {
+    u8 pad[0x5C];
+    u8 *buf;
+    s32 ptr[70];
+} H_245610;
 extern Tab_245610 T_245610 __asm__("D_00137B80");
 extern H_245610 H245610 __asm__("D_L00_0016C860");
 void start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");

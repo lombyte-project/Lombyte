@@ -3,17 +3,13 @@ struct PictureHeaderContext {
     unsigned char opaque;
 };
 
-#define FIELD(type, object, offset) \
-    (*(type *)((unsigned char *)(object) + (offset)))
+#define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
 
-extern int _nextBit(PictureHeaderContext *context, int count)
-    __asm__("_nextBit");
-extern void _extrainfo(PictureHeaderContext *context)
-    __asm__("_extrainfo");
-extern void _extensionAndUserData(PictureHeaderContext *context)
-    __asm__("_extensionAndUserData");
-extern void UpdateTempTrackData(PictureHeaderContext *context, int temporal_reference)
-    __asm__("UpdateTempTrackData");
+extern int _nextBit(PictureHeaderContext *context, int count) __asm__("_nextBit");
+extern void _extrainfo(PictureHeaderContext *context) __asm__("_extrainfo");
+extern void _extensionAndUserData(PictureHeaderContext *context) __asm__("_extensionAndUserData");
+extern void UpdateTempTrackData(PictureHeaderContext *context,
+                                int temporal_reference) __asm__("UpdateTempTrackData");
 
 void PictureHeader(PictureHeaderContext *context) __asm__("_pictureHeader");
 

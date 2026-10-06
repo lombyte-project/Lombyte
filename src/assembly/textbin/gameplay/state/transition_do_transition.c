@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_do_transition/FUN_001eb798.s", FUN_001eb798);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_do_transition/"
+            "FUN_001eb798.s",
+            FUN_001eb798);
 #else
 #include "types.h"
 #include "sda.h"
@@ -174,7 +176,8 @@ void transition_do_transition(void) {
                 if (D_001862B0[i].voice != -1) {
                     continue;
                 }
-            } else if (D_0018CB20.time < D_001862B0[i].start || D_001862B0[i].end < D_0018CB20.time) {
+            } else if (D_0018CB20.time < D_001862B0[i].start ||
+                       D_001862B0[i].end < D_0018CB20.time) {
                 goto stop;
             } else if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 continue;

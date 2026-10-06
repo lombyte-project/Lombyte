@@ -15,7 +15,7 @@ s32 sceCdNcmdDiskReady(void) {
         SignalSema(D_001312E8[0]);
         return 0;
     }
-    temp_16_37 = *(u32 *)((u32) D_00131340 | 0x20000000);
+    temp_16_37 = *(u32 *)((u32)D_00131340 | 0x20000000);
     SignalSema(D_001312E8[0]);
     return temp_16_37;
 }

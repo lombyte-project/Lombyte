@@ -93,8 +93,8 @@ int camera_activation_check_priority(void *cur, void *other) {
             CamRec20 *rec = &D_0015EF90[*(short *)(c + 0x84)];
             int g = *(int *)((char *)rec->unk1C + 0x24);
 
-            if (g < 0 || (*(int *)(base + 0x560) == D_0015EF40[g].unk10
-                          && *(int *)(base + 0x570) == 0)) {
+            if (g < 0 ||
+                (*(int *)(base + 0x560) == D_0015EF40[g].unk10 && *(int *)(base + 0x570) == 0)) {
                 return 1;
             }
         }
@@ -104,4 +104,5 @@ int camera_activation_check_priority(void *cur, void *other) {
     return 0;
 }
 
-extern __typeof__(camera_activation_check_priority) func_001EC210 __attribute__((alias("FUN_001ec210")));
+extern __typeof__(camera_activation_check_priority) func_001EC210
+    __attribute__((alias("FUN_001ec210")));

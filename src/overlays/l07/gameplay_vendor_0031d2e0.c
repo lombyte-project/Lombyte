@@ -10,7 +10,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031d2e0.s", FUN_L07_0031d2e0);
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_0031FF78), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x178]; int arr[8]; } L07SparkState;
+typedef struct {
+    char pad[0x178];
+    int arr[8];
+} L07SparkState;
 
 extern char D_L07_0016C8E0[];
 extern float D_L07_0015F580[] __attribute__((section(".sdata")));
@@ -21,8 +24,10 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_002637f8(int);
-unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float, float) __asm__("FUN_L00_0026d000");
+unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
+                                float size);
+extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float,
+                                 float) __asm__("FUN_L00_0026d000");
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
 void FUN_L07_0031eba8(char *m) {
@@ -42,17 +47,21 @@ void FUN_L07_0031eba8(char *m) {
         break;
     case 1:
         a = D_L07_0015F5C4;
-        if (a != 2) return;
+        if (a != 2)
+            return;
         S = D_L07_0016C960_c;
         t = *(int *)(S + 0x30) - 3;
         if ((unsigned)t < 2) {
             int idx = (unsigned)t > 1 ? 0 : 2;
             FUN_L00_002637f8(((L07SparkState *)S)->arr[idx]);
         }
-        if (*(int *)(S + 0x30) != a) return;
+        if (*(int *)(S + 0x30) != a)
+            return;
         k = 7;
-        if (*(int *)(S + 0x34) != scale_game_frames(0xA8A)) k = 0;
-        if (*(int *)(S + 0x34) == scale_game_frames(0xACE)) k = 6;
+        if (*(int *)(S + 0x34) != scale_game_frames(0xA8A))
+            k = 0;
+        if (*(int *)(S + 0x34) == scale_game_frames(0xACE))
+            k = 6;
         if (k != 0) {
             mob = (char *)((L07SparkState *)S)->arr[k];
             for (i = 0; i < 4; i++) {
@@ -63,7 +72,8 @@ void FUN_L07_0031eba8(char *m) {
                     int v = FUN_L00_00257b90(0, 4);
                     char *p;
                     char *q;
-                    if (random_integer_below(2) != 0) v = -v;
+                    if (random_integer_below(2) != 0)
+                        v = -v;
                     p = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, d);
                     if (p != 0) {
                         q = p + 0x20;
@@ -106,24 +116,29 @@ void FUN_L07_0031f900(unsigned char *moby) {
                 float a0[4], a1[4], a2[4], b0[4], b1[4], b2[4], c0[4], c1[4], c2[4];
                 int idx = 0;
                 char *o;
-                if (s == 1) idx = 3;
-                if (s == 2) idx = 4;
+                if (s == 1)
+                    idx = 3;
+                if (s == 2)
+                    idx = 4;
                 o = *(char **)(g - (-(idx * 4)) + 0x178);
                 FUN_L00_0024f7c8(o, 0, a0);
                 FUN_L00_0024f7c8(o, 3, b0);
                 subtract_vector_xyz(c0, a0, b0);
                 normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8_d);
-                FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC_d,
+                                 *(float *)&D_L07_00161CE0_d);
                 FUN_L00_0024f7c8(o, 1, a1);
                 FUN_L00_0024f7c8(o, 4, b1);
                 subtract_vector_xyz(c1, a1, b1);
                 normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8_d);
-                FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC_d,
+                                 *(float *)&D_L07_00161CE0_d);
                 FUN_L00_0024f7c8(o, 2, a2);
                 FUN_L00_0024f7c8(o, 5, b2);
                 subtract_vector_xyz(c2, a2, b2);
                 normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8_d);
-                FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC_d,
+                                 *(float *)&D_L07_00161CE0_d);
             }
         }
         break;

@@ -1,11 +1,11 @@
 /* Ported from rac1-decomp (src/game/help.c, func_001FE438). */
 typedef struct {
-    int state;    /* 0x00 */
-    int x04;      /* 0x04 */
-    int pad[7];   /* 0x08 */
-    int x24;      /* 0x24 */
-    int x28;      /* 0x28 */
-    int count;    /* 0x2C: entries in the D_0015F780 table */
+    int state;  /* 0x00 */
+    int x04;    /* 0x04 */
+    int pad[7]; /* 0x08 */
+    int x24;    /* 0x24 */
+    int x28;    /* 0x28 */
+    int count;  /* 0x2C: entries in the D_0015F780 table */
 } HelpState;
 extern char D_001996D0[];
 /* Advances the help screen's state (D_001996D0). Every access goes

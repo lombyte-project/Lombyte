@@ -20,7 +20,9 @@ void save_card_state_checking_save(void) {
         }
         return;
     }
-    if (a >= -1) D_0015EEB0 = 0x10;
+    if (a >= -1)
+        D_0015EEB0 = 0x10;
 }
 
-extern __typeof__(save_card_state_checking_save) func_00208C00 __attribute__((alias("FUN_00208c00")));
+extern __typeof__(save_card_state_checking_save) func_00208C00
+    __attribute__((alias("FUN_00208c00")));

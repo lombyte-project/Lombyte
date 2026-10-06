@@ -2,7 +2,10 @@
  * -fno-schedule-insns entry in configure.py (SDK_COMPILER_FLAG_UNITS). */
 
 #include "types.h"
-struct SifClient { u8 pad_0[0x24]; s32 unk24; };
+struct SifClient {
+    u8 pad_0[0x24];
+    s32 unk24;
+};
 extern u8 D_0012FCAC[];
 extern struct SifClient D_00158040;
 extern s32 sceSifBindRpc();

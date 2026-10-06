@@ -21,8 +21,7 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 void draw_mobys_setup(void) __asm__("FUN_0020d278");
 
-void draw_mobys_setup(void)
-{
+void draw_mobys_setup(void) {
     register s32 current;
     register s32 callbackArg;
     vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);

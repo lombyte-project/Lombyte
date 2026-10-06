@@ -59,7 +59,9 @@ void render_vendor_item_details_pass(void) {
     draw_moby_list(D_001E63C0.unk20 + 0x100, 1);
     draw_moby_list(D_001E63C0.unk20, 1);
     if (D_001E63C0.items[D_001E63C0.sel].type == 1) {
-        font_print_small(6, 8, 0x80F0F0F0, get_help_message_text(D_001863D0[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
+        font_print_small(
+            6, 8, 0x80F0F0F0,
+            get_help_message_text(D_001863D0[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
         font_print_small(0x18, 0x18, 0x80F0F0F0, get_help_message_text(0x4F5D), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
         font_print_right_small(0x76, 0x65, 0x80F0F0F0, text, -1);
@@ -72,12 +74,15 @@ void render_vendor_item_details_pass(void) {
             append_screen_sprite(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
             append_screen_sprite(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
             append_screen_sprite(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
-            format_scaled_display_value(text, D_001E63C0.unk40 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].d
-                                  : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
+            format_scaled_display_value(
+                text, D_001E63C0.unk40 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].d
+                                       : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
             font_print_right_small(0x76, 0x55, 0x80F0F0F0, text, -1);
         }
     } else {
-        font_print_small(6, 8, 0x80F0F0F0, get_help_message_text(D_001863D0[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
+        font_print_small(
+            6, 8, 0x80F0F0F0,
+            get_help_message_text(D_001863D0[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
         font_print_right_small(0x76, 0x65, D_0013D4C0.unk23 ? 0x80808080 : 0x80F0F0F0, text, -1);
         if (D_0013D4C0.unk23 != 0) {
@@ -89,11 +94,13 @@ void render_vendor_item_details_pass(void) {
             append_screen_sprite(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
             append_screen_sprite(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
             append_screen_sprite(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
-            format_scaled_display_value(text, D_0013D4C0.unk23 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].b
-                                  : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
+            format_scaled_display_value(
+                text, D_0013D4C0.unk23 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].b
+                                       : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
             font_print_right_small(0x76, 0x55, 0x80F0F0F0, text, -1);
         }
     }
 }
 
-extern __typeof__(render_vendor_item_details_pass) func_002389E0 __attribute__((alias("FUN_002389e0")));
+extern __typeof__(render_vendor_item_details_pass) func_002389E0
+    __attribute__((alias("FUN_002389e0")));

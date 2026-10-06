@@ -47,8 +47,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) __asm__("FUN_001fd748");
 
-void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
-{
+void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     f32 label_direction[4];
     s32 level_index;
     s32 availability;
@@ -76,9 +75,11 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
     texture_index = find_valid_animation_frame_index(0xE99A, 0xE);
     screen_width_subpixels = (right - left) * 16;
     screen_height_subpixels = (bottom - top) * 16;
-    draw_hud_sprite_uv(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0, 0x80);
+    draw_hud_sprite_uv(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0,
+                       0x80);
     vu1_add_g_sregister(8, 0);
-    draw_hud_sprite_uv(find_valid_animation_frame_index(0xE99A, 0xF), 0, 0, screen_width_subpixels, screen_height_subpixels, game_frame_counter & 0xFFF, 0, 0x80);
+    draw_hud_sprite_uv(find_valid_animation_frame_index(0xE99A, 0xF), 0, 0, screen_width_subpixels,
+                       screen_height_subpixels, game_frame_counter & 0xFFF, 0, 0x80);
     vu1_add_g_sregister(8, 5);
     for (level_index = 1; level_index < 20; level_index++) {
         if (*(volatile s32 *)&level_map_markers[level_index].x == 0) {
@@ -100,8 +101,12 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
         if (pal_mode != 0) {
             marker_y = marker_y * 0x1C0 / 0x1A0;
         }
-        if (availability == 3 || (availability == 2 && game_frame_counter % (scale_game_frames(0x16) + scale_game_frames(8)) < scale_game_frames(0x16))) {
-            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xC), marker_x - 5, marker_y - 5, 10, 10, 0x80);
+        if (availability == 3 ||
+            (availability == 2 &&
+             game_frame_counter % (scale_game_frames(0x16) + scale_game_frames(8)) <
+                 scale_game_frames(0x16))) {
+            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xC), marker_x - 5,
+                            marker_y - 5, 10, 10, 0x80);
         }
         if (level_index == level_map_selection.selected_level) {
             label_x = marker_x + level_map_markers[level_index].label_offset_x;
@@ -119,14 +124,17 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
             } else {
                 line_end_x = label_x + text_width;
             }
-            draw_hud_rect(line_start_x + 1, line_start_y + 1, label_x + 1, label_y + 1, 0x80000000, 0);
+            draw_hud_rect(line_start_x + 1, line_start_y + 1, label_x + 1, label_y + 1, 0x80000000,
+                          0);
             draw_hud_rect(label_x + 1, label_y + 1, line_end_x + 1, label_y + 1, 0x80000000, 0);
             text_x = (line_end_x < label_x) ? line_end_x : label_x;
-            font_print_large(text_x + 1, label_y - large_font_height + 1, 0x80000000, label_text, -1);
+            font_print_large(text_x + 1, label_y - large_font_height + 1, 0x80000000, label_text,
+                             -1);
             draw_hud_rect(line_start_x, line_start_y, label_x, label_y, 0x80F0F0F0, 0);
             draw_hud_rect(label_x, label_y, line_end_x, label_y, 0x80F0F0F0, 0);
             font_print_large(text_x, label_y - large_font_height, 0x80F0F0F0, label_text, -1);
-            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xD), marker_x - 10, marker_y - 10, 20, 20, 0x80);
+            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xD), marker_x - 10,
+                            marker_y - 10, 20, 20, 0x80);
         }
     }
     do_gif_paging();

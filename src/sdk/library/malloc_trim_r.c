@@ -16,7 +16,7 @@ extern void func_001154C0(struct _reent *);
 extern void func_001154C8(struct _reent *);
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 
-extern u32 D_0012F788[];  /* __malloc_av_ bins (pointer array) */
+extern u32 D_0012F788[]; /* __malloc_av_ bins (pointer array) */
 extern u32 D_0012FBA0[]; /* sbrk_base */
 extern u32 D_0012FBB8[]; /* current_mallinfo.arena / sbrked_mem */
 
@@ -27,25 +27,24 @@ struct malloc_chunk {
     struct malloc_chunk *bk;
 };
 
-#define SIZE_SZ 4
-#define MINSIZE 16
+#define SIZE_SZ                4
+#define MINSIZE                16
 #define DEFAULT_TRIM_THRESHOLD ((unsigned long)(64 * 1024))
-#define malloc_getpagesize 4096
-#define MORECORE(x) _sbrk_r(ptr, (x))
-#define MORECORE_FAILURE ((void *)-1)
-#define chunksize(p) ((p)->size & ~(SIZE_SZ - 1))
-#define set_head(p, s) ((p)->size = (s))
-#define check_chunk(p) ((void)0)
+#define malloc_getpagesize     4096
+#define MORECORE(x)            _sbrk_r(ptr, (x))
+#define MORECORE_FAILURE       ((void *)-1)
+#define chunksize(p)           ((p)->size & ~(SIZE_SZ - 1))
+#define set_head(p, s)         ((p)->size = (s))
+#define check_chunk(p)         ((void)0)
 
-#define av_ D_0012F788
+#define av_       D_0012F788
 #define bin_at(i) ((struct malloc_chunk *)((u8 *)&(av_[2 * (i) + 2]) - 2 * SIZE_SZ))
-#define top (bin_at(0)->fd)
+#define top       (bin_at(0)->fd)
 
-#define sbrk_base (D_0012FBA0[0])
+#define sbrk_base  (D_0012FBA0[0])
 #define sbrked_mem (D_0012FBB8[0])
 
-s32 _malloc_trim_r(struct _reent *ptr, u32 pad)
-{
+s32 _malloc_trim_r(struct _reent *ptr, u32 pad) {
     s64 top_size;
     s64 extra;
     u8 *current_brk;

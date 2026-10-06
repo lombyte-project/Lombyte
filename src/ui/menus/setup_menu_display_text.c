@@ -38,12 +38,10 @@ int setup_menu_display_text(char *arg0) {
             }
         }
     }
-    sprintf(buf, D_001602A8, func_001FE540_id(0x4F4F), count,
-                  func_001FE540_id(0x4F53), D_001E0888[D_001A00F0[0x89]]);
-    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x10, (D_0013E500[1] >> 1) - 8,
-                    0x80000000L, buf, -1);
-    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x11, (D_0013E500[1] >> 1) - 9,
-                    0x80FFA888L, buf, -1);
+    sprintf(buf, D_001602A8, func_001FE540_id(0x4F4F), count, func_001FE540_id(0x4F53),
+            D_001E0888[D_001A00F0[0x89]]);
+    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x10, (D_0013E500[1] >> 1) - 8, 0x80000000L, buf, -1);
+    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x11, (D_0013E500[1] >> 1) - 9, 0x80FFA888L, buf, -1);
     do_gif_paging();
     if (0) {
         (void)D_001602A4_s;

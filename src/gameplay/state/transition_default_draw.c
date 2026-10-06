@@ -53,8 +53,7 @@ extern s32 draw_ties_1() __asm__("func_002358C8");
 extern s32 func_00237370();
 void transition_default_draw(s32 *arg0) __asm__("FUN_001eb410");
 
-void transition_default_draw(s32 *arg0)
-{
+void transition_default_draw(s32 *arg0) {
     s32 n;
 
     if (D_0016045C == 0 || D_0016045C->unk4 != 0) {
@@ -98,7 +97,7 @@ void transition_default_draw(s32 *arg0)
     reset_gs_registers();
     if (D_0015EF50 != 0) {
         draw_textured_quad(0xEC, 0x10, 0x100, 0x80, 0, 0, 0x100, 0x80,
-                      (long)(D_0015EF50 << 24 | 0x808080), D_0015EF48);
+                           (long)(D_0015EF50 << 24 | 0x808080), D_0015EF48);
     }
     if (D_0015EF54 != 0) {
         n = D_0015ED88 - 1;
@@ -106,7 +105,7 @@ void transition_default_draw(s32 *arg0)
             n = 0;
         }
         draw_textured_quad(0xA0, D_0013E504[0] - 0x50, 0xC0, 0x60, 0, 0, 0x100, 0x80,
-                      (long)(D_0015EF54 << 24 | 0x808080), get_effect_texture(n + 4));
+                           (long)(D_0015EF54 << 24 | 0x808080), get_effect_texture(n + 4));
     }
     do_gif_paging();
     if (D_0015F43C > 0.0f) {

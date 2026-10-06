@@ -29,10 +29,15 @@ struct MpegPictureTimestampRecord {
 
 extern s64 __muldi3(s64 a, s64 b);
 
-void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state, struct MpegPictureTimestampRecord *picture, s64 *presentation_timestamp, s64 *decoding_timestamp, s64 *flags) __asm__("_getPtsDtsFlags");
+void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state,
+                                      struct MpegPictureTimestampRecord *picture,
+                                      s64 *presentation_timestamp, s64 *decoding_timestamp,
+                                      s64 *flags) __asm__("_getPtsDtsFlags");
 
-void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state, struct MpegPictureTimestampRecord *picture, s64 *presentation_timestamp, s64 *decoding_timestamp, s64 *flags)
-{
+void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state,
+                                      struct MpegPictureTimestampRecord *picture,
+                                      s64 *presentation_timestamp, s64 *decoding_timestamp,
+                                      s64 *flags) {
     s32 previous_timestamp;
     s32 timestamp_carry;
     s64 timestamp_step;
@@ -44,15 +49,18 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state, struct M
     s64 field_flags, sequence_flags, picture_flags;
 
     if (state->interpolate_timestamps != 0) {
-        if ((picture->presentation_timestamp < 0) && (previous_timestamp = state->previous_timestamp, (previous_timestamp >= 0))) {
+        if ((picture->presentation_timestamp < 0) &&
+            (previous_timestamp = state->previous_timestamp, (previous_timestamp >= 0))) {
             timestamp_step = state->timestamp_step;
-            step_low_word = (s32) timestamp_step;
+            step_low_word = (s32)timestamp_step;
             signed_step = step_low_word;
-            half_step_carry = (s32) __muldi3(__muldi3((s64) step_low_word & 1, state->timestamp_scale & 1), (timestamp_carry = state->timestamp_carry, timestamp_carry & 1));
+            half_step_carry =
+                (s32)__muldi3(__muldi3((s64)step_low_word & 1, state->timestamp_scale & 1),
+                              (timestamp_carry = state->timestamp_carry, timestamp_carry & 1));
             /* Keep the retail truncation and additions at 32 bits. */
             half_step = (s32)(__muldi3(state->timestamp_scale, signed_step) >> 1);
-            *presentation_timestamp = previous_timestamp + (s32) (half_step + half_step_carry);
-            if (__muldi3((s64) step_low_word & 1, state->timestamp_scale & 1) != 0) {
+            *presentation_timestamp = previous_timestamp + (s32)(half_step + half_step_carry);
+            if (__muldi3((s64)step_low_word & 1, state->timestamp_scale & 1) != 0) {
                 state->timestamp_carry = (timestamp_carry + 1);
             }
         } else {
@@ -70,8 +78,8 @@ void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state, struct M
         }
     }
     *decoding_timestamp = picture->decoding_timestamp;
-    field_flags = ((s64) picture->repeat_first_field << 5) | ((s64) picture->top_field_first << 6);
-    sequence_flags = ((s64) picture->progressive_sequence << 8) | picture->coding_type;
-    picture_flags = ((s64) picture->progressive_frame << 7) | ((s64) picture->picture_structure << 3);
+    field_flags = ((s64)picture->repeat_first_field << 5) | ((s64)picture->top_field_first << 6);
+    sequence_flags = ((s64)picture->progressive_sequence << 8) | picture->coding_type;
+    picture_flags = ((s64)picture->progressive_frame << 7) | ((s64)picture->picture_structure << 3);
     *flags = (sequence_flags | field_flags) | picture_flags;
 }

@@ -24,4 +24,5 @@ void music_remaining_time_callback(int remaining_time, long context) {
     *(int *)((char *)music_state + 0x28) = *(int *)(channel + 0x18) / 4;
 }
 
-extern __typeof__(music_remaining_time_callback) func_00216BC0 __attribute__((alias("FUN_00216bc0")));
+extern __typeof__(music_remaining_time_callback) func_00216BC0
+    __attribute__((alias("FUN_00216bc0")));

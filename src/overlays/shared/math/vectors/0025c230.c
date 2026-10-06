@@ -26,7 +26,9 @@ float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
 
-typedef struct { int a[4]; } Vq __attribute__((aligned(16)));
+typedef struct {
+    int a[4];
+} Vq __attribute__((aligned(16)));
 
 extern float FUN_001f9ab0(void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -47,7 +49,9 @@ void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
 /* Spawns one particle per point found by func_L00_0025BCF8, at a random offset about A1. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D3F0), where it is exact; names translated to the US level program. */
 
-typedef struct { float v[4]; } V4 __attribute__((aligned(16)));
+typedef struct {
+    float v[4];
+} V4 __attribute__((aligned(16)));
 
 extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -88,7 +92,25 @@ void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
         }
     }
 }
-typedef struct { f32 f0; f32 f4; f32 f8; f32 fC; u8 p10[8]; f32 f18; f32 f1C; u8 p20[4]; u32 w24; u8 p28[4]; s16 h2C; u8 p2E[0xE]; u8 b3C; u8 p3D; s16 h3E; f32 f40; int w44; } B_25c558;
+typedef struct {
+    f32 f0;
+    f32 f4;
+    f32 f8;
+    f32 fC;
+    u8 p10[8];
+    f32 f18;
+    f32 f1C;
+    u8 p20[4];
+    u32 w24;
+    u8 p28[4];
+    s16 h2C;
+    u8 p2E[0xE];
+    u8 b3C;
+    u8 p3D;
+    s16 h3E;
+    f32 f40;
+    int w44;
+} B_25c558;
 float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");
 float FUN_001fa580_0025c558(float, float) __asm__("FUN_001fa580");
@@ -112,7 +134,9 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
         b->w24 |= 0x20;
         *(int *)(a + 0x94) = 0;
     }
-    if (b->w24 & 2) FUN_002130d8_0025c558(a, c, e, d, 1);
-    else FUN_00212f90_0025c558(a, c, e, d);
+    if (b->w24 & 2)
+        FUN_002130d8_0025c558(a, c, e, d, 1);
+    else
+        FUN_00212f90_0025c558(a, c, e, d);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c698.s", FUN_L00_0025c698);

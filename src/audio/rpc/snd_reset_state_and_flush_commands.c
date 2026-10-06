@@ -11,4 +11,5 @@ void snd_reset_state_and_flush_commands(s32 arg0) {
 extern void func_0012EB00(s32 arg0) __attribute__((alias("FUN_0012eb00")));
 
 /* Recovered original symbol name. */
-extern __typeof__(snd_reset_state_and_flush_commands) snd_UnkFunction_0012eb00 __attribute__((alias("FUN_0012eb00")));
+extern __typeof__(snd_reset_state_and_flush_commands) snd_UnkFunction_0012eb00
+    __attribute__((alias("FUN_0012eb00")));
