@@ -59,6 +59,7 @@ u64 get_frame_texture(s32 frame_id) {
     u32 packet_offset;
     u32 queued_transfer;
     s32 image_upload_count;
+    s32 allocation_cursor;
     u8 width_log2;
     u8 height_log2;
     s32 palette_source_address;
@@ -104,11 +105,12 @@ u64 get_frame_texture(s32 frame_id) {
     if (image_page->gs_block_offset == 0) {
         width_log2 = image_page->width_log2;
         height_log2 = image_page->height_log2;
-        image_page->gs_block_offset = gs_texture_allocation_cursor >> 8;
+        allocation_cursor = gs_texture_allocation_cursor;
+        image_page->gs_block_offset = allocation_cursor >> 8;
         if (height_log2 < width_log2) {
             height_log2 = image_page->width_log2;
         }
-        gs_texture_allocation_cursor += 1 << (height_log2 * 2);
+        gs_texture_allocation_cursor = allocation_cursor + (1 << (height_log2 * 2));
         image_upload_count = pending_texture_upload_count;
         if (image_upload_count < 0x40) {
             queued_transfer = 1;
