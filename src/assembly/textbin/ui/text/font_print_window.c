@@ -62,8 +62,9 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     if ((window->flags ^ TEXT_REGION_CENTER_HORIZONTALLY) & TEXT_REGION_CENTER_HORIZONTALLY) {
         wrap_width = window->right - window->anchor_x;
     } else {
-        left_width = window->anchor_x - window->left;
-        right_width = window->right - window->anchor_x;
+        left_width = window->anchor_x;
+        right_width = window->right - left_width;
+        left_width -= window->left;
         if (left_width > right_width) {
             left_width = right_width;
         }
