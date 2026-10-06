@@ -69,15 +69,15 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
                 glyph_entry = capture_glyph_coordinates + glyph_index;
                 if (*glyph_entry != -1 || glyph_index == 0) {
                     if (blink_next_glyph != 0) {
-                        skip_draw = blink_next_glyph != 0;
+                        skip_draw = 0;
                         blink_next_glyph = 0;
                         long_blink_period = scale_game_frames(0x1E);
                         short_blink_period = scale_game_frames(0xA);
                         blink_period = long_blink_period + short_blink_period;
                         blink_remainder = game_frame_counter % blink_period;
                         long_blink_period = scale_game_frames(0xA);
-                        if (blink_remainder >= long_blink_period) {
-                            skip_draw = 0;
+                        if (blink_remainder < long_blink_period) {
+                            skip_draw = 1;
                         }
                     }
 
