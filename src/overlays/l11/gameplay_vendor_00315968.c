@@ -920,6 +920,65 @@ void FUN_L11_0031db50(void) {
     vu1_add_g_sregister_31db50(0x47, 0x5360B);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e2f0.s", FUN_L11_0031e2f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e930.s", FUN_L11_0031e930);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
+
+extern char D_L11_00167680[];
+extern int D_L11_001625CC;
+extern int D_L11_001625EC;
+extern int D_L11_00162610; /* no foreign declaration */
+extern int get_effect_texture(int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern char D_L11_001625C8[4] __attribute__((sda));
+extern char D_L11_001625E8[4] __attribute__((sda));
+extern char D_L11_001625F8[4] __attribute__((sda));
+extern void FUN_L08_002f0b40(int arg);
+extern void FUN_L08_002f0c18(int);
+extern void font_queue_vu_state(void);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L11_0031e930(char *m) {
+    int *d = *(int **)(m + 0x78);
+    int flag = 0;
+    char *cam;
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1L);
+    font_queue_vu_state();
+    cam = D_L11_00167680;
+    if (*(float *)(cam + 0x148) > 255.0f
+        || is_point_inside_clip_volume(cam + 0x140, d[0])
+        || is_point_inside_clip_volume(cam + 0x140, d[1])
+        || is_point_inside_clip_volume(cam + 0x140, d[2])) {
+        flag = 1;
+    }
+    if (flag) {
+        vu1_add_g_sregister(6, get_effect_texture(0x2C));
+        vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625C8 << 32) | 0x44);
+        FUN_L08_002f0b40(0);
+    }
+    if (*(unsigned char *)&D_L11_00162610 != 0 && flag) {
+        vu1_add_g_sregister(6, get_effect_texture(0x29));
+        vu1_add_g_sregister(0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x68);
+        FUN_L08_002f0b40(1);
+        vu1_add_g_sregister(0x42, ((long)((D_L11_001625CC * *(unsigned char *)&D_L11_00162610) >> 8) << 32) | 0x62);
+        FUN_L08_002f0b40(2);
+    }
+    vu1_add_g_sregister(6, get_effect_texture(0x2A));
+    vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625E8 << 32) | 0x48);
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister(0x42, ((long)D_L11_001625EC << 32) | 0x48);
+    FUN_L08_002f0c18(1);
+    if (flag) {
+        vu1_add_g_sregister(6, get_effect_texture(0x2B));
+        vu1_add_g_sregister(0x42, ((long)*(int *)&D_L11_001625F8 << 32) | 0x48);
+        FUN_L08_002f0c18(0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031f150.s", FUN_L11_0031f150);
 
