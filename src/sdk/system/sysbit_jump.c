@@ -22,7 +22,7 @@ void _sysbitJump(SysbitState *ctx, s32 bits) {
     ctx->bits = 0;
     ctx->cnt = 0;
     total = (ctx->total = (bits * 8) + ctx->total);
-    offset = (u32) (total >> 3);
+    offset = (u32)(total >> 3);
     pointer = ctx->field8 + offset;
     offset = pointer;
     ctx->bit_pointer = pointer;

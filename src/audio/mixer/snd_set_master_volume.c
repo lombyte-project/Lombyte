@@ -1,10 +1,11 @@
 #include "types.h"
-extern s32 func_0012E6E0(s32 cmd, s32 size, void *buf, s32 a, s32 b);
+extern s32 snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a,
+                                        s32 b) __asm__("func_0012E6E0");
 void snd_set_master_volume(s32 arg0, s32 arg1) __asm__("FUN_0012e208");
 
 void snd_set_master_volume(s32 arg0, s32 arg1) {
     u8 sp_slot[0x10];
     *(s32 *)sp_slot = arg0;
     *(s32 *)(sp_slot + 4) = arg1;
-    func_0012E6E0(9, 8, sp_slot, 0, 0);
+    snd_send_iop_command_no_wait(9, 8, sp_slot, 0, 0);
 }

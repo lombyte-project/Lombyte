@@ -9,8 +9,7 @@ typedef struct _Bigint {
     u32 _x[1];
 } _Bigint;
 
-s32 Dcmp(_Bigint *a, _Bigint *b)
-{
+s32 Dcmp(_Bigint *a, _Bigint *b) {
     u32 *xa, *xa0, *xb, *xb0;
     s32 i, j;
 

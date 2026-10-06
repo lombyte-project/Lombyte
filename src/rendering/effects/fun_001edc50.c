@@ -40,7 +40,8 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
+                               s64) __asm__("FUN_001f5450");
 
 void FUN_001edc50(void) {
     f32 scr[4];
@@ -102,7 +103,8 @@ void FUN_001edc50(void) {
             fy = 0.0f;
         }
         fade = fade * (fx * fy);
-        rgba = (truncate_float_to_s32(fade * D_00187300.alpha[i]) << 24) | (D_00187300.color[i] & 0xFFFFFF);
+        rgba = (truncate_float_to_s32(fade * D_00187300.alpha[i]) << 24) |
+               (D_00187300.color[i] & 0xFFFFFF);
         w = truncate_float_to_s32(size * D_00187300.scale[i]);
         half = w >> 1;
         x = truncate_float_to_s32(at[0] - half);

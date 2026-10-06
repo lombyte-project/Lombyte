@@ -1,10 +1,19 @@
 #include "types.h"
-struct CbDataStr { s32 type; s32 pad4; u8 *data; s32 len; };
-struct AudioBuf { u8 data[0x50008]; s32 size; };
+struct CbDataStr {
+    s32 type;
+    s32 pad4;
+    u8 *data;
+    s32 len;
+};
+struct AudioBuf {
+    u8 data[0x50008];
+    s32 size;
+};
 extern u8 *D_0016120C;
-extern void func_0023AD58(void *, void **, s32 *, void **, s32 *);
-extern s32 func_0023B810(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *, s32);
-extern void func_0023AE28(void *, s32);
+extern void audio_dec_begin_put(void *, void **, s32 *, void **, s32 *) __asm__("func_0023AD58");
+extern s32 copy_video_buffer_region(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *,
+                                    s32) __asm__("func_0023B810");
+extern void audio_dec_end_put(void *, s32) __asm__("func_0023AE28");
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) __asm__("FUN_0023b728");
 
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
@@ -30,9 +39,9 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
         n = len;
     }
     rest = len - n;
-    func_0023AD58(D_0016120C + 0xD9100, &ptr0, &len0, &ptr1, &len1);
-    ret = func_0023B810(ptr0, len0, ptr1, len1, ps, n, ab, rest);
-    func_0023AE28(D_0016120C + 0xD9100, ret);
+    audio_dec_begin_put(D_0016120C + 0xD9100, &ptr0, &len0, &ptr1, &len1);
+    ret = copy_video_buffer_region(ptr0, len0, ptr1, len1, ps, n, ab, rest);
+    audio_dec_end_put(D_0016120C + 0xD9100, ret);
     return ret > 0;
 }
 

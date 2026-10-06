@@ -38,5 +38,7 @@ void process_native_cd_read_completion(void *arg0) {
     }
     handle_cd_read_callback(D_00131314);
 }
-extern __typeof__(process_native_cd_read_completion) D_00120788 __attribute__((alias("FUN_00120788")));
-extern __typeof__(process_native_cd_read_completion) func_00120788 __attribute__((alias("FUN_00120788")));
+extern __typeof__(process_native_cd_read_completion) D_00120788
+    __attribute__((alias("FUN_00120788")));
+extern __typeof__(process_native_cd_read_completion) func_00120788
+    __attribute__((alias("FUN_00120788")));

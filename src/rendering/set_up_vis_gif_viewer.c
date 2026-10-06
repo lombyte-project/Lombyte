@@ -4,7 +4,8 @@ extern u64 D_0019E540[];
 extern u64 D_0019E6C0[];
 extern u64 D_0019E6D8[];
 
-void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0, s32 mode) __asm__("FUN_00202fd0");
+void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0,
+                           s32 mode) __asm__("FUN_00202fd0");
 
 void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0, s32 mode) {
     u64 w0;

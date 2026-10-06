@@ -28,7 +28,8 @@ int FUN_L08_002e0228(char *m) {
             FUN_001f9a28(b, (char *)p[i] + 0x10, D_L08_001675C0);
             FUN_001f9bf8(b, b, 1.0f);
             d = FUN_001f9ab0(b, a);
-            if (FUN_001f9dc8(0.06981317f) < d) return p[i];
+            if (FUN_001f9dc8(0.06981317f) < d)
+                return p[i];
         }
     }
     return 0;
@@ -74,7 +75,7 @@ void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
 /* builds a basis from a direction vector and writes the orientation into the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa050(float *, float *);
 extern void FUN_00214598(void *, void *);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -93,7 +94,7 @@ void FUN_L08_002e4db8(char *a, float *v) {
     qcopy(m, r);
     qcopy(m + 4, s);
     qcopy(m + 8, v);
-    FUN_001f99f8(m + 12);
+    clear_u64_value(m + 12);
     d += 0x10;
     m[15] = 1.0f;
     FUN_00214598(m, d);
@@ -150,7 +151,7 @@ void FUN_L08_002e8788(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -175,11 +176,14 @@ void FUN_L08_002e8ba0(char *a) {
     }
     if (*(int *)(data + 0x90) != 0) {
         char *r = *(char **)(data + 0x90);
-        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(r + 0x40), *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
+        *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
+            *(float *)(r + 0x40),
+            *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
-        if (m != 0) FUN_L00_00250df8(m);
+        if (m != 0)
+            FUN_L00_00250df8(m);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
@@ -207,7 +211,9 @@ void FUN_L08_002e9a18(char *arg) {
         }
     }
     if (*(char **)(data + 0x90) != 0) {
-        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(*(char **)(data + 0x90) + 0x40), *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
+        *(float *)(*(char **)(data + 0x90) + 0x40) =
+            fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
+                               *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
     }
     p = parts + 0x10;
     for (i = 0; i < 16; i++) {
@@ -239,17 +245,20 @@ extern char *D_L08_0015FFD8 __attribute__((section(".sdata")));
 
 void FUN_L08_002e2da0(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    int oclass=0x279;
+    int oclass = 0x279;
     char *base = D_L08_0015FFD8;
     int *ids = (int *)(data + 0x130);
     char **output = (char **)(data + 0x158);
-    int i=9;
+    int i = 9;
     for (;;) {
         char *other = (char *)((*ids << 8) + (unsigned int)base);
         if (*(short *)(other + 0xA6) == oclass) {
             *output++ = other;
         }
-        --i; if(i<0)return; ++ids;
+        --i;
+        if (i < 0)
+            return;
+        ++ids;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2df0.s", FUN_L08_002e2df0);
@@ -261,7 +270,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8cd0.s", FUN_L08_002e8cd0);
 /* Builds the moby's part hierarchy: body, head, arms and eight trailing segments. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EA930), where it is exact; names translated to the US level program. */
 
-void *FUN_L08_002e1c98_c2(char *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
+void *FUN_L08_002e1c98_c2(char *parent, int oClass, int joint,
+                          int pjoint) __asm__("FUN_L08_002e1c98");
 
 void FUN_L08_002e9558(char *moby) {
     char *data = *(char **)(moby + 0x78);

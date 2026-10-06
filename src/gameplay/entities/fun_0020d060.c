@@ -1,13 +1,20 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 extern struct TagPtr D_00160F00;
 extern struct TagPtr D_0015FF40;
 extern s32 D_0015FF3C;
 extern u8 D_001C8680[];
 extern u8 D_0015FEC0[];
 extern void FUN_00227740(void);
-extern void FUN_00227548(void *);
+extern void submit_graphics_setup_command_stream(void *) __asm__("FUN_00227548");
 extern void func_001F21B0(void *, s32);
 void FUN_0020d060(void) {
     struct DmaTag *tag;
@@ -25,7 +32,7 @@ void FUN_0020d060(void) {
     D_0015FF40.p->w2 = 0;
     D_0015FF40.p->w3 = 0;
     FUN_00227740();
-    FUN_00227548(D_001C8680);
+    submit_graphics_setup_command_stream(D_001C8680);
     D_00160F00.p->w0 = 0x20000000;
     D_00160F00.p->addr = (u32)(D_0015FF40.p + 1);
     D_00160F00.p->w2 = 0;

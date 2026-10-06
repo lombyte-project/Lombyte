@@ -1,11 +1,11 @@
 #include "types.h"
 
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern struct MusicStreamState D_001516D0;
-extern s32 func_0012DC80();
-extern s32 func_0012EB20();
-extern s32 func_00215420();
+extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
+extern s32 snd_init_vag_streaming_ex() __asm__("func_0012EB20");
+extern s32 register_audio_stream_callback() __asm__("func_00215420");
 void reset_music(void) __asm__("FUN_00215390");
 
 void reset_music(void) {
@@ -24,8 +24,8 @@ void reset_music(void) {
     D_001516D0.transition_state = 0;
     D_001516D0.queued_secondary_track = neg;
     D_001516D0.requested_track = neg;
-    func_0012EB20(4, 0xF000, 0, 1);
-    while (func_0012DC80() != 0) {
+    snd_init_vag_streaming_ex(4, 0xF000, 0, 1);
+    while (snd_flush_sound_commands() != 0) {
     }
-    func_00215420();
+    register_audio_stream_callback();
 }

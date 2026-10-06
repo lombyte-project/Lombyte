@@ -2,48 +2,51 @@
 
 typedef struct Pad {
     u8 pad0[0x100];
-    float axes[16];      /* 0x100 */
-    float prev[16];      /* 0x140 */
+    float axes[16]; /* 0x100 */
+    float prev[16]; /* 0x140 */
     u8 pad180[0xE];
-    s16 idx;             /* 0x18E */
-    s32 count;           /* 0x190 */
+    s16 idx;   /* 0x18E */
+    s32 count; /* 0x190 */
     u8 pad194[0xC];
-    s32 held;            /* 0x1A0 */
-    s32 pressed;         /* 0x1A4 */
-    s32 released;        /* 0x1A8 */
-    s32 old;             /* 0x1AC */
-    s32 raw;             /* 0x1B0 */
-    s32 x1B4;            /* 0x1B4 */
-    s32 x1B8;            /* 0x1B8 */
-    s32 x1BC;            /* 0x1BC */
-    s32 x1C0;            /* 0x1C0 */
-    s32 x1C4;            /* 0x1C4 */
-    s32 x1C8;            /* 0x1C8 */
-    s32 mode;            /* 0x1CC */
-    s32 none;            /* 0x1D0 */
-    s32 nodir;           /* 0x1D4 */
-    s32 moving;          /* 0x1D8 */
+    s32 held;     /* 0x1A0 */
+    s32 pressed;  /* 0x1A4 */
+    s32 released; /* 0x1A8 */
+    s32 old;      /* 0x1AC */
+    s32 raw;      /* 0x1B0 */
+    s32 x1B4;     /* 0x1B4 */
+    s32 x1B8;     /* 0x1B8 */
+    s32 x1BC;     /* 0x1BC */
+    s32 x1C0;     /* 0x1C0 */
+    s32 x1C4;     /* 0x1C4 */
+    s32 x1C8;     /* 0x1C8 */
+    s32 mode;     /* 0x1CC */
+    s32 none;     /* 0x1D0 */
+    s32 nodir;    /* 0x1D4 */
+    s32 moving;   /* 0x1D8 */
     u8 pad1DC[4];
-    s32 hist_btn[30];    /* 0x1E0 */
-    float hist_ang[30];  /* 0x258 */
-    float hist_mag[30];  /* 0x2D0 */
-    s32 x348;            /* 0x348 */
+    s32 hist_btn[30];   /* 0x1E0 */
+    float hist_ang[30]; /* 0x258 */
+    float hist_mag[30]; /* 0x2D0 */
+    s32 x348;           /* 0x348 */
     u8 pad34C;
-    u8 rep_delay;        /* 0x34D */
-    u8 rep_rate;         /* 0x34E */
-    u8 rep_timer;        /* 0x34F */
+    u8 rep_delay; /* 0x34D */
+    u8 rep_rate;  /* 0x34E */
+    u8 rep_timer; /* 0x34F */
 } Pad;
 
 extern volatile u8 D_0015EDB4;
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9b20(float *);
 extern float FUN_001f9e90(float, float);
-extern float func_001FA688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float func_001FA6C0(s32);
 
-#define SWAPLR(x) \
-    if ((x) & 0x8000) { (x) = ((x) & ~0x8000) | 0x2000; } \
-    else if ((x) & 0x2000) { (x) = ((x) & ~0x2000) | 0x8000; }
+#define SWAPLR(x)                                                                                  \
+    if ((x) & 0x8000) {                                                                            \
+        (x) = ((x) & ~0x8000) | 0x2000;                                                            \
+    } else if ((x) & 0x2000) {                                                                     \
+        (x) = ((x) & ~0x2000) | 0x8000;                                                            \
+    }
 
 void process_pad_input(Pad *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
@@ -60,7 +63,8 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     if (len >= 6) {
         for (i = 0; i < 4; i++) {
             s32 d = buf[i + 2] - 0x7F;
-            if (d < 0) d = -d;
+            if (d < 0)
+                d = -d;
             if (d >= 0x30) {
                 float f = func_001FA6C0(d - 0x30) / func_001FA6C0(0x4C);
                 p->axes[i] = f;
@@ -95,10 +99,14 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     } else {
         p->moving = 0;
     }
-    if (p->axes[2] < 0.0f) p->held |= 0x8000;
-    if (p->axes[2] > 0.0f) p->held |= 0x2000;
-    if (p->axes[3] < 0.0f) p->held |= 0x1000;
-    if (p->axes[3] > 0.0f) p->held |= 0x4000;
+    if (p->axes[2] < 0.0f)
+        p->held |= 0x8000;
+    if (p->axes[2] > 0.0f)
+        p->held |= 0x2000;
+    if (p->axes[3] < 0.0f)
+        p->held |= 0x1000;
+    if (p->axes[3] > 0.0f)
+        p->held |= 0x4000;
     p->nodir = (p->held & 0xF000) == 0;
     p->none = p->held == 0;
     p->pressed = ~p->old & p->held;
@@ -141,17 +149,19 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     p->hist_mag[p->idx] = mag;
     p->hist_ang[p->idx] = ang;
     if (mag > 0.9f) {
-        for (j = 1; j < FUN_001f96f8(4); j++) {
+        for (j = 1; j < scale_game_frames(4); j++) {
             float m = p->hist_mag[(p->idx - j + 30) % 30];
-            if (m > 0.9f) break;
+            if (m > 0.9f)
+                break;
             if (m < 0.25f) {
                 p->pressed |= 0x10000;
                 break;
             }
         }
         if (!(p->pressed & 0x10000)) {
-            for (k = 1; k < FUN_001f96f8(5); k++) {
-                if (func_001FA688(p->hist_ang[(p->idx - k + 30) % 30], ang) > 0.9599311f) {
+            for (k = 1; k < scale_game_frames(5); k++) {
+                if (fast_difference_between_rotations(p->hist_ang[(p->idx - k + 30) % 30], ang) >
+                    0.9599311f) {
                     p->pressed |= 0x10000;
                     break;
                 }

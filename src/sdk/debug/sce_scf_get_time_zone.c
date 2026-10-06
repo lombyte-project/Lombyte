@@ -6,7 +6,6 @@ int sceScfGetTimeZone(void) {
     int config;
     int timezone;
 
-
     if (IsT10K() != 0) {
         timezone = D_001330D0[0];
     } else {

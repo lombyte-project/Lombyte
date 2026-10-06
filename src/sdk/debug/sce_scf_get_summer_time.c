@@ -3,7 +3,10 @@ extern u8 D_001330D6[];
 extern void GetOsdConfigParam();
 extern s32 GetOsdConfigParam2();
 extern s32 IsT10K();
-struct M2c_SummerWork { u32 config; u8 summer; };
+struct M2c_SummerWork {
+    u32 config;
+    u8 summer;
+};
 u8 sceScfGetSummerTime(void) {
     struct M2c_SummerWork work;
     u8 result;

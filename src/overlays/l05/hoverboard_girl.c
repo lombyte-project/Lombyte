@@ -7,7 +7,10 @@
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
  * Its two breast manipulators also carry the effect into cutscene instances. */
-typedef union { u128 quadword; f32 component[4]; } HoverboardGirlVector;
+typedef union {
+    u128 quadword;
+    f32 component[4];
+} HoverboardGirlVector;
 struct HoverboardGirlMoby;
 
 typedef struct {
@@ -66,7 +69,10 @@ typedef struct {
     s32 second_gate;
 } HoverboardRaceGates;
 
-typedef struct { u8 pad00[4]; s16 state; } HoverboardRaceEntry;
+typedef struct {
+    u8 pad00[4];
+    s16 state;
+} HoverboardRaceEntry;
 
 typedef struct {
     u8 pad00[0x80];
@@ -83,7 +89,11 @@ typedef struct {
 /* Partial resident player-data view: addresses verified in the retail loads. */
 extern HoverboardGirlPlayerState player_state __asm__("D_0013F350");
 
-typedef struct { f32 delta; f32 frame_scale; f32 movement_sampling_scale; } FrameTiming;
+typedef struct {
+    f32 delta;
+    f32 frame_scale;
+    f32 movement_sampling_scale;
+} FrameTiming;
 extern FrameTiming frame_timing __asm__("D_0015ED64") __attribute__((sda));
 extern FrameTiming frame_timing_absolute __asm__("D_0015ED64") MACRO_ADDR;
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
@@ -105,14 +115,17 @@ extern s32 advance_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_time(f32) __asm__("FUN_001fa6d0");
 extern f32 random_float(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_remainder(s32) __asm__("FUN_00213260");
-extern void set_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void blend_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern f32 find_ground_height(f32, HoverboardGirlVector *, s32) __asm__("FUN_00213508");
 extern s32 get_dialogue_entry(HoverboardGirlMoby *) __asm__("FUN_L00_002667d0");
-extern void initialize_npc_dialogue(HoverboardGirlMoby *, HoverboardGirlState *) __asm__("FUN_L00_002668a0");
+extern void initialize_npc_dialogue(HoverboardGirlMoby *,
+                                    HoverboardGirlState *) __asm__("FUN_L00_002668a0");
 extern void initialize_moby_grounding(HoverboardGirlMoby *) __asm__("FUN_L02_0025c758");
-extern s32 update_npc_dialogue(HoverboardGirlMoby *, HoverboardGirlState *) __asm__("FUN_L00_00266448");
+extern s32 update_npc_dialogue(HoverboardGirlMoby *,
+                               HoverboardGirlState *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(f32, HoverboardGirlMoby *) __asm__("FUN_L01_002783a8");
-extern void set_race_camera(HoverboardGirlVector *, HoverboardGirlVector *, s32, s32) __asm__("FUN_L00_00216f90");
+extern void set_race_camera(HoverboardGirlVector *, HoverboardGirlVector *, s32,
+                            s32) __asm__("FUN_L00_00216f90");
 extern void set_race_camera_mode(s32, s32) __asm__("FUN_L01_0027a248");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void func_0020b178(s32, s64) __asm__("FUN_0020b178");
@@ -126,10 +139,13 @@ extern void add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 signed_angle_difference(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void update_joint_animation(HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32, f32) __asm__("FUN_L00_002628d8");
+extern void update_joint_animation(HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32,
+                                   f32) __asm__("FUN_L00_002628d8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9de0");
-extern void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
-void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *, HoverboardGirlState *) __asm__("FUN_L05_00316810");
+extern void
+update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
+void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *,
+                                            HoverboardGirlState *) __asm__("FUN_L05_00316810");
 void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 
 #ifndef NON_MATCHING
@@ -150,7 +166,8 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
             }
             state_window->joints[2].target_scale = animation_value;
             animation_value = (f32)(frame_number & 0x7F) * 0.0078125f;
-            state_window->joints[2].target_rotation[1] = fast_cos(animation_value * 3.1415927f) * 0.61086524f;
+            state_window->joints[2].target_rotation[1] =
+                fast_cos(animation_value * 3.1415927f) * 0.61086524f;
             delta = frame_timing_absolute.delta;
         }
         update_joint_animation(moby, joint, joint_index + 2, delta * 0.05f, delta * 0.3f);
@@ -183,7 +200,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     switch (moby->state) {
     case 0:
         if (moby->animation != 0) {
-            set_moby_animation(moby, 0, 0, scale_frame_count(20));
+            blend_moby_animation(moby, 0, 0, scale_frame_count(20));
         }
         moby->position.component[2] = find_ground_height(0.5f, &moby->position, 0);
         if (race_gates.first_gate == 0 || race_gates.second_gate == 0) {
@@ -233,15 +250,16 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             qcopy(&saved_camera_vectors[0], &race_camera_vectors[2]);
             qcopy(&saved_camera_vectors[1], &race_camera_vectors[3]);
         }
-        if ((moby->animation == 0 || moby->animation == 2) && advance_timer(&state->idle_animation_timer)) {
+        if ((moby->animation == 0 || moby->animation == 2) &&
+            advance_timer(&state->idle_animation_timer)) {
             state->idle_animation_timer = truncate_time(scale_time(random_float(1200.0f, 2400.0f)));
             if (moby->animation != 1) {
-                set_moby_animation(moby, 1, 0, scale_frame_count(10));
+                blend_moby_animation(moby, 1, 0, scale_frame_count(10));
             }
         } else if (moby->animation_flags & 2) {
             animation = random_remainder(2) != 0 ? 0 : 2;
             if (moby->animation != animation) {
-                set_moby_animation(moby, animation, 0, scale_frame_count(10));
+                blend_moby_animation(moby, animation, 0, scale_frame_count(10));
             }
         }
         break;
@@ -269,8 +287,11 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     if (moby->animation == 0 || moby->animation == 2) {
         look_enabled = 1;
         if (vector_distance(&moby->position, &player_state.position) < 8.0f &&
-            absolute_angle_difference(moby->yaw, angle_from_xy(player_state.look_position.component[0] - moby->position.component[0],
-                                                            player_state.look_position.component[1] - moby->position.component[1])) < 1.5707964f) {
+            absolute_angle_difference(
+                moby->yaw,
+                angle_from_xy(player_state.look_position.component[0] - moby->position.component[0],
+                              player_state.look_position.component[1] -
+                                  moby->position.component[1])) < 1.5707964f) {
             if (vector_length(&player_state.velocity) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
             } else {
@@ -299,12 +320,17 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         qcopy(&head_position, &moby->position);
         head_position.component[2] += 1.0f;
         subtract_vector(&direction, &target_position, &head_position);
-        yaw = signed_angle_difference(angle_from_xy(direction.component[0], direction.component[1]), moby->yaw);
+        yaw = signed_angle_difference(angle_from_xy(direction.component[0], direction.component[1]),
+                                      moby->yaw);
         pitch = -angle_from_xy(vector_length_xy(&direction), direction.component[2]);
-        if (yaw > 1.5707964f) yaw = 1.5707964f;
-        else if (yaw < -1.5707964f) yaw = -1.5707964f;
-        if (pitch > 0.5235988f) pitch = 0.5235988f;
-        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
         state->joints[0].target_rotation[1] = pitch;
         state->joints[0].target_rotation[2] = yaw * 0.6f;
         state->joints[1].target_rotation[2] = yaw * 0.4f;
@@ -313,18 +339,24 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     /* The easter egg only counts flips within 15 units and a 70-degree
      * facing cone. Retail increments at action 11, frame 15; no debounce. */
     if (vector_distance(&moby->position, &player_state.position) < 15.0f &&
-        absolute_angle_difference(moby->yaw, angle_from_xy(player_state.position.component[0] - moby->position.component[0],
-                                                          player_state.position.component[1] - moby->position.component[1])) < 1.2217305f) {
+        absolute_angle_difference(
+            moby->yaw,
+            angle_from_xy(player_state.position.component[0] - moby->position.component[0],
+                          player_state.position.component[1] - moby->position.component[1])) <
+            1.2217305f) {
         if (player_state.action == 11 && player_state.action_frame == 15) {
             state->breast_growth_count++;
-            if (state->breast_growth_count > 20) state->breast_growth_count = 20;
+            if (state->breast_growth_count > 20)
+                state->breast_growth_count = 20;
             breast_growth_count = state->breast_growth_count;
         }
         /* Action 4 eventually reduces the effect, one step
          * every tenth game frame. Keep the scaled-frame threshold. */
-        if (player_state.action == 4 && scale_frame_count(20) < player_state.action_frame && frame_number % 10 == 0) {
+        if (player_state.action == 4 && scale_frame_count(20) < player_state.action_frame &&
+            frame_number % 10 == 0) {
             state->breast_growth_count--;
-            if (state->breast_growth_count < 0) state->breast_growth_count = 0;
+            if (state->breast_growth_count < 0)
+                state->breast_growth_count = 0;
             breast_growth_count = state->breast_growth_count;
         }
     }
@@ -336,8 +368,11 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         } else {
             delta = frame_timing.delta;
         }
-        update_joint_animation(moby, &state->joints[0], 0, rotation_step * delta, rotation_limit * delta);
-        update_joint_animation(moby, &state->joints[1], 1, rotation_step * frame_timing_absolute.delta, rotation_limit * frame_timing_absolute.delta);
+        update_joint_animation(moby, &state->joints[0], 0, rotation_step * delta,
+                               rotation_limit * delta);
+        update_joint_animation(moby, &state->joints[1], 1,
+                               rotation_step * frame_timing_absolute.delta,
+                               rotation_limit * frame_timing_absolute.delta);
     }
 }
 #endif

@@ -11,7 +11,7 @@ typedef struct {
 extern sceGsGParam *GetCoreDataTable(void);
 extern s32 GsPutIMR();
 extern s32 RemoveIntcHandler();
-extern s32 func_00119028();
+extern s32 disable_intc() __asm__("func_00119028");
 extern void SetGsCrt(s32, s32, s32);
 
 void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
@@ -27,7 +27,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
         GsPutIMR(0xFF00);
         gp->sceGsFFMode = (ff != 0);
         if (gp->sceGsVSCfunc != 0) {
-            func_00119028(2);
+            disable_intc(2);
             RemoveIntcHandler(2, gp->sceGsVSCid);
             gp->sceGsVSCfunc = 0;
             gp->sceGsVSCid = 0;

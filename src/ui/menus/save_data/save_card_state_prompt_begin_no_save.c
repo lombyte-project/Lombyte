@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui_menus_fun_00208f28_types.h"
+#include "rnc/ui/menus/save_data/save_card_state.h"
 
 /* D_0013D2AC is the +0x1C field of the shared D_0013D290 save-state block. */
 extern struct M2c_D_0013D290 D_0013D290;
@@ -17,4 +17,5 @@ void save_card_state_prompt_begin_no_save(void) {
     }
 }
 
-extern __typeof__(save_card_state_prompt_begin_no_save) func_00208FE8 __attribute__((alias("FUN_00208fe8")));
+extern __typeof__(save_card_state_prompt_begin_no_save) func_00208FE8
+    __attribute__((alias("FUN_00208fe8")));

@@ -1,8 +1,16 @@
 #include "types.h"
 
 struct Handler;
-struct Handler { s32 id; void (*fn)(struct Handler *); u8 pad8[0x88]; };
-struct Table { u8 pad0[0xD90]; s32 count; struct Handler *handlers; };
+struct Handler {
+    s32 id;
+    void (*fn)(struct Handler *);
+    u8 pad8[0x88];
+};
+struct Table {
+    u8 pad0[0xD90];
+    s32 count;
+    struct Handler *handlers;
+};
 extern struct Table D_0013E550;
 
 void enqueue_voice_request(void) __asm__("FUN_0022dc50");

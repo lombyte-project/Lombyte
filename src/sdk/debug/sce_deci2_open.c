@@ -5,8 +5,7 @@ typedef unsigned short u16;
 extern s32 Deci2Call(s32 command, void *request);
 extern char D_00154910[];
 
-s32 sceDeci2Open(u16 protocol, void *options, void *handler)
-{
+s32 sceDeci2Open(u16 protocol, void *options, void *handler) {
     u32 request[4];
 
     request[0] = protocol & 0xFFFF;

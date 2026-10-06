@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui_menus_fun_0021d1f8_types.h"
+#include "rnc/ui/menus/fun_0021d1f8.h"
 
 typedef struct {
     u32 key;
@@ -11,15 +11,14 @@ extern struct MusicStreamState D_001516D0;
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern s32 D_001D5CF8[];
 extern PadBind D_001D60B8[];
-extern void func_00225AC0(s32);
+extern void initialize_graphics_buffer_descriptors(s32) __asm__("func_00225AC0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
-s32 FUN_0021d1f8(struct M2c_arg0 *arg0)
-{
+s32 FUN_0021d1f8(struct M2c_arg0 *arg0) {
     s32 i;
     struct M2c_D_001D5BF0 *g;
 
-    func_00225AC0(1);
+    initialize_graphics_buffer_descriptors(1);
     arg0->unk54 = 0;
     arg0->unk38 = 0;
     g = &D_001D5BF0;

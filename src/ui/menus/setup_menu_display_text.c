@@ -2,9 +2,9 @@
 
 extern int D_001A00F0[];
 extern unsigned char D_0014BEC0[];
-extern void func_001F4280(int);
-extern void func_001F4398(void);
-extern void func_0020D330(int, int);
+extern void setup_gif_paging(int) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
+extern void draw_moby_list(int, int) __asm__("func_0020D330");
 extern char D_00186F40[];
 extern void *func_001FE540_id(int) __asm__("func_001FDD10");
 extern const float D_001602A4_f __asm__("D_001602A4") __attribute__((sda));
@@ -26,9 +26,9 @@ int setup_menu_display_text(char *arg0) {
     *(float *)(o + 0x14) = *(float *)(t + 0x144) + D_001602A4_f;
     *(float *)(o + 0x18) = *(float *)(t + 0x148) - 0.1f;
     if (*(int *)(arg0 + 0x44) != 0) {
-        func_0020D330(*(int *)(arg0 + 0x44), 1);
+        draw_moby_list(*(int *)(arg0 + 0x44), 1);
     }
-    func_001F4280(0);
+    setup_gif_paging(0);
     count = 0;
     {
         int k;
@@ -38,13 +38,11 @@ int setup_menu_display_text(char *arg0) {
             }
         }
     }
-    sprintf(buf, D_001602A8, func_001FE540_id(0x4F4F), count,
-                  func_001FE540_id(0x4F53), D_001E0888[D_001A00F0[0x89]]);
-    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x10, (D_0013E500[1] >> 1) - 8,
-                    0x80000000L, buf, -1);
-    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x11, (D_0013E500[1] >> 1) - 9,
-                    0x80FFA888L, buf, -1);
-    func_001F4398();
+    sprintf(buf, D_001602A8, func_001FE540_id(0x4F4F), count, func_001FE540_id(0x4F53),
+            D_001E0888[D_001A00F0[0x89]]);
+    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x10, (D_0013E500[1] >> 1) - 8, 0x80000000L, buf, -1);
+    func_001F6CF8_c(*(int *)(arg0 + 0x20) - 0x11, (D_0013E500[1] >> 1) - 9, 0x80FFA888L, buf, -1);
+    do_gif_paging();
     if (0) {
         (void)D_001602A4_s;
     }

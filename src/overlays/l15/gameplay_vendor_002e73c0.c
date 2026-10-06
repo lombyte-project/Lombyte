@@ -13,7 +13,7 @@ extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 
 void FUN_L15_002e73c0(char *moby) {
@@ -23,15 +23,19 @@ void FUN_L15_002e73c0(char *moby) {
         switch (state) {
         case 0: {
             char *vec = data + 0x40;
-            FUN_001f99f8(vec);
+            clear_u64_value(vec);
             *(int *)(data + 0x9C) |= 4;
             moby[0x20] = 3;
             break;
         }
         case 3:
             *(float *)(moby + 0x58) = 1.3888889f;
-            *(float *)(data + 0x40) = FUN_001f9dc8(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) * (D_0015ED6C * 2.5f);
-            *(float *)(data + 0x44) = FUN_001f9de0(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) * (D_0015ED6C * 2.5f);
+            *(float *)(data + 0x40) =
+                FUN_001f9dc8(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) *
+                (D_0015ED6C * 2.5f);
+            *(float *)(data + 0x44) =
+                FUN_001f9de0(FUN_001fa580(*(float *)(moby + 0x48), 1.5707964f)) *
+                (D_0015ED6C * 2.5f);
             *(int *)(data + 0x48) = 0;
             break;
         }
@@ -160,11 +164,18 @@ void FUN_L15_002eabd8(char *moby) {
 /* Builds the two rippling vertex strips around the moby (template points moved to its position, z waved by distance from the centre), then draws them twice with scrolled texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1FE0), where it is exact; names translated to the US level program. */
 
-typedef struct { float f0; float f4; } RippleData;
+typedef struct {
+    float f0;
+    float f4;
+} RippleData;
 
-typedef struct { float v[2]; } P2;
+typedef struct {
+    float v[2];
+} P2;
 
-typedef struct { P2 p[2]; } T4;
+typedef struct {
+    P2 p[2];
+} T4;
 
 extern T4 D_L15_00162108;
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -209,7 +220,8 @@ void FUN_L15_002eac90(char *moby) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     d->f0 = d->f4;
-    d->f4 = fast_add_rotations(d->f4, 360.0f / FUN_001f96b0(D_L15_001620FC) * 0.017453292f * D_0015ED6C);
+    d->f4 = fast_add_rotations(d->f4,
+                               360.0f / FUN_001f96b0(D_L15_001620FC) * 0.017453292f * D_0015ED6C);
     FUN_L00_00250320(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
@@ -217,9 +229,11 @@ void FUN_L15_002eac90(char *moby) {
             int *e = D_L15_001620C0 + i;
             float *p = (float *)(*e + j * 12);
             float t = D_L15_00162100 *
-                fast_sin(fast_add_rotations(wrap_angle(
-                    FUN_L00_00200260(FUN_001f9988(p[0] * p[0] + p[1] * p[1]), D_L15_001620F8)
-                        * 6.2831855f / D_L15_001620F8), d->f4));
+                      fast_sin(fast_add_rotations(
+                          wrap_angle(FUN_L00_00200260(FUN_001f9988(p[0] * p[0] + p[1] * p[1]),
+                                                      D_L15_001620F8) *
+                                     6.2831855f / D_L15_001620F8),
+                          d->f4));
             *(float *)(j * 12 + D_L15_00162090[i]) = p[0] + *(float *)(moby + 0x10);
             *(float *)(j * 12 + D_L15_00162090[i] + 4) = p[1] + *(float *)(moby + 0x14);
             *(float *)(j * 12 + D_L15_00162090[i] + 8) = p[2] + *(float *)(moby + 0x18) + t;
@@ -231,17 +245,17 @@ void FUN_L15_002eac90(char *moby) {
             for (n = 0; n < D_L15_00162080[m]; n++) {
                 T4 tbl = D_L15_00162108;
                 *(float *)(n * 8 + D_L15_001620A0[m]) =
-                    *(float *)(n * 8 + D_L15_001620D0[m])
-                    + FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
+                    *(float *)(n * 8 + D_L15_001620D0[m]) +
+                    FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
                 *(float *)(n * 8 + D_L15_001620A0[m] + 4) =
-                    *(float *)(n * 8 + D_L15_001620D0[m] + 4)
-                    + FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
+                    *(float *)(n * 8 + D_L15_001620D0[m] + 4) +
+                    FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
             }
         }
         font_queue_vu_state();
         for (q = 0; q < 3; q++) {
-            FUN_L00_001fde98(D_L15_00162080[q], D_L15_00162090[q],
-                D_L15_001620B0[q], (void *)D_L15_001620A0[q], 1);
+            FUN_L00_001fde98(D_L15_00162080[q], D_L15_00162090[q], D_L15_001620B0[q],
+                             (void *)D_L15_001620A0[q], 1);
         }
     }
 }
@@ -250,7 +264,9 @@ void FUN_L15_002eac90(char *moby) {
 /* Builds and draws the animated ring of lights around a moby: 68 vertices and colours, then two passes of 68 texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F2BD8), where it is exact; names translated to the US level program. */
 
-typedef struct { float f[4]; } Quad4;
+typedef struct {
+    float f[4];
+} Quad4;
 
 typedef struct {
     float prev;
@@ -310,7 +326,8 @@ void FUN_L15_002eb108(char *moby) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) * 0.017453292f * D_0015ED6C);
+    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) *
+                                                      0.017453292f * D_0015ED6C);
     FUN_L00_00250320(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
     p = (Quad4 *)&t.f[1];
@@ -335,17 +352,18 @@ void FUN_L15_002eb108(char *moby) {
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 68; n++) {
             t = D_L15_00162170;
-            D_L15_001DE530[n][0] = D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
-            D_L15_001DE530[n][1] = D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+            D_L15_001DE530[n][0] =
+                D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
+            D_L15_001DE530[n][1] =
+                D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
-            FUN_L00_001fde98(D_L15_00162120[k], D_L15_00162140[k], D_L15_00162150[k], (void *)D_L15_00162148[k], 1);
+            FUN_L00_001fde98(D_L15_00162120[k], D_L15_00162140[k], D_L15_00162150[k],
+                             (void *)D_L15_00162148[k], 1);
         }
     }
 }
-
-
 
 #include "qcopy.h"
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
@@ -408,15 +426,20 @@ void FUN_L15_002eb6b8(void) {
             }
         }
     }
-    if (flag == 0) return;
+    if (flag == 0)
+        return;
     n = strlen_alt(buf);
     if (val < n) {
         n = val;
     } else if (n < val) {
-        if ((n - val) & 4) n = n - 1;
+        if ((n - val) & 4)
+            n = n - 1;
     }
-    font_print_large((void *)(*(int *)&D_L15_00162180_d + 1), (void *)(*(int *)&D_L15_00162184_d + 1), (void *)*(int *)&D_L15_0016218C_d, buf, (void *)n);
-    font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d, (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
+    font_print_large((void *)(*(int *)&D_L15_00162180_d + 1),
+                     (void *)(*(int *)&D_L15_00162184_d + 1), (void *)*(int *)&D_L15_0016218C_d,
+                     buf, (void *)n);
+    font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d,
+                     (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
@@ -427,13 +450,12 @@ extern short D_L15_0016219C_d __asm__("D_L15_0016219C") __attribute__((sda));
 extern void FUN_L00_0026f080(float, float, char *, float *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-void FUN_L15_002eb928(char *moby)
-{
+void FUN_L15_002eb928(char *moby) {
     float vec[4];
     float *data = *(float **)(moby + 0x78);
     if (random_integer_below(*(int *)&D_L15_0016219C_d - 1) == 0) {
         char *pos = moby + 0x10;
-        FUN_001f99f8(vec);
+        clear_u64_value(vec);
         vec[2] = random_float_between_alt(0.75f, 1.5f) * *(float *)&D_L15_00162198_d * D_0015ED6C;
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
@@ -507,7 +529,8 @@ int FUN_L15_002f85a8(char *moby) {
         }
     } else if (e[5] >= 0) {
         i = e[5];
-        if (FUN_L00_00259740((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4), D_L15_001B0AB0[i][0])) {
+        if (FUN_L00_00259740((float *)(D_0013E533 + 0xE9D), (float *)(D_L15_001B0AB0[i] + 4),
+                             D_L15_001B0AB0[i][0])) {
             return 1;
         }
     }
@@ -522,7 +545,7 @@ extern char D_L15_00167280[];
 extern float FUN_001f9ab0(void *a, void *b);
 extern float FUN_001f9af0(void *a);
 extern float FUN_001f9df8(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(void *dst, void *a, void *b);
 extern void FUN_001f9a68(void *, void *, float);
@@ -563,7 +586,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     if (b != 0.0f) {
         float t1 = FUN_001f9e90(lenq, dot1);
         float t2 = FUN_001f9e90(lenr, dot2);
-        float t3 = FUN_001fa688(t1, t2);
+        float t3 = fast_difference_between_rotations(t1, t2);
         if (b * 0.017453292f < t3) {
             return 0;
         }

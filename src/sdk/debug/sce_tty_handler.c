@@ -28,8 +28,7 @@ extern s32 SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count);
 extern s32 SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
 extern int kprintf(const char *format, ...);
 
-void sceTtyHandler(s32 event, s32 param, TtyState *tty)
-{
+void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     Deci2Hdr *hdr;
     s32 n;
     s32 off;

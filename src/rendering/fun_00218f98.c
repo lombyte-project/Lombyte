@@ -20,9 +20,18 @@ struct M {
     u8 pad_110[0x14];
     s32 f124;
 };
-struct S { u8 pad_0[0x140]; float f140, f144, f148; };
-struct P { u8 pad_0[0x10]; u8 f10; };
-struct T { u8 pad_0[0x48]; struct P *tbl[1]; };
+struct S {
+    u8 pad_0[0x140];
+    float f140, f144, f148;
+};
+struct P {
+    u8 pad_0[0x10];
+    u8 f10;
+};
+struct T {
+    u8 pad_0[0x48];
+    struct P *tbl[1];
+};
 struct O2 {
     u8 pad_0[0x10];
     float f10, f14, f18;
@@ -49,24 +58,26 @@ extern struct O2 *D_001D5D90[];
 extern u8 D_001601C0 __attribute__((sda));
 extern u8 D_001601D0 __attribute__((sda));
 extern s32 FUN_001f9a68(s32, s32, f32);
-extern void func_002337B0(s32);
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
-extern s32 FUN_00225ac0();
-extern void func_002335D0(void);
-extern struct O2 *func_00225490();
-extern s32 func_00212ED8();
+extern s32 initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
+extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
+extern s32 set_moby_animation() __asm__("func_00212ED8");
 
 void func_00225AC0__void() __asm__("FUN_00225ac0");
 void FUN_00218f98(void) {
     s32 i;
     s32 a, b, c, d;
     D_001D5BF0.f0 = 2;
-    D_001D5BF0.f4 = D_001D45C8; D_001D5BF0.f8 = D_001D45C8; D_001D5BF0.f124 = 0;
+    D_001D5BF0.f4 = D_001D45C8;
+    D_001D5BF0.f8 = D_001D45C8;
+    D_001D5BF0.f124 = 0;
     FUN_001f9a68((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);
     qzero(D_0019C160);
-    func_002337B0(1);
+    vu1_sync_chain(1);
     sceGsSyncV(0);
     D_0015F438++;
     a = D_001940C0[1] + 0xA0000;
@@ -81,11 +92,11 @@ void FUN_00218f98(void) {
     D_001D5BF0.f108 = c;
     D_001D5BF0.f10C = d;
     func_00225AC0__void(1);
-    func_002335D0();
+    vu1_init_chain();
     D_001D5BF0.f18 = D_0015EE78;
     if (D_001D5BF0.f4 != 0) {
         for (i = 0; i < 14; i++) {
-            struct O2 *o = (struct O2 *)func_00225490(0x472);
+            struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);
             D_001D5D90[i] = o;
             if (o != 0) {
                 s32 k;
@@ -98,7 +109,7 @@ void FUN_00218f98(void) {
                 D_001D5D90[i]->f44 = 0;
                 D_001D5D90[i]->f48 = 0;
                 k = *(s32 *)((s32)D_001D5BF0.f4 + (i << 2));
-                func_00212ED8(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
+                set_moby_animation(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
             }
         }
     }

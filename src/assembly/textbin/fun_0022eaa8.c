@@ -9,73 +9,78 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022eaa8/FUN_0022eaa8.s
 #include "sda.h"
 #include "qcopy.h"
 
-typedef union { u128 quadword; f32 components[4]; } Vector4;
-typedef struct { Vector4 rows[4]; } Matrix4x4;
+typedef union {
+    u128 quadword;
+    f32 components[4];
+} Vector4;
+typedef struct {
+    Vector4 rows[4];
+} Matrix4x4;
 
 typedef struct {
     u8 pad00[0xC];
-    u8 count;          /* 0x0C */
+    u8 count; /* 0x0C */
     u8 pad0D[0x24 - 0x0D];
-    f32 base_scale;         /* 0x24 */
+    f32 base_scale; /* 0x24 */
     u8 pad28[0x48 - 0x28];
-    s32 frames[1];     /* 0x48 */
+    s32 frames[1]; /* 0x48 */
 } RenderModel;
 
 typedef struct {
     u8 pad00[0x10];
-    Vector4 position;          /* 0x10 */
-    RenderModel *model;      /* 0x20 */
+    Vector4 position;   /* 0x10 */
+    RenderModel *model; /* 0x20 */
 } RenderObjectHeader;
 
 typedef struct {
     u8 pad00[0x10];
-    u8 position[0x14];      /* 0x10 */
-    RenderModel *model;      /* 0x24 */
+    u8 position[0x14];  /* 0x10 */
+    RenderModel *model; /* 0x24 */
     u8 pad28[4];
-    f32 fade;          /* 0x2C */
+    f32 fade; /* 0x2C */
     u8 pad30[2];
-    s16 selected_index;         /* 0x32 */
-    u16 flags;         /* 0x34 */
+    s16 selected_index; /* 0x32 */
+    u16 flags;          /* 0x34 */
     u8 pad36[0x50 - 0x36];
-    u8 state_a;          /* 0x50 */
+    u8 state_a; /* 0x50 */
     u8 state_b;
     u8 selected_a;
     u8 selected_b;
-    f32 blend;         /* 0x54 */
+    f32 blend; /* 0x54 */
     u8 pad58[0x68 - 0x58];
-    u8 *frame_data_a;         /* 0x68 */
-    u8 *frame_data_b;         /* 0x6C */
+    u8 *frame_data_a; /* 0x68 */
+    u8 *frame_data_b; /* 0x6C */
     u8 pad70;
     u8 cached_selector;
     u8 opacity;
     u8 pad73[5];
-    u8 *animation_positions;         /* 0x78 */
+    u8 *animation_positions; /* 0x78 */
 } LevelRenderObject;
 
 typedef struct {
     u8 pad00[0x34];
-    s32 time;          /* 0x34 */
-    s32 frame;         /* 0x38 */
-    s32 sequence_frame;         /* 0x3C */
-    s16 end;           /* 0x40 */
+    s32 time;           /* 0x34 */
+    s32 frame;          /* 0x38 */
+    s32 sequence_frame; /* 0x3C */
+    s16 end;            /* 0x40 */
     u8 pad42[2];
-    s16 count;         /* 0x44 */
+    s16 count; /* 0x44 */
     u8 pad46[0x58 - 0x46];
-    s32 source_begin;         /* 0x58 */
-    s32 source_end;         /* 0x5C */
-    s32 prepared_frames[0x46];   /* 0x60 */
-    LevelRenderObject *objects[1];      /* 0x178 */
+    s32 source_begin;              /* 0x58 */
+    s32 source_end;                /* 0x5C */
+    s32 prepared_frames[0x46];     /* 0x60 */
+    LevelRenderObject *objects[1]; /* 0x178 */
 } LevelGameplayState;
 
 typedef struct {
     u8 pad00[0x50];
-    s32 history_index;           /* 0x50 */
-    s32 history_count;           /* 0x54 */
+    s32 history_index; /* 0x50 */
+    s32 history_count; /* 0x54 */
     s32 mode;          /* 0x58 */
     s32 state;         /* 0x5C */
     u8 pad60[0xC0 - 0x60];
     Vector4 primary_history_positions[32];   /* 0xC0 */
-    Vector4 secondary_history_positions[32];   /* 0x2C0 */
+    Vector4 secondary_history_positions[32]; /* 0x2C0 */
 } LevelRenderState;
 
 typedef struct {
@@ -90,9 +95,9 @@ typedef struct {
 
 typedef struct {
     u8 pad00[4];
-    s32 data_offset;          /* 0x04 */
+    s32 data_offset; /* 0x04 */
     u8 pad08[0x50 - 0x08];
-    s32 scene_offsets[5];        /* 0x50 */
+    s32 scene_offsets[5]; /* 0x50 */
 } RenderArchiveTable;
 
 typedef struct {
@@ -100,7 +105,7 @@ typedef struct {
     s32 source_begin_offset;
     s32 source_end_offset;
     u8 pad0C[8];
-    RenderArchiveTable *archive_table;        /* 0x14 */
+    RenderArchiveTable *archive_table; /* 0x14 */
 } LevelRenderArchive;
 
 typedef struct {
@@ -137,9 +142,10 @@ extern f32 D_001D9B48[];
 
 extern void FillTransferWords(void *, s32, s32);
 extern void ReadGlobalTableEntry(void);
-extern void func_0012DC80(void);
-extern void func_0012E308(s32, s32, s32, s32, s32, s32, s32, void *);
-extern void func_0012EB00(void);
+extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32,
+                                        void *) __asm__("func_0012E308");
+extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
 extern void func_001E9428(void);
 extern void func_001E9430(void);
 extern void update_view_context(void) __asm__("func_001F2D98");
@@ -149,8 +155,8 @@ extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern void func_0020C828(LevelRenderObject *);
-extern void func_0020C880(LevelRenderObject *);
+extern void mark_moby_for_removal(LevelRenderObject *) __asm__("func_0020C828");
+extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
 extern void calculate_object_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void func_0020DEF8(LevelRenderObject *);
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
@@ -203,20 +209,23 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || D_0013DD43[0] != 0)) {
         ReadGlobalTableEntry();
-        func_0012E308(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
-        func_0012EB00();
-        func_0012DC80();
+        snd_play_sound_vol_pan_pmpb(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0,
+                                    D_0013E5C0);
+        snd_reset_state_and_flush_commands();
+        snd_flush_sound_commands();
     }
     if (render_sequence.time >= render_sequence.end) {
-        for (expired_object_index = 0; expired_object_index < render_sequence.count; expired_object_index++) {
+        for (expired_object_index = 0; expired_object_index < render_sequence.count;
+             expired_object_index++) {
             expired_object = render_sequence.objects[expired_object_index];
             if (expired_object != 0) {
                 expired_object->model->count--;
                 expired_object->model->frames[expired_object->model->count] = 0;
-                func_0020C828(expired_object);
+                mark_moby_for_removal(expired_object);
             }
         }
-        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0) && D_0015EE48 < 3) {
+        if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0) &&
+            D_0015EE48 < 3) {
             level_render_state.state = 0;
         }
         if (level_render_state.state < 2) {
@@ -238,9 +247,12 @@ void update_level_gameplay_frame(void) {
             scene_offset = &archive_table->scene_offsets[0];
             scene_offset += level_render_state.mode;
             archive_entry = (RenderArchiveEntry *)(archive_data + *scene_offset);
-            for (prepared_frame_index = 0; prepared_frame_index < 0x46 && archive_entry->available != 0; prepared_frame_index++, archive_entry++) {
+            for (prepared_frame_index = 0;
+                 prepared_frame_index < 0x46 && archive_entry->available != 0;
+                 prepared_frame_index++, archive_entry++) {
                 payload_offset = 0x800;
-                render_sequence.prepared_frames[prepared_frame_index] = (s32)(*scene_offset + archive_data) + (archive_entry->offset + payload_offset);
+                render_sequence.prepared_frames[prepared_frame_index] =
+                    (s32)(*scene_offset + archive_data) + (archive_entry->offset + payload_offset);
             }
             parse_space_scene_chunk(0);
         } else {
@@ -265,7 +277,7 @@ void update_level_gameplay_frame(void) {
         add_vectors(&D_001604F0, &D_001604F0, &first_position);
     }
     scale_vector(D_00160460, &D_001D9AE0[level_render_state.mode],
-                  (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
+                 (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
     D_00160404 = D_001D9B30[level_render_state.mode];
     for (object_index = 0; object_index < render_sequence.count; object_index++) {
         object = D_0018CC98[object_index];
@@ -288,7 +300,7 @@ void update_level_gameplay_frame(void) {
             object->selected_b = transform_count;
             object->state_a = 0;
             object->state_b = 0;
-            func_0020C880(object);
+            update_moby_animation_state(object);
             func_001F98D0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
             func_001F98D0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
             object->selected_index = 0x1FF;
@@ -304,22 +316,28 @@ void update_level_gameplay_frame(void) {
                 level_render_state.history_count++;
             }
             history_slot = level_render_state.history_index;
-            qcopy(&level_render_state.primary_history_positions[history_slot], &first_transform.rows[3]);
-            qcopy(&level_render_state.secondary_history_positions[history_slot], &second_transform.rows[3]);
+            qcopy(&level_render_state.primary_history_positions[history_slot],
+                  &first_transform.rows[3]);
+            qcopy(&level_render_state.secondary_history_positions[history_slot],
+                  &second_transform.rows[3]);
             if (level_render_state.mode == 4) {
                 if (current_level_index == 0 || (current_level_index == 1 && D_0013DD40[3] == 0)) {
                     object->flags |= 1;
                     level_render_state.history_count = 0;
                 }
                 if (render_sequence.time > render_sequence.end - 0x38) {
-                    object->fade = object->model->base_scale * ((f32)(render_sequence.end - render_sequence.time) * 0.017857144f);
+                    object->fade =
+                        object->model->base_scale *
+                        ((f32)(render_sequence.end - render_sequence.time) * 0.017857144f);
                     for (color_index = 0; color_index < 3; color_index++) {
-                        D_001D9A30[color_index].w0 = (D_001D9A30[color_index].w0 & 0xFFFFFF)
-                            | ((D_0018CB20_b[0].end - D_0018CB20_c[0].time) << 24);
+                        D_001D9A30[color_index].w0 =
+                            (D_001D9A30[color_index].w0 & 0xFFFFFF) |
+                            ((D_0018CB20_b[0].end - D_0018CB20_c[0].time) << 24);
                     }
                 } else {
                     for (color_index = 0; color_index < 3; color_index++) {
-                        D_001D9A30[color_index].w0 = (D_001D9A30[color_index].w0 & 0xFFFFFF) | 0x38000000;
+                        D_001D9A30[color_index].w0 =
+                            (D_001D9A30[color_index].w0 & 0xFFFFFF) | 0x38000000;
                     }
                 }
             }

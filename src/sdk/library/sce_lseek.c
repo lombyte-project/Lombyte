@@ -47,8 +47,7 @@ extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
-s32 sceLseek(s32 fd, s32 offset, s32 origin)
-{
+s32 sceLseek(s32 fd, s32 offset, s32 origin) {
     struct FsSeekRequest *request;
     struct SifFileSlot *file_slot;
     struct SemaphoreParameters semaphore_parameters;

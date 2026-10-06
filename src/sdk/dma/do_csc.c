@@ -13,7 +13,7 @@ void _doCSC(MpegDec *d, u32 src, s32 mbs) {
     s32 cbarg[8];
     s32 intr;
 
-    while ((s32)*(volatile u32 *)0x10002010 < 0) {
+    while ((s32) * (volatile u32 *)0x10002010 < 0) {
     }
     intr = DIntr();
     *(volatile u32 *)0x1000B010 = src & 0x0FFFFFFF;
@@ -27,6 +27,6 @@ void _doCSC(MpegDec *d, u32 src, s32 mbs) {
     _dispatchMpegCallback(d->cbData, cbarg);
     while ((*(volatile u32 *)0x1000B000 >> 8) & 1) {
     }
-    while ((s32)*(volatile u32 *)0x10002010 < 0) {
+    while ((s32) * (volatile u32 *)0x10002010 < 0) {
     }
 }

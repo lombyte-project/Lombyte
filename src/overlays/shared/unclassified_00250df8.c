@@ -13,16 +13,29 @@ extern int D_0015ED84_257470 __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern int D_L00_0015FFBC_257470 __asm__("D_L00_0015FFBC");
 extern int D_0014C190_257470[][64] __asm__("D_0014C190") __attribute__((section(".data")));
-extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050") __attribute__((section(".data")));
+extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
+    __attribute__((section(".data")));
 extern short D_0014D590_257470[][64][2] __asm__("D_0014D590") __attribute__((section(".data")));
 extern int D_L00_001BA4D0_257470[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
-typedef struct { unsigned char p[0x454]; unsigned char a[1]; } S_257470;
+typedef struct {
+    unsigned char p[0x454];
+    unsigned char a[1];
+} S_257470;
 extern S_257470 D_L00_001BA5D0_257470 __asm__("D_L00_001BA5D0") __attribute__((section(".data")));
 extern S_257470 D_L00_001BB230_257470 __asm__("D_L00_001BB230") __attribute__((section(".data")));
-extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88") __attribute__((section(".data")));
-extern unsigned char D_L00_001E8F00_257470[] __asm__("D_L00_001E8F00") __attribute__((section(".data")));
-extern unsigned char D_L00_001E8F28_257470[] __asm__("D_L00_001E8F28") __attribute__((section(".data")));
-typedef struct { char p0[0x80]; char v80[0x2084 - 0x80]; int i2084; char p1[0x20B2 - 0x2088]; unsigned char b20B2; } P_257470;
+extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
+    __attribute__((section(".data")));
+extern unsigned char D_L00_001E8F00_257470[] __asm__("D_L00_001E8F00")
+    __attribute__((section(".data")));
+extern unsigned char D_L00_001E8F28_257470[] __asm__("D_L00_001E8F28")
+    __attribute__((section(".data")));
+typedef struct {
+    char p0[0x80];
+    char v80[0x2084 - 0x80];
+    int i2084;
+    char p1[0x20B2 - 0x2088];
+    unsigned char b20B2;
+} P_257470;
 extern P_257470 D_0013F350_257470 __asm__("D_0013F350") __attribute__((section(".data")));
 extern void FUN_001e93b0_257470(void *, ...) __asm__("FUN_001e93b0");
 extern int FUN_001fa6d0_257470(float) __asm__("FUN_001fa6d0");
@@ -41,7 +54,8 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
     unsigned char *g;
 
     amt = *(short *)(m + 0xB4);
-    FUN_001e93b0_257470(D_L00_001E8F00_257470, *(short *)(m + 0xA6), *(short *)(m + 0xB2), *(short *)(m + 0xB4), *(short *)(m + 0xB6));
+    FUN_001e93b0_257470(D_L00_001E8F00_257470, *(short *)(m + 0xA6), *(short *)(m + 0xB2),
+                        *(short *)(m + 0xB4), *(short *)(m + 0xB6));
     if (m[0xB1] == 0xFE) {
         return;
     }
@@ -49,14 +63,17 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
         return;
     }
     lvl = D_0015ED84_257470;
-    D_0014C190_257470[lvl][*(short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+    D_0014C190_257470[lvl][*(short *)(m + 0xB2) >> 5] |= 1
+                                                         << (*(unsigned short *)(m + 0xB2) & 0x1F);
     D_L00_001BA4D0_257470[*(short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
     D_L00_001BA5D0_257470.a[*(short *)(m + 0xB2)] = m[0xB0] + 2;
     k = m[0xB0];
-    {unsigned int u = k & 0xFF;
-    if (k == 0xFF || (D_L00_0015FC88_257470[u] != 0xFF && D_0014C050_257470[lvl][u] == 0xFF)) {
-        D_L00_001BB230_257470.a[*(short *)(m + 0xB2)] = k + 2;
-    }}
+    {
+        unsigned int u = k & 0xFF;
+        if (k == 0xFF || (D_L00_0015FC88_257470[u] != 0xFF && D_0014C050_257470[lvl][u] == 0xFF)) {
+            D_L00_001BB230_257470.a[*(short *)(m + 0xB2)] = k + 2;
+        }
+    }
     if ((signed char)m[0xB1] >= 0) {
         int n1 = *(short *)(m + 0xB6);
         d = n1 - D_0014D590_257470[D_0015ED84_257470b][m[0xB1]][1];
@@ -78,7 +95,8 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
     if (D_0013F350_257470.b20B2 || (flags & 0x200)) {
         f |= 2;
     }
-    if (D_0013F350_257470.i2084 == 0x10 && FUN_001f9b48_257470(D_0013F350_257470.v80, m + 0x10) < 4.0f) {
+    if (D_0013F350_257470.i2084 == 0x10 &&
+        FUN_001f9b48_257470(D_0013F350_257470.v80, m + 0x10) < 4.0f) {
         f |= 2;
     }
     cnt = D_L00_0015FFBC_257470;
@@ -102,10 +120,10 @@ void FUN_L00_00257470(unsigned char *m, int flags, int arg) {
             r = 1;
         }
         {
-        int n2 = FUN_001fa6d0_257470(amt);
-        int hi = n2 + r;
-        n2 -= r;
-        FUN_L00_00260a88_257470(m, n2, hi, f, arg);
+            int n2 = FUN_001fa6d0_257470(amt);
+            int hi = n2 + r;
+            n2 -= r;
+            FUN_L00_00260a88_257470(m, n2, hi, f, arg);
         }
     }
 }

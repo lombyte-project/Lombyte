@@ -7,4 +7,5 @@ void ClearStateField(int *state_fields) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(ClearStateField) videoDecReset__FP8VideoDec __attribute__((alias("func_0023CC30")));
+extern __typeof__(ClearStateField) videoDecReset__FP8VideoDec
+    __attribute__((alias("func_0023CC30")));

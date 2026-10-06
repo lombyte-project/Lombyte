@@ -18,10 +18,12 @@ float FUN_L04_002922d0(float *pos) {
     float b[4];
     qcopy(a, pos);
     a[2] = a[2] - 2.5f;
-    if (a[2] < 0.1f) a[2] = 0.1f;
+    if (a[2] < 0.1f)
+        a[2] = 0.1f;
     qcopy(b, pos);
     b[2] = b[2] + 0.75f;
-    if (FUN_001efa68(b, a, 2, 0, 0) != 0) return D_L04_00173FE8_d;
+    if (FUN_001efa68(b, a, 2, 0, 0) != 0)
+        return D_L04_00173FE8_d;
     return 0.0f;
 }
 #define NOT_SDA
@@ -47,13 +49,14 @@ int FUN_L04_002927d0(char *arg0, char *arg1) {
     int i;
     for (i = 12; i >= 0; i--) {
         int *e = *p++;
-        if (*e == (int)(unsigned char)arg0[0x52]) found = e;
+        if (*e == (int)(unsigned char)arg0[0x52])
+            found = e;
     }
-    if (found == 0) return (unsigned char)arg1[0xB6];
+    if (found == 0)
+        return (unsigned char)arg1[0xB6];
     return FUN_L00_002a13f0(found, arg1);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292828.s", FUN_L04_00292828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292d48.s", FUN_L04_00292d48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295de8.s", FUN_L04_00295de8);
-

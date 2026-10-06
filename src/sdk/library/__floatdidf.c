@@ -30,8 +30,7 @@ Boston, MA 02111-1307, USA.  */
 
 #include "types.h"
 
-f64 __floatdidf(s64 u)
-{
+f64 __floatdidf(s64 u) {
     f64 d;
 
     d = (s32)(u >> 32);

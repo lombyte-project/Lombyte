@@ -15,20 +15,19 @@ extern s32 D_0015FF40;
 extern s32 D_00160F00;
 extern s32 D_00160F08;
 extern void func_001F21B8();
-extern void func_002334D8();
-extern void func_00233830();
-extern void func_00233980(s32, s64);
+extern void start_vif1_dma_transfer() __asm__("func_002334D8");
+extern void vu1_add_data_ref() __asm__("func_00233830");
+extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 void draw_mobys_setup(void) __asm__("FUN_0020d278");
 
-void draw_mobys_setup(void)
-{
+void draw_mobys_setup(void) {
     register s32 current;
     register s32 callbackArg;
-    func_00233830(D_0010FAA0, D_0010FA90[0]);
+    vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
     D_0015F620 = 6;
-    func_002334D8(D_00100080);
-    func_00233980(0x47, 0x5360B);
+    start_vif1_dma_transfer(D_00100080);
+    vu1_add_g_sregister(0x47, 0x5360B);
     current = D_00160F00;
     D_0015FF0C = current;
     callbackArg = 1;

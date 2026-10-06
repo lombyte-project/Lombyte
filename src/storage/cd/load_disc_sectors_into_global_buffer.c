@@ -29,4 +29,5 @@ s32 load_disc_sectors_into_global_buffer(void) {
     return 1;
 }
 
-extern __typeof__(load_disc_sectors_into_global_buffer) func_0012F2B8 __attribute__((alias("FUN_0012f2b8")));
+extern __typeof__(load_disc_sectors_into_global_buffer) func_0012F2B8
+    __attribute__((alias("FUN_0012f2b8")));

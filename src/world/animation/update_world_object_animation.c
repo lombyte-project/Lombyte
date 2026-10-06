@@ -6,79 +6,79 @@ extern void FlushCache(int);
 
 struct PartList {
     unsigned char pad00[6];
-    unsigned char flag;          /* 0x06 */
+    unsigned char flag; /* 0x06 */
     unsigned char pad07[5];
-    unsigned char used;          /* 0x0C */
+    unsigned char used; /* 0x0C */
     unsigned char pad0D[0x3B];
-    int entries[1];   /* 0x48 */
+    int entries[1]; /* 0x48 */
 };
 
 struct ColorSrc {
     unsigned char pad00[0x38];
-    unsigned long color;        /* 0x38 */
+    unsigned long color; /* 0x38 */
 };
 
 struct RenderGlobals {
     unsigned char pad00[0x2080];
-    struct ColorSrc *color_src;  /* 0x2080 */
+    struct ColorSrc *color_src; /* 0x2080 */
 };
 
 struct GlobalIndex {
     unsigned char pad00[0x26];
-    short slot;         /* 0x26 */
+    short slot; /* 0x26 */
 };
 
 struct Moby {
     unsigned char pad00[0x24];
-    struct PartList *parts;  /* 0x24 */
+    struct PartList *parts; /* 0x24 */
     unsigned char pad28[0xA];
-    unsigned short unk32;        /* 0x32 */
-    unsigned short unk34;        /* 0x34 */
+    unsigned short unk32; /* 0x32 */
+    unsigned short unk34; /* 0x34 */
     unsigned char pad36[2];
-    unsigned long color;        /* 0x38 */
+    unsigned long color; /* 0x38 */
     unsigned char pad40[8];
-    int attach;       /* 0x48 */
+    int attach; /* 0x48 */
     unsigned char pad4C[6];
-    unsigned char idx;           /* 0x52 */
-    unsigned char slot;          /* 0x53 */
+    unsigned char idx;  /* 0x52 */
+    unsigned char slot; /* 0x53 */
     unsigned char pad54[0x1E];
-    unsigned char flag72;        /* 0x72 */
-    unsigned char flag73;        /* 0x73 */
+    unsigned char flag72; /* 0x72 */
+    unsigned char flag73; /* 0x73 */
     unsigned char pad74[4];
-    int model;        /* 0x78 */
+    int model; /* 0x78 */
     unsigned char pad7C[0x18];
-    int unk94;        /* 0x94 */
+    int unk94; /* 0x94 */
 };
 
 struct ModelRec {
-    unsigned short flags;        /* 0x00 */
+    unsigned short flags; /* 0x00 */
     unsigned char pad02[2];
-    int part_count;   /* 0x04 */
+    int part_count; /* 0x04 */
     unsigned short pad08;
     unsigned char pad0A[2];
-    unsigned short num_parts;    /* 0x0C */
+    unsigned short num_parts; /* 0x0C */
     unsigned char pad0E[2];
-    int end_off;      /* 0x10 */
-    int part_off[1];  /* 0x14 */
+    int end_off;     /* 0x10 */
+    int part_off[1]; /* 0x14 */
 };
 
 struct TransferState {
     unsigned char pad00[0x38];
-    int unk38;        /* 0x38 */
+    int unk38; /* 0x38 */
     unsigned char pad3C[4];
-    unsigned short unk40;        /* 0x40 */
+    unsigned short unk40; /* 0x40 */
     unsigned char pad42[2];
-    short num_parts;    /* 0x44 */
+    short num_parts; /* 0x44 */
     unsigned char pad46[2];
-    unsigned short unk48;        /* 0x48 */
+    unsigned short unk48; /* 0x48 */
     unsigned char pad4A[2];
-    int unk4C;        /* 0x4C */
-    int unk50;        /* 0x50 */
-    int unk54;        /* 0x54 */
-    struct ModelRec *rec;     /* 0x58 */
-    int unk5C;        /* 0x5C */
+    int unk4C;            /* 0x4C */
+    int unk50;            /* 0x50 */
+    int unk54;            /* 0x54 */
+    struct ModelRec *rec; /* 0x58 */
+    int unk5C;            /* 0x5C */
     unsigned char pad60[0x118];
-    struct Moby *slots[1];    /* 0x178 */
+    struct Moby *slots[1]; /* 0x178 */
 };
 
 extern struct TransferState D_0018CB20_t __asm__("D_0018CB20") NOT_SDA;
@@ -162,4 +162,5 @@ void update_world_object_animation(void *arg0) {
     }
 }
 
-extern __typeof__(update_world_object_animation) func_00204790 __attribute__((alias("FUN_00204790")));
+extern __typeof__(update_world_object_animation) func_00204790
+    __attribute__((alias("FUN_00204790")));

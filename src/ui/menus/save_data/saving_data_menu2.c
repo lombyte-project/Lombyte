@@ -61,7 +61,9 @@ typedef struct {
     s32 stage;
 } Widget;
 
-typedef struct __attribute__((packed)) { s64 v; } Unaligned64;
+typedef struct __attribute__((packed)) {
+    s64 v;
+} Unaligned64;
 
 extern PadState D_0013C940;
 extern SaveState D_0013D290;
@@ -79,11 +81,11 @@ extern SubMenu D_001D4E38[];
 extern SubMenu D_001D4F98[];
 extern MenuState D_001D5BF0;
 extern void InitializeGlobalStateEntry(s32 value);
-extern void func_001FBAB8();
-extern s32 func_00209370();
+extern void mode_freeze_init() __asm__("func_001FBAB8");
+extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void FUN_00226a70(s32 arg0, s32 arg1);
 extern s32 FUN_00226b08();
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(Widget *w) __asm__("FUN_002235b8");
 
@@ -123,7 +125,7 @@ s32 saving_data_menu2(Widget *w) {
         D_001D5BF0.saving = 0;
         if (D_0013D290.unkE4 != 0) {
             D_0015EEB4 |= 0x80;
-            func_001FBAB8(3, D_001D5BF0.page);
+            mode_freeze_init(3, D_001D5BF0.page);
             return 0;
         }
         *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x24) = D_0015ED98;
@@ -181,13 +183,14 @@ s32 saving_data_menu2(Widget *w) {
         }
     } else if (pad & 0x20) {
         D_0013D290.unkF4 = 0;
-        fl = D_0015EEB4 & ~2; D_0015EEB4 = fl & ~4;
-        func_00209370();
+        fl = D_0015EEB4 & ~2;
+        D_0015EEB4 = fl & ~4;
+        load_and_initialize_level_chunk();
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
     if (w->cursor != old) {
-        func_0022DA68(1, 0x11, w->sound);
+        allocate_voice_for_target_entry(1, 0x11, w->sound);
     }
     return 0;
 }

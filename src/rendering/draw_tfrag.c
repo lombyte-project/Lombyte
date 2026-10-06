@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/rendering_draw_tfrag_types.h"
+#include "rnc/rendering/draw_tfrag.h"
 
 struct Locals {
     u8 pad0[0x30];
@@ -24,7 +24,7 @@ extern void func_001F21B8(void *, s32);
 extern void FUN_001f9a68(void *, void *, f32);
 extern void FUN_001f9fc8(void *);
 extern void FUN_001fa378(void *, void *, void *);
-extern void func_002331C0(void);
+extern void dma_tfrag_textures(void) __asm__("func_002331C0");
 extern void func_00233FB0(void);
 void write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
 void draw_tfrag(void) __asm__("FUN_002333a8");
@@ -52,7 +52,7 @@ void draw_tfrag(void) {
         func_00233FB0();
     }
     func_001F21B8(D_00160E80, 2);
-    func_002331C0();
+    dma_tfrag_textures();
     if (D_0018A2B0.unk10 != 0) {
         WriteDmaChannel(D_001E1300, 0x3000, 0x40);
     }

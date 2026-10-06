@@ -1,11 +1,25 @@
 #include "types.h"
-struct Obj { u8 pad0[0xC]; void (*release)(struct Obj *, s32); };
-struct Owner { u8 pad0[0x44]; struct Obj *objs[14]; };
-struct GameState { s32 state; struct Owner *owner; u8 pad8[0xC]; s32 unk14; s32 unk18; u8 pad1C[0xF4]; s32 progress; };
+struct Obj {
+    u8 pad0[0xC];
+    void (*release)(struct Obj *, s32);
+};
+struct Owner {
+    u8 pad0[0x44];
+    struct Obj *objs[14];
+};
+struct GameState {
+    s32 state;
+    struct Owner *owner;
+    u8 pad8[0xC];
+    s32 unk14;
+    s32 unk18;
+    u8 pad1C[0xF4];
+    s32 progress;
+};
 extern struct GameState D_001D5BF0;
 extern s32 D_0015EE78;
 extern s32 D_001D5D90[];
-extern s32 FUN_00225530(s32);
+extern s32 delete_moby(s32) __asm__("FUN_00225530");
 void FUN_002191b8(void) {
     s32 i;
     s32 j;
@@ -25,7 +39,7 @@ void FUN_002191b8(void) {
     }
     D_0015EE78 = D_001D5BF0.unk18;
     for (j = 0; j < 14; j++) {
-        D_001D5D90[j] = FUN_00225530(D_001D5D90[j]);
+        D_001D5D90[j] = delete_moby(D_001D5D90[j]);
     }
     D_001D5BF0.state = 20;
     D_001D5BF0.unk14 = 2;

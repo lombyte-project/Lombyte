@@ -5,8 +5,7 @@ struct GlobalStatePointer {
     char padding[0x100];
 };
 
-extern struct GlobalStatePointer GlobalStatePointer
-    __asm__("D_0012F76C");
+extern struct GlobalStatePointer GlobalStatePointer __asm__("D_0012F76C");
 
 int *GetGlobalStatePointer(void) __asm__("func_001138A8");
 

@@ -54,7 +54,8 @@ struct CamColl {
 extern struct Player D_0013F350;
 extern struct CamColl D_001870D0;
 
-extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping, f32 max) __asm__("FUN_001ebd78");
+extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
+                             f32 max) __asm__("FUN_001ebd78");
 extern float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern void FUN_001f9a28(void *out, void *a, void *b);
 extern void FUN_001f9a68(void *out, void *a, f32 s);
@@ -79,9 +80,12 @@ void FUN_001ed470(void) {
         dir.f[1] += 0.2f;
         dir.f[2] += 0.2f;
     }
-    cam->dir.f[0] = cam_interp_values(&cam->dir_vel[0], cam->dir.f[0], dir.f[0], 0.015f, 0.2f, 0.0f);
-    cam->dir.f[1] = cam_interp_values(&cam->dir_vel[1], cam->dir.f[1], dir.f[1], 0.015f, 0.2f, 0.0f);
-    cam->dir.f[2] = cam_interp_values(&cam->dir_vel[2], cam->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f);
+    cam->dir.f[0] =
+        cam_interp_values(&cam->dir_vel[0], cam->dir.f[0], dir.f[0], 0.015f, 0.2f, 0.0f);
+    cam->dir.f[1] =
+        cam_interp_values(&cam->dir_vel[1], cam->dir.f[1], dir.f[1], 0.015f, 0.2f, 0.0f);
+    cam->dir.f[2] =
+        cam_interp_values(&cam->dir_vel[2], cam->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f);
     FUN_001f9bf8(&cam->dir, &cam->dir, 1.0f);
 
     FUN_001f9a28(&cam->unk70, &D_0013F350.pos, &cam->unk60);
@@ -98,7 +102,8 @@ void FUN_001ed470(void) {
     if (D_0013F350.unk2284 != 0x50 || D_0013F350.unk2084 == 0x11) {
         cam->pos.f[0] = D_0013F350.pos.f[0];
         cam->pos.f[1] = D_0013F350.pos.f[1];
-        cam->pos.f[2] = cam_interp_values(&cam->vel, cam->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f);
+        cam->pos.f[2] =
+            cam_interp_values(&cam->vel, cam->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f);
         cam->pos.f[3] = D_0013F350.pos.f[2];
     } else {
         cam->pos.f[0] = D_0013F350.pos.f[0];

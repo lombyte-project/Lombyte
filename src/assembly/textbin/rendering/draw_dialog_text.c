@@ -2,38 +2,39 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/draw_dialog_text/FUN_001fbc50.s", FUN_001fbc50);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/draw_dialog_text/FUN_001fbc50.s",
+            FUN_001fbc50);
 #else
 #include "types.h"
 
-typedef struct { s16 s[12]; } FontWindow;
+typedef struct {
+    s16 s[12];
+} FontWindow;
 #include "types.h"
 #include "sda.h"
 
-
-
 typedef struct {
-    s32 mode;           /* 0x00 */
-    s32 fade_in;        /* 0x04 */
-    char *line1;        /* 0x08 */
-    char *line2;        /* 0x0C */
-    char *line3;        /* 0x10 */
+    s32 mode;    /* 0x00 */
+    s32 fade_in; /* 0x04 */
+    char *line1; /* 0x08 */
+    char *line2; /* 0x0C */
+    char *line3; /* 0x10 */
     s32 pad14[2];
     s32 choice;         /* 0x1C */
-    s32 blink_fraction;          /* 0x20 */
+    s32 blink_fraction; /* 0x20 */
     s32 fade_out;       /* 0x24 */
 } DialogState;
 
 extern s32 D_0013E500[];
 typedef struct {
     u8 pad0[0x894];
-    s32 best_time;      /* 0x894 */
+    s32 best_time; /* 0x894 */
     u8 pad898[2];
-    s16 race_result_state;           /* 0x89A */
+    s16 race_result_state; /* 0x89A */
     u8 pad89C[0xC];
-    s32 best_score;     /* 0x8A8 */
+    s32 best_score; /* 0x8A8 */
     u8 pad8AC[0x14];
-    s32 place;          /* 0x8C0 */
+    s32 place; /* 0x8C0 */
 } GameState;
 extern GameState D_0013F350;
 extern s32 D_0015ED80;
@@ -93,13 +94,14 @@ extern void font_print_window_regular(FontWindow *, long, char *, int) __asm__("
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA6C0(int);
-extern int func_001FA6D0(float);
+extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern int func_001FA6E0(int, int, float);
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int find_valid_animation_frame_index(int, int) __asm__("func_001FF960");
 extern u64 get_frame_texture(int) __asm__("func_001FFA10");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("func_001FFC30");
-extern void draw_rotated_sprite(int, int, u64, float, float, float, float, float) __asm__("func_00200600");
+extern void draw_rotated_sprite(int, int, u64, float, float, float, float,
+                                float) __asm__("func_00200600");
 extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
 extern void *memset(void *, int, unsigned int);
 extern int sprintf(char *, const char *, ...);
@@ -164,26 +166,33 @@ void draw_dialog_text(void) {
             *text_cursor = 0;
             text_cursor++;
         }
-        font_print_window(&text_window, mode5_color, (char *)0x70000000, -1, get_effect_texture(1), D_001DF050);
+        font_print_window(&text_window, mode5_color, (char *)0x70000000, -1, get_effect_texture(1),
+                          D_001DF050);
         icon_size = 272.0f;
         text_window.s[9] |= 4;
         middle_y = text_window.s[5];
         middle_y += text_window.s[7];
-        font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1), D_001DF050);
+        font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1),
+                          D_001DF050);
         text_window.s[9] ^= 4;
         text_window.s[5] = 0x136 - text_window.s[7];
-        font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1), D_001DF050);
-        mode5_color = func_001FA6E0(0x20FFFF, 0x8020FFFF,
-                              1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
+        font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1),
+                          D_001DF050);
+        mode5_color =
+            func_001FA6E0(0x20FFFF, 0x8020FFFF,
+                          1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
         font_print_center(0x100, 0x140, mode5_color, get_help_message_text(0x524A), -1);
         middle_y = (middle_y + text_window.s[5]) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
         icon_y = middle_y - 0x20;
-        draw_hud_sprite(find_valid_animation_frame_index(0x755D, 0), 0xE0, icon_y, 0x40, 0x40, 0x80);
+        draw_hud_sprite(find_valid_animation_frame_index(0x755D, 0), 0xE0, icon_y, 0x40, 0x40,
+                        0x80);
         animation_frame = D_0015F438 % 55;
         icon_y_subpixels = (float)(middle_y * 16);
         icon_angle = (float)animation_frame * -6.2831855f / 55.0f;
-        draw_rotated_sprite(0x40, 0x40, get_frame_texture(find_valid_animation_frame_index(0x755D, 1)), 4096.0f, icon_y_subpixels, icon_size, icon_size, icon_angle);
+        draw_rotated_sprite(0x40, 0x40,
+                            get_frame_texture(find_valid_animation_frame_index(0x755D, 1)), 4096.0f,
+                            icon_y_subpixels, icon_size, icon_size, icon_angle);
         break;
 
     case 3:
@@ -292,7 +301,7 @@ void draw_dialog_text(void) {
             text = text_buffer;
             break;
         }
-        text_window = (FontWindow){ { 0, D_0013E500[1], 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5 } };
+        text_window = (FontWindow){{0, D_0013E500[1], 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5}};
         font_print_window_regular(&text_window, 0, text, -1);
         y = text_window.s[7] + 0x28;
         middle_y = (D_0013E500[1] - y) >> 1;
@@ -302,17 +311,22 @@ void draw_dialog_text(void) {
         dialog_fade = 1.0f - (float)dialog_state.fade_in / (float)scale_game_frames(30);
         draw_ui_frame(text_window.s[0], text_window.s[1], 0x60, 0x1A0, (int)(dialog_fade * 80.0f));
         text_window.s[9] ^= 4;
-        font_print_window_regular(&text_window, func_001FA6E0(D_0015F4F0, D_0015F4F4, dialog_fade), text, -1);
-        dialog_color = func_001FA6E0(0x20FFFF, 0x8020FFFF,
-                              1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
+        font_print_window_regular(&text_window, func_001FA6E0(D_0015F4F0, D_0015F4F4, dialog_fade),
+                                  text, -1);
+        dialog_color =
+            func_001FA6E0(0x20FFFF, 0x8020FFFF,
+                          1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
         if (yes_text_id != 0) {
-            font_print_center(0xCA, text_window.s[1] - 0x14, dialog_color, get_help_message_text(yes_text_id), -1);
+            font_print_center(0xCA, text_window.s[1] - 0x14, dialog_color,
+                              get_help_message_text(yes_text_id), -1);
         }
         if (no_text_id != 0) {
-            font_print_center(0x135, text_window.s[1] - 0x14, dialog_color, get_help_message_text(no_text_id), -1);
+            font_print_center(0x135, text_window.s[1] - 0x14, dialog_color,
+                              get_help_message_text(no_text_id), -1);
         }
         if (confirm_text_id != 0) {
-            font_print_center(0x100, text_window.s[1] - 0x14, dialog_color, get_help_message_text(confirm_text_id), -1);
+            font_print_center(0x100, text_window.s[1] - 0x14, dialog_color,
+                              get_help_message_text(confirm_text_id), -1);
         }
         break;
 
@@ -343,14 +357,18 @@ void draw_dialog_text(void) {
             break;
         }
         if (text_id != 0) {
-            font_print_window(&text_window, dialog_color, get_help_message_text(text_id), -1, get_effect_texture(1), D_001DF050);
+            font_print_window(&text_window, dialog_color, get_help_message_text(text_id), -1,
+                              get_effect_texture(1), D_001DF050);
         }
         break;
 
     case 0:
-        background_color = func_001FA6E0(D_0015F524, D_0015F528,
-                              fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
-                                  * 0.5f + 0.5f);
+        background_color = func_001FA6E0(
+            D_0015F524, D_0015F528,
+            fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f -
+                     3.14159f) *
+                    0.5f +
+                0.5f);
         dialog_scale = (float)dialog_state.blink_fraction * 0.125f;
         if (dialog_scale > 1.0f) {
             dialog_scale = 1.0f;
@@ -372,20 +390,24 @@ void draw_dialog_text(void) {
             normal_color = func_001FA6E0(D_0015F53C, D_0015F540, blink_fraction);
         }
         if (D_0013F350.race_result_state < 3) {
-            draw_outlined_rect(D_0015F4FC - func_001FA6D0((float)D_0015F504 * dialog_scale),
-                          D_0015F4FC + func_001FA6D0((float)D_0015F504 * dialog_scale),
-                          D_0015F4F8 - func_001FA6D0((float)D_0015F500 * dialog_scale),
-                          D_0015F4F8 + func_001FA6D0((float)D_0015F500 * dialog_scale), background_color);
+            draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((float)D_0015F504 * dialog_scale),
+                               D_0015F4FC + truncate_float_to_s32((float)D_0015F504 * dialog_scale),
+                               D_0015F4F8 - truncate_float_to_s32((float)D_0015F500 * dialog_scale),
+                               D_0015F4F8 + truncate_float_to_s32((float)D_0015F500 * dialog_scale),
+                               background_color);
             font_print_center(0x100, D_0015F508, text_color, get_help_message_text(0x4F6E), -1);
-            font_print_center(0x100, D_0015F508 + 0x18, text_color, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_0015F508 + 0x30, text_color, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, D_0015F508 + 0x18, text_color, get_help_message_text(0x5249),
+                              -1);
+            font_print_center(0x100, D_0015F508 + 0x30, text_color, get_help_message_text(0x5248),
+                              -1);
         } else {
             char line[0x40];
 
-            draw_outlined_rect(D_0015F510 - func_001FA6D0((float)D_0015F518 * dialog_scale),
-                          D_0015F510 + func_001FA6D0((float)D_0015F518 * dialog_scale),
-                          D_0015F50C - func_001FA6D0((float)D_0015F514 * dialog_scale),
-                          D_0015F50C + func_001FA6D0((float)D_0015F514 * dialog_scale), background_color);
+            draw_outlined_rect(D_0015F510 - truncate_float_to_s32((float)D_0015F518 * dialog_scale),
+                               D_0015F510 + truncate_float_to_s32((float)D_0015F518 * dialog_scale),
+                               D_0015F50C - truncate_float_to_s32((float)D_0015F514 * dialog_scale),
+                               D_0015F50C + truncate_float_to_s32((float)D_0015F514 * dialog_scale),
+                               background_color);
             sprintf(line, D_0015F560, get_help_message_text(0x5240));
             if (D_0013F350.place == 1) {
                 sprintf(line, D_0015F568, 1);
@@ -429,23 +451,31 @@ void draw_dialog_text(void) {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A4));
                 font_print_center(0x100, D_0015F51C + 0x60, normal_color, line, -1);
             }
-            font_print_center(0x100, D_0015F51C + 0x90, text_color, get_help_message_text(0x5249), -1);
-            font_print_center(0x100, D_0015F51C + 0xA8, text_color, get_help_message_text(0x5248), -1);
+            font_print_center(0x100, D_0015F51C + 0x90, text_color, get_help_message_text(0x5249),
+                              -1);
+            font_print_center(0x100, D_0015F51C + 0xA8, text_color, get_help_message_text(0x5248),
+                              -1);
         }
         break;
 
     case 2:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
-                      func_001FA6E0(D_0015F524, D_0015F528,
-                                    fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
-                                        * 0.5f + 0.5f));
+                           func_001FA6E0(D_0015F524, D_0015F528,
+                                         fast_sin((float)(D_0015F438 % D_0015F520) /
+                                                      func_001FA6C0(D_0015F520) * 6.28318f -
+                                                  3.14159f) *
+                                                 0.5f +
+                                             0.5f));
         font_print_center(0x100, 0x7A, 0x8000C0C0, dialog_state.line1, -1);
         break;
 
     default:
-        background_color = func_001FA6E0(D_0015F524, D_0015F528,
-                              fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f - 3.14159f)
-                                  * 0.5f + 0.5f);
+        background_color = func_001FA6E0(
+            D_0015F524, D_0015F528,
+            fast_sin((float)(D_0015F438 % D_0015F520) / func_001FA6C0(D_0015F520) * 6.28318f -
+                     3.14159f) *
+                    0.5f +
+                0.5f);
         draw_outlined_rect(0x50, D_0015F4EC + 0x1A, 0xB0, 0x150, background_color);
         if (dialog_state.line1 != 0) {
             font_print_center(0x100, 0x5A, 0x8000C0C0, dialog_state.line1, -1);

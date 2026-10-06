@@ -1,18 +1,18 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern s32 preview_request_count __asm__("D_00160350");
 extern PreviewAnimationRequest preview_animation_requests[] __asm__("D_001D5EC0");
 
 s32 queue_preview_animation(s32 animation_id, s32 trigger_mode, s32 delay_frames, s32 item_index,
-                           s32 item_animation, s32 attachment0_class, s32 attachment0_animation,
-                           s32 attachment1_class, s32 attachment1_animation, s32 attachment2_class,
-                           s32 attachment2_animation, s32 resource_first, s32 resource_count) __asm__("FUN_002265d8");
+                            s32 item_animation, s32 attachment0_class, s32 attachment0_animation,
+                            s32 attachment1_class, s32 attachment1_animation, s32 attachment2_class,
+                            s32 attachment2_animation, s32 resource_first,
+                            s32 resource_count) __asm__("FUN_002265d8");
 
 s32 queue_preview_animation(s32 animation_id, s32 trigger_mode, s32 delay_frames, s32 item_index,
-                           s32 item_animation, s32 attachment0_class, s32 attachment0_animation,
-                           s32 attachment1_class, s32 attachment1_animation, s32 attachment2_class,
-                           s32 attachment2_animation, s32 resource_first, s32 resource_count)
-{
+                            s32 item_animation, s32 attachment0_class, s32 attachment0_animation,
+                            s32 attachment1_class, s32 attachment1_animation, s32 attachment2_class,
+                            s32 attachment2_animation, s32 resource_first, s32 resource_count) {
     PreviewAnimationRequest *request;
     s32 request_index;
 

@@ -86,7 +86,7 @@ extern int D_L13_0015F5C4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L13_00179710[];
 extern int FUN_L00_00203908(int a, int b);
-extern int is_point_inside_clip_volume(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern unsigned char D_0013D407[];
 extern unsigned char D_0014161B[];
@@ -109,8 +109,10 @@ void FUN_L13_002f3778(char *moby) {
                 m = D_L13_0015FFD8_m + (idx << 8);
                 if (m != 0 && *(short *)(m + 0xA6) == 0xAA) {
                     int s = (unsigned char)m[0x20];
-                    if (s == 0xFE) goto join;
-                    if (s != 0xFD) goto direct;
+                    if (s == 0xFE)
+                        goto join;
+                    if (s != 0xFD)
+                        goto direct;
                 }
             }
         join:
@@ -124,7 +126,8 @@ void FUN_L13_002f3778(char *moby) {
                 if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(q + 0x37A)) {
                     *(unsigned short *)(q + 0x37A) = scale_game_frames(D_0015EEA4) / 600;
                 }
-                *(unsigned int *)(q + 0x37C) = *(unsigned int *)(q + 0x37C) | (1 << D_0015ED84) | 0x80000000;
+                *(unsigned int *)(q + 0x37C) =
+                    *(unsigned int *)(q + 0x37C) | (1 << D_0015ED84) | 0x80000000;
             } else {
             direct:
                 if (is_point_inside_clip_volume(((char *)&D_0013F3D0), *(int *)data) != 0) {
@@ -145,7 +148,8 @@ void FUN_L13_002f3778(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F9D18), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -209,11 +213,15 @@ void FUN_L13_002f8880(char *moby) {
             int idx2 = *(int *)(data + 0x10);
             if (idx2 != -1) {
                 char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
-                if (data[0x15] != -1) o[0x20] = data[0x15];
-                if (data[0x17] != -1) o[0xBC] = data[0x17];
+                if (data[0x15] != -1)
+                    o[0x20] = data[0x15];
+                if (data[0x17] != -1)
+                    o[0xBC] = data[0x17];
             }
-            if (data[0x19] != -1) moby[0x20] = data[0x19];
-            if (data[0x1B] != -1) moby[0xBC] = data[0x1B];
+            if (data[0x19] != -1)
+                moby[0x20] = data[0x19];
+            if (data[0x1B] != -1)
+                moby[0xBC] = data[0x1B];
             data[0x1C] = 2;
         }
         break;
@@ -229,11 +237,15 @@ void FUN_L13_002f8880(char *moby) {
             int idx2 = *(int *)(data + 0x10);
             if (idx2 != -1) {
                 char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
-                if (data[0x14] != -1) o[0x20] = data[0x14];
-                if (data[0x16] != -1) o[0xBC] = data[0x16];
+                if (data[0x14] != -1)
+                    o[0x20] = data[0x14];
+                if (data[0x16] != -1)
+                    o[0xBC] = data[0x16];
             }
-            if (data[0x18] != -1) moby[0x20] = data[0x18];
-            if (data[0x1A] != -1) moby[0xBC] = data[0x1A];
+            if (data[0x18] != -1)
+                moby[0x20] = data[0x18];
+            if (data[0x1A] != -1)
+                moby[0xBC] = data[0x1A];
             data[0x1C] = 1;
         }
         break;

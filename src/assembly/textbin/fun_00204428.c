@@ -100,7 +100,8 @@ s32 service_level_archive_load(void) {
     switch (stage) {
     case 0:
         if (D_0015ED80 != 0) {
-            sound_aligned_bytes = ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes =
+                ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         } else {
             sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
@@ -116,21 +117,25 @@ s32 service_level_archive_load(void) {
         D_0015EE54 = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;
         D_0015EE4C = (struct LevelArchiveHeader *)shared_archive_buffer;
-        submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
+        submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes,
+                                       archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        submit_audio_stream_io_request(D_0015EE54, next_disc_entry->start_sector, next_disc_entry->sector_count);
+        submit_audio_stream_io_request(D_0015EE54, next_disc_entry->start_sector,
+                                       next_disc_entry->sector_count);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector, D_00137B80.alternate_sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector,
+                                           D_00137B80.alternate_sound_sector_count);
         } else {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector, D_00137B80.sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector,
+                                           D_00137B80.sound_sector_count);
         }
-increment_stage:
+    increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 3:
@@ -164,7 +169,8 @@ increment_stage:
         }
         shared_header = D_0015EE4C;
         D_0015ED5C = 0xFFFFFFFFU;
-        snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header, (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
+        snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header,
+                                 (s32)store_async_sound_bank_handle, (u32)&D_0015ED5C);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 7:

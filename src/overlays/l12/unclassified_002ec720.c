@@ -23,7 +23,7 @@ extern char D_L12_001F5B20[];
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern short D_L12_00161A10 __attribute__((sda));
 extern short D_L12_00161A14 __attribute__((sda));
 extern short D_L12_00161A0C __attribute__((sda));
@@ -48,8 +48,11 @@ void FUN_L12_002ecac0(char *moby) {
     q.g[1] = get_effect_texture(0x10);
     q.g[0] = 0;
     q.g[2] = 0xFF9000000260UL;
-    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) | ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) | (0x8000L << 24);
-    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) |
+             ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) |
+             (0x8000L << 24);
+    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20,
+                       (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         q.uv[i * 2] = 0.5f;
         *(&q.uv[i * 2] + 1) = 0.5f;
@@ -83,7 +86,7 @@ void FUN_L12_002ecac0(char *moby) {
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9e90(float, float);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
@@ -100,7 +103,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         qcopy(data, src);
         *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
         *(float *)(moby + 0x44) = -FUN_001f9e90(FUN_001f9b20(data), *(float *)(data + 8));
-        r = FUN_001f96f8(seed);
+        r = scale_game_frames(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
         *(float *)(data + 0x1C) = f0;

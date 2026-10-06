@@ -1,6 +1,6 @@
 #include "types.h"
 extern s32 D_001601B4 __attribute__((sda));
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void func_001FA6E0(s32, s32, f32);
 void FUN_0021b6d8(s32 delay, s32 from, s32 to) {
     s32 start;
@@ -12,9 +12,9 @@ void FUN_0021b6d8(s32 delay, s32 from, s32 to) {
     start = delay > -1 ? delay : 0;
     a = from != -1 ? from : 0x80FFA888;
     b = to != -1 ? to : 0x8020FFFF;
-    if (FUN_001f96f8(D_001601B4) >= start) {
-        now = FUN_001f96f8(D_001601B4);
-        t = 1.0f - (f32)(now - start) / (f32)FUN_001f96f8(D_001601B4);
+    if (scale_game_frames(D_001601B4) >= start) {
+        now = scale_game_frames(D_001601B4);
+        t = 1.0f - (f32)(now - start) / (f32)scale_game_frames(D_001601B4);
     } else {
         t = 1.0f;
     }

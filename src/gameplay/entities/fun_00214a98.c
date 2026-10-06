@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern f32 func_001F99C0(f32);
-extern s32 func_001FA6D0(f32) __asm__("FUN_001fa6d0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001f9d68(void *);
 
 void FUN_00214a98(f32 *v, s32 *out) {
@@ -20,7 +20,7 @@ void FUN_00214a98(f32 *v, s32 *out) {
         b = a;
     }
     m = (c < b) ? b : c;
-    n = func_001FA6D0(m * 10000.0f / 63.0f);
+    n = truncate_float_to_s32(m * 10000.0f / 63.0f);
     n = (n < 0x100) ? n : 0xFF;
     if (n <= 0) {
         n = 1;

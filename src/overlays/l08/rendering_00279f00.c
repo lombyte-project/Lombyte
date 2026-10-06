@@ -20,8 +20,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L08_00279f00(char *a)
-{
+unsigned char *FUN_L08_00279f00(char *a) {
     float v[4];
     unsigned char *m = FUN_L00_002678b8(0x27);
     char *p;
@@ -62,10 +61,8 @@ extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks,
-                                 unsigned char r, unsigned char g, unsigned char b, unsigned char a,
-                                 float size)
-{
+unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks, unsigned char r,
+                                unsigned char g, unsigned char b, unsigned char a, float size) {
     unsigned char *m = FUN_L00_002678b8(0x2B);
     unsigned char *q;
     if (m != 0) {

@@ -3,51 +3,51 @@
 extern u8 D_0013CDD0[];
 extern s32 D_0015F438;
 extern u8 *D_00160F00;
-extern void func_001FB2D0(void);
-extern void func_001FB368(void);
-extern void func_001F5210(s32, s32, s32, s32);
-extern void func_001FB3D0(void);
-extern void func_002335D0(void);
-extern void func_00233630(void);
-extern void func_002336A0(void);
-extern void func_002337B0(s32);
-extern void func_00233980(s32, u64);
+extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
+extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
+extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
+extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
+extern void swap_render_buffer_chain(void) __asm__("func_00233630");
+extern void vu1_send_chain(void) __asm__("func_002336A0");
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 sceGsSyncV(s32);
 
-#define VP (*(u8 * volatile *)&D_00160F00)
+#define VP (*(u8 *volatile *)&D_00160F00)
 
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void fade_to_black(s32 n) {
     s32 i;
 
-    func_002337B0(1);
+    vu1_sync_chain(1);
     sceGsSyncV(0);
     D_0015F438 += 1;
-    func_002335D0();
+    vu1_init_chain();
     for (i = n - 1; i >= 0; i--) {
-        func_001FB2D0();
-        func_001FB368();
-        func_001F5210(0, 0, 0, 0x80);
-        func_001FB3D0();
-        func_00233980(1, (u64)(0x80 - (i * 0x80) / (i + 1)) << 24);
+        append_draw_environment_packet();
+        append_gif_transfer_packet();
+        emit_rgba_draw_packet(0, 0, 0, 0x80);
+        append_draw_buffer_packet();
+        vu1_add_g_sregister(1, (u64)(0x80 - (i * 0x80) / (i + 1)) << 24);
         *(u32 *)(VP + 0) = 0x30000014;
         *(u32 *)(VP + 4) = (u32)D_0013CDD0;
         *(u32 *)(VP + 8) = 0;
         *(u32 *)(VP + 12) = 0x50000014;
         D_00160F00 = VP + 0x10;
-        func_002337B0(1);
+        vu1_sync_chain(1);
         sceGsSyncV(0);
         D_0015F438 += 1;
-        func_002336A0();
-        func_00233630();
+        vu1_send_chain();
+        swap_render_buffer_chain();
     }
-    func_002337B0(1);
+    vu1_sync_chain(1);
     sceGsSyncV(0);
     D_0015F438 += 1;
-    func_002335D0();
-    func_001FB2D0();
-    func_001FB368();
+    vu1_init_chain();
+    append_draw_environment_packet();
+    append_gif_transfer_packet();
 }
 
 extern __typeof__(VP) func_001F4A58 __attribute__((alias("FUN_001f4a58")));

@@ -5,8 +5,7 @@
 
 /* Source: newlib. */
 
-extern int SbrkErrno __asm__("D_0015EC10")
-    __attribute__((section(".data")));
+extern int SbrkErrno __asm__("D_0015EC10") __attribute__((section(".data")));
 extern void *Sbrk(int increment) __asm__("sbrk");
 
 void *SbrkReentrant(void *reent, int increment) __asm__("_sbrk_r");

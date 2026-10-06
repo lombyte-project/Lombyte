@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/vi_buf_restart_dma/FUN_0023c280.s", FUN_0023c280);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/video/decoder/vi_buf_restart_dma/FUN_0023c280.s",
+    FUN_0023c280);
 #else
 #include "types.h"
 
@@ -30,9 +32,9 @@ typedef struct {
 
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
-extern s32 func_0023BAF8(ViBuf *, s32);
-extern void func_0023BB40(s32);
-extern void func_0023BBB0(s32);
+extern s32 get_fifo_index(ViBuf *, s32) __asm__("func_0023BAF8");
+extern void set_dma_channel_3_control_register(s32) __asm__("func_0023BB40");
+extern void set_dma_channel_4_control_register(s32) __asm__("func_0023BBB0");
 
 s32 vi_buf_restart_dma(ViBuf *f) __asm__("FUN_0023c280");
 
@@ -79,8 +81,8 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         }
     } else {
         s32 datasize;
-        r1 = func_0023BAF8(f, f->d4_madr);
-        r2 = func_0023BAF8(f, dmaAddress);
+        r1 = get_fifo_index(f, f->d4_madr);
+        r2 = get_fifo_index(f, dmaAddress);
         if (r1 != r2) {
             dir = 3;
             datasize = f->n << 11;
@@ -106,7 +108,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         if (f->d3_qwc != 0) {
             DGET(0x1000B010) = f->d3_madr;
             DGET(0x1000B020) = f->d3_qwc;
-            func_0023BB40(f->d3_chcr | 0x100);
+            set_dma_channel_3_control_register(f->d3_chcr | 0x100);
         }
     }
     if (f->readBytes != 0) {
@@ -124,7 +126,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
     DGET(0x1000B430) = dmaTadr;
     DGET(0x1000B420) = dmaQwc;
     if (f->readBytes != 0) {
-        func_0023BBB0(dmaChcr);
+        set_dma_channel_4_control_register(dmaChcr);
     }
     DGET(0x10002010) = f->ipu_ctrl;
     f->active = 1;

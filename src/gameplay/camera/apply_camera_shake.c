@@ -22,7 +22,7 @@ extern s32 func_001F9740(s32 *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(f32 *, f32 *, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 func_001FA610(f32);
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 func_001FA6C0(s32);
 
 void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) __asm__("FUN_001ed360");
@@ -37,7 +37,7 @@ void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
     s32 v5;
 
     if (D_001870C0[0] != 0 && D_001870C0[0]->unk86 == 6) {
-                arg0->unk8 = 0;
+        arg0->unk8 = 0;
         arg0->unkC = 0;
     } else {
         v5 = arg0->unk8;
@@ -49,7 +49,7 @@ void apply_camera_shake(struct M2c_arg0 *arg0, s32 arg1) {
             v1 = func_001FA6C0(arg0->unk8);
             v2 = func_001FA6C0(arg0->unkC);
             v3 = v1 / v2;
-            v4 = fast_cos(func_001FA610(2.0f * func_001FA6C0(arg0->unk8)));
+            v4 = fast_cos(fast_normalize_angle(2.0f * func_001FA6C0(arg0->unk8)));
             val = arg0->unk0 * v4 * v3 * v3;
             arg0->unk4 = val;
             if (arg1 == 0) {

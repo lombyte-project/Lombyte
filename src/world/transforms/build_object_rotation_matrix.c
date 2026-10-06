@@ -48,4 +48,5 @@ unsigned char build_object_rotation_matrix(void) {
     return flag;
 }
 
-extern __typeof__(build_object_rotation_matrix) func_0022DE10 __attribute__((alias("FUN_0022de10")));
+extern __typeof__(build_object_rotation_matrix) func_0022DE10
+    __attribute__((alias("FUN_0022de10")));

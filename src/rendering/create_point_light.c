@@ -47,8 +47,7 @@ extern void FUN_001f9a80(void *, void *, f32);
 
 void create_point_light(s32 i) __asm__("FUN_00201ba8");
 
-void create_point_light(s32 i)
-{
+void create_point_light(s32 i) {
     LightSlot *slot;
     LightDef *def;
     s16 *p;

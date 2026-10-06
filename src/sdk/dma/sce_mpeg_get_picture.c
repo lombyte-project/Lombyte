@@ -21,9 +21,7 @@ extern s32 DecodeMpegPicture(MpegPictureDecoder *decoder) __asm__("_getpic");
 s32 sceMpegGetPicture(MpegPictureDecoder *decoder, void *picture_buffer,
                       s32 macroblock_count) __asm__("sceMpegGetPicture");
 
-s32 sceMpegGetPicture(MpegPictureDecoder *decoder, void *picture_buffer,
-                      s32 macroblock_count)
-{
+s32 sceMpegGetPicture(MpegPictureDecoder *decoder, void *picture_buffer, s32 macroblock_count) {
     MpegPictureState *picture_state = decoder->picture_state;
 
     picture_state->decode_state = 1;

@@ -30,8 +30,7 @@ Boston, MA 02111-1307, USA.  */
 
 #include "types.h"
 
-u64 __fixunsdfdi(f64 a)
-{
+u64 __fixunsdfdi(f64 a) {
     f64 b;
     u64 v;
     u64 high_word_coeff;

@@ -6,7 +6,7 @@ extern char D_00194120[];
 extern int D_0015F604 MACRO_ADDR;
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
-extern float func_002135F0(void *, int);
+extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 /* Camera-inside-water test: cast a ray through the camera focus from
    0.75 above to 0.75 below (up to six hits); on the first hit that is
    not a water surface, flag D_00186F40+0x394 when the focus is below the
@@ -31,7 +31,7 @@ void update_camera_underwater_flag(void) {
     i = 0;
     while (i < 6 && FUN_001efa68(a, b, 0x12, 0, 0) != 0) {
         if (FUN_001f0b58() == 0) {
-            float h = func_002135F0(D_00194120, 0) + 0.04f;
+            float h = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
             char *c2 = D_00186F40;
 
             if (*(float *)(c2 + 0x148) < h) {
@@ -47,4 +47,5 @@ void update_camera_underwater_flag(void) {
     }
 }
 
-extern __typeof__(update_camera_underwater_flag) func_001ED7F0 __attribute__((alias("FUN_001ed7f0")));
+extern __typeof__(update_camera_underwater_flag) func_001ED7F0
+    __attribute__((alias("FUN_001ed7f0")));

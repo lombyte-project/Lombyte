@@ -1,6 +1,12 @@
 #include "types.h"
-struct _reent { u8 pad0[0x38]; s32 __sdidinit; };
-typedef struct { u8 pad0[0x54]; struct _reent *_data; } FILE;
+struct _reent {
+    u8 pad0[0x38];
+    s32 __sdidinit;
+};
+typedef struct {
+    u8 pad0[0x54];
+    struct _reent *_data;
+} FILE;
 extern struct _reent *D_0012F76C[];
 extern void __sinit(struct _reent *);
 extern s32 _vfprintf_r(struct _reent *, FILE *, const char *, void *);

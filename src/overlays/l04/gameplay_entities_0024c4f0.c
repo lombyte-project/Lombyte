@@ -39,8 +39,10 @@ float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
     t = d1[1] * d2[0] - d1[0] * d2[1];
     t = t * det;
     r = t;
-    if (r < 0.0f) r = 0.0f;
-    if (1.0f < r) r = 1.0f;
+    if (r < 0.0f)
+        r = 0.0f;
+    if (1.0f < r)
+        r = 1.0f;
     scale_vector_xyz(dst, d0, r);
     add_vector_xyz(dst, dst, a);
     return t;

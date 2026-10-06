@@ -14,7 +14,7 @@ s32 _lf_bind(void) {
     s32 i;
 
     if (D_0012FCB0[0] < 0) {
-loop_2:
+    loop_2:
         if (sceSifBindRpc(&D_00158400, 0x80000006, 0) < 0) {
             return -1;
         }

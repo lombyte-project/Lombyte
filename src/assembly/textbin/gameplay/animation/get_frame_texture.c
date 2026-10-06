@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/animation/get_frame_texture/FUN_001ffa10.s", FUN_001ffa10);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/gameplay/animation/get_frame_texture/FUN_001ffa10.s",
+    FUN_001ffa10);
 #else
 #include "types.h"
 
@@ -65,9 +67,12 @@ u64 get_frame_texture(s32 frame_id) {
     u64 tex0_word;
     u64 palette_word;
 
-    frame = (struct FrameTextureRef *)(frame_id * 4 + frame_texture_tables.frame_references_address);
-    palette_page = (struct FramePalettePage *)(frame_texture_tables.palette_pages_address + frame->palette_index * 8);
-    image_page = (struct FrameImagePage *)(frame_texture_tables.image_pages_address + frame->image_index * 8);
+    frame =
+        (struct FrameTextureRef *)(frame_id * 4 + frame_texture_tables.frame_references_address);
+    palette_page = (struct FramePalettePage *)(frame_texture_tables.palette_pages_address +
+                                               frame->palette_index * 8);
+    image_page = (struct FrameImagePage *)(frame_texture_tables.image_pages_address +
+                                           frame->image_index * 8);
     queued_transfer = 0;
 
     if (palette_page->gs_block_offset == 0 || image_page->gs_block_offset == 0) {
@@ -108,7 +113,8 @@ u64 get_frame_texture(s32 frame_id) {
         if (image_upload_count < 0x40) {
             queued_transfer = 1;
             packet = pending_texture_uploads + image_upload_count;
-            *(s32 *)((u8 *)pending_texture_uploads + image_upload_count * 0x10 + 8) = image_page->source_address;
+            *(s32 *)((u8 *)pending_texture_uploads + image_upload_count * 0x10 + 8) =
+                image_page->source_address;
             packet->image_width = image_page->width_log2;
             packet->image_height = image_page->height_log2;
             packet->image_base = image_page->gs_block_offset;

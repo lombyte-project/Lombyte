@@ -4,11 +4,16 @@
 
 typedef struct LinkObject LinkObject;
 typedef struct LinkOwner LinkOwner;
-struct LinkObject { LinkObject *next_object; int index; };
-struct LinkOwner { unsigned char padding[76]; LinkObject **link_table; };
+struct LinkObject {
+    LinkObject *next_object;
+    int index;
+};
+struct LinkOwner {
+    unsigned char padding[76];
+    LinkObject **link_table;
+};
 
-void InsertLinkObject(LinkOwner *link_owner, LinkObject *link_object)
-    __asm__("InsertLinkObject");
+void InsertLinkObject(LinkOwner *link_owner, LinkObject *link_object) __asm__("InsertLinkObject");
 
 void InsertLinkObject(LinkOwner *link_owner, LinkObject *link_object) {
     if (link_object != 0) {

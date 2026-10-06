@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/init_dma/FUN_0020b418.s", FUN_0020b418);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/init_dma/FUN_0020b418.s",
+            FUN_0020b418);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

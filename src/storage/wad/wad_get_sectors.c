@@ -19,7 +19,11 @@ loop_1:
 block_2:
     sceGsSyncV(0);
 loop_3:
-    if (sceCdSync(1) != 0) { goto block_2; }
-    if (sceCdGetError() != 0) { goto loop_1; }
+    if (sceCdSync(1) != 0) {
+        goto block_2;
+    }
+    if (sceCdGetError() != 0) {
+        goto loop_1;
+    }
     return shift;
 }

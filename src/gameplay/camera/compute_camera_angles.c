@@ -5,13 +5,12 @@ extern f32 func_001F9AB0(void *a, void *b);
 extern void FUN_001f9bf8(void *out, void *a, f32 len);
 extern f32 FUN_001f9af0(void *a);
 extern f32 func_001F9DF8(f32);
-extern void FUN_00214890(void *out, void *dir, void *axis, f32 ang);
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 
 void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
-                  void *axis) __asm__("FUN_001ec530");
+                           void *axis) __asm__("FUN_001ec530");
 
-void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
-                  void *axis) {
+void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1, void *axis) {
     f32 diff[4];
     f32 proj[4];
     f32 perp[4];
@@ -42,7 +41,7 @@ void compute_camera_angles(f32 *out, void *p0, void *p1, void *dir0, void *dir1,
     }
     out[0] = yaw;
 
-    FUN_00214890(rotated, dir0, axis, yaw);
+    build_look_at_matrix(rotated, dir0, axis, yaw);
     d4 = func_001F9AB0(rotated, diff);
     lenDiff = FUN_001f9af0(diff);
     if (lenDiff == 0.0f) {

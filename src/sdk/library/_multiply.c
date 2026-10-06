@@ -88,12 +88,10 @@ typedef struct _Bigint {
 } _Bigint;
 struct _reent;
 typedef u32 __ULong;
-#define Storeinc(a,b,c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
+#define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
 extern _Bigint *_Balloc(struct _reent *, s32);
 
-_Bigint *
-_multiply(struct _reent *ptr, _Bigint *a, _Bigint *b)
-{
+_Bigint *_multiply(struct _reent *ptr, _Bigint *a, _Bigint *b) {
     _Bigint *c;
     s32 k, wa, wb, wc;
     __ULong carry, y, z;
@@ -148,7 +146,8 @@ _multiply(struct _reent *ptr, _Bigint *a, _Bigint *b)
             *xc = z2;
         }
     }
-    for (xc0 = c->_x, xc = xc0 + wc; wc > 0 && !*--xc; --wc);
+    for (xc0 = c->_x, xc = xc0 + wc; wc > 0 && !*--xc; --wc)
+        ;
     c->_wds = wc;
     return c;
 }

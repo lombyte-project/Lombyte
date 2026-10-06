@@ -11,4 +11,5 @@ void save_card_state_format_failed(void) {
     D_0015EEB0 = 3;
 }
 
-extern __typeof__(save_card_state_format_failed) func_00208E68 __attribute__((alias("FUN_00208e68")));
+extern __typeof__(save_card_state_format_failed) func_00208E68
+    __attribute__((alias("FUN_00208e68")));

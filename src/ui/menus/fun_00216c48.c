@@ -49,14 +49,14 @@ extern u8 D_0013D4E8[];
 extern u8 D_0013D388[];
 
 extern void func_001E9458(s32);
-extern s32 FUN_001ff480(s32);
+extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void func_001E9460(s32);
-extern char *func_001FDD10(s32);
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char *strcpy(char *, const char *);
 extern char *FindSubstring(char *, char *);
 extern s32 sprintf(char *, const char *, ...);
-extern void func_001FF658(char *);
-extern s32 FUN_00215248(void);
+extern void copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
+extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
 void func_00216C48(void *arg0, Menu *arg1, s32 arg2);
 
@@ -94,7 +94,7 @@ void FUN_00216c48(void *arg0, Menu *arg1, s32 arg2) {
                 if (e->unk4 & 0x4000) {
                     func_001E9458((s16)(e->unk4 ^ 0x4000));
                 } else {
-                    FUN_001ff480(D_00160070);
+                    remove_hud_item(D_00160070);
                     D_00160070 = -1;
                     func_001E9460((s16)e->unk4);
                 }
@@ -108,7 +108,7 @@ void FUN_00216c48(void *arg0, Menu *arg1, s32 arg2) {
     kind = e->unk8;
     if (kind == 6) {
         sfx = D_001E8680;
-        strcpy(SCRATCH, func_001FDD10(e->unk0));
+        strcpy(SCRATCH, get_help_message_text(e->unk0));
         p = FindSubstring(SCRATCH, D_00160088);
         if (p != 0) {
             p[1] = 's';
@@ -117,12 +117,12 @@ void FUN_00216c48(void *arg0, Menu *arg1, s32 arg2) {
         sprintf(num, D_00160090, t / 1000, sfx.s[D_0015ED88 % 6], t % 1000);
         sprintf(buf, SCRATCH, num);
     } else {
-        sprintf(buf, func_001FDD10(e->unk0));
+        sprintf(buf, get_help_message_text(e->unk0));
     }
     if (D_001993C0[5] != 0) {
-        func_001FF658(buf);
+        copy_text_to_shared_buffer(buf);
     } else if (D_00160070 != -1) {
-        FUN_001ff480(D_00160070);
+        remove_hud_item(D_00160070);
         D_00160070 = -1;
     }
     if (e->unk8 == 0) {
@@ -146,10 +146,10 @@ void FUN_00216c48(void *arg0, Menu *arg1, s32 arg2) {
         ok = D_0013D388[e->unkA] != 0;
         break;
     case 5:
-        ok = !(FUN_00215248() < e->unkA);
+        ok = !(compute_clamped_count_difference() < e->unkA);
         break;
     case 6:
-        ok = D_0015ED98 >= D_001DFFB0[e->unkA].unk14 && FUN_00215248() >= 4;
+        ok = D_0015ED98 >= D_001DFFB0[e->unkA].unk14 && compute_clamped_count_difference() >= 4;
         break;
     default:
         ok = 0;

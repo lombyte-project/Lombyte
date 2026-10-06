@@ -4,8 +4,8 @@
 
 extern int D_0015ED84 MACRO_ADDR;
 extern char D_0013D290[];
-extern void func_0020ABB0(char *out);
-extern void prepare_save_game(int, int);
+extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");
+extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
 extern void sceCdReadClock(void *);
@@ -22,7 +22,7 @@ void prepare_save_game(int arg0, int arg1) {
     sceScfGetLocalTimefromRTC(D_0015EE98);
     FUN_00208770();
     func_00207B08(D_00141EC0 + (D_0015ED84 << 11));
-    func_0020ABB0((char *)arg0);
+    memcard_make_whole_save((char *)arg0);
     *(int *)(b + 0xF4) = saving;
     *(int *)(b + 0xEC) = arg0;
     *(int *)(b + 0x14) = arg1;

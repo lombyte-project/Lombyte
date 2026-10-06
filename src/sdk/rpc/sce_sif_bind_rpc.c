@@ -21,7 +21,7 @@ extern u8 D_00156800[];
 extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
-extern s32 func_0011ACE8();
+extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
 s32 sceSifBindRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
@@ -31,11 +31,11 @@ s32 sceSifBindRpc(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
 
     arg0->unk10 = 0;
     arg0->unk24 = 0;
-    temp_2_15 = (struct M2c_temp_2_15 *)func_0011ACE8(D_00156800);
+    temp_2_15 = (struct M2c_temp_2_15 *)get_available_rpc_packet(D_00156800);
     if (temp_2_15 == NULL) {
         return -1;
     }
-    arg0->unk4 = (s32) temp_2_15->unk18;
+    arg0->unk4 = (s32)temp_2_15->unk18;
     arg0->unk0 = (s32)temp_2_15;
     temp_2_15->unk20 = arg1;
     temp_2_15->unk14 = (s32)temp_2_15;

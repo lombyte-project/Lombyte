@@ -31,10 +31,10 @@ extern s32 D_0015EE88;
 
 extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
-extern void func_0020B3E0(void);
+extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
 extern s32 FUN_0022bf94(s32, s32, s32, s32) __asm__("FUN_0022bf94");
 extern void FUN_0022c0e0(s32, s32, s32, s32) __asm__("FUN_0022c0e0");
-extern s32 func_00233980(s32, s64) __asm__("FUN_00233980");
+extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 void sky_draw_shell_gouraud(struct Shell *shell) __asm__("FUN_0022b928");
 
@@ -66,7 +66,7 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
 
     for (i = 0; i < shell->count; i++) {
         if (visibility[i] == 1) {
-            func_0020B3E0();
+            dma_to_spr_sync();
         }
 
         next = i + 1;
@@ -81,14 +81,14 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
             if (FUN_0022bf94(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
-                              (&shell->tiles[i])->unkC) == 0) {
+                             (&shell->tiles[i])->unkC) == 0) {
                 FUN_0022c0e0(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }
         }
     }
 
-    func_00233980(0x47, 0x3180B);
-    func_00233980(0x4E, (D_0015EE88 >> 13) | 0x1000000 | ((s64)1 << 32));
+    vu1_add_g_sregister(0x47, 0x3180B);
+    vu1_add_g_sregister(0x4E, (D_0015EE88 >> 13) | 0x1000000 | ((s64)1 << 32));
 }
 
 extern __typeof__(sky_draw_shell_gouraud) func_0022B928 __attribute__((alias("FUN_0022b928")));

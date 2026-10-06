@@ -1,11 +1,11 @@
 #include "types.h"
 
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern struct MusicStreamState D_001516D0;
-extern s32 func_0012DC80();
-extern s32 func_0012EBD0();
-extern s32 func_0012ED30();
+extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
+extern s32 snd_stop_all_streams() __asm__("func_0012EBD0");
+extern s32 snd_stream_safe_check_cd_idle() __asm__("func_0012ED30");
 void music_stop(void) __asm__("FUN_00215ee8");
 
 void music_stop(void) {
@@ -13,24 +13,24 @@ void music_stop(void) {
 
     if (D_001516D0.primary_handle == 0xFFFFFFFF) {
         do {
-            func_0012DC80();
+            snd_flush_sound_commands();
         } while (D_001516D0.primary_handle == 0xFFFFFFFF);
     }
     if (D_001516D0.transition_handle == 0xFFFFFFFF) {
         do {
-            func_0012DC80();
+            snd_flush_sound_commands();
         } while (D_001516D0.transition_handle == 0xFFFFFFFF);
     }
     if (D_001516D0.secondary_handle == 0xFFFFFFFF) {
         do {
-            func_0012DC80();
+            snd_flush_sound_commands();
         } while (D_001516D0.secondary_handle == 0xFFFFFFFF);
     }
-    func_0012EBD0();
+    snd_stop_all_streams();
     do {
 
-    } while (func_0012DC80() != 0);
-    func_0012ED30(1);
+    } while (snd_flush_sound_commands() != 0);
+    snd_stream_safe_check_cd_idle(1);
     cur = D_001516D0.requested_track;
     D_001516D0.primary_state = 0;
     D_001516D0.primary_flags = 0;

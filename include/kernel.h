@@ -4,7 +4,7 @@
 #include "types.h"
 
 /* Sony EE-kernel interrupt primitives. */
-#define CpuEnableInt() __asm__ __volatile__("ei")
+#define CpuEnableInt()  __asm__ __volatile__("ei")
 #define CpuDisableInt() __asm__ __volatile__("di")
 
 static inline u32 CpuReadStatus(void) {

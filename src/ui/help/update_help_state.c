@@ -2,18 +2,18 @@
 #include "sda.h"
 
 typedef struct {
-    s32 state;      /* 0x00 */
-    s32 timer;      /* 0x04 */
-    s32 pad08[6];   /* 0x08 */
-    s32 msg;        /* 0x20 */
-    s32 pending;    /* 0x24 */
-    s32 entry;      /* 0x28 */
-    s32 count;      /* 0x2C */
-    s32 started;    /* 0x30 */
-    s32 delay;      /* 0x34 */
-    s16 queued;     /* 0x38 */
-    s16 shown;      /* 0x3A */
-    s32 wait[1];    /* 0x3C */
+    s32 state;    /* 0x00 */
+    s32 timer;    /* 0x04 */
+    s32 pad08[6]; /* 0x08 */
+    s32 msg;      /* 0x20 */
+    s32 pending;  /* 0x24 */
+    s32 entry;    /* 0x28 */
+    s32 count;    /* 0x2C */
+    s32 started;  /* 0x30 */
+    s32 delay;    /* 0x34 */
+    s16 queued;   /* 0x38 */
+    s16 shown;    /* 0x3A */
+    s32 wait[1];  /* 0x3C */
 } HelpState;
 
 typedef struct {
@@ -50,29 +50,30 @@ extern s32 D_0015F604;
 extern TextEntry *D_0015F6A0;
 extern HelpState D_001996D0;
 
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 func_001F9740(void *);
 extern s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
-extern void FUN_00215b10(void) __asm__("FUN_00215b10");
+extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 
-#define PLAY_TIME (FUN_001f96f8(D_0015EEA4) / 600)
+#define PLAY_TIME (scale_game_frames(D_0015EEA4) / 600)
 
-#define RECORD_COUNT()                                             \
-    if (D_00141968[D_001996D0.entry].count < 0xFFFF) {             \
-        D_00141968[D_001996D0.entry].count++;                      \
+#define RECORD_COUNT()                                                                             \
+    if (D_00141968[D_001996D0.entry].count < 0xFFFF) {                                             \
+        D_00141968[D_001996D0.entry].count++;                                                      \
     }
 
-#define RECORD_BEST()                                              \
-    if (PLAY_TIME > D_00141968[D_001996D0.entry].best) {           \
-        D_00141968[D_001996D0.entry].best = PLAY_TIME;             \
+#define RECORD_BEST()                                                                              \
+    if (PLAY_TIME > D_00141968[D_001996D0.entry].best) {                                           \
+        D_00141968[D_001996D0.entry].best = PLAY_TIME;                                             \
     }
 
-#define RECORD_FLAGS() \
-    D_00141968[D_001996D0.entry].flags = D_00141968[D_001996D0.entry].flags | (1 << D_0015ED84) | 0x80000000
+#define RECORD_FLAGS()                                                                             \
+    D_00141968[D_001996D0.entry].flags =                                                           \
+        D_00141968[D_001996D0.entry].flags | (1 << D_0015ED84) | 0x80000000
 
 void update_help_state(void) {
 
@@ -81,7 +82,7 @@ void update_help_state(void) {
             D_001996D0.delay = 1;
         }
         if (D_001996D0.delay != 0) {
-            if (++D_001996D0.delay >= FUN_001f96f8(0x78)) {
+            if (++D_001996D0.delay >= scale_game_frames(0x78)) {
                 D_001996D0.started = 1;
             }
         }
@@ -158,10 +159,9 @@ void update_help_state(void) {
             D_001996D0.state = 7;
             D_001996D0.timer = 0;
             RECORD_FLAGS();
-        } else if (D_001996D0.timer >= FUN_001f96f8(0x18)) {
-            if (D_001516D0.unk5A == 3
-                || (id = D_0015F6A0[D_001996D0.msg].id) == -1
-                || id != D_001516D0.unk54 - 0x7530) {
+        } else if (D_001996D0.timer >= scale_game_frames(0x18)) {
+            if (D_001516D0.unk5A == 3 || (id = D_0015F6A0[D_001996D0.msg].id) == -1 ||
+                id != D_001516D0.unk54 - 0x7530) {
                 D_001996D0.state = 3;
                 D_001996D0.timer = 0;
             }
@@ -196,7 +196,7 @@ void update_help_state(void) {
         } else if (D_001996D0.timer >= 4) {
             id = D_0015F6A0[D_001996D0.msg].id;
             if (id != -1 && id == D_001516D0.unk54 - 0x7530 && D_001516D0.unk5A == 3) {
-                FUN_00215b10();
+                continue_audio_stream_if_ready();
             }
             D_001996D0.state = 5;
             D_001996D0.timer = 0;
@@ -208,11 +208,10 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if ((D_001996D0.timer >= FUN_001f96f8(0x1A4)
-             && ((id = D_0015F6A0[D_001996D0.msg].id) == -1
-                 || id != D_001516D0.unk54 - 0x7530
-                 || (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1)))
-            || (D_0013CAE4 & 0x10)) {
+        if ((D_001996D0.timer >= scale_game_frames(0x1A4) &&
+             ((id = D_0015F6A0[D_001996D0.msg].id) == -1 || id != D_001516D0.unk54 - 0x7530 ||
+              (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1))) ||
+            (D_0013CAE4 & 0x10)) {
             RECORD_COUNT();
             RECORD_BEST();
             D_001996D0.state = 6;
@@ -234,8 +233,7 @@ void update_help_state(void) {
 
         force_help_message(5, 0);
         id = D_0015F6A0[D_001996D0.msg].id;
-        if (id != -1 && id == D_001516D0.unk54 - 0x7530
-            && (u16)D_001516D0.unk5A - 6U >= 2) {
+        if (id != -1 && id == D_001516D0.unk54 - 0x7530 && (u16)D_001516D0.unk5A - 6U >= 2) {
             D_001516D0.unk5A = 5;
         }
         if (D_001996D0.timer >= 8) {

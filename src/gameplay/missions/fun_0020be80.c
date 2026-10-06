@@ -1,6 +1,8 @@
 /* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CCD0). */
 #include "sda.h"
-typedef struct { int a, b, c, d; } Rec16_C940;
+typedef struct {
+    int a, b, c, d;
+} Rec16_C940;
 extern Rec16_C940 D_0013D5B0[];
 extern unsigned char D_0013D4C2 NOT_SDA;
 /* Two flat `&&` returns over D_0013D5B0[20/24/22].d; retail's reuse of

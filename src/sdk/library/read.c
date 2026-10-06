@@ -16,22 +16,20 @@ typedef unsigned long long u64;
 extern u32 D_0012FBF0[];
 extern s32 sceTtyInit(void);
 extern s32 sceTtyRead();
-s32 read(s32 arg0, s32 arg1, s32 arg2)
-{
-  if (arg0 == 0)
-  {
-    if (D_0012FBF0[0] == 0)
-    {
-      if (sceTtyInit() != 0)
-      {
- do { D_0012FBF0[0] = 1; } while (0);
-        goto block_4;
-      }
-      goto block_5;
-    }
+s32 read(s32 arg0, s32 arg1, s32 arg2) {
+    if (arg0 == 0) {
+        if (D_0012FBF0[0] == 0) {
+            if (sceTtyInit() != 0) {
+                do {
+                    D_0012FBF0[0] = 1;
+                } while (0);
+                goto block_4;
+            }
+            goto block_5;
+        }
     block_4:
-    return sceTtyRead(arg1, arg2);
-  }
-  block_5:
-  return -1;
+        return sceTtyRead(arg1, arg2);
+    }
+block_5:
+    return -1;
 }

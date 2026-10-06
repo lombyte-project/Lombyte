@@ -4,13 +4,14 @@ struct M2c_arg0 {
     s32 unk4;
     u8 pad_8[0x28];
     s32 unk30;
-    u8 * unk34;
+    u8 *unk34;
     s32 unk38;
     s32 unk3C;
     s32 unk40;
 };
 
-void audio_dec_begin_put(struct M2c_arg0 *arg0, void **arg1, s32 *arg2, void **arg3, s32 *arg4) __asm__("FUN_0023ad58");
+void audio_dec_begin_put(struct M2c_arg0 *arg0, void **arg1, s32 *arg2, void **arg3,
+                         s32 *arg4) __asm__("FUN_0023ad58");
 
 void audio_dec_begin_put(struct M2c_arg0 *arg0, void **arg1, s32 *arg2, void **arg3, s32 *arg4) {
     s32 t2;
@@ -42,4 +43,5 @@ void audio_dec_begin_put(struct M2c_arg0 *arg0, void **arg1, s32 *arg2, void **a
         }
     }
 }
-extern void func_0023AD58(struct M2c_arg0 *, void **, s32 *, void **, s32 *) __attribute__((alias("FUN_0023ad58")));
+extern void func_0023AD58(struct M2c_arg0 *, void **, s32 *, void **, s32 *)
+    __attribute__((alias("FUN_0023ad58")));

@@ -1,31 +1,33 @@
 /* Ported from rac1-decomp (src/game/help.c, func_001FF1B0). */
 #include "sda.h"
 typedef struct {
-    int state;    /* 0x00 */
-    int x04;      /* 0x04 */
-    int pad[7];   /* 0x08 */
-    int x24;      /* 0x24 */
-    int x28;      /* 0x28 */
-    int count;    /* 0x2C: entries in the D_0015F6A0 table */
+    int state;  /* 0x00 */
+    int x04;    /* 0x04 */
+    int pad[7]; /* 0x08 */
+    int x24;    /* 0x24 */
+    int x28;    /* 0x28 */
+    int count;  /* 0x2C: entries in the D_0015F6A0 table */
 } HelpState;
 extern char D_001996D0[];
 typedef struct {
-    char *text;   /* 0x0 */
-    int id;       /* 0x4 */
+    char *text; /* 0x0 */
+    int id;     /* 0x4 */
     int unk_08;
     int unk_0C;
 } HelpEntry;
 extern HelpEntry *D_0015F6A0 MACRO_ADDR;
 extern int D_0015EE1D MACRO_ADDR;
 extern int D_0015EE1C MACRO_ADDR;
+extern void help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1D_b (*(unsigned char *)&D_0015EE1D)
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
-extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5,
-                          int a6, int a7, int a8);
-extern void func_001F75F0(void *a, long b, void *c, int d);
-extern void func_001F5F18(int, int, int, int, int);
-extern void func_001F5450(int, int, int, int, int, int, int, int, long, long);
-extern long func_001F44B8(int);
+extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
+                                int a8);
+extern void font_print_window_small(void *a, long b, void *c, int d) __asm__("func_001F75F0");
+extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
+extern void draw_textured_quad(int, int, int, int, int, int, int, int, long,
+                               long) __asm__("func_001F5450");
+extern long get_effect_texture(int) __asm__("func_001F44B8");
 /* Help_Draw: nothing unless a state is active, the help window is shown
    (+0x30) and one of the fade flags is set. Then, by state, and only while
    D_0015EE1D is set: the growing frame (1), the prompt (2), the frame
@@ -52,36 +54,38 @@ void draw_help(void) {
 
             ((HelpState *)D_001996D0)->pad[4] = s;
             ((HelpState *)D_001996D0)->pad[5] = s;
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - s,
-                          ((HelpState *)D_001996D0)->pad[3] + s,
-                          ((HelpState *)D_001996D0)->pad[2] - s,
-                          ((HelpState *)D_001996D0)->pad[2] + s, 0x60);
+            draw_ui_frame(
+                ((HelpState *)D_001996D0)->pad[3] - s, ((HelpState *)D_001996D0)->pad[3] + s,
+                ((HelpState *)D_001996D0)->pad[2] - s, ((HelpState *)D_001996D0)->pad[2] + s, 0x60);
         }
         break;
     case 2:
         if (D_0015EF1D_b) {
-            FUN_001fe898();
+            help_draw_prompt();
         }
         break;
     case 3:
         if (D_0015EF1D_b) {
-            int a = (((HelpState *)D_001996D0)->pad[0] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 + 0x20;
-            int b = (((HelpState *)D_001996D0)->pad[1] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 + 0x20;
+            int a =
+                (((HelpState *)D_001996D0)->pad[0] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 +
+                0x20;
+            int b =
+                (((HelpState *)D_001996D0)->pad[1] - 0x20) * ((HelpState *)D_001996D0)->x04 / 8 +
+                0x20;
             int alpha;
 
             ((HelpState *)D_001996D0)->pad[4] = a;
             ((HelpState *)D_001996D0)->pad[5] = b;
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - b,
-                          ((HelpState *)D_001996D0)->pad[3] + b,
-                          ((HelpState *)D_001996D0)->pad[2] - a,
-                          ((HelpState *)D_001996D0)->pad[2] + a, 0x60);
+            draw_ui_frame(
+                ((HelpState *)D_001996D0)->pad[3] - b, ((HelpState *)D_001996D0)->pad[3] + b,
+                ((HelpState *)D_001996D0)->pad[2] - a, ((HelpState *)D_001996D0)->pad[2] + a, 0x60);
             alpha = (8 - ((HelpState *)D_001996D0)->x04) * 16;
             if (alpha < 0) {
                 alpha = 0;
             }
-            func_001F5450(((HelpState *)D_001996D0)->pad[2] - 0x20,
-                          ((HelpState *)D_001996D0)->pad[3] - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
-                          (alpha << 24) | 0x808080, func_001F44B8(4));
+            draw_textured_quad(((HelpState *)D_001996D0)->pad[2] - 0x20,
+                               ((HelpState *)D_001996D0)->pad[3] - 0x20, 0x40, 0x40, 0, 0, 0x40,
+                               0x40, (alpha << 24) | 0x808080, get_effect_texture(4));
         }
         break;
     case 4:
@@ -94,10 +98,11 @@ void draw_help(void) {
 
             ((HelpState *)D_001996D0)->pad[4] = ((HelpState *)D_001996D0)->pad[0];
             ((HelpState *)D_001996D0)->pad[5] = ((HelpState *)D_001996D0)->pad[1];
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - ((HelpState *)D_001996D0)->pad[1],
+            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - ((HelpState *)D_001996D0)->pad[1],
                           ((HelpState *)D_001996D0)->pad[3] + ((HelpState *)D_001996D0)->pad[1],
                           ((HelpState *)D_001996D0)->pad[2] - ((HelpState *)D_001996D0)->pad[0],
-                          ((HelpState *)D_001996D0)->pad[2] + ((HelpState *)D_001996D0)->pad[0], 0x60);
+                          ((HelpState *)D_001996D0)->pad[2] + ((HelpState *)D_001996D0)->pad[0],
+                          0x60);
             if (((HelpState *)D_001996D0)->state == 4) {
                 col = 0xFFA888 | (((HelpState *)D_001996D0)->x04 << 29);
             } else if (((HelpState *)D_001996D0)->state == 6) {
@@ -105,22 +110,21 @@ void draw_help(void) {
             }
             text = D_0015F6A0[((HelpState *)D_001996D0)->pad[6]].text;
             InitializeDmaPacket((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
-                          ((HelpState *)D_001996D0)->pad[3], 0x10, 3);
-            func_001F75F0((void *)win, col, text, -1);
+                                ((HelpState *)D_001996D0)->pad[3], 0x10, 3);
+            font_print_window_small((void *)win, col, text, -1);
         }
         break;
     case 7:
         if (D_0015EF1D_b) {
-            int b = ((HelpState *)D_001996D0)->pad[4]
-                  - (((HelpState *)D_001996D0)->pad[4] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
-            int a = ((HelpState *)D_001996D0)->pad[5]
-                  - (((HelpState *)D_001996D0)->pad[5] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
+            int b = ((HelpState *)D_001996D0)->pad[4] -
+                    (((HelpState *)D_001996D0)->pad[4] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
+            int a = ((HelpState *)D_001996D0)->pad[5] -
+                    (((HelpState *)D_001996D0)->pad[5] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
 
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - a,
-                          ((HelpState *)D_001996D0)->pad[3] + a,
-                          ((HelpState *)D_001996D0)->pad[2] - b,
-                          ((HelpState *)D_001996D0)->pad[2] + b,
-                          (8 - ((HelpState *)D_001996D0)->x04) * 12);
+            draw_ui_frame(
+                ((HelpState *)D_001996D0)->pad[3] - a, ((HelpState *)D_001996D0)->pad[3] + a,
+                ((HelpState *)D_001996D0)->pad[2] - b, ((HelpState *)D_001996D0)->pad[2] + b,
+                (8 - ((HelpState *)D_001996D0)->x04) * 12);
         }
         break;
     }

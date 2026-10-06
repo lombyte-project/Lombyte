@@ -11,7 +11,10 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
 /* Draws a list of scrolling-texture strips (water) into the scratchpad. */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/drawquad_0021E3E8.c: func_L09_0021E770), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x20]; short idx[16]; } Strip;
+typedef struct {
+    char pad[0x20];
+    short idx[16];
+} Strip;
 
 extern char D_L09_0016EAA0[];
 extern int *D_L09_001611C0 __attribute__((sda));
@@ -46,7 +49,8 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     for (i = 0; i < count; i++) {
         char *e = list + i * 64;
         idx = FUN_001fa728(e, 256.0f);
-        if (idx == -1) continue;
+        if (idx == -1)
+            continue;
         for (j = 0; j < *(int *)(e + 0x1C); j++) {
             int n;
             float *src;
@@ -61,7 +65,8 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
                 *a++ = *src + s0;
                 *b++ = *src++ + s1;
             }
-            FUN_L01_0021fa98(n, *(int *)(e + 0x10) + ((Strip *)e)->idx[j] * 12, 0x70000000, 0x70001000, 0x70002000, idx == 0);
+            FUN_L01_0021fa98(n, *(int *)(e + 0x10) + ((Strip *)e)->idx[j] * 12, 0x70000000,
+                             0x70001000, 0x70002000, idx == 0);
         }
     }
 }
@@ -202,7 +207,7 @@ extern float D_0015ED60;
 extern float D_0015ED70;
 extern float D_L09_00166F40[];
 extern float FUN_001f9af0(void *);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -230,9 +235,9 @@ void FUN_L09_002ead30(unsigned char *m) {
             qcopy(m + 0x10, d + 0x20);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50);
         }
-        t = FUN_001fa580(*(float *)(m + 0x40), *(float *)(d + 0x40));
+        t = fast_add_rotations(*(float *)(m + 0x40), *(float *)(d + 0x40));
         *(float *)(m + 0x40) = t;
-        *(float *)(m + 0x44) = FUN_001fa580(t, *(float *)(d + 0x44));
+        *(float *)(m + 0x44) = fast_add_rotations(t, *(float *)(d + 0x44));
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaea8.s", FUN_L09_002eaea8);
@@ -241,7 +246,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eb970.s", FUN_L09_002eb970);
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 rand();
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
@@ -255,7 +260,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         moby[0x20] = 0;
         qcopy(moby + 0x10, src + 0x10);
         qcopy(moby + 0x40, src + 0x40);
-        moby[0xBC] = FUN_001f96f8(10);
+        moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
@@ -277,7 +282,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
 
 typedef int xu128 __attribute__((mode(TI)));
 
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vx;
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) Vx;
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
@@ -286,13 +293,13 @@ extern float D_0015ED60;
 extern float D_0015ED6C;
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int FUN_L00_00257b90(int, int);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void add_vector_xyz(void *, void *, void *);
-extern void mark_moby_for_removal(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L09_002ee110(char *m) {
@@ -312,17 +319,23 @@ void FUN_L09_002ee110(char *m) {
             v.y = fast_sin(*(float *)(m + 0x48)) * (D_0015ED6C * 20.0f);
             v.z = 0.0f;
             for (i = 24; i >= 0; i--) {
-                union { xu128 q; Vx v; } t;
+                union {
+                    xu128 q;
+                    Vx v;
+                } t;
                 t.q = 0;
                 t.v.x = random_float_between(-1.0f, 1.0f);
                 t.v.y = random_float_between(-1.0f, 1.0f);
                 t.v.z = random_float_between(-1.0f, 1.0f);
                 *(xu128 *)&b = t.q;
-                normalize_vector_xyz(&b, &b, vector_length_xyz(&v) * (D_0015ED60 * -0.35000002f + 1.0f));
+                normalize_vector_xyz(&b, &b,
+                                     vector_length_xyz(&v) * (D_0015ED60 * -0.35000002f + 1.0f));
                 add_vector_xyz(&b, &v, &b);
-                normalize_vector_xyz(&b, &b, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+                normalize_vector_xyz(&b, &b,
+                                     random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                 d = (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
-                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d, random_float_between(20000.0f, 50000.0f));
+                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d,
+                                 random_float_between(20000.0f, 50000.0f));
             }
             *(xu128 *)&b = *(xu128 *)(m + 0x10);
             FUN_L09_002ee380(m, &b, *(float *)(m + 0x48));
@@ -413,8 +426,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002efe48.s", FUN_L09_002efe48);
 
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L09_002f0040(char *moby)
-{
+void FUN_L09_002f0040(char *moby) {
     char *data = *(char **)(moby + 0x78);
     FUN_001f9a10(moby + 0x10, moby + 0x10, data);
     FUN_001f9a68(data, data, 1.0f + D_0015ED60 * -0.019999980926513672f);

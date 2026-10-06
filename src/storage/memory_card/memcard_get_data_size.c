@@ -3,8 +3,7 @@
 /* Return the aligned byte span of a linked DMA packet chain. */
 s32 GetDmaPacketSpanBytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
 
-s32 GetDmaPacketSpanBytes(const u32 *packet)
-{
+s32 GetDmaPacketSpanBytes(const u32 *packet) {
     s32 span_bytes = 8;
 
     if (packet[0] != 0) {
@@ -22,4 +21,5 @@ s32 GetDmaPacketSpanBytes(const u32 *packet)
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(GetDmaPacketSpanBytes) memcard_GetDataSize __attribute__((alias("GetDmaPacketSpanBytes")));
+extern __typeof__(GetDmaPacketSpanBytes) memcard_GetDataSize
+    __attribute__((alias("GetDmaPacketSpanBytes")));

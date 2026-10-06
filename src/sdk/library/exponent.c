@@ -19,11 +19,10 @@
 
 /* exponent: newlib-2000-02-17 vfprintf.c exponent formatter for %e/%g. */
 
-#define MAXEXP 308
+#define MAXEXP     308
 #define to_char(n) ((n) + '0')
 
-int exponent(char *p0, int exp, int fmtch)
-{
+int exponent(char *p0, int exp, int fmtch) {
     register char *p, *t;
     char expbuf[MAXEXP];
 

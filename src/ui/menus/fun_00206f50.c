@@ -3,10 +3,10 @@ extern s32 func_00208818();
 
 s32 FUN_00206f50(s32 arg0, s32 arg1) {
     if (arg1 < 0xE9) {
-        if (func_00208818(arg0, arg1, 0x132, 0xA0, 0x15F, 0xD8)
-            && func_00208818(arg0, arg1, 0x14D, 0xD8, 0x181, 0x9A)
-            && func_00208818(arg0, arg1, 0x182, 0xB4, 0x137, 0x93)
-            && func_00208818(arg0, arg1, 0x157, 0x8C, 0x130, 0xAA)) {
+        if (func_00208818(arg0, arg1, 0x132, 0xA0, 0x15F, 0xD8) &&
+            func_00208818(arg0, arg1, 0x14D, 0xD8, 0x181, 0x9A) &&
+            func_00208818(arg0, arg1, 0x182, 0xB4, 0x137, 0x93) &&
+            func_00208818(arg0, arg1, 0x157, 0x8C, 0x130, 0xAA)) {
             return 1;
         }
         return 0;

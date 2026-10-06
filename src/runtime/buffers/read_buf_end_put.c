@@ -14,4 +14,5 @@ void read_buf_end_put(s32 *buf, s32 n) {
 
 extern __typeof__(read_buf_end_put) func_0023B990 __attribute__((alias("FUN_0023b990")));
 /* Recovered original symbol name. */
-extern __typeof__(read_buf_end_put) readBufEndPut__FP7ReadBufi __attribute__((alias("FUN_0023b990")));
+extern __typeof__(read_buf_end_put) readBufEndPut__FP7ReadBufi
+    __attribute__((alias("FUN_0023b990")));

@@ -1,18 +1,30 @@
 #include "types.h"
 #include "qcopy.h"
 
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TagPtr { struct DmaTag *p; };
-struct ScreenOfs { u8 pad0[0x10]; s32 x; s32 y; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
+struct ScreenOfs {
+    u8 pad0[0x10];
+    s32 x;
+    s32 y;
+};
 
 extern struct TagPtr D_00160F00;
 extern struct ScreenOfs D_0013E500;
 extern char D_00160840[];
 
-void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color, s64 extra) __asm__("FUN_001f5450");
+void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
+                        s64 extra) __asm__("FUN_001f5450");
 
-void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color, s64 extra)
-{
+void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
+                        s64 extra) {
     struct DmaTag *tag;
     u64 *q;
     s32 sx;

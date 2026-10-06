@@ -1,5 +1,4 @@
-extern int SignExtendPackedValue(void *value, int shift)
-    __asm__("SignExtendPackedValue");
+extern int SignExtendPackedValue(void *value, int shift) __asm__("SignExtendPackedValue");
 extern void SysbitFlush(void *value, int count) __asm__("_sysbitFlush");
 
 int SysbitMarker(void *value) __asm__("_sysbitMarker");

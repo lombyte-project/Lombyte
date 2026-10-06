@@ -11,7 +11,8 @@ void save_card_state_no_save(void) {
         D_0015EEB0 = 3;
         return;
     }
-    if (D_0015EEB4 & 2) D_0015EEB0 = 0xD;
+    if (D_0015EEB4 & 2)
+        D_0015EEB0 = 0xD;
 }
 
 extern __typeof__(save_card_state_no_save) func_00208C70 __attribute__((alias("FUN_00208c70")));

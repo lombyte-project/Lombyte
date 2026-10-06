@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/data/memcard_restore_data/FUN_0020af20.s", FUN_0020af20);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/data/memcard_restore_data/"
+            "FUN_0020af20.s",
+            FUN_0020af20);
 #else
 #include "types.h"
 #include "sda.h"
@@ -34,7 +36,7 @@ typedef struct {
 
 extern CardState D_0013D290;
 extern s32 D_0015FE90 __attribute__((sda));
-extern s32 func_0020AD38(u8 *header);
+extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);
 extern void func_001F9838(void *, void *, s32);
 extern s32 GetDmaPacketSpanBytes(struct RestoreEntry *tbl);
@@ -49,7 +51,7 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
     s32 copySize;
     u8 *dst;
 
-    if (func_0020AD38(buf) == 0) {
+    if (validate_data_crc(buf) == 0) {
         return 1;
     }
     buf += 8;

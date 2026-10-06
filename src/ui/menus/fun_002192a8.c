@@ -72,12 +72,12 @@ extern struct Ent *D_001D5D90[];
 
 extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
-extern void FUN_00212e28();
-extern s32 func_0022DA68(s32, s32, struct Ent *);
-extern void func_001FBAB8(s32, struct Own *);
+extern void update_visible_resident_objects() __asm__("FUN_00212e28");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Ent *) __asm__("func_0022DA68");
+extern void mode_freeze_init(s32, struct Own *) __asm__("func_001FBAB8");
 extern void CalculateDmaTransferAddress(void);
 extern void update_fog(void) __asm__("FUN_001f2588");
-extern void FUN_00212ed8(struct Ent *, s32, s32);
+extern void set_moby_animation(struct Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void func_002191B8(void) __asm__("FUN_002191b8");
 
 void FUN_002192a8(void) {
@@ -116,7 +116,7 @@ void FUN_002192a8(void) {
         func_00218F98();
     }
     if (D_0015EEB4 & 1) {
-        func_001FBAB8(3, D_001D5BF0.owner);
+        mode_freeze_init(3, D_001D5BF0.owner);
         return;
     }
     if (D_001D5BF0.state == 1) {
@@ -135,9 +135,9 @@ void FUN_002192a8(void) {
         }
     } else if (D_001D5BF0.unk8 != 0) {
         if (D_001D5BF0.owner == D_001D5BF0.unk8) {
-            func_0022DA68(3, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(3, 0x11, D_001D5D90[0]);
         } else {
-            func_0022DA68(4, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(4, 0x11, D_001D5D90[0]);
         }
         for (i = 0; i < 14; i++) {
             obj = D_001D5BF0.owner->objs[i];
@@ -155,10 +155,10 @@ void FUN_002192a8(void) {
             }
             if (flag) {
                 s32 n = D_001D5BF0.owner->ids[j];
-                FUN_00212ed8(D_001D5D90[j], n, D_001D5D90[j]->unk24->unk48[n]->unk10 - 1);
+                set_moby_animation(D_001D5D90[j], n, D_001D5D90[j]->unk24->unk48[n]->unk10 - 1);
                 D_001D5D90[j]->unk58 = -1.0f;
             } else {
-                FUN_00212ed8(D_001D5D90[j], D_001D5BF0.unk8->ids[j], 0);
+                set_moby_animation(D_001D5D90[j], D_001D5BF0.unk8->ids[j], 0);
                 D_001D5D90[j]->unk58 = 1.0f;
             }
         }
@@ -189,7 +189,7 @@ void FUN_002192a8(void) {
             }
         }
     }
-    FUN_00212e28();
+    update_visible_resident_objects();
     if (D_001D5BF0.unkC != 0) {
         func_002191B8();
     }

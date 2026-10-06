@@ -8,9 +8,9 @@ extern s32 D_00133100[4];
 extern u8 D_0015EBC0[];
 extern char D_00153D20[];
 extern s32 printf(const char *, ...);
-extern void func_0012DC80(void);
-extern s32 func_0012DE70(void);
-extern void func_0012E9D8(void);
+extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern s32 snd_got_returns(void) __asm__("func_0012DE70");
+extern void snd_send_current_batch(void) __asm__("func_0012E9D8");
 extern s32 FlushCache(s32);
 extern s32 StoreObjectIndex(void *, s32);
 extern s32 SceSifCheckStatRpc(void *);
@@ -26,14 +26,14 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     }
     goto check;
     do {
-        func_0012DC80();
+        snd_flush_sound_commands();
         FlushCache(0);
-check:;
+    check:;
     } while (D_0015EC80 != 0);
     StoreObjectIndex(D_00133100, 1);
     while (SceSifCheckStatRpc(D_0015EBC0) != 0) {
         printf(D_00153D20);
-        func_0012DC80();
+        snd_flush_sound_commands();
         FlushCache(0);
     }
     if (size != 0) {
@@ -41,13 +41,14 @@ check:;
     } else {
         sceSifCallRpc(D_0015EBC0, cmd, 1, 0, 0, D_00133100, 0xC, 0, 0);
     }
-    while (func_0012DE70() == 0) {
+    while (snd_got_returns() == 0) {
     }
     result = D_00133100[1];
     if (*D_0015ECA0[D_0015ECC0] != 0 && D_0015ECC4 == 0) {
-        func_0012E9D8();
+        snd_send_current_batch();
     }
     return result;
 }
 
-extern __typeof__(snd_send_iop_command_and_wait) func_0012E548 __attribute__((alias("FUN_0012e548")));
+extern __typeof__(snd_send_iop_command_and_wait) func_0012E548
+    __attribute__((alias("FUN_0012e548")));

@@ -22,8 +22,7 @@ extern u64 __fixunsdfdi(f64 value);
 extern s64 ftoi(s64 bits);
 extern s32 kprintf();
 
-void printfloat(f64 x)
-{
+void printfloat(f64 x) {
     s32 exponent;
     s64 significand;
 

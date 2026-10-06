@@ -8,11 +8,10 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, float hi)
-{
+float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, float hi) {
     float t;
     float u;
     float r = 0.0f;
@@ -30,7 +29,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
         }
         u = 1.0f - t;
         if (flag != 0) {
-            r = FUN_001fa580(b, FUN_001fa5c8(c, b) * t);
+            r = fast_add_rotations(b, fast_subtract_rotations(c, b) * t);
         } else {
             r = b * u + c * t;
         }
@@ -47,8 +46,7 @@ extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
-unsigned char *FUN_L13_002e1c50(char *position, int moby_class)
-{
+unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
     unsigned char *moby = func_0020D348_m(moby_class);
     if (moby != 0) {
         moby[0x30] = 0xFF;
@@ -79,18 +77,18 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 extern char *FUN_L00_0026daa0(char *, int, int, int, float);
@@ -99,7 +97,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, int arg, float scale) {
+unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, int arg,
+                                float scale) {
     unsigned char *moby = func_0020D348_m(0x127);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -131,8 +130,9 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         if (*(char **)(data + 0x24) != 0) {
             qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
         }
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
-                                  (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+        *(float *)(moby + 0x2C) =
+            *(float *)(*(char **)(moby + 0x24) + 0x24) *
+            (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
         FUN_L00_00250df8(moby);
         FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }

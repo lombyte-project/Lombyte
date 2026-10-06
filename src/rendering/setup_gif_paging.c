@@ -48,8 +48,7 @@ void setup_gif_paging(int arg0) {
     }
     if (arg0 == 0) {
         for (i = 0; i < *(int *)(*(char **)(PagingArena() + 0x18) + 0x44); i++) {
-            unsigned short *el = (unsigned short *)(i * 8
-                + *(int *)(PagingArena() + 0x24) + 4);
+            unsigned short *el = (unsigned short *)(i * 8 + *(int *)(PagingArena() + 0x24) + 4);
 
             if (*el >= (D_0015EE8C >> 8)) {
                 *el = 0;

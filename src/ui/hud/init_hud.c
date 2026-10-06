@@ -1,4 +1,4 @@
-#include "rnc/ui_hud_init_hud_types.h"
+#include "rnc/ui/hud/init_hud.h"
 #include "types.h"
 
 extern u8 D_0015F6D8[];
@@ -9,8 +9,8 @@ extern s32 D_0015FA0C;
 extern u8 D_00199B60[];
 extern s32 D_0019A3E8[];
 extern s32 func_001F9810();
-extern s32 func_001FF288();
-extern s32 func_001FF308();
+extern s32 hud_heap_alloc() __asm__("func_001FF288");
+extern s32 queue_animation_update() __asm__("func_001FF308");
 /* retail small-data globals, declared to GAS before the body */
 
 void init_hud(void) __asm__("FUN_001fee88");
@@ -30,7 +30,7 @@ void init_hud(void) {
     do {
         var_16_16->unk40 = -1;
         *(s32 *)((u8 *)var_16_16 - 0x4) = 0x10000;
-        func_001FF308(var_17_14, 0xFFFF, 0, 0, 0, 0, 1);
+        queue_animation_update(var_17_14, 0xFFFF, 0, 0, 0, 0, 1);
         var_17_14 += 1;
         var_16_16->unk58 = 0;
         var_16_16->unk48 = -6;
@@ -40,8 +40,8 @@ void init_hud(void) {
     } while (var_17_14 < 0xD);
     temp_2_41 = D_0015FA00;
     if (temp_2_41 == NULL) {
-        D_0015FA00 = func_001FF288(0x2800, 0, D_0015F6D8, 0x115);
-        D_0015FA0C = func_001FF288(0x1400, 0, D_0015F6D8, 0x116);
+        D_0015FA00 = hud_heap_alloc(0x2800, 0, D_0015F6D8, 0x115);
+        D_0015FA0C = hud_heap_alloc(0x1400, 0, D_0015F6D8, 0x116);
     }
     D_0015FA08 = (s32)((u8 *)D_0015FA00 + 0x2800);
     D_0015FA04 = (s32)D_0015FA00;

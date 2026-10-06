@@ -35,7 +35,8 @@ s32 sceGsSetDefDrawEnv(struct GsDrawEnv1 *draw, s16 psm, s16 w, s16 h, s16 ztest
     draw->zbuf1addr = 0x4E;
     if (ztest == 0) {
         zbp = sceGszbufaddr(psm, w, h);
-        draw->zbuf1 = (unsigned long)zbp | ((unsigned long)(zpsm & 0xF) << 24) | ((unsigned long)1 << 32);
+        draw->zbuf1 =
+            (unsigned long)zbp | ((unsigned long)(zpsm & 0xF) << 24) | ((unsigned long)1 << 32);
     } else {
         zbp = sceGszbufaddr(psm, w, h);
         draw->zbuf1 = (unsigned long)zbp | ((unsigned long)(zpsm & 0xF) << 24);

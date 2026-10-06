@@ -4,7 +4,7 @@ extern char D_0013D290[];
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_001A04C0[];
 extern int D_001A07C0[];
-extern int func_0020AD78(void *dst, int i, int *table);
+extern int memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
 extern void FUN_00208770(void);
@@ -81,8 +81,8 @@ int memcard_save_data(int slot, int flags) {
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x2C) = D_0015EE24;
         memcpy(names + *(int *)(q + 0x14) * 0x1C, D_0015EE98, 8);
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x28) = D_0015EE20;
-        func_0020AD78(D_0014EED0, 0, D_001A04C0);
-        func_0020AD78(D_001506D0, *(int *)(q + 0xC8), D_001A07C0);
+        memcard_prepare_data(D_0014EED0, 0, D_001A04C0);
+        memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), D_001A07C0);
         if (flags >= 0) {
             D_0013DD58[D_0015ED84] = saved;
             D_0015ED84 = *(int *)(q + 0xC8);
@@ -92,11 +92,10 @@ int memcard_save_data(int slot, int flags) {
             *(int *)(q + 0xE0) = *(int *)(q + 0xC0);
         }
     }
-done:
-    {
-        char *r = D_0013D290;
-        return *(int *)(r + 0xDC) == 0xF;
-    }
+done: {
+    char *r = D_0013D290;
+    return *(int *)(r + 0xDC) == 0xF;
+}
 }
 
 extern __typeof__(memcard_save_data) func_0020B178 __attribute__((alias("FUN_0020b178")));

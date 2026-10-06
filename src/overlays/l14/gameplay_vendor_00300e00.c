@@ -13,8 +13,7 @@ extern u8 *D_L14_00167500 __attribute__((section(".data")));
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
  * constants, and set both floats on the record itself. */
-void FUN_L14_003135b8(u8 *arg0)
-{
+void FUN_L14_003135b8(u8 *arg0) {
     u8 *g = D_L14_00167500;
     u8 *q;
     u8 *p;
@@ -33,24 +32,21 @@ void FUN_L14_003135b8(u8 *arg0)
 
 /* 0x003167E0, 36 bytes.  While the executable's mode word is not 0xF, mark the
  * object's field at 0x7E as 3. */
-void FUN_L14_003167e0(u8 *arg0)
-{
+void FUN_L14_003167e0(u8 *arg0) {
     if (D_001413DC != 0x0F) {
         *(s16 *)(arg0 + 0x7E) = 3;
     }
 }
 
-
-extern u8 *FUN_0020c4f8(s32);
+extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(u8 *);
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
  * allocation, null when it failed.  The two 16-byte copies go through $2 with
  * each address in its own register -- the qcopy idiom, see include/qcopy.h. */
-u8 *FUN_L14_00306158(u8 *self)
-{
-    u8 *o = FUN_0020c4f8(0x574);
+u8 *FUN_L14_00306158(u8 *self) {
+    u8 *o = create_moby(0x574);
 
     if (o != 0) {
         qcopy(o + 0x10, self + 0x10);
@@ -127,7 +123,8 @@ extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0(int, int, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
+extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx,
+                                       int flag, int s, int mode);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -213,8 +210,10 @@ void FUN_L14_00307510(char *moby) {
     *(int *)(d + 0x70) = 0;
     *(int *)(d + 0x74) = 0;
     qcopy(moby + 0x10, p + 0x10);
-    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10), *(float *)(p + 0x24) - *(float *)(p + 0x14));
-    *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) = *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
+    *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)(p + 0x20) - *(float *)(p + 0x10),
+                                           *(float *)(p + 0x24) - *(float *)(p + 0x14));
+    *(float *)(d + 0x90) = *(float *)(d + 0x94) = *(float *)(d + 0x98) = *(float *)(d + 0x80) =
+        *(float *)(d + 0x84) = *(float *)(d + 0x88) = 0.0f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
 extern void FUN_L12_002e71b0(void);
@@ -277,7 +276,8 @@ void FUN_L14_003087c0(unsigned char *moby) {
             v = D_L14_0016CF60.state - 3;
             if (v < 3) {
                 i = 0;
-                if (v <= D_L14_0015F5C4) i = moby[0x20];
+                if (v <= D_L14_0015F5C4)
+                    i = moby[0x20];
                 FUN_L00_002637f8(D_L14_0016CF60.v178[i]);
             }
         }
@@ -298,15 +298,20 @@ extern char D_0013E633_15920[] __asm__("D_001413DC");
 int FUN_L14_00315920(char *a, char *b) {
     char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(a + 0x84) * 32 + 0x1C);
     int t, u;
-    if (*(unsigned char *)(rec + 0x38) != 0) return -1;
+    if (*(unsigned char *)(rec + 0x38) != 0)
+        return -1;
     if (b != 0 && *(short *)(b + 0x7E) == 0) {
-        if (*(int *)(D_0013E633_15920) != 15) return 0;
+        if (*(int *)(D_0013E633_15920) != 15)
+            return 0;
     }
-    if (func_L10_002F6E38_15920(a) == 0) return 0;
+    if (func_L10_002F6E38_15920(a) == 0)
+        return 0;
     t = *(int *)(rec + 0x48);
-    if (t >= 0 && *(int *)(D_0013E633_15920) != t) return 0;
+    if (t >= 0 && *(int *)(D_0013E633_15920) != t)
+        return 0;
     u = *(int *)(rec + 0x44);
-    if (u >= 0 && *(int *)(D_0013E633_15920 - 0x8) != u) return 0;
+    if (u >= 0 && *(int *)(D_0013E633_15920 - 0x8) != u)
+        return 0;
     return 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_003159d8.s", FUN_L14_003159d8);

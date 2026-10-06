@@ -53,8 +53,8 @@ typedef struct {
     int type;
 } sceMpegCbData;
 typedef struct {
-    sceMpeg mpeg;     /* 0x00 */
-    ViBuf vibuf;      /* 0x48 */
+    sceMpeg mpeg;       /* 0x00 */
+    ViBuf vibuf;        /* 0x48 */
     unsigned int state; /* 0xA8 */
     int sema;
     int hid_endimage;
@@ -67,12 +67,12 @@ typedef struct {
 } MovieGlobals;
 extern MovieGlobals *D_0016120C MACRO_ADDR;
 #define videoDec (D_0016120C->videoDec)
-extern int func_0023C170(ViBuf *); /* viBufStopDMA */
+extern int vi_buf_stop_dma(ViBuf *) __asm__("func_0023C170"); /* viBufStopDMA */
 /* mpegStopDMA */
 int mpeg_stop_dma(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData) __asm__("FUN_0023d0e0");
 
 int mpeg_stop_dma(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData) {
-    func_0023C170(&videoDec.vibuf);
+    vi_buf_stop_dma(&videoDec.vibuf);
     return 1;
 }
 

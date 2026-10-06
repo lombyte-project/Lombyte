@@ -1,3 +1,4 @@
+#include "rnc/ui/map/map_state.h"
 #include "types.h"
 
 struct Pad {
@@ -34,33 +35,6 @@ struct MapHdr {
     s32 unk18;
 };
 
-struct MapState {
-    u8 pad0[0xC];
-    s32 unkC;
-    u8 pad10[0x214];
-    s32 cur;
-    s32 loaded;
-    s32 unk22C;
-    s32 unk230;
-    s32 unk234;
-    u8 pad238[0x4];
-    struct MapHdr *hdr;
-    s32 unk240;
-    s32 unk244;
-    s32 unk248;
-    s32 unk24C;
-    s32 unk250;
-    u8 pad254[0x4];
-    s64 unk258;
-    s64 unk260;
-    s64 unk268;
-    u8 pad270[0x8];
-    s32 slot[5];
-    s32 flags[5];
-    s32 sel;
-    s32 vals[5];
-};
-
 struct MapEntry {
     s32 a;
     s32 b;
@@ -80,7 +54,6 @@ struct Hdr16 {
 
 extern struct Pad D_0013C940;
 extern struct MenuSys D_001D5BF0;
-extern struct MapState D_001A00F0;
 extern struct Hdr16 D_001516D0;
 extern s32 D_001D5D14[];
 extern u8 *D_001D5BF8[];
@@ -113,13 +86,12 @@ extern s32 func_0020B618_l() __asm__("FUN_0020b618");
 extern s64 func_00204E30();
 extern void load_map_chunk() __asm__("FUN_00207bb0");
 extern void FUN_0020b4a8();
-extern void func_0020BF90();
-extern void func_0022DA68();
+extern void update_map_icons() __asm__("func_0020BF90");
+extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 draw_map_screen(struct Screen *arg0) __asm__("FUN_0021be60");
 
-s32 draw_map_screen(struct Screen *arg0)
-{
+s32 draw_map_screen(struct Screen *arg0) {
     s32 prev;
     s32 idx;
     s32 t;
@@ -164,7 +136,7 @@ s32 draw_map_screen(struct Screen *arg0)
             D_001D5BF0.unkF4 = 0xB;
             D_001D5BF0.unkC = 3;
             D_001D5BF0.unkE4 = D_001A00F0.cur;
-            func_0022DA68(0, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
             return 0;
         }
         idx = find_id_in_terminated_table(D_001A00F0.cur);
@@ -184,7 +156,7 @@ s32 draw_map_screen(struct Screen *arg0)
             }
         }
         if (D_001A00F0.cur != prev) {
-            func_0022DA68(1, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
             update_mission_list();
         }
     }
@@ -204,11 +176,11 @@ s32 draw_map_screen(struct Screen *arg0)
         }
         func_0020B618_l(D_001A00F0.slot[slot], D_001A00F0.hdr);
         hdr = D_001A00F0.hdr;
-        pix = (u8 *) hdr + hdr->unk8;
-        pal = (u8 *) hdr + hdr->unkC;
+        pix = (u8 *)hdr + hdr->unk8;
+        pal = (u8 *)hdr + hdr->unkC;
         buf = select_next_stream_buffer(0);
         if (buf != 0) {
-            base = (u8 *) D_001A00F0.hdr;
+            base = (u8 *)D_001A00F0.hdr;
             a = base + hdr->unk0 + 8;
             if (D_001A00F0.cur == D_0015ED84) {
                 compose_bitmap_from_mask(pal, pix, pal, D_001A00F0.unkC);
@@ -222,13 +194,16 @@ s32 draw_map_screen(struct Screen *arg0)
             }
         }
         if (!(arg0->unk34 & 0x80)) {
-            tbase = (u8 *) D_001A00F0.hdr;
+            tbase = (u8 *)D_001A00F0.hdr;
             tex = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;
             c = tbase + hdr->unk18 + 0x420;
-            D_001A00F0.unk258 = func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
-            D_001A00F0.unk260 = func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
-            D_001A00F0.unk268 = func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
+            D_001A00F0.unk258 =
+                func_00204E30(7, 7, tex + 0x20, tex + 0x420, D_001A00F0.unk244, D_001A00F0.unk248);
+            D_001A00F0.unk260 =
+                func_00204E30(7, 7, tex + 0x20, b, D_001A00F0.unk244, D_001A00F0.unk24C);
+            D_001A00F0.unk268 =
+                func_00204E30(7, 7, tex + 0x20, c, D_001A00F0.unk244, D_001A00F0.unk250);
             if (buf != 0) {
                 func_00204E30(9, 9, pal, pal, 0x3FF000, D_001A00F0.unk240);
             }
@@ -237,15 +212,15 @@ s32 draw_map_screen(struct Screen *arg0)
         if (buf != 0) {
             complete_stream_buffer_transfer(buf);
         }
-        D_001A00F0.slot[0] = (s32) pix;
+        D_001A00F0.slot[0] = (s32)pix;
         D_001A00F0.loaded = D_001A00F0.cur;
-        func_0020BF90(D_001A00F0.cur, 0);
+        update_map_icons(D_001A00F0.cur, 0);
     }
 
     if (D_001516D0.unk8 == 0) {
         if (D_001A00F0.sel != -1) {
             D_001D5CBB[0] = 0;
-            D_001A00F0.flags[D_001A00F0.sel] ^= 0x1000;
+            D_001A00F0.slot_id[D_001A00F0.sel] ^= 0x1000;
             D_001A00F0.sel = -1;
         }
     }
@@ -257,8 +232,9 @@ s32 draw_map_screen(struct Screen *arg0)
             if (next != -1) {
                 k = (D_0015ED84 + D_001A00F0.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
-                    stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0, D_001A00F0.unk234, 0);
-                    D_001A00F0.vals[pick] = D_001A00F0.unk234;
+                    stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0,
+                                       D_001A00F0.unk234, 0);
+                    D_001A00F0.slot_size[pick] = D_001A00F0.unk234;
                 } else {
                     if (next & 0x100) {
                         e = &D_00138438[next ^ 0x100];
@@ -267,9 +243,9 @@ s32 draw_map_screen(struct Screen *arg0)
                     }
                     start_audio_stream_read(D_001A00F0.slot[pick], e->a, e->b);
                     D_001D5CBB[0] = 1;
-                    D_001A00F0.vals[pick] = (e->b << 11) >> 4;
+                    D_001A00F0.slot_size[pick] = (e->b << 11) >> 4;
                 }
-                D_001A00F0.flags[pick] = next | 0x1000;
+                D_001A00F0.slot_id[pick] = next | 0x1000;
                 D_001A00F0.sel = pick;
             }
         }

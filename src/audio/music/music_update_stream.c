@@ -1,23 +1,24 @@
 /* Ported from rac1-decomp (src/game/music.c, func_00216F48). */
-extern void func_0012ECA0(void *);
+extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");
 typedef struct {
     unsigned int handle; /* 0x00: 0 none, 0xFFFFFFFF starting/released */
     short id;            /* 0x04 */
     short unk06;
     short unk08;
-    short state;         /* 0x0A: low bits the state, 0x8000 paused */
-    short fade;          /* 0x0C: 0x8000 fading */
-    short fadeT;         /* 0x0E */
+    short state; /* 0x0A: low bits the state, 0x8000 paused */
+    short fade;  /* 0x0C: 0x8000 fading */
+    short fadeT; /* 0x0E */
 } MusicPlaying;
-extern void func_0012E368(int);
-extern void FUN_0012ec70(int);
+extern void snd_stop_sound(int) __asm__("func_0012E368");
+extern void snd_pause_vag_stream(int) __asm__("FUN_0012ec70");
 extern int FUN_001f9770(void *);
-extern void FUN_0012ecd0(int, void (*)(int, long), long);
-extern void FUN_0012e448(int, void (*)(int, long), long);
-extern void FUN_0012ed00(int, void (*)(int, long), long);
-extern void FUN_00216bc0(int, long);
-extern void func_00216B68(int, long);
-extern void FUN_00216990(int, long);
+extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long),
+                                                 long) __asm__("FUN_0012ecd0");
+extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");
+extern void snd_is_vag_stream_buffered_cb(int, void (*)(int, long), long) __asm__("FUN_0012ed00");
+extern void music_remaining_time_callback(int, long) __asm__("FUN_00216bc0");
+extern void set_sound_handle_id(int, long) __asm__("func_00216B68");
+extern void music_channel_ready_callback(int, long) __asm__("FUN_00216990");
 /* music_UpdateStream(music_Playing &): with a live handle and state other
    than 9, state 5 stops the stream (state 6) and state 6 without a
    handle resets; a fading record (+0xC bit 15) pauses the handle once
@@ -38,7 +39,7 @@ void music_update_stream(MusicPlaying *p) {
     if (p->state != 9 && p->handle != 0 && p->handle != 0xFFFFFFFF) {
         if (p->state == 5) {
             if (p->handle != 0) {
-                func_0012E368(p->handle);
+                snd_stop_sound(p->handle);
                 p->state = 6;
             } else {
                 p->state = 0;
@@ -53,14 +54,14 @@ void music_update_stream(MusicPlaying *p) {
         }
         if (p->fade & 0x8000) {
             if (!(p->state & 0x8000)) {
-                FUN_0012ec70(p->handle);
+                snd_pause_vag_stream(p->handle);
                 p->state |= 0x8000;
             }
             if (FUN_001f9770(&p->fadeT) == 2) {
                 p->fade = 4;
             }
         } else if (p->state & 0x8000) {
-            func_0012ECA0((void *)p->handle);
+            snd_continue_vag_stream((void *)p->handle);
             p->state ^= 0x8000;
         }
         if (p->state & 0x8000) {
@@ -72,12 +73,14 @@ void music_update_stream(MusicPlaying *p) {
         if (p->state != 2 && p->state != 3) {
             h = p->handle;
             p->handle = 0xFFFFFFFF;
-            FUN_0012ecd0(h, FUN_00216bc0, (long)(unsigned int)p);
-            FUN_0012e448(h, func_00216B68, (long)(unsigned int)p);
+            snd_get_vag_stream_time_remaining_cb(h, music_remaining_time_callback,
+                                                 (long)(unsigned int)p);
+            snd_sound_is_still_playing_cb(h, set_sound_handle_id, (long)(unsigned int)p);
             return;
         }
         if (p->handle != 0xFFFFFFFF && p->state == 2) {
-            FUN_0012ed00(p->handle, FUN_00216990, (long)(unsigned int)p);
+            snd_is_vag_stream_buffered_cb(p->handle, music_channel_ready_callback,
+                                          (long)(unsigned int)p);
         }
     } else if (p->state == 7 || p->handle == 0) {
         p->state = 0;

@@ -14,7 +14,7 @@ extern char D_00153518[];
 extern char D_00153540[];
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(SifClientData *, u32, u32);
-extern void func_00124A20(const char *fmt, ...);
+extern void debug_print_stub(const char *fmt, ...) __asm__("func_00124A20");
 extern void exit(s32);
 extern s32 sceDbcGetModVersion(void);
 extern void sceDbcSetWorkAddr(void *addr);
@@ -28,7 +28,7 @@ s32 sceDbcInit(void) {
     sceSifInitRpc(0);
     while (1) {
         if (sceSifBindRpc(&D_0015B008, 0x80000900, 0) < 0) {
-            func_00124A20(D_001534D8);
+            debug_print_stub(D_001534D8);
             exit(-1);
         }
         if (D_0015B008.server != 0) {
@@ -40,7 +40,7 @@ s32 sceDbcInit(void) {
     }
     while (1) {
         if (sceSifBindRpc(&D_0015B030, 0x8000091B, 0) < 0) {
-            func_00124A20(D_001534D8);
+            debug_print_stub(D_001534D8);
             exit(-1);
         }
         if (D_0015B030.server != 0) {
@@ -60,7 +60,7 @@ s32 sceDbcInit(void) {
     for (i = 15; i >= 0; i--) {
         D_0015B500[i] = 0;
     }
-    func_00124A20(D_00153540, D_0015B480);
+    debug_print_stub(D_00153540, D_0015B480);
     sceDbcSetWorkAddr(D_0015B480);
     return 1;
 }

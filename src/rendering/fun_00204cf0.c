@@ -5,23 +5,23 @@ extern int FUN_001f97a0(int);
 extern int D_0015EE74 MACRO_ADDR;
 extern int D_0015F458 MACRO_ADDR;
 typedef struct {
-    int addr;            /* +0 */
-    short unk4;          /* +4 */
-    short cbp;           /* +6 */
-    int unk8;            /* +8 */
-    unsigned char tw;    /* +C */
-    unsigned char th;    /* +D */
-    short tbp;           /* +E */
+    int addr;         /* +0 */
+    short unk4;       /* +4 */
+    short cbp;        /* +6 */
+    int unk8;         /* +8 */
+    unsigned char tw; /* +C */
+    unsigned char th; /* +D */
+    short tbp;        /* +E */
 } TexSlot;
 extern TexSlot D_0018D040[];
 typedef struct {
-    char *clut;          /* 0x00 */
-    char *pix;           /* 0x04 */
+    char *clut; /* 0x00 */
+    char *pix;  /* 0x04 */
     char pad08[0xC];
-    int clutSize;        /* 0x14 */
+    int clutSize; /* 0x14 */
     char pad18[0x34];
-    int tw;              /* 0x4C */
-    int th;              /* 0x50 */
+    int tw; /* 0x4C */
+    int th; /* 0x50 */
     char pad54[0xC];
 } TexDesc;
 

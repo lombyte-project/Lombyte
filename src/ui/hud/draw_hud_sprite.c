@@ -34,7 +34,7 @@ struct ScreenOfs {
 extern struct TagPtr D_00160F00;
 extern struct TexBank D_0019A3E8;
 extern struct ScreenOfs D_0013E500;
-extern u64 func_001FFA10(s32);
+extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 
@@ -57,15 +57,15 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     D_00160F00.p = tag + 1;
     q[0] = 0x7400000000008001;
     q[1] = 0x5353106;
-    q[2] = func_001FFA10(id);
+    q[2] = get_frame_texture(id);
     q[3] = 0x156;
     q[4] = ((u64)alpha << 24) | 0x7F7F7F;
     q[5] = 0;
     q[6] = (((x << 4) + D_0013E500.x) - 8) | ((u64)(((y << 4) + D_0013E500.y) - 8) << 16) |
            ((u64)D_0019A3E8.z << 32);
     q[7] = (th << 20) + (tw << 4);
-    q[8] = ((((x + w) << 4) + D_0013E500.x) - 8) | ((u64)((((y + h) << 4) + D_0013E500.y) - 8) << 16) |
-           ((u64)D_0019A3E8.z << 32);
+    q[8] = ((((x + w) << 4) + D_0013E500.x) - 8) |
+           ((u64)((((y + h) << 4) + D_0013E500.y) - 8) << 16) | ((u64)D_0019A3E8.z << 32);
     q[9] = 0;
     D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x50);
 }

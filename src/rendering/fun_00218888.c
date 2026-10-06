@@ -2,7 +2,10 @@
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union { u128 q; f32 f[4]; } Vec4;
+typedef union {
+    u128 q;
+    f32 f[4];
+} Vec4;
 
 struct Sub {
     s32 a;
@@ -33,12 +36,13 @@ struct Obj {
 extern u8 *D_001CDF80[];
 extern u8 *D_001CDFDC[];
 extern struct Obj *FUN_00217a30(s32);
-extern s32 func_001FA6D0(f32);
-extern f32 func_002132A8(f32, f32);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void func_00214A98(void *, void *);
-extern void func_00214BC0(void *, void *);
+extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
 
-struct Obj *FUN_00218888(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) {
+struct Obj *FUN_00218888(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
+                         s32 arg7, s32 arg8) {
     struct Obj *o;
     struct Sub *s;
     f32 t0[4];
@@ -48,11 +52,11 @@ struct Obj *FUN_00218888(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s
     if (o != 0) {
         qcopy(&o->q10, arg0);
         o->w4 = arg3;
-        o->b9 = func_001FA6D0(4.0f) + 0x40;
+        o->b9 = truncate_float_to_s32(4.0f) + 0x40;
         o->fC = 0.0f;
         o->b1 = 0;
         o->b3 = 0x44;
-        o->b8 = func_001FA6D0(func_002132A8(o->fC, 255.0f));
+        o->b8 = truncate_float_to_s32(random_float_between(o->fC, 255.0f));
         if (arg8 == -1) {
             o->b2 = *D_001CDFDC[0];
         } else {
@@ -63,12 +67,12 @@ struct Obj *FUN_00218888(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s
         }
         o->hA = arg5;
         s = &o->sub;
-        s->h16 = func_001FA6D0(arg1[3] * 210000.0f / 1000.0f);
-        s->h18 = func_001FA6D0(arg2[3] * 210000.0f / 1000.0f);
+        s->h16 = truncate_float_to_s32(arg1[3] * 210000.0f / 1000.0f);
+        s->h18 = truncate_float_to_s32(arg2[3] * 210000.0f / 1000.0f);
         func_00214A98(arg1, &s->a);
         func_00214A98(arg2, &s->b);
-        func_00214BC0(t0, &s->a);
-        func_00214BC0(t1, &s->b);
+        load_display_text_resource_entry(t0, &s->a);
+        load_display_text_resource_entry(t1, &s->b);
         s->c = arg3;
         s->d = arg4;
         s->h10 = arg5;

@@ -2,7 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -13,9 +12,17 @@
 
 typedef int u128 __attribute__((mode(TI)));
 
-typedef struct { int a; int b; int c; char pad[0x20]; } T2C_231228;
+typedef struct {
+    int a;
+    int b;
+    int c;
+    char pad[0x20];
+} T2C_231228;
 
-typedef struct { char pad[0x694]; float f694; } H694_231228;
+typedef struct {
+    char pad[0x694];
+    float f694;
+} H694_231228;
 
 extern char D_L08_0017C760_e[] __asm__("D_L08_0017C760");
 extern char D_L08_0017C720_e[] __asm__("D_L08_0017C720");
@@ -32,12 +39,12 @@ extern float D_0015ED70;
 extern float D_L08_0017C5F0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float dot_vectors_xyz(void *a, void *b);
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern unsigned char D_0015EDB5;
@@ -55,8 +62,8 @@ extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float d);
 extern int FUN_L01_00226f10(int a);
-extern int scale_game_frames(int);
-extern int truncate_float_to_s32(float);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L08_0015F6D8 __attribute__((sda));
 extern short D_L08_0015F688 __attribute__((sda));
 extern short D_L08_0015F6E8 __attribute__((sda));
@@ -84,7 +91,7 @@ extern void FUN_L00_00262840(char *o);
 extern void FUN_L00_002a3ec8(void *, int, int, float, float, float, float);
 extern void FUN_L01_002405a0(void);
 extern void FillTransferWords(void *, int, int);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -100,14 +107,17 @@ int FUN_L08_00230b38(int a, int b) {
     float vec[4];
     {
         char *p = ((char *)&D_0013F350);
-        if (*(int *)(p + 0x208C) == 0x14 && (a != 0x64 || b != 2)) return 0;
+        if (*(int *)(p + 0x208C) == 0x14 && (a != 0x64 || b != 2))
+            return 0;
     }
-    if ((D_L08_0015F5C4 == 2 || D_L08_0015F5C4 == 6) && b != 2) return 0;
+    if ((D_L08_0015F5C4 == 2 || D_L08_0015F5C4 == 6) && b != 2)
+        return 0;
     {
         char *p = ((char *)&D_0013F350);
-        if (*(int *)(p + 0x22A8) == 0 && (*(int *)(p + 0x208C) == 2 || *(int *)(p + 0x208C) == 7)
-            && a != 6 && a != 0x3D && a != 0x47 && a != 0x57 && a != 0x62 && a != 0x77
-            && a != 0x7B && a != 0x7C && a != 0x7F && a != 0x6A && a != 0x80 && a != 0x82) return 0;
+        if (*(int *)(p + 0x22A8) == 0 && (*(int *)(p + 0x208C) == 2 || *(int *)(p + 0x208C) == 7) &&
+            a != 6 && a != 0x3D && a != 0x47 && a != 0x57 && a != 0x62 && a != 0x77 && a != 0x7B &&
+            a != 0x7C && a != 0x7F && a != 0x6A && a != 0x80 && a != 0x82)
+            return 0;
     }
     {
         char *p = ((char *)&D_0013F350);
@@ -204,7 +214,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 0x14;
         *(int *)(p + 0x2284) = 0;
         qcopy(p + 0x150, p + 0x110);
-        if (b) FUN_L00_002323b8(0x45, 0, (float)scale_game_frames(0xC));
+        if (b)
+            FUN_L00_002323b8(0x45, 0, (float)scale_game_frames(0xC));
         break;
     }
     case 0x80: {
@@ -214,7 +225,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x22A8) = 0;
         qcopy(p + 0x150, p + 0x110);
         FUN_L00_0025f730(p + 0x150, D_0015ED6C * 3.5f);
-        if (b) FUN_L00_002323b8(0x7C, 0, (float)scale_game_frames(0xC));
+        if (b)
+            FUN_L00_002323b8(0x7C, 0, (float)scale_game_frames(0xC));
         break;
     }
     case 0x7F: {
@@ -224,11 +236,13 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x22A8) = 0;
         *(float *)(p + 0x694) = *(float *)(p + 0x108) * 0.2f;
         *(float *)(p + 0x69C) = *(float *)(p + 0x2F0) - 0.37f;
-        if (*(float *)(p + 0x694) < D_0015ED6C * -7.0f) ((H694_231228 *)p)->f694 = D_0015ED6C * -7.0f;
+        if (*(float *)(p + 0x694) < D_0015ED6C * -7.0f)
+            ((H694_231228 *)p)->f694 = D_0015ED6C * -7.0f;
         *(unsigned char *)(p + 0x20A7) = 1;
         *(int *)(p + 0x6A0) = 0;
         *(float *)(p + 0x690) = *(float *)(p + 0x88) - *(float *)(p + 0x69C);
-        if (b) FUN_L00_002323b8(0x74, 0, (float)scale_game_frames(0xB));
+        if (b)
+            FUN_L00_002323b8(0x74, 0, (float)scale_game_frames(0xB));
         break;
     }
     case 0x33: {
@@ -249,7 +263,8 @@ int FUN_L08_00230b38(int a, int b) {
             *(int *)(q + 0xFF8) = 0x68;
             *(int *)(q + 0x8E0) = 0;
             n = scale_game_frames(0xC);
-            if (b) FUN_L00_002323b8(0x3B, 0, (float)n);
+            if (b)
+                FUN_L00_002323b8(0x3B, 0, (float)n);
         }
         break;
     }
@@ -267,8 +282,10 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x8E0) = 0;
         *(int *)(p + 0xFF8) = 0x68;
         n = scale_game_frames(0xB);
-        if (*(int *)(p + 0x2090) == 0x33) n = scale_game_frames(0xF);
-        if (b) FUN_L00_002323b8(0x3D, 0, (float)n);
+        if (*(int *)(p + 0x2090) == 0x33)
+            n = scale_game_frames(0xF);
+        if (b)
+            FUN_L00_002323b8(0x3D, 0, (float)n);
         break;
     }
     case 0x34: {
@@ -282,8 +299,10 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0xFF8) = 0x68;
         n = scale_game_frames(0x23);
         t = -2;
-        if (*(int *)(p + 0x2090) != 0x35) t = n;
-        if (b) FUN_L00_002323b8(0x3C, 0, (float)t);
+        if (*(int *)(p + 0x2090) != 0x35)
+            t = n;
+        if (b)
+            FUN_L00_002323b8(0x3C, 0, (float)t);
         break;
     }
     case 0x37: {
@@ -295,15 +314,18 @@ int FUN_L08_00230b38(int a, int b) {
         if (*(int *)(p + 0x2094) == 0x11) {
             FUN_L00_00209ca8(3, 0xA, 0);
             if (D_L08_001612D0 != 0) {
-                FUN_L00_002a3ec8(D_L08_001612D0, D_L08_001612D8, 0, *(float *)(p + 0x80), *(float *)(p + 0x84), 0.4f, 0.3f);
+                FUN_L00_002a3ec8(D_L08_001612D0, D_L08_001612D8, 0, *(float *)(p + 0x80),
+                                 *(float *)(p + 0x84), 0.4f, 0.3f);
             }
         } else if (*(float *)(p + 0x108) < D_0015ED6C * -0.5f) {
             int n = truncate_float_to_s32(AbsoluteFloat(*(float *)(p + 0x108)) * 300.0f);
             int v = n;
-            if (n > 0x28) v = 0x28;
+            if (n > 0x28)
+                v = 0x28;
             FUN_L00_00209ca8(3, v, 1);
             if (D_L08_001612D0 != 0) {
-                FUN_L00_002a3ec8(D_L08_001612D0, D_L08_001612D8, 0, *(float *)(p + 0x80), *(float *)(p + 0x84), 0.5f, -0.4f);
+                FUN_L00_002a3ec8(D_L08_001612D0, D_L08_001612D8, 0, *(float *)(p + 0x80),
+                                 *(float *)(p + 0x84), 0.5f, -0.4f);
             }
             *(short *)(p + 0x90A) = scale_game_frames(0x4B);
         }
@@ -333,7 +355,8 @@ int FUN_L08_00230b38(int a, int b) {
         {
             char *s = ((char *)&D_0013F350);
             *(float *)(s + 0x694) = *(float *)(s + 0x108) * 0.37f;
-            if (*(float *)(s + 0x694) < D_0015ED6C * -7.0f) *(float *)(s + 0x694) = D_0015ED6C * -7.0f;
+            if (*(float *)(s + 0x694) < D_0015ED6C * -7.0f)
+                *(float *)(s + 0x694) = D_0015ED6C * -7.0f;
             *(float *)(s + 0x69C) = *(float *)(s + 0x2F0);
             *(int *)(s + 0x6A0) = 0;
             *(float *)(s + 0x690) = *(float *)(s + 0x88) - *(float *)(s + 0x69C) - -0.12f;
@@ -341,7 +364,8 @@ int FUN_L08_00230b38(int a, int b) {
             *(float *)(s + 0x158) = 0.0f;
             FUN_L00_0025f730(s + 0x150, D_0015ED6C * 5.5f);
             *(int *)(s + 0xFF8) = 0x68;
-            if (b) FUN_L00_002323b8(0x3A, 0, (float)scale_game_frames(0x16));
+            if (b)
+                FUN_L00_002323b8(0x3A, 0, (float)scale_game_frames(0x16));
         }
         break;
     }
@@ -372,7 +396,8 @@ int FUN_L08_00230b38(int a, int b) {
                 }
                 {
                     char *w = ((char *)&D_0013F350);
-                    *(float *)(*(char **)(w + 0x2080) + 0x54) = D_L08_0017C5F0[*(int *)(w + 0xAA0)][(*(int *)(w + 0xAA4))++];
+                    *(float *)(*(char **)(w + 0x2080) + 0x54) =
+                        D_L08_0017C5F0[*(int *)(w + 0xAA0)][(*(int *)(w + 0xAA4))++];
                 }
             }
         }
@@ -386,7 +411,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x8FC) = 0;
         *(int *)(p + 0x698) = scale_game_frames(0x2D);
         *(int *)(p + 0xFF8) = 0x68;
-        if (b) FUN_L00_002323b8(0x65, 0, (float)scale_game_frames(0x11));
+        if (b)
+            FUN_L00_002323b8(0x65, 0, (float)scale_game_frames(0x11));
         break;
     }
     case 0x6A: {
@@ -407,7 +433,8 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x62)) {
                 *(unsigned short *)(h + 0x62) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0x64) = *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0x64) =
+                *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
             q = ((char *)&D_0013F350);
             if (*(int *)(q + 0x910) >= 3) {
                 if (*(unsigned short *)(h + 0xE8) <= 0xFFFE) {
@@ -421,11 +448,13 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xEA)) {
                 *(unsigned short *)(h + 0xEA) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xEC) = *(unsigned int *)(h + 0xEC) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0xEC) =
+                *(unsigned int *)(h + 0xEC) | (1 << D_0015ED84) | 0x80000000;
             v = ((char *)&D_0013F4A0);
             qcopy(v, v - 0x40);
         }
-        if (b) FUN_L00_002323b8(0x5F, 0, (float)scale_game_frames(0xA));
+        if (b)
+            FUN_L00_002323b8(0x5F, 0, (float)scale_game_frames(0xA));
         break;
     }
     case 0x82: {
@@ -435,7 +464,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x2284) = 0;
         *(int *)(p + 0x22A8) = 0;
         qcopy(p + 0x150, p + 0x110);
-        if (b) FUN_L00_002323b8(0x80, 0, (float)scale_game_frames(0xA));
+        if (b)
+            FUN_L00_002323b8(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
     case 1: {
@@ -492,11 +522,14 @@ int FUN_L08_00230b38(int a, int b) {
         }
         {
             char *q = ((char *)&D_0013F350);
-            if (D_0015ED6C * 7.0f < *(float *)(q + 0x194)) *(float *)(q + 0x194) = D_0015ED6C * 7.0f;
+            if (D_0015ED6C * 7.0f < *(float *)(q + 0x194))
+                *(float *)(q + 0x194) = D_0015ED6C * 7.0f;
             *(short *)(q + 0x3BE) = 0;
             FUN_L00_002118c8(1.0f, 0);
-            if (1.5707964f < FUN_001fa688(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
-                if (*(int *)(q + 0x2094) == 7 || *(int *)(q + 0x2090) == 3 || *(int *)(q + 0x209C) == 3) {
+            if (1.5707964f <
+                fast_difference_between_rotations(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
+                if (*(int *)(q + 0x2094) == 7 || *(int *)(q + 0x2090) == 3 ||
+                    *(int *)(q + 0x209C) == 3) {
                     char *r = ((char *)&D_0013F350);
                     *(float *)(r + 0x194) = 0.0f;
                 }
@@ -524,16 +557,21 @@ int FUN_L08_00230b38(int a, int b) {
                 *(short *)(t + 0x3B8) = 0;
                 *(short *)(t + 0x3BC) = 0;
                 n = scale_game_frames(8);
-                if (*(int *)(t + 0x22A8) == 1) n = scale_game_frames(0xC);
-                if (*(int *)(t + 0x209C) == 0x23) n = scale_game_frames(0xF);
-                if (*(int *)(t + 0x209C) == 6 || *(int *)(t + 0x209C) == 0x2D) n = scale_game_frames(0x12);
+                if (*(int *)(t + 0x22A8) == 1)
+                    n = scale_game_frames(0xC);
+                if (*(int *)(t + 0x209C) == 0x23)
+                    n = scale_game_frames(0xF);
+                if (*(int *)(t + 0x209C) == 6 || *(int *)(t + 0x209C) == 0x2D)
+                    n = scale_game_frames(0x12);
                 {
                     char *u = ((char *)&D_0013F350);
-                    if (*(int *)(u + 0x20A0) == 4 && scale_game_frames(5) < *(int *)(u + 0x418)) n = scale_game_frames(0xD);
+                    if (*(int *)(u + 0x20A0) == 4 && scale_game_frames(5) < *(int *)(u + 0x418))
+                        n = scale_game_frames(0xD);
                 }
                 if (b) {
                     char *v = ((char *)&D_0013F350);
-                    FUN_L00_002323b8(*(int *)(v + 0x2088) + 3, ((int *)&D_L08_0015F6D8)[*(int *)(v + 0x2088)], (float)n);
+                    FUN_L00_002323b8(*(int *)(v + 0x2088) + 3,
+                                     ((int *)&D_L08_0015F6D8)[*(int *)(v + 0x2088)], (float)n);
                 }
             }
         }
@@ -558,14 +596,17 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x2284) = 0;
         *(float *)(p + 0x194) = vector_length_xy(p + 0x110);
         *(unsigned char *)(p + 0x20AC) = 1;
-        if (*(unsigned char *)(p + 0x20A4) == 0) FUN_L00_0020e698();
+        if (*(unsigned char *)(p + 0x20A4) == 0)
+            FUN_L00_0020e698();
         if (b) {
             if (*(unsigned char *)(p + 0x20A4) == 3) {
                 FUN_L00_002323b8(1, 0, (float)scale_game_frames(8));
             } else if (*(unsigned char *)(p + 0x20A4) == 1) {
                 FUN_L00_002323b8(2, 0, (float)scale_game_frames(8));
             } else if (*(unsigned char *)(p + 0x20A4) == 0) {
-                FUN_L00_002323b8(*(int *)(p + 0x2088) + 3, ((int *)&D_L08_0015F6D8)[*(int *)(p + 0x2088)], (float)scale_game_frames(8));
+                FUN_L00_002323b8(*(int *)(p + 0x2088) + 3,
+                                 ((int *)&D_L08_0015F6D8)[*(int *)(p + 0x2088)],
+                                 (float)scale_game_frames(8));
             }
         }
         break;
@@ -577,7 +618,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(unsigned char *)(p + 0x20A7) = 1;
         FillTransferWords(p + 0x9D0, 0, 0x20);
         qcopy(p + 0x150, p + 0x100);
-        if (b) FUN_L00_002323b8(0x64, 0, (float)scale_game_frames(0xF));
+        if (b)
+            FUN_L00_002323b8(0x64, 0, (float)scale_game_frames(0xF));
         break;
     }
     case 3: {
@@ -589,7 +631,8 @@ int FUN_L08_00230b38(int a, int b) {
             FUN_L08_00230b38(0x79, 1);
             return 0;
         }
-        if (FUN_L00_00229a98()) return 0;
+        if (FUN_L00_00229a98())
+            return 0;
         if (FUN_L01_00226f10(0) == 0x54) {
             if (FUN_L08_00230b38(0, 0)) {
                 FUN_L00_002323b8(FUN_L01_00226f10(0), 0, (float)scale_game_frames(0x12));
@@ -600,7 +643,8 @@ int FUN_L08_00230b38(int a, int b) {
             char *q = ((char *)&D_0013F350);
             float d = *(float *)(q + 0xAA8);
             int id = 6;
-            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
+            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+                id = 5;
             FUN_L00_002323b8(id, 4, (float)scale_game_frames(9));
         }
         break;
@@ -615,7 +659,8 @@ int FUN_L08_00230b38(int a, int b) {
         if (b) {
             int id = 6;
             float d = *(float *)(p + 0xAA8);
-            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
+            if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+                id = 5;
             FUN_L00_002323b8(id, 4, (float)scale_game_frames(9));
         }
         break;
@@ -625,7 +670,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 0xC;
         *(int *)(p + 0x2284) = 0;
         *(float *)(p + 0x194) = vector_length_xy(p + 0x110);
-        if (D_0015ED6C * 7.0f < *(float *)(p + 0x194)) *(float *)(p + 0x194) = D_0015ED6C * 7.0f;
+        if (D_0015ED6C * 7.0f < *(float *)(p + 0x194))
+            *(float *)(p + 0x194) = D_0015ED6C * 7.0f;
         if (*(unsigned char *)(p + 0x12EA) != 0 && *(short *)(p + 0x30C) == 0) {
             FUN_L08_00230b38(0x79, 1);
             return 0;
@@ -635,7 +681,8 @@ int FUN_L08_00230b38(int a, int b) {
             *(int *)(q + 0xFF8) = 0x68;
             qcopy(q + 0x150, q + 0x110);
             FUN_L00_0025f730(q + 0x150, D_0015ED6C * 7.0f);
-            if (D_0015ED6C * 3.5f < *(float *)(q + 0x168)) FUN_L00_00216de8(0xC, 0);
+            if (D_0015ED6C * 3.5f < *(float *)(q + 0x168))
+                FUN_L00_00216de8(0xC, 0);
             if (b) {
                 if (*(unsigned char *)(*(char **)(q + 0x2080) + 0x52) == FUN_L01_00226f10(0)) {
                     FUN_L00_002323b8(0xD, 2, (float)scale_game_frames(9));
@@ -659,9 +706,12 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x62)) {
                 *(unsigned short *)(h + 0x62) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0x64) = *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0x64) =
+                *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
         }
-        *(float *)(p + 0x180) = FUN_001f9e90(*(float *)(*(char **)(p + 0x964) + 0x10) - *(float *)(p + 0x80), *(float *)(*(char **)(p + 0x964) + 0x14) - *(float *)(p + 0x84));
+        *(float *)(p + 0x180) =
+            FUN_001f9e90(*(float *)(*(char **)(p + 0x964) + 0x10) - *(float *)(p + 0x80),
+                         *(float *)(*(char **)(p + 0x964) + 0x14) - *(float *)(p + 0x84));
         if (b) {
             FUN_L00_002323b8(0x2F, 2, (float)scale_game_frames(5));
             FUN_L00_002325e0(0xA, 0xE);
@@ -675,7 +725,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x960) = 0;
         *(int *)(p + 0x974) = 0;
         *(unsigned char *)(p + 0x20AC) = 1;
-        if (b) FUN_L00_002323b8(0x30, 1, (float)scale_game_frames(0xA));
+        if (b)
+            FUN_L00_002323b8(0x30, 1, (float)scale_game_frames(0xA));
         break;
     }
     case 0x26: {
@@ -686,7 +737,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x960) = 0;
         *(int *)(p + 0x974) = 0;
         *(float *)(p + 0x97C) = FUN_001f9b48(p + 0x80, *(char **)(p + 0x964) + 0x10);
-        if (b) FUN_L00_002323b8(0x30, 1, (float)scale_game_frames(5));
+        if (b)
+            FUN_L00_002323b8(0x30, 1, (float)scale_game_frames(5));
         break;
     }
     case 0x2C: {
@@ -702,7 +754,8 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x62)) {
                 *(unsigned short *)(h + 0x62) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0x64) = *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0x64) =
+                *(unsigned int *)(h + 0x64) | (1 << D_0015ED84) | 0x80000000;
         }
         *(short *)(p + 0x9BE) = 1;
         *(float *)(p + 0x9A8) = 0.0f;
@@ -726,10 +779,15 @@ int FUN_L08_00230b38(int a, int b) {
             *(float *)(q + 0x9CC) = D_0015ED6C * 11.0f;
             clear_vector(q + 0xA0);
             *(short *)(q + 0x1E6) = scale_game_frames(0x28);
-            if (*(float *)(d + 0x24) != 0.0f) *(float *)(q + 0x9C4) = *(float *)(d + 0x24);
-            if (*(float *)(d + 0x28) != 0.0f) *(float *)(q + 0x9C8) = *(float *)(d + 0x28);
-            if (*(float *)(d + 0x2C) != 0.0f) *(float *)(q + 0x9CC) = *(float *)(d + 0x2C);
-            *(float *)(q + 0x9AC) = FUN_001f9e90(*(float *)(*(char **)(q + 0x994) + 0x10) - *(float *)(q + 0x80), *(float *)(*(char **)(q + 0x994) + 0x14) - *(float *)(q + 0x84));
+            if (*(float *)(d + 0x24) != 0.0f)
+                *(float *)(q + 0x9C4) = *(float *)(d + 0x24);
+            if (*(float *)(d + 0x28) != 0.0f)
+                *(float *)(q + 0x9C8) = *(float *)(d + 0x28);
+            if (*(float *)(d + 0x2C) != 0.0f)
+                *(float *)(q + 0x9CC) = *(float *)(d + 0x2C);
+            *(float *)(q + 0x9AC) =
+                FUN_001f9e90(*(float *)(*(char **)(q + 0x994) + 0x10) - *(float *)(q + 0x80),
+                             *(float *)(*(char **)(q + 0x994) + 0x14) - *(float *)(q + 0x84));
             *(float *)(q + 0x9A4) = FUN_001f9b48(q + 0x80, *(char **)(q + 0x994) + 0x10);
             *(float *)(q + 0x9B0) = D_0015ED70 * 27.0f;
             if (*(int *)(q + 0x2094) == 4) {
@@ -753,7 +811,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x2284) = 7;
         clear_vector(p + 0xA0);
         qcopy(p + 0xE0, p + 0x110);
-        if (b) FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xF));
+        if (b)
+            FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xF));
         break;
     }
     case 0x22: {
@@ -764,7 +823,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x4B8) = 0;
         *(int *)(p + 0x4C4) = 0;
         *(float *)(p + 0x4B0) = D_0015ED70 * 100.0f;
-        if (b) FUN_L00_002323b8(0x2A, 0, (float)scale_game_frames(6));
+        if (b)
+            FUN_L00_002323b8(0x2A, 0, (float)scale_game_frames(6));
         break;
     }
     case 0x28: {
@@ -801,8 +861,12 @@ int FUN_L08_00230b38(int a, int b) {
         {
             char *q = ((char *)&D_0013F350);
             if (*(char **)(q + 0x5D8) != 0) {
-                float ang = FUN_001f9e90(*(float *)(*(char **)(q + 0x5D8) + 0x10) - *(float *)(q + 0x80), *(float *)(*(char **)(q + 0x5D8) + 0x14) - *(float *)(q + 0x84));
-                if (1.5707964f < FUN_001fa688(ang, fast_add_rotations(*(float *)(q + 0x588), FUN_001f9e90(vec[0], vec[1])))) {
+                float ang =
+                    FUN_001f9e90(*(float *)(*(char **)(q + 0x5D8) + 0x10) - *(float *)(q + 0x80),
+                                 *(float *)(*(char **)(q + 0x5D8) + 0x14) - *(float *)(q + 0x84));
+                if (1.5707964f < fast_difference_between_rotations(
+                                     ang, fast_add_rotations(*(float *)(q + 0x588),
+                                                             FUN_001f9e90(vec[0], vec[1])))) {
                     *(float *)(q + 0x588) = 1.5707964f;
                     *(int *)(q + 0x58C) = 1;
                 }
@@ -840,7 +904,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x2284) = 0xD;
         *(unsigned char *)(p + 0x20A7) = 1;
         *(int *)(p + 0xFF8) = 0x68;
-        if (b) FUN_L00_002323b8(0x21, 0, (float)scale_game_frames(6));
+        if (b)
+            FUN_L00_002323b8(0x21, 0, (float)scale_game_frames(6));
         break;
     }
     case 0x1A: {
@@ -848,7 +913,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 3;
         *(int *)(p + 0x2284) = 0xD;
         *(unsigned char *)(p + 0x20A7) = 1;
-        if (b) FUN_L00_002323b8(0x24, 0, (float)scale_game_frames(6));
+        if (b)
+            FUN_L00_002323b8(0x24, 0, (float)scale_game_frames(6));
         break;
     }
     case 0x1B: {
@@ -856,7 +922,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 3;
         *(int *)(p + 0x2284) = 0xD;
         *(unsigned char *)(p + 0x20A7) = 1;
-        if (b) FUN_L00_002323b8(0x25, 0, (float)scale_game_frames(6));
+        if (b)
+            FUN_L00_002323b8(0x25, 0, (float)scale_game_frames(6));
         break;
     }
     case 0x79: {
@@ -864,7 +931,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 2;
         *(int *)(p + 0x2284) = 0;
         qcopy(p + 0xE0, p + 0x110);
-        if (b) FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xC));
+        if (b)
+            FUN_L00_002323b8(0xB, 0, (float)scale_game_frames(0xC));
         break;
     }
     case 6:
@@ -878,8 +946,10 @@ int FUN_L08_00230b38(int a, int b) {
             if (*(unsigned char *)(p + 0x20A4) == 0) {
                 *(short *)(p + 0x22B2) = FUN_L00_00216de8(0x17, 0x20);
             }
-            *(float *)(p + 0x950) = FUN_L00_00257c48(D_0015ED6C * 3.1415927f, D_0015ED6C * 4.3633232f);
-            *(float *)(p + 0x954) = FUN_L00_00257c48(D_0015ED6C * 3.1415927f, D_0015ED6C * 4.3633232f);
+            *(float *)(p + 0x950) =
+                FUN_L00_00257c48(D_0015ED6C * 3.1415927f, D_0015ED6C * 4.3633232f);
+            *(float *)(p + 0x954) =
+                FUN_L00_00257c48(D_0015ED6C * 3.1415927f, D_0015ED6C * 4.3633232f);
         }
         {
             char *q = ((char *)&D_0013F350);
@@ -970,7 +1040,8 @@ int FUN_L08_00230b38(int a, int b) {
             qcopy(v, v + 0x30);
             r = v - 0xE0;
             if (*(int *)(r + 0x2084) != 0x12) {
-                if (*(unsigned char *)(r + 0x12E4) != 0 && *(float *)(r + 0x88) < *(float *)(r + 0x2F0) + 0.5f) {
+                if (*(unsigned char *)(r + 0x12E4) != 0 &&
+                    *(float *)(r + 0x88) < *(float *)(r + 0x2F0) + 0.5f) {
                     FUN_L00_00209ca8(3, 0x10, 0);
                 }
             }
@@ -1136,7 +1207,8 @@ int FUN_L08_00230b38(int a, int b) {
                 FUN_L00_00262528(x, 0xA, 6);
                 *(unsigned char *)(u + 0x4AE) = 1;
                 *(float *)(u + 0x3F4) = D_0015ED6C * 11.5f;
-                if (1.4f < *(float *)(u + 0x2DC)) *(float *)(u + 0x3F4) = D_0015ED6C * 5.7f;
+                if (1.4f < *(float *)(u + 0x2DC))
+                    *(float *)(u + 0x3F4) = D_0015ED6C * 5.7f;
                 *(float *)(u + 0x4A0) = D_0015ED70 * 8.5f;
                 *(float *)(u + 0x480) = D_0015ED70 * 44.0f;
                 *(float *)(u + 0x484) = D_0015ED70 * 50.0f;
@@ -1228,7 +1300,8 @@ int FUN_L08_00230b38(int a, int b) {
                 }
             } else if (*(int *)(u + 0x2084) == 0xE) {
                 float v = 0.7f;
-                if (*(float *)(u + 0x2DC) < 2.0f) v = (2.5f - *(float *)(u + 0x2DC)) * 0.5f + 0.7f;
+                if (*(float *)(u + 0x2DC) < 2.0f)
+                    v = (2.5f - *(float *)(u + 0x2DC)) * 0.5f + 0.7f;
                 *(float *)(u + 0x434) = 0.6f;
                 *(float *)(u + 0x440) = 32.0f;
                 *(float *)(u + 0x444) = 43.0f;
@@ -1272,7 +1345,8 @@ int FUN_L08_00230b38(int a, int b) {
         }
         {
             char *q = ((char *)&D_0013F350);
-            if (*(float *)(q + 0x490) == 0.0f) *(float *)(q + 0x490) = *(float *)(q + 0x430) * 1.5f;
+            if (*(float *)(q + 0x490) == 0.0f)
+                *(float *)(q + 0x490) = *(float *)(q + 0x430) * 1.5f;
             if (b) {
                 int s = *(int *)(q + 0x2084);
                 if (s == 7) {
@@ -1283,17 +1357,24 @@ int FUN_L08_00230b38(int a, int b) {
                     FUN_L00_002323b8(0x50, 4, (float)scale_game_frames(5));
                 } else if (s == 0x2A) {
                     int id = 0x1E;
-                    if (1.5707964f < FUN_001fa688(*(float *)(q + 0x98), FUN_001f9e90(*(float *)(q + 0x500) - *(float *)(q + 0x540), *(float *)(q + 0x504) - *(float *)(q + 0x544)))) id = 0x1F;
+                    if (1.5707964f <
+                        fast_difference_between_rotations(
+                            *(float *)(q + 0x98),
+                            FUN_001f9e90(*(float *)(q + 0x500) - *(float *)(q + 0x540),
+                                         *(float *)(q + 0x504) - *(float *)(q + 0x544))))
+                        id = 0x1F;
                     FUN_L00_002323b8(id, 0, (float)scale_game_frames(5));
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(*(float *)(q + 0xAA8));
-                    if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4) id = D_L08_0017C5D8[n];
+                    if (FUN_L00_002050b8(*(unsigned char *)(moby + 0x52)) == 4)
+                        id = D_L08_0017C5D8[n];
                     FUN_L00_002323b8(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {
                     FUN_L00_002323b8(0x12, 0, (float)scale_game_frames(5));
                 } else if (s == 0x10) {
-                    if (*(int *)(q + 0x2094) == 4 || (*(int *)(q + 0x2090) == 4 && scale_game_frames(7) > *(int *)(q + 0x198))) {
+                    if (*(int *)(q + 0x2094) == 4 ||
+                        (*(int *)(q + 0x2090) == 4 && scale_game_frames(7) > *(int *)(q + 0x198))) {
                         FUN_L00_002323b8(0x26, 0, (float)scale_game_frames(8));
                         *(int *)(q + 0x420) += scale_game_frames(3);
                     } else {
@@ -1312,7 +1393,8 @@ int FUN_L08_00230b38(int a, int b) {
                     FUN_L00_002323b8(0x15, 0, (float)scale_game_frames(5));
                 } else if (s == 0xB) {
                     int id;
-                    if (*(int *)(q + 0x450) == 2) *(int *)(q + 0x450) = 0;
+                    if (*(int *)(q + 0x450) == 2)
+                        *(int *)(q + 0x450) = 0;
                     id = *(int *)(q + 0x450) + 0x1C;
                     if (D_0015EDB5 != 0) {
                         if (id == 0x1C) {
@@ -1369,10 +1451,12 @@ int FUN_L08_00230b38(int a, int b) {
             if (b) {
                 char *m;
                 int n = scale_game_frames(0xB);
-                if (*(int *)(q + 0x2090) == 0xB && scale_game_frames(0x2A) > *(int *)(q + 0x2098)) n = scale_game_frames(0x11);
+                if (*(int *)(q + 0x2090) == 0xB && scale_game_frames(0x2A) > *(int *)(q + 0x2098))
+                    n = scale_game_frames(0x11);
                 FUN_L00_002323b8(0x2B, 4, (float)n);
                 m = FUN_L00_0020d460(0);
-                if (FUN_L00_00211360(m)) blend_moby_animation(m, 0xA, 4, n + 2);
+                if (FUN_L00_00211360(m))
+                    blend_moby_animation(m, 0xA, 4, n + 2);
             }
             break;
         }
@@ -1386,7 +1470,8 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xA)) {
                 *(unsigned short *)(h + 0xA) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xC) = *(unsigned int *)(h + 0xC) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0xC) =
+                *(unsigned int *)(h + 0xC) | (1 << D_0015ED84) | 0x80000000;
             h2 = D_00141680;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
@@ -1394,7 +1479,8 @@ int FUN_L08_00230b38(int a, int b) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h2 + 0x12A)) {
                 *(unsigned short *)(h2 + 0x12A) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h2 + 0x12C) = *(unsigned int *)(h2 + 0x12C) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h2 + 0x12C) =
+                *(unsigned int *)(h2 + 0x12C) | (1 << D_0015ED84) | 0x80000000;
             q = ((char *)&D_0013F350);
             *(int *)(q + 0xA60) = 3;
             *(int *)(q + 0x20F0) = 0;
@@ -1402,8 +1488,10 @@ int FUN_L08_00230b38(int a, int b) {
             *(int *)(q + 0xA7C) = *(int *)(q + 0xA7C) == 0;
             if (b) {
                 int n = scale_game_frames(0xA);
-                if (*(unsigned char *)(*(char **)(q + 0x2080) + 0x53) == 0x1A) n = scale_game_frames(3);
-                if (*(int *)(q + 0x2090) == 1) n = scale_game_frames(0x11);
+                if (*(unsigned char *)(*(char **)(q + 0x2080) + 0x53) == 0x1A)
+                    n = scale_game_frames(3);
+                if (*(int *)(q + 0x2090) == 1)
+                    n = scale_game_frames(0x11);
                 FUN_L00_002323b8(0x1A, 0, (float)n);
                 FUN_L00_002325e0(6, 0x15);
             }
@@ -1411,7 +1499,8 @@ int FUN_L08_00230b38(int a, int b) {
         }
         case 0x20: {
             char *q = ((char *)&D_0013F350);
-            if (*(void **)(q + 0x1090) == 0) break;
+            if (*(void **)(q + 0x1090) == 0)
+                break;
             if (b) {
                 FUN_L00_002323b8(0x67, 4, -1.0f);
                 blend_moby_animation(*(void **)(q + 0x1090), 3, 4, -1);
@@ -1431,7 +1520,8 @@ int FUN_L08_00230b38(int a, int b) {
                 *(unsigned short *)(h + 0x42) = scale_game_frames(D_0015EEA4) / 600;
             }
             q = ((char *)&D_0013F350);
-            *(unsigned int *)(h + 0x44) = *(unsigned int *)(h + 0x44) | (1 << D_0015ED84) | 0x80000000;
+            *(unsigned int *)(h + 0x44) =
+                *(unsigned int *)(h + 0x44) | (1 << D_0015ED84) | 0x80000000;
             e = &D_L08_0017C428[*(int *)(q + 0xA60)];
             *(int *)(q + 0x20F0) = 0;
             k = 0;
@@ -1459,23 +1549,30 @@ int FUN_L08_00230b38(int a, int b) {
                 {
                     char *r = ((char *)&D_0013F350);
                     if (*(int *)(r + 0xA58) != 0 && k < 2) {
-                        n += truncate_float_to_s32(FUN_001fa688(*(float *)(r + 0xA5C), *(float *)(r + 0x98)) * 1.5f);
+                        n +=
+                            truncate_float_to_s32(fast_difference_between_rotations(
+                                                      *(float *)(r + 0xA5C), *(float *)(r + 0x98)) *
+                                                  1.5f);
                     }
                 }
                 j = j / 2;
                 FUN_L00_002323b8(k + 0x17, j, (float)n);
                 m = FUN_L00_0020d460(0);
-                if (FUN_L00_00211360(m)) blend_moby_animation(m, k + 3, j, n);
+                if (FUN_L00_00211360(m))
+                    blend_moby_animation(m, k + 3, j, n);
             }
             break;
         }
         case 0x23: {
             char *q;
-            if (b) FUN_L00_002323b8(0x2C, 7, (float)scale_game_frames(9));
+            if (b)
+                FUN_L00_002323b8(0x2C, 7, (float)scale_game_frames(9));
             q = ((char *)&D_0013F350);
             if (*(int *)(q + 0x10B8) == 0xA && *(char **)(q + 0xA50) != 0) {
                 *(int *)(q + 0xA58) = 1;
-                *(float *)(q + 0xA5C) = FUN_001f9e90(*(float *)(*(char **)(q + 0xA50) + 0x10) - *(float *)(q + 0x80), *(float *)(*(char **)(q + 0xA50) + 0x14) - *(float *)(q + 0x84));
+                *(float *)(q + 0xA5C) =
+                    FUN_001f9e90(*(float *)(*(char **)(q + 0xA50) + 0x10) - *(float *)(q + 0x80),
+                                 *(float *)(*(char **)(q + 0xA50) + 0x14) - *(float *)(q + 0x84));
             }
             break;
         }
@@ -1488,7 +1585,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0xA64) = 0;
         if (*(int *)(p + 0x2090) == 0x70) {
             int v = 5;
-            if (D_L08_0017C428[*(int *)(p + 0xA60)].b == 0) v = 6;
+            if (D_L08_0017C428[*(int *)(p + 0xA60)].b == 0)
+                v = 6;
             *(int *)(p + 0xA60) = v;
         } else {
             *(int *)(p + 0xA60) = 5;
@@ -1502,7 +1600,8 @@ int FUN_L08_00230b38(int a, int b) {
                 int n = scale_game_frames(5);
                 FUN_L00_002323b8(e + 0x5C, z, (float)n);
                 m = FUN_L00_0020d460(0);
-                if (FUN_L00_00211360(m)) blend_moby_animation(m, e + 0xC, z, n);
+                if (FUN_L00_00211360(m))
+                    blend_moby_animation(m, e + 0xC, z, n);
             }
         }
         break;
@@ -1522,7 +1621,8 @@ int FUN_L08_00230b38(int a, int b) {
             int n = scale_game_frames(4);
             FUN_L00_002323b8(*(int *)(q + 0xA60) + 0x4E, 0, (float)n);
             m = FUN_L00_0020d460(0);
-            if (FUN_L00_00211360(m)) blend_moby_animation(m, *(int *)(q + 0xA60) + 0xC, 0, n);
+            if (FUN_L00_00211360(m))
+                blend_moby_animation(m, *(int *)(q + 0xA60) + 0xC, 0, n);
         }
         break;
     }
@@ -1536,11 +1636,13 @@ int FUN_L08_00230b38(int a, int b) {
             T2C_231228 *e = &D_L08_0017C428[*(int *)(p + 0xA60)];
             int k = e->b;
             int n;
-            if (e->a == 1) k = 2;
+            if (e->a == 1)
+                k = 2;
             n = scale_game_frames(5);
             FUN_L00_002323b8(k + 0x27, 5, (float)n);
             m = FUN_L00_0020d460(0);
-            if (FUN_L00_00211360(m)) blend_moby_animation(m, k + 7, 5, n);
+            if (FUN_L00_00211360(m))
+                blend_moby_animation(m, k + 7, 5, n);
         }
         break;
     }
@@ -1550,7 +1652,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x2284) = 0;
         *(float *)(p + 0xA68) = fast_add_rotations(*(float *)(p + 0x98), 3.1415927f);
         *(float *)(p + 0x194) = D_0015ED6C * 9.0f;
-        if (b) FUN_L00_002323b8(0x29, 5, (float)scale_game_frames(8));
+        if (b)
+            FUN_L00_002323b8(0x29, 5, (float)scale_game_frames(8));
         break;
     }
     case 0x16: {
@@ -1573,7 +1676,8 @@ int FUN_L08_00230b38(int a, int b) {
             *(int *)(q + 0x1C0) = scale_game_frames(0x4D);
             if (b) {
                 FUN_L00_002323b8(0x10, 3, -3.0f);
-                *(float *)(*(char **)(q + 0x2080) + 0x54) = D_L08_0017C5F0[*(int *)(q + 0xAA0)][(*(int *)(q + 0xAA4))++];
+                *(float *)(*(char **)(q + 0x2080) + 0x54) =
+                    D_L08_0017C5F0[*(int *)(q + 0xAA0)][(*(int *)(q + 0xAA4))++];
             }
         }
         break;
@@ -1582,7 +1686,8 @@ int FUN_L08_00230b38(int a, int b) {
         char *p = ((char *)&D_0013F350);
         *(int *)(p + 0x208C) = 0;
         *(int *)(p + 0x2284) = 0;
-        if (b) FUN_L00_002323b8(0, 0, (float)scale_game_frames(0xE));
+        if (b)
+            FUN_L00_002323b8(0, 0, (float)scale_game_frames(0xE));
         break;
     }
     case 0x59: {
@@ -1600,7 +1705,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 2;
         *(int *)(p + 0x2284) = 0;
         qcopy(p + 0xE0, p + 0x110);
-        if (b) FUN_L00_002323b8(6, 0, (float)scale_game_frames(0xC));
+        if (b)
+            FUN_L00_002323b8(6, 0, (float)scale_game_frames(0xC));
         break;
     }
     case 0x55: {
@@ -1610,7 +1716,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(float *)(p + 0x940) = D_0015ED70 * 24.0f;
         *(float *)(p + 0x944) = D_0015ED70 * 7.0f;
         qcopy(p + 0xE0, p + 0x110);
-        if (b) FUN_L00_002323b8(6, 0, (float)scale_game_frames(7));
+        if (b)
+            FUN_L00_002323b8(6, 0, (float)scale_game_frames(7));
         break;
     }
     case 0x54: {
@@ -1623,9 +1730,11 @@ int FUN_L08_00230b38(int a, int b) {
             float r = vector_length_xy(v);
             g = v - 0x110;
             *(float *)(g + 0x194) = r;
-            if (D_0015ED6C * 1.5f < r) *(float *)(g + 0x194) = D_0015ED6C * 1.5f;
+            if (D_0015ED6C * 1.5f < r)
+                *(float *)(g + 0x194) = D_0015ED6C * 1.5f;
             *(short *)(g + 0x3B8) = 0;
-            if (b) FUN_L00_002323b8(1, 0, (float)scale_game_frames(8));
+            if (b)
+                FUN_L00_002323b8(1, 0, (float)scale_game_frames(8));
         }
         break;
     }
@@ -1634,7 +1743,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 0x14;
         *(int *)(p + 0x2284) = 0;
         qcopy(p + 0x150, p + 0x110);
-        if (b) FUN_L00_002323b8(3, 0, (float)scale_game_frames(0xC));
+        if (b)
+            FUN_L00_002323b8(3, 0, (float)scale_game_frames(0xC));
         break;
     }
     case 0x56: {
@@ -1648,7 +1758,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x1C0) = scale_game_frames(0x4D);
         if (b) {
             FUN_L00_002323b8(2, 3, -3.0f);
-            *(float *)(*(char **)(p + 0x2080) + 0x54) = D_L08_0017C5F0[*(int *)(p + 0xAA0)][(*(int *)(p + 0xAA4))++];
+            *(float *)(*(char **)(p + 0x2080) + 0x54) =
+                D_L08_0017C5F0[*(int *)(p + 0xAA0)][(*(int *)(p + 0xAA4))++];
         }
         break;
     }
@@ -1656,15 +1767,18 @@ int FUN_L08_00230b38(int a, int b) {
         char *p = ((char *)&D_0013F350);
         *(int *)(p + 0x208C) = 0xF;
         *(int *)(p + 0x2284) = 0;
-        if (*(int *)(p + 0x570) == 0) FUN_L00_002050c0(1);
+        if (*(int *)(p + 0x570) == 0)
+            FUN_L00_002050c0(1);
         *(int *)(p + 0x1C0) = scale_game_frames(0x4D);
         *(float *)(p + 0x5CC) = D_0015ED6C * 2.5f;
-        if (D_0015ED6C * 2.5f < *(float *)(p + 0x5B0)) *(float *)(p + 0x5B0) = D_0015ED6C * 2.5f;
+        if (D_0015ED6C * 2.5f < *(float *)(p + 0x5B0))
+            *(float *)(p + 0x5B0) = D_0015ED6C * 2.5f;
         *(int *)(p + 0x5AC) = 0;
         clear_vector(p + 0xE0);
         clear_vector(p + 0x100);
         *(float *)(p + 0xE8) = D_0015ED6C * 10.0f;
-        if (b) FUN_L00_002323b8(0x10, 2, -3.0f);
+        if (b)
+            FUN_L00_002323b8(0x10, 2, -3.0f);
         break;
     }
     case 0x1D: {
@@ -1679,7 +1793,8 @@ int FUN_L08_00230b38(int a, int b) {
         char *p = ((char *)&D_0013F350);
         *(int *)(p + 0x2284) = 0x51;
         *(int *)(p + 0x208C) = 0;
-        if (FUN_L00_002050b8(*(unsigned char *)(*(char **)(p + 0x2080) + 0x53)) != FUN_L01_00226f10(1)) {
+        if (FUN_L00_002050b8(*(unsigned char *)(*(char **)(p + 0x2080) + 0x53)) !=
+            FUN_L01_00226f10(1)) {
             FUN_L00_002323b8(FUN_L01_00226f10(1), 0, (float)scale_game_frames(5));
         }
         break;
@@ -1714,7 +1829,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(unsigned char *)(p + 0x20A7) = 1;
         *(unsigned char *)(p + 0x20AD) = 1;
         *(unsigned char *)(p + 0x20AC) = 1;
-        if (b) FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -1.0f);
+        if (b)
+            FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -1.0f);
         break;
     }
     case 0x78: {
@@ -1724,7 +1840,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(unsigned char *)(p + 0x20A7) = 1;
         *(unsigned char *)(p + 0x20AC) = 1;
         clear_vector(p + 0xE0);
-        if (b) FUN_L00_002323b8(0xB, 0, -1.0f);
+        if (b)
+            FUN_L00_002323b8(0xB, 0, -1.0f);
         break;
     }
     case 0x3B: {
@@ -1737,7 +1854,8 @@ int FUN_L08_00230b38(int a, int b) {
         n = scale_game_frames(8);
         FUN_L00_002323b8(0x44, 2, (float)n);
         m = *(char **)(p + 0x1090);
-        if (FUN_L00_00211360(m)) blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
+        if (FUN_L00_00211360(m))
+            blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
     case 0x63:
@@ -1746,7 +1864,8 @@ int FUN_L08_00230b38(int a, int b) {
         *(int *)(p + 0x208C) = 0x18;
         *(unsigned char *)(p + 0x20AC) = 1;
         FUN_L00_0020e698();
-        if (b) FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -1.0f);
+        if (b)
+            FUN_L00_002323b8(FUN_L01_00226f10(0), 0, -1.0f);
         break;
     }
     }
@@ -1758,13 +1877,15 @@ int FUN_L08_00230b38(int a, int b) {
     }
     {
         char *t = ((char *)&D_0013F350);
-        if (*(short *)(t + 0x308) == 0 && *(int *)(t + 0x1108) == 0x1C && *(int *)(t + 0x20F4) != 0) {
+        if (*(short *)(t + 0x308) == 0 && *(int *)(t + 0x1108) == 0x1C &&
+            *(int *)(t + 0x20F4) != 0) {
             *(int *)(t + 0x2110) = 1;
         }
     }
     {
         char *t = ((char *)&D_0013F350);
-        if (*(int *)(t + 0x208C) != 0xF && *(int *)(t + 0x1108) == 0x1D && *(int *)(t + 0x20F4) != 0) {
+        if (*(int *)(t + 0x208C) != 0xF && *(int *)(t + 0x1108) == 0x1D &&
+            *(int *)(t + 0x20F4) != 0) {
             *(int *)(t + 0x2110) = 1;
         }
     }

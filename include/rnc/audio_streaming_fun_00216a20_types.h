@@ -1,8 +1,0 @@
-#ifndef RNC_AUDIO_STREAMING_FUN_00216A20_TYPES_H
-#define RNC_AUDIO_STREAMING_FUN_00216A20_TYPES_H
-
-#include "types.h"
-
-typedef struct ADXF_PTINFO { char _pad[8]; Sint32 nfile; } ADXF_PTINFO;
-
-#endif /* RNC_AUDIO_STREAMING_FUN_00216A20_TYPES_H */

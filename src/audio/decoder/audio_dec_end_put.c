@@ -1,5 +1,15 @@
 #include "types.h"
-struct AudioDec { s32 done; s32 state; u8 pad8[0x28]; s32 fill; u8 pad34[4]; s32 pos; s32 total; s32 size; s32 count; };
+struct AudioDec {
+    s32 done;
+    s32 state;
+    u8 pad8[0x28];
+    s32 fill;
+    u8 pad34[4];
+    s32 pos;
+    s32 total;
+    s32 size;
+    s32 count;
+};
 void audio_dec_end_put(struct AudioDec *ad, s32 n) __asm__("FUN_0023ae28");
 
 void audio_dec_end_put(struct AudioDec *ad, s32 n) {

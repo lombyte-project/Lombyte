@@ -13,7 +13,7 @@ s32 FUN_00207300(s32 arg0, s32 arg1, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 var_16_12;
 
     var_16_12 = 0;
-    if ((u32) (D_0013F350.unk208C - 0x11) < 2U) {
+    if ((u32)(D_0013F350.unk208C - 0x11) < 2U) {
         goto block_2;
     }
     if (D_0013F350.unk12E4 != 1) {

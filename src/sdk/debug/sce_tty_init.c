@@ -9,7 +9,12 @@ struct M2c_D_00154A50 {
     s32 unk18;
 };
 struct Mmio {
-    u16 unk0; u16 unk2; u16 unk4; u8 unk6; u8 unk7; u32 unk8;
+    u16 unk0;
+    u16 unk2;
+    u16 unk4;
+    u8 unk6;
+    u8 unk7;
+    u32 unk8;
 };
 extern struct M2c_D_00154A50 D_00154A50;
 extern u8 D_00154A80[];

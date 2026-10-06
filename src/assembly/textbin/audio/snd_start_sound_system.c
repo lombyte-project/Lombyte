@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_system/FUN_0012da28.s", FUN_0012da28);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_system/FUN_0012da28.s",
+            FUN_0012da28);
 #else
 #include "types.h"
 #include "sda.h"
@@ -38,7 +39,6 @@ extern s32 D_0015ECC8 __attribute__((sda));
 extern s32 D_0015ECD0 __attribute__((sda));
 extern s64 D_0015ECD8 MACRO_ADDR;
 extern s32 D_0015ED00 MACRO_ADDR;
-
 
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);

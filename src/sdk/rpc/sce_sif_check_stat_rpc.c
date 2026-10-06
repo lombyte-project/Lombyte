@@ -12,8 +12,7 @@ typedef struct {
     s32 rpc_id;
 } SifRpcClient;
 
-s32 SceSifCheckStatRpc(SifRpcClient *client)
-{
+s32 SceSifCheckStatRpc(SifRpcClient *client) {
     SifRpcPacket *packet = client->packet;
 
     if ((packet == NULL) || (client->rpc_id != packet->rpc_id) || !(packet->receive_id & 1)) {

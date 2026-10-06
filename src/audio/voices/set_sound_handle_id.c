@@ -1,5 +1,9 @@
 #include "types.h"
-struct Handle { u32 id; u8 pad4[6]; s16 state; };
+struct Handle {
+    u32 id;
+    u8 pad4[6];
+    s16 state;
+};
 extern char D_00160068[];
 extern void DebugPrint(char *, ...);
 void set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");

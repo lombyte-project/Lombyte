@@ -1,6 +1,15 @@
 #include "types.h"
-struct AnimSeq { u8 pad0[0x11]; u8 unk11; u8 unk12; u8 pad13[9]; void *frames[1]; };
-struct MobyClass { u8 pad0[0x48]; struct AnimSeq *seqs[1]; };
+struct AnimSeq {
+    u8 pad0[0x11];
+    u8 unk11;
+    u8 unk12;
+    u8 pad13[9];
+    void *frames[1];
+};
+struct MobyClass {
+    u8 pad0[0x48];
+    struct AnimSeq *seqs[1];
+};
 struct Moby {
     u8 pad0[0x24];
     struct MobyClass *cls;

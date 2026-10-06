@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/fast_add_rotations/FUN_001fa580.s", FUN_001fa580);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/math/rotations/fast_add_rotations/FUN_001fa580.s",
+    FUN_001fa580);
 #else
 #include "types.h"
 f32 fast_add_rotations(f32 angle, f32 delta) __asm__("FUN_001fa580");

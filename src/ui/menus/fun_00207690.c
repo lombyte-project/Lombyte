@@ -4,7 +4,8 @@ extern unsigned char D_0013D3D8 NOT_SDA;
 /* The recorded C was right; the two ps2eeas nops were the only
    residual. */
 int FUN_00207690(int arg0, float unused1, float unused2, float arg1) {
-    if (arg0 >= 0xBE) return D_0013D3D8 != 0;
+    if (arg0 >= 0xBE)
+        return D_0013D3D8 != 0;
     return (arg1 >= 58.5f) ? 1 : 0;
 }
 

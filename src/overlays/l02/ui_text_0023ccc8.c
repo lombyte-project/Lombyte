@@ -8,14 +8,14 @@
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/hud_0023D600.c: func_L02_0023D600), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L02_0023ccc8(char *m) {
     unsigned char *p = (unsigned char *)(m + 0x70);
-    if (*(int *)(m + 0x7C) >= FUN_001f96f8(5)) {
-        if (p[0] < FUN_001f96f8(8)) {
+    if (*(int *)(m + 0x7C) >= scale_game_frames(5)) {
+        if (p[0] < scale_game_frames(8)) {
             p[0] = p[0] + 1;
-        } else if (p[1] < FUN_001f96f8(8)) {
+        } else if (p[1] < scale_game_frames(8)) {
             p[1] = p[1] + 1;
         }
     } else {

@@ -1,10 +1,10 @@
 /* Ported from rac1-decomp (src/game/effects.c, func_001EE3B0). */
-extern int func_001F44B8(int);
+extern int get_effect_texture(int) __asm__("func_001F44B8");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float func_001FA580(float, float);
-extern void FUN_001f5ab0(float, float, float, float, float, int, int, int, int, int, int, int,
-                           float, float);
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int,
+                                       int, int, float, float) __asm__("FUN_001f5ab0");
 /*
  * Spawns a burst of particle effects around (arg1, arg2) using the source
  * object's unk10 (a size, scaled by 40.0f) and unk18 (looked up through
@@ -24,11 +24,10 @@ extern void FUN_001f5ab0(float, float, float, float, float, int, int, int, int, 
  */
 void spawn_particle_burst(void *arg0, float arg1, float arg2) __asm__("FUN_001ee008");
 
-void spawn_particle_burst(void *arg0, float arg1, float arg2)
-{
+void spawn_particle_burst(void *arg0, float arg1, float arg2) {
     float forty = 40.0f;
     char *p = (char *)arg0;
-    int handle = func_001F44B8(*(int *)(p + 0x18));
+    int handle = get_effect_texture(*(int *)(p + 0x18));
     int mode = *(int *)(p + 0x2C);
     float angle = *(float *)(p + 0x1C);
     float k;
@@ -37,11 +36,10 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2)
     switch (mode) {
     case 0:
         for (i = 0; i < *(short *)(p + 0x26); i++) {
-            FUN_001f5ab0(arg1, arg2, forty * *(float *)(p + 0x10),
-                          forty * *(float *)(p + 0x10), angle,
-                          0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 0, 0,
-                          0.0f, 0.0f);
-            angle = func_001FA580(angle, *(float *)(p + 0x28));
+            append_rotated_sprite_quad(arg1, arg2, forty * *(float *)(p + 0x10),
+                                       forty * *(float *)(p + 0x10), angle, 0x3F, 0x3F, handle,
+                                       0xFFFFF3, *(int *)(p + 0x14), 0, 0, 0.0f, 0.0f);
+            angle = fast_add_rotations(angle, *(float *)(p + 0x28));
         }
         break;
     case 1: {
@@ -53,35 +51,31 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2)
         tmp[5] = fast_sin(angle) * -forty * *(float *)(p + 0x10);
 
         k = *(float *)(p + 0x10) * forty;
-        FUN_001f5ab0(arg1, arg2, k, k, angle,
-                      0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 0, 0,
-                      0.0f, 0.0f);
+        append_rotated_sprite_quad(arg1, arg2, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
+                                   *(int *)(p + 0x14), 0, 0, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        FUN_001f5ab0(arg1 + tmp[4], arg2 + tmp[5], k, k, angle,
-                      0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 1, 0,
-                      0.0f, 0.0f);
+        append_rotated_sprite_quad(arg1 + tmp[4], arg2 + tmp[5], k, k, angle, 0x3F, 0x3F, handle,
+                                   0xFFFFF3, *(int *)(p + 0x14), 1, 0, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        FUN_001f5ab0(arg1 - tmp[0], arg2 - tmp[1], k, k, angle,
-                      0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 0, 1,
-                      0.0f, 0.0f);
+        append_rotated_sprite_quad(arg1 - tmp[0], arg2 - tmp[1], k, k, angle, 0x3F, 0x3F, handle,
+                                   0xFFFFF3, *(int *)(p + 0x14), 0, 1, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        FUN_001f5ab0(arg1 + tmp[4] - tmp[0], arg2 + tmp[5] - tmp[1], k, k, angle,
-                      0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 1, 1,
-                      0.0f, 0.0f);
+        append_rotated_sprite_quad(arg1 + tmp[4] - tmp[0], arg2 + tmp[5] - tmp[1], k, k, angle,
+                                   0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 1, 1, 0.0f,
+                                   0.0f);
         break;
     }
     case 2:
         k = *(float *)(p + 0x10);
         k *= forty;
-        FUN_001f5ab0(arg1, arg2, k, k, angle,
-                      0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 0, 0,
-                      0.5f, 0.5f);
+        append_rotated_sprite_quad(arg1, arg2, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
+                                   *(int *)(p + 0x14), 0, 0, 0.5f, 0.5f);
         break;
     }
 }

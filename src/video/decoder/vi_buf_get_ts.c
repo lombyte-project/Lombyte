@@ -4,20 +4,44 @@
 
 /* viBufGetTs(ViBuf *, TimeStamp *) */
 
-typedef struct { s64 pts; s64 dts; s32 pos; s32 len; } TimeStamp;
 typedef struct {
-    s32 d4madr; s32 d4tadr; s32 d4qwc; s32 d4chcr;
-    s32 d3madr; s32 d3qwc; s32 d3chcr; s32 ipubp; s32 ipuctrl;
+    s64 pts;
+    s64 dts;
+    s32 pos;
+    s32 len;
+} TimeStamp;
+typedef struct {
+    s32 d4madr;
+    s32 d4tadr;
+    s32 d4qwc;
+    s32 d4chcr;
+    s32 d3madr;
+    s32 d3qwc;
+    s32 d3chcr;
+    s32 ipubp;
+    s32 ipuctrl;
 } sceIpuDmaEnv;
 typedef struct {
-    u128 *data; u128 *tag; s32 n; s32 dmaStart; s32 dmaN; s32 readBytes; s32 buffSize;
+    u128 *data;
+    u128 *tag;
+    s32 n;
+    s32 dmaStart;
+    s32 dmaN;
+    s32 readBytes;
+    s32 buffSize;
     sceIpuDmaEnv env;
-    s32 sema; s32 isActive; s64 totalBytes; TimeStamp *ts; s32 n_ts; s32 count_ts; s32 wt_ts;
+    s32 sema;
+    s32 isActive;
+    s64 totalBytes;
+    TimeStamp *ts;
+    s32 n_ts;
+    s32 count_ts;
+    s32 wt_ts;
 } ViBuf;
 
-#define IPU_BP ((vu32 *)0x10002020)
+#define IPU_BP         ((vu32 *)0x10002020)
 #define VIBUF_ELM_SIZE 2048
-#define TS_NONE (-1)
+#define TS_NONE        (-1)
 /* Not the obvious spelling: retail's compare is `b < a`. */
 #define min(a, b) ((a) > (b) ? (b) : (a))
 

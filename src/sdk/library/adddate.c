@@ -15,8 +15,7 @@ extern const MonthLengthTable MonthLengths __asm__("D_00153C40");
 
 void AddDate(ClockDate *clock_date) __asm__("adddate");
 
-void AddDate(ClockDate *clock_date)
-{
+void AddDate(ClockDate *clock_date) {
     MonthLengthTable month_lengths = MonthLengths;
     s32 next_day = clock_date->day + 1;
 

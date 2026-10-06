@@ -1,4 +1,4 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern u8 moby_class_resources[] __asm__("D_001B3200");
 extern u8 class_resource_slots[] __asm__("D_001B3AC0");
@@ -23,13 +23,13 @@ void clear_preview_resource_bindings(void) {
         u8 *bindings = preview_resource_bindings;
 
         binding_base = bindings;
-        binding = (PreviewResourceBinding *) ((resource_index * 8) + binding_base);
+        binding = (PreviewResourceBinding *)((resource_index * 8) + binding_base);
         do {
             resource_index += 1;
-            class_slot = *((u8 *) (binding->class_id + (s32) class_slots));
-            class_resource_address = *(s32 *) ((class_slot * 4) + class_resources);
+            class_slot = *((u8 *)(binding->class_id + (s32)class_slots));
+            class_resource_address = *(s32 *)((class_slot * 4) + class_resources);
             animation_address = class_resource_address + (binding->animation_index * 4);
-            *(s32 *) (animation_address + 0x48) = 0;
+            *(s32 *)(animation_address + 0x48) = 0;
             binding += 1;
             resource_first = preview_stream_state.resource_first;
             resource_count = preview_stream_state.resource_count;

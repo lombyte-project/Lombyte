@@ -16,15 +16,15 @@ struct M2c_D_0013D290 {
 
 extern struct M2c_D_0013D290 D_0013D290;
 extern u8 D_0015EE98[] MACRO_ADDR;
-extern s32 func_00209370();
-extern s32 func_0020ABB0();
+extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
+extern s32 memcard_make_whole_save() __asm__("func_0020ABB0");
 extern s32 sceCdReadClock();
 extern s32 sceScfGetLocalTimefromRTC();
 void FUN_00226a70(s32 arg0, s32 arg1) {
-    func_00209370();
+    load_and_initialize_level_chunk();
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
-    func_0020ABB0(arg0);
+    memcard_make_whole_save(arg0);
     D_0013D290.unkC0 = 0;
     D_0013D290.unk14 = arg1;
     *(s32 *)((u8 *)&D_0013D290 + arg1 * 0x1C + 0x20) = 0;

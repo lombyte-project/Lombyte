@@ -1,6 +1,6 @@
-#include "rnc/audio_streaming_advance_audio_stream_state_types.h"
+#include "rnc/audio/streaming/advance_audio_stream_state.h"
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 struct Pair8 {
     s32 a;
@@ -28,7 +28,8 @@ s32 advance_audio_stream_state(struct M2c_arg0 *arg0) {
         if (D_00137B80.e2C8[D_0015ED88].b == 0) {
             break;
         }
-        if (start_audio_stream_read(arg0->unk48, D_00137B80.e2C8[D_0015ED88].a, D_00137B80.e2C8[D_0015ED88].b) != 0) {
+        if (start_audio_stream_read(arg0->unk48, D_00137B80.e2C8[D_0015ED88].a,
+                                    D_00137B80.e2C8[D_0015ED88].b) != 0) {
             arg0->unk44 = arg0->unk44 + 1;
         } else {
             arg0->unk44 = -1;
@@ -46,7 +47,8 @@ s32 advance_audio_stream_state(struct M2c_arg0 *arg0) {
         if (D_00137B80.e2F8[D_0015ED88].b == 0) {
             break;
         }
-        if (start_audio_stream_read(arg0->unk4C, D_00137B80.e2F8[D_0015ED88].a, D_00137B80.e2F8[D_0015ED88].b) != 0) {
+        if (start_audio_stream_read(arg0->unk4C, D_00137B80.e2F8[D_0015ED88].a,
+                                    D_00137B80.e2F8[D_0015ED88].b) != 0) {
             arg0->unk44 = arg0->unk44 + 1;
         } else {
             arg0->unk44 = -1;

@@ -14,23 +14,23 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x20];
-    s32 width;          /* 0x20 */
-    s32 height;          /* 0x24 */
+    s32 width;  /* 0x20 */
+    s32 height; /* 0x24 */
     u8 pad28[8];
-    int flags;      /* 0x30 */
-    int text_id;     /* 0x34 */
+    int flags;                /* 0x30 */
+    int text_id;              /* 0x34 */
     unsigned int text_stride; /* 0x38 */
-    int scroll_offset;     /* 0x3C */
+    int scroll_offset;        /* 0x3C */
     u8 pad40[4];
-    int fade_timer;      /* 0x44 */
-    int cached_value;        /* 0x48 */
-    int value_variant;        /* 0x4C */
+    int fade_timer;    /* 0x44 */
+    int cached_value;  /* 0x48 */
+    int value_variant; /* 0x4C */
 } ConfiguredTextLabel;
 
 typedef struct {
     u8 pad0[4];
-    short texture_group;        /* 0x4 */
-    short item_id;        /* 0x6 */
+    short texture_group; /* 0x4 */
+    short item_id;       /* 0x6 */
     u8 pad8[2];
 } MenuGridEntry;
 
@@ -41,10 +41,10 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x34];
-    MenuListEntry *items;   /* 0x34 */
+    MenuListEntry *items; /* 0x34 */
     u8 pad38[4];
-    int cursor;           /* 0x3C */
-    int selected_entry;          /* 0x40 */
+    int cursor;         /* 0x3C */
+    int selected_entry; /* 0x40 */
     u8 pad44[4];
     MenuGridEntry *entries; /* 0x48 */
 } MenuDescriptor;
@@ -94,8 +94,7 @@ extern int sprintf(char *, const char *, ...);
 
 int render_configured_text_label(ConfiguredTextLabel *label) __asm__("FUN_0021a328");
 
-int render_configured_text_label(ConfiguredTextLabel *label)
-{
+int render_configured_text_label(ConfiguredTextLabel *label) {
     char formatted_text[64];
     u8 *font;
     int font_texture_index;
@@ -217,7 +216,8 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     } else if ((flags & 0x100) && value_index == -1) {
         text = unavailable_label_text;
     } else if (label->text_id != 0) {
-        text = get_help_message_text(((int *)label->text_id + value_variant)[value_index * label->text_stride / sizeof(int)]);
+        text = get_help_message_text((
+            (int *)label->text_id + value_variant)[value_index * label->text_stride / sizeof(int)]);
     }
     if (!(label->flags & 0x11E4) && item_available[value_index] == 0) {
         text = unavailable_label_text;
@@ -257,14 +257,15 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     setup_gif_paging(0);
     texture_tex0 = get_effect_texture(font_texture_index);
     {
-        TextBox c = { { text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4, x,
-                        y - (label->scroll_offset >> 4), [8] = text_line_spacing, text_style,
-                        [11] = -(label->scroll_offset & 0xF) } };
+        TextBox c = {{text_vertical_inset, label->height - text_vertical_inset, 1, label->width - 4,
+                      x, y - (label->scroll_offset >> 4), [8] = text_line_spacing,
+                      text_style, [11] = -(label->scroll_offset & 0xF)}};
 
         if (label->flags & 0x10000) {
             c.s[1] = label->height - 1;
         }
-        color = func_0021B6D8(label->fade_timer, func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
+        color = func_0021B6D8(label->fade_timer, func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f),
+                              0x80FFA888);
         c.s[9] |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         c.s[9] ^= 4;
@@ -323,6 +324,7 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     return 2;
 }
 
-extern __typeof__(render_configured_text_label) func_0021A328 __attribute__((alias("FUN_0021a328")));
+extern __typeof__(render_configured_text_label) func_0021A328
+    __attribute__((alias("FUN_0021a328")));
 
 #endif /* NON_MATCHING */

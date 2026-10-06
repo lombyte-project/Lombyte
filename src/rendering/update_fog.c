@@ -13,7 +13,10 @@ struct Display {
 };
 
 /* D_001872D4 is the fog-source selector, a field 0x2D4 into this block. */
-struct FogMode { u8 pad0[0x2D4]; s32 use_level_fog; };
+struct FogMode {
+    u8 pad0[0x2D4];
+    s32 use_level_fog;
+};
 
 extern struct FogMode D_00187000;
 
@@ -34,7 +37,7 @@ extern f32 D_0015F494;
 extern struct Display D_0018CD00;
 extern s32 D_001600BC;
 extern s32 D_0015F498;
-extern void func_001F2D98(void);
+extern void update_view_context(void) __asm__("func_001F2D98");
 
 void update_fog(void) __asm__("FUN_001f2588");
 
@@ -58,7 +61,7 @@ void update_fog(void) {
         D_0018CD00.fog_far_int = D_0015F494;
         D_001600BC = 0x1F4000;
     }
-    func_001F2D98();
+    update_view_context();
     D_0015F498 = 0;
 }
 

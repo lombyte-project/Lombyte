@@ -7,8 +7,7 @@ typedef struct StateRecord {
     s32 limit;
 } StateRecord;
 
-void InitializeStateRecord(StateRecord *record, s32 value, s32 state)
-{
+void InitializeStateRecord(StateRecord *record, s32 value, s32 state) {
     record->value = value;
     record->initial_value = value;
     record->state = state;

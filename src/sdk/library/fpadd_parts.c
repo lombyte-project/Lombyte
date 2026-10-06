@@ -50,12 +50,12 @@ typedef struct FpNumber {
 
 extern FpNumber D_001596F0;
 
-#define LSHIFT(a) { a = (a & 1) | (a >> 1); }
+#define LSHIFT(a)                                                                                  \
+    { a = (a & 1) | (a >> 1); }
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL
 
-FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *tmp)
-{
+FpNumber *_fpadd_parts(FpNumber *a, FpNumber *b, FpNumber *tmp) {
     s64 tfraction;
     s32 a_normal_exp;
     s32 b_normal_exp;

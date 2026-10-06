@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk_library__getpic_types.h"
+#include "rnc/sdk/library/_getpic.h"
 
 extern u8 D_00153A58[];
 extern s32 _Error1();
@@ -47,16 +47,16 @@ s32 _getpic(struct M2c_arg0 *arg0) {
             temp_16_12->unkA4 = 0;
             temp_16_12->unkA0 = 0;
             var_18_8 = _decodeOrSkip(arg0, 0, temp_16_12->unk94);
-            temp_16_12->unkA0 = (s32) (temp_16_12->unkA0 + 1);
+            temp_16_12->unkA0 = (s32)(temp_16_12->unkA0 + 1);
             break;
         case 2:
             var_18_8 = _decodeOrSkip(arg0, temp_16_12->unkA4, temp_16_12->unk98);
-            temp_16_12->unkA4 = (s32) (temp_16_12->unkA4 + 1);
+            temp_16_12->unkA4 = (s32)(temp_16_12->unkA4 + 1);
             break;
         case 3:
         case 4:
             var_18_8 = _decodeOrSkip(arg0, temp_16_12->unkA8, temp_16_12->unk9C);
-            temp_16_12->unkA8 = (s32) (temp_16_12->unkA8 + 1);
+            temp_16_12->unkA8 = (s32)(temp_16_12->unkA8 + 1);
             break;
         }
         if (temp_16_12->unk820 != 0) {

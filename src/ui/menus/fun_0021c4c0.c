@@ -43,9 +43,9 @@ extern u8 D_0013DD40[];
 extern s32 D_0015ED84;
 extern u32 D_001CF874[];
 extern u32 D_001CF758[];
-extern void func_0022DA68(s32, s32, s32);
-extern void func_0020B950(void);
-extern s32 func_0020BC00(void *, s32, void *, s32);
+extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
+extern void update_mission_list(void) __asm__("func_0020B950");
+extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00");
 
 s32 FUN_0021c4c0(struct Menu *m) {
     s32 old;
@@ -59,10 +59,10 @@ s32 FUN_0021c4c0(struct Menu *m) {
         struct Menu *owner = D_001D5BF0.cur->owner;
         old = D_001A00F0.level;
         if (owner != m) {
-        if (old < 20) {
-            m->choice[old] = -1;
-        }
-        return 0;
+            if (old < 20) {
+                m->choice[old] = -1;
+            }
+            return 0;
         }
     }
     if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.unk124 == 0) {
@@ -85,8 +85,8 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_001A00F0.level != old) {
-        func_0022DA68(1, 0x11, m->unk14);
-        func_0020B950();
+        allocate_voice_for_target_entry(1, 0x11, m->unk14);
+        update_mission_list();
     }
     if (m->count != 0) {
         pad = D_0013C940.pressed;
@@ -99,10 +99,10 @@ s32 FUN_0021c4c0(struct Menu *m) {
             m->choice[D_001A00F0.level] = (m->choice[D_001A00F0.level] + 1) % m->count;
         }
         if (m->choice[D_001A00F0.level] != prev) {
-            func_0022DA68(1, 0x11, m->unk14);
+            allocate_voice_for_target_entry(1, 0x11, m->unk14);
         }
         if ((pad & 0x5000) || D_001A00F0.level != old) {
-            m->count = func_0020BC00((void *)0x70000000, 0, (void *)0x70000100, 1);
+            m->count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
             p = &ch[D_001A00F0.level];
             D_001CF874[0] = ((u32 *)0x70000000)[*p];
             D_001CF758[0] = ((u32 *)0x70000100)[*p];

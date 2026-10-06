@@ -19,4 +19,5 @@ extern s32 func_0023D080(s32 arg0, struct M2c_arg1 *arg1) __attribute__((alias("
 extern __typeof__(handle_mpeg_error) D_0023D080 __attribute__((alias("FUN_0023d080")));
 
 /* Recovered original symbol name. */
-extern __typeof__(handle_mpeg_error) mpegError__FP7sceMpegP18sceMpegCbDataErrorPv __attribute__((alias("FUN_0023d080")));
+extern __typeof__(handle_mpeg_error) mpegError__FP7sceMpegP18sceMpegCbDataErrorPv
+    __attribute__((alias("FUN_0023d080")));

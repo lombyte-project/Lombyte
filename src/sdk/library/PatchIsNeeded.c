@@ -6,7 +6,11 @@ extern s32 SetOsdConfigParam();
 s32 PatchIsNeeded(void) {
     union {
         u32 words[4];
-        struct { u32 a; u32 b; u8 pad[8]; } f;
+        struct {
+            u32 a;
+            u32 b;
+            u8 pad[8];
+        } f;
     } cfg;
 
     GetOsdConfigParam(&cfg);

@@ -54,8 +54,7 @@ typedef union {
     } bits;
 } FLOUnion;
 
-f64 __pack_d(FpNumber *src)
-{
+f64 __pack_d(FpNumber *src) {
     FLOUnion dst;
     u64 fraction = src->fraction;
     s32 sign = src->sign;

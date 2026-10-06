@@ -19,7 +19,8 @@ extern unsigned char *D_L05_001B25C8_q __asm__("D_L05_001B25C8") __attribute__((
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
-unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float a, float b, float c) {
+unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float a, float b,
+                                float c) {
     unsigned char *p = FUN_L00_002678b8_q(0x32);
     unsigned char *q;
     if (p != 0) {

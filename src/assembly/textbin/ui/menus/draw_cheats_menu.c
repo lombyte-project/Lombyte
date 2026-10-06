@@ -2,13 +2,13 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_cheats_menu/FUN_00221030.s", FUN_00221030);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/draw_cheats_menu/FUN_00221030.s",
+            FUN_00221030);
 #else
 #include "types.h"
-#include "rnc/text_region.h"
+#include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
-
 
 struct CheatMenuEntry {
     s32 text_id;
@@ -86,7 +86,10 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
                 enabled = *entry->enabled_flag;
             }
             font_print_large(0xC, draw_y, color, get_help_message_text(entry->text_id), -1);
-            font_print_right(menu->width - 0xC, draw_y, 0x80FFA888, get_help_message_text(enabled ? entry->enabled_text_id : entry->disabled_text_id), -1);
+            font_print_right(
+                menu->width - 0xC, draw_y, 0x80FFA888,
+                get_help_message_text(enabled ? entry->enabled_text_id : entry->disabled_text_id),
+                -1);
             draw_y += line_spacing;
             draw_index++;
             entry_index++;

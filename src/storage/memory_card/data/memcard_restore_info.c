@@ -11,16 +11,16 @@ typedef struct {
     char hdr[0x20];
     McEntry e[5];
     char pad[0xC];
-} McSlot;         /* 0xB8 */
+} McSlot; /* 0xB8 */
 extern McSlot D_0013D290[];
-extern int func_0020AD38(char *); /* memcard_TestChecksum */
+extern int validate_data_crc(char *) __asm__("func_0020AD38"); /* memcard_TestChecksum */
 /* memcard_RestoreInfo(char *, int, int). Advancing the buf parameter
    itself and copying the name with memcpy both matter for retail's
    registers; re-indexing the entry per store keeps its daddu copies. */
 void memcard_restore_info(char *buf, int slot, int idx) __asm__("FUN_0020ae60");
 
 void memcard_restore_info(char *buf, int slot, int idx) {
-    D_0013D290[slot].e[idx].valid = func_0020AD38(buf) == 0;
+    D_0013D290[slot].e[idx].valid = validate_data_crc(buf) == 0;
     buf += 0x10;
     D_0013D290[slot].e[idx].a = *(int *)buf;
     buf += 0xC;

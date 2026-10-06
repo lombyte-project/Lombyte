@@ -14,8 +14,7 @@
  * Prefer a plain TImode copy (u128) wherever that reproduces retail.
  * Identified by rac1-decomp (include/common.h).
  */
-static __inline__ void qcopy(void *dst, void *src)
-{
+static __inline__ void qcopy(void *dst, void *src) {
     __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
 }
 

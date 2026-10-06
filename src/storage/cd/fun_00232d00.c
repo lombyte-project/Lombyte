@@ -1,7 +1,21 @@
 #include "types.h"
-struct SifClientData { u8 pad0[0x24]; void *serve; };
-struct StashEntry { s32 addr; s32 count; s32 tag; s32 pad; };
-struct Stash { s32 base; s32 size; struct SifClientData cd; s32 cur; s32 n; };
+struct SifClientData {
+    u8 pad0[0x24];
+    void *serve;
+};
+struct StashEntry {
+    s32 addr;
+    s32 count;
+    s32 tag;
+    s32 pad;
+};
+struct Stash {
+    s32 base;
+    s32 size;
+    struct SifClientData cd;
+    s32 cur;
+    s32 n;
+};
 extern struct Stash D_001DD1A0;
 extern struct StashEntry D_001DD1D8[64];
 extern s32 sceSifBindRpc(struct SifClientData *, u32, s32);

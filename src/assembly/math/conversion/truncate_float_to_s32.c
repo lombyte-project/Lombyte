@@ -2,7 +2,8 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/math/conversion/truncate_float_to_s32/FUN_001fa6d0.s", FUN_001fa6d0);
+INCLUDE_ASM("config/us/expected/asm/assembly/math/conversion/truncate_float_to_s32/FUN_001fa6d0.s",
+            FUN_001fa6d0);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

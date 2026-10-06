@@ -1,5 +1,7 @@
 #include "types.h"
-struct Str19 { char c[19]; };
+struct Str19 {
+    char c[19];
+};
 extern struct Str19 D_001E7AA8;
 extern char D_0019A440[];
 extern u32 strlen(const char *);

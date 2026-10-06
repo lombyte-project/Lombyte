@@ -8,7 +8,7 @@ extern QuatNext D_0015FFD8;
    largest diagonal element, working on a packed 3x3 copy. */
 void FUN_00214260(void *arg0, void *arg1) {
     float *q = arg0;
-    float (*m)[4] = arg1;
+    float(*m)[4] = arg1;
     QuatNext n = D_0015FFD8;
     float mat[3][3];
     float trace;

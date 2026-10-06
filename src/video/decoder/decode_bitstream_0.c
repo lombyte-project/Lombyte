@@ -52,8 +52,8 @@ typedef struct {
 } sceMpeg; /* 0x48 */
 #define VD_STATE_ABORT 1
 typedef struct {
-    sceMpeg mpeg;     /* 0x00 */
-    ViBuf vibuf;      /* 0x48 */
+    sceMpeg mpeg;       /* 0x00 */
+    ViBuf vibuf;        /* 0x48 */
     unsigned int state; /* 0xA8 */
     int sema;
     int hid_endimage;
@@ -80,13 +80,15 @@ typedef struct {
 typedef struct {
     char v[0xD0000];
 } VoData;
-extern int func_0012BA48(sceMpeg *);                      /* sceMpegIsEnd */
-extern int sceMpegGetPicture(sceMpeg *, void *, int);         /* sceMpegGetPicture_pal */
-extern void sceMpegReset(sceMpeg *);                     /* sceMpegReset_pal */
-extern VoData *FUN_0023d288(VoBuf *); /* voBufGetData */
-extern void func_0023D210(VoBuf *);    /* voBufIncCount */
-extern void func_0023B210(void *, int, int, int);         /* setImageTag */
-extern void func_0023AB78(char *);                        /* ErrMessage */
+extern int func_0012BA48(sceMpeg *);                             /* sceMpegIsEnd */
+extern int sceMpegGetPicture(sceMpeg *, void *, int);            /* sceMpegGetPicture_pal */
+extern void sceMpegReset(sceMpeg *);                             /* sceMpegReset_pal */
+extern VoData *vo_buf_get_data(VoBuf *) __asm__("FUN_0023d288"); /* voBufGetData */
+extern void vo_buf_inc_count(VoBuf *) __asm__("func_0023D210");  /* voBufIncCount */
+extern void build_image_transfer_tag(void *, int, int,
+                                     int) __asm__("func_0023B210"); /* setImageTag */
+extern void switch_thread(void) __asm__("func_0023A770");           /* switchThread */
+extern void log_audio_error(char *) __asm__("func_0023AB78");       /* ErrMessage */
 extern char D_001E8B38[];
 extern char D_001E8B50[];
 /* decBs0(VideoDec *) */
@@ -104,12 +106,12 @@ int decode_bitstream_0(VideoDec *vd) {
             break;
         }
 
-        while (!(voData = FUN_0023d288(&voBuf))) {
-            func_0023A770();
+        while (!(voData = vo_buf_get_data(&voBuf))) {
+            switch_thread();
         }
 
         if (sceMpegGetPicture(&vd->mpeg, voData->v, 0x340) < 0) {
-            func_0023AB78(D_001E8B50);
+            log_audio_error(D_001E8B50);
         }
 
         if (vd->mpeg.frameCount == 0) {
@@ -117,17 +119,16 @@ int decode_bitstream_0(VideoDec *vd) {
             int image_h = vd->mpeg.height;
 
             for (i = 0; i < voBuf.size; i++) {
-                func_0023B210(((VoTag *)voBuf.tag)[i].body,
-                              (int)((VoData *)voBuf.data)[i].v, image_w, image_h);
+                build_image_transfer_tag(((VoTag *)voBuf.tag)[i].body,
+                                         (int)((VoData *)voBuf.data)[i].v, image_w, image_h);
             }
         }
 
-        func_0023D210(&voBuf);
-        func_0023A770();
+        vo_buf_inc_count(&voBuf);
+        switch_thread();
     }
     sceMpegReset(&vd->mpeg);
     return status;
 }
-extern void func_0023A770(void);  /* switchThread */
 
 extern __typeof__(decode_bitstream_0) func_0023CEC8 __attribute__((alias("FUN_0023cec8")));

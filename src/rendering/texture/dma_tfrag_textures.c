@@ -1,7 +1,18 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TexState { u8 pad0[0xC]; s32 count; s32 enabled; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TexState {
+    u8 pad0[0xC];
+    s32 count;
+    s32 enabled;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 extern struct TagPtr D_00160F00;
 extern struct TagPtr D_00160EBC;
 extern struct TexState D_0018A2B0;
@@ -10,7 +21,7 @@ extern s32 D_00160EC4;
 extern char D_001E89B0[];
 extern void FUN_00234bd8(void);
 extern s32 func_00234D48(s32);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
 void dma_tfrag_textures(void) __asm__("FUN_002331c0");
 
@@ -27,7 +38,7 @@ void dma_tfrag_textures(void) {
     if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
         FUN_00234bd8();
         size = func_00234D48(D_0015EE74);
-        func_00233B68();
+        vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E89B0);
         }

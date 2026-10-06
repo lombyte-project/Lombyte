@@ -12,7 +12,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_L00_002ea9d8(void *);
@@ -27,7 +27,7 @@ void FUN_L12_003032e8(char *moby) {
     FUN_L00_002ea9d8(m);
     m[4] = 0;
     m[5] = -*(float *)(data + 0x74);
-    m[6] = FUN_001fa580(1.5707964f, *(float *)(moby + 0x48));
+    m[6] = fast_add_rotations(1.5707964f, *(float *)(moby + 0x48));
     FUN_L00_002ea9d8(m + 4);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
@@ -81,7 +81,7 @@ extern int FUN_001f9770(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L12_003076e0(char *);
 extern void FUN_L12_00307ab8(char *m);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_00307840(char *m) {
@@ -95,7 +95,8 @@ void FUN_L12_00307840(char *m) {
         for (i = 0; i < 12; i++) {
             if (slots[i] != -1) {
                 char *o = (char *)(D_L12_0015FFD8_m + (slots[i] << 8));
-                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD) {
+                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE &&
+                    ((unsigned char *)o)[0x20] != 0xFD) {
                     mark_moby_for_removal(o);
                 }
             }
@@ -193,7 +194,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char v[16]; char padv[16];
+    char v[16];
+    char padv[16];
     float f20;
     char pad24[4];
     float f28;
@@ -269,7 +271,7 @@ extern int D_L12_001FBD10[];
 extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
 extern int D_L12_00205A58[];
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
@@ -289,7 +291,8 @@ void FUN_L12_0030be68(char *m) {
         vu1_add_g_sregister(6, get_effect_texture(0x2C));
         for (i = 0; i < 10; i++) {
             FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
-            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i], D_L12_00208B00, 1);
+            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i],
+                             D_L12_00208B00, 1);
         }
     }
     vu1_add_g_sregister(6, get_effect_texture(0x2F));

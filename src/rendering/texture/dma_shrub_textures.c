@@ -1,7 +1,18 @@
 #include "types.h"
-struct DmaTag { u32 w0; u32 addr; u32 w2; u32 w3; };
-struct TexState { u8 pad0[0x1C]; s32 count; s32 enabled; };
-struct TagPtr { struct DmaTag *p; };
+struct DmaTag {
+    u32 w0;
+    u32 addr;
+    u32 w2;
+    u32 w3;
+};
+struct TexState {
+    u8 pad0[0x1C];
+    s32 count;
+    s32 enabled;
+};
+struct TagPtr {
+    struct DmaTag *p;
+};
 extern struct TagPtr D_00160F00;
 extern struct TagPtr D_001603F0;
 extern struct TexState D_0018A2B0;
@@ -9,7 +20,7 @@ extern s32 D_0015EE74;
 extern s32 D_001603F8;
 extern char D_001E88D0[];
 extern s32 FUN_0022a330(s32);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
 void dma_shrub_textures(void) __asm__("FUN_002288f0");
 
@@ -25,7 +36,7 @@ void dma_shrub_textures(void) {
     D_001603F0.p->w3 = 0;
     if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
         size = FUN_0022a330(D_0015EE74);
-        func_00233B68();
+        vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E88D0);
         }

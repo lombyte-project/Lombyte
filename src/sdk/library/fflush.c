@@ -51,60 +51,59 @@ ANSI C requires <<fflush>>.
 No supporting OS subroutines are required.
 */
 
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
-#define FILE RncFile
+#define FILE                       RncFile
 #define _DEFUN(name, args, params) name(params)
-#define _REENT D_0012F76C
-#define __SWR 8
-#define __SLBF 1
-#define __SNBF 2
-#define __SERR 0x40
-#define EOF (-1)
+#define _REENT                     D_0012F76C
+#define __SWR                      8
+#define __SLBF                     1
+#define __SNBF                     2
+#define __SERR                     0x40
+#define EOF                        (-1)
 extern RncReent *D_0012F76C __attribute__((section(".data")));
 extern s32 _fwalk(RncReent *, s32 (*)(RncFile *));
 extern void __sinit(RncReent *);
-#define CHECK_INIT(fp) do { if ((fp)->_data == 0) (fp)->_data = _REENT; if (!(fp)->_data->__sdidinit) __sinit((fp)->_data); } while (0)
-
+#define CHECK_INIT(fp)                                                                             \
+    do {                                                                                           \
+        if ((fp)->_data == 0)                                                                      \
+            (fp)->_data = _REENT;                                                                  \
+        if (!(fp)->_data->__sdidinit)                                                              \
+            __sinit((fp)->_data);                                                                  \
+    } while (0)
 
 /* Flush a single file, or (if fp is NULL) all files.  */
 
-s32 fflush(RncFile *fp)
-{
-  register unsigned char *p;
-  register int n, t;
+s32 fflush(RncFile *fp) {
+    register unsigned char *p;
+    register int n, t;
 
+    if (fp == NULL)
+        return _fwalk(_REENT, fflush);
 
+    CHECK_INIT(fp);
 
+    t = (s16)fp->_flags;
+    if ((t & __SWR) == 0 || (p = fp->_bf._base) == NULL)
+        return 0;
+    n = fp->_p - p; /* write this much */
 
-  if (fp == NULL)
-    return _fwalk (_REENT, fflush);
-
-  CHECK_INIT (fp);
-
-  t = (s16)fp->_flags;
-  if ((t & __SWR) == 0 || (p = fp->_bf._base) == NULL)
-    return 0;
-  n = fp->_p - p;		/* write this much */
-
-  /*
+    /*
    * Set these immediately to avoid problems with longjmp
    * and to allow exchange buffering (via setvbuf) in user
    * write function.
    */
-  fp->_p = p;
-  fp->_w = t & (__SLBF | __SNBF) ? 0 : fp->_bf._size;
+    fp->_p = p;
+    fp->_w = t & (__SLBF | __SNBF) ? 0 : fp->_bf._size;
 
-  while (n > 0)
-    {
-      t = (*fp->_write) (fp->_cookie, (char *) p, n);
-      if (t <= 0)
-	{
-	  fp->_flags |= __SERR;
-	  return EOF;
-	}
-      p += t;
-      n -= t;
+    while (n > 0) {
+        t = (*fp->_write)(fp->_cookie, (char *)p, n);
+        if (t <= 0) {
+            fp->_flags |= __SERR;
+            return EOF;
+        }
+        p += t;
+        n -= t;
     }
-  return 0;
+    return 0;
 }

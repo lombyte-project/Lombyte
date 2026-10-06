@@ -3,7 +3,8 @@
 extern int D_0013D4C0 NOT_SDA;
 int FUN_0020bf68(void) {
     unsigned char *base = (unsigned char *)&D_0013D4C0;
-    if (base[0x1F] != 0) return 2;
+    if (base[0x1F] != 0)
+        return 2;
     return base[0x21] != 0;
 }
 

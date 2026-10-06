@@ -13,7 +13,8 @@ extern s32 D_0015F630;
 extern u8 *D_0015F634;
 extern s32 allocate_voice_slot(u8 *, s32, s32, s32, s32) __asm__("func_0022D7F0");
 
-s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
+s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags,
+                                   s32 owner) __asm__("FUN_0022dba0");
 
 s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) {
     s32 entry_index;
@@ -33,4 +34,5 @@ s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) 
     return slot_index;
 }
 
-extern __typeof__(allocate_voice_for_group_entry) func_0022DBA0 __attribute__((alias("FUN_0022dba0")));
+extern __typeof__(allocate_voice_for_group_entry) func_0022DBA0
+    __attribute__((alias("FUN_0022dba0")));

@@ -1,16 +1,35 @@
 #include "types.h"
 struct Anim {
-    s32 unk0; s32 flags; u8 pad8[0x18];
-    s32 next_id; s32 next_mode; s32 next_b; s32 next_c; s32 next_fn; s32 next_d; s32 next_e;
-    u8 pad3c[0x28]; s32 serial; s32 pending; u8 pad6c[4]; s32 unk70; u8 pad74[8]; s32 unk7C;
+    s32 unk0;
+    s32 flags;
+    u8 pad8[0x18];
+    s32 next_id;
+    s32 next_mode;
+    s32 next_b;
+    s32 next_c;
+    s32 next_fn;
+    s32 next_d;
+    s32 next_e;
+    u8 pad3c[0x28];
+    s32 serial;
+    s32 pending;
+    u8 pad6c[4];
+    s32 unk70;
+    u8 pad74[8];
+    s32 unk7C;
     u8 pad80[0x10];
 };
 extern s32 D_0015F604;
 extern struct Anim D_00199B60[];
-struct AnimTable { s32 serial; u8 pad4[0x18]; void *defs; };
+struct AnimTable {
+    s32 serial;
+    u8 pad4[0x18];
+    void *defs;
+};
 extern struct AnimTable D_0019A3E8;
-extern void func_001FF418(struct Anim *);
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
+extern void apply_pending_animation(struct Anim *) __asm__("func_001FF418");
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
+                           s32 b) __asm__("FUN_001ff308");
 
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) {
     s32 slot = chan & 0xF;
@@ -20,8 +39,8 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
     if (D_0015F604 == 5 && slot != 2 && slot != 0) {
         return 0;
     }
-    if (anim->next_c != c || anim->next_b != b || anim->next_id != id || anim->next_mode != mode
-        || anim->next_fn != fn || anim->next_d != d || anim->next_e != e) {
+    if (anim->next_c != c || anim->next_b != b || anim->next_id != id || anim->next_mode != mode ||
+        anim->next_fn != fn || anim->next_d != d || anim->next_e != e) {
         anim->next_c = c;
         anim->serial = D_0019A3E8.serial++;
         anim->next_b = b;
@@ -34,7 +53,7 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
         anim->unk7C = 0;
         anim->unk70 = 0;
         if (mode & anim->flags & 0x20) {
-            func_001FF418(anim);
+            apply_pending_animation(anim);
         }
     }
     return anim->serial;

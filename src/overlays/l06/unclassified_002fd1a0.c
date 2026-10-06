@@ -16,11 +16,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
 extern char D_0013F3D0[];
 extern int D_L06_0015FFD8;
 extern int FUN_L06_002e9d10(void *, void *);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L06_001ABFC0[];
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L06_002fda30(char *m) {
     int *d = *(int **)(m + 0x78);
@@ -53,7 +53,8 @@ void FUN_L06_002fda30(char *m) {
                 short *p = list;
                 char *pos = m + 0x10;
                 do {
-                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8), pos)) {
+                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8),
+                                         pos)) {
                         found = 1.0f;
                         break;
                     }
@@ -73,8 +74,7 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".s
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void FUN_L06_002ffc38(int idx)
-{
+void FUN_L06_002ffc38(int idx) {
     short *p = D_L06_001ABFC0_u[idx];
     if (p != 0) {
         do {
@@ -176,7 +176,7 @@ extern int D_0015EE1D;
 extern int FUN_L00_00203908(int a, int b);
 extern unsigned char D_0014C050[];
 extern unsigned short D_00141C00 __attribute__((section(".data")));
-extern void try_set_help_message(int, int);
+extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void FUN_L06_00302fd8(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -203,7 +203,8 @@ void FUN_L06_00302fd8(char *m) {
         *(int *)(d + 0x9C) = 4;
         break;
     }
-    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 && (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
+    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 &&
+        (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
         FUN_L00_00203908(0x177A, 0x53);
         *(int *)(d + 0x9C) = -1;
         return;
@@ -233,8 +234,7 @@ extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L06_00304028(char *moby)
-{
+void FUN_L06_00304028(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
@@ -248,16 +248,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_003047b8(char *arg) {
     if ((unsigned char)arg[0x20] == 1) {
         arg[0x20] = 2;
-        FUN_0022da68(0, 0, arg);
+        allocate_voice_for_target_entry(0, 0, arg);
     }
 }
-s32 FUN_L06_003047f8(const u8 *moby)
-{
+s32 FUN_L06_003047f8(const u8 *moby) {
     u32 state = moby[0x20];
 
     if (state == 7) {
@@ -318,7 +317,7 @@ void FUN_L06_00305000(char *m) {
 extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern short D_L06_001621C4 __attribute__((sda));
 extern short D_L06_001621C8 __attribute__((sda));
 extern short D_L06_001621C0 __attribute__((sda));
@@ -333,8 +332,8 @@ extern void FUN_001fa050(float *, float *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_L06_00216b88(int *, float *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void font_queue_vu_state(void);
-extern void vu1_add_g_sregister(int, long);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L06_00305170(char *m) {
     float a[16];
@@ -356,7 +355,9 @@ void FUN_L06_00305170(char *m) {
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
-    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) | ((long)*(int *)&D_L06_001621C8 << 4) | ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
+    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) |
+                                  ((long)*(int *)&D_L06_001621C8 << 4) |
+                                  ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
     m0 = mat[0];
     sp = s;

@@ -1,5 +1,7 @@
 #include "types.h"
-struct _reent { s32 _errno; };
+struct _reent {
+    s32 _errno;
+};
 extern s32 D_0015EC10[];
 extern s32 read(s32, s32, s32);
 s32 reentrant_read(struct _reent *ptr, s32 a, s32 b, s32 c) __asm__("FUN_00116108");

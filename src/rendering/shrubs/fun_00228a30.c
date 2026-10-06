@@ -1,8 +1,23 @@
 #include "types.h"
-struct TexRemap { s16 lo; s16 hi; };
-struct GifPacket { s32 count; s32 skip; u8 pad8[8]; };
-struct GifSlot { struct GifPacket *pkt; s32 pad; };
-struct TieClass { u8 pad0[0x28]; s16 count; u8 pad2A[0x16]; struct GifSlot slots[1]; };
+struct TexRemap {
+    s16 lo;
+    s16 hi;
+};
+struct GifPacket {
+    s32 count;
+    s32 skip;
+    u8 pad8[8];
+};
+struct GifSlot {
+    struct GifPacket *pkt;
+    s32 pad;
+};
+struct TieClass {
+    u8 pad0[0x28];
+    s16 count;
+    u8 pad2A[0x16];
+    struct GifSlot slots[1];
+};
 extern s32 D_001D8DB0[];
 extern struct TieClass *D_001D7F30[];
 extern struct TexRemap D_001D88B0[];

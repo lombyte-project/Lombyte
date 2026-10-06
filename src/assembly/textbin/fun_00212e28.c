@@ -6,8 +6,14 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00212e28/FUN_00212e28.s
 #else
 #include "types.h"
 struct Moby {
-    u8 pad0[0x20]; s8 state; u8 pad21[7]; struct Moby *next; u8 pad2C[8]; volatile u16 flags;
-    u8 pad36[0x3E]; void (*update_callback)(struct Moby *);
+    u8 pad0[0x20];
+    s8 state;
+    u8 pad21[7];
+    struct Moby *next;
+    u8 pad2C[8];
+    volatile u16 flags;
+    u8 pad36[0x3E];
+    void (*update_callback)(struct Moby *);
 };
 extern struct Moby *visible_moby_list __asm__("D_0015FF24");
 extern struct Moby *build_resident_visibility_list(void) __asm__("func_0020D868");
@@ -37,6 +43,7 @@ void update_visible_resident_objects(void) {
     }
 }
 
-extern __typeof__(update_visible_resident_objects) func_00212E28 __attribute__((alias("FUN_00212e28")));
+extern __typeof__(update_visible_resident_objects) func_00212E28
+    __attribute__((alias("FUN_00212e28")));
 
 #endif /* NON_MATCHING */

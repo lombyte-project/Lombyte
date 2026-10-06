@@ -88,24 +88,25 @@ typedef struct _Bigint {
 } _Bigint;
 struct _reent;
 typedef u32 __ULong;
-typedef union double_union { f64 d; u32 i[2]; } double_union;
-#define word0(x) ((x).i[1])
-#define word1(x) ((x).i[0])
-#define d0 word0(d)
-#define d1 word1(d)
+typedef union double_union {
+    f64 d;
+    u32 i[2];
+} double_union;
+#define word0(x)  ((x).i[1])
+#define word1(x)  ((x).i[0])
+#define d0        word0(d)
+#define d1        word1(d)
 #define Exp_shift 20
-#define Exp_msk1 0x100000U
+#define Exp_msk1  0x100000U
 #define Frac_mask 0xfffffU
-#define Exp_mask 0x7ff00000U
-#define Bias 1023
-#define P 53
+#define Exp_mask  0x7ff00000U
+#define Bias      1023
+#define P         53
 extern _Bigint *_Balloc(struct _reent *, s32);
 extern s32 _hi0bits(u32);
 extern s32 _lo0bits(u32 *);
 
-_Bigint *
-_d2b(struct _reent *ptr, f64 _d, s32 *e, s32 *bits)
-{
+_Bigint *_d2b(struct _reent *ptr, f64 _d, s32 *e, s32 *bits) {
     double_union d;
     _Bigint *b;
     s32 de, i, k;

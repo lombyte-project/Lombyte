@@ -7,7 +7,7 @@ typedef union {
     u128 q[4];
 } Mtx44;
 
-extern void func_001F99F8(float *);
+extern void clear_u64_value(float *) __asm__("func_001F99F8");
 extern float FUN_001f9e90(float, float);
 extern void FUN_001fa050(float *, float *);
 extern void FUN_001fa070(float *, float *);
@@ -31,7 +31,7 @@ void FUN_00214598(Mtx44 *src, float *out) {
     m.q[1] = src->q[1];
     m.q[2] = src->q[2];
     m.q[3] = src->q[3];
-    func_001F99F8(m.m[3]);
+    clear_u64_value(m.m[3]);
     m.m[3][3] = 1.0f;
     z = FUN_001f9e90(m.m[0][0], m.m[0][1]);
     v[0] = 0.0f;

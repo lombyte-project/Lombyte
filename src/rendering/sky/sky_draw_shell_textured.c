@@ -30,7 +30,7 @@ extern u8 D_0013D160[];
 
 extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
-extern void func_0020B3E0(void);
+extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
 extern s32 FUN_0022bf94(s32, s32, s32, s32) __asm__("FUN_0022bf94");
 extern void FUN_0022c208(s32, s32, s32, s32);
 
@@ -64,7 +64,7 @@ void sky_draw_shell_textured(struct Shell *shell) {
 
     for (i = 0; i < shell->count; i++) {
         if (visibility[i] == 1) {
-            func_0020B3E0();
+            dma_to_spr_sync();
         }
 
         next = i + 1;
@@ -79,7 +79,7 @@ void sky_draw_shell_textured(struct Shell *shell) {
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
             if (FUN_0022bf94(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
-                              (&shell->tiles[i])->unkC) == 0) {
+                             (&shell->tiles[i])->unkC) == 0) {
                 FUN_0022c208(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }
         }

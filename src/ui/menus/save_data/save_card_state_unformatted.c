@@ -10,6 +10,7 @@ void save_card_state_unformatted(void) {
         D_0015EEB0 = 3;
         return;
     }
-    if (D_0015EEB4 & 2) D_0015EEB0 = 6;
+    if (D_0015EEB4 & 2)
+        D_0015EEB0 = 6;
 }
 extern __typeof__(save_card_state_unformatted) func_00208A38 __attribute__((alias("FUN_00208a38")));

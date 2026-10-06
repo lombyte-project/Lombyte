@@ -11,4 +11,5 @@ void append_palette_transfer_packet(void) {
     D_00160F00 += 0x10;
 }
 
-extern __typeof__(append_palette_transfer_packet) func_001FB6E0 __attribute__((alias("FUN_001fb6e0")));
+extern __typeof__(append_palette_transfer_packet) func_001FB6E0
+    __attribute__((alias("FUN_001fb6e0")));

@@ -81,8 +81,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68
 
 s32 update_menu_entry_actions(MenuDescriptor *menu) __asm__("FUN_0021abf8");
 
-s32 update_menu_entry_actions(MenuDescriptor *menu)
-{
+s32 update_menu_entry_actions(MenuDescriptor *menu) {
     s32 focused;
     s32 entry_index;
     s32 entry_count;
@@ -104,7 +103,8 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
             if (scale_game_frames(menu_fade_duration) < fade_timer) {
                 menu->items[entry_index].timer = scale_game_frames(menu_fade_duration);
             }
-            menu->items[entry_index].timer = (s16)menu->items[entry_index].timer > 0 ? menu->items[entry_index].timer - 1 : 0;
+            menu->items[entry_index].timer =
+                (s16)menu->items[entry_index].timer > 0 ? menu->items[entry_index].timer - 1 : 0;
         }
     }
     if (!focused) {
@@ -225,7 +225,8 @@ s32 update_menu_entry_actions(MenuDescriptor *menu)
         }
     }
     if ((buttons & 0x4000) || ((menu->flags & 0x100) && (buttons & 8))) {
-        if (menu->items[menu->selected_entry + 1].type != 0 && menu->items[menu->selected_entry + 1].action != 0) {
+        if (menu->items[menu->selected_entry + 1].type != 0 &&
+            menu->items[menu->selected_entry + 1].action != 0) {
             menu->selected_entry++;
         } else if (menu->flags & 0x1000) {
             menu->selected_entry = 0;

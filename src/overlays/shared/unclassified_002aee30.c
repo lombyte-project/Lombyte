@@ -30,7 +30,8 @@ void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     v10[3] = 1.0f;
     FUN_001f9cf8(v10, v10, a + 0xC0);
     FUN_001f9a10(v10, v10, a + 0x10);
-    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d, *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
+    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d,
+                     *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 
@@ -44,8 +45,7 @@ extern short D_L04_001618D8_d __asm__("D_L04_001618D8") __attribute__((sda));
 extern short D_L04_001618DC_d __asm__("D_L04_001618DC") __attribute__((sda));
 extern void FUN_L04_002c45b8(char *a, int i, int j, int k);
 
-void FUN_L04_002c46d0(char *a)
-{
+void FUN_L04_002c46d0(char *a) {
     FUN_L04_002c45b8(a, 0, 1, *(int *)&D_L04_001618C0_d);
     FUN_L04_002c45b8(a, 2, 3, *(int *)&D_L04_001618C4_d);
     FUN_L04_002c45b8(a, 4, 5, *(int *)&D_L04_001618C8_d);

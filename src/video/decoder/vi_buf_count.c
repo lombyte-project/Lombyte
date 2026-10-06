@@ -12,12 +12,12 @@ extern s32 FUN_001189b0();
 s32 vi_buf_count(struct M2c_arg0 *arg0) __asm__("FUN_0023c610");
 
 s32 vi_buf_count(struct M2c_arg0 *arg0) {
-    s32 temp_17_17;
+    s32 count;
 
     FUN_001189b0(arg0->unk40);
-    temp_17_17 = (arg0->unk10 << 0xB) + arg0->unk14;
+    count = (arg0->unk10 << 0xB) + arg0->unk14;
     FUN_00118990(arg0->unk40);
-    return temp_17_17;
+    return count;
 }
 
 extern s32 func_0023C610(struct M2c_arg0 *arg0) __attribute__((alias("FUN_0023c610")));

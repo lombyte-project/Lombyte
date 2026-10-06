@@ -1,12 +1,12 @@
 typedef struct {
-    short id;             /* 0x00 */
+    short id; /* 0x00 */
     char pad02[0xE];
     unsigned short flags; /* 0x10 */
     short base;           /* 0x12 */
     short ids[8];         /* 0x14 */
     short status;         /* 0x24 */
     short sel;            /* 0x26 */
-} MissionNode; /* 0x28 */
+} MissionNode;            /* 0x28 */
 
 extern MissionNode *D_001A2C20[];
 

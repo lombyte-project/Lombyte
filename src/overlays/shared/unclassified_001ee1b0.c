@@ -3,11 +3,15 @@
 #include "asm.h"
 
 typedef int q128 __attribute__((mode(TI)));
-typedef union { q128 q; f32 f[4]; s32 i[4]; } V;
+typedef union {
+    q128 q;
+    f32 f[4];
+    s32 i[4];
+} V;
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
-extern s32 truncate_float_to_s32(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 *D_L00_0015EF80;
 extern void FUN_001e93b0(char *);
 extern char D_L00_001E78B0[];
@@ -49,7 +53,11 @@ s32 *FUN_L00_001ee1b0(q128 *v, f32 rad) {
     return 0;
 }
 typedef int u128_1ee318 __attribute__((mode(TI)));
-typedef union { u128_1ee318 q; float f[4]; int i[4]; } V_1ee318;
+typedef union {
+    u128_1ee318 q;
+    float f[4];
+    int i[4];
+} V_1ee318;
 extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");
 extern unsigned char *D_L00_001600FC_1ee318 __asm__("D_L00_001600FC");
 extern unsigned char *D_L00_001600F4_1ee318 __asm__("D_L00_001600F4");
@@ -78,7 +86,8 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
         FUN_001f9a28_1ee318(&d, pt, e + 0x30);
         d.i[3] = 0;
         FUN_001f9cf8_1ee318(&l, &d, e + 0x40);
-        return -1.0f <= l.f[0] && l.f[0] <= 1.0f && -1.0f <= l.f[1] && l.f[1] <= 1.0f && -1.0f <= l.f[2] && l.f[2] <= 1.0f;
+        return -1.0f <= l.f[0] && l.f[0] <= 1.0f && -1.0f <= l.f[1] && l.f[1] <= 1.0f &&
+               -1.0f <= l.f[2] && l.f[2] <= 1.0f;
     }
     case 6: {
         unsigned char *e;

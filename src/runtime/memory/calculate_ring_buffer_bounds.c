@@ -19,4 +19,5 @@ s32 calculate_ring_buffer_bounds(u32 arg0, s32 *arg1, s32 *arg2) {
     *arg2 = (D_001940C0.unk8 + D_00160F0C) - arg0;
     return 0;
 }
-extern __typeof__(calculate_ring_buffer_bounds) func_001FD6E0 __attribute__((alias("FUN_001fd6e0")));
+extern __typeof__(calculate_ring_buffer_bounds) func_001FD6E0
+    __attribute__((alias("FUN_001fd6e0")));

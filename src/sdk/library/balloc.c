@@ -92,9 +92,7 @@ typedef struct _reent {
 } _reent;
 extern void *_calloc_r(struct _reent *, u32, u32);
 
-_Bigint *
-_Balloc(struct _reent *ptr, s32 k)
-{
+_Bigint *_Balloc(struct _reent *ptr, s32 k) {
     s32 x;
     _Bigint *rv;
 

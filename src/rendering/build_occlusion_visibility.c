@@ -22,7 +22,7 @@ extern void FUN_001f9810(u8 *, s32);
 extern void FUN_001f98d0(u8 *, u8 *, s32);
 extern void FUN_001f98f8(u8 *, u8 *, u8 *, s32);
 extern f32 func_001FA6C0(s32);
-extern s32 func_001FA6D0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FillTransferWords(u8 *, s32, s32);
 
 void build_occlusion_visibility(void) __asm__("FUN_001f2820");
@@ -35,9 +35,9 @@ void build_occlusion_visibility(void) {
     f32 *p;
     s32 bx, by, bz;
 
-    x = func_001FA6D0(D_00186F40.x * scale);
-    y = func_001FA6D0(D_00186F40.y * scale);
-    z = func_001FA6D0(D_00186F40.z * scale);
+    x = truncate_float_to_s32(D_00186F40.x * scale);
+    y = truncate_float_to_s32(D_00186F40.y * scale);
+    z = truncate_float_to_s32(D_00186F40.z * scale);
     vis = parse_occlusion_grid(x, y, z);
     if (vis != 0) {
         D_0015F64C = 0;
@@ -86,7 +86,8 @@ void build_occlusion_visibility(void) {
                     bx = 0.0f < D_00186F40.x - p[0];
                     by = 0.0f < D_00186F40.y - p[1];
                     bz = 0.0f < D_00186F40.z - p[2];
-                    FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10), 0x80);
+                    FUN_001f98d0(D_00193FC0, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
+                                 0x80);
                 } else if (D_0018C32C[0] == 0 && D_0015F650 != 0) {
                     FUN_001f98d0(D_00193FC0, D_0015F650, 0x80);
                 } else {

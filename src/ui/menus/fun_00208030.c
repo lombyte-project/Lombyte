@@ -40,8 +40,8 @@ void FUN_00208030(u8 *out) {
                 }
             }
             for (m = 0; m < 128; m += 8) {
-                *dst++ = acc[m] | acc[m + 1] | acc[m + 2] | acc[m + 3] |
-                         acc[m + 4] | acc[m + 5] | acc[m + 6] | acc[m + 7];
+                *dst++ = acc[m] | acc[m + 1] | acc[m + 2] | acc[m + 3] | acc[m + 4] | acc[m + 5] |
+                         acc[m + 6] | acc[m + 7];
             }
         }
     }

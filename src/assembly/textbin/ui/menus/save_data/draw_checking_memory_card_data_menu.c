@@ -2,13 +2,14 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu/FUN_00220348.s", FUN_00220348);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/"
+            "draw_checking_memory_card_data_menu/FUN_00220348.s",
+            FUN_00220348);
 #else
 #include "types.h"
-#include "rnc/text_region.h"
+#include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
-
 
 struct MemoryCardMenuEntry {
     u8 pad0[4];
@@ -75,7 +76,8 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void *memset(void *, s32, u32) __asm__("func_001153FC");
 extern void font_print_window_small(FontWindow *, u64, char *, s32) __asm__("func_001F75F0");
 extern u64 func_00204CF0(s32);
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("func_001F5450");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
+                               u64) __asm__("func_001F5450");
 
 s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) __asm__("FUN_00220348");
 
@@ -94,7 +96,8 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         if (memory_card_state.phase != 2) {
             return 2;
         }
-        if (memory_card_state.card_operation_state < 3 && memory_card_state.pending_card_operation < 0) {
+        if (memory_card_state.card_operation_state < 3 &&
+            memory_card_state.pending_card_operation < 0) {
             return 2;
         }
         setup_gif_paging(0);
@@ -125,7 +128,8 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
     }
     if (menu->flags & 4) {
         entry_offset = (state >= 4) << 2;
-        entry = &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
+        entry =
+            &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
         if (entry->type == 0 && item_available[entry->id] == 0) {
             return 1;
         }
@@ -134,9 +138,12 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         }
     }
     setup_gif_paging(0);
-    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0, menu->texture_width, menu->texture_height, 0x80808080, func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture));
+    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0,
+                       menu->texture_width, menu->texture_height, 0x80808080,
+                       func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture));
     do_gif_paging();
     return 0x10;
 }
-extern __typeof__(draw_checking_memory_card_data_menu) func_00220348 __attribute__((alias("FUN_00220348")));
+extern __typeof__(draw_checking_memory_card_data_menu) func_00220348
+    __attribute__((alias("FUN_00220348")));
 #endif /* NON_MATCHING */

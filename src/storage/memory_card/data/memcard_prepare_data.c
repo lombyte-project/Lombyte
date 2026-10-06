@@ -13,10 +13,10 @@ struct SaveHeader {
 };
 
 extern void FUN_001f9838(void *, void *, s32);
-extern s32 func_0020ACC0(void *, s32);
+extern s32 calculate_crc16(void *, s32) __asm__("func_0020ACC0");
 
-s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) __asm__("FUN_0020ad78");
-
+s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
+                         struct SaveBlock *blk) __asm__("FUN_0020ad78");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) {
     u8 *p;
@@ -46,7 +46,7 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk
     total += 8;
     ((s32 *)p)[1] = 0;
     ((s32 *)p)[0] = -1;
-    out->checksum = func_0020ACC0(out + 1, total);
+    out->checksum = calculate_crc16(out + 1, total);
     out->size = total;
     return total + 8;
 }

@@ -11,4 +11,5 @@ void append_texture_transfer_packet(void) {
     D_00160F00 += 0x10;
 }
 
-extern __typeof__(append_texture_transfer_packet) func_001FB680 __attribute__((alias("FUN_001fb680")));
+extern __typeof__(append_texture_transfer_packet) func_001FB680
+    __attribute__((alias("FUN_001fb680")));

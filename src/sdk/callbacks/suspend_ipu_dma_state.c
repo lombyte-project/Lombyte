@@ -8,8 +8,7 @@ extern void SetD3Chcr(s32 value);
 
 void suspend_ipu_dma_state(u32 *pSnapshot) __asm__("FUN_0012cc20");
 
-void suspend_ipu_dma_state(u32 *pSnapshot)
-{
+void suspend_ipu_dma_state(u32 *pSnapshot) {
     SetD4Chcr(1);
     pSnapshot[0] = *(volatile u32 *)0x1000B410;
     pSnapshot[1] = *(volatile u32 *)0x1000B430;

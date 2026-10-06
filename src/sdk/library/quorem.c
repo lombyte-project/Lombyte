@@ -12,10 +12,9 @@ typedef struct Bigint {
     unsigned int x[1];
 } Bigint;
 
-#define STOREINC(xc, hi, lo) \
-    (((unsigned short *)(xc))[1] = (unsigned short)(hi), \
-     ((unsigned short *)(xc))[0] = (unsigned short)(lo), \
-     (xc)++)
+#define STOREINC(xc, hi, lo)                                                                       \
+    (((unsigned short *)(xc))[1] = (unsigned short)(hi),                                           \
+     ((unsigned short *)(xc))[0] = (unsigned short)(lo), (xc)++)
 
 int quorem(Bigint *b, Bigint *S) {
     int n;

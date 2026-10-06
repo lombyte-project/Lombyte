@@ -37,7 +37,7 @@ extern SurfaceHeightGrid surface_height_grid __asm__("D_001E66E0");
 extern s32 surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 
 extern s32 find_surface_height_map(f32, f32, f32) __asm__("func_00239D60");
-extern s32 func_001FA6D0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 func_001FA6C0(s32);
 extern void func_001F9AD8(f32 *, f32 *, f32 *);
 extern void func_001F9BF8(f32 *, f32 *, f32);
@@ -46,7 +46,8 @@ extern void func_001F9BF8(f32 *, f32 *, f32);
    cell indices use signed fractions, so interpolation can extrapolate on
    either side of a sample. Cell 15 uses dedicated edge and corner samples.
    Either output may be omitted without suppressing a successful lookup. */
-s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) __asm__("FUN_00239f58");
+s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y,
+                              f32 z) __asm__("FUN_00239f58");
 
 s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 x_tangent[4] __attribute__((aligned(16)));
@@ -74,8 +75,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_y += surface_height_grid.origin_y;
     fraction_x = x - fraction_x;
     fraction_y = y - fraction_y;
-    column = func_001FA6D0(fraction_x / surface_height_grid.cell_width);
-    row = func_001FA6D0(fraction_y / surface_height_grid.cell_height);
+    column = truncate_float_to_s32(fraction_x / surface_height_grid.cell_width);
+    row = truncate_float_to_s32(fraction_y / surface_height_grid.cell_height);
     fraction_x -= func_001FA6C0(column) * surface_height_grid.cell_width;
     fraction_x /= surface_height_grid.cell_width;
     fraction_y -= func_001FA6C0(row) * surface_height_grid.cell_height;
@@ -105,7 +106,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     }
     if (height != NULL) {
         first_row_height = h00 + (h10 - h00) * fraction_x;
-        *height = first_row_height + ((h01 + (h11 - h01) * fraction_x) - first_row_height) * fraction_y + tile->z;
+        *height = first_row_height +
+                  ((h01 + (h11 - h01) * fraction_x) - first_row_height) * fraction_y + tile->z;
     }
     if (normal != NULL) {
         x_tangent[0] = surface_height_grid.cell_width;

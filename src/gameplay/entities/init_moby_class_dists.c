@@ -7,4 +7,5 @@ void init_moby_class_dists(void) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(init_moby_class_dists) InitMobyClassDists__Fv __attribute__((alias("FUN_0020d1f0")));
+extern __typeof__(init_moby_class_dists) InitMobyClassDists__Fv
+    __attribute__((alias("FUN_0020d1f0")));

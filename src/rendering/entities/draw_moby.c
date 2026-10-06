@@ -7,7 +7,10 @@ struct MobyClass {
     void *unkC;
     void (*draw)(struct Moby *);
 };
-struct Moby { u8 pad0[0x8C]; s16 oclass; };
+struct Moby {
+    u8 pad0[0x8C];
+    s16 oclass;
+};
 extern struct MobyClass D_001E8C00[];
 void draw_moby(struct Moby *moby) __asm__("FUN_001ec3d8");
 

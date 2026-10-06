@@ -13,4 +13,5 @@ void save_card_state_create_save_pending(void) {
     }
 }
 
-extern __typeof__(save_card_state_create_save_pending) func_00208D20 __attribute__((alias("FUN_00208d20")));
+extern __typeof__(save_card_state_create_save_pending) func_00208D20
+    __attribute__((alias("FUN_00208d20")));

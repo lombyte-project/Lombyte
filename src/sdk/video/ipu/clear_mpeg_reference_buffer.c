@@ -15,8 +15,7 @@ struct MpegDecoder {
     struct MpegReferenceTable *reference_table;
 };
 
-int ClearMpegReferenceBuffer(struct MpegDecoder *decoder)
-    __asm__("ClearMpegReferenceBuffer");
+int ClearMpegReferenceBuffer(struct MpegDecoder *decoder) __asm__("ClearMpegReferenceBuffer");
 
 int ClearMpegReferenceBuffer(struct MpegDecoder *decoder) {
     struct MpegReferenceTable *reference_table = decoder->reference_table;

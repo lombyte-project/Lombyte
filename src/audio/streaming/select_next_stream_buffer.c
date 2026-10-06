@@ -1,8 +1,11 @@
 #include "types.h"
-struct E { s32 unk0; s32 flags; };
+struct E {
+    s32 unk0;
+    s32 flags;
+};
 extern struct E D_001D60B8[];
 extern void FillTransferWords();
-extern s32 func_00225D88();
+extern s32 get_stream_buffer_size() __asm__("func_00225D88");
 
 s32 select_next_stream_buffer(s32 arg0) __asm__("FUN_00225c18");
 
@@ -20,7 +23,8 @@ s32 select_next_stream_buffer(s32 arg0) {
             if (D_001D60B8[i].unk0 != 0) {
                 if (!(D_001D60B8[i].flags & 2)) {
                     D_001D60B8[i].flags |= 2;
-                    FillTransferWords(D_001D60B8[i].unk0, 0xDEADBEEF, func_00225D88(D_001D60B8[i].unk0));
+                    FillTransferWords(D_001D60B8[i].unk0, 0xDEADBEEF,
+                                      get_stream_buffer_size(D_001D60B8[i].unk0));
                     return D_001D60B8[i].unk0;
                 }
             }

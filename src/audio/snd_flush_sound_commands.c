@@ -13,22 +13,22 @@ extern s32 D_0015EC80 __attribute__((sda));          /* pending RPC record */
 extern void (*D_0015EC90)(s32) __attribute__((sda)); /* stop callback */
 extern s32 D_0015EC94 __attribute__((sda));          /* stop requested */
 extern s32 D_0015EC98 __attribute__((sda));
-extern s32 D_0015EC9C __attribute__((sda));          /* abort */
-extern s32 *D_0015ECA0[2] __attribute__((sda));      /* command counts */
+extern s32 D_0015EC9C __attribute__((sda));     /* abort */
+extern s32 *D_0015ECA0[2] __attribute__((sda)); /* command counts */
 extern struct SndCommand *D_0015ECB0[2] __attribute__((sda));
-extern s32 *D_0015ECB8[2] __attribute__((sda));      /* replies */
-extern s32 D_0015ECC0 __attribute__((sda));          /* current buffer */
+extern s32 *D_0015ECB8[2] __attribute__((sda)); /* replies */
+extern s32 D_0015ECC0 __attribute__((sda));     /* current buffer */
 extern s32 D_0015ECC4 __attribute__((sda));
-extern s32 D_0015ECC8 __attribute__((sda));          /* CD read pending */
-extern SndCallback D_0015ECD0 __attribute__((sda));  /* CD read callback */
-extern volatile long D_0015ECD8 MACRO_ADDR;          /* its argument */
-extern SndCallback D_0015ECE0 __attribute__((sda));  /* abort callback */
-extern long D_0015ECE8 __attribute__((sda));         /* its argument */
-extern u32 D_0015ED00 MACRO_ADDR;                    /* CD read reply */
+extern s32 D_0015ECC8 __attribute__((sda));         /* CD read pending */
+extern SndCallback D_0015ECD0 __attribute__((sda)); /* CD read callback */
+extern volatile long D_0015ECD8 MACRO_ADDR;         /* its argument */
+extern SndCallback D_0015ECE0 __attribute__((sda)); /* abort callback */
+extern long D_0015ECE8 __attribute__((sda));        /* its argument */
+extern u32 D_0015ED00 MACRO_ADDR;                   /* CD read reply */
 extern s32 D_00133104[];
-extern s32 func_0012DE70(void);
-extern void func_0012E9D8(void);
-extern s32 func_0012EE08(s32);
+extern s32 snd_got_returns(void) __asm__("func_0012DE70");
+extern void snd_send_current_batch(void) __asm__("func_0012E9D8");
+extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
 extern void FlushCache(s32);
 
 s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
@@ -44,7 +44,7 @@ s32 snd_flush_sound_commands(void) {
     SndCallback fn;
     long arg;
 
-    if (D_0015EC80 != 0 && func_0012DE70() != 0) {
+    if (D_0015EC80 != 0 && snd_got_returns() != 0) {
         if (D_0015EC9C != 0) {
             if (D_0015ECE0 != 0) {
                 D_0015ECE0(D_00133104[0], D_0015ECE8);
@@ -76,11 +76,11 @@ s32 snd_flush_sound_commands(void) {
     }
     if (D_0015EC80 == 0) {
         if (*D_0015ECA0[D_0015ECC0] != 0 && D_0015ECC4 == 0) {
-            func_0012E9D8();
+            snd_send_current_batch();
         }
     }
     if (D_0015EC94 != 0) {
-        func_0012EE08(1);
+        snd_stream_safe_cd_sync(1);
         if (D_0015EC98 != 0) {
             D_0015EC94 = 0;
             D_0015EC98 = 0;

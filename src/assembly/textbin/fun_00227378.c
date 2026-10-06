@@ -105,7 +105,8 @@ void append_fullscreen_clear_strips(s64 color) {
             vertices++;
         } while (strip_index < strip_count);
     }
-    packet_cursor = (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + strip_count * 0x10 + 0x50);
+    packet_cursor =
+        (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + strip_count * 0x10 + 0x50);
     render_packet_cursor[0] = packet_cursor;
     packet_cursor->dma_control = 0x10000000;
     render_packet_cursor[0]->address = 0;
@@ -113,6 +114,7 @@ void append_fullscreen_clear_strips(s64 color) {
     render_packet_cursor[0]->gif_control = 0;
     render_packet_cursor[0] = (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + 0x10);
 }
-extern __typeof__(append_fullscreen_clear_strips) func_00227378 __attribute__((alias("FUN_00227378")));
+extern __typeof__(append_fullscreen_clear_strips) func_00227378
+    __attribute__((alias("FUN_00227378")));
 
 #endif /* NON_MATCHING */

@@ -4,7 +4,7 @@
 extern s32 D_00160F18;
 extern s32 D_00160F1C;
 extern s32 RemoveDmacHandler();
-extern s32 func_001190F8();
+extern s32 disable_dmac() __asm__("func_001190F8");
 void dmac_vif1_disable(void) __asm__("FUN_00233d90");
 
 void dmac_vif1_disable(void) {
@@ -13,7 +13,7 @@ void dmac_vif1_disable(void) {
     }
     RemoveDmacHandler(1, D_00160F18);
     RemoveDmacHandler(0xF, D_00160F1C);
-    func_001190F8(1);
+    disable_dmac(1);
     D_00160F18 = 0;
     D_00160F1C = 0;
 }

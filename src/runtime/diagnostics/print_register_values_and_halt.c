@@ -18,4 +18,5 @@ void print_register_values_and_halt(void) {
     }
 }
 
-extern __typeof__(print_register_values_and_halt) func_00233F00 __attribute__((alias("FUN_00233f00")));
+extern __typeof__(print_register_values_and_halt) func_00233F00
+    __attribute__((alias("FUN_00233f00")));

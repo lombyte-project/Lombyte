@@ -3,11 +3,13 @@
 
 #ifndef NON_MATCHING
 /* Exact SDK/library unit _sequenceHeader; includes target internal entry symbols. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/_sequenceHeader.s", _sequenceHeader);
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/func_0012C4C8.s", func_0012C4C8);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/_sequenceHeader.s",
+            _sequenceHeader);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/func_0012C4C8.s",
+            func_0012C4C8);
 #else
 
-#include "rnc/sdk_library_sequenceheader_types.h"
+#include "rnc/sdk/library/sequenceheader.h"
 #include "types.h"
 
 extern u8 D_00132FC0[];
@@ -68,7 +70,7 @@ void _sequenceHeader(struct M2c_arg0 *arg0) {
 extern s32 InitializeReferenceImage();
 extern s32 _initRefImages();
 extern s32 func_0012BC10();
-extern s32 func_0012BC20();
+extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *sp30;
@@ -100,16 +102,16 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
         temp_30_15->unk17C = 1;
         temp_30_15->unk144 = 5;
     }
-    temp_30_15->unk12C = (s32) ((s32) (temp_30_15->unk124 + 0xF) >> 4);
+    temp_30_15->unk12C = (s32)((s32)(temp_30_15->unk124 + 0xF) >> 4);
     if (temp_6_16 != 0) {
         if (temp_30_15->unk13C == 0) {
-            var_2_40 = ((s32) (temp_30_15->unk128 + 0x1F) >> 5) * 2;
+            var_2_40 = ((s32)(temp_30_15->unk128 + 0x1F) >> 5) * 2;
         } else {
             goto block_6;
         }
     } else {
-block_6:
-        var_2_40 = (s32) (temp_30_15->unk128 + 0xF) >> 4;
+    block_6:
+        var_2_40 = (s32)(temp_30_15->unk128 + 0xF) >> 4;
     }
     temp_30_15->unk130 = var_2_40;
     temp_22_48 = var_2_40 << 4;
@@ -133,14 +135,16 @@ block_6:
         temp_21_73 = ((u8 *)temp_30_15 + (0x2B8));
         sp38 = ((u8 *)temp_30_15 + (0x3F0));
         temp_18_75 = temp_22_48 >> 1;
-        temp_16_77 = (u32) ((0x180 * temp_22_48) * temp_23_51) >> 8;
+        temp_16_77 = (u32)((0x180 * temp_22_48) * temp_23_51) >> 8;
         sp3C = ((u8 *)temp_30_15 + (0x458));
         sp40 = ((u8 *)temp_30_15 + (0x4C0));
         func_0012BC10(temp_17_63);
-        temp_30_15->unkFC = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk100 = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk104 = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        _initRefImages(temp_19_67, temp_20_71, temp_21_73, sp30, sp34, sp38, sp3C, sp40, var_2_53, temp_30_15->unkFC, temp_30_15->unk100, temp_30_15->unk104, temp_23_51, temp_22_48);
+        temp_30_15->unkFC = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        temp_30_15->unk100 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        temp_30_15->unk104 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        _initRefImages(temp_19_67, temp_20_71, temp_21_73, sp30, sp34, sp38, sp3C, sp40, var_2_53,
+                       temp_30_15->unkFC, temp_30_15->unk100, temp_30_15->unk104, temp_23_51,
+                       temp_22_48);
         InitializeReferenceImage(temp_19_67, temp_23_51, temp_22_48);
         InitializeReferenceImage(temp_20_71, temp_23_51, temp_22_48);
         InitializeReferenceImage(temp_21_73, temp_23_51, temp_22_48);

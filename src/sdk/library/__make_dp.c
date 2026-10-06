@@ -39,8 +39,7 @@ typedef unsigned long long u64;
 
 extern void PackDouble(void *parameters) __asm__("__pack_d");
 
-void MakeDoublePacket(int first, int second, int third, u64 fourth)
-    __asm__("__make_dp");
+void MakeDoublePacket(int first, int second, int third, u64 fourth) __asm__("__make_dp");
 
 void MakeDoublePacket(int first, int second, int third, u64 fourth) {
     int parameters[8];

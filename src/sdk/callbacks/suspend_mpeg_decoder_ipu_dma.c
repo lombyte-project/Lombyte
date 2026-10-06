@@ -17,11 +17,11 @@ extern void suspend_ipu_dma_state(void *state) __asm__("FUN_0012cc20");
 
 void suspend_mpeg_decoder_ipu_dma(MpegObject *mpeg) __asm__("FUN_0012cb30");
 
-void suspend_mpeg_decoder_ipu_dma(MpegObject *mpeg)
-{
+void suspend_mpeg_decoder_ipu_dma(MpegObject *mpeg) {
     suspend_ipu_dma_state(&mpeg->decoder->ipu_dma_state);
 }
 
 /* The MPEG constructor also refers to this callback by its address label. */
 extern __typeof__(suspend_mpeg_decoder_ipu_dma) D_0012CB30 __attribute__((alias("FUN_0012cb30")));
-extern __typeof__(suspend_mpeg_decoder_ipu_dma) func_0012CB30 __attribute__((alias("FUN_0012cb30")));
+extern __typeof__(suspend_mpeg_decoder_ipu_dma) func_0012CB30
+    __attribute__((alias("FUN_0012cb30")));

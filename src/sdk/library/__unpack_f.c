@@ -53,8 +53,7 @@ typedef union {
     } bits;
 } FLOSingleUnion;
 
-void __unpack_f(FLOSingleUnion *src, FpSingle *dst)
-{
+void __unpack_f(FLOSingleUnion *src, FpSingle *dst) {
     u32 fraction = src->bits.fraction;
     s32 exp = src->bits.exp;
     s32 sign = src->bits.sign;

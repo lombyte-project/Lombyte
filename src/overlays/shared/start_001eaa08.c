@@ -17,11 +17,10 @@ typedef struct {
 
 extern L00Entry D_L00_00166000[8];
 extern f32 FUN_001fa6c0(s32);
-extern s32 FUN_001fa6d0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_001f9dc8(f32);
 
-s32 FUN_L00_001eaa08(s32 *p1)
-{
+s32 FUN_L00_001eaa08(s32 *p1) {
     s32 aa[3][4];
     s32 *q2;
     s32 *q1;
@@ -98,7 +97,7 @@ s32 FUN_L00_001eaa08(s32 *p1)
             }
             f = FUN_001f9dc8(f);
             g = FUN_001fa6c0(e->f0e);
-            res = FUN_001fa6d0((f * g + g) * 0.5f) + e->f0f;
+            res = truncate_float_to_s32((f * g + g) * 0.5f) + e->f0f;
             if (res >= 256) {
                 res = 255;
             }
@@ -107,10 +106,16 @@ s32 FUN_L00_001eaa08(s32 *p1)
         }
         if (e->f03 != 0) {
             aa[0][e->f02] = aa[0][e->f02] + res;
-            { s32 *t = q1 + e->f02; *t = *t + 1; }
+            {
+                s32 *t = q1 + e->f02;
+                *t = *t + 1;
+            }
         } else {
             p1[e->f02] = p1[e->f02] + res;
-            { s32 *t = q2 + e->f02; *t = *t + 1; }
+            {
+                s32 *t = q2 + e->f02;
+                *t = *t + 1;
+            }
         }
     }
     for (i = 0; i < 2; i++) {

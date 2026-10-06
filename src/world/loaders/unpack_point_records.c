@@ -1,5 +1,11 @@
 #include "types.h"
-struct Point { u64 flags; s16 y; s16 x; s16 u; s16 v; };
+struct Point {
+    u64 flags;
+    s16 y;
+    s16 x;
+    s16 u;
+    s16 v;
+};
 extern s32 D_0015F45C;
 extern struct Point D_0018D440[];
 extern s16 FUN_001f97a0(s32);

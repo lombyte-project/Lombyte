@@ -29,11 +29,11 @@ typedef s32 b32;
 #endif
 
 #ifndef TRUE
-#define TRUE 1
+#define TRUE  1
 #define FALSE 0
 #endif
 
-#define ARRAY_COUNT(array) ((s32)(sizeof(array) / sizeof((array)[0])))
+#define ARRAY_COUNT(array)  ((s32)(sizeof(array) / sizeof((array)[0])))
 #define ARRAY_COUNTU(array) ((u32)(sizeof(array) / sizeof((array)[0])))
 
 #endif /* RNCDECOMP_TYPES_H */

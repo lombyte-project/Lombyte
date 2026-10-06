@@ -30,13 +30,13 @@ typedef union {
 
 #define word0(x) ((x).i[1])
 #define Sign_bit 0x80000000U
-#define ALT 0x001
+#define ALT      0x001
 
-extern s8 *_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits,
-                   s32 *decpt, s32 *sign, s8 **rve);
+extern s8 *_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign,
+                   s8 **rve);
 
-static s8 *cvt(struct _reent *data, f64 value, s32 ndigits, s32 flags, s8 *sign, s32 *decpt, s32 ch, s32 *length)
-{
+static s8 *cvt(struct _reent *data, f64 value, s32 ndigits, s32 flags, s8 *sign, s32 *decpt, s32 ch,
+               s32 *length) {
     s32 mode, dsgn;
     s8 *digits, *bp, *rve;
     double_union tmp;

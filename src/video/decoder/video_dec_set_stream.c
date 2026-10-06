@@ -8,4 +8,6 @@ s32 video_dec_set_stream(s32 arg0) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(video_dec_set_stream) videoDecSetStream__FP8VideoDeciiPFP7sceMpegP13sceMpegCbDataPv_iPv __attribute__((alias("FUN_0023cbd0")));
+extern __typeof__(video_dec_set_stream)
+    videoDecSetStream__FP8VideoDeciiPFP7sceMpegP13sceMpegCbDataPv_iPv
+    __attribute__((alias("FUN_0023cbd0")));

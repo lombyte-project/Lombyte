@@ -35,7 +35,7 @@ typedef struct Menu {
 
 extern struct M2c_D_0013C940 D_0013C940;
 extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 FUN_002212b8(Menu *menu) {
     MenuItem *item;
@@ -69,7 +69,7 @@ s32 FUN_002212b8(Menu *menu) {
         }
     }
     if (prev != menu->cursor) {
-        func_0022DA68(1, 0x11, menu->unk14);
+        allocate_voice_for_target_entry(1, 0x11, menu->unk14);
     }
     item = &menu->items[menu->cursor];
     first = item->option;
@@ -87,7 +87,7 @@ s32 FUN_002212b8(Menu *menu) {
     if (D_0013C940.unk1C4 & 0x40) {
         if (item->value != NULL) {
             *item->value = (*item->value + 1) % n;
-            func_0022DA68(0, 0x11, menu->unk14);
+            allocate_voice_for_target_entry(0, 0x11, menu->unk14);
         }
     }
     return 0;

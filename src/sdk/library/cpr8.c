@@ -1,4 +1,4 @@
-#include "rnc/sdk_library_cpr8_types.h"
+#include "rnc/sdk/library/cpr8.h"
 #include "types.h"
 
 extern s32 DIntr();
@@ -49,7 +49,7 @@ block_7:
     goto block_9;
 block_8:
     var_30_43 = (temp_4_27 >> 4) * 0xC0;
-    var_21_38 = ((s32) arg1->unk10 >> 1) * 0x180;
+    var_21_38 = ((s32)arg1->unk10 >> 1) * 0x180;
     sp4 = 2;
     var_20_40 = var_21_38 >> 4;
 block_9:

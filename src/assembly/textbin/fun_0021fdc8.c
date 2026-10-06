@@ -107,7 +107,7 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
     u8 *item_table_entry;
 
     selection_flags = stream->flags;
-    stream->elapsed_frames = (s32) (stream->elapsed_frames + 1);
+    stream->elapsed_frames = (s32)(stream->elapsed_frames + 1);
     if (selection_flags & 1) {
         resource_index = stream->fixed_resource_index;
         if (resource_index == -1) {
@@ -132,7 +132,8 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
                     if (stream->state == -1) {
                         stream->state = 0;
                     }
-                    resource_index = *(s32 *)((u8 *)&save_preview_state + resource_index * 0x1C + 0x20);
+                    resource_index =
+                        *(s32 *)((u8 *)&save_preview_state + resource_index * 0x1C + 0x20);
                     if (resource_index == -1) {
                         stream->state = resource_index;
                     }
@@ -147,16 +148,19 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
             }
         } else if (selection_flags & 8) {
             group_selection = menu_preview_context[0]->selection;
-            resource_index = (s32) *(s16 *)((u8 *)((group_selection->selected_group * 0xA) + group_selection->group_table_address) + 0x8);
+            resource_index = (s32) * (s16 *)((u8 *)((group_selection->selected_group * 0xA) +
+                                                    group_selection->group_table_address) +
+                                             0x8);
             if (group_selection->selected_item == 0) {
-disable_stream:
+            disable_stream:
                 stream->state = -1;
             }
         } else if (selection_flags & 0x400) {
-            resource_index = (s32) ((s32) stream->elapsed_frames / scale_game_frames(0x12C)) % 19;
+            resource_index = (s32)((s32)stream->elapsed_frames / scale_game_frames(0x12C)) % 19;
         } else if (selection_flags & 0x1000) {
             language_offsets = menu_language_resource_offsets;
-            resource_index = *(s32 *)stream->language_base_address + language_offsets.values[dialogue_language_column];
+            resource_index = *(s32 *)stream->language_base_address +
+                             language_offsets.values[dialogue_language_column];
         } else {
             item_selection = menu_preview_context[0]->selection;
             resource_index = item_selection->selected_item;
@@ -169,7 +173,7 @@ disable_stream:
                 resource_index = (*(s16 *)(item_table_entry + 2) == 2) ? 9 : resource_index;
             }
         }
-process_stream_state:
+    process_stream_state:
         if (stream->flags & 0x2000) {
             resource_index = (skill_point_completed[resource_index] == 0) ? 0x1E : resource_index;
         }
@@ -180,19 +184,32 @@ process_stream_state:
             if (primary_buffer != 0) {
                 if (cd_read_active[0] == 0) {
                     primary_entry_offset = resource_index * 8;
-                    if (*(s32 *)((u8 *)(primary_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                    if (*(s32 *)((u8 *)(primary_entry_offset + stream->entry_table_address) +
+                                 0x4) != 0) {
                         primary_read_address = primary_buffer;
                         if (stream->flags & 0x20) {
-                            primary_read_offset = get_stream_buffer_size(primary_buffer) - (*(s32 *)((u8 *)(primary_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                            primary_read_offset = get_stream_buffer_size(primary_buffer) -
+                                                  (*(s32 *)((u8 *)(primary_entry_offset +
+                                                                   stream->entry_table_address) +
+                                                            0x4)
+                                                   << 0xB);
                             stream->read_offset = primary_read_offset;
                             primary_read_address += primary_read_offset;
                         }
                         if (stream->flags & 0x10) {
-                            primary_entry = (struct MenuResourceEntry *)(primary_entry_offset + stream->entry_table_address);
-                            primary_read_started = start_audio_stream_read(primary_read_address, primary_entry->sector, primary_entry->sector_count);
+                            primary_entry =
+                                (struct MenuResourceEntry *)(primary_entry_offset +
+                                                             stream->entry_table_address);
+                            primary_read_started =
+                                start_audio_stream_read(primary_read_address, primary_entry->sector,
+                                                        primary_entry->sector_count);
                         } else {
-                            primary_entry_alternate = (struct MenuResourceEntry *)(primary_entry_offset + stream->entry_table_address);
-                            primary_read_started = start_audio_stream_read_alternate(primary_read_address, primary_entry_alternate->sector, primary_entry_alternate->sector_count);
+                            primary_entry_alternate =
+                                (struct MenuResourceEntry *)(primary_entry_offset +
+                                                             stream->entry_table_address);
+                            primary_read_started = start_audio_stream_read_alternate(
+                                primary_read_address, primary_entry_alternate->sector,
+                                primary_entry_alternate->sector_count);
                         }
                         if (primary_read_started == 0) {
                             stream->state = -1;
@@ -232,19 +249,33 @@ process_stream_state:
                         stream->state = 0;
                     } else if (cd_read_active[0] == 0) {
                         secondary_entry_offset = resource_index * 8;
-                        if (*(s32 *)((u8 *)(secondary_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                        if (*(s32 *)((u8 *)(secondary_entry_offset + stream->entry_table_address) +
+                                     0x4) != 0) {
                             secondary_read_address = secondary_buffer;
                             if (stream->flags & 0x20) {
-                                secondary_read_offset = get_stream_buffer_size(secondary_buffer) - (*(s32 *)((u8 *)(secondary_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                                secondary_read_offset =
+                                    get_stream_buffer_size(secondary_buffer) -
+                                    (*(s32 *)((u8 *)(secondary_entry_offset +
+                                                     stream->entry_table_address) +
+                                              0x4)
+                                     << 0xB);
                                 stream->read_offset = secondary_read_offset;
                                 secondary_read_address += secondary_read_offset;
                             }
                             if (stream->flags & 0x10) {
-                                secondary_entry = (struct MenuResourceEntry *)(secondary_entry_offset + stream->entry_table_address);
-                                secondary_read_started = start_audio_stream_read(secondary_read_address, secondary_entry->sector, secondary_entry->sector_count);
+                                secondary_entry =
+                                    (struct MenuResourceEntry *)(secondary_entry_offset +
+                                                                 stream->entry_table_address);
+                                secondary_read_started = start_audio_stream_read(
+                                    secondary_read_address, secondary_entry->sector,
+                                    secondary_entry->sector_count);
                             } else {
-                                secondary_entry_alternate = (struct MenuResourceEntry *)(secondary_entry_offset + stream->entry_table_address);
-                                secondary_read_started = start_audio_stream_read_alternate(secondary_read_address, secondary_entry_alternate->sector, secondary_entry_alternate->sector_count);
+                                secondary_entry_alternate =
+                                    (struct MenuResourceEntry *)(secondary_entry_offset +
+                                                                 stream->entry_table_address);
+                                secondary_read_started = start_audio_stream_read_alternate(
+                                    secondary_read_address, secondary_entry_alternate->sector,
+                                    secondary_entry_alternate->sector_count);
                             }
                             next_state = -1;
                             if (secondary_read_started != 0) {
@@ -268,19 +299,35 @@ process_stream_state:
                     if (replacement_buffer != 0) {
                         if (cd_read_active[0] == 0) {
                             replacement_entry_offset = resource_index * 8;
-                            if (*(s32 *)((u8 *)(replacement_entry_offset + stream->entry_table_address) + 0x4) != 0) {
+                            if (*(s32 *)((u8 *)(replacement_entry_offset +
+                                                stream->entry_table_address) +
+                                         0x4) != 0) {
                                 replacement_read_address = replacement_buffer;
                                 if (stream->flags & 0x20) {
-                                    replacement_read_offset = get_stream_buffer_size(replacement_buffer) - (*(s32 *)((u8 *)(replacement_entry_offset + stream->entry_table_address) + 0x4) << 0xB);
+                                    replacement_read_offset =
+                                        get_stream_buffer_size(replacement_buffer) -
+                                        (*(s32 *)((u8 *)(replacement_entry_offset +
+                                                         stream->entry_table_address) +
+                                                  0x4)
+                                         << 0xB);
                                     stream->read_offset = replacement_read_offset;
                                     replacement_read_address += replacement_read_offset;
                                 }
                                 if (stream->flags & 0x10) {
-                                    replacement_entry = (struct MenuResourceEntry *)(replacement_entry_offset + stream->entry_table_address);
-                                    replacement_read_started = start_audio_stream_read(replacement_read_address, replacement_entry->sector, replacement_entry->sector_count);
+                                    replacement_entry =
+                                        (struct MenuResourceEntry *)(replacement_entry_offset +
+                                                                     stream->entry_table_address);
+                                    replacement_read_started = start_audio_stream_read(
+                                        replacement_read_address, replacement_entry->sector,
+                                        replacement_entry->sector_count);
                                 } else {
-                                    replacement_entry_alternate = (struct MenuResourceEntry *)(replacement_entry_offset + stream->entry_table_address);
-                                    replacement_read_started = start_audio_stream_read_alternate(replacement_read_address, replacement_entry_alternate->sector, replacement_entry_alternate->sector_count);
+                                    replacement_entry_alternate =
+                                        (struct MenuResourceEntry *)(replacement_entry_offset +
+                                                                     stream->entry_table_address);
+                                    replacement_read_started = start_audio_stream_read_alternate(
+                                        replacement_read_address,
+                                        replacement_entry_alternate->sector,
+                                        replacement_entry_alternate->sector_count);
                                 }
                                 next_state = -1;
                                 if (replacement_read_started != 0) {

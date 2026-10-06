@@ -55,8 +55,8 @@ extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 D_001D5BA0[];
 
 extern void func_001F9838(void *dst, void *src, s32 size);
-extern void func_00209370(void);
-extern void func_0020ABB0(s32);
+extern void load_and_initialize_level_chunk(void) __asm__("func_00209370");
+extern void memcard_make_whole_save(s32) __asm__("func_0020ABB0");
 extern s32 sceCdReadClock(u8 *clock);
 extern void sceScfGetLocalTimefromRTC(u8 *clock);
 
@@ -82,7 +82,7 @@ void FUN_00226b08(s32 slot) {
     flag4 = D_0013D388[4] != 0;
     flag5 = D_0013D388[5] != 0;
     bytes = (u8 *)0x70000030;
-    func_00209370();
+    load_and_initialize_level_chunk();
     func_001F9838(D_0013E520, (void *)0x70000000, 0x28);
     for (p = D_001D5BA0; *p != -1; p++) {
         D_0013D4C0[*p] = bytes[*p];
@@ -112,7 +112,7 @@ void FUN_00226b08(s32 slot) {
     if (slot >= 0) {
         D_0013D290.slot = slot;
         D_0013D290.entries[slot].unk0 = 0;
-        func_0020ABB0(D_001D5BF0.unkE0);
+        memcard_make_whole_save(D_001D5BF0.unkE0);
         D_0013D290.unkEC = D_001D5BF0.unkE0;
         D_0013D290.unkC0 = 0;
         if (D_0013D290.unkDC < 0) {

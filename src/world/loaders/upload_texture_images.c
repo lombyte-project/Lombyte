@@ -1,7 +1,9 @@
 #include "types.h"
 #include "eetypes.h"
 
-typedef struct { u128 data[6]; } sceGsLoadImage;
+typedef struct {
+    u128 data[6];
+} sceGsLoadImage;
 
 struct Ent {
     s32 unk0;
@@ -14,7 +16,8 @@ extern s32 D_0015EE74;
 extern s32 D_0015EE78;
 extern s32 D_0015EE8C;
 extern void FlushCache(s32 a0);
-extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 x, s32 y, s32 w, s32 h, s32 a4, s32 a6, s32 a7);
+extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 x, s32 y, s32 w, s32 h, s32 a4, s32 a6,
+                                s32 a7);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *img, s32 addr);
 extern s32 FUN_00120558(s32 a0, s32 a1);
 
@@ -41,11 +44,12 @@ void upload_texture_images(s32 arg0, s32 count, struct Ent *p) {
             x = p->unk4;
             dst = arg0 + p->unkC;
             vram = D_0015EE74;
-            lo = (u16) x;
+            lo = (u16)x;
             hi = x >> 16;
             if (p->unk0 == 0x13) {
                 t = lo >> 6;
-                sceGsSetDefLoadImage(&img, (vram << 8) >> 16, t == 0 ? one : t, 0x13, 0, 0, (s16) lo, hi);
+                sceGsSetDefLoadImage(&img, (vram << 8) >> 16, t == 0 ? one : t, 0x13, 0, 0, (s16)lo,
+                                     hi);
                 prod = lo * hi;
                 if (prod <= 0xFF) {
                     prod = 0x100;

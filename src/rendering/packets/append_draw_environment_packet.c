@@ -16,4 +16,5 @@ void append_draw_environment_packet(void) {
     }
 }
 
-extern __typeof__(append_draw_environment_packet) func_001FB2D0 __attribute__((alias("FUN_001fb2d0")));
+extern __typeof__(append_draw_environment_packet) func_001FB2D0
+    __attribute__((alias("FUN_001fb2d0")));

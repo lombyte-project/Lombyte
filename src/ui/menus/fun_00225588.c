@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
 extern void *func_00226720_a(int) __asm__("func_00225490");
-extern int FUN_00225c18(int);
+extern int select_next_stream_buffer(int) __asm__("FUN_00225c18");
 extern void func_00225AB8(void *);
 extern char D_00186F40[];
 /* sets up a pause-menu helper moby in front of the camera */
@@ -26,7 +26,7 @@ int FUN_00225588(char *h) {
     } else {
         *(int *)(h + 0x34) = 3;
     }
-    r = FUN_00225c18(1);
+    r = select_next_stream_buffer(1);
     *(int *)(h + 0x3C) = r;
     if (r == 0) {
         *(int *)(h + 0x34) = 3;

@@ -29,31 +29,72 @@ extern void FUN_L00_0028ac88(void);
 extern void FUN_L00_0028b080(void);
 extern void FUN_L00_0028b1a0(void);
 
-void FUN_L00_0023d968(void)
-{
+void FUN_L00_0023d968(void) {
     setup_sky_gif_paging();
     switch (D_0015ED84) {
-    case 0: FUN_L00_00289330(); break;
-    case 1: FUN_L00_00289420(); break;
-    case 2: FUN_L00_002895a0(); break;
-    case 3: FUN_L00_002899a8(); break;
-    case 4: FUN_L00_00289a90(); break;
-    case 5: FUN_L00_00289bd8(); break;
-    case 6: FUN_L00_00289cb8(); break;
-    case 7: FUN_L00_0028a208(); break;
-    case 8: FUN_L00_0028a2f0(); break;
-    case 9: FUN_L00_0028a3a8(); break;
-    case 10: FUN_L00_0028a480(); break;
-    case 11: FUN_L00_0028a620(); break;
-    case 12: FUN_L00_0028a7a0(); break;
-    case 13: FUN_L00_0028a920(); break;
-    case 14: FUN_L00_0028a998(); break;
-    case 15: FUN_L00_0028aa98(); break;
-    case 16: FUN_L00_0028ab08(); break;
-    case 17: FUN_L00_0028ac88(); break;
-    case 18: FUN_L00_0028b080(); break;
-    case 19: FUN_L00_0028b1a0(); break;
-    default: FUN_L00_002892d0(); break;
+    case 0:
+        FUN_L00_00289330();
+        break;
+    case 1:
+        FUN_L00_00289420();
+        break;
+    case 2:
+        FUN_L00_002895a0();
+        break;
+    case 3:
+        FUN_L00_002899a8();
+        break;
+    case 4:
+        FUN_L00_00289a90();
+        break;
+    case 5:
+        FUN_L00_00289bd8();
+        break;
+    case 6:
+        FUN_L00_00289cb8();
+        break;
+    case 7:
+        FUN_L00_0028a208();
+        break;
+    case 8:
+        FUN_L00_0028a2f0();
+        break;
+    case 9:
+        FUN_L00_0028a3a8();
+        break;
+    case 10:
+        FUN_L00_0028a480();
+        break;
+    case 11:
+        FUN_L00_0028a620();
+        break;
+    case 12:
+        FUN_L00_0028a7a0();
+        break;
+    case 13:
+        FUN_L00_0028a920();
+        break;
+    case 14:
+        FUN_L00_0028a998();
+        break;
+    case 15:
+        FUN_L00_0028aa98();
+        break;
+    case 16:
+        FUN_L00_0028ab08();
+        break;
+    case 17:
+        FUN_L00_0028ac88();
+        break;
+    case 18:
+        FUN_L00_0028b080();
+        break;
+    case 19:
+        FUN_L00_0028b1a0();
+        break;
+    default:
+        FUN_L00_002892d0();
+        break;
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);
@@ -88,8 +129,8 @@ typedef union {
 } VeldinVec;
 
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-extern int FUN_001f96f8(int);
-extern void FUN_001f99f8(void *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -104,8 +145,7 @@ extern f32 D_0015ED6C;
 extern s32 D_0015ED84;
 extern VeldinLevelState D_L00_0016C860;
 
-void FUN_L00_0023e268(void)
-{
+void FUN_L00_0023e268(void) {
     VeldinMoby *m;
     VeldinMoby *mb;
     char *src;
@@ -134,23 +174,26 @@ void FUN_L00_0023e268(void)
             }
         }
     }
-    if (D_0015ED84 == 3 && D_L00_0016C860.state == 5 && FUN_001f96f8(900) < D_L00_0016C860.timer
-        && D_L00_0016C860.timer < FUN_001f96f8(1100)) {
+    if (D_0015ED84 == 3 && D_L00_0016C860.state == 5 &&
+        scale_game_frames(900) < D_L00_0016C860.timer &&
+        D_L00_0016C860.timer < scale_game_frames(1100)) {
         src = (char *)D_L00_0016C860.unk184;
         if (src != 0) {
             for (n = 0; n < 4; n++) {
-                FUN_001f99f8(&v);
+                clear_u64_value(&v);
                 FUN_L00_0024f7c8(src, n % 2, &buf);
                 a = veldin_random_angle();
                 b = veldin_random_angle();
-                build_spherical_offset(v.f, veldin_random_range(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
-                r = FUN_001f96f8(0xC);
-                FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080, FUN_L00_00257b90(r, FUN_001f96f8(0x23)), 147000.0f);
+                build_spherical_offset(
+                    v.f, veldin_random_range(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
+                r = scale_game_frames(0xC);
+                FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080,
+                                 FUN_L00_00257b90(r, scale_game_frames(0x23)), 147000.0f);
             }
         }
     }
-    if (D_0015ED84 == 7 && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0
-        && D_L00_0016C860.unk188->oClass == 0x214) {
+    if (D_0015ED84 == 7 && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0 &&
+        D_L00_0016C860.unk188->oClass == 0x214) {
         enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
     if (D_0015ED84 == 14 && D_L00_0016C860.state == 0) {
@@ -168,7 +211,10 @@ void FUN_L00_0023e268(void)
 }
 #include "qzero.h"
 
-typedef union { u128 q; f32 f[4]; } SkyRotVec;
+typedef union {
+    u128 q;
+    f32 f[4];
+} SkyRotVec;
 
 extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[];
@@ -187,7 +233,8 @@ void FUN_L00_00289330(void) {
     *(short *)(D_L00_0016051C + 4) = 0;
     sky_draw_shell(0);
     sky_draw_shell(1);
-    if (*(short *)(D_L00_0016051C + 8) == 0) FUN_L00_00288ec0(0xF4, 0xC);
+    if (*(short *)(D_L00_0016051C + 8) == 0)
+        FUN_L00_00288ec0(0xF4, 0xC);
     FUN_L00_00289108();
     FUN_0022bba0();
     vu1_add_g_sregister(0x42, 0x8000000044L);
@@ -232,8 +279,7 @@ extern s32 FUN_L00_00266448(DoorMoby *, void *);
 extern void FUN_0022e188(s32);
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void FUN_L00_002d9dc8(DoorMoby *m)
-{
+void FUN_L00_002d9dc8(DoorMoby *m) {
     DoorVars *vars;
 
     vars = m->vars;

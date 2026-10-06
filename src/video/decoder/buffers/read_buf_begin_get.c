@@ -14,4 +14,5 @@ s32 read_buf_begin_get(s32 *arg0, s32 *arg1) {
 }
 
 extern s32 func_0023B9D8(s32 *arg0, s32 *arg1) __attribute__((alias("FUN_0023b9d8")));
-extern s32 readBufBeginGet__FP7ReadBufPPUc(s32 *arg0, s32 *arg1) __attribute__((alias("FUN_0023b9d8")));
+extern s32 readBufBeginGet__FP7ReadBufPPUc(s32 *arg0, s32 *arg1)
+    __attribute__((alias("FUN_0023b9d8")));

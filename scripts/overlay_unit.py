@@ -157,6 +157,9 @@ def verify_all() -> int:
     import overlay_proof as proof
     total, bad = 0, []
     for obj in sorted((BUILD / "c").glob("**/*.c.o")):
+        # An object left behind by a moved or deleted source is not counted.
+        if not (SOURCES / obj.relative_to(BUILD / "c").with_suffix("")).is_file():
+            continue
         with open(obj, "rb") as handle:
             symtab = ELFFile(handle).get_section_by_name(".symtab")
             names = [s.name for s in symtab.iter_symbols()

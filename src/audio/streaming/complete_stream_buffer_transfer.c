@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/audio_streaming_complete_stream_buffer_transfer_types.h"
+#include "rnc/audio/streaming/complete_stream_buffer_transfer.h"
 
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern u8 D_001D60B8[];
@@ -35,4 +35,5 @@ s32 complete_stream_buffer_transfer(s32 arg0) {
     return 0;
 }
 
-extern __typeof__(complete_stream_buffer_transfer) func_00225CD8 __attribute__((alias("FUN_00225cd8")));
+extern __typeof__(complete_stream_buffer_transfer) func_00225CD8
+    __attribute__((alias("FUN_00225cd8")));

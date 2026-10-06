@@ -41,10 +41,10 @@ extern struct PadState D_0013C940;
 extern struct MenuSys D_001D5BF0;
 extern f32 D_0015F43C;
 extern u8 D_0016034C;
-extern void func_0022DA68(s32, s32, s32);
-extern void func_001FBAB8(s32, struct MenuCur *);
-extern void func_001F4A58(s32);
-extern s32 FUN_001f96f8(s32);
+extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
+extern void mode_freeze_init(s32, struct MenuCur *) __asm__("func_001FBAB8");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 FUN_00220e28(struct Menu *m) {
     s32 active;
@@ -81,13 +81,13 @@ s32 FUN_00220e28(struct Menu *m) {
         m->sel = m->sel + 1;
     }
     if (D_0013C940.pressed & 0x40) {
-        func_0022DA68(0, 0x11, m->unk14);
+        allocate_voice_for_target_entry(0, 0x11, m->unk14);
         if (m->opts[m->sel].type & 1) {
             if (D_0016034C != 0) {
-                func_001FBAB8(6, D_001D5BF0.cur);
+                mode_freeze_init(6, D_001D5BF0.cur);
             } else {
-                func_001F4A58(4);
-                m->timer = FUN_001f96f8(0x10);
+                fade_to_black(4);
+                m->timer = scale_game_frames(0x10);
                 D_0016034C = D_0016034C == 0;
             }
         } else if (m->opts[m->sel].flag != 0) {
@@ -95,7 +95,7 @@ s32 FUN_00220e28(struct Menu *m) {
         }
     }
     if (m->sel != old) {
-        func_0022DA68(1, 0x11, m->unk14);
+        allocate_voice_for_target_entry(1, 0x11, m->unk14);
     }
     return 0;
 }

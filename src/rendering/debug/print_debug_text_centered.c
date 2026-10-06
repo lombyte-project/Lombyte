@@ -1,6 +1,6 @@
 #include "types.h"
 extern s32 D_00189DC0[];
-extern void FUN_001f0bd0(s32, s32, s32, u8 *);
+extern void print_debug_text(s32, s32, s32, u8 *) __asm__("FUN_001f0bd0");
 
 s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) __asm__("FUN_001f0c50");
 
@@ -21,7 +21,7 @@ s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) {
         width += D_00189DC0[idx];
     }
     x -= width >> 1;
-    FUN_001f0bd0(x, y, color, text);
+    print_debug_text(x, y, color, text);
     return x;
 }
 

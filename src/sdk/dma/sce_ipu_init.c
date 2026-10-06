@@ -5,12 +5,11 @@ extern volatile u128 D_00133050[];
 extern u128 D_001330A0[];
 extern void SetD4ChcrVariant(s32);
 
-#define IPU_CMD  ((volatile u32 *)0x10002000)
-#define IPU_CTRL ((volatile s32 *)0x10002010)
+#define IPU_CMD     ((volatile u32 *)0x10002000)
+#define IPU_CTRL    ((volatile s32 *)0x10002010)
 #define IPU_IN_FIFO ((volatile u128 *)0x10007010)
 
-void sceIpuInit(void)
-{
+void sceIpuInit(void) {
     SetD4ChcrVariant(1);
     *IPU_CTRL = 0x40000000;
     while (*IPU_CTRL < 0) {

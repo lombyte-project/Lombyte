@@ -1,7 +1,16 @@
 #include "types.h"
 
-struct ParticleHdr { s32 count; s32 pad4; s32 data_offset; s32 data_size; s32 ptrs[1]; };
-struct ParticleTex { s32 tex0; s32 tex1; };
+struct ParticleHdr {
+    s32 count;
+    s32 pad4;
+    s32 data_offset;
+    s32 data_size;
+    s32 ptrs[1];
+};
+struct ParticleTex {
+    s32 tex0;
+    s32 tex1;
+};
 
 extern s32 D_001600C0;
 extern u8 D_001CE180[];
@@ -10,7 +19,8 @@ extern struct ParticleTex D_001CD980[];
 extern void FUN_001f9838(void *, void *, s32);
 extern s32 FUN_001f97a0(s32);
 
-void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 count) __asm__("FUN_002026c8");
+void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src,
+                             s32 count) __asm__("FUN_002026c8");
 
 void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 count) {
     s32 n;

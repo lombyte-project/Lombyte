@@ -14,15 +14,15 @@ extern void _Error(MpegDec *d, char *msg);
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
 
-#define IPU_CTRL   ((volatile u32 *)0x10002010)
-#define IPU_BP     ((volatile u32 *)0x10002020)
-#define IPU_TOP    ((u64 *)0x10002030)
-#define D3_CHCR    ((volatile u32 *)0x1000B400)
-#define D3_QWC     ((volatile u32 *)0x1000B420)
-#define D4_CHCR    ((volatile u32 *)0x1000B000)
-#define D4_QWC     ((volatile u32 *)0x1000B020)
-#define D_ENABLER  ((volatile u32 *)0x1000F520)
-#define D_ENABLEW  ((volatile u32 *)0x1000F590)
+#define IPU_CTRL  ((volatile u32 *)0x10002010)
+#define IPU_BP    ((volatile u32 *)0x10002020)
+#define IPU_TOP   ((u64 *)0x10002030)
+#define D3_CHCR   ((volatile u32 *)0x1000B400)
+#define D3_QWC    ((volatile u32 *)0x1000B420)
+#define D4_CHCR   ((volatile u32 *)0x1000B000)
+#define D4_QWC    ((volatile u32 *)0x1000B020)
+#define D_ENABLER ((volatile u32 *)0x1000F520)
+#define D_ENABLEW ((volatile u32 *)0x1000F590)
 
 s32 _waitBdecOut(MpegDec *d) {
     s32 cb1[8];

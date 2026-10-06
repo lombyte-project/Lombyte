@@ -49,8 +49,7 @@ typedef struct FpNumber {
 
 u64 __pack_d(FpNumber *src);
 
-u64 litodp(s32 arg_a)
-{
+u64 litodp(s32 arg_a) {
     FpNumber in;
 
     in.class = 3;

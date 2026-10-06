@@ -1,5 +1,7 @@
 #include "types.h"
-struct unaligned64 { u64 v; } __attribute__((packed));
+struct unaligned64 {
+    u64 v;
+} __attribute__((packed));
 extern s32 D_001312D0[];
 extern u32 D_001312EC[];
 extern u8 D_001324C0[];
@@ -7,7 +9,7 @@ extern u8 D_00132D08[];
 extern u8 D_00152FF0[];
 extern u8 D_00153010[];
 extern s32 SignalSema();
-extern s32 func_00120D40();
+extern s32 cd_check_scmd() __asm__("func_00120D40");
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern void *memcpy();
@@ -15,7 +17,7 @@ extern void *memcpy();
 s32 sceCdReadClock(u64 *clock) {
     u32 result;
 
-    if (func_00120D40(0xF) == 0) {
+    if (cd_check_scmd(0xF) == 0) {
         return 0;
     }
     if (D_001312D0[0] > 0) {

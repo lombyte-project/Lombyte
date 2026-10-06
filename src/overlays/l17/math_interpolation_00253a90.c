@@ -38,8 +38,10 @@ void FUN_L17_00253a90(int class_id, int flag2, int flag1, int link_mode) {
     for (moby = D_L17_0015FFD8; moby <= D_L17_0015FFE0; moby++) {
         if (moby->class_id == class_id && moby->state >= 0) {
             if (flag2 != -1) {
-                if (flag2 != 0) moby->flags &= ~2;
-                else moby->flags |= 2;
+                if (flag2 != 0)
+                    moby->flags &= ~2;
+                else
+                    moby->flags |= 2;
             }
             if (flag1 != -1) {
                 if (flag1 != 0) {
@@ -51,8 +53,10 @@ void FUN_L17_00253a90(int class_id, int flag2, int flag1, int link_mode) {
                 }
             }
             if (link_mode != -1) {
-                if (link_mode != 0) moby->linked_value = moby->link->value;
-                else moby->linked_value = 0;
+                if (link_mode != 0)
+                    moby->linked_value = moby->link->value;
+                else
+                    moby->linked_value = 0;
             }
         }
     }

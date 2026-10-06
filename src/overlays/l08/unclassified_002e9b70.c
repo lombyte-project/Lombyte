@@ -16,7 +16,7 @@ extern int D_L08_00161DF4;
 extern int D_L08_00161E00 __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L08_002f0b40(int);
 extern void FUN_L08_002f0c18(int);
 extern void FUN_L08_002f0cf0(int);
@@ -27,7 +27,7 @@ void FUN_L08_002f0dc8(void) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(0x47, 0x513F1);
-    FUN_001f76a0();
+    font_queue_vu_state();
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
     vu1_add_g_sregister(0x42, (long)D_L08_00161DD0 << 32 | 0x44);
     FUN_L08_002f0b40(0);
@@ -48,7 +48,9 @@ void FUN_L08_002f0dc8(void) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
-typedef struct { int a, b; } Pair;
+typedef struct {
+    int a, b;
+} Pair;
 
 extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
@@ -68,7 +70,7 @@ extern float D_L08_00161DCC;
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int FUN_001fa728(char *, float);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short D_L08_00161DC0 __attribute__((sda));
 extern short D_L08_00161E04 __attribute__((sda));
 extern char D_L08_001DDF20[];
@@ -78,7 +80,7 @@ extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, in
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -131,7 +133,8 @@ void FUN_L08_002f1548(unsigned char *moby) {
                 if (d < 20.0f) {
                     *(unsigned char *)&D_L08_00161E08 = 0xFF;
                 } else if (d < 84.0f) {
-                    *(char *)&D_L08_00161E08 = func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                    *(char *)&D_L08_00161E08 =
+                        func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
                 } else {
                     *(char *)&D_L08_00161E08 = 0;
                 }
@@ -163,7 +166,8 @@ float FUN_L08_002f5d98(float x, char *arg) {
     char *t;
     int j;
     i = i % 8;
-    j = i + 1; j = j % 8;
+    j = i + 1;
+    j = j % 8;
     t = arg + 0x90;
     return *(float *)(t - (-(i * 4))) * (1.0f - fr) + *(float *)(t - (-(j * 4))) * fr;
 }

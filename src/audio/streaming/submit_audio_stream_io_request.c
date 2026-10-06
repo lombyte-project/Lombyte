@@ -1,5 +1,10 @@
 #include "types.h"
-typedef struct { u8 trycount; u8 spindlctrl; u8 datapattern; u8 pad; } sceCdRMode;
+typedef struct {
+    u8 trycount;
+    u8 spindlctrl;
+    u8 datapattern;
+    u8 pad;
+} sceCdRMode;
 extern sceCdRMode D_00151700[];
 extern u8 D_0015ED58;
 extern s32 D_0015EEBC;
@@ -17,4 +22,5 @@ s32 submit_audio_stream_io_request(void *buf, u32 lsn, u32 sectors) {
     return 1;
 }
 
-extern __typeof__(submit_audio_stream_io_request) func_00216728 __attribute__((alias("FUN_00216728")));
+extern __typeof__(submit_audio_stream_io_request) func_00216728
+    __attribute__((alias("FUN_00216728")));

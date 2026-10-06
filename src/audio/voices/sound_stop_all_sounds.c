@@ -16,9 +16,9 @@ typedef struct {
 } SndState;
 
 extern SndState D_0013E550;
-extern s32 func_0012DC80();
-extern s32 func_0012E3B8();
-extern s32 func_0012EB00();
+extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
+extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
+extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 
 void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 void sound_stop_all_sounds(void) {
@@ -28,10 +28,10 @@ void sound_stop_all_sounds(void) {
     s32 p;
     s32 end;
 
-    func_0012EB00();
-    func_0012DC80();
-    func_0012E3B8();
-    while (func_0012DC80() != 0) {
+    snd_reset_state_and_flush_commands();
+    snd_flush_sound_commands();
+    snd_stop_all_sounds();
+    while (snd_flush_sound_commands() != 0) {
     }
     for (i = 0; i < 4; i++) {
         qzero(&D_0013E550.q[i]);

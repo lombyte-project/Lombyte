@@ -2,11 +2,14 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s", FUN_001f34e8);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/display/set_pal_mode/FUN_001f34e8.s",
+            FUN_001f34e8);
 #else
 #include "types.h"
 
-typedef struct { long q[12]; } sceGsLoadImage __attribute__((aligned(16)));
+typedef struct {
+    long q[12];
+} sceGsLoadImage __attribute__((aligned(16)));
 
 typedef struct {
     s32 width;
@@ -63,17 +66,16 @@ extern u8 image_clear_buffer[] __asm__("D_001941C0");
 extern void FillTransferWords(u8 *, s32, s32);
 extern void FlushCache(s32);
 extern void func_00120558(s32, s32);
-extern void func_001FA978(s32, s32, s32, s32, s32, s32);
-extern void func_001FB2A8(void);
-extern void func_001FB2D0(void);
-extern void func_001FB368(void);
+extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
+extern void put_disp_buffer(void) __asm__("func_001FB2A8");
+extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
+extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u8 *);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 
 void set_pal_mode(void) __asm__("FUN_001f34e8");
 
-void set_pal_mode(void)
-{
+void set_pal_mode(void) {
     sceGsLoadImage image_transfer;
     s32 tile_count;
     s32 tile_index;
@@ -87,13 +89,13 @@ void set_pal_mode(void)
         depth_buffer_address = 0x1E0000;
         display_buffer_address = 0;
         image_buffer_address = 0x2C0000;
-        func_001FA978(0x200, 0x1C0, 0x200, 0x200, 4, 0);
+        setup_fs_aa_buffer(0x200, 0x1C0, 0x200, 0x200, 4, 0);
     } else {
         draw_buffer_address = 0xE0000;
         depth_buffer_address = 0x1B0000;
         display_buffer_address = 0;
         image_buffer_address = 0x280000;
-        func_001FA978(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
+        setup_fs_aa_buffer(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
     screen_offsets.width = fs_aa_buffer.width;
@@ -122,11 +124,11 @@ void set_pal_mode(void)
     draw_environment.frame1 = frame;
     draw_environment.scissor2 = scissor;
     FlushCache(0);
-    func_001FB2D0();
-    func_001FB368();
+    append_draw_environment_packet();
+    append_gif_transfer_packet();
     FlushCache(0);
     func_00120558(0, 0);
-    func_001FB2A8();
+    put_disp_buffer();
     FillTransferWords(image_clear_buffer, 0, 0x1000);
     tile_count = (fs_aa_buffer.storage_width * fs_aa_buffer.storage_height) >> 10;
     for (tile_index = 0; tile_index < tile_count; tile_index++) {

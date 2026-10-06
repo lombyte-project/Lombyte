@@ -10,8 +10,8 @@ extern char D_00153EC0[];
 extern char D_00153EF8[];
 extern char D_00153D20[];
 extern s32 printf(const char *, ...);
-extern s32 func_0012EE08(s32);
-extern s32 func_0012DC80(void);
+extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
+extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32 FlushCache(s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
@@ -26,7 +26,7 @@ void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) {
         printf(D_00153EC0);
         return;
     }
-    if (func_0012EE08(1) == 1) {
+    if (snd_stream_safe_cd_sync(1) == 1) {
         printf(D_00153EF8);
         return;
     }
@@ -36,7 +36,7 @@ void snd_bank_load_from_ee_cb(s32 cmd, s32 arg, s64 data) {
     D_0015ECD8 = data;
     while (SceSifCheckStatRpc(D_0015EBE8) != 0) {
         printf(D_00153D20);
-        func_0012DC80();
+        snd_flush_sound_commands();
         FlushCache(0);
     }
     D_0015ECC8 = 1;

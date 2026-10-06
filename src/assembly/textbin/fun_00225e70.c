@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s
 #include "qcopy.h"
 #include "sda.h"
 
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 typedef struct {
     u8 pad0[0x10];
@@ -82,10 +82,14 @@ extern Moby *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern Moby *delete_moby(Moby *) __asm__("FUN_00225530");
 extern void refresh_moby_spatial_bounds() __asm__("func_0020DEF8");
 
-s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_item_moby, Moby *secondary_item_moby, Moby **attachment0, Moby **attachment1, Moby **attachment2) __asm__("FUN_00225e70");
+s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_item_moby,
+                                             Moby *secondary_item_moby, Moby **attachment0,
+                                             Moby **attachment1,
+                                             Moby **attachment2) __asm__("FUN_00225e70");
 
-s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_item_moby, Moby *secondary_item_moby, Moby **attachment0, Moby **attachment1, Moby **attachment2)
-{
+s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_item_moby,
+                                             Moby *secondary_item_moby, Moby **attachment0,
+                                             Moby **attachment1, Moby **attachment2) {
     s32 animation_complete;
     s32 delay_expired;
     s32 activate_request;
@@ -98,7 +102,8 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
     }
     if (source_moby->transition_flags & 2) {
         animation_complete = 1;
-        if (active_preview_animation.delay_frames == 0 || --active_preview_animation.delay_frames == 0) {
+        if (active_preview_animation.delay_frames == 0 ||
+            --active_preview_animation.delay_frames == 0) {
             delay_expired = 1;
         }
     }
@@ -110,20 +115,25 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
         decompress_wad(buffer_address + preview_stream_state.read_offset, buffer_address);
         preview_stream_state.read_offset = 0;
         clear_record_flag_by_key(buffer_address);
-        preview_stream_state.loaded_animation[buffer_index] = preview_animation_requests[0].animation_id;
+        preview_stream_state.loaded_animation[buffer_index] =
+            preview_animation_requests[0].animation_id;
         preview_animation_requests[0].status = 2;
-        ((PreviewAnimationClassResource *)moby_class_resources[0])->animation_tables[preview_animation_requests[0].animation_id] = *buffer_slot;
-        relocate_asset_entry_pointers(moby_class_resources[0], preview_animation_requests[0].animation_id);
+        ((PreviewAnimationClassResource *)moby_class_resources[0])
+            ->animation_tables[preview_animation_requests[0].animation_id] = *buffer_slot;
+        relocate_asset_entry_pointers(moby_class_resources[0],
+                                      preview_animation_requests[0].animation_id);
         preview_stream_state.pending_buffer = 0;
     }
-    if (preview_stream_state.pending_buffer == 0 && cd_read_state.active == 0 && preview_request_count > 0) {
+    if (preview_stream_state.pending_buffer == 0 && cd_read_state.active == 0 &&
+        preview_request_count > 0) {
         if (preview_animation_requests[0].status == 0) {
             u32 animation_id = preview_animation_requests[0].animation_id;
             PreviewAnimationStreamState *stream = &preview_stream_state;
             u8 *loaded_animation = stream->loaded_animation;
 
             /* Retail uses the Boolean opposite-buffer index here. */
-            if (loaded_animation[stream->read_buffer_index] == animation_id || loaded_animation[stream->read_buffer_index == 0] == animation_id) {
+            if (loaded_animation[stream->read_buffer_index] == animation_id ||
+                loaded_animation[stream->read_buffer_index == 0] == animation_id) {
                 preview_animation_requests[0].status = 2;
             } else if (animation_id < stream->streamed_animation_base) {
                 preview_animation_requests[0].status = 3;
@@ -131,10 +141,13 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                 u32 archive_index = animation_id - stream->streamed_animation_base;
                 s32 buffer_address = stream->buffer_address[stream->read_buffer_index];
                 s32 read_size = animation_archive.entries[archive_index].sector_count << 11;
-                s32 read_address = buffer_address + get_stream_buffer_size(buffer_address) - read_size;
+                s32 read_address =
+                    buffer_address + get_stream_buffer_size(buffer_address) - read_size;
 
                 stream->read_offset = read_address - buffer_address;
-                if (start_audio_stream_read(read_address, animation_archive.entries[archive_index].offset, animation_archive.entries[archive_index].sector_count) == 0) {
+                if (start_audio_stream_read(
+                        read_address, animation_archive.entries[archive_index].offset,
+                        animation_archive.entries[archive_index].sector_count) == 0) {
                     RaiseKernelTrap();
                 }
                 mark_stream_buffer_read_active(buffer_address);
@@ -144,11 +157,13 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             }
         }
     }
-    if (preview_request_count > 0 && (preview_animation_requests[0].status == 2 || preview_animation_requests[0].status == 3)) {
+    if (preview_request_count > 0 &&
+        (preview_animation_requests[0].status == 2 || preview_animation_requests[0].status == 3)) {
         s32 item_index = preview_animation_requests[0].item_index;
 
-        if (item_index != 0 && preview_stream_state.active_items[0] != item_index && preview_stream_state.active_items[2] != item_index
-            && preview_stream_state.active_items[1] != item_index) {
+        if (item_index != 0 && preview_stream_state.active_items[0] != item_index &&
+            preview_stream_state.active_items[2] != item_index &&
+            preview_stream_state.active_items[1] != item_index) {
             activate_request = 0;
             advance_preview_animation_queue();
         } else if (preview_animation_requests[0].trigger_mode == 0) {
@@ -166,31 +181,37 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
         active_preview_animation = preview_animation_requests[0];
         advance_preview_animation_queue();
         clear_preview_resource_bindings();
-        load_preview_resource_bindings(active_preview_animation.resource_first, active_preview_animation.resource_count);
+        load_preview_resource_bindings(active_preview_animation.resource_first,
+                                       active_preview_animation.resource_count);
         blend_moby_animation_ex(source_moby, active_preview_animation.animation_id, 0, 10, 5);
         if (active_preview_animation.animation_id == preview_stream_state.loaded_animation[0]) {
             preview_stream_state.read_buffer_index = 1;
-        } else if (active_preview_animation.animation_id == preview_stream_state.loaded_animation[1]) {
+        } else if (active_preview_animation.animation_id ==
+                   preview_stream_state.loaded_animation[1]) {
             preview_stream_state.read_buffer_index = 0;
         }
         if (preview_item_definitions[active_preview_animation.item_index].item_type == 2) {
             if (secondary_item_moby != 0) {
-                blend_moby_animation_ex(secondary_item_moby, active_preview_animation.item_animation, 0, 10, 5);
+                blend_moby_animation_ex(secondary_item_moby,
+                                        active_preview_animation.item_animation, 0, 10, 5);
             }
             if (primary_item_moby != 0) {
                 set_moby_animation(primary_item_moby, 1, 0);
             }
         } else if (primary_item_moby != 0) {
-            blend_moby_animation_ex(primary_item_moby, active_preview_animation.item_animation, 0, 10, 5);
+            blend_moby_animation_ex(primary_item_moby, active_preview_animation.item_animation, 0,
+                                    10, 5);
         }
         *attachment0 = delete_moby(*attachment0);
         *attachment1 = delete_moby(*attachment1);
         *attachment2 = delete_moby(*attachment2);
         if (active_preview_animation.attachment0_class != -1) {
-            if ((*attachment0 = create_menu_preview_moby(active_preview_animation.attachment0_class)) != 0) {
+            if ((*attachment0 =
+                     create_menu_preview_moby(active_preview_animation.attachment0_class)) != 0) {
                 Moby *moby;
                 set_moby_animation(*attachment0, active_preview_animation.attachment0_animation, 0);
-                blend_moby_animation(*attachment0, active_preview_animation.attachment0_animation, 0, 10);
+                blend_moby_animation(*attachment0, active_preview_animation.attachment0_animation,
+                                     0, 10);
                 (*attachment0)->flags = 0;
                 moby = *attachment0;
                 qcopy(&moby->position, &source_moby->position);
@@ -203,10 +224,12 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             }
         }
         if (active_preview_animation.attachment1_class != -1) {
-            if ((*attachment1 = create_menu_preview_moby(active_preview_animation.attachment1_class)) != 0) {
+            if ((*attachment1 =
+                     create_menu_preview_moby(active_preview_animation.attachment1_class)) != 0) {
                 Moby *moby;
                 set_moby_animation(*attachment1, active_preview_animation.attachment1_animation, 0);
-                blend_moby_animation(*attachment1, active_preview_animation.attachment1_animation, 0, 10);
+                blend_moby_animation(*attachment1, active_preview_animation.attachment1_animation,
+                                     0, 10);
                 (*attachment1)->flags = 0;
                 moby = *attachment1;
                 qcopy(&moby->position, &source_moby->position);
@@ -219,10 +242,12 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             }
         }
         if (active_preview_animation.attachment2_class != -1) {
-            if ((*attachment2 = create_menu_preview_moby(active_preview_animation.attachment2_class)) != 0) {
+            if ((*attachment2 =
+                     create_menu_preview_moby(active_preview_animation.attachment2_class)) != 0) {
                 Moby *moby;
                 set_moby_animation(*attachment2, active_preview_animation.attachment2_animation, 0);
-                blend_moby_animation(*attachment2, active_preview_animation.attachment2_animation, 0, 10);
+                blend_moby_animation(*attachment2, active_preview_animation.attachment2_animation,
+                                     0, 10);
                 (*attachment2)->flags = 0;
                 moby = *attachment2;
                 qcopy(&moby->position, &source_moby->position);

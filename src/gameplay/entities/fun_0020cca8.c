@@ -1,6 +1,5 @@
-#include "rnc/gameplay_entities_fun_0020cca8_types.h"
+#include "rnc/gameplay/entities/fun_0020cca8.h"
 #include "types.h"
-
 
 extern void FUN_001f9a10(s32, s32, s32);
 extern void FUN_001f9a68(s32, s32, f32);
@@ -8,7 +7,8 @@ extern void func_001FA298(void *, void *);
 extern void FUN_001fa378(s32, void *, s32);
 extern void FUN_00210850(struct M2c_arg0 *, s32, s32 *, s32);
 void FUN_0020cca8(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
-u8 sp_slot[0x40];    s32 sp40;
+    u8 sp_slot[0x40];
+    s32 sp40;
     f32 temp_f20_19;
     s32 temp_16_22;
 

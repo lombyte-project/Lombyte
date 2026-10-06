@@ -1,19 +1,28 @@
 #include "types.h"
-struct MenuItem { u8 pad0[0xA]; s16 state; };
-struct Menu { u8 pad0[0x34]; struct MenuItem items[4]; };
-struct Labels { u8 pad0[0x14]; s32 text[4]; };
+struct MenuItem {
+    u8 pad0[0xA];
+    s16 state;
+};
+struct Menu {
+    u8 pad0[0x34];
+    struct MenuItem items[4];
+};
+struct Labels {
+    u8 pad0[0x14];
+    s32 text[4];
+};
 extern struct Menu D_001D2800;
 extern struct Labels D_001D2878;
-extern s32 func_00215348(void);
-extern s32 func_00215300(void);
+extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
+extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 void FUN_00226e58(void) {
     s32 a;
     s32 b;
     s32 c;
 
-    a = func_00215348() >= 15;
-    b = func_00215348() >= 30;
-    c = func_00215300() >= 10;
+    a = count_nonzero_entries_up_to_30() >= 15;
+    b = count_nonzero_entries_up_to_30() >= 30;
+    c = count_nonzero_entries_up_to_10() >= 10;
     D_001D2800.items[0].state = a ? 3 : 2;
     D_001D2800.items[1].state = b ? 3 : 2;
     D_001D2800.items[2].state = c ? 10 : 2;

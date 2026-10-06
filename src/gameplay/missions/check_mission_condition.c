@@ -1,5 +1,8 @@
 #include "types.h"
-struct Upgrade { u8 pad0[0xC]; s32 level; };
+struct Upgrade {
+    u8 pad0[0xC];
+    s32 level;
+};
 extern u8 D_0013DD40[];
 extern u8 D_0013D4C0[];
 extern u8 D_0013D4E8[];
@@ -31,7 +34,7 @@ s32 check_mission_condition(s16 kind, s32 value) {
     case 6:
         return D_0013D388[value] != 0;
     case 7:
-        return ((s32 (*)(void))value)() != 0;
+        return ((s32(*)(void))value)() != 0;
     case 8:
         return D_0014BEC0[(value & 0xFFFF) + (value >> 16) * 4] != 0;
     case 9:

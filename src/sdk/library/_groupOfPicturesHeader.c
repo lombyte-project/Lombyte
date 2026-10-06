@@ -3,15 +3,12 @@ struct GroupOfPicturesContext {
     unsigned char opaque;
 };
 
-#define FIELD(type, object, offset) \
-    (*(type *)((unsigned char *)(object) + (offset)))
+#define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
 
 int _nextBit(GroupOfPicturesContext *context, int count) __asm__("_nextBit");
-void _extensionAndUserData(GroupOfPicturesContext *context)
-    __asm__("_extensionAndUserData");
+void _extensionAndUserData(GroupOfPicturesContext *context) __asm__("_extensionAndUserData");
 
-void _groupOfPicturesHeader(GroupOfPicturesContext *context)
-    __asm__("_groupOfPicturesHeader");
+void _groupOfPicturesHeader(GroupOfPicturesContext *context) __asm__("_groupOfPicturesHeader");
 
 void _groupOfPicturesHeader(GroupOfPicturesContext *context) {
     FIELD(int, context, 0xE8) = 0;

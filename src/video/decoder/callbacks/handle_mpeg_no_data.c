@@ -1,15 +1,15 @@
 #include "types.h"
 
 extern s32 D_0016120C;
-extern void func_0023A770();
-extern void func_0023BF70();
+extern void switch_thread() __asm__("func_0023A770");
+extern void vi_buf_add_dma() __asm__("func_0023BF70");
 
 s32 handle_mpeg_no_data(void) __asm__("FUN_0023d0a8");
 
 s32 handle_mpeg_no_data(void) {
     s32 v;
-    func_0023A770();
+    switch_thread();
     v = D_0016120C;
-    func_0023BF70(v + 0xD9090);
+    vi_buf_add_dma(v + 0xD9090);
     return 1;
 }

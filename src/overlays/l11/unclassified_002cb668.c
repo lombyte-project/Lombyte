@@ -12,7 +12,7 @@
 extern char D_0013E533[];
 extern float D_0015ED6C;
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00203908(int, int);
 extern unsigned char D_0013D4C2[];
 extern unsigned char D_0013D4E3[];
@@ -33,7 +33,7 @@ void FUN_L11_002cb668(char *moby) {
     case 1:
         break;
     case 2:
-        FUN_001fa580(*(float *)(moby + 0x48), D_0015ED6C * 4.7123890f);
+        fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C * 4.7123890f);
         if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 2.0f) {
             D_0013D4C2[4] = 1;
             D_0013D4E3[0xB] = 1;
@@ -60,7 +60,8 @@ void FUN_L11_002cb990(char *moby) {
         D_0013D3E2[0] = moby[0x20];
         moby[0x20] = 2;
         child = *(char **)(state + 8);
-        if (child) child[0x20] = 2;
+        if (child)
+            child[0x20] = 2;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0710.s", FUN_L11_002d0710);
@@ -106,7 +107,8 @@ void FUN_L11_002d1340(void *mp) {
     qcopy(B, d + 0x130);
     FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
     if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
-        FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10, moby + 0x10);
+        FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10,
+                         moby + 0x10);
         switch (*(int *)(d + 0x158)) {
         case 2:
             FUN_L00_00261d78(0.3f, *(void **)(d + 0x80), moby + 0x10, moby + 0x10);
@@ -145,7 +147,8 @@ int FUN_L11_002d2340(char *moby, char *other) {
     int *ent = D_L11_001B0EB0[*(int *)((char *)p - (-(d->idx * 4)))];
     int buf[8];
     int n;
-    if (FUN_L00_00259740(other, ent + 4, *ent) == 0) return 0;
+    if (FUN_L00_00259740(other, ent + 4, *ent) == 0)
+        return 0;
     buf[0] = *(int *)((char *)p - (-(d->idx * 4)));
     n = 1;
     switch (d->idx) {
@@ -197,7 +200,8 @@ int FUN_L11_002d25e8(char *m, float *out) {
     if (found) {
         float *pos = (float *)(m + 0x10);
         subtract_vector_xyz(a, out, pos);
-        if (vector_length_xyz(a) > 4.0f) normalize_vector_xyz(a, a, 4.0f);
+        if (vector_length_xyz(a) > 4.0f)
+            normalize_vector_xyz(a, a, 4.0f);
         add_vector_xyz(a, a, pos);
         {
             int *q = D_L11_001B0EB0[*(int *)(s - (-(*(int *)(s + 0x158) * 4)) + 0x60)];
@@ -295,7 +299,8 @@ void FUN_L11_002f3350(unsigned char *moby) {
     case 0:
         moby[0x30] = 0xFF;
         moby[0x20] = 1;
-        if (*(int *)state == -1) DeleteMoby(moby);
+        if (*(int *)state == -1)
+            DeleteMoby(moby);
         break;
     case 1:
         if (D_0013F350.timer > 194.0f && D_0013F350.mode != 0x32) {
@@ -307,27 +312,39 @@ void FUN_L11_002f3350(unsigned char *moby) {
 /* Same source as the exact FUN_L13_002e6a58, spawning class 0x40A, without the target class store and the closing effect. */
 typedef struct {
     char _pad00[0x10];
-    unsigned char nframes; } AnimSeq_309378;
+    unsigned char nframes;
+} AnimSeq_309378;
 
 typedef struct {
     char _pad00[0x48];
-    AnimSeq_309378 *seqs[1]; } AnimClass_309378;
+    AnimSeq_309378 *seqs[1];
+} AnimClass_309378;
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass_309378 *pClass;           char _pad28[0x50 - 0x28];
-    unsigned char frame;         unsigned char nextFrame;     unsigned char seq;           unsigned char prevSeq;       char _pad54[0x5C - 0x54];
-    float unk5C;                 char _pad60[0x68 - 0x60];
-    float *frameData;            char _pad6C[4];
-    unsigned char unk70;     } MobyAnim_309378;
+    AnimClass_309378 *pClass;
+    char _pad28[0x50 - 0x28];
+    unsigned char frame;
+    unsigned char nextFrame;
+    unsigned char seq;
+    unsigned char prevSeq;
+    char _pad54[0x5C - 0x54];
+    float unk5C;
+    char _pad60[0x68 - 0x60];
+    float *frameData;
+    char _pad6C[4];
+    unsigned char unk70;
+} MobyAnim_309378;
 
 extern char *FUN_L00_0026daa0(char *, int, int, int, float);
 extern void *FUN_002141f8(char *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
+                                 int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, int arg, float scale) {
+unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, int arg,
+                                float scale) {
     unsigned char *moby = func_0020D348_m(0x40A);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -358,8 +375,9 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
         if (*(char **)(data + 0x24) != 0) {
             qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
         }
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
-                                  (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
+        *(float *)(moby + 0x2C) =
+            *(float *)(*(char **)(moby + 0x24) + 0x24) *
+            (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
         FUN_L00_00250df8(moby);
     }
     return moby;
@@ -381,27 +399,29 @@ typedef struct {
 
 typedef struct {
     char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
+    AnimClass *pClass; /* 0x24 */
     char _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
     char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
+    float unk5C; /* 0x5C */
     char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
+    float *frameData; /* 0x68 */
     char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int FUN_L11_0030a480(unsigned char *moby) {
     char *current;
-    if (moby[0x20] != 1) return 0;
+    if (moby[0x20] != 1)
+        return 0;
     current = D_0013F350.current;
-    if (current != (char *)moby || D_0013F350.active) return 0;
+    if (current != (char *)moby || D_0013F350.active)
+        return 0;
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {
         int value = scale_ticks(0x14);
@@ -430,13 +450,16 @@ extern short D_L11_0015FFF4;
 int FUN_L11_0030a850(char *m) {
     int idx = *(short *)(*(char **)(m + 0x78) + 0xB4);
     short *p;
-    if (idx < 0 || *(int *)&D_L11_0015FFF4 < idx) return 1;
+    if (idx < 0 || *(int *)&D_L11_0015FFF4 < idx)
+        return 1;
     p = D_L11_001AC240[idx];
-    if (p == 0) return 1;
+    if (p == 0)
+        return 1;
     do {
         char *o = (char *)(((*p & 0x7FFF) << 8) + D_L11_0015FFD8);
         if (o[0x20] >= 0 && *(short *)(o + 0xA6) == 0x4DE) {
-            if (FUN_L11_00316128(o) == 0) return 0;
+            if (FUN_L11_00316128(o) == 0)
+                return 0;
         }
     } while (*p++ >= 0);
     return 1;

@@ -115,7 +115,7 @@ ROUTE_EXCEPTIONS = {
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "ui/menus/fun_00208030": "cc_sn",
-    "ui/menus/fun_00221e50": "cc_sn",
+    "ui/menus/update_menu_cycle_selection": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
@@ -254,7 +254,7 @@ GAME_COMPILER_FLAG_UNITS = {
     "rendering/state/reset_graphics": "-mno-split-addresses",
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "ui/menus/fun_00225490": "-fno-schedule-insns",
+    "ui/menus/create_menu_preview_moby": "-fno-schedule-insns",
     "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
     # FUN_002075e8: retail materializes the zero return before `jr $ra` and
     # leaves the delay slot empty; the default pass moves that assignment into
@@ -353,38 +353,38 @@ OVERLAY_SN_UNITS = {
     "l18/ui_help_00227dd0.c",
     "l18/ui_help_0022e8f8.c",
     "l18/unclassified_002a7220.c",
-    "shared/gameplay_animation_00235878.c",
-    "shared/gameplay_camera_001eb188.c",
-    "shared/gameplay_state_0024eec0.c",
-    "shared/gameplay_state_0027b268.c",
-    "shared/gameplay_vendor_002e3de8.c",
-    "shared/gameplay_vendor_003015d0.c",
-    "shared/gameplay_vendor_0030b618.c",
-    "shared/gameplay_vendor_0030e690.c",
-    "shared/math_interpolation_00257ef0.c",
-    "shared/math_vectors_0025c230.c",
-    "shared/rendering_002712b8.c",
-    "shared/ui_help_0021d0a0.c",
-    "shared/ui_help_00221310.c",
-    "shared/ui_help_00229b70.c",
-    "shared/ui_help_00231d08.c",
-    "shared/unclassified_00278fd8.c",
+    "shared/gameplay/animation/00235878.c",
+    "shared/gameplay/camera/001eb188.c",
+    "shared/gameplay/state/0024eec0.c",
+    "shared/gameplay/state/0027b268.c",
+    "shared/gameplay/vendor/002e3de8.c",
+    "shared/gameplay/vendor/003015d0.c",
+    "shared/gameplay/vendor/0030b618.c",
+    "shared/gameplay/vendor/0030e690.c",
+    "shared/math/interpolation/00257ef0.c",
+    "shared/math/vectors/0025c230.c",
+    "shared/rendering/002712b8.c",
+    "shared/ui/help/0021d0a0.c",
+    "shared/ui/help/00221310.c",
+    "shared/ui/help/00229b70.c",
+    "shared/ui/help/00231d08.c",
+    "shared/gameplay/entities/00278fd8.c",
     "shared/unclassified_00288ec0.c",
-    "shared/unclassified_00291918.c",
-    "shared/unclassified_002937a0.c",
-    "shared/unclassified_00295100.c",
-    "shared/unclassified_00297d10.c",
-    "shared/unclassified_0029f990.c",
-    "shared/unclassified_002a09a0.c",
-    "shared/unclassified_002a4038.c",
-    "shared/unclassified_002aa670.c",
+    "shared/gameplay/entities/00291918.c",
+    "shared/gameplay/entities/002937a0.c",
+    "shared/gameplay/entities/00295100.c",
+    "shared/gameplay/entities/00297d10.c",
+    "shared/gameplay/entities/0029f990.c",
+    "shared/gameplay/entities/002a09a0.c",
+    "shared/gameplay/entities/002a4038.c",
+    "shared/gameplay/entities/002aa670.c",
     "shared/unclassified_002aee30.c",
-    "shared/unclassified_002b17d8.c",
-    "shared/unclassified_002b2100.c",
-    "shared/unclassified_002b3840.c",
-    "shared/unclassified_002b94d0.c",
-    "shared/unclassified_002d7f88.c",
-    "shared/unclassified_002f6328.c",
+    "shared/gameplay/entities/002b17d8.c",
+    "shared/gameplay/entities/002b2100.c",
+    "shared/gameplay/entities/002b3840.c",
+    "shared/gameplay/entities/002b94d0.c",
+    "shared/gameplay/entities/002d7f88.c",
+    "shared/gameplay/entities/002f6328.c",
 }
 
 # —— Retail link layout ——
@@ -404,8 +404,8 @@ RODATA_OVERLAYS = {
     "_getpic": (0x153AA0, 0x54A20),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
-    "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
-    "fun_0022f778": (0x1E8930, 0xE98B0),  # gameplay-state switch table
+    "draw_menu_preview_objects": (0x1E87A0, 0xE9720),  # item-handle release switch table
+    "update_resident_gameplay_state": (0x1E8930, 0xE98B0),  # gameplay-state switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
     "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
@@ -418,7 +418,7 @@ RODATA_OVERLAYS = {
     # pairing; it does not by itself make the unit match.
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860),  # retail switch table (jtbl_001528E0)
     "fun_00216c48": (0x1E86A0, 0xE9620),  # retail switch table (jtbl_001E86A0)
-    "fun_0022b288": (0x1E8910, 0xE9890),  # switch table
+    "draw_sky_shells": (0x1E8910, 0xE9890),  # switch table
     "fun_002223f0": (0x1E8810, 0xE9790),  # switch table
     "fun_00237ed0": (0x1E8A90, 0xE9A10),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0),  # switch table

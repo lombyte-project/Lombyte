@@ -52,9 +52,8 @@ typedef struct {
 extern MCFunc D_00132E30[];
 extern MCFunc D_00132E50[];
 
-void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h,
-              int bx, int by, int dx, int dy, int fieldpred, int avg)
-{
+void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, int bx, int by,
+              int dx, int dy, int fieldpred, int avg) {
     RefEnt *ye;
     RefEnt *ce;
     int n;

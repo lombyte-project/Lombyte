@@ -6,8 +6,8 @@
 extern char D_001871B0[];
 extern char D_00187290[];
 extern int D_0018C32C NOT_SDA;
-extern int func_001ECAF8(void *, void *);
-extern int FUN_001eccd8(void *, void *);
+extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
+extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");
 
 /* Picks the update path by the flag at D_001871B0+2 (func_001ECAF8 when
    clear, FUN_001eccd8 when set), each passed arg0 and a slot inside
@@ -23,9 +23,9 @@ void update_camera_blend(char *arg0) {
     int result;
 
     if (*(unsigned char *)(base + 2) == 0) {
-        result = func_001ECAF8(arg0, base + 0x10);
+        result = step_camera_blend(arg0, base + 0x10);
     } else {
-        result = FUN_001eccd8(arg0, base + 0x70);
+        result = advance_alternate_camera_transition(arg0, base + 0x70);
     }
     if (result != 0) {
         if (D_0018C32C == 0) {

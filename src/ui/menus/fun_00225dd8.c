@@ -1,6 +1,5 @@
-#include "rnc/ui_menus_fun_00225dd8_types.h"
+#include "rnc/ui/menus/fun_00225dd8.h"
 #include "types.h"
-
 
 extern u8 D_001D60B8[];
 s32 FUN_00225dd8(s32 arg0) {

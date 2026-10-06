@@ -2,7 +2,9 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/effects/get_effect_texture/FUN_001f44b8.s", FUN_001f44b8);
+INCLUDE_ASM(
+    "config/us/expected/asm/assembly/textbin/rendering/effects/get_effect_texture/FUN_001f44b8.s",
+    FUN_001f44b8);
 #else
 
 #include "types.h"
@@ -70,10 +72,12 @@ u64 get_effect_texture(s32 index) {
         texture->tex0 = tex0_word;
         if (pending_texture_upload_count_snapshot < 0x40) {
             upload = &pending_texture_uploads[pending_texture_upload_count_snapshot];
-            upload->palette_address = level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
+            upload->palette_address =
+                level_texture_payload_address + texture->palette_offset_quadwords * 0x10;
             upload->palette_block_offset = palette_block_offset;
             upload->reserved_zero = 0;
-            *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count_snapshot * 0x10 + 8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
+            *(s32 *)((u8 *)pending_texture_uploads + pending_texture_upload_count_snapshot * 0x10 +
+                     8) = level_texture_payload_address + texture->texel_offset_quadwords * 0x10;
             upload->width_log2 = (u8)texture->width_log2;
             upload->height_log2 = (u8)texture->height_log2;
             upload->texel_block_offset = texel_block_offset;

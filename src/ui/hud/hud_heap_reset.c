@@ -16,4 +16,5 @@ void InitializeResourceEntry(void) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(InitializeResourceEntry) Hud_HeapReset__Fv __attribute__((alias("InitializeResourceEntry")));
+extern __typeof__(InitializeResourceEntry) Hud_HeapReset__Fv
+    __attribute__((alias("InitializeResourceEntry")));

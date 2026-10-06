@@ -19,10 +19,10 @@ typedef struct {
 } ViBuf;
 
 #define VIBUF_ELM_SIZE 2048
-#define DMA_ID_REFE 0
-#define DMA_ID_REF 3
-#define D4_CHCR ((volatile u32 *)0x1000B400)
-#define D4_MADR ((volatile u32 *)0x1000B410)
+#define DMA_ID_REFE    0
+#define DMA_ID_REF     3
+#define D4_CHCR        ((volatile u32 *)0x1000B400)
+#define D4_MADR        ((volatile u32 *)0x1000B410)
 
 extern s32 WaitSema(s32 semaphore);
 extern s32 SignalSema(s32 semaphore);
@@ -30,7 +30,8 @@ extern void log_audio_error(s32 message) __asm__("FUN_0023ab78");
 extern char D_001E8B20[];
 extern void set_dma_channel_4_control_register(s32 control) __asm__("FUN_0023bbb0");
 extern u32 get_fifo_index(ViBuf *buffer, s32 dma_address) __asm__("FUN_0023baf8");
-extern void PackStateValue(u64 *output, u32 high_word, u32 middle_word, u32 low_word) __asm__("func_0023BC20");
+extern void PackStateValue(u64 *output, u32 high_word, u32 middle_word,
+                           u32 low_word) __asm__("func_0023BC20");
 
 s32 vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");
 
@@ -68,18 +69,16 @@ s32 vi_buf_add_dma(ViBuf *f) {
 
     if (read_n > 0) {
         last = (f->dmaStart + f->dmaN - 1 + f->n) % f->n;
-        PackStateValue((u64 *)(f->tag + last),
-                      (u32)((u8 *)f->data + VIBUF_ELM_SIZE * last),
-                      DMA_ID_REF, VIBUF_ELM_SIZE / 16);
+        PackStateValue((u64 *)(f->tag + last), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * last),
+                       DMA_ID_REF, VIBUF_ELM_SIZE / 16);
         isNewData = 1;
     }
 
     index = read_start;
     for (i = 0; i < read_n; i++) {
         id = (i == read_n - 1) ? DMA_ID_REFE : DMA_ID_REF;
-        PackStateValue((u64 *)(f->tag + index),
-                      (u32)((u8 *)f->data + VIBUF_ELM_SIZE * index), id,
-                      VIBUF_ELM_SIZE / 16);
+        PackStateValue((u64 *)(f->tag + index), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * index), id,
+                       VIBUF_ELM_SIZE / 16);
         index = (index + 1) % f->n;
     }
 

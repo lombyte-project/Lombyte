@@ -11,7 +11,11 @@
 /* Returns the current help record's value, 0x54 or 0x6E in two special states, or 0 when no record applies. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_00202740.c: func_L17_00202740), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x24]; int v; char pad2[0x24]; } Rec;
+typedef struct {
+    char pad[0x24];
+    int v;
+    char pad2[0x24];
+} Rec;
 
 extern Rec D_L17_0017A3C0[];
 extern char D_0013F350[];
@@ -94,7 +98,11 @@ typedef struct {
     u8 pad38[8];
 } T_8;
 
-typedef union { Q_8 q; f32 f[4]; s32 i[4]; } V_8;
+typedef union {
+    Q_8 q;
+    f32 f[4];
+    s32 i[4];
+} V_8;
 
 extern G_8 D_0013F350_8 __asm__("D_0013F350");
 extern s32 D_L08_0015F5C4_8 __asm__("D_L17_0015F5C4");
@@ -208,8 +216,8 @@ s32 FUN_L17_0020dbe8(s32 arg) {
             }
             if (D_0015ED84_8 == 0xF || D_0015ED84_8 == 0x11) {
                 mob = G.p2280;
-                if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B
-                                 || *(s16 *)(mob + 0xA6) == 0x29D)) {
+                if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
+                                 *(s16 *)(mob + 0xA6) == 0x29D)) {
                     FUN_L00_00216de8_8(0x1C, 0);
                 }
             }
@@ -254,7 +262,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
 #define NOT_SDA
 #define MACRO_ADDR
 
-/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui_help_0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
+/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui/help/0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
 
 typedef struct {
     u8 pad0[0x80];
@@ -320,7 +328,8 @@ void FUN_L17_0020e1c0(void) {
         break;
     }
     if (P.i208C == 4) {
-        if (P.i198 > P.i420 && P.s41E == 0) P.f22C = P.f434;
+        if (P.i198 > P.i420 && P.s41E == 0)
+            P.f22C = P.f434;
     } else if (P.i2084 == 6) {
         P.f22C = 0.5f;
     } else if (P.i2084 == 4) {
@@ -334,12 +343,14 @@ void FUN_L17_0020e1c0(void) {
     } else if (P.i2084 == 0x7F) {
         P.f230 = 0.8f;
     }
-    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 || FUN_001f9b80_211380(P.v210, P.v80) > P.f234 * 0.5f) {
+    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 ||
+        FUN_001f9b80_211380(P.v210, P.v80) > P.f234 * 0.5f) {
         f32 *q = D_0013F570_211380;
         P211380 *b = (P211380 *)((u8 *)q - 0x220);
         approach_value_211380(b->f228, D_0015ED60_211380 * 0.02f, q);
         approach_value_211380(b->f22C, D_0015ED60_211380 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_211380(q + 5, q + 6, b->f230, D_0015ED64_211380 * 0.02f, D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
+        FUN_L00_0025b8c0_211380(q + 5, q + 6, b->f230, D_0015ED64_211380 * 0.02f,
+                                D_0015ED64_211380 * 0.3f, D_0015ED6C_211380 * 4.0f);
     }
 }
 #undef P

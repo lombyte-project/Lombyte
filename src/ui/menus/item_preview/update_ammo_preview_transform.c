@@ -92,8 +92,8 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     bob_angle = fast_add_rotations(bob_angle, double_phase);
     if (ammo_preview_offsets[moby->slot] != zero) {
         advance_accelerated_scalar(&ammo_preview_offsets[moby->slot],
-                                  &ammo_preview_velocities[moby->slot],
-                                  zero, 1.0f, animation_delta * 6.0f, frame_delta * 6.0f);
+                                   &ammo_preview_velocities[moby->slot], zero, 1.0f,
+                                   animation_delta * 6.0f, frame_delta * 6.0f);
     }
     offset[0] = fast_cos(orbit_angle);
     offset[1] = fast_sin(orbit_angle);
@@ -108,4 +108,5 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     refresh_moby_spatial_bounds_from_basis(moby);
 }
 
-extern __typeof__(update_ammo_preview_transform) func_00225180 __attribute__((alias("FUN_00225180")));
+extern __typeof__(update_ammo_preview_transform) func_00225180
+    __attribute__((alias("FUN_00225180")));

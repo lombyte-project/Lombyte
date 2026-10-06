@@ -8,7 +8,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00207c28/FUN_00207c28.s
 
 extern void FillTransferWords(void *, s32, s32) __asm__("func_001F97E8");
 extern void copy_blocks_16_forward(void *, void *, s32) __asm__("func_001F98D0");
-void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *span_stream) __asm__("FUN_00207c28");
+void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream,
+                                     u8 *span_stream) __asm__("FUN_00207c28");
 
 /* Decode a 32 KiB bit map in 1 KiB output blocks. Each span pair skips bytes
    then writes a run of bits in scratchpad. A zero control count toggles the bit
@@ -55,7 +56,8 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
                 control_remaining--;
             } while (run_length != 0);
         }
-        if (expanded_cursor < scratchpad_end) goto next_run;
+        if (expanded_cursor < scratchpad_end)
+            goto next_run;
 
         bit_read = (u8 *)0x70000000;
         packed_write = (u8 *)0x70000000;
@@ -99,6 +101,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
     }
 }
 
-extern __typeof__(decode_compressed_occlusion_map) func_00207C28 __attribute__((alias("FUN_00207c28")));
+extern __typeof__(decode_compressed_occlusion_map) func_00207C28
+    __attribute__((alias("FUN_00207c28")));
 
 #endif /* NON_MATCHING */

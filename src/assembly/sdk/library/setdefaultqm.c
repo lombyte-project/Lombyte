@@ -3,7 +3,8 @@
 
 #ifndef NON_MATCHING
 /* Exact SDK/library unit _setDefaultQM; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/setdefaultqm/_setDefaultQM.s", _setDefaultQM);
+INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/setdefaultqm/_setDefaultQM.s",
+            _setDefaultQM);
 #else
 #include "types.h"
 
@@ -23,9 +24,11 @@ extern void _dispatchMpegCallback(void *, MpegCallbackArgument *);
 extern void _sendIpuCommand(struct MpegQuantizerState *, s32);
 extern void _waitIpuIdle(struct MpegQuantizerState *);
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) __asm__("_setDefaultQM");
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command,
+                                    u32 source_address) __asm__("_setDefaultQM");
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) {
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command,
+                                    u32 source_address) {
     s32 interrupts_enabled;
     MpegCallbackArgument callback;
 

@@ -9,13 +9,14 @@ struct Glyph {
 
 extern s32 D_0018CAF8[];
 extern s32 D_0015F49C;
-extern void FUN_001f5450(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, u64 color, u64 extra);
+extern void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, u64 color,
+                               u64 extra) __asm__("FUN_001f5450");
 
 s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
-                 struct Glyph *font) __asm__("FUN_001f6cb8");
+                       struct Glyph *font) __asm__("FUN_001f6cb8");
 
 s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text, s32 len, u64 extra,
-                 struct Glyph *font) {
+                       struct Glyph *font) {
     s32 i;
     s32 j;
     s32 cx;
@@ -55,12 +56,15 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
             if (font[c].adv != 0) {
                 if ((u8)(c + 0x80) < 0x28) {
                     g = (struct Glyph *)(((c + 0x40) << 2) + (s32)font);
-                    FUN_001f5450(cx + g->adv, cy + g->yoff, 16, 16, g->u, g->v, 16, 16, color, extra);
+                    draw_textured_quad(cx + g->adv, cy + g->yoff, 16, 16, g->u, g->v, 16, 16, color,
+                                       extra);
                 }
                 if (*p < 0x20) {
-                    FUN_001f5450(cx, cy + font[*p].yoff, 0x18, 16, font[*p].u, font[*p].v, 0x18, 16, color, extra);
+                    draw_textured_quad(cx, cy + font[*p].yoff, 0x18, 16, font[*p].u, font[*p].v,
+                                       0x18, 16, color, extra);
                 } else if (*p > 0x20) {
-                    FUN_001f5450(cx, cy + font[*p].yoff, 16, 16, font[*p].u, font[*p].v, 16, 16, color, extra);
+                    draw_textured_quad(cx, cy + font[*p].yoff, 16, 16, font[*p].u, font[*p].v, 16,
+                                       16, color, extra);
                 }
                 cx += font[*p].adv;
             }

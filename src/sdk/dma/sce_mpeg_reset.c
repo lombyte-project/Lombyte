@@ -25,8 +25,7 @@ extern void SetImageBufferFlag(MpegDecoder *decoder) __asm__("SetImageBufferFlag
 
 void sceMpegReset(MpegObject *mpeg) __asm__("sceMpegReset");
 
-void sceMpegReset(MpegObject *mpeg)
-{
+void sceMpegReset(MpegObject *mpeg) {
     MpegDecoder *decoder = mpeg->decoder;
 
     decoder->status = 0;
