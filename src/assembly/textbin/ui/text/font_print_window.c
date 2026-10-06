@@ -112,9 +112,7 @@ retry:
         }
         line_count = next_line_count;
         if (text[position] == 0) {
-            /* Retail saves this width before testing whether to rebalance. */
-            last_line_width = line_width;
-            goto after_scan;
+                goto terminal_line;
         }
         position++;
     }
@@ -131,6 +129,14 @@ after_scan:
         using_initial_width = 1;
         goto retry;
     }
+    goto compare_width;
+
+terminal_line:
+    /* Retail saves this width before testing whether to rebalance. */
+    last_line_width = line_width;
+    goto after_scan;
+
+compare_width:
     if (last_line_width < wrap_width / balance_divisor) {
         wrap_width -= 0x10;
         goto retry;
