@@ -82,6 +82,8 @@ s32 draw_items_menu(ItemsMenu *menu) {
     setup_gif_paging(0);
     column_divisor = 3;
     {
+        /* Retail initializes the 24-byte text window with the menu height,
+       signed width / 3, and the 0x10 and 5 fields before drawing the title. */
         FontWindow text_window = {{0, menu->height, window_left,
                                    divide_coordinate(menu->width, column_divisor), 0, 0, 0, 0, 0x10,
                                    5}};
