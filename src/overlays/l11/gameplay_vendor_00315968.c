@@ -78,7 +78,79 @@ int FUN_L11_00318050(char *moby, void **out) {
     return count;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003181f0.s", FUN_L11_003181f0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
+
+char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale);
+extern char D_L11_00161E18[] __attribute__((section(".sdata")));
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L11_0015F580[] __attribute__((section(".sdata")));
+extern float random_float_between(float a, float b);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern char D_L11_0015FFBC[4] __attribute__((sda));
+extern char D_L11_00162340[4] __attribute__((sda));
+extern char D_L11_00162350[4] __attribute__((sda));
+extern char D_L11_00162360[4] __attribute__((sda));
+extern char D_L11_00162364[4] __attribute__((sda));
+extern char D_L11_00162368[4] __attribute__((sda));
+extern char D_L11_0016236C[4] __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void tick_countdown_32(int *arg0);
+extern void transform_vector_by_basis(void *, void *, void *);
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
+extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
+extern char *func_L11_0031C210_5(void *, void *, void *, int, float) __asm__("FUN_L11_0031ada0");
+extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *, float *, float, float *) __asm__("FUN_L00_00263fd8");
+
+void FUN_L11_003181f0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float w[4];
+    float r[4];
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (func_001F9908_i(d + 0x28) == 0 && random_integer_below(*(int *)&D_L11_00162340) == 0
+            && ((unsigned char *)m)[0x31] != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
+            transform_vector_by_basis(v, &D_L11_00162350, m + 0xC0);
+            add_vector_xyz(v, v, m + 0x10);
+            FUN_L00_00257d78(r, 0.0f, *(float *)&D_L11_00162368 * D_0015ED6C);
+            subtract_vector_xyz(w, m + 0x10, d);
+            w[2] -= D_0015ED6C + D_0015ED6C;
+            add_vector_xyz(w, w, r);
+            func_L11_0031C210_5(v, w, D_L11_00161E18, 0, random_float_between(*(float *)&D_L11_00162360, *(float *)&D_L11_00162364));
+        }
+        qcopy(d, m + 0x10);
+        break;
+    case 1: {
+        char *p1 = m + 0x10;
+        float *dv;
+        char *p2;
+        FUN_L00_0025f090(m, p1, -1, 5.0f, 13.0f);
+        scale_vector_xyz(v, m + 0xC0, (dv = D_L11_0015F580, p2 = m + 0x40, *(float *)&D_L11_0016236C * D_0015ED60));
+        v[2] += D_0015ED60 * 0.08f;
+        func_L00_00265050_s(m, 0x785, p1, p2, scale_game_frames(0x5A), 0, v, dv, D_0015ED70 * 12.0f, dv);
+        func_L00_00265050_s(m, 0x786, p1, p2, scale_game_frames(0x5A), 0, v, dv, D_0015ED70 * 12.0f, dv);
+        func_L00_00265050_s(m, 0x787, p1, p2, scale_game_frames(0x5A), 0, v, dv, D_0015ED70 * 12.0f, dv);
+        m[0x20] = 2;
+        m[0x31] = 0;
+        *(unsigned short *)(m + 0x34) |= 1;
+        break;
+    }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
@@ -104,7 +176,7 @@ extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int
 extern void FUN_L11_00319028_c(char *moby) __asm__("FUN_L11_00319028");
 extern void FUN_L11_003191c0_c(char *moby) __asm__("FUN_L11_003191c0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void tick_countdown_32(void *) __asm__("func_001F9740");
+extern void tick_countdown_32_u(void *) __asm__("func_001F9740");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
