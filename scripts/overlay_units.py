@@ -104,7 +104,10 @@ def category_of(function: dict) -> str:
 
 
 def group_of(function: dict) -> str:
-    """The logical group: the src/overlays file (its stem), or the level."""
+    """The logical group: the src/overlays file path below its category
+    directory, without the suffix (e.g. ``gameplay/entities/0025d1b8``), or
+    the level."""
     if function["file"]:
-        return Path(function["file"]).stem
+        parts = Path(function["file"]).with_suffix("").parts
+        return "/".join(parts[3:]) if parts[:2] == ("src", "overlays") else parts[-1]
     return category_of(function)
