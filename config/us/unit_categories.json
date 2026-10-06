@@ -95,7 +95,6 @@
     "assembly/math/fast_count_chars",
     "assembly/math/subtract_integer_with_clamp",
     "assembly/sdk/dma/do_csc2",
-    "assembly/sdk/dma/sce_gs_set_def_disp_env",
     "assembly/sdk/library/_motionComp0",
     "assembly/sdk/library/domc_mmi",
     "assembly/sdk/library/entry",
