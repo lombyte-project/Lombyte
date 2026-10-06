@@ -1,11 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/world/startlevel/FUN_001e9658.s",
-            FUN_001e9658);
-#else
-#include "types.h"
 #include "sda.h"
 
 typedef struct {
@@ -48,10 +41,10 @@ extern s32 D_00139378[];
 extern s32 D_00139380[];
 extern char D_001E76C0[];
 extern s32 D_00137B80[];
-extern SoundSlot D_00186100[];
-extern SoundSlot D_001861E0[];
-extern SoundSlot *D_0015F634;
-extern s32 D_0015F630;
+extern volatile SoundSlot D_00186100[];
+extern volatile SoundSlot D_001861E0[];
+extern volatile SoundSlot * volatile D_0015F634;
+extern volatile s32 D_0015F630;
 extern u8 D_0016034C;
 extern s32 D_0015F600;
 extern u8 D_0013E030[];
@@ -190,9 +183,11 @@ void startlevel(void) {
     DebugPrint(D_001E76C0);
     bank = load_audio_bank_by_location(D_00137B80[0x14E0 / 4]);
     snd_resolve_bank_xrefs();
-    /* Retail stores the slot base at 0x001e99d8, then the count at 0x001e99e0.
-       The managed compiler reverses these two stores despite this C order. */
+    /* Publish the slot tables and metadata in retail order. */
+    D_001861E0[4].bank = bank;
+    D_00186100[6].bank = bank;
     D_0015F634 = D_00186100;
+    D_0015F630 = 7;
     D_00186100[0].bank = bank;
     D_00186100[1].bank = bank;
     D_00186100[2].bank = bank;
@@ -200,12 +195,10 @@ void startlevel(void) {
     D_00186100[4].bank = bank;
     D_00186100[5].bank = bank;
     D_001861E0[0].bank = bank;
+    /* The ordinary view lets the last bank store fill the call delay slot. */
+    ((SoundSlot *)D_001861E0)[2].bank = bank;
+    ((SoundSlot *)D_001861E0)[3].bank = bank;
     D_001861E0[1].bank = bank;
-    D_001861E0[2].bank = bank;
-    D_00186100[6].bank = bank;
-    D_0015F630 = 7;
-    D_001861E0[3].bank = bank;
-    D_001861E0[4].bank = bank;
     transition_do_transition();
     if (D_0015ED80 != D_0016034C) {
         D_0015ED80 = D_0016034C;
@@ -220,4 +213,5 @@ void startlevel(void) {
     D_0015ED84 = -1;
     do_space_transition();
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(startlevel) func_001E9658 __attribute__((alias("FUN_001e9658")));

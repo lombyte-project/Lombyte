@@ -198,6 +198,11 @@ void transition_load_wad(void) {
     u8 *lookupHeader;
     u8 *lookupSource;
     u8 *lookupRange;
+    s32 next_workspace_address;
+    s32 moby_class_index;
+    s32 first_image_buffer_address;
+    s32 text_base;
+    s32 text_index;
     s32 k_800 = 0x800;
     u64 t;
     u64 u;
@@ -302,18 +307,18 @@ void transition_load_wad(void) {
     sceGsExecLoadImage(li, data + hdr->x84);
     func_00120558(0, 0);
     D_001940C0.x18 = (s32)D_001940C0.hdr + size;
-    v = D_0015EE74;
-    D_0015EE78 = v + 0x20000;
-    D_0015EF48 = (v >> 8) | 0x20010000 | (s64)0xB800 << 19;
-    D_0015EE74 = v + 0x20000;
+    first_image_buffer_address = D_0015EE74;
+    D_0015EE78 = first_image_buffer_address + 0x20000;
+    D_0015EE74 = first_image_buffer_address + 0x20000;
+    D_0015EF48 = (first_image_buffer_address >> 8) | 0x20010000 | (s64)0xB800 << 19;
     D_001940C0.x1C = func_001E9B10(data + hdr->x7C);
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
     v = D_001940C0.x1C;
-    i = v + 0x40000;
+    next_workspace_address = v + 0x40000;
     D_0018CB20.x58 = v;
-    D_0018CB20.x5C = i;
-    D_001940C0.x1C = i + 0x40000;
+    D_0018CB20.x5C = next_workspace_address;
+    D_001940C0.x1C = next_workspace_address + 0x40000;
     snd = (WadSound *)(data + hdr->x80);
     j = 0;
     if (snd->size != 0) {
@@ -332,22 +337,22 @@ void transition_load_wad(void) {
     D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
     for (k = 0; k < 8; k++) {
         QueueDmaTransfer(k);
-        j = 0;
+        text_index = 0;
         if (D_001996D0.count > 0) {
             te = D_0015F6A0;
-            v = (s32)te - 8;
+            text_base = (s32)te - 8;
             do {
-                te[j].offset += v;
-                j++;
-            } while (j < D_001996D0.count);
+                te[text_index].offset += text_base;
+                text_index++;
+            } while (text_index < D_001996D0.count);
         }
     }
     QueueDmaTransfer(0);
     /* Retail uses lbu here; its signed-negative branch cannot fire. */
-    i = D_001B3AC0[0x472];
-    if (i >= 0) {
-        D_001B3200[i]->x28 = D_001861E0;
-        D_001B3200[i]->xD = 5;
+    moby_class_index = D_001B3AC0[0x472];
+    if (moby_class_index >= 0) {
+        D_001B3200[moby_class_index]->x28 = D_001861E0;
+        D_001B3200[moby_class_index]->xD = 5;
     }
 }
 #endif /* NON_MATCHING */
