@@ -233,32 +233,30 @@ void update_mode_freeze(void) {
             struct S_00193300 *st = &D_00193300;
             if (st->unk24 != 0) {
                 st->unk24--;
-                break;
-            }
-            if (st->unk20 != 0) {
+            } else if (st->unk20 != 0) {
                 st->unk20--;
-                break;
-            }
-            if (st->unk1C == 2) {
-                if (D_0013F350.unk880 != (-1)) {
-                    set_animation_parameter(D_0013F350.unk880, 0);
-                    D_0013F350.unk880 = -1;
-                }
-                func_001FF768();
-                if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
-                    if (D_0015ED84 == 5) {
-                        D_0015EE38++;
-                    } else if (D_0015ED84 == 0x10) {
-                        D_0015EE3C++;
-                    }
-                }
-                D_0015F604 = 0;
-                func_001E9440(D_00141050, D_00141050 + 0x10, 0, 1);
             } else {
-                D_0015F604 = 0;
-                if (D_0013F350.unk89A >= 3) {
-                    D_0013F350.unk89A = (s16)(((u16)D_0013F350.unk89A) - 1);
-                    D_0013F350.unk890->unkBC = 3;
+                if (st->unk1C == 2) {
+                    if (D_0013F350.unk880 != (-1)) {
+                        set_animation_parameter(D_0013F350.unk880, 0);
+                        D_0013F350.unk880 = -1;
+                    }
+                    func_001FF768();
+                    if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
+                        if (D_0015ED84 == 5) {
+                            D_0015EE38++;
+                        } else if (D_0015ED84 == 0x10) {
+                            D_0015EE3C++;
+                        }
+                    }
+                    D_0015F604 = 0;
+                    func_001E9440(D_00141050, D_00141050 + 0x10, 0, 1);
+                } else {
+                    D_0015F604 = 0;
+                    if (D_0013F350.unk89A >= 3) {
+                        D_0013F350.unk89A = (s16)(((u16)D_0013F350.unk89A) - 1);
+                        D_0013F350.unk890->unkBC = 3;
+                    }
                 }
             }
         } break;
