@@ -321,7 +321,183 @@ void FUN_L08_003063f0(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);
+extern float FUN_001fa580(float, float);
+extern float FUN_001f9e90(float, float);
+#include "sda.h"
+#include "qcopy.h"
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} L14WatchScratch;
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0xF];
+    unsigned char opacity;
+    unsigned char near_flag;
+    char pad32[0x16];
+    float yaw;
+    char pad4C[7];
+    unsigned char animation;
+    char pad54[0x24];
+    char *data;
+    char pad7C[3];
+    unsigned char flag7F;
+    char pad80[0x30];
+    unsigned char bB0;
+    char padB1;
+    unsigned short hB2;
+} L14WatchMoby;
+typedef struct {
+    char pad00[4];
+    short sub;
+    char pad06[0x1A];
+    void *p20;
+    char pad24[0x12];
+    short h36;
+    char pad38[0x10];
+    int i48;
+    char pad4C[4];
+    int i50;
+    char pad54[0xC];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padCC[4];
+    float height;
+    char padD4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad14C[0x14];
+    float target[4];
+    char pad170[4];
+    int moving_timer;
+    int target_timer;
+} L14WatchData;
+typedef struct { char pad00[0xD0]; float aim[4]; } L14Player;
+extern char D_0013F3D0[];
+extern float D_0013F420[4];
+extern float D_0015ED64;
+extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b20(void *);
+extern float FUN_001fa688(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_002132a8(float, float);
+extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
+extern int FUN_001fa6d0(float);
+extern void FUN_001f9a28(void *, void *, void *);
+extern int D_0015ED84;
+extern unsigned char D_0014C050[];
+extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
+extern void FUN_L00_00284e50(void *, void *);
+extern int D_0015ED84_s __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern char D_L08_00162308[];
+extern char *D_L08_001600EC;
+extern unsigned char *D_L08_0015FFD8;
+extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
+extern void FUN_L08_002e1698(void *);
+extern void FUN_L00_00299460(int);
+extern void FUN_L00_00211250(void);
+extern void FUN_L00_00260860(int, int);
+
+/* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
+void FUN_L08_003065d8(L14WatchMoby *m) {
+    L14WatchScratch scratch;
+    L14WatchData *d = (L14WatchData *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    FUN_L08_003063f0_c(m);
+    switch (m->state) {
+    case 0:
+        m->opacity = 0xFF;
+        if (D_0014C050[m->bB0 + D_0015ED84_s * 16] == 0xFF) {
+            FUN_0020c828(m);
+            return;
+        }
+        d->p20 = (void *)D_L08_00162308;
+        m->state = 1;
+        FUN_L00_002668a0_c(m, d);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, d)) FUN_L01_002783a8(m, 2.7f);
+        if (d->h36 == 2) {
+            char *t = D_L08_001600EC + d->i48 * 128;
+            FUN_L00_00284e50(t + 0x30, t + 0x70);
+            m->state = 2;
+            FUN_L08_002e1698(D_L08_0015FFD8 + d->i50 * 256);
+        }
+        if (d->sub == 3) {
+            FUN_L00_00299460(1);
+            m->state = 5;
+        }
+        if (d->sub == 4) {
+            FUN_L00_00211250();
+            d->sub = -1;
+        }
+        break;
+    case 2:
+        break;
+    case 5:
+        FUN_L00_002502a0(m->bB0);
+        FUN_L00_00260860(0x1B, 1);
+        FUN_0020b178(0, -1);
+        FUN_0020c828(m);
+        return;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *g = D_0013F3D0;
+        L14Player *q;
+        tracking = 1;
+        if (FUN_001f9b80_c(m->position, g) < 8.0f &&
+            (q = (L14Player *)(g - 0x80), FUN_001fa688(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
+            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
+            else FUN_001f9740_c(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, D_0013F420);
+        }
+        if (FUN_001f9740_c(&d->target_timer)) {
+            float heading;
+            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
+            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
+            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            FUN_001f9a10(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, D_0013F420);
+            rate = 0.03f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
+        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f) yaw = 1.5707964f;
+        else if (yaw < -1.5707964f) yaw = -1.5707964f;
+        if (pitch > 0.5235988f) pitch = 0.5235988f;
+        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->yaw = yaw * 0.7f;
+        d->head_yaw = yaw * 0.3f;
+    }
+    if (D_0015EDB0_b) d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
 
