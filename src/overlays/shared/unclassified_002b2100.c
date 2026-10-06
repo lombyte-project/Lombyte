@@ -438,7 +438,61 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     return best;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B69C0), where it is exact; names translated to the US level program. */
+
+extern int D_L00_0015F30C;
+extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444") __attribute__((section(".sdata")));
+extern float D_L00_0015F448;
+extern float D_L00_0015F44C;
+extern float D_L00_0015F450;
+extern float D_L00_0015F454 __attribute__((sda));
+extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") __attribute__((section(".sdata")));
+extern int D_L00_0015FFF0;
+extern float D_L00_001604A4;
+extern int D_L00_0016017C;
+extern float D_L00_00160F80;
+extern float D_L00_00160FE0;
+extern int D_L00_00169FF8 __attribute__((section(".data")));
+extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
+
+void FUN_L00_002b56d0(void *m_) {
+    char *m = (char *)m_;
+    char *p;
+    float f0, f1, f2, f3;
+
+    p = *(char **)(m + 0x78);
+    f0 = D_L00_0015F448;
+    f1 = D_L00_0015F44C;
+    f2 = D_L00_0015F450;
+    f3 = D_L00_0015F448_e[3];
+    D_L00_0015F30C = 1;
+    *(float *)(p + 0x30) = f0;
+    *(float *)(p + 0x34) = f1;
+    *(float *)(p + 0x38) = f2;
+    *(float *)(p + 0x3C) = f3;
+    p[0x40] = D_L00_0015F444_e[0];
+    p[0x41] = D_L00_0015F444_e[1];
+    p[0x42] = D_L00_0015F444_e[2];
+    D_L00_0015F444_e[0] = 0x40;
+    D_L00_0015F448 = 0;
+    D_L00_0015F444_e[1] = 0x60;
+    D_L00_0015F454 = 0;
+    D_L00_0015F444_e[2] = 0x40;
+    D_L00_00160FE0 = 144.0f;
+    D_L00_0015F44C = 131072.0f;
+    D_L00_0015F450 = 255.0f;
+    D_L00_00169FF8 = 0;
+    D_L00_00160F80 = 147456.0f;
+    D_L00_001604A4 = 144.0f;
+    D_L00_0015FFF0 = 0x90;
+    D_L00_0016017C = 0x50000;
+    PackDmaTag(0x40, 0x60, 0x40);
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016CA40[] __attribute__((section(".data")));
@@ -449,7 +503,6 @@ extern unsigned char D_L00_0015F446 __attribute__((sda));
 extern float D_L00_0015F448;
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
-extern float D_L00_0015F454;
 extern int D_L00_0015FFF0;
 extern int D_L00_0016017C;
 extern float D_L00_001604A4;
@@ -473,7 +526,7 @@ void FUN_L00_002b57f0(int m_, int flag) {
     D_L00_0015F448 = f0;
     D_L00_0015F44C = f1;
     D_L00_0015F450 = f2;
-    D_L00_0015F454 = f3;
+    D_L00_0015F448_e[3] = f3;
     D_L00_0015F444 = p[0x40];
     D_L00_0015F445 = p[0x41];
     D_L00_0015F446 = p[0x42];
