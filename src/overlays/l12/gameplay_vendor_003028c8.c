@@ -226,7 +226,7 @@ extern char D_L12_0016CCF0[];
 extern int D_L12_0015F5C4 MACRO_ADDR;
 extern int D_L12_0015F5CC MACRO_ADDR;
 extern void FUN_L00_00298840(int);
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_003093c8(char *moby) {
@@ -241,7 +241,7 @@ void FUN_L12_003093c8(char *moby) {
             return;
         }
         p = D_0013F3D0;
-        if (is_point_inside_clip_volume(p, *(int *)data) != 0) {
+        if (is_point_inside_clip_volume_u(p, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
             qcopy(D_L12_0016CCF0, p);
             q = D_L12_0016CCF0 - 0x10;
@@ -253,5 +253,49 @@ void FUN_L12_003093c8(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030be68.s", FUN_L12_0030be68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
+/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
+
+extern char D_L12_00162108[] __attribute__((section(".sdata")));
+extern char D_L12_00167240[];
+extern char D_L12_00208B00[];
+extern int D_L12_001620D4;
+extern int D_L12_001FBD10[];
+extern int D_L12_002059E0[];
+extern int D_L12_00205A08[];
+extern int D_L12_00205A58[];
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+extern void FUN_L08_002f0c18(int);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L12_0030be68(char *m) {
+    int *d = *(int **)(m + 0x78);
+    int i;
+    font_queue_vu_state();
+    vu1_add_g_sregister(0x42, 0x7F00000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x5360A);
+    if (is_point_inside_clip_volume(D_L12_00167240, d[0])) {
+        vu1_add_g_sregister(6, get_effect_texture(0x2C));
+        for (i = 0; i < 10; i++) {
+            FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
+            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i], D_L12_00208B00, 1);
+        }
+    }
+    vu1_add_g_sregister(6, get_effect_texture(0x2F));
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister(0x42, ((long)D_L12_001620D4 << 32) | 0x68);
+    vu1_add_g_sregister(6, get_effect_texture(0x30));
+    FUN_L08_002f0c18(1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030bff0.s", FUN_L12_0030bff0);
