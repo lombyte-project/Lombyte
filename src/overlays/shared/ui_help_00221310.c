@@ -83,9 +83,9 @@ int FUN_L00_00221d98(void) {
 }
 extern char D_0013F350[];
 void FUN_L00_002118c8(int, float);
-float FUN_001fa5c8(float, float);
-float FUN_001fa688(float, float);
-int FUN_L00_00221df8(void) { int r = 2; float a; FUN_L00_002118c8(0, 1.0f); { char *g = D_0013F350; a = FUN_001fa5c8(*(float *)(g + 0x180), *(float *)(g + 0x98)); } if (FUN_001fa688(a, 3.1415927f) < 0.7853982f) r = 3; else if (FUN_001fa688(a, -1.5707964f) < 0.7853982f) r = 1; else if (FUN_001fa688(a, 1.5707964f) < 0.7853982f) r = 0; return r; }
+float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+int FUN_L00_00221df8(void) { int r = 2; float a; FUN_L00_002118c8(0, 1.0f); { char *g = D_0013F350; a = fast_subtract_rotations(*(float *)(g + 0x180), *(float *)(g + 0x98)); } if (fast_difference_between_rotations(a, 3.1415927f) < 0.7853982f) r = 3; else if (fast_difference_between_rotations(a, -1.5707964f) < 0.7853982f) r = 1; else if (fast_difference_between_rotations(a, 1.5707964f) < 0.7853982f) r = 0; return r; }
 #include "qcopy.h"
 typedef int q_221ee0 __attribute__((mode(TI)));
 typedef struct {
@@ -182,7 +182,7 @@ extern char *D_L00_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_L00_0020d6b0(void *, int *, float, float, float, float);
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern char D_0013F3D0[];
 
 int FUN_L00_00222158(void) {
@@ -285,12 +285,12 @@ extern float D_0015ED70;
 extern float D_L00_0017BDF0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float dot_vectors_xyz(void *a, void *b);
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern char D_0013F4A0[];
@@ -310,7 +310,7 @@ extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, int);
 extern int scale_game_frames(int);
-extern int truncate_float_to_s32(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F688 __attribute__((sda));
 extern short D_L00_0017BC28_1 __asm__("D_L00_0017BC28");
 extern short D_L00_0015F6D8 __attribute__((sda));
@@ -341,7 +341,7 @@ extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 extern void FillTransferWords(void *, int, int);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -777,7 +777,7 @@ int FUN_L00_002223f8(int a, int b) {
             if (D_0015ED6C * 7.0f < *(float *)(q + 0x194)) *(float *)(q + 0x194) = D_0015ED6C * 7.0f;
             *(short *)(q + 0x3BE) = 0;
             FUN_L00_002118c8(0, 1.0f);
-            if (1.5707964f < FUN_001fa688(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
+            if (1.5707964f < fast_difference_between_rotations(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
                 if (*(int *)(q + 0x2094) == 7 || *(int *)(q + 0x2090) == 3 || *(int *)(q + 0x209C) == 3) {
                     char *r = (char *)((char *)&D_0013F350);
                     *(float *)(r + 0x194) = 0.0f;
@@ -1095,7 +1095,7 @@ int FUN_L00_002223f8(int a, int b) {
         {
             char *q = (char *)((char *)&D_0013F350);
             if (*(char **)(q + 0x5D8) != 0) {
-                if (1.5707964f < FUN_001fa688(FUN_001f9e90(*(float *)(*(char **)(q + 0x5D8) + 0x10) - *(float *)(q + 0x80), *(float *)(*(char **)(q + 0x5D8) + 0x14) - *(float *)(q + 0x84)), fast_add_rotations(*(float *)(q + 0x588), FUN_001f9e90(d.v.x, d.v.y)))) {
+                if (1.5707964f < fast_difference_between_rotations(FUN_001f9e90(*(float *)(*(char **)(q + 0x5D8) + 0x10) - *(float *)(q + 0x80), *(float *)(*(char **)(q + 0x5D8) + 0x14) - *(float *)(q + 0x84)), fast_add_rotations(*(float *)(q + 0x588), FUN_001f9e90(d.v.x, d.v.y)))) {
                     *(float *)(q + 0x588) = 1.5707964f;
                     *(int *)(q + 0x58C) = 1;
                 }
@@ -1702,7 +1702,7 @@ int FUN_L00_002223f8(int a, int b) {
                     FUN_L00_002323b8(0x50, 4, (float)scale_game_frames(5));
                 } else if (s == 0x2A) {
                     int id = 0x1E;
-                    if (1.5707964f < FUN_001fa688(*(float *)(q + 0x98), FUN_001f9e90(*(float *)(q + 0x500) - *(float *)(q + 0x540), *(float *)(q + 0x504) - *(float *)(q + 0x544)))) id = 0x1F;
+                    if (1.5707964f < fast_difference_between_rotations(*(float *)(q + 0x98), FUN_001f9e90(*(float *)(q + 0x500) - *(float *)(q + 0x540), *(float *)(q + 0x504) - *(float *)(q + 0x544)))) id = 0x1F;
                     FUN_L00_002323b8(id, 0, (float)scale_game_frames(5));
                 } else if (s == 9) {
                     int id = 8;
@@ -1884,7 +1884,7 @@ int FUN_L00_002223f8(int a, int b) {
                 {
                     char *r = (char *)((char *)&D_0013F350);
                     if (*(int *)(r + 0xA58) != 0 && k < 2) {
-                        n += truncate_float_to_s32(FUN_001fa688(*(float *)(r + 0xA5C), *(float *)(r + 0x98)) * 1.5f);
+                        n += truncate_float_to_s32(fast_difference_between_rotations(*(float *)(r + 0xA5C), *(float *)(r + 0x98)) * 1.5f);
                     }
                 }
                 j = j / 2;

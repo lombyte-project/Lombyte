@@ -486,7 +486,7 @@ extern float FUN_001f96b0(float);
 extern int D_L18_0015F5C4;
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern short D_L18_00161964;
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9a68(void *, void *, float);
@@ -520,11 +520,11 @@ void FUN_L18_002d5050(char *moby) {
         }
         FUN_001f9a28(v0, (char *)d + 0x10, moby + 0x10);
         FUN_001f9a68(v0, v0, 1.0f / ConvertIntegerToFloat(d->end - d->c));
-        FUN_001f99f8(a20);
+        clear_u64_value(a20);
         a20[2] = FUN_001f9e90(v0[0], v0[1]);
         FUN_001fa030(a40, a20);
         FUN_001fa2d8(aA0, a40);
-        FUN_001f99f8(a20);
+        clear_u64_value(a20);
         a20[2] = d->f24;
         a20[1] = d->f28;
         FUN_001fa030(a70, a20);
@@ -573,7 +573,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
 
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern float D_0015ED6C;
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
 typedef unsigned int Q128 __attribute__((mode(TI), aligned(16)));
 typedef union { Q128 q; float v[4]; } QU;
@@ -1043,7 +1043,7 @@ typedef struct { char pad[0x58]; char *base; char pad2[0x100]; } L18Glob;
 typedef struct { char pad0[0x10]; float x; float y; } L18Pos;
 
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int *D_L18_001AC240[];
 
 void *FUN_L18_002d6b58(float *a, float *b, int idx) {
@@ -1056,7 +1056,7 @@ void *FUN_L18_002d6b58(float *a, float *b, int idx) {
         if (*(short *)(off + (int)*(char **)&D_L18_0015FFD8_d + 0xA6) == 0x247) {
             float ang = FUN_001f9e90(a[0] - b[0], a[1] - b[1]);
             L18Pos *m = (L18Pos *)(off + (int)*(char **)&D_L18_0015FFD8_d);
-            float d = FUN_001fa688(ang, FUN_001f9e90(a[0] - m->x, a[1] - m->y));
+            float d = fast_difference_between_rotations(ang, FUN_001f9e90(a[0] - m->x, a[1] - m->y));
             if (bestd < d) {
                 bestd = d;
                 best = (char *)D_L18_0015FFD8_m + off;
@@ -1188,7 +1188,7 @@ void FUN_L18_002d88b8(char *moby) {
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
@@ -1217,7 +1217,7 @@ extern void FUN_L18_002dba20(void);
 extern void FUN_L18_002dbe80_c(char *moby) __asm__("FUN_L18_002dbe80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal_p(void *) __asm__("FUN_0020c828");
 extern void scale_vector_xyz(void *, void *, float);
 

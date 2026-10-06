@@ -31,7 +31,7 @@ extern u64 *D_L00_001611C0;
 extern u64 D_0015EEC8;
 extern s32 D_L00_00169980[];
 extern s32 D_L00_00169B00[];
-extern void FUN_00233980(s32, u64);
+extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) __asm__("FUN_L00_001f3770");
 
@@ -45,8 +45,8 @@ void draw_debug_text(s32 x, s32 y, u64 color, const u8 *text) {
     u64 *glyph_tag;
     u64 *cursor;
 
-    FUN_00233980(0x42, 0x8000000044ULL);
-    FUN_00233980(0x47, 0x5360B);
+    vu1_add_g_sregister(0x42, 0x8000000044ULL);
+    vu1_add_g_sregister(0x47, 0x5360B);
     packet = D_L00_001611C0;
     D_L00_001611C0 = packet + 2;
     packet[2] = 0x10AB400000000001ULL;
@@ -100,11 +100,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3aa0.s", FUN_L00_001f3aa0);
 extern u32 D_0013CAE0 NOT_SDA;
 extern s32 D_0013CB18 NOT_SDA;
 extern s16 D_0013F658 NOT_SDA;
-extern void FUN_001ec420(void);
+extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001fa5c8(f32, f32);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void FUN_001f9bf8(void *, void *, f32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -127,7 +127,7 @@ void update_debug_camera(void) {
   moving = FALSE;
   if ((D_0013CAE0 & 0x800) == 0) {
     if ((g_debug_menu.update_flags & 8) != 0) {
-      FUN_001ec420();
+      update_all_cameras();
     }
     if (D_0013CB18 == 0) {
       use_euler_angles = D_0013F658 != 2;
@@ -214,7 +214,7 @@ void update_debug_camera(void) {
           g_debug_menu.yaw_speed = 0.04f;
         }
         if (use_euler_angles) {
-          g_debug_camera.angles[2] = FUN_001fa5c8(g_debug_camera.angles[2],g_debug_menu.yaw_speed);
+          g_debug_camera.angles[2] = fast_subtract_rotations(g_debug_camera.angles[2],g_debug_menu.yaw_speed);
         }
         else {
           cosine = (float)FUN_001f9de0(g_debug_menu.yaw_speed);
@@ -252,7 +252,7 @@ void update_debug_camera(void) {
           g_debug_menu.pitch_speed = 0.04f;
         }
         if (use_euler_angles) {
-          g_debug_camera.angles[1] = FUN_001fa5c8(g_debug_camera.angles[1],g_debug_menu.pitch_speed);
+          g_debug_camera.angles[1] = fast_subtract_rotations(g_debug_camera.angles[1],g_debug_menu.pitch_speed);
         }
         else {
           cosine = (float)FUN_001f9de0(g_debug_menu.pitch_speed);
@@ -362,7 +362,7 @@ typedef struct { u8 p[0x80]; f32 x80, x84, x88, x8c; u8 x90[8]; f32 x98; u8 p9c[
 extern A001f4490 D_L00_00166C80;
 extern B001f4490 D_L00_0016C058;
 extern C001f4490 D_0013F350;
-f32 FUN_001fa580(f32, f32);
+f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8(f32);
 f32 FUN_001f9de0(f32);
 void FUN_001fa050(void *, void *);
@@ -373,13 +373,13 @@ void FUN_L00_001f4490(void) {
     B001f4490 *b = &D_L00_0016C058;
     C001f4490 *c;
     u8 *d;
-    f32 ang = FUN_001fa580(a->x158, b->x88);
+    f32 ang = fast_add_rotations(a->x158, b->x88);
     f32 s = FUN_001f9dc8(ang);
     c = &D_0013F350;
     c->x80 = a->x + s * b->x8c;
     c->x84 = a->y + FUN_001f9de0(ang) * b->x8c;
     c->x88 = a->z + b->x90;
-    c->x98 = FUN_001fa580(a->x158, b->x84);
+    c->x98 = fast_add_rotations(a->x158, b->x84);
     FUN_001fa050(c, c->x90);
     d = c->x2080;
     qcopy(d + 0x10, &c->x80);
@@ -442,15 +442,15 @@ extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
 extern u8 D_L00_0015EFD0[];
 extern f32 D_0013F3D0[];
-extern void FUN_0022ca50(void);
+extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_001fb280(s32, s32, s32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 FUN_001fa5c8(f32, f32);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001fa6c0(s32);
-extern void FUN_001f2588(void);
-extern void FUN_001f2d98(void);
+extern void update_fog(void) __asm__("FUN_001f2588");
+extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern s32 FUN_00116248(char *, const char *, ...);
 extern f64 FUN_00120478(f32);
 extern s32 FUN_0011bc80(const char *, s32);
@@ -479,7 +479,7 @@ void update_debug_menu(void) {
     char position_buffer[48];
     char angle_buffer[64];
     char capture_path[48];
-  FUN_0022ca50();
+  sound_update();
   index = g_debug_menu.segment_index;
   if ((D_0013CAE4 & 0x500) != 0) {
     D_L00_0015F5C4 = g_debug_menu.unknown_a4;
@@ -566,9 +566,9 @@ void update_debug_menu(void) {
           FUN_001f9a28(difference,D_0013F3D0,g_debug_camera.position);
           g_debug_menu.target_distance = FUN_001f9b20(difference);
           angle = FUN_001f9e90(difference[0],difference[1]);
-          g_debug_menu.target_angle = FUN_001fa5c8(angle,g_debug_camera.angles[2]);
+          g_debug_menu.target_angle = fast_subtract_rotations(angle,g_debug_camera.angles[2]);
           g_debug_menu.target_height = D_0013F3D8 - g_debug_camera.position[2];
-          g_debug_menu.target_yaw = FUN_001fa5c8(D_0013F3E8,g_debug_camera.angles[2]);
+          g_debug_menu.target_yaw = fast_subtract_rotations(D_0013F3E8,g_debug_camera.angles[2]);
         }
         else if (g_debug_menu.control_mode == 3) {
           g_debug_menu.update_flags = 6;
@@ -655,7 +655,7 @@ void update_debug_menu(void) {
         D_L00_0016CC44 = dimension * scale;
         D_L00_0016CC48 = D_L00_0016CC40 * 4.0f;
         D_L00_0016CC4C = D_L00_0016CC44 * 4.0f;
-        FUN_001f2d98();
+        update_view_context();
       }
       break;
     case 9:
@@ -875,7 +875,7 @@ reload_count:
         D_L00_0015F446 = byte_value + -1;
       }
     }
-    FUN_001f2588();
+    update_fog();
     break;
   case 5:
     if ((g_debug_menu.selected_row == 0) && ((D_0013CAE4 & 0x50) != 0)) {
@@ -1047,9 +1047,9 @@ extern const char * D_L00_00160CE0[];
 extern const char * D_L00_00160CF0[];
 extern const char * D_L00_00160D08[];
 extern const char * D_L00_001C3E28[];
-extern void FUN_001fb368(void);
-extern void FUN_001f0bd0(s32, s32, s32, const char *);
-extern void FUN_001f0c50(s32, s32, s32, const char *);
+extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
+extern void print_debug_text(s32, s32, s32, const char *) __asm__("FUN_001f0bd0");
+extern void print_debug_text_centered(s32, s32, s32, const char *) __asm__("FUN_001f0c50");
 extern void FUN_L00_001f36f8(void);
 extern s32 FUN_00116248(char *, const char *, ...);
 extern f64 FUN_00120478(f32);
@@ -1084,256 +1084,256 @@ void draw_debug_menu(void) {
     f32 percent;
     f64 value;
     char buffer[16];
-  FUN_001fb368();
+  append_gif_transfer_packet();
   if (D_L00_0015F5D8 == 0) {
-    FUN_001f0c50(0x100,0x10,0x80c0c000,D_L00_0015F008);
-    FUN_001f0c50(0x100,0x18,0x80c0c000,D_L00_0015F010);
-    FUN_001f0bd0(0xc,0x2c,0x8000c000,D_L00_0015F020);
-    FUN_001f0bd0(0xc,0x32,0x8000c000,D_L00_0015F028);
-    FUN_001f0bd0(0x14,0x40,0x8000c0c0,D_L00_0015F030);
+    print_debug_text_centered(0x100,0x10,0x80c0c000,D_L00_0015F008);
+    print_debug_text_centered(0x100,0x18,0x80c0c000,D_L00_0015F010);
+    print_debug_text(0xc,0x2c,0x8000c000,D_L00_0015F020);
+    print_debug_text(0xc,0x32,0x8000c000,D_L00_0015F028);
+    print_debug_text(0x14,0x40,0x8000c0c0,D_L00_0015F030);
     choice_offset = 0;
     if ((g_debug_menu.update_flags & 1) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x6c,0x40,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x14,0x4f,0x8000c0c0,D_L00_0015F040);
+    print_debug_text(0x6c,0x40,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x14,0x4f,0x8000c0c0,D_L00_0015F040);
     choice_offset = 0;
     if ((g_debug_menu.update_flags & 2) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x6c,0x4f,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x14,0x5e,0x8000c0c0,D_L00_0015F048);
+    print_debug_text(0x6c,0x4f,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x14,0x5e,0x8000c0c0,D_L00_0015F048);
     choice_offset = 0;
     if ((g_debug_menu.update_flags & 4) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x6c,0x5e,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x14,0x6d,0x8000c0c0,D_L00_0015F050);
+    print_debug_text(0x6c,0x5e,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x14,0x6d,0x8000c0c0,D_L00_0015F050);
     choice_offset = 0;
     if ((g_debug_menu.update_flags & 8) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x6c,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x14,0x7c,0x8000c0c0,D_L00_0015F058);
+    print_debug_text(0x6c,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x14,0x7c,0x8000c0c0,D_L00_0015F058);
     choice_offset = 0;
     if ((g_debug_menu.update_flags & 0x10) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x6c,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x6c,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
     if (g_debug_menu.selected_column == 0) {
-      FUN_001f0bd0(9,g_debug_menu.selected_row * 0xf + 0x40,0x800000c0,D_L00_0015F060);
+      print_debug_text(9,g_debug_menu.selected_row * 0xf + 0x40,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0xa8,0x2c,0x8000c000,D_L00_0015F068);
-    FUN_001f0bd0(0xa8,0x32,0x8000c000,D_L00_0015F070);
-    FUN_001f0bd0(0xb0,0x40,0x8000c0c0,D_L00_0015F078);
-    FUN_001f0bd0(0x108,0x40,0x80f0f0f0,D_L00_00160C40[g_debug_menu.control_mode]);
-    FUN_001f0bd0(0xb0,0x4f,0x8000c0c0,D_L00_0015F080);
-    FUN_001f0bd0(0x108,0x4f,0x80f0f0f0,D_L00_001C3E28[g_debug_menu.profiler_mode]);
-    FUN_001f0bd0(0xb0,0x5e,0x8000c0c0,D_L00_0015F088);
-    FUN_001f0bd0(0x108,0x5e,0x80f0f0f0,D_L00_00160D08[g_debug_menu.occlusion_mode]);
-    FUN_001f0bd0(0xb0,0x6d,0x8000c0c0,D_L00_0015F090);
+    print_debug_text(0xa8,0x2c,0x8000c000,D_L00_0015F068);
+    print_debug_text(0xa8,0x32,0x8000c000,D_L00_0015F070);
+    print_debug_text(0xb0,0x40,0x8000c0c0,D_L00_0015F078);
+    print_debug_text(0x108,0x40,0x80f0f0f0,D_L00_00160C40[g_debug_menu.control_mode]);
+    print_debug_text(0xb0,0x4f,0x8000c0c0,D_L00_0015F080);
+    print_debug_text(0x108,0x4f,0x80f0f0f0,D_L00_001C3E28[g_debug_menu.profiler_mode]);
+    print_debug_text(0xb0,0x5e,0x8000c0c0,D_L00_0015F088);
+    print_debug_text(0x108,0x5e,0x80f0f0f0,D_L00_00160D08[g_debug_menu.occlusion_mode]);
+    print_debug_text(0xb0,0x6d,0x8000c0c0,D_L00_0015F090);
     choice_offset = 4;
     if (g_debug_menu.bookmark_enabled != 0) {
       choice_offset = 0;
     }
-    FUN_001f0bd0(0x108,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0xb0,0x7c,0x8000c0c0,D_L00_0015F0A0);
-    FUN_001f0bd0(0x108,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.invincibility_enabled * 4));
-    FUN_001f0bd0(0xb0,0x8b,0x8000c0c0,D_L00_0015F0A8);
-    FUN_001f0bd0(0x108,0x8b,0x80f0f0f0,D_L00_00160CA8[g_debug_menu.draw_distance_override]);
-    FUN_001f0bd0(0xb0,0x9a,0x8000c0c0,D_L00_0015F0B8);
-    FUN_001f0bd0(0x108,0x9a,0x80f0f0f0,D_L00_00160CC0[g_debug_menu.collision_mode]);
-    FUN_001f0bd0(0xb0,0xa9,0x8000c0c0,D_L00_0015F0C0);
-    FUN_001f0bd0(0x108,0xa9,0x80f0f0f0,D_L00_00160CE0[g_debug_menu.television_mode]);
-    FUN_001f0bd0(0xb0,0xb8,0x8000c0c0,D_L00_0015F0C8);
-    FUN_001f0bd0(0x108,0xb8,0x80f0f0f0,D_L00_00160CF0[g_debug_menu.screen_mode]);
-    FUN_001f0bd0(0xb0,199,0x8000c0c0,D_L00_0015F0D0);
+    print_debug_text(0x108,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0xb0,0x7c,0x8000c0c0,D_L00_0015F0A0);
+    print_debug_text(0x108,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.invincibility_enabled * 4));
+    print_debug_text(0xb0,0x8b,0x8000c0c0,D_L00_0015F0A8);
+    print_debug_text(0x108,0x8b,0x80f0f0f0,D_L00_00160CA8[g_debug_menu.draw_distance_override]);
+    print_debug_text(0xb0,0x9a,0x8000c0c0,D_L00_0015F0B8);
+    print_debug_text(0x108,0x9a,0x80f0f0f0,D_L00_00160CC0[g_debug_menu.collision_mode]);
+    print_debug_text(0xb0,0xa9,0x8000c0c0,D_L00_0015F0C0);
+    print_debug_text(0x108,0xa9,0x80f0f0f0,D_L00_00160CE0[g_debug_menu.television_mode]);
+    print_debug_text(0xb0,0xb8,0x8000c0c0,D_L00_0015F0C8);
+    print_debug_text(0x108,0xb8,0x80f0f0f0,D_L00_00160CF0[g_debug_menu.screen_mode]);
+    print_debug_text(0xb0,199,0x8000c0c0,D_L00_0015F0D0);
     if (g_debug_menu.scene_index < 0) {
-      FUN_001f0bd0(0x108,199,0x80f0f0f0,D_L00_0015F0E0);
+      print_debug_text(0x108,199,0x80f0f0f0,D_L00_0015F0E0);
     }
     else {
       FUN_00116248(buffer,D_L00_0015F0D8);
-      FUN_001f0bd0(0x108,199,0x80f0f0f0,buffer);
+      print_debug_text(0x108,199,0x80f0f0f0,buffer);
     }
-    FUN_001f0bd0(0xb0,0xd6,0x8000c0c0,D_L00_0015F0E8);
+    print_debug_text(0xb0,0xd6,0x8000c0c0,D_L00_0015F0E8);
     FUN_00116248(buffer,D_L00_0015F0F0,g_debug_menu.segment_index,
                     D_0014C050[g_debug_menu.segment_index + D_0015ED84 * 0x10]);
-    FUN_001f0bd0(0x108,0xd6,0x80f0f0f0,buffer);
+    print_debug_text(0x108,0xd6,0x80f0f0f0,buffer);
     if (g_debug_menu.selected_column == 1) {
-      FUN_001f0bd0(0xa5,g_debug_menu.selected_row * 0xf + 0x40,0x800000c0,D_L00_0015F060);
+      print_debug_text(0xa5,g_debug_menu.selected_row * 0xf + 0x40,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0x158,0x2c,0x8000c000,D_L00_0015F0F8);
-    FUN_001f0bd0(0x158,0x32,0x8000c000,D_L00_0015F070);
-    FUN_001f0bd0(0x160,0x40,0x8000c0c0,D_L00_0015F100);
+    print_debug_text(0x158,0x2c,0x8000c000,D_L00_0015F0F8);
+    print_debug_text(0x158,0x32,0x8000c000,D_L00_0015F070);
+    print_debug_text(0x160,0x40,0x8000c0c0,D_L00_0015F100);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 1) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x40,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x4f,0x8000c0c0,D_L00_0015F108);
+    print_debug_text(0x1cc,0x40,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x4f,0x8000c0c0,D_L00_0015F108);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 2) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x4f,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x5e,0x8000c0c0,D_L00_0015F118);
+    print_debug_text(0x1cc,0x4f,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x5e,0x8000c0c0,D_L00_0015F118);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 4) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x5e,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x6d,0x8000c0c0,D_L00_0015F128);
+    print_debug_text(0x1cc,0x5e,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x6d,0x8000c0c0,D_L00_0015F128);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 8) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x7c,0x8000c0c0,D_L00_0015F138);
+    print_debug_text(0x1cc,0x6d,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x7c,0x8000c0c0,D_L00_0015F138);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 0x10) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x8b,0x8000c0c0,D_L00_0015F148);
+    print_debug_text(0x1cc,0x7c,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x8b,0x8000c0c0,D_L00_0015F148);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 0x20) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x8b,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0x9a,0x8000c0c0,D_L00_0015F150);
+    print_debug_text(0x1cc,0x8b,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0x9a,0x8000c0c0,D_L00_0015F150);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 0x40) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0x9a,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0xa9,0x8000c0c0,D_L00_0015F158);
+    print_debug_text(0x1cc,0x9a,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0xa9,0x8000c0c0,D_L00_0015F158);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 0x80) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0xa9,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x160,0xb8,0x8000c0c0,D_L00_0015F160);
+    print_debug_text(0x1cc,0xa9,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x160,0xb8,0x8000c0c0,D_L00_0015F160);
     choice_offset = 0;
     if ((g_debug_menu.draw_flags & 0x100) != 0) {
       choice_offset = 4;
     }
-    FUN_001f0bd0(0x1cc,0xb8,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x1cc,0xb8,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
     if (g_debug_menu.selected_column == 2) {
-      FUN_001f0bd0(0x155,g_debug_menu.selected_row * 0xf + 0x3e,0x800000c0,D_L00_0015F060);
+      print_debug_text(0x155,g_debug_menu.selected_row * 0xf + 0x3e,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0xc,0xa6,0x8000c000,D_L00_0015F168);
-    FUN_001f0bd0(0xc,0xac,0x8000c000,D_L00_0015F070);
+    print_debug_text(0xc,0xa6,0x8000c000,D_L00_0015F168);
+    print_debug_text(0xc,0xac,0x8000c000,D_L00_0015F070);
     if (g_debug_menu.selected_column == 3) {
-      FUN_001f0bd0(9,g_debug_menu.selected_row * 0xf + 0xb8,0x800000c0,D_L00_0015F060);
+      print_debug_text(9,g_debug_menu.selected_row * 0xf + 0xb8,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0x14,0xba,0x8000c0c0,D_L00_0015F170);
+    print_debug_text(0x14,0xba,0x8000c0c0,D_L00_0015F170);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E529);
-    FUN_001f0bd0(0x7a,0xba,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0xc9,0x8000c0c0,D_L00_0015F180);
+    print_debug_text(0x7a,0xba,0x80406080,buffer);
+    print_debug_text(0x14,0xc9,0x8000c0c0,D_L00_0015F180);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E535);
-    FUN_001f0bd0(0x7a,0xc9,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0xd8,0x8000c0c0,D_L00_0015F190);
+    print_debug_text(0x7a,0xc9,0x80406080,buffer);
+    print_debug_text(0x14,0xd8,0x8000c0c0,D_L00_0015F190);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E539);
-    FUN_001f0bd0(0x7a,0xd8,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0xe7,0x8000c0c0,D_L00_0015F1A0);
+    print_debug_text(0x7a,0xd8,0x80406080,buffer);
+    print_debug_text(0x14,0xe7,0x8000c0c0,D_L00_0015F1A0);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D484);
-    FUN_001f0bd0(0x8c,0xe7,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0x14,0xf6,0x8000c0c0,D_L00_0015F1B0);
+    print_debug_text(0x8c,0xe7,0x80f0f0f0,buffer);
+    print_debug_text(0x14,0xf6,0x8000c0c0,D_L00_0015F1B0);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D488);
-    FUN_001f0bd0(0x8c,0xf6,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0x14,0x105,0x8000c0c0,D_L00_0015F1C0);
+    print_debug_text(0x8c,0xf6,0x80f0f0f0,buffer);
+    print_debug_text(0x14,0x105,0x8000c0c0,D_L00_0015F1C0);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D450);
-    FUN_001f0bd0(0x8c,0x105,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x105,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E52A);
-    FUN_001f0bd0(0x7a,0x105,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x114,0x8000c0c0,D_L00_0015F1C8);
+    print_debug_text(0x7a,0x105,0x80406080,buffer);
+    print_debug_text(0x14,0x114,0x8000c0c0,D_L00_0015F1C8);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D454);
-    FUN_001f0bd0(0x8c,0x114,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x114,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E52B);
-    FUN_001f0bd0(0x7a,0x114,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x123,0x8000c0c0,D_L00_0015F1D8);
+    print_debug_text(0x7a,0x114,0x80406080,buffer);
+    print_debug_text(0x14,0x123,0x8000c0c0,D_L00_0015F1D8);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D45C);
-    FUN_001f0bd0(0x8c,0x123,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0x14,0x132,0x8000c0c0,D_L00_0015F1E8);
+    print_debug_text(0x8c,0x123,0x80f0f0f0,buffer);
+    print_debug_text(0x14,0x132,0x8000c0c0,D_L00_0015F1E8);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D478);
-    FUN_001f0bd0(0x8c,0x132,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x132,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E534);
-    FUN_001f0bd0(0x7a,0x132,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x141,0x8000c0c0,D_L00_0015F1F0);
+    print_debug_text(0x7a,0x132,0x80406080,buffer);
+    print_debug_text(0x14,0x141,0x8000c0c0,D_L00_0015F1F0);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D468);
-    FUN_001f0bd0(0x8c,0x141,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x141,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E530);
-    FUN_001f0bd0(0x7a,0x141,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x150,0x8000c0c0,D_L00_0015F200);
+    print_debug_text(0x7a,0x141,0x80406080,buffer);
+    print_debug_text(0x14,0x150,0x8000c0c0,D_L00_0015F200);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D474);
-    FUN_001f0bd0(0x8c,0x150,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x150,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E533);
-    FUN_001f0bd0(0x7a,0x150,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x15f,0x8000c0c0,D_L00_0015F210);
+    print_debug_text(0x7a,0x150,0x80406080,buffer);
+    print_debug_text(0x14,0x15f,0x8000c0c0,D_L00_0015F210);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D46C);
-    FUN_001f0bd0(0x8c,0x15f,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x15f,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E531);
-    FUN_001f0bd0(0x7a,0x15f,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x16e,0x8000c0c0,D_L00_0015F220);
+    print_debug_text(0x7a,0x15f,0x80406080,buffer);
+    print_debug_text(0x14,0x16e,0x8000c0c0,D_L00_0015F220);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013D464);
-    FUN_001f0bd0(0x8c,0x16e,0x80f0f0f0,buffer);
+    print_debug_text(0x8c,0x16e,0x80f0f0f0,buffer);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0013E52F);
-    FUN_001f0bd0(0x7a,0x16e,0x80406080,buffer);
-    FUN_001f0bd0(0x14,0x17d,0x8000c0c0,D_L00_0015F228);
+    print_debug_text(0x7a,0x16e,0x80406080,buffer);
+    print_debug_text(0x14,0x17d,0x8000c0c0,D_L00_0015F228);
     FUN_00116248(buffer,D_L00_0015F0D8,D_0015ED98);
-    FUN_001f0bd0(0x8c,0x17d,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xbc,0x100,0x8000c000,D_L00_0015F230);
-    FUN_001f0bd0(0xbc,0x106,0x8000c000,D_L00_0015F238);
+    print_debug_text(0x8c,0x17d,0x80f0f0f0,buffer);
+    print_debug_text(0xbc,0x100,0x8000c000,D_L00_0015F230);
+    print_debug_text(0xbc,0x106,0x8000c000,D_L00_0015F238);
     if (g_debug_menu.selected_column == 4) {
-      FUN_001f0bd0(0xb9,g_debug_menu.selected_row * 0xf + 0x112,0x800000c0,D_L00_0015F060);
+      print_debug_text(0xb9,g_debug_menu.selected_row * 0xf + 0x112,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0xc4,0x114,0x8000c0c0,D_L00_0015F240);
+    print_debug_text(0xc4,0x114,0x8000c0c0,D_L00_0015F240);
     percent = 100.0f;
     value = FUN_00120478(D_L00_0015F448 * 0.0009765625f);
     FUN_00116248(buffer,D_L00_0015F248,value);
-    FUN_001f0bd0(0x11c,0x114,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x123,0x8000c0c0,D_L00_0015F250);
+    print_debug_text(0x11c,0x114,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x123,0x8000c0c0,D_L00_0015F250);
     value = FUN_00120478(percent - D_L00_0015F450 / 2.55f);
     FUN_00116248(buffer,D_L00_0015F248,value);
-    FUN_001f0bd0(0x11c,0x123,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x132,0x8000c0c0,D_L00_0015F258);
+    print_debug_text(0x11c,0x123,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x132,0x8000c0c0,D_L00_0015F258);
     value = FUN_00120478(D_L00_0015F44C * 0.0009765625f);
     FUN_00116248(buffer,D_L00_0015F248,value);
-    FUN_001f0bd0(0x11c,0x132,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x141,0x8000c0c0,D_L00_0015F260);
+    print_debug_text(0x11c,0x132,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x141,0x8000c0c0,D_L00_0015F260);
     value = FUN_00120478(percent - D_L00_0015F454 / 2.55f);
     FUN_00116248(buffer,D_L00_0015F248,value);
-    FUN_001f0bd0(0x11c,0x141,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x150,0x8000c0c0,D_L00_0015F268);
+    print_debug_text(0x11c,0x141,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x150,0x8000c0c0,D_L00_0015F268);
     FUN_00116248(buffer,D_L00_0015F0D8,D_L00_0015F444);
-    FUN_001f0bd0(0x11c,0x150,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x15f,0x8000c0c0,D_L00_0015F270);
+    print_debug_text(0x11c,0x150,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x15f,0x8000c0c0,D_L00_0015F270);
     FUN_00116248(buffer,D_L00_0015F0D8,D_L00_0015F445);
-    FUN_001f0bd0(0x11c,0x15f,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0xc4,0x16e,0x8000c0c0,D_L00_0015F278);
+    print_debug_text(0x11c,0x15f,0x80f0f0f0,buffer);
+    print_debug_text(0xc4,0x16e,0x8000c0c0,D_L00_0015F278);
     FUN_00116248(buffer,D_L00_0015F0D8,D_L00_0015F446);
-    FUN_001f0bd0(0x11c,0x16e,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0x160,0x100,0x8000c000,D_L00_0015F280);
-    FUN_001f0bd0(0x160,0x106,0x8000c000,D_L00_0015F070);
+    print_debug_text(0x11c,0x16e,0x80f0f0f0,buffer);
+    print_debug_text(0x160,0x100,0x8000c000,D_L00_0015F280);
+    print_debug_text(0x160,0x106,0x8000c000,D_L00_0015F070);
     if (g_debug_menu.selected_column == 5) {
-      FUN_001f0bd0(0x15d,g_debug_menu.selected_row * 0xf + 0x112,0x800000c0,D_L00_0015F060);
+      print_debug_text(0x15d,g_debug_menu.selected_row * 0xf + 0x112,0x800000c0,D_L00_0015F060);
     }
-    FUN_001f0bd0(0x168,0x114,0x8000c0c0,D_L00_0015F288);
+    print_debug_text(0x168,0x114,0x8000c0c0,D_L00_0015F288);
     choice_offset = 4;
     if (g_debug_menu.battle_camera_enabled != 0) {
       choice_offset = 0;
     }
-    FUN_001f0bd0(0x1ca,0x114,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
-    FUN_001f0bd0(0x168,0x123,0x8000c0c0,D_L00_0015F298);
-    FUN_001f0bd0(0x1ca,0x123,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.actuator_enabled * 4));
-    FUN_001f0bd0(0x168,0x132,0x8000c0c0,D_L00_0015F2A8);
+    print_debug_text(0x1ca,0x114,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + choice_offset));
+    print_debug_text(0x168,0x123,0x8000c0c0,D_L00_0015F298);
+    print_debug_text(0x1ca,0x123,0x80f0f0f0,*(const char **)((const u8 *)D_L00_00160C18 + g_debug_menu.actuator_enabled * 4));
+    print_debug_text(0x168,0x132,0x8000c0c0,D_L00_0015F2A8);
     buffer[1] = 0;
     buffer[0] = g_debug_menu.sample_capture_status;
-    FUN_001f0bd0(0x1ca,0x132,0x80f0f0f0,buffer);
-    FUN_001f0bd0(0x168,0x141,0x8000c0c0,D_L00_0015F2B8);
+    print_debug_text(0x1ca,0x132,0x80f0f0f0,buffer);
+    print_debug_text(0x168,0x141,0x8000c0c0,D_L00_0015F2B8);
     buffer[1] = 0;
     buffer[0] = g_debug_menu.start_capture_status;
-    FUN_001f0bd0(0x1ca,0x141,0x80f0f0f0,buffer);
+    print_debug_text(0x1ca,0x141,0x80f0f0f0,buffer);
     FUN_L00_001f36f8();
     do {
     } while ((D_L00_001611A0 & 1) != 0);

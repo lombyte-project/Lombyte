@@ -355,7 +355,7 @@ extern void FUN_L00_00262b00(f32, f32, u8 *, f32 *, f32 *);
 extern void FUN_L00_00262b80(u8 *, u8 *, u8 *, f32, f32, f32);
 extern s32 FUN_001f9770(s16 *);
 extern s32 FUN_001f96f8(s32);
-extern f32 FUN_001fa580(f32, f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 
 /* 0x002AEA08, 208 bytes.  Per-frame update of a moby's aim and turn state from
@@ -374,14 +374,14 @@ void FUN_L14_002aea08(u8 *moby)
         if (FUN_001f9770((s16 *)(data + 0x1B4))) {
             *(s16 *)(data + 0x1B4) = FUN_001f96f8(D_L14_001613BC);
             t = D_L14_001613C0;
-            if (FUN_00213260(2)) t = -t;
-            *(f32 *)(data + 0x1B0) = FUN_001fa580(*(f32 *)(moby + 0x48), t);
+            if (random_integer_below(2)) t = -t;
+            *(f32 *)(data + 0x1B0) = fast_add_rotations(*(f32 *)(moby + 0x48), t);
         }
         FUN_L00_0025b8c0((f32 *)(moby + 0x48), (f32 *)(data + 0x1B8), *(f32 *)(data + 0x1B0),
                          D_L14_001613C4, D_L14_001613C8, D_L14_001613CC);
     }
 }
-extern s32 FUN_00213260(s32 n);
+extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
 extern f32 D_L14_0016139C __attribute__((sda));
 extern f32 FUN_001fa6c0(s16);
 extern s32 FUN_001fa728(u8 *, f32);
@@ -399,7 +399,7 @@ void FUN_L14_002aead8(u8 *moby)
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *p;
     f32 v[4];
-    if (FUN_00213260(5)) {
+    if (random_integer_below(5)) {
         qcopy(v, moby + 0x10);
         v[3] = D_L14_0016139C;
         if (FUN_001fa728((u8 *)v, FUN_001fa6c0(*(s16 *)(moby + 0x32))) >= 0) {
@@ -459,7 +459,7 @@ int FUN_L14_002aeba0(char *moby, int flag) {
     }
     return ok;
 }
-extern s32 FUN_001fa6d0(f32 f);
+extern s32 truncate_float_to_s32(f32 f) __asm__("FUN_001fa6d0");
 extern s32 D_L14_00161418 __attribute__((sda));
 extern s32 D_L14_001D8210[];
 extern s32 D_L14_001D80C8[];
@@ -477,7 +477,7 @@ void FUN_L14_002aed50(u8 *moby)
     s32 i;
     f32 f = *(f32 *)(data + 0x164) + 0.5f;
     *(f32 *)(data + 0x164) = f;
-    step = FUN_001fa6d0(f);
+    step = truncate_float_to_s32(f);
     if (1.0f <= *(f32 *)(data + 0x164)) *(s32 *)(data + 0x164) = 0;
     for (i = 0; i < D_L14_00161418; i++) {
         s32 v = D_L14_001D8210[i];
@@ -777,7 +777,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5850.s", FUN_L14_002b5850);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);
 extern u8 D_0013E550[];
-extern void FUN_0022d798(s32 idx);
+extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
 /* 0x002B5C98, 124 bytes.  Clears a moby's link to its slot entry, releasing
  * the slot if it still points back here.
@@ -794,7 +794,7 @@ void FUN_L14_002b5c98(u8 *moby)
     if (idx != -1) {
         u8 *e = D_0013E550 + idx * 0x70;
         if (*(u8 **)(e + 0x88) == moby && *(u8 *)(e + 0x74) != 0) {
-            FUN_0022d798(idx);
+            release_voice_slot(idx);
         }
     }
     *(s32 *)(data + 0x108) = -1;
@@ -816,10 +816,10 @@ typedef int u128_2BC560 __attribute__((mode(TI)));
 extern char D_0013F5E0[];
 extern float D_0015ED60;
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
 extern void FUN_L00_00250df8(void *);
-extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle);
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -962,7 +962,7 @@ extern char D_L14_001674C0[];
 extern char D_L14_001809C0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] __attribute__((section(".sdata")));
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

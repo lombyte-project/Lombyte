@@ -725,8 +725,8 @@ void FUN_0022b690(int);
 void FUN_0022bba0(void);
 void FUN_00233980(int, long);
 int FUN_001160d8(void);
-int FUN_00213260(int);
-f32 FUN_00213308(void);
+int random_integer_below(int) __asm__("FUN_00213260");
+f32 random_angle_radians(void) __asm__("FUN_00213308");
 f32 FUN_001fa6c0(int);
 f32 FUN_001f9dc8(f32);
 f32 FUN_001f9de0(f32);
@@ -755,21 +755,21 @@ void FUN_L00_0028ac88(void) {
                 s->color = D_L00_00160500[(FUN_001160d8() >> 16) & 3];
             } else {
                 s->type = 1;
-                s->c.h.a = FUN_00213260(0x100);
+                s->c.h.a = random_integer_below(0x100);
                 {
                     int q = FUN_001160d8() >> 16;
                     s->b3 = 0x48;
                     s->b2 = q & 1;
                 }
-                s->f8 = FUN_00213308();
-                s->f1C = FUN_001fa6c0(FUN_00213260(0x30) + 0x20) * (1.0f / 256.0f);
-                a = FUN_00213308();
-                b = FUN_00213308();
+                s->f8 = random_angle_radians();
+                s->f1C = FUN_001fa6c0(random_integer_below(0x30) + 0x20) * (1.0f / 256.0f);
+                a = random_angle_radians();
+                b = random_angle_radians();
                 s->x = FUN_001f9dc8(a) * FUN_001f9de0(b) * 50.0f;
                 s->y = FUN_001f9de0(a) * FUN_001f9de0(b) * 50.0f;
                 s->z = FUN_001f9dc8(b) * 50.0f;
-                t16 = FUN_00213260(0x18) + 8;
-                t18 = FUN_00213260(0x20) << 24;
+                t16 = random_integer_below(0x18) + 8;
+                t18 = random_integer_below(0x20) << 24;
                 {
                     u32 u, w;
                     if ((FUN_001160d8() >> 16) & 1) { u = (t16 << 16) + 0x30505050; w = t18 + u; }

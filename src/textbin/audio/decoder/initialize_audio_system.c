@@ -48,7 +48,7 @@ extern s32 AddIntcHandler(s32, void *, s32);
 extern s32 enable_intc(s32) __asm__("func_00119090");
 extern s32 AddDmacHandler(s32, void *, s32);
 extern s32 enable_dmac(s32) __asm__("func_00119160");
-s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context);
+s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context) __asm__("FUN_0023a7c0");
 s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context) __asm__("FUN_0023a7c0");
 
 s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context)

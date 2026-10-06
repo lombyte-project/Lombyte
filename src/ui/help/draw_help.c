@@ -18,6 +18,7 @@ typedef struct {
 extern HelpEntry *D_0015F6A0 MACRO_ADDR;
 extern int D_0015EE1D MACRO_ADDR;
 extern int D_0015EE1C MACRO_ADDR;
+extern void help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1D_b (*(unsigned char *)&D_0015EE1D)
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
 extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5,
@@ -60,7 +61,7 @@ void draw_help(void) {
         break;
     case 2:
         if (D_0015EF1D_b) {
-            FUN_001fe898();
+            help_draw_prompt();
         }
         break;
     case 3:

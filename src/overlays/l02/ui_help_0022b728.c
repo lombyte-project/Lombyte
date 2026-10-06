@@ -30,11 +30,11 @@ extern float D_0015ED60;
 extern float D_L02_0017C3F0[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int D_0015ED5C;
 extern int D_0015ED84;
@@ -50,7 +50,7 @@ extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int);
-extern int truncate_float_to_s32(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L02_0015F6E8 __attribute__((sda));
 extern short D_L02_0015F688 __attribute__((sda));
 extern short D_L02_0015F6D8 __attribute__((sda));
@@ -74,7 +74,7 @@ extern void FUN_L00_00262500(int a, char *b);
 extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L01_002405a0(void);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern char D_0013F350[];
 extern char D_00141680[];
@@ -273,7 +273,7 @@ int FUN_L02_0022b728(int a, int b) {
             if (D_0015ED6C * 7.0f < *(float *)(q + 0x194)) *(float *)(q + 0x194) = D_0015ED6C * 7.0f;
             *(short *)(q + 0x3BE) = 0;
             FUN_L00_002118c8(1.0f, 0);
-            if (1.5707964f < FUN_001fa688(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
+            if (1.5707964f < fast_difference_between_rotations(*(float *)(q + 0x98), *(float *)(q + 0x180))) {
                 if (*(int *)(q + 0x2094) == 7 || *(int *)(q + 0x2090) == 3 || *(int *)(q + 0x209C) == 3) {
                     char *r = ((char *)&D_0013F350);
                     *(float *)(r + 0x194) = 0.0f;
@@ -1120,7 +1120,7 @@ int FUN_L02_0022b728(int a, int b) {
                 {
                     char *r = ((char *)&D_0013F350);
                     if (*(int *)(r + 0xA58) != 0 && k < 2) {
-                        n += truncate_float_to_s32(FUN_001fa688(*(float *)(r + 0xA5C), *(float *)(r + 0x98)) * 1.5f);
+                        n += truncate_float_to_s32(fast_difference_between_rotations(*(float *)(r + 0xA5C), *(float *)(r + 0x98)) * 1.5f);
                     }
                 }
                 j = j / 2;
@@ -1723,17 +1723,17 @@ extern float D_L02_0015F638;
 extern float D_L02_001673D8 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
 extern float FUN_L00_00232b90(float a, float b, float c);
 extern float FUN_L00_00233a78(float *v);
 extern float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step);
 extern float FUN_L00_00266e80(int);
-extern float approach_value(float *p, float target, float maxstep);
-extern float fast_add_rotations(float, float);
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L02_0015F678_t __asm__("D_L02_0015F678") __attribute__((sda));
@@ -1764,9 +1764,9 @@ extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0022d838(float *, float *);
 extern int FUN_L02_0021ff70(int);
 extern int FUN_L02_0022ee00(void);
-extern int queue_animation_update(int, int, int, int, int, int, int);
+extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int);
-extern int truncate_float_to_s32(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int D_L02_0015F678 __attribute__((sda));
 extern unsigned char D_0013D4DC[];
 extern void FUN_L00_00206c08(void);
@@ -1795,7 +1795,7 @@ extern void FUN_L01_00227e48(int a0, int a1, int a2);
 extern void FUN_L01_002405a0(void);
 extern void FUN_L01_00242198(void);
 extern void FUN_L02_00220b80(void);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void scale_vector_xyz(void *, void *, float);
 extern void tick_countdown_32(int *arg0);
@@ -2038,7 +2038,7 @@ void FUN_L02_00230988(void) {
                         if (D_0013F350_u.f2090 == 1 || D_0013F350_u.f2090 == 0x1E) {
                             if (scale_game_frames(0x18) > D_0013F350_u.f198 && D_0013F350_u.f308 == 0) {
                                 FUN_L00_002118c8(1.0f, 0);
-                                if (FUN_001fa688(D_0013F350_u.f180, D_L02_001673D8) > 1.2217305f) {
+                                if (fast_difference_between_rotations(D_0013F350_u.f180, D_L02_001673D8) > 1.2217305f) {
                                     ok = 0;
                                 }
                             }
@@ -2286,7 +2286,7 @@ void FUN_L02_00230988(void) {
                                     FUN_L02_0022b728(7, 1);
                                     break;
                                 }
-                                if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && FUN_001fa688(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.0471976f && D_L02_0017C3B8.f18 * D_0015ED6C * 0.85f < D_0013F350_u.f164) {
+                                if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && fast_difference_between_rotations(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.0471976f && D_L02_0017C3B8.f18 * D_0015ED6C * 0.85f < D_0013F350_u.f164) {
                                     FUN_L02_0022b728(9, 1);
                                     break;
                                 }
@@ -2356,7 +2356,7 @@ void FUN_L02_00230988(void) {
                 case 101:
                     if (FUN_001f9b80(D_0013F350_u.f80, D_0013F350_u.f1640) < 0.2f) {
                         if (D_0015ED6C * 2.7f > D_0013F350_u.f160) {
-                            if (FUN_001fa688(D_0013F350_u.f90[2], D_0013F350_u.f1640[3]) < 0.034906585f) {
+                            if (fast_difference_between_rotations(D_0013F350_u.f90[2], D_0013F350_u.f1640[3]) < 0.034906585f) {
                                 FUN_L02_0022b728(0x67, 1);
                                 break;
                             }
@@ -2635,7 +2635,7 @@ void FUN_L02_00230988(void) {
                         D_0013F350_u.f1B0 = scale_game_frames(0xA);
                         break;
                     }
-                    if ((D_0013F350_u.f229C > 0.5f && FUN_L00_00266d60(0x40, scale_game_frames(9), 0) && 2.3561945f < FUN_001fa688(D_0013F350_u.f180, D_0013F350_u.f90[2])) || (D_0013C940.f1A4 & 0xA)) {
+                    if ((D_0013F350_u.f229C > 0.5f && FUN_L00_00266d60(0x40, scale_game_frames(9), 0) && 2.3561945f < fast_difference_between_rotations(D_0013F350_u.f180, D_0013F350_u.f90[2])) || (D_0013C940.f1A4 & 0xA)) {
                         FUN_L02_0022b728(6, 1);
                         D_0013F350_u.f1B0 = scale_game_frames(0xA);
                         break;
@@ -2644,7 +2644,7 @@ void FUN_L02_00230988(void) {
                         FUN_L02_0022b728(0x1C, 1);
                         break;
                     }
-                    if (0.5f < D_0013F350_u.f229C && FUN_001fa688(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], 1.5707964f)) < 0.7853982f) {
+                    if (0.5f < D_0013F350_u.f229C && fast_difference_between_rotations(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], 1.5707964f)) < 0.7853982f) {
                         qcopy(v1, D_0013F350_u.f80);
                         v1[0] += fast_cos(fast_add_rotations(D_0013F350_u.f90[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(D_0013F350_u.f90[2], 1.5707964f)) * 0.3f;
@@ -2654,7 +2654,7 @@ void FUN_L02_00230988(void) {
                         }
                         break;
                     }
-                    if (0.5f < D_0013F350_u.f229C && FUN_001fa688(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], -1.5707964f)) < 0.7853982f) {
+                    if (0.5f < D_0013F350_u.f229C && fast_difference_between_rotations(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], -1.5707964f)) < 0.7853982f) {
                         qcopy(v1, D_0013F350_u.f80);
                         v1[0] += fast_cos(fast_add_rotations(D_0013F350_u.f90[2], -1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(D_0013F350_u.f90[2], -1.5707964f)) * 0.3f;
@@ -2678,14 +2678,14 @@ void FUN_L02_00230988(void) {
                         v0[1] += fast_sin(fast_add_rotations(D_0013F350_u.f90[2], ang)) * 0.3f;
                         sp34 = D_0013F350_u.f90[2];
                         FUN_L00_002118c8(1.0f, 0);
-                        if (D_0013F350_u.f229C < 0.5f || 0.7853982f < FUN_001fa688(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], ang)) || FUN_L01_0022d838(v0, &sp34) == 0) {
+                        if (D_0013F350_u.f229C < 0.5f || 0.7853982f < fast_difference_between_rotations(D_0013F350_u.f180, fast_add_rotations(D_0013F350_u.f90[2], ang)) || FUN_L01_0022d838(v0, &sp34) == 0) {
                             if (D_0013F350_u.fA98 & 2) {
                                 FUN_L02_0022b728(0x19, 1);
                                 break;
                             }
                         }
                     }
-                    if (0.5f < D_0013F350_u.f229C && FUN_L00_00266d60(0x40, scale_game_frames(9), 0) && 2.3561945f < FUN_001fa688(D_0013F350_u.f180, D_0013F350_u.f90[2])) {
+                    if (0.5f < D_0013F350_u.f229C && FUN_L00_00266d60(0x40, scale_game_frames(9), 0) && 2.3561945f < fast_difference_between_rotations(D_0013F350_u.f180, D_0013F350_u.f90[2])) {
                         FUN_L02_0022b728(6, 1);
                         D_0013F350_u.f1B0 = scale_game_frames(0x28);
                         break;
@@ -2904,7 +2904,7 @@ void FUN_L02_00230988(void) {
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
-                    if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && FUN_001fa688(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.5707964f) {
+                    if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && fast_difference_between_rotations(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.5707964f) {
                         if (D_0013F350_u.f12E2 != 0 || D_0013F350_u.f20A9 != 0) {
                             FUN_L02_0022b728(2, 1);
                             break;
@@ -3137,7 +3137,7 @@ void FUN_L02_00230988(void) {
                         if (D_0013F350_u.f12EA == 0 && D_0013F350_u.f1C4 == 0) {
                             if (FUN_L00_00266d60(0x40, scale_game_frames(8), 0)) {
                                 if (D_0013F350_u.f30E < scale_game_frames(4)) {
-                                    if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && FUN_001fa688(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.0471976f && D_L02_0017C3B8.f18 * D_0015ED6C * 0.85f < D_0013F350_u.f164) {
+                                    if (D_0013F350_u.f190 > D_L02_0017C3B8.fC && fast_difference_between_rotations(D_0013F350_u.f180, D_0013F350_u.f90[2]) < 1.0471976f && D_L02_0017C3B8.f18 * D_0015ED6C * 0.85f < D_0013F350_u.f164) {
                                         FUN_L02_0022b728(9, 1);
                                         break;
                                     }

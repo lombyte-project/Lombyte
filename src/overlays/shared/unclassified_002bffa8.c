@@ -304,13 +304,13 @@ void FUN_L00_002c5dc8(char *m) {
     }
 }
 #include "eetypes.h"
-unsigned char *FUN_0020c4f8(int);
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_002502f0(unsigned char *, int, int, int);
 void FUN_L00_0024f7c8(unsigned char *, int, void *);
 int FUN_001f96f8(int);
-void FUN_00212f90(unsigned char *, int, int, int);
+void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) { unsigned char *m = FUN_0020c4f8(0xd1); if (m) { char *q = *(char **)(m + 0x78); *(float *)(q + 4) = f; *(unsigned char **)q = src; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; FUN_L00_002502f0(m, 0x80, 0x80, 0x80); FUN_L00_0024f7c8(src, 0, m + 0x10); *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0); *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0); *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0); if (m[0x53]) FUN_00212f90(m, 0, 0, FUN_001f96f8(10)); FUN_L00_00250df8(m); m[0x20] = 0; *(unsigned short *)(m + 0x34) |= 4; } return m; }
+unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) { unsigned char *m = create_moby(0xd1); if (m) { char *q = *(char **)(m + 0x78); *(float *)(q + 4) = f; *(unsigned char **)q = src; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; FUN_L00_002502f0(m, 0x80, 0x80, 0x80); FUN_L00_0024f7c8(src, 0, m + 0x10); *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0); *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0); *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0); if (m[0x53]) blend_moby_animation(m, 0, 0, FUN_001f96f8(10)); FUN_L00_00250df8(m); m[0x20] = 0; *(unsigned short *)(m + 0x34) |= 4; } return m; }
 extern unsigned char D_001413FF_2c7070 __asm__("D_001413FF") __attribute__((section(".data")));
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
@@ -447,7 +447,7 @@ void FUN_L00_002c7320(V2c7320 *pos, V2c7320 *tgt, f32 *out, f32 speed, f32 unuse
 }
 #include "qcopy.h"
 s32 FUN_001f0b58();
-float FUN_002132a8(float, float);
+float random_float_between(float, float) __asm__("FUN_002132a8");
 int FUN_001160d8(void);
 int FUN_001f96f8(int);
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
@@ -460,13 +460,13 @@ void FUN_L00_002c8078(unsigned char *m) {
     case 0: case 1: case 3: case 8: case 11: case 12: case 13:
         for (i = 0; i < 20; i++) {
             qcopy(v, m + 0x10);
-            v[0] += FUN_002132a8(-0.3f, 0.3f);
-            v[1] += FUN_002132a8(-0.3f, 0.3f);
-            v[2] += FUN_002132a8(-0.3f, 0.3f);
+            v[0] += random_float_between(-0.3f, 0.3f);
+            v[1] += random_float_between(-0.3f, 0.3f);
+            v[2] += random_float_between(-0.3f, 0.3f);
             r = (FUN_001160d8() + 0x30) & 0x3F;
             g = (FUN_001160d8() + 0x20) & 0x3F;
             b = FUN_001160d8() & 0x2F;
-            s = FUN_002132a8(100000.0f, 800000.0f);
+            s = random_float_between(100000.0f, 800000.0f);
             FUN_L00_00269b70(v, r, g, b, s, 0.0f, FUN_001f96f8(FUN_001160d8() % 40 + 10));
         }
         m[0x20] = 4;
@@ -475,8 +475,8 @@ void FUN_L00_002c8078(unsigned char *m) {
 }
 #include "qcopy.h"
 extern unsigned char D_0013F350[];
-unsigned char *FUN_0020c4f8(int);
-unsigned char *FUN_L00_002c8218(int a, u128 *b, u128 *c) { unsigned char *m = FUN_0020c4f8(0xe6); if (m) { char *q; q = *(char **)(m + 0x78); m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; m[0x20] = 0; qcopy(m + 0x10, b); qcopy(q, c); *(int *)(q + 0x30) = a; *(int *)(q + 0x34) = 0; *(short *)(q + 0x38) = 0; *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.01f; if (D_0013F350[0x20a5] || D_0013F350[0x20af]) *(unsigned short *)(m + 0x34) |= 0x41; } return m; }
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
+unsigned char *FUN_L00_002c8218(int a, u128 *b, u128 *c) { unsigned char *m = create_moby(0xe6); if (m) { char *q; q = *(char **)(m + 0x78); m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; m[0x20] = 0; qcopy(m + 0x10, b); qcopy(q, c); *(int *)(q + 0x30) = a; *(int *)(q + 0x34) = 0; *(short *)(q + 0x38) = 0; *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.01f; if (D_0013F350[0x20a5] || D_0013F350[0x20af]) *(unsigned short *)(m + 0x34) |= 0x41; } return m; }
 typedef unsigned int u128_2c82f0 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_2c82f0 q; float f[4]; } Vec4_2c82f0;
 typedef struct { u8 p0[0x100]; Vec4_2c82f0 v100; u8 p1[0x2FC - 0x110]; void *w2FC; u8 p2[0x2080 - 0x300]; char *w2080; } S13F350_2c82f0;

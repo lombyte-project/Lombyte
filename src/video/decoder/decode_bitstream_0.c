@@ -83,7 +83,7 @@ typedef struct {
 extern int func_0012BA48(sceMpeg *);                      /* sceMpegIsEnd */
 extern int sceMpegGetPicture(sceMpeg *, void *, int);         /* sceMpegGetPicture_pal */
 extern void sceMpegReset(sceMpeg *);                     /* sceMpegReset_pal */
-extern VoData *FUN_0023d288(VoBuf *); /* voBufGetData */
+extern VoData *vo_buf_get_data(VoBuf *) __asm__("FUN_0023d288"); /* voBufGetData */
 extern void func_0023D210(VoBuf *);    /* voBufIncCount */
 extern void func_0023B210(void *, int, int, int);         /* setImageTag */
 extern void func_0023AB78(char *);                        /* ErrMessage */
@@ -104,7 +104,7 @@ int decode_bitstream_0(VideoDec *vd) {
             break;
         }
 
-        while (!(voData = FUN_0023d288(&voBuf))) {
+        while (!(voData = vo_buf_get_data(&voBuf))) {
             func_0023A770();
         }
 

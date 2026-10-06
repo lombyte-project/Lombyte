@@ -126,7 +126,7 @@ extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
 
 extern char D_L07_00166E40[];
-extern void register_audio_stream_callback(void) __asm__("FUN_L07_0030d420");
+extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
 extern char D_L07_00208560[];
 extern void FUN_L02_002a40d0(void *, float);
@@ -140,7 +140,7 @@ void FUN_L07_0030d440(unsigned char *moby) {
         break;
     case 1:
         if (!is_point_inside_clip_volume(D_L07_00166E40, **(int **)(moby + 0x78))) {
-            AddDrawCallback((void *)register_audio_stream_callback, moby);
+            AddDrawCallback((void *)l07_moby_draw_callback, moby);
         }
         break;
     }
@@ -296,12 +296,12 @@ void FUN_L07_0030f0f8(char *a, char *b, float f12, float f13, float f14) {
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 int FUN_L07_0030f1e0(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) {
     float speed = FUN_001f9b20(obj + 0xD0);
     int r = 0;
-    float d = FUN_001fa688(*(float *)(moby + 0x48), a);
+    float d = fast_difference_between_rotations(*(float *)(moby + 0x48), a);
     if (d < lo) {
         speed += up;
         r = 1;
@@ -919,7 +919,7 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025d458(void *, short *);
 extern void FUN_L07_0030e720(void *, void *, void *);
 extern void FUN_L07_0030e858(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
     char *info;

@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8") __attribute__((sda));
 extern short D_L15_00161EC0_d __asm__("D_L15_00161EC0") __attribute__((sda));
 
@@ -30,7 +30,7 @@ void FUN_L15_002e46b0(char *moby) {
         } else {
             return;
         }
-        *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), step);
+        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), step);
     }
 }
 
@@ -277,11 +277,11 @@ extern float FUN_L00_00258110(float *vel, float cur, float target, float k, floa
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float FUN_L00_0025be00(void *, float, void *, float, float, float);
 extern float FUN_L15_002cf110_u(void *, void *, float) __asm__("FUN_L15_002cf110");
-extern float compute_interpolated_record_value(void *);
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float probe_ground_height(void *, int, float);
-extern float random_float_between(float, float);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int D_0015ED84;
 extern int D_L15_001BAAD0[];
@@ -294,13 +294,13 @@ extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L01_0026e008(int, int);
 extern int allocate_voice_for_target_entry(int, int, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
-extern int is_value_within_interpolated_window(char *, float);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int rand(void);
-extern int random_integer_below(int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern short D_L15_00161B14 __attribute__((sda));
 extern short D_L15_00161B18 __attribute__((sda));
@@ -330,9 +330,9 @@ extern void FUN_L03_00250ae8(void *, void *, int);
 extern void FUN_L15_002d0fa8(void *);
 extern void NoOpMainCallback(void *, void *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, float);
-extern void release_voice_slot(int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);

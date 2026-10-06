@@ -41,7 +41,7 @@ void FUN_L14_003167e0(u8 *arg0)
 }
 
 
-extern u8 *FUN_0020c4f8(s32);
+extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(u8 *);
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
@@ -50,7 +50,7 @@ extern void FUN_L00_00250df8(u8 *);
  * each address in its own register -- the qcopy idiom, see include/qcopy.h. */
 u8 *FUN_L14_00306158(u8 *self)
 {
-    u8 *o = FUN_0020c4f8(0x574);
+    u8 *o = create_moby(0x574);
 
     if (o != 0) {
         qcopy(o + 0x10, self + 0x10);

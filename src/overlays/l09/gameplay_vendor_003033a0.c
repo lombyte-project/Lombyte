@@ -12,7 +12,7 @@ extern L09LevelState D_L09_001BB3B0;
 extern s32 D_0014C190[][64];
 extern int D_0015ED84;
 extern int D_L09_001BA650[];
-extern int FUN_00214720(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED6C;
@@ -51,7 +51,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
     path = D_L09_001B0630[*(int *)(data + 0xB4)];
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
-        if (FUN_00214720(D_0013F3D0, *(int *)(data + 0xC0))
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0xC0))
             || D_L09_001BB3B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0
             || (D_0014C190[D_0015ED84][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {

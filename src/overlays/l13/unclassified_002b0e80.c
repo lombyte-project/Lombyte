@@ -166,11 +166,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b39e0.s", FUN_L13_002b39e0);
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8(float, float);
 extern float FUN_001f9e90(float, float);
 extern unsigned char D_0013E533[];
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 
 void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
@@ -182,7 +182,7 @@ void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
     if ((moby[0xBC] >= 2 && (moby[0xBC] & 1)) || (moby[0x20] >= 2 && (moby[0x20] & 1))) {
         ang = FUN_001fa5c8(ang, 1.5707964f);
     } else {
-        ang = FUN_001fa580(ang, 1.5707964f);
+        ang = fast_add_rotations(ang, 1.5707964f);
     }
     if (*(short *)(moby + 0xA6) == 0x15) {
         r = 2.0f;
@@ -192,7 +192,7 @@ void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
     v[1] = FUN_001f9de0(ang) * r;
     v[2] = z;
     FUN_001f9a10(v, v, moby + 0x10);
-    FUN_001f99f8(w);
+    clear_u64_value(w);
     x = D_0013E533 + 0xE1D;
     w[2] = FUN_001f9e90(*(float *)(x + 0xD0) - v[0], *(float *)(x + 0xD4) - v[1]);
     *(int *)(w + 1) = 0;
@@ -220,7 +220,7 @@ void FUN_L13_002b47a0(char *moby)
         FUN_L00_0024f7c8(moby, 0, v);
         d = FUN_001f9b80(moby + 0x10, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
-        ang = FUN_001fa580(random_float_between_alt(-x, x) * 0.017453292f, *(float *)(moby + 0x48));
+        ang = fast_add_rotations(random_float_between_alt(-x, x) * 0.017453292f, *(float *)(moby + 0x48));
         v2[0] = FUN_001f9dc8(ang) * (*(float *)&D_L13_00161388_d * D_0015ED6C);
         v2[1] = FUN_001f9de0(ang) * (*(float *)&D_L13_00161388_d * D_0015ED6C);
         v2[2] = 0;
@@ -274,7 +274,7 @@ typedef struct {
 } MobyAnim;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00257470(void *, int, int);
@@ -297,7 +297,7 @@ void FUN_L13_002b4a58(char *m, char *p) {
                     *(int *)(q + 0x2C) = 0;
                     k = 1;
                 } else {
-                    float f = FUN_001fa688(FUN_001f9e90(*(float *)(t + 0x10) - *(float *)(m + 0x10), *(float *)(t + 0x14) - *(float *)(m + 0x14)),
+                    float f = fast_difference_between_rotations(FUN_001f9e90(*(float *)(t + 0x10) - *(float *)(m + 0x10), *(float *)(t + 0x14) - *(float *)(m + 0x14)),
                         *(float *)(*(char **)(*(char **)(p + 0x70) + 0x78) + 0x54));
                     if (f < 1.65806282f) {
                         *(int *)(q + 0x2C) = 0;

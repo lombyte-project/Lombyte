@@ -50,7 +50,7 @@ extern s32 panel_slot_enabled[] __asm__("D_001CE2C0");
 extern PanelRenderState panel_render_state __asm__("D_001D5BF0");
 extern PanelRenderSlot *panel_slots[] __asm__("D_001D5D90");
 
-extern void FUN_00233980(s32, s64);
+extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void func_0020D278(void);
 extern void func_0020D1F0(void);
 extern void func_0020D218(void);
@@ -108,7 +108,7 @@ void render_level_effects_and_screen_sprites(void)
     s32 frame_y;
     s32 width_for_panel;
 
-    FUN_00233980(0x47, 0x5360B);
+    vu1_add_g_sregister(0x47, 0x5360B);
     func_0020D278();
     func_0020D1F0();
     func_0020D218();
@@ -251,8 +251,8 @@ void render_level_effects_and_screen_sprites(void)
             } else if (!(draw_result & 0x10)) {
                 continue;
             }
-            FUN_00233980(0x42, 0x8000000064L);
-            FUN_00233980(0x47, 0x43);
+            vu1_add_g_sregister(0x42, 0x8000000064L);
+            vu1_add_g_sregister(0x47, 0x43);
             func_001F5450(frame_x, frame_y, frame_width, frame_height, texture_left, texture_top, texture_right - texture_left, texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
         }
         if (pass == 0) {

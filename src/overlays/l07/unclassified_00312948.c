@@ -120,14 +120,14 @@ typedef struct {
     unsigned char unk70;     /* 0x70 */
 } MobyAnim;
 
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern int FUN_L00_00257b90(int, int);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, int b) {
     float h = FUN_001f9e90(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14));
-    if (*(float *)(obj + 0x98) < FUN_001fa688(*(float *)(m + 0x48), h)) {
+    if (*(float *)(obj + 0x98) < fast_difference_between_rotations(*(float *)(m + 0x48), h)) {
         *(int *)(obj + 0x168) = 0;
         *(float *)(m + 0x58) = 1.0f;
         obj[0x1F4] = m[0x20];
@@ -153,7 +153,7 @@ int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, in
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00315338), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED64;
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
 
 void FUN_L07_00313f60(char *moby, char *d, float *t) {
@@ -161,7 +161,7 @@ void FUN_L07_00313f60(char *moby, char *d, float *t) {
     float k;
     if (((unsigned char *)moby)[0x20] < 10) {
         a = FUN_001f9e90(t[0] - *(float *)(moby + 0x10), t[1] - *(float *)(moby + 0x14));
-        *(float *)(d + 0x268) = FUN_001fa5c8(a, *(float *)(moby + 0x48));
+        *(float *)(d + 0x268) = fast_subtract_rotations(a, *(float *)(moby + 0x48));
     } else {
         *(int *)(d + 0x268) = 0;
     }

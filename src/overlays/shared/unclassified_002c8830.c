@@ -34,7 +34,7 @@ extern float FUN_001f9988(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
     char *best = 0;
@@ -51,10 +51,10 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
                 float ra, rb, y, score;
                 qcopy(tmp, q);
                 tmp[2] = tmp[2] + 0.4f;
-                ra = FUN_001fa688(aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
+                ra = fast_difference_between_rotations(aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
                 ra = ra * ra;
                 if (ra < r1 * r1) {
-                    y = FUN_001fa688(aim[1], FUN_001f9e90(d, tmp[2] - pos[2]));
+                    y = fast_difference_between_rotations(aim[1], FUN_001f9e90(d, tmp[2] - pos[2]));
                     rb = y * y;
                     if (rb < r2 * r2) {
                         score = ra * rb * 30.0f;

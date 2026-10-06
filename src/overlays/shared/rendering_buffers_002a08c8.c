@@ -42,14 +42,14 @@ extern int D_L00_001611A0 __attribute__((sda));
 extern char D_L00_001E9548[];
 void FUN_L00_001ff018(int);
 void FUN_001e93b0(char *);
-void FUN_001f21c0(void);
+void reset_graphics(void) __asm__("FUN_001f21c0");
 void FUN_L00_002a09d8(int mask) {
     int i;
     for (i = 0; D_L00_001611A0 & mask; i++) {
         FUN_L00_001ff018(0x400);
         if (i > 100000) {
             FUN_001e93b0(D_L00_001E9548);
-            FUN_001f21c0();
+            reset_graphics();
             break;
         }
     }

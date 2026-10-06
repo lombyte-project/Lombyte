@@ -114,7 +114,7 @@ void FUN_L00_002bb0b0(void *mv) {
 }
 typedef int q128 __attribute__((mode(TI)));
 u8 *FUN_0020c4f8(s32);
-void FUN_001f99f8();
+void clear_u64_value() __asm__("FUN_001f99f8");
 void FUN_0020e098();
 void FUN_L00_00250df8();
 u8 *FUN_L00_002bb360(u8 *src) {
@@ -128,7 +128,7 @@ u8 *FUN_L00_002bb360(u8 *src) {
         m[0x23] = 0x50;
         m[0x20] = 0;
         *(u8 **)(v + 8) = src;
-        FUN_001f99f8(m + 0x40);
+        clear_u64_value(m + 0x40);
         *(q128 *)(m + 0xC0) = *(q128 *)(src + 0xC0);
         *(q128 *)(m + 0xD0) = *(q128 *)(src + 0xD0);
         *(q128 *)(m + 0xE0) = *(q128 *)(src + 0xE0);
@@ -198,8 +198,8 @@ extern float D_L00_001616D4 __attribute__((sda));
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC __attribute__((section(".data")));
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float compute_interpolated_record_value(void *);
-extern float random_float_between(float, float);
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L00_001616CC __attribute__((sda));
 extern int D_L00_001616D0 __attribute__((sda));
 extern int scale_game_frames(int);
@@ -215,9 +215,9 @@ extern short D_L00_001DBF08[];
 extern void FUN_00213358(void *, float, float);
 extern void FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
 extern void add_vector_xyz(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
-extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle);
-extern void enqueue_callback_list_1(void *, void *);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern char D_0013F350[];
@@ -341,7 +341,7 @@ extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section("
 extern f32 D_L00_00161690 __attribute__((sda));
 extern f32 D_L00_00161694 __attribute__((sda));
 f32 FUN_001fa6c0(s32);
-s32 FUN_001fa6d0(f32);
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002bbbc8(void *, s32, s32, s32, f32, f32, f32);
 void FUN_L00_002bc1a0(void *);
 void FUN_L00_002bbb00(void *o) {
@@ -349,7 +349,7 @@ void FUN_L00_002bbb00(void *o) {
     s32 r;
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
-            r = FUN_001fa6d0(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
+            r = truncate_float_to_s32(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
             FUN_L00_002bbbc8(&D_L00_001DBBA0_u[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
@@ -374,7 +374,7 @@ typedef struct {
 
 extern float D_L00_00166DC0[];
 extern float vector_length_xyz(void *);
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern char D_L00_00161680[4] __attribute__((sda));
 extern char D_L00_00161684[4] __attribute__((sda));
 extern char D_L00_001616B0[4] __attribute__((sda));
@@ -384,7 +384,7 @@ extern void cross_vectors_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
-extern void vu1_add_g_sregister(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float sz) {
     char *m = mv;
@@ -788,9 +788,9 @@ extern VU D_L00_00173E60;
 
 extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-extern f32 FUN_001fa580(f32, f32);
-extern f32 FUN_001fa5c8(f32, f32);
-extern f32 FUN_001fa688(f32, f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9b48(void *, void *);
@@ -827,8 +827,8 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
         cur = ang;
     }
     arc *= 0.5f;
-    FUN_001fa580(ang, arc);
-    arc = FUN_001fa5c8(ang, arc);
+    fast_add_rotations(ang, arc);
+    arc = fast_subtract_rotations(ang, arc);
 
     qcopy(&v0, pos);
     v0.f[1] += FUN_001f9de0(cur) * r1;
@@ -868,7 +868,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
         v1.f[2] += h + h;
         if (FUN_001efa68_c(&v0, &v1, 4, m, 0) == 0) {
             if (FUN_L00_002bec80_c(&v1, m) != 0.0f) {
-                diff = FUN_001fa688(arc, cur);
+                diff = fast_difference_between_rotations(arc, cur);
                 if (diff < bestDiff || bestDist < r2) {
                     bestDiff = diff;
                     best = arc;
@@ -887,12 +887,12 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
             if (bestDist < d) {
                 best = arc;
                 bestDist = d;
-                bestDiff = FUN_001fa688(best, cur);
+                bestDiff = fast_difference_between_rotations(best, cur);
                 if (*out < d) {
                     *out = d;
                 }
             } else if (d == bestDist) {
-                diff = FUN_001fa688(arc, cur);
+                diff = fast_difference_between_rotations(arc, cur);
                 if (diff < bestDiff) {
                     bestDiff = diff;
                     best = arc;
@@ -903,10 +903,10 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
                 }
             }
         }
-        arc = FUN_001fa580(arc, da);
+        arc = fast_add_rotations(arc, da);
     }
 
-    ang = FUN_001fa5c8(best, 1.5707964f);
+    ang = fast_subtract_rotations(best, 1.5707964f);
     qcopy(&v0, pos);
     v0.f[1] += FUN_001f9de0(ang) * r1;
     v0.f[0] += FUN_001f9dc8(ang) * r1;
@@ -918,10 +918,10 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     if (FUN_001efa68_c(&v0, &v1, 4, m, 0) != 0) {
         if (D_L00_00173E58_bf != x->p38 && !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 && D_L00_00173E58_bf->p24->h46 == 5)) {
             d = FUN_001f9b48(&v0, &D_L00_00173E60);
-            best = FUN_001fa580(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
+            best = fast_add_rotations(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
         }
     }
-    ang = FUN_001fa580(ang, 3.1415927f);
+    ang = fast_add_rotations(ang, 3.1415927f);
     qcopy(&v0, pos);
     v0.f[1] += FUN_001f9de0(ang) * r1;
     v0.f[0] += FUN_001f9dc8(ang) * r1;
@@ -933,11 +933,11 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     if (FUN_001efa68_c(&v0, &v1, 4, m, 0) != 0) {
         if (D_L00_00173E58_bf != x->p38 && !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 && D_L00_00173E58_bf->p24->h46 == 5)) {
             d = FUN_001f9b48(&v0, &D_L00_00173E60);
-            best = FUN_001fa5c8(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
+            best = fast_subtract_rotations(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
         }
     }
-    if (2.5132742f < FUN_001fa688(best, m->f48)) {
-        best = FUN_001fa580(m->f48, FUN_001fa5c8(best, m->f48) * 0.5f);
+    if (2.5132742f < fast_difference_between_rotations(best, m->f48)) {
+        best = fast_add_rotations(m->f48, fast_subtract_rotations(best, m->f48) * 0.5f);
     }
     return best;
 }

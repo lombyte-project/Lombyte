@@ -33,7 +33,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 func_001FB368();
 extern s32 func_001FB680();
 extern s32 func_001FBC50();
-extern s32 FUN_0020cc60();
+extern s32 prune_moby_references() __asm__("FUN_0020cc60");
 extern s32 func_0020CEF8();
 extern s32 func_0020D460();
 extern void func_00217C18();
@@ -63,7 +63,7 @@ void transition_default_draw(s32 *arg0)
     FillTransferWords(D_00193FC0, -1, 0x80);
     func_001EAF88();
     func_001F2260();
-    FUN_0020cc60();
+    prune_moby_references();
     func_001F3868();
     D_0015F620 = -1;
     if (D_0016045C != 0) {

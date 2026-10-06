@@ -2,8 +2,8 @@
 #include "types.h"
 #include "asm.h"
 
-void FUN_00213508(void *, s32, f32);
-void FUN_L00_00259710(void *a) { FUN_00213508(a, 0x20, 0.5f); }
+void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
+void FUN_L00_00259710(void *a) { probe_ground_height(a, 0x20, 0.5f); }
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -33,14 +33,14 @@ int FUN_L00_00259830(char *a) { char *p = *(char **)(a + 0x94); if (p && *(int *
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L00_00259858(char *a, int b, int c, float d) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
     *(float *)(a + 0x1C) = d;
     *(int *)(a + 0x20) = 0;
-    FUN_001f99f8(a);
+    clear_u64_value(a);
 }
 #include "qcopy.h"
 void FUN_L00_00259888(char *a, int b, int c, float d, void *q) {
@@ -582,12 +582,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025b6b8.s", FUN_L00_0025b6b8);
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 float FUN_L00_0025b750(float a, float b, float c) {
-    float r = FUN_001fa5c8(b, a);
-    return FUN_001fa580(a, r * c);
+    float r = fast_subtract_rotations(b, a);
+    return fast_add_rotations(a, r * c);
 }
 #define NOT_SDA
 

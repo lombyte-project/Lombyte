@@ -229,10 +229,10 @@ extern G D_0013F350_c __asm__("D_0013F350");
 extern s32 D_L00_0015F5CC __attribute__((sda));
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 
-extern f32 FUN_00213308(void);
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
-extern f32 FUN_002132a8(f32, f32);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001f9cf8(V4 *, V4 *, V4 *);
 extern s32 FUN_001f96f8_c2(s32) __asm__("FUN_001f96f8");
 extern u8 *FUN_L00_0026cbb0(V4 *, V4 *, s32, s32, s32, s32, f32);
@@ -240,7 +240,7 @@ extern f32 FUN_001f9b48(V4 *, V4 *);
 extern void FUN_001f9a28_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8(V4 *, V4 *, f32);
 extern void FUN_001f9a10_c(V4 *, V4 *, V4 *) __asm__("FUN_001f9a10");
-extern s32 FUN_00213260(s32);
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern u8 *FUN_L00_0026d000(V4 *, f32, f32, f32, f32, s32, V4 *, u32);
 
 void FUN_L00_002b3c50(X *x) {
@@ -258,10 +258,10 @@ void FUN_L00_002b3c50(X *x) {
     u8 *p;
 
     g = x->f78;
-    l0.f[0] = FUN_001f9dc8(FUN_00213308()) * 0.05f;
-    l0.f[1] = FUN_001f9de0(FUN_00213308()) * 0.05f;
+    l0.f[0] = FUN_001f9dc8(random_angle_radians()) * 0.05f;
+    l0.f[1] = FUN_001f9de0(random_angle_radians()) * 0.05f;
     l0.f[2] = 0.0f;
-    l0.f[2] = -FUN_002132a8(0.01f, 0.03f);
+    l0.f[2] = -random_float_between(0.01f, 0.03f);
     FUN_001f9cf8(&l0, &l0, &x->vC0);
     qcopy(&a, &x->v10);
     if (D_0013F350_c.i2084 == 0x81) {
@@ -280,7 +280,7 @@ void FUN_L00_002b3c50(X *x) {
             FUN_L00_0026cbb0(&t, &l0, 0x4F007FFF, 0x1FFFFFFF, FUN_001f96f8_c2(10), 1, 10000.0f);
         }
     }
-    g->f00 = FUN_00213260(FUN_001f96f8_c2(10));
+    g->f00 = random_integer_below(FUN_001f96f8_c2(10));
     q = 1.075f;
     col = 0x808080;
     l0.f[0] = 0.0f;
@@ -629,7 +629,7 @@ void FUN_L00_002eba18();
 void FUN_L00_002223f8();
 void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
-void FUN_0020c828();
+void mark_moby_for_removal() __asm__("FUN_0020c828");
 void FUN_L00_002b5b20(void *a, char **b) {
     char *x = *(char **)(*b + 0x78);
     if (x) *(int *)(x + 4) = 0;
@@ -639,7 +639,7 @@ void FUN_L00_002b5b20(void *a, char **b) {
     FUN_L00_002223f8(0, 1);
     FUN_L00_002b57f0_u(a, 1);
     FUN_L00_00203b78();
-    FUN_0020c828(a);
+    mark_moby_for_removal(a);
     D_L00_00167014[0] = 0;
 }
 typedef unsigned int u128_2b5ba0 __attribute__((mode(TI), aligned(16)));
@@ -697,7 +697,7 @@ extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
 extern void FUN_L00_002ac910(void *, void *, void *, int, int, int, int, int, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -718,7 +718,7 @@ void FUN_L00_002b5d00(char *m, int flag) {
     }
     if (flag != 0) {
         FUN_001f9a28(d, D_L00_00166DC0, m + 0x10);
-        FUN_001f99f8(n);
+        clear_u64_value(n);
         len = FUN_001f9af0(d);
         if (len < 8.0f) {
             count = func_001FA898_r(len) + 2;
@@ -765,11 +765,11 @@ typedef struct { u8 pad0[0x70]; u16 cnt; u16 last; u32 flags; } Ring;
 extern s32 FUN_L00_0028d8c0(Moby *, s32);
 extern s32 FUN_L00_00257b90_c(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-extern void FUN_00212f90(Moby *, s32, s32, s32);
+extern void blend_moby_animation(Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 FUN_0022da68(s32, s32, Moby *);
-extern s32 FUN_001fa6d0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002b6bc8(Moby *, f32);
-extern void FUN_0022d798(s32);
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 typedef struct { u8 p0[0x10A0]; u32 w10A0; u8 p10A4[0x10]; u32 w10B4; u8 p10B8[0x20AC-0x10B8]; u8 b20AC; } GS;
 extern GS D_0013F350;
 extern u32 D_0013C940[];
@@ -836,12 +836,12 @@ void FUN_L00_002b6f10(Moby *m)
             }
             D_00141680.flags |= 1 << D_0015ED84;
             D_00141680.flags |= 0x80000000;
-            if (m->type != 3) FUN_00212f90(m, 3, 0, FUN_001f96f8_c(3));
+            if (m->type != 3) blend_moby_animation(m, 3, 0, FUN_001f96f8_c(3));
             o->anim = FUN_0022da68(o->idx, 1, m);
             i = o->idx + 1;
             o->idx = i;
-            r1 = FUN_001fa6d0(m->cfg->tab[i].x * 10.0f);
-            r2 = FUN_001fa6d0(m->cfg->tab[i].y * 10.0f);
+            r1 = truncate_float_to_s32(m->cfg->tab[i].x * 10.0f);
+            r2 = truncate_float_to_s32(m->cfg->tab[i].y * 10.0f);
             if (!(o->idx < m->cfg->count && r1 == 0x1E && r2 == r1)) o->idx = 0;
             FUN_L00_002b6bc8(m, o->radius);
             o->retry = 0;
@@ -850,7 +850,7 @@ void FUN_L00_002b6f10(Moby *m)
         if (o->anim < 0) {
             if ((D_0013C940[0x1A0 / 4] & G_W(10A0)) != 0 && G_B(20AC) == 0) o->retry++;
             else o->retry = 0;
-            if (m->type != 1) FUN_00212f90(m, 1, 0, FUN_001f96f8_c(5));
+            if (m->type != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_c(5));
             goto end;
         }
     } else {
@@ -859,11 +859,11 @@ void FUN_L00_002b6f10(Moby *m)
             if (G_B(20AC) == 0) goto L7340;
         }
     }
-    if (m->type != 1) FUN_00212f90(m, 1, 0, FUN_001f96f8_c(5));
+    if (m->type != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_c(5));
     a = o->anim;
     if (a != -1) {
         e = D_0013E550 + a * 0x70;
-        if (*(Moby **)(e + 0x88) == m && e[0x74] != 0) FUN_0022d798(a);
+        if (*(Moby **)(e + 0x88) == m && e[0x74] != 0) release_voice_slot(a);
     }
     o->retry = 0;
     o->anim = -1;
@@ -901,7 +901,7 @@ extern int FUN_001f9770(void *);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *arg0);
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int f_to_int(float) __asm__("FUN_001fa6d0");
 void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 

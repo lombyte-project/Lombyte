@@ -2,9 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
-void FUN_00214db0(void *);
+void build_spherical_offset(void *) __asm__("FUN_00214db0");
 void FUN_001f9a10(void *, void *, void *);
-void FUN_L00_00262cf0(void *a, void *b) { char buf[16]; FUN_00214db0(buf); FUN_001f9a10(a, buf, b); }
+void FUN_L00_00262cf0(void *a, void *b) { char buf[16]; build_spherical_offset(buf); FUN_001f9a10(a, buf, b); }
 typedef struct { s32 v[19]; } T;
 extern T D_L00_001E9060;
 s32 FUN_001f96f8(s32);

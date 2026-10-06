@@ -58,7 +58,7 @@ extern unsigned char D_0014161B_q[] __asm__("D_0014161B");
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
 extern void FUN_L10_002e91b8(void);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 
 void FUN_L10_002e9028(unsigned char *m) {

@@ -9,13 +9,13 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 float FUN_L00_00257ef0(float x, float y, float z) {
-    float t = FUN_001fa5c8(y, x);
+    float t = fast_subtract_rotations(y, x);
     float c = FUN_001f9dc8(z * 3.1415927f);
-    return FUN_001fa580(x, t * ((1.0f - c) * 0.5f));
+    return fast_add_rotations(x, t * ((1.0f - c) * 0.5f));
 }
 #include "qcopy.h"
 extern void FastVecAdd(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -51,14 +51,14 @@ void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
     float s = (1.0f - FUN_001f9dc8(ang * 3.1415927f)) * 0.5f;
-    out[0] = FUN_001fa580(a[0], FUN_001fa5c8(b[0], a[0]) * s);
-    out[1] = FUN_001fa580(a[1], FUN_001fa5c8(b[1], a[1]) * s);
-    out[2] = FUN_001fa580(a[2], FUN_001fa5c8(b[2], a[2]) * s);
+    out[0] = fast_add_rotations(a[0], fast_subtract_rotations(b[0], a[0]) * s);
+    out[1] = fast_add_rotations(a[1], fast_subtract_rotations(b[1], a[1]) * s);
+    out[2] = fast_add_rotations(a[2], fast_subtract_rotations(b[2], a[2]) * s);
 }
 float FUN_001fa5c8_00258110(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_00258110(float) __asm__("FUN_001f99c0");
@@ -80,7 +80,7 @@ float FUN_L00_00258110(float *p, float a, float b, float c, float d, float lim) 
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
-    float r = FUN_001fa5c8(t, *(float *)(m + 0x48));
+    float r = fast_subtract_rotations(t, *(float *)(m + 0x48));
     float k = r / 0.15707964f;
     float v;
     if (1.0f < k) k = 1.0f;
@@ -99,7 +99,7 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
     } else if (*ptr < -FUN_001f99c0(r)) {
         *ptr = -FUN_001f99c0(r);
     }
-    *(float *)(m + 0x48) = FUN_001fa580(*(float *)(m + 0x48), *ptr);
+    *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), *ptr);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -372,7 +372,7 @@ extern f32 FUN_001f9e90(f32, f32);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
-extern f32 FUN_00213508(void *, s32, f32);
+extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec *out, f32 f) {
     Vec save;
@@ -453,7 +453,7 @@ done:
         if (r & 1) {
             mask |= 1;
             if (d.f[0] * p.f[0] + d.f[1] * p.f[1] < l2 * 0.2f) mask |= 2;
-            h = FUN_00213508(&m->pos, 0, 0.5f);
+            h = probe_ground_height(&m->pos, 0, 0.5f);
             if (c->f08 < save.f[2] - h || c->f0C < h - save.f[2]) {
                 mask |= 0x22;
                 m->pos.q = save.q;

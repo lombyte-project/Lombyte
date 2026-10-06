@@ -515,8 +515,8 @@ float FUN_L00_002339d0(void *);
 void FUN_L00_00233b20(void *, void *, float);
 void FUN_L00_00233ba0(void *, void *, float);
 void FUN_001f9a10(void *, void *, void *);
-void FUN_001f99f8(void *);
-void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else FUN_001f99f8(g); }
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+void FUN_L00_00216710(float x) { char *g = D_0013F4A0; float d = FUN_L00_002339d0(g); if (0.001f < d) { float z = 0.0f; float s; FUN_L00_00233b20(g, g, z); s = d - x; if (s < z) s = z; FUN_L00_00233ba0(g, g, s); FUN_001f9a10(g - 0x70, g - 0x70, g); } else clear_u64_value(g); }
 typedef int ti_167d0 __attribute__((mode(TI)));
 typedef union { ti_167d0 q; f32 f[4]; } V4 __attribute__((aligned(16)));
 

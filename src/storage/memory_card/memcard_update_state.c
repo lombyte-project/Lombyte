@@ -78,7 +78,7 @@ extern s32 SceMcUnformat(s32 port, s32 slot);
 extern void func_001FD6E0(s32, McChunk **, s32 *);
 extern void func_0020AE60(u8 *, s32, s32);
 extern s32 func_0020AF20(u8 *, s32, u32 *);
-extern s32 FUN_00216788(McChunk *, s32, s32);
+extern s32 start_audio_stream_read(McChunk *, s32, s32) __asm__("FUN_00216788");
 extern s32 sceMcChdir(s32, s32, char *, s32);
 extern s32 sceMcClose(s32 fd);
 extern s32 sceMcDelete(s32 port, s32 slot, char *name);
@@ -355,7 +355,7 @@ void memcard_update_state(void) {
             s32 size;
 
             func_001FD6E0(D_00137B80.x14 << 11, &chunk, &size);
-            FUN_00216788(chunk, D_00137B80.x10, D_00137B80.x14);
+            start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
             MC.sub = 4;
             MC.busy = 0;
             break;
@@ -943,7 +943,7 @@ void memcard_update_state(void) {
         s32 size;
 
         func_001FD6E0(D_00137B80.x14 << 11, &chunk, &size);
-        FUN_00216788(chunk, D_00137B80.x10, D_00137B80.x14);
+        start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
         MC.sub = 18;
         MC.busy = 0;
         break;

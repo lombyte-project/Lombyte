@@ -23,7 +23,7 @@ extern char D_L12_001F5B20[];
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern short D_L12_00161A10 __attribute__((sda));
 extern short D_L12_00161A14 __attribute__((sda));
 extern short D_L12_00161A0C __attribute__((sda));

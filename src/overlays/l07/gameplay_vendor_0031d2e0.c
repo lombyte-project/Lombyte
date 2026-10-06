@@ -14,7 +14,7 @@ typedef struct { char pad[0x178]; int arr[8]; } L07SparkState;
 
 extern char D_L07_0016C8E0[];
 extern float D_L07_0015F580[] __attribute__((section(".sdata")));
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int D_L07_0015F5C4;
 extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");

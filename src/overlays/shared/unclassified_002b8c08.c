@@ -36,7 +36,7 @@ extern L01PathLevelState D_L01_001BB6B0;
 extern s32 D_0014C190[][64];
 extern int D_0015ED84;
 extern int D_L01_001BA950[];
-extern int FUN_00214720(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED6C;
@@ -76,13 +76,13 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
     }
     path = D_L01_001B0930[*(int *)(data + 0xB4)];
     if (*(int *)(data + 0xCC) != -1) {
-        if (FUN_00214720(D_0013F3D0_c, *(int *)(data + 0xCC)) == 0) {
+        if (is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xCC)) == 0) {
             moby[0x30] = 0xFF;
             *(int *)(moby + 0x94) = 0;
             *(unsigned short *)(moby + 0x34) |= 0x41;
             return;
         }
-        if (*(int *)(data + 0xCC) != -1 && FUN_00214720(D_0013F3D0_c, *(int *)(data + 0xCC))) {
+        if (*(int *)(data + 0xCC) != -1 && is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xCC))) {
             *(unsigned short *)(moby + 0x34) &= 0xFFBE;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
             *(int *)(data + 0xCC) = -1;
@@ -90,7 +90,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
     }
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
-        if (FUN_00214720(D_0013F3D0_c, *(int *)(data + 0xC0))
+        if (is_point_inside_clip_volume(D_0013F3D0_c, *(int *)(data + 0xC0))
             || D_L01_001BB6B0.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0
             || (D_0014C190[D_0015ED84][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
@@ -248,7 +248,7 @@ extern char D_L01_00167240[];
 extern char D_L01_001742E0[];
 extern float D_L01_001742C0[];
 extern float FUN_001f9b20(void *);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00257c48(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -270,8 +270,8 @@ void FUN_L01_002c72c8(void) {
     FUN_001f9e90(v[0], v[1]);
     for (i = 19; i >= 0; i--) {
         float x, y;
-        x = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
-        y = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        x = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        y = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
         build_spherical_offset(v, 0.2f, y, x);
         FUN_001f9a68(p, v, random_float_between_alt(1.0f, 3.0f));
         FUN_001f9a10(p, p, D_L01_001742E0);
@@ -282,8 +282,8 @@ void FUN_L01_002c72c8(void) {
         p[0] = D_L01_001742C0[8] + FUN_L00_00257c48(0.0f, 0.1f);
         p[1] = D_L01_001742C0[9] + FUN_L00_00257c48(0.0f, 0.1f);
         p[2] = D_L01_001742C0[10] + FUN_L00_00257c48(0.0f, 0.1f);
-        x = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
-        y = FUN_001fa580(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        x = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
+        y = fast_add_rotations(FUN_L00_00257c48(0.0f, 3.1415927f), a);
         build_spherical_offset(v, 0.05f, y, x);
         FUN_L00_0026cbb0(p, v, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 20000.0f);
     }
@@ -342,7 +342,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e32a8.s", FUN_L01_002e32a8);
 typedef int u128_w22c __attribute__((mode(TI)));
 
 extern int FUN_001f9770(void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
 extern void *FUN_L01_002e32a8(void *, void *, void *, float, float, float, float, float, float);
@@ -379,7 +379,7 @@ void FUN_L01_002e35a8(char *moby, char *state) {
         if (D_0013F3D0.f[2] + 1.1f < *(float *)(moby + 0x18)) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
-            if (FUN_001fa688(*(float *)(moby + 0x48), t) < 0.5235988f) {
+            if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
                 if (D_L01_0015F5C4 != 2) {
                     char *r;
                     qcopy(&q, e + 0x10);

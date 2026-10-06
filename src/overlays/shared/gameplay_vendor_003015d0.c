@@ -37,7 +37,7 @@ extern void FUN_L14_003017f8(char *);
 extern void FUN_L14_00301de8(char *);
 extern void FUN_L14_00301fa8(void);
 extern void FUN_L14_00302538(char *);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern short D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
 extern short D_L14_001621A8_s __asm__("D_L14_001620D8") __attribute__((sda));
 extern short D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));

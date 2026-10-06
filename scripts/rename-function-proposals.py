@@ -40,6 +40,11 @@ ASM_DECL_RE = re.compile(
     r'(?m)^[A-Za-z_][A-Za-z0-9_ \t*]*?\b(?P<name>[A-Za-z_]\w*)\s*'
     r'\([^;{}]*\)\s*__asm__\s*\(\s*"(?P<label>[^"]+)"\s*\)\s*;'
 )
+# A top-level prototype written without `extern`, e.g. `s32 FUN_001f9740(void *);`.
+PROTOTYPE_LINE_RE = re.compile(
+    r"^(?!(?:return|if|else|while|for|switch|case|goto|do)\b)"
+    r"[A-Za-z_][\w \t]*[\s*]\**\s*[A-Za-z_]\w*\s*\([^;{}=]*\)[^;{}=]*;\s*$"
+)
 NON_MATCHING_RE = re.compile(r"^\s*#ifndef\s+NON_MATCHING\s*$")
 
 
@@ -361,6 +366,14 @@ def preserve_semantic_alias(
     return "".join(kept), rebound
 
 
+def equivalent_labels(canonical: str) -> set[str]:
+    """FUN_<addr> and its upper-case func_<ADDR> alias name the same symbol."""
+    labels = {canonical}
+    if canonical.startswith("FUN_"):
+        labels.add("func_" + canonical.removeprefix("FUN_").upper())
+    return labels
+
+
 def function_asm_label(text: str, function_name: str) -> str | None:
     labels = {
         match.group("label")
@@ -370,6 +383,24 @@ def function_asm_label(text: str, function_name: str) -> str | None:
     if len(labels) > 1:
         raise ValueError(f"conflicting asm labels for {function_name}: {sorted(labels)}")
     return next(iter(labels)) if labels else None
+
+
+def prototype_signature(line: str, name: str) -> str:
+    """Return type and parameter types of a one-line prototype, names dropped."""
+    head = re.sub(r"__asm__\s*\([^)]*\)", "", line).split(";")[0]
+    head = re.sub(r"^\s*extern\b", "", head)
+    before, _, rest = head.partition(name)
+    params = rest[rest.find("(") + 1:rest.rfind(")")]
+    types = []
+    for param in params.split(","):
+        param = " ".join(param.replace("*", " * ").split())
+        words = param.split(" ")
+        if len(words) > 1 and re.fullmatch(r"[A-Za-z_]\w*", words[-1]) and words[-1] not in {
+            "void", "int", "char", "short", "long", "float", "double", "unsigned", "signed",
+        } and not re.fullmatch(r"[us](8|16|32|64|128)|f32|f64", words[-1]):
+            words = words[:-1]
+        types.append(" ".join(words))
+    return " ".join(before.replace("*", " * ").split()) + "(" + ",".join(types) + ")"
 
 
 def rewrite_function_alias_references(
@@ -389,7 +420,7 @@ def rewrite_function_alias_references(
     function_identifier = re.compile(r"\b([A-Za-z_]\w*)\s*\(")
 
     for index, line in enumerate(lines):
-        if not re.match(r"^[ \t]*extern\b", line):
+        if not (re.match(r"^[ \t]*extern\b", line) or PROTOTYPE_LINE_RE.match(line)):
             continue
         found_by_canonical: dict[str, tuple[str, str, str]] = {}
         for match in function_identifier.finditer(line):
@@ -424,7 +455,9 @@ def rewrite_function_alias_references(
             r'__asm__\s*\(\s*"([^"]+)"\s*\)',
             rewritten[:rewritten_semicolon],
         )
-        if existing_labels and existing_labels != [canonical]:
+        if existing_labels and (
+            len(existing_labels) != 1 or existing_labels[0] not in equivalent_labels(canonical)
+        ):
             issues.append(
                 f"extern {semantic} binds to {existing_labels}, expected {canonical}"
             )
@@ -440,6 +473,21 @@ def rewrite_function_alias_references(
         lines[index] = rewritten
         declarations[canonical] = declarations.get(canonical, 0) + 1
 
+    # One C name declared with two different prototypes does not compile
+    # (the file used FUN_ and func_ spellings with different types): such a
+    # function keeps its FUN_ spelling in this file.
+    signatures: dict[str, set[str]] = {}
+    for line in lines:
+        match = ASM_DECL_RE.match(line.strip())
+        if match:
+            signatures.setdefault(match.group("name"), set()).add(
+                prototype_signature(line, match.group("name"))
+            )
+    clashing = {name for name, found in signatures.items() if len(found) > 1}
+    if clashing & set(aliases.values()):
+        kept = {c: s for c, s in aliases.items() if s not in clashing}
+        return rewrite_function_alias_references(text, kept)
+
     declared_text = "".join(lines)
     reference_counts: dict[str, int] = {}
     updated, reference_count = replace_code_identifiers(
@@ -448,6 +496,14 @@ def rewrite_function_alias_references(
         skip_include_asm=True,
         replacement_counts=reference_counts,
     )
+    for canonical, semantic in aliases.items():
+        if not reference_counts.get(canonical):
+            continue
+        uses = [m.start() for m in re.finditer(r"\b" + re.escape(semantic) + r"\b", updated)]
+        declared = [m.start() for m in ASM_DECL_RE.finditer(updated) if m.group("name") == semantic]
+        if declared and uses and uses[0] < declared[0]:
+            # An implicit declaration would link to the semantic name.
+            issues.append(f"{semantic} is used before its asm-labeled declaration")
     return (
         updated,
         reference_count,
@@ -545,7 +601,7 @@ def plan_function_reference_aliases(
             except ValueError as exc:
                 issues.append(f"{path}: {exc}")
                 continue
-            if label != canonical:
+            if label not in equivalent_labels(canonical):
                 issues.append(
                     f"{path}: {semantic} references {canonical} without an asm-labeled declaration"
                 )
@@ -780,6 +836,10 @@ def inspect_candidates(
                 and function_asm_label(text, candidate.proposed_name) == candidate.current_name
             ):
                 candidate.already_applied = True
+            elif re.search(
+                r"INCLUDE_ASM\([^)]*\b" + re.escape(candidate.current_name) + r"\s*\)", text
+            ):
+                candidate.already_applied = True
             elif find_function_definition(text, candidate.current_name) is None:
                 candidate.error = f"no unique {candidate.current_name} definition in source"
         elif not old_exists and new_exists:
@@ -799,7 +859,13 @@ def inspect_candidates(
                     find_function_definition(text, candidate.proposed_name) is not None
                     and function_asm_label(text, candidate.proposed_name) == candidate.current_name
                 ):
-                    candidate.error = "function rename is present, but its source path/config row is still old"
+                    # Renamed in place; where the file lives is decided by hand.
+                    candidate.already_applied = True
+                elif re.search(
+                    r"INCLUDE_ASM\([^)]*\b" + re.escape(candidate.current_name) + r"\s*\)", text
+                ):
+                    # Still retail assembly: only its call sites take the name.
+                    candidate.already_applied = True
                 else:
                     candidate.error = f"no unique {candidate.current_name} definition in source"
             if candidate.new_source in destinations:

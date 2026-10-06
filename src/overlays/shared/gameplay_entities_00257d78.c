@@ -3,13 +3,13 @@
 #include "asm.h"
 
 float random_float_between(float *, float, float) __asm__("FUN_002132a8");
-float FUN_00213308(void);
+float random_angle_radians(void) __asm__("FUN_00213308");
 float FUN_001f9dc8(float);
 float FUN_001f9de0(float);
 void FUN_L00_00257d78(float *out, float lo, float hi) {
     float r = random_float_between(out, lo, hi);
-    float a = FUN_00213308();
-    float b = FUN_00213308();
+    float a = random_angle_radians();
+    float b = random_angle_radians();
     out[0] = FUN_001f9dc8(a) * FUN_001f9de0(b) * r;
     out[1] = FUN_001f9de0(a) * FUN_001f9de0(b) * r;
     out[2] = FUN_001f9dc8(b) * r;

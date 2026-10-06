@@ -86,7 +86,7 @@ extern int D_L00_0015F3F8 __attribute__((section(".sdata")));
 extern int FUN_001f96f8(int);
 extern float FUN_001f9988(float);
 extern float FUN_001f9e90(float, float);
-extern int FUN_001ff480(int);
+extern int remove_hud_item(int) __asm__("FUN_001ff480");
 
 void FUN_L00_00238b80(Obj *o) {
     float x, y, len, ang;
@@ -151,7 +151,7 @@ void FUN_L00_00238b80(Obj *o) {
     }
     if (c[0] == 0) {
         { int a = o->w78; int b = o->w74; D_L00_0015FA9C = b; D_L00_0015FA98 = a; }
-        FUN_001ff480(o->w64);
+        remove_hud_item(o->w64);
         o->w6C = -6;
         D_L00_0015FA94 = D_L00_0015F3F8;
     }
@@ -285,9 +285,9 @@ typedef struct { u8 p0[0x2084]; s32 w2084; u8 p2088[0x20A4 - 0x2088]; u8 b20A4; 
 extern GS D_0013F350_c __asm__("D_0013F350");
 
 extern f32 FUN_001fa6c0(s32);
-extern s32 FUN_001fa6d0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
-extern void FUN_001ffe18(s32, s32, s32, s32, s32, s32);
+extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
 extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((sda));
@@ -340,8 +340,8 @@ s32 FUN_L00_00239810(Hud *m)
     f22 = FUN_001fa6c0(q[1]) / FUN_001fa6c0(D_L00_0015F7F0);
     if (1.0f < f22) f22 = 1.0f;
     else if (f22 < 0.0f) f22 = 0.0f;
-    alpha = FUN_001fa6d0(f22 * 128.0f);
-    w = FUN_001fa6d0((f32)D_L00_0015F820 * f21);
+    alpha = truncate_float_to_s32(f22 * 128.0f);
+    w = truncate_float_to_s32((f32)D_L00_0015F820 * f21);
     p = m->p;
     sel = p[0] >> 1;
     mode = D_0015EDA0;
@@ -349,26 +349,26 @@ s32 FUN_L00_00239810(Hud *m)
     if (D_0013F350_c.b20A4 == 1) mode = D_0013F350_c.w22AC;
     if (mode == 8) {
         tab = D_L00_0017E478;
-        a = FUN_001fa6d0(f21 * 48.0f);
-        b = FUN_001fa6d0(f21 * 48.0f);
+        a = truncate_float_to_s32(f21 * 48.0f);
+        b = truncate_float_to_s32(f21 * 48.0f);
     } else if (mode == 5) {
         tab = D_L00_0017E460;
-        a = FUN_001fa6d0(f21 * 32.0f);
-        b = FUN_001fa6d0(f21 * 16.0f);
+        a = truncate_float_to_s32(f21 * 32.0f);
+        b = truncate_float_to_s32(f21 * 16.0f);
     } else {
         b = 0;
         tab = (Pt *)D_L00_0015F7F8;
-        a = FUN_001fa6d0(f21 * 48.0f);
+        a = truncate_float_to_s32(f21 * 48.0f);
     }
     yy = y + D_L00_0015F810;
     h1 = FUN_001ff960_c(0x7580, 1);
     h2 = FUN_001ff960_c(0x7580, 0);
-    FUN_001ffe18(h1, x + a, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+    draw_hud_sprite_flipped(h1, x + a, yy, D_L00_0015F81C, D_L00_0015F81C, w);
     FUN_001ffc30_c(h2, x - a, yy, a * 2, D_L00_0015F81C, w);
     FUN_001ffc30_c(h1, x - a - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
     if (b != 0) {
         yy += D_L00_0015F80C;
-        FUN_001ffe18(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
+        draw_hud_sprite_flipped(h1, x + b, yy, D_L00_0015F81C, D_L00_0015F81C, w);
         x0 = x - b;
         FUN_001ffc30_c(h2, x0, yy, b * 2, D_L00_0015F81C, w);
         FUN_001ffc30_c(h1, x0 - D_L00_0015F81C, yy, D_L00_0015F81C, D_L00_0015F81C, w);
@@ -380,7 +380,7 @@ s32 FUN_L00_00239810(Hud *m)
             r = FUN_001ff960_c(0x7536, 0x1E);
             FUN_L00_0023b120_c(m, r, x + tab[i].x, y + tab[i].y, 1, alpha);
             r = FUN_001ff960_c(0x7536, 0x1F);
-            FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22, FUN_001fa6d0((f32)(p[1] >> 4) * f22));
+            FUN_001ffc30_c(r, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22, truncate_float_to_s32((f32)(p[1] >> 4) * f22));
             if (cnt == i + 1) sel = 0x1E;
             else sel = (sel + 6) % 30;
         }
@@ -482,9 +482,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 extern short D_00140986 __attribute__((section(".data")));
 int FUN_L00_00235a70(char *, int *, int *);
 void FUN_L00_00235ad8(char *, int *, int *, int, int);
-int FUN_001ff960(int, int);
+int find_valid_animation_frame_index(int, int) __asm__("FUN_001ff960");
 void FUN_L00_0023b6c0(int, int, int, int, int, int);
-void FUN_001ffc30(int, int, int, int, int, int);
+void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 int FUN_L00_0023a640(char *rec) {
     int x, y;
     int n;
@@ -495,9 +495,9 @@ int FUN_L00_0023a640(char *rec) {
     FUN_L00_00235a70(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
     n = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
-    FUN_L00_0023b6c0(FUN_001ff960(0x7558, 1), x, y, n, 0x40, 0x80);
-    FUN_001ffc30(FUN_001ff960(0x7558, 0), x, y, 0x100, 0x40, 0x80);
-    FUN_001ffc30(FUN_001ff960(0x7558, 2), x, y, 0x20, 0x20, D_00140986 ? 0x80 : 0);
+    FUN_L00_0023b6c0(find_valid_animation_frame_index(0x7558, 1), x, y, n, 0x40, 0x80);
+    draw_hud_sprite(find_valid_animation_frame_index(0x7558, 0), x, y, 0x100, 0x40, 0x80);
+    draw_hud_sprite(find_valid_animation_frame_index(0x7558, 2), x, y, 0x20, 0x20, D_00140986 ? 0x80 : 0);
     return *(int *)(rec + 0x58);
 }
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer

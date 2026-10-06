@@ -89,7 +89,7 @@ typedef union {
 
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 extern int FUN_001f96f8(int);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -139,7 +139,7 @@ void FUN_L00_0023e268(void)
         src = (char *)D_L00_0016C860.unk184;
         if (src != 0) {
             for (n = 0; n < 4; n++) {
-                FUN_001f99f8(&v);
+                clear_u64_value(&v);
                 FUN_L00_0024f7c8(src, n % 2, &buf);
                 a = veldin_random_angle();
                 b = veldin_random_angle();

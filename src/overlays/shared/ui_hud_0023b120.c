@@ -7,7 +7,7 @@ typedef struct { s16 a; s16 k; } T0023b120;
 typedef struct { u8 p[0x20]; T0023b120 *tab; R0023b120 *rec; } G0023b120;
 typedef struct { u8 p[0x48]; s16 x; s16 y; } O0023b120;
 extern G0023b120 D_L00_0017E4D8;
-void FUN_001ffc30(s32, s32, s32, s32, s32, s32);
+void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void FUN_L00_0023b120(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32 w0, h0, w, h;
     R0023b120 *r;
@@ -22,7 +22,7 @@ void FUN_L00_0023b120(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) 
     if (flags & 1) { x -= w >> 1; y -= h >> 1; }
     if (flags & 2) { x += w >> 2; y += h >> 2; w >>= 1; h >>= 1; }
     if (flags & 4) { x -= w0 >> 1; y -= h0 >> 1; w <<= 1; h <<= 1; }
-    FUN_001ffc30(id, x, y, w, h, extra);
+    draw_hud_sprite(id, x, y, w, h, extra);
 }
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23b6c0[] __asm__("D_0013E500");

@@ -148,8 +148,8 @@ extern char D_L13_00174180[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float fast_add_rotations(float, float);
-extern float probe_ground_height(void *, int, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L13_00161E80 __attribute__((sda));
 extern short D_L13_00161E84;
@@ -237,14 +237,14 @@ extern char D_0013E533[];
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001f9e90(float, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 
 void FUN_L13_0030ad38(char *moby, float *p, float *q) {
     float a, k;
     char *base;
-    FUN_001f99f8(q);
+    clear_u64_value(q);
     k = 2.25f;
     if ((*(unsigned char *)(moby + 0xBC) >= 2 && (*(unsigned char *)(moby + 0xBC) & 1)) ||
         (*(unsigned char *)(moby + 0x20) >= 2 && (*(unsigned char *)(moby + 0x20) & 1))) {

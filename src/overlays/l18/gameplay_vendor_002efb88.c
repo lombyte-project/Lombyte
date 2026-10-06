@@ -187,11 +187,11 @@ extern float advance_accelerated_scalar(float, float, float, float, float *, flo
 extern float fast_add_rotations(float, float);
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
 extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") __attribute__((section(".sdata")));
 extern int D_L18_00162288 __attribute__((sda));
@@ -211,7 +211,7 @@ extern void FUN_L12_0027b268(char *, void *, int);
 extern void FUN_L12_0027b370(Level18VendorMoby *, void *, int);
 extern void FUN_L18_002fa8e0(void *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void mark_moby_for_removal(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char D_0013F350[];
 extern char D_0013F3D0[];
 extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
@@ -889,7 +889,7 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern float FUN_L18_002dfb90(void *moby);
@@ -1481,7 +1481,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                     float w;
 
                     qcopy(v0, D_L18_001600EC + d->f280[i] * 0x80 + 0x30);
-                    w = FUN_001fa688(
+                    w = fast_difference_between_rotations(
                         FUN_001f9e90(d->f3C0[0] - D_0013F350_u.f80[0], d->f3C0[1] - D_0013F350_u.f80[1]),
                         FUN_001f9e90(d->f3C0[0] - v0[0], d->f3C0[1] - v0[1]));
                     if (best < w) {
@@ -2274,11 +2274,11 @@ typedef union { Q128 q; float v[4]; } QVec;
 
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern char D_L18_001623EC[4] __attribute__((sda));
 extern char D_L18_001623F0[4] __attribute__((sda));
 extern char D_L18_00162408[4] __attribute__((sda));
@@ -2636,7 +2636,7 @@ extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
-extern float fast_subtract_rotations(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
@@ -2736,7 +2736,7 @@ void FUN_L18_002f8050(void *mv) {
 }
 /* Steers the moby along its path toward the next node, slowing on sharp turns. */
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int *D_L18_001B0EB0[];
 extern float D_0015ED6C_g __asm__("D_0015ED6C");
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
@@ -2755,7 +2755,7 @@ void FUN_L18_002f8658(char *m) {
     ang = FUN_001f9e90(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
     FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0x128), ang, D_0015ED6C_e[1] * 3.1415927f, D_0015ED6C_e[1] * 3.1415927f, D_0015ED6C * 6.2831855f);
     f = *(float *)&D_L18_00162478 * D_0015ED6C;
-    if (FUN_001fa688(ang, *(float *)(m + 0x48)) > 0.2617994f) {
+    if (fast_difference_between_rotations(ang, *(float *)(m + 0x48)) > 0.2617994f) {
         f = D_0015ED6C_g;
     }
     approach_value((float *)(d + 0x12C), f, D_0015ED6C_e[1]);

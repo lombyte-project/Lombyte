@@ -160,7 +160,7 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
 int FUN_L16_002cf738(void *mv);
 extern void FUN_0022da68(int, int, void *);
-extern void FUN_0022d798(int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
@@ -190,7 +190,7 @@ void FUN_L16_002cf4a8(char *moby) {
                 if (h != -1) {
                     char *e = D_0013E533 + 0x1D + h * 0x70;
                     if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
-                        FUN_0022d798(h);
+                        release_voice_slot(h);
                     }
                 }
                 data[3] = -1;
@@ -1058,7 +1058,7 @@ extern float D_0015EE6C ,D_0015ED70;
 extern float FUN_001f9e90(float,float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
-extern float compute_interpolated_record_value(void *);
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float probe_ground_height(void *, int, float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float vector_length_xyz(void *a);
@@ -1070,7 +1070,7 @@ extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int FUN_L16_002ced20(char *, void *, float);
-extern int is_value_within_interpolated_window(char *, float);
+extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1090,7 +1090,7 @@ extern void FUN_L16_002ce9f0(void *);
 extern void FUN_L16_002d5e80(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f);
@@ -1450,7 +1450,7 @@ extern char D_0014161B[];
 extern float D_0015ED6C ,D_0015EE70;
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
-extern float random_angle_radians(void);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_0015ED84;
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
@@ -1716,7 +1716,7 @@ extern float D_0015ED6C ,D_0015EE70;
 extern float D_0015EE6C ,D_0015ED70;
 extern float FUN_001f9b80(void*,void*);
 extern float FUN_001f9e90(float,float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern float approach_value(float *p, float target, float maxstep);
 extern float fast_add_rotations(float, float);
@@ -1837,7 +1837,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
             if (scale_game_frames(240) < timer) {
                 L16RacePlayer *player = &D_L16_00167080;
 
-                if (FUN_001fa688(FUN_001f9e90(*(float *)(m + 0x10) - player->position[0],
+                if (fast_difference_between_rotations(FUN_001f9e90(*(float *)(m + 0x10) - player->position[0],
                                                     *(float *)(m + 0x14) - player->position[1]),
                                   player->yaw) > 1.5707964f) {
                     *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
@@ -2256,7 +2256,7 @@ extern char *D_L16_001B0930[];
 extern char D_0013F3D0[];
 extern int D_L16_001600EC; /* no foreign declaration */
 extern short D_L16_00161A8C_d __asm__("D_L16_00161A8C") __attribute__((sda));
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9cf8(void *, void *, void *);
 
@@ -2270,7 +2270,7 @@ void FUN_L16_002d6260(char *moby, void *out1, float *out2) {
     FUN_001f9cf8(v, v, entry + 0x40);
     FUN_00213f38((v[1] + 1.0f) * 0.5f, D_0015ED70, D_0015ED70, D_0015ED6C + D_0015ED6C, (float *)(data + 0x1C), (float *)(data + 0x20));
     FUN_001f9a40(out1, tbl + 0x10, tbl + 0x20, *(float *)(data + 0x1C));
-    FUN_001f99f8(out2);
+    clear_u64_value(out2);
     out2[1] = *(float *)&D_L16_00161A8C_d;
     out2[2] = *(float *)(moby + 0x48);
 }

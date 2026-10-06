@@ -4,9 +4,9 @@
 
 extern float D_L00_00161BB0 __attribute__((sda));
 extern float D_0015ED6C;
-float FUN_00213308(void);
-void FUN_0020cb10(unsigned char *, int, char *);
-float FUN_001fa580(float, float);
+float random_angle_radians(void) __asm__("FUN_00213308");
+void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
 void FUN_L00_002df730(unsigned char *p) {
     char *m = *(char **)(p + 0x78);
@@ -15,13 +15,13 @@ void FUN_L00_002df730(unsigned char *p) {
     case 0:
         p[0x20] = 1;
         p[0x73] = 0x20;
-        *(float *)(m + 0x40) = FUN_00213308();
-        FUN_0020cb10(p, 1, m);
+        *(float *)(m + 0x40) = random_angle_radians();
+        attach_manipulator(p, 1, m);
         break;
     case 1:
         s = D_L00_00161BB0 * 0.017453292f * D_0015ED6C;
-        *(float *)(p + 0x48) = FUN_001fa580(*(float *)(p + 0x48), s);
-        *(float *)(m + 0x40) = FUN_001fa580(*(float *)(m + 0x40), s * -2.0f);
+        *(float *)(p + 0x48) = fast_add_rotations(*(float *)(p + 0x48), s);
+        *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), s * -2.0f);
         FUN_L00_001fff28(m + 0x10, 2, *(float *)(m + 0x40));
         break;
     }
@@ -488,17 +488,17 @@ extern char D_0013F3D0[];
 float FUN_001f9b48(void *, void *);
 float FUN_001f9af0(void *);
 int FUN_001f96f8(int);
-void FUN_00212f90(unsigned char *, int, int, int);
+void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_002e3ca8(unsigned char *p) {
     char *g = D_0013F3D0;
     if (FUN_001f9b48(g, p + 0x10) < 1.0f) {
         if (FUN_001f9af0(g + 0x80) > D_0015ED6C + D_0015ED6C && p[0x53] != 1) {
-            FUN_00212f90(p, 1, 0, FUN_001f96f8(6));
+            blend_moby_animation(p, 1, 0, FUN_001f96f8(6));
         }
     }
     if (p[0x70] & 2) {
         if (p[0x53] == 1) {
-            FUN_00212f90(p, 0, 0, FUN_001f96f8(6));
+            blend_moby_animation(p, 0, 0, FUN_001f96f8(6));
         }
     }
 }
@@ -1151,14 +1151,14 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
         break;
     }
 }
-f32 FUN_001ebd78(void *, f32, f32, f32, f32, f32);
+f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 void FUN_L00_002e55b8(void *mm, void *vv, void *tt, f32 a, f32 b, f32 c) {
     u8 *p = *(u8 **)((u8 *)mm + 0x70);
     f32 *v = vv;
     f32 *t = tt;
-    v[0] = FUN_001ebd78(p + 0xE0, v[0], t[0], a, b, c);
-    v[1] = FUN_001ebd78(p + 0xE4, v[1], t[1], a, b, c);
-    v[2] = FUN_001ebd78(p + 0xE8, v[2], t[2], a, b, c);
+    v[0] = cam_interp_values(p + 0xE0, v[0], t[0], a, b, c);
+    v[1] = cam_interp_values(p + 0xE4, v[1], t[1], a, b, c);
+    v[2] = cam_interp_values(p + 0xE8, v[2], t[2], a, b, c);
 }
 void FUN_001f9a10(void *, void *, void *);
 s32 FUN_L00_002e5678(void *mm, void *a, void *b, s32 k) {
@@ -1604,7 +1604,7 @@ void FUN_L00_002e8680(void) { char *p = D_L00_00166E00_002e8680; if (*(short *)(
 /* Measures the signed angle between two offsets of an object's data relative to an axis, and (within the limit) stores a scaled blend in the object's data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9B60), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_00257e20(float a, float b, float c, float d, float t);
 extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -1648,7 +1648,7 @@ float FUN_L00_002e86b0(char *a0, float *a1, float lim) {
     if (FUN_001f9ab0(b3, b2) >= 0.0f) {
         sign = 1.0f;
     }
-    r = FUN_001fa5c8(3.1415927f, ang);
+    r = fast_subtract_rotations(3.1415927f, ang);
     if (lim != z2 && lim < AbsoluteFloat(r)) {
         return r;
     }

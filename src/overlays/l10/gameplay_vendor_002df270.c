@@ -174,16 +174,16 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float FUN_L10_002e4840(char *self);
-extern float approach_value(float *p, float target, float maxstep);
-extern float compute_interpolated_record_value(void *);
-extern float fast_add_rotations(float, float);
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float probe_ground_height(void *, int, float);
-extern float random_float_between(float, float);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L10_0015F5CC;
 extern int D_L10_0015FFD8 __attribute__((sda));
@@ -192,11 +192,11 @@ extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f0b58(void);
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_0025c698(void *, void *);
-extern int random_integer_below(int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
 extern s32 FUN_L00_0025e3b8(s32);
-extern s32 truncate_float_to_s32(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L10_00161E24 __attribute__((sda));
 extern short D_L10_00161E28 __attribute__((sda));
 extern short D_L10_00161E34 __attribute__((sda));
@@ -223,9 +223,9 @@ extern void FUN_L10_002e3a90(void *);
 extern void FUN_L10_002e3de8(char *moby);
 extern void FUN_L10_002e3ef0(void *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
-extern void mark_moby_for_removal(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char D_0013F64C[];
 extern char D_0014C190[];
 extern char D_0013F3D0[];
@@ -406,7 +406,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 approach_value(&d->fF4, 0.0f, D_0015ED70 * 10.0f);
             }
             ang = FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]);
-            diff = FUN_001fa688(ang, m->f48);
+            diff = fast_difference_between_rotations(ang, m->f48);
             if (0.87266463f < diff) {
                 float lim = d->f1A4 * D_0015ED6C * 0.25f;
                 if (lim < d->fF4) {
@@ -510,7 +510,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
     case 6: {
         float diff;
 
-        diff = FUN_001fa688(FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]),
+        diff = fast_difference_between_rotations(FUN_001f9e90(*(float *)(t + 0x10) - m->pos[0], *(float *)(t + 0x14) - m->pos[1]),
                              m->f48);
         if (0.87266463f < diff) {
             float lim = d->f1A4 * D_0015ED6C * 0.25f;
@@ -654,7 +654,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             approach_value(&d->fF4, d->f1A4 * D_0015ED6C, D_0015ED70 * 5.0f);
             ang = FUN_001f9e90(d->v170[0] - m->pos[0], d->v170[1] - m->pos[1]);
             func_L00_002592B0_b((char *)m, ang, 0.02f, 0.3f, D_0015ED6C * 6.2831855f, &d->f190);
-            if (0.87266463f < FUN_001fa688(ang, m->f48)) {
+            if (0.87266463f < fast_difference_between_rotations(ang, m->f48)) {
                 float lim = d->f1A4 * D_0015ED6C * 0.25f;
                 if (lim < d->fF4) {
                     d->fF4 = lim;
@@ -802,9 +802,9 @@ extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern short *D_L10_001ABCC0[];
 extern short D_L10_00161E48_d __asm__("D_L10_00161E48") __attribute__((sda));
@@ -835,7 +835,7 @@ float FUN_L10_002e4840(char *self) {
             if (D_L10_0015FFD0_e[2][idx].state == 5 || FUN_001f9b48(&D_L10_0015FFD0_e[2][idx].x, owner + 0x10) < dist) {
                 float d = FUN_001f9e90(D_L10_0015FFD0_e[2][idx].x - *(float *)(owner + 0x10),
                                             D_L10_0015FFD0_e[2][idx].y - *(float *)(owner + 0x14));
-                float r = FUN_001fa5c8(d, ang);
+                float r = fast_subtract_rotations(d, ang);
                 if (r > 0.0f && r < hi) {
                     hi = r;
                 } else if (r < 0.0f && r > lo) {
@@ -844,7 +844,7 @@ float FUN_L10_002e4840(char *self) {
             }
         } while (*p++ >= 0);
     }
-    return FUN_001fa580(FUN_001fa580(lo, FUN_001fa688(hi, lo) * 0.5f), ang);
+    return fast_add_rotations(fast_add_rotations(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e4a88.s", FUN_L10_002e4a88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5968.s", FUN_L10_002e5968);

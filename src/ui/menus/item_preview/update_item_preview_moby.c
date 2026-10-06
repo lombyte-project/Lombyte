@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_0021EFA0). */
 #include "sda.h"
 #include "qcopy.h"
-extern int FUN_00225530(int);
+extern int delete_moby(int) __asm__("FUN_00225530");
 extern char *D_001D5BF4 NOT_SDA;
 extern char D_001863D0[];
 extern char D_00186F40[];
@@ -39,7 +39,7 @@ int update_item_preview_moby(char *arg0) {
             **(void ***)(o + 0x78) = arg0;
         }
     } else if (want == -1) {
-        *(int *)(arg0 + 0x44) = FUN_00225530(*(int *)(arg0 + 0x44));
+        *(int *)(arg0 + 0x44) = delete_moby(*(int *)(arg0 + 0x44));
     } else if (cur != want) {
         char *n = func_00225490(want);
 
@@ -53,7 +53,7 @@ int update_item_preview_moby(char *arg0) {
             *(int *)(n + 0x74) = *(int *)(old + 0x74);
             **(void ***)(n + 0x78) = arg0;
         }
-        FUN_00225530(*(int *)(arg0 + 0x44));
+        delete_moby(*(int *)(arg0 + 0x44));
         *(char **)(arg0 + 0x44) = n;
     }
     return 0;

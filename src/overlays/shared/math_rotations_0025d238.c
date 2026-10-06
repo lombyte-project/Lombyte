@@ -31,9 +31,9 @@ void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
 typedef struct { short cur; short flag; unsigned char r, g, b; char pad; char pad2[4]; short lo; short hi; } S;
 int FUN_001f96f8(int);
 float FUN_001fa6c0(int);
-int FUN_001fa6d0(float);
+int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00250320(void *, int *, int *, int *);
-void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = FUN_001f96f8(s->lo); s->flag = 0; if (old != 0) { int n = FUN_001f96f8(s->lo); s->cur = FUN_001fa6d0(n * (old / FUN_001fa6c0(FUN_001f96f8(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
+void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = FUN_001f96f8(s->lo); s->flag = 0; if (old != 0) { int n = FUN_001f96f8(s->lo); s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(FUN_001f96f8(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
 typedef struct { s16 t; s16 phase; u8 r0, g0, b0; u8 r1, g1, b1; u8 pad[2]; s16 d0; s16 d1; } S_25d538;
 f32 FUN_001fa6c0_25d538(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
@@ -295,11 +295,11 @@ M25f878 *FUN_L00_0025f878(s32 id) {
     }
     return 0;
 }
-f32 FUN_002132a8(f32, f32);
+f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 void FUN_L00_0025f8e0(f32 *v, f32 r) {
-    v[0] += FUN_002132a8(-r, r);
-    v[1] += FUN_002132a8(-r, r);
-    v[2] += FUN_002132a8(-r, r);
+    v[0] += random_float_between(-r, r);
+    v[1] += random_float_between(-r, r);
+    v[2] += random_float_between(-r, r);
 }
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8") __attribute__((sda));
 extern u8 *D_L00_0015FFE0 __attribute__((sda));

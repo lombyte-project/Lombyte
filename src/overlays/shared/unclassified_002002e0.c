@@ -8,12 +8,12 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_002004C0), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 float FUN_L00_00200510(float a, float b, float c) {
-    float r = FUN_001fa5c8(b, a);
+    float r = fast_subtract_rotations(b, a);
     if (!(r > 0.0f)) {
         c = -c;
     }
@@ -22,5 +22,5 @@ float FUN_L00_00200510(float a, float b, float c) {
     } else if (c < -AbsoluteFloat(r)) {
         c = -AbsoluteFloat(r);
     }
-    return FUN_001fa580(a, c);
+    return fast_add_rotations(a, c);
 }

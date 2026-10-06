@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *arg0);
@@ -38,7 +38,7 @@ void FUN_L10_002d8c00(char *moby) {
     if (FUN_001f9740((int *)data)) {
         float x = *(float *)&D_L10_00161BF8_d;
         float p = random_float_between_alt(-x, x) * 0.017453292f;
-        float q = FUN_001fa580(*(float *)(moby + 0x48), p);
+        float q = fast_add_rotations(*(float *)(moby + 0x48), p);
         float r = random_float_between_alt(*(float *)&D_L10_00161BFC_d, *(float *)&D_L10_00161C00_d) * 0.017453292f;
         build_spherical_offset(a, random_float_between_alt(*(float *)&D_L10_00161C04_d, *(float *)&D_L10_00161C08_d) * D_0015ED6C, q, r);
         FUN_001f9a10(b, moby + 0x10, a);

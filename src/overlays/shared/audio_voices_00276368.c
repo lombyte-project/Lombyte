@@ -104,18 +104,18 @@ extern s32 D_L00_0016000C __attribute__((sda));
 extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
 extern u8 D_L00_001E91B0[];
 
-extern void FUN_0012dc80(void);
-extern void FUN_0012e418(s32);
+extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
+extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void FUN_001e93b0(void *, s32);
-extern void FUN_001f2588(void);
-extern s32 FUN_001f4a58(s32);
+extern void update_fog(void) __asm__("FUN_001f2588");
+extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
 extern s32 FUN_001f96f8(s32);
-extern void FUN_001fbab8(s32, void *);
-extern void FUN_00204a40(s32, s32);
+extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
+extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void FUN_00212e28(void);
-extern void FUN_00212ed8(Ent *, s32, s32);
+extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void FUN_00216088(void);
-extern int FUN_0022ca50(void);
+extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_0022da68(s32, s32, void *);
 extern void FUN_002335a0(void);
 extern void FUN_L00_00235668(s32);
@@ -169,9 +169,9 @@ void FUN_L00_00276bd0(void) {
         FUN_L00_00235668(0);
         if (D_L00_001B9CF0.unk140 != 0) {
             D_L00_0016000C = -1;
-            FUN_00204a40(D_L00_001B9CF0.unk140, D_L00_001B9CF0.unk144);
+            select_world_object_resource_tables(D_L00_001B9CF0.unk140, D_L00_001B9CF0.unk144);
         }
-        FUN_001f2588();
+        update_fog();
         D_L00_0015F5D8 = 1;
         D_L00_001B9CF0.unk108 = 0;
         D_L00_001B9CF0.unk10C = 0;
@@ -184,45 +184,45 @@ void FUN_L00_00276bd0(void) {
             tmp = D_0015EED8;
             D_0015EED8 = 2;
             D_L00_001B9CF0.unk130 = tmp;
-            FUN_001f4a58(FUN_001f96f8(0x10));
+            fade_to_black(FUN_001f96f8(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299460(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            FUN_001f4a58(FUN_001f96f8(0x10));
+            fade_to_black(FUN_001f96f8(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299560(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 6) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            FUN_001f4a58(FUN_001f96f8(0x10));
+            fade_to_black(FUN_001f96f8(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_002994f8(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 5) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            FUN_001f4a58(FUN_001f96f8(0x10));
+            fade_to_black(FUN_001f96f8(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00298840(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 7) {
             tmp = D_0015EED8;
             D_L00_001B9CF0.unk130 = tmp;
-            FUN_001f4a58(FUN_001f96f8(0x10));
+            fade_to_black(FUN_001f96f8(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299a68();
         } else {
             D_L00_0015F5C4 = 0;
         }
-        FUN_0012e418(0x1D);
+        snd_continue_all_sounds_in_group(0x1D);
         if (D_L00_001B9CF0.unkC != 2) {
             FUN_00216088();
         }
-        FUN_0012dc80();
-        FUN_0022ca50();
+        snd_flush_sound_commands();
+        sound_update();
         return;
     }
     v = D_L00_001B9CF0.state;
@@ -231,7 +231,7 @@ void FUN_L00_00276bd0(void) {
         FUN_L00_00276368();
     }
     if ((D_0015EEB4 & 1) && !(D_L00_0015F5C8 < 8)) {
-        FUN_001fbab8(3, D_L00_001B9CF0.owner);
+        mode_freeze_init(3, D_L00_001B9CF0.owner);
         return;
     }
     FUN_L00_002831c0();
@@ -277,10 +277,10 @@ void FUN_L00_00276bd0(void) {
             }
             if (flag) {
                 s32 n = D_L00_001B9CF0.owner->ids[j];
-                FUN_00212ed8(D_L00_001B9E90[j], n, D_L00_001B9E90[j]->unk24->unk48[n]->unk10 - 1);
+                set_moby_animation(D_L00_001B9E90[j], n, D_L00_001B9E90[j]->unk24->unk48[n]->unk10 - 1);
                 D_L00_001B9E90[j]->unk58 = -1.0f;
             } else {
-                FUN_00212ed8(D_L00_001B9E90[j], D_L00_001B9CF0.unk8->ids[j], 0);
+                set_moby_animation(D_L00_001B9E90[j], D_L00_001B9CF0.unk8->ids[j], 0);
                 D_L00_001B9E90[j]->unk58 = 1.0f;
             }
         }
@@ -313,7 +313,7 @@ L2:
         }
     }
     FUN_00212e28();
-    FUN_0022ca50();
+    sound_update();
     if (D_L00_001B9CF0.unkC != 0) {
         FUN_L00_00276908();
     }

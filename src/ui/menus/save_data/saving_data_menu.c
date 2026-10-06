@@ -92,7 +92,7 @@ extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern void func_001FBAB8();
-extern s32 FUN_002269c0();
+extern s32 prepare_save_game() __asm__("FUN_002269c0");
 extern s32 func_0022DA68();
 s32 saving_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222f88");
 
@@ -114,7 +114,7 @@ s32 saving_data_menu(struct M2c_arg0 *arg0)
     temp_17_29 = arg0->unk4C;
     if (temp_17_29 == 1)
     {
-      FUN_002269c0(arg0->unk48, arg0->unk40);
+      prepare_save_game(arg0->unk48, arg0->unk40);
       D_001D5BF0.unk128 = temp_17_29;
       D_001D5BF0.unk12C = 0x4FB5;
     }

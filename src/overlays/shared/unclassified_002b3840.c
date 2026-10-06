@@ -113,8 +113,8 @@ void FUN_L05_002f8080(char *m) {
 
 extern float D_0015ED6C;
 extern float fsin_p(float) __asm__("FUN_001f9de0");
-extern float approach_value(float *p, float target, float maxstep);
-extern float fast_add_rotations(float, float);
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int lerp_p(int, int, float) __asm__("FUN_001fa6e0");
 extern short D_L05_001618C0 __attribute__((sda));
 extern short D_L05_001618C4 __attribute__((sda));
@@ -243,7 +243,7 @@ void FUN_L05_00307010(char *moby) {
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -276,10 +276,10 @@ void FUN_L05_0030c0a8(unsigned char *m) {
         float k = 0.5235988f;
         float t;
         enqueue_callback_list_1((void *)FUN_L05_0030c220, m);
-        t = FUN_001fa580(*(float *)(d + 0x44), *(float *)(d + 0x4C));
+        t = fast_add_rotations(*(float *)(d + 0x44), *(float *)(d + 0x4C));
         *(float *)(d + 0x44) = t;
-        *(float *)(m + 0x48) = FUN_001fa580(*(float *)(d + 0x40), FUN_001f9de0(t) * k);
-        t = FUN_001fa580(*(float *)(d + 0x48), *(float *)(d + 0x50));
+        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x40), FUN_001f9de0(t) * k);
+        t = fast_add_rotations(*(float *)(d + 0x48), *(float *)(d + 0x50));
         *(float *)(d + 0x48) = t;
         FUN_L00_001fff28(d + 0x10, 1, FUN_001f9de0(t) * k + k);
         break;
@@ -416,26 +416,26 @@ void FUN_L05_00319690(char *moby) {
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L05_00319740(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float s, t, w;
     qcopy(moby + 0x10, d + 0x60);
     qcopy(moby + 0x40, d + 0x70);
-    s = FUN_001fa580(*(float *)(d + 0xC8), D_0015ED6C * 2.0943951f);
+    s = fast_add_rotations(*(float *)(d + 0xC8), D_0015ED6C * 2.0943951f);
     *(float *)(d + 0xC8) = s;
     t = FUN_001f9de0(s);
     w = D_0015ED6C * 1.6929693f;
     *(float *)(moby + 0x18) += t * 0.25f;
-    s = FUN_001fa580(*(float *)(d + 0xCC), w);
+    s = fast_add_rotations(*(float *)(d + 0xCC), w);
     *(float *)(d + 0xCC) = s;
-    t = FUN_001fa580(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
+    t = fast_add_rotations(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
     w = D_0015ED6C * 0.9250245f;
     *(float *)(moby + 0x44) = t;
-    s = FUN_001fa580(*(float *)(d + 0xD0), w);
+    s = fast_add_rotations(*(float *)(d + 0xD0), w);
     *(float *)(d + 0xD0) = s;
-    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
     if (*(float *)(moby + 0x40) > 0.17453292f) *(float *)(moby + 0x40) = 0.17453292f;
     else if (*(float *)(moby + 0x40) < -0.17453292f) *(float *)(moby + 0x40) = -0.17453292f;
     if (*(float *)(moby + 0x44) > 0.17453292f) *(float *)(moby + 0x44) = 0.17453292f;

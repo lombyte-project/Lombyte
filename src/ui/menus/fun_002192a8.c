@@ -77,7 +77,7 @@ extern s32 func_0022DA68(s32, s32, struct Ent *);
 extern void func_001FBAB8(s32, struct Own *);
 extern void CalculateDmaTransferAddress(void);
 extern void update_fog(void) __asm__("FUN_001f2588");
-extern void FUN_00212ed8(struct Ent *, s32, s32);
+extern void set_moby_animation(struct Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void func_002191B8(void) __asm__("FUN_002191b8");
 
 void FUN_002192a8(void) {
@@ -155,10 +155,10 @@ void FUN_002192a8(void) {
             }
             if (flag) {
                 s32 n = D_001D5BF0.owner->ids[j];
-                FUN_00212ed8(D_001D5D90[j], n, D_001D5D90[j]->unk24->unk48[n]->unk10 - 1);
+                set_moby_animation(D_001D5D90[j], n, D_001D5D90[j]->unk24->unk48[n]->unk10 - 1);
                 D_001D5D90[j]->unk58 = -1.0f;
             } else {
-                FUN_00212ed8(D_001D5D90[j], D_001D5BF0.unk8->ids[j], 0);
+                set_moby_animation(D_001D5D90[j], D_001D5BF0.unk8->ids[j], 0);
                 D_001D5D90[j]->unk58 = 1.0f;
             }
         }

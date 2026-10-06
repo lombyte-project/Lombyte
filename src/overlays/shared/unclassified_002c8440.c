@@ -138,10 +138,10 @@ extern s32 D_L00_00161854_b __asm__("D_L00_00161854") __attribute__((sda));
 extern u32 D_L00_00161840[1] __attribute__((sda));
 
 extern void *CreateMoby(int) __asm__("FUN_0020c4f8");
-extern f32 FUN_002132a8(f32, f32);
-extern void FUN_001f99f8(void *);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 FUN_00213508(void *, int, f32);
+extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9988(f32);
@@ -185,12 +185,12 @@ Moby *FUN_L00_002c9348(State *a) {
         } else {
             n->unk38 = a->unk38;
         }
-        n->unk58 = FUN_002132a8(0.85f, 1.15f);
+        n->unk58 = random_float_between(0.85f, 1.15f);
         qcopy(&n->pos, &a->pos);
-        FUN_001f99f8(&n->dir);
+        clear_u64_value(&n->dir);
         n->dir.f[2] = FUN_001f9e90(n->pos.f[0] - D_0013F350.f80,
                                  n->pos.f[1] - D_0013F350.f84);
-        g = FUN_00213508(&n->pos, 0, 0.5f);
+        g = probe_ground_height(&n->pos, 0, 0.5f);
         if (n->pos.f[2] <= g) {
             n->pos.f[2] = g;
             n->pos.f[2] = D_L00_00173E40.f28;

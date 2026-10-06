@@ -237,7 +237,7 @@ extern s32 D_L02_00161B64 __attribute__((sda));
 
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9dc8(f32);
-extern s32 FUN_001fa6d0(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001f44b8(s32);
 extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L02_0020bc88");
 
@@ -256,7 +256,7 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     f32 f24, f25, f26, f27, f28, f29, f30, f31;
     f32 s0;
 
-    t = FUN_001fa6d0((f32)D_L02_0015F5CC * D_L02_00161B60);
+    t = truncate_float_to_s32((f32)D_L02_0015F5CC * D_L02_00161B60);
     off = (t % 512) << 16;
     a4[3] = d;
     a4[2] = d;
@@ -293,14 +293,14 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     m[1] = 0xFFFFF000000000ULL;
     m[0] = 0xFFFFF000000000ULL;
 
-    NEG20(m[0], FUN_001fa6d0(f26));
-    LO4(m[0], FUN_001fa6d0(f29));
-    NEG20(m[1], FUN_001fa6d0(f24));
-    LO4(m[1], FUN_001fa6d0(f25));
-    NEG20(m[2], FUN_001fa6d0(f30));
-    LO4(m[2], FUN_001fa6d0(f31));
-    NEG20(m[3], FUN_001fa6d0(f27));
-    LO4(m[3], FUN_001fa6d0(f28));
+    NEG20(m[0], truncate_float_to_s32(f26));
+    LO4(m[0], truncate_float_to_s32(f29));
+    NEG20(m[1], truncate_float_to_s32(f24));
+    LO4(m[1], truncate_float_to_s32(f25));
+    NEG20(m[2], truncate_float_to_s32(f30));
+    LO4(m[2], truncate_float_to_s32(f31));
+    NEG20(m[3], truncate_float_to_s32(f27));
+    LO4(m[3], truncate_float_to_s32(f28));
 
     tex = FUN_001f44b8(D_L02_00161B64);
     FUN_L02_0020bc88_u(m, p4, a4, tex, 0);
@@ -336,14 +336,14 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     m[1] = 0xFFFFF000000000ULL;
     m[0] = 0xFFFFF000000000ULL;
 
-    NEG20(m[0], FUN_001fa6d0(f26));
-    LO4(m[0], FUN_001fa6d0(f29));
-    NEG20(m[1], FUN_001fa6d0(f24));
-    LO4(m[1], FUN_001fa6d0(f25));
-    NEG20(m[2], FUN_001fa6d0(f30));
-    LO4(m[2], FUN_001fa6d0(f31));
-    NEG20(m[3], FUN_001fa6d0(f27));
-    LO4(m[3], FUN_001fa6d0(f28));
+    NEG20(m[0], truncate_float_to_s32(f26));
+    LO4(m[0], truncate_float_to_s32(f29));
+    NEG20(m[1], truncate_float_to_s32(f24));
+    LO4(m[1], truncate_float_to_s32(f25));
+    NEG20(m[2], truncate_float_to_s32(f30));
+    LO4(m[2], truncate_float_to_s32(f31));
+    NEG20(m[3], truncate_float_to_s32(f27));
+    LO4(m[3], truncate_float_to_s32(f28));
 
     FUN_L02_0020bc88_u(m, p4, a4, tex, 0);
 }

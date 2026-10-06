@@ -280,7 +280,7 @@ int FUN_L13_002c3c88(char *m, char *d, int aim) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C5190), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
@@ -290,8 +290,8 @@ void FUN_L13_002c3f08(char *out, float scale) {
         qcopy(out, x + 0x80);
     } else {
         char *d = *(char **)(*(char **)(x + 0x15F0) + 0x78);
-        float a = FUN_001fa580(*(float *)(*(char **)(x + 0x15F0) + 0x48), *(float *)(d + 0x90));
-        float b = FUN_001fa580(*(float *)(*(char **)(x + 0x15F0) + 0x44), *(float *)(d + 0x94));
+        float a = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x48), *(float *)(d + 0x90));
+        float b = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x44), *(float *)(d + 0x94));
         build_spherical_offset(out, scale * *(float *)(d + 0x64), a, -b);
         FUN_001f9a10(out, out, *(char **)(x + 0x15F0) + 0x10);
     }
@@ -608,8 +608,8 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 void FUN_L13_002ea330(char *a, char *b, float f) {
     char *base = D_0013E533 + 0xE1D;
     char *d = *(char **)(*(char **)(base + 0x15F0) + 0x78);
-    float y = FUN_001fa580(*(float *)(*(char **)(base + 0x15F0) + 0x48), *(float *)(d + 0x90));
-    float x = FUN_001fa580(*(float *)(*(char **)(base + 0x15F0) + 0x44), *(float *)(d + 0x94));
+    float y = fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x48), *(float *)(d + 0x90));
+    float x = fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x44), *(float *)(d + 0x94));
     float dist = FUN_001f9b48(b, *(char **)(base + 0x15F0) + 0x10);
     float k = *(float *)(d + 0x64);
     build_spherical_offset(a, dist / (k + f) * k, y, -x);

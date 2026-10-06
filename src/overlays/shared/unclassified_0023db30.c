@@ -70,10 +70,10 @@ void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e) { int i; T_0023e738 *t; P_0023e738 *p; if (0.8f < D_L00_0015F5D4_0023e738) return -1; for (i = 0; i < 8; i++) if (D_L00_001804C0_0023e738[i].used == 0) break; if (i == 8) return -1; t = &D_L00_001804C0_0023e738[i]; p = &D_L00_001802C0_0023e738[i]; qcopy(&p->pos, v); p->pos.f[3] = a; p->x = c; p->y = d; p->z = e; p->b_0023e738 = b_0023e738; FUN_001f9810_0023e738(t, 0x30); t->used = 1; t->buf = D_L00_00180640_0023e738 + i * 1024; return i; }
 extern char D_L00_001802C0[];
 extern char D_L00_001804C0[];
-void FUN_00201f88();
+void detach_point_light() __asm__("FUN_00201f88");
 void FUN_001f9810();
 void FUN_L00_0023e838(int i) {
-    FUN_00201f88();
+    detach_point_light();
     FUN_001f9810(D_L00_001802C0 + i * 32, 32);
     FUN_001f9810(D_L00_001804C0 + i * 48, 48);
 }

@@ -126,7 +126,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 
 extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L02_001ABE40[];
-extern int random_integer_below(int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
 
 int FUN_L02_002d5658(void *argp) {
     char *arg = argp;
@@ -321,7 +321,7 @@ extern int D_L02_00161C00 __attribute__((sda));
 extern int D_L02_00161C04 __attribute__((sda));
 extern int D_L02_00161C08 __attribute__((sda));
 extern int FUN_001fa6e0(int,int,float);
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_001fa298(void *,void *);
 extern void draw_geometry_quad(void *,void *,int);
 

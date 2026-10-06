@@ -6,7 +6,7 @@
 extern char D_0018CB20[];
 extern float D_0018CDB0 NOT_SDA;
 extern char D_00187080[];
-extern void FUN_001f2d98(void);
+extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
 extern void SceVu0RotMatrixY(float *, float *, float);
@@ -23,7 +23,7 @@ unsigned char transition_update_movie_camera(void) {
     float m[16];
 
     D_0018CDB0 = 0.63f;
-    FUN_001f2d98();
+    update_view_context();
     pos = D_00187080;
     qcopy(pos, key);
     sceVu0UnitMatrix(m);

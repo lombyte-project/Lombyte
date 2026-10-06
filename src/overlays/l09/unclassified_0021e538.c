@@ -202,7 +202,7 @@ extern float D_0015ED60;
 extern float D_0015ED70;
 extern float D_L09_00166F40[];
 extern float FUN_001f9af0(void *);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -230,9 +230,9 @@ void FUN_L09_002ead30(unsigned char *m) {
             qcopy(m + 0x10, d + 0x20);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50);
         }
-        t = FUN_001fa580(*(float *)(m + 0x40), *(float *)(d + 0x40));
+        t = fast_add_rotations(*(float *)(m + 0x40), *(float *)(d + 0x40));
         *(float *)(m + 0x40) = t;
-        *(float *)(m + 0x44) = FUN_001fa580(t, *(float *)(d + 0x44));
+        *(float *)(m + 0x44) = fast_add_rotations(t, *(float *)(d + 0x44));
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaea8.s", FUN_L09_002eaea8);
@@ -286,13 +286,13 @@ extern float D_0015ED60;
 extern float D_0015ED6C;
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void add_vector_xyz(void *, void *, void *);
-extern void mark_moby_for_removal(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 
 void FUN_L09_002ee110(char *m) {

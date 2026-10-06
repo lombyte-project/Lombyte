@@ -70,16 +70,16 @@ extern float D_0015ED6C;
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_L04_002418b0(int a, unsigned int b);
 extern float FUN_L04_00241910(int a, unsigned int b);
-extern float compute_interpolated_record_value(void *);
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float dot_vectors_xyz(void *, void *);
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
-extern float random_float_between(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001fa728(char *, float);
-extern int is_point_inside_clip_volume(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short D_L17_00161498 __attribute__((sda));
 extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
 extern unsigned char D_0013F3D0[];
@@ -87,7 +87,7 @@ extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L17_002a95b8(char *moby);
 extern void add_vector_xyz(void *, void *, void *);
-extern void enqueue_callback_list_1(void *, void *);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -342,9 +342,9 @@ extern float D_0015ED70;
 extern float D_L17_0015F580_f[] __asm__("D_L17_0015F580");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int D_0015ED84;
 extern int D_L17_0015F5CC;
@@ -367,7 +367,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3);
+extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern unsigned char D_0014C050[];
 extern char D_0013F350[];
@@ -441,9 +441,9 @@ void FUN_L17_002cb310(char *m) {
             FUN_L00_0025be00(yaw, &d->yawvel, ang, turn, turn, D_0015ED6C * 1.0471976f);
             d->fF4 = -FUN_001f9e90(vector_length_xy(dir), dir[2]);
             FUN_L00_002628d8(m, d->a90, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f);
-            off = FUN_001fa688(d->fD4, -FUN_001f9e90(vector_length_xy(dir), dir[2]));
+            off = fast_difference_between_rotations(d->fD4, -FUN_001f9e90(vector_length_xy(dir), dir[2]));
             if (D_L17_0015F5CC % scale_game_frames(0x5A) == d->timer && off < 0.034906585f) {
-                if (FUN_001fa688(*(float *)(m + 0x48), FUN_001f9e90(*(float *)(D_L17_001600EC + d->zone * 0x80 + 0x30) - *(float *)(m + 0x10), *(float *)(D_L17_001600EC + d->zone * 0x80 + 0x34) - *(float *)(m + 0x14))) < 0.034906585f) {
+                if (fast_difference_between_rotations(*(float *)(m + 0x48), FUN_001f9e90(*(float *)(D_L17_001600EC + d->zone * 0x80 + 0x30) - *(float *)(m + 0x10), *(float *)(D_L17_001600EC + d->zone * 0x80 + 0x34) - *(float *)(m + 0x14))) < 0.034906585f) {
                     char *p;
                     normalize_vector_xyz(j, dir, D_0015ED6C * 60.0f);
                     add_vector_xyz(j + 4, j, j + 4);
@@ -483,9 +483,9 @@ void FUN_L17_002cb310(char *m) {
             FUN_L00_0025be00(yaw, &d->yawvel, ang, turn, turn, D_0015ED6C * 1.0471976f);
             d->fF4 = -FUN_001f9e90(vector_length_xy(dir), dir[2]);
             FUN_L00_002628d8(m, d->a90, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f);
-            off = FUN_001fa688(d->fD4, -FUN_001f9e90(vector_length_xy(dir), dir[2]));
+            off = fast_difference_between_rotations(d->fD4, -FUN_001f9e90(vector_length_xy(dir), dir[2]));
             if (tick_countdown_32_alt(&d->timer) && off < 0.034906585f) {
-                if (FUN_001fa688(*(float *)(m + 0x48), FUN_001f9e90(aim.pos[0] - *(float *)(m + 0x10), aim.pos[1] - *(float *)(m + 0x14))) < 0.034906585f) {
+                if (fast_difference_between_rotations(*(float *)(m + 0x48), FUN_001f9e90(aim.pos[0] - *(float *)(m + 0x10), aim.pos[1] - *(float *)(m + 0x14))) < 0.034906585f) {
                     if (FUN_001efa68(from, aim.pos, 2, *(char **)(g + 0x15F0), 0) == 0) {
                         char *p;
                         qzero(zero);
@@ -547,8 +547,8 @@ extern float D_0015ED6C;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float dot_vectors_xyz(void *, void *);
-extern float fast_add_rotations(float, float);
-extern float random_float_between(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern float wrap_angle(float);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
@@ -571,9 +571,9 @@ extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa298(void *, void *);
 void FUN_L17_002d7cf0(char *moby);
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void build_spherical_offset(void *, float, float, float);
-extern void enqueue_callback_list_1(void *, void *);
-extern void normalize_vector_triplet(void *);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);

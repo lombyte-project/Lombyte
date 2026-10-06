@@ -5,12 +5,12 @@
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F3F4 __attribute__((sda));
 int FUN_L00_00201720(void);
-void FUN_001fb368(void);
-void FUN_001f39d0(void);
+void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
+void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 void FUN_L00_002772c0(int);
-void FUN_001f5210(int, int, int, int);
-void FUN_001fbc50(void);
-void FUN_L00_001f8ec8(void) { if (D_L00_0015F5D8 == 0) { if (FUN_L00_00201720() == 0) { FUN_001fb368(); D_L00_0015F3F4 = 0x100ff; FUN_001f39d0(); } else if (FUN_L00_00201720() == 3) FUN_L00_002772c0(1); FUN_001f5210(0, 0, 0, 0x40); FUN_001fbc50(); } }
+void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
+void draw_dialog_text(void) __asm__("FUN_001fbc50");
+void FUN_L00_001f8ec8(void) { if (D_L00_0015F5D8 == 0) { if (FUN_L00_00201720() == 0) { append_gif_transfer_packet(); D_L00_0015F3F4 = 0x100ff; draw_debug_profiler(); } else if (FUN_L00_00201720() == 3) FUN_L00_002772c0(1); emit_rgba_draw_packet(0, 0, 0, 0x40); draw_dialog_text(); } }
 extern s32 D_L00_0015F5D8;
 void FUN_L00_002772c0(s32);
 void FUN_L00_001f8f50(void) { if (D_L00_0015F5D8 == 0) FUN_L00_002772c0(0); }
@@ -19,12 +19,12 @@ extern f32 D_L00_0015F3FC;
 extern s16 D_L00_0015F626;
 extern u8 D_L00_00173080[];
 void FUN_L00_001fc558(s32);
-s32 FUN_001fa6d0(f32);
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f5210_c(s32, s32, s32, s32) __asm__("FUN_001f5210");
-void FUN_001f3868(void);
-void FUN_001f4280(s32);
+void reset_gs_registers(void) __asm__("FUN_001f3868");
+void setup_gif_paging(s32) __asm__("FUN_001f4280");
 void FUN_L00_001fcca0(void *, s32);
-void FUN_001f4398(void);
+void do_gif_paging(void) __asm__("FUN_001f4398");
 void FUN_L00_001f8f78(void) {
     s32 i;
     u8 *p;
@@ -32,14 +32,14 @@ void FUN_L00_001f8f78(void) {
     FUN_L00_001fc558(D_L00_0015F628);
     if (0.0f < D_L00_0015F3FC) {
         if (1.0f < D_L00_0015F3FC) D_L00_0015F3FC = 1.0f;
-        FUN_001f5210_c(0, 0, 0, FUN_001fa6d0(D_L00_0015F3FC * 128.0f));
+        FUN_001f5210_c(0, 0, 0, truncate_float_to_s32(D_L00_0015F3FC * 128.0f));
     }
-    FUN_001f3868();
-    FUN_001f4280(0);
+    reset_gs_registers();
+    setup_gif_paging(0);
     p = D_L00_00173080;
     for (i = 0xB6; i >= 0; i--) {
         FUN_L00_001fcca0(p, D_L00_0015F626);
         p += 16;
     }
-    FUN_001f4398();
+    do_gif_paging();
 }

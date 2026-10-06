@@ -14,7 +14,7 @@ extern char D_L01_0016CCE0[];
 extern char D_L01_0017C7C0[];
 extern char D_L01_001CA940[];
 extern float D_L01_0015F3FC;
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int D_L01_0015F5C4;
 extern int D_L01_0015F5D8_d __asm__("D_L01_0015F5D8") __attribute__((sda));
 extern int D_L01_001611CC;
@@ -24,8 +24,8 @@ extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern short D_L01_0015F400_d __asm__("D_L01_0015F400") __attribute__((sda));
 extern unsigned char D_001516D0[];
-extern void FUN_00204a40(int, int);
-extern void FUN_0022ca50(void);
+extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
+extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_L00_002039a0(void);
 extern void FUN_L00_00207330(int, int);
 extern void FUN_L00_0020fca8(int, int);
@@ -90,13 +90,13 @@ void FUN_L01_002aea70(char *m, int lvl) {
     *(int *)&D_L01_0015F400_d = 0;
     FUN_L00_0020fca8(0, 0);
     *(int *)(g + 0x20B8) = lvl;
-    FUN_00204a40(D_L01_00179F40[lvl].f10, -1);
+    select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);
     FUN_L00_002454c8(r);
     q = (char *)D_001516D0;
     *(int *)(q + 0x1C) = 0x2734;
     parse_space_scene_chunk(0);
     while (qq = (char *)D_001516D0, *(short *)(qq + 0x5A) != 3) {
-        FUN_0022ca50();
+        sound_update();
         sceGsSyncV_alt(0);
     }
     c2 = D_L01_0016CCE0;

@@ -8,23 +8,23 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
 float FUN_L00_0025bb38(int n, float x, float y) {
-    float d = FUN_001fa5c8(x, y);
+    float d = fast_subtract_rotations(x, y);
     if (n == 0 || d * (float)n > 0.0f) return d;
     if (AbsoluteFloat(d) <= 0.0017453292f) return 0.0f;
     if (d > 0.0f) return d - 6.2831855f;
     return d + 6.2831855f;
 }
 extern float bb38_fif(float, void *, float) __asm__("FUN_L00_0025bb38");
-float FUN_001fa580(float, float);
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
     float r = bb38_fif(a, o, *p);
     if (lim < r) r = lim;
     else if (r < -lim) r = -lim;
-    *p = FUN_001fa580(*p, r);
+    *p = fast_add_rotations(*p, r);
     bb38_fif(a, o, *p);
 }
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");

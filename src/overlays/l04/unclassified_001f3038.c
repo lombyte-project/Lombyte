@@ -37,7 +37,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
 
 extern char D_L04_00173FF0[];
 extern float FUN_001f9e90(float, float);
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);

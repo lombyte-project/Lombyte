@@ -20,13 +20,13 @@ typedef struct {
 
 extern float D_L00_001CA318[][4];
 extern float vector_length_xyz(void *);
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_00237c80(void *, void *, float *, float *, float *, float *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
-extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3);
+extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
 
 void FUN_L00_0029f990(char *m) {
@@ -209,37 +209,37 @@ extern u128 D_L00_00166FD0[];
 extern f32 D_L00_00166C80[];
 extern A02b0_tab D_L00_001C8FF0[];
 
-extern void FUN_001fb368(void);
-extern void FUN_001f39d0(void);
+extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
+extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 extern void FUN_L00_002a09d8(s32);
 extern s32 FUN_00122298(s32);
 extern void FUN_L00_002a08c8(void);
-extern void FUN_00233630(void);
+extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void FUN_L00_001f99c0(s32);
 extern void FUN_001f2260(void);
 extern void FUN_001f9ad8(void *, void *, void *);
-extern void FUN_0020c5f0(void *, s32);
+extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_0020d4f0(void *, s32, s32, s32, s32);
 extern void FUN_L00_0029b680(void);
 extern void FUN_001f9810(void *, s32);
-extern s32 FUN_00216788(void *, s32, s32);
+extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void FUN_L00_002a0fc8(s32, u32, u32);
-extern void FUN_001f4280(s32);
-extern void FUN_001f3868(void);
-extern void FUN_0020d278(void);
-extern void FUN_0020d1f0(void);
-extern void FUN_0020d218(void);
-extern void FUN_0020d330(void *, s32);
+extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
+extern void reset_gs_registers(void) __asm__("FUN_001f3868");
+extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
+extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
+extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
+extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
 extern void FUN_L00_0029ff58(void);
 extern void FUN_00239780(s32);
 extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
-extern void FUN_001ff780(void);
-extern void FUN_001f4398(void);
-extern void FUN_0020d248(void);
-extern void FUN_0020d3b0(void);
-extern void FUN_0020cef8(void);
+extern void update_hud(void) __asm__("FUN_001ff780");
+extern void do_gif_paging(void) __asm__("FUN_001f4398");
+extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
+extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
+extern void patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
 void FUN_L00_002a02b0(void) {
     A02b0_obj *e;
@@ -249,7 +249,7 @@ void FUN_L00_002a02b0(void) {
     if (D_L00_0015F5D8 != 0) {
         return;
     }
-    FUN_001fb368();
+    append_gif_transfer_packet();
     switch (p->f8) {
     case 0:
         if (p->fC != 0) {
@@ -259,7 +259,7 @@ void FUN_L00_002a02b0(void) {
         if (p->fC != 0 || *(s32 *)p == 3) {
             D_L00_0015F3F4 = 0x7F;
         }
-        FUN_001f39d0();
+        draw_debug_profiler();
         if (p->fC == 0) {
             return;
         }
@@ -269,7 +269,7 @@ void FUN_L00_002a02b0(void) {
         FUN_00122298(0);
         D_L00_0015F3F8_s = D_L00_0015F3F8_v[0] + 1;
         FUN_L00_002a08c8();
-        FUN_00233630();
+        swap_render_buffer_chain();
         D_L00_001611CC = 0x60000;
         FUN_L00_001f99c0(p->f10);
         *(u16 *)(p->f1C + 0x34) &= 0xFFFE;
@@ -295,11 +295,11 @@ void FUN_L00_002a02b0(void) {
             FUN_001f9ad8(&D_L00_00166FD0[1], &D_L00_00166FD0[0], &D_L00_00166FD0[2]);
         }
         p->f20 = p->f14 + 0x100;
-        FUN_0020c5f0(p->f20, 0xD);
+        init_moby_instance(p->f20, 0xD);
         *(u16 *)(p->f20 + 0x32) = 0x40;
         FUN_L00_00250df8(p->f20);
         FUN_0020d4f0(p->f20, 0x202020, 0xE, 0xE, 0);
-        FUN_0020c5f0(p->f20 + 0x500, 0xD);
+        init_moby_instance(p->f20 + 0x500, 0xD);
         *(u16 *)(p->f20 + 0x532) = 0x40;
         FUN_L00_00250df8(p->f20 + 0x500);
         FUN_0020d4f0(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
@@ -308,7 +308,7 @@ void FUN_L00_002a02b0(void) {
         FUN_001f9810(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (D_001516D8[0] == 0) {
-            if (FUN_00216788(p->f18 + 0x80000, D_00137B80[0x198 / 4], D_00137B80[0x19C / 4]) != 0) {
+            if (start_audio_stream_read(p->f18 + 0x80000, D_00137B80[0x198 / 4], D_00137B80[0x19C / 4]) != 0) {
                 D_L00_0016118C = 1;
             } else {
                 D_L00_0016118C = 0;
@@ -323,23 +323,23 @@ void FUN_L00_002a02b0(void) {
         return;
     }
     FUN_L00_002a0fc8(p->f10, D_0015EE84, D_0013E504[0] << 11);
-    FUN_001f4280(0);
+    setup_gif_paging(0);
     FUN_001f2260();
-    FUN_001f3868();
-    FUN_0020d278();
-    FUN_0020d1f0();
-    FUN_0020d218();
+    reset_gs_registers();
+    draw_mobys_setup();
+    init_moby_class_dists();
+    stash_moby_class_dists();
     if (D_L00_00161E38 == 0 && p->f40 == 0) {
         if (p->arr[p->f58].b == 1) {
             g = &D_L00_001C8FF0[p->arr[p->f58].a];
             if (g->f30 != 0) {
-                FUN_0020d330(p->f20 + 0x200, 1);
+                draw_moby_list(p->f20 + 0x200, 1);
             }
         } else {
-            FUN_0020d330(p->f20 + 0x300, 1);
+            draw_moby_list(p->f20 + 0x300, 1);
         }
     }
-    FUN_0020d330(p->f1C, 1);
+    draw_moby_list(p->f1C, 1);
     if (p->f40 == 0) {
         FUN_L00_0029ff58();
     }
@@ -349,10 +349,10 @@ void FUN_L00_002a02b0(void) {
     }
     FUN_L00_0029f990(p->f1C);
     FUN_00233980(0x42, 0x8000000044LL);
-    FUN_001ff780();
-    FUN_001f4398();
-    FUN_0020d248();
-    FUN_0020d3b0();
+    update_hud();
+    do_gif_paging();
+    restore_moby_class_dists();
+    draw_mobys_clean_up();
     FUN_L00_002a09d8(0x10);
-    FUN_0020cef8();
+    patch_moby_gifs();
 }

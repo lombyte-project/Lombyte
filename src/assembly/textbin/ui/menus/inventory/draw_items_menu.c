@@ -59,7 +59,7 @@ extern int sprintf(char *, const char *, ...);
 extern char *strchr(const char *, int);
 extern char *strcpy(char *, const char *);
 extern u32 strlen(const char *);
-s32 draw_items_menu(ItemsMenu *menu);
+s32 draw_items_menu(ItemsMenu *menu) __asm__("FUN_0021eb20");
 static inline int add_offset(s32 arg0, int arg1)
 {
   return arg0 + arg1;

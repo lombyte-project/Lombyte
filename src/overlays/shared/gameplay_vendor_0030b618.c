@@ -79,7 +79,7 @@ extern int FUN_001f9770(void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
 extern int FUN_001f96f8(int);
@@ -118,7 +118,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
         if (D_0013F3D0_u.f[2] + 1.1f < *(float *)(moby + 0x18)) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
-            if (FUN_001fa688(*(float *)(moby + 0x48), t) < 0.5235988f) {
+            if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
                 if (D_L01_0015F5C4 != 2) {
                     char *r;
                     qcopy(&q, e + 0x10);
@@ -268,7 +268,7 @@ void FUN_L01_00319f18(char *moby) {
 extern char D_0013E5E0[];
 extern char D_L01_00167240[];
 extern int FUN_L00_0028ddd8(int, int, int, int);
-extern void FUN_0022d798(int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void FUN_L01_0031a078(int a0) {
     char *p = *(char **)(a0 + 8);
@@ -284,7 +284,7 @@ void FUN_L01_0031a078(int a0) {
         }
     } else {
         if (flag) {
-            FUN_0022d798(n);
+            release_voice_slot(n);
             *(int *)(p + 4) = -1;
         }
     }

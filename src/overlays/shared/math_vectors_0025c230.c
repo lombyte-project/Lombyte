@@ -50,14 +50,14 @@ void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
 typedef struct { float v[4]; } V4 __attribute__((aligned(16)));
 
 extern float D_0015ED6C;
-extern float random_angle_radians(void);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
 extern int scale_game_frames(int);
 extern unsigned char D_0013E520[];
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);
-extern void build_spherical_offset(void *, float, float, float);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
     V4 buf[20];

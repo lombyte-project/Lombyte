@@ -86,16 +86,16 @@ void FUN_L14_002b3578(char *moby) {
 
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void FUN_L00_001fff28(void *, int, float);
 
 void FUN_L14_002b37b0(char *a, float x) {
     char *d = *(char **)(a + 0x78);
     float s = -*(float *)(d + 0x268);
-    float r = FUN_001fa5c8(x, *(float *)(a + 0x48));
-    s = FUN_001fa580(s, -r);
+    float r = fast_subtract_rotations(x, *(float *)(a + 0x48));
+    s = fast_add_rotations(s, -r);
     if (s > 1.2217304706573486f) s = 1.2217304706573486f;
     else if (s < -1.2217304706573486f) s = -1.2217304706573486f;
     {

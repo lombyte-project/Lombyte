@@ -12,13 +12,13 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_L09_00277688(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L09_00277758(float *out, float scale)
 {
     float angle = random_angle_radians();
     float magnitude = FUN_L09_00277688(scale);
-    FUN_001f99f8(out);
+    clear_u64_value(out);
     out[0] = FUN_001f9dc8(angle) * magnitude;
     out[1] = FUN_001f9de0(angle) * magnitude;
 }

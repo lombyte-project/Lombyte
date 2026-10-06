@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 
@@ -21,7 +21,7 @@ int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     if (!(0.0f < z)) return 1;
     {
         float r = FUN_001f9e90(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
-        r = FUN_001fa688(*(float *)(a + 0x48), r);
+        r = fast_difference_between_rotations(*(float *)(a + 0x48), r);
         if (r > z) return 0;
     }
     return 1;

@@ -80,7 +80,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
 extern char *D_L08_0015FFD8;
 extern char D_0013F350[];
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern short *D_L08_001AC040[];
 
 char *FUN_L08_002daa10(char *moby) {
@@ -102,7 +102,7 @@ char *FUN_L08_002daa10(char *moby) {
             a = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(moby + 0x10),
                                   *(float *)(p + 0x14) - *(float *)(moby + 0x14));
             base = D_0013F350;
-            ang = FUN_001fa688(a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
+            ang = fast_difference_between_rotations(a, FUN_001f9e90(*(float *)(base + 0x80) - *(float *)(moby + 0x10),
                                                      *(float *)(base + 0x84) - *(float *)(moby + 0x14)));
             d = FUN_001f9b48(moby + 0x10, p + 0x10);
             if (ang < 1.5707964f) {

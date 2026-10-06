@@ -445,7 +445,7 @@ extern char D_L02_00167280[] __attribute__((section(".data")));
 extern float FUN_001f9ab0(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9df8(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern float FUN_001f99c0(float);
 
@@ -485,7 +485,7 @@ int FUN_L02_002fb788(char *moby, float a, float b) {
     if (b != 0.0f) {
         float t1 = FUN_001f9e90(lenq, dot1);
         float t2 = FUN_001f9e90(lenr, dot2);
-        float t3 = FUN_001fa688(t1, t2);
+        float t3 = fast_difference_between_rotations(t1, t2);
         if (b * 0.017453292f < t3) {
             return 0;
         }

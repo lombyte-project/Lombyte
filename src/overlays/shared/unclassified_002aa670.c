@@ -157,10 +157,10 @@ extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00200510(float, float, float);
 extern float FUN_L00_00259710(void *);
 extern float dot_vectors_xyz(void *a, void *b);
-extern float fast_add_rotations(float, float);
-extern float probe_ground_height(void *, int, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *a);
 extern int *D_L00_00177F00[];
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -209,7 +209,7 @@ extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void FUN_L00_002738e8(void *, void *, int, float, float, float, int, int, int);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void clear_vector(void *);
 extern void copy_matrix3x4(void *, void *);
@@ -1434,7 +1434,7 @@ extern s32 D_L00_00173E40[0x1C] __attribute__((section(".data")));
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 FUN_001fa688(f32, f32);
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f99c0(f32);
 extern f32 FUN_001f9df8(f32);
 extern f32 FUN_001fa6c0(s32);
@@ -1489,7 +1489,7 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         dist = FUN_001f9b48(spos, &v);
         if (dist < 2.5f) {
             char *cam = g->cam;
-            if (FUN_001fa688(*(f32 *)(cam + 0x48),
+            if (fast_difference_between_rotations(*(f32 *)(cam + 0x48),
                     FUN_001f9e90(*(f32 *)(o + 0x10) - g->x80, *(f32 *)(o + 0x14) - g->x84)) < 1.0471976f) {
                 if (FUN_001f99c0(angv) < 0.7853982f) return;
             }

@@ -82,7 +82,7 @@ extern void func_001F21B0(void *, s32);
 extern void func_001F21B8(void *, s32);
 extern void func_001F2260(void);
 extern void func_001F2588(void);
-extern void FUN_001f2c10(void);
+extern void update_occlusion(void) __asm__("FUN_001f2c10");
 extern void func_001F3868(void);
 extern void func_001F4280(s32);
 extern void func_001F4398(void);
@@ -104,7 +104,7 @@ extern void func_001FB368(void);
 extern void func_001FB680(void);
 extern void func_001FE980(void);
 extern void func_001FF780(void);
-extern void FUN_0020cc60(void);
+extern void prune_moby_references(void) __asm__("FUN_0020cc60");
 extern void func_0020CEF8(void);
 extern void func_0020D460(void);
 extern void func_00217C18(void);
@@ -120,9 +120,9 @@ extern void func_00233980(s32, u64);
 extern void func_00233BC8(void);
 extern void func_00233C28(void);
 extern void FUN_00234f98(void *);
-extern void FUN_00235780(void);
-extern void FUN_00235840(void);
-extern void FUN_00235898(void);
+extern void patch_tie_texture_fields(void) __asm__("FUN_00235780");
+extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
+extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void func_002358C8(void);
 extern void func_00235990(void);
 extern void FUN_00237370(void *);
@@ -139,8 +139,8 @@ void draw_debug_profiler(void) {
         func_001FB368();
     }
     func_001F2260();
-    FUN_0020cc60();
-    FUN_001f2c10();
+    prune_moby_references();
+    update_occlusion();
     func_001F3868();
     D_0015F620 = -1;
     func_001F21B0(D_0015F380, 0xF);
@@ -300,11 +300,11 @@ void draw_debug_profiler(void) {
     if (D_0015F434 & 4) {
         if (D_0018A2B0.unk18 != 0) {
             if (D_0015ED80 != 0) {
-                FUN_00235898();
-                FUN_00235840();
+                register_entity_render_resources();
+                copy_render_buffer_pair();
             } else {
                 FUN_00237370(D_001E3200);
-                FUN_00235780();
+                patch_tie_texture_fields();
             }
         }
         func_001F21B0(D_0015F418, 5);

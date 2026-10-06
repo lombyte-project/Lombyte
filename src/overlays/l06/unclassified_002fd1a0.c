@@ -16,11 +16,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
 extern char D_0013F3D0[];
 extern int D_L06_0015FFD8;
 extern int FUN_L06_002e9d10(void *, void *);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L06_001ABFC0[];
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L06_002fda30(char *m) {
     int *d = *(int **)(m + 0x78);
@@ -176,7 +176,7 @@ extern int D_0015EE1D;
 extern int FUN_L00_00203908(int a, int b);
 extern unsigned char D_0014C050[];
 extern unsigned short D_00141C00 __attribute__((section(".data")));
-extern void try_set_help_message(int, int);
+extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void FUN_L06_00302fd8(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -318,7 +318,7 @@ void FUN_L06_00305000(char *m) {
 extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
-extern int get_effect_texture(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern short D_L06_001621C4 __attribute__((sda));
 extern short D_L06_001621C8 __attribute__((sda));
 extern short D_L06_001621C0 __attribute__((sda));
@@ -334,7 +334,7 @@ extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_L06_00216b88(int *, float *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void font_queue_vu_state(void);
-extern void vu1_add_g_sregister(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L06_00305170(char *m) {
     float a[16];

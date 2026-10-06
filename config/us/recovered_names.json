@@ -83,7 +83,7 @@
     },
     {
       "name": "snd_GotReturns",
-      "unit": "audio/rpc/snd_returns",
+      "unit": "audio/snd_got_returns",
       "unit_size": "0x88",
       "match": "full",
       "address": "0x12de70",
@@ -1051,7 +1051,7 @@
     },
     {
       "name": "DrawRectOverlay_FiiiiUl",
-      "unit": "rendering/effects/draw_rect_overlay",
+      "unit": "rendering/draw_rect_overlay",
       "unit_size": "0x1a8",
       "match": "entry_size_unknown",
       "address": "0x1f52a0",
@@ -1539,7 +1539,7 @@
     },
     {
       "name": "LoadIRXModule",
-      "unit": "runtime/iop/load_irx_module",
+      "unit": "unclassified/load_irx_module",
       "unit_size": "0xb4",
       "match": "entry_size_unknown",
       "address": "0x201520",
@@ -1547,7 +1547,7 @@
     },
     {
       "name": "InitMemSlots__Fv",
-      "unit": "runtime/memory/init_mem_slots",
+      "unit": "unclassified/init_mem_slots",
       "unit_size": "0x78",
       "match": "full",
       "address": "0x2015d8",
@@ -1555,7 +1555,7 @@
     },
     {
       "name": "InitOnce__Fv",
-      "unit": "runtime/startup/init_once",
+      "unit": "unclassified/init_once",
       "unit_size": "0x3cc",
       "match": "fragment",
       "address": "0x201650",
@@ -2403,7 +2403,7 @@
     },
     {
       "name": "VU1_sendChain__Fv",
-      "unit": "rendering/vu1_chain",
+      "unit": "rendering/vu1_sync_chain",
       "unit_size": "0x110",
       "match": "fragment",
       "address": "0x2336a0",
@@ -2411,7 +2411,7 @@
     },
     {
       "name": "VU1_syncChain__Fi",
-      "unit": "rendering/vu1_chain",
+      "unit": "rendering/vu1_sync_chain",
       "unit_size": "0x80",
       "match": "fragment",
       "address": "0x2337b0",
@@ -3361,8 +3361,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "runtime/newlib/double_is_not_nan",
-        "source_path": "src/runtime/newlib/double_is_not_nan.c",
+        "unit": "math/floating_point/double_is_not_nan",
+        "source_path": "src/math/floating_point/double_is_not_nan.c",
         "address": "0x00116168",
         "current_name": "FUN_00116168",
         "proposed_name": "double_is_not_nan",
@@ -3893,7 +3893,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/audio/snd_start_sound_system",
+        "unit": "textbin/audio/snd_start_sound_system",
         "source_path": "src/assembly/textbin/audio/snd_start_sound_system.c",
         "address": "0x0012da28",
         "current_name": "FUN_0012da28",
@@ -3929,8 +3929,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/rpc/snd_returns",
-        "source_path": "src/audio/rpc/snd_returns.c",
+        "unit": "audio/snd_got_returns",
+        "source_path": "src/audio/snd_got_returns.c",
         "address": "0x0012de70",
         "current_name": "FUN_0012de70",
         "proposed_name": "snd_got_returns",
@@ -4903,7 +4903,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/rendering/texture/load_pif_as_psmt8_h",
+        "unit": "textbin/rendering/texture/load_pif_as_psmt8_h",
         "source_path": "src/assembly/textbin/rendering/texture/load_pif_as_psmt8_h.c",
         "address": "0x001e9168",
         "current_name": "FUN_001e9168",
@@ -4965,7 +4965,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/world/startlevel",
+        "unit": "textbin/world/startlevel",
         "source_path": "src/assembly/textbin/world/startlevel.c",
         "address": "0x001e9658",
         "current_name": "FUN_001e9658",
@@ -5034,7 +5034,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "assembly/textbin/gameplay/state/transition_load_wad",
+        "unit": "textbin/gameplay/state/transition_load_wad",
         "source_path": "src/assembly/textbin/gameplay/state/transition_load_wad.c",
         "address": "0x001ea830",
         "current_name": "FUN_001ea830",
@@ -5148,7 +5148,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/gameplay/state/transition_do_transition",
+        "unit": "textbin/gameplay/state/transition_do_transition",
         "source_path": "src/assembly/textbin/gameplay/state/transition_do_transition.c",
         "address": "0x001eb798",
         "current_name": "FUN_001eb798",
@@ -5939,7 +5939,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/rendering/view/update_view_context",
+        "unit": "textbin/rendering/view/update_view_context",
         "source_path": "src/assembly/textbin/rendering/view/update_view_context.c",
         "address": "0x001f2d98",
         "current_name": "FUN_001f2d98",
@@ -5969,7 +5969,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/video/display/set_pal_mode",
+        "unit": "textbin/video/display/set_pal_mode",
         "source_path": "src/assembly/textbin/video/display/set_pal_mode.c",
         "address": "0x001f34e8",
         "current_name": "FUN_001f34e8",
@@ -6146,7 +6146,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/rendering/effects/get_effect_texture",
+        "unit": "textbin/rendering/effects/get_effect_texture",
         "source_path": "src/assembly/textbin/rendering/effects/get_effect_texture.c",
         "address": "0x001f44b8",
         "current_name": "FUN_001f44b8",
@@ -6443,8 +6443,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/effects/draw_rect_overlay",
-        "source_path": "src/rendering/effects/draw_rect_overlay.c",
+        "unit": "rendering/draw_rect_overlay",
+        "source_path": "src/rendering/draw_rect_overlay.c",
         "address": "0x001f52a0",
         "current_name": "FUN_001f52a0",
         "proposed_name": "draw_rect_overlay",
@@ -6937,7 +6937,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/text/font_print_window",
+        "unit": "textbin/ui/text/font_print_window",
         "source_path": "src/assembly/textbin/ui/text/font_print_window.c",
         "address": "0x001f7090",
         "current_name": "FUN_001f7090",
@@ -7143,7 +7143,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/runtime/memory/clear_u64_value",
+        "unit": "textbin/runtime/memory/clear_u64_value",
         "source_path": "src/assembly/textbin/runtime/memory/clear_u64_value.c",
         "address": "0x001f99f8",
         "current_name": "FUN_001f99f8",
@@ -7172,7 +7172,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/math/rotations/fast_add_rotations",
+        "unit": "textbin/math/rotations/fast_add_rotations",
         "source_path": "src/assembly/textbin/math/rotations/fast_add_rotations.c",
         "address": "0x001fa580",
         "current_name": "FUN_001fa580",
@@ -7190,7 +7190,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/math/rotations/fast_subtract_rotations",
+        "unit": "textbin/math/rotations/fast_subtract_rotations",
         "source_path": "src/assembly/textbin/math/rotations/fast_subtract_rotations.c",
         "address": "0x001fa5c8",
         "current_name": "FUN_001fa5c8",
@@ -7208,7 +7208,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/math/rotations/fast_normalize_angle",
+        "unit": "textbin/math/rotations/fast_normalize_angle",
         "source_path": "src/assembly/textbin/math/rotations/fast_normalize_angle.c",
         "address": "0x001fa610",
         "current_name": "FUN_001fa610",
@@ -7226,7 +7226,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/math/rotations/fast_difference_between_rotations",
+        "unit": "textbin/math/rotations/fast_difference_between_rotations",
         "source_path": "src/assembly/textbin/math/rotations/fast_difference_between_rotations.c",
         "address": "0x001fa688",
         "current_name": "FUN_001fa688",
@@ -7244,7 +7244,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/math/conversion/truncate_float_to_s32",
+        "unit": "math/conversion/truncate_float_to_s32",
         "source_path": "src/assembly/math/conversion/truncate_float_to_s32.c",
         "address": "0x001fa6d0",
         "current_name": "FUN_001fa6d0",
@@ -7266,7 +7266,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/rendering/buffers/setup_fs_aa_buffer",
+        "unit": "textbin/rendering/buffers/setup_fs_aa_buffer",
         "source_path": "src/assembly/textbin/rendering/buffers/setup_fs_aa_buffer.c",
         "address": "0x001fa978",
         "current_name": "FUN_001fa978",
@@ -7513,7 +7513,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/runtime/memory/mode_freeze_init",
+        "unit": "textbin/runtime/memory/mode_freeze_init",
         "source_path": "src/assembly/textbin/runtime/memory/mode_freeze_init.c",
         "address": "0x001fbab8",
         "current_name": "FUN_001fbab8",
@@ -7531,7 +7531,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/rendering/draw_dialog_text",
+        "unit": "textbin/rendering/draw_dialog_text",
         "source_path": "src/assembly/textbin/rendering/draw_dialog_text.c",
         "address": "0x001fbc50",
         "current_name": "FUN_001fbc50",
@@ -7554,7 +7554,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/runtime/memory/update_mode_freeze",
+        "unit": "textbin/runtime/memory/update_mode_freeze",
         "source_path": "src/assembly/textbin/runtime/memory/update_mode_freeze.c",
         "address": "0x001fce28",
         "current_name": "FUN_001fce28",
@@ -7871,7 +7871,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/ui/hud/hud_send_resident_bank",
+        "unit": "textbin/ui/hud/hud_send_resident_bank",
         "source_path": "src/assembly/textbin/ui/hud/hud_send_resident_bank.c",
         "address": "0x001ff128",
         "current_name": "FUN_001ff128",
@@ -8131,7 +8131,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/gameplay/animation/get_frame_texture",
+        "unit": "textbin/gameplay/animation/get_frame_texture",
         "source_path": "src/assembly/textbin/gameplay/animation/get_frame_texture.c",
         "address": "0x001ffa10",
         "current_name": "FUN_001ffa10",
@@ -8441,8 +8441,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/frames/draw_framed_text",
-        "source_path": "src/assembly/textbin/ui/frames/draw_framed_text.c",
+        "unit": "ui/frames/draw_framed_text",
+        "source_path": "src/ui/frames/draw_framed_text.c",
         "address": "0x00201200",
         "current_name": "FUN_00201200",
         "proposed_name": "draw_framed_text",
@@ -8501,8 +8501,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "runtime/iop/load_irx_module",
-        "source_path": "src/runtime/iop/load_irx_module.c",
+        "unit": "unclassified/load_irx_module",
+        "source_path": "src/unclassified/load_irx_module.c",
         "address": "0x00201520",
         "current_name": "FUN_00201520",
         "proposed_name": "load_irx_module",
@@ -8534,8 +8534,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "runtime/memory/init_mem_slots",
-        "source_path": "src/runtime/memory/init_mem_slots.c",
+        "unit": "unclassified/init_mem_slots",
+        "source_path": "src/unclassified/init_mem_slots.c",
         "address": "0x002015d8",
         "current_name": "FUN_002015d8",
         "proposed_name": "init_mem_slots",
@@ -8567,8 +8567,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "runtime/startup/init_once",
-        "source_path": "src/runtime/startup/init_once.c",
+        "unit": "unclassified/init_once",
+        "source_path": "src/unclassified/init_once.c",
         "address": "0x00201650",
         "current_name": "FUN_00201650",
         "proposed_name": "init_once",
@@ -9042,7 +9042,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/world/data/select_world_object_resource_tables",
+        "unit": "textbin/world/data/select_world_object_resource_tables",
         "source_path": "src/assembly/textbin/world/data/select_world_object_resource_tables.c",
         "address": "0x00204a40",
         "current_name": "FUN_00204a40",
@@ -9272,7 +9272,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/map/draw_map_overlay",
+        "unit": "textbin/ui/map/draw_map_overlay",
         "source_path": "src/assembly/textbin/ui/map/draw_map_overlay.c",
         "address": "0x00205640",
         "current_name": "FUN_00205640",
@@ -9939,7 +9939,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/storage/memory_card/data/memcard_restore_data",
+        "unit": "textbin/storage/memory_card/data/memcard_restore_data",
         "source_path": "src/assembly/textbin/storage/memory_card/data/memcard_restore_data.c",
         "address": "0x0020af20",
         "current_name": "FUN_0020af20",
@@ -9975,7 +9975,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/rendering/dma_to_spr_sync",
+        "unit": "textbin/rendering/dma_to_spr_sync",
         "source_path": "src/assembly/textbin/rendering/dma_to_spr_sync.c",
         "address": "0x0020b3e0",
         "current_name": "FUN_0020b3e0",
@@ -9993,7 +9993,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/rendering/init_dma",
+        "unit": "textbin/rendering/init_dma",
         "source_path": "src/assembly/textbin/rendering/init_dma.c",
         "address": "0x0020b418",
         "current_name": "FUN_0020b418",
@@ -10660,7 +10660,7 @@
       },
       {
         "unit": "gameplay/animation/set_moby_animation",
-        "source_path": "src/gameplay/animation/set_moby_animation.c",
+        "source_path": "src/assembly/gameplay/animation/set_moby_animation.c",
         "address": "0x00212ed8",
         "current_name": "FUN_00212ed8",
         "proposed_name": "set_moby_animation",
@@ -11434,7 +11434,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/audio/music/music_transition",
+        "unit": "textbin/audio/music/music_transition",
         "source_path": "src/assembly/textbin/audio/music/music_transition.c",
         "address": "0x00215e00",
         "current_name": "FUN_00215e00",
@@ -11493,7 +11493,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/audio/music/music_update",
+        "unit": "textbin/audio/music/music_update",
         "source_path": "src/assembly/textbin/audio/music/music_update.c",
         "address": "0x00216290",
         "current_name": "FUN_00216290",
@@ -12234,7 +12234,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/audio/sound_options_menu",
+        "unit": "textbin/ui/menus/audio/sound_options_menu",
         "source_path": "src/assembly/textbin/ui/menus/audio/sound_options_menu.c",
         "address": "0x0021cb30",
         "current_name": "FUN_0021cb30",
@@ -12252,7 +12252,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/audio/draw_sound_menu",
+        "unit": "textbin/ui/menus/audio/draw_sound_menu",
         "source_path": "src/assembly/textbin/ui/menus/audio/draw_sound_menu.c",
         "address": "0x0021ce00",
         "current_name": "FUN_0021ce00",
@@ -12583,7 +12583,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/inventory/draw_items_menu",
+        "unit": "textbin/ui/menus/inventory/draw_items_menu",
         "source_path": "src/assembly/textbin/ui/menus/inventory/draw_items_menu.c",
         "address": "0x0021eb20",
         "current_name": "FUN_0021eb20",
@@ -12960,7 +12960,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu",
+        "unit": "textbin/ui/menus/save_data/draw_checking_memory_card_data_menu",
         "source_path": "src/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu.c",
         "address": "0x00220348",
         "current_name": "FUN_00220348",
@@ -13122,7 +13122,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/draw_cheats_menu",
+        "unit": "textbin/ui/menus/draw_cheats_menu",
         "source_path": "src/assembly/textbin/ui/menus/draw_cheats_menu.c",
         "address": "0x00221030",
         "current_name": "FUN_00221030",
@@ -13452,7 +13452,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/draw_localized_three_option_menu",
+        "unit": "textbin/ui/menus/draw_localized_three_option_menu",
         "source_path": "src/assembly/textbin/ui/menus/draw_localized_three_option_menu.c",
         "address": "0x00222a98",
         "current_name": "FUN_00222a98",
@@ -13543,8 +13543,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/ui/menus/save_data/loading_data_menu",
-        "source_path": "src/assembly/textbin/ui/menus/save_data/loading_data_menu.c",
+        "unit": "ui/menus/save_data/loading_data_menu",
+        "source_path": "src/ui/menus/save_data/loading_data_menu.c",
         "address": "0x002232d8",
         "current_name": "FUN_002232d8",
         "proposed_name": "loading_data_menu",
@@ -13652,8 +13652,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/gameplay/gadgets/load_hand_gadget",
-        "source_path": "src/assembly/textbin/gameplay/gadgets/load_hand_gadget.c",
+        "unit": "gameplay/gadgets/load_hand_gadget",
+        "source_path": "src/gameplay/gadgets/load_hand_gadget.c",
         "address": "0x00224368",
         "current_name": "FUN_00224368",
         "proposed_name": "load_hand_gadget",
@@ -14394,8 +14394,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/rendering/sky/update_sky_effects",
-        "source_path": "src/assembly/textbin/rendering/sky/update_sky_effects.c",
+        "unit": "rendering/sky/update_sky_effects",
+        "source_path": "src/rendering/sky/update_sky_effects.c",
         "address": "0x0022ae70",
         "current_name": "FUN_0022ae70",
         "proposed_name": "update_sky_effects",
@@ -14646,7 +14646,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/audio/voices/sound_update",
+        "unit": "textbin/audio/voices/sound_update",
         "source_path": "src/assembly/textbin/audio/voices/sound_update.c",
         "address": "0x0022ca50",
         "current_name": "FUN_0022ca50",
@@ -15454,8 +15454,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/vu1_chain",
-        "source_path": "src/rendering/vu1_chain.c",
+        "unit": "rendering/vu1_send_chain",
+        "source_path": "src/rendering/vu1_send_chain.c",
         "address": "0x002336a0",
         "current_name": "FUN_002336a0",
         "proposed_name": "vu1_send_chain",
@@ -15477,8 +15477,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/vu1_chain",
-        "source_path": "src/rendering/vu1_chain.c",
+        "unit": "rendering/vu1_sync_chain",
+        "source_path": "src/rendering/vu1_sync_chain.c",
         "address": "0x002337b0",
         "current_name": "FUN_002337b0",
         "proposed_name": "vu1_sync_chain",
@@ -16291,7 +16291,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "assembly/textbin/video/decoder/read_mpeg",
+        "unit": "textbin/video/decoder/read_mpeg",
         "source_path": "src/assembly/textbin/video/decoder/read_mpeg.c",
         "address": "0x0023a460",
         "current_name": "FUN_0023a460",
@@ -16350,8 +16350,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/audio/decoder/initialize_audio_system",
-        "source_path": "src/assembly/textbin/audio/decoder/initialize_audio_system.c",
+        "unit": "audio/decoder/initialize_audio_system",
+        "source_path": "src/audio/decoder/initialize_audio_system.c",
         "address": "0x0023a7c0",
         "current_name": "FUN_0023a7c0",
         "proposed_name": "initialize_audio_system",
@@ -16952,7 +16952,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/video/decoder/vi_buf_restart_dma",
+        "unit": "textbin/video/decoder/vi_buf_restart_dma",
         "source_path": "src/assembly/textbin/video/decoder/vi_buf_restart_dma.c",
         "address": "0x0023c280",
         "current_name": "FUN_0023c280",

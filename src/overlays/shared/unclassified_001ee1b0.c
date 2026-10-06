@@ -7,7 +7,7 @@ typedef union { q128 q; f32 f[4]; s32 i[4]; } V;
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
-extern s32 truncate_float_to_s32(f32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 *D_L00_0015EF80;
 extern void FUN_001e93b0(char *);
 extern char D_L00_001E78B0[];

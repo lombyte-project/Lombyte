@@ -588,8 +588,8 @@ float FUN_L00_0020f0b8(float *a, float *b) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f580.s", FUN_L00_0020f580);
 typedef struct { char pad[0x20]; unsigned char t; char pad2[0x74 - 0x21]; void (*fn)(void); } O;
-void FUN_0020c828(void *);
-void FUN_L00_0020fca8(int i, int v) { char *e; { char *f = D_0013F350 + i * 0x50; O *o; *(int *)(f + 0x10a4) = v; if (*(int *)(f + 0x10b4) != 3) { o = *(O **)(f + 0x1090); *(int *)(f + 0x10b4) = 3; if (o && o->t != 0xfe && o->t != 0xfd && o->fn) o->fn(); } } e = D_0013F350 + i * 0x50; *(int *)(e + 0x10b4) = 0; *(int *)(e + 0x10b8) = 0; if (*(void **)(e + 0x1090)) { FUN_0020c828(*(void **)(e + 0x1090)); *(void **)(e + 0x1090) = 0; } if (*(void **)(e + 0x1094) && i != 3) { FUN_0020c828(*(void **)(e + 0x1094)); *(void **)(e + 0x1094) = 0; } }
+void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+void FUN_L00_0020fca8(int i, int v) { char *e; { char *f = D_0013F350 + i * 0x50; O *o; *(int *)(f + 0x10a4) = v; if (*(int *)(f + 0x10b4) != 3) { o = *(O **)(f + 0x1090); *(int *)(f + 0x10b4) = 3; if (o && o->t != 0xfe && o->t != 0xfd && o->fn) o->fn(); } } e = D_0013F350 + i * 0x50; *(int *)(e + 0x10b4) = 0; *(int *)(e + 0x10b8) = 0; if (*(void **)(e + 0x1090)) { mark_moby_for_removal(*(void **)(e + 0x1090)); *(void **)(e + 0x1090) = 0; } if (*(void **)(e + 0x1094) && i != 3) { mark_moby_for_removal(*(void **)(e + 0x1094)); *(void **)(e + 0x1094) = 0; } }
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -2234,7 +2234,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00212ff0.s", FUN_L00_00212ff0);
 
 extern char D_0013E533[];
 extern float FUN_001f9af0(void *);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -2247,7 +2247,7 @@ void FUN_L00_002132b8(float a, float b) {
     FUN_001f9a68(p, p, a);
     v = FUN_001f9af0(p);
     if (v <= b) {
-        FUN_001f99f8(p);
+        clear_u64_value(p);
     } else {
         FUN_001f9bf8(p, p, v - b);
     }

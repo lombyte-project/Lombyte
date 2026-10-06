@@ -20,8 +20,8 @@ struct Amb {
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
@@ -41,9 +41,9 @@ void FUN_L00_002a4890(void) {
         case 0:
             if (FUN_001f9770(&s->h1E)) {
                 a = ConvertIntegerToFloat(s->h1C) * random_float_between_alt(0.5f, 1.5f);
-                c = FUN_001fa580(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
+                c = fast_add_rotations(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
                 b = random_float_between_alt(s->f10 * 0.5f, s->f10 * 1.5f);
-                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f8 = fast_subtract_rotations(c, s->f4) / a;
                 s->f18 = (b - s->f14) / a;
                 s->h1E = func_001FA898_r(a);
                 s->hE = 1;
@@ -54,7 +54,7 @@ void FUN_L00_002a4890(void) {
                 s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(2.0f, 3.0f));
                 s->hE = 0;
             } else {
-                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
                 d = AbsoluteFloat(s->f14);
                 e = D_0015ED6C * 9.6f;
@@ -71,9 +71,9 @@ void FUN_L00_002a4890(void) {
         case 0:
             if (FUN_001f9770(&s->h1E)) {
                 a = FUN_001f96b0(random_float_between_alt(45.0f, 60.0f));
-                c = FUN_001fa580(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
+                c = fast_add_rotations(s->f0, random_float_between_alt(-1.5707964f, 1.5707964f));
                 b = random_float_between_alt(s->f10 * 1.5f, s->f10 + s->f10);
-                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f8 = fast_subtract_rotations(c, s->f4) / a;
                 s->f18 = (b - s->f14) / a;
                 s->h1E = func_001FA898_r(a);
                 s->hE = 1;
@@ -84,7 +84,7 @@ void FUN_L00_002a4890(void) {
                 s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(1.0f, 1.5f));
                 s->hE = 2;
             } else {
-                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
                 d = AbsoluteFloat(s->f14);
                 e = D_0015ED6C * 9.6f;
@@ -97,9 +97,9 @@ void FUN_L00_002a4890(void) {
         case 2:
             if (FUN_001f9770(&s->h1E)) {
                 a = FUN_001f96b0(random_float_between_alt(45.0f, 60.0f));
-                c = FUN_001fa580(s->f0, random_float_between_alt(-0.785398f, 0.785398f));
+                c = fast_add_rotations(s->f0, random_float_between_alt(-0.785398f, 0.785398f));
                 b = random_float_between_alt(s->f10 * 0.8f, s->f10 * 1.2f);
-                s->f8 = FUN_001fa5c8(c, s->f4) / a;
+                s->f8 = fast_subtract_rotations(c, s->f4) / a;
                 s->f18 = (b - s->f14) / a;
                 s->h1E = func_001FA898_r(a);
                 s->hE = 3;
@@ -110,7 +110,7 @@ void FUN_L00_002a4890(void) {
                 s->h1E = func_001FA898_r(ConvertIntegerToFloat(s->h1C) * random_float_between_alt(3.0f, 5.0f));
                 s->hE = 0;
             } else {
-                s->f4 = FUN_001fa580(s->f4, s->f8);
+                s->f4 = fast_add_rotations(s->f4, s->f8);
                 s->f14 = s->f14 + s->f18;
                 d = AbsoluteFloat(s->f14);
                 e = D_0015ED6C * 9.6f;
@@ -158,9 +158,9 @@ void FUN_L00_002a4cd8(unsigned char *p) {
 int FUN_L00_002a4dc8(int a) { int t = D_L00_00161390; D_L00_00161390 = t + a; return t; }
 #include "eetypes.h"
 #include "qcopy.h"
-unsigned char *FUN_0020c4f8(int);
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002a4de0(u128 *v) { unsigned char *m = FUN_0020c4f8(0x3ef); if (m) { m[0x30] = 0xff; *(unsigned short *)(m + 0x34) |= 0x41; qcopy(m + 0x10, v); FUN_L00_00250df8(m); } return m; }
+unsigned char *FUN_L00_002a4de0(u128 *v) { unsigned char *m = create_moby(0x3ef); if (m) { m[0x30] = 0xff; *(unsigned short *)(m + 0x34) |= 0x41; qcopy(m + 0x10, v); FUN_L00_00250df8(m); } return m; }
 typedef int ti_2a4e48 __attribute__((mode(TI)));
 typedef struct {
     char p0[0x98];
@@ -358,11 +358,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a6b70.s", FUN_L00_002a6b70);
 
 extern char *FUN_L00_002603d0_c(void *) __asm__("FUN_L00_002603d0");
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int FUN_L00_002604f0(int x, char *o, float *p, float *q, float *r, float *s);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001fa030(void *, void *);
@@ -402,11 +402,11 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
         break;
     }
     if (*(unsigned char *)(data + 0x55) & 1) {
-        *(float *)(data + 0x50) = FUN_001fa580(*(float *)(data + 0x50), c1);
-        *(float *)(data + 0x58) = FUN_001fa580(*(float *)(data + 0x58), -0.0125f);
+        *(float *)(data + 0x50) = fast_add_rotations(*(float *)(data + 0x50), c1);
+        *(float *)(data + 0x58) = fast_add_rotations(*(float *)(data + 0x58), -0.0125f);
     } else {
-        *(float *)(data + 0x50) = FUN_001fa5c8(*(float *)(data + 0x50), c1);
-        *(float *)(data + 0x58) = FUN_001fa5c8(*(float *)(data + 0x58), -0.0125f);
+        *(float *)(data + 0x50) = fast_subtract_rotations(*(float *)(data + 0x50), c1);
+        *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
     }
     qcopy(v60, data + 0x50);
     v60[1] = c2;
@@ -431,13 +431,13 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
             }
             if (r) {
                 moby[0x20] = 1;
-                FUN_001f99f8(data + 0x30);
+                clear_u64_value(data + 0x30);
                 *(float *)(data + 0x3C) = 1.0f;
                 x = FUN_L00_002603d0_c(*(char **)(data + 0x5C));
                 if (x != 0) {
                     qcopy(data + 0x20, x + 0x10);
                 } else {
-                    FUN_001f99f8(data + 0x20);
+                    clear_u64_value(data + 0x20);
                 }
                 FUN_001f9bf8(C, &m1[8], D_0015ED6C);
                 FUN_001f9bf8(D, (float *)(moby + 0xC0), D_0015ED6C);
@@ -632,7 +632,7 @@ typedef struct N_2a82c0 { char p0[0x20]; unsigned char type; char p1[3]; char *i
 extern N_2a82c0 *D_L00_0015FFE4;
 extern char D_0013F350[];
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_002132a8(float, float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_002a7210(void *, void *, float, float);
 extern int FUN_L00_0025e3f8(void *);
 extern int FUN_L00_002c5be8(void *);
@@ -648,7 +648,7 @@ void FUN_L00_002a82c0(unsigned char *m) {
         if (n->type == 0xFD) return;
         if (n && n->info && *(short *)(n->info + 0x46) == 0x13) {
             if (FUN_001f9b48((char *)n + 0x10, m + 0x10) < 2.7f) {
-                r = FUN_L00_002a7210(n, *(void **)(g + 0x2080), FUN_002132a8(-30.0f, 30.0f) * 0.017453292f, 0.0f);
+                r = FUN_L00_002a7210(n, *(void **)(g + 0x2080), random_float_between(-30.0f, 30.0f) * 0.017453292f, 0.0f);
                 goto check;
             }
         } else if (FUN_L00_0025e3f8(n) && FUN_001f9b48((char *)n + 0x10, m + 0x10) < 2.7f) {

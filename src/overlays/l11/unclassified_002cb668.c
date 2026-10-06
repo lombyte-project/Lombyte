@@ -12,7 +12,7 @@
 extern char D_0013E533[];
 extern float D_0015ED6C;
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00203908(int, int);
 extern unsigned char D_0013D4C2[];
 extern unsigned char D_0013D4E3[];
@@ -33,7 +33,7 @@ void FUN_L11_002cb668(char *moby) {
     case 1:
         break;
     case 2:
-        FUN_001fa580(*(float *)(moby + 0x48), D_0015ED6C * 4.7123890f);
+        fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C * 4.7123890f);
         if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 2.0f) {
             D_0013D4C2[4] = 1;
             D_0013D4E3[0xB] = 1;

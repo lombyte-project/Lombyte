@@ -16,9 +16,9 @@ extern s32 D_001D0398[];
 extern char D_001D5BF0[] NOT_SDA;
 extern s32 D_0015F604 MACRO_ADDR;
 
-extern void FUN_0012e3e8(s32);
+extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void InitializeRenderState(s32);
-extern s32 FUN_0012dc80();
+extern s32 snd_flush_sound_commands() __asm__("FUN_0012dc80");
 extern s32 update_mission_list() __asm__("FUN_0020b950");
 extern void func_00226E58();
 
@@ -27,9 +27,9 @@ void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 void pause_all_sounds(s32 mode)
 {
     char *g;
-    FUN_0012e3e8(0x1D);
+    snd_pause_all_sounds_in_group(0x1D);
     InitializeRenderState(0);
-    FUN_0012dc80();
+    snd_flush_sound_commands();
     if (D_0018C32C[0] != 0) {
         D_0015F674 = 1;
         return;

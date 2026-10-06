@@ -100,7 +100,7 @@ extern float D_0015ED60;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L11_0015F580[] __attribute__((section(".sdata")));
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern char D_L11_0015FFBC[4] __attribute__((sda));
@@ -231,7 +231,7 @@ void FUN_L11_00318b30(unsigned char *moby) {
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);
 extern int FUN_L11_00318ed8_u() __asm__("FUN_L11_00318ed8");
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa030(void *, void *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -250,7 +250,7 @@ char *FUN_L11_00318d10(char *src, void *pos, int ticks) {
         mob[0x20] = 1;
         qcopy(mob + 0x10, pos);
         qcopy(mob + 0x40, src + 0x40);
-        FUN_001f99f8(d);
+        clear_u64_value(d);
         *(char **)(d + 0x24) = src;
         p = (unsigned char *)(d + 0x14);
         *(int *)(d + 0x20) = FUN_001f96f8(ticks);
@@ -726,7 +726,7 @@ void FUN_L11_0031aa80(char *moby) {
 
 extern float D_0015ED70;
 extern float approach_value(float *p, float target, float maxstep);
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int D_L11_0015F5CC;
 extern int random_integer_below_c3(int) __asm__("FUN_00213260");
@@ -837,7 +837,7 @@ extern float D_0015ED6C;
 extern float D_L11_0015F580[];
 extern float FUN_001f96b0(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -1014,7 +1014,7 @@ extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, in
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1094,15 +1094,15 @@ extern char D_L11_00167680[];
 extern int D_L11_001625CC;
 extern int D_L11_001625EC;
 extern int D_L11_00162610; /* no foreign declaration */
-extern int get_effect_texture(int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern char D_L11_001625C8[4] __attribute__((sda));
 extern char D_L11_001625E8[4] __attribute__((sda));
 extern char D_L11_001625F8[4] __attribute__((sda));
 extern void FUN_L08_002f0b40(int arg);
 extern void FUN_L08_002f0c18(int);
 extern void font_queue_vu_state(void);
-extern void vu1_add_g_sregister(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L11_0031e930(char *m) {
     int *d = *(int **)(m + 0x78);
@@ -1178,7 +1178,7 @@ extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, in
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 

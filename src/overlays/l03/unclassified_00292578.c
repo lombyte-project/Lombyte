@@ -442,7 +442,7 @@ extern void FUN_L01_0026d930_cf(char *, char *, int, float, float) __asm__("FUN_
 extern void FUN_L03_00250ae8_cf(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L03_002c95a8_cf(void *) __asm__("FUN_0020c828");
 extern void FUN_L03_002d4288_cf(void *, void *, int) __asm__("FUN_L03_00250ae8");
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float, float) __asm__("FUN_L03_002d4288");
 extern void fast_add_rotations_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void is_value_within_interpolated_window_cf(void *) __asm__("FUN_L03_002c9ca0");

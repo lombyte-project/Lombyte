@@ -99,9 +99,9 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
 extern unsigned char D_0015EDB7 __attribute__((section(".sdata")));
-void FUN_0020cb10();
-void FUN_0020cb88();
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) { if (D_0015EDB7) { if (p[1] == 0) FUN_0020cb10();  *(float *)(p + 0x20) = x; *(float *)(p + 0x24) = x; *(float *)(p + 0x28) = x; } else if (p[1]) FUN_0020cb88(a, p); }
+void attach_manipulator() __asm__("FUN_0020cb10");
+void detach_manipulator() __asm__("FUN_0020cb88");
+void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) { if (D_0015EDB7) { if (p[1] == 0) attach_manipulator();  *(float *)(p + 0x20) = x; *(float *)(p + 0x24) = x; *(float *)(p + 0x28) = x; } else if (p[1]) detach_manipulator(a, p); }
 void FUN_L00_00263b38(char *p, float x) {
     if (*(unsigned char *)0x15EDB7) {
         *(float *)(p + 0x70) = x;
@@ -159,11 +159,11 @@ void FUN_L00_00263d40(int a, int b) {
 extern u8 D_L00_00179118[];
 extern s32 D_L00_0015F640;
 s32 FUN_001f96f8(s32);
-s32 FUN_001fdd10();
+s32 get_help_message_text() __asm__("FUN_001fdd10");
 void FUN_00116248();
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1) c = FUN_001f96f8(0xB4);
-    FUN_00116248(D_L00_00179118, FUN_001fdd10(a), b);
+    FUN_00116248(D_L00_00179118, get_help_message_text(a), b);
     D_L00_0015F640 = c;
 }
 typedef unsigned int u128_263e30 __attribute__((mode(TI), aligned(16)));
@@ -328,7 +328,7 @@ extern s32 D_L00_00161E04;
 void FUN_L00_00237190(void);
 void FUN_L00_002371e0(void);
 void FUN_L00_00237200(void);
-s32 FUN_001ff308(s32, s32, void *, void *, void *, s32, s32);
+s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
 void FUN_L00_00235e18(s32, s32);
 void FUN_L00_00264328(void) {
     if (D_L00_0015F590 != 0) {
@@ -337,7 +337,7 @@ void FUN_L00_00264328(void) {
     if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
-        D_L00_00161E04 = FUN_001ff308(0xC, 0, FUN_L00_00237190, FUN_L00_002371e0, FUN_L00_00237200, 0, 0);
+        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, FUN_L00_002371e0, FUN_L00_00237200, 0, 0);
     } else {
         FUN_L00_00235e18(D_L00_00161E04, 10);
     }

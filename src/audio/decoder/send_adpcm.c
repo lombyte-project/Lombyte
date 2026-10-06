@@ -27,7 +27,7 @@ typedef struct {
     int spuPos;          /* 0x60 */
 } AudioDecA;
 extern unsigned char *D_001612BC MACRO_ADDR;
-extern int FUN_0012f178(void);
+extern int snd_get_movie_nax(void) __asm__("FUN_0012f178");
 extern void func_0023AF18(AudioDecA *, unsigned char *, int, int);
 /* sendADPCM(_AudioDec *): once enough is buffered (state 1: 4 KiB,
    filling the IOP buffer from iopLastPos; state 2: the free space behind
@@ -55,7 +55,7 @@ void send_adpcm(void *arg0) {
         avail = 0x1000 - ad->iopLastPos;
         break;
     case 2:
-        avail = (FUN_0012f178() - ad->spuPos) & 0xFFF;
+        avail = (snd_get_movie_nax() - ad->spuPos) & 0xFFF;
         break;
     case 3:
         return;

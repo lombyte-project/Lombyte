@@ -25,10 +25,10 @@ extern void FlushCache(s32);
 extern void PackDmaTag(u64, u64, u64);
 extern void func_0012DC80(void);
 extern void func_0012E1A8(void);
-extern void FUN_0012e1d8(s32) __asm__("FUN_0012e1d8");
+extern void snd_unload_bank(s32) __asm__("FUN_0012e1d8");
 extern void func_0012EB00(void);
 extern s32 func_0012EE08(s32);
-extern s32 FUN_0012ef28(s32) __asm__("FUN_0012ef28");
+extern s32 snd_stream_safe_cd_callback(s32) __asm__("FUN_0012ef28");
 extern void func_0012EF68(s32, s32, s32, s32, s32);
 extern s32 func_0012F368(s32);
 extern void func_001F4A58(s32);
@@ -85,12 +85,12 @@ void do_space_transition(void)
     func_00215EE8();
     D_001516D0.updates_suspended = 1;
     if (D_0015F634 != 0) {
-        FUN_0012e1d8(D_0015F634->unk1C);
+        snd_unload_bank(D_0015F634->unk1C);
         func_0012E1A8();
         DebugPrint(D_001E8988, D_0015F634->unk1C);
     }
     D_0015ED5C = 0;
-    FUN_0012ef28(0);
+    snd_stream_safe_cd_callback(0);
     func_0012EE08(0);
     D_0018CD00.unk238 = 16;
     D_0018CD00.unk21C = 524288.0f;

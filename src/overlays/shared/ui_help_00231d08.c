@@ -905,10 +905,11 @@ void FUN_L00_002335c8(float *out, float r, float angle, float z) {
    D_0013F450 + 0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233EE0), where it is exact; names translated to the US level program. */
 
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00233660(float *out, float x, float y, float z) {
     char *base;
 
-    FUN_001f99f8(out);
+    clear_u64_value(out);
     base = D_0013F350;
     out[0] = x;
     out[1] = y;
@@ -1042,7 +1043,6 @@ float FUN_L00_002339d0(float *v) {
 
 extern char D_0013F350[];
 extern float FUN_001f9ab0(void *, void *);
-extern void FUN_001f99f8(void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(void *, void *);
 
@@ -1056,7 +1056,7 @@ float FUN_L00_00233a78(float *v) {
         return v[2];
     case 1:
     case 2:
-        FUN_001f99f8(axis);
+        clear_u64_value(axis);
         axis[2] = 1.0f;
         FUN_001fa050(m, *(char **)(base + 0x2080) + 0x40);
         FUN_001f9d20(axis, axis, m);
@@ -1433,7 +1433,7 @@ void FUN_L00_002395b0();
 void FUN_L00_00239630();
 void FUN_L00_00239810();
 extern u8 D_001415F8[];
-void FUN_001ff308();
+void queue_animation_update() __asm__("FUN_001ff308");
 void FUN_L00_00234e00(void) {
-    FUN_001ff308(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810, D_001415F8, 8);
+    queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810, D_001415F8, 8);
 }

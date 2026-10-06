@@ -60,7 +60,7 @@ int FUN_L14_002fea80(char *moby) {
     }
     return r;
 }
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern int FUN_001f96f8(int);
 extern float FUN_001f9e90(float, float);
@@ -128,15 +128,15 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
-extern float FUN_001fa688(float, float);
-extern float FUN_001fa5c8(float, float);
-extern float FUN_002132a8(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9740(int *);
-extern int FUN_001fa6d0(float);
-extern int FUN_00214720(void *, int);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_00214db0(void *, float, float, float);
-extern void FUN_0020c828(void *);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 typedef struct { u8 pad0[0x454]; u8 collected[1]; } L14LevelState;
 extern L14LevelState D_L14_001BB930;
@@ -150,14 +150,14 @@ extern char *D_L14_001600EC;
 extern int D_L14_0015F5C4;
 extern unsigned char D_0013DD4F __attribute__((section(".data")));
 extern struct { char pad[0x10]; unsigned int q10[4] __attribute__((aligned(16))); char pad20[8]; float f28; char pad2C[0x1A]; short h46; } D_L14_0016CF60;
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L00_002668a0(void *, void *);
 extern int FUN_L00_00266448(void *, void *);
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00262d38(int);
-extern void FUN_0020b178(int, int);
+extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void FUN_L14_002fefe0(L14WatchMoby *m) {
@@ -171,17 +171,17 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
     case 0: {
         unsigned short id;
         if (D_0013DD4F) {
-            FUN_0020c828(m);
+            mark_moby_for_removal(m);
             return;
         }
         id = m->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0
             || (D_0014C190[D_0015ED84][(short)id >> 5] >> (id & 0x1F)) & 1) {
-            FUN_0020c828(m);
+            mark_moby_for_removal(m);
             return;
         }
         if (d->i44 == -1 || d->i48 == -1) {
-            FUN_0020c828(m);
+            mark_moby_for_removal(m);
             return;
         }
         d->p20 = (void *)D_L14_00161FE8;
@@ -191,7 +191,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         break;
     }
     case 1:
-        if (d->b8 == 1 && FUN_00214720(D_0013F3D0, d->i40)) {
+        if (d->b8 == 1 && is_point_inside_clip_volume(D_0013F3D0, d->i40)) {
             if (D_0014C050[m->bB0 + D_0015ED84 * 16] != 0xFF) {
                 char *t;
                 FUN_L00_002502a0(m->bB0);
@@ -206,7 +206,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
             char *t = D_L14_001600EC + d->i48 * 128;
             D_L14_0016CF60.h46 = 1;
             qcopy(D_L14_0016CF60.q10, t + 0x30);
-            FUN_001f99f8((char *)&D_L14_0016CF60 + 0x20);
+            clear_u64_value((char *)&D_L14_0016CF60 + 0x20);
             D_L14_0016CF60.f28 = *(float *)(t + 0x78);
             m->state = 2;
         }
@@ -219,14 +219,14 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
                 FUN_L00_00262d38(0xF);
                 D_0014C190[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
                 D_L14_001BABD0[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
-                FUN_0020b178(0, -1);
-                FUN_0020c828(m);
+                memcard_save_data(0, -1);
+                mark_moby_for_removal(m);
                 return;
             }
         }
         break;
     case 3:
-        FUN_0020c828(m);
+        mark_moby_for_removal(m);
         return;
     }
     rate = 0.02f;
@@ -237,7 +237,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         L14Player *q;
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
-            (q = (L14Player *)(g - 0x80), FUN_001fa688(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
+            (q = (L14Player *)(g - 0x80), fast_difference_between_rotations(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
             if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
             else FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
@@ -246,9 +246,9 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
-            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
-            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            d->target_timer = truncate_float_to_s32(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * 0.017453292f);
+            build_spherical_offset(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FUN_001f9a10(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
@@ -265,7 +265,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         qcopy(scratch.eye, m->position);
         scratch.eye[2] += 1.0f;
         FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
-        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = fast_subtract_rotations(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
         pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f) yaw = 1.5707964f;
         else if (yaw < -1.5707964f) yaw = -1.5707964f;

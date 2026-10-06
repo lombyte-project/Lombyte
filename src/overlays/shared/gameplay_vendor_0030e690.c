@@ -33,7 +33,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 /* Draws four quads with the angle advanced by a quarter turn each time. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, int, int, int, int, int);
 
@@ -43,11 +43,11 @@ void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigne
     h = get_effect_texture(0x42);
     w = s * 20.0f;
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
-    ang = FUN_001fa580(ang, 1.5707964f);
+    ang = fast_add_rotations(ang, 1.5707964f);
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
-    ang = FUN_001fa580(ang, 1.5707964f);
+    ang = fast_add_rotations(ang, 1.5707964f);
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
-    ang = FUN_001fa580(ang, 1.5707964f);
+    ang = fast_add_rotations(ang, 1.5707964f);
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
 }
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
@@ -202,7 +202,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D408[];
 extern unsigned char D_00141968[];
 extern void FUN_L00_00263d40(int, int);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void FUN_L11_0031a1c0(char *m) {

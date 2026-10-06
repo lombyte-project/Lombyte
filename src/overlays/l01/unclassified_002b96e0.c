@@ -387,10 +387,10 @@ extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int, 
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L01_0023cf98(int, int);
 extern int FUN_L01_002e6790(void *, int *);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short D_L01_00161950 __attribute__((sda));
 extern short D_L01_00161954 __attribute__((sda));
 extern short D_L01_0016195C __attribute__((sda));
@@ -414,7 +414,7 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation_cf(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_spherical_offset_cf(void *, float, float, float) __asm__("FUN_00214db0");
 extern void clear_vector(void *);
-extern void mark_moby_for_removal(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518");
@@ -1183,7 +1183,7 @@ extern s32 FUN_001f96f8(s32);
 extern int FUN_001f9740(void *);
 extern int FUN_001f9770(void *);
 f32 FUN_001f99c0(f32);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9af0(void *);
@@ -1191,17 +1191,17 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern f32 FUN_001fa5c8(f32, f32);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001fa688(f32, f32);
 extern f32 FUN_001fa6c0(s32);
-extern void FUN_0020c828(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32 FUN_0020c9e0(void *);
-extern void FUN_00212f90(void *, s32, s32, s32);
-extern s32 FUN_00213260(s32);
-extern f32 FUN_002132a8(f32, f32);
-extern f32 FUN_00213308(void);
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_00213508(void *, s32, f32);
-extern f32 FUN_00213ed8(f32 *, f32, f32);
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
 extern s32 FUN_L00_001f35d8_cf(void) __asm__("FUN_001f0b58");
 extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1230,7 +1230,7 @@ extern void FUN_L01_0026e090(s32, s32);
 extern void FUN_L01_0028b5e0(void *, s32, void *, void *);
 extern s32 FUN_L01_002efbf8(void *, s32, s32);
 
-#define SET_ANIM(m, a, b, c) if ((m)->anim != (a)) FUN_00212f90((m), (a), (b), (c))
+#define SET_ANIM(m, a, b, c) if ((m)->anim != (a)) blend_moby_animation((m), (a), (b), (c))
 
 void FUN_L01_002efc60(Mob577 *self) {
     Vec577 oldpos;
@@ -1366,25 +1366,25 @@ void FUN_L01_002efc60(Mob577 *self) {
     case 14:
         FUN_001f9a28(&v70, &target.pos, &self->pos);
         if (FUN_001f9740(&v->x228) != 0 && FUN_001f9af0(&v70) < v->range + 4.0f
-            && FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f && FUN_00213260(0x13) == 0) {
+            && FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f && random_integer_below(0x13) == 0) {
             self->state = 17;
-        } else if (v->x228 == 0 && self->hit == 1 && FUN_00213260(0x13) == 0) {
-            if (FUN_00213260(0x100) & 1) {
+        } else if (v->x228 == 0 && self->hit == 1 && random_integer_below(0x13) == 0) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             self->state = 17;
-            FUN_001f99f8(&v->vel);
+            clear_u64_value(&v->vel);
             self->hit = 0;
         } else if (FUN_001f9740(&v->idle_timer) != 0) {
             v->idle_timer = FUN_001f96f8(0x78);
-            rad = FUN_002132a8(0.0f, 3.0f);
-            dir = FUN_00213308();
+            rad = random_float_between(0.0f, 3.0f);
+            dir = random_angle_radians();
             v80.f[0] = FUN_001f9dc8(dir) * rad;
             v80.f[1] = FUN_001f9de0(dir) * rad;
             v80.f[2] = 0.0f;
-            v80.f[2] = FUN_002132a8(5.0f, 7.0f);
+            v80.f[2] = random_float_between(5.0f, 7.0f);
             FUN_001f9a10(&v->dest, &v80, &v->home);
             self->state = 15;
         }
@@ -1396,7 +1396,7 @@ void FUN_L01_002efc60(Mob577 *self) {
         FUN_L00_0025f730(&v->vel, D_0015ED6C * 4.0f);
         FUN_001f9a10(&v70, &v->vel, &self->pos);
         if (FUN_L00_001f0d60(&v70, 0, self, 0.4f) != 0) {
-            FUN_001f99f8(&v->vel);
+            clear_u64_value(&v->vel);
             self->state = 14;
         } else {
             qcopy(&self->pos, &v70);
@@ -1407,46 +1407,46 @@ void FUN_L01_002efc60(Mob577 *self) {
         break;
     case 17:
         g17 = FUN_00213508(&self->pos, 0, 0.5f);
-        FUN_00213ed8(&v->vel.f[2], -(D_0015ED6C * 8.0f), D_0015ED70 * 10.8f);
+        approach_value(&v->vel.f[2], -(D_0015ED6C * 8.0f), D_0015ED70 * 10.8f);
         self->pos.f[2] = self->pos.f[2] + v->vel.f[2];
         if (self->anim != 1 && self->pos.f[2] - g17 <= D_0015ED6C * 8.0f * FUN_001f96b0(45.0f)) {
             SET_ANIM(self, 1, 0, FUN_001f96f8(5));
         }
         if (self->pos.f[2] <= g17) {
             self->pos.f[2] = g17;
-            if (FUN_00213260(0x100) & 1) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             self->state = 3;
-            FUN_001f99f8(&v->vel);
+            clear_u64_value(&v->vel);
             SET_ANIM(self, 2, 0, FUN_001f96f8(3));
         }
         break;
     case 16:
         g16 = FUN_00213508(&self->pos, 0, 0.5f);
-        FUN_00213ed8(&v->vel.f[2], D_0015ED6C * 8.0f, D_0015ED70 * 10.8f);
+        approach_value(&v->vel.f[2], D_0015ED6C * 8.0f, D_0015ED70 * 10.8f);
         self->pos.f[2] += v->vel.f[2];
         if (g16 + 6.0f <= self->pos.f[2]) {
             self->pos.f[2] = g16 + 6.0f;
             self->state = 14;
             v->x228 = FUN_001f96f8(0xB4);
-            FUN_001f99f8(&v->vel);
+            clear_u64_value(&v->vel);
         }
         break;
     case 1:
         FUN_001f9a28(&v70, &target.pos, &self->pos);
         if (FUN_001f9af0(&v70) < v->range + 4.0f && FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f
-            && FUN_00213260(0x13) == 0) {
+            && random_integer_below(0x13) == 0) {
             self->state = 2;
             SET_ANIM(self, 5, 0, FUN_001f96f8(3));
-        } else if (self->hit == 1 && FUN_00213260(0x13) == 0) {
-            if (FUN_00213260(0x100) & 1) {
+        } else if (self->hit == 1 && random_integer_below(0x13) == 0) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, FUN_001f96f8(3));
             self->hit = 0;
@@ -1458,7 +1458,7 @@ void FUN_L01_002efc60(Mob577 *self) {
     case 8:
         FUN_001f9a28(&v70, &target.pos, &self->pos);
         if (FUN_001f9af0(&v70) < v->range - 4.0f && FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f
-            && FUN_00213260(0x13) == 0) {
+            && random_integer_below(0x13) == 0) {
             self->state = 2;
             self->pos.f[2] = self->pos.f[2] + 1.0f;
             SET_ANIM(self, 5, 0, FUN_001f96f8(3));
@@ -1488,16 +1488,16 @@ void FUN_L01_002efc60(Mob577 *self) {
     case 11:
         if (FUN_L00_0025c698(self, v->knock) & 1) {
             self->state = 3;
-            if (FUN_00213260(0x100) & 1) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             SET_ANIM(self, 2, 8, FUN_001f96f8(3));
             return;
         } else if (self->pos.f[2] < 5.0f) {
             FUN_L00_00257470(self, 0, -1);
-            FUN_0020c828(self);
+            mark_moby_for_removal(self);
             return;
         }
         break;
@@ -1506,24 +1506,24 @@ void FUN_L01_002efc60(Mob577 *self) {
         FUN_L00_00258278(self, v->turn, ang, 0.02f, 0.3f, 0.1f);
         FUN_001f9a28(&v70, &target.pos, &self->pos);
         if (FUN_001f9af0(&v70) < v->range && FUN_001f99c0(self->pos.f[2] - target.pos.f[2]) < 8.0f
-            && FUN_00213260(0x13) == 0) {
+            && random_integer_below(0x13) == 0) {
             if (self->group != 0xFF) {
                 FUN_L01_0026e090(self->group, 1);
             }
-            if (FUN_00213260(0x100) & 1) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, FUN_001f96f8(3));
             self->hit = 0;
-        } else if (self->hit == 1 && FUN_00213260(0x13) == 0) {
-            if (FUN_00213260(0x100) & 1) {
+        } else if (self->hit == 1 && random_integer_below(0x13) == 0) {
+            if (random_integer_below(0x100) & 1) {
                 v->turn_deg = -v->turn_deg;
             }
             v->turn_off = v->turn_deg * 0.017453292f;
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             self->state = 3;
             SET_ANIM(self, 2, 0, FUN_001f96f8(3));
             self->hit = 0;
@@ -1532,7 +1532,7 @@ void FUN_L01_002efc60(Mob577 *self) {
             SET_ANIM(self, 0, 0, FUN_001f96f8(3));
         }
         if (self->anim == 5 && (self->anim_flags & 2)) {
-            FUN_00212f90(self, 4, 0, FUN_001f96f8(3));
+            blend_moby_animation(self, 4, 0, FUN_001f96f8(3));
         }
         break;
     case 3:
@@ -1550,7 +1550,7 @@ void FUN_L01_002efc60(Mob577 *self) {
         v70.f[2] = 0.0f;
         res = FUN_L00_00258b50(self, &v->x180, &v70, &v80, 1.0f);
         if (FUN_001f9740(&v->turn_timer) != 0) {
-            v->turn_timer = FUN_001f96f8(FUN_002132a8(30.0f, 90.0f));
+            v->turn_timer = FUN_001f96f8(random_float_between(30.0f, 90.0f));
             v->turn_off = -v->turn_off;
         }
         FUN_001f9a28(&v90, &target.pos, &v->home);
@@ -1649,7 +1649,7 @@ void FUN_L01_002efc60(Mob577 *self) {
             return;
         } else if (self->pos.f[2] < 5.0f) {
             FUN_L00_00257470(self, 0, -1);
-            FUN_0020c828(self);
+            mark_moby_for_removal(self);
             return;
         }
         break;
@@ -1664,7 +1664,7 @@ void FUN_L01_002efc60(Mob577 *self) {
     case 0x63:
         self->flags &= ~0x1000;
         if (FUN_L00_0025c698(self, v->knock) & 0x140) {
-            FUN_001f99f8(&v70);
+            clear_u64_value(&v70);
             n = FUN_001f96f8(1) * 60.0f;
             if (FUN_L01_002efbf8(D_L01_00161A80, 3, n) >= 0) {
                 FUN_L00_0025f090(self, &self->pos, 4, 0.5f, 13.0f);
@@ -1672,13 +1672,13 @@ void FUN_L01_002efc60(Mob577 *self) {
             FUN_L00_00263fd8(self, 0x6D3, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
             FUN_L00_00263fd8(self, 0x6D4, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
             FUN_L00_00263fd8(self, 0x6D5, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
-            FUN_0020c828(self);
+            mark_moby_for_removal(self);
             return;
         } else if (self->pos.f[2] < 0.0f) {
             FUN_L00_00263fd8(self, 0x6D3, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
             FUN_L00_00263fd8(self, 0x6D4, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
             FUN_L00_00263fd8(self, 0x6D5, &self->pos, &self->rot, 0, 0, 0.0f, D_L01_0015F580, D_L01_0015F580, D_L01_0015F580);
-            FUN_0020c828(self);
+            mark_moby_for_removal(self);
             return;
         }
         break;
@@ -1707,9 +1707,9 @@ void FUN_L01_002efc60(Mob577 *self) {
             self->state = 16;
             SET_ANIM(self, 0, 0, FUN_001f96f8(3));
         } else if (self->anim_flags & 2) {
-            FUN_00213260(4);
-            n = FUN_00213260(4) ? 4 : 5;
-            FUN_00212f90(self, n, 0, FUN_001f96f8(3));
+            random_integer_below(4);
+            n = random_integer_below(4) ? 4 : 5;
+            blend_moby_animation(self, n, 0, FUN_001f96f8(3));
         }
         FUN_00213508(&self->pos, 0, 0.5f);
         if (FUN_L00_001f35d8_cf() == 0 || FUN_L00_001f35d8_cf() == 8) {
@@ -1733,7 +1733,7 @@ void FUN_L01_002efc60(Mob577 *self) {
             if (m->oclass == 0 || m->oclass == 0x241) {
                 if (FUN_001f9b80(&v80, &m->pos) < 2.0f) {
                     z = self->pos.f[2];
-                    d13 = FUN_001fa5c8(self->rot.f[2], FUN_L00_001ff8b0_cf(m->pos.f[0] - self->pos.f[0], m->pos.f[1] - self->pos.f[1]));
+                    d13 = fast_subtract_rotations(self->rot.f[2], FUN_L00_001ff8b0_cf(m->pos.f[0] - self->pos.f[0], m->pos.f[1] - self->pos.f[1]));
                     turn = D_0015ED6C * 1.5707964f;
                     if (!(d13 > 0.0f)) {
                         turn = -turn;
@@ -2296,7 +2296,7 @@ extern CapColors D_L01_00161C40;
 extern s32 D_0014C190[][64];
 extern s32 D_L01_001BA950[];
 extern s32 D_L01_0015F404;
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L01_002f9000(Obj *obj);
 extern void FUN_L00_002eac18(s32);
 extern void FUN_L01_0023cf98_u(s32, s32) __asm__("FUN_L01_0023cf98");
@@ -2336,7 +2336,7 @@ void FUN_L01_002f9080(CapMoby *m) {
         m->state = 1;
         if (D_L01_001BB6B0.collected[m->id] != 0
             || (D_0014C190[D_0015ED84][m->id >> 5] >> (m->id & 0x1F)) & 1) {
-            FUN_001f99f8(&v->rot);
+            clear_u64_value(&v->rot);
             m->state = 4;
             m->pos.f[2] = v->home.f[2] - 20.0f;
             v->music = -1;
@@ -2360,7 +2360,7 @@ void FUN_L01_002f9080(CapMoby *m) {
     case 2:
         FUN_L01_002f9000((Obj *)m);
         if (FUN_001f9770(&v->rise)) {
-            FUN_001f99f8(&v->rot);
+            clear_u64_value(&v->rot);
             v->hold = FUN_001f96f8(0x2D);
             m->state = 3;
         }
@@ -2376,7 +2376,7 @@ void FUN_L01_002f9080(CapMoby *m) {
         if (FUN_001f9770(&v->hold) && 20.0f < v->home.f[2] - m->pos.f[2]) {
             D_L01_00167100.shake = 0.1f;
             D_L01_00167100.shake_time = FUN_001f96f8(20);
-            FUN_001f99f8(&v->rot);
+            clear_u64_value(&v->rot);
             m->state = 4;
             FUN_0022da68(0, 0, m);
             m->pos.f[2] = v->home.f[2] - 20.0f;

@@ -68,7 +68,7 @@ extern float D_L08_00161DCC;
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
 extern int FUN_001fa728(char *, float);
-extern int truncate_float_to_s32();
+extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short D_L08_00161DC0 __attribute__((sda));
 extern short D_L08_00161E04 __attribute__((sda));
 extern char D_L08_001DDF20[];
@@ -78,7 +78,7 @@ extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, in
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
 extern void FUN_L08_002f1378(int);
-extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 

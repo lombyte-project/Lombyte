@@ -7,8 +7,8 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-extern s32 FUN_0012e6e0(s32, s32, void *, s32, u64);
-void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s32 pitch, s32 flags, s32 voice, s32 channel, s32 a8, s32 id, u64 cb_data);
+extern s32 snd_send_iop_command_no_wait(s32, s32, void *, s32, u64) __asm__("FUN_0012e6e0");
+void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s32 pitch, s32 flags, s32 voice, s32 channel, s32 a8, s32 id, u64 cb_data) __asm__("FUN_0012ec08");
 void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s32 pitch, s32 flags, s32 voice, s32 channel, s32 a8, s32 id, u64 cb_data) __asm__("FUN_0012ec08");
 
 void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s32 pitch, s32 flags, s32 voice, s32 channel, s32 a8, s32 id, u64 cb_data)
@@ -25,7 +25,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s
   buf[4] = voice;
   buf[5] = channel;
   buf[6] = a8;
-  FUN_0012e6e0(0x2C, 0x1C, buf, id, cb_data);
+  snd_send_iop_command_no_wait(0x2C, 0x1C, buf, id, cb_data);
 }
 
 extern __typeof__(snd_play_vag_stream_by_loc_ex_cb) func_0012EC08 __attribute__((alias("FUN_0012ec08")));

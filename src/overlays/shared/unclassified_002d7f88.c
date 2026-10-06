@@ -10,11 +10,11 @@ typedef struct { u8 pad[0x10]; u8 v10[4]; f32 f14; u8 pad2[0x23 - 0x18]; u8 b23;
 extern f32 D_L00_001616DC;
 extern f32 D_0015ED6C;
 s32 FUN_001f9740(void *);
-void FUN_0020c828(void *);
-void FUN_001f99f8(void *);
+void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_001f9cf8(void *, void *, void *);
 void FUN_001f9a10(void *, void *, void *);
-s32 FUN_001fa6d0(f32);
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002d7f88(S_002d7f88 *self) {
     D_002d7f88 *d = self->p78;
     O_002d7f88 *o;
@@ -25,17 +25,17 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     o = d->o;
     if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
 kill:
-        FUN_0020c828(self);
+        mark_moby_for_removal(self);
         return;
     }
     m = o->p78;
-    FUN_001f99f8(self->v10);
+    clear_u64_value(self->v10);
     self->f14 = -d->f4;
     FUN_001f9cf8(self->v10, self->v10, (u8 *)d->o + 0xC0);
     FUN_001f9a10(self->v10, self->v10, m);
     qcopy(&self->q40, &d->o->q40);
     if (d->f4 > D_L00_001616DC) {
-        self->b23 = FUN_001fa6d0((1.0f - (d->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
+        self->b23 = truncate_float_to_s32((1.0f - (d->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
     }
     t = d->fC;
     self->f2C = t * 0.1f + t * d->f4 / D_L00_001616DC;
@@ -45,12 +45,12 @@ typedef int q128 __attribute__((mode(TI)));
 typedef struct { char pad[0x10]; q128 q; signed char b20; } P2d8138;
 typedef struct { char pad[0xC]; P2d8138 *p; } T2d8138;
 typedef struct { char pad[0x10]; q128 q; char b20; char pad2[0xF]; char b30; char pad3[3]; unsigned short h34; char pad4[0x42]; T2d8138 *t78; char pad5[0x18]; int f94; } O2d8138;
-O2d8138 *FUN_0020c4f8(int);
+O2d8138 *create_moby(int) __asm__("FUN_0020c4f8");
 #include "qcopy.h"
 O2d8138 *FUN_L00_002d8138(P2d8138 *p) {
     O2d8138 *o;
     if (p->b20 < 0) return 0;
-    o = FUN_0020c4f8(0x326);
+    o = create_moby(0x326);
     if (o) {
         o->b30 = 0x40;
         o->b20 = 0;
@@ -227,12 +227,12 @@ extern V4 D_L00_001E3CA0[];
 extern V4 D_L00_001E3D20[];
 extern f32 D_L00_001619F0 __attribute__((sda));
 extern f32 D_L00_00161A14 __attribute__((sda));
-void FUN_00214890(V4 *, V4 *, V4 *, f32);
+void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 void FUN_001f9bf8(V4 *, V4 *, f32);
 void FUN_L00_002d8908(void) {
     s32 i;
     for (i = 0; i < 8; i++) {
-        FUN_00214890(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i], D_L00_001619F0);
+        build_look_at_matrix(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], &D_L00_001E3D20[i], D_L00_001619F0);
         FUN_001f9bf8(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14);
     }
 }
@@ -396,7 +396,7 @@ extern R *FUN_L00_002db890_c(M_da360 *) __asm__("FUN_L00_002db890");
 extern f32 FUN_001f9b80(void *, void *);
 extern s32 FUN_L00_002d9f78_c(void) __asm__("FUN_L00_002d9f78");
 extern f32 FUN_001f9e90(f32, f32);
-extern f32 FUN_001fa688(f32, f32);
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_001efa68");
 int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf);
 extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
@@ -427,10 +427,10 @@ void FUN_L00_002da360(u8 *p, void *q)
                         r->h6a = -1;
                         qcopy(&v, &m->pos);
                         v.z += 0.4f;
-                        t = FUN_001fa688(a, FUN_001f9e90(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
+                        t = fast_difference_between_rotations(a, FUN_001f9e90(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
                         if (t * t < thr) {
                             t = FUN_001f9e90(d, v.z - *(f32 *)(p + 0x18));
-                            t = FUN_001fa688(b, t);
+                            t = fast_difference_between_rotations(b, t);
                             if (t * t < thr) {
                                 if (!FUN_001efa68_c(buf, &v, 2, m, 0)) goto hit;
                                 if (r->h68 > 0) FUN_L00_002da1e0_c(m);
@@ -575,7 +575,7 @@ typedef struct { u8 pad0[0x2050]; s32 slot[11]; s32 count; } G;
 extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
 s32 FUN_001f96f8(s32);
-void FUN_00212f90(void *, s32, s32, s32);
+void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     u8 *o = FUN_L00_002db890_u(m);
     s32 k;
@@ -594,7 +594,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
     case 2: {
         if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
             u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
-            FUN_00212f90(m, c, 0, FUN_001f96f8(10));
+            blend_moby_animation(m, c, 0, FUN_001f96f8(10));
         }
         *(s16 *)(o + 0x68) = 7;
         return 0;
@@ -719,7 +719,7 @@ typedef struct { u8 pad[0x80]; u8 v80[0x2000]; void *p2080; } G_2df1e0;
 extern G_2df1e0 D_0013F350_2df1e0 __asm__("D_0013F350");
 extern s16 D_L00_001E6008_2df1e0[] __asm__("D_L00_001E6008") __attribute__((section(".data")));
 extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") __attribute__((section(".data")));
-s32 FUN_00213260(s32);
+s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 FUN_L00_0025e3f8(O_2df1e0 *);
 f32 FUN_001f9b48(void *, void *);
 void FUN_L00_002a7210(O_2df1e0 *, void *, f32, f32);
@@ -730,7 +730,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
     if (p == 0) return;
     if (p->b20 == 0xFE) return;
     if (p->b20 == 0xFD) return;
-    if (FUN_00213260(10)) return;
+    if (random_integer_below(10)) return;
     if (!(p->p24 && p->p24->h46 == 0x13) && !FUN_L00_0025e3f8(p)) return;
     if (!(FUN_001f9b48(p->v10, D_0013F350_2df1e0.v80) < 30.0f)) return;
     for (i = 0; i < 10 && D_L00_001E6008_2df1e0[i] >= 8; i++) {
@@ -792,7 +792,7 @@ void FUN_L00_002df4a8(M09 *m) {
 
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int D_0015ED84 __attribute__((section(".sdata")));
 extern int FUN_001fa6e0(int, int, float);
 extern short D_L00_00161B90_d __asm__("D_L00_00161B90") __attribute__((sda));
@@ -812,7 +812,7 @@ void FUN_L00_002df4f8(char *m) {
         m[0x20] = 1;
         break;
     case 1:
-        a = FUN_001fa580(*(float *)p, *(float *)&D_L00_00161B98_d * 0.017453292f * D_0015ED6C_c);
+        a = fast_add_rotations(*(float *)p, *(float *)&D_L00_00161B98_d * 0.017453292f * D_0015ED6C_c);
         *(float *)p = a;
         a = FUN_001f9de0(a);
         c = FUN_001fa6e0(*(int *)&D_L00_00161B90_d, *(int *)&D_L00_00161B94_d, a * 0.5f + 0.5f);

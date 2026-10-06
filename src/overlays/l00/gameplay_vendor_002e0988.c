@@ -204,12 +204,12 @@ extern f32 FUN_001f9af0(void *);
 extern f32 FUN_00213f38(f32, f32, f32, f32, f32 *, f32 *);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
-extern f32 FUN_001fa580(f32, f32);
-extern f32 FUN_001fa5c8(f32, f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void FUN_0020cca8(VendMoby *, s32, void *);
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
-extern f32 FUN_0020c9e0(VendMoby *);
+extern f32 compute_interpolated_record_value(VendMoby *) __asm__("FUN_0020c9e0");
 extern s32 FUN_001efa68(void *, void *, s32, VendMoby *, VendQuery *);
 extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
 extern s32 FUN_L00_002e2190(VendMoby *, void *, void *);
@@ -326,9 +326,9 @@ void FUN_L00_002e0b88(VendMoby *moby) {
 
         ang = FUN_001f9e90(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
         if (moby->flags34 & 0x8000) {
-            ang = FUN_001fa580(ang, D_L00_00161BEC);
+            ang = fast_add_rotations(ang, D_L00_00161BEC);
         } else {
-            ang = FUN_001fa5c8(ang, D_L00_00161BEC);
+            ang = fast_subtract_rotations(ang, D_L00_00161BEC);
         }
         VEND_TURN(moby, vars, ang, 1.5707964f);
         FUN_0020cca8(moby, 0, mtx);
@@ -348,7 +348,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         query.unk8A = moby->unkA6;
         query.dir[2] = 1.0f;
         query.unk88 = 0;
-        if (moby->unk52 == moby->anim && FUN_0020c9e0(moby) > 1.0f) {
+        if (moby->unk52 == moby->anim && compute_interpolated_record_value(moby) > 1.0f) {
             hit = 1;
             query.flags |= 1;
         }

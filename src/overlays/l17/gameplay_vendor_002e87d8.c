@@ -780,7 +780,7 @@ extern void FUN_L17_002eb768(int a, char *p);
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
-s32 font_print_center_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6af0");
+s32 font_print_center(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6af0");
 void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
@@ -1720,7 +1720,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L17_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_001f96b0(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
 extern float fast_cos_c(float) __asm__("func_001F9DC8");
 extern float fast_sin_c(float) __asm__("func_001F9DE0");
@@ -2002,7 +2002,7 @@ void FUN_L17_002eeb68(unsigned char *m) {
             }
         } else if (AbsoluteFloat(compute_interpolated_record_value(m) - 17.5f) <= 0.25f
                    && AbsoluteFloat(d->v180[2] - *(float *)(m + 0x18)) < 1.0f
-                   && FUN_001fa688(FUN_001f9e90(d->v180[0] - *(float *)(m + 0x10), d->v180[1] - *(float *)(m + 0x14)),
+                   && fast_difference_between_rotations(FUN_001f9e90(d->v180[0] - *(float *)(m + 0x10), d->v180[1] - *(float *)(m + 0x14)),
                                     *(float *)(m + 0x48)) < 0.2617994f
                    && d->target != 0
                    && FUN_001f9b80(m + 0x10, d->v180) < 2.75f) {
@@ -2153,8 +2153,8 @@ extern float D_0015ED70;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
-extern float random_float_between(float a, float b);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -2218,7 +2218,7 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
     }
     if (FUN_001f9b48(moby->pos, d->v1B0) < 64.0f) {
         ang2 = FUN_001f9e90(d->v180[0] - moby->pos[0], d->v180[1] - moby->pos[1]);
-        yaw = FUN_001fa688(moby->f48, ang2);
+        yaw = fast_difference_between_rotations(moby->f48, ang2);
         qcopy(tmp, moby->pos);
         tmp[2] += 1.0f;
         r = FUN_001efa68(tmp, D_0013F420, 2, 0, 0) == 0;
@@ -2789,9 +2789,9 @@ extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
 extern void FUN_L00_002eac18(int);
 extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
-extern void fade_to_black(int);
+extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);

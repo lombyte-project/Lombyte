@@ -8,8 +8,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, float hi)
 {
@@ -30,7 +30,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
         }
         u = 1.0f - t;
         if (flag != 0) {
-            r = FUN_001fa580(b, FUN_001fa5c8(c, b) * t);
+            r = fast_add_rotations(b, fast_subtract_rotations(c, b) * t);
         } else {
             r = b * u + c * t;
         }

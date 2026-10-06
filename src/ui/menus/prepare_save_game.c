@@ -5,7 +5,7 @@
 extern int D_0015ED84 MACRO_ADDR;
 extern char D_0013D290[];
 extern void func_0020ABB0(char *out);
-extern void prepare_save_game(int, int);
+extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
 extern void sceCdReadClock(void *);

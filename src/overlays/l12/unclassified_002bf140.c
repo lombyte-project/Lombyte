@@ -173,7 +173,7 @@ extern short D_L12_001618C0_d __asm__("D_L12_001618C0") __attribute__((sda));
 extern short D_L12_001618C4_d __asm__("D_L12_001618C4") __attribute__((sda));
 extern short D_L12_001618C8_d __asm__("D_L12_001618C8") __attribute__((sda));
 extern short D_L12_001618CC_d __asm__("D_L12_001618CC") __attribute__((sda));
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L12_002e19a8(void *pos) {
@@ -192,7 +192,7 @@ void FUN_L12_002e19a8(void *pos) {
         w[2] = w[2] + random_float_between_alt(-0.25f, -0.75f);
         w[0] = w[0] + random_float_between_alt(-0.25f, 0.25f);
         w[1] = w[1] + random_float_between_alt(-0.25f, 0.25f);
-        FUN_001f99f8(v3);
+        clear_u64_value(v3);
         v4[0] = fast_cos(r) * (random_float_between_alt(*(float *)&D_L12_00161898_d, *(float *)&D_L12_0016189C_d) * D_0015ED6C);
         v4[1] = fast_sin(r) * (random_float_between_alt(*(float *)&D_L12_00161898_d, *(float *)&D_L12_0016189C_d) * D_0015ED6C);
         *(int *)&v4[2] = 0;
@@ -217,7 +217,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
 
 extern char D_0013E533[];
 extern short D_L12_00161914_d __asm__("D_L12_00161914") __attribute__((sda));
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa050(void *, void *);
@@ -230,7 +230,7 @@ void FUN_L12_002e3e28(char *moby, float *out, int on) {
     float g;
     if (on) {
         FUN_001f9a28(a, D_0013E533 + 0xE9D, moby + 0x10);
-        FUN_001f99f8(m);
+        clear_u64_value(m);
         m[2] = -*(float *)(moby + 0x48);
         FUN_001fa050(b, m);
         FUN_001f9d20(a, a, b);
@@ -323,7 +323,7 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void*,void*);
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float,float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float);
 extern float truncate_float_to_s32_cf(float,float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
@@ -340,8 +340,8 @@ extern void FUN_L12_0027b9c0_x(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 extern void FUN_L00_00263d40_c(int, int) __asm__("FUN_L00_00263d40");
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
-extern int is_point_inside_clip_volume(void *, int);
-extern int memcard_save_data(int, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
@@ -354,7 +354,7 @@ extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L12_002e6b60(char *);
 extern void add_vector_xyz(void*,void*,void*);
-extern void build_spherical_offset(void*,float,float,float);
+extern void build_spherical_offset(void*,float,float,float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern char D_001413DC[];
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");

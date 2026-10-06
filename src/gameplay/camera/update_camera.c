@@ -12,6 +12,7 @@ extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void FUN_001eda60(void);
 extern void func_001ED940(void);
 extern void FUN_001ed470(void);
+extern void update_camera_blend(char *) __asm__("FUN_001ed2b0");
 extern void func_001EC8A0(void *);
 extern void FUN_001fa298(void *, void *);
 extern void FUN_00214598(void *, void *);
@@ -49,7 +50,7 @@ void update_camera(void) {
         func_001EC8A0(*(void **)(c + 0x184));
     }
     if (*(short *)(c + 0x270) == 3) {
-        FUN_001ed2b0(target);
+        update_camera_blend(target);
     } else {
         char *st = D_0018C318;
         if (*(int *)(st + 0x14) != 0) {

@@ -2,7 +2,7 @@
 extern void func_001F4280(int);
 extern void func_001F4398(void);
 extern void *func_001FDD10(int);
-extern void FUN_00233980(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 typedef struct {
     short s[12];
 } TextBox;
@@ -20,8 +20,8 @@ int draw_prompt_box(char *arg0) {
     char *text;
     int v;
 
-    FUN_00233980(0x42, 0x44);
-    FUN_00233980(0x47, 0x2004B);
+    vu1_add_g_sregister(0x42, 0x44);
+    vu1_add_g_sregister(0x47, 0x2004B);
     func_001F4280(0);
     text = D_001602E8;
     v = D_001D5CC4[0];

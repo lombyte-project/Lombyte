@@ -20,7 +20,7 @@ typedef struct { char pad[0x10]; short life; unsigned short ang; char pad2[4]; f
 
 extern P D_L00_0016EA40[16];
 extern float D_0015ED6C;
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void FillTransferWords(u8 *, s32, s32);
 
 void FUN_L00_001fea18(void) {
@@ -28,7 +28,7 @@ void FUN_L00_001fea18(void) {
     P *p = D_L00_0016EA40;
     for (i = 15; i >= 0; i--, p++) {
         if (p->life > 0) {
-            p->f = FUN_001fa5c8(p->f, D_0015ED6C * 5.2359877f);
+            p->f = fast_subtract_rotations(p->f, D_0015ED6C * 5.2359877f);
             if (p->life > 12) {
                 p->ang = p->ang + 5;
             } else {

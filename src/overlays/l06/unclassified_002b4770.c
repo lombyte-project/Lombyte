@@ -180,7 +180,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 extern float FUN_001fa5c8(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
 extern short D_L06_00161ED8_d __asm__("D_L06_00161ED8") __attribute__((sda));
@@ -221,7 +221,7 @@ float FUN_L06_002f96f8(char *self) {
             }
         }
     } while (*p++ >= 0);
-    return FUN_001fa580(FUN_001fa580(lo, FUN_001fa688(hi, lo) * 0.5f), ang);
+    return FUN_001fa580(FUN_001fa580(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
 }
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
@@ -303,7 +303,7 @@ extern short D_0015ED70_s __asm__("D_0015ED70");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern float FUN_001f9e90(float, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -316,7 +316,7 @@ int FUN_L06_002fb2a8(char *moby) {
     char *x;
     float t;
     data = *(char **)(moby + 0x78);
-    FUN_001f99f8(m);
+    clear_u64_value(m);
     if (*(unsigned char *)(moby + 0x53) == 8) {
         qcopy(v0, D_L06_00167540);
         pos = moby + 0x10;
@@ -373,7 +373,7 @@ int FUN_L06_002fb668(char *moby) {
     char *x;
     float t;
     data = *(char **)(moby + 0x78);
-    FUN_001f99f8(m);
+    clear_u64_value(m);
     if (*(unsigned char *)(moby + 0x53) == 6) {
         qcopy(v0, D_L06_00167540);
         pos = moby + 0x10;
@@ -586,7 +586,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations(float, float);
 extern int FUN_L00_0028d8c0(void *, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -776,7 +776,7 @@ void FUN_L06_002f4390(char *m)
     q.owner = m;
     q.f1C = 1.0f;
     q.i20 = 1;
-    FUN_001f99f8(&q);
+    clear_u64_value(&q);
     q.f8 = 1.0f;
     q.fC = 5627.9248046875f;
     q.b18 = 3;

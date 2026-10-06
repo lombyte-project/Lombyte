@@ -18,7 +18,7 @@ typedef struct {
 
 extern FRow D_0018CAA0[4];
 extern LightRec D_0018E340_l[] __asm__("D_0018E340");
-extern int FUN_001f44b8(int);
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_001f9bf8(void *dst, void *src, float len);
 extern void func_001F7D30(void *, int, int);
 
@@ -40,7 +40,7 @@ void draw_light_quads(void) {
     int i;
     int j;
 
-    pkt[1] = FUN_001f44b8(0);
+    pkt[1] = get_effect_texture(0);
     pkt[2] = 0xFF9000000260;
     pkt[0] = 5;
     pkt[3] = 0x8000000044;

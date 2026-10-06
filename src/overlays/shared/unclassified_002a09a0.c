@@ -161,11 +161,11 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *);
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
-extern float approach_value(float *, float, float);
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float,float);
 extern float fast_sin(float);
-extern float random_angle_radians(void);
-extern float random_float_between(float, float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern unsigned char D_0015EDB0;
 extern int D_L16_00161A74 __attribute__((sda));
 extern int D_L16_00161A78 __attribute__((sda));
@@ -176,8 +176,8 @@ extern int D_L16_0016CC90 __attribute__((section(".data")));
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_0028d8c0(void *, int);
-extern int is_value_within_interpolated_window(char *, float);
-extern int random_integer_below(int);
+extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32(float);
 extern int D_001413DC __attribute__((section(".data")));
@@ -187,8 +187,8 @@ extern void FUN_L16_002d38b0(char *);
 extern void FUN_L16_002d4070(char *);
 extern void add_vector_xyz(void*,void*,void*);
 extern void allocate_voice_for_target_entry(int, int, int);
-extern void blend_moby_animation(void *, int, int, int);
-extern void mark_moby_for_removal(void*);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void mark_moby_for_removal(void*) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void*,void*,void*);
 extern void transform_vector_by_basis(void *, void *, void *);
@@ -740,14 +740,14 @@ next:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L16_002d4070(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
     float angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-    float delta = FUN_001fa5c8(angle, *(float *)(moby + 0x48));
+    float delta = fast_subtract_rotations(angle, *(float *)(moby + 0x48));
     if (delta < 0.78539819f && -0.78539819f < delta) {
         if ((unsigned char)moby[0x53] != 1) {
             blend_moby_animation_u(moby, 1, 0, FUN_001f96f8(0x14));
@@ -779,7 +779,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L16_0015F5D0;
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0024f7c8(void *,int,void *);
 extern void FUN_L00_0026a9f0(void *,void *,int,int,int,int,int,int,float,float);
 extern void FUN_L00_002ac910(void *,void *,void *,float,int,int,int,int,int);
@@ -795,7 +795,7 @@ void FUN_L16_002d41f8(void *m) {
     void *movement;
     FUN_L00_0024f7c8(m,2,joint);
     subtract_vector_xyz(delta,D_L16_001671C0,joint);
-    FUN_001f99f8(velocity);
+    clear_u64_value(velocity);
     distance=vector_length_xyz(delta);
     if(distance<8.0f) count=truncate_float_to_s32(distance)+2;
     else count=10;
@@ -909,7 +909,7 @@ void FUN_L16_002d4908(char *m) {
         normalize_vector_xyz(velocity,matrix+8,speed);
         {float component=(random_float_between_alt(-0.2f,0.2f)+1.0f)*-2.0f;
         z=component*D_0015ED6C;}
-        FUN_001f99f8(acceleration);
+        clear_u64_value(acceleration);
         acceleration[2]=z;
         z=random_float_between_alt(-1.5f,1.5f)*D_0015ED6C;
         FUN_L00_00257d78(scatter,z,z);

@@ -106,13 +106,13 @@ extern s32 D_0015EEA4_c __asm__("D_0015EEA4");
 extern s32 D_L00_0015F630;
 extern s32 D_0015ED98;
 extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[], D_L00_00161038[];
-extern void FUN_001fbab8(s32, s32);
-extern void FUN_00218d78(s32);
+extern void mode_freeze_init(s32, s32) __asm__("FUN_001fbab8");
+extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00264328(void);
 extern s32 FUN_L00_00234e00(void);
 extern void FUN_L00_00235e18(s32, s32);
-extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
+extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
@@ -120,21 +120,21 @@ extern void FUN_L00_0028ecd8(void);
 extern void FUN_L00_00297e30_c(void) __asm__("FUN_L00_00297e30");
 extern void FUN_L00_0024e7a8(void);
 extern void FUN_L00_002648e0(void);
-extern void FUN_0022dc50(void);
+extern void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 extern void FUN_L00_002a4890(void);
 extern void FUN_001e93e8(void *, s32);
 extern void prof_297f78(void) __asm__("FUN_001e93e8");
 extern void FUN_L00_002070d0(void);
 extern void FUN_00217b88(void);
 extern void FUN_L00_001fea18(void);
-extern void FUN_001edaa8(void);
+extern void update_camera(void) __asm__("FUN_001edaa8");
 extern void FUN_L00_001f3aa0(void);
 extern void FUN_L00_001f4490(void);
-extern void FUN_0022ca50(void);
-extern void FUN_00201a28(void);
+extern void sound_update(void) __asm__("FUN_0022ca50");
+extern void update_all_point_lights(void) __asm__("FUN_00201a28");
 extern void FUN_0020cfd0(void);
 extern void FUN_L00_0023ac78(s32);
-extern void FUN_001fde90(void);
+extern void update_help_state(void) __asm__("FUN_001fde90");
 extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
 
 #define DBG(b) ((D_L00_0016C058.w8 & (b)) || ((D_L00_0016C058.w8 & 0x10) && (D_0013C940_c.w1A4 & 0x200)))
@@ -152,18 +152,18 @@ void FUN_L00_00297f78(void) {
     }
     lvl = D_L00_0015F5C0_m[1];
     if (lvl == 0 && (D_0015EEB4 & 1) && D_L00_0015F5C8 >= 8) {
-        FUN_001fbab8(3, 0);
+        mode_freeze_init(3, 0);
         return;
     }
     noctl = D_0013C940_c.w19C == 0;
     if (D_L00_001B9DE0 && lvl == 0) {
-        FUN_00218d78(0);
+        pause_all_sounds(0);
         return;
     }
     area = D_0015ED84;
     if (area == 15 && D_L00_0015F5C8 >= 8 && D_0013F350_c.b20A4 == 2 && HELD && D_0013F350_c.w2084 != 0x72) {
         if (D_L00_00166E00->h86 == 0x13) return;
-        FUN_001fbab8(4, 0);
+        mode_freeze_init(4, 0);
         return;
     }
     special = 0;
@@ -172,31 +172,31 @@ void FUN_L00_00297f78(void) {
         if (k == 0x45 || k == 0x563 || k == 0x4DA) special = 1;
     }
     if (special && D_L00_0015F5C8 >= 8 && HELD && D_0013F350_c.w2084 != 0x72 && D_L00_00166E00->h86 != 0x13) {
-        FUN_001fbab8(1, 0);
+        mode_freeze_init(1, 0);
         return;
     }
     if (lvl == 0 && (area == 8 || area == 0xC) && HELD && D_0013F350_c.w2084 == 0x32) {
-        FUN_001fbab8(1, 0);
+        mode_freeze_init(1, 0);
         return;
     }
     if (HELD && D_L00_0015F5C8 >= 8 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.w208C == 0x16) {
-        FUN_001fbab8(0, 0);
+        mode_freeze_init(0, 0);
         return;
     }
     if (HELD && D_L00_0015F5C8 >= 8 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.b10AC != 2
         && D_0013F350_c.w2084 != 0x32 && D_0013F350_c.w2084 != 0x1D && !D_0013F350_c.b20B1 && D_0013F350_c.w22A8 && lvl == 0) {
-        FUN_00218d78(0);
+        pause_all_sounds(0);
         return;
     }
     if (!(D_L00_0016C058.w8 & 0x10) && D_L00_0015F5C8 >= 8 && (D_0013C940_c.w1A4 & 0x500)
         && D_0013F350_c.w208C != 0x16 && D_0013F350_c.w2084 != 0x72 && D_0013F350_c.w2084 != 0x32 && D_0013F350_c.w2084 != 0x1D
         && !D_0013F350_c.b20B1 && D_0013F350_c.w22A8 && lvl == 0 && !special && !D_L00_0016C058.wEC) {
-        FUN_00218d78(10);
+        pause_all_sounds(10);
         return;
     }
     if (D_0013D384 && !D_0013D388.b10 && D_L00_0015F5C8 >= 8 && !D_0015EE20 && !D_0013F350_c.b20B1 && D_0013F350_c.w22A8
         && FUN_001f96f8_c(0x1E) < D_L00_0015F5CC_c && D_0015ED84) {
-        FUN_001fbab8(5, 0);
+        mode_freeze_init(5, 0);
         D_0013D388.b10 = 1;
         return;
     }
@@ -205,7 +205,7 @@ void FUN_L00_00297f78(void) {
         s32 x;
         x = FUN_L00_00234e00();
         FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
-        x = FUN_001ff308(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8, &D_0015ED98, 9999999);
+        x = queue_animation_update(2, 0x754E, FUN_L00_00239cc8, FUN_L00_00239d00, FUN_L00_00239df8, &D_0015ED98, 9999999);
         FUN_L00_00235e18(x, FUN_001f96f8_c(0xB4));
     }
     if (D_L00_00184214) {
@@ -225,7 +225,7 @@ void FUN_L00_00297f78(void) {
     if (DBG(2)) {
         FUN_L00_0024e7a8();
         FUN_L00_002648e0();
-        FUN_0022dc50();
+        enqueue_voice_request();
         FUN_L00_002a4890();
     }
     FUN_001e93e8(D_L00_00160FF8, 3);
@@ -237,18 +237,18 @@ void FUN_L00_00297f78(void) {
     }
     FUN_001e93e8(D_L00_00161018, 5);
     if (DBG(8)) {
-        FUN_001edaa8();
+        update_camera();
     } else if (D_L00_0016C058.w14) {
         FUN_L00_001f3aa0();
         if (D_L00_0016C058.w14 == 2) FUN_L00_001f4490();
     }
     FUN_001e93e8(D_L00_00161028, 8);
-    FUN_0022ca50();
+    sound_update();
     FUN_001e93e8(D_L00_00161038, 6);
-    FUN_00201a28();
+    update_all_point_lights();
     FUN_0020cfd0();
     FUN_L00_0023ac78(1);
-    FUN_001fde90();
+    update_help_state();
     if (DBG(2)) FUN_L00_00297e70_c();
     if (D_L00_0016C058.w18 == 2) prof_297f78();
     if (D_L00_0016C058.w18 == 3) prof_297f78();
@@ -569,13 +569,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0015F3FC;
 void FUN_L00_002a09d8(s32);
-void FUN_001f4a58(s32);
-void FUN_002166e8(void);
+void fade_to_black(s32) __asm__("FUN_001f4a58");
+void request_audio_stream_break(void) __asm__("FUN_002166e8");
 void FUN_002335a0(void);
 void FUN_L00_00299c00(void) {
     FUN_L00_002a09d8(1);
-    FUN_001f4a58(0xC);
-    FUN_002166e8();
+    fade_to_black(0xC);
+    request_audio_stream_break();
     D_L00_0015F5C0_m[1] = 0;
     D_L00_0015F5D8 = 1;
     D_L00_0015F3FC = 0;
@@ -683,12 +683,12 @@ int FUN_L00_002223f8(int, int);
 void FUN_L00_002330d0(void);
 void FUN_001f9cf8(Vec4 *, void *, void *);
 void FUN_001f9a10(Vec4 *, Vec4 *, void *);
-float FUN_001fa580(float, float);
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_00216f90(Vec4 *, Vec4 *, int, int);
 void FUN_001ff768(void);
-void FUN_0012e418(int);
+void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void FUN_00216088(void);
-void FUN_0012dc80(void);
+void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 void FUN_L00_0029af80(void) {
     Vec4 v;
     Vec4 r;
@@ -703,13 +703,13 @@ void FUN_L00_0029af80(void) {
     FUN_001f9a10(&v, &v, *(char **)(g + 0x28) + 0x10);
     r.x = 0.0f;
     r.y = 0.0f;
-    r.z = FUN_001fa580(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
+    r.z = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
     FUN_L00_00216f90(&v, &r, 0, 1);
     FUN_001ff768();
     if ((unsigned short)(D_001516D0.mode - 6) >= 2) D_001516D0.mode = 5;
-    FUN_0012e418(0x1D);
+    snd_continue_all_sounds_in_group(0x1D);
     FUN_00216088();
-    FUN_0012dc80();
+    snd_flush_sound_commands();
 }
 
 #define NOT_SDA
@@ -724,10 +724,10 @@ extern int D_L00_00161188;
 extern int D_L00_00161190;
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
-extern int random_integer_below(int);
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern unsigned char D_001516EC[];
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L00_0029b4d8(int a) {
     char *b;

@@ -26,7 +26,7 @@ extern void func_001F4398();
 extern void func_001F7580(void *, u64, void *, s32);
 extern void *func_001FDD10(s32);
 extern s32 func_001FF960();
-extern void FUN_001ffc30();
+extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
 s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222948");
 
@@ -44,7 +44,7 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     tmp.unk10 = 0x10;
     packet = tmp;
     func_001F4280(0);
-    FUN_001ffc30(func_001FF960(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
+    draw_hud_sprite(func_001FF960(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.unkA = first_y;
     packet.unk8 = pos_x;
     tex = func_001FDD10(0x5182);
@@ -53,7 +53,7 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     first_y = width + 0x10;
     packet.unkA = first_y;
     tex = func_001FF960(0xE99A, 6);
-    FUN_001ffc30(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
+    draw_hud_sprite(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
     func_001F7580(&packet, ((u64)0x80FF << 16) | 0xA888, func_001FDD10(0x5183), -1);
     func_001F4398();
     return 2;

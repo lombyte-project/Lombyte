@@ -105,7 +105,7 @@ extern s32 advance_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_time(f32) __asm__("FUN_001fa6d0");
 extern f32 random_float(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_remainder(s32) __asm__("FUN_00213260");
-extern void set_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void blend_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern f32 find_ground_height(f32, HoverboardGirlVector *, s32) __asm__("FUN_00213508");
 extern s32 get_dialogue_entry(HoverboardGirlMoby *) __asm__("FUN_L00_002667d0");
 extern void initialize_npc_dialogue(HoverboardGirlMoby *, HoverboardGirlState *) __asm__("FUN_L00_002668a0");
@@ -183,7 +183,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     switch (moby->state) {
     case 0:
         if (moby->animation != 0) {
-            set_moby_animation(moby, 0, 0, scale_frame_count(20));
+            blend_moby_animation(moby, 0, 0, scale_frame_count(20));
         }
         moby->position.component[2] = find_ground_height(0.5f, &moby->position, 0);
         if (race_gates.first_gate == 0 || race_gates.second_gate == 0) {
@@ -236,12 +236,12 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         if ((moby->animation == 0 || moby->animation == 2) && advance_timer(&state->idle_animation_timer)) {
             state->idle_animation_timer = truncate_time(scale_time(random_float(1200.0f, 2400.0f)));
             if (moby->animation != 1) {
-                set_moby_animation(moby, 1, 0, scale_frame_count(10));
+                blend_moby_animation(moby, 1, 0, scale_frame_count(10));
             }
         } else if (moby->animation_flags & 2) {
             animation = random_remainder(2) != 0 ? 0 : 2;
             if (moby->animation != animation) {
-                set_moby_animation(moby, animation, 0, scale_frame_count(10));
+                blend_moby_animation(moby, animation, 0, scale_frame_count(10));
             }
         }
         break;

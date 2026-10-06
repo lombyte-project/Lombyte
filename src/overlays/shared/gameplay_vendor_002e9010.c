@@ -68,7 +68,7 @@ extern char D_L00_00166E10[];
 extern float FUN_001f9ab0(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9df8(float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
 extern short D_L00_00161CF4_d __asm__("D_L00_00161CF4") __attribute__((sda));
 extern short D_L00_00161CF8_d __asm__("D_L00_00161CF8") __attribute__((sda));
@@ -141,7 +141,7 @@ void FUN_L00_002e9720(int arg) {
         x = 1.5707964f - FUN_001f9df8(e / len);
         if (AbsoluteFloat(x) < 0.2617994f) {
             fast_vec_cross(t8, p140, fw);
-            build_look_at_matrix(p140, p140, t8, FUN_001fa5c8(0.2617994f, AbsoluteFloat(x)));
+            build_look_at_matrix(p140, p140, t8, fast_subtract_rotations(0.2617994f, AbsoluteFloat(x)));
             *(float *)(p130 + 0x28) = 0.0f;
             *(float *)(p130 + 0x20) = 0.0f;
             *(float *)(p130 + 0x24) = 0.0f;
@@ -309,7 +309,7 @@ void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 float FUN_001fa6c0(int);
 float FUN_001f99c0(float);
 float FUN_001ebd78(float, float, float, float, float, float *);
-void FUN_00214890(void *, void *, void *, float);
+void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
 int FUN_L00_001f0d60(void *, int, void *, float);
@@ -330,9 +330,9 @@ void FUN_L00_002e9f38(u8 *o) {
     r = FUN_001f99c0(st->a);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
     st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
-    if (r != 0.0f) FUN_00214890(o, o, &up, k * r);
+    if (r != 0.0f) build_look_at_matrix(o, o, &up, k * r);
     if (D_0013F350_c.f14C != 0.0f && D_0013F350_c.s308 == 0)
-        FUN_00214890(o, o, &up, D_0013F350_c.f14C);
+        build_look_at_matrix(o, o, &up, D_0013F350_c.f14C);
     t = -D_0013C940.f10C;
     if (t == 0.0f) t = -D_0013C940.f104;
     if (t == 0.0f) t = FUN_001fa6c0((D_0013C940.i1A0 >> 12) & 1);
@@ -365,7 +365,7 @@ void FUN_L00_002e9f38(u8 *o) {
         n = FUN_001fa580_c(st->ang, a);
         if (FUN_001f99c0(n) > 1.4660766f)
             { float m = 1.4660766f; if (!(z < n)) m = -1.4660766f; a = FUN_001fa5c8_c(m, st->ang); }
-        FUN_00214890(o, o, &side, a);
+        build_look_at_matrix(o, o, &side, a);
         st->ang = FUN_001fa580_c(st->ang, a);
     }
     FUN_001f9bf8_c(o, o, 1.0f);
@@ -688,7 +688,7 @@ void FUN_L00_002eac18(int mode) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa2b8(void *, void *);
 
@@ -702,13 +702,13 @@ void FUN_L00_002ead60(char *m) {
     *(float *)(q + 0x24) = 0.3f;
     *(float *)(q + 0x28) = 1.0f;
     *(short *)(q + 0x2C) = 1;
-    FUN_001f99f8(q);
+    clear_u64_value(q);
     p = *(char **)(m + 0x70);
     *(float *)(p + 0x10) = 0.3f;
     *(float *)(p + 0x14) = 0.3f;
     *(float *)(p + 0x18) = 1.0f;
     *(short *)(p + 0x1C) = 1;
-    FUN_001f99f8(p);
+    clear_u64_value(p);
     FUN_001fa050(v, m + 0x40);
     FUN_001fa2b8(m, v);
     *(short *)(m + 0x7E) = 0;
@@ -720,7 +720,7 @@ void FUN_L00_002ead60(char *m) {
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
-extern float FUN_001fa5c8(float, float);
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern float FUN_L00_00257ef0(float, float, float);
@@ -757,8 +757,8 @@ void FUN_L00_002eae20(void *arg) {
             float t, x, y, diff, z;
             t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / ConvertIntegerToFloat(*(int *)(c + 4));
             FUN_L00_001ed630(d + 0xE8, b, D_0013F3D0_c);
-            x = FUN_001fa5c8(F(c, 8), F(c, 0x1C));
-            y = FUN_001fa5c8(F(b, 0x18), D_L00_00166DD8);
+            x = fast_subtract_rotations(F(c, 8), F(c, 0x1C));
+            y = fast_subtract_rotations(F(b, 0x18), D_L00_00166DD8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
                 diff = F(c, 8) - F(c, 0x1C);
                 z = 0;
@@ -815,7 +815,7 @@ void FUN_L00_002eb218(char *a) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
 
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa2b8(void *, void *);
 extern void FUN_L00_001ed580(void *, void *, void *);
@@ -825,11 +825,11 @@ void FUN_L00_002eb278(void *arg) {
     float m[16];
     char *p = *(char **)(a + 0x70) + 0xB0;
     FUN_L00_001ed580(a + 0x30, a + 0x50, p);
-    *(float *)(a + 0x50) = FUN_001fa580(*(float *)(a + 0x50), *(float *)(p + 0x18));
+    *(float *)(a + 0x50) = fast_add_rotations(*(float *)(a + 0x50), *(float *)(p + 0x18));
     *(int *)(a + 0x40) = 0;
-    *(float *)(a + 0x44) = FUN_001fa580(*(float *)(a + 0x54), *(float *)(a + 0x5C));
-    *(float *)(a + 0x48) = FUN_001fa580(3.14159274101257324f, *(float *)(a + 0x50));
-    *(float *)(a + 0x48) = FUN_001fa580(*(float *)(a + 0x48), *(float *)(a + 0x60));
+    *(float *)(a + 0x44) = fast_add_rotations(*(float *)(a + 0x54), *(float *)(a + 0x5C));
+    *(float *)(a + 0x48) = fast_add_rotations(3.14159274101257324f, *(float *)(a + 0x50));
+    *(float *)(a + 0x48) = fast_add_rotations(*(float *)(a + 0x48), *(float *)(a + 0x60));
     *(int *)(a + 0x4C) = 0;
     FUN_001fa050(m, a + 0x40);
     FUN_001fa2b8(a, m);
@@ -1033,14 +1033,14 @@ char *FUN_L00_002eb930(void *arg) {
 extern char D_0013F350[];
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
 float FUN_001f9e90(float, float);
-float FUN_001fa688(float, float);
+float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b48(void *, void *);
 void FUN_L00_002eba18(char *o) {
     char *g = D_0013F350;
     char *h = D_00166C80_c;
     char *s = *(char **)(g + 0x2080);
     float a = FUN_001f9e90(*(float *)(s + 0x10) - *(float *)(h + 0x140), *(float *)(s + 0x14) - *(float *)(h + 0x144));
-    if (FUN_001fa688(*(float *)(h + 0x158), a) < 0.5585053563117981f && FUN_001f9b48(g + 0x80, h + 0x140) < 8.0f) {
+    if (fast_difference_between_rotations(*(float *)(h + 0x158), a) < 0.5585053563117981f && FUN_001f9b48(g + 0x80, h + 0x140) < 8.0f) {
         *(char *)(h + 0x273) = 0;
         *(short *)(o + 0x7E) = 2;
         *(float *)(h + 0x294) = 0.018f;
@@ -1192,7 +1192,7 @@ extern u8 *D_L00_0015EF50_c __asm__("D_L00_0015EF50");
 extern u8 *D_L00_001B04B0[];
 extern s32 D_001413DC[];
 extern s32 D_001415D4[];
-extern s32 FUN_00214720(void *, s32);
+extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 FUN_L00_0025fa38(void *, s32);
 extern s32 FUN_L00_0025faf0(void *, s32);
 extern s32 FUN_L00_00259740(void *, void *, s32);
@@ -1212,8 +1212,8 @@ s32 FUN_L00_002ec7e8(A_2ec7e8 *a) {
     } else if ((s16)w == 4 && D_001415D4[0] == 3) {
         v17 = 0 < o->f2E;
     }
-    if (o->f0C >= 0 && (v17 || FUN_00214720(&D_0013F3D0[0], o->f0C))) return 1;
-    if (o->f4C >= 0 && (v17 || FUN_00214720(&D_0013F3D0[0], o->f4C))) return 1;
+    if (o->f0C >= 0 && (v17 || is_point_inside_clip_volume(&D_0013F3D0[0], o->f0C))) return 1;
+    if (o->f4C >= 0 && (v17 || is_point_inside_clip_volume(&D_0013F3D0[0], o->f4C))) return 1;
     if (o->f10 >= 0 && (v17 || FUN_L00_0025fa38(&D_0013F3D0[0], o->f10))) return 1;
     if (o->f08 >= 0 && (v17 || FUN_L00_0025faf0(&D_0013F3D0[0], o->f08))) return 1;
     if (o->f14 >= 0 && (v17 || FUN_L00_00259740(&D_0013F3D0[0], D_L00_001B04B0[o->f14] + 0x10, *(s32 *)D_L00_001B04B0[o->f14]))) return 1;

@@ -55,7 +55,7 @@ extern s32 func_001F9740(void *);
 extern s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
-extern void FUN_00215b10(void) __asm__("FUN_00215b10");
+extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 
@@ -196,7 +196,7 @@ void update_help_state(void) {
         } else if (D_001996D0.timer >= 4) {
             id = D_0015F6A0[D_001996D0.msg].id;
             if (id != -1 && id == D_001516D0.unk54 - 0x7530 && D_001516D0.unk5A == 3) {
-                FUN_00215b10();
+                continue_audio_stream_if_ready();
             }
             D_001996D0.state = 5;
             D_001996D0.timer = 0;

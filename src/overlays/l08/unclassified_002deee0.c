@@ -74,7 +74,7 @@ void *FUN_L08_002e1c98(char *parent, int oClass, int joint, int pjoint) {
 /* builds a basis from a direction vector and writes the orientation into the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa050(float *, float *);
 extern void FUN_00214598(void *, void *);
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -93,7 +93,7 @@ void FUN_L08_002e4db8(char *a, float *v) {
     qcopy(m, r);
     qcopy(m + 4, s);
     qcopy(m + 8, v);
-    FUN_001f99f8(m + 12);
+    clear_u64_value(m + 12);
     d += 0x10;
     m[15] = 1.0f;
     FUN_00214598(m, d);
@@ -150,7 +150,7 @@ void FUN_L08_002e8788(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C_d __asm__("D_0015ED6C") __attribute__((sda));
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -175,7 +175,7 @@ void FUN_L08_002e8ba0(char *a) {
     }
     if (*(int *)(data + 0x90) != 0) {
         char *r = *(char **)(data + 0x90);
-        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(r + 0x40), *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
+        *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(*(float *)(r + 0x40), *(float *)&D_L08_00161D28_d * 0.01745329238474369049072265625f * D_0015ED6C_d);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
@@ -207,7 +207,7 @@ void FUN_L08_002e9a18(char *arg) {
         }
     }
     if (*(char **)(data + 0x90) != 0) {
-        *(float *)(*(char **)(data + 0x90) + 0x40) = FUN_001fa580(*(float *)(*(char **)(data + 0x90) + 0x40), *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
+        *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40), *(float *)&D_L08_00161D38_d * 0.0174532925f * D_0015ED6C_d);
     }
     p = parts + 0x10;
     for (i = 0; i < 16; i++) {

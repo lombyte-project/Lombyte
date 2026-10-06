@@ -485,7 +485,7 @@ typedef struct {
     Q_2726d8 q;
 } P_2726d8;
 void FUN_L00_00267a08(void *);
-f32 FUN_002132a8(f32, f32);
+f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 void FUN_L00_0024f7c8(void *, s32, void *);
 void FUN_001f9a28(void *, void *, void *);
 f32 FUN_001f9af0(void *);
@@ -499,12 +499,12 @@ void FUN_L00_002726d8(P_2726d8 *p) {
         FUN_L00_00267a08(p);
         return;
     }
-    sc = q->xC * FUN_002132a8(0.5f, 1.0f);
+    sc = q->xC * random_float_between(0.5f, 1.0f);
     save = p->f2C;
     qcopy(&t, &p->pos);
     FUN_L00_0024f7c8(p->q.owner, q->x4, &p->pos);
     FUN_001f9a28(&t, &t, &p->pos);
-    r2 = FUN_002132a8(-0.021f, 0.021f);
+    r2 = random_float_between(-0.021f, 0.021f);
     if (FUN_001f9af0(&t) < 0.0625f) {
         f = r2 + 0.0625f;
     } else {
@@ -1716,16 +1716,16 @@ extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern T1_276078 D_00137B80;
 extern T2_276078 D_L00_001B9CF0;
 extern u8 D_L00_001602D0[];
-void FUN_00216828(s32, s32, s32);
-s32 FUN_00232e40(s32, s32, s32, void *);
+void load(s32, s32, s32) __asm__("FUN_00216828");
+s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
 void FUN_L00_00276078(void) {
     s32 h = D_L00_00173E08;
     s32 i;
     for (i = 0; i < 20; i++) {
         s32 sz = D_00137B80.e[i].n << 7;
         if (sz) {
-            FUN_00216828(h, D_00137B80.e[i].a, D_00137B80.e[i].n);
-            D_L00_001B9CF0.o[i] = FUN_00232e40(h, sz, sz, D_L00_001602D0);
+            load(h, D_00137B80.e[i].a, D_00137B80.e[i].n);
+            D_L00_001B9CF0.o[i] = stash_send_data(h, sz, sz, D_L00_001602D0);
         }
     }
 }

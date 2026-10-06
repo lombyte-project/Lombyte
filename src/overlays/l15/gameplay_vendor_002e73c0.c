@@ -13,7 +13,7 @@ extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 
 void FUN_L15_002e73c0(char *moby) {
@@ -23,7 +23,7 @@ void FUN_L15_002e73c0(char *moby) {
         switch (state) {
         case 0: {
             char *vec = data + 0x40;
-            FUN_001f99f8(vec);
+            clear_u64_value(vec);
             *(int *)(data + 0x9C) |= 4;
             moby[0x20] = 3;
             break;
@@ -433,7 +433,7 @@ void FUN_L15_002eb928(char *moby)
     float *data = *(float **)(moby + 0x78);
     if (random_integer_below(*(int *)&D_L15_0016219C_d - 1) == 0) {
         char *pos = moby + 0x10;
-        FUN_001f99f8(vec);
+        clear_u64_value(vec);
         vec[2] = random_float_between_alt(0.75f, 1.5f) * *(float *)&D_L15_00162198_d * D_0015ED6C;
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
@@ -522,7 +522,7 @@ extern char D_L15_00167280[];
 extern float FUN_001f9ab0(void *a, void *b);
 extern float FUN_001f9af0(void *a);
 extern float FUN_001f9df8(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern void FUN_001f9a28(void *dst, void *a, void *b);
 extern void FUN_001f9a68(void *, void *, float);
@@ -563,7 +563,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     if (b != 0.0f) {
         float t1 = FUN_001f9e90(lenq, dot1);
         float t2 = FUN_001f9e90(lenr, dot2);
-        float t3 = FUN_001fa688(t1, t2);
+        float t3 = fast_difference_between_rotations(t1, t2);
         if (b * 0.017453292f < t3) {
             return 0;
         }

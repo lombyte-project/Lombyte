@@ -18,11 +18,11 @@ typedef struct { char pad[0x74]; u8 active; char pad75[0x13]; char *owner; } L16
 
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_0022d798(int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, char *, void *, int, int *, float *, int, int);
 extern float FUN_L00_00257c48(float, float);
-extern void FUN_0020c828(char *);
+extern void mark_moby_for_removal(char *) __asm__("FUN_0020c828");
 extern int FUN_001f96f8(int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
@@ -45,7 +45,7 @@ void FUN_L16_002e2b60(char *m) {
         int slot = *(int *)(d + 0x190);
         if (slot != -1) {
             L16Slot_e *s = (L16Slot_e *)(D_0013E550 + slot * 0x70);
-            if (s->owner == m && s->active != 0) FUN_0022d798(slot);
+            if (s->owner == m && s->active != 0) release_voice_slot(slot);
         }
         *(int *)(d + 0x190) = -1;
     }
@@ -69,7 +69,7 @@ void FUN_L16_002e2b60(char *m) {
                     int *child = (int *)(d + 0xC0), count = 3;
                     do {
                         char *pool = D_L16_0015FFD8_sda;
-                        if (*child >= 0) FUN_0020c828(pool + (*child << 8));
+                        if (*child >= 0) mark_moby_for_removal(pool + (*child << 8));
                         child++;
                     } while (--count >= 0);
                 }
@@ -155,7 +155,7 @@ void FUN_L16_002e3050(char *moby)
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L16_002e5cd0(int);
 extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
@@ -184,11 +184,11 @@ void FUN_L16_002e5708(unsigned char *m) {
         if (FUN_L00_0028d8c0(m, *(int *)(d + 0x24)) == 0) {
             *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
         }
-        *(float *)(d + 8) = FUN_001fa580(*(float *)(d + 8),
+        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8),
                             *(float *)&D_L16_00161E00_d * 0.017453292f * D_0015ED6C);
         p = (float *)(d + 0x10);
         for (i = 0; i < 4; i++) {
-            p[i] = FUN_001fa580(p[i],
+            p[i] = fast_add_rotations(p[i],
                    ((float *)&D_L16_00161E08_d)[i] * 0.017453292f * D_0015ED6C);
         }
         if (m[0x31]) enqueue_callback_list_1_alt(FUN_L16_002e58d8, m);

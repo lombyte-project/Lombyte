@@ -31,7 +31,7 @@ void FUN_L03_00291918(char *moby)
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED60;
 extern float D_0015ED6C;
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -57,7 +57,7 @@ void FUN_L03_002bae48(char *moby) {
     v = *(float *)(p + 0x10) + *(float *)(p + 0x14);
     *(float *)(p + 0x10) = v;
     FUN_L00_00262cf0(moby + 0x10, moby + 0x10, -v, *(float *)(moby + 0x48), *(float *)(moby + 0x44));
-    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), D_0015ED6C * 5.235987663269043f);
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), D_0015ED6C * 5.235987663269043f);
     ratio = ConvertIntegerToFloat(*(short *)(p + 0xE));
     ratio = ratio / ConvertIntegerToFloat(*(short *)(p + 0xC));
     c = FUN_001fa6e0(*(int *)(p + 8), *(int *)(p + 4), ratio);
@@ -389,19 +389,19 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa5c8(float, float);
-extern float FUN_001fa580(float, float);
-extern float FUN_002132a8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6d0(float);
 extern float FUN_001f9b48(void *, void *);
-extern int FUN_00214720(void *, int);
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_001e93b0(void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_00214db0(void *, float, float, float);
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_0020c828(void *);
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00266858(void *, int);
@@ -440,7 +440,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
         m->state = 1;
         break;
     case 1:
-        if (d->region_a != -1 && FUN_00214720(D_0013F3D0, d->region_a)) {
+        if (d->region_a != -1 && is_point_inside_clip_volume(D_0013F3D0, d->region_a)) {
             FUN_L00_00266858(m, 1);
             m->state = 2;
         }
@@ -457,7 +457,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
         L03Player *q;
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
-            (q = (L03Player *)(g - 0x80), FUN_001fa688(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
+            (q = (L03Player *)(g - 0x80), fast_difference_between_rotations(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
             if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
             else FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
@@ -466,9 +466,9 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
-            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
-            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            d->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * 0.017453292f);
+            build_spherical_offset(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FUN_001f9a10(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
@@ -502,7 +502,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
 extern void FUN_L02_002a4058(void *, int, float);
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char D_L03_001DC1A0[];
-extern void FUN_00215420(void);
+extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void FUN_L03_002dc9b0(unsigned char *moby) {
     switch (moby[0x20]) {
@@ -512,7 +512,7 @@ void FUN_L03_002dc9b0(unsigned char *moby) {
         moby[0x30] = 0xFF;
         break;
     case 1:
-        AddDrawCallback(FUN_00215420, moby);
+        AddDrawCallback(register_audio_stream_callback, moby);
         break;
     }
 }

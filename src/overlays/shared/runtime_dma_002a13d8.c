@@ -146,7 +146,7 @@ extern float D_0015ED6C;
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -178,7 +178,7 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
             d->bB7 = 0xD;
             d->bB6 = FUN_L00_002a13f0_c(d->anim[7], (float)d->anim[7]->i14);
             d->sEC = 0;
-        } else if (speed > D_0015ED6C * 0.21f || FUN_001fa688(m->f48, ang) > 0.10471976f) {
+        } else if (speed > D_0015ED6C * 0.21f || fast_difference_between_rotations(m->f48, ang) > 0.10471976f) {
             d->sEC++;
             if (d->sEC >= 4) {
                 {
@@ -208,7 +208,7 @@ void FUN_L00_002a1670(WalkMoby *m, WalkData *d, int flags, float speed, float an
     case 10:
     case 11: {
         int idx = D_L00_001CA760[d->bB7];
-        if (m->f58 < 0.25f && FUN_001fa688(m->f48, ang) < 0.09239978f && speed < D_0015ED6C * 0.19f) {
+        if (m->f58 < 0.25f && fast_difference_between_rotations(m->f48, ang) < 0.09239978f && speed < D_0015ED6C * 0.19f) {
             blend_moby_animation(m, d->bB0, 0, 10);
             FUN_L00_002a1538_c((char *)d);
             d->bB7 = 0;

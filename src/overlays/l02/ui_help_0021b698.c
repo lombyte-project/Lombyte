@@ -1251,7 +1251,7 @@ extern float D_0015ED70;
 extern float D_L02_001673D8 __attribute__((section(".data")));
 extern float D_L02_001C42B0[];
 extern float FUN_001f9988(float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");
 extern float FUN_L00_00208f20(float, float, float, float);
 extern float FUN_L00_00213350(void *);
@@ -1260,8 +1260,8 @@ extern float FUN_L00_0025b8c0(float *, float *, float, float, float, float);
 extern float FUN_L00_0025bb38(int, float, float);
 extern float FUN_L00_0025bc00(float *, int, float, float);
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
-extern float approach_value(float *, float, float);
-extern float fast_subtract_rotations(float, float);
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xyz(void *);
 extern int D_0015ED84;
 extern int D_0015EEA4;
@@ -1326,7 +1326,7 @@ extern void FUN_L02_00220b80(void);
 extern void FUN_L02_00223450(void);
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void func_0020D348_m_cf(void) __asm__("FUN_L00_002121c0");
-extern void release_voice_slot(int);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void transform_vector_by_basis(void *, void *, void *);
 f32 FUN_001f9b48(void *, void *);
 f32 FUN_001f9b80_cf(f32, f32) __asm__("FUN_001fa580");
@@ -1665,7 +1665,7 @@ void FUN_L02_00225c20(void) {
                 float a;
 
                 a = D_0013F350.f994->f40[2];
-                if (FUN_001fa688(a, D_0013F350.f90[2]) > 90.0f) {
+                if (fast_difference_between_rotations(a, D_0013F350.f90[2]) > 90.0f) {
                     a = FUN_001f9b80_cf(a, 3.1415927f);
                 }
                 FUN_L00_0025bc98(&D_0013F350.f9AC, a, &D_0013F350.f9B8, 0, D_0015ED64 * 0.02f, D_0015ED64 * 0.3f, 0.0f);
@@ -2066,7 +2066,7 @@ void FUN_L02_00225c20(void) {
             approach_value(&D_0013F350.fA90, 1.0f, 0.2f);
             if (D_0013F350.fA58 != 0 || D_0013F350.fA54 != 0) {
                 if (r->f4 == 1 && fast_subtract_rotations(D_0013F350.fA5C, D_0013F350.f90[2]) > 0.0f) {
-                    D_0013F350.fA90 = 1.0f / (FUN_001fa688(D_0013F350.fA5C, D_0013F350.f90[2]) + 1.0f);
+                    D_0013F350.fA90 = 1.0f / (fast_difference_between_rotations(D_0013F350.fA5C, D_0013F350.f90[2]) + 1.0f);
                 }
                 D_0013F350.f180 = D_0013F350.fA5C;
                 FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
@@ -2386,7 +2386,7 @@ void FUN_L02_00225c20(void) {
                 if (D_0013F350.f4E8 != 0) {
                     qcopy(vec[1], D_0013F350.f4D0);
                     a1 = FUN_001f9b80_cf(D_0013F350.f4E4, 3.1415927f);
-                    if (!(FUN_001fa688(a0, a1) > 0.5235988f)) {
+                    if (!(fast_difference_between_rotations(a0, a1) > 0.5235988f)) {
                         float mid;
                         float spd;
 
@@ -2821,7 +2821,7 @@ void FUN_L02_00225c20(void) {
             float k;
             float t;
 
-            d = FUN_001fa688(D_0013F350.f90[2], D_0013F350.f180);
+            d = fast_difference_between_rotations(D_0013F350.f90[2], D_0013F350.f180);
             FUN_L00_002118c8(D_0015ED6C * 1.5f, 0);
             if (D_0013F350.f190 < D_0015ED6C * 1.5f * 0.55f) {
                 D_0013F350.f190 = D_0015ED6C * 1.5f * 0.55f;

@@ -77,8 +77,8 @@ extern float D_L00_001CB7C0[];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001f9e90(float, float);
 extern int D_L00_0015F5CC;
 extern int FUN_001f9770(void *);
@@ -128,11 +128,11 @@ after:
     q = D_L00_00166DC0;
     B = q - 0x140;
     d = FUN_001f9b48(pos, q);
-    a = FUN_001fa5c8(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(B + 0x140), *(float *)(m + 0x14) - *(float *)(B + 0x144)), *(float *)(B + 0x158));
+    a = fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(B + 0x140), *(float *)(m + 0x14) - *(float *)(B + 0x144)), *(float *)(B + 0x158));
     if (AbsoluteFloat(a) > 1.0471976f) {
         if ((*(int *)(p + 0x18))++ >= 6) goto kill;
-        v[0] = FUN_001f9dc8(FUN_001fa580(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
-        v[1] = FUN_001f9de0(FUN_001fa580(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
+        v[0] = FUN_001f9dc8(fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
+        v[1] = FUN_001f9de0(fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) * d;
         v[2] = *(float *)(m + 0x18) - *(float *)(B + 0x148);
         FUN_001f9a10(pos, v, q);
         qcopy(v, pos);
@@ -775,17 +775,17 @@ void FUN_L00_0026c558(P_26c558 *p) {
 typedef struct { u8 x0; u8 x1; u8 x2; u8 x3; u32 x4; u8 x8; u8 x9; u8 pa[2]; u32 xc; f32 a[4]; f32 b[4]; f32 c[4]; } E0026c6e8;
 extern u8 *D_L00_001B20CC NOT_SDA;
 E0026c6e8 *FUN_L00_002678b8(s32);
-s32 FUN_00213260(s32);
-s32 FUN_001fa6d0(f32);
+s32 random_integer_below(s32) __asm__("FUN_00213260");
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f9a28(void *, void *, void *);
 void FUN_L00_0026c6e8(void *pos, void *vel) {
     E0026c6e8 *e = FUN_L00_002678b8(0x13);
     u32 v;
     if (e == 0) return;
-    v = (FUN_00213260(6) * 6 + 0x40) | 0x78404000;
+    v = (random_integer_below(6) * 6 + 0x40) | 0x78404000;
     e->x4 = v;
     e->xc = v;
-    e->x9 = FUN_001fa6d0(2.0f) + 0x20;
+    e->x9 = truncate_float_to_s32(2.0f) + 0x20;
     e->x3 = 0x48;
     e->x1 = 3;
     e->x2 = *D_L00_001B20CC;
@@ -1824,7 +1824,7 @@ extern float D_L00_00166DD8_d __asm__("D_L00_00166DD8") __attribute__((section("
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9c48(void *, void *, float);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -1867,8 +1867,8 @@ void FUN_L00_0026f280(char *m) {
     *(float *)(p + 0) = v[0];
     *(float *)(p + 4) = v[1];
     *(float *)(p + 8) = v[2];
-    *(float *)(p + 0x14) = FUN_001fa580(*(float *)(p + 0x14), *(float *)(p + 0x18));
-    a = FUN_001fa580(D_L00_00166DD8_d, 1.5707964f);
+    *(float *)(p + 0x14) = fast_add_rotations(*(float *)(p + 0x14), *(float *)(p + 0x18));
+    a = fast_add_rotations(D_L00_00166DD8_d, 1.5707964f);
     k = FUN_001f9de0(*(float *)(p + 0x14)) * *(float *)(p + 0x1C);
     v[0] = FUN_001f9dc8(a) * k;
     v[1] = FUN_001f9de0(a) * k;
@@ -2427,7 +2427,7 @@ typedef struct { V_270948 v; s32 x10; s32 x14; u8 pad[4]; f32 x1C; s32 x20; } C_
 extern u8 *D_L00_001B20B0_c[] __asm__("D_L00_001B20B0");
 extern f32 D_0015ED64;
 extern s32 FUN_001f9770_c(s16 *) __asm__("FUN_001f9770");
-extern f32 FUN_002132a8(f32, f32);
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern M_270948 *FUN_L00_00270758_c(void *, void *, s32, s32) __asm__("FUN_L00_00270758");
@@ -2451,25 +2451,25 @@ void FUN_L00_00270948(M_270948 *m) {
         r = m->fC / 900000.0f;
         m->fC *= 0.8f;
         nr = -r;
-        FUN_001f9a68_c(&v, e, FUN_002132a8(0.5f, 0.7f));
-        p.f[0] = m->pos.f[0] + FUN_002132a8(nr, r);
-        p.f[1] = m->pos.f[1] + FUN_002132a8(nr, r);
-        p.f[2] = m->pos.f[2] + FUN_002132a8(nr, r);
-        v.f[0] += FUN_002132a8(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
-        v.f[1] += FUN_002132a8(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
-        v.f[2] += FUN_002132a8(-e->v.f[2] * 0.2f, 0.0f);
+        FUN_001f9a68_c(&v, e, random_float_between(0.5f, 0.7f));
+        p.f[0] = m->pos.f[0] + random_float_between(nr, r);
+        p.f[1] = m->pos.f[1] + random_float_between(nr, r);
+        p.f[2] = m->pos.f[2] + random_float_between(nr, r);
+        v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
+        v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
+        v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
         n = FUN_L00_00270758_c(&p, &v, 0x88, e->x1C);
         if (n) {
             n->hA = FUN_001f96f8_c(2);
             n->fC = m->fC;
         }
-        FUN_001f9a68_c(e, e, FUN_002132a8(0.5f, 0.7f));
-        e->v.f[0] += FUN_002132a8(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
-        e->v.f[1] += FUN_002132a8(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
-        e->v.f[2] += FUN_002132a8(-e->v.f[2] * 0.2f, 0.0f);
-        m->pos.f[0] += FUN_002132a8(nr, r);
-        m->pos.f[1] += FUN_002132a8(nr, r);
-        m->pos.f[2] += FUN_002132a8(nr, r);
+        FUN_001f9a68_c(e, e, random_float_between(0.5f, 0.7f));
+        e->v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
+        e->v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
+        e->v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
+        m->pos.f[0] += random_float_between(nr, r);
+        m->pos.f[1] += random_float_between(nr, r);
+        m->pos.f[2] += random_float_between(nr, r);
     }
     m->b2 = D_L00_001B20B0_c[0][(m->hA + e->h16 + (m->b2 - D_L00_001B20B0_c[0][0])) & 7];
     FUN_001f9a10(&v, &m->pos, e);

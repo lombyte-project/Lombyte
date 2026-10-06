@@ -45,12 +45,12 @@ void FUN_L00_00262500(int a, char *b) {
 }
 typedef struct { u8 p0[0x23]; u8 x23; u8 p24[0xC]; u8 x30; u8 x31; u16 x32; s16 x34; u8 p36[2]; u64 x38; u8 p40[0x32]; u8 x72; u8 p73[0x21]; s32 x94; u8 p98[0xE]; s16 xa6; } E00262528;
 typedef struct { u8 p0[0x100]; s32 x100[4]; s32 x110[4]; E00262528 *x120[4]; u8 p130[4]; E00262528 *x134; s32 x138; } O00262528;
-E00262528 *FUN_0020c4f8(s32);
+E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
 void FUN_L00_00262528(O00262528 *o, s32 a, s32 b) {
     E00262528 *e;
     if (o->x138 == 4) return;
     if (b >= 9) return;
-    e = FUN_0020c4f8(o->x134->xa6);
+    e = create_moby(o->x134->xa6);
     if (e == 0) return;
     e->x32 = o->x134->x32;
     e->x38 = o->x134->x38;
@@ -205,11 +205,11 @@ void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb)
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9de0(float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
     float t;
-    *p = FUN_001fa580(*p, y);
+    *p = fast_add_rotations(*p, y);
     *(float *)(a + 0x18) -= *q;
     t = FUN_001f9de0(*p) * x;
     *q = t;
@@ -222,6 +222,6 @@ extern float FUN_001f9dc8(float);
 void FUN_L00_00262b80(float *o, float *a, float *b, float r, float l1, float l2) {
     o[0x10] = r * FUN_001f9de0(*a) * FUN_001f9de0(*b);
     o[0x11] = r * FUN_001f9de0(*a) * FUN_001f9dc8(*b);
-    *a = FUN_001fa580(*a, l1);
-    *b = FUN_001fa580(*b, l2);
+    *a = fast_add_rotations(*a, l1);
+    *b = fast_add_rotations(*b, l2);
 }

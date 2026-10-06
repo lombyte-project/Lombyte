@@ -139,7 +139,7 @@ extern E_23ac78 D_L00_0017DC50[] __attribute__((section(".data")));
 typedef struct { int a; int b; } H_23ac78;
 extern H_23ac78 D_L00_0017E4D8 __attribute__((section(".data")));
 extern void FUN_L00_0023adb8(void);
-extern void FUN_001ff418(void *);
+extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
 int FUN_L00_0023ac78(int call) {
     int n = 0;
@@ -161,7 +161,7 @@ int FUN_L00_0023ac78(int call) {
             if (e->lvl >= -5) e->lvl--;
         }
         if (e->on && e->lvl == -6) {
-            FUN_001ff418(e);
+            apply_pending_animation(e);
         }
         if (call && e->cb) {
             e->cb(e);

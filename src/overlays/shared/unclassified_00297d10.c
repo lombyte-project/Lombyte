@@ -35,10 +35,10 @@ extern float FUN_001f9de0(float);
 extern int FUN_001fa6e0(int, int, float);
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_001fefc8(void *);
-extern void FUN_0020c828(void *);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L06_002d8178(void *, void *);
 extern void FUN_L06_002d8738(void);
-extern void FUN_001f4600(int, int);
+extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 
 void FUN_L06_002d85a0(unsigned char *moby) {
     char *p = FUN_L00_0025a420(moby, 0x10000, 0);
@@ -63,14 +63,14 @@ void FUN_L06_002d85a0(unsigned char *moby) {
             FUN_L06_002d8178(moby, p);
         }
         if (moby[0x31] != 0) {
-            FUN_001f4600((int)FUN_L06_002d8738, (int)moby);
+            enqueue_callback_list_1((int)FUN_L06_002d8738, (int)moby);
         }
         break;
     case 2:
         qcopy(tmp, moby + 0x10);
         tmp[2] += 0.3f;
         if (FUN_L00_001fefc8(moby + 0xBC) != 0) {
-            FUN_0020c828(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }
@@ -454,14 +454,14 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float FUN_L00_0025bc00(float *, int, float, float);
-extern float approach_value(float *p, float target, float maxstep);
-extern float compute_interpolated_record_value(void *);
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations(float, float);
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float probe_ground_height(void *, int, float);
-extern float random_angle_radians(void);
-extern float random_float_between(float, float);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int *D_L06_001B0C30[];
@@ -480,8 +480,8 @@ extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern int FUN_L01_00276a48(float, int *, int, int, void *);
 extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
 extern int FUN_L06_002f32f0(void *, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
-extern int random_integer_below(int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern float D_L06_00161CE0 __attribute__((sda));
@@ -506,10 +506,10 @@ extern void FUN_L06_002f2910(void *);
 extern void FUN_L06_002f3640(void *);
 extern void FUN_L06_002f38c8(char *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void attach_manipulator(char *, int, void *);
-extern void blend_moby_animation(void *, int, int, int);
-extern void detach_manipulator(void *, void *);
-extern void mark_moby_for_removal(void *);
+extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 
@@ -1199,16 +1199,16 @@ void FUN_L06_002f0040(GbMoby *moby) {
 
 extern char D_L06_00167400[];
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 
 float FUN_L06_002f2148(char *a, char *b, int c) {
     float r = FUN_001f9b80(a + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
-    float t = FUN_001fa688(g[0x56],
+    float t = fast_difference_between_rotations(g[0x56],
                             FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
-    float u = FUN_001fa688(*(float *)(a + 0x48),
+    float u = fast_difference_between_rotations(*(float *)(a + 0x48),
                             FUN_001f9e90(*(float *)(b + 0x10) - *(float *)(a + 0x10),
                                               *(float *)(b + 0x14) - *(float *)(a + 0x14)));
     r = r + u * 10.0f;
@@ -1233,7 +1233,7 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
     if (!(thresh < dist)) {
         float ang = FUN_001f9e90(*(float *)(c + 0x10) - *(float *)(a + 0x10),
                                       *(float *)(c + 0x14) - *(float *)(a + 0x14));
-        float v = dist + FUN_001fa688(*(float *)(a + 0x48), ang) * 5.0f;
+        float v = dist + fast_difference_between_rotations(*(float *)(a + 0x48), ang) * 5.0f;
         if (c == b) {
             v -= 2.0f;
         }
@@ -1420,7 +1420,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8D60), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00211250(void);
 extern void FUN_L06_002356a0(int, int);

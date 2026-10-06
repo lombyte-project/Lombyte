@@ -15,13 +15,13 @@ extern char D_0013E52B[];
 extern char D_L17_00167580[];
 extern char D_L17_001E6F60[];
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_00141DC4 __attribute__((section(".data")));
 extern int D_L17_00179D10[];
 extern int FUN_L00_00203908(int a, int b);
 extern int FUN_L00_0020d568(void);
-extern int allocate_voice_for_bank_entry(int, int, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern int tick_countdown_32();
 extern unsigned char D_0013D408[];
@@ -224,7 +224,7 @@ void FUN_L17_002f26d0(char *moby) {
         cam = D_L17_00167580;
         f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x30)) - *(float *)(cam + 0x140),
                               *(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x34)) - *(float *)(cam + 0x144));
-        if (FUN_001fa688(*(float *)(cam + 0x158), f) < 0.034906585f) {
+        if (fast_difference_between_rotations(*(float *)(cam + 0x158), f) < 0.034906585f) {
             *(unsigned char *)(moby + 0x20) = 3;
             *(int *)(d + 0x5C) = scale_game_frames(0x3C);
         }
@@ -238,7 +238,7 @@ void FUN_L17_002f26d0(char *moby) {
             cam = D_L17_00167580;
             f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x30)) - *(float *)(cam + 0x140),
                                   *(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x34)) - *(float *)(cam + 0x144));
-            if (FUN_001fa688(*(float *)(cam + 0x158), f) < 0.034906585f) {
+            if (fast_difference_between_rotations(*(float *)(cam + 0x158), f) < 0.034906585f) {
                 FUN_L06_00239528();
                 *(unsigned char *)(d + 0x4C) = 1;
                 *(unsigned char *)(moby + 0x20) = 1;

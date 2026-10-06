@@ -84,7 +84,7 @@ extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern char D_L10_00167240[];
 extern float D_0015ED6C;
 extern float FUN_001f9b48(void *, void *);
-extern float random_float_between(float a, float b);
+extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_001fa728(char *, float);

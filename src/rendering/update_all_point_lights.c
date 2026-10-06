@@ -10,8 +10,8 @@ extern float func_001FA580(float, float);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_00201ba8(int);
-extern void FUN_00201f58(int);
+extern void create_point_light(int) __asm__("FUN_00201ba8");
+extern void refresh_point_light(int) __asm__("FUN_00201f58");
 void update_all_point_lights(void) __asm__("FUN_00201a28");
 
 void update_all_point_lights(void) {
@@ -35,10 +35,10 @@ void update_all_point_lights(void) {
         if (*(int *)(dst + 0x10) != 0 && FUN_001f9b48(src + 0x10, dst + 0x20) > 8.0f) {
             qcopy(dst + 0x20, src + 0x10);
             if (*(int *)(dst + 0x10) == 1) {
-                FUN_00201ba8(i);
+                create_point_light(i);
                 *(int *)(dst + 0x10) = 2;
             } else if (*(int *)(dst + 0x10) == 2) {
-                FUN_00201f58(i);
+                refresh_point_light(i);
             }
         }
     }

@@ -11,7 +11,7 @@
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_0015ED70;
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9740(int *arg0);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -23,9 +23,9 @@ void FUN_L03_002de370(char *moby) {
     char *d = *(char **)(moby + 0x78);
     *(float *)(d + 8) = *(float *)(d + 8) - D_0015ED70 * 9.8f;
     FUN_L00_001ff290(v, moby + 0x10, d);
-    *(float *)(moby + 0x40) = FUN_001fa580(*(float *)(moby + 0x40), *(float *)(d + 0x10));
-    *(float *)(moby + 0x44) = FUN_001fa580(*(float *)(moby + 0x44), *(float *)(d + 0x14));
-    *(float *)(moby + 0x48) = FUN_001fa580(*(float *)(moby + 0x48), *(float *)(d + 0x18));
+    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(d + 0x10));
+    *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(d + 0x14));
+    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(d + 0x18));
     {
         float a = ConvertIntegerToFloat(*(int *)(d + 0x24));
         float b = ConvertIntegerToFloat(*(int *)(d + 0x20));

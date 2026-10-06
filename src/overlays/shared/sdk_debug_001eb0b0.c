@@ -9,9 +9,9 @@ void FUN_L00_001eb0b0(s32 *p) {
     p[3] = 0;
     p[4] = 0;
 }
-f32 FUN_001fa580(f32, f32);
+f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void FUN_L00_001eb0c8(f32 *d, f32 *s, f32 x) {
-    d[0] = FUN_001fa580(s[0], x);
+    d[0] = fast_add_rotations(s[0], x);
     d[1] = s[1];
     d[2] = s[2];
     d[3] = s[3];

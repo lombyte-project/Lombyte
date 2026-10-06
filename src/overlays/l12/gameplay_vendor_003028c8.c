@@ -12,7 +12,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_L00_002ea9d8(void *);
@@ -27,7 +27,7 @@ void FUN_L12_003032e8(char *moby) {
     FUN_L00_002ea9d8(m);
     m[4] = 0;
     m[5] = -*(float *)(data + 0x74);
-    m[6] = FUN_001fa580(1.5707964f, *(float *)(moby + 0x48));
+    m[6] = fast_add_rotations(1.5707964f, *(float *)(moby + 0x48));
     FUN_L00_002ea9d8(m + 4);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
@@ -81,7 +81,7 @@ extern int FUN_001f9770(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L12_003076e0(char *);
 extern void FUN_L12_00307ab8(char *m);
-extern void blend_moby_animation(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_00307840(char *m) {
@@ -269,7 +269,7 @@ extern int D_L12_001FBD10[];
 extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
 extern int D_L12_00205A58[];
-extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
