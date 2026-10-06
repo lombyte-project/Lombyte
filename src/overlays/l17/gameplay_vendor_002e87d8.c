@@ -680,7 +680,145 @@ skip:
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002eb9a8.s", FUN_L17_002eb9a8);
+
+/* Draws the fleet HUD: target marker, ammo icons, gauge sprites and warnings, and refreshes the gauge colour table. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002ED498), where it is exact; names translated to the US level program. */
+
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern char D_L17_001D99E0[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float FUN_L00_0025e310(float);
+extern int D_L17_0015F5CC;
+extern int D_L17_001D9B68[];
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern short D_L17_00162170 __attribute__((sda));
+extern short D_L17_00162174 __attribute__((sda));
+extern short D_L17_00162180 __attribute__((sda));
+extern unsigned char D_0013E500[];
+extern unsigned char D_0013F350[];
+extern void FUN_001f5ab0(float, float, float, float, float, int, int, long, int, int, int, int, float, float);
+extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
+extern void FUN_L11_00311210(void *, void *, void *, int);
+extern void FUN_L17_002eb768(int a, char *p);
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+s32 font_print_center_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6af0");
+void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern long func_001F4868_l(int) __asm__("FUN_001f44b8");
+extern void func_L17_002EBF08_f(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L11_00311048");
+extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
+extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6af0");
+
+void FUN_L17_002eb9a8(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    char *s;
+    unsigned char *base;
+    unsigned char *g;
+    unsigned char *h;
+    unsigned char *b;
+    int sp10;
+    int sp14;
+    long tex;
+    int i;
+    unsigned char n;
+    unsigned char c;
+    int j;
+    int x;
+    int y;
+    int ex;
+    int ey;
+    int a;
+    int v;
+    int lo;
+    int hi;
+    int idx;
+    float t;
+    float k;
+    float m;
+    float px;
+    float py;
+    float f;
+    float q;
+
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    draw_textured_quad(0x170, (s = (char *)D_0013E500, *(int *)(s + 4)) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x28));
+    draw_textured_quad(0x170, *(int *)(s + 4) - 0x90, 0x80, 0x80, 0, 0, 0x80, 0x80, 0x70808080, func_001F4868_l(*(int *)(d + 0x104) + 0x29));
+    vu1_add_g_sregister(0x42, 0x8000000048L);
+    FUN_L17_002eb768((int)moby, d);
+    if (*(int *)(d + 0x88) != 0) {
+        FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
+        if (*(int *)(d + 0x8C) > *(int *)&D_L17_00162170) {
+            t = ConvertIntegerToFloat(*(int *)(d + 0x8C) - *(int *)&D_L17_00162170);
+            t = t / ConvertIntegerToFloat(*(int *)&D_L17_00162174);
+            m = 2.0f * (1.0f - t);
+            k = t * 5.0f + 1.0f;
+            if (m > 1.0f) m = 1.0f;
+            c = func_001FA898_r(m * 96.0f);
+            func_L17_002EBF08_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), k, FUN_L00_0025e310(ConvertIntegerToFloat(D_L17_0015F5CC) / 30.0f), 0, 0xFF, 0, c);
+            *(int *)(d + 0xEC) = 0;
+        } else {
+            a = 0xFF;
+            if ((*(int *)(d + 0x8C) / scale_game_frames(0x14)) & 1) a = 0;
+            func_L17_002EBF08_f(ConvertIntegerToFloat(sp10), ConvertIntegerToFloat(sp14), 1.0f, 0.0f, 0xFF, a, 0, 0x60);
+            *(int *)(d + 0xEC) = *(int *)(d + 0x88);
+        }
+    }
+    y = 0x40;
+    x = 0x18;
+    base = D_0013F350;
+    n = base[0x15F7];
+    for (i = 0; i < n; i++) {
+        g = D_0013F350;
+        if (i < g[0x15F6]) {
+            FUN_L11_00310ad0(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x50008F00);
+        } else {
+            FUN_L11_00310ad0(x, y, 0.5f, D_L17_001D99E0, 0x19, 0xFFFFF3, 0x20004F00);
+        }
+        n = g[0x15F7];
+        if (i == n >> 1) {
+            y = 0x2E;
+            x += 0x1E;
+        }
+        y += 0x12;
+    }
+    ex = *(int *)(d + 0xE0);
+    ey = *(int *)(d + 0xE4);
+    tex = func_001F4868_l(0x11);
+    FUN_001f5ab0(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    FUN_001f5ab0(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, func_001F4868_l(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    FUN_001f5ab0(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, func_001F4868_l(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    b = D_0013F350;
+    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L17_0015F5CC / 90) & 1) {
+        func_001F6F40_c(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
+    }
+    if (*(unsigned char *)(moby + 0x20) == 8) {
+        func_001F6F40_c(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
+    }
+    h = D_0013F350;
+    f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
+    f *= 0.2f;
+    q = AbsoluteFloat(f);
+    if (q > 1.0f) f /= q;
+    *(float *)(d + 0xF0) += f;
+    v = func_001FA898_r(*(float *)(d + 0xF0) * 251.0f / *(float *)(h + 0x1600)) + 2;
+    if (v > 0xFD) v = 0xFD;
+    if (v < 2) v = 2;
+    lo = *(int *)(d + 0xF4) <= v ? *(int *)(d + 0xF4) : v;
+    hi = *(int *)(d + 0xF4) < v ? v : *(int *)(d + 0xF4);
+    for (j = lo; j <= hi; j++) {
+        idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        if (j < v) {
+            (*(int **)&D_L17_00162180)[idx] = D_L17_001D9B68[idx];
+        } else {
+            (*(int **)&D_L17_00162180)[idx] = 0x80000000;
+        }
+    }
+    *(int *)(d + 0xF4) = v;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -1020,7 +1158,7 @@ typedef struct {
     unsigned short index;
 } CameraGlobals;
 
-extern CameraGlobals D_0013F350;
+extern CameraGlobals D_0013F350_u __asm__("D_0013F350");
 extern char D_L17_001676C0[];
 extern float FUN_001f9e90(float, float);
 extern void FUN_001f9c48(void *, void *, float);
@@ -1031,8 +1169,8 @@ void FUN_L17_002ee9c0(char *moby, char *temp, char *state) {
     *(float *)(temp + 8) = 1.5f;
     FastVecAdd(temp, temp, moby + 0x10);
     clear_u64_value(state);
-    *(float *)(state + 8) = FUN_001f9e90(D_0013F350.x - *(float *)temp,
-                                                 D_0013F350.y - *(float *)(temp + 4));
+    *(float *)(state + 8) = FUN_001f9e90(D_0013F350_u.x - *(float *)temp,
+                                                 D_0013F350_u.y - *(float *)(temp + 4));
     *(int *)(state + 4) = 0;
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
@@ -1043,7 +1181,7 @@ extern void FUN_001f9cf8(void *, void *, void *);
 
 void FUN_L17_002eea70(char *moby) {
     char *state = *(char **)(moby + 0x78);
-    if (D_0013F350.active && D_0013F350.current == moby) {
+    if (D_0013F350_u.active && D_0013F350_u.current == moby) {
         char *vec = *(char **)(D_L17_001B0DB0 + *(int *)(state + 0x80) * 4) + 0x10;
         char *point = moby + 0xC0;
         int i;
@@ -1053,7 +1191,7 @@ void FUN_L17_002eea70(char *moby) {
             *(float *)(vec + 0xC) = 1.0f;
             vec += 0x10;
         }
-        D_0013F350.index = *(unsigned short *)(state + 0x80);
+        D_0013F350_u.index = *(unsigned short *)(state + 0x80);
     }
 }
 /* UpdateMoby for class 1382: hides or shows the moby by its clip volumes, then runs its state machine. */
