@@ -56,15 +56,15 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
 
     *(u128 *)&image->q[10] = 0;
     *(u128 *)&image->q[0] = 0;
-    image->q[0] = 0x1000000000000004ULL;
     image->q[10] = (u64)(size & 0x7fff) | 0x0800000000008000ULL;
+    image->q[0] = 0x1000000000000004ULL;
     image->q[1] = 0xe;
     image->q[2] = ((u64)(s64)destination_base << 0x20) |
                   ((u64)(s64)destination_width << 0x30) |
                   ((u64)(s64)pixel_format << 0x38);
     image->q[3] = 0x50;
-    image->q[4] = ((u64)(s64)destination_x << 0x20) |
-                  ((u64)(s64)destination_y << 0x30);
+    image->q[4] = ((u64)(s64)destination_y << 0x30) |
+                  ((u64)(s64)destination_x << 0x20);
     image->q[5] = 0x51;
     image->q[6] = (u64)(s64)width | ((u64)(s64)height << 0x20);
     image->q[7] = 0x52;
