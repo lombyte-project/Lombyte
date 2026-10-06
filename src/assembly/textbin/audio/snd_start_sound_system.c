@@ -10,13 +10,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_syste
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
-    void *server;
+    void *volatile server;
 };
 
 struct StartSoundWork {
-    s32 read_active;
+    volatile s32 read_active;
     u8 pad_4[0xC];
-    s32 read_error;
+    volatile s32 read_error;
 };
 
 extern u8 D_00133280[];
