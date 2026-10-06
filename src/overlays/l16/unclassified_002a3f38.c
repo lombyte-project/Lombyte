@@ -304,7 +304,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L16_002d6740(char *moby) {
     int flag = 0;
@@ -322,7 +322,7 @@ void FUN_L16_002d6740(char *moby) {
         FUN_L00_00257470(moby, 0, -1);
         FUN_L01_002787a0(moby);
         FUN_L00_00263e30(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
-        mark_moby_for_removal(moby);
+        mark_moby_for_removal_u(moby);
         break;
     }
 }
@@ -812,7 +812,383 @@ void FUN_L16_002c9a50(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cddb8.s", FUN_L16_002cddb8);
+
+
+
+#include "qcopy.h"
+
+/* Updates the test dummy (moby class 541): walks its path, throws at or sprays its target, bursts and respawns. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CF180), where it is exact; names translated to the US level program. */
+
+
+typedef int u128 __attribute__((mode(TI)));
+
+typedef struct {
+    char pad00[0x20];
+    float f20;
+    short h24;
+    char pad26[2];
+    unsigned char b28;
+    char pad29[5];
+    unsigned char b2E;
+    char pad2F[0x41];
+    float target[4];
+    char pad80[0x34];
+    int mode;
+    char padB8[8];
+    int kind;
+    int path;
+    int lives;
+    int iCC;
+    int aim[2];
+    int sound_path;
+    int node;
+    float spawn[4];
+    int timer;
+    char padF4[4];
+    char *route;
+    float turn;
+    char pad100[4];
+    char *child;
+    int step;
+    float f10C;
+    unsigned char next_state;
+    char pad111[3];
+    int next_anim;
+    char pad118[4];
+    float f11C;
+    char slots[0x20];
+    char block140[1];
+} L16DummyData;
+
+extern char D_0013F350[];
+extern char *D_L16_001B0930[];
+extern char *func_0020D348_m(int);
+extern char *D_L16_00174258 __attribute__((section(".data")));
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_0015ED6C ,D_0015EE70;
+extern float D_0015EE6C ,D_0015ED70;
+extern float FUN_001f9e90(float,float);
+extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float compute_interpolated_record_value(void *);
+extern float probe_ground_height(void *, int, float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float vector_length_xyz(void *a);
+extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
+extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
+extern int D_L16_001619C8 __attribute__((sda));
+extern float D_L16_001619CC __attribute__((sda));
+extern float D_L16_001619D0 __attribute__((sda));
+extern float D_L16_001619D4 __attribute__((sda));
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern int FUN_L16_002ced20(char *, void *, float);
+extern int is_value_within_interpolated_window(char *, float);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern void *FUN_L16_002d5db0(int, void *);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void FUN_L00_002598b0(int,float,void*,int,float,float,int,int,int);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void FUN_L00_0025f730(void *, float);
+extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
+extern void FUN_L02_00264e40(char *);
+extern void FUN_L02_00264e70(void *, void *, void *, float);
+extern void FUN_L02_002651d0(char **, int, int);
+extern void FUN_L16_002ce9f0(void *);
+extern void FUN_L16_002d5e80(char *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
+extern void blend_moby_animation(void *, int, int, int);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+unsigned char *FUN_L16_002c6268(int a, void *pos, float *dir, int c, float f);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern unsigned char *func_L16_002C75D0_2cf180(int, void *, float *, float, int) __asm__("FUN_L16_002c6268");
+extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+
+void FUN_L16_002cddb8(unsigned char *m) {
+    L16SparkVector v0, v1, v2;
+    L16SparkQuery fx;
+    L16DummyData *d = *(L16DummyData **)(m + 0x78);
+    /* A count, then 16-byte points from +0x10. A point copied whole is `path + i * 16 + 16`; its x and y are read
+       through `path + (i << 4)`: retail forms index + base for the first and base + index for the second, which
+       is what this compiler does with a multiplication and with a shift in an address. */
+    char *path;
+
+    FUN_L16_002ce9f0(m);
+    path = D_L16_001B0930[d->path];
+    FUN_L00_00263ac8(2.5f, (int)m, 2, (unsigned char *)d->block140);
+    switch (m[0x20]) {
+    case 0: /* set up: lives, home position, the held child for the variant */
+        d->b2E = 1;
+        if (d->lives > 0) {
+            *(short *)(m + 0xB4) /= d->lives;
+        }
+        m[0x20] = 1;
+        m[0x31] = 0;
+        *(unsigned short *)(m + 0x34) |= 1;
+        if (random_integer_below(2)) {
+            *(unsigned short *)(m + 0x34) |= 0x8000;
+        }
+        d->b28 = 1;
+        d->h24 = 2;
+        d->f20 = 2.0f;
+        d->f11C = random_angle_radians();
+        d->route = FUN_L16_002d5db0(d->iCC, m + 0x10);
+        qcopy(d->spawn, m + 0x10);
+        switch (d->kind) {
+        case 0:
+            d->child = func_0020D348_m(0x35F);
+            break;
+        case 1:
+            d->child = func_0020D348_m(0x374);
+            break;
+        case 2:
+            d->child = func_0020D348_m(0x36C);
+            FUN_L02_00264e40(d->slots);
+            break;
+        }
+        if (d->child) {
+            *(unsigned short *)(d->child + 0x34) |= 0x100;
+            *(short *)(d->child + 0x32) = 0x40;
+            *(unsigned char *)(d->child + 0x30) = 0;
+            *(unsigned char *)(d->child + 0x31) = 1;
+        }
+        break;
+    case 1:
+        break;
+    case 2: /* turn to the path's first node, then start by variant */
+        FUN_L16_002d5e80(d->route);
+        v0.quad = *(u128 *)(path + 0x10);
+        if (FUN_L16_002ced20(m, v0.f, *(float *)(m + 0x48))) {
+            d->timer = scale_game_frames(30);
+            d->node = 1;
+            d->step = 1;
+            if (d->kind == 0) {
+                m[0x20] = 3;
+            } else if (d->kind == 1) {
+                m[0x20] = 5;
+            } else {
+                m[0x20] = 7;
+            }
+        }
+        break;
+    case 3: /* thrower: wait, face the node, wind up */
+        if (tick_countdown_32_alt(&d->timer)) {
+            v0.quad = *(u128 *)(path + d->node * 16 + 16);
+            if (FUN_L16_002ced20(m, v0.f, FUN_001f9e90(
+                    ((float *)(path + (d->node << 4)))[4] - *(float *)(m + 16),
+                    ((float *)(path + (d->node << 4)))[5] - *(float *)(m + 20)))) {
+                d->timer = scale_game_frames(30);
+                m[0x20] = 4;
+                if (m[0x53] != 21) {
+                    blend_moby_animation(m, 21, 0, scale_game_frames(30));
+                }
+                if (random_integer_below(2)) {
+                    char *p = D_L16_001B0930[d->sound_path];
+                    FUN_L00_0025ff38(12.0f, (char *)m, d->target, 0, 0, p + 16, *(int *)p);
+                } else {
+                    d->mode = 2;
+                }
+            }
+        }
+        break;
+    case 4: /* thrower: launch the held object at the target, then face it or the next node */
+        if (d->mode == 2) {
+            qcopy(v0.f, D_L16_001600EC_c + d->aim[d->node] * 0x80 + 0x30);
+        } else {
+            qcopy(v0.f, d->target);
+        }
+        if (is_value_within_interpolated_window(m, 15.0f) && d->child) {
+            float speed = D_L16_001619CC * D_0015ED6C;
+            float gravity = D_0015ED70 * 10.0f;
+            v0.f[2] = probe_ground_height(v0.f, 0, 0.5f);
+            FUN_L00_0024f7c8(d->child, 0, v1.f);
+            subtract_vector_xyz(v2.f, v0.f, v1.f);
+            v2.f[2] = 0.0f;
+            normalize_vector_xyz(v2.f, v2.f, speed);
+            v2.f[2] = FUN_L00_0025abf0(v1.f, v0.f, 0, speed, -gravity);
+            func_L16_002C75D0_2cf180((int)m, v1.f, v2.f, gravity, scale_game_frames(300));
+        } else if (m[0x70] & 2) {
+            d->node = (d->node + 1) & 1;
+            m[0x20] = 3;
+            if (m[0x53] != 23) {
+                blend_moby_animation(m, 23, 0, scale_game_frames(30));
+            }
+        }
+        if (compute_interpolated_record_value(m) < 15.0f) {
+            v1.quad = *(u128 *)(m + 16);
+            FUN_L16_002ced20(m, v1.f, FUN_001f9e90(
+                v0.f[0] - *(float *)(m + 16),
+                v0.f[1] - *(float *)(m + 20)));
+        } else {
+            int node = (d->node + 1) & 1;
+            v1.quad = *(u128 *)(m + 16);
+            FUN_L16_002ced20(m, v1.f, FUN_001f9e90(
+                ((float *)(path + (node << 4)))[4] - *(float *)(m + 16),
+                ((float *)(path + (node << 4)))[5] - *(float *)(m + 20)));
+        }
+        break;
+    case 5: /* slider: move toward the node, emit, stop on arrival */
+        if (m[0x53] == 10) {
+            if (m[0x70] & 2) {
+                blend_moby_animation(m, 11, 0, 1);
+            }
+        } else {
+            char *position = (char *)m + 16;
+            char *g;
+            subtract_vector_xyz(v0.f, path + (d->node * 16 + 16), position);
+            FUN_L00_0025f730(v0.f, D_L16_001619D0 * D_0015ED6C);
+            add_vector_xyz(position, position, v0.f);
+            FUN_L00_0024f7c8(m, D_L16_001619C8, v1.f);
+            func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
+            g = D_0013F350;
+            if (D_L16_00174258 == *(char **)(g + 0x2080) && *(int *)(g + 0x1C0) == 0) {
+                func_0022ED80_i(6, 0, m);
+            }
+            if (vector_length_xyz(v0.f) < 0.0001f) {
+                if (m[0x53] != 9) {
+                    blend_moby_animation(m, 9, 0, scale_game_frames(20));
+                }
+                m[0x20] = 6;
+                d->timer = scale_game_frames(60);
+                if (d->node == 0) {
+                    d->step = 1;
+                } else if (d->node == *(int *)path - 1) {
+                    d->step = -1;
+                }
+            }
+        }
+        break;
+    case 6: { /* slider: turn toward the next node while the timer runs */
+        float *yaw = (float *)(m + 0x48);
+        int next = d->node + d->step;
+        float angle = FUN_001f9e90(
+            ((float *)(path + (next << 4)))[4] - *(float *)(m + 16),
+            ((float *)(path + (next << 4)))[5] - *(float *)(m + 20));
+        FUN_L00_0025be00(yaw, &d->turn, angle, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
+        if (tick_countdown_32_alt(&d->timer)) {
+            d->node = next;
+            if (m[0x53] != 10) {
+                blend_moby_animation(m, 10, 0, scale_game_frames(10));
+            }
+            m[0x20] = 5;
+        }
+        break;
+    }
+    case 7: /* sprayer: wait, face the node, start */
+        if (tick_countdown_32_alt(&d->timer)) {
+            v0.quad = *(u128 *)(path + d->node * 16 + 16);
+            if (FUN_L16_002ced20(m, v0.f, *(float *)(m + 0x48))) {
+                d->timer = scale_game_frames(30);
+                m[0x20] = 8;
+                if (m[0x53] != 1) {
+                    blend_moby_animation(m, 1, 0, scale_game_frames(30));
+                }
+                if (random_integer_below(2)) {
+                    char *p = D_L16_001B0930[d->sound_path];
+                    FUN_L00_0025ff38(12.0f, (char *)m, d->target, 0, 0, p + 16, *(int *)p);
+                } else {
+                    d->mode = 2;
+                }
+            }
+        }
+        break;
+    case 8: /* sprayer: face the target and emit from the child toward it */
+        if (d->mode != 2) {
+            v0.quad = *(u128 *)(m + 16);
+            FUN_L16_002ced20(m, v0.f, FUN_001f9e90(
+                d->target[0] - *(float *)(m + 16),
+                d->target[1] - *(float *)(m + 20)));
+        }
+        if (d->child) {
+            char *slots;
+            FUN_L00_0024f7c8(d->child, 0, v0.f);
+            slots = d->slots;
+            v1.f[0] = fast_cos(FUN_001f9e90(
+                v0.f[0] - *(float *)(m + 16),
+                v0.f[1] - *(float *)(m + 20)));
+            v1.f[1] = fast_sin(FUN_001f9e90(
+                v0.f[0] - *(float *)(m + 16),
+                v0.f[1] - *(float *)(m + 20)));
+            v1.f[2] = 0.0f;
+            FUN_L02_00264e70(slots, v0.f, v1.f, D_L16_001619D4);
+            v1.f[3] = 5627.925f;
+            v1.f[2] = 1.0f;
+            FUN_L00_00259888(&fx, m, 0x10001, 1.0f, v1.f);
+            fx.kind = 5;
+            fx.enabled = 1;
+            fx.cls = *(unsigned short *)(m + 0xA6);
+            FUN_L02_002651d0((char **)slots, (int)m, (int)&fx);
+        }
+        if (m[0x70] & 2) {
+            d->node = (d->node + 1) & 1;
+            m[0x20] = 7;
+            if (m[0x53] != 3) {
+                blend_moby_animation(m, 3, 0, scale_game_frames(30));
+            }
+        }
+        break;
+    case 9: /* turn back to the node, then resume the saved state and animation */
+        v0.quad = *(u128 *)(path + d->node * 16 + 16);
+        FUN_L16_002ced20(m, v0.f, d->f10C);
+        if (m[0x70] & 2) {
+            m[0x20] = d->next_state;
+            if (m[0x53] != d->next_anim) {
+                blend_moby_animation(m, d->next_anim, 0, scale_game_frames(20));
+            }
+        }
+        break;
+    case 10: { /* burst into three pieces; respawn at home or delete */
+        char *position = (char *)m + 16;
+        char *rot = (char *)m + 0x40;
+        float burst;
+        d->f20 = 2.0f;
+        d->timer = scale_game_frames(60);
+        burst = D_0015ED70 * 12.0f;
+        FUN_L00_00263fd8(m, 0x655, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c, &D_L16_0015F580_c);
+        FUN_L00_00263fd8(m, 0x656, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c, &D_L16_0015F580_c);
+        FUN_L00_00263fd8(m, 0x657, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c, &D_L16_0015F580_c);
+        qcopy(v0.f, position);
+        v0.f[2] += 1.2f;
+        FUN_L00_0025f090(m, v0.f, -1, 0.5f, 10.0f);
+        FUN_L00_00257470(m, 0, -1);
+        func_0022ED80_i(7, 0, m);
+        d->lives--;
+        if (d->lives != -1) {
+            m[0x20] = 11;
+            qcopy(position, d->spawn);
+            d->timer = scale_game_frames(60);
+        } else {
+            if (d->child) {
+                mark_moby_for_removal(d->child);
+            }
+            mark_moby_for_removal(m);
+        }
+        break;
+    }
+    case 11: /* respawn: settle to the home height as the timer runs out */
+        if (tick_countdown_32_alt(&d->timer)) {
+            d->turn = 0.0f;
+            m[0x20] = 2;
+            if (m[0x53] != 9) {
+                blend_moby_animation(m, 9, 0, scale_game_frames(10));
+            }
+            d->f20 = 2.0f;
+            *(unsigned short *)(m + 0x34) |= 0x1000;
+        }
+        *(float *)(m + 0x18) = d->spawn[2] + D_0015ED6C * 3.0f * (float)d->timer;
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
 #include "sda.h"
 
@@ -951,7 +1327,7 @@ extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+f32 compute_interpolated_record_value_u(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
 void FUN_L00_002371e0(void);
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 
@@ -990,7 +1366,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
         }
         if (d->sequence != -1) {
             if (m->animation == m->next_animation) {
-                float frame = compute_interpolated_record_value(m);
+                float frame = compute_interpolated_record_value_u(m);
                 if (frame > 7.0f && frame < 20.0f && duration != 0.0f) {
                     float speed = 30.0f / duration;
                     if (speed > 1.7f) speed = 1.7f;
@@ -1011,7 +1387,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
         if (m->animation == m->next_animation && m->animation == 5 && duration != 0.0f) {
             float remaining;
             remaining = 50.0f;
-            remaining -= compute_interpolated_record_value(m);
+            remaining -= compute_interpolated_record_value_u(m);
             remaining /= duration;
             m->animation_speed = remaining;
         }
