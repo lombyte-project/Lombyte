@@ -73,7 +73,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003076e0.s", FUN_L12_003076e0);
 #define MACRO_ADDR
 
 /* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
 extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
@@ -259,7 +259,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
 #define MACRO_ADDR
 
 /* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00162108[] __attribute__((section(".sdata")));
 extern char D_L12_00167240[];

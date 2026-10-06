@@ -142,7 +142,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00308d10.s", FUN_L13_00308d10);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
 
 extern char D_L13_00174180[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -326,7 +326,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
 #include "qcopy.h"
 
 /* Follows its target moby along a path: snaps to the nearest path point, then walks the path segments. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D028), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D028), where it is exact; names translated to the US level program. */
 
 extern char *D_L13_001B07B0[];
 extern float D_0015ED60;
@@ -400,7 +400,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D468), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);

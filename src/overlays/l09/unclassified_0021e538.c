@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
 #define MACRO_ADDR
 
 /* Draws a list of scrolling-texture strips (water) into the scratchpad. */
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/drawquad_0021E3E8.c: func_L09_0021E770), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/drawquad_0021E3E8.c: func_L09_0021E770), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x20]; short idx[16]; } Strip;
 
@@ -273,7 +273,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
 
 typedef int xu128 __attribute__((mode(TI)));
 
