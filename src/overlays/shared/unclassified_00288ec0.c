@@ -132,7 +132,35 @@ void FUN_L00_002892d0(void) {
     FUN_001f9fc8(D_L00_001BD7E0);
     for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) FUN_0022b690(i);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289420.s", FUN_L00_00289420);
+#include "sda.h"
+
+#include "qzero.h"
+
+/* rotates animated sky shells and draws each layer */
+/* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028A6F8), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_0016051C MACRO_ADDR;
+extern char D_L00_001BD7E0[] NOT_SDA;
+extern int D_L00_0015F5CC MACRO_ADDR;
+extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
+void FUN_001fa070(void *,void *);
+void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
+
+
+void FUN_L00_00289420(void) {
+ float v[4] __attribute__((aligned(16))); int i;
+ *(short *)(D_L00_0016051C+4)=0;
+ qzero(v);
+ for(i=0;i<*(short *)(D_L00_0016051C+6);i++) {
+ switch(i) {
+ case 2: v[2]=(D_L00_0015F5CC&0x3ffff)*0.000023968450f-3.14159265f; FUN_001fa070(D_L00_001BD7E0,v); break;
+ case 3: v[2]=(D_L00_0015F5CC&0x1ffff)*0.000047936900f-3.14159265f; FUN_001fa070(D_L00_001BD7E0,v); break;
+ case 4: v[2]=(unsigned short)D_L00_0015F5CC*0.000095873800f-3.14159265f; FUN_001fa070(D_L00_001BD7E0,v); break;
+ default:FUN_001f9fc8_c(D_L00_001BD7E0);
+ }
+ sky_draw_shell(i);
+ }
+}
 typedef struct {
     u8 type;
     u8 b1;
@@ -268,7 +296,27 @@ void FUN_L00_002899a8_2899a8(void) {
     FUN_001fa070_2899a8(D_L00_001BD7E0_2899a8, &rot);
     sky_draw_shell_2899a8(2);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00289a90.s", FUN_L00_00289a90);
+/* draws sky shells with two animated rotation offsets */
+/* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028AD68), where it is exact; names translated to the US level program. */
+
+extern void FUN_001fa070_cf(void *) __asm__("FUN_001f9fc8");
+void FUN_001f9fc8_cf(void *,void *) __asm__("FUN_001fa070");
+void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
+
+
+void FUN_L00_00289a90(void) {
+ float v[4] __attribute__((aligned(16))); int i;
+ *(short *)(D_L00_0016051C+4)=0; qzero(v);
+ for(i=0;i<*(short *)(D_L00_0016051C+6);++i) {
+ switch(i) {
+ case 1: v[2]=(float)*(unsigned short *)&D_L00_0015F5CC*0.0000958738017f-3.14159265f; FUN_001f9fc8_cf(D_L00_001BD7E0,v); break;
+ case 2: v[2]=(float)(D_L00_0015F5CC&0x1FFFF)*0.00004793690085f-3.14159265f;
+ FUN_001f9fc8_cf(D_L00_001BD7E0,v); break;
+ default: FUN_001fa070_cf(D_L00_001BD7E0); break;
+ }
+ sky_draw_shell(i);
+ }
+}
 #include "qzero.h"
 typedef int q128 __attribute__((mode(TI)));
 typedef union { q128 q; float f[4]; } U289bd8;
@@ -558,7 +606,37 @@ void FUN_L00_0028a480(void)
         FUN_0022b690_28a480(i);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0028a620.s", FUN_L00_0028a620);
+/* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028B8F8), where it is exact; names translated to the US level program. */
+
+void FUN_001fa070(void *,void *);
+void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
+extern short D_L00_0015F6B0_s __asm__("D_L00_0015F5CC");
+
+
+void FUN_L00_0028a620(void) {
+ float v[4] __attribute__((aligned(16)));
+ int i;
+ *(short *)(D_L00_0016051C + 4) = 0;
+ qzero(v);
+ for (i = 0; i < *(short *)(D_L00_0016051C + 6); i++) {
+  switch (i) {
+   case 1:
+    v[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
+    FUN_001fa070(D_L00_001BD7E0, v);
+    break;
+   case 2:
+    v[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
+    FUN_001fa070(D_L00_001BD7E0, v);
+    break;
+   case 3:
+    v[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
+    FUN_001fa070(D_L00_001BD7E0, v);
+    break;
+   default: FUN_001f9fc8(D_L00_001BD7E0); break;
+  }
+  sky_draw_shell(i);
+ }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

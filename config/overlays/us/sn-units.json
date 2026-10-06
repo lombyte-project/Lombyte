@@ -116,6 +116,7 @@
       "unclassified_002a7220.c"
     ],
     "shared": [
+      "gameplay_animation_00235878.c",
       "gameplay_camera_001eb188.c",
       "gameplay_state_0024eec0.c",
       "gameplay_state_0027b268.c",
@@ -131,6 +132,7 @@
       "ui_help_00229b70.c",
       "ui_help_00231d08.c",
       "unclassified_00278fd8.c",
+      "unclassified_00288ec0.c",
       "unclassified_00291918.c",
       "unclassified_002937a0.c",
       "unclassified_00295100.c",
