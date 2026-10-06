@@ -133,7 +133,20 @@ void FUN_L06_003047b8(char *arg) {
         FUN_0022da68(0, 0, arg);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003047f8.s", FUN_L06_003047f8);
+#else
+/* Maps the unsigned moby state byte to the callback result. */
+s32 FUN_L06_003047f8(const u8 *moby)
+{
+    u32 state = moby[0x20];
+
+    if (state == 7) {
+        return 2;
+    }
+    return state > 3;
+}
+#endif /* NON_MATCHING */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
 /* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */

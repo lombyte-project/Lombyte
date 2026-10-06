@@ -507,7 +507,22 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551b8.s", FUN_L05_002551b8);
+#else
+/* Selects one of two IDs using the resident unsigned flag byte. */
+extern u8 D_0013FC1E __attribute__((section(".sdata")));
+
+s32 FUN_L05_002551b8(void)
+{
+    s32 id = 0x55;
+
+    if (D_0013FC1E != 0) {
+        id = 0x7F;
+    }
+    return id;
+}
+#endif /* NON_MATCHING */
 int FUN_L05_002551d0(void) {
     char *p = D_0013F350;
     int f = *(unsigned char *)(p + 0x8CE);
