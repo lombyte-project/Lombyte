@@ -84,10 +84,77 @@ Slot *FUN_L00_0024f028(char *o, int id) {
     return s;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f0e8.s", FUN_L00_0024f0e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024f190.s", FUN_L00_0024f190);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* advances an animation blend timer and steps through its frame table */
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002501C8), where it is exact; names translated to the US level program. */
+
+extern void FUN_L00_0024f440(void *, int, int, int);
+extern void FUN_L00_00252990(void *);
+
+void FUN_L00_0024f190_c(void *unused, unsigned char *a) __asm__("FUN_L00_0024f190");
+void FUN_L00_0024f190_c(void *unused, unsigned char *a) {
+    float s = *(float *)(a + 0x28);
+    a[5] = 0;
+    if (s != 0.0f && *(float *)(a + 0x2C) != 0.0f) {
+        float t = *(float *)(a + 0x24) + s * *(float *)(a + 0x2C);
+        *(float *)(a + 0x24) = t;
+        if (s > 0.0f) {
+            if (t > 0.99f && t < 1.01f) {
+                *(float *)(a + 0x24) = 1.0f;
+            }
+            if (*(float *)(a + 0x24) >= 1.0f) {
+                int u = a[7];
+                do {
+                    int o, p, o2;
+                    a[6] = u;
+                    a[5] |= 1;
+                    a[0x20] = a[0x21];
+                    if ((unsigned char)u) {
+                        *(int *)(a + 0x38) = *(int *)(a + 0x3C);
+                    }
+                    a[0x22] = a[0x23];
+                    a[0x21]++;
+                    o = a[0x23] * 4;
+                    if (a[0x21] >= *(unsigned char *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + 0x10)) {
+                        a[0x21] = 0;
+                        a[5] |= 2;
+                    }
+                    {
+                        float f = (*(float *)(a + 0x24) - 1.0f) / *(float *)(a + 0x2C);
+                        float g;
+                        o2 = a[0x22] * 4;
+                        p = a[0x20] * 4;
+                        *(float *)(a + 0x24) = f;
+                        g = **(float **)(*(int *)(*(unsigned char **)(a + 0x14) + o2 + 0x48) + p + 0x1C);
+                        *(float *)(a + 0x2C) = g;
+                        *(float *)(a + 0x24) = f * g;
+                    }
+                } while (*(float *)(a + 0x24) >= 1.0f);
+            }
+        }
+    }
+    if (a[6]) {
+        FUN_L00_0024f440(a, a[0x22], a[0x20], *(int *)(a + 0x38));
+    } else {
+        int o = a[0x22] * 4;
+        int p = a[0x20] * 4;
+        *(int *)(a + 0x38) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+    }
+    if (a[7]) {
+        FUN_L00_0024f440(a, a[0x23], a[0x21], *(int *)(a + 0x3C));
+    } else {
+        int o = a[0x23] * 4;
+        int p = a[0x21] * 4;
+        *(int *)(a + 0x3C) = *(int *)(*(int *)(*(unsigned char **)(a + 0x14) + o + 0x48) + p + 0x1C);
+    }
+    FUN_L00_00252990(a);
+}
 typedef struct { u8 pad[0x20]; u8 b20, b21, b22, b23; s32 i24; f32 f28; f32 f2c; } S;
 typedef struct { u8 pad[0x51]; u8 b51, b52, b53; } A;
-extern void FUN_L00_0024f190(void);
 void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     a1->b22 = a0->b53;
     a1->b20 = a0->b51;
