@@ -118,11 +118,12 @@ retry:
         position++;
     }
 after_scan:
+    next_line_count = line_count < 2;
     if (using_initial_width) {
         goto layout;
     }
     initial_line_count = initial_line_count ? initial_line_count : line_count;
-    if (line_count < 2) {
+    if (next_line_count) {
         goto layout;
     }
     if (initial_line_count < line_count) {
