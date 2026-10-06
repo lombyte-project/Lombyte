@@ -1,5 +1,5 @@
-#ifndef RNC_UI_MENUS_FUN_0021F158_H
-#define RNC_UI_MENUS_FUN_0021F158_H
+#ifndef LOMBYTE_RNC_UI_MENUS_FUN_0021F158_H
+#define LOMBYTE_RNC_UI_MENUS_FUN_0021F158_H
 
 #include "types.h"
 
@@ -22,4 +22,4 @@ struct M2c_temp_3_15 {
     s32 unk48;
 };
 
-#endif /* RNC_UI_MENUS_FUN_0021F158_H */
+#endif /* LOMBYTE_RNC_UI_MENUS_FUN_0021F158_H */

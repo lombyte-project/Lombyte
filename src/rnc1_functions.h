@@ -1,5 +1,5 @@
-#ifndef RNC1_FUNCTIONS_H
-#define RNC1_FUNCTIONS_H
+#ifndef LOMBYTE_RNC1_FUNCTIONS_H
+#define LOMBYTE_RNC1_FUNCTIONS_H
 
 #include "types.h"
 

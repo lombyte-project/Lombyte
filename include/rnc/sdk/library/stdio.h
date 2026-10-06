@@ -1,5 +1,5 @@
-#ifndef RNC_SDK_LIBRARY_STDIO_H
-#define RNC_SDK_LIBRARY_STDIO_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY_STDIO_H
+#define LOMBYTE_RNC_SDK_LIBRARY_STDIO_H
 
 #include "types.h"
 
@@ -57,4 +57,4 @@ typedef struct RncStdioUio {
     u32 uio_resid;
 } RncStdioUio;
 
-#endif /* RNC_SDK_LIBRARY_STDIO_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY_STDIO_H */

@@ -1,5 +1,5 @@
-#ifndef RNC_SDK_LIBRARY__DECMB0_H
-#define RNC_SDK_LIBRARY__DECMB0_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H
+#define LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H
 
 #include "types.h"
 
@@ -40,4 +40,4 @@ struct M2c_arg4 {
     int unk1C;
 };
 
-#endif /* RNC_SDK_LIBRARY__DECMB0_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H */

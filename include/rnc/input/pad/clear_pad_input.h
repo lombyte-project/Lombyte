@@ -1,5 +1,5 @@
-#ifndef RNC_INPUT_PAD_CLEAR_PAD_INPUT_H
-#define RNC_INPUT_PAD_CLEAR_PAD_INPUT_H
+#ifndef LOMBYTE_RNC_INPUT_PAD_CLEAR_PAD_INPUT_H
+#define LOMBYTE_RNC_INPUT_PAD_CLEAR_PAD_INPUT_H
 
 #include "types.h"
 
@@ -26,4 +26,4 @@ struct M2c_var_3_8 {
     s32 unk0;
 };
 
-#endif /* RNC_INPUT_PAD_CLEAR_PAD_INPUT_H */
+#endif /* LOMBYTE_RNC_INPUT_PAD_CLEAR_PAD_INPUT_H */

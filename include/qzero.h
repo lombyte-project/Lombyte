@@ -1,5 +1,5 @@
-#ifndef QZERO_H
-#define QZERO_H
+#ifndef LOMBYTE_QZERO_H
+#define LOMBYTE_QZERO_H
 
 /*
  * Clears one 16-byte quadword with `sq $0`. GCC 2.9's `sq` template takes a
@@ -14,4 +14,4 @@
  */
 #define qzero(p) __asm__ __volatile__("sq $0,0x0(%0)" : : "r"(p))
 
-#endif /* QZERO_H */
+#endif /* LOMBYTE_QZERO_H */

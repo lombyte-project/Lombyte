@@ -1,5 +1,5 @@
-#ifndef RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
-#define RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
+#ifndef LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
+#define LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H
 
 #include "types.h"
 
@@ -67,4 +67,4 @@ struct MusicStreamState {
     s32 transition_remaining_time;
 };
 
-#endif /* RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H */
+#endif /* LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H */

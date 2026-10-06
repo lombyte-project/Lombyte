@@ -1,5 +1,5 @@
-#ifndef RNC_AUDIO_LOAD_H
-#define RNC_AUDIO_LOAD_H
+#ifndef LOMBYTE_RNC_AUDIO_LOAD_H
+#define LOMBYTE_RNC_AUDIO_LOAD_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ struct M2c_D_001516D0 {
     s32 unk14;
 };
 
-#endif /* RNC_AUDIO_LOAD_H */
+#endif /* LOMBYTE_RNC_AUDIO_LOAD_H */

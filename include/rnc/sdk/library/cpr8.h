@@ -1,5 +1,5 @@
-#ifndef RNC_SDK_LIBRARY_CPR8_H
-#define RNC_SDK_LIBRARY_CPR8_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY_CPR8_H
+#define LOMBYTE_RNC_SDK_LIBRARY_CPR8_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@ struct M2c_sp0 {
     s32 unk174;
 };
 
-#endif /* RNC_SDK_LIBRARY_CPR8_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY_CPR8_H */

@@ -1,5 +1,5 @@
-#ifndef RNC_UI_TEXT_TEXT_REGION_H
-#define RNC_UI_TEXT_TEXT_REGION_H
+#ifndef LOMBYTE_RNC_UI_TEXT_TEXT_REGION_H
+#define LOMBYTE_RNC_UI_TEXT_TEXT_REGION_H
 
 #include "types.h"
 

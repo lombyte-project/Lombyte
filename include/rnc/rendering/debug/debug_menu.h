@@ -1,5 +1,5 @@
-#ifndef RNC_RENDERING_DEBUG_DEBUG_MENU_H
-#define RNC_RENDERING_DEBUG_DEBUG_MENU_H
+#ifndef LOMBYTE_RNC_RENDERING_DEBUG_DEBUG_MENU_H
+#define LOMBYTE_RNC_RENDERING_DEBUG_DEBUG_MENU_H
 
 /* Descriptive names recovered from retail menu labels and consumers. */
 #include "types.h"

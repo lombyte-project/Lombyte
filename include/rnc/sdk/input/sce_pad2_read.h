@@ -1,5 +1,5 @@
-#ifndef RNC_SDK_INPUT_SCE_PAD2_READ_H
-#define RNC_SDK_INPUT_SCE_PAD2_READ_H
+#ifndef LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H
+#define LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H
 
 #include "types.h"
 
@@ -10,4 +10,4 @@ struct M2c_temp_2_27 {
     s32 unk4;
 };
 
-#endif /* RNC_SDK_INPUT_SCE_PAD2_READ_H */
+#endif /* LOMBYTE_RNC_SDK_INPUT_SCE_PAD2_READ_H */

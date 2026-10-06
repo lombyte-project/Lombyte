@@ -1,5 +1,5 @@
-#ifndef RNCDECOMP_EEREGS_H
-#define RNCDECOMP_EEREGS_H
+#ifndef LOMBYTE_EEREGS_H
+#define LOMBYTE_EEREGS_H
 
 #include "types.h"
 
@@ -23,4 +23,4 @@
 #define VU1_MICRO_ADDR ((u32)0x11008000)
 #define VU1_MEM_ADDR   ((u32)0x1100c000)
 
-#endif /* RNCDECOMP_EEREGS_H */
+#endif /* LOMBYTE_EEREGS_H */

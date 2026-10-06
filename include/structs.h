@@ -1,5 +1,5 @@
-#ifndef RNCDECOMP_STRUCTS_H
-#define RNCDECOMP_STRUCTS_H
+#ifndef LOMBYTE_STRUCTS_H
+#define LOMBYTE_STRUCTS_H
 
 #include "types.h"
 
@@ -13,4 +13,4 @@ typedef struct RncCoreState {
     u16 status_78;
 } RncCoreState;
 
-#endif /* RNCDECOMP_STRUCTS_H */
+#endif /* LOMBYTE_STRUCTS_H */

@@ -1,5 +1,5 @@
-#ifndef RNC_UI_HUD_INIT_HUD_H
-#define RNC_UI_HUD_INIT_HUD_H
+#ifndef LOMBYTE_RNC_UI_HUD_INIT_HUD_H
+#define LOMBYTE_RNC_UI_HUD_INIT_HUD_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ struct M2c_var_16_16 {
     s32 unk58;
 };
 
-#endif /* RNC_UI_HUD_INIT_HUD_H */
+#endif /* LOMBYTE_RNC_UI_HUD_INIT_HUD_H */
