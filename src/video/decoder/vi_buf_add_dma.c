@@ -26,11 +26,11 @@ typedef struct {
 
 extern s32 WaitSema(s32 semaphore);
 extern s32 SignalSema(s32 semaphore);
-extern void log_audio_error(s32 message) __asm__("FUN_0023ab78");
+extern void err_message(s32 message) __asm__("FUN_0023ab78");
 extern char D_001E8B20[];
-extern void set_dma_channel_4_control_register(s32 control) __asm__("FUN_0023bbb0");
+extern void set_d4_chcr(s32 control) __asm__("FUN_0023bbb0");
 extern u32 get_fifo_index(ViBuf *buffer, s32 dma_address) __asm__("FUN_0023baf8");
-extern void PackStateValue(u64 *output, u32 high_word, u32 middle_word,
+extern void sc_tag2(u64 *output, u32 high_word, u32 middle_word,
                            u32 low_word) __asm__("func_0023BC20");
 
 s32 vi_buf_add_dma(ViBuf *f) __asm__("FUN_0023bf70");
@@ -50,11 +50,11 @@ s32 vi_buf_add_dma(ViBuf *f) {
     WaitSema(f->semaphore);
 
     if (!f->isActive) {
-        log_audio_error((s32)D_001E8B20);
+        err_message((s32)D_001E8B20);
         return 0;
     }
 
-    set_dma_channel_4_control_register((DMA_ID_REFE << 28) | (0 << 8) | (1 << 2) | 1);
+    set_d4_chcr((DMA_ID_REFE << 28) | (0 << 8) | (1 << 2) | 1);
     d4chcr = *D4_CHCR;
     madr = *D4_MADR;
 
@@ -69,7 +69,7 @@ s32 vi_buf_add_dma(ViBuf *f) {
 
     if (read_n > 0) {
         last = (f->dmaStart + f->dmaN - 1 + f->n) % f->n;
-        PackStateValue((u64 *)(f->tag + last), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * last),
+        sc_tag2((u64 *)(f->tag + last), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * last),
                        DMA_ID_REF, VIBUF_ELM_SIZE / 16);
         isNewData = 1;
     }
@@ -77,7 +77,7 @@ s32 vi_buf_add_dma(ViBuf *f) {
     index = read_start;
     for (i = 0; i < read_n; i++) {
         id = (i == read_n - 1) ? DMA_ID_REFE : DMA_ID_REF;
-        PackStateValue((u64 *)(f->tag + index), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * index), id,
+        sc_tag2((u64 *)(f->tag + index), (u32)((u8 *)f->data + VIBUF_ELM_SIZE * index), id,
                        VIBUF_ELM_SIZE / 16);
         index = (index + 1) % f->n;
     }
@@ -88,7 +88,7 @@ s32 vi_buf_add_dma(ViBuf *f) {
         if (isNewData) {
             d4chcr = (d4chcr & 0x0fffffff) | (DMA_ID_REF << 28);
         }
-        set_dma_channel_4_control_register(d4chcr | 0x100);
+        set_d4_chcr(d4chcr | 0x100);
     }
 
     SignalSema(f->semaphore);

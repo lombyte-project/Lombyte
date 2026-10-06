@@ -12,7 +12,7 @@ extern u8 D_001602A0[];
 extern u8 D_001602B8[];
 extern u8 D_001602C0[];
 extern u8 D_001602D0[];
-extern struct M2c_D_001D5BF4 *D_001D5BF4[];
+extern struct ModeRef *D_001D5BF4[];
 struct ImageEntry {
     u8 pad0[8];
     u16 unk8;
@@ -35,9 +35,9 @@ s32 FUN_0021f158(s32 arg0) {
     s32 idx;
     s32 temp_17_38;
     s32 temp_18_40;
-    struct ImageEntry *temp_16_37;
-    struct M2c_temp_3_15 *temp_3_15;
-    u8 *temp_4_77;
+    struct ImageEntry *entry;
+    struct MenuItem *temp_3_15;
+    u8 *end_ptr;
 
     temp_3_15 = D_001D5BF4[0]->unk40;
     temp_4_20 = *(s32 *)((u8 *)((temp_3_15->unk3C * 0xA) + temp_3_15->unk48) + 0x6);
@@ -46,23 +46,23 @@ s32 FUN_0021f158(s32 arg0) {
         return 0;
     }
     temp_17_38 = D_0013D428[idx];
-    temp_16_37 = &D_001DFFB0[idx];
-    temp_18_40 = (s32)temp_16_37->unkE;
+    entry = &D_001DFFB0[idx];
+    temp_18_40 = (s32)entry->unkE;
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0xB);
-    if (temp_16_37->unk8 == 0) {
+    if (entry->unk8 == 0) {
         sprintf(sp_slot, get_help_message_text(0x4F52));
     } else {
         if (temp_17_38 < 0x3E8) {
-            temp_4_77 = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
+            end_ptr = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
         } else {
-            temp_4_77 =
+            end_ptr =
                 sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
         }
         if ((s32)temp_18_40 < 0x3E8) {
-            sprintf(temp_4_77, D_001602A0, (s32)temp_18_40);
+            sprintf(end_ptr, D_001602A0, (s32)temp_18_40);
         } else {
-            sprintf(temp_4_77, D_001602D0, (s32)temp_18_40 / 1000, (s32)temp_18_40 % 1000);
+            sprintf(end_ptr, D_001602D0, (s32)temp_18_40 / 1000, (s32)temp_18_40 % 1000);
         }
     }
     setup_gif_paging(0);

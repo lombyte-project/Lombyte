@@ -1,9 +1,9 @@
-#ifndef RNC_SDK_LIBRARY_SEQUENCEHEADER_H
-#define RNC_SDK_LIBRARY_SEQUENCEHEADER_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY_SEQUENCEHEADER_H
+#define LOMBYTE_RNC_SDK_LIBRARY_SEQUENCEHEADER_H
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0xD4];
     s32 unkD4;
     u8 pad_D8[0x4C];
@@ -19,14 +19,14 @@ struct M2c_arg0 {
     s32 unk858;
 };
 
-struct M2c_arg0__func_0012C4C8 {
+struct MpegContext {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x38];
-    struct M2c_temp_30_15__func_0012C4C8 *unk40;
+    struct MpegDecoderPriv *unk40;
 };
 
-struct M2c_temp_30_15__func_0012C4C8 {
+struct MpegDecoderPriv {
     u8 pad_0[0xFC];
     s32 unkFC;
     s32 unk100;
@@ -50,4 +50,4 @@ struct M2c_temp_30_15__func_0012C4C8 {
     s32 unk848;
 };
 
-#endif /* RNC_SDK_LIBRARY_SEQUENCEHEADER_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY_SEQUENCEHEADER_H */

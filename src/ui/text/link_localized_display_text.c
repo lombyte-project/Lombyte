@@ -20,7 +20,7 @@ extern u8 D_0015EE1D;
 extern TextEntry *D_0015F6A0;
 extern s32 D_0013E504[];
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("func_0022DB10");
-extern void InitializeDmaPacket(u16 *, u16, u16, u16, u16, u16, u16, u16, u32);
+extern void font_set_window(u16 *, u16, u16, u16, u16, u16, u16, u16, u32);
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
 
 void link_localized_display_text(void) __asm__("FUN_001fdd58");
@@ -43,7 +43,7 @@ void link_localized_display_text(void) {
     }
     box = &D_001996D0;
     text = D_0015F6A0[box->pad[6]].text;
-    InitializeDmaPacket(win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100, 0x168, 0x10, 7);
+    font_set_window(win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100, 0x168, 0x10, 7);
     font_print_window_small(win, 0x80FFA888L, text, -1);
     screenY = D_0013E504[0];
     w = win[6];

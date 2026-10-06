@@ -38,7 +38,7 @@ extern void font_print_large(s32, s32, u64, u8 *, s32) __asm__("func_001F6530");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 func_001F9B20(f32 *);
 extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void draw_hud_sprite_uv(s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_00200258");
 extern void draw_hud_rect(s32, s32, s32, s32, u64, s32) __asm__("func_00200C80");
@@ -72,13 +72,13 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
     vu1_add_g_sregister(0x42, 0x8000000044);
     vu1_add_g_sregister(0x47, 0x4B);
     append_screen_rect_packet(0, 0, 0x200, 0x1C0, 0x80000000, 0);
-    texture_index = find_valid_animation_frame_index(0xE99A, 0xE);
+    texture_index = get_icon_frame(0xE99A, 0xE);
     screen_width_subpixels = (right - left) * 16;
     screen_height_subpixels = (bottom - top) * 16;
     draw_hud_sprite_uv(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0,
                        0x80);
     vu1_add_g_sregister(8, 0);
-    draw_hud_sprite_uv(find_valid_animation_frame_index(0xE99A, 0xF), 0, 0, screen_width_subpixels,
+    draw_hud_sprite_uv(get_icon_frame(0xE99A, 0xF), 0, 0, screen_width_subpixels,
                        screen_height_subpixels, game_frame_counter & 0xFFF, 0, 0x80);
     vu1_add_g_sregister(8, 5);
     for (level_index = 1; level_index < 20; level_index++) {
@@ -106,7 +106,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             (availability == 2 &&
              game_frame_counter % (scale_game_frames(0x16) + scale_game_frames(8)) <
                  scale_game_frames(0x16))) {
-            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xC), marker_x - 5,
+            draw_hud_sprite(get_icon_frame(0xE99A, 0xC), marker_x - 5,
                             marker_y - 5, 10, 10, 0x80);
         }
         if (level_index == level_map_selection.selected_level) {
@@ -134,7 +134,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             draw_hud_rect(line_start_x, line_start_y, label_x, label_y, 0x80F0F0F0, 0);
             draw_hud_rect(label_x, label_y, line_end_x, label_y, 0x80F0F0F0, 0);
             font_print_large(text_x, label_y - large_font_height, 0x80F0F0F0, label_text, -1);
-            draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 0xD), marker_x - 10,
+            draw_hud_sprite(get_icon_frame(0xE99A, 0xD), marker_x - 10,
                             marker_y - 10, 20, 20, 0x80);
         }
     }

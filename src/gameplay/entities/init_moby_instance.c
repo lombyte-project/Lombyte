@@ -87,10 +87,10 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
    first, and the default stores are ordered so that sched1's
    register-pressure tie-break (stores that free a register go first)
    reproduces retail's store order. */
-void init_moby_instance(void *arg0, int oClass) __asm__("FUN_0020c5f0");
+void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 
-void init_moby_instance(void *arg0, int oClass) {
-    MobyI *m = (MobyI *)arg0;
+void init_moby_instance(void *moby_mem, int oClass) {
+    MobyI *m = (MobyI *)moby_mem;
     unsigned char c;
     int idx;
     MobyIClass *pClass;

@@ -3,10 +3,10 @@
 extern u8 D_0013CDD0[];
 extern s32 D_0015F438;
 extern u8 *D_00160F00;
-extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
+extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
-extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
@@ -26,10 +26,10 @@ void fade_to_black(s32 n) {
     D_0015F438 += 1;
     vu1_init_chain();
     for (i = n - 1; i >= 0; i--) {
-        append_draw_environment_packet();
+        put_draw_buffer_large();
         append_gif_transfer_packet();
         emit_rgba_draw_packet(0, 0, 0, 0x80);
-        append_draw_buffer_packet();
+        put_draw_buffer_small();
         vu1_add_g_sregister(1, (u64)(0x80 - (i * 0x80) / (i + 1)) << 24);
         *(u32 *)(VP + 0) = 0x30000014;
         *(u32 *)(VP + 4) = (u32)D_0013CDD0;
@@ -46,7 +46,7 @@ void fade_to_black(s32 n) {
     sceGsSyncV(0);
     D_0015F438 += 1;
     vu1_init_chain();
-    append_draw_environment_packet();
+    put_draw_buffer_large();
     append_gif_transfer_packet();
 }
 

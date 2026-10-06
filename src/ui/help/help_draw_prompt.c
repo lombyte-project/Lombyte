@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_001996D0 {
+struct HelpMessageState {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x8];
@@ -9,7 +9,7 @@ struct M2c_D_001996D0 {
     s32 unk1C;
 };
 
-extern struct M2c_D_001996D0 D_001996D0;
+extern struct HelpMessageState D_001996D0;
 extern u64 get_effect_texture() __asm__("func_001F44B8");
 extern s32 draw_textured_quad() __asm__("func_001F5450");
 extern s32 draw_ui_frame() __asm__("func_001F5F18");

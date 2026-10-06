@@ -1,10 +1,10 @@
 #include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
 
-extern struct M2c_D_0013D290 D_0013D290;
-extern struct M2c_D_0013DD40 D_0013DD40;
+extern struct SaveSlotTable D_0013D290;
+extern struct Globals_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
-extern struct M2c_D_0013E030 D_0013E030;
+extern struct Globals_0013E030 D_0013E030;
 extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
@@ -15,9 +15,9 @@ extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
 extern s32 D_0015F604;
 extern s32 D_0015F618 MACRO_ADDR;
-extern struct M2c_D_0015F634 *D_0015F634;
-extern struct M2c_D_0018CD00 D_0018CD00;
-extern struct M2c_D_00194100 D_00194100;
+extern struct Globals_0015F634 *D_0015F634;
+extern struct Globals_0018CD00 D_0018CD00;
+extern struct Globals_00194100 D_00194100;
 extern u8 D_001E8988[];
 
 extern void DebugPrint();
@@ -33,8 +33,8 @@ extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("func_0012EF68");
 extern s32 read_file_entry_with_retry(s32) __asm__("func_0012F368");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
-extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
+extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet(void) __asm__("func_001FB6E0");
 extern void load_level_chunk_from_disc(void) __asm__("func_002043B0");
 extern s32 service_level_archive_load(void) __asm__("func_00204428");
@@ -178,9 +178,9 @@ void do_space_transition(void) {
         while (D_0015F618 == 0) {
             vu1_send_chain();
             swap_render_buffer_chain();
-            append_draw_buffer_packet();
+            put_draw_buffer_small();
             append_palette_transfer_packet();
-            append_draw_environment_packet();
+            put_draw_buffer_large();
             update_primary_pad_state();
             update_resident_gameplay_state();
             dispatch_game_state_update();

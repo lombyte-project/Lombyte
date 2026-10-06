@@ -4,12 +4,7 @@
 #include "types.h"
 
 #include "eetypes.h"
-struct GraphicsDmaTag {
-    u32 dma_control;
-    u32 addr;
-    u32 vif0;
-    u32 vif1;
-};
+#include "rnc/rendering/dma_tag.h"
 struct GraphicsSetupRecord {
     s32 command_count;
     s32 command_flags;

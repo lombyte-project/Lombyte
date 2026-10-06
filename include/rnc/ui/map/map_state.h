@@ -1,5 +1,5 @@
-#ifndef RNC_UI_MAP_MAP_STATE_H
-#define RNC_UI_MAP_MAP_STATE_H
+#ifndef LOMBYTE_RNC_UI_MAP_MAP_STATE_H
+#define LOMBYTE_RNC_UI_MAP_MAP_STATE_H
 
 #include "types.h"
 
@@ -44,4 +44,4 @@ struct MapState {
 
 extern struct MapState D_001A00F0;
 
-#endif /* RNC_UI_MAP_MAP_STATE_H */
+#endif /* LOMBYTE_RNC_UI_MAP_MAP_STATE_H */

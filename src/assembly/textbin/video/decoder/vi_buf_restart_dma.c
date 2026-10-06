@@ -33,8 +33,8 @@ typedef struct {
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
 extern s32 get_fifo_index(ViBuf *, s32) __asm__("func_0023BAF8");
-extern void set_dma_channel_3_control_register(s32) __asm__("func_0023BB40");
-extern void set_dma_channel_4_control_register(s32) __asm__("func_0023BBB0");
+extern void set_d3_chcr(s32) __asm__("func_0023BB40");
+extern void set_d4_chcr(s32) __asm__("func_0023BBB0");
 
 s32 vi_buf_restart_dma(ViBuf *f) __asm__("FUN_0023c280");
 
@@ -114,7 +114,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         if (f->d3_qwc != 0) {
             DGET(0x1000B010) = f->d3_madr;
             DGET(0x1000B020) = f->d3_qwc;
-            set_dma_channel_3_control_register(f->d3_chcr | 0x100);
+            set_d3_chcr(f->d3_chcr | 0x100);
         }
     }
     if (f->readBytes != 0) {
@@ -132,7 +132,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
     DGET(0x1000B430) = dmaTadr;
     DGET(0x1000B420) = dmaQwc;
     if (f->readBytes != 0) {
-        set_dma_channel_4_control_register(dmaChcr);
+        set_d4_chcr(dmaChcr);
     }
     DGET(0x10002010) = f->ipu_ctrl;
     f->active = 1;

@@ -6,10 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268900.s", FUN_L00_00268900);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00268d48.s", FUN_L00_00268d48);
 #include "eetypes.h"
 #include "qcopy.h"
-typedef union {
-    u128 q;
-    float f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");

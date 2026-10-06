@@ -1,11 +1,11 @@
-#ifndef RNC_SDK_LIBRARY_DOMC_H
-#define RNC_SDK_LIBRARY_DOMC_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY_DOMC_H
+#define LOMBYTE_RNC_SDK_LIBRARY_DOMC_H
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x81C];
     s32 unk81C;
 };
 
-#endif /* RNC_SDK_LIBRARY_DOMC_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY_DOMC_H */

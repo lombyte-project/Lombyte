@@ -1,23 +1,23 @@
 #include "types.h"
-struct M2c_D_001516D0 {
+struct MusicStreamState {
     u8 pad_0[0x8];
     s16 unk8;
     u8 pad_A[0x2];
 };
-struct M2c_D_001A00F0 {
+struct UiGlobals {
     u8 pad_0[0x28C];
     s32 unk28C[5];
     s32 unk2A0;
 };
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0xCB];
     u8 unkCB;
     u8 pad_CC[0x3];
 };
 
-extern struct M2c_D_001516D0 D_001516D0;
-extern struct M2c_D_001A00F0 D_001A00F0;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct MusicStreamState D_001516D0;
+extern struct UiGlobals D_001A00F0;
+extern struct Globals_001D5BF0 D_001D5BF0;
 extern u8 D_001D5CBB[];
 extern void request_audio_stream_break() __asm__("FUN_002166e8");
 

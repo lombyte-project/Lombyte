@@ -20,9 +20,9 @@
 </p>
 
 > [!NOTE]
-> Yes, this project is AI-assisted— that’s pretty obvious. <br>
-> AI helps me get more done, but I make the decisions and guide the project. <br>
-> I put a lot of time and care into getting things right. Every PR and issue is manually reviewed.
+> Yes, this project is AI-assisted—that’s pretty obvious. <br>
+> AI helps get more done, but the direction and decisions remain human. <br>
+> A lot of time and care goes into getting things right. Every PR and issue is manually reviewed.
 
 > [!WARNING]
 > Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>

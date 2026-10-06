@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct BcdClockTime {
     u8 pad_0;
     u8 unk1;
     u8 unk2;
@@ -11,13 +11,13 @@ struct M2c_arg0 {
 };
 
 extern s32 TimeToBcd(u8 value);
-void encode_bcd_time_fields(struct M2c_arg0 *arg0) __asm__("FUN_0012d428");
+void encode_bcd_time_fields(struct BcdClockTime *time) __asm__("FUN_0012d428");
 
-void encode_bcd_time_fields(struct M2c_arg0 *arg0) {
-    arg0->unk7 = TimeToBcd(arg0->unk7);
-    arg0->unk6 = TimeToBcd(arg0->unk6);
-    arg0->unk5 = TimeToBcd(arg0->unk5);
-    arg0->unk3 = TimeToBcd(arg0->unk3);
-    arg0->unk2 = TimeToBcd(arg0->unk2);
-    arg0->unk1 = TimeToBcd(arg0->unk1);
+void encode_bcd_time_fields(struct BcdClockTime *time) {
+    time->unk7 = TimeToBcd(time->unk7);
+    time->unk6 = TimeToBcd(time->unk6);
+    time->unk5 = TimeToBcd(time->unk5);
+    time->unk3 = TimeToBcd(time->unk3);
+    time->unk2 = TimeToBcd(time->unk2);
+    time->unk1 = TimeToBcd(time->unk1);
 }

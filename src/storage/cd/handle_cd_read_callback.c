@@ -8,10 +8,10 @@ extern volatile s32 D_00131318[];
 extern volatile s32 D_00159740[];
 extern s32 iSignalSema();
 
-void handle_cd_read_callback(s32 *arg0) __asm__("FUN_001206d8");
+void handle_cd_read_callback(s32 *status) __asm__("FUN_001206d8");
 
-void handle_cd_read_callback(s32 *arg0) {
-    D_00131314[0] = *arg0;
+void handle_cd_read_callback(s32 *status) {
+    D_00131314[0] = *status;
     D_00131318[0] = D_00131314[0];
     if (D_00131314[0] == 11) {
         D_00131314[0] = 0;
@@ -26,4 +26,4 @@ void handle_cd_read_callback(s32 *arg0) {
     }
     D_00131314[0] = 0;
 }
-extern void func_001206D8(s32 *arg0) __attribute__((alias("FUN_001206d8")));
+extern void func_001206D8(s32 *status) __attribute__((alias("FUN_001206d8")));

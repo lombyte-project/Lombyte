@@ -96,7 +96,7 @@ extern char D_0013E533[];
 extern char D_L00_00169110[];
 extern void FUN_001ed470(void);
 void backup_current_cam(void) __asm__("FUN_001ebc90");
-void update_moby(struct Moby *moby) __asm__("FUN_001ebec8");
+void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
 void FUN_L00_001ed280(void) {
     char *g = (char *)&D_L00_00166C80_c;
@@ -112,7 +112,7 @@ void FUN_L00_001ed280(void) {
     *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
     *(short *)(g + 0x270) = 0;
     FUN_001ed470();
-    update_moby(*(char **)(g + 0x180));
+    camera_run_setup_to_new_cam(*(char **)(g + 0x180));
     backup_current_cam();
     a = *(char **)(g + 0x180);
     s = (float *)(g + 0x140);

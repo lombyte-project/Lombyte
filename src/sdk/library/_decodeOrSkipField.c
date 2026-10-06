@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_temp_16_13 {
+struct MpegPictureContext {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -15,11 +15,11 @@ struct M2c_temp_16_13 {
     u8 pad_124[0x50];
     s32 unk174;
 };
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x34];
-    struct M2c_temp_16_13 *unk40;
+    struct MpegPictureContext *unk40;
 };
 extern s32 _decPicture();
 extern s32 _dispatchMpegCbNodata();
@@ -27,8 +27,8 @@ extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 extern s32 _updateRefImage();
 extern void _outputFrame();
-s32 _decodeOrSkipField(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
-    struct M2c_temp_16_13 *p;
+s32 _decodeOrSkipField(struct MpegDecoder *decoder, s32 arg1, s32 arg2) {
+    struct MpegPictureContext *p;
     s32 bVar3;
     unsigned int new_var2;
     s32 iVar4;
@@ -38,13 +38,13 @@ s32 _decodeOrSkipField(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     short new_var;
     s32 gate;
     bVar3 = 0;
-    p = arg0->unk40;
+    p = decoder->unk40;
     p->unk120 = 0;
     if ((arg2 == (-1)) || (arg1 < arg2)) {
         bVar3 = 1;
     };
     if (p->unk8 == 0) {
-        arg0->unk8 = 0;
+        decoder->unk8 = 0;
         p->unk8 = 1;
     }
     lVar5 = _updateRefImage(p, 0);
@@ -54,7 +54,7 @@ s32 _decodeOrSkipField(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     p->unk120 = 1;
     lVar5 = _nextHeader(p);
     if (lVar5 == 0) {
-        _sceMpegFlush(arg0);
+        _sceMpegFlush(decoder);
         p->unk0 = 1;
         return 0;
     }
@@ -85,11 +85,11 @@ out:
     _outputFrame(p, p->unk118, p->unk4);
 
     p->unk120 = 0;
-    arg0->unk8 = p->unk118 - p->unkAC;
+    decoder->unk8 = p->unk118 - p->unkAC;
     p->unk118 = p->unk118 + 1;
     p->unk4 = (unsigned long long)(p->unk4 + 1);
     if (bVar3 == 0) {
-        _dispatchMpegCbNodata(arg0);
+        _dispatchMpegCbNodata(decoder);
     }
     return uVar7;
 }

@@ -443,7 +443,7 @@
     },
     {
       "name": "snd_GetDopplerPitchMod",
-      "unit": "math/compute_sector_index",
+      "unit": "audio/snd_get_doppler_pitch_mod",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x12f1a0",
@@ -883,7 +883,7 @@
     },
     {
       "name": "Camera_runSetupToNewCam__FP9UpdateCam",
-      "unit": "gameplay/entities/update_moby",
+      "unit": "gameplay/camera/camera_run_setup_to_new_cam",
       "unit_size": "0x44",
       "match": "fragment",
       "address": "0x1ebec8",
@@ -899,7 +899,7 @@
     },
     {
       "name": "Camera_Exit__FP9UpdateCam",
-      "unit": "rendering/entities/draw_moby",
+      "unit": "gameplay/camera/camera_exit",
       "unit_size": "0x44",
       "match": "fragment",
       "address": "0x1ec3d8",
@@ -987,7 +987,7 @@
     },
     {
       "name": "ResetDrawGlobals",
-      "unit": "gameplay/callbacks/reset_callback_registries",
+      "unit": "rendering/reset_draw_globals",
       "unit_size": "0x7c",
       "match": "fragment",
       "address": "0x1f37e8",
@@ -1131,7 +1131,7 @@
     },
     {
       "name": "FontSetWindow",
-      "unit": "runtime/dma/initialize_dma_packet",
+      "unit": "ui/fonts/font_set_window",
       "unit_size": "0x38",
       "match": "entry_size_unknown",
       "address": "0x1f7668",
@@ -1395,7 +1395,7 @@
     },
     {
       "name": "PutDrawBufferLarge__Fv",
-      "unit": "rendering/packets/append_draw_environment_packet",
+      "unit": "rendering/packets/put_draw_buffer_large",
       "unit_size": "0x94",
       "match": "fragment",
       "address": "0x1fb2d0",
@@ -1403,7 +1403,7 @@
     },
     {
       "name": "PutDrawBufferSmall__Fv",
-      "unit": "rendering/packets/append_draw_buffer_packet",
+      "unit": "rendering/packets/put_draw_buffer_small",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x1fb3d0",
@@ -1411,7 +1411,7 @@
     },
     {
       "name": "AA_BlurPass__Fv",
-      "unit": "rendering/texture/append_texture_transfer_packet",
+      "unit": "rendering/effects/aa_blur_pass",
       "unit_size": "0x5c",
       "match": "entry_size_unknown",
       "address": "0x1fb680",
@@ -1475,7 +1475,7 @@
     },
     {
       "name": "Hud_GetIconIndex__Fi",
-      "unit": "gameplay/animation/find_animation_definition_index",
+      "unit": "ui/hud/hud_get_icon_index",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x1fee38",
@@ -1515,7 +1515,7 @@
     },
     {
       "name": "GetIconFrame__Fii",
-      "unit": "gameplay/animation/find_valid_animation_frame_index",
+      "unit": "ui/hud/get_icon_frame",
       "unit_size": "0xac",
       "match": "fragment",
       "address": "0x1ff960",
@@ -1651,7 +1651,7 @@
     },
     {
       "name": "memcard_RestoreGame",
-      "unit": "world/streaming/initialize_dma_packet_payloads",
+      "unit": "storage/memory_card/memcard_restore_game",
       "unit_size": "0xd4",
       "match": "fragment",
       "address": "0x209298",
@@ -1955,7 +1955,7 @@
     },
     {
       "name": "music_Pause__Fi",
-      "unit": "rendering/state/initialize_render_state",
+      "unit": "audio/music/music_pause",
       "unit_size": "0x34",
       "match": "fragment",
       "address": "0x216050",
@@ -1963,7 +1963,7 @@
     },
     {
       "name": "music_Unpause__Fv",
-      "unit": "rendering/commands/update_render_state_command",
+      "unit": "audio/music/music_unpause",
       "unit_size": "0x1c",
       "match": "fragment",
       "address": "0x216088",
@@ -2379,7 +2379,7 @@
     },
     {
       "name": "VU0_loadMicroProgram__FPl",
-      "unit": "rendering/dma/start_vif1_dma_transfer",
+      "unit": "rendering/vu0/vu0_load_micro_program",
       "unit_size": "0xc8",
       "match": "fragment",
       "address": "0x2334d8",
@@ -2587,7 +2587,7 @@
     },
     {
       "name": "initAll__Fiii",
-      "unit": "textbin/audio/decoder/initialize_audio_system",
+      "unit": "textbin/video/player/init_all",
       "unit_size": "0x2a4",
       "match": "fragment",
       "address": "0x23a7c0",
@@ -2595,7 +2595,7 @@
     },
     {
       "name": "termAll__Fv",
-      "unit": "audio/decoder/terminate_audio_system",
+      "unit": "video/player/term_all",
       "unit_size": "0x10c",
       "match": "fragment",
       "address": "0x23aa68",
@@ -2603,7 +2603,7 @@
     },
     {
       "name": "ErrMessage",
-      "unit": "audio/decoder/log_audio_error",
+      "unit": "video/player/err_message",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x23ab78",
@@ -2611,7 +2611,7 @@
     },
     {
       "name": "proceedAudio__Fv",
-      "unit": "audio/decoder/process_audio_stream",
+      "unit": "video/player/proceed_audio",
       "unit_size": "0x2c",
       "match": "fragment",
       "address": "0x23aba0",
@@ -2691,7 +2691,7 @@
     },
     {
       "name": "setImageTag",
-      "unit": "video/decoder/build_image_transfer_tag",
+      "unit": "video/display/set_image_tag",
       "unit_size": "0x1c4",
       "match": "fragment",
       "address": "0x23b210",
@@ -2707,7 +2707,7 @@
     },
     {
       "name": "handler_endimage",
-      "unit": "video/decoder/callbacks/handle_end_image",
+      "unit": "video/display/handler_end_image",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x23b540",
@@ -2715,7 +2715,7 @@
     },
     {
       "name": "startDisplay__Fi",
-      "unit": "video/display/wait_for_display_vsync",
+      "unit": "video/display/start_display",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x23b590",
@@ -2723,7 +2723,7 @@
     },
     {
       "name": "endDisplay__Fv",
-      "unit": "gameplay/state/clear_stage_state_flag",
+      "unit": "video/display/end_display",
       "unit_size": "0x10",
       "match": "entry_size_unknown",
       "address": "0x23b5e0",
@@ -2747,7 +2747,7 @@
     },
     {
       "name": "cpy2area__FPUciT0iT0iT0i",
-      "unit": "video/decoder/buffers/copy_video_buffer_region",
+      "unit": "video/decoder/buffers/cpy2area",
       "unit_size": "0x130",
       "match": "entry_size_unknown",
       "address": "0x23b810",
@@ -2795,7 +2795,7 @@
     },
     {
       "name": "readBufEndGet__FP7ReadBufi",
-      "unit": "runtime/data/get_state_table_word",
+      "unit": "video/decoder/buffers/read_buf_end_get",
       "unit_size": "0x24",
       "match": "entry_size_unknown",
       "address": "0x23ba20",
@@ -2811,7 +2811,7 @@
     },
     {
       "name": "setD3_CHCR__FUi",
-      "unit": "video/decoder/dma/set_dma_channel_3_control_register",
+      "unit": "video/decoder/dma/set_d3_chcr",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x23bb40",
@@ -2819,7 +2819,7 @@
     },
     {
       "name": "setD4_CHCR__FUi",
-      "unit": "video/decoder/dma/set_dma_channel_4_control_register",
+      "unit": "video/decoder/dma/set_d4_chcr",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x23bbb0",
@@ -2827,7 +2827,7 @@
     },
     {
       "name": "scTag2",
-      "unit": "runtime/state/pack_state_value",
+      "unit": "video/decoder/dma/sc_tag2",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x23bc20",
@@ -2987,7 +2987,7 @@
     },
     {
       "name": "videoDecAbort__FP8VideoDec",
-      "unit": "runtime/state/set_state_field",
+      "unit": "video/decoder/video_dec_abort",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23cc70",
@@ -3003,7 +3003,7 @@
     },
     {
       "name": "videoDecSetState__FP8VideoDecUi",
-      "unit": "runtime/state/replace_state_field",
+      "unit": "video/decoder/video_dec_set_state",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23cc88",
@@ -3043,7 +3043,7 @@
     },
     {
       "name": "videoDecMain__FPv",
-      "unit": "video/decoder/run_video_decoder",
+      "unit": "video/decoder/video_dec_main",
       "unit_size": "0x9c",
       "match": "fragment",
       "address": "0x23ce28",
@@ -3051,7 +3051,7 @@
     },
     {
       "name": "decBs0__FP8VideoDec",
-      "unit": "video/decoder/decode_bitstream_0",
+      "unit": "video/decoder/dec_bs0",
       "unit_size": "0x1b4",
       "match": "fragment",
       "address": "0x23cec8",
@@ -3059,7 +3059,7 @@
     },
     {
       "name": "mpegError__FP7sceMpegP18sceMpegCbDataErrorPv",
-      "unit": "video/decoder/callbacks/handle_mpeg_error",
+      "unit": "video/decoder/callbacks/mpeg_error",
       "unit_size": "0x28",
       "match": "full",
       "address": "0x23d080",
@@ -3067,7 +3067,7 @@
     },
     {
       "name": "mpegNodata__FP7sceMpegP13sceMpegCbDataPv",
-      "unit": "video/decoder/callbacks/handle_mpeg_no_data",
+      "unit": "video/decoder/callbacks/mpeg_nodata",
       "unit_size": "0x38",
       "match": "entry_size_unknown",
       "address": "0x23d0a8",
@@ -3099,7 +3099,7 @@
     },
     {
       "name": "voBufIsFull__FP5VoBuf",
-      "unit": "runtime/state/compare_state_fields",
+      "unit": "video/decoder/vo_buf_is_full",
       "unit_size": "0x14",
       "match": "fragment",
       "address": "0x23d1f8",
@@ -3123,7 +3123,7 @@
     },
     {
       "name": "voBufIsEmpty",
-      "unit": "runtime/state/is_state_field_zero",
+      "unit": "video/decoder/vo_buf_is_empty",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23d2c8",
@@ -3139,7 +3139,7 @@
     },
     {
       "name": "voBufDecCount__FP5VoBuf",
-      "unit": "runtime/state/decrement_state_field",
+      "unit": "video/decoder/vo_buf_dec_count",
       "unit_size": "0x20",
       "match": "entry_size_unknown",
       "address": "0x23d340",
@@ -3894,7 +3894,7 @@
       },
       {
         "unit": "textbin/audio/snd_start_sound_system",
-        "source_path": "src/assembly/textbin/audio/snd_start_sound_system.c",
+        "source_path": "src/textbin/audio/snd_start_sound_system.c",
         "address": "0x0012da28",
         "current_name": "FUN_0012da28",
         "proposed_name": "snd_start_sound_system",
@@ -4904,7 +4904,7 @@
       },
       {
         "unit": "textbin/rendering/texture/load_pif_as_psmt8_h",
-        "source_path": "src/assembly/textbin/rendering/texture/load_pif_as_psmt8_h.c",
+        "source_path": "src/textbin/rendering/texture/load_pif_as_psmt8_h.c",
         "address": "0x001e9168",
         "current_name": "FUN_001e9168",
         "proposed_name": "load_pif_as_psmt8_h",
@@ -4966,7 +4966,7 @@
       },
       {
         "unit": "textbin/world/startlevel",
-        "source_path": "src/assembly/textbin/world/startlevel.c",
+        "source_path": "src/textbin/world/startlevel.c",
         "address": "0x001e9658",
         "current_name": "FUN_001e9658",
         "proposed_name": "startlevel",
@@ -5035,7 +5035,7 @@
       },
       {
         "unit": "textbin/gameplay/state/transition_load_wad",
-        "source_path": "src/assembly/textbin/gameplay/state/transition_load_wad.c",
+        "source_path": "src/textbin/gameplay/state/transition_load_wad.c",
         "address": "0x001ea830",
         "current_name": "FUN_001ea830",
         "proposed_name": "transition_load_wad",
@@ -5071,7 +5071,7 @@
       },
       {
         "unit": "textbin/fun_001eb0a8",
-        "source_path": "src/assembly/textbin/fun_001eb0a8.c",
+        "source_path": "src/textbin/fun_001eb0a8.c",
         "address": "0x001eb0a8",
         "current_name": "FUN_001eb0a8",
         "proposed_name": "update_gameplay_frame",
@@ -5153,7 +5153,7 @@
       },
       {
         "unit": "textbin/gameplay/state/transition_do_transition",
-        "source_path": "src/assembly/textbin/gameplay/state/transition_do_transition.c",
+        "source_path": "src/textbin/gameplay/state/transition_do_transition.c",
         "address": "0x001eb798",
         "current_name": "FUN_001eb798",
         "proposed_name": "transition_do_transition",
@@ -5251,20 +5251,15 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/update_moby",
-        "source_path": "src/gameplay/entities/update_moby.c",
+        "unit": "gameplay/camera/camera_run_setup_to_new_cam",
+        "source_path": "src/gameplay/camera/camera_run_setup_to_new_cam.c",
         "address": "0x001ebec8",
         "current_name": "FUN_001ebec8",
-        "proposed_name": "update_moby",
-        "logical_group": "gameplay/entities",
+        "proposed_name": "camera_run_setup_to_new_cam",
+        "logical_group": "gameplay/camera",
         "status": "proposed",
         "confidence": "high",
         "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "f303c83",
-            "excerpt": "- fun_001ebec8 and fun_001ec3d8 dispatch through the moby class table."
-          },
           {
             "kind": "recovered_symbol",
             "name": "Camera_runSetupToNewCam__FP9UpdateCam",
@@ -5272,14 +5267,14 @@
           },
           {
             "kind": "source_analysis",
-            "note": "Dispatches to the Moby class update method."
+            "note": "Recovered symbol at the unit address; calls the camera type slot in D_001E8C00."
           }
         ],
         "logical_group_confidence": "high"
       },
       {
         "unit": "textbin/fun_001ebf10",
-        "source_path": "src/assembly/textbin/fun_001ebf10.c",
+        "source_path": "src/textbin/fun_001ebf10.c",
         "address": "0x001ebf10",
         "current_name": "FUN_001ebf10",
         "proposed_name": "switch_active_camera_record",
@@ -5328,20 +5323,15 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/entities/draw_moby",
-        "source_path": "src/rendering/entities/draw_moby.c",
+        "unit": "gameplay/camera/camera_exit",
+        "source_path": "src/gameplay/camera/camera_exit.c",
         "address": "0x001ec3d8",
         "current_name": "FUN_001ec3d8",
-        "proposed_name": "draw_moby",
-        "logical_group": "rendering/entities",
+        "proposed_name": "camera_exit",
+        "logical_group": "gameplay/camera",
         "status": "proposed",
         "confidence": "high",
         "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "f303c83",
-            "excerpt": "- fun_001ebec8 and fun_001ec3d8 dispatch through the moby class table."
-          },
           {
             "kind": "recovered_symbol",
             "name": "Camera_Exit__FP9UpdateCam",
@@ -5349,7 +5339,7 @@
           },
           {
             "kind": "source_analysis",
-            "note": "Dispatches to the Moby class draw method."
+            "note": "Recovered symbol at the unit address; calls the camera type slot in D_001E8C00."
           }
         ],
         "logical_group_confidence": "high"
@@ -5971,7 +5961,7 @@
       },
       {
         "unit": "textbin/rendering/view/update_view_context",
-        "source_path": "src/assembly/textbin/rendering/view/update_view_context.c",
+        "source_path": "src/textbin/rendering/view/update_view_context.c",
         "address": "0x001f2d98",
         "current_name": "FUN_001f2d98",
         "proposed_name": "update_view_context",
@@ -5989,7 +5979,7 @@
       },
       {
         "unit": "textbin/fun_001f33b8",
-        "source_path": "src/assembly/textbin/fun_001f33b8.c",
+        "source_path": "src/textbin/fun_001f33b8.c",
         "address": "0x001f33b8",
         "current_name": "FUN_001f33b8",
         "proposed_name": "configure_graphics_projection",
@@ -6006,7 +5996,7 @@
       },
       {
         "unit": "textbin/video/display/set_pal_mode",
-        "source_path": "src/assembly/textbin/video/display/set_pal_mode.c",
+        "source_path": "src/textbin/video/display/set_pal_mode.c",
         "address": "0x001f34e8",
         "current_name": "FUN_001f34e8",
         "proposed_name": "set_pal_mode",
@@ -6023,8 +6013,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/callbacks/reset_callback_registries",
-        "source_path": "src/gameplay/callbacks/reset_callback_registries.c",
+        "unit": "rendering/reset_draw_globals",
+        "source_path": "src/rendering/reset_draw_globals.c",
         "address": "0x001f37e8",
         "current_name": "FUN_001f37e8",
         "proposed_name": "reset_callback_registries",
@@ -6183,7 +6173,7 @@
       },
       {
         "unit": "textbin/rendering/effects/get_effect_texture",
-        "source_path": "src/assembly/textbin/rendering/effects/get_effect_texture.c",
+        "source_path": "src/textbin/rendering/effects/get_effect_texture.c",
         "address": "0x001f44b8",
         "current_name": "FUN_001f44b8",
         "proposed_name": "get_effect_texture",
@@ -6549,7 +6539,7 @@
       },
       {
         "unit": "textbin/fun_001f5ab0",
-        "source_path": "src/assembly/textbin/fun_001f5ab0.c",
+        "source_path": "src/textbin/fun_001f5ab0.c",
         "address": "0x001f5ab0",
         "current_name": "FUN_001f5ab0",
         "proposed_name": "append_rotated_sprite_quad",
@@ -6988,7 +6978,7 @@
       },
       {
         "unit": "textbin/ui/text/font_print_window",
-        "source_path": "src/assembly/textbin/ui/text/font_print_window.c",
+        "source_path": "src/textbin/ui/text/font_print_window.c",
         "address": "0x001f7090",
         "current_name": "FUN_001f7090",
         "proposed_name": "font_print_window",
@@ -7160,7 +7150,7 @@
       },
       {
         "unit": "textbin/fun_001f96f8",
-        "source_path": "src/assembly/textbin/fun_001f96f8.c",
+        "source_path": "src/textbin/fun_001f96f8.c",
         "address": "0x001f96f8",
         "current_name": "FUN_001f96f8",
         "proposed_name": "scale_game_frames",
@@ -7213,7 +7203,7 @@
       },
       {
         "unit": "textbin/runtime/memory/clear_u64_value",
-        "source_path": "src/assembly/textbin/runtime/memory/clear_u64_value.c",
+        "source_path": "src/textbin/runtime/memory/clear_u64_value.c",
         "address": "0x001f99f8",
         "current_name": "FUN_001f99f8",
         "proposed_name": "clear_u64_value",
@@ -7242,7 +7232,7 @@
       },
       {
         "unit": "textbin/math/rotations/fast_add_rotations",
-        "source_path": "src/assembly/textbin/math/rotations/fast_add_rotations.c",
+        "source_path": "src/textbin/math/rotations/fast_add_rotations.c",
         "address": "0x001fa580",
         "current_name": "FUN_001fa580",
         "proposed_name": "fast_add_rotations",
@@ -7260,7 +7250,7 @@
       },
       {
         "unit": "textbin/math/rotations/fast_subtract_rotations",
-        "source_path": "src/assembly/textbin/math/rotations/fast_subtract_rotations.c",
+        "source_path": "src/textbin/math/rotations/fast_subtract_rotations.c",
         "address": "0x001fa5c8",
         "current_name": "FUN_001fa5c8",
         "proposed_name": "fast_subtract_rotations",
@@ -7278,7 +7268,7 @@
       },
       {
         "unit": "textbin/math/rotations/fast_normalize_angle",
-        "source_path": "src/assembly/textbin/math/rotations/fast_normalize_angle.c",
+        "source_path": "src/textbin/math/rotations/fast_normalize_angle.c",
         "address": "0x001fa610",
         "current_name": "FUN_001fa610",
         "proposed_name": "fast_normalize_angle",
@@ -7296,7 +7286,7 @@
       },
       {
         "unit": "textbin/math/rotations/fast_difference_between_rotations",
-        "source_path": "src/assembly/textbin/math/rotations/fast_difference_between_rotations.c",
+        "source_path": "src/textbin/math/rotations/fast_difference_between_rotations.c",
         "address": "0x001fa688",
         "current_name": "FUN_001fa688",
         "proposed_name": "fast_difference_between_rotations",
@@ -7314,7 +7304,7 @@
       },
       {
         "unit": "math/conversion/truncate_float_to_s32",
-        "source_path": "src/assembly/math/conversion/truncate_float_to_s32.c",
+        "source_path": "src/math/conversion/truncate_float_to_s32.c",
         "address": "0x001fa6d0",
         "current_name": "FUN_001fa6d0",
         "proposed_name": "truncate_float_to_s32",
@@ -7336,7 +7326,7 @@
       },
       {
         "unit": "textbin/rendering/buffers/setup_fs_aa_buffer",
-        "source_path": "src/assembly/textbin/rendering/buffers/setup_fs_aa_buffer.c",
+        "source_path": "src/textbin/rendering/buffers/setup_fs_aa_buffer.c",
         "address": "0x001fa978",
         "current_name": "FUN_001fa978",
         "proposed_name": "setup_fs_aa_buffer",
@@ -7386,8 +7376,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "rendering/packets/append_draw_environment_packet",
-        "source_path": "src/rendering/packets/append_draw_environment_packet.c",
+        "unit": "rendering/packets/put_draw_buffer_large",
+        "source_path": "src/rendering/packets/put_draw_buffer_large.c",
         "address": "0x001fb2d0",
         "current_name": "FUN_001fb2d0",
         "proposed_name": "append_draw_environment_packet",
@@ -7445,8 +7435,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/packets/append_draw_buffer_packet",
-        "source_path": "src/rendering/packets/append_draw_buffer_packet.c",
+        "unit": "rendering/packets/put_draw_buffer_small",
+        "source_path": "src/rendering/packets/put_draw_buffer_small.c",
         "address": "0x001fb3d0",
         "current_name": "FUN_001fb3d0",
         "proposed_name": "append_draw_buffer_packet",
@@ -7500,8 +7490,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "rendering/texture/append_texture_transfer_packet",
-        "source_path": "src/rendering/texture/append_texture_transfer_packet.c",
+        "unit": "rendering/effects/aa_blur_pass",
+        "source_path": "src/rendering/effects/aa_blur_pass.c",
         "address": "0x001fb680",
         "current_name": "FUN_001fb680",
         "proposed_name": "append_texture_transfer_packet",
@@ -7583,7 +7573,7 @@
       },
       {
         "unit": "textbin/runtime/memory/mode_freeze_init",
-        "source_path": "src/assembly/textbin/runtime/memory/mode_freeze_init.c",
+        "source_path": "src/textbin/runtime/memory/mode_freeze_init.c",
         "address": "0x001fbab8",
         "current_name": "FUN_001fbab8",
         "proposed_name": "mode_freeze_init",
@@ -7601,7 +7591,7 @@
       },
       {
         "unit": "textbin/rendering/draw_dialog_text",
-        "source_path": "src/assembly/textbin/rendering/draw_dialog_text.c",
+        "source_path": "src/textbin/rendering/draw_dialog_text.c",
         "address": "0x001fbc50",
         "current_name": "FUN_001fbc50",
         "proposed_name": "draw_dialog_text",
@@ -7624,7 +7614,7 @@
       },
       {
         "unit": "textbin/runtime/memory/update_mode_freeze",
-        "source_path": "src/assembly/textbin/runtime/memory/update_mode_freeze.c",
+        "source_path": "src/textbin/runtime/memory/update_mode_freeze.c",
         "address": "0x001fce28",
         "current_name": "FUN_001fce28",
         "proposed_name": "update_mode_freeze",
@@ -7669,7 +7659,7 @@
       },
       {
         "unit": "textbin/fun_001fd748",
-        "source_path": "src/assembly/textbin/fun_001fd748.c",
+        "source_path": "src/textbin/fun_001fd748.c",
         "address": "0x001fd748",
         "current_name": "FUN_001fd748",
         "proposed_name": "draw_level_selection_map",
@@ -7879,8 +7869,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/animation/find_animation_definition_index",
-        "source_path": "src/gameplay/animation/find_animation_definition_index.c",
+        "unit": "ui/hud/hud_get_icon_index",
+        "source_path": "src/ui/hud/hud_get_icon_index.c",
         "address": "0x001fee38",
         "current_name": "FUN_001fee38",
         "proposed_name": "find_animation_definition_index",
@@ -7946,7 +7936,7 @@
       },
       {
         "unit": "textbin/ui/hud/hud_send_resident_bank",
-        "source_path": "src/assembly/textbin/ui/hud/hud_send_resident_bank.c",
+        "source_path": "src/textbin/ui/hud/hud_send_resident_bank.c",
         "address": "0x001ff128",
         "current_name": "FUN_001ff128",
         "proposed_name": "hud_send_resident_bank",
@@ -8178,8 +8168,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/animation/find_valid_animation_frame_index",
-        "source_path": "src/gameplay/animation/find_valid_animation_frame_index.c",
+        "unit": "ui/hud/get_icon_frame",
+        "source_path": "src/ui/hud/get_icon_frame.c",
         "address": "0x001ff960",
         "current_name": "FUN_001ff960",
         "proposed_name": "find_valid_animation_frame_index",
@@ -8206,7 +8196,7 @@
       },
       {
         "unit": "textbin/gameplay/animation/get_frame_texture",
-        "source_path": "src/assembly/textbin/gameplay/animation/get_frame_texture.c",
+        "source_path": "src/textbin/gameplay/animation/get_frame_texture.c",
         "address": "0x001ffa10",
         "current_name": "FUN_001ffa10",
         "proposed_name": "get_frame_texture",
@@ -8760,7 +8750,7 @@
       },
       {
         "unit": "textbin/fun_00202270",
-        "source_path": "src/assembly/textbin/fun_00202270.c",
+        "source_path": "src/textbin/fun_00202270.c",
         "address": "0x00202270",
         "current_name": "FUN_00202270",
         "proposed_name": "upload_mip_texture",
@@ -8873,7 +8863,7 @@
       },
       {
         "unit": "textbin/fun_00202d78",
-        "source_path": "src/assembly/textbin/fun_00202d78.c",
+        "source_path": "src/textbin/fun_00202d78.c",
         "address": "0x00202d78",
         "current_name": "FUN_00202d78",
         "proposed_name": "build_indexed_resident_render_packet",
@@ -8999,7 +8989,7 @@
       },
       {
         "unit": "textbin/fun_00203730",
-        "source_path": "src/assembly/textbin/fun_00203730.c",
+        "source_path": "src/textbin/fun_00203730.c",
         "address": "0x00203730",
         "current_name": "FUN_00203730",
         "proposed_name": "register_object_render_class",
@@ -9016,7 +9006,7 @@
       },
       {
         "unit": "textbin/fun_00203b08",
-        "source_path": "src/assembly/textbin/fun_00203b08.c",
+        "source_path": "src/textbin/fun_00203b08.c",
         "address": "0x00203b08",
         "current_name": "FUN_00203b08",
         "proposed_name": "register_shrub_render_class",
@@ -9033,7 +9023,7 @@
       },
       {
         "unit": "textbin/fun_002040e0",
-        "source_path": "src/assembly/textbin/fun_002040e0.c",
+        "source_path": "src/textbin/fun_002040e0.c",
         "address": "0x002040e0",
         "current_name": "FUN_002040e0",
         "proposed_name": "initialize_tfrag_render_data",
@@ -9072,7 +9062,7 @@
       },
       {
         "unit": "textbin/fun_00204428",
-        "source_path": "src/assembly/textbin/fun_00204428.c",
+        "source_path": "src/textbin/fun_00204428.c",
         "address": "0x00204428",
         "current_name": "FUN_00204428",
         "proposed_name": "service_level_archive_load",
@@ -9159,7 +9149,7 @@
       },
       {
         "unit": "textbin/world/data/select_world_object_resource_tables",
-        "source_path": "src/assembly/textbin/world/data/select_world_object_resource_tables.c",
+        "source_path": "src/textbin/world/data/select_world_object_resource_tables.c",
         "address": "0x00204a40",
         "current_name": "FUN_00204a40",
         "proposed_name": "select_world_object_resource_tables",
@@ -9389,7 +9379,7 @@
       },
       {
         "unit": "textbin/ui/map/draw_map_overlay",
-        "source_path": "src/assembly/textbin/ui/map/draw_map_overlay.c",
+        "source_path": "src/textbin/ui/map/draw_map_overlay.c",
         "address": "0x00205640",
         "current_name": "FUN_00205640",
         "proposed_name": "draw_map_overlay",
@@ -9650,7 +9640,7 @@
       },
       {
         "unit": "textbin/fun_00207c28",
-        "source_path": "src/assembly/textbin/fun_00207c28.c",
+        "source_path": "src/textbin/fun_00207c28.c",
         "address": "0x00207c28",
         "current_name": "FUN_00207c28",
         "proposed_name": "decode_compressed_occlusion_map",
@@ -9743,7 +9733,7 @@
       },
       {
         "unit": "textbin/fun_00208508",
-        "source_path": "src/assembly/textbin/fun_00208508.c",
+        "source_path": "src/textbin/fun_00208508.c",
         "address": "0x00208508",
         "current_name": "FUN_00208508",
         "proposed_name": "draw_map_markers",
@@ -9868,8 +9858,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "world/streaming/initialize_dma_packet_payloads",
-        "source_path": "src/world/streaming/initialize_dma_packet_payloads.c",
+        "unit": "storage/memory_card/memcard_restore_game",
+        "source_path": "src/storage/memory_card/memcard_restore_game.c",
         "address": "0x00209298",
         "current_name": "FUN_00209298",
         "proposed_name": "initialize_dma_packet_payloads",
@@ -10071,7 +10061,7 @@
       },
       {
         "unit": "textbin/storage/memory_card/data/memcard_restore_data",
-        "source_path": "src/assembly/textbin/storage/memory_card/data/memcard_restore_data.c",
+        "source_path": "src/textbin/storage/memory_card/data/memcard_restore_data.c",
         "address": "0x0020af20",
         "current_name": "FUN_0020af20",
         "proposed_name": "memcard_restore_data",
@@ -10107,7 +10097,7 @@
       },
       {
         "unit": "textbin/rendering/dma_to_spr_sync",
-        "source_path": "src/assembly/textbin/rendering/dma_to_spr_sync.c",
+        "source_path": "src/textbin/rendering/dma_to_spr_sync.c",
         "address": "0x0020b3e0",
         "current_name": "FUN_0020b3e0",
         "proposed_name": "dma_to_spr_sync",
@@ -10125,7 +10115,7 @@
       },
       {
         "unit": "textbin/rendering/init_dma",
-        "source_path": "src/assembly/textbin/rendering/init_dma.c",
+        "source_path": "src/textbin/rendering/init_dma.c",
         "address": "0x0020b418",
         "current_name": "FUN_0020b418",
         "proposed_name": "init_dma",
@@ -10784,7 +10774,7 @@
       },
       {
         "unit": "textbin/fun_00212e28",
-        "source_path": "src/assembly/textbin/fun_00212e28.c",
+        "source_path": "src/textbin/fun_00212e28.c",
         "address": "0x00212e28",
         "current_name": "FUN_00212e28",
         "proposed_name": "update_visible_resident_objects",
@@ -10801,7 +10791,7 @@
       },
       {
         "unit": "gameplay/animation/set_moby_animation",
-        "source_path": "src/assembly/gameplay/animation/set_moby_animation.c",
+        "source_path": "src/gameplay/animation/set_moby_animation.c",
         "address": "0x00212ed8",
         "current_name": "FUN_00212ed8",
         "proposed_name": "set_moby_animation",
@@ -11051,7 +11041,7 @@
       },
       {
         "unit": "textbin/fun_00213f38",
-        "source_path": "src/assembly/textbin/fun_00213f38.c",
+        "source_path": "src/textbin/fun_00213f38.c",
         "address": "0x00213f38",
         "current_name": "FUN_00213f38",
         "proposed_name": "advance_accelerated_scalar",
@@ -11593,7 +11583,7 @@
       },
       {
         "unit": "textbin/audio/music/music_transition",
-        "source_path": "src/assembly/textbin/audio/music/music_transition.c",
+        "source_path": "src/textbin/audio/music/music_transition.c",
         "address": "0x00215e00",
         "current_name": "FUN_00215e00",
         "proposed_name": "music_transition",
@@ -11652,7 +11642,7 @@
       },
       {
         "unit": "textbin/audio/music/music_update",
-        "source_path": "src/assembly/textbin/audio/music/music_update.c",
+        "source_path": "src/textbin/audio/music/music_update.c",
         "address": "0x00216290",
         "current_name": "FUN_00216290",
         "proposed_name": "music_update",
@@ -12145,7 +12135,7 @@
       },
       {
         "unit": "textbin/fun_002196b8",
-        "source_path": "src/assembly/textbin/fun_002196b8.c",
+        "source_path": "src/textbin/fun_002196b8.c",
         "address": "0x002196b8",
         "current_name": "FUN_002196b8",
         "proposed_name": "render_level_effects_and_screen_sprites",
@@ -12209,7 +12199,7 @@
       },
       {
         "unit": "textbin/fun_0021a328",
-        "source_path": "src/assembly/textbin/fun_0021a328.c",
+        "source_path": "src/textbin/fun_0021a328.c",
         "address": "0x0021a328",
         "current_name": "FUN_0021a328",
         "proposed_name": "render_configured_text_label",
@@ -12231,7 +12221,7 @@
       },
       {
         "unit": "textbin/fun_0021abf8",
-        "source_path": "src/assembly/textbin/fun_0021abf8.c",
+        "source_path": "src/textbin/fun_0021abf8.c",
         "address": "0x0021abf8",
         "current_name": "FUN_0021abf8",
         "proposed_name": "update_menu_entry_actions",
@@ -12282,7 +12272,7 @@
       },
       {
         "unit": "textbin/fun_0021b858",
-        "source_path": "src/assembly/textbin/fun_0021b858.c",
+        "source_path": "src/textbin/fun_0021b858.c",
         "address": "0x0021b858",
         "current_name": "FUN_0021b858",
         "proposed_name": "update_menu_grid_selection",
@@ -12422,7 +12412,7 @@
       },
       {
         "unit": "textbin/ui/menus/audio/sound_options_menu",
-        "source_path": "src/assembly/textbin/ui/menus/audio/sound_options_menu.c",
+        "source_path": "src/textbin/ui/menus/audio/sound_options_menu.c",
         "address": "0x0021cb30",
         "current_name": "FUN_0021cb30",
         "proposed_name": "sound_options_menu",
@@ -12440,7 +12430,7 @@
       },
       {
         "unit": "textbin/ui/menus/audio/draw_sound_menu",
-        "source_path": "src/assembly/textbin/ui/menus/audio/draw_sound_menu.c",
+        "source_path": "src/textbin/ui/menus/audio/draw_sound_menu.c",
         "address": "0x0021ce00",
         "current_name": "FUN_0021ce00",
         "proposed_name": "draw_sound_menu",
@@ -12662,7 +12652,7 @@
       },
       {
         "unit": "textbin/fun_0021e230",
-        "source_path": "src/assembly/textbin/fun_0021e230.c",
+        "source_path": "src/textbin/fun_0021e230.c",
         "address": "0x0021e230",
         "current_name": "FUN_0021e230",
         "proposed_name": "update_item_preview_binding",
@@ -12822,7 +12812,7 @@
       },
       {
         "unit": "textbin/ui/menus/inventory/draw_items_menu",
-        "source_path": "src/assembly/textbin/ui/menus/inventory/draw_items_menu.c",
+        "source_path": "src/textbin/ui/menus/inventory/draw_items_menu.c",
         "address": "0x0021eb20",
         "current_name": "FUN_0021eb20",
         "proposed_name": "draw_items_menu",
@@ -13175,7 +13165,7 @@
       },
       {
         "unit": "textbin/fun_0021fdc8",
-        "source_path": "src/assembly/textbin/fun_0021fdc8.c",
+        "source_path": "src/textbin/fun_0021fdc8.c",
         "address": "0x0021fdc8",
         "current_name": "FUN_0021fdc8",
         "proposed_name": "update_menu_resource_stream",
@@ -13207,7 +13197,7 @@
       },
       {
         "unit": "textbin/ui/menus/save_data/draw_checking_memory_card_data_menu",
-        "source_path": "src/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu.c",
+        "source_path": "src/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu.c",
         "address": "0x00220348",
         "current_name": "FUN_00220348",
         "proposed_name": "draw_checking_memory_card_data_menu",
@@ -13369,7 +13359,7 @@
       },
       {
         "unit": "textbin/ui/menus/draw_cheats_menu",
-        "source_path": "src/assembly/textbin/ui/menus/draw_cheats_menu.c",
+        "source_path": "src/textbin/ui/menus/draw_cheats_menu.c",
         "address": "0x00221030",
         "current_name": "FUN_00221030",
         "proposed_name": "draw_cheats_menu",
@@ -13703,7 +13693,7 @@
       },
       {
         "unit": "textbin/ui/menus/draw_localized_three_option_menu",
-        "source_path": "src/assembly/textbin/ui/menus/draw_localized_three_option_menu.c",
+        "source_path": "src/textbin/ui/menus/draw_localized_three_option_menu.c",
         "address": "0x00222a98",
         "current_name": "FUN_00222a98",
         "proposed_name": "draw_localized_three_option_menu",
@@ -13985,7 +13975,7 @@
       },
       {
         "unit": "textbin/fun_00224e18",
-        "source_path": "src/assembly/textbin/fun_00224e18.c",
+        "source_path": "src/textbin/fun_00224e18.c",
         "address": "0x00224e18",
         "current_name": "FUN_00224e18",
         "proposed_name": "update_menu_preview_pose_and_attachments",
@@ -14135,7 +14125,7 @@
       },
       {
         "unit": "textbin/fun_002256e8",
-        "source_path": "src/assembly/textbin/fun_002256e8.c",
+        "source_path": "src/textbin/fun_002256e8.c",
         "address": "0x002256e8",
         "current_name": "FUN_002256e8",
         "proposed_name": "update_streamed_moby_animation",
@@ -14179,7 +14169,7 @@
       },
       {
         "unit": "textbin/fun_00225ac0",
-        "source_path": "src/assembly/textbin/fun_00225ac0.c",
+        "source_path": "src/textbin/fun_00225ac0.c",
         "address": "0x00225ac0",
         "current_name": "FUN_00225ac0",
         "proposed_name": "initialize_graphics_buffer_descriptors",
@@ -14331,7 +14321,7 @@
       },
       {
         "unit": "textbin/fun_00225e70",
-        "source_path": "src/assembly/textbin/fun_00225e70.c",
+        "source_path": "src/textbin/fun_00225e70.c",
         "address": "0x00225e70",
         "current_name": "FUN_00225e70",
         "proposed_name": "update_preview_animation_and_attachments",
@@ -14443,7 +14433,7 @@
       },
       {
         "unit": "ui/menus/fun_00226848",
-        "source_path": "src/assembly/ui/menus/fun_00226848.c",
+        "source_path": "src/ui/menus/fun_00226848.c",
         "address": "0x00226848",
         "current_name": "FUN_00226848",
         "proposed_name": "load_preview_resource_bindings",
@@ -14617,7 +14607,7 @@
       },
       {
         "unit": "textbin/fun_002271d0",
-        "source_path": "src/assembly/textbin/fun_002271d0.c",
+        "source_path": "src/textbin/fun_002271d0.c",
         "address": "0x002271d0",
         "current_name": "FUN_002271d0",
         "proposed_name": "append_fullscreen_setup_strips",
@@ -14634,7 +14624,7 @@
       },
       {
         "unit": "textbin/fun_00227378",
-        "source_path": "src/assembly/textbin/fun_00227378.c",
+        "source_path": "src/textbin/fun_00227378.c",
         "address": "0x00227378",
         "current_name": "FUN_00227378",
         "proposed_name": "append_fullscreen_clear_strips",
@@ -14651,7 +14641,7 @@
       },
       {
         "unit": "textbin/fun_00227548",
-        "source_path": "src/assembly/textbin/fun_00227548.c",
+        "source_path": "src/textbin/fun_00227548.c",
         "address": "0x00227548",
         "current_name": "FUN_00227548",
         "proposed_name": "submit_graphics_setup_command_stream",
@@ -15000,7 +14990,7 @@
       },
       {
         "unit": "textbin/fun_0022c8d0",
-        "source_path": "src/assembly/textbin/fun_0022c8d0.c",
+        "source_path": "src/textbin/fun_0022c8d0.c",
         "address": "0x0022c8d0",
         "current_name": "FUN_0022c8d0",
         "proposed_name": "initialize_gameplay_sound_system",
@@ -15017,7 +15007,7 @@
       },
       {
         "unit": "textbin/audio/voices/sound_update",
-        "source_path": "src/assembly/textbin/audio/voices/sound_update.c",
+        "source_path": "src/textbin/audio/voices/sound_update.c",
         "address": "0x0022ca50",
         "current_name": "FUN_0022ca50",
         "proposed_name": "sound_update",
@@ -15104,7 +15094,7 @@
       },
       {
         "unit": "textbin/fun_0022d7f0",
-        "source_path": "src/assembly/textbin/fun_0022d7f0.c",
+        "source_path": "src/textbin/fun_0022d7f0.c",
         "address": "0x0022d7f0",
         "current_name": "FUN_0022d7f0",
         "proposed_name": "allocate_voice_slot",
@@ -15309,7 +15299,7 @@
       },
       {
         "unit": "textbin/fun_0022e420",
-        "source_path": "src/assembly/textbin/fun_0022e420.c",
+        "source_path": "src/textbin/fun_0022e420.c",
         "address": "0x0022e420",
         "current_name": "FUN_0022e420",
         "proposed_name": "build_resident_indexed_texture_warp_meshes",
@@ -15368,7 +15358,7 @@
       },
       {
         "unit": "textbin/fun_0022eaa8",
-        "source_path": "src/assembly/textbin/fun_0022eaa8.c",
+        "source_path": "src/textbin/fun_0022eaa8.c",
         "address": "0x0022eaa8",
         "current_name": "FUN_0022eaa8",
         "proposed_name": "update_level_gameplay_frame",
@@ -15565,7 +15555,7 @@
       },
       {
         "unit": "textbin/fun_00231878",
-        "source_path": "src/assembly/textbin/fun_00231878.c",
+        "source_path": "src/textbin/fun_00231878.c",
         "address": "0x00231878",
         "current_name": "FUN_00231878",
         "proposed_name": "prepare_loading_slide_textures",
@@ -15652,7 +15642,7 @@
       },
       {
         "unit": "textbin/fun_002327a0",
-        "source_path": "src/assembly/textbin/fun_002327a0.c",
+        "source_path": "src/textbin/fun_002327a0.c",
         "address": "0x002327a0",
         "current_name": "FUN_002327a0",
         "proposed_name": "render_environment_mapped_object",
@@ -15808,8 +15798,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/dma/start_vif1_dma_transfer",
-        "source_path": "src/rendering/dma/start_vif1_dma_transfer.c",
+        "unit": "rendering/vu0/vu0_load_micro_program",
+        "source_path": "src/rendering/vu0/vu0_load_micro_program.c",
         "address": "0x002334d8",
         "current_name": "FUN_002334d8",
         "proposed_name": "start_vif1_dma_transfer",
@@ -16394,7 +16384,7 @@
       },
       {
         "unit": "textbin/fun_00237a78",
-        "source_path": "src/assembly/textbin/fun_00237a78.c",
+        "source_path": "src/textbin/fun_00237a78.c",
         "address": "0x00237a78",
         "current_name": "FUN_00237a78",
         "proposed_name": "project_graphics_bounds",
@@ -16411,7 +16401,7 @@
       },
       {
         "unit": "textbin/fun_00237c80",
-        "source_path": "src/assembly/textbin/fun_00237c80.c",
+        "source_path": "src/textbin/fun_00237c80.c",
         "address": "0x00237c80",
         "current_name": "FUN_00237c80",
         "proposed_name": "project_graphics_bounds_float",
@@ -16462,7 +16452,7 @@
       },
       {
         "unit": "textbin/fun_00238310",
-        "source_path": "src/assembly/textbin/fun_00238310.c",
+        "source_path": "src/textbin/fun_00238310.c",
         "address": "0x00238310",
         "current_name": "FUN_00238310",
         "proposed_name": "render_capture_scrolling_text",
@@ -16579,7 +16569,7 @@
       },
       {
         "unit": "textbin/fun_00238f08",
-        "source_path": "src/assembly/textbin/fun_00238f08.c",
+        "source_path": "src/textbin/fun_00238f08.c",
         "address": "0x00238f08",
         "current_name": "FUN_00238f08",
         "proposed_name": "render_vendor_buy_label_pass",
@@ -16663,7 +16653,7 @@
       },
       {
         "unit": "textbin/fun_00239780",
-        "source_path": "src/assembly/textbin/fun_00239780.c",
+        "source_path": "src/textbin/fun_00239780.c",
         "address": "0x00239780",
         "current_name": "FUN_00239780",
         "proposed_name": "render_vendor_capture_pass_sequence",
@@ -16701,7 +16691,7 @@
       },
       {
         "unit": "textbin/fun_00239f58",
-        "source_path": "src/assembly/textbin/fun_00239f58.c",
+        "source_path": "src/textbin/fun_00239f58.c",
         "address": "0x00239f58",
         "current_name": "FUN_00239f58",
         "proposed_name": "sample_surface_height_map",
@@ -16777,7 +16767,7 @@
       },
       {
         "unit": "textbin/video/decoder/read_mpeg",
-        "source_path": "src/assembly/textbin/video/decoder/read_mpeg.c",
+        "source_path": "src/textbin/video/decoder/read_mpeg.c",
         "address": "0x0023a460",
         "current_name": "FUN_0023a460",
         "proposed_name": "read_mpeg",
@@ -16835,8 +16825,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/audio/decoder/initialize_audio_system",
-        "source_path": "src/textbin/audio/decoder/initialize_audio_system.c",
+        "unit": "textbin/video/player/init_all",
+        "source_path": "src/textbin/video/player/init_all.c",
         "address": "0x0023a7c0",
         "current_name": "FUN_0023a7c0",
         "proposed_name": "initialize_audio_system",
@@ -16853,8 +16843,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/terminate_audio_system",
-        "source_path": "src/audio/decoder/terminate_audio_system.c",
+        "unit": "video/player/term_all",
+        "source_path": "src/video/player/term_all.c",
         "address": "0x0023aa68",
         "current_name": "FUN_0023aa68",
         "proposed_name": "terminate_audio_system",
@@ -16876,8 +16866,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/log_audio_error",
-        "source_path": "src/audio/decoder/log_audio_error.c",
+        "unit": "video/player/err_message",
+        "source_path": "src/video/player/err_message.c",
         "address": "0x0023ab78",
         "current_name": "FUN_0023ab78",
         "proposed_name": "log_audio_error",
@@ -16899,8 +16889,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/process_audio_stream",
-        "source_path": "src/audio/decoder/process_audio_stream.c",
+        "unit": "video/player/proceed_audio",
+        "source_path": "src/video/player/proceed_audio.c",
         "address": "0x0023aba0",
         "current_name": "FUN_0023aba0",
         "proposed_name": "process_audio_stream",
@@ -17094,8 +17084,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/build_image_transfer_tag",
-        "source_path": "src/video/decoder/build_image_transfer_tag.c",
+        "unit": "video/display/set_image_tag",
+        "source_path": "src/video/display/set_image_tag.c",
         "address": "0x0023b210",
         "current_name": "FUN_0023b210",
         "proposed_name": "build_image_transfer_tag",
@@ -17116,8 +17106,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/callbacks/handle_end_image",
-        "source_path": "src/video/decoder/callbacks/handle_end_image.c",
+        "unit": "video/display/handler_end_image",
+        "source_path": "src/video/display/handler_end_image.c",
         "address": "0x0023b540",
         "current_name": "FUN_0023b540",
         "proposed_name": "handle_end_image",
@@ -17143,8 +17133,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/display/wait_for_display_vsync",
-        "source_path": "src/video/display/wait_for_display_vsync.c",
+        "unit": "video/display/start_display",
+        "source_path": "src/video/display/start_display.c",
         "address": "0x0023b590",
         "current_name": "FUN_0023b590",
         "proposed_name": "wait_for_display_vsync",
@@ -17201,8 +17191,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/buffers/copy_video_buffer_region",
-        "source_path": "src/video/decoder/buffers/copy_video_buffer_region.c",
+        "unit": "video/decoder/buffers/cpy2area",
+        "source_path": "src/video/decoder/buffers/cpy2area.c",
         "address": "0x0023b810",
         "current_name": "FUN_0023b810",
         "proposed_name": "copy_video_buffer_region",
@@ -17284,8 +17274,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/dma/set_dma_channel_3_control_register",
-        "source_path": "src/video/decoder/dma/set_dma_channel_3_control_register.c",
+        "unit": "video/decoder/dma/set_d3_chcr",
+        "source_path": "src/video/decoder/dma/set_d3_chcr.c",
         "address": "0x0023bb40",
         "current_name": "FUN_0023bb40",
         "proposed_name": "set_dma_channel_3_control_register",
@@ -17306,8 +17296,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/dma/set_dma_channel_4_control_register",
-        "source_path": "src/video/decoder/dma/set_dma_channel_4_control_register.c",
+        "unit": "video/decoder/dma/set_d4_chcr",
+        "source_path": "src/video/decoder/dma/set_d4_chcr.c",
         "address": "0x0023bbb0",
         "current_name": "FUN_0023bbb0",
         "proposed_name": "set_dma_channel_4_control_register",
@@ -17442,7 +17432,7 @@
       },
       {
         "unit": "textbin/video/decoder/vi_buf_restart_dma",
-        "source_path": "src/assembly/textbin/video/decoder/vi_buf_restart_dma.c",
+        "source_path": "src/textbin/video/decoder/vi_buf_restart_dma.c",
         "address": "0x0023c280",
         "current_name": "FUN_0023c280",
         "proposed_name": "vi_buf_restart_dma",
@@ -17754,8 +17744,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/run_video_decoder",
-        "source_path": "src/video/decoder/run_video_decoder.c",
+        "unit": "video/decoder/video_dec_main",
+        "source_path": "src/video/decoder/video_dec_main.c",
         "address": "0x0023ce28",
         "current_name": "FUN_0023ce28",
         "proposed_name": "run_video_decoder",
@@ -17781,8 +17771,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/decode_bitstream_0",
-        "source_path": "src/video/decoder/decode_bitstream_0.c",
+        "unit": "video/decoder/dec_bs0",
+        "source_path": "src/video/decoder/dec_bs0.c",
         "address": "0x0023cec8",
         "current_name": "FUN_0023cec8",
         "proposed_name": "decode_bitstream_0",
@@ -17799,8 +17789,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/callbacks/handle_mpeg_error",
-        "source_path": "src/video/decoder/callbacks/handle_mpeg_error.c",
+        "unit": "video/decoder/callbacks/mpeg_error",
+        "source_path": "src/video/decoder/callbacks/mpeg_error.c",
         "address": "0x0023d080",
         "current_name": "FUN_0023d080",
         "proposed_name": "handle_mpeg_error",
@@ -17826,8 +17816,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/callbacks/handle_mpeg_no_data",
-        "source_path": "src/video/decoder/callbacks/handle_mpeg_no_data.c",
+        "unit": "video/decoder/callbacks/mpeg_nodata",
+        "source_path": "src/video/decoder/callbacks/mpeg_nodata.c",
         "address": "0x0023d0a8",
         "current_name": "FUN_0023d0a8",
         "proposed_name": "handle_mpeg_no_data",

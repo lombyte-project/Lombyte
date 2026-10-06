@@ -21,7 +21,7 @@ extern int D_0015EE1C MACRO_ADDR;
 extern void help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1D_b (*(unsigned char *)&D_0015EE1D)
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
-extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
+extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
                                 int a8);
 extern void font_print_window_small(void *a, long b, void *c, int d) __asm__("func_001F75F0");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
@@ -109,7 +109,7 @@ void draw_help(void) {
                 col = ((4 - ((HelpState *)D_001996D0)->x04) << 29) | 0xFFA888;
             }
             text = D_0015F6A0[((HelpState *)D_001996D0)->pad[6]].text;
-            InitializeDmaPacket((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
+            font_set_window((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
                                 ((HelpState *)D_001996D0)->pad[3], 0x10, 3);
             font_print_window_small((void *)win, col, text, -1);
         }

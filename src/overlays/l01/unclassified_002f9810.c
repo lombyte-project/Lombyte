@@ -224,10 +224,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 typedef struct {
     u128 vel;

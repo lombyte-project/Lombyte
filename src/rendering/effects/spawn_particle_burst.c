@@ -6,7 +6,7 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int,
                                        int, int, float, float) __asm__("FUN_001f5ab0");
 /*
- * Spawns a burst of particle effects around (arg1, arg2) using the source
+ * Spawns a burst of particle effects around (x, y) using the source
  * object's unk10 (a size, scaled by 40.0f) and unk18 (looked up through
  * func_001F44B8 to get a handle passed on to FUN_001f5ab0). unk2C picks
  * the pattern: 0 -- a fan of unk26 particles, stepping the angle (unk1C)
@@ -22,11 +22,11 @@ extern void append_rotated_sprite_quad(float, float, float, float, float, int, i
  * array, not scalars: retail spills them to fixed stack slots (0x0, 0x4,
  * 0x10, 0x14 with an 8-byte gap) instead of extra saved float registers.
  */
-void spawn_particle_burst(void *arg0, float arg1, float arg2) __asm__("FUN_001ee008");
+void spawn_particle_burst(void *effect, float x, float y) __asm__("FUN_001ee008");
 
-void spawn_particle_burst(void *arg0, float arg1, float arg2) {
+void spawn_particle_burst(void *effect, float x, float y) {
     float forty = 40.0f;
-    char *p = (char *)arg0;
+    char *p = (char *)effect;
     int handle = get_effect_texture(*(int *)(p + 0x18));
     int mode = *(int *)(p + 0x2C);
     float angle = *(float *)(p + 0x1C);
@@ -36,7 +36,7 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2) {
     switch (mode) {
     case 0:
         for (i = 0; i < *(short *)(p + 0x26); i++) {
-            append_rotated_sprite_quad(arg1, arg2, forty * *(float *)(p + 0x10),
+            append_rotated_sprite_quad(x, y, forty * *(float *)(p + 0x10),
                                        forty * *(float *)(p + 0x10), angle, 0x3F, 0x3F, handle,
                                        0xFFFFF3, *(int *)(p + 0x14), 0, 0, 0.0f, 0.0f);
             angle = fast_add_rotations(angle, *(float *)(p + 0x28));
@@ -51,22 +51,22 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2) {
         tmp[5] = fast_sin(angle) * -forty * *(float *)(p + 0x10);
 
         k = *(float *)(p + 0x10) * forty;
-        append_rotated_sprite_quad(arg1, arg2, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
+        append_rotated_sprite_quad(x, y, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
                                    *(int *)(p + 0x14), 0, 0, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(arg1 + tmp[4], arg2 + tmp[5], k, k, angle, 0x3F, 0x3F, handle,
+        append_rotated_sprite_quad(x + tmp[4], y + tmp[5], k, k, angle, 0x3F, 0x3F, handle,
                                    0xFFFFF3, *(int *)(p + 0x14), 1, 0, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(arg1 - tmp[0], arg2 - tmp[1], k, k, angle, 0x3F, 0x3F, handle,
+        append_rotated_sprite_quad(x - tmp[0], y - tmp[1], k, k, angle, 0x3F, 0x3F, handle,
                                    0xFFFFF3, *(int *)(p + 0x14), 0, 1, 0.0f, 0.0f);
 
         k = *(float *)(p + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(arg1 + tmp[4] - tmp[0], arg2 + tmp[5] - tmp[1], k, k, angle,
+        append_rotated_sprite_quad(x + tmp[4] - tmp[0], y + tmp[5] - tmp[1], k, k, angle,
                                    0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 1, 1, 0.0f,
                                    0.0f);
         break;
@@ -74,7 +74,7 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2) {
     case 2:
         k = *(float *)(p + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(arg1, arg2, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
+        append_rotated_sprite_quad(x, y, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
                                    *(int *)(p + 0x14), 0, 0, 0.5f, 0.5f);
         break;
     }

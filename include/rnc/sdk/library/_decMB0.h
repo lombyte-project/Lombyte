@@ -1,9 +1,9 @@
-#ifndef RNC_SDK_LIBRARY__DECMB0_H
-#define RNC_SDK_LIBRARY__DECMB0_H
+#ifndef LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H
+#define LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x11C];
     int unk11C;
     u8 pad_120[0x30];
@@ -29,7 +29,7 @@ struct M2c_arg0 {
     int unk848;
 };
 
-struct M2c_arg4 {
+struct MpegMbState {
     int unk0;
     int unk4;
     int unk8;
@@ -40,4 +40,4 @@ struct M2c_arg4 {
     int unk1C;
 };
 
-#endif /* RNC_SDK_LIBRARY__DECMB0_H */
+#endif /* LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H */

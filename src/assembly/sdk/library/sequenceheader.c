@@ -22,49 +22,49 @@ extern s32 _sendIpuCommand();
 extern s32 _setDefaultQM();
 extern s32 _waitIpuIdle();
 
-void _sequenceHeader(struct M2c_arg0 *arg0) {
-    s32 temp_2_8;
+void _sequenceHeader(struct MpegDecoder *mpeg) {
+    s32 height;
     u32 temp_2_12;
     u32 temp_2_24;
-    u32 temp_2_33;
-    u32 temp_2_54;
+    u32 intra_qm_flag;
+    u32 nonintra_qm_flag;
     u32 temp_vbv;
 
-    arg0->unkD4 = 0;
-    temp_2_12 = _nextBit(arg0, 0x20);
-    temp_2_8 = (temp_2_12 >> 8) & 0xFFF;
-    arg0->unk124 = (u32)temp_2_12 >> 0x14;
-    arg0->unk128 = temp_2_8;
-    if (temp_2_8 >= 0xAF1) {
-        _Error(arg0, D_00153AE8);
+    mpeg->unkD4 = 0;
+    temp_2_12 = _nextBit(mpeg, 0x20);
+    height = (temp_2_12 >> 8) & 0xFFF;
+    mpeg->unk124 = (u32)temp_2_12 >> 0x14;
+    mpeg->unk128 = height;
+    if (height >= 0xAF1) {
+        _Error(mpeg, D_00153AE8);
     }
-    temp_2_24 = _nextBit(arg0, 0x1E);
+    temp_2_24 = _nextBit(mpeg, 0x1E);
     temp_2_12 = temp_2_24;
     temp_vbv = temp_2_12 >> 1;
     temp_2_12 >>= 0xC;
     temp_vbv &= 0x3FF;
-    arg0->unk134 = temp_2_12;
-    arg0->unk138 = temp_vbv;
-    temp_2_33 = _nextBit(arg0, 1);
-    arg0->unk840 = temp_2_33;
-    if (temp_2_33 != 0) {
-        _waitIpuIdle(arg0);
-        _sendIpuCommand(arg0, 0x50000000);
-        _waitIpuIdle(arg0);
+    mpeg->unk134 = temp_2_12;
+    mpeg->unk138 = temp_vbv;
+    intra_qm_flag = _nextBit(mpeg, 1);
+    mpeg->unk840 = intra_qm_flag;
+    if (intra_qm_flag != 0) {
+        _waitIpuIdle(mpeg);
+        _sendIpuCommand(mpeg, 0x50000000);
+        _waitIpuIdle(mpeg);
     } else {
-        _setDefaultQM(arg0, 0x50000000, D_00132FC0);
+        _setDefaultQM(mpeg, 0x50000000, D_00132FC0);
     }
-    temp_2_54 = _nextBit(arg0, 1);
-    arg0->unk844 = temp_2_54;
-    if (temp_2_54 != 0) {
-        _waitIpuIdle(arg0);
-        _sendIpuCommand(arg0, 0x58000000);
-        _waitIpuIdle(arg0);
+    nonintra_qm_flag = _nextBit(mpeg, 1);
+    mpeg->unk844 = nonintra_qm_flag;
+    if (nonintra_qm_flag != 0) {
+        _waitIpuIdle(mpeg);
+        _sendIpuCommand(mpeg, 0x58000000);
+        _waitIpuIdle(mpeg);
     } else {
-        _setDefaultQM(arg0, 0x58000000, D_00133000);
+        _setDefaultQM(mpeg, 0x58000000, D_00133000);
     }
-    _extensionAndUserData(arg0);
-    func_0012C4C8((struct M2c_arg0__func_0012C4C8 *)arg0->unk858);
+    _extensionAndUserData(mpeg);
+    func_0012C4C8((struct MpegContext *)mpeg->unk858);
 }
 
 extern s32 InitializeReferenceImage();
@@ -72,16 +72,16 @@ extern s32 _initRefImages();
 extern s32 func_0012BC10();
 extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
-void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
+void func_0012C4C8(struct MpegContext *arg0) {
     s32 *sp30;
     s32 *sp34;
     s32 *sp38;
     s32 *sp3C;
     s32 *sp40;
     s32 *sp44;
-    s32 temp_18_75;
-    s32 temp_22_48;
-    s32 temp_23_51;
+    s32 chroma_height;
+    s32 height;
+    s32 width;
     s32 temp_6_16;
     s32 var_2_40;
     u32 temp_16_77;
@@ -89,29 +89,29 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *temp_19_67;
     s32 *temp_20_71;
     s32 *temp_21_73;
-    struct M2c_temp_30_15__func_0012C4C8 *temp_30_15;
+    struct MpegDecoderPriv *temp_30_15;
     u8 *var_2_53;
 
-    temp_30_15 = arg0->unk40;
-    temp_6_16 = temp_30_15->unk848;
+    mpeg = arg0->unk40;
+    temp_6_16 = mpeg->unk848;
     if (temp_6_16 == 0) {
-        temp_30_15->unk174 = 3;
-        temp_30_15->unk13C = 1;
-        temp_30_15->unk140 = 1;
-        temp_30_15->unk188 = 1;
-        temp_30_15->unk17C = 1;
-        temp_30_15->unk144 = 5;
+        mpeg->unk174 = 3;
+        mpeg->unk13C = 1;
+        mpeg->unk140 = 1;
+        mpeg->unk188 = 1;
+        mpeg->unk17C = 1;
+        mpeg->unk144 = 5;
     }
-    temp_30_15->unk12C = (s32)((s32)(temp_30_15->unk124 + 0xF) >> 4);
+    mpeg->unk12C = (s32)((s32)(mpeg->unk124 + 0xF) >> 4);
     if (temp_6_16 != 0) {
-        if (temp_30_15->unk13C == 0) {
-            var_2_40 = ((s32)(temp_30_15->unk128 + 0x1F) >> 5) * 2;
+        if (mpeg->unk13C == 0) {
+            var_2_40 = ((s32)(mpeg->unk128 + 0x1F) >> 5) * 2;
         } else {
             goto block_6;
         }
     } else {
     block_6:
-        var_2_40 = (s32)(temp_30_15->unk128 + 0xF) >> 4;
+        var_2_40 = (s32)(mpeg->unk128 + 0xF) >> 4;
     }
     temp_30_15->unk130 = var_2_40;
     temp_22_48 = var_2_40 << 4;
@@ -122,7 +122,7 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
         }
         var_2_53 = ((u8 *)temp_30_15 + 0x528);
     }
-    var_2_53 = ((u8 *)temp_30_15 + 0x528);
+    var_2_53 = ((u8 *)mpeg + 0x528);
     {
         arg0->unk0 = temp_23_51;
         arg0->unk4 = temp_22_48;
@@ -139,21 +139,21 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
         sp3C = ((u8 *)temp_30_15 + (0x458));
         sp40 = ((u8 *)temp_30_15 + (0x4C0));
         func_0012BC10(temp_17_63);
-        temp_30_15->unkFC = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk100 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk104 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        mpeg->unkFC = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
+        mpeg->unk100 = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
+        mpeg->unk104 = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
         _initRefImages(temp_19_67, temp_20_71, temp_21_73, sp30, sp34, sp38, sp3C, sp40, var_2_53,
-                       temp_30_15->unkFC, temp_30_15->unk100, temp_30_15->unk104, temp_23_51,
-                       temp_22_48);
-        InitializeReferenceImage(temp_19_67, temp_23_51, temp_22_48);
-        InitializeReferenceImage(temp_20_71, temp_23_51, temp_22_48);
-        InitializeReferenceImage(temp_21_73, temp_23_51, temp_22_48);
-        InitializeReferenceImage(sp30, temp_23_51, temp_18_75);
-        InitializeReferenceImage(sp34, temp_23_51, temp_18_75);
-        InitializeReferenceImage(sp38, temp_23_51, temp_18_75);
-        InitializeReferenceImage(sp3C, temp_23_51, temp_18_75);
-        InitializeReferenceImage(sp40, temp_23_51, temp_18_75);
-        InitializeReferenceImage(sp44, temp_23_51, temp_18_75);
+                       mpeg->unkFC, mpeg->unk100, mpeg->unk104, width,
+                       height);
+        InitializeReferenceImage(temp_19_67, width, height);
+        InitializeReferenceImage(temp_20_71, width, height);
+        InitializeReferenceImage(temp_21_73, width, height);
+        InitializeReferenceImage(sp30, width, chroma_height);
+        InitializeReferenceImage(sp34, width, chroma_height);
+        InitializeReferenceImage(sp38, width, chroma_height);
+        InitializeReferenceImage(sp3C, width, chroma_height);
+        InitializeReferenceImage(sp40, width, chroma_height);
+        InitializeReferenceImage(sp44, width, chroma_height);
     }
 }
 #endif /* NON_MATCHING */

@@ -1,13 +1,5 @@
 #include "types.h"
-struct Moby {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0x17];
-    u64 spawn_frame;
-    u8 pad40[0x38];
-    u8 *pvars;
-    u8 pad7C[0x84];
-};
+#include "rnc/gameplay/entities/moby.h"
 extern u32 D_0015F60C;
 extern s32 D_0015FEFC;
 extern struct Moby *D_0015FF1C;

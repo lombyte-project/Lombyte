@@ -5,31 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4;
-
-typedef struct CameraRecord {
-    u128 m0;
-    u128 m1;
-    u128 m2;
-    Vec4 pos;
-    u8 pad40[0x24];
-    f32 previous_position[3];
-    void *saved_state;
-    u8 pad74[4];
-    f32 transition_duration;
-    u8 pad7C;
-    u8 handoff_state;
-    s16 transition_state;
-    u8 pad80[4];
-    s16 descriptor_index;
-    u8 pad86[8];
-    s16 activation_blocked;
-} CameraRecord;
+#include "rnc/gameplay/camera/update_cam.h"
 
 typedef struct {
     u8 pad0[0x1D];
@@ -45,8 +21,8 @@ struct CameraTransitionState {
     u8 pad0[0x140];
     u128 published_position;
     u8 pad150[0x30];
-    CameraRecord *current;
-    CameraRecord *previous;
+    struct UpdateCam *current;
+    struct UpdateCam *previous;
     u8 pad188[0xE8];
     s16 transition_phase;
     u8 pad272;
@@ -68,21 +44,21 @@ extern u8 previous_camera_record_storage[] __asm__("D_00189650");
 extern s32 camera_position_publication_suppressed[] __asm__("D_0018C32C");
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
-extern void update_moby(CameraRecord *next_camera) __asm__("func_001EBEC8");
+extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
 extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
 extern s32 convert_float_to_word(f32 transition_duration) __asm__("func_001FA6D0");
 
-void switch_active_camera_record(CameraRecord *next_camera) __asm__("FUN_001ebf10");
+void switch_active_camera_record(struct UpdateCam *next_camera) __asm__("FUN_001ebf10");
 
-void switch_active_camera_record(CameraRecord *next_camera) {
+void switch_active_camera_record(struct UpdateCam *next_camera) {
 
-    CameraRecord *previous_camera;
+    struct UpdateCam *previous_camera;
     CameraDescriptorInfo *descriptor;
     f32 transition_duration;
     f32 mode_one_duration;
     f32 handoff_duration;
     f32 *previous_position;
-    Vec4 *position;
+    Vec4f *position;
     s32 descriptor_kind = 0;
     s32 previous_transition_state;
 
@@ -162,13 +138,13 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     camera_transition_state.current = next_camera;
     next_camera->saved_state = previous_camera_record_storage - 0x280;
     camera_transition_state.snapshot_pending = 0;
-    update_moby(next_camera);
+    camera_run_setup_to_new_cam(next_camera);
     backup_current_cam();
     /* The callbacks run before this flag is read; previous_position is updated either way. */
     if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_transition_state.published_position, &next_camera->pos);
     }
-    previous_position = next_camera->previous_position;
+    previous_position = &next_camera->prev_pos.x;
     previous_position[0] = next_camera->pos.x;
     previous_position[1] = position->y;
     previous_position[2] = position->z;

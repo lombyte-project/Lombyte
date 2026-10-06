@@ -15,7 +15,7 @@ extern u8 D_00160E80[];
 extern s32 D_00160EBC;
 extern s32 D_00160F00;
 extern u8 D_00187080[];
-extern struct M2c_D_0018A2B0 D_0018A2B0;
+extern struct Globals_0018A2B0 D_0018A2B0;
 extern u8 D_001E1300[];
 extern void FlushCache(s32);
 extern void WriteDmaChannel(u32, u32, u32);

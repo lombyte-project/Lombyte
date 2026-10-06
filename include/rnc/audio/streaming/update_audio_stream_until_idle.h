@@ -1,9 +1,9 @@
-#ifndef RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H
-#define RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H
+#ifndef LOMBYTE_RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H
+#define LOMBYTE_RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H
 
 #include "types.h"
 
-struct M2c_D_001516D0 {
+struct MusicStreamState {
     u8 pad_0[0x8];
     s16 unk8;
     u8 unkA;
@@ -13,7 +13,7 @@ struct M2c_D_001516D0 {
     s32 unk14;
 };
 
-struct M2c_var_3_30 {
+struct AudioStreamEntry {
     u8 pad_0[0x8];
     s16 unk8;
     u8 unkA;
@@ -23,4 +23,4 @@ struct M2c_var_3_30 {
     s32 unk14;
 };
 
-#endif /* RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H */
+#endif /* LOMBYTE_RNC_AUDIO_STREAMING_UPDATE_AUDIO_STREAM_UNTIL_IDLE_H */

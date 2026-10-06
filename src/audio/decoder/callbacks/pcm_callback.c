@@ -11,7 +11,7 @@ struct AudioBuf {
 };
 extern u8 *D_0016120C;
 extern void audio_dec_begin_put(void *, void **, s32 *, void **, s32 *) __asm__("func_0023AD58");
-extern s32 copy_video_buffer_region(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *,
+extern s32 cpy2area(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *,
                                     s32) __asm__("func_0023B810");
 extern void audio_dec_end_put(void *, s32) __asm__("func_0023AE28");
 s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) __asm__("FUN_0023b728");
@@ -40,7 +40,7 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
     }
     rest = len - n;
     audio_dec_begin_put(D_0016120C + 0xD9100, &ptr0, &len0, &ptr1, &len1);
-    ret = copy_video_buffer_region(ptr0, len0, ptr1, len1, ps, n, ab, rest);
+    ret = cpy2area(ptr0, len0, ptr1, len1, ps, n, ab, rest);
     audio_dec_end_put(D_0016120C + 0xD9100, ret);
     return ret > 0;
 }

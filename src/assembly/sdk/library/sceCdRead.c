@@ -6,7 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceCdRead/sceCdRead.s", sceCdRead);
 #else
 #include "types.h"
-struct M2c_D_001313C0 {
+struct CdDriveState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -18,7 +18,7 @@ struct M2c_D_001313C0 {
     s32 unk14;
 };
 
-struct M2c_arg3 {
+struct sceCdRMode {
     u8 unk0;
     u8 unk1;
     u8 unk2;
@@ -30,7 +30,7 @@ extern volatile u32 D_001312E8[];
 extern volatile u32 D_001312F0[];
 extern volatile u32 D_001312F4[];
 extern volatile u32 D_00131314[];
-extern struct M2c_D_001313C0 D_001313C0;
+extern struct CdDriveState D_001313C0;
 extern u8 D_001323C0[];
 extern u8 D_00132480[];
 extern u8 D_00132490[];
@@ -42,10 +42,10 @@ extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern s32 sceSifWriteBackDCache();
-s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct M2c_arg3 *pMode) {
+s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct sceCdRMode *pMode) {
     s32 byteCount;
     s32 dataPattern;
-    struct M2c_D_001313C0 *st = &D_001313C0;
+    struct CdDriveState *st = &D_001313C0;
 
     if (D_001312F4[0] & 1) {
         goto block_2;

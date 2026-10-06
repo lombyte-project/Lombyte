@@ -366,10 +366,7 @@ void FUN_L00_002d8908(void) {
         FUN_001f9bf8(&D_L00_001E3CA0[i], &D_L00_001E3CA0[i], D_L00_00161A14);
     }
 }
-typedef union {
-    u128 q;
-    float f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 extern char *D_001413D0 __attribute__((section(".data")));
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d89f0.s", FUN_L00_002d89f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d9810.s", FUN_L00_002d9810);

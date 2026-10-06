@@ -10,13 +10,13 @@ typedef float f32;
 typedef double f64;
 struct EndPkt {
     u8 pad_0[0x1C];
-    struct ClientData *cd;
+    struct sceSifClientData *cd;
     s32 cid;
     s32 sd;
     s32 buf;
     s32 cbuf;
 };
-struct ClientData {
+struct sceSifClientData {
     s32 pkt_addr;
     u8 pad_4[4];
     s32 sema_id;
@@ -30,7 +30,7 @@ struct ClientData {
 extern s32 iSignalSema();
 extern s32 func_0011AD90();
 void _request_end(struct EndPkt *request, void *data) {
-    struct ClientData *cd;
+    struct sceSifClientData *cd;
     (void)data;
     if (request->cid == 0x8000000A)
         goto case_a;

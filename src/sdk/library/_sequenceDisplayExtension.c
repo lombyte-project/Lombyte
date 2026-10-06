@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x144];
     s32 unk144;
     s32 unk148;
@@ -7,14 +7,14 @@ struct M2c_arg0 {
 };
 
 extern s32 _nextBit();
-void _sequenceDisplayExtension(struct M2c_arg0 *arg0) {
-    _nextBit(arg0, 3);
-    if (_nextBit(arg0, 1) != 0) {
-        _nextBit(arg0, 8);
-        _nextBit(arg0, 8);
-        arg0->unk144 = _nextBit(arg0, 8);
+void _sequenceDisplayExtension(struct MpegDecoder *mpeg) {
+    _nextBit(mpeg, 3);
+    if (_nextBit(mpeg, 1) != 0) {
+        _nextBit(mpeg, 8);
+        _nextBit(mpeg, 8);
+        mpeg->unk144 = _nextBit(mpeg, 8);
     }
-    arg0->unk148 = _nextBit(arg0, 0xE);
-    _nextBit(arg0, 1);
-    arg0->unk14C = _nextBit(arg0, 0xE);
+    mpeg->unk148 = _nextBit(mpeg, 0xE);
+    _nextBit(mpeg, 1);
+    mpeg->unk14C = _nextBit(mpeg, 0xE);
 }

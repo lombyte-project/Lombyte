@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg1 {
+struct PackHeaderInfo {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -10,7 +10,7 @@ extern s32 SignExtendPackedValue();
 extern s32 _sysbitGet();
 extern s32 _sysbitMarker();
 extern s32 _system_header();
-s32 _pack_header(s32 arg0, struct M2c_arg1 *arg1) {
+s32 _pack_header(s32 arg0, struct PackHeaderInfo *arg1) {
     u32 temp_16_20;
     u32 temp_17_26;
     u32 temp_18_32;

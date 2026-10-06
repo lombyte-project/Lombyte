@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_00137B00 {
+struct SndCdSyncState {
     s32 unk0;
     u8 pad_4[0xC];
     s32 unk10;
 };
-extern volatile struct M2c_D_00137B00 D_00137B00;
+extern volatile struct SndCdSyncState D_00137B00;
 extern s32 D_0015EC8C;
 extern s32 D_0015EC98;
 extern void FlushCache(s32);

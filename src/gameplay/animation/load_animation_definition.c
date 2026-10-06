@@ -19,11 +19,11 @@ struct Anim {
     s32 frames;
 };
 extern struct AnimTable D_0019A3E8;
-extern s32 find_animation_definition_index(s32) __asm__("func_001FEE38");
+extern s32 hud_get_icon_index(s32) __asm__("func_001FEE38");
 void load_animation_definition(struct Anim *anim, s32 id) __asm__("FUN_001ff500");
 
 void load_animation_definition(struct Anim *anim, s32 id) {
-    s32 i = find_animation_definition_index(id);
+    s32 i = hud_get_icon_index(id);
 
     anim->id = D_0019A3E8.defs[i].id;
     anim->index = i;

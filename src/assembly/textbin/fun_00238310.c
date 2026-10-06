@@ -14,7 +14,7 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y,
@@ -41,7 +41,7 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
 
     blink_next_glyph = 0;
     cursor_text = text;
-    texture = get_frame_texture(find_valid_animation_frame_index(0xE935, 0));
+    texture = get_frame_texture(get_icon_frame(0xE935, 0));
     cursor_x = start_x;
     cursor_y = start_y;
 

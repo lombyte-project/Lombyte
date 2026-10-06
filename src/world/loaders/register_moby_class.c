@@ -1,8 +1,5 @@
 #include "types.h"
-struct Moby {
-    u8 pad0[0x2C];
-    s32 unk2C;
-};
+#include "rnc/gameplay/entities/moby.h"
 extern s32 D_0015FF00;
 extern u8 D_001B3AC0[];
 extern s16 D_001B3900[];

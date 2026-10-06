@@ -22,26 +22,26 @@ struct Manipulator {
     f32 unk28;
 };
 
-void attach_manipulator(MobyAttachOwner *arg0, s32 arg1, Manipulator *arg2) __asm__("FUN_0020cb10");
+void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *manip) __asm__("FUN_0020cb10");
 
-void attach_manipulator(MobyAttachOwner *arg0, s32 arg1, Manipulator *arg2) {
-    if (arg2->unk1 == 0) {
+void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *manip) {
+    if (manip->unk1 == 0) {
         u8 *r;
 
-        arg2->unk0 = arg1;
-        arg2->unk1 = 1;
-        arg2->unk1C = 1.0f;
-        arg2->unk20 = 1.0f;
-        arg2->unk24 = 1.0f;
-        arg2->unk28 = 1.0f;
+        manip->unk0 = slot_index;
+        manip->unk1 = 1;
+        manip->unk1C = 1.0f;
+        manip->unk20 = 1.0f;
+        manip->unk24 = 1.0f;
+        manip->unk28 = 1.0f;
 
-        r = *(u8 **)((u8 *)(*(s32 *)((u8 *)arg0->unk24 + 0x1C) + arg2->unk0 * 4) + 4);
+        r = *(u8 **)((u8 *)(*(s32 *)((u8 *)owner->unk24 + 0x1C) + manip->unk0 * 4) + 4);
         {
             u8 n = *r;
-            arg2->unk4 = (void *)((r[n + 4] << 6) + 0x70000000);
+            manip->unk4 = (void *)((r[n + 4] << 6) + 0x70000000);
         }
-        arg2->unk8 = arg0->unk64;
-        arg0->unk64 = arg2;
+        manip->unk8 = owner->unk64;
+        owner->unk64 = manip;
     }
 }
 

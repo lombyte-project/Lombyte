@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x150];
     s32 unk150;
     u8 pad_154[0x20];
@@ -10,7 +10,7 @@ struct M2c_arg0 {
     s32 unk810;
 };
 
-struct M2c_arg1 {
+struct MpegSkipState {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x8];
@@ -18,14 +18,14 @@ struct M2c_arg1 {
     s32 unk14;
 };
 
-struct M2c_arg3 {
+struct MpegMotionRef {
     s32 unk0;
     s32 unk4;
 };
 
 extern u8 D_00153868[];
-extern s32 _Error(struct M2c_arg0 *a0, u8 *a1);
-s32 _skipMB0(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1, s32 *arg2, struct M2c_arg3 *arg3,
+extern s32 _Error(struct MpegDecoder *a0, u8 *a1);
+s32 _skipMB0(struct MpegDecoder *arg0, struct MpegSkipState *arg1, s32 *arg2, struct MpegMotionRef *arg3,
              s32 *arg4) {
     s32 temp_10_11;
     s32 temp_2_32;

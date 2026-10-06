@@ -1,5 +1,5 @@
-#ifndef RNC_MATH_MATRIX3X4_H
-#define RNC_MATH_MATRIX3X4_H
+#ifndef LOMBYTE_RNC_MATH_MATRIX3X4_H
+#define LOMBYTE_RNC_MATH_MATRIX3X4_H
 
 #include "eetypes.h"
 
@@ -8,4 +8,4 @@ struct Matrix3x4 {
     u128 columns[3];
 };
 
-#endif /* RNC_MATH_MATRIX3X4_H */
+#endif /* LOMBYTE_RNC_MATH_MATRIX3X4_H */

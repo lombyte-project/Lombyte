@@ -18,7 +18,7 @@ struct FsReadRequest {
     s32 slot;
 };
 
-struct SemaphoreParameters {
+struct SemaParam {
     s32 count;
     s32 max_count;
     s32 init_count;
@@ -34,15 +34,15 @@ extern s32 D_0012FC94[];
 extern s32 D_0012FCA4[];
 extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
-struct SifClient {
+struct sceSifClientData {
     u8 pad[0x28];
 };
 
-extern struct SifClient D_00157F80;
+extern struct sceSifClientData D_00157F80;
 extern struct SifFileSlot *get_iob(s32 fd);
 extern s32 _sceFsWaitS(s32);
 extern s32 ReadQueueStatus(void);
-extern s32 CreateSema(struct SemaphoreParameters *);
+extern s32 CreateSema(struct SemaParam *);
 extern s32 DeleteSema(s32);
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
@@ -52,7 +52,7 @@ extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, voi
 s32 sceRead(s32 fd, void *buffer, s32 length) {
     struct FsReadRequest *request;
     struct SifFileSlot *file_slot;
-    struct SemaphoreParameters semaphore_parameters;
+    struct SemaParam semaphore_parameters;
     s32 result;
     s32 flags;
     s32 completion_semaphore;

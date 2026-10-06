@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x80];
     s32 unk80;
     u8 pad_84[0x4];
@@ -15,10 +15,10 @@ struct M2c_arg0 {
     s32 unkCC;
     s32 unkD0;
     u8 pad_D4[0x784];
-    struct M2c_temp_7_14 *unk858;
+    struct MpegDisplayState *unk858;
 };
 
-struct M2c_arg1 {
+struct MpegRefImage {
     u8 pad_0[0x28];
     s32 unk28;
     u8 pad_2C[0x18];
@@ -32,7 +32,7 @@ struct M2c_arg1 {
     s32 unk60;
 };
 
-struct M2c_temp_7_14 {
+struct MpegDisplayState {
     u8 pad_0[0x10];
     s32 unk10;
     u8 pad_14[0xC];
@@ -44,34 +44,34 @@ extern s32 _cpr8();
 extern s32 _csc_storeRefImage();
 extern s32 _getPtsDtsFlags();
 extern s32 _isOutSizeOK();
-void _dispRefImage(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1) {
+void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *arg1) {
     u64 temp_6_28;
-    struct M2c_temp_7_14 *temp_7_14;
+    struct MpegDisplayState *ref_info;
     s32 *temp_7_9;
 
-    temp_7_9 = arg0->unk858;
-    _getPtsDtsFlags(arg0, arg1, (s32 *)((u8 *)temp_7_9 + 0x10), (s32 *)((u8 *)temp_7_9 + 0x18),
+    temp_7_9 = decoder->unk858;
+    _getPtsDtsFlags(decoder, arg1, (s32 *)((u8 *)temp_7_9 + 0x10), (s32 *)((u8 *)temp_7_9 + 0x18),
                     (s32 *)((u8 *)temp_7_9 + 0x20));
-    temp_7_14 = arg0->unk858;
-    arg0->unk80 = (s32)temp_7_14->unk10;
-    temp_6_28 = D_00132E98[(s32)(temp_7_14->unk20 >> 5) & 0xF];
-    arg0->unkCC = (s32)arg1->unk5C;
-    arg0->unk88 = temp_6_28;
-    arg0->unkD0 = (s32)arg1->unk60;
-    arg0->unkB4 = (s32)arg1->unk44;
-    arg0->unkB8 = (s32)arg1->unk48;
-    arg0->unkBC = (s32)arg1->unk4C;
-    arg0->unkC0 = (s32)arg1->unk50;
-    arg0->unkC4 = (s32)arg1->unk54;
-    arg0->unkC8 = (s32)arg1->unk58;
-    if (_isOutSizeOK(arg0, arg1) != 0) {
+    ref_info = decoder->unk858;
+    decoder->unk80 = (s32)ref_info->unk10;
+    temp_6_28 = D_00132E98[(s32)(ref_info->unk20 >> 5) & 0xF];
+    decoder->unkCC = (s32)arg1->unk5C;
+    decoder->unk88 = temp_6_28;
+    decoder->unkD0 = (s32)arg1->unk60;
+    decoder->unkB4 = (s32)arg1->unk44;
+    decoder->unkB8 = (s32)arg1->unk48;
+    decoder->unkBC = (s32)arg1->unk4C;
+    decoder->unkC0 = (s32)arg1->unk50;
+    decoder->unkC4 = (s32)arg1->unk54;
+    decoder->unkC8 = (s32)arg1->unk58;
+    if (_isOutSizeOK(decoder, arg1) != 0) {
         if (arg1->unk28 == 1) {
-            if (arg0->unkB0 != 0) {
-                _csc_storeRefImage(arg0, arg1);
+            if (decoder->unkB0 != 0) {
+                _csc_storeRefImage(decoder, arg1);
             } else {
-                _cpr8(arg0, arg1);
+                _cpr8(decoder, arg1);
             }
-            func_00129B38(arg0);
+            func_00129B38(decoder);
         }
     }
 }

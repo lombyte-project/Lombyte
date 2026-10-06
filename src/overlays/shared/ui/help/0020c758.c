@@ -2037,15 +2037,15 @@ extern void func_001F9EE8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void func_001FA218(void *, void *) __asm__("FUN_001fa050");
 extern void func_00215C00(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_002120d8(float arg0) {
+void FUN_L00_002120d8(float radians) {
     char *g = D_0013F350;
     float y;
     float r;
     float out[4];
 
     y = *(float *)(g + 0x98);
-    if (arg0 <= 3.14159274f) {
-        y = arg0;
+    if (radians <= 3.14159274f) {
+        y = radians;
     }
     r = *(float *)(g + 0x194);
 

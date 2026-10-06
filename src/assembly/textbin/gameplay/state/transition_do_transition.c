@@ -81,8 +81,8 @@ extern s32 is_active_state_entry(s32 arg0, s32 arg1) __asm__("FUN_001eb740");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
-extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
+extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
 extern void init_hud(void) __asm__("FUN_001fee88");
 extern void load_hud_banks(void) __asm__("FUN_00202a98");
@@ -161,9 +161,9 @@ void transition_do_transition(void) {
     while (D_0015F5B0 == 0) {
         vu1_send_chain();
         swap_render_buffer_chain();
-        append_draw_buffer_packet();
+        put_draw_buffer_small();
         append_palette_transfer_packet();
-        append_draw_environment_packet();
+        put_draw_buffer_large();
         memcard_update_state();
         run_state_handler();
         update_primary_pad_state();

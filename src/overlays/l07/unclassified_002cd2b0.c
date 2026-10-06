@@ -55,7 +55,7 @@ extern int FUN_001f96f8(int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
     unsigned char *m = func_0020D348_m(0x370);
@@ -250,7 +250,7 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L07_0030ec58(char *arg) {
     switch (((unsigned char *)arg)[0xBC]) {
@@ -388,7 +388,7 @@ void FUN_L07_00312150(char *a) {
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f9740(int *arg0);
+extern int FUN_001f9740(int *counter);
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);

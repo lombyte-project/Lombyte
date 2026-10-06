@@ -18,7 +18,7 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
-struct M2c_arg0 {
+struct Reent {
     u8 pad_0[0x38];
     s32 unk38;
     s32 unk3C;
@@ -30,7 +30,7 @@ struct M2c_arg0 {
 
 extern u8 D_00113AC8[];
 extern void std();
-void __sinit(struct M2c_arg0 *arg0) {
+void __sinit(struct Reent *arg0) {
     s32 *temp_17_9;
 
     temp_17_9 = ((u8 *)arg0 + (0x1E4));

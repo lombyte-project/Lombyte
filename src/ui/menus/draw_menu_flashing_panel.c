@@ -17,7 +17,7 @@ struct MenuPanelOwner {
 
 extern s32 D_0015ED80;
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
@@ -58,7 +58,7 @@ void draw_menu_flashing_panel(struct MenuPanelOwner *owner) {
     }
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
-    draw_hud_sprite_subpixel(find_valid_animation_frame_index(0xE99E, 7), x << 4, y << 4,
+    draw_hud_sprite_subpixel(get_icon_frame(0xE99E, 7), x << 4, y << 4,
                              width << 4, height << 4, 0x80);
     if (panel->active) {
         panel->time += 2;

@@ -1,9 +1,9 @@
-#ifndef RNC_UI_MENUS_FUN_0021FCE0_H
-#define RNC_UI_MENUS_FUN_0021FCE0_H
+#ifndef LOMBYTE_RNC_UI_MENUS_FUN_0021FCE0_H
+#define LOMBYTE_RNC_UI_MENUS_FUN_0021FCE0_H
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x34];
     s32 unk34;
     u8 pad_38[0xC];
@@ -16,4 +16,4 @@ struct M2c_arg0 {
     s32 unk5C;
 };
 
-#endif /* RNC_UI_MENUS_FUN_0021FCE0_H */
+#endif /* LOMBYTE_RNC_UI_MENUS_FUN_0021FCE0_H */

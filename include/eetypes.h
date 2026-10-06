@@ -1,5 +1,5 @@
-#ifndef RNCDECOMP_EETYPES_H
-#define RNCDECOMP_EETYPES_H
+#ifndef LOMBYTE_EETYPES_H
+#define LOMBYTE_EETYPES_H
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ typedef union {
     sceVu0IVECTOR iv;
 } Q_WORDDATA;
 
-#endif /* RNCDECOMP_EETYPES_H */
+#endif /* LOMBYTE_EETYPES_H */

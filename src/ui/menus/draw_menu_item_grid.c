@@ -67,7 +67,7 @@ extern f32 D_00160294 __attribute__((sda));
 extern s32 SubtractIntegerWithClamp(s32);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("FUN_001ff960");
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void append_screen_sprite(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
@@ -157,7 +157,7 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
                     }
                 }
                 draw_hud_sprite_subpixel(
-                    find_valid_animation_frame_index(cell->icon, cell->frame + frame_offset), left,
+                    get_icon_frame(cell->icon, cell->frame + frame_offset), left,
                     top, icon_width, icon_height, 0x80);
             }
             cell++;

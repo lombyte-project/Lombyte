@@ -35,7 +35,7 @@ extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
@@ -84,14 +84,14 @@ s32 draw_pause_ring(struct PauseState *arg0) {
                                       0x40404040L, 0);
         } else {
             s32 idx = arg0->slots[i];
-            s32 id = find_valid_animation_frame_index(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
+            s32 id = get_icon_frame(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
 
             draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
         }
         i += 1;
     } while (i < 8);
-    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
-    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20,
+    draw_hud_sprite(get_icon_frame(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
+    draw_hud_sprite(get_icon_frame(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20,
                     0x80);
     font_print_large(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
     font_print_large(arg0->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);

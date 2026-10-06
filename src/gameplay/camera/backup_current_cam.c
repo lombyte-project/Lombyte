@@ -1,11 +1,11 @@
 #include "types.h"
-struct M2c_D_00189210 {
+struct CameraBackupState {
     u8 pad_0[0x70];
     s32 unk70;
 };
 
 extern u32 D_001870C0[];
-extern struct M2c_D_00189210 D_00189210;
+extern struct CameraBackupState D_00189210;
 extern u8 D_001898D0[];
 extern s32 FUN_001f98d0();
 void backup_current_cam(void) __asm__("FUN_001ebc90");

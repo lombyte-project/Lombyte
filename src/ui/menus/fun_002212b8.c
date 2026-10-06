@@ -1,19 +1,19 @@
 #include "types.h"
-struct M2c_D_0013C940 {
+struct PadState {
     u8 pad_0[0x1C4];
     s32 unk1C4;
 };
 
-struct M2c_D_001D5BF0_unk4 {
+struct ModeEntry {
     u8 pad_0[0x38];
     s32 unk38;
     u8 pad_3C[0x4];
     void *unk40;
 };
 
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0x4];
-    struct M2c_D_001D5BF0_unk4 *unk4;
+    struct ModeEntry *unk4;
     s32 unk8;
     u8 pad_C[0x118];
     s32 unk124;
@@ -33,8 +33,8 @@ typedef struct Menu {
     s32 cursor;
 } Menu;
 
-extern struct M2c_D_0013C940 D_0013C940;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct PadState D_0013C940;
+extern struct Globals_001D5BF0 D_001D5BF0;
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 FUN_002212b8(Menu *menu) {

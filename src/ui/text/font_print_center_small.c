@@ -3,15 +3,15 @@ extern u8 D_001DF3F0[];
 extern s32 get_effect_texture() __asm__("func_001F44B8");
 extern s32 measure_text_width_small() __asm__("func_001F6270");
 extern void font_print() __asm__("func_001F62B0");
-s32 font_print_center_small(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
-                            s32 arg4) __asm__("FUN_001f6b88");
+s32 font_print_center_small(s32 center_x, s32 y, s32 color, s32 text,
+                            s32 max_chars) __asm__("FUN_001f6b88");
 
-s32 font_print_center_small(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    s32 temp_16_21;
+s32 font_print_center_small(s32 center_x, s32 y, s32 color, s32 text, s32 max_chars) {
+    s32 left_x;
 
-    temp_16_21 = arg0 - (measure_text_width_small(arg3, arg4) >> 1);
-    font_print(temp_16_21, arg1, arg2, arg3, arg4, get_effect_texture(2), D_001DF3F0);
-    return temp_16_21;
+    left_x = center_x - (measure_text_width_small(text, max_chars) >> 1);
+    font_print(left_x, y, color, text, max_chars, get_effect_texture(2), D_001DF3F0);
+    return left_x;
 }
 
 extern __typeof__(font_print_center_small) func_001F6B88 __attribute__((alias("FUN_001f6b88")));

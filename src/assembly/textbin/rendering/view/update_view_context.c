@@ -11,11 +11,7 @@ INCLUDE_ASM(
 #include "qcopy.h"
 #include "qzero.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 struct View {
     s32 fog_color;

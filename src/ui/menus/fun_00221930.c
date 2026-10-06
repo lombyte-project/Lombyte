@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x18];
     s32 unk18;
     s32 unk1C;
@@ -8,12 +8,12 @@ struct M2c_arg0 {
 };
 
 extern s32 draw_level_selection_map() __asm__("FUN_001fd748");
-s32 FUN_00221930(struct M2c_arg0 *arg0) {
-    s32 temp_4_8;
-    s32 temp_6_9;
+s32 FUN_00221930(struct MenuScreen *menu) {
+    s32 x;
+    s32 y;
 
-    temp_4_8 = arg0->unk18;
-    temp_6_9 = arg0->unk1C;
-    draw_level_selection_map(temp_4_8, temp_4_8 + arg0->unk20, temp_6_9, temp_6_9 + arg0->unk24);
+    x = menu->unk18;
+    y = menu->unk1C;
+    draw_level_selection_map(x, x + menu->unk20, y, y + menu->unk24);
     return 2;
 }

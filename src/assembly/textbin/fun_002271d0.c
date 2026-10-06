@@ -6,15 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002271d0/FUN_002271d0.s
 #else
 #include "types.h"
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 struct FullScreenAntiAliasingDimensions {
     u8 pad0[0x150];
     s16 display_width;
@@ -44,10 +36,10 @@ void append_fullscreen_setup_strips(void) {
     /* Retail divides the signed display width, truncating toward zero. */
     strip_count = display_width / 32;
     vu1_add_g_sregister(0x42, 0x64);
-    render_packet_cursor.p->w0 = (strip_count + 5) | 0x10000000;
+    render_packet_cursor.p->tag = (strip_count + 5) | 0x10000000;
     render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->w2 = 0;
-    render_packet_cursor.p->w3 = (strip_count + 5) | 0x50000000;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = (strip_count + 5) | 0x50000000;
     tag = render_packet_cursor.p;
     packet_words = (u64 *)(tag + 1);
     render_packet_cursor.p = tag + 1;

@@ -1754,7 +1754,7 @@ extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-f32 compute_interpolated_record_value_u(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void FUN_L00_002371e0(void);
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 

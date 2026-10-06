@@ -2,14 +2,14 @@
 
 #include "types.h"
 
-struct SemaArgsInit {
+struct SemaParam {
     u8 pad0[4];
     s32 unk4;
     s32 unk8;
     u8 padC[0x14];
 };
 
-struct ThreadArgsInit {
+struct ThreadParam {
     u8 pad0[4];
     void (*entry)();
     void *stack;
@@ -34,8 +34,8 @@ extern s32 D_00154100[];
 extern s32 D_00166C00[];
 
 s32 InitThread(void) {
-    struct ThreadArgsInit th;
-    struct SemaArgsInit se;
+    struct ThreadParam th;
+    struct SemaParam se;
 
     if (D_0012FBF8[0] > 0)
         return -1;

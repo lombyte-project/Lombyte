@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct AudioDec {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x28];
@@ -18,37 +18,37 @@ struct M2c_arg0 {
     s32 unk60;
 };
 
-struct M2c_D_001612BC;
-extern struct M2c_D_001612BC *D_001612BC;
+struct Globals_001612BC;
+extern struct Globals_001612BC *D_001612BC;
 extern s32 snd_init_movie_sound() __asm__("FUN_0012f068");
 extern void func_001F9810();
-s32 audio_dec_create(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3) __asm__("FUN_0023abd0");
+s32 audio_dec_create(struct AudioDec *dec, s32 buffer, s32 buffer_size, s32 arg3) __asm__("FUN_0023abd0");
 
-s32 audio_dec_create(struct M2c_arg0 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    s32 temp_2_38;
+s32 audio_dec_create(struct AudioDec *dec, s32 buffer, s32 buffer_size, s32 arg3) {
+    s32 movie_handle;
     s32 three;
     s32 four;
 
-    func_001F9810(((u8 *)arg0 + (8)), 0x20);
-    arg0->unk34 = arg1;
-    arg0->unk40 = arg2;
+    func_001F9810(((u8 *)dec + (8)), 0x20);
+    dec->unk34 = buffer;
+    dec->unk40 = buffer_size;
     three = 3;
-    arg0->unk4 = three;
-    arg0->unk0 = 0;
-    arg0->unk30 = 0;
-    arg0->unk38 = 0;
-    arg0->unk3C = 0;
-    arg0->unk44 = 0;
-    arg0->unk50 = 0;
-    arg0->unk58 = 0;
-    arg0->unk5C = 0;
-    arg0->unk60 = 0;
-    D_001612BC = (struct M2c_D_001612BC *)arg3;
+    dec->unk4 = three;
+    dec->unk0 = 0;
+    dec->unk30 = 0;
+    dec->unk38 = 0;
+    dec->unk3C = 0;
+    dec->unk44 = 0;
+    dec->unk50 = 0;
+    dec->unk58 = 0;
+    dec->unk5C = 0;
+    dec->unk60 = 0;
+    D_001612BC = (struct Globals_001612BC *)arg3;
     four = 0x400;
-    arg0->unk4C = four;
-    temp_2_38 = snd_init_movie_sound(0x400, 0x1000, 0x400, 0, 5, 3);
-    arg0->unk48 = temp_2_38;
-    if (temp_2_38 < 0) {
+    dec->unk4C = four;
+    movie_handle = snd_init_movie_sound(0x400, 0x1000, 0x400, 0, 5, 3);
+    dec->unk48 = movie_handle;
+    if (movie_handle < 0) {
         return 0;
     }
     return 1;

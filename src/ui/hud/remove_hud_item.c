@@ -1,27 +1,27 @@
 #include "types.h"
-struct M2c_D_00199B60 {
+struct HudSlotArray {
     u8 pad_0[0x64];
     s32 unk64;
 };
 
-extern struct M2c_D_00199B60 D_00199B60;
-extern s32 queue_animation_update(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
+extern struct HudSlotArray D_00199B60;
+extern s32 queue_animation_update(s32 item, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                                   s32 arg6) __asm__("func_001FF308");
 
-s32 remove_hud_item(s32 arg0) __asm__("FUN_001ff480");
+s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 
-s32 remove_hud_item(s32 arg0) {
-    s32 *var_3_11;
-    s32 var_4_10;
+s32 remove_hud_item(s32 item) {
+    s32 *cursor;
+    s32 index;
 
-    var_4_10 = 0;
-    if (D_00199B60.unk64 != arg0) {
-        var_3_11 = (s32 *)((u8 *)&D_00199B60 + 0x64);
+    index = 0;
+    if (D_00199B60.unk64 != item) {
+        cursor = (s32 *)((u8 *)&D_00199B60 + 0x64);
     loop_2:
-        var_4_10 += 1;
-        var_3_11 = (s32 *)((u8 *)var_3_11 + 0x90);
-        if (var_4_10 < 0xD) {
-            if (*var_3_11 == arg0) {
+        index += 1;
+        cursor = (s32 *)((u8 *)cursor + 0x90);
+        if (index < 0xD) {
+            if (*cursor == item) {
                 goto block_4;
             }
             goto loop_2;
@@ -29,10 +29,10 @@ s32 remove_hud_item(s32 arg0) {
         goto block_5;
     }
 block_4:
-    if (var_4_10 >= 0xD) {
+    if (index >= 0xD) {
     block_5:
         return 0;
     }
-    queue_animation_update(var_4_10, 0xFFFF, 0, 0, 0, 0, 0);
+    queue_animation_update(index, 0xFFFF, 0, 0, 0, 0, 0);
     return 1;
 }

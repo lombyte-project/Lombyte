@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_D_00132D08 {
+struct sceSifClientData {
     u8 pad_0[0x24];
     s32 unk24;
 };
@@ -9,7 +9,7 @@ extern s32 D_001312D0[];
 extern s32 D_001312D8[];
 extern volatile s32 D_001312EC[];
 extern s32 D_00131308[];
-extern struct M2c_D_00132D08 D_00132D08;
+extern struct sceSifClientData D_00132D08;
 extern u8 D_00152F10[];
 extern u8 D_00152F38[];
 extern s32 D_00159750[];
@@ -23,19 +23,19 @@ extern void scePrintf();
 extern s32 sceSifBindRpc();
 extern void sceSifInitRpc();
 
-s32 cd_check_scmd(s32 arg0) __asm__("FUN_00120d40");
+s32 cd_check_scmd(s32 cmd) __asm__("FUN_00120d40");
 
-s32 cd_check_scmd(s32 arg0) {
+s32 cd_check_scmd(s32 cmd) {
     s32 spin;
 
     cmd_sem_init();
     if (D_001312EC[0] != PollSema(D_001312EC[0])) {
         if (D_001312D0[0] > 0) {
-            scePrintf(D_00152F10, arg0, D_001312D8[0]);
+            scePrintf(D_00152F10, cmd, D_001312D8[0]);
         }
         return 0;
     }
-    D_001312D8[0] = arg0;
+    D_001312D8[0] = cmd;
     ReferThreadStatus(D_00159750[0], D_00159758);
     if (sceCdSyncS(1) != 0) {
         SignalSema(D_001312EC[0]);

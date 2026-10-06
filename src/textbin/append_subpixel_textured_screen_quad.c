@@ -4,15 +4,7 @@
 #include "types.h"
 #include "qcopy.h"
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 struct ScreenOfs {
     u8 pad0[0x10];
     s32 x;
@@ -53,10 +45,10 @@ void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen
     texture_right = (texture_u + texture_width) << 4;
     texture_left = texture_u << 4;
     texture_bottom = texture_v + texture_height;
-    render_packet_cursor.p->w0 = 0x10000007;
+    render_packet_cursor.p->tag = 0x10000007;
     render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->w2 = 0;
-    render_packet_cursor.p->w3 = 0x50000007;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000007;
     tag = render_packet_cursor.p;
     render_packet_cursor.p = tag + 1;
     qcopy(tag + 1, textured_quad_header);

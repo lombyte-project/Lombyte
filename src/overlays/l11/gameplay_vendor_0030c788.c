@@ -275,7 +275,7 @@ typedef struct {
 } MobyAnim;
 
 extern void FUN_L11_0030fe50(void *, void *, void *);
-f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -401,16 +401,16 @@ extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
-void FUN_L11_00311be8(void *a0, void *a1, void *a2);
+void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
+void *FUN_L11_00311948(void *moby, char *a1, int a2, int a3, void *a4) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
     void *list[12];
-    FUN_L11_00311be8(a0, a1 + 0xE8, a1 + 0xEA);
+    FUN_L11_00311be8(moby, a1 + 0xE8, a1 + 0xEA);
     if (a4 != 0) {
-        if (FUN_L11_00311a88_u(a0, a4) < bestd)
+        if (FUN_L11_00311a88_u(moby, a4) < bestd)
             return a4;
     }
     p = D_L11_001AC240[*(short *)(a1 + 0x108)];
@@ -422,7 +422,7 @@ void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
             int n = FUN_L11_00318050(m, list);
             int i;
             for (i = 1; i < n; i++) {
-                float d = FUN_L11_00311a88_u(a0, list[i]);
+                float d = FUN_L11_00311a88_u(moby, list[i]);
                 if (d < bestd) {
                     best = list[i];
                     bestd = d;
@@ -482,8 +482,8 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
-void FUN_L11_00311be8(void *a0, void *a1, void *a2) {
-    char *d = *(char **)((char *)a0 + 0x78);
+void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
+    char *d = *(char **)((char *)moby + 0x78);
     int type = *(short *)(d + 0x108);
     short *p;
     *(unsigned short *)a1 = 0;

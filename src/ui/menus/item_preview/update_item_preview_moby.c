@@ -11,16 +11,16 @@ extern void rotate_item_preview_moby(char *) __asm__("FUN_0021e1f8");
    when the entry's class (D_001863D0 record +0x3A) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with
    the old one's position and orientation when the class changed. */
-int update_item_preview_moby(char *arg0) __asm__("FUN_0021df98");
+int update_item_preview_moby(char *menu) __asm__("FUN_0021df98");
 
-int update_item_preview_moby(char *arg0) {
+int update_item_preview_moby(char *menu) {
     char *q = *(char **)(D_001D5BF4 + 0x40);
     int item = *(short *)(*(int *)(q + 0x3C) * 10 + *(char **)(q + 0x48) + 6);
     short cur;
     char *rec;
     short want;
 
-    cur = *(char **)(arg0 + 0x44) != 0 ? *(short *)(*(char **)(arg0 + 0x44) + 0xA6) : -1;
+    cur = *(char **)(menu + 0x44) != 0 ? *(short *)(*(char **)(menu + 0x44) + 0xA6) : -1;
     rec = D_001863D0 + item * 0x4C;
     want = *(short *)(rec + 0x3A);
     if (want != -1 && cur == -1) {
@@ -29,17 +29,17 @@ int update_item_preview_moby(char *arg0) {
         if (o != 0) {
             char *t = D_00186F40;
 
-            *(char **)(arg0 + 0x44) = o;
+            *(char **)(menu + 0x44) = o;
             *(short *)(o + 0x34) = 0;
             *(float *)(o + 0x10) = *(float *)(t + 0x140) + 6.0f;
             *(float *)(o + 0x14) = *(float *)(t + 0x144);
             *(float *)(o + 0x18) = *(float *)(t + 0x148) - 0.3f;
             *(float *)(o + 0x48) = 3.1415927f;
             *(void **)(o + 0x74) = (void *)rotate_item_preview_moby;
-            **(void ***)(o + 0x78) = arg0;
+            **(void ***)(o + 0x78) = menu;
         }
     } else if (want == -1) {
-        *(int *)(arg0 + 0x44) = delete_moby(*(int *)(arg0 + 0x44));
+        *(int *)(menu + 0x44) = delete_moby(*(int *)(menu + 0x44));
     } else if (cur != want) {
         char *n = create_menu_preview_moby(want);
 
@@ -47,14 +47,14 @@ int update_item_preview_moby(char *arg0) {
             char *old;
 
             *(short *)(n + 0x34) = 0;
-            old = *(char **)(arg0 + 0x44);
+            old = *(char **)(menu + 0x44);
             qcopy(n + 0x10, old + 0x10);
             qcopy(n + 0x40, old + 0x40);
             *(int *)(n + 0x74) = *(int *)(old + 0x74);
-            **(void ***)(n + 0x78) = arg0;
+            **(void ***)(n + 0x78) = menu;
         }
-        delete_moby(*(int *)(arg0 + 0x44));
-        *(char **)(arg0 + 0x44) = n;
+        delete_moby(*(int *)(menu + 0x44));
+        *(char **)(menu + 0x44) = n;
     }
     return 0;
 }

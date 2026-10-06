@@ -41,9 +41,9 @@ extern s32 collect_mission_ids() __asm__("func_0020BC00");
 extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 
-s32 draw_missions_menu2(struct MissionsMenu *arg0) __asm__("FUN_0021f688");
+s32 draw_missions_menu2(struct MissionsMenu *menu) __asm__("FUN_0021f688");
 
-s32 draw_missions_menu2(struct MissionsMenu *arg0) {
+s32 draw_missions_menu2(struct MissionsMenu *menu) {
     struct Rect dst;
     struct Rect src;
     s32 mask;
@@ -70,12 +70,12 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
         p = (u32 *)0x70000000;
         do {
             y = off + 0xA;
-            flag = arg0->sel[D_001A00F0.unk224] == i;
+            flag = menu->sel[D_001A00F0.unk224] == i;
             col = flag ? 0x8020FFFF : 0x80FFA888;
             if (flag) {
                 func_001F61F8();
             }
-            h = font_print_wrapped_small(0x10, off, arg0->unk20 - 0x11, 0x3E8, col,
+            h = font_print_wrapped_small(0x10, off, menu->unk20 - 0x11, 0x3E8, col,
                                          get_help_message_text(*p), -1);
             if (flag) {
                 func_001F61E8();
@@ -93,9 +93,9 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
     }
     if (mask < 0) {
         memset(&src, 0, 0x18);
-        src.unk02 = arg0->unk24;
-        src.unk06 = arg0->unk20;
-        src.unk08 = arg0->unk24 >> 1;
+        src.unk02 = menu->unk24;
+        src.unk06 = menu->unk20;
+        src.unk08 = menu->unk24 >> 1;
         src.unk0A = off + 8;
         src.unk10 = 0x10;
         src.unk12 = 1;

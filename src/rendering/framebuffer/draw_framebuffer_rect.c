@@ -1,15 +1,6 @@
 #include "types.h"
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 extern struct TagPtr D_00160F00;
 extern void vu1_add_vif_code(s32) __asm__("func_00233938");
@@ -28,10 +19,10 @@ void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 c
 
     vu1_add_vif_code(0x13000000);
     vu1_add_g_sregister(0x42, 0x64);
-    D_00160F00.p->w0 = 0x10000006;
+    D_00160F00.p->tag = 0x10000006;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000006;
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000006;
     ay = y0 << 4;
     by = y1 << 4;
     ax = x0 << 4;

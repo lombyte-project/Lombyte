@@ -1,20 +1,20 @@
-#ifndef RNC_UI_HUD_INIT_HUD_H
-#define RNC_UI_HUD_INIT_HUD_H
+#ifndef LOMBYTE_RNC_UI_HUD_INIT_HUD_H
+#define LOMBYTE_RNC_UI_HUD_INIT_HUD_H
 
 #include "types.h"
 
-struct M2c_D_0015FA00 {
+struct Globals_0015FA00 {
     u8 pad_0[0x20];
     u8 unk20;
     u8 pad_21[0x3];
 };
 
-struct M2c_D_0019A3E8 {
+struct Globals_0019A3E8 {
     s32 unk0;
     s32 unk4;
 };
 
-struct M2c_var_16_16 {
+struct HudSlot {
     s32 unk0;
     u8 pad_4[0x3C];
     s32 unk40;
@@ -24,4 +24,4 @@ struct M2c_var_16_16 {
     s32 unk58;
 };
 
-#endif /* RNC_UI_HUD_INIT_HUD_H */
+#endif /* LOMBYTE_RNC_UI_HUD_INIT_HUD_H */

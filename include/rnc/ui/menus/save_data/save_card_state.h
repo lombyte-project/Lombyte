@@ -1,9 +1,9 @@
-#ifndef RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H
-#define RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H
+#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H
+#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H
 
 #include "types.h"
 
-struct M2c_D_0013D290 {
+struct SaveSlotTable {
     u8 pad_0[0xD4];
     s32 unkD4;
     u8 pad_D8[0x4];
@@ -12,4 +12,4 @@ struct M2c_D_0013D290 {
     s32 unkE4;
 };
 
-#endif /* RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H */
+#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H */

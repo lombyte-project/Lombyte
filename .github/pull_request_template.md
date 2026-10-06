@@ -1,29 +1,13 @@
-## What changed
+## Before
 
-<!-- What changed and why; list the affected units or files. -->
+<!-- What the code, build or docs looked like before this change. -->
 
-## Type
+## After
 
-- [ ] Exact C promotion (unit matches; oracle removed)
-- [ ] Work-in-progress C (oracle kept; `make elf` passes)
-- [ ] Build / config
-- [ ] Docs / tooling
+<!-- What changed and what a reader sees now; list the affected units or files. -->
 
 ## Verification
 
-- Unit(s) / files:
-- `make elf` result: PASS / FAIL
-  <!-- Paste the final lines (`PASS: reconstructed boot ELF matches retail`). -->
-- `check-unit` object score (C changes): **_%**
-
-## Promotion details (exact C only)
-
-- Symbol:
-- Bytes:
-- Measures: code **_ · functions _** · data **_ · complete-data _**
-- Compiler and flags:
-
-## Checklist
-
-- [ ] `make elf` passes
-- [ ] No game data, disc images, or compiler binaries
+- [ ] `make elf` ends with `PASS: reconstructed boot ELF matches retail`
+- [ ] `make overlays` ends with `PASS` (overlay changes)
+- [ ] `make check` passes

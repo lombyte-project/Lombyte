@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_D_0018A2B0 {
+struct Globals_0018A2B0 {
     u8 pad_0[0x28];
     s32 unk28;
 };
@@ -9,7 +9,7 @@ extern u8 D_0015FEE0[];
 extern u8 D_0015FEF0[];
 extern s32 D_0015FF38;
 extern s32 D_0015FF40;
-extern struct M2c_D_0018A2B0 D_0018A2B0;
+extern struct Globals_0018A2B0 D_0018A2B0;
 extern void func_001F21B0();
 extern s32 func_001F21B8();
 extern s32 dma_moby_textures() __asm__("FUN_0020cdf0");

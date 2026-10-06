@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_arg0 {
+struct AudioDec {
     s32 unk0;
     u8 pad_4[0x2C];
     s32 unk30;
@@ -16,16 +16,16 @@ struct M2c_arg0 {
     s32 unk5C;
 };
 extern s32 snd_reset_movie_sound() __asm__("func_0012F0A8");
-void audio_dec_reset(struct M2c_arg0 *arg0) __asm__("FUN_0023ad10");
+void audio_dec_reset(struct AudioDec *dec) __asm__("FUN_0023ad10");
 
-void audio_dec_reset(struct M2c_arg0 *arg0) {
+void audio_dec_reset(struct AudioDec *dec) {
     snd_reset_movie_sound();
-    arg0->unk0 = 0;
-    arg0->unk30 = 0;
-    arg0->unk38 = 0;
-    arg0->unk3C = 0;
-    arg0->unk44 = 0;
-    arg0->unk50 = 0;
-    arg0->unk58 = 0;
-    arg0->unk5C = 0;
+    dec->unk0 = 0;
+    dec->unk30 = 0;
+    dec->unk38 = 0;
+    dec->unk3C = 0;
+    dec->unk44 = 0;
+    dec->unk50 = 0;
+    dec->unk58 = 0;
+    dec->unk5C = 0;
 }

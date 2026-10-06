@@ -21,7 +21,7 @@
 
 #include "types.h"
 
-typedef struct DmaChannel {
+typedef struct sceDmaChan {
     s32 chcr;
     u8 pad_04[0xC];
     s32 madr;
@@ -33,9 +33,9 @@ typedef struct DmaChannel {
     s32 asr1;
     u8 pad_54[0x2C];
     s32 sadr;
-} DmaChannel;
+} sceDmaChan;
 
-extern DmaChannel *DmaChannels[] __asm__("D_00132D70");
+extern sceDmaChan *DmaChannels[] __asm__("D_00132D70");
 extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
 extern s32 Memclr();
 extern s32 sceDmaPutEnv();
@@ -49,7 +49,7 @@ s32 sceDmaReset(s32 arg0) {
     status = *(volatile u32 *)0x1000E000 & 1;
     for (i = 9; i >= 0; i--) {
         if (DmaChannelsUsed[9 - i] != 0) {
-            DmaChannel *p = DmaChannels[9 - i];
+            sceDmaChan *p = DmaChannels[9 - i];
             p->chcr = 0;
             p->tadr = 0;
             p->madr = 0;

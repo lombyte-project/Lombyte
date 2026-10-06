@@ -247,7 +247,7 @@
     "runtime/interrupts/disable_intc",
     "runtime/dma/disable_dmac",
     "runtime/dma/enable_dmac",
-    "video/decoder/callbacks/handle_end_image",
+    "video/display/handler_end_image",
     "sdk/library/DIntr",
     "sdk/interrupts/enable_interrupts",
     "sdk/library/__divdi3",

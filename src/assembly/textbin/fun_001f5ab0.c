@@ -6,16 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f5ab0/FUN_001f5ab0.s
 #else
 #include "types.h"
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 struct Vec4 {
     f32 x;
@@ -103,10 +94,10 @@ void append_rotated_sprite_quad(s32 texture_width, s32 texture_height, s64 textu
     fast_vec_sub(&bottom_right, &center, &temporary);
     fast_vec_scale(&temporary, &horizontal_edge, pivot_u);
     fast_vec_add(&bottom_right, &bottom_right, &temporary);
-    render_packet_cursor.p->w0 = 0x10000007;
+    render_packet_cursor.p->tag = 0x10000007;
     render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->w2 = 0;
-    render_packet_cursor.p->w3 = 0x50000007;
+    render_packet_cursor.p->vif0 = 0;
+    render_packet_cursor.p->vif1 = 0x50000007;
     tag = render_packet_cursor.p;
     packet_words = (u64 *)(tag + 1);
     render_packet_cursor.p = tag + 1;

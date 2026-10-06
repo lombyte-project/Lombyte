@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_00137B80 {
+struct Globals_00137B80 {
     u8 pad_0[0x12C0];
     s32 unk12C0;
     s32 unk12C4;
@@ -7,7 +7,7 @@ struct M2c_D_00137B80 {
 
 extern u8 D_0010E4C0[];
 extern void count_vsync() __asm__("FUN_0012f1c8");
-extern struct M2c_D_00137B80 D_00137B80;
+extern struct Globals_00137B80 D_00137B80;
 extern s32 D_0015ED80;
 extern s32 D_0015ED88;
 extern s32 D_0015EE90;
@@ -44,7 +44,7 @@ extern s32 FUN_0020b618();
 extern s32 init_pads() __asm__("func_00217048");
 extern s32 initialize_gameplay_sound_system() __asm__("FUN_0022c8d0");
 extern s32 initialize_sif_rpc() __asm__("FUN_00232ce0");
-extern s32 start_vif1_dma_transfer() __asm__("func_002334D8");
+extern s32 vu0_load_micro_program() __asm__("func_002334D8");
 extern s32 vu1_init_chain() __asm__("func_002335D0");
 extern s32 sceCdInit();
 extern s32 sceCdMmode();
@@ -98,7 +98,7 @@ void init_once(void) {
     sceGsResetGraph(0, 1, D_0015ED80 ? 3 : 2, 0);
     init_dma();
     set_pal_mode();
-    start_vif1_dma_transfer(D_0010E4C0);
+    vu0_load_micro_program(D_0010E4C0);
     load_disc_sectors_into_global_buffer();
     b = (u32)D_24135F & 0xFFFFC000;
     base = b + 0x2C0000;

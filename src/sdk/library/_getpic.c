@@ -7,15 +7,15 @@ extern s32 _decodeOrSkip();
 extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 
-s32 _getpic(struct M2c_arg0 *arg0) {
+s32 _getpic(struct MpegDecoder *mpeg) {
     s32 temp_6_13;
     s32 var_18_8;
     u32 var_19_6;
-    struct M2c_temp_16_12 *temp_16_12;
+    struct MpegPictureContext *temp_16_12;
 
     var_19_6 = 1;
     var_18_8 = 0;
-    temp_16_12 = arg0->unk40;
+    temp_16_12 = mpeg->unk40;
     temp_6_13 = temp_16_12->unkD8;
     temp_16_12->unk0 = 0;
     if (temp_6_13 & 0x3F) {
@@ -39,23 +39,23 @@ s32 _getpic(struct M2c_arg0 *arg0) {
     dispatch:
         switch (var_19_6) {
         case 0:
-            _sceMpegFlush(arg0);
+            _sceMpegFlush(mpeg);
             temp_16_12->unk0 = 1;
             break;
         case 1:
             temp_16_12->unkA8 = 0;
             temp_16_12->unkA4 = 0;
             temp_16_12->unkA0 = 0;
-            var_18_8 = _decodeOrSkip(arg0, 0, temp_16_12->unk94);
+            var_18_8 = _decodeOrSkip(mpeg, 0, temp_16_12->unk94);
             temp_16_12->unkA0 = (s32)(temp_16_12->unkA0 + 1);
             break;
         case 2:
-            var_18_8 = _decodeOrSkip(arg0, temp_16_12->unkA4, temp_16_12->unk98);
+            var_18_8 = _decodeOrSkip(mpeg, temp_16_12->unkA4, temp_16_12->unk98);
             temp_16_12->unkA4 = (s32)(temp_16_12->unkA4 + 1);
             break;
         case 3:
         case 4:
-            var_18_8 = _decodeOrSkip(arg0, temp_16_12->unkA8, temp_16_12->unk9C);
+            var_18_8 = _decodeOrSkip(mpeg, temp_16_12->unkA8, temp_16_12->unk9C);
             temp_16_12->unkA8 = (s32)(temp_16_12->unkA8 + 1);
             break;
         }

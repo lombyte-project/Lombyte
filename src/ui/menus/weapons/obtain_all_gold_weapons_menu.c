@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x20];
     u16 unk20;
     u8 pad_22[2];
@@ -25,12 +25,12 @@ extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
+extern s32 get_icon_frame() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222948");
+s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
+s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     struct MenuPacket packet;
     struct MenuPacket tmp;
     void *tex;
@@ -39,12 +39,12 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     s16 pos_x = 0x18;
 
     func_001153FC(&tmp, 0, 0x18);
-    tmp.unk2 = arg0->unk24;
-    tmp.unk6 = arg0->unk20;
+    tmp.unk2 = menu->unk24;
+    tmp.unk6 = menu->unk20;
     tmp.unk10 = 0x10;
     packet = tmp;
     setup_gif_paging(0);
-    draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
+    draw_hud_sprite(get_icon_frame(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.unkA = first_y;
     packet.unk8 = pos_x;
     tex = get_help_message_text(0x5182);
@@ -52,7 +52,7 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     width = packet.unkE;
     first_y = width + 0x10;
     packet.unkA = first_y;
-    tex = find_valid_animation_frame_index(0xE99A, 6);
+    tex = get_icon_frame(0xE99A, 6);
     draw_hud_sprite(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
     font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183),
                               -1);

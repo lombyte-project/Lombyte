@@ -1,16 +1,16 @@
 #include "types.h"
-struct M2c_D_00156880 {
+struct SifFileState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
     s32 unk10;
 };
-struct M2c_temp_16_13 {
+struct SifFileEntry {
     s32 unk0;
     s32 unk4;
 };
-struct Sema {
+struct SemaParam {
     s32 count;
     s32 max_count;
     s32 init_count;
@@ -19,11 +19,11 @@ struct Sema {
     s32 option;
 };
 extern u32 D_0012FC94[];
-extern struct M2c_D_00156880 D_00156880;
+extern struct SifFileState D_00156880;
 extern u8 D_001574C0[];
 extern u8 D_00157D80[];
 extern u8 D_00157F80[];
-extern struct M2c_temp_16_13 *get_iob(s32);
+extern struct SifFileEntry *get_iob(s32);
 extern s32 _sceFsWaitS(s32 arg0);
 extern s32 ReadQueueStatus(void);
 extern s32 CreateSema(void *param);
@@ -32,12 +32,12 @@ extern s32 WaitSema(s32 id);
 extern s32 sceSifCallRpc(void *a0, s32 a1, s32 a2, void *a3, s32 a4, void *a5, s32 a6, void *a7,
                          void *a8);
 s32 sceClose(s32 fd) {
-    struct Sema sema;
+    struct SemaParam sema;
     s32 result;
     s32 ok;
     s32 sid;
-    struct M2c_temp_16_13 *io;
-    struct M2c_D_00156880 *state = &D_00156880;
+    struct SifFileEntry *io;
+    struct SifFileState *state = &D_00156880;
 
     io = get_iob(fd);
     _sceFsWaitS(1);

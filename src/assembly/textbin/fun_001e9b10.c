@@ -8,11 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 typedef struct Shrub {
     f32 v[3];
@@ -194,7 +190,7 @@ extern void DebugPrint(char *fmt, ...);
 extern void FillTransferWords(void *, s32, s32);
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
-extern void reset_callback_registries(void) __asm__("func_001F37E8");
+extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void func_001F61E8(void);
 extern void func_001F9810(void *, s32);
 extern void func_001F9838(void *, void *, s32);
@@ -208,7 +204,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_video_timing(s32) __asm__("func_00214970");
 extern void func_00217020(void);
 extern void func_0022A5E0(void *);
-extern void start_vif1_dma_transfer(void *) __asm__("func_002334D8");
+extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 extern void func_00234F98(void *);
 extern void func_00237370(void *);
 
@@ -299,7 +295,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     D_0015FF30 = 500;
     D_001600BC = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
-    start_vif1_dma_transfer(D_00100AE0);
+    vu0_load_micro_program(D_00100AE0);
     func_001F9810(D_0019C1C0, 0x100);
     func_001F9810(D_0019C3C0, 0x180);
     func_001F9810(D_0019BDC0, 0x400);
@@ -536,7 +532,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         D_00160E8C[i0].x3A = 0x7F80;
     }
     D_0018C318.x1C = 0;
-    reset_callback_registries();
+    reset_draw_globals();
     func_00217020();
     func_001F61E8();
     D_0015F60C = 0;

@@ -133,7 +133,7 @@ typedef struct {
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern int FUN_L00_00257b90(int, int);
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 int FUN_L07_00313de8(unsigned char *m, unsigned char *obj, float *vec, int a, int b) {
     float h = FUN_001f9e90(vec[0] - *(float *)(m + 0x10), vec[1] - *(float *)(m + 0x14));
@@ -195,7 +195,7 @@ extern L07MobyList D_L07_0016C8E0;
 extern int D_L07_0015F5C4;
 extern unsigned char D_0015EDB0;
 extern unsigned char D_L07_0020C6C0[];
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
+extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 void FUN_L07_00314058(char *moby) {
     int i;
@@ -252,7 +252,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern char D_L07_0020DDC0_v[] __asm__("D_L07_0020DAF0");
 
-void FUN_L07_00318e98(int arg0) {
+void FUN_L07_00318e98(int target_entry) {
     float a[4];
     float b[4];
     float c[4];
@@ -266,7 +266,7 @@ void FUN_L07_00318e98(int arg0) {
     D_L07_00161B6C = 1;
     D_L07_00161B70 = 1;
     D_L07_00161B7C = D_L07_00161B7C * 0.5f;
-    allocate_voice_for_target_entry(10, 0, arg0);
+    allocate_voice_for_target_entry(10, 0, target_entry);
     base = (char *)D_L07_0020C840;
     for (i = 0; i < 200; i++) {
         m = D_L07_0020C840[i].moby;
@@ -284,7 +284,7 @@ void FUN_L07_00318e98(int arg0) {
             *(short *)(m + 0xA) = 0x46;
         }
     }
-    FUN_L00_002defe0(arg0);
+    FUN_L00_002defe0(target_entry);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");

@@ -188,8 +188,8 @@ extern Vector4 D_001D9CB0[];
 extern u8 D_0022E1B0[];
 
 extern void CalculateDmaTransferAddress(void);
-extern void InitializeRenderState(s32);
-extern void UpdateRenderStateCommand(void);
+extern void music_pause(s32);
+extern void music_unpause(void);
 extern void sceVu0UnitMatrix(void *);
 extern void SceVu0RotMatrixX(void *, void *, f32);
 extern void SceVu0RotMatrixY(void *, void *, f32);
@@ -360,7 +360,7 @@ void update_resident_gameplay_state(void) {
                 return;
             }
             game_stage = 0;
-            UpdateRenderStateCommand();
+            music_unpause();
             D_0015F618[0] = 1;
             D_001413F5[0] = 0;
             func_001E9438();
@@ -596,7 +596,7 @@ void update_resident_gameplay_state(void) {
         func_001E9420();
         func_00217B88();
         if (level_render_state.timer == 0) {
-            InitializeRenderState(0);
+            music_pause(0);
             update_audio_stream_until_idle(0);
             D_001516D0.unk1C = level_render_state.content_variant + 0x9C4F;
             fade_to_black(scale_ticks(12));

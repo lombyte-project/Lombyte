@@ -26,7 +26,7 @@ typedef struct {
     s32 wt_ts;
 } ViBuf;
 extern void func_0023BC20(u128 *, u32, s32, s32);
-extern void set_dma_channel_4_control_register(s32) __asm__("FUN_0023bbb0");
+extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
 s32 vi_buf_reset(ViBuf *f) __asm__("FUN_0023bcc0");
 
 s32 vi_buf_reset(ViBuf *f) {
@@ -51,7 +51,7 @@ s32 vi_buf_reset(ViBuf *f) {
     DPUT(0x1000B420, 0);
     DPUT(0x1000B410, DMA_ADDR(f->data));
     DPUT(0x1000B430, DMA_ADDR(f->tag));
-    set_dma_channel_4_control_register(5);
+    set_d4_chcr(5);
     return 1;
 }
 

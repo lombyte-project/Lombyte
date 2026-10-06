@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_00154A50 {
+struct TtyState {
     s32 unk0;
     volatile s32 unk4;
     volatile s32 unk8;
@@ -16,7 +16,7 @@ struct Mmio {
     u8 unk7;
     u32 unk8;
 };
-extern struct M2c_D_00154A50 D_00154A50;
+extern struct TtyState D_00154A50;
 extern u8 D_00154A80[];
 extern u8 D_00154BC0[];
 extern s32 FlushCache();
@@ -24,7 +24,7 @@ extern s32 func_00119568();
 extern s32 sceDeci2Open();
 extern void sceTtyHandler();
 s32 sceTtyInit(void) {
-    struct M2c_D_00154A50 *state = &D_00154A50;
+    struct TtyState *state = &D_00154A50;
     struct Mmio *hdr;
 
     FlushCache(0);

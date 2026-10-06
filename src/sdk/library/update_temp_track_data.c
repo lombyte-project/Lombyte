@@ -6,7 +6,7 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x150];
     s32 unk150;
     u8 pad_154[0x58];
@@ -16,7 +16,7 @@ struct M2c_arg0 {
     s32 unk850;
     s32 unk854;
 };
-void UpdateTempTrackData(struct M2c_arg0 *arg0, s32 arg1) {
+void UpdateTempTrackData(struct MpegDecoder *arg0, s32 delta) {
     s32 temp_2_30;
     s32 temp_3_21;
     s32 temp_4_32;
@@ -24,16 +24,16 @@ void UpdateTempTrackData(struct M2c_arg0 *arg0, s32 arg1) {
     s32 var_7_4;
     var_7_4 = 0;
     var_4_8 = 0;
-    if ((arg0->unk150 != 3) && (arg1 != 0)) {
-        if (arg1 < 0) {
+    if ((arg0->unk150 != 3) && (delta != 0)) {
+        if (delta < 0) {
             var_7_4 = arg0->unk854 == 0;
         }
         arg0->unk854 = 0;
-        var_4_8 = arg1;
+        var_4_8 = delta;
     }
-    temp_3_21 = arg0->unk84C + arg1;
+    temp_3_21 = arg0->unk84C + delta;
     arg0->unk1AC = temp_3_21;
-    if ((var_7_4 != 0) && (var_4_8 >= arg1)) {
+    if ((var_7_4 != 0) && (var_4_8 >= delta)) {
         arg0->unk1AC = (s32)(temp_3_21 + 0x400);
     };
     temp_4_32 = arg0->unk1AC;

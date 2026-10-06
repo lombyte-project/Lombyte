@@ -89,9 +89,9 @@ extern void FUN_0020b4a8();
 extern void update_map_icons() __asm__("func_0020BF90");
 extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
-s32 draw_map_screen(struct Screen *arg0) __asm__("FUN_0021be60");
+s32 draw_map_screen(struct Screen *screen) __asm__("FUN_0021be60");
 
-s32 draw_map_screen(struct Screen *arg0) {
+s32 draw_map_screen(struct Screen *screen) {
     s32 prev;
     s32 idx;
     s32 t;
@@ -114,7 +114,7 @@ s32 draw_map_screen(struct Screen *arg0) {
     struct MapEntry *e;
 
     update_map_zoom_and_pan();
-    if (!(arg0->unk34 & 0x40)) {
+    if (!(screen->unk34 & 0x40)) {
         prev = D_001A00F0.cur;
         if (D_0013C940.pressed & 0xD00) {
             if (D_001D5D14[0] == 0) {
@@ -136,7 +136,7 @@ s32 draw_map_screen(struct Screen *arg0) {
             D_001D5BF0.unkF4 = 0xB;
             D_001D5BF0.unkC = 3;
             D_001D5BF0.unkE4 = D_001A00F0.cur;
-            allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(0, 0x11, screen->unk14);
             return 0;
         }
         idx = find_id_in_terminated_table(D_001A00F0.cur);
@@ -156,7 +156,7 @@ s32 draw_map_screen(struct Screen *arg0) {
             }
         }
         if (D_001A00F0.cur != prev) {
-            allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(1, 0x11, screen->unk14);
             update_mission_list();
         }
     }
@@ -193,7 +193,7 @@ s32 draw_map_screen(struct Screen *arg0) {
                 compose_bitmap_from_mask(pal, pix, pal, buf);
             }
         }
-        if (!(arg0->unk34 & 0x80)) {
+        if (!(screen->unk34 & 0x80)) {
             tbase = (u8 *)D_001A00F0.hdr;
             tex = tbase + hdr->unk10;
             b = tbase + hdr->unk14 + 0x420;

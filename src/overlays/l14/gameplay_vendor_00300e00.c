@@ -69,7 +69,7 @@ extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 extern float D_L14_00162098_g __asm__("D_L14_00162098") __attribute__((sda));
 
-char *FUN_L14_003014e0(int a0, float *a1, float *a2, int a3, float f) {
+char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f) {
     char *moby = FUN_0020c4f8_c(0x4A9);
     float t, u;
     unsigned short g;
@@ -80,7 +80,7 @@ char *FUN_L14_003014e0(int a0, float *a1, float *a2, int a3, float f) {
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(int *)(d + 0x24) = a0;
-        qcopy(moby + 0x10, a1);
+        qcopy(moby + 0x10, pos);
         qcopy(d + 0x10, a2);
         g = D_L14_0016208C_g;
         *(float *)(d + 0x1C) = f;

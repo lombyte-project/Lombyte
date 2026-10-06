@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct SifDmaTransfer {
+struct sceSifDmaData {
     u32 source;
     u32 destination;
     u32 size;
@@ -8,21 +8,21 @@ struct SifDmaTransfer {
 };
 
 extern s32 sceSifAllocIopHeap(s32 module_id);
-extern s32 sceSifSetDma(struct SifDmaTransfer *transfer, s32 priority);
+extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 extern s32 sceSifDmaStat(s32 dma_id);
 extern s32 InvokeIopStatus(s32 module_id, s32 a1, s32 a2);
 extern void InvokeStateInitializer(s32 module_id);
 
-s32 load_irx_module(s32 arg0, s32 arg1) __asm__("FUN_00201520");
-s32 load_irx_module(s32 arg0, s32 arg1) {
-    struct SifDmaTransfer transfer;
+s32 load_irx_module(s32 irx_image, s32 arg1) __asm__("FUN_00201520");
+s32 load_irx_module(s32 irx_image, s32 arg1) {
+    struct sceSifDmaData transfer;
     s32 module_id;
     s32 dma_id;
     s32 result;
 
     module_id = sceSifAllocIopHeap(arg1);
     transfer.size = arg1;
-    transfer.source = arg0;
+    transfer.source = irx_image;
     transfer.destination = module_id;
     transfer.attr = 0;
     dma_id = sceSifSetDma(&transfer, 1);
