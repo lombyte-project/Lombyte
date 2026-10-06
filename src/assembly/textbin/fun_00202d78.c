@@ -62,7 +62,7 @@ void build_indexed_resident_render_packet(u64 *packet, struct ResidentRenderText
         draw_control_word = (u64)draw_shift;
         draw_control_word <<= 6;
         draw_control_word |= 0x20;
-        draw_control_word = ((u64)(draw_control_count - 1) << 2) | draw_control_word;
+        draw_control_word |= ((u64)(draw_control_count - 1) << 2);
         draw_control_word |= (u64)draw_high << 32;
         packet[0] = draw_control_word;
         packet += 2;

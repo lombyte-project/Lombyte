@@ -84,7 +84,7 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     source_inactive = definition->source_state == 0;
     if ((flags & 4) == 0) {
         result = -1;
-        if (!source_inactive) {
+        if (source_inactive == 0) {
             goto return_result;
         }
     } else {
@@ -115,22 +115,21 @@ find_free_slot:
         goto allocation_failed;
     }
     if (voice_pool.voices[0].state == 0) {
-        goto initialize_slot;
+        goto slot_found;
     }
     state = &voice_pool.voices[0].state;
     slot_index = 1;
-scan_next_slot:
-    state += 0x70;
-    if (slot_index >= slot_limit) {
-        goto allocation_failed;
-    }
-    if (*state == 0) {
-        goto slot_found;
-    }
-    slot_index += 1;
-    goto scan_next_slot;
+    do {
+        if (slot_index >= slot_limit) {
+            goto allocation_failed;
+        }
+        state += 0x70;
+        if (*state == 0) {
+            break;
+        }
+        slot_index += 1;
+    } while (1);
 slot_found:
-initialize_slot:
     if (slot_index >= slot_limit) {
         goto allocation_failed;
     }
@@ -182,15 +181,14 @@ check_calculated_volume:
     committed_slot->voice.history_position = 0;
     pitch_bend_max = definition->pitch_bend_max;
     pitch_bend_min = definition->pitch_bend_min;
-    pitch_bend = pitch_bend_max;
-    if (pitch_bend_max == pitch_bend_min) {
-        goto publish_pitch_bend;
+    if (pitch_bend_max != pitch_bend_min) {
+        pitch_bend = game_random_remainder(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
+    } else {
+        pitch_bend = pitch_bend_max;
     }
-    pitch_bend = game_random_remainder(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
-publish_pitch_bend:
     pitch_slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
-    pitch_slot->voice.handle = 0xFFFFFFFF;
     pitch_slot->voice.pitch_bend = pitch_bend;
+    pitch_slot->voice.handle = 0xFFFFFFFF;
     goto return_index;
 allocation_failed:
     slot_index = -1;

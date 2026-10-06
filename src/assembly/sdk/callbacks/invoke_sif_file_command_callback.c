@@ -18,7 +18,7 @@ extern void __sync_synchronize(void);
 extern void CpuEnableInt(void);
 
 void FUN_0011b980(void *packet, SifFileCommandCallbackRecord *callback_record) {
-    if (callback_record->callback != 0) {
+    if (callback_record->callback) {
         callback_record->callback(callback_record->argument);
     }
     __sync_synchronize();

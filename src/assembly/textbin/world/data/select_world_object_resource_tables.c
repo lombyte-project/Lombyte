@@ -54,7 +54,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     s32 runtime_index;
     s32 resource_table_index;
     char *resource_data;
-    s32 class_slot;
+    u8 class_slot;
     s32 resource_tag;
     s32 vendor_item_index;
 

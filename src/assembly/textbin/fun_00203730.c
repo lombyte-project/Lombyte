@@ -161,7 +161,7 @@ void register_object_render_class(ObjectRenderClass *render_class, ResidentRende
       mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
       mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
       texture_block = texture->texture_block_offset + gs_block_base;
-      tex0_word = (((u64) width_units_64) << 14) | ((((u64) width_log2) << 26) | 0x1300000);
+      tex0_word = ((((u64) width_log2) << 26) | 0x1300000) | (((u64) width_units_64) << 14);
       tex0_word |= ((u64) height_log2) << 30;
       tex0_word |= (((u64) texture_block) << 37) | (((u64) 1) << 34);
       tex0_word |= ((u64) 1) << 63;

@@ -41,6 +41,7 @@ u64 get_effect_texture(s32 index) {
     s32 palette_block_offset;
     s32 texel_address;
     s32 texel_block_offset;
+    s32 area_shift;
     u64 tex0_word;
     s64 width_bits;
     s64 palette_bits;
@@ -50,6 +51,7 @@ u64 get_effect_texture(s32 index) {
     if ((width_bits = texture->tex0) == 0) {
         width_log2 = texture->width_log2;
         buffer_width_shift = width_log2 - 6;
+        area_shift = width_log2 + texture->height_log2;
         palette_block_offset = gs_texture_allocation_cursor >> 8;
         texel_address = gs_texture_allocation_cursor + 0x400;
         texel_block_offset = texel_address >> 8;
@@ -64,7 +66,7 @@ u64 get_effect_texture(s32 index) {
         palette_bits |= (u64)1 << 34;
         tex0_word |= palette_bits;
         tex0_word |= (u64)1 << 63;
-        gs_texture_allocation_cursor = texel_address + (1 << (width_log2 + texture->height_log2));
+        gs_texture_allocation_cursor = texel_address + (1 << area_shift);
         texture->tex0 = tex0_word;
         if (pending_texture_upload_count_snapshot < 0x40) {
             upload = &pending_texture_uploads[pending_texture_upload_count_snapshot];

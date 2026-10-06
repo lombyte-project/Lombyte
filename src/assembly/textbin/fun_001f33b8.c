@@ -50,10 +50,10 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     half_width = viewport_width >> 1;
     screen_offsets.half_height = half_height;
     screen_offsets.half_width = half_width;
-    screen_offsets.left_origin = (0x800 - half_width) << 4;
-    screen_offsets.bottom_extent = (half_height + 0x800) << 4;
-    screen_offsets.top_origin = (0x800 - half_height) << 4;
-    screen_offsets.right_extent = (half_width + 0x800) << 4;
+    screen_offsets.left_origin = (s32)((u32)(0x800 - half_width) << 4);
+    screen_offsets.bottom_extent = (s32)((u32)(half_height + 0x800) << 4);
+    screen_offsets.top_origin = (s32)((u32)(0x800 - half_height) << 4);
+    screen_offsets.right_extent = (s32)((u32)(half_width + 0x800) << 4);
     view_context.horizontal_fov = horizontal_fov;
     view_context.near_clip = 32.0f;
     view_context.far_clip = 524288.0f;

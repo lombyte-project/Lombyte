@@ -59,7 +59,6 @@ u64 get_frame_texture(s32 frame_id) {
     s32 image_upload_count;
     u8 width_log2;
     u8 height_log2;
-    s32 allocation_start;
     s32 palette_source_address;
     s32 return_mode;
     s32 return_shift;
@@ -72,6 +71,7 @@ u64 get_frame_texture(s32 frame_id) {
     queued_transfer = 0;
 
     if (palette_page->gs_block_offset == 0 || image_page->gs_block_offset == 0) {
+        /* Retail fills this first packet even when the queue is already full. */
         packet_offset = pending_texture_upload_count * 0x10;
         palette_source_address = palette_page->source_address;
         initial_packet = pending_texture_uploads + pending_texture_upload_count;
@@ -99,12 +99,11 @@ u64 get_frame_texture(s32 frame_id) {
     if (image_page->gs_block_offset == 0) {
         width_log2 = image_page->width_log2;
         height_log2 = image_page->height_log2;
-        allocation_start = gs_texture_allocation_cursor;
-        image_page->gs_block_offset = allocation_start >> 8;
+        image_page->gs_block_offset = gs_texture_allocation_cursor >> 8;
         if (height_log2 < width_log2) {
             height_log2 = image_page->width_log2;
         }
-        gs_texture_allocation_cursor = allocation_start + (1 << (height_log2 * 2));
+        gs_texture_allocation_cursor += 1 << (height_log2 * 2);
         image_upload_count = pending_texture_upload_count;
         if (image_upload_count < 0x40) {
             queued_transfer = 1;

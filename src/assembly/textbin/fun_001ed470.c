@@ -94,7 +94,7 @@ void update_camera_tracking_state(void) {
     direction_stiffness = 0.015f;
     direction_damping = 0.2f;
     tracking->direction.f[0] = cam_interp_values(tracking->direction.f[0], direction.f[0], direction_stiffness, direction_damping, 0.0f, &tracking->direction_velocity[0]);
-    direction_y_velocity = &tracking->direction_velocity[1];
+    direction_y_velocity = &tracking->direction_velocity[0] + 1;
     tracking->direction.f[1] = cam_interp_values(tracking->direction.f[1], direction.f[1], direction_stiffness, direction_damping, 0.0f, direction_y_velocity);
     tracking->direction.f[2] = cam_interp_values(tracking->direction.f[2], direction.f[2], direction_stiffness, direction_damping, 0.0f, &tracking->direction_velocity[2]);
     normalize_vector_xyz(&tracking->direction, &tracking->direction, 1.0f);

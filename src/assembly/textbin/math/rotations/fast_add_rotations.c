@@ -8,18 +8,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/fast_add_rot
 f32 fast_add_rotations(f32 angle, f32 delta) __asm__("FUN_001fa580");
 
 f32 fast_add_rotations(f32 angle, f32 delta) {
-    f32 wrapped_angle;
-    f32 pi;
-    f32 negative_pi;
-    s32 below_negative_pi;
-    pi = 3.1415927f;
-    negative_pi = -3.1415927f;
-    wrapped_angle = angle + delta;
-    below_negative_pi = wrapped_angle < negative_pi;
+    f32 wrapped_angle = angle + delta;
+    f32 pi = 3.1415927f;
+    f32 negative_pi = -pi;
     if (!(wrapped_angle < pi)) {
         wrapped_angle = (wrapped_angle - pi) - pi;
     }
-    if (below_negative_pi) {
+    if (wrapped_angle < negative_pi) {
         wrapped_angle = (wrapped_angle + pi) + pi;
     }
     return wrapped_angle;

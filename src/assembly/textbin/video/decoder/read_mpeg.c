@@ -5,12 +5,6 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/video/decoder/read_mpeg/FUN_0023a460.s", FUN_0023a460);
 #else
 #include "rnc/video_decoder_read_mpeg_types.h"
-#include "types.h"
-
-
-
-
-
 
 extern struct M2c_D_0013C940 D_0013C940;
 extern struct M2c_D_0013E550 D_0013E550;
@@ -150,6 +144,7 @@ loop_25:
     if (var_18_22 >= 5 && func_0023CC80(arg0) != 3) {
         goto block_2;
     }
+    /* Retail reuses arg1 as the status value 3 during the shutdown waits. */
     while (func_0023CD08(arg0) == 0) {
         arg1 = (struct M2c_arg1 *)3;
         func_0023ABA0();

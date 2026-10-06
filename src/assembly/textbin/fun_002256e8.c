@@ -88,7 +88,7 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         }
         animation_asset_read_active[0] = 0;
         decompress_wad(stream->buffer + stream->read_offset, stream->buffer);
-        class_resource = moby_class_resources + streamed_moby_class_slot[0];
+        class_resource = &moby_class_resources[streamed_moby_class_slot[0]];
         header = (AnimationTableHeader *)stream->buffer;
         table_index = 0;
     next:

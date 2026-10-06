@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/decoder/initialize_audio_system/FUN_0023a7c0.s", FUN_0023a7c0);
-#else
 #include "types.h"
 
 struct AudioDecoderState
@@ -27,7 +24,7 @@ struct AudioDecoderThreadArgs
 extern s32 decoder_buffer_address __asm__("D_00161208");
 extern struct AudioDecoderState *decoder_state __asm__("D_0016120C");
 extern s32 decoder_thread_id __asm__("D_00161210");
-extern u8 D_00166C00[];
+extern u8 D_00166C00;
 extern u8 movie_open_error_text[] __asm__("D_001E8AF0");
 extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
@@ -39,9 +36,9 @@ extern void handle_end_image() __asm__("FUN_0023b540");
 extern void run_video_decoder() __asm__("func_0023CE28");
 extern s32 func_0023B940(struct AudioDecoderState *);
 extern void sceMpegInit(void);
-extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *, u32) __asm__("func_0023CAC8");
-extern s32 audio_dec_create(void *, void *, u32, u32) __asm__("func_0023ABD0");
-extern s32 video_dec_set_stream(void *, u32, u32, void *, struct AudioDecoderState *) __asm__("func_0023CBD0");
+extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *, u32) __asm__("FUN_0023cac8");
+extern s32 audio_dec_create(void *, void *, u32, u32) __asm__("FUN_0023abd0");
+extern s32 video_dec_set_stream(void *, u32, u32, void *, struct AudioDecoderState *) __asm__("FUN_0023cbd0");
 extern void vo_buf_create(void *, u32, u32, u32) __asm__("func_0023D190");
 extern s32 CreateThread(struct AudioDecoderThreadArgs *);
 extern s32 _StartThread(s32, void *);
@@ -59,6 +56,7 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
   struct AudioDecoderThreadArgs decoder_thread;
   s32 thread_id;
   s32 opened;
+  void *thread_gp;
   *((volatile s32 *) 0x1000E000) |= 3;
   *((volatile s32 *) 0x1000E010) = 4;
   func_0023B940(decoder_state);
@@ -69,11 +67,12 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
   video_dec_set_stream(((u8 *) decoder_state) + 0xD9048, 3, callback_context, pcm_callback, decoder_state);
   vo_buf_create(((u8 *) decoder_state) + 0xD9168, (decoder_buffer_address & 0x0FFFFFFF) | 0x20000000, decoder_buffer_address + 0x1A0000, 2);
   /* Retail fills only these descriptor fields before CreateThread. */
+  thread_gp = &D_00166C00;
   decoder_thread.stack = ((u8 *) decoder_state) + 0xD2040;
   decoder_thread.entry = run_video_decoder;
   decoder_thread.stack_size = 0x4000;
-  decoder_thread.gp = D_00166C00;
   decoder_thread.priority = 1;
+  decoder_thread.gp = thread_gp;
   decoder_thread.gs_tag = 0;
   thread_id = CreateThread(&decoder_thread);
   decoder_thread_id = thread_id;
@@ -93,4 +92,4 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
   enable_dmac(2);
   return opened;
 }
-#endif /* NON_MATCHING */
+extern __typeof__(initialize_audio_system) func_0023A7C0 __attribute__((alias("FUN_0023a7c0")));

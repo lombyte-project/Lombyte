@@ -67,7 +67,7 @@ void append_fullscreen_clear_strips(s64 color) {
     dividend = (display_width > -1) ? display_width : (display_width + 0x1F);
     strip_count = dividend >> 5;
     render_packet_cursor[0]->dma_control = (strip_count + 5) | 0x10000000;
-    render_packet_cursor[0]->address = 0;
+    ((s32 *)render_packet_cursor[0])[1] = 0;
     render_packet_cursor[0]->vif_command = 0;
     render_packet_cursor[0]->gif_control = (strip_count + 5) | 0x50000000;
     base = render_packet_cursor[0];

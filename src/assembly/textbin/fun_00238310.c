@@ -52,6 +52,7 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
         if (glyph_index == 0x42) {
             blink_next_glyph = 1;
         }
+        /* Retail retains this branch even though an unsigned byte minus 0x20 cannot reach 0xEA. */
         if (glyph_index == 0xEA) {
             cursor_x = start_x;
             cursor_y += 9;

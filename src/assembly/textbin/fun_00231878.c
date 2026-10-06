@@ -48,8 +48,6 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     s32 archive_base;
     u64 texture_bits;
     u64 image_bits;
-    s32 *first_slide_offsets;
-    s32 *second_slide_offsets;
     s32 disc_start_sector;
     s32 disc_sector_count;
     struct CommonArchiveMemory *archive_memory;
@@ -66,8 +64,6 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
     FlushCache(0);
     archive_base = archive_memory->archive_base;
-    first_slide_offsets = (s32 *)((u8 *)archive_base + first_slide * 4);
-    second_slide_offsets = (s32 *)((u8 *)archive_base + second_slide * 4);
     gs_texture_allocation_start = gs_texture_allocation_base;
     gs_texture_allocation_cursor = gs_texture_allocation_base;
     texture_base_output = texture_bases;
@@ -83,19 +79,19 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         } else if (upload_index == 2) {
             sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
             upload_bytes = 0x400;
-            image_address = (s32)((u8 *)archive_base + first_slide_offsets[2]) + 0x20;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) + 0x20;
         } else if (upload_index == 3) {
             sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
             upload_bytes = 0x8000;
-            image_address = (s32)((u8 *)archive_base + first_slide_offsets[2]) + 0x420;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) + 0x420;
         } else if (upload_index == 4) {
             sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
             upload_bytes = 0x400;
-            image_address = (s32)((u8 *)archive_base + second_slide_offsets[2]) + 0x20;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) + 0x20;
         } else {
             sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
             upload_bytes = 0x8000;
-            image_address = (s32)((u8 *)archive_base + second_slide_offsets[2]) + 0x420;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) + 0x420;
         }
         FlushCache(0);
         sceGsExecLoadImage(&load_image, image_address);

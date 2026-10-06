@@ -107,9 +107,11 @@ s32 service_level_archive_load(void) {
         disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
         sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
         level_archive_sectors = disc_entry->sector_count;
-        level_archive_buffer = sound_archive_buffer - (((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000);
+        sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
+        level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
         archive_start_or_sectors = D_00137B80.shared_sector_count;
-        shared_archive_buffer = level_archive_buffer - (((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000);
+        sound_aligned_bytes = ((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000;
+        shared_archive_buffer = level_archive_buffer - sound_aligned_bytes;
         archive_start_or_bytes = D_00137B80.shared_start_sector;
         D_0015EE54 = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;

@@ -40,7 +40,8 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     render_packet_cursor.p->vif0 = 0x13000000;
     render_packet_cursor.p->vif1 = 0x50000007;
     /* Remaining vector components are filled from each setup record. */
-    second_vector[1] = second_vector[0] = first_vector[1] = first_vector[0] = 0.0f;
+    first_vector[1] = first_vector[0] = 0.0f;
+    second_vector[1] = second_vector[0] = 0.0f;
     render_packet_cursor.p++;
     while (record->command_count != 0) {
         command_stream += 0x20;

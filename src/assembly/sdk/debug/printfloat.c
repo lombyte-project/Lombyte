@@ -32,6 +32,7 @@ void printfloat(f64 x)
         x = dpsub_f(0.0, x);
         ((void (*)(s32))D_0012FC00)(0x2D);
     }
+    /* These absolute loads keep the constants out of GP-relative delay slots. */
     if (dpcmp_f(x, *(f64 *)0x00152798) < 0) {
         while (dpcmp_f(x, *(f64 *)0x001527A0) < 0) {
             exponent--;

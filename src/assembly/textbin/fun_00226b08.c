@@ -11,7 +11,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00226b08/FUN_00226b08.s
    Only listed bytes of D_0013D4C0 are restored; each D_00141EA0 entry is
    cleared when its referenced byte is zero. The two saved flags are then
    restored, the counter is advanced, the clock is refreshed, and a
-   nonnegative slot updates the checkpoint state. */
+   nonnegative slot updates the checkpoint state. The save menu supplies
+   a cursor slot; the global state caller supplies -1 to skip that update. */
 
 typedef struct {
     u8 pad0[0x14];

@@ -69,6 +69,7 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
     case 5:
         func_001FED30(0x4E2B);
         st = &D_00193300;
+        /* Retail stores unk4 before clearing unk20 between the two calls. */
         st->unk4 = func_001F96F8(0x1E);
         st->unk20 = 0;
         st->unk24 = func_001F96F8(0x1E);

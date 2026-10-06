@@ -79,7 +79,7 @@ s32 snd_start_sound_system(void) {
     D_0015ECD8 = 0;
     D_0015ED00 = 0;
 
-    for (;;) {
+    do {
         bind_result = sceSifBindRpc(&sound_stream_client, 0x123457, 0);
         if (bind_result < 0) {
             printf((const char *)D_00153C50, D_00153C78, 0x88);
@@ -89,10 +89,7 @@ s32 snd_start_sound_system(void) {
         command_arg = 10000;
         for (command_arg--; command_arg != -1; command_arg--) {
         }
-        if (sound_stream_client.server != NULL) {
-            break;
-        }
-    }
+    } while (sound_stream_client.server == NULL);
 
     *(s32 *)D_00133280 = 0;
     sound_read_work.read_active = 0;

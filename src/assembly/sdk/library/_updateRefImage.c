@@ -90,8 +90,8 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
     struct MpegReferencePicture *selected_picture;
 
     picture_structure = state->picture_structure;
-    queue_threshold = ((picture_structure ^ 3) == 0) ? 2 : 4;
     coding_type = state->coding_type;
+    queue_threshold = ((picture_structure ^ 3) == 0) ? 2 : 4;
     selected_picture = NULL;
     references_ready = 0;
     if (coding_type != 3) {

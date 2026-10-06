@@ -29,6 +29,10 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
 void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) __asm__("FUN_00237c80");
 
+/* Project opposing world bounds into a floating-point screen rectangle. The first
+ * point supplies x/y; subtracting it from the opposite point supplies width/height.
+ * Keep the four output stores in retail order because callers may alias outputs.
+ */
 void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) {
     f32 first_projected[4] __attribute__((aligned(16)));
     f32 opposite_projected[4] __attribute__((aligned(16)));

@@ -19,7 +19,7 @@ struct DmaChanRegs {
 };
 
 void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination) {
-    volatile struct DmaChanRegs *d = (volatile struct DmaChanRegs *)0x1000D400;
+    volatile struct DmaChanRegs * const d = (volatile struct DmaChanRegs *)0x1000D400;
     d->sadr = destination;
     d->qwc = qwc;
     d->madr = address;
