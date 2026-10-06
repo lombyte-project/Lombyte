@@ -5,15 +5,77 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd1a0.s", FUN_L06_002fd1a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fda30.s", FUN_L06_002fda30);
-extern int D_L06_001ABFC0[];
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Trigger moby: waits for the hero in its zone, plays its open animation, then launches a listed moby. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern int D_L06_0015FFD8;
+extern int FUN_L06_002e9d10(void *, void *);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short *D_L06_001ABFC0[];
+extern void blend_moby_animation(void *, int, int, int);
+
+void FUN_L06_002fda30(char *m) {
+    int *d = *(int **)(m + 0x78);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (d[1] >= 0 && is_point_inside_clip_volume(D_0013F3D0, d[1])) {
+            m[0x20] = 1;
+            if (((unsigned char *)m)[0x53] != 1) {
+                blend_moby_animation(m, 1, 0, 5);
+            }
+        }
+        break;
+    case 1:
+        if (m[0x70] & 2) {
+            if (d[0] >= 0) {
+                m[0x20] = 2;
+            } else {
+                m[0x20] = 3;
+            }
+            if (((unsigned char *)m)[0x53] != 2) {
+                blend_moby_animation(m, 2, 0, 5);
+            }
+        }
+        break;
+    case 2:
+        if (tick_countdown_32_alt(d + 2)) {
+            float found = 0.0f;
+            short *list = D_L06_001ABFC0[d[0]];
+            if (list != 0) {
+                short *p = list;
+                char *pos = m + 0x10;
+                do {
+                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8), pos)) {
+                        found = 1.0f;
+                        break;
+                    }
+                } while (*p++ >= 0);
+            }
+            if (found != 0.0f) {
+                d[2] = scale_game_frames(0x14);
+            } else {
+                m[0x20] = 3;
+            }
+        }
+        break;
+    }
+}
+extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002ffc38(int idx)
 {
-    short *p = D_L06_001ABFC0[idx];
+    short *p = D_L06_001ABFC0_u[idx];
     if (p != 0) {
         do {
             char *moby = D_L06_0015FFD8_d + ((*p & 0x7FFF) << 8);
@@ -106,7 +168,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015FFD8;
+extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -115,7 +177,7 @@ void FUN_L06_00304028(char *moby)
     char *data = *(char **)(moby + 0x78);
     short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
-        mark_moby_for_removal_c(D_L06_0015FFD8 + ((*p & 0x7FFF) << 8));
+        mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*p & 0x7FFF) << 8));
     } while (*p++ >= 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
