@@ -69,13 +69,7 @@ s32 vi_buf_restart_dma(ViBuf *f) {
         dmaQwc = (f->data - dmaAddress) >> 4;
         dmaTadr = f->tag & 0x0FFFFFFF;
         dmaAddress = dmaAddress + datasize;
-        r = 0;
-        if (f->d4_madr != f->data) {
-            r = 3;
-            if ((f->d4_madr ^ (f->data + datasize)) == 0) {
-                r = 0;
-            }
-        }
+        r = (f->d4_madr != f->data && f->d4_madr != f->data + datasize) ? 3 : 0;
         r = r << 28;
         dmaChcr = (f->d4_chcr & 0x0FFFFFFF) | r | 0x100;
         datasize = f->n - f->dmaStart;

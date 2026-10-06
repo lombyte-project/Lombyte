@@ -59,7 +59,7 @@ struct PreviewClassResource { u8 pad0[0xD]; u8 state_0d; };
 
 extern struct ItemPreviewMenuState preview_menu_state __asm__("D_001D5BF0");
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
-extern struct PreviewCamera preview_camera __asm__("D_00186F40");
+extern volatile struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
@@ -97,8 +97,8 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
     struct ItemPreviewVars *preview_vars;
     s32 is_type1;
     s32 item_two_difference;
-    f32 offset;
     f32 camera_x;
+    volatile f32 *camera_position;
 
     selection = preview_menu_state.game->selection;
     item_index = *(s16 *)(selection->table + selection->index * 10 + 6);
@@ -163,6 +163,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             }
             preview->primary_moby = moby;
             moby->flags = 0;
+            camera_position = &preview_camera.x;
             camera_x = preview_camera.x;
             if (use_alternate_x) {
                 moby->x = camera_x + preview_placements[item_index].alternate_x;
@@ -170,7 +171,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 moby->x = camera_x + preview_placements[item_index].normal_x;
             }
             moby->y = preview_camera.y + preview_placements[item_index].y;
-            moby->z = preview_camera.z + preview_placements[item_index].z;
+            moby->z = camera_position[2] + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
             moby->rotation_z = 3.1415927f;

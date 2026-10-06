@@ -5,12 +5,14 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00226b08/FUN_00226b08.s", FUN_00226b08);
 #else
 #include "types.h"
+#include "sda.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
    Only listed bytes of D_0013D4C0 are restored; each D_00141EA0 entry is
    cleared when its referenced byte is zero. The two saved flags are then
    restored, the counter is advanced, the clock is refreshed, and a
-   nonnegative slot updates the checkpoint state. */
+   nonnegative slot updates the checkpoint state. The save menu supplies
+   a cursor slot; the global state caller supplies -1 to skip that update. */
 
 typedef struct {
     u8 pad0[0x14];
@@ -43,13 +45,13 @@ extern u8 D_0013D4C0[];
 extern u8 D_0013E520[];
 extern u8 D_0014BEC0[];
 extern s32 D_00141EA0[];
-extern u8 D_0015EDD0[];
+extern u8 D_0015EDD0[] MACRO_ADDR;
 extern s32 D_0015EDA0;
 extern s32 D_0015ED98;
 extern u8 D_0015EE1C;
 extern u8 D_0015EE1D;
 extern s32 D_0015EE20;
-extern u8 D_0015EE98[];
+extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 D_001D5BA0[];
 
 extern void func_001F9838(void *dst, void *src, s32 size);
@@ -61,8 +63,8 @@ extern void sceScfGetLocalTimefromRTC(u8 *clock);
 void FUN_00226b08(s32 slot) {
     s32 saved;
     s32 count;
-    s32 flag4;
-    s32 flag5;
+    u8 flag4;
+    u8 flag5;
     s32 *p;
     s32 *items = (s32 *)0x70000150;
     u8 *bytes;

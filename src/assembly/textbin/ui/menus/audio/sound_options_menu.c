@@ -66,7 +66,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     s32 previous_playback_mode;
     s32 previous_first_volume;
     s32 previous_second_volume;
-    s32 scaled_first_volume;
+    s32 scaled_second_volume;
 
     if (D_0013C940.pressed_buttons & 0xD00) {
         if (D_001D5D14 == 0) {
@@ -100,10 +100,10 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     first_volume = &D_0015EDF0;
     if (D_0013C940.held_buttons & 0x2000) {
         if (menu->selected_option == 0) {
-            D_0015EDF0 = (0x400 < D_0015EDF0 + 3) ? 0x400 : D_0015EDF0 + 3;
+            D_0015EDF0 = (0x400 < previous_second_volume + 3) ? 0x400 : previous_second_volume + 3;
         }
         if (menu->selected_option == 1) {
-            D_0015EDEC = (0x400 < D_0015EDEC + 3) ? 0x400 : D_0015EDEC + 3;
+            D_0015EDEC = (0x400 < previous_first_volume + 3) ? 0x400 : previous_first_volume + 3;
         }
     }
     if (D_0013C940.held_buttons & 0x8000) {
@@ -114,14 +114,13 @@ s32 sound_options_menu(struct SoundMenu *menu) {
             D_0015EDEC = (D_0015EDEC - 3 <= 0) ? 0 : D_0015EDEC - 3;
         }
     }
-    if ((previous_second_volume != D_0015EDEC) || (previous_first_volume != *first_volume)) {
-        /* Retail assigns both groups 1 and 2 from the second slider here. */
-        D_0013E550.group_0_volume = *first_volume * 8 / 10;
-        D_0013E550.group_2_volume = D_0013E550.group_1_volume = D_0015EDEC;
-        scaled_first_volume = *first_volume * 7 / 10;
-        D_0013E550.group_4_volume = scaled_first_volume;
-        D_0013E550.group_5_volume = *first_volume;
-        D_0013E550.group_3_volume = scaled_first_volume;
+    if ((previous_first_volume != *first_volume) || (previous_second_volume != D_0015EDEC)) {
+        D_0013E550.group_0_volume = D_0015EDEC * 8 / 10;
+        D_0013E550.group_2_volume = D_0013E550.group_1_volume = *first_volume;
+        scaled_second_volume = D_0015EDEC * 7 / 10;
+        D_0013E550.group_4_volume = scaled_second_volume;
+        D_0013E550.group_3_volume = D_0015EDEC * 7 / 10;
+        D_0013E550.group_5_volume = D_0015EDEC;
     }
     if (D_0013C940.pressed_buttons & 0x40) {
         if (menu->selected_option == 2) {

@@ -146,16 +146,16 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_buffer.storage_psm = 0;
     fs_aa_buffer.psm = 0;
     fs_aa_buffer.reserved164 = 0;
+    fs_aa_buffer.zpsm = 0x31;
+    fs_aa_buffer.fbp1 = display_buffer_address >> 13;
     fs_aa_buffer.fbp0 = draw_buffer_address >> 13;
     fs_aa_buffer.zbp = depth_buffer_address >> 13;
-    fs_aa_buffer.fbp1 = display_buffer_address >> 13;
-    fs_aa_buffer.zpsm = 0x31;
     sceGsSetDefDispEnv(&fs_aa_buffer, 0, storage_width, storage_height, display_offset_x, display_offset_y);
     active_fs_aa_buffer->disp.dispfb.FBP = fs_aa_buffer.fbp1;
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw0, fs_aa_buffer.psm, fs_aa_buffer.display_width, fs_aa_buffer.display_height, 3,
                        fs_aa_buffer.zpsm);
     active_fs_aa_buffer->draw0.frame1.FBP = fs_aa_buffer.fbp0;
-    active_fs_aa_buffer->draw0.zbuf1 = (u64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
+    *(volatile u64 *)&active_fs_aa_buffer->draw0.zbuf1 = (u64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
     *(volatile u128 *)&active_fs_aa_buffer->giftag0 = 0;
     active_fs_aa_buffer->giftag0.NLOOP = 8;
     active_fs_aa_buffer->giftag0.EOP = 1;
@@ -168,6 +168,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag1.NLOOP = 8;
     active_fs_aa_buffer->giftag1.EOP = 1;
     active_fs_aa_buffer->giftag1.NREG = 1;
+    packet_word = &fs_aa_transfer_words[12];
     active_fs_aa_buffer->giftag1.REGS0 = 0xE;
 
     fs_aa_transfer_words[0] = 0x408B400000000001;
@@ -183,23 +184,22 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_transfer_words[9] = 6;
     fs_aa_transfer_words[10] = 0x4400000000008010;
     fs_aa_transfer_words[11] = 0x5353;
-    packet_word = &fs_aa_transfer_words[12];
     strip_index = 0;
     do {
         *packet_word++ = strip_index * active_fs_aa_buffer->display_width;
-        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
+        *packet_word++ = (strip_index * active_fs_aa_buffer->storage_width + (0x8000 - (active_fs_aa_buffer->storage_width << 3))) |
                ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
         *packet_word++ = (strip_index + 1) * active_fs_aa_buffer->display_width | ((u64)active_fs_aa_buffer->display_height << 20);
-        *packet_word++ = ((strip_index + 1) * active_fs_aa_buffer->storage_width + 0x8000 - (active_fs_aa_buffer->storage_width << 3)) |
+        *packet_word++ = ((strip_index + 1) * active_fs_aa_buffer->storage_width + (0x8000 - (active_fs_aa_buffer->storage_width << 3))) |
                ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
         strip_index++;
     } while (strip_index < 16);
-    fs_aa_transfer_words[76] = 0x4400000000008001;
+    packet_word[0] = 0x4400000000008001;
     fs_aa_transfer_words[77] = 0x4410;
-    fs_aa_transfer_words[78] = 0x181;
-    fs_aa_transfer_words[79] = 0x80000000;
+    packet_word[2] = 0x181;
+    packet_word[3] = 0x80000000;
     fs_aa_transfer_words[80] = 0x6FF8 | ((u64)(0x7FF8 - (active_fs_aa_buffer->storage_height << 3)) << 16);
-    fs_aa_transfer_words[81] = 0x6FF8 | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
+    packet_word[5] = 0x6FF8 | ((u64)((active_fs_aa_buffer->storage_height << 3) + 0x7FF8) << 16);
 
     fs_aa_resample_words[0] = 0x308B400000000001;
     fs_aa_resample_words[1] = 0xEEE;

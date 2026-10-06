@@ -53,9 +53,12 @@ extern s32 sceSifGetReg();
 extern s32 sceSifSetDChain();
 extern s32 sceSifSetReg();
 extern void _sceSifCmdIntrHdlr();
+/* Initializes the fixed command state once, then submits a warm or cold SIF
+ * handshake. The cold path polls register 4 until bit 0x20000 is set. */
 void sceSifInitCmd(void) {
     u32 ipval;
     struct M2c_var_3_42 *var_3_42;
+    struct M2c_var_3_42 *handlers;
     s32 *var_2_61;
     s32 temp_2_113;
     s32 temp_2_141;
@@ -71,20 +74,22 @@ void sceSifInitCmd(void) {
     EnableInterrupts();
     return;
 block_3:
-    ipval = 0x20;
-    temp_5_29 = (s32) D_00154E00 | 0x20000000;
-    temp_6_30 = (s32) D_00154D80 | 0x20000000;
     *(s32 *)D_0012FC04 = 1;
+    ipval = 0x20;
+    temp_6_30 = (s32) D_00154D80 | 0x20000000;
+    temp_5_29 = (s32) D_00154E00 | 0x20000000;
     D_00154E58.unk0 = temp_6_30;
-    D_00154E58.unk1C = D_00154F80;
     D_00154E58.unk4 = temp_5_29;
-    var_3_42 = &D_00154E80;
-    D_00154E58.unk10 = ipval;
+    D_00154E58.unk1C = D_00154F80;
+    handlers = (struct M2c_var_3_42 *)&D_00154E80;
+    var_3_42 = handlers;
     D_00154E58.unk8 = 0;
+
     var_16_46 = 0x1F;
     D_00154E58.unkC = &D_00154E80;
     D_00154E58.unk14 = 0;
     D_00154E58.unk18 = 0;
+    D_00154E58.unk10 = ipval;
 loop_4:
     var_3_42->unk0 = 0;
     var_16_46 -= 1;
@@ -102,10 +107,10 @@ loop_6:
     if (var_16_59 >= 0) {
         goto loop_6;
     }
-    D_00154E80.unk0 = FUN_0011a448;
-    D_00154E80.unk4 = &D_00154E58;
-    D_00154E80.unk8 = FUN_0011a428;
-    D_00154E80.unkC = &D_00154E58;
+    handlers[0].unk0 = FUN_0011a448;
+    handlers[1].unk0 = FUN_0011a428;
+    handlers[0].unk4 = &D_00154E58;
+    handlers[1].unk4 = &D_00154E58;
     EnableInterrupts();
     FlushCache(0);
     {

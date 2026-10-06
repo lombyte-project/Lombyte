@@ -45,8 +45,8 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     struct CheatMenuEntry *entry;
     s32 entry_count;
     s32 entry_index;
-    s32 line_spacing;
     s32 draw_y;
+    s32 line_spacing;
     s32 color;
     s32 enabled;
     s32 draw_index;
@@ -67,10 +67,12 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
         text_window = *(FontWindow *)window_fields;
         font_print_window_regular(&text_window, 0x80FFA888, get_help_message_text(0x4FC0), -1);
     }
+    /* Entries end at a zero text ID; each retail entry occupies 0x14 bytes. */
     entry_count = 0;
     while (menu->entries[entry_count].text_id != 0) {
         entry_count++;
     }
+    /* Retail keeps row spacing in s8 and the entry offset in s7. */
     line_spacing = menu->height / (entry_count + 1);
     draw_y = line_spacing - 8;
     entry_index = 0;

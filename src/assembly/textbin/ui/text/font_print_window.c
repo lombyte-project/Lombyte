@@ -17,11 +17,9 @@ struct Glyph {
 };
 
 extern s32 font_window_active __asm__("D_0015F4A0");
-extern s32 font_color_codes_enabled[] __asm__("D_0015F49C");
+extern s32 font_color_codes_enabled __asm__("D_0015F49C");
 extern s32 font_palette_colors[] __asm__("D_0018CAF8");
-struct FontScreenDimensions { s32 width; s32 height; };
-
-extern struct FontScreenDimensions D_0013E500;
+extern s32 D_0013E500[];
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
 extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("func_001F62B0");
@@ -34,7 +32,7 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     s16 line_ends[32];
     s16 line_colors[32];
     s32 wrap_width;
-    s32 initial_wrap_width;
+    volatile s32 initial_wrap_width;
     s32 using_initial_width;
     s32 initial_line_count;
     s32 last_line_width;
@@ -67,8 +65,8 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
         }
         wrap_width = left_width * 2;
     }
-    initial_wrap_width = wrap_width;
     current_color = 0;
+    initial_wrap_width = wrap_width;
     using_initial_width = 0;
     initial_line_count = 0;
     last_line_width = 0;
@@ -87,7 +85,7 @@ retry:
                     if (text[position] == ' ' || text[position] < 0x10) {
                         break_position = position;
                     }
-                    if (font_color_codes_enabled[0] != 0 && (text[position] >= 8 && text[position] < 0x10)) {
+                    if (font_color_codes_enabled != 0 && (text[position] >= 8 && text[position] < 0x10)) {
                         current_color = text[position] - 8;
                     }
                     if (text[position] < 2) {
@@ -111,27 +109,33 @@ retry:
             if (text[position] == 0) {
                 /* Retail saves this width before testing whether to rebalance. */
                 last_line_width = line_width;
-                break;
+                goto after_scan;
             }
             position++;
     }
-    if (!using_initial_width && initial_line_count == 0) {
+after_scan:
+    if (using_initial_width) {
+        goto layout;
+    }
+    if (initial_line_count == 0) {
         initial_line_count = line_count;
     }
-    if (!using_initial_width && line_count >= 2) {
-        if (initial_line_count < line_count) {
-            wrap_width = initial_wrap_width;
-            using_initial_width = 1;
-            goto retry;
-        }
-        if (last_line_width < wrap_width / balance_divisor) {
-            wrap_width -= 0x10;
-            goto retry;
-        }
+    if (line_count < 2) {
+        goto layout;
+    }
+    if (initial_line_count < line_count) {
+        wrap_width = initial_wrap_width;
+        using_initial_width = 1;
+        goto retry;
+    }
+    if (last_line_width < wrap_width / balance_divisor) {
+        wrap_width -= 0x10;
+        goto retry;
     }
 
+layout:
     draw_window = window;
-    line_length = draw_window->line_advance * line_count;
+    line_length = line_count * draw_window->line_advance;
     draw_window->measured_width = 0;
     draw_y = draw_window->anchor_y;
     draw_window->rendered_height = line_length;
@@ -169,7 +173,9 @@ retry:
         }
     }
     font_window_active = 0;
-    vu1_set_scissor(0, D_0013E500.width - 1, 0, D_0013E500.height - 1);
+    left_width = D_0013E500[0];
+    right_width = D_0013E500[1];
+    vu1_set_scissor(0, left_width - 1, 0, right_width - 1);
 }
 
 extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));

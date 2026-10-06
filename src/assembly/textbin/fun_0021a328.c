@@ -115,9 +115,9 @@ int render_configured_text_label(ConfiguredTextLabel *label)
     u8 *availability_table;
     int item_id;
 
+    text = empty_label_text;
     font = normal_font_metrics;
     font_texture_index = 1;
-    text = empty_label_text;
     value_variant = 0;
     flags = label->flags;
     if (flags & 8) {
@@ -152,7 +152,8 @@ int render_configured_text_label(ConfiguredTextLabel *label)
         }
     } else if (flags & 0x100) {
         page = active_menu_page[0]->page;
-        entry = &page->entries[page->cursor];
+        value_index = page->cursor;
+        entry = &page->entries[value_index];
         item_id = entry->item_id;
         availability_table = entry->texture_group == 0 ? item_available : alternate_item_available;
         if (availability_table[item_id] != 0) {

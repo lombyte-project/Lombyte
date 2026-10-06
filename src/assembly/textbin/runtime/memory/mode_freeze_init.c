@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/mode_freeze_
 #else
 #include "types.h"
 
-struct St {
+struct FreezeModeState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -21,7 +21,7 @@ struct St {
 };
 
 extern s32 D_0015F604;
-extern struct St D_00193300;
+extern struct FreezeModeState D_00193300;
 extern s32 func_0012E3E8();
 extern s32 InitializeRenderState();
 extern s32 func_001F96F8(s32);
@@ -31,7 +31,7 @@ extern s32 func_001FED30();
 void mode_freeze_init(u32 arg0, s32 arg1) __asm__("FUN_001fbab8");
 
 void mode_freeze_init(u32 arg0, s32 arg1) {
-    struct St *st;
+    struct FreezeModeState *st;
 
     if (D_0015F604 != 3) {
         func_0012E3E8(0x1D);
@@ -69,6 +69,7 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
     case 5:
         func_001FED30(0x4E2B);
         st = &D_00193300;
+        /* Retail stores unk4 before clearing unk20 between the two calls. */
         st->unk4 = func_001F96F8(0x1E);
         st->unk20 = 0;
         st->unk24 = func_001F96F8(0x1E);

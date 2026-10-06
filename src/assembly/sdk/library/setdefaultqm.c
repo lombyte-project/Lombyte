@@ -23,15 +23,16 @@ extern void _dispatchMpegCallback(void *, MpegCallbackArgument *);
 extern void _sendIpuCommand(struct MpegQuantizerState *, s32);
 extern void _waitIpuIdle(struct MpegQuantizerState *);
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, s32 source_address) __asm__("_setDefaultQM");
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) __asm__("_setDefaultQM");
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, s32 source_address) {
+void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command, u32 source_address) {
     s32 interrupts_enabled;
     MpegCallbackArgument callback;
 
     callback.type = 2;
     _dispatchMpegCallback(state->callback_context, &callback);
     _waitIpuIdle(state);
+    /* Retail places this store in the following call's delay slot. */
     *(volatile s32 *)0x10002000 = 0;
     _waitIpuIdle(state);
     interrupts_enabled = DIntr();

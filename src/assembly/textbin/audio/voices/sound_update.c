@@ -147,8 +147,8 @@ s32 sound_update(void) {
     s32 handle;
     s32 command_flags;
 
-    water_height = 0.0f;
     underwater = D_001872D4;
+    water_height = 0.0f;
     if (underwater != 0) {
         water_height = D_0013F640[0];
     }
@@ -168,12 +168,12 @@ s32 sound_update(void) {
     }
 
     qzero(&listener_velocity);
-    history_index = (D_0013E550.listener_history_position + 1) % 4;
+    { s32 *history_position = &D_0013E550.listener_history_position;
+    history_index = *history_position + 1;
+    history_index %= 4; }
     D_0013E550.listener_history_position = history_index;
     qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
 
-    voice_flags = flags;
-    volumes = voice_volumes;
     listener_sample_count = 0;
     previous_history_index = (history_index + 3) % 4;
     if (previous_history_index != history_index) {
@@ -209,6 +209,8 @@ s32 sound_update(void) {
     snd_set_master_volume(4, D_0013E550.group_4_volume);
     snd_set_master_volume(5, D_0013E550.group_5_volume);
 
+    voice_flags = flags;
+    volumes = voice_volumes;
     FillTransferWords(voice_flags, 0, 0x78);
     FillTransferWords(volumes, 0, 0x78);
     FillTransferWords(radial_velocities, 0, 0x78);
@@ -224,8 +226,14 @@ s32 sound_update(void) {
         }
         moby = D_0013E550.voices[slot_index].moby;
         owner_removed = 0;
-        if (moby != NULL && (moby->state == 0xFE || moby->state == 0xFD)) {
+        /* The retail state check releases an owner in either removal state. */
+        if (moby != NULL) {
+            u8 owner_state = moby->state;
+            if (owner_state == 0xFE) goto owner_removed_label;
+            if (owner_state != 0xFD) goto owner_checked_label;
+        owner_removed_label:
             owner_removed = 1;
+        owner_checked_label:;
         }
         if (owner_removed) {
             D_0013E550.voices[slot_index].moby = NULL;

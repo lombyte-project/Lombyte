@@ -256,10 +256,10 @@ void draw_dialog_text(void) {
             confirm_text_id = 0x524A;
             goto one;
         case 24:
+            format = D_0015F550;
             no_text_id = 0x524B;
             yes_text_id = 0x524E;
             format_argument = get_help_message_text(0x4FAE);
-            format = D_0015F550;
             text_id = 0x4FAA;
             goto print;
         case 23:

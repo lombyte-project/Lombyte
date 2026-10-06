@@ -15,6 +15,8 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
 s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volume) {
     volatile s32 *location_entry;
     s64 stream_location;
+    u64 callback_context;
+    void (*callback)();
     u8 *track_table;
     s32 track_table_offset;
 
@@ -37,7 +39,9 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     music_state.transition_crossfade_enabled = 1;
     music_state.transition_flags = flags;
     stream_location = *location_entry;
-    snd_play_vag_stream_by_loc_ex_cb(stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, music_transition_start_callback, (u32)&music_state.transition_handle);
+    callback_context = (u32)&music_state.transition_handle;
+    callback = music_transition_start_callback;
+    snd_play_vag_stream_by_loc_ex_cb(stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, callback, callback_context);
     return 1;
 }
 #endif /* NON_MATCHING */

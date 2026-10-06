@@ -41,17 +41,18 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
     texture = get_frame_texture(find_valid_animation_frame_index(0xE935, 0));
 
     for (;;) {
+        skip_draw = 0;
         character = (u8)*text;
         if (character == 0) {
-            break;
+            return;
         }
         text++;
         glyph_index = (s32)character - 0x20;
-        skip_draw = 0;
 
         if (glyph_index == 0x42) {
             blink_next_glyph = 1;
         }
+        /* Retail retains this branch even though an unsigned byte minus 0x20 cannot reach 0xEA. */
         if (glyph_index == 0xEA) {
             cursor_x = start_x;
             cursor_y += 9;

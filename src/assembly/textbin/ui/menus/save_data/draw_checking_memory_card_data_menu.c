@@ -84,7 +84,6 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
     s16 window_fields[12];
     struct MemoryCardMenuEntry *entry;
     char *text;
-    u64 texture;
     s32 state = menu->state;
     s32 entry_offset;
 
@@ -125,7 +124,7 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         return 2;
     }
     if (menu->flags & 4) {
-        entry_offset = ((state < 4) ^ 1) << 2;
+        entry_offset = (state >= 4) << 2;
         entry = &active_menu_page->level->entries[*(s32 *)((u8 *)menu->entry_indices + entry_offset)];
         if (entry->type == 0 && item_available[entry->id] == 0) {
             return 1;
@@ -135,8 +134,7 @@ s32 draw_checking_memory_card_data_menu(struct MemoryCardDataMenu *menu) {
         }
     }
     setup_gif_paging(0);
-    texture = func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture);
-    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0, menu->texture_width, menu->texture_height, 0x80808080, texture);
+    draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0, menu->texture_width, menu->texture_height, 0x80808080, func_00204CF0(menu->state < 4 ? menu->first_texture : menu->second_texture));
     do_gif_paging();
     return 0x10;
 }

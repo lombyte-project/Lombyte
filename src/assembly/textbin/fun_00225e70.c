@@ -226,6 +226,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                 (*attachment2)->flags = 0;
                 moby = *attachment2;
                 qcopy(&moby->position, &source_moby->position);
+                /* This expression preserves the retail reload of the third attachment. */
                 qcopy(&(*attachment2)->rotation, &source_moby->rotation);
                 if (moby->oclass == 0x4A) {
                     moby->scale *= 3.0f;

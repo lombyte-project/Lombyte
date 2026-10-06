@@ -25,27 +25,29 @@ extern s32 kprintf();
 void printfloat(f64 x)
 {
     s32 exponent;
-    char *format;
+    s64 significand;
 
     exponent = 0;
     if (dpcmp_f(x, 0.0) < 0) {
         x = dpsub_f(0.0, x);
         ((void (*)(s32))D_0012FC00)(0x2D);
     }
+    /* These absolute loads keep the constants out of GP-relative delay slots. */
     if (dpcmp_f(x, *(f64 *)0x00152798) < 0) {
-        format = D_00152780;
-        for (; dpcmp_f(x, *(f64 *)0x001527A0) < 0; exponent--) {
+        while (dpcmp_f(x, *(f64 *)0x001527A0) < 0) {
+            exponent--;
             x = dpmul_f(x, 10.0);
         }
     } else {
-        format = D_00152780;
         if (dpcmp_f(x, 1.0) >= 0) {
-            for (; dpcmp_f(x, 1.0) >= 0; exponent++) {
+            while (dpcmp_f(x, 1.0) >= 0) {
+                exponent++;
                 x = dpdiv_f(x, 10.0);
             }
         }
     }
-    kprintf(format, ftoi(__fixunsdfdi(dpmul_f(x, *(f64 *)0x001527A8))));
+    significand = ftoi(__fixunsdfdi(dpmul_f(x, *(f64 *)0x001527A8)));
+    kprintf(D_00152780, significand);
     if (exponent >= 0) {
         kprintf(D_00152788, exponent);
     } else {

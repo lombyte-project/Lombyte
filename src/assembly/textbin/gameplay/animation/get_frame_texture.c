@@ -52,12 +52,14 @@ u64 get_frame_texture(s32 frame_id) {
     struct FramePalettePage *palette_page;
     struct FrameImagePage *image_page;
     struct GifTexturePacket *packet;
+    struct GifTexturePacket *initial_packet;
+    struct GifTexturePacket *palette_packet;
     u32 packet_offset;
     u32 queued_transfer;
     s32 image_upload_count;
     u8 width_log2;
     u8 height_log2;
-    s32 allocation_start;
+    s32 palette_source_address;
     s32 return_mode;
     s32 return_shift;
     u64 tex0_word;
@@ -69,15 +71,17 @@ u64 get_frame_texture(s32 frame_id) {
     queued_transfer = 0;
 
     if (palette_page->gs_block_offset == 0 || image_page->gs_block_offset == 0) {
+        /* Retail fills this first packet even when the queue is already full. */
         packet_offset = pending_texture_upload_count * 0x10;
-        packet = pending_texture_uploads + pending_texture_upload_count;
-        packet->palette_address = palette_page->source_address;
-        packet->reserved_zero = 0;
-        packet->palette_block_offset = 0x3FF0;
+        palette_source_address = palette_page->source_address;
+        initial_packet = pending_texture_uploads + pending_texture_upload_count;
+        initial_packet->palette_address = palette_source_address;
+        initial_packet->reserved_zero = 0;
+        initial_packet->palette_block_offset = 0x3FF0;
         *(s32 *)((u8 *)pending_texture_uploads + packet_offset + 8) = palette_page->source_address;
-        packet->image_width = 5;
-        packet->image_height = 5;
-        packet->image_base = 0x3FF0;
+        initial_packet->image_width = 5;
+        initial_packet->image_height = 5;
+        initial_packet->image_base = 0x3FF0;
     }
 
     if (palette_page->gs_block_offset == 0) {
@@ -85,27 +89,26 @@ u64 get_frame_texture(s32 frame_id) {
         gs_texture_allocation_cursor += 0x400;
         if (pending_texture_upload_count < 0x40) {
             queued_transfer = 1;
-            packet = pending_texture_uploads + pending_texture_upload_count;
-            packet->palette_address = palette_page->source_address;
-            packet->reserved_zero = 0;
-            packet->palette_block_offset = palette_page->gs_block_offset;
+            palette_packet = pending_texture_uploads + pending_texture_upload_count;
+            palette_packet->palette_address = palette_page->source_address;
+            palette_packet->reserved_zero = 0;
+            palette_packet->palette_block_offset = palette_page->gs_block_offset;
         }
     }
 
     if (image_page->gs_block_offset == 0) {
-        allocation_start = gs_texture_allocation_cursor;
-        height_log2 = image_page->height_log2;
         width_log2 = image_page->width_log2;
-        image_page->gs_block_offset = allocation_start >> 8;
+        height_log2 = image_page->height_log2;
+        image_page->gs_block_offset = gs_texture_allocation_cursor >> 8;
         if (height_log2 < width_log2) {
-            height_log2 = width_log2;
+            height_log2 = image_page->width_log2;
         }
-        gs_texture_allocation_cursor = allocation_start + (1 << ((height_log2 & 0xF) * 2));
-        image_upload_count = *(volatile s32 *)&pending_texture_upload_count;
+        gs_texture_allocation_cursor += 1 << (height_log2 * 2);
+        image_upload_count = pending_texture_upload_count;
         if (image_upload_count < 0x40) {
             queued_transfer = 1;
             packet = pending_texture_uploads + image_upload_count;
-            packet->image_address = image_page->source_address;
+            *(s32 *)((u8 *)pending_texture_uploads + image_upload_count * 0x10 + 8) = image_page->source_address;
             packet->image_width = image_page->width_log2;
             packet->image_height = image_page->height_log2;
             packet->image_base = image_page->gs_block_offset;

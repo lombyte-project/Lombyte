@@ -216,7 +216,7 @@ extern void func_00237370(void *);
 
 
 u8 *FUN_001e9b10(LevelHeader *hdr) {
-    u8 *p = D_001940D8;
+    u8 *p;
     u8 *c;
     u8 *lc;
     u8 *sc;
@@ -255,10 +255,10 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     s32 r;
     s32 g;
     s32 bl;
-    u8 *col;
     Ent100 *e;
     Shrub *o;
 
+    p = D_001940D8;
     FillTransferWords(D_0013F350, 0, 0x2310);
     FillTransferWords(D_00186F40, 0, 0x3A0);
     FillTransferWords(D_001AAA40, 0, 0x180);

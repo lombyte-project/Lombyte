@@ -29,10 +29,16 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 
 void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) __asm__("FUN_00237c80");
 
+/* Project opposing world bounds into a floating-point screen rectangle. The first
+ * point supplies x/y; subtracting it from the opposite point supplies width/height.
+ * Keep the four output stores in retail order because callers may alias outputs.
+ */
 void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) {
     f32 first_projected[4] __attribute__((aligned(16)));
     f32 opposite_projected[4] __attribute__((aligned(16)));
     f32 *opposite_pointer;
+    f32 scale_x;
+    f32 scale_y;
 
     opposite_pointer = opposite_projected;
     *(u128 *)first_projected = *first;
@@ -49,14 +55,16 @@ void project_graphics_bounds_float(u128 *first, u128 *opposite, f32 *width, f32 
     first_projected[1] *= 1.0f / first_projected[3];
     opposite_pointer[0] *= 1.0f / opposite_pointer[3];
     opposite_pointer[1] *= 1.0f / opposite_pointer[3];
-    first_projected[0] *= view_context.scale_x;
-    opposite_pointer[0] *= view_context.scale_x;
-    first_projected[1] *= view_context.scale_y;
-    opposite_pointer[1] *= view_context.scale_y;
+    scale_x = *(volatile f32 *)&view_context.scale_x;
+    scale_y = view_context.scale_y;
+    first_projected[0] *= scale_x;
+    opposite_pointer[0] *= scale_x;
+    first_projected[1] *= scale_y;
+    opposite_pointer[1] *= scale_y;
     *x = first_projected[0] * 0.25f + (f32)screen_offsets.x;
     *y = first_projected[1] * 0.25f + (f32)screen_offsets.y;
-    *width = (opposite_pointer[0] - first_projected[0]) * 0.25f;
-    *height = (opposite_projected[1] - first_projected[1]) * 0.25f;
+    *(volatile f32 *)width = (opposite_pointer[0] - first_projected[0]) * 0.25f;
+    *height = (*(volatile f32 *)&opposite_pointer[1] - first_projected[1]) * 0.25f;
 }
 
 extern __typeof__(project_graphics_bounds_float) func_00237C80 __attribute__((alias("FUN_00237c80")));

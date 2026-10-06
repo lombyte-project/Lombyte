@@ -63,6 +63,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     FsRcvRead *r;
     u8 *pkt;
     u8 *d;
+    u32 *bank = D_0012FC90;
     s32 idx;
     s32 i;
     u32 ret;
@@ -72,8 +73,8 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     if (D_0012FC98[0] != 0) {
         idx = arg[3];
     }
-    D_0012FC90[0] = idx;
-    pkt = D_00157500 + idx * 0x440;
+    *bank = idx;
+    pkt = D_00157500 + (u32)idx * 0x440;
     pkt = (u8 *)((u32)pkt | 0x20000000);
     src = (FsRcvHead *)pkt;
     h.ret = src->ret;
@@ -122,8 +123,7 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         break;
     }
     if (h.ret.v < 0) {
-        h.ret.v = -h.ret.v;
-        ret = h.ret.v;
+        ret = -(u32)h.ret.v;
         for (i = 0; i < 32; i++) {
             if (D_0012FC10[i] == ret) {
                 D_0012FC10[i] = -1;

@@ -1,32 +1,57 @@
+#include "asm.h"
+
 #include "types.h"
-struct M2c_var_5_0 { s32 unk0; s32 unk4; s32 unk8; s32 unkC; };
-s32 scePad2SetButtonOrder(u8 *arg0, s32 *arg1) {
-    register s32 var_6_6 __asm__("a2");
-    register s32 var_7_5 __asm__("a3");
-    register s32 var_8_3 __asm__("t0");
-    register s32 var_9_4 __asm__("t1");
-    u8 *var_4_0;
-    struct M2c_var_5_0 *var_5_0;
-    var_4_0 = arg0;
-    var_5_0 = arg1;
-    var_8_3 = 0; var_9_4 = 0; var_7_5 = 0; var_6_6 = 0;
+struct Pad2Capability {
+    s32 present;
+    s32 width;
+    s32 byteIndex;
+    s32 bitIndex;
+};
+
+/* Decode forty LSB-first presence bits into sixteen-byte capability records.
+ * Absent entries leave the width field untouched, as in the retail code. */
+s32 scePad2SetButtonOrder(u8 *profile, s32 *order) {
+    s32 capabilityIndex;
+    u32 bitIndex;
+    u32 bitPosition;
+    s32 byteIndex;
+    u8 *profileByte;
+    struct Pad2Capability *capability;
+
+    profileByte = profile;
+    capability = (struct Pad2Capability *)order;
+    bitPosition = 0;
+    byteIndex = 0;
+    bitIndex = 0;
+    capabilityIndex = 0;
     do {
-        if (((s32)*var_4_0 >> var_8_3) & 1) {
-            var_5_0->unk0 = 1;
-            var_5_0->unk8 = var_9_4;
-            var_5_0->unkC = var_7_5;
-            if ((u32)(var_6_6 - 0x10) < 0x10U) {
-                var_5_0->unk4 = 8; var_9_4 += 1;
-            } else if ((u32)(var_6_6 - 0x23) < 4U) {
-                var_5_0->unk4 = 8; var_9_4 += 1;
+        if (((s32)*profileByte >> bitPosition) & 1) {
+            capability->present = 1;
+            capability->byteIndex = byteIndex;
+            capability->bitIndex = bitIndex;
+            if (((u32)(capabilityIndex - 0x10) < 0x10U) || ((u32)(capabilityIndex - 0x23) < 4U)) {
+                capability->width = 8;
+                byteIndex = byteIndex + 1;
             } else {
-                var_7_5 += 1; var_5_0->unk4 = 1;
-                if (!(var_7_5 & 7)) { var_9_4 += 1; var_7_5 = 0; }
+                bitIndex = bitIndex + 1;
+                capability->width = 1;
+                if ((bitIndex & 7) == 0) {
+                    byteIndex = byteIndex + 1;
+                    bitIndex = 0;
+                }
             }
-        } else { var_5_0->unk0=0; var_5_0->unk8=0; var_5_0->unkC=0; }
-        var_8_3 += 1; var_6_6 += 1;
-        if (!(var_8_3 & 7)) { var_4_0 += 1; var_8_3 = 0; }
-        var_5_0 += 1;
-    } while (var_6_6 < 0x28);
+        } else {
+            capability->present = 0;
+            capability->byteIndex = 0;
+            capability->bitIndex = 0;
+        }
+        bitPosition = bitPosition + 1;
+        capabilityIndex = capabilityIndex + 1;
+        if ((bitPosition & 7) == 0) {
+            profileByte = profileByte + 1;
+            bitPosition = 0;
+        }
+        capability = capability + 1;
+    } while (capabilityIndex < 0x28);
     return 1;
 }
