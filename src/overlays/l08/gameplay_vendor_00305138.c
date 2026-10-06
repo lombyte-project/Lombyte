@@ -102,7 +102,49 @@ void FUN_L08_003063f0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003084d8.s", FUN_L08_003084d8);
+
+
+
+/* per-frame update of a moby that fires a sound event when the game state allows */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_00309998), where it is exact; names translated to the US level program. */
+
+struct G08c {
+    char pad0[0x30];
+    int a;
+    int b;
+    char pad1[0xC];
+    short n;
+    char pad2[0x132];
+    char *objs[1];
+};
+
+
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
+extern void FUN_L00_002637f8(int);
+
+void FUN_L08_003084d8(char *moby) {
+    int k;
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L08_0015F5C4 == 2) {
+            int t = D_L08_0016D060_c.a;
+            if ((t >= 1 && t <= 2) || t == 4 || t == 5) {
+                if (D_L08_0016D060_c.a != 1 || scale_game_frames(0x8CE) < D_L08_0016D060_c.b) {
+                    k = 0;
+                    if (D_L08_0016D060_c.a == 1 || D_L08_0016D060_c.a == 4) k = 3;
+                    else if (D_L08_0016D060_c.a == 2 || D_L08_0016D060_c.a == 5) k = 2;
+                    FUN_L00_002637f8((int)D_L08_0016D060_c.objs[k]);
+                }
+            }
+        }
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -169,6 +211,7 @@ void FUN_L08_00308f68(int x) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
+extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section(".sdata")));
 extern Pair D_L08_001623F8[] __attribute__((sda));
 extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));
 extern Pair D_L08_001F8548[];
@@ -216,16 +259,16 @@ void FUN_L08_003097b0(unsigned char *moby) {
         for (i = 0; i < 3; i++) {
             D_L08_001F8548[i].a = 0;
             D_L08_001F8548[i].b = 0;
-            D_L08_00162408_c[1].a = 0;
-            D_L08_00162408_c[1].b = 0;
+            D_L08_001623F0_e[8] = 0;
+            D_L08_001623F0_e[9] = 0;
         }
         for (i = 0; i < 2; i++) {
-            D_L08_001623F8[i].a = 0;
-            *(float *)&D_L08_001623F8[i].b = i * 0.4f;
+            D_L08_001623F0_e[2 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_e[3 + i * 2] = i * 0.4f;
         }
         for (i = 0; i < 1; i++) {
-            D_L08_00162408_c[i].a = 0;
-            *(float *)&D_L08_00162408_c[i].b = i * 0.4f;
+            D_L08_001623F0_e[6 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_e[7 + i * 2] = i * 0.4f;
         }
         break;
     case 1:
@@ -242,7 +285,7 @@ void FUN_L08_003097b0(unsigned char *moby) {
             d = vector_length_xyz(w);
             if (d <= 84.0f) {
                 FUN_L08_002f12a0(0);
-                FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_00162408_c[1]);
+                FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
                 FUN_L08_002f12a0(2);
                 if (d < 20.0f) {
                     *(unsigned char *)&D_L08_001623F0 = 0xFF;

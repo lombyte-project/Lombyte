@@ -46,6 +46,7 @@
       "unclassified_00312948.c"
     ],
     "l08": [
+      "gameplay_vendor_00305138.c",
       "rendering_00279f00.c",
       "ui_help_00230b38.c",
       "ui_help_002370d8.c",
