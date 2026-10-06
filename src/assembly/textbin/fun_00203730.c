@@ -131,7 +131,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
     slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
     record = render_class->records;
     qcopy(slot_materials, material_map);
-    for (record_index = 0; record_index < render_class->record_count;) {
+    for (record_index = 0; record_index < render_class->record_count; record_index++, record++) {
         draw_high = record->tex1.w[0];
         material_index = slot_materials->b[record_index];
         draw_shift = record->tex1.w[1];
@@ -182,8 +182,6 @@ void register_object_render_class(ObjectRenderClass *render_class,
             record->clamp.d = clamp_word;
         }
         record->end = 0;
-        record_index++;
-        record++;
     }
 }
 
