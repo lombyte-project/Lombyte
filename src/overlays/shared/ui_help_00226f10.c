@@ -587,7 +587,34 @@ void FUN_L01_00231ae0(void) {
     }
 }
 #undef P
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232290.s", FUN_L01_00232290);
+extern char D_0013E533_c[] __asm__("D_0013E533");
+extern float D_0015ED6C;
+extern float D_L01_0017C238[];
+extern void FUN_L00_002118c8(int, float);
+
+void FUN_L01_00232290(void) {
+    char *x;
+    FUN_L00_002118c8(0, 1.0f);
+    x = D_0013E533_c + 0xE1D;
+    if (0.0f < *(float *)(x + 0x190)) {
+        if (*(float *)(x + 0x190) < D_L01_0017C238[3]) {
+            *(float *)(x + 0x190) = D_L01_0017C238[2] * D_0015ED6C;
+        } else {
+            *(float *)(x + 0x190) = D_L01_0017C238[6] * D_0015ED6C;
+        }
+    }
+    {
+        char *y = D_0013E533_c + 0xE1D;
+        if (*(int *)(y + 0x2084) == 0x73) {
+            float v = *(float *)(y + 0x190) * 0.8f;
+            float m = D_0015ED6C * 2.5f;
+            *(float *)(y + 0x190) = v;
+            if (v < m) {
+                *(float *)(y + 0x190) = m;
+            }
+        }
+    }
+}
 /* Checks the hero's movement against walls ahead and slides the direction along the wall. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
 
