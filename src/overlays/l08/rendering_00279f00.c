@@ -45,5 +45,48 @@ unsigned char *FUN_L08_00279f00(char *a)
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0027b450.s", FUN_L08_0027b450);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Spawns a coloured effect at pos with the given vector, size and lifetime. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027C218), where it is exact; names translated to the US level program. */
+
+extern s32 rand(void);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
+extern unsigned char *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+unsigned char *FUN_L08_0027b450(int owner, void *pos, void *vec, short ticks,
+                                 unsigned char r, unsigned char g, unsigned char b, unsigned char a,
+                                 float size)
+{
+    unsigned char *m = FUN_L00_002678b8(0x2B);
+    unsigned char *q;
+    if (m != 0) {
+        q = m + 0x20;
+        qcopy(m + 0x10, pos);
+        qcopy(q, vec);
+        q[0x14] = r;
+        q[0x15] = g;
+        q[0x16] = b;
+        q[0x17] = a;
+        *(int *)(m + 4) = (b << 16) | (g << 8) | r;
+        m[9] = func_001FA898_r(4.0f) + 0x40;
+        m[3] = 0x48;
+        m[1] = 0;
+        m[8] = rand();
+        m[2] = *D_L08_001B292C;
+        *(float *)(m + 0xC) = size;
+        *(short *)(m + 0xA) = 0;
+        *(short *)(q + 0x18) = scale_game_frames(ticks);
+        *(int *)(q + 0x10) = owner;
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0027fe00.s", FUN_L08_0027fe00);
