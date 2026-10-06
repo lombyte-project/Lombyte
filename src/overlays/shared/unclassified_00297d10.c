@@ -1348,7 +1348,68 @@ void FUN_L06_002f38c8(char *obj)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4f00.s", FUN_L06_002f4f00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7288.s", FUN_L06_002f7288);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F86B8), where it is exact; names translated to the US level program. */
+
+extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
+extern int D_0014C190; /* no foreign declaration */
+extern int D_0015ED84_p __asm__("D_0015ED84");
+extern int D_L06_001BAC50[];
+extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void FUN_L02_002ea7d0(char *);
+extern void FUN_L06_002f7628(char *);
+extern char D_0014171B_86b8[] __asm__("D_0014C190");
+extern char D_0014171B_aa35[] __asm__("D_0014C050");
+
+void FUN_L06_002f7288(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *o;
+    unsigned char *q;
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if ((*(int *)(D_0015ED84_p * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + D_0014171B_86b8)
+             >> (*(unsigned short *)(m + 0xB2) & 0x1F) & 1)
+            && (D_0015ED84_p != 10 || (q = (unsigned char *)D_0014171B_aa35, (q + ((unsigned char *)m)[0xB0]))[0xA0] == 0xFF)) {
+            m[0x20] = 2;
+            m[0xBC] = 1;
+            break;
+        }
+        o = func_0020D348_m(0x410);
+        o[0x30] = 0x40;
+        o[0x31] = 1;
+        *(short *)(o + 0x32) = 0x40;
+        *(long *)(o + 0x38) = *(long *)(m + 0x38);
+        *(unsigned short *)(o + 0x34) = *(unsigned short *)(m + 0x34) | 0x5000;
+        qcopy(o + 0x10, m + 0x10);
+        *(float *)(o + 0x40) = random_angle_radians_alt();
+        *(float *)(o + 0x44) = random_angle_radians_alt();
+        *(float *)(o + 0x48) = random_angle_radians_alt();
+        *(float *)(o + 0x18) += 0.85f;
+        *(char **)(d + 0x40) = o;
+        m[0x20] = 1;
+        FUN_L02_002ea7d0(m);
+        *(int *)(D_0015ED84_p * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + D_0014171B_86b8)
+            &= ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
+        D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] &= ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
+        break;
+    case 1: {
+        char *h = FUN_L00_0025a420(m, 0x330000, 0);
+        if (h != 0) {
+            FUN_L00_00259bc8(*(void **)(d + 0x40), *(int *)(h + 0x20), 0x10000, h, h + 0x10, 1.0f);
+            ((unsigned char *)m)[0xA4] = 0xFF;
+        }
+        if ((*(char **)(d + 0x40))[0x20] < 0) {
+            m[0xBC] = 1;
+            m[0x20] = 2;
+            *(int *)(D_0015ED84_p * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 + D_0014171B_86b8)
+                |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+            D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+        } else {
+            FUN_L06_002f7628(m);
+        }
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
 
 #define NOT_SDA
