@@ -955,7 +955,6 @@ extern void FUN_L18_002f6fa8(int unused, int idx);
 extern void FUN_L18_002f7028(int a0, int idx);
 extern void FUN_L18_002f7220();
 extern void FUN_L18_002f7288(char *moby);
-extern void FUN_L18_002f76a0(char *moby, void *p);
 extern void FUN_L18_002f7880(char *moby);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_vector(void *) __asm__("func_001F99F8");
@@ -2072,8 +2071,8 @@ extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
 extern float FUN_001f9b80(void *, void *);
 extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
-extern short D_L18_00162408 __asm__("D_L18_00162378") __attribute__((sda));
-extern short D_L18_0016240C __asm__("D_L18_0016237C") __attribute__((sda));
+extern short D_L18_00162408_u __asm__("D_L18_00162378") __attribute__((sda));
+extern short D_L18_0016240C_u __asm__("D_L18_0016237C") __attribute__((sda));
 extern void FUN_L00_0025f730(void *a, float x);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -2088,9 +2087,9 @@ void FUN_L18_002f6960(char *m) {
     subtract_vector_xyz(v, b, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
     v[2] = 0.0f;
     if (*(int *)(b + 0x200C) == 0xF) {
-        FUN_L00_0025f730(v, *(float *)&D_L18_0016240C);
+        FUN_L00_0025f730(v, *(float *)&D_L18_0016240C_u);
     } else {
-        FUN_L00_0025f730(v, *(float *)&D_L18_00162408);
+        FUN_L00_0025f730(v, *(float *)&D_L18_00162408_u);
     }
     add_vector_xyz(v, v, D_L18_0016016C + (*(int *)(d + 0x344) << 7) + 0x30);
     t = *(float *)(D_0013E633 + 0xE0);
@@ -2263,7 +2262,81 @@ void FUN_L18_002f7220(char *source, char *dest, L18Vector *from, L18Vector *to) 
     *(float *)(dest + 0x68) = FastSubRots(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), *(float *)(source + 0x48));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f76a0.s", FUN_L18_002f76a0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8B00), where it is exact; names translated to the US level program. */
+
+typedef unsigned int Q128 __attribute__((mode(TI), aligned(16)));
+typedef union { Q128 q; float v[4]; } QVec;
+
+extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float random_float_between(float, float);
+extern int FUN_L00_001fefc8(void *);
+extern int FUN_L00_00257b90(int, int);
+extern int scale_game_frames(int);
+extern int truncate_float_to_s32();
+extern char D_L18_001623EC[4] __attribute__((sda));
+extern char D_L18_001623F0[4] __attribute__((sda));
+extern char D_L18_00162408[4] __attribute__((sda));
+extern char D_L18_0016240C[4] __attribute__((sda));
+extern char D_L18_00162410[4] __attribute__((sda));
+extern char D_L18_00162414[4] __attribute__((sda));
+extern char D_L18_00162418[4] __attribute__((sda));
+extern char D_L18_0016241C[4] __attribute__((sda));
+extern char D_L18_00162420[4] __attribute__((sda));
+extern char D_L18_00162424[4] __attribute__((sda));
+extern char D_L18_00162428[4] __attribute__((sda));
+extern char D_L18_0016242C[4] __attribute__((sda));
+extern char D_L18_00162430[4] __attribute__((sda));
+extern char D_L18_00162438[4] __attribute__((sda));
+extern char D_L18_0016243C[4] __attribute__((sda));
+extern char D_L18_00162440[4] __attribute__((sda));
+extern char D_L18_00162444[4] __attribute__((sda));
+extern char D_L18_00162448[4] __attribute__((sda));
+extern char D_L18_0016244C[4] __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void transform_vector_by_basis(void *, void *, void *);
+unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L18_002f76a0(char *moby, void *p) {
+    QVec a;
+    QVec b;
+    float c[4];
+    float d[4];
+    a.q = 0;
+    b.q = 0;
+    a.v[0] = 1.0f;
+    a.v[3] = 1.0f;
+    b.v[0] = 0.23f;
+    b.v[3] = 1.0f;
+    FUN_L00_001fefc8(moby + 0xBC);
+    transform_vector_by_basis(&b, &b, moby + 0xC0);
+    add_vector_xyz(c, moby + 0x10, &b);
+    transform_vector_by_basis(&a, &a, moby + 0xC0);
+    {
+    int i;
+    for (i = 0; i < *(int *)&D_L18_00162408; i++) {
+        int h;
+        normalize_vector_xyz(d, &a, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
+        h = func_001FA898_r(FUN_L00_00257c48((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
+        FUN_L00_002712b8(p, d, scale_game_frames(FUN_L00_00257b90(*(int *)&D_L18_00162428, *(int *)&D_L18_0016242C)), 0x7F, 0xFFFFFF, h,
+                          *(float *)&D_L18_00162414, *(float *)&D_L18_00162418, *(float *)&D_L18_00162430, *(float *)&D_L18_0016241C, 0.85f);
+    }
+    }
+    {
+    int j;
+    for (j = 0; j < *(int *)&D_L18_00162438; j++) {
+        normalize_vector_xyz(d, &a, random_float_between(*(float *)&D_L18_0016243C, *(float *)&D_L18_00162440));
+        FUN_L00_0026cbb0(p, d, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0, scale_game_frames(FUN_L00_00257b90(*(int *)&D_L18_00162444, *(int *)&D_L18_00162448)), 1, *(float *)&D_L18_0016244C);
+    }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8CE0), where it is exact; names translated to the US level program. */
 
 typedef struct {
