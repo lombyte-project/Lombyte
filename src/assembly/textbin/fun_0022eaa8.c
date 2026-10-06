@@ -186,6 +186,8 @@ void update_level_gameplay_frame(void) {
     s32 prepared_frame_index;
     s32 payload_offset;
     u8 *frame_offsets;
+    s32 *current_frame_pointer;
+    s32 *next_frame_pointer;
     f32 unused_fraction;
     s32 subframe;
     s32 unused_index;
@@ -289,8 +291,10 @@ void update_level_gameplay_frame(void) {
             next_frame = current_frame + 1;
             model = object->model;
             frame_offsets = (u8 *)model->frames[model->count - 1] + 0x1C;
-            current_frame_payload = *(s32 *)(frame_offsets + current_frame * 4) + 0x10;
-            next_frame_payload = *(s32 *)(frame_offsets + next_frame * 4) + 0x10;
+            current_frame_pointer = (s32 *)(frame_offsets + current_frame * 4);
+            next_frame_pointer = (s32 *)(frame_offsets + next_frame * 4);
+            current_frame_payload = *current_frame_pointer + 0x10;
+            next_frame_payload = *next_frame_pointer + 0x10;
             blend = convert_integer_to_float(frame & 1) * 0.5f + (f32)subframe * 0.25f;
             object->blend = blend;
             animation_positions = object->animation_positions;
