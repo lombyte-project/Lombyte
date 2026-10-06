@@ -158,7 +158,7 @@ void FUN_L16_002ceca8(int idx) {
 extern char D_0013E533[];
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
-extern int FUN_L16_002cf738(void *);
+int FUN_L16_002cf738(void *mv);
 extern void FUN_0022da68(int, int, void *);
 extern void FUN_0022d798(int);
 extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
@@ -1428,7 +1428,26 @@ int FUN_L16_002cf678(char *m) {
         if (*p++ < 0) return 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf738.s", FUN_L16_002cf738);
+
+
+
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B00), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern int *D_L16_001ABCC0[];
+
+int FUN_L16_002cf738(void *mv) {
+    unsigned char *m = mv;
+    unsigned short *p = (unsigned short *)D_L16_001ABCC0[m[0x21]];
+    if (p == 0) return 1;
+    for (;;) {
+        unsigned char *other = D_L16_0015FFD8 + ((*p & 0x7FFF) << 8);
+        if (*(short *)(other + 0xA6) == 0x222) {
+            if (other[0xBC] != 0) return 0;
+        }
+        if ((short)*p++ < 0) return 1;
+    }
+}
 /* Draw each linked pair once per generation. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B70), where it is exact; names translated to the US level program. */
 
