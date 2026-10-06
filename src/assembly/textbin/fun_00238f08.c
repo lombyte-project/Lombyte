@@ -63,8 +63,8 @@ void render_vendor_buy_label_pass(s32 capture_context, s32 target_width, s32 tar
     region.flags = 1;
     if (vendor_state.selection_active != 0) {
         struct VendorSelectionEntry *entry = &vendor_state.entries[vendor_state.selected_entry];
-        if (entry->purchase_kind == 1 &&
-            (price = vendor_state.entries[vendor_state.selected_entry].item_index,
+        if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1 &&
+            (price = entry->item_index,
              vendor_item_prices[price].ammo_capacity <= weapon_ammo_counts[price])) {
             evaluated_message_id = 0x5233;
         } else if (vendor_state.entries[vendor_state.selected_entry].purchase_kind == 1) {
