@@ -1973,7 +1973,37 @@ void *FUN_L16_002d5ad0(int index, int secondary) {
         if (*p++ < 0) return nearest;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
+
+
+
+/* Activate the linked mobys, clearing their timers, and return the one nearest the challenge target. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6F90), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern char D_L16_001671C0[];
+extern float FUN_001f9b48(void *, void *);
+extern int *D_L16_001ABCC0[];
+
+void *FUN_L16_002d5bc8(int index, int secondary) {
+    short *p = (short *)D_L16_001ABCC0[index];
+    char *nearest = 0;
+    float distance = 1000.0f;
+    char *moby;
+    int *data;
+    float d;
+    if (!p) return 0;
+    while (1) {
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (*(short *)(moby + 0xA6) != 0x287) continue;
+        d = FUN_001f9b48(D_L16_001671C0, moby + 0x10);
+        data = *(int **)(moby + 0x78);
+        if (d < distance) {distance = d; nearest = moby;}
+        moby[0x20] = 1;
+        data[5] = 0;
+        if (secondary) data[6] = 0;
+        if (*p++ < 0) return nearest;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
 extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
