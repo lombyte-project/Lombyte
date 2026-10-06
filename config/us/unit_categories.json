@@ -4,7 +4,6 @@
   "generated": "2026-09-24",
   "exact_under_assembly": [],
   "intentional_asm": [
-    "assembly/runtime/memory/fill_transfer_words",
     "assembly/runtime/exceptions/raise_kernel_trap",
     "assembly/runtime/scheduling/spin_wait",
     "assembly/sdk/interrupts/add_dmac_handler",
