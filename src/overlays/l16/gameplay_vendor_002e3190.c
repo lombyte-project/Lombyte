@@ -1488,7 +1488,7 @@ void FUN_L16_002e88d0(unsigned char *moby)
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
-extern char *FUN_L16_002e8b08(int);
+char *FUN_L16_002e8b08(int idx);
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int FUN_L00_00257b90(int, int);
@@ -1544,7 +1544,31 @@ void FUN_L16_002e8970(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e8b08.s", FUN_L16_002e8b08);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9F80), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern int FUN_L16_002c4710(void *);
+extern short *D_L16_001ABCC0[];
+
+char *FUN_L16_002e8b08(int idx)
+{
+    short *p = D_L16_001ABCC0[idx];
+    char *moby;
+    if (p == 0)
+        return 0;
+    for (;;) {
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (*(short *)(moby + 0xA6) == 0x10E && FUN_L16_002c4710(moby))
+            return moby;
+        if (*p++ < 0)
+            return 0;
+    }
+}
 /* For each of n point pairs, reflects a direction and writes its 2D map coordinates. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA010), where it is exact; names translated to the US level program. */
 
