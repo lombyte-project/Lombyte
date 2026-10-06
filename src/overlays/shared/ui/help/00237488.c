@@ -403,7 +403,7 @@ void FUN_L05_0023dc88(int i) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0024bdc0.s", FUN_L05_0024bdc0);
-/* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/ui_help_00221310.c): L05 has a wider head guard and its own level data. */
+/* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/ui/help/00221310.c): L05 has a wider head guard and its own level data. */
 
 extern float D_L05_00174268 __attribute__((section(".data")));
 extern int D_L05_0015F5CC;

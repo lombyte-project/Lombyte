@@ -422,7 +422,7 @@ d1:
 
 #define MACRO_ADDR
 
-/* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/ui_help_0020c758.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
+/* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/ui/help/0020c758.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
 
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"

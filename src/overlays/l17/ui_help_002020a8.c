@@ -254,7 +254,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
 #define NOT_SDA
 #define MACRO_ADDR
 
-/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui_help_0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
+/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui/help/0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
 
 typedef struct {
     u8 pad0[0x80];
