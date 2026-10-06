@@ -510,7 +510,7 @@ extern float D_0015ED6C ,D_0015EE70;
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80_c2(void*,void*) __asm__("FUN_001f9b80");
 extern int FUN_001fa728(char *, float);
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern s32 allocate_voice_for_target_entry_u(s32, s32, void *) __asm__("func_0022DA68");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
@@ -554,7 +554,7 @@ void FUN_L16_002c3d38(unsigned char *moby) {
         }
         if (*(short *)(data + 0x16) == 0 && FUN_001f9b80_c2(moby + 0x10, (char *)D_0013F3D0) < 7.0f) {
             *(short *)(data + 0x16) = 1;
-            allocate_voice_for_target_entry(1, 0, moby);
+            allocate_voice_for_target_entry_u(1, 0, moby);
         }
         break;
     case 3:
@@ -1342,7 +1342,72 @@ again:
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf198.s", FUN_L16_002cf198);
+
+
+
+/* Pulse a linked control object and toggle its child when hit or its timer expires. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern char *FUN_L00_0025a420(void*,int,int);
+extern char D_0014161B[];
+extern float D_0015ED6C ,D_0015EE70;
+extern float fast_add_rotations(float, float);
+extern float fast_sin(float);
+extern float random_angle_radians(void);
+extern int D_0015ED84;
+extern int scale_game_frames(int);
+extern int tick_countdown_32(int *);
+extern int truncate_float_to_s32(float);
+extern short D_0014C050 __attribute__((section(".data")));
+extern void FUN_L16_002e3770(void*,int);
+extern void allocate_voice_for_target_entry(int, int, void *);
+extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
+extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
+
+void FUN_L16_002cf198(char *m) {
+    char *d=*(char**)(m+0x78);
+    switch((*(unsigned char *)((char *)(m)+(0x20)))) {
+    case 0:
+        (*(float *)((char *)(d)+(0x68)))=random_angle_radians();(*(float *)((char *)(d)+(0x30)))=0.001f;
+        if((*(unsigned char *)((char *)(((char *)&D_0014C050)+(D_0015ED84<<4))+((*(unsigned char *)((char *)(m)+(0xB0))))))==255 && (*(int *)((char *)(d)+(0x64)))==-1) {
+            (*(unsigned char *)((char *)(m)+(0xBC)))=1;(*(unsigned char *)((char *)(m)+(0x20)))=2;
+            if((*(int *)((char *)(d)+(0x60)))!=-1) {
+                FUN_L16_002e3770(D_L16_0015FFD8+((*(int *)((char *)(d)+(0x60)))<<8),0);
+            }
+        } else (*(unsigned char *)((char *)(m)+(0x20)))=1;
+        break;
+    case 1: {
+        int color;
+        (*(float *)((char *)(d)+(0x68)))=fast_add_rotations((*(float *)((char *)(d)+(0x68))),D_0015ED6C*6.2831855f);
+        color=func_001FA898_caa18((fast_sin((*(float *)((char *)(d)+(0x68))))*4.0f-3.0f)*128.0f);
+        if(color>128) color=128;else if(color<32) color=32;
+        (*(int *)((char *)(m)+(0x90)))=0x80000000|(color<<16)|(color<<8)|color;
+        if(FUN_L00_0025a420(m,0x330000,0)) {
+            (*(unsigned char *)((char *)(m)+(0x20)))=2;(*(int *)((char *)(m)+(0x90)))=0x80208020;(*(unsigned char *)((char *)(m)+(0xBC)))=1;(*(float *)((char *)(d)+(0x68)))=1.5707964f;
+            func_0022ED80_i(0,0,m);
+            if((*(int *)((char *)(d)+(0x60)))!=-1) FUN_L16_002e3770(D_L16_0015FFD8+((*(int *)((char *)(d)+(0x60)))<<8),0);
+            if((*(int *)((char *)(d)+(0x64)))>0) (*(int *)((char *)(d)+(0x6C)))=scale_game_frames((*(int *)((char *)(d)+(0x64))));
+        }
+        break;
+    }
+    case 2: {
+        int color=func_001FA898_caa18((fast_sin((*(float *)((char *)(d)+(0x68))))*0.5f+0.5f)*128.0f);
+        if(color>128) color=128;else if(color<32) color=32;
+        (*(int *)((char *)(m)+(0x90)))=0x80200020|(color<<8);
+        if((*(int *)((char *)(d)+(0x64)))>0) {
+            if(tick_countdown_32((int*)(d+0x6C))) {
+                (*(unsigned char *)((char *)(m)+(0xBC)))=0;(*(unsigned char *)((char *)(m)+(0x20)))=1;(*(float *)((char *)(d)+(0x68)))=1.5707964f;
+                if((*(int *)((char *)(d)+(0x60)))!=-1) {
+                    FUN_L16_002e3770(D_L16_0015FFD8+((*(int *)((char *)(d)+(0x60)))<<8),1);
+                }
+            } else if((*(int *)((char *)(d)+(0x6C)))<scale_game_frames(90)) (*(float *)((char *)(d)+(0x68)))=fast_add_rotations((*(float *)((char *)(d)+(0x68))),D_0015EE6C*25.132742f);
+        }
+        break;
+    }
+    }
+    (*(unsigned char *)((char *)(m)+(0xA4)))=255;
+}
 /* first other moby of type 0x228 in m's list whose 0x18 is within 0.1 of m's */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0A40), where it is exact; names translated to the US level program. */
 
