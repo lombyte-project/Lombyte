@@ -206,6 +206,7 @@ void transition_load_wad(void) {
     s32 k_800 = 0x800;
     u64 t;
     u64 u;
+    u64 texture_state_word;
 
     D_0015EF58 = 0;
     i = 0;
@@ -308,9 +309,10 @@ void transition_load_wad(void) {
     func_00120558(0, 0);
     D_001940C0.x18 = (s32)D_001940C0.hdr + size;
     first_image_buffer_address = D_0015EE74;
+    texture_state_word = 0x20010000 | (first_image_buffer_address >> 8) | (s64)0xB800 << 19;
     D_0015EE78 = first_image_buffer_address + 0x20000;
     D_0015EE74 = first_image_buffer_address + 0x20000;
-    D_0015EF48 = (first_image_buffer_address >> 8) | 0x20010000 | (s64)0xB800 << 19;
+    D_0015EF48 = texture_state_word;
     D_001940C0.x1C = func_001E9B10(data + hdr->x7C);
     FillTransferWords(&D_0018CB20, 0, 0x1C0);
     FillTransferWords(D_00186310, 0, 0x40);
