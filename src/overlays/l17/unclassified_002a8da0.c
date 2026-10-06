@@ -52,7 +52,187 @@ void FUN_L17_002cbc10(char *m) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002a8da0.s", FUN_L17_002a8da0);
+
+
+
+#include "qcopy.h"
+
+/* Updates moby 99: a beam swinging between two waypoints that sprays particles while the hero is in its zone. */
+/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002AA068), where it is exact; names translated to the US level program. */
+
+typedef int v128 __attribute__((mode(TI)));
+
+extern char *D_L17_0015FFD8 __attribute__((sda));
+extern char *D_L17_0015FFD8_e[] __asm__("D_L17_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L17_001600EC;
+extern char D_L17_00174760[];
+extern float D_0015ED6C;
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_L04_002418b0(int a, unsigned int b);
+extern float FUN_L04_00241910(int a, unsigned int b);
+extern float compute_interpolated_record_value(void *);
+extern float dot_vectors_xyz(void *, void *);
+extern float fast_add_rotations(float, float);
+extern float fast_cos(float);
+extern float random_float_between(float, float);
+extern float vector_length_xyz(void *);
+extern int D_L17_0015FFD8_t; /* no foreign declaration */
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001fa728(char *, float);
+extern int is_point_inside_clip_volume(void *, int);
+extern short D_L17_00161498 __attribute__((sda));
+extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
+extern unsigned char D_0013F3D0[];
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L17_002a95b8(char *moby);
+extern void add_vector_xyz(void *, void *, void *);
+extern void enqueue_callback_list_1(void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *);
+void FUN_L00_00259888(char *a, int b, int c, float d, void *q);
+extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale, void *src) __asm__("FUN_L00_00259888");
+
+void FUN_L17_002a8da0(char *m) {
+    float c[4];
+    float a[4];
+    float b[4];
+    float v30[4];
+    float v40[4];
+    float e50[4];
+    float v60[12];
+    char *d;
+    char *e;
+    int flag;
+    int i;
+    int k;
+    int j;
+    float len;
+
+    if (*(unsigned char *)(m + 0x20) == 3) return;
+    flag = 0;
+    d = *(char **)(m + 0x78);
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        *(float *)(d + 0x58) = FUN_L04_002418b0(*(unsigned char *)(m + 0x22), 0);
+        *(float *)(d + 0x5C) = (FUN_L04_00241910(*(unsigned char *)(m + 0x22), 0) - *(float *)(d + 0x58)) / 6.2831855f;
+        k = *(int *)(d + 0x44);
+        if (k != -1) {
+            qcopy(d, m + 0x10);
+            *(float *)(d + 0x54) = *(float *)(d + 0x48) * D_0015ED6C / FUN_001f9b48(d, D_L17_001600EC + (k << 7) + 0x30);
+            *(unsigned char *)(m + 0x20) = 2;
+        } else if ((j = *(int *)(d + 0x68)) != -1) {
+            qcopy(d, m + 0x10);
+            *(float *)(d + 0x54) = *(float *)(d + 0x48) * D_0015ED6C / FUN_001f9b48(d, D_L17_0015FFD8_e[2] + (j << 8) + 0x10);
+            *(unsigned char *)(m + 0x20) = 2;
+        } else {
+            *(unsigned char *)(m + 0x20) = 1;
+        }
+        *(int *)(d + 0x60) = 0;
+        *(float *)(d + 0x4C) = 0.1f;
+        *(v128 *)a = 0;
+        a[0] = 13.0f;
+        transform_vector_by_basis(a, a, m + 0xC0);
+        add_vector_xyz(b, m + 0x10, a);
+        *(v128 *)c = *(v128 *)b;
+        if (FUN_001efa68(m + 0x10, c, 2, 0, 0)) {
+            *(v128 *)c = *(v128 *)D_L17_00174760;
+        }
+        subtract_vector_xyz(b, c, m + 0x10);
+        *(v128 *)(d + 0x30) = *(v128 *)b;
+        break;
+    case 1:
+        if (*(int *)(d + 0x40) == -1 || is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x40))) {
+            flag = 1;
+        }
+        break;
+    case 2:
+        *(float *)(d + 0x50) += *(float *)(d + 0x54);
+        if (*(float *)(d + 0x50) > 1.0f) {
+            *(float *)(d + 0x50) = 1.0f;
+            *(float *)(d + 0x54) = -*(float *)(d + 0x54);
+        } else if (*(float *)(d + 0x50) < 0.0f) {
+            *(float *)(d + 0x50) = 0.0f;
+            *(float *)(d + 0x54) = -*(float *)(d + 0x54);
+        }
+        if (*(int *)(d + 0x68) != -1) {
+            FUN_001f9a40(m + 0x10, d, ((char *(*)[64])D_L17_0015FFD8)[*(int *)(d + 0x68)][0x1E], *(float *)(d + 0x50));
+        } else {
+            FUN_001f9a40(m + 0x10, d, D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30, *(float *)(d + 0x50));
+        }
+        if (*(int *)(d + 0x40) == -1 || is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x40))) {
+            *(v128 *)a = 0;
+            a[0] = 13.0f;
+            transform_vector_by_basis(a, a, m + 0xC0);
+            add_vector_xyz(b, m + 0x10, a);
+            *(v128 *)c = *(v128 *)b;
+            if (FUN_001efa68(m + 0x10, c, 2, 0, 0)) {
+                *(v128 *)c = *(v128 *)D_L17_00174760;
+            }
+            flag = 1;
+            subtract_vector_xyz(b, c, m + 0x10);
+            *(v128 *)(d + 0x30) = *(v128 *)b;
+        }
+        break;
+    }
+    *(v128 *)a = 0;
+    a[0] = 12.0f;
+    transform_vector_by_basis(a, a, m + 0xC0);
+    add_vector_xyz(b, m + 0x10, d + 0x30);
+    *(v128 *)c = *(v128 *)b;
+    if (*(int *)(d + 0x60) != 0) {
+        normalize_vector_xyz(d + 0x20, a, -(*(float *)&D_L17_00161498 - 0.2f));
+        normalize_vector_xyz(*(char **)(d + 0x60) + 0x10, a, -*(float *)&D_L17_00161498);
+        add_vector_xyz(b, d + 0x20, c);
+        e = *(char **)(d + 0x60);
+        *(v128 *)(d + 0x20) = *(v128 *)b;
+        add_vector_xyz(b, e + 0x10, c);
+        *(v128 *)(e + 0x10) = *(v128 *)b;
+    } else {
+        *(v128 *)(d + 0x20) = *(v128 *)c;
+    }
+    if (flag) {
+        *(float *)(d + 0x4C) = fast_cos(fast_add_rotations(3.1415927f, (compute_interpolated_record_value(m) - *(float *)(d + 0x58)) / *(float *)(d + 0x5C))) * 0.02f + 0.09f;
+        normalize_vector_xyz(d + 0x10, a, 0.2f);
+        subtract_vector_xyz(e50, m + 0x10, d + 0x10);
+        *(v128 *)(d + 0x10) = *(v128 *)e50;
+        len = vector_length_xyz(d + 0x30);
+        FUN_001f9a40(b, d + 0x10, d + 0x20, 0.5f);
+        b[3] = len * 0.5f;
+        if (FUN_001fa728((char *)b, 32.0f) != -1) {
+            subtract_vector_xyz(v30, D_0013F3D0, m + 0x10);
+            normalize_vector_xyz(v40, m + 0xC0, dot_vectors_xyz(m + 0xC0, v30));
+            subtract_vector_xyz(v30, v30, v40);
+            func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, v30);
+            FUN_001efa68(m + 0x10, d + 0x20, 9, m, v60);
+            len = vector_length_xyz(d + 0x30);
+            *(v128 *)e50 = *(v128 *)(d + 0x10);
+            for (i = 0; i < 7; i++) {
+                scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
+                FUN_L00_001ff290(v60, c, e50);
+                normalize_vector_xyz(a, d + 0x30, random_float_between(D_0015ED6C * 10.0f, len / 20.0f));
+                FUN_L17_0026fb60(m, c, a);
+            }
+            len = -len;
+            *(v128 *)e50 = *(v128 *)(d + 0x20);
+            for (i = 0; i < 8; i++) {
+                scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
+                subtract_vector_xyz(v60, e50, c);
+                *(v128 *)c = *(v128 *)v60;
+                normalize_vector_xyz(a, d + 0x30, random_float_between(D_0015ED6C * 10.0f, len / 20.0f));
+                FUN_L17_0026fb60(m, c, a);
+            }
+            normalize_vector_xyz(a, d + 0x30, -random_float_between(D_0015ED6C * 0.5f, D_0015ED6C));
+            a[0] += random_float_between(-0.01f, 0.01f);
+            a[1] += random_float_between(-0.01f, 0.01f);
+            a[2] += random_float_between(-0.01f, 0.01f);
+            FUN_L17_0026fb60(0, d + 0x20, a);
+        }
+        enqueue_callback_list_1(FUN_L17_002a95b8, m);
+    }
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
