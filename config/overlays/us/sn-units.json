@@ -88,7 +88,8 @@
       "gameplay_vendor_002efb88.c",
       "gameplay_vendor_002f88e8.c",
       "ui_help_00227dd0.c",
-      "ui_help_0022e8f8.c"
+      "ui_help_0022e8f8.c",
+      "unclassified_002a7220.c"
     ],
     "shared": [
       "gameplay_camera_001eb188.c",

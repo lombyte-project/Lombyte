@@ -493,7 +493,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001fa030(void *, void *);
 extern void FUN_001fa2d8(void *, void *);
-extern void FUN_L18_002d5488(void *, void *);
+void FUN_L18_002d5488(void *mobyp, void *vec);
 extern void FUN_L18_002d5610_u(void *, void *) __asm__("FUN_L18_002d5610");
 extern void FUN_L18_002d5768(void);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
@@ -564,7 +564,44 @@ void FUN_L18_002d5050(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5488.s", FUN_L18_002d5488);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6878), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern float D_0015ED6C;
+extern float random_float_between(float, float);
+extern int scale_game_frames(int);
+typedef unsigned int Q128 __attribute__((mode(TI), aligned(16)));
+typedef union { Q128 q; float v[4]; } QU;
+extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void transform_vector_by_basis(void *, void *, void *);
+
+void FUN_L18_002d5488(void *mobyp, void *vec) {
+    char *moby = mobyp;
+    float a0[4];
+    float v10[4];
+    QU a20;
+    unsigned char *p;
+    FUN_L00_00257d78(a0, D_0015ED6C * 0.1f, D_0015ED6C * 0.2f);
+    scale_vector_xyz(v10, vec, random_float_between(0.0f, 1.0f));
+    add_vector_xyz(v10, v10, moby + 0x10);
+    p = FUN_L00_002712b8(v10, a0, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+    if (p != 0) {
+        p[2] = *(unsigned char *)D_L18_001B2DDC_c;
+        p[3] = 0x44;
+    }
+    a20.q = 0;
+    a20.v[2] = 0.02f;
+    transform_vector_by_basis(&a20, &a20, moby + 0xC0);
+    FUN_L00_0026cbb0(v10, &a20, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(0x14), 1, 20000.0f);
+}
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6A00), where it is exact; names translated to the US level program. */
 
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
