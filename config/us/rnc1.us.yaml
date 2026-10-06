@@ -954,7 +954,7 @@ segments:
           - [0xee230, c, gameplay/camera/update_camera_blend]
           - [0xee2e0, c, gameplay/camera/apply_camera_shake]
           - [0xee3ec, textbin, text_gap_001ed46c_after_fun_001ed360]
-          - [0xee3f0, c, assembly/textbin/fun_001ed470]
+          - [0xee3f0, c, gameplay/camera/fun_001ed470]
           - [0xee76c, textbin, text_gap_001ed7ec_before_fun_001ed7f0]
           - [0xee770, c, gameplay/camera/update_camera_underwater_flag]
           - [0xee8bc, textbin, text_gap_001ed93c_before_fun_001ed940]
