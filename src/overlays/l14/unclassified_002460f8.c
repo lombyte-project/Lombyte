@@ -861,7 +861,30 @@ void FUN_L14_002d6358(char *m) {
         *(float *)(d + 0x78) += *(float *)(path + k * 16 + 0x1C);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d64d0.s", FUN_L14_002d64d0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
+
+extern float ConvertIntegerToFloat(int);
+extern int *D_L14_001B0BB0[];
+extern int D_L14_0015F70C;
+extern int tick_countdown_32(void *);
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
+
+int FUN_L14_002d64d0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *ent = *(char **)((char *)((*(int *)(d + 0x60) << 5) + (int)D_L14_0015F70C) + 0x10);
+    int ok;
+    float t;
+    ok = tick_countdown_32(d + 0x6C) != 0;
+    t = ConvertIntegerToFloat(*(int *)(d + 0x6C));
+    FUN_001f9a40(m + 0x10, ent + 0x10, D_L14_001B0F30_a[*(int *)(d + 0x84)] + 0x10, t * *(float *)(d + 0x70));
+    return ok;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6570.s", FUN_L14_002d6570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
