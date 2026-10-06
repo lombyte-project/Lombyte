@@ -96,7 +96,7 @@ struct PreviewClassResource {
 
 extern struct ItemPreviewMenuState preview_menu_state __asm__("D_001D5BF0");
 extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
-extern volatile struct PreviewCamera preview_camera __asm__("D_00186F40");
+extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern struct ItemPreviewPlacement preview_placements[] __asm__("D_001E0408");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_preview_resource_class[] __asm__("D_00140408");
@@ -208,7 +208,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             } else {
                 moby->x = camera_x + preview_placements[item_index].normal_x;
             }
-            moby->y = preview_camera.y + preview_placements[item_index].y;
+            moby->y = ((volatile struct PreviewCamera *)&preview_camera)->y + preview_placements[item_index].y;
             moby->z = camera_position[2] + preview_placements[item_index].z;
             moby->rotation_x = preview_placements[item_index].rotation_x;
             moby->rotation_y = preview_placements[item_index].rotation_y;
