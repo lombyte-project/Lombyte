@@ -22,7 +22,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, List, Set, Union, cast
+from typing import Any, Set, Union, cast
 
 import ninja_syntax
 import yaml
@@ -260,11 +260,6 @@ GAME_COMPILER_FLAG_UNITS = {
     # leaves the delay slot empty; the default pass moves that assignment into
     # the slot.  100/100/100 with this option (2026-10-03).
     "ui/menus/fun_002075e8": "-fno-delayed-branch",
-    # fun_001f33b8 (-fno-schedule-insns) and fun_00221f58 (-G0) carry no entry:
-    # both owners are still assembly wrappers, where an option cannot change the
-    # wrapper's bytes. The shorter keys also always won first-suffix-match over
-    # the longer "textbin/..." spellings, so those were dead as well. Re-add with
-    # the measurement and the reason recorded here if a C body needs them.
 }
 
 SN_FLAG_UNITS = {
@@ -1011,9 +1006,9 @@ def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
         return f"{match.group(1)}*({section}); /* {obj} */"
 
     text = _TEXT_STATEMENT_RE.sub(rename, text)
-    for obj, copy, _ in rows:
-        text = text.replace(f"{obj}(", f"{copy}(")
-    inputs = "".join(f"    {copy}\n" for _, copy, _ in rows)
+    for obj, link, _ in rows:
+        text = text.replace(f"{obj}(", f"{link}(")
+    inputs = "".join(f"    {link}\n" for _, link, _ in rows)
     (config_dir / FAST_LD_PATH).write_text(f"INPUT(\n{inputs})\n\n" + text)
     return rows
 
@@ -1364,9 +1359,9 @@ def build_stuff(
     alias_path.write_text("\n".join(alias_lines) + "\n")
 
     link_copies = []
-    for obj, copy, section in write_fast_linkerscript(config_dir):
-        ninja.build(copy, "link_copy", obj, variables={"section": section})
-        link_copies.append(copy)
+    for obj, link, section in write_fast_linkerscript(config_dir):
+        ninja.build(link, "link_copy", obj, variables={"section": section})
+        link_copies.append(link)
 
     ninja.build(
         PRE_ELF_PATH,
