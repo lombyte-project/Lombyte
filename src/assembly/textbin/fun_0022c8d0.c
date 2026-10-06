@@ -49,7 +49,7 @@ void initialize_gameplay_sound_system(void) {
     s32 header_block_index;
 
     header_block = voice_pool_header;
-    for (header_block_index = 3; header_block_index >= 0; header_block_index -= 1) {
+    for (header_block_index = 0; header_block_index < 4; header_block_index += 1) {
         qzero(header_block);
         header_block += 16;
     }
