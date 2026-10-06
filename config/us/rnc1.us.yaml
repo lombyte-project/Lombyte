@@ -934,7 +934,7 @@ segments:
           - [0xecde8, c, gameplay/camera/handle_camera_collision_with_hero]
           - [0xece48, c, gameplay/entities/update_moby]
           - [0xece8c, textbin, text_gap_001ebf0c_after_fun_001ebec8]
-          - [0xece90, c, assembly/textbin/fun_001ebf10]
+          - [0xece90, c, textbin/fun_001ebf10]
           - [0xed190, c, gameplay/camera/camera_activation_check_priority]
           - [0xed354, textbin, text_gap_001ec3d4_before_fun_001ec3d8]
           - [0xed358, c, rendering/entities/draw_moby]
