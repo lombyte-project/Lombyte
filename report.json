@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 32.232791,
+    "fuzzy_match_percent": 32.233303,
     "total_code": "3499624",
-    "matched_code": "1035444",
-    "matched_code_percent": 29.587293,
+    "matched_code": "1036120",
+    "matched_code_percent": 29.606609,
     "total_functions": 4123,
-    "matched_functions": 2691,
-    "matched_functions_percent": 65.268009,
-    "complete_code": "1035444",
-    "complete_code_percent": 29.587293,
+    "matched_functions": 2692,
+    "matched_functions_percent": 65.292263,
+    "complete_code": "1036120",
+    "complete_code_percent": 29.606609,
     "total_units": 433,
-    "complete_units": 164
+    "complete_units": 165
   },
   "units": [
     {
@@ -13526,17 +13526,17 @@
     {
       "name": "game/audio/decoder",
       "measures": {
-        "fuzzy_match_percent": 99.31707,
+        "fuzzy_match_percent": 100.0,
         "total_code": "2624",
-        "matched_code": "1948",
-        "matched_code_percent": 74.237805,
+        "matched_code": "2624",
+        "matched_code_percent": 100.0,
         "total_functions": 14,
-        "matched_functions": 13,
-        "matched_functions_percent": 92.857143,
-        "complete_code": "1948",
-        "complete_code_percent": 74.237805,
+        "matched_functions": 14,
+        "matched_functions_percent": 100.0,
+        "complete_code": "2624",
+        "complete_code_percent": 100.0,
         "total_units": 1,
-        "complete_units": 0
+        "complete_units": 1
       },
       "functions": [
         {
@@ -13551,7 +13551,7 @@
         {
           "name": "initialize_audio_system",
           "size": "676",
-          "fuzzy_match_percent": 97.3491,
+          "fuzzy_match_percent": 100.0,
           "address": "48",
           "metadata": {
             "virtual_address": "1292096"
@@ -13667,7 +13667,7 @@
         }
       ],
       "metadata": {
-        "complete": false,
+        "complete": true,
         "progress_categories": [
           "boot",
           "game"
@@ -48080,34 +48080,34 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 96.194539,
+        "fuzzy_match_percent": 96.19969,
         "total_code": "347856",
-        "matched_code": "242036",
-        "matched_code_percent": 69.579366,
+        "matched_code": "242712",
+        "matched_code_percent": 69.773699,
         "total_functions": 1218,
-        "matched_functions": 1101,
-        "matched_functions_percent": 90.394089,
-        "complete_code": "242036",
-        "complete_code_percent": 69.579366,
+        "matched_functions": 1102,
+        "matched_functions_percent": 90.47619,
+        "complete_code": "242712",
+        "complete_code_percent": 69.773699,
         "total_units": 118,
-        "complete_units": 80
+        "complete_units": 81
       }
     },
     {
       "id": "game",
       "name": "Game",
       "measures": {
-        "fuzzy_match_percent": 95.584069,
+        "fuzzy_match_percent": 95.590716,
         "total_code": "269568",
-        "matched_code": "176372",
-        "matched_code_percent": 65.427647,
+        "matched_code": "177048",
+        "matched_code_percent": 65.678419,
         "total_functions": 906,
-        "matched_functions": 813,
-        "matched_functions_percent": 89.735099,
-        "complete_code": "176372",
-        "complete_code_percent": 65.427647,
+        "matched_functions": 814,
+        "matched_functions_percent": 89.845475,
+        "complete_code": "177048",
+        "complete_code_percent": 65.678419,
         "total_units": 106,
-        "complete_units": 73
+        "complete_units": 74
       }
     },
     {
