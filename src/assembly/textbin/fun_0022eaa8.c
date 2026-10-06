@@ -175,6 +175,7 @@ void update_level_gameplay_frame(void) {
     LevelRenderObject *object;
     LevelRenderObject *expired_object;
     s32 mode_advance;
+    s32 sound_bank;
     RenderModel *model;
     RenderArchiveTable *archive_table;
     u8 *archive_data;
@@ -209,8 +210,9 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || D_0013DD43[0] != 0)) {
         ReadGlobalTableEntry();
-        snd_play_sound_vol_pan_pmpb(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0,
-                                    D_0013E5C0);
+        sound_bank = D_0015ED5C;
+        mode_advance = level_render_state.mode;
+        snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, D_0013E5C0);
         snd_reset_state_and_flush_commands();
         snd_flush_sound_commands();
     }
