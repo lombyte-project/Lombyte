@@ -41,7 +41,79 @@ void FUN_L05_0031abe0(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031c8e0.s", FUN_L05_0031c8e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031cf58.s", FUN_L05_0031cf58);
+/* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
+
+typedef int ti_31e468 __attribute__((mode(TI)));
+
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    u64 a, b, c, d;
+} Pk_31e468;
+
+extern char D_L05_001671C0_d[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
+extern float D_L05_00215C70[4][4];
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern short D_L05_00161FC8_d __asm__("D_L05_00161FC8") __attribute__((sda));
+extern short D_L05_00161FCC_d __asm__("D_L05_00161FCC") __attribute__((sda));
+extern void FUN_001f9d20(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, void *, int);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
+
+void FUN_L05_0031cf58(char *m) {
+    char *d = *(char **)(m + 0x78);
+    Pk_31e468 pk;
+    float up[4];
+    float M[4][4];
+    float t[4];
+    float w[4];
+    u32 col;
+    int j;
+    *(ti_31e468 *)up = 0;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+    pk.b = get_effect_texture_alt(0xB);
+    pk.d = 0x8000000048ULL;
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 5;
+    pk.uv[0] = 0.0f;
+    pk.uv[1] = 0.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 1.0f;
+    pk.uv[7] = 1.0f;
+    scale_vector_xyz(t, m + 0xE0, *(float *)&D_L05_00161FC8_d);
+    add_vector_xyz(M[3], m + 0x10, t);
+    subtract_vector_xyz(M[0], D_L05_001671C0_d, M[3]);
+    normalize_vector_xyz(M[0], M[0], 1.0f);
+    cross_vectors_xyz(M[1], M[0], up);
+    normalize_vector_xyz(M[1], M[1], 1.0f);
+    cross_vectors_xyz(M[2], M[1], M[0]);
+    scale_vector_xyz(w, M[0], *(float *)&D_L05_00161FCC_d);
+    add_vector_xyz(M[3], M[3], w);
+    if (((unsigned char *)d)[0x67] != 0 && random_integer_below(8) == 0) {
+        *(int *)(d + 0x60) >>= 1;
+    }
+    col = (*(int *)(d + 0x60) << 24) | *(int *)(d + 0x68);
+    pk.col[3] = col;
+    pk.col[2] = col;
+    pk.col[1] = col;
+    pk.col[0] = col;
+    for (j = 0; j < 4; j++) {
+        scale_vector_xyz(pk.m[j], D_L05_00215C70[j], *(float *)(d + 0x70));
+        FUN_001f9d20(pk.m[j], pk.m[j], M);
+    }
+    draw_geometry_quad(&pk, 0, 0);
+}
 extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
@@ -129,7 +201,44 @@ void FUN_L05_003294c0(float a, float b, float c, float d, float e, float f, floa
         *(float *)(p + 0x14) = h;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329540.s", FUN_L05_00329540);
+/* Places the camera moby relative to the hero's target and builds its look-at basis. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002CF2C0.c: func_L05_0032AA50), where it is exact; names translated to the US level program. */
+
+extern void FUN_L05_00329358_c(void *) __asm__("FUN_L05_00329358");
+
+void FUN_L05_00329540(char *m) {
+    char *d = *(char **)(m + 0x70);
+    char *at = m + 0x30;
+    char *up = m + 0x10;
+    char *side = m + 0x20;
+    char *g;
+    char *a;
+    char *b;
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float v3[4];
+    float v4[4];
+    FUN_L05_00329358_c(m);
+    g = D_0013F350;
+    a = d + 0x80;
+    b = d + 0xE0;
+    normalize_vector_xyz(v3, *(char **)(g + 0x2080) + 0xC0, 1.0f);
+    normalize_vector_xyz(v3, v3, *(float *)(d + 0xE0));
+    subtract_vector_xyz(at, a, v3);
+    normalize_vector_xyz(v4, g + 0x290, -1.0f);
+    normalize_vector_xyz(v3, v4, *(float *)(b + 0x10));
+    add_vector_xyz(at, at, v3);
+    normalize_vector_xyz(v0, v4, *(float *)(a + 0x4C));
+    add_vector_xyz(v2, v0, a);
+    subtract_vector_xyz(v1, v2, at);
+    normalize_vector_xyz(m, v1, 1.0f);
+    cross_vectors_xyz(up, m, v4);
+    cross_vectors_xyz(side, up, m);
+    normalize_vector_xyz(up, up, 1.0f);
+    normalize_vector_xyz(side, side, 1.0f);
+    qcopy(m + 0x40, m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003296e0.s", FUN_L05_003296e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003298d8.s", FUN_L05_003298d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00329ce8.s", FUN_L05_00329ce8);

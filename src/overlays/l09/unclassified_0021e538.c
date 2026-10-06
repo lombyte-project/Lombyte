@@ -50,7 +50,29 @@ char *FUN_L09_002c2500(char *src, char *pos, int cls) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c2610.s", FUN_L09_002c2610);
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
+
+extern char *D_L09_0015FFE4;
+extern float FUN_001f9b48(void *, void *);
+
+char *FUN_L09_002c2610(void *pos, int type, float *dist) {
+    char *best = 0;
+    float bestd = 100000.0f;
+    char *m;
+    for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
+        if (*(short *)(m + 0xA6) == type) {
+            float d = FUN_001f9b48(pos, m + 0x10);
+            if (d < bestd) {
+                bestd = d;
+                best = m;
+            }
+        }
+    }
+    if (dist != 0) {
+        *dist = bestd;
+    }
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c26c8.s", FUN_L09_002c26c8);
 /* spawns a debris moby with randomized velocity toward a point */
 /* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */

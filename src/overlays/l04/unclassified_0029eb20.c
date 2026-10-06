@@ -144,7 +144,16 @@ void FUN_L04_002c4808(char *arg) {
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029eb20.s", FUN_L04_0029eb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba448.s", FUN_L04_002ba448);
+/* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
+/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
+
+void FUN_L04_002ba448(char *arg, float f) {
+    char *data = *(char **)(arg + 0x78);
+    *(float *)(arg + 0x58) = f;
+    if (*(char **)(data + 0x424) != 0) {
+        *(float *)(*(char **)(data + 0x424) + 0x58) = f;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ba520.s", FUN_L04_002ba520);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);
 #include "sda.h"

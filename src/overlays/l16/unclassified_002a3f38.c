@@ -202,7 +202,7 @@ void FUN_L16_002cf4a8(char *moby) {
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0990), where it is exact; names translated to the US level program. */
 
 extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
-extern int FUN_L16_002cf678(char *);
+extern int FUN_L16_002cf678_u(char *) __asm__("FUN_L16_002cf678");
 
 void FUN_L16_002cf5c8(char *moby) {
     short *p = D_L16_001ABCC0_c[(unsigned char)moby[0x21]];
@@ -215,7 +215,7 @@ void FUN_L16_002cf5c8(char *moby) {
                     *(unsigned short *)(other + 0x34) |= 2;
                 }
                 data = *(int **)(other + 0x78);
-                *data = FUN_L16_002cf678(other);
+                *data = FUN_L16_002cf678_u(other);
             }
         } while (*p++ >= 0);
     }
@@ -877,7 +877,26 @@ again:
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf198.s", FUN_L16_002cf198);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf678.s", FUN_L16_002cf678);
+/* first other moby of type 0x228 in m's list whose 0x18 is within 0.1 of m's */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0A40), where it is exact; names translated to the US level program. */
+
+extern int *D_L16_001ABCC0_c4[] __asm__("D_L16_001ABCC0");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
+
+int FUN_L16_002cf678(char *m) {
+    short *p = D_L16_001ABFC0_2d0a40[((unsigned char *)m)[0x21]];
+    if (p == 0) return 0;
+    while (1) {
+        char *o = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (*(short *)(o + 0xA6) == 0x228 && m != o) {
+            if (AbsoluteFloat(*(float *)(o + 0x18) - *(float *)(m + 0x18)) < 0.1f) {
+                return (int)o;
+            }
+        }
+        if (*p++ < 0) return 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf738.s", FUN_L16_002cf738);
 /* Draw each linked pair once per generation. */
 /* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B70), where it is exact; names translated to the US level program. */

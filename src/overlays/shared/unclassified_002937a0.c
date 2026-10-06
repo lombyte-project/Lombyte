@@ -3,7 +3,51 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d36e0.s", FUN_L08_002d36e0);
+/* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
+
+extern char *D_L08_001B0CB0[];
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_001413D0[];
+extern float FUN_001f9b80(void *, void *);
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_0025ff38();
+extern void FUN_L00_00257470(void *, int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+
+void FUN_L08_002d36e0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int hit;
+    float dmg;
+    int idx;
+    dmg = 0.0f;
+    idx = FUN_L00_0025a478(m, FUN_L00_0025a420(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
+        *(float *)(d + 0x20) -= dmg;
+        if (*(float *)(d + 0x20) <= 0.0f) idx = 1;
+        if (idx < 12) {
+            if (idx >= 0) {
+                FUN_L00_00257470(m, 0, -1);
+                m[0x20] = 0x63;
+            }
+        }
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    if (((unsigned char *)m)[0x20] != 0 && ((unsigned char *)m)[0x20] != 4) {
+        char *e = D_L08_001B0CB0[*(int *)(d + 0x21C)];
+        if (func_L00_00260FB0_f(m, d + 0x170, 14.0f, 0, 0, e + 0x10, *(int *)e) != 2) {
+            if (14.0f < FUN_001f9b80(d + 0x1C0, d + 0x170)) {
+                *(int *)(d + 0x1B4) = 2;
+            } else if (3.0f < AbsoluteFloat(*(float *)(d + 0x1C8) - *(float *)(d + 0x178))) {
+                *(int *)(d + 0x1B4) = 2;
+            }
+        }
+    }
+    if (*(int *)(d + 0x1B0) == 0) {
+        *(int *)(d + 0x1B0) = *(int *)(D_001413D0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 #define NOT_SDA
 

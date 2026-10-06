@@ -160,8 +160,136 @@ void FUN_L14_002ad8b8(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ada18.s", FUN_L14_002ada18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002add48.s", FUN_L14_002add48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae0a8.s", FUN_L14_002ae0a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae260.s", FUN_L14_002ae260);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ae448.s", FUN_L14_002ae448);
+/* Draws the moby's glow quad, pulled toward the camera so it is not hidden by the moby. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF4A0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    u64 a, b, c, d;
+} Pk_2af4a0;
+
+extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern float D_L14_001D8640[4][4];
+extern float vector_length_xyz(void *a);
+extern short D_L14_0016147C_d __asm__("D_L14_0016147C") __attribute__((sda));
+extern short D_L14_00161480_d __asm__("D_L14_00161480") __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
+
+void FUN_L14_002ae260(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float pos[4];
+    Pk_2af4a0 pk;
+    float v[4];
+    float w[4];
+    float len;
+    u32 col;
+    int j;
+    qcopy(pos, d + 0x90);
+    pos[2] += 0.01f;
+    pos[3] = 1.0f;
+    pk.b = get_effect_texture_alt(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
+    subtract_vector_xyz(v, D_L14_001674C0_d, pos);
+    len = vector_length_xyz(v);
+    if (0.0f < len) {
+        float s = *(float *)(d + 0x218);
+        float f = len - *(float *)&D_L14_0016147C_d;
+        if (f < s) {
+            s = f;
+            if (f < 0.0f) s = 0.0f;
+        }
+        normalize_vector_xyz(w, v, s);
+        add_vector_xyz(pos, pos, w);
+    }
+    pk.uv[2] = 0.0f;
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    if (*(short *)(d + 0x202) != 0) {
+        col = 0x7F40407F;
+        pk.col[3] = col;
+        pk.col[2] = col;
+        pk.col[1] = col;
+        pk.col[0] = col;
+    } else {
+        col = *(u32 *)&D_L14_00161480_d;
+        pk.col[3] = col;
+        pk.col[2] = col;
+        pk.col[1] = col;
+        pk.col[0] = col;
+    }
+    for (j = 0; j < 4; j++) {
+        scale_vector_xyz(pk.m[j], D_L14_001D8640[j], *(float *)(d + 0x214));
+        add_vector_xyz(pk.m[j], pk.m[j], pos);
+    }
+    draw_geometry_quad(&pk, 0, 0);
+}
+/* Measures the segments of the moby's three paths, sums two of them and places it on the first two. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF688), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b48(void *, void *);
+extern int *D_L14_001B0BB0[];
+extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
+extern int func_L00_0025E860_2AF688(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
+
+void FUN_L14_002ae448(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *p;
+    int i;
+    float len;
+    p = D_L14_001B0BB0[*(int *)(d + 0x78)];
+    *(int *)(d + 0x16C) = 0;
+    for (i = 0; i < p[0]; i++) {
+        len = FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
+        *(float *)((char *)p + (i << 4) + 0x1C) = len;
+        if (i != p[0] - 1) {
+            *(float *)(d + 0x16C) += len;
+        }
+    }
+    p = D_L14_001B0BB0[*(int *)(d + 0x74)];
+    *(int *)(d + 0x190) = 0;
+    for (i = 0; i < p[0]; i++) {
+        len = FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
+        *(float *)((char *)p + (i << 4) + 0x1C) = len;
+        if (i != p[0] - 1) {
+            *(float *)(d + 0x190) += len;
+        }
+    }
+    p = D_L14_001B0BB0[*(int *)(d + 0x204)];
+    for (i = 0; i < p[0]; i++) {
+        *(float *)((char *)p + (i << 4) + 0x1C) = FUN_001f9b48((char *)p + (i * 16 + 0x10), (char *)p + (((i + 1) % p[0]) * 16 + 0x10));
+    }
+    if (*(float *)(d + 0x210) != 0.0f) {
+        int *q = D_L14_001B0BB0[*(int *)(d + 0x78)];
+        *(int *)(d + 0x84) = 0;
+        *(float *)(d + 0x1CC) = 0.0f;
+        func_L00_0025E860_2AF688(q, m + 0x10, d + 0x84, d + 0x1CC, *(short *)(d + 0x8A), *(float *)(d + 0x210) * *(float *)(d + 0x16C));
+        *(float *)(d + 0x8C) = 0.0f;
+        *(int *)(d + 0x80) = 0;
+        func_L00_0025E860_2AF688(q, m + 0x10, d + 0x80, d + 0x8C, *(short *)(d + 0x8A), *(float *)(d + 0x210) * *(float *)(d + 0x190));
+    } else {
+        *(int *)(d + 0x80) = 0;
+        *(int *)(d + 0x84) = 0;
+        *(float *)(d + 0x8C) = 0.0f;
+        *(float *)(d + 0x1CC) = 0.0f;
+    }
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF918), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -294,7 +422,7 @@ extern float FUN_001f9e90(float, float);
 extern int FUN_001fa728_c(char *, float) __asm__("FUN_001fa728");
 extern void FUN_0020cca8_c(char *, int, void *) __asm__("FUN_0020cca8");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void FUN_L14_002ae260(void);
+extern void FUN_L14_002ae260_u(void) __asm__("FUN_L14_002ae260");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -325,7 +453,7 @@ int FUN_L14_002aeba0(char *moby, int flag) {
         *(float *)(data + 0x1C0) = t;
         qcopy(data + 0x90, data + 0x170);
         if (flag != 0) {
-            enqueue_callback_list_1(FUN_L14_002ae260, moby);
+            enqueue_callback_list_1(FUN_L14_002ae260_u, moby);
             *(int *)(data + 0x20C) |= 2;
         }
     }

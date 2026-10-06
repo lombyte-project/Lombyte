@@ -301,7 +301,59 @@ char *FUN_L05_00303f80(char *self, int idx) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305898.s", FUN_L05_00305898);
+/* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
+/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float v[4];
+    char *owner;
+    int x14;
+    unsigned char x18;
+    unsigned char x19;
+    short type;
+    float x1C;
+    int flags;
+} Hit_306CF0;
+
+extern char D_0013F350[];
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L00_001f2868(void *, int, void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+
+void FUN_L05_00305898(char *m) {
+    char **slots = (char **)(*(char **)(m + 0x78) + 0x1A0);
+    char *base;
+    Hit_306CF0 h;
+    int i;
+    int j;
+    for (i = 0; i < 8; i++) {
+        char *e = slots[i];
+        if (e != 0) {
+            if (*(unsigned char *)e != 2 || *(short *)(e + 0x32) == 0) {
+                slots[i] = 0;
+            }
+        }
+    }
+    base = D_0013F350;
+    if (*(int *)(base + 0x1158) == 6) return;
+    h.flags |= 1;
+    h.owner = m;
+    h.x14 = 1;
+    h.x1C = 1.0f;
+    subtract_vector_xyz(h.v, base + 0x80, m + 0x10);
+    h.v[2] = 0.0f;
+    FUN_001f9c48(h.v, h.v, 1.5f);
+    h.v[2] = 1.0f;
+    h.v[3] = 5627.9248f;
+    h.x19 = 1;
+    h.type = *(short *)(m + 0xA6);
+    h.x18 = 0;
+    for (j = 0; j < 8; j++) {
+        if (slots[j] != 0) {
+            FUN_L00_001f2868(slots[j] + 0x10, 0, m, &h, 0.75f);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);

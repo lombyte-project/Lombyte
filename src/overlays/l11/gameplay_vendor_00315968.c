@@ -642,7 +642,86 @@ void FUN_L11_0031aa80(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ab08.s", FUN_L11_0031ab08);
+/* Bubble update: rises to the surface, then pops and fades, drifting with its velocity. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BF78), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED70;
+extern float approach_value(float *p, float target, float maxstep);
+extern float random_float_between(float a, float b);
+extern float vector_length_xy(void *);
+extern int D_L11_0015F5CC;
+extern int random_integer_below_c3(int) __asm__("FUN_00213260");
+extern int scale_game_frames(int);
+extern short D_L11_00162400_d __asm__("D_L11_00162400") __attribute__((sda));
+extern short D_L11_00162404_d __asm__("D_L11_00162404") __attribute__((sda));
+extern short D_L11_00162408_d __asm__("D_L11_00162408") __attribute__((sda));
+extern short D_L11_0016240C_d __asm__("D_L11_0016240C") __attribute__((sda));
+extern short D_L11_00162410_d __asm__("D_L11_00162410") __attribute__((sda));
+extern short D_L11_00162414_d __asm__("D_L11_00162414") __attribute__((sda));
+extern short D_L11_00162418_d __asm__("D_L11_00162418") __attribute__((sda));
+extern short D_L11_0016241C_d __asm__("D_L11_0016241C") __attribute__((sda));
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L11_0031ae68(char *, float *, int, int);
+extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
+
+void FUN_L11_0031ab08(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float len;
+    float rate;
+    char *p;
+    if (((unsigned char *)m)[0x31] == 0) {
+        if (++*(short *)(d + 0x22) > scale_game_frames(0xF)) {
+            mark_moby_for_removal(m);
+            return;
+        }
+    } else {
+        *(short *)(d + 0x22) = 0;
+    }
+    switch (((unsigned char *)m)[0x20]) {
+    case 1:
+        *(float *)(d + 8) -= *(float *)&D_L11_00162400_d * D_0015ED70;
+        if (**(float **)(d + 0x24) + 3.0f < *(float *)(m + 0x18)) {
+            if (random_integer_below_c3(*(int *)&D_L11_00162410_d) == 0) {
+                FUN_L11_0031b098_c(m);
+            }
+        }
+        if (*(float *)(m + 0x18) < **(float **)(d + 0x24)) {
+            scale_vector_xyz(d, d, *(float *)&D_L11_0016240C_d);
+            m[0x20] = 2;
+            FUN_L11_0031ae68(m, *(float **)(d + 0x24), 8, 4);
+        }
+        break;
+    case 2:
+        *(float *)(d + 8) -= *(float *)&D_L11_00162404_d * D_0015ED70;
+        rate = *(float *)(*(char **)(m + 0x24) + 0x24) / (float)scale_game_frames(0x3C);
+        if ((D_L11_0015F5CC & 3) == 0) {
+            FUN_L11_0031ae68(m, *(float **)(d + 0x24), 0, 1);
+            FUN_L00_00257d78(v, 0.0f, D_0015ED6C);
+            v[2] = AbsoluteFloat(v[2]);
+            p = func_L00_0026FF20_p(m + 0x10, v, *(float *)&D_L11_00162414_d, **(float **)(d + 0x24));
+            if (p != 0) {
+                *(int *)(p + 4) = FUN_001fa6e0(*(int *)&D_L11_00162418_d, *(int *)&D_L11_0016241C_d, random_float_between(0.0f, 1.0f));
+            }
+        }
+        approach_value((float *)(m + 0x2C), 0.0f, rate);
+        if (*(float *)(m + 0x2C) == 0.0f) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        break;
+    }
+    add_vector_xyz(m + 0x10, m + 0x10, d);
+    len = vector_length_xy(d);
+    approach_value(&len, 0.0f, *(float *)&D_L11_00162408_d * D_0015ED70);
+    FUN_001f9c48(d, d, len);
+}
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 

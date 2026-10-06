@@ -185,7 +185,57 @@ int FUN_L13_002c3ac8(char *pt, int *tbl, int start, float ref) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c3c88.s", FUN_L13_002c3c88);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
+
+extern char *D_L13_001B07B0[];
+extern char D_0013F350[];
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
+
+int FUN_L13_002c3c88(char *m, char *d, int aim) {
+    char *path = D_L13_001B07B0[*(int *)(d + 0xA0)];
+    float a, seg, diff, t;
+    int wrapped = 0;
+    float v[4];
+    a = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10), m + 0x10);
+    seg = FUN_001f9b48(path + (*(short *)(d + 0xB6) * 16 + 0x10), path + (*(short *)(d + 0xB4) * 16 + 0x10));
+    diff = seg - a;
+    if ((0.0f <= diff && diff < *(float *)(d + 0xCC)) || seg < *(float *)(d + 0xCC)) {
+        *(short *)(d + 0xB6) = *(unsigned short *)(d + 0xB4);
+        *(short *)(d + 0xB4) = *(unsigned short *)(d + 0xB4) + ((signed char *)d)[0xD0];
+        if (*(short *)(d + 0xB4) >= *(int *)path) {
+            *(short *)(d + 0xB4) = 0;
+            wrapped = 1;
+        }
+        if (*(short *)(d + 0xB4) < 0) {
+            wrapped = 1;
+            *(short *)(d + 0xB4) = *(unsigned short *)path - 1;
+        }
+        t = 0.0f;
+    } else {
+        t = a / seg;
+    }
+    if (t < 0.05f) t = 0.05f;
+    if (1.0f < t) t = 1.0f;
+    scale_vector_xyz(d + 0x70, d + 0x70, 1.0f - t);
+    subtract_vector_xyz(v, path + (*(short *)(d + 0xB4) * 16 + 0x10), m + 0x10);
+    normalize_vector_xyz(v, v, *(float *)(d + 0xCC));
+    scale_vector_xyz(v, v, t);
+    add_vector_xyz(d + 0x70, d + 0x70, v);
+    normalize_vector_xyz(d + 0x70, d + 0x70, *(float *)(d + 0xCC));
+    add_vector_xyz(m + 0x10, m + 0x10, d + 0x70);
+    if (aim != 0) {
+        char *g = D_0013F350;
+        float yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10), *(float *)(g + 0x84) - *(float *)(m + 0x14));
+        FUN_L13_002c3988_c(m, d, yaw, -FUN_001f9e90(FUN_001f9b80(m + 0x10, g + 0x80), *(float *)(g + 0x88) - *(float *)(m + 0x18)));
+    }
+    return wrapped;
+}
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C5190), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
@@ -462,7 +512,33 @@ void FUN_L13_002ea330(char *a, char *b, float f) {
     build_spherical_offset(a, dist / (k + f) * k, y, -x);
     FUN_001f9a10(a, a, *(char **)(base + 0x15F0) + 0x10);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea400.s", FUN_L13_002ea400);
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB838), where it is exact; names translated to the US level program. */
+
+extern void FUN_L13_002ea330_c2(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
+
+float FUN_L13_002ea400(float *pos, float *pitch, float *yaw, float lead) {
+    char *base = D_0013F350;
+    char *t = *(char **)(base + 0x15F0);
+    float v[4];
+    float y;
+    float p;
+    if (t != 0 && *(short *)(t + 0xA6) == 0x45) {
+        if (lead > 0.0f) {
+            FUN_L13_002ea330_c2((char *)v, (char *)pos, lead);
+        } else {
+            qcopy(v, t + 0x10);
+        }
+        y = FUN_001f9e90(v[0] - pos[0], v[1] - pos[1]);
+        p = -FUN_001f9e90(FUN_001f9b80(pos, v), v[2] - pos[2]);
+    } else {
+        char *p0 = D_0013F350;
+        y = FUN_001f9e90(*(float *)(p0 + 0x80) - pos[0], *(float *)(p0 + 0x84) - pos[1]);
+        p = -FUN_001f9e90(FUN_001f9b80(pos, p0 + 0x80), *(float *)(p0 + 0x88) - pos[2]);
+    }
+    if (yaw != 0) *yaw = y;
+    if (pitch != 0) *pitch = p;
+    return y;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea540.s", FUN_L13_002ea540);
 /* computes a velocity vector for a moby from the camera/player and spawns a projectile */
 /* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EBAF0), where it is exact; names translated to the US level program. */

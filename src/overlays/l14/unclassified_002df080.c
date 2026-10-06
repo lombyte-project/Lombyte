@@ -171,8 +171,100 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee6b0.s", FUN_L14_002ee6b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef150.s", FUN_L14_002ef150);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ef3e0.s", FUN_L14_002ef3e0);
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
+
+extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
+extern float FUN_L00_0025b750(float, float, float);
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int FUN_L00_0025d808();
+extern short D_L14_00161D14_d __asm__("D_L14_00161D14") __attribute__((sda));
+extern int func_L00_0025E860_2F05D8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
+
+int FUN_L14_002ef150(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float rot[4];
+    float pos[4];
+    char *e;
+    float total;
+    float step;
+    float t;
+    float s;
+    int r;
+    if (((unsigned char *)m)[0xBC] == 0) {
+        e = D_L14_001B0BB0_c3[*(int *)(d + 0xA0)];
+        total = *(float *)(d + 0xB4);
+        qcopy(rot, d + 0xE0);
+    } else {
+        e = D_L14_001B0BB0_c3[*(int *)(d + 0xB8)];
+        total = *(float *)(d + 0xBC);
+        qcopy(rot, d + 0xF0);
+    }
+    step = *(float *)&D_L14_00161D14_d * D_0015ED6C_c;
+    r = func_L00_0025E860_2F05D8(e, pos, d + 0xA4, d + 0xA8, 0, step * *(float *)(d + 0xAC));
+    FUN_L00_0025b8c0((float *)(m + 0x10), (float *)(d + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x14), (float *)(d + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x18), (float *)(d + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
+    *(float *)(d + 0xB0) += step;
+    t = *(float *)(d + 0xB0) / total;
+    if (1.0f < t) t = 1.0f;
+    if (r != 0) t = 1.0f;
+    if (*(float *)(d + 0xAC) < 0.0f) t = 1.0f - t;
+    if (0.0f < *(float *)(d + 0xAC)) {
+        s = 0.0f;
+        if (0.5f < t) s = (t - 0.5f) + (t - 0.5f);
+    } else {
+        s = 1.0f;
+        if (t <= 0.5f) s = t + t;
+    }
+    if (1.0f < s) s = 1.0f;
+    *(float *)(m + 0x40) = FUN_L00_0025b750(*(float *)(d + 0xD0), rot[0], s);
+    *(float *)(m + 0x44) = FUN_L00_0025b750(*(float *)(d + 0xD4), rot[1], t);
+    *(float *)(m + 0x48) = FUN_L00_0025b750(*(float *)(d + 0xD8), rot[2], t);
+    if (r != 0) {
+        if (0.0f < *(float *)(d + 0xAC)) {
+            int n = *(int *)e - 2;
+            *(int *)(d + 0xA4) = n;
+            *(float *)(d + 0xA8) = *(float *)(e + (n << 4) + 0x1C);
+        } else {
+            *(int *)(d + 0xA4) = 0;
+            *(float *)(d + 0xA8) = 0.0f;
+        }
+        return 1;
+    }
+    return 0;
+}
+/* Springs the moby's position (and, while moving, its rotation) toward its current path point. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0868), where it is exact; names translated to the US level program. */
+
+extern char *D_L14_001B0BB0_c4[] __asm__("D_L14_001B0BB0");
+
+void FUN_L14_002ef3e0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float pos[4];
+    float rot[4];
+    char *e;
+    if (((unsigned char *)m)[0xBC] == 0) {
+        e = D_L14_001B0BB0_c4[*(int *)(d + 0xA0)];
+        qcopy(rot, d + 0xE0);
+    } else {
+        e = D_L14_001B0BB0_c4[*(int *)(d + 0xB8)];
+        qcopy(rot, d + 0xF0);
+    }
+    if (*(float *)(d + 0xAC) > 0.0f) {
+        qcopy(pos, e + *(int *)e * 16);
+    } else {
+        qcopy(pos, e + 0x10);
+    }
+    FUN_L00_0025b8c0((float *)(m + 0x10), (float *)(d + 0xC0), pos[0], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x14), (float *)(d + 0xC4), pos[1], 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x18), (float *)(d + 0xC8), pos[2], 0.003f, 0.2f, 0.0f);
+    if (0.0f < *(float *)(d + 0xAC)) {
+        FUN_L00_0025b8c0((float *)(m + 0x40), (float *)(d + 0x100), rot[0], 0.003f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0((float *)(m + 0x44), (float *)(d + 0x104), rot[1], 0.003f, 0.2f, 0.0f);
+        FUN_L00_0025b8c0((float *)(m + 0x48), (float *)(d + 0x108), rot[2], 0.003f, 0.2f, 0.0f);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
