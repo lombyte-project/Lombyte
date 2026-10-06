@@ -167,6 +167,7 @@ void switch_active_camera_record(CameraRecord *next_camera) {
     camera_transition_state.snapshot_pending = 0;
     update_moby(next_camera);
     backup_current_cam();
+    /* The callbacks run before this flag is read; previous_position is updated either way. */
     if (camera_position_publication_suppressed == 0) {
         qcopy(&camera_transition_state.published_position, &next_camera->pos);
     }
