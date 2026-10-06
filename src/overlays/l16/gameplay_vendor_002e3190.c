@@ -479,7 +479,7 @@ extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L16_001D9750[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L16_0015F5CC_c __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
-extern int FUN_001fa6e0(float, int, int);
+extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L16_00161DD8_x __asm__("D_L16_00161DD8") __attribute__((sda));
 extern short D_L16_00161DDC_x __asm__("D_L16_00161DDC") __attribute__((sda));
@@ -499,7 +499,7 @@ void FUN_L16_002e5010(unsigned char *m) {
     float f;
     int period = scale_game_frames(30);
     f = ConvertIntegerToFloat(D_L16_0015F5CC_c % period) / ConvertIntegerToFloat(period);
-    *(int *)(m + 0x90) = FUN_001fa6e0(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
+    *(int *)(m + 0x90) = FUN_001fa6e0_u(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                       *(int *)&D_L16_00161DDC_x, *(int *)&D_L16_00161DE0_x);
     switch (m[0x20]) {
     case 0:
@@ -613,7 +613,7 @@ extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int FUN_001f9740(int *);
-extern int FUN_001fa6e0(float, int, int);
+extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 extern short D_L16_00161DF0 __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -665,9 +665,9 @@ void FUN_L16_002e54a0(unsigned char *m) {
     *(float *)d = FUN_001fa580(*(float *)d, D_0015ED6C * 12.566371f);
     f = (FUN_001f9de0(*(float *)d) + 1.0f) * 0.5f;
     if (m[0xBC]) {
-        *(int *)(m + 0x90) = FUN_001fa6e0(f, 0x80208020, 0x80202020);
+        *(int *)(m + 0x90) = FUN_001fa6e0_u(f, 0x80208020, 0x80202020);
     } else {
-        *(int *)(m + 0x90) = FUN_001fa6e0(f, 0x80202080, 0x80202020);
+        *(int *)(m + 0x90) = FUN_001fa6e0_u(f, 0x80202080, 0x80202020);
     }
 }
 #define NOT_SDA
@@ -1273,7 +1273,107 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7e00.s", FUN_L16_002e7e00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e84e8.s", FUN_L16_002e84e8);
+
+
+
+#include "qcopy.h"
+
+/* Draw stacked alternating rings with a rotating transformation and interpolated tint. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9960), where it is exact; names translated to the US level program. */
+
+typedef float L16RingVector[4] __attribute__((aligned(16)));
+
+typedef struct {
+    L16RingVector position[4];
+    int color[4];
+    struct { float u,v; } uv[4];
+    long zero,texture,flags,mode;
+} L16RingPacket;
+
+typedef struct { L16RingVector basis[3]; L16RingVector position; } L16RingMatrix;
+
+extern char *D_L16_001600FC;
+extern float AbsoluteFloat(float);
+extern float D_0015ED6C;
+extern float D_L16_001D9880[][2];
+extern float fast_cos(float);
+extern float fast_sin(float);
+extern float wrap_angle(float);
+extern int D_L16_0015F5CC;
+extern float D_L16_00161EB8 __attribute__((sda));
+extern float D_L16_00161EC4 __attribute__((sda));
+extern float D_L16_00161EC8 __attribute__((sda));
+extern float D_L16_00161EE8 __attribute__((sda));
+extern int D_L16_00161ECC __attribute__((sda));
+extern int D_L16_00161ED0 __attribute__((sda));
+extern int D_L16_00161ED4 __attribute__((sda));
+extern int D_L16_00161ED8 __attribute__((sda));
+extern int D_L16_00161EDC __attribute__((sda));
+extern int D_L16_00161EE0 __attribute__((sda));
+extern int FUN_001fa6e0(int,int,float);
+extern int get_effect_texture(int);
+extern void FUN_001fa298(void *,void *);
+extern void draw_geometry_quad(void *,void *,int);
+
+void FUN_L16_002e84e8(char *m) {
+    L16RingPacket packet;
+    L16RingMatrix matrix;
+    char *d=*(char **)(m+0x78);
+    int bound_index=(*(int *)((char *)d+0xA0))<<7;
+    char *entry=(char *)(bound_index+(int)D_L16_001600FC);
+    float translation=(*(float *)((char *)d+0xB8));
+    float lower=(*(float *)((char *)entry+0x38));
+    float half=(*(float *)((char *)entry+0x28));
+    float upper=lower+half+translation;
+    int color;
+    float (*uv)[2];
+    L16RingVector *point;
+    float *v,*u;
+    L16RingMatrix *transform;
+    float radius,index,phase;
+    int i,j,sign,period;
+    lower=lower-half;
+    lower+=translation;
+    color=FUN_001fa6e0(D_L16_00161EDC,D_L16_00161EE0,AbsoluteFloat((*(float *)((char *)d+0xB0)))/(D_L16_00161EB8*D_0015ED6C));
+    FUN_001fa298(&matrix,m+0xC0);
+    qcopy(matrix.position,m+16);
+    matrix.position[2]=lower; matrix.position[3]=1.0f;
+    packet.texture=get_effect_texture(14);
+    packet.flags=0xFF9000000260L;
+    packet.mode=(long)D_L16_00161ECC|((long)D_L16_00161ED0<<2)|((long)D_L16_00161ED4<<4)|((long)D_L16_00161ED8<<6)|0x8000000000L;
+    packet.zero=0;
+    uv=D_L16_001D9880;point=packet.position;v=&packet.uv[0].v;u=&packet.uv[0].u;
+    for(i=0;i<4;i++) {
+        *u=(*uv)[0]; *v=(*uv)[1];
+        if(i&1) { (*point)[2]=D_L16_00161EC8; radius=D_L16_00161EC4; }
+        else { (*point)[2]=-D_L16_00161EC8; radius=D_L16_00161EC4-0.05f; }
+        index=(float)(i>>1);
+        (*point)[0]=fast_cos(index*(D_L16_00161EE8*0.017453292f))*radius;
+        (*point)[1]=fast_sin(index*(D_L16_00161EE8*0.017453292f))*radius;
+        (*point)[3]=1.0f;
+        v+=2;u+=2;uv++;point++;
+    }
+    transform=&matrix;
+    sign=1;
+    if(matrix.position[2]<upper) {
+        period=120;
+        do {
+        phase=(float)(D_L16_0015F5CC%period)*0.02617991715669632f;
+        sign=-sign;
+        for(j=0;(float)j<360.0f/D_L16_00161EE8;j++) {
+            matrix.basis[0][0]=fast_cos(wrap_angle((D_L16_00161EE8*0.017453292f)*(float)j+phase*(float)sign));
+            matrix.basis[0][1]=fast_sin(wrap_angle((D_L16_00161EE8*0.017453292f)*(float)j+phase*(float)sign));
+            matrix.basis[0][2]=0.0f;
+            matrix.basis[1][0]=fast_cos(wrap_angle((D_L16_00161EE8*0.017453292f)*(float)j+1.5707964f+phase*(float)sign));
+            matrix.basis[1][1]=fast_sin(wrap_angle((D_L16_00161EE8*0.017453292f)*(float)j+1.5707964f+phase*(float)sign));
+            matrix.basis[1][2]=0.0f; matrix.basis[2][2]=1.0f;
+            packet.color[3]=color;packet.color[2]=color;packet.color[1]=color;packet.color[0]=color;
+            draw_geometry_quad(&packet,transform,0);
+        }
+        matrix.position[2]+=(*(float *)((char *)d+0xBC));
+        } while(matrix.position[2]<upper);
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9D48), where it is exact; names translated to the US level program. */
 
 void FUN_L16_002e88d0(unsigned char *moby)
