@@ -430,7 +430,84 @@ void FUN_L06_002fd088(char *moby) {
     }
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002b4770.s", FUN_L06_002b4770);
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002B5990), where it is exact; names translated to the US level program. */
+
+extern char *D_L06_001600EC;
+extern char D_0013E050[];
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern int D_L06_0015F5C4;
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L06_002b4770(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float z;
+    float a;
+    float s;
+    char *tb;
+    if (D_L06_0015F5C4 == 6) {
+        if (*(int *)(d + 0x10) == 0) {
+            int x;
+            *(int *)(d + 0x10) = 0;
+            x = *(int *)(D_0013E050);
+            if (x == 8) {
+                *(int *)(d + 0x10) = 1;
+                *(float *)(d + 0x18) = 0.3490658402442932f;
+                *(int *)(d + 0x14) = 0;
+            } else if (x == 3) {
+                *(int *)(d + 0x10) = 1;
+                *(float *)(d + 0x14) = 0.3490658402442932f;
+                *(int *)(d + 0x18) = 0;
+            }
+        }
+    } else {
+        *(int *)(d + 0x10) = 0;
+    }
+    if (*(float *)(d + 0x18) != *(float *)(d + 0x14)) {
+        FUN_L00_0025be00((float *)(d + 0x18), (float *)(d + 8), *(float *)(d + 0x14), D_0015ED70 * 1.5707964f,
+                          D_0015ED70 * 1.5707964f, D_0015ED6C * 1.5707964f);
+    }
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        *(float *)(d + 0xC) = FUN_001f9b80(m + 0x10, D_L06_001600EC + *(int *)d * 0x80 + 0x30);
+        *(float *)(d + 4) = *(float *)(m + 0x48);
+        if (*(float *)(m + 0x44) != 0.0f) {
+            m[0x20] = 1;
+        } else {
+            m[0x20] = 2;
+        }
+        break;
+    case 1:
+        z = *(float *)(m + 0x18);
+        a = fast_add_rotations_c(*(float *)(d + 0x18), -1.5707950592041016f);
+        *(float *)(m + 0x10) = fast_cos_c(a) * *(float *)(d + 0xC);
+        s = fast_sin_c2(a) * *(float *)(d + 0xC);
+        tb = D_L06_001600EC;
+        *(float *)(m + 0x14) = s;
+        *(int *)(m + 0x18) = 0;
+        tb += *(int *)d * 0x80;
+        add_vector_xyz(m + 0x10, m + 0x10, tb + 0x30);
+        *(float *)(m + 0x18) = z;
+        *(float *)(m + 0x48) = fast_add_rotations_c(*(float *)(d + 4), *(float *)(d + 0x18));
+        break;
+    case 2:
+        z = *(float *)(m + 0x18);
+        a = fast_subtract_rotations(-1.5707950592041016f, *(float *)(d + 0x18));
+        *(float *)(m + 0x10) = fast_cos_c(a) * *(float *)(d + 0xC);
+        s = fast_sin_c2(a) * *(float *)(d + 0xC);
+        tb = D_L06_001600EC;
+        *(float *)(m + 0x14) = s;
+        *(int *)(m + 0x18) = 0;
+        tb += *(int *)d * 0x80;
+        add_vector_xyz(m + 0x10, m + 0x10, tb + 0x30);
+        *(float *)(m + 0x18) = z;
+        *(float *)(m + 0x48) = fast_subtract_rotations(*(float *)(d + 4), *(float *)(d + 0x18));
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");

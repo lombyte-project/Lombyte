@@ -266,7 +266,78 @@ void FUN_L05_002d1fd8(int unused, char *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7020.s", FUN_L05_002d7020);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002dac80.s", FUN_L05_002dac80);
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float D_0015ED70;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
+extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void FUN_L01_0026d930(char *p);
+extern void FUN_L05_002daf58_c(unsigned char *m) __asm__("FUN_L05_002daf58");
+extern void FUN_L05_002db018_c(unsigned char *moby) __asm__("FUN_L05_002db018");
+extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
+extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
+
+void FUN_L05_002dac80(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float dir[4];
+    FUN_L05_002daf58_c(m);
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        m[0x30] = 0x40;
+        if (m[0x53] != 0) blend_moby_animation_c(m, 0, 0, 0);
+        if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        FUN_L01_0026d930(d + 0x60);
+        *(float *)(d + 0x6C) = 1.0f;
+        *(float *)(d + 0x68) = 1.0f;
+        {
+            int r = truncate_float_to_s32_c(409.6f);
+            float f = D_0015ED6C * 4.0f;
+            *(int *)(d + 0x60) = r;
+            *(float *)(d + 0x84) = f;
+        }
+        break;
+    case 1: {
+        char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
+        float yaw = FUN_001f9e90(*(float *)(p + 0x10) - *(float *)(m + 0x10), *(float *)(p + 0x14) - *(float *)(m + 0x14));
+        FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0xBC), yaw, D_0015ED70 * 1.0471976f, D_0015ED70 * 1.0471976f,
+                          D_0015ED6C * 3.1415927f);
+        dir[0] = fast_cos_c(*(float *)(m + 0x48));
+        dir[1] = fast_sin_c(*(float *)(m + 0x48));
+        dir[2] = 0.0f;
+        FUN_L00_00258b50(m, d + 0x60, dir, d + 0x40, 1.0f);
+        if (func_001F9908_v(d + 0xB8) != 0
+            || FUN_001f9b80(m + 0x10, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
+            int r = random_integer_below_c(*(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)]);
+            *(int *)(d + 0xB4) = (*(int *)(d + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)];
+            *(int *)(d + 0xB8) = scale_game_frames(600);
+        }
+        FUN_L05_002db018_c(m);
+        break;
+    }
+    case 2:
+        if (48.0f < FUN_001f9b80(m + 0x10, D_0013F3D0)) {
+            m[0x20] = 1;
+            m[0x31] = 1;
+            *(unsigned short *)(m + 0x34) &= 0xFFFE;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        }
+        break;
+    }
+}
 /* Emits up to two particle effects around the moby, each in a random direction. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
 

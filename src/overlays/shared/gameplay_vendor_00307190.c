@@ -38,7 +38,72 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307298.s", FUN_L08_00307298);
+/* Fire bolt: flies along its velocity with a smoke trail (while the level is not underwater), damaging what it hits. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308758), where it is exact; names translated to the US level program. */
+
+extern char D_L08_00174640[];
+extern float D_L08_0015F5D0;
+extern float D_L08_0015F5D4;
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_L00_00257b90(int, int);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
+
+void FUN_L08_00307298(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float prev[4];
+    float sc[4];
+    float off[4];
+    float tmp[4];
+    char *o;
+    switch (((unsigned char *)m)[0x20]) {
+    case 1:
+        qcopy(prev, m + 0x10);
+        o = *(char **)(d + 0x14);
+        if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
+            m[0x20] = 2;
+        }
+        if (D_L08_0015F5D4 < 0.9f && D_L08_0015F5D0 < 0.9f) {
+            int a;
+            float f = random_float_between_alt(0.95f, 0.985f);
+            scale_vector_xyz(sc, d, f);
+            normalize_vector_xyz(off, d, -0.1f);
+            FUN_L00_001ff290(tmp, off, m + 0x10);
+            a = scale_game_frames(FUN_L00_00257b90(0xF, 0x14));
+            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28, scale_game_frames(FUN_L00_00257b90(7, 0xA)), 1);
+        }
+        add_vector_xyz(m + 0x10, m + 0x10, d);
+        if (FUN_001efa68(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
+            char *t = D_L08_00174640;
+            if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
+                if (*(int *)(t + 0x18) != 0) {
+                    FUN_L00_00259bc8(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
+                }
+                m[0x20] = 2;
+            }
+        }
+        if (func_001F9908_i(d + 0x18) != 0) m[0x20] = 2;
+        break;
+    case 2:
+        if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
+            FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 13.0f);
+        } else {
+            FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 0.0f);
+        }
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
