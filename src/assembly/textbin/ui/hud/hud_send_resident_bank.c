@@ -48,8 +48,8 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
     }
     addr = depth_buffer_address;
     previous_counts = hud_texture_counts;
-    i = bank != 0 ? previous_counts->ends[bank - 1] : 0;
-    end = D_0019A3E8.counts->ends[bank];
+    i = bank == 0 ? 0 : previous_counts->ends[bank - 1];
+    end = *(s32 *)((u8 *)D_0019A3E8.counts + 0x34 + (bank << 2));
     for (; i < end; i++) {
         page = addr >> 8;
         w = D_0019A3E8.entries[i].log_w;
