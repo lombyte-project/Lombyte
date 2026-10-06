@@ -1678,7 +1678,97 @@ int FUN_L17_002efea8(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f00a0.s", FUN_L17_002f00a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0210.s", FUN_L17_002f0210);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f04d0.s", FUN_L17_002f04d0);
+
+
+
+/* Builds the two rippling vertex strips around the moby (template points moved to its position, z waved by distance from the centre), then draws them twice with scrolled texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1FE0), where it is exact; names translated to the US level program. */
+
+typedef struct { float f0; float f4; } RippleData;
+
+typedef struct { float v[2]; } P2;
+
+typedef struct { P2 p[2]; } T4;
+
+extern T4 D_L17_00162268;
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float FUN_001f96b0(float);
+extern float FUN_001f9988(float);
+extern float FUN_L00_00200260(float, float);
+extern float fast_add_rotations(float, float);
+extern float wrap_angle(float);
+extern float D_0015ED6C;
+extern int D_L17_0015F5CC;
+extern int D_L17_00162248 __attribute__((sda));
+extern int D_L17_0016224C __attribute__((sda));
+extern int D_L17_00162250 __attribute__((sda));
+extern float D_L17_00162254 __attribute__((sda));
+extern float D_L17_00162258 __attribute__((sda));
+extern float D_L17_0016225C __attribute__((sda));
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern float D_L17_00162260 __attribute__((sda));
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+extern int D_L17_00162210[2] __attribute__((sda));
+extern int D_L17_00162218[2] __attribute__((sda));
+extern int D_L17_00162220[2] __attribute__((sda));
+extern int D_L17_00162228[2] __attribute__((sda));
+extern int D_L17_00162230[2] __attribute__((sda));
+extern int D_L17_00162238[2] __attribute__((sda));
+
+void FUN_L17_002f04d0(char *moby) {
+    RippleData *d = *(RippleData **)(moby + 0x78);
+    float scale;
+    int r, g, b;
+    int color;
+    int i, j, m, n, q;
+
+    scale = ConvertIntegerToFloat(D_L17_0015F5CC) * (D_L17_00162260 * D_0015ED6C);
+    vu1_add_g_sregister(6, get_effect_texture(D_L17_0016224C));
+    vu1_add_g_sregister(0x42, ((long)D_L17_00162248 << 32) | 0x44);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
+    d->f0 = d->f4;
+    d->f4 = fast_add_rotations(d->f4, 360.0f / FUN_001f96b0(D_L17_00162258) * 0.017453292f * D_0015ED6C);
+    FUN_L00_00250320(moby, &r, &g, &b);
+    color = (D_L17_00162250 << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < D_L17_00162210[i]; j++) {
+            int *e = D_L17_00162230 + i;
+            float *p = (float *)(*e + j * 12);
+            float t = D_L17_0016225C *
+                fast_sin(fast_add_rotations(wrap_angle(
+                    FUN_L00_00200260(FUN_001f9988(p[0] * p[0] + p[1] * p[1]), D_L17_00162254)
+                        * 6.2831855f / D_L17_00162254), d->f4));
+            *(float *)(j * 12 + D_L17_00162218[i]) = p[0] + *(float *)(moby + 0x10);
+            *(float *)(j * 12 + D_L17_00162218[i] + 4) = p[1] + *(float *)(moby + 0x14);
+            *(float *)(j * 12 + D_L17_00162218[i] + 8) = p[2] + *(float *)(moby + 0x18) + t;
+            *(int *)(j * 4 + D_L17_00162228[i]) = color;
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        for (m = 0; m < 2; m++) {
+            for (n = 0; n < D_L17_00162210[m]; n++) {
+                T4 tbl = D_L17_00162268;
+                *(float *)(n * 8 + D_L17_00162220[m]) =
+                    *(float *)(n * 8 + D_L17_00162238[m])
+                    + FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
+                *(float *)(n * 8 + D_L17_00162220[m] + 4) =
+                    *(float *)(n * 8 + D_L17_00162238[m] + 4)
+                    + FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
+            }
+        }
+        font_queue_vu_state();
+        for (q = 0; q < 2; q++) {
+            FUN_L00_001fde98(D_L17_00162210[q], D_L17_00162218[q],
+                D_L17_00162228[q], (void *)D_L17_00162220[q], 1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0948.s", FUN_L17_002f0948);
 
 
