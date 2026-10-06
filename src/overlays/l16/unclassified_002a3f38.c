@@ -714,7 +714,7 @@ extern float D_0015EE6C ,D_0015ED70_c __asm__("D_0015ED70");
 extern short D_L16_0016198C_d __asm__("D_L16_0016198C") __attribute__((sda));
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void FUN_L16_002c9c38_c(int, void *) __asm__("FUN_L16_002c9c38");
-extern void FUN_L16_002c9cd0();
+void FUN_L16_002c9cd0(char *m);
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
@@ -811,7 +811,97 @@ void FUN_L16_002c9a50(unsigned char *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c9cd0.s", FUN_L16_002c9cd0);
+
+
+
+#include "qcopy.h"
+
+/* Draw paired textured strips along an indexed pose, fading the end caps. */
+/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CB098), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float point[4][4]; int color[4]; struct {float u,v;} uv[4];
+    long zero,texture,flags,mode;
+} L16RibbonPacket;
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L16_001D2FF0[][2],D_L16_001D32E0[][2],D_L16_001D3300[][4];
+extern float D_L16_001D32C0[][2],D_L16_001D3010[][2],D_L16_001D3300[][4];
+extern float D_L16_001D32C0[][2],D_L16_001D32E0[][2],D_L16_001D3030[][4];
+extern float vector_length_xyz(void *a);
+extern int D_L16_0015F5CC;
+extern int D_L16_00161990 __attribute__((sda));
+extern int D_L16_00161994 __attribute__((sda));
+extern int D_L16_00161998 __attribute__((sda));
+extern int D_L16_0016199C __attribute__((sda));
+extern int D_L16_001619A0 __attribute__((sda));
+extern int D_L16_001619A4 __attribute__((sda));
+extern int D_L16_001619A8 __attribute__((sda));
+extern int D_L16_001619AC __attribute__((sda));
+extern int D_L16_001619B0 __attribute__((sda));
+extern int D_L16_001600EC_m __asm__("D_L16_001600EC") __attribute__((section(".sdata")));
+extern int FUN_001fa6e0(float, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void draw_geometry_quad(void *, void *, int);
+extern int func_001FA8A8_caa18(int,int,float) __asm__("FUN_001fa6e0");
+extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
+
+void FUN_L16_002c9cd0(char *m) {
+    L16RibbonPacket packets[2];
+    char *d=*(char **)(m+0x78);
+    float scale=vector_length_xyz(D_L16_001600EC_m+((*(int *)(d+0x60))<<7))*2.001f;
+    int count=func_001FA898_caa18(scale);
+    float step=2.0f/scale;
+    int period,tint,color,limit,j;
+    float phase;
+    long modebits,flags;
+    (*(float *)((char *)d+0x70))=(*(float *)((char *)d+0x70))+(*(float *)((char *)d+0x6C));
+    if((*(float *)((char *)d+0x70))>1.0f) (*(float *)((char *)d+0x70))-=1.0f;
+    else if((*(float *)((char *)d+0x70))<0.0f) (*(float *)((char *)d+0x70))+=1.0f;
+    modebits=0x8000000000L;
+    period=scale_game_frames(120);
+    flags=0xFF9000000260L;
+    limit=count+2;
+    phase=ConvertIntegerToFloat(D_L16_0015F5CC%period);
+    phase=phase/ConvertIntegerToFloat(period);
+    phase=fast_sin(phase*6.28318f-3.14159f)*0.5f+0.5f;
+    tint=func_001FA8A8_caa18(D_L16_001619A8,D_L16_001619AC,phase);
+    color=D_L16_001619B0;
+    packets[0].texture=get_effect_texture(D_L16_00161990);
+    packets[0].mode=(long)D_L16_00161998|((long)D_L16_0016199C<<2)|((long)D_L16_001619A0<<4)|((long)D_L16_001619A4<<6)|modebits;
+    packets[0].flags=flags; packets[0].zero=0;
+    packets[1].texture=get_effect_texture(D_L16_00161994);
+    packets[1].mode=(long)D_L16_00161998|((long)D_L16_0016199C<<2)|((long)D_L16_001619A0<<4)|((long)D_L16_001619A4<<6)|modebits;
+    packets[1].flags=flags; packets[1].zero=0;
+    { int vertex;
+      for(vertex=0;vertex<4;vertex++) {
+          packets[0].uv[vertex].u=D_L16_001D2FF0[vertex][0];
+          packets[0].uv[vertex].v=D_L16_001D2FF0[vertex][1];
+          packets[1].uv[vertex].u=D_L16_001D3010[vertex][0]-(*(float *)(d+0x70));
+          packets[1].uv[vertex].v=D_L16_001D3010[vertex][1];
+          packets[0].color[vertex]=tint; packets[1].color[vertex]=color;
+          qcopy(packets[0].point[vertex],D_L16_001D3030[vertex]);
+          qcopy(packets[1].point[vertex],D_L16_001D3030[vertex]);
+          /* the same vertex of both packets, one packet apart */
+          if(vertex<2) { float *pt=packets[0].point[vertex]; pt[0]-=step; pt[sizeof(L16RibbonPacket)/sizeof(float)]-=step; }
+      }
+    }
+    { int strip;
+    for(strip=0;strip<limit;strip++) {
+        if(strip==0) {packets[0].color[1]=0;packets[0].color[0]=0;packets[1].color[1]=0;packets[1].color[0]=0;}
+        else if(strip==count+1) {packets[0].color[3]=0;packets[0].color[2]=0;packets[1].color[3]=0;packets[1].color[2]=0;}
+        else if(strip==1) {packets[0].color[1]=tint;packets[0].color[0]=tint;packets[1].color[1]=color;packets[1].color[0]=color;}
+        draw_geometry_quad(&packets[0],D_L16_001600EC_m+((*(int *)(d+0x60))<<7),0);
+        draw_geometry_quad(&packets[1],D_L16_001600EC_m+((*(int *)(d+0x60))<<7),0);
+        {float *point=packets[0].point[0];
+        for(j=3;j>=0;j--) {float a=*point+step,b=point[sizeof(L16RibbonPacket)/sizeof(float)]+step;*point=a;point[sizeof(L16RibbonPacket)/sizeof(float)]=b;point+=4;}
+        }
+    }
+}
+}
 
 
 
