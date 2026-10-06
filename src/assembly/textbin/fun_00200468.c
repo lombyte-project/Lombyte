@@ -61,8 +61,8 @@ void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 scre
     packet_words = (u64 *)((u8 *)tag + 0x10);
     render_packet_cursor.p = (struct SpritePacket *)packet_words;
     tag->gif_tag = 0x7400000000008001;
-    packet_words[2] = tex0;
     packet_words[1] = 0x5353106;
+    packet_words[2] = tex0;
     packet_words[4] = ((s64)alpha << 24) | 0x7F7F7F;
     packet_words[3] = 0x156;
     packet_words[5] = packed_first_uv;
