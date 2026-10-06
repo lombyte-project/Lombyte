@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/sky/update_sky_effects/FUN_0022ae70.s", FUN_0022ae70);
-#else
-#include "types.h"
 
 struct LevelSkyEffectData {
     u8 pad_0[4];
@@ -17,7 +11,7 @@ struct LevelSkyEffectData {
 
 /* Orbiting effects use two halfword angles; randomized effects use RGBA. */
 union SkyEffectColorOrAngles {
-    struct {
+    struct SkyAngles {
         s16 azimuth;
         u16 elevation;
     } angles;
@@ -52,7 +46,7 @@ extern f32 func_00213308();
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
 extern void func_0022BBA0();
 extern void func_00233980(s32, u64);
-extern s32 rand() __asm__("func_001160D8");
+extern s32 rand() __asm__("FUN_001160d8");
 
 void update_sky_effects(void) __asm__("FUN_0022ae70");
 
@@ -68,32 +62,24 @@ void update_sky_effects(void) {
     s32 random_bits;
     s32 random_color_enabled;
     s32 effect_flags;
-    s16 effect_count;
     f32 radius;
-    f32 angle_step;
     struct SkyEffect *effect;
-    struct LevelSkyEffectData *sky_data;
+    struct SkyAngles *orbit;
     s16 *angles;
 
     level_sky_effect_data->relocation_state = 0;
     func_001F9FC8(D_001D96E0);
     sky_draw_shell(0);
     sky_draw_shell(1);
-    effect_count = level_sky_effect_data->effect_count;
-    if (effect_count == 0) {
+    if (level_sky_effect_data->effect_count == 0) {
         level_sky_effect_data->effect_count = 0x100;
-        initialization_index = 0;
         func_001160C8(0x3039);
-        sky_data = level_sky_effect_data;
-        if (sky_data->effect_count < 1) {
-            goto end;
-        }
-        radius = 50.0f;
-        random_color_enabled = 1;
-        effect_flags = 0x48;
-        base_color = 0x30505050;
-        while (1) {
-            effect = &sky_data->effects[initialization_index];
+        for (initialization_index = 0; initialization_index < level_sky_effect_data->effect_count; initialization_index++) {
+            radius = 50.0f;
+            random_color_enabled = 1;
+            effect_flags = 0x48;
+            base_color = 0x30505050;
+            effect = &level_sky_effect_data->effects[initialization_index];
             if (initialization_index >= 0xF6) {
                 effect->randomize_color = 0;
                 angles = &effect->state.angles.azimuth;
@@ -132,59 +118,42 @@ void update_sky_effects(void) {
                     effect->state.base_color = (alpha_delta + ((color_delta << 8) + base_color)) | color_delta;
                 }
             }
-            initialization_index += 1;
-            sky_data = level_sky_effect_data;
-            if (initialization_index >= sky_data->effect_count) {
-                break;
+        }
+    }
+    for (effect_index = 0; effect_index < level_sky_effect_data->effect_count; effect_index++) {
+        effect = &level_sky_effect_data->effects[effect_index];
+        if (effect->randomize_color == 0) {
+            orbit = &effect->state.angles;
+            angles = &effect->state.angles.azimuth;
+            effect->state.angles.azimuth = (s16) (effect->state.angles.azimuth + 1);
+            angles[1] = (u16) (angles[1] + 1);
+            azimuth = convert_integer_to_float((orbit->azimuth & 0xFFF) - 0x800) * 0.0015339808f;
+            elevation = convert_integer_to_float((angles[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            trig_product = fast_cos(azimuth);
+            trig_product = trig_product * fast_sin(elevation);
+            trig_product = trig_product * 50.0f;
+            effect->position_x = trig_product;
+            trig_product = fast_sin(azimuth);
+            trig_product = trig_product * fast_sin(elevation);
+            trig_product = trig_product * 50.0f;
+            effect->position_y = trig_product;
+            effect->position_z = AbsoluteFloat(fast_cos(elevation)) * 50.0f;
+            if ((u32) (orbit->azimuth & 0x3F) < 8U) {
+                effect->color = 0x702020F0;
+            } else {
+                effect->color = 0x202020F0;
             }
-        }
-    }
-    sky_data = level_sky_effect_data;
-    effect_count = sky_data->effect_count;
-    if (effect_count <= 0) {
-        goto end;
-    }
-    angle_step = 0.0015339808f;
-    radius = 50.0f;
-    effect_index = 0;
-update_next_effect:
-    effect = &sky_data->effects[effect_index];
-    if (effect->randomize_color == 0) {
-        angles = &effect->state.angles.azimuth;
-        effect->state.angles.azimuth = (s16) (effect->state.angles.azimuth + 1);
-        angles[1] = (u16) (angles[1] + 1);
-        azimuth = convert_integer_to_float((effect->state.angles.azimuth & 0xFFF) - 0x800) * angle_step;
-        elevation = convert_integer_to_float((angles[1] & 0xFFF) - 0x800) * angle_step;
-        trig_product = fast_cos(azimuth);
-        trig_product = trig_product * fast_sin(elevation);
-        trig_product = trig_product * radius;
-        effect->position_x = trig_product;
-        trig_product = fast_sin(azimuth);
-        trig_product = trig_product * fast_sin(elevation);
-        trig_product = trig_product * radius;
-        effect->position_y = trig_product;
-        effect->position_z = AbsoluteFloat(fast_cos(elevation)) * radius;
-        if ((u32) (effect->state.angles.azimuth & 0x3F) < 8U) {
-            effect->color = 0x702020F0;
         } else {
-            effect->color = 0x202020F0;
+            u32 color_value;
+            u32 color_offset;
+            random_bits = rand() >> 0x10;
+            color_offset = ((random_bits & 0x1F00) << 0xA) + 0xFFDFDFE0;
+            color_value = effect->state.base_color + color_offset;
+            color_value += (random_bits & 0x1F0) << 6;
+            color_value += (random_bits & 0x1F) << 2;
+            effect->color = color_value;
         }
-    } else {
-        u32 color_value;
-        u32 color_offset;
-        random_bits = rand() >> 0x10;
-        color_offset = ((random_bits & 0x1F00) << 0xA) + 0xFFDFDFE0;
-        color_value = effect->state.base_color + color_offset;
-        color_value += (random_bits & 0x1F0) << 6;
-        color_value += (random_bits & 0x1F) << 2;
-        effect->color = color_value;
     }
-    effect_index += 1;
-    sky_data = level_sky_effect_data;
-    if (effect_index < sky_data->effect_count) {
-        goto update_next_effect;
-    }
-end:
     func_0022BBA0();
     func_00233980(0x42, (0x8000ULL << 0x18) | 0x44);
     sky_draw_shell(2);
@@ -193,4 +162,3 @@ end:
 
 extern __typeof__(update_sky_effects) func_0022AE70 __attribute__((alias("FUN_0022ae70")));
 
-#endif /* NON_MATCHING */

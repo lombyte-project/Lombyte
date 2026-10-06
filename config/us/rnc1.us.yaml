@@ -1961,7 +1961,7 @@ segments:
           - [0x12bb14, textbin, text_gap_0022ab94_before_fun_0022ae70]
           - [0x12bb40, c, assembly/textbin/fun_0022abc0]
           - [0x12bdec, textbin, text_gap_0022ae6c_after_fun_0022abc0]
-          - [0x12bdf0, c, assembly/textbin/rendering/sky/update_sky_effects]
+          - [0x12bdf0, c, rendering/sky/update_sky_effects]
           - [0x12c204, textbin, text_gap_0022b284_before_fun_0022b288]
           - [0x12c208, c, rendering/sky/fun_0022b288]
           - [0x12c448, c, rendering/sky/setup_sky_gif_paging]
