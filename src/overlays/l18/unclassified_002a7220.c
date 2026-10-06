@@ -72,14 +72,14 @@ void FUN_L18_002d6280(unsigned char *arg) {
     flags &= 0xEFFF;
     *(unsigned short *)(arg + 0x34) = flags;
 }
-extern int D_L18_001AC240[];
+extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
 extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d6d50, 108 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
 void FUN_L18_002d6d50(int idx) {
-    short *p = (short *)D_L18_001AC240[idx];
+    short *p = (short *)D_L18_001AC240_u[idx];
     if (p != 0) {
         char *base = *(char **)&D_L18_0015FFD8_d;
         do {
@@ -1031,7 +1031,40 @@ void FUN_L18_002d6600(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d6b58.s", FUN_L18_002d6b58);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7F48), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x58]; char *base; char pad2[0x100]; } L18Glob;
+
+typedef struct { char pad0[0x10]; float x; float y; } L18Pos;
+
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+extern int *D_L18_001AC240[];
+
+void *FUN_L18_002d6b58(float *a, float *b, int idx) {
+    short *p = (short *)D_L18_001AC240[idx];
+    char *best = 0;
+    float bestd = 0.0f;
+    if (p == 0) return 0;
+    while (1) {
+        int off = (*p & 0x7FFF) << 8;
+        if (*(short *)(off + (int)*(char **)&D_L18_0015FFD8_d + 0xA6) == 0x247) {
+            float ang = FUN_001f9e90(a[0] - b[0], a[1] - b[1]);
+            L18Pos *m = (L18Pos *)(off + (int)*(char **)&D_L18_0015FFD8_d);
+            float d = FUN_001fa688(ang, FUN_001f9e90(a[0] - m->x, a[1] - m->y));
+            if (bestd < d) {
+                bestd = d;
+                best = (char *)D_L18_0015FFD8_m + off;
+            }
+        }
+        if (*p++ < 0) return best;
+    }
+}
 /* Of the mobys of class 0x247 in list idx, the one nearest to pos (within
    255 units), or 0. The second spelling of the table base keeps the
    address out of the loop's $gp-relative reload in the bc1f delay slot. */
