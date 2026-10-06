@@ -173,7 +173,36 @@ char *FUN_L11_0030f5a8(void *position, void *vector, int id) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f660.s", FUN_L11_0030f660);
+#include "sda.h"
+
+#include "qzero.h"
+
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310B28), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L11_0030fd98_c(char *) __asm__("FUN_L11_0030fd98");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+
+int FUN_L11_0030f660(char *owner, char *data) {
+ char *child;
+ if (!*(char **)(data + 0x34)) {
+  *(char **)(data + 0x34) = FUN_L11_0030fd98_c(owner);
+  if (!*(char **)(data + 0x34)) goto missing;
+ }
+ child = *(char **)(data + 0x34);
+ if (*(unsigned char *)(child + 0x20) == 0xFE) goto missing;
+ if (*(unsigned char *)(child + 0x20) == 0xFD) goto missing;
+ qcopy(child + 0x10, owner + 0x10);
+ qcopy(child + 0x40, owner + 0x40);
+ FUN_L00_00250df8(child);
+ FUN_L00_0024f7c8(*(char **)(data + 0x34), 0, data);
+ subtract_vector_xyz_c(data + 0x20, *(char **)(data + 0x34) + 0x10, data);
+ return 1;
+missing:
+ qcopy(data, owner + 0x10);
+ qzero(data + 0x20);
+ return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f728.s", FUN_L11_0030f728);
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
 

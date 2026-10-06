@@ -451,7 +451,31 @@ void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
         moby->value = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4ff0.s", FUN_L13_002b4ff0);
+#include "sda.h"
+
+#include "qzero.h"
+
+/* adjusts moby height toward the sampled ground height */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B61A0), where it is exact; names translated to the US level program. */
+
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern short D_0015ED70;
+
+void FUN_L13_002b4ff0(char *m,char *d) {
+ float ground=probe_ground_height(m+0x10,0,0.5f);
+ float z=*(float *)(m+0x18);
+ if(ground<z+0.3f) {
+ float v=*(float *)(d+0x128)-*(float *)&D_0015ED70*9.8f;
+ *(float *)(d+0x128)=v;
+ *(float *)(m+0x18)=*(float *)(m+0x18)+v;
+ if(*(float *)(m+0x18)<ground) *(float *)(m+0x18)=ground;
+ } else if(z<ground) {
+ *(float *)(m+0x18)=z+*(float *)&D_0015ED70*9.8f;
+ qzero(d+0x120);
+ } else {
+ qzero(d+0x120);
+ }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 #include "qcopy.h"
 

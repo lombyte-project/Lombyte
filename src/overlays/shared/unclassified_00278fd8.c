@@ -1027,7 +1027,24 @@ void FUN_L15_0029ae18(char *moby) {
     c = func_001FA898_r(FUN_001f96b0(random_float_between_alt(*(float *)&D_L15_00161438, *(float *)&D_L15_0016143C)));
     FUN_00218888(moby + 0x10, v0, v1, *(int *)&D_L15_00161418, *(int *)&D_L15_0016141C, a, b, c, *(int *)&D_L15_00161454);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029af88.s", FUN_L15_0029af88);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
+
+extern float D_L15_0015F580[] __attribute__((section(".sdata")));
+extern short D_L15_00161458_d __asm__("D_L15_00161458") __attribute__((sda));
+extern short D_L15_0016145C_d __asm__("D_L15_0016145C") __attribute__((sda));
+extern unsigned char D_L15_00161460_d __asm__("D_L15_00161460") __attribute__((sda));
+extern unsigned char D_L15_00161464_d __asm__("D_L15_00161464") __attribute__((sda));
+extern unsigned char D_L15_00161468_d __asm__("D_L15_00161468") __attribute__((sda));
+extern unsigned char D_L15_0016146C_d __asm__("D_L15_0016146C") __attribute__((sda));
+extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
+
+void FUN_L15_0029af88(char *moby)
+{
+    char *pos = moby + 0x10;
+    int t = scale_game_frames(*(int *)&D_L15_0016145C_d);
+    FUN_L00_002ac910(moby, pos, (int)&D_L15_0015F580, t, *(float *)&D_L15_00161458_d,
+                      D_L15_00161464_d, D_L15_00161468_d, D_L15_0016146C_d, D_L15_00161460_d);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ead0.s", FUN_L15_0029ead0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);

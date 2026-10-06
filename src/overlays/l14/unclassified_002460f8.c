@@ -530,7 +530,23 @@ char *FUN_L14_002aef28(int index) {
     } while (*p++ >= 0);
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002af048.s", FUN_L14_002af048);
+#include "sda.h"
+
+/* counts table entries through the first negative terminator */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0288), where it is exact; names translated to the US level program. */
+
+extern int *D_L14_001ABF40_c[] __asm__("D_L14_001ABF40");
+
+int FUN_L14_002af048(char *moby) {
+    short *table = D_L14_001AC2C0_2B0168[(unsigned char)moby[0x21]];
+    int count = 0;
+    if (table == 0)
+        return 0;
+    do {
+        count++;
+    } while (*table++ >= 0);
+    return count;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3bf0.s", FUN_L14_002b3bf0);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
 

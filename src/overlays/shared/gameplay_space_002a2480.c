@@ -2,4 +2,19 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002a2480.s", FUN_L01_002a2480);
+#include "sda.h"
+
+/* clears two moby flags and refreshes its linked value */
+/* Ported from rac1-decomp (src/overlays/shared/space_002A3680.c: func_L01_002A3680), where it is exact; names translated to the US level program. */
+
+extern char D_0013E030[];
+
+void FUN_L01_002a2480(void) {
+ char *first=*(char **)D_0013E030;
+ if(first!=0) {
+ char *moby;
+ *(unsigned short *)(first+0x34)&=0xfffc;
+ moby=*(char **)D_0013E030;
+ *(int *)(moby+0x94)=*(int *)(*(char **)(moby+0x24)+0x10);
+ }
+}

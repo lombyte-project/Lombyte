@@ -414,7 +414,26 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef478.s", FUN_L01_002ef478);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef560.s", FUN_L01_002ef560);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efa88.s", FUN_L01_002efa88);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0E60), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002db8f8(void *);
+
+int FUN_L01_002efa88(unsigned char *moby)
+{
+    int value = FUN_L00_002db8f8(moby);
+    if (value != 0) {
+        if (*(short *)(moby + 0xA6) != 0x362) {
+            return 0;
+        } else if (moby[0x20] == 8) {
+            return 0;
+        } else {
+            moby[0x20] = 0xE;
+        }
+    } else if (moby[0x20] == 0xE) {
+        moby[0x20] = 1;
+    }
+    return value;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efbf8.s", FUN_L01_002efbf8);
 #define NOT_SDA
 

@@ -2,7 +2,25 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00265170.s", FUN_L13_00265170);
+#include "sda.h"
+
+/* updates matching objects in the selected object range */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/mobyutil_00266128.c: func_L13_00266128), where it is exact; names translated to the US level program. */
+
+extern char *D_L13_0015FFD8 __attribute__((section(".sdata")));
+extern char *D_L13_0015FFE0 __attribute__((section(".sdata")));
+
+void FUN_L13_00265170(int id, int state) {
+    char *moby = D_L13_0015FFD8;
+    if ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby) {
+        do {
+            if (*(short *)(moby + 0xA6) == id) {
+                if (moby[0x20] >= 0) moby[0x20] = state;
+            }
+            moby += 0x100;
+        } while ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby);
+    }
+}
 extern int D_L13_0015FFD8_d __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0") __attribute__((section(".sdata")));
 /* 0x002651c8, 268 bytes.

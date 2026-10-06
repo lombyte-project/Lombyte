@@ -507,7 +507,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00253b48.s", FUN_L05_00253b48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002551b8.s", FUN_L05_002551b8);
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */
+
+extern unsigned char D_0013FC1E __attribute__((section(".data")));
+
+int FUN_L05_002551b8(void) {
+    unsigned char b = D_0013FC1E;  // selected help mode
+    int r = 0x7F;
+    if (b == 0)
+        r = 0x55;
+    return r;
+}
 int FUN_L05_002551d0(void) {
     char *p = D_0013F350;
     int f = *(unsigned char *)(p + 0x8CE);
