@@ -188,6 +188,9 @@ void transition_load_wad(void) {
     s32 v;
     s32 *out;
     WadTex *tex;
+    WadTex *texSecond;
+    WadTex *texThird;
+    WadTex *texFourth;
     WadClass20 *c20;
     WadClass30 *c30;
     WadSound *snd;
@@ -239,29 +242,29 @@ void transition_load_wad(void) {
         } while (i < D_00160E94);
     }
     k = 0;
-    tex = (WadTex *)((u8 *)hdr + hdr->x3C);
+    texSecond = (WadTex *)((u8 *)hdr + hdr->x3C);
     D_0015FF08 = hdr->n38;
     if (D_0015FF08 > 0) {
         do {
-            D_001B5980[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
+            D_001B5980[k] = (s32)base + texSecond[k].offset + (func_001F97A0(texSecond[k].x4) << 28);
             k++;
         } while (k < D_0015FF08);
     }
     k = 0;
-    tex = (WadTex *)((u8 *)hdr + hdr->x44);
+    texThird = (WadTex *)((u8 *)hdr + hdr->x44);
     D_00160F64 = hdr->n40;
     if (D_00160F64 > 0) {
         do {
-            D_001E2600[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
+            D_001E2600[k] = (s32)base + texThird[k].offset + (func_001F97A0(texThird[k].x4) << 28);
             k++;
         } while (k < D_00160F64);
     }
     k = 0;
-    tex = (WadTex *)((u8 *)hdr + hdr->x4C);
+    texFourth = (WadTex *)((u8 *)hdr + hdr->x4C);
     D_001603EC = hdr->n48;
     if (D_001603EC > 0) {
         do {
-            D_001D84B0[k] = (s32)base + tex[k].offset + (func_001F97A0(tex[k].x4) << 28);
+            D_001D84B0[k] = (s32)base + texFourth[k].offset + (func_001F97A0(texFourth[k].x4) << 28);
             k++;
         } while (k < D_001603EC);
     }
