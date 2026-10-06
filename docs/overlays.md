@@ -52,10 +52,9 @@ of C_EXACT, as in the executable.
 A function is exact when its C, compiled as retail game code was (game
 compiler `cc1`, then `Ps2EeAs`) and placed at its address with every symbol
 resolved to that level's address, equals the level's text byte for byte
-(`scripts/overlay_proof.py`). Files listed in
-`config/overlays/us/sn-units.json` are compiled with SN ee-gcc 2.95.2 instead
-of the game compiler; list a file there only when every C function in it
-stays exact. `check-unit.py FUN_LNN_xxxxxxxx` runs this for one function; `make overlays` builds every file and runs it for every
+(`scripts/overlay_proof.py`). Files in `OVERLAY_SN_UNITS` (compiler routes,
+top of `configure.py`) build with SN ee-gcc 2.95.2 instead; list a file only
+when every C function in it stays exact. `check-unit.py FUN_LNN_xxxxxxxx` runs this for one function; `make overlays` builds every file and runs it for every
 function in C, ending with `PASS`.
 
 ## Progress

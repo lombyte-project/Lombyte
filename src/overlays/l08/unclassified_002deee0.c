@@ -230,7 +230,28 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e1d70.s", FUN_L08_002e1d70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2078.s", FUN_L08_002e2078);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2da0.s", FUN_L08_002e2da0);
+#include "sda.h"
+
+/* updates matching objects in the selected object range */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E4118), where it is exact; names translated to the US level program. */
+
+extern char *D_L08_0015FFD8 __attribute__((section(".sdata")));
+
+void FUN_L08_002e2da0(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int oclass=0x279;
+    char *base = D_L08_0015FFD8;
+    int *ids = (int *)(data + 0x130);
+    char **output = (char **)(data + 0x158);
+    int i=9;
+    for (;;) {
+        char *other = (char *)((*ids << 8) + (unsigned int)base);
+        if (*(short *)(other + 0xA6) == oclass) {
+            *output++ = other;
+        }
+        --i; if(i<0)return; ++ids;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2df0.s", FUN_L08_002e2df0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e3870.s", FUN_L08_002e3870);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e4e90.s", FUN_L08_002e4e90);

@@ -132,7 +132,9 @@ justify a change in behavior.
   authority; a wrong entry fails the full-image gate instead of silently
   changing the output.
 - Compiler routing is a rule, not a list: `configure.py` builds a unit with
-  the compiler of the retail block it sits in. `ROUTE_EXCEPTIONS` names the
+  the compiler of the retail block it sits in. Every exception and per-unit
+  flag sits in one section at the top of `configure.py` (compiler routes).
+  `ROUTE_EXCEPTIONS` names the
   units that do not reproduce on that compiler yet and the route that still
   builds them (SN, the patched EE-GCC, or the SDK compiler for a few game
   functions). It only shrinks: a unit leaves it when it builds on its own

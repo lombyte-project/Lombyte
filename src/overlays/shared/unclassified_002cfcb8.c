@@ -264,7 +264,21 @@ void FUN_L00_002d1e80(M2d1e80 *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2e28.s", FUN_L00_002d2e28);
+#include "sda.h"
+
+/* increments the selected packed nibble, saturating at fifteen */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D42D8), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84 __attribute__((section(".sdata")));
+extern unsigned char D_0014BF10[];
+
+void FUN_L00_002d2e28(unsigned char *moby) {
+ int row=D_0015ED84;
+ if (row<20) { int index=moby[0xBC]-1;
+ if (index&1) { unsigned char *p=D_0014BF10+(index/2+row*16); unsigned int value=*p; int n=(value&15)+1; if(n>=16)n=15; *p=(value&240)|n; }
+ else { unsigned char *p=D_0014BF10+(index/2+row*16); unsigned int value=*p; int n=(value>>4)+1; if(n>=16)n=15; *p=(value&15)|(n<<4); }
+ }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2ee8.s", FUN_L00_002d2ee8);
 #define NOT_SDA
 

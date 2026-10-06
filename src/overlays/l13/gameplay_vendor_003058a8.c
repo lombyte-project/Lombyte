@@ -391,7 +391,31 @@ void FUN_L13_0030bb70(char *m) {
         qcopy(m + 0x10, o + 0x10);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bdf0.s", FUN_L13_0030bdf0);
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D2A8), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x30]; int state; char pad34[0x14C]; int target; } L13Action;
+
+extern L13Action D_L13_0016CB60;
+extern int D_L13_0015F5C4 __attribute__((section(".sdata")));
+extern void FUN_L00_002637f8(int);
+
+void FUN_L13_0030bdf0(unsigned char *moby)
+{
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L13_0015F5C4 == 2 && D_L13_0016CB60.state == 2) {
+            FUN_L00_002637f8(D_L13_0016CB60.target);
+        }
+        break;
+    }
+
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
 
 #define NOT_SDA

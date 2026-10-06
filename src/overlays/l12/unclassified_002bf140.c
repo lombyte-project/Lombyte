@@ -96,7 +96,28 @@ int FUN_L12_002e17f8(Level12VendorStateMoby *moby) {
     moby->state = 8;
     return result;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1878.s", FUN_L12_002e1878);
+#include "sda.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2B88), where it is exact; names translated to the US level program. */
+
+typedef union { long long quad; float f[4]; } L12Vector;
+
+extern float D_0015ED70_c __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
+extern void approach_value_c(f32 *, f32, f32) __asm__("func_00213ED8");
+extern float func_00214358_order(float, void *, int) __asm__("FUN_00213508");
+extern void func_00214D28_order(float, float, void *) __asm__("FUN_00213ed8");
+
+void FUN_L12_002e1878(char *moby) {
+    L12Vector position;
+    float value;
+    qcopy(&position, moby + 0x10);
+    position.f[2] += 0.5f;
+    value = func_00214358_order(0.5f, &position, 0);
+    func_00214D28_order(value, D_0015ED70_c * 27.0f, moby + 0x18);
+}
 
 #define NOT_SDA
 

@@ -451,7 +451,31 @@ void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
         moby->value = 0;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4ff0.s", FUN_L13_002b4ff0);
+#include "sda.h"
+
+#include "qzero.h"
+
+/* adjusts moby height toward the sampled ground height */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B61A0), where it is exact; names translated to the US level program. */
+
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern short D_0015ED70;
+
+void FUN_L13_002b4ff0(char *m,char *d) {
+ float ground=probe_ground_height(m+0x10,0,0.5f);
+ float z=*(float *)(m+0x18);
+ if(ground<z+0.3f) {
+ float v=*(float *)(d+0x128)-*(float *)&D_0015ED70*9.8f;
+ *(float *)(d+0x128)=v;
+ *(float *)(m+0x18)=*(float *)(m+0x18)+v;
+ if(*(float *)(m+0x18)<ground) *(float *)(m+0x18)=ground;
+ } else if(z<ground) {
+ *(float *)(m+0x18)=z+*(float *)&D_0015ED70*9.8f;
+ qzero(d+0x120);
+ } else {
+ qzero(d+0x120);
+ }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 #include "qcopy.h"
 
@@ -513,7 +537,67 @@ void FUN_L13_002b8590(void *moby, char *obj)
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b89f8.s", FUN_L13_002b89f8);
+#include "sda.h"
+#include "qzero.h"
+typedef struct {
+    short tex;
+    short u;
+    short v;
+    short w;
+    short h;
+    short fA;
+    short x;
+    short y;
+} IconEC5D0;
+extern IconEC5D0 D_L13_001CBDB8[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float vector_length_xyz(void *a);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern unsigned char D_0013E504[];
+extern void FUN_001fa050(float *, float *);
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+/* Draws a map icon for a moby relative to the hero (level copy of FUN_L17_002eaae0 without the mirror flag). */
+void FUN_L13_002b89f8(char *rot, char *from, char *moby, int icon, long color, int tex) {
+    float turn[4];
+    float mat[16];
+    float delta[4];
+    float pos[4];
+    float len;
+    int x, y;
+    IconEC5D0 *t;
+
+    qzero(turn);
+    turn[2] = *(float *)(rot + 8);
+    turn[2] = fast_subtract_rotations(1.5707964f, turn[2]);
+    FUN_001fa050(mat, turn);
+    subtract_vector_xyz(delta, moby + 0x10, from);
+    delta[2] = 0.0f;
+    transform_vector(pos, delta, mat);
+    scale_vector_xyz(pos, pos, 0.0714285746f);
+    len = vector_length_xyz(pos);
+    x = func_001FA898_r(pos[0]);
+    y = func_001FA898_r(-pos[1]);
+    if (len < 46.0f) {
+        if (len > 38.0f) {
+            float f;
+            len = 46.0f - len;
+            f = ConvertIntegerToFloat(((unsigned long)color >> 24) & 0xFF) * len;
+            color &= 0xFFFFFF;
+            color = (func_001FA898_r(f * 0.125f) << 24) | color;
+        }
+        t = &D_L13_001CBDB8[icon];
+        y -= 0x50;
+        y += *(int *)(D_0013E504);
+        x += 0x1B0;
+        draw_textured_quad(x - t->x, y - t->y, t->w, t->h, t->u, t->v, t->w, t->h, color, get_effect_texture(tex + 0x28 + t->tex));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8be0.s", FUN_L13_002b8be0);
 #include "qcopy.h"
 

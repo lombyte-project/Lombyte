@@ -304,7 +304,24 @@ void FUN_L02_002f6598(float x, float y, float z) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002f8aa0.s", FUN_L02_002f8aa0);
+#include "sda.h"
+
+/* stores two coordinate triples in the selected object data */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F9ED8), where it is exact; names translated to the US level program. */
+
+void FUN_L02_002f8aa0(float a, float b, float c,
+                       float d, float e, float f) {
+    char *moby = D_L02_00167400_d;
+    char *data = *(char **)(moby + 0x70);
+    char *dst = data + 0x30;
+    *(float *)(dst + 0x20) = e;
+    *(float *)(dst + 0x24) = d;
+    *(float *)(dst + 0x28) = f;
+    { char *other = *(char **)(moby + 0x70);
+    *(float *)(other + 0x10) = b;
+    *(float *)(other + 0x14) = a;
+    *(float *)(other + 0x18) = c; }
+}
 typedef struct {
     int a;
     int b;

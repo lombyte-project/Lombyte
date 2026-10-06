@@ -66,14 +66,14 @@ def ninja(*targets: str) -> subprocess.CompletedProcess:
 
 def ensure_configured(force: bool = False) -> str | None:
     """Write build/overlays/build.ninja when missing (always with FORCE, so a
-    new or renamed source file is picked up, and when sn-units.json changed)."""
+    new or renamed source file is picked up, and when configure.py changed)."""
     if not ov.ASM_DIR.is_dir():
         return ("config/us/overlays/asm is missing: run "
                 "`python3 scripts/overlay-extract.py --iso <your disc image>` first")
     build_ninja = BUILD / "build.ninja"
-    sn_units = ROOT / "config/overlays/us/sn-units.json"
-    stale = (build_ninja.is_file() and sn_units.is_file()
-             and sn_units.stat().st_mtime > build_ninja.stat().st_mtime)
+    routes = ROOT / "configure.py"
+    stale = (build_ninja.is_file()
+             and routes.stat().st_mtime > build_ninja.stat().st_mtime)
     if force or stale or not build_ninja.is_file():
         proc = subprocess.run([sys.executable, "configure.py", "--overlays"], cwd=ROOT,
                               capture_output=True, text=True)

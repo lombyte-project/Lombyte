@@ -22,7 +22,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, List, Set, Union, cast
+from typing import Any, Set, Union, cast
 
 import ninja_syntax
 import yaml
@@ -34,27 +34,60 @@ from splat.util.conf import load as splat_load_yaml
 
 ROOT = Path.cwd()
 
+# —— Toolchain and paths ——
+
 # The two compilers of the retail build: tools/compilers/game-compiler (the
 # reconstructed Sony/Cygnus 2.9-ee-991111b, game code) and
 # tools/compilers/sdk-compiler (the vendored EE-GCC 2.9-991111-01, the SDK
 # libraries).  The build stages tools/compilers as tools/cc.
 SDK_COMPILER = "sdk-compiler"
+
 # decomp.me id of the SDK compiler, for the permuter settings.
 SDK_COMPILER_DECOMPME = "ee-gcc2.9-991111-01"
+
 CROSS = "mips-ps2-decompals-"
+
 COMPILER_FLAGS = "-DMATCHING_DECOMP -O2 -g2 -gstabs"
+
 LANG_DEFINE = "-DBUILD_US_VERSION"
 
 # Overrides for the game compiler location (default tools/compilers/game-compiler,
 # rebuilt from patches/sce-991111b).
 GAME_COMPILER_ROOT = os.environ.get("GAME_COMPILER_ROOT", "").strip()
+
 # Retiring toolchains, needed only by ROUTE_EXCEPTIONS below: the SN tree
 # (cc_sn, cc_sn_padless and the Ps2EeAs assembler) and the locally built
 # patched 991111 cc1 (cc_ee_gcc_patched, docs/patched-toolchain.md).
 SN_TOOLCHAIN_ROOT = os.environ.get("SN_TOOLCHAIN_ROOT", "").strip()
+
 EE_GCC_PATCHED_ROOT = os.environ.get("EE_GCC_PATCHED_ROOT", "").strip()
-# The routing and flag tables below use unit paths from rnc1.us.yaml.  When a
-# source unit is renamed or moved, carry its entries forward.
+
+LANGUAGES = {
+    "SCUS_971.99": "us",
+}
+
+BASENAME = "SCUS_971.99"
+
+LD_PATH = f"{BASENAME}.ld"
+
+# The script ld actually runs: LD_PATH with every per-object `.text` statement
+# rewritten to a unique input-section name (see write_fast_linkerscript).
+FAST_LD_PATH = f"{BASENAME}.fast.ld"
+
+ELF_PATH = f"build/{BASENAME}"
+
+MAP_PATH = f"build/{BASENAME}.map"
+
+PRE_ELF_PATH = f"build/{BASENAME}.elf"
+
+OBJDIFF_CATEGORY = {"id": "us", "name": "Ratchet & Clank (USA)"}
+
+OVERLAYS_SRC = Path("src/overlays")
+
+OVERLAYS_BUILD = Path("build/overlays")
+
+# —— Compiler routes ——
+
 # The retail executable links the SDK libraries (newlib, libkernl, libsif,
 # libcdvd, libmpeg, ...) as one block ahead of the game code, and the two
 # blocks were built by different compilers: the SDK libraries by sdk-compiler,
@@ -65,11 +98,6 @@ EE_GCC_PATCHED_ROOT = os.environ.get("EE_GCC_PATCHED_ROOT", "").strip()
 # (no per-unit flags): 1258 of 1331 C units build byte-identically on the
 # compiler this rule gives them.
 GAME_TEXT_START = 0x12D8F8  # first game function; the SDK block ends at 0x12D8F0
-
-
-def provenance_compiler(vram: int) -> str:
-    return "sdk-compiler" if vram < GAME_TEXT_START else "game-compiler"
-
 
 # Units that do not build byte-identically on their provenance compiler yet,
 # mapped to the build.ninja rule that still reproduces them.  This table is the
@@ -159,6 +187,208 @@ PADLESS_POLICY_UNITS = {
     "sdk/library/picturecodingextension": "at-store",
 }
 
+# Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
+# exact codegen requires a different scheduling model.  Keyed by the configured
+# owner path (exact match): a unit renamed or moved out of assembly/ must have
+# its entry renamed with it.
+# sce_sif_init_iop_heap: retail tail (lui v0; sw; move v0) is byte-exact only
+# under -fno-schedule-insns; applying it globally to all EE-GCC 2.9 units changes
+# scePad2Read and other already-exact siblings.
+SDK_COMPILER_FLAG_UNITS = {
+    "sdk/rpc/sce_sif_init_iop_heap": "-fno-schedule-insns",
+    # Retail writes the absolute global through the assembler `$at` macro
+    # (`lui $1,%hi; sw ...,%lo($1)`); the default split-address sequence uses a
+    # general register instead.  Validated 100/100/100 under EE-GCC 2.9 + flag.
+    # DIntr: Sony libkernel privileged-loop glue.  The ps2sdk glue.c shape
+    # (pinned eie/next/res + `.p2align 3`) matches retail only under the size
+    # optimization with the missing-cse-follow-jumps policy; the default
+    # -O2 compile picks `daddu a0,v1` for the out arm instead of $zero and
+    # schedules the return move out of the jr delay slot.  100/100/100 under
+    # EE-GCC 2.9 with this flag pair (campaign pipeline-2026-09-11-7).
+    "sdk/library/DIntr": "-Os -fno-cse-follow-jumps",
+    # __swrite: retail's field layout is u16@0xC + s16@0xE (not s32@0xE, which
+    # the compiler pads to 0x10) and the s64 return is the dsll32/dsra32
+    # sign-extension pair, which the local compiler only emits when the s32
+    # result is forced through an s64 local + (u32) truncation.  Exact under
+    # -Os -fno-cse-follow-jumps (pipeline-2026-09-13-11).
+    "sdk/library/__swrite": "-Os",
+    # cmd_sem_init: retail stores the first CreateSema result in call 2's
+    # delay slot.  Under -fno-schedule-insns the E8 store is issued before
+    # call 2's `a0 = sp`, so the daddu takes the slot; the empty
+    # `asm("" : "+r"(r1))` one-cycle edge delays the E8 store so reorg fills
+    # the call-2 slot instead (pipeline-2026-09-13-12g).
+    "sdk/library/cmd_sem_init": "-fno-schedule-insns",
+    # No -fno-edge-lcm entry remains: the six that did (draw_debug_profiler,
+    # fun_0022f778, draw_dialog_text, memcard_update_state, sound_update,
+    # setup_fs_aa_buffer) belong to units that are still assembly wrappers,
+    # where the option cannot change a byte. Those units build on the 991111-01
+    # route, where -fno-edge-lcm is a real requirement for their C once a body
+    # replaces the wrapper: re-add it then, with the measurement and the reason
+    # recorded in this comment.
+}
+
+# Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
+GAME_COMPILER_FLAG_UNITS = {
+    # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
+    # (the .extern-ordering class); its call loop needs patch
+    # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
+    # full-ELF PASS on 2026-09-22.
+    "audio/streaming/snd_init_vag_streaming_ex": "-mastra-r5900-extern-buffer",
+    "ui/menus/fun_00219fa0": "-mastra-r5900-extern-buffer",
+    # fun_00221968: 100/100/100 on the game compiler only with
+    # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
+    # 2026-09-22 demotion measured cc_game without the flag (62.65).
+    "ui/menus/fun_00221968": "-fno-expensive-optimizations",
+    # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
+    # constraints; the same four pins reproduce the object on the game compiler.
+    "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
+    "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
+    "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer",
+    # vu1_add_g_sregister needs only the address form: the game compiler already
+    # builds without strict aliasing, so -fno-strict-aliasing changes nothing
+    # here while -mno-split-addresses is required.
+    "rendering/vu1_add_g_sregister": "-mno-split-addresses",
+    "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
+    "rendering/state/reset_graphics": "-mno-split-addresses",
+    "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
+    "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
+    "ui/menus/fun_00225490": "-fno-schedule-insns",
+    "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
+    # FUN_002075e8: retail materializes the zero return before `jr $ra` and
+    # leaves the delay slot empty; the default pass moves that assignment into
+    # the slot.  100/100/100 with this option (2026-10-03).
+    "ui/menus/fun_002075e8": "-fno-delayed-branch",
+}
+
+SN_FLAG_UNITS = {
+    # snd_post_message: retail keeps the index in v1 and the base in v0; the
+    # default prepass scheduler swaps them.  100/100/100 with
+    # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
+    "audio/rpc/snd_post_message": "-fno-schedule-insns",
+}
+
+# Level overlay units (src/overlays/<dir>/<file>) built with SN cc1 2.95.2
+# instead of the game compiler: retail level code matches SN where the game
+# compiler cannot (the help giants' 128-bit zero stores, reload registers).
+# Add a unit only when every C function in it stays exact under SN.
+# Kept sorted, one per line: scripts/sn/tryfn.py edits this block.
+OVERLAY_SN_UNITS = {
+    "l01/ui_help_00233de0.c",
+    "l01/ui_help_0023cf98.c",
+    "l01/ui_help_00242930.c",
+    "l01/unclassified_002b96e0.c",
+    "l01/unclassified_002f9810.c",
+    "l02/gameplay_vendor_002ebf20.c",
+    "l02/ui_help_0021b698.c",
+    "l02/ui_help_0022b728.c",
+    "l02/unclassified_002400c8.c",
+    "l03/runtime_startup_0022c728.c",
+    "l03/ui_help_00205830.c",
+    "l03/ui_help_00216648.c",
+    "l03/ui_help_0021c668.c",
+    "l03/unclassified_00292578.c",
+    "l03/unclassified_002c9eb8.c",
+    "l04/unclassified_001f3038.c",
+    "l04/unclassified_0029eb20.c",
+    "l04/unclassified_002ca420.c",
+    "l05/ui_help_00244a70.c",
+    "l05/ui_help_0024cee8.c",
+    "l05/ui_help_00255960.c",
+    "l05/unclassified_002d1688.c",
+    "l05/unclassified_0030d6a0.c",
+    "l06/ui_help_002356a0.c",
+    "l06/ui_help_0023b440.c",
+    "l06/unclassified_002b4770.c",
+    "l06/unclassified_002fd1a0.c",
+    "l07/gameplay_vendor_0031d2e0.c",
+    "l07/ui_map_00270248.c",
+    "l07/unclassified_002cd2b0.c",
+    "l07/unclassified_00312948.c",
+    "l08/gameplay_vendor_00305138.c",
+    "l08/rendering_00279f00.c",
+    "l08/ui_help_00230b38.c",
+    "l08/ui_help_002370d8.c",
+    "l08/unclassified_002e9b70.c",
+    "l09/unclassified_0021e538.c",
+    "l10/gameplay_vendor_002df270.c",
+    "l10/gameplay_vendor_002ea1f0.c",
+    "l11/gameplay_vendor_0030c788.c",
+    "l11/gameplay_vendor_00315968.c",
+    "l11/ui_help_0023c7a0.c",
+    "l11/ui_help_0024db50.c",
+    "l11/ui_help_00253a18.c",
+    "l12/gameplay_vendor_003028c8.c",
+    "l12/ui_help_0022de30.c",
+    "l12/ui_help_002400d0.c",
+    "l12/ui_help_002461f0.c",
+    "l12/unclassified_002bf140.c",
+    "l12/unclassified_002ec720.c",
+    "l13/gameplay_vendor_003058a8.c",
+    "l13/unclassified_002c13b0.c",
+    "l13/unclassified_002ea8c8.c",
+    "l14/ui_help_0022ff58.c",
+    "l14/ui_help_00235600.c",
+    "l14/unclassified_002460f8.c",
+    "l14/unclassified_002df080.c",
+    "l14/unclassified_002fded0.c",
+    "l15/gameplay_vendor_002e73c0.c",
+    "l15/ui_help_002044c8.c",
+    "l15/ui_help_00216c38.c",
+    "l15/ui_help_0021d040.c",
+    "l15/unclassified_0029aff0.c",
+    "l16/gameplay_vendor_002e3190.c",
+    "l16/ui_help_0021e398.c",
+    "l16/ui_help_002270c8.c",
+    "l16/unclassified_002a3f38.c",
+    "l17/gameplay_vendor_002e87d8.c",
+    "l17/gameplay_vendor_002f26d0.c",
+    "l17/ui_help_002020a8.c",
+    "l17/ui_help_0021e530.c",
+    "l17/ui_help_002258a8.c",
+    "l17/unclassified_002a8da0.c",
+    "l18/gameplay_vendor_002efb88.c",
+    "l18/gameplay_vendor_002f88e8.c",
+    "l18/ui_help_00227dd0.c",
+    "l18/ui_help_0022e8f8.c",
+    "l18/unclassified_002a7220.c",
+    "shared/gameplay_animation_00235878.c",
+    "shared/gameplay_camera_001eb188.c",
+    "shared/gameplay_state_0024eec0.c",
+    "shared/gameplay_state_0027b268.c",
+    "shared/gameplay_vendor_002e3de8.c",
+    "shared/gameplay_vendor_003015d0.c",
+    "shared/gameplay_vendor_0030b618.c",
+    "shared/gameplay_vendor_0030e690.c",
+    "shared/math_interpolation_00257ef0.c",
+    "shared/math_vectors_0025c230.c",
+    "shared/rendering_002712b8.c",
+    "shared/ui_help_0021d0a0.c",
+    "shared/ui_help_00221310.c",
+    "shared/ui_help_00229b70.c",
+    "shared/ui_help_00231d08.c",
+    "shared/unclassified_00278fd8.c",
+    "shared/unclassified_00288ec0.c",
+    "shared/unclassified_00291918.c",
+    "shared/unclassified_002937a0.c",
+    "shared/unclassified_00295100.c",
+    "shared/unclassified_00297d10.c",
+    "shared/unclassified_0029f990.c",
+    "shared/unclassified_002a09a0.c",
+    "shared/unclassified_002a4038.c",
+    "shared/unclassified_002aa670.c",
+    "shared/unclassified_002aee30.c",
+    "shared/unclassified_002b17d8.c",
+    "shared/unclassified_002b2100.c",
+    "shared/unclassified_002b3840.c",
+    "shared/unclassified_002b94d0.c",
+    "shared/unclassified_002d7f88.c",
+    "shared/unclassified_002f6328.c",
+}
+
+# —— Retail link layout ——
+
 # Recovered C units that own the small .rodata retail kept inside the
 # preserved `core_rdata` blob.  Key: configured unit-name suffix; value:
 # (retail VMA, retail file offset) of the unit's compiled `.rodata` bytes.
@@ -210,94 +440,10 @@ SDATA_OVERLAYS = {
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
-# Per-unit extra compiler flags for the native EE-GCC 2.9 units whose
-# exact codegen requires a different scheduling model.  Keyed by the configured
-# owner path (exact match): a unit renamed or moved out of assembly/ must have
-# its entry renamed with it.
-# sce_sif_init_iop_heap: retail tail (lui v0; sw; move v0) is byte-exact only
-# under -fno-schedule-insns; applying it globally to all EE-GCC 2.9 units changes
-# scePad2Read and other already-exact siblings.
-SDK_COMPILER_FLAG_UNITS = {
-    "sdk/rpc/sce_sif_init_iop_heap": "-fno-schedule-insns",
-    # Retail writes the absolute global through the assembler `$at` macro
-    # (`lui $1,%hi; sw ...,%lo($1)`); the default split-address sequence uses a
-    # general register instead.  Validated 100/100/100 under EE-GCC 2.9 + flag.
-    # DIntr: Sony libkernel privileged-loop glue.  The ps2sdk glue.c shape
-    # (pinned eie/next/res + `.p2align 3`) matches retail only under the size
-    # optimization with the missing-cse-follow-jumps policy; the default
-    # -O2 compile picks `daddu a0,v1` for the out arm instead of $zero and
-    # schedules the return move out of the jr delay slot.  100/100/100 under
-    # EE-GCC 2.9 with this flag pair (campaign pipeline-2026-09-11-7).
-    "sdk/library/DIntr": "-Os -fno-cse-follow-jumps",
-    # __swrite: retail's field layout is u16@0xC + s16@0xE (not s32@0xE, which
-    # the compiler pads to 0x10) and the s64 return is the dsll32/dsra32
-    # sign-extension pair, which the local compiler only emits when the s32
-    # result is forced through an s64 local + (u32) truncation.  Exact under
-    # -Os -fno-cse-follow-jumps (pipeline-2026-09-13-11).
-    "sdk/library/__swrite": "-Os",
-    # cmd_sem_init: retail stores the first CreateSema result in call 2's
-    # delay slot.  Under -fno-schedule-insns the E8 store is issued before
-    # call 2's `a0 = sp`, so the daddu takes the slot; the empty
-    # `asm("" : "+r"(r1))` one-cycle edge delays the E8 store so reorg fills
-    # the call-2 slot instead (pipeline-2026-09-13-12g).
-    "sdk/library/cmd_sem_init": "-fno-schedule-insns",
-    # No -fno-edge-lcm entry remains: the six that did (draw_debug_profiler,
-    # fun_0022f778, draw_dialog_text, memcard_update_state, sound_update,
-    # setup_fs_aa_buffer) belong to units that are still assembly wrappers,
-    # where the option cannot change a byte. Those units build on the 991111-01
-    # route, where -fno-edge-lcm is a real requirement for their C once a body
-    # replaces the wrapper: re-add it then, with the measurement and the reason
-    # recorded in this comment.
-}
+# —— Code ——
 
-
-# Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
-GAME_COMPILER_FLAG_UNITS = {
-    # fun_0012eb20: retail's D_0015EC8C accesses are gp-relative in the body
-    # (the .extern-ordering class); its call loop needs patch
-    # 0046-r5900-pad-unfilled-loops (cc1 eb7a3497...).  100/100/100 and
-    # full-ELF PASS on 2026-09-22.
-    "audio/streaming/snd_init_vag_streaming_ex": "-mastra-r5900-extern-buffer",
-    "ui/menus/fun_00219fa0": "-mastra-r5900-extern-buffer",
-    # fun_00221968: 100/100/100 on the game compiler only with
-    # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
-    # 2026-09-22 demotion measured cc_game without the flag (62.65).
-    "ui/menus/fun_00221968": "-fno-expensive-optimizations",
-    # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
-    # constraints; the same four pins reproduce the object on the game compiler.
-    "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
-    "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
-    "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer",
-    # vu1_add_g_sregister needs only the address form: the game compiler already
-    # builds without strict aliasing, so -fno-strict-aliasing changes nothing
-    # here while -mno-split-addresses is required.
-    "rendering/vu1_add_g_sregister": "-mno-split-addresses",
-    "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
-    "rendering/state/reset_graphics": "-mno-split-addresses",
-    "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
-    "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "ui/menus/fun_00225490": "-fno-schedule-insns",
-    "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
-    # FUN_002075e8: retail materializes the zero return before `jr $ra` and
-    # leaves the delay slot empty; the default pass moves that assignment into
-    # the slot.  100/100/100 with this option (2026-10-03).
-    "ui/menus/fun_002075e8": "-fno-delayed-branch",
-    # fun_001f33b8 (-fno-schedule-insns) and fun_00221f58 (-G0) carry no entry:
-    # both owners are still assembly wrappers, where an option cannot change the
-    # wrapper's bytes. The shorter keys also always won first-suffix-match over
-    # the longer "textbin/..." spellings, so those were dead as well. Re-add with
-    # the measurement and the reason recorded here if a C body needs them.
-}
-
-SN_FLAG_UNITS = {
-    # snd_post_message: retail keeps the index in v1 and the base in v0; the
-    # default prepass scheduler swaps them.  100/100/100 with
-    # -fno-schedule-insns (pipeline-2026-09-13-11 wave 2).
-    "audio/rpc/snd_post_message": "-fno-schedule-insns",
-}
-
+def provenance_compiler(vram: int) -> str:
+    return "sdk-compiler" if vram < GAME_TEXT_START else "game-compiler"
 
 def _is_include_asm(config_dir: Path, source: Path) -> bool:
     """A pending unit: its C file only wraps splat's listing."""
@@ -306,32 +452,14 @@ def _is_include_asm(config_dir: Path, source: Path) -> bool:
     except OSError:
         return False
 
-
 def unit_compiler(unit: str, vram: int) -> str:
     """The build.ninja rule a unit is compiled with."""
     return ROUTE_EXCEPTIONS.get(unit) or provenance_compiler(vram)
-
-
-LANGUAGES = {
-    "SCUS_971.99": "us",
-}
-
-BASENAME = "SCUS_971.99"
-LD_PATH = f"{BASENAME}.ld"
-# The script ld actually runs: LD_PATH with every per-object `.text` statement
-# rewritten to a unique input-section name (see write_fast_linkerscript).
-FAST_LD_PATH = f"{BASENAME}.fast.ld"
-ELF_PATH = f"build/{BASENAME}"
-MAP_PATH = f"build/{BASENAME}.map"
-PRE_ELF_PATH = f"build/{BASENAME}.elf"
-
-OBJDIFF_CATEGORY = {"id": "us", "name": "Ratchet & Clank (USA)"}
 
 # Configuration names become file paths and compiler command fragments.
 # Restrict them to the project's alphabet and forbid path escapes so a
 # malformed or hostile row cannot write outside the build workspace.
 _UNIT_NAME_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_./-]*$")
-
 
 def _check_unit_name(name: str) -> None:
     parts = [part for part in name.split("/") if part not in ("", ".")]
@@ -345,7 +473,6 @@ def _check_unit_name(name: str) -> None:
             "(allowed: letters, digits, '_', '.', '/', '-'; no '..')"
         )
 
-
 def validate_config_names(node: Any) -> None:
     """Reject configuration names that could escape the build tree."""
     if isinstance(node, dict):
@@ -358,7 +485,6 @@ def validate_config_names(node: Any) -> None:
             _check_unit_name(node[2])
         for item in node:
             validate_config_names(item)
-
 
 @contextlib.contextmanager
 def suppress_stdout_stderr():
@@ -374,7 +500,6 @@ def suppress_stdout_stderr():
         for fd in null_fds + save_fds:
             os.close(fd)
 
-
 def get_compiler_command(command: str) -> Path:
     compiler_dir = Path("tools") / "cc" / SDK_COMPILER
     ee_dir = compiler_dir / "lib" / "gcc-lib" / "ee"
@@ -386,7 +511,6 @@ def get_compiler_command(command: str) -> Path:
     }
 
     return commands[command]
-
 
 def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     rel_root = Path(os.path.relpath(ROOT, config_dir))
@@ -405,13 +529,11 @@ def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
 
     return compile_cmd, common_includes
 
-
 def sn_compiler_configured() -> bool:
     return (
         bool(SN_TOOLCHAIN_ROOT)
         and (Path(SN_TOOLCHAIN_ROOT) / "bin/ee-gcc.exe").is_file()
     )
-
 
 def _game_compiler_root() -> Path:
     """Locate the reconstructed game compiler.
@@ -427,15 +549,12 @@ def _game_compiler_root() -> Path:
             return candidate
     return ROOT / "tools/compilers/game-compiler"
 
-
 def game_compiler_configured() -> bool:
     root = _game_compiler_root()
     return (root / "ee-gcc").is_file() and (root / "cc1").is_file()
 
-
 def ee_gcc_patched_configured() -> bool:
     return bool(EE_GCC_PATCHED_ROOT) and (Path(EE_GCC_PATCHED_ROOT) / "xgcc").is_file()
-
 
 def _win_path(value: str) -> str:
     """Convert a WSL mount path to the form the Windows driver needs.
@@ -457,7 +576,6 @@ def _win_path(value: str) -> str:
         return f"\\\\wsl.localhost\\{distro}{value}".replace("/", "\\")
     return value.replace("/", "\\")
 
-
 def _wine_binary() -> str:
     """The wine binary the PE tools must run under, or "" to run them directly."""
     wine = os.environ.get("RNC_WINE")
@@ -465,7 +583,6 @@ def _wine_binary() -> str:
         return wine
     on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
     return "" if on_windows_drive else (shutil.which("wine") or "")
-
 
 def _windows_exe(path: str) -> str:
     """Spell a Windows tool (Ps2EeAs, the SN driver) for a ninja command.
@@ -482,7 +599,6 @@ def _windows_exe(path: str) -> str:
     quoted = shlex.quote(path)
     return f"{shlex.quote(wine)} {quoted}" if wine else quoted
 
-
 def _unit_from_object(object_path: Path) -> str:
     """Derive the unit name from the ninja object path.
 
@@ -497,7 +613,6 @@ def _unit_from_object(object_path: Path) -> str:
         joined = joined[: -len(".c.o")]
     return joined
 
-
 # C aliases in promoted sources: ALIAS __attribute__((alias("TARGET"))).
 # The oracle fallback keeps the bytes but not the aliases, so they are handed
 # to the linker (PROVIDE, only when nothing else defines them).
@@ -507,12 +622,10 @@ _ALIAS_RE = re.compile(
     r"([A-Za-z_]\w*)\s*(?:\([^;{]*?\))?\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
 )
 
-
 def _alias_symbols(source: Path) -> set[tuple[str, str]]:
     """(alias, target) pairs declared in a source file."""
     text = source.read_text(errors="replace")
     return {(match.group(1), match.group(2)) for match in _ALIAS_RE.finditer(text)}
-
 
 PADLESS_ASM_HELPER = r'''#!/usr/bin/env python3
 """Normalize SN cc1 output for Ps2EeAs and drop section tail padding.
@@ -834,7 +947,6 @@ if __name__ == "__main__":
     main(sys.argv)
 '''
 
-
 def clean(config_dir: Path):
     for file in (
         ".splache",
@@ -852,7 +964,6 @@ def clean(config_dir: Path):
     for folder in ("asm", "assets", "build", "expected"):
         shutil.rmtree(config_dir / folder, ignore_errors=True)
 
-
 def write_permuter_settings(config_dir: Path, compiler_cmd: str):
     with open(config_dir / "permuter_settings.toml", "w", encoding="utf-8") as f:
         f.write(
@@ -867,9 +978,7 @@ compiler_type = "gcc"
 """
         )
 
-
 _TEXT_STATEMENT_RE = re.compile(r"^(\s*)(build/\S+?\.o)\(\.text\);$", re.MULTILINE)
-
 
 def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
     """Write FAST_LD_PATH from LD_PATH; return (object, link copy, section) rows.
@@ -897,12 +1006,11 @@ def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
         return f"{match.group(1)}*({section}); /* {obj} */"
 
     text = _TEXT_STATEMENT_RE.sub(rename, text)
-    for obj, copy, _ in rows:
-        text = text.replace(f"{obj}(", f"{copy}(")
-    inputs = "".join(f"    {copy}\n" for _, copy, _ in rows)
+    for obj, link, _ in rows:
+        text = text.replace(f"{obj}(", f"{link}(")
+    inputs = "".join(f"    {link}\n" for _, link, _ in rows)
     (config_dir / FAST_LD_PATH).write_text(f"INPUT(\n{inputs})\n\n" + text)
     return rows
-
 
 def build_stuff(
     config_dir: Path,
@@ -1251,9 +1359,9 @@ def build_stuff(
     alias_path.write_text("\n".join(alias_lines) + "\n")
 
     link_copies = []
-    for obj, copy, section in write_fast_linkerscript(config_dir):
-        ninja.build(copy, "link_copy", obj, variables={"section": section})
-        link_copies.append(copy)
+    for obj, link, section in write_fast_linkerscript(config_dir):
+        ninja.build(link, "link_copy", obj, variables={"section": section})
+        link_copies.append(link)
 
     ninja.build(
         PRE_ELF_PATH,
@@ -1277,13 +1385,11 @@ def build_stuff(
 
     write_permuter_settings(config_dir, compile_cmd)
 
-
 def rename_locals(base_path: Path):
     for asm_file in base_path.rglob("*.s"):
         data = asm_file.read_text()
         data = re.sub(r"__local_\d+", "", data)
         asm_file.write_text(data)
-
 
 def fix_gp_rel_stores(asm_root: Path) -> int:
     """Normalize the gp-relative store and FPU load spelling for the frozen assembler.
@@ -1323,7 +1429,6 @@ def fix_gp_rel_stores(asm_root: Path) -> int:
         asm_file.write_text(updated)
         fixed += 1
     return fixed
-
 
 def make_asm(config_path: Path, config: dict[str, Any]):
     with tempfile.TemporaryDirectory(dir=config_path, prefix="tmp_") as tmp_dir:
@@ -1442,7 +1547,6 @@ def make_asm(config_path: Path, config: dict[str, Any]):
 
         print(f"expected obj built to '{dst_path}'")
 
-
 def generate_objdiff_configuration(config_path: Path, config: dict[str, Any]):
     segments: list[Any] = config["segments"]
 
@@ -1499,7 +1603,6 @@ def generate_objdiff_configuration(config_path: Path, config: dict[str, Any]):
 
     print(f"Wrote objdiff configuration ({len(units)} units) to {objdiff_path}")
 
-
 def fix_assets(config_dir: Path, config: dict[str, Any]):
     asset_path = Path(config["options"]["asset_path"])
     asset_rel_path = (config_dir / asset_path).resolve().relative_to(ROOT)
@@ -1517,7 +1620,6 @@ def fix_assets(config_dir: Path, config: dict[str, Any]):
             count += labels
         if count > 0:
             asm_file.write_text(data_asm)
-
 
 def fix_linkerscript(config: dict[str, Any], linkerscript_path: Path):
     section_subalign = cast(dict[str, int], config.get("_section_subalign", {}))
@@ -1561,7 +1663,6 @@ def fix_linkerscript(config: dict[str, Any], linkerscript_path: Path):
 
     if config.get("_retail_link_layout"):
         apply_retail_link_layout(config, linkerscript_path)
-
 
 def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
     """Place the preserved inputs at their retail file offsets.
@@ -1765,26 +1866,9 @@ SECTIONS
 """
     linkerscript_path.write_text(script)
 
-
-OVERLAYS_SRC = Path("src/overlays")
-OVERLAYS_BUILD = Path("build/overlays")
-
-
-OVERLAY_SN_UNITS = Path("config/overlays/us/sn-units.json")
-
-
 def overlay_sn_units() -> set[str]:
-    """src/overlays files built by SN cc1 2.95.2 (units grouped by src/overlays directory).
-
-    Retail level code matches SN cc1 where the game compiler cannot reach it:
-    the help giants' 128-bit zero stores and loop pointers take the reload
-    registers SN picks.
-    """
-    if not OVERLAY_SN_UNITS.is_file():
-        return set()
-    groups = json.loads(OVERLAY_SN_UNITS.read_text())["units"]
-    return {f"{dir_}/{name}" for dir_, names in groups.items() for name in names}
-
+    """src/overlays files built by SN cc1 2.95.2 (OVERLAY_SN_UNITS)."""
+    return set(OVERLAY_SN_UNITS)
 
 def overlay_sn_functions(units: set[str]) -> set[str]:
     """Names of the functions defined or stubbed in the SN-built files."""
@@ -1794,7 +1878,6 @@ def overlay_sn_functions(units: set[str]) -> set[str]:
         if path.is_file():
             names |= set(re.findall(r"\b(FUN_L\d\d_[0-9a-f]{8})\b", path.read_text(errors="replace")))
     return names
-
 
 def build_overlays() -> Path:
     """Write build/overlays/build.ninja for the level overlays (docs/overlays.md).
@@ -1906,7 +1989,6 @@ def build_overlays() -> Path:
     print(f"{len(sources)} overlay source files -> {ninja_path} (ninja -C {OVERLAYS_BUILD})")
     return ninja_path
 
-
 def main():
     class ArgsProtocol:
         YAML_FILE: Path
@@ -1984,7 +2066,6 @@ def main():
         make_asm(config_dir, config)
 
     generate_objdiff_configuration(config_dir, config)
-
 
 if __name__ == "__main__":
     main()
