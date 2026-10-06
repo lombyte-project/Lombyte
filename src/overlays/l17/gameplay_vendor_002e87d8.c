@@ -1741,7 +1741,7 @@ extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 void FUN_L17_002efa48(void *moby_v, int arg);
-extern void FUN_L17_002f00a0(void *);
+void FUN_L17_002f00a0(char *moby);
 void FUN_L17_002f0210(unsigned char *moby);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
@@ -2301,7 +2301,62 @@ int FUN_L17_002efea8(unsigned char *moby) {
     }
     return result;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f00a0.s", FUN_L17_002f00a0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Aims the turret at the hero: yaw and pitch to him, clamped, become the eased part's targets. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1BB0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x64];
+    float pitch;
+    float yaw;
+} AimPart_1BB0;
+
+typedef struct {
+    char pad0[0x230];
+    AimPart_1BB0 part;
+} AimData_1BB0;
+
+extern char D_0013F420[];
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float D_0015ED64;
+extern float FUN_001f9e90(float, float);
+extern float vector_length_xy(void *);
+extern void FUN_L00_002628d8(char *, char *, int, float, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+
+void FUN_L17_002f00a0(char *moby) {
+    AimData_1BB0 *d = *(AimData_1BB0 **)(moby + 0x78);
+    float accel = 0.02f;
+    float speed = 0.3f;
+    float tmp[4];
+    float v[4];
+    float yaw;
+    float pitch;
+    qcopy(tmp, moby + 0x10);
+    tmp[2] += 0.5f;
+    subtract_vector_xyz(v, D_0013F420, tmp);
+    yaw = fast_subtract_rotations(FUN_001f9e90(v[0], v[1]), *(float *)(moby + 0x48));
+    pitch = -FUN_001f9e90(vector_length_xy(v), v[2]);
+    if (yaw > 1.0471976f) {
+        yaw = 1.0471976f;
+    } else if (yaw < -1.0471976f) {
+        yaw = -1.0471976f;
+    }
+    if (pitch > 0.5235988f) {
+        pitch = 0.5235988f;
+    } else if (pitch < -0.5235988f) {
+        pitch = -0.5235988f;
+    }
+    d->part.pitch = pitch;
+    d->part.yaw = yaw;
+    FUN_L00_002628d8(moby, (char *)&d->part, 0, accel * D_0015ED64, speed * D_0015ED64);
+}
 
 #define NOT_SDA
 
