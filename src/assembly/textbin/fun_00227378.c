@@ -100,13 +100,11 @@ void append_fullscreen_clear_strips(s64 color) {
             vertices->first = first_vertex;
             strip_index += 1;
             right_x += 0x200;
-            vertices->second = second_vertex;
+            (++vertices)[-1].second = second_vertex;
             left_x += 0x200;
-            vertices++;
         } while (strip_index < strip_count);
     }
-    packet_cursor =
-        (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + strip_count * 0x10 + 0x50);
+    packet_cursor = (struct ClearStripPacket *)((u8 *)base + strip_count * 0x10 + 0x60);
     render_packet_cursor[0] = packet_cursor;
     packet_cursor->dma_control = 0x10000000;
     render_packet_cursor[0]->address = 0;
