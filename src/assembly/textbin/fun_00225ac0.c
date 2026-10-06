@@ -75,7 +75,7 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
         }
         clear_remaining = end_index < 5;
     }
-    if (clear_remaining == 1) {
+    if (clear_remaining & 1) {
         descriptor = graphics_buffer_descriptors + index;
         do {
             descriptor->flags = 0;
