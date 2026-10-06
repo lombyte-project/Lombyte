@@ -4,7 +4,9 @@
 extern s32 sceCdRead(s32, s32, s32, u8 *);
 extern s32 sceCdSync(s32);
 
-s32 FUN_0023ba60(struct M2c_arg0 *arg0, u32 arg1, s32 arg2, s32 arg3)
+s32 read_cd_stream_sectors(struct M2c_arg0 *arg0, u32 arg1, s32 arg2, s32 arg3) __asm__("FUN_0023ba60");
+
+s32 read_cd_stream_sectors(struct M2c_arg0 *arg0, u32 arg1, s32 arg2, s32 arg3)
 {
     u8 readcmd[0x10];
     s32 blocks;
@@ -25,4 +27,4 @@ s32 FUN_0023ba60(struct M2c_arg0 *arg0, u32 arg1, s32 arg2, s32 arg3)
     return result;
 }
 
-extern __typeof__(FUN_0023ba60) func_0023BA60 __attribute__((alias("FUN_0023ba60")));
+extern __typeof__(read_cd_stream_sectors) func_0023BA60 __attribute__((alias("FUN_0023ba60")));

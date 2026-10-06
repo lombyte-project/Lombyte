@@ -42,7 +42,7 @@ extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void draw_hud_sprite_uv(s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_00200258");
 extern void draw_hud_rect(s32, s32, s32, s32, u64, s32) __asm__("func_00200C80");
-extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) __asm__("FUN_001fd748");
@@ -72,7 +72,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom)
     setup_gif_paging(0);
     vu1_add_g_sregister(0x42, 0x8000000044);
     vu1_add_g_sregister(0x47, 0x4B);
-    func_00200E08(0, 0, 0x200, 0x1C0, 0x80000000, 0);
+    append_screen_rect_packet(0, 0, 0x200, 0x1C0, 0x80000000, 0);
     texture_index = find_valid_animation_frame_index(0xE99A, 0xE);
     screen_width_subpixels = (right - left) * 16;
     screen_height_subpixels = (bottom - top) * 16;

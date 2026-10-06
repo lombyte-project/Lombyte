@@ -137,7 +137,7 @@ extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void draw_rotated_sprite(f32, f32, f32, f32, f32, s32, s32, u64) __asm__("func_00200600");
-extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
 extern void world_to_map_coords(f32 *, f32 *, s32, f32, f32) __asm__("func_00208408");
 extern void draw_map_markers(s32, s32, s32, s32) __asm__("func_00208508");
@@ -283,7 +283,7 @@ void draw_map_overlay(void) {
             if (cell >= 0) {
                 cell_x = cell % 16;
                 cell_y = cell / 16;
-                func_00200E08(rx0 + cell_x * dx / 16, ry0 + cell_y * dy / 16,
+                append_screen_rect_packet(rx0 + cell_x * dx / 16, ry0 + cell_y * dy / 16,
                               rx0 + (cell_x + 1) * dx / 16, ry0 + (cell_y + 1) * dy / 16,
                               0x20000000, 1);
             }
@@ -399,7 +399,7 @@ next_outer_icon:
                 if (D_001A00F0.icons[i].active != 0 && !(D_001A00F0.icons[i].flags & 1) && (id = D_001A00F0.icons[i].texture_id) != 0) {
                     frame_index = D_001A00F0.icons[i].frame_index;
                     if (D_001A00F0.icons[i].flags & 0x40) {
-                        func_00200E08(icon_bounds[i].x0 - 0x20, icon_bounds[i].y0 - 0x20, icon_bounds[i].x1 + 0x20, icon_bounds[i].y1 + 0x20,
+                        append_screen_rect_packet(icon_bounds[i].x0 - 0x20, icon_bounds[i].y0 - 0x20, icon_bounds[i].x1 + 0x20, icon_bounds[i].y1 + 0x20,
                                       0x80000000, 1);
                     }
                     if (D_001A00F0.icons[i].flags & 0x200) {

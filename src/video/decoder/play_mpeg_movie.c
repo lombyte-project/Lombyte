@@ -8,7 +8,9 @@ extern s32 read_mpeg() __asm__("func_0023A460");
 extern s32 initialize_audio_system() __asm__("func_0023A7C0");
 extern s32 terminate_audio_system() __asm__("func_0023AA68");
 
-s32 FUN_0023a3b8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+s32 play_mpeg_movie(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_0023a3b8");
+
+s32 play_mpeg_movie(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     D_00161208 = arg2;
     D_0016120C = arg3;
     ChangeThreadPriority(GetThreadId(), 1);

@@ -51,7 +51,7 @@ extern float D_L02_00161300 MACRO_ADDR;
 extern float D_L02_00161304 MACRO_ADDR;
 extern int *D_L02_001611C0 MACRO_ADDR;
 extern void FUN_001f2260(void);
-extern void FUN_00233938(int);
+extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 void append_texture_transfer_packet(void) __asm__("FUN_001fb680");
 
@@ -59,7 +59,7 @@ void FUN_L02_002a46e0(void) {
     char *b;
     long *g;
     int *q;
-    FUN_00233938(0x13000000);
+    vu1_add_vif_code(0x13000000);
     b = D_L02_0016D040;
     *(float *)(b + 0x218) = D_L02_001612F8;
     *(float *)(b + 0x21C) = D_L02_001612FC;

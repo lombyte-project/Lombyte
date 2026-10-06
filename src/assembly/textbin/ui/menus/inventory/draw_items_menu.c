@@ -49,7 +49,7 @@ extern void font_print_right(s32, s32, u64, char *, s32) __asm__("FUN_001f6940")
 extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
 extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
 extern s32 compute_clamped_count_difference(void) __asm__("func_00215248");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
@@ -141,8 +141,8 @@ s32 draw_items_menu(ItemsMenu *menu)
   sprintf(text_buffer, D_001602A0, compute_clamped_count_difference());
   font_print_left(add_offset(D_001601B8, 0xF0), add_offset(D_001601BC, 0x54), 0x80000000L, text_buffer, -1);
   font_print_left(0xF0, 0x54, 0x80FFA888L, text_buffer, -1);
-  func_00200E08(add_offset(D_001601B8, 0xD0), add_offset(D_001601BC, 0x4D), add_offset(D_001601B8, 0xF2), add_offset(D_001601BC, 0x50), 0x80000000L, 0);
-  func_00200E08(0xD0, 0x4D, 0xF2, 0x50, 0x80FFA888L, 0);
+  append_screen_rect_packet(add_offset(D_001601B8, 0xD0), add_offset(D_001601BC, 0x4D), add_offset(D_001601B8, 0xF2), add_offset(D_001601BC, 0x50), 0x80000000L, 0);
+  append_screen_rect_packet(0xD0, 0x4D, 0xF2, 0x50, 0x80FFA888L, 0);
   do_gif_paging();
   return 8;
 }

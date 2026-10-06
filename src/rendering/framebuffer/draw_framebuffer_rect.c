@@ -12,7 +12,7 @@ struct TagPtr {
 };
 
 extern struct TagPtr D_00160F00;
-extern void func_00233938(s32);
+extern void vu1_add_vif_code(s32) __asm__("func_00233938");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 color) __asm__("FUN_001fb8f0");
@@ -25,7 +25,7 @@ void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 c
     s32 bx;
     s32 by;
 
-    func_00233938(0x13000000);
+    vu1_add_vif_code(0x13000000);
     vu1_add_g_sregister(0x42, 0x64);
     D_00160F00.p->w0 = 0x10000006;
     D_00160F00.p->addr = 0;
@@ -60,7 +60,7 @@ void draw_framebuffer_rect(s32 x0, s32 y0, s32 x1, s32 y1, s32 ox, s32 oy, u32 c
     q[11] = bx | ((u64)by << 16);
     D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x60);
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
-    func_00233938(0x13000000);
+    vu1_add_vif_code(0x13000000);
 }
 
 extern __typeof__(draw_framebuffer_rect) func_001FB8F0 __attribute__((alias("FUN_001fb8f0")));

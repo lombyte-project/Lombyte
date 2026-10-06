@@ -8415,14 +8415,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/hud/fun_00200e08",
-        "source_path": "src/ui/hud/fun_00200e08.c",
+        "unit": "ui/hud/append_screen_rect_packet",
+        "source_path": "src/ui/hud/append_screen_rect_packet.c",
         "address": "0x00200e08",
         "current_name": "FUN_00200e08",
-        "proposed_name": null,
+        "proposed_name": "append_screen_rect_packet",
         "logical_group": "ui/hud",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -8442,6 +8442,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL hud.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Appends a DMA/GIF packet: the given prim and two XYZ2 corners offset by the screen origin at D_0013E500, in pixels or 1/16 pixels."
           }
         ],
         "logical_group_confidence": "high"
@@ -10920,18 +10924,22 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/fun_00213358",
-        "source_path": "src/gameplay/entities/fun_00213358.c",
+        "unit": "gameplay/entities/random_spherical_offset",
+        "source_path": "src/gameplay/entities/random_spherical_offset.c",
         "address": "0x00213358",
         "current_name": "FUN_00213358",
-        "proposed_name": null,
+        "proposed_name": "random_spherical_offset",
         "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Builds a spherical offset with a random radius in [a, b] and two random angles (random_float_between, random_angle_radians, build_spherical_offset)."
           }
         ],
         "logical_group_confidence": "high"
@@ -15957,14 +15965,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/vu1/fun_00233938",
-        "source_path": "src/rendering/vu1/fun_00233938.c",
+        "unit": "rendering/vu1/vu1_add_vif_code",
+        "source_path": "src/rendering/vu1/vu1_add_vif_code.c",
         "address": "0x00233938",
         "current_name": "FUN_00233938",
-        "proposed_name": null,
+        "proposed_name": "vu1_add_vif_code",
         "logical_group": "rendering/vu1",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -15989,6 +15997,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Appends one DMA cnt tag with qwc 0 to the VU1 chain at D_00160F00, carrying arg0 as its VIF code word."
           }
         ],
         "logical_group_confidence": "high"
@@ -16732,14 +16744,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/fun_0023a3b8",
-        "source_path": "src/video/decoder/fun_0023a3b8.c",
+        "unit": "video/decoder/play_mpeg_movie",
+        "source_path": "src/video/decoder/play_mpeg_movie.c",
         "address": "0x0023a3b8",
         "current_name": "FUN_0023a3b8",
-        "proposed_name": null,
+        "proposed_name": "play_mpeg_movie",
         "logical_group": "video/decoder",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -16755,6 +16767,10 @@
                 "logical_group": "video/decoder"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "Raises its thread priority, initialize_audio_system, read_mpeg over the buffer at arg3, terminate_audio_system, then clears the movie globals."
           }
         ],
         "logical_group_confidence": "low"
@@ -17225,18 +17241,22 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/fun_0023ba60",
-        "source_path": "src/video/decoder/fun_0023ba60.c",
+        "unit": "video/decoder/read_cd_stream_sectors",
+        "source_path": "src/video/decoder/read_cd_stream_sectors.c",
         "address": "0x0023ba60",
         "current_name": "FUN_0023ba60",
-        "proposed_name": null,
+        "proposed_name": "read_cd_stream_sectors",
         "logical_group": "video/decoder",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL movie/strfile.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "sceCdRead of size>>11 sectors from the stream position at +4; when not async, advances the position, sceCdSync(0) and returns the byte count."
           }
         ],
         "logical_group_confidence": "high"

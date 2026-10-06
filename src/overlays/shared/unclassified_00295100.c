@@ -539,7 +539,7 @@ extern int D_L00_00161050;
 extern int D_L00_00161058;
 extern int sceCdSync_alt(int) __asm__("FUN_00120c30");
 extern short D_L00_00161054_d __asm__("D_L00_00161054") __attribute__((sda));
-extern void FUN_0023a3b8(int, int, int, int, int);
+extern void play_mpeg_movie(int, int, int, int, int) __asm__("FUN_0023a3b8");
 extern void FUN_L00_002997c8(void);
 extern void FlushCache(s32);
 s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
@@ -559,7 +559,7 @@ void FUN_L00_002999a8(void) {
         }
         memcard_update_state();
     }
-    FUN_0023a3b8(D_L00_00161048, D_L00_0016104C,
+    play_mpeg_movie(D_L00_00161048, D_L00_0016104C,
                   (*(int *)&D_L00_00161054_d + 0x3F) & ~0x3F,
                   (D_L00_00161058 + 0x3F) & ~0x3F, D_L00_00161050);
     sceCdSync_alt(0);

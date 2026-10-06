@@ -73,7 +73,7 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 check_memory_card(void) __asm__("FUN_00209168");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern void func_0023A3B8(s32, s32, s32, s32, s32);
+extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void DebugPrint(char *, ...);
 extern s32 load_audio_bank_by_location(s32) __asm__("func_0022D708");
@@ -156,10 +156,10 @@ void startlevel(void) {
     code = hdr->code + (s32)hdr;
     D_0015EF5C = code;
     if (D_0015ED80 == 0) {
-        func_0023A3B8(D_00139378[0], D_00139378[1], (code + 0x3F) & ~0x3F,
+        play_mpeg_movie(D_00139378[0], D_00139378[1], (code + 0x3F) & ~0x3F,
                       (code + 0x2C003F) & ~0x3F, 0);
     } else {
-        func_0023A3B8(D_00139380[0], D_00139380[1], (code + 0x3F) & ~0x3F,
+        play_mpeg_movie(D_00139380[0], D_00139380[1], (code + 0x3F) & ~0x3F,
                       (code + 0x2C003F) & ~0x3F, 0);
     }
     D_0015EED8 = 0;

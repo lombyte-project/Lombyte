@@ -24,7 +24,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("func_001F4A58");
 extern void snd_stream_safe_cd_sync(int) __asm__("func_0012EE08");
 extern void memcard_update_state(void) __asm__("func_002093D8");
-extern void func_0023A3B8(int, int, int, int, int);
+extern void play_mpeg_movie(int, int, int, int, int) __asm__("func_0023A3B8");
 extern void sceCdSync(int);
 extern void sceGsSyncV(int);
 extern void FUN_00120558(int, int);
@@ -74,7 +74,7 @@ void start_level(int level) {
         char *g = D_001940C0;
         t = *(int *)(g + 0x1C);
     }
-    func_0023A3B8(b, a, t + 0x100000, t + 0x400000, 0);
+    play_mpeg_movie(b, a, t + 0x100000, t + 0x400000, 0);
     sceCdSync(0);
     sceGsSyncV(0);
     FUN_00120558(0, 0);

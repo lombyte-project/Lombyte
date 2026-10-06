@@ -58,7 +58,7 @@ extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 extern void func_00218D10(void);
 extern void func_001F2260(void);
 extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *) __asm__("func_00237A78");
-extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void func_001F7888(s32, s32, s32, f32);
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("func_00200F90");
 extern void begin_draw_frame(void) __asm__("func_001F7978");
@@ -157,7 +157,7 @@ void render_level_effects_and_screen_sprites(void)
         projected_frame->screen_y = screen_y;
         projected_frame->projected_width = projected_width;
         projected_frame->projected_height = projected_height;
-        func_00200E08(screen_x + 1, screen_y + 1, screen_x + projected_width - 1, screen_y + projected_height - 1, panel_clear_color, 0);
+        append_screen_rect_packet(screen_x + 1, screen_y + 1, screen_x + projected_width - 1, screen_y + projected_height - 1, panel_clear_color, 0);
     }
 
     for (pass = 0; pass < 2; pass++) {

@@ -30,7 +30,7 @@ extern s32 func_0023B960();
 extern void func_0023B990();
 extern s32 read_buf_begin_get() __asm__("func_0023B9D8");
 extern void func_0023BA20();
-extern s32 func_0023BA60();
+extern s32 read_cd_stream_sectors() __asm__("func_0023BA60");
 extern void func_0023CC70();
 extern s32 func_0023CC80();
 extern s32 video_dec_flush() __asm__("func_0023CD08");
@@ -112,7 +112,7 @@ block_15:
     if (temp_3_92 <= 0xFFFF) {
         goto block_18;
     }
-    temp_2_99 = func_0023BA60(arg2, sp0, 0x10000, 0);
+    temp_2_99 = read_cd_stream_sectors(arg2, sp0, 0x10000, 0);
     var_19_25 -= temp_2_99;
     func_0023B990(arg1, temp_2_99);
 block_18:

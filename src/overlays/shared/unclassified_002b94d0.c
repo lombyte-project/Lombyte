@@ -212,7 +212,7 @@ extern char D_L00_001616AC[4] __attribute__((sda));
 extern short D_L00_001DBEC0[];
 extern short D_L00_001DBEF0[];
 extern short D_L00_001DBF08[];
-extern void FUN_00213358(void *, float, float);
+extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -297,7 +297,7 @@ void FUN_L00_002bb558(char *m) {
                 int k;
                 D_L00_001DBEC0[i] = 2;
                 D_L00_001DBED8[i] = 0x40;
-                FUN_00213358(vec1, D_L00_001616A4, D_L00_001616A4);
+                random_spherical_offset(vec1, D_L00_001616A4, D_L00_001616A4);
                 qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
                 n = i + 1;
                 sign = 1.0f;

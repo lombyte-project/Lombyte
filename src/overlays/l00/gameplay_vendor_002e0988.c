@@ -626,7 +626,7 @@ typedef struct {
 } SparkMoby;
 
 extern void FUN_L00_0024f7c8(void *, s32, void *);
-extern void FUN_00213358(void *out, f32 a, f32 b);
+extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
@@ -647,7 +647,7 @@ void FUN_L00_002e1aa8(SparkMoby *m)
     pos = vars->pos;
     FUN_L00_0024f7c8(m, 1, pos);
     vars->pos[2] -= 0.333f;
-    FUN_00213358(vel, 0.005f, 0.03f);
+    random_spherical_offset(vel, 0.005f, 0.03f);
     p = FUN_L00_00274948(pos, vel, 0x7F, m);
     if (p != 0) {
         p->unkC = random_float_between(6000.0f, 32000.0f);

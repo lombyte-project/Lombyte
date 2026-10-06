@@ -967,7 +967,7 @@ extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern float D_L14_00161A60 __attribute__((sda));
-extern void FUN_00213358(void *, float, float);
+extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L14_002d71f0(void);
 extern void add_vector_xyz(void *, void *, void *);
@@ -998,7 +998,7 @@ void FUN_L14_002d7490(char *m) {
         }
         p[2] -= 1.0f;
     }
-    FUN_00213358(w, 0.005f, 0.03f);
+    random_spherical_offset(w, 0.005f, 0.03f);
     q = FUN_L00_00274948(p, w, 0x7F, m);
     if (q != 0) {
         *(float *)(q + 0xC) = random_float_between(6000.0f, 32000.0f);

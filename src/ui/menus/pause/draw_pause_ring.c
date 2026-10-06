@@ -37,7 +37,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
 extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
-extern void func_00200E08(s32, s32, s32, s32, u64, s32);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
 s32 draw_pause_ring(struct PauseState *arg0) __asm__("FUN_00220b20");
 
@@ -74,13 +74,13 @@ s32 draw_pause_ring(struct PauseState *arg0) {
             u64 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40)
                          * 0x10202) | 0x80000000;
 
-            func_00200E08((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,
+            append_screen_rect_packet((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,
                           color, 0);
-            func_00200E08((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
+            append_screen_rect_packet((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
                           D_001601B0, 0);
         }
         if (arg0->slots[i] == 0) {
-            func_00200E08((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
+            append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
                           0x40404040L, 0);
         } else {
             s32 idx = arg0->slots[i];

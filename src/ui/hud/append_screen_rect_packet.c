@@ -5,7 +5,9 @@ struct Screen { u8 pad[0x10]; s32 offx; s32 offy; };
 extern struct TagPtr D_00160F00;
 extern struct Screen D_0013E500;
 
-void FUN_00200e08(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
+void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__("FUN_00200e08");
+
+void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     u64 *q;
 
     D_00160F00.p->w0 = 0x10000003;
@@ -27,4 +29,4 @@ void FUN_00200e08(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     D_00160F00.p += 3;
 }
 
-extern __typeof__(FUN_00200e08) func_00200E08 __attribute__((alias("FUN_00200e08")));
+extern __typeof__(append_screen_rect_packet) func_00200E08 __attribute__((alias("FUN_00200e08")));
