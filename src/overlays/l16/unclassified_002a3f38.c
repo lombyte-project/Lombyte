@@ -817,7 +817,7 @@ void FUN_L16_002c9a50(unsigned char *m) {
 #include "qcopy.h"
 
 /* Draw paired textured strips along an indexed pose, fading the end caps. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CB098), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CB098), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float point[4][4]; int color[4]; struct {float u,v;} uv[4];
@@ -908,7 +908,7 @@ void FUN_L16_002c9cd0(char *m) {
 #include "qcopy.h"
 
 /* Updates the test dummy (moby class 541): walks its path, throws at or sprays its target, bursts and respawns. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CF180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CF180), where it is exact; names translated to the US level program. */
 
 
 typedef int u128 __attribute__((mode(TI)));
@@ -1346,7 +1346,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cef60.s", FUN_L16_002cef60);
 
 
 /* Pulse a linked control object and toggle its child when hit or its timer expires. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_0015FFD8;
 extern char *FUN_L00_0025a420(void*,int,int);
@@ -1561,7 +1561,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
 #include "qcopy.h"
 
 /* Update the hoverboard race competitor: wait for the race, follow the path, leap, and emit spray. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1868), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1868), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x2C0];

@@ -149,7 +149,7 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, floa
 #include "qcopy.h"
 
 /* Update the floating enemy's patrol, attack and death states. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
 extern char *FUN_L16_002a09a0(char *, float *, char *);

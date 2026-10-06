@@ -229,7 +229,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
 
 
 
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
 extern float AbsoluteFloat(float);
@@ -914,7 +914,7 @@ float FUN_L16_002e6428(void *m_v, void *t_v) {
 #include "qcopy.h"
 
 /* Update the challenge NPC's interaction state and gaze. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E7C70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E7C70), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[4];
@@ -1321,7 +1321,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
 #include "qcopy.h"
 
 /* Draw stacked alternating rings with a rotating transformation and interpolated tint. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9960), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9960), where it is exact; names translated to the US level program. */
 
 typedef float L16RingVector[4] __attribute__((aligned(16)));
 
