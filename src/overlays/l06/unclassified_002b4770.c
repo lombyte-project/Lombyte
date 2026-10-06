@@ -274,7 +274,7 @@ void FUN_L06_002f99b0(int index)
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L06_002e9d10(void *, void *);
+int FUN_L06_002e9d10(void *m_, void *pos);
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
 void FUN_L06_002fb090(char *moby) {
@@ -460,7 +460,48 @@ void FUN_L06_002d9d10(unsigned char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB140), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void clear_vector(void *);
+extern void vu_euler_rotation_basis(void *, void *);
+extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+
+int FUN_L06_002e9d10(void *m_, void *pos) {
+    char *m = (char *)m_;
+    char *d = *(char **)(m + 0x78);
+    float f, g;
+    if (((unsigned char *)m)[0x20] == 0xF) {
+        qcopy(m + 0x10, pos);
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) & 0xFFBE) | 0x1000;
+        m[0x20] = 6;
+        clear_vector(m + 0x40);
+        *(float *)(m + 0x48) = random_angle_radians();
+        vu_euler_rotation_basis(m + 0xC0, m + 0x40);
+        g = D_0015ED70 * 20.0f;
+        f = D_0015ED6C + D_0015ED6C;
+        *(float *)(d + 0x130) = g;
+        *(int *)(d + 0x134) = 0;
+        *(float *)(d + 0x138) = f;
+        *(float *)(d + 0x13C) = f;
+        d[0x15D] = 3;
+        *(int *)(d + 0x144) = 5;
+        func_L00_0025D5B0_2eb140(m, d + 0x120, 2, 1, 0, random_angle_radians());
+        *(float *)(d + 0x128) = -*(float *)(d + 0x128);
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
 /* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
