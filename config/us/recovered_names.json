@@ -883,7 +883,7 @@
     },
     {
       "name": "Camera_runSetupToNewCam__FP9UpdateCam",
-      "unit": "gameplay/entities/update_moby",
+      "unit": "gameplay/camera/camera_run_setup_to_new_cam",
       "unit_size": "0x44",
       "match": "fragment",
       "address": "0x1ebec8",
@@ -899,7 +899,7 @@
     },
     {
       "name": "Camera_Exit__FP9UpdateCam",
-      "unit": "rendering/entities/draw_moby",
+      "unit": "gameplay/camera/camera_exit",
       "unit_size": "0x44",
       "match": "fragment",
       "address": "0x1ec3d8",
@@ -5251,20 +5251,15 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/update_moby",
-        "source_path": "src/gameplay/entities/update_moby.c",
+        "unit": "gameplay/camera/camera_run_setup_to_new_cam",
+        "source_path": "src/gameplay/camera/camera_run_setup_to_new_cam.c",
         "address": "0x001ebec8",
         "current_name": "FUN_001ebec8",
-        "proposed_name": "update_moby",
-        "logical_group": "gameplay/entities",
+        "proposed_name": "camera_run_setup_to_new_cam",
+        "logical_group": "gameplay/camera",
         "status": "proposed",
         "confidence": "high",
         "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "f303c83",
-            "excerpt": "- fun_001ebec8 and fun_001ec3d8 dispatch through the moby class table."
-          },
           {
             "kind": "recovered_symbol",
             "name": "Camera_runSetupToNewCam__FP9UpdateCam",
@@ -5272,7 +5267,7 @@
           },
           {
             "kind": "source_analysis",
-            "note": "Dispatches to the Moby class update method."
+            "note": "Recovered symbol at the unit address; calls the camera type slot in D_001E8C00."
           }
         ],
         "logical_group_confidence": "high"
@@ -5328,20 +5323,15 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/entities/draw_moby",
-        "source_path": "src/rendering/entities/draw_moby.c",
+        "unit": "gameplay/camera/camera_exit",
+        "source_path": "src/gameplay/camera/camera_exit.c",
         "address": "0x001ec3d8",
         "current_name": "FUN_001ec3d8",
-        "proposed_name": "draw_moby",
-        "logical_group": "rendering/entities",
+        "proposed_name": "camera_exit",
+        "logical_group": "gameplay/camera",
         "status": "proposed",
         "confidence": "high",
         "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "f303c83",
-            "excerpt": "- fun_001ebec8 and fun_001ec3d8 dispatch through the moby class table."
-          },
           {
             "kind": "recovered_symbol",
             "name": "Camera_Exit__FP9UpdateCam",
@@ -5349,7 +5339,7 @@
           },
           {
             "kind": "source_analysis",
-            "note": "Dispatches to the Moby class draw method."
+            "note": "Recovered symbol at the unit address; calls the camera type slot in D_001E8C00."
           }
         ],
         "logical_group_confidence": "high"

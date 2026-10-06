@@ -1,10 +1,6 @@
 #include "types.h"
 
-struct M2c_D_001870C0 {
-    u8 pad_0[0x86];
-    s16 unk86;
-    u8 pad_88[0x2];
-};
+#include "rnc/gameplay/camera/update_cam.h"
 
 struct M2c_arg0 {
     f32 unk0;
@@ -13,7 +9,7 @@ struct M2c_arg0 {
     s32 unkC;
 };
 
-extern struct M2c_D_001870C0 *D_001870C0[];
+extern struct UpdateCam *D_001870C0[];
 extern u8 D_00187080[];
 extern u8 D_00187290[];
 extern u8 D_001872B0[];
