@@ -34,13 +34,9 @@ from splat.util.conf import load as splat_load_yaml
 
 ROOT = Path.cwd()
 
-# ###########################################################################
-# SETTINGS: everything edited by hand lives here, above the code.
-# ###########################################################################
+# —— Settings ——
 
-# ===========================================================================
-# Toolchain, paths and project names
-# ===========================================================================
+# —— Toolchain and paths ——
 
 # The two compilers of the retail build: tools/compilers/game-compiler (the
 # reconstructed Sony/Cygnus 2.9-ee-991111b, game code) and
@@ -92,13 +88,7 @@ OVERLAYS_SRC = Path("src/overlays")
 
 OVERLAYS_BUILD = Path("build/overlays")
 
-# ===========================================================================
-# Compiler routes: which compiler and flags build each unit (boot ELF: unit
-# paths from rnc1.us.yaml; overlays: src/overlays paths).  A boot ELF unit with
-# no entry builds on its provenance compiler (GAME_TEXT_START); an overlay unit
-# with no entry builds on the game compiler.  Carry entries forward when a unit
-# is renamed or moved.
-# ===========================================================================
+# —— Compiler routes ——
 
 # The retail executable links the SDK libraries (newlib, libkernl, libsif,
 # libcdvd, libmpeg, ...) as one block ahead of the game code, and the two
@@ -404,9 +394,7 @@ OVERLAY_SN_UNITS = {
     "shared/unclassified_002f6328.c",
 }
 
-# ===========================================================================
-# Retail link layout: data retail kept inside preserved blobs
-# ===========================================================================
+# —— Retail link layout ——
 
 # Recovered C units that own the small .rodata retail kept inside the
 # preserved `core_rdata` blob.  Key: configured unit-name suffix; value:
@@ -460,9 +448,7 @@ SDATA_OVERLAYS = {
 }
 
 
-# ###########################################################################
-# CODE: no hand-edited settings below this line.
-# ###########################################################################
+# —— Code ——
 
 
 def provenance_compiler(vram: int) -> str:
