@@ -58,7 +58,7 @@ void FUN_L17_002cbc10(char *m) {
 #include "qcopy.h"
 
 /* Updates moby 99: a beam swinging between two waypoints that sprays particles while the hero is in its zone. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002AA068), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002AA068), where it is exact; names translated to the US level program. */
 
 typedef int v128 __attribute__((mode(TI)));
 
@@ -302,7 +302,7 @@ void FUN_L17_002a95b8(char *moby) {
 #include "qzero.h"
 
 /* Updates moby 347, a turret of Drek's fleet: waits for the hero, aims at its zone or at the hero's ship and fires. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CC788), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CC788), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x20];
@@ -569,8 +569,8 @@ extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigne
 extern unsigned char D_0013F3D0[];
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa298(void *, void *);
+void FUN_L17_002d7cf0(char *moby);
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L17_002d7cf0(void);
 extern void build_spherical_offset(void *, float, float, float);
 extern void enqueue_callback_list_1(void *, void *);
 extern void normalize_vector_triplet(void *);
@@ -682,7 +682,103 @@ void FUN_L17_002d77f0(char *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002d7cf0.s", FUN_L17_002d7cf0);
+
+
+
+/* Draw callback of fleet moby 669: two passes of three textured quads fanned around the moby, with scrolling texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D91C8), where it is exact; names translated to the US level program. */
+
+typedef int u128_d7cf0 __attribute__((mode(TI)));
+
+typedef struct { float v[2]; } RingStep;
+typedef struct { float x, y; } RingUV;
+
+typedef struct {
+    float v[4][4];
+    int rgba[4];
+    struct { float x, y; } uv[4];
+    long z70;
+    long tex;
+    long q80;
+    long alpha;
+} RingPrim;
+
+extern float D_L17_00161B80_c __asm__("D_L17_00161B80") __attribute__((sda));
+extern RingUV D_L17_001D3F70[4];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_L17_00161BBC __attribute__((sda));
+extern float FUN_L00_00200260(float, float);
+extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
+extern float D_0015ED6C;
+extern int D_L17_0015F5CC;
+extern int D_L17_00161B98 __attribute__((sda));
+extern int D_L17_00161B9C __attribute__((sda));
+extern int D_L17_00161BA0 __attribute__((sda));
+extern int D_L17_00161BA4 __attribute__((sda));
+extern int D_L17_00161BB8 __attribute__((sda));
+extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern short D_L17_00161B7C __attribute__((sda));
+extern short D_L17_00161B84 __attribute__((sda));
+extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
+extern void FUN_001fa050(float *, float *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
+
+void FUN_L17_002d7cf0(char *moby) {
+    RingPrim q;
+    float mat[16];
+    float scroll;
+    int pass;
+    int i;
+    int j;
+    int k;
+
+    scroll = ConvertIntegerToFloat(D_L17_0015F5CC) * (D_L17_00161BBC * D_0015ED6C);
+    scroll = FUN_L00_00200260(scroll, 1.0f);
+    FUN_001fa050(mat, (float *)(moby + 0x40));
+    *(u128_d7cf0 *)&mat[12] = *(u128_d7cf0 *)(moby + 0x10);
+    mat[15] = 1.0f;
+    q.tex = get_effect_texture(0x28);
+    q.q80 = 0xFF9000000260L;
+    q.alpha = (long)D_L17_00161B98 | ((long)D_L17_00161B9C << 2) | ((long)D_L17_00161BA0 << 4) | ((long)D_L17_00161BA4 << 6) | 0x8000000000L;
+    q.z70 = 0;
+    for (pass = 0; pass < 2; pass++) {
+        for (k = 0; k < 4; k++) {
+            RingStep step = D_L17_00161BC0;
+
+            q.uv[k].y = D_L17_001D3F70[k].y + scroll * step.v[pass];
+        }
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 4; j++) {
+                RingStep step = D_L17_00161BC8;
+                float spread[4] = {
+                    0.0f,
+                    -D_L17_00161B80_c * 0.017453292f,
+                    D_L17_00161B80_c * 0.017453292f,
+                    0.0f
+                };
+                float *vj;
+                float radius;
+
+                q.uv[j].x = D_L17_001D3F70[j].x + scroll * step.v[pass];
+                radius = 0.0f;
+                if (j != 0) {
+                    radius = *(float *)&D_L17_00161B84;
+                }
+                vj = q.v[j];
+                wrap_angle_alt(vj, radius, 1.5707964f,
+                              build_spherical_offset_alt(*(float *)&D_L17_00161B7C * 0.017453292f + ConvertIntegerToFloat(i) * 2.0943952f + spread[j]));
+                vj[3] = 1.0f;
+            }
+            q.rgba[3] = D_L17_00161BB8;
+            q.rgba[2] = D_L17_00161BB8;
+            q.rgba[1] = D_L17_00161BB8;
+            q.rgba[0] = D_L17_00161BB8;
+            draw_geometry_quad(&q, mat, 0);
+        }
+    }
+}
 #include "sda.h"
 
 #include "qcopy.h"
