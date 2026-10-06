@@ -1,9 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0022d7f0/FUN_0022d7f0.s", FUN_0022d7f0);
-#else
 #include "types.h"
 
 #include "eetypes.h"
@@ -74,7 +71,7 @@ extern VoicePool voice_pool __asm__("D_0013E550");
 extern VoicePlayerState player_state __asm__("D_0013F350");
 extern void clear_voice_position(VoiceVector *) __asm__("func_001F99F8");
 extern s32 game_random_remainder(s32) __asm__("func_00213260");
-extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("func_0022C7E8");
+extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
 
 s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
                         s32) __asm__("FUN_0022d7f0");
@@ -87,9 +84,7 @@ s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
     s32 slot_index;
     s32 result;
     s32 slot_limit;
-    s32 slot_in_bounds;
     s32 pitch_bend;
-    u8 *state;
     s32 source_inactive;
     VoicePoolWindow *committed_slot;
     VoicePoolWindow *slot;
@@ -127,30 +122,12 @@ check_moby:
 use_extended_pool:
     slot_limit = 0x1E;
 find_free_slot:
-    slot_index = 0;
-    if (slot_limit == 0) {
-        goto allocation_failed;
-    }
-    slot_in_bounds = slot_index < slot_limit;
-    if (voice_pool.voices[0].state == 0) {
-        goto slot_found;
-    }
-    state = &voice_pool.voices[0].state;
-    slot_index = 1;
-    do {
-        if (slot_index >= slot_limit) {
-            goto allocation_failed;
-        }
-        state += 0x70;
-        if (*state != 0) {
-            slot_index += 1;
-            continue;
-        }
-            slot_in_bounds = slot_index < slot_limit;
+    for (slot_index = 0; slot_index < slot_limit; slot_index++) {
+        if (voice_pool.voices[slot_index].state == 0) {
             break;
-    } while (1);
-slot_found:
-    if (!slot_in_bounds) {
+        }
+    }
+    if (slot_index >= slot_limit) {
         goto allocation_failed;
     }
     slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
@@ -219,7 +196,4 @@ return_index:
 return_result:
     return result;
 }
-
 extern __typeof__(allocate_voice_slot) func_0022D7F0 __attribute__((alias("FUN_0022d7f0")));
-
-#endif /* NON_MATCHING */
