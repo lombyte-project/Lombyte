@@ -125,7 +125,6 @@ void draw_dialog_text(void) {
     int normal_color;
     int background_color;
     char *text;
-    u8 *text_cursor;
     char *format_argument;
     const char *format;
     int text_id;
@@ -149,14 +148,15 @@ void draw_dialog_text(void) {
 
     setup_gif_paging(0);
     switch (dialog_state.mode) {
-    case 5:
+    case 5: {
+        u8 *text_cursor;
         mode5_fade = 1.0f - (float)dialog_state.fade_in / (float)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (int)(mode5_fade * 80.0f));
         text_window = D_001E78F0;
         mode5_color = func_001FA6E0(D_0015F4F0, D_0015F4F4, mode5_fade);
         strncpy((char *)0x70000000, get_help_message_text(0x4E2B), 0x400);
-        text_cursor = (u8 *)0x70000000;
         /* Split at the first control byte, then consume consecutive separators. */
+        text_cursor = (u8 *)0x70000000;
         if (*text_cursor >= 2) {
             do {
                 text_cursor++;
@@ -194,6 +194,7 @@ void draw_dialog_text(void) {
                             get_frame_texture(find_valid_animation_frame_index(0x755D, 1)), 4096.0f,
                             icon_y_subpixels, icon_size, icon_size, icon_angle);
         break;
+    }
 
     case 3:
         text = D_0015F548;
