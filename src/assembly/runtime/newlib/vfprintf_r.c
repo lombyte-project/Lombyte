@@ -39,15 +39,15 @@ typedef char *va_list;
 #define FILE RncFile
 #define _CONST const
 extern RncReent *D_0012F76C[];
-#define D_0012F770 ((s32 *)0x0012F770)
+extern s32 D_0012F770[];
 extern char **localeconv(void) __asm__("GetStateResourceWrapper");
-extern s32 _mbtowc_r(RncReent *, s32 *, const char *, s32, s32 *);
+extern s32 _mbtowc_r(RncReent *, s32 *, const char *, s32, s32 *) __asm__("ConvertMultibyteCharacter");
 extern s32 __swsetup(RncFile *);
 extern s32 __sbprintf(RncFile *, const char *, va_list);
 extern s32 __sprint(RncFile *, RncStdioUio *);
 extern s32 isinf(f64) __asm__("FUN_00116168");
 extern s32 isnan(f64) __asm__("ClassifyDoubleNaN");
-extern char *cvt(RncReent *, f64, s32, s32, char *, s32 *, s32, s32 *);
+extern char *cvt(RncReent *, f64, s32, s32, char *, s32 *, s32, s32 *) __asm__("func_00118338");
 extern s32 exponent(char *, s32, s32);
 extern void *memchr(const void *, s32, u32);
 extern u32 strlen(const char *);
@@ -56,6 +56,7 @@ extern u32 strlen(const char *);
 #define va_ptr(ap, type) ((type)(*(void **)((ap += 8) - 8)))
 
 s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) __asm__("FUN_00116e20");
+extern __typeof__(_vfprintf_r) _vfprintf_r_link __asm__("_vfprintf_r") __attribute__((alias("FUN_00116e20")));
 s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 {
 	register char *fmt;	/* format string */
