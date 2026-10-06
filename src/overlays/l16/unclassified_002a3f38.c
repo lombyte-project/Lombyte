@@ -2178,4 +2178,19 @@ void FUN_L16_002d6260(char *moby, void *out1, float *out2) {
     out2[1] = *(float *)&D_L16_00161A8C_d;
     out2[2] = *(float *)(moby + 0x48);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e0e28.s", FUN_L16_002e0e28);
+
+
+
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2290), where it is exact; names translated to the US level program. */
+
+int FUN_L16_002e0e28(char *m) {
+    unsigned char s = m[0x20];
+    m = *(char **)(m + 0x78);
+    if (s == 7 || s == 8) {
+        if (s == 8 && *(float *)(m + 0x34) > 0.2f) {
+            return 2;
+        }
+        return 1;
+    }
+    return 0;
+}
