@@ -122,9 +122,7 @@ after_scan:
     if (using_initial_width) {
         goto layout;
     }
-    if (initial_line_count == 0) {
-        initial_line_count = line_count;
-    }
+    initial_line_count = initial_line_count ? initial_line_count : line_count;
     if (line_count < 2) {
         goto layout;
     }
