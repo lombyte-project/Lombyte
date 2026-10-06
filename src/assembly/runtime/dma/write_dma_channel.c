@@ -26,6 +26,9 @@ s32 WriteDmaChannel(s32 sadr, s32 dar, s32 chcnt) {
     d->sadr = sadr;
     d->dar = chcnt;
     d->chcr = 0x100;
-    return ((*(volatile u32 *)0x20100000 | 1), 0x100);
+    if (*(volatile u32 *)0x20100000 & 1u) {
+        return 0x100;
+    }
+    return 0x100;
 }
 #endif /* NON_MATCHING */
