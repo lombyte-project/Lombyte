@@ -1769,11 +1769,11 @@ OVERLAYS_SRC = Path("src/overlays")
 OVERLAYS_BUILD = Path("build/overlays")
 
 
-OVERLAY_SN_UNITS = Path("config/overlays/us/sn-units.txt")
+OVERLAY_SN_UNITS = Path("config/overlays/us/sn-units.json")
 
 
 def overlay_sn_units() -> set[str]:
-    """src/overlays files built by SN cc1 2.95.2 (one path per line, # notes).
+    """src/overlays files built by SN cc1 2.95.2 (units grouped by src/overlays directory).
 
     Retail level code matches SN cc1 where the game compiler cannot reach it:
     the help giants' 128-bit zero stores and loop pointers take the reload
@@ -1781,12 +1781,8 @@ def overlay_sn_units() -> set[str]:
     """
     if not OVERLAY_SN_UNITS.is_file():
         return set()
-    units = set()
-    for line in OVERLAY_SN_UNITS.read_text().splitlines():
-        line = line.split("#", 1)[0].strip()
-        if line:
-            units.add(line)
-    return units
+    groups = json.loads(OVERLAY_SN_UNITS.read_text())["units"]
+    return {f"{dir_}/{name}" for dir_, names in groups.items() for name in names}
 
 
 def overlay_sn_functions(units: set[str]) -> set[str]:
