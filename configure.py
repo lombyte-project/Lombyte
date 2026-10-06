@@ -34,8 +34,6 @@ from splat.util.conf import load as splat_load_yaml
 
 ROOT = Path.cwd()
 
-# —— Settings ——
-
 # —— Toolchain and paths ——
 
 # The two compilers of the retail build: tools/compilers/game-compiler (the
@@ -447,13 +445,10 @@ SDATA_OVERLAYS = {
     "rendering/vu1_chain": (0x160EE0, 0x61E60),
 }
 
-
 # —— Code ——
-
 
 def provenance_compiler(vram: int) -> str:
     return "sdk-compiler" if vram < GAME_TEXT_START else "game-compiler"
-
 
 def _is_include_asm(config_dir: Path, source: Path) -> bool:
     """A pending unit: its C file only wraps splat's listing."""
@@ -462,17 +457,14 @@ def _is_include_asm(config_dir: Path, source: Path) -> bool:
     except OSError:
         return False
 
-
 def unit_compiler(unit: str, vram: int) -> str:
     """The build.ninja rule a unit is compiled with."""
     return ROUTE_EXCEPTIONS.get(unit) or provenance_compiler(vram)
-
 
 # Configuration names become file paths and compiler command fragments.
 # Restrict them to the project's alphabet and forbid path escapes so a
 # malformed or hostile row cannot write outside the build workspace.
 _UNIT_NAME_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_./-]*$")
-
 
 def _check_unit_name(name: str) -> None:
     parts = [part for part in name.split("/") if part not in ("", ".")]
@@ -486,7 +478,6 @@ def _check_unit_name(name: str) -> None:
             "(allowed: letters, digits, '_', '.', '/', '-'; no '..')"
         )
 
-
 def validate_config_names(node: Any) -> None:
     """Reject configuration names that could escape the build tree."""
     if isinstance(node, dict):
@@ -499,7 +490,6 @@ def validate_config_names(node: Any) -> None:
             _check_unit_name(node[2])
         for item in node:
             validate_config_names(item)
-
 
 @contextlib.contextmanager
 def suppress_stdout_stderr():
@@ -515,7 +505,6 @@ def suppress_stdout_stderr():
         for fd in null_fds + save_fds:
             os.close(fd)
 
-
 def get_compiler_command(command: str) -> Path:
     compiler_dir = Path("tools") / "cc" / SDK_COMPILER
     ee_dir = compiler_dir / "lib" / "gcc-lib" / "ee"
@@ -527,7 +516,6 @@ def get_compiler_command(command: str) -> Path:
     }
 
     return commands[command]
-
 
 def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
     rel_root = Path(os.path.relpath(ROOT, config_dir))
@@ -546,13 +534,11 @@ def make_compiler_cmd(config_dir: Path, src_path: Path) -> tuple[str, str]:
 
     return compile_cmd, common_includes
 
-
 def sn_compiler_configured() -> bool:
     return (
         bool(SN_TOOLCHAIN_ROOT)
         and (Path(SN_TOOLCHAIN_ROOT) / "bin/ee-gcc.exe").is_file()
     )
-
 
 def _game_compiler_root() -> Path:
     """Locate the reconstructed game compiler.
@@ -568,15 +554,12 @@ def _game_compiler_root() -> Path:
             return candidate
     return ROOT / "tools/compilers/game-compiler"
 
-
 def game_compiler_configured() -> bool:
     root = _game_compiler_root()
     return (root / "ee-gcc").is_file() and (root / "cc1").is_file()
 
-
 def ee_gcc_patched_configured() -> bool:
     return bool(EE_GCC_PATCHED_ROOT) and (Path(EE_GCC_PATCHED_ROOT) / "xgcc").is_file()
-
 
 def _win_path(value: str) -> str:
     """Convert a WSL mount path to the form the Windows driver needs.
@@ -598,7 +581,6 @@ def _win_path(value: str) -> str:
         return f"\\\\wsl.localhost\\{distro}{value}".replace("/", "\\")
     return value.replace("/", "\\")
 
-
 def _wine_binary() -> str:
     """The wine binary the PE tools must run under, or "" to run them directly."""
     wine = os.environ.get("RNC_WINE")
@@ -606,7 +588,6 @@ def _wine_binary() -> str:
         return wine
     on_windows_drive = re.match(r"^/mnt/[A-Za-z]/", str(ROOT)) is not None
     return "" if on_windows_drive else (shutil.which("wine") or "")
-
 
 def _windows_exe(path: str) -> str:
     """Spell a Windows tool (Ps2EeAs, the SN driver) for a ninja command.
@@ -623,7 +604,6 @@ def _windows_exe(path: str) -> str:
     quoted = shlex.quote(path)
     return f"{shlex.quote(wine)} {quoted}" if wine else quoted
 
-
 def _unit_from_object(object_path: Path) -> str:
     """Derive the unit name from the ninja object path.
 
@@ -638,7 +618,6 @@ def _unit_from_object(object_path: Path) -> str:
         joined = joined[: -len(".c.o")]
     return joined
 
-
 # C aliases in promoted sources: ALIAS __attribute__((alias("TARGET"))).
 # The oracle fallback keeps the bytes but not the aliases, so they are handed
 # to the linker (PROVIDE, only when nothing else defines them).
@@ -648,12 +627,10 @@ _ALIAS_RE = re.compile(
     r"([A-Za-z_]\w*)\s*(?:\([^;{]*?\))?\s*__attribute__\s*\(\(\s*alias\s*\(\s*\"([^\"]+)\"\s*\)\s*\)\)"
 )
 
-
 def _alias_symbols(source: Path) -> set[tuple[str, str]]:
     """(alias, target) pairs declared in a source file."""
     text = source.read_text(errors="replace")
     return {(match.group(1), match.group(2)) for match in _ALIAS_RE.finditer(text)}
-
 
 PADLESS_ASM_HELPER = r'''#!/usr/bin/env python3
 """Normalize SN cc1 output for Ps2EeAs and drop section tail padding.
@@ -975,7 +952,6 @@ if __name__ == "__main__":
     main(sys.argv)
 '''
 
-
 def clean(config_dir: Path):
     for file in (
         ".splache",
@@ -993,7 +969,6 @@ def clean(config_dir: Path):
     for folder in ("asm", "assets", "build", "expected"):
         shutil.rmtree(config_dir / folder, ignore_errors=True)
 
-
 def write_permuter_settings(config_dir: Path, compiler_cmd: str):
     with open(config_dir / "permuter_settings.toml", "w", encoding="utf-8") as f:
         f.write(
@@ -1008,9 +983,7 @@ compiler_type = "gcc"
 """
         )
 
-
 _TEXT_STATEMENT_RE = re.compile(r"^(\s*)(build/\S+?\.o)\(\.text\);$", re.MULTILINE)
-
 
 def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
     """Write FAST_LD_PATH from LD_PATH; return (object, link copy, section) rows.
@@ -1043,7 +1016,6 @@ def write_fast_linkerscript(config_dir: Path) -> list[tuple[str, str, str]]:
     inputs = "".join(f"    {copy}\n" for _, copy, _ in rows)
     (config_dir / FAST_LD_PATH).write_text(f"INPUT(\n{inputs})\n\n" + text)
     return rows
-
 
 def build_stuff(
     config_dir: Path,
@@ -1418,13 +1390,11 @@ def build_stuff(
 
     write_permuter_settings(config_dir, compile_cmd)
 
-
 def rename_locals(base_path: Path):
     for asm_file in base_path.rglob("*.s"):
         data = asm_file.read_text()
         data = re.sub(r"__local_\d+", "", data)
         asm_file.write_text(data)
-
 
 def fix_gp_rel_stores(asm_root: Path) -> int:
     """Normalize the gp-relative store and FPU load spelling for the frozen assembler.
@@ -1464,7 +1434,6 @@ def fix_gp_rel_stores(asm_root: Path) -> int:
         asm_file.write_text(updated)
         fixed += 1
     return fixed
-
 
 def make_asm(config_path: Path, config: dict[str, Any]):
     with tempfile.TemporaryDirectory(dir=config_path, prefix="tmp_") as tmp_dir:
@@ -1583,7 +1552,6 @@ def make_asm(config_path: Path, config: dict[str, Any]):
 
         print(f"expected obj built to '{dst_path}'")
 
-
 def generate_objdiff_configuration(config_path: Path, config: dict[str, Any]):
     segments: list[Any] = config["segments"]
 
@@ -1640,7 +1608,6 @@ def generate_objdiff_configuration(config_path: Path, config: dict[str, Any]):
 
     print(f"Wrote objdiff configuration ({len(units)} units) to {objdiff_path}")
 
-
 def fix_assets(config_dir: Path, config: dict[str, Any]):
     asset_path = Path(config["options"]["asset_path"])
     asset_rel_path = (config_dir / asset_path).resolve().relative_to(ROOT)
@@ -1658,7 +1625,6 @@ def fix_assets(config_dir: Path, config: dict[str, Any]):
             count += labels
         if count > 0:
             asm_file.write_text(data_asm)
-
 
 def fix_linkerscript(config: dict[str, Any], linkerscript_path: Path):
     section_subalign = cast(dict[str, int], config.get("_section_subalign", {}))
@@ -1702,7 +1668,6 @@ def fix_linkerscript(config: dict[str, Any], linkerscript_path: Path):
 
     if config.get("_retail_link_layout"):
         apply_retail_link_layout(config, linkerscript_path)
-
 
 def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
     """Place the preserved inputs at their retail file offsets.
@@ -1906,11 +1871,9 @@ SECTIONS
 """
     linkerscript_path.write_text(script)
 
-
 def overlay_sn_units() -> set[str]:
     """src/overlays files built by SN cc1 2.95.2 (OVERLAY_SN_UNITS)."""
     return set(OVERLAY_SN_UNITS)
-
 
 def overlay_sn_functions(units: set[str]) -> set[str]:
     """Names of the functions defined or stubbed in the SN-built files."""
@@ -1920,7 +1883,6 @@ def overlay_sn_functions(units: set[str]) -> set[str]:
         if path.is_file():
             names |= set(re.findall(r"\b(FUN_L\d\d_[0-9a-f]{8})\b", path.read_text(errors="replace")))
     return names
-
 
 def build_overlays() -> Path:
     """Write build/overlays/build.ninja for the level overlays (docs/overlays.md).
@@ -2032,7 +1994,6 @@ def build_overlays() -> Path:
     print(f"{len(sources)} overlay source files -> {ninja_path} (ninja -C {OVERLAYS_BUILD})")
     return ninja_path
 
-
 def main():
     class ArgsProtocol:
         YAML_FILE: Path
@@ -2110,7 +2071,6 @@ def main():
         make_asm(config_dir, config)
 
     generate_objdiff_configuration(config_dir, config)
-
 
 if __name__ == "__main__":
     main()
