@@ -126,14 +126,14 @@ void FUN_L16_002c9c38(int index, void *arg) {
         } while (*p++ >= 0);
     }
 }
-extern int D_L16_001ABCC0[];
+extern int D_L16_001ABCC0_u[] __asm__("D_L16_001ABCC0");
 extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ceca8, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // For each listed moby of class 0x21D: sets its state bytes and clears bit 0 of its flags.
 void FUN_L16_002ceca8(int idx) {
-    short *p = (short *)D_L16_001ABCC0[idx];
+    short *p = (short *)D_L16_001ABCC0_u[idx];
     if (p != 0) {
         do {
             char *moby;
@@ -1939,7 +1939,40 @@ void FUN_L16_002d59e0(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5ad0.s", FUN_L16_002d5ad0);
+
+
+
+/* Activate the linked mobys and return the one nearest the challenge target. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6E98), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_0015FFD8;
+extern char D_L16_001671C0[];
+extern float FUN_001f9b48(void *, void *);
+extern int *D_L16_001ABCC0[];
+extern float D_L16_00161A80 __attribute__((sda));
+
+void *FUN_L16_002d5ad0(int index, int secondary) {
+    short *p = (short *)D_L16_001ABCC0[index];
+    char *nearest = 0;
+    float distance = 1000.0f;
+    char *moby;
+    float *data;
+    float d;
+    float g;
+    if (!p) return 0;
+    while (1) {
+        moby = D_L16_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (*(short *)(moby + 0xA6) != 0x287) continue;
+        d = FUN_001f9b48(D_L16_001671C0, moby + 0x10);
+        if (d < distance) {distance = d; nearest = moby;}
+        data = *(float **)(moby + 0x78);
+        moby[0x20] = 1;
+        g = D_L16_00161A80;
+        data[5] = g;
+        if (secondary) data[6] = g;
+        if (*p++ < 0) return nearest;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5bc8.s", FUN_L16_002d5bc8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002d5db0.s", FUN_L16_002d5db0);
 extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
