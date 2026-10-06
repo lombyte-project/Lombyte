@@ -185,7 +185,7 @@ typedef struct { u8 b[0x50]; } E002bbb00;
 extern s16 D_L00_001DBEC0[];
 extern s16 D_L00_001DBED8[];
 extern E002bbb00 D_L00_001DBBA0[];
-extern f32 D_L00_001616D4;
+extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
 extern f32 D_L00_00161690 __attribute__((sda));
 extern f32 D_L00_00161694 __attribute__((sda));
 f32 FUN_001fa6c0(s32);
@@ -197,7 +197,7 @@ void FUN_L00_002bbb00(void *o) {
     s32 r;
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
-            r = FUN_001fa6d0(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_001616D4);
+            r = FUN_001fa6d0(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
             FUN_L00_002bbbc8(&D_L00_001DBBA0[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
@@ -350,7 +350,6 @@ extern float D_L00_001616B8_2bc1a0 __asm__("D_L00_001616B8") __attribute__((sda)
 extern int D_L00_001616C8_2bc1a0 __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0_2bc1a0 __asm__("D_L00_001616C0") __attribute__((sda));
 extern unsigned int D_L00_001616C4_2bc1a0 __asm__("D_L00_001616C4") __attribute__((sda));
-extern float D_L00_001616D4_2bc1a0 __asm__("D_L00_001616D4");
 extern V_2bc1a0 D_L00_00166DC0_2bc1a0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V_2bc1a0 D_0013F5E0_2bc1a0 __asm__("D_0013F5E0");
 extern V_2bc1a0 D_L00_001DBB60_2bc1a0[] __asm__("D_L00_001DBB60") __attribute__((section(".data")));
@@ -390,7 +389,7 @@ void FUN_L00_002bc1a0(void *mv) {
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4)) c = D_L00_001616C4_2bc1a0;
     else c = D_L00_001616C0_2bc1a0;
-    c = (c & 0xFFFFFF) | (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_001616D4_2bc1a0) << 24);
+    c = (c & 0xFFFFFF) | (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_00161660_f[29]) << 24);
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
