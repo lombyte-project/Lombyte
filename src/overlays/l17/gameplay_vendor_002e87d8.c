@@ -1769,7 +1769,92 @@ void FUN_L17_002f04d0(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0948.s", FUN_L17_002f0948);
+
+
+
+/* Builds the rippling 89-point ring around the moby (template points moved to its position, z waved by distance from the centre), then draws it twice with scrolled texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F2458), where it is exact; names translated to the US level program. */
+
+typedef struct { float f0; float f4; } RippleData_c;
+
+typedef struct { float v[2]; } P2_c;
+
+typedef struct { P2_c p[2]; } T4_c;
+
+typedef struct { float x; float y; float z; } RingPt;
+
+extern RingPt D_L17_001DBE20[];
+extern RingPt D_L17_001DC680[];
+extern T4_c D_L17_001622D0;
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L17_001622CC __attribute__((sda));
+extern float D_L17_001DC250[][2];
+extern float D_L17_001DCAB0[][2];
+extern float FUN_001f96b0(float);
+extern float FUN_001f9988(float);
+extern float FUN_L00_00200260(float, float);
+extern float fast_add_rotations(float, float);
+extern float wrap_angle(float);
+extern float D_0015ED6C;
+extern int D_L17_0015F5CC;
+extern int D_L17_00162280[2] __attribute__((sda));
+extern int D_L17_001622A0[2] __attribute__((sda));
+extern int D_L17_001622A8[2] __attribute__((sda));
+extern int D_L17_001622B0[2] __attribute__((sda));
+extern int D_L17_001622B4 __attribute__((sda));
+extern int D_L17_001622B8 __attribute__((sda));
+extern int D_L17_001622BC __attribute__((sda));
+extern float D_L17_001622C0 __attribute__((sda));
+extern float D_L17_001622C4 __attribute__((sda));
+extern float D_L17_001622C8 __attribute__((sda));
+extern int D_L17_001DCD78[];
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L17_002f0948(char *moby) {
+    RippleData_c *d = *(RippleData_c **)(moby + 0x78);
+    T4_c t;
+    float scale;
+    int r, g, b;
+    int color;
+    int i, j, n, k;
+
+    scale = ConvertIntegerToFloat(D_L17_0015F5CC) * (D_L17_001622CC * D_0015ED6C);
+    vu1_add_g_sregister(6, get_effect_texture(D_L17_001622B8));
+    vu1_add_g_sregister(0x42, ((long)D_L17_001622B4 << 32) | 0x44);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
+    d->f0 = d->f4;
+    d->f4 = fast_add_rotations(d->f4, 360.0f / FUN_001f96b0(D_L17_001622C4) * 0.017453292f * D_0015ED6C);
+    FUN_L00_00250320(moby, &r, &g, &b);
+    color = (D_L17_001622BC << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < D_L17_00162280[0]; i++) {
+        RingPt *p = &D_L17_001DBE20[i];
+        float w = D_L17_001622C8 *
+            fast_sin(fast_add_rotations(wrap_angle(
+                FUN_L00_00200260(FUN_001f9988(p->x * p->x + p->y * p->y), D_L17_001622C0)
+                    * 6.2831855f / D_L17_001622C0), d->f4));
+        D_L17_001DC680[i].x = p->x + *(float *)(moby + 0x10);
+        D_L17_001DC680[i].y = p->y + *(float *)(moby + 0x14);
+        D_L17_001DC680[i].z = p->z + *(float *)(moby + 0x18) + w;
+        D_L17_001DCD78[i] = color;
+    }
+    for (j = 0; j < 2; j++) {
+        for (n = 0; n < D_L17_00162280[0]; n++) {
+            t = D_L17_001622D0;
+            D_L17_001DCAB0[n][0] = D_L17_001DC250[n][0] + FUN_L00_00200260(scale * t.p[j].v[0], 1.0f);
+            D_L17_001DCAB0[n][1] = D_L17_001DC250[n][1] + FUN_L00_00200260(scale * t.p[j].v[1], 1.0f);
+        }
+        font_queue_vu_state();
+        for (k = 0; k < 1; k++) {
+            FUN_L00_001fde98(D_L17_00162280[k], D_L17_001622A0[k], D_L17_001622B0[k], (void *)D_L17_001622A8[k], 1);
+        }
+    }
+}
 
 
 
