@@ -207,11 +207,11 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L09_002ead30(unsigned char *m) {
     if (m[0x23] < 3) {
-        mark_moby_for_removal(m);
+        mark_moby_for_removal_u(m);
     } else {
         char *d;
         float len, t;
@@ -268,7 +268,70 @@ char *FUN_L09_002edb60(char *src, int cls) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002edc30.s", FUN_L09_002edc30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ee110.s", FUN_L09_002ee110);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
+
+typedef int xu128 __attribute__((mode(TI)));
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vx;
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
+extern char *FUN_L09_002ee380(char *owner, void *position, float angle);
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern float fast_cos(float);
+extern float fast_sin(float);
+extern float random_float_between(float, float);
+extern float vector_length_xyz(void *);
+extern int FUN_L00_00257b90(int, int);
+extern int scale_game_frames(int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void add_vector_xyz(void *, void *, void *);
+extern void mark_moby_for_removal(void *);
+extern void normalize_vector_xyz(void *, void *, float);
+
+void FUN_L09_002ee110(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    Vx v;
+    Vx b;
+    int i;
+    if (r != 0) {
+        *(float *)d = *(float *)d - *(float *)(r + 0x2C);
+        if (0.0f < *(float *)d) {
+            d[0x47] = 0x46;
+            FUN_L00_0025d458(m, (short *)(d + 0x40));
+        } else {
+            char *pos = m + 0x10;
+            v.x = fast_cos(*(float *)(m + 0x48)) * (D_0015ED6C * 20.0f);
+            v.y = fast_sin(*(float *)(m + 0x48)) * (D_0015ED6C * 20.0f);
+            v.z = 0.0f;
+            for (i = 24; i >= 0; i--) {
+                union { xu128 q; Vx v; } t;
+                t.q = 0;
+                t.v.x = random_float_between(-1.0f, 1.0f);
+                t.v.y = random_float_between(-1.0f, 1.0f);
+                t.v.z = random_float_between(-1.0f, 1.0f);
+                *(xu128 *)&b = t.q;
+                normalize_vector_xyz(&b, &b, vector_length_xyz(&v) * (D_0015ED60 * -0.35000002f + 1.0f));
+                add_vector_xyz(&b, &v, &b);
+                normalize_vector_xyz(&b, &b, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+                d = (char *)FUN_L00_00257b90(scale_game_frames(5), scale_game_frames(10));
+                FUN_L00_0026dd20(pos, (char *)&b, 0x5F7F4F2F, (int)d, random_float_between(20000.0f, 50000.0f));
+            }
+            *(xu128 *)&b = *(xu128 *)(m + 0x10);
+            FUN_L09_002ee380(m, &b, *(float *)(m + 0x48));
+            mark_moby_for_removal(m);
+            return;
+        }
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+}
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
