@@ -278,7 +278,79 @@ void FUN_L13_0030af50(char *moby) {
     moby[0xBC] = d[0x24];
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bb70.s", FUN_L13_0030bb70);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Follows its target moby along a path: snaps to the nearest path point, then walks the path segments. */
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D028), where it is exact; names translated to the US level program. */
+
+extern char *D_L13_001B07B0[];
+extern float D_0015ED60;
+extern float FUN_001f9b48(void *, void *);
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
+extern int FUN_L09_00294ae0(void *, void *, void *, int, int, float);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L13_0030bb70(char *m) {
+    int *d = *(int **)(m + 0x78);
+    char *path;
+    char *pth;
+    char *o;
+    float v[4];
+    int idx;
+    float t;
+    int i;
+    if (((unsigned char *)m)[0x20] == 0) {
+        ((unsigned char *)m)[0x30] = 0xFF;
+        if (d[1] != -1) {
+            path = D_L13_001B07B0[d[1]];
+            for (i = 0; i < *(int *)path; i++) {
+                *(float *)(path + (i << 4) + 0x1C) = FUN_001f9b48(path + (i * 16 + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
+            }
+        }
+        d[2] = 0;
+        d[3] = 0;
+        m[0x20] = 1;
+        d[4] = 0;
+    }
+    if (d[0] == -1) return;
+    o = (char *)(D_L13_0015FFD8_m + (d[0] << 8));
+    if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (((unsigned char *)o)[0x20] >= 7) {
+        d[4]++;
+        if (d[1] == -1) return;
+        pth = D_L13_001B07B0[d[1]];
+        if (((unsigned char *)m)[0x20] == 1) {
+            FUN_L00_0025df68(pth, o + 0x10, v, &idx, &t, 0, 100.0f, 1.0f, 0.0f);
+            if (idx > d[2] || t > ((float *)d)[3] || d[4] < 0x1E) {
+                d[2] = idx;
+                ((float *)d)[3] = t;
+                qcopy(m + 0x10, v);
+            } else {
+                m[0x20] = 2;
+            }
+        }
+        if (((unsigned char *)m)[0x20] == 2) {
+            if (d[2] < *(int *)pth - 1) {
+                int k = FUN_L09_00294ae0(m, pth, m + 0x10, d[2], 1, D_0015ED60 * 0.25f);
+                d[2] = k;
+                ((float *)d)[3] = FUN_001f9b48(m + 0x10, pth + (k * 16 + 0x10));
+            } else {
+                m[0x20] = 3;
+            }
+        }
+    } else {
+        qcopy(m + 0x10, o + 0x10);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bdf0.s", FUN_L13_0030bdf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bfb0.s", FUN_L13_0030bfb0);
@@ -289,7 +361,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bfb0.s", FUN_L13_0030bfb0);
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_00259a88(void *, void *);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L13_0030c060(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -298,7 +370,7 @@ void FUN_L13_0030c060(char *moby) {
     char buf[0x30];
     if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(data + 0x64) ||
         (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
-        mark_moby_for_removal(moby);
+        mark_moby_for_removal_u(moby);
         return;
     }
     p = FUN_L00_0025a420(moby, -1, 0);
