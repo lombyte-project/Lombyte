@@ -90,7 +90,7 @@ typedef struct { u8 pad0[0x48]; u16 h48; u16 h4A; u32 w4C; } H_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
 extern G_297f78 D_0013F350_c __asm__("D_0013F350");
-extern s32 D_L00_0015F5C4;
+extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5C8;
 extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
 extern s32 D_0015EEB4;
@@ -150,7 +150,7 @@ void FUN_L00_00297f78(void) {
         D_0013C940_c.w1A8 = ~D_0013C940_c.w1A0 & D_L00_0016C058.wA0;
         D_L00_0016C058.wA0 = D_0013C940_c.w1A0 & ~0x200;
     }
-    lvl = D_L00_0015F5C4;
+    lvl = D_L00_0015F5C0_m[1];
     if (lvl == 0 && (D_0015EEB4 & 1) && D_L00_0015F5C8 >= 8) {
         FUN_001fbab8(3, 0);
         return;
@@ -273,7 +273,6 @@ extern int D_L00_001611CC_298840 __asm__("D_L00_001611CC");
 extern float D_L00_0015F59C_298840 __asm__("D_L00_0015F59C");
 extern int D_L00_0015F5A0_298840 __asm__("D_L00_0015F5A0");
 extern float D_L00_0015F3FC_298840 __asm__("D_L00_0015F3FC");
-extern int D_L00_0015F5C4_298840 __asm__("D_L00_0015F5C4");
 extern int D_L00_0015F400_298840 __asm__("D_L00_0015F400");
 extern F_298840 *D_L00_00179108_298840 __asm__("D_L00_00179108") __attribute__((section(".data")));
 extern struct { char pad[0xEC]; F_298840 *p; } D_L00_001B9CF0_298840 __asm__("D_L00_001B9CF0") __attribute__((section(".data")));
@@ -320,7 +319,7 @@ void FUN_L00_00298840(int a) {
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + t; D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + t;
     f2039a0_298840();
     D_L00_0015F3FC_298840 = 1.0f;
-    D_L00_0015F5C4_298840 = 2;
+    D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400_298840 = 0;
     f2223f8_298840(100, 2);
     D_0013F350_298840.x20a5 = 1;
@@ -351,7 +350,6 @@ typedef struct { char pad[0x10]; char v[8]; float x18; char pad1c[0x28]; short n
 typedef struct { char pad[0x80]; char v[8]; float x88; char pad8c[0x2019]; unsigned char x20a5; } P_298b18;
 extern struct { char pad[0x5A]; unsigned short x5a; } D_001516D0_298b18 __asm__("D_001516D0");
 extern int D_L00_0015F5D8_298b18 __asm__("D_L00_0015F5D8");
-extern int D_L00_0015F5C4_298b18 __asm__("D_L00_0015F5C4");
 extern float D_L00_0016CAF0_298b18 __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 extern int D_L00_0015F3FC_298b18 __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
@@ -379,7 +377,7 @@ void FUN_L00_00298b18(void) {
     D_L00_0015F5D8_298b18 = 1;
     f2335a0_298b18();
     f1f4a58_298b18(0xC);
-    D_L00_0015F5C4_298b18 = 0;
+    D_L00_0015F5C0_m[1] = 0;
     D_L00_0016CAF0_298b18 = 0.63f;
     D_L00_0015F3FC_298b18 = 0;
     f1f2d98_298b18();
@@ -568,7 +566,6 @@ void FUN_L00_002999a8(void) {
     FUN_L00_002997c8();
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
-extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0015F3FC;
 void FUN_L00_002a09d8(s32);
@@ -579,7 +576,7 @@ void FUN_L00_00299c00(void) {
     FUN_L00_002a09d8(1);
     FUN_001f4a58(0xC);
     FUN_002166e8();
-    D_L00_0015F5C4 = 0;
+    D_L00_0015F5C0_m[1] = 0;
     D_L00_0015F5D8 = 1;
     D_L00_0015F3FC = 0;
     FUN_002335a0();
@@ -678,7 +675,7 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec4;
 extern int D_L00_0015F5D8;
 extern int D_L00_0015F5C4 __attribute__((sda));
 extern unsigned char D_001413F5[];
-extern char D_L00_001CA4C0[];
+extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161100 __attribute__((sda));
 struct S16 { char pad[0x5A]; unsigned short mode; };
 extern struct S16 D_001516D0;
@@ -701,7 +698,7 @@ void FUN_L00_0029af80(void) {
     FUN_L00_002223f8(0, 1);
     D_001413F5[0] = 0;
     FUN_L00_002330d0();
-    g = D_L00_001CA4C0;
+    g = D_L00_001CA4C0_u;
     FUN_001f9cf8(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
     FUN_001f9a10(&v, &v, *(char **)(g + 0x28) + 0x10);
     r.x = 0.0f;
@@ -714,7 +711,70 @@ void FUN_L00_0029af80(void) {
     FUN_00216088();
     FUN_0012dc80();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029b4d8.s", FUN_L00_0029b4d8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* steps the pickup-spawn state machine for the given mode */
+/* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029C840), where it is exact; names translated to the US level program. */
+
+extern int D_L00_0015F3F8;
+extern int D_L00_00161188;
+extern int D_L00_00161190;
+extern int D_L00_00161194;
+extern int D_L00_001CA4C0[];
+extern int random_integer_below(int);
+extern int scale_game_frames(int);
+extern unsigned char D_001516EC[];
+extern void blend_moby_animation(void *, int, int, int);
+
+void FUN_L00_0029b4d8(int a) {
+    char *b;
+    unsigned char *m;
+    int s;
+    int s2;
+    int r0;
+    int r1;
+    if (D_L00_00161188 == 0) return;
+    b = D_L00_001CA4C0;
+    m = *(unsigned char **)(b + 0x24);
+    switch (a) {
+    case 0:
+        s = m[0x20];
+        if (s == 2 || s == 0) {
+            if (random_integer_below(4) == 0) {
+                if (*(int *)(b + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
+                    *(int *)(b + 0x30) = D_L00_0015F3F8;
+                    r0 = random_integer_below(2);
+                    *(int *)(b + 0x3C) = r0;
+                    D_L00_00161190 = 1;
+                    D_L00_00161194 = 0;
+                    *(int *)(D_001516EC) = (r0 * 3 + 2) * 6 + *(int *)(b + 0x38) + 10000;
+                    m[0x20] = 0xB;
+                }
+            }
+        }
+        break;
+    case 1:
+        r1 = random_integer_below(2);
+        *(int *)(b + 0x3C) = r1;
+        D_L00_00161190 = a;
+        D_L00_00161194 = 0;
+        *(int *)(D_001516EC) = r1 * 0x12 + *(int *)(b + 0x38) + 10000;
+        if (m[0x53] != a) blend_moby_animation(m, 1, 0, 10);
+        m[0x20] = 10;
+        break;
+    case 2:
+    case 3:
+        s2 = m[0x20];
+        if (s2 == 2 || s2 == 0) {
+            char *q = D_L00_001CA4C0;
+            *(int *)(q + 0x34) = 0;
+        }
+        break;
+    }
+}
 typedef float V_29b680[4] __attribute__((aligned(16)));
 typedef struct { int k; int f; char pad[0xC]; } E_29b680;
 typedef struct { char p0[0x1C]; unsigned char *p1C; unsigned char *p20; char p1[0x58 - 0x24]; int i58; char p2[0xD0 - 0x5C]; E_29b680 ent[1]; } P_29b680;
