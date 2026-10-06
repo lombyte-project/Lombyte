@@ -1,8 +1,0 @@
-#ifndef RNC_RENDERING_ENTITIES_DRAW_MOBY_TYPES_H
-#define RNC_RENDERING_ENTITIES_DRAW_MOBY_TYPES_H
-
-#include "types.h"
-
-typedef struct ADXF_PTINFO { char _pad[8]; Sint32 nfile; } ADXF_PTINFO;
-
-#endif /* RNC_RENDERING_ENTITIES_DRAW_MOBY_TYPES_H */
