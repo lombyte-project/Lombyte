@@ -468,7 +468,7 @@ void FUN_L17_002258a8(void) {
     int prevAnim;
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    int sp20;
+    int record_index;
     int sp24;
     int sp28;
     float sp2C;
@@ -614,11 +614,11 @@ void FUN_L17_002258a8(void) {
                         }
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == FUN_L17_002020a8(0) && flag) {
-                            if (FUN_L00_00229010(&sp20)) {
+                            if (FUN_L00_00229010(&record_index)) {
                                 Rec70 *rec;
 
-                                D_0013F350.f2270 = sp20;
-                                rec = &D_L17_0017A190[sp20];
+                                D_0013F350.f2270 = record_index;
+                                rec = &D_L17_0017A190[record_index];
                                 D_0013F350.f1E8 = scale_game_frames(0x78);
                                 rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
                                 if (rec->f44 != 0) {

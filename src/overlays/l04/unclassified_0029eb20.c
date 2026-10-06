@@ -37,7 +37,7 @@ typedef struct {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 rand();
 extern void FUN_0020e098(void *);
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L04_002a5a08(char *m) {
     int *d;
@@ -63,7 +63,7 @@ void FUN_L04_002a5a08(char *m) {
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c) {
     char *data = *(char **)(arg + 0x78);
@@ -364,7 +364,7 @@ extern void copy_matrix3x4(void *, void *);
 extern void memset_cf(char *, int, void *) __asm__("FUN_0020cb10");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
-extern void tick_countdown_32(int *arg0);
+extern void tick_countdown_32(int *counter);
 void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c);
 extern char D_0013F350[];
 extern char D_0013F3D0[];
@@ -1865,7 +1865,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
-extern void tick_countdown_32(int *arg0);
+extern void tick_countdown_32(int *counter);
 void FUN_L04_002c4808_c(char *arg) __asm__("FUN_L04_002c4808");
 extern char D_0013F350[];
 extern char D_001413D0[];

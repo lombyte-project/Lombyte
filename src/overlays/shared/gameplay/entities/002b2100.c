@@ -1226,8 +1226,8 @@ typedef struct {
     s32 *slots;
 } ListSlots8;
 
-void FUN_L00_002b8798(ListSlots8 *arg0, s32 val) {
-    s32 *p = arg0->slots;
+void FUN_L00_002b8798(ListSlots8 *list, s32 val) {
+    s32 *p = list->slots;
     s32 i = 0;
     s32 *q;
     s32 n;

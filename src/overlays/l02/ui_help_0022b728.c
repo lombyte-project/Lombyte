@@ -1936,7 +1936,7 @@ extern void FUN_L02_00220b80(void);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_vector(void *);
 extern void scale_vector_xyz(void *, void *, float);
-extern void tick_countdown_32(int *arg0);
+extern void tick_countdown_32(int *counter);
 void FUN_L00_00234e00(void);
 extern Rec2C D_L02_0017C2A8_rec[] __asm__("D_L02_0017C228");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
@@ -1949,7 +1949,7 @@ void FUN_L02_00230988(void) {
     int prevAnim;
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    int sp20;
+    int record_index;
     int sp24;
     float sp28;
     float sp2C;
@@ -2072,11 +2072,11 @@ void FUN_L02_00230988(void) {
                         }
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == FUN_L01_00226f10(0) && flag) {
-                            if (FUN_L00_00229010(&sp20)) {
+                            if (FUN_L00_00229010(&record_index)) {
                                 Rec70 *rec;
 
-                                D_0013F350_u.f2270 = sp20;
-                                rec = &D_L02_00179E90[sp20];
+                                D_0013F350_u.f2270 = record_index;
+                                rec = &D_L02_00179E90[record_index];
                                 D_0013F350_u.f1E8 = scale_game_frames(0x78);
                                 rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
                                 if (rec->f44 != 0) {

@@ -271,7 +271,7 @@ typedef struct {
 
 extern char *D_L02_001B0AB0[];
 extern int FUN_L00_00259740(void *, void *, int);
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L02_002d63c0(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -422,7 +422,7 @@ extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001fefc8(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002dca10(unsigned char *moby) {
@@ -540,7 +540,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L02_002dd370(char *moby) {
     switch (((unsigned char *)moby)[0x53]) {
@@ -644,7 +644,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L02_00161C68_d __asm__("D_L02_00161C68") __attribute__((sda));
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void FUN_L02_002df1a8(unsigned char *moby) {
     int *d = *(int **)(moby + 0x78);
@@ -855,7 +855,7 @@ extern short D_L02_00161C9C_d __asm__("D_L02_00161C9C") __attribute__((sda));
 extern short D_L02_00161CA0_d __asm__("D_L02_00161CA0") __attribute__((sda));
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void clear_vector(void *) __asm__("func_001F99F8");
-void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_c(void *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L02_002e0280(char *moby) {

@@ -409,12 +409,12 @@ void FUN_L15_0021d040(void) {
     int prevAnim;
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    int sp20;
+    int record_index;
     int sp24;
-    float sp28;
-    float sp2C;
-    float sp30;
-    float sp34;
+    float probe_heading_0;
+    float probe_heading_1;
+    float probe_heading_2;
+    float probe_heading_3;
     int sp38;
     int sp3C;
     int sp40;
@@ -532,11 +532,11 @@ void FUN_L15_0021d040(void) {
                         }
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == FUN_L06_0021d0a0(0) && flag) {
-                            if (FUN_L00_00229010(&sp20)) {
+                            if (FUN_L00_00229010(&record_index)) {
                                 Rec70 *rec;
 
-                                D_0013F350.f2270 = sp20;
-                                rec = &D_L15_00179E90[sp20];
+                                D_0013F350.f2270 = record_index;
+                                rec = &D_L15_00179E90[record_index];
                                 D_0013F350.f1E8 = scale_game_frames(0x78);
                                 rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
                                 if (rec->f44 != 0) {
@@ -1390,8 +1390,8 @@ void FUN_L15_0021d040(void) {
                     }
                     FUN_L00_002118c8(0, 1.0f);
                     qcopy(v0, D_0013F350.f80);
-                    sp28 = D_0013F350.f90[2];
-                    if (FUN_L01_0022d838(v0, &sp28) == 0) {
+                    probe_heading_0 = D_0013F350.f90[2];
+                    if (FUN_L01_0022d838(v0, &probe_heading_0) == 0) {
                         FUN_L15_00216c38(6, 1);
                         D_0013F350.f1B0 = scale_game_frames(0xA);
                         break;
@@ -1416,8 +1416,8 @@ void FUN_L15_0021d040(void) {
                         qcopy(v1, D_0013F350.f80);
                         v1[0] += fast_cos(fast_add_rotations(D_0013F350.f90[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(D_0013F350.f90[2], 1.5707964f)) * 0.3f;
-                        sp2C = D_0013F350.f90[2];
-                        if (FUN_L01_0022d838(v1, &sp2C)) {
+                        probe_heading_1 = D_0013F350.f90[2];
+                        if (FUN_L01_0022d838(v1, &probe_heading_1)) {
                             FUN_L15_00216c38(0x1A, 1);
                         }
                         break;
@@ -1431,8 +1431,8 @@ void FUN_L15_0021d040(void) {
                             fast_cos(fast_add_rotations(D_0013F350.f90[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(D_0013F350.f90[2], -1.5707964f)) * 0.3f;
-                        sp30 = D_0013F350.f90[2];
-                        if (FUN_L01_0022d838(v1, &sp30)) {
+                        probe_heading_2 = D_0013F350.f90[2];
+                        if (FUN_L01_0022d838(v1, &probe_heading_2)) {
                             FUN_L15_00216c38(0x1B, 1);
                         }
                     }
@@ -1448,13 +1448,13 @@ void FUN_L15_0021d040(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(D_0013F350.f90[2], ang)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(D_0013F350.f90[2], ang)) * 0.3f;
-                    sp34 = D_0013F350.f90[2];
+                    probe_heading_3 = D_0013F350.f90[2];
                     FUN_L00_002118c8(0, 1.0f);
                     if (D_0013F350.f229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 D_0013F350.f180, fast_add_rotations(D_0013F350.f90[2], ang)) ||
-                        FUN_L01_0022d838(v0, &sp34) == 0) {
+                        FUN_L01_0022d838(v0, &probe_heading_3) == 0) {
                         if (D_0013F350.fA98 & 2) {
                             FUN_L15_00216c38(0x19, 1);
                             break;

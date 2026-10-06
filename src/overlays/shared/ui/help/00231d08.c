@@ -1244,7 +1244,7 @@ extern s32 D_00140408[];
 extern TE33a D_L00_001C40B0[];
 extern s32 D_0013D428[];
 extern s32 D_0013DEA0[];
-s32 FUN_L00_00233db8(s32 idx, s32 arg1) {
+s32 FUN_L00_00233db8(s32 idx, s32 amount) {
     s32 n;
     s32 v;
     TE33a *e;
@@ -1257,11 +1257,11 @@ s32 FUN_L00_00233db8(s32 idx, s32 arg1) {
         return 1;
     }
     v = D_0013D428[idx];
-    if (v < arg1) {
+    if (v < amount) {
         return 0;
     }
-    D_0013D428[idx] = v - arg1;
-    D_0013DEA0[idx] = D_0013DEA0[idx] + arg1;
+    D_0013D428[idx] = v - amount;
+    D_0013DEA0[idx] = D_0013DEA0[idx] + amount;
     return 1;
 }
 extern int D_0013D428_233e40[] __asm__("D_0013D428");

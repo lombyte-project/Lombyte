@@ -493,7 +493,7 @@ void FUN_L16_002270c8(void) {
     int prevAnim;
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
-    int sp20;
+    int record_index;
     int sp24;
     float sp28;
     int sp2C;
@@ -502,10 +502,10 @@ void FUN_L16_002270c8(void) {
     int sp38;
     int sp3C;
     int sp40;
-    float sp44;
-    float sp48;
-    float sp4C;
-    float sp50;
+    float probe_heading_0;
+    float probe_heading_1;
+    float probe_heading_2;
+    float probe_heading_3;
     int sp54;
     int sp58;
 
@@ -622,11 +622,11 @@ void FUN_L16_002270c8(void) {
                         }
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == FUN_L01_00226f10(0) && flag) {
-                            if (FUN_L00_00229010(&sp20)) {
+                            if (FUN_L00_00229010(&record_index)) {
                                 Rec70 *rec;
 
-                                D_0013F350.f2270 = sp20;
-                                rec = &D_L16_00179CF0[sp20];
+                                D_0013F350.f2270 = record_index;
+                                rec = &D_L16_00179CF0[record_index];
                                 D_0013F350.f1E8 = scale_game_frames(0x78);
                                 rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
                                 if (rec->f44 != 0) {
@@ -1830,8 +1830,8 @@ void FUN_L16_002270c8(void) {
                     }
                     FUN_L00_002118c8(0, 1.0f);
                     qcopy(v0, D_0013F350.f80);
-                    sp44 = D_0013F350.f90[2];
-                    if (FUN_L01_0022d838(v0, &sp44) == 0) {
+                    probe_heading_0 = D_0013F350.f90[2];
+                    if (FUN_L01_0022d838(v0, &probe_heading_0) == 0) {
                         FUN_L16_0021e398(6, 1);
                         D_0013F350.f1B0 = scale_game_frames(0xA);
                         break;
@@ -1856,8 +1856,8 @@ void FUN_L16_002270c8(void) {
                         qcopy(v1, D_0013F350.f80);
                         v1[0] += fast_cos(fast_add_rotations(D_0013F350.f90[2], 1.5707964f)) * 0.3f;
                         v1[1] += fast_sin(fast_add_rotations(D_0013F350.f90[2], 1.5707964f)) * 0.3f;
-                        sp48 = D_0013F350.f90[2];
-                        if (FUN_L01_0022d838(v1, &sp48)) {
+                        probe_heading_1 = D_0013F350.f90[2];
+                        if (FUN_L01_0022d838(v1, &probe_heading_1)) {
                             FUN_L16_0021e398(0x1A, 1);
                         }
                         break;
@@ -1871,8 +1871,8 @@ void FUN_L16_002270c8(void) {
                             fast_cos(fast_add_rotations(D_0013F350.f90[2], -1.5707964f)) * 0.3f;
                         v1[1] +=
                             fast_sin(fast_add_rotations(D_0013F350.f90[2], -1.5707964f)) * 0.3f;
-                        sp4C = D_0013F350.f90[2];
-                        if (FUN_L01_0022d838(v1, &sp4C)) {
+                        probe_heading_2 = D_0013F350.f90[2];
+                        if (FUN_L01_0022d838(v1, &probe_heading_2)) {
                             FUN_L16_0021e398(0x1B, 1);
                         }
                     }
@@ -1888,13 +1888,13 @@ void FUN_L16_002270c8(void) {
                     }
                     v0[0] += fast_cos(fast_add_rotations(D_0013F350.f90[2], ang)) * 0.3f;
                     v0[1] += fast_sin(fast_add_rotations(D_0013F350.f90[2], ang)) * 0.3f;
-                    sp50 = D_0013F350.f90[2];
+                    probe_heading_3 = D_0013F350.f90[2];
                     FUN_L00_002118c8(0, 1.0f);
                     if (D_0013F350.f229C < 0.5f ||
                         0.7853982f <
                             fast_difference_between_rotations(
                                 D_0013F350.f180, fast_add_rotations(D_0013F350.f90[2], ang)) ||
-                        FUN_L01_0022d838(v0, &sp50) == 0) {
+                        FUN_L01_0022d838(v0, &probe_heading_3) == 0) {
                         if (D_0013F350.fA98 & 2) {
                             FUN_L16_0021e398(0x19, 1);
                             break;
