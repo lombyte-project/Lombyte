@@ -50,15 +50,16 @@ void draw_map_markers(s32 left, s32 top, s32 right, s32 bottom) {
     s32 screen_x;
     s32 screen_y;
     s32 remaining;
-    s32 one = 1;
+    s32 one;
     s32 texture_index;
     s16 *references;
     u8 *texture;
     u8 width_log2;
     u8 height_log2;
 
-    marker = map_marker_state.markers;
+    one = 1;
     remaining = map_marker_state.marker_count - 1;
+    marker = map_marker_state.markers;
     for (; remaining != -1; remaining--) {
         world_to_map_coords(&normalized_x, &normalized_y, current_level_index, marker->x,
                             marker->y);
