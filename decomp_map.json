@@ -88,16 +88,16 @@
         "name": "game/gameplay/state",
         "logical_group": "gameplay/state",
         "category": "game",
-        "functions": 22,
-        "matching_c": 18,
+        "functions": 21,
+        "matching_c": 17,
         "pending_c": 4,
         "intentional_asm": 0,
-        "bytes_total": 15980,
-        "bytes_matching_c": 8680,
+        "bytes_total": 15964,
+        "bytes_matching_c": 8664,
         "bytes_pending_c": 7300,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 54.3179,
-        "c_fuzzy_percent_of_recoverable": 98.0378
+        "c_exact_percent_of_recoverable": 54.2721,
+        "c_fuzzy_percent_of_recoverable": 98.0358
       },
       {
         "name": "sdk/dma",
@@ -133,12 +133,12 @@
         "name": "game/gameplay/entities",
         "logical_group": "gameplay/entities",
         "category": "game",
-        "functions": 31,
-        "matching_c": 30,
+        "functions": 30,
+        "matching_c": 29,
         "pending_c": 0,
         "intentional_asm": 1,
-        "bytes_total": 8500,
-        "bytes_matching_c": 5440,
+        "bytes_total": 8432,
+        "bytes_matching_c": 5372,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 3060,
         "c_exact_percent_of_recoverable": 100.0,
@@ -178,16 +178,16 @@
         "name": "game/video/decoder",
         "logical_group": "video/decoder",
         "category": "game",
-        "functions": 38,
-        "matching_c": 36,
+        "functions": 43,
+        "matching_c": 41,
         "pending_c": 2,
         "intentional_asm": 0,
-        "bytes_total": 7112,
-        "bytes_matching_c": 5504,
+        "bytes_total": 7200,
+        "bytes_matching_c": 5592,
         "bytes_pending_c": 1608,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 77.3903,
-        "c_fuzzy_percent_of_recoverable": 98.3453
+        "c_exact_percent_of_recoverable": 77.6667,
+        "c_fuzzy_percent_of_recoverable": 98.3656
       },
       {
         "name": "game/gameplay",
@@ -208,12 +208,12 @@
         "name": "game/gameplay/camera",
         "logical_group": "gameplay/camera",
         "category": "game",
-        "functions": 21,
-        "matching_c": 21,
+        "functions": 23,
+        "matching_c": 23,
         "pending_c": 0,
         "intentional_asm": 0,
-        "bytes_total": 6052,
-        "bytes_matching_c": 6052,
+        "bytes_total": 6188,
+        "bytes_matching_c": 6188,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
@@ -268,16 +268,16 @@
         "name": "game/audio/music",
         "logical_group": "audio/music",
         "category": "game",
-        "functions": 16,
-        "matching_c": 14,
+        "functions": 18,
+        "matching_c": 16,
         "pending_c": 2,
         "intentional_asm": 0,
-        "bytes_total": 5448,
-        "bytes_matching_c": 4116,
+        "bytes_total": 5528,
+        "bytes_matching_c": 4196,
         "bytes_pending_c": 1332,
         "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 75.5507,
-        "c_fuzzy_percent_of_recoverable": 99.7137
+        "c_exact_percent_of_recoverable": 75.9045,
+        "c_fuzzy_percent_of_recoverable": 99.7178
       },
       {
         "name": "game/ui/menus/save_data",
@@ -670,6 +670,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "game/audio",
+        "logical_group": "audio",
+        "category": "game",
+        "functions": 5,
+        "matching_c": 4,
+        "pending_c": 1,
+        "intentional_asm": 0,
+        "bytes_total": 1404,
+        "bytes_matching_c": 804,
+        "bytes_pending_c": 600,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 57.265,
+        "c_fuzzy_percent_of_recoverable": 98.3618
+      },
+      {
         "name": "game/ui/menus/missions",
         "logical_group": "ui/menus/missions",
         "category": "game",
@@ -683,21 +698,6 @@
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "game/audio",
-        "logical_group": "audio",
-        "category": "game",
-        "functions": 4,
-        "matching_c": 3,
-        "pending_c": 1,
-        "intentional_asm": 0,
-        "bytes_total": 1368,
-        "bytes_matching_c": 768,
-        "bytes_pending_c": 600,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 56.1404,
-        "c_fuzzy_percent_of_recoverable": 98.3187
       },
       {
         "name": "game/world/loaders",
@@ -820,6 +820,21 @@
         "c_fuzzy_percent_of_recoverable": 99.9628
       },
       {
+        "name": "game/video/display",
+        "logical_group": "video/display",
+        "category": "game",
+        "functions": 3,
+        "matching_c": 2,
+        "pending_c": 1,
+        "intentional_asm": 0,
+        "bytes_total": 860,
+        "bytes_matching_c": 92,
+        "bytes_pending_c": 768,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 10.6977,
+        "c_fuzzy_percent_of_recoverable": 92.9628
+      },
+      {
         "name": "game/storage/cd",
         "logical_group": "storage/cd",
         "category": "game",
@@ -848,21 +863,6 @@
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 62.4413,
         "c_fuzzy_percent_of_recoverable": 80.723
-      },
-      {
-        "name": "game/video/display",
-        "logical_group": "video/display",
-        "category": "game",
-        "functions": 2,
-        "matching_c": 1,
-        "pending_c": 1,
-        "intentional_asm": 0,
-        "bytes_total": 844,
-        "bytes_matching_c": 76,
-        "bytes_pending_c": 768,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 9.0047,
-        "c_fuzzy_percent_of_recoverable": 92.8294
       },
       {
         "name": "game/audio/banks",
@@ -1000,36 +1000,6 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "game/runtime/dma",
-        "logical_group": "runtime/dma",
-        "category": "game",
-        "functions": 11,
-        "matching_c": 7,
-        "pending_c": 2,
-        "intentional_asm": 2,
-        "bytes_total": 624,
-        "bytes_matching_c": 336,
-        "bytes_pending_c": 80,
-        "bytes_intentional_asm": 208,
-        "c_exact_percent_of_recoverable": 80.7692,
-        "c_fuzzy_percent_of_recoverable": 91.7788
-      },
-      {
-        "name": "game/rendering/state",
-        "logical_group": "rendering/state",
-        "category": "game",
-        "functions": 5,
-        "matching_c": 5,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 608,
-        "bytes_matching_c": 608,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
         "name": "game/world/animation",
         "logical_group": "world/animation",
         "category": "game",
@@ -1060,6 +1030,21 @@
         "c_fuzzy_percent_of_recoverable": null
       },
       {
+        "name": "game/runtime/dma",
+        "logical_group": "runtime/dma",
+        "category": "game",
+        "functions": 10,
+        "matching_c": 6,
+        "pending_c": 2,
+        "intentional_asm": 2,
+        "bytes_total": 568,
+        "bytes_matching_c": 280,
+        "bytes_pending_c": 80,
+        "bytes_intentional_asm": 208,
+        "c_exact_percent_of_recoverable": 77.7778,
+        "c_fuzzy_percent_of_recoverable": 90.5
+      },
+      {
         "name": "game/video/decoder/callbacks",
         "logical_group": "video/decoder/callbacks",
         "category": "game",
@@ -1071,6 +1056,21 @@
         "bytes_matching_c": 488,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 76,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
+        "name": "game/rendering/state",
+        "logical_group": "rendering/state",
+        "category": "game",
+        "functions": 4,
+        "matching_c": 4,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 556,
+        "bytes_matching_c": 556,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1105,6 +1105,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "game/video/decoder/buffers",
+        "logical_group": "video/decoder/buffers",
+        "category": "game",
+        "functions": 4,
+        "matching_c": 4,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 480,
+        "bytes_matching_c": 480,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
         "name": "game/rendering/framebuffer",
         "logical_group": "rendering/framebuffer",
         "category": "game",
@@ -1114,36 +1129,6 @@
         "intentional_asm": 0,
         "bytes_total": 448,
         "bytes_matching_c": 448,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "game/video/decoder/buffers",
-        "logical_group": "video/decoder/buffers",
-        "category": "game",
-        "functions": 3,
-        "matching_c": 3,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 444,
-        "bytes_matching_c": 444,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "game/runtime/state",
-        "logical_group": "runtime/state",
-        "category": "game",
-        "functions": 21,
-        "matching_c": 21,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 436,
-        "bytes_matching_c": 436,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
@@ -1240,6 +1225,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "game/runtime/state",
+        "logical_group": "runtime/state",
+        "category": "game",
+        "functions": 15,
+        "matching_c": 15,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 312,
+        "bytes_matching_c": 312,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
         "name": "sdk/video/ipu",
         "logical_group": "sdk/video/ipu",
         "category": "sdk",
@@ -1330,21 +1330,6 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "game/math",
-        "logical_group": "math",
-        "category": "game",
-        "functions": 10,
-        "matching_c": 3,
-        "pending_c": 2,
-        "intentional_asm": 5,
-        "bytes_total": 264,
-        "bytes_matching_c": 100,
-        "bytes_pending_c": 44,
-        "bytes_intentional_asm": 120,
-        "c_exact_percent_of_recoverable": 69.4444,
-        "c_fuzzy_percent_of_recoverable": 97.2203
-      },
-      {
         "name": "game/rendering/shrubs",
         "logical_group": "rendering/shrubs",
         "category": "game",
@@ -1390,17 +1375,17 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "game/rendering/commands",
-        "logical_group": "rendering/commands",
+        "name": "game/video/decoder/dma",
+        "logical_group": "video/decoder/dma",
         "category": "game",
-        "functions": 4,
-        "matching_c": 2,
+        "functions": 3,
+        "matching_c": 3,
         "pending_c": 0,
-        "intentional_asm": 2,
+        "intentional_asm": 0,
         "bytes_total": 252,
-        "bytes_matching_c": 60,
+        "bytes_matching_c": 252,
         "bytes_pending_c": 0,
-        "bytes_intentional_asm": 192,
+        "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1435,6 +1420,21 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
+        "name": "game/math",
+        "logical_group": "math",
+        "category": "game",
+        "functions": 9,
+        "matching_c": 2,
+        "pending_c": 2,
+        "intentional_asm": 5,
+        "bytes_total": 228,
+        "bytes_matching_c": 64,
+        "bytes_pending_c": 44,
+        "bytes_intentional_asm": 120,
+        "c_exact_percent_of_recoverable": 59.2593,
+        "c_fuzzy_percent_of_recoverable": 96.2937
+      },
+      {
         "name": "game/audio/decoder/callbacks",
         "logical_group": "audio/decoder/callbacks",
         "category": "game",
@@ -1446,6 +1446,21 @@
         "bytes_matching_c": 228,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
+        "name": "game/rendering/commands",
+        "logical_group": "rendering/commands",
+        "category": "game",
+        "functions": 3,
+        "matching_c": 1,
+        "pending_c": 0,
+        "intentional_asm": 2,
+        "bytes_total": 224,
+        "bytes_matching_c": 32,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 192,
         "c_exact_percent_of_recoverable": 100.0,
         "c_fuzzy_percent_of_recoverable": 100.0
       },
@@ -1470,21 +1485,6 @@
         "category": "game",
         "functions": 1,
         "matching_c": 1,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 216,
-        "bytes_matching_c": 216,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "game/video/decoder/dma",
-        "logical_group": "video/decoder/dma",
-        "category": "game",
-        "functions": 2,
-        "matching_c": 2,
         "pending_c": 0,
         "intentional_asm": 0,
         "bytes_total": 216,
@@ -1555,21 +1555,6 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "game/rendering/entities",
-        "logical_group": "rendering/entities",
-        "category": "game",
-        "functions": 3,
-        "matching_c": 3,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 192,
-        "bytes_matching_c": 192,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
         "name": "game/audio/effects",
         "logical_group": "audio/effects",
         "category": "game",
@@ -1594,6 +1579,21 @@
         "intentional_asm": 0,
         "bytes_total": 172,
         "bytes_matching_c": 172,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
+        "name": "game/ui/fonts",
+        "logical_group": "ui/fonts",
+        "category": "game",
+        "functions": 2,
+        "matching_c": 2,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 164,
+        "bytes_matching_c": 164,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
@@ -1675,6 +1675,21 @@
         "c_fuzzy_percent_of_recoverable": null
       },
       {
+        "name": "game/rendering/entities",
+        "logical_group": "rendering/entities",
+        "category": "game",
+        "functions": 2,
+        "matching_c": 2,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 124,
+        "bytes_matching_c": 124,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
+      },
+      {
         "name": "game/runtime/diagnostics",
         "logical_group": "runtime/diagnostics",
         "category": "game",
@@ -1720,21 +1735,6 @@
         "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
-        "name": "game/ui/fonts",
-        "logical_group": "ui/fonts",
-        "category": "game",
-        "functions": 1,
-        "matching_c": 1,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 108,
-        "bytes_matching_c": 108,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
         "name": "game/rendering/image",
         "logical_group": "rendering/image",
         "category": "game",
@@ -1774,21 +1774,6 @@
         "intentional_asm": 0,
         "bytes_total": 88,
         "bytes_matching_c": 88,
-        "bytes_pending_c": 0,
-        "bytes_intentional_asm": 0,
-        "c_exact_percent_of_recoverable": 100.0,
-        "c_fuzzy_percent_of_recoverable": 100.0
-      },
-      {
-        "name": "game/runtime/data",
-        "logical_group": "runtime/data",
-        "category": "game",
-        "functions": 4,
-        "matching_c": 4,
-        "pending_c": 0,
-        "intentional_asm": 0,
-        "bytes_total": 84,
-        "bytes_matching_c": 84,
         "bytes_pending_c": 0,
         "bytes_intentional_asm": 0,
         "c_exact_percent_of_recoverable": 100.0,
@@ -1853,6 +1838,21 @@
         "bytes_intentional_asm": 48,
         "c_exact_percent_of_recoverable": null,
         "c_fuzzy_percent_of_recoverable": null
+      },
+      {
+        "name": "game/runtime/data",
+        "logical_group": "runtime/data",
+        "category": "game",
+        "functions": 3,
+        "matching_c": 3,
+        "pending_c": 0,
+        "intentional_asm": 0,
+        "bytes_total": 48,
+        "bytes_matching_c": 48,
+        "bytes_pending_c": 0,
+        "bytes_intentional_asm": 0,
+        "c_exact_percent_of_recoverable": 100.0,
+        "c_fuzzy_percent_of_recoverable": 100.0
       },
       {
         "name": "game/runtime/containers",
@@ -2167,7 +2167,7 @@
           "bytes_matching_c": 0
         },
         {
-          "file": "src/overlays/shared/ui/help/00217970.c",
+          "file": "src/overlays/shared/gameplay/hero/00217970.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 39324,
@@ -2188,7 +2188,7 @@
           "bytes_matching_c": 2012
         },
         {
-          "file": "src/overlays/shared/ui/help/00221310.c",
+          "file": "src/overlays/shared/gameplay/hero/00221310.c",
           "functions": 17,
           "matching_c": 12,
           "bytes_total": 31960,
@@ -2223,7 +2223,7 @@
           "bytes_matching_c": 1988
         },
         {
-          "file": "src/overlays/shared/ui/help/00229b70.c",
+          "file": "src/overlays/shared/gameplay/hero/00229b70.c",
           "functions": 1,
           "matching_c": 1,
           "bytes_total": 33172,
@@ -3346,21 +3346,21 @@
         "c_exact_percent_of_recoverable": 76.9602,
         "files": [
           {
-            "file": "src/overlays/l01/ui_help_00233de0.c",
+            "file": "src/overlays/l01/gameplay/hero/00233de0.c",
             "functions": 3,
             "matching_c": 2,
             "bytes_total": 24352,
             "bytes_matching_c": 23084
           },
           {
-            "file": "src/overlays/l01/ui_help_0023cf98.c",
+            "file": "src/overlays/l01/gameplay/hero/0023cf98.c",
             "functions": 2,
             "matching_c": 1,
             "bytes_total": 16532,
             "bytes_matching_c": 13832
           },
           {
-            "file": "src/overlays/l01/ui_help_00242930.c",
+            "file": "src/overlays/l01/gameplay/hero/00242930.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 19120,
@@ -3417,14 +3417,14 @@
         "c_exact_percent_of_recoverable": 65.0498,
         "files": [
           {
-            "file": "src/overlays/l02/ui_help_0021b698.c",
+            "file": "src/overlays/l02/gameplay/hero/0021b698.c",
             "functions": 6,
             "matching_c": 6,
             "bytes_total": 24484,
             "bytes_matching_c": 24484
           },
           {
-            "file": "src/overlays/l02/ui_help_0022b728.c",
+            "file": "src/overlays/l02/gameplay/hero/0022b728.c",
             "functions": 3,
             "matching_c": 3,
             "bytes_total": 31868,
@@ -3474,21 +3474,21 @@
         "c_exact_percent_of_recoverable": 63.5102,
         "files": [
           {
-            "file": "src/overlays/l03/ui_help_00205830.c",
+            "file": "src/overlays/l03/gameplay/hero/00205830.c",
             "functions": 2,
             "matching_c": 1,
             "bytes_total": 26768,
             "bytes_matching_c": 26256
           },
           {
-            "file": "src/overlays/l03/ui_help_00216648.c",
+            "file": "src/overlays/l03/gameplay/hero/00216648.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 15172,
             "bytes_matching_c": 15172
           },
           {
-            "file": "src/overlays/l03/ui_help_0021c668.c",
+            "file": "src/overlays/l03/gameplay/hero/0021c668.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 20140,
@@ -3609,28 +3609,28 @@
         "c_exact_percent_of_recoverable": 64.6532,
         "files": [
           {
-            "file": "src/overlays/l05/ui_help_00239fc0.c",
+            "file": "src/overlays/l05/gameplay/hero/00239fc0.c",
             "functions": 4,
             "matching_c": 3,
             "bytes_total": 6124,
             "bytes_matching_c": 4576
           },
           {
-            "file": "src/overlays/l05/ui_help_00244a70.c",
+            "file": "src/overlays/l05/gameplay/hero/00244a70.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 29516,
             "bytes_matching_c": 29516
           },
           {
-            "file": "src/overlays/l05/ui_help_0024cee8.c",
+            "file": "src/overlays/l05/gameplay/hero/0024cee8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 17308,
             "bytes_matching_c": 17308
           },
           {
-            "file": "src/overlays/l05/ui_help_00255960.c",
+            "file": "src/overlays/l05/gameplay/hero/00255960.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 22324,
@@ -3694,21 +3694,21 @@
             "bytes_matching_c": 0
           },
           {
-            "file": "src/overlays/l06/ui_help_00222fb8.c",
+            "file": "src/overlays/l06/gameplay/hero/00222fb8.c",
             "functions": 7,
             "matching_c": 7,
             "bytes_total": 32348,
             "bytes_matching_c": 32348
           },
           {
-            "file": "src/overlays/l06/ui_help_002356a0.c",
+            "file": "src/overlays/l06/gameplay/hero/002356a0.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 16004,
             "bytes_matching_c": 16004
           },
           {
-            "file": "src/overlays/l06/ui_help_0023b440.c",
+            "file": "src/overlays/l06/gameplay/hero/0023b440.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 26244,
@@ -3822,21 +3822,21 @@
         "c_exact_percent_of_recoverable": 54.9545,
         "files": [
           {
-            "file": "src/overlays/l08/ui_help_0021d9c0.c",
+            "file": "src/overlays/l08/gameplay/hero/0021d9c0.c",
             "functions": 2,
             "matching_c": 2,
             "bytes_total": 31064,
             "bytes_matching_c": 31064
           },
           {
-            "file": "src/overlays/l08/ui_help_00230b38.c",
+            "file": "src/overlays/l08/gameplay/hero/00230b38.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 16604,
             "bytes_matching_c": 16604
           },
           {
-            "file": "src/overlays/l08/ui_help_002370d8.c",
+            "file": "src/overlays/l08/gameplay/hero/002370d8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 24288,
@@ -3965,21 +3965,21 @@
         "c_exact_percent_of_recoverable": 61.8178,
         "files": [
           {
-            "file": "src/overlays/l11/ui_help_0023c7a0.c",
+            "file": "src/overlays/l11/gameplay/hero/0023c7a0.c",
             "functions": 2,
             "matching_c": 2,
             "bytes_total": 25212,
             "bytes_matching_c": 25212
           },
           {
-            "file": "src/overlays/l11/ui_help_0024db50.c",
+            "file": "src/overlays/l11/gameplay/hero/0024db50.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 14852,
             "bytes_matching_c": 14852
           },
           {
-            "file": "src/overlays/l11/ui_help_00253a18.c",
+            "file": "src/overlays/l11/gameplay/hero/00253a18.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 19808,
@@ -4022,21 +4022,21 @@
         "c_exact_percent_of_recoverable": 59.8063,
         "files": [
           {
-            "file": "src/overlays/l12/ui_help_0022de30.c",
+            "file": "src/overlays/l12/gameplay/hero/0022de30.c",
             "functions": 4,
             "matching_c": 4,
             "bytes_total": 29748,
             "bytes_matching_c": 29748
           },
           {
-            "file": "src/overlays/l12/ui_help_002400d0.c",
+            "file": "src/overlays/l12/gameplay/hero/002400d0.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 15408,
             "bytes_matching_c": 15408
           },
           {
-            "file": "src/overlays/l12/ui_help_002461f0.c",
+            "file": "src/overlays/l12/gameplay/hero/002461f0.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 21448,
@@ -4157,21 +4157,21 @@
         "c_exact_percent_of_recoverable": 54.8997,
         "files": [
           {
-            "file": "src/overlays/l14/ui_help_0021dd30.c",
+            "file": "src/overlays/l14/gameplay/hero/0021dd30.c",
             "functions": 4,
             "matching_c": 4,
             "bytes_total": 27264,
             "bytes_matching_c": 27264
           },
           {
-            "file": "src/overlays/l14/ui_help_0022ff58.c",
+            "file": "src/overlays/l14/gameplay/hero/0022ff58.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 14208,
             "bytes_matching_c": 14208
           },
           {
-            "file": "src/overlays/l14/ui_help_00235600.c",
+            "file": "src/overlays/l14/gameplay/hero/00235600.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 23112,
@@ -4221,21 +4221,21 @@
         "c_exact_percent_of_recoverable": 75.3555,
         "files": [
           {
-            "file": "src/overlays/l15/ui_help_002044c8.c",
+            "file": "src/overlays/l15/gameplay/hero/002044c8.c",
             "functions": 3,
             "matching_c": 3,
             "bytes_total": 30552,
             "bytes_matching_c": 30552
           },
           {
-            "file": "src/overlays/l15/ui_help_00216c38.c",
+            "file": "src/overlays/l15/gameplay/hero/00216c38.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 16168,
             "bytes_matching_c": 16168
           },
           {
-            "file": "src/overlays/l15/ui_help_0021d040.c",
+            "file": "src/overlays/l15/gameplay/hero/0021d040.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 22780,
@@ -4285,28 +4285,28 @@
         "c_exact_percent_of_recoverable": 93.1272,
         "files": [
           {
-            "file": "src/overlays/l16/ui_help_002097a0.c",
+            "file": "src/overlays/l16/gameplay/hero/002097a0.c",
             "functions": 5,
             "matching_c": 4,
             "bytes_total": 5856,
             "bytes_matching_c": 4184
           },
           {
-            "file": "src/overlays/l16/ui_help_00214598.c",
+            "file": "src/overlays/l16/gameplay/hero/00214598.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 36052,
             "bytes_matching_c": 36052
           },
           {
-            "file": "src/overlays/l16/ui_help_0021e398.c",
+            "file": "src/overlays/l16/gameplay/hero/0021e398.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 18008,
             "bytes_matching_c": 18008
           },
           {
-            "file": "src/overlays/l16/ui_help_002270c8.c",
+            "file": "src/overlays/l16/gameplay/hero/002270c8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 26336,
@@ -4349,21 +4349,21 @@
             "bytes_matching_c": 2068
           },
           {
-            "file": "src/overlays/l17/ui_help_00214760.c",
+            "file": "src/overlays/l17/gameplay/hero/00214760.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 36168,
             "bytes_matching_c": 36168
           },
           {
-            "file": "src/overlays/l17/ui_help_0021e530.c",
+            "file": "src/overlays/l17/gameplay/hero/0021e530.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 20044,
             "bytes_matching_c": 20044
           },
           {
-            "file": "src/overlays/l17/ui_help_002258a8.c",
+            "file": "src/overlays/l17/gameplay/hero/002258a8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 30532,
@@ -4420,28 +4420,28 @@
         "c_exact_percent_of_recoverable": 79.6938,
         "files": [
           {
-            "file": "src/overlays/l18/ui_help_00213b40.c",
+            "file": "src/overlays/l18/gameplay/hero/00213b40.c",
             "functions": 2,
             "matching_c": 2,
             "bytes_total": 2372,
             "bytes_matching_c": 2372
           },
           {
-            "file": "src/overlays/l18/ui_help_0021eac8.c",
+            "file": "src/overlays/l18/gameplay/hero/0021eac8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 33392,
             "bytes_matching_c": 33392
           },
           {
-            "file": "src/overlays/l18/ui_help_00227dd0.c",
+            "file": "src/overlays/l18/gameplay/hero/00227dd0.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 17988,
             "bytes_matching_c": 17988
           },
           {
-            "file": "src/overlays/l18/ui_help_0022e8f8.c",
+            "file": "src/overlays/l18/gameplay/hero/0022e8f8.c",
             "functions": 1,
             "matching_c": 1,
             "bytes_total": 27180,
