@@ -12,8 +12,8 @@ void copy_matrix3x4(volatile struct Matrix3x4 *destination,
 /* Copy the three 16-byte basis columns; retain all source values before stores. */
 void copy_matrix3x4(volatile struct Matrix3x4 *destination, const struct Matrix3x4 *source) {
     u128 first = source->columns[0];
-    u128 second = source->columns[1];
-    u128 third = source->columns[2];
+    u128 second = *(const volatile u128 *)&source->columns[1];
+    u128 third = *(const volatile u128 *)&source->columns[2];
 
     destination->columns[0] = first;
     destination->columns[1] = second;
