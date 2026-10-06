@@ -36,13 +36,11 @@ void _getAllRefs(Decoder *d, int bx, int by, int mb_type, int motion_type, int p
                  int mvfs[2][2], int *dmvector) {
     int dmv[2][2];
     int refs[2][2];
-    int avg;
+    int avg = 0;
     int currentfield;
     int same;
-    int one;
+    int one = 1;
 
-    one = 1;
-    avg = 0;
     *(int *)((char *)d + d->cur * 0x140 + 0x6BC) = 0;
 
     if ((mb_type & 8) || d->picture_coding_type == 2) {
