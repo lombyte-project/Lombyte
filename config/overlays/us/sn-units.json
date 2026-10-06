@@ -101,6 +101,7 @@
       "gameplay_vendor_002e3de8.c",
       "gameplay_vendor_003015d0.c",
       "gameplay_vendor_0030b618.c",
+      "math_interpolation_00257ef0.c",
       "math_vectors_0025c230.c",
       "rendering_002712b8.c",
       "ui_help_00221310.c",

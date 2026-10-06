@@ -105,7 +105,7 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 #include "qcopy.h"
 typedef union { u128 q; f32 f[4]; } V002583f0;
 typedef struct { u8 pad[0x18]; s32 x18; s32 x1c; } G002583f0;
-extern G002583f0 D_L00_00173E40;
+extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     V002583f0 t0, t1;
@@ -116,8 +116,8 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     t1.f[2] -= down;
     if (t1.f[2] < 0.0f) t1.f[2] = 0.0f;
     r = FUN_001efa68(&t0, &t1, 0x22, a, 0);
-    if (D_L00_00173E40.x1c < 0) r = 0;
-    if (flag && D_L00_00173E40.x18 != 0) r = 0;
+    if (D_L00_00173E40_u.x1c < 0) r = 0;
+    if (flag && D_L00_00173E40_u.x18 != 0) r = 0;
     return r;
 }
 typedef int u128_258490 __attribute__((mode(TI)));
@@ -225,7 +225,94 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     to->f[1] = pos->f[1];
     return ok;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00258830.s", FUN_L00_00258830);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
+
+typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+
+typedef int u128_94C8 __attribute__((mode(TI)));
+
+typedef union { u128_94C8 q; float f[4]; } V_94C8;
+
+extern V_94C8 D_L00_00173E70;
+extern float FUN_001f9e90(float, float);
+extern float vector_length_xy(void *);
+extern float vector_length_xyz(void *);
+extern int D_L00_00173E40[];
+extern int D_L00_00173E60; /* no foreign declaration */
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_L00_001f0d60();
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
+extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) __asm__("FUN_L00_00258830");
+int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
+    Vs t0;
+    Vs t1;
+    Vs t2;
+    Vs t3;
+    int r = 0;
+    int fl = (flags * 2) & 0x20;
+    char *p = m + 0x10;
+    int i;
+    char *q;
+
+    qcopy(&t0, p);
+    add_vector_xyz(p, p, v);
+    if (b < vector_length_xyz(v)) {
+        qcopy(&t1, &t0);
+        t1.a[2] += a;
+        normalize_vector_xyz(&t3, v, b);
+        add_vector_xyz(&t2, &t3, p);
+        t2.a[2] += a;
+        if (FUN_001efa68(&t1, &t2, fl, (int)m, 0)) {
+            subtract_vector_xyz(p, (char *)&D_94C8_60, &t3);
+            r = 1;
+            *(float *)(m + 0x18) -= a;
+        }
+    }
+    for (i = 0, q = m + 0x10; i < 6; i++) {
+        qcopy(&t1, q);
+        t1.a[2] += a;
+        if (func_L00_001F10E0_l(&t1, b, fl | 4, m)) {
+            qcopy(q, &D_L00_00173E70);
+            r |= 1;
+            *(float *)(m + 0x18) -= a;
+        } else {
+            break;
+        }
+    }
+    b = *(float *)(m + 0x18) - c;
+    qcopy(&t1, q);
+    qcopy(&t2, q);
+    t1.a[2] += a;
+    t2.a[2] = b - 0.05f;
+    if (FUN_001efa68(&t1, &t2, fl | 2, (int)m, 0)) {
+        if (D_L00_00173E40[7] > 0) {
+            float g;
+            r |= 2;
+            g = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            if (g > 0.5f) {
+                r |= 4;
+            }
+            g = *(float *)((char *)D_L00_00173E40 + 0x28);
+            if (b < g) {
+                *(float *)(m + 0x18) += (g - b) * 0.3f;
+            }
+        }
+    }
+    subtract_vector_xyz(v, q, &t0);
+    return r;
+}
 float FUN_001fa6c0(int);
 void FUN_L00_00258830(int, int, float, float, float, int);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
