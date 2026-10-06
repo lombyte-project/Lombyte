@@ -286,7 +286,7 @@ extern float FUN_L11_00311a88_u(void *, void *) __asm__("FUN_L11_00311a88");
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
-extern void FUN_L11_00311be8(void *, void *, void *);
+void FUN_L11_00311be8(void *a0, void *a1, void *a2);
 
 void *FUN_L11_00311948(void *a0, char *a1, int a2, int a3, void *a4) {
     void *best = 0;
@@ -348,7 +348,35 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
     }
     return 10000.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311be8.s", FUN_L11_00311be8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* counts the listed mobys of the type that are active, and of those the ones with 0x31 set */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003130B0), where it is exact; names translated to the US level program. */
+
+extern int D_L11_0015FFD8; /* no foreign declaration */
+extern short *D_L11_001AC240[];
+
+void FUN_L11_00311be8(void *a0, void *a1, void *a2) {
+    char *d = *(char **)((char *)a0 + 0x78);
+    int type = *(short *)(d + 0x108);
+    short *p;
+    *(unsigned short *)a1 = 0;
+    *(unsigned short *)a2 = 0;
+    p = D_L11_001AC240[type];
+    if (p == 0) return;
+    do {
+        int off = (*(unsigned short *)p & 0x7FFF) << 8;
+        if (((char *)D_L11_0015FFD8)[off + 0x20] >= 0) {
+            (*(unsigned short *)a1)++;
+            if (((unsigned char *)D_L11_0015FFD8)[off + 0x31] != 0) {
+                (*(unsigned short *)a2)++;
+            }
+        }
+    } while (*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311c80.s", FUN_L11_00311c80);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00311d50.s", FUN_L11_00311d50);
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
