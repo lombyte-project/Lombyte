@@ -115,7 +115,7 @@ ROUTE_EXCEPTIONS = {
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
     "ui/menus/fun_00208030": "cc_sn",
-    "ui/menus/fun_00221e50": "cc_sn",
+    "ui/menus/update_menu_cycle_selection": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
     # parse_particle_textures: The a1/a3 induction-pointer swap was the ORDER OF
@@ -254,7 +254,7 @@ GAME_COMPILER_FLAG_UNITS = {
     "rendering/state/reset_graphics": "-mno-split-addresses",
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "ui/menus/fun_00225490": "-fno-schedule-insns",
+    "ui/menus/create_menu_preview_moby": "-fno-schedule-insns",
     "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
     # FUN_002075e8: retail materializes the zero return before `jr $ra` and
     # leaves the delay slot empty; the default pass moves that assignment into
@@ -404,8 +404,8 @@ RODATA_OVERLAYS = {
     "_getpic": (0x153AA0, 0x54A20),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
-    "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
-    "fun_0022f778": (0x1E8930, 0xE98B0),  # gameplay-state switch table
+    "draw_menu_preview_objects": (0x1E87A0, 0xE9720),  # item-handle release switch table
+    "update_resident_gameplay_state": (0x1E8930, 0xE98B0),  # gameplay-state switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
     "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
@@ -418,7 +418,7 @@ RODATA_OVERLAYS = {
     # pairing; it does not by itself make the unit match.
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860),  # retail switch table (jtbl_001528E0)
     "fun_00216c48": (0x1E86A0, 0xE9620),  # retail switch table (jtbl_001E86A0)
-    "fun_0022b288": (0x1E8910, 0xE9890),  # switch table
+    "draw_sky_shells": (0x1E8910, 0xE9890),  # switch table
     "fun_002223f0": (0x1E8810, 0xE9790),  # switch table
     "fun_00237ed0": (0x1E8A90, 0xE9A10),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0),  # switch table

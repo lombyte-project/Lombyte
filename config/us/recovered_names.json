@@ -5491,8 +5491,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/camera/fun_001eccd8",
-        "source_path": "src/gameplay/camera/fun_001eccd8.c",
+        "unit": "gameplay/camera/advance_alternate_camera_transition",
+        "source_path": "src/gameplay/camera/advance_alternate_camera_transition.c",
         "address": "0x001eccd8",
         "current_name": "FUN_001eccd8",
         "proposed_name": null,
@@ -5578,8 +5578,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/camera/fun_001ed940",
-        "source_path": "src/gameplay/camera/fun_001ed940.c",
+        "unit": "gameplay/camera/refresh_camera_control_flags",
+        "source_path": "src/gameplay/camera/refresh_camera_control_flags.c",
         "address": "0x001ed940",
         "current_name": "FUN_001ed940",
         "proposed_name": null,
@@ -5600,8 +5600,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/camera/fun_001eda60",
-        "source_path": "src/gameplay/camera/fun_001eda60.c",
+        "unit": "gameplay/camera/advance_timed_camera_control",
+        "source_path": "src/gameplay/camera/advance_timed_camera_control.c",
         "address": "0x001eda60",
         "current_name": "FUN_001eda60",
         "proposed_name": null,
@@ -10074,8 +10074,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/fun_0020bf90",
-        "source_path": "src/ui/map/fun_0020bf90.c",
+        "unit": "ui/map/update_map_icons",
+        "source_path": "src/ui/map/update_map_icons.c",
         "address": "0x0020bf90",
         "current_name": "FUN_0020bf90",
         "proposed_name": null,
@@ -10842,8 +10842,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/fun_002135f0",
-        "source_path": "src/gameplay/entities/fun_002135f0.c",
+        "unit": "gameplay/entities/resolve_camera_surface_height",
+        "source_path": "src/gameplay/entities/resolve_camera_surface_height.c",
         "address": "0x002135f0",
         "current_name": "FUN_002135f0",
         "proposed_name": null,
@@ -11175,8 +11175,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "gameplay/entities/fun_00214e58",
-        "source_path": "src/gameplay/entities/fun_00214e58.c",
+        "unit": "gameplay/entities/sample_camera_path",
+        "source_path": "src/gameplay/entities/sample_camera_path.c",
         "address": "0x00214e58",
         "current_name": "FUN_00214e58",
         "proposed_name": null,
@@ -11709,8 +11709,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_002169c0",
-        "source_path": "src/audio/streaming/fun_002169c0.c",
+        "unit": "audio/streaming/music_secondary_start_callback",
+        "source_path": "src/audio/streaming/music_secondary_start_callback.c",
         "address": "0x002169c0",
         "current_name": "FUN_002169c0",
         "proposed_name": "update_sound_handle_a",
@@ -11735,8 +11735,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216a20",
-        "source_path": "src/audio/streaming/fun_00216a20.c",
+        "unit": "audio/streaming/music_primary_preseek_callback",
+        "source_path": "src/audio/streaming/music_primary_preseek_callback.c",
         "address": "0x00216a20",
         "current_name": "FUN_00216a20",
         "proposed_name": "update_sound_handle_b",
@@ -12287,8 +12287,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021d2c8",
-        "source_path": "src/ui/menus/fun_0021d2c8.c",
+        "unit": "ui/menus/restore_menu_help_text",
+        "source_path": "src/ui/menus/restore_menu_help_text.c",
         "address": "0x0021d2c8",
         "current_name": "FUN_0021d2c8",
         "proposed_name": null,
@@ -12309,8 +12309,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021d338",
-        "source_path": "src/ui/menus/fun_0021d338.c",
+        "unit": "ui/menus/update_menu_help_text_load",
+        "source_path": "src/ui/menus/update_menu_help_text_load.c",
         "address": "0x0021d338",
         "current_name": "FUN_0021d338",
         "proposed_name": null,
@@ -12326,8 +12326,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021d4a8",
-        "source_path": "src/ui/menus/fun_0021d4a8.c",
+        "unit": "ui/menus/draw_menu_text_list",
+        "source_path": "src/ui/menus/draw_menu_text_list.c",
         "address": "0x0021d4a8",
         "current_name": "FUN_0021d4a8",
         "proposed_name": null,
@@ -12338,8 +12338,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_0021d948",
-        "source_path": "src/ui/menus/fun_0021d948.c",
+        "unit": "ui/menus/draw_menu_item_grid",
+        "source_path": "src/ui/menus/draw_menu_item_grid.c",
         "address": "0x0021d948",
         "current_name": "FUN_0021d948",
         "proposed_name": null,
@@ -12350,8 +12350,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_0021ddf8",
-        "source_path": "src/ui/menus/fun_0021ddf8.c",
+        "unit": "ui/menus/draw_menu_preview_objects",
+        "source_path": "src/ui/menus/draw_menu_preview_objects.c",
         "address": "0x0021ddf8",
         "current_name": "FUN_0021ddf8",
         "proposed_name": null,
@@ -12367,8 +12367,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021df58",
-        "source_path": "src/ui/menus/fun_0021df58.c",
+        "unit": "ui/menus/clear_menu_preview_pair",
+        "source_path": "src/ui/menus/clear_menu_preview_pair.c",
         "address": "0x0021df58",
         "current_name": "FUN_0021df58",
         "proposed_name": null,
@@ -12422,8 +12422,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021e1f8",
-        "source_path": "src/ui/menus/fun_0021e1f8.c",
+        "unit": "ui/menus/rotate_item_preview_moby",
+        "source_path": "src/ui/menus/rotate_item_preview_moby.c",
         "address": "0x0021e1f8",
         "current_name": "FUN_0021e1f8",
         "proposed_name": null,
@@ -12456,8 +12456,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_0021e608",
-        "source_path": "src/ui/menus/fun_0021e608.c",
+        "unit": "ui/menus/draw_available_item_preview_mobys",
+        "source_path": "src/ui/menus/draw_available_item_preview_mobys.c",
         "address": "0x0021e608",
         "current_name": "FUN_0021e608",
         "proposed_name": null,
@@ -12519,8 +12519,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_0021ea48",
-        "source_path": "src/ui/menus/fun_0021ea48.c",
+        "unit": "ui/menus/create_rotating_preview_moby",
+        "source_path": "src/ui/menus/create_rotating_preview_moby.c",
         "address": "0x0021ea48",
         "current_name": "FUN_0021ea48",
         "proposed_name": null,
@@ -12551,8 +12551,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021eaf0",
-        "source_path": "src/ui/menus/fun_0021eaf0.c",
+        "unit": "ui/menus/release_item_preview_moby",
+        "source_path": "src/ui/menus/release_item_preview_moby.c",
         "address": "0x0021eaf0",
         "current_name": "FUN_0021eaf0",
         "proposed_name": null,
@@ -12627,8 +12627,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021f120",
-        "source_path": "src/ui/menus/fun_0021f120.c",
+        "unit": "ui/menus/rotate_preview_moby_x",
+        "source_path": "src/ui/menus/rotate_preview_moby_x.c",
         "address": "0x0021f120",
         "current_name": "FUN_0021f120",
         "proposed_name": null,
@@ -13317,8 +13317,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00221e50",
-        "source_path": "src/ui/menus/fun_00221e50.c",
+        "unit": "ui/menus/update_menu_cycle_selection",
+        "source_path": "src/ui/menus/update_menu_cycle_selection.c",
         "address": "0x00221e50",
         "current_name": "FUN_00221e50",
         "proposed_name": null,
@@ -13584,8 +13584,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_002239e0",
-        "source_path": "src/ui/menus/fun_002239e0.c",
+        "unit": "ui/menus/draw_save_slot_list",
+        "source_path": "src/ui/menus/draw_save_slot_list.c",
         "address": "0x002239e0",
         "current_name": "FUN_002239e0",
         "proposed_name": null,
@@ -13596,8 +13596,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00223e28",
-        "source_path": "src/ui/menus/fun_00223e28.c",
+        "unit": "ui/menus/draw_menu_flashing_panel",
+        "source_path": "src/ui/menus/draw_menu_flashing_panel.c",
         "address": "0x00223e28",
         "current_name": "FUN_00223e28",
         "proposed_name": null,
@@ -13613,8 +13613,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002240c8",
-        "source_path": "src/ui/menus/fun_002240c8.c",
+        "unit": "ui/menus/initialize_menu_preview_objects",
+        "source_path": "src/ui/menus/initialize_menu_preview_objects.c",
         "address": "0x002240c8",
         "current_name": "FUN_002240c8",
         "proposed_name": null,
@@ -13630,8 +13630,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002242b8",
-        "source_path": "src/ui/menus/fun_002242b8.c",
+        "unit": "ui/menus/release_menu_preview_objects",
+        "source_path": "src/ui/menus/release_menu_preview_objects.c",
         "address": "0x002242b8",
         "current_name": "FUN_002242b8",
         "proposed_name": null,
@@ -13675,8 +13675,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_00224b70",
-        "source_path": "src/ui/menus/fun_00224b70.c",
+        "unit": "ui/menus/update_menu_preview_class_pose",
+        "source_path": "src/ui/menus/update_menu_preview_class_pose.c",
         "address": "0x00224b70",
         "current_name": "FUN_00224b70",
         "proposed_name": null,
@@ -13692,8 +13692,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00224d28",
-        "source_path": "src/ui/menus/fun_00224d28.c",
+        "unit": "ui/menus/update_menu_preview_animation_transform",
+        "source_path": "src/ui/menus/update_menu_preview_animation_transform.c",
         "address": "0x00224d28",
         "current_name": "FUN_00224d28",
         "proposed_name": null,
@@ -13721,8 +13721,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00224fc0",
-        "source_path": "src/ui/menus/fun_00224fc0.c",
+        "unit": "ui/menus/update_menu_preview_animation_pose",
+        "source_path": "src/ui/menus/update_menu_preview_animation_pose.c",
         "address": "0x00224fc0",
         "current_name": "FUN_00224fc0",
         "proposed_name": null,
@@ -13738,8 +13738,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002250f0",
-        "source_path": "src/ui/menus/fun_002250f0.c",
+        "unit": "ui/menus/update_menu_preview_class_transform",
+        "source_path": "src/ui/menus/update_menu_preview_class_transform.c",
         "address": "0x002250f0",
         "current_name": "FUN_002250f0",
         "proposed_name": null,
@@ -13767,8 +13767,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00225490",
-        "source_path": "src/ui/menus/fun_00225490.c",
+        "unit": "ui/menus/create_menu_preview_moby",
+        "source_path": "src/ui/menus/create_menu_preview_moby.c",
         "address": "0x00225490",
         "current_name": "FUN_00225490",
         "proposed_name": null,
@@ -14416,8 +14416,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/sky/fun_0022b288",
-        "source_path": "src/rendering/sky/fun_0022b288.c",
+        "unit": "rendering/sky/draw_sky_shells",
+        "source_path": "src/rendering/sky/draw_sky_shells.c",
         "address": "0x0022b288",
         "current_name": "FUN_0022b288",
         "proposed_name": null,
@@ -14534,8 +14534,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/sound/fun_0022c5a8",
-        "source_path": "src/audio/sound/fun_0022c5a8.c",
+        "unit": "audio/sound/clamp_voice_position_to_collision",
+        "source_path": "src/audio/sound/clamp_voice_position_to_collision.c",
         "address": "0x0022c5a8",
         "current_name": "FUN_0022c5a8",
         "proposed_name": null,
@@ -14556,8 +14556,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022c658",
-        "source_path": "src/audio/sound/fun_0022c658.c",
+        "unit": "audio/sound/test_voice_occlusion",
+        "source_path": "src/audio/sound/test_voice_occlusion.c",
         "address": "0x0022c658",
         "current_name": "FUN_0022c658",
         "proposed_name": null,
@@ -14617,8 +14617,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022c830",
-        "source_path": "src/audio/sound/fun_0022c830.c",
+        "unit": "audio/sound/calculate_voice_pan",
+        "source_path": "src/audio/sound/calculate_voice_pan.c",
         "address": "0x0022c830",
         "current_name": "FUN_0022c830",
         "proposed_name": null,
@@ -14761,8 +14761,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "audio/sound/fun_0022da68",
-        "source_path": "src/audio/sound/fun_0022da68.c",
+        "unit": "audio/sound/allocate_voice_for_target_entry",
+        "source_path": "src/audio/sound/allocate_voice_for_target_entry.c",
         "address": "0x0022da68",
         "current_name": "FUN_0022da68",
         "proposed_name": null,
@@ -14942,8 +14942,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "gameplay/space/fun_0022e8c8",
-        "source_path": "src/gameplay/space/fun_0022e8c8.c",
+        "unit": "gameplay/space/draw_resident_textured_quad",
+        "source_path": "src/gameplay/space/draw_resident_textured_quad.c",
         "address": "0x0022e8c8",
         "current_name": "FUN_0022e8c8",
         "proposed_name": null,
@@ -14959,8 +14959,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/space/fun_0022ea08",
-        "source_path": "src/gameplay/space/fun_0022ea08.c",
+        "unit": "gameplay/space/draw_resident_textured_banner",
+        "source_path": "src/gameplay/space/draw_resident_textured_banner.c",
         "address": "0x0022ea08",
         "current_name": "FUN_0022ea08",
         "proposed_name": null,
@@ -15087,8 +15087,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "gameplay/space/fun_00231608",
-        "source_path": "src/gameplay/space/fun_00231608.c",
+        "unit": "gameplay/space/play_level_transition_movie",
+        "source_path": "src/gameplay/space/play_level_transition_movie.c",
         "address": "0x00231608",
         "current_name": "FUN_00231608",
         "proposed_name": null,
@@ -16109,8 +16109,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002389e0",
-        "source_path": "src/ui/menus/fun_002389e0.c",
+        "unit": "ui/menus/render_vendor_item_details_pass",
+        "source_path": "src/ui/menus/render_vendor_item_details_pass.c",
         "address": "0x002389e0",
         "current_name": "FUN_002389e0",
         "proposed_name": null,
@@ -18655,8 +18655,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216990",
-        "source_path": "src/audio/streaming/fun_00216990.c",
+        "unit": "audio/streaming/music_channel_ready_callback",
+        "source_path": "src/audio/streaming/music_channel_ready_callback.c",
         "address": "0x00216990",
         "current_name": "FUN_00216990",
         "proposed_name": null,
@@ -18672,8 +18672,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216a80",
-        "source_path": "src/audio/streaming/fun_00216a80.c",
+        "unit": "audio/streaming/music_transition_start_callback",
+        "source_path": "src/audio/streaming/music_transition_start_callback.c",
         "address": "0x00216a80",
         "current_name": "FUN_00216a80",
         "proposed_name": null,
@@ -18689,8 +18689,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216ad0",
-        "source_path": "src/audio/streaming/fun_00216ad0.c",
+        "unit": "audio/streaming/music_primary_replace_callback",
+        "source_path": "src/audio/streaming/music_primary_replace_callback.c",
         "address": "0x00216ad0",
         "current_name": "FUN_00216ad0",
         "proposed_name": null,
@@ -18706,8 +18706,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216b28",
-        "source_path": "src/audio/streaming/fun_00216b28.c",
+        "unit": "audio/streaming/music_primary_start_callback",
+        "source_path": "src/audio/streaming/music_primary_start_callback.c",
         "address": "0x00216b28",
         "current_name": "FUN_00216b28",
         "proposed_name": null,
@@ -18723,8 +18723,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/streaming/fun_00216bc0",
-        "source_path": "src/audio/streaming/fun_00216bc0.c",
+        "unit": "audio/streaming/music_remaining_time_callback",
+        "source_path": "src/audio/streaming/music_remaining_time_callback.c",
         "address": "0x00216bc0",
         "current_name": "FUN_00216bc0",
         "proposed_name": null,
@@ -18939,8 +18939,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022dd78",
-        "source_path": "src/audio/sound/fun_0022dd78.c",
+        "unit": "audio/sound/store_sound_bank_handle_callback",
+        "source_path": "src/audio/sound/store_sound_bank_handle_callback.c",
         "address": "0x0022dd78",
         "current_name": "FUN_0022dd78",
         "proposed_name": null,
@@ -18956,8 +18956,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022dd90",
-        "source_path": "src/audio/sound/fun_0022dd90.c",
+        "unit": "audio/sound/voice_start_callback",
+        "source_path": "src/audio/sound/voice_start_callback.c",
         "address": "0x0022dd90",
         "current_name": "FUN_0022dd90",
         "proposed_name": null,
@@ -18973,8 +18973,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022ddd8",
-        "source_path": "src/audio/sound/fun_0022ddd8.c",
+        "unit": "audio/sound/voice_update_callback",
+        "source_path": "src/audio/sound/voice_update_callback.c",
         "address": "0x0022ddd8",
         "current_name": "FUN_0022ddd8",
         "proposed_name": null,
