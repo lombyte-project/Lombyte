@@ -1,5 +1,5 @@
 #include "types.h"
-struct SifRpcClientData {
+struct sceSifClientData {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -24,7 +24,7 @@ extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
-s32 sceSifBindRpc(struct SifRpcClientData *client, s32 rpc_number, s32 mode) {
+s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     s32 sema_param[6];
     s32 sema_id;
     struct SifRpcPacket *packet;

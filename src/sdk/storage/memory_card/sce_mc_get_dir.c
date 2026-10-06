@@ -1,5 +1,5 @@
 #include "types.h"
-struct McRpcClient {
+struct sceSifClientData {
     u8 pad_0[0x24];
     s32 unk24;
 };
@@ -16,7 +16,7 @@ struct McGetDirRequest {
 
 extern u32 D_00132DA8[];
 extern u32 D_00132DAC[];
-extern struct McRpcClient D_00159A00;
+extern struct sceSifClientData D_00159A00;
 extern struct McGetDirRequest D_00159AB0;
 extern u8 D_0015AFC0[];
 extern s32 PollSema();

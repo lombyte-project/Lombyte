@@ -5,7 +5,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/cmd_sem_init/cmd_sem_in
             cmd_sem_init);
 #else
 #include "types.h"
-struct Sema {
+struct SemaParam {
     s32 count;
     s32 max_count;
     s32 init_count;
@@ -17,9 +17,9 @@ extern volatile s32 D_001312E0[];
 extern volatile s32 D_001312E8[];
 extern s32 D_001312EC[];
 extern volatile s32 D_001312F0[];
-extern s32 CreateSema(struct Sema *);
+extern s32 CreateSema(struct SemaParam *);
 void cmd_sem_init(void) {
-    struct Sema sema;
+    struct SemaParam sema;
 
     if ((D_001312E8[0] != -1) && (D_001312EC[0] != -1)) {
         return;

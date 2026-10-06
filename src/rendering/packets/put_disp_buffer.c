@@ -1,7 +1,7 @@
 #include "types.h"
-struct DispEnv;
-extern struct DispEnv *D_0015EEB8;
-extern void sceGsPutDispEnv(struct DispEnv *);
+struct sceGsDispEnv;
+extern struct sceGsDispEnv *D_0015EEB8;
+extern void sceGsPutDispEnv(struct sceGsDispEnv *);
 void put_disp_buffer(void) __asm__("FUN_001fb2a8");
 
 void put_disp_buffer(void) {

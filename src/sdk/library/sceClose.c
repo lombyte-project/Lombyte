@@ -10,7 +10,7 @@ struct SifFileEntry {
     s32 unk0;
     s32 unk4;
 };
-struct Sema {
+struct SemaParam {
     s32 count;
     s32 max_count;
     s32 init_count;
@@ -32,7 +32,7 @@ extern s32 WaitSema(s32 id);
 extern s32 sceSifCallRpc(void *a0, s32 a1, s32 a2, void *a3, s32 a4, void *a5, s32 a6, void *a7,
                          void *a8);
 s32 sceClose(s32 fd) {
-    struct Sema sema;
+    struct SemaParam sema;
     s32 result;
     s32 ok;
     s32 sid;

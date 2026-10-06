@@ -18,7 +18,7 @@ struct CdDriveState {
     s32 unk14;
 };
 
-struct CdReadMode {
+struct sceCdRMode {
     u8 unk0;
     u8 unk1;
     u8 unk2;
@@ -42,7 +42,7 @@ extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
 extern s32 sceSifWriteBackDCache();
-s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct CdReadMode *pMode) {
+s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct sceCdRMode *pMode) {
     s32 byteCount;
     s32 dataPattern;
     struct CdDriveState *st = &D_001313C0;

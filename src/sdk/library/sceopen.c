@@ -12,7 +12,7 @@ struct FsOpenRequest {
     s32 slot;
 };
 
-struct SemaphoreParameters {
+struct SemaParam {
     s32 count;
     s32 max_count;
     s32 init_count;
@@ -34,7 +34,7 @@ extern struct FsOpenRequest D_00156880;
 extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
 extern u8 D_00157F80[];
-extern s32 CreateSema(struct SemaphoreParameters *);
+extern s32 CreateSema(struct SemaParam *);
 extern s32 DeleteSema(s32);
 extern s32 ReadQueueStatus(void);
 extern s32 SignalSema(s32);
@@ -46,7 +46,7 @@ extern s32 sceFsInit(void);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
 s32 sceOpen(const u8 *path, s32 flags, ...) {
-    struct SemaphoreParameters semaphore_parameters;
+    struct SemaParam semaphore_parameters;
     va_list arguments;
     s32 result;
     s32 path_index;

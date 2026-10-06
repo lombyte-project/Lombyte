@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct GsDrawEnv1 {
+struct sceGsDrawEnv1 {
     unsigned long frame1;
     unsigned long frame1addr;
     unsigned long zbuf1;
@@ -23,7 +23,7 @@ struct GsDrawEnv1 {
 
 extern s16 sceGszbufaddr(s16 psm, s16 w, s16 h);
 
-s32 sceGsSetDefDrawEnv(struct GsDrawEnv1 *draw, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm) {
+s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *draw, s16 psm, s16 w, s16 h, s16 ztest, s16 zpsm) {
     s16 fbw;
     s16 zbp;
     long ofx;

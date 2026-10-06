@@ -1,5 +1,5 @@
 #include "types.h"
-struct SifClientData {
+struct sceSifClientData {
     u8 pad0[0x24];
     void *serve;
 };
@@ -12,14 +12,14 @@ struct StashEntry {
 struct Stash {
     s32 base;
     s32 size;
-    struct SifClientData cd;
+    struct sceSifClientData cd;
     s32 cur;
     s32 n;
 };
 extern struct Stash D_001DD1A0;
 extern struct StashEntry D_001DD1D8[64];
-extern s32 sceSifBindRpc(struct SifClientData *, u32, s32);
-extern s32 SceSifCheckStatRpc(struct SifClientData *);
+extern s32 sceSifBindRpc(struct sceSifClientData *, u32, s32);
+extern s32 SceSifCheckStatRpc(struct sceSifClientData *);
 extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
 void FUN_00232d00(void) {
     s32 buf[4];

@@ -1,5 +1,5 @@
 #include "types.h"
-struct MemoryCardRpcClient {
+struct sceSifClientData {
     u8 reserved_00[0x24];
     s32 is_initialized;
 };
@@ -16,7 +16,7 @@ struct MemoryCardWriteRequest {
 };
 extern u32 D_00132DA8[];
 extern u32 D_00132DAC[];
-extern struct MemoryCardRpcClient D_00159A00;
+extern struct sceSifClientData D_00159A00;
 extern struct MemoryCardWriteRequest D_00159A80;
 extern u8 D_0015AFC0[];
 extern s32 FlushCache();

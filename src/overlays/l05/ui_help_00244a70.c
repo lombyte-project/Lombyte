@@ -4,7 +4,7 @@
 
 #include "rnc/math/vector.h"
 
-struct PL {
+struct GameState {
     u8 pad0[0x40];
     Vec4 v40;
     u8 pad50[0x30];
@@ -115,7 +115,7 @@ struct PL {
     u8 pad2F8[0x4];
     union {
         void *p2FC;
-        struct M *pm2FC;
+        struct MobyView *pm2FC;
         s32 i2FC;
     } u2FC;
     u8 pad300[0x4];
@@ -204,7 +204,7 @@ struct PL {
     f32 f5CC;
     f32 f5D0;
     f32 f5D4;
-    struct M *pm5D8;
+    struct MobyView *pm5D8;
     f32 f5DC;
     Vec4 v5E0;
     void *p5F0;
@@ -221,7 +221,7 @@ struct PL {
     u8 pad61C[0x7C];
     s32 i698;
     u8 pad69C[0x8];
-    struct M *pm6A4;
+    struct MobyView *pm6A4;
     u8 pad6A8[0x18];
     Vec4 v6C0;
     f32 f6D0;
@@ -242,7 +242,7 @@ struct PL {
     f32 f860;
     s32 i864;
     f32 f868;
-    struct M *pm86C;
+    struct MobyView *pm86C;
     u8 pad870[0x4];
     f32 f874;
     f32 f878;
@@ -298,7 +298,7 @@ struct PL {
     f32 f954;
     u8 pad958[0x8];
     f32 f960;
-    struct M *pm964;
+    struct MobyView *pm964;
     u8 pad968[0x4];
     f32 f96C;
     f32 f970;
@@ -307,7 +307,7 @@ struct PL {
     f32 f97C;
     f32 f980;
     u8 pad984[0x10];
-    struct M *pm994;
+    struct MobyView *pm994;
     u8 pad998[0x4];
     s16 h99C;
     u8 pad99E[0x2];
@@ -330,7 +330,7 @@ struct PL {
     f32 f9E4;
     f32 f9E8;
     u8 pad9EC[0x68];
-    struct M *pmA54;
+    struct MobyView *pmA54;
     s32 iA58;
     f32 fA5C;
     s32 iA60;
@@ -346,13 +346,13 @@ struct PL {
     u8 padAA0[0x8];
     f32 fAA8;
     u8 padAAC[0x5E4];
-    struct M *pm1090;
+    struct MobyView *pm1090;
     u8 pad1094[0x14];
     s16 h10A8;
     u8 pad10AA[0xE];
     s32 i10B8;
     u8 pad10BC[0xC4];
-    struct M *pm1180;
+    struct MobyView *pm1180;
     u8 pad1184[0x24];
     s32 i11A8;
     u8 pad11AC[0x136];
@@ -376,7 +376,7 @@ struct PL {
     u8 pad1680[0x12C];
     s32 i17AC;
     u8 pad17B0[0x8D0];
-    struct M *pm2080;
+    struct MobyView *pm2080;
     s32 i2084;
     s32 i2088;
     u8 pad208C[0x4];
@@ -413,7 +413,7 @@ struct PL {
     u8 pad22DA[0x1A];
     s32 i22F4;
 };
-struct M {
+struct MobyView {
     u8 pad0[0xC];
     f32 fC;
     union {
@@ -453,7 +453,7 @@ struct M {
     u8 pad54[0x1C];
     u8 b70;
     u8 pad71[0x7];
-    struct M *pm78;
+    struct MobyView *pm78;
     u8 pad7C[0x2A];
     s16 hA6;
     u8 padA8[0x14];
@@ -461,7 +461,7 @@ struct M {
     u8 padBD[0x3];
     Vec4 vC0;
 };
-struct ST {
+struct Globals_00141848 {
     u8 pad0[0x58];
     u16 uh58;
     u16 uh5A;
@@ -471,7 +471,7 @@ struct ST {
     u16 uh92;
     s32 i94;
 };
-struct PADT {
+struct PadState {
     u8 pad0[0x128];
     f32 f128;
     f32 f12C;
@@ -489,7 +489,7 @@ struct PADT {
     u8 pad1D8[0x4];
     s32 i1DC;
 };
-struct AN {
+struct PlayerJointTable {
     u8 pad0[0x60];
     f32 f60;
     f32 f64;
@@ -533,7 +533,7 @@ struct AN {
     f32 f1494;
     f32 f1498;
 };
-struct QS {
+struct LevelTable_QS {
     u8 pad0[0x158];
     f32 f158;
     u8 pad15C[0x4];
@@ -542,9 +542,9 @@ struct QS {
     s32 i168;
 };
 
-extern struct PL D_0013F350;
+extern struct GameState D_0013F350;
 #define P D_0013F350
-extern struct PL D_0013F350_b __asm__("D_0013F350");
+extern struct GameState D_0013F350_b __asm__("D_0013F350");
 extern f32 D_0015ED60;
 extern f32 D_0015ED64;
 extern f32 D_0015ED64_a __asm__("D_0015ED64");
@@ -555,7 +555,7 @@ extern f32 D_0015ED70_a __asm__("D_0015ED70");
 extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
 extern u8 D_0013D4DC[];
-extern struct ST D_00141848;
+extern struct Globals_00141848 D_00141848;
 #define S D_00141848
 extern s32 D_L05_0015F688 __attribute__((sda));
 extern s32 D_L05_0015F68C __attribute__((sda));
@@ -583,10 +583,10 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern void FUN_L01_00232978(s32);
 extern void FUN_L00_002121c0(void);
 extern void FUN_L00_00217450(void);
-extern struct M *create_moby(s32) __asm__("FUN_0020c4f8");
+extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00250df8(struct M *);
-extern s32 allocate_voice_for_target_entry(s32, s32, struct M *) __asm__("FUN_0022da68");
+extern void FUN_L00_00250df8(struct MobyView *);
+extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern f32 FUN_001f9b20(void *);
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void FUN_L00_00227d40(void);
@@ -601,15 +601,15 @@ extern void FUN_L00_00216130(void *, void *, f32, f32, f32, s32);
 extern void FUN_L00_002090d0(void *, f32, f32, f32);
 extern void FUN_L05_00254608(void);
 extern Vec4 D_L05_00179BE0[];
-extern struct PADT D_0013C940;
+extern struct PadState D_0013C940;
 #define PD D_0013C940
-extern struct AN D_L05_0017AAE0;
+extern struct PlayerJointTable D_L05_0017AAE0;
 #define AN D_L05_0017AAE0
-struct ENT {
+struct VoiceSlot {
     u8 pad0[0x74];
     u8 b74;
     u8 pad75[0x13];
-    struct M *pm88;
+    struct MobyView *pm88;
 };
 extern u8 D_0013E550[];
 extern s32 D_L05_001612D0;
@@ -617,7 +617,7 @@ extern s32 D_L05_001612D8;
 extern s32 D_L05_0015F5CC;
 extern u8 D_L05_0017C420[];
 
-extern void FUN_L00_00216e48(s32, struct M *, s32);
+extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 FUN_001f9770(s16 *);
 extern void FUN_L00_00209a40(s32, s32);
@@ -625,7 +625,7 @@ extern void FUN_L00_00209ca8(s32, s32, s32);
 extern void FUN_L00_002a3ec8(s32, s32, s32, f32, f32, f32, f32);
 extern f32 FUN_L00_0025bc98(f32 *, f32, f32 *, s32, f32, f32, f32);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void FUN_L00_0024f7c8(struct M *, s32, void *);
+extern void FUN_L00_0024f7c8(struct MobyView *, s32, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern u8 *FUN_L00_0026f080(void *, void *, f32, f32);
@@ -667,7 +667,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-struct TB {
+struct LevelTable_TB {
     u8 pad0[4];
     s32 i04;
     u8 pad8[0x10];
@@ -676,42 +676,42 @@ struct TB {
     s32 i20;
     u8 pad24[8];
 };
-extern struct TB D_L05_0017C088[];
-extern struct QS D_L05_00167080;
+extern struct LevelTable_TB D_L05_0017C088[];
+extern struct LevelTable_QS D_L05_00167080;
 #define Q D_L05_00167080
 extern s32 D_0013CAE0[];
 extern void FUN_L00_00233ba0(void *, void *, f32);
 extern void FUN_L00_00233b20(void *, void *, f32);
 extern void FUN_L00_002336e8(void *, void *, f32);
-extern void FUN_L00_00259888(void *, struct M *, s32, f32, void *);
-extern s32 FUN_L00_001f2868(f32, void *, s32, struct M *, void *);
+extern void FUN_L00_00259888(void *, struct MobyView *, s32, f32, void *);
+extern s32 FUN_L00_001f2868(f32, void *, s32, struct MobyView *, void *);
 extern f32 FUN_L00_0025bb38(s32, f32, f32);
 extern void FUN_L00_00214ed8(f32, f32, f32);
 extern void FUN_L00_002167d0(void);
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_002a9b80(struct M *, void *);
-extern s32 FUN_L00_002a96f8(struct M *, void *, f32, f32, s32, f32, f32, f32);
+extern void FUN_L00_002a9b80(struct MobyView *, void *);
+extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
 extern void FUN_L00_002335c8(void *, f32, f32, f32);
 extern f32 D_L00_001C3CF0[];
-extern s32 FUN_L00_002598b0(struct M *, f32, void *, s32, f32, f32, s32, s32, s32);
+extern s32 FUN_L00_002598b0(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32);
 extern f32 FUN_001f9ab0(void *, void *);
-struct TBDB8 {
+struct PlayerSpeedTuning {
     u8 pad0[8];
     f32 x08;
     f32 x0C;
     u8 pad10[8];
     f32 x18;
 };
-extern struct TBDB8 D_L05_0017C218;
+extern struct PlayerSpeedTuning D_L05_0017C218;
 extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
-extern s32 FUN_001efa68(void *, void *, s32, struct M *, s32);
+extern s32 FUN_001efa68(void *, void *, s32, struct MobyView *, s32);
 extern s32 D_0013CB14[];
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern s32 FUN_L00_0025e3b8(s32);
-extern void FUN_L00_00259bc8(s32, struct M *, s32, void *, void *, f32);
+extern void FUN_L00_00259bc8(s32, struct MobyView *, s32, void *, void *, f32);
 extern s32 D_L05_00178300[];
 extern void FUN_L00_00209ec8(void);
 extern void FUN_L00_002338d0(void *, void *);
@@ -731,13 +731,13 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32);
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
-struct T4C {
+struct LevelTable_T4C {
     u8 pad0[0x18];
     s32 x18;
     u8 pad1C[0x30];
 };
 extern u8 D_L00_00179AC0[];
-extern struct T4C D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
+extern struct LevelTable_T4C D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
@@ -753,7 +753,7 @@ extern f32 FUN_L00_002120d8(f32);
 extern s32 FUN_L00_00211870(f32);
 
 void FUN_L05_00244a70(void) {
-    struct M *moby = P.pm2080;
+    struct MobyView *moby = P.pm2080;
     s32 sub = P.i2088;
     s32 anim = moby->b53;
     f32 speed;
@@ -906,7 +906,7 @@ void FUN_L05_00244a70(void) {
         break;
     case 0x7F:
         if (P.pm6A4 == NULL) {
-            struct M *m = create_moby(0x52A);
+            struct MobyView *m = create_moby(0x52A);
             s32 h40 = 0x40;
             P.pm6A4 = m;
             if (m == NULL) {
@@ -923,8 +923,8 @@ void FUN_L05_00244a70(void) {
             allocate_voice_for_target_entry(0, 0, P.pm6A4);
         }
         if (P.pm6A4 != NULL) {
-            struct M *m;
-            struct M *o;
+            struct MobyView *m;
+            struct MobyView *o;
             P.pm6A4->b23 += truncate_float_to_s32(D_0015ED60 * 5.0f);
             if (P.pm6A4->b23 > 0x80) {
                 P.pm6A4->b23 = 0x80;
@@ -951,7 +951,7 @@ void FUN_L05_00244a70(void) {
         } else {
             s32 idx = P.i222C;
             if (idx != -1) {
-                struct ENT *e = (struct ENT *)(D_0013E550 + idx * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + idx * 0x70);
                 if (e->pm88 == P.pm2080 && e->b74 != 0) {
                     release_voice_slot(idx);
                 }
@@ -994,7 +994,7 @@ void FUN_L05_00244a70(void) {
             f32 k;
             f32 yaw;
             f32 t;
-            struct PL *pl;
+            struct GameState *pl;
 
             steer = 0.0f;
             m = PD.f128 < PD.f12C ? PD.f12C : PD.f128;
@@ -1139,7 +1139,7 @@ void FUN_L05_00244a70(void) {
                 pl->i8F0 = FUN_L00_00257b90(lo2, scale_game_frames(hi2));
             }
             if (P.i2084 == 0x35 && FUN_001f9770(&P.h8F8) != 0) {
-                struct M *gm = P.pm1180;
+                struct MobyView *gm = P.pm1180;
                 if (gm != NULL && gm->hA6 == 0x261) {
                     s32 i;
                     for (i = 0; i < 4; i++) {
@@ -1340,7 +1340,7 @@ void FUN_L05_00244a70(void) {
                 FUN_L00_00216e48(7, P.pm86C, 2);
             } else {
                 if (P.i2234 != -1) {
-                    struct ENT *e = (struct ENT *)(D_0013E550 + P.i2234 * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + P.i2234 * 0x70);
                     if (e->pm88 == P.pm86C && e->b74 != 0) {
                         release_voice_slot(P.i2234);
                     }
@@ -1351,7 +1351,7 @@ void FUN_L05_00244a70(void) {
                 FUN_L00_00216e48(6, P.pm86C, 0);
             } else {
                 if (P.i2230 != -1) {
-                    struct ENT *e = (struct ENT *)(D_0013E550 + P.i2230 * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + P.i2230 * 0x70);
                     if (e->pm88 == P.pm86C && e->b74 != 0) {
                         release_voice_slot(P.i2230);
                     }
@@ -1499,7 +1499,7 @@ void FUN_L05_00244a70(void) {
             FUN_001f9a68(&v10, &P.u100.v100, 7.0f);
             for (i = 0; i < n; i++) {
                 if (FUN_L00_0025e3b8(D_L05_00178300[i]) != 0 ||
-                    ((struct M *)D_L05_00178300[i])->hA6 == 0x85) {
+                    ((struct MobyView *)D_L05_00178300[i])->hA6 == 0x85) {
                     FUN_L00_00259bc8(D_L05_00178300[i], P.pm2080, 0x10000, &P.u80.v80, &v10, 1.0f);
                 }
             }
@@ -1507,7 +1507,7 @@ void FUN_L05_00244a70(void) {
         break;
     }
     case 0x6D: {
-        struct M *m = P.pm86C;
+        struct MobyView *m = P.pm86C;
         f32 len;
         f32 sp;
         s32 n;
@@ -1541,7 +1541,7 @@ void FUN_L05_00244a70(void) {
         break;
     }
     case 0x6E: {
-        struct M *m = P.pm86C;
+        struct MobyView *m = P.pm86C;
         if (m != NULL) {
             m->bBC = 2;
         }
@@ -1751,7 +1751,7 @@ void FUN_L05_00244a70(void) {
             FUN_001f9a10(&P.uE0.vE0, &P.uE0.vE0, &m80[3]);
         }
         {
-            struct M *r;
+            struct MobyView *r;
             if (P.pm994 != NULL && (r = P.pm994->pm78) != NULL) {
                 f32 len = FUN_001f9af0(&P.uE0.vE0);
                 if (r->fC < len) {
@@ -2017,7 +2017,7 @@ void FUN_L05_00244a70(void) {
         break;
     }
     case 0x13: {
-        struct TB *tb;
+        struct LevelTable_TB *tb;
         if (0) {
             FUN_L00_002167d0();
             break;
@@ -2166,7 +2166,7 @@ void FUN_L05_00244a70(void) {
             }
         }
         if (P.i2084 == 0x20 && t1 < P.i198 && P.i198 < t2 + scale_game_frames(4)) {
-            struct M *o = P.pm1090;
+            struct MobyView *o = P.pm1090;
             if (o != NULL) {
                 f32 a;
                 v30.f[0] = FUN_001f9dc8(P.u90.f98.v) * 2.0f;
@@ -2439,7 +2439,7 @@ void FUN_L05_00244a70(void) {
                 FUN_L00_00216e48(0, P.pm2080, 0);
             } else {
                 if (P.i2218 != -1) {
-                    struct ENT *e = (struct ENT *)(D_0013E550 + P.i2218 * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + P.i2218 * 0x70);
                     if (e->pm88 == P.pm2080 && e->b74 != 0) {
                         release_voice_slot(P.i2218);
                     }
@@ -2833,7 +2833,7 @@ void FUN_L05_00244a70(void) {
         f32 sp;
         if (FUN_L00_0020d498(3) == 2) {
             if (P.i2228 != -1) {
-                struct ENT *e = (struct ENT *)(D_0013E550 + P.i2228 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + P.i2228 * 0x70);
                 if (e->pm88 == P.pm2080 && e->b74 != 0) {
                     release_voice_slot(P.i2228);
                 }
@@ -2842,7 +2842,7 @@ void FUN_L05_00244a70(void) {
             FUN_L00_00216e48(3, P.pm2080, 2);
         } else {
             if (P.i2224 != -1) {
-                struct ENT *e = (struct ENT *)(D_0013E550 + P.i2224 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + P.i2224 * 0x70);
                 if (e->pm88 == P.pm2080 && e->b74 != 0) {
                     release_voice_slot(P.i2224);
                 }

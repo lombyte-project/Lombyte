@@ -25,7 +25,7 @@ struct RpcBindPacket {
     s32 unk28;
     s32 unk2C;
 };
-struct RpcServerData {
+struct sceSifServeData {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x8];
@@ -37,7 +37,7 @@ extern void isceSifSendCmd();
 void _request_bind(struct RpcBindRequest *arg0, s32 arg1) {
     struct RpcBindPacket *packet;
     s32 new_var;
-    struct RpcServerData *svdata;
+    struct sceSifServeData *svdata;
     packet = GetRpcPacket(arg1);
     new_var = (s32)arg0->unk14;
     packet->unk1C = (s32)arg0->unk1C;

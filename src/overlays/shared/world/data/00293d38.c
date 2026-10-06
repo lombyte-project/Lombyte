@@ -16,7 +16,7 @@ typedef struct {
 } StashSlot;
 
 extern StashSlot D_L00_001C12D8[];
-extern s32 sceSifSetDma(struct SifDmaTransfer *transfer, s32 priority);
+extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 
 int FUN_L00_00293d38(int arg, unsigned int slot, int off, int size) {
     int req[4];

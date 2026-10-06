@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct CdScmdRpcClient {
+struct sceSifClientData {
     u8 pad_0[0x24];
     s32 unk24;
 };
@@ -9,7 +9,7 @@ extern s32 D_001312D0[];
 extern s32 D_001312D8[];
 extern volatile s32 D_001312EC[];
 extern s32 D_00131308[];
-extern struct CdScmdRpcClient D_00132D08;
+extern struct sceSifClientData D_00132D08;
 extern u8 D_00152F10[];
 extern u8 D_00152F38[];
 extern s32 D_00159750[];

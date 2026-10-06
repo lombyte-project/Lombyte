@@ -1,5 +1,5 @@
 #include "types.h"
-struct DispEnv {
+struct sceGsDispEnv {
     u64 f0;
     u64 f8;
     u64 f10;
@@ -7,7 +7,7 @@ struct DispEnv {
     u64 f20;
 };
 extern s32 GetCoreDataTable();
-void sceGsPutDispEnv(struct DispEnv *env) {
+void sceGsPutDispEnv(struct sceGsDispEnv *env) {
     s32 *core;
 
     core = (s32 *)GetCoreDataTable();

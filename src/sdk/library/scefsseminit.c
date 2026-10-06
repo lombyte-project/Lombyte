@@ -3,7 +3,7 @@
 extern s32 CreateSema();
 extern s32 D_0012FC9C[];
 
-struct SemaArgs {
+struct SemaParam {
     u8 pad0[4];
     s32 unk4;
     s32 unk8;
@@ -12,7 +12,7 @@ struct SemaArgs {
 };
 
 void _sceFsSemInit(void) {
-    struct SemaArgs args;
+    struct SemaParam args;
 
     if (D_0012FC9C[0] == -1) {
         args.unk14 = 0;
