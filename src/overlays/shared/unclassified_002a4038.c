@@ -349,7 +349,98 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002e0450.s", FUN_L02_002e0450);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Hideable flower: appears when its slot is free, faces and sparkles at the hero (class 0x323), hides again
+ * when its slot is used. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002E1888), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f96b0(float);
+extern float FUN_001f9e90(float, float);
+extern unsigned char D_0014C050_a[] __asm__("D_0014C050");
+extern int D_0015ED84; /* no foreign declaration */
+extern int D_L02_0015F5CC; /* no foreign declaration */
+extern int D_L02_0015FFD8; /* no foreign declaration */
+extern int FUN_L00_0025be00();
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L02_00161CB0 __attribute__((sda));
+extern short D_L02_00161CB4 __attribute__((sda));
+extern short D_L02_00161CB8 __attribute__((sda));
+extern short D_L02_00161CBC;
+extern void FUN_L00_002502f0(void *, int, int, int);
+extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+void FUN_L02_002fa6d8(void);
+void FUN_L02_002fa7c8(char *m);
+extern unsigned char D_0014171B_x[] __asm__("D_0015ED84");
+extern void func_L02_002FBB10_c(char *) __asm__("FUN_L02_002fa6d8");
+extern void func_L02_002FBC00_c(char *) __asm__("FUN_L02_002fa7c8");
+extern float func_L00_0025CE58_f(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+
+void FUN_L02_002e0450(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    float w[4];
+    char *o;
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(int *)(d + 0x30) != -1
+            || (*(int *)(d + 0x3C) != -1 && (o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) != 0
+                && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD)) {
+            ((unsigned char *)m)[0x30] = 0xFF;
+            m[0x20] = 2;
+            *(unsigned short *)(m + 0x34) |= 0x41;
+        } else {
+            FUN_L00_002502f0(m, 0xC0, 0xC0, 0xC0);
+            func_L02_002FBB10_c(m);
+            m[0x20] = 1;
+        }
+        break;
+    case 1:
+        if (*(short *)(m + 0xA6) == 0x323) {
+            char *g = D_0013F350;
+            float *rz = (float *)(m + 0x48);
+            float yaw = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10), *(float *)(g + 0x84) - *(float *)(m + 0x14));
+            func_L00_0025CE58_f(rz, yaw, (float *)(d + 0x38), D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f, D_0015ED6C * 12.566371f);
+            if (D_L02_0015F5CC & 1) {
+                if (((unsigned char *)m)[0x31] != 0) {
+                    float s = 1.0f;
+                    int a;
+                    if (D_L02_0015F5CC & 4) s = -1.0f;
+                    normalize_vector_xyz(v, m + 0xD0, s * *(float *)&D_L02_00161CBC);
+                    normalize_vector_xyz(w, v, -2.0f / FUN_001f96b0(*(float *)&D_L02_00161CB0));
+                    add_vector_xyz(v, v, m + 0x10);
+                    a = truncate_float_to_s32(FUN_001f96b0(*(float *)&D_L02_00161CB0)) & 0xFF;
+                    FUN_L00_002730e0(v, w, *(int *)&D_L02_00161CB4, a, random_integer_below(0xFF) & 0xFF, 0,
+                                      *(float *)&D_L02_00161CB8);
+                }
+            }
+        }
+        {
+            char *g2 = D_0013F350;
+            if (*(int *)(g2 + 0x2084) != 0x2C) func_L02_002FBC00_c(m);
+        }
+        break;
+    case 2:
+        if (D_0014C050_a[*(int *)(d + 0x30) + (D_0015ED84 << 4)] != 0
+            || (*(int *)(d + 0x3C) != -1
+                && ((o = (char *)(D_L02_0015FFD8 + (*(int *)(d + 0x3C) << 8))) == 0
+                    || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD))) {
+            *(unsigned short *)(m + 0x34) &= 0xFFBE;
+            *(int *)(d + 0x30) = -1;
+            m[0x20] = 0;
+        }
+        break;
+    }
+}
 /* Re-arms the matching entry of the moby list when the level mode is 2. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002E2110), where it is exact; names translated to the US level program. */
 
