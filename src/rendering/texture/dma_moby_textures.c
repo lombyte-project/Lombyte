@@ -7,7 +7,7 @@ extern struct TagPtr D_0015FF0C;
 extern struct TexState D_0018A2B0;
 extern s32 D_0015EE74;
 extern void FUN_00211408(s32);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 void dma_moby_textures(void) __asm__("FUN_0020cdf0");
 
 void dma_moby_textures(void) {
@@ -21,7 +21,7 @@ void dma_moby_textures(void) {
     D_0015FF0C.p->w3 = 0;
     if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
         FUN_00211408(D_0015EE74);
-        func_00233B68();
+        vu1_tex_flush();
     }
     D_00160F00.p->w0 = 0x20000000;
     D_00160F00.p->addr = (u32)(D_0015FF0C.p + 1);

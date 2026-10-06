@@ -93,7 +93,7 @@ extern void font_print_window_regular(FontWindow *, long, char *, int) __asm__("
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA6C0(int);
-extern int func_001FA6D0(float);
+extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern int func_001FA6E0(int, int, float);
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int find_valid_animation_frame_index(int, int) __asm__("func_001FF960");
@@ -372,20 +372,20 @@ void draw_dialog_text(void) {
             normal_color = func_001FA6E0(D_0015F53C, D_0015F540, blink_fraction);
         }
         if (D_0013F350.race_result_state < 3) {
-            draw_outlined_rect(D_0015F4FC - func_001FA6D0((float)D_0015F504 * dialog_scale),
-                          D_0015F4FC + func_001FA6D0((float)D_0015F504 * dialog_scale),
-                          D_0015F4F8 - func_001FA6D0((float)D_0015F500 * dialog_scale),
-                          D_0015F4F8 + func_001FA6D0((float)D_0015F500 * dialog_scale), background_color);
+            draw_outlined_rect(D_0015F4FC - truncate_float_to_s32((float)D_0015F504 * dialog_scale),
+                          D_0015F4FC + truncate_float_to_s32((float)D_0015F504 * dialog_scale),
+                          D_0015F4F8 - truncate_float_to_s32((float)D_0015F500 * dialog_scale),
+                          D_0015F4F8 + truncate_float_to_s32((float)D_0015F500 * dialog_scale), background_color);
             font_print_center(0x100, D_0015F508, text_color, get_help_message_text(0x4F6E), -1);
             font_print_center(0x100, D_0015F508 + 0x18, text_color, get_help_message_text(0x5249), -1);
             font_print_center(0x100, D_0015F508 + 0x30, text_color, get_help_message_text(0x5248), -1);
         } else {
             char line[0x40];
 
-            draw_outlined_rect(D_0015F510 - func_001FA6D0((float)D_0015F518 * dialog_scale),
-                          D_0015F510 + func_001FA6D0((float)D_0015F518 * dialog_scale),
-                          D_0015F50C - func_001FA6D0((float)D_0015F514 * dialog_scale),
-                          D_0015F50C + func_001FA6D0((float)D_0015F514 * dialog_scale), background_color);
+            draw_outlined_rect(D_0015F510 - truncate_float_to_s32((float)D_0015F518 * dialog_scale),
+                          D_0015F510 + truncate_float_to_s32((float)D_0015F518 * dialog_scale),
+                          D_0015F50C - truncate_float_to_s32((float)D_0015F514 * dialog_scale),
+                          D_0015F50C + truncate_float_to_s32((float)D_0015F514 * dialog_scale), background_color);
             sprintf(line, D_0015F560, get_help_message_text(0x5240));
             if (D_0013F350.place == 1) {
                 sprintf(line, D_0015F568, 1);

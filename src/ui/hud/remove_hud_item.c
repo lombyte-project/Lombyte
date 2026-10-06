@@ -5,7 +5,7 @@ struct M2c_D_00199B60 {
 };
 
 extern struct M2c_D_00199B60 D_00199B60;
-extern s32 func_001FF308(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+extern s32 queue_animation_update(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) __asm__("func_001FF308");
 
 
 s32 remove_hud_item(s32 arg0) __asm__("FUN_001ff480");
@@ -33,6 +33,6 @@ block_4:
 block_5:
         return 0;
     }
-    func_001FF308(var_4_10, 0xFFFF, 0, 0, 0, 0, 0);
+    queue_animation_update(var_4_10, 0xFFFF, 0, 0, 0, 0, 0);
     return 1;
 }

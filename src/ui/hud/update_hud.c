@@ -22,7 +22,7 @@ extern u8 D_00199428[];
 extern u8 D_00199B60[];
 extern struct M2c_D_0019A3E8 D_0019A3E8;
 extern s32 func_001F96F8();
-extern s32 func_00201200();
+extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
 
 void update_hud(void)
@@ -107,7 +107,7 @@ void update_hud(void)
     block_17:
   temp_16_90 = (D_0015F684 << 0x18) + 0xF0F0F0;
 
-  func_00201200(0x100, D_0015F688, temp_16_90, D_001993D8);
+  draw_framed_text(0x100, D_0015F688, temp_16_90, D_001993D8);
   if (D_00199428[0] == 0)
   {
     goto block_20;
@@ -116,7 +116,7 @@ void update_hud(void)
   {
     goto block_21;
   }
-  func_00201200(0x100, D_0015F688, temp_16_90, D_00199428);
+  draw_framed_text(0x100, D_0015F688, temp_16_90, D_00199428);
   block_20:
   block_21:
   if (D_0015F680 == 0)

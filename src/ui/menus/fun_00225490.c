@@ -16,7 +16,7 @@ struct PreviewMoby {
     u8 state_73;
 };
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
-extern struct PreviewMoby *func_0020C4F8(s32);
+extern struct PreviewMoby *create_moby(s32) __asm__("func_0020C4F8");
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
 extern void PackRenderCommandFields(struct PreviewMoby *, s32, s32, s32, s32);
 
@@ -28,7 +28,7 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     u8 unset = 0xFF;
     if (moby_class_slots[oclass] == unset) return 0;
     {
-        moby = func_0020C4F8(oclass);
+        moby = create_moby(oclass);
         if (moby != 0) {
             moby->control = unset;
             moby->culling_radius = unset;

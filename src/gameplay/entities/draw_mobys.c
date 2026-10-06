@@ -4,7 +4,7 @@ extern u8 D_001E8400[];
 extern s32 D_0018A2D8[];
 extern s32 DebugPrint();
 extern s32 init_moby_class_dists() __asm__("FUN_0020d1f0");
-extern void func_0020D278();
+extern void draw_mobys_setup() __asm__("func_0020D278");
 extern s32 draw_mobys_clean_up() __asm__("FUN_0020d3b0");
 extern s32 func_00211808();
 void draw_mobys(void) __asm__("FUN_0020d460");
@@ -13,7 +13,7 @@ void draw_mobys(void) {
     register s32 flag;
     s32 *new_var;
 
-    func_0020D278();
+    draw_mobys_setup();
     flag = D_0018A2D8[0];
     if (flag != 0) {
         init_moby_class_dists();

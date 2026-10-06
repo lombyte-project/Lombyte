@@ -1,10 +1,10 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00223810). */
-extern void func_001F4280(int);
-extern void func_001F4398(void);
-extern void *func_001FDD10(int);
+extern void setup_gif_paging(int) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
+extern void *get_help_message_text(int) __asm__("func_001FDD10");
 extern void PackImageDescriptor(void *, char *);
-extern void func_001F7580(void *, long, void *, int);
-extern void func_00233980(int, long);
+extern void font_print_window_regular(void *, long, void *, int) __asm__("func_001F7580");
+extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
 /* A text box on the menu's own geometry (PackImageDescriptor's box, then
    arg0+0x18..0x24: top y + 4, bottom y + h - 4, x, x + w, centre).
    Per state (arg0+0x50): the list states draw each text id of the -1
@@ -20,9 +20,9 @@ int FUN_00222768(char *arg0) {
     int n;
     int i;
 
-    func_00233980(0x47, 0x30000);
-    func_00233980(0x42, 0x8000000044L);
-    func_001F4280(0);
+    vu1_add_g_sregister(0x47, 0x30000);
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    setup_gif_paging(0);
     PackImageDescriptor(box, arg0);
     box[9] = 9;
     box[3] = *(int *)(arg0 + 0x18) + *(int *)(arg0 + 0x20);
@@ -53,8 +53,8 @@ int FUN_00222768(char *arg0) {
         for (i = 0; (*(int **)(arg0 + 0x34))[i] != -1; i++) {
             box[5] = ypos;
             box[11] = (*(int *)(arg0 + 0x3C) >> 4) & 0xF;
-            func_001F7580(box, 0x80FFA888L,
-                          func_001FDD10((*(int **)(arg0 + 0x34))[i]), -1);
+            font_print_window_regular(box, 0x80FFA888L,
+                          get_help_message_text((*(int **)(arg0 + 0x34))[i]), -1);
             ypos += box[7];
             ypos += 10;
         }
@@ -67,12 +67,12 @@ int FUN_00222768(char *arg0) {
     case 15:
     case 19:
         box[5] = *(int *)(arg0 + 0x1C) + 0x20;
-        func_001F7580(box, 0x80FFA888L, func_001FDD10(*(int *)(arg0 + 0x34)), -1);
+        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(arg0 + 0x34)), -1);
         break;
     case 0:
         break;
     }
-    func_001F4398();
+    do_gif_paging();
     return 2;
 }
 

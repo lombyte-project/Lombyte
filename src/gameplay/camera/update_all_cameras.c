@@ -6,11 +6,11 @@ extern struct Camera *D_001870C0[];
 extern struct Camera D_00187410[];
 extern s32 D_00189B50[];
 extern struct CamMode D_001E8C00[];
-extern void func_001EC3D8(struct Camera *);
-extern s32 func_001EC210(struct Camera *, struct Camera *);
+extern void draw_moby(struct Camera *) __asm__("func_001EC3D8");
+extern s32 camera_activation_check_priority(struct Camera *, struct Camera *) __asm__("func_001EC210");
 extern void func_001EBF10(struct Camera *);
-extern void func_001EBE68(struct Camera *);
-extern void func_001EBCF0(void);
+extern void handle_camera_collision_with_hero(struct Camera *) __asm__("func_001EBE68");
+extern void execute_camera_post_update_callbacks(void) __asm__("func_001EBCF0");
 s32 update_all_cameras(void) __asm__("FUN_001ec420");
 
 s32 update_all_cameras(void) {
@@ -23,9 +23,9 @@ s32 update_all_cameras(void) {
 
     best = D_001870C0[0];
     changed = 0;
-    func_001EC3D8(best);
+    draw_moby(best);
     for (i = 0; i < 48; i++) {
-        if (D_00189B50[i] != 0 && &D_00187410[i] != best && func_001EC210(&D_00187410[i], best) != 0) {
+        if (D_00189B50[i] != 0 && &D_00187410[i] != best && camera_activation_check_priority(&D_00187410[i], best) != 0) {
             best = &D_00187410[i];
             changed = 1;
         }
@@ -34,7 +34,7 @@ s32 update_all_cameras(void) {
         func_001EBF10(best);
     }
     update = D_001E8C00[best->mode].update;
-    func_001EBE68(best);
+    handle_camera_collision_with_hero(best);
     if (update != 0) {
         update(best);
     }
@@ -43,7 +43,7 @@ s32 update_all_cameras(void) {
     dst->x = src->x;
     dst->y = src->y;
     dst->z = src->z;
-    func_001EBCF0();
+    execute_camera_post_update_callbacks();
     return -1;
 }
 

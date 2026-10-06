@@ -150,24 +150,24 @@ extern void FlushCache(s32);
 extern void QueueDmaTransfer(s32);
 extern void func_00120558(s32, s32);
 extern s32 func_001E9B10(u8 *);
-extern void func_001F2C60(void);
-extern void func_001F2D98(void);
+extern void init_view_context(void) __asm__("func_001F2C60");
+extern void update_view_context(void) __asm__("func_001F2D98");
 extern s32 func_001F97A0(s32);
-extern void func_002015D8(void);
-extern void func_002026C8(u8 *, u8 *, u8 *, s32);
-extern void func_00202800(u8 *, s32);
-extern void func_002028E0(u8 *);
-extern void func_00203120(u8 *, s32, u8 *);
-extern void func_00203640(u8 *, u8 *, u8 *, s32);
+extern void init_mem_slots(void) __asm__("func_002015D8");
+extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("func_002026C8");
+extern void unpack_point_records(u8 *, s32) __asm__("func_00202800");
+extern void relocate_sky_definition(u8 *) __asm__("func_002028E0");
+extern void upload_texture_images(u8 *, s32, u8 *) __asm__("func_00203120");
+extern void register_moby_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203640");
 extern void func_00203730(u8 *, u8 *, u8 *, s32);
 extern void func_00203B08(u8 *, u8 *, u8 *, u8 *, s32);
 extern void func_002040E0(u8 *, u8 *);
-extern void func_002049F0(s32);
+extern void parse_space_scene_chunk(s32) __asm__("func_002049F0");
 extern s32 func_0020B618(u8 *, u8 *);
-extern void func_00216788(u8 *, s32, s32);
-extern void func_00216828(s32, s32, s32);
-extern void func_002168A8(s32);
-extern void func_002335D0(void);
+extern void start_audio_stream_read(u8 *, s32, s32) __asm__("func_00216788");
+extern void load(s32, s32, s32) __asm__("func_00216828");
+extern void update_audio_stream_until_idle(s32) __asm__("func_002168A8");
+extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 
@@ -201,7 +201,7 @@ void transition_load_wad(void) {
     D_0015EF58 = 0;
     i = 0;
     CalculateDmaTransferAddress();
-    func_002015D8();
+    init_mem_slots();
     D_00160F0C = 0x100000;
     D_0015EE8C = 0x2C0000;
     D_0015EE78 = 0x2C0000;
@@ -210,16 +210,16 @@ void transition_load_wad(void) {
     FillTransferWords(D_001B3AC0, -1, k_800);
     FillTransferWords(D_001B6880, -1, 0xE00);
     FillTransferWords(D_001B6180, 0, 0xE0);
-    func_001F2C60();
-    func_001F2D98();
-    func_002335D0();
-    func_00216788(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
-    func_002168A8(1);
+    init_view_context();
+    update_view_context();
+    vu1_init_chain();
+    start_audio_stream_read(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
+    update_audio_stream_until_idle(1);
     FlushCache(0);
     size = func_0020B618(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
     FlushCache(0);
     hdr = (WadHeader *)D_001940C0.hdr;
-    func_00203120((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
+    upload_texture_images((u8 *)hdr + hdr->x0, hdr->x8, (u8 *)hdr + hdr->xC);
     /* Retail forms the two texture addresses from header offsets 0x70 and 0x74. */
     t = 0x1D308000 | (s64)((D_0015EE8C + hdr->x70) >> 8);
     u = ((s64)((D_0015EE8C + hdr->x74) >> 8) << 37) | ((s64)0xB800 << 19);
@@ -270,13 +270,13 @@ void transition_load_wad(void) {
     }
 
     func_002040E0(data + hdr->x10, (u8 *)hdr + hdr->x34);
-    func_002028E0(data + hdr->x14);
+    relocate_sky_definition(data + hdr->x14);
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x1C);
     D_0015FF00 = 0;
     D_00160F4C = 0;
     D_001603CC = 0;
     for (i = 0; i < hdr->n18; i++) {
-        func_00203640(c20->offset != 0 ? data + c20->offset : 0, (u8 *)hdr + hdr->x3C, c20->x10, c20->x4);
+        register_moby_class(c20->offset != 0 ? data + c20->offset : 0, (u8 *)hdr + hdr->x3C, c20->x10, c20->x4);
         c20++;
     }
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x24);
@@ -290,11 +290,11 @@ void transition_load_wad(void) {
         c30++;
     }
     D_0015F460 = (s32)(data + hdr->x68);
-    func_00202800((u8 *)hdr + hdr->x5C, hdr->x58);
+    unpack_point_records((u8 *)hdr + hdr->x5C, hdr->x58);
     lookupSource = data + hdr->x64;
     lookupRange = (u8 *)hdr + hdr->x54;
     lookupHeader = (u8 *)hdr + hdr->x6C;
-    func_002026C8(lookupHeader, lookupSource, lookupRange, hdr->x50);
+    parse_particle_textures(lookupHeader, lookupSource, lookupRange, hdr->x50);
     sceGsSetDefLoadImage(li, (D_0015EE74 << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
     FlushCache(0);
     sceGsExecLoadImage(li, data + hdr->x84);
@@ -323,9 +323,9 @@ void transition_load_wad(void) {
             out++;
         } while (j < 0x46 && snd->size != 0);
     }
-    func_002049F0(0);
+    parse_space_scene_chunk(0);
     D_0015EF60 = D_001940C0.x1C;
-    func_00216828(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
+    load(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
     D_0015EF64 = D_0015EF60;
     D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
     for (k = 0; k < 8; k++) {

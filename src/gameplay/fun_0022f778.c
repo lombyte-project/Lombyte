@@ -215,7 +215,7 @@ extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern f32 func_001F96E8(f32);
 extern s32 scale_ticks(s32) __asm__("func_001F96F8");
 extern f32 AbsoluteFloat(f32) __asm__("func_001F99C0");
-extern void func_001F99F8(void *);
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void func_001F9A40(void *, void *, void *, f32);
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
@@ -228,10 +228,10 @@ extern f32 func_001F9E90(f32, f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void func_00201A28(void);
+extern void update_all_point_lights(void) __asm__("func_00201A28");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern ResidentRenderObject *func_0020C4F8(s32);
-extern void func_0020C828(ResidentRenderObject *);
+extern ResidentRenderObject *create_moby(s32) __asm__("func_0020C4F8");
+extern void mark_moby_for_removal(ResidentRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void func_0020CFD0(void);
 extern void refresh_resident_object_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
@@ -243,8 +243,8 @@ extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern void func_00217B88(void);
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
-extern void func_0022CA50(void);
-extern void func_0022DC50(void);
+extern void sound_update(void) __asm__("func_0022CA50");
+extern void enqueue_voice_request(void) __asm__("func_0022DC50");
 extern void update_level_gameplay_frame(void) __asm__("func_0022EAA8");
 extern void func_0022F5B0(ResidentRenderObject *, f32);
 extern void draw_light_flare() __asm__("func_0022DF40");
@@ -284,7 +284,7 @@ void update_resident_gameplay_state(void) {
     case 8:
         func_001E9430();
         update_visible_resident_objects();
-        func_0022DC50();
+        enqueue_voice_request();
         func_001E9420();
         func_00217B88();
         sequence_fade -= 0.125f;
@@ -334,10 +334,10 @@ void update_resident_gameplay_state(void) {
                 if (expired_object != 0) {
                     expired_object->model->count--;
                     expired_object->model->frames[expired_object->model->count] = 0;
-                    func_0020C828(expired_object);
+                    mark_moby_for_removal(expired_object);
                 }
                 if (level_render_state.attachment != 0) {
-                    func_0020C828(level_render_state.attachment);
+                    mark_moby_for_removal(level_render_state.attachment);
                 }
             }
             level_render_state.player->flags &= ~1;
@@ -453,7 +453,7 @@ void update_resident_gameplay_state(void) {
                 func_001E9410(object);
                 if ((current_level_index == 10 && D_0013D4C0[6] != 0) || current_level_index == 13) {
                     if (level_render_state.attachment == 0) {
-                        level_render_state.attachment = func_0020C4F8(0x509);
+                        level_render_state.attachment = create_moby(0x509);
                         level_render_state.attachment->selected_index = 0x40;
                         level_render_state.attachment->flags |= 0x806;
                         level_render_state.attachment->lifetime_stamp = object->lifetime_stamp;
@@ -541,8 +541,8 @@ void update_resident_gameplay_state(void) {
                 }
             }
         }
-        func_0022CA50();
-        func_00201A28();
+        sound_update();
+        update_all_point_lights();
         func_0020CFD0();
         func_001E9428();
         break;
@@ -550,7 +550,7 @@ void update_resident_gameplay_state(void) {
     case 3:
         func_001E9430();
         update_visible_resident_objects();
-        func_0022DC50();
+        enqueue_voice_request();
         func_001E9420();
         func_00217B88();
         if (level_render_state.timer == 0) {
@@ -559,7 +559,7 @@ void update_resident_gameplay_state(void) {
             D_001516D0.unk1C = level_render_state.content_variant + 0x9C4F;
             fade_to_black(scale_ticks(12));
             while ((s16)D_001516D0.unk5A != 3) {
-                func_0022CA50();
+                sound_update();
                 sceGsSyncV(0);
             }
             continue_audio_stream_if_ready();
@@ -570,13 +570,13 @@ void update_resident_gameplay_state(void) {
             level_render_state.player->opacity = 0xFF;
             level_render_state.player->unk94 = 0;
             if (level_render_state.path >= 0) {
-                level_render_state.companion_a = func_0020C4F8(0);
+                level_render_state.companion_a = create_moby(0);
                 level_render_state.companion_a->selected_index = 0x1FF;
                 level_render_state.companion_a->opacity = 0xFF;
                 level_render_state.companion_a->unk94 = 0;
                 level_render_state.companion_a->flags |= 6;
                 level_render_state.companion_a->lifetime_stamp = D_0013F350.reference_object->lifetime_stamp;
-                level_render_state.companion_b = func_0020C4F8(10);
+                level_render_state.companion_b = create_moby(10);
                 level_render_state.companion_b->selected_index = 0x1FF;
                 level_render_state.companion_b->opacity = 0xFF;
                 level_render_state.companion_b->unk94 = 0;
@@ -620,7 +620,7 @@ void update_resident_gameplay_state(void) {
             camera_blend_step = D_0015ED70 * 0.666f;
             advance_accelerated_scalar(&level_render_state.blend, &level_render_state.interpolation_velocity, 1.0f, camera_blend_step, camera_blend_step, D_0015ED6C * 0.5f);
             func_001F9A40(&scratch_vectors[0], &D_00160034[level_render_state.source_camera_index].position, &D_00160034[level_render_state.destination_camera_index].position, level_render_state.blend);
-            func_001F99F8(&scratch_vectors[1]);
+            clear_u64_value(&scratch_vectors[1]);
             scratch_vectors[1].components[1] = fast_subtract_rotations(D_00160034[level_render_state.destination_camera_index].rotY, D_00160034[level_render_state.source_camera_index].rotY) * level_render_state.blend;
             scratch_vectors[1].components[1] = fast_add_rotations(D_00160034[level_render_state.source_camera_index].rotY, scratch_vectors[1].components[1]);
             scratch_vectors[1].components[2] = fast_subtract_rotations(D_00160034[level_render_state.destination_camera_index].rotZ, D_00160034[level_render_state.source_camera_index].rotZ) * level_render_state.blend;
@@ -710,8 +710,8 @@ void update_resident_gameplay_state(void) {
             refresh_resident_object_spatial_bounds(level_render_state.companion_b);
         }
         update_camera();
-        func_0022CA50();
-        func_00201A28();
+        sound_update();
+        update_all_point_lights();
         func_0020CFD0();
         func_001E9428();
         break;

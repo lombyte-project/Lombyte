@@ -8,7 +8,7 @@ extern volatile struct M2c_D_00137B00 D_00137B00;
 extern s32 D_0015EC8C;
 extern s32 D_0015EC98;
 extern void FlushCache(s32);
-extern void func_0012DC80(void);
+extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32 sceCdSync(s32);
 
 s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
@@ -28,7 +28,7 @@ s32 snd_stream_safe_cd_sync(s32 mode) {
         }
         if (ready == 0) {
             do {
-                func_0012DC80();
+                snd_flush_sound_commands();
                 FlushCache(0);
                 next_ready = D_00137B00.unk0 == 0;
                 D_0015EC98 = next_ready;

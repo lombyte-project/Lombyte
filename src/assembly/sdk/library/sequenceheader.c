@@ -68,7 +68,7 @@ void _sequenceHeader(struct M2c_arg0 *arg0) {
 extern s32 InitializeReferenceImage();
 extern s32 _initRefImages();
 extern s32 func_0012BC10();
-extern s32 func_0012BC20();
+extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *sp30;
@@ -137,9 +137,9 @@ block_6:
         sp3C = ((u8 *)temp_30_15 + (0x458));
         sp40 = ((u8 *)temp_30_15 + (0x4C0));
         func_0012BC10(temp_17_63);
-        temp_30_15->unkFC = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk100 = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
-        temp_30_15->unk104 = func_0012BC20(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        temp_30_15->unkFC = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        temp_30_15->unk100 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
+        temp_30_15->unk104 = reserve_aligned_buffer_space(temp_30_15, temp_17_63, temp_16_77, 0x40);
         _initRefImages(temp_19_67, temp_20_71, temp_21_73, sp30, sp34, sp38, sp3C, sp40, var_2_53, temp_30_15->unkFC, temp_30_15->unk100, temp_30_15->unk104, temp_23_51, temp_22_48);
         InitializeReferenceImage(temp_19_67, temp_23_51, temp_22_48);
         InitializeReferenceImage(temp_20_71, temp_23_51, temp_22_48);

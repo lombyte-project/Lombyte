@@ -9,7 +9,7 @@ extern s32 D_0015F604;
 extern struct Anim D_00199B60[];
 struct AnimTable { s32 serial; u8 pad4[0x18]; void *defs; };
 extern struct AnimTable D_0019A3E8;
-extern void func_001FF418(struct Anim *);
+extern void apply_pending_animation(struct Anim *) __asm__("func_001FF418");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) {
@@ -34,7 +34,7 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b)
         anim->unk7C = 0;
         anim->unk70 = 0;
         if (mode & anim->flags & 0x20) {
-            func_001FF418(anim);
+            apply_pending_animation(anim);
         }
     }
     return anim->serial;

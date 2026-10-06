@@ -9,7 +9,7 @@
 extern struct M2c_D_0013D290 D_0013D290;
 extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
-extern void func_001FBAB8();
+extern void mode_freeze_init() __asm__("func_001FBAB8");
 
 void save_card_state_saving(void) __asm__("FUN_00208f28");
 
@@ -18,7 +18,7 @@ void save_card_state_saving(void) {
 
     if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) {
         if (D_0013D290.unkE4 != 0) {
-            func_001FBAB8(3, 0);
+            mode_freeze_init(3, 0);
             D_0015EEB0 = 0x15;
             flags = D_0015EEB4 | 0x40;
             D_0015EEB4 = flags;

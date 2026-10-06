@@ -7,13 +7,13 @@ struct M2c_D_001516D0 {
 };
 
 extern struct M2c_D_001516D0 D_001516D0 __attribute__((section(".data")));
-extern s32 func_0012ECA0();
+extern s32 snd_continue_vag_stream() __asm__("func_0012ECA0");
 s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 s32 continue_audio_stream_if_ready(void) {
     if (D_001516D0.unk50 != 0) {
         if (D_001516D0.unk5A == 3) {
-            func_0012ECA0(D_001516D0.unk50);
+            snd_continue_vag_stream(D_001516D0.unk50);
             D_001516D0.unk5A = 4;
             return 1;
         }

@@ -23,10 +23,10 @@ extern void help_draw_prompt(void) __asm__("FUN_001fe898");
 #define D_0015EF1C_b (*(unsigned char *)&D_0015EE1C)
 extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5,
                           int a6, int a7, int a8);
-extern void func_001F75F0(void *a, long b, void *c, int d);
-extern void func_001F5F18(int, int, int, int, int);
-extern void func_001F5450(int, int, int, int, int, int, int, int, long, long);
-extern long func_001F44B8(int);
+extern void font_print_window_small(void *a, long b, void *c, int d) __asm__("func_001F75F0");
+extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
+extern void draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("func_001F5450");
+extern long get_effect_texture(int) __asm__("func_001F44B8");
 /* Help_Draw: nothing unless a state is active, the help window is shown
    (+0x30) and one of the fade flags is set. Then, by state, and only while
    D_0015EE1D is set: the growing frame (1), the prompt (2), the frame
@@ -53,7 +53,7 @@ void draw_help(void) {
 
             ((HelpState *)D_001996D0)->pad[4] = s;
             ((HelpState *)D_001996D0)->pad[5] = s;
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - s,
+            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - s,
                           ((HelpState *)D_001996D0)->pad[3] + s,
                           ((HelpState *)D_001996D0)->pad[2] - s,
                           ((HelpState *)D_001996D0)->pad[2] + s, 0x60);
@@ -72,7 +72,7 @@ void draw_help(void) {
 
             ((HelpState *)D_001996D0)->pad[4] = a;
             ((HelpState *)D_001996D0)->pad[5] = b;
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - b,
+            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - b,
                           ((HelpState *)D_001996D0)->pad[3] + b,
                           ((HelpState *)D_001996D0)->pad[2] - a,
                           ((HelpState *)D_001996D0)->pad[2] + a, 0x60);
@@ -80,9 +80,9 @@ void draw_help(void) {
             if (alpha < 0) {
                 alpha = 0;
             }
-            func_001F5450(((HelpState *)D_001996D0)->pad[2] - 0x20,
+            draw_textured_quad(((HelpState *)D_001996D0)->pad[2] - 0x20,
                           ((HelpState *)D_001996D0)->pad[3] - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
-                          (alpha << 24) | 0x808080, func_001F44B8(4));
+                          (alpha << 24) | 0x808080, get_effect_texture(4));
         }
         break;
     case 4:
@@ -95,7 +95,7 @@ void draw_help(void) {
 
             ((HelpState *)D_001996D0)->pad[4] = ((HelpState *)D_001996D0)->pad[0];
             ((HelpState *)D_001996D0)->pad[5] = ((HelpState *)D_001996D0)->pad[1];
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - ((HelpState *)D_001996D0)->pad[1],
+            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - ((HelpState *)D_001996D0)->pad[1],
                           ((HelpState *)D_001996D0)->pad[3] + ((HelpState *)D_001996D0)->pad[1],
                           ((HelpState *)D_001996D0)->pad[2] - ((HelpState *)D_001996D0)->pad[0],
                           ((HelpState *)D_001996D0)->pad[2] + ((HelpState *)D_001996D0)->pad[0], 0x60);
@@ -107,7 +107,7 @@ void draw_help(void) {
             text = D_0015F6A0[((HelpState *)D_001996D0)->pad[6]].text;
             InitializeDmaPacket((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
                           ((HelpState *)D_001996D0)->pad[3], 0x10, 3);
-            func_001F75F0((void *)win, col, text, -1);
+            font_print_window_small((void *)win, col, text, -1);
         }
         break;
     case 7:
@@ -117,7 +117,7 @@ void draw_help(void) {
             int a = ((HelpState *)D_001996D0)->pad[5]
                   - (((HelpState *)D_001996D0)->pad[5] - 8) * ((HelpState *)D_001996D0)->x04 / 8;
 
-            func_001F5F18(((HelpState *)D_001996D0)->pad[3] - a,
+            draw_ui_frame(((HelpState *)D_001996D0)->pad[3] - a,
                           ((HelpState *)D_001996D0)->pad[3] + a,
                           ((HelpState *)D_001996D0)->pad[2] - b,
                           ((HelpState *)D_001996D0)->pad[2] + b,

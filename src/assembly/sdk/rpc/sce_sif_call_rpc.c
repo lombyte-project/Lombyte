@@ -42,7 +42,7 @@ extern u8 D_00156800[];
 extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
-extern s32 func_0011ACE8();
+extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
 extern s32 sceSifWriteBackDCache();
@@ -54,7 +54,7 @@ s32 sceSifCallRpc(struct SifRpcClient *arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
   s32 skip_cache_writeback;
   s32 request_id;
   s32 allocation_failure_result;
-  packet = (struct SifRpcPacket *) func_0011ACE8(D_00156800);
+  packet = (struct SifRpcPacket *) get_available_rpc_packet(D_00156800);
   allocation_failure_result = -1;
   if (packet == 0)
   {

@@ -11,7 +11,7 @@ extern u8 *D_0015FF28;
 extern char D_001E83C0[];
 extern void DebugPrint(char *, ...);
 extern void FillTransferWords(void *, s32, s32);
-extern void func_0020C5F0(struct Moby *, s32);
+extern void init_moby_instance(struct Moby *, s32) __asm__("func_0020C5F0");
 struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 
 struct Moby *create_moby(s32 oclass) {
@@ -22,7 +22,7 @@ struct Moby *create_moby(s32 oclass) {
             if (m->state == 0xFF) {
                 m[1].state = 0xFF;
             }
-            func_0020C5F0(m, oclass);
+            init_moby_instance(m, oclass);
             m->pvars = D_0015FF28 + (m - D_0015FF1C) * 0x80;
             FillTransferWords(m->pvars, 0, 0x80);
             if (D_0015FEFC != 0) {

@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00213F28). */
 #include "qcopy.h"
-extern int func_0020CC18(int v);
+extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -24,7 +24,7 @@ typedef struct {
     char _pad6C[4];
     unsigned char unk70;     /* 0x70 */
 } MobyAnim;
-extern void func_0020C880(void *);
+extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern float func_001FA6C0(int arg0);
 extern void FUN_0020ede8(void *, int);
 extern char D_001B2C00[];
@@ -50,7 +50,7 @@ void blend_moby_animation_ex(MobyAnim *arg0, int arg1, int arg2, int arg3, int a
     if (*(float *)((char *)arg0 + 0x54) > 0.025f ||
         *(int *)((char *)arg0 + 0x60) != 0 ||
         *(int *)((char *)arg0 + 0x64) != 0 || (arg4 & 4)) {
-        slot = func_0020CC18((int)arg0);
+        slot = find_or_allocate_id_slot((int)arg0);
         if (slot >= 0) {
             flags = (arg4 & 1) ? (slot | 0x100) : slot;
             FUN_0020ede8(arg0, (arg4 & 2) ? (flags | 0x200) : flags);
@@ -65,7 +65,7 @@ void blend_moby_animation_ex(MobyAnim *arg0, int arg1, int arg2, int arg3, int a
     }
     arg0->nextFrame = arg2;
     arg0->prevSeq = arg1;
-    func_0020C880(arg0);
+    update_moby_animation_state(arg0);
     *(float *)((char *)arg0 + 0x58) = 1.0f;
     scale = 1.0f / func_001FA6C0(arg3);
     *(float *)((char *)arg0 + 0x54) = 0.0f;

@@ -14,14 +14,14 @@ struct M2c_arg0
   s32 unk20;
   s32 unk24;
 };
-extern void func_001F4280(s32);
-extern void func_001F4398();
-extern s32 func_001F6250();
-extern void func_001F6530(s32, s32, u64, s32, s32);
-extern void func_001F6AF0(s32, s32, u64, s32, s32);
-extern void func_001F7580(s32, u64, s32, s32);
-extern s32 func_001FDD10();
-extern void func_00233980();
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
+extern s32 measure_text_width_regular() __asm__("func_001F6250");
+extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
+extern void font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");
+extern void font_print_window_regular(s32, u64, s32, s32) __asm__("func_001F7580");
+extern s32 get_help_message_text() __asm__("func_001FDD10");
+extern void vu1_add_g_sregister() __asm__("func_00233980");
 extern void func_001153FC();
 s32 draw_quit_game_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021e890");
 
@@ -49,16 +49,16 @@ s32 draw_quit_game_menu(struct M2c_arg0 *arg0)
   packet[8] = 16;
   packet[9] = 1;
   packet[7] = temp_17_18;
-  func_001F4280(0);
+  setup_gif_paging(0);
   new_var = 0x2004B;
-  func_00233980(0x47, new_var);
-  func_001F7580(packet, 0x80FFA888, func_001FDD10(0x4F6D), -1);
-  func_001F6AF0(temp_18_25, temp_17_18 - 0x40, 0x80FFA888, func_001FDD10(0x4F3F), -1);
-  temp_16_69 = func_001F6250(func_001FDD10(0x524B), -1);
-  temp_2_73 = func_001F6250(func_001FDD10(0x524F), -1);
+  vu1_add_g_sregister(0x47, new_var);
+  font_print_window_regular(packet, 0x80FFA888, get_help_message_text(0x4F6D), -1);
+  font_print_center(temp_18_25, temp_17_18 - 0x40, 0x80FFA888, get_help_message_text(0x4F3F), -1);
+  temp_16_69 = measure_text_width_regular(get_help_message_text(0x524B), -1);
+  temp_2_73 = measure_text_width_regular(get_help_message_text(0x524F), -1);
   temp_17_81 = ((s32) (arg0->unk20 - ((temp_2_73 >= temp_16_69) ? (temp_2_73) : (temp_16_69)))) >> 1;
-  func_001F6530(temp_17_81, temp_17_18 - 0x28, 0x80FFA888, func_001FDD10(0x524B), -1);
-  func_001F6530(temp_17_81, temp_17_18 - 0x14, 0x80FFA888, func_001FDD10(0x524F), -1);
-  func_001F4398();
+  font_print_large(temp_17_81, temp_17_18 - 0x28, 0x80FFA888, get_help_message_text(0x524B), -1);
+  font_print_large(temp_17_81, temp_17_18 - 0x14, 0x80FFA888, get_help_message_text(0x524F), -1);
+  do_gif_paging();
   return 2;
 }

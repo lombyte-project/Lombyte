@@ -4,7 +4,7 @@ extern u8 D_001324C0[];
 extern u8 D_00132900[];
 extern u8 D_00132D08[];
 extern s32 SignalSema();
-extern s32 func_00120D40();
+extern s32 cd_check_scmd() __asm__("func_00120D40");
 extern s32 sceSifCallRpc();
 extern void sceSifWriteBackDCache();
 s32 sceCdMmode(s32 arg0) {
@@ -14,7 +14,7 @@ s32 sceCdMmode(s32 arg0) {
 
     state = D_00132900;
     mode = arg0;
-    if (func_00120D40(0x22) == 0) {
+    if (cd_check_scmd(0x22) == 0) {
         return 0;
     }
     *(s32 *)D_00132900 = mode;

@@ -25,7 +25,7 @@ struct FullScreenAntiAliasingDimensions
 };
 extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern struct FullScreenAntiAliasingDimensions fs_aa_buffer __asm__("D_00151780");
-extern void func_00233980(s32, s32);
+extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 void append_fullscreen_setup_strips(void) __asm__("FUN_002271d0");
 
 void append_fullscreen_setup_strips(void)
@@ -47,7 +47,7 @@ void append_fullscreen_setup_strips(void)
   display_height = fs_aa_buffer.display_height;
   /* Retail divides the signed display width, truncating toward zero. */
   strip_count = display_width / 32;
-  func_00233980(0x42, 0x64);
+  vu1_add_g_sregister(0x42, 0x64);
   render_packet_cursor.p->w0 = (strip_count + 5) | 0x10000000;
   render_packet_cursor.p->addr = 0;
   render_packet_cursor.p->w2 = 0;

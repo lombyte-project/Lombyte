@@ -23,36 +23,36 @@ extern u8 D_001E8988[];
 extern void DebugPrint();
 extern void FlushCache(s32);
 extern void PackDmaTag(u64, u64, u64);
-extern void func_0012DC80(void);
-extern void func_0012E1A8(void);
+extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
 extern void snd_unload_bank(s32) __asm__("FUN_0012e1d8");
-extern void func_0012EB00(void);
-extern s32 func_0012EE08(s32);
+extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
+extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
 extern s32 snd_stream_safe_cd_callback(s32) __asm__("FUN_0012ef28");
-extern void func_0012EF68(s32, s32, s32, s32, s32);
-extern s32 func_0012F368(s32);
-extern void func_001F4A58(s32);
+extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("func_0012EF68");
+extern s32 read_file_entry_with_retry(s32) __asm__("func_0012F368");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 FUN_001f96f8(s32);
-extern void func_001FB2D0(void);
-extern void func_001FB3D0(void);
-extern void func_001FB6E0(void);
-extern void func_002043B0(void);
+extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
+extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void append_palette_transfer_packet(void) __asm__("func_001FB6E0");
+extern void load_level_chunk_from_disc(void) __asm__("func_002043B0");
 extern s32 func_00204428(void);
-extern void func_00208840(void);
-extern void func_002093D8(void);
-extern void func_00215EE8(void);
-extern void func_00217A10(void);
+extern void run_state_handler(void) __asm__("func_00208840");
+extern void memcard_update_state(void) __asm__("func_002093D8");
+extern void music_stop(void) __asm__("func_00215EE8");
+extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void FUN_00226e08(void) __asm__("FUN_00226e08");
-extern void func_0022DCD0(void);
+extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
 extern void func_0022F778(void);
-extern void func_00230EE8(void);
+extern void dispatch_game_state_update(void) __asm__("func_00230EE8");
 extern void func_00230F60(void);
 extern void func_00231608(s32);
 extern void FUN_00231bd8(s32, s32, s32, s32, s32);
-extern void func_00233630(void);
-extern void func_002336A0(void);
-extern void func_002337B0(s32);
-extern void func_00233D90(void);
+extern void swap_render_buffer_chain(void) __asm__("func_00233630");
+extern void vu1_send_chain(void) __asm__("func_002336A0");
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
+extern void dmac_vif1_disable(void) __asm__("func_00233D90");
 extern s32 sceCdSync(s32);
 extern s32 sceGsSyncV(s32);
 
@@ -78,20 +78,20 @@ void do_space_transition(void)
         D_0013E030.unk26 = 2;
     }
     FlushCache(0);
-    func_0012EF68(2, 0, 0, 0, 0);
-    func_0012EB00();
-    func_0012DC80();
-    func_0022DCD0();
-    func_00215EE8();
+    snd_set_reverb_ex(2, 0, 0, 0, 0);
+    snd_reset_state_and_flush_commands();
+    snd_flush_sound_commands();
+    sound_stop_all_sounds();
+    music_stop();
     D_001516D0.updates_suspended = 1;
     if (D_0015F634 != 0) {
         snd_unload_bank(D_0015F634->unk1C);
-        func_0012E1A8();
+        snd_resolve_bank_xrefs();
         DebugPrint(D_001E8988, D_0015F634->unk1C);
     }
     D_0015ED5C = 0;
     snd_stream_safe_cd_callback(0);
-    func_0012EE08(0);
+    snd_stream_safe_cd_sync(0);
     D_0018CD00.unk238 = 16;
     D_0018CD00.unk21C = 524288.0f;
     D_0018CD00.unk228 = 255.0f;
@@ -102,19 +102,19 @@ void do_space_transition(void)
     PackDmaTag(0, 0, 0);
     if (D_0015F600 < 0) {
         while (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0) {
-            func_002093D8();
-            func_00208840();
+            memcard_update_state();
+            run_state_handler();
         }
-        func_001F4A58(FUN_001f96f8(6));
+        fade_to_black(FUN_001f96f8(6));
         D_0015ED84 = D_0015F600;
-        func_002043B0();
+        load_level_chunk_from_disc();
         sceCdSync(0);
         D_001516D0.updates_suspended = 0;
-        func_00233D90();
+        dmac_vif1_disable();
         return;
     }
     if (D_0015F600 == 0 && D_0013DD58[0] == 0) {
-        func_001F4A58(FUN_001f96f8(6));
+        fade_to_black(FUN_001f96f8(6));
         FUN_00231bd8(lvl, 0, 1, FUN_001f96f8(240), 0);
         func_00231608(0);
         FUN_00231bd8(lvl, 2, 2, FUN_001f96f8(180), 0);
@@ -123,7 +123,7 @@ void do_space_transition(void)
         FUN_00231bd8(lvl, 3, 4, FUN_001f96f8(240), 1);
         func_00231608(2);
     } else if (D_0015ED84 == 0 && D_0015F600 == 1 && D_0013DD58[1] == 0) {
-        func_001F4A58(FUN_001f96f8(6));
+        fade_to_black(FUN_001f96f8(6));
         FUN_00231bd8(lvl, 5, 6, FUN_001f96f8(240), 0);
         func_00231608(3);
         func_00231608(4);
@@ -134,27 +134,27 @@ void do_space_transition(void)
         FUN_00231bd8(lvl, 8, 8, FUN_001f96f8(240), 1);
     } else {
         if (D_0015F600 == 4 && D_0013DD58[4] == 0) {
-            func_001F4A58(FUN_001f96f8(12));
+            fade_to_black(FUN_001f96f8(12));
             FUN_00231bd8(lvl, 9, 10, FUN_001f96f8(240), 0);
             func_00231608(6);
         }
         if (D_0015ED84 == 7 && D_0013DD58[7] != 2 && D_0013DD40.unk8 != 0) {
-            func_001F4A58(FUN_001f96f8(12));
+            fade_to_black(FUN_001f96f8(12));
             FUN_00231bd8(lvl, 11, 11, FUN_001f96f8(240), 0);
             func_00231608(7);
         }
         if (D_0015F600 == 13 && D_0013DD58[13] == 0) {
-            func_001F4A58(FUN_001f96f8(12));
+            fade_to_black(FUN_001f96f8(12));
             FUN_00231bd8(lvl, 12, 13, FUN_001f96f8(240), 0);
             func_00231608(8);
         }
         if (D_0015ED84 == 14 && D_0013DD58[14] != 2 && D_0013DD40.unkF != 0) {
-            func_001F4A58(FUN_001f96f8(12));
+            fade_to_black(FUN_001f96f8(12));
             FUN_00231bd8(lvl, 14, 14, FUN_001f96f8(240), 0);
             func_00231608(9);
         }
         if (D_0015F600 == 16 && D_0013DD58[16] == 0) {
-            func_001F4A58(FUN_001f96f8(12));
+            fade_to_black(FUN_001f96f8(12));
             FUN_00231bd8(lvl, 15, 16, FUN_001f96f8(240), 0);
             func_00231608(10);
         }
@@ -175,19 +175,19 @@ void do_space_transition(void)
         D_0015ED84 = D_0015F600;
         D_0015EE48 = 0;
         func_00230F60();
-        func_0012F368(D_0015ED84);
+        read_file_entry_with_retry(D_0015ED84);
         while (D_0015F618 == 0) {
-            func_002336A0();
-            func_00233630();
-            func_001FB3D0();
-            func_001FB6E0();
-            func_001FB2D0();
-            func_00217A10();
+            vu1_send_chain();
+            swap_render_buffer_chain();
+            append_draw_buffer_packet();
+            append_palette_transfer_packet();
+            append_draw_environment_packet();
+            update_primary_pad_state();
             func_0022F778();
-            func_00230EE8();
-            func_002093D8();
-            func_00208840();
-            func_002337B0(1);
+            dispatch_game_state_update();
+            memcard_update_state();
+            run_state_handler();
+            vu1_sync_chain(1);
             sceGsSyncV(0);
             D_0015F438++;
             FUN_00226e08();
@@ -199,22 +199,22 @@ void do_space_transition(void)
             do {
                 FlushCache(0);
                 sceGsSyncV(0);
-                func_002093D8();
-                func_00208840();
+                memcard_update_state();
+                run_state_handler();
                 FUN_00226e08();
             } while (func_00204428() == 0);
         }
         while (D_0013D290.unkD4 != 2 || D_0013D290.unkDC >= 0) {
             FlushCache(0);
             sceGsSyncV(0);
-            func_002093D8();
-            func_00208840();
+            memcard_update_state();
+            run_state_handler();
             FUN_00226e08();
         }
     }
     sceCdSync(0);
     D_001516D0.updates_suspended = 0;
-    func_00233D90();
+    dmac_vif1_disable();
 }
 
 extern __typeof__(do_space_transition) func_00231FF0 __attribute__((alias("FUN_00231ff0")));

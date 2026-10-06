@@ -75,7 +75,7 @@ extern s32 D_001B3580[];
 extern MobyIClass *D_001B3200[];
 extern char *D_0015FF18;
 extern void FillTransferWords();
-extern void func_0020C880(void *);
+extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 
 /* InitMobyInstance: clears the 0x100-byte moby, fills its defaults (class
    byte from D_001B3AC0[oClass], colours, its slot index from the moby
@@ -157,7 +157,7 @@ void init_moby_instance(void *arg0, int oClass) {
                 return;
             }
         }
-        func_0020C880(m);
+        update_moby_animation_state(m);
         if (m->pClass->seq->nframes >= 2) {
             m->flags &= 0xFFFD;
         }

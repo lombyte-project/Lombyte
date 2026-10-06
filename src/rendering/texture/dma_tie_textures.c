@@ -9,7 +9,7 @@ extern s32 D_0015EE74;
 extern s32 D_00160F74;
 extern char D_001E8A50[];
 extern s32 FUN_002370c0(s32);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
 void dma_tie_textures(void) __asm__("FUN_00235640");
 
@@ -25,7 +25,7 @@ void dma_tie_textures(void) {
     D_00160F68.p->w3 = 0;
     if (D_0018A2B0.enabled != 0 && D_0018A2B0.count != 0) {
         size = FUN_002370c0(D_0015EE74);
-        func_00233B68();
+        vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E8A50);
         }

@@ -74,7 +74,7 @@ extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
 extern void FUN_00212e28();
 extern s32 func_0022DA68(s32, s32, struct Ent *);
-extern void func_001FBAB8(s32, struct Own *);
+extern void mode_freeze_init(s32, struct Own *) __asm__("func_001FBAB8");
 extern void CalculateDmaTransferAddress(void);
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern void set_moby_animation(struct Ent *, s32, s32) __asm__("FUN_00212ed8");
@@ -116,7 +116,7 @@ void FUN_002192a8(void) {
         func_00218F98();
     }
     if (D_0015EEB4 & 1) {
-        func_001FBAB8(3, D_001D5BF0.owner);
+        mode_freeze_init(3, D_001D5BF0.owner);
         return;
     }
     if (D_001D5BF0.state == 1) {

@@ -18,7 +18,7 @@ extern u8 ntsc_graphics_setup_packet[] __asm__("D_001D7E50");
 extern s32 graphics_setup_word __asm__("D_001603A0");
 extern void append_fullscreen_setup_strips(void) __asm__("func_002271D0");
 extern void func_00226FB8(f32 *, f32);
-extern u8 *func_002270E8(u8 *);
+extern u8 *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
 extern void func_00227140(s32, s32, s32);
@@ -50,7 +50,7 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
         first_vector[2] = record->first_depth;
         second_vector[2] = record->second_depth;
         for (command_index = 0; command_index < record->command_count; command_index++) {
-            command_stream = func_002270E8(command_stream);
+            command_stream = parse_typed_resource_record(command_stream);
             func_00228520(first_vector, second_vector);
             func_00227A08(0x70000000, graphics_setup_word, record->command_flags);
             func_00227140(2, 1, 2);

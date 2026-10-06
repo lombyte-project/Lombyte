@@ -7,7 +7,7 @@ extern void D_0012CB40();
 extern void *memset(void *, s32, u32);
 extern void _Error(void *, u8 *);
 extern void InitializeStateRecord(void *, void *, s32);
-extern s32 func_0012BC20(void *, void *, s32, s32);
+extern s32 reserve_aligned_buffer_space(void *, void *, s32, s32) __asm__("func_0012BC20");
 extern void func_0012BC00(void *);
 extern void _clearOnce(void *);
 extern s32 sceMpegReset(void *);
@@ -61,7 +61,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     L(d, 0xF0) = -1;
     W(d, 0x1C) = (s32)D_0012CB30;
     W(d, 0x24) = (s32)D_0012CB40;
-    r = func_0012BC20(d, state, 0x600, 8);
+    r = reserve_aligned_buffer_space(d, state, 0x600, 8);
     W(d, 0x48) = 0;
     W(d, 0xFC) = 0;
     W(d, 0x100) = 0;

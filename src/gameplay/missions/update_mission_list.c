@@ -9,7 +9,7 @@ extern struct Level D_001A00F0;
 extern struct MenuItem *D_001A2B70[];
 extern struct MenuState D_001A2C10;
 extern u8 D_0013DD58[];
-extern s32 func_0020BAF0(s16, s32);
+extern s32 check_mission_condition(s16, s32) __asm__("func_0020BAF0");
 s32 update_mission_list(void) __asm__("FUN_0020b950");
 
 s32 update_mission_list(void) {
@@ -24,9 +24,9 @@ s32 update_mission_list(void) {
     for (it = items; it->id != 0; it++) {
         if ((it->flags & 4) && D_0013DD58[D_001A00F0.level] == 0) {
             it->state = 0;
-        } else if (!func_0020BAF0(it->kind1, it->value1)) {
+        } else if (!check_mission_condition(it->kind1, it->value1)) {
             it->state = 0;
-        } else if (!func_0020BAF0(it->kind2, it->value2)) {
+        } else if (!check_mission_condition(it->kind2, it->value2)) {
             it->state = 1;
         } else {
             it->state = 2;

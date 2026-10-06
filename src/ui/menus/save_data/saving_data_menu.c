@@ -91,7 +91,7 @@ extern s32 D_0015EEB4;
 extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern void func_001FBAB8();
+extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 prepare_save_game() __asm__("FUN_002269c0");
 extern s32 func_0022DA68();
 s32 saving_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222f88");
@@ -128,7 +128,7 @@ s32 saving_data_menu(struct M2c_arg0 *arg0)
         if (D_0013D290.unkE4 != 0)
         {
           D_0015EEB4 |= 0x80;
-          func_001FBAB8(3, D_001D5BF0.unk4);
+          mode_freeze_init(3, D_001D5BF0.unk4);
           goto block_46;
         }
         *((s32 *) ((((u8 *) (&D_0013D290)) + (D_0013D290.unk14 * 0x1C)) + 0x24)) = (s32) D_0015ED98;

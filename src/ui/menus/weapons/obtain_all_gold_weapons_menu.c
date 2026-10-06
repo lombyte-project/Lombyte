@@ -21,11 +21,11 @@ struct MenuPacket {
 };
 
 extern void func_001153FC();
-extern void func_001F4280();
-extern void func_001F4398();
-extern void func_001F7580(void *, u64, void *, s32);
-extern void *func_001FDD10(s32);
-extern s32 func_001FF960();
+extern void setup_gif_paging() __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
+extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
+extern void *get_help_message_text(s32) __asm__("func_001FDD10");
+extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
 s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222948");
@@ -43,19 +43,19 @@ s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *arg0) {
     tmp.unk6 = arg0->unk20;
     tmp.unk10 = 0x10;
     packet = tmp;
-    func_001F4280(0);
-    draw_hud_sprite(func_001FF960(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
+    setup_gif_paging(0);
+    draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.unkA = first_y;
     packet.unk8 = pos_x;
-    tex = func_001FDD10(0x5182);
-    func_001F7580(&packet, ((u64)0x80FF << 16) | 0xA888, tex, -1);
+    tex = get_help_message_text(0x5182);
+    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, tex, -1);
     width = packet.unkE;
     first_y = width + 0x10;
     packet.unkA = first_y;
-    tex = func_001FF960(0xE99A, 6);
+    tex = find_valid_animation_frame_index(0xE99A, 6);
     draw_hud_sprite(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
-    func_001F7580(&packet, ((u64)0x80FF << 16) | 0xA888, func_001FDD10(0x5183), -1);
-    func_001F4398();
+    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183), -1);
+    do_gif_paging();
     return 2;
 }
 

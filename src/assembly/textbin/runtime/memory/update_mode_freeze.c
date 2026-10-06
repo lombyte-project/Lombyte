@@ -88,24 +88,24 @@ extern u8 D_0016034C;
 extern struct S_00193300 D_00193300;
 extern s32 D_0015EEB8[];
 extern s32 D_001D5BF8[];
-extern char func_0022CA50();
+extern char sound_update() __asm__("func_0022CA50");
 extern s32 func_001F96F8(s32);
-extern void func_0020B178(s32, s32);
+extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void func_001E93E8();
 extern void func_001E9440(u8 *, u8 *, s32, s32);
-extern void func_001F4A58(s32);
-extern void func_001FF570(s32, s32);
+extern void fade_to_black(s32) __asm__("func_001F4A58");
+extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
 extern void func_001FF768();
-extern void func_00209370();
+extern void load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void func_0022E188(s32);
-extern void func_0012E418(s32);
+extern void snd_continue_all_sounds_in_group(s32) __asm__("func_0012E418");
 extern void func_00216088();
-extern void func_0012DC80();
+extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void)
 {
-  func_0022CA50();
+  sound_update();
   if (D_00193300.unk4 != 0)
   {
     D_00193300.unk4--;
@@ -131,7 +131,7 @@ void update_mode_freeze(void)
           D_0015F604 = 0;
           if (D_0015ED84 == 1)
           {
-            func_0020B178(0, -1);
+            memcard_save_data(0, -1);
           }
         }
       }
@@ -181,7 +181,7 @@ void update_mode_freeze(void)
       else
         if (D_0013CAE4[0] & 0x40)
       {
-        func_001F4A58(4);
+        fade_to_black(4);
         D_0016034C = 0;
         D_00193300.unk1C = 2;
         D_00193300.unk20 = func_001F96F8(0x258);
@@ -197,7 +197,7 @@ void update_mode_freeze(void)
       else
         if (D_0013CAE4[0] & 0x10)
       {
-        func_001F4A58(4);
+        fade_to_black(4);
         D_0016034C = 1;
         D_0015F604 = D_00193300.unk14;
       }
@@ -296,7 +296,7 @@ void update_mode_freeze(void)
           {
             if (D_0013F350.unk880 != (-1))
             {
-              func_001FF570(D_0013F350.unk880, 0);
+              set_animation_parameter(D_0013F350.unk880, 0);
               D_0013F350.unk880 = -1;
             }
             func_001FF768();
@@ -435,7 +435,7 @@ void update_mode_freeze(void)
       {
         if (D_0013CAE4[0] & 0x40)
         {
-          func_00209370();
+          load_and_initialize_level_chunk();
           D_0015EEB4 = D_0015EEB4 & (~2);
           D_0015EEB4 = D_0015EEB4 & (~4);
           D_0015EEB4 = D_0015EEB4 | 0x20;
@@ -464,7 +464,7 @@ void update_mode_freeze(void)
       case 24:
         if (D_0013CAE4[0] & 0x40)
       {
-        func_00209370();
+        load_and_initialize_level_chunk();
         D_0015EEB4 = D_0015EEB4 & (~2);
         D_0015EEB4 = D_0015EEB4 & (~4);
         D_0015EEB4 = D_0015EEB4 | 0x20;
@@ -487,7 +487,7 @@ void update_mode_freeze(void)
           struct S_0013C940 *p = &D_0013C940;
           if (p->unk1A4 & 0x40)
           {
-            func_00209370();
+            load_and_initialize_level_chunk();
             D_0015EEB4 = D_0015EEB4 & (~2);
             D_0015EEB4 = D_0015EEB4 & (~4);
             func_0022E188(0);
@@ -545,9 +545,9 @@ void update_mode_freeze(void)
 
   if (((u32) (D_0015F604 - 3)) >= 2U)
   {
-    func_0012E418(0x1D);
+    snd_continue_all_sounds_in_group(0x1D);
     func_00216088();
-    func_0012DC80();
+    snd_flush_sound_commands();
   }
 }
 #endif /* NON_MATCHING */

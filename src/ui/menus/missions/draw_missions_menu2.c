@@ -29,17 +29,17 @@ struct Rect {
 };
 
 extern struct GameState D_001A00F0;
-extern void func_001F4280(s32);
-extern void func_001F4398();
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
 extern void func_001F61E8();
 extern void func_001F61F8();
-extern void func_001F6530(s32, s32, u64, s32, s32);
-extern s32 func_001F6FD0(s32, s32, s32, s32, s32, s32, s32);
-extern void func_001F75F0(void *, u64, void *, s32);
-extern u32 func_001FDD10(s32);
-extern s32 func_0020BC00();
-extern void func_0021F8E8(s32, s32, s32);
-extern void func_00233980(s32, s32);
+extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
+extern s32 font_print_wrapped_small(s32, s32, s32, s32, s32, s32, s32) __asm__("func_001F6FD0");
+extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
+extern u32 get_help_message_text(s32) __asm__("func_001FDD10");
+extern s32 collect_mission_ids() __asm__("func_0020BC00");
+extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
+extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 
 s32 draw_missions_menu2(struct MissionsMenu *arg0) __asm__("FUN_0021f688");
 
@@ -61,11 +61,11 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
     off = 0x18;
     i = 0;
     mask = 0;
-    func_001F4280(0);
-    count = func_0020BC00(0x70000000, &mask, 0, 0);
-    func_00233980(0x42, 0x44);
-    func_00233980(0x47, 0x10B);
-    func_001F6530(4, 4, 0x80FFA888, func_001FDD10(0x4F59), -1);
+    setup_gif_paging(0);
+    count = collect_mission_ids(0x70000000, &mask, 0, 0);
+    vu1_add_g_sregister(0x42, 0x44);
+    vu1_add_g_sregister(0x47, 0x10B);
+    font_print_large(4, 4, 0x80FFA888, get_help_message_text(0x4F59), -1);
     if (i < count) {
         p = (u32 *)0x70000000;
         do {
@@ -75,7 +75,7 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
             if (flag) {
                 func_001F61F8();
             }
-            h = func_001F6FD0(0x10, off, arg0->unk20 - 0x11, 0x3E8, col, func_001FDD10(*p), -1);
+            h = font_print_wrapped_small(0x10, off, arg0->unk20 - 0x11, 0x3E8, col, get_help_message_text(*p), -1);
             if (flag) {
                 func_001F61E8();
             }
@@ -85,7 +85,7 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
             }
             bit = (mask >> i) & 1;
             i++;
-            func_0021F8E8(9, y, bit);
+            draw_menu_selection_marker(9, y, bit);
             p++;
             off += step * 16;
         } while (i < count);
@@ -99,9 +99,9 @@ s32 draw_missions_menu2(struct MissionsMenu *arg0) {
         src.unk10 = 0x10;
         src.unk12 = 1;
         dst = src;
-        func_001F75F0(&dst, 0x8020FFFF, func_001FDD10(0x523D), -1);
+        font_print_window_small(&dst, 0x8020FFFF, get_help_message_text(0x523D), -1);
     }
-    func_001F4398();
+    do_gif_paging();
     return 2;
 }
 

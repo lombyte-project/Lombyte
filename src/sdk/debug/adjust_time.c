@@ -7,16 +7,16 @@ struct AdjustTimeArg {
     u8 hour;
 };
 
-extern void func_0012D3C0();
+extern void decode_bcd_time_fields() __asm__("func_0012D3C0");
 extern void subhour();
 extern void addhour();
-extern void func_0012D428();
+extern void encode_bcd_time_fields() __asm__("func_0012D428");
 
 void AdjustTime(struct AdjustTimeArg *arg0, s32 arg1)
 {
     s32 hour;
 
-    func_0012D3C0();
+    decode_bcd_time_fields();
     hour = arg0->hour + arg1;
     if (hour >= 0) {
         if (hour >= 0x3D) {
@@ -32,5 +32,5 @@ void AdjustTime(struct AdjustTimeArg *arg0, s32 arg1)
         } while (hour < 0);
     }
     arg0->hour = (u8)hour;
-    func_0012D428(arg0);
+    encode_bcd_time_fields(arg0);
 }

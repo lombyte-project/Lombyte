@@ -6,7 +6,7 @@ extern struct TextTable D_001A00F0;
 extern struct Weapon D_001DFFB0[];
 extern char D_0015FDA0[];
 extern char D_0015FDA8[];
-extern u8 *func_001FDD10(s32);
+extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 sprintf(char *, const char *, ...);
 void format_menu_item_text(s32 idx, u8 *dst) __asm__("FUN_00208280");
 
@@ -15,7 +15,7 @@ void format_menu_item_text(s32 idx, u8 *dst) {
     u8 *src;
     u8 *p;
 
-    src = func_001FDD10(D_001A00F0.entries[idx].text_id);
+    src = get_help_message_text(D_001A00F0.entries[idx].text_id);
     p = buf;
     if (src == 0) {
         return;

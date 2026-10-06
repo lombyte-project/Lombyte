@@ -6,9 +6,9 @@ struct M2c_arg0 {
     s32 unk4C;
 };
 
-extern void func_001F4280();
-extern void func_001F4398();
-extern void func_001F5450();
+extern void setup_gif_paging() __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
+extern void draw_textured_quad() __asm__("func_001F5450");
 extern s64 func_00204CF0();
 s32 draw_two_texture_panels(struct M2c_arg0 *arg0) __asm__("FUN_00220790");
 
@@ -19,9 +19,9 @@ s32 draw_two_texture_panels(struct M2c_arg0 *arg0) {
         return 0;
     }
     temp_16_14 = (s64) 0x80808080;
-    func_001F4280(0);
-    func_001F5450(0, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, temp_16_14, func_00204CF0(arg0->unk48));
-    func_001F5450(0x100, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, temp_16_14, func_00204CF0(arg0->unk4C));
-    func_001F4398();
+    setup_gif_paging(0);
+    draw_textured_quad(0, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, temp_16_14, func_00204CF0(arg0->unk48));
+    draw_textured_quad(0x100, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, temp_16_14, func_00204CF0(arg0->unk4C));
+    do_gif_paging();
     return 8;
 }

@@ -37,7 +37,7 @@ extern u8 D_00132490[];
 extern u8 D_00152FC8[];
 extern u8 D_00152FE0[];
 extern s32 SignalSema();
-extern s32 func_00120A28();
+extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
@@ -54,7 +54,7 @@ s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct M2c_arg
         return 0;
     }
 block_2:
-    if (func_00120A28(4) == 0) {
+    if (cd_check_ncmd(4) == 0) {
         return 0;
     }
     st->unk0 = dwSector;

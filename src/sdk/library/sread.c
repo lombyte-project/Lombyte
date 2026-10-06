@@ -27,11 +27,11 @@ struct M2c_arg0 {
     s32 unk54;
 };
 
-extern s64 func_00116108();
+extern s64 reentrant_read() __asm__("func_00116108");
 s64 __sread(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     register s32 temp_3_14;
 
-    temp_3_14 = (s32)func_00116108(*(s32 *)((u8 *)arg0 + 0x54), *(s16 *)((u8 *)arg0 + 0xE), arg1, arg2);
+    temp_3_14 = (s32)reentrant_read(*(s32 *)((u8 *)arg0 + 0x54), *(s16 *)((u8 *)arg0 + 0xE), arg1, arg2);
     if (temp_3_14 >= 0) {
         goto block_2;
     }

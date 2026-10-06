@@ -34,7 +34,7 @@ struct ScreenOfs {
 extern struct TagPtr D_00160F00;
 extern struct TexBank D_0019A3E8;
 extern struct ScreenOfs D_0013E500;
-extern u64 func_001FFA10(s32);
+extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 
@@ -57,7 +57,7 @@ void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     D_00160F00.p = tag + 1;
     q[0] = 0x7400000000008001;
     q[1] = 0x5353106;
-    q[2] = func_001FFA10(id);
+    q[2] = get_frame_texture(id);
     q[3] = 0x156;
     q[4] = ((u64)alpha << 24) | 0x7F7F7F;
     q[5] = 0;

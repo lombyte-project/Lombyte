@@ -15,11 +15,11 @@ struct M2c_arg0 {
     s32 unk58;
     s32 unk5C;
 };
-extern s32 func_0012F0A8();
+extern s32 snd_reset_movie_sound() __asm__("func_0012F0A8");
 void audio_dec_reset(struct M2c_arg0 *arg0) __asm__("FUN_0023ad10");
 
 void audio_dec_reset(struct M2c_arg0 *arg0) {
-    func_0012F0A8();
+    snd_reset_movie_sound();
     arg0->unk0 = 0;
     arg0->unk30 = 0;
     arg0->unk38 = 0;

@@ -31,16 +31,16 @@ extern struct Goal D_001DFFB0[];
 extern s32 D_0013D428[];
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
-extern void func_001FB8F0(s32, s32, s32, s32, s32, s32, u32);
-extern s32 func_001FDD10(s32);
-extern void func_001F6B88(s32, s32, u64, s32, s32);
+extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, u32) __asm__("func_001FB8F0");
+extern s32 get_help_message_text(s32) __asm__("func_001FDD10");
+extern void font_print_center_small(s32, s32, u64, s32, s32) __asm__("func_001F6B88");
 
 void FUN_00239160(void) {
     struct Shop *s;
     s32 id;
     s32 cost;
 
-    func_001FB8F0(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     s = &D_001E63C0;
     if (s->open != 0) {
         if (s->slots[s->cur].kind == 1) {
@@ -69,9 +69,9 @@ void FUN_00239160(void) {
             }
             id = 0x524B;
         }
-        func_001F6B88(0x28, 0x14, 0x80F0F0F0, func_001FDD10(id), -1);
+        font_print_center_small(0x28, 0x14, 0x80F0F0F0, get_help_message_text(id), -1);
     } else {
-        func_001F6B88(0x28, 0x14, 0x80F0F0F0, func_001FDD10(0x4EE0), -1);
+        font_print_center_small(0x28, 0x14, 0x80F0F0F0, get_help_message_text(0x4EE0), -1);
     }
 }
 

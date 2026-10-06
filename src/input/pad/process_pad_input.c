@@ -38,7 +38,7 @@ extern volatile u8 D_0015EDB4;
 extern s32 FUN_001f96f8(s32);
 extern float FUN_001f9b20(float *);
 extern float FUN_001f9e90(float, float);
-extern float func_001FA688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float func_001FA6C0(s32);
 
 #define SWAPLR(x) \
@@ -151,7 +151,7 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
         }
         if (!(p->pressed & 0x10000)) {
             for (k = 1; k < FUN_001f96f8(5); k++) {
-                if (func_001FA688(p->hist_ang[(p->idx - k + 30) % 30], ang) > 0.9599311f) {
+                if (fast_difference_between_rotations(p->hist_ang[(p->idx - k + 30) % 30], ang) > 0.9599311f) {
                     p->pressed |= 0x10000;
                     break;
                 }

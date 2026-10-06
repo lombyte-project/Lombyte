@@ -14,7 +14,7 @@ extern s32 WriteDmaChannel();
 extern s32 func_001F21B0();
 extern void func_001F21B8();
 extern s32 func_001F98D0();
-extern s32 func_00235640();
+extern s32 dma_tie_textures() __asm__("func_00235640");
 extern s32 func_00235BE8();
 void draw_ties_1(void) __asm__("FUN_002358c8");
 
@@ -38,7 +38,7 @@ void draw_ties_1(void)
     WriteDmaChannel(D_001E3200, 0x3600, 0x40);
   }
   func_001F21B8(D_00160F40, 5);
-  func_00235640();
+  dma_tie_textures();
   func_001F98D0(D_00160F00, D_001DF030, 0x20);
   func_001F21B0(D_00160F40, 5);
 }

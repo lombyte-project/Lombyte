@@ -7,7 +7,7 @@ extern struct TagPtr D_00160F00;
 extern struct GifPaging D_0015F450;
 extern s32 D_0018A2DC[];
 extern void FUN_0020b4a8(void);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
 void do_gif_paging(void) __asm__("FUN_001f4398");
 
@@ -24,7 +24,7 @@ void do_gif_paging(void) {
     D_0015F450.start->w3 = 0;
     if (D_0018A2DC[0] != 0) {
         FUN_0020b4a8();
-        func_00233B68();
+        vu1_tex_flush();
     }
     D_00160F00.p->w0 = 0x20000000;
     D_00160F00.p->addr = (u32)(D_0015F450.start + 1);

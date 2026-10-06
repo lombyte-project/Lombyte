@@ -48,7 +48,7 @@ extern s32 AddDmacHandler();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
 extern s32 FlushCache();
-extern s32 func_00119160();
+extern s32 enable_dmac() __asm__("func_00119160");
 extern s32 sceSifGetReg();
 extern s32 sceSifSetDChain();
 extern s32 sceSifSetReg();
@@ -126,7 +126,7 @@ loop_6:
         }
     }
     D_00154E54[0] = AddDmacHandler(5, &_sceSifCmdIntrHdlr, 0);
-    func_00119160(5);
+    enable_dmac(5);
     temp_2_113 = sceSifGetReg(0x80000000);
     D_00154E58.unk8 = temp_2_113;
     if (temp_2_113 == 0) {

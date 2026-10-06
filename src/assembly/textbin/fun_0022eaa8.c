@@ -137,9 +137,9 @@ extern f32 D_001D9B48[];
 
 extern void FillTransferWords(void *, s32, s32);
 extern void ReadGlobalTableEntry(void);
-extern void func_0012DC80(void);
-extern void func_0012E308(s32, s32, s32, s32, s32, s32, s32, void *);
-extern void func_0012EB00(void);
+extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32, void *) __asm__("func_0012E308");
+extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
 extern void func_001E9428(void);
 extern void func_001E9430(void);
 extern void update_view_context(void) __asm__("func_001F2D98");
@@ -149,8 +149,8 @@ extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern void func_0020C828(LevelRenderObject *);
-extern void func_0020C880(LevelRenderObject *);
+extern void mark_moby_for_removal(LevelRenderObject *) __asm__("func_0020C828");
+extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
 extern void calculate_object_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void func_0020DEF8(LevelRenderObject *);
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
@@ -203,9 +203,9 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || D_0013DD43[0] != 0)) {
         ReadGlobalTableEntry();
-        func_0012E308(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
-        func_0012EB00();
-        func_0012DC80();
+        snd_play_sound_vol_pan_pmpb(D_0015ED5C, level_render_state.mode, 0x400, 0, 0, 0, 0, D_0013E5C0);
+        snd_reset_state_and_flush_commands();
+        snd_flush_sound_commands();
     }
     if (render_sequence.time >= render_sequence.end) {
         for (expired_object_index = 0; expired_object_index < render_sequence.count; expired_object_index++) {
@@ -213,7 +213,7 @@ void update_level_gameplay_frame(void) {
             if (expired_object != 0) {
                 expired_object->model->count--;
                 expired_object->model->frames[expired_object->model->count] = 0;
-                func_0020C828(expired_object);
+                mark_moby_for_removal(expired_object);
             }
         }
         if (current_level_index != 0 && (current_level_index != 1 || D_0013DD43[0] != 0) && D_0015EE48 < 3) {
@@ -288,7 +288,7 @@ void update_level_gameplay_frame(void) {
             object->selected_b = transform_count;
             object->state_a = 0;
             object->state_b = 0;
-            func_0020C880(object);
+            update_moby_animation_state(object);
             func_001F98D0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
             func_001F98D0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
             object->selected_index = 0x1FF;

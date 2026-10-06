@@ -4,7 +4,7 @@
 extern s32 InitializeMemoryCardDirectory();
 extern s32 _ipuVdec();
 extern s32 _nextBit();
-extern s32 func_001280A8();
+extern s32 decode_motion_vector() __asm__("func_001280A8");
 
 void _motionVector(s32 arg0, struct M2c_arg1 *arg1, struct M2c_arg2 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     s32 code;
@@ -16,7 +16,7 @@ void _motionVector(s32 arg0, struct M2c_arg1 *arg1, struct M2c_arg2 *arg2, s32 a
     } else {
         bits = 0;
     }
-    func_001280A8(arg1, arg3, code, bits, arg7);
+    decode_motion_vector(arg1, arg3, code, bits, arg7);
     if (arg5 != 0) {
         arg2->unk0 = InitializeMemoryCardDirectory(arg0);
     }
@@ -29,7 +29,7 @@ void _motionVector(s32 arg0, struct M2c_arg1 *arg1, struct M2c_arg2 *arg2, s32 a
     if (arg6 != 0) {
         arg1->unk4 >>= 1;
     }
-    func_001280A8((u8 *)arg1 + 4, arg4, code, bits, arg7);
+    decode_motion_vector((u8 *)arg1 + 4, arg4, code, bits, arg7);
     if (arg6 != 0) {
         arg1->unk4 *= 2;
     }

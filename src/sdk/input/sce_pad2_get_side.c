@@ -7,13 +7,13 @@ typedef struct PadPort {
 } PadPort;
 
 extern PadPort D_0015B540[];
-extern void func_00118F88(s32, s32);
+extern void synchronize_cache_range(s32, s32) __asm__("func_00118F88");
 
 void *scePad2GetSide(s32 arg0) {
     u8 *sides[2];
 
     sides[0] = D_0015B540[arg0].unkC;
     sides[1] = sides[0] + 0x80;
-    func_00118F88((s32)sides[0], (s32)(sides[0] + 0x100));
+    synchronize_cache_range((s32)sides[0], (s32)(sides[0] + 0x100));
     return sides[*(s32 *)(sides[0] + 0x7C) < *(s32 *)(sides[1] + 0x7C)];
 }

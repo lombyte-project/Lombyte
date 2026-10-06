@@ -12,7 +12,7 @@ struct TagPtr {
 };
 
 extern struct TagPtr D_00160F00;
-extern void func_00233980(s32, u64);
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 /* Appends a GIF packet to D_00160F00: a fixed 10-quad header (the last
    quads carry n = w / 32), then n pairs of sprite corner registers stepping
@@ -33,7 +33,7 @@ void FUN_001fb740(s32 w, s32 h) {
     u64 hi;
 
     n = w / 32;
-    func_00233980(0x42, 0x800000004AULL);
+    vu1_add_g_sregister(0x42, 0x800000004AULL);
     D_00160F00.p->w0 = (n + 5) | 0x10000000;
     D_00160F00.p->addr = 0;
     D_00160F00.p->w2 = 0;

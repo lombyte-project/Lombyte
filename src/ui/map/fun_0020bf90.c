@@ -73,7 +73,7 @@ extern struct { u8 pad0[0x10]; MapIconLink *links; } D_001A2C10;
 
 extern void world_to_map_coords(f32 *outx, f32 *outy, s32 view, f32 x, f32 y) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
-extern void func_001F75F0(TextBox *, long, char *, int);
+extern void font_print_window_small(TextBox *, long, char *, int) __asm__("func_001F75F0");
 
 void update_map_icons(s32 level, s32 flag) __asm__("FUN_0020bf90");
 
@@ -171,12 +171,12 @@ void update_map_icons(s32 level, s32 flag) {
             format_menu_item_text(icon_index, label_text);
             {
                 TextBox text_window = { { 0, icon->label_height, 0, icon->label_width, 4, 4, 0, 0, 0xF, 4 } };
-                func_001F75F0(&text_window, 0x80FFA888L, label_text, -1);
+                font_print_window_small(&text_window, 0x80FFA888L, label_text, -1);
                 previous_label_height = text_window.s[7];
                 icon->label_height = text_window.s[7] + 8;
                 do {
                     text_window.s[3] -= 4;
-                    func_001F75F0(&text_window, 0x80FFA888L, label_text, -1);
+                    font_print_window_small(&text_window, 0x80FFA888L, label_text, -1);
                     if (text_window.s[7] != previous_label_height) {
                         label_height_changed = 1;
                     }

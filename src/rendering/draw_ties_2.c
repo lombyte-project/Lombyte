@@ -21,7 +21,7 @@ extern void func_001F21B8(void *, int); /* empty profiling marker */
 extern void func_001F21B0(void *, int); /* empty profiling marker */
 extern void FUN_00235be8(void);
 extern void WriteDmaChannel(void *, int, int);
-extern void func_00235640(void); /* DmaTieTextures */
+extern void dma_tie_textures(void) __asm__("func_00235640"); /* DmaTieTextures */
 extern int D_00160F4C MACRO_ADDR;
 typedef struct {
     int unk00[6];
@@ -58,7 +58,7 @@ void draw_ties_2(void) {
             WriteDmaChannel(D_001E4400, 0x3600, 0x40);
         }
     }
-    func_00235640();
+    dma_tie_textures();
     FUN_001f98d0(D_001E4200, D_001E3000, 0x200);
     FUN_001f98d0(D_001E3E00, D_001E2A00, 0x400);
     {
@@ -89,7 +89,7 @@ void draw_ties_2(void) {
         }
     }
     func_001F21B8(D_00160F40, 5);
-    func_00235640();
+    dma_tie_textures();
     {
         int i;
         int n = D_00160F4C;

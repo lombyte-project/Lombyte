@@ -10,9 +10,9 @@ struct M2c_D_001996D0 {
 };
 
 extern struct M2c_D_001996D0 D_001996D0;
-extern u64 func_001F44B8();
-extern s32 func_001F5450();
-extern s32 func_001F5F18();
+extern u64 get_effect_texture() __asm__("func_001F44B8");
+extern s32 draw_textured_quad() __asm__("func_001F5450");
+extern s32 draw_ui_frame() __asm__("func_001F5F18");
 void help_draw_prompt(void) __asm__("FUN_001fe898");
 
 void help_draw_prompt(void) {
@@ -20,7 +20,7 @@ void help_draw_prompt(void) {
 
     D_001996D0.unk18 = 0x20;
     D_001996D0.unk1C = 0x20;
-    func_001F5F18(D_001996D0.unk14 - 0x20, D_001996D0.unk14 + 0x20, D_001996D0.unk10 - 0x20, D_001996D0.unk10 + 0x20, 0x60);
+    draw_ui_frame(D_001996D0.unk14 - 0x20, D_001996D0.unk14 + 0x20, D_001996D0.unk10 - 0x20, D_001996D0.unk10 + 0x20, 0x60);
     if (D_001996D0.unk0 == 1 || D_001996D0.unk0 == 7) {
         alpha = D_001996D0.unk4 * 21;
     } else {
@@ -29,6 +29,6 @@ void help_draw_prompt(void) {
     if (alpha > 0x80) {
         alpha = 0x80;
     }
-    func_001F5450(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
-                  (u64)(alpha << 24 | 0x808080), func_001F44B8(4));
+    draw_textured_quad(D_001996D0.unk10 - 0x20, D_001996D0.unk14 - 0x20, 0x40, 0x40, 0, 0, 0x40, 0x40,
+                  (u64)(alpha << 24 | 0x808080), get_effect_texture(4));
 }

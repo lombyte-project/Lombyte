@@ -6,7 +6,7 @@ extern char D_00187098[];
 extern char D_0019BDC0[];
 extern char D_0019C1C0[];
 extern char D_0019C3C0[];
-extern float func_001FA580(float, float);
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float FUN_001f9b48(void *, void *);
@@ -23,7 +23,7 @@ void update_all_point_lights(void) {
     *(float *)(l + 0x340) = 0.8f;
     *(float *)(l + 0x344) = 0.8f;
     *(float *)(l + 0x348) = 0.8f;
-    ang = func_001FA580(*(float *)D_00187098, -0.8f);
+    ang = fast_add_rotations(*(float *)D_00187098, -0.8f);
     *(float *)(l + 0x350) = fast_cos(ang) * 0.866f;
     *(float *)(l + 0x354) = fast_sin(ang) * 0.866f;
     *(float *)(l + 0x358) = -0.5f;

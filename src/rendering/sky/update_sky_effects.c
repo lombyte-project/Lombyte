@@ -42,10 +42,10 @@ extern void func_001F9FC8(u8 *);
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern f32 func_00213308();
+extern f32 random_angle_radians() __asm__("func_00213308");
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
 extern void func_0022BBA0();
-extern void func_00233980(s32, u64);
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 rand() __asm__("FUN_001160d8");
 
 void update_sky_effects(void) __asm__("FUN_0022ae70");
@@ -95,10 +95,10 @@ void update_sky_effects(void) {
                 effect->texture_index = random_color_enabled;
                 effect->flags = effect_flags;
                 effect->state.angles.azimuth = color_delta;
-                effect->angle = func_00213308();
+                effect->angle = random_angle_radians();
                 effect->size = convert_integer_to_float(random_integer_below(0x18) + 0x20) * 0.00390625f;
-                azimuth = fast_add_rotations(-3.0f, func_00213308() * 0.2f);
-                elevation = func_00213308();
+                azimuth = fast_add_rotations(-3.0f, random_angle_radians() * 0.2f);
+                elevation = random_angle_radians();
                 elevation = elevation * 0.09f;
                 elevation = elevation + 1.2f;
                 trig_product = fast_cos(azimuth);
@@ -155,7 +155,7 @@ void update_sky_effects(void) {
         }
     }
     func_0022BBA0();
-    func_00233980(0x42, (0x8000ULL << 0x18) | 0x44);
+    vu1_add_g_sregister(0x42, (0x8000ULL << 0x18) | 0x44);
     sky_draw_shell(2);
     sky_draw_shell(3);
 }

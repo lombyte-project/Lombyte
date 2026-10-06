@@ -75,9 +75,9 @@ extern s32 GetDmaPacketSpanBytes(const u32 *packet);
 extern void RaiseKernelTrap();
 extern s32 SceMcFormat(s32 port, s32 slot);
 extern s32 SceMcUnformat(s32 port, s32 slot);
-extern void func_001FD6E0(s32, McChunk **, s32 *);
-extern void func_0020AE60(u8 *, s32, s32);
-extern s32 func_0020AF20(u8 *, s32, u32 *);
+extern void calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
+extern void memcard_restore_info(u8 *, s32, s32) __asm__("func_0020AE60");
+extern s32 memcard_restore_data(u8 *, s32, u32 *) __asm__("func_0020AF20");
 extern s32 start_audio_stream_read(McChunk *, s32, s32) __asm__("FUN_00216788");
 extern s32 sceMcChdir(s32, s32, char *, s32);
 extern s32 sceMcClose(s32 fd);
@@ -354,7 +354,7 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            func_001FD6E0(D_00137B80.x14 << 11, &chunk, &size);
+            calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
             start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
             MC.sub = 4;
             MC.busy = 0;
@@ -400,7 +400,7 @@ void memcard_update_state(void) {
                 if (MC.fd < 0) {
                     MC.fd = MC.result;
                 }
-                func_001FD6E0(D_00137B94[0] << 11, &chunk, &size);
+                calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
                 switch (MC.sub) {
                 case 6:
                     MC.size = 0x3C4;
@@ -685,10 +685,10 @@ void memcard_update_state(void) {
         case 5:
             if (MC.result == MC.size) {
                 if (MC.state == 23) {
-                    func_0020AE60(D_0014EED0, MC.cur, CARD.x18);
+                    memcard_restore_info(D_0014EED0, MC.cur, CARD.x18);
                     MC.sub = 8;
                 } else {
-                    CARD.xAC = func_0020AF20(D_0014EED0, 0, D_001A04C0);
+                    CARD.xAC = memcard_restore_data(D_0014EED0, 0, D_001A04C0);
                     MC.sub = 6;
                 }
                 MC.busy = 0;
@@ -730,7 +730,7 @@ void memcard_update_state(void) {
             break;
         case 7:
             if (MC.result == MC.size) {
-                CARD.xAC += func_0020AF20(D_001506D0, MC.xC8, D_001A07C0);
+                CARD.xAC += memcard_restore_data(D_001506D0, MC.xC8, D_001A07C0);
                 if (++MC.xC8 < 20) {
                     MC.sub = 6;
                 } else {
@@ -942,7 +942,7 @@ void memcard_update_state(void) {
         McChunk *chunk;
         s32 size;
 
-        func_001FD6E0(D_00137B80.x14 << 11, &chunk, &size);
+        calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
         start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
         MC.sub = 18;
         MC.busy = 0;
@@ -954,7 +954,7 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            func_001FD6E0(D_00137B94[0] << 11, &chunk, &size);
+            calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
             MC.sub = 19;
             MC.buf = (u8 *)chunk + chunk->x10;
         }

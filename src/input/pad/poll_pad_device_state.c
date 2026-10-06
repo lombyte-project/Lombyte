@@ -34,8 +34,8 @@ extern s32 scePad2GetState(s32 socket);
 extern s32 scePad2GetButtonProfile(s32 socket, u8 *profile);
 extern s32 sceVibGetProfile(s32 port, u8 *profile);
 extern s32 scePad2Read(s32 socket, void *buf);
-extern void func_002172C0(struct PadState *p);
-extern void func_00217328(struct PadState *p, u8 *buf, s32 len);
+extern void clear_pad_input(struct PadState *p) __asm__("func_002172C0");
+extern void process_pad_input(struct PadState *p, u8 *buf, s32 len) __asm__("func_00217328");
 
 void poll_pad_device_state(struct PadState *p) __asm__("FUN_002170c8");
 
@@ -85,19 +85,19 @@ void poll_pad_device_state(struct PadState *p) {
         for (i = n; i < 4; i++) {
             p->unk184[i] = buf[i];
         }
-        func_002172C0(p);
+        clear_pad_input(p);
         break;
     }
     case 1:
         n = scePad2Read(p->socket, buf);
-        func_00217328(p, buf, n);
+        process_pad_input(p, buf, n);
         break;
     case 2:
-        func_002172C0(p);
+        clear_pad_input(p);
         break;
     }
     } else {
-        func_002172C0(p);
+        clear_pad_input(p);
         p->unk198 = 0;
     }
     p->unk188 = 0;

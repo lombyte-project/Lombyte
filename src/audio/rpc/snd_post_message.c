@@ -1,7 +1,7 @@
 #include "types.h"
 extern s32 D_0015ECA0;
 extern s32 D_0015ECC0;
-extern s32 func_0012DC80();
+extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 void snd_post_message(void) __asm__("FUN_0012e9a0");
 
 void snd_post_message(void) {
@@ -13,7 +13,7 @@ void snd_post_message(void) {
     base = (u8 *)&D_0015ECA0;
     temp_4_11 = *(s32 **)(base + (idx * 4));
     *temp_4_11 += 1;
-    func_0012DC80(temp_4_11);
+    snd_flush_sound_commands(temp_4_11);
 }
 
 extern __typeof__(snd_post_message) func_0012E9A0 __attribute__((alias("FUN_0012e9a0")));

@@ -83,7 +83,7 @@
     },
     {
       "name": "snd_GotReturns",
-      "unit": "audio/snd_got_returns",
+      "unit": "audio/rpc/snd_returns",
       "unit_size": "0x88",
       "match": "full",
       "address": "0x12de70",
@@ -1051,7 +1051,7 @@
     },
     {
       "name": "DrawRectOverlay_FiiiiUl",
-      "unit": "rendering/draw_rect_overlay",
+      "unit": "rendering/effects/draw_rect_overlay",
       "unit_size": "0x1a8",
       "match": "entry_size_unknown",
       "address": "0x1f52a0",
@@ -1539,7 +1539,7 @@
     },
     {
       "name": "LoadIRXModule",
-      "unit": "unclassified/load_irx_module",
+      "unit": "runtime/iop/load_irx_module",
       "unit_size": "0xb4",
       "match": "entry_size_unknown",
       "address": "0x201520",
@@ -1547,7 +1547,7 @@
     },
     {
       "name": "InitMemSlots__Fv",
-      "unit": "unclassified/init_mem_slots",
+      "unit": "runtime/memory/init_mem_slots",
       "unit_size": "0x78",
       "match": "full",
       "address": "0x2015d8",
@@ -1555,7 +1555,7 @@
     },
     {
       "name": "InitOnce__Fv",
-      "unit": "unclassified/init_once",
+      "unit": "runtime/startup/init_once",
       "unit_size": "0x3cc",
       "match": "fragment",
       "address": "0x201650",
@@ -2403,7 +2403,7 @@
     },
     {
       "name": "VU1_sendChain__Fv",
-      "unit": "rendering/vu1_sync_chain",
+      "unit": "rendering/vu1_chain",
       "unit_size": "0x110",
       "match": "fragment",
       "address": "0x2336a0",
@@ -2411,7 +2411,7 @@
     },
     {
       "name": "VU1_syncChain__Fi",
-      "unit": "rendering/vu1_sync_chain",
+      "unit": "rendering/vu1_chain",
       "unit_size": "0x80",
       "match": "fragment",
       "address": "0x2337b0",
@@ -3361,8 +3361,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "math/floating_point/double_is_not_nan",
-        "source_path": "src/math/floating_point/double_is_not_nan.c",
+        "unit": "runtime/newlib/double_is_not_nan",
+        "source_path": "src/runtime/newlib/double_is_not_nan.c",
         "address": "0x00116168",
         "current_name": "FUN_00116168",
         "proposed_name": "double_is_not_nan",
@@ -3929,8 +3929,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/snd_got_returns",
-        "source_path": "src/audio/snd_got_returns.c",
+        "unit": "audio/rpc/snd_returns",
+        "source_path": "src/audio/rpc/snd_returns.c",
         "address": "0x0012de70",
         "current_name": "FUN_0012de70",
         "proposed_name": "snd_got_returns",
@@ -6443,8 +6443,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/draw_rect_overlay",
-        "source_path": "src/rendering/draw_rect_overlay.c",
+        "unit": "rendering/effects/draw_rect_overlay",
+        "source_path": "src/rendering/effects/draw_rect_overlay.c",
         "address": "0x001f52a0",
         "current_name": "FUN_001f52a0",
         "proposed_name": "draw_rect_overlay",
@@ -8441,8 +8441,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/frames/draw_framed_text",
-        "source_path": "src/ui/frames/draw_framed_text.c",
+        "unit": "textbin/ui/frames/draw_framed_text",
+        "source_path": "src/textbin/ui/frames/draw_framed_text.c",
         "address": "0x00201200",
         "current_name": "FUN_00201200",
         "proposed_name": "draw_framed_text",
@@ -8501,8 +8501,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "unclassified/load_irx_module",
-        "source_path": "src/unclassified/load_irx_module.c",
+        "unit": "runtime/iop/load_irx_module",
+        "source_path": "src/runtime/iop/load_irx_module.c",
         "address": "0x00201520",
         "current_name": "FUN_00201520",
         "proposed_name": "load_irx_module",
@@ -8534,8 +8534,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "unclassified/init_mem_slots",
-        "source_path": "src/unclassified/init_mem_slots.c",
+        "unit": "runtime/memory/init_mem_slots",
+        "source_path": "src/runtime/memory/init_mem_slots.c",
         "address": "0x002015d8",
         "current_name": "FUN_002015d8",
         "proposed_name": "init_mem_slots",
@@ -8567,8 +8567,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "unclassified/init_once",
-        "source_path": "src/unclassified/init_once.c",
+        "unit": "runtime/startup/init_once",
+        "source_path": "src/runtime/startup/init_once.c",
         "address": "0x00201650",
         "current_name": "FUN_00201650",
         "proposed_name": "init_once",
@@ -13543,8 +13543,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/save_data/loading_data_menu",
-        "source_path": "src/ui/menus/save_data/loading_data_menu.c",
+        "unit": "textbin/ui/menus/save_data/loading_data_menu",
+        "source_path": "src/textbin/ui/menus/save_data/loading_data_menu.c",
         "address": "0x002232d8",
         "current_name": "FUN_002232d8",
         "proposed_name": "loading_data_menu",
@@ -13652,8 +13652,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/gadgets/load_hand_gadget",
-        "source_path": "src/gameplay/gadgets/load_hand_gadget.c",
+        "unit": "textbin/gameplay/gadgets/load_hand_gadget",
+        "source_path": "src/textbin/gameplay/gadgets/load_hand_gadget.c",
         "address": "0x00224368",
         "current_name": "FUN_00224368",
         "proposed_name": "load_hand_gadget",
@@ -15454,8 +15454,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/vu1_send_chain",
-        "source_path": "src/rendering/vu1_send_chain.c",
+        "unit": "rendering/vu1_chain",
+        "source_path": "src/rendering/vu1_chain.c",
         "address": "0x002336a0",
         "current_name": "FUN_002336a0",
         "proposed_name": "vu1_send_chain",
@@ -15477,8 +15477,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/vu1_sync_chain",
-        "source_path": "src/rendering/vu1_sync_chain.c",
+        "unit": "rendering/vu1_chain",
+        "source_path": "src/rendering/vu1_chain.c",
         "address": "0x002337b0",
         "current_name": "FUN_002337b0",
         "proposed_name": "vu1_sync_chain",
@@ -16350,8 +16350,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/initialize_audio_system",
-        "source_path": "src/audio/decoder/initialize_audio_system.c",
+        "unit": "textbin/audio/decoder/initialize_audio_system",
+        "source_path": "src/textbin/audio/decoder/initialize_audio_system.c",
         "address": "0x0023a7c0",
         "current_name": "FUN_0023a7c0",
         "proposed_name": "initialize_audio_system",

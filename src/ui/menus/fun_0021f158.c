@@ -17,11 +17,11 @@ extern struct M2c_D_001D5BF4 *D_001D5BF4[];
 struct ImageEntry { u8 pad0[8]; u16 unk8; u8 padA[4]; u16 unkE; u8 pad10[8]; };
 extern struct ImageEntry D_001DFFB0[];
 extern void PackImageDescriptor(s32 *, s32);
-extern void func_001F4280(s32);
-extern void func_001F4398();
-extern void func_001F7580(void *, u64, void *, s32);
-extern u8 *func_001FDD10(s32);
-extern void func_00233980(s32, s32);
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
+extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
+extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
+extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 extern s32 sprintf();
 s32 FUN_0021f158(s32 arg0) {
 u8 sp_slot[0x50];    u8 descriptor[0x20];
@@ -42,10 +42,10 @@ u8 sp_slot[0x50];    u8 descriptor[0x20];
     temp_17_38 = D_0013D428[idx];
     temp_16_37 = &D_001DFFB0[idx];
     temp_18_40 = (s32)temp_16_37->unkE;
-    func_00233980(0x42, 0x44);
-    func_00233980(0x47, 0xB);
+    vu1_add_g_sregister(0x42, 0x44);
+    vu1_add_g_sregister(0x47, 0xB);
     if (temp_16_37->unk8 == 0) {
-        sprintf(sp_slot, func_001FDD10(0x4F52));
+        sprintf(sp_slot, get_help_message_text(0x4F52));
     } else {
         if (temp_17_38 < 0x3E8) {
             temp_4_77 = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
@@ -58,11 +58,11 @@ u8 sp_slot[0x50];    u8 descriptor[0x20];
             sprintf(temp_4_77, D_001602D0, (s32) temp_18_40 / 1000, (s32) temp_18_40 % 1000);
         }
     }
-    func_001F4280(0);
+    setup_gif_paging(0);
     PackImageDescriptor((s32 *)descriptor, arg0);
     *(s16 *)(descriptor + 0x10) = 0x10;
     *(s16 *)(descriptor + 0x12) = 3;
-    func_001F7580((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);
-    func_001F4398();
+    font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);
+    do_gif_paging();
     return 2;
 }

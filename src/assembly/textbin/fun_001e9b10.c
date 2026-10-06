@@ -193,8 +193,8 @@ extern char D_001E76D8[];
 extern void DebugPrint(char *fmt, ...);
 extern void FillTransferWords(void *, s32, s32);
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
-extern void func_001F2588(void);
-extern void func_001F37E8(void);
+extern void update_fog(void) __asm__("func_001F2588");
+extern void reset_callback_registries(void) __asm__("func_001F37E8");
 extern void func_001F61E8(void);
 extern void func_001F9810(void *, s32);
 extern void func_001F9838(void *, void *, s32);
@@ -204,11 +204,11 @@ extern void func_001F9A80(void *, void *, f32);
 extern f32 func_001F9AF0(void *);
 extern void func_001F9CF8(void *, void *, void *);
 extern f32 func_001FA6C0(s32);
-extern s32 func_001FA6D0(f32);
-extern void func_00214970(s32);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void set_video_timing(s32) __asm__("func_00214970");
 extern void func_00217020(void);
 extern void func_0022A5E0(void *);
-extern void func_002334D8(void *);
+extern void start_vif1_dma_transfer(void *) __asm__("func_002334D8");
 extern void func_00234F98(void *);
 extern void func_00237370(void *);
 
@@ -264,10 +264,10 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     FillTransferWords(D_001AAA40, 0, 0x180);
     if (D_0015ED80 != 0) {
         if (D_0015ED60 == 1.0f) {
-            func_00214970(1);
+            set_video_timing(1);
         }
     } else if (D_0015ED60 != 1.0f) {
-        func_00214970(0);
+        set_video_timing(0);
     }
     D_0016034C = *(u8 *)&D_0015ED80;
     D_00194100.x4 = D_001941C0;
@@ -295,14 +295,14 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     D_0015F48C = *(f32 *)(c + 4);
     D_0015F490 = *(f32 *)(c + 8);
     D_0015F494 = *(f32 *)(c + 12);
-    func_001F2588();
+    update_fog();
     D_00160EC0 = 512000.0f;
     D_00160F70 = 720.0f;
     D_001603E4 = 500.0f;
     D_0015FF30 = 500;
     D_001600BC = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
-    func_002334D8(D_00100AE0);
+    start_vif1_dma_transfer(D_00100AE0);
     func_001F9810(D_0019C1C0, 0x100);
     func_001F9810(D_0019C3C0, 0x180);
     func_001F9810(D_0019BDC0, 0x400);
@@ -442,7 +442,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         if (D_001D7F30[cls]->x1C != 0) {
             f32 rad;
 
-            tie->x17 = func_001FA6D0(*D_001D7F30[cls]->x1C);
+            tie->x17 = truncate_float_to_s32(*D_001D7F30[cls]->x1C);
             rad = func_001FA6C0(tie->x17) + 24.0f;
             if (tie->radius < rad) {
                 tie->radius = rad;
@@ -456,8 +456,8 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         td->m3.w = D_001D7F30[cls]->x20;
         a = (func_001F9AF0(&td->m[0]) + func_001F9AF0(&td->m[1])) * 0.5f;
         b = func_001F9AF0(&td->m[2]);
-        x = func_001FA6D0(a * 4096.0f);
-        y = func_001FA6D0(b * 4096.0f);
+        x = truncate_float_to_s32(a * 4096.0f);
+        y = truncate_float_to_s32(b * 4096.0f);
         if (x > 0x10000) {
             x = 0x10000;
         }
@@ -537,7 +537,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         D_00160E8C[i0].x3A = 0x7F80;
     }
     D_0018C318.x1C = 0;
-    func_001F37E8();
+    reset_callback_registries();
     func_00217020();
     func_001F61E8();
     D_0015F60C = 0;

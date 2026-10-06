@@ -39,18 +39,18 @@ extern struct LevelProjectionState view_context __asm__("D_0018CD00");
 extern void AppendDmaTag(u32);
 extern void func_001F2260();
 extern void update_view_context() __asm__("func_001F2D98");
-extern void func_001F3868();
-extern void func_001F4280(s32);
-extern void func_001F4398();
+extern void reset_gs_registers() __asm__("func_001F3868");
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 extern void draw_rotated_sprite(f32, f32, f32, f32, s32, s32, s64, f32) __asm__("FUN_00200600");
-extern void func_0020CC60(void) __asm__("FUN_0020cc60");
-extern void func_0020CEF8();
-extern void func_0020D460(void);
+extern void prune_moby_references(void) __asm__("FUN_0020cc60");
+extern void patch_moby_gifs() __asm__("func_0020CEF8");
+extern void draw_mobys(void) __asm__("func_0020D460");
 extern void draw_sky_shells() __asm__("func_0022B288");
 extern void build_resident_indexed_texture_warp_meshes(s32) __asm__("func_0022E420");
 extern void draw_resident_textured_quad() __asm__("func_0022E8C8");
@@ -73,8 +73,8 @@ void render_level_frame(void)
   s64 texture;
   append_gif_transfer_packet();
   func_001F2260();
-  func_0020CC60();
-  func_001F3868();
+  prune_moby_references();
+  reset_gs_registers();
   saved_projection_scale = view_context.projection_scale;
   D_0015F620 = -1;
   if (saved_projection_scale < 0.63f)
@@ -89,13 +89,13 @@ void render_level_frame(void)
   func_001F2260();
   if (level_render_state.mode == 4)
   {
-    func_001F4280(1);
+    setup_gif_paging(1);
     draw_resident_textured_quad();
-    func_001F4398();
+    do_gif_paging();
   }
-  func_0020D460();
+  draw_mobys();
   AppendDmaTag(0x02080000);
-  func_001F4280(1);
+  setup_gif_paging(1);
   if ((current_level_index != 0) && ((current_level_index != 1) || (D_0013DD43[0] != 0)))
   {
     build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);
@@ -126,7 +126,7 @@ void render_level_frame(void)
     /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
     draw_rotated_sprite(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40, get_effect_texture(3), rotation_angle);
   }
-  func_001F4398();
+  do_gif_paging();
   if (sequence_fade > 0.0f)
   {
     if (sequence_fade > 1.0f)
@@ -136,6 +136,6 @@ void render_level_frame(void)
     emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence_fade * 128.0f));
   }
   vu1_sync_chain(0x10);
-  func_0020CEF8();
+  patch_moby_gifs();
 }
 extern __typeof__(render_level_frame) func_0022F288 __attribute__((alias("FUN_0022f288")));

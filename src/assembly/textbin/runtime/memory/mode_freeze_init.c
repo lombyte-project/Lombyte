@@ -22,11 +22,11 @@ struct FreezeModeState {
 
 extern s32 D_0015F604;
 extern struct FreezeModeState D_00193300;
-extern s32 func_0012E3E8();
+extern s32 snd_pause_all_sounds_in_group() __asm__("func_0012E3E8");
 extern s32 InitializeRenderState();
 extern s32 func_001F96F8(s32);
-extern s32 func_001FDD10();
-extern s32 func_001FED30();
+extern s32 get_help_message_text() __asm__("func_001FDD10");
+extern s32 push_help_history() __asm__("func_001FED30");
 
 void mode_freeze_init(u32 arg0, s32 arg1) __asm__("FUN_001fbab8");
 
@@ -34,7 +34,7 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
     struct FreezeModeState *st;
 
     if (D_0015F604 != 3) {
-        func_0012E3E8(0x1D);
+        snd_pause_all_sounds_in_group(0x1D);
         InitializeRenderState(0);
     }
     D_00193300.unk14 = D_0015F604;
@@ -44,9 +44,9 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
     switch (arg0) {
     case 0:
         st = &D_00193300;
-        st->unk8 = (s32)func_001FDD10(0x4F6E);
-        st->unkC = (s32)func_001FDD10(0x5248);
-        st->unk10 = (s32)func_001FDD10(0x5249);
+        st->unk8 = (s32)get_help_message_text(0x4F6E);
+        st->unkC = (s32)get_help_message_text(0x5248);
+        st->unk10 = (s32)get_help_message_text(0x5249);
         st->unk4 = 0;
         st->unk1C = 0;
         st->unk20 = 0;
@@ -54,20 +54,20 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
         st->unk28 = 0;
         break;
     case 2:
-        D_00193300.unk8 = (s32)func_001FDD10(0x524A);
+        D_00193300.unk8 = (s32)get_help_message_text(0x524A);
         D_00193300.unkC = 0;
         D_00193300.unk4 = 0;
         break;
     case 1:
     case 4:
         st = &D_00193300;
-        st->unk8 = (s32)func_001FDD10(0x5229);
-        st->unkC = (s32)func_001FDD10(0x4EE0);
-        st->unk10 = (s32)func_001FDD10(0x524A);
+        st->unk8 = (s32)get_help_message_text(0x5229);
+        st->unkC = (s32)get_help_message_text(0x4EE0);
+        st->unk10 = (s32)get_help_message_text(0x524A);
         st->unk4 = 0;
         break;
     case 5:
-        func_001FED30(0x4E2B);
+        push_help_history(0x4E2B);
         st = &D_00193300;
         /* Retail stores unk4 before clearing unk20 between the two calls. */
         st->unk4 = func_001F96F8(0x1E);

@@ -31,7 +31,7 @@ struct RncStatBuffer {
 };
 extern u8 D_00113AC8[];
 extern void *_malloc_r();
-extern s32 func_00114000();
+extern s32 reentrant_syscall_with_two_arguments() __asm__("func_00114000");
 extern s32 func_00118EC0();
 extern s32 __sseek(void *, s32, s32);
 
@@ -46,7 +46,7 @@ void __smakebuf(RncFile *fp)
         fp->_bf._size = 1;
         return;
     }
-    if ((s16)fp->_file < 0 || func_00114000(fp->_data, (s16)fp->_file, &st) < 0) {
+    if ((s16)fp->_file < 0 || reentrant_syscall_with_two_arguments(fp->_data, (s16)fp->_file, &st) < 0) {
         couldbetty = 0;
         size = 0x400;
         fp->_flags |= 0x800;

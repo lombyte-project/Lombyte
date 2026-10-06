@@ -6,7 +6,7 @@ extern struct TagPtr D_00160F00;
 extern u8 D_0013CFC0[];
 extern u8 D_0013CF10[];
 extern struct Disp D_0018CD00;
-extern void func_00233980(s32, u64);
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
 
 void reset_gs_registers(void) {
@@ -23,7 +23,7 @@ void reset_gs_registers(void) {
     D_00160F00.p->w2 = 0;
     D_00160F00.p->w3 = 0x5000000B;
     D_00160F00.p++;
-    func_00233980(0x3D, D_0018CD00.a | ((u64)D_0018CD00.b << 8) | ((u64)D_0018CD00.c << 16));
+    vu1_add_g_sregister(0x3D, D_0018CD00.a | ((u64)D_0018CD00.b << 8) | ((u64)D_0018CD00.c << 16));
 }
 
 extern __typeof__(reset_gs_registers) func_001F3868 __attribute__((alias("FUN_001f3868")));

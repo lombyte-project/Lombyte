@@ -51,23 +51,23 @@ extern PanelRenderState panel_render_state __asm__("D_001D5BF0");
 extern PanelRenderSlot *panel_slots[] __asm__("D_001D5D90");
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-extern void func_0020D278(void);
-extern void func_0020D1F0(void);
-extern void func_0020D218(void);
-extern void func_0020D330(void *, s32);
+extern void draw_mobys_setup(void) __asm__("func_0020D278");
+extern void init_moby_class_dists(void) __asm__("func_0020D1F0");
+extern void stash_moby_class_dists(void) __asm__("func_0020D218");
+extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 extern void func_00218D10(void);
 extern void func_001F2260(void);
 extern void func_00237A78(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *);
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 extern void func_001F7888(s32, s32, s32, f32);
-extern void func_00200F90(s32, s32, s32, s32, u64, u32, s32);
-extern void func_001F7978(void);
-extern void func_001F5450(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64);
-extern void func_0020D248(void);
-extern void func_0020D3B0(void);
-extern void func_001F4280(s32);
+extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("func_00200F90");
+extern void begin_draw_frame(void) __asm__("func_001F7978");
+extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern void restore_moby_class_dists(void) __asm__("func_0020D248");
+extern void draw_mobys_clean_up(void) __asm__("func_0020D3B0");
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void func_00223E28(PanelRenderSlot *);
-extern void func_001F4398(void);
+extern void do_gif_paging(void) __asm__("func_001F4398");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 
@@ -109,15 +109,15 @@ void render_level_effects_and_screen_sprites(void)
     s32 width_for_panel;
 
     vu1_add_g_sregister(0x47, 0x5360B);
-    func_0020D278();
-    func_0020D1F0();
-    func_0020D218();
-    func_0020D330(resident_object_pool, 4);
+    draw_mobys_setup();
+    init_moby_class_dists();
+    stash_moby_class_dists();
+    draw_moby_list(resident_object_pool, 4);
     func_00218D10();
     func_001F2260();
     for (effect_slot_index = 0; effect_slot_index < 14; effect_slot_index++) {
         if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 && (effect_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
-            func_0020D330(panel_slots[effect_slot_index], 1);
+            draw_moby_list(panel_slots[effect_slot_index], 1);
         }
     }
 
@@ -210,9 +210,9 @@ void render_level_effects_and_screen_sprites(void)
             func_001F7888(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
             texture_width = 1 << texture_width_log2;
             texture_height = 1 << texture_height_log2;
-            func_00200F90(0, 0, texture_width, texture_height, panel_clear_color, 0, 0);
+            draw_hud_rect_depth(0, 0, texture_width, texture_height, panel_clear_color, 0, 0);
             draw_result = panels[draw_slot_index]->draw(panels[draw_slot_index]);
-            func_001F7978();
+            begin_draw_frame();
             if (draw_result & 1) {
                 continue;
             }
@@ -253,22 +253,22 @@ void render_level_effects_and_screen_sprites(void)
             }
             vu1_add_g_sregister(0x42, 0x8000000064L);
             vu1_add_g_sregister(0x47, 0x43);
-            func_001F5450(frame_x, frame_y, frame_width, frame_height, texture_left, texture_top, texture_right - texture_left, texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
+            draw_textured_quad(frame_x, frame_y, frame_width, frame_height, texture_left, texture_top, texture_right - texture_left, texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
         }
         if (pass == 0) {
-            func_0020D248();
-            func_0020D3B0();
+            restore_moby_class_dists();
+            draw_mobys_clean_up();
         }
     }
 
     final_slot_index = 0;
-    func_001F4280(0);
+    setup_gif_paging(0);
     for (; final_slot_index < 14; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 && (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
             func_00223E28(slots[final_slot_index]);
         }
     }
-    func_001F4398();
+    do_gif_paging();
 }
 
 extern __typeof__(render_level_effects_and_screen_sprites) func_002196B8 __attribute__((alias("FUN_002196b8")));

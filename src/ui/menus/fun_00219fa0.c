@@ -20,12 +20,12 @@ struct M2c_temp_22_35
 extern s32 D_0015F438;
 extern s32 D_001601B0;
 extern s32 SubtractIntegerWithClamp();
-extern void func_001F4280();
-extern void func_001F4398();
-extern s32 func_001FF960();
-extern void func_001FFC30();
-extern void func_001FFE18() __asm__("FUN_001ffe18");
-extern void func_00200080();
+extern void setup_gif_paging() __asm__("func_001F4280");
+extern void do_gif_paging() __asm__("func_001F4398");
+extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
+extern void draw_hud_sprite() __asm__("func_001FFC30");
+extern void draw_hud_sprite_flipped() __asm__("FUN_001ffe18");
+extern void draw_hud_sprite_subpixel() __asm__("func_00200080");
 extern void func_00200E08();
 
 s32 FUN_00219fa0(struct M2c_arg0 *arg0)
@@ -44,7 +44,7 @@ s32 FUN_00219fa0(struct M2c_arg0 *arg0)
   var_18_18 = (*arg0).unk5C;
   sp0 = var_18_18;
   temp_21_23 = ((s32) ((arg0->unk20 * 0x10) - 0x200)) >> 1;
-  func_001F4280(0);
+  setup_gif_paging(0);
   new_var3 = 0;
   new_var = new_var3;
   if (arg0->unk40 > new_var3)
@@ -60,7 +60,7 @@ s32 FUN_00219fa0(struct M2c_arg0 *arg0)
       }
       var_19_11 = var_19_11 + 1;
       var_30_28 += 0xA;
-      func_00200080(func_001FF960(temp_22_35->unk0, temp_22_35->unk2), new_var2 = temp_21_23, var_18_18, 0x200, 0x200, 0x80);
+      draw_hud_sprite_subpixel(find_valid_animation_frame_index(temp_22_35->unk0, temp_22_35->unk2), new_var2 = temp_21_23, var_18_18, 0x200, 0x200, 0x80);
       var_18_18 += 0x260;
     }
     while (var_19_11 < arg0->unk40);
@@ -68,15 +68,15 @@ s32 FUN_00219fa0(struct M2c_arg0 *arg0)
   if (sp0 < new_var)
   {
     func_00200E08(new_var, new_var, arg0->unk20, 0x14, (u64) D_001601B0, new_var);
-    func_001FFC30(func_001FF960(0xE99EU, 6), (temp_21_23 >> 4), 2, 0x20, 0x10, 0x80);
+    draw_hud_sprite(find_valid_animation_frame_index(0xE99EU, 6), (temp_21_23 >> 4), 2, 0x20, 0x10, 0x80);
   }
   temp_5_100 = arg0->unk24;
   if ((temp_5_100 * 0x10) < var_18_18)
   {
     var_30_28 = new_var;
     func_00200E08(var_30_28, temp_5_100 - 0x14, arg0->unk20, temp_5_100, (u64) D_001601B0, var_30_28);
-    func_001FFE18(func_001FF960(0xE99EU, 6), (temp_21_23 >> 4), arg0->unk24 - 0x12, 0x20, 0x10, 0x80);
+    draw_hud_sprite_flipped(find_valid_animation_frame_index(0xE99EU, 6), (temp_21_23 >> 4), arg0->unk24 - 0x12, 0x20, 0x10, 0x80);
   }
-  func_001F4398();
+  do_gif_paging();
   return 2;
 }

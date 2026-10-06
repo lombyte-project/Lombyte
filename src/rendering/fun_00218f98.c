@@ -49,12 +49,12 @@ extern struct O2 *D_001D5D90[];
 extern u8 D_001601C0 __attribute__((sda));
 extern u8 D_001601D0 __attribute__((sda));
 extern s32 FUN_001f9a68(s32, s32, f32);
-extern void func_002337B0(s32);
+extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
 extern s32 FUN_00225ac0();
-extern void func_002335D0(void);
+extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern struct O2 *func_00225490();
-extern s32 func_00212ED8();
+extern s32 set_moby_animation() __asm__("func_00212ED8");
 
 void func_00225AC0__void() __asm__("FUN_00225ac0");
 void FUN_00218f98(void) {
@@ -66,7 +66,7 @@ void FUN_00218f98(void) {
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);
     qzero(D_0019C160);
-    func_002337B0(1);
+    vu1_sync_chain(1);
     sceGsSyncV(0);
     D_0015F438++;
     a = D_001940C0[1] + 0xA0000;
@@ -81,7 +81,7 @@ void FUN_00218f98(void) {
     D_001D5BF0.f108 = c;
     D_001D5BF0.f10C = d;
     func_00225AC0__void(1);
-    func_002335D0();
+    vu1_init_chain();
     D_001D5BF0.f18 = D_0015EE78;
     if (D_001D5BF0.f4 != 0) {
         for (i = 0; i < 14; i++) {
@@ -98,7 +98,7 @@ void FUN_00218f98(void) {
                 D_001D5D90[i]->f44 = 0;
                 D_001D5D90[i]->f48 = 0;
                 k = *(s32 *)((s32)D_001D5BF0.f4 + (i << 2));
-                func_00212ED8(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
+                set_moby_animation(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
             }
         }
     }

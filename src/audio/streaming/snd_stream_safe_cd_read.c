@@ -4,8 +4,8 @@ extern s32 D_0015EC94;
 extern s32 D_0015EC98;
 extern volatile s32 D_00137B00[];
 extern s32 sceCdRead();
-extern s32 func_0012EE08();
-extern s32 func_0012E6E0();
+extern s32 snd_stream_safe_cd_sync() __asm__("func_0012EE08");
+extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
 
 s32 snd_stream_safe_cd_read(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0012ed58");
 
@@ -15,7 +15,7 @@ s32 snd_stream_safe_cd_read(s32 arg0, s32 arg1, s32 arg2) {
     if (D_0015EC8C == 0) {
         return sceCdRead(arg0, arg1, arg2);
     }
-    if (func_0012EE08(1) == 1) {
+    if (snd_stream_safe_cd_sync(1) == 1) {
         return 0;
     }
     buf[0] = arg0;
@@ -23,7 +23,7 @@ s32 snd_stream_safe_cd_read(s32 arg0, s32 arg1, s32 arg2) {
     D_00137B00[4] = 0;
     buf[1] = arg1;
     buf[2] = arg2;
-    func_0012E6E0(0x38, 0xC, buf, 0, 0);
+    snd_send_iop_command_no_wait(0x38, 0xC, buf, 0, 0);
     D_0015EC94 = 1;
     D_0015EC98 = 0;
     return 1;

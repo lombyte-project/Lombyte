@@ -2,9 +2,9 @@
 extern s32 D_00160F18;
 extern s32 D_00160F1C;
 extern s32 AddDmacHandler();
-extern s32 func_00119160();
+extern s32 enable_dmac() __asm__("func_00119160");
 extern void func_00233E00();
-extern void func_00233F00();
+extern void print_register_values_and_halt() __asm__("func_00233F00");
 
 void dmac_vif1_enable(void) __asm__("FUN_00233d00");
 
@@ -21,8 +21,8 @@ void dmac_vif1_enable(void) {
                 *p = 0x20000;
             }
             D_00160F18 = AddDmacHandler(1, &func_00233E00, 0);
-            D_00160F1C = AddDmacHandler(0xF, &func_00233F00, 0);
-            func_00119160(1);
+            D_00160F1C = AddDmacHandler(0xF, &print_register_values_and_halt, 0);
+            enable_dmac(1);
         }
     }
 }

@@ -31,12 +31,12 @@ extern u8 D_001863D0[];
 extern s32 SubtractIntegerWithClamp(s32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 func_001FA610(f32);
-extern void func_001F4280(s32);
-extern void func_001F4398(void);
-extern void func_001F6530(s32, s32, u64, s32, s32);
-extern s32 func_001FF960(s32, s32);
-extern void func_001FFC30(s32, s32, s32, s32, s32, s32);
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
+extern void setup_gif_paging(s32) __asm__("func_001F4280");
+extern void do_gif_paging(void) __asm__("func_001F4398");
+extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
+extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 
 s32 draw_pause_ring(struct PauseState *arg0) __asm__("FUN_00220b20");
@@ -48,7 +48,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
     struct IconEnt *iconTab;
     s32 v1, v0;
 
-    func_001F4280(0);
+    setup_gif_paging(0);
     v1 = arg0->w;
     iconTab = D_001863D0;
     v0 = arg0->h;
@@ -67,7 +67,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
     do {
         f32 t, x, y;
 
-        t = func_001FA610((f32)i * 0.7853982f + -1.5707964f);
+        t = fast_normalize_angle((f32)i * 0.7853982f + -1.5707964f);
         x = cx + fast_cos(t) * radius;
         y = cy + fast_sin(t) * radius;
         if (i == arg0->sel) {
@@ -84,17 +84,17 @@ s32 draw_pause_ring(struct PauseState *arg0) {
                           0x40404040L, 0);
         } else {
             s32 idx = arg0->slots[i];
-            s32 id = func_001FF960(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
+            s32 id = find_valid_animation_frame_index(iconTab[idx].id, D_0013E520[idx] ? 4 : 0);
 
-            func_001FFC30(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
+            draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
         }
         i += 1;
     } while (i < 8);
-    func_001FFC30(func_001FF960(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
-    func_001FFC30(func_001FF960(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20, 0x80);
-    func_001F6530(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
-    func_001F6530(arg0->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
-    func_001F4398();
+    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
+    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20, 0x80);
+    font_print_large(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
+    font_print_large(arg0->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
+    do_gif_paging();
     return 2;
 }
 

@@ -35,8 +35,8 @@ extern s32 _dispatchMpegCallback();
 extern s32 _doCSC();
 extern s32 _doCSC2();
 extern s32 _sendIpuCommand();
-extern s32 func_001190F8();
-extern s32 func_00119160();
+extern s32 disable_dmac() __asm__("func_001190F8");
+extern s32 enable_dmac() __asm__("func_00119160");
 
 void _csc_storeRefImage(CscDec *d, CscImage *img) __asm__("_csc_storeRefImage");
 
@@ -68,7 +68,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
         handle = AddDmacHandlerSecondary(4, D_0012A5D8, 0, &dma);
         p = (volatile u32 *)0x1000E010;
         *p = 0x10;
-        func_00119160(4);
+        enable_dmac(4);
         intr = DIntr();
         *(volatile u32 *)0x1000B410 = dma.addr;
         *(volatile u32 *)0x1000B420 = 0xFFFF;
@@ -83,7 +83,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
         } else {
             _doCSC2(d, d->data, total);
         }
-        func_001190F8(4);
+        disable_dmac(4);
         RemoveDmacHandler(4, handle);
     } else {
         /* Even the short transfer clears the stack count before running CSC. */

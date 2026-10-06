@@ -115,7 +115,7 @@ extern void func_001E9478(Moby *, s32);
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
-extern void func_00212F90(void *, int, int, int);
+extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
 extern Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
 extern Moby *delete_moby(Moby *) __asm__("FUN_00225530");
 extern void update_preview_animation_and_attachments(s32, Moby *, Moby *, s32 *, s32 *, s32 *) __asm__("func_00225E70");
@@ -273,7 +273,7 @@ s32 load_hand_gadget(HandGadgetState *hand)
         {
           if (moby->anim != 6)
           {
-            func_00212F90(moby, 6, 0, 10);
+            blend_moby_animation(moby, 6, 0, 10);
           }
           moby->state = 8;
         }

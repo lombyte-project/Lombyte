@@ -368,10 +368,10 @@ def preserve_semantic_alias(
 
 def equivalent_labels(canonical: str) -> set[str]:
     """FUN_<addr> and its upper-case func_<ADDR> alias name the same symbol."""
-    labels = {canonical}
-    if canonical.startswith("FUN_"):
-        labels.add("func_" + canonical.removeprefix("FUN_").upper())
-    return labels
+    address = re.fullmatch(r"(?:FUN|func)_([0-9A-Fa-f]{8})", canonical)
+    if not address:
+        return {canonical}
+    return {canonical, "FUN_" + address.group(1).lower(), "func_" + address.group(1).upper()}
 
 
 def function_asm_label(text: str, function_name: str) -> str | None:
@@ -427,7 +427,7 @@ def rewrite_function_alias_references(
             identifier = match.group(1)
             for canonical, semantic in aliases_by_identifier.get(identifier, ()):
                 found_by_canonical.setdefault(
-                    canonical, (canonical, semantic, identifier)
+                    semantic, (canonical, semantic, identifier)
                 )
         found = list(found_by_canonical.values())
         if not found:
@@ -488,7 +488,9 @@ def rewrite_function_alias_references(
         kept = {c: s for c, s in aliases.items() if s not in clashing}
         return rewrite_function_alias_references(text, kept)
 
-    declared_text = "".join(lines)
+    # Linker alias definitions keep their address-keyed name.
+    alias_lines = {i: line for i, line in enumerate(lines) if ALIAS_LINE_RE.search(line)}
+    declared_text = "".join("\0\n" if i in alias_lines else line for i, line in enumerate(lines))
     reference_counts: dict[str, int] = {}
     updated, reference_count = replace_code_identifiers(
         declared_text,
@@ -496,6 +498,8 @@ def rewrite_function_alias_references(
         skip_include_asm=True,
         replacement_counts=reference_counts,
     )
+    restored = iter(alias_lines[i] for i in sorted(alias_lines))
+    updated = re.sub(r"\0\n", lambda _m: next(restored), updated)
     for canonical, semantic in aliases.items():
         if not reference_counts.get(canonical):
             continue
@@ -515,7 +519,7 @@ def rewrite_function_alias_references(
 
 
 def plan_function_reference_aliases(
-    root: Path, candidates: list[Candidate], moves: list[Move]
+    root: Path, candidates: list[Candidate], moves: list[Move], skip_files: bool = False
 ) -> tuple[list[ReferenceEdit], int, int, int, list[str]]:
     """Plan semantic call-site identifiers across source and public headers."""
     aliases: dict[str, str] = {}
@@ -529,6 +533,8 @@ def plan_function_reference_aliases(
                 f"{candidate.current_name} maps to multiple semantic names"
             )
         aliases[candidate.current_name] = candidate.proposed_name
+        for label in equivalent_labels(candidate.current_name) - {candidate.current_name}:
+            aliases[label] = candidate.proposed_name
     if not aliases:
         return [], 0, 0, 0, issues
 
@@ -606,6 +612,16 @@ def plan_function_reference_aliases(
                     f"{path}: {semantic} references {canonical} without an asm-labeled declaration"
                 )
 
+    if skip_files:
+        skipped = {
+            issue.split(": ", 1)[0] for issue in issues if issue.startswith(str(root))
+        }
+        if skipped:
+            print(f"Skipping call-site edits in {len(skipped)} file(s) with conflicts:")
+            for path in sorted(skipped):
+                print(f"  {Path(path).relative_to(root)}")
+        edits = [edit for edit in edits if str(edit.path) not in skipped]
+        issues = [issue for issue in issues if not issue.startswith(str(root))]
     return edits, total_references, total_declarations, updated_files, issues
 
 
@@ -861,14 +877,18 @@ def inspect_candidates(
                 ):
                     # Renamed in place; where the file lives is decided by hand.
                     candidate.already_applied = True
+                    candidate.new_owner = candidate.old_owner
+                    candidate.new_source = candidate.old_source
                 elif re.search(
                     r"INCLUDE_ASM\([^)]*\b" + re.escape(candidate.current_name) + r"\s*\)", text
                 ):
                     # Still retail assembly: only its call sites take the name.
                     candidate.already_applied = True
+                    candidate.new_owner = candidate.old_owner
+                    candidate.new_source = candidate.old_source
                 else:
                     candidate.error = f"no unique {candidate.current_name} definition in source"
-            if candidate.new_source in destinations:
+            if candidate.new_source in destinations and not candidate.already_applied:
                 candidate.error = f"duplicate target path: {candidate.new_source}"
             else:
                 destinations[candidate.new_source] = candidate
@@ -1212,6 +1232,11 @@ def main() -> int:
         help="select one proposal by address, e.g. 0x0012d8f8",
     )
     parser.add_argument("--diff", action="store_true", help="show unified content diffs")
+    parser.add_argument(
+        "--skip-conflicting-files",
+        action="store_true",
+        help="leave the call sites of a file with a conflict as they are instead of refusing",
+    )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true", help="preview only (the default)")
     mode.add_argument("--apply", action="store_true", help="write the planned changes")
@@ -1251,7 +1276,7 @@ def main() -> int:
         reference_declaration_count,
         reference_file_count,
         reference_issues,
-    ) = plan_function_reference_aliases(root, active, moves)
+    ) = plan_function_reference_aliases(root, active, moves, args.skip_conflicting_files)
     issues.extend(reference_issues)
 
     yaml_text = yaml_path.read_text(encoding="utf-8")

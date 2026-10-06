@@ -28,7 +28,7 @@ typedef struct {
 } AudioDecA;
 extern unsigned char *D_001612BC MACRO_ADDR;
 extern int snd_get_movie_nax(void) __asm__("FUN_0012f178");
-extern void func_0023AF18(AudioDecA *, unsigned char *, int, int);
+extern void send_to_spu(AudioDecA *, unsigned char *, int, int) __asm__("func_0023AF18");
 /* sendADPCM(_AudioDec *): once enough is buffered (state 1: 4 KiB,
    filling the IOP buffer from iopLastPos; state 2: the free space behind
    the SPU position FUN_0012f178 reports), sends 1 KiB per channel at a
@@ -81,7 +81,7 @@ void send_adpcm(void *arg0) {
                 b[1] = 6;
                 b[0x11] = 2;
             }
-            func_0023AF18(ad, D_001612BC, 0x400, i * 0x1000 + ad->spuPos);
+            send_to_spu(ad, D_001612BC, 0x400, i * 0x1000 + ad->spuPos);
         }
         ad->spuPos = (ad->spuPos + 0x400) % 0x1000;
         ad->count -= ad->ch << 10;

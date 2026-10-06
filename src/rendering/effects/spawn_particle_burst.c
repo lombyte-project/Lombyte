@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/effects.c, func_001EE3B0). */
-extern int func_001F44B8(int);
+extern int get_effect_texture(int) __asm__("func_001F44B8");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float func_001FA580(float, float);
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern void FUN_001f5ab0(float, float, float, float, float, int, int, int, int, int, int, int,
                            float, float);
 /*
@@ -28,7 +28,7 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2)
 {
     float forty = 40.0f;
     char *p = (char *)arg0;
-    int handle = func_001F44B8(*(int *)(p + 0x18));
+    int handle = get_effect_texture(*(int *)(p + 0x18));
     int mode = *(int *)(p + 0x2C);
     float angle = *(float *)(p + 0x1C);
     float k;
@@ -41,7 +41,7 @@ void spawn_particle_burst(void *arg0, float arg1, float arg2)
                           forty * *(float *)(p + 0x10), angle,
                           0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(p + 0x14), 0, 0,
                           0.0f, 0.0f);
-            angle = func_001FA580(angle, *(float *)(p + 0x28));
+            angle = fast_add_rotations(angle, *(float *)(p + 0x28));
         }
         break;
     case 1: {

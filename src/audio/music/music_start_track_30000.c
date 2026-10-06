@@ -6,7 +6,7 @@ extern u8 D_0015EE1C;
 extern struct MusicStreamState D_001516D0;
 extern u8 D_00151720[];
 extern void func_002169C0();
-extern void func_0012EC08(s32, s32, s32, s32, s16, s32, s32, s32, s32, void (*)(), u64);
+extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32, void (*)(), u64) __asm__("func_0012EC08");
 void music_start_track_30000(s32 track, s32 arg1, s32 arg2) __asm__("FUN_002156d8");
 
 void music_start_track_30000(s32 track, s32 arg1, s32 arg2) {
@@ -22,7 +22,7 @@ void music_start_track_30000(s32 track, s32 arg1, s32 arg2) {
         D_001516D0.secondary_remaining_time = 48000;
         D_001516D0.secondary_volume = arg2;
         D_001516D0.secondary_crossfade_enabled = 0;
-        func_0012EC08(*entry, 0, 0, 0, D_0015EE1C ? arg2 : 0, 0, 2, 0, 0x21, func_002169C0, (u32)D_00151720);
+        snd_play_vag_stream_by_loc_ex_cb(*entry, 0, 0, 0, D_0015EE1C ? arg2 : 0, 0, 2, 0, 0x21, func_002169C0, (u32)D_00151720);
     }
 }
 

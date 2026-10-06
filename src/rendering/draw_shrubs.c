@@ -13,7 +13,7 @@ extern void func_00118A80(s32);
 extern void WriteDmaChannel(u32, u32, u32);
 extern void func_001F21B0(void *, s32);
 extern void func_001F21B8(void *, s32);
-extern void func_002288F0(void);
+extern void dma_shrub_textures(void) __asm__("func_002288F0");
 extern void func_00228BE8(void);
 
 void draw_shrubs(void) __asm__("FUN_00228b38");
@@ -33,7 +33,7 @@ void draw_shrubs(void) {
         WriteDmaChannel(D_001D8EB0, 0x3200, 0x40);
     }
     func_001F21B8(D_001603C0, 7);
-    func_002288F0();
+    dma_shrub_textures();
     func_001F21B0(D_001603C0, 7);
 }
 

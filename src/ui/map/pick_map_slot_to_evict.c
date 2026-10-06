@@ -11,7 +11,7 @@ struct M2c_D_001A00F0 {
 
 extern struct M2c_D_001A00F0 D_001A00F0;
 extern s32 SubtractIntegerWithClamp(s32 value);
-extern s32 func_00205220(s32 id);
+extern s32 find_id_in_terminated_table(s32 id) __asm__("func_00205220");
 
 s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) __asm__("FUN_00205278");
 
@@ -33,7 +33,7 @@ s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) {
             }
         }
     }
-    base = func_00205220(D_001A00F0.unk224);
+    base = find_id_in_terminated_table(D_001A00F0.unk224);
     if (base == -1) {
         return 1;
     }
@@ -43,7 +43,7 @@ s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) {
             if (v == -1) {
                 return i;
             }
-            delta = SubtractIntegerWithClamp(func_00205220(v & 0xFF) - base);
+            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(v & 0xFF) - base);
             if (max < delta) {
                 max = delta;
                 best = i;

@@ -10,7 +10,7 @@ extern s32 D_0018A2B4[];
 struct SkyPagingState { s32 current_page; s32 next_page; };
 extern struct SkyPagingState D_0015EE74;
 extern void FUN_0020b4a8(void);
-extern void func_00233B68(void);
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 
@@ -27,7 +27,7 @@ void do_sky_gif_paging(void) {
     D_00160470.tag->w3 = 0;
     if (D_0018A2B4[0] != 0) {
         FUN_0020b4a8();
-        func_00233B68();
+        vu1_tex_flush();
     }
     D_00160F00.tag->w0 = 0x20000000;
     D_00160F00.tag->addr = (u32)(D_00160470.tag + 1);

@@ -10,7 +10,7 @@ extern CamRec20 *D_0015EF90 MACRO_ADDR;
 extern CamRec20 *D_0015EF40 MACRO_ADDR;
 extern char D_0013F350[];
 extern char D_0013F3D0[];
-extern int func_00214720(void *arg0, int arg1);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 typedef struct {
     char unk_00[4];
     int (*fn_04)(void *, void *);
@@ -71,7 +71,7 @@ int camera_activation_check_priority(void *cur, void *other) {
         if (o != 0 && *(short *)(o + 0x7E) == 0 && !(state[8] > *(unsigned char *)(o + 0x7C))) {
             return 0;
         }
-        if (func_00214720(D_0013F3D0, *(int *)(p + 0xC))) {
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(p + 0xC))) {
             return 1;
         }
         break;
