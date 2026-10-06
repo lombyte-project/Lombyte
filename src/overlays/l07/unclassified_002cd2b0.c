@@ -176,7 +176,7 @@ extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L07_0030dcf0(void);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L07_0030e1f8(unsigned char *m) {
@@ -194,7 +194,7 @@ void FUN_L07_0030e1f8(unsigned char *m) {
         m[0x23] = 0x80;
     }
     if (r >= 1.0f) {
-        mark_moby_for_removal(m);
+        mark_moby_for_removal_u(m);
         return;
     }
     enqueue_callback_list_1((void *)FUN_L07_0030dcf0, m);
@@ -842,7 +842,66 @@ unsigned char *FUN_L07_0030dbb0(int a, void *pos, int b, float f0, float f1, flo
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F838), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern int D_L07_0015F5CC;
+extern int D_L07_00173ED8;
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int FUN_L00_0025e450();
+extern void FUN_L07_0029b8d8(char *, int, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, void *target) __asm__("FUN_0022da68");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern char *D_L07_ed0_e[] __asm__("D_L07_00173ED0");
+extern int func_L00_001F10E0_f(float, void *, int, int) __asm__("FUN_L00_001f0d60");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+void FUN_L07_0030e458(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float prev[4];
+    qcopy(prev, m + 0x10);
+    add_vector_xyz(m + 0x10, m + 0x10, d);
+    {
+        float g = D_0015ED70 * 9.8f;
+        float r = D_0015ED6C * 6.2831855f;
+        *(float *)(d + 8) -= g;
+        *(float *)(m + 0x48) += r;
+    }
+    if (*(float *)(m + 0x2C) < *(float *)(*(char **)(m + 0x24) + 0x24) * 2.8f) {
+        *(float *)(m + 0x2C) *= 1.2f;
+    }
+    if (D_L07_0015F5CC % 3 == 0) {
+        FUN_L07_0029b8d8(m, 0, 400000.0f, 5.0f);
+    }
+    if (FUN_001efa68(prev, m + 0x10, 0, *(int *)(d + 0x10), 0) != 0
+        || func_L00_001F10E0_f(0.1f, m + 0x10, 0, *(int *)(d + 0x10)) != 0) {
+        char *o = D_L07_ed0_e[2];
+        if (o == 0 || (*(short *)(o + 0xA6) != 0x415 && *(short *)(o + 0xA6) != 0x419 && *(short *)(o + 0xA6) != 0x452)) {
+            if (((unsigned char *)m)[0x31] != 0) {
+                func_L00_0025F4A8_alt(m, d, 0, 2.0f, 1.0f, 0, 3, 5, 0.0f, 0.0f, 1000.0f, 1.2f, 0, 10.0f, 0, 1, -1, 0);
+            } else {
+                allocate_voice_for_target_entry(0, 0, (int)m);
+            }
+            mark_moby_for_removal(m);
+            return;
+        }
+    }
+    if (*(float *)(m + 0x10) < 2.0f || 1021.0f < *(float *)(m + 0x10)
+        || *(float *)(m + 0x14) < 2.0f || 1021.0f < *(float *)(m + 0x14)
+        || *(float *)(m + 0x18) < 2.0f || 1021.0f < *(float *)(m + 0x18)) {
+        mark_moby_for_removal(m);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
 
