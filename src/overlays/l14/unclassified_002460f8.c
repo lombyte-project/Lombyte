@@ -718,7 +718,64 @@ void FUN_L14_002b5c98(u8 *moby)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5d18.s", FUN_L14_002b5d18);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5dd8.s", FUN_L14_002b5dd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bb310.s", FUN_L14_002bb310);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
+
+typedef int u128_2BC560 __attribute__((mode(TI)));
+
+extern char D_0013F5E0[];
+extern float D_0015ED60;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float random_float_between(float, float);
+extern int scale_game_frames(int);
+extern void FUN_L00_00250df8(void *);
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle);
+extern void cross_vectors_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+unsigned char *FUN_L14_002bb310(char *owner, float angle, char *posp) {
+    float vec[12];
+    unsigned char *m;
+    char *d;
+    char *g;
+    float *v0 = vec;
+    float *v1;
+    *(u128_2BC560 *)v0 = *(u128_2BC560 *)posp;
+    m = (unsigned char *)func_0020D348_m(0x51);
+    if (m != 0) {
+        d = *(char **)(m + 0x78);
+        qcopy(m + 0x10, v0);
+        v1 = vec + 4;
+        *(float *)(m + 0x48) = angle;
+        m[0x20] = 0;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        subtract_vector_xyz(v1, v0, owner + 0x10);
+        vec[6] = 0.0f;
+        normalize_vector_xyz(v1, v1, random_float_between(D_0015ED60 * 0.075f, D_0015ED60 * 0.2f));
+        g = D_0013F5E0;
+        cross_vectors_xyz(vec + 8, g, v1);
+        build_look_at_matrix(d, v1, g, FUN_L00_00257c48(0.0f, 0.7853982f));
+        *(float *)(d + 8) = random_float_between(D_0015ED60 * 0.05f, D_0015ED60 * 0.32f);
+        *(float *)(d + 0x14) = FUN_L00_00257c48(0.0f, 0.034906585f);
+        *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, 0.034906585f);
+        *(float *)(d + 0x1C) = FUN_L00_00257c48(0.0f, 0.034906585f);
+        *(short *)(d + 0x10) = scale_game_frames(200);
+        *(char **)(d + 0x20) = owner;
+        *(short *)(d + 0x12) = -1;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d5f40.s", FUN_L14_002d5f40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6358.s", FUN_L14_002d6358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d64d0.s", FUN_L14_002d64d0);
