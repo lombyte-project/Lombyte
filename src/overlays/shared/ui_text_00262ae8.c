@@ -22,6 +22,29 @@ void FUN_L05_00264298(void) {
     *(int *)&D_L05_0015F978_d = *(int *)&D_L05_0015F978_d + 1;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262ae8.s", FUN_L05_00262ae8);
+typedef struct {
+    u8 pad[0x48];
+    s16 unk48;
+    s16 unk4A;
+    u8 pad2[0x7C - 0x4C];
+    s32 unk7C;
+} HudElemX;
+extern s32 FUN_001f96f8(s32);
+extern void FUN_L00_00235c80(void *);
+extern s32 D_L05_0015FAFC;
+
+void FUN_L05_00262ae8(HudElemX *e) {
+    s32 i;
+    s32 *p;
+    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk48 = 0;
+    e->unk4A = 0;
+    i = 3;
+    p = &D_L05_0015FAFC;
+    for (; i >= 0; i--) {
+        *p-- = -1;
+    }
+    FUN_L00_00235c80(e);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262b58.s", FUN_L05_00262b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);

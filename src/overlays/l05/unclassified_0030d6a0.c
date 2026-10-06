@@ -797,7 +797,7 @@ extern void FUN_L05_00319510(void *);
 extern void FUN_L05_00319690(char *);
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
-extern void FUN_L05_00319208(void *);
+void FUN_L05_00319208(void *moby_v);
 extern void FUN_L05_003193a8_u(char *) __asm__("FUN_L05_003193a8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
@@ -925,7 +925,65 @@ void FUN_L05_00318c78(char *moby) {
     subtract_vector_xyz(v20, moby + 0x10, v00);
     FUN_L00_00260738(d + 0x20, v20, v10, moby + 0x40);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319208.s", FUN_L05_00319208);
+#include "qcopy.h"
+extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
+extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC") __attribute__((section(".sdata")));
+extern int D_0015ED84_19208 __asm__("D_0015ED84");
+extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
+
+void FUN_L05_00319208(void *moby_v) {
+    char *moby = moby_v;
+    char *data = *(char **)(moby + 0x78);
+    int *list = (int *)(data + 0x80);
+    int i;
+    int idx;
+    char *g;
+    *(short *)(data + 0xB4) = -1;
+    for (i = 0; i < 5; i++) {
+        if (func_001F9D10_19208(moby + 0x10, D_L05_001600EC_19208 + (list[i] << 7) + 0x30) < 1.0f) {
+            *(short *)(data + 0xB4) = i;
+        }
+    }
+    switch (*(short *)(data + 0xB4)) {
+    case 2: {
+        int k = D_0015ED84_19208 << 4;
+        if (D_0014C050_19208[*(int *)(data + 0xB8) + k] != 0xFF
+            && D_0014C050_19208[*(int *)(data + 0xBC) + k] != 0xFF) {
+            moby[0x20] = 6;
+            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) | 1;
+            moby[0x31] = 0;
+            *(int *)(moby + 0x94) = 0;
+            break;
+        } else {
+            int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby[0x31] = 1;
+            *(int *)(moby + 0x94) = v;
+            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xFFFE;
+            moby[0x20] = 1;
+            break;
+        }
+    }
+    case 0:
+    case 1:
+    case 3:
+    case 4: {
+        int v = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        moby[0x31] = 1;
+        *(int *)(moby + 0x94) = v;
+        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xFFFE;
+        moby[0x20] = 1;
+        break;
+    }
+    }
+    {
+        int *selected = list;
+        selected += *(short *)(data + 0xB4);
+        idx = *selected << 7;
+    }
+    g = D_L05_001600EC_19208;
+    qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
+    qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
+}
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 extern float D_0015ED70;
 

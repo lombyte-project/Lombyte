@@ -64,7 +64,7 @@ extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L15_00299a68(char *moby, void *a, float *point, void *b, void *c);
 extern void FUN_L15_0029a0d0(void *);
-extern void FUN_L15_0029a2a8(void *);
+extern void FUN_L15_0029a2a8_u(void *) __asm__("FUN_L15_0029a2a8");
 extern void FUN_L15_0029a570(void *, int);
 extern void FUN_L15_0029aba8(char *m);
 extern void FUN_L15_002a35d8(int);
@@ -709,7 +709,7 @@ void FUN_L15_002979d8(unsigned char *moby) {
         }
         break;
     }
-    FUN_L15_0029a2a8(moby);
+    FUN_L15_0029a2a8_u(moby);
     if (*(short *)(data + 0x156) != 0) {
         lvl = 2;
     } else if (*(int *)(data + 0x114) != 2) {
@@ -955,7 +955,69 @@ void FUN_L15_0029a248(char *a, char *b) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a2a8.s", FUN_L15_0029a2a8);
+/* Turns the turret head toward its current target (or remembered point), clamping yaw and pitch, and eases both joints. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B488), where it is exact; names translated to the US level program. */
+
+extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED64;
+extern void FUN_L00_002628d8(char *, char *, int, float, float);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+
+void FUN_L15_0029a2a8(void *mv) {
+    char *m = mv;
+    char *d = *(char **)(m + 0x78);
+    float tgt[4];
+    float pos[4];
+    float dir[4];
+    float k1 = 0.02f;
+    float k2 = 0.3f;
+    float yaw, pitch;
+    int have = 0;
+    if (*(short *)(d + 0x194) != 0 && *(char **)(d + 0x190) != 0) {
+        qcopy(tgt, *(char **)(d + 0x190) + 0x10);
+        have = 1;
+    } else if (*(short *)(d + 0x19C) != 0 && *(char **)(d + 0x198) != 0) {
+        qcopy(tgt, *(char **)(d + 0x198) + 0x10);
+        have = 1;
+    } else if (((unsigned char *)d)[0x19F] != 0) {
+        qcopy(tgt, d + 0x100);
+        have = 1;
+    }
+    if (have) {
+        qcopy(pos, m + 0x10);
+        pos[2] += 1.0f;
+        subtract_vector_xyz_c(dir, tgt, pos);
+        yaw = fast_subtract_rotations(FUN_001f9e90(dir[0], dir[1]), *(float *)(m + 0x48));
+        pitch = -FUN_001f9e90(vector_length_xy_c(dir), dir[2]);
+        if ((unsigned int)(((unsigned char *)m)[0x20] - 0x10) < 2) {
+            if (1.5707964f < yaw) yaw = 1.5707964f;
+            else if (yaw < -1.5707964f) yaw = -1.5707964f;
+        } else {
+            if (1.0471976f < yaw) yaw = 1.0471976f;
+            else if (yaw < -1.0471976f) yaw = -1.0471976f;
+        }
+        if (0.5235988f < pitch) pitch = 0.5235988f;
+        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+    } else {
+        pitch = 0.0f;
+        yaw = pitch;
+    }
+    if ((unsigned int)(((unsigned char *)m)[0x20] - 0x10) < 2) {
+        *(float *)(d + 0x288) = yaw;
+        if (1.0471976f < yaw) *(float *)(d + 0x288) = 1.0471976f;
+        else if (yaw < -1.0471976f) *(float *)(d + 0x288) = -1.0471976f;
+        *(float *)(d + 0x208) = yaw - *(float *)(d + 0x288);
+    } else {
+        *(float *)(d + 0x208) = yaw * 0.7f;
+        *(float *)(d + 0x288) = yaw * 0.3f;
+    }
+    {
+        float e = D_0015ED64;
+        *(float *)(d + 0x204) = pitch;
+        FUN_L00_002628d8(m, d + 0x1A0, 1, k1 * e, k2 * e);
+    }
+    FUN_L00_002628d8(m, d + 0x220, 0, k1 * D_0015ED64, k2 * D_0015ED64);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029a570.s", FUN_L15_0029a570);
 #define NOT_SDA
 

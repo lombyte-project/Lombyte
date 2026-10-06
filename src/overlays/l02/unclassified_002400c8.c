@@ -421,7 +421,88 @@ void FUN_L02_002dca10(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcb38.s", FUN_L02_002dcb38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dcfe0.s", FUN_L02_002dcfe0);
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE418), where it is exact; names translated to the US level program. */
+
+typedef int Q_2de418 __attribute__((mode(TI)));
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L02_002dcfe0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    int hit;
+    float dmg;
+    float k1;
+    float k2;
+    char *h;
+    dmg = 0.0f;
+    if (((unsigned char *)d)[0x2E] == 2) {
+        d[0x2E] = 1;
+        if (*(int *)(d + 0xE0) >= 0) {
+            char *od = *(char **)((*(int *)(d + 0xE0) << 8) + D_L02_0015FFD8 + 0x78);
+            *(int *)(od + 0x150) -= 1;
+        }
+        mark_moby_for_removal(m);
+        return;
+    }
+    h = FUN_L00_0025a420(m, 0x330000, 0);
+    FUN_L00_0025a478(m, h, d + 0x20, 0, &hit, &dmg, 0, 4);
+    if (h != 0 && hit != 1 && ((unsigned char *)m)[0x20] != 4) {
+        if (hit == 3) {
+            *(float *)(d + 0x20) = 0.0f;
+        } else {
+            *(float *)(d + 0x20) -= dmg;
+        }
+        *(int *)(d + 0x94) = 4;
+        if (0.0f < *(float *)(d + 0x20)) {
+            {
+                float a = D_0015ED6C * 4.0f;
+                float b = D_0015ED6C * 3.0f;
+                *(float *)(d + 0x88) = a;
+                *(float *)(d + 0x8C) = b;
+            }
+            *(Q_2de418 *)v = *(Q_2de418 *)(h + 0x10);
+            FUN_L00_0025ab48(v, &k1, d + 0x88, d + 0x8C);
+            FUN_L00_0025c558(k1, m, d + 0x70, 3, 1, 0);
+            if (1.0f <= dmg) {
+                d[0x67] = 0x78;
+                m[0x20] = 3;
+                blend_moby_animation_c2(m, 2, 0, 0);
+            } else {
+                d[0x67] = 0x78;
+            }
+        } else {
+            *(unsigned short *)(m + 0x34) &= 0xEFFF;
+            ((unsigned char *)d)[0x67] = 0xFA;
+            m[0x20] = 4;
+            {
+                float b = D_0015ED6C * 11.0f;
+                float a = D_0015ED6C * 3.0f;
+                *(float *)(d + 0x8C) = a;
+                *(float *)(d + 0x88) = b;
+            }
+            *(Q_2de418 *)v = *(Q_2de418 *)(h + 0x10);
+            FUN_L00_0025ab48(v, &k2, d + 0x88, d + 0x8C);
+            FUN_L00_0025c558(k2, m, d + 0x70, 3, 1, 0);
+            *(float *)(d + 0xC0) = 9.0f;
+            *(float *)(d + 0xC4) = 19.0f;
+            if (((unsigned char *)m)[0x53] != 3) blend_moby_animation_c2(m, 3, 0, 0);
+            FUN_L00_00257470(m, 0, -1);
+        }
+        FUN_L00_0025d458(m, (short *)(d + 0x60));
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    FUN_L00_0025d538(m, d + 0x60);
+    FUN_L00_001fefc8(m + 0xBC);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
@@ -591,7 +672,49 @@ void FUN_L02_002df1a8(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df730.s", FUN_L02_002df730);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E0B68), where it is exact; names translated to the US level program. */
+
+extern char D_L02_001673C0[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern float D_0015ED6C;
+extern int D_001413D4 __attribute__((section(".data")));
+extern int FUN_L00_0028df38(int, int);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L02_00161C80 __attribute__((sda));
+extern short D_L02_00161C88 __attribute__((sda));
+extern short D_L02_00161C8C __attribute__((sda));
+extern short D_L02_00161C90 __attribute__((sda));
+extern short D_L02_00161C94 __attribute__((sda));
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, void *target) __asm__("FUN_0022da68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002df730(char *moby) {
+ char *data = *(char **)(moby + 0x78);
+ float distance;
+ int sound_a, sound_b, gain_a, gain_b;
+ if (*(float *)(data + 0x10) >= 0.0f) {
+  distance = distance_xyz(D_L02_001673C0, moby + 0x10);
+  *(float *)(data + 0x10) += *(float *)&D_L02_00161C80 * D_0015ED6C;
+  if (distance < *(float *)(data + 0x10) && D_001413D4 != 0x72) {
+   sound_a = allocate_voice_for_target_entry(0, 0x10, (int)moby);
+   sound_b = allocate_voice_for_target_entry(1, 0x10, (int)moby);
+   gain_a = func_001FA898_r((1.0f - (distance - *(float *)&D_L02_00161C88) / (*(float *)&D_L02_00161C8C - *(float *)&D_L02_00161C88)) * 1024.0f);
+   gain_b = func_001FA898_r(((distance - *(float *)&D_L02_00161C90) / (*(float *)&D_L02_00161C94 - *(float *)&D_L02_00161C90)) * 1024.0f);
+   if (gain_a > 1024) gain_a = 1024;
+   else if (gain_a < 0) gain_a = 0;
+   if (gain_b > 1024) gain_b = 1024;
+   else if (gain_b < 0) gain_b = 0;
+   FUN_L00_0028df38(sound_a, gain_a);
+   FUN_L00_0028df38(sound_b, gain_b);
+   *(float *)(data + 0x10) = -1.0f;
+  }
+ }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df948.s", FUN_L02_002df948);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
 

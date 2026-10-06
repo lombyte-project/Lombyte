@@ -650,7 +650,103 @@ void FUN_L16_002c44f0(unsigned char *m, void *p) {
         *(short *)(d + 0x66) = scale_game_frames_q(0xB4);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002c5eb0.s", FUN_L16_002c5eb0);
+/* Update a thrown bomb (class 0x119): fly and bounce off what it hits and off the ground, rest, then burst. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C7218), where it is exact; names translated to the US level program. */
+
+typedef struct {char pad[0x18];char *moby;int count;float position[4];float unk30[4];float normal[4];} L16SparkHitN;
+
+typedef struct {
+    char pad00[7];
+    unsigned char reaction;     /* 0x07 */
+    char pad08[8];
+    float velocity[4];          /* 0x10 */
+    void *owner;                /* 0x20: the moby that threw it, left out of the sweep */
+    float gravity;              /* 0x24 */
+    int timer;                  /* 0x28 */
+} L16FallingData;
+
+typedef struct {
+    char pad00[0x10];
+    float position[4];          /* 0x10 */
+    unsigned char state;        /* 0x20 */
+    char pad21[0x57];
+    L16FallingData *data;       /* 0x78 */
+} L16FallingMoby;
+
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
+extern char D_L16_0015F580n[] __asm__("D_L16_0015F580") __attribute__((section(".sdata")));
+
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+extern void FUN_L00_0025e450(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int);
+extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
+extern int func_0022ED80_n(int, int, void *) __asm__("FUN_0022da68");
+
+void FUN_L16_002c5eb0(L16FallingMoby *m) {
+    float previous[4], normal[4];
+    L16FallingData *d = m->data;
+
+    switch (m->state) {
+    case 1:
+        /* No pointer locals: m->position and d->velocity are written at each use and the compiler caches
+           them itself (velocity formed in the argument register and copied to a saved one, the position
+           copied a second time for the ground test). */
+        qcopy(previous, m->position);
+        add_vector_xyz(m->position, m->position, d->velocity);
+        if (func_L00_001EFFF0_spark(previous, m->position, 5, d->owner, 0)) {
+            normalize_vector_xyz_c(normal, D_L16_hitN.normal, 1.0f);
+            if (dot_vectors_xyz(normal, d->velocity) < 0.0f) {
+                FUN_L00_001ff660(d->velocity, d->velocity, normal);
+                scale_vector_xyz_c(d->velocity, d->velocity, 0.25f);
+            }
+        }
+        if (FUN_L00_001f0d60(0.333f, m->position, 2, 0)) {
+            normalize_vector_xyz_c(normal, D_L16_hitN.normal, 0.333f);
+            if (dot_vectors_xyz(normal, d->velocity) < 0.0f) {
+                FUN_L00_001ff660(d->velocity, d->velocity, normal);
+                scale_vector_xyz_c(d->velocity, d->velocity, 0.25f);
+            }
+            qcopy(m->position, D_L16_hitN.position);
+            m->position[2] += normal[2];
+            if (normal[2] >= 0.3f && vector_length_xyz_c(d->velocity) < D_0015ED6C * 0.25f) {
+                m->state = 2;
+                d->timer = scale_game_frames(90);
+            }
+        }
+        if (tick_countdown_32_alt(&d->timer)) {
+            m->state = 3;
+        } else if (d->timer < scale_game_frames(45) && d->timer % scale_game_frames(10) == 0) {
+            d->reaction = 250;
+            FUN_L00_0025d458(m, (short *)d);
+        }
+        d->velocity[2] -= d->gravity;
+        break;
+    case 2:
+        if (tick_countdown_32_alt(&d->timer)) {
+            m->state = 3;
+        } else if (d->timer < scale_game_frames(61) && d->timer % scale_game_frames(20) == 0) {
+            d->reaction = 250;
+            FUN_L00_0025d458(m, (short *)d);
+        }
+        break;
+    case 3:
+        func_0022ED80_n(0, 0, m);
+        FUN_L00_0025e450(m, (int)D_L16_0015F580n, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1, 1.0f, 7.0f,
+                          0, 7, -1, 0);
+        mark_moby_for_removal(m);
+        return;
+    }
+    FUN_L00_0025d538(m, d);
+}
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAA18), where it is exact; names translated to the US level program. */
 
 typedef struct {

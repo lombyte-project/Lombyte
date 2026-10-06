@@ -2,7 +2,30 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00220b80.s", FUN_L02_00220b80);
+extern char D_0013E533[];
+extern float D_0015ED6C;
+extern float D_L02_0017C3B8[];
+extern void FUN_L00_002118c8(int, float);
+
+void FUN_L02_00220b80(void) {
+    char *x;
+    FUN_L00_002118c8(0, 1.0f);
+    x = D_0013E533 + 0xE1D;
+    if (*(int *)(x + 0x2084) == 0x3F) {
+        float two = D_0015ED6C + D_0015ED6C;
+        float v = D_0015ED6C * 3.5f * *(float *)(x + 0x190);
+        *(float *)(x + 0x190) = v;
+        if (v < two) {
+            *(float *)(x + 0x190) = two;
+        }
+    } else if (0.0f < *(float *)(x + 0x190)) {
+        if (*(float *)(x + 0x190) < D_L02_0017C3B8[3]) {
+            *(float *)(x + 0x190) = D_L02_0017C3B8[2] * D_0015ED6C;
+        } else {
+            *(float *)(x + 0x190) = D_L02_0017C3B8[6] * D_0015ED6C;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002226d8.s", FUN_L02_002226d8);
 #include "eetypes.h"
 #include "qcopy.h"

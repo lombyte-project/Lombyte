@@ -114,7 +114,43 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
+#include "qzero.h"
+
+/* spawns a type-74 particle with transformed offset and velocity */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */
+
+extern int D_L01_001B2628; /* no foreign declaration */
+extern s32 rand(void);
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void FUN_001fa2d8(void *,void *);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
+
+unsigned char *FUN_L01_0028a7a8(char *m,char *pos,float *vel,char *cfg,int flag) {
+ float v[4]; float mat[16];
+ unsigned char *p=FUN_L00_002678b8(74);
+ if(p) {
+ char *q;
+ p[9]=func_001FA898_r(4.0f)-0x60;
+ if(flag) p[3]=0x48; else p[3]=0x44;
+ p[1]=0;
+ q=(char *)p+0x20;
+ p[2]=**(unsigned char **)D_L01_001B2928_b;
+ p[8]=rand(); *(int *)(p+0xc)=0;
+ qcopy(p+0x10,pos);
+ *(float *)q=vel[0]; *(float *)(q+4)=vel[1]; *(float *)(q+8)=vel[2];
+ subtract_vector_xyz_c(v,pos,m+0x10);
+ qzero(mat);qzero(mat+4);qzero(mat+8);qzero(mat+12);
+ FUN_001fa2d8(mat,m+0xc0);
+ transform_vector(v,v,mat);
+ *(float *)(q+0x10)=v[0]; *(float *)(q+0x14)=v[1]; *(float *)(q+0x18)=v[2];
+ *(char **)(q+0xc)=m; *(char **)(q+0x1c)=cfg;
+ *(short *)(p+0xa)=*(unsigned short *)(cfg+0xc);
+ *(int *)(p+4)=*(int *)cfg;
+ }
+ return p;
+}
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_001B0930[];

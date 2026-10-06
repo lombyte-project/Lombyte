@@ -204,7 +204,80 @@ void FUN_L09_003033a0(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303b30.s", FUN_L09_00303b30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303d10.s", FUN_L09_00303d10);
+/* Pressure plate: waits for its trigger slot, hums while armed, wakes its linked moby when stepped on, then shatters. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003050C0), where it is exact; names translated to the US level program. */
+
+extern char D_0013D388[];
+extern float D_L09_00166F40[];
+extern int D_L09_0015F5CC;
+extern int D_L09_0015FFD8; /* no foreign declaration */
+extern int FUN_L00_0025e450();
+extern unsigned char D_0013E550_c[] __asm__("D_0013E550");
+extern void FUN_L09_00303b30(char *, char *, char *);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags, void *target) __asm__("FUN_0022da68");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int func_0022ED80_r(int, int, char *) __asm__("FUN_0022da68");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+
+void FUN_L09_00303d10(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4];
+    unsigned char *q;
+    FUN_L09_00303b30(m, d, d + 0x20);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(short *)(d + 0x76) != -1 && (q = (unsigned char *)D_0013D388 + *(short *)(d + 0x76))[0x39] != 0) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        *(int *)(d + 0x7C) = -1;
+        m[0x20] = 1;
+        break;
+    case 1:
+        if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
+            if (*(int *)(d + 0x7C) == -1
+                || (FUN_L00_0028d8c0(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
+                *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
+            }
+        }
+        if (((unsigned char *)m)[0xBC] == 1) {
+            if (*(int *)(d + 0x78) != -1) {
+                unsigned char *o = (unsigned char *)(D_L09_0015FFD8 + (*(int *)(d + 0x78) << 8));
+                if (o[0x20] == 1) o[0xBC] = o[0x20];
+            }
+            *(short *)(d + 0x74) = scale_game_frames(0xA);
+            if (*(int *)(d + 0x7C) != -1) {
+                char *e = D_0013E550_c + *(int *)(d + 0x7C) * 0x70;
+                if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
+                    release_voice_slot(*(int *)(d + 0x7C));
+                }
+            }
+            *(int *)(d + 0x7C) = -1;
+            ((unsigned char *)m)[0x30] = 0xFF;
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (FUN_001f9770(d + 0x74)) {
+            if (*(int *)(d + 0x70) != -1) {
+                unsigned char *o = (unsigned char *)(D_L09_0015FFD8 + (*(int *)(d + 0x70) << 8));
+                if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD
+                    && (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D || *(short *)(o + 0xA6) == 0x4A0)) {
+                    o[0x30] = 0xFF;
+                    o[0xBC] = 1;
+                }
+            }
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        subtract_vector_xyz_c(v, D_L09_00166F40, m + 0x10);
+        func_L00_0025F4A8_alt(m, v, 0, 0.0f, 0.0f, 0x14, 9, 0x20, 10.0f, 7.0f, 20.0f, 2.0f, 0, 40.0f, 0, 1, -1, 0);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303fc8.s", FUN_L09_00303fc8);
 #define NOT_SDA
 

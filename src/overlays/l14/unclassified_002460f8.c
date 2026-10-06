@@ -37,16 +37,16 @@ void FUN_L14_002460f8(void) {
     }
 }
 
-extern u16 *D_L14_001ABF40[];
+extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
 extern u8 *D_L14_0015FFD8 __attribute__((sda));
 extern void FUN_L00_0023e838(s32);
 extern void FUN_0020c828(void *);
 
-/* Walk the record list at D_L14_001ABF40[index] (terminated by a negative
+/* Walk the record list at D_L14_001ABF40_u[index] (terminated by a negative
  * entry) and flag the objects whose state byte at 0x20 is 1. */
 void FUN_L14_002b44a8(s32 index)
 {
-    u16 *p = D_L14_001ABF40[index];
+    u16 *p = D_L14_001ABF40_u[index];
     u8 *base;
     u8 *o;
 
@@ -599,7 +599,37 @@ void FUN_L14_002b4340(unsigned char *m) {
     FUN_L00_0025d538(m, d + 0x60);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4500.s", FUN_L14_002b4500);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4670.s", FUN_L14_002b4670);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B58C0), where it is exact; names translated to the US level program. */
+
+extern int *D_L14_001ABF40[];
+extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
+
+int FUN_L14_002b4670(int index) {
+ unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
+ int count = 0;
+ char *base;
+ if (list) goto scan;
+success:
+ return 1;
+scan:
+ base = D_L14_ffd0_e[2];
+ do {
+  unsigned short id = *list;
+  char *moby = base + ((id & 0x7FFF) << 8);
+  int state = *(signed char *)(moby + 0x20);
+  char *data = *(char **)(moby + 0x78);
+  if (state >= 0) count++;
+  if (state >= 0 && *(short *)(data + 0x88)) goto success;
+  list++;
+  if ((short)id < 0) return count == 0;
+ } while (1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b46e8.s", FUN_L14_002b46e8);
 /* Same source as the exact FUN_L14_002b4340: skips states 0 and 9, keeps the model scale, and hit reactions play animation 2. */
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
