@@ -491,7 +491,45 @@ void FUN_L14_002aed50(u8 *moby)
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aee28.s", FUN_L14_002aee28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aef28.s", FUN_L14_002aef28);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Returns the farthest moby in a list that is not in the excluded-id table, by distance from a point. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0168), where it is exact; names translated to the US level program. */
+
+extern char D_L14_001674C0[];
+extern float FUN_001f9b80(void *, void *);
+extern unsigned char *D_L14_0015FFD0_e[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern int D_L14_001D8680[];
+extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
+
+char *FUN_L14_002aef28(int index) {
+    short *p = D_L14_001AC2C0_2B0168[index];
+    char *best = 0;
+    float bestd = 0.0f;
+    if (p == 0) return 0;
+    do {
+        char *moby = (char *)D_L14_0015FFD0_e[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
+        int found = 0;
+        int i;
+        for (i = 0; i < 20; i++) {
+            if (*(short *)(moby + 0xB2) == D_L14_001D8680[i]) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            float d = FUN_001f9b80(D_L14_001674C0, moby + 0x10);
+            if (bestd < d) {
+                bestd = d;
+                best = moby;
+            }
+        }
+    } while (*p++ >= 0);
+    return best;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002af048.s", FUN_L14_002af048);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3bf0.s", FUN_L14_002b3bf0);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5590), where it is exact; names translated to the US level program. */
