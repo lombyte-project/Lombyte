@@ -14,7 +14,7 @@ typedef struct {
 extern SubState D_0018CB20;
 extern int D_0015ED88 MACRO_ADDR;
 extern int D_0013E500[];
-extern void InitializeDmaPacket(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
+extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
                                 int a8);
 extern void font_print_window_regular(void *, long, char *, int) __asm__("func_001F7580");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
@@ -22,7 +22,7 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
    list at +0x4C holds 16-byte entries (start, end, and one string offset
    into the list per language; a negative start ends it). The language
    D_0015ED88 picks the string (2..5 map to 1..4, anything else to 0). The
-   text is measured in a FontSetWindow buffer (InitializeDmaPacket/7560), its
+   text is measured in a FontSetWindow buffer (font_set_window/7560), its
    box is kept 0x14 above the bottom of the screen (D_0013E500[1]), the
    frame is drawn (func_001F5F18) and the text printed with the measure
    flag (4) cleared. The list is tested and then read again for the
@@ -52,7 +52,7 @@ void draw_subtitles(void) {
             short w, h;
             int hw, hh;
 
-            InitializeDmaPacket(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, D_0013E500[1] - 0x38, 0x12,
+            font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, D_0013E500[1] - 0x38, 0x12,
                                 7);
             font_print_window_regular(win, 0x80B0B0B0, D_0018CB20.subs + p->text[idx], -1);
             win[5] = D_0013E500[1] - 0x3C;

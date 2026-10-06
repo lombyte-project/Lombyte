@@ -23,11 +23,11 @@ struct AnimTable {
     struct FrameInfo *infoA;
 };
 extern struct AnimTable D_0019A3E8;
-extern s32 find_animation_definition_index(s32) __asm__("func_001FEE38");
-s32 find_valid_animation_frame_index(s32 id, s32 frame) __asm__("FUN_001ff960");
+extern s32 hud_get_icon_index(s32) __asm__("func_001FEE38");
+s32 get_icon_frame(s32 id, s32 frame) __asm__("FUN_001ff960");
 
-s32 find_valid_animation_frame_index(s32 id, s32 frame) {
-    s32 i = find_animation_definition_index(id);
+s32 get_icon_frame(s32 id, s32 frame) {
+    s32 i = hud_get_icon_index(id);
     s32 k;
 
     if (D_0019A3E8.defs[i].id == 0xFFFF) {
@@ -46,5 +46,5 @@ s32 find_valid_animation_frame_index(s32 id, s32 frame) {
     return k;
 }
 
-extern __typeof__(find_valid_animation_frame_index) func_001FF960
+extern __typeof__(get_icon_frame) func_001FF960
     __attribute__((alias("FUN_001ff960")));

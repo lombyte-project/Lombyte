@@ -11,9 +11,9 @@ typedef struct RenderState {
 
 extern RenderState GlobalRenderState __asm__("D_001516D0") __attribute__((section(".data")));
 
-void UpdateRenderStateCommand(void) __asm__("UpdateRenderStateCommand");
+void music_unpause(void) __asm__("music_unpause");
 
-void UpdateRenderStateCommand(void) {
+void music_unpause(void) {
     GlobalRenderState.command_40 = 4;
     GlobalRenderState.command_78 = 4;
     GlobalRenderState.command_5C = 4;

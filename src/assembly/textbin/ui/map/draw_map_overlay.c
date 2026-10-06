@@ -125,7 +125,7 @@ extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("func_001F5F18");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void draw_rotated_sprite(f32, f32, f32, f32, f32, s32, s32, u64) __asm__("func_00200600");
@@ -226,7 +226,7 @@ void draw_map_overlay(void) {
     D_00160F00.p->vif1 = 0x50000005;
     D_00160F00.p++;
     background_tex0 =
-        get_frame_texture(find_valid_animation_frame_index(0xE999, D_001A00F0.selected_map));
+        get_frame_texture(get_icon_frame(0xE999, D_001A00F0.selected_map));
     packet_words = (u64 *)D_00160F00.p;
     packet_words[0] = 0x7400000000008001;
     packet_words[1] = 0x5353106;
@@ -308,7 +308,7 @@ void draw_map_overlay(void) {
                     if (D_001A00F0.icons[i].flags & 0x80) {
                         icon_size_multiplier = 1.5f;
                     }
-                    image_index = find_valid_animation_frame_index(texture_id,
+                    image_index = get_icon_frame(texture_id,
                                                                    D_001A00F0.icons[i].frame_index);
                     icon_center_x = (f32)rx0 + D_001A00F0.icons[i].x * (f32)(rx1 - rx0);
                     icon_center_y = (f32)ry0 + D_001A00F0.icons[i].y * (f32)(ry1 - ry0);
@@ -456,11 +456,11 @@ void draw_map_overlay(void) {
                             center_y = (f32)(icon_bounds[i].y0 + icon_bounds[i].y1) * 0.5f;
                             draw_rotated_sprite(center_x, center_y, sprite_width, sprite_height,
                                                 angle, texture_width, 0x20,
-                                                get_frame_texture(find_valid_animation_frame_index(
+                                                get_frame_texture(get_icon_frame(
                                                     id, frame_index)));
                         } else {
                             draw_hud_sprite_subpixel(
-                                find_valid_animation_frame_index(id, frame_index),
+                                get_icon_frame(id, frame_index),
                                 icon_bounds[i].x0, icon_bounds[i].y0,
                                 icon_bounds[i].x1 - icon_bounds[i].x0,
                                 icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
@@ -518,7 +518,7 @@ void draw_map_overlay(void) {
             f32 angle;
             s32 flip;
 
-            image_index = find_valid_animation_frame_index(0xE99A, 5);
+            image_index = get_icon_frame(0xE99A, 5);
             s = ((m->zoom[m->selected_map] * 4.0f + 10.0f) * 0.75f) / 13.0f;
             angle = D_0013F350.angle;
             flip = D_0013F350.mode == 0xF;

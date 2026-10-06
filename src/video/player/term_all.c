@@ -18,9 +18,9 @@ extern s32 func_0023BA58();
 extern s32 video_dec_delete() __asm__("func_0023CC38");
 extern s32 func_0023D1E0();
 extern s32 sceCdSync();
-void terminate_audio_system(void) __asm__("FUN_0023aa68");
+void term_all(void) __asm__("FUN_0023aa68");
 
-void terminate_audio_system(void) {
+void term_all(void) {
     sceCdSync(0);
     func_0023B958(D_0016120C);
     func_0023D1E0((u8 *)D_0016120C + 0xD9168);
@@ -38,4 +38,4 @@ void terminate_audio_system(void) {
     *(s32 *)0x1000E000 &= 0xFFFFFFFD;
 }
 
-extern __typeof__(terminate_audio_system) func_0023AA68 __attribute__((alias("FUN_0023aa68")));
+extern __typeof__(term_all) func_0023AA68 __attribute__((alias("FUN_0023aa68")));

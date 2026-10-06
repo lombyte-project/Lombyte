@@ -1,9 +1,9 @@
 #include "types.h"
 extern u8 D_001611F8[];
 extern s32 DebugPrint();
-void log_audio_error(s32 error_code) __asm__("FUN_0023ab78");
+void err_message(s32 error_code) __asm__("FUN_0023ab78");
 
-void log_audio_error(s32 error_code) {
+void err_message(s32 error_code) {
     DebugPrint(D_001611F8, error_code);
 }
 

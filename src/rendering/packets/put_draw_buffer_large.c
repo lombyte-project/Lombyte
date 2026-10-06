@@ -2,9 +2,9 @@
 extern s32 D_0015EEB8;
 extern u8 *D_00160F00;
 extern void sceGsPutDrawEnv(s32);
-void append_draw_environment_packet(void) __asm__("FUN_001fb2d0");
+void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 
-void append_draw_environment_packet(void) {
+void put_draw_buffer_large(void) {
     if (D_00160F00 != 0) {
         *(u32 *)(D_00160F00 + 0) = 0x30000009;
         *(u32 *)(D_00160F00 + 4) = (D_0015EEB8 + 0x30) & 0x0FFFFFFF;
@@ -16,5 +16,5 @@ void append_draw_environment_packet(void) {
     }
 }
 
-extern __typeof__(append_draw_environment_packet) func_001FB2D0
+extern __typeof__(put_draw_buffer_large) func_001FB2D0
     __attribute__((alias("FUN_001fb2d0")));

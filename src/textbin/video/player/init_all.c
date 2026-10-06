@@ -28,8 +28,8 @@ extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
 extern void func_0023B3D8();
 
-extern void handle_end_image() __asm__("FUN_0023b540");
-extern void run_video_decoder() __asm__("func_0023CE28");
+extern void handler_end_image() __asm__("FUN_0023b540");
+extern void video_dec_main() __asm__("func_0023CE28");
 extern s32 func_0023B940(struct AudioDecoderState *);
 extern void sceMpegInit(void);
 extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *,
@@ -46,12 +46,12 @@ extern s32 AddIntcHandler(s32, void *, s32);
 extern s32 enable_intc(s32) __asm__("func_00119090");
 extern s32 AddDmacHandler(s32, void *, s32);
 extern s32 enable_dmac(s32) __asm__("func_00119160");
-s32 initialize_audio_system(s32 stream_source, s32 source_mode,
+s32 init_all(s32 stream_source, s32 source_mode,
                             s32 callback_context) __asm__("FUN_0023a7c0");
-s32 initialize_audio_system(s32 stream_source, s32 source_mode,
+s32 init_all(s32 stream_source, s32 source_mode,
                             s32 callback_context) __asm__("FUN_0023a7c0");
 
-s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_context) {
+s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     struct AudioDecoderThreadArgs decoder_thread;
     s32 thread_id;
     s32 opened;
@@ -74,7 +74,7 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
     /* Retail fills only these descriptor fields before CreateThread. */
     thread_gp = &D_00166C00;
     decoder_thread.stack = ((u8 *)decoder_state) + 0xD2040;
-    decoder_thread.entry = run_video_decoder;
+    decoder_thread.entry = video_dec_main;
     decoder_thread.stack_size = 0x4000;
     decoder_thread.priority = 1;
     decoder_thread.gp = thread_gp;
@@ -90,8 +90,8 @@ s32 initialize_audio_system(s32 stream_source, s32 source_mode, s32 callback_con
     }
     decoder_state->intc_handler_id = AddIntcHandler(2, func_0023B3D8, 0);
     enable_intc(2);
-    decoder_state->dmac_handler_id = AddDmacHandler(2, handle_end_image, 0);
+    decoder_state->dmac_handler_id = AddDmacHandler(2, handler_end_image, 0);
     enable_dmac(2);
     return opened;
 }
-extern __typeof__(initialize_audio_system) func_0023A7C0 __attribute__((alias("FUN_0023a7c0")));
+extern __typeof__(init_all) func_0023A7C0 __attribute__((alias("FUN_0023a7c0")));

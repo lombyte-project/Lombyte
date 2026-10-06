@@ -1,5 +1,5 @@
 #include "types.h"
-struct Globals_001516D0 {
+struct MusicStreamState {
     u8 pad_0[0x8];
     s16 unk8;
     u8 pad_A[0x2];
@@ -15,7 +15,7 @@ struct Globals_001D5BF0 {
     u8 pad_CC[0x3];
 };
 
-extern struct Globals_001516D0 D_001516D0;
+extern struct MusicStreamState D_001516D0;
 extern struct UiGlobals D_001A00F0;
 extern struct Globals_001D5BF0 D_001D5BF0;
 extern u8 D_001D5CBB[];

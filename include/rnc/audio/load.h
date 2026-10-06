@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct Globals_001516D0 {
+struct MusicStreamState {
     u8 pad_0[0x8];
     s16 unk8;
     u8 unkA;

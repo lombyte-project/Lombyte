@@ -38,7 +38,7 @@ extern void FUN_L00_0023aef8(void);
 extern void FUN_L00_002454c8(int);
 extern void FUN_L01_0023cf98(int, int);
 extern void FillTransferWords_alt() __asm__("FUN_001f97e8");
-extern void InitializeRenderState(s32);
+extern void music_pause(s32);
 extern void add_vector_xyz(void *, void *, void *);
 extern void clear_vector(void *);
 extern void snd_flush_sound_commands_alt(void) __asm__("FUN_0012dc80");
@@ -61,7 +61,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     int n;
     int r;
     snd_pause_all_sounds_in_group(0x1D);
-    InitializeRenderState(0);
+    music_pause(0);
     snd_flush_sound_commands_alt();
     D_L01_0015F5D8_d = 1;
     FillTransferWords_alt(s, 0, 0x220);

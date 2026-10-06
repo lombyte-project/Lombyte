@@ -153,7 +153,7 @@ extern void unpack_point_records(s32 src, s32 count) __asm__("FUN_00202800");
 extern void parse_particle_textures(s32 hdr, s32 base, s32 src, s32 count) __asm__("FUN_002026c8");
 extern s32 upload_mip_texture(s32, void *) __asm__("func_00202270");
 extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
-extern void reset_callback_registries(void) __asm__("FUN_001f37e8");
+extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern s32 rand(void);
 extern void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 extern void snd_bank_load_from_ee_cb(s32 cmd, void *arg, s64 data) __asm__("FUN_0012e088");
@@ -278,7 +278,7 @@ void initialize_level_runtime(void) {
     D_001600B0 = 0;
     D_001600B8 = 0;
     clear_blocks_16(D_001CD780, 0x200);
-    reset_callback_registries();
+    reset_draw_globals();
     D_0015FF30 = 0x1F4;
     D_001600BC = 0x1F4000;
     scene_variant = (rand() >> 16) & 3;

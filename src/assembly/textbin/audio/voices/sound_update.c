@@ -84,7 +84,7 @@ extern u8 D_00187290[];
 extern s32 D_001872D4;
 
 extern s32 ComputeByteStringHash(u8 *, s32);
-extern int ComputeSectorIndex(int arg0);
+extern int snd_get_doppler_pitch_mod(int arg0);
 extern void FillTransferWords(void *, s32, s32);
 extern void ReadGlobalTableEntry(void);
 extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
@@ -412,7 +412,7 @@ s32 sound_update(void) {
             }
             if (voice_flags[slot_index] & 4) {
                 parameter_mask |= 8;
-                pitch_modifier = ComputeSectorIndex(
+                pitch_modifier = snd_get_doppler_pitch_mod(
                     truncate_float_to_s32(radial_velocities[slot_index] * 300.0f));
             }
             if (underwater && !(D_0013E550.voices[slot_index].definition->attenuation_flags & 8)) {

@@ -3,10 +3,10 @@ extern void func_00115248(void *, const void *, s32);
 extern s32 func_0023B810(s32, s32, s32, s32, s32, s32, s32, s32)
     __attribute__((alias("FUN_0023b810")));
 
-s32 copy_video_buffer_region(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
+s32 cpy2area(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
                              s32 src_b_len) __asm__("FUN_0023b810");
 
-s32 copy_video_buffer_region(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
+s32 cpy2area(s32 dst_a, s32 dst_a_len, s32 dst_b, s32 dst_b_len, s32 src_a, s32 src_a_len, s32 src_b,
                              s32 src_b_len) {
     if (dst_a_len + dst_b_len < src_a_len + src_b_len) {
         return 0;

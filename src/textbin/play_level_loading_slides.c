@@ -32,7 +32,7 @@ extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("func_001F5450");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
+extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern s32 service_level_archive_load(void) __asm__("func_00204428");
 extern void run_state_handler(void) __asm__("func_00208840");
 extern void memcard_update_state(void) __asm__("func_002093D8");
@@ -75,7 +75,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
          frame++) {
         alpha = 0x80;
         reset_gs_registers();
-        append_draw_buffer_packet();
+        put_draw_buffer_small();
         vu1_add_g_sregister(1, (u64)0x8000 << 16);
         vu1_add_g_sregister(8, 0);
         D_00160F00[0] = 0x30000014;

@@ -25,7 +25,7 @@ struct FreezeModeState {
 extern s32 D_0015F604;
 extern struct FreezeModeState D_00193300;
 extern s32 snd_pause_all_sounds_in_group() __asm__("func_0012E3E8");
-extern s32 InitializeRenderState();
+extern s32 music_pause();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 push_help_history() __asm__("func_001FED30");
@@ -37,7 +37,7 @@ void mode_freeze_init(u32 mode, s32 arg1) {
 
     if (D_0015F604 != 3) {
         snd_pause_all_sounds_in_group(0x1D);
-        InitializeRenderState(0);
+        music_pause(0);
     }
     D_00193300.unk14 = D_0015F604;
     D_00193300.unk18 = arg1;

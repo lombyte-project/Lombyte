@@ -68,7 +68,7 @@ extern void FlushCache(s32);
 extern void func_00120558(s32, s32);
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
-extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
+extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u8 *);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
@@ -125,7 +125,7 @@ void set_pal_mode(void) {
     draw_environment.zbuf2 = zbuf;
     draw_environment.scissor2 = scissor;
     FlushCache(0);
-    append_draw_environment_packet();
+    put_draw_buffer_large();
     append_gif_transfer_packet();
     FlushCache(0);
     func_00120558(0, 0);

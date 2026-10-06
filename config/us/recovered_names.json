@@ -443,7 +443,7 @@
     },
     {
       "name": "snd_GetDopplerPitchMod",
-      "unit": "math/compute_sector_index",
+      "unit": "audio/snd_get_doppler_pitch_mod",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x12f1a0",
@@ -987,7 +987,7 @@
     },
     {
       "name": "ResetDrawGlobals",
-      "unit": "gameplay/callbacks/reset_callback_registries",
+      "unit": "rendering/reset_draw_globals",
       "unit_size": "0x7c",
       "match": "fragment",
       "address": "0x1f37e8",
@@ -1131,7 +1131,7 @@
     },
     {
       "name": "FontSetWindow",
-      "unit": "runtime/dma/initialize_dma_packet",
+      "unit": "ui/fonts/font_set_window",
       "unit_size": "0x38",
       "match": "entry_size_unknown",
       "address": "0x1f7668",
@@ -1395,7 +1395,7 @@
     },
     {
       "name": "PutDrawBufferLarge__Fv",
-      "unit": "rendering/packets/append_draw_environment_packet",
+      "unit": "rendering/packets/put_draw_buffer_large",
       "unit_size": "0x94",
       "match": "fragment",
       "address": "0x1fb2d0",
@@ -1403,7 +1403,7 @@
     },
     {
       "name": "PutDrawBufferSmall__Fv",
-      "unit": "rendering/packets/append_draw_buffer_packet",
+      "unit": "rendering/packets/put_draw_buffer_small",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x1fb3d0",
@@ -1411,7 +1411,7 @@
     },
     {
       "name": "AA_BlurPass__Fv",
-      "unit": "rendering/texture/append_texture_transfer_packet",
+      "unit": "rendering/effects/aa_blur_pass",
       "unit_size": "0x5c",
       "match": "entry_size_unknown",
       "address": "0x1fb680",
@@ -1475,7 +1475,7 @@
     },
     {
       "name": "Hud_GetIconIndex__Fi",
-      "unit": "gameplay/animation/find_animation_definition_index",
+      "unit": "ui/hud/hud_get_icon_index",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x1fee38",
@@ -1515,7 +1515,7 @@
     },
     {
       "name": "GetIconFrame__Fii",
-      "unit": "gameplay/animation/find_valid_animation_frame_index",
+      "unit": "ui/hud/get_icon_frame",
       "unit_size": "0xac",
       "match": "fragment",
       "address": "0x1ff960",
@@ -1651,7 +1651,7 @@
     },
     {
       "name": "memcard_RestoreGame",
-      "unit": "world/streaming/initialize_dma_packet_payloads",
+      "unit": "storage/memory_card/memcard_restore_game",
       "unit_size": "0xd4",
       "match": "fragment",
       "address": "0x209298",
@@ -1955,7 +1955,7 @@
     },
     {
       "name": "music_Pause__Fi",
-      "unit": "rendering/state/initialize_render_state",
+      "unit": "audio/music/music_pause",
       "unit_size": "0x34",
       "match": "fragment",
       "address": "0x216050",
@@ -1963,7 +1963,7 @@
     },
     {
       "name": "music_Unpause__Fv",
-      "unit": "rendering/commands/update_render_state_command",
+      "unit": "audio/music/music_unpause",
       "unit_size": "0x1c",
       "match": "fragment",
       "address": "0x216088",
@@ -2379,7 +2379,7 @@
     },
     {
       "name": "VU0_loadMicroProgram__FPl",
-      "unit": "rendering/dma/start_vif1_dma_transfer",
+      "unit": "rendering/vu0/vu0_load_micro_program",
       "unit_size": "0xc8",
       "match": "fragment",
       "address": "0x2334d8",
@@ -2587,7 +2587,7 @@
     },
     {
       "name": "initAll__Fiii",
-      "unit": "textbin/audio/decoder/initialize_audio_system",
+      "unit": "textbin/video/player/init_all",
       "unit_size": "0x2a4",
       "match": "fragment",
       "address": "0x23a7c0",
@@ -2595,7 +2595,7 @@
     },
     {
       "name": "termAll__Fv",
-      "unit": "audio/decoder/terminate_audio_system",
+      "unit": "video/player/term_all",
       "unit_size": "0x10c",
       "match": "fragment",
       "address": "0x23aa68",
@@ -2603,7 +2603,7 @@
     },
     {
       "name": "ErrMessage",
-      "unit": "audio/decoder/log_audio_error",
+      "unit": "video/player/err_message",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x23ab78",
@@ -2611,7 +2611,7 @@
     },
     {
       "name": "proceedAudio__Fv",
-      "unit": "audio/decoder/process_audio_stream",
+      "unit": "video/player/proceed_audio",
       "unit_size": "0x2c",
       "match": "fragment",
       "address": "0x23aba0",
@@ -2691,7 +2691,7 @@
     },
     {
       "name": "setImageTag",
-      "unit": "video/decoder/build_image_transfer_tag",
+      "unit": "video/display/set_image_tag",
       "unit_size": "0x1c4",
       "match": "fragment",
       "address": "0x23b210",
@@ -2707,7 +2707,7 @@
     },
     {
       "name": "handler_endimage",
-      "unit": "video/decoder/callbacks/handle_end_image",
+      "unit": "video/display/handler_end_image",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x23b540",
@@ -2747,7 +2747,7 @@
     },
     {
       "name": "cpy2area__FPUciT0iT0iT0i",
-      "unit": "video/decoder/buffers/copy_video_buffer_region",
+      "unit": "video/decoder/buffers/cpy2area",
       "unit_size": "0x130",
       "match": "entry_size_unknown",
       "address": "0x23b810",
@@ -2811,7 +2811,7 @@
     },
     {
       "name": "setD3_CHCR__FUi",
-      "unit": "video/decoder/dma/set_dma_channel_3_control_register",
+      "unit": "video/decoder/dma/set_d3_chcr",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x23bb40",
@@ -2819,7 +2819,7 @@
     },
     {
       "name": "setD4_CHCR__FUi",
-      "unit": "video/decoder/dma/set_dma_channel_4_control_register",
+      "unit": "video/decoder/dma/set_d4_chcr",
       "unit_size": "0x6c",
       "match": "fragment",
       "address": "0x23bbb0",
@@ -3043,7 +3043,7 @@
     },
     {
       "name": "videoDecMain__FPv",
-      "unit": "video/decoder/run_video_decoder",
+      "unit": "video/decoder/video_dec_main",
       "unit_size": "0x9c",
       "match": "fragment",
       "address": "0x23ce28",
@@ -3051,7 +3051,7 @@
     },
     {
       "name": "decBs0__FP8VideoDec",
-      "unit": "video/decoder/decode_bitstream_0",
+      "unit": "video/decoder/dec_bs0",
       "unit_size": "0x1b4",
       "match": "fragment",
       "address": "0x23cec8",
@@ -3059,7 +3059,7 @@
     },
     {
       "name": "mpegError__FP7sceMpegP18sceMpegCbDataErrorPv",
-      "unit": "video/decoder/callbacks/handle_mpeg_error",
+      "unit": "video/decoder/callbacks/mpeg_error",
       "unit_size": "0x28",
       "match": "full",
       "address": "0x23d080",
@@ -3067,7 +3067,7 @@
     },
     {
       "name": "mpegNodata__FP7sceMpegP13sceMpegCbDataPv",
-      "unit": "video/decoder/callbacks/handle_mpeg_no_data",
+      "unit": "video/decoder/callbacks/mpeg_nodata",
       "unit_size": "0x38",
       "match": "entry_size_unknown",
       "address": "0x23d0a8",
@@ -6013,7 +6013,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/callbacks/reset_callback_registries",
+        "unit": "rendering/reset_draw_globals",
         "source_path": "src/gameplay/callbacks/reset_callback_registries.c",
         "address": "0x001f37e8",
         "current_name": "FUN_001f37e8",
@@ -7376,7 +7376,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "rendering/packets/append_draw_environment_packet",
+        "unit": "rendering/packets/put_draw_buffer_large",
         "source_path": "src/rendering/packets/append_draw_environment_packet.c",
         "address": "0x001fb2d0",
         "current_name": "FUN_001fb2d0",
@@ -7435,7 +7435,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/packets/append_draw_buffer_packet",
+        "unit": "rendering/packets/put_draw_buffer_small",
         "source_path": "src/rendering/packets/append_draw_buffer_packet.c",
         "address": "0x001fb3d0",
         "current_name": "FUN_001fb3d0",
@@ -7490,7 +7490,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "rendering/texture/append_texture_transfer_packet",
+        "unit": "rendering/effects/aa_blur_pass",
         "source_path": "src/rendering/texture/append_texture_transfer_packet.c",
         "address": "0x001fb680",
         "current_name": "FUN_001fb680",
@@ -7869,7 +7869,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/animation/find_animation_definition_index",
+        "unit": "ui/hud/hud_get_icon_index",
         "source_path": "src/gameplay/animation/find_animation_definition_index.c",
         "address": "0x001fee38",
         "current_name": "FUN_001fee38",
@@ -8168,7 +8168,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/animation/find_valid_animation_frame_index",
+        "unit": "ui/hud/get_icon_frame",
         "source_path": "src/gameplay/animation/find_valid_animation_frame_index.c",
         "address": "0x001ff960",
         "current_name": "FUN_001ff960",
@@ -9858,7 +9858,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "world/streaming/initialize_dma_packet_payloads",
+        "unit": "storage/memory_card/memcard_restore_game",
         "source_path": "src/world/streaming/initialize_dma_packet_payloads.c",
         "address": "0x00209298",
         "current_name": "FUN_00209298",
@@ -15798,7 +15798,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/dma/start_vif1_dma_transfer",
+        "unit": "rendering/vu0/vu0_load_micro_program",
         "source_path": "src/rendering/dma/start_vif1_dma_transfer.c",
         "address": "0x002334d8",
         "current_name": "FUN_002334d8",
@@ -16825,7 +16825,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/audio/decoder/initialize_audio_system",
+        "unit": "textbin/video/player/init_all",
         "source_path": "src/textbin/audio/decoder/initialize_audio_system.c",
         "address": "0x0023a7c0",
         "current_name": "FUN_0023a7c0",
@@ -16843,7 +16843,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/terminate_audio_system",
+        "unit": "video/player/term_all",
         "source_path": "src/audio/decoder/terminate_audio_system.c",
         "address": "0x0023aa68",
         "current_name": "FUN_0023aa68",
@@ -16866,7 +16866,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/log_audio_error",
+        "unit": "video/player/err_message",
         "source_path": "src/audio/decoder/log_audio_error.c",
         "address": "0x0023ab78",
         "current_name": "FUN_0023ab78",
@@ -16889,7 +16889,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "audio/decoder/process_audio_stream",
+        "unit": "video/player/proceed_audio",
         "source_path": "src/audio/decoder/process_audio_stream.c",
         "address": "0x0023aba0",
         "current_name": "FUN_0023aba0",
@@ -17084,7 +17084,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/build_image_transfer_tag",
+        "unit": "video/display/set_image_tag",
         "source_path": "src/video/decoder/build_image_transfer_tag.c",
         "address": "0x0023b210",
         "current_name": "FUN_0023b210",
@@ -17106,7 +17106,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/callbacks/handle_end_image",
+        "unit": "video/display/handler_end_image",
         "source_path": "src/video/decoder/callbacks/handle_end_image.c",
         "address": "0x0023b540",
         "current_name": "FUN_0023b540",
@@ -17191,7 +17191,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/buffers/copy_video_buffer_region",
+        "unit": "video/decoder/buffers/cpy2area",
         "source_path": "src/video/decoder/buffers/copy_video_buffer_region.c",
         "address": "0x0023b810",
         "current_name": "FUN_0023b810",
@@ -17274,7 +17274,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/dma/set_dma_channel_3_control_register",
+        "unit": "video/decoder/dma/set_d3_chcr",
         "source_path": "src/video/decoder/dma/set_dma_channel_3_control_register.c",
         "address": "0x0023bb40",
         "current_name": "FUN_0023bb40",
@@ -17296,7 +17296,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/dma/set_dma_channel_4_control_register",
+        "unit": "video/decoder/dma/set_d4_chcr",
         "source_path": "src/video/decoder/dma/set_dma_channel_4_control_register.c",
         "address": "0x0023bbb0",
         "current_name": "FUN_0023bbb0",
@@ -17744,7 +17744,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/run_video_decoder",
+        "unit": "video/decoder/video_dec_main",
         "source_path": "src/video/decoder/run_video_decoder.c",
         "address": "0x0023ce28",
         "current_name": "FUN_0023ce28",
@@ -17771,7 +17771,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/decode_bitstream_0",
+        "unit": "video/decoder/dec_bs0",
         "source_path": "src/video/decoder/decode_bitstream_0.c",
         "address": "0x0023cec8",
         "current_name": "FUN_0023cec8",
@@ -17789,7 +17789,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "video/decoder/callbacks/handle_mpeg_error",
+        "unit": "video/decoder/callbacks/mpeg_error",
         "source_path": "src/video/decoder/callbacks/handle_mpeg_error.c",
         "address": "0x0023d080",
         "current_name": "FUN_0023d080",
@@ -17816,7 +17816,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/decoder/callbacks/handle_mpeg_no_data",
+        "unit": "video/decoder/callbacks/mpeg_nodata",
         "source_path": "src/video/decoder/callbacks/handle_mpeg_no_data.c",
         "address": "0x0023d0a8",
         "current_name": "FUN_0023d0a8",

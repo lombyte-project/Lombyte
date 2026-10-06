@@ -45,7 +45,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_small(s32, s32, u64, char *, s32) __asm__("func_001F65B0");
 extern void font_print_center_small(s32, s32, u64, char *, s32) __asm__("func_001F6B88");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("FUN_001ff960");
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void append_screen_sprite(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern s32 sprintf(char *, const char *, ...);
@@ -101,11 +101,11 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                     hours = 99;
                 }
                 sprintf(text, D_00160300, hours, minutes);
-                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 3), 4, y, 0x10, 0x10,
+                draw_hud_sprite(get_icon_frame(0xE99E, 3), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 if (slot->count != 0) {
-                    draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 4), 0x4E, y, 0x10,
+                    draw_hud_sprite(get_icon_frame(0xE99E, 4), 0x4E, y, 0x10,
                                     0x10, 0x80);
                     sprintf(text, D_001602A0, slot->count < 100 ? slot->count : 99);
                     font_print_small(0x60, y, color, text, -1);
@@ -123,12 +123,12 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                     sprintf(text, D_00160310, bolts / 1000000, bolts % 1000000 / 1000,
                             bolts % 1000);
                 }
-                draw_hud_sprite(find_valid_animation_frame_index(0x754F, 0xF), 4, y, 0x10, 0x10,
+                draw_hud_sprite(get_icon_frame(0x754F, 0xF), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
                 sprintf(text, D_00160320, slot->b16, slot->b15, slot->b17);
-                draw_hud_sprite(find_valid_animation_frame_index(0xE99E, 2), 4, y, 0x10, 0x10,
+                draw_hud_sprite(get_icon_frame(0xE99E, 2), 4, y, 0x10, 0x10,
                                 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;

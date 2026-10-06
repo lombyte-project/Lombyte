@@ -5,9 +5,9 @@ extern char D_001E81D0[];
 extern s32 GetDmaPacketSpanBytes(void *);
 extern void DebugPrint(char *, ...);
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
-void initialize_dma_packet_payloads(u8 *p) __asm__("FUN_00209298");
+void memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 
-void initialize_dma_packet_payloads(u8 *p) {
+void memcard_restore_game(u8 *p) {
     s32 size0 = GetDmaPacketSpanBytes(D_001A04C0);
     s32 size1 = GetDmaPacketSpanBytes(D_001A07C0);
     s32 len0 = ((s32 *)p)[0];
@@ -26,5 +26,5 @@ void initialize_dma_packet_payloads(u8 *p) {
     }
 }
 
-extern __typeof__(initialize_dma_packet_payloads) func_00209298
+extern __typeof__(memcard_restore_game) func_00209298
     __attribute__((alias("FUN_00209298")));

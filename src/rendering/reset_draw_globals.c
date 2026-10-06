@@ -17,9 +17,9 @@ extern s32 D_00161194;
 extern s32 D_00161198;
 extern s32 D_0016119C __attribute__((sda));
 
-void reset_callback_registries(void) __asm__("FUN_001f37e8");
+void reset_draw_globals(void) __asm__("FUN_001f37e8");
 
-void reset_callback_registries(void) {
+void reset_draw_globals(void) {
     D_0015F464 = 0;
     D_0015F46C = 0;
     D_0015F470 = 0;
@@ -39,4 +39,4 @@ void reset_callback_registries(void) {
     D_0016119C = 0;
 }
 
-extern __typeof__(reset_callback_registries) func_001F37E8 __attribute__((alias("FUN_001f37e8")));
+extern __typeof__(reset_draw_globals) func_001F37E8 __attribute__((alias("FUN_001f37e8")));

@@ -20,7 +20,7 @@ extern s32 D_001601B0;
 extern s32 SubtractIntegerWithClamp();
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
-extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
+extern s32 get_icon_frame() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("func_001FFC30");
 extern void draw_hud_sprite_flipped() __asm__("FUN_001ffe18");
 extern void draw_hud_sprite_subpixel() __asm__("func_00200080");
@@ -62,14 +62,14 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
             i = i + 1;
             byte_offset += 0xA;
             draw_hud_sprite_subpixel(
-                find_valid_animation_frame_index(icon->unk0, icon->unk2),
+                get_icon_frame(icon->unk0, icon->unk2),
                 new_var2 = x, y, 0x200, 0x200, 0x80);
             y += 0x260;
         } while (i < menu->unk40);
     }
     if (start_y < new_var) {
         append_screen_rect_packet(new_var, new_var, menu->unk20, 0x14, (u64)D_001601B0, new_var);
-        draw_hud_sprite(find_valid_animation_frame_index(0xE99EU, 6), (x >> 4), 2, 0x20,
+        draw_hud_sprite(get_icon_frame(0xE99EU, 6), (x >> 4), 2, 0x20,
                         0x10, 0x80);
     }
     height = menu->unk24;
@@ -77,7 +77,7 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
         byte_offset = new_var;
         append_screen_rect_packet(byte_offset, height - 0x14, menu->unk20, height,
                                   (u64)D_001601B0, byte_offset);
-        draw_hud_sprite_flipped(find_valid_animation_frame_index(0xE99EU, 6), (x >> 4),
+        draw_hud_sprite_flipped(get_icon_frame(0xE99EU, 6), (x >> 4),
                                 menu->unk24 - 0x12, 0x20, 0x10, 0x80);
     }
     do_gif_paging();

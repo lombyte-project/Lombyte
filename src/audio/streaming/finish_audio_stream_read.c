@@ -6,7 +6,7 @@
 #include "rnc/audio/streaming/finish_audio_stream_read.h"
 #include "types.h"
 
-extern struct Globals_001516D0 D_001516D0;
+extern struct MusicStreamState D_001516D0;
 extern s32 snd_stream_safe_cd_get_error() __asm__("func_0012EEF0");
 void finish_audio_stream_read(s32 arg0) __asm__("FUN_00216950");
 

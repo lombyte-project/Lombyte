@@ -1,5 +1,5 @@
 #include "types.h"
-struct Globals_001516D0 {
+struct MusicStreamState {
     u8 pad_0[0x40];
     s16 unk40;
     s16 unk42;
@@ -11,8 +11,8 @@ struct Globals_001516D0 {
     s16 unk7A;
 };
 
-extern struct Globals_001516D0 D_001516D0;
-void InitializeRenderState(s32 arg0) {
+extern struct MusicStreamState D_001516D0;
+void music_pause(s32 arg0) {
     if (arg0 != 0) {
         D_001516D0.unk5C = -0x8000;
         D_001516D0.unk5E = 0;

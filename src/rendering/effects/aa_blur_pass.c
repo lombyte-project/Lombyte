@@ -1,9 +1,9 @@
 #include "types.h"
 extern u8 D_00151900[];
 extern u8 *D_00160F00;
-void append_texture_transfer_packet(void) __asm__("FUN_001fb680");
+void aa_blur_pass(void) __asm__("FUN_001fb680");
 
-void append_texture_transfer_packet(void) {
+void aa_blur_pass(void) {
     *(u32 *)(D_00160F00 + 0) = 0x30000026;
     *(u32 *)(D_00160F00 + 4) = (u32)D_00151900;
     *(u32 *)(D_00160F00 + 8) = 0;
@@ -11,5 +11,5 @@ void append_texture_transfer_packet(void) {
     D_00160F00 += 0x10;
 }
 
-extern __typeof__(append_texture_transfer_packet) func_001FB680
+extern __typeof__(aa_blur_pass) func_001FB680
     __attribute__((alias("FUN_001fb680")));

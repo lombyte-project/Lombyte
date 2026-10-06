@@ -19,7 +19,7 @@ extern u8 D_001863D0[];
 extern struct HudMenuState D_001E63C0;
 extern s32 SubtractIntegerWithClamp();
 extern void draw_framebuffer_rect() __asm__("func_001FB8F0");
-extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
+extern s32 get_icon_frame() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("func_001FFC30");
 void FUN_002386e8(void) {
     s32 slot_x;
@@ -54,9 +54,9 @@ void FUN_002386e8(void) {
                     ((struct HudItemEntry *)(void *)((u8 *)D_001863D0 + item[-1] * 0x4C))
                         ->unk38;
                 if (item[0] == 1) {
-                    frame_index = find_valid_animation_frame_index(temp_4_73, 2);
+                    frame_index = get_icon_frame(temp_4_73, 2);
                 } else {
-                    frame_index = find_valid_animation_frame_index(temp_4_73, 0);
+                    frame_index = get_icon_frame(temp_4_73, 0);
                 }
                 draw_hud_sprite(frame_index, sprite_x, 6, 0x30, 0x30, 0x80);
                 sprite_x += 0x38;
@@ -90,9 +90,9 @@ void FUN_002386e8(void) {
                                                        0x4C))
                     ->unk38;
             if (*(s32 *)(void *)(temp_3_162 + ((u8 *)&D_001E63C0 + 0xD4)) == 1) {
-                var_2_171 = find_valid_animation_frame_index(temp_4_170, 2);
+                var_2_171 = get_icon_frame(temp_4_170, 2);
             } else {
-                var_2_171 = find_valid_animation_frame_index(temp_4_170, 0);
+                var_2_171 = get_icon_frame(temp_4_170, 0);
             }
             var_17_145 += 1;
             draw_hud_sprite(var_2_171, var_16_144, 6, 0x30, 0x30, 0x80808080);

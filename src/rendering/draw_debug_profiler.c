@@ -101,7 +101,7 @@ extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
 extern f32 func_001FA6C0(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
-extern void append_texture_transfer_packet(void) __asm__("func_001FB680");
+extern void aa_blur_pass(void) __asm__("func_001FB680");
 extern void draw_help(void) __asm__("func_001FE980");
 extern void update_hud(void) __asm__("func_001FF780");
 extern void prune_moby_references(void) __asm__("FUN_0020cc60");
@@ -113,7 +113,7 @@ extern void draw_shrubs(void) __asm__("func_00228B38");
 extern void FUN_0022a5e0(void *);
 extern void patch_tfrag_gifs(void) __asm__("func_00233308");
 extern void draw_tfrag(void) __asm__("func_002333A8");
-extern void start_vif1_dma_transfer(void *) __asm__("func_002334D8");
+extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
@@ -240,7 +240,7 @@ void draw_debug_profiler(void) {
         func_001F21B8(D_0015F3E0, 6);
     }
     if (D_0018A2B0.unk48 != 0) {
-        append_texture_transfer_packet();
+        aa_blur_pass();
     }
     func_001F21B8(D_0015F3F0, 0xF);
     vu1_gs_regs_alt();
@@ -282,7 +282,7 @@ void draw_debug_profiler(void) {
         }
         func_001F21B8(D_0015F400, 0xA);
     }
-    start_vif1_dma_transfer(D_00100AE0);
+    vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
     t = func_001FA6C0(*(volatile s32 *)0x10000800);
     D_0015F614 = t / (D_0015ED80 != 0 ? 11520.0f : 9600.0f);

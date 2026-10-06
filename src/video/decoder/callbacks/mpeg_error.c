@@ -8,16 +8,16 @@ struct MpegErrorData {
 
 extern u8 D_00161220[];
 extern s32 DebugPrint();
-s32 handle_mpeg_error(s32 arg0, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
+s32 mpeg_error(s32 arg0, struct MpegErrorData *cb_data) __asm__("FUN_0023d080");
 
-s32 handle_mpeg_error(s32 arg0, struct MpegErrorData *cb_data) {
+s32 mpeg_error(s32 arg0, struct MpegErrorData *cb_data) {
     DebugPrint(D_00161220, cb_data->unk4);
     return 1;
 }
 
 extern s32 func_0023D080(s32 arg0, struct MpegErrorData *cb_data) __attribute__((alias("FUN_0023d080")));
-extern __typeof__(handle_mpeg_error) D_0023D080 __attribute__((alias("FUN_0023d080")));
+extern __typeof__(mpeg_error) D_0023D080 __attribute__((alias("FUN_0023d080")));
 
 /* Recovered original symbol name. */
-extern __typeof__(handle_mpeg_error) mpegError__FP7sceMpegP18sceMpegCbDataErrorPv
+extern __typeof__(mpeg_error) mpegError__FP7sceMpegP18sceMpegCbDataErrorPv
     __attribute__((alias("FUN_0023d080")));

@@ -1,10 +1,10 @@
 typedef unsigned short u16;
 typedef unsigned int u32;
 
-void InitializeDmaPacket(u16 *packet, u16 word0, u16 word1, u16 word2, u16 word3, u16 word4,
-                         u16 word5, u16 word6, u32 word7) __asm__("InitializeDmaPacket");
+void font_set_window(u16 *packet, u16 word0, u16 word1, u16 word2, u16 word3, u16 word4,
+                         u16 word5, u16 word6, u32 word7) __asm__("font_set_window");
 
-void InitializeDmaPacket(u16 *packet, u16 word0, u16 word1, u16 word2, u16 word3, u16 word4,
+void font_set_window(u16 *packet, u16 word0, u16 word1, u16 word2, u16 word3, u16 word4,
                          u16 word5, u16 word6, u32 word7) {
     packet[0] = word0;
     packet[1] = word1;

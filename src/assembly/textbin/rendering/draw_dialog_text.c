@@ -97,7 +97,7 @@ extern float func_001FA6C0(int);
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern int func_001FA6E0(int, int, float);
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
-extern int find_valid_animation_frame_index(int, int) __asm__("func_001FF960");
+extern int get_icon_frame(int, int) __asm__("func_001FF960");
 extern u64 get_frame_texture(int) __asm__("func_001FFA10");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("func_001FFC30");
 extern void draw_rotated_sprite(int, int, u64, float, float, float, float,
@@ -185,13 +185,13 @@ void draw_dialog_text(void) {
         middle_y = (middle_y + text_window.s[5]) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
         icon_y = middle_y - 0x20;
-        draw_hud_sprite(find_valid_animation_frame_index(0x755D, 0), 0xE0, icon_y, 0x40, 0x40,
+        draw_hud_sprite(get_icon_frame(0x755D, 0), 0xE0, icon_y, 0x40, 0x40,
                         0x80);
         animation_frame = D_0015F438 % 55;
         icon_y_subpixels = (float)(middle_y * 16);
         icon_angle = (float)animation_frame * -6.2831855f / 55.0f;
         draw_rotated_sprite(0x40, 0x40,
-                            get_frame_texture(find_valid_animation_frame_index(0x755D, 1)), 4096.0f,
+                            get_frame_texture(get_icon_frame(0x755D, 1)), 4096.0f,
                             icon_y_subpixels, icon_size, icon_size, icon_angle);
         break;
     }

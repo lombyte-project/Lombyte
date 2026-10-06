@@ -11,10 +11,10 @@ extern char D_00151DF0[];
    written in address order, so the loop pass hoists the invariants in the
    order retail's scheduler starts from (TRXPOS x part first, the REF tag
    before the address mask). */
-void build_image_transfer_tag(void *p, int texbuf, int image_w,
+void set_image_tag(void *p, int texbuf, int image_w,
                               int image_h) __asm__("FUN_0023b210");
 
-void build_image_transfer_tag(void *p, int texbuf, int image_w, int image_h) {
+void set_image_tag(void *p, int texbuf, int image_w, int image_h) {
     char *out = (char *)p;
     int mbx = image_w >> 4;
     int mby = image_h >> 4;
@@ -64,4 +64,4 @@ void build_image_transfer_tag(void *p, int texbuf, int image_w, int image_h) {
     out += 0x20;
 }
 
-extern __typeof__(build_image_transfer_tag) func_0023B210 __attribute__((alias("FUN_0023b210")));
+extern __typeof__(set_image_tag) func_0023B210 __attribute__((alias("FUN_0023b210")));

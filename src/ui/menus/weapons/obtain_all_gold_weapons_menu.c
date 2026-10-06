@@ -25,7 +25,7 @@ extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
+extern s32 get_icon_frame() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948");
@@ -44,7 +44,7 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     tmp.unk10 = 0x10;
     packet = tmp;
     setup_gif_paging(0);
-    draw_hud_sprite(find_valid_animation_frame_index(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
+    draw_hud_sprite(get_icon_frame(0xE99A, 6), 4, 0xC, 0x10, 0x10, 0x80);
     packet.unkA = first_y;
     packet.unk8 = pos_x;
     tex = get_help_message_text(0x5182);
@@ -52,7 +52,7 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     width = packet.unkE;
     first_y = width + 0x10;
     packet.unkA = first_y;
-    tex = find_valid_animation_frame_index(0xE99A, 6);
+    tex = get_icon_frame(0xE99A, 6);
     draw_hud_sprite(tex, 4, width + 0x18, 0x10, 0x10, 0x80);
     font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183),
                               -1);

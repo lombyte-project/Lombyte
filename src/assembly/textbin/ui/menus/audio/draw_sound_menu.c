@@ -24,7 +24,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_right(s32, s32, u64, void *, s32) __asm__("FUN_001f6940");
 extern void font_print_large(s32, s32, u64, void *, s32) __asm__("FUN_001f6530");
-extern s32 find_valid_animation_frame_index(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_rect(s32, s32, s32, s32, s32, s32, s32, s32, s32,
                                  s32) __asm__("FUN_00200958");
 extern void append_screen_sprite(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
@@ -57,7 +57,7 @@ s32 draw_sound_menu(SoundMenu *menu) {
     append_screen_sprite(slider_left, row_height - 6, menu->width - 0x41, row_height + 6,
                          0x80383838, 0);
     slider_length = (menu->width - slider_padding) * sound_volume / 1024;
-    draw_hud_sprite_rect(find_valid_animation_frame_index(0xE99E, 8), slider_left << 4,
+    draw_hud_sprite_rect(get_icon_frame(0xE99E, 8), slider_left << 4,
                          (row_height - 6) << 4, (center_x + 8 + slider_length) << 4,
                          (row_height + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
 
@@ -70,7 +70,7 @@ s32 draw_sound_menu(SoundMenu *menu) {
     append_screen_sprite(slider_left, second_row - 6, menu->width - 0x41, second_row + 6,
                          0x80383838, 0);
     slider_length = (menu->width - slider_padding) * music_volume / 1024;
-    draw_hud_sprite_rect(find_valid_animation_frame_index(0xE99E, 9), slider_left << 4,
+    draw_hud_sprite_rect(get_icon_frame(0xE99E, 9), slider_left << 4,
                          (second_row - 6) << 4, (center_x + 8 + slider_length) << 4,
                          (second_row * 16) + 0x50, 0, 0xA0, 0x1F0, 0x150, 0x80);
 
