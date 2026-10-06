@@ -3,7 +3,51 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d36e0.s", FUN_L08_002d36e0);
+/* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
+
+extern char *D_L08_001B0CB0[];
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_001413D0[];
+extern float FUN_001f9b80(void *, void *);
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_0025ff38();
+extern void FUN_L00_00257470(void *, int, int);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+
+void FUN_L08_002d36e0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int hit;
+    float dmg;
+    int idx;
+    dmg = 0.0f;
+    idx = FUN_L00_0025a478(m, FUN_L00_0025a420(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
+        *(float *)(d + 0x20) -= dmg;
+        if (*(float *)(d + 0x20) <= 0.0f) idx = 1;
+        if (idx < 12) {
+            if (idx >= 0) {
+                FUN_L00_00257470(m, 0, -1);
+                m[0x20] = 0x63;
+            }
+        }
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    if (((unsigned char *)m)[0x20] != 0 && ((unsigned char *)m)[0x20] != 4) {
+        char *e = D_L08_001B0CB0[*(int *)(d + 0x21C)];
+        if (func_L00_00260FB0_f(m, d + 0x170, 14.0f, 0, 0, e + 0x10, *(int *)e) != 2) {
+            if (14.0f < FUN_001f9b80(d + 0x1C0, d + 0x170)) {
+                *(int *)(d + 0x1B4) = 2;
+            } else if (3.0f < AbsoluteFloat(*(float *)(d + 0x1C8) - *(float *)(d + 0x178))) {
+                *(int *)(d + 0x1B4) = 2;
+            }
+        }
+    }
+    if (*(int *)(d + 0x1B0) == 0) {
+        *(int *)(d + 0x1B0) = *(int *)(D_001413D0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 #define NOT_SDA
 
@@ -12,7 +56,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
 #include "qcopy.h"
 
 /* Steers a moby along its path state and lifts it clear of the ground. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
@@ -73,7 +117,7 @@ void FUN_L08_002d3d78(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -188,7 +232,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
 #define MACRO_ADDR
 
 /* Runs the two per-entry update calls over a 13-entry table. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
 typedef struct { int a, b; } Pair;
 
@@ -221,9 +265,45 @@ void FUN_L08_002f0c18(int a) {
         FUN_L00_001fde98(D_L08_001DDF40[i], D_L08_001E2798[i], D_L08_001E2828[i], D_L08_001E8360, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f0f68.s", FUN_L08_002f0f68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
+
+extern float ConvertIntegerToFloat(int);
+extern int truncate_float_to_s32(float);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g, float b, float a) {
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < counts[i]; j++) {
+            int w = tabs[i][j];
+            int c0 = w & 0xFF;
+            int c1 = (w & 0xFF00) >> 8;
+            int c2 = ((unsigned)w >> 16) & 0xFF;
+            int c3 = (unsigned)w >> 24;
+            float fr, fg, fb, fa;
+            if (flat == 0) {
+                fr = r * ConvertIntegerToFloat(c0);
+                fg = g * ConvertIntegerToFloat(c1);
+                fb = b * ConvertIntegerToFloat(c2);
+                fa = a * ConvertIntegerToFloat(c3);
+            } else {
+                fr = r * 255.0f;
+                fg = g * 255.0f;
+                fb = b * 255.0f;
+                fa = a * ConvertIntegerToFloat(c3);
+            }
+            tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) + (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
+        }
+    }
+}
 /* advance a 2-D wrapped phase by a and b and write scaled sines */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED7C;
 extern float FUN_001f9de0(float);

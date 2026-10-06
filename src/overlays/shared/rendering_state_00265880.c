@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/music_002664B0.c: func_L00_002666C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/music_002664B0.c: func_L00_002666C8), where it is exact; names translated to the US level program. */
 
 extern char D_001516D0[];
 

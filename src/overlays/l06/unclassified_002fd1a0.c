@@ -5,15 +5,77 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd1a0.s", FUN_L06_002fd1a0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd460.s", FUN_L06_002fd460);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fd748.s", FUN_L06_002fd748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fda30.s", FUN_L06_002fda30);
-extern int D_L06_001ABFC0[];
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Trigger moby: waits for the hero in its zone, plays its open animation, then launches a listed moby. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern int D_L06_0015FFD8;
+extern int FUN_L06_002e9d10(void *, void *);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short *D_L06_001ABFC0[];
+extern void blend_moby_animation(void *, int, int, int);
+
+void FUN_L06_002fda30(char *m) {
+    int *d = *(int **)(m + 0x78);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (d[1] >= 0 && is_point_inside_clip_volume(D_0013F3D0, d[1])) {
+            m[0x20] = 1;
+            if (((unsigned char *)m)[0x53] != 1) {
+                blend_moby_animation(m, 1, 0, 5);
+            }
+        }
+        break;
+    case 1:
+        if (m[0x70] & 2) {
+            if (d[0] >= 0) {
+                m[0x20] = 2;
+            } else {
+                m[0x20] = 3;
+            }
+            if (((unsigned char *)m)[0x53] != 2) {
+                blend_moby_animation(m, 2, 0, 5);
+            }
+        }
+        break;
+    case 2:
+        if (tick_countdown_32_alt(d + 2)) {
+            float found = 0.0f;
+            short *list = D_L06_001ABFC0[d[0]];
+            if (list != 0) {
+                short *p = list;
+                char *pos = m + 0x10;
+                do {
+                    if (FUN_L06_002e9d10(D_L06_0015FFD8 + ((*(unsigned short *)p & 0x7FFF) << 8), pos)) {
+                        found = 1.0f;
+                        break;
+                    }
+                } while (*p++ >= 0);
+            }
+            if (found != 0.0f) {
+                d[2] = scale_game_frames(0x14);
+            } else {
+                m[0x20] = 3;
+            }
+        }
+        break;
+    }
+}
+extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002ffc38, 116 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002ffc38(int idx)
 {
-    short *p = D_L06_001ABFC0[idx];
+    short *p = D_L06_001ABFC0_u[idx];
     if (p != 0) {
         do {
             char *moby = D_L06_0015FFD8_d + ((*p & 0x7FFF) << 8);
@@ -37,7 +99,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300720.s", FUN_L06_00300720);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -88,7 +150,7 @@ void FUN_L06_00300df0(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 
 void FUN_L06_00300f70(char *arg, void *a, void *b) {
     char *dst = *(char **)(arg + 0x78);
@@ -100,13 +162,74 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301070.s", FUN_L06_00301070);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00301b90.s", FUN_L06_00301b90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302400.s", FUN_L06_00302400);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302578.s", FUN_L06_00302578);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00302fd8.s", FUN_L06_00302fd8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Picks the next selection state from the menu mode, then queues the matching sound. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00304418), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84;
+extern int D_0015EE1C;
+extern int D_0015EE1D;
+extern int FUN_L00_00203908(int a, int b);
+extern unsigned char D_0014C050[];
+extern unsigned short D_00141C00 __attribute__((section(".data")));
+extern void try_set_help_message(int, int);
+
+void FUN_L06_00302fd8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    switch (*(int *)(d + 0xBC)) {
+    case 0: {
+        int idx = D_0015ED84 << 4;
+        int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)D_0014C050);
+        if (a != 0xFF) {
+            *(int *)(d + 0x9C) = 0;
+        } else {
+            int b = *(unsigned char *)(*(int *)(d + 0xFC) + idx + (int)D_0014C050);
+            if (b == a) {
+                *(int *)(d + 0x9C) = 3;
+            } else {
+                *(int *)(d + 0x9C) = -1;
+            }
+        }
+        break;
+    }
+    case 1:
+        *(int *)(d + 0x9C) = 1;
+        break;
+    case 2:
+        *(int *)(d + 0x9C) = 4;
+        break;
+    }
+    if (D_00141C00 == 0 && *(int *)(d + 0x9C) == 0 && (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0)) {
+        FUN_L00_00203908(0x177A, 0x53);
+        *(int *)(d + 0x9C) = -1;
+        return;
+    }
+    switch (*(int *)(d + 0x9C)) {
+    case 0:
+        try_set_help_message(10, 0x1782);
+        break;
+    case 1:
+    case 4:
+        try_set_help_message(10, 0x1785);
+        break;
+    case 2:
+        try_set_help_message(10, 0x1786);
+        break;
+    case 3:
+        try_set_help_message(10, 0x1784);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303b68.s", FUN_L06_00303b68);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305468), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015FFD8;
+extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -115,7 +238,7 @@ void FUN_L06_00304028(char *moby)
     char *data = *(char **)(moby + 0x78);
     short *p = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
-        mark_moby_for_removal_c(D_L06_0015FFD8 + ((*p & 0x7FFF) << 8));
+        mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*p & 0x7FFF) << 8));
     } while (*p++ >= 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
@@ -123,7 +246,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
 extern void FUN_0022da68(int, int, void *);
 
@@ -136,7 +259,7 @@ void FUN_L06_003047b8(char *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003047f8.s", FUN_L06_003047f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
 
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern short D_L06_001621E8_d __asm__("D_L06_001621E8") __attribute__((sda));
@@ -173,4 +296,84 @@ void FUN_L06_00305000(char *m) {
     FUN_001f9a10(Q, Q, m + 0x10);
     FUN_001efa68(P, Q, 0, (int)m, (int)A);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00305170.s", FUN_L06_00305170);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* draws four copies of a model transformed by a table, then spawns a part for each */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */
+
+extern float D_L06_001FE890[];
+extern int D_L06_00162234;
+extern int D_L06_00162238;
+extern int get_effect_texture(int);
+extern short D_L06_001621C4 __attribute__((sda));
+extern short D_L06_001621C8 __attribute__((sda));
+extern short D_L06_001621C0 __attribute__((sda));
+extern short D_L06_001621CC __attribute__((sda));
+extern short D_L06_001621E0 __attribute__((sda));
+extern short D_L06_001621E4 __attribute__((sda));
+extern short D_L06_001621F4 __attribute__((sda));
+extern short D_L06_001621F8 __attribute__((sda));
+extern short D_L06_00162208 __attribute__((sda));
+extern void FUN_001f9ff8(float *, float);
+extern void FUN_001fa050(float *, float *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_L06_00216b88(int *, float *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void font_queue_vu_state(void);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L06_00305170(char *m) {
+    float a[16];
+    float b[16];
+    float mat[5][16];
+    int s[10];
+    char *data;
+    float *m0;
+    int *sp;
+    float *pp;
+    float *tp;
+    float *mp;
+    int i;
+    int j;
+    data = *(char **)(m + 0x78);
+    FUN_001fa050(a, (float *)(m + 0x40));
+    FUN_001f9ff8(b, *(float *)&D_L06_00162208);
+    FUN_001fa378(a, a, b);
+    vu1_add_g_sregister(6, get_effect_texture(0xE));
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) | ((long)*(int *)&D_L06_001621C8 << 4) | ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
+    font_queue_vu_state();
+    m0 = mat[0];
+    sp = s;
+    pp = mat[0] + 12;
+    tp = D_L06_001FE890;
+    mp = m0;
+    for (i = 0; i < 4; i++) {
+        FUN_001fa050(mp, tp);
+        tp += 4;
+        FUN_001fa378(mp, a, mp);
+        mp += 16;
+        add_vector_xyz(pp, pp, m + 0x10);
+        pp[2] += (float)i * 1.7f + 0.6f;
+        pp[3] = 1.0f;
+        pp += 16;
+    }
+    s[0] = D_L06_00162234;
+    s[2] = (int)(data + 0xF00);
+    s[1] = D_L06_00162238;
+    s[3] = *(int *)&D_L06_001621E0;
+    s[4] = *(int *)&D_L06_001621E4;
+    *(float *)&s[7] = *(float *)&D_L06_001621F4;
+    *(float *)&s[8] = *(float *)&D_L06_001621F8;
+    s[5] = 0x1E;
+    s[6] = (int)data;
+    pp = m0;
+    for (j = 3; j >= 0; j--) {
+        FUN_L06_00216b88(sp, pp);
+        pp += 16;
+    }
+}

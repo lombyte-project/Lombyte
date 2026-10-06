@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float x;
@@ -48,12 +48,12 @@ void FUN_L05_0030d6a0(int arg) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
 extern char D_L05_001671C0[];
 extern float FUN_001f9b48(void *, void *);
-extern int D_L05_0015F5CC;
+extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
 extern int FUN_0022da68();
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8") __attribute__((sda));
 extern short D_L05_00161D38_d __asm__("D_L05_00161D38") __attribute__((sda));
@@ -79,8 +79,8 @@ void FUN_L05_0030dc68(char *m) {
         **(int **)(data + 4) = -1;
         break;
     case 1:
-        if (*(int *)&D_L05_00161D38_d != D_L05_0015F5CC) {
-            *(int *)&D_L05_00161D38_d = D_L05_0015F5CC;
+        if (*(int *)&D_L05_00161D38_d != D_L05_0015F5CC_e[2]) {
+            *(int *)&D_L05_00161D38_d = D_L05_0015F5CC_e[2];
             enqueue_callback_list_1(FUN_L05_0030de90, m);
         }
         pos = m + 0x10;
@@ -125,7 +125,58 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e1f8.s", FUN_L05_0030e1f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e508.s", FUN_L05_0030e508);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030e7f8.s", FUN_L05_0030e7f8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f218.s", FUN_L05_0030f218);
+/* Scatters points along a range, placing each one with a heading and radius. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003106E0), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float D_0015ED6C;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L05_00161DB4_d __asm__("D_L05_00161DB4") __attribute__((sda));
+extern short D_L05_00161DB8_d __asm__("D_L05_00161DB8") __attribute__((sda));
+extern short D_L05_00161DBC_d __asm__("D_L05_00161DBC") __attribute__((sda));
+extern short D_L05_00161DC0_d __asm__("D_L05_00161DC0") __attribute__((sda));
+extern short D_L05_00161DC4_d __asm__("D_L05_00161DC4") __attribute__((sda));
+extern short D_L05_00161DC8_d __asm__("D_L05_00161DC8") __attribute__((sda));
+extern short D_L05_00161DCC_d __asm__("D_L05_00161DCC") __attribute__((sda));
+extern short D_L05_00161DD0_d __asm__("D_L05_00161DD0") __attribute__((sda));
+extern void FUN_L05_0029bbe0(float, void *, void *, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L05_0030f218(char *obj, float a, float b) {
+    float v[4];
+    float w[4];
+    float ground, x, y, t, u;
+    int i, j, k, m, n;
+    clear_vector(v);
+    v[2] = *(float *)&D_L05_00161DC8_d * D_0015ED6C;
+    ground = v[2] * 0.75f * ConvertIntegerToFloat(*(int *)&D_L05_00161DB8_d);
+    j = 0;
+    for (i = j; (float)i < (b - a) / *(float *)&D_L05_00161DB4_d; i++) {
+        float fi = (float)j;
+        x = random_float_between_alt(fi, *(float *)&D_L05_00161DD0_d);
+        y = random_angle_radians();
+        w[0] = fast_cos(y) * x;
+        w[1] = fast_sin(y) * x;
+        w[2] = fi;
+        add_vector_xyz(w, obj + 0x10, w);
+        w[2] = random_float_between_alt(a, b) - ground;
+        t = random_float_between_alt((a + b) * 0.5f, b) - ground;
+        if (t < w[2]) w[2] = t;
+        u = random_float_between_alt(*(float *)&D_L05_00161DBC_d, *(float *)&D_L05_00161DC0_d);
+        k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
+        m = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&D_L05_00161DC4_d));
+        n = *(int *)&D_L05_00161DCC_d;
+        FUN_L05_0029bbe0(u, w, v, k, m, n);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);
@@ -135,7 +186,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003156d0.s", FUN_L05_003156d0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
 
 extern short D_L05_00161EC0_d __asm__("D_L05_00161EC0") __attribute__((sda));
 extern short D_L05_00161EC4_d __asm__("D_L05_00161EC4") __attribute__((sda));
@@ -154,7 +205,7 @@ void FUN_L05_00315ee0(char *a, char *b, char *c) {
     *(float *)(c + 8) = *(float *)(a + 0x48);
     *(float *)(c + 4) = t * 0.017453292f;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
 extern float FUN_001f9dc8(float);
@@ -176,7 +227,7 @@ void FUN_L05_00315f70(char *moby) {
         ang = FUN_001fa580(ang, step);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001671C0[];
 extern char D_L05_00211B20[];
@@ -231,7 +282,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003166a0.s", FUN_L05_003166a0);
 
 /* Applies breast growth (D_L05_00161ED0) and big-head manipulators to
  * matching-class cutscene instances of the hoverboard girl. */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];
@@ -271,9 +322,222 @@ void FUN_L05_00316990(char *arg) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00317470.s", FUN_L05_00317470);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003180a0.s", FUN_L05_003180a0);
+/* Level overlay code after gameplay/vendor; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
+
+
+
+
+#include "qcopy.h"
+
+/* Activate the watcher and steer its body and head toward the player. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad00[4];
+    unsigned short sub;
+    char pad06[0x1A];
+    void *ptr20;
+    char pad24[0x1C];
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padAC[4];
+    float height;
+    char padB4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad12C[0x14];
+    float target[4];
+    char pad150[4];
+    int idle_timer;
+    int moving_timer;
+    int target_timer;
+} WD;
+
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char opacity;
+    char pad32[0x16];
+    float yaw;
+    char pad4C[7];
+    unsigned char animation;
+    char pad54[0x1C];
+    unsigned char flags70;
+    char pad71[7];
+    WD *data;
+    char pad7C[3];
+    unsigned char b7F;
+} WM;
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];
+    char pad90[0x40];
+    float aim[4];
+    char padE0[0x22E];
+    short disabled;
+    char pad310[0x1D7C];
+    int mode;
+} L16WatchPlayer;
+
+typedef struct {
+    char pad00[0x70];
+    unsigned char entered;
+    unsigned char mission;
+} L16WatchFlags;
+
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} L16WatchScratch;
+
+extern char D_0013E533[];
+extern char D_L05_001671C0[];
+extern unsigned char D_0013D4FF __attribute__((section(".data")));
+extern f32 FUN_001f9b48(void *, void *);
+extern void FUN_L00_0025a120(void *);
+extern void FUN_L01_002783a8(void *, float);
+extern void FUN_0020c828(void *);
+extern void FUN_0020b178(int, int);
+extern f32 FUN_00213508(void *, int, float);
+extern int FUN_001f9740(void *);
+extern void FUN_00212f90(void *, int, int, int);
+extern int FUN_001f96f8(int);
+
+extern char D_0013E633[],D_0014171B[],D_0013D24D[],D_L16_00167240[];
+extern float D_0015ED64;
+extern float D_L16_001D96C0[8];
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b80(void*,void*);
+extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
+extern float FUN_001fa688_cf(float,float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float);
+extern float fast_subtract_rotations(float, float);
+extern float truncate_float_to_s32_cf(float,float) __asm__("FUN_002132a8");
+extern float vector_length_xy(void *);
+extern float vector_length_xyz(void *);
+extern int FUN_L00_00203908(int, int);
+extern int FUN_L00_00266448(void *, void *);
+extern int FUN_L00_002668a0(void *, void *);
+extern int is_point_inside_clip_volume(void *, int);
+extern int memcard_save_data(int, int);
+extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
+extern int scale_game_frames(int);
+extern int tick_countdown_32(int *);
+extern char D_L05_00161EF8[];
+extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
+extern void FUN_L00_00216f90(void*,void*,int,int);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L02_002e0cd8(char *);
+extern void add_vector_xyz(void*,void*,void*);
+extern void build_spherical_offset(void*,float,float,float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern char D_001413DC[];
+extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
+extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
+
+void FUN_L05_003180a0(WM *m) {
+    L16WatchScratch scratch;
+    WD *d = m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    FUN_L02_002e0cd8((char *)m);
+    if (m->opacity) {
+        if (FUN_001f9b48(m->position, D_L05_001671C0) < 40.0f) {
+            FUN_L00_0025a120(m);
+            m->b7F = 0x20;
+        }
+    }
+    switch (m->state) {
+    case 0:
+        if (D_0013D4FF) {
+            FUN_0020c828(m);
+            return;
+        }
+        m->position[2] += 0.5f;
+        m->position[2] = FUN_00213508(m->position, 0, 0.5f);
+        d->ptr20 = (void *)D_L05_00161EF8;
+        m->state = 1;
+        FUN_L00_002668a0(m, d);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, d)) FUN_L01_002783a8(m, 2.0f);
+        if ((unsigned)(d->sub - 3) < 2) {
+            FUN_L00_00260860(0x17, 1);
+            FUN_L00_00263d40(0x1396, -1);
+            FUN_0020b178(0, -1);
+            FUN_0020c828(m);
+            return;
+        }
+        if (m->animation == 0 && FUN_001f9740((char *)d + 0x154)) {
+            d->idle_timer = random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(1200.0f, 2400.0f)));
+            if (m->animation != 1) FUN_00212f90(m, 1, 0, FUN_001f96f8(10));
+        } else if (m->animation == 1 && (m->flags70 & 2)) {
+            FUN_00212f90(m, 0, 0, FUN_001f96f8(10));
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *player = (char *)&D_0013E633_watch + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, player) < 8.0f &&
+            FUN_001f9e90_cf(m->yaw,
+                FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] - m->position[0],
+                    ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] - m->position[1])) < 1.5707964f) {
+            if (vector_length_xyz(player + 0x80) > 0.01f) d->moving_timer = scale_game_frames(120);
+            else tick_countdown_32(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+        }
+        if (tick_countdown_32(&d->target_timer)) {
+            float heading;
+            d->target_timer = random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * 0.017453292f);
+            build_spherical_offset(d->target, 6.0f, heading, truncate_float_to_s32_cf(0.0f, 30.0f) * 0.017453292f);
+            add_vector_xyz(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f) yaw = 1.5707964f;
+        else if (yaw < -1.5707964f) yaw = -1.5707964f;
+        if (pitch > 0.5235988f) pitch = 0.5235988f;
+        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->yaw = yaw * 0.6f;
+        d->head_yaw = yaw * 0.4f;
+    }
+    if (D_0015EDB0_b) d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00318a68.s", FUN_L05_00318a68);
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");

@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/music.c, func_00216B68). */
+/* Ported from rac1-decomp (src/game/music.c, func_00216B68). */
 extern int D_00137B80[];
 extern short D_001516D0[];
 extern void func_0012EC08(int, int, int, int, short, int, int, int,

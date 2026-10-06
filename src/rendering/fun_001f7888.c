@@ -1,6 +1,6 @@
 #include "types.h"
 
-/* Ported from the PAL decompilation (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
+/* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 
 /* data paired by order (exact), deltas ['0x100']: D_001519EE->D_001518EE, D_0015EF8C->D_0015EE8C */
 

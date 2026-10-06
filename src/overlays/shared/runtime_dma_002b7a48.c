@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */
 
 extern float D_L01_001CAD00[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

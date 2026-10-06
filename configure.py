@@ -175,6 +175,7 @@ RODATA_OVERLAYS = {
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
     "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
+    "fun_0022f778": (0x1E8930, 0xE98B0),  # gameplay-state switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
     "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
@@ -775,9 +776,39 @@ def apply_la_gprel_policy(assembly):
     return "".join(body[:insert_at] + moved + body[insert_at:])
 
 
+def hoist_sda_externs(assembly, source):
+    """Move `.extern NAME, SIZE` ahead of the code for every small-data symbol.
+
+    SN cc1 writes its `.extern` directives at the end of the file and leaves
+    the choice between $gp and lui to the assembler.  Ps2EeAs is single-pass:
+    it relaxes a bare symbol access to $gp only when the size is already
+    known.  The source says which globals retail reads through $gp: those
+    declared `__attribute__((sda))` (the game compiler's spelling, ignored by
+    SN cc1); their directives go first, the others stay where cc1 put them.
+    """
+    sda = set()
+    for decl in re.findall(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
+        label = re.search(r'__asm__\s*\(\s*"([\w.$]+)"', decl)
+        name = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*(?:__asm__|__attribute__)", decl)
+        if label:
+            sda.add(label.group(1))
+        elif name:
+            sda.add(name.group(1))
+    lines = assembly.split("\n")
+    first = [l for l in lines if re.match(r"\s*\.extern\s+([\w.$]+)\s*,", l)
+             and re.match(r"\s*\.extern\s+([\w.$]+)", l).group(1) in sda]
+    rest = [l for l in lines if l not in first]
+    return "\n".join(first + rest)
+
+
 def main(argv):
+    if len(argv) == 5 and argv[1] == "externs":
+        _, _, source, destination, c_source = argv
+        assembly = hoist_sda_externs(open(source).read(), open(c_source, errors="replace").read())
+        open(destination, "w").write(assembly)
+        return
     if len(argv) not in (4, 5):
-        raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE]")
+        raise SystemExit("usage: padless-asm.py normalize IN OUT [POLICY] | finish IN OUT [REFERENCE] | externs IN OUT SOURCE")
     mode, source, destination = argv[1:4]
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
@@ -1739,6 +1770,32 @@ OVERLAYS_SRC = Path("src/overlays")
 OVERLAYS_BUILD = Path("build/overlays")
 
 
+OVERLAY_SN_UNITS = Path("config/overlays/us/sn-units.json")
+
+
+def overlay_sn_units() -> set[str]:
+    """src/overlays files built by SN cc1 2.95.2 (units grouped by src/overlays directory).
+
+    Retail level code matches SN cc1 where the game compiler cannot reach it:
+    the help giants' 128-bit zero stores and loop pointers take the reload
+    registers SN picks.
+    """
+    if not OVERLAY_SN_UNITS.is_file():
+        return set()
+    groups = json.loads(OVERLAY_SN_UNITS.read_text())["units"]
+    return {f"{dir_}/{name}" for dir_, names in groups.items() for name in names}
+
+
+def overlay_sn_functions(units: set[str]) -> set[str]:
+    """Names of the functions defined or stubbed in the SN-built files."""
+    names = set()
+    for unit in units:
+        path = OVERLAYS_SRC / unit
+        if path.is_file():
+            names |= set(re.findall(r"\b(FUN_L\d\d_[0-9a-f]{8})\b", path.read_text(errors="replace")))
+    return names
+
+
 def build_overlays() -> Path:
     """Write build/overlays/build.ninja for the level overlays (docs/overlays.md).
 
@@ -1803,9 +1860,29 @@ def build_overlays() -> Path:
         ),
     )
 
-    def game_edge(out: str, src: str) -> None:
+    # Level code the game compiler does not reproduce but SN cc1 2.95.2 does
+    # (OVERLAY_SN_UNITS): SN cc1, its externs ordered for Ps2EeAs, then the
+    # same Ps2EeAs + padless finish as overlay-game.
+    sn_driver = _windows_exe(str(sn_root / "bin/ee-gcc295.exe"))
+    ninja.rule(
+        "overlay-sn",
+        description="overlay-sn $in",
+        command=(
+            f"mkdir -p {work} && cp $in {work}/cand.c && "
+            f"cd {work} && {sn_driver} -S -I{ROOT}/src -I{ROOT}/include "
+            f"{LANG_DEFINE} -DMATCHING_DECOMP -O2 cand.c -o cand.s && cd - >/dev/null && "
+            f"{sys.executable} padless-asm.py normalize {work}/cand.s {work}/cand-norm.s none && "
+            f"{sys.executable} padless-asm.py externs {work}/cand-norm.s {work}/cand-final.s $in && "
+            f"{ee_assembler} -o '$work_win/cand-padded.o' '$work_win/cand-final.s' && "
+            f"{game_root}/as -mabi=eabi -o {work}/cand-ref.o {work}/cand-final.s && "
+            f"{sys.executable} padless-asm.py finish {work}/cand-padded.o $out {work}/cand-ref.o"
+        ),
+    )
+    sn_units = overlay_sn_units()
+
+    def game_edge(out: str, src: str, rule: str = "overlay-game") -> None:
         path = str((OVERLAYS_BUILD / out).resolve()) + ".work"
-        ninja.build(outputs=[out], rule="overlay-game", inputs=[src],
+        ninja.build(outputs=[out], rule=rule, inputs=[src],
                     implicit=["padless-asm.py"], variables={"work_win": _win_path(path)})
 
     objects = []
@@ -1814,13 +1891,15 @@ def build_overlays() -> Path:
         obj, c_only = f"obj/{rel}.o", f"c/{rel}"
         ninja.build(outputs=[obj], rule="overlay-cc", inputs=[f"{rel_root}/{src}"])
         ninja.build(outputs=[c_only], rule="c-only", inputs=[f"{rel_root}/{src}"])
-        game_edge(f"{c_only}.o", c_only)
+        game_edge(f"{c_only}.o", c_only, "overlay-sn" if str(rel) in sn_units else "overlay-game")
         objects += [obj, f"{c_only}.o"]
     catalogue = Path("config/overlays/us/functions.tsv")
+    sn_functions = overlay_sn_functions(sn_units)
     for line in catalogue.read_text().splitlines():
         parts = line.split("\t")
         if len(parts) > 1 and parts[1] in ("shared", "level"):
-            game_edge(f"stage/{parts[0]}.c.o", f"stage/{parts[0]}.c")
+            game_edge(f"stage/{parts[0]}.c.o", f"stage/{parts[0]}.c",
+                      "overlay-sn" if parts[0] in sn_functions else "overlay-game")
     ninja.build(outputs=["overlays"], rule="phony", inputs=objects)
     ninja.default(["overlays"])
     ninja.close()

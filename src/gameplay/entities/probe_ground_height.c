@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c, func_00214358). */
+/* Ported from rac1-decomp (src/game/mobyutil.c, func_00214358). */
 typedef int s32;
 typedef float f32;
 #include "qcopy.h"

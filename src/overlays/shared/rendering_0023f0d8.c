@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/lights_0023FA70.c: func_L00_0023FA70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/lights_0023FA70.c: func_L00_0023FA70), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0;

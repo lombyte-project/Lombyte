@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/overlays/shared/pause_00277208.c, func_L00_00280740). */
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00280740). */
 #define NOT_SDA __attribute__((section(".data")))
 extern unsigned char D_0013A4E0[] NOT_SDA;
 extern char D_001D5BF0[] NOT_SDA;

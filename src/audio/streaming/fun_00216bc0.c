@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/stream.c, func_00217A60). */
+/* Ported from rac1-decomp (src/game/stream.c, func_00217A60). */
 extern short D_001516D0[];
 void music_remaining_time_callback(int remaining_time, long context) __asm__("FUN_00216bc0");
 

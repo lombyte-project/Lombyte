@@ -180,12 +180,164 @@ void FUN_L00_002bb400(unsigned char *m) {
     *(float *)(m + 0x44) = FUN_001fa580_2bb400(*(float *)(m + 0x44), FUN_L00_0025e310_2bb400(v->fC));
     FUN_0020e098_2bb400(m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bb558.s", FUN_L00_002bb558);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BC860), where it is exact; names translated to the US level program. */
+
+typedef struct { float previous[4]; float point[4][4]; } SparkleRowC860;
+
+extern char D_0013E533[];
+extern char D_L00_001DBBA0[];
+extern float ConvertIntegerToFloat(int);
+extern float D_L00_001616D4 __attribute__((sda));
+extern float D_L00_00166DC0[];
+extern float D_L00_0017AEBC __attribute__((section(".data")));
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float compute_interpolated_record_value(void *);
+extern float random_float_between(float, float);
+extern int D_L00_001616CC __attribute__((sda));
+extern int D_L00_001616D0 __attribute__((sda));
+extern int scale_game_frames(int);
+extern int tick_countdown_32();
+extern float D_L00_001616A4 __attribute__((sda));
+extern short D_L00_00161660_e[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
+extern short D_L00_001DBED8[];
+extern char D_L00_001616A8[4] __attribute__((sda));
+extern char D_L00_001616AC[4] __attribute__((sda));
+extern short D_L00_001DBEC0[];
+extern short D_L00_001DBEF0[];
+extern short D_L00_001DBF08[];
+extern void FUN_00213358(void *, float, float);
+extern void FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
+extern void add_vector_xyz(void *, void *, void *);
+extern void blend_moby_animation(void *, int, int, int);
+extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle);
+extern void enqueue_callback_list_1(void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern char D_0013F350[];
+extern SparkleRowC860 D_L00_001DBE90_rows[] __asm__("D_L00_001DBB90");
+extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
+
+void FUN_L00_002bb558(char *m) {
+    int flag = 0;
+    float vec0[4] __attribute__((aligned(16)));
+    float vec1[4] __attribute__((aligned(16)));
+    float t[4] __attribute__((aligned(16)));
+    float w[5][4] __attribute__((aligned(16)));
+    char *g = ((char *)&D_0013F350);
+    int i;
+    int n;
+    int j;
+    int q;
+    int any;
+
+    if (*(unsigned char *)(*(char **)(g + 0x2080) + 0x53) != 0x82) {
+        D_L00_0017AEBC = 0.1f;
+    }
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        m[0x20] = 2;
+        for (q = 0; q < 10; q++) {
+            D_L00_001DBEC0[q] = 0;
+            D_L00_001DBEF0[q] = 2;
+            D_L00_001DBF08[q] = 1;
+        }
+        D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
+        D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
+        break;
+    case 2:
+        if (*(int *)(g + 0x2084) == 0x20) {
+            float f = compute_interpolated_record_value(m);
+            if (6.0f <= f) {
+                flag = 1;
+                if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
+                    float a = ConvertIntegerToFloat(D_L00_001616CC);
+                    a = a / ConvertIntegerToFloat(scale_game_frames(*(int *)&D_L00_001616A8));
+                    D_L00_001616D4 = 1.0f - a;
+                } else if (12.0f <= f) {
+                    if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
+                        float a = ConvertIntegerToFloat(D_L00_001616D0);
+                        a = a / ConvertIntegerToFloat(scale_game_frames(*(int *)&D_L00_001616AC));
+                        D_L00_001616D4 = a;
+                    } else {
+                        D_L00_001616D4 = 0.0f;
+                    }
+                } else {
+                    D_L00_001616D4 = 1.0f;
+                }
+            }
+        } else {
+            D_L00_001616CC = scale_game_frames(*(int *)&D_L00_001616A8);
+            D_L00_001616D0 = scale_game_frames(*(int *)&D_L00_001616AC);
+            blend_moby_animation(m, 1, 0, scale_game_frames(12));
+        }
+    }
+    scale_vector_xyz(vec0, m + 0xD0, -0.5f);
+    add_vector_xyz(vec0, vec0, m + 0x10);
+    any = 0;
+    for (j = 0; j < 10; j++) {
+        if (D_L00_001DBEC0[j] != 0) {
+            any = 1;
+            break;
+        }
+    }
+    if (!flag && !any) return;
+    for (i = 0; i < 10; i = n) {
+        D_L00_001DBEC0[i]--;
+        if (D_L00_001DBEC0[i] < 0) D_L00_001DBEC0[i] = 0;
+        if (D_L00_001DBEC0[i] == 0) {
+            if (flag) {
+                float sign;
+                int k;
+                D_L00_001DBEC0[i] = 2;
+                D_L00_001DBED8[i] = 0x40;
+                FUN_00213358(vec1, D_L00_001616A4, D_L00_001616A4);
+                qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
+                n = i + 1;
+                sign = 1.0f;
+                for (k = 1; k < 5; k++) {
+                    float ang;
+                    subtract_vector_xyz(t, D_L00_001DBE90_rows[i].point[k - 1], D_L00_00166DC0);
+                    ang = random_float_between(0.17453292f, 0.7853982f) * sign;
+                    sign = -sign;
+                    build_look_at_matrix(vec1, vec1, t, ang);
+                    add_vector_xyz(((float (*)[4])(D_L00_001DBBA0+i*0x50))[k], D_L00_001DBE90_rows[i].point[k - 1], vec1);
+                }
+            } else {
+                n = i + 1;
+            }
+        } else {
+            int k;
+            float (*workspace)[4] = w;
+            for (k = 1; k < 5; k++) {
+                float *v = workspace[k];
+                subtract_vector_xyz(v, ((float (*)[4])(D_L00_001DBBA0+i*0x50))[k], D_L00_001DBE90_rows[i].point[k - 1]);
+                v[0] += FUN_L00_00257c48(0.0f, 0.1f);
+                v[1] += FUN_L00_00257c48(0.0f, 0.1f);
+                v[2] += FUN_L00_00257c48(0.0f, 0.1f);
+            }
+            n = i + 1;
+            qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
+            for (k = 1; k < 5; k++) {
+                add_vector_xyz(((float (*)[4])(D_L00_001DBBA0+i*0x50))[k], D_L00_001DBE90_rows[i].point[k - 1], workspace[k]);
+            }
+            if (D_L00_001DBEC0[i] > 0) D_L00_001DBED8[i] = 0x20;
+            else D_L00_001DBED8[i] = 0;
+        }
+    }
+    enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
+}
 typedef struct { u8 b[0x50]; } E002bbb00;
 extern s16 D_L00_001DBEC0[];
 extern s16 D_L00_001DBED8[];
-extern E002bbb00 D_L00_001DBBA0[];
-extern f32 D_L00_001616D4;
+extern E002bbb00 D_L00_001DBBA0_u[] __asm__("D_L00_001DBBA0");
+extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
 extern f32 D_L00_00161690 __attribute__((sda));
 extern f32 D_L00_00161694 __attribute__((sda));
 f32 FUN_001fa6c0(s32);
@@ -197,13 +349,144 @@ void FUN_L00_002bbb00(void *o) {
     s32 r;
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
-            r = FUN_001fa6d0(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_001616D4);
-            FUN_L00_002bbbc8(&D_L00_001DBBA0[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            r = FUN_001fa6d0(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
+            FUN_L00_002bbbc8(&D_L00_001DBBA0_u[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
     FUN_L00_002bc1a0(o);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bbbc8.s", FUN_L00_002bbbc8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BCED0), where it is exact; names translated to the US level program. */
+
+typedef float RW[4] __attribute__((aligned(16)));
+
+typedef struct {
+    int c[4];
+    float f[8];
+    long z4, q0, q1, q2;
+} RT;
+
+extern float D_L00_00166DC0[];
+extern float vector_length_xyz(void *);
+extern int get_effect_texture(int);
+extern char D_L00_00161680[4] __attribute__((sda));
+extern char D_L00_00161684[4] __attribute__((sda));
+extern char D_L00_001616B0[4] __attribute__((sda));
+extern char D_L00_001616B4[4] __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *);
+extern void cross_vectors_xyz(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float sz) {
+    char *m = mv;
+    RW q[4];
+    RT t;
+    RW q2[4];
+    RT u;
+    RW w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    int i, col0, col1;
+    float len, len0, l0, l1;
+    t.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
+    col0 = *(int *)&D_L00_00161680 | (a << 24);
+    t.q2 = 0x8000000048L;
+    t.q1 = 0xFF9000000260L;
+    t.z4 = 0;
+    t.c[3] = col0;
+    t.c[2] = col0;
+    t.c[1] = col0;
+    t.c[0] = col0;
+    u.q0 = get_effect_texture(*(int *)&D_L00_001616B4);
+    col1 = *(int *)&D_L00_00161684 | (b << 24);
+    u.q2 = t.q2;
+    u.q1 = t.q1;
+    u.z4 = t.z4;
+    u.c[3] = col1;
+    u.c[2] = col1;
+    u.c[1] = col1;
+    u.c[0] = col1;
+    u.f[0] = 0; u.f[1] = 0; u.f[2] = 0; u.f[3] = 1.0f; u.f[4] = 1.0f; u.f[5] = 0; u.f[6] = 1.0f; u.f[7] = 1.0f;
+    t.f[0] = 0; t.f[1] = 0; t.f[2] = 0; t.f[3] = 1.0f; t.f[4] = 1.0f; t.f[5] = 0; t.f[6] = 1.0f; t.f[7] = 1.0f;
+    subtract_vector_xyz(w140, m, D_L00_00166DC0);
+    subtract_vector_xyz(w150, m + 0x10, m);
+    cross_vectors_xyz(w120, w150, w140);
+    len0 = vector_length_xyz(w120);
+    if (len0 != 0) len0 = 1.0f / len0;
+    scale_vector_xyz(w120, w120, sx * len0);
+    add_vector_xyz(q[0], m, w120);
+    subtract_vector_xyz(q[1], m, w120);
+    for (i = 1; i < n - 1; i++) {
+        subtract_vector_xyz(w140, m + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(w150, m + i * 16 + 16, m + i * 16);
+        cross_vectors_xyz(w120, w150, w140);
+        len = vector_length_xyz(w120);
+        if (len != 0) len = 1.0f / len;
+        scale_vector_xyz(w120, w120, sx * len);
+        add_vector_xyz(q[2], m + i * 16, w120);
+        subtract_vector_xyz(q[3], m + i * 16, w120);
+        if (i == 1) {
+            t.c[1] = *(int *)&D_L00_00161680;
+            t.c[0] = *(int *)&D_L00_00161680;
+        } else if (i == n - 2) {
+            t.c[3] = *(int *)&D_L00_00161680;
+            t.c[2] = *(int *)&D_L00_00161680;
+        } else if (i == 2) {
+            t.c[1] = col0;
+            t.c[0] = col0;
+        }
+        draw_geometry_quad(q, 0, 0);
+        qcopy(q[0], q[2]);
+        qcopy(q[1], q[3]);
+    }
+    for (i = 0; i < n - 1; i++) {
+        subtract_vector_xyz(a180, m + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(b190, m + i * 16 + 16, D_L00_00166DC0);
+        l0 = vector_length_xyz(a180);
+        l1 = vector_length_xyz(b190);
+        if (l1 < l0) {
+            if (l1 == 0) qcopy(b190, a180);
+            else scale_vector_xyz(b190, b190, l0 / l1);
+        } else {
+            if (l0 == 0) qcopy(a180, b190);
+            else scale_vector_xyz(a180, a180, l1 / l0);
+        }
+        add_vector_xyz(r160, D_L00_00166DC0, a180);
+        add_vector_xyz(r170, D_L00_00166DC0, b190);
+        subtract_vector_xyz(w150, r170, r160);
+        scale_vector_xyz(s1B0, w150, sz);
+        subtract_vector_xyz(r160, r160, s1B0);
+        add_vector_xyz(r170, r170, s1B0);
+        subtract_vector_xyz(s1A0, D_L00_00166DC0, r160);
+        cross_vectors_xyz(w120, s1A0, w150);
+        len = vector_length_xyz(w120);
+        if (len != 0) len = 1.0f / len;
+        scale_vector_xyz(w130, w120, sy * len);
+        add_vector_xyz(q2[0], r160, w130);
+        subtract_vector_xyz(q2[1], r160, w130);
+        add_vector_xyz(q2[2], r170, w130);
+        subtract_vector_xyz(q2[3], r170, w130);
+        if (i == 0) {
+            u.c[1] = *(int *)&D_L00_00161684;
+            u.c[0] = *(int *)&D_L00_00161684;
+        } else if (i == n - 2) {
+            u.c[3] = *(int *)&D_L00_00161684;
+            u.c[2] = *(int *)&D_L00_00161684;
+        } else if (i == 1) {
+            u.c[1] = col1;
+            u.c[0] = col1;
+        }
+        draw_geometry_quad(q2, 0, 0);
+    }
+    vu1_add_g_sregister(0x47, 0x5360B);
+}
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2bc1a0;
 typedef struct {
     V_2bc1a0 corner[4];
@@ -219,7 +502,6 @@ extern float D_L00_001616B8_2bc1a0 __asm__("D_L00_001616B8") __attribute__((sda)
 extern int D_L00_001616C8_2bc1a0 __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int D_L00_001616C0_2bc1a0 __asm__("D_L00_001616C0") __attribute__((sda));
 extern unsigned int D_L00_001616C4_2bc1a0 __asm__("D_L00_001616C4") __attribute__((sda));
-extern float D_L00_001616D4_2bc1a0 __asm__("D_L00_001616D4");
 extern V_2bc1a0 D_L00_00166DC0_2bc1a0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V_2bc1a0 D_0013F5E0_2bc1a0 __asm__("D_0013F5E0");
 extern V_2bc1a0 D_L00_001DBB60_2bc1a0[] __asm__("D_L00_001DBB60") __attribute__((section(".data")));
@@ -259,7 +541,7 @@ void FUN_L00_002bc1a0(void *mv) {
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4)) c = D_L00_001616C4_2bc1a0;
     else c = D_L00_001616C0_2bc1a0;
-    c = (c & 0xFFFFFF) | (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_001616D4_2bc1a0) << 24);
+    c = (c & 0xFFFFFF) | (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_00161660_f[29]) << 24);
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
@@ -364,7 +646,7 @@ void FUN_L00_002be890(void *mv) {
 #include "qcopy.h"
 
 /* Nudge a position and ask the level helper about it, lowering a global on success. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFDB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFDB8), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } Vx __attribute__((aligned(16)));
 
@@ -397,7 +679,7 @@ int FUN_L00_002beab0(char *a, int b, Vx *c) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -413,7 +695,7 @@ void FUN_L00_002beb90(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -427,7 +709,7 @@ void FUN_L00_002bebc8(char *a) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF08), where it is exact; names translated to the US level program. */
 
 void FUN_L00_002bec00(char *a) {
     char *g = D_0013F350;
@@ -442,7 +724,7 @@ void FUN_L00_002bec00(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -660,7 +942,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
     return best;
 }
 /* Steps a vector by n repeated additions of the normalised difference. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002C0B18), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);

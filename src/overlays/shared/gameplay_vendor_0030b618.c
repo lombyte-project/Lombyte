@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030bfa8.s", FUN_L01_0030bfa8);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
 
 typedef int uq __attribute__((mode(TI)));
 
@@ -54,7 +54,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
 #define MACRO_ADDR
 
 /* offset a position by two camera-relative vectors, then raise z by 1 */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);
@@ -97,7 +97,7 @@ extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
 extern int D_L01_0015F5C4 __attribute__((sda));
 
 typedef union { u128_w22c q; float f[4]; } V4_w22c;
-extern V4_w22c D_0013F3D0;
+extern V4_w22c D_0013F3D0_u __asm__("D_0013F3D0");
 
 void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c v;
@@ -115,7 +115,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                          D_L01_00162084, 2.0f, 3.1415927f, 3.1415927f);
     if (e != 0) {
         *(char **)(state + 0x60) = e;
-        if (D_0013F3D0.f[2] + 1.1f < *(float *)(moby + 0x18)) {
+        if (D_0013F3D0_u.f[2] + 1.1f < *(float *)(moby + 0x18)) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (FUN_001fa688(*(float *)(moby + 0x48), t) < 0.5235988f) {
@@ -148,7 +148,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d880.s", FUN_L01_0030d880);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -179,7 +179,7 @@ void FUN_L01_0030dda0(char *m) {
 #define MACRO_ADDR
 
 /* Initialize both consecutive effect entries. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00263618(void *, int, float, float);
 
@@ -193,7 +193,7 @@ void FUN_L01_0030de68(char *moby) {
     }
 }
 /* Attach two effect entries and register their update callback. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0030de68(char *moby);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -214,7 +214,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00314e98.s", FUN_L01_00314e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315358.s", FUN_L01_00315358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00315de0.s", FUN_L01_00315de0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00316030.s", FUN_L01_00316030);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
@@ -230,7 +230,41 @@ void FUN_L01_00316e88(float a, float b) {
     *(float *)(d + 0x48) = b;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319928.s", FUN_L01_00319928);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00319f18.s", FUN_L01_00319f18);
+/* reverb box sound update: starts or stops the sound as the listener enters or leaves the box */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B2F0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern void FUN_L01_002a1a90(int a, int b, int c, int d, int e);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_00319f18(char *moby) {
+    float a[4];
+    float b[4];
+    unsigned char *data = *(unsigned char **)(moby + 8);
+    subtract_vector_xyz(a, D_0013F3D0_c, moby + 0x40);
+    a[3] = 0;
+    transform_vector_by_basis(b, a, moby + 0x50);
+    if (AbsoluteFloat(b[0]) <= 1.0f && AbsoluteFloat(b[1]) <= 1.0f && AbsoluteFloat(b[2]) <= 1.0f) {
+        float t = (b[0] + 1.0f) * 0.5f;
+        int v = func_001FA898_r(ConvertIntegerToFloat(*(int *)(data + 4)) * t);
+        int w = *(int *)(data + 4);
+        if (!(w < v)) w = v;
+        FUN_L01_002a1a90((int)moby, data[0], w, data[1], data[2]);
+        data[3] = 1;
+    } else if (data[3] != 0) {
+        if (b[0] > 0.0f) {
+            FUN_L01_002a1a90(0, data[0], *(int *)(data + 4), data[1], data[2]);
+        } else {
+            FUN_L01_002a1a90((int)moby, 0, 0, 0, 0);
+        }
+        data[3] = 0;
+    }
+}
 extern char D_0013E5E0[];
 extern char D_L01_00167240[];
 extern int FUN_L00_0028ddd8(int, int, int, int);
@@ -255,4 +289,41 @@ void FUN_L01_0031a078(int a0) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0031a128.s", FUN_L01_0031a128);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* sound instance update: fade/stop test against a listener distance */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern float AbsoluteFloat(float);
+extern void FUN_L01_0027a248(int, int);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *);
+
+void FUN_L01_0031a128(int *moby) {
+    float v[8];
+    int *p = (int *)moby[2];
+    if (((unsigned *)p)[3] != 0xFFFFFFFF) {
+        subtract_vector_xyz(v, D_0013F3D0, (char *)moby + 0x40);
+        v[3] = 0;
+        transform_vector_by_basis(v + 4, v, (char *)moby + 0x50);
+        if (AbsoluteFloat(v[4]) <= 1.0f && AbsoluteFloat(v[5]) <= 1.0f && AbsoluteFloat(v[6]) <= 1.0f) {
+            p[2] = 1;
+            return;
+        }
+        if (p[2] != 0) {
+            short *s = (short *)p;
+            if (s[7] == -1) s[7] = s[6];
+            if (s[6] == -1) s[6] = s[7];
+            if (v[4] > 0) {
+                FUN_L01_0027a248(p[1], s[7]);
+            } else {
+                FUN_L01_0027a248(p[0], s[6]);
+            }
+            p[2] = 0;
+        }
+    }
+}

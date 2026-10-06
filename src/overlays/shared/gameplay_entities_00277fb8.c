@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
 #include "qcopy.h"
 
 /* Places the marker at a moby's position offset along its heading by scale. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279398), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279398), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x10];
@@ -39,7 +39,7 @@ void FUN_L01_002783a8(float scale, char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
@@ -56,7 +56,7 @@ void FUN_L01_002787a0(char *moby)
 #include "qcopy.h"
 
 /* spawns a moby of a class copying the source moby's placement, scaled */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);

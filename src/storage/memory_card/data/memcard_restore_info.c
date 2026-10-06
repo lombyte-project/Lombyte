@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/memcard.c, func_0020BCB0). */
+/* Ported from rac1-decomp (src/game/memcard.c, func_0020BCB0). */
 typedef struct {
     int a;        /* 0x00 */
     int b;        /* 0x04 */
@@ -11,7 +11,7 @@ typedef struct {
     char hdr[0x20];
     McEntry e[5];
     char pad[0xC];
-} McSlot;         /* 0xB8 in the NTSC build (0xC0 in PAL) */
+} McSlot;         /* 0xB8 */
 extern McSlot D_0013D290[];
 extern int func_0020AD38(char *); /* memcard_TestChecksum */
 /* memcard_RestoreInfo(char *, int, int). Advancing the buf parameter

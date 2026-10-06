@@ -198,18 +198,21 @@ void FUN_L00_002b3458(unsigned char *m) {
                 return;
             }
         }
+        goto test;
+    found: {
+            unsigned char *q;
+            v->p[i][0x20] = 0x51;
+            q = v->p[i];
+            qcopy(q + 0x10, m + 0x10);
+            q[0xA4] = 0xFF;
+            return;
+        }
+    test:
         if (v->p[0][0x20] == 0x50 || v->p[1][0x20] == 0x50 || v->p[2][0x20] == 0x50 || v->p[3][0x20] == 0x50) {
             if (FUN_001f9740_2b3458(&v->w4)) {
                 v->w4 = D_L00_00161478_2b3458;
                 for (i = 0; i < 4; i++) {
-                    if (v->p[i][0x20] == 0x50) {
-                        unsigned char *q;
-                        v->p[i][0x20] = 0x51;
-                        q = v->p[i];
-                        qcopy(q + 0x10, m + 0x10);
-                        q[0xA4] = 0xFF;
-                        break;
-                    }
+                    if (v->p[i][0x20] == 0x50) goto found;
                 }
             }
         }
@@ -325,7 +328,7 @@ void FUN_L00_002b3c50(X *x) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 
@@ -435,8 +438,62 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     return best;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b56d0.s", FUN_L00_002b56d0);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B69C0), where it is exact; names translated to the US level program. */
+
+extern int D_L00_0015F30C;
+extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444") __attribute__((section(".sdata")));
+extern float D_L00_0015F448;
+extern float D_L00_0015F44C;
+extern float D_L00_0015F450;
+extern float D_L00_0015F454 __attribute__((sda));
+extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") __attribute__((section(".sdata")));
+extern int D_L00_0015FFF0;
+extern float D_L00_001604A4;
+extern int D_L00_0016017C;
+extern float D_L00_00160F80;
+extern float D_L00_00160FE0;
+extern int D_L00_00169FF8 __attribute__((section(".data")));
+extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
+
+void FUN_L00_002b56d0(void *m_) {
+    char *m = (char *)m_;
+    char *p;
+    float f0, f1, f2, f3;
+
+    p = *(char **)(m + 0x78);
+    f0 = D_L00_0015F448;
+    f1 = D_L00_0015F44C;
+    f2 = D_L00_0015F450;
+    f3 = D_L00_0015F448_e[3];
+    D_L00_0015F30C = 1;
+    *(float *)(p + 0x30) = f0;
+    *(float *)(p + 0x34) = f1;
+    *(float *)(p + 0x38) = f2;
+    *(float *)(p + 0x3C) = f3;
+    p[0x40] = D_L00_0015F444_e[0];
+    p[0x41] = D_L00_0015F444_e[1];
+    p[0x42] = D_L00_0015F444_e[2];
+    D_L00_0015F444_e[0] = 0x40;
+    D_L00_0015F448 = 0;
+    D_L00_0015F444_e[1] = 0x60;
+    D_L00_0015F454 = 0;
+    D_L00_0015F444_e[2] = 0x40;
+    D_L00_00160FE0 = 144.0f;
+    D_L00_0015F44C = 131072.0f;
+    D_L00_0015F450 = 255.0f;
+    D_L00_00169FF8 = 0;
+    D_L00_00160F80 = 147456.0f;
+    D_L00_001604A4 = 144.0f;
+    D_L00_0015FFF0 = 0x90;
+    D_L00_0016017C = 0x50000;
+    PackDmaTag(0x40, 0x60, 0x40);
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0016CA40[] __attribute__((section(".data")));
 extern int D_L00_0015F30C;
@@ -446,7 +503,6 @@ extern unsigned char D_L00_0015F446 __attribute__((sda));
 extern float D_L00_0015F448;
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
-extern float D_L00_0015F454;
 extern int D_L00_0015FFF0;
 extern int D_L00_0016017C;
 extern float D_L00_001604A4;
@@ -470,7 +526,7 @@ void FUN_L00_002b57f0(int m_, int flag) {
     D_L00_0015F448 = f0;
     D_L00_0015F44C = f1;
     D_L00_0015F450 = f2;
-    D_L00_0015F454 = f3;
+    D_L00_0015F448_e[3] = f3;
     D_L00_0015F444 = p[0x40];
     D_L00_0015F445 = p[0x41];
     D_L00_0015F446 = p[0x42];
@@ -623,7 +679,7 @@ void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
     FUN_0020e098(*(unsigned char **)(o + 0x20));
 }
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6FF0), where it is exact; names translated to the US level program. */
 
 typedef struct { int v[6]; } V6;
 
@@ -714,7 +770,6 @@ extern s32 FUN_0022da68(s32, s32, Moby *);
 extern s32 FUN_001fa6d0(f32);
 extern void FUN_L00_002b6bc8(Moby *, f32);
 extern void FUN_0022d798(s32);
-extern void FUN_L00_002b7398(Moby *);
 typedef struct { u8 p0[0x10A0]; u32 w10A0; u8 p10A4[0x10]; u32 w10B4; u8 p10B8[0x20AC-0x10B8]; u8 b20AC; } GS;
 extern GS D_0013F350;
 extern u32 D_0013C940[];
@@ -818,7 +873,78 @@ L7340:
 end:
     if ((s32)(G_W(10B4) ^ 3) != 0) FUN_L00_002b7398(m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b7398.s", FUN_L00_002b7398);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* per-frame update of the ten slot table: spawn one, age the rest, then draw */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B8690), where it is exact; names translated to the US level program. */
+
+typedef struct { float f; short a; short b; short c; short pad; } E8690;
+
+extern E8690 D_L00_001DB440[];
+extern int D_L00_001614CC;
+extern int D_L00_001614D0;
+extern int D_L00_001614D4;
+extern float D_L00_001614DC;
+extern char D_L00_001614E0[] __attribute__((section(".sdata")));
+extern float D_0015ED6C;
+extern int D_L00_001614B0 __attribute__((sda));
+extern float D_L00_001614B4 __attribute__((sda));
+extern float D_L00_001614B8 __attribute__((sda));
+extern unsigned short D_L00_001614BC __attribute__((sda));
+extern int D_L00_001614D8 __attribute__((sda));
+extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
+extern float ConvertIntegerToFloat(int);
+extern int FUN_001f9770(void *);
+extern int scale_game_frames(int);
+extern int tick_countdown_32(int *arg0);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void enqueue_callback_list_1(void (*)(void), void *);
+extern int f_to_int(float) __asm__("FUN_001fa6d0");
+void FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
+
+void FUN_L00_002b7398(void *arg) {
+    E8690 *p;
+    unsigned short av;
+    int i;
+    int r;
+    if (D_L00_001614CC != 0) {
+        for (i = 9; i >= 0; i--) D_L00_001DB440[i].c = 0;
+        D_L00_001614CC = 0;
+        D_L00_001614D0 = 0;
+        r = f_to_int(D_L00_001614B4 / (D_L00_001614B8 * D_0015ED6C));
+        D_L00_001614D8 = r;
+        D_L00_001614DC = 1.0f / ConvertIntegerToFloat(r);
+    }
+    if (D_L00_001614D4 == 0) {
+        if (tick_countdown_32(&D_L00_001614D0) != 0) {
+            i = 0;
+            do {
+                p = &D_L00_001DB440[i];
+                if (p->c == 0) {
+                    D_L00_001614D0 = scale_game_frames(D_L00_001614B0);
+                    av = *(unsigned short *)&D_L00_001614D0_e[2];
+                    p->b = D_L00_001614BC;
+                    p->c = 1;
+                    p->a = av;
+                    p->f = 0;
+                    break;
+                }
+            } while (++i < 10);
+        }
+    }
+    for (i = 0; i < 10; i++) {
+        p = &D_L00_001DB440[i];
+        if (p->c != 0) {
+            if (FUN_001f9770(&p->a) != 0) p->c = 0;
+            else p->f += D_L00_001614B8 * D_0015ED6C;
+        }
+    }
+    FUN_L00_0024f7c8(arg, 0, D_L00_001614E0);
+    enqueue_callback_list_1(FUN_L00_002b7568_c, arg);
+}
 typedef int U_2b7568 __attribute__((mode(TI)));
 typedef union { U_2b7568 q; f32 f[4]; } V_2b7568;
 typedef struct {

@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00207200). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00207200). */
 typedef struct {
     char _pad0[0x12E4];
     unsigned char unk12E4;

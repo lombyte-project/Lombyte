@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/vendor.c, func_0023B018). */
+/* Ported from rac1-decomp (src/game/vendor.c, func_0023B018). */
 #include "sda.h"
 typedef struct {
     int x;

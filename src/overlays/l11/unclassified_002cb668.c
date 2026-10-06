@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float D_0015ED6C;
@@ -49,7 +49,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb810.s", FUN_L11_002cb810);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013D3E2[];
 
@@ -66,7 +66,7 @@ void FUN_L11_002cb990(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d0710.s", FUN_L11_002d0710);
 extern float FastVecDist(void *, void *) __asm__("FUN_001f9b48");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
 extern float D_L11_001677C0[];
 extern void FUN_L00_0025a120(void *);
@@ -91,7 +91,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d1030.s", FUN_L11_002d1030);
 #include "qcopy.h"
 
 /* moves the parts' positions and stores the moby's displacement since last frame */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_00258830(int, int, float, float, float, int);
@@ -123,7 +123,7 @@ void FUN_L11_002d1340(void *mp) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d14b0.s", FUN_L11_002d14b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2088.s", FUN_L11_002d2088);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D3500), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D3500), where it is exact; names translated to the US level program. */
 
 struct TgtData {
     char pad0[0x60];
@@ -166,7 +166,59 @@ int FUN_L11_002d2340(char *moby, char *other) {
     return FUN_L01_00276fe8(buf, n, d->b[d->idx], moby + 0x10, other, d->e, 0.2f) != 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d2460.s", FUN_L11_002d2460);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d25e8.s", FUN_L11_002d25e8);
+/* Tests whether a moby can drop onto the ground, writing the landing point. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
+
+extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern int FUN_001efa68(void *, void *, int, void *, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void FUN_L00_00259710(void *a);
+extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
+
+int FUN_L11_002d25e8(char *m, float *out) {
+    char *s = *(char **)(m + 0x78);
+    int *p = (int *)(s + 0xF8);
+    int i;
+    int found = 0;
+    float a[4];
+    float b[4];
+    float g;
+    for (i = 0; i < 2; i++) {
+        if (is_point_inside_clip_volume(m + 0x10, *p)) {
+            found = 1;
+            break;
+        }
+        p++;
+    }
+    if (found) {
+        float *pos = (float *)(m + 0x10);
+        subtract_vector_xyz(a, out, pos);
+        if (vector_length_xyz(a) > 4.0f) normalize_vector_xyz(a, a, 4.0f);
+        add_vector_xyz(a, a, pos);
+        {
+            int *q = D_L11_001B0EB0[*(int *)(s - (-(*(int *)(s + 0x158) * 4)) + 0x60)];
+            if (FUN_L00_00259740(a, q + 4, *q)) {
+                a[2] += 5.0f;
+                g = func_L00_0025A748_f(a);
+                if (AbsoluteFloat(g - *(float *)(m + 0x18)) > 0.5f) {
+                    qcopy(b, pos);
+                    b[2] += 0.15f;
+                    a[2] = g + 0.15f;
+                    if (FUN_001efa68(b, a, 2, m, 0)) {
+                        a[2] = g;
+                        qcopy(out, a);
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002d27b0.s", FUN_L11_002d27b0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f0e40.s", FUN_L11_002f0e40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
@@ -174,7 +226,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2518.s", FUN_L11_002f2518);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
 
 void FUN_L11_002f2cd0(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -196,7 +248,7 @@ void FUN_L11_002f2cd0(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002f2d58.s", FUN_L11_002f2d58);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F43B0), where it is exact; names translated to the US level program. */
 
 void FUN_L11_002f3040(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -220,7 +272,7 @@ void FUN_L11_002f3040(char *moby) {
 }
 extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x88];
@@ -315,7 +367,7 @@ unsigned char *FUN_L11_00309378(char *src, char *pos, char *target, char *vec, i
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -358,17 +410,17 @@ int FUN_L11_0030a480(unsigned char *moby) {
     return 1;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a500.s", FUN_L11_0030a500);
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
 int FUN_L11_0030a830(unsigned char *arg) {
     return arg[0x20] == 5;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC10), where it is exact; names translated to the US level program. */
 
 void FUN_L11_0030a840(unsigned char *arg) {
     *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
 
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int FUN_L11_00316128(char *);

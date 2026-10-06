@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00227C78). */
+/* Ported from rac1-decomp (src/game/pause.c, func_00227C78). */
 
 #include "sda.h"
 

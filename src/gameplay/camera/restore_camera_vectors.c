@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001ECC10). */
+/* Ported from rac1-decomp (src/game/camera.c, func_001ECC10). */
 #include "qcopy.h"
 extern char D_001871B0[];
 /* When the flag at +2 is set, copies the 16-byte vectors at +0xC0 and

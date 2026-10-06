@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 
@@ -20,7 +20,7 @@ void FUN_L03_002cc828(unsigned char *arg) {
     }
     arg[0xA4] = 0xFF;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
 void FUN_L03_002d3100(void *arg, int mode) {
     if (mode == 1) {
@@ -30,7 +30,7 @@ void FUN_L03_002d3100(void *arg, int mode) {
     }
 }
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float D_L03_00161AF0 __attribute__((sda));
@@ -54,7 +54,54 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d30d8.s", FUN_L03_002d30d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d4288.s", FUN_L03_002d4288);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5650), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char D_L03_00173F60[];
+extern float FUN_001f9e90(float, float);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int scale_game_frames(int);
+extern void FUN_L00_00250df8(void *);
+extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+char *FUN_L03_002d4288(char *a, char *pos, char *parent, int n, float f0, float f1, float f2) {
+    char *m = (char *)func_0020D348_m(0x341);
+    char *d;
+    if (m != 0) {
+        float v[4];
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x7E;
+        d = *(char **)(m + 0x78);
+        m[0x31] = 1;
+        m[0x20] = 1;
+        qcopy(m + 0x10, pos);
+        qcopy(d, a);
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)d, *(float *)(d + 4));
+        *(int *)(d + 0x14) = scale_game_frames(n);
+        *(float *)(d + 0x18) = f2;
+        *(float *)(d + 0x1C) = f0;
+        *(float *)(d + 0x24) = f1;
+        *(char **)(d + 0x10) = parent;
+        *(int *)(d + 0x28) = 0;
+        *(u128 *)v = *(u128 *)(parent + 0x10);
+        v[2] = *(float *)(pos + 8);
+        if (FUN_001efa68(v, pos, 2, parent, 0) != 0) {
+            *(int *)(d + 0x14) = 0;
+            *(u128 *)(m + 0x10) = *(u128 *)D_L03_00173F60;
+            *(int *)(d + 0x24) = 0;
+        }
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d43c8.s", FUN_L03_002d43c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da710.s", FUN_L03_002da710);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002da870.s", FUN_L03_002da870);
@@ -74,7 +121,7 @@ int FUN_L03_002dcb30(unsigned char *moby) {
     return 0;
 }
 /* Shows a help message for the mode, then keeps a hud queue entry alive. */
-/* Ported from rac1-decomp (PAL, src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00235dc0(void);
 extern void FUN_L00_00235e18(int, int);

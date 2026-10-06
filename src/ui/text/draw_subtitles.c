@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/draw.c, func_001F4F90). */
+/* Ported from rac1-decomp (src/game/draw.c, func_001F4F90). */
 #include "sda.h"
 typedef struct {
     short start;   /* 0x0 */

@@ -8,7 +8,7 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
 extern float D_L04_00173FE8_d __asm__("D_L04_00173FE8") __attribute__((section(".data")));
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -28,7 +28,7 @@ float FUN_L04_002922d0(float *pos) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
 
 void FUN_L04_00292370(void *unused, char *arg) {
     *(float *)(arg + 0x10C) = -0.19634955f;
@@ -37,7 +37,7 @@ void FUN_L04_00292370(void *unused, char *arg) {
     *(float *)(arg + 0x1C0) = 0.19634955f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002a13f0(int *a, char *b);
 

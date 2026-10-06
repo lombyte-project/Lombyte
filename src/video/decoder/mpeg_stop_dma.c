@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/movie/videodec.c, func_0023E4B0). */
+/* Ported from rac1-decomp (src/game/movie/videodec.c, func_0023E4B0). */
 #ifndef COMMON_H
 #include "sda.h"
 #endif /* STRUCTS_H */

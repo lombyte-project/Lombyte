@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f88e8.s", FUN_L18_002f88e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9780.s", FUN_L18_002f9780);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L18_00162454;
@@ -56,7 +56,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FB6B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FB6B0), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -109,7 +109,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
 #include "sda.h"
 
 /* State machine: waits for level flags, then turns the moby around and back. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4 MACRO_ADDR;
@@ -146,7 +146,7 @@ void FUN_L18_002fa640(char *moby) {
 #include "qcopy.h"
 
 /* updates a moby that drags a child moby along with it */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -189,7 +189,7 @@ void FUN_L18_002fa728(char *moby) {
 extern int D_L18_001AC240[];
 extern int D_L18_0015FFD8 __attribute__((section(".sdata")));
 /* 0x002fa888, 88 bytes.
- * Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c:
+ * Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c:
  * func_L18_002FBCE8), where it is exact; names translated to the US level
  * program. */
 void FUN_L18_002fa888(int idx, int value) {
@@ -215,7 +215,7 @@ extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 #define MACRO_ADDR
 
 /* Remove a vendor moby and any child it owns. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBD40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBD40), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x84];
@@ -238,7 +238,7 @@ void FUN_L18_002fa8e0(L18VM_a8e0 *moby) {
         DeleteMoby(moby);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FC188), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FC188), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad[0x30];
@@ -286,7 +286,174 @@ void FUN_L18_002fad28(M2 *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fbb98.s", FUN_L18_002fbb98);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FD058), where it is exact; names translated to the US level program. */
+
+typedef unsigned int QVd058 __attribute__((mode(TI), aligned(16)));
+
+extern char D_L18_001625F0[4] __attribute__((sda));
+extern char D_L18_00162608 __attribute__((sda));
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(float *, float *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float approach_value(float *p, float target, float maxstep);
+extern float probe_ground_height(void *, int, float);
+extern float random_angle_radians(void);
+extern int FUN_L00_0025c698(void *, void *);
+extern int FUN_L00_0025e450();
+extern int FUN_L00_002dc9f0(void *, void *);
+extern int is_value_within_interpolated_window(char *, float);
+extern int random_integer_below(int);
+extern int scale_game_frames(int);
+extern float D_L18_00162600 __attribute__((sda));
+extern void FUN_L00_002599e8(void *, float, float, float, int, int, int, int, int);
+extern void FUN_L18_002fc100(void *);
+extern void FUN_L18_002fc860(void);
+extern void add_vector_xyz(void *, void *, void *);
+extern void blend_moby_animation(void *, int, int, int);
+extern void enqueue_callback_list_1(void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void vu_euler_rotation_basis(void *, void *);
+float FUN_L18_002fc4e0(char *self, float *src);
+extern float fd9a0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
+extern float f9d48_i(void *, void *) __asm__("FUN_001f9b80");
+extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int)
+    __asm__("FUN_L00_0025e450");
+
+void FUN_L18_002fbb98(unsigned char *m) {
+    char tmp[16];
+    unsigned char *e = *(unsigned char **)(m + 0x78);
+    unsigned char *s0;
+    FUN_L18_002fc100(m);
+    switch (m[0x20]) {
+    case 0: {
+        unsigned short h;
+        m[0x20] = 8;
+        if (random_integer_below(2)) *(unsigned short *)(m + 0x34) |= 0x8000;
+        else *(unsigned short *)(m + 0x34) &= 0x7FFF;
+        *(unsigned short *)(m + 0x34) |= 0x100;
+        m[0x73] = D_L18_00162608;
+        *(void **)(e + 0x140) = &D_L18_001625F0;
+        *(float *)(e + 0x20) = 1.0f;
+        e[0x58] = 8;
+        *(short *)(e + 0x24) = 1;
+        e[0x5C] = 1;
+        *(float *)(e + 0x30) = 0.5f;
+        *(float *)(e + 0x1F8) = random_angle_radians();
+        m[0x30] = 0xFF;
+        h = *(unsigned short *)(m + 0x34);
+        *(short *)(m + 0x32) = 0xFF;
+        h |= 1;
+        m[0x31] = 0;
+        h &= 0xEFFF;
+        *(int *)(m + 0x94) = 0;
+        *(unsigned short *)(m + 0x34) = h;
+        break;
+    }
+    case 1: {
+        float a = 10.0f;
+        float r;
+        s0 = m + 0x10;
+        *(float *)(e + 0x1D8) = *(float *)(e + 0x1D8) - D_0015ED70 * a;
+        add_vector_xyz(s0, s0, e + 0x1D0);
+        qcopy(tmp, s0);
+        ((float *)tmp)[2] += 1.0f;
+        r = probe_ground_height(tmp, 0, 0.5f);
+        if (*(float *)(m + 0x18) < r) {
+            *(float *)(m + 0x18) = r;
+            m[0x20] = 2;
+            if (m[0x53]) blend_moby_animation(m, 0, 0, scale_game_frames(10));
+        } else if (*(float *)(m + 0x18) < a) {
+            m[0x20] = 6;
+        }
+        break;
+    }
+    case 7:
+        if (FUN_L00_002dc9f0(m, e + 0x70)) {
+            m[0x20] = 2;
+            *(short *)(e + 0x138) = 0;
+        }
+        break;
+    case 2:
+        if (*(int *)(e + 0x1C4) == 2) {
+            if (!(10.0f < f9d48_i(m + 0x10, e + 0x180))) break;
+        }
+        m[0x20] = 3;
+        if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
+        break;
+    case 3: {
+        float f;
+        *(QVd058 *)tmp = *(QVd058 *)(e + 0x180);
+        f = fd9a0_c(m, tmp);
+        if (*(int *)(e + 0x1C4) == 2 && f < 5.0f) {
+            m[0x20] = 2;
+            if (m[0x53]) blend_moby_animation(m, 0, 0, scale_game_frames(10));
+            break;
+        }
+        if (f < 1.5f) {
+            m[0x20] = 4;
+            if (m[0x53] != 2) {
+                int v = (int)D_L18_00162600;
+                blend_moby_animation(m, 2, v, scale_game_frames(5));
+            }
+        }
+        break;
+    }
+    case 4: {
+        float r, k, b, d;
+        s0 = m + 0x48;
+        r = FUN_001f9e90(*(float *)(e + 0x180) - *(float *)(m + 0x10), *(float *)(e + 0x184) - *(float *)(m + 0x14));
+        k = 6.2831855f;
+        b = D_0015ED70 * k;
+        d = D_0015ED6C * k;
+        FUN_L00_0025be00((float *)s0, (float *)(e + 0x1E8), r, b, b, d);
+        if (is_value_within_interpolated_window((char *)m, 14.0f)) FUN_L00_002599e8(m, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
+        if (m[0x70] & 2) {
+            if (*(int *)(e + 0x1C4) == 2) {
+                m[0x20] = 2;
+                if (m[0x53]) blend_moby_animation(m, 0, 0, scale_game_frames(10));
+                break;
+            }
+            if (!(2.5f < f9d48_i(m + 0x10, e + 0x180))) break;
+            m[0x20] = 3;
+            if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
+            break;
+        }
+        break;
+    }
+    case 5:
+        if (!(FUN_L00_0025c698(m, e + 0x70) & 0x140)) break;
+    case 6:
+        qcopy(tmp, m + 0x10);
+        ((float *)tmp)[2] += 0.5f;
+        func_L00_0025F4A8_alt(m, e + 0x40, tmp, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 0.5f, 4, 0.0f, 0, 1, -1, 0);
+        m[0x20] = 8;
+        if (m[0x53]) blend_moby_animation(m, 0, 0, scale_game_frames(10));
+        *(int *)(m + 0x94) = 0;
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
+        break;
+    }
+    s0 = m + 0xC0;
+    vu_euler_rotation_basis(s0, m + 0x40);
+    if (*(float *)(e + 0x1F4) != 0.0f) {
+        float g;
+        approach_value((float *)(e + 0x1F4), 0.0f, D_0015ED6C * 4.0f);
+        g = 1.0f;
+        scale_vector_xyz(m + 0xE0, m + 0xE0, *(float *)(e + 0x1F4) + g);
+        g = g - *(float *)(e + 0x1F4);
+        scale_vector_xyz(s0, s0, g);
+        scale_vector_xyz(m + 0xD0, m + 0xD0, g);
+        enqueue_callback_list_1(FUN_L18_002fc860, m);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);
 #include "eetypes.h"
 
@@ -332,7 +499,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
 #include "sda.h"
 
 /* For each listed moby of matching type, spawns effects at five points. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
 
 extern int D_L18_0015FFD8 MACRO_ADDR;
 extern short D_L18_00162654;

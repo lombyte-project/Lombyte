@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c8440.s", FUN_L00_002c8440);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
 /* 0x002c92d8, 112 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // resets the fields of a record (if non-null) to their defaults
 void FUN_L00_002c92d8(char *a) {
@@ -260,7 +260,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 
@@ -277,7 +277,7 @@ int FUN_L00_002cadc0(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
@@ -300,7 +300,7 @@ int FUN_L00_002cae60(char *m, int a, int b, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbe20(void *);
 
@@ -647,7 +647,7 @@ void FUN_L00_002cdcc0(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002725d8(void *, int, float, float, unsigned, unsigned);
 
@@ -660,7 +660,83 @@ void FUN_L00_002cde78(char *m) {
         *(int *)(p + 0x50) = FUN_L00_002725d8(m, 1, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cdf28.s", FUN_L00_002cdf28);
+/* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF3D8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b48(void *, void *);
+extern int D_L00_0015FFE4;
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+char *FUN_L00_002cdf28(char *a, int *excl) {
+    char *result = 0;
+    char *m;
+    float best = 1e9f;
+    float v[4];
+    for (m = (char *)D_L00_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
+        char *cls = *(char **)(m + 0x24);
+        int t = 0;
+        float dist;
+        char *h;
+        char *x;
+        if (cls != 0) t = *(unsigned char *)(cls + 0x46);
+        if (m == 0 || *(unsigned char *)(m + 0x20) == 0xFE) continue;
+        if (*(unsigned char *)(m + 0x20) == 0xFD) continue;
+        if (t != 5 && t != 7 && t != 8) continue;
+        if (excl != 0) {
+            int found = 0;
+            int i;
+            for (i = 0; i < 9; i++) {
+                if (excl[i] == (int)m) {
+                    found = 1;
+                    break;
+                }
+            }
+            if (found) continue;
+        }
+        if (t == 5 && (*(unsigned short *)(m + 0x34) & 0x1000) == 0) continue;
+        if (*(unsigned char *)(m + 0x31) == 0) {
+            short c = *(short *)(m + 0xA6);
+            if (c != 0x350 && c != 0x31) continue;
+        }
+        dist = FUN_001f9b48(a, m + 0x10);
+        if (*(short *)(m + 0xA6) == 0x4D6) {
+            normalize_vector_xyz(v, *(char **)(m + 0x78), dist);
+            add_vector_xyz(v, v, m + 0x10);
+            if (dist < FUN_001f9b48(a, v)) continue;
+        } else {
+            float lim;
+            switch (t) {
+            case 5:
+                lim = 4.0f;
+                break;
+            case 7:
+                lim = 5.3f;
+                break;
+            case 8:
+                lim = 6.0f;
+                break;
+            default:
+                goto skip;
+            }
+            if (lim < dist) continue;
+        }
+    skip:
+        if (!(dist < best)) continue;
+        h = FUN_L00_002db890(m);
+        if (h != 0 && *(short *)(h + 0x68) > 0) continue;
+        x = (char *)FUN_002141f8_c(m);
+        qcopy(v, m + 0x10);
+        if (x != 0) v[2] = v[2] + (*(float *)(x + 0x10) + 0.05f);
+        if (FUN_001efa68(a, v, 6, (int)m, 0) == 0) {
+            best = dist;
+            result = m;
+        }
+    }
+    return result;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ce1f0.s", FUN_L00_002ce1f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ce358.s", FUN_L00_002ce358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cf218.s", FUN_L00_002cf218);

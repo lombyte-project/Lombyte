@@ -138,7 +138,7 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -195,7 +195,7 @@ void FUN_L00_002607d0(s32 id) {
     }
 }
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[8]; unsigned short a; char pad2[8]; unsigned short b; char pad3[4]; } ItemRec;
 

@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F0B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F0B0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015F5F4;
 extern char D_0013E533[];
@@ -24,7 +24,7 @@ int FUN_L00_0028ddd8(int a, int b, int c, int d) {
     }
     return r;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F140), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F140), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550_c[] __asm__("D_0013E550");
 
@@ -62,7 +62,7 @@ s32 FUN_L00_0028df38(s32 i, s32 v) { E0028df38 *p = &D_0013E550[i]; p->w[0x21] =
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/sound_0028EB98.c: func_L00_0028F230), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F230), where it is exact; names translated to the US level program. */
 
 typedef struct { int k; int v; } TE;
 

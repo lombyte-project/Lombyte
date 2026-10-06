@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/effects.c, func_001EE3B0). */
+/* Ported from rac1-decomp (src/game/effects.c, func_001EE3B0). */
 extern int func_001F44B8(int);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");

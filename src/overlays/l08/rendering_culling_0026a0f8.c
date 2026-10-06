@@ -2,4 +2,54 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0026a0f8.s", FUN_L08_0026a0f8);
+#include "qcopy.h"
+
+/* Builds a matrix that rolls by roll around the direction dir and writes it to out. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/mobyutil_0026B0E8.c: func_L08_0026B0E8), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9e90(float, float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f9fc8(void *);
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa070(void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void copy_matrix3x4(void *, void *);
+
+void FUN_L08_0026a0f8(void *out, void *dir, float roll) {
+    float M[4][4];
+    float Rz[4][4];
+    float Ry[4][4];
+    float Rx[4][4];
+    float ang[4];
+    float d[4];
+    float a;
+    qcopy(d, dir);
+    FUN_001f9fc8(M);
+    a = -FUN_001f9e90(d[0], d[1]);
+    ang[0] = 0.0f;
+    ang[1] = 0.0f;
+    ang[2] = a;
+    FUN_001fa050(Rz, ang);
+    FUN_001f9d20(d, d, Rz);
+    a = -FUN_001f9e90(d[2], d[0]);
+    ang[0] = 0.0f;
+    ang[2] = 0.0f;
+    ang[1] = a;
+    FUN_001fa070(Ry, ang);
+    FUN_001f9d20(d, d, Ry);
+    ang[2] = roll;
+    ang[0] = 0.0f;
+    ang[1] = 0.0f;
+    FUN_001fa070(Rx, ang);
+    FUN_001fa378(M, Rz, M);
+    FUN_001fa378(M, Ry, M);
+    FUN_001fa378(M, Rx, M);
+    FUN_001fa2d8(Ry, Ry);
+    FUN_001fa378(M, Ry, M);
+    FUN_001fa2d8(Rz, Rz);
+    FUN_001fa378(M, Rz, M);
+    qcopy(d, dir);
+    FUN_001f9d20(d, d, M);
+    copy_matrix3x4(out, M);
+}

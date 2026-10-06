@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* draw a list of effect entries into the scratchpad */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
 
 extern char D_L12_001CB7A0[];
 struct Pkt611c0 { int *p; };
@@ -84,7 +84,7 @@ void FUN_L12_002e6b60(char *moby) {
 #define MACRO_ADDR
 
 /* calls func_L12_002BD3D0 with two looked-up ids */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
 
 extern char D_L12_001F5480[];
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");

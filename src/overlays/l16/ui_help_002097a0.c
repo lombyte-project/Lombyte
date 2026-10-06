@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Per-frame update of the pickup/hit state flags from the state code. */
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern int D_0015ED84;
@@ -133,7 +133,7 @@ void FUN_L16_002097a0(void) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);

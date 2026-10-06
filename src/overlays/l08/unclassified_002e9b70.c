@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
 /* Draws three rows of HUD elements with their colours. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
 extern int D_L08_00161DD0 __attribute__((sda));
 extern int D_L08_00161DD4;
@@ -14,7 +14,7 @@ extern int D_L08_00161DD8;
 extern int D_L08_00161DF0 __attribute__((sda));
 extern int D_L08_00161DF4;
 extern int D_L08_00161E00 __attribute__((sda));
-extern unsigned char D_L08_00161E08;
+extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0(void);
 extern void FUN_L08_002f0b40(int);
@@ -32,9 +32,9 @@ void FUN_L08_002f0dc8(void) {
     vu1_add_g_sregister(0x42, (long)D_L08_00161DD0 << 32 | 0x44);
     FUN_L08_002f0b40(0);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
-    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD4 * D_L08_00161E08) >> 8) << 32 | 0x62);
+    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD4 * D_L08_00161E08_u) >> 8) << 32 | 0x62);
     FUN_L08_002f0b40(1);
-    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD8 * D_L08_00161E08) >> 8) << 32 | 0x68);
+    vu1_add_g_sregister(0x42, (long)((D_L08_00161DD8 * D_L08_00161E08_u) >> 8) << 32 | 0x68);
     FUN_L08_002f0b40(2);
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
     vu1_add_g_sregister(0x42, (long)D_L08_00161DF0 << 32 | 0x48);
@@ -45,17 +45,115 @@ void FUN_L08_002f0dc8(void) {
     vu1_add_g_sregister(0x42, (long)D_L08_00161E00 << 32 | 0x48);
     FUN_L08_002f0cf0(0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1548.s", FUN_L08_002f1548);
+
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
+
+typedef struct { int a, b; } Pair;
+
+extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E24[] __attribute__((section(".sdata")));
+extern Pair D_L08_00162408_c[] __asm__("D_L08_00161E20") __attribute__((section(".sdata")));
+extern Pair D_L08_001E8348[];
+extern Pair D_L08_00161E28;
+extern char D_L08_001675C0[];
+extern char D_L08_001DDF40[];
+extern char D_L08_001E2828[];
+extern char D_L08_001E2858[];
+extern char D_L08_001E8310[];
+extern char D_L08_001E8350[];
+extern float D_L08_00161DC4;
+extern float D_L08_00161DC8;
+extern float D_L08_00161DCC;
+extern float vector_length_xyz(void *);
+extern int D_L08_00161E08;
+extern int FUN_001fa728(char *, float);
+extern int truncate_float_to_s32();
+extern short D_L08_00161DC0 __attribute__((sda));
+extern short D_L08_00161E04 __attribute__((sda));
+extern char D_L08_001DDF20[];
+extern char D_L08_001DB518[];
+extern void FUN_L08_002f0dc8(void);
+extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void FUN_L08_002f1158(void *, float, float, float, void *);
+extern void FUN_L08_002f12a0(int);
+extern void FUN_L08_002f1378(int);
+extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_002f1548(unsigned char *moby) {
+    int i;
+    float v[4];
+    float w[4];
+    float d;
+
+    switch (moby[0x20]) {
+    case 0:
+        if (*(int *)&D_L08_00161E04 == 0) {
+            FUN_L08_002f0f68(D_L08_001E8310, 0xD, D_L08_001E2858, 0.5f, 0.5f, 0.65f, 0.5f, 1);
+            FUN_L08_002f0f68(D_L08_001DDF20, 8, D_L08_001DB518, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            FUN_L08_002f0f68(D_L08_001E2828, 0xB, D_L08_001DDF40, 0.25f, 0.25f, 0.25f, 1.0f, 1);
+            *(int *)&D_L08_00161E04 = 1;
+        }
+        moby[0x20] = 1;
+        for (i = 0; i < 3; i++) {
+            D_L08_001E8348[i].a = 0;
+            D_L08_001E8348[i].b = 0;
+            D_L08_00161E28.a = 0;
+            D_L08_00161E28.b = 0;
+        }
+        for (i = 0; i < 2; i++) {
+            D_L08_00161E10[i].a = 0;
+            *(float *)&D_L08_00161E14[i].a = i * 0.4f;
+        }
+        for (i = 0; i < 1; i++) {
+            D_L08_00162408_c[i].a = 0;
+            *(float *)&D_L08_00161E24[i].a = i * 0.4f;
+        }
+        break;
+    case 1:
+        v[0] = *(float *)&D_L08_00161DC0;
+        v[1] = D_L08_00161DC4;
+        v[2] = D_L08_00161DC8;
+        v[3] = D_L08_00161DCC;
+        if (FUN_001fa728((char *)v, 1000.0f) >= 0) {
+            w[0] = *(float *)&D_L08_00161DC0;
+            w[1] = D_L08_00161DC4;
+            w[2] = D_L08_00161DC8;
+            w[3] = 1.0f;
+            subtract_vector_xyz(w, D_L08_001675C0, w);
+            d = vector_length_xyz(w);
+            if (d <= 84.0f) {
+                FUN_L08_002f12a0(0);
+                FUN_L08_002f1158(D_L08_001E8350, 0.52f, 0.62f, 0.06f, (void *)&D_L08_00161E28);
+                FUN_L08_002f12a0(2);
+                if (d < 20.0f) {
+                    *(unsigned char *)&D_L08_00161E08 = 0xFF;
+                } else if (d < 84.0f) {
+                    *(char *)&D_L08_00161E08 = func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                } else {
+                    *(char *)&D_L08_00161E08 = 0;
+                }
+            }
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(1);
+            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
 #define NOT_SDA
 
 #define MACRO_ADDR
 
 /* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 float FUN_L08_002f5d98(float x, char *arg) {

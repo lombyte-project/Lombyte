@@ -69,7 +69,7 @@ void FUN_L00_00269290(char *o) {
 #include "qcopy.h"
 
 /* part type 3 update: spawn, drift toward a target, fade, and expire */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026A398), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026A398), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166DC0[];
 extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
@@ -221,7 +221,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269b70.s", FUN_L00_00269b70);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(void *);
@@ -388,7 +388,7 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
     q[0x19] = b19;
 }
 /* Per-tick update of a particle type 11: moves, drags, fades and kills it. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166DC0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -800,7 +800,7 @@ void FUN_L00_0026c6e8(void *pos, void *vel) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026D690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026D690), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
@@ -877,7 +877,7 @@ void FUN_L00_0026c860(M_26c860 *m) {
     if (1.0f < r->f8) r->f8 -= 1.0f;
     m->b8 = r->f8 * 255.0f;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026DA50), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
 extern unsigned char *D_L00_001B20D4_d __asm__("D_L00_001B20D4") __attribute__((section(".data")));
@@ -1317,7 +1317,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026ECA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026ECA0), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9740(void *);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1752,7 +1752,7 @@ kill:
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_0026FEE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026FEE8), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
@@ -1815,7 +1815,7 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
     return m;
 }
 /* Updates a particle that swirls on a circle: fades with age, spins, and moves along its orbit. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_00270120), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_00270120), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED60_c __asm__("D_0015ED60");
@@ -1905,7 +1905,7 @@ void FUN_L00_0026f548(u128 *a, u128 *b, int k, int j) {
 
 }
 /* Moves a particle by its velocity according to its mode, bouncing or killing it on contact. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_00270500), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_00270500), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[4]; } V __attribute__((aligned(16)));
 
@@ -2361,7 +2361,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_002715B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715B0), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
@@ -2374,7 +2374,7 @@ void FUN_L00_00270710(char *a) {
     }
 }
 /* Spawns a particle of type 0x2A at a with velocity b, class c and tag d. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0026A130.c: func_L00_002715F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715F8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60_c2 __asm__("D_0015ED60");
 extern int FUN_L00_0025bfe0(float, float, float, float);

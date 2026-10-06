@@ -180,7 +180,7 @@ void FUN_L00_002395b0(char *p) {
 #define MACRO_ADDR
 
 /* Updates the health HUD element: advances the wobble counters in its HudCounter (+0x80), clamps the target (+0x78) to +0x08, and steps the two digits (+0x70, +0x71) up or down. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x8];
@@ -395,7 +395,7 @@ out:
 /* Sets E up with func_L00_0023B0F8, points +0x80 at the shorts of
    D_L00_0015FB70 (declared like D_L00_0015FB68, out of $gp's reach) and
    clears the first. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023A658), where it is exact; names translated to the US level program. */
 
 
 
@@ -502,7 +502,7 @@ int FUN_L00_0023a640(char *rec) {
 }
 /* func_L00_00236750 without the offsets: a 32 x 32 element with a timer
    of 30 + func_001F9850(120). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern void FUN_L00_00235c80(HudElem *);

@@ -2,4 +2,32 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00270248.s", FUN_L07_00270248);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Clears each set bit in a rectangle of a per-row bit grid, notifying for each. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/map_00270BE0.c: func_L07_00270BE0), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0xC]; unsigned char *p; } Grid_270248;
+extern Grid_270248 D_L07_00184270;
+extern int FUN_L00_00249d80(int);
+
+void FUN_L07_00270248(int x, int y0, int w, int h) {
+    int y = y0;
+    for (; y < y0 + h; y++) {
+        int rowbase = (y >> 5) << 4;
+        int i;
+        for (i = x; i < x + w; i++) {
+            unsigned char *p = D_L07_00184270.p + (y << 6) + i / 8;
+            if (*p != 0) {
+                int bit = 1 << (i & 7);
+                if (*p & bit) {
+                    FUN_L00_00249d80((i >> 5) + rowbase);
+                    *p = *p & ~bit;
+                }
+            }
+        }
+    }
+}

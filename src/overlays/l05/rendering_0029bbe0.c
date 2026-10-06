@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0029bbe0.s", FUN_L05_0029bbe0);
 #include "qcopy.h"
 
 /* spawn a particle at a position with a velocity and random parameters */
-/* Ported from rac1-decomp (PAL, src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CCB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CCB8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt_q(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames_q(s32) __asm__("func_001F96F8");

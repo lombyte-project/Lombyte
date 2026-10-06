@@ -10,7 +10,7 @@
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
    0xFFFF, 0, 0, 0, 0, 1), +0x7C = 0, +0x6C = -6, then reloads it with
    func_001FFC48. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int unk00, unk04;
@@ -41,7 +41,7 @@ void FUN_L00_00235878(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x8];
@@ -90,7 +90,7 @@ int FUN_L00_00235a70(HudElem *rec, int *x, int *y) {
    D_L00_0017E500, and offsets *Y by it times (height + 52) for flags 1
    (up) / 2 (down), or *X by it times (width + 20) for flags 4 (left) /
    8 (right), rounded (func_001FA888 / func_001FA898 convert). */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L00_0017E3A0[];
@@ -133,7 +133,7 @@ void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00235c80.s", FUN_L00_00235c80);
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern void FUN_L00_00235c80(HudElem *);
@@ -145,7 +145,7 @@ void FUN_L00_00235d80(HudElem *e) {
     FUN_L00_00235c80(e);
 }
 /* func_L00_00236710 for a 32 x 32 element. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
 
 void FUN_L00_00235dc0(HudElem *e) {
     e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
@@ -246,7 +246,7 @@ void FUN_L00_00235ea0(e) HudElem *e; {
     }
     FUN_L00_0023aaa8((char *)e + 0x40);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0023aaa8(void *);
 

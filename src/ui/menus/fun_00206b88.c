@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, FUN_002073b8). */
+/* Ported from rac1-decomp (src/game/menu.c, FUN_002073b8). */
 #include "sda.h"
 extern unsigned char D_0013D3A4 NOT_SDA;
 int FUN_00206b88(void) {

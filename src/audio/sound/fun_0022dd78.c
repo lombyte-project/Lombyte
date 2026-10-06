@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/sound.c, func_0022F090). */
+/* Ported from rac1-decomp (src/game/sound.c, func_0022F090). */
 /* 8 bytes of post-endlabel nop padding in retail -- see func_001F6668. */
 void store_sound_bank_handle_callback(int handle, long context) __asm__("FUN_0022dd78");
 

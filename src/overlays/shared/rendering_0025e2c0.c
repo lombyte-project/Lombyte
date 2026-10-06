@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0025e2c0.s", FUN_L15_0025e2c0);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
 
 extern int *D_L15_001B2770_x __asm__("D_L15_001B2770") __attribute__((section(".data")));
 extern int random_integer_below(int) __asm__("FUN_00213260");

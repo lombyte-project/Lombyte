@@ -162,7 +162,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b39e0.s", FUN_L13_002b39e0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5210), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5210), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -198,7 +198,7 @@ void FUN_L13_002b4060(unsigned char *moby, float *v, float *w)
     *(int *)(w + 1) = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b41b8.s", FUN_L13_002b41b8);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L13_003061c8(float, float *, float *, void *);
 extern float D_0015ED6C;
@@ -228,7 +228,7 @@ void FUN_L13_002b47a0(char *moby)
         FUN_L13_003061c8(*(float *)(data + 0x68), v, v2, moby);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5A88), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0025fcb8(void *, void *, float);
 extern unsigned char D_001413D0[];
@@ -245,7 +245,7 @@ void FUN_L13_002b48d8(unsigned char *moby) {
     if (moby[0xBC] >= 4) moby[0x20] = moby[0xBC];
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4958.s", FUN_L13_002b4958);
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -347,7 +347,7 @@ void FUN_L13_002b4a58(char *m, char *p) {
     FUN_L00_0025d538(m, p + 0x60);
 }
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5E30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5E30), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];
@@ -436,7 +436,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4f28.s", FUN_L13_002b4f28);
 #define MACRO_ADDR
 
 /* Release the vendor moby's attached object and clear its reference. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13/vendor_002B2020.c: func_L13_002B6168), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13/vendor_002B2020.c: func_L13_002B6168), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x228];
@@ -455,7 +455,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4ff0.s", FUN_L13_002b4ff0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b50d8.s", FUN_L13_002b50d8);
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B9800), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B9800), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -518,7 +518,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b8be0.s", FUN_L13_002b8be0);
 #include "qcopy.h"
 
 /* Per-frame target tracking: validates the current target, re-picks one and drops it when lost. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BA828), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BA828), where it is exact; names translated to the US level program. */
 
 extern char D_L13_001670D0[];
 extern int D_L13_0015F5C4;
@@ -596,7 +596,7 @@ skip:
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
 
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
@@ -627,7 +627,7 @@ void FUN_L13_002b9df8(char *moby, char *obj, float p2, float p3) {
     FUN_L11_00311210(d, obj + 0xE0, obj + 0xE4, 0);
 }
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */
-/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB1C8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L13_002e6a58(void *, void *, float, int, void *, int);
 

@@ -9,7 +9,7 @@
 #include "qcopy.h"
 
 /* Spawn a particle moby at pos with a colour, lifetime and size. */
-/* Ported from rac1-decomp (PAL, src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);

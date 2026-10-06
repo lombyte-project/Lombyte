@@ -2,7 +2,93 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029f990.s", FUN_L00_0029f990);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float v[4][4];
+    int rgba[4];
+    float uv[4][2];
+    long gs[4];
+} QuadPkt;
+
+extern float D_L00_001CA318[][4];
+extern float vector_length_xyz(void *);
+extern int get_effect_texture(int);
+extern void FUN_00237c80(void *, void *, float *, float *, float *, float *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L00_0029f990(char *m) {
+    float A[4];
+    float B[4];
+    float C[4];
+    float P[3][4];
+    int idx[3];
+    float E[4];
+    QuadPkt q;
+    float g[4];
+    float f;
+    int i;
+    float one = 1.0f;
+    float uvv = 0.984375f;
+    for (i = 1; i < 6; i++) {
+        idx[0] = i * 4;
+        idx[1] = i * 4 + 1;
+        idx[2] = i * 4 + 2;
+        transform_scaled_vertex_batch(m, 3, idx, (char *)P);
+        qcopy(C, P[0]);
+        subtract_vector_xyz(A, P[1], P[0]);
+        subtract_vector_xyz(B, P[2], P[0]);
+        f = vector_length_xyz(A);
+        normalize_vector_xyz(E, A, D_L00_001CA318[i][0]);
+        add_vector_xyz(C, C, E);
+        normalize_vector_xyz(A, A, f - D_L00_001CA318[i][2] * 2.0f);
+        f = vector_length_xyz(B);
+        normalize_vector_xyz(E, B, D_L00_001CA318[i][1]);
+        add_vector_xyz(C, C, E);
+        normalize_vector_xyz(B, B, f - D_L00_001CA318[i][3] * 2.0f);
+        add_vector_xyz(E, C, A);
+        add_vector_xyz(E, E, B);
+        FUN_00237c80(C, E, &g[0], &g[1], &g[2], &g[3]);
+        qcopy(q.v[0], C);
+        add_vector_xyz(q.v[1], C, A);
+        add_vector_xyz(q.v[2], C, B);
+        add_vector_xyz(q.v[3], q.v[2], A);
+        q.gs[0] = 5;
+        q.gs[2] = 1;
+        q.gs[3] = 0x8000000044L;
+        q.rgba[0] = 0x80808080;
+        q.rgba[1] = 0x80808080;
+        q.rgba[2] = 0x80808080;
+        q.rgba[3] = 0x80808080;
+        q.gs[1] = get_effect_texture(0x19);
+        q.v[0][3] = one;
+        q.v[1][3] = one;
+        q.v[2][3] = one;
+        q.v[3][3] = one;
+        q.uv[0][0] = 0;
+        q.uv[0][1] = 0;
+        q.uv[1][0] = uvv;
+        q.uv[1][1] = 0;
+        q.uv[2][0] = 0;
+        q.uv[2][1] = uvv;
+        q.uv[3][0] = uvv;
+        q.uv[3][1] = uvv;
+        vu1_add_g_sregister(0x47, 0x32003);
+        draw_geometry_quad(&q, 0, 1);
+    }
+}
 #include "qcopy.h"
 typedef int q_29fcd0 __attribute__((mode(TI)));
 typedef struct { int a, b, c; } I3_29fcd0;
@@ -148,7 +234,6 @@ extern void FUN_0020d330(void *, s32);
 extern void FUN_L00_0029ff58(void);
 extern void FUN_00239780(s32);
 extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
-extern void FUN_L00_0029f990(s32);
 extern void FUN_00233980(s32, s64);
 extern void FUN_001ff780(void);
 extern void FUN_001f4398(void);

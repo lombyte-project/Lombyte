@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/lights.c, func_00202260). */
+/* Ported from rac1-decomp (src/game/lights.c, func_00202260). */
 
 #include "qcopy.h"
 

@@ -3,10 +3,10 @@
 #include "asm.h"
 
 typedef struct { char pad09[0x86]; s16 id; char pad09b[0x18]; } Ent09;
-extern Ent09 D_L00_00167150[];
+extern Ent09 D_L00_00167150_u[] __asm__("D_L00_00167150");
 s32 FUN_L00_001eb1f8(s32 id) {
     s32 p; s32 e; s16 v;
-    p = (s32)&D_L00_00167150[0];
+    p = (s32)&D_L00_00167150_u[0];
     e = p + 0x1E00;
     for (;;) {
         v = *(s16 *)(p + 0x86);
@@ -30,8 +30,8 @@ float FUN_L00_001eb328(float *p, float a, float b, float c, float d, float lim) 
 }
 typedef struct { char pad[0x7D]; u8 b; s16 h; } T001eb448;
 typedef struct { char pad[0x180]; T001eb448 *p; } S001eb448;
-extern S001eb448 D_L00_00166C80;
-void FUN_L00_001eb448(void) { D_L00_00166C80.p->h = 1; D_L00_00166C80.p->b = 0; }
+extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
+void FUN_L00_001eb448(void) { D_L00_00166C80_u.p->h = 1; D_L00_00166C80_u.p->b = 0; }
 typedef struct { s32 id; s32 pad[4]; } E5;
 extern E5 D_L00_001EA880[];
 s32 FUN_L00_001ed230(s32 id) {
@@ -46,11 +46,11 @@ s32 FUN_L00_001ed230(s32 id) {
 #include "qcopy.h"
 
 /* resets the camera behind the hero */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S_u;
 
-extern S D_L00_00166C80_c __asm__("D_L00_00166C80");
+extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
 extern char D_0013E533[];
 extern char D_L00_00169110[];
@@ -87,12 +87,133 @@ void FUN_L00_001ed280(void) {
     u[1] = t[1];
     u[2] = t[2];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
+
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
+#include "qcopy.h"
+
+/* Exact match: needs -fno-force-mem (config/func_cflags.txt). */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED6D8), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
+
+typedef struct {
+    char pad[0x74];
+    int i74;
+    float f78;
+    char c7C, c7D;
+    short s7E, s80, s82, s84, s86;
+    char pad2;
+    char c89;
+    short s8A, s8C, s8E;
+    char pad3[0x10];
+} Elem;
+
+extern Elem D_L00_00167150[];
+extern S D_L00_00166C80;
+extern char *D_L00_0015EF50;
+extern char D_0013F350[];
+extern char D_L00_00166EF0[];
+extern int D_L00_0015EF4C;
+extern int D_L00_0015EF54;
+extern int D_L00_00169890[];
+extern float D_L00_0015EF40 __attribute__((sda));
+extern void clear_vector(void *);
+extern void normalize_vector_xyz(void *, void *, float);
+s32 FUN_L00_001ed230(s32 id);
+void FUN_L00_001ed280(void);
+
+void FUN_L00_001ed358(void) {
+    char *g = (char *)&D_L00_00166C80;
+    char *g1;
+    char *q;
+    char *p1;
+    char *base;
+    int i;
+    int k;
+
+    *(int *)(g + 0x394) = 0;
+    *(int *)(g + 0x398) = 0;
+    D_L00_0015EF40 = 0.75f;
+    D_L00_0015EF4C = 0;
+    for (k = 0; k < 48; k++) {
+        D_L00_00167150[k].s8E = 0;
+        D_L00_00169890[k] = 0;
+    }
+    g1 = (char *)&D_L00_00166C80;
+    base = D_0013F350;
+    q = g1 + 0x190;
+    p1 = g1 + 0x1B0;
+    *(int *)(g1 + 0x184) = 0;
+    *(short *)(g1 + 0x270) = 0;
+    normalize_vector_xyz(p1, (char *)(*(int *)(base + 0x2080) + 0xE0), 1.0f);
+    qcopy(g1 + 0x1C0, p1);
+    qcopy(g1 + 0x1D0, p1);
+    clear_vector(g1 + 0x1E0);
+    qcopy(g1 + 0x1F0, base + 0x80);
+    {
+        float f0 = *(float *)(base + 0x98);
+        float f1 = *(float *)(base + 0x88);
+        *(int *)(q + 0xC4) = 0;
+        *(int *)(q + 0xCC) = 0;
+        *(int *)(q + 0xC0) = 0;
+        *(int *)(q + 0xC8) = 0;
+        *(int *)(q + 0xD0) = 0;
+        *(float *)(q + 0xBC) = f0;
+        *(float *)(q + 0xB8) = f0;
+        *(float *)(q + 0xB4) = f0;
+        *(float *)(q + 0xB0) = f0;
+        *(int *)(q + 0xD4) = 0;
+        *(int *)(q + 0xDC) = 0;
+        *(float *)(q + 0xAC) = f0;
+        *(float *)(q + 0xD8) = f1;
+    }
+    i = 0;
+    if (D_L00_0015EF54 > 0) {
+        do {
+            char *e;
+            char *r;
+            Elem *el;
+            int h;
+            e = (char *)(i * 32); e = D_L00_0015EF50 + (int)e;
+            r = *(char **)(e + 0x1C);
+            el = &D_L00_00167150[i];
+            el->s84 = i;
+            *(Elem **)(r + 4) = el;
+            el->s8E = 0;
+            el->c89 = 0;
+            el->s8A = 0;
+            el->s82 = -1;
+            el->s80 = -1;
+            el->c7D = 0;
+            el->s7E = 0;
+            el->f78 = -1.0f;
+            el->c7C = r[0x1C];
+            el->i74 = (unsigned char)r[0x1F];
+            h = *(unsigned short *)(e + 0xC);
+            D_L00_00169890[i] = 1;
+            el->s86 = h;
+            el->s8C = FUN_L00_001ed230((short)h);
+            i++;
+        } while (i < D_L00_0015EF54);
+    }
+    FUN_L00_001ed280();
+    *(short *)D_L00_00166EF0 = 0;
+    {
+        int *q = (int *)(D_L00_00166EF0 + 0x110);
+        q[0] = 0;
+        q[3] = 0;
+        q[1] = 0;
+        q[4] = 0;
+    }
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -109,7 +230,7 @@ void FUN_L00_001ed580(float *o, float *v, void *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
 
 typedef float W[4] __attribute__((aligned(16)));
 

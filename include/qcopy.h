@@ -12,7 +12,7 @@
  *
  * This is the project's one inline-asm idiom, because the original had it.
  * Prefer a plain TImode copy (u128) wherever that reproduces retail.
- * Identified by rac1-decomp, the PAL decompilation (include/common.h).
+ * Identified by rac1-decomp (include/common.h).
  */
 static __inline__ void qcopy(void *dst, void *src)
 {

@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0025D750.c: func_L02_0025D750), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_0025D750), where it is exact; names translated to the US level program. */
 
 void FUN_L02_0025c758(char *moby) {
     float delta = 0.2f;

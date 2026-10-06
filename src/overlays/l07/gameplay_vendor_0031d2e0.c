@@ -3,5 +3,129 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031d2e0.s", FUN_L07_0031d2e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031eba8.s", FUN_L07_0031eba8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031f900.s", FUN_L07_0031f900);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_0031FF78), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x178]; int arr[8]; } L07SparkState;
+
+extern char D_L07_0016C8E0[];
+extern float D_L07_0015F580[] __attribute__((section(".sdata")));
+extern float random_float_between(float a, float b);
+extern int D_L07_0015F5C4;
+extern int FUN_L00_00257b90(int, int);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_002637f8(int);
+unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
+extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float, float) __asm__("FUN_L00_0026d000");
+extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
+
+void FUN_L07_0031eba8(char *m) {
+    int state = *(unsigned char *)(m + 0x20);
+    int a;
+    int k;
+    int t;
+    int i;
+    int j;
+    char *mob;
+    char *S;
+    float buf[4];
+    switch (state) {
+    case 0:
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        m[0x20] = 1;
+        break;
+    case 1:
+        a = D_L07_0015F5C4;
+        if (a != 2) return;
+        S = D_L07_0016C960_c;
+        t = *(int *)(S + 0x30) - 3;
+        if ((unsigned)t < 2) {
+            int idx = (unsigned)t > 1 ? 0 : 2;
+            FUN_L00_002637f8(((L07SparkState *)S)->arr[idx]);
+        }
+        if (*(int *)(S + 0x30) != a) return;
+        k = 7;
+        if (*(int *)(S + 0x34) != scale_game_frames(0xA8A)) k = 0;
+        if (*(int *)(S + 0x34) == scale_game_frames(0xACE)) k = 6;
+        if (k != 0) {
+            mob = (char *)((L07SparkState *)S)->arr[k];
+            for (i = 0; i < 4; i++) {
+                FUN_L00_0024f7c8(mob, i, buf);
+                for (j = 9; j >= 0; j--) {
+                    float d = random_float_between(20000.0f, 200000.0f);
+                    int col = (FUN_L00_00257b90(0x20, 0x80) << 24) | 0x7F7F7F;
+                    int v = FUN_L00_00257b90(0, 4);
+                    char *p;
+                    char *q;
+                    if (random_integer_below(2) != 0) v = -v;
+                    p = func_L00_0026DEA0_c(buf, v, D_L07_0015F580, col, 0.6f, 1.0f, 1.01f, d);
+                    if (p != 0) {
+                        q = p + 0x20;
+                        *(short *)(p + 0xA) = scale_game_frames(FUN_L00_00257b90(0x3C, 0x5A));
+                        *(int *)(q + 4) = 2;
+                        *(char *)(q + 0xA) = col >> 24;
+                        *(char *)(q + 0xB) = *(unsigned char *)(p + 0xA);
+                    }
+                }
+            }
+        }
+        break;
+    }
+}
+/* Level moby state machine: UpdateMoby_1789: spawn state then position three points.
+ * Matched using lever: g - (-(idx * 4)) + 0x178 fixes addu operand order. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
+
+extern char D_L07_0016C8E0[];
+extern int D_L07_0015F5C4;
+extern short D_L07_00161CD8_d __asm__("D_L07_00161CD8") __attribute__((sda));
+extern short D_L07_00161CDC_d __asm__("D_L07_00161CDC") __attribute__((sda));
+extern short D_L07_00161CE0_d __asm__("D_L07_00161CE0") __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+
+void FUN_L07_0031f900(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L07_0015F5C4 == 2) {
+            char *g = D_L07_0016C8E0;
+            int s = *(int *)(g + 0x30);
+            if (s == 1 || s == 2) {
+                float a0[4], a1[4], a2[4], b0[4], b1[4], b2[4], c0[4], c1[4], c2[4];
+                int idx = 0;
+                char *o;
+                if (s == 1) idx = 3;
+                if (s == 2) idx = 4;
+                o = *(char **)(g - (-(idx * 4)) + 0x178);
+                FUN_L00_0024f7c8(o, 0, a0);
+                FUN_L00_0024f7c8(o, 3, b0);
+                subtract_vector_xyz(c0, a0, b0);
+                normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_0024f7c8(o, 1, a1);
+                FUN_L00_0024f7c8(o, 4, b1);
+                subtract_vector_xyz(c1, a1, b1);
+                normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+                FUN_L00_0024f7c8(o, 2, a2);
+                FUN_L00_0024f7c8(o, 5, b2);
+                subtract_vector_xyz(c2, a2, b2);
+                normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8_d);
+                FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC_d, *(float *)&D_L07_00161CE0_d);
+            }
+        }
+        break;
+    }
+}

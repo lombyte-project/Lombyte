@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00265170.s", FUN_L13_00265170);
 extern int D_L13_0015FFD8_d __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0") __attribute__((section(".sdata")));
 /* 0x002651c8, 268 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Sets flag bits and a data pointer on every live object in the pool whose id appears in a zero-terminated list.
 void FUN_L13_002651c8(short *ids, int a, int b, int c) {

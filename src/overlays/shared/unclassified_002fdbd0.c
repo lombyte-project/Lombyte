@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff680.s", FUN_L06_002ff680);
 #include "sda.h"
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float FUN_001f96b0(float);
@@ -78,7 +78,7 @@ void FUN_L06_002ff978(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED70;
 extern float FUN_001fa580(float, float);
@@ -102,7 +102,7 @@ void FUN_L06_00300b90(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00300c60.s", FUN_L06_00300c60);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
 extern int D_L06_0015F5CC;
 extern short D_L06_001620C8 __attribute__((sda));

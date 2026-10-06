@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/space.c, func_00232A00). */
+/* Ported from rac1-decomp (src/game/space.c, func_00232A00). */
 #include "sda.h"
 #include "qcopy.h"
 

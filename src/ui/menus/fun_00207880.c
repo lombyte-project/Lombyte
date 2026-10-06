@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_002080B0). */
+/* Ported from rac1-decomp (src/game/menu.c, func_002080B0). */
 #include "sda.h"
 typedef struct {
     char _pad0[0x12E4];

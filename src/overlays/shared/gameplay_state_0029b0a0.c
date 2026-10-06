@@ -2,4 +2,52 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0029b0a0.s", FUN_L01_0029b0a0);
+/* Ported from rac1-decomp (src/overlays/shared/pause_0029C2A0.c: func_L01_0029C2A0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int key;
+    int pad4;
+    unsigned short a;
+    short flag;
+    short c;
+    short d;
+} Entry;
+
+typedef struct {
+    int n;
+    Entry e[1];
+} Table;
+
+extern void FUN_001f9838(int, void *, int);
+
+void FUN_L01_0029b0a0(char *a0, int a1, char *p, int mode, Table *t) {
+    short v20 = *(short *)(p + 0xB2);
+    short v19 = *(short *)(p + 0xA6);
+    short key;
+    int i;
+    Entry *e;
+    Entry *ne;
+    if (mode == 1) {
+        key = a0 - p;
+    } else {
+        key = (int)a0 - *(unsigned short *)(p + 0x78);
+    }
+    for (i = 0; i < t->n; i++) {
+        e = &t->e[i];
+        if (e->key == key && e->a == a1 && v20 == e->c && v19 == e->d) {
+            mode = e->flag;
+            if (mode) {
+                FUN_001f9838((int)&e->pad4, a0, a1);
+                return;
+            }
+        }
+    }
+    ne = &t->e[t->n];
+    t->n = t->n + 1;
+    ne->key = key;
+    FUN_001f9838((int)&ne->pad4, a0, a1);
+    ne->a = a1;
+    ne->flag = mode;
+    ne->c = v20;
+    ne->d = v19;
+}

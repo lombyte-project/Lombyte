@@ -7,7 +7,7 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* triggers objects matching the moby's class */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
 
 struct G {
     char pad0[0x30];
@@ -49,7 +49,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00305270.s", FUN_L08_00305270);
 #include "sda.h"
 
 /* triggers objects matching the moby's class, with per-segment settings */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003078B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003078B0), where it is exact; names translated to the US level program. */
 
 struct G_3063f0 {
     char pad0[0x30];
@@ -102,12 +102,54 @@ void FUN_L08_003063f0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003065d8.s", FUN_L08_003065d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003084d8.s", FUN_L08_003084d8);
+
+
+
+/* per-frame update of a moby that fires a sound event when the game state allows */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_00309998), where it is exact; names translated to the US level program. */
+
+struct G08c {
+    char pad0[0x30];
+    int a;
+    int b;
+    char pad1[0xC];
+    short n;
+    char pad2[0x132];
+    char *objs[1];
+};
+
+
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
+extern void FUN_L00_002637f8(int);
+
+void FUN_L08_003084d8(char *moby) {
+    int k;
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L08_0015F5C4 == 2) {
+            int t = D_L08_0016D060_c.a;
+            if ((t >= 1 && t <= 2) || t == 4 || t == 5) {
+                if (D_L08_0016D060_c.a != 1 || scale_game_frames(0x8CE) < D_L08_0016D060_c.b) {
+                    k = 0;
+                    if (D_L08_0016D060_c.a == 1 || D_L08_0016D060_c.a == 4) k = 3;
+                    else if (D_L08_0016D060_c.a == 2 || D_L08_0016D060_c.a == 5) k = 2;
+                    FUN_L00_002637f8((int)D_L08_0016D060_c.objs[k]);
+                }
+            }
+        }
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -142,7 +184,7 @@ void FUN_L08_00308c90(char *moby) {
 #define MACRO_ADDR
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
-/* Ported from rac1-decomp (PAL, src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
 
 typedef struct { int a, b; } Pair;
 
@@ -167,4 +209,97 @@ void FUN_L08_00308f68(int x) {
         FUN_L00_001fde98(a[i], c[i], e[i], D_L08_001F8560, 1);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_003097b0.s", FUN_L08_003097b0);
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
+
+extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section(".sdata")));
+extern Pair D_L08_001623F8[] __attribute__((sda));
+extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));
+extern Pair D_L08_001F8548[];
+extern char D_L08_001675C0[];
+extern char D_L08_001F01C8[];
+extern char D_L08_001F4C48[];
+extern char D_L08_001F4C60[];
+extern char D_L08_001F8528[];
+extern char D_L08_001F8550[];
+extern float D_L08_00162384;
+extern float D_L08_00162388;
+extern float D_L08_0016238C;
+extern float vector_length_xyz(void *);
+extern int D_L08_001623F0;
+extern int FUN_001fa728(char *, float);
+extern int truncate_float_to_s32();
+extern short D_L08_00162380 __attribute__((sda));
+extern short D_L08_001623C4 __attribute__((sda));
+extern short D_L08_001623E8 __attribute__((sda));
+extern short D_L08_001623C8 __attribute__((sda));
+extern void FUN_L08_002f0dc8(void);
+extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
+extern void FUN_L08_002f1158(void *, float, float, float, void *);
+extern void FUN_L08_002f12a0(int);
+extern void FUN_L08_002f1378(int);
+extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_003097b0(unsigned char *moby) {
+    int i;
+    float v[4];
+    float w[4];
+    float d;
+
+    switch (moby[0x20]) {
+    case 0:
+        if (*(int *)&D_L08_001623C4 == 0) {
+            FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
+            FUN_L08_002f0f68(&D_L08_001623E8, 2, &D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            FUN_L08_002f0f68(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
+            *(int *)&D_L08_001623C4 = 1;
+        }
+        moby[0x20] = 1;
+        for (i = 0; i < 3; i++) {
+            D_L08_001F8548[i].a = 0;
+            D_L08_001F8548[i].b = 0;
+            D_L08_001623F0_e[8] = 0;
+            D_L08_001623F0_e[9] = 0;
+        }
+        for (i = 0; i < 2; i++) {
+            D_L08_001623F0_e[2 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_e[3 + i * 2] = i * 0.4f;
+        }
+        for (i = 0; i < 1; i++) {
+            D_L08_001623F0_e[6 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_e[7 + i * 2] = i * 0.4f;
+        }
+        break;
+    case 1:
+        v[0] = *(float *)&D_L08_00162380;
+        v[1] = D_L08_00162384;
+        v[2] = D_L08_00162388;
+        v[3] = D_L08_0016238C;
+        if (FUN_001fa728((char *)v, 1000.0f) >= 0) {
+            w[0] = *(float *)&D_L08_00162380;
+            w[1] = D_L08_00162384;
+            w[2] = D_L08_00162388;
+            w[3] = 1.0f;
+            subtract_vector_xyz(w, D_L08_001675C0, w);
+            d = vector_length_xyz(w);
+            if (d <= 84.0f) {
+                FUN_L08_002f12a0(0);
+                FUN_L08_002f1158(D_L08_001F8550, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
+                FUN_L08_002f12a0(2);
+                if (d < 20.0f) {
+                    *(unsigned char *)&D_L08_001623F0 = 0xFF;
+                } else if (d < 84.0f) {
+                    *(char *)&D_L08_001623F0 = func_001FA898_r((1.0f - (d - 20.0f) * 0.015625f) * 255.0f);
+                } else {
+                    *(char *)&D_L08_001623F0 = 0;
+                }
+            }
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(0);
+            FUN_L08_002f1378(1);
+            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+        }
+        break;
+    }
+}

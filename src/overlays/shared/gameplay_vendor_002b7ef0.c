@@ -15,7 +15,7 @@ void FUN_L01_002b7ef0(float s) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002B90E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B90E8), where it is exact; names translated to the US level program. */
 
 extern short D_L01_00161218_d __asm__("D_L01_00161218") __attribute__((sda));
 extern short D_L01_0016121C_d __asm__("D_L01_0016121C") __attribute__((sda));
@@ -39,7 +39,7 @@ void FUN_L01_002b7f30(char *base, int n) {
         *(int *)&D_L01_00161218_d = b;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
 
 extern float D_L01_001CAD00[];
 extern int FUN_L01_002b7f30_c() __asm__("FUN_L01_002b7f30");
@@ -72,7 +72,7 @@ void FUN_L01_002b7fe0(char *p, int n) {
     }
     *(float *)&D_L01_00161224_d = *(float *)&D_L01_00161224_d + D_L01_001CAD00[8];
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_L01_001CAE60[];

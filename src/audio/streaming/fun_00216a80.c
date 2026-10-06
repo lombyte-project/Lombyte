@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/stream.c, func_00217920). */
+/* Ported from rac1-decomp (src/game/stream.c, func_00217920). */
 #include "sda.h"
 extern short D_001516F0 NOT_SDA;
 void music_transition_start_callback(int handle, long context) __asm__("FUN_00216a80");

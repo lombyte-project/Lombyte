@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -40,7 +40,58 @@ void FUN_L10_002e3de8(char *moby) {
     h = *(int *)&D_L10_00161E5C_d;
     FUN_L01_00287158(v, c, d, g, h, e);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e9028.s", FUN_L10_002e9028);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* UpdateMoby_1378 (names.tsv role). State 0 sets flag bit 0 and goes to state 1. In state 1,
+ * when the hero (D_0013E633 + 0xE9D) is within 8.0: takes the vector from the moby to the point
+ * hero+0x50, rotates it with the matrix from func_001FA4A0(moby + 0xC0), and if that point lies
+ * in the box -5 < x < 5, 0 < z < 8 sets hero byte 0x224B to (y < 0.5), else (y > 0) clears
+ * D_0014171B. Then queues func_L10_002EA578. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern float FUN_001f9b48(void *, void *);
+extern unsigned char D_0014161B_q[] __asm__("D_0014161B");
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_L10_002e91b8(void);
+extern void enqueue_callback_list_1(void (*)(void), void *);
+extern void subtract_vector_xyz(void *, void *, void *);
+
+void FUN_L10_002e9028(unsigned char *m) {
+    float v[4] __attribute__((aligned(16)));
+    float mtx[16] __attribute__((aligned(16)));
+    char *hero;
+    unsigned int s = m[0x20];
+    switch (s) {
+    case 0:
+        m[0x20] = 1;
+        *(unsigned short *)(m + 0x34) |= 1;
+        m[0x31] = 0;
+        break;
+    case 1:
+        hero = D_0013F3D0;
+        if (FUN_001f9b48(m + 0x10, hero) < 8.0f) {
+            subtract_vector_xyz(v, hero + 0x50, m + 0x10);
+            FUN_001fa2d8(mtx, m + 0xC0);
+            FUN_001f9d20(v, v, mtx);
+            if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
+                if (v[1] < 0.5f) {
+                    hero[0x224B] = 1;
+                } else {
+                    hero[0x224B] = 0;
+                }
+            } else if (0.0f < v[1]) {
+                D_0014161B_q[0] = 0;
+            }
+        }
+        enqueue_callback_list_1(FUN_L10_002e91b8, m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e91b8.s", FUN_L10_002e91b8);
 extern char *D_L10_0015EF50;
 
@@ -82,7 +133,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
 extern char *D_L10_0015F050 __asm__("D_L10_0015EF50") MACRO_ADDR;
 extern char D_0013E633[] __asm__("D_0013F3D0");

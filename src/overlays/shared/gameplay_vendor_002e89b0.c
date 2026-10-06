@@ -176,7 +176,7 @@ void FUN_L00_002e8bb8(unsigned char *o, float k, float in) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 
 extern float D_L00_0015EF40;
 extern float FUN_001f9af0(void *);

@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
 extern char D_L11_001DA880[];
 extern int D_L11_0015FFD8; /* no foreign declaration */
@@ -31,7 +31,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #define MACRO_ADDR
 
 /* Draws four quads with the angle advanced by a quarter turn each time. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
@@ -51,7 +51,7 @@ void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigne
     FUN_L11_00310cf8(x, y, w, w, ang, 0x3F, 0x3F, h, 0xFFFFF3, a, b, c, d);
 }
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013E05A[];
@@ -68,7 +68,7 @@ void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
 typedef int u128_312780 __attribute__((mode(TI)));
 
@@ -134,7 +134,7 @@ void FUN_L11_003112b8(void *m, char *t) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
 typedef int u128_31AAE0 __attribute__((mode(TI)));
 
@@ -184,7 +184,84 @@ void FUN_L11_00319670(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031a1c0.s", FUN_L11_0031a1c0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013F350[];
+extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015EE00;
+extern int D_0015EEA4;
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_0013D408[];
+extern unsigned char D_00141968[];
+extern void FUN_L00_00263d40(int, int);
+extern void blend_moby_animation(void *, int, int, int);
+s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+
+void FUN_L11_0031a1c0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *info = FUN_L00_0025a420(m, 0x330000, 0);
+    char *g;
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    g = D_0013F350;
+    if (*(int *)(g + 0x2084) != 0x32) {
+        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+    } else {
+        *(unsigned short *)(m + 0x34) |= 0x1000;
+    }
+    if (info != 0) {
+        char *st = (char *)D_00141968;
+        int st2;
+        int cur;
+        if (*(unsigned short *)(st + 0x157E8) < 0xFFFF) {
+            *(unsigned short *)(st + 0x157E8) += 1;
+        }
+        if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(st + 0x157EA)) {
+            *(unsigned short *)(st + 0x157EA) = scale_game_frames(D_0015EEA4) / 600;
+        }
+        *(int *)(st + 0x157EC) = *(int *)(st + 0x157EC) | (1 << D_0015ED84_m) | 0x80000000;
+        if (D_0015ED84_m == 0xB && *(char **)(info + 0x20) != 0 && *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
+            if (++D_0015EE00 >= 3 && D_0013D408[0x12] == 0) {
+                D_0013D408[0x12] = 1;
+                allocate_voice_for_bank_entry(1, 0, 0);
+                FUN_L00_00263d40(0x53D6, -1);
+            }
+        }
+        if (*(int *)(d + 0x88) != 0) {
+            st2 = 6;
+            cur = ((unsigned char *)m)[0x20];
+        } else {
+            cur = ((unsigned char *)m)[0x20];
+            st2 = 2;
+        }
+        if (cur != st2) {
+            m[0x20] = st2;
+            if (((unsigned char *)m)[0x53] != 1) {
+                blend_moby_animation(m, 1, 0, scale_game_frames(10));
+            }
+        }
+    } else if (((unsigned char *)m)[0x20] == 5) {
+        char *g2 = D_0013F350;
+        if (*(int *)(g2 + 0x2084) != 0x32) {
+            m[0x20] = 4;
+            *(int *)(m + 0x94) = 0;
+            *(unsigned short *)(m + 0x34) |= 1;
+        }
+        if (FUN_L00_001f0d60(1.0f, m + 0x10, 0, m)) {
+            m[0x20] = 6;
+            if (((unsigned char *)m)[0x53] != 1) {
+                blend_moby_animation(m, 1, 0, scale_game_frames(10));
+            }
+        }
+    }
+}
 
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310ad0.s", FUN_L11_00310ad0);

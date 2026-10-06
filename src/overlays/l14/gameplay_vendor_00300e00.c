@@ -66,7 +66,7 @@ u8 *FUN_L14_00306158(u8 *self)
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00300e00.s", FUN_L14_00300e00);
 #include "sda.h"
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
 extern char *FUN_0020c4f8_c(int) __asm__("FUN_0020c4f8");
 extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
@@ -110,7 +110,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 #define MACRO_ADDR
 
 /* Updates and draws four scrolling particle streaks for an Oltanis moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306FA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306FA0), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float pad[2];
@@ -195,7 +195,7 @@ void FUN_L14_003061d8(void *arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306b78.s", FUN_L14_00306b78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00306ee0.s", FUN_L14_00306ee0);
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00308998), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00308998), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0[];
 extern float FUN_001f9b48(void *, void *);
@@ -220,9 +220,9 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307620.s", FUN_L14_00307620);
 extern void FUN_L12_002e71b0(void);
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 /* 0x00307a80, 84 bytes.
- * Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c:
+ * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c:
  * func_L14_00308F08), where it is exact; names translated to the US level
- * program. The size-matched PAL neighbour was the callback this one enqueues,
+ * program. The size-matched rac1-decomp neighbour was the callback this one enqueues,
  * not this body. */
 void FUN_L14_00307a80(unsigned char *moby) {
     switch (moby[0x20]) {
@@ -237,7 +237,7 @@ void FUN_L14_00307a80(unsigned char *moby) {
 }
 
 /* Play the level sound once on first update, then handle the two-state moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00309C48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00309C48), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x30];

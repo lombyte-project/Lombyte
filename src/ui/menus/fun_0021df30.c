@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021EF38). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021EF38). */
 int FUN_0021df30(void *arg0) {
     char *p = (char *)arg0;
     *(float *)(p + 0x38) = 3.14159274f;

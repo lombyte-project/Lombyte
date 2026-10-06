@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_00226380). */
+/* Ported from rac1-decomp (src/game/pause.c, func_00226380). */
 #include "qcopy.h"
 #include "rnc/pause_moby_types.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");

@@ -226,7 +226,7 @@ unsigned char *FUN_L00_00271b18(u128 *a, u128 *b, float x) { unsigned char *m = 
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -249,7 +249,7 @@ void FUN_L00_00271be8(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
@@ -342,7 +342,7 @@ void FUN_L00_00271ec8(u8 *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern int FUN_001f9770(void *);
@@ -874,7 +874,7 @@ void FUN_L00_00273448(P_273448 *p) {
     vscl_273448(v, v, e->f14);
     vadd_273448(p->pos, a, v);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
 
 extern f32 ConvertIntegerToFloat_c(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -905,7 +905,7 @@ unsigned char *FUN_L00_00273708(void *a, int b, int c) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1023,7 +1023,7 @@ unsigned char *FUN_L00_002741a0(void *a, int color, float s, float z) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
@@ -1272,7 +1272,7 @@ kill:
     *(u32 *)(p + 4) = (FUN_001fa6d0_274a70(FUN_001fa6c0_274a70(*(s16 *)(p + 0xA)) * *(f32 *)(q + 0x10) * FUN_001fa6c0_274a70(*(s16 *)(q + 0x14))) << 24) | *(u32 *)(q + 0x18);
 }
 /* spawns a particle at pos with a colour byte taken from a table and a heading */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1298,7 +1298,7 @@ unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1422,7 +1422,7 @@ unsigned char *FUN_L00_00275158(void *a, void *b, int n, float f) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00267a08(void *);
 
@@ -1499,7 +1499,67 @@ void FUN_L00_00275320(O_275320 *o) {
     FUN_001f9a10_275320(vel, &tmp, vel);
     vel->f[3] = h + D_L00_00160258_275320;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00275510.s", FUN_L00_00275510);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Update a particle following a parent moby with a scaled offset. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
+
+extern float ConvertIntegerToFloat(int);
+extern float D_0015ED60;
+extern int FUN_L00_002371e0_cf(void *) __asm__("FUN_001f9770");
+extern int FUN_L00_00267a08_cf(float, int, int) __asm__("FUN_L00_002371e0");
+extern void FUN_001f9770_cf(void *) __asm__("FUN_L00_00267a08");
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void transform_vector_by_basis(void *, void *, void *);
+
+void FUN_L00_00275510(char *m) {
+    char *s = m + 0x20;
+    char *d = *(char **)(s + 0x1C);
+    float t[3];
+    float u[3];
+    float w[3];
+    char *o;
+    float q;
+    float r;
+    int k;
+    k = *(int *)(d + 0xC) - *(short *)(m + 0xA);
+    r = ConvertIntegerToFloat(*(short *)(d + 8) * k / *(int *)(d + 0xC) + *(short *)(d + 0xA));
+    q = D_0015ED60 * -0.01999998f + 1.0f;
+    *(float *)(m + 0xC) = r * 1000.0f;
+    t[0] = *(float *)(m + 0x20);
+    t[1] = *(float *)(s + 4);
+    t[2] = *(float *)(s + 8);
+    scale_vector_xyz(t, t, q);
+    *(float *)(m + 0x20) = t[0];
+    *(float *)(s + 4) = t[1];
+    *(float *)(s + 8) = t[2];
+    o = *(char **)(s + 0xC);
+    if (o != 0 && (unsigned char)o[0x20] != 0xFE && (unsigned char)o[0x20] != 0xFD) {
+        u[0] = *(float *)(s + 0x10);
+        u[1] = *(float *)(s + 0x14);
+        u[2] = *(float *)(s + 0x18);
+        add_vector_xyz(u, u, t);
+        *(float *)(s + 0x10) = u[0];
+        *(float *)(s + 0x14) = u[1];
+        *(float *)(s + 0x18) = u[2];
+        transform_vector_by_basis(w, u, *(char **)(s + 0xC) + 0xC0);
+        add_vector_xyz(m + 0x10, *(char **)(s + 0xC) + 0x10, w);
+    } else {
+        FUN_001f9770_cf(m);
+        return;
+    }
+    m[8] = m[8] + 1;
+    *(int *)(m + 4) = FUN_L00_00267a08_cf(
+        (float)*(short *)(m + 0xA) / ConvertIntegerToFloat(*(int *)(d + 0xC)),
+        *(int *)(d + 4), *(int *)d);
+    if (FUN_L00_002371e0_cf(m + 0xA)) {
+        FUN_001f9770_cf(m);
+    }
+}
 extern float D_0015ED64_002756f0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015ED60_002756f0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern void FUN_001f9a10_002756f0(void *, void *, void *) __asm__("FUN_001f9a10");

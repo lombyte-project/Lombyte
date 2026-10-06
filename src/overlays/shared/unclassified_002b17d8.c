@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
@@ -26,7 +26,7 @@ void FUN_L14_002b3268(char *moby) {
     }
 }
 /* 0x002b3318, 24 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Manipulate moby flags and clear field
 void FUN_L14_002b3318(char *moby) {
@@ -36,7 +36,7 @@ void FUN_L14_002b3318(char *moby) {
 }
 
 /* 0x002b3330, 36 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Clears two flag bits, sets another, and copies a word from the moby's linked record.
 void FUN_L14_002b3330(char *moby) {
@@ -48,7 +48,7 @@ void FUN_L14_002b3330(char *moby) {
     *(int *)(moby + 0x94) = v;
 }
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B45A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B45A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 
@@ -68,7 +68,7 @@ void FUN_L14_002b3358(char *moby) {
         *(float *)(p + o + 0x1C) = FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60;
 extern short D_L14_001614DC_d __asm__("D_L14_001614DC") __attribute__((sda));
@@ -82,7 +82,7 @@ void FUN_L14_002b3578(char *moby) {
     *(float *)(moby + 0x14) = *(float *)(moby + 0x14) + *(float *)(d + 0x258);
 }
 /* steers the pitch angle of a moby toward a target and updates the joint */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -104,7 +104,7 @@ void FUN_L14_002b37b0(char *a, float x) {
     }
     FUN_L00_001fff28(d + 0x130, 2, *(float *)(d + 0x270));
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_0015FFD8;
 extern int FUN_001f96f8(int);
@@ -129,7 +129,7 @@ void FUN_L14_002b3890(int idx) {
 #include "qcopy.h"
 
 /* Recomputes a path's segment lengths, aims the moby along its first segment, and recomputes a second path. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002FFD88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002FFD88), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9e90(float, float);
 
@@ -154,7 +154,7 @@ void FUN_L14_002fe900(char *moby) {
     }
 }
 /* rebuilds two vectors from the moby's transform and applies them to its linked object */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_003000B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_003000B0), where it is exact; names translated to the US level program. */
 
 extern short D_L14_00161FC4_d __asm__("D_L14_00161FC4") __attribute__((sda));
 extern short D_L14_00161FC8_d __asm__("D_L14_00161FC8") __attribute__((sda));
@@ -174,7 +174,7 @@ void FUN_L14_002fec28(char *moby) {
     }
 }
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_00300F80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00300F80), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
@@ -230,7 +230,81 @@ int FUN_L14_002b3920(int a0)
     return count;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b39a0.s", FUN_L14_002b39a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3a20.s", FUN_L14_002b3a20);
+/* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
+#include "qcopy.h"
+/* Draws the moby's glow quad, pulled toward the camera so it is not hidden by the moby. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF4A0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_2af4a0;
+
+extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern float D_L14_001D8890[4][4];
+extern float D_L14_001614F8 __attribute__((sda));
+extern float D_L14_001614FC __attribute__((sda));
+extern float D_L14_00161500 __attribute__((sda));
+extern u32 D_L14_00161504 __attribute__((sda));
+extern float vector_length_xyz(void *a);
+extern void add_vector_xyz(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
+
+void FUN_L14_002b3a20(char *m) {
+    float pos[4];
+    Pk_2af4a0 pk;
+    float v[4];
+    float w[4];
+    float len;
+    u32 col;
+    int j;
+    qcopy(pos, m + 0x10);
+    pos[2] += 0.01f;
+    pos[3] = 1.0f;
+    pk.b = get_effect_texture_alt(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
+    subtract_vector_xyz(v, D_L14_001674C0_d, pos);
+    len = vector_length_xyz(v);
+    if (0.0f < len) {
+        float s = D_L14_001614FC;
+        float f = len - D_L14_00161500;
+        if (f < s) {
+            s = f;
+            if (f < 0.0f) s = 0.0f;
+        }
+        normalize_vector_xyz(w, v, s);
+        add_vector_xyz(pos, pos, w);
+    }
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    col = D_L14_00161504;
+    pk.col[3] = col;
+    pk.col[2] = col;
+    pk.col[1] = col;
+    pk.col[0] = col;
+    for (j = 0; j < 4; j++) {
+        scale_vector_xyz(pk.m[j], D_L14_001D8890[j], D_L14_001614F8);
+        add_vector_xyz(pk.m[j], pk.m[j], pos);
+    }
+    draw_geometry_quad(&pk, 0, 0);
+}
 #define NOT_SDA __attribute__((section(".data")))
 
 extern u8 D_001413F4[] __asm__("D_001413F4");
@@ -293,7 +367,7 @@ void FUN_L14_002d96e0(char *moby) {
         break;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002DAC00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DAC00), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];
@@ -342,7 +416,7 @@ int FUN_L14_002d9870(int i)
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
 extern float D_0015ED60 MACRO_ADDR;

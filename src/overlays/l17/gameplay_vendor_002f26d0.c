@@ -2,9 +2,253 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f26d0.s", FUN_L17_002f26d0);
+
+
+
+/* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
+
+extern char *D_L17_0015FFD8;
+extern char *D_L17_0015FFDC;
+extern char *D_L17_001600EC;
+extern char D_0013E52B[];
+extern char D_L17_00167580[];
+extern char D_L17_001E6F60[];
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+extern int D_00141DC4 __attribute__((section(".data")));
+extern int D_L17_00179D10[];
+extern int FUN_L00_00203908(int a, int b);
+extern int FUN_L00_0020d568(void);
+extern int allocate_voice_for_bank_entry(int, int, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int scale_game_frames(int);
+extern int tick_countdown_32();
+extern unsigned char D_0013D408[];
+extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
+extern unsigned char D_0013D4DF __attribute__((section(".data")));
+extern unsigned char D_0014161B[];
+extern int D_0015ED84 __attribute__((sda));
+extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern char D_0013F3D0[];
+extern void DebugPrint();
+extern void FUN_L00_002039a0(void);
+extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void FUN_L00_002e8680(void);
+extern void FUN_L00_002e8970(int a, float x, float y);
+extern void FUN_L06_00239528(void);
+extern void FUN_L17_0021e530(int, int);
+extern char D_001413D4[];
+extern char D_001413DC[];
+extern char D_0013F350[];
+extern char D_00141D54[];
+extern char D_00141D7C[];
+extern unsigned char D_0014C050[];
+extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
+
+void FUN_L17_002f26d0(char *moby) {
+    int off;
+    char *d = *(char **)(moby + 0x78);
+    int st;
+    int i;
+    int j;
+    int found;
+    int tgt;
+    int idx;
+    char *m;
+    int *p;
+    int *q;
+    float f;
+    int n;
+    int mask;
+    unsigned char *sk;
+    int wrap;
+
+    st = *(int *)(d + 0x6C);
+    switch (st) {
+    case 0:
+    {
+        char *h = D_0013F3D0;
+        if (is_point_inside_clip_volume(h, *(int *)(d + 0x60))) {
+            if (*(int *)(h + 0x200C) == 0x11) {
+                *(int *)(d + 0x6C) = 1;
+            }
+        }
+        break;
+    }
+    case 1: {
+        char *h = D_0013F350;
+        int v = *(int *)(h + 0x2084);
+        if (v == 0x76 || v == 0x32) {
+            *(int *)(d + 0x6C) = 0;
+        } else if (is_point_inside_clip_volume(h + 0x80, *(int *)(d + 0x64)) || is_point_inside_clip_volume(h + 0x80, *(int *)(d + 0x68))) {
+            if (D_0013D408[0x1C] == 0) {
+                D_0013D408[0x1C] = 1;
+                allocate_voice_for_bank_entry(1, 0, 0);
+                FUN_L00_00263d40(0x53D6, -1);
+            }
+        }
+        break;
+    }
+    }
+
+    if (D_0013D408[0x1B] == 0) {
+        for (j = 0; j < 30; j++) {
+            char *mb;
+            sk = D_0013D408;
+            mb = D_L17_0015FFD8 + (*(int *)(d + 0x70) << 8);
+            if ((*(short *)(mb + 0xA6) == 0x2C || *(short *)(mb + 0xA6) == 0x566)
+                && *(signed char *)(mb + 0x20) >= 0
+                && !is_point_inside_clip_volume(mb + 0x10, *(int *)(d + 0x78))) {
+                *(int *)(d + 0x74) += 1;
+            }
+            n = *(int *)(d + 0x70) + 1;
+            wrap = D_L17_0015FFD8 + (n << 8) < D_L17_0015FFDC;
+            *(int *)(d + 0x70) = n;
+            if (!wrap) {
+                if (*(int *)(d + 0x74) == 0 && sk[0x1B] == 0) {
+                    sk[0x1B] = 1;
+                    allocate_voice_for_bank_entry(1, 0, 0);
+                    FUN_L00_00263d40(0x53D6, -1);
+                }
+                *(int *)(d + 0x70) = 0;
+                *(int *)(d + 0x74) = 0;
+            }
+        }
+    }
+
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        *(int *)(d + 0x38) = scale_game_frames(600);
+        *(unsigned char *)(d + 0x4C) = 0;
+        if (*(int *)(d + 0x44) == -1 || *(int *)(d + 0x40) == -1 || *(int *)(d + 0x3C) == -1 || *(int *)(d + 0x48) == -1) {
+            DebugPrint(D_L17_001E6F60, *(int *)(d + 0x3C), *(int *)(d + 0x48), *(int *)(d + 0x40), *(int *)(d + 0x44));
+            *(unsigned char *)(d + 0x4C) = 1;
+        }
+        *(unsigned char *)(moby + 0x20) = 1;
+        break;
+    case 1:
+        tgt = -1;
+        idx = -1;
+        found = 0;
+        for (i = 0; i < 1; i++) {
+            off = i * 4;
+            if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + off))) {
+                found = 1;
+                if (*(int *)(d + 0x30) != *(int *)(d + off)) {
+                    tgt = *(int *)(d + off);
+                    p = (int *)(d + 0x10);
+                    idx = p[i];
+                }
+                break;
+            }
+        }
+        if (found) {
+            *(int *)(d + 0xC) += 1;
+        } else {
+            *(int *)(d + 0xC) = 0;
+            *(int *)(d + 0x30) = -1;
+        }
+        if (idx != -1) {
+            m = D_L17_0015FFD8 + (idx << 8);
+            if (m == 0) goto skip1;
+            if (*(short *)(m + 0xA6) != 0x4E) goto skip1;
+            if (*(unsigned char *)(m + 0x20) == 0xFE) goto skip1;
+            if (*(unsigned char *)(m + 0x20) == 0xFD) goto skip1;
+            if (*(unsigned char *)(m + 0x20) == 3) goto skip1;
+        }
+        if (*(int *)(d + 0xC) > *(int *)(d + 0x38) && tgt != -1
+            && ((unsigned int)*(int *)(((char *)&D_001413DC)) < 2 || *(int *)(((char *)&D_001413DC)) == 9)
+            && D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D4DF != 0) {
+            *(int *)(d + 0x38) = scale_game_frames(0x708);
+            if (*(int *)(((char *)&D_00141D54)) >= 0) {
+                FUN_L00_00203908(0x3A9A, 0x7D);
+            }
+            *(int *)(d + 0x30) = tgt;
+            *(int *)(d + 0xC) = 0;
+        }
+    skip1:
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x20)) && D_L17_00179D10[0] == 0
+            && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] == 0) {
+            int w = *(int *)(((char *)&D_00141D7C));
+            mask = 1 << D_0015ED80_e[1];
+            if (!(w & mask)) {
+                FUN_L00_00203908(0x3A9D, 0x82);
+            }
+        }
+        tgt = -1;
+        found = 0;
+        for (i = 0; i < 3; i++) {
+            off = i * 4;
+            q = (int *)(d + 0x20 + off);
+            if (is_point_inside_clip_volume(D_0013F3D0, *q)) {
+                found = 1;
+                if (*(int *)(d + 0x30) != *q) {
+                    tgt = *q;
+                }
+                break;
+            }
+        }
+        if (!found || (*(int *)(d + 0x2C) += 1, *(int *)D_001413D4 == 0x35)) {
+            *(int *)(d + 0x2C) = 0;
+            *(int *)(d + 0x30) = -1;
+        }
+        if (scale_game_frames(0xE10) < *(int *)(d + 0x2C) && tgt != -1 && FUN_L00_0020d568()
+            && D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] != 0) {
+            FUN_L00_00203908(0x4E2E, 0x78);
+            *(int *)(d + 0x30) = tgt;
+            *(int *)(d + 0x2C) = 0;
+        }
+        if (*(int *)(d + 0x58) != 0xFF
+            && D_0014C050[*(int *)(d + 0x58) + (D_0015ED84 << 4)] == 0xFF) {
+            *(unsigned char *)(d + 0x4C) = 1;
+        }
+        if (*(unsigned char *)(d + 0x4C) == 0 && is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x3C))) {
+            FUN_L00_002039a0();
+            if (*(int *)(((char *)&D_00141DC4)) >= 0) {
+                FUN_L00_00203908(0x4268, 0x8B);
+            }
+            if (D_L17_00179D10[0] != 0 || D_L17_00179D10[9] != -1) {
+                *(int *)(d + 0x50) = 0;
+                *(unsigned char *)(moby + 0x20) = 2;
+                *(int *)(d + 0x5C) = scale_game_frames(0xB4);
+                FUN_L17_0021e530(0x72, 0);
+            }
+        }
+        break;
+    case 2: {
+        char *cam;
+        FUN_L00_002e8680();
+        FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f, 0.0f);
+        cam = D_L17_00167580;
+        f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x30)) - *(float *)(cam + 0x140),
+                              *(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x34)) - *(float *)(cam + 0x144));
+        if (FUN_001fa688(*(float *)(cam + 0x158), f) < 0.034906585f) {
+            *(unsigned char *)(moby + 0x20) = 3;
+            *(int *)(d + 0x5C) = scale_game_frames(0x3C);
+        }
+        break;
+    }
+    case 3:
+        FUN_L00_002e8680();
+        if (func_001F9908_i((int *)(d + 0x5C))) {
+            char *cam;
+            FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x40) << 7) + 0x30), 0.02617994f, 0.0f);
+            cam = D_L17_00167580;
+            f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x30)) - *(float *)(cam + 0x140),
+                                  *(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x34)) - *(float *)(cam + 0x144));
+            if (FUN_001fa688(*(float *)(cam + 0x158), f) < 0.034906585f) {
+                FUN_L06_00239528();
+                *(unsigned char *)(d + 0x4C) = 1;
+                *(unsigned char *)(moby + 0x20) = 1;
+            }
+        }
+        break;
+    }
+}
 #include "sda.h"
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
 extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4") MACRO_ADDR;
 extern struct {
     int pad0[12];
@@ -34,7 +278,7 @@ void FUN_L17_002f2e78(unsigned char *m) {
 }
 
 /* Draws the Drek's Fleet reflection/backdrop quads around a moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4E30), where it is exact; names translated to the US level program. */
 
 typedef int u128_2F4E30 __attribute__((mode(TI)));
 
@@ -172,7 +416,7 @@ void FUN_L17_002f32f0(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -186,7 +430,7 @@ extern short D_L17_00162454 __asm__("D_L17_001623D4") __attribute__((sda));
 extern short D_L17_00162458 __asm__("D_L17_001623D8") __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void FUN_L17_002f3848(unsigned char *moby) {
@@ -198,7 +442,7 @@ void FUN_L17_002f3848(unsigned char *moby) {
     if (*(int *)(d + 0x4C) != -1) {
         char *g = D_0013E633 - 0x80;
         if (*(int *)(g + 0x2084) != 0x32 || *(char **)(g + 0x15F0) == 0 || *(short *)(*(char **)(g + 0x15F0) + 0xA6) != 0x563) {
-            if (is_point_inside_clip_volume(D_0013E633 + 0x0, *(int *)(d + 0x4C))) {
+            if (is_point_inside_clip_volume_u(D_0013E633 + 0x0, *(int *)(d + 0x4C))) {
                 D_L17_0015F718_m = 150.0f;
                 goto done;
             }
@@ -252,7 +496,7 @@ done:
 #include "qcopy.h"
 
 /* UpdateMoby 1843: a flying fleet craft that circles, follows a path, strafes the player and fires. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];
@@ -514,7 +758,7 @@ void FUN_L17_002f40d8(unsigned char *moby) {
 #include "qcopy.h"
 
 /* Finds the listed moby of type 0x733 in state 4 and launches it along a rotated vector. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
 
 
 
@@ -576,7 +820,7 @@ char *FUN_L17_002f4fb8(int list) {
     return 0;
 }
 /* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_0022da68(int, int, int);
@@ -609,7 +853,7 @@ void FUN_L17_002f5260(unsigned char *m) {
     }
 }
 /* Update moby 1876: waits for a trigger, then plays an effect and finishes. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
 
 extern float D_L17_0015F580[] __attribute__((section(".sdata")));
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
@@ -645,7 +889,7 @@ void FUN_L17_002f5390(unsigned char *m) {
 #define MACRO_ADDR
 
 /* Projects each direction pair into 2D texture coordinates (reflection mapping). */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z; } V3;
 
@@ -689,7 +933,7 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DE8A0[];
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
@@ -717,7 +961,7 @@ void FUN_L17_002f5690(void) {
         FUN_L00_001fde98(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162410_d)[i], p, 1);
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DF6A0[];
 extern short D_L17_00162420_d __asm__("D_L17_00162420") __attribute__((sda));
@@ -743,7 +987,7 @@ void FUN_L17_002f59a8(void) {
     }
 }
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
-/* Ported from rac1-decomp (PAL, src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7C78), where it is exact; names translated to the US level program. */
 
 void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
     float a[4];

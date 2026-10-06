@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
 extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
 extern float FUN_001fa580(float, float);
@@ -40,7 +40,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 #define MACRO_ADDR
 
 /* Scale and play the vendor cue while its counter is below the limit. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xAC];
@@ -67,11 +67,92 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003076e0.s", FUN_L12_003076e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00307840.s", FUN_L12_00307840);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b80(void *, void *);
+extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
+extern int FUN_001f9770(void *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L12_003076e0(char *);
+extern void FUN_L12_00307ab8(char *m);
+extern void blend_moby_animation(void *, int, int, int);
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L12_00307840(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *slots;
+    int i;
+    FUN_L12_00307ab8(m);
+    slots = (int *)(d + 0xC0);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        for (i = 0; i < 12; i++) {
+            if (slots[i] != -1) {
+                char *o = (char *)(D_L12_0015FFD8_m + (slots[i] << 8));
+                if (o != 0 && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD) {
+                    mark_moby_for_removal(o);
+                }
+            }
+        }
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (*(int *)(d + 0xB4) != 2) {
+            if (FUN_001f9b80(m + 0x10, d + 0x70) < *(float *)(d + 0xF8)) {
+                m[0x20] = 2;
+            }
+        }
+        break;
+    case 2:
+        if (((unsigned char *)m)[0x53] != 1) {
+            blend_moby_animation(m, 1, 0, scale_game_frames(2));
+        }
+        if (m[0x70] & 2) {
+            if (((unsigned char *)m)[0x53] != 2) {
+                blend_moby_animation(m, 2, 0, scale_game_frames(2));
+            }
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        if (FUN_001f9770(d + 0xFC)) {
+            if (slots[*(int *)(d + 0xF0)] != -1) {
+                FUN_L12_003076e0(m);
+                m[0xBC] = ((unsigned char *)m)[0xBC] == 0;
+                *(short *)(d + 0xFC) = scale_game_frames(0x28);
+            }
+            *(int *)(d + 0xF0) += 1;
+        }
+        if (*(int *)(d + 0xF0) == 12 || slots[*(int *)(d + 0xF0)] == -1) {
+            m[0x20] = 4;
+        }
+        break;
+    case 4:
+        *(unsigned short *)(m + 0x34) &= 0xEFFF;
+        if (((unsigned char *)m)[0x53] != 3) {
+            blend_moby_animation(m, 3, 0, scale_game_frames(2));
+        }
+        if (m[0x70] & 2) {
+            if (((unsigned char *)m)[0x53] != 0) {
+                blend_moby_animation(m, 0, 0, scale_game_frames(2));
+            }
+            m[0x20] = 5;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
 #include "qcopy.h"
 
 /* per-frame update of a moby's timer and approach state */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
@@ -109,7 +190,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 #include "sda.h"
 
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];
@@ -145,8 +226,8 @@ extern char D_L12_0016CCF0[];
 extern int D_L12_0015F5C4 MACRO_ADDR;
 extern int D_L12_0015F5CC MACRO_ADDR;
 extern void FUN_L00_00298840(int);
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L12_003093c8(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -156,11 +237,11 @@ void FUN_L12_003093c8(char *moby) {
     if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
         base = D_0013D388;
         if (*(unsigned char *)(*(int *)(data + 4) + base + 0x5C) != 0) {
-            mark_moby_for_removal(moby);
+            mark_moby_for_removal_u(moby);
             return;
         }
         p = D_0013F3D0;
-        if (is_point_inside_clip_volume(p, *(int *)data) != 0) {
+        if (is_point_inside_clip_volume_u(p, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
             qcopy(D_L12_0016CCF0, p);
             q = D_L12_0016CCF0 - 0x10;
@@ -172,5 +253,49 @@ void FUN_L12_003093c8(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003094a0.s", FUN_L12_003094a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030be68.s", FUN_L12_0030be68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
+
+extern char D_L12_00162108[] __attribute__((section(".sdata")));
+extern char D_L12_00167240[];
+extern char D_L12_00208B00[];
+extern int D_L12_001620D4;
+extern int D_L12_001FBD10[];
+extern int D_L12_002059E0[];
+extern int D_L12_00205A08[];
+extern int D_L12_00205A58[];
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+extern void FUN_L08_002f0c18(int);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L12_0030be68(char *m) {
+    int *d = *(int **)(m + 0x78);
+    int i;
+    font_queue_vu_state();
+    vu1_add_g_sregister(0x42, 0x7F00000064L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x5360A);
+    if (is_point_inside_clip_volume(D_L12_00167240, d[0])) {
+        vu1_add_g_sregister(6, get_effect_texture(0x2C));
+        for (i = 0; i < 10; i++) {
+            FUN_L08_00258090(D_L12_00208B00, D_L12_00205A08[i], D_L12_001FBD10[i], D_L12_00162108);
+            FUN_L00_001fde98(D_L12_001FBD10[i], D_L12_002059E0[i], D_L12_00205A58[i], D_L12_00208B00, 1);
+        }
+    }
+    vu1_add_g_sregister(6, get_effect_texture(0x2F));
+    FUN_L08_002f0c18(0);
+    vu1_add_g_sregister(0x42, ((long)D_L12_001620D4 << 32) | 0x68);
+    vu1_add_g_sregister(6, get_effect_texture(0x30));
+    FUN_L08_002f0c18(1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_0030bff0.s", FUN_L12_0030bff0);

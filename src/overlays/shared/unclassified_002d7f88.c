@@ -260,7 +260,7 @@ int FUN_L00_002d9f78(void) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[16]; } V __attribute__((aligned(16)));
 
@@ -279,12 +279,65 @@ void FUN_L00_002d9fd0(char *a, char *b, void *c) {
     *(unsigned short *)(b + 0x34) |= 4;
     FUN_0020e098(b);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da058.s", FUN_L00_002da058);
+
 #define NOT_SDA
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB508), where it is exact; names translated to the US level program. */
+
+typedef struct { u8 pad0[0x2078]; s32 i2078; s32 i207C; } G_2db508;
+
+extern float FUN_001f9b80(void *, void *);
+extern unsigned char D_0013E529 __attribute__((section(".data")));
+extern char *D_001413A0[];
+extern G_2db508 D_0013F350;
+extern G_2db508 D_0013F350_a __asm__("D_0013F350");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
+
+int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf) {
+    char *m = (char *)m_;
+    char *r = (char *)r_;
+    int ret = 0;
+    int (*fn)(void *, void *, void *) = **(int (***)(void *, void *, void *))(*(char **)(m + 0x24) + 0x2C);
+    char *x;
+    int c;
+    int n;
+    int i;
+    if (fn != 0) {
+        ret = fn(m, buf, p);
+        if (ret == 2 && *(short *)(r + 0x68) != 3) {
+
+            n = D_0013F350_a.i2078 + D_0013F350_a.i207C;
+            if (D_0013E529 == 0 ? n < 5 : n < 10) {
+                x = *(char **)(r + 0x70);
+                if (((unsigned char *)m)[0x53] != (unsigned char)x[3]) {
+                    blend_moby_animation_alt(m, (unsigned char)x[3], 0, scale_game_frames_alt(10));
+                }
+                *(short *)(r + 0x68) = 3;
+                *(int *)(r + 0x6C) = 0;
+                *(float *)(m + 0x58) = 1.0f;
+                *(float *)(r + 0x64) = FUN_001f9b80(m + 0x10, buf);
+                for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
+                    G_2db508 *gg = &D_0013F350;
+                    if (D_001413A0[i] == 0) {
+                        D_001413A0[i] = m;
+                        *(short *)(r + 0x6A) = i;
+                        gg->i207C++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+}
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 int FUN_L00_002da1e0(char *a) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0xC);
@@ -345,7 +398,7 @@ extern s32 FUN_L00_002d9f78_c(void) __asm__("FUN_L00_002d9f78");
 extern f32 FUN_001f9e90(f32, f32);
 extern f32 FUN_001fa688(f32, f32);
 extern s32 FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_001efa68");
-extern void FUN_L00_002da058(u8 *, void *, M_da360 *, R *, void *);
+int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf);
 extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
 extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void FUN_L00_002da360(u8 *p, void *q)
@@ -519,7 +572,7 @@ fail:
     return 0;
 }
 typedef struct { u8 pad0[0x2050]; s32 slot[11]; s32 count; } G;
-extern G D_0013F350;
+extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
 s32 FUN_001f96f8(s32);
 void FUN_00212f90(void *, s32, s32, s32);
@@ -533,8 +586,8 @@ s32 FUN_L00_002dbe20(u8 *m) {
     switch (k) {
     case 3:
         if (*(s16 *)(o + 0x6A) != -1) {
-            D_0013F350.slot[*(s16 *)(o + 0x6A)] = 0;
-            if (D_0013F350.count > 0) D_0013F350.count--;
+            D_0013F350_u.slot[*(s16 *)(o + 0x6A)] = 0;
+            if (D_0013F350_u.count > 0) D_0013F350_u.count--;
         }
         /* fall through */
     case 1:
@@ -593,7 +646,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddf60.s", FUN_L00_002ddf60);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
 
 extern short D_L00_001E6008[];
 extern void FUN_L00_002dd8e8(void);
@@ -609,7 +662,57 @@ void FUN_L00_002defe0(int arg0) {
         enqueue_callback_list_1(FUN_L00_002dd8e8, arg0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df048.s", FUN_L00_002df048);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* pull each active entry's marker toward its target, then update the rest */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E04F8), where it is exact; names translated to the US level program. */
+
+typedef struct { short idx; short pad; float f; int pad2[3]; char *p; } E04;
+
+typedef float VQ[4] __attribute__((aligned(16)));
+
+extern E04 D_L00_001E4C80[];
+extern char D_L00_001E5F30[];
+extern char D_L00_001E5F40[];
+extern float vector_length_xyz(void *);
+extern short D_L00_00161B40 __attribute__((sda));
+extern short D_L00_00161B44 __attribute__((sda));
+extern short D_L00_00161B50 __attribute__((sda));
+extern void FUN_L00_002defe0(int);
+extern void add_vector_xyz(void *, void *, void *);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+void normalize_vector_xyz(void *, void *, f32);
+
+void FUN_L00_002df048(int arg0) {
+    VQ a, b, c;
+    int i;
+    float len;
+    char *p;
+
+    *(int *)&D_L00_00161B40 = 1;
+    *(float *)&D_L00_00161B50 = *(float *)&D_L00_00161B50 * 0.5f;
+    *(int *)&D_L00_00161B44 = 1;
+    for (i = 0; i < 200; i++) {
+        p = D_L00_001E4C80[i].p;
+        if (p != 0) {
+            D_L00_001E4C80[i].p = 0;
+            subtract_vector_xyz(a, D_L00_001E5F30 + D_L00_001E4C80[i].idx * 16, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16);
+            len = vector_length_xyz(a);
+            scale_vector_xyz(a, a, D_L00_001E4C80[i].f / len);
+            add_vector_xyz(b, D_L00_001E5F40 + D_L00_001E4C80[i].idx * 16, a);
+            subtract_vector_xyz(c, p + 0x10, b);
+            normalize_vector_xyz(c, c, 0.03f);
+            scale_vector_xyz(a, a, 0.1f / len);
+            add_vector_xyz(p + 0x30, c, a);
+            *(short *)(p + 0xA) = 0x46;
+        }
+    }
+    FUN_L00_002defe0(arg0);
+}
 typedef struct { u8 pad[0x46]; s16 h46; } T_2df1e0;
 typedef struct { u8 pad[0x10]; u8 v10[0x10]; u8 b20; u8 pad2[3]; T_2df1e0 *p24; } O_2df1e0;
 typedef struct { u8 pad[0x80]; u8 v80[0x2000]; void *p2080; } G_2df1e0;
@@ -685,7 +788,7 @@ void FUN_L00_002df4a8(M09 *m) {
     }
 }
 /* update for the pulsing colour object */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f9de0(float);

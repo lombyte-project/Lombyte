@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/pause.c, func_0021C790). */
+/* Ported from rac1-decomp (src/game/pause.c, func_0021C790). */
 #include "sda.h"
 extern char D_001D5BF0[] NOT_SDA;
 /* Pause page link walk: with arg1 clear, follow arg0's +0x4C chain for

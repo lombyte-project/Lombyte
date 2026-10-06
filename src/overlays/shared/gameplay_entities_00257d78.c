@@ -18,7 +18,7 @@ void FUN_L00_00257d78(float *out, float lo, float hi) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
 
 float FUN_L00_00257e20(float a, float b, float c, float d, float t) {
     float p = (d - c) - (a - b);

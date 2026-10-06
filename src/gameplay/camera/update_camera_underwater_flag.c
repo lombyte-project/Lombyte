@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/camera.c, func_001EDB98). */
+/* Ported from rac1-decomp (src/game/camera.c, func_001EDB98). */
 #include "sda.h"
 #include "qcopy.h"
 extern char D_00186F40[];

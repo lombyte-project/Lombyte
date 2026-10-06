@@ -62,7 +62,7 @@ void FUN_L00_002e9518(char *o, float *x, float *y) {
 #define MACRO_ADDR
 
 /* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166E10[];
 extern float FUN_001f9ab0(void *, void *);
@@ -175,7 +175,7 @@ void FUN_L00_002e9aa0(int a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_002e7d20(int);
 extern void FUN_L00_002e8378(int);
@@ -493,7 +493,7 @@ tail:
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBC50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBC50), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
 
@@ -588,7 +588,7 @@ void FUN_L00_002ea810(A_2ea810 *arg) {
     Q.f288 = 0.018f;
 }
 /* Copies a vector into the current object's slot, switching to state 5 first. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
@@ -686,7 +686,7 @@ void FUN_L00_002eac18(int mode) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f99f8(void *);
 extern void FUN_001fa050(void *, void *);
@@ -715,7 +715,7 @@ void FUN_L00_002ead60(char *m) {
 }
 #define F(p, o) (*(float *)((char *)(p) + (o)))
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
@@ -796,7 +796,7 @@ void FUN_L00_002eae20(void *arg) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_001ed6a8(void *, float);
 extern void FUN_L00_002eae20_u(void *) __asm__("FUN_L00_002eae20");
@@ -813,7 +813,7 @@ void FUN_L00_002eb218(char *a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa580(float, float);
 extern void FUN_001fa050(void *, void *);
@@ -1116,7 +1116,7 @@ void FUN_L00_002ec4a8(unsigned char *m)
     FUN_001f9ad8_2ec4a8(m + 0x20, m + 0x10, m);
 }
 /* camera update: copies the moby's matrix when the camera mode changes */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern void FUN_L00_002ebbd8(void *);
@@ -1158,7 +1158,7 @@ done:
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 
@@ -1263,7 +1263,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ed498.s", FUN_L00_002ed498);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002EB0D8.c: func_L00_002EED60), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EED60), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015EF50;
 extern int D_L00_0015F5C4;

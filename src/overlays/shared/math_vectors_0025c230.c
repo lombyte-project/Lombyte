@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
@@ -24,7 +24,7 @@ float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
 
 typedef struct { int a[4]; } Vq __attribute__((aligned(16)));
 
@@ -39,7 +39,55 @@ void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
     FUN_001f9a68(&t0, &t1, FUN_001f9ab0(&t1, b) * s);
     FUN_001f9a28(a, b, &t0);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c398.s", FUN_L00_0025c398);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Spawns one particle per point found by func_L00_0025BCF8, at a random offset about A1. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D3F0), where it is exact; names translated to the US level program. */
+
+typedef struct { float v[4]; } V4 __attribute__((aligned(16)));
+
+extern float D_0015ED6C;
+extern float random_angle_radians(void);
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
+extern int scale_game_frames(int);
+extern unsigned char D_0013E520[];
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void add_vector_xyz(void *, void *, void *);
+extern void build_spherical_offset(void *, float, float, float);
+
+void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
+    V4 buf[20];
+    float tmp[4];
+    int n, i;
+
+    n = FUN_L00_0025aca0(a0, 20, buf, a2, 14.0f);
+    if (n == 0) {
+        return;
+    }
+    for (i = 0; i < n; i++) {
+        float y = random_angle_radians();
+        float z = random_angle_radians();
+        unsigned char *flag = D_0013E520;
+        int a, b;
+
+        build_spherical_offset(tmp, D_0015ED6C * 1.8f, y, z);
+        add_vector_xyz(tmp, tmp, a1);
+        tmp[2] += D_0015ED6C * 0.9f;
+        if (flag[0x10]) {
+            a = scale_game_frames(FUN_L00_00257b90(20, 35));
+            b = FUN_L00_00257b90(40, 60);
+            FUN_L00_00269958(&buf[i], tmp, 0x7000FFA0, 0xFF00, a, 30, b, 1);
+        } else {
+            a = scale_game_frames(FUN_L00_00257b90(20, 35));
+            b = FUN_L00_00257b90(40, 60);
+            FUN_L00_00269958(&buf[i], tmp, 0x7000A0FF, 0xFF, a, 30, b, 1);
+        }
+    }
+}
 typedef struct { f32 f0; f32 f4; f32 f8; f32 fC; u8 p10[8]; f32 f18; f32 f1C; u8 p20[4]; u32 w24; u8 p28[4]; s16 h2C; u8 p2E[0xE]; u8 b3C; u8 p3D; s16 h3E; f32 f40; int w44; } B_25c558;
 float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");

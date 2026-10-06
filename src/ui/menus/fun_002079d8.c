@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/menu.c, func_00208208). */
+/* Ported from rac1-decomp (src/game/menu.c, func_00208208). */
 /* arg0 is unused; the two unused float parameters put arg3 in $f14
    (floats count consecutively from $f12, one register each; see
    func_00207CE0). With `r` defaulting to 1, reorg turns the reset into

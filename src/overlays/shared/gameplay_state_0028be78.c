@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Build a symmetric adjacency bitmask over a table's entries from pairwise tests. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0028AA68.c: func_L05_0028CEE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0028AA68.c: func_L05_0028CEE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
 extern int FUN_L00_00261968(int, void *, void *);

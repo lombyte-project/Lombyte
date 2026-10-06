@@ -31,7 +31,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308708.s", FUN_L12_00308708);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BD3D0.c: func_L12_00309CF8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_00309CF8), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x40]; float vx, vy; } MO;
 

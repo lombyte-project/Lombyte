@@ -5,7 +5,7 @@
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e08, 108 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Walks a moby index list and, for each moby of one type, sets its state to 2 and a float to 1.0.
 void FUN_L06_002d9e08(int index)
@@ -25,7 +25,7 @@ void FUN_L06_002d9e08(int index)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002d9e78, 100 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002d9e78(int idx)
 {
@@ -45,7 +45,7 @@ void FUN_L06_002d9e78(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002e9e30, 108 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Switches every moby listed in a table into state 15 until a negative entry. */
 void FUN_L06_002e9e30(int index) {
@@ -66,7 +66,7 @@ void FUN_L06_002e9e30(int index) {
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45a0, 80 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Clears state 4 from every moby in the selected table. */
 void FUN_L06_002f45a0(int idx)
@@ -83,7 +83,7 @@ void FUN_L06_002f45a0(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f45f0, 72 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 /* Sets each moby in the selected table to state 4 until its terminal entry. */
 void FUN_L06_002f45f0(int idx)
@@ -99,7 +99,7 @@ void FUN_L06_002f45f0(int idx)
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 
 extern void FUN_0022da68(int, int, int);
 
@@ -120,7 +120,7 @@ void FUN_L06_002f5360(char *moby) {
     }
 }
 /* Switches a moby from state 6 to 8 and sets its ten children to state 9. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6818), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6818), where it is exact; names translated to the US level program. */
 
 void FUN_L06_002f53e8(char *moby)
 {
@@ -150,7 +150,7 @@ void FUN_L06_002f53e8(char *moby)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9698, 96 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002f9698(char *arg)
 {
@@ -171,7 +171,7 @@ void FUN_L06_002f9698(char *arg)
 #define MACRO_ADDR
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
 extern char D_0013E533[];
@@ -226,7 +226,7 @@ float FUN_L06_002f96f8(char *self) {
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f9948, 100 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 void FUN_L06_002f9948(int idx)
 {
@@ -247,7 +247,7 @@ void FUN_L06_002f9948(int idx)
 extern int D_L06_001ABFC0[];
 extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 /* 0x002f99b0, 120 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Resets every moby of a list that is in state 0x12.
 void FUN_L06_002f99b0(int index)
@@ -271,10 +271,10 @@ void FUN_L06_002f99b0(int index)
 #include "qcopy.h"
 
 /* raise each listed moby's position z by a fixed amount and notify it */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC4C0), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_L06_002e9d10(void *, void *);
+int FUN_L06_002e9d10(void *m_, void *pos);
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
 void FUN_L06_002fb090(char *moby) {
@@ -294,7 +294,7 @@ void FUN_L06_002fb090(char *moby) {
 }
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
 extern char D_L06_00167540[] __attribute__((section(".data")));
@@ -345,7 +345,7 @@ int FUN_L06_002fb2a8(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 
 extern int *D_L06_001B0C30[];
 extern void FUN_L00_002eac18(int);
@@ -358,7 +358,7 @@ void FUN_L06_002fb4b0(char *arg) {
     FUN_L00_002eac18(2);
 }
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00167540[];
 extern float D_0015ED6C;
@@ -399,7 +399,7 @@ int FUN_L06_002fb668(char *moby) {
     return 0;
 }
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
 
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void FUN_L06_002fd1a0(void);
@@ -431,13 +431,237 @@ void FUN_L06_002fd088(char *moby) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002b4770.s", FUN_L06_002b4770);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d9d10.s", FUN_L06_002d9d10);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
+
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+
+void FUN_L06_002d9d10(unsigned char *moby) {
+    char *data;
+    data = *(char **)(moby + 0x78);
+    switch (moby[0x20]) {
+    case 0: {
+        char *p = (char *)moby + 0x10;
+        char *q;
+        qcopy(data, p);
+        q = data + 0x10;
+        normalize_vector_xyz(q, moby + 0xD0, 11.0f);
+        add_vector_xyz(q, q, p);
+        moby[0x20] = 1;
+        break;
+    }
+    case 2: {
+        float a = (&D_0015ED6C)[1] * 10.0f;
+        advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x24), *(float *)(data + 0x28), a, a, D_0015ED6C * 20.0f);
+        FUN_001f9a40(moby + 0x10, data, data + 0x10, *(float *)(data + 0x20));
+        if (*(float *)(data + 0x20) == *(float *)(data + 0x28)) moby[0x20] = 1;
+        break;
+    }
+    }
+}
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002EB140), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void clear_vector(void *);
+extern void vu_euler_rotation_basis(void *, void *);
+extern void func_L00_0025D5B0_2eb140(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+
+int FUN_L06_002e9d10(void *m_, void *pos) {
+    char *m = (char *)m_;
+    char *d = *(char **)(m + 0x78);
+    float f, g;
+    if (((unsigned char *)m)[0x20] == 0xF) {
+        qcopy(m + 0x10, pos);
+        *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) & 0xFFBE) | 0x1000;
+        m[0x20] = 6;
+        clear_vector(m + 0x40);
+        *(float *)(m + 0x48) = random_angle_radians();
+        vu_euler_rotation_basis(m + 0xC0, m + 0x40);
+        g = D_0015ED70 * 20.0f;
+        f = D_0015ED6C + D_0015ED6C;
+        *(float *)(d + 0x130) = g;
+        *(int *)(d + 0x134) = 0;
+        *(float *)(d + 0x138) = f;
+        *(float *)(d + 0x13C) = f;
+        d[0x15D] = 3;
+        *(int *)(d + 0x144) = 5;
+        func_L00_0025D5B0_2eb140(m, d + 0x120, 2, 1, 0, random_angle_radians());
+        *(float *)(d + 0x128) = -*(float *)(d + 0x128);
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3ad8.s", FUN_L06_002f3ad8);
+/* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
+
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float fast_add_rotations(float, float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L06_00161D24_d __asm__("D_L06_00161D24") __attribute__((sda));
+extern short D_L06_00161D28_d __asm__("D_L06_00161D28") __attribute__((sda));
+extern void FUN_L06_002f3d70(char *);
+extern void FUN_L06_002f4130_c(char *) __asm__("FUN_L06_002f4130");
+extern void FUN_L06_002f4390_c(char *) __asm__("FUN_L06_002f4390");
+extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern char D_0013F3D0[];
+extern char D_0013E550[];
+extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
+
+void FUN_L06_002f3ad8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float s;
+    if (*(int *)(d + 0x90) >= 0) {
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), *(int *)(d + 0x90)) != 0) {
+            float x = *(float *)&D_L06_00161D24_d;
+            float y = *(float *)&D_L06_00161D28_d;
+            *(float *)(d + 0x50) = x;
+            *(float *)(d + 0x54) = y;
+        } else {
+            *(int *)(d + 0x50) = 0;
+            *(int *)(d + 0x54) = 0;
+        }
+    }
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(int *)(d + 0x60) != 0) {
+            m[0x20] = 1;
+            *(float *)(d + 0x80) = 360.0f / *(float *)(d + 0x68) * 0.017453292f * D_0015ED6C;
+            *(float *)(d + 0x7C) = *(float *)(d + 0x6C) * 0.017453292f;
+            *(float *)(d + 0x84) = *(float *)(m + 0x48);
+        } else {
+            m[0x20] = 3;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x74) + *(float *)(d + 0x78) * 60.0f));
+        }
+        *(int *)(d + 0x94) = -1;
+        break;
+    case 1:
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        }
+        FUN_L06_002f3d70(m);
+        FUN_L06_002f4130_c(m);
+        s = *(float *)(d + 0x64) * 0.017453292f * fast_sin_c(*(float *)(d + 0x7C));
+        *(float *)(d + 0x7C) = fast_add_rotations(*(float *)(d + 0x7C), *(float *)(d + 0x80));
+        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
+        break;
+    case 2:
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        }
+        FUN_L06_002f3d70(m);
+        FUN_L06_002f4390_c(m);
+        if (tick_countdown_32_alt(d + 0x88) != 0) {
+            m[0x20] = 3;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x74) * 60.0f));
+            if (*(int *)(d + 0x94) != -1) {
+                char *e = ((char *)&D_0013E550) + *(int *)(d + 0x94) * 0x70;
+                if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
+                    release_voice_slot(*(int *)(d + 0x94));
+                }
+            }
+            *(int *)(d + 0x94) = -1;
+        }
+        break;
+    case 3:
+        if (tick_countdown_32_alt(d + 0x88) != 0) {
+            m[0x20] = 2;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x70) * 60.0f));
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f4130.s", FUN_L06_002f4130);
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int pad0;
+    int pad4;
+    float f8;
+    float fC;
+    void *m;
+    int flags;
+    char b18;
+    char b19;
+    unsigned short h1A;
+    float f1C;
+    int i20;
+} Sx;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vx;
+
+extern char D_001404A8[];
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern short D_L06_00161CF0_d __asm__("D_L06_00161CF0") __attribute__((sda));
+extern void clear_vector_c(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L06_002f4130(char *m) {
+    Sx s;
+    Vx a;
+    Vx b;
+    int i;
+    char *pos = m + 0x10;
+    int one = 1;
+    char *d;
+    int n;
+    float f25, f27, cur, prev, ang, ra, rb;
+    d = *(char **)(m + 0x78);
+    n = func_001FA898_r(*(float *)&D_L06_00161CF0_d / (*(float *)&D_L06_00161CEC_d * D_0015ED6C) * 0.25f);
+    f25 = *(float *)(d + 0x80) * (float)n;
+    f27 = *(float *)&D_L06_00161CF0_d * 0.25f;
+    cur = *(float *)&D_L06_00161CF0_d;
+    ang = fast_subtract_rotations(*(float *)(d + 0x7C), f25 * 4.0f);
+    s.m = m;
+    s.f1C = 1.0f;
+    s.flags = *(int *)(D_001404A8) != 6 ? 0x10001 : 0x10000;
+    s.i20 = one;
+    clear_vector_c(&s);
+    s.f8 = 1.0f;
+    s.fC = 5627.9248f;
+    s.b18 = 3;
+    s.b19 = one;
+    s.h1A = *(unsigned short *)(m + 0xA6);
+    for (i = 3; i >= 0; i--) {
+        prev = cur;
+        ra = fast_add_rotations(*(float *)(d + 0x84), *(float *)(d + 0x64) * 0.017453292f * fast_sin(ang));
+        cur -= f27;
+        ang = fast_add_rotations(ang, f25);
+        rb = fast_add_rotations(*(float *)(d + 0x84), *(float *)(d + 0x64) * 0.017453292f * fast_sin(ang));
+        a.x = fast_cos(ra) * prev;
+        a.y = fast_sin(ra) * prev;
+        a.z = 0.0f;
+        b.x = fast_cos(rb) * cur;
+        b.y = fast_sin(rb) * cur;
+        b.z = 0.0f;
+        add_vector_xyz(&a, &a, pos);
+        add_vector_xyz(&b, &b, pos);
+        FUN_001efa68(&a, &b, 0, m, &s);
+    }
+}
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F57C0), where it is exact; names translated to the US level program. */
 
 extern char D_001404A8[];
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -501,7 +725,7 @@ void FUN_L06_002f4390(char *m)
     FUN_001efa68(v, w, 0, m, &q);
 }
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
 
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern void FUN_L00_00250df8(void *);
@@ -543,7 +767,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
 #include "sda.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0016016C __asm__("D_L06_001600EC") MACRO_ADDR;
 extern char D_0013E633[] __asm__("D_0013F3D0");

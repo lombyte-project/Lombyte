@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
@@ -46,7 +46,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *, void *);
 
@@ -70,9 +70,67 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e7f68.s", FUN_L15_002e7f68);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ea748.s", FUN_L15_002ea748);
+/* UpdateMoby_1388 (names.tsv role). Every frame: func_001FA748 on the heading at +0x48 with
+ * frame time * pi/2, and the +0x2C scale from the model's +0x24 value. State 0: runs
+ * func_L00_002D80A0, then deletes the moby if flag byte 0xD is set, else raises it by 1.0
+ * and goes to state 1. State 1: when the hero (D_0013E633 + 0xE9D) is within 3.0, sets
+ * flags 0x41, calls func_L00_00299B68(5) and goes to state 2. State 2: once the level flag
+ * is no longer 2, starts the exit sequence and goes to state 3. State 3: deletes the moby. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBB38), where it is exact; names translated to the US level program. */
+
+extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
+extern float FUN_001f9b80(void *, void *);
+extern int D_L15_0015F5C4;
+extern int D_L15_0015F640;
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L15_00162078_d __asm__("D_L15_00162078") __attribute__((sda));
+extern unsigned char D_0013D4FD[];
+extern unsigned char D_0013F3D0[];
+extern void FUN_L00_00260860(int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L00_00298840(int);
+extern void FUN_L00_002d6bf0(char *);
+extern void FUN_L10_00298940(char *);
+int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+
+void FUN_L15_002ea748(unsigned char *m) {
+    *(float *)(m + 0x48) = fast_add_rotations(*(float *)(m + 0x48), D_0015ED6C * 1.5707964f);
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L15_00162078_d;
+    switch (m[0x20]) {
+    case 0:
+        FUN_L00_002d6bf0((char *)m);
+        if (D_0013D4FD[0xD] != 0) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        m[0x20] = 1;
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + 1.0f;
+        break;
+    case 1:
+        FUN_L10_00298940((char *)m);
+        if (FUN_001f9b80(m + 0x10, D_0013F3D0) < 3.0f) {
+            *(unsigned short *)(m + 0x34) |= 0x41;
+            FUN_L00_00298840(5);
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (D_L15_0015F5C4 != 2) {
+            FUN_L00_00263d40(0x3AA3, -1);
+            D_L15_0015F640 = scale_game_frames(0xB4);
+            FUN_L00_00260860(0x22, 1);
+            memcard_save_data(0, -1);
+            m[0x20] = 3;
+        }
+        break;
+    case 3:
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float FUN_001f96b0(float);
@@ -97,14 +155,205 @@ void FUN_L15_002eabd8(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eac90.s", FUN_L15_002eac90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
+#include "sda.h"
+
+/* Builds the two rippling vertex strips around the moby (template points moved to its position, z waved by distance from the centre), then draws them twice with scrolled texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1FE0), where it is exact; names translated to the US level program. */
+
+typedef struct { float f0; float f4; } RippleData;
+
+typedef struct { float v[2]; } P2;
+
+typedef struct { P2 p[2]; } T4;
+
+extern T4 D_L15_00162108;
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float FUN_001f96b0(float);
+extern float FUN_001f9988(float);
+extern float FUN_L00_00200260(float, float);
+extern float fast_add_rotations(float, float);
+extern float wrap_angle(float);
+extern float D_0015ED6C;
+extern int D_L15_0015F5CC;
+extern int D_L15_001620EC __attribute__((sda));
+extern int D_L15_001620F0 __attribute__((sda));
+extern int D_L15_001620F4 __attribute__((sda));
+extern float D_L15_001620F8 __attribute__((sda));
+extern float D_L15_001620FC __attribute__((sda));
+extern float D_L15_00162100 __attribute__((sda));
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern float D_L15_00162104 __attribute__((sda));
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+extern int D_L15_00162080[2] __attribute__((sda));
+extern int D_L15_00162090[2] __attribute__((sda));
+extern int D_L15_001620A0[2] __attribute__((sda));
+extern int D_L15_001620B0[2] __attribute__((sda));
+extern int D_L15_001620C0[2] __attribute__((sda));
+extern int D_L15_001620D0[2] __attribute__((sda));
+
+void FUN_L15_002eac90(char *moby) {
+    RippleData *d = *(RippleData **)(moby + 0x78);
+    float scale;
+    int r, g, b;
+    int color;
+    int i, j, m, n, q;
+
+    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_00162104 * D_0015ED6C);
+    vu1_add_g_sregister(6, get_effect_texture(D_L15_001620F0));
+    vu1_add_g_sregister(0x42, ((long)D_L15_001620EC << 32) | 0x44);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
+    d->f0 = d->f4;
+    d->f4 = fast_add_rotations(d->f4, 360.0f / FUN_001f96b0(D_L15_001620FC) * 0.017453292f * D_0015ED6C);
+    FUN_L00_00250320(moby, &r, &g, &b);
+    color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < D_L15_00162080[i]; j++) {
+            int *e = D_L15_001620C0 + i;
+            float *p = (float *)(*e + j * 12);
+            float t = D_L15_00162100 *
+                fast_sin(fast_add_rotations(wrap_angle(
+                    FUN_L00_00200260(FUN_001f9988(p[0] * p[0] + p[1] * p[1]), D_L15_001620F8)
+                        * 6.2831855f / D_L15_001620F8), d->f4));
+            *(float *)(j * 12 + D_L15_00162090[i]) = p[0] + *(float *)(moby + 0x10);
+            *(float *)(j * 12 + D_L15_00162090[i] + 4) = p[1] + *(float *)(moby + 0x14);
+            *(float *)(j * 12 + D_L15_00162090[i] + 8) = p[2] + *(float *)(moby + 0x18) + t;
+            *(int *)(j * 4 + D_L15_001620B0[i]) = color;
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        for (m = 0; m < 3; m++) {
+            for (n = 0; n < D_L15_00162080[m]; n++) {
+                T4 tbl = D_L15_00162108;
+                *(float *)(n * 8 + D_L15_001620A0[m]) =
+                    *(float *)(n * 8 + D_L15_001620D0[m])
+                    + FUN_L00_00200260(scale * tbl.p[i].v[0], 1.0f);
+                *(float *)(n * 8 + D_L15_001620A0[m] + 4) =
+                    *(float *)(n * 8 + D_L15_001620D0[m] + 4)
+                    + FUN_L00_00200260(scale * tbl.p[i].v[1], 1.0f);
+            }
+        }
+        font_queue_vu_state();
+        for (q = 0; q < 3; q++) {
+            FUN_L00_001fde98(D_L15_00162080[q], D_L15_00162090[q],
+                D_L15_001620B0[q], (void *)D_L15_001620A0[q], 1);
+        }
+    }
+}
+#include "sda.h"
+
+/* Builds and draws the animated ring of lights around a moby: 68 vertices and colours, then two passes of 68 texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F2BD8), where it is exact; names translated to the US level program. */
+
+typedef struct { float f[4]; } Quad4;
+
+typedef struct {
+    float prev;
+    float angle;
+} RingVars;
+
+extern Quad4 D_L15_00162170;
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L15_0016216C __attribute__((sda));
+extern float D_L15_001DDBA0[];
+extern float D_L15_001DDED0[][2];
+extern float D_L15_001DE200[];
+extern float D_L15_001DE530[][2];
+extern float FUN_001f96b0(float);
+extern float FUN_001f9988(float);
+extern float FUN_L00_00200260(float, float);
+extern float fast_add_rotations(float, float);
+extern float wrap_angle(float);
+extern float D_0015ED6C;
+extern int D_L15_0015F5CC;
+extern int D_L15_00162120[2] __attribute__((sda));
+extern int D_L15_00162140[2] __attribute__((sda));
+extern int D_L15_00162148[2] __attribute__((sda));
+extern int D_L15_00162150[1] __attribute__((sda));
+extern int D_L15_00162154 __attribute__((sda));
+extern int D_L15_00162158 __attribute__((sda));
+extern int D_L15_0016215C __attribute__((sda));
+extern float D_L15_00162160 __attribute__((sda));
+extern float D_L15_00162164 __attribute__((sda));
+extern float D_L15_00162168 __attribute__((sda));
+extern int D_L15_001DE750[];
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L15_002eb108(char *moby) {
+    unsigned int i = 0;
+    unsigned int off = 0;
+    RingVars *data = *(RingVars **)(moby + 0x78);
+    unsigned int n;
+    int j;
+    int k;
+    int color;
+    Quad4 t;
+    int r;
+    int g;
+    int b;
+    float scale;
+    Quad4 *p;
+    float *o;
+    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_0016216C * D_0015ED6C);
+    vu1_add_g_sregister(6, get_effect_texture(D_L15_00162158));
+    vu1_add_g_sregister(0x42, ((long)D_L15_00162154 << 32) | 0x44);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    data->prev = data->angle;
+    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) * 0.017453292f * D_0015ED6C);
+    FUN_L00_00250320(moby, &r, &g, &b);
+    /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
+    p = (Quad4 *)&t.f[1];
+    color = (D_L15_0016215C << 24) | (b << 16) | (g << 8) | r;
+    o = D_L15_001DE200;
+    do {
+        float *s = &D_L15_001DDBA0[i * 3];
+        float x = s[0];
+        float y = s[1];
+        float rad = FUN_001f9988(x * x + y * y);
+        float a = FUN_L00_00200260(rad, D_L15_00162160);
+        float w = wrap_angle(a * 6.2831855f / D_L15_00162160);
+        float z = fast_sin(fast_add_rotations(w, data->angle));
+        o[0] = s[0] + *(float *)(moby + 0x10);
+        *(float *)((char *)D_L15_001DE200 + 4 + off) = s[1] + *(float *)(moby + 0x14);
+        o[2] = s[2] + *(float *)(moby + 0x18) + D_L15_00162168 * z;
+        D_L15_001DE750[i] = color;
+        i++;
+        off += 12;
+        o += 3;
+    } while (i < 68);
+    for (j = 0; j < 2; j++) {
+        for (n = 0; n < 68; n++) {
+            t = D_L15_00162170;
+            D_L15_001DE530[n][0] = D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
+            D_L15_001DE530[n][1] = D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+        }
+        font_queue_vu_state();
+        for (k = 0; k < 1; k++) {
+            FUN_L00_001fde98(D_L15_00162120[k], D_L15_00162140[k], D_L15_00162150[k], (void *)D_L15_00162148[k], 1);
+        }
+    }
+}
+
+
+
+#include "qcopy.h"
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
 #define NOT_SDA __attribute__((section(".data")))
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char D_L15_00162190[];
@@ -170,7 +419,7 @@ void FUN_L15_002eb6b8(void) {
     font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d, (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern short D_L15_00162198_d __asm__("D_L15_00162198") __attribute__((sda));
@@ -189,7 +438,34 @@ void FUN_L15_002eb928(char *moby)
         FUN_L00_0026f080(random_float_between_alt(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb9e0.s", FUN_L15_002eb9e0);
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern char *func_0020D348_m(int);
+extern int FUN_L00_0025d1b8();
+extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
+extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
+extern void func_L00_00251E30_u(void *) __asm__("FUN_L00_00250df8");
+
+char *FUN_L15_002eb9e0(char *pos, char *vec) {
+    char tmp[32] __attribute__((aligned(16)));
+    char *p = tmp;
+    char *m;
+    *(u128 *)tmp = *(u128 *)pos;
+    *(u128 *)(tmp + 0x10) = *(u128 *)vec;
+    m = func_0020D348_c(0x594);
+    if (m != 0) {
+        func_L00_0025E210_u(m);
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        qcopy(m + 0x10, p);
+        *(u128 *)(m + 0x40) = *(u128 *)(tmp + 0x10);
+        func_L00_00251E30_u(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
@@ -200,7 +476,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
 /* tests several indexed conditions of a moby's entry in the table */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_0015EF50;
 extern char D_0013E533[];
@@ -238,7 +514,7 @@ int FUN_L15_002f85a8(char *moby) {
     return 0;
 }
 /* tests whether the target lies within a cone of the player's axis */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
 
 extern char *D_L15_001600EC;
 extern char D_L15_00167410[];

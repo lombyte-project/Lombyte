@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/missionfunc.c, func_0020CB80). */
+/* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CB80). */
 #include "sda.h"
 extern int D_0013D73C NOT_SDA;
 extern unsigned char D_0013D3A0 NOT_SDA;

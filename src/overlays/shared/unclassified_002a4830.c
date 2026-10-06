@@ -3,7 +3,7 @@
 #include "asm.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
 
 struct Amb {
     float f0;
@@ -354,7 +354,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a6b70.s", FUN_L00_002a6b70);
 #define MACRO_ADDR
 
 /* Steers a thrown moby along its path: builds its orientation from the data's angles and, when done, releases the held target. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002A8088), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A8088), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002603d0_c(void *) __asm__("FUN_L00_002603d0");
 extern float D_0015ED6C;
@@ -535,7 +535,7 @@ void FUN_L00_002a7c70(O_002a7c70 *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
 extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
 extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") __attribute__((section(".data")));
@@ -659,7 +659,7 @@ check:
         n = n->next;
     } while (n);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002A96B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A96B8), where it is exact; names translated to the US level program. */
 
 extern float D_0013F3E8[];
 extern float FastDiffRots(float, float) __asm__("FUN_001fa688");
@@ -677,7 +677,7 @@ void FUN_L00_002a8418(float *v) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a84c8.s", FUN_L00_002a84c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
 /* Creates a moby at a position with a scale, colour and a few data fields. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
 extern void FUN_L00_002502f0(void *, int, int, int);
@@ -706,7 +706,7 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
 }
 typedef int u128_q __attribute__((mode(TI)));
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m_q(int) __asm__("func_0020D348_m");
 extern int D_L00_0015F320_q __asm__("D_L00_0015F320");
@@ -747,7 +747,7 @@ void FUN_L00_002a9b80(void *a, q128_2a9b80 *v) { q128_2a9b80 t = *v; u8 *p; u8 *
  g = D_L00_001613C8; if (g == 0) { FUN_L00_002a9aa0_u(a, &t); g = D_L00_001613C8; if (g == 0) return; }
  p = D_L00_001613C8; q = *(u8 **)(p + 0x78);
  if (*(s16 *)(p + 0xA6) == 0x5F3) { *(q128_2a9b80 *)(p + 0x10) = t; *(s16 *)(q + 0x2E) = 1; } }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F320;
 extern int D_L00_0015F330;

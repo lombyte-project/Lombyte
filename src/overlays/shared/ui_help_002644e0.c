@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00265558.c: func_L00_00265558), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00265558.c: func_L00_00265558), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F590;
 extern int D_L00_0015F594;

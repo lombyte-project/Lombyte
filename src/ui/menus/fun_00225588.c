@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
 extern void *func_00226720_a(int) __asm__("func_00225490");
 extern int FUN_00225c18(int);
 extern void func_00225AB8(void *);

@@ -9,7 +9,7 @@
 #include "qcopy.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
@@ -115,9 +115,29 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028a7a8.s", FUN_L01_0028a7a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b410.s", FUN_L01_0028b410);
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
+
+extern char *D_L01_001B0930[];
+extern float FUN_001f9b48(void *, void *);
+
+void FUN_L01_0028b410(char *p)
+{
+    int i;
+    int off;
+    char *q;
+    p[5] = 0;
+    *(int *)(p + 8) = 0;
+    *(char **)(p + 0x10) = D_L01_001B0930[*(int *)(p + 0x14)];
+    for (i = 0; i < **(int **)(p + 0x10); i++) {
+        q = *(char **)(p + 0x10);
+        off = i << 4;
+        *(float *)(*(char **)(p + 0x10) + off + 0x1C) = FUN_001f9b48(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
+        *(float *)(*(char **)(p + 0x10) + off + 0x18) += 0.5f;
+        *(float *)(*(char **)(p + 0x10) + off + 0x18) -= 0.5f;
+    }
+}
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C2D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C2D8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int count;
@@ -198,7 +218,7 @@ int FUN_L01_0028b828(T_28b828 *a, int b) {
     return b;
 }
 /* 0x0028b878, 76 bytes.
- * Ported from rac1-decomp (PAL), where it is exact; names translated to
+ * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 int FUN_L01_0028b878(char *p)
 {
@@ -215,7 +235,7 @@ int FUN_L01_0028b878(char *p)
     return next;
 }
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -259,7 +279,7 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
         *(u128 *)out = *(u128 *)v3;
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);

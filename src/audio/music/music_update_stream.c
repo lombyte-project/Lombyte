@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/music.c, func_00216F48). */
+/* Ported from rac1-decomp (src/game/music.c, func_00216F48). */
 extern void func_0012ECA0(void *);
 typedef struct {
     unsigned int handle; /* 0x00: 0 none, 0xFFFFFFFF starting/released */

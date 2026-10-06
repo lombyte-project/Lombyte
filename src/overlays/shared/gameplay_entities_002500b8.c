@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00160040;
 extern char D_0013E533[];
@@ -71,7 +71,7 @@ void FUN_L00_002500b8(char *o) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84;
 extern unsigned char D_0014C050[];

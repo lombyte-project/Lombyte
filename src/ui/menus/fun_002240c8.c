@@ -7,7 +7,7 @@ extern char D_001D5DD0[];
 extern char D_001D5E10[];
 extern char D_001D5E50[];
 extern int D_0015FF4C;
-extern int D_00224B60[];
+extern void FUN_00224b60();
 extern int func_001E9410();
 extern int FUN_00224fc0();
 extern int FillTransferWords();
@@ -68,7 +68,7 @@ int initialize_menu_preview_objects(char *preview) {
         *(float *)(object + 0x14) = *(float *)(camera + 0x144);
         *(float *)(object + 0x18) = *(float *)(camera + 0x148) - 0.6f;
         *(float *)(object + 0x48) = 3.1415927f;
-        *(void **)(object + 0x74) = D_00224B60;
+        *(void **)(object + 0x74) = FUN_00224b60;
         object_variables = *(int **)(object + 0x78);
         object_variables[0] = (int)preview;
         object_variables[1] = 0;

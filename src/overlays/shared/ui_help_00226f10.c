@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
 
 extern char D_L01_00179F40[];
 extern int FUN_L00_0020d498(int);
@@ -27,7 +27,7 @@ int FUN_L01_00226f10(int a) {
     r = D_L01_00179F40 - (-(n * 0x4C));
     return *(int *)(r + 0x24);
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002283E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4);
 
@@ -48,7 +48,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
 #define MACRO_ADDR
 
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f96f8(int);
 extern unsigned char D_0013E533[];
@@ -235,7 +235,7 @@ void FUN_L01_0022cd48(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d838.s", FUN_L01_0022d838);
 /* Starts a level scene: resets the player state, takes the new moby and sets up its flags. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231960), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
@@ -281,7 +281,7 @@ void FUN_L01_00231348(int a, int b, int c) {
 #include "qcopy.h"
 
 /* resets the hero state and default camera fields */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00231A68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231A68), where it is exact; names translated to the US level program. */
 
 extern int D_L01_0015F5C4;
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -589,7 +589,7 @@ void FUN_L01_00231ae0(void) {
 #undef P
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00232290.s", FUN_L01_00232290);
 /* Checks the hero's movement against walls ahead and slides the direction along the wall. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001742C0_d[] __asm__("D_L01_001742C0") __attribute__((section(".data")));
 extern float D_0015ED6C;
@@ -1058,7 +1058,7 @@ s32 FUN_L01_00233940(s32 mode) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00234358.s", FUN_L01_00234358);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0023c710.s", FUN_L01_0023c710);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00240CE8), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002405a0(void)
 {
@@ -1129,7 +1129,7 @@ void FUN_L01_00242198(void) {
         }
     }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/help_002274A8.c: func_L01_002490E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002490E0), where it is exact; names translated to the US level program. */
 
 void FUN_L01_002488e8(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) |= 1;

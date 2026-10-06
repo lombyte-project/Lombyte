@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/mobyutil.c,
+/* Ported from rac1-decomp (src/game/mobyutil.c,
    func_002153E8). */
 #include "eetypes.h"
 

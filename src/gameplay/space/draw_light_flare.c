@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/space.c, func_0022F258). */
+/* Ported from rac1-decomp (src/game/space.c, func_0022F258). */
 #include "sda.h"
 extern void copy_blocks_16_forward(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");

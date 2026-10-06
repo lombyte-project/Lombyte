@@ -63,7 +63,7 @@ typedef struct {
 } PreviewItemDefinition;
 
 extern PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
-extern u8 attachment_update_callback[] __asm__("D_00224B68");
+extern u8 attachment_update_callback[] __asm__("FUN_00224b68");
 
 extern void decompress_wad() __asm__("func_0020B618");
 extern s32 clear_record_flag_by_key(s32) __asm__("FUN_00225e20");

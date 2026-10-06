@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
 extern float FUN_001fa5c8(float, float);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
@@ -101,7 +101,7 @@ float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float ac
 }
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
 
 unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
     unsigned int x = truncate_float_to_s32(r * 255.0f) & 0xFF;
@@ -116,7 +116,7 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
     int x, y;
@@ -124,7 +124,7 @@ void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
     if (mask & 2) { x = *c; y = *b; *b = x; *c = y; }
     if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
 }
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D140), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 

@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* tests whether a point lies within height, distance and heading limits of a moby */
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001fa688(float, float);
@@ -34,7 +34,7 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 extern void func_001FA480(void *, void *) __asm__("FUN_001fa2b8");
@@ -56,7 +56,7 @@ void FUN_L12_0027b9c0(unsigned char *parent, unsigned char *child, int mode) {
         *(unsigned short *)(child + 0x34) &= 0xFFBE;
     *(unsigned short *)(child + 0x34) |= 6;
 }
-/* Ported from rac1-decomp (PAL, src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027CA68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027CA68), where it is exact; names translated to the US level program. */
 
 extern char *D_L12_001B0930[];
 

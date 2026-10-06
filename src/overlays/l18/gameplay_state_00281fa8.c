@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* Serialize save data once and retain its destination buffer. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18/pause_00282F48.c: func_L18_00282F48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18/pause_00282F48.c: func_L18_00282F48), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0xE0];

@@ -1,0 +1,151 @@
+{
+  "description": "src/overlays units built with SN ee-gcc 2.95.2 instead of the game compiler. Add a unit only when every C function in it stays exact under SN.",
+  "units": {
+    "l01": [
+      "ui_help_00233de0.c",
+      "ui_help_0023cf98.c",
+      "ui_help_00242930.c",
+      "unclassified_002b96e0.c",
+      "unclassified_002f9810.c"
+    ],
+    "l02": [
+      "gameplay_vendor_002ebf20.c",
+      "ui_help_0021b698.c",
+      "ui_help_0022b728.c",
+      "unclassified_002400c8.c"
+    ],
+    "l03": [
+      "runtime_startup_0022c728.c",
+      "ui_help_00205830.c",
+      "ui_help_00216648.c",
+      "ui_help_0021c668.c",
+      "unclassified_00292578.c",
+      "unclassified_002c9eb8.c"
+    ],
+    "l04": [
+      "unclassified_001f3038.c",
+      "unclassified_0029eb20.c",
+      "unclassified_002ca420.c"
+    ],
+    "l05": [
+      "ui_help_00244a70.c",
+      "ui_help_0024cee8.c",
+      "ui_help_00255960.c",
+      "unclassified_002d1688.c",
+      "unclassified_0030d6a0.c"
+    ],
+    "l06": [
+      "ui_help_002356a0.c",
+      "ui_help_0023b440.c",
+      "unclassified_002b4770.c",
+      "unclassified_002fd1a0.c"
+    ],
+    "l07": [
+      "gameplay_vendor_0031d2e0.c",
+      "ui_map_00270248.c",
+      "unclassified_002cd2b0.c",
+      "unclassified_00312948.c"
+    ],
+    "l08": [
+      "gameplay_vendor_00305138.c",
+      "rendering_00279f00.c",
+      "ui_help_00230b38.c",
+      "ui_help_002370d8.c",
+      "unclassified_002e9b70.c"
+    ],
+    "l09": [
+      "unclassified_0021e538.c"
+    ],
+    "l10": [
+      "gameplay_vendor_002df270.c",
+      "gameplay_vendor_002ea1f0.c"
+    ],
+    "l11": [
+      "gameplay_vendor_0030c788.c",
+      "gameplay_vendor_00315968.c",
+      "ui_help_0023c7a0.c",
+      "ui_help_0024db50.c",
+      "ui_help_00253a18.c"
+    ],
+    "l12": [
+      "gameplay_vendor_003028c8.c",
+      "ui_help_0022de30.c",
+      "ui_help_002400d0.c",
+      "ui_help_002461f0.c",
+      "unclassified_002bf140.c",
+      "unclassified_002ec720.c"
+    ],
+    "l13": [
+      "gameplay_vendor_003058a8.c",
+      "unclassified_002c13b0.c",
+      "unclassified_002ea8c8.c"
+    ],
+    "l14": [
+      "ui_help_0022ff58.c",
+      "ui_help_00235600.c",
+      "unclassified_002460f8.c",
+      "unclassified_002df080.c",
+      "unclassified_002fded0.c"
+    ],
+    "l15": [
+      "gameplay_vendor_002e73c0.c",
+      "ui_help_002044c8.c",
+      "ui_help_00216c38.c",
+      "ui_help_0021d040.c",
+      "unclassified_0029aff0.c"
+    ],
+    "l16": [
+      "gameplay_vendor_002e3190.c",
+      "ui_help_0021e398.c",
+      "ui_help_002270c8.c",
+      "unclassified_002a3f38.c"
+    ],
+    "l17": [
+      "gameplay_vendor_002e87d8.c",
+      "gameplay_vendor_002f26d0.c",
+      "ui_help_002020a8.c",
+      "ui_help_0021e530.c",
+      "ui_help_002258a8.c",
+      "unclassified_002a8da0.c"
+    ],
+    "l18": [
+      "gameplay_vendor_002efb88.c",
+      "gameplay_vendor_002f88e8.c",
+      "ui_help_00227dd0.c",
+      "ui_help_0022e8f8.c",
+      "unclassified_002a7220.c"
+    ],
+    "shared": [
+      "gameplay_camera_001eb188.c",
+      "gameplay_state_0024eec0.c",
+      "gameplay_state_0027b268.c",
+      "gameplay_vendor_002e3de8.c",
+      "gameplay_vendor_003015d0.c",
+      "gameplay_vendor_0030b618.c",
+      "gameplay_vendor_0030e690.c",
+      "math_interpolation_00257ef0.c",
+      "math_vectors_0025c230.c",
+      "rendering_002712b8.c",
+      "ui_help_0021d0a0.c",
+      "ui_help_00221310.c",
+      "ui_help_00229b70.c",
+      "ui_help_00231d08.c",
+      "unclassified_00278fd8.c",
+      "unclassified_00291918.c",
+      "unclassified_002937a0.c",
+      "unclassified_00295100.c",
+      "unclassified_00297d10.c",
+      "unclassified_0029f990.c",
+      "unclassified_002a09a0.c",
+      "unclassified_002a4038.c",
+      "unclassified_002aa670.c",
+      "unclassified_002aee30.c",
+      "unclassified_002b17d8.c",
+      "unclassified_002b2100.c",
+      "unclassified_002b3840.c",
+      "unclassified_002b94d0.c",
+      "unclassified_002d7f88.c",
+      "unclassified_002f6328.c"
+    ]
+  }
+}

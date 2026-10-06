@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/stream.c, func_00217830). */
+/* Ported from rac1-decomp (src/game/stream.c, func_00217830). */
 void music_channel_ready_callback(int result, long context) __asm__("FUN_00216990");
 
 void music_channel_ready_callback(int result, long context) {

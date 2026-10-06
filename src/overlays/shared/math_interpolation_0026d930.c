@@ -6,7 +6,7 @@
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0026d930(char *p)
 {
@@ -24,7 +24,7 @@ void FUN_L01_0026d930(char *p)
     *(float *)(p + 0x2C) = 0.1f;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0026e008.s", FUN_L01_0026e008);
-/* Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
 
 extern char *D_L01_0015FFD8;
 extern unsigned short *D_L01_001ABCC0[];
@@ -42,7 +42,7 @@ void FUN_L01_0026e090(int i, int v) {
 extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8")
     __attribute__((section(".sdata")));
 /* 0x0026e0e0, 88 bytes.
- * Ported from rac1-decomp (PAL, src/overlays/shared/mobyutil_0026E8E0.c:
+ * Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c:
  * func_L01_0026F090), where it is exact; names translated to the US level
  * program. The datum needs the unsplit macro form here, so it is declared
  * through an alias (same symbol, .sdata) beside its neighbour's declaration. */

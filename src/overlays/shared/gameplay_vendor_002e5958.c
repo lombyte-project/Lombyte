@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e5958.s", FUN_L15_002e5958);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L15_002eac90(void);
@@ -29,7 +29,7 @@ void FUN_L15_002eb0a0(char *moby)
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16]; char padv[16];

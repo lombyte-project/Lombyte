@@ -7,7 +7,7 @@
 #define MACRO_ADDR
 
 /* index of the nearest of n vectors to a + 0x10 */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
 
@@ -25,4 +25,40 @@ int FUN_L04_001f3038(char *a, char *b, int n) {
     return best;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f3a80.s", FUN_L04_001f3a80);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* steps a moby's position out of collision and aims it */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
+
+extern char D_L04_00173FF0[];
+extern float FUN_001f9e90(float, float);
+extern float fast_add_rotations(float, float);
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+
+void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
+    int i;
+    float v[4];
+    char *p = b + 0x10;
+    add_vector_xyz(p, p, b);
+    normalize_vector_xyz(p, p, *(float *)(c + 0x1C));
+    *(float *)(b + 0x18) = *(float *)(b + 0x18) / *(float *)(b + 0x48);
+    add_vector_xyz(a + 0x10, a + 0x10, p);
+    for (i = 0; i < 6; i++) {
+        qcopy(v, a + 0x10);
+        v[2] = v[2] + f;
+        if (FUN_L00_001f0d60(*(float *)(c + 0x10) * 0.25f, v, 4, a)) {
+            qcopy(a + 0x10, D_L04_00173FF0);
+            *(float *)(a + 0x18) = *(float *)(a + 0x18) - f;
+        } else {
+            break;
+        }
+    }
+    *(float *)(a + 0x48) = fast_add_rotations(FUN_001f9e90(*(float *)(b + 0x10), *(float *)(b + 0x14)), 3.14159265f);
+}

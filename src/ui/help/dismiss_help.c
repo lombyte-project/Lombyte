@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp, the PAL decompilation (src/game/help.c, func_001FE438). */
+/* Ported from rac1-decomp (src/game/help.c, func_001FE438). */
 typedef struct {
     int state;    /* 0x00 */
     int x04;      /* 0x04 */
