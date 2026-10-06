@@ -142,11 +142,12 @@ find_free_slot:
             goto allocation_failed;
         }
         state += 0x70;
-        if (*state == 0) {
+        if (*state != 0) {
+            slot_index += 1;
+            continue;
+        }
             slot_in_bounds = slot_index < slot_limit;
             break;
-        }
-        slot_index += 1;
     } while (1);
 slot_found:
     if (!slot_in_bounds) {
