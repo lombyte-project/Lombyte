@@ -80,7 +80,6 @@ retry:
     line_count = 0;
     position = 0;
     while (position != character_limit && text[position] != 0) {
-        next_line_count = line_count + 1;
         line_starts[line_count] = position;
         line_colors[line_count] = current_color;
         break_position = position;
@@ -111,7 +110,7 @@ retry:
         if (text[position] == ' ' || text[position] < 0x10) {
             line_ends[line_count]--;
         }
-        line_count = next_line_count;
+        line_count++;
         if (text[position] == 0) {
                 goto terminal_line;
         }
