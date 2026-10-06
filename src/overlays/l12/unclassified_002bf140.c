@@ -716,5 +716,69 @@ void FUN_L12_002ebca8(char *m, int flag) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ebea8.s", FUN_L12_002ebea8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ec1d0.s", FUN_L12_002ec1d0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Idle critter: waits a random time, then plays one of its fidget animations (or reacts when the hero comes close). */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED550), where it is exact; names translated to the US level program. */
+
+extern char D_0013F3D0[];
+extern float FUN_001f9b80(void *, void *);
+extern int FUN_L00_001fefc8(void *);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+
+void FUN_L12_002ec1d0(unsigned char *m) {
+    float dist = FUN_001f9b80(m + 0x10, D_0013F3D0);
+    switch (m[0x20]) {
+    case 0:
+        if (m[0x53] != 0) blend_moby_animation(m, 0, 0, 0);
+        m[0x20] = 1;
+        m[0xBC] = random_integer_below(scale_game_frames(0xB4));
+        break;
+    case 1:
+        if (m[0x52] == 0 && dist < 9.0f && m[0xBC] < 2) m[0xBC] = 2;
+        if (dist < 12.0f && m[0x52] == m[0x53] && m[0x52] != 0) m[0xBC] = 0;
+        if (FUN_L00_001fefc8(m + 0xBC)) {
+            switch (m[0x52]) {
+            case 0:
+                if (random_integer_below(0x100) & 1) {
+                    if (m[0x53] != 3) blend_moby_animation(m, 3, 0, 0);
+                } else {
+                    if (m[0x53] != 5) blend_moby_animation(m, 5, 0, 0);
+                }
+                break;
+            case 1:
+                if (m[0x53] != 4) blend_moby_animation(m, 4, 0, 0);
+                break;
+            case 2:
+                if (m[0x53] != 6) blend_moby_animation(m, 6, 0, 0);
+                break;
+            }
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (m[0x70] & 2) {
+            switch (m[0x52]) {
+            case 3:
+                if (m[0x53] != 1) blend_moby_animation(m, 1, 0, 0);
+                break;
+            case 4:
+            case 6:
+                if (m[0x53] != 0) blend_moby_animation(m, 0, 0, 0);
+                break;
+            case 5:
+                if (m[0x53] != 2) blend_moby_animation(m, 2, 0, 0);
+                break;
+            }
+            m[0x20] = 1;
+            m[0xBC] = random_integer_below(scale_game_frames(0xB4));
+        }
+        break;
+    }
+}
 
