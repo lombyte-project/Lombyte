@@ -777,7 +777,52 @@ unsigned char *FUN_L14_002bb310(char *owner, float angle, char *posp) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d5f40.s", FUN_L14_002d5f40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6358.s", FUN_L14_002d6358);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
+/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float v[4];
+    int i;
+    float t;
+} PathPos_2D7668;
+
+extern int *D_L14_001B0BB0[];
+extern int D_L14_0015F70C;
+extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
+extern float D_L14_00161A38 __attribute__((sda));
+
+void FUN_L14_002d6358(char *m) {
+    char *d = *(char **)(m + 0x78);
+    char *path = *(char **)(D_L14_0015F70C + *(int *)(d + 0x60) * 32 + 0x10);
+    char *tg;
+    PathPos_2D7668 s;
+    int k;
+    float z;
+    unsigned short n;
+    *(float *)(d + 0x74) = D_L14_00161A38;
+    *(int *)(d + 0x68) = 0;
+    *(int *)(d + 0x64) = 0;
+    z = *(float *)(d + 0x68);
+    tg = (char *)D_L14_001B0BB0[*(int *)(d + 0x88)] + 0x30;
+    s.t = z;
+    s.i = 0;
+    FUN_L00_0025df68(path, tg, s.v, &s.i, &s.t, 0, 20.0f, 5.0f, z);
+    *(short *)(d + 0x8C) = s.i;
+    s.t = z;
+    s.i = 0;
+    FUN_L00_0025df68(path, (char *)D_L14_001B0BB0[*(int *)(d + 0x88)] + 0x20, s.v, &s.i, &s.t, 0, 20.0f, 5.0f, z);
+    n = s.i;
+    *(short *)(d + 0x8E) = n;
+    *(float *)(d + 0x78) = z;
+    for (k = (short)n; k < *(short *)(d + 0x8C); k++) {
+        *(float *)(d + 0x78) += *(float *)(path + k * 16 + 0x1C);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d64d0.s", FUN_L14_002d64d0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d6570.s", FUN_L14_002d6570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d67e8.s", FUN_L14_002d67e8);
