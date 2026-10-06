@@ -192,8 +192,7 @@ layout:
     }
     font_window_active = 0;
     left_width = D_0013E500[0];
-    right_width = D_0013E500[1];
-    vu1_set_scissor(0, left_width - 1, 0, right_width - 1);
+    vu1_set_scissor(0, left_width - 1, 0, D_0013E500[1] - 1);
 }
 
 extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));
