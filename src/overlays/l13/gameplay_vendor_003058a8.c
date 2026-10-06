@@ -393,7 +393,36 @@ void FUN_L13_0030bb70(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bdf0.s", FUN_L13_0030bdf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030be60.s", FUN_L13_0030be60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030bfb0.s", FUN_L13_0030bfb0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D468), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L13_0030bfb0(char *owner, void *position, float scale) {
+    char *moby = func_0020D348_m(0x660);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(char **)(data + 0x60) = owner;
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * scale;
+        qcopy(moby + 0x10, position);
+        if (owner != 0) {
+            *(int *)(data + 0x64) = *(short *)(owner + 0xA6);
+        }
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 #include "qcopy.h"
 
 /* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
