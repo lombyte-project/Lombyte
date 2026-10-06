@@ -676,7 +676,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_0015ED64;
 extern float D_0015ED6C;
-extern float D_0015ED70;
+extern float D_0015ED70_m[] __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_L18_0015F3FC;
 extern float D_L18_0015F580[] __attribute__((section(".sdata")));
 extern float D_L18_001677C0[];
@@ -942,7 +942,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 2:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if (d->f38C <= 301.0f) {
@@ -1010,7 +1010,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         qcopy(v0, d->f340 + 4);
         hit = FUN_L18_002f6878((char *)moby, 20.0f, v0);
@@ -1069,9 +1069,9 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
-        approach_value(&d->f374, D_0015ED6C * 12.0f, D_0015ED70 * 20.0f);
+        approach_value(&d->f374, D_0015ED6C * 12.0f, D_0015ED70_m[0] * 20.0f);
         if (d->f374 != 0.0f) {
             subtract_vector_xyz(v0, (char *)d->f340 + (d->f348 * 0x10 + 0x10), d->f3C0);
             if (vector_length_xyz(v0) <= d->f374) {
@@ -1105,7 +1105,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     }
     case 0xB:
         if (d->f348 != *d->f340) {
-            approach_value(&d->f374, D_0015ED6C * 10.0f, D_0015ED70 * 20.0f);
+            approach_value(&d->f374, D_0015ED6C * 10.0f, D_0015ED70_m[0] * 20.0f);
             subtract_vector_xyz(v0, (char *)d->f340 + (d->f348 * 0x10 + 0x10), d->f3C0);
             if (vector_length_xyz(v0) <= d->f374) {
                 d->f348 = d->f348 + 1;
@@ -1222,7 +1222,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0xC:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if ((moby->f70 & 2) == 0) {
@@ -1308,7 +1308,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0xE:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(d->f320[0] - moby->f10[0], d->f320[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L00_0024f7c8(moby, 0x13, v0);
         *(BossTI *)v1 = *(BossTI *)d->f320;
@@ -1358,7 +1358,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0xF:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 || is_value_within_interpolated_window((char *)moby, 16.0f) != 0) {
@@ -1420,7 +1420,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0xD:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(tgt->f10[0] - moby->f10[0], tgt->f10[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if (d->f354 < d->f358 + d->f35C) {
@@ -1468,7 +1468,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0x10:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if (tick_countdown_32_alt(&d->f354) != 0) {
@@ -1506,7 +1506,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         if ((moby->f70 & 2) != 0 && moby->f53 != 12) {
@@ -1547,7 +1547,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         if (tick_countdown_32_alt(&d->f354) != 0) {
             FUN_L18_002f6960((char *)moby);
@@ -1596,7 +1596,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0x12:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(d->f70[0] - moby->f10[0], d->f70[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         {
             /* Retail scales the index before it sets up the call. */
@@ -1614,7 +1614,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     case 0x15:
         aim = &moby->f40[2];
         ang = FUN_001f9e90(d->f330->f10[0] - moby->f10[0], d->f330->f10[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002d6dc0(d->f330);
         if (FUN_L18_002f6878((char *)moby, D_0015ED6C * 12.0f, d->f330->f10) != 0) {
@@ -1660,7 +1660,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 
         aim = &moby->f40[2];
         ang = FUN_001f9e90(D_0013F350.f80[0] - moby->f10[0], D_0013F350.f80[1] - moby->f10[1]);
-        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70 * 6.2831855f, D_0015ED70 * 6.2831855f,
+        FUN_L00_0025be00(aim, &d->f370, ang, D_0015ED70_m[0] * 6.2831855f, D_0015ED70_m[0] * 6.2831855f,
                           D_0015ED6C * 6.2831855f);
         FUN_L18_002f6aa0((char *)moby);
         d->f358 = d->f358 + 1;
@@ -1779,7 +1779,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
     slow = 0.3f;
     fast = 0.03f;
     d->f3D4 = fast_add_rotations(d->f3D4, D_0015ED6C * 3.1415927f);
-    aas_c(d->f3D0 * fast_sin(d->f3D4) + d->f3D8, D_0015ED70 * 4.0f, D_0015ED70 * 4.0f,
+    aas_c(d->f3D0 * fast_sin(d->f3D4) + d->f3D8, D_0015ED70_m[0] * 4.0f, D_0015ED70_m[0] * 4.0f,
                   D_0015ED6C * 4.0f, &d->f3DC, &d->f3E0);
     moby->f10[2] = moby->f10[2] + d->f3DC;
     d->f3D8 = 0.0f;
@@ -1828,7 +1828,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f5e80.s", FUN_L18_002f5e80);
 /* steps a moby's offset vector toward a target, returns whether both settled */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7CD8), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED70;
 extern float FUN_001f9af0(void *);
 extern float FUN_00213f38(float, float, float, float, float *, float *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -1846,7 +1845,7 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     FUN_001f9a28(a, x, p);
     a[2] = v;
     len = FUN_001f9af0(a);
-    s = D_0015ED70 * 10.0f;
+    s = D_0015ED70_m[0] * 10.0f;
     FUN_00213f38(len, s, s, arg, b, (float *)(data + 0x374));
     FUN_001f9bf8(a, a, *(float *)(data + 0x374));
     FUN_001f9a10(p, p, a);
@@ -2353,7 +2352,6 @@ void FUN_L18_002f7c40(M1454 *m) {
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013F3D0[];
 extern float D_0015ED6C;
-extern float D_0015ED70;
 extern float D_L18_0015F580[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -2447,11 +2445,11 @@ void FUN_L18_002f8050(void *mv) {
         } else if (b < -0.7853982f) {
             b = -0.7853982f;
         }
-        FUN_L00_0025be00((float *)(d + 0x110), (float *)(d + 0x114), a, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 9.424778f);
-        FUN_L00_0025be00((float *)(d + 0x118), (float *)(d + 0x11C), b, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 9.424778f);
+        FUN_L00_0025be00((float *)(d + 0x110), (float *)(d + 0x114), a, D_0015ED70_m[0] * 12.566371f, D_0015ED70_m[0] * 12.566371f, D_0015ED6C * 9.424778f);
+        FUN_L00_0025be00((float *)(d + 0x118), (float *)(d + 0x11C), b, D_0015ED70_m[0] * 12.566371f, D_0015ED70_m[0] * 12.566371f, D_0015ED6C * 9.424778f);
     } else {
-        FUN_L00_0025be00((float *)(d + 0x110), (float *)(d + 0x114), *(float *)(m + 0x48), D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 9.424778f);
-        FUN_L00_0025be00((float *)(d + 0x118), (float *)(d + 0x11C), 0.0f, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 9.424778f);
+        FUN_L00_0025be00((float *)(d + 0x110), (float *)(d + 0x114), *(float *)(m + 0x48), D_0015ED70_m[0] * 12.566371f, D_0015ED70_m[0] * 12.566371f, D_0015ED6C * 9.424778f);
+        FUN_L00_0025be00((float *)(d + 0x118), (float *)(d + 0x11C), 0.0f, D_0015ED70_m[0] * 12.566371f, D_0015ED70_m[0] * 12.566371f, D_0015ED6C * 9.424778f);
     }
     FUN_L00_001fff28(v, 1, *(float *)(d + 0x118));
     FUN_L00_001fff28(d + 0xD0, 2, fast_subtract_rotations(*(float *)(d + 0x110), *(float *)(m + 0x48)));
@@ -2477,12 +2475,12 @@ void FUN_L18_002f8658(char *m) {
     char *p;
     qcopy(t, (char *)D_L18_001B0EB0[*(int *)(d + 0x100)] + *(int *)(d + 0x120) * 16 + 0x10);
     ang = FUN_001f9e90(t[0] - *(float *)(m + 0x10), t[1] - *(float *)(m + 0x14));
-    FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0x128), ang, D_0015ED70 * 3.1415927f, D_0015ED70 * 3.1415927f, D_0015ED6C * 6.2831855f);
+    FUN_L00_0025be00((float *)(m + 0x48), (float *)(d + 0x128), ang, D_0015ED70_m[0] * 3.1415927f, D_0015ED70_m[0] * 3.1415927f, D_0015ED6C * 6.2831855f);
     f = *(float *)&D_L18_00162478 * D_0015ED6C;
     if (FUN_001fa688(ang, *(float *)(m + 0x48)) > 0.2617994f) {
         f = D_0015ED6C_g;
     }
-    approach_value((float *)(d + 0x12C), f, D_0015ED70);
+    approach_value((float *)(d + 0x12C), f, D_0015ED70_m[0]);
     z = 0.0f;
     normalize_vector_xyz(v, m + 0xC0, *(float *)(d + 0x12C));
     FUN_L00_00258830((int)m, (int)v, 0.5f, 0.5f, z, 0);
