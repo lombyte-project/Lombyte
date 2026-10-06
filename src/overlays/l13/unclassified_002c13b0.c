@@ -2,7 +2,48 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c13b0.s", FUN_L13_002c13b0);
+#include "qcopy.h"
+
+extern char *CreateMoby_c13(int) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8(void *);
+extern char *FUN_L00_0026daa0(char *, int, int, int, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
+
+unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, int arg, float scale, float f2) {
+    unsigned char *moby = (unsigned char *)CreateMoby_c13(0x52);
+    if (moby != 0) {
+        char *data = *(char **)(moby + 0x78);
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        moby[0x20] = 0;
+        *(char **)(data + 0x24) = target;
+        *(char **)(data + 0x20) = src;
+        qcopy(moby + 0x10, pos);
+        qcopy(moby + 0x40, vec);
+        {
+            float *sp = &scale;
+            *(float *)(data + 0x2C) = *sp;
+        }
+        *(float *)(data + 0x38) = f2;
+        *(int *)(data + 0x28) = arg;
+        *(int *)(data + 0x30) = 0;
+        *(int *)(data + 0x34) = 0;
+        qcopy(data, *(char **)(src + 0x78) + 0xC0);
+        if (moby[0x53] != 1) {
+            blend_moby_animation_c13(moby, 1, 0, 10);
+        }
+        add_vector_xyz(moby + 0x10, moby + 0x10, data);
+        if (*(char **)(data + 0x24) != 0) {
+            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        }
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
+        FUN_L00_00250df8(moby);
+        FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c1528.s", FUN_L13_002c1528);
 #define NOT_SDA
 
