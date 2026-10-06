@@ -4,7 +4,7 @@
    retail's block, one instruction stream for all 30 instructions. */
 
 #include "types.h"
-#include "rnc/ui_menus_fun_00208f28_types.h"
+#include "rnc/ui_menus_save_data_save_card_state_types.h"
 
 extern struct M2c_D_0013D290 D_0013D290;
 extern s32 D_0015EEB0;

@@ -1,4 +1,4 @@
-#include "rnc/video_decoder_fun_0023ba60_types.h"
+#include "rnc/video_decoder_read_cd_stream_sectors_types.h"
 #include "types.h"
 
 extern s32 sceCdRead(s32, s32, s32, u8 *);
