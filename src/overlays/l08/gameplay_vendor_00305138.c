@@ -529,7 +529,29 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00306b30.s", FUN_L08_00306b30);
+extern void FUN_L00_00211250(void);
+
+/* Set the object state, then apply the requested payload mode. */
+void FUN_L08_00306b30(u8 *object, s32 mode)
+{
+    u8 *payload;
+
+    object[0x20] = 1;
+    payload = *(u8 **)(object + 0x78);
+    switch (mode) {
+    case 1:
+        payload[8] = 1;
+        *(s16 *)(payload + 0x36) = 3;
+        break;
+    case 0:
+        payload[8] = 1;
+        *(s16 *)(payload + 0x36) = 4;
+        break;
+    case -1:
+        FUN_L00_00211250();
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
 
 /* per-frame update of a moby that fires a sound event when the game state allows */
