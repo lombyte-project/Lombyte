@@ -20,7 +20,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) __as
 
 void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
     s32 count;
-    register s32 *class_resource_slot;
+    s32 *class_resource_slot;
     s32 read_address;
     s32 buffer_address;
     s32 compressed_size;
@@ -39,7 +39,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
     preview_stream_state.resource_first = first_resource;
     if (count > 0) {
         resource_offset = first_resource * 4;
-        binding = (PreviewResourceBinding *)(preview_resource_bindings + (first_resource * 8));
+        binding = ((PreviewResourceBinding *)preview_resource_bindings) + first_resource;
         do {
             buffer_skip = 0;
             class_slot = class_resource_slots[binding->class_id];
@@ -64,7 +64,7 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             stash_receive_data(read_address, resource_id, 0, -1, 0);
             decompress_wad(read_address, buffer_address);
             {
-                register s32 animation_offset = animation_index * 4;
+                s32 animation_offset = animation_index * 4;
                 class_resource_slot = (class_slot * 4) + moby_class_resources;
                 *((s32 *)(((u8 *)((*class_resource_slot) + animation_offset)) + 0x48)) =
                     buffer_address;
