@@ -4,12 +4,7 @@
 
 #include "rnc/math/vector.h"
 
-struct Moby {
-    u8 pad0[0x18];
-    f32 unk18;
-    u8 pad1C[0x8A];
-    s16 unkA6;
-};
+#include "rnc/gameplay/entities/moby.h"
 
 struct Player {
     u8 pad0[0x80];
@@ -113,17 +108,17 @@ void FUN_001ed470(void) {
     cam->hist[i] = D_0013F350.unk98;
 
     m = D_0013F350.unk2FC;
-    if (m != NULL && m->unkA6 != 0x4BA && m->unkA6 != 0x336) {
+    if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {
         if (m == cam->unkD4) {
-            cam->unkDC = m->unk18 - cam->unkD8;
+            cam->unkDC = m->pos.z - cam->unkD8;
             if (AbsoluteFloat(cam->unkDC) < 0.001f) {
                 cam->unkDC = 0.0f;
             }
-            cam->unkD8 = cam->unkD4->unk18;
+            cam->unkD8 = cam->unkD4->pos.z;
         } else {
             cam->unkD4 = m;
             cam->unkDC = 0.0f;
-            cam->unkD8 = m->unk18;
+            cam->unkD8 = m->pos.z;
         }
     } else {
         cam->unkDC = 0.0f;

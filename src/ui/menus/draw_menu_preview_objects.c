@@ -1,10 +1,5 @@
 #include "types.h"
-struct Moby {
-    u8 pad0[0x50];
-    u64 tag;
-    u8 pad58[0x4E];
-    s16 oclass;
-};
+#include "rnc/gameplay/entities/moby.h"
 struct MenuPreviewObject {
     u8 pad0[0x50];
     u64 tag;
