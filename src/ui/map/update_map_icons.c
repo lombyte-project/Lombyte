@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/map_state.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
@@ -44,13 +45,6 @@ typedef struct {
     f32 z;
 } MapWorldObject;
 
-struct MapState {
-    u8 pad0[0x20];
-    MapIcon *icons;
-    u8 pad24[0xE0];
-    s32 pan_x[20];
-    s32 pan_y[20];
-};
 
 struct MapCursor {
     u8 pad0[0x80];
@@ -61,7 +55,6 @@ struct MapCursor {
 
 extern u8 D_0013DD58[];
 extern MapIcon *D_001A2BC0[];
-extern struct MapState D_001A00F0;
 extern s32 D_001A01F4[];
 extern struct MapCursor D_0013F350;
 extern s32 D_0015ED84;

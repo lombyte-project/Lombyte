@@ -1,10 +1,5 @@
 #include "types.h"
-struct M2c_D_001A00F0 {
-    u8 pad_0[0x278];
-    s32 unk278[5];
-    s32 unk28C[5];
-};
-extern struct M2c_D_001A00F0 D_001A00F0;
+#include "rnc/map_state.h"
 extern s32 find_free_map_slot() __asm__("func_00204EF8");
 extern s32 move_map_entry_slot() __asm__("func_00205000");
 
@@ -18,7 +13,7 @@ s32 promote_first_available_map_entry(void) {
         return i;
     }
     for (i = 1; i < 5; i++) {
-        if (!(D_001A00F0.unk28C[i] & 0x1000) && D_001A00F0.unk278[i] != 0) {
+        if (!(D_001A00F0.slot_id[i] & 0x1000) && D_001A00F0.slot[i] != 0) {
             break;
         }
     }

@@ -1,3 +1,4 @@
+#include "rnc/map_state.h"
 #include "types.h"
 
 struct Pad {
@@ -34,32 +35,6 @@ struct MapHdr {
     s32 unk18;
 };
 
-struct MapState {
-    u8 pad0[0xC];
-    s32 unkC;
-    u8 pad10[0x214];
-    s32 cur;
-    s32 loaded;
-    s32 unk22C;
-    s32 unk230;
-    s32 unk234;
-    u8 pad238[0x4];
-    struct MapHdr *hdr;
-    s32 unk240;
-    s32 unk244;
-    s32 unk248;
-    s32 unk24C;
-    s32 unk250;
-    u8 pad254[0x4];
-    s64 unk258;
-    s64 unk260;
-    s64 unk268;
-    u8 pad270[0x8];
-    s32 slot[5];
-    s32 flags[5];
-    s32 sel;
-    s32 vals[5];
-};
 
 struct MapEntry {
     s32 a;
@@ -80,7 +55,6 @@ struct Hdr16 {
 
 extern struct Pad D_0013C940;
 extern struct MenuSys D_001D5BF0;
-extern struct MapState D_001A00F0;
 extern struct Hdr16 D_001516D0;
 extern s32 D_001D5D14[];
 extern u8 *D_001D5BF8[];
@@ -245,7 +219,7 @@ s32 draw_map_screen(struct Screen *arg0)
     if (D_001516D0.unk8 == 0) {
         if (D_001A00F0.sel != -1) {
             D_001D5CBB[0] = 0;
-            D_001A00F0.flags[D_001A00F0.sel] ^= 0x1000;
+            D_001A00F0.slot_id[D_001A00F0.sel] ^= 0x1000;
             D_001A00F0.sel = -1;
         }
     }
@@ -258,7 +232,7 @@ s32 draw_map_screen(struct Screen *arg0)
                 k = (D_0015ED84 + D_001A00F0.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
                     stash_receive_data(D_001A00F0.slot[pick], D_001A00F0.unk22C, 0, D_001A00F0.unk234, 0);
-                    D_001A00F0.vals[pick] = D_001A00F0.unk234;
+                    D_001A00F0.slot_size[pick] = D_001A00F0.unk234;
                 } else {
                     if (next & 0x100) {
                         e = &D_00138438[next ^ 0x100];
@@ -267,9 +241,9 @@ s32 draw_map_screen(struct Screen *arg0)
                     }
                     start_audio_stream_read(D_001A00F0.slot[pick], e->a, e->b);
                     D_001D5CBB[0] = 1;
-                    D_001A00F0.vals[pick] = (e->b << 11) >> 4;
+                    D_001A00F0.slot_size[pick] = (e->b << 11) >> 4;
                 }
-                D_001A00F0.flags[pick] = next | 0x1000;
+                D_001A00F0.slot_id[pick] = next | 0x1000;
                 D_001A00F0.sel = pick;
             }
         }
