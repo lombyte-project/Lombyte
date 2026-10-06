@@ -672,7 +672,49 @@ void FUN_L02_002df1a8(unsigned char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df3d8.s", FUN_L02_002df3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df730.s", FUN_L02_002df730);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E0B68), where it is exact; names translated to the US level program. */
+
+extern char D_L02_001673C0[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern float D_0015ED6C;
+extern int D_001413D4 __attribute__((section(".data")));
+extern int FUN_L00_0028df38(int, int);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L02_00161C80 __attribute__((sda));
+extern short D_L02_00161C88 __attribute__((sda));
+extern short D_L02_00161C8C __attribute__((sda));
+extern short D_L02_00161C90 __attribute__((sda));
+extern short D_L02_00161C94 __attribute__((sda));
+s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, void *target) __asm__("FUN_0022da68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002df730(char *moby) {
+ char *data = *(char **)(moby + 0x78);
+ float distance;
+ int sound_a, sound_b, gain_a, gain_b;
+ if (*(float *)(data + 0x10) >= 0.0f) {
+  distance = distance_xyz(D_L02_001673C0, moby + 0x10);
+  *(float *)(data + 0x10) += *(float *)&D_L02_00161C80 * D_0015ED6C;
+  if (distance < *(float *)(data + 0x10) && D_001413D4 != 0x72) {
+   sound_a = allocate_voice_for_target_entry(0, 0x10, (int)moby);
+   sound_b = allocate_voice_for_target_entry(1, 0x10, (int)moby);
+   gain_a = func_001FA898_r((1.0f - (distance - *(float *)&D_L02_00161C88) / (*(float *)&D_L02_00161C8C - *(float *)&D_L02_00161C88)) * 1024.0f);
+   gain_b = func_001FA898_r(((distance - *(float *)&D_L02_00161C90) / (*(float *)&D_L02_00161C94 - *(float *)&D_L02_00161C90)) * 1024.0f);
+   if (gain_a > 1024) gain_a = 1024;
+   else if (gain_a < 0) gain_a = 0;
+   if (gain_b > 1024) gain_b = 1024;
+   else if (gain_b < 0) gain_b = 0;
+   FUN_L00_0028df38(sound_a, gain_a);
+   FUN_L00_0028df38(sound_b, gain_b);
+   *(float *)(data + 0x10) = -1.0f;
+  }
+ }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002df948.s", FUN_L02_002df948);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E1400), where it is exact; names translated to the US level program. */
 
