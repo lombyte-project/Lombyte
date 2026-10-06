@@ -124,9 +124,7 @@ s32 service_level_archive_load(void) {
         break;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        level_archive_sectors = *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12CC);
-        archive_start_or_sectors = next_disc_entry->start_sector;
-        submit_audio_stream_io_request(D_0015EE54, archive_start_or_sectors, level_archive_sectors);
+        submit_audio_stream_io_request(D_0015EE54, *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12C8), *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
