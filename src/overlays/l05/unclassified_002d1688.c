@@ -209,7 +209,60 @@ void FUN_L05_00307480(char *moby, int a1, int a2, int a3) {
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1e30.s", FUN_L05_002d1e30);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1fd8.s", FUN_L05_002d1fd8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Spawns a burst of particles and a ring of sparks around a position. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D3220), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_002d7e90(void *, float);
+extern char D_L05_0015F580[] __attribute__((section(".sdata")));
+extern float D_0015ED6C;
+extern float FUN_001f96b0(float);
+extern float fast_cos(float);
+extern float fast_sin(float);
+extern float random_angle_radians(void);
+extern float random_float_between(float, float);
+extern float D_L05_001612E8;
+extern int FUN_L00_00257b90(int, int);
+extern int random_integer_below(int);
+extern int truncate_float_to_s32();
+extern unsigned char *FUN_L00_002718d0(void *, void *, void *, float, float);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void add_vector_xyz(void *, void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L05_002d1fd8(int unused, char *p) {
+    float v[4];
+    char *r;
+    int i;
+    char *base;
+    int n;
+    r = FUN_L00_002d7e90(p, 3.0f);
+    if (r) r[0x23] = 0x70;
+    for (base = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {
+        float ang = random_angle_radians();
+        float k = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+        v[0] = fast_cos(ang) * k;
+        v[1] = fast_sin(ang) * k;
+        v[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+        n = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(p, v, random_integer_below(2), n);
+    }
+    for (i = 0; i < 16; i++) {
+        unsigned char *q;
+        FUN_L00_00257d78(v, 1.0f, 1.0f);
+        add_vector_xyz(v, v, p);
+        v[2] = D_L05_001612E8 + 0.05f;
+        q = FUN_L00_002718d0(v, D_L05_0015F580, base, random_float_between(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
+        if (q) {
+            *(short *)(q + 0xA) = func_001FA898_r(FUN_001f96b0(random_float_between(30.0f, 60.0f)));
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7020.s", FUN_L05_002d7020);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7140.s", FUN_L05_002d7140);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
@@ -223,7 +276,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L01_00287158(float *, float, float, int, int, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
