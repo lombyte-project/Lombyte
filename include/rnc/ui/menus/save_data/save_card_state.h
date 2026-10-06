@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_0013D290 {
+struct SaveSlotTable {
     u8 pad_0[0xD4];
     s32 unkD4;
     u8 pad_D8[0x4];

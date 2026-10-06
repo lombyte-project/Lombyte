@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MobyView {
     u8 pad_0[0x2C];
     s32 unk2C;
 };

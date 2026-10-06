@@ -2,6 +2,6 @@
 
 extern volatile s32 D_001611E0;
 
-void ClearStageStateFlag(void) {
+void end_display(void) {
     D_001611E0 = 0;
 }

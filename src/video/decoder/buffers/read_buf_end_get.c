@@ -1,19 +1,19 @@
 #include "types.h"
-struct StateTable {
+struct ReadBuf {
     u8 pad_0[0x50004];
-    s32 unk50004;
+    s32 count;
 };
 
-s32 GetStateTableWord(struct StateTable *table, s32 requested) {
+s32 read_buf_end_get(struct ReadBuf *table, s32 requested) {
     s32 taken;
     s32 result;
 
-    taken = table->unk50004;
+    taken = table->count;
     result = taken;
     if (requested < taken) {
         taken = requested;
     }
     result -= taken;
-    table->unk50004 = result;
+    table->count = result;
     return taken;
 }

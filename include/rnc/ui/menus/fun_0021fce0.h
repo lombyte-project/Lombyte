@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x34];
     s32 unk34;
     u8 pad_38[0xC];

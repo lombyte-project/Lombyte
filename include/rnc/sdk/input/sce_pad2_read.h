@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_temp_2_27 {
+struct Pad2Data {
     u8 pad_0[0x2];
     u8 unk2;
     u8 pad_3[0x1];

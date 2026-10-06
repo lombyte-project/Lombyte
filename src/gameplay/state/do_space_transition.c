@@ -1,10 +1,10 @@
 #include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
 
-extern struct M2c_D_0013D290 D_0013D290;
-extern struct M2c_D_0013DD40 D_0013DD40;
+extern struct SaveSlotTable D_0013D290;
+extern struct Globals_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
-extern struct M2c_D_0013E030 D_0013E030;
+extern struct Globals_0013E030 D_0013E030;
 extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
@@ -15,9 +15,9 @@ extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
 extern s32 D_0015F604;
 extern s32 D_0015F618 MACRO_ADDR;
-extern struct M2c_D_0015F634 *D_0015F634;
-extern struct M2c_D_0018CD00 D_0018CD00;
-extern struct M2c_D_00194100 D_00194100;
+extern struct Globals_0015F634 *D_0015F634;
+extern struct Globals_0018CD00 D_0018CD00;
+extern struct Globals_00194100 D_00194100;
 extern u8 D_001E8988[];
 
 extern void DebugPrint();

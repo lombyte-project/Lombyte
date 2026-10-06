@@ -12,7 +12,7 @@ extern u8 D_001602A0[];
 extern u8 D_001602B8[];
 extern u8 D_001602C0[];
 extern u8 D_001602D0[];
-extern struct M2c_D_001D5BF4 *D_001D5BF4[];
+extern struct ModeRef *D_001D5BF4[];
 struct ImageEntry {
     u8 pad0[8];
     u16 unk8;
@@ -36,7 +36,7 @@ s32 FUN_0021f158(s32 arg0) {
     s32 temp_17_38;
     s32 temp_18_40;
     struct ImageEntry *entry;
-    struct M2c_temp_3_15 *temp_3_15;
+    struct MenuItem *temp_3_15;
     u8 *end_ptr;
 
     temp_3_15 = D_001D5BF4[0]->unk40;

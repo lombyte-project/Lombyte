@@ -6,7 +6,7 @@ extern s32 _ipuVdec();
 extern s32 _nextBit();
 extern s32 decode_motion_vector() __asm__("func_001280A8");
 
-void _motionVector(s32 arg0, struct M2c_arg1 *arg1, struct M2c_arg2 *arg2, s32 arg3, s32 arg4,
+void _motionVector(s32 arg0, struct MotionVector *arg1, struct MotionVectorStore *arg2, s32 arg3, s32 arg4,
                    s32 arg5, s32 arg6, s32 arg7) {
     s32 code;
     s32 bits;

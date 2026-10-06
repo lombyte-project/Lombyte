@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_00137B80 {
+struct Globals_00137B80 {
     u8 pad_0[0x1528];
     s32 unk1528;
     s32 unk152C;
@@ -11,12 +11,12 @@ struct M2c_D_00137B80 {
 
 #include "rnc/audio/music/music_stream_state.h"
 
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0x10C];
     s32 unk10C;
 };
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x10];
     s32 unk10;
     u8 pad_14[0x24];
@@ -26,7 +26,7 @@ struct M2c_arg0 {
     s32 unk54;
 };
 
-struct M2c_var_3_15 {
+struct WordCell {
     s32 unk0;
 };
 

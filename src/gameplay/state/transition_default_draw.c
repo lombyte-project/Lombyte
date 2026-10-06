@@ -9,7 +9,7 @@ extern f32 D_0015F43C;
 extern s32 D_0015F464;
 extern s32 D_0015F604;
 extern s32 D_0015F620;
-extern struct M2c_D_0016045C *D_0016045C;
+extern struct Globals_0016045C *D_0016045C;
 extern s32 D_0018A2E8[];
 extern u8 D_00193FC0[];
 extern u8 D_001D8EB0[];

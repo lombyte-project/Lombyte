@@ -22,7 +22,7 @@ extern s32 _sendIpuCommand();
 extern s32 _setDefaultQM();
 extern s32 _waitIpuIdle();
 
-void _sequenceHeader(struct M2c_arg0 *mpeg) {
+void _sequenceHeader(struct MpegDecoder *mpeg) {
     s32 height;
     u32 temp_2_12;
     u32 temp_2_24;
@@ -64,7 +64,7 @@ void _sequenceHeader(struct M2c_arg0 *mpeg) {
         _setDefaultQM(mpeg, 0x58000000, D_00133000);
     }
     _extensionAndUserData(mpeg);
-    func_0012C4C8((struct M2c_arg0__func_0012C4C8 *)mpeg->unk858);
+    func_0012C4C8((struct MpegContext *)mpeg->unk858);
 }
 
 extern s32 InitializeReferenceImage();
@@ -72,7 +72,7 @@ extern s32 _initRefImages();
 extern s32 func_0012BC10();
 extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
-void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
+void func_0012C4C8(struct MpegContext *arg0) {
     s32 *sp30;
     s32 *sp34;
     s32 *sp38;
@@ -89,7 +89,7 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *temp_19_67;
     s32 *temp_20_71;
     s32 *temp_21_73;
-    struct M2c_temp_30_15__func_0012C4C8 *temp_30_15;
+    struct MpegDecoderPriv *temp_30_15;
     u8 *var_2_53;
 
     mpeg = arg0->unk40;

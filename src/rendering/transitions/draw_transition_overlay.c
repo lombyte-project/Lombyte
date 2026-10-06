@@ -1,13 +1,13 @@
 #include "rnc/rendering/transitions/draw_transition_overlay.h"
 #include "types.h"
 
-extern struct M2c_D_00151780 D_00151780;
+extern struct Globals_00151780 D_00151780;
 extern u8 D_001A00F0[];
 extern void draw_textured_quad() __asm__("func_001F5450");
 
-s32 draw_transition_overlay(struct M2c_arg0 *transition) __asm__("FUN_0021fc68");
+s32 draw_transition_overlay(struct TransitionState *transition) __asm__("FUN_0021fc68");
 
-s32 draw_transition_overlay(struct M2c_arg0 *transition) {
+s32 draw_transition_overlay(struct TransitionState *transition) {
     if (transition->unk44 < 2) {
         return 0;
     }

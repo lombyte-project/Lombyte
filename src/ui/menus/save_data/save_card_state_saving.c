@@ -6,7 +6,7 @@
 #include "types.h"
 #include "rnc/ui/menus/save_data/save_card_state.h"
 
-extern struct M2c_D_0013D290 D_0013D290;
+extern struct SaveSlotTable D_0013D290;
 extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
 extern void mode_freeze_init() __asm__("func_001FBAB8");

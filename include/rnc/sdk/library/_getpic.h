@@ -3,12 +3,12 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x40];
-    struct M2c_temp_16_12 *unk40;
+    struct MpegPictureContext *unk40;
 };
 
-struct M2c_temp_16_12 {
+struct MpegPictureContext {
     s32 unk0;
     u8 pad_4[0x90];
     s32 unk94;

@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/input/pad/clear_pad_input.h"
 
-void clear_pad_input(struct M2c_arg0 *pad_state) __asm__("FUN_002172c0");
+void clear_pad_input(struct PAD *pad_state) __asm__("FUN_002172c0");
 
-void clear_pad_input(struct M2c_arg0 *pad_state) {
+void clear_pad_input(struct PAD *pad_state) {
     s32 remaining;
-    struct M2c_var_3_8 *slot;
+    struct WordCell *slot;
 
     slot = ((u8 *)pad_state + (0x140));
     remaining = 0xF;
@@ -29,4 +29,4 @@ void clear_pad_input(struct M2c_arg0 *pad_state) {
     } while (remaining >= 0);
 }
 
-extern void func_002172C0(struct M2c_arg0 *pad_state) __attribute__((alias("FUN_002172c0")));
+extern void func_002172C0(struct PAD *pad_state) __attribute__((alias("FUN_002172c0")));

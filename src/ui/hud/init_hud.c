@@ -2,7 +2,7 @@
 #include "types.h"
 
 extern u8 D_0015F6D8[];
-extern struct M2c_D_0015FA00 *D_0015FA00;
+extern struct Globals_0015FA00 *D_0015FA00;
 extern s32 D_0015FA04 __attribute__((sda));
 extern s32 D_0015FA08;
 extern s32 D_0015FA0C;
@@ -18,12 +18,12 @@ void init_hud(void) __asm__("FUN_001fee88");
 void init_hud(void) {
     s32 slot_index;
     s32 *temp_2_41;
-    struct M2c_var_16_16 *slot;
+    struct HudSlot *slot;
 
     slot_index = 0;
     {
         u8 *base = D_00199B60;
-        slot = (struct M2c_var_16_16 *)((u8 *)base + 0x24);
+        slot = (struct HudSlot *)((u8 *)base + 0x24);
     }
     D_0019A3E8[0] = 0;
     D_0019A3E8[1] = 0;
@@ -36,7 +36,7 @@ void init_hud(void) {
         slot->unk48 = -6;
         *(s32 *)((u8 *)slot - 0x20) = 0;
         slot->unk0 = 0;
-        slot = (struct M2c_var_16_16 *)((u8 *)slot + 0x90);
+        slot = (struct HudSlot *)((u8 *)slot + 0x90);
     } while (slot_index < 0xD);
     temp_2_41 = D_0015FA00;
     if (temp_2_41 == NULL) {

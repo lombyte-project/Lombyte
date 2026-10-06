@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x11C];
     int unk11C;
     u8 pad_120[0x30];
@@ -29,7 +29,7 @@ struct M2c_arg0 {
     int unk848;
 };
 
-struct M2c_arg4 {
+struct MpegMbState {
     int unk0;
     int unk4;
     int unk8;

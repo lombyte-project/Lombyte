@@ -4,10 +4,10 @@
 extern s32 sceCdRead(s32, s32, s32, u8 *);
 extern s32 sceCdSync(s32);
 
-s32 read_cd_stream_sectors(struct M2c_arg0 *stream, u32 dst, s32 size,
+s32 read_cd_stream_sectors(struct CdStream *stream, u32 dst, s32 size,
                            s32 is_async) __asm__("FUN_0023ba60");
 
-s32 read_cd_stream_sectors(struct M2c_arg0 *stream, u32 dst, s32 size, s32 is_async) {
+s32 read_cd_stream_sectors(struct CdStream *stream, u32 dst, s32 size, s32 is_async) {
     u8 readcmd[0x10];
     s32 blocks;
     s32 result;

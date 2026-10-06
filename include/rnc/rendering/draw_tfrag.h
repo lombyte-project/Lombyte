@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_0018A2B0 {
+struct Globals_0018A2B0 {
     u8 pad_0[0x10];
     s32 unk10;
 };

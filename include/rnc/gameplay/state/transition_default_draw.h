@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_0016045C {
+struct Globals_0016045C {
     u8 pad_0[0x4];
     s16 unk4;
     u8 pad_6[0x2];

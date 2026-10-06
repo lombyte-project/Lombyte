@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/save_data/save_card_state.h"
 
 /* D_0013D2AC is the +0x1C field of the shared D_0013D290 save-state block. */
-extern struct M2c_D_0013D290 D_0013D290;
+extern struct SaveSlotTable D_0013D290;
 extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
 

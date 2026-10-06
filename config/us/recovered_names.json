@@ -2715,7 +2715,7 @@
     },
     {
       "name": "startDisplay__Fi",
-      "unit": "video/display/wait_for_display_vsync",
+      "unit": "video/display/start_display",
       "unit_size": "0x4c",
       "match": "fragment",
       "address": "0x23b590",
@@ -2723,7 +2723,7 @@
     },
     {
       "name": "endDisplay__Fv",
-      "unit": "gameplay/state/clear_stage_state_flag",
+      "unit": "video/display/end_display",
       "unit_size": "0x10",
       "match": "entry_size_unknown",
       "address": "0x23b5e0",
@@ -2795,7 +2795,7 @@
     },
     {
       "name": "readBufEndGet__FP7ReadBufi",
-      "unit": "runtime/data/get_state_table_word",
+      "unit": "video/decoder/buffers/read_buf_end_get",
       "unit_size": "0x24",
       "match": "entry_size_unknown",
       "address": "0x23ba20",
@@ -2827,7 +2827,7 @@
     },
     {
       "name": "scTag2",
-      "unit": "runtime/state/pack_state_value",
+      "unit": "video/decoder/dma/sc_tag2",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x23bc20",
@@ -2987,7 +2987,7 @@
     },
     {
       "name": "videoDecAbort__FP8VideoDec",
-      "unit": "runtime/state/set_state_field",
+      "unit": "video/decoder/video_dec_abort",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23cc70",
@@ -3003,7 +3003,7 @@
     },
     {
       "name": "videoDecSetState__FP8VideoDecUi",
-      "unit": "runtime/state/replace_state_field",
+      "unit": "video/decoder/video_dec_set_state",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23cc88",
@@ -3099,7 +3099,7 @@
     },
     {
       "name": "voBufIsFull__FP5VoBuf",
-      "unit": "runtime/state/compare_state_fields",
+      "unit": "video/decoder/vo_buf_is_full",
       "unit_size": "0x14",
       "match": "fragment",
       "address": "0x23d1f8",
@@ -3123,7 +3123,7 @@
     },
     {
       "name": "voBufIsEmpty",
-      "unit": "runtime/state/is_state_field_zero",
+      "unit": "video/decoder/vo_buf_is_empty",
       "unit_size": "0xc",
       "match": "fragment",
       "address": "0x23d2c8",
@@ -3139,7 +3139,7 @@
     },
     {
       "name": "voBufDecCount__FP5VoBuf",
-      "unit": "runtime/state/decrement_state_field",
+      "unit": "video/decoder/vo_buf_dec_count",
       "unit_size": "0x20",
       "match": "entry_size_unknown",
       "address": "0x23d340",
@@ -17133,7 +17133,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "video/display/wait_for_display_vsync",
+        "unit": "video/display/start_display",
         "source_path": "src/video/display/wait_for_display_vsync.c",
         "address": "0x0023b590",
         "current_name": "FUN_0023b590",

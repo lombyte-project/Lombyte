@@ -5,8 +5,8 @@ extern void FUN_001f9a10(s32, s32, s32);
 extern void FUN_001f9a68(s32, s32, f32);
 extern void func_001FA298(void *, void *);
 extern void FUN_001fa378(s32, void *, s32);
-extern void FUN_00210850(struct M2c_arg0 *, s32, s32 *, s32);
-void FUN_0020cca8(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
+extern void FUN_00210850(struct MobyView *, s32, s32 *, s32);
+void FUN_0020cca8(struct MobyView *arg0, s32 arg1, s32 arg2) {
     u8 sp_slot[0x40];
     s32 sp40;
     f32 scale;

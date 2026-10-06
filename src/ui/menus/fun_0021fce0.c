@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/fun_0021fce0.h"
 
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
-s32 FUN_0021fce0(struct M2c_arg0 *menu) {
+s32 FUN_0021fce0(struct MenuScreen *menu) {
     menu->unk44 = 0;
     menu->unk48 = select_next_stream_buffer(menu->unk34 & 0x200);
     menu->unk4C = select_next_stream_buffer(menu->unk34 & 0x200);
@@ -20,4 +20,4 @@ s32 FUN_0021fce0(struct M2c_arg0 *menu) {
     return 0;
 }
 
-extern s32 func_0021FCE0(struct M2c_arg0 *menu) __attribute__((alias("FUN_0021fce0")));
+extern s32 func_0021FCE0(struct MenuScreen *menu) __attribute__((alias("FUN_0021fce0")));

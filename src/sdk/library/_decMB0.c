@@ -4,14 +4,14 @@
 extern u8 D_00153898[];
 extern void _Error();
 extern void _flushBuf();
-extern s16 _ipuVdec(struct M2c_arg0 *, s32);
+extern s16 _ipuVdec(struct MpegDecoder *, s32);
 extern void _motionVector();
 extern void _motionVectors();
-extern s32 _nextBit(struct M2c_arg0 *, s32);
+extern s32 _nextBit(struct MpegDecoder *, s32);
 extern void _sendIpuCommand();
 extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
-int _decMB0(struct M2c_arg0 *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct M2c_arg4 *arg4,
+int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *arg4,
             int *arg5, int arg6) {
     int *sp20;
     int *sp24;

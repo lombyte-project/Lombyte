@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct PAD {
     u8 pad_0[0x1A0];
     s32 unk1A0;
     s32 unk1A4;
@@ -22,7 +22,7 @@ struct M2c_arg0 {
     s32 unk1D8;
 };
 
-struct M2c_var_3_8 {
+struct WordCell {
     s32 unk0;
 };
 

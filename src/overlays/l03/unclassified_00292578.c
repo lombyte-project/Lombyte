@@ -62,7 +62,7 @@ int FUN_L03_002c5b78(unsigned char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
-f32 compute_interpolated_record_value(struct M2c_arg0 *arg0) __asm__("FUN_0020c9e0");
+f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 
 int FUN_L03_002c6ca0(unsigned char *moby) {
     unsigned char state;

@@ -7,11 +7,11 @@ extern s32 _decodeOrSkip();
 extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 
-s32 _getpic(struct M2c_arg0 *mpeg) {
+s32 _getpic(struct MpegDecoder *mpeg) {
     s32 temp_6_13;
     s32 var_18_8;
     u32 var_19_6;
-    struct M2c_temp_16_12 *temp_16_12;
+    struct MpegPictureContext *temp_16_12;
 
     var_19_6 = 1;
     var_18_8 = 0;

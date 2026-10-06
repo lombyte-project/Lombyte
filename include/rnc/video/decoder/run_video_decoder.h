@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_temp_2_25 {
+struct VideoDec {
     u8 pad_0[0xD9174];
     s32 unkD9174;
 };

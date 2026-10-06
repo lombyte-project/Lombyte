@@ -2,14 +2,14 @@
 #include "rnc/gameplay/state/process_global_state_flags.h"
 
 extern u32 D_0013CAE4[];
-extern struct M2c_D_0013D408 D_0013D408;
+extern struct Globals_0013D408 D_0013D408;
 extern u8 D_0013E05A[];
-extern struct M2c_D_0013F350 D_0013F350;
+extern struct GameState D_0013F350;
 extern u8 D_0014BF08[];
 extern s32 D_0015EEA0;
 extern s32 D_0015EEB0;
 extern u8 D_001D4EC0[];
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct Globals_001D5BF0 D_001D5BF0;
 extern s32 D_001D5BF8[];
 extern void InitializeGlobalStateEntry(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");

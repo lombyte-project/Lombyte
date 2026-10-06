@@ -850,7 +850,7 @@ extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L16_002e6208(void *);
-s32 is_value_within_interpolated_window(struct M2c_arg0 *arg0, f32 fparg0) __asm__("FUN_00214cc8");
+s32 is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");

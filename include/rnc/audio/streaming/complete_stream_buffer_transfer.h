@@ -3,13 +3,13 @@
 
 #include "types.h"
 
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0xCB];
     u8 unkCB;
     u8 pad_CC[0x3];
 };
 
-struct M2c_var_16_10 {
+struct WordCell {
     s32 unk0;
 };
 

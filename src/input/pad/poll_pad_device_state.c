@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct PadState {
+struct PAD {
     u8 pad0[0x180];
     u8 unk180[4];
     u8 unk184[4];
@@ -34,12 +34,12 @@ extern s32 scePad2GetState(s32 socket);
 extern s32 scePad2GetButtonProfile(s32 socket, u8 *profile);
 extern s32 sceVibGetProfile(s32 port, u8 *profile);
 extern s32 scePad2Read(s32 socket, void *buf);
-extern void clear_pad_input(struct PadState *p) __asm__("func_002172C0");
-extern void process_pad_input(struct PadState *p, u8 *buf, s32 len) __asm__("func_00217328");
+extern void clear_pad_input(struct PAD *p) __asm__("func_002172C0");
+extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_00217328");
 
-void poll_pad_device_state(struct PadState *p) __asm__("FUN_002170c8");
+void poll_pad_device_state(struct PAD *p) __asm__("FUN_002170c8");
 
-void poll_pad_device_state(struct PadState *p) {
+void poll_pad_device_state(struct PAD *p) {
     s32 v;
     s32 r;
     s32 n;

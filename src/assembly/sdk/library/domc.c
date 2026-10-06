@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc/_doMC.s", _doMC);
 extern u8 D_00153770[];
 extern s32 _Error();
 
-void _doMC(struct M2c_arg0 *mpeg, s32 arg1) {
+void _doMC(struct MpegDecoder *mpeg, s32 arg1) {
     s32 sp0;
     u8 *sp4;
     u8 *sp8;

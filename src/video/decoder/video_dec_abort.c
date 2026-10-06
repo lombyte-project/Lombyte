@@ -1,8 +1,8 @@
 /* Set the state field to one and report success. */
 
-int SetStateField(int *state_fields) __asm__("func_0023CC70");
+int video_dec_abort(int *state_fields) __asm__("func_0023CC70");
 
-int SetStateField(int *state_fields) {
+int video_dec_abort(int *state_fields) {
     int value = 1;
 
     do {

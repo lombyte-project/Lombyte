@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_arg0 {
+struct CdStream {
     u8 pad_0[0x4];
     s32 unk4;
 };

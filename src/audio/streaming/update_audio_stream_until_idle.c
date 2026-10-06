@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/streaming/update_audio_stream_until_idle.h"
-extern struct M2c_D_001516D0 D_001516D0;
+extern struct Globals_001516D0 D_001516D0;
 
 extern void ReadGlobalTableEntry(void);
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");

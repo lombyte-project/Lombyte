@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_var_5_8 {
+struct WordCell {
     s32 unk0;
 };
 

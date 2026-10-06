@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_001516D0 {
+struct Globals_001516D0 {
     u8 pad_0[0x8];
     s16 unk8;
     u8 unkA;
@@ -13,7 +13,7 @@ struct M2c_D_001516D0 {
     s32 unk14;
 };
 
-struct M2c_var_3_30 {
+struct AudioStreamEntry {
     u8 pad_0[0x8];
     s16 unk8;
     u8 unkA;

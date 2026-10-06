@@ -3,14 +3,14 @@
 
 #include "types.h"
 
-struct M2c_D_00151780 {
+struct Globals_00151780 {
     u8 pad_0[0x160];
     s16 unk160;
     s16 unk162;
     u8 pad_164[0x2];
 };
 
-struct M2c_arg0 {
+struct TransitionState {
     u8 pad_0[0x38];
     s32 unk38;
     s32 unk3C;

@@ -16,9 +16,9 @@ extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED88;
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 
-s32 advance_audio_stream_state(struct M2c_arg0 *stream) __asm__("FUN_00220648");
+s32 advance_audio_stream_state(struct AudioStream *stream) __asm__("FUN_00220648");
 
-s32 advance_audio_stream_state(struct M2c_arg0 *stream) {
+s32 advance_audio_stream_state(struct AudioStream *stream) {
 
     switch (stream->unk44) {
     case 0:
