@@ -1667,7 +1667,7 @@ extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 void FUN_L17_002efa48(void *moby_v, int arg);
 extern void FUN_L17_002f00a0(void *);
-extern void FUN_L17_002f0210(void *);
+void FUN_L17_002f0210(unsigned char *moby);
 extern void clear_vector(void *) __asm__("func_001F99F8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
@@ -2227,7 +2227,104 @@ int FUN_L17_002efea8(unsigned char *moby) {
     return result;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f00a0.s", FUN_L17_002f00a0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0210.s", FUN_L17_002f0210);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1D20), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern int D_L17_0015F5CC;
+extern int FUN_001fa6e0(int, int, float);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L15_0029aba8(char *);
+extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L17_002f0210(unsigned char *moby) {
+    char *data;
+    int n;
+    int alpha;
+    int mode;
+    int i;
+    int x, y, z;
+    int r, g, b;
+    float f;
+    int color;
+
+    /* Period and base colour by state range; both ranges have the same values in this build. */
+    if (moby[0x20] < 16) {
+        n = 0xAA;
+        r = 0x32;
+        g = 0xB4;
+        b = 0x14;
+    } else {
+        n = 0xAA;
+        r = 0x32;
+        g = 0xB4;
+        b = 0x14;
+    }
+    data = *(char **)(moby + 0x78);
+    n = scale_game_frames(n);
+    alpha = 0x80;
+    mode = 0;
+    switch (moby[0x20]) {
+    case 4:
+    case 5:
+    case 6:
+        mode = 1;
+        break;
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 13:
+    case 14:
+    case 15:
+        mode = 2;
+        break;
+    case 12:
+        mode = -1;
+        break;
+    }
+    if (mode >= 0) {
+        if (mode == 2) {
+            n = scale_game_frames(0x32);
+        } else if (mode == 1) {
+            n = scale_game_frames(0x5A);
+        }
+        f = fast_sin(((float)(D_L17_0015F5CC % n) / ConvertIntegerToFloat(n)) * 2.0f * 3.1415927f + -3.1415927f);
+        x = func_001FA898_r(f * 20.0f);
+        y = func_001FA898_r(f * 70.0f);
+        z = func_001FA898_r(f * 10.0f);
+        r += x;
+        g += y;
+        b += z;
+        if (r > 255) {
+            r = 255;
+        }
+        if (g > 255) {
+            g = 255;
+        }
+        if (mode == 2) {
+            color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
+        } else if (mode != 0) {
+            color = (alpha << 24) | (b << 16) | ((r / 2) << 8) | g;
+        } else {
+            color = (alpha << 24) | (b << 16) | (g << 8) | r;
+        }
+        *(int *)(moby + 0x90) = FUN_001fa6e0(*(int *)(moby + 0x90), color, 0.1f);
+        for (i = 0; i < 3; i++) {
+            FUN_L00_0024f7c8(moby, i + 1, data + 0x200 + i * 16);
+        }
+        enqueue_callback_list_1_alt(FUN_L15_0029aba8, moby);
+    }
+}
 
 
 
