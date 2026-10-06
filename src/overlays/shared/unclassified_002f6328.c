@@ -96,12 +96,12 @@ void FUN_L01_002ff028(char *a) {
         }
     }
 }
-extern float FUN_001fa580(float, float);
-extern void FUN_001f9a10(void *, void *, void *);
+extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
+extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_001f96f8(int);
 extern float FUN_001f9e90(float, float);
 #include "sda.h"
-extern unsigned char D_0015EDB0;
+extern unsigned char D_0015EDB0_c __asm__("D_0015EDB0");
 #include "qcopy.h"
 typedef struct {
     float target[4];
@@ -154,7 +154,7 @@ typedef struct {
     int target_timer;
 } L01WatchData;
 typedef struct { char pad00[0xD0]; float aim[4]; } L01Player;
-extern char D_0013F3D0[];
+extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern float D_0013F420[4];
 extern float D_0015ED64;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
@@ -163,7 +163,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
 extern float FUN_001fa688(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_002132a8(float, float);
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6d0(float);
@@ -173,17 +173,17 @@ extern void FUN_00214db0(void *, float, float, float);
 extern void FUN_0020c828(void *);
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
-extern int D_0015ED84;
+extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern unsigned char D_0013DD42 __attribute__((section(".data")));
-extern unsigned char D_0014C050[];
+extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern char D_L01_0020B600[];
 extern char D_L01_00161D38[];
 extern char D_L01_00161D48[];
-extern char D_L01_00167240[];
+extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
-extern char *D_L01_001600EC;
-extern int D_L01_0015F5C4;
+extern char *D_L01_001600EC_c __asm__("D_L01_001600EC");
+extern int D_L01_0015F5C4_c __asm__("D_L01_0015F5C4");
 extern struct { char pad[0x80]; float f80; float f84; float f88; } D_0013F350_w __asm__("D_0013F350");
 extern void FUN_L01_002ff028_c(void *) __asm__("FUN_L01_002ff028");
 extern void FUN_L00_002668a0(void *, void *);
@@ -206,7 +206,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
     if (!d) return;
     FUN_L01_002ff028_c(m);
     if (m->near_flag) {
-        if (FUN_001f9b48(m->position, D_L01_00167240) < 32.0f) {
+        if (FUN_001f9b48(m->position, D_L01_00167240_c) < 32.0f) {
             FUN_L00_0025a120(m);
             m->flag7F = 0x1A;
         }
@@ -238,11 +238,11 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         }
         break;
     case 2:
-        if (D_L01_0015F5C4 == 2) break;
-        if (D_0014C050[m->bB0 + D_0015ED84 * 16] != 0xFF) {
+        if (D_L01_0015F5C4_c == 2) break;
+        if (D_0014C050_c[m->bB0 + D_0015ED84_c * 16] != 0xFF) {
             FUN_L00_002502a0(m->bB0);
             if (d->i4C != -1) {
-                char *t = D_L01_001600EC + d->i4C * 128;
+                char *t = D_L01_001600EC_c + d->i4C * 128;
                 FUN_L00_00284e50(t + 0x30, t + 0x70);
             }
         }
@@ -265,7 +265,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         }
         break;
     case 5:
-        if (D_L01_0015F5C4 == 2) break;
+        if (D_L01_0015F5C4_c == 2) break;
         if (d->h6 == 2) {
             D_0013F350_w.f80 = 130.5f;
             D_0013F350_w.f84 = 299.5f;
@@ -282,7 +282,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
     head_rate = 0.3f;
     tracking = 0;
     if (m->animation == 0) {
-        char *g = D_0013F3D0;
+        char *g = D_0013F3D0_c;
         L01Player *q;
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
@@ -296,9 +296,9 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
             d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
-            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
+            heading = FUN_001fa580_c(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
             FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
-            FUN_001f9a10(d->target, d->target, m->position);
+            FUN_001f9a10_c(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
             qcopy(scratch.target, D_0013F420);
@@ -314,7 +314,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         qcopy(scratch.eye, m->position);
         scratch.eye[2] += 1.0f;
         FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
-        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        yaw = FUN_001fa5c8_c(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
         pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f) yaw = 1.5707964f;
         else if (yaw < -1.5707964f) yaw = -1.5707964f;
@@ -455,7 +455,7 @@ extern void add_vector_xyz_87e0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8(f32 *);
 extern void FUN_001f9a40(f32 *, void *, void *, f32);
 extern void FUN_L00_002ea9d8(void *);
-extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
+extern u8 *D_L01_001600EC;
 extern u8 D_0013F350_87e0[] __asm__("D_0013F350");
 
 void FUN_L01_003087e0(char *moby) {
@@ -487,10 +487,10 @@ void FUN_L01_003087e0(char *moby) {
         m.z = FUN_001fa580_c(ang, 3.141590118408203f);
         m.y = f22 * -0.17000000178813934f;
     } else {
-        FUN_001f9a40(&v.x, D_L01_001600EC_u + *(s32 *)(data + 4) * 128 + 0x30,
-                     D_L01_001600EC_u + *(s32 *)(data + 8) * 128 + 0x30, f22);
+        FUN_001f9a40(&v.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
+                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, f22);
         {
-            u8 *base = D_L01_001600EC_u;
+            u8 *base = D_L01_001600EC;
 
             qcopy(&a, base + *(s32 *)(data + 4) * 128 + 0x70);
             qcopy(&b, base + *(s32 *)(data + 8) * 128 + 0x70);

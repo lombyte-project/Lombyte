@@ -46,9 +46,9 @@ void FUN_L08_00305138(char *moby) {
     }
 }
 #include "qcopy.h"
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_0013E533[];
 #include "sda.h"
 typedef struct {
@@ -119,16 +119,16 @@ extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float truncate_float_to_s32_cf(float,float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *);
+extern float vector_length_xyz_c(void *) __asm__("vector_length_xyz");
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
-extern int scale_game_frames(int);
+extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern int tick_countdown_32(int *);
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern void add_vector_xyz(void*,void*,void*);
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("subtract_vector_xyz");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 typedef struct {
     char pad00[0x24];
@@ -160,7 +160,7 @@ extern unsigned char D_0013DD49 __attribute__((section(".data")));
 extern unsigned char D_0014C050[];
 extern int D_0015ED84;
 extern char D_L08_001622E8[];
-extern float D_L08_001675C0[];
+extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
 extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
@@ -179,7 +179,7 @@ void FUN_L08_00305270(WM *m) {
     int tracking;
     FUN_L08_00305138_c(m);
     if (m->opacity) {
-        if (FUN_001f9b48(m->position, D_L08_001675C0) < 30.0f) {
+        if (FUN_001f9b48(m->position, D_L08_001675C0_c) < 30.0f) {
             FUN_L00_0025a120(m);
             m->b7F = 0x18;
         }
@@ -228,7 +228,7 @@ void FUN_L08_00305270(WM *m) {
             FUN_001f9e90_cf(m->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] - m->position[0],
                     ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] - m->position[1])) < 1.5707964f) {
-            if (vector_length_xyz(player + 0x80) > 0.01f) d->moving_timer = scale_game_frames(120);
+            if (vector_length_xyz_c(player + 0x80) > 0.01f) d->moving_timer = scale_game_frames_c(120);
             else tick_countdown_32(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;
@@ -254,7 +254,7 @@ void FUN_L08_00305270(WM *m) {
         float pitch;
         qcopy(scratch.eye, m->position);
         scratch.eye[2] += 1.0f;
-        subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
+        subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f) yaw = 1.5707964f;
@@ -323,8 +323,6 @@ void FUN_L08_003063f0(char *moby) {
 }
 extern float FUN_001fa580(float, float);
 extern float FUN_001f9e90(float, float);
-#include "sda.h"
-#include "qcopy.h"
 typedef struct {
     float target[4];
     float eye[4];
@@ -379,7 +377,6 @@ typedef struct {
 typedef struct { char pad00[0xD0]; float aim[4]; } L14Player;
 extern char D_0013F3D0[];
 extern float D_0013F420[4];
-extern float D_0015ED64;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
@@ -389,8 +386,6 @@ extern float FUN_002132a8(float, float);
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
 extern void FUN_001f9a28(void *, void *, void *);
-extern int D_0015ED84;
-extern unsigned char D_0014C050[];
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void FUN_L00_00284e50(void *, void *);
 extern int D_0015ED84_s __asm__("D_0015ED84") __attribute__((section(".sdata")));
@@ -613,7 +608,7 @@ extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section("
 extern Pair D_L08_001623F8[] __attribute__((sda));
 extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408") __attribute__((sda));
 extern Pair D_L08_001F8548[];
-extern char D_L08_001675C0_u[] __asm__("D_L08_001675C0");
+extern char D_L08_001675C0[];
 extern char D_L08_001F01C8[];
 extern char D_L08_001F4C48[];
 extern char D_L08_001F4C60[];
@@ -679,7 +674,7 @@ void FUN_L08_003097b0(unsigned char *moby) {
             w[1] = D_L08_00162384;
             w[2] = D_L08_00162388;
             w[3] = 1.0f;
-            subtract_vector_xyz(w, D_L08_001675C0_u, w);
+            subtract_vector_xyz(w, D_L08_001675C0, w);
             d = vector_length_xyz(w);
             if (d <= 84.0f) {
                 FUN_L08_002f12a0(0);

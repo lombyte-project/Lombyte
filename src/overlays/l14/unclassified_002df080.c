@@ -54,10 +54,10 @@ void FUN_L14_002df458(char *m) {
     FUN_L14_002df510(m, d + 0xA0, 0x30, 0x10, 0x14);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002df510.s", FUN_L14_002df510);
-extern s32 FUN_00214720_u(u8 *base, s32 arg) __asm__("FUN_00214720");
+extern s32 FUN_00214720(u8 *base, s32 arg);
 extern void FUN_001f99f8(void *);
 extern void FUN_L00_00259a88(s32, void *);
-extern u8 D_0013F3D0_u[] __asm__("D_0013F3D0");
+extern u8 D_0013F3D0[];
 
 typedef struct {
     f32 v[4];
@@ -77,10 +77,10 @@ typedef struct {
  * program. */
 void FUN_L14_002dfc58(u8 *moby)
 {
-    u8 *base = D_0013F3D0_u;
+    u8 *base = D_0013F3D0;
     Level14Req r;
     u8 *q;
-    if (FUN_00214720_u(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
+    if (FUN_00214720(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
         r.flags = 0x200001;
         r.range = 100.0f;
         r.one = 1;
@@ -296,7 +296,7 @@ extern u8 D_L14_001E03B0[];
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
 extern u8 D_0013F350_u[] __asm__("D_0013F350");
 extern void FUN_001f9cf8(u8 *, u8 *, u8 *);
-extern void FUN_001f9a10_u(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a10(u8 *, u8 *, u8 *);
 
 /* 0x002EF630, 192 bytes.  Rebuilds the 11 vectors of a table entry from the
  * moby's matrix and position.
@@ -315,7 +315,7 @@ void FUN_L14_002ef630(u8 *moby)
         FUN_001f9cf8(dst, src, moby + 0xC0);
         src += 0x10;
         i--;
-        FUN_001f9a10_u(dst, dst, moby + 0x10);
+        FUN_001f9a10(dst, dst, moby + 0x10);
         *(f32 *)(dst + 0xC) = one;
         dst += 0x10;
     } while (i >= 0);
@@ -434,12 +434,9 @@ void FUN_L14_002f13f8(char *moby) {
     }
 }
 extern float FUN_001fa580(float, float);
-extern void FUN_001f9a10(void *, void *, void *);
-extern int FUN_001f96f8(int);
-extern float FUN_001f9e90(float, float);
+extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
-#include "qcopy.h"
 typedef struct {
     float target[4];
     float eye[4];
@@ -494,21 +491,19 @@ typedef struct {
     int target_timer;
 } L14WatchData;
 typedef struct { char pad00[0xD0]; float aim[4]; } L14Player;
-extern char D_0013F3D0[];
+extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
 extern float D_0013F420[4];
 extern float D_0015ED64;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
-extern float FUN_001f9b20(void *);
 extern float FUN_001fa688(float, float);
 extern float FUN_001fa5c8(float, float);
 extern float FUN_002132a8(float, float);
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6d0(float);
-extern float FUN_001f9b48(void *, void *);
-extern int FUN_00214720(void *, int);
+extern int FUN_00214720_c(void *, int) __asm__("FUN_00214720");
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_00214db0(void *, float, float, float);
 extern void FUN_0020c828(void *);
@@ -572,7 +567,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
         break;
     }
     case 1:
-        if (d->b8 == 1 && FUN_00214720(D_0013F3D0, d->i40)) {
+        if (d->b8 == 1 && FUN_00214720_c(D_0013F3D0_c, d->i40)) {
             if (D_0014C050[m->bB0 + D_0015ED84 * 16] != 0xFF) {
                 char *t;
                 FUN_L00_002502a0(m->bB0);
@@ -613,7 +608,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
     head_rate = 0.3f;
     tracking = 0;
     if (m->animation == 0) {
-        char *g = D_0013F3D0;
+        char *g = D_0013F3D0_c;
         L14Player *q;
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
@@ -629,7 +624,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
             d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
             heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
             FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
-            FUN_001f9a10(d->target, d->target, m->position);
+            FUN_001f9a10_c(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
             qcopy(scratch.target, D_0013F420);
