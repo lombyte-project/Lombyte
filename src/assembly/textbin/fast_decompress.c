@@ -6,6 +6,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fast_decompress/FUN_0020b61
 #else
 #include "types.h"
 
+/* Provisional reconstruction: this C follows the retail decompression logic,
+ * but functional equivalence is not fully proven. The current C has not been
+ * dynamically validated against the master archive; DMA hardware behavior and
+ * malformed-input exception handling also remain unverified. The normal build
+ * uses the assembly oracle, so a passing full ELF check does not validate this
+ * C fallback's behavior. */
+
 /* Channel 9 transfers alternating 0x2000-byte compressed blocks to EE scratchpad. */
 #define SPR_DMA_CHCR (*(volatile u32 *)0x1000d400)
 #define SPR_DMA_MADR (*(volatile u32 *)0x1000d410)
