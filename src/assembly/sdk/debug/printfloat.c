@@ -32,8 +32,8 @@ void printfloat(f64 x) {
         ((void (*)(s32))D_0012FC00)(0x2D);
     }
     /* Absolute loads avoid GP-relative references in the call delay slots. */
-    if (dpcmp_f(x, *(f64 *)0x00152798) < 0) {
-        while (dpcmp_f(x, *(f64 *)0x001527A0) < 0) {
+    if (dpcmp_f(x, 0.1) < 0) {
+        while (dpcmp_f(x, 0.1) < 0) {
             exponent--;
             x = dpmul_f(x, 10.0);
         }
@@ -45,7 +45,7 @@ void printfloat(f64 x) {
             }
         }
     }
-    significand = ftoi(__fixunsdfdi(dpmul_f(x, *(f64 *)0x001527A8)));
+    significand = ftoi(__fixunsdfdi(dpmul_f(x, 1000000.0)));
     kprintf(D_00152780, significand);
     if (exponent >= 0) {
         kprintf(D_00152788, exponent);
