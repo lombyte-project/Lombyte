@@ -97,7 +97,43 @@ int FUN_L15_00299ae0(char *moby, float *point, float arg) {
     FUN_L00_00258830((int)moby, (int)vec, 0.5f, 0.5f, 0.0f, 0);
     return FUN_001f9b80((float *)(moby + 0x10), point) < 0.2f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_00299ca0.s", FUN_L15_00299ca0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* checks that no closer live object blocks the line to the target */
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_00298BB8.c: func_L15_0029AE80), where it is exact; names translated to the US level program. */
+
+extern float FUN_001f9b80(float *, float *);
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L15_001ABE40[];
+
+int FUN_L15_00299ca0(void *mm) {
+    char *m = mm;
+    int idx = *(int *)(*(char **)(m + 0x78) + 0x128);
+    char *t;
+    float d;
+    short *p;
+    if (idx == -1) return 0;
+    t = (char *)D_L15_0015FFD8_m + (idx << 8);
+    if (*(int *)(*(char **)(t + 0x78) + 8) != 0) return 0;
+    if (((unsigned char *)m)[0x21] == 0xFF) return 1;
+    d = FUN_001f9b80((float *)(m + 0x10), (float *)(t + 0x10));
+    p = (short *)D_L15_001ABE40[((unsigned char *)m)[0x21]];
+    if (p == 0) return 1;
+    do {
+        char *o = (char *)(((*(unsigned short *)p & 0x7FFF) << 8) + D_L15_0015FFD8_m);
+        if (((unsigned char *)o)[0x20] == 0xE) return 0;
+        if (((unsigned char *)o)[0xBC] == 1) {
+            int j = *(int *)(*(char **)(o + 0x78) + 0x128);
+            if (j != -1) {
+                if (FUN_001f9b80((float *)(o + 0x10), (float *)((char *)D_L15_0015FFD8_m + (j << 8) + 0x10)) < d) return 0;
+            }
+        }
+    } while (*p++ >= 0);
+    return 1;
+}
 #include "sda.h"
 
 #include "qcopy.h"
@@ -296,7 +332,7 @@ int FUN_L15_002a2868(int idx, void *pos) {
             *(float *)(m + 0x48) = FUN_001f9e90(*(float *)(g + 0x80) - *(float *)(m + 0x10), *(float *)(g + 0x84) - *(float *)(m + 0x14));
             return 1;
         }
-    } while (*p++ >= 0);
+    } while (*p++ > -1);
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a29b8.s", FUN_L15_002a29b8);
