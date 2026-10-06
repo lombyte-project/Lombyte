@@ -1,8 +1,7 @@
 /* Ported from rac1-decomp (src/game/music.c, func_00216B68). */
 extern int D_00137B80[];
 extern short D_001516D0[];
-extern void func_0012EC08(int, int, int, int, short, int, int, int,
-                          int, void (*)(int, long), long);
+extern void snd_play_vag_stream_by_loc_ex_cb(int, int, int, int, short, int, int, int, int, void (*)(int, long), long) __asm__("func_0012EC08");
 extern void FUN_00216ad0(int, long);
 /* music_StartTrackBody(int, int, int): when the music record at +0x34 is
    already playing (its word neither 0 nor -1) and not in state 9, starts
@@ -46,7 +45,7 @@ void music_start_track_body(int arg0, int arg1, int arg2) {
     *(int *)(s + 0x4C) = 0xBB80;
     *(short *)(s + 0x3A) = arg2;
     *(short *)(s + 0x44) = 0;
-    func_0012EC08(h, 0, 0, 0, arg2, 0, 1, cur, flags,
+    snd_play_vag_stream_by_loc_ex_cb(h, 0, 0, 0, arg2, 0, 1, cur, flags,
                   FUN_00216ad0, (long)(unsigned int)(s + 0x34));
 }
 

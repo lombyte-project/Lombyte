@@ -519,7 +519,7 @@ def rewrite_function_alias_references(
 
 
 def plan_function_reference_aliases(
-    root: Path, candidates: list[Candidate], moves: list[Move], skip_files: bool = False
+    root: Path, candidates: list[Candidate], moves: list[Move]
 ) -> tuple[list[ReferenceEdit], int, int, int, list[str]]:
     """Plan semantic call-site identifiers across source and public headers."""
     aliases: dict[str, str] = {}
@@ -612,16 +612,6 @@ def plan_function_reference_aliases(
                     f"{path}: {semantic} references {canonical} without an asm-labeled declaration"
                 )
 
-    if skip_files:
-        skipped = {
-            issue.split(": ", 1)[0] for issue in issues if issue.startswith(str(root))
-        }
-        if skipped:
-            print(f"Skipping call-site edits in {len(skipped)} file(s) with conflicts:")
-            for path in sorted(skipped):
-                print(f"  {Path(path).relative_to(root)}")
-        edits = [edit for edit in edits if str(edit.path) not in skipped]
-        issues = [issue for issue in issues if not issue.startswith(str(root))]
     return edits, total_references, total_declarations, updated_files, issues
 
 
@@ -1232,11 +1222,6 @@ def main() -> int:
         help="select one proposal by address, e.g. 0x0012d8f8",
     )
     parser.add_argument("--diff", action="store_true", help="show unified content diffs")
-    parser.add_argument(
-        "--skip-conflicting-files",
-        action="store_true",
-        help="leave the call sites of a file with a conflict as they are instead of refusing",
-    )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true", help="preview only (the default)")
     mode.add_argument("--apply", action="store_true", help="write the planned changes")
@@ -1276,7 +1261,7 @@ def main() -> int:
         reference_declaration_count,
         reference_file_count,
         reference_issues,
-    ) = plan_function_reference_aliases(root, active, moves, args.skip_conflicting_files)
+    ) = plan_function_reference_aliases(root, active, moves)
     issues.extend(reference_issues)
 
     yaml_text = yaml_path.read_text(encoding="utf-8")

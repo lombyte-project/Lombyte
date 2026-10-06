@@ -111,7 +111,6 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     }
 }
 
-extern void func_00204A40(s32 class_id, s32 buffer_index)
-    __attribute__((alias("FUN_00204a40")));
+extern void func_00204A40(s32 class_id, s32 buffer_index) __attribute__((alias("FUN_00204a40")));
 
 #endif /* NON_MATCHING */

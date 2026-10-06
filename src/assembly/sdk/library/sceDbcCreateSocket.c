@@ -6,7 +6,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceDbcCreateSocket/sceD
 #include "types.h"
 struct M2c_D_0015B080 { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; u8 pad_14[0x10]; s32 unk24; s32 unk28; s32 unk2C; };
 struct M2c_arg0 { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; };
-extern u8 D_00153578[]; extern u8 D_0015B008[]; extern struct M2c_D_0015B080 D_0015B080; extern s32 func_00124A20(); extern s32 sceSifCallRpc();
+extern u8 D_00153578[]; extern u8 D_0015B008[]; extern struct M2c_D_0015B080 D_0015B080; extern s32 sceSifCallRpc();
+extern s32 debug_print_stub() __asm__("func_00124A20");
 s32 sceDbcCreateSocket(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
     struct M2c_D_0015B080 *state = &D_0015B080;
     u8 *src = (u8 *)arg0 + 0x14;
@@ -27,7 +28,7 @@ s32 sceDbcCreateSocket(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
         i++;
     } while (i < 0x10);
     if (sceSifCallRpc(D_0015B008, 0x80000901, 0, &D_0015B080, 0x400, &D_0015B080, 0x400, 0, 0) < 0) {
-        func_00124A20(D_00153578);
+        debug_print_stub(D_00153578);
         return 0;
     }
     return state->unk24;

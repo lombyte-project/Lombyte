@@ -3,9 +3,11 @@
 #include "qcopy.h"
 extern char D_0013F350[];
 extern void FUN_001f9bf8(void *dst, void *src, float len);    /* dst = normalize(src) * len */
-extern void func_001EC530(float *out, void *p0, void *p1, void *dir0, void *dir1,
-                           void *axis);
+extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1, void *axis) __asm__("func_001EC530");
 extern char D_001871B0[];
+extern void capture_camera_orientation(void) __asm__("func_001EC710");
+extern void save_camera_vectors(void) __asm__("func_001EC7F0");
+extern void restore_camera_vectors(void) __asm__("func_001EC868");
 extern short D_001871B0_h __asm__("D_001871B0") NOT_SDA;
 extern void func_002144D8(void *, void *);
 extern int FUN_001f96f8(int);
@@ -35,14 +37,14 @@ void start_camera_blend(void *arg) {
         } else if (sub == 2) {
             qcopy(r + 0xC0, arg0 + 0x30);
             func_002144D8(r + 0xD0, arg0);
-            func_001EC710();
+            capture_camera_orientation();
         } else {
             char *g = D_0013F350;
 
             FUN_001f9bf8(local0, *(char **)(g + 0x2080) + 0xC0, 1.0f);
             FUN_001f9bf8(local1, *(char **)(g + 0x2080) + 0xD0, 1.0f);
             FUN_001f9bf8(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
-            func_001EC530((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
+            compute_camera_angles((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
                           local0, local1, local2);
             func_002144D8(r + 0xB0, arg0);
             qcopy(r + 0xD0, r + 0xB0);
@@ -50,13 +52,13 @@ void start_camera_blend(void *arg) {
     } else {
         sub = r[3];
         if (sub == 2) {
-            func_001EC7F0();
-            func_001EC710();
+            save_camera_vectors();
+            capture_camera_orientation();
         } else if (sub == 1) {
-            func_001EC7F0();
+            save_camera_vectors();
             qcopy(r + 0xB0, r + 0xD0);
         } else if (sub == 0) {
-            func_001EC868();
+            restore_camera_vectors();
         }
     }
     D_001871B0_h = 3;
