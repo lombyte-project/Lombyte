@@ -64,4 +64,36 @@ void FUN_L04_002c46d0(char *a)
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002aee30.s", FUN_L04_002aee30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002af058.s", FUN_L04_002af058);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce080.s", FUN_L04_002ce080);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
+
+typedef int u128 __attribute__((mode(TI)));
+
+extern void FUN_L00_00250df8(void *);
+extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+void *FUN_L04_002ce080(char *src, char *pos) {
+    char tmp[16];
+    char *p = tmp;
+    char *m;
+    *(u128 *)tmp = *(u128 *)pos;
+    m = (char *)func_0020D348_m(0x1F3);
+    if (m != 0) {
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(unsigned short *)(m + 0x32) = *(unsigned short *)(src + 0x32);
+        m[0x31] = 1;
+        *(int *)(m + 0x40) = 0;
+        *(int *)(m + 0x44) = 0;
+        *(float *)(m + 0x48) = *(float *)(src + 0x48);
+        *(unsigned long *)(m + 0x38) = *(unsigned long *)(src + 0x38);
+        qcopy(m + 0x10, p);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
