@@ -202,7 +202,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             preview->primary_moby = moby;
             moby->flags = 0;
             camera_position = &preview_camera.x;
-            camera_x = preview_camera.x;
+            camera_x = *(f32 *)((u8 *)&preview_camera + 0x140);
             if (use_alternate_x) {
                 moby->x = camera_x + preview_placements[item_index].alternate_x;
             } else {
