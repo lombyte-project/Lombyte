@@ -733,7 +733,7 @@ extern short D_L11_00162414_d __asm__("D_L11_00162414") __attribute__((sda));
 extern short D_L11_00162418_d __asm__("D_L11_00162418") __attribute__((sda));
 extern short D_L11_0016241C_d __asm__("D_L11_0016241C") __attribute__((sda));
 extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_L11_0031ae68(char *, float *, int, int);
+void FUN_L11_0031ae68(char *m, float *ground, int n1, int n2);
 extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -816,7 +816,59 @@ char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031ae68.s", FUN_L11_0031ae68);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Bursts n1 sparks and n2 smoke puffs at the moby, the puffs sitting on the ground height. */
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C2D8), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_0015ED6C;
+extern float D_L11_0015F580[];
+extern float FUN_001f96b0(float);
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between(float a, float b);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_L00_00257b90(int, int);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern char D_L11_00162420[4] __attribute__((sda));
+extern char D_L11_00162424[4] __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void add_vector_xyz(void *, void *, void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern char *func_L00_00272770_p(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
+
+void FUN_L11_0031ae68(char *m, float *ground, int n1, int n2) {
+    float v[4];
+    int i;
+    for (i = 0; i < n1; i++) {
+        float a = random_angle_radians();
+        float r = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 6.0f);
+        int k;
+        v[0] = fast_cos(a) * r;
+        v[1] = fast_sin(a) * r;
+        v[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+        k = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(m + 0x10, v, random_integer_below(2), k);
+    }
+    for (i = 0; i < n2; i++) {
+        char *e;
+        FUN_L00_00257d78(v, 1.0f, 1.0f);
+        add_vector_xyz(v, v, m + 0x10);
+        v[2] = *ground + 0.05f;
+        e = func_L00_00272770_p(v, D_L11_0015F580, ground, random_float_between(3.0f, 6.0f), i == 0 ? 1.0f : -1.0f);
+        if (e != 0) {
+            e[9] = func_001FA898_r(4.0f) + 0x40;
+            *(short *)(e + 0xA) = func_001FA898_r(FUN_001f96b0(random_float_between(30.0f, 90.0f)));
+            *(int *)(e + 4) = FUN_001fa6e0(*(int *)&D_L11_00162420, *(int *)&D_L11_00162424, random_float_between(0.0f, 1.0f));
+        }
+    }
+}
 #define NOT_SDA __attribute__((section(".data")))
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
