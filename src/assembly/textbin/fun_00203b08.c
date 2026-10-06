@@ -159,9 +159,9 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
 
             width_log2 = highest_set_bit_index(mip_texture->width);
             height_log2 = highest_set_bit_index(mip_texture->height);
-            mip_packet->tex1.d = ((((u64)(mip_texture->draw_control_count - 1)) << 2) |
-                                  ((((u64)material_shift) << 6) | 0x20)) |
-                                 (((u64)material_base) << 32);
+            draw_word = (((u64)material_base) << 32) | (((u64)material_shift) << 6) | 0x20;
+            draw_word |= ((u64)(mip_texture->draw_control_count - 1)) << 2;
+            mip_packet->tex1.d = draw_word;
             gs_block_base = gs_texture_allocation_base >> 8;
             mip_packet->tex0.d = ((u64)(mip_texture->palette_block_offset + gs_block_base)) |
                                  ((u64)mip_width_units[0] << 14) | ((u64)width_log2 << 26) |
