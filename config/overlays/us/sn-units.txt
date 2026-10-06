@@ -51,3 +51,4 @@ shared/unclassified_002d7f88.c
 l16/gameplay_vendor_002e3190.c
 l16/ui_help_002270c8.c
 l05/ui_help_00255960.c
+shared/gameplay_vendor_003015d0.c
