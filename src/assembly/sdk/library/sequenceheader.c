@@ -90,7 +90,7 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *temp_20_71;
     s32 *temp_21_73;
     struct M2c_temp_30_15__func_0012C4C8 *temp_30_15;
-    s32 *var_2_53;
+    u8 *var_2_53;
 
     temp_30_15 = arg0->unk40;
     temp_6_16 = temp_30_15->unk848;
