@@ -144,10 +144,9 @@ s32 service_level_archive_load(void) {
         }
         snd_stop_all_sounds();
         if (D_0015ED5C != 0) {
-            D_0015EE48 = D_0015EE48 + 1;
-        } else {
-            D_0015EE48 = 6;
+            goto increment_stage;
         }
+        D_0015EE48 = 6;
         break;
     case 4:
         if (snd_flush_sound_commands() != 0) {
@@ -155,6 +154,8 @@ s32 service_level_archive_load(void) {
         }
         snd_unload_bank(D_0015ED5C);
         D_0015ED5C = 0;
+        /* Retail reloads the stage after unloading the bank. */
+        *(volatile u16 *)&D_0015EE48;
         goto increment_stage;
     case 5:
         if (snd_flush_sound_commands() != 0) {
