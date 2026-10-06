@@ -203,7 +203,138 @@ void FUN_L00_002bbb00(void *o) {
     }
     FUN_L00_002bc1a0(o);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bbbc8.s", FUN_L00_002bbbc8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BCED0), where it is exact; names translated to the US level program. */
+
+typedef float RW[4] __attribute__((aligned(16)));
+
+typedef struct {
+    int c[4];
+    float f[8];
+    long z4, q0, q1, q2;
+} RT;
+
+extern float D_L00_00166DC0[];
+extern float vector_length_xyz(void *);
+extern int get_effect_texture(int);
+extern char D_L00_00161680[4] __attribute__((sda));
+extern char D_L00_00161684[4] __attribute__((sda));
+extern char D_L00_001616B0[4] __attribute__((sda));
+extern char D_L00_001616B4[4] __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *);
+extern void cross_vectors_xyz(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *, void *, void *);
+extern void vu1_add_g_sregister(int, long);
+
+void FUN_L00_002bbbc8(void *mv, int a, int b, int n, float sx, float sy, float sz) {
+    char *m = mv;
+    RW q[4];
+    RT t;
+    RW q2[4];
+    RT u;
+    RW w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    int i, col0, col1;
+    float len, len0, l0, l1;
+    t.q0 = get_effect_texture(*(int *)&D_L00_001616B0);
+    col0 = *(int *)&D_L00_00161680 | (a << 24);
+    t.q2 = 0x8000000048L;
+    t.q1 = 0xFF9000000260L;
+    t.z4 = 0;
+    t.c[3] = col0;
+    t.c[2] = col0;
+    t.c[1] = col0;
+    t.c[0] = col0;
+    u.q0 = get_effect_texture(*(int *)&D_L00_001616B4);
+    col1 = *(int *)&D_L00_00161684 | (b << 24);
+    u.q2 = t.q2;
+    u.q1 = t.q1;
+    u.z4 = t.z4;
+    u.c[3] = col1;
+    u.c[2] = col1;
+    u.c[1] = col1;
+    u.c[0] = col1;
+    u.f[0] = 0; u.f[1] = 0; u.f[2] = 0; u.f[3] = 1.0f; u.f[4] = 1.0f; u.f[5] = 0; u.f[6] = 1.0f; u.f[7] = 1.0f;
+    t.f[0] = 0; t.f[1] = 0; t.f[2] = 0; t.f[3] = 1.0f; t.f[4] = 1.0f; t.f[5] = 0; t.f[6] = 1.0f; t.f[7] = 1.0f;
+    subtract_vector_xyz(w140, m, D_L00_00166DC0);
+    subtract_vector_xyz(w150, m + 0x10, m);
+    cross_vectors_xyz(w120, w150, w140);
+    len0 = vector_length_xyz(w120);
+    if (len0 != 0) len0 = 1.0f / len0;
+    scale_vector_xyz(w120, w120, sx * len0);
+    add_vector_xyz(q[0], m, w120);
+    subtract_vector_xyz(q[1], m, w120);
+    for (i = 1; i < n - 1; i++) {
+        subtract_vector_xyz(w140, m + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(w150, m + i * 16 + 16, m + i * 16);
+        cross_vectors_xyz(w120, w150, w140);
+        len = vector_length_xyz(w120);
+        if (len != 0) len = 1.0f / len;
+        scale_vector_xyz(w120, w120, sx * len);
+        add_vector_xyz(q[2], m + i * 16, w120);
+        subtract_vector_xyz(q[3], m + i * 16, w120);
+        if (i == 1) {
+            t.c[1] = *(int *)&D_L00_00161680;
+            t.c[0] = *(int *)&D_L00_00161680;
+        } else if (i == n - 2) {
+            t.c[3] = *(int *)&D_L00_00161680;
+            t.c[2] = *(int *)&D_L00_00161680;
+        } else if (i == 2) {
+            t.c[1] = col0;
+            t.c[0] = col0;
+        }
+        draw_geometry_quad(q, 0, 0);
+        qcopy(q[0], q[2]);
+        qcopy(q[1], q[3]);
+    }
+    for (i = 0; i < n - 1; i++) {
+        subtract_vector_xyz(a180, m + i * 16, D_L00_00166DC0);
+        subtract_vector_xyz(b190, m + i * 16 + 16, D_L00_00166DC0);
+        l0 = vector_length_xyz(a180);
+        l1 = vector_length_xyz(b190);
+        if (l1 < l0) {
+            if (l1 == 0) qcopy(b190, a180);
+            else scale_vector_xyz(b190, b190, l0 / l1);
+        } else {
+            if (l0 == 0) qcopy(a180, b190);
+            else scale_vector_xyz(a180, a180, l1 / l0);
+        }
+        add_vector_xyz(r160, D_L00_00166DC0, a180);
+        add_vector_xyz(r170, D_L00_00166DC0, b190);
+        subtract_vector_xyz(w150, r170, r160);
+        scale_vector_xyz(s1B0, w150, sz);
+        subtract_vector_xyz(r160, r160, s1B0);
+        add_vector_xyz(r170, r170, s1B0);
+        subtract_vector_xyz(s1A0, D_L00_00166DC0, r160);
+        cross_vectors_xyz(w120, s1A0, w150);
+        len = vector_length_xyz(w120);
+        if (len != 0) len = 1.0f / len;
+        scale_vector_xyz(w130, w120, sy * len);
+        add_vector_xyz(q2[0], r160, w130);
+        subtract_vector_xyz(q2[1], r160, w130);
+        add_vector_xyz(q2[2], r170, w130);
+        subtract_vector_xyz(q2[3], r170, w130);
+        if (i == 0) {
+            u.c[1] = *(int *)&D_L00_00161684;
+            u.c[0] = *(int *)&D_L00_00161684;
+        } else if (i == n - 2) {
+            u.c[3] = *(int *)&D_L00_00161684;
+            u.c[2] = *(int *)&D_L00_00161684;
+        } else if (i == 1) {
+            u.c[1] = col1;
+            u.c[0] = col1;
+        }
+        draw_geometry_quad(q2, 0, 0);
+    }
+    vu1_add_g_sregister(0x47, 0x5360B);
+}
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2bc1a0;
 typedef struct {
     V_2bc1a0 corner[4];
