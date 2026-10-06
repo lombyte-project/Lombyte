@@ -106,8 +106,8 @@ s32 service_level_archive_load(void) {
             sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
         disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
+        level_archive_sectors = *(s32 *)((u8 *)&D_00137B80 + level_index * 8 + 0x12CC);
         sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
-        level_archive_sectors = disc_entry->sector_count;
         sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
         level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
         archive_start_or_sectors = D_00137B80.shared_sector_count;
