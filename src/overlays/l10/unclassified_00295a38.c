@@ -255,7 +255,99 @@ int FUN_L10_002d8058(int owner, char *pos, char *vec) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8170.s", FUN_L10_002d8170);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d85c8.s", FUN_L10_002d85c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d8d30.s", FUN_L10_002d8d30);
+/* Electric spark: runs along its wire path with a light and a buzzing sound, then rests for a random time. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
+
+typedef int Q_2da0f0 __attribute__((mode(TI)));
+
+extern char D_0013E533[];
+extern char D_L10_00180740[];
+extern char D_L10_001DD120[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern int *D_L10_001B0930[];
+extern int D_L10_0015F5CC;
+extern int DebugPrint_alt() __asm__("FUN_001e93b0");
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int FUN_L00_00262360();
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_0023e838(int);
+extern void FUN_L10_002dd270(char *, float *, int *, float, float, float);
+void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
+extern char D_0013E5E0[];
+extern int func_001E9730_2da0f0(void *, int) __asm__("FUN_001e93b0");
+extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
+extern void func_L00_002633D8_f(float, float, void *, int *, float *, void *) __asm__("FUN_L00_00262360");
+extern int func_L00_0028EF68_v(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+
+void FUN_L10_002d8d30(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *path;
+    float pos[4];
+    int seg;
+    float frac;
+    float len;
+    if (*(int *)d == -1) {
+        func_001E9730_2da0f0(D_L10_001DD120, *(short *)(m + 0xB2));
+        mark_moby_for_removal_c(m);
+        return;
+    }
+    path = D_L10_001B0930[*(int *)d];
+    ((unsigned char *)m)[0x30] = 0xFF;
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(int *)(d + 0xC) != -1) {
+            FUN_L00_0023e838(*(int *)(d + 0xC));
+            *(int *)(d + 0xC) = -1;
+        }
+        if (*(int *)(d + 0x10) != -1) {
+            char *e = ((char *)&D_0013E550) + *(int *)(d + 0x10) * 0x70;
+            if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
+                release_voice_slot(*(int *)(d + 0x10));
+            }
+        }
+        *(int *)(d + 0x10) = -1;
+        if (func_001F9908_v(d + 8) != 0) {
+            m[0x20] = 1;
+            *(int *)(d + 4) = 0;
+        }
+        break;
+    case 1:
+        len = distance_xyz((char *)path + 0x10, (char *)path + 0x20);
+        *(float *)(d + 4) += D_0015ED6C * 5.0f;
+        func_L00_002633D8_f(*(float *)(d + 4), len, path, &seg, &frac, pos);
+        if (*(int *)(d + 0xC) == -1) {
+            *(int *)(d + 0xC) = FUN_L00_0023e738(pos, 3.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+        } else {
+            char *l = D_L10_00180740 + *(int *)(d + 0xC) * 32;
+            qcopy(l + 0x10, pos);
+            *(float *)(l + 0) = 1.0f;
+            *(float *)(l + 0x1C) = 3.0f;
+            *(float *)(l + 4) = 1.0f;
+            *(float *)(l + 8) = 0.5f;
+            *(int *)(l + 0xC) = 0;
+        }
+        if (random_integer_below(2) != 0) return;
+        if (D_L10_0015F5CC & 1) {
+            FUN_L10_002dd270(m, pos, path, *(float *)(d + 4), D_0015ED6C * 5.0f, len);
+        }
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x10)) == 0) {
+            int r = func_L00_0028EF68_v(0, 0xC, m, 0x442);
+            *(int *)(d + 0x10) = r;
+            if (r != -1) {
+                *(Q_2da0f0 *)(((char *)&D_0013E5E0) + r * 0x70) = *(Q_2da0f0 *)pos;
+            }
+        } else {
+            *(Q_2da0f0 *)(((char *)&D_0013E5E0) + *(int *)(d + 0x10) * 0x70) = *(Q_2da0f0 *)pos;
+        }
+        if (seg == *path - 1) {
+            m[0x20] = 0;
+            *(int *)(d + 8) = scale_game_frames(0x78);
+        }
+        break;
+    }
+}
 /* Test whether a point lies within a box around a moby, in the moby's local frame. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
 

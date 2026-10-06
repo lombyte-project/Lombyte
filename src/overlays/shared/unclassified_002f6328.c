@@ -47,7 +47,122 @@ void FUN_L01_002fb4b8(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fb5b0.s", FUN_L01_002fb5b0);
+#include "qcopy.h"
+
+/* Cutscene trigger: unless already seen, starts its camera sequence when the hero enters the volume (or it is
+ * triggered), then ends it after its timer and re-arms. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FC988), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } TpLevelState_fc988;
+
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } TpLevelState;
+
+extern TpLevelState D_L01_001BB6B0_c __asm__("D_L01_001BB6B0");
+extern char D_0013F3D0[];
+extern char D_L01_00167240[];
+extern char D_L01_0020B550[];
+extern int D_0015ED84; /* no foreign declaration */
+extern int D_L01_0015F404;
+extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern unsigned char D_0014C190[];
+extern void DebugPrint(char *, ...);
+extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void FUN_L00_002eac18(int);
+extern void FUN_L01_002405a0(void);
+s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
+extern TpLevelState_fc988 D_L01_001BB9C0_s __asm__("D_L01_001BB6B0");
+extern char D_L01_001672C0_c[] __asm__("D_L01_00167240");
+extern char D_0014171B_c[] __asm__("D_0014C190");
+extern char D_0013E633_c[] __asm__("D_0013F3D0");
+extern int func_001E9730_c(void *, int, int) __asm__("FUN_001e93b0");
+extern int func_001F9908_c(void *) __asm__("FUN_001f9740");
+
+void FUN_L01_002fb5b0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float a[4];
+    float b[4];
+    func_L01_002FC890_m(m);
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(int *)(d + 0x24) == -1) {
+            func_001E9730_c(D_L01_0020B550, *(short *)(m + 0xA6), *(unsigned short *)(m + 0xA8));
+            mark_moby_for_removal(m);
+            return;
+        }
+        *(int *)(d + 0x2C) = scale_game_frames(*(int *)(d + 0x2C));
+        m[0x20] = 1;
+        {
+            int ff = 0xFF;
+            *(short *)(m + 0x32) = ff;
+            ((unsigned char *)m)[0x30] = ff;
+        }
+        break;
+    case 1: {
+        char *g;
+        if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(m + 0xB2)] != 0) {
+            m[0x20] = 1;
+            break;
+        }
+        if ((*(int *)((((short)*(unsigned short *)(m + 0xB2) >> 5) << 2) + (D_0015ED84 << 8) + D_0014171B_c)
+             >> (*(unsigned short *)(m + 0xB2) & 0x1F)) & 1) {
+            m[0x20] = 1;
+            break;
+        }
+        g = D_0013E633_c;
+        if (is_point_inside_clip_volume(g, *(int *)(d + 0x20)) == 0 && ((unsigned char *)m)[0xBC] != 1) break;
+        qcopy(a, D_L01_001672C0_c);
+        qcopy(b, D_L01_001672C0_c + 0x10);
+        if (*(int *)(d + 0x28) == -1) {
+            FUN_L00_00216f90(g, g + 0x10, 0x72, 1);
+        } else {
+            char *o = D_L01_001600EC_q + *(int *)(d + 0x28) * 128;
+            FUN_L00_00216f90(o + 0x30, o + 0x70, 0x72, 1);
+        }
+        if (*(int *)(d + 0x30) != 0) {
+            FUN_L00_002eaaa0(a, b, 2, *(int *)(d + 0x34), 0);
+        } else {
+            char *o = D_L01_001600EC_q + *(int *)(d + 0x24) * 128;
+            FUN_L00_002eaaa0(o + 0x30, o + 0x70, 0, 0, 0);
+        }
+        D_L01_0015F404 = 1;
+        m[0x20] = 2;
+        m[0xBC] = 1;
+        {
+            int o = *(int *)(d + 0x24) << 7;
+            char *t = D_L01_001600EC_q;
+            qcopy(d, (char *)(o + (int)t) + 0x30);
+            qcopy(d + 0x10, (char *)(o + (int)t) + 0x70);
+        }
+        break;
+    }
+    case 2:
+        if (func_001F9908_c(d + 0x2C) != 0 || ((unsigned char *)m)[0xBC] != 1) {
+            if (*(int *)(d + 0x30) != 0) {
+                FUN_L00_002eac18(2);
+            } else {
+                FUN_L00_002eac18(0);
+            }
+            FUN_L01_002405a0();
+            D_L01_0015F404 = 0;
+            m[0x20] = 3;
+            m[0xBC] = 0;
+        } else {
+            FUN_L00_002ea9d8(d);
+            FUN_L00_002ea9d8(d + 0x10);
+        }
+        break;
+    case 3:
+        if (((unsigned char *)m)[0xBC] == 1) m[0x20] = ((unsigned char *)m)[0xBC];
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

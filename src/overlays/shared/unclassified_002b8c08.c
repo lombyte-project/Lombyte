@@ -407,7 +407,81 @@ void FUN_L01_002e35a8(char *moby, char *state) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3830.s", FUN_L01_002e3830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3f20.s", FUN_L01_002e3f20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eda00.s", FUN_L01_002eda00);
+/* Burning debris: flies along its velocity leaving two smoke trails, sticks to the ground, and hurts what it hits. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002EEDD8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float v[2];
+    float f8;
+    float fC;
+    char pad10[8];
+    char b18;
+    char b19;
+    short s1A;
+    char pad1C[0x14];
+} Hit_2eedd8;
+
+extern char D_0013F5F8[];
+extern float D_0015ED70;
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void FUN_L00_00259a88(void *, void *);
+extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void clear_vector(void *) __asm__("func_001F99F8");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
+
+void FUN_L01_002eda00(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float prev[4];
+    float z[4];
+    Hit_2eedd8 h;
+    float gz;
+    switch (((unsigned char *)m)[0x20]) {
+    case 1:
+        qcopy(prev, m + 0x10);
+        add_vector_xyz(m + 0x10, m + 0x10, d);
+        *(float *)(m + 0x48) = FUN_001f9e90(*(float *)(d + 0), *(float *)(d + 4));
+        clear_vector(z);
+        FUN_L00_00269958(m + 0x10, z, 0x6F00AFFF, 0xFF, scale_game_frames(FUN_L00_00257b90(0xF, 0x16)), 0x28,
+                          FUN_L00_00257b90(0x14, 0x23), 1);
+        FUN_L00_00269958(m + 0x10, z, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(FUN_L00_00257b90(0x1E, 0x3C)), 0x28,
+                          FUN_L00_00257b90(0x32, 0x4B), 0);
+        gz = *(float *)(m + 0x18) - probe_ground_height(m + 0x10, 0, 0.5f);
+        if (gz < *(float *)(d + 0x18)) {
+            *(float *)(m + 0x18) = *(float *)(m + 0x18) + (*(float *)(d + 0x18) - gz);
+            *(int *)(d + 8) = 0;
+        } else if (*(float *)(m + 0x18) < *(float *)(D_0013F5F8) + *(float *)(d + 0x18)) {
+            *(int *)(d + 8) = 0;
+        } else {
+            *(float *)(d + 8) -= D_0015ED70 * 10.8f;
+        }
+        if (FUN_001efa68(m + 0x10, prev, 0, *(int *)(d + 0x10), 0) != 0) {
+            char *p = D_L01_00174340_c;
+            if (*(int *)(p + 0x18) != 0) {
+                FUN_L00_00259888(&h, m, 0x10001, 1.0f, d);
+                FUN_001f9c48(&h, &h, 1.0f);
+                h.f8 = 1.0f;
+                h.fC = 5627.9248f;
+                h.b19 = 1;
+                h.s1A = *(unsigned short *)(m + 0xA6);
+                h.b18 = 0;
+                FUN_L00_00259a88(*(void **)(p + 0x18), &h);
+            }
+            m[0x20] = 2;
+        }
+        if (tick_countdown_32_alt(d + 0x14) != 0) m[0x20] = 2;
+        break;
+    case 2:
+        FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 13.0f);
+        mark_moby_for_removal(m);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002edca0.s", FUN_L01_002edca0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eec68.s", FUN_L01_002eec68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
