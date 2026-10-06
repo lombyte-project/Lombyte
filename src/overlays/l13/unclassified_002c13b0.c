@@ -648,7 +648,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ea540.s", FUN_L13_002ea540);
 
 extern char D_0013F350[];
 extern unsigned char *FUN_L13_002c1f28_c(char *owner, char *pos, char *vec) __asm__("FUN_L13_002c1f28");
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -673,6 +673,6 @@ unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
     }
     add_vector_xyz(v1, v1, b + 0x70);
     r = FUN_L13_002c1f28_c(a, (char *)v0, (char *)v1);
-    if (r) FUN_0022da68(3, 0, (int)a);
+    if (r) allocate_voice_for_target_entry(3, 0, (int)a);
     return r;
 }

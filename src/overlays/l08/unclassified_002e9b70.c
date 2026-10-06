@@ -16,7 +16,7 @@ extern int D_L08_00161DF4;
 extern int D_L08_00161E00 __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L08_002f0b40(int);
 extern void FUN_L08_002f0c18(int);
 extern void FUN_L08_002f0cf0(int);
@@ -27,7 +27,7 @@ void FUN_L08_002f0dc8(void) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(0x47, 0x513F1);
-    FUN_001f76a0();
+    font_queue_vu_state();
     vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
     vu1_add_g_sregister(0x42, (long)D_L08_00161DD0 << 32 | 0x44);
     FUN_L08_002f0b40(0);

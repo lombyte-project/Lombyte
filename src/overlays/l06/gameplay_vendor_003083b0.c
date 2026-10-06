@@ -50,7 +50,7 @@ void FUN_L06_00309240(int idx) {
 
 extern char D_L06_0016CFE0[];
 extern int D_L06_0015F5C4;
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_002637f8(int);
 
 void FUN_L06_00309348(unsigned char *moby)
@@ -64,7 +64,7 @@ void FUN_L06_00309348(unsigned char *moby)
         if (D_L06_0015F5C4 == 2) {
             char *p = D_L06_0016CFE0;
             if (*(int *)(p + 0x30) == 5) {
-                if (FUN_001f96f8(0x7F) >= *(int *)(p + 0x34)) {
+                if (scale_game_frames(0x7F) >= *(int *)(p + 0x34)) {
                     FUN_L00_002637f8(*(int *)(p + 0x180));
                 }
             }

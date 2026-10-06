@@ -53,7 +53,7 @@ extern void func_001E9410(RenderSequenceActor *);
 extern void func_001E9428(void);
 extern void func_001E9430(void);
 extern void transition_update_movie_camera(void) __asm__("func_001EAF88");
-extern s32 func_001F96F8(s32);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void func_001F9A10(Vec4 *, Vec4 *, Vec4 *);
 extern void func_001F9A68(Vec4 *, Vec4 *, f32);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -120,20 +120,20 @@ void update_gameplay_frame(void)
     func_001E9428();
     if (game_stage == 0) {
         intro_overlay_timer++;
-        if (func_001F96F8(0x3C) < intro_overlay_timer) {
+        if (scale_game_frames(0x3C) < intro_overlay_timer) {
             if (++intro_overlay_alpha > 0x40) {
                 intro_overlay_alpha = 0x40;
             }
         }
-        if (func_001F96F8(0x78) < intro_overlay_timer) {
-            language_intro_overlay_alpha = (s32)(fast_cos((intro_overlay_timer - func_001F96F8(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
+        if (scale_game_frames(0x78) < intro_overlay_timer) {
+            language_intro_overlay_alpha = (s32)(fast_cos((intro_overlay_timer - scale_game_frames(0x78)) % 60 * 0.10471976f + -3.1415927f) * 32.0f) + 0x60;
         }
         if (D_0013CAE4[0] & 0x840) {
             InitializeTransferCommand();
         }
         sound_update();
     } else if (game_stage == 3) {
-        intro_overlay_timer = func_001F96F8(0x3C);
+        intro_overlay_timer = scale_game_frames(0x3C);
         if ((intro_overlay_alpha -= 0x10) < 0) {
             intro_overlay_alpha = 0;
         }

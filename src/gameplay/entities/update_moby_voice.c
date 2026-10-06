@@ -13,7 +13,7 @@ struct M2c_temp_3_16 {
 
 extern u8 D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 void update_moby_voice(struct M2c_arg0 *arg0) __asm__("FUN_0020c940");
 
@@ -31,7 +31,7 @@ void update_moby_voice(struct M2c_arg0 *arg0) {
             arg0->unk7D = 0xFF;
         }
     } else if (arg0->unk7C != 0xFF) {
-        arg0->unk7D = func_0022DA68(arg0->unk7C, 4, arg0);
+        arg0->unk7D = allocate_voice_for_target_entry(arg0->unk7C, 4, arg0);
     }
 }
 

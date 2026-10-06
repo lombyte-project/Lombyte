@@ -60,7 +60,7 @@ extern u8 D_001D5148[];
 extern u8 D_001D5208[];
 extern u8 D_001D5298[];
 extern u8 D_001D52B0[];
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 FUN_002223f0(struct Menu *arg0)
 {
   int flag;
@@ -100,7 +100,7 @@ s32 FUN_002223f0(struct Menu *arg0)
   {
     case 0:
       arg0->unk50 = arg0->unk50 + 1;
-      arg0->unk40 = FUN_001f96f8(0xB4);
+      arg0->unk40 = scale_game_frames(0xB4);
       arg0->unk3C = 0;
       D_001D2AF4[0] = 0x50A9;
       arg0->str = (s32) D_001D5098;
@@ -139,7 +139,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     }
       if (arg0->unk54 != 0)
     {
-      arg0->unk40 = FUN_001f96f8(0xB4);
+      arg0->unk40 = scale_game_frames(0xB4);
       arg0->unk50 = arg0->unk50 + 1;
     }
       break;
@@ -148,7 +148,7 @@ s32 FUN_002223f0(struct Menu *arg0)
       if (arg0->unk40 == 0)
     {
       arg0->unk50 = 5;
-      arg0->unk40 = FUN_001f96f8(0xB4);
+      arg0->unk40 = scale_game_frames(0xB4);
       arg0->unk3C = 0;
       D_001D2AF4[0] = 0x50D6;
       arg0->str = (s32) D_001D5148;
@@ -160,7 +160,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     {
       D_001D2AF4[0] = 0x50D4;
       arg0->str = 0x50D5;
-      arg0->unk40 = FUN_001f96f8(0xF0);
+      arg0->unk40 = scale_game_frames(0xF0);
       arg0->unk3C = 0;
       arg0->unk50 = arg0->unk50 + 1;
     }
@@ -171,7 +171,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     {
       D_001D2AF4[0] = 0x5106;
       arg0->str = (s32) D_001D5208;
-      arg0->unk40 = FUN_001f96f8(0xF0);
+      arg0->unk40 = scale_game_frames(0xF0);
       arg0->unk3C = 0;
       arg0->unk50 = arg0->unk50 + 1;
     }
@@ -182,7 +182,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     {
       D_001D2AF4[0] = 0x5136;
       arg0->str = 0x5137;
-      arg0->unk40 = FUN_001f96f8(0xF0);
+      arg0->unk40 = scale_game_frames(0xF0);
       arg0->unk3C = 0;
       arg0->unk50 = arg0->unk50 + 1;
     }
@@ -191,7 +191,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     case 11:
       if (arg0->unk40 == 0)
     {
-      arg0->unk40 = FUN_001f96f8(0xB4);
+      arg0->unk40 = scale_game_frames(0xB4);
       arg0->unk3C = 0;
       D_001D2AF4[0] = 0x5138;
       arg0->str = (s32) D_001D5298;
@@ -204,7 +204,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     {
       D_001D2AF4[0] = 0;
       arg0->str = 0x5143;
-      arg0->unk40 = FUN_001f96f8(0xF0);
+      arg0->unk40 = scale_game_frames(0xF0);
       arg0->unk3C = 0;
       arg0->unk50 = arg0->unk50 + 1;
     }
@@ -213,7 +213,7 @@ s32 FUN_002223f0(struct Menu *arg0)
     case 15:
       if (arg0->unk40 == 0)
     {
-      arg0->unk40 = FUN_001f96f8(0xB4);
+      arg0->unk40 = scale_game_frames(0xB4);
       arg0->unk3C = 0;
       D_001D2AF4[0] = 0x5144;
       arg0->str = (s32) D_001D52B0;
@@ -227,7 +227,7 @@ s32 FUN_002223f0(struct Menu *arg0)
       D_001D2AF4[0] = 0;
       arg0->str = 0x5175;
       arg0->unk50 = arg0->unk50 + 1;
-      arg0->unk40 = FUN_001f96f8(0x12C);
+      arg0->unk40 = scale_game_frames(0x12C);
     }
       break;
 

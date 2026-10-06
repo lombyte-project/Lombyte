@@ -50,7 +50,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void FUN_L00_002054e8(void);
 extern void FUN_L00_002056a8(void);
@@ -89,7 +89,7 @@ void FUN_L01_00228870(void) {
     char *g = (char *)D_0013E533 + 0xE1D;
     if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
         char *q;
-        fade_to_black(FUN_001f96f8(0x10));
+        fade_to_black(scale_game_frames(0x10));
         q = (char *)D_0013E533 + 0xE1D;
         q[0x20B1] = 1;
         return;
@@ -723,7 +723,7 @@ void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 FUN_L00_001f3608(void);
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
-f32 FUN_002135f0(void *, void *);
+f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
 f32 FUN_001f9b48(void *, void *);
@@ -843,7 +843,7 @@ void FUN_L01_00232dc0(void) {
     GG.xB12ed = r;
     GG.xH12e0 = FUN_001f0b58_c();
     if (GG.xH12e0 == 0) {
-        GG.xF2f0 = FUN_002135f0(D_L01_001742E0, (u8 *)&GG + 0x280);
+        GG.xF2f0 = resolve_camera_surface_height(D_L01_001742E0, (u8 *)&GG + 0x280);
         if (GG.xF88 < GG.xF2f0 && GG.xI2f8 <= 0) {
             GG.xI2f8 = 1;
         }

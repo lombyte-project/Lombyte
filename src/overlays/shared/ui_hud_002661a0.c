@@ -31,10 +31,10 @@ typedef struct {
     void *unk80;
 } HudElem;
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L05_002661a0(HudElem *e) {
-    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->w = 0x80;
     e->unk48 = 0;
     e->h = 0x80;
@@ -47,7 +47,7 @@ extern char D_0013E533[];
 void FUN_L05_002661e8(char *moby)
 {
     if (*(int *)(D_0013E533 + 0x2EA9) == 0x16) {
-        *(int *)(moby + 0x7C) = FUN_001f96f8(0x1E);
+        *(int *)(moby + 0x7C) = scale_game_frames(0x1E);
         *(int *)(moby + 0x6C) = 5;
     } else {
         *(int *)(moby + 0x6C) = -6;

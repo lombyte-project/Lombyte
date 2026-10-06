@@ -136,7 +136,7 @@ typedef struct {
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9e90(float, float);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -155,7 +155,7 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
         qcopy(m + 0x10, a);
         qcopy(data + 0x10, a);
         qcopy(data, b);
-        blend_moby_animation(m, 1, 0, FUN_001f96f8(5));
+        blend_moby_animation(m, 1, 0, scale_game_frames(5));
         *(short *)(m + 0x34) = 0x208;
         *(int *)(data + 0x20) = c;
         *(int *)(data + 0x24) = d;
@@ -613,7 +613,7 @@ void FUN_L14_002fba20(L14WatchMoby *m) {
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
             (q = (L14Player *)(g - 0x80), fast_difference_between_rotations(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
-            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
+            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = scale_game_frames(120);
             else FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;

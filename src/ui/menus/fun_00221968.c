@@ -28,7 +28,7 @@ extern s32 D_0013CB04[];
 extern s32 D_0015ED84;
 extern s32 D_001A0314[];
 extern struct M2c_D_001D5BF0 D_001D5BF0;
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221968(struct M2c_arg0 *arg0)
 {
   if (D_0013CB04[0] & 0x10) {
@@ -41,14 +41,14 @@ s32 FUN_00221968(struct M2c_arg0 *arg0)
     D_001A0314[0] = D_0015ED84;
     return 1;
   } else if (D_0013CB04[0] & 0x40) {
-    func_0022DA68(0, 0x11, arg0->unk14);
+    allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
     return 1;
   } else if (D_0013CB04[0] & 0x20) {
     D_001D5BF0.unkE4 = D_001A0314[0];
     D_001D5BF0.unkF0 = (s32)D_001D5BF0.unk4;
     D_001D5BF0.unkC = 3;
     D_001D5BF0.unkF4 = 0xF;
-    func_0022DA68(0, 0x11, arg0->unk14);
+    allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
   }
   return 0;
 }

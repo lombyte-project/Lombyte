@@ -315,7 +315,7 @@ extern unsigned char D_0013D4E1 __attribute__((section(".data")));
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void FUN_L00_00266858(void *, int);
 extern void FUN_L05_00319510(void *);
@@ -543,7 +543,7 @@ extern short D_L16_00161DDC_x __asm__("D_L16_00161DDC") __attribute__((sda));
 extern short D_L16_00161DE0_x __asm__("D_L16_00161DE0") __attribute__((sda));
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001fa2d8(void *, void *);
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int tick_countdown_32_u(void *) __asm__("func_001F9740");
 extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
@@ -675,7 +675,7 @@ extern short D_L16_00161DF0 __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 void FUN_L16_002e56e0_c(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
 extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
@@ -1643,7 +1643,7 @@ extern short D_L16_00161F00 __attribute__((sda));
 extern short D_L16_00161F10 __attribute__((sda));
 extern short D_L16_00161F20 __attribute__((sda));
 extern short D_L16_00161F30 __attribute__((sda));
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
@@ -1660,7 +1660,7 @@ void FUN_L16_002e8d40(void) {
     vu1_add_g_sregister_l16(0x42, 0x4000000064);
     vu1_add_g_sregister_l16(8, 0);
     vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
-    FUN_001f76a0();
+    font_queue_vu_state();
     for (i = 0; i < 3; i++) {
         if (FUN_001fa728(D_L16_001DC600[i], 512.0f) != -1) {
             FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DC630);
@@ -1752,7 +1752,7 @@ void FUN_L16_002e9270(void) {
     vu1_add_g_sregister_2e9270(0x42, 0x4000000064);
     vu1_add_g_sregister_2e9270(8, 0);
     vu1_add_g_sregister_2e9270(0x14, 0xFF9000000260);
-    FUN_001f76a0();
+    font_queue_vu_state();
     for (i = 0; i < 1; i++) {
         if (FUN_001fa728(D_L16_00161F80_t[i], 512.0f) != -1) {
             FUN_L16_002e8b98_t(a[i], d[i], b[i], c[i], D_L16_001DDC80_t);
@@ -1891,7 +1891,7 @@ extern short D_L16_00161FC8_d[1] __asm__("D_L16_00161FC8") __attribute__((sda));
 extern short D_L16_00161FD8_d[1] __asm__("D_L16_00161FD8") __attribute__((sda));
 extern short D_L16_00161FE8_d[1] __asm__("D_L16_00161FE8") __attribute__((sda));
 extern short D_L16_00161FF8_d[1] __asm__("D_L16_00161FF8") __attribute__((sda));
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -1902,7 +1902,7 @@ void FUN_L16_002e9ce0(void) {
     vu1_add_g_sregister(0x42, 0x4000000064L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    FUN_001f76a0();
+    font_queue_vu_state();
     for (i = 0; i < 3; i++) {
         FUN_L16_002e8b98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FE8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FD8_d)[i], D_L16_001E28D0);
         FUN_L00_001fde98(((int *)D_L16_00161FB8_d)[i], ((int *)D_L16_00161FC8_d)[i], ((int *)D_L16_00161FF8_d)[i], D_L16_001E28D0, 1);

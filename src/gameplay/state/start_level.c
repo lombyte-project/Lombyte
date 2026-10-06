@@ -20,7 +20,7 @@ extern char D_001940C0[];
 extern void FlushCache(int);
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
 extern void music_stop(void) __asm__("func_00215EE8");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("func_001F4A58");
 extern void snd_stream_safe_cd_sync(int) __asm__("func_0012EE08");
 extern void memcard_update_state(void) __asm__("func_002093D8");
@@ -57,7 +57,7 @@ void start_level(int level) {
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
-    fade_to_black(FUN_001f96f8(12));
+    fade_to_black(scale_game_frames(12));
     D_0015F604 = 1;
     FlushCache(0);
     sound_stop_all_sounds();

@@ -942,7 +942,7 @@ extern short D_L17_001623F8_d __asm__("D_L17_001623F8") __attribute__((sda));
 extern short D_L17_00162400_d __asm__("D_L17_00162400") __attribute__((sda));
 extern short D_L17_00162408_d __asm__("D_L17_00162408") __attribute__((sda));
 extern short D_L17_00162410_d __asm__("D_L17_00162410") __attribute__((sda));
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -954,7 +954,7 @@ void FUN_L17_002f5690(void) {
     vu1_add_g_sregister(0x42, 0x2000000064L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    FUN_001f76a0();
+    font_queue_vu_state();
     p = (float *)D_L17_001DE8A0;
     for (i = 0; i < 2; i++) {
         FUN_L17_002f54d8(((int *)&D_L17_001623F0_d)[i], ((int *)&D_L17_00162408_d)[i], ((int *)&D_L17_001623F8_d)[i], ((int *)&D_L17_00162400_d)[i], p);
@@ -979,7 +979,7 @@ void FUN_L17_002f59a8(void) {
     vu1_add_g_sregister(0x42, 0x2000000064L);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    FUN_001f76a0();
+    font_queue_vu_state();
     p = (float *)D_L17_001DF6A0;
     for (i = 0; i < 1; i++) {
         FUN_L17_002f54d8(((int *)&D_L17_00162420_d)[i], (V3 *)((int *)&D_L17_00162450_d)[i], (V3 *)((int *)&D_L17_00162440_d)[i], ((int *)&D_L17_00162448_d)[i], p);

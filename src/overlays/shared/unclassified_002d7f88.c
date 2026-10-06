@@ -574,7 +574,7 @@ fail:
 typedef struct { u8 pad0[0x2050]; s32 slot[11]; s32 count; } G;
 extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 FUN_L00_002dbe20(u8 *m) {
     u8 *o = FUN_L00_002db890_u(m);
@@ -594,7 +594,7 @@ s32 FUN_L00_002dbe20(u8 *m) {
     case 2: {
         if (m[0x53] != *(u8 *)(*(u8 **)(o + 0x70) + 7)) {
             u8 c = *(u8 *)(*(u8 **)(o + 0x70) + 7);
-            blend_moby_animation(m, c, 0, FUN_001f96f8(10));
+            blend_moby_animation(m, c, 0, scale_game_frames(10));
         }
         *(s16 *)(o + 0x68) = 7;
         return 0;

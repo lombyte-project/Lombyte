@@ -68,7 +68,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030ab80.s", FUN_L09_0030ab80);
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
@@ -81,7 +81,7 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
         *(float *)(m + 0x40) = random_float_between_alt(-3.1415927f, 3.1415927f);
         *(float *)(m + 0x44) = random_float_between_alt(-3.1415927f, 3.1415927f);
         *(int *)(d + 0x14) = 0;
-        *(short *)(d + 0x18) = FUN_001f96f8(500);
+        *(short *)(d + 0x18) = scale_game_frames(500);
         *(unsigned char *)(m + 0x30) = 0xFF;
         *(short *)(m + 0x32) = 0x40;
         m[0x31] = 1;

@@ -201,7 +201,7 @@ extern void FUN_L00_0025be00(void *, f32, void *, f32, f32, f32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern f32 FUN_001f9af0(void *);
-extern f32 FUN_00213f38(f32, f32, f32, f32, f32 *, f32 *);
+extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void FUN_001f9bf8(void *, void *, f32);
 extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -290,7 +290,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         qcopy(&delta, &path->pts[vars->pathPt]);
         VEND_TURN(moby, vars, FUN_001f9e90(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]), 12.566371f);
         FUN_001f9a28(&dir, &delta, &moby->pos);
-        FUN_00213f38(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]), D_0015ED70 * 8.0f, D_0015ED70 * 16.0f, D_0015ED6C * 12.0f, &vel, &vars->speed);
+        advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]), D_0015ED70 * 8.0f, D_0015ED70 * 16.0f, D_0015ED6C * 12.0f, &vel, &vars->speed);
         if (FUN_001f9af0(&dir) < vars->speed + vars->speed) {
             vars->pathPt++;
             if (vars->pathPt == path->count) {
@@ -476,7 +476,7 @@ typedef struct {
     TrollVec pos;
 } TrollColl;
 
-extern s16 FUN_001f96f8(s32);
+extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int FUN_001f9770(void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -521,7 +521,7 @@ void FUN_L00_002e1678(TrollMoby *m)
     }
     if (vars->unk38 != 0) {
         vars->unk38 = 0;
-        vars->unk1DA = FUN_001f96f8(FUN_L00_00257b90(0xB4, 0x12C));
+        vars->unk1DA = scale_game_frames(FUN_L00_00257b90(0xB4, 0x12C));
     }
     FUN_001f9770(&vars->unk1DA);
     anim = vars->unk60;
@@ -561,7 +561,7 @@ void FUN_L00_002e1678(TrollMoby *m)
             vars->unkC4 = vars->unkC0 = -1.0f;
             m->state = 7;
             vars->unk67 = 0xFA;
-            vars->unk26 = FUN_001f96f8(0x3C);
+            vars->unk26 = scale_game_frames(0x3C);
             FUN_L00_0025d458(m, anim);
         }
         FUN_L00_002e2040(m);

@@ -93,7 +93,7 @@ extern s32 D_001D2640[];
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 prepare_save_game() __asm__("FUN_002269c0");
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 saving_data_menu(struct M2c_arg0 *arg0) __asm__("FUN_00222f88");
 
 s32 saving_data_menu(struct M2c_arg0 *arg0)
@@ -216,7 +216,7 @@ s32 saving_data_menu(struct M2c_arg0 *arg0)
       }
       if (arg0->unk40 != temp_11_47)
       {
-        func_0022DA68(1, 0x11, arg0->unk14);
+        allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
       }
       block_46:
       ;

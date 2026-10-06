@@ -60,7 +60,7 @@ extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L05_002551b8(void);
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern char D_L16_0015F6E8[4] __attribute__((sda));
 extern short D_L16_0015F688 __attribute__((sda));

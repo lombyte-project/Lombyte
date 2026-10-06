@@ -73,12 +73,12 @@ extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 extern void start_level(int level) __asm__("FUN_001e9488");
 extern void transition_load_wad(void) __asm__("FUN_001ea830");
-extern void func_001EB0A8(void);
+extern void update_gameplay_frame(void) __asm__("func_001EB0A8");
 extern void transition_default_draw() __asm__("FUN_001eb410");
 extern s32 is_active_state_entry(s32 arg0, s32 arg1) __asm__("FUN_001eb740");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 func_001F96F8();
+extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
 extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
@@ -145,7 +145,7 @@ void transition_do_transition(void) {
     FUN_00232d00();
     init_hud();
     load_hud_banks();
-    for (n = *(volatile u32 *)0x10000000 / 0x109; n < func_001F96F8(0xB4); n++) {
+    for (n = *(volatile u32 *)0x10000000 / 0x109; n < scale_game_frames(0xB4); n++) {
         sceGsSyncV(0);
     }
     snd_reset_state_and_flush_commands();
@@ -187,11 +187,11 @@ void transition_do_transition(void) {
             }
             D_001862B0[i].voice = -1;
         }
-        func_001EB0A8();
+        update_gameplay_frame();
         transition_default_draw();
         if (D_0015F604 != 0) {
             wait = 0;
-        } else if (++wait >= func_001F96F8(0x5DC)) {
+        } else if (++wait >= scale_game_frames(0x5DC)) {
             start_level(level);
             wait = 0;
             level = (level + 1) % 4;

@@ -15,9 +15,9 @@ extern int FUN_001f9770(void *);
 extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long), long) __asm__("FUN_0012ecd0");
 extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");
 extern void snd_is_vag_stream_buffered_cb(int, void (*)(int, long), long) __asm__("FUN_0012ed00");
-extern void FUN_00216bc0(int, long);
+extern void music_remaining_time_callback(int, long) __asm__("FUN_00216bc0");
 extern void set_sound_handle_id(int, long) __asm__("func_00216B68");
-extern void FUN_00216990(int, long);
+extern void music_channel_ready_callback(int, long) __asm__("FUN_00216990");
 /* music_UpdateStream(music_Playing &): with a live handle and state other
    than 9, state 5 stops the stream (state 6) and state 6 without a
    handle resets; a fading record (+0xC bit 15) pauses the handle once
@@ -72,12 +72,12 @@ void music_update_stream(MusicPlaying *p) {
         if (p->state != 2 && p->state != 3) {
             h = p->handle;
             p->handle = 0xFFFFFFFF;
-            snd_get_vag_stream_time_remaining_cb(h, FUN_00216bc0, (long)(unsigned int)p);
+            snd_get_vag_stream_time_remaining_cb(h, music_remaining_time_callback, (long)(unsigned int)p);
             snd_sound_is_still_playing_cb(h, set_sound_handle_id, (long)(unsigned int)p);
             return;
         }
         if (p->handle != 0xFFFFFFFF && p->state == 2) {
-            snd_is_vag_stream_buffered_cb(p->handle, FUN_00216990, (long)(unsigned int)p);
+            snd_is_vag_stream_buffered_cb(p->handle, music_channel_ready_callback, (long)(unsigned int)p);
         }
     } else if (p->state == 7 || p->handle == 0) {
         p->state = 0;

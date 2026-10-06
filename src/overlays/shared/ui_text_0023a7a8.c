@@ -141,6 +141,7 @@ extern H_23ac78 D_L00_0017E4D8 __attribute__((section(".data")));
 extern void FUN_L00_0023adb8(void);
 extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 int FUN_L00_0023ac78(int call) {
     int n = 0;
     E_23ac78 *e;
@@ -150,8 +151,8 @@ int FUN_L00_0023ac78(int call) {
     h = &D_L00_0017E4D8;
     do {
         if ((e->flags & 0x10) || h->b != 0) {
-            if (e->t < FUN_001f96f8(10)) {
-                e->t = FUN_001f96f8(10);
+            if (e->t < scale_game_frames(10)) {
+                e->t = scale_game_frames(10);
             }
         }
         if (e->t > 0 && --e->t > 0) {

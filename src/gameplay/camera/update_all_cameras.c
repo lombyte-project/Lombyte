@@ -8,7 +8,7 @@ extern s32 D_00189B50[];
 extern struct CamMode D_001E8C00[];
 extern void draw_moby(struct Camera *) __asm__("func_001EC3D8");
 extern s32 camera_activation_check_priority(struct Camera *, struct Camera *) __asm__("func_001EC210");
-extern void func_001EBF10(struct Camera *);
+extern void switch_active_camera_record(struct Camera *) __asm__("func_001EBF10");
 extern void handle_camera_collision_with_hero(struct Camera *) __asm__("func_001EBE68");
 extern void execute_camera_post_update_callbacks(void) __asm__("func_001EBCF0");
 s32 update_all_cameras(void) __asm__("FUN_001ec420");
@@ -31,7 +31,7 @@ s32 update_all_cameras(void) {
         }
     }
     if (changed) {
-        func_001EBF10(best);
+        switch_active_camera_record(best);
     }
     update = D_001E8C00[best->mode].update;
     handle_camera_collision_with_hero(best);

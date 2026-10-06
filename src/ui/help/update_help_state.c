@@ -50,7 +50,7 @@ extern s32 D_0015F604;
 extern TextEntry *D_0015F6A0;
 extern HelpState D_001996D0;
 
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 func_001F9740(void *);
 extern s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
@@ -59,7 +59,7 @@ extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void update_help_state(void) __asm__("FUN_001fde90");
 
-#define PLAY_TIME (FUN_001f96f8(D_0015EEA4) / 600)
+#define PLAY_TIME (scale_game_frames(D_0015EEA4) / 600)
 
 #define RECORD_COUNT()                                             \
     if (D_00141968[D_001996D0.entry].count < 0xFFFF) {             \
@@ -81,7 +81,7 @@ void update_help_state(void) {
             D_001996D0.delay = 1;
         }
         if (D_001996D0.delay != 0) {
-            if (++D_001996D0.delay >= FUN_001f96f8(0x78)) {
+            if (++D_001996D0.delay >= scale_game_frames(0x78)) {
                 D_001996D0.started = 1;
             }
         }
@@ -158,7 +158,7 @@ void update_help_state(void) {
             D_001996D0.state = 7;
             D_001996D0.timer = 0;
             RECORD_FLAGS();
-        } else if (D_001996D0.timer >= FUN_001f96f8(0x18)) {
+        } else if (D_001996D0.timer >= scale_game_frames(0x18)) {
             if (D_001516D0.unk5A == 3
                 || (id = D_0015F6A0[D_001996D0.msg].id) == -1
                 || id != D_001516D0.unk54 - 0x7530) {
@@ -208,7 +208,7 @@ void update_help_state(void) {
         s32 id;
 
         force_help_message(5, 0);
-        if ((D_001996D0.timer >= FUN_001f96f8(0x1A4)
+        if ((D_001996D0.timer >= scale_game_frames(0x1A4)
              && ((id = D_0015F6A0[D_001996D0.msg].id) == -1
                  || id != D_001516D0.unk54 - 0x7530
                  || (D_001516D0.unk50 == 0 && D_001516D0.unk1C == -1)))

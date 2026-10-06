@@ -101,7 +101,7 @@ void FUN_L06_002f45f0(int idx)
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 void FUN_L06_002f5360(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -109,7 +109,7 @@ void FUN_L06_002f5360(char *moby) {
     int i;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 2) {
-        FUN_0022da68(0, 0, (int)moby);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
         moby[0x20] = 4;
         p = (char **)(data + 0x24);
         *(int *)(data + 0x14) = 0;
@@ -130,7 +130,7 @@ void FUN_L06_002f53e8(char *moby)
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 6) {
         unsigned short fl;
-        FUN_0022da68(0, 0, (int)moby);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
         fl = *(unsigned short *)(moby + 0x34);
         moby[0x31] = 1;
         fl &= 0xFFFE;

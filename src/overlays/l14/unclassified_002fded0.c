@@ -62,7 +62,7 @@ int FUN_L14_002fea80(char *moby) {
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float FUN_001f9e90(float, float);
 #include "sda.h"
 extern unsigned char D_0015EDB0;
@@ -238,7 +238,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         tracking = 1;
         if (FUN_001f9b80(m->position, g) < 8.0f &&
             (q = (L14Player *)(g - 0x80), fast_difference_between_rotations(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
-            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
+            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = scale_game_frames(120);
             else FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;

@@ -83,7 +83,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
 extern int FUN_001f96f8(int);
-extern void FUN_0022da68(int, int, char *);
+extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 extern void *FUN_L01_0030d308(void *, void *, void *, float, float, float, float, float, float);
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float, float) __asm__("FUN_L01_0030c898");
 
@@ -135,7 +135,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
                     dist = FUN_001f9b80(&v, &q);
                     d = -FUN_001f9e90(dist, q.f[2] - v.f[2]);
                     FUN_L01_0030c898_c(moby, &v, a, b, c, d);
-                    FUN_0022da68(0, 0, moby);
+                    allocate_voice_for_target_entry(0, 0, moby);
                     *(short *)(state + 0x54) = FUN_001f96f8(D_L01_00162080_i);
                     *(int *)(state + 0x5C) = *(int *)(state + 0x5C) + 1;
                 }

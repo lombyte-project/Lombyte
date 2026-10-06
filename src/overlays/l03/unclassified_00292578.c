@@ -12,7 +12,7 @@ extern char D_L03_00166EC0[];
 extern float FUN_001f9b48(void *, void *);
 extern int FUN_001f96f8(int);
 extern int FUN_001f9770(void *);
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_00257b90(int, int);
 
 void FUN_L03_0029d1b8(char *moby) {
@@ -37,7 +37,7 @@ void FUN_L03_0029d1b8(char *moby) {
             }
             f = FUN_001f9b48(moby + 0x10, D_L03_00166EC0);
             if (f > 15.0f && f < 90.0f) {
-                FUN_0022da68(0, 0, (int)moby);
+                allocate_voice_for_target_entry(0, 0, (int)moby);
             }
             x = FUN_001f96f8(0x898);
             y = FUN_001f96f8(0x898);
@@ -140,14 +140,14 @@ void FUN_L03_0029c9d0(unsigned char *moby) {
     switch (*(short *)(moby + 0xA6)) {
     case 0x75:
     case 0x78:
-        *(int *)(data + 0x150) = FUN_0022da68(0, 4, (int)moby);
+        *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case 0x4B:
     case 0x73:
     case 0x74:
     case 0x76:
     case 0x77:
-        *(int *)(data + 0x150) = FUN_0022da68(1, 4, (int)moby);
+        *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
         break;
     }
 }

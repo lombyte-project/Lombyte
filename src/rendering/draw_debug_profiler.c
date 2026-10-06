@@ -77,7 +77,7 @@ extern void AppendDmaTag(u32);
 extern void FlushCache(s32);
 extern void transition_draw_sky(void) __asm__("func_001E9AB8");
 extern void func_001EDC50(void);
-extern void FUN_001ee338(void);
+extern void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");
 extern void func_001F21B0(void *, s32);
 extern void func_001F21B8(void *, s32);
 extern void func_001F2260(void);
@@ -93,11 +93,11 @@ extern void dispatch_callback_list_4(void) __asm__("func_001F4808");
 extern void draw_light_quads(void) __asm__("func_001F4880");
 extern void draw_subtitles(void) __asm__("func_001F4BE0");
 extern void draw_letterbox_bars(void) __asm__("func_001F4D98");
-extern void func_001F4FB8(void);
+extern void draw_screen_effect(void) __asm__("func_001F4FB8");
 extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
-extern void func_001F79A8(void);
-extern void FUN_001f92b0(void);
+extern void draw_debug_font(void) __asm__("func_001F79A8");
+extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
 extern f32 func_001FA6C0(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
@@ -118,7 +118,7 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void vu1_gs_regs_normal(void) __asm__("func_00233BC8");
-extern void func_00233C28(void);
+extern void vu1_gs_regs_alt(void) __asm__("func_00233C28");
 extern void FUN_00234f98(void *);
 extern void patch_tie_texture_fields(void) __asm__("FUN_00235780");
 extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
@@ -165,7 +165,7 @@ void draw_debug_profiler(void) {
     }
     AppendDmaTag(0x02020000);
     if (D_0018A2B0.unk34 != 0 && D_0015F46C != 0) {
-        func_00233C28();
+        vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_2();
         do_gif_paging();
@@ -182,11 +182,11 @@ void draw_debug_profiler(void) {
     }
     if (D_0015F434 & 0x20) {
         setup_gif_paging(1);
-        func_001F79A8();
+        draw_debug_font();
         do_gif_paging();
     }
     if (D_0018A2B0.unk34 != 0 && D_0015F470 != 0) {
-        func_00233C28();
+        vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_3();
         do_gif_paging();
@@ -204,21 +204,21 @@ void draw_debug_profiler(void) {
     func_001F21B8(D_0015F3B0, 4);
     func_001F21B0(D_0015F3B0, 4);
     if (D_0015F434 & 0x20) {
-        func_00233C28();
+        vu1_gs_regs_alt();
         if (D_0018A2B0.unk34 != 0) {
             if (D_0015F464 != 0) {
                 dispatch_callback_list_1();
             }
             vu1_add_g_sregister(0x42, 0x8000000048);
             func_001EDC50();
-            func_00233C28();
+            vu1_gs_regs_alt();
             draw_light_quads();
         }
         func_001F21B0(D_0015F3C0, 6);
         func_001F21B8(D_0015F3C0, 6);
         if (D_0018A2B0.unk38 != 0) {
             vu1_add_g_sregister(8, 5);
-            func_00233C28();
+            vu1_gs_regs_alt();
             FlushCache(0);
             func_00217C18();
             D_0015F620 = 8;
@@ -227,14 +227,14 @@ void draw_debug_profiler(void) {
         func_001F21B8(D_0015F3D0, 8);
         if (D_0018A2B0.unk3C != 0) {
             if (D_0015F468 != 0) {
-                func_00233C28();
+                vu1_gs_regs_alt();
                 dispatch_callback_list_4();
             }
             if (D_0015F604 == 0) {
-                FUN_001f92b0();
+                append_billboard_batch();
             }
             vu1_add_g_sregister(0x42, 0x8000000044);
-            FUN_001ee338();
+            render_queued_rotated_sprites();
         }
         func_001F21B0(D_0015F3E0, 6);
         func_001F21B8(D_0015F3E0, 6);
@@ -243,7 +243,7 @@ void draw_debug_profiler(void) {
         append_texture_transfer_packet();
     }
     func_001F21B8(D_0015F3F0, 0xF);
-    func_00233C28();
+    vu1_gs_regs_alt();
     if (D_0015F434 & 0x10000) {
         func_00237A70();
     }
@@ -277,7 +277,7 @@ void draw_debug_profiler(void) {
                 emit_rgba_draw_packet(0xFF, 0xFF, 0xFF, truncate_float_to_s32(D_0015F440 * 128.0f));
             }
             if (D_0015F34C != 0 && D_0015F350 != 0) {
-                func_001F4FB8();
+                draw_screen_effect();
             }
         }
         func_001F21B8(D_0015F400, 0xA);

@@ -11,7 +11,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002502a0(int idx);
 
 void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
@@ -20,7 +20,7 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
     case 0x502:
         if (m[0x20] == 2) {
             m[0x20] = 3;
-            FUN_0022da68(0, 0, (int)m);
+            allocate_voice_for_target_entry(0, 0, (int)m);
         }
         break;
     case 0x404:

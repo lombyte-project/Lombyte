@@ -57,7 +57,7 @@ extern void stash_moby_class_dists(void) __asm__("func_0020D218");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 extern void func_00218D10(void);
 extern void func_001F2260(void);
-extern void func_00237A78(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *);
+extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *) __asm__("func_00237A78");
 extern void func_00200E08(s32, s32, s32, s32, u64, s32);
 extern void func_001F7888(s32, s32, s32, f32);
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("func_00200F90");
@@ -66,7 +66,7 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64)
 extern void restore_moby_class_dists(void) __asm__("func_0020D248");
 extern void draw_mobys_clean_up(void) __asm__("func_0020D3B0");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
-extern void func_00223E28(PanelRenderSlot *);
+extern void draw_menu_flashing_panel(PanelRenderSlot *) __asm__("func_00223E28");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
@@ -143,7 +143,7 @@ void render_level_effects_and_screen_sprites(void)
         qcopy(&frame_vectors[3], (Vec4 *)projected_frame + 3);
         first_corner.q = frame_vectors[0].q;
         opposite_corner.q = frame_vectors[3].q;
-        func_00237A78(&first_corner, &opposite_corner, &projected_width, &projected_height, &screen_x, &screen_y);
+        project_graphics_bounds(&first_corner, &opposite_corner, &projected_width, &projected_height, &screen_x, &screen_y);
         width_for_panel = projected_width;
         screen_x++;
         screen_y++;
@@ -265,7 +265,7 @@ void render_level_effects_and_screen_sprites(void)
     setup_gif_paging(0);
     for (; final_slot_index < 14; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 && (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
-            func_00223E28(slots[final_slot_index]);
+            draw_menu_flashing_panel(slots[final_slot_index]);
         }
     }
     do_gif_paging();

@@ -166,7 +166,7 @@ void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 FUN_L00_001f3608(void);
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
-f32 FUN_002135f0(void *, void *);
+f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
 f32 FUN_001f9b48(void *, void *);
@@ -287,7 +287,7 @@ void FUN_L16_0020ffb0(void) {
     GG.xB12ed = r;
     GG.xH12e0 = FUN_001f0b58_c();
     if (GG.xH12e0 == 0) {
-        GG.xF2f0 = FUN_002135f0(D_L16_00174260, (u8 *)&GG + 0x280);
+        GG.xF2f0 = resolve_camera_surface_height(D_L16_00174260, (u8 *)&GG + 0x280);
         if (GG.xF88 < GG.xF2f0 && GG.xI2f8 <= 0) {
             GG.xI2f8 = 1;
         }

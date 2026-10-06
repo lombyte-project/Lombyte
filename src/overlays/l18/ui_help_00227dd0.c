@@ -53,7 +53,7 @@ extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float d);
 extern int FUN_L06_0021d0a0(int a);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L18_0015F6D8 __attribute__((sda));
 extern short D_L18_0015F688 __attribute__((sda));

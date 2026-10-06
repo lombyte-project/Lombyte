@@ -16,7 +16,7 @@ extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4") MACRO_ADDR;
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -50,7 +50,7 @@ void FUN_L17_002e87d8(char *m) {
         break;
     case 2:
         if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
         k = D_0015EE6C * 3.0f;
         f = (*(float *)(d + ((0x14))));
@@ -96,7 +96,7 @@ void FUN_L17_002e87d8(char *m) {
                 if (is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18))))) == 0) break;
             }
             if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
-                (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+                (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
             }
             m[0x20] = 2;
         }
@@ -116,13 +116,13 @@ void FUN_L17_002e87d8(char *m) {
         if (is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x1C)))))) break;
         if ((*(int *)(d + ((0x10)))) != -1 && is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18)))))) break;
         if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
         m[0x20] = 5;
         break;
     case 5:
         if (*(int *)(*(char **)(m + 0x24) + 0x28) != 0 && FUN_L00_0028d8c0(m, (*(int *)(d + ((0x20))))) == 0) {
-            (*(int *)(d + ((0x20)))) = FUN_0022da68(0, 4, (int)m);
+            (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
         if (is_point_inside_clip_volume(D_0013E633 + 0x0, (*(int *)(d + ((0x18))))) || is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x18)))))
             || ((*(int *)(d + ((0x10)))) != -1 && is_point_inside_clip_volume(D_L17_00160058 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10, (*(int *)(d + ((0x18))))))) {
@@ -773,7 +773,7 @@ extern short D_L17_00162174 __attribute__((sda));
 extern short D_L17_00162180 __attribute__((sda));
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F350[];
-extern void FUN_001f5ab0(float, float, float, float, float, int, int, long, int, int, int, int, float, float);
+extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, long, int, int, int, int, float, float) __asm__("FUN_001f5ab0");
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
 extern void FUN_L11_00311210(void *, void *, void *, int);
 extern void FUN_L17_002eb768(int a, char *p);
@@ -863,9 +863,9 @@ void FUN_L17_002eb9a8(char *moby) {
     ex = *(int *)(d + 0xE0);
     ey = *(int *)(d + 0xE4);
     tex = func_001F4868_l(0x11);
-    FUN_001f5ab0(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    FUN_001f5ab0(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, func_001F4868_l(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
-    FUN_001f5ab0(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, func_001F4868_l(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, tex, 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, func_001F4868_l(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
+    append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, func_001F4868_l(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     b = D_0013F350;
     if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L17_0015F5CC / 90) & 1) {
         func_001F6F40_c(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
@@ -902,7 +902,7 @@ void FUN_L17_002eb9a8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
 
 extern int FUN_001f9740(void *);
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
 extern short D_L17_0016206C_d __asm__("D_L17_0016206C") __attribute__((sda));
 extern short D_L17_00162070_d __asm__("D_L17_00162070") __attribute__((sda));
@@ -922,7 +922,7 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     build_spherical_offset(a, *(float *)&D_L17_0016206C_d * *(float *)&D_L17_001620A0_d, p2, p3);
     FUN_001f9a10(a, a, obj);
     if (FUN_001f9740(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
-        FUN_0022da68(3, 0, (int)moby);
+        allocate_voice_for_target_entry(3, 0, (int)moby);
         FUN_001f9bf8(c, a, 2.2f);
         FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
@@ -959,7 +959,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
             s = *(float *)&D_L17_00162074_d * *(float *)&D_L17_001620A0_d;
             n = FUN_001f96f8(300);
             if (FUN_L13_002e6a58(moby, a, *(int *)(obj + 0xEC), pos, s, n)) {
-                FUN_0022da68(2, 0, (int)moby);
+                allocate_voice_for_target_entry(2, 0, (int)moby);
                 *(unsigned char *)(g + 0x15F6) -= 1;
                 *(int *)(obj + 0x84) = *(int *)&D_L17_00162078_d;
             }
@@ -2777,7 +2777,7 @@ extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")))
 extern int D_L17_001BADD0[];
 extern int D_L17_0015F594 __attribute__((sda));
 extern int FUN_L00_002644e0(int);
-extern int allocate_voice_for_target_entry(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int);
 extern short D_L17_001623A8 __attribute__((sda));
 extern short D_L17_001623AC __attribute__((sda));

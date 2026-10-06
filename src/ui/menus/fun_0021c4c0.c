@@ -43,7 +43,7 @@ extern u8 D_0013DD40[];
 extern s32 D_0015ED84;
 extern u32 D_001CF874[];
 extern u32 D_001CF758[];
-extern void func_0022DA68(s32, s32, s32);
+extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void update_mission_list(void) __asm__("func_0020B950");
 extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00");
 
@@ -85,7 +85,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_001A00F0.level != old) {
-        func_0022DA68(1, 0x11, m->unk14);
+        allocate_voice_for_target_entry(1, 0x11, m->unk14);
         update_mission_list();
     }
     if (m->count != 0) {
@@ -99,7 +99,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
             m->choice[D_001A00F0.level] = (m->choice[D_001A00F0.level] + 1) % m->count;
         }
         if (m->choice[D_001A00F0.level] != prev) {
-            func_0022DA68(1, 0x11, m->unk14);
+            allocate_voice_for_target_entry(1, 0x11, m->unk14);
         }
         if ((pad & 0x5000) || D_001A00F0.level != old) {
             m->count = collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);

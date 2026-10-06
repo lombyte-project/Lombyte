@@ -54,7 +54,7 @@ extern char D_0013E550[];
 extern char D_L05_001671C0[];
 extern float FUN_001f9b48(void *, void *);
 extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
-extern int FUN_0022da68();
+extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8") __attribute__((sda));
 extern short D_L05_00161D38_d __asm__("D_L05_00161D38") __attribute__((sda));
 extern void FUN_L05_0030de90(void);

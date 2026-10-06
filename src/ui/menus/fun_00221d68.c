@@ -30,7 +30,7 @@ struct M2c_arg0
 extern struct M2c_D_0013C940 D_0013C940;
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 __attribute__((section(".data"))) extern s32 D_001D5D14;
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221d68(struct M2c_arg0 *arg0)
 {
   s32 prev;
@@ -52,7 +52,7 @@ s32 FUN_00221d68(struct M2c_arg0 *arg0)
     arg0->unk40 = (prev + 29) % 30;
   }
   if (arg0->unk40 != prev) {
-    func_0022DA68(1, 0x11, arg0->unk14);
+    allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
   }
   return 0;
 }

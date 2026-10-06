@@ -163,7 +163,7 @@ extern E00229a98 D_L00_00179AC0[];
 s32 FUN_L00_0020d498(s32);
 void FUN_L00_0020e698(void);
 s32 FUN_L00_002223f8(s32, s32);
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8(s32, s32, f32);
 s32 FUN_L00_00229a98(void) {
     u8 *b = D_0013F350;
@@ -176,7 +176,7 @@ s32 FUN_L00_00229a98(void) {
     }
     k = D_L00_00179AC0[id].x24;
     if (FUN_L00_002223f8(0, 0) == 0) return 0;
-    FUN_L00_002323b8(k, 0, (f32)FUN_001f96f8(0xB));
+    FUN_L00_002323b8(k, 0, (f32)scale_game_frames(0xB));
     if (*(s32 *)(b + 0xD08) != 0) *(s32 *)(b + 0xD14) = 1;
     *(s32 *)(b + 0x2294) = k;
     return 1;

@@ -307,10 +307,10 @@ void FUN_L00_002c5dc8(char *m) {
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_002502f0(unsigned char *, int, int, int);
 void FUN_L00_0024f7c8(unsigned char *, int, void *);
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
 void FUN_L00_00250df8(unsigned char *);
-unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) { unsigned char *m = create_moby(0xd1); if (m) { char *q = *(char **)(m + 0x78); *(float *)(q + 4) = f; *(unsigned char **)q = src; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; FUN_L00_002502f0(m, 0x80, 0x80, 0x80); FUN_L00_0024f7c8(src, 0, m + 0x10); *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0); *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0); *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0); if (m[0x53]) blend_moby_animation(m, 0, 0, FUN_001f96f8(10)); FUN_L00_00250df8(m); m[0x20] = 0; *(unsigned short *)(m + 0x34) |= 4; } return m; }
+unsigned char *FUN_L00_002c6f88(unsigned char *src, float f) { unsigned char *m = create_moby(0xd1); if (m) { char *q = *(char **)(m + 0x78); *(float *)(q + 4) = f; *(unsigned char **)q = src; m[0x30] = 0xff; *(short *)(m + 0x32) = 0xff; m[0x31] = 1; FUN_L00_002502f0(m, 0x80, 0x80, 0x80); FUN_L00_0024f7c8(src, 0, m + 0x10); *(u128 *)(m + 0xc0) = *(u128 *)(src + 0xc0); *(u128 *)(m + 0xd0) = *(u128 *)(src + 0xd0); *(u128 *)(m + 0xe0) = *(u128 *)(src + 0xe0); if (m[0x53]) blend_moby_animation(m, 0, 0, scale_game_frames(10)); FUN_L00_00250df8(m); m[0x20] = 0; *(unsigned short *)(m + 0x34) |= 4; } return m; }
 extern unsigned char D_001413FF_2c7070 __asm__("D_001413FF") __attribute__((section(".data")));
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
@@ -449,7 +449,7 @@ void FUN_L00_002c7320(V2c7320 *pos, V2c7320 *tgt, f32 *out, f32 speed, f32 unuse
 s32 FUN_001f0b58();
 float random_float_between(float, float) __asm__("FUN_002132a8");
 int FUN_001160d8(void);
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
 void FUN_L00_002c8078(unsigned char *m) {
     float v[4] __attribute__((aligned(16)));
@@ -467,7 +467,7 @@ void FUN_L00_002c8078(unsigned char *m) {
             g = (FUN_001160d8() + 0x20) & 0x3F;
             b = FUN_001160d8() & 0x2F;
             s = random_float_between(100000.0f, 800000.0f);
-            FUN_L00_00269b70(v, r, g, b, s, 0.0f, FUN_001f96f8(FUN_001160d8() % 40 + 10));
+            FUN_L00_00269b70(v, r, g, b, s, 0.0f, scale_game_frames(FUN_001160d8() % 40 + 10));
         }
         m[0x20] = 4;
         break;

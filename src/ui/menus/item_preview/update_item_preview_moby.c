@@ -5,8 +5,8 @@ extern int delete_moby(int) __asm__("FUN_00225530");
 extern char *D_001D5BF4 NOT_SDA;
 extern char D_001863D0[];
 extern char D_00186F40[];
-extern void *func_00225490(int);
-extern void FUN_0021e1f8(char *);
+extern void *create_menu_preview_moby(int) __asm__("func_00225490");
+extern void rotate_item_preview_moby(char *) __asm__("FUN_0021e1f8");
 /* Keeps the item preview moby in step with the highlighted entry: drop it
    when the entry's class (D_001863D0 record +0x3A) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with
@@ -24,7 +24,7 @@ int update_item_preview_moby(char *arg0) {
     rec = D_001863D0 + item * 0x4C;
     want = *(short *)(rec + 0x3A);
     if (want != -1 && cur == -1) {
-        char *o = func_00225490(want);
+        char *o = create_menu_preview_moby(want);
 
         if (o != 0) {
             char *t = D_00186F40;
@@ -35,13 +35,13 @@ int update_item_preview_moby(char *arg0) {
             *(float *)(o + 0x14) = *(float *)(t + 0x144);
             *(float *)(o + 0x18) = *(float *)(t + 0x148) - 0.3f;
             *(float *)(o + 0x48) = 3.1415927f;
-            *(void **)(o + 0x74) = (void *)FUN_0021e1f8;
+            *(void **)(o + 0x74) = (void *)rotate_item_preview_moby;
             **(void ***)(o + 0x78) = arg0;
         }
     } else if (want == -1) {
         *(int *)(arg0 + 0x44) = delete_moby(*(int *)(arg0 + 0x44));
     } else if (cur != want) {
-        char *n = func_00225490(want);
+        char *n = create_menu_preview_moby(want);
 
         if (n != 0) {
             char *old;

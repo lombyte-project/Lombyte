@@ -74,7 +74,7 @@ extern int D_0013D388; /* no foreign declaration */
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int D_L11_0015FFD8; /* no foreign declaration */
-extern int advance_accelerated_scalar();
+extern int advance_accelerated_scalar() __asm__("FUN_00213f38");
 extern int allocate_voice_for_target_entry();
 extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *);

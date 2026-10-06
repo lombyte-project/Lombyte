@@ -168,7 +168,7 @@ extern float AbsoluteFloat(float);
 extern float vector_length_xyz(void *);
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
 extern void FUN_001f9d20(void *, void *, void *);
 extern void FUN_001f9fc8(void *);
@@ -333,14 +333,14 @@ typedef struct {
 } Dat;
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
     Dat *d = *(Dat **)(m + 0x78);
     m[0x20] = 1;
     qcopy((char *)d + 0x30, v1);
     qcopy((char *)d + 0x10, v2);
-    d->id = FUN_001f96f8(a);
+    d->id = scale_game_frames(a);
     d->s[0] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
     d->s[1] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
     d->s[2] = random_float_between_alt(-(D_0015ED6C * 4.1887903f), D_0015ED6C * 4.1887903f);
@@ -383,15 +383,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00319598.s", FUN_L05_00319598);
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
 
-extern float FUN_00213f38(float, float, float, float, float *, float *);
-extern void FUN_00214e58(int *, int, void *, float *, int, float);
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 int FUN_L05_003195f8(char *m) {
     char *d = *(char **)(m + 0x78);
     int *path;
-    FUN_00213f38(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
+    advance_accelerated_scalar(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
     path = *(int **)(d + 0xAC);
-    FUN_00214e58(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
+    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
     return *(float *)(d + 0xC0) >= 1.0f;
 }
 /* Plays the sound that goes with the moby's current variant. */

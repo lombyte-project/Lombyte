@@ -21,7 +21,7 @@ typedef struct {
 extern float D_L00_001CA318[][4];
 extern float vector_length_xyz(void *);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void FUN_00237c80(void *, void *, float *, float *, float *, float *);
+extern void project_graphics_bounds_float(void *, void *, float *, float *, float *, float *) __asm__("FUN_00237c80");
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -60,7 +60,7 @@ void FUN_L00_0029f990(char *m) {
         normalize_vector_xyz(B, B, f - D_L00_001CA318[i][3] * 2.0f);
         add_vector_xyz(E, C, A);
         add_vector_xyz(E, E, B);
-        FUN_00237c80(C, E, &g[0], &g[1], &g[2], &g[3]);
+        project_graphics_bounds_float(C, E, &g[0], &g[1], &g[2], &g[3]);
         qcopy(q.v[0], C);
         add_vector_xyz(q.v[1], C, A);
         add_vector_xyz(q.v[2], C, B);
@@ -232,7 +232,7 @@ extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
 extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
 extern void FUN_L00_0029ff58(void);
-extern void FUN_00239780(s32);
+extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
 extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
 extern void update_hud(void) __asm__("FUN_001ff780");
@@ -343,7 +343,7 @@ void FUN_L00_002a02b0(void) {
     if (p->f40 == 0) {
         FUN_L00_0029ff58();
     }
-    FUN_00239780(p->f1C);
+    render_vendor_capture_pass_sequence(p->f1C);
     if (p->f5C != 0) {
         FUN_L00_0029fcd0_c(p->f20 + 0x400);
     }

@@ -29,14 +29,14 @@ typedef struct {
     u8 pad2[0x7C - 0x4C];
     s32 unk7C;
 } HudElemX;
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(void *);
 extern s32 D_L05_0015FAFC;
 
 void FUN_L05_00262ae8(HudElemX *e) {
     s32 i;
     s32 *p;
-    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->unk48 = 0;
     e->unk4A = 0;
     i = 3;

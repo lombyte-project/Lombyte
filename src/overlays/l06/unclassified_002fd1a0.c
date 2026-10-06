@@ -248,12 +248,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304098.s", FUN_L06_00304098);
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_003047b8(char *arg) {
     if ((unsigned char)arg[0x20] == 1) {
         arg[0x20] = 2;
-        FUN_0022da68(0, 0, arg);
+        allocate_voice_for_target_entry(0, 0, arg);
     }
 }
 s32 FUN_L06_003047f8(const u8 *moby)
@@ -333,7 +333,7 @@ extern void FUN_001fa050(float *, float *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_L06_00216b88(int *, float *);
 extern void add_vector_xyz(void *, void *, void *);
-extern void font_queue_vu_state(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L06_00305170(char *m) {

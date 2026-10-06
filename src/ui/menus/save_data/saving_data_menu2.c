@@ -83,7 +83,7 @@ extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void FUN_00226a70(s32 arg0, s32 arg1);
 extern s32 FUN_00226b08();
-extern s32 func_0022DA68();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(Widget *w) __asm__("FUN_002235b8");
 
@@ -187,7 +187,7 @@ s32 saving_data_menu2(Widget *w) {
         D_0013E05A[0] = 1;
     }
     if (w->cursor != old) {
-        func_0022DA68(1, 0x11, w->sound);
+        allocate_voice_for_target_entry(1, 0x11, w->sound);
     }
     return 0;
 }

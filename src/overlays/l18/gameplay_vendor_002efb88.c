@@ -183,7 +183,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70_g __asm__("D_0015ED70") __attribute__((sda));
 extern float D_L18_001622C0 __attribute__((sda));
 extern float D_L18_001677D8 __attribute__((section(".data")));
-extern float advance_accelerated_scalar(float, float, float, float, float *, float *);
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern float fast_add_rotations(float, float);
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -2033,7 +2033,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f5e80.s", FUN_L18_002f5e80);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7CD8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
-extern float FUN_00213f38(float, float, float, float, float *, float *);
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 
@@ -2050,7 +2050,7 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
     a[2] = v;
     len = FUN_001f9af0(a);
     s = D_0015ED6C_e[1] * 10.0f;
-    FUN_00213f38(len, s, s, arg, b, (float *)(data + 0x374));
+    advance_accelerated_scalar(len, s, s, arg, b, (float *)(data + 0x374));
     FUN_001f9bf8(a, a, *(float *)(data + 0x374));
     FUN_001f9a10(p, p, a);
     if (len < 0.1f) {

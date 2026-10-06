@@ -159,7 +159,7 @@ extern char D_0013E533[];
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L16_002cf5c8_u() __asm__("FUN_L16_002cf5c8");
 int FUN_L16_002cf738(void *mv);
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_L16_002cf7a8_u(void) __asm__("FUN_L16_002cf7a8");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -265,7 +265,7 @@ void FUN_L16_002cff48(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7080), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED70;
-extern float FUN_00213f38(float, float, float, float, float *, float *);
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern int D_L16_0015F5CC;
 extern int FUN_001f9740(int *arg0);
 extern s32 SubtractIntegerWithClamp(s32);
@@ -286,14 +286,14 @@ void FUN_L16_002d5cb8(char *moby) {
             if (r == 2) {
                 if (SubtractIntegerWithClamp(*(int *)&D_L16_00161A88_d - D_L16_0015F5CC) >= 4) {
                     *(int *)&D_L16_00161A88_d = D_L16_0015F5CC;
-                    FUN_0022da68(1, 0, moby);
+                    allocate_voice_for_target_entry(1, 0, moby);
                 }
             }
             f = *(float *)data;
         } else {
             f = *(float *)data + *(float *)&D_L16_00161A84_d;
         }
-        FUN_00213f38(f, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 10.0f, (float *)(moby + 0x18), (float *)(data + 4));
+        advance_accelerated_scalar(f, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 10.0f, (float *)(moby + 0x18), (float *)(data + 4));
         break;
     }
     }
@@ -318,7 +318,7 @@ void FUN_L16_002d6740(char *moby) {
         if (flag) moby[0x20] = 2;
         break;
     case 2:
-        FUN_0022da68(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
         FUN_L00_00257470(moby, 0, -1);
         FUN_L01_002787a0(moby);
         FUN_L00_00263e30(moby, 0x74E, 1, 0x74E, 1, 0xB, 2);
@@ -335,12 +335,12 @@ void FUN_L16_002de3b8(float f) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L16_002e0de0(unsigned char *moby) {
     int state = 1;
     if (moby[0x20] == state) {
-        FUN_0022da68(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
         state = 7;
         moby[0x20] = state;
     }
@@ -1457,7 +1457,7 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32(float);
 extern short D_0014C050 __attribute__((section(".data")));
 extern void FUN_L16_002e3770(void*,int);
-extern void allocate_voice_for_target_entry(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
@@ -2027,7 +2027,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
 
 extern float D_0015ED6C ,D_0015EE70;
 extern float D_0015EE6C ,D_0015ED70;
-extern float advance_accelerated_scalar(float, float, float, float, float *, float *);
+extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void add_vector_xyz(void*,void*,void*);
 extern void normalize_vector_xyz(void*,void*,float);
 
@@ -2268,7 +2268,7 @@ void FUN_L16_002d6260(char *moby, void *out1, float *out2) {
     FUN_001f9a28(v, D_0013F3D0, entry + 0x30);
     v[3] = 0;
     FUN_001f9cf8(v, v, entry + 0x40);
-    FUN_00213f38((v[1] + 1.0f) * 0.5f, D_0015ED70, D_0015ED70, D_0015ED6C + D_0015ED6C, (float *)(data + 0x1C), (float *)(data + 0x20));
+    advance_accelerated_scalar((v[1] + 1.0f) * 0.5f, D_0015ED70, D_0015ED70, D_0015ED6C + D_0015ED6C, (float *)(data + 0x1C), (float *)(data + 0x20));
     FUN_001f9a40(out1, tbl + 0x10, tbl + 0x20, *(float *)(data + 0x1C));
     clear_u64_value(out2);
     out2[1] = *(float *)&D_L16_00161A8C_d;

@@ -23,7 +23,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, char *, void *, int, int *, float *, int, int);
 extern float FUN_L00_00257c48(float, float);
 extern void mark_moby_for_removal(char *) __asm__("FUN_0020c828");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -74,7 +74,7 @@ void FUN_L16_002e2b60(char *m) {
                     } while (--count >= 0);
                 }
                 *(unsigned char *)(m + 0x20) = 8;
-                *(int *)(d + 0x160) = FUN_001f96f8(90);
+                *(int *)(d + 0x160) = scale_game_frames(90);
                 *(unsigned char *)(d + 0x67) = 120;
             }
         }
@@ -161,7 +161,7 @@ extern int FUN_L16_002e5cd0(int);
 extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
 extern short D_L16_00161E04_d __asm__("D_L16_00161E04") __attribute__((sda));
 extern short D_L16_00161E08_d __asm__("D_L16_00161E08") __attribute__((sda));
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L16_002e58d8(void);
 extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -219,7 +219,7 @@ extern float D_L16_00161D78_far __asm__("D_L16_00161D78");
 extern char D_0013E533[];
 extern float FUN_001f9b48(void *);
 extern short *D_L16_001ABCC0[];
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L16_002e5d30(int idx) {
@@ -238,7 +238,7 @@ void FUN_L16_002e5d30(int idx) {
             }
         } while (*p++ >= 0);
         if (best != 0) {
-            FUN_0022da68(0, 0, (int)best);
+            allocate_voice_for_target_entry(0, 0, (int)best);
         }
     }
 }

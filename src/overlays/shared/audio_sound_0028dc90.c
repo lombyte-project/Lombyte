@@ -10,7 +10,7 @@
 
 extern char *D_L00_00197300[];
 extern char D_0013E533[];
-extern int FUN_0022d7f0(void *, int, int, int, int);
+extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern unsigned char D_L00_00197BC0[];
 
 int FUN_L00_0028dc90(int i, int a1, int v, int k) {
@@ -23,7 +23,7 @@ int FUN_L00_0028dc90(int i, int a1, int v, int k) {
     if (i >= *(unsigned char *)(t + 0xD)) {
         return -1;
     }
-    r = FUN_0022d7f0(*(char **)(t + 0x28) + i * 32, a1, v, 0, 0x400);
+    r = allocate_voice_slot(*(char **)(t + 0x28) + i * 32, a1, v, 0, 0x400);
     if (r >= 0) {
         e = D_0013E533 + 0x1D + r * 0x70;
         *(int *)(e + 0x88) = v;

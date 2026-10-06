@@ -147,7 +147,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float FUN_001f9e90(float, float);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0025d458(void *m, short *p);
@@ -190,7 +190,7 @@ void FUN_L03_002ce238(char *m) {
                 *(short *)(d + 0x206) = scale_game_frames(0x3C);
                 *(unsigned char *)(m + 0xBC) = *(unsigned char *)(m + 0x20);
                 *(unsigned char *)(m + 0x20) = 4;
-                FUN_0022da68(1, 0, (int)m);
+                allocate_voice_for_target_entry(1, 0, (int)m);
             }
         }
     }
@@ -250,7 +250,7 @@ void FUN_L03_002d3cd8(unsigned char *m) {
         if (flag) m[0x20] = 2;
         break;
     case 2:
-        FUN_0022da68(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)m);
         z = 0.0f;
         p = D_L03_0015F580;
         pos = m + 0x10;

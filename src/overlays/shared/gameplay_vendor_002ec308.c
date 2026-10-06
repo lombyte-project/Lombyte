@@ -246,7 +246,7 @@ void FUN_L02_002ed658(char *m, void *arg1) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
@@ -264,7 +264,7 @@ void FUN_L02_002f1f60(char *m) {
         if (hit) m[0x20] = 2;
         break;
     case 2:
-        FUN_0022da68(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x71D, 1, 0x71D, 1, 5, 2);
         FUN_L01_00278e20(m, 0x71C);

@@ -73,7 +73,7 @@ extern void FUN_L00_00250df8(DebrisMoby *);
 extern void FUN_001f9bf8(void *, void *, f32);
 extern f32 FUN_L00_00257c48(f32 lo, f32 hi);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
     DebrisMoby *m;
@@ -94,7 +94,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         v->spin_x = FUN_L00_00257c48(0.0f, 0.008726646f);
         v->spin_y = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         v->spin_z = FUN_L00_00257c48(0.0f, 0.017453292f);
-        v->timer = FUN_001f96f8(200);
+        v->timer = scale_game_frames(200);
         FUN_L00_00250df8(m);
     }
     return m;
@@ -115,7 +115,7 @@ typedef struct {
 
 extern s32 D_L01_0015F580;
 void *FUN_L00_0025a420(void *, s32, s32);
-extern s32 FUN_0022da68(s32, s32, void *);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_002787a0();
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void FUN_L01_00278e20();
@@ -140,7 +140,7 @@ void FUN_L01_0030d0f0(TriggerMoby *obj) {
         }
         break;
     case 2:
-        FUN_0022da68(0, 0, obj);
+        allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
         FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f, &D_L01_0015F580);
         FUN_L01_00278e20(obj, 0x718);
@@ -196,7 +196,7 @@ extern s32 D_L01_00208150[];
 extern u8 D_L01_00208170[];
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
-void FUN_001f76a0(void);
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void FUN_L01_0030ef18();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);
 
@@ -207,7 +207,7 @@ void FUN_L01_0030f0e0(void) {
     vu1_add_g_sregister(0x42, 0x2000000064);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260);
-    FUN_001f76a0();
+    font_queue_vu_state();
     for (i = 0; i < 5; i++) {
         FUN_L01_0030ef18(D_L01_00202EA0[i], D_L01_00208138[i], D_L01_00208108[i], D_L01_00208120[i], D_L01_00208170);
         FUN_L00_001fde98(D_L01_00202EA0[i], D_L01_00208108[i], D_L01_00208150[i], D_L01_00208170, 1);

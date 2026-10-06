@@ -1274,7 +1274,7 @@ kill:
 /* spawns a particle at pos with a colour byte taken from a table and a heading */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
@@ -1290,7 +1290,7 @@ unsigned char *FUN_L00_00274cf8(void *a, int idx, float ang) {
         r[2] = D_L00_001B2198[idx];
         r[8] = truncate_float_to_s32(ang * 128.0f / 3.14159274f) - 0x20;
         *(float *)(r + 0xC) = 147000.0f;
-        *(short *)(r + 0xA) = FUN_001f96f8(0x78);
+        *(short *)(r + 0xA) = scale_game_frames(0x78);
     }
     return r;
 }

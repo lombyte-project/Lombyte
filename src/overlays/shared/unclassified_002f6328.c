@@ -715,10 +715,10 @@ extern void FUN_L01_003092d0_c(char *) __asm__("FUN_L01_003092d0");
 extern void FUN_L01_00309430_c(char *) __asm__("FUN_L01_00309430");
 extern void FUN_L01_003094f0(char *);
 extern void FUN_L01_0026e0e0_c(char *, int) __asm__("FUN_L01_0026e0e0");
-extern int FUN_0022da68(int, int, void *);
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00233ee8(float *, int, float);
 extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
-extern void FUN_00213f38(float *, float *, float, float, float, float);
+extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern int FUN_L00_00233f38(void);
 extern void FUN_L00_00216f90(void *, void *, int, int);
@@ -794,7 +794,7 @@ void FUN_L01_00308bd8(char *moby) {
         if (*(short *)(g + 0x30E) != 0) break;
         FUN_L01_00309430_c(moby);
         if (!(D_0013CAE4[0] & 0x10)) break;
-        FUN_0022da68(0, 0, (void *)moby);
+        allocate_voice_for_target_entry(0, 0, (void *)moby);
         *(unsigned char *)(moby + 0x20) = 2;
         *(int *)(data + 0x30) = -1;
         *(int *)(data + 0x2C) = 0;
@@ -805,17 +805,17 @@ void FUN_L01_00308bd8(char *moby) {
     }
     case 7:
         if (*(float *)(data + 0x20) < 1.0f) {
-            FUN_00213f38((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else if (*(float *)(data + 0x24) < 1.0f) {
-            FUN_00213f38((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else {
-            FUN_0022da68(1, 0, (void *)moby);
+            allocate_voice_for_target_entry(1, 0, (void *)moby);
             *(unsigned char *)(moby + 0x20) = 8;
             *(float *)(data + 0x34) = 0.0f;
         }
@@ -824,12 +824,12 @@ void FUN_L01_00308bd8(char *moby) {
     case 2: {
         int r = FUN_L00_00233f38();
         if (*(float *)(data + 0x20) < 1.0f) {
-            FUN_00213f38((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else if (*(float *)(data + 0x24) < 1.0f) {
-            FUN_00213f38((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);
@@ -865,7 +865,7 @@ void FUN_L01_00308bd8(char *moby) {
             *(float *)(td + 0x2C) = 0.0f;
             *(float *)(td + 0x20) = 1.0f;
             *(float *)(td + 0x24) = 1.0f;
-            FUN_0022da68(1, 0, (void *)t);
+            allocate_voice_for_target_entry(1, 0, (void *)t);
             *(unsigned char *)(moby + 0x20) = 1;
             *(float *)(data + 0x20) = 0.0f;
             *(float *)(data + 0x24) = 0.0f;
@@ -881,12 +881,12 @@ void FUN_L01_00308bd8(char *moby) {
             enqueue_callback_list_1(FUN_L01_003094f0, moby);
             approach_value((float *)(data + 0x34), 1.95f, D_0015ED6C * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
-            FUN_00213f38((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
+            advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);
         } else if (0.0f < *(float *)(data + 0x20)) {
-            FUN_00213f38((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
+            advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
                          *(float *)&D_L01_00161F88_d * D_0015ED70,
                          *(float *)&D_L01_00161F8C_d * D_0015ED70,
                          *(float *)&D_L01_00161F90_d * D_0015ED6C);

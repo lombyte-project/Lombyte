@@ -15,7 +15,7 @@ extern u8 D_0013C940[];
    load to %gp_rel(D_001D5D14)(gp); retail loads it through lui/lw. */
 extern s32 D_001D5D14[];
 extern u8 D_001D5BF0[];
-extern void func_0022DA68(s32, s32, s32);
+extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
 int FUN_00219e10(char *arg0) {
     {
@@ -53,7 +53,7 @@ int FUN_00219e10(char *arg0) {
             }
         }
         if (*(int *)(arg0 + 0x3C) != old) {
-            func_0022DA68(1, 0x11, *(int *)(arg0 + 0x14));
+            allocate_voice_for_target_entry(1, 0x11, *(int *)(arg0 + 0x14));
         }
     }
     {

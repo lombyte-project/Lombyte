@@ -223,7 +223,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269b70.s", FUN_L00_00269b70);
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740(void *);
 extern void FUN_L00_00267a08(void *);
 
@@ -235,9 +235,9 @@ void FUN_L00_00269c70(char *m) {
         return;
     }
     *(float *)(m + 0xC) += p[1];
-    if (FUN_001f96f8(6) > *(int *)(m + 0x20)) {
+    if (scale_game_frames(6) > *(int *)(m + 0x20)) {
 
-        *(int *)(m + 4) = (*(int *)(m + 4) & 0xFFFFFF) | ((*(int *)(m + 0x20) * 127 / FUN_001f96f8(6)) << 24);
+        *(int *)(m + 4) = (*(int *)(m + 4) & 0xFFFFFF) | ((*(int *)(m + 0x20) * 127 / scale_game_frames(6)) << 24);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
@@ -1841,17 +1841,17 @@ void FUN_L00_0026f280(char *m) {
         int s;
         *(int *)(p + 8) = 0;
         s = *(short *)(m + 0xA);
-        if (FUN_001f96f8(0xE) - 2 < s) *(short *)(m + 0xA) = FUN_001f96f8(0xE) - 2;
+        if (scale_game_frames(0xE) - 2 < s) *(short *)(m + 0xA) = scale_game_frames(0xE) - 2;
     }
     if (*(float *)(p + 0x10) < *(float *)(m + 0x18) + D_0015ED6C * 1.3f * 40.0f) {
         if (random_integer_below(0x14) == 0) {
             int s = *(short *)(m + 0xA);
-            if (FUN_001f96f8(0xE) - 2 < s) *(short *)(m + 0xA) = FUN_001f96f8(0xE) - 2;
+            if (scale_game_frames(0xE) - 2 < s) *(short *)(m + 0xA) = scale_game_frames(0xE) - 2;
         }
     }
-    if (*(short *)(m + 0xA) < FUN_001f96f8(0xE)) {
+    if (*(short *)(m + 0xA) < scale_game_frames(0xE)) {
         int r = *(unsigned char *)(m + 7);
-        *(int *)(m + 4) = ((r * *(short *)(m + 0xA) / FUN_001f96f8(0xE)) << 24) | (*(int *)(m + 4) & 0xFFFFFF);
+        *(int *)(m + 4) = ((r * *(short *)(m + 0xA) / scale_game_frames(0xE)) << 24) | (*(int *)(m + 4) & 0xFFFFFF);
     }
     *(float *)(m + 0xC) += D_0015ED60_c * 840.00006f;
     if (*(float *)(p + 0xC) < *(float *)(m + 0xC)) *(float *)(m + 0xC) = *(float *)(p + 0xC);

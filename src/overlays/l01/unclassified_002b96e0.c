@@ -1925,7 +1925,7 @@ extern f32 FUN_001f9af0(void *);
 extern f32 FUN_001f9e90(f32, f32);
 extern s32 FUN_001f96f8(s32);
 extern void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern s32 FUN_0022da68(s32, s32, void *);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4 p;
@@ -1961,7 +1961,7 @@ BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 k
         v->len = FUN_001f9af0(pd);
         FUN_L00_0026daa0(m, 0x2F4F7F7F, FUN_001f96f8(0x78), -1, 420000.0f);
         FUN_L00_0026daa0(m, 0x4F6F7F7F, FUN_001f96f8(0x78), -1, 210000.0f);
-        FUN_0022da68(0, 0, m);
+        allocate_voice_for_target_entry(0, 0, m);
         FUN_L00_00250df8(m);
     }
     return m;
@@ -2034,7 +2034,7 @@ extern float FUN_001f9de0(float);
 extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern void FUN_001f9bf8(void *, void *, f32);
-extern f32 FUN_002135f0(void *, s32);
+extern f32 resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void FUN_L01_002f8268(HoverMoby *m) {
     HoverVars *v;
@@ -2081,7 +2081,7 @@ void FUN_L01_002f8268(HoverMoby *m) {
             FUN_001f9a10(&d, &old, &step);
             m->pos.q = d.q;
         }
-        dz = FUN_002135f0(&m->pos, 0) - m->pos.v.z;
+        dz = resolve_camera_surface_height(&m->pos, 0) - m->pos.v.z;
         lim = D_0015ED6C * 3.0f;
         if (dz > lim) {
             dz = lim;
@@ -2353,7 +2353,7 @@ void FUN_L01_002f9080(CapMoby *m) {
                 m->state = 2;
                 D_L01_00167100.shake = 0.4f;
                 D_L01_00167100.shake_time = FUN_001f96f8(30);
-                FUN_0022da68(1, 0, m);
+                allocate_voice_for_target_entry(1, 0, m);
             }
         }
         break;
@@ -2378,7 +2378,7 @@ void FUN_L01_002f9080(CapMoby *m) {
             D_L01_00167100.shake_time = FUN_001f96f8(20);
             clear_u64_value(&v->rot);
             m->state = 4;
-            FUN_0022da68(0, 0, m);
+            allocate_voice_for_target_entry(0, 0, m);
             m->pos.f[2] = v->home.f[2] - 20.0f;
             D_0014C190[D_0015ED84][m->id >> 5] |= 1 << (m->id & 0x1F);
             D_L01_001BA950[m->id >> 5] |= 1 << (m->id & 0x1F);
@@ -2463,7 +2463,7 @@ void FUN_L01_002f95c0(LiftMoby *m) {
             m->mode = 2;
             v->speed = v->travel / FUN_001fa6c0(FUN_001f96f8(truncate_float_to_s32_u(v->period * 60.0f)));
             v->timer = FUN_001f96f8(truncate_float_to_s32_u(v->period * 60.0f));
-            FUN_0022da68(0, 0, m);
+            allocate_voice_for_target_entry(0, 0, m);
         }
         break;
     case 1:
@@ -2471,7 +2471,7 @@ void FUN_L01_002f95c0(LiftMoby *m) {
             m->mode = 2;
             v->speed = -(v->travel / FUN_001fa6c0(FUN_001f96f8(truncate_float_to_s32_u(v->period * 60.0f))));
             v->timer = FUN_001f96f8(truncate_float_to_s32_u(v->period * 60.0f));
-            FUN_0022da68(1, 0, m);
+            allocate_voice_for_target_entry(1, 0, m);
         }
         break;
     case 2:

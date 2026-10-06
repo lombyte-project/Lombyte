@@ -207,7 +207,7 @@ extern int D_0013D428[];
 extern int D_00141EA0[];
 extern int D_L00_001B0340[] __attribute__((section(".data")));
 extern int D_L00_001C3E98[] __attribute__((section(".data")));
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0013D4E8[];
 extern int D_00141408 __attribute__((section(".data")));
@@ -229,7 +229,7 @@ void FUN_L00_00260860(int id, int flag) {
     p = &D_L00_001B0340[idx];
     *pb = 1;
     if (*p != -1) {
-        FUN_L00_00263d40(*p, FUN_001f96f8(0x12C));
+        FUN_L00_00263d40(*p, scale_game_frames(0x12C));
     }
     if (*pa == 0) {
         ItemRec *r;

@@ -19,7 +19,7 @@
     },
     {
       "name": "__main",
-      "unit": "assembly/sdk/syscalls/update_rfu_dispatch_state",
+      "unit": "sdk/syscalls/update_rfu_dispatch_state",
       "unit_size": "0x20",
       "match": "fragment",
       "address": "0x11dcc8",
@@ -43,7 +43,7 @@
     },
     {
       "name": "_exit",
-      "unit": "assembly/sdk/syscalls/jump_to_rfu_status",
+      "unit": "sdk/syscalls/jump_to_rfu_status",
       "unit_size": "0x8",
       "match": "fragment",
       "address": "0x12d8e8",
@@ -443,7 +443,7 @@
     },
     {
       "name": "snd_GetDopplerPitchMod",
-      "unit": "assembly/math/compute_sector_index",
+      "unit": "math/compute_sector_index",
       "unit_size": "0x24",
       "match": "fragment",
       "address": "0x12f1a0",
@@ -2171,7 +2171,7 @@
     },
     {
       "name": "LoadingDataMenu",
-      "unit": "assembly/textbin/ui/menus/save_data/loading_data_menu",
+      "unit": "textbin/ui/menus/save_data/loading_data_menu",
       "unit_size": "0x2dc",
       "match": "fragment",
       "address": "0x2232d8",
@@ -2187,7 +2187,7 @@
     },
     {
       "name": "LoadHandGadget",
-      "unit": "assembly/textbin/gameplay/gadgets/load_hand_gadget",
+      "unit": "textbin/gameplay/gadgets/load_hand_gadget",
       "unit_size": "0x7f8",
       "match": "entry_size_unknown",
       "address": "0x224368",
@@ -2235,7 +2235,7 @@
     },
     {
       "name": "SkyLevelGeneric___maybe",
-      "unit": "assembly/textbin/rendering/sky/update_sky_effects",
+      "unit": "rendering/sky/update_sky_effects",
       "unit_size": "0x414",
       "match": "fragment",
       "address": "0x22ae70",
@@ -2587,7 +2587,7 @@
     },
     {
       "name": "initAll__Fiii",
-      "unit": "assembly/textbin/audio/decoder/initialize_audio_system",
+      "unit": "textbin/audio/decoder/initialize_audio_system",
       "unit_size": "0x2a4",
       "match": "fragment",
       "address": "0x23a7c0",
@@ -5070,19 +5070,23 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_001eb0a8",
+        "unit": "textbin/fun_001eb0a8",
         "source_path": "src/assembly/textbin/fun_001eb0a8.c",
         "address": "0x001eb0a8",
         "current_name": "FUN_001eb0a8",
-        "proposed_name": null,
+        "proposed_name": "update_gameplay_frame",
         "logical_group": "gameplay/state",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "recovered_symbol",
             "name": "Transition_FUN_001eb0a8",
             "match": "fragment"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "medium"
@@ -5274,14 +5278,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001ebf10",
+        "unit": "textbin/fun_001ebf10",
         "source_path": "src/assembly/textbin/fun_001ebf10.c",
         "address": "0x001ebf10",
         "current_name": "FUN_001ebf10",
-        "proposed_name": null,
+        "proposed_name": "switch_active_camera_record",
         "logical_group": "gameplay",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -5297,6 +5301,10 @@
                 "logical_group": "gameplay/camera"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -5495,11 +5503,16 @@
         "source_path": "src/gameplay/camera/advance_alternate_camera_transition.c",
         "address": "0x001eccd8",
         "current_name": "FUN_001eccd8",
-        "proposed_name": null,
+        "proposed_name": "advance_alternate_camera_transition",
         "logical_group": "storage",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "medium"
       },
       {
@@ -5545,8 +5558,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001ed470",
-        "source_path": "src/assembly/textbin/fun_001ed470.c",
+        "unit": "gameplay/camera/fun_001ed470",
+        "source_path": "src/gameplay/camera/fun_001ed470.c",
         "address": "0x001ed470",
         "current_name": "FUN_001ed470",
         "proposed_name": null,
@@ -5582,10 +5595,10 @@
         "source_path": "src/gameplay/camera/refresh_camera_control_flags.c",
         "address": "0x001ed940",
         "current_name": "FUN_001ed940",
-        "proposed_name": null,
+        "proposed_name": "refresh_camera_control_flags",
         "logical_group": "gameplay/camera",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -5595,6 +5608,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL camera.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -5604,10 +5621,10 @@
         "source_path": "src/gameplay/camera/advance_timed_camera_control.c",
         "address": "0x001eda60",
         "current_name": "FUN_001eda60",
-        "proposed_name": null,
+        "proposed_name": "advance_timed_camera_control",
         "logical_group": "gameplay/camera",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -5617,6 +5634,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL camera.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -5681,27 +5702,37 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001ee338",
-        "source_path": "src/assembly/textbin/fun_001ee338.c",
+        "unit": "textbin/render_queued_rotated_sprites",
+        "source_path": "src/textbin/render_queued_rotated_sprites.c",
         "address": "0x001ee338",
         "current_name": "FUN_001ee338",
-        "proposed_name": null,
+        "proposed_name": "render_queued_rotated_sprites",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001ee4b0",
-        "source_path": "src/assembly/textbin/fun_001ee4b0.c",
+        "unit": "textbin/update_camera_environment_from_regions",
+        "source_path": "src/textbin/update_camera_environment_from_regions.c",
         "address": "0x001ee4b0",
         "current_name": "FUN_001ee4b0",
-        "proposed_name": null,
+        "proposed_name": "update_camera_environment_from_regions",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -5957,15 +5988,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001f33b8",
+        "unit": "textbin/fun_001f33b8",
         "source_path": "src/assembly/textbin/fun_001f33b8.c",
         "address": "0x001f33b8",
         "current_name": "FUN_001f33b8",
-        "proposed_name": null,
+        "proposed_name": "configure_graphics_projection",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -6382,18 +6418,22 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001f4fb8",
-        "source_path": "src/rendering/fun_001f4fb8.c",
+        "unit": "rendering/draw_screen_effect",
+        "source_path": "src/rendering/draw_screen_effect.c",
         "address": "0x001f4fb8",
         "current_name": "FUN_001f4fb8",
-        "proposed_name": null,
+        "proposed_name": "draw_screen_effect",
         "logical_group": "rendering",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL draw.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -6479,15 +6519,20 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_001f55d8",
-        "source_path": "src/assembly/textbin/fun_001f55d8.c",
+        "unit": "textbin/append_subpixel_textured_screen_quad",
+        "source_path": "src/textbin/append_subpixel_textured_screen_quad.c",
         "address": "0x001f55d8",
         "current_name": "FUN_001f55d8",
-        "proposed_name": null,
+        "proposed_name": "append_subpixel_textured_screen_quad",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -6503,15 +6548,20 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001f5ab0",
+        "unit": "textbin/fun_001f5ab0",
         "source_path": "src/assembly/textbin/fun_001f5ab0.c",
         "address": "0x001f5ab0",
         "current_name": "FUN_001f5ab0",
-        "proposed_name": null,
+        "proposed_name": "append_rotated_sprite_quad",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -6989,15 +7039,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001f76a0",
-        "source_path": "src/rendering/fun_001f76a0.c",
+        "unit": "rendering/font_queue_vu_state",
+        "source_path": "src/rendering/font_queue_vu_state.c",
         "address": "0x001f76a0",
         "current_name": "FUN_001f76a0",
-        "proposed_name": null,
+        "proposed_name": "font_queue_vu_state",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -7039,14 +7094,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001f79a8",
-        "source_path": "src/rendering/fun_001f79a8.c",
+        "unit": "rendering/draw_debug_font",
+        "source_path": "src/rendering/draw_debug_font.c",
         "address": "0x001f79a8",
         "current_name": "FUN_001f79a8",
-        "proposed_name": null,
+        "proposed_name": "draw_debug_font",
         "logical_group": "rendering",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -7056,6 +7111,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL draw.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -7083,27 +7142,37 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_001f92b0",
-        "source_path": "src/assembly/textbin/fun_001f92b0.c",
+        "unit": "textbin/append_billboard_batch",
+        "source_path": "src/textbin/append_billboard_batch.c",
         "address": "0x001f92b0",
         "current_name": "FUN_001f92b0",
-        "proposed_name": null,
+        "proposed_name": "append_billboard_batch",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001f96f8",
+        "unit": "textbin/fun_001f96f8",
         "source_path": "src/assembly/textbin/fun_001f96f8.c",
         "address": "0x001f96f8",
         "current_name": "FUN_001f96f8",
-        "proposed_name": null,
+        "proposed_name": "scale_game_frames",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -7599,15 +7668,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001fd748",
+        "unit": "textbin/fun_001fd748",
         "source_path": "src/assembly/textbin/fun_001fd748.c",
         "address": "0x001fd748",
         "current_name": "FUN_001fd748",
-        "proposed_name": null,
+        "proposed_name": "draw_level_selection_map",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -8473,14 +8547,14 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/draw_boot_image",
-        "source_path": "src/assembly/textbin/draw_boot_image.c",
+        "unit": "textbin/draw_boot_image",
+        "source_path": "src/textbin/draw_boot_image.c",
         "address": "0x002012b8",
         "current_name": "FUN_002012b8",
-        "proposed_name": null,
+        "proposed_name": "draw_boot_image",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -8496,6 +8570,10 @@
                 "logical_group": "rendering"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -8677,15 +8755,20 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00202270",
+        "unit": "textbin/fun_00202270",
         "source_path": "src/assembly/textbin/fun_00202270.c",
         "address": "0x00202270",
         "current_name": "FUN_00202270",
-        "proposed_name": null,
+        "proposed_name": "upload_mip_texture",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -8785,15 +8868,20 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00202d78",
+        "unit": "textbin/fun_00202d78",
         "source_path": "src/assembly/textbin/fun_00202d78.c",
         "address": "0x00202d78",
         "current_name": "FUN_00202d78",
-        "proposed_name": null,
+        "proposed_name": "build_indexed_resident_render_packet",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -8868,15 +8956,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00203338",
-        "source_path": "src/assembly/textbin/fun_00203338.c",
+        "unit": "textbin/prepare_resident_class_render_data",
+        "source_path": "src/textbin/prepare_resident_class_render_data.c",
         "address": "0x00203338",
         "current_name": "FUN_00203338",
-        "proposed_name": null,
+        "proposed_name": "prepare_resident_class_render_data",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -8901,39 +8994,54 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00203730",
+        "unit": "textbin/fun_00203730",
         "source_path": "src/assembly/textbin/fun_00203730.c",
         "address": "0x00203730",
         "current_name": "FUN_00203730",
-        "proposed_name": null,
+        "proposed_name": "register_object_render_class",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00203b08",
+        "unit": "textbin/fun_00203b08",
         "source_path": "src/assembly/textbin/fun_00203b08.c",
         "address": "0x00203b08",
         "current_name": "FUN_00203b08",
-        "proposed_name": null,
+        "proposed_name": "register_shrub_render_class",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_002040e0",
+        "unit": "textbin/fun_002040e0",
         "source_path": "src/assembly/textbin/fun_002040e0.c",
         "address": "0x002040e0",
         "current_name": "FUN_002040e0",
-        "proposed_name": null,
+        "proposed_name": "initialize_tfrag_render_data",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -8959,14 +9067,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00204428",
+        "unit": "textbin/fun_00204428",
         "source_path": "src/assembly/textbin/fun_00204428.c",
         "address": "0x00204428",
         "current_name": "FUN_00204428",
-        "proposed_name": null,
+        "proposed_name": "service_level_archive_load",
         "logical_group": "world",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -8982,6 +9090,10 @@
                 "logical_group": "world"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -9353,15 +9465,20 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00206bd8",
-        "source_path": "src/assembly/textbin/fun_00206bd8.c",
+        "unit": "textbin/passes_projected_region_callback_0",
+        "source_path": "src/textbin/passes_projected_region_callback_0.c",
         "address": "0x00206bd8",
         "current_name": "FUN_00206bd8",
-        "proposed_name": null,
+        "proposed_name": "passes_projected_region_callback_0",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -9528,15 +9645,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00207c28",
+        "unit": "textbin/fun_00207c28",
         "source_path": "src/assembly/textbin/fun_00207c28.c",
         "address": "0x00207c28",
         "current_name": "FUN_00207c28",
-        "proposed_name": null,
+        "proposed_name": "decode_compressed_occlusion_map",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -9616,15 +9738,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00208508",
+        "unit": "textbin/fun_00208508",
         "source_path": "src/assembly/textbin/fun_00208508.c",
         "address": "0x00208508",
         "current_name": "FUN_00208508",
-        "proposed_name": null,
+        "proposed_name": "draw_map_markers",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -10078,11 +10205,16 @@
         "source_path": "src/ui/map/update_map_icons.c",
         "address": "0x0020bf90",
         "current_name": "FUN_0020bf90",
-        "proposed_name": null,
+        "proposed_name": "update_map_icons",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -10647,15 +10779,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00212e28",
+        "unit": "textbin/fun_00212e28",
         "source_path": "src/assembly/textbin/fun_00212e28.c",
         "address": "0x00212e28",
         "current_name": "FUN_00212e28",
-        "proposed_name": null,
+        "proposed_name": "update_visible_resident_objects",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -10846,14 +10983,18 @@
         "source_path": "src/gameplay/entities/resolve_camera_surface_height.c",
         "address": "0x002135f0",
         "current_name": "FUN_002135f0",
-        "proposed_name": null,
+        "proposed_name": "resolve_camera_surface_height",
         "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -10901,14 +11042,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00213f38",
+        "unit": "textbin/fun_00213f38",
         "source_path": "src/assembly/textbin/fun_00213f38.c",
         "address": "0x00213f38",
         "current_name": "FUN_00213f38",
-        "proposed_name": null,
+        "proposed_name": "advance_accelerated_scalar",
         "logical_group": "math/vectors",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -10919,6 +11060,10 @@
                 "logical_group": "math/vectors"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -11179,11 +11324,16 @@
         "source_path": "src/gameplay/entities/sample_camera_path.c",
         "address": "0x00214e58",
         "current_name": "FUN_00214e58",
-        "proposed_name": null,
+        "proposed_name": "sample_camera_path",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -11986,15 +12136,20 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_002196b8",
+        "unit": "textbin/fun_002196b8",
         "source_path": "src/assembly/textbin/fun_002196b8.c",
         "address": "0x002196b8",
         "current_name": "FUN_002196b8",
-        "proposed_name": null,
+        "proposed_name": "render_level_effects_and_screen_sprites",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12028,57 +12183,76 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_0021a1e0",
-        "source_path": "src/assembly/textbin/fun_0021a1e0.c",
+        "unit": "textbin/rebuild_configured_text_label_list",
+        "source_path": "src/textbin/rebuild_configured_text_label_list.c",
         "address": "0x0021a1e0",
         "current_name": "FUN_0021a1e0",
-        "proposed_name": null,
+        "proposed_name": "rebuild_configured_text_label_list",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
-        "unit": "assembly/textbin/fun_0021a328",
-        "source_path": "src/assembly/textbin/fun_0021a328.c",
-        "address": "0x0021a328",
-        "current_name": "FUN_0021a328",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
-            "kind": "git_log",
-            "commit": "4229e5b",
-            "excerpt": "fun_0021a328 is neutral (+0.04). Also drops a stale tools-repo path from"
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_0021abf8",
-        "source_path": "src/assembly/textbin/fun_0021abf8.c",
-        "address": "0x0021abf8",
-        "current_name": "FUN_0021abf8",
-        "proposed_name": null,
+        "unit": "textbin/fun_0021a328",
+        "source_path": "src/assembly/textbin/fun_0021a328.c",
+        "address": "0x0021a328",
+        "current_name": "FUN_0021a328",
+        "proposed_name": "render_configured_text_label",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "git_log",
+            "commit": "4229e5b",
+            "excerpt": "fun_0021a328 is neutral (+0.04). Also drops a stale tools-repo path from"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_0021b1c8",
-        "source_path": "src/assembly/textbin/fun_0021b1c8.c",
+        "unit": "textbin/fun_0021abf8",
+        "source_path": "src/assembly/textbin/fun_0021abf8.c",
+        "address": "0x0021abf8",
+        "current_name": "FUN_0021abf8",
+        "proposed_name": "update_menu_entry_actions",
+        "logical_group": "unclassified",
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
+        "logical_group_confidence": "unresolved"
+      },
+      {
+        "unit": "textbin/render_localized_ui_entry_list",
+        "source_path": "src/textbin/render_localized_ui_entry_list.c",
         "address": "0x0021b1c8",
         "current_name": "FUN_0021b1c8",
-        "proposed_name": null,
+        "proposed_name": "render_localized_ui_entry_list",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12099,15 +12273,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0021b858",
+        "unit": "textbin/fun_0021b858",
         "source_path": "src/assembly/textbin/fun_0021b858.c",
         "address": "0x0021b858",
         "current_name": "FUN_0021b858",
-        "proposed_name": null,
+        "proposed_name": "update_menu_grid_selection",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12291,10 +12470,10 @@
         "source_path": "src/ui/menus/restore_menu_help_text.c",
         "address": "0x0021d2c8",
         "current_name": "FUN_0021d2c8",
-        "proposed_name": null,
+        "proposed_name": "restore_menu_help_text",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -12304,6 +12483,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12313,14 +12496,18 @@
         "source_path": "src/ui/menus/update_menu_help_text_load.c",
         "address": "0x0021d338",
         "current_name": "FUN_0021d338",
-        "proposed_name": null,
+        "proposed_name": "update_menu_help_text_load",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12330,11 +12517,16 @@
         "source_path": "src/ui/menus/draw_menu_text_list.c",
         "address": "0x0021d4a8",
         "current_name": "FUN_0021d4a8",
-        "proposed_name": null,
+        "proposed_name": "draw_menu_text_list",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12342,11 +12534,16 @@
         "source_path": "src/ui/menus/draw_menu_item_grid.c",
         "address": "0x0021d948",
         "current_name": "FUN_0021d948",
-        "proposed_name": null,
+        "proposed_name": "draw_menu_item_grid",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12354,14 +12551,18 @@
         "source_path": "src/ui/menus/draw_menu_preview_objects.c",
         "address": "0x0021ddf8",
         "current_name": "FUN_0021ddf8",
-        "proposed_name": null,
+        "proposed_name": "draw_menu_preview_objects",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12371,14 +12572,18 @@
         "source_path": "src/ui/menus/clear_menu_preview_pair.c",
         "address": "0x0021df58",
         "current_name": "FUN_0021df58",
-        "proposed_name": null,
+        "proposed_name": "clear_menu_preview_pair",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12426,10 +12631,10 @@
         "source_path": "src/ui/menus/rotate_item_preview_moby.c",
         "address": "0x0021e1f8",
         "current_name": "FUN_0021e1f8",
-        "proposed_name": null,
+        "proposed_name": "rotate_item_preview_moby",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -12439,20 +12644,29 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0021e230",
+        "unit": "textbin/fun_0021e230",
         "source_path": "src/assembly/textbin/fun_0021e230.c",
         "address": "0x0021e230",
         "current_name": "FUN_0021e230",
-        "proposed_name": null,
+        "proposed_name": "update_item_preview_binding",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12460,27 +12674,31 @@
         "source_path": "src/ui/menus/draw_available_item_preview_mobys.c",
         "address": "0x0021e608",
         "current_name": "FUN_0021e608",
-        "proposed_name": null,
+        "proposed_name": "draw_available_item_preview_mobys",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0021e698",
-        "source_path": "src/assembly/textbin/fun_0021e698.c",
+        "unit": "textbin/update_item_preview_transform",
+        "source_path": "src/textbin/update_item_preview_transform.c",
         "address": "0x0021e698",
         "current_name": "FUN_0021e698",
-        "proposed_name": null,
+        "proposed_name": "update_item_preview_transform",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -12491,6 +12709,10 @@
                 "logical_group": "ui/menus"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -12523,10 +12745,10 @@
         "source_path": "src/ui/menus/create_rotating_preview_moby.c",
         "address": "0x0021ea48",
         "current_name": "FUN_0021ea48",
-        "proposed_name": null,
+        "proposed_name": "create_rotating_preview_moby",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -12546,6 +12768,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12555,10 +12781,10 @@
         "source_path": "src/ui/menus/release_item_preview_moby.c",
         "address": "0x0021eaf0",
         "current_name": "FUN_0021eaf0",
-        "proposed_name": null,
+        "proposed_name": "release_item_preview_moby",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -12578,6 +12804,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12631,10 +12861,10 @@
         "source_path": "src/ui/menus/rotate_preview_moby_x.c",
         "address": "0x0021f120",
         "current_name": "FUN_0021f120",
-        "proposed_name": null,
+        "proposed_name": "rotate_preview_moby_x",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -12659,6 +12889,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -12932,14 +13166,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0021fdc8",
+        "unit": "textbin/fun_0021fdc8",
         "source_path": "src/assembly/textbin/fun_0021fdc8.c",
         "address": "0x0021fdc8",
         "current_name": "FUN_0021fdc8",
-        "proposed_name": null,
+        "proposed_name": "update_menu_resource_stream",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -12955,6 +13189,10 @@
                 "logical_group": "ui/menus/save_data"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -13321,14 +13559,18 @@
         "source_path": "src/ui/menus/update_menu_cycle_selection.c",
         "address": "0x00221e50",
         "current_name": "FUN_00221e50",
-        "proposed_name": null,
+        "proposed_name": "update_menu_cycle_selection",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13588,11 +13830,16 @@
         "source_path": "src/ui/menus/draw_save_slot_list.c",
         "address": "0x002239e0",
         "current_name": "FUN_002239e0",
-        "proposed_name": null,
+        "proposed_name": "draw_save_slot_list",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -13600,14 +13847,18 @@
         "source_path": "src/ui/menus/draw_menu_flashing_panel.c",
         "address": "0x00223e28",
         "current_name": "FUN_00223e28",
-        "proposed_name": null,
+        "proposed_name": "draw_menu_flashing_panel",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13617,14 +13868,18 @@
         "source_path": "src/ui/menus/initialize_menu_preview_objects.c",
         "address": "0x002240c8",
         "current_name": "FUN_002240c8",
-        "proposed_name": null,
+        "proposed_name": "initialize_menu_preview_objects",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13634,10 +13889,10 @@
         "source_path": "src/ui/menus/release_menu_preview_objects.c",
         "address": "0x002242b8",
         "current_name": "FUN_002242b8",
-        "proposed_name": null,
+        "proposed_name": "release_menu_preview_objects",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -13647,6 +13902,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13679,14 +13938,18 @@
         "source_path": "src/ui/menus/update_menu_preview_class_pose.c",
         "address": "0x00224b70",
         "current_name": "FUN_00224b70",
-        "proposed_name": null,
+        "proposed_name": "update_menu_preview_class_pose",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13696,28 +13959,37 @@
         "source_path": "src/ui/menus/update_menu_preview_animation_transform.c",
         "address": "0x00224d28",
         "current_name": "FUN_00224d28",
-        "proposed_name": null,
+        "proposed_name": "update_menu_preview_animation_transform",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00224e18",
+        "unit": "textbin/fun_00224e18",
         "source_path": "src/assembly/textbin/fun_00224e18.c",
         "address": "0x00224e18",
         "current_name": "FUN_00224e18",
-        "proposed_name": null,
+        "proposed_name": "update_menu_preview_pose_and_attachments",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -13725,14 +13997,18 @@
         "source_path": "src/ui/menus/update_menu_preview_animation_pose.c",
         "address": "0x00224fc0",
         "current_name": "FUN_00224fc0",
-        "proposed_name": null,
+        "proposed_name": "update_menu_preview_animation_pose",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13742,14 +14018,18 @@
         "source_path": "src/ui/menus/update_menu_preview_class_transform.c",
         "address": "0x002250f0",
         "current_name": "FUN_002250f0",
-        "proposed_name": null,
+        "proposed_name": "update_menu_preview_class_transform",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13759,11 +14039,16 @@
         "source_path": "src/ui/menus/item_preview/update_ammo_preview_transform.c",
         "address": "0x00225180",
         "current_name": "FUN_00225180",
-        "proposed_name": null,
+        "proposed_name": "update_ammo_preview_transform",
         "logical_group": "ui/menus/item_preview",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -13771,10 +14056,10 @@
         "source_path": "src/ui/menus/create_menu_preview_moby.c",
         "address": "0x00225490",
         "current_name": "FUN_00225490",
-        "proposed_name": null,
+        "proposed_name": "create_menu_preview_moby",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -13784,6 +14069,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -13837,15 +14126,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_002256e8",
+        "unit": "textbin/fun_002256e8",
         "source_path": "src/assembly/textbin/fun_002256e8.c",
         "address": "0x002256e8",
         "current_name": "FUN_002256e8",
-        "proposed_name": null,
+        "proposed_name": "update_streamed_moby_animation",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -13876,14 +14170,14 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00225ac0",
+        "unit": "textbin/fun_00225ac0",
         "source_path": "src/assembly/textbin/fun_00225ac0.c",
         "address": "0x00225ac0",
         "current_name": "FUN_00225ac0",
-        "proposed_name": null,
+        "proposed_name": "initialize_graphics_buffer_descriptors",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -13894,6 +14188,10 @@
                 "logical_group": "audio/streaming"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -14024,14 +14322,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00225e70",
+        "unit": "textbin/fun_00225e70",
         "source_path": "src/assembly/textbin/fun_00225e70.c",
         "address": "0x00225e70",
         "current_name": "FUN_00225e70",
-        "proposed_name": null,
+        "proposed_name": "update_preview_animation_and_attachments",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -14042,6 +14340,10 @@
                 "logical_group": "audio/streaming"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -14068,14 +14370,18 @@
         "source_path": "src/ui/menus/item_preview/advance_preview_animation_queue.c",
         "address": "0x00226670",
         "current_name": "FUN_00226670",
-        "proposed_name": null,
+        "proposed_name": "advance_preview_animation_queue",
         "logical_group": "ui/menus/item_preview",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14085,14 +14391,18 @@
         "source_path": "src/ui/menus/item_preview/clear_preview_animation_queue.c",
         "address": "0x00226718",
         "current_name": "FUN_00226718",
-        "proposed_name": null,
+        "proposed_name": "clear_preview_animation_queue",
         "logical_group": "ui/menus/item_preview",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14102,10 +14412,10 @@
         "source_path": "src/ui/menus/item_preview/clear_preview_resource_bindings.c",
         "address": "0x002267b8",
         "current_name": "FUN_002267b8",
-        "proposed_name": null,
+        "proposed_name": "clear_preview_resource_bindings",
         "logical_group": "ui/menus/item_preview",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -14115,24 +14425,32 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
         "unit": "ui/menus/fun_00226848",
-        "source_path": "src/ui/menus/fun_00226848.c",
+        "source_path": "src/assembly/ui/menus/fun_00226848.c",
         "address": "0x00226848",
         "current_name": "FUN_00226848",
-        "proposed_name": null,
+        "proposed_name": "load_preview_resource_bindings",
         "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
             "commit": "d261447",
             "excerpt": "fun_0022c6f8, fun_00226848): the yaml owner becomes the subsystem unit and the"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "unresolved"
@@ -14290,39 +14608,54 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_002271d0",
+        "unit": "textbin/fun_002271d0",
         "source_path": "src/assembly/textbin/fun_002271d0.c",
         "address": "0x002271d0",
         "current_name": "FUN_002271d0",
-        "proposed_name": null,
+        "proposed_name": "append_fullscreen_setup_strips",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00227378",
+        "unit": "textbin/fun_00227378",
         "source_path": "src/assembly/textbin/fun_00227378.c",
         "address": "0x00227378",
         "current_name": "FUN_00227378",
-        "proposed_name": null,
+        "proposed_name": "append_fullscreen_clear_strips",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00227548",
+        "unit": "textbin/fun_00227548",
         "source_path": "src/assembly/textbin/fun_00227548.c",
         "address": "0x00227548",
         "current_name": "FUN_00227548",
-        "proposed_name": null,
+        "proposed_name": "submit_graphics_setup_command_stream",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -14420,10 +14753,10 @@
         "source_path": "src/rendering/sky/draw_sky_shells.c",
         "address": "0x0022b288",
         "current_name": "FUN_0022b288",
-        "proposed_name": null,
+        "proposed_name": "draw_sky_shells",
         "logical_group": "rendering/sky",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -14439,6 +14772,10 @@
                 "logical_group": "rendering/sky"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -14538,10 +14875,10 @@
         "source_path": "src/audio/sound/clamp_voice_position_to_collision.c",
         "address": "0x0022c5a8",
         "current_name": "FUN_0022c5a8",
-        "proposed_name": null,
+        "proposed_name": "clamp_voice_position_to_collision",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -14551,6 +14888,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14560,27 +14901,31 @@
         "source_path": "src/audio/sound/test_voice_occlusion.c",
         "address": "0x0022c658",
         "current_name": "FUN_0022c658",
-        "proposed_name": null,
+        "proposed_name": "test_voice_occlusion",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022c6f8",
-        "source_path": "src/audio/sound/fun_0022c6f8.c",
+        "unit": "audio/sound/calculate_voice_distance_volume",
+        "source_path": "src/audio/sound/calculate_voice_distance_volume.c",
         "address": "0x0022c6f8",
         "current_name": "FUN_0022c6f8",
-        "proposed_name": null,
+        "proposed_name": "calculate_voice_distance_volume",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -14590,19 +14935,23 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "audio/sound/fun_0022c7e8",
-        "source_path": "src/audio/sound/fun_0022c7e8.c",
+        "unit": "audio/sound/calculate_voice_volume",
+        "source_path": "src/audio/sound/calculate_voice_volume.c",
         "address": "0x0022c7e8",
         "current_name": "FUN_0022c7e8",
-        "proposed_name": null,
+        "proposed_name": "calculate_voice_volume",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -14612,6 +14961,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14621,28 +14974,37 @@
         "source_path": "src/audio/sound/calculate_voice_pan.c",
         "address": "0x0022c830",
         "current_name": "FUN_0022c830",
-        "proposed_name": null,
+        "proposed_name": "calculate_voice_pan",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0022c8d0",
+        "unit": "textbin/fun_0022c8d0",
         "source_path": "src/assembly/textbin/fun_0022c8d0.c",
         "address": "0x0022c8d0",
         "current_name": "FUN_0022c8d0",
-        "proposed_name": null,
+        "proposed_name": "initialize_gameplay_sound_system",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -14733,14 +15095,14 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0022d7f0",
+        "unit": "textbin/fun_0022d7f0",
         "source_path": "src/assembly/textbin/fun_0022d7f0.c",
         "address": "0x0022d7f0",
         "current_name": "FUN_0022d7f0",
-        "proposed_name": null,
+        "proposed_name": "allocate_voice_slot",
         "logical_group": "audio/voices",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -14756,6 +15118,10 @@
                 "logical_group": "audio/voices"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -14765,14 +15131,18 @@
         "source_path": "src/audio/sound/allocate_voice_for_target_entry.c",
         "address": "0x0022da68",
         "current_name": "FUN_0022da68",
-        "proposed_name": null,
+        "proposed_name": "allocate_voice_for_target_entry",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14930,15 +15300,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0022e420",
+        "unit": "textbin/fun_0022e420",
         "source_path": "src/assembly/textbin/fun_0022e420.c",
         "address": "0x0022e420",
         "current_name": "FUN_0022e420",
-        "proposed_name": null,
+        "proposed_name": "build_resident_indexed_texture_warp_meshes",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -14946,14 +15321,18 @@
         "source_path": "src/gameplay/space/draw_resident_textured_quad.c",
         "address": "0x0022e8c8",
         "current_name": "FUN_0022e8c8",
-        "proposed_name": null,
+        "proposed_name": "draw_resident_textured_quad",
         "logical_group": "gameplay/space",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -14963,46 +15342,59 @@
         "source_path": "src/gameplay/space/draw_resident_textured_banner.c",
         "address": "0x0022ea08",
         "current_name": "FUN_0022ea08",
-        "proposed_name": null,
+        "proposed_name": "draw_resident_textured_banner",
         "logical_group": "gameplay/space",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_0022eaa8",
+        "unit": "textbin/fun_0022eaa8",
         "source_path": "src/assembly/textbin/fun_0022eaa8.c",
         "address": "0x0022eaa8",
         "current_name": "FUN_0022eaa8",
-        "proposed_name": null,
+        "proposed_name": "update_level_gameplay_frame",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
             "commit": "c3e3597",
             "excerpt": "fun_0022eaa8). NON_MATCHING bodies only; INCLUDE_ASM stays authoritative."
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_0022f288",
-        "source_path": "src/assembly/textbin/fun_0022f288.c",
+        "unit": "textbin/render_level_frame",
+        "source_path": "src/textbin/render_level_frame.c",
         "address": "0x0022f288",
         "current_name": "FUN_0022f288",
-        "proposed_name": null,
+        "proposed_name": "render_level_frame",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -15024,19 +15416,23 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_0022f778",
-        "source_path": "src/assembly/textbin/fun_0022f778.c",
+        "unit": "gameplay/update_resident_gameplay_state",
+        "source_path": "src/gameplay/update_resident_gameplay_state.c",
         "address": "0x0022f778",
         "current_name": "FUN_0022f778",
-        "proposed_name": null,
+        "proposed_name": "update_resident_gameplay_state",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
             "commit": "44a2a33",
             "excerpt": "arguments and reads its table as s32 (40.19 -> 46.18); fun_0022f778 casts"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "unresolved"
@@ -15064,14 +15460,14 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00230f60",
-        "source_path": "src/assembly/textbin/fun_00230f60.c",
+        "unit": "textbin/initialize_level_runtime",
+        "source_path": "src/textbin/initialize_level_runtime.c",
         "address": "0x00230f60",
         "current_name": "FUN_00230f60",
-        "proposed_name": null,
+        "proposed_name": "initialize_level_runtime",
         "logical_group": "gameplay/state",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -15082,6 +15478,10 @@
                 "logical_group": "gameplay/state"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -15091,10 +15491,10 @@
         "source_path": "src/gameplay/space/play_level_transition_movie.c",
         "address": "0x00231608",
         "current_name": "FUN_00231608",
-        "proposed_name": null,
+        "proposed_name": "play_level_transition_movie",
         "logical_group": "gameplay/space",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -15119,6 +15519,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -15152,14 +15556,14 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "assembly/textbin/fun_00231878",
+        "unit": "textbin/fun_00231878",
         "source_path": "src/assembly/textbin/fun_00231878.c",
         "address": "0x00231878",
         "current_name": "FUN_00231878",
-        "proposed_name": null,
+        "proposed_name": "prepare_loading_slide_textures",
         "logical_group": "gameplay/state",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -15175,19 +15579,23 @@
                 "logical_group": "gameplay/state"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
       },
       {
-        "unit": "assembly/textbin/fun_00231bd8",
-        "source_path": "src/assembly/textbin/fun_00231bd8.c",
+        "unit": "textbin/play_level_loading_slides",
+        "source_path": "src/textbin/play_level_loading_slides.c",
         "address": "0x00231bd8",
         "current_name": "FUN_00231bd8",
-        "proposed_name": null,
+        "proposed_name": "play_level_loading_slides",
         "logical_group": "gameplay/state",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "neighboring_group_context",
@@ -15203,6 +15611,10 @@
                 "logical_group": "gameplay/state"
               }
             ]
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "low"
@@ -15231,15 +15643,20 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_002327a0",
+        "unit": "textbin/fun_002327a0",
         "source_path": "src/assembly/textbin/fun_002327a0.c",
         "address": "0x002327a0",
         "current_name": "FUN_002327a0",
-        "proposed_name": null,
+        "proposed_name": "render_environment_mapped_object",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -15664,14 +16081,14 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/vu1/fun_00233c28",
-        "source_path": "src/rendering/vu1/fun_00233c28.c",
+        "unit": "rendering/vu1/vu1_gs_regs_alt",
+        "source_path": "src/rendering/vu1/vu1_gs_regs_alt.c",
         "address": "0x00233c28",
         "current_name": "FUN_00233c28",
-        "proposed_name": null,
+        "proposed_name": "vu1_gs_regs_alt",
         "logical_group": "rendering/vu1",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -15696,19 +16113,23 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/vu1/fun_00233c90",
-        "source_path": "src/rendering/vu1/fun_00233c90.c",
+        "unit": "rendering/vu1/vu1_gs_regs_font",
+        "source_path": "src/rendering/vu1/vu1_gs_regs_font.c",
         "address": "0x00233c90",
         "current_name": "FUN_00233c90",
-        "proposed_name": null,
+        "proposed_name": "vu1_gs_regs_font",
         "logical_group": "rendering/vu1",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "git_log",
@@ -15733,6 +16154,10 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -15956,27 +16381,37 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "assembly/textbin/fun_00237a78",
+        "unit": "textbin/fun_00237a78",
         "source_path": "src/assembly/textbin/fun_00237a78.c",
         "address": "0x00237a78",
         "current_name": "FUN_00237a78",
-        "proposed_name": null,
+        "proposed_name": "project_graphics_bounds",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00237c80",
+        "unit": "textbin/fun_00237c80",
         "source_path": "src/assembly/textbin/fun_00237c80.c",
         "address": "0x00237c80",
         "current_name": "FUN_00237c80",
-        "proposed_name": null,
+        "proposed_name": "project_graphics_bounds_float",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16014,15 +16449,20 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00238310",
+        "unit": "textbin/fun_00238310",
         "source_path": "src/assembly/textbin/fun_00238310.c",
         "address": "0x00238310",
         "current_name": "FUN_00238310",
-        "proposed_name": null,
+        "proposed_name": "render_capture_scrolling_text",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16113,23 +16553,33 @@
         "source_path": "src/ui/menus/render_vendor_item_details_pass.c",
         "address": "0x002389e0",
         "current_name": "FUN_002389e0",
-        "proposed_name": null,
+        "proposed_name": "render_vendor_item_details_pass",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00238f08",
+        "unit": "textbin/fun_00238f08",
         "source_path": "src/assembly/textbin/fun_00238f08.c",
         "address": "0x00238f08",
         "current_name": "FUN_00238f08",
-        "proposed_name": null,
+        "proposed_name": "render_vendor_buy_label_pass",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16145,15 +16595,20 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_00239328",
-        "source_path": "src/assembly/textbin/fun_00239328.c",
+        "unit": "textbin/render_vendor_capture_texture_overlays_pass",
+        "source_path": "src/textbin/render_vendor_capture_texture_overlays_pass.c",
         "address": "0x00239328",
         "current_name": "FUN_00239328",
-        "proposed_name": null,
+        "proposed_name": "render_vendor_capture_texture_overlays_pass",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16174,32 +16629,41 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/vendor/fun_00239750",
-        "source_path": "src/gameplay/vendor/fun_00239750.c",
+        "unit": "gameplay/vendor/setup_view_context",
+        "source_path": "src/gameplay/vendor/setup_view_context.c",
         "address": "0x00239750",
         "current_name": "FUN_00239750",
-        "proposed_name": null,
+        "proposed_name": "setup_view_context",
         "logical_group": "gameplay/vendor",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00239780",
+        "unit": "textbin/fun_00239780",
         "source_path": "src/assembly/textbin/fun_00239780.c",
         "address": "0x00239780",
         "current_name": "FUN_00239780",
-        "proposed_name": null,
+        "proposed_name": "render_vendor_capture_pass_sequence",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16224,15 +16688,20 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00239f58",
+        "unit": "textbin/fun_00239f58",
         "source_path": "src/assembly/textbin/fun_00239f58.c",
         "address": "0x00239f58",
         "current_name": "FUN_00239f58",
-        "proposed_name": null,
+        "proposed_name": "sample_surface_height_map",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "proposed",
+        "confidence": "medium",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -18659,14 +19128,18 @@
         "source_path": "src/audio/streaming/music_channel_ready_callback.c",
         "address": "0x00216990",
         "current_name": "FUN_00216990",
-        "proposed_name": null,
+        "proposed_name": "music_channel_ready_callback",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18676,14 +19149,18 @@
         "source_path": "src/audio/streaming/music_transition_start_callback.c",
         "address": "0x00216a80",
         "current_name": "FUN_00216a80",
-        "proposed_name": null,
+        "proposed_name": "music_transition_start_callback",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18693,14 +19170,18 @@
         "source_path": "src/audio/streaming/music_primary_replace_callback.c",
         "address": "0x00216ad0",
         "current_name": "FUN_00216ad0",
-        "proposed_name": null,
+        "proposed_name": "music_primary_replace_callback",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18710,14 +19191,18 @@
         "source_path": "src/audio/streaming/music_primary_start_callback.c",
         "address": "0x00216b28",
         "current_name": "FUN_00216b28",
-        "proposed_name": null,
+        "proposed_name": "music_primary_start_callback",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18727,14 +19212,18 @@
         "source_path": "src/audio/streaming/music_remaining_time_callback.c",
         "address": "0x00216bc0",
         "current_name": "FUN_00216bc0",
-        "proposed_name": null,
+        "proposed_name": "music_remaining_time_callback",
         "logical_group": "audio/streaming",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18943,14 +19432,18 @@
         "source_path": "src/audio/sound/store_sound_bank_handle_callback.c",
         "address": "0x0022dd78",
         "current_name": "FUN_0022dd78",
-        "proposed_name": null,
+        "proposed_name": "store_sound_bank_handle_callback",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18960,14 +19453,18 @@
         "source_path": "src/audio/sound/voice_start_callback.c",
         "address": "0x0022dd90",
         "current_name": "FUN_0022dd90",
-        "proposed_name": null,
+        "proposed_name": "voice_start_callback",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"
@@ -18977,14 +19474,18 @@
         "source_path": "src/audio/sound/voice_update_callback.c",
         "address": "0x0022ddd8",
         "current_name": "FUN_0022ddd8",
-        "proposed_name": null,
+        "proposed_name": "voice_update_callback",
         "logical_group": "audio/sound",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "proposed",
+        "confidence": "medium",
         "evidence": [
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+          },
+          {
+            "kind": "source_analysis",
+            "note": "named in source after review of the matched C body"
           }
         ],
         "logical_group_confidence": "high"

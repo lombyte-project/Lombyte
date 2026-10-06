@@ -254,7 +254,7 @@ extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *FUN_002141f8(void *);
 extern s32 FUN_001f9770(s16 *);
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
@@ -361,15 +361,15 @@ s32 FUN_L00_0025a478(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *ou
     if (q->h14 != kind) q->h1C = 0;
     if (FUN_001f9770(&q->h1C)) {
         switch (r) {
-        case 0: q->h1C = FUN_001f96f8(0x25); break;
-        case 1: q->h1C = FUN_001f96f8(0xF); break;
-        case 4: q->h1C = FUN_001f96f8(0x3C); break;
+        case 0: q->h1C = scale_game_frames(0x25); break;
+        case 1: q->h1C = scale_game_frames(0xF); break;
+        case 4: q->h1C = scale_game_frames(0x3C); break;
         case 7:
-            if (D_0013E533[0]) q->h1C = FUN_001f96f8(0x2D);
-            else q->h1C = FUN_001f96f8(0x3C);
+            if (D_0013E533[0]) q->h1C = scale_game_frames(0x2D);
+            else q->h1C = scale_game_frames(0x3C);
             break;
-        case 11: q->h1C = FUN_001f96f8(0x3C); break;
-        default: q->h1C = FUN_001f96f8(0x1E); break;
+        case 11: q->h1C = scale_game_frames(0x3C); break;
+        default: q->h1C = scale_game_frames(0x1E); break;
         }
     } else {
         switch (r) {

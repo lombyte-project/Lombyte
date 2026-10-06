@@ -160,11 +160,11 @@ void FUN_L00_00235c80(HudElem *e) {
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(HudElem *);
 
 void FUN_L00_00235d80(HudElem *e) {
-    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->unk48 = 0;
     e->unk4A = 0;
     FUN_L00_00235c80(e);
@@ -173,7 +173,7 @@ void FUN_L00_00235d80(HudElem *e) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236750), where it is exact; names translated to the US level program. */
 
 void FUN_L00_00235dc0(HudElem *e) {
-    e->unk7C = FUN_001f96f8(0xB4) + 0x1E;
+    e->unk7C = scale_game_frames(0xB4) + 0x1E;
     e->unk48 = 0;
     e->unk4A = 0;
     e->w = 0x20;
@@ -228,35 +228,35 @@ void FUN_L00_00235ea0(e) HudElem *e; {
         }
     }
     if (e->unk74 != e->unk78) {
-        e->unk7C = FUN_001f96f8(0xB4);
+        e->unk7C = scale_game_frames(0xB4);
         if (e->unk6C >= 0x18) {
             int t = e->unk74 - e->unk78;
             d = t < 0 ? -t : t;
             if (d != 0) {
                 s = FUN_001fa6d0(FUN_001f9988(FUN_001fa6c0(d) / 25.0f) * 5.0f);
-                s = s < d * FUN_001f96f8(2) / FUN_001f96f8(10) ? d * FUN_001f96f8(2) / FUN_001f96f8(10) : s;
+                s = s < d * scale_game_frames(2) / scale_game_frames(10) ? d * scale_game_frames(2) / scale_game_frames(10) : s;
                 if (s >= 0x7A) {
                     s = 0x79;
                 } else if (s <= 0) {
                     s = 1;
                 }
                 c[3] += s;
-                if (c[3] > FUN_001f96f8(2)) {
-                    s = c[3] / FUN_001f96f8(2);
+                if (c[3] > scale_game_frames(2)) {
+                    s = c[3] / scale_game_frames(2);
                     if (e->unk78 < e->unk74) {
                         e->unk74 = e->unk74 - s;
                     } else {
                         e->unk74 = e->unk74 + s;
                     }
-                    c[3] -= s * FUN_001f96f8(2);
+                    c[3] -= s * scale_game_frames(2);
                 }
             }
         }
     }
-    if (e->unk7C >= FUN_001f96f8(5)) {
-        if (c[0] < FUN_001f96f8(8)) {
+    if (e->unk7C >= scale_game_frames(5)) {
+        if (c[0] < scale_game_frames(8)) {
             c[0]++;
-        } else if (c[1] < FUN_001f96f8(8)) {
+        } else if (c[1] < scale_game_frames(8)) {
             c[1]++;
         }
     } else {
@@ -292,15 +292,15 @@ void FUN_L00_00236128(HudElem *e) {
         }
     }
     if (e->unk74 != e->unk78) {
-        e->unk7C = FUN_001f96f8(0xB4);
+        e->unk7C = scale_game_frames(0xB4);
         if (e->unk6C >= 0x18) {
             e->unk74 = e->unk78;
         }
     }
-    if (e->unk7C >= FUN_001f96f8(5)) {
-        if (c[0] < FUN_001f96f8(8)) {
+    if (e->unk7C >= scale_game_frames(5)) {
+        if (c[0] < scale_game_frames(8)) {
             c[0]++;
-        } else if (c[1] < FUN_001f96f8(8)) {
+        } else if (c[1] < scale_game_frames(8)) {
             c[1]++;
         }
     } else {

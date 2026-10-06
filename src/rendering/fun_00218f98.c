@@ -51,9 +51,9 @@ extern u8 D_001601D0 __attribute__((sda));
 extern s32 FUN_001f9a68(s32, s32, f32);
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
-extern s32 FUN_00225ac0();
+extern s32 initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
-extern struct O2 *func_00225490();
+extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
 extern s32 set_moby_animation() __asm__("func_00212ED8");
 
 void func_00225AC0__void() __asm__("FUN_00225ac0");
@@ -85,7 +85,7 @@ void FUN_00218f98(void) {
     D_001D5BF0.f18 = D_0015EE78;
     if (D_001D5BF0.f4 != 0) {
         for (i = 0; i < 14; i++) {
-            struct O2 *o = (struct O2 *)func_00225490(0x472);
+            struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);
             D_001D5D90[i] = o;
             if (o != 0) {
                 s32 k;

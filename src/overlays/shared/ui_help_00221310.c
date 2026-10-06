@@ -18,7 +18,7 @@ extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 
 void FUN_L00_00221b68(void) {
@@ -38,7 +38,7 @@ void FUN_L00_00221b68(void) {
         && *(float *)(q + 0x229C) < 0.2f) {
         s = *(int *)(q + 0x208C);
         if (s == 0 || s == 2 || s == 4 || s == 10 || s == 1) {
-            s = FUN_001f96f8(5);
+            s = scale_game_frames(5);
             r = (char *)D_0013E533 + 0xE1D;
             *(short *)(r + 0x1EA) = s;
         }
@@ -68,16 +68,16 @@ void FUN_L00_00221b68(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00221df8(void);
 
 int FUN_L00_00221d98(void) {
-    int r = FUN_001f96f8(12);
+    int r = scale_game_frames(12);
     int t = FUN_L00_00221df8();
     if (t == 2) {
         r = 0;
     } else if (t == 3) {
-        r = FUN_001f96f8(12);
+        r = scale_game_frames(12);
     }
     return r;
 }
@@ -308,8 +308,8 @@ extern int FUN_L00_00216de8(int, int);
 extern int FUN_L00_00221df8(void);
 extern int FUN_L00_00229a98(void);
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry(int, int, int);
-extern int scale_game_frames(int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F688 __attribute__((sda));
 extern short D_L00_0017BC28_1 __asm__("D_L00_0017BC28");
@@ -2535,7 +2535,7 @@ void FUN_L00_00227638(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void FUN_L00_0020e698(void);
 
@@ -2544,7 +2544,7 @@ int FUN_L00_002276c0(void) {
     int s = *(int *)(p + 0x2084);
     if ((unsigned)(s - 2) < 2 || s == 0) {
         if (*(unsigned char *)(p + 0x20A8) != 0) {
-            if (*(int *)(p + 0x1BC) < FUN_001f96f8(6)) {
+            if (*(int *)(p + 0x1BC) < scale_game_frames(6)) {
                 if (*(float *)(p + 0x229C) < 0.7f) {
                     if (*(unsigned char *)(p + 0x20AB) == 0) {
                         FUN_L00_0020e698();

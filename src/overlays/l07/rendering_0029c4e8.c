@@ -12,7 +12,7 @@
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L07_001B2164_d __asm__("D_L07_001B2164") __attribute__((section(".data")));
@@ -35,7 +35,7 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
         f[5] = 1.0f;
         f[6] = 1.0f;
         f[7] = 0.6f;
-        *(short *)(p + 0xA) = FUN_001f96f8(0x50);
+        *(short *)(p + 0xA) = scale_game_frames(0x50);
         qcopy(f, pos2);
     }
 }

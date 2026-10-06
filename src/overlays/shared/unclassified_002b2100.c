@@ -691,7 +691,7 @@ extern float D_L00_0015F5D0;
 extern float FUN_001f9af0(void *);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_0026b790(void *pos, int spin, int col, float range, float f1, float f2, float f3, float scale);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -737,18 +737,18 @@ void FUN_L00_002b5d00(char *m, int flag) {
             B = D_L00_001E9A70;
             pa = A.v + random_integer_below(6);
             pb = B.v + random_integer_below(6);
-            a = FUN_L00_00257b90(FUN_001f96f8(15), FUN_001f96f8(20));
-            b = FUN_L00_00257b90(FUN_001f96f8(25), FUN_001f96f8(30));
+            a = FUN_L00_00257b90(scale_game_frames(15), scale_game_frames(20));
+            b = FUN_L00_00257b90(scale_game_frames(25), scale_game_frames(30));
             FUN_L00_0026a9f0(m + 0x10, n, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
         } while (--i);
         }
         if (D_L00_0015F5D0 < 0.95f) {
-            FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
-            FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(24), 0x7F, 0x20, 0, 0x20, 2.0f);
+            FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(15), 0x7F, 0x7F, 0x7F, 0x20, 3.0f);
+            FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(24), 0x7F, 0x20, 0, 0x20, 2.0f);
         }
-        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(20), 0x7F, 0x40, 0, 0x30, 3.0f);
-        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(27), 0x60, 0x10, 0, 0x40, 2.0f);
-        FUN_L00_002ac910(m, m + 0x10, n, FUN_001f96f8(29), 0x20, 0, 0, 0x20, 1.0f);
+        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(20), 0x7F, 0x40, 0, 0x30, 3.0f);
+        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(27), 0x60, 0x10, 0, 0x40, 2.0f);
+        FUN_L00_002ac910(m, m + 0x10, n, scale_game_frames(29), 0x20, 0, 0, 0x20, 1.0f);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b6140.s", FUN_L00_002b6140);
@@ -766,7 +766,7 @@ extern s32 FUN_L00_0028d8c0(Moby *, s32);
 extern s32 FUN_L00_00257b90_c(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern s32 FUN_0022da68(s32, s32, Moby *);
+extern s32 allocate_voice_for_target_entry(s32, s32, Moby *) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002b6bc8(Moby *, f32);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -837,7 +837,7 @@ void FUN_L00_002b6f10(Moby *m)
             D_00141680.flags |= 1 << D_0015ED84;
             D_00141680.flags |= 0x80000000;
             if (m->type != 3) blend_moby_animation(m, 3, 0, FUN_001f96f8_c(3));
-            o->anim = FUN_0022da68(o->idx, 1, m);
+            o->anim = allocate_voice_for_target_entry(o->idx, 1, m);
             i = o->idx + 1;
             o->idx = i;
             r1 = truncate_float_to_s32(m->cfg->tab[i].x * 10.0f);
@@ -898,7 +898,7 @@ extern int D_L00_001614D8 __attribute__((sda));
 extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
 extern float ConvertIntegerToFloat(int);
 extern int FUN_001f9770(void *);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *arg0);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");

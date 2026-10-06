@@ -83,7 +83,7 @@ void FUN_L12_002ecac0(char *moby) {
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9e90(float, float);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
@@ -100,7 +100,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         qcopy(data, src);
         *(float *)(moby + 0x48) = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
         *(float *)(moby + 0x44) = -FUN_001f9e90(FUN_001f9b20(data), *(float *)(data + 8));
-        r = FUN_001f96f8(seed);
+        r = scale_game_frames(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;
         *(float *)(data + 0x1C) = f0;

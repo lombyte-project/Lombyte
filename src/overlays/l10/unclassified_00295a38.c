@@ -14,7 +14,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f96f8(int);
 extern int FUN_001f9740(int *arg0);
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern short D_L10_00161BF0_d __asm__("D_L10_00161BF0") __attribute__((sda));
@@ -43,7 +43,7 @@ void FUN_L10_002d8c00(char *moby) {
         build_spherical_offset(a, random_float_between_alt(*(float *)&D_L10_00161C04_d, *(float *)&D_L10_00161C08_d) * D_0015ED6C, q, r);
         FUN_001f9a10(b, moby + 0x10, a);
         FUN_L10_002d8058_u(moby, b, a);
-        FUN_0022da68(0, 0, (int)moby);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)data = FUN_001f96f8(FUN_L00_00257b90(*(int *)&D_L10_00161BF0_d, *(int *)&D_L10_00161BF4_d));
     }
 }

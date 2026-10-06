@@ -231,7 +231,7 @@ extern L07Ent D_L07_0020C840[];
 extern L07Ent D_L07_0020DAF0[];
 extern char D_L07_0020DB00[];
 extern float vector_length_xyz(void *);
-extern int allocate_voice_for_target_entry(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int D_L07_00161B6C __attribute__((sda));
 extern int D_L07_00161B70 __attribute__((sda));
 extern float D_L07_00161B7C __attribute__((sda));

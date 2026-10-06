@@ -682,7 +682,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b97f8.s", FUN_L13_002b97f8);
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
 
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
 extern unsigned char D_0013A4E0[];
 extern void FUN_001f9bf8(void *, void *, float);
@@ -698,7 +698,7 @@ void FUN_L13_002b9df8(char *moby, char *obj, float p2, float p3) {
     build_spherical_offset(a, D_0015ED6C * 400.0f, p2, p3);
     FUN_001f9a10(a, a, obj);
     if (func_001F9908_i(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
-        FUN_0022da68(3, 0, (int)moby);
+        allocate_voice_for_target_entry(3, 0, (int)moby);
         FUN_001f9bf8(c, a, 2.2f);
         FUN_L00_0024f7c8(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
@@ -732,7 +732,7 @@ void FUN_L13_002b9f58(char *moby, char *obj) {
             s = D_0015ED6C * 100.0f;
             h = FUN_001f96f8(300);
             if (FUN_L13_002e6a58(moby, a, s, *(int *)(obj + 0xEC), pos, h) != 0) {
-                FUN_0022da68(2, 0, (int)moby);
+                allocate_voice_for_target_entry(2, 0, (int)moby);
                 u[0x15F6]--;
                 *(int *)(obj + 0x84) = FUN_001f96f8(30);
             }

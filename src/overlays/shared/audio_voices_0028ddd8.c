@@ -11,12 +11,12 @@
 extern char *D_L00_0015F5F4;
 extern char D_0013E533[];
 extern int D_L00_0015F5F0;
-extern int FUN_0022d7f0(void *, int, int, int, int);
+extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 int FUN_L00_0028ddd8(int a, int b, int c, int d) {
     int r;
     if (a >= D_L00_0015F5F0) return -1;
-    r = FUN_0022d7f0(D_L00_0015F5F4 + a * 32, b, 0, c + 0x40, d);
+    r = allocate_voice_slot(D_L00_0015F5F4 + a * 32, b, 0, c + 0x40, d);
     if (r >= 0) {
         char *e = D_0013E533 + 0x1D + r * 0x70;
         *(int *)(e + 0x8C) = c;
@@ -47,7 +47,7 @@ int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
     if (idx >= D_L00_0015F5F0) {
         return -1;
     }
-    h = FUN_0022d7f0(D_L00_0015F5F4 + idx * 32, a3, a4, 0, 0x400);
+    h = allocate_voice_slot(D_L00_0015F5F4 + idx * 32, a3, a4, 0, 0x400);
     if (h >= 0) {
         char *rec = D_0013E550_c + h * 0x70;
         *(int *)(rec + 0x88) = a4;

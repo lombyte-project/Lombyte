@@ -34,7 +34,7 @@ extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
 extern int D_0015EE28;
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00297e70(void) {
     if (D_0013C940.busy != 0 || D_0013C940.c != 0.0f || D_0013C940.d != 0.0f || D_0013C940.a != 0.0f || D_0013C940.b != 0.0f) {
         D_L00_00160FF0 = 0;
@@ -44,7 +44,7 @@ void FUN_L00_00297e70(void) {
     D_L00_0015F5CC++;
     D_0015EEA4++;
     if (D_L00_0015F598) {
-        if (D_L00_00160FF0 < (int)((float)FUN_001f96f8(15) * 60.0f)) {
+        if (D_L00_00160FF0 < (int)((float)scale_game_frames(15) * 60.0f)) {
             D_0015EE28++;
         }
     }
@@ -725,7 +725,7 @@ extern int D_L00_00161190;
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_001516EC[];
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 

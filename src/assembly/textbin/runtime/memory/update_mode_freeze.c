@@ -89,7 +89,7 @@ extern struct S_00193300 D_00193300;
 extern s32 D_0015EEB8[];
 extern s32 D_001D5BF8[];
 extern char sound_update() __asm__("func_0022CA50");
-extern s32 func_001F96F8(s32);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void func_001E93E8();
 extern void func_001E9440(u8 *, u8 *, s32, s32);
@@ -116,7 +116,7 @@ void update_mode_freeze(void)
     {
       struct S_00193300 *st = &D_00193300;
       st->unk20++;
-      if (func_001F96F8(0x5A) < st->unk20)
+      if (scale_game_frames(0x5A) < st->unk20)
       {
         if (st->unk24 != 0)
         {
@@ -124,7 +124,7 @@ void update_mode_freeze(void)
         }
       }
       st = &D_00193300;
-      if (func_001F96F8(0x78) < st->unk20)
+      if (scale_game_frames(0x78) < st->unk20)
       {
         if (D_0013CAE4[0] & 0x40)
         {
@@ -184,7 +184,7 @@ void update_mode_freeze(void)
         fade_to_black(4);
         D_0016034C = 0;
         D_00193300.unk1C = 2;
-        D_00193300.unk20 = func_001F96F8(0x258);
+        D_00193300.unk20 = scale_game_frames(0x258);
       }
         break;
 
@@ -300,7 +300,7 @@ void update_mode_freeze(void)
               D_0013F350.unk880 = -1;
             }
             func_001FF768();
-            if (func_001F96F8(0x1068) < D_0013F350.unk19C)
+            if (scale_game_frames(0x1068) < D_0013F350.unk19C)
             {
               if (D_0015ED84 == 5)
               {
@@ -336,7 +336,7 @@ void update_mode_freeze(void)
 
     case 3:
       D_00193300.unk20++;
-      if (func_001F96F8(0x1E) < D_00193300.unk20)
+      if (scale_game_frames(0x1E) < D_00193300.unk20)
     {
       if (D_00193300.unk24 != 0)
       {

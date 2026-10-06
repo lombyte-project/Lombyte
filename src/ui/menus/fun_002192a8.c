@@ -72,8 +72,8 @@ extern struct Ent *D_001D5D90[];
 
 extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
-extern void FUN_00212e28();
-extern s32 func_0022DA68(s32, s32, struct Ent *);
+extern void update_visible_resident_objects() __asm__("FUN_00212e28");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Ent *) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct Own *) __asm__("func_001FBAB8");
 extern void CalculateDmaTransferAddress(void);
 extern void update_fog(void) __asm__("FUN_001f2588");
@@ -135,9 +135,9 @@ void FUN_002192a8(void) {
         }
     } else if (D_001D5BF0.unk8 != 0) {
         if (D_001D5BF0.owner == D_001D5BF0.unk8) {
-            func_0022DA68(3, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(3, 0x11, D_001D5D90[0]);
         } else {
-            func_0022DA68(4, 0x11, D_001D5D90[0]);
+            allocate_voice_for_target_entry(4, 0x11, D_001D5D90[0]);
         }
         for (i = 0; i < 14; i++) {
             obj = D_001D5BF0.owner->objs[i];
@@ -189,7 +189,7 @@ void FUN_002192a8(void) {
             }
         }
     }
-    FUN_00212e28();
+    update_visible_resident_objects();
     if (D_001D5BF0.unkC != 0) {
         func_002191B8();
     }

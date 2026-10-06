@@ -32,7 +32,7 @@ extern int D_L14_001620D4; /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
 extern int FUN_001f9770(void *);
 extern int FUN_001fa728(void *, float);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L14_003017f8(char *);
 extern void FUN_L14_00301de8(char *);
 extern void FUN_L14_00301fa8(void);

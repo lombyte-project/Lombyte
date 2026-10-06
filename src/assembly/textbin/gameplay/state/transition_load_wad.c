@@ -159,9 +159,9 @@ extern void unpack_point_records(u8 *, s32) __asm__("func_00202800");
 extern void relocate_sky_definition(u8 *) __asm__("func_002028E0");
 extern void upload_texture_images(u8 *, s32, u8 *) __asm__("func_00203120");
 extern void register_moby_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203640");
-extern void func_00203730(u8 *, u8 *, u8 *, s32);
-extern void func_00203B08(u8 *, u8 *, u8 *, u8 *, s32);
-extern void func_002040E0(u8 *, u8 *);
+extern void register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203730");
+extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
+extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void parse_space_scene_chunk(s32) __asm__("func_002049F0");
 extern s32 func_0020B618(u8 *, u8 *);
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("func_00216788");
@@ -269,7 +269,7 @@ void transition_load_wad(void) {
         } while (k < D_001603EC);
     }
 
-    func_002040E0(data + hdr->x10, (u8 *)hdr + hdr->x34);
+    initialize_tfrag_render_data(data + hdr->x10, (u8 *)hdr + hdr->x34);
     relocate_sky_definition(data + hdr->x14);
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x1C);
     D_0015FF00 = 0;
@@ -281,12 +281,12 @@ void transition_load_wad(void) {
     }
     c20 = (WadClass20 *)((u8 *)hdr + hdr->x24);
     for (i = 0; i < hdr->n20; i++) {
-        func_00203730(data + c20->offset, (u8 *)hdr + hdr->x44, c20->x10, c20->x4);
+        register_object_render_class(data + c20->offset, (u8 *)hdr + hdr->x44, c20->x10, c20->x4);
         c20++;
     }
     c30 = (WadClass30 *)((u8 *)hdr + hdr->x2C);
     for (i = 0; i < hdr->n28; i++) {
-        func_00203B08(data + c30->offset, (u8 *)hdr + hdr->x4C, c30->x10, c30->x20, c30->x4);
+        register_shrub_render_class(data + c30->offset, (u8 *)hdr + hdr->x4C, c30->x10, c30->x20, c30->x4);
         c30++;
     }
     D_0015F460 = (s32)(data + hdr->x68);

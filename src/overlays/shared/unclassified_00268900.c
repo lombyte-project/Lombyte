@@ -10,9 +10,9 @@ typedef union { u128 q; float f[4]; } Vec4;
 extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-int FUN_001f96f8(int);
-void FUN_L00_00268f10(Vec4 *v, int c) { unsigned char *m = FUN_L00_002678b8(1); if (m) { v->f[2] += 0.1f; qcopy(m + 0x10, v); *(int *)(m + 4) = (c << 24) | 0x907070; m[9] = truncate_float_to_s32(2.0f) + 0x40; m[3] = 0x48; m[1] = 0; m[2] = *D_L00_001B2084; *(float *)(m + 0xc) = 31500.002f; m[8] = 0xa0; *(short *)(m + 0xa) = FUN_001f96f8(0x1b); *(int *)(m + 0x20) = c; } }
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
+void FUN_L00_00268f10(Vec4 *v, int c) { unsigned char *m = FUN_L00_002678b8(1); if (m) { v->f[2] += 0.1f; qcopy(m + 0x10, v); *(int *)(m + 4) = (c << 24) | 0x907070; m[9] = truncate_float_to_s32(2.0f) + 0x40; m[3] = 0x48; m[1] = 0; m[2] = *D_L00_001B2084; *(float *)(m + 0xc) = 31500.002f; m[8] = 0xa0; *(short *)(m + 0xa) = scale_game_frames(0x1b); *(int *)(m + 0x20) = c; } }
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 int FUN_001f9770(void *);
 void FUN_L00_00267a08(unsigned char *);
-void FUN_L00_00268fe8(unsigned char *p) { int r = FUN_001f96f8(0x1b); int k = *(short *)(p + 0xa) * *(int *)(p + 0x20) / r; *(int *)(p + 4) = (*(int *)(p + 4) & 0xffffff) | (k << 24); if (FUN_001f9770(p + 0xa)) FUN_L00_00267a08(p); else { int a = FUN_001f96f8(0x1b); int b = FUN_001f96f8(0x1b); p[2] = D_L00_001B2084[(a - *(short *)(p + 0xa)) * 9 / b]; } }
+void FUN_L00_00268fe8(unsigned char *p) { int r = scale_game_frames(0x1b); int k = *(short *)(p + 0xa) * *(int *)(p + 0x20) / r; *(int *)(p + 4) = (*(int *)(p + 4) & 0xffffff) | (k << 24); if (FUN_001f9770(p + 0xa)) FUN_L00_00267a08(p); else { int a = scale_game_frames(0x1b); int b = scale_game_frames(0x1b); p[2] = D_L00_001B2084[(a - *(short *)(p + 0xa)) * 9 / b]; } }

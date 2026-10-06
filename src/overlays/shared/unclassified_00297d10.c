@@ -1508,7 +1508,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E550[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern short D_L06_00161E74 __attribute__((sda));
 extern short D_L06_00161E78 __attribute__((sda));
@@ -1524,7 +1524,7 @@ void FUN_L06_002f7ab8(char *m) {
     if (FUN_L00_0025a420(m, 0x330000, 0) != 0) {
         int idx;
         FUN_L06_002f7c68_c(m);
-        FUN_0022da68(1, 0, (int)m);
+        allocate_voice_for_target_entry(1, 0, (int)m);
         idx = *(int *)(d + 0x60);
         if (idx != -1) {
             char *e = D_0013E550 + idx * 0x70;
@@ -1557,7 +1557,7 @@ void FUN_L06_002f7ab8(char *m) {
     }
     }
     if (FUN_L00_0028d8c0(m, *(int *)(d + 0x60)) == 0) {
-        *(int *)(d + 0x60) = FUN_0022da68(0, 4, (int)m);
+        *(int *)(d + 0x60) = allocate_voice_for_target_entry(0, 4, (int)m);
     }
 }
 #include "sda.h"

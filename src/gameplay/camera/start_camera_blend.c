@@ -10,7 +10,7 @@ extern void save_camera_vectors(void) __asm__("func_001EC7F0");
 extern void restore_camera_vectors(void) __asm__("func_001EC868");
 extern short D_001871B0_h __asm__("D_001871B0") NOT_SDA;
 extern void func_002144D8(void *, void *);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float func_001FA6C0(int);
 /* Camera mode update from arg (its +0x30 vector is copied). In mode 1
    the sub-mode at +3 picks what is captured from it: 0 the +0x50/+0x60
@@ -76,7 +76,7 @@ void start_camera_blend(void *arg) {
         char *b = r + 0x70;
         int n = ++*(int *)(b + 0x14);
 
-        *(int *)(b + 0xC) = FUN_001f96f8(n);
+        *(int *)(b + 0xC) = scale_game_frames(n);
         *(float *)(b + 0x10) = 1.0f / func_001FA6C0(*(int *)(b + 0xC));
     }
 }

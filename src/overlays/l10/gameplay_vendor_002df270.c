@@ -35,7 +35,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e17c0.s", FUN_L10_002e17c0);
 /* Stores a value into each table entry listed for this moby's index. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short D_L10_00161E00_d __asm__("D_L10_00161E00") __attribute__((sda));
 
 void FUN_L10_002e1cb0(unsigned char *moby) {
@@ -45,7 +45,7 @@ void FUN_L10_002e1cb0(unsigned char *moby) {
         if (p != 0) {
             do {
                 int idx = *(unsigned short *)p & 0x7FFF;
-                ((char *)D_L10_0015FFD0_e[2])[(idx << 8) + 0xBC] = FUN_001f96f8(*(int *)&D_L10_00161E00_d);
+                ((char *)D_L10_0015FFD0_e[2])[(idx << 8) + 0xBC] = scale_game_frames(*(int *)&D_L10_00161E00_d);
             } while (*p++ >= 0);
         }
     }
@@ -193,7 +193,7 @@ extern int FUN_001f0b58(void);
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_0025c698(void *, void *);
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(void *);
 extern s32 FUN_L00_0025e3b8(s32);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

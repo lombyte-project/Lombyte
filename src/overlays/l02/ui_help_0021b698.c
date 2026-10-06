@@ -372,7 +372,7 @@ void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 FUN_L00_001f3608(void);
 s32 FUN_001f0b58(void);
-f32 FUN_002135f0(void *, void *);
+f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
 f32 FUN_001f9b48(void *, void *);
@@ -492,7 +492,7 @@ void FUN_L02_002216a0(void) {
     GG.xB12ed = r;
     GG.xH12e0 = FUN_001f0b58();
     if (GG.xH12e0 == 0) {
-        GG.xF2f0 = FUN_002135f0(D_L02_00174460, (u8 *)&GG + 0x280);
+        GG.xF2f0 = resolve_camera_surface_height(D_L02_00174460, (u8 *)&GG + 0x280);
         if (GG.xF88 < GG.xF2f0 && GG.xI2f8 <= 0) {
             GG.xI2f8 = 1;
         }
@@ -1272,7 +1272,7 @@ extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600"
 extern int FUN_L00_00229a98(void);
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern int FUN_L01_00226f10(int);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_cf(int, int, int) __asm__("FUN_0022da68");
 extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");

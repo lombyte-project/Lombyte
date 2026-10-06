@@ -26,7 +26,7 @@ extern void FUN_001f9ff8(f32 (*)[4], f32);
 extern void FUN_001f9a68(f32 *, u8 *, f32);
 extern void FUN_001fa378(void *, u8 *, f32 (*)[4]);
 extern void vu1_add_data_ref(u8 *, s32) __asm__("func_00233830");
-extern void func_00233C90(void);
+extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
@@ -77,7 +77,7 @@ void font_queue_vu_state(void)
     p = (u8 *)(base + 15);
     D_00160F00.p->w0 |= (((u8 *)p - (u8 *)D_00160F00.p) >> 4) - 1;
     D_00160F00.p = (struct DmaTag *)p;
-    func_00233C90();
+    vu1_gs_regs_font();
 }
 
 extern __typeof__(font_queue_vu_state) func_001F76A0 __attribute__((alias("FUN_001f76a0")));

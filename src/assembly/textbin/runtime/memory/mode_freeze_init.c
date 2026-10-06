@@ -24,7 +24,7 @@ extern s32 D_0015F604;
 extern struct FreezeModeState D_00193300;
 extern s32 snd_pause_all_sounds_in_group() __asm__("func_0012E3E8");
 extern s32 InitializeRenderState();
-extern s32 func_001F96F8(s32);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 push_help_history() __asm__("func_001FED30");
 
@@ -70,18 +70,18 @@ void mode_freeze_init(u32 arg0, s32 arg1) {
         push_help_history(0x4E2B);
         st = &D_00193300;
         /* Retail stores unk4 before clearing unk20 between the two calls. */
-        st->unk4 = func_001F96F8(0x1E);
+        st->unk4 = scale_game_frames(0x1E);
         st->unk20 = 0;
-        st->unk24 = func_001F96F8(0x1E);
+        st->unk24 = scale_game_frames(0x1E);
         break;
     case 3:
         st = &D_00193300;
-        st->unk4 = func_001F96F8(0x1E);
+        st->unk4 = scale_game_frames(0x1E);
         st->unk20 = 0;
-        st->unk24 = func_001F96F8(0x1E);
+        st->unk24 = scale_game_frames(0x1E);
         break;
     case 6:
-        D_00193300.unk4 = func_001F96F8(0x1E);
+        D_00193300.unk4 = scale_game_frames(0x1E);
         D_00193300.unk1C = 0;
         break;
     default:

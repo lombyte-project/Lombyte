@@ -186,7 +186,7 @@ extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L16_002d38b0(char *);
 extern void FUN_L16_002d4070(char *);
 extern void add_vector_xyz(void*,void*,void*);
-extern void allocate_voice_for_target_entry(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void*) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
@@ -687,7 +687,7 @@ void FUN_L16_002d3de0(char *moby, int arg) {
 
 extern float D_0015ED70;
 extern float FUN_001f9b48(void *);
-extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -700,7 +700,7 @@ float FUN_L16_002d3eb8(char *moby, float *target) {
     int zero[1];
     float vec[4];
     zero[0] = 0;
-    FUN_00213f38((float *)zero, (float *)(data + 0x2D4), d, b, b, D_0015ED6C * 5.0f);
+    advance_accelerated_scalar((float *)zero, (float *)(data + 0x2D4), d, b, b, D_0015ED6C * 5.0f);
     FUN_001f9a28(vec, target, p);
     FUN_001f9bf8(vec, vec, *(float *)(data + 0x2D4));
     FUN_001f9a10(p, p, vec);

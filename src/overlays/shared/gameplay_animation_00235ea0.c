@@ -33,7 +33,7 @@ typedef struct {
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9988(float);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0023aaa8(char *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
@@ -58,14 +58,14 @@ void FUN_L00_00235ea0(HudElem *e) {
         }
     }
     if (e->unk74 != e->unk78) {
-        e->unk7C = FUN_001f96f8(0xB4);
+        e->unk7C = scale_game_frames(0xB4);
         if (e->unk6C >= 0x18) {
             x = e->unk74 - e->unk78;
             d = x;
             d = d < 0 ? -d : d;
             if (d != 0) {
                 n = truncate_float_to_s32(FUN_001f9988(ConvertIntegerToFloat(d) / 25.0f) * 5.0f);
-                n = n < d * FUN_001f96f8(2) / FUN_001f96f8(10) ? d * FUN_001f96f8(2) / FUN_001f96f8(10) : n;
+                n = n < d * scale_game_frames(2) / scale_game_frames(10) ? d * scale_game_frames(2) / scale_game_frames(10) : n;
                 if (n >= 0x7A) {
                     n = 0x79;
                 } else if (n <= 0) {
@@ -73,22 +73,22 @@ void FUN_L00_00235ea0(HudElem *e) {
                 }
                 c[3] += n;
                 t = c[3];
-                if (FUN_001f96f8(2) < t) {
-                    n = c[3] / FUN_001f96f8(2);
+                if (scale_game_frames(2) < t) {
+                    n = c[3] / scale_game_frames(2);
                     if (e->unk78 < e->unk74) {
                         e->unk74 = e->unk74 - n;
                     } else {
                         e->unk74 = e->unk74 + n;
                     }
-                    c[3] -= n * FUN_001f96f8(2);
+                    c[3] -= n * scale_game_frames(2);
                 }
             }
         }
     }
-    if (e->unk7C >= FUN_001f96f8(5)) {
-        if (c[0] < FUN_001f96f8(8)) {
+    if (e->unk7C >= scale_game_frames(5)) {
+        if (c[0] < scale_game_frames(8)) {
             c[0]++;
-        } else if (c[1] < FUN_001f96f8(8)) {
+        } else if (c[1] < scale_game_frames(8)) {
             c[1]++;
         }
     } else {

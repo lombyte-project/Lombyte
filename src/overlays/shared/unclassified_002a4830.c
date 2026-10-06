@@ -130,7 +130,7 @@ extern int D_L00_00161368 SDA, D_L00_0016136C SDA, D_L00_00161370 SDA;
 extern int D_L00_0016137C SDA, D_L00_00161380 SDA, D_L00_00161388;
 extern float D_L00_00161374 SDA, D_L00_00161378 SDA, D_L00_00161384 SDA, D_L00_0016138C SDA;
 extern float D_0015ED60;
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
 void FUN_L00_002a4cd8(unsigned char *p) {
     float one;
@@ -141,11 +141,11 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         p[0x20] = 1;
         p[0x30] = 0xFF;
         one = 1.0f;
-        D_L00_0016137C = FUN_001f96f8(D_L00_00161368);
-        r = FUN_001f96f8(D_L00_0016136C);
+        D_L00_0016137C = scale_game_frames(D_L00_00161368);
+        r = scale_game_frames(D_L00_0016136C);
         D_L00_00161380 = r;
         D_L00_00161384 = one / FUN_001fa6c0(r);
-        r = FUN_001f96f8(D_L00_00161370);
+        r = scale_game_frames(D_L00_00161370);
         D_L00_00161388 = r;
         D_L00_0016138C = one / (float)r;
         break;
@@ -800,7 +800,7 @@ extern f32 rzw_2a9c50 __asm__("D_L00_001613EC");
 extern f32 sqrt_2a9c50(f32) __asm__("FUN_001f9988");
 extern f32 atan2_2a9c50(f32, f32) __asm__("FUN_001f9e90");
 extern f32 appr_2a9c50(f32, f32) __asm__("FUN_001fa580");
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
 extern f32 i2f_2a9c50(f32) __asm__("FUN_001f96b0");
 extern f32 sin_2a9c50(f32) __asm__("FUN_001fa610");
@@ -828,7 +828,7 @@ void FUN_L00_002a9c50(M_2a9c50 *m) {
         rot.f[2] = 0.0f;
         rot.f[3] = 0.0f;
         rzx_2a9c50 = 0.0f;
-        t = FUN_001fa6c0(D_L00_0015F5CC % FUN_001f96f8(180));
+        t = FUN_001fa6c0(D_L00_0015F5CC % scale_game_frames(180));
         {
             f32 d = i2f_2a9c50(180.0f);
             f32 r;

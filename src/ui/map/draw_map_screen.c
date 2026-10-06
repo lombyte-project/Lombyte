@@ -113,8 +113,8 @@ extern s32 func_0020B618_l() __asm__("FUN_0020b618");
 extern s64 func_00204E30();
 extern void load_map_chunk() __asm__("FUN_00207bb0");
 extern void FUN_0020b4a8();
-extern void func_0020BF90();
-extern void func_0022DA68();
+extern void update_map_icons() __asm__("func_0020BF90");
+extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 draw_map_screen(struct Screen *arg0) __asm__("FUN_0021be60");
 
@@ -164,7 +164,7 @@ s32 draw_map_screen(struct Screen *arg0)
             D_001D5BF0.unkF4 = 0xB;
             D_001D5BF0.unkC = 3;
             D_001D5BF0.unkE4 = D_001A00F0.cur;
-            func_0022DA68(0, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(0, 0x11, arg0->unk14);
             return 0;
         }
         idx = find_id_in_terminated_table(D_001A00F0.cur);
@@ -184,7 +184,7 @@ s32 draw_map_screen(struct Screen *arg0)
             }
         }
         if (D_001A00F0.cur != prev) {
-            func_0022DA68(1, 0x11, arg0->unk14);
+            allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
             update_mission_list();
         }
     }
@@ -239,7 +239,7 @@ s32 draw_map_screen(struct Screen *arg0)
         }
         D_001A00F0.slot[0] = (s32) pix;
         D_001A00F0.loaded = D_001A00F0.cur;
-        func_0020BF90(D_001A00F0.cur, 0);
+        update_map_icons(D_001A00F0.cur, 0);
     }
 
     if (D_001516D0.unk8 == 0) {

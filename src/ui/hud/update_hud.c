@@ -21,7 +21,7 @@ extern u8 D_001993D8[];
 extern u8 D_00199428[];
 extern u8 D_00199B60[];
 extern struct M2c_D_0019A3E8 D_0019A3E8;
-extern s32 func_001F96F8();
+extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
 
@@ -87,7 +87,7 @@ void update_hud(void)
   {
     goto block_15;
   }
-  temp_2_59 = D_0015F684 + (0x80 / func_001F96F8(8));
+  temp_2_59 = D_0015F684 + (0x80 / scale_game_frames(8));
   D_0015F684 = temp_2_59;
   if (temp_2_59 < 0x81)
   {
@@ -96,7 +96,7 @@ void update_hud(void)
   D_0015F684 = 0x80;
   goto block_17;
   block_15:
-  temp_2_76 = D_0015F684 - (0x80 / func_001F96F8(8));
+  temp_2_76 = D_0015F684 - (0x80 / scale_game_frames(8));
 
   D_0015F684 = temp_2_76;
   if (temp_2_76 >= 0)

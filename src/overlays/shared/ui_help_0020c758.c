@@ -599,7 +599,7 @@ void FUN_L00_0020fca8(int i, int v) { char *e; { char *f = D_0013F350 + i * 0x50
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L00_0020fd80(int id) {
     char *base;
@@ -612,7 +612,7 @@ void FUN_L00_0020fd80(int id) {
     case 23:
         base = D_0013F350;
         *(short *)(base + 0x22CE) = 3;
-        *(short *)(base + 0x1DC) = FUN_001f96f8(0x46);
+        *(short *)(base + 0x1DC) = scale_game_frames(0x46);
         break;
     }
 }
@@ -625,7 +625,7 @@ void FUN_L00_0020fd80(int id) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L00_0020fde0(int id) {
     switch (id) {
@@ -640,7 +640,7 @@ void FUN_L00_0020fde0(int id) {
     case 22:
     case 23:
     case 26:
-        *(short *)(D_0013F350 + 0x1DA) = FUN_001f96f8(0x46);
+        *(short *)(D_0013F350 + 0x1DA) = scale_game_frames(0x46);
         break;
     }
 }
@@ -969,7 +969,7 @@ void FUN_L00_0020fea0(int i) {
         Sel *g = (Sel *)(D_0013F350);
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
-        *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
+        *(int *)((char *)g + 0x1010) = FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0_c(*((int *)(D_0013F350 + 0x20D4) + i));
         FUN_L00_0020fd80_c(*((int *)(D_0013F350 + 0x20D4) + i));
         if (g->f20A8 != 0) {
@@ -1968,7 +1968,7 @@ void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 FUN_L00_001f3608(void);
 s32 FUN_001f0b58(void);
-f32 FUN_002135f0(void *, void *);
+f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
 f32 FUN_001f9b48(void *, void *);
@@ -2088,7 +2088,7 @@ void FUN_L00_002127b8(void) {
     GG.xB12ed = r;
     GG.xH12e0 = FUN_001f0b58();
     if (GG.xH12e0 == 0) {
-        GG.xF2f0 = FUN_002135f0(D_L00_00173E60, (u8 *)&GG + 0x280);
+        GG.xF2f0 = resolve_camera_surface_height(D_L00_00173E60, (u8 *)&GG + 0x280);
         if (GG.xF88 < GG.xF2f0 && GG.xI2f8 <= 0) {
             GG.xI2f8 = 1;
         }

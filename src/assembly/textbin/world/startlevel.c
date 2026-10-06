@@ -64,7 +64,7 @@ extern void FlushCache(s32);
 extern void func_0020B618(s32, s32);
 extern void append_draw_environment_packet(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
-extern void func_002012B8(s32);
+extern void draw_boot_image(s32) __asm__("func_002012B8");
 extern void append_draw_buffer_packet(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet(void) __asm__("func_001FB6E0");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
@@ -74,7 +74,7 @@ extern s32 check_memory_card(void) __asm__("FUN_00209168");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void func_0023A3B8(s32, s32, s32, s32, s32);
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void DebugPrint(char *, ...);
 extern s32 load_audio_bank_by_location(s32) __asm__("func_0022D708");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
@@ -137,7 +137,7 @@ void startlevel(void) {
             PackDmaTag(0, 0, 0);
             append_draw_environment_packet();
             append_gif_transfer_packet();
-            func_002012B8(hdr->code + (s32)hdr);
+            draw_boot_image(hdr->code + (s32)hdr);
             append_draw_buffer_packet();
             append_palette_transfer_packet();
             vu1_send_chain();
@@ -163,7 +163,7 @@ void startlevel(void) {
                       (code + 0x2C003F) & ~0x3F, 0);
     }
     D_0015EED8 = 0;
-    fade_to_black(FUN_001f96f8(0x12));
+    fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
     if (D_0015ED80 != 0) {
         func_0020B618(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
@@ -175,7 +175,7 @@ void startlevel(void) {
     PackDmaTag(0, 0, 0);
     append_draw_environment_packet();
     append_gif_transfer_packet();
-    func_002012B8(hdr->code + (s32)hdr);
+    draw_boot_image(hdr->code + (s32)hdr);
     append_draw_buffer_packet();
     append_palette_transfer_packet();
     vu1_send_chain();

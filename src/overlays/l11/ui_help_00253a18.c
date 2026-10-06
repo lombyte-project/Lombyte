@@ -305,7 +305,7 @@ extern int FUN_L01_00231580(int);
 extern int FUN_L02_0022ee00(void);
 extern int FUN_L11_0024db50(int, int);
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int D_L11_0015F678 __attribute__((sda));
 extern unsigned char D_0013D4C0[];

@@ -36,7 +36,7 @@ void FUN_L05_002d6f48(unsigned char *moby) {
 
 extern float D_0015ED6C;
 extern short D_L05_001613D0_d __asm__("D_L05_001613D0") __attribute__((sda));
-extern void FUN_00214e58(int *, int, void *, float *, int, float);
+extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 void FUN_L05_002d7890(char *moby, int *path) {
     float *d = *(float **)(moby + 0x78);
@@ -44,7 +44,7 @@ void FUN_L05_002d7890(char *moby, int *path) {
     if ((float)path[0] < d[2]) {
         d[2] = d[2] - (float)path[0];
     }
-    FUN_00214e58(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
+    sample_camera_path(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
     *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC1E8), where it is exact; names translated to the US level program. */
@@ -52,7 +52,7 @@ void FUN_L05_002d7890(char *moby, int *path) {
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L05_002db238(void *, void *);
 
 void FUN_L05_002daf58(unsigned char *m) {
@@ -65,7 +65,7 @@ void FUN_L05_002daf58(unsigned char *m) {
         *(int *)(m + 0x94) = 0;
         *(unsigned short *)(m + 0x34) |= 1;
         FUN_L05_002db238(m, b);
-        FUN_0022da68(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)m);
         o = *(char **)(r + 0x20);
         if (o != 0 && *(short *)(o + 0xA6) == 0) {
             int v = FUN_001f96f8(0x3C);

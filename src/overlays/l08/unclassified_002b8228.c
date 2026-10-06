@@ -41,7 +41,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002b82a0.s", FUN_L08_002b82a0);
 extern char *func_0020D348_m(int);
 extern float FUN_001f9e90(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
@@ -53,7 +53,7 @@ char *FUN_L08_002d22e0(int arg, char *pos, char *vec) {
         m[0x31] = 1;
         m[0x20] = 1;
         *(int *)(d + 0x30) = arg;
-        *(int *)(d + 0x20) = FUN_001f96f8(300);
+        *(int *)(d + 0x20) = scale_game_frames(300);
         *(float *)(d + 0x2C) = 1.0f;
         *(int *)(d + 0x24) = 0;
         qcopy(m + 0x10, pos);
@@ -214,7 +214,7 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
         moby[0x31] = 1;
         moby[0x20] = 1;
         *(char **)(data + 0x20) = src;
-        *(int *)(data + 0x10) = FUN_001f96f8(0x12C);
+        *(int *)(data + 0x10) = scale_game_frames(0x12C);
         *(float *)(data + 0x1C) = 1.0f;
         *(int *)(data + 0x14) = 0;
         qcopy(moby + 0x10, pos);

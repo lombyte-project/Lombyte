@@ -293,7 +293,7 @@ extern int FUN_L00_00259d08(void *a, void *b, void *c, void *d, void *e, void *f
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L01_0026e008(int, int);
-extern int allocate_voice_for_target_entry(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int rand(void);

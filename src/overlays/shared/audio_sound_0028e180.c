@@ -21,7 +21,7 @@ extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013DD4B[];
-extern void FUN_002327a0(void);
+extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void FUN_L00_00298840(int);
 extern void FUN_L00_00299460(int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -49,7 +49,7 @@ void FUN_L00_0028e180(unsigned char *m) {
             } else {
                 *(int *)(m + 0x90) = v | (v << 8) | (v << 16);
             }
-            enqueue_callback_list_1_alt(FUN_002327a0, m);
+            enqueue_callback_list_1_alt(render_environment_mapped_object, m);
             if (FUN_001f9b80(m + 0x10, D_L00_00166DC0) < 32.0f) {
                 enqueue_callback_list_1_alt(draw_light_flare, m);
             }

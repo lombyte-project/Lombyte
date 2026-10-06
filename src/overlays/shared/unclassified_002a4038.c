@@ -478,7 +478,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L02_002ea7d0(char *moby) {
@@ -495,7 +495,7 @@ void FUN_L02_002ea7d0(char *moby) {
     d[7] = 2.5f;
     q = (int *)(d + 8);
     for (i = 0; i < 4; i++) {
-        q[i] = FUN_001f96f8(0x3F + i * 0x40);
+        q[i] = scale_game_frames(0x3F + i * 0x40);
     }
     d[12] = 2.5f;
     d[13] = 3.0f;

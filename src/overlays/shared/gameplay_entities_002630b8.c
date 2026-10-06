@@ -158,11 +158,11 @@ void FUN_L00_00263d40(int a, int b) {
 }
 extern u8 D_L00_00179118[];
 extern s32 D_L00_0015F640;
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void FUN_00116248();
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
-    if (c == -1) c = FUN_001f96f8(0xB4);
+    if (c == -1) c = scale_game_frames(0xB4);
     FUN_00116248(D_L00_00179118, get_help_message_text(a), b);
     D_L00_0015F640 = c;
 }

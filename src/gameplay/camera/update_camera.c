@@ -9,8 +9,8 @@ extern int D_0015F604 MACRO_ADDR;
 extern int D_001E6400[];
 extern char D_001870A0[];
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
-extern void FUN_001eda60(void);
-extern void func_001ED940(void);
+extern void advance_timed_camera_control(void) __asm__("FUN_001eda60");
+extern void refresh_camera_control_flags(void) __asm__("func_001ED940");
 extern void FUN_001ed470(void);
 extern void update_camera_blend(char *) __asm__("FUN_001ed2b0");
 extern void start_camera_blend(void *) __asm__("func_001EC8A0");
@@ -19,7 +19,7 @@ extern void apply_camera_shake(void *, int) __asm__("func_001ED360");
 extern void update_camera_underwater_flag(void) __asm__("func_001ED7F0");
 extern void FUN_001fa298(void *, void *);
 extern void FUN_00214598(void *, void *);
-extern void FUN_001ee4b0(void *);
+extern void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
 extern void func_001F9AD8(void *, void *, void *);
 /* Camera update, once per frame: count the frame, run the camera
    steps, then (unless the D_0018C318 freeze flag is set) take the view
@@ -44,8 +44,8 @@ void update_camera(void) {
     }
     c = D_00186F40;
     (*(int *)(c + 0x398))++;
-    FUN_001eda60();
-    func_001ED940();
+    advance_timed_camera_control();
+    refresh_camera_control_flags();
     FUN_001ed470();
     update_all_cameras();
     target = *(char **)(c + 0x180);
@@ -76,7 +76,7 @@ frozen:
     apply_camera_shake(v, 0);
     apply_camera_shake(v + 0x10, 1);
     update_camera_underwater_flag();
-    FUN_001ee4b0(v - 0x20);
+    update_camera_environment_from_regions(v - 0x20);
     if (D_0015EDB4[0] != 0) {
         func_001F9AD8(v + 0x200, v + 0x210, v + 0x1F0);
     }

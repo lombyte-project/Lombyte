@@ -498,7 +498,7 @@ tail:
 typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
 
 extern S D_L00_00166C80;
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 
 void FUN_L00_002ea7a0(void) {
@@ -510,7 +510,7 @@ void FUN_L00_002ea7a0(void) {
     h->f1 = 0.05f;
     h->f0 = 0.05f;
     FUN_L00_002e9ef0_v();
-    if (h->p != 0) FUN_0022da68(0, 0, h->p);
+    if (h->p != 0) allocate_voice_for_target_entry(0, 0, h->p);
 }
 typedef int u128_2ea810 __attribute__((mode(TI)));
 typedef struct {
@@ -1118,7 +1118,7 @@ void FUN_L00_002ec4a8(unsigned char *m)
 /* camera update: copies the moby's matrix when the camera mode changes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_002ebbd8(void *);
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
@@ -1147,7 +1147,7 @@ void FUN_L00_002ec6c0(char *m) {
         qcopy(r + 0x10, m + 0x10);
         qcopy(r + 0x20, m + 0x20);
         FUN_L00_002ebbd8(m);
-        *(int *)(g + 0x2F4) = FUN_001f96f8(0x2D);
+        *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
     }
 done:
     refresh_point_light((int)m);

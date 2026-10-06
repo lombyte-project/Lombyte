@@ -241,7 +241,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eb970.s", FUN_L09_002eb970);
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 rand();
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
@@ -255,7 +255,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         moby[0x20] = 0;
         qcopy(moby + 0x10, src + 0x10);
         qcopy(moby + 0x40, src + 0x40);
-        moby[0xBC] = FUN_001f96f8(10);
+        moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
@@ -289,7 +289,7 @@ extern float fast_sin(float);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int FUN_L00_00257b90(int, int);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");

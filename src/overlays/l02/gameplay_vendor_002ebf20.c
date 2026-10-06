@@ -31,7 +31,7 @@ extern int D_0015ED84;
 extern int FUN_L00_00203908(int a, int b);
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0013E533[];
 extern unsigned char D_0014161B[];

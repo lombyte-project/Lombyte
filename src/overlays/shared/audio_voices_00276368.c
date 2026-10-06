@@ -109,14 +109,14 @@ extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void FUN_001e93b0(void *, s32);
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
-extern void FUN_00212e28(void);
+extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void FUN_00216088(void);
 extern int sound_update(void) __asm__("FUN_0022ca50");
-extern void FUN_0022da68(s32, s32, void *);
+extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_002335a0(void);
 extern void FUN_L00_00235668(s32);
 extern void FUN_L00_00276368(void);
@@ -184,34 +184,34 @@ void FUN_L00_00276bd0(void) {
             tmp = D_0015EED8;
             D_0015EED8 = 2;
             D_L00_001B9CF0.unk130 = tmp;
-            fade_to_black(FUN_001f96f8(0x10));
+            fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299460(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 4) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            fade_to_black(FUN_001f96f8(0x10));
+            fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299560(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 6) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            fade_to_black(FUN_001f96f8(0x10));
+            fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_002994f8(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 5) {
             tmp = D_0015EED8;
             D_0015EED8 = 1;
             D_L00_001B9CF0.unk130 = tmp;
-            fade_to_black(FUN_001f96f8(0x10));
+            fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00298840(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 7) {
             tmp = D_0015EED8;
             D_L00_001B9CF0.unk130 = tmp;
-            fade_to_black(FUN_001f96f8(0x10));
+            fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
             FUN_L00_00299a68();
         } else {
@@ -252,9 +252,9 @@ void FUN_L00_00276bd0(void) {
         }
     } else if (D_L00_001B9CF0.unk8 != 0) {
         if (D_L00_001B9CF0.owner == D_L00_001B9CF0.unk8) {
-            FUN_0022da68(3, 0x11, D_L00_001B9E90[0]);
+            allocate_voice_for_target_entry(3, 0x11, D_L00_001B9E90[0]);
         } else {
-            FUN_0022da68(4, 0x11, D_L00_001B9E90[0]);
+            allocate_voice_for_target_entry(4, 0x11, D_L00_001B9E90[0]);
         }
         for (i = 0; i < 14; i++) {
             obj = D_L00_001B9CF0.owner->objs[i];
@@ -312,7 +312,7 @@ L2:
             }
         }
     }
-    FUN_00212e28();
+    update_visible_resident_objects();
     sound_update();
     if (D_L00_001B9CF0.unkC != 0) {
         FUN_L00_00276908();

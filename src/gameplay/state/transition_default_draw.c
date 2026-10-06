@@ -37,7 +37,7 @@ extern s32 prune_moby_references() __asm__("FUN_0020cc60");
 extern s32 patch_moby_gifs() __asm__("func_0020CEF8");
 extern s32 draw_mobys() __asm__("func_0020D460");
 extern void func_00217C18();
-extern s32 func_002196B8();
+extern s32 render_level_effects_and_screen_sprites() __asm__("func_002196B8");
 extern s32 func_00228A30();
 extern s32 draw_shrubs() __asm__("func_00228B38");
 extern s32 func_0022A5E0();
@@ -46,7 +46,7 @@ extern s32 draw_tfrag() __asm__("func_002333A8");
 extern s32 start_vif1_dma_transfer() __asm__("func_002334D8");
 extern s32 vu1_sync_chain() __asm__("func_002337B0");
 extern s32 vu1_add_g_sregister() __asm__("func_00233980");
-extern void func_00233C28();
+extern void vu1_gs_regs_alt() __asm__("func_00233C28");
 extern s32 func_00234F98();
 extern s32 patch_tie_texture_fields() __asm__("func_00235780");
 extern s32 draw_ties_1() __asm__("func_002358C8");
@@ -76,20 +76,20 @@ void transition_default_draw(s32 *arg0)
     draw_shrubs();
     AppendDmaTag(0x02040000);
     if (D_0015F604 == 3) {
-        func_002196B8();
+        render_level_effects_and_screen_sprites();
     } else {
         draw_mobys();
     }
     AppendDmaTag(0x02080000);
     setup_gif_paging(0);
-    func_00233C28();
+    vu1_gs_regs_alt();
     if (D_0015F464 != 0) {
         dispatch_callback_list_1();
     }
-    func_00233C28();
+    vu1_gs_regs_alt();
     if (D_0018A2E8[0] != 0) {
         vu1_add_g_sregister(8, 5);
-        func_00233C28();
+        vu1_gs_regs_alt();
         FlushCache(0);
         func_00217C18();
         D_0015F620 = 8;

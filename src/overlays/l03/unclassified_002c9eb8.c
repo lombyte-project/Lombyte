@@ -68,7 +68,7 @@ typedef int u128 __attribute__((mode(TI)));
 extern char D_L03_00173F60[];
 extern float FUN_001f9e90(float, float);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 

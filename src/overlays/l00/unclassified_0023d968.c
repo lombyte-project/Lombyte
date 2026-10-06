@@ -88,7 +88,7 @@ typedef union {
 } VeldinVec;
 
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
@@ -134,8 +134,8 @@ void FUN_L00_0023e268(void)
             }
         }
     }
-    if (D_0015ED84 == 3 && D_L00_0016C860.state == 5 && FUN_001f96f8(900) < D_L00_0016C860.timer
-        && D_L00_0016C860.timer < FUN_001f96f8(1100)) {
+    if (D_0015ED84 == 3 && D_L00_0016C860.state == 5 && scale_game_frames(900) < D_L00_0016C860.timer
+        && D_L00_0016C860.timer < scale_game_frames(1100)) {
         src = (char *)D_L00_0016C860.unk184;
         if (src != 0) {
             for (n = 0; n < 4; n++) {
@@ -144,8 +144,8 @@ void FUN_L00_0023e268(void)
                 a = veldin_random_angle();
                 b = veldin_random_angle();
                 build_spherical_offset(v.f, veldin_random_range(D_0015ED6C * 0.7f, D_0015ED6C * 2.2f), a, b);
-                r = FUN_001f96f8(0xC);
-                FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080, FUN_L00_00257b90(r, FUN_001f96f8(0x23)), 147000.0f);
+                r = scale_game_frames(0xC);
+                FUN_L00_0026ced0(&buf, &v, 0x80808080, 0x808080, FUN_L00_00257b90(r, scale_game_frames(0x23)), 147000.0f);
             }
         }
     }

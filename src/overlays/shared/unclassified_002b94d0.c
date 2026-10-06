@@ -202,7 +202,7 @@ extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L00_001616CC __attribute__((sda));
 extern int D_L00_001616D0 __attribute__((sda));
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32();
 extern float D_L00_001616A4 __attribute__((sda));
 extern short D_L00_00161660_e[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));

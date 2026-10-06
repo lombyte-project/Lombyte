@@ -47,7 +47,7 @@ extern int FUN_L15_00299ae0(char *moby, float *point, float arg);
 extern int FUN_L15_00299ca0(void *);
 extern int FUN_L15_00299dd8(char *m);
 extern int FUN_L15_00299ff8(void *);
-extern int allocate_voice_for_target_entry(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
@@ -1300,7 +1300,7 @@ void FUN_L15_002cbba0(unsigned char *moby) {
 
 extern char D_0013F350[];
 extern float D_0015ED6C MACRO_ADDR;
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
 extern short D_0015ED84_d __asm__("D_0015ED84") __attribute__((sda));
@@ -1327,7 +1327,7 @@ void FUN_L15_002cbc30(void *arg) {
     if (*(float *)&D_L15_00161ABC_d != 0.0f) {
         *(int *)&D_L15_00161AC0_d = 1;
         if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8_d, *(int *)&D_L15_00161AC4_d) == 0) {
-            *(int *)&D_L15_00161AC4_d = FUN_0022da68(5, 0x11, (int)arg);
+            *(int *)&D_L15_00161AC4_d = allocate_voice_for_target_entry(5, 0x11, (int)arg);
             *(void **)&D_L15_00161AC8_d = arg;
         }
         enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, arg);

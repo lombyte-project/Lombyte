@@ -12,8 +12,8 @@ extern struct M2c_D_00141848 D_00141848;
 extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
 extern struct M2c_D_001D5BF4 *D_001D5BF4[];
-extern s32 FUN_001f96f8();
-extern s32 func_0022DA68();
+extern s32 scale_game_frames() __asm__("FUN_001f96f8");
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
   s16 id;
@@ -39,16 +39,16 @@ s32 FUN_0021c7a0(struct M2c_arg0 *arg0) {
   }
   cur = arg0->unk50;
   if (cur != start_index) {
-    func_0022DA68(1, 0x11, arg0->unk14);
+    allocate_voice_for_target_entry(1, 0x11, arg0->unk14);
   }
   if (id != 0) {
     if (D_0013D4C0[id] != 0 && (D_0013C940.unk1C4 & 0x40)) {
       if ((u16) D_00141848.unkA8 <= 0xFFFEU) {
         D_00141848.unkA8 = (u16) (D_00141848.unkA8 + 1);
       }
-      tmp = FUN_001f96f8(D_0015EEA4) / 600;
+      tmp = scale_game_frames(D_0015EEA4) / 600;
       if ((s32) D_00141848.unkAA < tmp) {
-        D_00141848.unkAA = (u16) (FUN_001f96f8(D_0015EEA4) / 600);
+        D_00141848.unkAA = (u16) (scale_game_frames(D_0015EEA4) / 600);
       }
       slots = arg0->unk30;
       D_00141848.unkAC = (s32) ((D_00141848.unkAC | (1 << D_0015ED84)) | 0x80000000);

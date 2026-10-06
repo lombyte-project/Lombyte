@@ -182,7 +182,7 @@ void FUN_L10_002eacd8(char *m) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -199,7 +199,7 @@ void FUN_L10_002eb6f0(char *m) {
         if (hit) m[0x20] = 2;
         break;
     case 2:
-        FUN_0022da68(0, 0, (int)m);
+        allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x742, 1, 0x742, 1, 11, 2);
         mark_moby_for_removal(m);
@@ -226,7 +226,7 @@ void FUN_L10_002eb7e0(char *moby) {
         if (ok != 0) moby[0x20] = 2;
         break;
     case 2:
-        FUN_0022da68(0, 0, (int)moby);
+        allocate_voice_for_target_entry(0, 0, (int)moby);
         FUN_L01_002787a0(moby);
         FUN_L01_00278e20(moby, 0x741);
         mark_moby_for_removal_c(moby);

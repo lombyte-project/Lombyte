@@ -275,7 +275,7 @@ void FUN_L07_0030ec58(char *arg) {
 /* Step a moby's velocity toward a target: gravity when above a height, then ease and clamp. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003104D8), where it is exact; names translated to the US level program. */
 
-extern float FUN_00213f38(float *, float *, float, float, float, float);
+extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int FUN_L00_00258ad0(int a, int b, int g, int e, float c, float d);
 extern void FUN_001f9a68(void *, void *, float);
 
@@ -286,7 +286,7 @@ void FUN_L07_0030f0f8(char *a, char *b, float f12, float f13, float f14) {
         *(float *)(b + 0xD8) -= D_0015ED6C * 9.8f;
     }
     qcopy(v, a + 0x10);
-    FUN_00213f38(v + 2, (float *)(b + 0xD8), *(float *)(b + 0x138), f12, f13, f14);
+    advance_accelerated_scalar(v + 2, (float *)(b + 0xD8), *(float *)(b + 0x138), f12, f13, f14);
     q = b + 0xD0;
     if (FUN_L00_00258ad0((int)a, (int)q, 0x400, 0x10, 1.0f, 0.0f)) {
         FUN_001f9a68(q, q, 0.5f);

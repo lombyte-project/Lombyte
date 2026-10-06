@@ -9,10 +9,10 @@ extern char D_001D5E50[];
 extern int D_0015FF4C;
 extern void FUN_00224b60();
 extern int func_001E9410();
-extern int FUN_00224fc0();
+extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
 extern int FillTransferWords();
-extern int func_00225490();
-extern int FUN_00225ac0();
+extern int create_menu_preview_moby() __asm__("func_00225490");
+extern int initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
 extern s32 clear_preview_animation_queue(void) __asm__("FUN_00226718");
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
 
@@ -25,7 +25,7 @@ int initialize_menu_preview_objects(char *preview) {
     char *held_flag;
     int i, j;
 
-    FUN_00225ac0(1);
+    initialize_graphics_buffer_descriptors(1);
     clear_preview_animation_queue();
     {
         unsigned char *g = D_001D5BF0;
@@ -52,7 +52,7 @@ int initialize_menu_preview_objects(char *preview) {
         D_001D5E10[1] = 0;
         D_001D5E50[1] = 0;
     }
-    object = func_00225490(0);
+    object = create_menu_preview_moby(0);
     held_flag = preview + 0xBB;
     for (j = 23; j >= 0; j--) {
         *held_flag = 0;
@@ -78,10 +78,10 @@ int initialize_menu_preview_objects(char *preview) {
         FillTransferWords(D_00186310, 0, 0x40);
         func_001E9410(object);
     }
-    object = func_00225490(0x259);
+    object = create_menu_preview_moby(0x259);
     if (object != 0) {
         **(int **)(object + 0x78) = (int)preview;
-        *(void **)(object + 0x74) = FUN_00224fc0;
+        *(void **)(object + 0x74) = update_menu_preview_animation_pose;
         *(short *)(object + 0x34) = 4;
     }
     *(char **)(preview + 0x48) = object;

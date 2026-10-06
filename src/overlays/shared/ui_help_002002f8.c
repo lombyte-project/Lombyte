@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/help_00200890.c: func_L03_00200890), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_002054e8(void);
 extern void FUN_L00_002056a8(void);
 extern void FUN_L00_002059d8(void);
@@ -49,7 +49,7 @@ void FUN_L03_002002f8(void) {
     char *g = (char *)D_0013E533 + 0xE1D;
     if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
         char *q;
-        fade_to_black(FUN_001f96f8(0x10));
+        fade_to_black(scale_game_frames(0x10));
         q = (char *)D_0013E533 + 0xE1D;
         q[0x20B1] = 1;
         return;

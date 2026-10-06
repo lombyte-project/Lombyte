@@ -96,15 +96,15 @@ void FUN_L00_0023bac0(int id, int x, int y, int w, int h, int a) {
 typedef struct O23cdb8 { u8 pad0[0x8]; s32 max; s32 *src; u8 pad10[0x5C]; s32 f6C; u8 c[4]; s32 val; u8 pad78[4]; s32 timer; } O23cdb8;
 extern s32 D_L00_0015F91C __attribute__((sda));
 extern s32 D_L00_0015F920 __attribute__((sda));
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023cdb8(O23cdb8 *p) {
     u8 *c = p->c;
     s32 v = *p->src;
     p->val = v;
     if (p->max < v) p->val = p->max;
     else if (v < 0) p->val = 0;
-    if (p->timer >= FUN_001f96f8(5)) {
-        p->timer = FUN_001f96f8(5);
+    if (p->timer >= scale_game_frames(5)) {
+        p->timer = scale_game_frames(5);
         if (c[0] < D_L00_0015F91C) c[0]++;
         else if (c[1] < D_L00_0015F920) c[1]++;
     } else {

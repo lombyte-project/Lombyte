@@ -13,7 +13,7 @@ extern char D_L12_001CB7A0[];
 struct Pkt611c0 { int *p; };
 extern struct Pkt611c0 D_L12_001611C0;
 extern int FUN_001fa728(char *, float);
-extern void FUN_001f76a0(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -30,7 +30,7 @@ void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
     D_L12_001611C0.p[2] = 0;
     D_L12_001611C0.p[3] = 0x50000009;
     D_L12_001611C0.p += 4;
-    FUN_001f76a0();
+    font_queue_vu_state();
     sp = (int *)0x70000000;
     for (i = 0xB3; i >= 0; i--) {
         *sp++ = 0x80808080;

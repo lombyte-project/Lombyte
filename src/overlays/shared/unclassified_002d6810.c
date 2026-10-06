@@ -25,7 +25,7 @@ extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
 extern char *func_0020D348_m(int);
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9e90(float, float);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 
@@ -42,7 +42,7 @@ char *FUN_L15_002e4580(char *src, float *v, char *pos) {
         qcopy(m + 0x10, pos);
         p = *(char **)(m + 0x78);
         FUN_001f9a68(p, v, 5.0f);
-        *(int *)(p + 0x38) = FUN_001f96f8(0xF0);
+        *(int *)(p + 0x38) = scale_game_frames(0xF0);
         *(char **)(p + 0x3C) = src;
         m[0x23] = 0x30;
         *(unsigned short *)(m + 0x34) |= 0x200;

@@ -13,7 +13,7 @@ extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern s32 D_001D5BF8[];
 extern void InitializeGlobalStateEntry(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 func_001F96F8(s32);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void initialize_dma_packet_payloads(s32) __asm__("func_00209298");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void func_00226B08(s32);
@@ -49,7 +49,7 @@ s32 process_global_state_flags(void)
         D_0015EEA0 = 1;
         memcard_save_data(0, -1);
         clear_scene_state_buffers();
-        result = func_001F96F8(0x10);
+        result = scale_game_frames(0x10);
         fade_to_black(result);
         D_0013F350.unk20B1 = 1;
         return -1;

@@ -146,7 +146,7 @@ extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9988(f32);
 extern s32 FUN_0022da68_c(s32, s32, void *) __asm__("FUN_0022da68");
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern f32 FUN_001fa6c0(int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -210,7 +210,7 @@ Moby *FUN_L00_002c9348(State *a) {
         FUN_0022da68_c(1, 0, n);
         n->unk20 = 1;
         s2->unk66 = 0;
-        s2->unk64 = FUN_L00_00257b90(FUN_001f96f8(0x78), FUN_001f96f8(0x12C));
+        s2->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
         g = FUN_001fa6c0(D_0013E520[0x15]);
         s2->unk70 = -1;
         s2->unk78 = g * 3.0f + 1.0f;
@@ -224,7 +224,7 @@ Moby *FUN_L00_002c9348(State *a) {
             mark_moby_for_removal(a);
         }
         c1 = 0.0f;
-        FUN_L00_00269b70(&n->pos, 0x7F, 0x7F, 0x7F, FUN_001f96f8(0xF), 1000000.0f, c1);
+        FUN_L00_00269b70(&n->pos, 0x7F, 0x7F, 0x7F, scale_game_frames(0xF), 1000000.0f, c1);
         FUN_001f97e8(s2, 0, 0x20);
         p = D_L00_001DD100[D_L00_00161854];
         if (p != NULL && p->unkA6 == 0x10E && p->unk20 != 0xFE && p->unk20 != 0xFD) {
@@ -281,7 +281,7 @@ int FUN_L00_002cadc0(char *a) {
 
 extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
-extern void FUN_0022da68(int, int, char *);
+extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 int FUN_L00_002cae60(char *m, int a, int b, float f) {
     char *h = FUN_L00_002db890(m);
@@ -292,7 +292,7 @@ int FUN_L00_002cae60(char *m, int a, int b, float f) {
         m[0x20] = 1;
     }
     if (*(short *)(h + 0x68) == 6) {
-        FUN_0022da68(1, 0, m);
+        allocate_voice_for_target_entry(1, 0, m);
     }
     return r;
 }

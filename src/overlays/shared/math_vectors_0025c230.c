@@ -53,7 +53,7 @@ extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);

@@ -569,7 +569,7 @@ extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f9b20(void *);
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9ab0(void *, void *);
 extern f32 FUN_001f9af0(void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -629,7 +629,7 @@ void FUN_L00_002167d0(void) {
     if (D_0013CB14[0]) {
         f21 = D_0015ED70 * 1.1f;
     }
-    if (D_0013F350_167d0.i2084 == 0x13 && D_0013F350_167d0.i198 < FUN_001f96f8(0xF) && D_0013F350_167d0.f160 < D_0015ED6C * 3.0f) {
+    if (D_0013F350_167d0.i2084 == 0x13 && D_0013F350_167d0.i198 < scale_game_frames(0xF) && D_0013F350_167d0.f160 < D_0015ED6C * 3.0f) {
         f21 = D_0015ED70 * 11.0f;
     }
     if (D_0015ED6C * 5.9f < D_0013F350_167d0.f160) {
@@ -706,7 +706,7 @@ void FUN_L00_002167d0(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 int FUN_L00_00216de8(int a, int b) {
     char *p = D_0013E533 + 0xE1D;
@@ -715,10 +715,10 @@ int FUN_L00_00216de8(int a, int b) {
         c = *(int *)(p + 0xA88);
         if (c != 0) {
             qcopy((char *)c + 0x10, p + 0x80);
-            return FUN_0022da68(a, b, c);
+            return allocate_voice_for_target_entry(a, b, c);
         }
     } else {
-        return FUN_0022da68(a, b, *(int *)(p + 0x2080));
+        return allocate_voice_for_target_entry(a, b, *(int *)(p + 0x2080));
     }
     return -1;
 }
@@ -731,12 +731,12 @@ int FUN_L00_00216de8(int a, int b) {
 typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
 
 extern G D_0013F350;
-extern int FUN_0022da68(int, int, int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 void FUN_L00_00216e48(int idx, int a, int b) {
     G *g = &D_0013F350;
     if (g->a[idx] == -1) {
-        g->a[idx] = FUN_0022da68(b, 4, a);
+        g->a[idx] = allocate_voice_for_target_entry(b, 4, a);
     }
     g->b[idx] = a;
 }
@@ -910,7 +910,7 @@ void FUN_L00_00217368(int a, int n) {
         char *d = D_0013E533 + 0xE1D;
         int i;
         if (*(int *)(d + 0xA64) == 0) {
-            FUN_0022da68(1, 0, a);
+            allocate_voice_for_target_entry(1, 0, a);
             *(int *)(d + 0xA64) = 1;
         }
         for (i = 0; i < n; i++) {

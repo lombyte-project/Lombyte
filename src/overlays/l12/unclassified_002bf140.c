@@ -612,7 +612,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
@@ -636,7 +636,7 @@ void FUN_L12_002eb220(char *m) {
         t = *(float *)(d + 0x20) - fv;
         *(float *)(d + 0x20) = t;
         if (res == 1 || t <= 0.0f) {
-            FUN_0022da68(2, 0, (int)m);
+            allocate_voice_for_target_entry(2, 0, (int)m);
             *(unsigned char *)(m + 0x20) = 6;
         } else if (res != 0xB) {
             *(unsigned char *)(d + 0x67) = 0xB4;
@@ -658,7 +658,7 @@ void FUN_L12_002eb220(char *m) {
                 *(short *)(d + 0x8E) = scale_game_frames(0x3C);
                 *(unsigned char *)(m + 0xBC) = *(unsigned char *)(m + 0x20);
                 *(unsigned char *)(m + 0x20) = 5;
-                FUN_0022da68(1, 0, (int)m);
+                allocate_voice_for_target_entry(1, 0, (int)m);
             }
         }
     }

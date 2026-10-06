@@ -41,7 +41,7 @@ typedef struct {
 } MobyAnim;
 
 extern char D_0013F350[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00231ff8(int, int *, int *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -62,9 +62,9 @@ void FUN_L00_00231d08(void) {
         return;
     }
     seq = buf[0];
-    blend_moby_animation(a, seq, 0, FUN_001f96f8(7));
+    blend_moby_animation(a, seq, 0, scale_game_frames(7));
     seq = buf[1];
-    blend_moby_animation(b, seq, 0, FUN_001f96f8(7));
+    blend_moby_animation(b, seq, 0, scale_game_frames(7));
 }
 
 #define NOT_SDA
@@ -152,10 +152,10 @@ void FUN_L00_00231e78(int id, int arg, float t) {
     if (!ok) {
         return;
     }
-    seq = FUN_001f96f8(7);
+    seq = scale_game_frames(7);
     blk3 = D_0013F350;
     if (*(int *)(blk3 + 0x2090) == 8 && FUN_L00_0020d498(3) == 2) {
-        seq = FUN_001f96f8(0x13);
+        seq = scale_game_frames(0x13);
     }
     if (*(unsigned char *)(a + 0x53) != 1) {
         blend_moby_animation(a, 1, 0, seq);
@@ -260,7 +260,7 @@ void FUN_L00_00232220(int a0, int a1, float a2) {
             if (ok != 0) {
                 blend_moby_animation(*(void **)(base + 0x2278), buf[0], a1, (int)a2);
             } else if (*(unsigned char *)(*(char **)(base + 0x2278) + 0x53) != 0) {
-                blend_moby_animation(*(void **)(base + 0x2278), 0, 0, FUN_001f96f8(7));
+                blend_moby_animation(*(void **)(base + 0x2278), 0, 0, scale_game_frames(7));
             }
         }
     }
@@ -493,11 +493,11 @@ void FUN_L00_00232628(void) { int *p = D_0013F350_00232628; p[0xab0/4] = -1; p[0
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void FUN_L00_00232640(int id) {
     if (id == -1) {
-        id = FUN_001f96f8(5);
+        id = scale_game_frames(5);
     }
     *(int *)(D_0013F350 + 0xAB8) = id;
 }

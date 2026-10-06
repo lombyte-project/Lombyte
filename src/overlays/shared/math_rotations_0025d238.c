@@ -29,11 +29,11 @@ void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
     }
 }
 typedef struct { short cur; short flag; unsigned char r, g, b; char pad; char pad2[4]; short lo; short hi; } S;
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00250320(void *, int *, int *, int *);
-void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = FUN_001f96f8(s->lo); s->flag = 0; if (old != 0) { int n = FUN_001f96f8(s->lo); s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(FUN_001f96f8(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
+void FUN_L00_0025d458(void *a, S *s) { int old = s->cur; if (old == 0 || s->flag != 0) { s->cur = scale_game_frames(s->lo); s->flag = 0; if (old != 0) { int n = scale_game_frames(s->lo); s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(scale_game_frames(s->hi)))); if (s->cur <= 0) s->cur = 1; } else { int x, y, z; FUN_L00_00250320(a, &x, &y, &z); s->r = x; s->g = y; s->b = z; } } }
 typedef struct { s16 t; s16 phase; u8 r0, g0, b0; u8 r1, g1, b1; u8 pad[2]; s16 d0; s16 d1; } S_25d538;
 f32 FUN_001fa6c0_25d538(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");

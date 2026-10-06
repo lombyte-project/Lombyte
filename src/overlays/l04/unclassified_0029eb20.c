@@ -34,7 +34,7 @@ typedef struct {
     unsigned char unk70;     /* 0x70 */
 } MobyAnim;
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 rand();
 extern void FUN_0020e098(void *);
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -46,12 +46,12 @@ void FUN_L04_002a5a08(char *m) {
         d = *(int **)(m + 0x78);
         if (*d == 0) {
             if (*(unsigned char *)(m + 0x53) != 1) {
-                blend_moby_animation_u(m, (void *)1, 0, (void *)FUN_001f96f8(3));
+                blend_moby_animation_u(m, (void *)1, 0, (void *)scale_game_frames(3));
             }
-            *d = FUN_001f96f8((rand() + 0x1E) & 0xFF);
+            *d = scale_game_frames((rand() + 0x1E) & 0xFF);
         }
         if ((*(unsigned char *)(m + 0x70) & 2) && *(unsigned char *)(m + 0x53) != 0) {
-            blend_moby_animation_u(m, 0, 0, (void *)FUN_001f96f8(3));
+            blend_moby_animation_u(m, 0, 0, (void *)scale_game_frames(3));
         }
         *d = *d - 1;
         FUN_0020e098(m);
@@ -329,7 +329,7 @@ extern int FUN_L04_002ba470_cf(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_00213260");
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern unsigned char D_0013E533[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
@@ -1138,7 +1138,7 @@ extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, in
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L04_00161878 __attribute__((sda));
 extern struct Path5BD0 *D_L04_001B0630[];
@@ -1760,7 +1760,7 @@ extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, in
 extern int FUN_L00_0025c698(void *, void *);
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int rand(void);
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern unsigned char D_0013E533[];

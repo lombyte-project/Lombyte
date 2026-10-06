@@ -42,7 +42,7 @@ extern s32 memcard_initialize() __asm__("func_0020AC58");
 extern s32 init_dma() __asm__("func_0020B418");
 extern s32 FUN_0020b618();
 extern s32 init_pads() __asm__("func_00217048");
-extern s32 FUN_0022c8d0();
+extern s32 initialize_gameplay_sound_system() __asm__("FUN_0022c8d0");
 extern s32 initialize_sif_rpc() __asm__("FUN_00232ce0");
 extern s32 start_vif1_dma_transfer() __asm__("func_002334D8");
 extern s32 vu1_init_chain() __asm__("func_002335D0");
@@ -129,7 +129,7 @@ void init_once(void) {
     update_view_context();
     vu1_init_chain();
     FUN_00121190(0);
-    FUN_0022c8d0();
+    initialize_gameplay_sound_system();
     FillTransferWords(D_001941C0, 0x80808080, 0x100);
     sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);

@@ -35,7 +35,7 @@ typedef struct Pad {
 } Pad;
 
 extern volatile u8 D_0015EDB4;
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9b20(float *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -141,7 +141,7 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     p->hist_mag[p->idx] = mag;
     p->hist_ang[p->idx] = ang;
     if (mag > 0.9f) {
-        for (j = 1; j < FUN_001f96f8(4); j++) {
+        for (j = 1; j < scale_game_frames(4); j++) {
             float m = p->hist_mag[(p->idx - j + 30) % 30];
             if (m > 0.9f) break;
             if (m < 0.25f) {
@@ -150,7 +150,7 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
             }
         }
         if (!(p->pressed & 0x10000)) {
-            for (k = 1; k < FUN_001f96f8(5); k++) {
+            for (k = 1; k < scale_game_frames(5); k++) {
                 if (fast_difference_between_rotations(p->hist_ang[(p->idx - k + 30) % 30], ang) > 0.9599311f) {
                     p->pressed |= 0x10000;
                     break;

@@ -447,7 +447,7 @@ extern int FUN_001fa728_u(char *, float) __asm__("FUN_001fa728");
 extern int random_integer_below_c2(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L11_001623D0_d __asm__("D_L11_001623D0") __attribute__((sda));
-extern void FUN_0022da68(int, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L11_00319670(void *);
@@ -516,7 +516,7 @@ void FUN_L11_00319838(unsigned char *moby) {
             } else {
                 FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C2);
             }
-            FUN_0022da68(1, 0, (int)moby);
+            allocate_voice_for_target_entry(1, 0, (int)moby);
             *(unsigned short *)(D_00141C18) = 0xFFFF;
             moby[0x20] = 3;
             *(int *)(moby + 0x94) = 0;
@@ -603,7 +603,7 @@ void FUN_L11_00319838(unsigned char *moby) {
             ang = -FUN_001f9e90(vector_length_xy(s70), s70[2]);
             FUN_L00_0025be00(pitch, (float *)(d + 0x90), ang, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 12.566371f);
             if (D_L11_0015F5CC % 10 == 0) {
-                FUN_0022da68(2, 0, (int)moby);
+                allocate_voice_for_target_entry(2, 0, (int)moby);
                 approach_value((float *)(d + 0x94), 0.0f, 0.25f);
                 normalize_vector_xyz(sB0, s20, *(float *)(d + 0x94));
                 add_vector_xyz(sB0, sB0, tgt);
@@ -641,7 +641,7 @@ void FUN_L11_00319838(unsigned char *moby) {
         } else {
             FUN_L11_0030f5a8(moby + 0x10, D_L11_0015F580, 0x4C2);
         }
-        FUN_0022da68(1, 0, (int)moby);
+        allocate_voice_for_target_entry(1, 0, (int)moby);
         moby[0x20] = 4;
         *(int *)(moby + 0x94) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
@@ -1101,7 +1101,7 @@ extern char D_L11_001625E8[4] __attribute__((sda));
 extern char D_L11_001625F8[4] __attribute__((sda));
 extern void FUN_L08_002f0b40(int arg);
 extern void FUN_L08_002f0c18(int);
-extern void font_queue_vu_state(void);
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void FUN_L11_0031e930(char *m) {
