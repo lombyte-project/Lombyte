@@ -1,16 +1,16 @@
 {
   "measures": {
-    "fuzzy_match_percent": 60.784095,
+    "fuzzy_match_percent": 60.784665,
     "total_code": "3502776",
-    "matched_code": "2044932",
-    "matched_code_percent": 58.380325,
+    "matched_code": "2044952",
+    "matched_code_percent": 58.380896,
     "total_functions": 4128,
-    "matched_functions": 2980,
-    "matched_functions_percent": 72.189922,
-    "complete_code": "2044932",
-    "complete_code_percent": 58.380325,
-    "total_units": 433,
-    "complete_units": 213
+    "matched_functions": 2981,
+    "matched_functions_percent": 72.214147,
+    "complete_code": "2044952",
+    "complete_code_percent": 58.380896,
+    "total_units": 434,
+    "complete_units": 214
   },
   "units": [
     {
@@ -379,7 +379,7 @@
           }
         },
         {
-          "name": "balloc",
+          "name": "_Balloc",
           "size": "168",
           "fuzzy_match_percent": 100.0,
           "address": "12584",
@@ -424,7 +424,7 @@
           }
         },
         {
-          "name": "pow5mult",
+          "name": "_pow5mult",
           "size": "256",
           "fuzzy_match_percent": 100.0,
           "address": "14024",
@@ -451,7 +451,7 @@
           }
         },
         {
-          "name": "mdiff",
+          "name": "__mdiff",
           "size": "400",
           "fuzzy_match_percent": 100.0,
           "address": "14760",
@@ -460,7 +460,7 @@
           }
         },
         {
-          "name": "d2b",
+          "name": "_d2b",
           "size": "380",
           "fuzzy_match_percent": 100.0,
           "address": "15168",
@@ -874,7 +874,7 @@
           }
         },
         {
-          "name": "dpmul",
+          "name": "pack_d",
           "size": "680",
           "fuzzy_match_percent": 100.0,
           "address": "55392",
@@ -3864,7 +3864,7 @@
           }
         },
         {
-          "name": "FUN_001f33b8",
+          "name": "configure_graphics_projection",
           "size": "304",
           "fuzzy_match_percent": 59.6184,
           "address": "860712",
@@ -3882,7 +3882,7 @@
           }
         },
         {
-          "name": "FUN_001f5ab0",
+          "name": "append_rotated_sprite_quad",
           "size": "1116",
           "fuzzy_match_percent": 99.8745,
           "address": "870688",
@@ -3900,7 +3900,7 @@
           }
         },
         {
-          "name": "FUN_001f96f8",
+          "name": "scale_game_frames",
           "size": "40",
           "fuzzy_match_percent": 15.0,
           "address": "886120",
@@ -3918,7 +3918,7 @@
           }
         },
         {
-          "name": "FUN_001fd748",
+          "name": "draw_level_selection_map",
           "size": "1212",
           "fuzzy_match_percent": 99.7987,
           "address": "902584",
@@ -3945,7 +3945,7 @@
           }
         },
         {
-          "name": "FUN_00202270",
+          "name": "upload_mip_texture",
           "size": "1104",
           "fuzzy_match_percent": 93.5797,
           "address": "921824",
@@ -3954,7 +3954,7 @@
           }
         },
         {
-          "name": "FUN_00202d78",
+          "name": "build_indexed_resident_render_packet",
           "size": "600",
           "fuzzy_match_percent": 84.4,
           "address": "924648",
@@ -3972,7 +3972,7 @@
           }
         },
         {
-          "name": "FUN_00203730",
+          "name": "register_object_render_class",
           "size": "980",
           "fuzzy_match_percent": 79.2694,
           "address": "927136",
@@ -3981,7 +3981,7 @@
           }
         },
         {
-          "name": "FUN_00203b08",
+          "name": "register_shrub_render_class",
           "size": "1492",
           "fuzzy_match_percent": 63.9866,
           "address": "928120",
@@ -3990,7 +3990,7 @@
           }
         },
         {
-          "name": "FUN_002040e0",
+          "name": "initialize_tfrag_render_data",
           "size": "720",
           "fuzzy_match_percent": 66.9778,
           "address": "929616",
@@ -4017,7 +4017,7 @@
           }
         },
         {
-          "name": "FUN_00207c28",
+          "name": "decode_compressed_occlusion_map",
           "size": "560",
           "fuzzy_match_percent": 95.8071,
           "address": "944792",
@@ -4026,7 +4026,7 @@
           }
         },
         {
-          "name": "FUN_00208508",
+          "name": "draw_map_markers",
           "size": "616",
           "fuzzy_match_percent": 91.6558,
           "address": "947064",
@@ -4035,7 +4035,7 @@
           }
         },
         {
-          "name": "FUN_00212e28",
+          "name": "update_visible_resident_objects",
           "size": "148",
           "fuzzy_match_percent": 92.027,
           "address": "990360",
@@ -4053,7 +4053,7 @@
           }
         },
         {
-          "name": "FUN_002196b8",
+          "name": "render_level_effects_and_screen_sprites",
           "size": "1732",
           "fuzzy_match_percent": 97.2425,
           "address": "1017128",
@@ -4071,7 +4071,7 @@
           }
         },
         {
-          "name": "FUN_0021a328",
+          "name": "render_configured_text_label",
           "size": "2252",
           "fuzzy_match_percent": 93.6714,
           "address": "1020312",
@@ -4080,7 +4080,7 @@
           }
         },
         {
-          "name": "FUN_0021abf8",
+          "name": "update_menu_entry_actions",
           "size": "1488",
           "fuzzy_match_percent": 99.1129,
           "address": "1022568",
@@ -4098,7 +4098,7 @@
           }
         },
         {
-          "name": "FUN_0021b858",
+          "name": "update_menu_grid_selection",
           "size": "1340",
           "fuzzy_match_percent": 99.9851,
           "address": "1025736",
@@ -4107,7 +4107,7 @@
           }
         },
         {
-          "name": "FUN_0021e230",
+          "name": "update_item_preview_binding",
           "size": "984",
           "fuzzy_match_percent": 95.1342,
           "address": "1036448",
@@ -4116,7 +4116,7 @@
           }
         },
         {
-          "name": "FUN_0021fdc8",
+          "name": "update_menu_resource_stream",
           "size": "1404",
           "fuzzy_match_percent": 92.8746,
           "address": "1043512",
@@ -4125,7 +4125,7 @@
           }
         },
         {
-          "name": "FUN_00224e18",
+          "name": "update_menu_preview_pose_and_attachments",
           "size": "424",
           "fuzzy_match_percent": 96.5566,
           "address": "1064072",
@@ -4134,7 +4134,7 @@
           }
         },
         {
-          "name": "FUN_002256e8",
+          "name": "update_streamed_moby_animation",
           "size": "892",
           "fuzzy_match_percent": 98.9238,
           "address": "1066328",
@@ -4152,7 +4152,7 @@
           }
         },
         {
-          "name": "FUN_002271d0",
+          "name": "append_fullscreen_setup_strips",
           "size": "424",
           "fuzzy_match_percent": 99.5283,
           "address": "1073216",
@@ -4161,7 +4161,7 @@
           }
         },
         {
-          "name": "FUN_00227378",
+          "name": "append_fullscreen_clear_strips",
           "size": "460",
           "fuzzy_match_percent": 87.5304,
           "address": "1073640",
@@ -4170,7 +4170,7 @@
           }
         },
         {
-          "name": "FUN_00227548",
+          "name": "submit_graphics_setup_command_stream",
           "size": "500",
           "fuzzy_match_percent": 98.16,
           "address": "1074104",
@@ -4188,7 +4188,7 @@
           }
         },
         {
-          "name": "FUN_0022c8d0",
+          "name": "initialize_gameplay_sound_system",
           "size": "380",
           "fuzzy_match_percent": 80.0316,
           "address": "1095488",
@@ -4197,7 +4197,7 @@
           }
         },
         {
-          "name": "FUN_0022e420",
+          "name": "build_resident_indexed_texture_warp_meshes",
           "size": "1188",
           "fuzzy_match_percent": 94.3603,
           "address": "1102480",
@@ -4206,7 +4206,7 @@
           }
         },
         {
-          "name": "FUN_0022eaa8",
+          "name": "update_level_gameplay_frame",
           "size": "2012",
           "fuzzy_match_percent": 96.7634,
           "address": "1104152",
@@ -4224,7 +4224,7 @@
           }
         },
         {
-          "name": "FUN_002327a0",
+          "name": "render_environment_mapped_object",
           "size": "1344",
           "fuzzy_match_percent": 96.4821,
           "address": "1119760",
@@ -4233,7 +4233,7 @@
           }
         },
         {
-          "name": "FUN_00237a78",
+          "name": "project_graphics_bounds",
           "size": "516",
           "fuzzy_match_percent": 88.7985,
           "address": "1140968",
@@ -4242,7 +4242,7 @@
           }
         },
         {
-          "name": "FUN_00237c80",
+          "name": "project_graphics_bounds_float",
           "size": "484",
           "fuzzy_match_percent": 78.9421,
           "address": "1141488",
@@ -4251,7 +4251,7 @@
           }
         },
         {
-          "name": "FUN_00238310",
+          "name": "render_capture_scrolling_text",
           "size": "528",
           "fuzzy_match_percent": 83.6439,
           "address": "1143168",
@@ -4260,7 +4260,7 @@
           }
         },
         {
-          "name": "FUN_00238f08",
+          "name": "render_vendor_buy_label_pass",
           "size": "596",
           "fuzzy_match_percent": 90.0134,
           "address": "1146232",
@@ -4278,7 +4278,7 @@
           }
         },
         {
-          "name": "FUN_00239780",
+          "name": "render_vendor_capture_pass_sequence",
           "size": "1484",
           "fuzzy_match_percent": 96.6523,
           "address": "1148400",
@@ -4287,7 +4287,7 @@
           }
         },
         {
-          "name": "FUN_00239f58",
+          "name": "sample_surface_height_map",
           "size": "756",
           "fuzzy_match_percent": 99.9471,
           "address": "1150408",
@@ -5162,7 +5162,7 @@
           }
         },
         {
-          "name": "FUN_001eb0a8",
+          "name": "update_gameplay_frame",
           "size": "868",
           "fuzzy_match_percent": 90.5991,
           "address": "776112",
@@ -5270,7 +5270,7 @@
           }
         },
         {
-          "name": "FUN_00231878",
+          "name": "prepare_loading_slide_textures",
           "size": "860",
           "fuzzy_match_percent": 86.8977,
           "address": "1064832",
@@ -5631,7 +5631,7 @@
           }
         },
         {
-          "name": "FUN_0022d7f0",
+          "name": "allocate_voice_slot",
           "size": "628",
           "fuzzy_match_percent": 62.7516,
           "address": "1045736",
@@ -6023,7 +6023,7 @@
           }
         },
         {
-          "name": "FUN_00225ac0",
+          "name": "initialize_graphics_buffer_descriptors",
           "size": "340",
           "fuzzy_match_percent": 95.2353,
           "address": "1011616",
@@ -6068,7 +6068,7 @@
           }
         },
         {
-          "name": "FUN_00225e70",
+          "name": "update_preview_animation_and_attachments",
           "size": "1892",
           "fuzzy_match_percent": 99.7357,
           "address": "1012560",
@@ -6754,7 +6754,7 @@
           }
         },
         {
-          "name": "FUN_00204428",
+          "name": "service_level_archive_load",
           "size": "864",
           "fuzzy_match_percent": 85.6343,
           "address": "110032",
@@ -7209,7 +7209,7 @@
           }
         },
         {
-          "name": "FUN_00213358",
+          "name": "random_spherical_offset",
           "size": "120",
           "fuzzy_match_percent": 100.0,
           "address": "160912",
@@ -7306,7 +7306,7 @@
       },
       "functions": [
         {
-          "name": "FUN_001ebf10",
+          "name": "switch_active_camera_record",
           "size": "768",
           "fuzzy_match_percent": 98.4531,
           "address": "0",
@@ -9433,7 +9433,7 @@
           }
         },
         {
-          "name": "FUN_00200e08",
+          "name": "append_screen_rect_packet",
           "size": "388",
           "fuzzy_match_percent": 100.0,
           "address": "8064",
@@ -11228,7 +11228,7 @@
           }
         },
         {
-          "name": "FUN_00226848",
+          "name": "load_preview_resource_bindings",
           "size": "376",
           "fuzzy_match_percent": 0.0,
           "address": "130768",
@@ -12101,7 +12101,7 @@
       },
       "functions": [
         {
-          "name": "FUN_00213f38",
+          "name": "advance_accelerated_scalar",
           "size": "456",
           "fuzzy_match_percent": 99.9123,
           "address": "0",
@@ -13001,7 +13001,7 @@
       },
       "functions": [
         {
-          "name": "FUN_00233938",
+          "name": "vu1_add_vif_code",
           "size": "72",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -13184,7 +13184,7 @@
       },
       "functions": [
         {
-          "name": "FUN_0023a3b8",
+          "name": "play_mpeg_movie",
           "size": "168",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -13211,7 +13211,7 @@
           }
         },
         {
-          "name": "FUN_0023ba60",
+          "name": "read_cd_stream_sectors",
           "size": "152",
           "fuzzy_match_percent": 100.0,
           "address": "5800",
@@ -14005,7 +14005,7 @@
       }
     },
     {
-      "name": "shared/sdk_debug_001eb0b0",
+      "name": "shared/sdk/debug/001eb0b0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "116",
@@ -14048,7 +14048,7 @@
       }
     },
     {
-      "name": "shared/gameplay_camera_001eb188",
+      "name": "shared/gameplay/camera/001eb188",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1960",
@@ -14154,7 +14154,7 @@
       }
     },
     {
-      "name": "shared/rendering_effects_001edf60",
+      "name": "shared/rendering/effects/001edf60",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "220",
@@ -14284,7 +14284,7 @@
       }
     },
     {
-      "name": "shared/rendering_debug_001f36f8",
+      "name": "shared/rendering/debug/001f36f8",
       "measures": {
         "fuzzy_match_percent": 2.815214,
         "total_code": "13356",
@@ -14363,7 +14363,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_001f6d70",
+      "name": "shared/rendering/view/001f6d70",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "28",
@@ -14397,7 +14397,7 @@
       }
     },
     {
-      "name": "shared/rendering_001f8e30",
+      "name": "shared/rendering/001f8e30",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "96",
@@ -14431,7 +14431,7 @@
       }
     },
     {
-      "name": "shared/rendering_debug_001f8ec8",
+      "name": "shared/rendering/debug/001f8ec8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "408",
@@ -14483,7 +14483,7 @@
       }
     },
     {
-      "name": "shared/rendering_transitions_001f99c0",
+      "name": "shared/rendering/transitions/001f99c0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "96",
@@ -14517,7 +14517,7 @@
       }
     },
     {
-      "name": "shared/gameplay_camera_001fc008",
+      "name": "shared/gameplay/camera/001fc008",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "104",
@@ -14551,7 +14551,7 @@
       }
     },
     {
-      "name": "shared/runtime_dma_001fc558",
+      "name": "shared/runtime/dma/001fc558",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "488",
@@ -14585,7 +14585,7 @@
       }
     },
     {
-      "name": "shared/rendering_texture_001fcb28",
+      "name": "shared/rendering/texture/001fcb28",
       "measures": {
         "fuzzy_match_percent": 33.214286,
         "total_code": "1120",
@@ -14680,7 +14680,7 @@
       }
     },
     {
-      "name": "shared/ui_help_001ff938",
+      "name": "shared/ui/help/001ff938",
       "measures": {
         "fuzzy_match_percent": 47.88975,
         "total_code": "4644",
@@ -14777,7 +14777,7 @@
       }
     },
     {
-      "name": "shared/math_rotations_00200228",
+      "name": "shared/math/rotations/00200228",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "24",
@@ -14811,7 +14811,7 @@
       }
     },
     {
-      "name": "shared/ui_help_002002f8",
+      "name": "shared/ui/help/002002f8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "492",
@@ -14879,7 +14879,7 @@
       }
     },
     {
-      "name": "shared/rendering_framebuffer_00201720",
+      "name": "shared/rendering/framebuffer/00201720",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "12",
@@ -15052,7 +15052,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00203b18",
+      "name": "shared/ui/help/00203b18",
       "measures": {
         "fuzzy_match_percent": 56.875239,
         "total_code": "31388",
@@ -15837,7 +15837,7 @@
       }
     },
     {
-      "name": "shared/ui_help_0020c758",
+      "name": "shared/ui/help/0020c758",
       "measures": {
         "fuzzy_match_percent": 55.962395,
         "total_code": "32336",
@@ -16544,7 +16544,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00214658",
+      "name": "shared/ui/help/00214658",
       "measures": {
         "fuzzy_match_percent": 68.232386,
         "total_code": "12944",
@@ -16857,10 +16857,10 @@
       "name": "shared/shared",
       "measures": {
         "fuzzy_match_percent": 0.0,
-        "total_code": "1584",
+        "total_code": "1564",
         "matched_code": "0",
         "matched_code_percent": 0.0,
-        "total_functions": 5,
+        "total_functions": 4,
         "matched_functions": 0,
         "matched_functions_percent": 0.0,
         "complete_code": "0",
@@ -16894,15 +16894,6 @@
           "address": "268656",
           "metadata": {
             "virtual_address": "2459696"
-          }
-        },
-        {
-          "name": "FUN_L00_0025d1b8",
-          "size": "20",
-          "fuzzy_match_percent": 0.0,
-          "address": "287480",
-          "metadata": {
-            "virtual_address": "2478520"
           }
         },
         {
@@ -16959,7 +16950,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00217970",
+      "name": "shared/ui/help/00217970",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "39324",
@@ -17143,7 +17134,7 @@
       }
     },
     {
-      "name": "shared/ui_help_0021d0a0",
+      "name": "shared/ui/help/0021d0a0",
       "measures": {
         "fuzzy_match_percent": 40.133333,
         "total_code": "6000",
@@ -17693,7 +17684,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00220b80",
+      "name": "shared/ui/help/00220b80",
       "measures": {
         "fuzzy_match_percent": 31.875792,
         "total_code": "6312",
@@ -17754,7 +17745,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00221310",
+      "name": "shared/ui/help/00221310",
       "measures": {
         "fuzzy_match_percent": 79.22403,
         "total_code": "31960",
@@ -17932,7 +17923,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00222800",
+      "name": "shared/ui/help/00222800",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1100",
@@ -18090,7 +18081,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00226f10",
+      "name": "shared/ui/help/00226f10",
       "measures": {
         "fuzzy_match_percent": 56.044836,
         "total_code": "14988",
@@ -18383,7 +18374,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00227f10",
+      "name": "shared/ui/help/00227f10",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "2196",
@@ -18426,7 +18417,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00229010",
+      "name": "shared/ui/help/00229010",
       "measures": {
         "fuzzy_match_percent": 68.363136,
         "total_code": "2908",
@@ -18496,7 +18487,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00229b70",
+      "name": "shared/ui/help/00229b70",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "33172",
@@ -18820,7 +18811,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00231d08",
+      "name": "shared/ui/help/00231d08",
       "measures": {
         "fuzzy_match_percent": 72.64,
         "total_code": "12500",
@@ -19339,7 +19330,7 @@
       }
     },
     {
-      "name": "shared/ui_hud_00234fd0",
+      "name": "shared/ui/hud/00234fd0",
       "measures": {
         "fuzzy_match_percent": 85.31746,
         "total_code": "1008",
@@ -19461,7 +19452,7 @@
       }
     },
     {
-      "name": "shared/gameplay_animation_00235878",
+      "name": "shared/gameplay/animation/00235878",
       "measures": {
         "fuzzy_match_percent": 26.089918,
         "total_code": "5872",
@@ -19612,7 +19603,7 @@
       }
     },
     {
-      "name": "shared/gameplay_animation_00235ea0",
+      "name": "shared/gameplay/animation/00235ea0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "644",
@@ -19681,7 +19672,7 @@
       }
     },
     {
-      "name": "shared/ui_help_00237488",
+      "name": "shared/ui/help/00237488",
       "measures": {
         "fuzzy_match_percent": 26.813725,
         "total_code": "16320",
@@ -19841,7 +19832,7 @@
       }
     },
     {
-      "name": "shared/ui_text_002377b8",
+      "name": "shared/ui/text/002377b8",
       "measures": {
         "fuzzy_match_percent": 33.584535,
         "total_code": "12208",
@@ -20090,7 +20081,7 @@
       }
     },
     {
-      "name": "shared/ui_text_0023a7a8",
+      "name": "shared/ui/text/0023a7a8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1900",
@@ -20160,7 +20151,7 @@
       }
     },
     {
-      "name": "shared/ui_hud_0023b120",
+      "name": "shared/ui/hud/0023b120",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1476",
@@ -20388,7 +20379,7 @@
       }
     },
     {
-      "name": "shared/ui_frames_0023d028",
+      "name": "shared/ui/frames/0023d028",
       "measures": {
         "fuzzy_match_percent": 46.641791,
         "total_code": "1072",
@@ -20572,7 +20563,7 @@
       }
     },
     {
-      "name": "shared/rendering_0023f0d8",
+      "name": "shared/rendering/0023f0d8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "256",
@@ -20615,7 +20606,7 @@
       }
     },
     {
-      "name": "shared/world_loaders_0023fa00",
+      "name": "shared/world/loaders/0023fa00",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "1040",
@@ -21113,7 +21104,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_002418b0",
+      "name": "shared/gameplay/state/002418b0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "200",
@@ -21226,7 +21217,7 @@
       }
     },
     {
-      "name": "shared/world_animation_002454c8",
+      "name": "shared/world/animation/002454c8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "516",
@@ -21269,7 +21260,7 @@
       }
     },
     {
-      "name": "shared/rendering_00245c28",
+      "name": "shared/rendering/00245c28",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "3640",
@@ -21876,7 +21867,7 @@
       }
     },
     {
-      "name": "shared/ui_map_002484e0",
+      "name": "shared/ui/map/002484e0",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "1808",
@@ -21910,7 +21901,7 @@
       }
     },
     {
-      "name": "shared/ui_text_00249720",
+      "name": "shared/ui/text/00249720",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "932",
@@ -21944,7 +21935,7 @@
       }
     },
     {
-      "name": "shared/ui_menus_00248d08",
+      "name": "shared/ui/menus/00248d08",
       "measures": {
         "fuzzy_match_percent": 20.879121,
         "total_code": "364",
@@ -22040,7 +22031,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_0024c7f0",
+      "name": "shared/gameplay/entities/0024c7f0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "36",
@@ -22178,7 +22169,7 @@
       }
     },
     {
-      "name": "shared/gameplay_missions_0024e010",
+      "name": "shared/gameplay/missions/0024e010",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "12",
@@ -22212,7 +22203,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_0024e6f8",
+      "name": "shared/rendering/view/0024e6f8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "308",
@@ -22246,7 +22237,7 @@
       }
     },
     {
-      "name": "shared/ui_map_0024e7a8",
+      "name": "shared/ui/map/0024e7a8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "140",
@@ -22280,7 +22271,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_0024ed18",
+      "name": "shared/gameplay/entities/0024ed18",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "168",
@@ -22314,7 +22305,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_0024eec0",
+      "name": "shared/gameplay/state/0024eec0",
       "measures": {
         "fuzzy_match_percent": 55.197133,
         "total_code": "1116",
@@ -22393,7 +22384,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_0024f698",
+      "name": "shared/gameplay/entities/0024f698",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "136",
@@ -22427,7 +22418,7 @@
       }
     },
     {
-      "name": "shared/rendering_geometry_0024f8f0",
+      "name": "shared/rendering/geometry/0024f8f0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "212",
@@ -22496,7 +22487,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_002500b8",
+      "name": "shared/gameplay/entities/002500b8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "528",
@@ -22539,7 +22530,7 @@
       }
     },
     {
-      "name": "shared/rendering_commands_002502f0",
+      "name": "shared/rendering/commands/002502f0",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "96",
@@ -22582,7 +22573,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_00250a78",
+      "name": "shared/gameplay/state/00250a78",
       "measures": {
         "fuzzy_match_percent": 12.254902,
         "total_code": "816",
@@ -22625,7 +22616,7 @@
       }
     },
     {
-      "name": "shared/unclassified_00252570",
+      "name": "shared/rendering/sky/00252570",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "124",
@@ -22807,7 +22798,7 @@
       }
     },
     {
-      "name": "shared/math_random_00257b90",
+      "name": "shared/math/random/00257b90",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "188",
@@ -22850,7 +22841,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00257d78",
+      "name": "shared/gameplay/entities/00257d78",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "224",
@@ -22893,7 +22884,7 @@
       }
     },
     {
-      "name": "shared/math_interpolation_00257ef0",
+      "name": "shared/math/interpolation/00257ef0",
       "measures": {
         "fuzzy_match_percent": 88.821293,
         "total_code": "5260",
@@ -23062,7 +23053,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00259710",
+      "name": "shared/gameplay/entities/00259710",
       "measures": {
         "fuzzy_match_percent": 66.26188,
         "total_code": "7576",
@@ -23303,7 +23294,7 @@
       }
     },
     {
-      "name": "shared/math_interpolation_0025b8c0",
+      "name": "shared/math/interpolation/0025b8c0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "172",
@@ -23425,7 +23416,7 @@
       }
     },
     {
-      "name": "shared/math_vectors_0025c230",
+      "name": "shared/math/vectors/0025c230",
       "measures": {
         "fuzzy_match_percent": 32.319392,
         "total_code": "3156",
@@ -23495,7 +23486,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_0025c758",
+      "name": "shared/gameplay/entities/0025c758",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "36",
@@ -23529,7 +23520,41 @@
       }
     },
     {
-      "name": "shared/math_rotations_0025d238",
+      "name": "shared/gameplay/entities/0025d1b8",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "20",
+        "matched_code": "20",
+        "matched_code_percent": 100.0,
+        "total_functions": 1,
+        "matched_functions": 1,
+        "matched_functions_percent": 100.0,
+        "complete_code": "20",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "FUN_L00_0025d1b8",
+          "size": "20",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "2478520"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "overlays",
+          "shared"
+        ]
+      }
+    },
+    {
+      "name": "shared/math/rotations/0025d238",
       "measures": {
         "fuzzy_match_percent": 34.20182,
         "total_code": "9672",
@@ -23743,7 +23768,7 @@
       }
     },
     {
-      "name": "shared/rendering_0025e2c0",
+      "name": "shared/rendering/0025e2c0",
       "measures": {
         "fuzzy_match_percent": 57.792208,
         "total_code": "616",
@@ -23786,7 +23811,7 @@
       }
     },
     {
-      "name": "shared/rendering_culling_0025fa38",
+      "name": "shared/rendering/culling/0025fa38",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "316",
@@ -23829,7 +23854,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_0025fcb8",
+      "name": "shared/rendering/view/0025fcb8",
       "measures": {
         "fuzzy_match_percent": 40.237929,
         "total_code": "5716",
@@ -23935,7 +23960,7 @@
       }
     },
     {
-      "name": "shared/rendering_00260130",
+      "name": "shared/rendering/00260130",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "224",
@@ -23969,7 +23994,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_002603d0",
+      "name": "shared/rendering/view/002603d0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "48",
@@ -24003,7 +24028,7 @@
       }
     },
     {
-      "name": "shared/ui_text_00261630",
+      "name": "shared/ui/text/00261630",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "552",
@@ -24037,7 +24062,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_00261968",
+      "name": "shared/gameplay/state/00261968",
       "measures": {
         "fuzzy_match_percent": 40.954774,
         "total_code": "4776",
@@ -24179,7 +24204,7 @@
       }
     },
     {
-      "name": "shared/ui_text_00262ae8",
+      "name": "shared/ui/text/00262ae8",
       "measures": {
         "fuzzy_match_percent": 6.638418,
         "total_code": "2832",
@@ -24240,7 +24265,7 @@
       }
     },
     {
-      "name": "shared/gameplay_camera_00262cf0",
+      "name": "shared/gameplay/camera/00262cf0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "332",
@@ -24283,7 +24308,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_002630b8",
+      "name": "shared/gameplay/entities/002630b8",
       "measures": {
         "fuzzy_match_percent": 65.695254,
         "total_code": "4804",
@@ -24425,7 +24450,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_00263a28",
+      "name": "shared/gameplay/state/00263a28",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "652",
@@ -24459,7 +24484,7 @@
       }
     },
     {
-      "name": "shared/ui_help_002644e0",
+      "name": "shared/ui/help/002644e0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "96",
@@ -24493,7 +24518,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00264740",
+      "name": "shared/gameplay/entities/00264740",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "260",
@@ -24561,7 +24586,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00264e40",
+      "name": "shared/gameplay/entities/00264e40",
       "measures": {
         "fuzzy_match_percent": 23.214286,
         "total_code": "1120",
@@ -24613,7 +24638,7 @@
       }
     },
     {
-      "name": "shared/math_interpolation_002650a8",
+      "name": "shared/math/interpolation/002650a8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "196",
@@ -24691,7 +24716,7 @@
       }
     },
     {
-      "name": "shared/rendering_state_00265880",
+      "name": "shared/rendering/state/00265880",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "64",
@@ -24795,7 +24820,7 @@
       }
     },
     {
-      "name": "shared/ui_hud_002661a0",
+      "name": "shared/ui/hud/002661a0",
       "measures": {
         "fuzzy_match_percent": 7.4,
         "total_code": "2000",
@@ -24856,7 +24881,7 @@
       }
     },
     {
-      "name": "shared/audio_streaming_00266298",
+      "name": "shared/audio/streaming/00266298",
       "measures": {
         "fuzzy_match_percent": 30.88685,
         "total_code": "1308",
@@ -24917,7 +24942,7 @@
       }
     },
     {
-      "name": "shared/ui_menus_00266d60",
+      "name": "shared/ui/menus/00266d60",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "356",
@@ -24969,7 +24994,7 @@
       }
     },
     {
-      "name": "shared/input_pad_002678b8",
+      "name": "shared/input/pad/002678b8",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "8",
@@ -25064,7 +25089,7 @@
       }
     },
     {
-      "name": "shared/rendering_00269290",
+      "name": "shared/rendering/00269290",
       "measures": {
         "fuzzy_match_percent": 86.926492,
         "total_code": "32432",
@@ -25673,7 +25698,7 @@
       }
     },
     {
-      "name": "shared/math_interpolation_0026d930",
+      "name": "shared/math/interpolation/0026d930",
       "measures": {
         "fuzzy_match_percent": 68.571429,
         "total_code": "420",
@@ -25848,7 +25873,7 @@
       }
     },
     {
-      "name": "shared/rendering_002712b8",
+      "name": "shared/rendering/002712b8",
       "measures": {
         "fuzzy_match_percent": 85.763467,
         "total_code": "19752",
@@ -26428,7 +26453,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_00275690",
+      "name": "shared/rendering/view/00275690",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "64",
@@ -26462,7 +26487,7 @@
       }
     },
     {
-      "name": "shared/audio_voices_00276368",
+      "name": "shared/audio/voices/00276368",
       "measures": {
         "fuzzy_match_percent": 30.259563,
         "total_code": "5856",
@@ -26532,7 +26557,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_00276a48",
+      "name": "shared/gameplay/state/00276a48",
       "measures": {
         "fuzzy_match_percent": 9.003215,
         "total_code": "1244",
@@ -26584,7 +26609,7 @@
       }
     },
     {
-      "name": "shared/math_random_00277688",
+      "name": "shared/math/random/00277688",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "88",
@@ -26618,7 +26643,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00277758",
+      "name": "shared/gameplay/entities/00277758",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "112",
@@ -26652,7 +26677,7 @@
       }
     },
     {
-      "name": "shared/gameplay_entities_00277fb8",
+      "name": "shared/gameplay/entities/00277fb8",
       "measures": {
         "fuzzy_match_percent": 82.8125,
         "total_code": "512",
@@ -26766,7 +26791,7 @@
       }
     },
     {
-      "name": "shared/audio_music_0027a248",
+      "name": "shared/audio/music/0027a248",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "84",
@@ -26800,7 +26825,7 @@
       }
     },
     {
-      "name": "shared/ui_menus_audio_0027adb0",
+      "name": "shared/ui/menus/audio/0027adb0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "136",
@@ -26834,7 +26859,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_0027b268",
+      "name": "shared/gameplay/state/0027b268",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "524",
@@ -27017,7 +27042,7 @@
       }
     },
     {
-      "name": "shared/ui_menus_0027f448",
+      "name": "shared/ui/menus/0027f448",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "428",
@@ -27069,7 +27094,7 @@
       }
     },
     {
-      "name": "shared/rendering_0027f5f0",
+      "name": "shared/rendering/0027f5f0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "368",
@@ -27103,7 +27128,7 @@
       }
     },
     {
-      "name": "shared/rendering_0027f660",
+      "name": "shared/rendering/0027f660",
       "measures": {
         "fuzzy_match_percent": 73.106796,
         "total_code": "4120",
@@ -27359,7 +27384,7 @@
       }
     },
     {
-      "name": "shared/ui_menus_002831c0",
+      "name": "shared/ui/menus/002831c0",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "516",
@@ -27393,7 +27418,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_00284e50",
+      "name": "shared/gameplay/state/00284e50",
       "measures": {
         "fuzzy_match_percent": 61.209964,
         "total_code": "1124",
@@ -27454,7 +27479,7 @@
       }
     },
     {
-      "name": "shared/rendering_view_00288968",
+      "name": "shared/rendering/view/00288968",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "184",
@@ -27684,7 +27709,7 @@
       }
     },
     {
-      "name": "shared/math_rotations_002899f8",
+      "name": "shared/math/rotations/002899f8",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "144",
@@ -27718,7 +27743,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_0028be78",
+      "name": "shared/gameplay/state/0028be78",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "408",
@@ -27752,7 +27777,7 @@
       }
     },
     {
-      "name": "shared/audio_voices_0028d8c0",
+      "name": "shared/audio/voices/0028d8c0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "72",
@@ -27786,7 +27811,7 @@
       }
     },
     {
-      "name": "shared/audio_sound_0028dc90",
+      "name": "shared/audio/sound/0028dc90",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "176",
@@ -27820,7 +27845,7 @@
       }
     },
     {
-      "name": "shared/audio_voices_0028ddd8",
+      "name": "shared/audio/voices/0028ddd8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "480",
@@ -27881,7 +27906,7 @@
       }
     },
     {
-      "name": "shared/audio_sound_0028e180",
+      "name": "shared/audio/sound/0028e180",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "956",
@@ -27915,7 +27940,7 @@
       }
     },
     {
-      "name": "shared/gameplay_space_0028e8a0",
+      "name": "shared/gameplay/space/0028e8a0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "2404",
@@ -28003,7 +28028,7 @@
       }
     },
     {
-      "name": "shared/unclassified_00291918",
+      "name": "shared/gameplay/entities/00291918",
       "measures": {
         "fuzzy_match_percent": 19.987188,
         "total_code": "18732",
@@ -28512,7 +28537,7 @@
       }
     },
     {
-      "name": "shared/world_data_00293d38",
+      "name": "shared/world/data/00293d38",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "128",
@@ -28546,7 +28571,7 @@
       }
     },
     {
-      "name": "shared/rendering_00294ae0",
+      "name": "shared/rendering/00294ae0",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "464",
@@ -28849,7 +28874,7 @@
       }
     },
     {
-      "name": "shared/unclassified_00278fd8",
+      "name": "shared/gameplay/entities/00278fd8",
       "measures": {
         "fuzzy_match_percent": 40.138191,
         "total_code": "31840",
@@ -29153,7 +29178,7 @@
       }
     },
     {
-      "name": "shared/unclassified_00295100",
+      "name": "shared/gameplay/entities/00295100",
       "measures": {
         "fuzzy_match_percent": 34.114583,
         "total_code": "21504",
@@ -29499,7 +29524,7 @@
       }
     },
     {
-      "name": "shared/rendering_0029a2a0",
+      "name": "shared/rendering/0029a2a0",
       "measures": {
         "fuzzy_match_percent": 32.857143,
         "total_code": "560",
@@ -29694,7 +29719,7 @@
       }
     },
     {
-      "name": "shared/gameplay_state_0029b0a0",
+      "name": "shared/gameplay/state/0029b0a0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "288",
@@ -29816,7 +29841,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_0029ead8",
+      "name": "shared/gameplay/vendor/0029ead8",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "2800",
@@ -30038,7 +30063,7 @@
       }
     },
     {
-      "name": "shared/unclassified_0029f990",
+      "name": "shared/gameplay/entities/0029f990",
       "measures": {
         "fuzzy_match_percent": 75.116822,
         "total_code": "3424",
@@ -30099,7 +30124,7 @@
       }
     },
     {
-      "name": "shared/rendering_buffers_002a08c8",
+      "name": "shared/rendering/buffers/002a08c8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "400",
@@ -30142,7 +30167,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002a09a0",
+      "name": "shared/gameplay/entities/002a09a0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "9348",
@@ -30284,7 +30309,7 @@
       }
     },
     {
-      "name": "shared/rendering_002a0f18",
+      "name": "shared/rendering/002a0f18",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "520",
@@ -30327,7 +30352,7 @@
       }
     },
     {
-      "name": "shared/runtime_dma_002a13d8",
+      "name": "shared/runtime/dma/002a13d8",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "10448",
@@ -30388,7 +30413,7 @@
       }
     },
     {
-      "name": "shared/audio_voices_002a1a90",
+      "name": "shared/audio/voices/002a1a90",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "116",
@@ -30422,7 +30447,7 @@
       }
     },
     {
-      "name": "shared/gameplay_space_002a2480",
+      "name": "shared/gameplay/space/002a2480",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "52",
@@ -30869,7 +30894,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002a4038",
+      "name": "shared/gameplay/entities/002a4038",
       "measures": {
         "fuzzy_match_percent": 27.928156,
         "total_code": "15812",
@@ -31065,7 +31090,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002a4830",
+      "name": "shared/gameplay/entities/002a4830",
       "measures": {
         "fuzzy_match_percent": 39.826261,
         "total_code": "23944",
@@ -31952,7 +31977,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002aa670",
+      "name": "shared/gameplay/entities/002aa670",
       "measures": {
         "fuzzy_match_percent": 47.178243,
         "total_code": "31328",
@@ -32467,7 +32492,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002b17d8",
+      "name": "shared/gameplay/entities/002b17d8",
       "measures": {
         "fuzzy_match_percent": 19.250302,
         "total_code": "16540",
@@ -32753,7 +32778,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002b2100",
+      "name": "shared/gameplay/entities/002b2100",
       "measures": {
         "fuzzy_match_percent": 35.104801,
         "total_code": "29580",
@@ -33380,7 +33405,7 @@
       }
     },
     {
-      "name": "shared/runtime_dma_002b7a48",
+      "name": "shared/runtime/dma/002b7a48",
       "measures": {
         "fuzzy_match_percent": 26.086957,
         "total_code": "736",
@@ -33502,7 +33527,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002b7ef0",
+      "name": "shared/gameplay/vendor/002b7ef0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "932",
@@ -33832,7 +33857,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002b8c08",
+      "name": "shared/gameplay/entities/002b8c08",
       "measures": {
         "fuzzy_match_percent": 18.477984,
         "total_code": "31432",
@@ -34136,7 +34161,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002b94d0",
+      "name": "shared/gameplay/entities/002b94d0",
       "measures": {
         "fuzzy_match_percent": 34.25641,
         "total_code": "27300",
@@ -35030,7 +35055,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002bffa8",
+      "name": "shared/gameplay/entities/002bffa8",
       "measures": {
         "fuzzy_match_percent": 20.63083,
         "total_code": "32592",
@@ -35718,7 +35743,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002c8440",
+      "name": "shared/gameplay/entities/002c8440",
       "measures": {
         "fuzzy_match_percent": 17.591869,
         "total_code": "30696",
@@ -37148,7 +37173,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002cfcb8",
+      "name": "shared/gameplay/entities/002cfcb8",
       "measures": {
         "fuzzy_match_percent": 23.875645,
         "total_code": "32552",
@@ -37757,7 +37782,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002937a0",
+      "name": "shared/gameplay/entities/002937a0",
       "measures": {
         "fuzzy_match_percent": 24.670005,
         "total_code": "17576",
@@ -37935,7 +37960,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002b3840",
+      "name": "shared/gameplay/entities/002b3840",
       "measures": {
         "fuzzy_match_percent": 44.062205,
         "total_code": "8488",
@@ -38246,7 +38271,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002d7f88",
+      "name": "shared/gameplay/entities/002d7f88",
       "measures": {
         "fuzzy_match_percent": 25.527625,
         "total_code": "29756",
@@ -38604,7 +38629,7 @@
       }
     },
     {
-      "name": "shared/unclassified_00297d10",
+      "name": "shared/gameplay/entities/00297d10",
       "measures": {
         "fuzzy_match_percent": 45.59361,
         "total_code": "29548",
@@ -38944,7 +38969,7 @@
       }
     },
     {
-      "name": "level_03/unclassified_00291918",
+      "name": "level_03/gameplay/entities/00291918",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "252",
@@ -38979,7 +39004,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002de370",
+      "name": "shared/gameplay/vendor/002de370",
       "measures": {
         "fuzzy_match_percent": 76.449275,
         "total_code": "1104",
@@ -39954,7 +39979,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002df730",
+      "name": "shared/gameplay/vendor/002df730",
       "measures": {
         "fuzzy_match_percent": 44.880457,
         "total_code": "30784",
@@ -40706,7 +40731,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002e22d8",
+      "name": "shared/gameplay/vendor/002e22d8",
       "measures": {
         "fuzzy_match_percent": 35.687732,
         "total_code": "5380",
@@ -41233,7 +41258,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002e3de8",
+      "name": "shared/gameplay/vendor/002e3de8",
       "measures": {
         "fuzzy_match_percent": 22.213312,
         "total_code": "4988",
@@ -41330,7 +41355,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002e5958",
+      "name": "shared/gameplay/vendor/002e5958",
       "measures": {
         "fuzzy_match_percent": 20.090634,
         "total_code": "2648",
@@ -41902,7 +41927,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002e89b0",
+      "name": "shared/gameplay/vendor/002e89b0",
       "measures": {
         "fuzzy_match_percent": 100.0,
         "total_code": "1624",
@@ -41954,7 +41979,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002e9010",
+      "name": "shared/gameplay/vendor/002e9010",
       "measures": {
         "fuzzy_match_percent": 64.810598,
         "total_code": "19324",
@@ -42740,7 +42765,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_002ec308",
+      "name": "shared/gameplay/vendor/002ec308",
       "measures": {
         "fuzzy_match_percent": 43.187448,
         "total_code": "9688",
@@ -43518,7 +43543,7 @@
       }
     },
     {
-      "name": "shared/unclassified_002f6328",
+      "name": "shared/gameplay/entities/002f6328",
       "measures": {
         "fuzzy_match_percent": 40.367989,
         "total_code": "18044",
@@ -44920,7 +44945,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_003015d0",
+      "name": "shared/gameplay/vendor/003015d0",
       "measures": {
         "fuzzy_match_percent": 10.36036,
         "total_code": "5328",
@@ -45778,7 +45803,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_00307190",
+      "name": "shared/gameplay/vendor/00307190",
       "measures": {
         "fuzzy_match_percent": 40.868794,
         "total_code": "4512",
@@ -45866,7 +45891,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_00307578",
+      "name": "shared/gameplay/vendor/00307578",
       "measures": {
         "fuzzy_match_percent": 21.538462,
         "total_code": "4940",
@@ -45963,7 +45988,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_00307ba8",
+      "name": "shared/gameplay/vendor/00307ba8",
       "measures": {
         "fuzzy_match_percent": 11.433447,
         "total_code": "7032",
@@ -46140,7 +46165,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_00308670",
+      "name": "shared/gameplay/vendor/00308670",
       "measures": {
         "fuzzy_match_percent": 49.027237,
         "total_code": "1028",
@@ -46308,7 +46333,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_0030b618",
+      "name": "shared/gameplay/vendor/0030b618",
       "measures": {
         "fuzzy_match_percent": 14.802232,
         "total_code": "16484",
@@ -47078,7 +47103,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_0030e690",
+      "name": "shared/gameplay/vendor/0030e690",
       "measures": {
         "fuzzy_match_percent": 40.713887,
         "total_code": "7172",
@@ -47820,7 +47845,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_00316f48",
+      "name": "shared/gameplay/vendor/00316f48",
       "measures": {
         "fuzzy_match_percent": 0.0,
         "total_code": "56",
@@ -47898,7 +47923,7 @@
       }
     },
     {
-      "name": "shared/gameplay_vendor_0031abe0",
+      "name": "shared/gameplay/vendor/0031abe0",
       "measures": {
         "fuzzy_match_percent": 25.156576,
         "total_code": "7664",
@@ -48176,34 +48201,34 @@
       "id": "overlays",
       "name": "Level overlays",
       "measures": {
-        "fuzzy_match_percent": 56.929063,
+        "fuzzy_match_percent": 56.929698,
         "total_code": "3151768",
-        "matched_code": "1794272",
-        "matched_code_percent": 56.929063,
+        "matched_code": "1794292",
+        "matched_code_percent": 56.929698,
         "total_functions": 2905,
-        "matched_functions": 1873,
-        "matched_functions_percent": 64.475043,
-        "complete_code": "1794272",
-        "complete_code_percent": 56.929063,
-        "total_units": 315,
-        "complete_units": 131
+        "matched_functions": 1874,
+        "matched_functions_percent": 64.509466,
+        "complete_code": "1794292",
+        "complete_code_percent": 56.929698,
+        "total_units": 316,
+        "complete_units": 132
       }
     },
     {
       "id": "shared",
       "name": "Shared level code",
       "measures": {
-        "fuzzy_match_percent": 45.768246,
+        "fuzzy_match_percent": 45.770024,
         "total_code": "1124640",
-        "matched_code": "514728",
-        "matched_code_percent": 45.768246,
+        "matched_code": "514748",
+        "matched_code_percent": 45.770024,
         "total_functions": 1571,
-        "matched_functions": 1107,
-        "matched_functions_percent": 70.464672,
-        "complete_code": "514728",
-        "complete_code_percent": 45.768246,
-        "total_units": 187,
-        "complete_units": 74
+        "matched_functions": 1108,
+        "matched_functions_percent": 70.528326,
+        "complete_code": "514748",
+        "complete_code_percent": 45.770024,
+        "total_units": 188,
+        "complete_units": 75
       }
     },
     {
