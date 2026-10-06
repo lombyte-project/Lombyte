@@ -90,7 +90,7 @@ extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
 extern long func_0021B6D8(int, long, int);
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
-extern int sprintf(char *, const char *, ...);
+extern int sprintf(char *, const char *, ...) __asm__("func_00116248");
 
 int render_configured_text_label(ConfiguredTextLabel *label) __asm__("FUN_0021a328");
 
