@@ -175,6 +175,7 @@ RODATA_OVERLAYS = {
     "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
     "fun_0021ddf8": (0x1E87A0, 0xE9720),  # item-handle release switch table
+    "fun_0022f778": (0x1E8930, 0xE98B0),  # gameplay-state switch table
     "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
     "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
