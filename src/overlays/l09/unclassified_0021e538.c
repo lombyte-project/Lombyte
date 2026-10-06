@@ -3,7 +3,68 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e560.s", FUN_L09_0021e560);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0021e8c0.s", FUN_L09_0021e8c0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Draws a list of scrolling-texture strips (water) into the scratchpad. */
+/* Ported from rac1-decomp (PAL, src/overlays/l09_gaspar/drawquad_0021E3E8.c: func_L09_0021E770), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x20]; short idx[16]; } Strip;
+
+extern char D_L09_0016EAA0[];
+extern int *D_L09_001611C0 __attribute__((sda));
+extern int *D_L09_001611C0_x[] __asm__("D_L09_001611B8") __attribute__((section(".sdata")));
+extern int D_L09_0015F5CC;
+extern int FUN_001fa728(char *, float);
+extern void FUN_L01_0021fa98(int, int, int, int, int, int);
+extern void FUN_L09_0021e560(int, int);
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1) {
+    int i;
+    int j;
+    int c;
+    int *sp;
+    int idx;
+    float s0;
+    float s1;
+    FUN_L09_0021e560(tex0, tex1);
+    D_L09_001611C0_x[2][0] = 0x30000009;
+    D_L09_001611C0_x[2][1] = (int)D_L09_0016EAA0;
+    D_L09_001611C0_x[2][2] = 0;
+    D_L09_001611C0_x[2][3] = 0x50000009;
+    D_L09_001611C0 = D_L09_001611C0_x[2] + 4;
+    font_queue_vu_state();
+    s0 = 1.0f - (float)(D_L09_0015F5CC & 0x7FF) * 0.00048828125f;
+    s1 = s0 + s0 + 0.5f;
+    sp = (int *)0x70000000;
+    for (i = 0; i < 256; i++) {
+        sp[i] = ((i * 0x89) & 0xF) * 0x20200 + 0x80787070;
+    }
+    for (i = 0; i < count; i++) {
+        char *e = list + i * 64;
+        idx = FUN_001fa728(e, 256.0f);
+        if (idx == -1) continue;
+        for (j = 0; j < *(int *)(e + 0x1C); j++) {
+            int n;
+            float *src;
+            float *a = (float *)0x70001000;
+            float *b = (float *)0x70002000;
+            n = ((Strip *)e)->idx[j + 1] - ((Strip *)e)->idx[j];
+            src = (float *)(*(int *)(e + 0x14) + ((Strip *)e)->idx[j] * 8);
+            for (c = 0; c < n; c++) {
+                float f = *src++;
+                *b++ = f;
+                *a++ = f;
+                *a++ = *src + s0;
+                *b++ = *src++ + s1;
+            }
+            FUN_L01_0021fa98(n, *(int *)(e + 0x10) + ((Strip *)e)->idx[j] * 12, 0x70000000, 0x70001000, 0x70002000, idx == 0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
 #define NOT_SDA
 
@@ -248,7 +309,6 @@ extern char D_L09_001F63C0[];
 extern char D_L09_001FC740[];
 extern int D_L09_0015F5CC;
 extern void FUN_L03_00291918(char *moby);
-extern void FUN_L09_0021e8c0(void *, float, int, int, int);
 extern void FUN_L09_002c1978(void *, void *, int);
 
 void FUN_L09_002ef750(void) {
@@ -256,7 +316,7 @@ void FUN_L09_002ef750(void) {
     int n = t / 20;
     float a = (float)t / 20.0f;
     float b = (float)n;
-    FUN_L09_0021e8c0(D_L09_001F3080, a - b, 0x6C, (n & 15) + 0x2C, ((n + 1) & 15) + 0x2C);
+    FUN_L09_0021e8c0(D_L09_001F3080, 0x6C, a - b, (n & 15) + 0x2C, ((n + 1) & 15) + 0x2C);
     FUN_L03_00291918(D_L09_001FC740);
     FUN_L09_002c1978(D_L09_001FC740, D_L09_001F63C0, 10);
 }
