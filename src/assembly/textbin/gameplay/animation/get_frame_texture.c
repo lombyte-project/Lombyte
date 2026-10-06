@@ -103,12 +103,12 @@ u64 get_frame_texture(s32 frame_id) {
     }
 
     if (image_page->gs_block_offset == 0) {
-        width_log2 = image_page->width_log2;
         height_log2 = image_page->height_log2;
+        width_log2 = image_page->width_log2;
         allocation_cursor = gs_texture_allocation_cursor;
         image_page->gs_block_offset = allocation_cursor >> 8;
         if (height_log2 < width_log2) {
-            height_log2 = image_page->width_log2;
+            height_log2 += width_log2 - height_log2;
         }
         gs_texture_allocation_cursor = allocation_cursor + (1 << (height_log2 * 2));
         image_upload_count = pending_texture_upload_count;
