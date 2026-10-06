@@ -36,6 +36,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     GsVideoModeState *state;
     s32 kernel_horizontal, kernel_vertical, kernel_width, kernel_height;
     s32 mode, scale;
+    u16 interlace;
     u64 value;
 
     state = GetCoreDataTable();
@@ -49,10 +50,11 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         kernel_horizontal = 0;
     }
     mode = state->wMode;
+    interlace = state->nSInterlace;
 
     output->pmode = 0x66;
     value = 2;
-    if (state->nSInterlace != 0) {
+    if (interlace != 0) {
         value = 3;
         if (state->nSFrame_mode == 0) value = 1;
     }
@@ -61,7 +63,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
                      ((u64)(((width + 63) >> 6) & 63) << 9);
 
     if (mode == 2) {
-        if (state->nSInterlace == 1) {
+        if (interlace == 1) {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(s64)(scale * width - 1) << 32) |
@@ -82,7 +84,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         }
         output->display = value;
     } else if (mode == 3) {
-        if (state->nSInterlace == 1) {
+        if (interlace == 1) {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(s64)(scale * width - 1) << 32) |
