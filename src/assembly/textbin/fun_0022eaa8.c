@@ -175,7 +175,7 @@ void update_level_gameplay_frame(void) {
     LevelRenderObject *object;
     LevelRenderObject *expired_object;
     s32 mode_advance;
-    s32 sound_bank;
+    volatile s32 sound_bank;
     RenderModel *model;
     RenderArchiveTable *archive_table;
     u8 *archive_data;
