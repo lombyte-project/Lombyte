@@ -8,4 +8,6 @@
 
 ## Verification
 
-<!-- `make elf` and, for overlay changes, `make overlays` must end with PASS. Paste the final lines. -->
+- [ ] `make elf` ends with `PASS: reconstructed boot ELF matches retail`
+- [ ] `make overlays` ends with `PASS` (overlay changes)
+- [ ] `make check` passes
