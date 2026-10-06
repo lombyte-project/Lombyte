@@ -206,9 +206,9 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             material_shift = packet->material_shift;
             if (textures != 0) {
                 texture = &textures[material_index];
-                material_base = ((s16)texture->width) >> 6;
-                width_units_64 = material_base;
-                width_units_128 = ((s16)texture->width) >> 7;
+                material_base = (s32)((u32)texture->width << 16);
+                width_units_64 = material_base >> 22;
+                width_units_128 = material_base >> 23;
                 if (width_units_64 <= 0) {
                     width_units_64 = 1;
                 }
@@ -218,8 +218,9 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 width_log2 = highest_set_bit_index((s16)texture->width);
                 height_log2 = highest_set_bit_index(texture->height);
                 gs_block_base = gs_texture_allocation_base >> 8;
-                draw_word = (((u64)draw_high) << 32) | (((u64)draw_shift) << 6) | 0x20 |
-                            (((u64)(texture->draw_control_count - 1)) << 2);
+                draw_word = (((u64)draw_high) << 32) |
+                            (((u64)(texture->draw_control_count - 1)) << 2) |
+                            (((u64)draw_shift) << 6) | 0x20;
                 material_word = (packet_material_base | (((u64)material_shift) << 2)) |
                                 (((u64)material_index) << 24);
                 mip_word = (((u64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
