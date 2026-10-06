@@ -7,6 +7,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/init_dma/FUN_0020
 #else
 #include "types.h"
 
+/* Provisional reconstruction: retail instructions establish the MMIO addresses,
+ * access widths, values, and write order, but runtime hardware behavior has not
+ * been validated. This C does not reproduce the retail instruction timing or
+ * nops; their hardware significance remains unresolved. The normal build uses
+ * the assembly oracle, so a passing full ELF check does not validate this C
+ * fallback's behavior. */
+
 void init_dma(void) __asm__("FUN_0020b418");
 
 void init_dma(void) {
