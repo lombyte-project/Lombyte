@@ -1,13 +1,5 @@
 #include "types.h"
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 struct Screen {
     u8 pad[0x10];
     s32 offx;
@@ -47,10 +39,10 @@ void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) {
     t = &hud->tex[hud->index[id].slot];
     tw = 1 << t->wlog;
     th = 1 << t->hlog;
-    D_00160F00.p->w0 = 0x10000005;
+    D_00160F00.p->tag = 0x10000005;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000005;
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000005;
     q = (u64 *)++D_00160F00.p;
     q[0] = (u64)0xE800 << 47 | 0x8001;
     q[1] = 0x5353106;

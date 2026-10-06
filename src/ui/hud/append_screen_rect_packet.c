@@ -1,13 +1,5 @@
 #include "types.h"
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 struct Screen {
     u8 pad[0x10];
     s32 offx;
@@ -22,10 +14,10 @@ void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim,
 void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     u64 *q;
 
-    D_00160F00.p->w0 = 0x10000003;
+    D_00160F00.p->tag = 0x10000003;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000003;
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000003;
     q = (u64 *)D_00160F00.p++;
     q[2] = (u64)0x8800 << 47 | 1;
     q[3] = 0x4410;

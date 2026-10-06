@@ -8,16 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/map/draw_map_overlay/FUN
 #include "types.h"
 #include "sda.h"
 
-struct DmaTag {
-    u32 dma_control;
-    u32 addr;
-    u32 vif0;
-    u32 vif1;
-};
-
-struct RenderPacketCursor {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 struct ScreenOffsets {
     u8 pad0[0x10];
@@ -109,7 +100,7 @@ typedef struct {
 
 #define SPR ((MapIconBounds *)0x70000000)
 
-extern struct RenderPacketCursor D_00160F00;
+extern struct TagPtr D_00160F00;
 extern struct ScreenOffsets D_0013E500;
 extern MapOverlayState D_001A00F0;
 extern MapPlayerState D_0013F350;
@@ -229,7 +220,7 @@ void draw_map_overlay(void) {
 
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x47, 0);
-    D_00160F00.p->dma_control = 0x10000005;
+    D_00160F00.p->tag = 0x10000005;
     D_00160F00.p->addr = 0;
     D_00160F00.p->vif0 = 0;
     D_00160F00.p->vif1 = 0x50000005;
@@ -254,7 +245,7 @@ void draw_map_overlay(void) {
     vu1_add_g_sregister(0x47, 0x60B);
 
     palette_block = (background_tex0 >> 37) & 0x3FFF;
-    D_00160F00.p->dma_control = 0x10000005;
+    D_00160F00.p->tag = 0x10000005;
     D_00160F00.p->addr = 0;
     D_00160F00.p->vif0 = 0;
     D_00160F00.p->vif1 = 0x50000005;

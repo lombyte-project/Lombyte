@@ -1,15 +1,6 @@
 #include "types.h"
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 struct Vec4 {
     f32 x;
@@ -65,10 +56,10 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
     FUN_001f9a28(&p2, &p2, &off);
     FUN_001f9a28(&p3, &pos, &sz);
     FUN_001f9a10(&p3, &p3, &off);
-    D_00160F00.p->w0 = 0x10000007;
+    D_00160F00.p->tag = 0x10000007;
     D_00160F00.p->addr = 0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000007;
+    D_00160F00.p->vif0 = 0;
+    D_00160F00.p->vif1 = 0x50000007;
     tag = D_00160F00.p;
     q = (u64 *)(tag + 1);
     D_00160F00.p = tag + 1;

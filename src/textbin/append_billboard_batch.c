@@ -24,15 +24,7 @@ typedef struct {
     f32 projection_scale;
 } BillboardViewContext;
 
-struct DmaTag {
-    u32 w0;
-    u32 addr;
-    u32 w2;
-    u32 w3;
-};
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern char billboard_quad_header[] __asm__("D_001608E0");
@@ -109,10 +101,10 @@ void append_billboard_batch(void) {
                  ((24.0f - distance) * 16.0f);
         sine_offset = convert_float_to_integer(radius * fast_sin(record->angle));
         cosine_offset = convert_float_to_integer(radius * fast_cos(record->angle));
-        render_packet_cursor.p->w0 = 0x10000009;
+        render_packet_cursor.p->tag = 0x10000009;
         render_packet_cursor.p->addr = 0;
-        render_packet_cursor.p->w2 = 0;
-        render_packet_cursor.p->w3 = 0x50000009;
+        render_packet_cursor.p->vif0 = 0;
+        render_packet_cursor.p->vif1 = 0x50000009;
         tag = render_packet_cursor.p;
         render_packet_cursor.p = tag + 1;
         qcopy(tag + 1, billboard_quad_header);

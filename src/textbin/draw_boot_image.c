@@ -1,15 +1,6 @@
 #include "types.h"
 
-struct DmaTag {
-    u32 dma_control;
-    u32 address;
-    u32 vif0;
-    u32 vif1;
-};
-
-struct TagPtr {
-    struct DmaTag *p;
-};
+#include "rnc/rendering/dma_tag.h"
 
 extern struct TagPtr D_00160F00;
 extern s32 D_0015ED80;
@@ -35,8 +26,8 @@ void draw_boot_image(u32 image_address) {
         if (rows_after_upload < 0) {
             upload_rows = remaining_rows;
         }
-        D_00160F00.p->dma_control = 0x10000006;
-        D_00160F00.p->address = 0;
+        D_00160F00.p->tag = 0x10000006;
+        D_00160F00.p->addr = 0;
         D_00160F00.p->vif0 = 0;
         D_00160F00.p->vif1 = 0x50000006;
         tag = D_00160F00.p;
@@ -57,8 +48,8 @@ void draw_boot_image(u32 image_address) {
         register_words[10] = ((u64)image_quadword_count) | 0x0800000000008000;
         register_words[11] = 0;
         D_00160F00.p = next;
-        D_00160F00.p->dma_control = image_quadword_count | 0x30000000;
-        D_00160F00.p->address = image_address;
+        D_00160F00.p->tag = image_quadword_count | 0x30000000;
+        D_00160F00.p->addr = image_address;
         {
             s64 upload_bytes = upload_rows << 11;
             image_address += upload_bytes;
@@ -77,8 +68,8 @@ void draw_boot_image(u32 image_address) {
         struct DmaTag *final_tag;
         struct DmaTag *final_next;
         u64 *final_words;
-        D_00160F00.p->dma_control = 0x10000002;
-        D_00160F00.p->address = 0;
+        D_00160F00.p->tag = 0x10000002;
+        D_00160F00.p->addr = 0;
         D_00160F00.p->vif0 = 0;
         D_00160F00.p->vif1 = 0x50000002;
         final_tag = D_00160F00.p;
