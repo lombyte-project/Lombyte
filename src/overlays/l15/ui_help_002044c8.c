@@ -354,18 +354,14 @@ s32 FUN_L15_00208e10(s32 arg) {
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec;
+#include "rnc/math/vector.h"
 
 struct PL {
     u8 pad0[0x40];
-    Vec v40;
+    Vec4 v40;
     u8 pad50[0x30];
     union {
-        Vec v80;
+        Vec4 v80;
         f32 f80;
         struct {
             u8 pad[0x4];
@@ -377,7 +373,7 @@ struct PL {
         } f88;
     } u80;
     union {
-        Vec v90;
+        Vec4 v90;
         f32 f90;
         struct {
             u8 pad[0x4];
@@ -392,7 +388,7 @@ struct PL {
     f32 fA4;
     u8 padA8[0x38];
     union {
-        Vec vE0;
+        Vec4 vE0;
         f32 fE0;
         struct {
             u8 pad[0x4];
@@ -404,7 +400,7 @@ struct PL {
         } fE8;
     } uE0;
     union {
-        Vec vF0;
+        Vec4 vF0;
         f32 fF0;
         struct {
             u8 pad[0x4];
@@ -412,7 +408,7 @@ struct PL {
         } fF4;
     } uF0;
     union {
-        Vec v100;
+        Vec4 v100;
         f32 f100;
         struct {
             u8 pad[0x4];
@@ -424,21 +420,21 @@ struct PL {
         } f108;
     } u100;
     union {
-        Vec v110;
+        Vec4 v110;
         struct {
             u8 pad[0x8];
             f32 v;
         } f118;
     } u110;
-    Vec v120;
-    Vec v130;
+    Vec4 v120;
+    Vec4 v130;
     u8 pad140[0x10];
-    Vec v150;
+    Vec4 v150;
     f32 f160;
     f32 f164;
     f32 f168;
     f32 f16C;
-    Vec v170;
+    Vec4 v170;
     f32 f180;
     f32 f184;
     f32 f188;
@@ -454,7 +450,7 @@ struct PL {
     u8 pad1C8[0x2C];
     s16 h1F4;
     u8 pad1F6[0xAA];
-    Vec v2A0;
+    Vec4 v2A0;
     u8 pad2B0[0x28];
     f32 f2D8;
     f32 f2DC;
@@ -483,7 +479,7 @@ struct PL {
     u8 pad3D8[0x20];
     f32 f3F8;
     u8 pad3FC[0x4];
-    Vec v400;
+    Vec4 v400;
     f32 f410;
     u8 pad414[0x4];
     s32 i418;
@@ -506,7 +502,7 @@ struct PL {
     u8 pad4BC[0x8];
     s32 i4C4;
     u8 pad4C8[0x8];
-    Vec v4D0;
+    Vec4 v4D0;
     u8 pad4E0[0x4];
     f32 f4E4;
     s32 i4E8;
@@ -514,16 +510,16 @@ struct PL {
     f32 f4F0;
     u8 pad4F4[0xC];
     union {
-        Vec v500;
+        Vec4 v500;
         struct {
             u8 pad[0x8];
             f32 v;
         } f508;
     } u500;
-    Vec v510;
-    Vec v520;
-    Vec v530;
-    Vec v540;
+    Vec4 v510;
+    Vec4 v520;
+    Vec4 v530;
+    Vec4 v540;
     f32 f550;
     f32 f554;
     u8 pad558[0x8];
@@ -556,7 +552,7 @@ struct PL {
     f32 f5D4;
     struct M *pm5D8;
     f32 f5DC;
-    Vec v5E0;
+    Vec4 v5E0;
     void *p5F0;
     s32 i5F4;
     f32 f5F8;
@@ -591,7 +587,7 @@ struct PL {
     s32 i910;
     s32 i914;
     u8 pad918[0x8];
-    Vec v920;
+    Vec4 v920;
     f32 f930;
     u8 pad934[0xC];
     f32 f940;
@@ -667,7 +663,7 @@ struct PL {
     u8 b12E7;
     u8 pad12E8[0x358];
     union {
-        Vec v1640;
+        Vec4 v1640;
         struct {
             u8 pad[0xC];
             f32 v;
@@ -676,7 +672,7 @@ struct PL {
     u8 pad1650[0x10];
     s32 i1660;
     u8 pad1664[0xC];
-    Vec v1670;
+    Vec4 v1670;
     u8 pad1680[0xA00];
     struct M *pm2080;
     s32 i2084;
@@ -717,7 +713,7 @@ struct M {
     u8 pad0[0xC];
     f32 fC;
     union {
-        Vec v10;
+        Vec4 v10;
         f32 f10;
         struct {
             u8 pad[0x4];
@@ -740,7 +736,7 @@ struct M {
     } u34;
     u8 pad38[0x8];
     union {
-        Vec v40;
+        Vec4 v40;
         struct {
             u8 pad[0x8];
             f32 v;
@@ -757,7 +753,7 @@ struct M {
     u8 pad7C[0x2A];
     s16 hA6;
     u8 padA8[0x18];
-    Vec vC0;
+    Vec4 vC0;
 };
 struct ST {
     u8 pad0[0x58];
@@ -1043,14 +1039,14 @@ void FUN_L15_0020ed50(void) {
     s32 sub = P.i2088;
     s32 anim = moby->b53;
     f32 speed;
-    Vec v0;
-    Vec v10;
-    Vec v20;
-    Vec v30;
-    Vec m40[4];
-    Vec m80[4];
-    Vec vC0;
-    Vec vD0;
+    Vec4 v0;
+    Vec4 v10;
+    Vec4 v20;
+    Vec4 v30;
+    Vec4 m40[4];
+    Vec4 m80[4];
+    Vec4 vC0;
+    Vec4 vD0;
 
     switch (P.i2084) {
     case 0x0:
@@ -2222,7 +2218,7 @@ void FUN_L15_0020ed50(void) {
         }
         FUN_L01_00232290();
         if (P.f930 > 0.0f) {
-            Vec *p = &P.v920;
+            Vec4 *p = &P.v920;
             FUN_L00_002132b8(0.7f, 0.0f);
             v0.q = P.v920.q;
             P.f190 += FUN_L00_00213350(&v0);

@@ -1125,10 +1125,7 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
     }
     return m;
 }
-typedef union {
-    u128 q;
-    float f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 extern char *D_L00_00173E58 __attribute__((section(".data")));
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 unsigned int FUN_001f0b58(void);

@@ -4,10 +4,7 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630c8.s", FUN_L00_002630c8);
 #include "eetypes.h"
-typedef union {
-    u128 q;
-    float f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 extern int D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0 __attribute__((section(".sdata")));

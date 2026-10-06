@@ -377,10 +377,7 @@ void FUN_L00_00215b68(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00215ef8.s", FUN_L00_00215ef8);
 #include "eetypes.h"
 #include "qcopy.h"
-typedef union {
-    u128 q;
-    float f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 extern char *D_001413D0 __attribute__((section(".data")));
 void FUN_001fa050(void *, void *);
 void FUN_001fa2d8(void *, void *);

@@ -1898,10 +1898,7 @@ void FUN_L01_002f60f8(void) {
 #include "qzero.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 typedef struct {
     Vec4 *pts;

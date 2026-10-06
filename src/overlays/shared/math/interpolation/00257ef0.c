@@ -349,10 +349,7 @@ void FUN_L00_00258830(int, int, float, float, float, int);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
     FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
 }
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec;
+#include "rnc/math/vector.h"
 
 typedef struct {
     s32 i00;
@@ -376,7 +373,7 @@ typedef struct {
 
 typedef struct {
     u8 pad00[0x10];
-    Vec pos;
+    Vec4 pos;
     u8 pad20[0x48 - 0x20];
     f32 f48;
 } Obj;
@@ -385,7 +382,7 @@ typedef struct {
     u8 pad00[0x28];
     f32 f28;
     u8 pad2C[0x40 - 0x2C];
-    Vec v40;
+    Vec4 v40;
     f32 f48;
 } Glob;
 
@@ -405,11 +402,11 @@ extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
-s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec *out, f32 f) {
-    Vec save;
-    Vec d;
-    Vec p;
-    Vec q;
+s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
+    Vec4 save;
+    Vec4 d;
+    Vec4 p;
+    Vec4 q;
     Glob *g;
     s32 mask = 0;
     s32 r;

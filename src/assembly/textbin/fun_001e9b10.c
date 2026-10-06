@@ -8,11 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 typedef struct Shrub {
     f32 v[3];

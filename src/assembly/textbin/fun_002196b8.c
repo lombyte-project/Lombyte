@@ -8,10 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 typedef struct {
     u8 pad0[0x50];

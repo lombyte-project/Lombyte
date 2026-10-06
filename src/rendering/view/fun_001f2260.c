@@ -2,10 +2,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-} Vec4;
+#include "rnc/math/vector.h"
 
 struct G {
     f32 f[0x50];
