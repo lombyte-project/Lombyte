@@ -158,7 +158,7 @@ loop_25:
     }
     func_0023B5E0();
     audio_dec_reset(D_0016120C + 0xD9100);
-    snd_set_master_volume(5, D_0013E550.unk5C);
+    snd_set_master_volume(5, *(s32 *)((u8 *)&D_0013E550 + 0x5C));
     snd_flush_sound_commands();
     return var_22_8;
 }
