@@ -1,4 +1,4 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern s32 preview_request_count __asm__("D_00160350");
 extern PreviewAnimationRequest preview_animation_requests[] __asm__("D_001D5EC0");

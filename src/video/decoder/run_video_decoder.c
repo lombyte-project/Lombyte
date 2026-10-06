@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/video_decoder_run_video_decoder_types.h"
+#include "rnc/video/decoder/run_video_decoder.h"
 
 extern s32 D_0016120C;
 extern s32 vi_buf_reset() __asm__("func_0023BCC0");

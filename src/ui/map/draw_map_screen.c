@@ -1,4 +1,4 @@
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 #include "types.h"
 
 struct Pad {

@@ -18,7 +18,7 @@
  */
 
 #include "types.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 
 /* Only mode is accessed here; the remaining SDK stat fields are opaque.

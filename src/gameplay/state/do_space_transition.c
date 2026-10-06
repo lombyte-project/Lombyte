@@ -1,4 +1,4 @@
-#include "rnc/gameplay_state_do_space_transition_types.h"
+#include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
 
 extern struct M2c_D_0013D290 D_0013D290;

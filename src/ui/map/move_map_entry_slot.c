@@ -1,6 +1,6 @@
 #include "types.h"
 
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 extern void func_001F98D0(s32, s32, s32);
 
 void move_map_entry_slot(s32 arg0, s32 arg1) __asm__("FUN_00205000");

@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001fa2b8/FUN_001fa2b8.s", FUN_001fa2b8);
 #else
-#include "rnc/fun_001fa2b8_types.h"
+#include "rnc/math/matrix3x4.h"
 
 void copy_matrix3x4(volatile struct Matrix3x4 *destination,
                    const struct Matrix3x4 *source)

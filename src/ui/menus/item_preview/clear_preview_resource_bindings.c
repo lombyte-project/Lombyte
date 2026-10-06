@@ -1,4 +1,4 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern u8 moby_class_resources[] __asm__("D_001B3200");
 extern u8 class_resource_slots[] __asm__("D_001B3AC0");

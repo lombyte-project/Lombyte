@@ -17,7 +17,7 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 typedef u32 size_t;
 #define _CONST const

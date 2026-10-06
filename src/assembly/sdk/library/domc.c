@@ -6,7 +6,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc/_doMC.s", _doMC);
 #else
 #include "types.h"
-#include "rnc/sdk_library_domc_types.h"
+#include "rnc/sdk/library/domc.h"
 
 extern u8 D_00153770[];
 extern s32 _Error();

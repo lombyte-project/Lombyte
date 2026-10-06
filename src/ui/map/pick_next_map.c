@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/map.c, func_00205918). */
 #include "sda.h"
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 extern unsigned char D_0013D4E1 NOT_SDA;
 extern int *D_001601E0 MACRO_ADDR;
 extern int find_map_entry_slot(int) __asm__("FUN_002050a0");

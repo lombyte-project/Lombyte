@@ -8,7 +8,7 @@
 /* sprintf: newlib sprintf.c with the recovered SDK FILE ABI. */
 
 #include "types.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 typedef char *va_list;
 

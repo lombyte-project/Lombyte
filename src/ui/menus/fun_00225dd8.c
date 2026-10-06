@@ -1,4 +1,4 @@
-#include "rnc/ui_menus_fun_00225dd8_types.h"
+#include "rnc/ui/menus/fun_00225dd8.h"
 #include "types.h"
 
 

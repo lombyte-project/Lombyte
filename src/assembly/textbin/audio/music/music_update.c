@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_update/FUN_00216290.s", FUN_00216290);
 #else
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern struct MusicStreamState music_state __asm__("D_001516D0");
 extern u8 D_00151704[];

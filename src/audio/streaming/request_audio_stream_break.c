@@ -1,9 +1,9 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/audio_streaming_request_audio_stream_break_types.h"
+#include "rnc/audio/streaming/request_audio_stream_break.h"
 #include "types.h"
 
-#include "rnc/audio_streaming_request_audio_stream_break_types.h"
+#include "rnc/audio/streaming/request_audio_stream_break.h"
 #include "types.h"
 
 

@@ -18,7 +18,7 @@
  */
 
 #include "types.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 /* FILE with the SDK's signed flags word. */
 struct SwFile {

@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/save_data/draw_checking_memory_card_data_menu/FUN_00220348.s", FUN_00220348);
 #else
 #include "types.h"
-#include "rnc/text_region.h"
+#include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
 

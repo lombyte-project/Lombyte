@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/audio_streaming_complete_stream_buffer_transfer_types.h"
+#include "rnc/audio/streaming/complete_stream_buffer_transfer.h"
 
 extern struct M2c_D_001D5BF0 D_001D5BF0;
 extern u8 D_001D60B8[];

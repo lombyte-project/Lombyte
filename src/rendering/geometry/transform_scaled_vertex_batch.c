@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/rendering_geometry_transform_scaled_vertex_batch_types.h"
+#include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
 
 extern void func_001F9A10(void *arg0, void *arg1, void *arg2);
 extern void func_001F9A68(void *arg0, void *arg1, f32 arg2);

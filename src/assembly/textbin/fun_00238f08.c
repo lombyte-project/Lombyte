@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00238f08/FUN_00238f08.s", FUN_00238f08);
 #else
 #include "types.h"
-#include "rnc/text_region.h"
+#include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
 

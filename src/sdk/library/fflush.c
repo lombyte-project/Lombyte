@@ -51,7 +51,7 @@ ANSI C requires <<fflush>>.
 No supporting OS subroutines are required.
 */
 
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 #define FILE RncFile
 #define _DEFUN(name, args, params) name(params)

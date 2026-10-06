@@ -1,4 +1,4 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "sda.h"
 
 /* Retail forms the queue head from the address one request before it. */

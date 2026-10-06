@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_transition/FUN_00215e00.s", FUN_00215e00);
 #else
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 struct MusicTable { u8 pad0[0x2AA8]; s32 tracks[1]; };
 extern struct MusicTable level_music_table __asm__("D_00137B80");
 extern struct MusicStreamState music_state __asm__("D_001516D0");

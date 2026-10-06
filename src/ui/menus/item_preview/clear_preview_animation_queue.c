@@ -1,4 +1,4 @@
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern PreviewAnimationStreamState preview_stream_state __asm__("D_001D5BF0");

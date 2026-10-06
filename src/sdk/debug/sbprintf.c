@@ -8,7 +8,7 @@
 /* __sbprintf: newlib vfprintf.c fallback for unbuffered streams. */
 
 #include "types.h"
-#include "rnc/rnc_stdio.h"
+#include "rnc/sdk/library/stdio.h"
 
 typedef char *va_list;
 

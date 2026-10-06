@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/rendering_draw_tfrag_types.h"
+#include "rnc/rendering/draw_tfrag.h"
 
 struct Locals {
     u8 pad0[0x30];

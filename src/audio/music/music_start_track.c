@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 struct MusicTable { u8 pad0[0x2AA8]; s32 tracks[1]; };
 

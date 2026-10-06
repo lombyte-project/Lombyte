@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay_state_process_global_state_flags_types.h"
+#include "rnc/gameplay/state/process_global_state_flags.h"
 
 extern u32 D_0013CAE4[];
 extern struct M2c_D_0013D408 D_0013D408;

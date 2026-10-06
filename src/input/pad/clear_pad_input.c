@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/input_pad_clear_pad_input_types.h"
+#include "rnc/input/pad/clear_pad_input.h"
 
 void clear_pad_input(struct M2c_arg0 *arg0) __asm__("FUN_002172c0");
 

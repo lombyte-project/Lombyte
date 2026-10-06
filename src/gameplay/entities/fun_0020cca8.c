@@ -1,4 +1,4 @@
-#include "rnc/gameplay_entities_fun_0020cca8_types.h"
+#include "rnc/gameplay/entities/fun_0020cca8.h"
 #include "types.h"
 
 

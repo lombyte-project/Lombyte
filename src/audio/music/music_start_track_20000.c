@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 struct Tracks { u8 pad[0x2988]; s32 h[1][2]; };
 extern struct Tracks D_00137B80;

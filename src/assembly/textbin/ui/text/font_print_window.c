@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/text/font_print_window/FUN_001f7090.s", FUN_001f7090);
 #else
 #include "types.h"
-#include "rnc/text_region.h"
+#include "rnc/ui/text/text_region.h"
 
 typedef struct TextRegion FontWindow;
 

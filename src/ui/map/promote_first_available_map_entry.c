@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 extern s32 find_free_map_slot() __asm__("func_00204EF8");
 extern s32 move_map_entry_slot() __asm__("func_00205000");
 

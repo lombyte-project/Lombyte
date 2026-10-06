@@ -1,4 +1,4 @@
-#include "rnc/gameplay_camera_refresh_camera_control_flags_types.h"
+#include "rnc/gameplay/camera/refresh_camera_control_flags.h"
 #include "types.h"
 extern struct CameraControlConditions D_0013F350;
 extern s32 D_0015EF98;

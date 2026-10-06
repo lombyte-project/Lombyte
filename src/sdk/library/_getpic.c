@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk_library__getpic_types.h"
+#include "rnc/sdk/library/_getpic.h"
 
 extern u8 D_00153A58[];
 extern s32 _Error1();

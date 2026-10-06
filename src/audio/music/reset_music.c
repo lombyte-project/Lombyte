@@ -1,6 +1,6 @@
 #include "types.h"
 
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern struct MusicStreamState D_001516D0;
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");

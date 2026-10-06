@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00226380). */
 #include "qcopy.h"
-#include "rnc/pause_moby_types.h"
+#include "rnc/ui/menus/pause_moby.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern int advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui_menus_fun_0021d1f8_types.h"
+#include "rnc/ui/menus/fun_0021d1f8.h"
 
 typedef struct {
     u32 key;

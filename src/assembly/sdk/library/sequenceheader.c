@@ -7,7 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/_sequenc
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sequenceheader/func_0012C4C8.s", func_0012C4C8);
 #else
 
-#include "rnc/sdk_library_sequenceheader_types.h"
+#include "rnc/sdk/library/sequenceheader.h"
 #include "types.h"
 
 extern u8 D_00132FC0[];

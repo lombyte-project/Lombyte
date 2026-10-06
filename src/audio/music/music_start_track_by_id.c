@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern u8 D_0013A664[];
 extern s32 D_0015ED88;

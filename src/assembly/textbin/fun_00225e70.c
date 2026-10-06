@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s
 #include "qcopy.h"
 #include "sda.h"
 
-#include "rnc/preview_animation.h"
+#include "rnc/ui/menus/item_preview/preview_animation.h"
 
 typedef struct {
     u8 pad0[0x10];

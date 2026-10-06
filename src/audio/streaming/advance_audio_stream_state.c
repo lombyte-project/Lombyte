@@ -1,6 +1,6 @@
-#include "rnc/audio_streaming_advance_audio_stream_state_types.h"
+#include "rnc/audio/streaming/advance_audio_stream_state.h"
 #include "types.h"
-#include "rnc/music_stream_state.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 struct Pair8 {
     s32 a;

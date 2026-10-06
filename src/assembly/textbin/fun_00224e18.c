@@ -6,7 +6,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00224e18/FUN_00224e18.s
 #else
 /* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
-#include "rnc/pause_moby_types.h"
+#include "rnc/ui/menus/pause_moby.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table[] __asm__("D_001863D0");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");

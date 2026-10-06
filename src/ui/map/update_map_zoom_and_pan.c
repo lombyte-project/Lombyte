@@ -2,7 +2,7 @@
 
 extern void func_00208810(void);
 extern u8 D_0013C940[];
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
 

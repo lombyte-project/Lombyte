@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */

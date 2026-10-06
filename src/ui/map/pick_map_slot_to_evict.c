@@ -1,6 +1,6 @@
 #include "types.h"
 
-#include "rnc/map_state.h"
+#include "rnc/ui/map/map_state.h"
 extern s32 SubtractIntegerWithClamp(s32 value);
 extern s32 find_id_in_terminated_table(s32 id) __asm__("func_00205220");
 

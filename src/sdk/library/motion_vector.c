@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk_library_motion_vector_types.h"
+#include "rnc/sdk/library/motion_vector.h"
 
 extern s32 InitializeMemoryCardDirectory();
 extern s32 _ipuVdec();

@@ -96,7 +96,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f3aa0.s", FUN_L00_001f3aa0);
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/debug_menu_types.h"
+#include "rnc/rendering/debug/debug_menu.h"
 extern u32 D_0013CAE0 NOT_SDA;
 extern s32 D_0013CB18 NOT_SDA;
 extern s16 D_0013F658 NOT_SDA;
@@ -393,7 +393,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f4598.s", FUN_L00_001f4598);
 #else
 #include "types.h"
 #include "sda.h"
-#include "rnc/debug_menu_types.h"
+#include "rnc/rendering/debug/debug_menu.h"
 typedef struct { s32 rows[6]; } DebugRowCounts;
 extern DebugRowCounts D_L00_001E7920;
 extern u32 D_0013CAE0 NOT_SDA;
@@ -962,7 +962,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001f58e0.s", FUN_L00_001f58e0);
 #else
 #include "types.h"
 
-#include "rnc/debug_menu_types.h"
+#include "rnc/rendering/debug/debug_menu.h"
 extern s32 D_L00_0015F5D8;
 extern f32 D_L00_0015F450;
 extern u8 D_L00_0015F446;
