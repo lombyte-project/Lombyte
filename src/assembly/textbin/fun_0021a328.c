@@ -118,12 +118,11 @@ int render_configured_text_label(ConfiguredTextLabel *label) {
     font = normal_font_metrics;
     font_texture_index = 1;
     value_variant = 0;
-    flags = label->flags;
-    if (flags & 8) {
+    if (label->flags & 8) {
         font_texture_index = 3;
         font = large_font_metrics;
     }
-    if (flags & 0x10) {
+    if (label->flags & 0x10) {
         font_texture_index = 2;
         font = small_font_metrics;
     }
