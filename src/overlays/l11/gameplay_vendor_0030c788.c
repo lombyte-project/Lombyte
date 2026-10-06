@@ -57,7 +57,85 @@ void FUN_L11_0030e730(int arg) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030e978.s", FUN_L11_0030e978);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030FE40), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad[0x57]; char f57; } Rec57;
+
+extern char *func_0020D348_m(int);
+extern float fast_add_rotations(float, float);
+extern int D_0013D388; /* no foreign declaration */
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern int D_L11_0015FFD8; /* no foreign declaration */
+extern int advance_accelerated_scalar();
+extern int allocate_voice_for_target_entry();
+extern void FUN_L00_00250df8(void *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
+extern float func_001FA748_f(float, float) __asm__("FUN_001fa580");
+extern void func_L00_00251E30_u(void *) __asm__("FUN_L00_00250df8");
+extern void func_0022ED80_u(int, int, void *) __asm__("FUN_0022da68");
+extern float func_00214D88_f(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void func_L00_001FF4B0_u(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_u(void *, void *, void *) __asm__("FUN_001f9a10");
+extern char D_0013D355_t[] __asm__("D_0013D388");
+
+void FUN_L11_0030e978(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[4] __attribute__((aligned(16)));
+    unsigned char *c;
+    unsigned char *o;
+    char *p;
+    char *q;
+    switch (m[0x20]) {
+    case 0:
+        *(float *)(m + 0x18) = *(float *)(m + 0x18) + *(float *)(d + 0xC) * 1.9f;
+        c = (unsigned char *)func_0020D348_c(0x487);
+        c[0x31] = 1;
+        *(short *)(c + 0x32) = 0x40;
+        *(long *)(c + 0x38) = *(long *)(m + 0x38);
+        *(unsigned short *)(c + 0x34) = *(unsigned short *)(m + 0x34);
+        qcopy(c + 0x10, m + 0x10);
+        qcopy(c + 0x40, m + 0x40);
+        *(float *)(c + 0x40) = func_001FA748_f(*(float *)(c + 0x40), 3.1415927f);
+        func_L00_00251E30_u(c);
+        p = *(char **)(c + 0x78);
+        *(int *)(p + 8) = *(int *)(d + 8);
+        *(float *)(p + 0x10) = *(float *)(d + 0x10);
+        *(int *)(p + 0x14) = *(int *)(d + 0x14);
+        q = *(char **)(m + 0x24);
+        *(float *)(m + 0x2C) = *(float *)(q + 0x24) * *(float *)(d + 0xC);
+        *(float *)(c + 0x2C) = *(float *)(q + 0x24) * *(float *)(d + 0xC);
+        c[0x20] = 1;
+        m[0x20] = 1;
+        break;
+    case 1:
+        o = (unsigned char *)((*(int *)(d + 8) << 8) + (int)D_L11_0015FFD8);
+        if (*(short *)(o + 0xA6) == 0x267 && o[0x20] == 4) {
+            goto go;
+        }
+        if (*(short *)(o + 0xA6) == 0x33E && o[0xBC] != 0) {
+        go:
+            m[0x20] = 2;
+            ((Rec57 *)(*(int *)(d + 0x14) + (int)(D_0013D355_t)))->f57 = 1;
+            func_0022ED80_u(0, 0, m);
+        }
+        break;
+    case 2:
+        func_00214D88_f((float *)d, (float *)(d + 4), *(float *)(d + 0x10), D_0015ED70, D_0015ED70, D_0015ED6C + D_0015ED6C);
+        func_L00_001FF4B0_u(v, m + 0xD0, -*(float *)(d + 4));
+        func_001F9BD8_u(m + 0x10, m + 0x10, v);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030eb90.s", FUN_L11_0030eb90);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f2a8.s", FUN_L11_0030f2a8);
 #include "qcopy.h"
