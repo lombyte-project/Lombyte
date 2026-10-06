@@ -1110,7 +1110,43 @@ void FUN_L00_00233ba0(float *dst, float *src, float z) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00233c30.s", FUN_L00_00233c30);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
+extern float ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+
+float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step) {
+    int n;
+    int k;
+    float a;
+    float r;
+
+    switch (*(unsigned char *)(D_0013F350 + 0x20B3)) {
+    case 0:
+        n = truncate_float_to_s32(vel[2] / step);
+        a = ConvertIntegerToFloat(n);
+        r = pos[2] + vel[2] * a - ConvertIntegerToFloat((n * n + n) >> 1) * step;
+        if (steps != 0) {
+            *steps = n;
+        }
+        return r;
+    case 1:
+    case 2:
+        k = truncate_float_to_s32(FUN_L00_00233a78_c(vel) / step);
+        if (steps != 0) {
+            *steps = k;
+        }
+        return pos[2] + vel[2] * 0.5f;
+    }
+    return 0.0f;
+}
 #include "eetypes.h"
 typedef union { u128 q; f32 f[4]; } V00233d30;
 extern u8 D_0013F350_00233d30[] __asm__("D_0013F350");
