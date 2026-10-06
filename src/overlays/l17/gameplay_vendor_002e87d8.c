@@ -1665,7 +1665,7 @@ extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
-extern void FUN_L17_002efa48(void *, int);
+void FUN_L17_002efa48(void *moby_v, int arg);
 extern void FUN_L17_002f00a0(void *);
 extern void FUN_L17_002f0210(void *);
 extern void clear_vector(void *) __asm__("func_001F99F8");
@@ -2004,7 +2004,155 @@ void FUN_L17_002eeb68(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002efa48.s", FUN_L17_002efa48);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Fleet turret/enemy state update: refreshes the hit reaction, fires the aim query and sets the lock flags. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1558), where it is exact; names translated to the US level program. */
+
+typedef int q128_2F1558 __attribute__((mode(TI)));
+
+typedef struct {
+    char pad0[0x20];
+    float f20;
+    char pad24[0x14];
+    int i38;
+    char pad3C[0xD4];
+    short h110[3];
+    char b116;
+    unsigned char b117;
+    char pad118[8];
+    float v120[4];
+    float f130;
+    float f134;
+    float f138;
+    float f13C;
+    int i140;
+    int i144;
+    char pad148[0x15];
+    char b15D;
+    char pad15E[0x12];
+    float f170;
+    float f174;
+    char pad178[8];
+    float v180[4];
+    char pad190[0x20];
+    float v1B0[4];
+    char pad1C0[0x14];
+    float f1D4;
+    char pad1D8[0xC];
+    char b1E4;
+    char pad1E5[0xB];
+    float f1F0;
+    float f1F4;
+} Data_2F1558;
+
+typedef struct {
+    char pad0[0x10];
+    float pos[4];
+    unsigned char state;
+    char pad21[0x27];
+    float f48;
+    char pad4C[0x2C];
+    Data_2F1558 *data;
+    char pad7C[0x28];
+    unsigned char bA4;
+    char padA5;
+    short hA6;
+} Moby_2F1558;
+
+typedef struct {
+    char pad0[0x10];
+    float pos[4];
+    Moby_2F1558 *moby;
+} Hit_2F1558;
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013F420[];
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001fa688(float, float);
+extern float random_float_between(float a, float b);
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L08_00211b08(float *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L17_002efa48(void *moby_v, int arg) {
+    Moby_2F1558 *moby = (Moby_2F1558 *)moby_v;
+    Data_2F1558 *d;
+    Hit_2F1558 *q;
+    float tmp[4];
+    int x;
+    float y;
+    float ang;
+    int r;
+    float yaw;
+    float ang2;
+
+    d = moby->data;
+    if (moby->state == 0) {
+        return;
+    }
+    if (d->i38 != 0) {
+        d->f1D4 = func_001FA898_r(FUN_001f96b0(random_float_between(180.0f, 240.0f)));
+        d->i38 = 0;
+    }
+    FUN_L08_00211b08(&d->f1D4);
+    y = 0;
+    q = (Hit_2F1558 *)FUN_L00_0025a420(moby, 0x330000, 0);
+    FUN_L00_0025a478(moby, q, &d->f20, 0, &x, &y, 0, 4);
+    if (x != 1 && moby->state != 15) {
+        d->f20 -= y;
+        d->f130 = D_0015ED70 * 42.0f;
+        d->f134 = D_0015ED70 * 24.0f;
+        d->b15D = 0;
+        d->i144 = 9;
+        d->f13C = D_0015ED6C * 15.7f;
+        d->f138 = D_0015ED6C * 19.0f;
+        d->f170 = -1.0f;
+        d->f174 = -1.0f;
+        *(q128_2F1558 *)tmp = *(q128_2F1558 *)q->pos;
+        FUN_L00_0025ab48(tmp, &ang, &d->f138, &d->f13C);
+        if (q != 0 && q->moby != 0 && q->moby->hA6 == 0x63) {
+            ang = FUN_001f9e90(d->f1F0 - moby->pos[0], d->f1F4 - moby->pos[1]);
+        }
+        FUN_L00_0025c558(ang, moby, d->v120, 0xB, 1, 0);
+        moby->state = 15;
+        d->b117 = 0xF0;
+        FUN_L00_0025d458(moby, d->h110);
+    }
+    moby->bA4 = 0xFF;
+    if (arg != 0) {
+        return;
+    }
+    if (FUN_L00_0025ff38(128.0f, (char *)moby, d->v180, 0, 0, 0, 0) == 2) {
+        return;
+    }
+    if (FUN_001f9b48(moby->pos, d->v1B0) < 64.0f) {
+        ang2 = FUN_001f9e90(d->v180[0] - moby->pos[0], d->v180[1] - moby->pos[1]);
+        yaw = FUN_001fa688(moby->f48, ang2);
+        qcopy(tmp, moby->pos);
+        tmp[2] += 1.0f;
+        r = FUN_001efa68(tmp, D_0013F420, 2, 0, 0) == 0;
+        d->b1E4 = r;
+        if (yaw < 1.0471976f) {
+            d->b1E4 = r << 1;
+        }
+    }
+}
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1858), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
