@@ -35,17 +35,15 @@ void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8")
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) {
     struct Anim **slot;
     struct Anim **anims;
-    struct Anim *anim;
     s32 n;
     s32 v;
 
     anims = o->set->anims;
     slot = &anims[sel];
-    anim = *slot;
-    n = anim->count;
+    n = anims[sel]->count;
     o->sel = sel;
     v = n - 1;
-    if (idx < n) {
+    if (n > idx) {
         v = idx;
     }
     o->cur = v;
