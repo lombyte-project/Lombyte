@@ -11,7 +11,6 @@ f32 convert_integer_to_float(s32 value) __asm__("func_001FA6C0");
 
 /* Retail converts the signed word directly with CVT.S.W. */
 f32 convert_integer_to_float(s32 value) {
-    f32 result = (f32)value;
-    return result;
+    return (f32)value;
 }
 #endif /* NON_MATCHING */
