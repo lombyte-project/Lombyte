@@ -271,7 +271,7 @@ SN_FLAG_UNITS = {
 
 # Level overlay units (src/overlays/<dir>/<file>) built with SN cc1 2.95.2
 # instead of the game compiler: retail level code matches SN where the game
-# compiler cannot (the help giants' 128-bit zero stores, reload registers).
+# compiler cannot (the hero giants' 128-bit zero stores, reload registers).
 # Add a unit only when every C function in it stays exact under SN.
 # Kept sorted, one per line: scripts/sn/tryfn.py edits this block.
 OVERLAY_SN_UNITS = {

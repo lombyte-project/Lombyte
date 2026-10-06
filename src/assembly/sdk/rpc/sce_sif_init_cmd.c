@@ -6,13 +6,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_init_cmd/sceSifInit
             sceSifInitCmd);
 #else
 #include "types.h"
-struct SifCmdPacket {
+struct M2c_D_00154E40 {
     u8 pad_0[0xC];
     s32 unkC;
     s32 unk10;
 };
 
-struct SifCmdState {
+struct M2c_D_00154E58 {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -23,14 +23,14 @@ struct SifCmdState {
     s32 unk1C;
 };
 
-struct SifCmdHandlerTable {
+struct M2c_D_00154E80 {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
 };
 
-struct SifCmdHandlerEntry {
+struct M2c_var_3_42 {
     s32 unk0;
     s32 unk4;
 };
@@ -40,10 +40,10 @@ extern void FUN_0011a448();
 extern u8 D_0012FC04[];
 extern u8 D_00154D80[];
 extern u8 D_00154E00[];
-extern struct SifCmdPacket D_00154E40;
+extern struct M2c_D_00154E40 D_00154E40;
 extern u32 D_00154E54[];
-extern struct SifCmdState D_00154E58;
-extern struct SifCmdHandlerTable D_00154E80;
+extern struct M2c_D_00154E58 D_00154E58;
+extern struct M2c_D_00154E80 D_00154E80;
 extern u8 D_00154F80[];
 extern s32 AddDmacHandler();
 extern s32 DIntr();
@@ -66,8 +66,8 @@ void sceSifInitCmd(void) {
     s32 poll_value;
     s32 temp_5_29;
     s32 temp_6_30;
-    s32 handler_remaining;
-    s32 buf_remaining;
+    s32 var_16_46;
+    s32 var_16_59;
 
     DIntr();
     if (*(s32 *)D_0012FC04 == 0) {
@@ -83,30 +83,30 @@ block_3:
     D_00154E58.unk0 = temp_6_30;
     D_00154E58.unk4 = temp_5_29;
     D_00154E58.unk1C = D_00154F80;
-    handlers = (struct SifCmdHandlerEntry *)&D_00154E80;
-    handler_entry = handlers;
+    handlers = (struct M2c_var_3_42 *)&D_00154E80;
+    var_3_42 = handlers;
     D_00154E58.unk8 = 0;
 
-    handler_remaining = 0x1F;
+    var_16_46 = 0x1F;
     D_00154E58.unkC = &D_00154E80;
     D_00154E58.unk14 = 0;
     D_00154E58.unk18 = 0;
     D_00154E58.unk10 = ipval;
 loop_4:
-    handler_entry->unk0 = 0;
-    handler_remaining -= 1;
-    handler_entry->unk4 = 0;
-    handler_entry += 1;
-    if (handler_remaining >= 0) {
+    var_3_42->unk0 = 0;
+    var_16_46 -= 1;
+    var_3_42->unk4 = 0;
+    var_3_42 += 1;
+    if (var_16_46 >= 0) {
         goto loop_4;
     }
-    buf_remaining = 0x1F;
-    buf_word = D_00154F80 + 0x7C;
+    var_16_59 = 0x1F;
+    var_2_61 = D_00154F80 + 0x7C;
 loop_6:
-    *buf_word = 0;
-    buf_remaining -= 1;
-    buf_word -= 1;
-    if (buf_remaining >= 0) {
+    *var_2_61 = 0;
+    var_16_59 -= 1;
+    var_2_61 -= 1;
+    if (var_16_59 >= 0) {
         goto loop_6;
     }
     handlers[0].unk0 = FUN_0011a448;
@@ -129,9 +129,9 @@ loop_6:
     }
     D_00154E54[0] = AddDmacHandler(5, &_sceSifCmdIntrHdlr, 0);
     enable_dmac(5);
-    remote_reg = sceSifGetReg(0x80000000);
-    D_00154E58.unk8 = remote_reg;
-    if (remote_reg == 0) {
+    temp_2_113 = sceSifGetReg(0x80000000);
+    D_00154E58.unk8 = temp_2_113;
+    if (temp_2_113 == 0) {
         goto block_14;
     }
     D_00154E40.unk10 = D_00154D80;

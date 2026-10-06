@@ -103,7 +103,7 @@ differs. `make` does not track header dependencies: after changing
     byte-identically with the common configuration; full-ELF gate PASS
   - fixtures: `textbin/audio/banks/snd_bank_load_by_loc`,
     `textbin/fun_00226670`, `textbin/video/decoder/vi_buf_stop_dma`,
-    `gameplay/animation/find_valid_animation_frame_index`,
+    `ui/hud/get_icon_frame`,
     `video/decoder/video_dec_flush`
 
 - `0053-gas-la-absolute-unknown-symbol.patch` SHA-256: `c43dcd5c4f48a7b25b2660f2bace5cd9709364d179c561ef9a705f8f0ea8c93d`
