@@ -95,7 +95,7 @@ extern int memcard_save_data(int, int);
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern short D_L16_0015F5C4;
+extern short D_L16_0015F5C4_u __asm__("D_L16_0015F5C4");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void*,void*,int,int);
 extern void FUN_L00_002502a0(int);
@@ -136,7 +136,7 @@ void FUN_L16_002e3190(L16WatchMoby *m) {
         break;
     }
     case 2:
-        if (*(int *)&D_L16_0015F5C4 != 2) {
+        if (*(int *)&D_L16_0015F5C4_u != 2) {
             char *player;
             m->state = 1;
             FUN_L00_00216f90(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
@@ -1065,7 +1065,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
         break;
     }
     case 2:
-        if (*(int *)&D_L16_0015F5C4 != 2) {
+        if (*(int *)&D_L16_0015F5C4_u != 2) {
             int previous;
             m->state = 1;
             previous = activation->previous;
@@ -1076,7 +1076,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
         }
         break;
     case 4:
-        if (*(int *)&D_L16_0015F5C4 == 0) {
+        if (*(int *)&D_L16_0015F5C4_u == 0) {
             m->state = 1;
             FUN_L00_00260860(31, 1);
             memcard_save_data(0, -1);
@@ -1313,7 +1313,52 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
                         *(int *)&D_L16_00161E9C_d, final_size, scale_game_frames(0x23));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7e00.s", FUN_L16_002e7e00);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Waits one tick, then pushes two pairs of the player's points apart along their difference. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9278), where it is exact; names translated to the US level program. */
+
+typedef float W[4] __attribute__((aligned(16)));
+
+extern char D_L16_0016CC60[];
+extern int D_L16_0015F5C4;
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+
+void FUN_L16_002e7e00(char *moby) {
+    W a, b, c, d, e, f;
+    float k1 = 0.075f, k2 = 20000.0f, k3 = 1000.0f;
+    float j1 = 0.075f, j2 = 20000.0f, j3 = 1000.0f;
+    switch (*(unsigned char *)(moby + 0x20)) {
+    case 0:
+        *(unsigned char *)(moby + 0x30) = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L16_0015F5C4 == 2) {
+        char *g = D_L16_0016CC60;
+        if (*(int *)(g + 0x30) == 0) {
+            char *p = *(char **)(g + 0x184);
+            FUN_L00_0024f7c8(p, 6, a);
+            FUN_L00_0024f7c8(p, 4, c);
+            subtract_vector_xyz(e, a, c);
+            normalize_vector_xyz(e, e, k1);
+            FUN_L00_00263b70(a, a, e, k2, k3);
+            FUN_L00_0024f7c8(p, 7, b);
+            FUN_L00_0024f7c8(p, 5, d);
+            subtract_vector_xyz(f, b, d);
+            normalize_vector_xyz(f, f, j1);
+            FUN_L00_00263b70(b, b, f, j2, j3);
+        }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
 
 
