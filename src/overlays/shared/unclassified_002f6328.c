@@ -96,7 +96,238 @@ void FUN_L01_002ff028(char *a) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ff118.s", FUN_L01_002ff118);
+extern float FUN_001fa580(float, float);
+extern void FUN_001f9a10(void *, void *, void *);
+extern int FUN_001f96f8(int);
+extern float FUN_001f9e90(float, float);
+#include "sda.h"
+extern unsigned char D_0015EDB0;
+#include "qcopy.h"
+typedef struct {
+    float target[4];
+    float eye[4];
+    float delta[4];
+} L01WatchScratch;
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0xF];
+    unsigned char opacity;
+    unsigned char near_flag;
+    char pad32[0x16];
+    float yaw;
+    char pad4C[7];
+    unsigned char animation;
+    char pad54[0x24];
+    char *data;
+    char pad7C[3];
+    unsigned char flag7F;
+    char pad80[0x30];
+    unsigned char bB0;
+    char padB1;
+    unsigned short hB2;
+} L01WatchMoby;
+typedef struct {
+    char pad00[4];
+    short sub;
+    short h6;
+    unsigned char b8;
+    char pad09[0x17];
+    void *p20;
+    char pad24[0x20];
+    int i44;
+    char pad48[4];
+    int i4C;
+    char body[0x64];
+    float pitch;
+    float yaw;
+    char padBC[4];
+    float height;
+    char padC4[0xC];
+    char head[0x68];
+    float head_yaw;
+    char pad13C[0x14];
+    float target[4];
+    char pad160[4];
+    int moving_timer;
+    int target_timer;
+} L01WatchData;
+typedef struct { char pad00[0xD0]; float aim[4]; } L01Player;
+extern char D_0013F3D0[];
+extern float D_0013F420[4];
+extern float D_0015ED64;
+extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
+extern float FUN_001f96b0(float);
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9af0(void *);
+extern float FUN_001f9b20(void *);
+extern float FUN_001fa688(float, float);
+extern float FUN_001fa5c8(float, float);
+extern float FUN_002132a8(float, float);
+extern int FUN_001f9740(int *);
+extern int FUN_001fa6d0(float);
+extern float FUN_001f9b48(void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_00214db0(void *, float, float, float);
+extern void FUN_0020c828(void *);
+extern void FUN_L00_0025a120(void *);
+extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern int D_0015ED84;
+extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern unsigned char D_0013DD42 __attribute__((section(".data")));
+extern unsigned char D_0014C050[];
+extern char D_L01_0020B600[];
+extern char D_L01_00161D38[];
+extern char D_L01_00161D48[];
+extern char D_L01_00167240[];
+extern char D_L01_001BAAA0[];
+extern char *D_L01_001600EC;
+extern int D_L01_0015F5C4;
+extern struct { char pad[0x80]; float f80; float f84; float f88; } D_0013F350_w __asm__("D_0013F350");
+extern void FUN_L01_002ff028_c(void *) __asm__("FUN_L01_002ff028");
+extern void FUN_L00_002668a0(void *, void *);
+extern int FUN_L00_00266448(void *, void *);
+extern void FUN_L01_002783a8(void *, float);
+extern void FUN_L00_002502a0(int);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L00_002607d0(int);
+extern void FUN_L00_00262d38(int);
+extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void FUN_0020b178(int, int);
+
+/* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */
+void FUN_L01_002ff118(L01WatchMoby *m) {
+    L01WatchScratch scratch;
+    L01WatchData *d = (L01WatchData *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    if (!d) return;
+    FUN_L01_002ff028_c(m);
+    if (m->near_flag) {
+        if (FUN_001f9b48(m->position, D_L01_00167240) < 32.0f) {
+            FUN_L00_0025a120(m);
+            m->flag7F = 0x1A;
+        }
+    }
+    switch (m->state) {
+    case 0:
+        m->opacity = 0xFF;
+        d->i44 = 0;
+        if (D_0015ED84_m == 1) {
+            if (D_0013DD42) {
+                FUN_0020c828(m);
+                return;
+            }
+            d->p20 = (void *)D_L01_0020B600;
+            m->state = 1;
+        } else if (D_0015ED84_m == 8) {
+            d->p20 = (void *)D_L01_00161D38;
+            m->state = 4;
+        } else {
+            d->p20 = (void *)D_L01_00161D48;
+            m->state = 7;
+        }
+        FUN_L00_002668a0(m, d);
+        break;
+    case 1:
+        if (FUN_L00_00266448(m, d)) {
+            FUN_L01_002783a8(m, 2.2f);
+            m->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L01_0015F5C4 == 2) break;
+        if (D_0014C050[m->bB0 + D_0015ED84 * 16] != 0xFF) {
+            FUN_L00_002502a0(m->bB0);
+            if (d->i4C != -1) {
+                char *t = D_L01_001600EC + d->i4C * 128;
+                FUN_L00_00284e50(t + 0x30, t + 0x70);
+            }
+        }
+        m->state = 1;
+        if (d->sub == 4) {
+            FUN_L00_002607d0(2);
+            FUN_L00_00262d38(2);
+            m->state = 3;
+            FUN_L01_0029b0a0((char *)m + 0x20, 1, m, 1, D_L01_001BAAA0);
+            FUN_0020b178(0, -1);
+        }
+        break;
+    case 3:
+        FUN_0020c828(m);
+        return;
+    case 4:
+        if (FUN_L00_00266448(m, d)) {
+            m->state = 5;
+            d->b8 = 0;
+        }
+        break;
+    case 5:
+        if (D_L01_0015F5C4 == 2) break;
+        if (d->h6 == 2) {
+            D_0013F350_w.f80 = 130.5f;
+            D_0013F350_w.f84 = 299.5f;
+            D_0013F350_w.f88 = 46.0f;
+            m->state = 6;
+        } else {
+            m->state = 4;
+        }
+        break;
+    case 6:
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *g = D_0013F3D0;
+        L01Player *q;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, g) < 8.0f &&
+            (q = (L01Player *)(g - 0x80), FUN_001fa688(m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) < 1.5707964f) {
+            if (FUN_001f9af0(g + 0x80) > 0.01f) d->moving_timer = FUN_001f96f8(120);
+            else FUN_001f9740(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, D_0013F420);
+        }
+        if (FUN_001f9740(&d->target_timer)) {
+            float heading;
+            d->target_timer = FUN_001fa6d0(FUN_001f96b0(FUN_002132a8(180.0f, 300.0f)));
+            heading = FUN_001fa580(m->yaw, FUN_002132a8(-90.0f, 90.0f) * 0.017453292f);
+            FUN_00214db0(d->target, 6.0f, heading, FUN_002132a8(0.0f, 30.0f) * 0.017453292f);
+            FUN_001f9a10(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, D_0013F420);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
+        yaw = FUN_001fa5c8(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f) yaw = 1.5707964f;
+        else if (yaw < -1.5707964f) yaw = -1.5707964f;
+        if (pitch > 0.5235988f) pitch = 0.5235988f;
+        else if (pitch < -0.5235988f) pitch = -0.5235988f;
+        d->yaw = yaw * 0.5f;
+        d->pitch = pitch * 1.25f;
+        d->head_yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0_b) d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->body, 0);
+    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, d->head, 1);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
@@ -224,7 +455,7 @@ extern void add_vector_xyz_87e0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8(f32 *);
 extern void FUN_001f9a40(f32 *, void *, void *, f32);
 extern void FUN_L00_002ea9d8(void *);
-extern u8 *D_L01_001600EC;
+extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
 extern u8 D_0013F350_87e0[] __asm__("D_0013F350");
 
 void FUN_L01_003087e0(char *moby) {
@@ -256,10 +487,10 @@ void FUN_L01_003087e0(char *moby) {
         m.z = FUN_001fa580_c(ang, 3.141590118408203f);
         m.y = f22 * -0.17000000178813934f;
     } else {
-        FUN_001f9a40(&v.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
-                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, f22);
+        FUN_001f9a40(&v.x, D_L01_001600EC_u + *(s32 *)(data + 4) * 128 + 0x30,
+                     D_L01_001600EC_u + *(s32 *)(data + 8) * 128 + 0x30, f22);
         {
-            u8 *base = D_L01_001600EC;
+            u8 *base = D_L01_001600EC_u;
 
             qcopy(&a, base + *(s32 *)(data + 4) * 128 + 0x70);
             qcopy(&b, base + *(s32 *)(data + 8) * 128 + 0x70);
