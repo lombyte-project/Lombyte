@@ -245,7 +245,109 @@ void FUN_L15_002eac90(char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb108.s", FUN_L15_002eb108);
+#include "sda.h"
+
+/* Builds and draws the animated ring of lights around a moby: 68 vertices and colours, then two passes of 68 texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F2BD8), where it is exact; names translated to the US level program. */
+
+typedef struct { float f[4]; } Quad4;
+
+typedef struct {
+    float prev;
+    float angle;
+} RingVars;
+
+extern Quad4 D_L15_00162170;
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L15_0016216C __attribute__((sda));
+extern float D_L15_001DDBA0[];
+extern float D_L15_001DDED0[][2];
+extern float D_L15_001DE200[];
+extern float D_L15_001DE530[][2];
+extern float FUN_001f96b0(float);
+extern float FUN_001f9988(float);
+extern float FUN_L00_00200260(float, float);
+extern float fast_add_rotations(float, float);
+extern float wrap_angle(float);
+extern float D_0015ED6C;
+extern int D_L15_0015F5CC;
+extern int D_L15_00162120[2] __attribute__((sda));
+extern int D_L15_00162140[2] __attribute__((sda));
+extern int D_L15_00162148[2] __attribute__((sda));
+extern int D_L15_00162150[1] __attribute__((sda));
+extern int D_L15_00162154 __attribute__((sda));
+extern int D_L15_00162158 __attribute__((sda));
+extern int D_L15_0016215C __attribute__((sda));
+extern float D_L15_00162160 __attribute__((sda));
+extern float D_L15_00162164 __attribute__((sda));
+extern float D_L15_00162168 __attribute__((sda));
+extern int D_L15_001DE750[];
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
+void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+
+void FUN_L15_002eb108(char *moby) {
+    unsigned int i = 0;
+    unsigned int off = 0;
+    RingVars *data = *(RingVars **)(moby + 0x78);
+    unsigned int n;
+    int j;
+    int k;
+    int color;
+    Quad4 t;
+    int r;
+    int g;
+    int b;
+    float scale;
+    Quad4 *p;
+    float *o;
+    scale = ConvertIntegerToFloat(D_L15_0015F5CC) * (D_L15_0016216C * D_0015ED6C);
+    vu1_add_g_sregister(6, get_effect_texture(D_L15_00162158));
+    vu1_add_g_sregister(0x42, ((long)D_L15_00162154 << 32) | 0x44);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    data->prev = data->angle;
+    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) * 0.017453292f * D_0015ED6C);
+    FUN_L00_00250320(moby, &r, &g, &b);
+    /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
+    p = (Quad4 *)&t.f[1];
+    color = (D_L15_0016215C << 24) | (b << 16) | (g << 8) | r;
+    o = D_L15_001DE200;
+    do {
+        float *s = &D_L15_001DDBA0[i * 3];
+        float x = s[0];
+        float y = s[1];
+        float rad = FUN_001f9988(x * x + y * y);
+        float a = FUN_L00_00200260(rad, D_L15_00162160);
+        float w = wrap_angle(a * 6.2831855f / D_L15_00162160);
+        float z = fast_sin(fast_add_rotations(w, data->angle));
+        o[0] = s[0] + *(float *)(moby + 0x10);
+        *(float *)((char *)D_L15_001DE200 + 4 + off) = s[1] + *(float *)(moby + 0x14);
+        o[2] = s[2] + *(float *)(moby + 0x18) + D_L15_00162168 * z;
+        D_L15_001DE750[i] = color;
+        i++;
+        off += 12;
+        o += 3;
+    } while (i < 68);
+    for (j = 0; j < 2; j++) {
+        for (n = 0; n < 68; n++) {
+            t = D_L15_00162170;
+            D_L15_001DE530[n][0] = D_L15_001DDED0[n][0] + FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
+            D_L15_001DE530[n][1] = D_L15_001DDED0[n][1] + FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+        }
+        font_queue_vu_state();
+        for (k = 0; k < 1; k++) {
+            FUN_L00_001fde98(D_L15_00162120[k], D_L15_00162140[k], D_L15_00162150[k], (void *)D_L15_00162148[k], 1);
+        }
+    }
+}
+
+
+
+#include "qcopy.h"
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002eb4c0.s", FUN_L15_002eb4c0);
 #define NOT_SDA __attribute__((section(".data")))
 
