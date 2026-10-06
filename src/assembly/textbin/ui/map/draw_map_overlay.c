@@ -362,9 +362,9 @@ void draw_map_overlay(void) {
                         (D_001A00F0.icons[i].flags & 3)) {
                         goto next_outer_icon;
                     }
-                    inner_offset = (i + 1) * sizeof(MapIcon);
-                    for (j = i + 1; !(D_001A00F0.icons[j].flags & 4);
-                         j++, inner_offset += sizeof(MapIcon)) {
+                    j = i + 1;
+                    inner_offset = j * sizeof(MapIcon);
+                    for (; !(D_001A00F0.icons[j].flags & 4); j++, inner_offset += sizeof(MapIcon)) {
                         pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                         if (pan_x <= 0)
                             continue;
