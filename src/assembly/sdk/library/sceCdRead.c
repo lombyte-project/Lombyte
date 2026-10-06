@@ -78,7 +78,7 @@ block_2:
     }
     goto block_9;
 block_7:
-    byteCount = (s32)(((u32)dwSectorCount << 3) * 0x123U);
+    byteCount = dwSectorCount * (dataPattern = 0x918);
     goto block_9;
 block_8:
     byteCount = dwSectorCount * 0x924;
