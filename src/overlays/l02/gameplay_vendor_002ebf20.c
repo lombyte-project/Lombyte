@@ -12,7 +12,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec228.s", FUN_L02_002ec228);
 #include "qcopy.h"
 
 /* UpdateMoby_1324: tutorial hint triggers around the player */
-/* Ported from rac1-decomp (PAL, src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EFCC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EFCC8), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int pad0;

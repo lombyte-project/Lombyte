@@ -293,7 +293,7 @@ void FUN_L18_002fad28(M2 *m) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FD058), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FD058), where it is exact; names translated to the US level program. */
 
 typedef unsigned int QVd058 __attribute__((mode(TI), aligned(16)));
 

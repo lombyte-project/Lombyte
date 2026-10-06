@@ -85,7 +85,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003180a0.s", FUN_L11_003180a0);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
 
 char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale);
 extern char D_L11_00161E18[] __attribute__((section(".sdata")));
@@ -822,7 +822,7 @@ char *FUN_L11_0031ada0(void *position, void *vector, void *owner, float scale) {
 #define MACRO_ADDR
 
 /* Bursts n1 sparks and n2 smoke puffs at the moby, the puffs sitting on the ground height. */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C2D8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C2D8), where it is exact; names translated to the US level program. */
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -977,7 +977,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e2f0.s", FUN_L11_0031e2f0);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
 
 extern char D_L11_00167680[];
 extern int D_L11_001625CC;

@@ -64,7 +64,7 @@ void FUN_L11_0030e730(int arg) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030FE40), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030FE40), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x57]; char f57; } Rec57;
 
@@ -354,7 +354,7 @@ float FUN_L11_00311a88(void *moby_v, void *o_v) {
 #define MACRO_ADDR
 
 /* counts the listed mobys of the type that are active, and of those the ones with 0x31 set */
-/* Ported from rac1-decomp (PAL, src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003130B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003130B0), where it is exact; names translated to the US level program. */
 
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];

@@ -497,7 +497,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002aee28.s", FUN_L14_002aee28);
 #define MACRO_ADDR
 
 /* Returns the farthest moby in a list that is not in the excluded-id table, by distance from a point. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0168), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0168), where it is exact; names translated to the US level program. */
 
 extern char D_L14_001674C0[];
 extern float FUN_001f9b80(void *, void *);
@@ -763,7 +763,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002bac78.s", FUN_L14_002bac78);
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
 
 typedef int u128_2BC560 __attribute__((mode(TI)));
 
@@ -821,7 +821,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d5f40.s", FUN_L14_002d5f40);
 #define MACRO_ADDR
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[4];
@@ -866,7 +866,7 @@ void FUN_L14_002d6358(char *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
 
 extern float ConvertIntegerToFloat(int);
 extern int *D_L14_001B0BB0[];
@@ -909,7 +909,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002d71f0.s", FUN_L14_002d71f0);
 #include "qcopy.h"
 
 /* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
-/* Ported from rac1-decomp (PAL, src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_00274948(void *, void *, int, void *);
 extern char D_L14_001674C0[];

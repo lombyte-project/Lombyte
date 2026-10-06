@@ -131,7 +131,7 @@ void FUN_L18_002f0848(char *moby) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F2AE0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F2AE0), where it is exact; names translated to the US level program. */
 
 typedef struct { int idx; char pad[0x2C]; } VEnt;
 
@@ -2267,7 +2267,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f7288.s", FUN_L18_002f7288);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8B00), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8B00), where it is exact; names translated to the US level program. */
 
 typedef unsigned int Q128 __attribute__((mode(TI), aligned(16)));
 typedef union { Q128 q; float v[4]; } QVec;
@@ -2625,7 +2625,7 @@ void FUN_L18_002f7c40(M1454 *m) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013F3D0[];

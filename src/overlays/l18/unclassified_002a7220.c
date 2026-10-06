@@ -569,7 +569,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d5348.s", FUN_L18_002d5348);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6878), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6878), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern float D_0015ED6C;
@@ -1036,7 +1036,7 @@ void FUN_L18_002d6600(char *moby) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7F48), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7F48), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x58]; char *base; char pad2[0x100]; } L18Glob;
 

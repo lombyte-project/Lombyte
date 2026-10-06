@@ -187,7 +187,7 @@ void FUN_L00_002bb400(unsigned char *m) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BC860), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BC860), where it is exact; names translated to the US level program. */
 
 typedef struct { float previous[4]; float point[4][4]; } SparkleRowC860;
 
@@ -362,7 +362,7 @@ void FUN_L00_002bbb00(void *o) {
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/vendor_002BA7C8.c: func_L00_002BCED0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BCED0), where it is exact; names translated to the US level program. */
 
 typedef float RW[4] __attribute__((aligned(16)));
 
