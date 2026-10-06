@@ -111,7 +111,7 @@ extern short D_L01_00161F14_d __asm__("D_L01_00161F14") __attribute__((sda));
 extern short D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
 extern short D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
 extern short D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
-extern void FUN_L01_00308550(char *);
+void FUN_L01_00308550(char *m);
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -136,7 +136,81 @@ void FUN_L01_00308380(char *moby) {
         FUN_L01_003089f0_u(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308550.s", FUN_L01_00308550);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Draws the moby's four pulsing glow rings between it and the camera, fading with distance. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309928), where it is exact; names translated to the US level program. */
+
+extern char D_L01_00167240[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern float compute_interpolated_record_value_alt(void) __asm__("FUN_0020c9e0");
+extern int FUN_001fa6e0(int, int, float);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern int D_L01_00161F3C __attribute__((sda));
+extern int D_L01_00161F40 __attribute__((sda));
+extern int D_L01_00161F48 __attribute__((sda));
+extern int D_L01_00161F4C __attribute__((sda));
+extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_00308550(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float dir[4];
+    float pos[4];
+    float step[4];
+    float scale = 1.0f;
+    int i;
+    float *ang;
+    float *spd;
+    int *tm;
+    float *sz;
+    if (((unsigned char *)m)[0x20] == 1) {
+        scale_vector_xyz(pos, m, 0.0009765625f);
+    } else {
+        FUN_L00_0024f7c8(m, 0, pos);
+        scale = (160.0f - func_0020D830_m(m)) / 160.0f * 16.0f;
+        if (1.0f < scale) scale = 1.0f;
+    }
+    subtract_vector_xyz(dir, D_L01_00167240, pos);
+    normalize_vector_xyz(dir, dir, -0.3f);
+    normalize_vector_xyz(step, dir, 0.1f);
+    add_vector_xyz(dir, dir, pos);
+    ang = (float *)(d + 0x20);
+    spd = (float *)(d + 0x30);
+    tm = (int *)(d + 0x40);
+    sz = (float *)(d + 0x50);
+    for (i = 0; i < 4; i++) {
+        float a = ang[i] + spd[i];
+        float t;
+        int c;
+        ang[i] = a;
+        if (255.0f <= a) {
+            ang[i] = a - 255.0f;
+        } else if (a <= 0.0f) {
+            ang[i] = a + 255.0f;
+        }
+        if (tick_countdown_32_alt((int *)(d + 0x40) + i)) {
+            tm[i] = scale_game_frames(0xFF);
+        }
+        t = ConvertIntegerToFloat(scale_game_frames(0xFF) - tm[i]) / (float)scale_game_frames(0xFF);
+        c = FUN_001fa6e0(D_L01_00161F3C, D_L01_00161F40, AbsoluteFloat(0.5f - t));
+        FUN_L00_00272f68(dir, c, func_001FA898_r(ang[i]), D_L01_00161F4C,
+                          D_L01_00161F48, 2, 0, sz[i] * scale);
+        add_vector_xyz(dir, dir, step);
+    }
+}
 typedef struct { f32 x, y, z, w; } V4_3087e0;
 
 #include "qcopy.h"
