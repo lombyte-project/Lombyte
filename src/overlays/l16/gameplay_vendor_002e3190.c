@@ -224,7 +224,22 @@ void FUN_L16_002e36e8(unsigned char *moby) {
         FUN_L00_00250df8(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e3770.s", FUN_L16_002e3770);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4BD8), where it is exact; names translated to the US level program. */
+
+void FUN_L16_002e3770(void *moby, int on) {
+    if (*(short *)((char *)moby + 0xA6) == 0x56B) {
+        if (on != 0) {
+            *(int *)((char *)moby + 0x94) = *(int *)(*(char **)((char *)moby + 0x24) + 0x10);
+        } else {
+            *(int *)((char *)moby + 0x94) = 0;
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e37a0.s", FUN_L16_002e37a0);
 
 
