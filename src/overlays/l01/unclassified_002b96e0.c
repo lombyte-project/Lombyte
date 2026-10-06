@@ -192,7 +192,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e6790.s", FUN_L01_002e6790);
 #include "qcopy.h"
 
 /* Birdbot update: follows its path, turns on and shoots at the hero, flees when hurt, and blows up when it dies or leaves the level. */
-/* Ported from rac1-decomp (PAL, src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002E7FC8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002E7FC8), where it is exact; names translated to the US level program. */
 
 
 typedef struct {

@@ -58,7 +58,7 @@ void FUN_L10_002e1cb0(unsigned char *moby) {
 #include "qcopy.h"
 
 /* Update for the toxic crab (moby class 1202): line-of-sight test, then a 13-state walk/chase/attack/death machine. */
-/* Ported from rac1-decomp (PAL, src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E30F8), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E30F8), where it is exact; names translated to the US level program. */
 
 typedef int u128_2E30F8 __attribute__((mode(TI)));
 

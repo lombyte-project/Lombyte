@@ -162,7 +162,7 @@ void FUN_L04_002ba448(char *arg, float f) {
 #include "qcopy.h"
 
 /* Update of the big axebot: hit reaction, state machine (idle, alert, path, chase, return home, swing, stagger, turn, death), knockback, gravity, and its axe moby. */
-/* Ported from rac1-decomp (PAL, src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB7B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB7B0), where it is exact; names translated to the US level program. */
 
 typedef int u128_B7B0 __attribute__((mode(TI)));
 

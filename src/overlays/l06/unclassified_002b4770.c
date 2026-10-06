@@ -462,7 +462,90 @@ void FUN_L06_002d9d10(unsigned char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9d10.s", FUN_L06_002e9d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e9ea0.s", FUN_L06_002e9ea0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3ad8.s", FUN_L06_002f3ad8);
+/* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
+
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern float fast_add_rotations(float, float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L06_00161D24_d __asm__("D_L06_00161D24") __attribute__((sda));
+extern short D_L06_00161D28_d __asm__("D_L06_00161D28") __attribute__((sda));
+extern void FUN_L06_002f3d70(char *);
+extern void FUN_L06_002f4130_c(char *) __asm__("FUN_L06_002f4130");
+extern void FUN_L06_002f4390_c(char *) __asm__("FUN_L06_002f4390");
+extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern char D_0013F3D0[];
+extern char D_0013E550[];
+extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
+
+void FUN_L06_002f3ad8(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float s;
+    if (*(int *)(d + 0x90) >= 0) {
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), *(int *)(d + 0x90)) != 0) {
+            float x = *(float *)&D_L06_00161D24_d;
+            float y = *(float *)&D_L06_00161D28_d;
+            *(float *)(d + 0x50) = x;
+            *(float *)(d + 0x54) = y;
+        } else {
+            *(int *)(d + 0x50) = 0;
+            *(int *)(d + 0x54) = 0;
+        }
+    }
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        if (*(int *)(d + 0x60) != 0) {
+            m[0x20] = 1;
+            *(float *)(d + 0x80) = 360.0f / *(float *)(d + 0x68) * 0.017453292f * D_0015ED6C;
+            *(float *)(d + 0x7C) = *(float *)(d + 0x6C) * 0.017453292f;
+            *(float *)(d + 0x84) = *(float *)(m + 0x48);
+        } else {
+            m[0x20] = 3;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x74) + *(float *)(d + 0x78) * 60.0f));
+        }
+        *(int *)(d + 0x94) = -1;
+        break;
+    case 1:
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        }
+        FUN_L06_002f3d70(m);
+        FUN_L06_002f4130_c(m);
+        s = *(float *)(d + 0x64) * 0.017453292f * fast_sin_c(*(float *)(d + 0x7C));
+        *(float *)(d + 0x7C) = fast_add_rotations(*(float *)(d + 0x7C), *(float *)(d + 0x80));
+        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
+        break;
+    case 2:
+        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+            *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
+        }
+        FUN_L06_002f3d70(m);
+        FUN_L06_002f4390_c(m);
+        if (tick_countdown_32_alt(d + 0x88) != 0) {
+            m[0x20] = 3;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x74) * 60.0f));
+            if (*(int *)(d + 0x94) != -1) {
+                char *e = ((char *)&D_0013E550) + *(int *)(d + 0x94) * 0x70;
+                if (*(char **)(e + 0x88) == m && ((unsigned char *)e)[0x74] != 0) {
+                    release_voice_slot(*(int *)(d + 0x94));
+                }
+            }
+            *(int *)(d + 0x94) = -1;
+        }
+        break;
+    case 3:
+        if (tick_countdown_32_alt(d + 0x88) != 0) {
+            m[0x20] = 2;
+            *(int *)(d + 0x88) = scale_game_frames(truncate_float_to_s32_c(*(float *)(d + 0x70) * 60.0f));
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 

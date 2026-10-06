@@ -176,7 +176,81 @@ void FUN_L00_00221ee0(void) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00222158.s", FUN_L00_00222158);
+/* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002228E0), where it is exact; names translated to the US level program. */
+
+extern char *D_L00_0015FFE4;
+extern float FUN_001f9b48(void *, void *);
+extern float FUN_L00_0020d6b0(void *, int *, float, float, float, float);
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1);
+extern char D_0013F3D0[];
+
+int FUN_L00_00222158(void) {
+    char *g0, *g, *gb, *g2, *g3;
+    char *m;
+    char *best;
+    char *q;
+    float bestd, d, a13, a14, a15, x;
+    int k;
+    int out;
+    float v[4];
+    float w[4];
+
+    g0 = (char *)((char *)&D_0013F350);
+    if (*(int *)(g0 + 0x208C) == 0xD) {
+        return *(int *)(g0 + 0x968);
+    }
+    best = 0;
+    bestd = 1e8f;
+    *(int *)(g0 + 0x968) = 0;
+    for (m = D_L00_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
+        if (*(short *)(m + 0xA6) != 0x2F6) continue;
+        if (*(unsigned short *)(m + 0x34) & 1) continue;
+        q = *(char **)(m + 0x78);
+        if (*(int *)q != 0) continue;
+        if (*(float *)(q + 0x20) != 0.0f && *(float *)(q + 0x20) < FUN_001f9b48((char *)((char *)&D_0013F3D0), m + 0x10)) continue;
+        g = (char *)((char *)&D_0013F350);
+        k = *(int *)(g + 0x2084);
+        a14 = 0.5235988f;
+        a15 = -1.0f;
+        if (k == 1 || k == 0x1E) {
+            a15 = 0.08726646f;
+            a14 = a15;
+        }
+        gb = (char *)((char *)&D_0013F350);
+        x = *(float *)(gb + 0x98);
+        if (*(int *)(gb + 0x208C) == 0xF) x = *(float *)(gb + 0x57C);
+        a13 = 30.0f;
+        if (*(float *)(q + 0x20) != 0.0f) a13 = *(float *)(q + 0x20);
+        d = FUN_L00_0020d6b0(m, &out, x, a13, a14, a15);
+        if (out != 0) continue;
+        gb += 0x80;
+        if (FUN_001f9b80(gb, m + 0x10) < 4.0f) continue;
+        if (*(unsigned char *)(m + 0x31) == 0) d += 10.0f;
+        if (*(int *)(q + 0x1C) >= 0 && is_point_inside_clip_volume(gb, *(int *)(q + 0x1C)) != 0) continue;
+        if (d < bestd) {
+            bestd = d;
+            best = m;
+        }
+    }
+    if (best != 0) {
+        char *bd;
+        g2 = (char *)((char *)&D_0013F350);
+        *(char **)(g2 + 0x964) = best;
+        qcopy(v, g2 + 0x80);
+        v[2] += 0.5f;
+        qcopy(w, best + 0x10);
+        bd = *(char **)(best + 0x78);
+        *(int *)(g2 + 0x978) = *(int *)(bd + 8);
+        *(float *)(g2 + 0x980) = *(float *)(bd + 4);
+        *(float *)(g2 + 0x984) = bestd;
+        if (FUN_001efa68(v, w, 2, 0, 0) == 0) {
+            *(int *)(g2 + 0x968) = 1;
+        }
+    }
+    g3 = (char *)((char *)&D_0013F350);
+    return *(int *)(g3 + 0x968);
+}
 
 #define NOT_SDA
 

@@ -46,7 +46,7 @@ s32 FUN_L00_001ed230(s32 id) {
 #include "qcopy.h"
 
 /* resets the camera behind the hero */
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED600), where it is exact; names translated to the US level program. */
 
 typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
 
@@ -92,7 +92,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ed358.s", FUN_L00_001ed358);
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
@@ -109,7 +109,7 @@ void FUN_L00_001ed580(float *o, float *v, void *m) {
 
 #define MACRO_ADDR
 
-/* Ported from rac1-decomp (PAL, src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
 
 typedef float W[4] __attribute__((aligned(16)));
 

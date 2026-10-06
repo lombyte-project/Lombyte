@@ -99,7 +99,70 @@ void FUN_L15_002c6900(char *m) {
     *(unsigned char *)(m + 0xA4) = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf110.s", FUN_L15_002cf110);
+#include "qcopy.h"
+
+/* Flocking step toward the moby's path target: separates from same-type mobys, keeps ~10 units off the
+ * target while others are closer, writes the steering point to out and returns the heading to follow. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002D0500), where it is exact; names translated to the US level program. */
+
+extern char *D_L15_0015FFE4;
+extern float FUN_001f9b80(void *, void *);
+extern void add_vector_xyz(void *, void *, void *);
+extern void clear_vector(void *);
+extern void normalize_vector_xyz(void *, void *, float);
+extern void scale_vector_xyz(void *, void *, float);
+extern void subtract_vector_xyz(void *dst, void *a, void *b);
+int FUN_L00_0025fcb8(char *a, char *o, float best);
+extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
+extern void func_001F9BC0_t(void *) __asm__("FUN_001f99f8");
+
+float FUN_L15_002cf110(void *m_, void *out, float r) {
+    char *m = m_;
+    float tmp[4];
+    float tgt[4];
+    float pad[4][4]; /* unused, but retail reserves the stack space */
+    float dist;
+    float wsum = 0.0f;
+    int clear = 1;
+    float k;
+    char *o;
+    func_L00_00260D30_t(m, tgt, r);
+    dist = FUN_001f9b80(m + 0x10, tgt);
+    func_001F9BC0_t(out);
+    for (o = D_L15_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
+        if (o == m) continue;
+        if (*(short *)(o + 0xA6) != *(short *)(m + 0xA6)) continue;
+        if (FUN_001f9b80(o + 0x10, m + 0x10) < 3.0f) {
+            wsum += 6.0f;
+            subtract_vector_xyz(tmp, m + 0x10, o + 0x10);
+            scale_vector_xyz(tmp, tmp, 6.0f);
+            add_vector_xyz(out, out, tmp);
+        }
+        if (FUN_001f9b80(o + 0x10, tgt) < dist) clear = 0;
+    }
+    if (clear == 0) {
+        subtract_vector_xyz(tmp, m + 0x10, tgt);
+        if (dist < 9.5f) {
+            k = 10.0f;
+        } else if (10.5f < dist) {
+            k = -10.0f;
+        } else {
+            k = 0.0f;
+        }
+        wsum += 10.0f;
+        normalize_vector_xyz(tmp, tmp, k * 10.0f);
+        add_vector_xyz(out, out, tmp);
+        scale_vector_xyz(out, out, 1.0f / wsum);
+        add_vector_xyz(out, out, m + 0x10);
+    } else {
+        qcopy(out, tgt);
+    }
+    if (FUN_001f9b80(m + 0x10, out) < 1.0f) {
+        qcopy(out, m + 0x10);
+        return FUN_001f9e90(tgt[0] - *(float *)(m + 0x10), tgt[1] - *(float *)(m + 0x14));
+    }
+    return FUN_001f9e90(((float *)out)[0] - *(float *)(m + 0x10), ((float *)out)[1] - *(float *)(m + 0x14));
+}
 
 #define NOT_SDA
 
@@ -108,7 +171,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cf110.s", FUN_L15_002cf110);
 #include "qcopy.h"
 
 /* Update function of the ultramech (moby class 491): waits for the player, follows its path, turns, fires and strafes, with jet particles while it moves. */
-/* Ported from rac1-decomp (PAL, src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002D0798), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002D0798), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -213,7 +276,7 @@ extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float FUN_L00_0025be00(void *, float, void *, float, float, float);
-extern float FUN_L15_002cf110(void *, void *, float);
+extern float FUN_L15_002cf110_u(void *, void *, float) __asm__("FUN_L15_002cf110");
 extern float compute_interpolated_record_value(void *);
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -519,7 +582,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
     case 7: {
         float ang = FUN_001f9e90(tgt->pos.f[0] - m->pos.f[0], tgt->pos.f[1] - m->pos.f[1]);
         if (d->w164 != 2) {
-            ang = FUN_L15_002cf110(m, &v20, d->f1B8);
+            ang = FUN_L15_002cf110_u(m, &v20, d->f1B8);
             if (FUN_001f9b80(&m->pos, &tgt->pos) < *(float *)&D_L15_00161B28) {
                 m->state = 8;
                 if (m->anim != 2) blend_moby_animation(m, 2, 0, scale_game_frames(0xA));

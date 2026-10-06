@@ -489,7 +489,7 @@ void FUN_L18_002f2b18(char *moby) {
 #include "qcopy.h"
 
 /* Update of the final boss robot (class 1422): one step of its state machine, then its bob, aim and tint. */
-/* Ported from rac1-decomp (PAL, src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F4050), where it is exact; names translated to the US level program. */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F4050), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x44];
