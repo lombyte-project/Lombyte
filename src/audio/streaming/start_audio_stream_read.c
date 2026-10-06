@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_D_001516D0 {
+struct Globals_001516D0 {
     u8 pad_0[0x8];
     s16 unk8;
     u8 pad_A[0x2];
@@ -8,7 +8,7 @@ struct M2c_D_001516D0 {
     s32 unk10;
     s32 unk14;
 };
-extern struct M2c_D_001516D0 D_001516D0;
+extern struct Globals_001516D0 D_001516D0;
 extern u8 D_001E8650[];
 extern s32 DebugPrint();
 extern s32 RaiseKernelTrap();

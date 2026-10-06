@@ -6,13 +6,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/rpc/sce_sif_init_cmd/sceSifInit
             sceSifInitCmd);
 #else
 #include "types.h"
-struct M2c_D_00154E40 {
+struct SifCmdPacket {
     u8 pad_0[0xC];
     s32 unkC;
     s32 unk10;
 };
 
-struct M2c_D_00154E58 {
+struct SifCmdState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -23,14 +23,14 @@ struct M2c_D_00154E58 {
     s32 unk1C;
 };
 
-struct M2c_D_00154E80 {
+struct SifCmdHandlerTable {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
 };
 
-struct M2c_var_3_42 {
+struct SifCmdHandlerEntry {
     s32 unk0;
     s32 unk4;
 };
@@ -40,10 +40,10 @@ extern void FUN_0011a448();
 extern u8 D_0012FC04[];
 extern u8 D_00154D80[];
 extern u8 D_00154E00[];
-extern struct M2c_D_00154E40 D_00154E40;
+extern struct SifCmdPacket D_00154E40;
 extern u32 D_00154E54[];
-extern struct M2c_D_00154E58 D_00154E58;
-extern struct M2c_D_00154E80 D_00154E80;
+extern struct SifCmdState D_00154E58;
+extern struct SifCmdHandlerTable D_00154E80;
 extern u8 D_00154F80[];
 extern s32 AddDmacHandler();
 extern s32 DIntr();
@@ -58,8 +58,8 @@ extern void _sceSifCmdIntrHdlr();
  * handshake. The cold path polls register 4 until bit 0x20000 is set. */
 void sceSifInitCmd(void) {
     u32 ipval;
-    struct M2c_var_3_42 *handler_entry;
-    struct M2c_var_3_42 *handlers;
+    struct SifCmdHandlerEntry *handler_entry;
+    struct SifCmdHandlerEntry *handlers;
     s32 *buf_word;
     s32 remote_reg;
     s32 temp_2_141;
@@ -82,7 +82,7 @@ block_3:
     D_00154E58.unk0 = temp_6_30;
     D_00154E58.unk4 = temp_5_29;
     D_00154E58.unk1C = D_00154F80;
-    handlers = (struct M2c_var_3_42 *)&D_00154E80;
+    handlers = (struct SifCmdHandlerEntry *)&D_00154E80;
     handler_entry = handlers;
     D_00154E58.unk8 = 0;
 

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "sda.h"
-struct M2c_D_0013D290 {
+struct SaveSlotTable {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0xA8];
@@ -14,7 +14,7 @@ struct M2c_D_0013D290 {
     s32 unkF4;
 };
 
-extern struct M2c_D_0013D290 D_0013D290;
+extern struct SaveSlotTable D_0013D290;
 extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_make_whole_save() __asm__("func_0020ABB0");

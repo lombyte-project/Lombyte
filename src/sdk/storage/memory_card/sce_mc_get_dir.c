@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_00159A00 {
+struct McRpcClient {
     u8 pad_0[0x24];
     s32 unk24;
 };
 
-struct M2c_D_00159AB0 {
+struct McGetDirRequest {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -16,8 +16,8 @@ struct M2c_D_00159AB0 {
 
 extern u32 D_00132DA8[];
 extern u32 D_00132DAC[];
-extern struct M2c_D_00159A00 D_00159A00;
-extern struct M2c_D_00159AB0 D_00159AB0;
+extern struct McRpcClient D_00159A00;
+extern struct McGetDirRequest D_00159AB0;
 extern u8 D_0015AFC0[];
 extern s32 PollSema();
 extern s32 SignalSema();

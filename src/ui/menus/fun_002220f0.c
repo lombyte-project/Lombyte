@@ -1,16 +1,16 @@
 #include "types.h"
-struct M2c_D_001D5BF4 {
+struct ModeRef {
     u8 pad_0[0x40];
-    struct M2c_temp_3_16 *unk40;
+    struct MenuListInfo *unk40;
 };
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x20];
     s32 unk20;
     s32 unk24;
 };
 
-struct M2c_temp_3_16 {
+struct MenuListInfo {
     u8 pad_0[0x34];
     s32 unk34;
     u8 pad_38[0x8];
@@ -23,7 +23,7 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
 extern s32 font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
-s32 FUN_002220f0(struct M2c_arg0 *menu) {
+s32 FUN_002220f0(struct MenuScreen *menu) {
     s32 height;
     s32 center_y;
     s32 temp_16_61;
@@ -37,9 +37,9 @@ s32 FUN_002220f0(struct M2c_arg0 *menu) {
     u32 temp_16_50;
     u32 width;
     u32 temp_17_75;
-    struct M2c_temp_3_16 *temp_3_16;
+    struct MenuListInfo *temp_3_16;
 
-    temp_3_16 = (*(struct M2c_D_001D5BF4 **)(void *)D_001D5BF4)->unk40;
+    temp_3_16 = (*(struct ModeRef **)(void *)D_001D5BF4)->unk40;
     temp_5_18 = temp_3_16->unk34;
     temp_20_22 = *(s32 *)((u8 *)((temp_3_16->unk40 * 0xC) + temp_5_18) + 0x4);
     setup_gif_paging(0);

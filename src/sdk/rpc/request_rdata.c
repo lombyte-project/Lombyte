@@ -8,7 +8,7 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct M2c_arg0 {
+struct RpcRdataRequest {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0x4];
@@ -17,7 +17,7 @@ struct M2c_arg0 {
     s32 unk24;
     s32 unk28;
 };
-struct M2c_temp_2_7 {
+struct RpcRdataPacket {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0x4];
@@ -26,10 +26,10 @@ struct M2c_temp_2_7 {
 };
 extern s32 GetRpcPacket();
 extern void isceSifSendCmd();
-void _request_rdata(struct M2c_arg0 *arg0, s32 arg1) {
+void _request_rdata(struct RpcRdataRequest *arg0, s32 arg1) {
     s32 a;
     s32 b;
-    struct M2c_temp_2_7 *packet;
+    struct RpcRdataPacket *packet;
     packet = GetRpcPacket(arg1);
     a = (s32)arg0->unk14;
     b = (s32)arg0->unk1C;

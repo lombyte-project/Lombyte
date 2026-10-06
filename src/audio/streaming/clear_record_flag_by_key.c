@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_rec {
+struct KeyedFlagRecord {
     s32 key;
     s32 flags;
 };
 
-extern struct M2c_rec D_001D60B8[];
+extern struct KeyedFlagRecord D_001D60B8[];
 s32 clear_record_flag_by_key(s32 arg0) __asm__("FUN_00225e20");
 
 s32 clear_record_flag_by_key(s32 arg0) {

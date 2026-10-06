@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct AudioDecoder {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x28];
@@ -22,9 +22,9 @@ struct M2c_D_001612BC;
 extern struct M2c_D_001612BC *D_001612BC;
 extern s32 snd_init_movie_sound() __asm__("FUN_0012f068");
 extern void func_001F9810();
-s32 audio_dec_create(struct M2c_arg0 *dec, s32 buffer, s32 buffer_size, s32 arg3) __asm__("FUN_0023abd0");
+s32 audio_dec_create(struct AudioDecoder *dec, s32 buffer, s32 buffer_size, s32 arg3) __asm__("FUN_0023abd0");
 
-s32 audio_dec_create(struct M2c_arg0 *dec, s32 buffer, s32 buffer_size, s32 arg3) {
+s32 audio_dec_create(struct AudioDecoder *dec, s32 buffer, s32 buffer_size, s32 arg3) {
     s32 movie_handle;
     s32 three;
     s32 four;

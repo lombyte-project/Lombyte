@@ -1,12 +1,12 @@
 #include "types.h"
 
-struct M2c_D_00137B80 {
+struct Globals_00137B80 {
     u8 pad_0[0x8];
     s32 unk8;
     s32 unkC;
 };
 
-extern struct M2c_D_00137B80 D_00137B80;
+extern struct Globals_00137B80 D_00137B80;
 extern u8 D_001AABC0[];
 extern void load_pif_as_psmt8_h() __asm__("func_001E9168");
 extern s32 load() __asm__("func_00216828");

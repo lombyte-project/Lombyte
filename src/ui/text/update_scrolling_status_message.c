@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_001E63C0 {
+struct ScrollingStatus {
     u8 pad_0[0x2C];
     s32 unk2C;
     u8 pad_30[0x14];
@@ -7,7 +7,7 @@ struct M2c_D_001E63C0 {
 };
 
 extern u8 D_001E5FB8[];
-extern struct M2c_D_001E63C0 D_001E63C0;
+extern struct ScrollingStatus D_001E63C0;
 extern s32 draw_framebuffer_rect() __asm__("func_001FB8F0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 random_integer_below() __asm__("func_00213260");

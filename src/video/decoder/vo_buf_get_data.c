@@ -1,14 +1,14 @@
 #include "types.h"
-struct M2c_arg0 {
+struct VoBuf {
     s32 unk0;
     u8 pad_4[0x4];
     s32 unk8;
 };
 
 extern s32 FUN_0023d1f8();
-s32 vo_buf_get_data(struct M2c_arg0 *arg0) __asm__("FUN_0023d288");
+s32 vo_buf_get_data(struct VoBuf *arg0) __asm__("FUN_0023d288");
 
-s32 vo_buf_get_data(struct M2c_arg0 *arg0) {
+s32 vo_buf_get_data(struct VoBuf *arg0) {
     if (FUN_0023d1f8() != 0) {
         return 0;
     }

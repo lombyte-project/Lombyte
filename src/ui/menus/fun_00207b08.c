@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_001A00F0 {
+struct UiGlobals {
     u8 pad_0[0xC];
     s32 unkC;
     u8 pad_10[0x4];
@@ -10,7 +10,7 @@ struct M2c_D_001A00F0 {
 
 extern s32 D_0013D560[];
 extern s32 D_0015ED84;
-extern struct M2c_D_001A00F0 D_001A00F0;
+extern struct UiGlobals D_001A00F0;
 extern void FillTransferWords();
 extern s32 func_001FA860();
 extern void func_00208030();

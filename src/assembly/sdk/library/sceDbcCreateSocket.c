@@ -5,7 +5,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/sceDbcCreateSocket/sceD
             sceDbcCreateSocket);
 #else
 #include "types.h"
-struct M2c_D_0015B080 {
+struct DbcRpcBuffer {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -16,7 +16,7 @@ struct M2c_D_0015B080 {
     s32 unk28;
     s32 unk2C;
 };
-struct M2c_arg0 {
+struct DbcSocketParams {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -25,11 +25,11 @@ struct M2c_arg0 {
 };
 extern u8 D_00153578[];
 extern u8 D_0015B008[];
-extern struct M2c_D_0015B080 D_0015B080;
+extern struct DbcRpcBuffer D_0015B080;
 extern s32 sceSifCallRpc();
 extern s32 debug_print_stub() __asm__("func_00124A20");
-s32 sceDbcCreateSocket(struct M2c_arg0 *arg0, s32 arg1, s32 arg2) {
-    struct M2c_D_0015B080 *state = &D_0015B080;
+s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
+    struct DbcRpcBuffer *state = &D_0015B080;
     u8 *src = (u8 *)arg0 + 0x14;
     s32 i;
     s32 even;

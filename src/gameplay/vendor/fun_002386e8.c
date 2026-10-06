@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_001E63C0 {
+struct HudMenuState {
     u8 pad_0[0x4];
     s32 unk4;
     u8 pad_8[0x44];
@@ -10,13 +10,13 @@ struct M2c_D_001E63C0 {
     s32 unk210;
 };
 
-struct M2c_1863D0_ent {
+struct HudItemEntry {
     u8 pad_0[0x38];
     u16 unk38;
 };
 
 extern u8 D_001863D0[];
-extern struct M2c_D_001E63C0 D_001E63C0;
+extern struct HudMenuState D_001E63C0;
 extern s32 SubtractIntegerWithClamp();
 extern void draw_framebuffer_rect() __asm__("func_001FB8F0");
 extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
@@ -51,7 +51,7 @@ void FUN_002386e8(void) {
             do {
                 item = (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
                 temp_4_73 =
-                    ((struct M2c_1863D0_ent *)(void *)((u8 *)D_001863D0 + item[-1] * 0x4C))
+                    ((struct HudItemEntry *)(void *)((u8 *)D_001863D0 + item[-1] * 0x4C))
                         ->unk38;
                 if (item[0] == 1) {
                     frame_index = find_valid_animation_frame_index(temp_4_73, 2);
@@ -84,7 +84,7 @@ void FUN_002386e8(void) {
                 ((s32)((D_001E63C0.unk210 * 2) + var_17_145 + temp_58_3) % (s32)D_001E63C0.unk210) *
                 0x14;
             temp_4_170 =
-                ((struct M2c_1863D0_ent *)(void *)((u8 *)D_001863D0 +
+                ((struct HudItemEntry *)(void *)((u8 *)D_001863D0 +
                                                    *(s32 *)(void *)(temp_3_162 +
                                                                     ((u8 *)&D_001E63C0 + 0xD0)) *
                                                        0x4C))

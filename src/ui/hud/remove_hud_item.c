@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_00199B60 {
+struct HudSlotArray {
     u8 pad_0[0x64];
     s32 unk64;
 };
 
-extern struct M2c_D_00199B60 D_00199B60;
+extern struct HudSlotArray D_00199B60;
 extern s32 queue_animation_update(s32 item, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                                   s32 arg6) __asm__("func_001FF308");
 

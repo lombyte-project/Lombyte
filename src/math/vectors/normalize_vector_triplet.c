@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_temp3 {
+struct Vec3Padded {
     f32 values[3];
     s32 pad;
 };
@@ -10,7 +10,7 @@ extern void func_001F9BF8(f32 *, f32 *, f32);
 void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
 
 void normalize_vector_triplet(f32 *arg0) {
-    struct M2c_temp3 scratch;
+    struct Vec3Padded scratch;
     f32 *base;
     f32 *src;
     f32 *dst;

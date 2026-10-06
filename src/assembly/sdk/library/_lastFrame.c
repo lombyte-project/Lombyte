@@ -13,7 +13,7 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x118];
     s32 unk118;
     u8 pad_11C[0x4];
@@ -30,10 +30,10 @@ struct M2c_arg0 {
     s32 unk1DC;
 };
 extern u8 D_00153AB8[];
-extern s32 _Error(struct M2c_arg0 *, u8 *, s32);
-extern s32 _dispRefImage(struct M2c_arg0 *, s32, s32, s32);
-extern s32 _dispRefImageField(struct M2c_arg0 *, s32, s32, s32);
-void _lastFrame(struct M2c_arg0 *arg0) {
+extern s32 _Error(struct MpegDecoder *, u8 *, s32);
+extern s32 _dispRefImage(struct MpegDecoder *, s32, s32, s32);
+extern s32 _dispRefImageField(struct MpegDecoder *, s32, s32, s32);
+void _lastFrame(struct MpegDecoder *arg0) {
     s32 count;
     count = arg0->unk118;
     if (arg0->unk120 != 0) {

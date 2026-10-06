@@ -6,14 +6,14 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-struct M2c_D_00130310 {
+struct SyscallMidTable {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
 };
 extern u32 D_00130308[];
-extern struct M2c_D_00130310 D_00130310;
+extern struct SyscallMidTable D_00130310;
 extern s32 InvokeKernelSyscall0083_Rfu();
 extern s32 Rfu116SetSyscallMid();
 extern void FindKernelAddress();

@@ -18,7 +18,7 @@ typedef volatile u64 vu64;
 typedef float f32;
 typedef double f64;
 typedef s32 b32;
-struct M2c_D_0013C940 {
+struct PadState {
     u8 pad_0[0x1A4];
     s32 unk1A4;
     u8 pad_1A8[0xC];
@@ -26,7 +26,7 @@ struct M2c_D_0013C940 {
     u8 pad_1B8[0xC];
     s32 unk1C4;
 };
-struct M2c_D_0013D290 {
+struct SaveSlotTable {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x8];
@@ -38,29 +38,29 @@ struct M2c_D_0013D290 {
     u8 pad_E0[0x4];
     s32 unkE4;
 };
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0x4];
-    struct M2c_D_001D5BF0_unk4 *unk4;
+    struct ModeEntry *unk4;
     s32 unk8;
     u8 pad_C[0xC4];
-    struct M2c_D_001D5BF0_unkD0 *unkD0;
+    struct ModeTarget *unkD0;
     s32 unkD4;
     u8 pad_D8[0x4C];
     s32 unk124;
     s32 unk128;
     s32 unk12C;
 };
-struct M2c_D_001D5BF0_unk4 {
+struct ModeEntry {
     u8 pad_0[0x38];
     s32 unk38;
     u8 pad_3C[0x4];
     s32 unk40;
 };
-struct M2c_D_001D5BF0_unkD0 {
+struct ModeTarget {
     u8 pad_0[0x84];
     s32 unk84;
 };
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0x18];
@@ -74,9 +74,9 @@ struct M2c_arg0 {
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
-extern struct M2c_D_0013C940 D_0013C940;
+extern struct PadState D_0013C940;
 extern Unaligned64 D_0015EE98[1];
-extern struct M2c_D_0013D290 D_0013D290;
+extern struct SaveSlotTable D_0013D290;
 extern s32 D_0015ED84;
 extern s32 D_0015ED98;
 extern s32 D_0015EE20;
@@ -86,13 +86,13 @@ extern s32 D_0015EEB0;
 extern s32 D_0015EEB4;
 extern u8 D_001D2578[];
 extern s32 D_001D2640[];
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct Globals_001D5BF0 D_001D5BF0;
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 prepare_save_game() __asm__("FUN_002269c0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 saving_data_menu(struct M2c_arg0 *menu) __asm__("FUN_00222f88");
+s32 saving_data_menu(struct MenuScreen *menu) __asm__("FUN_00222f88");
 
-s32 saving_data_menu(struct M2c_arg0 *menu) {
+s32 saving_data_menu(struct MenuScreen *menu) {
     u8 *new_var;
     s32 *temp_2_126;
     s32 prev_slot;

@@ -1,18 +1,18 @@
 #include "types.h"
 
-struct M2c_D_0013F350 {
+struct GameState {
     u8 pad_0[0x12E4];
     u8 unk12E4;
     u8 pad_12E5[0xDA7];
     s32 unk208C;
 };
 
-extern struct M2c_D_0013F350 D_0013F350;
+extern struct GameState D_0013F350;
 extern s32 D_001A03A8[];
 extern s32 func_00208818();
 
 s32 FUN_00206e18(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {
-    struct M2c_D_0013F350 *s = &D_0013F350;
+    struct GameState *s = &D_0013F350;
     s32 a = s->unk208C == 17 || s->unk208C == 18 || s->unk12E4 == 1;
 
     if (func_00208818(px, py, 0x93, 0x168, 0x182, 0x168) != 0 && py >= 0x135 &&

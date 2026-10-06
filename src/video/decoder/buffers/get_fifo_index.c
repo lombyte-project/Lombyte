@@ -1,13 +1,13 @@
 #include "types.h"
-struct M2c_arg0 {
+struct VideoStream {
     s32 unk0;
     s32 unk4;
     s32 unk8;
 };
 
-u32 get_fifo_index(struct M2c_arg0 *fifo, s32 dma_address) __asm__("FUN_0023baf8");
+u32 get_fifo_index(struct VideoStream *fifo, s32 dma_address) __asm__("FUN_0023baf8");
 
-u32 get_fifo_index(struct M2c_arg0 *fifo, s32 dma_address) {
+u32 get_fifo_index(struct VideoStream *fifo, s32 dma_address) {
     if (dma_address == (((fifo->unk8 * 0x10) + fifo->unk4 + 0x10) & 0x0FFFFFFF)) {
         return 0U;
     }

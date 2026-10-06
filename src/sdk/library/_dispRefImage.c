@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x80];
     s32 unk80;
     u8 pad_84[0x4];
@@ -15,10 +15,10 @@ struct M2c_arg0 {
     s32 unkCC;
     s32 unkD0;
     u8 pad_D4[0x784];
-    struct M2c_temp_7_14 *unk858;
+    struct MpegDisplayState *unk858;
 };
 
-struct M2c_arg1 {
+struct MpegRefImage {
     u8 pad_0[0x28];
     s32 unk28;
     u8 pad_2C[0x18];
@@ -32,7 +32,7 @@ struct M2c_arg1 {
     s32 unk60;
 };
 
-struct M2c_temp_7_14 {
+struct MpegDisplayState {
     u8 pad_0[0x10];
     s32 unk10;
     u8 pad_14[0xC];
@@ -44,9 +44,9 @@ extern s32 _cpr8();
 extern s32 _csc_storeRefImage();
 extern s32 _getPtsDtsFlags();
 extern s32 _isOutSizeOK();
-void _dispRefImage(struct M2c_arg0 *decoder, struct M2c_arg1 *arg1) {
+void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *arg1) {
     u64 temp_6_28;
-    struct M2c_temp_7_14 *ref_info;
+    struct MpegDisplayState *ref_info;
     s32 *temp_7_9;
 
     temp_7_9 = decoder->unk858;

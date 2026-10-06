@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x44];
     s32 unk44;
     s32 unk48;
@@ -9,7 +9,7 @@ struct M2c_arg0 {
 };
 
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
-s32 FUN_0021fd78(struct M2c_arg0 *menu) {
+s32 FUN_0021fd78(struct MenuScreen *menu) {
     menu->unk48 = complete_stream_buffer_transfer(menu->unk48);
     menu->unk4C = complete_stream_buffer_transfer(menu->unk4C);
     menu->unk50 = -1;

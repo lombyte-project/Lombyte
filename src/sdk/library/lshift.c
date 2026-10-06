@@ -21,7 +21,7 @@
 
 #include "types.h"
 
-struct M2c_Bigint {
+struct Bigint {
     s32 _next;
     s32 _k;
     s32 _maxwds;
@@ -30,15 +30,15 @@ struct M2c_Bigint {
     u32 _x[1];
 };
 
-extern struct M2c_Bigint *_Balloc(s32, s32);
+extern struct Bigint *_Balloc(s32, s32);
 extern s32 InsertLinkObject();
 
-struct M2c_Bigint *_lshift(s32 arg0, struct M2c_Bigint *arg1, s32 arg2) {
+struct Bigint *_lshift(s32 arg0, struct Bigint *arg1, s32 arg2) {
     s32 i;
     s32 k1;
     s32 n;
     s32 n1;
-    struct M2c_Bigint *b1;
+    struct Bigint *b1;
     u32 *x;
     u32 *x1;
     u32 *xe;

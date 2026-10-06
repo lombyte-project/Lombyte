@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x840];
     s32 unk840;
     s32 unk844;
@@ -11,7 +11,7 @@ extern s32 _Error();
 extern s32 _nextBit();
 extern s32 _sendIpuCommand();
 extern s32 _waitIpuIdle();
-void _quantMatrixExtension(struct M2c_arg0 *mpeg) {
+void _quantMatrixExtension(struct MpegDecoder *mpeg) {
     s32 temp_2_20;
     s32 temp_2_7;
 

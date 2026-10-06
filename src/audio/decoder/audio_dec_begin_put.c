@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct AudioDecoder {
     s32 unk0;
     s32 unk4;
     u8 pad_8[0x28];
@@ -10,10 +10,10 @@ struct M2c_arg0 {
     s32 unk40;
 };
 
-void audio_dec_begin_put(struct M2c_arg0 *dec, void **ptr1, s32 *size1, void **ptr2,
+void audio_dec_begin_put(struct AudioDecoder *dec, void **ptr1, s32 *size1, void **ptr2,
                          s32 *size2) __asm__("FUN_0023ad58");
 
-void audio_dec_begin_put(struct M2c_arg0 *dec, void **ptr1, s32 *size1, void **ptr2, s32 *size2) {
+void audio_dec_begin_put(struct AudioDecoder *dec, void **ptr1, s32 *size1, void **ptr2, s32 *size2) {
     s32 t2;
 
     if (dec->unk0 == 0) {
@@ -43,5 +43,5 @@ void audio_dec_begin_put(struct M2c_arg0 *dec, void **ptr1, s32 *size1, void **p
         }
     }
 }
-extern void func_0023AD58(struct M2c_arg0 *, void **, s32 *, void **, s32 *)
+extern void func_0023AD58(struct AudioDecoder *, void **, s32 *, void **, s32 *)
     __attribute__((alias("FUN_0023ad58")));

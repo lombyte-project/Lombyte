@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-struct M2c_D_00154A50 {
+struct TtyState {
     volatile s32 unk0; /* deci2 handle from sceDeci2Open */
     volatile s32 unk4; /* published payload length */
     volatile s32 unk8;
@@ -23,7 +23,7 @@ struct Mmio {
     u8 data[0xF4]; /* payload window, addressed at block + 0xC */
 };
 
-extern struct M2c_D_00154A50 D_00154A50;
+extern struct TtyState D_00154A50;
 extern u8 D_00154A80[];
 extern s32 CallDebugCharacter(s32, s32);
 extern s32 DIntr();

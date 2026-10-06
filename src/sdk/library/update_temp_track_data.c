@@ -6,7 +6,7 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x150];
     s32 unk150;
     u8 pad_154[0x58];
@@ -16,7 +16,7 @@ struct M2c_arg0 {
     s32 unk850;
     s32 unk854;
 };
-void UpdateTempTrackData(struct M2c_arg0 *arg0, s32 delta) {
+void UpdateTempTrackData(struct MpegDecoder *arg0, s32 delta) {
     s32 temp_2_30;
     s32 temp_3_21;
     s32 temp_4_32;

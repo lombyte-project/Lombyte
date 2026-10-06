@@ -1,12 +1,12 @@
 #include "types.h"
 
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0xDC];
     s32 unkDC;
     s32 unkE0;
     s32 unkE4;
 };
-struct M2c_arg1 {
+struct MpegOutputSize {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
@@ -17,11 +17,11 @@ extern u8 D_00153980[];
 extern s32 _Error(void *a, void *b);
 extern s32 sprintf(char *d, char *f, ...);
 
-s32 _isOutSizeOK(struct M2c_arg0 *arg0, struct M2c_arg1 *arg1) {
+s32 _isOutSizeOK(struct MpegDecoder *arg0, struct MpegOutputSize *arg1) {
     char sp_slot[0x100];
     s32 t;
     int new_var2;
-    struct M2c_arg1 *new_var;
+    struct MpegOutputSize *new_var;
     s32 s1;
     t = arg0->unkE0;
     if (t != 0) {

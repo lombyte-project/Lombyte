@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_00137B80 {
+struct Globals_00137B80 {
     u8 pad_0[0x12C0];
     s32 unk12C0;
     s32 unk12C4;
@@ -7,7 +7,7 @@ struct M2c_D_00137B80 {
 
 extern u8 D_0010E4C0[];
 extern void count_vsync() __asm__("FUN_0012f1c8");
-extern struct M2c_D_00137B80 D_00137B80;
+extern struct Globals_00137B80 D_00137B80;
 extern s32 D_0015ED80;
 extern s32 D_0015ED88;
 extern s32 D_0015EE90;

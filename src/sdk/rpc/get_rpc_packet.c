@@ -1,14 +1,14 @@
 #include "types.h"
-struct M2c_arg0 {
+struct RpcPacketQueue {
     u8 pad_0[0x14];
     s32 unk14;
     s32 unk18;
     u8 pad_1C[0x8];
     s32 unk24;
 };
-s32 GetRpcPacket(struct M2c_arg0 *queue) {
-    struct M2c_arg0 *alias;
-    struct M2c_arg0 *store;
+s32 GetRpcPacket(struct RpcPacketQueue *queue) {
+    struct RpcPacketQueue *alias;
+    struct RpcPacketQueue *store;
     s32 remainder;
     s32 scaled;
     alias = queue;

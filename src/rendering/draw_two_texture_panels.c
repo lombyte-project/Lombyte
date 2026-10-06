@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct TexturePanelScreen {
     u8 pad_0[0x44];
     s32 unk44;
     s32 unk48;
@@ -10,9 +10,9 @@ extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void draw_textured_quad() __asm__("func_001F5450");
 extern s64 func_00204CF0();
-s32 draw_two_texture_panels(struct M2c_arg0 *screen) __asm__("FUN_00220790");
+s32 draw_two_texture_panels(struct TexturePanelScreen *screen) __asm__("FUN_00220790");
 
-s32 draw_two_texture_panels(struct M2c_arg0 *screen) {
+s32 draw_two_texture_panels(struct TexturePanelScreen *screen) {
     s64 modulate_color;
 
     if (screen->unk44 < 4) {

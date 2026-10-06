@@ -6,7 +6,7 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-struct M2c_D_0013D290 {
+struct SaveSlotTable {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0xC8];
@@ -14,27 +14,27 @@ struct M2c_D_0013D290 {
     u8 pad_D8[0x4];
     s32 unkDC;
 };
-struct M2c_D_001D5BF4 {
+struct ModeRef {
     u8 pad_0[0x40];
-    struct M2c_D_001D5BF4_unk40 *unk40;
+    struct MenuObject *unk40;
 };
-struct M2c_D_001D5BF4_unk40 {
+struct MenuObject {
     u8 pad_0[0x40];
     s32 unk40;
 };
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x20];
     s32 unk20;
     s32 unk24;
 };
-extern struct M2c_D_0013D290 D_0013D290;
-extern struct M2c_D_001D5BF4 *D_001D5BF4[];
+extern struct SaveSlotTable D_0013D290;
+extern struct ModeRef *D_001D5BF4[];
 extern u8 D_001DDD40[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
 extern s32 font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
-s32 FUN_00222d98(struct M2c_arg0 *menu) {
+s32 FUN_00222d98(struct MenuScreen *menu) {
     s32 center_y;
     s32 temp_16_80;
     s32 temp_17_21;
@@ -45,7 +45,7 @@ s32 FUN_00222d98(struct M2c_arg0 *menu) {
     u32 temp_16_56;
     u32 temp_16_74;
     u32 width;
-    struct M2c_D_0013D290 *base;
+    struct SaveSlotTable *base;
     base = &D_0013D290;
     temp_17_21 = *((s32 *)((((u8 *)base) - (-(D_001D5BF4[0]->unk40->unk40 * 0x1C))) + 0x20));
     setup_gif_paging(0);

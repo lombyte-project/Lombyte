@@ -1,11 +1,11 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x34];
-    struct M2c_temp_16_13 *unk40;
+    struct MpegPictureContext *unk40;
 };
-struct M2c_temp_16_13 {
+struct MpegPictureContext {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
@@ -18,15 +18,15 @@ struct M2c_temp_16_13 {
     u8 pad_124[0x50];
     s32 unk174;
 };
-extern s32 _decPicture(struct M2c_temp_16_13 *a0);
-extern void _dispatchMpegCbNodata(struct M2c_arg0 *a0);
-extern void _outputFrame(struct M2c_temp_16_13 *a0, s32 a1, s32 a2);
-extern s32 _updateRefImage(struct M2c_temp_16_13 *a0, s32 a1);
-s32 _decodeOrSkipFrame(struct M2c_arg0 *decoder, s32 arg1, s32 arg2) {
+extern s32 _decPicture(struct MpegPictureContext *a0);
+extern void _dispatchMpegCbNodata(struct MpegDecoder *a0);
+extern void _outputFrame(struct MpegPictureContext *a0, s32 a1, s32 a2);
+extern s32 _updateRefImage(struct MpegPictureContext *a0, s32 a1);
+s32 _decodeOrSkipFrame(struct MpegDecoder *decoder, s32 arg1, s32 arg2) {
     s32 ret;
     s32 flag;
     s32 t;
-    struct M2c_temp_16_13 *tmp;
+    struct MpegPictureContext *tmp;
     flag = 0;
     tmp = decoder->unk40;
     if ((arg2 == -1) || (arg1 < arg2)) {

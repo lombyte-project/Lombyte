@@ -1,12 +1,12 @@
 #include "types.h"
-struct M2c_D_0013F350 {
+struct GameState {
     u8 pad_0[0x12E4];
     u8 unk12E4;
     u8 pad_12E5[0xDA7];
     s32 unk208C;
 };
 
-extern struct M2c_D_0013F350 D_0013F350;
+extern struct GameState D_0013F350;
 extern s32 func_00208818();
 s32 FUN_002073b8(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 var_4_15;

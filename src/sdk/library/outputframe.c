@@ -1,7 +1,7 @@
 #include "asm.h"
 
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0xF8];
     s32 unkF8;
     u8 pad_FC[0x54];
@@ -20,9 +20,9 @@ struct M2c_arg0 {
     s32 unk1E4;
 };
 
-extern s32 _dispRefImage(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2);
-extern s32 _dispRefImageField(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2, s32 arg3);
-void _outputFrame(struct M2c_arg0 *mpeg, s32 arg1, s32 arg2) {
+extern s32 _dispRefImage(struct MpegDecoder *mpeg, s32 arg1, s32 arg2);
+extern s32 _dispRefImageField(struct MpegDecoder *mpeg, s32 arg1, s32 arg2, s32 arg3);
+void _outputFrame(struct MpegDecoder *mpeg, s32 arg1, s32 arg2) {
     s32 var_5_14;
     s32 var_5_24;
     s32 var_6_27;

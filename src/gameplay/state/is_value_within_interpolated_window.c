@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct InterpolatedAnim {
     u8 pad_0[0x58];
     f32 unk58;
     f32 unk5C;
@@ -7,9 +7,9 @@ struct M2c_arg0 {
 
 extern f32 compute_interpolated_record_value() __asm__("func_0020C9E0");
 extern f32 round_float_to_decimal_places(s32, f32) __asm__("func_00214C48");
-s32 is_value_within_interpolated_window(struct M2c_arg0 *anim, f32 value) __asm__("FUN_00214cc8");
+s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 value) __asm__("FUN_00214cc8");
 
-s32 is_value_within_interpolated_window(struct M2c_arg0 *anim, f32 value) {
+s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 value) {
     f32 interp_value;
     f32 window;
     f32 diff;

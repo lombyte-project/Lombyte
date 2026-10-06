@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_temp_3_10 {
+struct MobyRecord {
     u8 pad_0[0x20];
     u8 unk20;
     u8 pad_21[0x31];
@@ -12,7 +12,7 @@ void prune_moby_references(void) __asm__("FUN_0020cc60");
 void prune_moby_references(void) {
     s32 remaining;
     void **slot;
-    struct M2c_temp_3_10 *moby;
+    struct MobyRecord *moby;
     s32 mask = 0xFF;
 
     slot = D_001B2BC0;

@@ -6,12 +6,12 @@ struct Pair8 {
     s32 a;
     s32 b;
 };
-struct M2c_D_00137B80 {
+struct Globals_00137B80 {
     u8 pad_0[0x2C8];
     struct Pair8 e2C8[6];
     struct Pair8 e2F8[1];
 };
-extern struct M2c_D_00137B80 D_00137B80;
+extern struct Globals_00137B80 D_00137B80;
 extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED88;
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");

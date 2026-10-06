@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct VoBuf {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
@@ -8,9 +8,9 @@ struct M2c_arg0 {
 };
 
 extern s32 func_0023D2C8();
-s32 vo_buf_get_tag(struct M2c_arg0 *vo_buf) __asm__("FUN_0023d2d8");
+s32 vo_buf_get_tag(struct VoBuf *vo_buf) __asm__("FUN_0023d2d8");
 
-s32 vo_buf_get_tag(struct M2c_arg0 *vo_buf) {
+s32 vo_buf_get_tag(struct VoBuf *vo_buf) {
     s32 ring_size;
     s32 unk8;
     s32 unkC;

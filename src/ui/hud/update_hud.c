@@ -1,12 +1,12 @@
 #include "types.h"
 
-struct M2c_D_0019A3E8 {
+struct HudState {
     u8 pad_0[0xC];
     s32 unkC;
     u8 pad_10[0x20];
     s32 unk30;
 };
-struct M2c_var_16_23 {
+struct HudSlot {
     u8 pad_0[0x18];
     s32 unk18;
 };
@@ -18,7 +18,7 @@ extern s32 D_0015F688;
 extern u8 D_001993D8[];
 extern u8 D_00199428[];
 extern u8 D_00199B60[];
-extern struct M2c_D_0019A3E8 D_0019A3E8;
+extern struct HudState D_0019A3E8;
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
@@ -49,7 +49,7 @@ block_5:
     D_0019A3E8.unkC = 0xFFFFF0;
     remaining = 0xC;
 loop_6:
-    update_fn = ((struct M2c_var_16_23 *)slot)->unk18;
+    update_fn = ((struct HudSlot *)slot)->unk18;
 
     if (update_fn == 0) {
         goto block_8;

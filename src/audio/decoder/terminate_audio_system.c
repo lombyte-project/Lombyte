@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_0016120C {
+struct AudioSystemState {
     u8 pad_0[0xD90F8];
     s32 unkD90F8;
     s32 unkD90FC;
 };
-extern struct M2c_D_0016120C *D_0016120C;
+extern struct AudioSystemState *D_0016120C;
 extern s32 D_00161210;
 extern s32 DeleteThread();
 extern s32 RemoveDmacHandler();

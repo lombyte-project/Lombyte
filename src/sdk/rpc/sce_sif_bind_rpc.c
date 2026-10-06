@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct SifRpcClientData {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -9,7 +9,7 @@ struct M2c_arg0 {
     s32 unk24;
 };
 
-struct M2c_temp_2_15 {
+struct SifRpcPacket {
     u8 pad_0[0x14];
     s32 unk14;
     s32 unk18;
@@ -24,14 +24,14 @@ extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 func_0011AD90();
 extern s32 sceSifSendCmd();
-s32 sceSifBindRpc(struct M2c_arg0 *client, s32 rpc_number, s32 mode) {
+s32 sceSifBindRpc(struct SifRpcClientData *client, s32 rpc_number, s32 mode) {
     s32 sema_param[6];
     s32 sema_id;
-    struct M2c_temp_2_15 *packet;
+    struct SifRpcPacket *packet;
 
     client->unk10 = 0;
     client->unk24 = 0;
-    packet = (struct M2c_temp_2_15 *)get_available_rpc_packet(D_00156800);
+    packet = (struct SifRpcPacket *)get_available_rpc_packet(D_00156800);
     if (packet == NULL) {
         return -1;
     }

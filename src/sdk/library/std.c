@@ -6,7 +6,7 @@ typedef signed int s32;
 typedef unsigned int u32;
 typedef signed long long s64;
 typedef unsigned long long u64;
-struct M2c_arg0 {
+struct StdioFile {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -27,9 +27,9 @@ extern void __sread();
 extern void __sseek();
 extern void __swrite();
 extern void func_00116408();
-void std(struct M2c_arg0 *fp, s16 flags, s16 fd, s32 reent) {
+void std(struct StdioFile *fp, s16 flags, s16 fd, s32 reent) {
     int new_var2;
-    struct M2c_arg0 *new_var;
+    struct StdioFile *new_var;
     fp->unk54 = reent;
     new_var = fp;
     new_var->unkC = (unsigned long)flags;

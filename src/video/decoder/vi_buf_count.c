@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct ViBuf {
     u8 pad_0[0x10];
     s32 unk10;
     s32 unk14;
@@ -9,9 +9,9 @@ struct M2c_arg0 {
 
 extern s32 FUN_00118990();
 extern s32 FUN_001189b0();
-s32 vi_buf_count(struct M2c_arg0 *buf) __asm__("FUN_0023c610");
+s32 vi_buf_count(struct ViBuf *buf) __asm__("FUN_0023c610");
 
-s32 vi_buf_count(struct M2c_arg0 *buf) {
+s32 vi_buf_count(struct ViBuf *buf) {
     s32 count;
 
     FUN_001189b0(buf->unk40);
@@ -20,4 +20,4 @@ s32 vi_buf_count(struct M2c_arg0 *buf) {
     return count;
 }
 
-extern s32 func_0023C610(struct M2c_arg0 *buf) __attribute__((alias("FUN_0023c610")));
+extern s32 func_0023C610(struct ViBuf *buf) __attribute__((alias("FUN_0023c610")));

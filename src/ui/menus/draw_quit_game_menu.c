@@ -8,7 +8,7 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct M2c_arg0 {
+struct QuitMenu {
     u8 pad_0[0x20];
     s32 unk20;
     s32 unk24;
@@ -22,9 +22,9 @@ extern void font_print_window_regular(s32, u64, s32, s32) __asm__("func_001F7580
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern void vu1_add_g_sregister() __asm__("func_00233980");
 extern void func_001153FC();
-s32 draw_quit_game_menu(struct M2c_arg0 *arg0) __asm__("FUN_0021e890");
+s32 draw_quit_game_menu(struct QuitMenu *arg0) __asm__("FUN_0021e890");
 
-s32 draw_quit_game_menu(struct M2c_arg0 *arg0) {
+s32 draw_quit_game_menu(struct QuitMenu *arg0) {
     unsigned long new_var;
     s16 packet[0xC];
     s32 temp_16_69;

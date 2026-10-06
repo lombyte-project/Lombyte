@@ -1,13 +1,13 @@
 #include "types.h"
 
-struct M2c_D_00186F40 {
+struct CameraView {
     u8 pad_0[0x140];
     f32 unk140;
     f32 unk144;
     f32 unk148;
 };
 
-struct M2c_arg0 {
+struct ScreenPoint {
     f32 unk0;
     f32 unk4;
     f32 unk8;
@@ -29,15 +29,15 @@ struct Locals_001f2070 {
     f32 v9C;
 };
 
-extern struct M2c_D_00186F40 D_00186F40;
+extern struct CameraView D_00186F40;
 extern f32 D_0018CF10[];
 extern void FUN_001f9a68(void *a, s64 b, f32 c);
 extern void FUN_001f9d20(void *a, void *b, void *c);
 extern void FUN_001f9fc8(void *a);
 extern void FUN_001fa378(void *a, void *b, void *c);
-void project_to_screen(struct M2c_arg0 *screen_out, s32 world_pos) __asm__("FUN_001f2070");
+void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
-void project_to_screen(struct M2c_arg0 *screen_out, s32 world_pos) {
+void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     struct Locals_001f2070 L;
     f32 scale;
     f32 y;

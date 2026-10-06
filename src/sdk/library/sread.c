@@ -18,7 +18,7 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
-struct M2c_arg0 {
+struct StdioFile {
     u8 pad_0[0xC];
     u16 unkC;
     s32 unkE;
@@ -28,7 +28,7 @@ struct M2c_arg0 {
 };
 
 extern s64 reentrant_read() __asm__("func_00116108");
-s64 __sread(struct M2c_arg0 *fp, s32 buf, s32 len) {
+s64 __sread(struct StdioFile *fp, s32 buf, s32 len) {
     register s32 bytes_read;
 
     bytes_read =

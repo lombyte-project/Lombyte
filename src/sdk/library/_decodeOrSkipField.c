@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_temp_16_13 {
+struct MpegPictureContext {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -15,11 +15,11 @@ struct M2c_temp_16_13 {
     u8 pad_124[0x50];
     s32 unk174;
 };
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x34];
-    struct M2c_temp_16_13 *unk40;
+    struct MpegPictureContext *unk40;
 };
 extern s32 _decPicture();
 extern s32 _dispatchMpegCbNodata();
@@ -27,8 +27,8 @@ extern s32 _nextHeader();
 extern s32 _sceMpegFlush();
 extern s32 _updateRefImage();
 extern void _outputFrame();
-s32 _decodeOrSkipField(struct M2c_arg0 *decoder, s32 arg1, s32 arg2) {
-    struct M2c_temp_16_13 *p;
+s32 _decodeOrSkipField(struct MpegDecoder *decoder, s32 arg1, s32 arg2) {
+    struct MpegPictureContext *p;
     s32 bVar3;
     unsigned int new_var2;
     s32 iVar4;

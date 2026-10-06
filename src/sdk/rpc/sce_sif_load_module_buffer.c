@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_00158200 {
+struct SifLoadModuleArgs {
     s32 unk0;
     s32 unk4;
 };
@@ -9,7 +9,7 @@ extern s32 _lf_bind();
 extern s32 func_0011CAE0();
 extern s32 memcpy();
 extern s32 sceSifCallRpc();
-#define SIFCMD ((struct M2c_D_00158200 *)D_00158200)
+#define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
 s32 _sceSifLoadModuleBuffer(s32 arg0, s32 size, s32 src, s32 *result_out) {
     s32 var_2_18;
     s32 temp;

@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x20];
     u16 unk20;
     u8 pad_22[2];
@@ -28,9 +28,9 @@ extern void *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 find_valid_animation_frame_index() __asm__("func_001FF960");
 extern void draw_hud_sprite() __asm__("FUN_001ffc30");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *menu) __asm__("FUN_00222948");
+s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948");
 
-s32 obtain_all_gold_weapons_menu(struct M2c_arg0 *menu) {
+s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     struct MenuPacket packet;
     struct MenuPacket tmp;
     void *tex;

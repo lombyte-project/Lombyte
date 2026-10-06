@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_0013E550 {
+struct BankLoadState {
     u8 pad_0[0x44];
     s32 unk44;
 };
 
-extern struct M2c_D_0013E550 D_0013E550;
+extern struct BankLoadState D_0013E550;
 extern s32 snd_bank_load_by_loc() __asm__("FUN_0012df20");
 extern s32 snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
 extern s32 snd_stream_safe_check_cd_idle() __asm__("FUN_0012ed30");

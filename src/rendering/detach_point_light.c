@@ -1,25 +1,25 @@
 #include "types.h"
-struct M2c_temp_17_156 {
+struct LightLinkEntryB {
     u8 pad_0[0x1B];
     u8 unk1B;
     u8 pad_1C[0x2];
     u16 unk1E;
 };
 
-struct M2c_temp_17_98 {
+struct LightLinkEntryWide {
     u8 pad_0[0x35];
     u8 unk35;
     u16 unk36;
 };
 
-struct M2c_temp_18_40 {
+struct LightLinkEntryA {
     u8 pad_0[0x1B];
     u8 unk1B;
     u8 pad_1C[0x2];
     u16 unk1E;
 };
 
-struct M2c_temp_19_18 {
+struct LightRecord {
     s16 unk0;
     s16 unk2;
     s16 unk4;
@@ -56,10 +56,10 @@ void detach_point_light(s32 light_index) {
     u32 var_16_157;
     u32 var_16_41;
     u32 var_16_99;
-    struct M2c_temp_17_156 *temp_17_156;
-    struct M2c_temp_17_98 *temp_17_98;
-    struct M2c_temp_18_40 *temp_18_40;
-    struct M2c_temp_19_18 *light_entry;
+    struct LightLinkEntryB *temp_17_156;
+    struct LightLinkEntryWide *temp_17_98;
+    struct LightLinkEntryA *temp_18_40;
+    struct LightRecord *light_entry;
 
     temp_30_16 = light_index & 0xFFFF;
     light_entry = (light_index * 0x30) + D_0019C3C0;

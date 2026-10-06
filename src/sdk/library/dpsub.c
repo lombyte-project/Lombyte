@@ -39,7 +39,7 @@ Boston, MA 02111-1307, USA.  */
 extern s32 __pack_d();
 extern s32 __unpack_d();
 extern s32 _fpadd_parts();
-struct M2c_DpsubWork {
+struct DpsubWork {
     u8 pad_0[0x20];
     s32 unk20;
     s32 unk24;
@@ -50,7 +50,7 @@ struct M2c_DpsubWork {
     s64 unk68;
 };
 void dpsub(s64 arg0, s64 arg1) {
-    struct M2c_DpsubWork work;
+    struct DpsubWork work;
 
     work.unk60 = arg0;
     work.unk68 = arg1;

@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0xD4];
     s32 unkD4;
     u8 pad_D8[0x8C];
@@ -16,7 +16,7 @@ struct M2c_arg0 {
 };
 
 extern s32 _nextBit();
-void _pictureCodingExtension(struct M2c_arg0 *mpeg) {
+void _pictureCodingExtension(struct MpegDecoder *mpeg) {
     s32 temp_2_35;
     s32 temp_6_65;
     s32 temp_6_77;

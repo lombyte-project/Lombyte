@@ -1,8 +1,8 @@
 #include "types.h"
 
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     u8 pad_0[0x4];
-    struct M2c_D_001D5BF0_unk4 *unk4;
+    struct ModeEntry *unk4;
     s32 unk8;
     s32 unkC;
     u8 pad_10[0xD4];
@@ -13,20 +13,20 @@ struct M2c_D_001D5BF0 {
     u8 pad_F8[0x2C];
     s32 unk124;
 };
-struct M2c_D_001D5BF0_unk4 {
+struct ModeEntry {
     u8 pad_0[0x38];
     s32 unk38;
 };
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x14];
     s32 unk14;
 };
 extern s32 D_0013CB04[];
 extern s32 D_0015ED84;
 extern s32 D_001A0314[];
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct Globals_001D5BF0 D_001D5BF0;
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 FUN_00221968(struct M2c_arg0 *arg0) {
+s32 FUN_00221968(struct MenuScreen *arg0) {
     if (D_0013CB04[0] & 0x10) {
         if (D_001D5BF0.unk4->unk38 != 0) {
             D_001D5BF0.unk8 = D_001D5BF0.unk4->unk38;

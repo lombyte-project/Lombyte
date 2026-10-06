@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MenuScreen {
     u8 pad_0[0x20];
     s32 unk20;
     s32 unk24;
@@ -7,11 +7,11 @@ struct M2c_arg0 {
     s32 unk3C;
     s32 unk40;
     u8 pad_44[0x4];
-    struct M2c_temp_22_35 *unk48;
+    struct MenuIcon *unk48;
     u8 pad_4C[0x10];
     s32 unk5C;
 };
-struct M2c_temp_22_35 {
+struct MenuIcon {
     u16 unk0;
     s16 unk2;
 };
@@ -26,7 +26,7 @@ extern void draw_hud_sprite_flipped() __asm__("FUN_001ffe18");
 extern void draw_hud_sprite_subpixel() __asm__("func_00200080");
 extern void append_screen_rect_packet() __asm__("func_00200E08");
 
-s32 FUN_00219fa0(struct M2c_arg0 *menu) {
+s32 FUN_00219fa0(struct MenuScreen *menu) {
     s32 new_var2;
     s32 start_y;
     int new_var;
@@ -36,7 +36,7 @@ s32 FUN_00219fa0(struct M2c_arg0 *menu) {
     s32 i;
     int new_var3;
     s32 byte_offset;
-    struct M2c_temp_22_35 *icon;
+    struct MenuIcon *icon;
     i = 0;
     y = (*menu).unk5C;
     start_y = y;
@@ -47,7 +47,7 @@ s32 FUN_00219fa0(struct M2c_arg0 *menu) {
     if (menu->unk40 > new_var3) {
         byte_offset = new_var3;
         do {
-            icon = (struct M2c_temp_22_35 *)((u8 *)menu->unk48 + byte_offset);
+            icon = (struct MenuIcon *)((u8 *)menu->unk48 + byte_offset);
             if (menu->unk3C == i) {
                 append_screen_rect_packet(
                     x - 0x30, y - 0x30, 0x230 + x, y + 0x230,

@@ -2,7 +2,7 @@
 
 #include "rnc/gameplay/camera/update_cam.h"
 
-struct M2c_arg0 {
+struct CameraShake {
     f32 unk0;
     f32 unk4;
     s32 unk8;
@@ -21,9 +21,9 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 func_001FA6C0(s32);
 
-void apply_camera_shake(struct M2c_arg0 *shake, s32 arg1) __asm__("FUN_001ed360");
+void apply_camera_shake(struct CameraShake *shake, s32 arg1) __asm__("FUN_001ed360");
 
-void apply_camera_shake(struct M2c_arg0 *shake, s32 arg1) {
+void apply_camera_shake(struct CameraShake *shake, s32 arg1) {
     f32 sp_slot[4];
     f32 v1;
     f32 v2;

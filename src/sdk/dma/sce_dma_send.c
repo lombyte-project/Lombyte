@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct DmaChannelRegs {
     s32 unk0;
     u8 pad_4[0x1C];
     s32 unk20;
@@ -8,7 +8,7 @@ struct M2c_arg0 {
 };
 extern s32 CheckAddress();
 extern void WaitDma();
-void sceDmaSend(struct M2c_arg0 *channel, s32 addr) {
+void sceDmaSend(struct DmaChannelRegs *channel, s32 addr) {
     s32 phys_addr;
     register u32 sentinel;
     phys_addr = CheckAddress(addr);

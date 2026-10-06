@@ -1,12 +1,12 @@
 #include "types.h"
-struct M2c_D_001940C0 {
+struct RingBufferConfig {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
 };
 
 extern s32 D_00160F0C;
-extern struct M2c_D_001940C0 D_001940C0;
+extern struct RingBufferConfig D_001940C0;
 s32 calculate_ring_buffer_bounds(u32 size, s32 *out_start, s32 *out_end) __asm__("FUN_001fd6e0");
 
 s32 calculate_ring_buffer_bounds(u32 size, s32 *out_start, s32 *out_end) {

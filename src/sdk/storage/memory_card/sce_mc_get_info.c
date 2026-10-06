@@ -1,10 +1,10 @@
 #include "types.h"
-struct M2c_D_00159A00 {
+struct McRpcClient {
     u8 pad_0[0x24];
     s32 unk24;
 };
 
-struct M2c_D_00159A80 {
+struct McGetInfoRequest {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
@@ -18,11 +18,11 @@ struct M2c_D_00159A80 {
 extern u8 D_00123D10[];
 extern u32 D_00132DA8[];
 extern u32 D_00132DAC[];
-extern struct M2c_D_00159A00 D_00159A00;
+extern struct McRpcClient D_00159A00;
 extern u32 D_00159A28[];
 extern u32 D_00159A2C[];
 extern u32 D_00159A30[];
-extern struct M2c_D_00159A80 D_00159A80;
+extern struct McGetInfoRequest D_00159A80;
 extern u8 D_00159F00[];
 extern u8 D_0015AFC0[];
 extern s32 PollSema();

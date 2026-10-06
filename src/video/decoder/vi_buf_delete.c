@@ -1,6 +1,6 @@
 #include "types.h"
 
-struct M2c_arg0 {
+struct ViBuf {
     u8 pad_0[0x40];
     s32 unk40;
 };
@@ -8,9 +8,9 @@ struct M2c_arg0 {
 extern s32 set_dma_channel_4_control_register(s32 buf) __asm__("FUN_0023bbb0");
 extern s32 DeleteSema(s32 buf);
 
-s32 vi_buf_delete(struct M2c_arg0 *buf) __asm__("FUN_0023c5b8");
+s32 vi_buf_delete(struct ViBuf *buf) __asm__("FUN_0023c5b8");
 
-s32 vi_buf_delete(struct M2c_arg0 *buf) {
+s32 vi_buf_delete(struct ViBuf *buf) {
     volatile s32 *p1;
     volatile s32 *p2;
     volatile s32 *p3;

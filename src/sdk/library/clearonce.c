@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct MpegDecoder {
     u8 pad_0[0x590];
     s32 unk590;
     s32 unk594;
@@ -11,7 +11,7 @@ struct M2c_arg0 {
 };
 
 extern void _ipuSetMPEG1();
-void _clearOnce(struct M2c_arg0 *mpeg) {
+void _clearOnce(struct MpegDecoder *mpeg) {
     u32 spr = 0x70000000;
 
     _ipuSetMPEG1(1);

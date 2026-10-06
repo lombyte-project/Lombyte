@@ -8,14 +8,14 @@ typedef signed long long s64;
 typedef unsigned long long u64;
 typedef float f32;
 typedef double f64;
-struct M2c_arg0 {
+struct RpcBindRequest {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0x4];
     s32 unk1C;
     s32 unk20;
 };
-struct M2c_temp_2_10 {
+struct RpcBindPacket {
     u8 pad_0[0x14];
     s32 unk14;
     u8 pad_18[0x4];
@@ -25,7 +25,7 @@ struct M2c_temp_2_10 {
     s32 unk28;
     s32 unk2C;
 };
-struct M2c_temp_2_21 {
+struct RpcServerData {
     u8 pad_0[0x8];
     s32 unk8;
     u8 pad_C[0x8];
@@ -34,10 +34,10 @@ struct M2c_temp_2_21 {
 extern s32 GetRpcPacket();
 extern s32 SearchSvdata();
 extern void isceSifSendCmd();
-void _request_bind(struct M2c_arg0 *arg0, s32 arg1) {
-    struct M2c_temp_2_10 *packet;
+void _request_bind(struct RpcBindRequest *arg0, s32 arg1) {
+    struct RpcBindPacket *packet;
     s32 new_var;
-    struct M2c_temp_2_21 *svdata;
+    struct RpcServerData *svdata;
     packet = GetRpcPacket(arg1);
     new_var = (s32)arg0->unk14;
     packet->unk1C = (s32)arg0->unk1C;

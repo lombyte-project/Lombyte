@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg1 {
+struct BufferPool {
     s32 unk0;
     s32 unk4;
     s32 unk8;
@@ -7,10 +7,10 @@ struct M2c_arg1 {
 
 extern u8 D_00153A38[];
 extern s32 _Error();
-s32 reserve_aligned_buffer_space(s32 arg0, struct M2c_arg1 *pool, s32 size,
+s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size,
                                  u32 alignment) __asm__("FUN_0012bc20");
 
-s32 reserve_aligned_buffer_space(s32 arg0, struct M2c_arg1 *pool, s32 size, u32 alignment) {
+s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size, u32 alignment) {
     s32 start;
     u32 new_end;
 

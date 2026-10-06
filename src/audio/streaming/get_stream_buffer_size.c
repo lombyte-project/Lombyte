@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_var_3_7 {
+struct StreamBufferEntry {
     s32 unk0;
     s32 unk4;
 };
@@ -8,7 +8,7 @@ extern u8 D_001D60B8[];
 s32 get_stream_buffer_size(s32 stream_id) __asm__("FUN_00225d88");
 
 s32 get_stream_buffer_size(s32 stream_id) {
-    struct M2c_var_3_7 *entry;
+    struct StreamBufferEntry *entry;
     s32 index;
 
     entry = D_001D60B8;

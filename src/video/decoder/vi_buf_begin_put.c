@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_arg0 {
+struct ViBuf {
     s32 unk0;
     u8 pad_4[0x4];
     s32 unk8;
@@ -13,10 +13,10 @@ struct M2c_arg0 {
 
 extern s32 FUN_00118990();
 extern s32 FUN_001189b0();
-void vi_buf_begin_put(struct M2c_arg0 *buf, s32 *ptr0, s32 *len0, s32 *ptr1,
+void vi_buf_begin_put(struct ViBuf *buf, s32 *ptr0, s32 *len0, s32 *ptr1,
                       s32 *len1) __asm__("FUN_0023be20");
 
-void vi_buf_begin_put(struct M2c_arg0 *buf, s32 *ptr0, s32 *len0, s32 *ptr1, s32 *len1) {
+void vi_buf_begin_put(struct ViBuf *buf, s32 *ptr0, s32 *len0, s32 *ptr1, s32 *len1) {
     s32 temp_2_37;
     s32 temp_3_22;
     s32 temp_4_17;

@@ -1,5 +1,5 @@
 #include "types.h"
-struct M2c_D_001D5BF0 {
+struct Globals_001D5BF0 {
     s32 unk0;
     u8 pad_4[0x8];
     s32 unkC;
@@ -8,7 +8,7 @@ struct M2c_D_001D5BF0 {
     s32 unk110;
 };
 extern u32 D_0015F604;
-extern struct M2c_D_001D5BF0 D_001D5BF0;
+extern struct Globals_001D5BF0 D_001D5BF0;
 /* Linkage correction: D_0015F604 is a u32 array element (sibling
  * FUN_00218d78 declares `extern u32 D_0015F604[]`), i.e. non-small-data.
  * The size metadata (12 = non-small under -G8; exact extent unknown) lets
