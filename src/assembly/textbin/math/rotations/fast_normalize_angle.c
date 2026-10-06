@@ -10,9 +10,10 @@ INCLUDE_ASM(
 #define PI 3.1415927f
 f32 fast_normalize_angle(f32 angle) __asm__("FUN_001fa610");
 f32 fast_normalize_angle(f32 angle) {
+    f32 wrapped_angle;
     f32 pi = PI;
     f32 negative_pi = -PI;
-    f32 wrapped_angle = angle;
+    wrapped_angle = angle;
     do {
         if (wrapped_angle < pi)
             break;

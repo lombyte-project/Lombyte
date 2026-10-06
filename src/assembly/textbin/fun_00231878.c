@@ -62,9 +62,9 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     second_output = second_texture;
     archive_memory = &D_001940C0;
     upload_index = 0;
-    disc_start_sector = *(s32 *)(D_00137B80 + 0x1388 + language_index * 8);
-    disc_sector_count =
-        ((struct LoadingSlideDiscEntry *)(D_00137B80 + language_index * 8))->sector_count;
+    disc_start_sector =
+        ((struct LoadingSlideDiscEntry *)(D_00137B80 + language_index * 8))->start_sector;
+    disc_sector_count = *(s32 *)(D_00137B80 + 0x138c + language_index * 8);
     submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000), disc_start_sector,
                            disc_sector_count);
     sceCdSync(0);

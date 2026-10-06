@@ -58,15 +58,15 @@ s32 sceFsInit(void) {
     struct FsRequest *rpc_command;
     struct FsSemaSlot *sema_slot;
     u8 *sema_end;
-    struct FsRequest *init_request = D_00158000;
+    s32 *init_request = &D_00158000[0].field4;
     struct FsWord4 response_word;
 
     sceSifInitRpc(0);
-    init_request->field0 = 0;
-    init_request->field4 = 0;
+    D_00158000[0].field0 = 0;
+    *init_request = 0;
     irq_state = DIntr();
     sceSifAddCmdHandler(0x80000011, &_sceFs_Rcv_Intr, D_00157FC0);
-    sceSifAddCmdHandler(0x80000013, D_0011B980, init_request);
+    sceSifAddCmdHandler(0x80000013, D_0011B980, D_00158000);
 
     if (irq_state != 0) {
         EnableInterrupts();

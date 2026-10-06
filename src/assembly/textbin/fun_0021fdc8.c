@@ -211,11 +211,10 @@ s32 update_menu_resource_stream(struct MenuResourceStream *stream) {
                                 primary_read_address, primary_entry_alternate->sector,
                                 primary_entry_alternate->sector_count);
                         }
-                        if (primary_read_started == 0) {
-                            stream->state = -1;
-                        } else {
+                        if (primary_read_started != 0) {
                             goto publish_primary_read;
                         }
+                        stream->state = -1;
                         break;
                     }
                 }

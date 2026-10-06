@@ -174,8 +174,8 @@ s32 sound_update(void) {
         s32 *history_position = &D_0013E550.listener_history_position;
         history_index = *history_position + 1;
         history_index %= 4;
+        *history_position = history_index;
     }
-    D_0013E550.listener_history_position = history_index;
     qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
 
     listener_sample_count = 0;
@@ -305,7 +305,7 @@ s32 sound_update(void) {
             voice_flags[slot_index] = 0x20;
             continue;
         }
-        if (!(D_0013E550.voices[slot_index].flags & 1)) {
+        if ((D_0013E550.voices[slot_index].flags & 1) != 1) {
             voice_flags[slot_index] |= 2;
             if (!(D_0013E550.voices[slot_index].flags & 0x20)) {
                 voice_flags[slot_index] |= 4;

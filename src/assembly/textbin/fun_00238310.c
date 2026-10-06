@@ -30,6 +30,8 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
     s32 long_blink_period;
     s32 short_blink_period;
     s32 blink_period;
+    s32 blink_remainder;
+    char *cursor_text;
     s32 packed_coordinates;
     s32 texture_v;
     s32 texture_u;
@@ -37,18 +39,19 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
     s32 glyph_height;
     u8 character;
 
+    blink_next_glyph = 0;
+    cursor_text = text;
+    texture = get_frame_texture(find_valid_animation_frame_index(0xE935, 0));
     cursor_x = start_x;
     cursor_y = start_y;
-    blink_next_glyph = 0;
-    texture = get_frame_texture(find_valid_animation_frame_index(0xE935, 0));
 
     for (;;) {
         skip_draw = 0;
-        character = (u8)*text;
+        character = (u8)*cursor_text;
         if (character == 0) {
             return;
         }
-        text++;
+        cursor_text++;
         glyph_index = (s32)character - 0x20;
 
         if (glyph_index == 0x42) {
@@ -66,15 +69,15 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
                 glyph_entry = capture_glyph_coordinates + glyph_index;
                 if (*glyph_entry != -1 || glyph_index == 0) {
                     if (blink_next_glyph != 0) {
-                        skip_draw = blink_next_glyph != 0;
+                        skip_draw = 0;
                         blink_next_glyph = 0;
                         long_blink_period = scale_game_frames(0x1E);
                         short_blink_period = scale_game_frames(0xA);
                         blink_period = long_blink_period + short_blink_period;
-                        start_y = game_frame_counter % blink_period;
+                        blink_remainder = game_frame_counter % blink_period;
                         long_blink_period = scale_game_frames(0xA);
-                        if (start_y >= long_blink_period) {
-                            skip_draw = 0;
+                        if (blink_remainder < long_blink_period) {
+                            skip_draw = 1;
                         }
                     }
 

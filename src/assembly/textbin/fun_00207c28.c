@@ -43,8 +43,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
     next_run:
         expanded_cursor += *span_stream++;
         run_length = *span_stream++;
-        if (run_length != 0) {
-            do {
+        while (run_length != 0) {
                 run_length--;
                 if (control_remaining == 0) {
                     do {
@@ -54,7 +53,6 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
                 }
                 *expanded_cursor++ = bit_value;
                 control_remaining--;
-            } while (run_length != 0);
         }
         if (expanded_cursor < scratchpad_end)
             goto next_run;

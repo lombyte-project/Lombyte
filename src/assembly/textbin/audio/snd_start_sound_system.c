@@ -10,13 +10,13 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_syste
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];
-    void *server;
+    void *volatile server;
 };
 
 struct StartSoundWork {
-    s32 read_active;
+    volatile s32 read_active;
     u8 pad_4[0xC];
-    s32 read_error;
+    volatile s32 read_error;
 };
 
 extern u8 D_00133280[];
@@ -97,7 +97,7 @@ s32 snd_start_sound_system(void) {
     sound_read_work.read_error = 0;
     D_0015ECA8 = 0xFFC;
     D_0015ECAC = 0xFFC;
-    command_arg = (s32)(u32)&sound_read_work;
+    command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }
 #endif /* NON_MATCHING */

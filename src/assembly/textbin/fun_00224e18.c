@@ -53,19 +53,14 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         second_attachment_active = 1;
         detach_manipulator(source_moby_address, second_preview_manipulator);
     }
-    /* Both retail paths pass the same table address. Keep their distinct
-       source expressions and the load of resource_address inside each path:
-       the retail code branches here and rejoins before the callback.
-       The unmatched table-address LUI instructions at 0x00224F00,
-       0x00224F04, and 0x00224F08 differ only in register allocation. */
     if (!is_second_preview_moby) {
-        binding_table_alias = preview_binding_table_alias;
-        binding_table = preview_binding_table;
         resource_address = moby->resource_address;
+        binding_table = preview_binding_table;
+        binding_table_alias = (char *)0x001863D0;
     } else {
-        binding_table = preview_binding_table;
-        binding_table_alias = preview_binding_table_alias;
         resource_address = moby->resource_address;
+        binding_table = (char *)0x001863D0;
+        binding_table_alias = preview_binding_table_alias;
     }
     noop_callback_s(binding_table_alias, binding_table, resource_address, 0, source_moby_address);
     moby->primary_binding = binding_table;

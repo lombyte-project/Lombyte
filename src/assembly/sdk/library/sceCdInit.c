@@ -64,7 +64,6 @@ int sceCdInit(int init_mode) {
     }
     sceSifInitRpc(0);
     owner = GetThreadId();
-    rbuf = D_001324C0;
     count = *(volatile s32 *)D_00131310 + 1;
     *(volatile s32 *)D_001312E4 = 1;
     D_001312FC[0] = -1;
@@ -72,6 +71,7 @@ int sceCdInit(int init_mode) {
     D_001312F8[0] = -1;
     D_00131308[0] = -1;
     D_00131304[0] = -1;
+    rbuf = D_001324C0;
     D_001312F4[0] = 0;
     D_00131310[0] = count;
     D_0013130C[0] = -1;
@@ -101,6 +101,8 @@ int sceCdInit(int init_mode) {
         while (i-- != 0) {
         }
     }
+    /* Read the RPC result through the EE uncached alias. The signed division
+       below preserves the retail rounding for negative response components. */
     stat = *(s32 *)((u32)(rbuf + 0xC) | 0x20000000);
     b = *(s32 *)((u32)(rbuf + 8) | 0x20000000);
     a = *(s32 *)((u32)(rbuf + 4) | 0x20000000);

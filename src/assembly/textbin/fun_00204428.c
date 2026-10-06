@@ -106,8 +106,8 @@ s32 service_level_archive_load(void) {
             sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
         disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
+        level_archive_sectors = *(s32 *)((u8 *)&D_00137B80 + level_index * 8 + 0x12CC);
         sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
-        level_archive_sectors = disc_entry->sector_count;
         sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
         level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
         archive_start_or_sectors = D_00137B80.shared_sector_count;
@@ -116,15 +116,15 @@ s32 service_level_archive_load(void) {
         archive_start_or_bytes = D_00137B80.shared_start_sector;
         D_0015EE54 = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;
-        D_0015EE4C = (struct LevelArchiveHeader *)shared_archive_buffer;
+        *(struct LevelArchiveHeader **)0x0015EE4C =
+            (struct LevelArchiveHeader *)shared_archive_buffer;
         submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes,
                                        archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        submit_audio_stream_io_request(D_0015EE54, next_disc_entry->start_sector,
-                                       next_disc_entry->sector_count);
+        submit_audio_stream_io_request(D_0015EE54, *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12C8), *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:

@@ -62,8 +62,9 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     if ((window->flags ^ TEXT_REGION_CENTER_HORIZONTALLY) & TEXT_REGION_CENTER_HORIZONTALLY) {
         wrap_width = window->right - window->anchor_x;
     } else {
-        left_width = window->anchor_x - window->left;
-        right_width = window->right - window->anchor_x;
+        left_width = window->anchor_x;
+        right_width = window->right - left_width;
+        left_width -= window->left;
         if (left_width > right_width) {
             left_width = right_width;
         }
@@ -112,20 +113,17 @@ retry:
         }
         line_count = next_line_count;
         if (text[position] == 0) {
-            /* Retail saves this width before testing whether to rebalance. */
-            last_line_width = line_width;
-            goto after_scan;
+                goto terminal_line;
         }
         position++;
     }
 after_scan:
+    next_line_count = line_count < 2;
     if (using_initial_width) {
         goto layout;
     }
-    if (initial_line_count == 0) {
-        initial_line_count = line_count;
-    }
-    if (line_count < 2) {
+    initial_line_count = initial_line_count ? initial_line_count : line_count;
+    if (next_line_count) {
         goto layout;
     }
     if (initial_line_count < line_count) {
@@ -133,6 +131,14 @@ after_scan:
         using_initial_width = 1;
         goto retry;
     }
+    goto compare_width;
+
+terminal_line:
+    /* Retail saves this width before testing whether to rebalance. */
+    last_line_width = line_width;
+    goto after_scan;
+
+compare_width:
     if (last_line_width < wrap_width / balance_divisor) {
         wrap_width -= 0x10;
         goto retry;
@@ -187,8 +193,7 @@ layout:
     }
     font_window_active = 0;
     left_width = D_0013E500[0];
-    right_width = D_0013E500[1];
-    vu1_set_scissor(0, left_width - 1, 0, right_width - 1);
+    vu1_set_scissor(0, left_width - 1, 0, D_0013E500[1] - 1);
 }
 
 extern __typeof__(font_print_window) func_001F7090 __attribute__((alias("FUN_001f7090")));

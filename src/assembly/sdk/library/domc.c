@@ -22,6 +22,7 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
     s32 jdx;
     s32 i;
     u8 *slot;
+    u8 *count_slot;
 
     sp0 = arg1;
     slot = (u8 *)arg0 + arg1 * 0x140;
@@ -30,7 +31,8 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
     }
     sp4 = (u8 *)arg0 + 0x6BC;
     i = 0;
-    if (*(s32 *)(sp4 + arg1 * 0x140) <= 0) {
+    count_slot = sp4 + arg1 * 0x140;
+    if (*(s32 *)count_slot <= 0) {
         goto block_6;
     }
     sp8 = (u8 *)arg0 + 0x6C0;
@@ -40,7 +42,7 @@ void _doMC(struct M2c_arg0 *arg0, s32 arg1) {
         idx = i * 4 + sp0 * 0x140;
         jdx = i * 0x1C;
         p = (u8 *)arg0 + (sp0 * 0x140 + 0x590);
-        ((void (*)(u8 *)) * (s32 *)((u8 *)arg0 + 0x5B8 + idx))(p + (jdx + 0x48));
+        ((void (*)(u8 *)) * (s32 *)((u8 *)arg0 + idx + 0x5B8))(p + (jdx + 0x48));
         ((void (*)(u8 *)) * (s32 *)(base2 + idx))(p + (jdx + 0xB8));
         if (i + 1 >= *(s32 *)(sp4 + sp0 * 0x140)) {
             break;

@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/"
 #include "types.h"
 f32 fast_difference_between_rotations(f32 first_angle, f32 second_angle) __asm__("FUN_001fa688");
 f32 fast_difference_between_rotations(f32 first_angle, f32 second_angle) {
-    f32 pi_values[1] = {3.1415927f};
+    f32 pi_values[1] = {(f32)3.141592653589793};
     f32 difference = first_angle - second_angle;
     f32 pi = pi_values[0];
     difference = fabsf(difference);

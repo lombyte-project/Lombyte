@@ -90,7 +90,7 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     s32 *temp_20_71;
     s32 *temp_21_73;
     struct M2c_temp_30_15__func_0012C4C8 *temp_30_15;
-    s32 *var_2_53;
+    u8 *var_2_53;
 
     temp_30_15 = arg0->unk40;
     temp_6_16 = temp_30_15->unk848;
@@ -117,16 +117,15 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
     temp_22_48 = var_2_40 << 4;
     temp_23_51 = temp_30_15->unk12C << 4;
     if (temp_23_51 == arg0->unk0) {
-        var_2_53 = ((u8 *)temp_30_15 + 0x528);
         if (temp_22_48 == arg0->unk4) {
             return;
         }
+        var_2_53 = ((u8 *)temp_30_15 + 0x528);
     }
     var_2_53 = ((u8 *)temp_30_15 + 0x528);
     {
         arg0->unk0 = temp_23_51;
         arg0->unk4 = temp_22_48;
-        sp44 = var_2_53;
         temp_17_63 = ((u8 *)temp_30_15 + (0x108));
         sp30 = ((u8 *)temp_30_15 + (0x320));
         temp_19_67 = ((u8 *)temp_30_15 + (0x1E8));
@@ -136,6 +135,7 @@ void func_0012C4C8(struct M2c_arg0__func_0012C4C8 *arg0) {
         sp38 = ((u8 *)temp_30_15 + (0x3F0));
         temp_18_75 = temp_22_48 >> 1;
         temp_16_77 = (u32)((0x180 * temp_22_48) * temp_23_51) >> 8;
+        sp44 = var_2_53;
         sp3C = ((u8 *)temp_30_15 + (0x458));
         sp40 = ((u8 *)temp_30_15 + (0x4C0));
         func_0012BC10(temp_17_63);

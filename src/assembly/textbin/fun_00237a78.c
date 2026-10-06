@@ -47,15 +47,18 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     scale_y = view_context[101];
     scale_x = view_context[100];
     first_projected[0] *= scale_x;
-    opposite_pointer[0] *= scale_x;
     first_projected[1] *= scale_y;
+    opposite_pointer[0] *= scale_x;
     opposite_pointer[1] *= scale_y;
     *x = convert_float_to_integer(first_projected[0] * 0.25f + (f32)screen_offsets.x);
     *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_offsets.y);
     *(volatile s32 *)width =
         convert_float_to_integer((opposite_pointer[0] - first_projected[0]) * 0.25f);
-    *height = convert_float_to_integer(
-        (*(volatile f32 *)&opposite_pointer[1] - *(volatile f32 *)&first_projected[1]) * 0.25f);
+    {
+        f32 first_y = *(volatile f32 *)&first_projected[1];
+        *height =
+            convert_float_to_integer((*(volatile f32 *)&opposite_pointer[1] - first_y) * 0.25f);
+    }
 }
 
 extern __typeof__(project_graphics_bounds) func_00237A78 __attribute__((alias("FUN_00237a78")));

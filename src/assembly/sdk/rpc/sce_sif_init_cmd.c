@@ -57,12 +57,13 @@ extern void _sceSifCmdIntrHdlr();
 /* Initializes the fixed command state once, then submits a warm or cold SIF
  * handshake. The cold path polls register 4 until bit 0x20000 is set. */
 void sceSifInitCmd(void) {
-    u32 ipval;
+    s32 ipval;
     struct M2c_var_3_42 *var_3_42;
     struct M2c_var_3_42 *handlers;
     s32 *var_2_61;
     s32 temp_2_113;
     s32 temp_2_141;
+    s32 poll_value;
     s32 temp_5_29;
     s32 temp_6_30;
     s32 var_16_46;
@@ -137,10 +138,9 @@ loop_6:
     sceSifSendCmd(0x80000000, &D_00154E40, 0x14, 0, 0, 0);
     return;
 block_14:
-loop_15:
-    if (!(sceSifGetReg(4) & 0x20000)) {
-        goto loop_15;
-    }
+    do {
+        poll_value = sceSifGetReg(4);
+    } while (!(poll_value & 0x20000));
     temp_2_141 = sceSifGetReg(2);
     D_00154E58.unk8 = temp_2_141;
     sceSifSetReg(0x80000000, temp_2_141);

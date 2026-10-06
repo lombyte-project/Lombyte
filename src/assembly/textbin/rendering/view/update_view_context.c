@@ -147,6 +147,7 @@ void update_view_context(void) {
     qcopy(&D_0018CFC0[2], &view->clip_scale);
     qcopy(&D_0018CFC0[3], &view->clip_distances);
 
+    /* Retail lw instructions carry the fog endpoint float bits into packet fields. */
     near_bits = *(s32 *)&view->fog_near_int;
     far_bits = *(s32 *)&view->fog_far_int;
     fog_distance_range = view->fog_far_dist - view->fog_near_dist;

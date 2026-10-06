@@ -58,8 +58,8 @@ u64 get_effect_texture(s32 index) {
         texel_address = gs_texture_allocation_cursor + 0x400;
         texel_block_offset = texel_address >> 8;
         pending_texture_upload_count_snapshot = pending_texture_upload_count;
-        tex0_word = texel_block_offset;
-        tex0_word |= ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
+        tex0_word = ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
+        tex0_word |= texel_block_offset;
         /* Retail sign-extends each 16-bit exponent before packing TEX0. */
         width_bits = ((s64)((u64)(u16)texture->width_log2 << 48) >> 22) | 0x1300000;
         tex0_word |= width_bits;

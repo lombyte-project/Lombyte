@@ -129,7 +129,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
     if (controller_state.pressed & 0x40) {
         items = menu->items;
         selected_entry = menu->selected_entry;
-        switch (items[selected_entry].action) {
+        switch (menu->items[menu->selected_entry].action) {
         case 0:
             break;
         case 1:
@@ -156,7 +156,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
             break;
         case 6:
             /* This action passes the low halfword; the other indexed actions pass the full word. */
-            message_index = items[selected_entry].param.h.hi;
+            message_index = menu->items[menu->selected_entry].param.h.hi;
             if (message_index != 0) {
                 menu_state.action_message = menu_action_messages[message_index];
             }
@@ -194,7 +194,7 @@ s32 update_menu_entry_actions(MenuDescriptor *menu) {
             allocate_voice_for_target_entry(0, 0x11, menu->sound);
             return 0;
         case 9:
-            requested_level_index = menu->items[menu->selected_entry].param.entry_index;
+            requested_level_index = items[selected_entry].param.entry_index;
             return 0;
         case 2:
             allocate_voice_for_target_entry(2, 0x11, menu->sound);

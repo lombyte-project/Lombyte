@@ -362,8 +362,9 @@ void draw_map_overlay(void) {
                         (D_001A00F0.icons[i].flags & 3)) {
                         goto next_outer_icon;
                     }
-                    inner_offset = (i + 1) * sizeof(MapIcon);
-                    for (j = i + 1; !(D_001A00F0.icons[j].flags & 4);
+                    j = i + 1;
+                    inner_offset = j * sizeof(MapIcon);
+                    for (; !(((MapIcon *)((u8 *)D_001A00F0.icons + inner_offset))->flags & 4);
                          j++, inner_offset += sizeof(MapIcon)) {
                         pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                         if (pan_x <= 0)
@@ -377,8 +378,9 @@ void draw_map_overlay(void) {
                         oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
                         if (oy1 <= 0)
                             continue;
-                        icon = (MapIcon *)((u8 *)D_001A00F0.icons + inner_offset);
-                        if (icon->active == 0 || icon->texture_id == 0 || (icon->flags & 3)) {
+                        if (D_001A00F0.icons[j].active == 0 ||
+                            D_001A00F0.icons[j].texture_id == 0 ||
+                            (D_001A00F0.icons[j].flags & 3)) {
                             continue;
                         }
                         ax = 0;

@@ -120,9 +120,9 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     if ((previous_first_volume != *first_volume) || (previous_second_volume != D_0015EDEC)) {
         D_0013E550.group_0_volume = D_0015EDEC * 8 / 10;
         D_0013E550.group_2_volume = D_0013E550.group_1_volume = *first_volume;
+        D_0013E550.group_3_volume = D_0015EDEC * 7 / 10;
         scaled_second_volume = D_0015EDEC * 7 / 10;
         D_0013E550.group_4_volume = scaled_second_volume;
-        D_0013E550.group_3_volume = D_0015EDEC * 7 / 10;
         D_0013E550.group_5_volume = D_0015EDEC;
     }
     if (D_0013C940.pressed_buttons & 0x40) {

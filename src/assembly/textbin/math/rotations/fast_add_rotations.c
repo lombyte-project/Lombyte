@@ -14,10 +14,12 @@ f32 fast_add_rotations(f32 angle, f32 delta) {
     f32 pi = 3.1415927f;
     f32 negative_pi = -pi;
     if (!(wrapped_angle < pi)) {
-        wrapped_angle = (wrapped_angle - pi) - pi;
+        wrapped_angle = wrapped_angle - pi;
+        wrapped_angle = wrapped_angle - pi;
     }
     if (wrapped_angle < negative_pi) {
-        wrapped_angle = (wrapped_angle + pi) + pi;
+        wrapped_angle = wrapped_angle + pi;
+        wrapped_angle = wrapped_angle + pi;
     }
     return wrapped_angle;
 }

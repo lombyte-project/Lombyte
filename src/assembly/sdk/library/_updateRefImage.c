@@ -80,7 +80,7 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
     s32 top_field_status;
     s32 picture_structure;
     s32 queue_threshold;
-    s32 references_ready;
+    u32 references_ready;
     s32 reference_status;
     struct MpegReferencePicture *previous_bottom_field;
     struct MpegReferencePicture *current_reference;

@@ -72,7 +72,6 @@ void build_resident_indexed_texture_warp_meshes(void) {
     struct GeometryQuad quad;
     Vector4 cross_strip_differences[4];
     Vector4 edge_normals[4];
-    s32 texture_index;
     s32 vertex;
     s32 uv_vertex;
     s32 side_vertex;
