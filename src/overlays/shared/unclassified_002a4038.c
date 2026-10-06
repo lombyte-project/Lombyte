@@ -131,7 +131,98 @@ void FUN_L02_002d92f0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da6c0.s", FUN_L02_002da6c0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Draws the rotating radar arrow sprite (style sel) at angle a and scale s, twice. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DBAF8), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_L02_001D33B0[4][4];
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern int D_L02_00161ABC __attribute__((sda));
+extern int D_L02_00161AC0 __attribute__((sda));
+extern int D_L02_00161AC4 __attribute__((sda));
+extern int D_L02_00161AC8 __attribute__((sda));
+extern int D_L02_00161ACC __attribute__((sda));
+extern int D_L02_00161AD0 __attribute__((sda));
+extern int D_L02_00161AD4 __attribute__((sda));
+extern int D_L02_00161AD8 __attribute__((sda));
+extern int D_L02_00161ADC __attribute__((sda));
+extern int D_L02_00161AE0 __attribute__((sda));
+extern int D_L02_00161AE4 __attribute__((sda));
+extern int D_L02_00161AE8 __attribute__((sda));
+extern int D_L02_00161B1C __attribute__((sda));
+extern int D_L02_00161B9C __attribute__((sda));
+extern void FUN_001fa050(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern void clear_vector(void *);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
+    long xy[4];
+    u32 col[4];
+    int uv[4];
+    float M[4][4];
+    float ang[4];
+    int x, y;
+    long v;
+    s64 tex;
+    switch (sel) {
+    case 0:
+        uv[0] = D_L02_00161ABC;
+        uv[1] = D_L02_00161AC0;
+        uv[2] = D_L02_00161AC4;
+        uv[3] = D_L02_00161AC8;
+        break;
+    case 1:
+        uv[0] = D_L02_00161ACC;
+        uv[1] = D_L02_00161AD0;
+        uv[2] = D_L02_00161AD4;
+        uv[3] = D_L02_00161AD8;
+        break;
+    case 2:
+    default:
+        uv[0] = D_L02_00161ADC;
+        uv[1] = D_L02_00161AE0;
+        uv[2] = D_L02_00161AE4;
+        uv[3] = D_L02_00161AE8;
+        break;
+    }
+    col[3] = D_L02_00161B9C;
+    col[2] = D_L02_00161B9C;
+    col[1] = D_L02_00161B9C;
+    col[0] = D_L02_00161B9C;
+    y = func_001FA898_r(fast_sin(a) * s * 16.0f);
+    x = func_001FA898_r(fast_cos(a) * s * 16.0f);
+    v = (long)y + 0xFFFFF080000000L;
+    v -= x << 16;
+    v += 0x8000;
+    xy[3] = v;
+    xy[2] = v;
+    xy[1] = v;
+    xy[0] = v;
+    clear_vector(ang);
+    ang[2] = -a;
+    FUN_001fa050(M, ang);
+    FUN_001fa378(M, M, D_L02_001D33B0);
+    xy[0] += func_001FA898_r(M[0][0] * 16.0f) << 16;
+    xy[0] += func_001FA898_r(M[0][1] * 16.0f);
+    xy[1] += func_001FA898_r(M[1][0] * 16.0f) << 16;
+    xy[1] += func_001FA898_r(M[1][1] * 16.0f);
+    xy[2] += func_001FA898_r(M[2][0] * 16.0f) << 16;
+    xy[2] += func_001FA898_r(M[2][1] * 16.0f);
+    xy[3] += func_001FA898_r(M[3][0] * 16.0f) << 16;
+    xy[3] += func_001FA898_r(M[3][1] * 16.0f);
+    tex = get_effect_texture(D_L02_00161B1C + 0x29);
+    FUN_L02_0020bc88(xy, uv, col, tex, 1);
+    FUN_L02_0020bc88(xy, uv, col, tex, 1);
+}
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
 extern char *D_L02_00161AEC __attribute__((sda));
@@ -148,7 +239,7 @@ extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9dc8(f32);
 extern s32 FUN_001fa6d0(f32);
 extern s32 FUN_001f44b8(s32);
-extern void FUN_L02_0020bc88(void *, void *, void *, s32, s32);
+extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L02_0020bc88");
 
 typedef unsigned long long u64_t;
 
@@ -212,7 +303,7 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     LO4(m[3], FUN_001fa6d0(f28));
 
     tex = FUN_001f44b8(D_L02_00161B64);
-    FUN_L02_0020bc88(m, p4, a4, tex, 0);
+    FUN_L02_0020bc88_u(m, p4, a4, tex, 0);
 
     p4[0] = (s32)D_L02_00161AFC;
     p4[1] = (s32)D_L02_00161B00;
@@ -254,7 +345,7 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     NEG20(m[3], FUN_001fa6d0(f27));
     LO4(m[3], FUN_001fa6d0(f28));
 
-    FUN_L02_0020bc88(m, p4, a4, tex, 0);
+    FUN_L02_0020bc88_u(m, p4, a4, tex, 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dae88.s", FUN_L02_002dae88);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dc6b0.s", FUN_L02_002dc6b0);
