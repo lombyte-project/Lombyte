@@ -55,7 +55,7 @@ extern int FUN_001f96f8(int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
     unsigned char *m = func_0020D348_m(0x370);
@@ -79,7 +79,7 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
         FUN_L00_00259888(d, (int)m, 0x10001, V, 1.0f);
         d[0x18] = 1;
         d[0x19] = 1;
-        blend_moby_animation(m, 1, 0, FUN_001f96f8(5));
+        blend_moby_animation_u(m, 1, 0, FUN_001f96f8(5));
         *(short *)(m + 0x34) = 0x208;
         *(int *)(d + 0x50) = a;
         *(int *)(d + 0x54) = b;
@@ -248,25 +248,25 @@ int FUN_L07_0030ebc8(char *moby, char *data) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void FUN_L07_0030ec58(char *arg) {
     switch (((unsigned char *)arg)[0xBC]) {
     case 0:
         if (((unsigned char *)arg)[0x53] != 0) {
-            blend_moby_animation(arg, 0, 0, 10);
+            blend_moby_animation_u(arg, 0, 0, 10);
         }
         arg[0x20] = 1;
         break;
     case 1:
         if (((unsigned char *)arg)[0x53] != 3) {
-            blend_moby_animation(arg, 3, 0, 10);
+            blend_moby_animation_u(arg, 3, 0, 10);
         }
         arg[0x20] = 7;
         break;
     case 2:
         if (((unsigned char *)arg)[0x53] != 9) {
-            blend_moby_animation(arg, 9, 0, 10);
+            blend_moby_animation_u(arg, 9, 0, 10);
         }
         arg[0x20] = 0xF;
         break;
@@ -845,7 +845,76 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030dcf0.s", FUN_L07_0030dcf0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e458.s", FUN_L07_0030e458);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e998.s", FUN_L07_0030e998);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Hit handler: reacts to the hit type, then takes damage and dies (state 0xE) when health runs out. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FD78), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025d458(void *, short *);
+extern void FUN_L07_0030e720(void *, void *, void *);
+extern void FUN_L07_0030e858(void *, void *, void *);
+extern void blend_moby_animation(void *, int, int, int);
+
+void FUN_L07_0030e998(char *m, char *x, float *hp) {
+    char *info;
+    int hit;
+    int r;
+    if (((unsigned char *)m)[0x20] == 0xE) return;
+    info = FUN_L00_0025a420(m, 0x330000, 0);
+    r = FUN_L00_0025a478(m, info, hp, 0, &hit, 0, 0, 4);
+    if (((unsigned char *)m)[0xBC] != 0) {
+        switch (r) {
+        case 0:
+            break;
+        case 1:
+        case 2:
+            *hp = 0.0f;
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            FUN_L07_0030e858(m, x + 0x70, info + 0x10);
+            m[0x20] = 0xC;
+            break;
+        case 9:
+        case 10:
+            if (((unsigned char *)m)[0x53] != 4) {
+                blend_moby_animation(m, 4, 4, 4);
+            }
+            m[0x20] = 0xD;
+            break;
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (*hp <= *(float *)(info + 0x2C)) {
+                *hp = 0.0f;
+                *(unsigned short *)(m + 0x34) &= 0xEFFF;
+                FUN_L07_0030e720(m, x + 0x70, info + 0x10);
+                FUN_L00_00257470(m, 0, -1);
+                x[0x67] = 0x78;
+                FUN_L00_0025d458(m, (short *)(x + 0x60));
+                m[0x20] = 0xE;
+            } else {
+                *hp -= *(float *)(info + 0x2C);
+                ((unsigned char *)x)[0x67] = 0xFA;
+                *(short *)(x + 0x26) = scale_game_frames(0x3C);
+                FUN_L00_0025d458(m, (short *)(x + 0x60));
+            }
+        }
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+}
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FF18), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
