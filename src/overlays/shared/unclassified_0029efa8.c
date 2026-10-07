@@ -3,10 +3,3 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0029efa8.s", FUN_L01_0029efa8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efaf8.s", FUN_L01_002efaf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efb98.s", FUN_L01_002efb98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efbc8.s", FUN_L01_002efbc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1c78.s", FUN_L01_002f1c78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1dc8.s", FUN_L01_002f1dc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1df8.s", FUN_L01_002f1df8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308470.s", FUN_L01_00308470);

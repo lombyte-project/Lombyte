@@ -3,6 +3,7 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4b58.s", FUN_L16_002e4b58);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4c40.s", FUN_L16_002e4c40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4cd8.s", FUN_L16_002e4cd8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4d88.s", FUN_L16_002e4d88);
