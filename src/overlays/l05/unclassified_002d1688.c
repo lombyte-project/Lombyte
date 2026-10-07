@@ -605,7 +605,35 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030bf98.s", FUN_L05_0030bf98);
+extern char *D_L05_0015FFD8_c __asm__("D_L05_0015FFD8");
+extern void FUN_L00_00260668(char *, char *, char *, char *, char *, char *);
+extern void FUN_L00_002604f0(char *, char *, char *, char *, char *, char *);
+extern void FUN_001f9a28(float *, char *, float *);
+extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
+
+void FUN_L05_0030bf98(char *a0)
+{
+    char *d = *(char **)(a0 + 0x78);
+    float p[4];
+    float q[4];
+    float r[4];
+    switch (*(u8 *)(a0 + 0x20)) {
+    case 0:
+        *(int *)(d + 0x5C) = 1;
+        if (*(int *)(d + 0x80) >= 0) {
+            FUN_L00_00260668(a0, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), a0 + 0x10, a0 + 0x40, d + 0x60, d + 0x70);
+            *(u8 *)(a0 + 0x20) = 1;
+        }
+        break;
+    case 1:
+        qcopy(p, a0 + 0x10);
+        qcopy(q, a0 + 0x40);
+        FUN_L00_002604f0(a0, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), d + 0x60, d + 0x70, a0 + 0x10, a0 + 0x40);
+        FUN_001f9a28(r, a0 + 0x10, p);
+        FUN_L00_00260738_c(d + 0x20, r, q, a0 + 0x40);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030ca80.s", FUN_L05_0030ca80);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030EA88), where it is exact; names translated to the US level program. */
 
