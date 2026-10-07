@@ -251,28 +251,28 @@ int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-void FUN_L12_002e3948(char *m) {
+void FUN_L12_002e3948(char *moby) {
     float a[4];
     float b[4];
     float p1[4];
     float p2[4];
     float z[4];
-    if (((unsigned char *)m)[0x31] == 0) return;
+    if (((unsigned char *)moby)[0x31] == 0) return;
     clear_u64_value_c(z);
     a[0] = -random_float_between(0.0f, D_0015ED6C * 5.0f);
     a[1] = random_float_between(-(D_0015ED6C * 2.0f), D_0015ED6C * 2.0f);
     a[2] = random_float_between(-(D_0015ED6C * 2.0f), D_0015ED6C * 2.0f);
-    transform_vector_by_basis(a, a, m + 0xC0);
-    transform_vector_by_basis(p1, &D_L12_00161920_d, m + 0xC0);
-    add_vector_xyz_c(p1, p1, m + 0x10);
+    transform_vector_by_basis(a, a, moby + 0xC0);
+    transform_vector_by_basis(p1, &D_L12_00161920_d, moby + 0xC0);
+    add_vector_xyz_c(p1, p1, moby + 0x10);
     b[0] = -random_float_between(0.0f, D_0015ED6C);
     b[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
     b[2] = random_float_between(-D_0015ED6C, D_0015ED6C);
-    transform_vector_by_basis(b, b, m + 0xC0);
+    transform_vector_by_basis(b, b, moby + 0xC0);
     qcopy(p2, &D_L12_00161920_d);
     p2[1] = -p2[1];
-    transform_vector_by_basis(p2, p2, m + 0xC0);
-    add_vector_xyz_c(p2, p2, m + 0x10);
+    transform_vector_by_basis(p2, p2, moby + 0xC0);
+    add_vector_xyz_c(p2, p2, moby + 0x10);
     FUN_L00_0026cbb0(p1, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(p1, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
     FUN_L00_0026cbb0(p2, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);

@@ -472,6 +472,7 @@ void FUN_L13_002b4c80(unsigned char *moby) {
 extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
 extern void FUN_L00_00267a08(void *);
 
+/* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
 void FUN_L13_002b4f28(unsigned char *moby, char *data) {
     float opacity = 0.2f;
     void **handle = (void **)(data + 0x228);

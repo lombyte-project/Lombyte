@@ -1536,6 +1536,7 @@ extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
 
+/* Per-frame update of a hit-point moby: handles a hit (respawn at the spawn point or removal when out of lives) and its state timers. */
 void FUN_L16_002ce9f0(void *moby) {
     L16HitMoby *m = moby;
     float matrix[16];
@@ -1873,6 +1874,7 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
+/* Draws a four-pass textured ribbon quad from the moby toward its partner moby. */
 void FUN_L16_002cf850(char *moby, char *partner) {
     L16RibbonPacket packet;
     float frame[4][4]; /* direction, side, up, origin */
@@ -1960,8 +1962,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out);
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002cf9f8(char *m) {
-    L16PatrolMoby *moby = (L16PatrolMoby *)m;
+/* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
+void FUN_L16_002cf9f8(char *obj) {
+    L16PatrolMoby *moby = (L16PatrolMoby *)obj;
     L16PatrolData *d = moby->data;
     float target[4];
     float heading, distance;

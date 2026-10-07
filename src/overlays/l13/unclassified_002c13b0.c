@@ -403,46 +403,46 @@ extern int func_0022ED80_s(int, int, int) __asm__("FUN_0022da68");
 extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 extern void func_L00_0025F4A8_s(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_002e1348(char *m, char *d, float s) {
+void FUN_L13_002e1348(char *moby, char *d, float s) {
     float v[4];
     float p[4];
     float a = s * 7.0f;
     float b;
     int i;
     b = s * 10.0f;
-    if (20.0f < distance_xyz(m + 0x10, D_0013F3D0)) {
+    if (20.0f < distance_xyz(moby + 0x10, D_0013F3D0)) {
         a = b = 0.0f;
     }
-    func_0022ED80_s(0, 0, (int)m);
+    func_0022ED80_s(0, 0, (int)moby);
     if (*(short *)(d + 0x4C) == 0) {
-        func_L00_0025F4A8_s(m, D_L13_00160680, 0, a, b, func_001FA898_s(s * 10.0f), func_001FA898_s(s * 3.0f),
+        func_L00_0025F4A8_s(moby, D_L13_00160680, 0, a, b, func_001FA898_s(s * 10.0f), func_001FA898_s(s * 3.0f),
                             func_001FA898_s(s * 16.0f), s * 4.0f, s + s, 9.0f, 1.0f, -1, s * 15.0f, 0, 1, -1, 0);
     }
-    m[0x72] = 0;
+    moby[0x72] = 0;
     if (*(short *)(d + 0x4E) > 0) {
         for (i = 0; i < FUN_L00_00257b90(1, 2); i++) {
-            float part = *(float *)(m + 0x2C) * random_float_between(0.25f, 0.75f);
+            float part = *(float *)(moby + 0x2C) * random_float_between(0.25f, 0.75f);
             FUN_L00_00257d78(v, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
             scale_vector_xyz(d, d, 0.75f);
             add_vector_xyz(v, v, d);
             normalize_vector_xyz(p, v, 0.5f);
-            add_vector_xyz(p, p, m + 0x10);
+            add_vector_xyz(p, p, moby + 0x10);
             add_vector_xyz(p, p, v);
-            FUN_L13_002e1140(m, (char *)p, (char *)v, *(short *)(d + 0x4E) - 1, part);
-            *(float *)(m + 0x2C) -= part;
+            FUN_L13_002e1140(moby, (char *)p, (char *)v, *(short *)(d + 0x4E) - 1, part);
+            *(float *)(moby + 0x2C) -= part;
             if (--*(short *)(d + 0x4E) == 0) break;
-            if (*(float *)(m + 0x2C) / *(float *)(*(char **)(m + 0x24) + 0x24) <= 0.2f) break;
+            if (*(float *)(moby + 0x2C) / *(float *)(*(char **)(moby + 0x24) + 0x24) <= 0.2f) break;
         }
-        *(int *)(m + 0x94) = 0;
+        *(int *)(moby + 0x94) = 0;
         *(short *)(d + 0x4C) = scale_game_frames(0x1E);
     } else if (*(int *)(d + 0x40) == 0) {
-        m[0x20] = 4;
-        *(unsigned short *)(m + 0x34) |= 1;
-        *(int *)(m + 0x94) = 0;
-        m[0x31] = 0;
-        *(float *)(m + 0x2C) = *(float *)(d + 0x2C);
+        moby[0x20] = 4;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        *(int *)(moby + 0x94) = 0;
+        moby[0x31] = 0;
+        *(float *)(moby + 0x2C) = *(float *)(d + 0x2C);
     } else {
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1638.s", FUN_L13_002e1638);

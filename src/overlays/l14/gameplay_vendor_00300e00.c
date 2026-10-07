@@ -122,6 +122,7 @@ void FUN_L14_00305600(char *moby) {
 extern float FUN_001fa6c0(int);
 extern float FUN_L00_00257e20(float, float, float, float, float);
 
+/* Per-frame update: slides each listed part toward a rest height by a factor from the moby's animation value. */
 void FUN_L14_00305680(char *moby) {
     int *d = *(int **)(moby + 0x78);
     short *p = (short *)D_L14_001ABF40[d[0]];

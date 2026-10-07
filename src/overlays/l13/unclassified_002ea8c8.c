@@ -270,8 +270,8 @@ extern void FUN_L00_002502f0(void *, int, int, int);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
-void FUN_L13_002f8a78(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L13_002f8a78(char *moby) {
+    char *d = *(char **)(moby + 0x78);
     char *c = 0;
     int open;
     int close;
@@ -281,7 +281,7 @@ void FUN_L13_002f8a78(char *m) {
     }
     open = 0;
     close = 0;
-    if (((unsigned char *)m)[0x20] != 0) {
+    if (((unsigned char *)moby)[0x20] != 0) {
         int i;
         for (i = 0; i < 6; i++) {
             if (((unsigned char *)c)[0x20] == (d + i)[4]) {
@@ -296,69 +296,69 @@ void FUN_L13_002f8a78(char *m) {
             }
         }
     }
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)moby)[0x20]) {
     case 0:
         if (c == 0) {
-            DebugPrint_alt(D_L13_001F51E0, *(short *)(m + 0xB2), *(short *)(m + 0xA6));
-            mark_moby_for_removal(m);
+            DebugPrint_alt(D_L13_001F51E0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
+            mark_moby_for_removal(moby);
             return;
         }
-        FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
-        *(unsigned short *)(m + 0x34) |= 0xA08;
+        FUN_L00_002502f0(moby, 0x80, 0x80, 0x80);
+        *(unsigned short *)(moby + 0x34) |= 0xA08;
         if (*(int *)(d + 0x18) == 0) {
             *(float *)(d + 0x10) = 1.0f;
-            m[0x20] = 1;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-            m[0x23] = 0x14;
+            moby[0x20] = 1;
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby[0x23] = 0x14;
         } else {
             *(float *)(d + 0x10) = 0.0f;
-            m[0x20] = 3;
-            *(int *)(m + 0x94) = 0;
-            m[0x23] = 0;
+            moby[0x20] = 3;
+            *(int *)(moby + 0x94) = 0;
+            moby[0x23] = 0;
         }
         break;
     case 1:
         if (close) {
-            *(int *)(m + 0x94) = 0;
-            m[0x20] = 2;
+            *(int *)(moby + 0x94) = 0;
+            moby[0x20] = 2;
         }
         break;
     case 2:
         if (open) {
-            m[0x20] = 4;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            moby[0x20] = 4;
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
         *(float *)(d + 0x10) -= D_0015ED60 * 0.05f;
         if (*(float *)(d + 0x10) < 0.0f) {
             *(float *)(d + 0x10) = 0.0f;
-            m[0x20] = 3;
-            *(int *)(m + 0x94) = 0;
-            m[0x31] = 0;
-            *(unsigned short *)(m + 0x34) |= 1;
+            moby[0x20] = 3;
+            *(int *)(moby + 0x94) = 0;
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
         }
         break;
     case 3:
         if (open) {
-            m[0x20] = 4;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
-            m[0x31] = 1;
-            *(unsigned short *)(m + 0x34) &= 0xFFFE;
+            moby[0x20] = 4;
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby[0x31] = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xFFFE;
         }
         break;
     case 4:
         if (close) {
-            *(int *)(m + 0x94) = 0;
-            m[0x20] = 2;
+            *(int *)(moby + 0x94) = 0;
+            moby[0x20] = 2;
         }
         *(float *)(d + 0x10) += D_0015ED60 * 0.05f;
         if (1.0f < *(float *)(d + 0x10)) {
             *(float *)(d + 0x10) = 1.0f;
-            m[0x20] = 1;
-            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            moby[0x20] = 1;
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
         break;
     }
-    m[0x23] = func_001FA898_d(*(float *)(d + 0x10) * 20.0f);
+    moby[0x23] = func_001FA898_d(*(float *)(d + 0x10) * 20.0f);
     step = 0xC0;
     *(int *)(d + 0x14) += step;
     if (*(int *)(d + 0x14) > 0x1000) {
@@ -368,5 +368,5 @@ void FUN_L13_002f8a78(char *m) {
         *(int *)(d + 0x14) += 0x1000;
         step += 0x1000;
     }
-    FUN_L00_0024efb0(*(unsigned char **)(m + 0x24), step, 0);
+    FUN_L00_0024efb0(*(unsigned char **)(moby + 0x24), step, 0);
 }
