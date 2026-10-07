@@ -31,7 +31,23 @@ void FUN_L16_002e4b58(void *moby_v) {
     *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4c40.s", FUN_L16_002e4c40);
+/* Advances a moby's path: steps the path position and returns whether it has reached the end. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
+
+extern float advance_accelerated_scalar(float, float, float, float, float *,
+                                        float *) __asm__("FUN_00213f38");
+extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
+
+int FUN_L16_002e4c40(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *path;
+    advance_accelerated_scalar(1.0f, *(float *)(d + 0xC8), *(float *)(d + 0xC8),
+                               *(float *)(d + 0xc4), (float *)(d + 0xb0), (float *)(d + 0xb4));
+    path = *(int **)(d + 0xa4);
+    sample_camera_path(path, 0, d + 0x60, (float *)(d + 0x70), 0,
+                       *(float *)(d + 0xb0) * (float)(*path - 1));
+    return *(float *)(d + 0xb0) >= 1.0f;
+}
 #include "qcopy.h"
 #include "sda.h"
 /* Plays the sound that goes with the moby's current variant. */

@@ -2,4 +2,32 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ecc68.s", FUN_L02_002ecc68);
+#include "sda.h"
+
+/* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L02_002ecc68(char *self) {
+    char *cur;
+    FUN_L00_002591d0((int *)&cur, *(unsigned char *)(self + 0x21), 0, 0);
+    while (cur != 0) {
+        if (*(unsigned char *)(cur + 0x31) != 0) {
+            char *data = *(char **)(cur + 0x78);
+            if (*(short *)(cur + 0xA6) == *(short *)(self + 0xA6)) {
+                if ((*(int *)(data + 0xe0) & 0xFF) > 0x80) {
+                    char *q = data + 0x80;
+                    int i;
+                    for (i = 0x5; i >= 0; i--) {
+                        FUN_L00_00263618(q, *(int *)(data + 0xe0), 1.2f, 0.57f);
+                        q += 0x10;
+                    }
+                }
+            }
+        }
+        FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
+    }
+}

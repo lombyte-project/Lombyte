@@ -21,7 +21,36 @@ void FUN_L14_00303370(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305a38.s", FUN_L14_00305a38);
+#include "eetypes.h"
+typedef struct {
+    u8 p0[0x20];
+    f32 r[4];
+    f32 a[4];
+    s32 c[4];
+    f32 x40, x44, x48, x4c;
+} M_FUN_L14_00305a38;
+typedef struct {
+    u8 p0[0x78];
+    M_FUN_L14_00305a38 *m;
+} O_FUN_L14_00305a38;
+s32 random_integer_below(s32) __asm__("FUN_00213260");
+s32 FUN_001f96f8(s32);
+void FUN_L14_00305a38(O_FUN_L14_00305a38 *o) {
+    M_FUN_L14_00305a38 *m = o->m;
+    s32 i;
+    for (i = 0; i < 4; i++)
+        m->r[i] = random_integer_below(0xFF);
+    m->a[0] = -1.0f;
+    m->a[1] = -2.25f;
+    m->a[2] = 1.25f;
+    m->a[3] = 2.5f;
+    for (i = 0; i < 4; i++)
+        m->c[i] = FUN_001f96f8(i * 0x40 + 0x3F);
+    m->x40 = 2.0f;
+    m->x44 = 2.5f;
+    m->x4c = 2.0f;
+    m->x48 = 2.5f;
+}
 /* calls func_L12_002BD3D0 with two looked-up ids */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
 
