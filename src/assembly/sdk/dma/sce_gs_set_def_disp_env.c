@@ -65,8 +65,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     if (mode == 2) {
         if (interlace == 1) {
             scale = (width + 0x9ff) / width;
-            value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)(s64)(width * scale - 1) << 32) |
+            value = ((u64)(s64)(width * scale - 1) << 32) |
+                    ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12);
             if (state->nSFrame_mode == 0) {
@@ -86,8 +86,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     } else if (mode == 3) {
         if (interlace == 1) {
             scale = (width + 0x9ff) / width;
-            value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)(s64)(width * scale - 1) << 32) |
+            value = ((u64)(s64)(width * scale - 1) << 32) |
+                    ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12);
             if (state->nSFrame_mode == 0) {
@@ -107,10 +107,10 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     } else if (mode == 0x50) {
         output->display = ((u64)(s64)(height - 1) << 44) |
                           ((u64)(s64)(width * 2 - 1) << 32) |
-                          ((u64)(((0x2d0 - width) / 2 * 2 + kernel_horizontal +
+                          ((u64)(((s64)((0x2d0 - width) / 2 * 2) + kernel_horizontal +
                                   horizontal_offset * 2 + 0xe8) & 0xfff)) |
-                          0x800000ULL |
-                          ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12);
+                          ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12) |
+                          0x800000ULL;
     } else {
         scePrintf("sceGsDefDispEnv:Not support displaymode for 0x%x!!\n");
     }
