@@ -131,7 +131,57 @@ void FUN_L02_002d92f0(char *moby) {
     *(float *)(p + 0x98) = func_001FA748_d92f0(f, *(float *)(p + 0x98));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002da3d8.s", FUN_L02_002da3d8);
+
+
+
+/* Draws an elliptical arc from angle a to b (radii rx, ry, around the screen centre) as five sprite
+ * segments in colour col. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DB810), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern int D_L02_00161B0C __attribute__((sda));
+extern int D_L02_00161B10 __attribute__((sda));
+extern int D_L02_00161B14 __attribute__((sda));
+extern int D_L02_00161B18 __attribute__((sda));
+extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L02_002da3d8(int tex, u32 col, float a, float b, float rx, float ry) {
+    long xy[4];
+    u32 cols[4];
+    int uv[4];
+    float step = fast_subtract_rotations(b, a) / 5.0f;
+    int i;
+    uv[0] = D_L02_00161B0C;
+    uv[1] = D_L02_00161B10;
+    uv[2] = D_L02_00161B14;
+    uv[3] = D_L02_00161B18;
+    cols[3] = col;
+    cols[2] = col;
+    cols[1] = col;
+    cols[0] = col;
+    for (i = 0; i < 5; i++) {
+        float t0 = fast_add_rotations(a, step * (float)i);
+        float t1 = fast_add_rotations(a, step * (float)(i + 1));
+        xy[3] = 0xFFFFF000000000L;
+        xy[2] = 0xFFFFF000000000L;
+        xy[1] = 0xFFFFF000000000L;
+        xy[0] = 0xFFFFF000000000L;
+        xy[0] += (u32)(-(func_001FA898_r(fast_cos(t0) * rx * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += func_001FA898_r(fast_sin(t0) * rx * 16.0f) + 0x8000;
+        xy[1] += (u32)(-(func_001FA898_r(fast_cos(t0) * ry * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += func_001FA898_r(fast_sin(t0) * ry * 16.0f) + 0x8000;
+        xy[2] += (u32)(-(func_001FA898_r(fast_cos(t1) * rx * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += func_001FA898_r(fast_sin(t1) * rx * 16.0f) + 0x8000;
+        xy[3] += (u32)(-(func_001FA898_r(fast_cos(t1) * ry * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += func_001FA898_r(fast_sin(t1) * ry * 16.0f) + 0x8000;
+        FUN_L02_0020bc88(xy, uv, cols, tex, 1);
+    }
+}
 
 #define NOT_SDA
 
