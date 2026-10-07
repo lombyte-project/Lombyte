@@ -55,6 +55,12 @@ extern u32 strlen(const char *);
 #define va_arg(ap, type) (*(type *)((ap += 8) - 8))
 #define va_ptr(ap, type) ((type)(*(void **)((ap += 8) - 8)))
 
+#define PADSIZE 16
+	static _CONST char blanks[PADSIZE] =
+	 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
+	static _CONST char zeroes[PADSIZE] =
+	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+
 s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap);
 extern __typeof__(FUN_00116e20) _vfprintf_r __attribute__((alias("FUN_00116e20")));
 s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
@@ -99,11 +105,7 @@ s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	 * fields occur frequently, increase PADSIZE and make the initialisers
 	 * below longer.
 	 */
-#define	PADSIZE	16		/* pad chunk size */
-	static _CONST char blanks[PADSIZE] =
-	 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
-	static _CONST char zeroes[PADSIZE] =
-	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+
 
 	/*
 	 * BEWARE, these `goto error' on error, and PAD uses `n'.
