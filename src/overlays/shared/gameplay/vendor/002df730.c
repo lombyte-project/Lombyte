@@ -403,7 +403,41 @@ s32 FUN_L00_002e2190(s32 id, void *src, void *v) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2250.s", FUN_L00_002e2250);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2af0.s", FUN_L00_002e2af0);
+/* Scrolls and draws the two panes of each active slot (3 slots). */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E3FA0), where it is exact; names translated to the US level program. */
+
+typedef struct { char b[0x140]; } Pane_2e3fa0;
+
+extern Pane_2e3fa0 D_L00_001E6E40[];
+extern float D_0015ED60;
+extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
+extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
+extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern void FUN_L00_002e2c88(int, int, void *, int, int, int);
+extern void FUN_L00_002e3388_c(int, int) __asm__("FUN_L00_002e3388");
+extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+
+void FUN_L00_002e2af0(char *m) {
+    int *d = *(int **)(m + 0x78);
+    int i;
+    vu1_add_g_sregister(0x47, 0x51001);
+    for (i = 0; i < 3; i++) {
+        float f;
+        int a, b;
+        int k, k1;
+        if (D_L00_00161C88_c2[i] == 0 || D_L00_00161BF8_c2[i] < 2) continue;
+        k = i << 1;
+        k1 = k + 1;
+        f = D_L00_00161C78_f[i] - D_0015ED60 * 0.2f;
+        D_L00_00161C78_f[i] = f;
+        if (f <= -8.0f) D_L00_00161C78_f[i] = f + 8.0f;
+        FUN_L00_002e3388_c(D_L00_00161C88_c2[i], i);
+        a = d[1] + 0x28;
+        b = d[0] + 0x28;
+        FUN_L00_002e2c88(a, b, &D_L00_001E6E40[k], 0x80, 0x40, i);
+        FUN_L00_002e2c88(a, b, &D_L00_001E6E40[k1], 0x30, 0x10, i);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2c88.s", FUN_L00_002e2c88);
 typedef struct {
     f32 v[4][4];
