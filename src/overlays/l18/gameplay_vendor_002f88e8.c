@@ -528,7 +528,27 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     return dist;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc668.s", FUN_L18_002fc668);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc7e0.s", FUN_L18_002fc7e0);
+/* Counts the listed mobys of class 0x772 that are not in state 8. */
+
+extern int D_L18_001AC240[];
+extern int D_L18_0015FFD8;
+
+short FUN_L18_002fc7e0(int idx) {
+    unsigned short *p = (unsigned short *)D_L18_001AC240[idx];
+    short n = 0;
+    int base;
+    if (p == 0)
+        return 0;
+    base = D_L18_0015FFD8;
+    while (1) {
+        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        if (*(short *)(moby + 0xA6) == 0x772 && moby[0x20] != 8)
+            n++;
+        if ((short)*p++ < 0)
+            return n;
+    }
+    return n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
 #include "sda.h"
 

@@ -142,7 +142,42 @@ void FUN_L18_002efb88(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0030.s", FUN_L18_002f0030);
+#include "qcopy.h"
+
+/* Wakes every waiting moby of class 0x54B in a group: moves it to pos and records the caller. */
+
+extern short *D_L18_001AC240[];
+extern unsigned char *D_L18_0015FFD8;
+
+int FUN_L18_002f0030(char *moby, int group, float *pos) {
+    short *p = D_L18_001AC240[group];
+    int idle;
+    int i;
+    if (p == 0)
+        return 1;
+    idle = 1;
+    while (1) {
+        unsigned char *m = (unsigned char *)(((*p & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
+        if (*(short *)(m + 0xA6) == 0x54B && m[0x20] == 1) {
+            unsigned char *d = *(unsigned char **)(m + 0x78);
+            idle = 0;
+            qcopy(m + 0x10, pos);
+            i = 0;
+            do {
+                qcopy(d + 0x10 + i * 16, m + 0x10);
+                i++;
+            } while ((float)i < 4.0f);
+            *(char **)(d + 0x16C) = moby;
+            m[0x31] = 1;
+            *(unsigned short *)(m + 0x34) &= 0xFFFE;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            m[0x20] = 2;
+        }
+        if (*p++ < 0)
+            return idle;
+    }
+    return idle;
+}
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1510), where it is exact; names translated to the US level program. */
 

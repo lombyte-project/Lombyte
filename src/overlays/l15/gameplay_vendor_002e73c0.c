@@ -606,4 +606,17 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     return 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f8ba8.s", FUN_L15_002f8ba8);
+/* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
+
+extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_0015EF50;
+extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern void FUN_L15_002f88e8(char *);
+
+int FUN_L15_002f8ba8(char *moby) {
+    char *e = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    if (*(short *)(D_L15_00167400 + 0x86) == 0 && *(short *)(e + 0x20) >= 0 &&
+        D_001413F4 == 2)
+        FUN_L15_002f88e8(moby);
+    return -1;
+}
