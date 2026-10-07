@@ -157,7 +157,78 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309098.s", FUN_L11_00309098);
+#include "qcopy.h"
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A468), where it is exact; names translated to the US level program. */
+typedef int u128 __attribute__((mode(TI)));
+extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
+extern char D_L11_00174880[];
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern int D_L11_00161DC0 __attribute__((sda));
+extern int D_L11_00161DC4 __attribute__((sda));
+extern int D_L11_00161DC8 __attribute__((sda));
+extern int D_L11_00161DCC __attribute__((sda));
+extern float D_L11_00161DD0 __attribute__((sda));
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_L00_00257b90(int, int);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_00259888(void *, void *, int, float, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+void FUN_L11_00309098(char *m) {
+    float old[4];
+    float p[4];
+    float v[4];
+    float hit[4];
+    float pad[4][2];
+    float q[4];
+    float r[4];
+    char *d;
+    char *pos;
+    int c;
+    if (m == 0) return;
+    d = *(char **)(m + 0x78);
+    if (d == 0) return;
+    pos = m + 0x10;
+    qcopy(old, pos);
+    c = FUN_001fa6e0(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
+    FUN_L00_00257d78(p, 0.0f, 0.1f);
+    add_vector_xyz(p, p, pos);
+    scale_vector_xyz(v, d, D_L11_00161DD0);
+    FUN_L00_0026dd20((char *)p, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
+    add_vector_xyz(pos, pos, d);
+    FUN_L00_00259888(hit, m, 0x10000, *(float *)(d + 0x20), d);
+    if (FUN_001efa68(old, pos, 0, *(void **)(d + 0x1C), hit)) {
+        int i;
+        for (i = 0; i < 5; i++) {
+            *(u128 *)r = 0;
+            r[0] = random_float_between(-1.0f, 1.0f);
+            r[1] = random_float_between(-1.0f, 1.0f);
+            r[2] = random_float_between(-1.0f, 1.0f);
+            *(u128 *)q = *(u128 *)r;
+            FUN_L00_001ff660(r, d, D_L11_00174880);
+            normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
+            add_vector_xyz(q, r, q);
+            normalize_vector_xyz(q, q, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 9.0f));
+            FUN_L00_0026dd20(m + 0x10, (char *)q, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
+        }
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (tick_countdown_32_alt((int *)(d + 0x18))) {
+        *(float *)(d + 0x10) *= 0.74f;
+        if (*(float *)(d + 0x10) < 0.02f) {
+            mark_moby_for_removal(m);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003094f8.s", FUN_L11_003094f8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030a908.s", FUN_L11_0030a908);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030b358.s", FUN_L11_0030b358);
