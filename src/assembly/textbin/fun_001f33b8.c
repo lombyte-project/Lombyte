@@ -9,8 +9,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001f33b8/FUN_001f33b8.s
 struct ProjectionScreenState {
     s32 viewport_width;
     s32 viewport_height;
-    s32 half_height;
     s32 half_width;
+    s32 half_height;
     s32 left_origin;
     s32 top_origin;
     s32 right_extent;
