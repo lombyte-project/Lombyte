@@ -2,7 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003058a8.s", FUN_L13_003058a8);
+#include "qcopy.h"
+
+/* Spawns a Gemlik moby that copies its look and transform from a source moby. */
+
+typedef int Q_3058a8 __attribute__((mode(TI)));
+
+extern char *FUN_0020c4f8(int);
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+
+char *FUN_L13_003058a8(char *src, short cls) {
+    char *m = FUN_0020c4f8(0x4D1);
+    char *d;
+    char *pos;
+    if (m != 0) {
+        d = *(char **)(m + 0x78);
+        m[0x31] = 1;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x20] = 1;
+        *(char **)(d + 0x20) = src;
+        *(short *)(d + 0x26) = cls;
+        *(short *)(d + 0x24) = 1;
+        pos = m + 0x10;
+        FUN_L00_0024f7c8(src, cls, pos);
+        qcopy(m + 0x40, src + 0x40);
+        *(Q_3058a8 *)(m + 0xC0) = *(Q_3058a8 *)(src + 0xC0);
+        *(Q_3058a8 *)(m + 0xD0) = *(Q_3058a8 *)(src + 0xD0);
+        *(Q_3058a8 *)(m + 0xE0) = *(Q_3058a8 *)(src + 0xE0);
+        qcopy(d + 0x10, pos);
+        *(int *)(m + 0x94) = 0;
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
