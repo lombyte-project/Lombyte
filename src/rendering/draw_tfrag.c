@@ -27,6 +27,12 @@ extern void FUN_001fa378(void *, void *, void *);
 extern void dma_tfrag_textures(void) __asm__("func_002331C0");
 extern void func_00233FB0(void);
 void write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
+/* Tfrag header (0x40 bytes): 0x10 data offset, u16 list offsets 0x16 common,
+ * 0x18 lod_1, 0x1a lod_0, u8 0x22 * 0x10 + common = lod_0-only list, u16 0x1e
+ * raw RGBA8 per position (alpha 0x80), u8 0x3d LOD 0 triangle count. The
+ * vertex-info unpack runs with STROW 0x45000000, so ST = float(0x45000000 + s)
+ * - 2048.0 (s / 8192 below zero). Strip records are 4 x s8: count (- 128 when
+ * the texture changes), y, ad-gif qword offset, w; (0, -1, -1, -1) ends. */
 void draw_tfrag(void) __asm__("FUN_002333a8");
 
 void draw_tfrag(void) {

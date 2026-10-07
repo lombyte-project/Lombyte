@@ -26,6 +26,9 @@ extern void do_sky_gif_paging(void) __asm__("func_0022B558");
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
+/* Draws shells in index order with no depth sorting. Case 0 falls through to
+ * case 1; shells 2..5 get a y tilt, a z offset added to the base yaw D_00160404
+ * and a scale of 1.25..2.0. */
 void draw_sky_shells(void) __asm__("FUN_0022b288");
 
 void draw_sky_shells(void) {

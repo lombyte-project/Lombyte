@@ -31,6 +31,11 @@ struct SpriteFile {
 extern struct SpriteFile *D_0016045C;
 extern s16 FUN_001f97a0(s32);
 
+/* Sky block (core index 0x10). Header: 0x00 RGBA background colour (non-zero
+ * on some levels), 0x04 flag (set on two levels), 0x06 shell count, 0x0a 256/128/0,
+ * 0x0c texture count, 0x0e leading textures no shell face uses, 0x10 texture defs
+ * (palette, pixels, width, height), 0x14 texture data base, 0x20 shell offsets.
+ * Shell: +0 cluster count, +4 gouraud flag (only shell 0), +8/+0xc zero. */
 void relocate_sky_definition(struct SpriteFile *f) __asm__("FUN_002028e0");
 
 void relocate_sky_definition(struct SpriteFile *f) {

@@ -27,6 +27,10 @@ void FUN_L00_00241728(s32 *h) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
+/* Gameplay file parser (0x23f8 bytes). Header pointers to sections of
+ * s32 count, 12 bytes pad, records: 0x34 ties (0xe0, class +0, 4x4 matrix +0x10),
+ * 0x3c shrubs (0x70, same head), 0x44 mobies (0x78, class +0x18, scale +0x1c,
+ * position +0x30, euler angles +0x3c). Moby class 0 is the hero start. */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241940.s", FUN_L00_00241940);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00244110.s", FUN_L00_00244110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002451b8.s", FUN_L00_002451b8);
