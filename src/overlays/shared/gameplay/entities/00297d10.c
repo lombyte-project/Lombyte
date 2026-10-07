@@ -1385,7 +1385,7 @@ extern int D_0015ED84_p __asm__("D_0015ED84");
 extern int D_L06_001BAC50[];
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L02_002ea7d0(char *);
-extern void FUN_L06_002f7628(char *);
+void FUN_L06_002f7628(char *m);
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
 extern char D_0014171B_aa35[] __asm__("D_0014C050");
 
@@ -1444,7 +1444,89 @@ void FUN_L06_002f7288(char *m) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
+
+
+
+/* Draws the moby's light beam: four flickering glow sprites spaced from its target toward the camera,
+ * plus, every fourth frame while visible, a spark drifting up or down from the moby. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8A58), where it is exact; names translated to the US level program. */
+
+
+typedef struct {
+    float ph[4];
+    float spd[4];
+    int t[4];
+    float sz[4];
+    char *tgt;
+} Beam_2f8a58;
+
+extern char D_L06_00167540[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_L06_0015F5CC;
+extern int D_L06_00161E58 __attribute__((sda));
+extern int D_L06_00161E5C __attribute__((sda));
+extern int D_L06_00161E60 __attribute__((sda));
+extern int D_L06_00161E64 __attribute__((sda));
+extern int D_L06_00161E68 __attribute__((sda));
+extern float D_L06_00161E6C __attribute__((sda));
+extern int D_L06_00161E70 __attribute__((sda));
+extern int FUN_001fa6e0(int, int, float);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
+extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");
+extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
+
+void FUN_L06_002f7628(char *m) {
+    float pos[4];
+    float step[4];
+    float a[4];
+    float b[4];
+    Beam_2f8a58 *d = *(Beam_2f8a58 **)(m + 0x78);
+    int i;
+    subtract_vector_xyz(pos, D_L06_00167540, d->tgt + 0x10);
+    normalize_vector_xyz(pos, pos, -0.3f);
+    normalize_vector_xyz(step, pos, 0.1f);
+    add_vector_xyz(pos, pos, d->tgt + 0x10);
+    for (i = 0; i < 4; i++) {
+        float f;
+        int c;
+        d->ph[i] += d->spd[i];
+        if (255.0f <= d->ph[i]) {
+            d->ph[i] -= 255.0f;
+        } else if (d->ph[i] <= 0.0f) {
+            d->ph[i] += 255.0f;
+        }
+        if (tick_countdown_32_alt(&d->t[i])) {
+            d->t[i] = scale_game_frames(0xFF);
+        }
+        f = ConvertIntegerToFloat(scale_game_frames(0xFF) - d->t[i]) / (float)scale_game_frames(0xFF);
+        c = FUN_001fa6e0(D_L06_00161E58, D_L06_00161E5C, AbsoluteFloat(0.5f - f));
+        func_L00_00273E08_g(pos, c, func_001FA898_g(d->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+                          d->sz[i]);
+        add_vector_xyz(pos, pos, step);
+    }
+    if ((D_L06_0015F5CC & 3) == 3 && ((unsigned char *)m)[0x31] != 0) {
+        float sgn = 1.0f;
+        if (D_L06_0015F5CC & 4) sgn = -1.0f;
+        clear_u64_value(a);
+        a[2] += sgn * 0.9f;
+        normalize_vector_xyz(b, a, -2.0f / (float)scale_game_frames(D_L06_00161E70));
+        add_vector_xyz(a, a, m + 0x10);
+        a[2] += 0.85f;
+        func_L00_00273F80_g(a, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
+                          (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);
+    }
+}
 
 #define NOT_SDA
 
