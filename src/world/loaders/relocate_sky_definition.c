@@ -31,6 +31,16 @@ struct SpriteFile {
 extern struct SpriteFile *D_0016045C;
 extern s16 FUN_001f97a0(s32);
 
+/* Prepares the sky data of a level. The sky block starts with a header:
+ *   0x00  background colour (RGBA), set only on some levels
+ *   0x04  a flag that is set on two levels
+ *   0x06  number of shells (sky layers)
+ *   0x0c  number of textures
+ *   0x10  offset of the texture list (palette, pixels, width, height)
+ *   0x14  offset of the texture pixel data
+ *   0x20  offsets of each shell
+ * Each shell starts with its number of clusters. The word at shell + 4 says
+ * the shell has no texture and uses vertex colours; only shell 0 does that. */
 void relocate_sky_definition(struct SpriteFile *f) __asm__("FUN_002028e0");
 
 void relocate_sky_definition(struct SpriteFile *f) {

@@ -3,5 +3,13 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00252dd0.s", FUN_L06_00252dd0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fc630.s", FUN_L06_002fc630);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304088.s", FUN_L06_00304088);
+#include "qcopy.h"
+#include "sda.h"
+
+void FUN_L06_002fc630(unsigned char *moby) {
+    moby[0x20] = 0x3;
+}
+
+void FUN_L06_00304088(unsigned char *moby) {
+    moby[0x20] = 0x5;
+}

@@ -2,4 +2,14 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030d678.s", FUN_L05_0030d678);
+#include "qcopy.h"
+#include "sda.h"
+
+/* Register this level's vendor data set. */
+
+extern char D_L05_001D6880[];
+extern void FUN_L01_002b91c8(char *, int);
+
+void FUN_L05_0030d678(void) {
+    FUN_L01_002b91c8(D_L05_001D6880, 0x30);
+}

@@ -3,5 +3,30 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ea418.s", FUN_L17_002ea418);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0040.s", FUN_L17_002f0040);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002f0448.s", FUN_L17_002f0448);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+
+
+extern int FUN_L00_002dbe20(void *);
+
+int FUN_L17_002f0040(char *a) {
+    int r = FUN_L00_002dbe20(a);
+    a[0x20] = 0xc;
+    return r;
+}
+extern void FUN_L17_002f0448(char *m);
+
+/* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
+
+extern void FUN_L00_00263618(void *, int, float, float);
+
+void FUN_L17_002f0448(char *m) {
+    int v = (*(int *)(m + 0x90) & 0xFFFFFF) | 0x30000000;
+    char *p = *(char **)(m + 0x78) + 0x200;
+    int i;
+    for (i = 2; i >= 0; i--) {
+        FUN_L00_00263618(p, v, 0.2f, 0.08f);
+        p += 0x10;
+    }
+}
