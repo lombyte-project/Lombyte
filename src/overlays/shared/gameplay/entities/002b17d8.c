@@ -214,7 +214,108 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b17d8.s", FUN_L14_002b17d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2600.s", FUN_L14_002b2600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2f60.s", FUN_L14_002b2f60);
+
+
+
+/* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013E533[];
+extern float FUN_001f9e90(float, float);
+extern float D_0015ED6C;
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_002e2040(char *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern float D_L14_001614C8 __attribute__((sda));
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+extern char D_0013E633_x[] __asm__("D_0013E533");
+extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
+
+void FUN_L14_002b2f60(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int hit;
+    float dmg;
+    char *h;
+    int r;
+    if (((unsigned char *)m)[0x20] == 0 || ((unsigned char *)m)[0x20] == 0xB) {
+        if (((unsigned char *)m)[0x20] == 0xB) {
+            ((unsigned char *)m)[0xA4] = 0xFF;
+            FUN_L00_0025d538(m, d + 0xC0);
+        }
+        return;
+    }
+    dmg = 0.0f;
+    h = FUN_L00_0025a420(m, 0x330000, 0);
+    if (h != 0 && *(char **)(h + 0x20) != 0
+        && (*(short *)(*(char **)(h + 0x20) + 0xA6) == *(short *)(m + 0xA6) || *(short *)(*(char **)(h + 0x20) + 0xA6) == 0x370)) {
+        h = 0;
+    }
+    r = FUN_L00_0025a478(m, h, d + 0x20, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && ((unsigned char *)m)[0x20] != 0xB) {
+        *(float *)(d + 0x20) -= dmg;
+        if (*(float *)(d + 0x20) <= 0.0f) r = 1;
+        switch (r) {
+        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        {
+            char *p60 = d + 0x60;
+            int t;
+            float e, g, k;
+            FUN_L00_002e2040(m);
+            m[0x20] = 0xA;
+            t = scale_game_frames(0x3C);
+            e = D_0015ED6C;
+            g = D_L14_001614C8 * e;
+            k = e * 8.0f;
+            *(short *)(d + 0x26) = t;
+            *(float *)(d + 0x78) = k;
+            *(float *)(d + 0x7C) = g;
+            *(float *)(d + 0xB0) = 11.0f;
+            *(float *)(d + 0xB4) = 29.0f;
+            func_L00_0025D5B0_i(m, p60, FUN_001f9e90(*(float *)(h + 0x10), *(float *)(h + 0x14)), 7, 1, 0);
+        }
+            ((unsigned char *)d)[0xC7] = 0xFA;
+            break;
+        case 1: case 2: {
+            float y;
+            if (*(int *)(h + 0x24) & 0x800000) {
+                m[0x20] = 0xC;
+            } else {
+                m[0x20] = 0xB;
+            }
+            *(unsigned short *)(m + 0x34) &= 0xEFFF;
+            {
+                int r80 = truncate_float_to_s32(*(float *)(d + 0x88) * 1024.0f);
+                float k = D_0015ED6C * 10.0f;
+                *(float *)(d + 0x88) = 0.3f;
+                *(float *)(d + 0x78) = k;
+                *(float *)(d + 0x7C) = k;
+                *(float *)(d + 0xB0) = 9.0f;
+                *(int *)(d + 0x80) = r80;
+                *(float *)(d + 0xB4) = 15.0f;
+            }
+            y = FUN_001f9e90(*(float *)(h + 0x10), *(float *)(h + 0x14));
+            func_L00_0025D5B0_i(m, d + 0x60, y, 8, scale_game_frames(5), 0);
+            ((unsigned char *)d)[0xC7] = 0xFA;
+            if (((unsigned char *)D_0013E633_x)[0x2EC1] == 2) {
+                FUN_L00_00257470(m, 0x200, -1);
+            } else {
+                FUN_L00_00257470(m, 0, -1);
+            }
+            *(int *)(m + 0x94) = 0;
+            break;
+        }
+        case 0: case 11:
+            break;
+        }
+        FUN_L00_0025d458(m, (short *)(d + 0xC0));
+    }
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    FUN_L00_0025d538(m, d + 0xC0);
+}
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
 
