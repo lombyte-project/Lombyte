@@ -952,7 +952,50 @@ void FUN_L00_002aa670(M910 *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ac910.s", FUN_L00_002ac910);
+#include "qcopy.h"
+typedef unsigned int u128_2ac910 __attribute__((mode(TI), aligned(16)));
+typedef union { u128_2ac910 q; float f[4]; } Q_2ac910;
+typedef struct { u128_2ac910 p; void *o; int n; float f18; short h1c; short h1e; } V_2ac910;
+unsigned char *FUN_0020c4f8_2ac910(int) __asm__("FUN_0020c4f8");
+float FUN_002132a8_2ac910(float, float) __asm__("FUN_002132a8");
+void FUN_L00_002502f0_2ac910(void *, int, int, int) __asm__("FUN_L00_002502f0");
+int FUN_001f96f8_2ac910(int) __asm__("FUN_001f96f8");
+float FUN_001fa6c0_2ac910(int) __asm__("FUN_001fa6c0");
+void FUN_L00_00250df8_2ac910(void *) __asm__("FUN_L00_00250df8");
+unsigned char *FUN_L00_002ac910(void *owner, void *pos, void *vel, int n, int r, int g, int b, int a23, float scale) {
+    unsigned char *m;
+    r &= 0xFF; g &= 0xFF; b &= 0xFF; a23 &= 0xFF;
+    m = FUN_0020c4f8_2ac910(0x70);
+    if (m) {
+        Q_2ac910 u, t;
+        V_2ac910 *v = *(V_2ac910 **)(m + 0x78);
+        float x;
+        t.q = 0;
+        t.f[0] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        t.f[1] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        t.f[2] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        u.q = t.q;
+        m[0x20] = 0;
+        m[0x23] = a23;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        FUN_L00_002502f0_2ac910(m, r, g, b);
+        v->f18 = *(float *)(m + 0x2C) * scale;
+        *(int *)(m + 0x2C) = 0;
+        v->o = owner;
+        qcopy(m + 0x10, pos);
+        qcopy(v, vel);
+        qcopy(m + 0x40, &u);
+        v->n = n;
+        v->h1c = *(unsigned short *)&v->n - FUN_001f96f8_2ac910(4);
+        x = FUN_001fa6c0_2ac910(v->n - v->h1c);
+        *(float *)(m + 0x2C) = x * v->f18 / FUN_001fa6c0_2ac910(v->n);
+        v->h1e = a23;
+        FUN_L00_00250df8_2ac910(m);
+    }
+    return m;
+}
 typedef struct {
     char pad[0x14];
     int n;
