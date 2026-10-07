@@ -150,7 +150,80 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
                  b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002eaa08.s", FUN_L10_002eaa08);
+
+
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9988(float);
+extern int FUN_001f9770(void *);
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_001fa728(char *, float);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L10_00162000 __attribute__((sda));
+extern short D_L10_00162004 __attribute__((sda));
+extern short D_L10_00162008 __attribute__((sda));
+extern short D_L10_0016200C __attribute__((sda));
+extern short D_L10_00162010 __attribute__((sda));
+extern short D_L10_00162014 __attribute__((sda));
+extern short D_L10_00162018 __attribute__((sda));
+extern short D_L10_0016201C __attribute__((sda));
+extern short D_L10_00162020 __attribute__((sda));
+extern short D_L10_00162024 __attribute__((sda));
+extern short D_L10_00162028 __attribute__((sda));
+extern short D_L10_0016202C __attribute__((sda));
+extern short D_L10_00162030 __attribute__((sda));
+extern short D_L10_00162038 __attribute__((sda));
+extern short D_L10_00162034 __attribute__((sda));
+extern short D_L10_00162040 __attribute__((sda));
+extern short D_L10_0016203C __attribute__((sda));
+extern short D_L10_00162048 __attribute__((sda));
+extern short D_L10_00162044 __attribute__((sda));
+extern short D_L10_0016204C __attribute__((sda));
+extern short D_L10_00162050 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
+    float p[4];
+    float vel[4];
+    float acc[4];
+    float s;
+    int a, b, c, c1;
+    if (*burst >= 0) {
+        if (FUN_001f9770(burst)) {
+            *burst = -func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162044, (float)*(int *)&D_L10_00162048));
+            return;
+        }
+    } else {
+        if (++*burst != 0) return;
+        *burst = func_001FA898_r(random_float_between((float)*(int *)&D_L10_0016203C, (float)*(int *)&D_L10_00162040));
+    }
+    qcopy(p, pos);
+    p[3] = 3.0f;
+    p[2] -= 4.0f;
+    if (FUN_001fa728((char *)p, 32.0f) == -1) return;
+    if (!FUN_001f9770(timer)) return;
+    s = random_float_between(1.0f - *(float *)&D_L10_00162020, *(float *)&D_L10_00162020 + 1.0f);
+    a = func_001FA898_r((float)*(int *)&D_L10_00162018 * s);
+    b = func_001FA898_r((float)*(int *)&D_L10_0016201C * s);
+    c = func_001FA898_r(FUN_001f9988((height + height) / (*(float *)&D_L10_00162000 * D_0015ED70)) * *(float *)&D_L10_00162050 * s);
+    clear_u64_value(vel);
+    FUN_L00_00257d78(acc, 0.0f, *(float *)&D_L10_00162004 * D_0015ED6C);
+    acc[2] -= *(float *)&D_L10_00162000 * D_0015ED70 * (float)c;
+    vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
+    acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
+    c1 = FUN_001fa6e0(*(int *)&D_L10_00162024, *(int *)&D_L10_00162028, random_float_between(0.0f, 1.0f));
+    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(*(int *)&D_L10_0016202C, *(int *)&D_L10_00162030, random_float_between(0.0f, 1.0f)), a, c, b, *(int *)&D_L10_0016204C);
+    *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
