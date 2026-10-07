@@ -292,6 +292,7 @@ OVERLAY_SN_UNITS = {
     "l03/unclassified_002c9eb8.c",
     "l04/gameplay/entities/0029eb20.c",
     "l04/gameplay/entities/002ca420.c",
+    "l04/gameplay_entities_0024c4f0.c",
     "l04/unclassified_001f3038.c",
     "l05/gameplay/entities/002d1688.c",
     "l05/gameplay/entities/0030d6a0.c",

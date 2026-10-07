@@ -2,7 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0024c4f0.s", FUN_L04_0024c4f0);
+typedef struct {
+    float x, y, z, w;
+} V_24c4f0;
+
+int FUN_L04_0024c4f0(float *p, float *poly, int n) {
+    V_24c4f0 *v = (V_24c4f0 *)poly;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        if ((v[(i + 1) % n].x - v[i].x) * (p[1] - v[i].y) -
+                (v[(i + 1) % n].y - v[i].y) * (p[0] - v[i].x) >
+            0.0f) {
+            return i + 1;
+        }
+    }
+    return 0;
+}
+
 #define NOT_SDA
 
 #define MACRO_ADDR
