@@ -61,15 +61,15 @@ BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a
 HOST_CFLAGS = "-O2 -fno-strict-aliasing -fcommon -std=gnu89 -D_GNU_SOURCE"
 HOST_OBJECTS_CFLAGS_MK = "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 
-# Hashes of the maintainer's build (full stack through 0056, Ubuntu 24.04
-# x86-64 host), taken while the stack still held the retired 0034; the stack
-# without it gives the same objects. Rebuilds on other hosts embed their own build paths and may
-# differ; the full-ELF gate (`make elf`) is the check that matters.
+# Hashes of a build of the current stack (through 0056, without the retired
+# 0034) on the Linux cloud host, with the default --work directory inside the
+# checkout. Rebuilds on other hosts or paths embed their own build paths and
+# may differ; the full-ELF gate (`make elf`) is the check that matters.
 REFERENCE_HASHES = {
-    "cc1": "fc69951c0ec883e19179d289fd690b3c7f94f15abb71b1ddafad14d7794cdf15",
-    "cpp": "c1ab66820a740deb5c2ec95c07bac49d06e2baa46f8e00641c7a9ae54e8e3759",
-    "xgcc": "54a8bb9dfe0f51f4b6138569564dbc822bb2d67736e627a9c93c42934300e854",
-    "as": "af95ed125045dcc0dd3549b25e2d73f44ed03b283d4129d09979e879eab34fff",
+    "cc1": "c2b8e013b797f4ffbadc35c8764206523f0c7344edfc6ac72dacb44f02d4ac82",
+    "cpp": "147aa9875b47be026a25e1b7859bf545c364862d9f2731cbbbbc4f6af50eb288",
+    "xgcc": "693c6e50b74d5cea3ca61a4af4e3a9002f121d1fc240d0b5db6b7bd0f502dc17",
+    "as": "5fb49530da24d8621a561596fcb76ebb8183043bee6d37199064b690274f0ab9",
 }
 
 # The driver has no builtin include directory; these three headers from the

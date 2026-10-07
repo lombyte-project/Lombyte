@@ -7,8 +7,9 @@ full-ELF gate PASS). Its bytes depend on the host compiler: through `0049`
 the WSL host built `05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`,
 and the stack through `0055` builds `66c253915a6fa851…`, the full stack through
 `0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). That last stack still held
-`0034`, which is retired; the stack without it builds a compiler that gives the
-same objects (full-ELF gate PASS). Check a rebuilt compiler by its output.
+`0034`, which is retired. The current stack (through `0056`, without `0034`)
+builds `c2b8e013b797f4ff…` there and gives the same objects (full-ELF gate
+PASS). Check a rebuilt compiler by its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
 - SHA-256: `1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92`
@@ -64,8 +65,11 @@ wrappers. The `cc1` bytes depend on the host compiler as well as on the
 stack: on the Linux cloud host used for `0054`, the stack through `0053`
 builds `d372122712b3f995…`, which produces the same object as `05ff323f…` for
 every game-compiler unit, the stack through `0054` builds `6f4bb085d51c0633…`,
-the stack through `0055` builds `66c253915a6fa851…`, and the full stack
-through `0056` builds `fc69951c0ec883e19179d289fd690b3c7f94f15abb71b1ddafad14d7794cdf15`.
+the stack through `0055` builds `66c253915a6fa851…`, the full stack
+through `0056` with `0034` built `fc69951c0ec883e1…`, and the current stack
+(through `0056`, without `0034`) builds
+`c2b8e013b797f4ffbadc35c8764206523f0c7344edfc6ac72dacb44f02d4ac82`
+(`scripts/build-game-compiler.py` with its default work directory).
 Check a rebuilt compiler by its output, not by its hash, when the host
 differs. `make` does not track header dependencies: after changing
 `mips.h`, remove `toplev.o` (or build from a fresh tree).
@@ -361,7 +365,8 @@ differs. `make` does not track header dependencies: after changing
 
 
 - `0027-gas-inline-float-literals.patch` SHA-256: `0272bee08529c415490f3f565f5a38846a98872fb972c81f8f17f07682605682`
-  - as (gas, with P20): `af95ed125045dcc0dd3549b25e2d73f44ed03b283d4129d09979e879eab34fff`
+  - as (gas, with P20): `5fb49530da24d8621a561596fcb76ebb8183043bee6d37199064b690274f0ab9`
+    (current stack, default work directory; the build path is embedded)
   - role: default assembler policy; synthesize `li.s` constants inline
     (lui/ori/mtc1) instead of pooling them in `.lit4`, matching the retail SN
     R5900 assembler; `li.d`/.lit8 pooling untouched

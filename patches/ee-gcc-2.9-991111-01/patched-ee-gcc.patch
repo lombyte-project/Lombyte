@@ -37,22 +37,18 @@ index 9aac2569..2971f90c 100644
  		{ $$= finish_enum ($<ttype>3, nreverse ($4), chainon ($1, $7));
  		  resume_momentary ($<itype>2); }
 diff --git a/ee/gcc/config/mips/mips.c b/ee/gcc/config/mips/mips.c
-index ead57073..d5fddd1e 100644
+index ead57073..13b64586 100644
 --- a/ee/gcc/config/mips/mips.c
 +++ b/ee/gcc/config/mips/mips.c
-@@ -206,6 +206,11 @@ int mips_abi;
+@@ -206,6 +206,7 @@ int mips_abi;
  #endif
  
  /* Strings to hold which cpu and instruction set architecture to use.  */
-+char *mips_astra_no_narrow_andi;
-+char *mips_astra_alloc_order;
-+char *mips_astra_annul_fill;
-+char *mips_astra_inplace_cvt;
 +int mips_astra_volatile_split_active;
  char *mips_cpu_string;		/* for -mcpu=<xxx> */
  char *mips_isa_string;		/* for -mips{1,2,3,4} */
  char *mips_abi_string;		/* for -mabi={32,n32,64,eabi} */
-@@ -4668,9 +4673,11 @@ override_options ()
+@@ -4668,9 +4669,11 @@ override_options ()
      }
  
    /* Saves/restores of general purpose registers on the r5900 use
@@ -66,7 +62,7 @@ index ead57073..d5fddd1e 100644
  
    /* CYGNUS LOCAL law */
    {
-@@ -6183,9 +6190,13 @@ save_restore_insns (store_p, large_reg, large_offset, file)
+@@ -6183,9 +6186,13 @@ save_restore_insns (store_p, large_reg, large_offset, file)
  	    if (file == 0)
  	      {
  		rtx reg_rtx;
@@ -81,7 +77,7 @@ index ead57073..d5fddd1e 100644
  			     gen_rtx (PLUS, Pmode, base_reg_rtx,
  				      GEN_INT (gp_offset - base_offset)));
  
-@@ -6213,7 +6224,7 @@ save_restore_insns (store_p, large_reg, large_offset, file)
+@@ -6213,7 +6220,7 @@ save_restore_insns (store_p, large_reg, large_offset, file)
  		  }
  		else
  		      reg_rtx = gen_rtx (REG,
@@ -91,34 +87,21 @@ index ead57073..d5fddd1e 100644
  		if (store_p)
  		  {
 diff --git a/ee/gcc/config/mips/mips.h b/ee/gcc/config/mips/mips.h
-index 1324d53a..281739f2 100644
+index 1324d53a..68206eef 100644
 --- a/ee/gcc/config/mips/mips.h
 +++ b/ee/gcc/config/mips/mips.h
-@@ -595,9 +595,22 @@ extern void		mips_select_section ();
+@@ -595,6 +595,9 @@ extern void		mips_select_section ();
  	extern char *m88k_short_data;
  	#define TARGET_OPTIONS { { "short-data-", &m88k_short_data } }  */
  
-+/* ASTRA experimental policy switches: inert unless explicitly selected. */
-+extern char *mips_astra_no_narrow_andi;
-+extern char *mips_astra_alloc_order;
-+extern char *mips_astra_annul_fill;
-+extern char *mips_astra_inplace_cvt;
-+
 +/* Set while reorg splits a volatile store for a call delay slot.  */
 +extern int mips_astra_volatile_split_active;
 +
  #define TARGET_OPTIONS							\
  {									\
    SUBTARGET_TARGET_OPTIONS						\
-+  { "astra-inplace-cvt", &mips_astra_inplace_cvt }, \
-+  { "astra-no-narrow-andi", &mips_astra_no_narrow_andi }, \
-+  { "astra-alloc-order=", &mips_astra_alloc_order }, \
-+  { "astra-annul-fill", &mips_astra_annul_fill }, \
-   { "cpu=",	&mips_cpu_string	},				\
-   { "ips",	&mips_isa_string	},				\
-   { "entry",	&mips_entry_string	},				\
 diff --git a/ee/gcc/config/mips/mips.md b/ee/gcc/config/mips/mips.md
-index e9eda13b..5e242131 100644
+index e9eda13b..6005ed51 100644
 --- a/ee/gcc/config/mips/mips.md
 +++ b/ee/gcc/config/mips/mips.md
 @@ -1810,7 +1810,10 @@
@@ -133,59 +116,7 @@ index e9eda13b..5e242131 100644
      {
        emit_insn (gen_mulsi3_mult3_r5900 (operands[0], operands[1], operands[2],
  				         gen_reg_rtx (SImode),
-@@ -4710,12 +4713,49 @@ move\\t%0,%z4\\n\\
-    (set_attr "length"	"11,9,10,11")])
- 
- 
--(define_insn "fix_truncsfsi2"
-+(define_expand "fix_truncsfsi2"
-+  [(set (match_operand:SI 0 "general_operand" "")
-+	(fix:SI (match_operand:SF 1 "register_operand" "")))]
-+  "TARGET_HARD_FLOAT"
-+  "
-+{
-+  if (TARGET_MIPS5900 && mips_astra_inplace_cvt)
-+    emit_insn (gen_fix_truncsfsi2_inplace (operands[0], operands[1]));
-+  else
-+    emit_insn (gen_fix_truncsfsi2_legacy (operands[0], operands[1]));
-+  DONE;
-+}")
-+
-+;;; ASTRA: in-place conversion.  Retail emits cvt.w.s into the source float
-+;;; register when that value is dead (e.g. the first float argument converted
-+;;; and immediately moved to an integer result).  Opt-in per unit.  Defined
-+;;; before the scratch alternative so recog prefers it for the plain
-+;;; conversion RTL (match_scratch clobbers are optional in matching).
-+(define_insn "fix_truncsfsi2_inplace"
-+  [(set (match_operand:SI 0 "general_operand" "=d")
-+	(fix:SI (match_operand:SF 1 "register_operand" "+f")))]
-+  "TARGET_HARD_FLOAT && TARGET_MIPS5900 && mips_astra_inplace_cvt"
-+  "*
-+{
-+  rtx xoperands[10];
-+
-+  output_asm_insn (\"cvt.w.s %1,%1\", operands);
-+
-+  xoperands[0] = operands[0];
-+  xoperands[1] = operands[1];
-+  output_asm_insn (mips_move_1word (xoperands, insn, FALSE), xoperands);
-+  return \"\";
-+}"
-+  [(set_attr "type"	"fcvt")
-+   (set_attr "mode"	"SF")
-+   (set_attr "length"	"11")])
-+
-+(define_insn "fix_truncsfsi2_legacy"
-   [(set (match_operand:SI 0 "general_operand" "=d,*f,R,To")
- 	(fix:SI (match_operand:SF 1 "register_operand" "f,*f,f,f")))
-    (clobber (match_scratch:SI 2 "=d,*d,&d,&d"))
-    (clobber (match_scratch:SF 3 "=f,?*X,f,f"))]
--  "TARGET_HARD_FLOAT"
-+  "TARGET_HARD_FLOAT && !(TARGET_MIPS5900 && mips_astra_inplace_cvt)"
-   "*
- {
-   rtx xoperands[10];
-@@ -6115,6 +6155,49 @@ move\\t%0,%z4\\n\\
+@@ -6115,6 +6118,49 @@ move\\t%0,%z4\\n\\
     (set_attr "length"	"1,2,1,2,1,2,1,2,1,1,1,1,2,1,2,1,1,1,1")])
  
  ;; CYGNUS LOCAL law

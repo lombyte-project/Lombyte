@@ -29,7 +29,7 @@ SOURCE_REVISION = "b595ded"
 PATCH_PATH = (
     ROOT / "patches" / "ee-gcc-2.9-991111-01" / "patched-ee-gcc.patch"
 )
-PATCH_SHA256 = "cc55e70cba79e24fba4195d494370b850d329a4e039e5b2c72dc42661c2e74fa"
+PATCH_SHA256 = "0faa74c638ad4ce2fa3ebf7e9b1a99afc295bb2b61958d177bf883d4fa3eef4e"
 BISON_URL = "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz"
 BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a"
 HOST_CFLAGS = "-O2 -fcommon -std=gnu89 -D_GNU_SOURCE"
@@ -43,9 +43,9 @@ HOST_OBJECTS_CFLAGS_MK = (
 # build paths and differ; they are reported, not enforced unless
 # --verify-hashes is passed.
 REFERENCE_HASHES = {
-    "cc1": "9a46212fe367be7787b8b07e5e498585b8cef8a2bbd29c1a70da4eb29f31dc76",
-    "cpp": "f2b234687c9b518f5c78c2f42ab6cc67ea6a1b1eb2042889cc6bcfafdc3db341",
-    "xgcc": "44143d386c89bd63d04ec5ca3e01471511768be8066364fe4ce236feae4a7db0",
+    "cc1": "c2aaf9dcbd5d72eafcc63b4ae98472d3f8b9f7202bab3a10dfe7b535f10b9213",
+    "cpp": "1509d06d85068c86c6e2529108597c0e4d3d9ecafcd3e43b6d14607c9bc3b1b7",
+    "xgcc": "28872669c68b760b3220077ac313f908c479f3b1282e29308988318e2c76b252",
 }
 
 
@@ -241,7 +241,7 @@ def build(
     build_dir.mkdir(parents=True, exist_ok=True)
     # GCC's generated Makefiles do not track tm.h (mips.h) dependencies, so a
     # reused build directory silently keeps stale option tables after a recipe
-    # change (e.g. a new -mastra-* switch).  Stamp the objects with the recipe
+    # change (e.g. a changed mips.h).  Stamp the objects with the recipe
     # they were built from and start over when it moves.
     recipe_stamp = build_dir / ".recipe-sha256"
     recipe_now = sha256(PATCH_PATH)

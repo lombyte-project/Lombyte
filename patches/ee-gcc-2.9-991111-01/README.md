@@ -8,23 +8,23 @@ oracle. Build instructions and requirements:
 - File: [`patched-ee-gcc.patch`](patched-ee-gcc.patch), applied with
   `git apply` at the source root.
 - Patch SHA-256:
-  `cc55e70cba79e24fba4195d494370b850d329a4e039e5b2c72dc42661c2e74fa`.
-Changes (151 inserted, 14 deleted lines across 5 files):
+  `0faa74c638ad4ce2fa3ebf7e9b1a99afc295bb2b61958d177bf883d4fa3eef4e`.
+Changes (98 inserted, 12 deleted lines across 5 files):
 | File                                   | Change                                                                  |
 | :------------------------------------- | :---------------------------------------------------------------------- |
 | `ee/gcc/c-parse.in`                    | typed midrule actions, so bison 1.28 parses the grammar on modern hosts |
-| `ee/gcc/config/mips/mips.h`            | opt-in `-mastra-*` target options, inert unless selected                |
+| `ee/gcc/config/mips/mips.h`            | declares the flag reorg sets while it splits a volatile store           |
 | `ee/gcc/config/mips/mips.c`            | GPR callee saves with `sd`/`ld` in 16-byte slots, as the retail SDK code |
-| `ee/gcc/config/mips/mips.md`           | `mulsi3` uses classic `mult`/`mflo`; in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`); a volatile store to an absolute address in a call delay slot is split into `lui $1` / `sw` through `$1`, bracketed with `.set noat` |
+| `ee/gcc/config/mips/mips.md`           | `mulsi3` uses classic `mult`/`mflo`; a volatile store to an absolute address in a call delay slot is split into `lui $1` / `sw` through `$1`, bracketed with `.set noat` |
 | `ee/gcc/reorg.c`                       | a volatile store just before a call may fill its delay slot             |
 The profile has no per-unit options: every unit on it builds with the same
 command line.
 Reference binaries (a Linux cloud host build; rebuilds elsewhere differ
 because GCC embeds build paths):
 ```text
-cc1   9a46212fe367be7787b8b07e5e498585b8cef8a2bbd29c1a70da4eb29f31dc76
-cpp   f2b234687c9b518f5c78c2f42ab6cc67ea6a1b1eb2042889cc6bcfafdc3db341
-xgcc  44143d386c89bd63d04ec5ca3e01471511768be8066364fe4ce236feae4a7db0
+cc1   c2aaf9dcbd5d72eafcc63b4ae98472d3f8b9f7202bab3a10dfe7b535f10b9213
+cpp   1509d06d85068c86c6e2529108597c0e4d3d9ecafcd3e43b6d14607c9bc3b1b7
+xgcc  28872669c68b760b3220077ac313f908c479f3b1282e29308988318e2c76b252
 ```
 Patch and binaries are GPLv2-or-later, like the base; see
 [`licenses/GPL-2.0.txt`](../../licenses/GPL-2.0.txt). Binaries are not

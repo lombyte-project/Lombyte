@@ -207,18 +207,6 @@ SDK_COMPILER_FLAG_UNITS = {
 
 # Per-unit extra flags for GAME_COMPILER_UNITS (exact owner path, as SN_FLAG_UNITS).
 GAME_COMPILER_FLAG_UNITS = {
-    # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
-    # constraints; the same four pins reproduce the object on the game compiler.
-    # Without them the prepass schedule pairs the first `nor` with the `slt`,
-    # so the two `nor` results land in a3/v1 instead of v1/v0; no C spelling
-    # tried (orders, forms, types, do-while barriers, permuter) moves it.
-    "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
-    # FUN_002075e8: retail materializes the zero return before `jr $ra` and
-    # leaves the delay slot empty; the default pass moves that assignment into
-    # the slot.  100/100/100 with this option (2026-10-03).  No plain C keeps
-    # the slot empty: it needs a label between the store and `jr`, and a
-    # three-instruction body has none.
-    "ui/menus/fun_002075e8": "-fno-delayed-branch",
 }
 
 SN_FLAG_UNITS = {
