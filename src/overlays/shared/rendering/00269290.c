@@ -248,7 +248,42 @@ void FUN_L00_00269a70(O00269a70 *o) {
     if (FUN_001f9770(&o->xa))
         FUN_L00_00267a08(o);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269b70.s", FUN_L00_00269b70);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* spawns a type-5 particle at pos with packed color and a target */
+/* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AA10), where it is exact; names translated to the US level program. */
+
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_L00_001B2094 __attribute__((section(".data")));
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void *FUN_L00_002678b8(int);
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L00_00269b70(void *pos, unsigned char c0, unsigned char c1, unsigned char c2, int tgt, float a, float b) {
+    char *p;
+    float *q;
+    if (tgt) {
+        p = FUN_L00_002678b8(5);
+        if (p) {
+            qcopy(p + 0x10, pos);
+            *(int *)(p + 4) = 0x7F000000 | (c2 << 16) | (c1 << 8) | c0;
+            q = (float *)(p + 0x20);
+            p[9] = func_001FA898_r(4.0f) - 0x60;
+            p[3] = 0x48;
+            *(float *)(p + 0xC) = b;
+            p[1] = 0;
+            p[8] = 0;
+            p[2] = **(unsigned char **)&D_L00_001B2094;
+            *(int *)(p + 0x20) = tgt;
+            q[1] = a / ConvertIntegerToFloat(tgt);
+        }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -925,12 +960,12 @@ typedef struct {
     f32 c[4];
 } E0026c6e8;
 extern u8 *D_L00_001B20CC NOT_SDA;
-E0026c6e8 *FUN_L00_002678b8(s32);
+E0026c6e8 *FUN_L00_002678b8_u(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f9a28(void *, void *, void *);
 void FUN_L00_0026c6e8(void *pos, void *vel) {
-    E0026c6e8 *e = FUN_L00_002678b8(0x13);
+    E0026c6e8 *e = FUN_L00_002678b8_u(0x13);
     u32 v;
     if (e == 0)
         return;
