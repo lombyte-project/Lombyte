@@ -2,5 +2,37 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00298c68.s", FUN_L02_00298c68);
+typedef struct {
+    s32 a, b;
+} P2_00298c68;
+typedef struct {
+    u8 pad[0x19F8];
+    P2_00298c68 x[3];
+    P2_00298c68 y[3];
+} Tab_00298c68;
+extern Tab_00298c68 D_00137B80_00298c68 __asm__("D_00137B80");
+extern s32 D_0015ED80;
+extern s32 D_0015ED88;
+extern u8 D_0013F350[];
+void FUN_L00_002995d0(s32, s32, s32);
+void FUN_L00_00211250();
+void FUN_L02_00298c68(s32 i) {
+    s32 a, b;
+    u8 *s;
+    if (i < 0)
+        return;
+    if (D_0015ED80) {
+        a = D_00137B80_00298c68.y[i].a;
+        b = D_00137B80_00298c68.y[i].b;
+    } else {
+        a = D_00137B80_00298c68.x[i].a;
+        b = D_00137B80_00298c68.x[i].b;
+    }
+    s = D_0013F350;
+    if (*(s32 *)(s + 0x22A8) == 0) {
+        FUN_L00_00211250();
+    } else if (s[0x20B1] == 0) {
+        FUN_L00_002995d0(a, b, D_0015ED88);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d61c0.s", FUN_L02_002d61c0);
