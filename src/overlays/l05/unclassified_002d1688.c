@@ -444,7 +444,33 @@ void FUN_L05_002db238(void *m, void *dir) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303e50.s", FUN_L05_00303e50);
+extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
+extern float FUN_001f9dc8_c(float) __asm__("FUN_001f9dc8");
+extern float FUN_001f9de0_c(float) __asm__("FUN_001f9de0");
+extern float FUN_001f9b48_c(float *, float *) __asm__("FUN_001f9b48");
+extern void FUN_001f9a10_c(float *, float *, float *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a28_c(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void FUN_001f9bf8_c(float *, float *, float) __asm__("FUN_001f9bf8");
+extern int FUN_L00_00261968_c(int, float *, float *) __asm__("FUN_L00_00261968");
+
+int FUN_L05_00303e50(char *a0, float *a1, float s)
+{
+    float v[4];
+    float w[4];
+    char *d = *(char **)(a0 + 0x78);
+    float a;
+    a = FUN_001f9e90_c(a1[0] - *(float *)(a0 + 0x10), a1[1] - *(float *)(a0 + 0x14));
+    a = FUN_001fa580_c(a, *(float *)(d + 0x294) * 1.5f);
+    v[0] = FUN_001f9dc8_c(a) * FUN_001f9b48_c(a1, (float *)(a0 + 0x10));
+    v[1] = FUN_001f9de0_c(a) * FUN_001f9b48_c(a1, (float *)(a0 + 0x10));
+    *(int *)&v[2] = 0;
+    FUN_001f9a10_c(v, v, (float *)(a0 + 0x10));
+    FUN_001f9a28_c(w, v, a1);
+    FUN_001f9bf8_c(w, w, s);
+    FUN_001f9a10_c(w, w, (float *)(a0 + 0x10));
+    return FUN_L00_00261968_c(*(int *)(d + 0x2C0), v, w) == 0;
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
