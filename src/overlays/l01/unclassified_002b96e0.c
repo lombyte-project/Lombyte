@@ -1907,62 +1907,63 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_002f4428(char *m) {
-    float dir[4];
-    float tmp[4];
-    char *d = *(char **)(m + 0x78);
-    void *hit = FUN_L00_0025a420(m, 0x800000, 0);
-    float s;
-    ((unsigned char *)m)[0xA4] = 0xFF;
-    if (((unsigned char *)m)[0x20] == 0) {
-        *(float *)(d + 0x170) = *(float *)(m + 0x2C);
-        *(float *)(d + 0x174) = *(float *)(d + 0xFC);
+/* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
+void FUN_L01_002f4428(char *moby) {
+    float hit_dir[4];
+    float hit_vec[4];
+    char *data = *(char **)(moby + 0x78);
+    void *hit = FUN_L00_0025a420(moby, 0x800000, 0);
+    float speed_scale;
+    ((unsigned char *)moby)[0xA4] = 0xFF;
+    if (((unsigned char *)moby)[0x20] == 0) {
+        *(float *)(data + 0x170) = *(float *)(moby + 0x2C);
+        *(float *)(data + 0x174) = *(float *)(data + 0xFC);
     }
     {
-        float dist = distance_xyz(m + 0x10, D_L01_00167240);
-        float lo = *(float *)&D_L01_00161AF4;
-        float x0 = *(float *)&D_L01_00161AFC;
-        float k = -((1.0f - lo) / (*(float *)&D_L01_00161AF8 - x0));
-        s = k * dist + (1.0f - k * x0);
-        if (1.0f < s) s = 1.0f;
-        if (s < lo) s = lo;
+        float dist = distance_xyz(moby + 0x10, D_L01_00167240);
+        float min_scale = *(float *)&D_L01_00161AF4;
+        float near_dist = *(float *)&D_L01_00161AFC;
+        float slope = -((1.0f - min_scale) / (*(float *)&D_L01_00161AF8 - near_dist));
+        speed_scale = slope * dist + (1.0f - slope * near_dist);
+        if (1.0f < speed_scale) speed_scale = 1.0f;
+        if (speed_scale < min_scale) speed_scale = min_scale;
     }
-    *(float *)(m + 0x2C) = *(float *)(d + 0x170) * s;
-    *(float *)(d + 0xFC) = *(float *)(d + 0x174) * s;
+    *(float *)(moby + 0x2C) = *(float *)(data + 0x170) * speed_scale;
+    *(float *)(data + 0xFC) = *(float *)(data + 0x174) * speed_scale;
     if (hit != 0) {
         int i;
-        int *t;
-        if (((unsigned char *)m)[0x20] == 0x65) return;
+        int *child_ids;
+        if (((unsigned char *)moby)[0x20] == 0x65) return;
         if (D_0013D408 == 0) {
             D_0013D408 = 1;
             allocate_voice_for_bank_entry_alt(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
-        subtract_vector_xyz(tmp, d + 0xD0, d + 0xE0);
-        m[0x20] = 0x65;
-        *(u128 *)dir = *(u128 *)tmp;
-        FUN_L00_0025e450(m, dir, m + 0x10, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
-        FUN_L01_0030be70(m, dir, s);
-        t = (int *)(d + 0x140);
+        subtract_vector_xyz(hit_vec, data + 0xD0, data + 0xE0);
+        moby[0x20] = 0x65;
+        *(u128 *)hit_dir = *(u128 *)hit_vec;
+        FUN_L00_0025e450(moby, hit_dir, moby + 0x10, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
+        FUN_L01_0030be70(moby, hit_dir, speed_scale);
+        child_ids = (int *)(data + 0x140);
         for (i = 0; i < 4; i++) {
-            if (t[i] != -1) {
-                mark_moby_for_removal((char *)(*(int *)&D_L01_0015FFD8_c + (t[i] << 8)));
+            if (child_ids[i] != -1) {
+                mark_moby_for_removal((char *)(*(int *)&D_L01_0015FFD8_c + (child_ids[i] << 8)));
             }
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    if (((unsigned char *)m)[0x20] == 0x65) return;
-    FUN_L01_002f5168(m);
-    *(unsigned short *)(m + 0x34) |= 0x1000;
-    d[0x2B] = 1;
-    d[0x2C] = 0x64;
-    if (175.0f <= *(float *)(m + 0x18)) {
-        m[0x23] = 0;
-    } else if (125.0f < *(float *)(m + 0x18) && *(float *)(m + 0x18) < 175.0f) {
-        m[0x23] = func_001FA898_r((175.0f - *(float *)(m + 0x18)) * 128.0f / 50.0f);
-    } else if (*(float *)(m + 0x18) <= 125.0f) {
-        ((unsigned char *)m)[0x23] = 0x80;
+    if (((unsigned char *)moby)[0x20] == 0x65) return;
+    FUN_L01_002f5168(moby);
+    *(unsigned short *)(moby + 0x34) |= 0x1000;
+    data[0x2B] = 1;
+    data[0x2C] = 0x64;
+    if (175.0f <= *(float *)(moby + 0x18)) {
+        moby[0x23] = 0;
+    } else if (125.0f < *(float *)(moby + 0x18) && *(float *)(moby + 0x18) < 175.0f) {
+        moby[0x23] = func_001FA898_r((175.0f - *(float *)(moby + 0x18)) * 128.0f / 50.0f);
+    } else if (*(float *)(moby + 0x18) <= 125.0f) {
+        ((unsigned char *)moby)[0x23] = 0x80;
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);

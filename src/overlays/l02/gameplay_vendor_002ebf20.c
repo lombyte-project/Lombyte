@@ -13,24 +13,25 @@ extern int D_L02_00161F4C __attribute__((sda));
 extern int D_L02_00161F50 __attribute__((sda));
 extern int D_L02_00161F54 __attribute__((sda));
 
+/* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
 char *FUN_L02_002ec228(char *src, void *pos, float *dir) {
-    char *m;
-    char *v;
-    m = create_moby_c(0x4B8);
-    if (m != 0) {
-        m[0x31] = 1;
-        *(unsigned char *)(m + 0x30) = *(short *)(m + 0x32) = 0xFF;
-        FUN_L00_002502f0_c(m, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
-        *(short *)(m + 0x34) = *(unsigned short *)(src + 0x34);
-        qcopy(m + 0x10, pos);
-        *(float *)(m + 0x48) = atan2_c(dir[0], dir[1]);
-        *(float *)(m + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
-        m[0x20] = 1;
-        v = *(char **)(m + 0x78);
-        qcopy(v, dir);
-        *(int *)(v + 0x10) = scale_frames_c(0x3C);
+    char *moby;
+    char *data;
+    moby = create_moby_c(0x4B8);
+    if (moby != 0) {
+        moby[0x31] = 1;
+        *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
+        FUN_L00_002502f0_c(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
+        *(short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
+        qcopy(moby + 0x10, pos);
+        *(float *)(moby + 0x48) = atan2_c(dir[0], dir[1]);
+        *(float *)(moby + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
+        moby[0x20] = 1;
+        data = *(char **)(moby + 0x78);
+        qcopy(data, dir);
+        *(int *)(data + 0x10) = scale_frames_c(0x3C);
     }
-    return m;
+    return moby;
 }
 
 #define NOT_SDA

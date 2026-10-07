@@ -550,28 +550,29 @@ typedef struct {
 
 extern Level02GroupMoby *D_L02_0015FFD8_g __asm__("D_L02_0015FFD8");
 
-Level02GroupMoby *FUN_L02_002dd2a8(Level02GroupMoby *arg) {
-    short *p;
-    Level02GroupMoby *base;
-    if (arg->group == 0xFF) {
+/* Finds the group's moby of type 0x244 in state 0x1A, hands it arg as target, and transfers hp to arg; returns it or 0. */
+Level02GroupMoby *FUN_L02_002dd2a8(Level02GroupMoby *owner) {
+    short *group_ids;
+    Level02GroupMoby *mobys;
+    if (owner->group == 0xFF) {
         return 0;
     }
-    p = (short *)D_L02_001ABE40[arg->group];
-    base = D_L02_0015FFD8_g;
+    group_ids = (short *)D_L02_001ABE40[owner->group];
+    mobys = D_L02_0015FFD8_g;
     do {
-        int i = *(unsigned short *)p & 0x7FFF;
-        if (base[i].type == 0x244 && base[i].state == 0x1A) {
-            base[i].target = arg;
-            if (arg->hp < base[i].hp) {
-                base[i].hp = arg->hp;
+        int i = *(unsigned short *)group_ids & 0x7FFF;
+        if (mobys[i].type == 0x244 && mobys[i].state == 0x1A) {
+            mobys[i].target = owner;
+            if (owner->hp < mobys[i].hp) {
+                mobys[i].hp = owner->hp;
             }
-            arg->hp -= D_L02_0015FFD8_g[i].hp;
-            if (arg->hp <= 0) {
-                arg->hp = 1;
+            owner->hp -= D_L02_0015FFD8_g[i].hp;
+            if (owner->hp <= 0) {
+                owner->hp = 1;
             }
             return &D_L02_0015FFD8_g[i];
         }
-    } while (*p++ >= 0);
+    } while (*group_ids++ >= 0);
     return 0;
 }
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */

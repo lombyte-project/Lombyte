@@ -838,60 +838,61 @@ extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
-void FUN_L01_002ffdc0(char *m) {
-    float np[4];
-    float at[4];
-    float vel[4];
-    char *d = *(char **)(m + 0x78);
-    *(float *)(d + 8) -= *(float *)(d + 0x10);
-    *(float *)(m + 0x40) += *(float *)(d + 0x1C);
-    add_vector_xyz(np, m + 0x10, d);
-    if (FUN_001efa68(m + 0x10, np, 2, 0, 0)) {
+/* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
+void FUN_L01_002ffdc0(char *moby) {
+    float next_pos[4];
+    float effect_pos[4];
+    float particle_vel[4];
+    char *data = *(char **)(moby + 0x78);
+    *(float *)(data + 8) -= *(float *)(data + 0x10);
+    *(float *)(moby + 0x40) += *(float *)(data + 0x1C);
+    add_vector_xyz(next_pos, moby + 0x10, data);
+    if (FUN_001efa68(moby + 0x10, next_pos, 2, 0, 0)) {
         int i;
-        char *o;
+        char *effect;
         if (!FUN_001f0b58()) {
-            if (*(int *)(d + 0x18) == 0) {
-                allocate_voice_for_target_entry_alt(0, 0, (int)m);
+            if (*(int *)(data + 0x18) == 0) {
+                allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             }
-            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, *(float *)(m + 0x10), *(float *)(m + 0x14), 0.5f, -0.35f);
+            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, *(float *)(moby + 0x10), *(float *)(moby + 0x14), 0.5f, -0.35f);
             {
-                float g = D_0015ED6C;
-                float h = D_0015ED70;
-                *(int *)(d + 0x18) = 1;
-                *(int *)(d + 0x14) = 0x78;
-                *(int *)(d + 0x1C) = 0;
-                *(float *)(d + 8) = g * -1.5f;
-                *(float *)(d + 0x10) = h * 0.8f;
+                float pos_unit = D_0015ED6C;
+                float pos_unit2 = D_0015ED70;
+                *(int *)(data + 0x18) = 1;
+                *(int *)(data + 0x14) = 0x78;
+                *(int *)(data + 0x1C) = 0;
+                *(float *)(data + 8) = pos_unit * -1.5f;
+                *(float *)(data + 0x10) = pos_unit2 * 0.8f;
             }
-            at[0] = *(float *)(m + 0x10);
-            at[1] = *(float *)(m + 0x14);
-            at[2] = D_L01_001742E8;
-            o = FUN_L00_002d7e90(at, 2.0f);
-            if (o != 0) {
-                o[0x23] = 0x70;
+            effect_pos[0] = *(float *)(moby + 0x10);
+            effect_pos[1] = *(float *)(moby + 0x14);
+            effect_pos[2] = D_L01_001742E8;
+            effect = FUN_L00_002d7e90(effect_pos, 2.0f);
+            if (effect != 0) {
+                effect[0x23] = 0x70;
             }
             for (i = 0; i < 16; i++) {
                 float a = random_angle_radians();
                 float r = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
-                vel[0] = fast_cos(a) * r;
-                vel[1] = fast_sin(a) * r;
-                vel[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+                particle_vel[0] = fast_cos(a) * r;
+                particle_vel[1] = fast_sin(a) * r;
+                particle_vel[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
                 {
-                    int c = FUN_L00_00257b90(0x5A, 0x78);
-                    FUN_L00_0026f548(at, vel, random_integer_below(2), c);
+                    int lifetime = FUN_L00_00257b90(0x5A, 0x78);
+                    FUN_L00_0026f548(effect_pos, particle_vel, random_integer_below(2), lifetime);
                 }
             }
         } else {
-            mark_moby_for_removal(m);
+            mark_moby_for_removal(moby);
             return;
         }
     }
-    qcopy(m + 0x10, np);
-    if (*(int *)(d + 0x18) != 0) {
-        *(float *)(m + 0x2C) *= 0.99f;
+    qcopy(moby + 0x10, next_pos);
+    if (*(int *)(data + 0x18) != 0) {
+        *(float *)(moby + 0x2C) *= 0.99f;
     }
-    if (tick_countdown_32_alt((int *)(d + 0x14))) {
-        mark_moby_for_removal(m);
+    if (tick_countdown_32_alt((int *)(data + 0x14))) {
+        mark_moby_for_removal(moby);
     }
 }
 typedef struct {
