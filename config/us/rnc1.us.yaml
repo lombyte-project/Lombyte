@@ -909,7 +909,7 @@ segments:
           - [0xea3f8, c, rendering/callbacks/noop_callback_r]
           - [0xea400, c, rendering/callbacks/noop_callback_s]
           - [0xea408, c, gameplay/state/start_level]
-          - [0xea5d8, c, assembly/textbin/world/startlevel]
+          - [0xea5d8, c, textbin/world/startlevel]
           - [0xeaa34, textbin, text_gap_001e9ab4_before_fun_001e9ab8]
           - [0xeaa38, c, gameplay/state/transition_draw_sky]
           - [0xeaa90, c, assembly/textbin/fun_001e9b10]

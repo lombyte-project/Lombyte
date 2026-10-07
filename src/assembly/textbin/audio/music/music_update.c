@@ -10,8 +10,8 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_update/FU
 
 extern struct MusicStreamState music_state __asm__("D_001516D0");
 extern u8 D_00151704[];
-extern void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32, s32,
-                                    s32) __asm__("func_0012E4C0");
+extern void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32,
+                                    void (*)(u32, s64), s32 *) __asm__("func_0012E4C0");
 extern void set_sound_handle_id(u32, s64) __asm__("func_00216B68");
 extern void snd_continue_vag_stream(s32) __asm__("func_0012ECA0");
 extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
@@ -93,8 +93,8 @@ void music_update(void) {
             } else if (music_state.primary_state != 9) {
                 /* The callback receives the old handle; mark its slot pending before submission. */
                 *(u32 *)&music_state.primary_handle = 0xFFFFFFFF;
-                snd_set_sound_params_cb(handle, 5, fade_volume, 0, 0, 0, (s32)set_sound_handle_id,
-                                        (s32)&music_state.primary_handle);
+                snd_set_sound_params_cb(handle, 5, fade_volume, 0, 0, 0, set_sound_handle_id,
+                                        &music_state.primary_handle);
             }
             break;
         case 3:
