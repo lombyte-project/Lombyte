@@ -25,7 +25,6 @@ void FUN_L00_002e85d8(float a, float b) {
     }
 }
 /* Copies a vector into the current object's slot, switching to state 5 first. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);

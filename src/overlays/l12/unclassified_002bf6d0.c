@@ -4,7 +4,6 @@
 
 #include "qcopy.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
 extern char D_L12_001CBF40[];
 extern int D_L12_0015FFD8; /* no foreign declaration */
@@ -25,7 +24,6 @@ void FUN_L12_002bf6d0(char *moby) {
 #include "sda.h"
 
 /* Register this level's vendor data set. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern void FUN_L01_002b91c8(char *, int);
 
@@ -34,7 +32,6 @@ void FUN_L12_002bf748(void) {
 }
 #include "eetypes.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbb20(void *);
 

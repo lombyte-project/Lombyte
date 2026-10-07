@@ -7,7 +7,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ea418.s", FUN_L17_002ea418);
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbe20(void *);
 
@@ -19,7 +18,6 @@ int FUN_L17_002f0040(char *a) {
 extern void FUN_L17_002f0448(char *m);
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00263618(void *, int, float, float);
 

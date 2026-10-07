@@ -5,7 +5,6 @@
 #include "sda.h"
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);

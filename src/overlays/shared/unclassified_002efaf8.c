@@ -6,7 +6,6 @@
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbb20(void *);
 
@@ -20,7 +19,6 @@ int FUN_L01_002efaf8(char *a) {
     }
     return r;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbe20(void *);
 
@@ -44,7 +42,6 @@ s32 FUN_L01_002efbc8(T6 *p) {
     }
     return 0;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 
@@ -58,7 +55,6 @@ int FUN_L01_002f1c78(char *a) {
     }
     return r;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 int FUN_L01_002f1dc8(char *a) {
     int r = FUN_L00_002dbe20(a);

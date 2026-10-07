@@ -6,7 +6,6 @@
 #include "sda.h"
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);

@@ -6,7 +6,6 @@
 #include "sda.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
-/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char v[16];
@@ -88,7 +87,6 @@ void FUN_L07_0031f3d8(char *self) {
     }
 }
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
-/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal_c_c(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -133,7 +131,6 @@ void FUN_L07_0031f5b0(char *self) {
 }
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320B50), where it is exact; names translated to the US level program. */
 
 void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");
 

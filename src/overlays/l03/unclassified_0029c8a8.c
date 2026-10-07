@@ -6,7 +6,6 @@
 #include "qzero.h"
 #include "sda.h"
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
-/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DA60), where it is exact; names translated to the US level program. */
 
 typedef int u128 __attribute__((mode(TI)));
 
@@ -40,7 +39,6 @@ void FUN_L03_0029c8a8(char *moby, float *out) {
         add_vector_xyz_q(out, out, d);
     }
 }
-/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
 int FUN_L03_002c6d58(unsigned char *moby) {
     if (moby && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(short *)(moby + 0xA6) == 0x23e &&
@@ -50,7 +48,6 @@ int FUN_L03_002c6d58(unsigned char *moby) {
     return 0;
 }
 /* Sets two speed pairs on a moby's data from level constants scaled by degrees-to-radians and the frame scale. */
-/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D5008), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float D_L03_00161BD8 __attribute__((sda));

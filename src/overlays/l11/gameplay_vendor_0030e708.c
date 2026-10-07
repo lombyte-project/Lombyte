@@ -6,7 +6,6 @@
 #include "sda.h"
 
 /* Register this level's vendor data set. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char D_L11_001DA880[];
 extern void FUN_L01_002b91c8(char *, int);
@@ -15,7 +14,6 @@ void FUN_L11_0030e708(void) {
     FUN_L01_002b91c8(D_L11_001DA880, 0x14);
 }
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -47,7 +45,6 @@ void FUN_L11_0031d7d8(char *m) {
     }
 }
 /* Runs the two per-entry update calls over a 13-entry table. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int a, b;

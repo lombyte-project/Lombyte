@@ -6,7 +6,6 @@
 #include "sda.h"
 
 /* Register this level's vendor data set. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001D6880[];
 extern void FUN_L01_002b91c8(char *, int);

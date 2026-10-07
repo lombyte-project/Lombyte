@@ -116,7 +116,6 @@ void FUN_L00_002c31c0(M_2acbf0_002acbf0 *m) {
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 
@@ -130,7 +129,6 @@ int FUN_L00_002d56e0(char *a) {
     }
     return r;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002dbe20(void *);
 
@@ -141,7 +139,6 @@ int FUN_L00_002d57d0(char *a) {
 }
 #include "rnc/math/vector.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 int FUN_L00_002da218(char *a) {
     int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0x4);

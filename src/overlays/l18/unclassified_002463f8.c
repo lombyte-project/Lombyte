@@ -5,7 +5,6 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002463f8.s", FUN_L18_002463f8);
 #include "sda.h"
 #define W(x) (*(int *)&(x))
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
 extern int D_L18_0015F5CC;
 extern short D_L18_00161A1C __attribute__((sda));
@@ -56,7 +55,6 @@ void FUN_L18_002d8098(char *moby) {
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
     FontPrintCenterLarge_001f6c20(W(D_L18_00161A1C), W(D_L18_00161A20), col, (int)buf, 8);
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 

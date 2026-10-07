@@ -6,7 +6,6 @@
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
 extern int FUN_L00_002dbc30(char *, int, int, float);
@@ -40,7 +39,6 @@ s32 FUN_L04_002c41b0(T6 *p) {
     }
     return 0;
 }
-/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
 typedef int u128_2d34d8 __attribute__((mode(TI)));
 

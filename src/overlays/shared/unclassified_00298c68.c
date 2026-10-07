@@ -39,7 +39,6 @@ void FUN_L02_00298c68(s32 i) {
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 

@@ -6,7 +6,6 @@
 #include "sda.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 
-/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
 

@@ -23,8 +23,6 @@ void FUN_L01_002f6150(void) {
 #include "rnc/math/vector.h"
 #include "sda.h"
 extern u8 D_L01_001FBC80[];
-void FUN_L00_002371e0(void);
-void FUN_L01_002b96e0(s32, void *);
 
 void FUN_L01_002feb28(void) {
     FUN_L00_002371e0();

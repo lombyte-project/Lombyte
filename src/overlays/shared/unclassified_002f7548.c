@@ -4,7 +4,6 @@
 
 #include "sda.h"
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -32,7 +31,6 @@ void FUN_L06_002f7548(char *moby) {
 }
 #include "qcopy.h"
 #include "sda.h"
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00301090), where it is exact; names translated to the US level program. */
 
 void FUN_L06_00303150(unsigned char *moby) {
     moby[0x20] = 0x2;

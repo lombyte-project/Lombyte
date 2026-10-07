@@ -6,7 +6,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003098d0.s", FUN_L13_003098d0);
 #include "sda.h"
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float FUN_001f96b0(float);
@@ -86,7 +85,6 @@ void FUN_L13_00309bc8(char *moby) {
 #include "qcopy.h"
 
 /* Register this level's vendor data set. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char D_L13_001D9BC0[];
 extern void FUN_L01_002b91c8(char *, int);

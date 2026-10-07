@@ -5,7 +5,6 @@
 #include "qcopy.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
 typedef struct {
     int a, b;
@@ -45,7 +44,6 @@ void FUN_L08_00308e90(int a) {
     }
 }
 /* Draws three rows of HUD elements with their colours. */
-/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
 extern int D_L08_00162390 __attribute__((sda));
 extern int D_L08_00162394;
@@ -86,7 +84,6 @@ void FUN_L08_00309030(void) {
 }
 #include "sda.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");

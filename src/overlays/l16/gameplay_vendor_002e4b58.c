@@ -32,7 +32,6 @@ void FUN_L16_002e4b58(void *moby_v) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
 
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
@@ -51,7 +50,6 @@ int FUN_L16_002e4c40(char *m) {
 #include "qcopy.h"
 #include "sda.h"
 /* Plays the sound that goes with the moby's current variant. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
@@ -78,7 +76,6 @@ void FUN_L16_002e4cd8(char *moby) {
     }
 }
 /* Wobbles a moby's position and rotation from its sine-driven state. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
 extern float FUN_001f9de0(float);
@@ -113,7 +110,6 @@ void FUN_L16_002e4d88(char *moby) {
         *(float *)(moby + 0x44) = -0.17453292f;
 }
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L16_001B0930[];
 extern char D_0013F350[];
@@ -139,7 +135,6 @@ void FUN_L16_002e4f30(char *a) {
     }
 }
 /* Sets up the draw state, then draws the three entries of the level's table. */
-/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
 
 extern char D_L16_001DF2B0[][16] __attribute__((section(".data")));
 extern char D_L16_001DF2D0[] __attribute__((section(".data")));

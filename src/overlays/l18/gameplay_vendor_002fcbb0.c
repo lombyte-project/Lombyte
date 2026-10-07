@@ -6,7 +6,6 @@
 #include "qcopy.h"
 #include "sda.h"
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
 
@@ -23,7 +22,6 @@ int FUN_L18_002fcbb0(char *a) {
 #include "rnc/gameplay/entities/moby.h"
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
-/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7670), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char _pad00[0x10];

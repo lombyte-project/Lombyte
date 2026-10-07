@@ -52,7 +52,6 @@ void FUN_L14_00305a38(O_FUN_L14_00305a38 *o) {
     m->x48 = 2.5f;
 }
 /* calls func_L12_002BD3D0 with two looked-up ids */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
 
 extern char D_L14_001F5F80[];
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");

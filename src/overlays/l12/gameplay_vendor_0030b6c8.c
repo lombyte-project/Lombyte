@@ -4,7 +4,6 @@
 
 #include "sda.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
