@@ -14,7 +14,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00120558/FUN_00120558.s
  */
 s32 FUN_00120558(s32 arg0, s32 arg1) {
     u32 busy;
-    u32 initial_busy = 1;
+    u32 initial_busy;
     u32 vif1_dma;
     u32 gif_dma;
     u32 vif1_status;
@@ -25,6 +25,7 @@ s32 FUN_00120558(s32 arg0, s32 arg1) {
     (void)arg1;
     do {
         vif1_dma = *(vu32 *)0x10009000;
+        initial_busy = 1;
         gif_dma = *(vu32 *)0x1000a000;
         vif1_status = *(vu32 *)0x10003c00;
         busy = initial_busy;
