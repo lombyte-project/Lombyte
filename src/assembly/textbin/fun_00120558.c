@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00120558/FUN_00120558.s", FUN_00120558);
 #else
-#include "ee_cop2.h"
+#include "../../../include/ee_cop2.h"
 
 /* Provisional recovery of the complete resident polling loop. The original
  * two incoming argument registers are never consumed. All five sources are
@@ -14,6 +14,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00120558/FUN_00120558.s
  */
 s32 FUN_00120558(s32 arg0, s32 arg1) {
     u32 busy;
+    u32 initial_busy = 1;
     u32 vif1_dma;
     u32 gif_dma;
     u32 vif1_status;
@@ -26,7 +27,8 @@ s32 FUN_00120558(s32 arg0, s32 arg1) {
         vif1_dma = *(vu32 *)0x10009000;
         gif_dma = *(vu32 *)0x1000a000;
         vif1_status = *(vu32 *)0x10003c00;
-        busy = (vif1_dma & 0x100) ? 1 : 0;
+        busy = initial_busy;
+        if (!(vif1_dma & 0x100)) busy = 0;
         if (gif_dma & 0x100) busy |= 2;
         if (vif1_status & 3) busy |= 4;
         vpu_status = ee_read_vpu_stat();
