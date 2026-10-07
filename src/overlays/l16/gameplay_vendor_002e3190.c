@@ -327,7 +327,7 @@ extern L16PickupPose *D_L16_001600EC __attribute__((section(".sdata")));
 extern char *FUN_L05_00319598(void *, int);
 extern char D_0013CAE4[];
 extern char D_0013E550[];
-extern char D_0013F350[];
+extern char D_0013F350_u[] __asm__("D_0013F350");
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
@@ -380,7 +380,7 @@ void FUN_L16_002e43e0(char *moby) {
         FUN_L16_002e4900_c(moby);
         break;
     case 1:
-        g = D_0013F350;
+        g = D_0013F350_u;
         if (*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) {
             FUN_001fa2d8(v30, moby + 0xC0);
             subtract_vector_xyz(v70, g + 0x80, moby + 0x10);
@@ -465,7 +465,7 @@ void FUN_L16_002e43e0(char *moby) {
     }
     FUN_L05_00319740(moby);
     if (*(unsigned char *)(moby + 0x20) >= 3 && *(unsigned char *)(moby + 0x20) <= 5) {
-        g2 = D_0013F350;
+        g2 = D_0013F350_u;
         *(short *)(g2 + 0x1F2) = 2;
         *(short *)(g2 + 0x1F4) = 2;
         FUN_L05_003198e8(moby);
@@ -1570,7 +1570,173 @@ void FUN_L16_002e7e00(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7f80.s", FUN_L16_002e7f80);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Moves the platform between two heights above its joint, with a particle while it moves. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E93F8), where it is exact; names translated to the US level program. */
+
+
+typedef union {
+    u128 q;
+    float v[4];
+} L16PlatformVector;
+
+typedef struct {
+    char pad00[0x60];
+    float basis[4][4];
+    int joint;
+    int padA4;
+    float goal;
+    int padAC;
+    float speed;
+    int particle;
+} L16PlatformData;
+
+typedef struct {
+    char pad00[0x10];
+    float position[4];
+    unsigned char state;
+    char pad21[0x1F];
+    float rotation[4];
+    char pad50[0x28];
+    L16PlatformData *data;
+    char pad7C[0x40];
+    unsigned char reverse;
+} L16PlatformMoby;
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];
+    char pad90[0x26C];
+    L16PlatformMoby *contact;
+    char pad300[0xE];
+    short grounded;
+} L16PlatformHero;
+
+extern L16PlatformHero D_0013F350;
+extern char *D_L16_001600FC;
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(void *, void *);
+extern float D_L16_00161EAC __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_00161EBC __attribute__((sda)); /* no foreign declaration */
+extern int FUN_L00_0028d8c0(void *, int);
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern short D_L16_00161EB8 __attribute__((sda));
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void FUN_L16_002e84e8(char *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L16_002e7f80(L16PlatformMoby *m) {
+    L16PlatformVector delta, old_rotation, motion;
+    L16PlatformData *d = m->data;
+    float *position = m->position;
+    float *rotation = m->rotation;
+
+    scale_vector_xyz(delta.v, position, -1.0f);
+    qcopy(old_rotation.v, rotation);
+    if (d) {
+        switch (m->state) {
+        case 0:
+            motion.q = 0;
+            motion.v[2] = 1.0f;
+            d->particle = -1;
+            transform_vector_by_basis(motion.v, motion.v, D_L16_001600FC + (d->joint << 7));
+            d->goal = motion.v[2] + *(float *)(D_L16_001600FC + d->joint * 0x80 + 0x38);
+            m->position[2] = motion.v[2] + *(float *)(D_L16_001600FC + d->joint * 0x80 + 0x38) + D_L16_00161EAC;
+            m->reverse = 1;
+            m->state = 2;
+            break;
+        case 2:
+            if (FUN_L00_0028d8c0(m, d->particle)) {
+                release_voice_slot(d->particle);
+                d->particle = -1;
+            }
+            if (FUN_001f9b80(position, D_0013F350.position) < 20.0f) {
+                clear_u64_value(motion.v);
+                if (m->reverse) {
+                    motion.v[2] = -1.0f;
+                } else {
+                    motion.v[2] = 1.0f;
+                }
+                transform_vector(motion.v, motion.v, D_L16_001600FC + (d->joint << 7));
+                motion.v[2] = motion.v[2] + *(float *)(D_L16_001600FC + d->joint * 0x80 + 0x38) + D_L16_00161EAC;
+                if (AbsoluteFloat(D_0013F350.position[2] - motion.v[2]) < 1.0f) {
+                    m->reverse = (m->reverse + 1) & 1;
+                    d->goal = motion.v[2];
+                    d->speed = 0.0f;
+                    m->state = 3;
+                    break;
+                }
+            }
+            if (D_0013F350.contact == m && D_0013F350.grounded == 0) {
+                clear_u64_value(motion.v);
+                if (m->reverse) {
+                    motion.v[2] = -1.0f;
+                } else {
+                    motion.v[2] = 1.0f;
+                }
+                m->reverse = (m->reverse + 1) & 1;
+                transform_vector(motion.v, motion.v, D_L16_001600FC + (d->joint << 7));
+                d->goal = motion.v[2] + *(float *)(D_L16_001600FC + d->joint * 0x80 + 0x38) + D_L16_00161EAC;
+                d->speed = 0.0f;
+                m->state = 3;
+            }
+            break;
+        case 3: {
+            float *hero_position = D_0013F350.position;
+            float speed;
+
+            if (FUN_001f9b80(hero_position, D_L16_001600FC + (d->joint << 7) + 0x30) > 2.25f
+                || AbsoluteFloat(m->position[2] - hero_position[2] - 2.0f) > 1.0f
+                || m->position[2] < d->goal) {
+                speed = advance_accelerated_scalar(&m->position[2], &d->speed, d->goal,
+                                      D_L16_00161EBC * D_0015ED70, D_L16_00161EBC * D_0015ED70,
+                                      *(float *)&D_L16_00161EB8 * D_0015ED6C);
+            } else {
+                speed = advance_accelerated_scalar(&m->position[2], &d->speed, m->position[2],
+                                      D_L16_00161EBC * 4.0f * D_0015ED70, D_L16_00161EBC * 4.0f * D_0015ED70,
+                                      *(float *)&D_L16_00161EB8 * D_0015ED6C);
+            }
+            clear_u64_value(motion.v);
+            motion.v[2] = speed;
+            FUN_L00_00260738((char *)d->basis, motion.v, m->rotation, m->rotation);
+            if (motion.v[2] != 0.0f) {
+                if (!FUN_L00_0028d8c0(m, d->particle)) {
+                    d->particle = allocate_voice_for_target_entry_alt(0, 4, (int)m);
+                }
+            } else if (FUN_L00_0028d8c0(m, d->particle)) {
+                release_voice_slot(d->particle);
+                d->particle = -1;
+            }
+            if (m->position[2] == d->goal && (D_0013F350.contact != m || D_0013F350.grounded != 0)) {
+                clear_u64_value(d->basis[1]);
+                m->state = 2;
+                break;
+            }
+            if (d->speed != 0.0f) {
+                enqueue_callback_list_1(FUN_L16_002e84e8, m);
+            }
+            break;
+        }
+        }
+        add_vector_xyz(delta.v, delta.v, m->position);
+        FUN_L00_00260738((char *)d->basis, delta.v, old_rotation.v, m->rotation);
+    }
+}
 
 #include "qcopy.h"
 
@@ -1601,7 +1767,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L16_0015F5CC;
-extern float D_L16_00161EB8 __attribute__((sda));
+extern float D_L16_00161EB8_u __asm__("D_L16_00161EB8") __attribute__((sda));
 extern float D_L16_00161EC4 __attribute__((sda));
 extern float D_L16_00161EC8 __attribute__((sda));
 extern float D_L16_00161EE8 __attribute__((sda));
@@ -1637,7 +1803,7 @@ void FUN_L16_002e84e8(char *m) {
     lower += translation;
     color =
         FUN_001fa6e0(D_L16_00161EDC, D_L16_00161EE0,
-                     AbsoluteFloat((*(float *)((char *)d + 0xB0))) / (D_L16_00161EB8 * D_0015ED6C));
+                     AbsoluteFloat((*(float *)((char *)d + 0xB0))) / (D_L16_00161EB8_u * D_0015ED6C));
     FUN_001fa298(&matrix, m + 0xC0);
     qcopy(matrix.position, m + 16);
     matrix.position[2] = lower;
@@ -2003,7 +2169,7 @@ typedef struct {
 } L16SingleSphere;
 
 extern void FUN_L16_002e9270_u(void) __asm__("FUN_L16_002e9270");
-void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+void enqueue_callback_list_1_u(int arg0, int arg1) __asm__("FUN_001f4600");
 extern short D_L16_00162000_bounds __asm__("D_L16_00161F40") __attribute__((sda));
 extern short D_L16_00162020_bounds __asm__("D_L16_00161F60") __attribute__((sda));
 extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
@@ -2066,7 +2232,7 @@ void FUN_L16_002e93b0(unsigned char *m) {
         break;
     }
     case 1:
-        enqueue_callback_list_1(FUN_L16_002e9270_u, m);
+        enqueue_callback_list_1_u(FUN_L16_002e9270_u, m);
         break;
     }
 }
