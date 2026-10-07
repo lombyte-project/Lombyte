@@ -52,9 +52,9 @@ extern void restore_capture_projection(void) __asm__("func_00239750");
 extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s32, s32, s64,
                                                  s64) __asm__("func_001F55D8");
 
-void render_vendor_capture_pass_sequence(s32 capture_context) __asm__("FUN_00239780");
+void render_vendor_capture_pass_sequence(void *capture_context) __asm__("FUN_00239780");
 
-void render_vendor_capture_pass_sequence(s32 capture_context) {
+void render_vendor_capture_pass_sequence(void *capture_context) {
     CaptureVector first_edge;
     CaptureVector second_edge;
     CaptureVector origin;
