@@ -119,7 +119,31 @@ void FUN_L14_00305600(char *moby) {
         } while (*(short *)p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305680.s", FUN_L14_00305680);
+extern float FUN_001fa6c0(int);
+extern float FUN_L00_00257e20(float, float, float, float, float);
+
+void FUN_L14_00305680(char *moby) {
+    int *d = *(int **)(moby + 0x78);
+    short *p = (short *)D_L14_001ABF40[d[0]];
+    float t;
+    float *h;
+    char *base;
+    float x;
+    if (p == 0) {
+        return;
+    }
+    x = FUN_001fa6c0(d[1]) * ((float *)d)[2];
+    t = FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
+    base = D_L14_0015FFD8;
+    h = D_L14_001EE5E0;
+    do {
+        char *o = base + ((*(unsigned short *)p & 0x7FFF) << 8);
+        float a = *h++;
+        float lo = a - 20.0f;
+        *(unsigned short *)(o + 0x34) &= 0xFFBE;
+        *(float *)(o + 0x18) = lo + (a - lo) * t;
+    } while (*p++ >= 0);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 #define NOT_SDA
 
