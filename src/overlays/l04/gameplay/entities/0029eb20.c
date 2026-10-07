@@ -335,6 +335,7 @@ extern unsigned char D_0013E533[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void *FUN_L04_002ce080(void *, void *);
+extern void *FUN_L04_002d34d8(void *, void *);
 extern void *random_integer_below_cf(void *, int, unsigned int) __asm__("FUN_001153fc");
 extern void FUN_001fa3c0(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
@@ -927,7 +928,7 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
         float p[4];
 
         FUN_L00_0024f7c8(moby, 0xB, p);
-        data->f424 = FUN_L04_002ce080(moby, p);
+        data->f424 = FUN_L04_002d34d8(moby, p);
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1b80.s", FUN_L04_002c1b80);

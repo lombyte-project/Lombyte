@@ -1530,6 +1530,7 @@ extern void FUN_001f99f8_q(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
+extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
@@ -1580,7 +1581,7 @@ void FUN_L18_002df608(char *moby) {
                *(float *)(data + 0x60);
         v[6] = FUN_001fa580_q(*(float *)(data + 0x28), v[6]);
         FUN_L00_002ea9d8_q(v);
-        FUN_L00_002ea9d8_q(v + 4);
+        FUN_L00_002ea9d8_q_002eaa30(v + 4);
         approach_value_q((float *)(data + 0x6C), 0.0f, D_0015ED6C_d * 4.0f);
         {
             float d = *(float *)(data + 0x60);
@@ -1615,7 +1616,7 @@ void FUN_L18_002df608(char *moby) {
                *(float *)(data + 0x60);
         v[6] = FUN_001fa580_q(*(float *)(data + 0x28), v[6]);
         FUN_L00_002ea9d8_q(v);
-        FUN_L00_002ea9d8_q(v + 4);
+        FUN_L00_002ea9d8_q_002eaa30(v + 4);
         if (1.0f <= *(float *)(data + 0x60) ||
             (0.2f < *(float *)(data + 0x60) && D_L18_00179E10_q[0] == 0 &&
              D_L18_00179E10_q[9] == -1)) {

@@ -155,7 +155,7 @@ def verify_all() -> int:
     from elftools.elf.elffile import ELFFile
 
     import overlay_proof as proof
-    total, bad = 0, []
+    total, copies, bad = 0, 0, []
     for obj in sorted((BUILD / "c").glob("**/*.c.o")):
         # An object left behind by a moved or deleted source is not counted.
         if not (SOURCES / obj.relative_to(BUILD / "c").with_suffix("")).is_file():
@@ -170,12 +170,21 @@ def verify_all() -> int:
             verdict = proof.check(obj, name)
             if not verdict["exact"]:
                 bad.append(f"{name:24s} {verdict['verdict']}  ({obj.relative_to(BUILD)})")
+                continue
+            # every other copy (other levels, or twice in one level) is placed
+            # and compared too: callees and level data resolve per level
+            for place in ov.read_catalogue()[name].places[1:]:
+                copies += 1
+                verdict = proof.copy_check(obj, name, place)
+                if not verdict["exact"]:
+                    bad.append(f"{name:24s} L{place[0]:02d}:{place[1]:08x} {verdict['verdict']}"
+                               f"  ({obj.relative_to(BUILD)})")
     for line in bad:
         print(line)
     if bad:
         print(f"FAIL: {len(bad)} of {total} overlay functions in C do not match retail")
         return 1
-    print(f"PASS: all {total} overlay functions in C match retail")
+    print(f"PASS: all {total} overlay functions in C match retail, with their {copies} copies in other places")
     return 0
 
 

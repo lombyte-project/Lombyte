@@ -136,6 +136,7 @@ extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void FontPrintCenterLarge(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+extern void FontPrintCenterLarge_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 #define W(x) (*(int *)&(x))
 
@@ -164,5 +165,5 @@ void FUN_L06_003021d8(char *moby) {
     buf[5] = 0x3A;
     buf[6] = *(int *)(data + 0xB4) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    FontPrintCenterLarge(W(D_L06_001620C8), W(D_L06_001620CC), col, (int)buf, 8);
+    FontPrintCenterLarge_001f6c20(W(D_L06_001620C8), W(D_L06_001620CC), col, (int)buf, 8);
 }

@@ -2607,6 +2607,7 @@ extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001D
     __attribute__((section(".data")));
 
 extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
+extern void FUN_L16_002e97a0(void);
 void FUN_L16_002e8e80(unsigned char *m) {
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
@@ -2845,7 +2846,7 @@ void FUN_L16_002e98e0(unsigned char *m) {
         break;
     }
     case 1:
-        enqueue_callback_list_1_2e98e0(FUN_L16_002e8d40, m);
+        enqueue_callback_list_1_2e98e0(FUN_L16_002e97a0, m);
         break;
     }
 }

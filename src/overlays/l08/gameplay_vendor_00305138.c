@@ -687,6 +687,7 @@ extern short D_L08_001623C4 __attribute__((sda));
 extern short D_L08_001623E8 __attribute__((sda));
 extern short D_L08_001623C8 __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);
+extern void FUN_L08_00309030(void);
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
@@ -753,7 +754,7 @@ void FUN_L08_003097b0(unsigned char *moby) {
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(1);
-            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+            enqueue_callback_list_1(FUN_L08_00309030, moby);
         }
         break;
     }

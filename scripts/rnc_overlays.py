@@ -108,8 +108,18 @@ def places_index() -> dict[int, dict[int, str]]:
     return index
 
 
+@lru_cache(maxsize=1)
+def row_at() -> dict:
+    """{(level, address): row} over every place of every catalogue row."""
+    return {place: row for row in read_catalogue().values() for place in row.places}
+
+
 def places_in_level(name: str, level: int) -> list[int]:
     row = read_catalogue().get(name)
+    m = OVERLAY_FUNC.match(name)
+    if row is None and m:
+        # a name that is no longer a row of its own: one copy of another row
+        row = row_at().get((int(m.group(1)), int(m.group(2), 16)))
     return sorted({a for lv, a in row.places if lv == level}) if row else []
 
 

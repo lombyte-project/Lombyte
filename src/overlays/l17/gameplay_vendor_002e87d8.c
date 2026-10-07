@@ -859,6 +859,7 @@ extern void func_L17_002EBF08_f(float, float, float, float, unsigned char, unsig
                                 unsigned char, unsigned char) __asm__("FUN_L11_00311048");
 extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6af0");
+extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
 void FUN_L17_002eb9a8(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -950,10 +951,10 @@ void FUN_L17_002eb9a8(char *moby) {
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
     b = D_0013F350;
     if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L17_0015F5CC / 90) & 1) {
-        func_001F6F40_c(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
+        func_001F6F40_c_001f6b88(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     if (*(unsigned char *)(moby + 0x20) == 8) {
-        func_001F6F40_c(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
+        func_001F6F40_c_001f6b88(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
     }
     h = D_0013F350;
     f = *(float *)(h + 0x15FC) - *(float *)(d + 0xF0);
@@ -1200,6 +1201,7 @@ extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
 extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 extern void FUN_L17_002eb9a8();
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -1428,7 +1430,7 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
     ang[0] = o->f20;
     ang[2] = o->f28;
     ang[1] = o->f24;
-    FUN_L00_002ea9d8(ang);
+    FUN_L00_002eaa30(ang);
     FUN_L00_0025b8c0(&o->fB0, &o->fC0, D_L17_00162144 + (D_L17_00162148 - D_L17_00162144) * ratio,
                      D_L17_0016214C, D_L17_00162150, D_L17_00162154);
     h = o->fB0 * 0.5f;
@@ -1637,7 +1639,7 @@ void FUN_L17_002ee2b0(char *moby) {
             c[2] = fast_add_rotations(
                 fast_subtract_rotations((*(float *)((char *)(base) + (0x158))), c[2]) * t, c[2]);
             FUN_L00_002ea9d8(b);
-            FUN_L00_002ea9d8(c);
+            FUN_L00_002eaa30(c);
         } else {
             unsigned char s = B(moby, 0xBC);
             B(moby, 0xBC) = 1;
@@ -2541,6 +2543,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L15_0029aba8(char *);
+extern void FUN_L17_002f0448(char *);
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -2622,7 +2625,7 @@ void FUN_L17_002f0210(unsigned char *moby) {
         for (i = 0; i < 3; i++) {
             FUN_L00_0024f7c8(moby, i + 1, data + 0x200 + i * 16);
         }
-        enqueue_callback_list_1_alt(FUN_L15_0029aba8, moby);
+        enqueue_callback_list_1_alt(FUN_L17_002f0448, moby);
     }
 }
 
@@ -3098,7 +3101,7 @@ void FUN_L17_002f1940(unsigned char *m) {
             FUN_L00_002eaaa0(a, rot, 2, scale_game_frames(300), 0);
             FUN_L02_002f8aa0(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L00_002ea9d8(a);
-            FUN_L00_002ea9d8(rot);
+            FUN_L00_002eaa30(rot);
             FUN_L00_00216f90(D_L17_001600EC + (v->cut << 7) + 0x30,
                              D_L17_001600EC + (v->cut << 7) + 0x70, 0x72, 0);
         } else if (D_L17_001BBB30.collected[(short)*(unsigned short *)(m + 0xB2)] != 0 ||
@@ -3231,7 +3234,7 @@ extern float func_001FA790_f2180(float, float) __asm__("FUN_001fa5c8");
 extern float func_001F9D48_f2180(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9F90_f2180(float) __asm__("FUN_001f9dc8");
 extern void func_001F9BC0_f2180(void *) __asm__("FUN_001f99f8");
-extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002ea9d8");
+extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002eaa30");
 extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
 extern char D_L17_001B10B0_f2180[] __asm__("D_L17_001B0DB0");

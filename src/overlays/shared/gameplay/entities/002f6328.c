@@ -76,6 +76,7 @@ extern unsigned char D_0014C190[];
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
 extern void FUN_L00_002eac18(int);
 extern void FUN_L01_002405a0(void);
@@ -165,7 +166,7 @@ void FUN_L01_002fb5b0(char *m) {
             m[0xBC] = 0;
         } else {
             FUN_L00_002ea9d8(d);
-            FUN_L00_002ea9d8(d + 0x10);
+            FUN_L00_002eaa30(d + 0x10);
         }
         break;
     case 3:
@@ -655,7 +656,7 @@ void FUN_L01_003087e0(char *moby) {
         m.x = FUN_001fa580_c(fast_subtract_rotations(b.x, a.x) * f22, a.x);
     }
     FUN_L00_002ea9d8(&v.x);
-    FUN_L00_002ea9d8(&m.x);
+    FUN_L00_002eaa30(&m.x);
 }
 #include "sda.h"
 

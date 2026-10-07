@@ -354,13 +354,14 @@ void FUN_L03_002c6a20(unsigned char *moby) {
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
+extern int FUN_L03_002c5b78_c_002c6d58(unsigned char *) __asm__("FUN_L03_002c6d58");
 
 int FUN_L03_002c6d98(int id) {
     unsigned char *item;
     if (id == 0xFF) goto absent;
     FUN_L00_002591d0((int *)&item, id, 0, 0);
     while (item != 0) {
-        if (FUN_L03_002c5b78_c(item)) return 1;
+        if (FUN_L03_002c5b78_c_002c6d58(item)) return 1;
         if (FUN_L03_002c5b78_c(item)) return 1;
         FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
     }

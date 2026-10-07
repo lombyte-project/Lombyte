@@ -1466,6 +1466,7 @@ extern int D_0015ED84_p __asm__("D_0015ED84");
 extern int D_L06_001BAC50[];
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L02_002ea7d0(char *);
+extern void FUN_L06_002f7548(char *);
 void FUN_L06_002f7628(char *m);
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
 extern char D_0014171B_aa35[] __asm__("D_0014C050");
@@ -1499,7 +1500,7 @@ void FUN_L06_002f7288(char *m) {
         *(float *)(o + 0x18) += 0.85f;
         *(char **)(d + 0x40) = o;
         m[0x20] = 1;
-        FUN_L02_002ea7d0(m);
+        FUN_L06_002f7548(m);
         *(int *)(D_0015ED84_p * 256 + ((short)*(unsigned short *)(m + 0xB2) >> 5) * 4 +
                  D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(m + 0xB2) & 0x1F));
         D_L06_001BAC50[(short)*(unsigned short *)(m + 0xB2) >> 5] &=

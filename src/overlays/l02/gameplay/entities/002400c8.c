@@ -46,6 +46,7 @@ void FUN_L02_002a47f8(void) {
     FUN_L02_002a40d0(scratch);
 }
 extern void write_dma_channel(void *, int, int) __asm__("FUN_001f9928");
+extern void write_dma_channel_002101b8(void *, int, int) __asm__("FUN_L02_002101b8");
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
@@ -68,7 +69,7 @@ void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, flo
     ((unsigned char *)scratch)[0x3F] = 0x80;
     *(int *)(scratch + 0x1C) = g;
     FUN_L02_002a40f0(scratch);
-    write_dma_channel(D_L02_001CB400, 0x70002800, 0xF8);
+    write_dma_channel_002101b8(D_L02_001CB400, 0x70002800, 0xF8);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3a50.s", FUN_L02_002d3a50);
 #include "qcopy.h"
