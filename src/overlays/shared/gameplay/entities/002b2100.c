@@ -1218,7 +1218,92 @@ void FUN_L00_002b8230(unsigned char *m) {
     if (D_0013F350_2b8230[0x20B4] >= 3)
         FUN_L00_00203908_2b8230(0x4E24, 0x4E);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b8438.s", FUN_L00_002b8438);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B9730), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern char D_0013E520[];
+extern f32 ConvertIntegerToFloat_c(s32) __asm__("func_001FA6C0");
+extern f32 D_0015ED6C_c2 __asm__("D_0015ED6C");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float FUN_001f96b0(float);
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L00_0016152C_d __asm__("D_L00_0016152C") __attribute__((sda));
+extern short D_L00_00161538_d __asm__("D_L00_00161538") __attribute__((sda));
+extern short D_L00_0016153C_d __asm__("D_L00_0016153C") __attribute__((sda));
+extern short D_L00_00161540_d __asm__("D_L00_00161540") __attribute__((sda));
+extern short D_L00_00161544_d __asm__("D_L00_00161544") __attribute__((sda));
+extern short D_L00_00161548_d __asm__("D_L00_00161548") __attribute__((sda));
+extern short D_L00_0016154C_d __asm__("D_L00_0016154C") __attribute__((sda));
+extern short D_L00_00161550_d __asm__("D_L00_00161550") __attribute__((sda));
+extern short D_L00_00161554_d __asm__("D_L00_00161554") __attribute__((sda));
+extern short D_L00_00161558_d __asm__("D_L00_00161558") __attribute__((sda));
+extern short D_L00_0016155C_d __asm__("D_L00_0016155C") __attribute__((sda));
+extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L00_001f2868(void *, float, int, void *, void *);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+
+void FUN_L00_002b8438(char *m) {
+    float vec[4];
+    char buf[0x30];
+    char qv[16];
+    float v2[4];
+    float v3[4];
+    char *base = *(char **)(m + 0x78) + 4;
+    unsigned char *q = (unsigned char *)D_0013E520;
+    int i;
+
+    for (i = 0; i < 15; i++) {
+        char *o = *(char **)(base - (-(i * 4)));
+        if (o == 0) {
+            continue;
+        }
+        if (*(unsigned char *)o == 0xC && o[1] >= 0) {
+            float f20 = *(float *)(o + 0xC) / 210000.0f * 0.5f;
+            char *src = o + 0x20;
+            int type;
+            FUN_001f9c48(vec, src, 1.0f);
+            vec[2] = 1.0f;
+            vec[3] = 5627.9248046875f;
+            FUN_L00_00259888(buf, (int)m, 0x10000, vec, ConvertIntegerToFloat_c(q[0x10]) + 1.0f);
+            *(unsigned char *)(buf + 0x18) = 5;
+            *(unsigned char *)(buf + 0x19) = 1;
+            *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(m + 0xA6);
+            FUN_L00_001f2868((o + 0x10), f20, 0, m, buf);
+            type = *(short *)(o + 0xA);
+            if (type == 10) {
+                int j;
+                for (j = 0; j < *(int *)&D_L00_0016155C_d; j++) {
+                    int c1;
+                    int c2;
+                    int c3;
+                    int c4;
+                    qcopy(qv, src);
+                    FUN_L00_00257d78(v2, 0.0f, *(float *)&D_L00_00161538_d * D_0015ED6C_c2);
+                    *(float *)(qv + 0xC) = *(float *)&D_L00_0016153C_d;
+                    v2[2] = D_0015ED6C_c2 * 4.0f;
+                    v2[3] = *(float *)&D_L00_00161540_d;
+                    c1 = FUN_001fa6e0(*(int *)&D_L00_00161544_d, *(int *)&D_L00_00161548_d, random_float_between_c(0.0f, 1.0f));
+                    FUN_L00_0025c0e8(c1, q[0x10]);
+                    c2 = FUN_001fa6e0(*(int *)&D_L00_0016154C_d, *(int *)&D_L00_00161550_d, random_float_between_c(0.0f, 1.0f));
+                    FUN_L00_0025c0e8(c2, q[0x10]);
+                    c3 = func_001FA898_r(FUN_001f96b0(random_float_between_c((float)*(int *)&D_L00_00161554_d, (float)*(int *)&D_L00_00161558_d)));
+                    c4 = func_001FA898_r(FUN_001f96b0(random_float_between_c((float)*(int *)&D_L00_00161554_d, (float)*(int *)&D_L00_00161558_d)));
+                    FUN_L00_00257d78(v3, 0.0f, f20 + f20);
+                    add_vector_xyz(v3, v3, (o + 0x10));
+                    FUN_00218888(v3, qv, v2, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C_d);
+                }
+            } else if (type < 2) {
+                *(int *)(base - (-(i * 4))) = 0;
+            }
+        } else {
+            *(int *)(base - (-(i * 4))) = 0;
+        }
+    }
+}
 /* 0x78 points at a table of 15 s32 slots; index 0 is skipped, so the first
    free slot from 1 to 15 takes val. */
 typedef struct {

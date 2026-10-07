@@ -570,7 +570,24 @@ void FUN_L02_002dd370(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc00.s", FUN_L02_002ddc00);
+#include "qzero.h"
+
+/* Rotates a platform and updates its transform. */
+/* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DF038), where it is exact; names translated to the US level program. */
+
+extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+
+void FUN_L02_002ddc00(char *moby)
+{
+    char zero[16];
+    char pos[16];
+    char *data = *(char **)(moby + 0x78);
+    qzero(zero);
+    qcopy(pos, moby + 0x40);
+    *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), D_0015ED6C * 0.08726646f);
+    FUN_L00_00260738(data + 0x20, zero, pos, moby + 0x40);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ddc88.s", FUN_L02_002ddc88);
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E03B8), where it is exact; names translated to the US level program. */
 

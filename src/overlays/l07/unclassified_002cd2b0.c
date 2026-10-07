@@ -1019,7 +1019,33 @@ void FUN_L07_0030eb38(char *data) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030ed30.s", FUN_L07_0030ed30);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f308.s", FUN_L07_0030f308);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f540.s", FUN_L07_0030f540);
+/* Finds another moby whose state lies within the inclusive range. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310920), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+
+int FUN_L07_0030f540(unsigned char *moby, int lower, int upper) {
+    unsigned char *other = 0;
+    if (!FUN_L00_002591d0((int *)&other, moby[0x21], 0, 0)) {
+        if (other) {
+            do {
+                if (other != moby) {
+                    int state = other[0x20];
+                    if (state >= lower) {
+                        if (state <= upper) {
+                            goto found;
+                        }
+                    }
+                }
+                if (FUN_L00_002592b8((int *)&other, (int)other, 0, 0)) break;
+            } while (other);
+        }
+    }
+    return 0;
+found:
+    return 1;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f5f0.s", FUN_L07_0030f5f0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003112c8.s", FUN_L07_003112c8);
 /* Falling leaf: drops off its branch after a random delay, swaying, then falls faster and vanishes near the ground. */

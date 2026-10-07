@@ -342,7 +342,67 @@ void FUN_L01_002e3110(char *a, char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e3208.s", FUN_L01_002e3208);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e32a8.s", FUN_L01_002e32a8);
+/* Picks the best lock-on target for moby from the visible-moby list: a living, drawn class-5 enemy within range whose direction from `from`
+ * is inside the yaw/pitch cone (or the wider near cone when close), scored by angle error and distance,
+ * with a clear line of sight (or the blocker is the same kind of enemy). */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4620), where it is exact; names translated to the US level program. */
+
+extern char *D_L01_0015FFE4;
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern float FUN_001f9988(float);
+extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern void *FUN_002141f8(void *);
+extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
+extern float *func_L00_0025D390_t(void *) __asm__("FUN_002141f8");
+extern int func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+
+void *FUN_L01_002e32a8(void *moby, void *from, void *ang, float yawMax, float pitchMax, float range, float near,
+                        float nearYaw, float nearPitch) {
+    float tp[4];
+    char *best = 0;
+    float bestScore = 1.0e9f;
+    char *t;
+    for (t = D_L01_0015FFE4; t != 0; t = *(char **)(t + 0x28)) {
+        char *hs = D_L01_00174340_h;
+        char *pl = D_0013F350;
+        float *hp;
+        int cls;
+        float dist, score, p2;
+        if (*(short *)(t + 0x32) == 0) continue;
+        hp = func_L00_0025D390_t(t);
+        if (!(*(unsigned short *)(t + 0x34) & 0x1000) || t == 0 || *(char **)(t + 0x24) == 0) continue;
+        cls = *(short *)(*(char **)(t + 0x24) + 0x46);
+        if (cls != 5 || hp == 0 || !(0.0f < *hp)) continue;
+        dist = distance_xyz(from, t + 0x10);
+        if (!(dist < range)) continue;
+        qcopy(tp, t + 0x10);
+        tp[2] += 0.4f;
+        score = fast_difference_between_rotations_c(((float *)ang)[2], FUN_001f9e90(tp[0] - ((float *)from)[0], tp[1] - ((float *)from)[1]));
+        score = score * score;
+        if (!(score < yawMax * yawMax)) {
+            if (!(dist < near) || !(score < nearYaw * nearYaw)) continue;
+        }
+        p2 = fast_difference_between_rotations_c(((float *)ang)[1], FUN_001f9e90(dist, tp[2] - ((float *)from)[2]));
+        p2 = p2 * p2;
+        if (!(p2 < pitchMax * pitchMax)) {
+            if (!(dist < near) || !(p2 < nearPitch * nearPitch)) continue;
+        }
+        score *= p2;
+        score *= FUN_001f9988(distance_xyz(from, tp));
+        if (!(score < bestScore)) continue;
+        if (func_L00_001EFFF0_t(from, tp, 0, moby, 0)) {
+            char *hit = *(char **)(hs + 0x18);
+            if (hit == 0 || hit == *(char **)(pl + 0x2080) || hit == 0 || *(char **)(hit + 0x24) == 0
+                || *(short *)(*(char **)(hit + 0x24) + 0x46) != cls) {
+                continue;
+            }
+        }
+        bestScore = score;
+        best = t;
+    }
+    return best;
+}
 #include "qcopy.h"
 #include "qzero.h"
 
@@ -352,7 +412,7 @@ extern int FUN_001f9770(void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
-extern void *FUN_L01_002e32a8(void *, void *, void *, float, float, float, float, float, float);
+extern void *FUN_L01_002e32a8_u(void *, void *, void *, float, float, float, float, float, float) __asm__("FUN_L01_002e32a8");
 extern void FUN_L01_0030c898(void *, void *, float, float, float, float);
 
 extern float D_L01_00161904 __attribute__((sda));
@@ -381,7 +441,7 @@ void FUN_L01_002e35a8(char *moby, char *state) {
     qzero(&v);
     FUN_001f9a10(&v, &v, moby + 0x10);
     v.f[2] = v.f[2] + D_L01_00161914;
-    e = FUN_L01_002e32a8(moby, &v, moby + 0x40, D_L01_00161908 * 0.017453292f,
+    e = FUN_L01_002e32a8_u(moby, &v, moby + 0x40, D_L01_00161908 * 0.017453292f,
                          D_L01_0016190C * 0.017453292f, D_L01_00161904, 2.0f, 3.1415927f,
                          3.1415927f);
     if (e != 0) {

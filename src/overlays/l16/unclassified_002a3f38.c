@@ -1187,7 +1187,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L02_00264e40(char *);
 extern void FUN_L02_00264e70(void *, void *, void *, float);
 extern void FUN_L02_002651d0(char **, int, int);
-extern void FUN_L16_002ce9f0(void *);
+extern void FUN_L16_002ce9f0_u(void *) __asm__("FUN_L16_002ce9f0");
 extern void FUN_L16_002d5e80(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
@@ -1212,7 +1212,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
        is what this compiler does with a multiplication and with a shift in an address. */
     char *path;
 
-    FUN_L16_002ce9f0(m);
+    FUN_L16_002ce9f0_u(m);
     path = D_L16_001B0930[d->path];
     FUN_L00_00263ac8(2.5f, (int)m, 2, (unsigned char *)d->block140);
     switch (m[0x20]) {
@@ -1479,7 +1479,143 @@ void FUN_L16_002cddb8(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002ce9f0.s", FUN_L16_002ce9f0);
+/* The test dummy's respawn and hit handling: respawns or deletes it, takes damage, and carries its child on a joint. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CFDB8), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];          /* 0x80 */
+} L16HitPlayer;
+
+typedef struct {
+    char pad00[0x20];
+    float health;               /* 0x20 */
+    char pad24[10];
+    unsigned char substate;     /* 0x2E: 2 asks for a respawn */
+    char pad2F[0x31];
+    short reaction[3];          /* 0x60: record func_L00_0025E4B0 and func_L00_0025E590 take */
+    char pad66;
+    unsigned char reaction_time; /* 0x67 */
+    char pad68[0x60];
+    int lives;                  /* 0xC8 */
+    char padCC[0x14];
+    float spawn[4];             /* 0xE0 */
+    int timer;                  /* 0xF0 */
+    char padF4[0x10];
+    struct L16HitMoby *child;   /* 0x104 */
+    char pad108[4];
+    float heading;              /* 0x10C */
+    int next_state;             /* 0x110: stored here as a word */
+    int next_anim;              /* 0x114 */
+    int frame;                  /* 0x118: frame counter of the last func_L16_002D0238 */
+} L16HitData;
+
+typedef struct L16HitMoby {
+    char pad00[0x10];
+    float position[4];          /* 0x10 */
+    unsigned char state;        /* 0x20 */
+    char pad21[0x13];
+    unsigned short flags;       /* 0x34 */
+    char pad36[0x1D];
+    unsigned char animation;    /* 0x53 */
+    char pad54[0x24];
+    L16HitData *data;           /* 0x78 */
+    char pad7C[0x28];
+    unsigned char opacity;      /* 0xA4 */
+    char padA5[0x1B];
+    float matrix[3][4];         /* 0xC0 */
+} L16HitMoby;
+
+extern float FUN_001f9e90_c2(float,float) __asm__("FUN_001f9e90");
+extern int D_L16_001619C8_d __asm__("D_L16_001619C8") __attribute__((sda)); /* no foreign declaration */
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern void FUN_L16_002cee70_c(char *) __asm__("FUN_L16_002cee70");
+extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
+extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
+
+void FUN_L16_002ce9f0(void *moby) {
+    L16HitMoby *m = moby;
+    float matrix[16];
+    int status;
+    float amount;
+    L16HitData *d;
+    char *record;
+
+    if (m->state == 1) {
+        return;
+    }
+    d = m->data;
+    if (d->substate == 2) {
+        d->substate = 1;
+        d->health = 2.0f;
+        d->timer = scale_game_frames(60);
+        FUN_L00_00257470(m, 0, -1);
+        m->flags &= 0xEFFF;
+        d->lives--;
+        if (d->lives != -1) {
+            m->state = 11;
+            qcopy(m->position, d->spawn);
+            d->timer = scale_game_frames(60);
+        } else {
+            if (d->child) {
+                mark_moby_for_removal_c2(d->child);
+            }
+            mark_moby_for_removal_c2(m);
+        }
+        return;
+    }
+    if (d->frame != D_L16_0015F5CC) {
+        FUN_L16_002cee70_c((char *)m);
+    }
+    amount = 0.0f;
+    record = FUN_L00_0025a420(m, 0x330000, 0);
+    FUN_L00_0025a478(m, record, &d->health, 0, &status, &amount, 0, 4);
+    if (status != 1 && m->state != 10 && m->state != 11) {
+        d->health -= amount;
+        if (d->health <= 0.0f) {
+            m->state = 10;
+        } else {
+            if (m->state != 9) {
+                d->next_state = m->state;
+                d->next_anim = m->animation;
+            }
+            {
+                float x = m->position[0], y = m->position[1];
+                L16HitPlayer *player = (L16HitPlayer *)(D_0013F350);
+                d->heading = FUN_001f9e90_c2(player->position[0] - x, player->position[1] - y);
+            }
+            m->state = 9;
+            /* No pointer local for the reaction record anywhere: d->reaction is written at each call and the
+               compiler caches it itself (formed before the hit query, and formed again here with a copy after
+               the call). It only forms it again here when this place cannot be reached along one straight path
+               from the hit query, that is when the animation test has two arms while its common-subexpression
+               pass runs: the else arm below is what supplies the second one. The assignment is dead and leaves
+               no instruction; without it the function is two instructions short (see NOTES.md). */
+            if (m->animation != 8) {
+                blend_moby_animation_c(m, 8, 2, 1);
+            } else {
+                record = 0;
+            }
+            d->reaction_time = 120;
+            FUN_L00_0025d458(m, d->reaction);
+        }
+    }
+    m->opacity = 255;
+    FUN_L00_0025d538(m, d->reaction);
+    if (d->child) {
+        FUN_L00_0024f7c8(m, D_L16_001619C8_d, d->child->position);
+        build_moby_bone_transform((char *)m, D_L16_001619C8_d, (char *)matrix);
+        copy_matrix3x4(d->child->matrix[0], matrix);
+        normalize_vector_xyz_c2(d->child->matrix[0], d->child->matrix[0], 1.0f);
+        normalize_vector_xyz_c2(d->child->matrix[1], d->child->matrix[1], 1.0f);
+        normalize_vector_xyz_c2(d->child->matrix[2], d->child->matrix[2], 1.0f);
+        FUN_L00_00250df8(d->child);
+    }
+    FUN_L00_0025d538(m, d->reaction);
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D00E8), where it is exact; names translated to the US level program. */

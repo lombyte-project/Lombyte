@@ -44,7 +44,48 @@ void FUN_L11_002cb668(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_002cb810.s", FUN_L11_002cb810);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC9D0), where it is exact; names translated to the US level program. */
+
+extern char *func_0020D348_m(int);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern float D_0015ED70;
+extern float FUN_L00_0025be00(float *p, float a, float *v, float b, float c, float d);
+extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
+
+void FUN_L11_002cb810(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int state = (unsigned char)moby[0x20];
+    switch (state) {
+    case 0:
+        moby[0x20] = 1;
+        *(float *)(data + 4) = *(float *)(moby + 0x48);
+        if ((*(unsigned short *)(moby + 0x34) & 0x8000) == 0) {
+            char *c = func_0020D348_m(0x41);
+            *(short *)(c + 0x32) = *(short *)(moby + 0x32);
+            c[0x30] = moby[0x30];
+            *(unsigned short *)(c + 0x34) = *(unsigned short *)(moby + 0x34) | 0x8000;
+            qcopy(c + 0x10, moby + 0x10);
+            qcopy(c + 0x40, moby + 0x40);
+            *(char **)(data + 8) = c;
+            *(float *)(*(char **)(c + 0x78) + 4) = *(float *)(moby + 0x48);
+        }
+        break;
+    case 1:
+        break;
+    case 2: {
+        float f;
+        if ((*(unsigned short *)(moby + 0x34) & 0x8000) == 0)
+            f = fast_add_rotations_c(*(float *)(data + 4), 0.20769417f);
+        else
+            f = fast_subtract_rotations(*(float *)(data + 4), 0.20769417f);
+        if (FUN_L00_0025be00((float *)(moby + 0x48), f, (float *)data, D_0015ED70 * 0.34906584f, D_0015ED70 * 0.34906584f, D_0015ED6C * 0.7853982f) == 0.0f)
+            moby[0x20] = 3;
+        break;
+    }
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

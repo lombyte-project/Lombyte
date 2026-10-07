@@ -215,8 +215,78 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2600.s", FUN_L14_002b2600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2f60.s", FUN_L14_002b2f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3418.s", FUN_L14_002b3418);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b35d8.s", FUN_L14_002b35d8);
+/* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
+
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int FUN_L00_0025d808(void *, void *, void *, void *, int, float);
+extern short D_L14_001614D8_d __asm__("D_L14_001614D8") __attribute__((sda));
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
+
+int FUN_L14_002b3418(char *moby) {
+    float a[4];
+    float b[4];
+    float c[4];
+    char *data = *(char **)(moby + 0x78);
+    int r = FUN_L00_0025d808(D_L14_001B0BB0[*(int *)(data + 0x240)], a, data + 0x24C, data + 0x250, 0,
+                              *(float *)&D_L14_001614D8_d * D_0015ED6C * *(float *)(data + 0x27C));
+    float ang;
+    float k;
+    float m;
+    qcopy(b, moby + 0x10);
+    FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(data + 0x254), a[0], 0.01f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(data + 0x258), a[1], 0.01f, 0.2f, 0.0f);
+    subtract_vector_xyz_c(c, a, b);
+    ang = FUN_001f9e90(c[0], c[1]);
+    k = D_0015ED70 * 12.566371f;
+    m = D_0015ED6C * 6.2831855f;
+    func_L00_0025CE58_2B4668((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, m);
+    return r != 0;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4828), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern void FUN_001fa3c0(void *, void *, void *);
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+
+float FUN_L14_002b35d8(char *moby, int flag, float x) {
+    char *d = *(char **)(moby + 0x78);
+    char *owner = *(char **)(d + 0x110);
+    float s = fast_subtract_rotations_c(x, *(float *)(moby + 0x48));
+    if (s > 1.2217304706573486f) s = 1.2217304706573486f;
+    else if (s < -1.2217304706573486f) s = -1.2217304706573486f;
+    {
+        float w = D_0015ED70 * 12.566370964050293f;
+        func_L00_0025CE58_2B4828((float *)(d + 0x268), s, (float *)(d + 0x26C), w, w, D_0015ED6C * 6.2831854820251465f);
+    }
+    FUN_L00_001fff28(d + 0x170, 2, *(float *)(d + 0x268));
+    if (flag) {
+        float a[4];
+        float b[4];
+        float c[4];
+        float *bp;
+        float *cp;
+        char *g;
+        float t;
+        qcopy(a, owner + 0x10);
+        g = D_0013F350;
+        if (*(char **)(g + 0x2080) == owner) a[2] = a[2] - *(float *)(g + 0x2DC);
+        bp = b;
+        subtract_vector_xyz_c2(bp, a, moby + 0x10);
+        b[2] = b[2] + 1.5f;
+        t = -FUN_001f9e90(vector_length_xy(bp), b[2]);
+        func_L00_0025CE58_2B4828((float *)(d + 0x280), t, (float *)(d + 0x284), D_0015ED70 * 12.566370964050293f, D_0015ED70 * 12.566370964050293f, D_0015ED6C * 6.2831854820251465f);
+        cp = c;
+        FUN_L00_001fff28(cp, 1, *(float *)(d + 0x280));
+        FUN_001fa3c0(d + 0x170, d + 0x170, cp);
+    }
+    return fast_difference_between_rotations(s, *(float *)(d + 0x268));
+}
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 

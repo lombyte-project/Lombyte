@@ -192,7 +192,66 @@ char *FUN_L09_002ea528(char *owner, float *vec) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002ea778.s", FUN_L09_002ea778);
+/* spawns a debris moby at a random point of a ring above the arena, falling toward the centre */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EBA58), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+
+char *FUN_L09_002ea778(void) {
+    float v[4];
+    char *moby = func_0020D348_m(random_integer_below_c(4) + 0x107);
+    if (moby != 0) {
+        char *pos = moby + 0x10;
+        char *d = *(char **)(moby + 0x78);
+        float r = random_float_between_c(0.0f, 250.0f);
+        float a = random_float_between_c(-3.1415927f, 3.1415927f);
+        float len;
+        v[0] = fast_cos_c(a) * r;
+        v[1] = fast_sin_c(a) * r;
+        v[0] += 256.0f;
+        v[1] += 256.0f;
+        v[2] = 100.0f;
+        *(float *)(moby + 0x10) = 1000.0f;
+        *(float *)(moby + 0x14) = 500.0f;
+        *(float *)(moby + 0x18) = random_float_between_c(200.0f, 250.0f);
+        add_vector_xyz(pos, pos, v);
+        qcopy(d, pos);
+        *(float *)(moby + 0x2C) *= random_float_between_c(0.5f, 1.0f);
+        *(float *)(d + 0x40) = random_float_between_c(-0.015707964f, 0.015707964f);
+        *(float *)(d + 0x44) = random_float_between_c(-0.015707964f, 0.015707964f);
+        v[2] = probe_ground_height(v, 0, 0.5f);
+        if (v[2] < 25.0f) v[2] = 25.0f;
+        qcopy(d + 0x20, v);
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        *(int *)(d + 0x4C) = 1;
+        *(float *)(d + 0x54) = random_float_between_c(110.0f, 130.0f) * D_0015ED6C;
+        *(float *)(d + 0x50) = *(float *)(moby + 0x2C);
+        *(float *)d += random_float_between_c(-100.0f, 100.0f);
+        *(float *)(d + 4) += random_float_between_c(-100.0f, 100.0f);
+        subtract_vector_xyz_c(pos, d, D_L09_00166F40);
+        len = vector_length_xyz_c(pos);
+        if (100.0f < len) {
+            normalize_vector_xyz_c(pos, pos, 100.0f);
+            add_vector_xyz(pos, pos, D_L09_00166F40);
+            *(float *)(moby + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
+        } else {
+            qcopy(pos, d);
+            *(float *)(moby + 0x2C) = *(float *)(d + 0x50);
+        }
+        *(int *)(d + 0x58) = -1;
+        FUN_L00_00250df8(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaa50.s", FUN_L09_002eaa50);
 #define NOT_SDA
 

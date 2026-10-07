@@ -267,7 +267,48 @@ s32 FUN_L06_003047f8(const u8 *moby) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00304818.s", FUN_L06_00304818);
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305C58), where it is exact; names translated to the US level program. */
+
+typedef struct { int v[6]; } V6;
+
+extern V6 D_L06_002019A0;
+extern V6 D_L06_002019B8;
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern int FUN_L00_00257b90(int, int);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern short D_L06_001621B4_d __asm__("D_L06_001621B4") __attribute__((sda));
+extern short D_L06_001621B8_d __asm__("D_L06_001621B8") __attribute__((sda));
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+
+void FUN_L06_00304818(int unused, void *obj) {
+    float pos[4];
+    V6 a;
+    V6 b;
+    int i = 0;
+    clear_u64_value(pos);
+    if (*(int *)&D_L06_001621B8_d > 0) {
+        do {
+            float s;
+            float f;
+            int *pa;
+            int *pb;
+            int r1;
+            int r3;
+            i++;
+            s = random_float_between(8.0f, 10.0f);
+            a = D_L06_002019A0;
+            b = D_L06_002019B8;
+            s = s * D_0015ED6C;
+            pa = a.v + random_integer_below(6);
+            pb = b.v + random_integer_below(6);
+            f = *(float *)&D_L06_001621B4_d * 400000.0f;
+            r1 = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
+            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, r1, FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * *(float *)&D_L06_001621B4_d);
+        } while (i < *(int *)&D_L06_001621B8_d);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
 

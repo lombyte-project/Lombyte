@@ -98,7 +98,27 @@ char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f) {
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305408.s", FUN_L14_00305408);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305600.s", FUN_L14_00305600);
+/* For each entry in a moby-id list, saves the moby's Y and lowers it by 20. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
+
+extern char *D_L14_0015FFD8;
+extern float D_L14_001EE5E0[];
+extern unsigned short *D_L14_001ABF40[];
+
+void FUN_L14_00305600(char *moby) {
+    unsigned short *p = D_L14_001ABF40[**(int **)(moby + 0x78)];
+    float *out;
+    if (p != 0) {
+        int base = D_L14_0015FFD8;
+        out = D_L14_001EE5E0;
+        do {
+            float *f = (float *)(base + ((*p & 0x7FFF) << 8));
+            *out++ = f[6];
+            f[6] -= 20.0f;
+            *(unsigned short *)((char *)f + 0x34) |= 0x41;
+        } while (*(short *)p++ >= 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305680.s", FUN_L14_00305680);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305758.s", FUN_L14_00305758);
 #define NOT_SDA

@@ -968,7 +968,75 @@ void FUN_L04_002c1d70(char *moby) {
                           15.0f, 1, 1, r, 0);
     FUN_0022da68(1, 0, moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c1fb8.s", FUN_L04_002c1fb8);
+/* Flock steering for moby m: picks its path target, pushes away from same-class mobys within 3 units,
+ * keeps its spacing to the target unless another flock member is closer to it, writes the steer point
+ * to out and returns the yaw toward it. (The passed speed is recomputed from the moby's state.) */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3338), where it is exact; names translated to the US level program. */
+
+extern short D_L04_00161884_d __asm__("D_L04_00161884") __attribute__((sda));
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
+
+float FUN_L04_002c1fb8(void *m, void *out, float speed) {
+    float sep[4];
+    float tgt[4];
+    float pad[4][4];
+    char *d = *(char **)((char *)m + 0x78);
+    char *o;
+    float dist;
+    float w;
+    int alone;
+    int fast = 0;
+    if (*(int *)(d + 0x38) != 0 || *(short *)(d + 0x136) != 0) fast = 1;
+    if (fast) {
+        speed = *(float *)(d + 0x140) + *(float *)(d + 0x140);
+    } else {
+        speed = *(float *)(d + 0x140);
+    }
+    func_L00_00260D30_k(m, tgt, speed);
+    dist = FUN_001f9b80((float *)((char *)m + 0x10), tgt);
+    clear_u64_value_c(out);
+    alone = 1;
+    o = D_L04_0015FFE4;
+    w = 0.0f;
+    for (; o != 0; o = *(char **)(o + 0x28)) {
+        if (o == m || *(short *)(o + 0xA6) != *(short *)((char *)m + 0xA6)) continue;
+        if (FUN_001f9b80((float *)(o + 0x10), (float *)((char *)m + 0x10)) < 3.0f) {
+            subtract_vector_xyz_c(sep, (char *)m + 0x10, o + 0x10);
+            scale_vector_xyz(sep, sep, *(float *)&D_L04_00161884_d);
+            add_vector_xyz_c(out, out, sep);
+            w += *(float *)&D_L04_00161884_d;
+        }
+        if (FUN_001f9b80((float *)(o + 0x10), tgt) < dist) alone = 0;
+    }
+    if (!alone) {
+        float k;
+        subtract_vector_xyz_c(sep, (char *)m + 0x10, tgt);
+        if (dist < 4.5f) {
+            k = 5.0f;
+        } else if (5.5f < dist) {
+            k = -5.0f;
+        } else {
+            k = 0.0f;
+        }
+        normalize_vector_xyz_c(sep, sep, k * 10.0f);
+        w += 10.0f;
+        add_vector_xyz_c(out, out, sep);
+        scale_vector_xyz(out, out, 1.0f / w);
+        add_vector_xyz_c(out, out, (char *)m + 0x10);
+    } else {
+        qcopy(out, tgt);
+    }
+    if (FUN_001f9b80((float *)((char *)m + 0x10), (float *)out) < 1.0f) {
+        qcopy(out, (char *)m + 0x10);
+        return FUN_001f9e90(tgt[0] - *(float *)((char *)m + 0x10), tgt[1] - *(float *)((char *)m + 0x14));
+    }
+    return FUN_001f9e90(((float *)out)[0] - *(float *)((char *)m + 0x10), ((float *)out)[1] - *(float *)((char *)m + 0x14));
+}
 
 #define NOT_SDA
 
@@ -1158,7 +1226,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(float *, float *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_L04_002c1fb8(void *, void *, float);
+extern float FUN_L04_002c1fb8_u(void *, void *, float) __asm__("FUN_L04_002c1fb8");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
@@ -1455,7 +1523,7 @@ void FUN_L04_002c2270(M_35F0 *moby) {
             (flag || data->f138 == -1 ||
              FUN_L00_00259740(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
                               D_L04_001B0930_2C35F0[data->f138]->count) != 0)) {
-            rot = FUN_L04_002c1fb8(moby, dest, flag ? data->f140 * 2.0f : data->f140);
+            rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
             if (dist < 2.0f && data->f146 == 0 && FUN_L04_002c1e98((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                 data->f146 = scale_game_frames(0x3C);
@@ -1604,7 +1672,7 @@ void FUN_L04_002c2270(M_35F0 *moby) {
         break;
     }
     case 7:
-        rot = FUN_L04_002c1fb8(moby, dest, flag ? data->f140 * 2.0f : data->f140);
+        rot = FUN_L04_002c1fb8_u(moby, dest, flag ? data->f140 * 2.0f : data->f140);
         if (data->f146 == 0 && (hd > 44.0f || (moby->f70 & 2))) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
             data->f146 = scale_game_frames(0x78);

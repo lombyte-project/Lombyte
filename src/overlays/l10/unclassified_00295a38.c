@@ -484,7 +484,47 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd270.s", FUN_L10_002dd270);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dd3d8.s", FUN_L10_002dd3d8);
+/* Advances an effect, scales its size over its lifetime and emits hits. */
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DE798), where it is exact; names translated to the US level program. */
+
+typedef int Effect128 __attribute__((mode(TI)));
+
+typedef struct { int owner; float phase,speed,size; int source,timer; float growth; } EffectData;
+
+extern char D_L10_00178380[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern float D_0015ED60;
+extern int FUN_L00_001f2868(float,void *,int,void *,void *);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_0025a9f8(void *,void *,void *,int,int,int,int,int,float,float,float);
+extern void FUN_L00_00262360_c(int,float *,float *,void *,float,float) __asm__("FUN_L00_00262360");
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+
+void FUN_L10_002dd3d8(char *m) {
+ float old[4],pos[4],a,b;
+ char *d=*(char **)(m+0x78);
+ *(Effect128 *)old=*(Effect128 *)(m+0x10);
+ ((EffectData *)d)->phase+=((EffectData *)d)->speed;
+ ((EffectData *)d)->speed*=(((EffectData *)d)->growth-1.0f)*D_0015ED60+1.0f;
+ FUN_L00_00262360_c(((EffectData *)d)->owner,&a,&b,m+0x10,((EffectData *)d)->phase,((EffectData *)d)->size);
+ *(float *)(m+0x40)=random_angle_radians();
+ *(float *)(m+0x44)=random_angle_radians();
+ *(float *)(m+0x48)=random_angle_radians();
+ if(tick_countdown_32_alt((int *)(d+0x14))) {mark_moby_for_removal_c2(m);return;}
+ if(*(int *)(d+0x14)<truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))/2) {
+  float numerator=ConvertIntegerToFloat(*(int *)(d+0x14));
+  *(float *)(m+0x2C)=*(float *)(*(char **)(m+0x24)+0x24)*numerator/ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))/2)*0.5f;
+ } else if((truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))/4)*3<*(int *)(d+0x14)) {
+  float numerator=ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))-*(int *)(d+0x14));
+  *(float *)(m+0x2C)=*(float *)(*(char **)(m+0x24)+0x24)*numerator/ConvertIntegerToFloat(truncate_float_to_s32(10.0f/(D_0015ED6C*5.0f))/4)*0.5f;
+ }
+ if(*(float *)(*(char **)(m+0x24)+0x24)*0.25f<*(float *)(m+0x2C)) {
+  int count=FUN_L00_001f2868(0.15f,m+0x10,16,*(void **)(d+0x10),0);
+  *(Effect128 *)pos=*(Effect128 *)(m+0x10);
+  FUN_L00_0025a9f8(*(void **)(d+0x10),pos,D_L10_00178380,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
+ }
+}
 #include "sda.h"
 
 /* Collectible trigger: deletes itself once taken, else watches for its toucher. */

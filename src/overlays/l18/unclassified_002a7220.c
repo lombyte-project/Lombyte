@@ -1689,7 +1689,79 @@ s32 FUN_L18_002dfba0(const u8 *moby) {
     return result;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9e70.s", FUN_L18_002e9e70);
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB260), where it is exact; names translated to the US level program. */
+
+extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
+extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
+extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern short D_L18_00161ED0_d __asm__("D_L18_00161ED0") __attribute__((sda));
+extern short D_L18_00161ED4_d __asm__("D_L18_00161ED4") __attribute__((sda));
+extern short D_L18_00161ED8_d __asm__("D_L18_00161ED8") __attribute__((sda));
+extern short D_L18_00161EE0_d __asm__("D_L18_00161EE0") __attribute__((sda));
+extern void FUN_L15_002d8710(char *);
+extern void FUN_L18_002ea1f8(void);
+extern void FUN_L18_002ea800(void *);
+extern void FUN_L18_002eacd8(void *);
+extern void FUN_L18_002eaea0(void *);
+extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L18_002ea598_c(char *moby) __asm__("FUN_L18_002ea598");
+extern void func_L00_0025A8E8_2EB260(int, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+
+void FUN_L18_002e9e70(char *moby) {
+    float *d = *(float **)(moby + 0x78);
+    float t = fast_add_rotations_c(d[0xB], *(float *)&D_L18_00161ED0_d * 0.017453292f * D_0015ED6C);
+    float u = *(float *)&D_L18_00161ED4_d * 0.017453292f * D_0015ED6C;
+    d[0xB] = t;
+    d[0xC] = fast_add_rotations_c(d[0xC], u);
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0:
+        if (tick_countdown_32_alt((int *)(d + 10))) {
+            mark_moby_for_removal_c2(moby);
+            return;
+        }
+        break;
+    case 1: {
+        float buf[4];
+        float buf2[4];
+        float *p = (float *)(moby + 0x10);
+        float *q = d + 4;
+        float lim = *(float *)&D_L18_00161EE0_d * D_0015ED6C;
+        float len;
+        subtract_vector_xyz_c(buf, d, p);
+        len = vector_length_xyz_c(buf);
+        FUN_L18_002ea598_c(moby);
+        FUN_L00_00257d78(q, *(float *)&D_L18_00161ED8_d * d[9], *(float *)&D_L18_00161ED8_d * d[9]);
+        add_vector_xyz(q, q, p);
+        FUN_L18_002eacd8(moby);
+        FUN_L18_002eaea0(moby);
+        enqueue_callback_list_1_alt((void (*)(void))FUN_L15_002d8710, moby);
+        if (len < lim) {
+            FUN_L18_002ea800(moby);
+            mark_moby_for_removal_c2(moby);
+            return;
+        }
+        normalize_vector_xyz_c(buf, buf, lim);
+        add_vector_xyz(p, p, buf);
+        qcopy(buf2, p);
+        buf2[2] = probe_ground_height_c(buf2, 0, 0.5f);
+        func_L00_0025A8E8_2EB260(*(int *)(d + 8), p, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
+        func_L00_0025A8E8_2EB260(*(int *)(d + 8), buf2, 2.0f, 0x10001, 5.0f, 1.0f, 0, 1, 0);
+        if (tick_countdown_32_alt((int *)(d + 13))) {
+            approach_value_alt(d + 9, 0.0f, 0.2f);
+            if (d[9] == 0.0f) {
+                mark_moby_for_removal_c2(moby);
+                return;
+            }
+        }
+        break;
+    }
+    }
+    enqueue_callback_list_1_alt(FUN_L18_002ea1f8, moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */
 

@@ -467,7 +467,23 @@ void FUN_L13_002b4c80(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4f28.s", FUN_L13_002b4f28);
+/* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B60D8), where it is exact; names translated to the US level program. */
+
+extern void * FUN_L13_00280400(void *, int, int, float, float, int, float, int);
+extern void FUN_L00_00267a08(void *);
+
+void FUN_L13_002b4f28(unsigned char *moby, char *data) {
+    float opacity = 0.2f;
+    void **handle = (void **)(data + 0x228);
+    if (moby[0x31]) {
+        if (!*handle) {
+            *handle = FUN_L13_00280400(moby, 0, 0x80808080, opacity, opacity, 0x10808080, 0.8f, 0x19);
+        }
+    } else if (*handle) {
+        FUN_L00_00267a08(*handle);
+        *handle = 0;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

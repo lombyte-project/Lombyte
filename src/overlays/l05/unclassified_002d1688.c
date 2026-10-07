@@ -53,7 +53,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E533[];
 extern int FUN_001f96f8(int);
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L05_002db238(void *, void *);
+extern void FUN_L05_002db238_u(void *, void *) __asm__("FUN_L05_002db238");
 
 void FUN_L05_002daf58(unsigned char *m) {
     char *r = FUN_L00_0025a420(m, 0x330000, 0);
@@ -64,7 +64,7 @@ void FUN_L05_002daf58(unsigned char *m) {
         m[0x31] = 0;
         *(int *)(m + 0x94) = 0;
         *(unsigned short *)(m + 0x34) |= 1;
-        FUN_L05_002db238(m, b);
+        FUN_L05_002db238_u(m, b);
         allocate_voice_for_target_entry(0, 0, (int)m);
         o = *(char **)(r + 0x20);
         if (o != 0 && *(short *)(o + 0xA6) == 0) {
@@ -393,7 +393,54 @@ void FUN_L05_002db018(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002db238.s", FUN_L05_002db238);
+/* Explosion debris: 20 bursts thrown out along dir with random spread, each trailing 10 smoke puffs. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC4C8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians_c(void) __asm__("func_00213308");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern int FUN_001fa6e0(int, int, float);
+extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_0025f8e0(float *v, float s);
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+
+void FUN_L05_002db238(void *m, void *dir) {
+    float p[4];
+    float v[4];
+    float a[4];
+    char *pos = (char *)m + 0x10;
+    int i, j;
+    for (i = 0; i < 20; i++) {
+        float ang, sp, up;
+        qcopy(p, pos);
+        FUN_L00_0025f8e0(p, 0.25f);
+        p[2] += 1.0f;
+        ang = random_angle_radians_c();
+        sp = random_float_between_c(1.0f, 8.0f);
+        up = random_float_between_c(2.0f, 6.0f);
+        scale_vector_xyz(v, dir, random_float_between_c(0.0f, 1.0f));
+        v[0] += fast_cos_c2(ang) * (sp * D_0015ED6C);
+        v[1] += fast_sin_c2(ang) * (sp * D_0015ED6C);
+        v[2] += up * D_0015ED6C;
+        qcopy(a, v);
+        a[2] -= D_0015ED70 * 20.0f * (float)scale_game_frames(0x1E);
+        for (j = 0; j < 10; j++) {
+            float r = random_float_between_c(0.5f, 1.5f);
+            int c1, c2, n1, n2;
+            v[3] = r * 0.125f;
+            a[3] = r * 0.065f;
+            FUN_L00_0025f8e0(p, 0.2f);
+            FUN_L00_0025f8e0(a, D_0015ED6C * 0.5f);
+            c1 = FUN_001fa6e0(0x8000EEEE, 0x8000FF90, random_float_between_c(0.0f, 1.0f));
+            c2 = FUN_001fa6e0(0xFFEE, 0xFFEE, random_float_between_c(0.0f, 1.0f));
+            n1 = scale_game_frames(10);
+            n2 = scale_game_frames(0x1E);
+            FUN_00218888(p, v, a, c1, c2, n1, n2, func_001FA898_r(FUN_001f96b0(random_float_between_c(5.0f, 25.0f))), -1);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);

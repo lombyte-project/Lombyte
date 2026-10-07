@@ -208,8 +208,79 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6a20.s", FUN_L03_002c6a20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c6d98.s", FUN_L03_002c6d98);
+/* Applies damage reaction, knockback parameters and animation state. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C7DE8), where it is exact; names translated to the US level program. */
+
+typedef int L03Quad __attribute__((mode(TI)));
+
+extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8");
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L03_002c6ca0_c(unsigned char *) __asm__("FUN_L03_002c6ca0");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void FUN_L00_0025d458(void *, short *);
+extern void FUN_L01_0026e090(int, int);
+extern void FUN_L03_00250a78(float *, float, float);
+
+void FUN_L03_002c6a20(unsigned char *moby) {
+ float vector[4]; int result; float damage; float angle;
+ char *data=*(char **)(moby+0x78);
+ char *hit;
+ if (*(int *)(data+0x38)!=0 || (*(int *)(data+0x248)!=-1 && FUN_L03_002c6ca0_c((unsigned char *)(D_L03_0015FFD8_c+(*(int *)(data+0x248)<<8)))))
+  *(int *)(data+0x240)=scale_game_frames(240);
+ if (tick_countdown_32_alt((int *)(data+0x240))) *(float *)(data+0x230)=*(float *)(data+0x22C);
+ else *(float *)(data+0x230)=*(float *)(data+0x22C)*2.0f;
+ damage=0.0f;
+ hit=FUN_L00_0025a420(moby,0x330000,0);
+ FUN_L00_0025a478(moby,hit,data+0x20,0,&result,&damage,0,4);
+ if (result!=1 && moby[0x20]!=21) {
+  char *other;
+  if (moby[0x21]!=255)FUN_L01_0026e090(moby[0x21],1);
+  { float health=*(float *)(data+0x20)-damage;
+  float speed=D_0015ED70*50.0f;
+  *(int *)(data+0x144)=9;
+  data[0x15D]=0;
+  *(float *)(data+0x130)=speed;
+  *(float *)(data+0x20)=health; }
+  other=*(char **)(hit+0x20);
+  angle=FUN_001f9e90(*(float *)(moby+0x10)-*(float *)(other+0x10),*(float *)(moby+0x14)-*(float *)(other+0x14));
+  { float rotationSpeed=D_0015ED6C*10.0f;
+  *(unsigned short *)(moby+0x34)&=0xEFFF;
+  *(float *)(data+0x13C)=rotationSpeed; }
+  FUN_L03_00250a78((float *)(data+0x120),4.5f,2.0f);
+  *(float *)(data+0x170)=5.0f;
+  *(float *)(data+0x174)=12.0f;
+  *(L03Quad *)vector=*(L03Quad *)(hit+0x10);
+  FUN_L00_0025ab48(vector,&angle,data+0x138,data+0x13C);
+  FUN_L00_0025c558(angle,moby,data+0x120,4,1,0);
+  moby[0x20]=21;
+  *(unsigned char *)(data+0x117)=240;
+  FUN_L00_0025d458(moby,(short *)(data+0x110));
+ }
+ moby[0xA4]=255;
+}
+/* scans class instances for either predicate */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002591d0(int *, int, int, int);
+extern int FUN_L00_002592b8(int *, int, int, int);
+extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
+
+int FUN_L03_002c6d98(int id) {
+    unsigned char *item;
+    if (id == 0xFF) goto absent;
+    FUN_L00_002591d0((int *)&item, id, 0, 0);
+    while (item != 0) {
+        if (FUN_L03_002c5b78_c(item)) return 1;
+        if (FUN_L03_002c5b78_c(item)) return 1;
+        FUN_L00_002592b8((int *)&item, (int)item, 0, 0);
+    }
+absent:
+    return 0;
+}
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C81E0), where it is exact; names translated to the US level program. */
 
 typedef struct {

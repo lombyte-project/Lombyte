@@ -166,7 +166,55 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ece00.s", FUN_L14_002ece00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed280.s", FUN_L14_002ed280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed530.s", FUN_L14_002ed530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee6b0.s", FUN_L14_002ee6b0);
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EFB10), where it is exact; names translated to the US level program. */
+
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float FUN_L00_00257c48(float, float);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L14_00161CA0_d __asm__("D_L14_00161CA0") __attribute__((sda));
+extern short D_L14_00161CA4_d __asm__("D_L14_00161CA4") __attribute__((sda));
+extern short D_L14_00161CA8_d __asm__("D_L14_00161CA8") __attribute__((sda));
+extern short D_L14_00161CAC_d __asm__("D_L14_00161CAC") __attribute__((sda));
+extern short D_L14_00161CB0_d __asm__("D_L14_00161CB0") __attribute__((sda));
+extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
+extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L14_002ee6b0(float *pos, int n) {
+    float v[4];
+    float p2[4];
+    float a, f21, f20;
+    int s, r0, i, id;
+    unsigned char *r;
+    if (n > 0) {
+    i = n;
+    do {
+        a = random_float_between_c(*(float *)&D_L14_00161CAC_d, *(float *)&D_L14_00161CB0_d);
+        s = random_integer_below(2);
+        if (s == 0) s--;
+        f21 = random_angle_radians();
+        f20 = random_float_between_c(0.34906584f, 1.5358897f);
+        build_spherical_offset_c(v, random_float_between_c(*(float *)&D_L14_00161CA0_d, *(float *)&D_L14_00161CA4_d), f21, f20);
+        qcopy(p2, pos);
+        pos[0] += FUN_L00_00257c48(0.0f, 0.15f);
+        pos[1] += FUN_L00_00257c48(0.0f, 0.15f);
+        pos[2] += FUN_L00_00257c48(0.0f, 0.15f);
+        id = scale_game_frames_c(0x3C);
+        r = FUN_L00_00272060(pos, id, a * 0.1f, a, 0x7F7F2020, 0, s, v, *(float *)&D_L14_00161CA8_d);
+        if (r != 0) {
+            r[9] = func_001FA898_r(4.0f) + 0x70;
+        }
+        s = -s;
+        r = FUN_L00_00272060(pos, scale_game_frames_c(0x3C), a * 0.07f, a * 0.7f, 0x7F7F7F7F, 1, s, v, *(float *)&D_L14_00161CA8_d);
+        if (r != 0) {
+            r[9] = func_001FA898_r(4.0f) + 0x70;
+        }
+    } while (--i != 0);
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ee8d8.s", FUN_L14_002ee8d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002eef60.s", FUN_L14_002eef60);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F05D8), where it is exact; names translated to the US level program. */
@@ -702,7 +750,46 @@ void FUN_L14_002fc890(char *moby) {
     *(float *)(data + 0x80) = *(float *)(data + 0x84) = *(float *)(data + 0x88) =
         *(float *)(data + 0x70) = *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fc9a0.s", FUN_L14_002fc9a0);
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDE28), where it is exact; names translated to the US level program. */
+
+extern char *D_L14_001B0BB0_c5[] __asm__("D_L14_001B0BB0");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
+extern short D_L14_00161F48_d __asm__("D_L14_00161F48") __attribute__((sda));
+extern short D_L14_00161F4C_d __asm__("D_L14_00161F4C") __attribute__((sda));
+extern short D_L14_00161F50_d __asm__("D_L14_00161F50") __attribute__((sda));
+extern short D_L14_00161F54_d __asm__("D_L14_00161F54") __attribute__((sda));
+extern short D_L14_00161F58_d __asm__("D_L14_00161F58") __attribute__((sda));
+extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
+extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L14_002fc9a0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float v[3];
+    float t[3];
+    float a, b, c;
+    FUN_L00_0025d808_c((int)D_L14_001B0BB0_c5[*(int *)(d + 0x68)], (char *)v, d + 0x60, d + 0x64, 1, (*(float *)&D_L14_00161F48_d) * D_0015ED6C_c2);
+    FUN_L00_0025b8c0((float *)(m + 0x10), (float *)(d + 0x70), v[0], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x14), (float *)(d + 0x74), v[1], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
+    FUN_L00_0025b8c0((float *)(m + 0x18), (float *)(d + 0x78), v[2], (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
+    subtract_vector_xyz_c(t, v, m + 0x10);
+    if (AbsoluteFloat(t[0]) > 0.01f) {
+        if (AbsoluteFloat(t[1]) > 0.01f) {
+            a = FUN_001f9e90(t[0], t[1]);
+            b = fast_subtract_rotations(*(float *)(m + 0x48), a);
+            FUN_L00_00258278(m, (float *)(d + 0x88), a, (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
+            c = FUN_001f9e90(vector_length_xy_c(t), t[2]);
+            FUN_L00_0025b8c0((float *)(m + 0x44), (float *)(d + 0x84), -c, (*(float *)&D_L14_00161F4C_d), (*(float *)&D_L14_00161F50_d), 0.0f);
+            b = b / (*(float *)&D_L14_00161F58_d);
+            if (b > 1.0f) b = 1.0f;
+            if (b < -1.0f) b = -1.0f;
+            FUN_L00_0025b8c0((float *)(m + 0x40), (float *)(d + 0x80), b * (*(float *)&D_L14_00161F54_d), 0.003f, (*(float *)&D_L14_00161F50_d), 0.0f);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fcbb0.s", FUN_L14_002fcbb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fd310.s", FUN_L14_002fd310);
 

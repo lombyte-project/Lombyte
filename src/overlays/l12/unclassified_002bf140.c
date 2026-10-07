@@ -236,7 +236,48 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1be0.s", FUN_L12_002e1be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e2eb8.s", FUN_L12_002e2eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3528.s", FUN_L12_002e3528);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3948.s", FUN_L12_002e3948);
+/* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one
+ * mirrored across its local Y axis), with random jitter. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L12_00161920_d __asm__("D_L12_00161920") __attribute__((sda));
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+int FUN_L00_00257b90(int lo, int hi);
+unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
+extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+
+void FUN_L12_002e3948(char *m) {
+    float a[4];
+    float b[4];
+    float p1[4];
+    float p2[4];
+    float z[4];
+    if (((unsigned char *)m)[0x31] == 0) return;
+    clear_u64_value_c(z);
+    a[0] = -random_float_between(0.0f, D_0015ED6C * 5.0f);
+    a[1] = random_float_between(-(D_0015ED6C * 2.0f), D_0015ED6C * 2.0f);
+    a[2] = random_float_between(-(D_0015ED6C * 2.0f), D_0015ED6C * 2.0f);
+    transform_vector_by_basis(a, a, m + 0xC0);
+    transform_vector_by_basis(p1, &D_L12_00161920_d, m + 0xC0);
+    add_vector_xyz_c(p1, p1, m + 0x10);
+    b[0] = -random_float_between(0.0f, D_0015ED6C);
+    b[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
+    b[2] = random_float_between(-D_0015ED6C, D_0015ED6C);
+    transform_vector_by_basis(b, b, m + 0xC0);
+    qcopy(p2, &D_L12_00161920_d);
+    p2[1] = -p2[1];
+    transform_vector_by_basis(p2, p2, m + 0xC0);
+    add_vector_xyz_c(p2, p2, m + 0x10);
+    FUN_L00_0026cbb0(p1, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    func_L00_0026DEA0_x(p1, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
+    FUN_L00_0026cbb0(p2, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    func_L00_0026DEA0_x(p2, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3c08.s", FUN_L12_002e3c08);
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */
