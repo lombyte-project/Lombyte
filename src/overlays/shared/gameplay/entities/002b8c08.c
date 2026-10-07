@@ -295,7 +295,26 @@ void FUN_L01_002c72c8(void) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0bd8.s", FUN_L01_002e0bd8);
+extern int D_0015ED84;
+extern int D_0015ED84_r __asm__("D_0015ED84");
+extern unsigned char D_0013D394 __attribute__((section(".data")));
+extern unsigned char D_0013D395 __attribute__((section(".data")));
+void FUN_L01_002e0bd8(char *moby)
+{
+    int level = D_0015ED84;
+    if (level != 1) return;
+    if (*(short *)(moby + 0xB2) == 0x34 &&
+            *(short *)(moby + 0xA6) == 0x118 &&
+            (unsigned char)moby[0x20] == 5) {
+            D_0013D394 = level;
+            level = D_0015ED84_r;
+    }
+    if (level == 1 && *(short *)(moby + 0xB2) == 0x35 &&
+            *(short *)(moby + 0xA6) == 0x118 &&
+            (unsigned char)moby[0x20] == 5) {
+            D_0013D395 = level;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e0c68.s", FUN_L01_002e0c68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002e1ac0.s", FUN_L01_002e1ac0);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
