@@ -23,6 +23,9 @@ typedef struct {
     char pad04[2];
     u8 third_render_group_count;
     u8 patch_group_index;
+    char pad08[0x20];
+    char *runtime_table;
+    s32 original_field_2c;
 } ClassResourceHeader;
 
 extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
@@ -85,7 +88,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     resource_table = resident_class_resources;
     class_slot = resident_class_slot_by_id[class_id];
     resource_table[class_slot] = resource_data;
-    D_001B6180[class_slot] = *(s32 *)(resource_data + 0x2C);
+    D_001B6180[class_slot] = ((ClassResourceHeader *)resource_data)->original_field_2c;
     prepare_resident_class_render_data(resource_data, resident_indexed_textures,
                                        class_material_maps[active_class_resource_index], class_id);
     resource_table_index = active_class_resource_index;
@@ -94,9 +97,9 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {
         s16 runtime_entry_index = class_runtime_indices[resource_table_index][runtime_index];
         if (runtime_entry_index >= 0) {
-            *(s16 *)(*(char **)(resident_class_resources[class_slot] + 0x28) +
+            *(s16 *)(((ClassResourceHeader *)resident_class_resources[class_slot])->runtime_table +
                      runtime_index * 0x20 + 0x1A) = runtime_entry_index;
-            *(s32 *)(*(char **)(resident_class_resources[class_slot] + 0x28) +
+            *(s32 *)(((ClassResourceHeader *)resident_class_resources[class_slot])->runtime_table +
                      runtime_index * 0x20 + 0x1C) = resource_tag;
         }
     }
