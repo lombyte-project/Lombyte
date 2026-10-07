@@ -3,7 +3,20 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6150.s", FUN_L01_002f6150);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "qzero.h"
+#include "rnc/math/vector.h"
+#include "sda.h"
+
+extern u8 D_L01_001E3380[];
+void FUN_L00_002371e0(void);
+void FUN_L01_002b96e0(s32, void *);
+
+void FUN_L01_002f6150(void) {
+    FUN_L00_002371e0();
+    FUN_L01_002b96e0(0x2, D_L01_001E3380);
+}
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
