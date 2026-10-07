@@ -2,6 +2,33 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00303370.s", FUN_L14_00303370);
+#include "qcopy.h"
+#include "sda.h"
+extern void FUN_L02_002a4058(void *, int, float);
+extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
+extern unsigned char D_L14_001E9C60[];
+extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
+
+void FUN_L14_00303370(unsigned char *moby) {
+    switch (moby[0x20]) {
+    case 0:
+        FUN_L02_002a4058(D_L14_001E9C60, 0x40, 0.6666667f);
+        moby[0x20] = 1;
+        moby[0x30] = 0xFF;
+        break;
+    case 1:
+        AddDrawCallback(register_audio_stream_callback, moby);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00305a38.s", FUN_L14_00305a38);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00307a28.s", FUN_L14_00307a28);
+/* calls func_L12_002BD3D0 with two looked-up ids */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */
+
+extern char D_L14_001F5F80[];
+extern s32 get_effect_texture() __asm__("FUN_001f44b8");
+extern void FUN_L12_002bc210_u(void *, int, int, int) __asm__("FUN_L12_002bc210");
+
+void FUN_L14_00307a28(void) {
+    FUN_L12_002bc210_u(D_L14_001F5F80, 0x13, get_effect_texture(0x2e), get_effect_texture(0x2f));
+}

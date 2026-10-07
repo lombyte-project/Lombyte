@@ -46,5 +46,43 @@ void FUN_L11_0031d7d8(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e6a8.s", FUN_L11_0031e6a8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e780.s", FUN_L11_0031e780);
+/* Runs the two per-entry update calls over a 13-entry table. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int a, b;
+} Pair;
+
+extern Pair D_L11_00217758[];
+extern char D_L11_00217770[];
+extern int D_L11_00207900[];
+extern int D_L11_00215148[];
+extern int D_L11_00215190[];
+extern int D_L11_00215220[];
+extern void FUN_L00_001fde98(int, int, int, void *, int);
+extern void FUN_L08_00258090(void *, int, int, void *);
+
+void FUN_L11_0031e6a8(int a) {
+    int i;
+    for (i = 0; i < 0x11; i++) {
+        FUN_L08_00258090(D_L11_00217770, D_L11_00215190[i], D_L11_00207900[i], &D_L11_00217758[a]);
+        FUN_L00_001fde98(D_L11_00207900[i], D_L11_00215148[i], D_L11_00215220[i], D_L11_00217770,
+                         1);
+    }
+}
+typedef struct {
+    int a, b;
+} Pair_002f0c18;
+extern Pair_002f0c18 D_L11_00162618[] __attribute__((section(".sdata")));
+extern int D_L11_00200728[];
+extern int D_L11_00207888[];
+extern int D_L11_00207860[];
+extern int D_L11_002078D8[];
+void FUN_L11_0031e780(int a) {
+    int i;
+    for (i = 0; i < 0x9; i++) {
+        FUN_L08_00258090(D_L11_00217770, D_L11_00207888[i], D_L11_00200728[i], &D_L11_00162618[a]);
+        FUN_L00_001fde98(D_L11_00200728[i], D_L11_00207860[i], D_L11_002078D8[i], D_L11_00217770,
+                         1);
+    }
+}

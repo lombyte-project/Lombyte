@@ -2,7 +2,34 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4b58.s", FUN_L16_002e4b58);
+#include "qcopy.h"
+#include "sda.h"
+#ifndef __attribute__((section(".data")))
+#endif
+#ifndef __attribute__((section(".sdata")))
+#endif
+extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L16_002e4be0");
+extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L16_002e4900");
+extern char *D_L16_001601AC_m_19510 __asm__("D_L16_001600EC") __attribute__((section(".sdata")));
+void FUN_L16_002e4b58(void *moby_v) {
+    char *moby = moby_v;
+    char *data = *(char **)(moby + 0x78);
+    char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xae));
+    char *position;
+    if (spawn != 0) {
+        int index;
+        char *slot = data;
+        char *entry;
+        position = spawn + 0x10;
+        slot += *(short *)(data + 0xac) << 2;
+        index = *(int *)(slot + 0x80) << 7;
+        entry = D_L16_001601AC_m_19510;
+        qcopy(position, (void *)(index + (int)entry + 0x30));
+        qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
+        func_L16_002E5D68_19510(spawn);
+    }
+    *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4c40.s", FUN_L16_002e4c40);
 #include "qcopy.h"
@@ -95,4 +122,40 @@ void FUN_L16_002e4f30(char *a) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e97a0.s", FUN_L16_002e97a0);
+/* Sets up the draw state, then draws the three entries of the level's table. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
+
+extern char D_L16_001DF2B0[][16] __attribute__((section(".data")));
+extern char D_L16_001DF2D0[] __attribute__((section(".data")));
+extern int FUN_001fa728(char *, float);
+extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
+extern short D_L16_00161F90 __attribute__((sda));
+extern short D_L16_00161F98 __attribute__((sda));
+extern short D_L16_00161FA0 __attribute__((sda));
+extern short D_L16_00161FA8 __attribute__((sda));
+extern short D_L16_00161FB0 __attribute__((sda));
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+extern void FUN_L00_001fde98(int, int, int, char *, int);
+extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
+
+void FUN_L16_002e97a0(void) {
+    int *a = (int *)&D_L16_00161F90;
+    int *b = (int *)&D_L16_00161F98;
+    int *c = (int *)&D_L16_00161FA0;
+    int *d = (int *)&D_L16_00161FA8;
+    int *e = (int *)&D_L16_00161FB0;
+    int i;
+
+    vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
+    vu1_add_g_sregister_l16(0x42, 0x4000000064);
+    vu1_add_g_sregister_l16(8, 0);
+    vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
+    font_queue_vu_state();
+    for (i = 0; i < 0x2; i++) {
+        if (FUN_001fa728(D_L16_001DF2B0[i], 512.0f) != -1) {
+            FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DF2D0);
+            FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DF2D0, 1);
+        }
+    }
+}

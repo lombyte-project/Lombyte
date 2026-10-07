@@ -40,4 +40,29 @@ s32 FUN_L04_002c41b0(T6 *p) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d34d8.s", FUN_L04_002d34d8);
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
+
+typedef int u128_2d34d8 __attribute__((mode(TI)));
+
+extern void FUN_L00_00250df8(void *);
+extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+
+void *FUN_L04_002d34d8(char *src, char *pos) {
+    char tmp[16];
+    char *p = tmp;
+    char *m;
+    *(u128_2d34d8 *)tmp = *(u128_2d34d8 *)pos;
+    m = (char *)func_0020D348_m(0x23a);
+    if (m != 0) {
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(unsigned short *)(m + 0x32) = *(unsigned short *)(src + 0x32);
+        m[0x31] = 1;
+        *(int *)(m + 0x40) = 0;
+        *(int *)(m + 0x44) = 0;
+        *(float *)(m + 0x48) = *(float *)(src + 0x48);
+        *(unsigned long *)(m + 0x38) = *(unsigned long *)(src + 0x38);
+        qcopy(m + 0x10, p);
+        FUN_L00_00250df8(m);
+    }
+    return m;
+}
