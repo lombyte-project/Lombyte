@@ -503,7 +503,7 @@ extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, vo
 extern void FUN_L05_0028be78(int *list, int n, int idx);
 extern void FUN_L06_002f2250(void);
 extern void FUN_L06_002f2910(void *);
-extern void FUN_L06_002f3640(void *);
+extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
 extern void FUN_L06_002f38c8(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -538,7 +538,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
     dz = AbsoluteFloat(moby->pos[2] - D_0013F350_u.f2A0[2]);
     *(u128 *)save1 = *(u128 *)save0 = *(u128 *)moby->pos;
     if (moby->state != 1) {
-        FUN_L06_002f3640(moby);
+        FUN_L06_002f3640_u(moby);
         if (dist < 16.0f && AbsoluteFloat(moby->pos[2] - D_0013F350_u.f80[2]) < 1.5f) {
             int ok = 0;
             if (moby->state == 2 || moby->state == 5 || moby->state == 3 || moby->state == 6 ||
@@ -1309,7 +1309,46 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
+typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
+extern char *D_001413D0 __attribute__((section(".data")));
+extern void FUN_L03_00250a78(void *, float, float);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
+extern void FUN_0022da68(int, int, void *);
+
+void FUN_L06_002f3640(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    if (m[0x20] != 9 && m[0x52] != 2 && m[0x53] != 2) {
+        char *t = FUN_L00_0025a420(m, 0x330001, 0);
+        if (t != 0) {
+            Q pos;
+            float a0 = FUN_001f9e90(*(float *)(t + 0x10), *(float *)(t + 0x14));
+            char *o = *(char **)(t + 0x20);
+            float ang;
+            ang = a0;
+            if (o != D_001413D0 && *(short *)(o + 0xA6) != *(short *)(m + 0xA6)) {
+                int r = FUN_001f96f8(0x50);
+                r *= FUN_001f96f8(0x50);
+                d[0xBD] = 0;
+                *(int *)(d + 0xA4) = 9;
+                *(float *)(d + 0x90) = 4.0f / (float)r;
+                FUN_L03_00250a78(d + 0x80, 2.0f, 0.5f);
+                pos = *(Q *)(t + 0x10);
+                FUN_L00_0025ab48(&pos, &ang, d + 0x98, d + 0x9C);
+                FUN_L00_0025c558(m, d + 0x80, 4, 5, 2, ang);
+                {
+                    float v = D_0015ED6C + D_0015ED6C;
+                    *(float *)(d + 0xD0) = 10.0f;
+                    *(float *)(d + 0xD4) = 20.0f;
+                    *(float *)(d + 0xCC) = v;
+                }
+                FUN_0022da68(2, 0, m);
+                m[0x20] = 9;
+            }
+        }
+    }
+    m[0xA4] = 0xFF;
+}
 #include "sda.h"
 
 /* for each moby in a search list with the owner's id, start three effects on its data */
