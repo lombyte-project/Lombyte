@@ -2586,20 +2586,20 @@ extern char D_0013F3D0[];
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
 void FUN_L00_00212ff0(void) {
-    char *g = ((char *)&D_0013F350);
+    char *globals = ((char *)&D_0013F350);
     float v[4];
-    if (*(unsigned char *)(g + 0x20B3) != 0) {
-        float f2 = dot_vectors_xyz(g + 0xE0, g + 0x270);
+    if (*(unsigned char *)(globals + 0x20B3) != 0) {
+        float f2 = dot_vectors_xyz(globals + 0xE0, globals + 0x270);
         float f1;
         float len;
-        if (*(short *)(g + 0x30E) != 0) return;
-        f1 = *(float *)(g + 0x2DC);
+        if (*(short *)(globals + 0x30E) != 0) return;
+        f1 = *(float *)(globals + 0x2DC);
         if (!(f1 < 0.0f)) return;
-        if (f1 < f2 + 0.0001f || *(int *)(g + 0x2084) == 0x3E) {
-            qcopy(g + 0x80, g + 0x2A0);
+        if (f1 < f2 + 0.0001f || *(int *)(globals + 0x2084) == 0x3E) {
+            qcopy(globals + 0x80, globals + 0x2A0);
             return;
         }
-        subtract_vector_xyz(v, g + 0x2A0, g + 0x80);
+        subtract_vector_xyz(v, globals + 0x2A0, globals + 0x80);
         len = vector_length_xyz(v);
         if (len < D_0015ED60_c * 0.21f) {
             if (D_0015ED60_c * 0.05f < len) len = D_0015ED60_c * 0.05f;
@@ -2609,29 +2609,29 @@ void FUN_L00_00212ff0(void) {
         normalize_vector_xyz(v, v, len);
         add_vector_xyz(((char *)&D_0013F3D0), ((char *)&D_0013F3D0), v);
     } else {
-        if (*(short *)(g + 0x30E) == 0 && *(float *)(g + 0x88) < *(float *)(g + 0x2D8)) {
-            float x = AbsoluteFloat(*(float *)(g + 0x88) - *(float *)(g + 0x2D8));
-            float y = AbsoluteFloat(*(float *)(g + 0xE8)) + 0.01f;
+        if (*(short *)(globals + 0x30E) == 0 && *(float *)(globals + 0x88) < *(float *)(globals + 0x2D8)) {
+            float x = AbsoluteFloat(*(float *)(globals + 0x88) - *(float *)(globals + 0x2D8));
+            float y = AbsoluteFloat(*(float *)(globals + 0xE8)) + 0.01f;
             if (x < y) {
-                if (*(unsigned char *)(g + 0x257) != 0) {
-                    float d = FUN_001f9b80(g + 0x210, g + 0x80);
-                    if (*(float *)(g + 0x234) * 0.5f < d) {
-                        *(float *)(g + 0x88) = *(float *)(g + 0x2D8);
+                if (*(unsigned char *)(globals + 0x257) != 0) {
+                    float d = FUN_001f9b80(globals + 0x210, globals + 0x80);
+                    if (*(float *)(globals + 0x234) * 0.5f < d) {
+                        *(float *)(globals + 0x88) = *(float *)(globals + 0x2D8);
                         return;
                     }
                 } else {
-                    *(float *)(g + 0x88) = *(float *)(g + 0x2D8);
+                    *(float *)(globals + 0x88) = *(float *)(globals + 0x2D8);
                     return;
                 }
-                func_L00_0025C918_2136A8((float *)(g + 0x88), *(float *)(g + 0x2D8), (float *)(g + 0x304), D_0015ED64 * 0.057f, D_0015ED64 * 0.3f, D_0015ED6C_c * 2.0f);
+                func_L00_0025C918_2136A8((float *)(globals + 0x88), *(float *)(globals + 0x2D8), (float *)(globals + 0x304), D_0015ED64 * 0.057f, D_0015ED64 * 0.3f, D_0015ED6C_c * 2.0f);
             } else {
-                float f2 = *(float *)(g + 0x108);
+                float f2 = *(float *)(globals + 0x108);
                 char *q;
                 if (f2 < 0.0f) {
-                    float n = *(float *)(g + 0x88) - f2;
-                    float lim = *(float *)(g + 0x2D8);
-                    *(float *)(g + 0x88) = n;
-                    if (lim < n) *(float *)(g + 0x88) = lim;
+                    float n = *(float *)(globals + 0x88) - f2;
+                    float lim = *(float *)(globals + 0x2D8);
+                    *(float *)(globals + 0x88) = n;
+                    if (lim < n) *(float *)(globals + 0x88) = lim;
                 }
                 q = D_0013E533 + 0xEA5;
                 func_L00_0025C918_2136A8((float *)q, *(float *)(q + 0x250), (float *)(q + 0x27C), D_0015ED64 * 0.057f, D_0015ED64 * 0.3f, D_0015ED6C_c + D_0015ED6C_c);

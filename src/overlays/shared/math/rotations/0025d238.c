@@ -327,45 +327,47 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 extern void FUN_L00_002d3838(void *, void *, int, int);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
-void FUN_L00_0025f3e8(char *a, char *b, float sc, float fl) {
-    Vy10 m;
+/* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
+   (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
+void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
+    Vy10 zero_vec;
     S6y10 c0;
     S6y10 c1;
-    int r[3];
+    int rgb[3];
     int i;
     float k5, sp, big, t1, t2;
-    clear_u64_value(&m);
+    clear_u64_value(&zero_vec);
     k5 = 500000.0f;
     for (i = 2; i >= 0; i--) {
         sp = random_float_between_c(8.0f, 10.0f) * D_0015ED6C;
-        big = sc * k5;
+        big = scale * k5;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(b, &m, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
+        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
-            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * sc);
+            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
-    if (a != 0) {
-        r[0] = 0x7F; r[1] = 0x40; r[2] = 0;
-        FUN_L00_0025c088(&r[0], &r[1], &r[2], 1);
-        t1 = sc * 4.0f;
-        FUN_L00_002ac910(a, b, &m, t1, scale_game_frames_c(0x14), *(unsigned char *)&r[0], *(unsigned char *)&r[1], *(unsigned char *)&r[2], 0x30);
-        r[0] = 0x60; r[1] = 0x20; r[2] = 0;
-        FUN_L00_0025c088(&r[0], &r[1], &r[2], 1);
-        t2 = sc * 3.0f;
-        FUN_L00_002ac910(a, b, &m, t2, scale_game_frames_c(0x1D), *(unsigned char *)&r[0], *(unsigned char *)&r[1], *(unsigned char *)&r[2], 0x20);
+    if (owner != 0) {
+        rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
+        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        t1 = scale * 4.0f;
+        FUN_L00_002ac910(owner, pos, &zero_vec, t1, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
+        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        t2 = scale * 3.0f;
+        FUN_L00_002ac910(owner, pos, &zero_vec, t2, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
-    if (fl != 0.0f) {
-        if (fl > 0.0f) {
-            D_L00_001B02F0[9] = fl;
-            D_L00_001B02F0[10] = fl;
-            D_L00_001B02F0[8] = fl;
+    if (flash != 0.0f) {
+        if (flash > 0.0f) {
+            D_L00_001B02F0[9] = flash;
+            D_L00_001B02F0[10] = flash;
+            D_L00_001B02F0[8] = flash;
         } else {
             D_L00_001B02F0[9] = 13.0f;
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        FUN_L00_002d3838(D_L00_001B02F0, b, 0, 0);
+        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
     }
 }
 #define NOT_SDA

@@ -264,23 +264,23 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L00_00269b70(void *pos, unsigned char c0, unsigned char c1, unsigned char c2, int tgt, float a, float b) {
-    char *p;
+void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b) {
+    char *particle;
     float *q;
-    if (tgt) {
-        p = FUN_L00_002678b8(5);
-        if (p) {
-            qcopy(p + 0x10, pos);
-            *(int *)(p + 4) = 0x7F000000 | (c2 << 16) | (c1 << 8) | c0;
-            q = (float *)(p + 0x20);
-            p[9] = func_001FA898_r(4.0f) - 0x60;
-            p[3] = 0x48;
-            *(float *)(p + 0xC) = b;
-            p[1] = 0;
-            p[8] = 0;
-            p[2] = **(unsigned char **)&D_L00_001B2094;
-            *(int *)(p + 0x20) = tgt;
-            q[1] = a / ConvertIntegerToFloat(tgt);
+    if (target) {
+        particle = FUN_L00_002678b8(5);
+        if (particle) {
+            qcopy(particle + 0x10, pos);
+            *(int *)(particle + 4) = 0x7F000000 | (blue << 16) | (green << 8) | red;
+            q = (float *)(particle + 0x20);
+            particle[9] = func_001FA898_r(4.0f) - 0x60;
+            particle[3] = 0x48;
+            *(float *)(particle + 0xC) = b;
+            particle[1] = 0;
+            particle[8] = 0;
+            particle[2] = **(unsigned char **)&D_L00_001B2094;
+            *(int *)(particle + 0x20) = target;
+            q[1] = a / ConvertIntegerToFloat(target);
         }
     }
 }

@@ -848,16 +848,16 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern char D_00173F60_alias[] __asm__("D_L00_00173E60");
 
-void FUN_L00_002c3888(float *pos,char *m,void *vec) {
+void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
  float a[4],b[4],c[4];
- char *d=*(char **)(m+0x78);
+ char *state=*(char **)(moby+0x78);
  char *camera;
  char *player;
- qcopy(d+0x10,vec);
+ qcopy(state+0x10,vec);
  { char *view=D_0013F350_c2;
-   if(*(int *)(view+0x2FC) && FUN_L00_002603d0(*(int *)(view+0x2FC))) add_vector_xyz(d+0x10,d+0x10,view+0x100);
+   if(*(int *)(view+0x2FC) && FUN_L00_002603d0(*(int *)(view+0x2FC))) add_vector_xyz(state+0x10,state+0x10,view+0x100);
  }
- qcopy(m+0x10,pos);
+ qcopy(moby+0x10,pos);
  camera=D_0013F350_c2;
  player=*(char **)(camera+0x2080);
  *(q128_3888 *)a=*(q128_3888 *)(player+0x10); a[2]=pos[2];
@@ -866,22 +866,22 @@ void FUN_L00_002c3888(float *pos,char *m,void *vec) {
  add_vector_xyz(pos,pos,a);
  if(FUN_001efa68(a,pos,0,*(int *)(camera+0x2080),0)) {
   float smoothing;
-  qcopy(m+0x10,D_00173F60_alias); qzero(d+0x10);
-  m[0x20]=4;
-  *(short *)(d+0x44)=scale_game_frames_c(30);
-  *(float *)(m+0x18)=D_L00_00173E40.height;
+  qcopy(moby+0x10,D_00173F60_alias); qzero(state+0x10);
+  moby[0x20]=4;
+  *(short *)(state+0x44)=scale_game_frames_c(30);
+  *(float *)(moby+0x18)=D_L00_00173E40.height;
   qcopy(b,D_L00_00173E40.vector);
   { float co,si;
-  co=fast_cos(*(float *)(m+0x48)); smoothing=0.1f; si=fast_sin(*(float *)(m+0x48));
+  co=fast_cos(*(float *)(moby+0x48)); smoothing=0.1f; si=fast_sin(*(float *)(moby+0x48));
   c[0]=b[0]*co+b[1]*si; }
   { float co,si;
-  co=fast_cos(*(float *)(m+0x48)); si=fast_sin(*(float *)(m+0x48));
+  co=fast_cos(*(float *)(moby+0x48)); si=fast_sin(*(float *)(moby+0x48));
   c[1]=b[1]*co-b[0]*si; c[2]=b[2]; }
-  *(float *)(d+0x4C)=-FUN_001f9e90(FUN_001f9988(c[0]*c[0]+c[2]*c[2]),c[1]);
-  *(float *)(d+0x50)=FUN_001f9e90(c[2],c[0]);
-  *(float *)(m+0x40)=fast_add_rotations(*(float *)(m+0x40),fast_subtract_rotations(*(float *)(d+0x4C),*(float *)(m+0x40))*(D_0015ED60*smoothing));
-  *(float *)(m+0x44)=fast_add_rotations(*(float *)(m+0x44),fast_subtract_rotations(*(float *)(d+0x50),*(float *)(m+0x44))*(D_0015ED60*smoothing));
- } else m[0x20]=2;
+  *(float *)(state+0x4C)=-FUN_001f9e90(FUN_001f9988(c[0]*c[0]+c[2]*c[2]),c[1]);
+  *(float *)(state+0x50)=FUN_001f9e90(c[2],c[0]);
+  *(float *)(moby+0x40)=fast_add_rotations(*(float *)(moby+0x40),fast_subtract_rotations(*(float *)(state+0x4C),*(float *)(moby+0x40))*(D_0015ED60*smoothing));
+  *(float *)(moby+0x44)=fast_add_rotations(*(float *)(moby+0x44),fast_subtract_rotations(*(float *)(state+0x50),*(float *)(moby+0x44))*(D_0015ED60*smoothing));
+ } else moby[0x20]=2;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c3af8.s", FUN_L00_002c3af8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);

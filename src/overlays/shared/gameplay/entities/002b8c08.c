@@ -299,6 +299,7 @@ extern int D_0015ED84;
 extern int D_0015ED84_r __asm__("D_0015ED84");
 extern unsigned char D_0013D394 __attribute__((section(".data")));
 extern unsigned char D_0013D395 __attribute__((section(".data")));
+/* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
 void FUN_L01_002e0bd8(char *moby)
 {
     int level = D_0015ED84;

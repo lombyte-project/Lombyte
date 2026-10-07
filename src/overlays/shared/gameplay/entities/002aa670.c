@@ -962,39 +962,41 @@ void FUN_L00_002502f0_2ac910(void *, int, int, int) __asm__("FUN_L00_002502f0");
 int FUN_001f96f8_2ac910(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0_2ac910(int) __asm__("FUN_001fa6c0");
 void FUN_L00_00250df8_2ac910(void *) __asm__("FUN_L00_00250df8");
-unsigned char *FUN_L00_002ac910(void *owner, void *pos, void *vel, int n, int r, int g, int b, int a23, float scale) {
-    unsigned char *m;
-    r &= 0xFF; g &= 0xFF; b &= 0xFF; a23 &= 0xFF;
-    m = FUN_0020c4f8_2ac910(0x70);
-    if (m) {
-        Q_2ac910 u, t;
-        V_2ac910 *v = *(V_2ac910 **)(m + 0x78);
-        float x;
-        t.q = 0;
-        t.f[0] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        t.f[1] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        t.f[2] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
-        u.q = t.q;
-        m[0x20] = 0;
-        m[0x23] = a23;
-        m[0x30] = 0xFF;
-        *(short *)(m + 0x32) = 0xFF;
-        m[0x31] = 1;
-        FUN_L00_002502f0_2ac910(m, r, g, b);
-        v->f18 = *(float *)(m + 0x2C) * scale;
-        *(int *)(m + 0x2C) = 0;
-        v->o = owner;
-        qcopy(m + 0x10, pos);
-        qcopy(v, vel);
-        qcopy(m + 0x40, &u);
-        v->n = n;
-        v->h1c = *(unsigned short *)&v->n - FUN_001f96f8_2ac910(4);
-        x = FUN_001fa6c0_2ac910(v->n - v->h1c);
-        *(float *)(m + 0x2C) = x * v->f18 / FUN_001fa6c0_2ac910(v->n);
-        v->h1e = a23;
-        FUN_L00_00250df8_2ac910(m);
+/* Spawns a particle moby with a random rotation, owned by `owner`, at `pos` with velocity `vel`, tinted red/green/blue
+   and living `lifetime` frames; returns the new moby or NULL. */
+unsigned char *FUN_L00_002ac910(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) {
+    unsigned char *moby;
+    red &= 0xFF; green &= 0xFF; blue &= 0xFF; alpha &= 0xFF;
+    moby = FUN_0020c4f8_2ac910(0x70);
+    if (moby) {
+        Q_2ac910 rot_copy, rot;
+        V_2ac910 *data = *(V_2ac910 **)(moby + 0x78);
+        float elapsed;
+        rot.q = 0;
+        rot.f[0] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        rot.f[1] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        rot.f[2] = FUN_002132a8_2ac910(-3.1415927f, 3.1415927f);
+        rot_copy.q = rot.q;
+        moby[0x20] = 0;
+        moby[0x23] = alpha;
+        moby[0x30] = 0xFF;
+        *(short *)(moby + 0x32) = 0xFF;
+        moby[0x31] = 1;
+        FUN_L00_002502f0_2ac910(moby, red, green, blue);
+        data->f18 = *(float *)(moby + 0x2C) * scale;
+        *(int *)(moby + 0x2C) = 0;
+        data->o = owner;
+        qcopy(moby + 0x10, pos);
+        qcopy(data, vel);
+        qcopy(moby + 0x40, &rot_copy);
+        data->n = lifetime;
+        data->h1c = *(unsigned short *)&data->n - FUN_001f96f8_2ac910(4);
+        elapsed = FUN_001fa6c0_2ac910(data->n - data->h1c);
+        *(float *)(moby + 0x2C) = elapsed * data->f18 / FUN_001fa6c0_2ac910(data->n);
+        data->h1e = alpha;
+        FUN_L00_00250df8_2ac910(moby);
     }
-    return m;
+    return moby;
 }
 typedef struct {
     char pad[0x14];

@@ -134,8 +134,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d93e8.s", FUN_L02_002d93e8);
 
 
 
-/* Draws an elliptical arc from angle a to b (radii rx, ry, around the screen centre) as five sprite
- * segments in colour col. */
+/* Draws an elliptical arc from start_angle to end_angle (radii radius_x, radius_y, around the screen centre) as five sprite
+ * segments in the given colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DB810), where it is exact; names translated to the US level program. */
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -150,36 +150,36 @@ extern int D_L02_00161B18 __attribute__((sda));
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da3d8(int tex, u32 col, float a, float b, float rx, float ry) {
-    long xy[4];
-    u32 cols[4];
-    int uv[4];
-    float step = fast_subtract_rotations(b, a) / 5.0f;
+void FUN_L02_002da3d8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
+    long corners[4];
+    u32 colors[4];
+    int uvs[4];
+    float angle_step = fast_subtract_rotations(end_angle, start_angle) / 5.0f;
     int i;
-    uv[0] = D_L02_00161B0C;
-    uv[1] = D_L02_00161B10;
-    uv[2] = D_L02_00161B14;
-    uv[3] = D_L02_00161B18;
-    cols[3] = col;
-    cols[2] = col;
-    cols[1] = col;
-    cols[0] = col;
+    uvs[0] = D_L02_00161B0C;
+    uvs[1] = D_L02_00161B10;
+    uvs[2] = D_L02_00161B14;
+    uvs[3] = D_L02_00161B18;
+    colors[3] = color;
+    colors[2] = color;
+    colors[1] = color;
+    colors[0] = color;
     for (i = 0; i < 5; i++) {
-        float t0 = fast_add_rotations(a, step * (float)i);
-        float t1 = fast_add_rotations(a, step * (float)(i + 1));
-        xy[3] = 0xFFFFF000000000L;
-        xy[2] = 0xFFFFF000000000L;
-        xy[1] = 0xFFFFF000000000L;
-        xy[0] = 0xFFFFF000000000L;
-        xy[0] += (u32)(-(func_001FA898_r(fast_cos(t0) * rx * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += func_001FA898_r(fast_sin(t0) * rx * 16.0f) + 0x8000;
-        xy[1] += (u32)(-(func_001FA898_r(fast_cos(t0) * ry * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += func_001FA898_r(fast_sin(t0) * ry * 16.0f) + 0x8000;
-        xy[2] += (u32)(-(func_001FA898_r(fast_cos(t1) * rx * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += func_001FA898_r(fast_sin(t1) * rx * 16.0f) + 0x8000;
-        xy[3] += (u32)(-(func_001FA898_r(fast_cos(t1) * ry * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += func_001FA898_r(fast_sin(t1) * ry * 16.0f) + 0x8000;
-        FUN_L02_0020bc88(xy, uv, cols, tex, 1);
+        float angle0 = fast_add_rotations(start_angle, angle_step * (float)i);
+        float angle1 = fast_add_rotations(start_angle, angle_step * (float)(i + 1));
+        corners[3] = 0xFFFFF000000000L;
+        corners[2] = 0xFFFFF000000000L;
+        corners[1] = 0xFFFFF000000000L;
+        corners[0] = 0xFFFFF000000000L;
+        corners[0] += (u32)(-(func_001FA898_r(fast_cos(angle0) * radius_x * 16.0f) << 16) - (int)0x80000000);
+        corners[0] += func_001FA898_r(fast_sin(angle0) * radius_x * 16.0f) + 0x8000;
+        corners[1] += (u32)(-(func_001FA898_r(fast_cos(angle0) * radius_y * 16.0f) << 16) - (int)0x80000000);
+        corners[1] += func_001FA898_r(fast_sin(angle0) * radius_y * 16.0f) + 0x8000;
+        corners[2] += (u32)(-(func_001FA898_r(fast_cos(angle1) * radius_x * 16.0f) << 16) - (int)0x80000000);
+        corners[2] += func_001FA898_r(fast_sin(angle1) * radius_x * 16.0f) + 0x8000;
+        corners[3] += (u32)(-(func_001FA898_r(fast_cos(angle1) * radius_y * 16.0f) << 16) - (int)0x80000000);
+        corners[3] += func_001FA898_r(fast_sin(angle1) * radius_y * 16.0f) + 0x8000;
+        FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     }
 }
 

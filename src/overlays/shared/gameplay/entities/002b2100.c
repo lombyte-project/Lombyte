@@ -1246,35 +1246,37 @@ extern void FUN_L00_00257d78(float *, float, float);
 extern void FUN_L00_00259888(char *arg, int a, int b, void *src, float scale);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L00_002b8438(char *m) {
+/* Walks the 15 entry pointers in the moby's data; for each live type-0xC entry builds a hit record and, for sub-type 10,
+   spawns a burst of particles. Entries that are invalid or have sub-type < 2 are cleared. */
+void FUN_L00_002b8438(char *moby) {
     float vec[4];
     char buf[0x30];
     char qv[16];
     float v2[4];
     float v3[4];
-    char *base = *(char **)(m + 0x78) + 4;
+    char *slots_base = *(char **)(moby + 0x78) + 4;
     unsigned char *q = (unsigned char *)D_0013E520;
     int i;
 
     for (i = 0; i < 15; i++) {
-        char *o = *(char **)(base - (-(i * 4)));
-        if (o == 0) {
+        char *entry = *(char **)(slots_base - (-(i * 4)));
+        if (entry == 0) {
             continue;
         }
-        if (*(unsigned char *)o == 0xC && o[1] >= 0) {
-            float f20 = *(float *)(o + 0xC) / 210000.0f * 0.5f;
-            char *src = o + 0x20;
-            int type;
+        if (*(unsigned char *)entry == 0xC && entry[1] >= 0) {
+            float f20 = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
+            char *src = entry + 0x20;
+            int sub_type;
             FUN_001f9c48(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            FUN_L00_00259888(buf, (int)m, 0x10000, vec, ConvertIntegerToFloat_c(q[0x10]) + 1.0f);
+            FUN_L00_00259888(buf, (int)moby, 0x10000, vec, ConvertIntegerToFloat_c(q[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
-            *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(m + 0xA6);
-            FUN_L00_001f2868((o + 0x10), f20, 0, m, buf);
-            type = *(short *)(o + 0xA);
-            if (type == 10) {
+            *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(moby + 0xA6);
+            FUN_L00_001f2868((entry + 0x10), f20, 0, moby, buf);
+            sub_type = *(short *)(entry + 0xA);
+            if (sub_type == 10) {
                 int j;
                 for (j = 0; j < *(int *)&D_L00_0016155C_d; j++) {
                     int c1;
@@ -1293,14 +1295,14 @@ void FUN_L00_002b8438(char *m) {
                     c3 = func_001FA898_r(FUN_001f96b0(random_float_between_c((float)*(int *)&D_L00_00161554_d, (float)*(int *)&D_L00_00161558_d)));
                     c4 = func_001FA898_r(FUN_001f96b0(random_float_between_c((float)*(int *)&D_L00_00161554_d, (float)*(int *)&D_L00_00161558_d)));
                     FUN_L00_00257d78(v3, 0.0f, f20 + f20);
-                    add_vector_xyz(v3, v3, (o + 0x10));
+                    add_vector_xyz(v3, v3, (entry + 0x10));
                     FUN_00218888(v3, qv, v2, c1, c2, 0xA, c3, c4, *(int *)&D_L00_0016152C_d);
                 }
-            } else if (type < 2) {
-                *(int *)(base - (-(i * 4))) = 0;
+            } else if (sub_type < 2) {
+                *(int *)(slots_base - (-(i * 4))) = 0;
             }
         } else {
-            *(int *)(base - (-(i * 4))) = 0;
+            *(int *)(slots_base - (-(i * 4))) = 0;
         }
     }
 }

@@ -182,7 +182,9 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_L11_00309098(char *m) {
+/* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
+   five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
+void FUN_L11_00309098(char *moby) {
     float old[4];
     float p[4];
     float v[4];
@@ -190,22 +192,22 @@ void FUN_L11_00309098(char *m) {
     float pad[4][2];
     float q[4];
     float r[4];
-    char *d;
+    char *data;
     char *pos;
     int c;
-    if (m == 0) return;
-    d = *(char **)(m + 0x78);
-    if (d == 0) return;
-    pos = m + 0x10;
+    if (moby == 0) return;
+    data = *(char **)(moby + 0x78);
+    if (data == 0) return;
+    pos = moby + 0x10;
     qcopy(old, pos);
     c = FUN_001fa6e0(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
     FUN_L00_00257d78(p, 0.0f, 0.1f);
     add_vector_xyz(p, p, pos);
-    scale_vector_xyz(v, d, D_L11_00161DD0);
+    scale_vector_xyz(v, data, D_L11_00161DD0);
     FUN_L00_0026dd20((char *)p, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
-    add_vector_xyz(pos, pos, d);
-    FUN_L00_00259888(hit, m, 0x10000, *(float *)(d + 0x20), d);
-    if (FUN_001efa68(old, pos, 0, *(void **)(d + 0x1C), hit)) {
+    add_vector_xyz(pos, pos, data);
+    FUN_L00_00259888(hit, moby, 0x10000, *(float *)(data + 0x20), data);
+    if (FUN_001efa68(old, pos, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
             *(u128 *)r = 0;
@@ -213,19 +215,19 @@ void FUN_L11_00309098(char *m) {
             r[1] = random_float_between(-1.0f, 1.0f);
             r[2] = random_float_between(-1.0f, 1.0f);
             *(u128 *)q = *(u128 *)r;
-            FUN_L00_001ff660(r, d, D_L11_00174880);
+            FUN_L00_001ff660(r, data, D_L11_00174880);
             normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
             add_vector_xyz(q, r, q);
             normalize_vector_xyz(q, q, random_float_between(D_0015ED6C * 5.0f, D_0015ED6C * 9.0f));
-            FUN_L00_0026dd20(m + 0x10, (char *)q, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
+            FUN_L00_0026dd20(moby + 0x10, (char *)q, 0x7F2F4F6F, FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)), 90000.0f);
         }
-        mark_moby_for_removal(m);
+        mark_moby_for_removal(moby);
         return;
     }
-    if (tick_countdown_32_alt((int *)(d + 0x18))) {
-        *(float *)(d + 0x10) *= 0.74f;
-        if (*(float *)(d + 0x10) < 0.02f) {
-            mark_moby_for_removal(m);
+    if (tick_countdown_32_alt((int *)(data + 0x18))) {
+        *(float *)(data + 0x10) *= 0.74f;
+        if (*(float *)(data + 0x10) < 0.02f) {
+            mark_moby_for_removal(moby);
         }
     }
 }

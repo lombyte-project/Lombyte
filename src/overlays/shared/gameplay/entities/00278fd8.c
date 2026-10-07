@@ -1277,19 +1277,19 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 
 void FUN_L15_0029ead0(char *moby) {
     char *cls = *(char **)(moby + 0x24);
-    char *data = *(char **)(moby + 0x78);
+    char *state = *(char **)(moby + 0x78);
     float t = *(float *)(moby + 0x2C) / *(float *)(cls + 0x24) * 0.5f;
     char *pos;
-    char *g;
-    t = t + *(float *)data;
+    char *globals;
+    t = t + *(float *)state;
     *(float *)(moby + 0x2C) = t + t;
     *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * *(float *)(cls + 0x24);
-    if (*(int *)(data + 8) < scale_game_frames(0x28))
-        moby[0x23] = *(int *)(data + 8) * 127 / scale_game_frames(0x28);
-    g = D_0013F350;
+    if (*(int *)(state + 8) < scale_game_frames(0x28))
+        moby[0x23] = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
+    globals = D_0013F350;
     pos = moby + 0x10;
-    FUN_L00_002598b0(t, *(char **)(g + 0x2080), pos, (float)func_001FA898_r(*(float *)(data + 0xC)), 1.0f, 0x30000, 0, 1, 0);
-    if (tick_countdown_32_alt((int *)(data + 8)))
+    FUN_L00_002598b0(t, *(char **)(globals + 0x2080), pos, (float)func_001FA898_r(*(float *)(state + 0xC)), 1.0f, 0x30000, 0, 1, 0);
+    if (tick_countdown_32_alt((int *)(state + 8)))
         mark_moby_for_removal_c(moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);

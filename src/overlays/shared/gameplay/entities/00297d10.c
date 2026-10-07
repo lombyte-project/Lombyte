@@ -1260,35 +1260,37 @@ typedef struct {
     int out;
 } Iter32f0;
 
-int FUN_L06_002f32f0(char *a0, int a1)
+/* Runs the candidate check FUN_L06_002f2c28 over the moby's candidate list (or the global default list when it has none);
+   returns the output of the first accepted candidate. */
+int FUN_L06_002f32f0(char *moby, int flag)
 {
-    char **pa;
-    Iter32f0 s;
-    char *data;
-    int x;
-    int *p;
-    int v;
+    char **moby_ref;
+    Iter32f0 iter;
+    char *state;
+    int list_id;
+    int *cursor;
+    int entry;
 
-    data = *(char **)(a0 + 0x78);
-    s.out = 0;
-    x = *(int *)(data + 0x30C);
-    if (x != -1) {
-        FUN_L00_002591d0_c(&s.list, x, 0, 0);
-        while (s.list != 0) {
-            if (FUN_L06_002f2c28_c(a0, data, s.list, a1, &s.out)) return s.out;
-            FUN_L00_002592b8_c(&s.list, s.list, 0, 0);
+    state = *(char **)(moby + 0x78);
+    iter.out = 0;
+    list_id = *(int *)(state + 0x30C);
+    if (list_id != -1) {
+        FUN_L00_002591d0_c(&iter.list, list_id, 0, 0);
+        while (iter.list != 0) {
+            if (FUN_L06_002f2c28_c(moby, state, iter.list, flag, &iter.out)) return iter.out;
+            FUN_L00_002592b8_c(&iter.list, iter.list, 0, 0);
         }
     } else {
-        p = D_L06_001AC180_c;
-        v = *p;
-        while (v != 0) {
-            pa = &a0;
-            if (FUN_L06_002f2c28_c(*pa, data, v, a1, &s.out)) return s.out;
-            p++;
-            v = *p;
+        cursor = D_L06_001AC180_c;
+        entry = *cursor;
+        while (entry != 0) {
+            moby_ref = &moby;
+            if (FUN_L06_002f2c28_c(*moby_ref, state, entry, flag, &iter.out)) return iter.out;
+            cursor++;
+            entry = *cursor;
         }
     }
-    return s.out;
+    return iter.out;
 }
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
@@ -1316,38 +1318,39 @@ extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_0022da68(int, int, void *);
 
-void FUN_L06_002f3640(unsigned char *m) {
-    char *d = *(char **)(m + 0x78);
-    if (m[0x20] != 9 && m[0x52] != 2 && m[0x53] != 2) {
-        char *t = FUN_L00_0025a420(m, 0x330001, 0);
-        if (t != 0) {
+/* Looks for a target (query 0x330001); if its owner is a different hostile, sets up the aim/attack data and enters state 9. */
+void FUN_L06_002f3640(unsigned char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
+        char *target = FUN_L00_0025a420(moby, 0x330001, 0);
+        if (target != 0) {
             Q pos;
-            float a0 = FUN_001f9e90(*(float *)(t + 0x10), *(float *)(t + 0x14));
-            char *o = *(char **)(t + 0x20);
+            float base_angle = FUN_001f9e90(*(float *)(target + 0x10), *(float *)(target + 0x14));
+            char *owner = *(char **)(target + 0x20);
             float ang;
-            ang = a0;
-            if (o != D_001413D0 && *(short *)(o + 0xA6) != *(short *)(m + 0xA6)) {
-                int r = FUN_001f96f8(0x50);
-                r *= FUN_001f96f8(0x50);
-                d[0xBD] = 0;
-                *(int *)(d + 0xA4) = 9;
-                *(float *)(d + 0x90) = 4.0f / (float)r;
-                FUN_L03_00250a78(d + 0x80, 2.0f, 0.5f);
-                pos = *(Q *)(t + 0x10);
-                FUN_L00_0025ab48(&pos, &ang, d + 0x98, d + 0x9C);
-                FUN_L00_0025c558(m, d + 0x80, 4, 5, 2, ang);
+            ang = base_angle;
+            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != *(short *)(moby + 0xA6)) {
+                int frames_sq = FUN_001f96f8(0x50);
+                frames_sq *= FUN_001f96f8(0x50);
+                state[0xBD] = 0;
+                *(int *)(state + 0xA4) = 9;
+                *(float *)(state + 0x90) = 4.0f / (float)frames_sq;
+                FUN_L03_00250a78(state + 0x80, 2.0f, 0.5f);
+                pos = *(Q *)(target + 0x10);
+                FUN_L00_0025ab48(&pos, &ang, state + 0x98, state + 0x9C);
+                FUN_L00_0025c558(moby, state + 0x80, 4, 5, 2, ang);
                 {
                     float v = D_0015ED6C + D_0015ED6C;
-                    *(float *)(d + 0xD0) = 10.0f;
-                    *(float *)(d + 0xD4) = 20.0f;
-                    *(float *)(d + 0xCC) = v;
+                    *(float *)(state + 0xD0) = 10.0f;
+                    *(float *)(state + 0xD4) = 20.0f;
+                    *(float *)(state + 0xCC) = v;
                 }
-                FUN_0022da68(2, 0, m);
-                m[0x20] = 9;
+                FUN_0022da68(2, 0, moby);
+                moby[0x20] = 9;
             }
         }
     }
-    m[0xA4] = 0xFF;
+    moby[0xA4] = 0xFF;
 }
 #include "sda.h"
 
@@ -1564,42 +1567,42 @@ extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");
 extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
-void FUN_L06_002f7628(char *m) {
+void FUN_L06_002f7628(char *moby) {
     float pos[4];
     float step[4];
     float a[4];
     float b[4];
-    Beam_2f8a58 *d = *(Beam_2f8a58 **)(m + 0x78);
+    Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
     int i;
-    subtract_vector_xyz(pos, D_L06_00167540, d->tgt + 0x10);
+    subtract_vector_xyz(pos, D_L06_00167540, beam->tgt + 0x10);
     normalize_vector_xyz(pos, pos, -0.3f);
     normalize_vector_xyz(step, pos, 0.1f);
-    add_vector_xyz(pos, pos, d->tgt + 0x10);
+    add_vector_xyz(pos, pos, beam->tgt + 0x10);
     for (i = 0; i < 4; i++) {
         float f;
         int c;
-        d->ph[i] += d->spd[i];
-        if (255.0f <= d->ph[i]) {
-            d->ph[i] -= 255.0f;
-        } else if (d->ph[i] <= 0.0f) {
-            d->ph[i] += 255.0f;
+        beam->ph[i] += beam->spd[i];
+        if (255.0f <= beam->ph[i]) {
+            beam->ph[i] -= 255.0f;
+        } else if (beam->ph[i] <= 0.0f) {
+            beam->ph[i] += 255.0f;
         }
-        if (tick_countdown_32_alt(&d->t[i])) {
-            d->t[i] = scale_game_frames(0xFF);
+        if (tick_countdown_32_alt(&beam->t[i])) {
+            beam->t[i] = scale_game_frames(0xFF);
         }
-        f = ConvertIntegerToFloat(scale_game_frames(0xFF) - d->t[i]) / (float)scale_game_frames(0xFF);
+        f = ConvertIntegerToFloat(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
         c = FUN_001fa6e0(D_L06_00161E58, D_L06_00161E5C, AbsoluteFloat(0.5f - f));
-        func_L00_00273E08_g(pos, c, func_001FA898_g(d->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
-                          d->sz[i]);
+        func_L00_00273E08_g(pos, c, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+                          beam->sz[i]);
         add_vector_xyz(pos, pos, step);
     }
-    if ((D_L06_0015F5CC & 3) == 3 && ((unsigned char *)m)[0x31] != 0) {
+    if ((D_L06_0015F5CC & 3) == 3 && ((unsigned char *)moby)[0x31] != 0) {
         float sgn = 1.0f;
         if (D_L06_0015F5CC & 4) sgn = -1.0f;
         clear_u64_value(a);
         a[2] += sgn * 0.9f;
         normalize_vector_xyz(b, a, -2.0f / (float)scale_game_frames(D_L06_00161E70));
-        add_vector_xyz(a, a, m + 0x10);
+        add_vector_xyz(a, a, moby + 0x10);
         a[2] += 0.85f;
         func_L00_00273F80_g(a, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
                           (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);

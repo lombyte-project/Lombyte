@@ -1351,6 +1351,8 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
 
+/* Updates the follow camera: when `snap` is set, re-places the eye behind the followed target (backing off from walls found by
+   ray traces, nudging it sideways when directly above or below), then rebuilds the camera basis looking at the target. */
 void FUN_L00_002e66b8(int snap) {
     char *cams = D_L00_00166C80;
     char *cam = *(char **)(cams + 0x180);
