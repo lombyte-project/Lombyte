@@ -325,7 +325,33 @@ s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2040.s", FUN_L00_002e2040);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E34F0), where it is exact; names translated to the US level program. */
+
+extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
+extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
+extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
+extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern void FUN_L00_0023e838_c(int) __asm__("FUN_L00_0023e838");
+
+int FUN_L00_002e2040(int id) {
+    unsigned int i;
+    for (i = 0; (int)i < 3; i++) {
+        if (D_L00_00161C88_c[i] == id) {
+            D_L00_00161BF8_c[i] = 0;
+            D_L00_00161C88_c[i] = 0;
+            if (D_L00_00161C38_c[i] != -1) {
+                FUN_L00_0023e838_c(D_L00_00161C38_c[i]);
+                D_L00_00161C38_c[i] = -1;
+            }
+            if (D_L00_00161C48_c[i] != -1) {
+                FUN_L00_0023e838_c(D_L00_00161C48_c[i]);
+                D_L00_00161C48_c[i] = -1;
+            }
+            return 1;
+        }
+    }
+    return 0;
+}
 #include "sda.h"
 
 extern s32 D_L00_00161BF8[] MACRO_ADDR;
