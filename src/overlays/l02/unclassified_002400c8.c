@@ -535,7 +535,45 @@ void FUN_L02_002dcfe0(char *m) {
     FUN_L00_0025d538(m, d + 0x60);
     FUN_L00_001fefc8(m + 0xBC);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002dd2a8.s", FUN_L02_002dd2a8);
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+    unsigned char group;
+    char pad22[0x84];
+    short type;
+    char padA8[0xC];
+    short hp;
+    char padB6[2];
+    void *target;
+    char padBC[0x44];
+} Level02GroupMoby;
+
+extern Level02GroupMoby *D_L02_0015FFD8_g __asm__("D_L02_0015FFD8");
+
+Level02GroupMoby *FUN_L02_002dd2a8(Level02GroupMoby *arg) {
+    short *p;
+    Level02GroupMoby *base;
+    if (arg->group == 0xFF) {
+        return 0;
+    }
+    p = (short *)D_L02_001ABE40[arg->group];
+    base = D_L02_0015FFD8_g;
+    do {
+        int i = *(unsigned short *)p & 0x7FFF;
+        if (base[i].type == 0x244 && base[i].state == 0x1A) {
+            base[i].target = arg;
+            if (arg->hp < base[i].hp) {
+                base[i].hp = arg->hp;
+            }
+            arg->hp -= D_L02_0015FFD8_g[i].hp;
+            if (arg->hp <= 0) {
+                arg->hp = 1;
+            }
+            return &D_L02_0015FFD8_g[i];
+        }
+    } while (*p++ >= 0);
+    return 0;
+}
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
 
