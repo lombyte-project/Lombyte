@@ -616,4 +616,231 @@ s32 FUN_L05_00240ed0(s32 mode) {
     }
     return 1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002413e0.s", FUN_L05_002413e0);
+
+extern char D_0013F350[];
+
+s32 FUN_001efa68(void *, void *, s32, s32, s32);
+
+typedef int Qc __attribute__((mode(TI)));
+
+typedef union { Qc q; f32 f[4]; } V_c413e0;
+
+typedef struct {
+    char pad00[0x80];
+    float position[4];
+    float rotation[4];
+    char padA0[0x40];
+    float velocity[4];
+    float contact[4];
+    float external[4];
+    float delta[4];
+    float vertical_delta[4];
+    float horizontal_delta[4];
+    float frame_delta[4];
+    char pad150[0x10];
+    float speed;
+    float horizontal_speed;
+    float vertical_speed;
+    float slope;
+    char pad170[0x5C];
+    int unconstrained;
+    char pad1D0[0x64];
+    float speed_limit;
+    char pad238[4];
+    int contact_state;
+    char pad240[0x17];
+    unsigned char contact_flag;
+    char pad258[0x84];
+    float gravity_limit;
+    char pad2E0[0x218];
+    int physics_mode;
+    char pad4FC[0x424];
+    float extra_step[4];
+    char pad930[0x1754];
+    int state;
+    char pad2088[4];
+    int mode;
+} L16MovementPlayer;
+
+extern char *D_L05_00174258[];
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED6C;
+extern float FUN_L00_00213350(void *);
+extern float FUN_L00_002339d0(float *v);
+extern float FUN_L00_00233a78(float *);
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_L00_00212ff0(void);
+extern void FUN_L00_002137a8(void);
+extern void FUN_L00_002338d0(float *, float *);
+extern void FUN_L00_00233b20(float *, float *, float);
+extern void FUN_L00_00233ba0(float *, float *, float);
+extern void FUN_L00_00233f80(int, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+void FUN_L05_002402a8(void);
+extern char D_0013F3D0[];
+extern char D_0013F430_n[] __asm__("D_0013F430");
+extern char D_0013F460[];
+
+/* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */
+void FUN_L05_002413e0(void) {
+    V_c413e0 previous;
+    V_c413e0 work;
+    V_c413e0 plane;
+    L16MovementPlayer *contact_player;
+    L16MovementPlayer *motion_player;
+    L16MovementPlayer *cap_player;
+    float *position = (float *)(((char *)&D_0013F3D0));
+    L16MovementPlayer *player;
+    float *delta;
+    float *vertical;
+    float *horizontal;
+    float *extra_step;
+    float *velocity;
+    float *new_position;
+    float *contact;
+    float *external;
+    float magnitude;
+
+    qcopy(previous.f, position);
+    player = (L16MovementPlayer *)((char *)position - 0x80);
+    FUN_L00_00233f80(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
+    /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
+    if (player->state == 34 || player->state == 20) {
+        float limit;
+        float *limited_velocity;
+
+        if (!player->unconstrained) {
+            float length;
+
+            position = (float *)((char *)position + 0x60);
+            length = FUN_L00_002339d0(position);
+            limit = player->speed_limit - 0.02f;
+            if (limit < length) normalize_vector_xyz(position, position, limit);
+        }
+        limited_velocity = (float *)D_0013F430_n;
+        magnitude = FUN_L00_00233a78(limited_velocity);
+        limit = -*(float *)((char *)limited_velocity + 0x1FC); /* the player's gravity_limit */
+        if (magnitude < limit) {
+            if (limit > 0.0f) limit = 0.0f;
+            FUN_L00_00233b20(limited_velocity, limited_velocity, limit);
+        }
+    } else if (player->mode == 22) {
+        qcopy(work.f, position);
+        work.f[2] += 0.5f;
+        add_vector_xyz(plane.f, work.f, (char *)position + 0x60);
+        if (FUN_001efa68(position, plane.f, 2, 0, 0)) {
+            char *hit = D_L05_00174258[0];
+
+            if (!hit || *(short *)(hit + 0xA6) == 0x1F6 || *(short *)(hit + 0xA6) == 0x59F) {
+                player = (L16MovementPlayer *)(((char *)&D_0013F350));
+                if (!player->unconstrained) {
+                    float length;
+                    float limit;
+
+                    position = (float *)((char *)player + 0xE0);
+                    length = vector_length_xy(position);
+                    limit = player->speed_limit - 0.02f;
+                    if (limit < length) FUN_001f9c48(position, position, limit);
+                }
+            }
+        }
+    } else if (player->mode != 13) {
+        if (player->mode != 14) {
+            if (!player->unconstrained) {
+                float length;
+                float limit;
+
+                position = (float *)((char *)position + 0x60);
+                length = vector_length_xyz(position);
+                limit = player->speed_limit - 0.02f;
+                if (limit < length) normalize_vector_xyz(position, position, limit);
+            }
+        }
+    }
+    position = (float *)(((char *)&D_0013F3D0));
+    add_vector_xyz(position, position, (char *)position + 0x60);
+    extra_step = (float *)((char *)position + 0x8A0);
+    add_vector_xyz(position, position, extra_step);
+    clear_u64_value(extra_step);
+    contact_player = (L16MovementPlayer *)((char *)position - 0x80);
+    contact_player->contact_flag = 0;
+    contact_player->contact_state = 0;
+    if (vector_length_xyz((char *)position + 0x70) <= 0.0001f) {
+        FUN_L00_002137a8();
+        FUN_L05_002402a8();
+        subtract_vector_xyz((char *)position + 0x80, position, previous.f);
+        FUN_L00_00212ff0();
+    } else {
+        FUN_L05_002402a8();
+    }
+    delta = (float *)(((char *)&D_0013F460));
+    new_position = (float *)((char *)delta - 0x90);
+    horizontal = (float *)((char *)delta + 0x20);
+    subtract_vector_xyz(delta, new_position, previous.f);
+    qcopy(horizontal, delta);
+    vertical = (float *)((char *)delta + 0x10);
+    qcopy(vertical, delta);
+    velocity = (float *)((char *)delta - 0x30);
+    normalize_vector_xyz(delta, delta, 1.0f);
+    magnitude = dot_vectors_xyz(delta, velocity);
+    if (magnitude < 0.0f) magnitude = 0.0f;
+    normalize_vector_xyz(delta, velocity, magnitude);
+    qcopy(work.f, velocity);
+    FUN_L00_002338d0(work.f, work.f);
+    FUN_L00_002338d0(horizontal, horizontal);
+    normalize_vector_xyz(horizontal, horizontal, 1.0f);
+    magnitude = dot_vectors_xyz(horizontal, work.f);
+    if (magnitude < 0.0f) magnitude = 0.0f;
+    normalize_vector_xyz(horizontal, work.f, magnitude);
+    qcopy(plane.f, velocity);
+    FUN_L00_00233ba0(plane.f, plane.f, 0.0f);
+    FUN_L00_00233ba0(vertical, vertical, 0.0f);
+    normalize_vector_xyz(vertical, vertical, 1.0f);
+    magnitude = dot_vectors_xyz(vertical, plane.f);
+    if (magnitude < 0.0f) magnitude = 0.0f;
+    normalize_vector_xyz(vertical, plane.f, magnitude);
+    motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
+    motion_player->speed = vector_length_xyz(delta);
+    motion_player->horizontal_speed = vector_length_xy(delta);
+    work.q = *(Qc *)delta;
+    motion_player->vertical_speed = FUN_L00_00213350(work.f);
+    if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
+    qcopy(work.f, new_position);
+    contact = (float *)((char *)delta - 0x20);
+    external = (float *)((char *)delta - 0x10);
+    if (vector_length_xyz(contact) > 0.0001f) {
+        float saved;
+
+        add_vector_xyz(new_position, new_position, contact);
+        saved = motion_player->contact[3];
+        clear_u64_value(contact);
+        motion_player->contact[3] = saved;
+        FUN_L00_002137a8();
+        FUN_L05_002402a8();
+        subtract_vector_xyz(external, new_position, previous.f);
+        FUN_L00_00212ff0();
+    }
+    subtract_vector_xyz((char *)delta + 0x30, new_position, work.f);
+    motion_player->frame_delta[3] = motion_player->contact[3];
+    motion_player->contact[3] = 0.0f;
+    subtract_vector_xyz(external, new_position, previous.f);
+    motion_player->slope = 0.0f;
+    if (motion_player->horizontal_speed > 0.004f) {
+        motion_player->slope = motion_player->external[2] / motion_player->horizontal_speed;
+        if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
+        else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
+    }
+    cap_player = (L16MovementPlayer *)(((char *)&D_0013F350));
+    magnitude = D_0015ED6C * 52.0f;
+    if (magnitude < cap_player->speed) {
+        scale_vector_xyz(cap_player->external, cap_player->external, magnitude / cap_player->speed);
+        cap_player->speed = D_0015ED6C * 52.0f;
+    }
+}
+

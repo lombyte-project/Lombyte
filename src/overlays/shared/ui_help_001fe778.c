@@ -2,7 +2,49 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001fe778.s", FUN_L15_001fe778);
+typedef struct {
+    char pad[0x24];
+    int v;
+    char pad2[0x24];
+} Rec;
+
+extern Rec D_L15_0017A0C0[];
+extern char D_0013F350[];
+extern int FUN_L00_0020d498(int);
+
+/* Same routine as FUN_L06_0021d0a0, with case 2 in place of case 1. */
+int FUN_L15_001fe778(int a) {
+    char *g = (char *)D_0013F350;
+    switch (*(unsigned char *)(g + 0x20A4)) {
+    case 2:
+        return 0;
+    case 3:
+        return 0;
+    }
+    {
+        char *g2 = (char *)D_0013F350;
+        if (*(int *)(g2 + 0x22A8) == 1) {
+            return 0x54;
+        }
+        if (a == 0) {
+            return 0;
+        }
+        if (*(unsigned char *)(g2 + 0x20A8) == 0) {
+            return 0;
+        }
+        if (*(unsigned char *)(g2 + 0x20AA) == 0) {
+            return 0;
+        }
+        if (*(short *)(g2 + 0x22C8) != 0) {
+            return 0;
+        }
+    }
+    {
+        int i = FUN_L00_0020d498(0);
+        return D_L15_0017A0C0[i].v;
+    }
+}
+
 #include "qcopy.h"
 #define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
 #define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))

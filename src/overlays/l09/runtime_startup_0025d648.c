@@ -6,7 +6,7 @@
 extern int D_0015ED84;
 extern int D_0015EE88;
 extern void FUN_L00_002892d0(void);
-extern void FUN_L09_002a7d68(void);
+extern void FUN_L00_0028a3a8(void);
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -14,7 +14,7 @@ void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void FUN_L09_0025d648(void) {
     setup_sky_gif_paging();
     if (D_0015ED84 == 0x9) {
-        FUN_L09_002a7d68();
+        FUN_L00_0028a3a8();
     } else {
         FUN_L00_002892d0();
     }

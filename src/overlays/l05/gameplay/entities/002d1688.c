@@ -570,7 +570,86 @@ void FUN_L05_00305898(char *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00306e10.s", FUN_L05_00306e10);
+
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f9b80(void *, void *);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern int FUN_L01_0028b510(void *, void *, float);
+extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern char *D_L05_001B0930[];
+extern int random_integer_below_e10(int) __asm__("FUN_00213260");
+extern int trunc_f2i_e10(float) __asm__("FUN_001fa6d0");
+void FUN_L05_00306d30(char *moby, int idx, float *out);
+
+typedef struct {
+    int count;                  /* 0x00: number of nodes */
+    char pad04[0xC];
+    float points[1][4];         /* 0x10: position; w marks the node */
+} L16PatrolPath;
+
+typedef struct {
+    char pad0[0x200];
+    float position[4];          /* 0x200 */
+    char pad210[0x10];
+    int base_path;              /* 0x220: index into D_L05_001B0930 */
+    int branch_path[7];         /* 0x224: indexed by a node's mark - 1 */
+    char pad240[4];
+    L16PatrolPath *path;        /* 0x244: the path being followed */
+    char pad248[0x10];
+    short node;                 /* 0x258: the node being steered for */
+} L05PatrolData;
+
+typedef struct {
+    char pad0[0x10];
+    float position[4];          /* 0x10 */
+    char pad20[0x28];
+    float yaw;                  /* 0x48 */
+    char pad4C[0x2C];
+    L05PatrolData *data;        /* 0x78 */
+} L16PatrolMoby;
+
+/* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
+/* Same routine as FUN_L16_002cf9f8, with this level's data layout. */
+void FUN_L05_00306e10(char *obj) {
+    L16PatrolMoby *moby = (L16PatrolMoby *)obj;
+    L05PatrolData *d = moby->data;
+    float target[4];
+    float heading, distance;
+
+    FUN_L05_00306d30((char *)moby, d->node, target);
+    heading = FUN_001f9e90(target[0] - moby->position[0], target[1] - moby->position[1]);
+    for (;;) {
+        L16PatrolPath *path;
+        L16PatrolPath *base;
+
+        FUN_L05_00306d30((char *)moby, d->node, target);
+        distance = FUN_001f9b80(target, d->position);
+        if ((fast_difference_between_rotations(heading, moby->yaw) < 1.5707964f || distance > 4.0f) && distance > 2.0f) {
+            break;
+        }
+        path = d->path;
+        d->node = (d->node + 1) % path->count;
+        base = (L16PatrolPath *)D_L05_001B0930[d->base_path];
+        if (path != base) {
+            /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
+            if (d->node == path->count - 1) {
+                d->path = base;
+                d->node = FUN_L01_0028b510(d->position, base, 0.0f);
+                d->node = FUN_L00_0025d7a0((char *)d->path, d->node, 5, 1);
+            }
+        } else if (path->points[d->node][3] > 0.0f && random_integer_below_e10(100) > 0) {
+            /* At a marked node of the base path: more often than not, onto the branch the mark names. */
+            int branch = trunc_f2i_e10(d->path->points[d->node][3]) - 1;
+
+            d->path = (L16PatrolPath *)D_L05_001B0930[d->branch_path[branch]];
+            d->node = 0;
+        }
+        /* The same two statements as before the loop, written out again: the compiler merges the copies. */
+        FUN_L05_00306d30((char *)moby, d->node, target);
+        heading = FUN_001f9e90(target[0] - moby->position[0], target[1] - moby->position[1]);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307570.s", FUN_L05_00307570);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_0030D230), where it is exact; names translated to the US level program. */
