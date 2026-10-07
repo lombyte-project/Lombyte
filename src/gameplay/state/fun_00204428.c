@@ -1,9 +1,5 @@
 #include "types.h"
-#include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00204428/FUN_00204428.s", FUN_00204428);
-#else
 #include "types.h"
 #include "sda.h"
 
@@ -11,10 +7,10 @@ struct LevelArchiveDiscTable {
     u8 pad_0[0x2968];
     s32 shared_start_sector;
     s32 shared_sector_count;
-    s32 gameplay_start_sector;
-    s32 gameplay_sector_count;
-    s32 alternate_gameplay_start_sector;
-    s32 alternate_gameplay_sector_count;
+    s32 sound_start_sector;
+    s32 sound_sector_count;
+    s32 alternate_sound_start_sector;
+    s32 alternate_sound_sector_count;
 };
 
 struct LevelArchiveDiscEntry {
@@ -43,11 +39,11 @@ extern s32 D_0015EEC0 MACRO_ADDR;
 extern u8 D_1FF8000[];
 extern void store_async_sound_bank_handle() __asm__("FUN_0022dd78");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
-extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("func_0012E088");
-extern void snd_resolve_bank_xrefs() __asm__("func_0012E1A8");
-extern s32 snd_unload_bank(s32) __asm__("func_0012E1D8");
-extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern s32 submit_audio_stream_io_request(void *, u32, u32) __asm__("func_00216728");
+extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
+extern void snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
+extern s32 snd_unload_bank(s32) __asm__("FUN_0012e1d8");
+extern void snd_stop_all_sounds() __asm__("func_0012E3B8");
+extern s32 submit_audio_stream_io_request(void *, u32, u32) __asm__("FUN_00216728");
 extern s32 sceCdBreak();
 extern s32 sceCdGetError();
 extern s32 sceCdSync(s32);
@@ -56,13 +52,14 @@ s32 service_level_archive_load(void) __asm__("FUN_00204428");
 
 s32 service_level_archive_load(void) {
     s32 stage;
+    u16 next_stage;
     s32 retry_stage;
     s32 archive_start_or_bytes;
-    s32 aligned_bytes;
+    s32 sound_aligned_bytes;
     s32 level_archive_sectors;
     s32 archive_start_or_sectors;
     s32 shared_start_sector;
-    u8 *gameplay_archive_buffer;
+    u8 *sound_archive_buffer;
     u8 *level_archive_buffer;
     u8 *shared_archive_buffer;
     struct LevelArchiveDiscEntry *disc_entry;
@@ -100,22 +97,22 @@ s32 service_level_archive_load(void) {
     switch (stage) {
     case 0:
         if (D_0015ED80 != 0) {
-            aligned_bytes =
-                ((D_00137B80.alternate_gameplay_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes =
+                ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         } else {
-            aligned_bytes = ((D_00137B80.gameplay_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
         }
         disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
         level_archive_sectors = *(s32 *)((u8 *)&D_00137B80 + level_index * 8 + 0x12CC);
-        gameplay_archive_buffer = D_1FF8000 - aligned_bytes;
-        aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
-        level_archive_buffer = gameplay_archive_buffer - aligned_bytes;
+        sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
+        sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
+        level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
         archive_start_or_sectors = D_00137B80.shared_sector_count;
-        aligned_bytes = ((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000;
-        shared_archive_buffer = level_archive_buffer - aligned_bytes;
+        sound_aligned_bytes = ((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000;
+        shared_archive_buffer = level_archive_buffer - sound_aligned_bytes;
         archive_start_or_bytes = D_00137B80.shared_start_sector;
         D_0015EE54 = level_archive_buffer;
-        D_0015EE50 = gameplay_archive_buffer;
+        D_0015EE50 = sound_archive_buffer;
         *(struct LevelArchiveHeader **)0x0015EE4C =
             (struct LevelArchiveHeader *)shared_archive_buffer;
         submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes,
@@ -129,11 +126,11 @@ s32 service_level_archive_load(void) {
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_gameplay_start_sector,
-                                           D_00137B80.alternate_gameplay_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector,
+                                           D_00137B80.alternate_sound_sector_count);
         } else {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.gameplay_start_sector,
-                                           D_00137B80.gameplay_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector,
+                                           D_00137B80.sound_sector_count);
         }
     increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
@@ -144,19 +141,21 @@ s32 service_level_archive_load(void) {
         }
         snd_stop_all_sounds();
         if (D_0015ED5C != 0) {
-            goto increment_stage;
+            next_stage = D_0015EE48;
+            D_0015EE48 = next_stage + 1;
+        } else {
+            D_0015EE48 = 6;
         }
-        D_0015EE48 = 6;
         break;
     case 4:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
         snd_unload_bank(D_0015ED5C);
+        next_stage = D_0015EE48;
         D_0015ED5C = 0;
-        /* Retail reloads the stage after unloading the bank. */
-        *(volatile u16 *)&D_0015EE48;
-        goto increment_stage;
+        D_0015EE48 = next_stage + 1;
+        break;
     case 5:
         if (snd_flush_sound_commands() != 0) {
             return 0;
@@ -186,4 +185,5 @@ s32 service_level_archive_load(void) {
     }
     return 0;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(service_level_archive_load) func_00204428 __attribute__((alias("FUN_00204428")));

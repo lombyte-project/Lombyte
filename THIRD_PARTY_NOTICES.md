@@ -16,16 +16,14 @@ GPL-2.0-or-later with the standard GCC runtime exception: linking this library
 with other files does not by itself place the resulting executable under the
 GPL. Full text: [`licenses/GPL-2.0.txt`](licenses/GPL-2.0.txt).
 
-## rac1-decomp (PAL decompilation)
+## rac1-decomp
 
 Some functions in `src/` are C written by the
-[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project for the PAL
-release of the game, ported to this build by an agreed exchange between the
-two projects. Each such file names its origin in its first line
-(`Ported from rac1-decomp, the PAL decompilation (<file>, <function>)`).
-rac1-decomp has not chosen a license for its own code yet; the ported code
-remains its authors' work and is not covered by this repository's MIT license
-beyond what they grant.
+[rac1-decomp](https://github.com/OpenRAC/rac1-decomp) project, ported here
+while it was MIT licensed (before its switch to GPL-3.0 in `8753a55`). Each
+such file names its origin in its first line (`Ported from rac1-decomp ...`).
+No code is taken from later versions. Their notice:
+[`licenses/MIT-rac1-decomp.txt`](licenses/MIT-rac1-decomp.txt).
 
 ## newlib
 
