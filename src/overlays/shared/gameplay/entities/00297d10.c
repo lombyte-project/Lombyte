@@ -479,7 +479,7 @@ extern int FUN_L00_00261968(int, void *, void *);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern int FUN_L01_00276a48(float, int *, int, int, void *);
 extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
-extern int FUN_L06_002f32f0(void *, int);
+extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
@@ -1092,7 +1092,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         }
         break;
     }
-    r = FUN_L06_002f32f0(moby, moby->state != 7);
+    r = FUN_L06_002f32f0_u(moby, moby->state != 7);
     if (r == 2) {
         return;
     }
@@ -1250,7 +1250,46 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2910.s", FUN_L06_002f2910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f32f0.s", FUN_L06_002f32f0);
+extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
+extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");
+extern int D_L06_001AC180_c[] __asm__("D_L06_001AC180");
+
+typedef struct {
+    int list;
+    int out;
+} Iter32f0;
+
+int FUN_L06_002f32f0(char *a0, int a1)
+{
+    char **pa;
+    Iter32f0 s;
+    char *data;
+    int x;
+    int *p;
+    int v;
+
+    data = *(char **)(a0 + 0x78);
+    s.out = 0;
+    x = *(int *)(data + 0x30C);
+    if (x != -1) {
+        FUN_L00_002591d0_c(&s.list, x, 0, 0);
+        while (s.list != 0) {
+            if (FUN_L06_002f2c28_c(a0, data, s.list, a1, &s.out)) return s.out;
+            FUN_L00_002592b8_c(&s.list, s.list, 0, 0);
+        }
+    } else {
+        p = D_L06_001AC180_c;
+        v = *p;
+        while (v != 0) {
+            pa = &a0;
+            if (FUN_L06_002f2c28_c(*pa, data, v, a1, &s.out)) return s.out;
+            p++;
+            v = *p;
+        }
+    }
+    return s.out;
+}
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
