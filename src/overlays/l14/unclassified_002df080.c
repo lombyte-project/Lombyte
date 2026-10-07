@@ -163,7 +163,106 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
     return m;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ece00.s", FUN_L14_002ece00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed280.s", FUN_L14_002ed280);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Camera-intro controller: waits for the cutscene flag, then every few seconds moves the focus to a random
+ * visible point of its path. */
+/* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE6E0), where it is exact; names translated to the US level program. */
+
+extern char D_0013D24D[];
+extern float D_L14_00161CC0[] __attribute__((section(".sdata")));
+extern float D_L14_00161CD0[];
+extern float FUN_L00_00257c48(float, float);
+extern int D_0014161B; /* no foreign declaration */
+extern int D_0015ED84; /* no foreign declaration */
+extern int D_L14_0015F5C4;
+extern int D_L14_00161CB4;
+extern int FUN_001fa728(void *, float);
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L14_00161C50 __attribute__((sda));
+extern short D_L14_00161C54 __attribute__((sda));
+extern short D_L14_00161C58 __attribute__((sda));
+extern short D_L14_00161C5C __attribute__((sda));
+extern short D_L14_00161C60 __attribute__((sda));
+extern short D_L14_00161C64 __attribute__((sda));
+extern void FUN_L00_0028e990(void);
+extern void FUN_L00_00298840(int);
+extern void FUN_L01_002a2480(void);
+extern void FUN_L14_002ed530(char *);
+extern char D_0014171B_c[] __asm__("D_0014161B");
+extern int *D_L14_001B0F30_ee[] __asm__("D_L14_001B0BB0");
+extern float D_L14_00161CCC_f __asm__("D_L14_00161CCC");
+extern float D_L14_00161CD0_f __asm__("D_L14_00161CD0");
+extern float D_L14_00161CD4;
+extern float D_L14_00161CD8;
+
+void FUN_L14_002ed280(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int idx[5];
+    float v[4];
+    int st;
+    if (((unsigned char *)m)[0x20] == 0) {
+        if (D_0015ED84 == 0xE) *(short *)(D_0014171B_c + 0xD) = 1;
+        m[0x20] = 1;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(int *)&D_L14_00161C58 = 0;
+        *(int *)&D_L14_00161C50 = 0;
+    }
+    st = ((unsigned char *)m)[0x20];
+    if (st == 1) {
+        unsigned char *p;
+        if (D_L14_0015F5C4 != 0) return;
+        p = (unsigned char *)D_0013D24D + 0x13B;
+        if (p[0x68] != 0) return;
+        FUN_L00_00298840(0);
+        p[0x68] = st;
+        m[0x20] = 2;
+        FUN_L00_0028e990();
+        return;
+    }
+    if (st == 2) {
+        if (D_L14_0015F5C4 == st) return;
+        m[0x20] = 3;
+        FUN_L01_002a2480();
+        return;
+    }
+    if (tick_countdown_32_alt(&D_L14_00161C50) == 0) return;
+    if (*(int *)&D_L14_00161C58 == 0) {
+        int *path = D_L14_001B0F30_ee[*(int *)d];
+        int i;
+        int n = 0;
+        for (i = 0; i < path[0] && n < 5; i++) {
+            qcopy(v, (char *)path + i * 16 + 0x10);
+            v[2] += *(float *)&D_L14_00161C64;
+            v[3] = *(float *)&D_L14_00161C60;
+            if (FUN_001fa728(v, 255.0f) > 0) {
+                idx[n++] = i;
+            }
+        }
+        if (n > 0) {
+            int k = random_integer_below(n);
+            qcopy(D_L14_00161CC0, (char *)path + idx[k] * 16 + 0x10);
+            D_L14_00161CCC_f = 1.0f;
+            qcopy(D_L14_00161CD0, D_L14_00161CC0);
+            D_L14_00161CD8 = *(float *)&D_L14_00161C5C;
+            D_L14_00161CD0_f += FUN_L00_00257c48(0.0f, 20.0f);
+            D_L14_00161CD4 += FUN_L00_00257c48(0.0f, 20.0f);
+            qcopy(m + 0x10, D_L14_00161CC0);
+        }
+    }
+    FUN_L14_002ed530(m);
+    if (D_L14_00161CB4 == 0) {
+        *(int *)&D_L14_00161C50 = scale_game_frames(*(int *)&D_L14_00161C54);
+        *(int *)&D_L14_00161C58 = 0;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ed530.s", FUN_L14_002ed530);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002edc18.s", FUN_L14_002edc18);
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EFB10), where it is exact; names translated to the US level program. */

@@ -3,7 +3,145 @@
 #include "asm.h"
 #include "qcopy.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002efb88.s", FUN_L18_002efb88);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* State machine for the class 1355 moby: dispatches on moby state (0 init, 2 wander, 3 dive, 4 land). */
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F0F78), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float D_0015ED6C;
+extern float D_0015ED6C_a[] __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_L18_001677C0[];
+extern float FUN_001f9e90(float, float);
+extern float FUN_L00_0025bc00(float *p, int n, float x, float y);
+extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern float D_L18_0015F580[] __attribute__((section(".sdata")));
+extern int D_L18_0015F5C4;
+extern int D_L18_0016D290 __attribute__((section(".data")));
+extern int FUN_L18_002f0120(char *moby, float *vec);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern short D_L18_00162210 __attribute__((sda));
+extern short D_L18_00162214 __attribute__((sda));
+extern short D_L18_00162218 __attribute__((sda));
+extern short D_L18_00162234 __attribute__((sda));
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void FUN_L18_002f02e8(char *moby, void *out);
+extern void FUN_L18_002f0848(char *moby);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
+
+void FUN_L18_002efb88(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    if (((unsigned char *)moby)[0x20] != 4) {
+        *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40),
+                                  *(float *)&D_L18_00162210 * 0.017453292f * D_0015ED6C);
+    }
+    if (D_L18_0015F5C4 == 2 && D_L18_0016D290 == 3) {
+        mark_moby_for_removal(moby);
+        return;
+    }
+    switch (((unsigned char *)moby)[0x20]) {
+    case 0: {
+        float a = D_0015ED6C_a[1];
+        float b = D_0015ED6C;
+        *(float *)(d + 0x158) = a * 10.0f;
+        *(float *)(d + 0x154) = b * 12.566371f;
+        *(float *)(d + 0x150) = a * 3.1415927f;
+        *(float *)(d + 0x15C) = b * 10.0f;
+        *(float *)(d + 0x168) = random_angle_radians();
+        *(short *)(moby + 0x32) = 0xFF;
+        qcopy(d + 0x120, moby + 0x10);
+        *(float *)(d + 0x128) += 5.0f;
+        *(float *)(d + 0x128) = probe_ground_height(d + 0x120, 0, 0.5f);
+        FUN_L18_002f02e8(moby, d + 0x110);
+        moby[0x20] = 1;
+        *(unsigned short *)(moby + 0x34) |= 1;
+        moby[0x31] = 0;
+        *(int *)(moby + 0x94) = 0;
+        break;
+    }
+    case 2: {
+        char *p = d + 0x110;
+        if (FUN_L18_002f0120(moby, (float *)p)) {
+            FUN_L18_002f02e8(moby, p);
+        }
+        FUN_L18_002f0848(moby);
+        if (random_integer_below(*(int *)&D_L18_00162234)) {
+            return;
+        }
+        moby[0x20] = 3;
+        *(float *)(d + 0x130) = fast_cos(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214 * D_0015ED6C);
+        *(float *)(d + 0x134) = fast_sin(*(float *)(moby + 0x48)) * (*(float *)&D_L18_00162214 * D_0015ED6C);
+        *(float *)(d + 0x138) = *(float *)(d + 0x144);
+        *(int *)(d + 0x14C) = 0;
+        break;
+    }
+    case 3: {
+        float v[4];
+        float w[4];
+        subtract_vector_xyz(v, d + 0x120, moby + 0x10);
+        normalize_vector_xyz(v, v, *(float *)&D_L18_00162218 * D_0015ED6C);
+        approach_value_alt((float *)(d + 0x14C), 1.0f, D_0015ED6C);
+        FUN_001f9a40(v, d + 0x130, v, *(float *)(d + 0x14C));
+        add_vector_xyz(moby + 0x10, moby + 0x10, v);
+        *(float *)(moby + 0x48) = FUN_001f9e90(v[0], v[1]);
+        *(float *)(moby + 0x44) = -FUN_001f9e90(vector_length_xy(v), v[2]);
+        normalize_vector_xyz(w, moby + 0xC0, 1.0f);
+        add_vector_xyz(w, w, moby + 0x10);
+        FUN_L18_002f0848(moby);
+        if (w[2] < *(float *)(d + 0x128)) {
+            float t;
+            func_0022ED80_2F0F78(1, 0, (int)moby);
+            ((unsigned char *)moby)[0x20] = 4;
+            *(int *)(d + 0x160) = scale_game_frames(0x5A);
+            t = *(float *)(d + 0x128) + 0.7f;
+            if (*(float *)(moby + 0x18) < t) {
+                *(float *)(moby + 0x18) = t;
+            }
+        }
+        break;
+    }
+    case 4: {
+        float x = *(float *)(moby + 0x44);
+        if (x < 0.87266463f) {
+            x = 0.87266463f;
+        }
+        FUN_L00_0025bc00((float *)(moby + 0x44), 0, x, D_0015ED6C * 12.566371f);
+        if (tick_countdown_32_alt((int *)(d + 0x160))) {
+            int i;
+            char *pos = moby + 0x10;
+            moby[0x20] = 2;
+            *(short *)(d + 0x164) = 0;
+            FUN_L00_0025e450(*(void **)(d + 0x16C), D_L18_0015F580, pos, 1.0f, 1.0f, 10, 3, 16, 1.5f, 0.5f, 9.0f, 1.0f, 2, 5.0f, 0, 0, -1, 0);
+            qcopy(pos, D_L18_001677C0);
+            *(float *)(moby + 0x18) += 20.0f;
+            for (i = 0; (float)i < 4.0f; i++) {
+                qcopy(d + 0x10 + i * 16, pos);
+            }
+        } else {
+            FUN_L18_002f0848(moby);
+        }
+        break;
+    }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0030.s", FUN_L18_002f0030);
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1510), where it is exact; names translated to the US level program. */
@@ -943,7 +1081,7 @@ extern int *D_L18_001B0EB0[];
 extern int D_L18_0015F5C4;
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_L00_00259740(void *, void *, int);
-extern int FUN_L00_0025e450();
+extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L18_002dfba0(void *moby);
 extern int FUN_L18_002f0030(char *moby, int idx, float *pos);
