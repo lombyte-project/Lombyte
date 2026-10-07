@@ -155,7 +155,7 @@ def verify_all() -> int:
     from elftools.elf.elffile import ELFFile
 
     import overlay_proof as proof
-    total, copies, bad, others = 0, 0, [], set()
+    total, copies, bad = 0, 0, []
     for obj in sorted((BUILD / "c").glob("**/*.c.o")):
         # An object left behind by a moved or deleted source is not counted.
         if not (SOURCES / obj.relative_to(BUILD / "c").with_suffix("")).is_file():
@@ -177,18 +177,12 @@ def verify_all() -> int:
                 copies += 1
                 verdict = proof.copy_check(obj, name, place)
                 if verdict.get("not_a_copy"):
-                    others.add(place)
+                    bad.append(f"{name:24s} L{place[0]:02d}:{place[1]:08x} is another function, "
+                               "not a copy: fix the catalogue fingerprint")
                     continue
                 if not verdict["exact"]:
                     bad.append(f"{name:24s} L{place[0]:02d}:{place[1]:08x} {verdict['verdict']}"
                                f"  ({obj.relative_to(BUILD)})")
-    # places an exact function's C cannot build: the catalogue gives each its
-    # own row (scripts/overlays.py catalogue reads this list)
-    old = set(ov.not_copies())
-    if others - old:
-        ov.write_not_copies(old | others)
-        bad.append(f"{len(others - old)} places are other functions, not copies: "
-                   f"listed in {ov.NOT_COPIES.relative_to(ROOT)}, regenerate the catalogue")
     for line in bad:
         print(line)
     if bad:

@@ -108,23 +108,6 @@ def places_index() -> dict[int, dict[int, str]]:
     return index
 
 
-NOT_COPIES = ROOT / "config/overlays/us/not-copies.txt"
-
-
-def not_copies() -> list[tuple[int, int]]:
-    """Places the per-copy proof showed to be other functions (level:address)."""
-    if not NOT_COPIES.exists():
-        return []
-    return [(int(l[:2]), int(l[3:], 16)) for l in NOT_COPIES.read_text().splitlines()
-            if l and not l.startswith("#")]
-
-
-def write_not_copies(places) -> None:
-    NOT_COPIES.write_text("# written by scripts/overlay_unit.py: places an exact function's C\n"
-                          "# cannot build, so the catalogue gives each its own row\n"
-                          + "".join(f"{l:02d}:{a:08X}\n" for l, a in sorted(places)))
-
-
 @lru_cache(maxsize=1)
 def row_at() -> dict:
     """{(level, address): row} over every place of every catalogue row."""
