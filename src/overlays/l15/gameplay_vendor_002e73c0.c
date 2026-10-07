@@ -538,11 +538,25 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edb20.s", FUN_L15_002edb20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f78e0.s", FUN_L15_002f78e0);
+/* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
+
+extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_0015EF50 __attribute__((sda));
+extern float D_L15_0015F3FC;
+
+int FUN_L15_002f78e0(int slot) {
+    char *o;
+    if (*(short *)(D_L15_00167400 + 0x86) != 0x13)
+        return 1;
+    o = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
+    if (*(short *)(o + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
+        return 1;
+    return *(short *)(o + 0x14) == 3;
+}
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
-extern char *D_L15_0015EF50;
+extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
 extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
 extern int FUN_L00_00259740(float *p, float *v, int n);
@@ -551,7 +565,7 @@ extern int FUN_L00_0025faf0(float *p, int idx);
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int FUN_L15_002f85a8(char *moby) {
-    int *e = *(int **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    int *e = *(int **)(D_L15_ef48_e[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
     if (e[10] >= 0 && FUN_L00_0025fa38(D_0013E533 + 0xE9D, e[10])) {
@@ -607,7 +621,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     float lenr;
     float dot3;
     float den;
-    char *tbl = D_L15_0015EF50;
+    char *tbl = D_L15_ef48_e[2];
     char *src;
 
     data = *(char **)(tbl + *(short *)(moby + 0x84) * 32 + 0x1C);
@@ -650,12 +664,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002f88e8.s", FUN_L15_002f88e8);
 /* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
 
 extern char *D_L15_00167400 __attribute__((section(".data")));
-extern char *D_L15_0015EF50;
+extern char *D_L15_ef48_e[] __asm__("D_L15_0015EF48") __attribute__((section(".sdata")));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern void FUN_L15_002f88e8(char *);
 
 int FUN_L15_002f8ba8(char *moby) {
-    char *e = *(char **)(D_L15_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *e = *(char **)(D_L15_ef48_e[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(short *)(D_L15_00167400 + 0x86) == 0 && *(short *)(e + 0x20) >= 0 &&
         D_001413F4 == 2)
         FUN_L15_002f88e8(moby);
