@@ -72,12 +72,13 @@ s32 draw_sound_menu(SoundMenu *menu) {
     slider_length = (menu->width - slider_padding) * music_volume / 1024;
     draw_hud_sprite_rect(get_icon_frame(0xE99E, 9), slider_left << 4,
                          (second_row - 6) << 4, (center_x + 8 + slider_length) << 4,
-                         (second_row * 16) + 0x50, 0, 0xA0, 0x1F0, 0x150, 0x80);
+                         (second_row << 4) + 0x50, 0, 0xA0, 0x1F0, 0x150, 0x80);
 
-    font_print_right(label_right, row_height * 3 - 8,
+    second_row += row_height;
+    font_print_right(label_right, second_row - 8,
                      menu->selected_option == 2 ? 0x8020FFFF : 0x80FFA888,
                      get_help_message_text(0x5214), -1);
-    font_print_large(center_x + 8, row_height * 3 - 8, 0x80FFA888,
+    font_print_large(center_x + 8, second_row - 8, 0x80FFA888,
                      get_help_message_text(playback_mode != 0 ? 0x5216 : 0x5215), -1);
     do_gif_paging();
     return 2;
