@@ -364,7 +364,22 @@ void FUN_L08_002f12a0(int idx) {
         D_L08_001E8348_12a0[idx].y += 1.0f;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f1378.s", FUN_L08_002f1378);
+extern float SPX[2] __asm__("D_L08_00161DE0") __attribute__((sda));
+extern float SPY[] __asm__("D_L08_00161DE4") __attribute__((section(".sdata")));
+extern float PX[] __asm__("D_L08_00161E10") __attribute__((section(".sdata")));
+extern float PY[] __asm__("D_L08_00161E14") __attribute__((section(".sdata")));
+
+void FUN_L08_002f1378(int i) {
+    float *p;
+    p = &PX[i * 2];
+    *p += SPX[i * 2] * D_0015ED7C;
+    if (*p > 1.0f) *p -= 1.0f;
+    if (*p < -1.0f) *p += 1.0f;
+    p = &PY[i * 2];
+    *p += SPY[i * 2] * D_0015ED7C;
+    if (*p > 1.0f) *p -= 1.0f;
+    if (*p < -1.0f) *p += 1.0f;
+}
 extern int FUN_001f9740(int *);
 extern void FUN_001fa050(void *, void *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
