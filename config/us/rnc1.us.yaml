@@ -1303,7 +1303,7 @@ segments:
           - [0x10505c, textbin, text_gap_002040dc_before_fun_002040e0]
           - [0x105060, c, assembly/textbin/fun_002040e0]
           - [0x105330, c, world/streaming/load_level_chunk_from_disc]
-          - [0x1053a8, c, assembly/textbin/fun_00204428]
+          - [0x1053a8, c, gameplay/state/fun_00204428]
           - [0x105708, textbin, text_gap_00204788_before_fun_00204790]
           - [0x105710, c, world/animation/update_world_object_animation]
           - [0x105964, textbin, text_gap_002049e4_before_fun_002049f0]

@@ -436,6 +436,7 @@ RODATA_OVERLAYS = {
     "init_once": (0x1E7B30, 0xE8AB0),  # switch table
     "fun_001e8d08": (0x1E7640, 0xE85C0),  # switch table
     "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
+    "fun_00204428": (0x1E7CE0, 0xE8C60),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
