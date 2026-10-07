@@ -249,7 +249,25 @@ int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
     qcopy(out, pt);
     return -1;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
+/* Select a 16-byte entry using the descriptor's signed index rules. */
+void *FUN_L01_0028b7b0(void *descriptor, s32 index) {
+    char *data;
+    s32 last;
+
+    if (*(s8 *)((char *)descriptor + 4) >= 0) {
+        last = (s32)((u32)**(s32 **)((char *)descriptor + 0x10) - 1);
+        data = *(char **)((char *)descriptor + 0x10);
+    } else {
+        data = *(char **)((char *)descriptor + 0x10);
+        last = 0;
+    }
+    if (index < 0)
+        return data + ((((u32)last + (u32)index) << 4) + 0x20);
+    if (index > last)
+        return data + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
+    return data + (((u32)index << 4) + 0x10);
+}
+
 typedef struct {
     char pad0[4];
     signed char f4;

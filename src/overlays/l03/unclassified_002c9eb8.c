@@ -53,7 +53,13 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c9eb8.s", FUN_L03_002c9eb8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ca808.s", FUN_L03_002ca808);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cbea8.s", FUN_L03_002cbea8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002cc888.s", FUN_L03_002cc888);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d30d8.s", FUN_L03_002d30d8);
+/* Test the observed halfword and byte range without inferring object identity. */
+s32 FUN_L03_002d30d8(u8 *object) {
+    if (*(s16 *)(object + 0xa6) != 0x330) {
+        return 0;
+    }
+    return (u32)(object[0x20] - 2) < 5;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3198.s", FUN_L03_002d3198);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3918.s", FUN_L03_002d3918);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002d3e58.s", FUN_L03_002d3e58);
