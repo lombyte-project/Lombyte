@@ -84,7 +84,93 @@ int FUN_L03_002c6ca0(unsigned char *moby) {
     return 0;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292578.s", FUN_L03_00292578);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
+ * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
+/* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_00293720), where it is exact; names translated to the US level program. */
+
+typedef int Q_293720 __attribute__((mode(TI)));
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float FUN_001f9e90(float, float);
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern int D_L03_0015FFD8; /* no foreign declaration */
+extern short D_L03_00161368 __attribute__((sda));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void advance_moby_animation_alt(void *) __asm__("FUN_0020d580");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+
+void FUN_L03_00292578(char *m, float *at, float ang) {
+    float tmp[4];
+    float off[4];
+    float dv[4];
+    float oldp[4];
+    float oldr[4];
+    float v[4];
+    float w[4];
+    char *d;
+    char *head;
+    int next;
+    *(Q_293720 *)tmp = *(Q_293720 *)at;
+    d = *(char **)(m + 0x78);
+    head = D_L03_0015FFD8 + (*(int *)(d + 0xC4) << 8);
+    next = *(int *)(d + 0xA0);
+    *(Q_293720 *)oldp = *(Q_293720 *)(m + 0x10);
+    *(Q_293720 *)oldr = *(Q_293720 *)(m + 0x40);
+    qcopy(head + 0x10, tmp);
+    off[0] = fast_cos(ang) * -*(float *)(d + 0xDC);
+    off[1] = fast_sin(ang) * -*(float *)(d + 0xDC);
+    off[2] = 0.0f;
+    add_vector_xyz(m + 0x10, tmp, off);
+    *(float *)(m + 0x48) = fast_add_rotations(ang, 3.1415927f);
+    *(float *)(m + 0x44) = 0.0f;
+    subtract_vector_xyz(dv, m + 0x10, oldp);
+    FUN_L00_00260738(d + 0x60, dv, oldr, m + 0x40);
+    *(int *)(d + 0xCC) = 0;
+    *(int *)(d + 0xD0) = 0;
+    off[0] = fast_cos(ang) * -*(float *)(d + 0xBC);
+    off[1] = fast_sin(ang) * -*(float *)(d + 0xBC);
+    off[2] = 0.0f;
+    add_vector_xyz(off, off, m + 0x10);
+    while (next != -1) {
+        char *o = D_L03_0015FFD8 + (next << 8);
+        char *od = *(char **)(o + 0x78);
+        qcopy(od + 0xA0, o + 0x10);
+        qcopy(od + 0xB0, o + 0x40);
+        v[0] = fast_cos(ang) * -*(float *)&D_L03_00161368;
+        v[1] = fast_sin(ang) * -*(float *)&D_L03_00161368;
+        v[2] = 0.0f;
+        add_vector_xyz(v, v, off);
+        w[0] = fast_cos(ang) * -*(float *)(od + 0xC4);
+        w[1] = fast_sin(ang) * -*(float *)(od + 0xC4);
+        w[2] = 0.0f;
+        add_vector_xyz(o + 0x10, w, v);
+        *(float *)(o + 0x18) = *(float *)(m + 0x18);
+        *(float *)(o + 0x48) = fast_add_rotations(FUN_001f9e90(v[0] - *(float *)(o + 0x10), v[1] - *(float *)(o + 0x14)), 0.0f);
+        *(float *)(o + 0x44) = 0.0f;
+        advance_moby_animation_alt(o);
+        FUN_L00_00250df8(o);
+        *(unsigned short *)(o + 0x34) |= 6;
+        FUN_L00_0024f7c8(o, 1, off);
+        subtract_vector_xyz(dv, o + 0x10, od + 0xA0);
+        FUN_L00_00260738(od + 0x20, dv, od + 0xB0, o + 0x40);
+        qcopy(od + 0xA0, o + 0x10);
+        qcopy(od + 0xB0, o + 0x40);
+        next = *(int *)(od + 0xC0);
+    }
+    head[0x20] = 0;
+    *(unsigned short *)(head + 0x34) |= 6;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292890.s", FUN_L03_00292890);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292d10.s", FUN_L03_00292d10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00292e98.s", FUN_L03_00292e98);
@@ -311,7 +397,7 @@ typedef struct {
 
 extern float FUN_001f9b80(void *, void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L03_0015FFD8;
+extern short D_L03_0015FFD8_u __asm__("D_L03_0015FFD8");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -323,7 +409,7 @@ int FUN_L03_002c6e18(float ang, unsigned char *moby, char *target) {
     if (*(int *)(target + 0x40) != 0) {
         idx = *(int *)(data + 0x264);
         if (idx != -1) {
-            char *e = (char *)(idx << 8) + (int)*(char **)&D_L03_0015FFD8;
+            char *e = (char *)(idx << 8) + (int)*(char **)&D_L03_0015FFD8_u;
             if (*(short *)(e + 0xA6) == 0x336) {
                 if ((unsigned char)e[0xBC] != 4)
                     return 0;
