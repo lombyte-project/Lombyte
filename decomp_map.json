@@ -2,15 +2,15 @@
   "schema": "rnc-public-progress-v3",
   "source": "scripts/generate_treemap.py",
   "units_total": 4429,
-  "matching_c": 2986,
+  "matching_c": 2990,
   "intentional_asm": 301,
-  "pending_c": 1142,
+  "pending_c": 1138,
   "bytes_total": 3626096,
-  "bytes_matching_c": 2048208,
+  "bytes_matching_c": 2048584,
   "bytes_intentional_asm": 123320,
-  "bytes_pending_c": 1454568,
-  "c_exact_percent_of_recoverable": 58.4739,
-  "c_fuzzy_percent_of_recoverable": 60.7943,
+  "bytes_pending_c": 1454192,
+  "c_exact_percent_of_recoverable": 58.4846,
+  "c_fuzzy_percent_of_recoverable": 60.805,
   "boot": {
     "units_total": 1474,
     "groups_total": 129,
@@ -1963,12 +1963,12 @@
   },
   "overlays": {
     "functions_total": 2905,
-    "matching_c": 1874,
-    "pending_c": 1031,
+    "matching_c": 1878,
+    "pending_c": 1027,
     "bytes_total": 3151768,
-    "bytes_matching_c": 1794292,
-    "bytes_pending_c": 1357476,
-    "c_exact_percent_of_recoverable": 56.9297,
+    "bytes_matching_c": 1794668,
+    "bytes_pending_c": 1357100,
+    "c_exact_percent_of_recoverable": 56.9416,
     "intentional_asm": 50,
     "bytes_intentional_asm": 26972,
     "shared": {
@@ -1977,12 +1977,12 @@
       "planet": "Shared code",
       "description": "functions present in two or more levels",
       "functions": 1571,
-      "matching_c": 1108,
-      "pending_c": 463,
+      "matching_c": 1110,
+      "pending_c": 461,
       "bytes_total": 1124640,
-      "bytes_matching_c": 514748,
-      "bytes_pending_c": 609892,
-      "c_exact_percent_of_recoverable": 45.77,
+      "bytes_matching_c": 514972,
+      "bytes_pending_c": 609668,
+      "c_exact_percent_of_recoverable": 45.7899,
       "files": [
         {
           "file": "src/overlays/shared/start_001eaa08.c",
@@ -2799,9 +2799,9 @@
         {
           "file": "src/overlays/shared/rendering/0027f660.c",
           "functions": 14,
-          "matching_c": 11,
+          "matching_c": 12,
           "bytes_total": 4120,
-          "bytes_matching_c": 3012
+          "bytes_matching_c": 3132
         },
         {
           "file": "src/overlays/shared/ui/menus/002831c0.c",
@@ -3065,9 +3065,9 @@
         {
           "file": "src/overlays/shared/gameplay/entities/002b8c08.c",
           "functions": 31,
-          "matching_c": 11,
+          "matching_c": 12,
           "bytes_total": 31432,
-          "bytes_matching_c": 5808
+          "bytes_matching_c": 5912
         },
         {
           "file": "src/overlays/shared/gameplay/entities/002b94d0.c",
@@ -3466,12 +3466,12 @@
         "planet": "Kerwan",
         "description": "Metropolis: the city of towers and trains",
         "functions": 61,
-        "matching_c": 22,
-        "pending_c": 39,
+        "matching_c": 23,
+        "pending_c": 38,
         "bytes_total": 118488,
-        "bytes_matching_c": 75252,
-        "bytes_pending_c": 43236,
-        "c_exact_percent_of_recoverable": 63.5102,
+        "bytes_matching_c": 75292,
+        "bytes_pending_c": 43196,
+        "c_exact_percent_of_recoverable": 63.544,
         "files": [
           {
             "file": "src/overlays/l03/gameplay/hero/00205830.c",
@@ -3518,9 +3518,9 @@
           {
             "file": "src/overlays/l03/unclassified_002c9eb8.c",
             "functions": 23,
-            "matching_c": 6,
+            "matching_c": 7,
             "bytes_total": 18952,
-            "bytes_matching_c": 928
+            "bytes_matching_c": 968
           },
           {
             "file": "src/overlays/shared/gameplay/entities/00291918.c",
@@ -3814,12 +3814,12 @@
         "planet": "Batalia",
         "description": "Fort Krontos: a war zone with turrets and tanks",
         "functions": 77,
-        "matching_c": 36,
-        "pending_c": 41,
+        "matching_c": 37,
+        "pending_c": 40,
         "bytes_total": 154164,
-        "bytes_matching_c": 84720,
-        "bytes_pending_c": 69444,
-        "c_exact_percent_of_recoverable": 54.9545,
+        "bytes_matching_c": 84832,
+        "bytes_pending_c": 69332,
+        "c_exact_percent_of_recoverable": 55.0271,
         "files": [
           {
             "file": "src/overlays/l08/gameplay/hero/0021d9c0.c",
@@ -3880,9 +3880,9 @@
           {
             "file": "src/overlays/l08/gameplay_vendor_00305138.c",
             "functions": 10,
-            "matching_c": 8,
+            "matching_c": 9,
             "bytes_total": 7052,
-            "bytes_matching_c": 5328
+            "bytes_matching_c": 5440
           }
         ]
       },
@@ -4488,14 +4488,14 @@
   },
   "total": {
     "units_total": 4429,
-    "matching_c": 2986,
+    "matching_c": 2990,
     "intentional_asm": 301,
-    "pending_c": 1142,
+    "pending_c": 1138,
     "bytes_total": 3626096,
-    "bytes_matching_c": 2048208,
+    "bytes_matching_c": 2048584,
     "bytes_intentional_asm": 123320,
-    "bytes_pending_c": 1454568,
-    "c_exact_percent_of_recoverable": 58.4739,
-    "c_fuzzy_percent_of_recoverable": 60.7943
+    "bytes_pending_c": 1454192,
+    "c_exact_percent_of_recoverable": 58.4846,
+    "c_fuzzy_percent_of_recoverable": 60.805
   }
 }
