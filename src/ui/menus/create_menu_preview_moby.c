@@ -31,8 +31,8 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     {
         moby = create_moby(oclass);
         if (moby != 0) {
-            moby->control = unset;
             moby->culling_radius = unset;
+            moby->control = unset;
             moby->state = 0;
             moby->force_visible = 1;
             refresh_moby_spatial_bounds(moby);

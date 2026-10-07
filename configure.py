@@ -235,30 +235,24 @@ GAME_COMPILER_FLAG_UNITS = {
     # full-ELF PASS on 2026-09-22.
     "audio/streaming/snd_init_vag_streaming_ex": "-mastra-r5900-extern-buffer",
     "ui/menus/fun_00219fa0": "-mastra-r5900-extern-buffer",
-    # fun_00221968: 100/100/100 on the game compiler only with
-    # -fno-expensive-optimizations (the bank flag; without it 90.45).  Its
-    # 2026-09-22 demotion measured cc_game without the flag (62.65).
-    "ui/menus/fun_00221968": "-fno-expensive-optimizations",
     # FUN_0021b6d8 keeps its retail pseudo values in a0-a3 via fixed-register
     # constraints; the same four pins reproduce the object on the game compiler.
+    # Without them the prepass schedule pairs the first `nor` with the `slt`,
+    # so the two `nor` results land in a3/v1 instead of v1/v0; no C spelling
+    # tried (orders, forms, types, do-while barriers, permuter) moves it.
     "ui/menus/fun_0021b6d8": "-ffixed-4 -ffixed-5 -ffixed-6 -ffixed-7",
     "audio/streaming/snd_stream_safe_cd_break": "-mastra-r5900-extern-buffer",
     "audio/streaming/snd_stream_safe_cd_callback": "-mastra-r5900-extern-buffer",
     "audio/streaming/snd_stream_safe_cd_get_error": "-mastra-r5900-extern-buffer",
     "audio/streaming/snd_stream_safe_cd_read": "-mastra-r5900-extern-buffer",
-    # vu1_add_g_sregister needs only the address form: the game compiler already
-    # builds without strict aliasing, so -fno-strict-aliasing changes nothing
-    # here while -mno-split-addresses is required.
-    "rendering/vu1_add_g_sregister": "-mno-split-addresses",
     "audio/streaming/snd_stream_safe_cd_sync": "-mastra-r5900-extern-buffer",
-    "rendering/state/reset_graphics": "-mno-split-addresses",
     "ui/menus/draw_menu_selection_marker": "-mastra-r5900-extern-buffer",
     "audio/rpc/snd_reset_state_and_flush_commands": "-mastra-r5900-extern-buffer",
-    "ui/menus/create_menu_preview_moby": "-fno-schedule-insns",
-    "audio/sound/calculate_voice_volume": "-fno-schedule-insns",
     # FUN_002075e8: retail materializes the zero return before `jr $ra` and
     # leaves the delay slot empty; the default pass moves that assignment into
-    # the slot.  100/100/100 with this option (2026-10-03).
+    # the slot.  100/100/100 with this option (2026-10-03).  No plain C keeps
+    # the slot empty: it needs a label between the store and `jr`, and a
+    # three-instruction body has none.
     "ui/menus/fun_002075e8": "-fno-delayed-branch",
 }
 
