@@ -149,7 +149,93 @@ void FUN_L10_00295a38(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00295c20.s", FUN_L10_00295c20);
+
+
+
+/* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_00296DC0), where it is exact; names translated to the US level program. */
+
+typedef int Q_296dc0 __attribute__((mode(TI)));
+
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern float D_0015ED70;
+extern float FUN_L00_00257c48(float lo, float hi);
+extern float D_0015ED6C; /* no foreign declaration */
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L01_00277fb8(void *);
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void FUN_L00_00262b00(float, float, char *, float *, float *);
+extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+
+void FUN_L10_00295c20(char *m) {
+    char *d = *(char **)(m + 0x78);
+    float prev[4];
+    float v[4];
+    *(Q_296dc0 *)prev = *(Q_296dc0 *)(m + 0x10);
+    if (FUN_L01_00277fb8(m)) m[0x20] = 2;
+    tick_countdown_32_alt((int *)(d + 0xBC));
+    switch (((unsigned char *)m)[0x20]) {
+    case 0:
+        d[0x28] = 4;
+        *(short *)(d + 0x3E) = 5;
+        *(int *)(d + 0x20) = 0;
+        *(short *)(d + 0x24) = 0;
+        *(float *)(d + 0xA0) = *(float *)(m + 0x18);
+        *(float *)(d + 0xA8) = random_angle_radians();
+        *(float *)(d + 0xB4) = random_angle_radians();
+        {
+            float r = random_angle_radians();
+            float e = D_0015ED6C * 0.13962634f;
+            *(float *)(d + 0xB8) = r;
+            *(float *)(d + 0xB0) = D_0015ED6C * 1.5707964f + FUN_L00_00257c48(0.0f, e);
+        }
+        m[0x20] = 1;
+    case 1:
+        *(int *)(d + 0xA4) = 0;
+        FUN_L00_00262b00(0.1f, *(float *)(d + 0xB0), m, (float *)(d + 0xA8), (float *)(d + 0xAC));
+        FUN_L00_00262b80(m, d + 0xB4, d + 0xB8, 0.047123890f, D_0015ED6C * 0.34906584f, D_0015ED6C * 0.5235988f);
+        break;
+    case 2: {
+        float a = *(float *)(d + 0xA4) - (D_0015ED70 + D_0015ED70);
+        float lim = -(D_0015ED6C + D_0015ED6C);
+        *(float *)(d + 0xA4) = a;
+        if (a < lim) *(float *)(d + 0xA4) = lim;
+        *(float *)(m + 0x18) += *(float *)(d + 0xA4);
+        if (FUN_L01_00277fb8(m) == 0) m[0x20] = 3;
+        if (*(int *)(d + 0xBC) <= 0) {
+            allocate_voice_for_target_entry_alt(0, 0, (int)m);
+            *(int *)(d + 0xBC) = FUN_L00_00257b90(0x28, 0x3C);
+        }
+        break;
+    }
+    case 3: {
+        float vz = *(float *)(d + 0xA4);
+        float g = D_0015ED70;
+        float dist, sq, t;
+        if (vz < 0.0f || (t = g + g, dist = *(float *)(d + 0xA0) - *(float *)(m + 0x18), sq = vz * vz,
+                          sq / (t + t) < dist)) {
+            float a = vz + g;
+            float mx = D_0015ED6C + D_0015ED6C;
+            *(float *)(d + 0xA4) = a;
+            if (mx < a) *(float *)(d + 0xA4) = mx;
+        } else if (0.0f < dist) {
+            float a = vz - sq / (dist + dist);
+            *(float *)(d + 0xA4) = a;
+            if (a < 0.0f) *(float *)(d + 0xA4) = 0.0f;
+        }
+        *(float *)(m + 0x18) += *(float *)(d + 0xA4);
+        if (*(float *)(d + 0xA0) <= *(float *)(m + 0x18)) {
+            *(float *)(m + 0x18) = *(float *)(d + 0xA0);
+            m[0x20] = 1;
+        }
+        break;
+    }
+    }
+    subtract_vector_xyz(v, m + 0x10, prev);
+    FUN_L00_00260738(d + 0x60, v, m + 0x40, m + 0x40);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298668.s", FUN_L10_00298668);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_00298b68.s", FUN_L10_00298b68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002be858.s", FUN_L10_002be858);

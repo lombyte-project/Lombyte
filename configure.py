@@ -315,6 +315,7 @@ OVERLAY_SN_UNITS = {
     "l09/unclassified_0021e538.c",
     "l10/gameplay_vendor_002df270.c",
     "l10/gameplay_vendor_002ea1f0.c",
+    "l10/unclassified_00295a38.c",
     "l11/gameplay/hero/0023c7a0.c",
     "l11/gameplay/hero/0024db50.c",
     "l11/gameplay/hero/00253a18.c",
