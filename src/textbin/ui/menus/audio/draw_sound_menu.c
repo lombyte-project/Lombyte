@@ -1,10 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/ui/menus/audio/draw_sound_menu/FUN_0021ce00.s",
-            FUN_0021ce00);
-#else
 #include "types.h"
 
 typedef struct {
@@ -61,7 +57,7 @@ s32 draw_sound_menu(SoundMenu *menu) {
                          (row_height - 6) << 4, (center_x + 8 + slider_length) << 4,
                          (row_height + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
 
-    second_row = row_height * 2;
+    second_row = row_height + row_height;
     font_print_right(label_right, second_row - 8,
                      menu->selected_option == 1 ? 0x8020FFFF : 0x80FFA888,
                      get_help_message_text(0x5213), -1);
@@ -72,7 +68,7 @@ s32 draw_sound_menu(SoundMenu *menu) {
     slider_length = (menu->width - slider_padding) * music_volume / 1024;
     draw_hud_sprite_rect(get_icon_frame(0xE99E, 9), slider_left << 4,
                          (second_row - 6) << 4, (center_x + 8 + slider_length) << 4,
-                         (second_row << 4) + 0x50, 0, 0xA0, 0x1F0, 0x150, 0x80);
+                         (second_row + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
 
     second_row += row_height;
     font_print_right(label_right, second_row - 8,
@@ -83,4 +79,3 @@ s32 draw_sound_menu(SoundMenu *menu) {
     do_gif_paging();
     return 2;
 }
-#endif /* NON_MATCHING */
