@@ -833,7 +833,39 @@ void FUN_L14_002b5850(char *moby, float *target, float a, float b, float c, floa
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5968.s", FUN_L14_002b5968);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b5c30.s", FUN_L14_002b5c30);
+/* Points the mover at the second-to-last node of its active path and clears its offset. */
+
+typedef struct {
+    char pad00[0xD0];
+    int pathA;
+    char padD4[0xE4 - 0xD4];
+    int t;
+    int node;
+    float w;
+    float off[4];
+    char pad100[0x10C - 0x100];
+    int alt;
+    char pad110[0x150 - 0x110];
+    int pathB;
+} Mover_5c30;
+
+extern int *D_L14_001B0BB0[];
+extern void FUN_001f99f8(void *);
+
+void FUN_L14_002b5c30(char *moby) {
+    Mover_5c30 *d = *(Mover_5c30 **)(moby + 0x78);
+    int *p;
+    int n;
+    if (d->alt == 0)
+        p = D_L14_001B0BB0[d->pathA];
+    else
+        p = D_L14_001B0BB0[d->pathB];
+    n = *p - 2;
+    d->node = n;
+    d->w = *(float *)((n << 4) + (char *)p + 0x1C);
+    d->t = 0;
+    FUN_001f99f8(d->off);
+}
 extern u8 D_0013E550[];
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 

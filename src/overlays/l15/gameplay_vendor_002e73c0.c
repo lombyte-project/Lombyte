@@ -489,8 +489,49 @@ char *FUN_L15_002eb9e0(char *pos, char *vec) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebf28.s", FUN_L15_002ebf28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ebfb0.s", FUN_L15_002ebfb0);
+/* Shows or hides every listed moby. */
+
+extern int D_L15_001ABE40[];
+extern int D_L15_0015FFD8;
+
+void FUN_L15_002ebf28(int idx, int show) {
+    short *p = (short *)D_L15_001ABE40[idx];
+    if (p == 0)
+        return;
+    while (1) {
+        unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*p & 0x7FFF) << 8));
+        if (show) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby[0x31] = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xFFFC;
+        } else {
+            *(int *)(moby + 0x94) = 0;
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 3;
+        }
+        if (*p++ < 0)
+            return;
+    }
+}
+/* Counts the listed mobys that are missing or dying. */
+
+extern int D_L15_001ABE40[];
+extern int D_L15_0015FFD8;
+
+int FUN_L15_002ebfb0(int idx) {
+    unsigned short *p = (unsigned short *)D_L15_001ABE40[idx];
+    int n = 0;
+    int base;
+    if (p == 0)
+        return 0;
+    base = D_L15_0015FFD8;
+    do {
+        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+            n++;
+    } while ((short)*p++ >= 0);
+    return n;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
