@@ -434,6 +434,8 @@ RODATA_OVERLAYS = {
     "update_help_state": (0x1E7A40, 0xE89C0),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180),  # switch table
     "init_once": (0x1E7B30, 0xE8AB0),  # switch table
+    "fun_001e8d08": (0x1E7640, 0xE85C0),  # switch table
+    "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
