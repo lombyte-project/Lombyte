@@ -2,4 +2,12 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fb470.s", FUN_L00_001fb470);
+#include "sda.h"
+extern char D_L00_001C3890[] NOT_SDA;
+extern int tex_1fb470(int) __asm__("FUN_001f44b8");
+extern void FUN_001f62b0(int, int, int, int, int, int, void *);
+
+void FUN_L00_001fb470(int a, int b, int c, int d, int e) {
+    FUN_001f62b0(a, b, c, d, e, tex_1fb470(3), D_L00_001C3890);
+}
+

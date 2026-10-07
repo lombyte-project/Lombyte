@@ -391,6 +391,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/vendor/0030b618.c",
     "shared/gameplay/vendor/0030e690.c",
     "shared/gameplay/vendor/00316f48.c",
+    "shared/gameplay_camera_001fc008.c",
     "shared/math/interpolation/00257ef0.c",
     "shared/math/vectors/0025c230.c",
     "shared/rendering/00269290.c",
@@ -399,6 +400,8 @@ OVERLAY_SN_UNITS = {
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",
     "shared/ui_help_001fe778.c",
+    "shared/ui_menus_002497f8.c",
+    "shared/ui_text_001fb470.c",
     "shared/unclassified_00288ec0.c",
     "shared/unclassified_002aee30.c",
 }

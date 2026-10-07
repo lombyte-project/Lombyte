@@ -48,7 +48,155 @@ void FUN_L00_002ba970(u8 *o) {
                      D_L00_00161610, 0.2f);
     FUN_L00_002bb0b0(o);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002baae0.s", FUN_L00_002baae0);
+
+#include "qcopy.h"
+
+typedef float RW_2baae0[4] __attribute__((aligned(16)));
+
+typedef struct {
+    int c[4];
+    float f[8];
+    long z4, q0, q1, q2;
+} RT_2baae0;
+
+extern float D_L00_00166DC0_2baae0[] __asm__("D_L00_00166DC0");
+extern int D_L00_00161638 __attribute__((sda));
+extern int D_L00_0016163C __attribute__((sda));
+extern int D_L00_001615F4 __attribute__((sda));
+extern int D_L00_001615F8 __attribute__((sda));
+extern float vlen_2baae0(void *) __asm__("FUN_001f9af0");
+extern long tex_2baae0(int) __asm__("FUN_001f44b8");
+extern void vadd_2baae0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vsub_2baae0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_2baae0(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void vmul_2baae0(float, void *, void *) __asm__("FUN_001f9a68");
+extern void draw_2baae0(void *, void *, int) __asm__("FUN_001f7d30");
+extern void gsreg_2baae0(int, long) __asm__("FUN_00233980");
+
+void FUN_L00_002baae0(void *mv, int a, int b, int n, float sx, float sy, float sz) {
+    char *m = mv;
+    RW_2baae0 *v = mv;
+    RW_2baae0 q[4];
+    RT_2baae0 t;
+    RW_2baae0 q2[4];
+    RT_2baae0 u;
+    RW_2baae0 w120, w130, w140, w150, r160, r170, a180, b190, s1A0, s1B0;
+    int i, col0, col1;
+    float len, len0, l0, l1, l2;
+    t.q0 = tex_2baae0(D_L00_00161638);
+    col0 = D_L00_001615F4 | (a << 24);
+    t.q2 = 0x8000000048L;
+    t.q1 = 0xFF9000000260L;
+    t.z4 = 0;
+    t.c[3] = col0;
+    t.c[2] = col0;
+    t.c[1] = col0;
+    t.c[0] = col0;
+    u.q0 = tex_2baae0(D_L00_0016163C);
+    col1 = D_L00_001615F8 | (b << 24);
+    u.q2 = t.q2;
+    u.q1 = t.q1;
+    u.z4 = t.z4;
+    u.c[3] = col1;
+    u.c[2] = col1;
+    u.c[1] = col1;
+    u.c[0] = col1;
+    u.f[0] = 0;
+    u.f[1] = 0;
+    u.f[2] = 0;
+    u.f[3] = 1.0f;
+    u.f[4] = 1.0f;
+    u.f[5] = 0;
+    u.f[6] = 1.0f;
+    u.f[7] = 1.0f;
+    t.f[0] = D_L00_001615EC + 0;
+    t.f[1] = 0;
+    t.f[2] = D_L00_001615EC + 0;
+    t.f[3] = 1.0f;
+    t.f[4] = D_L00_001615EC + 1.0f;
+    t.f[5] = 0;
+    t.f[6] = D_L00_001615EC + 1.0f;
+    t.f[7] = 1.0f;
+    vsub_2baae0(w140, m, D_L00_00166DC0_2baae0);
+    vsub_2baae0(w150, m + 0x10, m);
+    cross_2baae0(w120, w150, w140);
+    len0 = vlen_2baae0(w120);
+    if (len0 != 0)
+        len0 = 1.0f / len0;
+    vmul_2baae0(D_L00_001615FC * len0, w120, w120);
+    vadd_2baae0(q[0], m, w120);
+    vsub_2baae0(q[1], m, w120);
+    for (i = 1; i < n - 1; i++) {
+        vsub_2baae0(w140, v[i], D_L00_00166DC0_2baae0);
+        vsub_2baae0(w150, v[i + 1], v[i]);
+        cross_2baae0(w120, w150, w140);
+        len = vlen_2baae0(w120);
+        if (len != 0)
+            len = 1.0f / len;
+        vmul_2baae0(D_L00_001615FC * len, w120, w120);
+        vadd_2baae0(q[2], v[i], w120);
+        vsub_2baae0(q[3], v[i], w120);
+        if (i == 1) {
+            t.c[1] = D_L00_001615F4;
+            t.c[0] = D_L00_001615F4;
+        } else if (i == n - 2) {
+            t.c[3] = D_L00_001615F4;
+            t.c[2] = D_L00_001615F4;
+        } else if (i == 2) {
+            t.c[1] = col0;
+            t.c[0] = col0;
+        }
+        draw_2baae0(q, 0, 0);
+        qcopy(q[0], q[2]);
+        qcopy(q[1], q[3]);
+    }
+    for (i = 0; i < n - 1; i++) {
+        vsub_2baae0(a180, m + i * 16, D_L00_00166DC0_2baae0);
+        vsub_2baae0(b190, m + i * 16 + 16, D_L00_00166DC0_2baae0);
+        l0 = vlen_2baae0(a180);
+        l1 = vlen_2baae0(b190);
+        if (l1 < l0) {
+            if (l1 == 0)
+                qcopy(b190, a180);
+            else
+                vmul_2baae0(l0 / l1, b190, b190);
+        } else {
+            if (l0 == 0)
+                qcopy(a180, b190);
+            else
+                vmul_2baae0(l1 / l0, a180, a180);
+        }
+        vadd_2baae0(r160, D_L00_00166DC0_2baae0, a180);
+        vadd_2baae0(r170, D_L00_00166DC0_2baae0, b190);
+        vsub_2baae0(w150, r170, r160);
+        vmul_2baae0(sz, s1B0, w150);
+        vsub_2baae0(r160, r160, s1B0);
+        vadd_2baae0(r170, r170, s1B0);
+        vsub_2baae0(s1A0, D_L00_00166DC0_2baae0, r160);
+        cross_2baae0(w120, s1A0, w150);
+        l2 = vlen_2baae0(w120);
+        if (l2 != 0)
+            l2 = 1.0f / l2;
+        vmul_2baae0(sy * l2, w130, w120);
+        vadd_2baae0(q2[0], r160, w130);
+        vsub_2baae0(q2[1], r160, w130);
+        vadd_2baae0(q2[2], r170, w130);
+        vsub_2baae0(q2[3], r170, w130);
+        if (i == 0) {
+            u.c[1] = D_L00_001615F8;
+            u.c[0] = D_L00_001615F8;
+        } else if (i == n - 2) {
+            u.c[3] = D_L00_001615F8;
+            u.c[2] = D_L00_001615F8;
+        } else if (i == 1) {
+            u.c[1] = col1;
+            u.c[0] = col1;
+        }
+        draw_2baae0(q2, 0, 0);
+    }
+    gsreg_2baae0(0x47, 0x5360B);
+}
+
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2bb0b0;
