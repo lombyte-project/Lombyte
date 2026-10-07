@@ -3,14 +3,14 @@
 <title>Ratchet &amp; Clank - decompilation progress</title>
 <rect width="800" height="1086" fill="#0d1117"/>
 <defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3632"/><stop offset="1" stop-color="#d87620"/></linearGradient><linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#de812f" stop-opacity="0.10"/><stop offset="0.5" stop-color="#de812f" stop-opacity="0.02"/><stop offset="1" stop-color="#000000" stop-opacity="0.08"/></linearGradient><linearGradient id="drawer-face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2816"/><stop offset="1" stop-color="#2a1d10"/></linearGradient><radialGradient id="drawer-halo"><stop offset="0" stop-color="#0d1117" stop-opacity="0.8"/><stop offset="0.6" stop-color="#0d1117" stop-opacity="0.55"/><stop offset="1" stop-color="#0d1117" stop-opacity="0"/></radialGradient></defs>
-<text x="10" y="24" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#a6adc8">3,072 of 4,503 functions in C &#183; executable and 19 level overlays</text>
+<text x="10" y="24" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#a6adc8">3,174 of 4,503 functions in C &#183; executable and 19 level overlays</text>
 <rect x="629" y="9" width="10" height="10" rx="2" fill="#de812f"></rect>
-<text x="644" y="18" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">matching C &#183; 2,097,540 B</text>
+<text x="644" y="18" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">matching C &#183; 2,121,784 B</text>
 <rect x="629" y="26" width="10" height="10" rx="2" fill="#c3cbd8"></rect>
 <text x="644" y="35" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">intentional asm &#183; 95,388 B</text>
 <rect x="629" y="43" width="10" height="10" rx="2" fill="url(#progress-range)"><title>Pending C: dark plate to copper shows C_EXACT coverage; bolt orange marks 100% exact.</title></rect>
-<text x="644" y="52" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">pending C &#183; 1,449,212 B</text>
-<text x="619" y="38" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="28" font-weight="800" fill="#de812f">59.1%</text>
+<text x="644" y="52" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#a6adc8">pending C &#183; 1,424,968 B</text>
+<text x="619" y="38" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="28" font-weight="800" fill="#de812f">59.8%</text>
 <text x="619" y="52" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8">C_EXACT &#183; executable + overlays</text>
 <rect x="10" y="62" width="780" height="86" fill="url(#drawer-face)"><title>Boot ELF SCUS_971.99: 258,292 of 352,592 recoverable bytes are matching C (73.3%); 1117 matching, 109 pending, 249 intentional asm units</title></rect>
 <clipPath id="drawer-clip"><rect x="10" y="62" width="780" height="86"/></clipPath>
@@ -150,13 +150,13 @@
 <text x="22" y="79" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" style="paint-order:stroke" stroke="#0d1117" stroke-width="3.15" stroke-opacity="0.7">BOOT ELF &#183; SCUS_971.99</text>
 <text x="400.0" y="112.0" text-anchor="middle" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="36" font-weight="800" fill="#de812f" style="paint-order:stroke" stroke="#0d1117" stroke-width="2.1" stroke-opacity="0.6">73.3%</text>
 <text x="400.0" y="130.0" text-anchor="middle" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#e8edf5" fill-opacity="0.95" style="paint-order:stroke" stroke="#0d1117" stroke-width="2.1" stroke-opacity="0.7">C_EXACT of the executable &#183; C_FUZZY 95.9%</text>
-<text x="10" y="166" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 1,839,248 of 3,194,160 B matching C (57.6%)</text>
+<text x="10" y="166" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#c3cbd8" fill-opacity="0.9">LEVEL OVERLAYS &#183; 1,863,492 of 3,194,160 B matching C (58.3%)</text>
 <line x1="24" y1="172" x2="24" y2="1024" stroke="#3a3632" stroke-width="2"/>
 <path d="M 24 188 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="188" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="192" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8"></tspan><tspan fill="#e8edf5" font-weight="700">Shared code</tspan><tspan fill="#a6adc8"> &#183; functions present in two or more levels</tspan></text>
-<text x="790" y="192" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">46.1%</text>
-<text x="790" y="208" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">1119/1594 fn &#183; 1,130,796 B</text>
+<text x="790" y="192" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">46.9%</text>
+<text x="790" y="208" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">1149/1594 fn &#183; 1,130,796 B</text>
 <rect x="44.00" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/sdk/debug/001eb0b0.c: 2/2 functions matching C, 116/116 B</title></rect>
 <rect x="45.04" y="200" width="0.72" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/camera/001eb188.c: 9/9 functions matching C, 1,960/1,960 B</title></rect>
 <rect x="46.77" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/effects/001edf60.c: 1/1 functions matching C, 220/220 B</title></rect>
@@ -170,7 +170,7 @@
 <rect x="60.52" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_camera_001fc008.c: 0/1 functions matching C, 0/104 B</title></rect>
 <rect x="61.56" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_fonts_001fc558.c: 0/1 functions matching C, 0/488 B</title></rect>
 <rect x="62.74" y="200" width="0.41" height="10" rx="1" fill="#58422f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/texture/001fcb28.c: 1/2 functions matching C, 372/1,120 B</title></rect>
-<rect x="64.15" y="200" width="0.79" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_001fe778.c: 0/2 functions matching C, 0/2,148 B</title></rect>
+<rect x="64.15" y="200" width="0.79" height="10" rx="1" fill="#c76f22" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_001fe778.c: 1/2 functions matching C, 1,992/2,148 B</title></rect>
 <rect x="65.95" y="200" width="0.40" height="10" rx="1" fill="#cd7221" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_001fd108.c: 2/3 functions matching C, 324/340 B</title></rect>
 <rect x="67.07" y="200" width="1.71" height="10" rx="1" fill="#6e4b2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/help/001ff938.c: 6/8 functions matching C, 2,224/4,644 B</title></rect>
 <rect x="69.78" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math/rotations/00200228.c: 0/1 functions matching C, 0/24 B</title></rect>
@@ -199,7 +199,7 @@
 <rect x="178.73" y="200" width="0.40" height="10" rx="1" fill="#b76824" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/hud/00234fd0.c: 2/3 functions matching C, 860/1,008 B</title></rect>
 <rect x="180.10" y="200" width="2.17" height="10" rx="1" fill="#4f3f30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/animation/00235878.c: 9/14 functions matching C, 1,532/5,872 B</title></rect>
 <rect x="183.27" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/animation/00235ea0.c: 1/1 functions matching C, 644/644 B</title></rect>
-<rect x="184.50" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_animation_00237190.c: 0/1 functions matching C, 0/76 B</title></rect>
+<rect x="184.50" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_animation_00237190.c: 1/1 functions matching C, 76/76 B</title></rect>
 <rect x="185.53" y="200" width="6.02" height="10" rx="1" fill="#503f30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/help/00237488.c: 7/15 functions matching C, 4,376/16,320 B</title></rect>
 <rect x="192.55" y="200" width="4.50" height="10" rx="1" fill="#59422e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/text/002377b8.c: 12/18 functions matching C, 4,100/12,208 B</title></rect>
 <rect x="198.05" y="200" width="0.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/text/0023a7a8.c: 5/5 functions matching C, 1,900/1,900 B</title></rect>
@@ -210,7 +210,7 @@
 <rect x="205.72" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/world_loaders_0023fa00.c: 0/1 functions matching C, 0/1,040 B</title></rect>
 <rect x="207.10" y="200" width="5.23" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00240348.c: 1/5 functions matching C, 96/14,180 B</title></rect>
 <rect x="213.33" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/002418b0.c: 2/2 functions matching C, 200/200 B</title></rect>
-<rect x="214.41" y="200" width="0.41" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_00242950.c: 0/1 functions matching C, 0/1,112 B</title></rect>
+<rect x="214.41" y="200" width="0.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_help_00242950.c: 1/1 functions matching C, 1,112/1,112 B</title></rect>
 <rect x="215.82" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/world/animation/002454c8.c: 2/2 functions matching C, 516/516 B</title></rect>
 <rect x="217.01" y="200" width="1.34" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_00245c28.c: 0/3 functions matching C, 0/3,640 B</title></rect>
 <rect x="219.35" y="200" width="0.67" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui_map_002484e0.c: 0/1 functions matching C, 0/1,808 B</title></rect>
@@ -231,7 +231,7 @@
 <rect x="236.90" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/commands/002502f0.c: 0/2 functions matching C, 0/96 B</title></rect>
 <rect x="237.94" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002503c0.c: 0/1 functions matching C, 0/112 B</title></rect>
 <rect x="238.98" y="200" width="0.40" height="10" rx="1" fill="#413931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/00250a78.c: 1/2 functions matching C, 100/816 B</title></rect>
-<rect x="240.28" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00252e18.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="240.28" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00252e18.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="241.52" y="200" width="0.53" height="10" rx="1" fill="#81532a" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00250df8.c: 1/2 functions matching C, 852/1,448 B</title></rect>
 <rect x="243.05" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math/random/00257b90.c: 2/2 functions matching C, 188/188 B</title></rect>
 <rect x="244.12" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/00257d78.c: 2/2 functions matching C, 224/224 B</title></rect>
@@ -251,7 +251,7 @@
 <rect x="270.35" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/view/002603d0.c: 1/1 functions matching C, 48/48 B</title></rect>
 <rect x="271.37" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/text/00261630.c: 1/1 functions matching C, 552/552 B</title></rect>
 <rect x="272.57" y="200" width="1.76" height="10" rx="1" fill="#63472d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/00261968.c: 8/13 functions matching C, 1,956/4,776 B</title></rect>
-<rect x="275.34" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00261c80.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="275.34" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00261c80.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="276.57" y="200" width="1.04" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/text/00262ae8.c: 2/4 functions matching C, 188/2,832 B</title></rect>
 <rect x="278.62" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/camera/00262cf0.c: 2/2 functions matching C, 332/332 B</title></rect>
 <rect x="279.74" y="200" width="1.77" height="10" rx="1" fill="#8e5828" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002630b8.c: 11/13 functions matching C, 3,156/4,804 B</title></rect>
@@ -268,11 +268,11 @@
 <rect x="294.98" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/input/pad/002678b8.c: 0/1 functions matching C, 0/8 B</title></rect>
 <rect x="295.98" y="200" width="0.73" height="10" rx="1" fill="#4a3c30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00268900.c: 2/4 functions matching C, 424/1,972 B</title></rect>
 <rect x="297.71" y="200" width="11.96" height="10" rx="1" fill="#bc6b23" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/00269290.c: 57/61 functions matching C, 28,444/32,432 B</title></rect>
-<rect x="310.67" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_0026a3d0.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="310.67" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_0026a3d0.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="311.91" y="200" width="0.40" height="10" rx="1" fill="#945a28" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math/interpolation/0026d930.c: 3/4 functions matching C, 288/420 B</title></rect>
 <rect x="313.06" y="200" width="7.28" height="10" rx="1" fill="#b76924" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/002712b8.c: 50/54 functions matching C, 16,940/19,752 B</title></rect>
 <rect x="321.34" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00258090.c: 1/1 functions matching C, 512/512 B</title></rect>
-<rect x="322.53" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00274b78.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="322.53" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering_view_00274b78.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="323.77" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/view/00275690.c: 1/1 functions matching C, 64/64 B</title></rect>
 <rect x="324.79" y="200" width="2.16" height="10" rx="1" fill="#54412f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio/voices/00276368.c: 1/5 functions matching C, 1,772/5,856 B</title></rect>
 <rect x="327.95" y="200" width="0.46" height="10" rx="1" fill="#3e3832" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/00276a48.c: 1/3 functions matching C, 112/1,244 B</title></rect>
@@ -290,7 +290,7 @@
 <rect x="343.04" y="200" width="0.41" height="10" rx="1" fill="#865529" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/00284e50.c: 3/4 functions matching C, 688/1,124 B</title></rect>
 <rect x="344.45" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/view/00288968.c: 1/1 functions matching C, 184/184 B</title></rect>
 <rect x="345.52" y="200" width="2.99" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00288ec0.c: 18/18 functions matching C, 8,104/8,104 B</title></rect>
-<rect x="349.51" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002899a8.c: 0/1 functions matching C, 0/232 B</title></rect>
+<rect x="349.51" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002899a8.c: 1/1 functions matching C, 232/232 B</title></rect>
 <rect x="350.60" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/math_rotations_002899f8.c: 0/1 functions matching C, 0/144 B</title></rect>
 <rect x="351.65" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/0028be78.c: 1/1 functions matching C, 408/408 B</title></rect>
 <rect x="352.80" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/audio/voices/0028d8c0.c: 1/1 functions matching C, 72/72 B</title></rect>
@@ -304,7 +304,7 @@
 <rect x="369.00" y="200" width="11.74" height="10" rx="1" fill="#64472d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/00278fd8.c: 17/31 functions matching C, 13,064/31,840 B</title></rect>
 <rect x="381.74" y="200" width="7.93" height="10" rx="1" fill="#59432e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/00295100.c: 16/26 functions matching C, 7,336/21,504 B</title></rect>
 <rect x="390.67" y="200" width="0.86" height="10" rx="1" fill="#5d442e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00298940.c: 2/3 functions matching C, 852/2,340 B</title></rect>
-<rect x="392.53" y="200" width="0.40" height="10" rx="1" fill="#905928" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00298c68.c: 1/2 functions matching C, 152/228 B</title></rect>
+<rect x="392.53" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_00298c68.c: 2/2 functions matching C, 228/228 B</title></rect>
 <rect x="393.61" y="200" width="0.40" height="10" rx="1" fill="#58422f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/rendering/0029a2a0.c: 1/2 functions matching C, 184/560 B</title></rect>
 <rect x="394.82" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/state/0029b0a0.c: 1/1 functions matching C, 288/288 B</title></rect>
 <rect x="395.93" y="200" width="1.03" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_0029ead8.c: 0/2 functions matching C, 0/2,800 B</title></rect>
@@ -331,7 +331,7 @@
 <rect x="485.19" y="200" width="10.07" height="10" rx="1" fill="#5a432e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002b94d0.c: 20/31 functions matching C, 9,352/27,300 B</title></rect>
 <rect x="496.25" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002bc210.c: 2/2 functions matching C, 560/560 B</title></rect>
 <rect x="497.46" y="200" width="12.02" height="10" rx="1" fill="#4b3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002bffa8.c: 17/27 functions matching C, 7,348/32,592 B</title></rect>
-<rect x="510.48" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c31c0.c: 0/4 functions matching C, 0/812 B</title></rect>
+<rect x="510.48" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c31c0.c: 4/4 functions matching C, 812/812 B</title></rect>
 <rect x="511.78" y="200" width="3.56" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002c5990.c: 0/3 functions matching C, 0/9,664 B</title></rect>
 <rect x="516.34" y="200" width="11.32" height="10" rx="1" fill="#463b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002c8440.c: 13/24 functions matching C, 5,400/30,696 B</title></rect>
 <rect x="528.66" y="200" width="3.16" height="10" rx="1" fill="#4d3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002c8830.c: 5/9 functions matching C, 2,056/8,556 B</title></rect>
@@ -347,18 +347,18 @@
 <rect x="600.34" y="200" width="1.98" height="10" rx="1" fill="#a36126" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002e22d8.c: 7/10 functions matching C, 4,104/5,380 B</title></rect>
 <rect x="603.33" y="200" width="1.84" height="10" rx="1" fill="#4b3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002e3de8.c: 5/8 functions matching C, 1,108/4,988 B</title></rect>
 <rect x="606.17" y="200" width="0.98" height="10" rx="1" fill="#483c30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002e5958.c: 2/4 functions matching C, 532/2,648 B</title></rect>
-<rect x="608.14" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e8540.c: 0/3 functions matching C, 0/196 B</title></rect>
+<rect x="608.14" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002e8540.c: 3/3 functions matching C, 196/196 B</title></rect>
 <rect x="609.22" y="200" width="0.60" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002e89b0.c: 3/3 functions matching C, 1,624/1,624 B</title></rect>
 <rect x="610.81" y="200" width="7.13" height="10" rx="1" fill="#8c5729" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002e9010.c: 35/40 functions matching C, 12,524/19,324 B</title></rect>
 <rect x="618.94" y="200" width="3.48" height="10" rx="1" fill="#65472d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/002ec308.c: 15/19 functions matching C, 3,936/9,440 B</title></rect>
-<rect x="623.42" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002ecc68.c: 0/1 functions matching C, 0/228 B</title></rect>
-<rect x="624.51" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002efaf8.c: 0/7 functions matching C, 0/552 B</title></rect>
-<rect x="625.71" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002f0cf0.c: 0/1 functions matching C, 0/216 B</title></rect>
+<rect x="623.42" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_002ecc68.c: 1/1 functions matching C, 228/228 B</title></rect>
+<rect x="624.51" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002efaf8.c: 7/7 functions matching C, 552/552 B</title></rect>
+<rect x="625.71" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002f0cf0.c: 1/1 functions matching C, 216/216 B</title></rect>
 <rect x="626.79" y="200" width="6.64" height="10" rx="1" fill="#62462d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002f6328.c: 14/23 functions matching C, 7,248/18,008 B</title></rect>
-<rect x="634.43" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002f7548.c: 0/2 functions matching C, 0/236 B</title></rect>
+<rect x="634.43" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002f7548.c: 2/2 functions matching C, 236/236 B</title></rect>
 <rect x="635.52" y="200" width="1.49" height="10" rx="1" fill="#3b3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002b1e48.c: 1/4 functions matching C, 112/4,040 B</title></rect>
 <rect x="638.01" y="200" width="3.28" height="10" rx="1" fill="#3f3831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002fdbd0.c: 2/8 functions matching C, 908/8,892 B</title></rect>
-<rect x="642.29" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002ffc08.c: 0/1 functions matching C, 0/12 B</title></rect>
+<rect x="642.29" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002ffc08.c: 1/1 functions matching C, 12/12 B</title></rect>
 <rect x="643.29" y="200" width="1.96" height="10" rx="1" fill="#3f3831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/003015d0.c: 1/6 functions matching C, 552/5,328 B</title></rect>
 <rect x="646.25" y="200" width="1.66" height="10" rx="1" fill="#63472d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/00307190.c: 5/7 functions matching C, 1,844/4,512 B</title></rect>
 <rect x="648.92" y="200" width="1.65" height="10" rx="1" fill="#423931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/00307578.c: 4/7 functions matching C, 604/4,480 B</title></rect>
@@ -366,7 +366,7 @@
 <rect x="655.16" y="200" width="0.40" height="10" rx="1" fill="#704c2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/00308670.c: 2/3 functions matching C, 504/1,028 B</title></rect>
 <rect x="656.54" y="200" width="6.08" height="10" rx="1" fill="#433a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/0030b618.c: 10/21 functions matching C, 2,440/16,484 B</title></rect>
 <rect x="663.62" y="200" width="2.44" height="10" rx="1" fill="#5c442e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/0030e690.c: 4/9 functions matching C, 2,352/6,604 B</title></rect>
-<rect x="667.06" y="200" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_0030f270.c: 0/2 functions matching C, 0/260 B</title></rect>
+<rect x="667.06" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay_vendor_0030f270.c: 2/2 functions matching C, 260/260 B</title></rect>
 <rect x="668.15" y="200" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/00316f48.c: 1/1 functions matching C, 56/56 B</title></rect>
 <rect x="669.17" y="200" width="2.83" height="10" rx="1" fill="#4e3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/0031abe0.c: 7/11 functions matching C, 1,928/7,664 B</title></rect>
 <path d="M 24 232 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
@@ -381,8 +381,8 @@
 <path d="M 24 276 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="276" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="280" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">01 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Novalis</tspan><tspan fill="#a6adc8"> &#183; Tobruk Crater: a village under Blarg attack</tspan></text>
-<text x="790" y="280" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">78.2%</text>
-<text x="790" y="296" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">48/67 fn &#183; 114,728 B</text>
+<text x="790" y="280" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">78.3%</text>
+<text x="790" y="296" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">50/67 fn &#183; 114,728 B</text>
 <rect x="44.00" y="288" width="131.18" height="10" rx="1" fill="#cc7121" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay/hero/00233de0.c: 2/3 functions matching C, 23,084/24,352 B</title></rect>
 <rect x="176.18" y="288" width="89.05" height="10" rx="1" fill="#b36724" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay/hero/0023cf98.c: 1/2 functions matching C, 13,832/16,532 B</title></rect>
 <rect x="266.23" y="288" width="102.99" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay/hero/00242930.c: 1/1 functions matching C, 19,120/19,120 B</title></rect>
@@ -390,20 +390,20 @@
 <rect x="371.89" y="288" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay_entities_0026eff0.c: 1/1 functions matching C, 36/36 B</title></rect>
 <rect x="373.08" y="288" width="5.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/rendering_0027e900.c: 3/3 functions matching C, 1,004/1,004 B</title></rect>
 <rect x="379.49" y="288" width="171.14" height="10" rx="1" fill="#a05f26" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay/entities/002b96e0.c: 15/21 functions matching C, 23,664/31,772 B</title></rect>
-<rect x="551.64" y="288" width="0.47" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/unclassified_00262618.c: 0/2 functions matching C, 0/88 B</title></rect>
+<rect x="551.64" y="288" width="0.47" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/unclassified_00262618.c: 2/2 functions matching C, 88/88 B</title></rect>
 <rect x="553.11" y="288" width="78.21" height="10" rx="1" fill="#6f4b2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay/entities/002f9810.c: 16/22 functions matching C, 6,968/14,520 B</title></rect>
 <rect x="632.32" y="288" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002f6328.c: 1/1 functions matching C, 36/36 B</title></rect>
 <rect x="633.52" y="288" width="38.48" height="10" rx="1" fill="#4f3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l01/gameplay_vendor_00309bf8.c: 7/10 functions matching C, 1,840/7,144 B</title></rect>
 <path d="M 24 320 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="320" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="324" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">02 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Aridia</tspan><tspan fill="#a6adc8"> &#183; Outpost X11: sand, swamps and the Trespasser</tspan></text>
-<text x="790" y="324" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">69.1%</text>
-<text x="790" y="340" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">40/62 fn &#183; 101,844 B</text>
+<text x="790" y="324" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">70.3%</text>
+<text x="790" y="340" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">42/62 fn &#183; 101,844 B</text>
 <rect x="44.00" y="332" width="149.05" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/gameplay/hero/0021b698.c: 6/6 functions matching C, 24,484/24,484 B</title></rect>
 <rect x="194.05" y="332" width="194.00" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/gameplay/hero/0022b728.c: 3/3 functions matching C, 31,868/31,868 B</title></rect>
-<rect x="389.06" y="332" width="6.77" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/ui_help_002360c8.c: 0/1 functions matching C, 0/1,112 B</title></rect>
+<rect x="389.06" y="332" width="6.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/ui_help_002360c8.c: 1/1 functions matching C, 1,112/1,112 B</title></rect>
 <rect x="396.83" y="332" width="7.33" height="10" rx="1" fill="#473b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/ui_text_0023ccc8.c: 1/2 functions matching C, 224/1,204 B</title></rect>
-<rect x="405.16" y="332" width="0.75" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/runtime_startup_00240048.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="405.16" y="332" width="0.75" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/runtime_startup_00240048.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="406.91" y="332" width="186.04" height="10" rx="1" fill="#5b432e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/gameplay/entities/002400c8.c: 25/37 functions matching C, 10,692/30,560 B</title></rect>
 <rect x="593.95" y="332" width="40.59" height="10" rx="1" fill="#403831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/gameplay/entities/002e0dc0.c: 2/6 functions matching C, 728/6,668 B</title></rect>
 <rect x="635.54" y="332" width="33.95" height="10" rx="1" fill="#60452e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l02/gameplay/vendor/002ebf20.c: 2/5 functions matching C, 2,152/5,576 B</title></rect>
@@ -411,164 +411,164 @@
 <path d="M 24 364 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="364" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="368" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">03 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Kerwan</tspan><tspan fill="#a6adc8"> &#183; Metropolis: the city of towers and trains</tspan></text>
-<text x="790" y="368" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">64.4%</text>
-<text x="790" y="384" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">31/71 fn &#183; 120,576 B</text>
+<text x="790" y="368" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">65.6%</text>
+<text x="790" y="384" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">37/71 fn &#183; 120,576 B</text>
 <rect x="44.00" y="376" width="136.75" height="10" rx="1" fill="#d37421" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay/hero/00205830.c: 1/2 functions matching C, 26,256/26,768 B</title></rect>
 <rect x="181.75" y="376" width="77.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay/hero/00216648.c: 1/1 functions matching C, 15,172/15,172 B</title></rect>
 <rect x="260.26" y="376" width="102.89" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay/hero/0021c668.c: 1/1 functions matching C, 20,140/20,140 B</title></rect>
-<rect x="364.15" y="376" width="0.63" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/runtime_startup_0022c6a8.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="364.15" y="376" width="0.63" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/runtime_startup_0022c6a8.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="365.79" y="376" width="2.04" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/runtime_startup_0022c728.c: 1/1 functions matching C, 400/400 B</title></rect>
-<rect x="368.83" y="376" width="3.27" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/rendering_view_0024e830.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="368.83" y="376" width="3.27" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/rendering_view_0024e830.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="373.10" y="376" width="1.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/math/rotations/rotate_point_about_axis.c: 1/1 functions matching C, 316/316 B</title></rect>
 <rect x="375.72" y="376" width="158.97" height="10" rx="1" fill="#65472d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay/entities/00292578.c: 11/22 functions matching C, 13,044/31,116 B</title></rect>
-<rect x="535.68" y="376" width="2.62" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/unclassified_0029c8a8.c: 0/3 functions matching C, 0/512 B</title></rect>
+<rect x="535.68" y="376" width="2.62" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/unclassified_0029c8a8.c: 3/3 functions matching C, 512/512 B</title></rect>
 <rect x="539.30" y="376" width="4.17" height="10" rx="1" fill="#955b28" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/00291918.c: 4/5 functions matching C, 564/816 B</title></rect>
 <rect x="544.47" y="376" width="96.82" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/unclassified_002c9eb8.c: 7/23 functions matching C, 968/18,952 B</title></rect>
 <rect x="642.29" y="376" width="27.44" height="10" rx="1" fill="#423931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay_vendor_002df520.c: 4/9 functions matching C, 760/5,372 B</title></rect>
-<rect x="670.73" y="376" width="1.27" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay_vendor_002e2948.c: 0/1 functions matching C, 0/248 B</title></rect>
+<rect x="670.73" y="376" width="1.27" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l03/gameplay_vendor_002e2948.c: 1/1 functions matching C, 248/248 B</title></rect>
 <path d="M 24 408 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="408" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="412" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">04 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Eudora</tspan><tspan fill="#a6adc8"> &#183; Logging Site: forest and Blarg lumber mills</tspan></text>
-<text x="790" y="412" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">58.2%</text>
-<text x="790" y="428" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">26/53 fn &#183; 60,764 B</text>
+<text x="790" y="412" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">59.4%</text>
+<text x="790" y="428" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">31/53 fn &#183; 60,764 B</text>
 <rect x="44.00" y="420" width="30.04" height="10" rx="1" fill="#453a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/unclassified_001f3038.c: 2/3 functions matching C, 488/2,944 B</title></rect>
-<rect x="75.04" y="420" width="1.27" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/runtime_startup_00230f48.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="75.04" y="420" width="1.27" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/runtime_startup_00230f48.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="77.30" y="420" width="8.20" height="10" rx="1" fill="#ab6425" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay_entities_0024c4f0.c: 2/3 functions matching C, 644/804 B</title></rect>
 <rect x="86.51" y="420" width="52.69" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/runtime_dma_002922d0.c: 3/8 functions matching C, 312/5,164 B</title></rect>
 <rect x="140.20" y="420" width="295.16" height="10" rx="1" fill="#af6525" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay/entities/0029eb20.c: 11/17 functions matching C, 23,624/28,928 B</title></rect>
-<rect x="436.36" y="420" width="3.75" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/unclassified_002c40d0.c: 0/3 functions matching C, 0/368 B</title></rect>
+<rect x="436.36" y="420" width="3.75" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/unclassified_002c40d0.c: 3/3 functions matching C, 368/368 B</title></rect>
 <rect x="441.12" y="420" width="182.76" height="10" rx="1" fill="#79502b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay/entities/002ca420.c: 7/13 functions matching C, 9,752/17,912 B</title></rect>
 <rect x="624.88" y="420" width="43.59" height="10" rx="1" fill="#413931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay_vendor_002e3078.c: 1/4 functions matching C, 548/4,272 B</title></rect>
-<rect x="669.47" y="420" width="2.53" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay_vendor_002e79a8.c: 0/1 functions matching C, 0/248 B</title></rect>
+<rect x="669.47" y="420" width="2.53" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l04/gameplay_vendor_002e79a8.c: 1/1 functions matching C, 248/248 B</title></rect>
 <path d="M 24 452 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="452" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="456" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">05 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Rilgar</tspan><tspan fill="#a6adc8"> &#183; Blackwater City: canals and the hoverboard race</tspan></text>
-<text x="790" y="456" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">66.4%</text>
-<text x="790" y="472" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">44/78 fn &#183; 135,164 B</text>
+<text x="790" y="456" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">66.5%</text>
+<text x="790" y="472" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">46/78 fn &#183; 135,164 B</text>
 <rect x="44.00" y="464" width="27.95" height="10" rx="1" fill="#a05f26" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00239fc0.c: 3/4 functions matching C, 4,576/6,124 B</title></rect>
 <rect x="72.95" y="464" width="134.74" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00244a70.c: 1/1 functions matching C, 29,516/29,516 B</title></rect>
 <rect x="208.69" y="464" width="79.01" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/0024cee8.c: 1/1 functions matching C, 17,308/17,308 B</title></rect>
 <rect x="288.70" y="464" width="101.91" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/hero/00255960.c: 1/1 functions matching C, 22,324/22,324 B</title></rect>
-<rect x="391.60" y="464" width="0.57" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/runtime_startup_00267520.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="391.60" y="464" width="0.57" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/runtime_startup_00267520.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="393.17" y="464" width="2.81" height="10" rx="1" fill="#764e2b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/rendering_0029bbe0.c: 1/2 functions matching C, 324/616 B</title></rect>
 <rect x="396.98" y="464" width="147.33" height="10" rx="1" fill="#463b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/entities/002d1688.c: 18/33 functions matching C, 5,724/32,276 B</title></rect>
 <rect x="545.32" y="464" width="5.06" height="10" rx="1" fill="#c46e22" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002b3840.c: 2/3 functions matching C, 1,012/1,108 B</title></rect>
-<rect x="551.37" y="464" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_0030d678.c: 0/1 functions matching C, 0/36 B</title></rect>
+<rect x="551.37" y="464" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/unclassified_0030d678.c: 1/1 functions matching C, 36/36 B</title></rect>
 <rect x="552.54" y="464" width="93.51" height="10" rx="1" fill="#66482d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay/entities/0030d6a0.c: 16/27 functions matching C, 8,784/20,484 B</title></rect>
 <rect x="647.04" y="464" width="12.11" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/hoverboard_girl.c: 0/2 functions matching C, 0/2,652 B</title></rect>
 <rect x="660.15" y="464" width="11.85" height="10" rx="1" fill="#3c3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l05/gameplay_vendor_0031bf40.c: 1/2 functions matching C, 136/2,596 B</title></rect>
 <path d="M 24 496 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="496" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="500" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">06 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Nebula G34</tspan><tspan fill="#a6adc8"> &#183; Blarg Tactical Research Station: zero-gravity corridors</tspan></text>
-<text x="790" y="500" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">62.0%</text>
-<text x="790" y="516" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">50/88 fn &#183; 139,308 B</text>
+<text x="790" y="500" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">62.4%</text>
+<text x="790" y="516" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">54/88 fn &#183; 139,308 B</text>
 <rect x="44.00" y="508" width="0.40" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/unclassified_00216b88.c: 0/1 functions matching C, 0/8 B</title></rect>
 <rect x="45.04" y="508" width="0.69" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/ui/help/0021d0a0.c: 1/1 functions matching C, 156/156 B</title></rect>
 <rect x="46.73" y="508" width="143.04" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay/hero/00222fb8.c: 7/7 functions matching C, 32,348/32,348 B</title></rect>
 <rect x="190.76" y="508" width="70.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay/hero/002356a0.c: 1/1 functions matching C, 16,004/16,004 B</title></rect>
 <rect x="262.53" y="508" width="116.05" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay/hero/0023b440.c: 1/1 functions matching C, 26,244/26,244 B</title></rect>
-<rect x="379.58" y="508" width="0.55" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/runtime_startup_0024d218.c: 0/1 functions matching C, 0/124 B</title></rect>
-<rect x="381.13" y="508" width="18.94" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/unclassified_00252dd0.c: 0/3 functions matching C, 0/4,284 B</title></rect>
+<rect x="379.58" y="508" width="0.55" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/runtime_startup_0024d218.c: 1/1 functions matching C, 124/124 B</title></rect>
+<rect x="381.13" y="508" width="18.94" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/unclassified_00252dd0.c: 2/3 functions matching C, 24/4,284 B</title></rect>
 <rect x="401.07" y="508" width="144.26" height="10" rx="1" fill="#493c30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/unclassified_002b4770.c: 24/38 functions matching C, 6,868/32,624 B</title></rect>
 <rect x="546.33" y="508" width="99.72" height="10" rx="1" fill="#413931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay/entities/002fd1a0.c: 11/27 functions matching C, 2,924/22,552 B</title></rect>
 <rect x="647.05" y="508" width="2.44" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002fdbd0.c: 1/1 functions matching C, 552/552 B</title></rect>
 <rect x="650.49" y="508" width="15.64" height="10" rx="1" fill="#4c3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay_vendor_003083b0.c: 3/5 functions matching C, 832/3,536 B</title></rect>
 <rect x="667.13" y="508" width="2.03" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/00307578.c: 1/1 functions matching C, 460/460 B</title></rect>
-<rect x="670.16" y="508" width="1.84" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay_vendor_00309fa8.c: 0/1 functions matching C, 0/416 B</title></rect>
+<rect x="670.16" y="508" width="1.84" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l06/gameplay_vendor_00309fa8.c: 1/1 functions matching C, 416/416 B</title></rect>
 <path d="M 24 540 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="540" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="544" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">07 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Umbris</tspan><tspan fill="#a6adc8"> &#183; Qwark&#x27;s headquarters and the Snagglebeast</tspan></text>
-<text x="790" y="544" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">17.6%</text>
-<text x="790" y="560" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">39/82 fn &#183; 77,488 B</text>
-<rect x="44.00" y="552" width="0.99" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/runtime_startup_00265b58.c: 0/1 functions matching C, 0/124 B</title></rect>
+<text x="790" y="544" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">20.4%</text>
+<text x="790" y="560" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">45/82 fn &#183; 77,488 B</text>
+<rect x="44.00" y="552" width="0.99" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/runtime_startup_00265b58.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="45.99" y="552" width="0.76" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/unclassified_00265bd8.c: 1/1 functions matching C, 96/96 B</title></rect>
 <rect x="47.75" y="552" width="33.92" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/unclassified_0026b768.c: 0/1 functions matching C, 0/4,260 B</title></rect>
 <rect x="82.67" y="552" width="2.42" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/ui_map_00270248.c: 1/1 functions matching C, 304/304 B</title></rect>
 <rect x="86.09" y="552" width="0.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/math_interpolation_00281ef8.c: 1/1 functions matching C, 52/52 B</title></rect>
-<rect x="87.51" y="552" width="5.10" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/rendering_view_002886d8.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="87.51" y="552" width="5.10" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/rendering_view_002886d8.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="93.60" y="552" width="9.11" height="10" rx="1" fill="#4c3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/rendering_0029c4e8.c: 1/2 functions matching C, 272/1,144 B</title></rect>
 <rect x="103.71" y="552" width="260.85" height="10" rx="1" fill="#54402f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/gameplay/entities/002cd2b0.c: 24/42 functions matching C, 9,712/32,760 B</title></rect>
-<rect x="365.56" y="552" width="14.43" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/unclassified_0030cd20.c: 0/3 functions matching C, 0/1,812 B</title></rect>
+<rect x="365.56" y="552" width="14.43" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/unclassified_0030cd20.c: 1/3 functions matching C, 36/1,812 B</title></rect>
 <rect x="380.99" y="552" width="260.82" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/unclassified_00312948.c: 9/23 functions matching C, 2,196/32,756 B</title></rect>
 <rect x="642.81" y="552" width="17.80" height="10" rx="1" fill="#6c4a2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/gameplay_vendor_0031d2e0.c: 2/3 functions matching C, 1,040/2,236 B</title></rect>
-<rect x="661.62" y="552" width="10.38" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/gameplay_vendor_0031f3d8.c: 0/3 functions matching C, 0/1,304 B</title></rect>
+<rect x="661.62" y="552" width="10.38" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l07/gameplay_vendor_0031f3d8.c: 3/3 functions matching C, 1,304/1,304 B</title></rect>
 <path d="M 24 584 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="584" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="588" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">08 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Batalia</tspan><tspan fill="#a6adc8"> &#183; Fort Krontos: a war zone with turrets and tanks</tspan></text>
-<text x="790" y="588" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">55.7%</text>
-<text x="790" y="604" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">41/84 fn &#183; 156,016 B</text>
+<text x="790" y="588" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">56.7%</text>
+<text x="790" y="604" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">47/84 fn &#183; 156,016 B</text>
 <rect x="44.00" y="596" width="122.65" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay/hero/0021d9c0.c: 2/2 functions matching C, 31,064/31,064 B</title></rect>
 <rect x="167.65" y="596" width="65.56" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay/hero/00230b38.c: 1/1 functions matching C, 16,604/16,604 B</title></rect>
 <rect x="234.21" y="596" width="95.90" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay/hero/002370d8.c: 1/1 functions matching C, 24,288/24,288 B</title></rect>
-<rect x="331.10" y="596" width="0.49" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/runtime_startup_00248148.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="331.10" y="596" width="0.49" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/runtime_startup_00248148.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="332.59" y="596" width="1.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/rendering_culling_0026a0f8.c: 1/1 functions matching C, 408/408 B</title></rect>
 <rect x="335.21" y="596" width="3.03" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/rendering_00279f00.c: 3/3 functions matching C, 768/768 B</title></rect>
 <rect x="339.24" y="596" width="114.86" height="10" rx="1" fill="#403831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay/entities/002b8228.c: 9/26 functions matching C, 3,284/29,092 B</title></rect>
-<rect x="455.10" y="596" width="1.66" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/unclassified_002dc4a0.c: 0/1 functions matching C, 0/420 B</title></rect>
+<rect x="455.10" y="596" width="1.66" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/unclassified_002dc4a0.c: 1/1 functions matching C, 420/420 B</title></rect>
 <rect x="457.76" y="596" width="124.01" height="10" rx="1" fill="#3f3831" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay/entities/002deee0.c: 10/23 functions matching C, 3,040/31,408 B</title></rect>
 <rect x="582.77" y="596" width="53.22" height="10" rx="1" fill="#423931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/unclassified_002e9b70.c: 4/10 functions matching C, 1,776/13,480 B</title></rect>
 <rect x="636.99" y="596" width="0.85" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/entities/002937a0.c: 1/1 functions matching C, 216/216 B</title></rect>
 <rect x="638.84" y="596" width="27.84" height="10" rx="1" fill="#a56126" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay_vendor_00305138.c: 9/10 functions matching C, 5,440/7,052 B</title></rect>
-<rect x="667.69" y="596" width="4.31" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay_vendor_00308db8.c: 0/4 functions matching C, 0/1,092 B</title></rect>
+<rect x="667.69" y="596" width="4.31" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l08/gameplay_vendor_00308db8.c: 4/4 functions matching C, 1,092/1,092 B</title></rect>
 <path d="M 24 628 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="628" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="632" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">09 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Gaspar</tspan><tspan fill="#a6adc8"> &#183; Blarg Depot: lava fields and the Pilot&#x27;s Helmet</tspan></text>
-<text x="790" y="632" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">21.9%</text>
-<text x="790" y="648" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">18/42 fn &#183; 35,924 B</text>
+<text x="790" y="632" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">22.9%</text>
+<text x="790" y="648" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">20/42 fn &#183; 35,924 B</text>
 <rect x="44.00" y="640" width="340.04" height="10" rx="1" fill="#4c3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/gameplay/entities/0021e538.c: 13/25 functions matching C, 4,568/19,576 B</title></rect>
-<rect x="385.04" y="640" width="2.15" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/runtime_startup_0025d648.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="385.04" y="640" width="2.15" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/runtime_startup_0025d648.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="388.19" y="640" width="3.61" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/unclassified_002a7d68.c: 0/1 functions matching C, 0/208 B</title></rect>
 <rect x="392.80" y="640" width="273.89" height="10" rx="1" fill="#493c30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/gameplay_vendor_003033a0.c: 5/14 functions matching C, 3,304/15,768 B</title></rect>
-<rect x="667.69" y="640" width="4.31" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/gameplay_vendor_0030a678.c: 0/1 functions matching C, 0/248 B</title></rect>
+<rect x="667.69" y="640" width="4.31" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l09/gameplay_vendor_0030a678.c: 1/1 functions matching C, 248/248 B</title></rect>
 <path d="M 24 672 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="672" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="676" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">10 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Orxon</tspan><tspan fill="#a6adc8"> &#183; the toxic Blarg homeworld, first with Clank</tspan></text>
-<text x="790" y="676" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">28.4%</text>
-<text x="790" y="692" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">22/54 fn &#183; 56,384 B</text>
-<rect x="44.00" y="684" width="1.37" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/runtime_startup_00230fd0.c: 0/1 functions matching C, 0/124 B</title></rect>
+<text x="790" y="676" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">28.9%</text>
+<text x="790" y="692" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">24/54 fn &#183; 56,384 B</text>
+<rect x="44.00" y="684" width="1.37" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/runtime_startup_00230fd0.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="46.37" y="684" width="222.27" height="10" rx="1" fill="#4e3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/gameplay/entities/00295a38.c: 12/27 functions matching C, 5,012/20,084 B</title></rect>
 <rect x="269.64" y="684" width="360.65" height="10" rx="1" fill="#4e3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/gameplay_vendor_002df270.c: 4/18 functions matching C, 8,324/32,588 B</title></rect>
 <rect x="631.29" y="684" width="38.11" height="10" rx="1" fill="#a76226" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/gameplay/vendor/002ea1f0.c: 6/7 functions matching C, 2,688/3,444 B</title></rect>
-<rect x="670.41" y="684" width="1.59" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/gameplay_vendor_002eb8c0.c: 0/1 functions matching C, 0/144 B</title></rect>
+<rect x="670.41" y="684" width="1.59" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l10/gameplay_vendor_002eb8c0.c: 1/1 functions matching C, 144/144 B</title></rect>
 <path d="M 24 716 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="716" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="720" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">11 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Pokitaru</tspan><tspan fill="#a6adc8"> &#183; Jowai Resort: the ocean and the Thruster-Pack</tspan></text>
-<text x="790" y="720" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">62.1%</text>
-<text x="790" y="736" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">60/101 fn &#183; 129,604 B</text>
+<text x="790" y="720" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">62.8%</text>
+<text x="790" y="736" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">65/101 fn &#183; 129,604 B</text>
 <rect x="44.00" y="728" width="120.61" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay/hero/0023c7a0.c: 2/2 functions matching C, 25,212/25,212 B</title></rect>
 <rect x="165.61" y="728" width="71.05" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay/hero/0024db50.c: 1/1 functions matching C, 14,852/14,852 B</title></rect>
 <rect x="237.66" y="728" width="94.76" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay/hero/00253a18.c: 1/1 functions matching C, 19,808/19,808 B</title></rect>
-<rect x="333.42" y="728" width="0.59" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/runtime_startup_00263908.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="333.42" y="728" width="0.59" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/runtime_startup_00263908.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="335.01" y="728" width="82.24" height="10" rx="1" fill="#463b31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay/entities/002cb668.c: 15/26 functions matching C, 3,096/17,192 B</title></rect>
 <rect x="418.25" y="728" width="154.88" height="10" rx="1" fill="#443a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay_vendor_0030c788.c: 13/29 functions matching C, 4,992/32,376 B</title></rect>
 <rect x="574.13" y="728" width="2.72" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/gameplay/vendor/0030e690.c: 2/2 functions matching C, 568/568 B</title></rect>
-<rect x="577.85" y="728" width="3.43" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay_vendor_0030e708.c: 0/4 functions matching C, 0/716 B</title></rect>
+<rect x="577.85" y="728" width="3.43" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay_vendor_0030e708.c: 4/4 functions matching C, 716/716 B</title></rect>
 <rect x="582.27" y="728" width="89.73" height="10" rx="1" fill="#8b5729" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l11/gameplay/vendor/00315968.c: 26/35 functions matching C, 11,976/18,756 B</title></rect>
 <path d="M 24 760 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="760" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="764" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">12 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Hoven</tspan><tspan fill="#a6adc8"> &#183; Bomb Factory: ice, magnetic walls and the Hologuise</tspan></text>
-<text x="790" y="764" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">60.7%</text>
-<text x="790" y="780" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">38/77 fn &#183; 127,460 B</text>
+<text x="790" y="764" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">61.2%</text>
+<text x="790" y="780" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">43/77 fn &#183; 127,460 B</text>
 <rect x="44.00" y="772" width="144.00" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay/hero/0022de30.c: 4/4 functions matching C, 29,748/29,748 B</title></rect>
 <rect x="189.00" y="772" width="74.59" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay/hero/002400d0.c: 1/1 functions matching C, 15,408/15,408 B</title></rect>
 <rect x="264.59" y="772" width="103.82" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay/hero/002461f0.c: 1/1 functions matching C, 21,448/21,448 B</title></rect>
-<rect x="369.41" y="772" width="0.60" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/runtime_startup_00256748.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="369.41" y="772" width="0.60" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/runtime_startup_00256748.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="371.01" y="772" width="0.72" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/math_interpolation_00271dd8.c: 0/1 functions matching C, 0/148 B</title></rect>
 <rect x="372.73" y="772" width="2.75" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay_entities_0027b8e0.c: 3/3 functions matching C, 568/568 B</title></rect>
 <rect x="376.48" y="772" width="154.32" height="10" rx="1" fill="#4a3c30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay/entities/002bf140.c: 19/33 functions matching C, 6,796/31,880 B</title></rect>
-<rect x="531.80" y="772" width="1.10" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/unclassified_002bf6d0.c: 0/3 functions matching C, 0/228 B</title></rect>
+<rect x="531.80" y="772" width="1.10" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/unclassified_002bf6d0.c: 3/3 functions matching C, 228/228 B</title></rect>
 <rect x="533.90" y="772" width="0.41" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/shared/unclassified_002bc210.c: 1/1 functions matching C, 84/84 B</title></rect>
 <rect x="535.31" y="772" width="17.83" height="10" rx="1" fill="#68482d" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/unclassified_002ec720.c: 3/5 functions matching C, 1,608/3,684 B</title></rect>
 <rect x="554.14" y="772" width="115.65" height="10" rx="1" fill="#3d3732" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay_vendor_003028c8.c: 6/23 functions matching C, 1,728/23,892 B</title></rect>
-<rect x="670.80" y="772" width="1.20" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay_vendor_0030b6c8.c: 0/1 functions matching C, 0/248 B</title></rect>
+<rect x="670.80" y="772" width="1.20" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l12/gameplay_vendor_0030b6c8.c: 1/1 functions matching C, 248/248 B</title></rect>
 <path d="M 24 804 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="804" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="808" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">13 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Oltanis Orbit</tspan><tspan fill="#a6adc8"> &#183; Gemlik Base: Qwark&#x27;s fighter and the ship dogfight</tspan></text>
-<text x="790" y="808" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">19.2%</text>
-<text x="790" y="824" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">55/109 fn &#183; 105,748 B</text>
-<rect x="44.00" y="816" width="0.72" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/runtime_startup_002497d8.c: 0/1 functions matching C, 0/124 B</title></rect>
+<text x="790" y="808" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">20.6%</text>
+<text x="790" y="824" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">59/109 fn &#183; 105,748 B</text>
+<rect x="44.00" y="816" width="0.72" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/runtime_startup_002497d8.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="45.72" y="816" width="2.06" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/math_interpolation_00265170.c: 2/2 functions matching C, 352/352 B</title></rect>
-<rect x="48.78" y="816" width="3.74" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/rendering_view_0026bd00.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="48.78" y="816" width="3.74" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/rendering_view_0026bd00.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="53.52" y="816" width="1.75" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/rendering_00280400.c: 1/1 functions matching C, 300/300 B</title></rect>
 <rect x="56.28" y="816" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/audio_voices_002982e8.c: 1/1 functions matching C, 56/56 B</title></rect>
 <rect x="57.60" y="816" width="189.65" height="10" rx="1" fill="#473b30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay/entities/002b0e80.c: 14/22 functions matching C, 6,212/32,452 B</title></rect>
@@ -576,31 +576,31 @@
 <rect x="251.90" y="816" width="190.24" height="10" rx="1" fill="#4b3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay/entities/002c13b0.c: 18/38 functions matching C, 7,284/32,552 B</title></rect>
 <rect x="443.13" y="816" width="79.43" height="10" rx="1" fill="#433a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay/entities/002ea8c8.c: 5/11 functions matching C, 2,016/13,592 B</title></rect>
 <rect x="523.57" y="816" width="138.67" height="10" rx="1" fill="#453a31" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay_vendor_003058a8.c: 14/28 functions matching C, 4,036/23,728 B</title></rect>
-<rect x="663.23" y="816" width="8.77" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay_vendor_003098d0.c: 0/3 functions matching C, 0/1,500 B</title></rect>
+<rect x="663.23" y="816" width="8.77" height="10" rx="1" fill="#714c2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l13/gameplay_vendor_003098d0.c: 2/3 functions matching C, 740/1,500 B</title></rect>
 <path d="M 24 848 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="848" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="852" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">14 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Oltanis</tspan><tspan fill="#a6adc8"> &#183; Gorda City Ruins: a bombed city in a storm</tspan></text>
-<text x="790" y="852" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">56.0%</text>
-<text x="790" y="868" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">67/130 fn &#183; 151,084 B</text>
+<text x="790" y="852" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">56.8%</text>
+<text x="790" y="868" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">72/130 fn &#183; 151,084 B</text>
 <rect x="44.00" y="860" width="111.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/hero/0021dd30.c: 4/4 functions matching C, 27,264/27,264 B</title></rect>
 <rect x="156.70" y="860" width="58.21" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/hero/0022ff58.c: 1/1 functions matching C, 14,208/14,208 B</title></rect>
 <rect x="215.91" y="860" width="94.69" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/hero/00235600.c: 1/1 functions matching C, 23,112/23,112 B</title></rect>
-<rect x="311.60" y="860" width="0.51" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/runtime_startup_00245940.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="311.60" y="860" width="0.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/runtime_startup_00245940.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="313.11" y="860" width="133.61" height="10" rx="1" fill="#4f3e30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/entities/002460f8.c: 29/51 functions matching C, 8,396/32,612 B</title></rect>
-<rect x="447.73" y="860" width="2.62" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/rendering_view_00268038.c: 0/1 functions matching C, 0/640 B</title></rect>
+<rect x="447.73" y="860" width="2.62" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/rendering_view_00268038.c: 1/1 functions matching C, 640/640 B</title></rect>
 <rect x="451.35" y="860" width="131.66" height="10" rx="1" fill="#4b3d30" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/entities/002df080.c: 17/39 functions matching C, 7,328/32,136 B</title></rect>
 <rect x="584.01" y="860" width="19.01" height="10" rx="1" fill="#6c4a2c" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/unclassified_002fded0.c: 3/5 functions matching C, 2,156/4,640 B</title></rect>
 <rect x="604.02" y="860" width="65.21" height="10" rx="1" fill="#423931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay/vendor/00300e00.c: 12/24 functions matching C, 2,204/15,916 B</title></rect>
-<rect x="670.23" y="860" width="1.77" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay_vendor_00303370.c: 0/3 functions matching C, 0/432 B</title></rect>
+<rect x="670.23" y="860" width="1.77" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l14/gameplay_vendor_00303370.c: 3/3 functions matching C, 432/432 B</title></rect>
 <path d="M 24 892 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="892" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="896" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">15 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Quartu</tspan><tspan fill="#a6adc8"> &#183; Robot Factory: Clank&#x27;s birthplace and Giant Clank</tspan></text>
-<text x="790" y="896" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">75.3%</text>
-<text x="790" y="912" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">21/46 fn &#183; 110,104 B</text>
+<text x="790" y="896" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">75.4%</text>
+<text x="790" y="912" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">22/46 fn &#183; 110,104 B</text>
 <rect x="44.00" y="904" width="172.32" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/gameplay/hero/002044c8.c: 3/3 functions matching C, 30,552/30,552 B</title></rect>
 <rect x="217.32" y="904" width="91.19" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/gameplay/hero/00216c38.c: 1/1 functions matching C, 16,168/16,168 B</title></rect>
 <rect x="309.51" y="904" width="128.48" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/gameplay/hero/0021d040.c: 1/1 functions matching C, 22,780/22,780 B</title></rect>
-<rect x="438.99" y="904" width="0.70" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/runtime_startup_0022dad0.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="438.99" y="904" width="0.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/runtime_startup_0022dad0.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="440.69" y="904" width="0.79" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/unclassified_0022db50.c: 1/1 functions matching C, 140/140 B</title></rect>
 <rect x="442.48" y="904" width="1.99" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/math_interpolation_00247e90.c: 0/1 functions matching C, 0/352 B</title></rect>
 <rect x="445.46" y="904" width="140.39" height="10" rx="1" fill="#5a432e" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l15/unclassified_0029aff0.c: 4/14 functions matching C, 8,580/24,892 B</title></rect>
@@ -608,51 +608,51 @@
 <path d="M 24 936 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="936" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="940" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">16 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Kalebo III</tspan><tspan fill="#a6adc8"> &#183; Gadgetron headquarters and the hoverboard finals</tspan></text>
-<text x="790" y="940" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">97.7%</text>
-<text x="790" y="956" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">86/96 fn &#183; 132,200 B</text>
+<text x="790" y="940" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">98.9%</text>
+<text x="790" y="956" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">93/96 fn &#183; 132,200 B</text>
 <rect x="44.00" y="948" width="27.46" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/hero/002097a0.c: 5/5 functions matching C, 5,856/5,856 B</title></rect>
 <rect x="72.46" y="948" width="169.08" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/hero/00214598.c: 1/1 functions matching C, 36,052/36,052 B</title></rect>
 <rect x="242.54" y="948" width="84.46" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/hero/0021e398.c: 1/1 functions matching C, 18,008/18,008 B</title></rect>
 <rect x="328.00" y="948" width="123.51" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/hero/002270c8.c: 1/1 functions matching C, 26,336/26,336 B</title></rect>
-<rect x="452.51" y="948" width="0.58" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/runtime_startup_00239c30.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="452.51" y="948" width="0.58" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/runtime_startup_00239c30.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="454.09" y="948" width="105.30" height="10" rx="1" fill="#d27421" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/entities/002a3f38.c: 42/43 functions matching C, 21,884/22,452 B</title></rect>
 <rect x="560.39" y="948" width="3.92" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/unclassified_002cfc00.c: 0/1 functions matching C, 0/836 B</title></rect>
 <rect x="565.31" y="948" width="98.60" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay/vendor/002e3190.c: 36/36 functions matching C, 21,024/21,024 B</title></rect>
-<rect x="664.91" y="948" width="7.09" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay_vendor_002e4b58.c: 0/7 functions matching C, 0/1,512 B</title></rect>
+<rect x="664.91" y="948" width="7.09" height="10" rx="1" fill="#c97022" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l16/gameplay_vendor_002e4b58.c: 6/7 functions matching C, 1,416/1,512 B</title></rect>
 <path d="M 24 980 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="980" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="984" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">17 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Veldin Orbit</tspan><tspan fill="#a6adc8"> &#183; Drek&#x27;s Fleet: the flagship boarding</tspan></text>
-<text x="790" y="984" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">96.5%</text>
-<text x="790" y="1000" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">54/60 fn &#183; 140,376 B</text>
+<text x="790" y="984" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">96.7%</text>
+<text x="790" y="1000" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">57/60 fn &#183; 140,376 B</text>
 <rect x="44.00" y="992" width="9.10" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/ui_help_002020a8.c: 3/3 functions matching C, 2,068/2,068 B</title></rect>
 <rect x="54.10" y="992" width="159.23" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay/hero/00214760.c: 1/1 functions matching C, 36,168/36,168 B</title></rect>
 <rect x="214.33" y="992" width="88.24" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay/hero/0021e530.c: 1/1 functions matching C, 20,044/20,044 B</title></rect>
 <rect x="303.58" y="992" width="134.42" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay/hero/002258a8.c: 1/1 functions matching C, 30,532/30,532 B</title></rect>
-<rect x="438.99" y="992" width="0.55" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/runtime_startup_00238c50.c: 0/1 functions matching C, 0/124 B</title></rect>
+<rect x="438.99" y="992" width="0.55" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/runtime_startup_00238c50.c: 1/1 functions matching C, 124/124 B</title></rect>
 <rect x="440.54" y="992" width="0.85" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/math_interpolation_00253a90.c: 1/1 functions matching C, 192/192 B</title></rect>
 <rect x="442.38" y="992" width="3.06" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/rendering_0026fb60.c: 2/2 functions matching C, 696/696 B</title></rect>
 <rect x="446.45" y="992" width="37.47" height="10" rx="1" fill="#cf7221" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/unclassified_002a8da0.c: 7/8 functions matching C, 8,184/8,512 B</title></rect>
 <rect x="484.92" y="992" width="141.13" height="10" rx="1" fill="#bd6b23" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay_vendor_002e87d8.c: 26/27 functions matching C, 28,228/32,056 B</title></rect>
-<rect x="627.05" y="992" width="2.78" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay_vendor_002ea418.c: 0/3 functions matching C, 0/632 B</title></rect>
+<rect x="627.05" y="992" width="2.78" height="10" rx="1" fill="#52402f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay_vendor_002ea418.c: 2/3 functions matching C, 180/632 B</title></rect>
 <rect x="630.83" y="992" width="41.17" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l17/gameplay_vendor_002f26d0.c: 12/12 functions matching C, 9,352/9,352 B</title></rect>
 <path d="M 24 1024 h 12" stroke="#3a3632" stroke-width="2" fill="none"/>
 <circle cx="24" cy="1024" r="3.5" fill="#d87620" stroke="#0d1117" stroke-width="1"/>
 <text x="44" y="1028" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="11"><tspan fill="#a6adc8">18 &#183; </tspan><tspan fill="#e8edf5" font-weight="700">Veldin</tspan><tspan fill="#a6adc8"> &#183; Kyzil Plateau again: the Deplanetizer and Drek</tspan></text>
-<text x="790" y="1028" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">78.3%</text>
-<text x="790" y="1044" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">83/121 fn &#183; 159,560 B</text>
+<text x="790" y="1028" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="800" fill="#d87620">78.8%</text>
+<text x="790" y="1044" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="8.5" fill="#a6adc8">88/121 fn &#183; 159,560 B</text>
 <rect x="44.00" y="1036" width="9.17" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/hero/00213b40.c: 2/2 functions matching C, 2,372/2,372 B</title></rect>
 <rect x="54.17" y="1036" width="129.12" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/hero/0021eac8.c: 1/1 functions matching C, 33,392/33,392 B</title></rect>
 <rect x="184.30" y="1036" width="69.56" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/hero/00227dd0.c: 1/1 functions matching C, 17,988/17,988 B</title></rect>
 <rect x="254.85" y="1036" width="105.10" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/hero/0022e8f8.c: 1/1 functions matching C, 27,180/27,180 B</title></rect>
-<rect x="360.95" y="1036" width="0.48" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/runtime_startup_00240840.c: 0/1 functions matching C, 0/124 B</title></rect>
-<rect x="362.43" y="1036" width="18.72" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/unclassified_002463f8.c: 0/3 functions matching C, 0/4,840 B</title></rect>
+<rect x="360.95" y="1036" width="0.48" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/runtime_startup_00240840.c: 1/1 functions matching C, 124/124 B</title></rect>
+<rect x="362.43" y="1036" width="18.72" height="10" rx="1" fill="#413931" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/unclassified_002463f8.c: 2/3 functions matching C, 580/4,840 B</title></rect>
 <rect x="382.15" y="1036" width="0.57" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_entities_00265ff8.c: 1/1 functions matching C, 148/148 B</title></rect>
 <rect x="383.72" y="1036" width="0.40" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_state_00281fa8.c: 1/1 functions matching C, 48/48 B</title></rect>
 <rect x="384.91" y="1036" width="110.65" height="10" rx="1" fill="#744d2b" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/entities/002a7220.c: 36/52 functions matching C, 14,632/28,616 B</title></rect>
 <rect x="496.56" y="1036" width="125.97" height="10" rx="1" fill="#a56226" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay/vendor/002efb88.c: 30/38 functions matching C, 25,192/32,576 B</title></rect>
 <rect x="623.53" y="1036" width="46.77" height="10" rx="1" fill="#57422f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002f88e8.c: 10/18 functions matching C, 3,940/12,096 B</title></rect>
-<rect x="671.30" y="1036" width="0.70" height="10" rx="1" fill="#3a3632" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002fcbb0.c: 0/2 functions matching C, 0/180 B</title></rect>
+<rect x="671.30" y="1036" width="0.70" height="10" rx="1" fill="#de812f" stroke="#0d1117" stroke-width="0.4"><title>src/overlays/l18/gameplay_vendor_002fcbb0.c: 2/2 functions matching C, 180/180 B</title></rect>
 <line x1="10" y1="1064.0" x2="790" y2="1064.0" stroke="#3a3632" stroke-width="1" opacity="0.8"/>
-<text x="10" y="1078" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 73.3% &#183; overlays 57.6% &#183; 2,097,540 of 3,642,140 B in C</text>
+<text x="10" y="1078" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">executable 73.3% &#183; overlays 58.3% &#183; 2,121,784 of 3,642,140 B in C</text>
 <text x="790" y="1078" text-anchor="end" font-family="ui-sans-serif, -apple-system, &#x27;Segoe UI&#x27;, Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#a6adc8" opacity="0.85">generated 2026-10-07 &#183; scripts/generate_treemap.py</text>
 </svg>
