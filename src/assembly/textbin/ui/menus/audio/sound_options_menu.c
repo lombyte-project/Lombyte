@@ -101,10 +101,10 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     first_volume = &D_0015EDF0;
     if (D_0013C940.held_buttons & 0x2000) {
         if (menu->selected_option == 0) {
-            D_0015EDF0 = (0x400 < previous_second_volume + 3) ? 0x400 : previous_second_volume + 3;
+            D_0015EDF0 = (previous_second_volume + 3 < 0x401) ? previous_second_volume + 3 : 0x400;
         }
         if (menu->selected_option == 1) {
-            D_0015EDEC = (0x400 < previous_first_volume + 3) ? 0x400 : previous_first_volume + 3;
+            D_0015EDEC = (previous_first_volume + 3 < 0x401) ? previous_first_volume + 3 : 0x400;
         }
     }
     if (D_0013C940.held_buttons & 0x8000) {
