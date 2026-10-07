@@ -1245,7 +1245,7 @@ segments:
           - [0x1008d4, textbin, text_gap_001ff954_before_fun_001ff960]
           - [0x1008e0, c, ui/hud/get_icon_frame]
           - [0x10098c, textbin, text_gap_001ffa0c_after_fun_001ff960]
-          - [0x100990, c, assembly/textbin/gameplay/animation/get_frame_texture]
+          - [0x100990, c, textbin/gameplay/animation/get_frame_texture]
           - [0x100bb0, c, ui/hud/draw_hud_sprite]
           - [0x100d98, c, ui/hud/draw_hud_sprite_flipped]
           - [0x100ff4, textbin, text_gap_00200074_before_fun_00200080]
