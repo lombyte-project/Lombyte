@@ -632,7 +632,7 @@ extern void FUN_L05_003198e8(char *);
 extern void FUN_L16_002e4900_c(void *) __asm__("FUN_L16_002e4900");
 extern void FUN_L16_002e4a58_c(char *) __asm__("FUN_L16_002e4a58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+extern void sample_camera_path_u(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
@@ -717,7 +717,7 @@ void FUN_L16_002e43e0(char *moby) {
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(v60, tab[s].direction);
-        sample_camera_path(*(int **)(d + 0xA4), 0, v30, v50, 0, (float)**(int **)(d + 0xA4));
+        sample_camera_path_u(*(int **)(d + 0xA4), 0, v30, v50, 0, (float)**(int **)(d + 0xA4));
         FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xB0));
         *(float *)(d + 0x74) = fast_add_rotations(
             fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xB0), v50[1]);
@@ -1790,7 +1790,142 @@ void FUN_L16_002e7208(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Update of a path walker: keeps its sound alive, follows the path behind its owner and jumps ahead while unobserved. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8B30), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int path_index;
+    float parameter;
+    float speed;
+    float period;
+    unsigned char *owner;
+    float height_step;
+    float target_speed;
+    short countdown;
+    short sound;
+} L16WalkerData_c;
+
+extern char *D_L16_001B0930[];
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
+extern float D_L16_00161E68 __attribute__((sda));
+extern float D_L16_00161E6C __attribute__((sda));
+extern float D_L16_00161E70 __attribute__((sda));
+extern float D_L16_00161E74 __attribute__((sda));
+extern float D_L16_00161E78 __attribute__((sda));
+extern float D_L16_00161E7C __attribute__((sda));
+extern float D_L16_00161E80 __attribute__((sda));
+extern float D_L16_00161E8C __attribute__((sda));
+extern int D_L16_00161E90 __attribute__((sda));
+extern int FUN_001fa728(char *, float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L16_002e7a30(unsigned char *, void *);
+extern void FUN_L16_002e7ba0(unsigned char *);
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
+
+void FUN_L16_002e76b8(unsigned char *m) {
+    float old[4], rotation[4], trial[4];
+    char *path;
+    L16WalkerData_c *d;
+    int playing = 0;
+
+    d = *(L16WalkerData_c **)(m + 0x78);
+    path = D_L16_001B0930[d->path_index];
+    if (((*(unsigned short *)(m + 0xA6) ^ 1) & 1) != 0) {
+        if (FUN_L00_0028d8c0(m, d->sound) == 0) {
+            d->sound = allocate_voice_for_target_entry_alt(0, 4, (int)m);
+        } else {
+            playing = 1;
+        }
+    } else {
+        qcopy(old, m + 0x10);
+    }
+    switch (m[0x20]) {
+    case 0:
+        if (m[0x21] == 255) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        FUN_L16_002e7ba0(m);
+        break;
+    case 1: {
+        L16WalkerData_c *other = *(L16WalkerData_c **)(d->owner + 0x78);
+        float gap, step, next, height, acceleration;
+        /* `playing` again, in a variable of case 1's own. The logic does not need it: tested directly,
+           `playing` is one value from the top of the function to the test, the compiler ranks it below
+           `path` and gives them $s5 and $s4, the reverse of retail. The narrowing copy ends that value
+           here and starts another; each ranks above `path`, both get $s4 and the copy itself leaves no
+           instruction. A same-width copy (int) is folded away and does not do it. */
+        char blocked = playing;
+
+        sample_camera_path(path, d->parameter, 0, m + 0x10, (float *)(m + 0x40), 0);
+        acceleration = D_L16_00161E78 * D_0015ED70;
+        *(float *)(m + 0x18) += d->height_step;
+        d->parameter += d->speed;
+        approach_value_alt(&d->speed, d->target_speed, acceleration);
+        gap = other->parameter - d->parameter;
+        if (gap < 0.0f) {
+            gap += d->period;
+        }
+        if (gap < D_L16_00161E68 && d->target_speed > other->target_speed) {
+            float saved = d->target_speed;
+            float theirs = other->target_speed;
+
+            other->target_speed = saved;
+            d->target_speed = theirs;
+        }
+        if (gap < 1.5f) {
+            step = D_0015ED70 * 50.0f;
+            approach_value_alt(&d->speed, d->target_speed, step);
+            approach_value_alt(&other->speed, other->target_speed, step);
+        }
+        if (m[0x31] == 0 && blocked == 0) {
+            if (gap > D_L16_00161E6C + 1.0f) {
+                height = random_float_between(D_L16_00161E7C, D_L16_00161E80);
+                if (d->owner[0x31] != 0 && d->countdown != 0) {
+                    next = other->parameter - random_float_between(D_L16_00161E68, D_L16_00161E6C);
+                    d->countdown--;
+                } else {
+                    next = d->parameter + D_L16_00161E8C * D_0015ED6C;
+                }
+                if (next < 0.0f) {
+                    next += d->period;
+                }
+                sample_camera_path(path, next, 0, trial, rotation, 1);
+                trial[2] += height;
+                trial[3] = 2.0f;
+                if (FUN_001fa728((char *)trial, (float)D_L16_00161E90) == -1) {
+                    float random = random_float_between(D_L16_00161E70, D_L16_00161E74);
+
+                    d->parameter = next;
+                    d->height_step = height;
+                    d->target_speed = random * D_0015ED6C;
+                }
+            }
+        } else {
+            d->countdown = 30;
+        }
+        if (d->parameter > d->period) {
+            d->parameter -= d->period;
+        }
+        break;
+    }
+    }
+    if (*(unsigned short *)(m + 0xA6) & 1) {
+        FUN_L16_002e7a30(m, old);
+    }
+}
 /* Emits a particle near an active moby when the target is close. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
 
