@@ -35,8 +35,7 @@ void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 comman
     callback.type = 2;
     _dispatchMpegCallback(state->callback_context, &callback);
     _waitIpuIdle(state);
-    *(volatile u32 *)0x10002000 = 0;
-    _waitIpuIdle(state);
+    _waitIpuIdle((*(volatile u32 *)0x10002000 = 0, state));
     interrupts_enabled = DIntr();
     *(volatile s32 *)0x1000B410 = source_address & 0x0FFFFFFF;
     *(volatile s32 *)0x1000B420 = 4;
