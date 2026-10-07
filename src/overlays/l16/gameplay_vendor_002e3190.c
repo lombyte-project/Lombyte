@@ -1433,7 +1433,97 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
     func_L00_0026DD70_emit(offset, velocity, *(int *)&D_L16_00161E98_d, *(int *)&D_L16_00161E9C_d,
                            final_size, scale_game_frames(0x23));
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e7ba0.s", FUN_L16_002e7ba0);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Start of a walker group: lists the group's mobys and spaces them along the path in random order. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9018), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int path_index;
+    float parameter;
+    float speed;
+    float period;
+    unsigned char *owner;
+    float height_step;
+    float target_speed;
+    short countdown;
+    short sound;
+} L16WalkerData;
+
+extern char *D_L16_0015FFD8;
+extern char *D_L16_001B0930[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_L16_00161E70 __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_00161E74 __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_00161E7C __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_00161E80 __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_00161E90 __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_00161E94 __attribute__((sda)); /* no foreign declaration */
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern short *D_L16_001ABCC0[];
+
+void FUN_L16_002e7ba0(unsigned char *m) {
+    unsigned char *objects[16];
+    unsigned char *previous;
+    L16WalkerData *d = *(L16WalkerData **)(m + 0x78);
+    short *list = D_L16_001ABCC0[m[0x21]];
+    short count = 0, rank;
+    int i;
+    float period;
+
+    if (list == 0 || d->path_index == -1) {
+        return;
+    }
+    period = (float)*(int *)D_L16_001B0930[d->path_index] - 1.0f;
+    do {
+        objects[count] = (unsigned char *)(D_L16_0015FFD8 + ((*(unsigned short *)list & 0x7FFF) << 8));
+        count++;
+    } while (*list++ >= 0);
+    previous = objects[count - 1];
+    rank = count;
+    for (i = 0; i < count; i++) {
+        unsigned char *current;
+        L16WalkerData *data;
+        unsigned short flags;
+
+        if (i == count - 1) {
+            /* the last one takes the slot the loop index is on */
+            current = objects[i];
+        } else {
+            /* the others take a random slot, or the next one still in use after it */
+            int selected = random_integer_below(count - 1);
+
+            for (;;) {
+                if (objects[selected] != 0) {
+                    current = objects[selected];
+                    objects[selected] = 0;
+                    break;
+                }
+                selected = (selected + 1) % (count - 1);
+            }
+        }
+        flags = D_L16_00161E90;
+        current[0x30] = 255;
+        *(float *)(current + 0x2C) *= D_L16_00161E94;
+        *(int *)(current + 0x94) = 0;
+        *(unsigned short *)(current + 0x32) = flags;
+        data = *(L16WalkerData **)(current + 0x78);
+        data->parameter = (float)rank * (period / ConvertIntegerToFloat(count));
+        data->owner = previous;
+        data->period = period;
+        previous = current;
+        data->height_step = random_float_between(D_L16_00161E7C, D_L16_00161E80);
+        data->speed = random_float_between(D_L16_00161E70, D_L16_00161E74) * D_0015ED6C;
+        data->target_speed = data->speed;
+        current[0x20] = 1;
+        rank--;
+    }
+}
 
 #define NOT_SDA
 
