@@ -981,61 +981,61 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
-float FUN_L04_002c1fb8(void *m, void *out, float speed) {
-    float sep[4];
-    float tgt[4];
+float FUN_L04_002c1fb8(void *moby, void *out, float speed) {
+    float away[4];
+    float target[4];
     float pad[4][4];
-    char *d = *(char **)((char *)m + 0x78);
-    char *o;
-    float dist;
-    float w;
-    int alone;
-    int fast = 0;
-    if (*(int *)(d + 0x38) != 0 || *(short *)(d + 0x136) != 0) fast = 1;
-    if (fast) {
-        speed = *(float *)(d + 0x140) + *(float *)(d + 0x140);
+    char *data = *(char **)((char *)moby + 0x78);
+    char *other;
+    float target_dist;
+    float weight;
+    int is_closest;
+    int is_alert = 0;
+    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) is_alert = 1;
+    if (is_alert) {
+        speed = *(float *)(data + 0x140) + *(float *)(data + 0x140);
     } else {
-        speed = *(float *)(d + 0x140);
+        speed = *(float *)(data + 0x140);
     }
-    func_L00_00260D30_k(m, tgt, speed);
-    dist = FUN_001f9b80((float *)((char *)m + 0x10), tgt);
+    func_L00_00260D30_k(moby, target, speed);
+    target_dist = FUN_001f9b80((float *)((char *)moby + 0x10), target);
     clear_u64_value_c(out);
-    alone = 1;
-    o = D_L04_0015FFE4;
-    w = 0.0f;
-    for (; o != 0; o = *(char **)(o + 0x28)) {
-        if (o == m || *(short *)(o + 0xA6) != *(short *)((char *)m + 0xA6)) continue;
-        if (FUN_001f9b80((float *)(o + 0x10), (float *)((char *)m + 0x10)) < 3.0f) {
-            subtract_vector_xyz_c(sep, (char *)m + 0x10, o + 0x10);
-            scale_vector_xyz(sep, sep, *(float *)&D_L04_00161884_d);
-            add_vector_xyz_c(out, out, sep);
-            w += *(float *)&D_L04_00161884_d;
+    is_closest = 1;
+    other = D_L04_0015FFE4;
+    weight = 0.0f;
+    for (; other != 0; other = *(char **)(other + 0x28)) {
+        if (other == moby || *(short *)(other + 0xA6) != *(short *)((char *)moby + 0xA6)) continue;
+        if (FUN_001f9b80((float *)(other + 0x10), (float *)((char *)moby + 0x10)) < 3.0f) {
+            subtract_vector_xyz_c(away, (char *)moby + 0x10, other + 0x10);
+            scale_vector_xyz(away, away, *(float *)&D_L04_00161884_d);
+            add_vector_xyz_c(out, out, away);
+            weight += *(float *)&D_L04_00161884_d;
         }
-        if (FUN_001f9b80((float *)(o + 0x10), tgt) < dist) alone = 0;
+        if (FUN_001f9b80((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }
-    if (!alone) {
-        float k;
-        subtract_vector_xyz_c(sep, (char *)m + 0x10, tgt);
-        if (dist < 4.5f) {
-            k = 5.0f;
-        } else if (5.5f < dist) {
-            k = -5.0f;
+    if (!is_closest) {
+        float offset_dir;
+        subtract_vector_xyz_c(away, (char *)moby + 0x10, target);
+        if (target_dist < 4.5f) {
+            offset_dir = 5.0f;
+        } else if (5.5f < target_dist) {
+            offset_dir = -5.0f;
         } else {
-            k = 0.0f;
+            offset_dir = 0.0f;
         }
-        normalize_vector_xyz_c(sep, sep, k * 10.0f);
-        w += 10.0f;
-        add_vector_xyz_c(out, out, sep);
-        scale_vector_xyz(out, out, 1.0f / w);
-        add_vector_xyz_c(out, out, (char *)m + 0x10);
+        normalize_vector_xyz_c(away, away, offset_dir * 10.0f);
+        weight += 10.0f;
+        add_vector_xyz_c(out, out, away);
+        scale_vector_xyz(out, out, 1.0f / weight);
+        add_vector_xyz_c(out, out, (char *)moby + 0x10);
     } else {
-        qcopy(out, tgt);
+        qcopy(out, target);
     }
-    if (FUN_001f9b80((float *)((char *)m + 0x10), (float *)out) < 1.0f) {
-        qcopy(out, (char *)m + 0x10);
-        return FUN_001f9e90(tgt[0] - *(float *)((char *)m + 0x10), tgt[1] - *(float *)((char *)m + 0x14));
+    if (FUN_001f9b80((float *)((char *)moby + 0x10), (float *)out) < 1.0f) {
+        qcopy(out, (char *)moby + 0x10);
+        return FUN_001f9e90(target[0] - *(float *)((char *)moby + 0x10), target[1] - *(float *)((char *)moby + 0x14));
     }
-    return FUN_001f9e90(((float *)out)[0] - *(float *)((char *)m + 0x10), ((float *)out)[1] - *(float *)((char *)m + 0x14));
+    return FUN_001f9e90(((float *)out)[0] - *(float *)((char *)moby + 0x10), ((float *)out)[1] - *(float *)((char *)moby + 0x14));
 }
 
 #define NOT_SDA

@@ -24,61 +24,62 @@ extern void FUN_L00_0023a760(void);
 extern void FUN_L02_0023ccc8(void);
 extern void FUN_L02_0023cda8(void);
 
-void FUN_L02_002e1fb8(char *m) {
-    char *v = *(char **)(m + 0x78);
-    float a[4] __attribute__((aligned(16)));
-    float b[4] __attribute__((aligned(16)));
-    char *base;
-    int k;
-    char *d;
-    float f;
-    char *tbl;
-    if (*(int *)(v + 0x180) == 1) {
-        if (FUN_00214720_n(D_0013F3D0_n, *(int *)(v + 0x148)) == 0) {
-            *(int *)(v + 0x180) = 0;
-            FUN_001ff570_n(*(int *)(v + 0x160), 0);
-            *(int *)(v + 0x160) = -1;
-            FUN_001ff570_n(*(int *)(v + 0x164), 0);
-            *(int *)(v + 0x164) = -1;
+/* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
+void FUN_L02_002e1fb8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float fx_pos[4] __attribute__((aligned(16)));
+    float fx_rot[4] __attribute__((aligned(16)));
+    char *entry;
+    int entry_off;
+    char *mobys;
+    float yaw;
+    char *table;
+    if (*(int *)(data + 0x180) == 1) {
+        if (FUN_00214720_n(D_0013F3D0_n, *(int *)(data + 0x148)) == 0) {
+            *(int *)(data + 0x180) = 0;
+            FUN_001ff570_n(*(int *)(data + 0x160), 0);
+            *(int *)(data + 0x160) = -1;
+            FUN_001ff570_n(*(int *)(data + 0x164), 0);
+            *(int *)(data + 0x164) = -1;
             return;
         }
-        if (*(int *)(v + 0x14C) != 0 || *(int *)(v + 0x150) != 0)
+        if (*(int *)(data + 0x14C) != 0 || *(int *)(data + 0x150) != 0)
             return;
-        if (tick_n((int *)(v + 0x168)) == 0)
+        if (tick_n((int *)(data + 0x168)) == 0)
             return;
-        *(int *)(v + 0x180) = 2;
+        *(int *)(data + 0x180) = 2;
         FUN_001f4a58_n(scale_n(0x10));
-        FUN_001ff570_n(*(int *)(v + 0x160), 0);
-        *(int *)(v + 0x160) = -1;
-        FUN_001ff570_n(*(int *)(v + 0x164), 0);
-        tbl = D_L02_001600EC_n;
-        k = *(int *)(v + 0x154) << 7;
-        d = tbl;
-        *(int *)(v + 0x164) = -1;
-        qcopy(m + 0x10, (char *)(k + (int)d) + 0x30);
-        base = (char *)(k + (int)d);
-        *(float *)(m + 0x48) = f = atan2_n(*(float *)(base + 0), *(float *)(base + 4));
-        qcopy(a, m + 0x10);
-        a[0] += fdc8_n(f) * 1.5f;
-        a[1] += fde0_n(*(float *)(m + 0x48)) * 1.5f;
-        f9f8_n(b);
-        b[2] = fa580_n(*(float *)(m + 0x48), 3.1415927f);
-        FUN_L00_00216f90_n(a, b, 0, 1);
+        FUN_001ff570_n(*(int *)(data + 0x160), 0);
+        *(int *)(data + 0x160) = -1;
+        FUN_001ff570_n(*(int *)(data + 0x164), 0);
+        table = D_L02_001600EC_n;
+        entry_off = *(int *)(data + 0x154) << 7;
+        mobys = table;
+        *(int *)(data + 0x164) = -1;
+        qcopy(moby + 0x10, (char *)(entry_off + (int)mobys) + 0x30);
+        entry = (char *)(entry_off + (int)mobys);
+        *(float *)(moby + 0x48) = yaw = atan2_n(*(float *)(entry + 0), *(float *)(entry + 4));
+        qcopy(fx_pos, moby + 0x10);
+        fx_pos[0] += fdc8_n(yaw) * 1.5f;
+        fx_pos[1] += fde0_n(*(float *)(moby + 0x48)) * 1.5f;
+        f9f8_n(fx_rot);
+        fx_rot[2] = fa580_n(*(float *)(moby + 0x48), 3.1415927f);
+        FUN_L00_00216f90_n(fx_pos, fx_rot, 0, 1);
         {
-            int i0 = *(int *)(v + 0x158);
-            int i1 = *(int *)(v + 0x15C);
-            d = D_L02_0015FFD8_n;
-            *(unsigned char *)(d + (i0 << 8) + 0xBC) = 1;
-            d += i1 << 8;
-            d[0xBC] = 1;
-            *(short *)(v + 0x36) = 2;
-            v[8] = 1;
+            int i0 = *(int *)(data + 0x158);
+            int i1 = *(int *)(data + 0x15C);
+            mobys = D_L02_0015FFD8_n;
+            *(unsigned char *)(mobys + (i0 << 8) + 0xBC) = 1;
+            mobys += i1 << 8;
+            mobys[0xBC] = 1;
+            *(short *)(data + 0x36) = 2;
+            data[8] = 1;
         }
-    } else if (*(int *)(v + 0x180) == 0) {
-        if (FUN_00214720_n(D_0013F3D0_n, *(int *)(v + 0x148)) != 0) {
-            *(int *)(v + 0x180) = 1;
-            *(int *)(v + 0x164) = FUN_001ff308_n(0x15, 0x7D0, FUN_L00_0023a760, FUN_L02_0023ccc8, FUN_L02_0023cda8, v + 0x14C, 100);
-            *(int *)(v + 0x160) = FUN_001ff308_n(0x17, 0x7D1, FUN_L00_0023a760, FUN_L02_0023ccc8, FUN_L02_0023cda8, v + 0x150, 7);
+    } else if (*(int *)(data + 0x180) == 0) {
+        if (FUN_00214720_n(D_0013F3D0_n, *(int *)(data + 0x148)) != 0) {
+            *(int *)(data + 0x180) = 1;
+            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, FUN_L00_0023a760, FUN_L02_0023ccc8, FUN_L02_0023cda8, data + 0x14C, 100);
+            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, FUN_L00_0023a760, FUN_L02_0023ccc8, FUN_L02_0023cda8, data + 0x150, 7);
         }
     }
 }

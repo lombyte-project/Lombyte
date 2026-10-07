@@ -406,11 +406,11 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 
-void FUN_L05_002db238(void *m, void *dir) {
+void FUN_L05_002db238(void *moby, void *dir) {
     float p[4];
     float v[4];
     float a[4];
-    char *pos = (char *)m + 0x10;
+    char *pos = (char *)moby + 0x10;
     int i, j;
     for (i = 0; i < 20; i++) {
         float ang, sp, up;
@@ -454,21 +454,21 @@ extern void FUN_001f9a28_c(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_c(float *, float *, float) __asm__("FUN_001f9bf8");
 extern int FUN_L00_00261968_c(int, float *, float *) __asm__("FUN_L00_00261968");
 
-int FUN_L05_00303e50(char *a0, float *a1, float s)
+int FUN_L05_00303e50(char *moby, float *goal, float s)
 {
     float v[4];
     float w[4];
-    char *d = *(char **)(a0 + 0x78);
+    char *d = *(char **)(moby + 0x78);
     float a;
-    a = FUN_001f9e90_c(a1[0] - *(float *)(a0 + 0x10), a1[1] - *(float *)(a0 + 0x14));
+    a = FUN_001f9e90_c(goal[0] - *(float *)(moby + 0x10), goal[1] - *(float *)(moby + 0x14));
     a = FUN_001fa580_c(a, *(float *)(d + 0x294) * 1.5f);
-    v[0] = FUN_001f9dc8_c(a) * FUN_001f9b48_c(a1, (float *)(a0 + 0x10));
-    v[1] = FUN_001f9de0_c(a) * FUN_001f9b48_c(a1, (float *)(a0 + 0x10));
+    v[0] = FUN_001f9dc8_c(a) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
+    v[1] = FUN_001f9de0_c(a) * FUN_001f9b48_c(goal, (float *)(moby + 0x10));
     *(int *)&v[2] = 0;
-    FUN_001f9a10_c(v, v, (float *)(a0 + 0x10));
-    FUN_001f9a28_c(w, v, a1);
+    FUN_001f9a10_c(v, v, (float *)(moby + 0x10));
+    FUN_001f9a28_c(w, v, goal);
     FUN_001f9bf8_c(w, w, s);
-    FUN_001f9a10_c(w, w, (float *)(a0 + 0x10));
+    FUN_001f9a10_c(w, w, (float *)(moby + 0x10));
     return FUN_L00_00261968_c(*(int *)(d + 0x2C0), v, w) == 0;
 }
 #ifndef NOT_SDA
@@ -637,26 +637,26 @@ extern void FUN_L00_002604f0(char *, char *, char *, char *, char *, char *);
 extern void FUN_001f9a28(float *, char *, float *);
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
-void FUN_L05_0030bf98(char *a0)
+void FUN_L05_0030bf98(char *moby)
 {
-    char *d = *(char **)(a0 + 0x78);
+    char *d = *(char **)(moby + 0x78);
     float p[4];
     float q[4];
     float r[4];
-    switch (*(u8 *)(a0 + 0x20)) {
+    switch (*(u8 *)(moby + 0x20)) {
     case 0:
         *(int *)(d + 0x5C) = 1;
         if (*(int *)(d + 0x80) >= 0) {
-            FUN_L00_00260668(a0, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), a0 + 0x10, a0 + 0x40, d + 0x60, d + 0x70);
-            *(u8 *)(a0 + 0x20) = 1;
+            FUN_L00_00260668(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), moby + 0x10, moby + 0x40, d + 0x60, d + 0x70);
+            *(u8 *)(moby + 0x20) = 1;
         }
         break;
     case 1:
-        qcopy(p, a0 + 0x10);
-        qcopy(q, a0 + 0x40);
-        FUN_L00_002604f0(a0, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), d + 0x60, d + 0x70, a0 + 0x10, a0 + 0x40);
-        FUN_001f9a28(r, a0 + 0x10, p);
-        FUN_L00_00260738_c(d + 0x20, r, q, a0 + 0x40);
+        qcopy(p, moby + 0x10);
+        qcopy(q, moby + 0x40);
+        FUN_L00_002604f0(moby, D_L05_0015FFD8_c + (*(int *)(d + 0x80) << 8), d + 0x60, d + 0x70, moby + 0x10, moby + 0x40);
+        FUN_001f9a28(r, moby + 0x10, p);
+        FUN_L00_00260738_c(d + 0x20, r, q, moby + 0x40);
         break;
     }
 }

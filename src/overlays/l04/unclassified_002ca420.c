@@ -55,54 +55,54 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
-void FUN_L04_002cdda0(char *m) {
+void FUN_L04_002cdda0(char *moby) {
     float old[4];
     float delta[4];
-    char *d = *(char **)(m + 0x78);
-    qcopy(old, m + 0x10);
-    if (d == 0) {
-        mark_moby_for_removal(m);
+    char *data = *(char **)(moby + 0x78);
+    qcopy(old, moby + 0x10);
+    if (data == 0) {
+        mark_moby_for_removal(moby);
         return;
     }
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)moby)[0x20]) {
     case 0: {
         int i;
-        *(float *)(m + 0x58) = random_float_between(0.5f, 0.8f);
-        m[0x20] = 1;
-        *(float *)(d + 0x220) = *(float *)(m + 0x18) + 15.0f;
-        ((unsigned char *)m)[0x30] = 0xFF;
-        *(short *)(d + 0x3E) = 0xD;
+        *(float *)(moby + 0x58) = random_float_between(0.5f, 0.8f);
+        moby[0x20] = 1;
+        *(float *)(data + 0x220) = *(float *)(moby + 0x18) + 15.0f;
+        ((unsigned char *)moby)[0x30] = 0xFF;
+        *(short *)(data + 0x3E) = 0xD;
         for (i = 0; i < 3; i++) {
-            ((float *)(d + 0x224))[i] = random_angle_radians();
+            ((float *)(data + 0x224))[i] = random_angle_radians();
         }
         break;
     }
     case 1: {
         float off = 0.0f;
-        float bob = fast_cos(fast_normalize_angle(compute_interpolated_record_value(m) * 6.2831855f / 118.0f)) * 0.75f;
+        float bob = fast_cos(fast_normalize_angle(compute_interpolated_record_value(moby) * 6.2831855f / 118.0f)) * 0.75f;
         int i;
         for (i = 0; i < 3; i++) {
-            float *p = (float *)(d + 0x224) + i;
+            float *p = (float *)(data + 0x224) + i;
             float a = fast_add_rotations(*p, *(float *)&D_L04_0016195C * 0.017453292f * D_0015ED6C);
             float g = D_0015ED64;
             *p = a;
-            *(float *)(d + 0x108 + i * 0x80) = a;
-            FUN_L00_002628d8(m, d + 0xA0 + i * 0x80, i, g * 0.03f, g * 0.3f);
+            *(float *)(data + 0x108 + i * 0x80) = a;
+            FUN_L00_002628d8(moby, data + 0xA0 + i * 0x80, i, g * 0.03f, g * 0.3f);
         }
-        if (*(int *)(d + 0x230) != -1) {
-            char *o = D_L04_0015FFD8 + (*(int *)(d + 0x230) << 8);
+        if (*(int *)(data + 0x230) != -1) {
+            char *o = D_L04_0015FFD8 + (*(int *)(data + 0x230) << 8);
             if (*(short *)(o + 0xA6) == 0x118) {
                 off = **(float **)(o + 0x78) * 15.0f;
             }
         } else {
             off = 15.0f;
         }
-        *(float *)(m + 0x18) = *(float *)(d + 0x220) + bob - off;
+        *(float *)(moby + 0x18) = *(float *)(data + 0x220) + bob - off;
         break;
     }
     }
-    subtract_vector_xyz(delta, m + 0x10, old);
-    FUN_L00_00260738(d + 0x60, delta, m + 0x40, m + 0x40);
+    subtract_vector_xyz(delta, moby + 0x10, old);
+    FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);

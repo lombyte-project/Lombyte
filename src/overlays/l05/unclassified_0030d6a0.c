@@ -157,87 +157,87 @@ extern unsigned char D_L05_00161200;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L05_0030e1f8(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L05_0030e1f8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
     char *g = D_0013F3D0;
-    if (is_point_inside_clip_volume(g, *(int *)(d + 0x28))) {
+    if (is_point_inside_clip_volume(g, *(int *)(data + 0x28))) {
         *(float *)(g + 0x270) = 500.0f;
     }
-    switch (((unsigned char *)m)[0x20]) {
+    switch (((unsigned char *)moby)[0x20]) {
     case 0:
-        d[0x20] = D_L05_0015F444;
-        d[0x21] = D_L05_0015F445;
-        d[0x22] = D_L05_0015F446;
+        data[0x20] = D_L05_0015F444;
+        data[0x21] = D_L05_0015F445;
+        data[0x22] = D_L05_0015F446;
         {
             float f0 = D_L05_0015F448;
             float f1 = D_L05_0015F44C;
             float f2 = D_L05_0015F450;
             float f3 = D_L05_0015F454;
-            *(float *)(d + 0) = f0;
-            *(float *)(d + 8) = f1;
-            *(float *)(d + 4) = f2;
-            *(float *)(d + 0xC) = f3;
+            *(float *)(data + 0) = f0;
+            *(float *)(data + 8) = f1;
+            *(float *)(data + 4) = f2;
+            *(float *)(data + 0xC) = f3;
         }
-        d[0x23] = 0x49;
-        d[0x24] = 0x53;
-        d[0x25] = 0xC;
-        *(float *)(d + 0x18) = 33792.0f;
-        *(float *)(d + 0x14) = 255.0f;
-        *(int *)(d + 0x10) = 0;
-        *(int *)(d + 0x1C) = 0;
+        data[0x23] = 0x49;
+        data[0x24] = 0x53;
+        data[0x25] = 0xC;
+        *(float *)(data + 0x18) = 33792.0f;
+        *(float *)(data + 0x14) = 255.0f;
+        *(int *)(data + 0x10) = 0;
+        *(int *)(data + 0x1C) = 0;
         {
             int c = D_L05_00161200 + (D_L05_00161201 << 8) + (D_L05_00161202 << 16) + (D_L05_00161203 << 24);
-            *(int *)(d + 0x34) = 0x40408070;
-            *(int *)(d + 0x30) = c;
+            *(int *)(data + 0x34) = 0x40408070;
+            *(int *)(data + 0x30) = c;
         }
-        m[0x20] = 1;
+        moby[0x20] = 1;
         break;
     case 1:
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x2C))) {
-            D_L05_0015F444 = d[0x23];
-            D_L05_0015F445 = d[0x24];
-            D_L05_0015F446 = d[0x25];
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0x2C))) {
+            D_L05_0015F444 = data[0x23];
+            D_L05_0015F445 = data[0x24];
+            D_L05_0015F446 = data[0x25];
             {
-                float f0 = *(float *)(d + 0x10);
-                float f1 = *(float *)(d + 0x18);
-                float f2 = *(float *)(d + 0x14);
-                float f3 = *(float *)(d + 0x1C);
+                float f0 = *(float *)(data + 0x10);
+                float f1 = *(float *)(data + 0x18);
+                float f2 = *(float *)(data + 0x14);
+                float f3 = *(float *)(data + 0x1C);
                 D_L05_0015F448 = f0;
                 D_L05_0015F44C = f1;
                 D_L05_0015F450 = f2;
                 D_L05_0015F454 = f3;
             }
-            m[0x20] = 2;
+            moby[0x20] = 2;
         }
         break;
     case 2:
-        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(d + 0x28))) {
-            D_L05_0015F444 = d[0x20];
-            D_L05_0015F445 = d[0x21];
-            D_L05_0015F446 = d[0x22];
+        if (is_point_inside_clip_volume(D_0013F3D0, *(int *)(data + 0x28))) {
+            D_L05_0015F444 = data[0x20];
+            D_L05_0015F445 = data[0x21];
+            D_L05_0015F446 = data[0x22];
             {
-                float f0 = *(float *)(d + 0);
-                float f1 = *(float *)(d + 8);
-                float f2 = *(float *)(d + 4);
-                float f3 = *(float *)(d + 0xC);
+                float f0 = *(float *)(data + 0);
+                float f1 = *(float *)(data + 8);
+                float f2 = *(float *)(data + 4);
+                float f3 = *(float *)(data + 0xC);
                 D_L05_0015F448 = f0;
                 D_L05_0015F44C = f1;
                 D_L05_0015F450 = f2;
                 D_L05_0015F454 = f3;
             }
-            m[0x20] = 1;
+            moby[0x20] = 1;
         }
         break;
     }
     g = D_0013F3D0;
-    if (is_point_inside_clip_volume(g, *(int *)(d + 0x38))) {
+    if (is_point_inside_clip_volume(g, *(int *)(data + 0x38))) {
         int c;
-        subtract_vector_xyz(v, g, D_L05_001600EC + *(int *)(d + 0x38) * 128 + 0x30);
+        subtract_vector_xyz(v, g, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x30);
         v[3] = 0.0f;
-        transform_vector_by_basis(w, v, D_L05_001600EC + *(int *)(d + 0x38) * 128 + 0x40);
-        c = FUN_001fa6e0(*(int *)(d + 0x30), *(int *)(d + 0x34), (w[0] + 1.0f) * 0.5f);
+        transform_vector_by_basis(w, v, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x40);
+        c = FUN_001fa6e0(*(int *)(data + 0x30), *(int *)(data + 0x34), (w[0] + 1.0f) * 0.5f);
         D_L05_00161201 = c >> 8;
         D_L05_00161202 = c >> 16;
         D_L05_00161200 = c;

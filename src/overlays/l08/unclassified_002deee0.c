@@ -293,7 +293,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-void FUN_L08_002e4e90(char *m, float *out, float *rot) {
+void FUN_L08_002e4e90(char *moby, float *out, float *rot) {
     float r[16];
     float b[16];
     float up[4];
@@ -302,10 +302,10 @@ void FUN_L08_002e4e90(char *m, float *out, float *rot) {
     float dir[4];
     float u[4];
     float v[4];
-    char *d = *(char **)(m + 0x78);
+    char *data = *(char **)(moby + 0x78);
     float sx, sy, sz;
     float t;
-    switch (*(short *)(m + 0xA6)) {
+    switch (*(short *)(moby + 0xA6)) {
     case 0x3DC:
         sx = *(float *)&D_L08_00161C68 * *(float *)&D_L08_00161CB8;
         sy = *(float *)&D_L08_00161C74 * *(float *)&D_L08_00161CB8;
@@ -322,23 +322,23 @@ void FUN_L08_002e4e90(char *m, float *out, float *rot) {
         sz = *(float *)&D_L08_00161C7C * *(float *)&D_L08_00161CB4;
         break;
     }
-    FUN_001fa050(b, (float *)(d + 0x10));
-    normalize_vector_xyz(u, b, -fast_sin(*(float *)(d + 0x60)));
-    normalize_vector_xyz(v, b + 4, fast_cos(*(float *)(d + 0x60)));
+    FUN_001fa050(b, (float *)(data + 0x10));
+    normalize_vector_xyz(u, b, -fast_sin(*(float *)(data + 0x60)));
+    normalize_vector_xyz(v, b + 4, fast_cos(*(float *)(data + 0x60)));
     add_vector_xyz(dir, u, v);
     t = sx * 0.017453292f;
     normalize_vector_xyz(u, dir, fast_cos(t));
     normalize_vector_xyz(v, b + 8, fast_sin(t));
     add_vector_xyz(up, u, v);
-    normalize_vector_xyz(u, b, -fast_cos(*(float *)(d + 0x60)));
-    normalize_vector_xyz(v, b + 4, -fast_sin(*(float *)(d + 0x60)));
+    normalize_vector_xyz(u, b, -fast_cos(*(float *)(data + 0x60)));
+    normalize_vector_xyz(v, b + 4, -fast_sin(*(float *)(data + 0x60)));
     add_vector_xyz(fwd, u, v);
     cross_vectors_xyz(side, up, fwd);
-    normalize_vector_xyz(u, side, fast_cos(*(float *)(d + 0x64)));
-    normalize_vector_xyz(v, fwd, fast_sin(*(float *)(d + 0x64)));
+    normalize_vector_xyz(u, side, fast_cos(*(float *)(data + 0x64)));
+    normalize_vector_xyz(v, fwd, fast_sin(*(float *)(data + 0x64)));
     add_vector_xyz(r, u, v);
-    normalize_vector_xyz(u, side, -fast_sin(*(float *)(d + 0x64)));
-    normalize_vector_xyz(v, fwd, fast_cos(*(float *)(d + 0x64)));
+    normalize_vector_xyz(u, side, -fast_sin(*(float *)(data + 0x64)));
+    normalize_vector_xyz(v, fwd, fast_cos(*(float *)(data + 0x64)));
     add_vector_xyz(r + 4, u, v);
     qcopy(r + 8, up);
     r[11] = 0.0f;
@@ -347,7 +347,7 @@ void FUN_L08_002e4e90(char *m, float *out, float *rot) {
     FUN_00214598(r, rot);
     rot[3] = 0.0f;
     normalize_vector_xyz(u, b + 8, sy);
-    add_vector_xyz(out, d, u);
+    add_vector_xyz(out, data, u);
     normalize_vector_xyz(v, dir, sz);
     add_vector_xyz(out, out, v);
 }

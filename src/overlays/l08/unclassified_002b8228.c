@@ -177,12 +177,12 @@ extern int D_0015ED84; /* no foreign declaration */
 extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
-void FUN_L08_002dc180(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L08_002dc180(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     char *pl = D_0013F3D0;
-    Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(d + 0x88)];
-    Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(d + 0x80)];
-    Route_2dd4f8 *c = D_L08_001B0FB0_r[*(int *)(d + 0x84)];
+    Route_2dd4f8 *a = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
+    Route_2dd4f8 *b = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
+    Route_2dd4f8 *c = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
     float d0 = distance_xyz(pl, (char *)a + (a->count << 4));
     float d1 = distance_xyz(pl, b->e[0]);
     float d2 = distance_xyz(pl, c->e[0]);
@@ -193,61 +193,61 @@ void FUN_L08_002dc180(char *m) {
         sel = 1;
     }
     if (d2 < d0) sel = 3;
-    if (*(int *)(d + 0x100) == sel) return;
-    *(int *)(d + 0x100) = sel;
-    *(int *)(d + 0xE4) = 0;
-    *(float *)(d + 0x104) = 1.0f;
-    m[0x31] = 1;
-    *(unsigned short *)(m + 0x34) &= 0xFFFE;
-    *(int *)(d + 0x124) = 1;
-    *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+    if (*(int *)(data + 0x100) == sel) return;
+    *(int *)(data + 0x100) = sel;
+    *(int *)(data + 0xE4) = 0;
+    *(float *)(data + 0x104) = 1.0f;
+    moby[0x31] = 1;
+    *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+    *(int *)(data + 0x124) = 1;
+    *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
     switch (sel) {
     case 0: {
         int n = a->count;
         unsigned char *t;
         int f94, f98;
         int fr;
-        qcopy(d + 0x60, (char *)((n << 4) + (int)a));
-        y = FUN_001f9e90(*(float *)((char *)a + ((n - 2) << 4) + 0x10) - *(float *)(d + 0x60),
-                              *(float *)((char *)a + ((n - 2) << 4) + 0x14) - *(float *)(d + 0x64));
+        qcopy(data + 0x60, (char *)((n << 4) + (int)a));
+        y = FUN_001f9e90(*(float *)((char *)a + ((n - 2) << 4) + 0x10) - *(float *)(data + 0x60),
+                              *(float *)((char *)a + ((n - 2) << 4) + 0x14) - *(float *)(data + 0x64));
         fr = D_0015ED84 << 4;
         t = D_0014C050;
-        *(float *)(d + 0x78) = y;
-        *(float *)(d + 0xE4) = 1.0f;
-        *(int *)(d + 0x104) = 0;
-        f94 = t[*(int *)(d + 0x94) + fr] == 0xFF;
-        f98 = t[*(int *)(d + 0x98) + fr] == 0xFF;
+        *(float *)(data + 0x78) = y;
+        *(float *)(data + 0xE4) = 1.0f;
+        *(int *)(data + 0x104) = 0;
+        f94 = t[*(int *)(data + 0x94) + fr] == 0xFF;
+        f98 = t[*(int *)(data + 0x98) + fr] == 0xFF;
         if (f98) {
-            *(Route_2dd4f8 **)(d + 0x120) = c;
+            *(Route_2dd4f8 **)(data + 0x120) = c;
         } else if (f94) {
-            *(Route_2dd4f8 **)(d + 0x120) = b;
-        } else if (32.0f < FUN_001f9b80(m + 0x10, pl) || D_L08_0015F5CC < 5) {
-            m[0x31] = 0;
-            *(unsigned short *)(m + 0x34) |= 1;
-            *(int *)(d + 0x124) = 0;
-            *(int *)(m + 0x94) = 0;
+            *(Route_2dd4f8 **)(data + 0x120) = b;
+        } else if (32.0f < FUN_001f9b80(moby + 0x10, pl) || D_L08_0015F5CC < 5) {
+            moby[0x31] = 0;
+            *(unsigned short *)(moby + 0x34) |= 1;
+            *(int *)(data + 0x124) = 0;
+            *(int *)(moby + 0x94) = 0;
         }
         return;
     }
     case 1:
-        qcopy(d + 0x60, b->e[0]);
-        y = FUN_001f9e90(b->e[1][0] - *(float *)(d + 0x60), b->e[1][1] - *(float *)(d + 0x64));
-        *(Route_2dd4f8 **)(d + 0x120) = b;
+        qcopy(data + 0x60, b->e[0]);
+        y = FUN_001f9e90(b->e[1][0] - *(float *)(data + 0x60), b->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = b;
         break;
     case 2:
-        qcopy(d + 0x60, a->e[0]);
-        y = FUN_001f9e90(a->e[1][0] - *(float *)(d + 0x60), a->e[1][1] - *(float *)(d + 0x64));
-        *(Route_2dd4f8 **)(d + 0x120) = a;
+        qcopy(data + 0x60, a->e[0]);
+        y = FUN_001f9e90(a->e[1][0] - *(float *)(data + 0x60), a->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = a;
         break;
     case 3:
-        qcopy(d + 0x60, c->e[0]);
-        y = FUN_001f9e90(c->e[1][0] - *(float *)(d + 0x60), c->e[1][1] - *(float *)(d + 0x64));
-        *(Route_2dd4f8 **)(d + 0x120) = c;
+        qcopy(data + 0x60, c->e[0]);
+        y = FUN_001f9e90(c->e[1][0] - *(float *)(data + 0x60), c->e[1][1] - *(float *)(data + 0x64));
+        *(Route_2dd4f8 **)(data + 0x120) = c;
         break;
     default:
         return;
     }
-    *(float *)(d + 0x78) = y;
+    *(float *)(data + 0x78) = y;
 }
 /* Per-frame update: ease the angle and position fields toward their targets. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
