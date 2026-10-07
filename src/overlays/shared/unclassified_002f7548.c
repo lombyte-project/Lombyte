@@ -3,4 +3,10 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7548.s", FUN_L06_002f7548);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303150.s", FUN_L06_00303150);
+#include "qcopy.h"
+#include "sda.h"
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00301090), where it is exact; names translated to the US level program. */
+
+void FUN_L06_00303150(unsigned char *moby) {
+    moby[0x20] = 0x2;
+}

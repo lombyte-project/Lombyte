@@ -2,4 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_00240840.s", FUN_L18_00240840);
+/* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
+
+extern int D_0015ED84;
+extern int D_0015EE88;
+extern void FUN_L00_002892d0(void);
+extern void FUN_L00_0028b080(void);
+void do_sky_gif_paging(void) __asm__("FUN_0022b558");
+void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L18_00240840(void) {
+    setup_sky_gif_paging();
+    if (D_0015ED84 == 0x12) {
+        FUN_L00_0028b080();
+    } else {
+        FUN_L00_002892d0();
+    }
+    do_sky_gif_paging();
+    vu1_add_g_sregister(0x47, 0x5360B);
+    vu1_add_g_sregister(0x4E, 0x1000000 | (D_0015EE88 >> 13));
+}

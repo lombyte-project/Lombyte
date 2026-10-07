@@ -2,10 +2,78 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efaf8.s", FUN_L01_002efaf8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efb98.s", FUN_L01_002efb98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002efbc8.s", FUN_L01_002efbc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1c78.s", FUN_L01_002f1c78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1dc8.s", FUN_L01_002f1dc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f1df8.s", FUN_L01_002f1df8);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002dbb20(void *);
+
+int FUN_L01_002efaf8(char *a) {
+    int r = FUN_L00_002dbb20(a);
+    if (r == 0) {
+        if (*(unsigned char *)(a + 0x20) == 0xe)
+            a[0x20] = 1;
+    } else {
+        a[0x20] = 0xe;
+    }
+    return r;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002dbe20(void *);
+
+int FUN_L01_002efb98(char *a) {
+    int r = FUN_L00_002dbe20(a);
+    a[0x20] = 0xe;
+    return r;
+}
+typedef struct {
+    char pad[0x78];
+    s32 f;
+} T6;
+s32 FUN_L01_002efbc8(T6 *p) {
+    s32 v;
+    if (p != 0) {
+        v = p->f;
+        if (v != 0) {
+            return v + 0xc0;
+        }
+        return 0;
+    }
+    return 0;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002db8f8(void *);
+
+int FUN_L01_002f1c78(char *a) {
+    int r = FUN_L00_002db8f8(a);
+    if (r == 0) {
+        if (*(unsigned char *)(a + 0x20) == 0x7)
+            a[0x20] = 1;
+    } else {
+        a[0x20] = 0x7;
+    }
+    return r;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
+
+int FUN_L01_002f1dc8(char *a) {
+    int r = FUN_L00_002dbe20(a);
+    a[0x20] = 0x7;
+    return r;
+}
+s32 FUN_L01_002f1df8(T6 *p) {
+    s32 v;
+    if (p != 0) {
+        v = p->f;
+        if (v != 0) {
+            return v + 0x60;
+        }
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00308470.s", FUN_L01_00308470);

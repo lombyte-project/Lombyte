@@ -5,7 +5,94 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4b58.s", FUN_L16_002e4b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4be0.s", FUN_L16_002e4be0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4c40.s", FUN_L16_002e4c40);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4cd8.s", FUN_L16_002e4cd8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4d88.s", FUN_L16_002e4d88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e4f30.s", FUN_L16_002e4f30);
+#include "qcopy.h"
+#include "sda.h"
+/* Plays the sound that goes with the moby's current variant. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
+
+s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
+
+void FUN_L16_002e4cd8(char *moby) {
+    switch (*(short *)(*(char **)(moby + 0x78) + 0xae)) {
+    case 0:
+        try_set_help_message(8, 0x3e89);
+        break;
+    case 1:
+        try_set_help_message(8, 0x3e8a);
+        break;
+    case 2:
+        try_set_help_message(8, 0x139A);
+        break;
+    case 3:
+        try_set_help_message(8, 0x139C);
+        break;
+    case 4:
+        try_set_help_message(8, 0x1399);
+        break;
+    default:
+        try_set_help_message(8, 0x139B);
+        break;
+    }
+}
+/* Wobbles a moby's position and rotation from its sine-driven state. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9de0(float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+
+void FUN_L16_002e4d88(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float s, t, w;
+    qcopy(moby + 0x10, d + 0x60);
+    qcopy(moby + 0x40, d + 0x70);
+    s = fast_add_rotations(*(float *)(d + 0xb8), D_0015ED6C * 2.0943951f);
+    *(float *)(d + 0xb8) = s;
+    t = FUN_001f9de0(s);
+    w = D_0015ED6C * 1.6929693f;
+    *(float *)(moby + 0x18) += t * 0.25f;
+    s = fast_add_rotations(*(float *)(d + 0xbc), w);
+    *(float *)(d + 0xbc) = s;
+    t = fast_add_rotations(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
+    w = D_0015ED6C * 0.9250245f;
+    *(float *)(moby + 0x44) = t;
+    s = fast_add_rotations(*(float *)(d + 0xc0), w);
+    *(float *)(d + 0xc0) = s;
+    *(float *)(moby + 0x40) =
+        fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+    if (*(float *)(moby + 0x40) > 0.17453292f)
+        *(float *)(moby + 0x40) = 0.17453292f;
+    else if (*(float *)(moby + 0x40) < -0.17453292f)
+        *(float *)(moby + 0x40) = -0.17453292f;
+    if (*(float *)(moby + 0x44) > 0.17453292f)
+        *(float *)(moby + 0x44) = 0.17453292f;
+    else if (*(float *)(moby + 0x44) < -0.17453292f)
+        *(float *)(moby + 0x44) = -0.17453292f;
+}
+/* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
+
+extern char *D_L16_001B0930[];
+extern char D_0013F350[];
+extern char D_L16_001D96E0[];
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+
+void FUN_L16_002e4f30(char *a) {
+    char *data = *(char **)(a + 0x78);
+    int idx = *(int *)(data + 0xa0);
+    if (idx != -1) {
+        char *p = D_L16_001B0930[idx];
+        if (*(int *)p == 7) {
+            int i;
+            char *g;
+            for (i = 0; i < 7; i++) {
+                FUN_001f9cf8(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, a + 0xC0);
+                FUN_001f9a10(p + 0x10 + i * 16, p + 0x10 + i * 16, a + 0x10);
+            }
+            g = D_0013F350;
+            *(unsigned short *)(g + 0x22DA) = *(unsigned short *)(data + 0xa0);
+        }
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e97a0.s", FUN_L16_002e97a0);

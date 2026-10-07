@@ -4,5 +4,76 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00308db8.s", FUN_L08_00308db8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00308e90.s", FUN_L08_00308e90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00309030.s", FUN_L08_00309030);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_0030bc00.s", FUN_L08_0030bc00);
+/* Draws three rows of HUD elements with their colours. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
+
+extern int D_L08_00162390 __attribute__((sda));
+extern int D_L08_00162394;
+extern int D_L08_00162398;
+extern int D_L08_001623B0 __attribute__((sda));
+extern int D_L08_001623B4;
+extern int D_L08_001623C0 __attribute__((sda));
+extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
+extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
+extern void FUN_L08_00308db8(int);
+extern void FUN_L08_00308e90(int);
+extern void FUN_L08_00308f68(int);
+void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
+
+void FUN_L08_00309030(void) {
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1);
+    font_queue_vu_state();
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
+    vu1_add_g_sregister(0x42, (long)D_L08_00162390 << 32 | 0x64);
+    FUN_L08_00308db8(0);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
+    vu1_add_g_sregister(0x42, (long)((D_L08_00162394 * D_L08_00161E08_u) >> 8) << 32 | 0x62);
+    FUN_L08_00308db8(1);
+    vu1_add_g_sregister(0x42, (long)((D_L08_00162398 * D_L08_00161E08_u) >> 8) << 32 | 0x68);
+    FUN_L08_00308db8(2);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
+    vu1_add_g_sregister(0x42, (long)D_L08_001623B0 << 32 | 0x48);
+    FUN_L08_00308e90(0);
+    vu1_add_g_sregister(0x42, (long)D_L08_001623B4 << 32 | 0x48);
+    FUN_L08_00308e90(1);
+    vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
+    vu1_add_g_sregister(0x42, (long)D_L08_001623C0 << 32 | 0x48);
+    FUN_L08_00308f68(0);
+}
+#include "sda.h"
+/* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
+extern void FUN_L01_002787a0(void *);
+extern void FUN_L01_00278e20(void *, int);
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+
+void FUN_L08_0030bc00(char *m) {
+    int hit = 0;
+    char *r = FUN_L00_0025a420(m, 0x10000, 0);
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0:
+        m[0x20] = 1;
+        break;
+    case 1:
+        if (r != 0 && *(float *)(r + 0x2C) > 0.0f)
+            hit = 1;
+        if (hit)
+            m[0x20] = 2;
+        break;
+    case 2:
+        allocate_voice_for_target_entry(0, 0, (int)m);
+        FUN_L01_002787a0(m);
+        FUN_L00_00263e30(m, 0x736, 1, 0x737, 1, 0x1, 2);
+        FUN_L01_00278e20(m, 0x735);
+        mark_moby_for_removal(m);
+        break;
+    }
+}

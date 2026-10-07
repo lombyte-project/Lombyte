@@ -2,4 +2,10 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ffc08.s", FUN_L14_002ffc08);
+#include "qcopy.h"
+#include "sda.h"
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00301090), where it is exact; names translated to the US level program. */
+
+void FUN_L14_002ffc08(unsigned char *moby) {
+    moby[0x20] = 0x1;
+}

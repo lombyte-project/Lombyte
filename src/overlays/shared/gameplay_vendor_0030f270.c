@@ -2,5 +2,15 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f270.s", FUN_L11_0030f270);
+#include "qcopy.h"
+#include "sda.h"
+/* Recognize the active vendor object state. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00310738), where it is exact; names translated to the US level program. */
+
+int FUN_L11_0030f270(char *moby) {
+    if (*(short *)(moby + 0xA6) == 0x49b && ((unsigned char *)moby)[0x20] == 0x2) {
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0031e858.s", FUN_L11_0031e858);

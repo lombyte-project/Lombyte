@@ -2,6 +2,17 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cd20.s", FUN_L07_0030cd20);
+#include "qcopy.h"
+#include "sda.h"
+
+/* Register this level's vendor data set. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
+
+extern char D_L07_001DCE40[];
+extern void FUN_L01_002b91c8(char *, int);
+
+void FUN_L07_0030cd20(void) {
+    FUN_L01_002b91c8(D_L07_001DCE40, 0x24);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a9e8.s", FUN_L07_0031a9e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031b3f0.s", FUN_L07_0031b3f0);

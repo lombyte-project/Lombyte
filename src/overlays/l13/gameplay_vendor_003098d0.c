@@ -3,5 +3,94 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003098d0.s", FUN_L13_003098d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00309bc8.s", FUN_L13_00309bc8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030a460.s", FUN_L13_0030a460);
+#include "sda.h"
+
+/* Spawns a burst of effects for each pair of ready entries in the moby's table. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
+
+extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern float FUN_001f96b0(float);
+extern float fast_cos(float) __asm__("func_001F9DC8");
+extern float fast_sin(float) __asm__("func_001F9DE0");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern short D_L13_00161EB0 __attribute__((sda));
+extern short D_L13_00161EB4 __attribute__((sda));
+extern short D_L13_00161EB8 __attribute__((sda));
+extern short D_L13_00161EBC __attribute__((sda));
+extern short D_L13_00161EC0 __attribute__((sda));
+extern short D_L13_00161EC4 __attribute__((sda));
+extern short D_L13_00161EC8 __attribute__((sda));
+extern short D_L13_00161ECC __attribute__((sda));
+extern short D_L13_00161ED0 __attribute__((sda));
+extern short D_L13_00161ED4 __attribute__((sda));
+extern short D_L13_00161ED8 __attribute__((sda));
+extern short D_L13_00161EDC __attribute__((sda));
+extern short D_L13_00161EE0 __attribute__((sda));
+extern short D_L13_00161EE4 __attribute__((sda));
+extern short D_L13_00161EE8 __attribute__((sda));
+extern short D_L13_00161EEC __attribute__((sda));
+extern void FUN_001f9a40(void *, void *, void *, float);
+extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L13_00309bc8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    int i, n;
+    for (i = 0; i < 15; i = n) {
+        float f21, f22;
+        int s18, s19, s17;
+        int s10[4];
+        float v[4], w[4];
+        char *p;
+        int off = i * 16;
+        n = i + 1;
+        if (*(float *)(data + off + 0x21c) < 0.99f &&
+            *(float *)(data - (-(n * 16)) + 0x21c) < 0.99f) {
+            continue;
+        }
+        if (*(float *)&D_L13_00161EE8 < random_float_between_alt(0.0f, 1.0f)) {
+            continue;
+        }
+        f21 = random_angle_radians();
+        f22 = random_angle_radians();
+        v[0] = fast_cos(f21) *
+               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+        v[1] = fast_sin(f21) *
+               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+        v[2] = 0;
+        w[0] = fast_cos(f22) *
+               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+        w[1] = fast_sin(f22) *
+               random_float_between_alt(*(float *)&D_L13_00161ED8, *(float *)&D_L13_00161EDC);
+        w[2] = 0;
+        v[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
+        w[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
+        s18 = func_001FA898_r(FUN_001f96b0(
+            random_float_between_alt(*(float *)&D_L13_00161EC0, *(float *)&D_L13_00161EC4)));
+        s19 = func_001FA898_r(FUN_001f96b0(
+            random_float_between_alt(*(float *)&D_L13_00161EC8, *(float *)&D_L13_00161ECC)));
+        s17 = func_001FA898_r(FUN_001f96b0(
+            random_float_between_alt(*(float *)&D_L13_00161ED0, *(float *)&D_L13_00161ED4)));
+        scale_vector_xyz(v, v, 1.0f / (float)s18);
+        v[3] = *(float *)&D_L13_00161EB8;
+        scale_vector_xyz(w, w, 1.0f / (float)s17);
+        w[3] = *(float *)&D_L13_00161EBC;
+        p = data + (off + 0x210);
+        FUN_001f9a40(s10, p, p, random_float_between_alt(0.0f, 1.0f));
+        FUN_00218888(s10, v, w, *(int *)&D_L13_00161EB0, *(int *)&D_L13_00161EB4, s18, s19, s17,
+                     *(int *)&D_L13_00161EEC);
+    }
+}
+#include "qcopy.h"
+
+/* Register this level's vendor data set. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
+
+extern char D_L13_001D9BC0[];
+extern void FUN_L01_002b91c8(char *, int);
+
+void FUN_L13_0030a460(void) {
+    FUN_L01_002b91c8(D_L13_001D9BC0, 0x16);
+}

@@ -2,6 +2,42 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c40d0.s", FUN_L04_002c40d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c41b0.s", FUN_L04_002c41b0);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_002db890(char *);
+extern int FUN_L00_002dbc30(char *, int, int, float);
+extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
+
+int FUN_L04_002c40d0(char *m, int a, int b, float f) {
+    char *h = FUN_L00_002db890(m);
+    int r = FUN_L00_002dbc30(m, a, b, f);
+    if (r != 0) {
+        m[0x20] = 0x9;
+    } else if ((unsigned char)m[0x20] == 0x9) {
+        m[0x20] = 1;
+    }
+    if (*(short *)(h + 0x68) == 6) {
+        allocate_voice_for_target_entry(1, 0, m);
+    }
+    return r;
+}
+typedef struct {
+    char pad[0x78];
+    s32 f;
+} T6;
+s32 FUN_L04_002c41b0(T6 *p) {
+    s32 v;
+    if (p != 0) {
+        v = p->f;
+        if (v != 0) {
+            return v + 0x180;
+        }
+        return 0;
+    }
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d34d8.s", FUN_L04_002d34d8);

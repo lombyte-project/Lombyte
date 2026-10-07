@@ -2,6 +2,49 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf6d0.s", FUN_L12_002bf6d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002bf748.s", FUN_L12_002bf748);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e1758.s", FUN_L12_002e1758);
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
+
+extern char D_L12_001CBF40[];
+extern int D_L12_0015FFD8; /* no foreign declaration */
+extern short *D_L12_001ABCC0[];
+
+void FUN_L12_002bf6d0(char *moby) {
+    short *p = D_L12_001ABCC0[*(unsigned char *)(moby + 0x21)];
+    int base = D_L12_0015FFD8;
+    do {
+        int i = (*p & 0x7FFF) * 256;
+        char *e = (char *)(i + base);
+        char *s;
+        *(float *)(e + 0x18) = *(float *)(moby + 0x18);
+        s = D_L12_001CBF40 + *(int *)(*(char **)(e + 0x78) + 0xc) * 0x1190;
+        *(float *)(s + 8) = *(float *)(moby + 0x18);
+    } while (*p++ >= 0);
+}
+#include "sda.h"
+
+/* Register this level's vendor data set. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
+
+extern void FUN_L01_002b91c8(char *, int);
+
+void FUN_L12_002bf748(void) {
+    FUN_L01_002b91c8(D_L12_001CBF40, 0x11);
+}
+#include "eetypes.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002dbb20(void *);
+
+int FUN_L12_002e1758(char *a) {
+    int r = FUN_L00_002dbb20(a);
+    if (r == 0) {
+        if (*(unsigned char *)(a + 0x20) == 0x8)
+            a[0x20] = 1;
+    } else {
+        a[0x20] = 0x8;
+    }
+    return r;
+}

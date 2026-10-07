@@ -35,4 +35,21 @@ void FUN_L02_00298c68(s32 i) {
         FUN_L00_002995d0(a, b, D_0015ED88);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d61c0.s", FUN_L02_002d61c0);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002db8f8(void *);
+
+int FUN_L02_002d61c0(char *a) {
+    int r = FUN_L00_002db8f8(a);
+    if (r == 0) {
+        if (*(unsigned char *)(a + 0x20) == 0x9)
+            a[0x20] = 1;
+    } else {
+        a[0x20] = 0x9;
+    }
+    return r;
+}

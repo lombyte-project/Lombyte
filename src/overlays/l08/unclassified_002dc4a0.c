@@ -2,4 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc4a0.s", FUN_L08_002dc4a0);
+#include "qcopy.h"
+#include "sda.h"
+
+/* Wobbles a moby's position and rotation from its sine-driven state. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
+
+extern float D_0015ED6C;
+extern float FUN_001f9de0(float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+
+void FUN_L08_002dc4a0(char *moby) {
+    char *d = *(char **)(moby + 0x78);
+    float s, t, w;
+    qcopy(moby + 0x10, d + 0x60);
+    qcopy(moby + 0x40, d + 0x70);
+    s = fast_add_rotations(*(float *)(d + 0xec), D_0015ED6C * 2.0943951f);
+    *(float *)(d + 0xec) = s;
+    t = FUN_001f9de0(s);
+    w = D_0015ED6C * 1.6929693f;
+    *(float *)(moby + 0x18) += t * 0.25f;
+    s = fast_add_rotations(*(float *)(d + 0xf0), w);
+    *(float *)(d + 0xf0) = s;
+    t = fast_add_rotations(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
+    w = D_0015ED6C * 0.9250245f;
+    *(float *)(moby + 0x44) = t;
+    s = fast_add_rotations(*(float *)(d + 0xf4), w);
+    *(float *)(d + 0xf4) = s;
+    *(float *)(moby + 0x40) =
+        fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+    if (*(float *)(moby + 0x40) > 0.17453292f)
+        *(float *)(moby + 0x40) = 0.17453292f;
+    else if (*(float *)(moby + 0x40) < -0.17453292f)
+        *(float *)(moby + 0x40) = -0.17453292f;
+    if (*(float *)(moby + 0x44) > 0.17453292f)
+        *(float *)(moby + 0x44) = 0.17453292f;
+    else if (*(float *)(moby + 0x44) < -0.17453292f)
+        *(float *)(moby + 0x44) = -0.17453292f;
+}

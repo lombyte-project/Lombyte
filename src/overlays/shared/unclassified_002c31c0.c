@@ -3,6 +3,41 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c31c0.s", FUN_L00_002c31c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d56e0.s", FUN_L00_002d56e0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d57d0.s", FUN_L00_002d57d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002da218.s", FUN_L00_002da218);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002db8f8(void *);
+
+int FUN_L00_002d56e0(char *a) {
+    int r = FUN_L00_002db8f8(a);
+    if (r == 0) {
+        if (*(unsigned char *)(a + 0x20) == 0x9)
+            a[0x20] = 0x5;
+    } else {
+        a[0x20] = 0x9;
+    }
+    return r;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
+
+extern int FUN_L00_002dbe20(void *);
+
+int FUN_L00_002d57d0(char *a) {
+    int r = FUN_L00_002dbe20(a);
+    a[0x20] = 0x9;
+    return r;
+}
+#include "rnc/math/vector.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
+
+int FUN_L00_002da218(char *a) {
+    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(a + 0x24) + 0x2C) + 0x4);
+    if (fn != 0) {
+        return fn(a);
+    }
+    return 1;
+}

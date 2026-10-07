@@ -4,4 +4,16 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6150.s", FUN_L01_002f6150);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002feb28.s", FUN_L01_002feb28);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "qzero.h"
+#include "rnc/math/vector.h"
+#include "sda.h"
+extern u8 D_L01_001FBC80[];
+void FUN_L00_002371e0(void);
+void FUN_L01_002b96e0(s32, void *);
+
+void FUN_L01_002feb28(void) {
+    FUN_L00_002371e0();
+    FUN_L01_002b96e0(0x4, D_L01_001FBC80);
+}
