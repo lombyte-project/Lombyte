@@ -356,8 +356,10 @@ extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L16_002e3fa0(char *moby);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L16_00161D94, D_L16_00161E58;
-extern short D_L16_00161E54, D_L16_00161D98 __attribute__((sda));
+extern short D_L16_00161D94;
+extern short D_L16_00161E58_u __asm__("D_L16_00161E58");
+extern short D_L16_00161E54_u __asm__("D_L16_00161E54") __attribute__((sda));
+extern short D_L16_00161D98 __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d538(void *, void *);
@@ -630,7 +632,7 @@ extern void FUN_L05_003198e8(char *);
 extern void FUN_L16_002e4900_c(void *) __asm__("FUN_L16_002e4900");
 extern void FUN_L16_002e4a58_c(char *) __asm__("FUN_L16_002e4a58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
+extern void sample_camera_path_u(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float AbsoluteFloat(float input) __asm__("func_001F99C0");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
@@ -715,7 +717,7 @@ void FUN_L16_002e43e0(char *moby) {
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(v60, tab[s].direction);
-        sample_camera_path(*(int **)(d + 0xA4), 0, v30, v50, 0, (float)**(int **)(d + 0xA4));
+        sample_camera_path_u(*(int **)(d + 0xA4), 0, v30, v50, 0, (float)**(int **)(d + 0xA4));
         FUN_001f9a40(d + 0x60, v30, v40, *(float *)(d + 0xB0));
         *(float *)(d + 0x74) = fast_add_rotations(
             fast_subtract_rotations(v60[1], v50[1]) * *(float *)(d + 0xB0), v50[1]);
@@ -1126,7 +1128,7 @@ extern void FUN_L00_002599e8(void *, int, int, float, float, float, int, int, in
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void FUN_L16_002e6208(void *);
+void FUN_L16_002e6208(void *arg);
 s32 is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
@@ -1215,7 +1217,133 @@ void FUN_L16_002e5e08(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e6208.s", FUN_L16_002e6208);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Start the knock-back when the moby is hit, then steer it along its path and note when it strays. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7670), where it is exact; names translated to the US level program. */
+
+typedef int u128_c __attribute__((mode(TI)));
+
+typedef struct {
+    char pad0[0x110];
+    short reaction[3];          /* 0x110: record func_L00_0025E4B0 and func_L00_0025E590 take */
+    char pad116;
+    unsigned char reaction_time; /* 0x117 */
+    char pad118[8];
+    float knock[4];             /* 0x120: record func_L00_0025D5B0 fills */
+    float speed;                /* 0x130 */
+    float acceleration;         /* 0x134 */
+    float jump_speed;           /* 0x138 */
+    float turn_speed;           /* 0x13C */
+    int flags;                  /* 0x140 */
+    int kind;                   /* 0x144 */
+    float strength;             /* 0x148 */
+    char pad14C[0x11];
+    unsigned char pending;      /* 0x15D */
+    char pad15E[0xE];
+    float timer;                /* 0x16C */
+    float f170;
+    float f174;
+    char pad178[8];
+    float target[4];            /* 0x180 */
+    char pad190[0x30];
+    int i1C0;
+    int i1C4;
+    char pad1C8[8];
+    float home[4];              /* 0x1D0 */
+    char pad1E0[0x10];
+    int path;                   /* 0x1F0: index into D_L16_001B0C30 */
+} L16PursuitData;
+
+typedef struct {
+    char pad0[0x10];
+    float position[4];          /* 0x10 */
+    unsigned char state;        /* 0x20 */
+    char pad21[0x13];
+    unsigned short flags;       /* 0x34 */
+    char pad36[0x42];
+    L16PursuitData *data;       /* 0x78 */
+    char pad7C[0x18];
+    int i94;
+    char pad98[0xC];
+    unsigned char bA4;
+} L16PursuitMoby;
+
+extern char *D_L16_001B0930[];
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013F350_c[] __asm__("D_0013F350");
+extern float D_0015EE6C_c __asm__("D_0015EE6C");
+extern float D_0015ED70;
+extern float D_L16_00161E58 __attribute__((sda));
+extern float D_0015EE70;
+extern float FUN_001f9b80(void*,void*);
+extern float D_0015ED6C;
+extern float D_L16_00161E54 __attribute__((sda));
+extern float D_L16_00161E5C __attribute__((sda));
+extern float D_L16_00161E60 __attribute__((sda));
+extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+
+void FUN_L16_002e6208(void *arg) {
+    L16PursuitMoby *m = arg;
+    L16PursuitData *d = m->data;
+    char *hit;
+    int a;                      /* the reaction kind, later the path */
+    int b;                      /* the reaction flags, later the path's slot in the table */
+    float scratch[8];           /* [0..3] where the hit came from, [4] the heading that gives */
+
+    if (m->state == 0) {
+        return;
+    }
+    hit = FUN_L00_0025a420(m, 0x330000, 0);
+    if (hit) {
+        b = 0x200;
+        d->flags = b;
+        d->strength = 0.5f;
+        d->speed = D_L16_00161E54 * D_0015ED70;
+        d->acceleration = D_L16_00161E58 * D_0015ED70;
+        d->jump_speed = D_L16_00161E60 * D_0015ED6C;
+        d->turn_speed = D_L16_00161E5C * D_0015ED6C;
+        a = 0x29;
+        d->kind = a;
+        d->pending = 0;
+        d->timer = D_0015ED6C * 2.0f;
+        m->flags &= ~0x1000;
+        *(u128_c *)scratch = *(u128_c *)(hit + 0x10);
+        FUN_L00_0025ab48(scratch, scratch + 4, &d->jump_speed, &d->turn_speed);
+        FUN_L00_0025c558(m, d->knock, 5, 1, 0, scratch[4]);
+        d->f170 = 8.0f;
+        d->f174 = 16.0f;
+        m->state = 8;
+        m->i94 = 0;
+        d->reaction_time = 0x78;
+        FUN_L00_0025d458(m, d->reaction);
+    }
+    m->bA4 = 0xFF;
+    FUN_L00_0025d538(m, d->reaction);
+    b = (int)&D_L16_001B0930[d->path];
+    a = *(int *)b;
+    if (FUN_L00_0025ff38(m, d->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
+        if (FUN_001f9b80(d->home, d->target) > 16.0f ||
+            AbsoluteFloat(m->position[2] - d->target[2]) > 3.0f) {
+            d->i1C4 = 2;
+        }
+    }
+    if (d->i1C0 == 0) {
+        char *hero = D_0013F350_c;
+        d->i1C0 = *(int *)(hero + 0x2080);
+        qcopy(d->target, hero + 0x80);
+    }
+}
 /* Steers and moves a moby toward a target point, returning the distance. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7890), where it is exact; names translated to the US level program. */
 
@@ -1362,6 +1490,7 @@ extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00299460(int);
+extern void FUN_L16_002923d0(int);
 extern void FUN_L01_002783a8(float, void *);
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L16_002e70c0(char *);
@@ -1450,7 +1579,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
             m->state = 1;
             previous = activation->previous;
             if (previous == 4) {
-                FUN_L00_00299460(0);
+                FUN_L16_002923d0(0);
                 m->state = previous;
             }
         }
@@ -1662,7 +1791,142 @@ void FUN_L16_002e7208(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002e76b8.s", FUN_L16_002e76b8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Update of a path walker: keeps its sound alive, follows the path behind its owner and jumps ahead while unobserved. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8B30), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int path_index;
+    float parameter;
+    float speed;
+    float period;
+    unsigned char *owner;
+    float height_step;
+    float target_speed;
+    short countdown;
+    short sound;
+} L16WalkerData_c;
+
+extern char *D_L16_001B0930[];
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float approach_value_alt(float *, float, float) __asm__("FUN_00213ed8");
+extern float D_L16_00161E68 __attribute__((sda));
+extern float D_L16_00161E6C __attribute__((sda));
+extern float D_L16_00161E70 __attribute__((sda));
+extern float D_L16_00161E74 __attribute__((sda));
+extern float D_L16_00161E78 __attribute__((sda));
+extern float D_L16_00161E7C __attribute__((sda));
+extern float D_L16_00161E80 __attribute__((sda));
+extern float D_L16_00161E8C __attribute__((sda));
+extern int D_L16_00161E90 __attribute__((sda));
+extern int FUN_001fa728(char *, float);
+extern int FUN_L00_0028d8c0(void *, int);
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L16_002e7a30(unsigned char *, void *);
+extern void FUN_L16_002e7ba0(unsigned char *);
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
+
+void FUN_L16_002e76b8(unsigned char *m) {
+    float old[4], rotation[4], trial[4];
+    char *path;
+    L16WalkerData_c *d;
+    int playing = 0;
+
+    d = *(L16WalkerData_c **)(m + 0x78);
+    path = D_L16_001B0930[d->path_index];
+    if (((*(unsigned short *)(m + 0xA6) ^ 1) & 1) != 0) {
+        if (FUN_L00_0028d8c0(m, d->sound) == 0) {
+            d->sound = allocate_voice_for_target_entry_alt(0, 4, (int)m);
+        } else {
+            playing = 1;
+        }
+    } else {
+        qcopy(old, m + 0x10);
+    }
+    switch (m[0x20]) {
+    case 0:
+        if (m[0x21] == 255) {
+            mark_moby_for_removal(m);
+            return;
+        }
+        FUN_L16_002e7ba0(m);
+        break;
+    case 1: {
+        L16WalkerData_c *other = *(L16WalkerData_c **)(d->owner + 0x78);
+        float gap, step, next, height, acceleration;
+        /* `playing` again, in a variable of case 1's own. The logic does not need it: tested directly,
+           `playing` is one value from the top of the function to the test, the compiler ranks it below
+           `path` and gives them $s5 and $s4, the reverse of retail. The narrowing copy ends that value
+           here and starts another; each ranks above `path`, both get $s4 and the copy itself leaves no
+           instruction. A same-width copy (int) is folded away and does not do it. */
+        char blocked = playing;
+
+        sample_camera_path(path, d->parameter, 0, m + 0x10, (float *)(m + 0x40), 0);
+        acceleration = D_L16_00161E78 * D_0015ED70;
+        *(float *)(m + 0x18) += d->height_step;
+        d->parameter += d->speed;
+        approach_value_alt(&d->speed, d->target_speed, acceleration);
+        gap = other->parameter - d->parameter;
+        if (gap < 0.0f) {
+            gap += d->period;
+        }
+        if (gap < D_L16_00161E68 && d->target_speed > other->target_speed) {
+            float saved = d->target_speed;
+            float theirs = other->target_speed;
+
+            other->target_speed = saved;
+            d->target_speed = theirs;
+        }
+        if (gap < 1.5f) {
+            step = D_0015ED70 * 50.0f;
+            approach_value_alt(&d->speed, d->target_speed, step);
+            approach_value_alt(&other->speed, other->target_speed, step);
+        }
+        if (m[0x31] == 0 && blocked == 0) {
+            if (gap > D_L16_00161E6C + 1.0f) {
+                height = random_float_between(D_L16_00161E7C, D_L16_00161E80);
+                if (d->owner[0x31] != 0 && d->countdown != 0) {
+                    next = other->parameter - random_float_between(D_L16_00161E68, D_L16_00161E6C);
+                    d->countdown--;
+                } else {
+                    next = d->parameter + D_L16_00161E8C * D_0015ED6C;
+                }
+                if (next < 0.0f) {
+                    next += d->period;
+                }
+                sample_camera_path(path, next, 0, trial, rotation, 1);
+                trial[2] += height;
+                trial[3] = 2.0f;
+                if (FUN_001fa728((char *)trial, (float)D_L16_00161E90) == -1) {
+                    float random = random_float_between(D_L16_00161E70, D_L16_00161E74);
+
+                    d->parameter = next;
+                    d->height_step = height;
+                    d->target_speed = random * D_0015ED6C;
+                }
+            }
+        } else {
+            d->countdown = 30;
+        }
+        if (d->parameter > d->period) {
+            d->parameter -= d->period;
+        }
+        break;
+    }
+    }
+    if (*(unsigned short *)(m + 0xA6) & 1) {
+        FUN_L16_002e7a30(m, old);
+    }
+}
 /* Emits a particle near an active moby when the target is close. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
 
@@ -2344,6 +2608,7 @@ extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001D
     __attribute__((section(".data")));
 
 extern void FUN_L16_002e8d40_c(void *) __asm__("FUN_L16_002e8d40");
+extern void FUN_L16_002e97a0(void);
 void FUN_L16_002e8e80(unsigned char *m) {
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
@@ -2582,7 +2847,7 @@ void FUN_L16_002e98e0(unsigned char *m) {
         break;
     }
     case 1:
-        enqueue_callback_list_1_2e98e0(FUN_L16_002e8d40, m);
+        enqueue_callback_list_1_2e98e0(FUN_L16_002e97a0, m);
         break;
     }
 }

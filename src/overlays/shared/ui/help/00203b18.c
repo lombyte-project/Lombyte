@@ -1738,6 +1738,8 @@ extern s32 FUN_001fa6d0_a540(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_002132a8_a540(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_00213ed8_a540(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_L00_0020a1e0_a540(f32, f32) __asm__("FUN_L00_0020a1e0");
+extern void FUN_L00_0020a1e0_a540_0020a1f8(f32, f32) __asm__("FUN_L00_0020a1f8");
+extern void FUN_L00_0020a1e0_a540_0020a228(f32, f32) __asm__("FUN_L00_0020a228");
 extern s32 FUN_L00_00257b90_a540(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 FUN_L00_00257c48_a540(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 FUN_L00_0025b6a8_a540(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
@@ -1765,14 +1767,14 @@ void FUN_L00_0020a540(void) {
     }
     if (G.i260 != 0 && 1.4f < G.f258 && 1.0f < G.f248) {
 
-        FUN_L00_0020a1e0_a540(D_0015ED64_a540 * 0.015f, D_0015ED64_a540 * 0.3f);
+        FUN_L00_0020a1e0_a540_0020a228(D_0015ED64_a540 * 0.015f, D_0015ED64_a540 * 0.3f);
         f = G.f258 * 1.5f * 0.017453292f + 0.19198622f;
         if (0.47123888f < f)
             f = 0.47123888f;
         if ((1.0f - G.f25c) * 35.0f * 0.017453292f < f)
             f = (1.0f - G.f25c) * 35.0f * 0.017453292f;
         P.f274 = f;
-        FUN_L00_0020a1e0_a540(D_0015ED64_a540 * 0.008f, D_0015ED64_a540 * 0.3f);
+        FUN_L00_0020a1e0_a540_0020a1f8(D_0015ED64_a540 * 0.008f, D_0015ED64_a540 * 0.3f);
         P.f114 = P.f274 * 0.7f;
         return;
     }
@@ -1807,10 +1809,10 @@ void FUN_L00_0020a540(void) {
         if (G.f1004 < 0.0f)
             G.f1004 = 0.0f;
     }
-    FUN_L00_0020a1e0_a540(G.f1014, G.f1018);
+    FUN_L00_0020a1e0_a540_0020a228(G.f1014, G.f1018);
     P.f278 = G.f1008;
     P.f274 = G.f1004;
-    FUN_L00_0020a1e0_a540(D_0015ED64_a540 * 0.008f, D_0015ED64_a540 * 0.3f);
+    FUN_L00_0020a1e0_a540_0020a1f8(D_0015ED64_a540 * 0.008f, D_0015ED64_a540 * 0.3f);
     P.f118 = P.f278 * 0.52f;
     P.f114 = P.f274 * 0.55f;
 }
@@ -1832,6 +1834,8 @@ extern unsigned char D_0013E633[] __asm__("D_0013F3D0") NOT_SDA;
 extern void FUN_L00_00233660(float *, float, float, float);
 float AbsoluteFloat(float input) __asm__("FUN_001f99c0");
 void FUN_L00_0020a1e0(float a, float b);
+void FUN_L00_0020a228(float a, float b);
+void FUN_L00_0020a210(float a, float b);
 
 void FUN_L00_0020ac98(void) {
     char *g1 = (char *)D_0013E633 - 0x80;
@@ -1930,11 +1934,11 @@ void FUN_L00_0020ac98(void) {
             f20 = -0.296705961f;
         f21 = 0.0f;
     }
-    FUN_L00_0020a1e0(D_0015EE64 * 0.021f, D_0015EE64 * 0.27f);
+    FUN_L00_0020a228(D_0015EE64 * 0.021f, D_0015EE64 * 0.27f);
     p = D_L00_0017A780;
     *(float *)(p + 0x274) = f21;
     *(float *)(p + 0x278) = f20 * 0.7f;
-    FUN_L00_0020a1e0(D_0015EE64 * 0.014f, D_0015EE64 * 0.3f);
+    FUN_L00_0020a210(D_0015EE64 * 0.014f, D_0015EE64 * 0.3f);
     *(float *)(p + 0x1C8) = *(float *)(p + 0x278) * 0.55f;
 }
 typedef struct {

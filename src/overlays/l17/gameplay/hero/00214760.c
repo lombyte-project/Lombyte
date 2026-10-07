@@ -575,6 +575,9 @@ extern f32 FUN_001f9af0(void *);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 FUN_001f9dc8(f32);
 extern void FUN_L00_0020a1e0(f32, f32);
+extern void FUN_L17_00207150(f32, f32);
+extern void FUN_L17_00207168(f32, f32);
+extern void FUN_L17_00207180(f32, f32);
 extern void FUN_L00_00209848(s32, s32);
 extern void FUN_L00_00209638(s32, s32);
 
@@ -1123,9 +1126,9 @@ void FUN_L17_00214760(void) {
             FUN_L06_002291d0(0);
             t = P.f8EC * FUN_001f9dc8(yaw) * -7.0f;
             FUN_L00_0025bc98(&P.u90.f90, t, &P.f8E4, 0, 0.007f, 0.17f, D_0015ED6C * 1.2217305f);
-            FUN_L00_0020a1e0(0.009f, 0.22f);
-            FUN_L00_0020a1e0(0.04f, 0.2f);
-            FUN_L00_0020a1e0(0.02f, 0.2f);
+            FUN_L17_00207150(0.009f, 0.22f);
+            FUN_L17_00207168(0.04f, 0.2f);
+            FUN_L17_00207180(0.02f, 0.2f);
             AN.f114 = diff * 47.0f;
             AN.f118 = t * 1.5f;
             AN.f110 = t * 1.4f;
@@ -2043,9 +2046,9 @@ void FUN_L17_00214760(void) {
         f32 a;
         FUN_L00_002167d0();
         FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.02f, 0.2f);
+        FUN_L17_00207150(0.04f, 0.2f);
+        FUN_L17_00207168(0.04f, 0.2f);
+        FUN_L17_00207180(0.02f, 0.2f);
         if (moby->b53 == 0x37) {
             a = P.f188;
             if (a > 1.4f) {
@@ -2127,9 +2130,9 @@ void FUN_L17_00214760(void) {
             FUN_L00_0025bc98(&P.u90.f94.v, -P.f9D4, &P.f9E8, 0, D_0015ED64 * 0.035f,
                              D_0015ED64 * 0.3f, D_0015ED6C * 1.9198622f);
         }
-        FUN_L00_0020a1e0(0.009f, 0.22f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.02f, 0.2f);
+        FUN_L17_00207150(0.009f, 0.22f);
+        FUN_L17_00207168(0.04f, 0.2f);
+        FUN_L17_00207180(0.02f, 0.2f);
         AN.f118 = d * 2.1f;
         AN.f110 = d * 3.5f;
         break;
@@ -2247,9 +2250,9 @@ void FUN_L17_00214760(void) {
             AN.f60 = FUN_001f9e90(FUN_001f9b20(&P.u100.v100), P.u100.f108.v);
         }
         if (has) {
-            FUN_L00_0020a1e0(D_0015ED64 * 0.017f, D_0015ED64 * 0.3f);
-            FUN_L00_0020a1e0(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
-            FUN_L00_0020a1e0(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
+            FUN_L17_00207180(D_0015ED64 * 0.017f, D_0015ED64 * 0.3f);
+            FUN_L17_00207150(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
+            FUN_L17_00207168(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
             if (P.pm5D8 != NULL) {
                 f32 a;
                 f32 k;

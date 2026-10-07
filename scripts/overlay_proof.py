@@ -7,6 +7,7 @@ level's retail text byte for byte. Method ``overlay-place-bytes-v1``.
 """
 from __future__ import annotations
 
+import os
 import re
 import sys
 from functools import lru_cache
@@ -73,8 +74,30 @@ def exe_symbols(game_root: Path = ov.ROOT) -> dict[str, int]:
     return values
 
 
+@lru_cache(maxsize=None)
+def loose_key(level: int, address: int, size: int) -> bytes:
+    """The bytes at a place with every address field and constant masked: two
+    rows that differ only in a number (a split catalogue row) share it."""
+    b = ov.level_text_bytes(level, address, size)
+    return b"".join(_mask(int.from_bytes(b[i:i + 4], "little")).to_bytes(4, "little")
+                    for i in range(0, len(b), 4))
+
+
+@lru_cache(maxsize=None)
+def loose_places(name: str, level: int) -> tuple[int, ...]:
+    """Places in LEVEL of the function NAME calls when the catalogue split it:
+    the rows whose masked bytes equal NAME's own."""
+    m = ov.OVERLAY_FUNC.match(name)
+    row = ov.read_catalogue().get(name) or (m and ov.row_at().get((int(m.group(1)), int(m.group(2), 16))))
+    if not row:
+        return ()
+    key = loose_key(*row.places[0], row.size)
+    return tuple(sorted(a for other in ov.read_catalogue().values() if other.size == row.size
+                        for lv, a in other.places if lv == level and loose_key(lv, a, other.size) == key))
+
+
 def place_in_level(name: str, level: int, near: int) -> int:
-    matches = ov.places_in_level(name, level)
+    matches = ov.places_in_level(name, level) or loose_places(name, level)
     if not matches:
         raise Unresolved(name)
     return min(matches, key=lambda a: abs(a - near))
@@ -87,13 +110,18 @@ def resolve_symbol(name: str, level: int, near: int) -> int:
     m = ov.OVERLAY_FUNC.match(name)
     if m:
         mm, y = int(m.group(1)), int(m.group(2), 16)
-        return y if mm == level else place_in_level(name, level, near)
+        if mm == level:
+            return y
+        try:
+            return place_in_level(name, level, near)
+        except Unresolved:
+            return translate_data(name, level)
     m = ov.OVERLAY_DATA.match(name) or ov.OVERLAY_JTBL.match(name)
     if m:
         mm, y = int(m.group(1)), int(m.group(2), 16)
         if mm == level:
             return y
-        raise Unresolved(name)
+        return translate_data(name, level)
     m = ov.EXE_FUNC.match(name)
     if m:
         y = int(m.group(1), 16)
@@ -126,15 +154,145 @@ def section_name(elf: ELFFile, shndx) -> str | None:
 
 
 def retail_jtbls(name: str, level: int) -> list[int]:
-    """The jump tables the function's retail asm names, in address order."""
+    """The jump tables the function's retail asm names, in address order
+    (translated to LEVEL when the function is a copy there)."""
     path = ov.ASM_DIR / f"{name}.s"
     if not path.exists():
         return []
     out = set()
-    for _full, mm, z in JTBL_REF.findall(path.read_text()):
+    for full, mm, z in JTBL_REF.findall(path.read_text()):
         if int(mm) == level:
             out.add(int(z, 16))
+        else:
+            try:
+                out.add(translate_data(full, level))
+            except Unresolved:
+                pass
     return sorted(out)
+
+
+# Level data a shared function names (D_LNN_x, jtbl_LNN_x) lives elsewhere in
+# every other level. The listing names it only in the canonical copy; each
+# copy's %hi/%lo pair or $gp offset at the same place gives that level's
+# address. One canonical object must map to one address per level across
+# every function that names it, or the copies are not linked alike.
+PLACE_INSN = re.compile(r"/\* [0-9A-F]+ ([0-9A-F]{8}) [0-9A-F]{8} \*/\s+(\S+)\s+([^\n]*)")
+LEVEL_SYM = re.compile(r"%(hi|lo)\(((?:D|jtbl)_L(\d{2})_([0-9A-Fa-f]{8}))\)")
+GP_SYM = re.compile(r"(-?0x[0-9A-Fa-f]+|\d+)\(\$28\)\s*/\* ((?:D|jtbl)_L(\d{2})_([0-9A-Fa-f]{8})) \*/")
+
+
+def _imm(buf: bytes, off: int) -> int:
+    return int.from_bytes(buf[off:off + 4], "little") & 0xFFFF
+
+
+@lru_cache(maxsize=None)
+def place_map() -> tuple[dict, dict]:
+    """({(level, symbol): address}, {(level, symbol): {addresses}} conflicts)."""
+    seen: dict[tuple[int, str], set[int]] = {}
+    for name, row in ov.read_catalogue().items():
+        if len(row.places) < 2:
+            continue
+        path = ov.ASM_DIR / f"{name}.s"
+        if not path.exists():
+            continue
+        lv0, a0 = row.places[0]
+        refs = []   # (kind, offset, symbol)
+        for line in path.read_text(errors="replace").splitlines():
+            m = PLACE_INSN.search(line)
+            if not m:
+                continue
+            off = int(m.group(1), 16) - a0
+            for kind, sym, mm, _z in LEVEL_SYM.findall(m.group(3)):
+                if int(mm) == lv0:
+                    refs.append((kind, off, sym))
+            if m.group(2) == "jal":
+                j = re.match(r"\s*(FUN_L(\d{2})_[0-9a-f]{8})", m.group(3))
+                if j and int(j.group(2)) == lv0:
+                    refs.append(("jal", off, j.group(1)))
+            g = GP_SYM.search(m.group(3))
+            if g and int(g.group(3)) == lv0:
+                refs.append(("gp", off, g.group(2)))
+            elif not g:
+                # an unnamed $gp address (addiu rX, $28, N) of level data
+                a = re.search(r"(-?0x[0-9A-Fa-f]+|-?\d+)\(\$28\)|\$28, (-?0x[0-9A-Fa-f]+|-?\d+)\s*$", m.group(3))
+                if a:
+                    v = (ov.GP + int(a.group(1) or a.group(2), 0)) & 0xFFFFFFFF
+                    if v >= ov.RESIDENT_MAX:
+                        refs.append(("gp", off, f"D_L{lv0:02d}_{v:08X}"))
+        if not refs:
+            continue
+        try:
+            canon = ov.level_text_bytes(lv0, a0, row.size)
+        except ValueError:
+            continue
+        copies = []
+        for lv, a in row.places[1:]:
+            try:
+                copies.append((lv, ov.level_text_bytes(lv, a, row.size)))
+            except ValueError:
+                pass
+        his: dict[str, int] = {}
+        for kind, off, sym in refs:
+            base = int(sym[-8:], 16)
+            if kind == "hi":
+                his[sym] = off
+                continue
+            if kind == "lo" and sym not in his:
+                continue
+            for lv, buf in copies:
+                if kind == "jal":
+                    w = int.from_bytes(buf[off:off + 4], "little")
+                    seen.setdefault((lv, sym), set()).add(((w & 0x03FFFFFF) << 2) | 0x00000000)
+                    continue
+                if kind == "gp":
+                    theirs = ov.GP + sign16(_imm(buf, off))
+                    mine = ov.GP + sign16(_imm(canon, off))
+                else:
+                    h = his[sym]
+                    theirs = (_imm(buf, h) << 16) + sign16(_imm(buf, off))
+                    mine = (_imm(canon, h) << 16) + sign16(_imm(canon, off))
+                seen.setdefault((lv, sym), set()).add((base + theirs - mine) & 0xFFFFFFFF)
+    good = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
+    bad = {k: v for k, v in seen.items() if len(v) > 1}
+    return good, bad
+
+
+def translate_data(name: str, level: int) -> int:
+    good, bad = place_map()
+    m = re.match(r"^(D|jtbl)_L(\d{2})_([0-9A-Fa-f]{8})$", name)
+    if m and (level, name) not in good:
+        name = f"{m.group(1)}_L{m.group(2)}_{m.group(3).upper()}"
+    if (level, name) in bad:
+        raise Unresolved(f"{name} is several objects in level {level:02d}")
+    if (level, name) not in good:
+        raise Unresolved(f"{name} in level {level:02d}")
+    return good[(level, name)]
+
+
+_ELVES: dict = {}
+
+
+def open_elf(path) -> ELFFile:
+    """One parsed ELFFile per object (rebuilt when the file changes): the
+    canonical check and every copy's check read the same object."""
+    path = str(path)
+    stamp = os.stat(path).st_mtime_ns
+    hit = _ELVES.get(path)
+    if hit and hit[0] == stamp:
+        return hit[1]
+    if hit:
+        hit[2].close()
+    handle = open(path, "rb")
+    elf = ELFFile(handle)
+    _ELVES[path] = (stamp, elf, handle)
+    return elf
+
+
+def _symbols(elf: ELFFile) -> list:
+    syms = getattr(elf, "_symbols", None)
+    if syms is None:
+        syms = elf._symbols = list(elf.get_section_by_name(".symtab").iter_symbols())
+    return syms
 
 
 def _is_named(sym) -> bool:
@@ -151,9 +309,9 @@ class Placer:
         self.symtab = elf.get_section_by_name(".symtab")
         if self.symtab is None or self.text is None:
             raise Unresolved("object has no .text/.symtab")
-        sym = next((s for s in self.symtab.iter_symbols() if s.name == name), None)
+        sym = next((s for s in _symbols(self.elf) if s.name == name), None)
         if sym is None:
-            sym = next((s for s in self.symtab.iter_symbols() if s.name.lower() == name.lower()
+            sym = next((s for s in _symbols(self.elf) if s.name.lower() == name.lower()
                         and s["st_size"]), None)
         if sym is None or not sym["st_size"]:
             raise Unresolved(f"{name} not defined by the candidate")
@@ -168,7 +326,7 @@ class Placer:
 
     def place_text_offset(self, toff: int, near: int) -> int:
         owner = None
-        for sym in self.symtab.iter_symbols():
+        for sym in _symbols(self.elf):
             if (sym["st_shndx"] == self.sym["st_shndx"] and sym["st_size"]
                     and sym["st_value"] <= toff < sym["st_value"] + sym["st_size"]
                     and sym["st_info"]["type"] == "STT_FUNC"):
@@ -187,15 +345,19 @@ class Placer:
             self.unresolved.append(what)
 
     def relocations(self):
-        for sec in self.elf.iter_sections():
-            if isinstance(sec, RelocationSection) and sec.name == ".rel.text":
-                for rel in sec.iter_relocations():
-                    o = rel["r_offset"]
-                    if self.off <= o < self.off + self.size:
-                        yield rel
+        # parsed once per object: pyelftools re-parses every entry on each walk
+        rels = getattr(self.elf, "_text_rels", None)
+        if rels is None:
+            rels = [rel for sec in self.elf.iter_sections()
+                    if isinstance(sec, RelocationSection) and sec.name == ".rel.text"
+                    for rel in sec.iter_relocations()]
+            self.elf._text_rels = rels
+        for rel in rels:
+            if self.off <= rel["r_offset"] < self.off + self.size:
+                yield rel
 
     def sym_of(self, rel):
-        return self.symtab.get_symbol(rel["r_info_sym"])
+        return _symbols(self.elf)[rel["r_info_sym"]]
 
     @staticmethod
     def word_at(buf: bytes, off: int) -> int:
@@ -420,7 +582,7 @@ def symbol_offsets(name: str, address: int, resident_too: bool = False) -> dict[
     return out
 
 
-def check(obj_path, name: str, show: bool = False) -> dict:
+def check(obj_path, name: str, show: bool = False, place: tuple[int, int] | None = None) -> dict:
     """The verdict for NAME in OBJ_PATH: dict(verdict, exact, size, diff, ...).
 
     verdict is one of EXACT, BYTES n/size, SIZE ours/retail, LINK <what>,
@@ -431,61 +593,105 @@ def check(obj_path, name: str, show: bool = False) -> dict:
         result["verdict"] = f"LINK not an overlay function name: {name}"
         return result
     level, address = int(m.group(1)), int(m.group(2), 16)
+    canon_address = address
+    if place is not None:
+        level, address = place
     row = ov.read_catalogue().get(name)
     if row is None:
         result["verdict"] = f"LINK {name} is not in the catalogue"
         return result
     result.update(level=level, address=address, size=row.size)
-    with open(obj_path, "rb") as handle:
-        elf = ELFFile(handle)
-        try:
-            placer = Placer(elf, name, level, address)
-        except Unresolved as e:
-            result["verdict"] = f"LINK {e.what}"
-            return result
-        if placer.size != row.size:
-            result["verdict"] = f"SIZE ours {placer.size} / retail {row.size}"
-            result["ours_size"] = placer.size
-            return result
-        retail = ov.level_text_bytes(level, address, row.size)
-        orig = bytes(elf.get_section_by_name(".text").data())
-        placer.scan_rodata(orig)
-        if placer.rodata_error:
-            result["verdict"] = placer.rodata_error
-            return result
-        ours = bytearray(orig)
-        placer.retail = retail
-        placer.apply(ours, orig)
-        if placer.unresolved or placer.unknown_types:
-            parts = list(placer.unresolved)
-            parts += [f"unknown relocation type {t} at +0x{o:x}" for o, t in placer.unknown_types]
-            result["verdict"] = "LINK " + ", ".join(parts)
-            return result
-        ours_func = bytes(ours[placer.off:placer.off + placer.size])
-        rows = []
-        for i in range(0, row.size, 4):
-            a = int.from_bytes(ours_func[i:i + 4], "little")
-            b = int.from_bytes(retail[i:i + 4], "little")
-            if a != b:
-                rows.append((i, a, b))
-        if not rows:
-            relocated = {rel["r_offset"] - placer.off for rel in placer.relocations()}
-            missing = sorted(set(symbol_offsets(name, address)) - relocated)
-            if missing:
-                refs = symbol_offsets(name, address)
-                result["verdict"] = ("LINK literal address where retail references a symbol: "
-                                     + ", ".join(f"+0x{o:x} ({refs[o]})" for o in missing[:4]))
-                return result
-            result.update(verdict="EXACT", exact=True, differing_words=0)
-            return result
-        result.update(verdict=f"BYTES {len(rows)}/{row.size // 4}", differing_words=len(rows),
-                      words=[[i, a, b] for i, a, b in rows])
-        if show:
-            import rabbitizer as rz
-            lines = []
-            for i, a, b in rows:
-                da = rz.Instruction(a, vram=address + i, category=rz.InstrCategory.R5900).disassemble()
-                db = rz.Instruction(b, vram=address + i, category=rz.InstrCategory.R5900).disassemble()
-                lines.append(f"  +{i:4x}  ours {da:40s} retail {db}")
-            result["diff"] = lines
+    elf = open_elf(obj_path)
+    try:
+        placer = Placer(elf, name, level, address)
+    except Unresolved as e:
+        result["verdict"] = f"LINK {e.what}"
         return result
+    if placer.size != row.size:
+        result["verdict"] = f"SIZE ours {placer.size} / retail {row.size}"
+        result["ours_size"] = placer.size
+        return result
+    retail = ov.level_text_bytes(level, address, row.size)
+    orig = bytes(elf.get_section_by_name(".text").data())
+    placer.scan_rodata(orig)
+    if placer.rodata_error:
+        result["verdict"] = placer.rodata_error
+        return result
+    ours = bytearray(orig)
+    placer.retail = retail
+    placer.apply(ours, orig)
+    if placer.unresolved or placer.unknown_types:
+        parts = list(placer.unresolved)
+        parts += [f"unknown relocation type {t} at +0x{o:x}" for o, t in placer.unknown_types]
+        result["verdict"] = "LINK " + ", ".join(parts)
+        return result
+    ours_func = bytes(ours[placer.off:placer.off + placer.size])
+    rows = []
+    for i in range(0, row.size, 4):
+        a = int.from_bytes(ours_func[i:i + 4], "little")
+        b = int.from_bytes(retail[i:i + 4], "little")
+        if a != b:
+            rows.append((i, a, b))
+    if not rows:
+        relocated = {rel["r_offset"] - placer.off for rel in placer.relocations()}
+        missing = sorted(set(symbol_offsets(name, canon_address)) - relocated)
+        if missing:
+            refs = symbol_offsets(name, canon_address)
+            result["verdict"] = ("LINK literal address where retail references a symbol: "
+                                 + ", ".join(f"+0x{o:x} ({refs[o]})" for o in missing[:4]))
+            return result
+        result.update(verdict="EXACT", exact=True, differing_words=0)
+        return result
+    result.update(verdict=f"BYTES {len(rows)}/{row.size // 4}", differing_words=len(rows),
+                  words=[[i, a, b] for i, a, b in rows])
+    if show:
+        import rabbitizer as rz
+        lines = []
+        for i, a, b in rows:
+            da = rz.Instruction(a, vram=address + i, category=rz.InstrCategory.R5900).disassemble()
+            db = rz.Instruction(b, vram=address + i, category=rz.InstrCategory.R5900).disassemble()
+            lines.append(f"  +{i:4x}  ours {da:40s} retail {db}")
+        result["diff"] = lines
+    return result
+
+
+MEM_OPS = {0x1A, 0x1B, 0x1E, 0x1F, *range(0x20, 0x30), 0x31, 0x36, 0x37, 0x39, 0x3E, 0x3F}
+
+
+def _mask(w: int) -> int:
+    """The word without its address field (jal target, %hi, %lo, $gp offset)."""
+    op, rs = w >> 26, (w >> 21) & 31
+    if op in (2, 3):
+        return w & 0xFC000000
+    if op == 0x0F or (rs == 28 and op >= 8):
+        return w & 0xFFFF0000
+    if (op in MEM_OPS or op in (0x09, 0x0D, 0x19)) and rs != 29:
+        return w & 0xFFFF0000
+    return w
+
+
+def copy_check(obj_path, name: str, place: tuple[int, int]) -> dict:
+    """A copy of an EXACT function: placed and compared like the canonical one
+    when every symbol resolves in that level; otherwise the copy must equal the
+    canonical retail bytes except in address fields our object relocates (a
+    jal target, %hi/%lo or $gp offset), so the same C builds it once linked."""
+    full = check(obj_path, name, place=place)
+    if full["exact"]:
+        return full
+    row = ov.read_catalogue()[name]
+    m = ov.OVERLAY_FUNC.match(name)
+    canon = ov.level_text_bytes(int(m.group(1)), int(m.group(2), 16), row.size)
+    copy = ov.level_text_bytes(place[0], place[1], row.size)
+    try:
+        placer = Placer(open_elf(obj_path), name, *place)
+    except Unresolved:
+        return full
+    relocated = {rel["r_offset"] - placer.off for rel in placer.relocations()}
+    for i in range(0, row.size, 4):
+        a = int.from_bytes(canon[i:i + 4], "little")
+        b = int.from_bytes(copy[i:i + 4], "little")
+        if a != b and (i not in relocated or _mask(a) != _mask(b)):
+            # a word our object does not relocate differs: the same C cannot
+            # build this place, it is another function the catalogue merged
+            return {**full, "not_a_copy": i not in relocated}
+    return {**full, "verdict": "EXACT", "exact": True, "differing_words": 0, "method": METHOD + "+copy"}

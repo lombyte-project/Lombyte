@@ -418,6 +418,7 @@ extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void FUN_L08_002e1698(void *);
 extern void FUN_L00_00299460(int);
+extern void FUN_L08_002a1880(int);
 extern void FUN_L00_00211250(void);
 extern void FUN_L00_00260860(int, int);
 
@@ -450,7 +451,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
             FUN_L08_002e1698(D_L08_0015FFD8 + d->i50 * 256);
         }
         if (d->sub == 3) {
-            FUN_L00_00299460(1);
+            FUN_L08_002a1880(1);
             m->state = 5;
         }
         if (d->sub == 4) {
@@ -687,6 +688,7 @@ extern short D_L08_001623C4 __attribute__((sda));
 extern short D_L08_001623E8 __attribute__((sda));
 extern short D_L08_001623C8 __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);
+extern void FUN_L08_00309030(void);
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
 extern void FUN_L08_002f1158(void *, float, float, float, void *);
 extern void FUN_L08_002f12a0(int);
@@ -753,7 +755,7 @@ void FUN_L08_003097b0(unsigned char *moby) {
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(0);
             FUN_L08_002f1378(1);
-            enqueue_callback_list_1(FUN_L08_002f0dc8, moby);
+            enqueue_callback_list_1(FUN_L08_00309030, moby);
         }
         break;
     }

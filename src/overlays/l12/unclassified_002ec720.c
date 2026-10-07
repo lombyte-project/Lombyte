@@ -115,4 +115,91 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
     return moby;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ece00.s", FUN_L12_002ece00);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002ed280.s", FUN_L12_002ed280);
+/* Hoven challenge tracker: unlocks the area once, records the time and run flags for two skill points and
+ * awards them (one for staying airborne long enough). */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE600), where it is exact; names translated to the US level program. */
+
+extern char D_00141968[];
+extern int D_0015ED84; /* no foreign declaration */
+extern int D_0015EEA4;
+extern int D_0015ED84;
+extern int D_0013CAE0[];
+extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
+extern char D_00141968_h[] __asm__("D_00141968");
+extern char D_0013F350_q[] __asm__("D_0013F350");
+extern int FUN_L01_0026e008(int, int);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern void FUN_L00_00203908(int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
+extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
+
+void FUN_L12_002ed280(char *m) {
+    int *d = *(int **)(m + 0x78);
+    if (FUN_L01_0026e008(d[3], -1) == 0) {
+        unsigned char *s = D_0013D50F_e;
+        if (s[0x14] == 0) {
+            s[0x14] = 1;
+            allocate_voice_for_bank_entry_alt(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+    }
+    {
+        char *h = D_00141968_h;
+        if (*(unsigned short *)(h + 0x368) == 0) {
+            char *q = D_0013F350_q;
+            if (*(int *)(q + 0x2084) == 0x81) {
+                *(unsigned short *)(h + 0x368) = *(unsigned short *)(h + 0x368) + 1;
+            }
+            if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x36A)) {
+                *(unsigned short *)(h + 0x36A) = scale_game_frames_c(D_0015EEA4) / 600;
+            }
+            *(unsigned int *)(h + 0x36C) = *(unsigned int *)(h + 0x36C) | (1 << D_0015ED84) | 0x80000000;
+            if (is_point_inside_clip_volume(q + 0x80, d[0])) {
+                FUN_L00_00203908(0x2EE3, 0x6D);
+            }
+        }
+    }
+    {
+        char *h = D_00141968_h;
+        if (*(unsigned short *)(h + 0x370) == 0
+            || (*(unsigned short *)(h + 0x370) < 2
+                && scale_game_frames_c(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 > scale_game_frames_c(72000))) {
+            char *q = D_0013F350_q;
+            if (*(int *)(q + 0x2084) == 0x81) {
+                d[1]++;
+                if ((D_0013CAE0[0] & 3) && 0.3f < *(float *)(q + 0x229C)) {
+                    d[2]++;
+                } else {
+                    d[2] = 0;
+                }
+                if (scale_game_frames_c(0x28) < d[2]) {
+                    char *g = D_00141968_h;
+                    d[1] = 0;
+                    if (*(unsigned short *)(g + 0x370) <= 0xFFFE) {
+                        *(unsigned short *)(g + 0x370) = *(unsigned short *)(g + 0x370) + 1;
+                    }
+                    if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(g + 0x372)) {
+                        *(unsigned short *)(g + 0x372) = scale_game_frames_c(D_0015EEA4) / 600;
+                    }
+                    *(unsigned int *)(g + 0x374) = *(unsigned int *)(g + 0x374) | (1 << D_0015ED84) | 0x80000000;
+                }
+                {
+                    int a = scale_game_frames_c(0x1C20);
+                    int b = scale_game_frames_c(0x708);
+                    char *k = D_00141968_h;
+                    if (*(unsigned short *)(k + 0x370) * a + b < d[1]) {
+                        FUN_L00_00203908(0x2EE4, 0x6E);
+                    }
+                }
+            }
+        }
+    }
+    if (D_0013D408_b[0xBC] != 0) {
+        char *k = D_00141968_h;
+        if (*(unsigned short *)(k + 0x1F0) == 0) {
+            FUN_L00_00203908(0x2EE0, 0x3E);
+        }
+    }
+}

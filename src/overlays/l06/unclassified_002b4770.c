@@ -301,6 +301,7 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 
 int FUN_L06_002fb2a8(char *moby) {
     float v0[4], m[4], v1[4], v2[4];
@@ -331,7 +332,7 @@ int FUN_L06_002fb2a8(char *moby) {
     m[1] = -FUN_001f9e90(FUN_001f9b80(v0, pos), *(float *)(moby + 0x18) - v0[2]) -
            (1.0f - *(float *)(data + 0x118)) * 30.0f * 0.017453293f;
     FUN_L00_002ea9d8(v0);
-    FUN_L00_002ea9d8(m);
+    FUN_L00_002eaa30(m);
     if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1)
         return 1;
     return 0;
@@ -883,7 +884,7 @@ void FUN_L06_002fb148(char *moby) {
         -FUN_001f9e90(FUN_001f9b80(v0, moby + 0x10), *(float *)(moby + 0x18) - v0[2]) - 0.5235988f;
     FUN_L00_002eaaa0(v0, m, 1, 0, 0);
     FUN_L00_002ea9d8(v0);
-    FUN_L00_002ea9d8(m);
+    FUN_L00_002eaa30(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbc88.s", FUN_L06_002fbc88);

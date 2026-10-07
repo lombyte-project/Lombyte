@@ -139,6 +139,7 @@ void FUN_L02_002eca30(char *m, void *arg1) {
     }
 }
 void FUN_L02_002ec308(char *self);
+void FUN_L02_002ecc68(char *self);
 
 void FUN_L02_002ecd50(char *moby) {
     int i;
@@ -169,7 +170,7 @@ void FUN_L02_002ecd50(char *moby) {
         q = *(int **)(data + 0xE4);
         if (v != *q) {
             *q = v;
-            enqueue_callback_list_1_alt(FUN_L02_002ec308, moby);
+            enqueue_callback_list_1_alt(FUN_L02_002ecc68, moby);
         }
     }
 }

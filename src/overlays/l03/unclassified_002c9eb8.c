@@ -133,6 +133,7 @@ int FUN_L03_002dcb30(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002DDF90), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00235dc0(void);
+extern void FUN_L00_00237190(void);
 extern void FUN_L00_00235e18(int, int);
 extern void FUN_L00_002371e0(void);
 extern void FUN_L00_00237200(void);
@@ -163,7 +164,7 @@ void FUN_L03_002dcbc8(char *m, int mode) {
     h = *(int *)(d + 0xA4);
     if (h == -1) {
         *(int *)(d + 0xA4) = queue_animation_update(
-            0xC, 0, (int)FUN_L00_00235dc0, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
+            0xC, 0, (int)FUN_L00_00237190, (int)FUN_L00_002371e0, (int)FUN_L00_00237200, 0, 0);
     } else {
         FUN_L00_00235e18(h, 0xA);
     }

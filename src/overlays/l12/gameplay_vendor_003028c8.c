@@ -16,6 +16,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
 void FUN_L12_003032e8(char *moby) {
@@ -28,7 +29,7 @@ void FUN_L12_003032e8(char *moby) {
     m[4] = 0;
     m[5] = -*(float *)(data + 0x74);
     m[6] = fast_add_rotations(1.5707964f, *(float *)(moby + 0x48));
-    FUN_L00_002ea9d8(m + 4);
+    FUN_L00_002eaa30(m + 4);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303540.s", FUN_L12_00303540);

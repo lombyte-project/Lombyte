@@ -409,6 +409,7 @@ extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F6E0 __attribute__((sda));
 extern void FUN_L00_002118b0(void);
+extern void FUN_L00_002321a8(void);
 extern void FUN_L00_00231e78_c(int, int, float) __asm__("FUN_L00_00231e78");
 extern void FUN_L00_00232220_c(int, int, float) __asm__("FUN_L00_00232220");
 extern void FUN_L00_00232628(void);
@@ -475,7 +476,7 @@ void FUN_L00_002323b8(int a0, int a1, float t) {
     if (*(unsigned char *)(g3 + 0x20A4) == 0) {
         FUN_L00_00231e78_c(a0, a1, t);
     }
-    FUN_L00_002118b0();
+    FUN_L00_002321a8();
     if (*(int *)(g3 + 0x2278) != 0) {
         FUN_L00_00232220_c(a0, a1, t);
     }

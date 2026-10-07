@@ -384,6 +384,7 @@ extern short D_L15_00162184_d __asm__("D_L15_00162184") __attribute__((sda));
 extern short D_L15_00162188_d __asm__("D_L15_00162188") __attribute__((sda));
 extern short D_L15_0016218C_d __asm__("D_L15_0016218C") __attribute__((sda));
 void font_print_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6530");
+extern void font_print_large_001fb470(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_L00_001fb470");
 
 void FUN_L15_002eb6b8(void) {
     char buf[0x50];
@@ -435,10 +436,10 @@ void FUN_L15_002eb6b8(void) {
         if ((n - val) & 4)
             n = n - 1;
     }
-    font_print_large((void *)(*(int *)&D_L15_00162180_d + 1),
+    font_print_large_001fb470((void *)(*(int *)&D_L15_00162180_d + 1),
                      (void *)(*(int *)&D_L15_00162184_d + 1), (void *)*(int *)&D_L15_0016218C_d,
                      buf, (void *)n);
-    font_print_large((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d,
+    font_print_large_001fb470((void *)*(int *)&D_L15_00162180_d, (void *)*(int *)&D_L15_00162184_d,
                      (void *)*(int *)&D_L15_00162188_d, buf, (void *)n);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */

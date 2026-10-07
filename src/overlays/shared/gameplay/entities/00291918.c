@@ -14,10 +14,11 @@ extern void FUN_L02_0024fa80(char *);
 extern void FUN_L02_002a40f0(char *);
 extern void FUN_L02_002a46e0(char *);
 extern void WriteDmaChannel(u32, u32, u32);
+extern void FUN_L02_002101b8(u32, u32, u32);
 
 void FUN_L03_00291918(char *moby) {
     FUN_L02_002a40f0(moby);
-    WriteDmaChannel(D_L03_001CAF00, 0x70002800, 0xF8);
+    FUN_L02_002101b8(D_L03_001CAF00, 0x70002800, 0xF8);
     FUN_L02_0024f748(moby);
     FUN_L02_0024fa80(moby);
     FUN_L02_002a46e0(moby);

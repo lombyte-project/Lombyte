@@ -185,7 +185,7 @@ extern s32 D_001D5BF0 NOT_SDA;
 extern PositionPair D_001D99B0[];
 extern Vector4 D_001D9C80[];
 extern Vector4 D_001D9CB0[];
-extern u8 D_0022E1B0[];
+extern void FUN_0022e1b0();
 
 extern void CalculateDmaTransferAddress(void);
 extern void music_pause(s32);
@@ -514,7 +514,7 @@ void update_resident_gameplay_state(void) {
                                 (s32)(((f32)render_sequence.time - func_001F96E8(420.0f)) *
                                       (D_0015ED60 * 1.2f));
                             level_render_state.player->unkB2 = 0;
-                            enqueue_callback_list_1(D_0022E1B0, level_render_state.player);
+                            enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                         }
                         if (scale_ticks(0x1D0) < render_sequence.time) {
                             D_0015F440 += 0.025f;
@@ -549,7 +549,7 @@ void update_resident_gameplay_state(void) {
                     }
                     object->unkBC = 0x32;
                     object->unkB2 = 10;
-                    enqueue_callback_list_1(D_0022E1B0, object);
+                    enqueue_callback_list_1(FUN_0022e1b0, object);
                 } else if (render_sequence.time <= scale_ticks(360)) {
                     s32 color_intensity;
                     if (render_sequence.time < scale_ticks(300)) {
@@ -557,7 +557,7 @@ void update_resident_gameplay_state(void) {
                             (s32)((func_001F96E8(300.0f) - (f32)render_sequence.time) *
                                   (D_0015ED60 * 1.5f));
                         level_render_state.player->unkB2 = 0;
-                        enqueue_callback_list_1(D_0022E1B0, level_render_state.player);
+                        enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                     }
                     color_intensity = (s32)((func_001F96E8(360.0f) - (f32)render_sequence.time) *
                                             (D_0015ED60 * 1.25f));
@@ -759,7 +759,7 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.content_variant < 2) {
                     level_render_state.player->unkBC = 0x32;
                     level_render_state.player->unkB2 = 10;
-                    enqueue_callback_list_1(D_0022E1B0, level_render_state.player);
+                    enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                 }
                 level_render_state.path_progress +=
                     level_render_state.speed * D_0015ED6C / level_render_state.path_segment_length;

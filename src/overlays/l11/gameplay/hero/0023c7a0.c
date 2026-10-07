@@ -675,6 +675,9 @@ extern f32 FUN_001f9af0(void *);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 FUN_001f9dc8(f32);
 extern void FUN_L00_0020a1e0(f32, f32);
+extern void FUN_L11_0023b050(f32, f32);
+extern void FUN_L11_0023b068(f32, f32);
+extern void FUN_L11_0023b038(f32, f32);
 extern void FUN_L00_00209848(s32, s32);
 extern void FUN_L00_00209638(s32, s32);
 
@@ -1220,9 +1223,9 @@ void FUN_L11_00246b70(void) {
             FUN_L01_00232978(0);
             t = P.f8EC * FUN_001f9dc8(yaw) * -7.0f;
             FUN_L00_0025bc98(&P.u90.f90, t, &P.f8E4, 0, 0.007f, 0.17f, D_0015ED6C * 1.2217305f);
-            FUN_L00_0020a1e0(0.009f, 0.22f);
-            FUN_L00_0020a1e0(0.04f, 0.2f);
-            FUN_L00_0020a1e0(0.02f, 0.2f);
+            FUN_L11_0023b038(0.009f, 0.22f);
+            FUN_L11_0023b050(0.04f, 0.2f);
+            FUN_L11_0023b068(0.02f, 0.2f);
             AN.f114 = diff * 47.0f;
             AN.f118 = t * 1.5f;
             AN.f110 = t * 1.4f;

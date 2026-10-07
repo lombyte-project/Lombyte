@@ -2691,6 +2691,7 @@ extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
+extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L16_002ceca8_q(int) __asm__("FUN_L16_002ceca8");
@@ -2745,7 +2746,7 @@ void FUN_L16_002d5ef8(char *m) {
     case 3:
         FUN_L16_002d6260_q(m, position, rotation);
         FUN_L00_002ea9d8_q(position);
-        FUN_L00_002ea9d8_q(rotation);
+        FUN_L00_002ea9d8_q_002eaa30(rotation);
         if (d->camera >= 0)
             *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&d->camera;
         if (FUN_L01_0026e008_q(d->path, -1))
