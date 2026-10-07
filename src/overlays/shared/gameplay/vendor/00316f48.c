@@ -2,4 +2,26 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00316f48.s", FUN_L13_00316f48);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* marks a vendor item for the current moby class */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_003184A0), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x39]; unsigned char field39; } Level13VendorItem;
+
+typedef struct { char pad0[0x1C]; Level13VendorItem *item; } Level13VendorRecord;
+
+typedef struct { char pad0[0x86]; short class_id; } Level13VendorCurrentMoby;
+
+extern Level13VendorCurrentMoby *D_L13_00167100 __attribute__((section(".data")));
+extern Level13VendorRecord *D_L13_0015EF50;
+
+void FUN_L13_00316f48(int index) {
+ Level13VendorCurrentMoby *m=D_L13_00167100;
+ Level13VendorRecord *rec=(Level13VendorRecord *)(index*32+(int)D_L13_0015EF50);
+ Level13VendorItem *item=rec->item;
+ if(m->class_id==0x13) item->field39=1;
+}

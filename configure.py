@@ -378,6 +378,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/vendor/003015d0.c",
     "shared/gameplay/vendor/0030b618.c",
     "shared/gameplay/vendor/0030e690.c",
+    "shared/gameplay/vendor/00316f48.c",
     "shared/math/interpolation/00257ef0.c",
     "shared/math/vectors/0025c230.c",
     "shared/rendering/00269290.c",
