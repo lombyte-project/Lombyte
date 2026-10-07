@@ -418,6 +418,7 @@ extern unsigned char *D_L08_0015FFD8;
 extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void FUN_L08_002e1698(void *);
 extern void FUN_L00_00299460(int);
+extern void FUN_L08_002a1880(int);
 extern void FUN_L00_00211250(void);
 extern void FUN_L00_00260860(int, int);
 
@@ -450,7 +451,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
             FUN_L08_002e1698(D_L08_0015FFD8 + d->i50 * 256);
         }
         if (d->sub == 3) {
-            FUN_L00_00299460(1);
+            FUN_L08_002a1880(1);
             m->state = 5;
         }
         if (d->sub == 4) {

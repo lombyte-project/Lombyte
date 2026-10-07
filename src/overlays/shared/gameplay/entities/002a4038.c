@@ -54,6 +54,7 @@ extern void FUN_001f2260(void);
 extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 void aa_blur_pass(void) __asm__("FUN_001fb680");
+extern void aa_blur_pass_00233b68(void) __asm__("FUN_00233b68");
 
 void FUN_L02_002a46e0(void) {
     char *b;
@@ -80,7 +81,7 @@ void FUN_L02_002a46e0(void) {
            ((long)*(int *)(b + 0x238) << 16);
     g[3] = 0x3D;
     D_L02_001611C0 = q + 12;
-    aa_blur_pass();
+    aa_blur_pass_00233b68();
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002CCD18), where it is exact; names translated to the US level program. */
 

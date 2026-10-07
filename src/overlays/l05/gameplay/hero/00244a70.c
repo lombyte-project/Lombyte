@@ -640,6 +640,9 @@ extern f32 FUN_001f9af0(void *);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 FUN_001f9dc8(f32);
 extern void FUN_L00_0020a1e0(f32, f32);
+extern void FUN_L05_00238858(f32, f32);
+extern void FUN_L05_00238870(f32, f32);
+extern void FUN_L05_00238888(f32, f32);
 extern void FUN_L00_00209848(s32, s32);
 extern void FUN_L00_00209638(s32, s32);
 
@@ -1188,9 +1191,9 @@ void FUN_L05_00244a70(void) {
             FUN_L01_00232978(0);
             t = P.f8EC * FUN_001f9dc8(yaw) * -7.0f;
             FUN_L00_0025bc98(&P.u90.f90, t, &P.f8E4, 0, 0.007f, 0.17f, D_0015ED6C * 1.2217305f);
-            FUN_L00_0020a1e0(0.009f, 0.22f);
-            FUN_L00_0020a1e0(0.04f, 0.2f);
-            FUN_L00_0020a1e0(0.02f, 0.2f);
+            FUN_L05_00238858(0.009f, 0.22f);
+            FUN_L05_00238870(0.04f, 0.2f);
+            FUN_L05_00238888(0.02f, 0.2f);
             AN.f114 = diff * 47.0f;
             AN.f118 = t * 1.5f;
             AN.f110 = t * 1.4f;
@@ -1442,7 +1445,7 @@ void FUN_L05_00244a70(void) {
         if (P.f229C < 0.2f) {
             an = 0.0f;
         }
-        FUN_L00_0020a1e0(0.02f, 0.2f);
+        FUN_L05_00238888(0.02f, 0.2f);
         AN.f278 = an * 37.0f;
         AN.f274 = an * -22.0f;
         if (an > 0.0f) {
@@ -1455,7 +1458,7 @@ void FUN_L05_00244a70(void) {
         } else if (AN.f60 < -0.6632251f) {
             AN.f60 = -0.6632251f;
         }
-        FUN_L00_0020a1e0(0.012f, 0.22f);
+        FUN_L05_00238858(0.012f, 0.22f);
         AN.f114 = an * 25.0f;
         AN.f110 = an * -10.0f;
         if (P.h30E != 0 && P.b88D != 0) {
@@ -2364,9 +2367,9 @@ void FUN_L05_00244a70(void) {
             FUN_L00_0025bc98(&P.u90.f94.v, -P.f9D4, &P.f9E8, 0, D_0015ED64 * 0.035f,
                              D_0015ED64 * 0.3f, D_0015ED6C * 1.9198622f);
         }
-        FUN_L00_0020a1e0(0.009f, 0.22f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.02f, 0.2f);
+        FUN_L05_00238858(0.009f, 0.22f);
+        FUN_L05_00238870(0.04f, 0.2f);
+        FUN_L05_00238888(0.02f, 0.2f);
         AN.f118 = d * 2.1f;
         AN.f110 = d * 3.5f;
         break;

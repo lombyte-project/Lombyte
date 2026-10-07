@@ -1490,6 +1490,7 @@ extern void FUN_L00_00260860(int, int);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_00299460(int);
+extern void FUN_L16_002923d0(int);
 extern void FUN_L01_002783a8(float, void *);
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L16_002e70c0(char *);
@@ -1578,7 +1579,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
             m->state = 1;
             previous = activation->previous;
             if (previous == 4) {
-                FUN_L00_00299460(0);
+                FUN_L16_002923d0(0);
                 m->state = previous;
             }
         }

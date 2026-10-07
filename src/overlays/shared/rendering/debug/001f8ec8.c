@@ -9,7 +9,7 @@ void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 void FUN_L00_002772c0(int);
 void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
-void draw_dialog_text(void) __asm__("FUN_001fbc50");
+void draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 void FUN_L00_001f8ec8(void) {
     if (D_L00_0015F5D8 == 0) {
         if (FUN_L00_00201720() == 0) {

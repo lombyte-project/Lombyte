@@ -786,6 +786,9 @@ extern void FUN_L00_002091d8(float, float, float);
 extern void FUN_L00_00209540(int, int);
 extern void FUN_L00_00209638_cf(int, int) __asm__("FUN_L00_00209848");
 extern void FUN_L00_00209848_cf(float, float) __asm__("FUN_L00_0020a1e0");
+extern void FUN_L00_00209848_cf_0022b5f8(float, float) __asm__("FUN_L01_0022b5f8");
+extern void FUN_L00_00209848_cf_0022b610(float, float) __asm__("FUN_L01_0022b610");
+extern void FUN_L00_00209848_cf_0022b5e0(float, float) __asm__("FUN_L01_0022b5e0");
 extern void FUN_L00_00209ca8_cf(int, int) __asm__("FUN_L00_00209a40");
 extern void FUN_L00_0020b5b8_cf(void) __asm__("FUN_L00_00214108");
 extern void FUN_L00_002118c8(float, int);
@@ -1310,9 +1313,9 @@ void FUN_L01_002370b8(void) {
         lean = D_0013F350.f8EC * FUN_L00_0020a1e0_cf(ang) * -7.0f;
         fast_subtract_rotations_cf(&D_0013F350.f90[0], lean, &D_0013F350.f8E4, 0, 0.007f, 0.17f,
                                    D_0015ED6C * 1.2217305f);
-        FUN_L00_00209848_cf(0.009f, 0.22f);
-        FUN_L00_00209848_cf(0.04f, 0.2f);
-        FUN_L00_00209848_cf(0.02f, 0.2f);
+        FUN_L00_00209848_cf_0022b5e0(0.009f, 0.22f);
+        FUN_L00_00209848_cf_0022b5f8(0.04f, 0.2f);
+        FUN_L00_00209848_cf_0022b610(0.02f, 0.2f);
         D_L01_0017AB00[1].f60[1] = roll * 47.0f;
         D_L01_0017AB00[1].f60[2] = lean * 1.5f;
         D_L01_0017AB00[1].f60[0] = lean * 1.4f;
@@ -2039,9 +2042,9 @@ void FUN_L01_002370b8(void) {
                                            0, D_0015ED64 * 0.035f, D_0015ED64 * 0.3f,
                                            D_0015ED6C * 1.9198622f);
             }
-            FUN_L00_00209848_cf(0.009f, 0.22f);
-            FUN_L00_00209848_cf(0.04f, 0.2f);
-            FUN_L00_00209848_cf(0.02f, 0.2f);
+            FUN_L00_00209848_cf_0022b5e0(0.009f, 0.22f);
+            FUN_L00_00209848_cf_0022b5f8(0.04f, 0.2f);
+            FUN_L00_00209848_cf_0022b610(0.02f, 0.2f);
             D_L01_0017AB00[1].f60[2] = lean * 2.1f;
             D_L01_0017AB00[1].f60[0] = lean * 3.5f;
         }

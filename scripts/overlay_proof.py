@@ -691,5 +691,7 @@ def copy_check(obj_path, name: str, place: tuple[int, int]) -> dict:
         a = int.from_bytes(canon[i:i + 4], "little")
         b = int.from_bytes(copy[i:i + 4], "little")
         if a != b and (i not in relocated or _mask(a) != _mask(b)):
-            return full
+            # a word our object does not relocate differs: the same C cannot
+            # build this place, it is another function the catalogue merged
+            return {**full, "not_a_copy": i not in relocated}
     return {**full, "verdict": "EXACT", "exact": True, "differing_words": 0, "method": METHOD + "+copy"}

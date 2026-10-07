@@ -1161,6 +1161,7 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float D_0015ED6C;
 extern int D_001413D4 __attribute__((section(".data")));
 extern int FUN_L00_0028df38(int, int);
+extern int FUN_L02_0028d618(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L02_00161C80 __attribute__((sda));
 extern short D_L02_00161C88 __attribute__((sda));
@@ -1196,8 +1197,8 @@ void FUN_L02_002df730(char *moby) {
                 gain_b = 1024;
             else if (gain_b < 0)
                 gain_b = 0;
-            FUN_L00_0028df38(sound_a, gain_a);
-            FUN_L00_0028df38(sound_b, gain_b);
+            FUN_L02_0028d618(sound_a, gain_a);
+            FUN_L02_0028d618(sound_b, gain_b);
             *(float *)(data + 0x10) = -1.0f;
         }
     }

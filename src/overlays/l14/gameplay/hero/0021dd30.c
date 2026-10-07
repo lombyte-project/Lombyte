@@ -913,6 +913,9 @@ extern f32 FUN_001f9af0(void *);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 FUN_001f9dc8(f32);
 extern void FUN_L00_0020a1e0(f32, f32);
+extern void FUN_L14_0021c5c8(f32, f32);
+extern void FUN_L14_0021c5f8(f32, f32);
+extern void FUN_L14_0021c5e0(f32, f32);
 extern void FUN_L00_00209848(s32, s32);
 extern void FUN_L00_00209638(s32, s32);
 
@@ -1981,9 +1984,9 @@ void FUN_L14_00228cd0(void) {
         f32 a;
         FUN_L00_002167d0();
         FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.04f, 0.2f);
-        FUN_L00_0020a1e0(0.02f, 0.2f);
+        FUN_L14_0021c5c8(0.04f, 0.2f);
+        FUN_L14_0021c5e0(0.04f, 0.2f);
+        FUN_L14_0021c5f8(0.02f, 0.2f);
         if (moby->b53 == 0x37) {
             a = P.f188;
             if (a > 1.4f) {
@@ -2133,9 +2136,9 @@ void FUN_L14_00228cd0(void) {
             AN.f60 = FUN_001f9e90(FUN_001f9b20(&P.u100.v100), P.u100.f108.v);
         }
         if (has) {
-            FUN_L00_0020a1e0(D_0015ED64 * 0.017f, D_0015ED64 * 0.3f);
-            FUN_L00_0020a1e0(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
-            FUN_L00_0020a1e0(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
+            FUN_L14_0021c5f8(D_0015ED64 * 0.017f, D_0015ED64 * 0.3f);
+            FUN_L14_0021c5c8(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
+            FUN_L14_0021c5e0(D_0015ED64 * 0.027f, D_0015ED64 * 0.3f);
             if (P.pm5D8 != NULL) {
                 f32 a;
                 f32 k;
