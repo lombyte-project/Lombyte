@@ -108,10 +108,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
             &level_render_state.secondary_history_positions[(history_index + 1) & 0x1F];
         primary_current = get_primary_history_position(history_index);
         secondary_current = &level_render_state.secondary_history_positions[history_index];
+        primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
         for (strip = 0; strip < 2; strip++) {
             strip_offset = strip * 32;
             quad.reserved = 0;
-            primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
             subtract_vectors(&cross_strip_differences[0], secondary_current, primary_current);
             subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);
             subtract_vectors(&cross_strip_differences[2], secondary_next, primary_next);
