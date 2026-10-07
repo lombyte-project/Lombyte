@@ -131,7 +131,10 @@ u64 get_frame_texture(s32 frame_id) {
     if (return_shift < 0) {
         return_shift = 0;
     }
-    return_mode = image_page->gs_block_offset < (gs_texture_allocation_base >> 8) ? 0x1B : 0x13;
+    return_mode = 0x13;
+    if (image_page->gs_block_offset < (gs_texture_allocation_base >> 8)) {
+        return_mode = 0x1B;
+    }
     tex0_word = image_page->gs_block_offset | ((u64)(1 << return_shift) << 14);
     tex0_word |= (u64)return_mode << 20;
     tex0_word |= (u64)image_page->width_log2 << 26;
