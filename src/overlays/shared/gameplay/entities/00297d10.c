@@ -479,7 +479,7 @@ extern int FUN_L00_00261968(int, void *, void *);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern int FUN_L01_00276a48(float, int *, int, int, void *);
 extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
-extern int FUN_L06_002f32f0(void *, int);
+extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
@@ -503,7 +503,7 @@ extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, vo
 extern void FUN_L05_0028be78(int *list, int n, int idx);
 extern void FUN_L06_002f2250(void);
 extern void FUN_L06_002f2910(void *);
-extern void FUN_L06_002f3640(void *);
+extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
 extern void FUN_L06_002f38c8(char *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -538,7 +538,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
     dz = AbsoluteFloat(moby->pos[2] - D_0013F350_u.f2A0[2]);
     *(u128 *)save1 = *(u128 *)save0 = *(u128 *)moby->pos;
     if (moby->state != 1) {
-        FUN_L06_002f3640(moby);
+        FUN_L06_002f3640_u(moby);
         if (dist < 16.0f && AbsoluteFloat(moby->pos[2] - D_0013F350_u.f80[2]) < 1.5f) {
             int ok = 0;
             if (moby->state == 2 || moby->state == 5 || moby->state == 3 || moby->state == 6 ||
@@ -1092,7 +1092,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         }
         break;
     }
-    r = FUN_L06_002f32f0(moby, moby->state != 7);
+    r = FUN_L06_002f32f0_u(moby, moby->state != 7);
     if (r == 2) {
         return;
     }
@@ -1250,7 +1250,48 @@ float FUN_L06_002f2148(char *a, char *b, int c) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2250.s", FUN_L06_002f2250);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2910.s", FUN_L06_002f2910);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f32f0.s", FUN_L06_002f32f0);
+extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
+extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");
+extern int D_L06_001AC180_c[] __asm__("D_L06_001AC180");
+
+typedef struct {
+    int list;
+    int out;
+} Iter32f0;
+
+/* Runs the candidate check FUN_L06_002f2c28 over the moby's candidate list (or the global default list when it has none);
+   returns the output of the first accepted candidate. */
+int FUN_L06_002f32f0(char *moby, int flag)
+{
+    char **moby_ref;
+    Iter32f0 iter;
+    char *state;
+    int list_id;
+    int *cursor;
+    int entry;
+
+    state = *(char **)(moby + 0x78);
+    iter.out = 0;
+    list_id = *(int *)(state + 0x30C);
+    if (list_id != -1) {
+        FUN_L00_002591d0_c(&iter.list, list_id, 0, 0);
+        while (iter.list != 0) {
+            if (FUN_L06_002f2c28_c(moby, state, iter.list, flag, &iter.out)) return iter.out;
+            FUN_L00_002592b8_c(&iter.list, iter.list, 0, 0);
+        }
+    } else {
+        cursor = D_L06_001AC180_c;
+        entry = *cursor;
+        while (entry != 0) {
+            moby_ref = &moby;
+            if (FUN_L06_002f2c28_c(*moby_ref, state, entry, flag, &iter.out)) return iter.out;
+            cursor++;
+            entry = *cursor;
+        }
+    }
+    return iter.out;
+}
 /* Scores a candidate target and keeps it if it beats the best so far. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4818), where it is exact; names translated to the US level program. */
 
@@ -1270,7 +1311,47 @@ void FUN_L06_002f33e8(char *a, char *b, char *c, int *out, float *best, float th
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f34d8.s", FUN_L06_002f34d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3640.s", FUN_L06_002f3640);
+typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
+extern char *D_001413D0 __attribute__((section(".data")));
+extern void FUN_L03_00250a78(void *, float, float);
+extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
+extern void FUN_0022da68(int, int, void *);
+
+/* Looks for a target (query 0x330001); if its owner is a different hostile, sets up the aim/attack data and enters state 9. */
+void FUN_L06_002f3640(unsigned char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
+        char *target = FUN_L00_0025a420(moby, 0x330001, 0);
+        if (target != 0) {
+            Q pos;
+            float base_angle = FUN_001f9e90(*(float *)(target + 0x10), *(float *)(target + 0x14));
+            char *owner = *(char **)(target + 0x20);
+            float ang;
+            ang = base_angle;
+            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != *(short *)(moby + 0xA6)) {
+                int frames_sq = FUN_001f96f8(0x50);
+                frames_sq *= FUN_001f96f8(0x50);
+                state[0xBD] = 0;
+                *(int *)(state + 0xA4) = 9;
+                *(float *)(state + 0x90) = 4.0f / (float)frames_sq;
+                FUN_L03_00250a78(state + 0x80, 2.0f, 0.5f);
+                pos = *(Q *)(target + 0x10);
+                FUN_L00_0025ab48(&pos, &ang, state + 0x98, state + 0x9C);
+                FUN_L00_0025c558(moby, state + 0x80, 4, 5, 2, ang);
+                {
+                    float v = D_0015ED6C + D_0015ED6C;
+                    *(float *)(state + 0xD0) = 10.0f;
+                    *(float *)(state + 0xD4) = 20.0f;
+                    *(float *)(state + 0xCC) = v;
+                }
+                FUN_0022da68(2, 0, moby);
+                moby[0x20] = 9;
+            }
+        }
+    }
+    moby[0xA4] = 0xFF;
+}
 #include "sda.h"
 
 /* for each moby in a search list with the owner's id, start three effects on its data */
@@ -1385,7 +1466,7 @@ extern int D_0015ED84_p __asm__("D_0015ED84");
 extern int D_L06_001BAC50[];
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L02_002ea7d0(char *);
-extern void FUN_L06_002f7628(char *);
+void FUN_L06_002f7628(char *m);
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
 extern char D_0014171B_aa35[] __asm__("D_0014C050");
 
@@ -1444,7 +1525,89 @@ void FUN_L06_002f7288(char *m) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7628.s", FUN_L06_002f7628);
+
+
+
+/* Draws the moby's light beam: four flickering glow sprites spaced from its target toward the camera,
+ * plus, every fourth frame while visible, a spark drifting up or down from the moby. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8A58), where it is exact; names translated to the US level program. */
+
+
+typedef struct {
+    float ph[4];
+    float spd[4];
+    int t[4];
+    float sz[4];
+    char *tgt;
+} Beam_2f8a58;
+
+extern char D_L06_00167540[];
+extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern int D_L06_0015F5CC;
+extern int D_L06_00161E58 __attribute__((sda));
+extern int D_L06_00161E5C __attribute__((sda));
+extern int D_L06_00161E60 __attribute__((sda));
+extern int D_L06_00161E64 __attribute__((sda));
+extern int D_L06_00161E68 __attribute__((sda));
+extern float D_L06_00161E6C __attribute__((sda));
+extern int D_L06_00161E70 __attribute__((sda));
+extern int FUN_001fa6e0(int, int, float);
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+float AbsoluteFloat(float input) __asm__("func_001F99C0");
+unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
+extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");
+extern unsigned char *func_L00_00273E08_g(void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
+extern void func_L00_00273F80_g(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
+
+void FUN_L06_002f7628(char *moby) {
+    float pos[4];
+    float step[4];
+    float a[4];
+    float b[4];
+    Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
+    int i;
+    subtract_vector_xyz(pos, D_L06_00167540, beam->tgt + 0x10);
+    normalize_vector_xyz(pos, pos, -0.3f);
+    normalize_vector_xyz(step, pos, 0.1f);
+    add_vector_xyz(pos, pos, beam->tgt + 0x10);
+    for (i = 0; i < 4; i++) {
+        float f;
+        int c;
+        beam->ph[i] += beam->spd[i];
+        if (255.0f <= beam->ph[i]) {
+            beam->ph[i] -= 255.0f;
+        } else if (beam->ph[i] <= 0.0f) {
+            beam->ph[i] += 255.0f;
+        }
+        if (tick_countdown_32_alt(&beam->t[i])) {
+            beam->t[i] = scale_game_frames(0xFF);
+        }
+        f = ConvertIntegerToFloat(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);
+        c = FUN_001fa6e0(D_L06_00161E58, D_L06_00161E5C, AbsoluteFloat(0.5f - f));
+        func_L00_00273E08_g(pos, c, func_001FA898_g(beam->ph[i]), D_L06_00161E64, D_L06_00161E60, 2, 0,
+                          beam->sz[i]);
+        add_vector_xyz(pos, pos, step);
+    }
+    if ((D_L06_0015F5CC & 3) == 3 && ((unsigned char *)moby)[0x31] != 0) {
+        float sgn = 1.0f;
+        if (D_L06_0015F5CC & 4) sgn = -1.0f;
+        clear_u64_value(a);
+        a[2] += sgn * 0.9f;
+        normalize_vector_xyz(b, a, -2.0f / (float)scale_game_frames(D_L06_00161E70));
+        add_vector_xyz(a, a, moby + 0x10);
+        a[2] += 0.85f;
+        func_L00_00273F80_g(a, b, D_L06_00161E68, (unsigned char)func_001FA898_g((float)scale_game_frames(D_L06_00161E70)),
+                          (unsigned char)random_integer_below(0xFF), 0, D_L06_00161E6C);
+    }
+}
 
 #define NOT_SDA
 

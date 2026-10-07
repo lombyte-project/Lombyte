@@ -1267,7 +1267,31 @@ void FUN_L15_0029af88(char *moby) {
                      D_L15_00161464_d, D_L15_00161468_d, D_L15_0016146C_d, D_L15_00161460_d);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ead0.s", FUN_L15_0029ead0);
+/* update: scale and fade a moby, spawn an effect, delete it when done */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FCB0), where it is exact; names translated to the US level program. */
+
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void FUN_L00_002598b0(float, char *, char *, float, float, int, int, int, int);
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+
+void FUN_L15_0029ead0(char *moby) {
+    char *cls = *(char **)(moby + 0x24);
+    char *state = *(char **)(moby + 0x78);
+    float t = *(float *)(moby + 0x2C) / *(float *)(cls + 0x24) * 0.5f;
+    char *pos;
+    char *globals;
+    t = t + *(float *)state;
+    *(float *)(moby + 0x2C) = t + t;
+    *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * *(float *)(cls + 0x24);
+    if (*(int *)(state + 8) < scale_game_frames(0x28))
+        moby[0x23] = *(int *)(state + 8) * 127 / scale_game_frames(0x28);
+    globals = D_0013F350;
+    pos = moby + 0x10;
+    FUN_L00_002598b0(t, *(char **)(globals + 0x2080), pos, (float)func_001FA898_r(*(float *)(state + 0xC)), 1.0f, 0x30000, 0, 1, 0);
+    if (tick_countdown_32_alt((int *)(state + 8)))
+        mark_moby_for_removal_c(moby);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2488.s", FUN_L15_002a2488);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */

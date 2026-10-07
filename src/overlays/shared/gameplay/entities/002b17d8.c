@@ -214,9 +214,182 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b17d8.s", FUN_L14_002b17d8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2600.s", FUN_L14_002b2600);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2ed8.s", FUN_L14_002b2ed8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2f60.s", FUN_L14_002b2f60);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b3418.s", FUN_L14_002b3418);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b35d8.s", FUN_L14_002b35d8);
+
+
+
+/* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_0025a420(void *, int, int);
+extern char D_0013E533[];
+extern float FUN_001f9e90(float, float);
+extern float D_0015ED6C;
+extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
+extern int FUN_L00_002e2040(char *);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern float D_L14_001614C8 __attribute__((sda));
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_L00_0025d458(void *m, short *p);
+extern void FUN_L00_0025d538(void *, void *);
+extern char D_0013E633_x[] __asm__("D_0013E533");
+extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
+
+void FUN_L14_002b2f60(char *moby) {
+    char *state = *(char **)(moby + 0x78);
+    int hit_kind;
+    float damage;
+    char *hit_info;
+    int result;
+    if (((unsigned char *)moby)[0x20] == 0 || ((unsigned char *)moby)[0x20] == 0xB) {
+        if (((unsigned char *)moby)[0x20] == 0xB) {
+            ((unsigned char *)moby)[0xA4] = 0xFF;
+            FUN_L00_0025d538(moby, state + 0xC0);
+        }
+        return;
+    }
+    damage = 0.0f;
+    hit_info = FUN_L00_0025a420(moby, 0x330000, 0);
+    if (hit_info != 0 && *(char **)(hit_info + 0x20) != 0
+        && (*(short *)(*(char **)(hit_info + 0x20) + 0xA6) == *(short *)(moby + 0xA6) || *(short *)(*(char **)(hit_info + 0x20) + 0xA6) == 0x370)) {
+        hit_info = 0;
+    }
+    result = FUN_L00_0025a478(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
+    if (hit_kind != 1 && ((unsigned char *)moby)[0x20] != 0xB) {
+        *(float *)(state + 0x20) -= damage;
+        if (*(float *)(state + 0x20) <= 0.0f) result = 1;
+        switch (result) {
+        case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10:
+        {
+            char *p60 = state + 0x60;
+            int t;
+            float e, g, k;
+            FUN_L00_002e2040(moby);
+            moby[0x20] = 0xA;
+            t = scale_game_frames(0x3C);
+            e = D_0015ED6C;
+            g = D_L14_001614C8 * e;
+            k = e * 8.0f;
+            *(short *)(state + 0x26) = t;
+            *(float *)(state + 0x78) = k;
+            *(float *)(state + 0x7C) = g;
+            *(float *)(state + 0xB0) = 11.0f;
+            *(float *)(state + 0xB4) = 29.0f;
+            func_L00_0025D5B0_i(moby, p60, FUN_001f9e90(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14)), 7, 1, 0);
+        }
+            ((unsigned char *)state)[0xC7] = 0xFA;
+            break;
+        case 1: case 2: {
+            float y;
+            if (*(int *)(hit_info + 0x24) & 0x800000) {
+                moby[0x20] = 0xC;
+            } else {
+                moby[0x20] = 0xB;
+            }
+            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            {
+                int r80 = truncate_float_to_s32(*(float *)(state + 0x88) * 1024.0f);
+                float k = D_0015ED6C * 10.0f;
+                *(float *)(state + 0x88) = 0.3f;
+                *(float *)(state + 0x78) = k;
+                *(float *)(state + 0x7C) = k;
+                *(float *)(state + 0xB0) = 9.0f;
+                *(int *)(state + 0x80) = r80;
+                *(float *)(state + 0xB4) = 15.0f;
+            }
+            y = FUN_001f9e90(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14));
+            func_L00_0025D5B0_i(moby, state + 0x60, y, 8, scale_game_frames(5), 0);
+            ((unsigned char *)state)[0xC7] = 0xFA;
+            if (((unsigned char *)D_0013E633_x)[0x2EC1] == 2) {
+                FUN_L00_00257470(moby, 0x200, -1);
+            } else {
+                FUN_L00_00257470(moby, 0, -1);
+            }
+            *(int *)(moby + 0x94) = 0;
+            break;
+        }
+        case 0: case 11:
+            break;
+        }
+        FUN_L00_0025d458(moby, (short *)(state + 0xC0));
+    }
+    ((unsigned char *)moby)[0xA4] = 0xFF;
+    FUN_L00_0025d538(moby, state + 0xC0);
+}
+/* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
+
+extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern int FUN_L00_0025d808(void *, void *, void *, void *, int, float);
+extern short D_L14_001614D8_d __asm__("D_L14_001614D8") __attribute__((sda));
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
+
+int FUN_L14_002b3418(char *moby) {
+    float a[4];
+    float b[4];
+    float c[4];
+    char *data = *(char **)(moby + 0x78);
+    int reached = FUN_L00_0025d808(D_L14_001B0BB0[*(int *)(data + 0x240)], a, data + 0x24C, data + 0x250, 0,
+                              *(float *)&D_L14_001614D8_d * D_0015ED6C * *(float *)(data + 0x27C));
+    float ang;
+    float k;
+    float m;
+    qcopy(b, moby + 0x10);
+    FUN_L00_0025b8c0((float *)(moby + 0x10), (float *)(data + 0x254), a[0], 0.01f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0((float *)(moby + 0x14), (float *)(data + 0x258), a[1], 0.01f, 0.2f, 0.0f);
+    subtract_vector_xyz_c(c, a, b);
+    ang = FUN_001f9e90(c[0], c[1]);
+    k = D_0015ED70 * 12.566371f;
+    m = D_0015ED6C * 6.2831855f;
+    func_L00_0025CE58_2B4668((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, m);
+    return reached != 0;
+}
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4828), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[];
+extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern void FUN_001fa3c0(void *, void *, void *);
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+
+/* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
+   Returns the remaining difference between the target and the current yaw offset. */
+float FUN_L14_002b35d8(char *moby, int flag, float target_angle) {
+    char *state = *(char **)(moby + 0x78);
+    char *owner = *(char **)(state + 0x110);
+    float turn = fast_subtract_rotations_c(target_angle, *(float *)(moby + 0x48));
+    if (turn > 1.2217304706573486f) turn = 1.2217304706573486f;
+    else if (turn < -1.2217304706573486f) turn = -1.2217304706573486f;
+    {
+        float w = D_0015ED70 * 12.566370964050293f;
+        func_L00_0025CE58_2B4828((float *)(state + 0x268), turn, (float *)(state + 0x26C), w, w, D_0015ED6C * 6.2831854820251465f);
+    }
+    FUN_L00_001fff28(state + 0x170, 2, *(float *)(state + 0x268));
+    if (flag) {
+        float a[4];
+        float b[4];
+        float c[4];
+        float *bp;
+        float *cp;
+        char *g;
+        float t;
+        qcopy(a, owner + 0x10);
+        g = D_0013F350;
+        if (*(char **)(g + 0x2080) == owner) a[2] = a[2] - *(float *)(g + 0x2DC);
+        bp = b;
+        subtract_vector_xyz_c2(bp, a, moby + 0x10);
+        b[2] = b[2] + 1.5f;
+        t = -FUN_001f9e90(vector_length_xy(bp), b[2]);
+        func_L00_0025CE58_2B4828((float *)(state + 0x280), t, (float *)(state + 0x284), D_0015ED70 * 12.566370964050293f, D_0015ED70 * 12.566370964050293f, D_0015ED6C * 6.2831854820251465f);
+        cp = c;
+        FUN_L00_001fff28(cp, 1, *(float *)(state + 0x280));
+        FUN_001fa3c0(state + 0x170, state + 0x170, cp);
+    }
+    return fast_difference_between_rotations(turn, *(float *)(state + 0x268));
+}
 extern short *D_L14_001ABF40_3920[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_3920 __asm__("D_L14_0015FFD8");
 

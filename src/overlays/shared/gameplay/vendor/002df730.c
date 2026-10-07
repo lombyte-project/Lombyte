@@ -1328,7 +1328,134 @@ void FUN_L00_002e5730(O002e5730 *o, void *a) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5830.s", FUN_L00_002e5830);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e5e38.s", FUN_L00_002e5e38);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6000.s", FUN_L00_002e6000);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e66b8.s", FUN_L00_002e66b8);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E7B68), where it is exact; names translated to the US level program. */
+
+typedef float V[4] __attribute__((aligned(16)));
+
+extern V D_L00_00173E60;
+extern char D_L00_00166C80[];
+extern char D_L00_00173E70_c[] __asm__("D_L00_00173E70");
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_L00_00166E40[];
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern short D_L00_00161CC8;
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
+
+/* Updates the follow camera: when `snap` is set, re-places the eye behind the followed target (backing off from walls found by
+   ray traces, nudging it sideways when directly above or below), then rebuilds the camera basis looking at the target. */
+void FUN_L00_002e66b8(int snap) {
+    char *cams = D_L00_00166C80;
+    char *cam = *(char **)(cams + 0x180);
+    char *track = cams + 0x190; /* the followed hero: position at 0, up vector at 0x30 */
+    char *data = *(char **)(cam + 0x70);
+    char *orbit = data + 0x130; /* distance at 0x2C, height at 0x30 */
+    char *target = data + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
+    float up[4], rise[4], look[4], eye[4];
+    int mask;
+    float *from, *to;
+    if (snap) {
+        float offset[4], part[4], basis[12], delta[4], start[4];
+        float length;
+        char *hero = D_0013F350;
+        char *hero2, *hero3;
+        part[0] = -*(float *)(orbit + 0x2C);
+        part[1] = 0.0f;
+        part[2] = *(float *)(orbit + 0x30);
+        part[3] = 0.0f;
+        mask = 0x94;
+        copy_matrix3x4(basis, hero);
+        transform_vector_by_basis(offset, part, *(char **)(target + 0xC0) + 0xC0);
+        add_vector_xyz(cam + 0x30, target, offset);
+        scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
+        add_vector_xyz(eye, target, rise);
+        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(hero + 0x2080), 0)) {
+            if (FUN_001f9b80(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
+        }
+        hero2 = D_0013F350;
+        if (FUN_001efa68(eye, cam + 0x30, mask, *(int *)(hero2 + 0x2080), 0)) {
+            subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+            length = vector_length_xyz(delta);
+            if (length == 0.0f) {
+                qcopy(cam + 0x30, target);
+            } else if (length < *(float *)&D_L00_00161CC8) {
+                /* the wall is too close to the eye: lift the eye out of it and trace again */
+                float radius = 0.5f;
+                int i;
+                scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, radius);
+                add_vector_xyz(eye, target, rise);
+                qcopy(start, eye);
+                for (i = 0; i < 3; i++) {
+                    if (FUN_L00_001f0d60(radius, eye, 4, 0)) {
+                        qcopy(eye, D_L00_00173E70_c);
+                    } else if (i == 0) {
+                        radius += 0.25f;
+                    } else {
+                        break;
+                    }
+                }
+                subtract_vector_xyz(delta, eye, start);
+                length = vector_length_xyz(delta);
+                if (length == 0.0f) {
+                    qcopy(cam + 0x30, target);
+                } else {
+                    scale_vector_xyz(delta, delta, *(float *)(orbit + 0x2C) / length);
+                    add_vector_xyz(cam + 0x30, start, delta);
+                    hero3 = D_0013F350;
+                    if (FUN_001efa68(start, cam + 0x30, mask, *(int *)(hero3 + 0x2080), 0)) {
+                        subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+                        length = vector_length_xyz(delta);
+                        if (length == 0.0f) {
+                            qcopy(cam + 0x30, target);
+                        } else {
+                            scale_vector_xyz(delta, delta, (length - 0.5f) / length);
+                            add_vector_xyz(cam + 0x30, eye, delta);
+                        }
+                    }
+                }
+            } else {
+                scale_vector_xyz(delta, delta, (length - 0.5f) / length);
+                add_vector_xyz(cam + 0x30, eye, delta);
+            }
+        }
+        /* straight above or below the target: nudge the camera sideways */
+        subtract_vector_xyz(offset, (float *)(cam + 0x30), (float *)target);
+        length = dot_vectors_xyz(offset, track + 0x30);
+        scale_vector_xyz(part, track + 0x30, length);
+        subtract_vector_xyz(offset, offset, part);
+        if (vector_length_xyz(offset) < 0.05f) {
+            if (random_integer_below(2)) *(float *)(cam + 0x30) += 0.5f;
+            else *(float *)(cam + 0x30) -= 0.5f;
+            if (random_integer_below(2)) *(float *)(cam + 0x34) += 0.5f;
+            else *(float *)(cam + 0x34) -= 0.5f;
+            *(float *)(cam + 0x38) += 0.5f;
+        }
+    }
+    from = (float *)(cam + 0x30);
+    to = (float *)(cam + 0x64);
+    to[0] = from[0];
+    to[1] = from[1];
+    to[2] = from[2];
+    qcopy(up, D_L00_00166E40);
+    normalize_vector_xyz(rise, up, *(float *)(target + 0xB0));
+    add_vector_xyz(eye, rise, target);
+    subtract_vector_xyz(look, eye, (float *)(cam + 0x30));
+    normalize_vector_xyz(cam, look, 1.0f);
+    qcopy(cam + 0x20, up);
+    cross_vectors_xyz(cam + 0x10, cam, cam + 0x20);
+    normalize_vector_xyz(cam + 0x10, cam + 0x10, 1.0f);
+    cross_vectors_xyz(cam + 0x20, cam + 0x10, cam);
+    qcopy(cam + 0x40, cam);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6bf8.s", FUN_L00_002e6bf8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e6d60.s", FUN_L00_002e6d60);
 typedef struct {
@@ -1510,7 +1637,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e7618.s", FUN_L00_002e7618);
    (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
 
-typedef float V[4] __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
 extern float FUN_001f9ab0(void *, void *);

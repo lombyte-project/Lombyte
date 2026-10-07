@@ -306,7 +306,70 @@ s32 FUN_L00_0025e3f8(void *p) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025e450.s", FUN_L00_0025e450);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f090.s", FUN_L00_0025f090);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025f3e8.s", FUN_L00_0025f3e8);
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
+
+typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
+
+typedef struct { int v[6]; } S6y10;
+
+extern S6y10 D_L00_001E9030;
+extern S6y10 D_L00_001E9048;
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_L00_001B02F0[];
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern unsigned FUN_L00_0025c0e8(unsigned, int);
+extern void FUN_L00_0025c088(int *, int *, int *, int);
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void FUN_L00_002d3838(void *, void *, int, int);
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+
+/* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
+   (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
+void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
+    Vy10 zero_vec;
+    S6y10 c0;
+    S6y10 c1;
+    int rgb[3];
+    int i;
+    float k5, sp, big, t1, t2;
+    clear_u64_value(&zero_vec);
+    k5 = 500000.0f;
+    for (i = 2; i >= 0; i--) {
+        sp = random_float_between_c(8.0f, 10.0f) * D_0015ED6C;
+        big = scale * k5;
+        c0 = D_L00_001E9030;
+        c1 = D_L00_001E9048;
+        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
+            big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
+            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
+    }
+    if (owner != 0) {
+        rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
+        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        t1 = scale * 4.0f;
+        FUN_L00_002ac910(owner, pos, &zero_vec, t1, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
+        FUN_L00_0025c088(&rgb[0], &rgb[1], &rgb[2], 1);
+        t2 = scale * 3.0f;
+        FUN_L00_002ac910(owner, pos, &zero_vec, t2, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+    }
+    if (flash != 0.0f) {
+        if (flash > 0.0f) {
+            D_L00_001B02F0[9] = flash;
+            D_L00_001B02F0[10] = flash;
+            D_L00_001B02F0[8] = flash;
+        } else {
+            D_L00_001B02F0[9] = 13.0f;
+            D_L00_001B02F0[10] = 13.0f;
+            D_L00_001B02F0[8] = 13.0f;
+        }
+        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR

@@ -3,7 +3,40 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea398.s", FUN_L08_002ea398);
+extern float D_0015ED6C;
+extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8") __attribute__((sda));
+extern u8 D_0013D3BD_c __asm__("D_0013D3BD") __attribute__((section(".data")));
+extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
+extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
+
+void FUN_L08_002ea398(char *m)
+{
+    char *d = *(char **)(m + 0x78);
+    char *o;
+    int i;
+    switch (*(u8 *)(m + 0x20)) {
+    case 0:
+        *(float *)(d + 4) = *(float *)(m + 0x18);
+        *(u8 *)(m + 0x20) = 1;
+        break;
+    case 1:
+        i = *(int *)(d + 8);
+        if (i < 0) break;
+        o = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
+        if (*(short *)(o + 0xA6) == 0x267 || *(short *)(o + 0xA6) == 0x23F) {
+            if (*(u8 *)(o + 0x20) != 4) break;
+            D_0013D3BD_c = 1;
+            FUN_0022da68_c(0, 0, m);
+            *(u8 *)(m + 0x20) = 2;
+        } else {
+            FUN_00213ed8_c(m + 0x18, (*(float *)d - *(float *)(d + 4)) * **(float **)(o + 0x78) + *(float *)(d + 4), D_0015ED6C * 10.0f);
+        }
+        break;
+    case 2:
+        FUN_00213ed8_c(m + 0x18, *(float *)d, D_0015ED6C * 10.0f);
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002ea4c0.s", FUN_L08_002ea4c0);
 /* Draws three rows of HUD elements with their colours. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
