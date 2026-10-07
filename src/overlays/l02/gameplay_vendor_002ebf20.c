@@ -3,7 +3,35 @@
 #include "asm.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ebf20.s", FUN_L02_002ebf20);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec228.s", FUN_L02_002ec228);
+#include "qcopy.h"
+extern char *create_moby_c(int) __asm__("FUN_0020c4f8");
+extern void FUN_L00_002502f0_c(char *, int, int, int) __asm__("FUN_L00_002502f0");
+extern float atan2_c(float, float) __asm__("FUN_001f9e90");
+extern float vlen_xy_c(void *) __asm__("FUN_001f9b20");
+extern int scale_frames_c(int) __asm__("FUN_001f96f8");
+extern int D_L02_00161F4C __attribute__((sda));
+extern int D_L02_00161F50 __attribute__((sda));
+extern int D_L02_00161F54 __attribute__((sda));
+
+char *FUN_L02_002ec228(char *src, void *pos, float *dir) {
+    char *m;
+    char *v;
+    m = create_moby_c(0x4B8);
+    if (m != 0) {
+        m[0x31] = 1;
+        *(unsigned char *)(m + 0x30) = *(short *)(m + 0x32) = 0xFF;
+        FUN_L00_002502f0_c(m, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
+        *(short *)(m + 0x34) = *(unsigned short *)(src + 0x34);
+        qcopy(m + 0x10, pos);
+        *(float *)(m + 0x48) = atan2_c(dir[0], dir[1]);
+        *(float *)(m + 0x44) = atan2_c(vlen_xy_c(dir), dir[2]);
+        m[0x20] = 1;
+        v = *(char **)(m + 0x78);
+        qcopy(v, dir);
+        *(int *)(v + 0x10) = scale_frames_c(0x3C);
+    }
+    return m;
+}
 
 #define NOT_SDA
 
