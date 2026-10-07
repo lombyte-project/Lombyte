@@ -249,9 +249,6 @@ int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
     qcopy(out, pt);
     return -1;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0028b7b0.s", FUN_L01_0028b7b0);
-#else
 /* Select a 16-byte entry using the descriptor's signed index rules. */
 void *FUN_L01_0028b7b0(void *descriptor, s32 index) {
     char *data;
@@ -270,7 +267,7 @@ void *FUN_L01_0028b7b0(void *descriptor, s32 index) {
         return data + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
     return data + (((u32)index << 4) + 0x10);
 }
-#endif /* NON_MATCHING */
+
 typedef struct {
     char pad0[4];
     signed char f4;
