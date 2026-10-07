@@ -124,7 +124,6 @@
     "assembly/textbin/fast_vec_dot",
     "assembly/textbin/fast_vector_from_packed_chars",
     "assembly/textbin/reset_vif1_gif",
-    "assembly/textbin/fun_00120558",
     "assembly/textbin/fun_00123bc0",
     "assembly/textbin/fun_001ee650",
     "assembly/textbin/fun_001ef9c8",
