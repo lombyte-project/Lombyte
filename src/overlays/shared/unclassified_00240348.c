@@ -27,6 +27,14 @@ void FUN_L00_00241728(s32 *h) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
+/* Reads the gameplay file of a level, which lists the objects placed in the
+ * world. The file header holds offsets to lists. Each list starts with the
+ * number of entries, then 12 bytes of padding, then the entries:
+ *   0x34  ties (large static objects), 0xe0 bytes each: class, then a 4x4 matrix at 0x10
+ *   0x3c  shrubs (small plants), 0x70 bytes each, same start as ties
+ *   0x44  mobies (moving objects), 0x78 bytes each: class at 0x18, scale at 0x1c,
+ *         position at 0x30, rotation angles at 0x3c
+ * The moby of class 0 marks where the hero starts. */
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241940.s", FUN_L00_00241940);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00244110.s", FUN_L00_00244110);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002451b8.s", FUN_L00_002451b8);

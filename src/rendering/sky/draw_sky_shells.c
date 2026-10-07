@@ -26,6 +26,10 @@ extern void do_sky_gif_paging(void) __asm__("func_0022B558");
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
+/* Draws the sky layers (shells) one by one, always starting with shell 0.
+ * Later shells are drawn on top of earlier ones. Shells 0 and 1 are drawn
+ * as they are. Shells 2 to 5 are tilted a little, turned a little, and made
+ * bigger (1.25 to 2 times). */
 void draw_sky_shells(void) __asm__("FUN_0022b288");
 
 void draw_sky_shells(void) {

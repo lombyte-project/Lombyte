@@ -27,6 +27,14 @@ extern void FUN_001fa378(void *, void *, void *);
 extern void dma_tfrag_textures(void) __asm__("func_002331C0");
 extern void func_00233FB0(void);
 void write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
+/* Draws the level terrain (tfrags). Each tfrag has a 0x40-byte header:
+ *   0x10  where its data starts
+ *   0x16, 0x18, 0x1a  where its data lists start (shared, lower detail, full detail)
+ *   0x1e  vertex colours: one RGBA colour per vertex, 0x80 means full brightness
+ *   0x3d  number of triangles at full detail
+ * Texture coordinates are 16-bit numbers that the hardware adds to 2048.0, so
+ * negative values come out at half size. The strips list how to join the
+ * vertices into triangles and when to switch to the next texture. */
 void draw_tfrag(void) __asm__("FUN_002333a8");
 
 void draw_tfrag(void) {
