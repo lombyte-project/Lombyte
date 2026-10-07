@@ -1904,7 +1904,101 @@ void FUN_L16_002cf850(char *moby, char *partner) {
         frame[3][2] += D_L16_001619FC;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf9f8.s", FUN_L16_002cf9f8);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+/* Choose the path node to steer for: step on while the current one is behind the moby or reached. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0DC0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad0[0x2C0];
+    char *vectors;
+} Level16VendorVectorData_c;
+
+typedef struct {
+    char pad0[0x78];
+    Level16VendorVectorData_c *data;
+} Level16VendorVectorMoby_c;
+
+typedef struct {
+    int count;                  /* 0x00: number of nodes */
+    char pad04[0xC];
+    float points[1][4];         /* 0x10: position; w marks the node */
+} L16PatrolPath;
+
+typedef struct {
+    char pad0[0x260];
+    float position[4];          /* 0x260 */
+    char pad270[0x20];
+    int base_path;              /* 0x290: index into D_L16_001B0C30 */
+    int branch_path[7];         /* 0x294: indexed by a node's mark - 11 */
+    char pad2B0[0x10];
+    L16PatrolPath *path;        /* 0x2C0: the path being followed */
+    char pad2C4[0x30];
+    short node;                 /* 0x2F4: the node being steered for */
+} L16PatrolData;
+
+typedef struct {
+    char pad0[0x10];
+    float position[4];          /* 0x10 */
+    char pad20[0x28];
+    float yaw;                  /* 0x48 */
+    char pad4C[0x2C];
+    L16PatrolData *data;        /* 0x78 */
+} L16PatrolMoby;
+
+extern char *D_L16_001B0930[];
+extern float FUN_001f9b80(void*,void*);
+extern float FUN_001f9e90(float,float);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern int FUN_L00_0025d7a0(char *, int, int, int);
+extern int FUN_L01_0028b510(void *, void *, float);
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+void FUN_L16_002cf9d0(Level16VendorVectorMoby_u *moby, int index, void *out);
+extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
+
+void FUN_L16_002cf9f8(char *m) {
+    L16PatrolMoby *moby = (L16PatrolMoby *)m;
+    L16PatrolData *d = moby->data;
+    float target[4];
+    float heading, distance;
+
+    FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, d->node, target);
+    heading = FUN_001f9e90(target[0] - moby->position[0], target[1] - moby->position[1]);
+    for (;;) {
+        L16PatrolPath *path;
+        L16PatrolPath *base;
+
+        FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, d->node, target);
+        distance = FUN_001f9b80(target, d->position);
+        if ((fast_difference_between_rotations(heading, moby->yaw) < 1.5707964f || distance > 4.0f) && distance > 2.0f) {
+            break;
+        }
+        path = d->path;
+        d->node = (d->node + 1) % path->count;
+        base = (L16PatrolPath *)D_L16_001B0930[d->base_path];
+        if (path != base) {
+            /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
+            if (d->node == path->count - 1) {
+                d->path = base;
+                d->node = FUN_L01_0028b510(d->position, base, 0.0f);
+                d->node = FUN_L00_0025d7a0((char *)d->path, d->node, 5, 1);
+            }
+        } else if (path->points[d->node][3] > 10.0f && random_integer_below(100) >= 31) {
+            /* At a marked node of the base path: more often than not, onto the branch the mark names. */
+            int branch = func_001FA898_caa18(d->path->points[d->node][3]) - 11;
+
+            d->path = (L16PatrolPath *)D_L16_001B0930[d->branch_path[branch]];
+            d->node = 0;
+        }
+        /* The same two statements as before the loop, written out again: the compiler merges the copies. */
+        FUN_L16_002cf9d0((Level16VendorVectorMoby_c *)moby, d->node, target);
+        heading = FUN_001f9e90(target[0] - moby->position[0], target[1] - moby->position[1]);
+    }
+}
 /* Adjust animation and pitch to the remaining time in a jump. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1420), where it is exact; names translated to the US level program. */
 
@@ -2129,7 +2223,7 @@ extern void FUN_L00_00263b38(void *, float);
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
-extern void FUN_L16_002cf9f8(char *);
+void FUN_L16_002cf9f8(char *m);
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void scale_vector_xyz(void *, void *, float);
