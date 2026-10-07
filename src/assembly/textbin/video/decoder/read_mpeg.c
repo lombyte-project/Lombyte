@@ -14,152 +14,193 @@ extern s32 D_0015EE20;
 extern s32 D_0015EEA0;
 extern s32 D_0015EED8;
 extern s32 D_0016120C;
-extern void func_00118A80();
-extern void func_00122298();
-extern s32 func_0012ABD0();
-extern void snd_flush_sound_commands() __asm__("func_0012DC80");
-extern void snd_set_master_volume() __asm__("func_0012E208");
-extern void update_primary_pad_state() __asm__("func_00217A10");
-extern void switch_thread() __asm__("func_0023A770");
-extern s32 is_audio_ok() __asm__("func_0023A790");
-extern void proceed_audio() __asm__("func_0023ABA0");
-extern void audio_dec_start() __asm__("func_0023ACB8");
-extern void audio_dec_reset() __asm__("func_0023AD10");
-extern void start_display() __asm__("func_0023B590");
-extern void func_0023B5E0();
-extern s32 func_0023B960();
-extern void func_0023B990();
-extern s32 read_buf_begin_get() __asm__("func_0023B9D8");
-extern void func_0023BA20();
-extern s32 read_cd_stream_sectors() __asm__("func_0023BA60");
-extern void func_0023CC70();
-extern s32 func_0023CC80();
-extern s32 video_dec_flush() __asm__("func_0023CD08");
-extern s32 video_dec_is_flushed() __asm__("func_0023CDE0");
-extern s32 func_0023D1F8();
-s32 read_mpeg(s32 video_dec, struct ReadBuf *arg1, s32 *cd_stream) __asm__("FUN_0023a460");
+extern void FlushCache(s32);
+extern s32 sceGsSyncV(s32);
+extern s32 sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
+extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern void snd_set_master_volume(s32, s32) __asm__("func_0012E208");
+extern void update_primary_pad_state(void) __asm__("func_00217A10");
+extern void switch_thread(void) __asm__("func_0023A770");
+extern s32 is_audio_ok(void) __asm__("func_0023A790");
+extern s32 proceed_audio(void) __asm__("func_0023ABA0");
+extern void audio_dec_start(s32) __asm__("func_0023ACB8");
+extern void audio_dec_reset(s32) __asm__("func_0023AD10");
+extern void start_display(s32) __asm__("func_0023B590");
+extern void end_display(void) __asm__("func_0023B5E0");
+extern s32 read_buf_begin_put(struct ReadBuf *, u8 **) __asm__("func_0023B960");
+extern void read_buf_end_put(struct ReadBuf *, s32) __asm__("func_0023B990");
+extern s32 read_buf_begin_get(struct ReadBuf *, u8 **) __asm__("func_0023B9D8");
+extern s32 read_buf_end_get(struct ReadBuf *, s32) __asm__("func_0023BA20");
+extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
+extern s32 video_dec_abort(s32) __asm__("func_0023CC70");
+extern s32 videoDecGetState(struct VideoDec *) __asm__("func_0023CC80");
+extern s32 video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
+extern s32 video_dec_is_flushed(struct VideoDec *) __asm__("func_0023CDE0");
+extern s32 vo_buf_is_full(s32) __asm__("func_0023D1F8");
+/* Retail 0x0023a460..0x0023a76f; play_mpeg_movie passes VideoDec at
+   context+0xD9048, ReadBuf at context+0, and the 8-byte CD stream at +0xD9040.
+   This is a PSS input pump, not the IPU decoding thread. Signed 32-bit
+   read/decode counters start at the stream byte count. Read 0x10000 bytes
+   synchronously only when bytes remain and ring space exceeds 0xFFFF;
+   decrement/commit the returned count without adding an error test.
+   Demux all available bytes with the ring base and capacity, then decrement
+   the independent decode count and commit exactly the demux return value.
 
-s32 read_mpeg(s32 arg0, struct ReadBuf *arg1, s32 *arg2) {
-    s32 sp0;
-    s32 sp4;
-    s32 temp_2_111;
-    s32 temp_2_120;
-    s32 temp_2_99;
-    s32 temp_3_92;
-    u64 temp_4_74;
-    s32 var_18_22;
-    s32 var_19_25;
-    s32 var_21_10;
-    s32 var_22_8;
-    s32 var_2_44;
+   Input mode -1 bypasses skip tests. Mode 2 permits any nonzero pad word
+   at +0x1A4; the other gates permit bit 0x800, or the 64-bit chord
+   0x8000000000F at +0x1A0. Preserve the second input-mode load. A skip
+   requests VideoDec state 1 and remembers return value 1; it does not
+   jump straight to cleanup. The main loop stops below five undecoded
+   bytes or when decoder state becomes 3. No timeout or extra negative
+   read/demux handling exists in this routine; errors are delegated.
+
+   Audio is serviced before/after each feed and during both shutdown waits.
+   Display/audio start once vo_buf_is_full and is_audio_ok both succeed.
+   Flush until the end code can be queued; then wait for flush completion
+   or state 3. End display, reset AudioDec at context+0xD9100, restore
+   mixer channel 5 from D_0013E550+0x5C and flush sound commands, in order.
+
+   Timestamp handling is delegated, not omitted: init_all registers
+   video_callback/pcm_callback; sceMpegDemuxPssRing supplies PES timestamps.
+   video_callback forwards signed 64-bit PTS/DTS through video_dec_put_ts
+   to ViBuf, while get_mpeg_timestamp returns them to libmpeg. The PCM
+   callback feeds AudioDec; is_audio_ok gates startup, not a timestamp
+   comparison here. These contracts follow existing C and retail callers;
+   playback timing and malformed-stream behavior have not been run on PS2.
+   Dependency gaps for mechanical import: video_dec_set_stream's C wrapper
+   does not explicitly forward its callback arguments, and video_callback
+   tests video_dec_put_ts as s32 while that implementation declares void.
+   Their ABI/return contracts need separate recovery; no success is assumed.
+
+   Status: readable pending C, with retail oracle retained. Unknown pad and
+   global meanings remain unnamed; this does not supply native IOP services. */
+s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
+              struct MpegCdStream *cd_stream) __asm__("FUN_0023a460");
+
+s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
+              struct MpegCdStream *cd_stream) {
+    u8 *write_ptr;
+    u8 *read_ptr;
+    u64 pad_mask;
+    s32 skipped;
+    s32 audio_started;
+    s32 decode_remaining;
+    s32 read_remaining;
+    s32 skip_requested;
+    s32 buf_space;
+    s32 buf_avail;
+    s32 bytes_read;
+    s32 bytes_decoded;
     struct PadState *mask_state;
 
     skipped = 0;
     audio_started = 0;
-    decode_remaining = *cd_stream;
-    func_00118A80(0);
+    decode_remaining = cd_stream->byte_count;
+    FlushCache(0);
     read_remaining = decode_remaining;
-    func_00118A80(2);
-    func_00122298(0);
-    goto loop_24;
-block_2:
+    FlushCache(2);
+    sceGsSyncV(0);
+    goto check_decoder_state;
+feed_movie:
     update_primary_pad_state();
     if (D_0015EED8 == -1) {
-        goto block_15;
+        goto feed_input;
     }
     if (D_0015EED8 != 2) {
-        goto block_5;
+        goto check_skip_policy;
     }
     skip_requested = 1;
     if (D_0013C940.unk1A4 != 0) {
-        goto block_13;
+        goto apply_skip;
     }
-block_5:
+check_skip_policy:
     if (D_0015EEA0 != 0) {
-        goto block_10;
+        goto check_start_button;
     }
     if (D_0015EE20 != 0) {
-        goto block_10;
+        goto check_start_button;
     }
     if (*(volatile s32 *)&D_0015EED8 != 0) {
-        goto block_10;
+        goto check_start_button;
     }
     if (D_0015ED84 > 0) {
-        goto block_12;
+        goto check_pad_chord;
     }
-block_10:
-    var_2_44 = 1;
+check_start_button:
+    skip_requested = 1;
     if (D_0013C940.unk1A4 & 0x800) {
-        goto block_13;
+        goto apply_skip;
     }
-block_12:
+check_pad_chord:
     mask_state = &D_0013C940;
-    temp_4_74 = 0x8000000000FULL;
-    var_2_44 = 1;
-    if ((*(u64 *)&mask_state->unk1A0 & temp_4_74) != temp_4_74) {
-        var_2_44 = 0;
+    pad_mask = 0x8000000000FULL;
+    skip_requested = 1;
+    if ((*(u64 *)&mask_state->unk1A0 & pad_mask) != pad_mask) {
+        skip_requested = 0;
     }
-block_13:
+apply_skip:
     if (skip_requested == 0) {
-        goto block_15;
+        goto feed_input;
     }
     skipped = 1;
-    func_0023CC70(D_0016120C + 0xD9048);
-block_15:
-    buf_space = func_0023B960(arg1, &write_ptr);
+    video_dec_abort(D_0016120C + 0xD9048);
+feed_input:
+    buf_space = read_buf_begin_put(read_buf, &write_ptr);
     if (read_remaining <= 0) {
-        goto block_18;
+        goto feed_decoder;
     }
     if (buf_space <= 0xFFFF) {
-        goto block_18;
+        goto feed_decoder;
     }
     bytes_read = read_cd_stream_sectors(cd_stream, write_ptr, 0x10000, 0);
     read_remaining -= bytes_read;
-    func_0023B990(arg1, bytes_read);
-block_18:
+    read_buf_end_put(read_buf, bytes_read);
+feed_decoder:
     proceed_audio();
     switch_thread();
-    buf_avail = read_buf_begin_get(arg1, &read_ptr);
+    buf_avail = read_buf_begin_get(read_buf, &read_ptr);
     if (buf_avail <= 0) {
-        goto block_20;
+        goto start_audio_when_ready;
     }
-    bytes_decoded = func_0012ABD0(video_dec, read_ptr, buf_avail, arg1, arg1->unk50008);
+    bytes_decoded = sceMpegDemuxPssRing(video_dec, read_ptr, buf_avail, read_buf, read_buf->capacity);
     decode_remaining -= bytes_decoded;
-    func_0023BA20(arg1, bytes_decoded);
-block_20:
+    read_buf_end_get(read_buf, bytes_decoded);
+start_audio_when_ready:
     proceed_audio();
     if (audio_started != 0) {
-        goto loop_25;
+        goto check_remaining_bytes;
     }
-    if (func_0023D1F8(D_0016120C + 0xD9168) == 0) {
-        goto loop_25;
+    if (vo_buf_is_full(D_0016120C + 0xD9168) == 0) {
+        goto check_remaining_bytes;
     }
     if (is_audio_ok() == 0) {
-        goto loop_24;
+        goto check_decoder_state;
     }
     audio_started = 1;
     start_display(1);
     audio_dec_start(D_0016120C + 0xD9100);
-loop_24:
-loop_25:
-    if (decode_remaining >= 5 && func_0023CC80(video_dec) != 3) {
-        goto block_2;
+check_decoder_state:
+check_remaining_bytes:
+    if (decode_remaining >= 5 && videoDecGetState(video_dec) != 3) {
+        goto feed_movie;
     }
-    /* Retail reuses arg1 as the status value 3 during the shutdown waits. */
+    /* Retail reuses the ring-pointer register for decoder state 3 here. */
     while (video_dec_flush(video_dec) == 0) {
-        arg1 = (struct ReadBuf *)3;
+        read_buf = (struct ReadBuf *)3;
         proceed_audio();
         switch_thread();
     }
-    arg1 = (struct ReadBuf *)3;
-    while (video_dec_is_flushed(video_dec) == 0 && func_0023CC80(video_dec) != (s32)arg1) {
+    read_buf = (struct ReadBuf *)3;
+    while (video_dec_is_flushed(video_dec) == 0 && videoDecGetState(video_dec) != (s32)read_buf) {
         proceed_audio();
         switch_thread();
     }
-    func_0023B5E0();
+    end_display();
     audio_dec_reset(D_0016120C + 0xD9100);
     snd_set_master_volume(5, *(s32 *)((u8 *)&D_0013E550 + 0x5C));
     snd_flush_sound_commands();
     return skipped;
 }
+extern __typeof__(read_mpeg) func_0023A460 __attribute__((alias("FUN_0023a460")));
+
 #endif /* NON_MATCHING */
