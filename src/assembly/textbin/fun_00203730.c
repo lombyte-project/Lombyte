@@ -75,6 +75,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
 void register_object_render_class(ObjectRenderClass *render_class,
                                   ResidentRenderTextureDefinition *textures, u128 *material_map,
                                   s32 class_id) {
+    MaterialMap *slot_materials;
     s32 stream_index;
     s32 entry_index;
     s32 record_index;
@@ -92,7 +93,6 @@ void register_object_render_class(ObjectRenderClass *render_class,
     s32 mip_block_0;
     s32 mip_block_1;
     s32 fixed_threshold;
-    MaterialMap *slot_materials;
     ObjectRenderRecord *record;
     ResidentRenderTextureDefinition *texture;
     u64 *fallback_packet;
@@ -161,8 +161,8 @@ void register_object_render_class(ObjectRenderClass *render_class,
                          ((((u64)draw_shift) << 6) | 0x20)) |
                         (((u64)draw_high) << 32);
             /* Keep the block address and enable bits above bit 31. */
-            mip_word = ((((u64)width_units_128) << 14) | (((u64)mip_block_0) << 20)) |
-                       ((((u64)mip_block_1) << 40) | (((u64)1) << 34));
+            mip_word = ((((u64)width_units_128) << 14) | (((u64)mip_block_1) << 40)) |
+                       ((((u64)mip_block_0) << 20) | (((u64)1) << 34));
             mip_word |= ((u64)1) << 54;
             clamp_word =
                 (material_base | (((u64)material_shift) << 2)) | (((u64)material_index) << 24);
