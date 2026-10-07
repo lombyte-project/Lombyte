@@ -914,7 +914,7 @@ segments:
           - [0xeaa38, c, gameplay/state/transition_draw_sky]
           - [0xeaa90, c, assembly/textbin/fun_001e9b10]
           - [0xeb7ac, textbin, text_gap_001ea82c_before_fun_001ea830]
-          - [0xeb7b0, c, assembly/textbin/gameplay/state/transition_load_wad]
+          - [0xeb7b0, c, gameplay/state/transition_load_wad]
           - [0xebecc, textbin, text_gap_001eaf4c_after_fun_001ea830]
           - [0xebed0, c, runtime/dma/queue_dma_transfer]
           - [0xebf08, c, gameplay/camera/transition_update_movie_camera]
