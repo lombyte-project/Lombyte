@@ -6,7 +6,9 @@ archive, rebuilds the installed game-compiler `cc1` (joint parity gate 55/58,
 full-ELF gate PASS). Its bytes depend on the host compiler: through `0049`
 the WSL host built `05ff323f6e75accbcec5129b233d7ec16a3045805ea3c2098572985bdcf0a19f`,
 and the stack through `0055` builds `66c253915a6fa851…`, the full stack through
-`0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). Check a rebuilt compiler by its output.
+`0056` `fc69951c0ec883e1…`, on the Linux cloud host (see the build notes below). That last stack still held
+`0034`, which is retired; the stack without it builds a compiler that gives the
+same objects (full-ELF gate PASS). Check a rebuilt compiler by its output.
 
 - Archive: `gnu-ee-binutils-gcc-1.1.tar.gz`, 16,510,927 bytes
 - SHA-256: `1f518043e252d6eda726386971d52eda26541ab936ea73a9783d73712b595f92`
@@ -36,7 +38,7 @@ Apply with `git apply` at the root of the extracted archive, in this order:
 1. `0000-modern-host-fixes.patch` (host build only: `include/obstack.h`
    lvalue-cast fix and the generated `gcc/c-gperf.h`)
 2. `0001`, `0015`, `0016`, `0019`, `0020`, `0021`, `0022`, `0025`, `0026`,
-   `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0034`, `0037`
+   `0027`, `0028`, `0029`, `0030`, `0031`, `0032`, `0033`, `0037`
 3. `0036`, `0044`, `0045`, `0046`, `0047`, `0048`, `0049`,
    `0050`, `0051`, `0052`, `0053`, `0054`, `0055`, `0056`
 
@@ -47,7 +49,9 @@ and build `cc1` with `make LANGUAGES=c 'CC=gcc -m32' 'CFLAGS=-O2
 `cc1` `05ff323f6e75accb…` (verified 2026-09-23 from a fresh extraction;
 through `0048` it is `4dfa3cf0f0fa8d31…`).
 `0038` is published but not part of the production stack; `0035` was never
-published (its record below is kept for the stack history).
+published and `0034` is retired (no unit selected its option once the units
+it served declared their gp-relative externals `__attribute__((sda))`, see
+`0056`); their records below are kept for the stack history.
 
 Patches marked *production dependency* are in that stack but turned no
 fixture exact on their own; they are published so the production compiler is
@@ -200,7 +204,8 @@ differs. `make` does not track header dependencies: after changing
     so each occupies two words; retail pads the loop to 7 words
     (`jal; nop x4; bnez; nop`). P19 only measured loops closed by a filled
     `SEQUENCE`, so these loops were never padded
-  - fixture: `textbin/fun_0012eb20` -> 100.0 (with `-mastra-r5900-extern-buffer`
+  - fixture: `textbin/fun_0012eb20` -> 100.0 (then with the retired
+    `-mastra-r5900-extern-buffer`, now with `__attribute__((sda))` externals,
     and a local `s32 args[4]` argument buffer)
   - wide sweep 282 -> 284 exact (+`runtime/state/read_state_field`,
     +`textbin/fun_0012f208`; 0 regressions across all 557); joint gate 55/58
@@ -274,7 +279,10 @@ differs. `make` does not track header dependencies: after changing
   - joint gate 54/58 unchanged
 
 
-- `0034-r5900-extern-buffer-optin.patch` SHA-256: `085ac4b30bf79e56c9f51c58013ac22cd77b62456c8f6669e909bca5435088bc`
+- `0034-r5900-extern-buffer-optin.patch` (retired, file removed) SHA-256: `085ac4b30bf79e56c9f51c58013ac22cd77b62456c8f6669e909bca5435088bc`
+  - retired: its nine units now mark the externals retail reaches through
+    `$gp` with `__attribute__((sda))` (`0056`) and build without the option;
+    full-ELF gate PASS with a game compiler built without this patch
   - cc1 (P26..P34 stack): `ad58bb494426663dcf73317db34eaea91c33449039723be9bf2e905c2deb09ab`
   - role: opt-in R5900/GAS extern buffering (`-mastra-r5900-extern-buffer`):
     the body is buffered and the `.extern name,size` declarations of

@@ -5,8 +5,8 @@ struct SndCdSyncState {
     s32 unk10;
 };
 extern volatile struct SndCdSyncState D_00137B00;
-extern s32 D_0015EC8C;
-extern s32 D_0015EC98;
+extern s32 D_0015EC8C __attribute__((sda));
+extern s32 D_0015EC98 __attribute__((sda));
 extern void FlushCache(s32);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32 sceCdSync(s32);

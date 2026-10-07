@@ -44,7 +44,7 @@ ARCHIVE_TOP = "gnu-ee-binutils-gcc"
 # Production stack, in application order (patches/sce-991111b/README.md).
 PATCH_ORDER = (
     "0000", "0001", "0015", "0016", "0019", "0020", "0021", "0022", "0025",
-    "0026", "0027", "0028", "0029", "0030", "0031", "0032", "0033", "0034",
+    "0026", "0027", "0028", "0029", "0030", "0031", "0032", "0033",
     "0037", "0036", "0044", "0045", "0046", "0047", "0048", "0049", "0050",
     "0051", "0052", "0053", "0054", "0055", "0056",
 )
@@ -62,7 +62,8 @@ HOST_CFLAGS = "-O2 -fno-strict-aliasing -fcommon -std=gnu89 -D_GNU_SOURCE"
 HOST_OBJECTS_CFLAGS_MK = "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 
 # Hashes of the maintainer's build (full stack through 0056, Ubuntu 24.04
-# x86-64 host). Rebuilds on other hosts embed their own build paths and may
+# x86-64 host), taken while the stack still held the retired 0034; the stack
+# without it gives the same objects. Rebuilds on other hosts embed their own build paths and may
 # differ; the full-ELF gate (`make elf`) is the check that matters.
 REFERENCE_HASHES = {
     "cc1": "fc69951c0ec883e19179d289fd690b3c7f94f15abb71b1ddafad14d7794cdf15",

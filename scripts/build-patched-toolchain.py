@@ -29,7 +29,7 @@ SOURCE_REVISION = "b595ded"
 PATCH_PATH = (
     ROOT / "patches" / "ee-gcc-2.9-991111-01" / "patched-ee-gcc.patch"
 )
-PATCH_SHA256 = "2726db653714629a1239773af36ef02e67dccd0b4e7f7aabe78feed51b93f99e"
+PATCH_SHA256 = "cc55e70cba79e24fba4195d494370b850d329a4e039e5b2c72dc42661c2e74fa"
 BISON_URL = "https://ftp.gnu.org/gnu/bison/bison-1.28.tar.gz"
 BISON_SHA256 = "c5d3e4858e17cb440cee9de7837f07277bcfb03507e9d2f0c506cab5efe36c3a"
 HOST_CFLAGS = "-O2 -fcommon -std=gnu89 -D_GNU_SOURCE"
@@ -39,13 +39,13 @@ HOST_OBJECTS_CFLAGS_MK = (
     "version.o real.o getpwd.o mbchar.o dyn-string.o splay-tree.o "
     "obstack.o gcc.o mkstemp.o: override CFLAGS = -g\n"
 )
-# Reference hashes of the maintainer's build. Rebuilds on other hosts embed
-# their own build paths and differ; they are reported, not enforced unless
+# Reference hashes of a Linux cloud host build. Rebuilds embed their own
+# build paths and differ; they are reported, not enforced unless
 # --verify-hashes is passed.
 REFERENCE_HASHES = {
-    "cc1": "a1f7ac64514a5cdf772b349904f8caf100696c6aca8b736786dfff12b3bf4e3d",
-    "cpp": "1f3b11af4a696d01180c3bf6a9dcd0ab3992ac4d57d2eb1be36d6743cdf3b5b9",
-    "xgcc": "56bb73b37a91882c3038c61ccea5c3dd31b9562d5a8634dcbd7c7dbbc32ca6b1",
+    "cc1": "9a46212fe367be7787b8b07e5e498585b8cef8a2bbd29c1a70da4eb29f31dc76",
+    "cpp": "f2b234687c9b518f5c78c2f42ab6cc67ea6a1b1eb2042889cc6bcfafdc3db341",
+    "xgcc": "44143d386c89bd63d04ec5ca3e01471511768be8066364fe4ce236feae4a7db0",
 }
 
 

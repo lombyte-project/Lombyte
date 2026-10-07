@@ -8,21 +8,23 @@ oracle. Build instructions and requirements:
 - File: [`patched-ee-gcc.patch`](patched-ee-gcc.patch), applied with
   `git apply` at the source root.
 - Patch SHA-256:
-  `2726db653714629a1239773af36ef02e67dccd0b4e7f7aabe78feed51b93f99e`.
-Changes (203 inserted, 15 deleted lines across 9 files):
-| File                                              | Change                                                                  |
-| :------------------------------------------------ | :---------------------------------------------------------------------- |
-| `ee/gcc/c-parse.in`                               | typed midrule actions, so bison 1.28 parses the grammar on modern hosts |
-| `ee/gcc/config/mips/mips.h`                       | opt-in `-mastra-*` target options, inert unless selected                |
-| `ee/gcc/config/mips/mips.c`, `mips.md`            | R5900 `sq`/`lq` callee saves; `mulsi3` uses classic `mult`/`mflo`; in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`) |
-| `ee/gcc/calls.c`, `cse.c`, `reload1.c`, `reorg.c` | codegen policies behind the opt-in flags                                |
-| `ee/gcc/local-alloc.c`                            | `-mastra-no-lo-sum-tie`: a multiply-referenced `lo_sum` base is not tied to its `%hi` result and is allocated to `a3`, as retail does |
-Reference binaries (the maintainer's build; rebuilds elsewhere differ because
-GCC embeds build paths):
+  `cc55e70cba79e24fba4195d494370b850d329a4e039e5b2c72dc42661c2e74fa`.
+Changes (151 inserted, 14 deleted lines across 5 files):
+| File                                   | Change                                                                  |
+| :------------------------------------- | :---------------------------------------------------------------------- |
+| `ee/gcc/c-parse.in`                    | typed midrule actions, so bison 1.28 parses the grammar on modern hosts |
+| `ee/gcc/config/mips/mips.h`            | opt-in `-mastra-*` target options, inert unless selected                |
+| `ee/gcc/config/mips/mips.c`            | GPR callee saves with `sd`/`ld` in 16-byte slots, as the retail SDK code |
+| `ee/gcc/config/mips/mips.md`           | `mulsi3` uses classic `mult`/`mflo`; in-place `cvt.w.s` conversion (`-mastra-inplace-cvt`); a volatile store to an absolute address in a call delay slot is split into `lui $1` / `sw` through `$1`, bracketed with `.set noat` |
+| `ee/gcc/reorg.c`                       | a volatile store just before a call may fill its delay slot             |
+The profile has no per-unit options: every unit on it builds with the same
+command line.
+Reference binaries (a Linux cloud host build; rebuilds elsewhere differ
+because GCC embeds build paths):
 ```text
-cc1   a1f7ac64514a5cdf772b349904f8caf100696c6aca8b736786dfff12b3bf4e3d
-cpp   1f3b11af4a696d01180c3bf6a9dcd0ab3992ac4d57d2eb1be36d6743cdf3b5b9
-xgcc  56bb73b37a91882c3038c61ccea5c3dd31b9562d5a8634dcbd7c7dbbc32ca6b1
+cc1   9a46212fe367be7787b8b07e5e498585b8cef8a2bbd29c1a70da4eb29f31dc76
+cpp   f2b234687c9b518f5c78c2f42ab6cc67ea6a1b1eb2042889cc6bcfafdc3db341
+xgcc  44143d386c89bd63d04ec5ca3e01471511768be8066364fe4ce236feae4a7db0
 ```
 Patch and binaries are GPLv2-or-later, like the base; see
 [`licenses/GPL-2.0.txt`](../../licenses/GPL-2.0.txt). Binaries are not

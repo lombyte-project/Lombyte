@@ -714,7 +714,7 @@ segments:
           - [0x2d040, c, sdk/dma/sce_mpeg_flush]
           - [0x2d0a8, c, rendering/image/set_image_buffer_flag]
           - [0x2d0b4, textbin, text_gap_0012c134]
-          - [0x2d0b8, c, assembly/sdk/library/_lastFrame]
+          - [0x2d0b8, c, sdk/library/_lastFrame]
           - [0x2d134, textbin, text_gap_0012c138_post_sdk_worker]
           - [0x2d138, c, sdk/library/clearonce]
           - [0x2d198, c, sdk/library/_clearEach]
