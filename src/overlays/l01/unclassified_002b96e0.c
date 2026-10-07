@@ -1883,7 +1883,88 @@ void FUN_L01_002f4348(Moby *self) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4428.s", FUN_L01_002f4428);
+
+
+
+/* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002BA898.c: func_L01_002F5800), where it is exact; names translated to the US level program. */
+
+
+extern char D_L01_00167240[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern unsigned char D_0013D408 __attribute__((section(".data")));
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8") __attribute__((sda));
+extern short D_L01_00161AF4 __attribute__((sda));
+extern short D_L01_00161AF8 __attribute__((sda));
+extern short D_L01_00161AFC __attribute__((sda));
+extern void *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void FUN_L00_00263d40(int, int);
+extern void FUN_L01_002f5168(char *);
+extern void FUN_L01_0030be70(char *, void *, float);
+extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+
+void FUN_L01_002f4428(char *m) {
+    float dir[4];
+    float tmp[4];
+    char *d = *(char **)(m + 0x78);
+    void *hit = FUN_L00_0025a420(m, 0x800000, 0);
+    float s;
+    ((unsigned char *)m)[0xA4] = 0xFF;
+    if (((unsigned char *)m)[0x20] == 0) {
+        *(float *)(d + 0x170) = *(float *)(m + 0x2C);
+        *(float *)(d + 0x174) = *(float *)(d + 0xFC);
+    }
+    {
+        float dist = distance_xyz(m + 0x10, D_L01_00167240);
+        float lo = *(float *)&D_L01_00161AF4;
+        float x0 = *(float *)&D_L01_00161AFC;
+        float k = -((1.0f - lo) / (*(float *)&D_L01_00161AF8 - x0));
+        s = k * dist + (1.0f - k * x0);
+        if (1.0f < s) s = 1.0f;
+        if (s < lo) s = lo;
+    }
+    *(float *)(m + 0x2C) = *(float *)(d + 0x170) * s;
+    *(float *)(d + 0xFC) = *(float *)(d + 0x174) * s;
+    if (hit != 0) {
+        int i;
+        int *t;
+        if (((unsigned char *)m)[0x20] == 0x65) return;
+        if (D_0013D408 == 0) {
+            D_0013D408 = 1;
+            allocate_voice_for_bank_entry_alt(1, 0, 0);
+            FUN_L00_00263d40(0x53D6, -1);
+        }
+        subtract_vector_xyz(tmp, d + 0xD0, d + 0xE0);
+        m[0x20] = 0x65;
+        *(u128 *)dir = *(u128 *)tmp;
+        FUN_L00_0025e450(m, dir, m + 0x10, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 1, 15.0f, 1, 1, -1, 0);
+        FUN_L01_0030be70(m, dir, s);
+        t = (int *)(d + 0x140);
+        for (i = 0; i < 4; i++) {
+            if (t[i] != -1) {
+                mark_moby_for_removal((char *)(*(int *)&D_L01_0015FFD8_c + (t[i] << 8)));
+            }
+        }
+        mark_moby_for_removal(m);
+        return;
+    }
+    if (((unsigned char *)m)[0x20] == 0x65) return;
+    FUN_L01_002f5168(m);
+    *(unsigned short *)(m + 0x34) |= 0x1000;
+    d[0x2B] = 1;
+    d[0x2C] = 0x64;
+    if (175.0f <= *(float *)(m + 0x18)) {
+        m[0x23] = 0;
+    } else if (125.0f < *(float *)(m + 0x18) && *(float *)(m + 0x18) < 175.0f) {
+        m[0x23] = func_001FA898_r((175.0f - *(float *)(m + 0x18)) * 128.0f / 50.0f);
+    } else if (*(float *)(m + 0x18) <= 125.0f) {
+        ((unsigned char *)m)[0x23] = 0x80;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4710.s", FUN_L01_002f4710);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f4960.s", FUN_L01_002f4960);
 extern u8 D_L01_001E2FC0[];

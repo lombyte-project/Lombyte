@@ -810,7 +810,90 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ffdc0.s", FUN_L01_002ffdc0);
+
+
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00301198), where it is exact; names translated to the US level program. */
+
+extern char *FUN_L00_002d7e90(void *, float);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED70;
+extern float D_0015ED6C; /* no foreign declaration */
+extern int D_L01_001612D8; /* no foreign declaration */
+extern int D_L01_001612D0; /* no foreign declaration */
+extern float D_L01_001742E8 __attribute__((section(".data"))); /* no foreign declaration */
+extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int FUN_001f0b58(void);
+extern int FUN_L00_00257b90(int lo, int hi);
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+
+void FUN_L01_002ffdc0(char *m) {
+    float np[4];
+    float at[4];
+    float vel[4];
+    char *d = *(char **)(m + 0x78);
+    *(float *)(d + 8) -= *(float *)(d + 0x10);
+    *(float *)(m + 0x40) += *(float *)(d + 0x1C);
+    add_vector_xyz(np, m + 0x10, d);
+    if (FUN_001efa68(m + 0x10, np, 2, 0, 0)) {
+        int i;
+        char *o;
+        if (!FUN_001f0b58()) {
+            if (*(int *)(d + 0x18) == 0) {
+                allocate_voice_for_target_entry_alt(0, 0, (int)m);
+            }
+            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, *(float *)(m + 0x10), *(float *)(m + 0x14), 0.5f, -0.35f);
+            {
+                float g = D_0015ED6C;
+                float h = D_0015ED70;
+                *(int *)(d + 0x18) = 1;
+                *(int *)(d + 0x14) = 0x78;
+                *(int *)(d + 0x1C) = 0;
+                *(float *)(d + 8) = g * -1.5f;
+                *(float *)(d + 0x10) = h * 0.8f;
+            }
+            at[0] = *(float *)(m + 0x10);
+            at[1] = *(float *)(m + 0x14);
+            at[2] = D_L01_001742E8;
+            o = FUN_L00_002d7e90(at, 2.0f);
+            if (o != 0) {
+                o[0x23] = 0x70;
+            }
+            for (i = 0; i < 16; i++) {
+                float a = random_angle_radians();
+                float r = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+                vel[0] = fast_cos(a) * r;
+                vel[1] = fast_sin(a) * r;
+                vel[2] = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+                {
+                    int c = FUN_L00_00257b90(0x5A, 0x78);
+                    FUN_L00_0026f548(at, vel, random_integer_below(2), c);
+                }
+            }
+        } else {
+            mark_moby_for_removal(m);
+            return;
+        }
+    }
+    qcopy(m + 0x10, np);
+    if (*(int *)(d + 0x18) != 0) {
+        *(float *)(m + 0x2C) *= 0.99f;
+    }
+    if (tick_countdown_32_alt((int *)(d + 0x14))) {
+        mark_moby_for_removal(m);
+    }
+}
 typedef struct {
     u8 pad0[0x10];
     s32 w10;

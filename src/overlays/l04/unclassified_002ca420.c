@@ -31,7 +31,79 @@ void FUN_L04_002d3580(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ca420.s", FUN_L04_002ca420);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002cdda0.s", FUN_L04_002cdda0);
+
+
+
+#include "qcopy.h"
+
+/* Floating platform: bobs on a slow wave above its start height (or above the moby it rides), and spins
+ * its three rings. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002CF180), where it is exact; names translated to the US level program. */
+
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
+extern float D_0015ED64; /* no foreign declaration */
+extern float D_0015ED6C; /* no foreign declaration */
+extern int D_L04_0015FFD8 __attribute__((sda)); /* no foreign declaration */
+extern short D_L04_0016195C __attribute__((sda));
+extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void FUN_L00_002628d8(char *, char *, int, float, float);
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
+
+void FUN_L04_002cdda0(char *m) {
+    float old[4];
+    float delta[4];
+    char *d = *(char **)(m + 0x78);
+    qcopy(old, m + 0x10);
+    if (d == 0) {
+        mark_moby_for_removal(m);
+        return;
+    }
+    switch (((unsigned char *)m)[0x20]) {
+    case 0: {
+        int i;
+        *(float *)(m + 0x58) = random_float_between(0.5f, 0.8f);
+        m[0x20] = 1;
+        *(float *)(d + 0x220) = *(float *)(m + 0x18) + 15.0f;
+        ((unsigned char *)m)[0x30] = 0xFF;
+        *(short *)(d + 0x3E) = 0xD;
+        for (i = 0; i < 3; i++) {
+            ((float *)(d + 0x224))[i] = random_angle_radians();
+        }
+        break;
+    }
+    case 1: {
+        float off = 0.0f;
+        float bob = fast_cos(fast_normalize_angle(compute_interpolated_record_value(m) * 6.2831855f / 118.0f)) * 0.75f;
+        int i;
+        for (i = 0; i < 3; i++) {
+            float *p = (float *)(d + 0x224) + i;
+            float a = fast_add_rotations(*p, *(float *)&D_L04_0016195C * 0.017453292f * D_0015ED6C);
+            float g = D_0015ED64;
+            *p = a;
+            *(float *)(d + 0x108 + i * 0x80) = a;
+            FUN_L00_002628d8(m, d + 0xA0 + i * 0x80, i, g * 0.03f, g * 0.3f);
+        }
+        if (*(int *)(d + 0x230) != -1) {
+            char *o = D_L04_0015FFD8 + (*(int *)(d + 0x230) << 8);
+            if (*(short *)(o + 0xA6) == 0x118) {
+                off = **(float **)(o + 0x78) * 15.0f;
+            }
+        } else {
+            off = 15.0f;
+        }
+        *(float *)(m + 0x18) = *(float *)(d + 0x220) + bob - off;
+        break;
+    }
+    }
+    subtract_vector_xyz(delta, m + 0x10, old);
+    FUN_L00_00260738(d + 0x60, delta, m + 0x40, m + 0x40);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
 #include "sda.h"
@@ -832,7 +904,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
 /* update: blend two keyframes of a path and write the result to a position */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
 
-extern char *D_L04_0015FFD8;
+extern char *D_L04_0015FFD0_e[] __asm__("D_L04_0015FFD0") __attribute__((section(".sdata")));
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
 extern int *D_L04_001B0630[];
@@ -844,7 +916,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 void FUN_L04_002d6f68(char *moby) {
     int *p = *(int **)(moby + 0x78);
     int *t = D_L04_001B0630[p[2]];
-    char *base = D_L04_0015FFD8;
+    char *base = D_L04_0015FFD0_e[2];
     int o0 = p[0] * 256;
     float *src = *(float **)(base + o0 + 0x78);
     char *dst = base + p[1] * 256;
