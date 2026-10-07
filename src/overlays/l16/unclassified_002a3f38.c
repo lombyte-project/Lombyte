@@ -988,7 +988,7 @@ typedef struct {
         float u, v;
     } uv[4];
     long zero, texture, flags, mode;
-} L16RibbonPacket;
+} L16RibbonPacket_u;
 
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1011,12 +1011,12 @@ extern int FUN_001fa6e0(float, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern void draw_geometry_quad(void *, void *, int);
+extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_quad");
 extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void FUN_L16_002c9cd0(char *m) {
-    L16RibbonPacket packets[2];
+    L16RibbonPacket_u packets[2];
     char *d = *(char **)(m + 0x78);
     float scale = vector_length_xyz(D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7)) * 2.001f;
     int count = func_001FA898_caa18(scale);
@@ -1064,7 +1064,7 @@ void FUN_L16_002c9cd0(char *m) {
             if (vertex < 2) {
                 float *pt = packets[0].point[vertex];
                 pt[0] -= step;
-                pt[sizeof(L16RibbonPacket) / sizeof(float)] -= step;
+                pt[sizeof(L16RibbonPacket_u) / sizeof(float)] -= step;
             }
         }
     }
@@ -1087,15 +1087,15 @@ void FUN_L16_002c9cd0(char *m) {
                 packets[1].color[1] = color;
                 packets[1].color[0] = color;
             }
-            draw_geometry_quad(&packets[0], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
-            draw_geometry_quad(&packets[1], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
+            draw_geometry_quad_u(&packets[0], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
+            draw_geometry_quad_u(&packets[1], D_L16_001600EC_m + ((*(int *)(d + 0x60)) << 7), 0);
             {
                 float *point = packets[0].point[0];
                 for (j = 3; j >= 0; j--) {
                     float a = *point + step,
-                          b = point[sizeof(L16RibbonPacket) / sizeof(float)] + step;
+                          b = point[sizeof(L16RibbonPacket_u) / sizeof(float)] + step;
                     *point = a;
-                    point[sizeof(L16RibbonPacket) / sizeof(float)] = b;
+                    point[sizeof(L16RibbonPacket_u) / sizeof(float)] = b;
                     point += 4;
                 }
             }
@@ -1819,7 +1819,7 @@ int FUN_L16_002cf738(void *mv) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B70), where it is exact; names translated to the US level program. */
 
 extern int *D_L16_001ABCC0_c3[] __asm__("D_L16_001ABCC0");
-extern void FUN_L16_002cf850(char *, char *);
+void FUN_L16_002cf850(char *moby, char *partner);
 
 void FUN_L16_002cf7a8(char *arg) {
     short *p = (short *)D_L16_001ABCC0_c3[*(unsigned char *)(arg + 0x21)];
@@ -1842,7 +1842,68 @@ void FUN_L16_002cf7a8(char *arg) {
         } while (*p++ >= 0);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf850.s", FUN_L16_002cf850);
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Draws the textured quad that links a moby to its partner, four times, each one a step higher than the last. */
+/* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0C18), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    float point[4][4]; int color[4]; struct {float u,v;} uv[4];
+    long zero,texture,flags,mode;
+} L16RibbonPacket;
+
+extern float D_L16_001D3170[][4];
+extern float D_L16_001D31B0[][2];
+extern int D_L16_001619EC __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_001619F0 __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_001619E8 __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_001619F4 __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_001619F8 __attribute__((sda)); /* no foreign declaration */
+extern float D_L16_001619FC __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_00161A00 __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_00161A04 __attribute__((sda)); /* no foreign declaration */
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+
+void FUN_L16_002cf850(char *moby, char *partner) {
+    L16RibbonPacket packet;
+    float frame[4][4]; /* direction, side, up, origin */
+    int color;
+    int corner;
+    int pass;
+
+    subtract_vector_xyz(frame[0], partner + 0x10, moby + 0x10);
+    clear_u64_value(frame[2]);
+    frame[2][2] = 1.0f;
+    cross_vectors_xyz(frame[1], frame[0], frame[2]);
+    qcopy(frame[3], moby + 0x10);
+    frame[3][2] += D_L16_001619F8;
+    frame[3][3] = 1.0f;
+    packet.texture = get_effect_texture(D_L16_00161A00);
+    packet.mode = (long)D_L16_001619E8 | ((long)D_L16_001619EC << 2) | ((long)D_L16_001619F0 << 4) |
+                  ((long)D_L16_001619F4 << 6) | 0x8000000000L;
+    packet.flags = 0xFF9000000260L;
+    packet.zero = 0;
+    color = D_L16_00161A04;
+    for (corner = 0; corner < 4; corner++) {
+        packet.uv[corner].u = D_L16_001D31B0[corner][0];
+        packet.uv[corner].v = D_L16_001D31B0[corner][1];
+        packet.color[corner] = color;
+        qcopy(packet.point[corner], D_L16_001D3170[corner]);
+    }
+    for (pass = 0; pass < 4; pass++) {
+        draw_geometry_quad(&packet, frame[0], 0);
+        frame[3][2] += D_L16_001619FC;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L16_002cf9f8.s", FUN_L16_002cf9f8);
 /* Adjust animation and pitch to the remaining time in a jump. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D1420), where it is exact; names translated to the US level program. */
