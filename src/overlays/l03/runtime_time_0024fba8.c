@@ -2,4 +2,47 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0024fba8.s", FUN_L03_0024fba8);
+typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
+extern void FUN_001fa378(void *, void *, void *);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void FUN_L00_001ffd48(void *, void *, float);
+extern void FUN_L00_001ffe20(void *, void *, void *);
+extern void FUN_001f9fc8(void *);
+extern void FUN_00214598(void *, void *);
+
+void FUN_L03_0024fba8(Q *axis, Q *point, float angle) {
+    float a[4] __attribute__((aligned(16)));
+    float v[4] __attribute__((aligned(16)));
+    float k[4][4] __attribute__((aligned(16)));
+    float k2[4][4] __attribute__((aligned(16)));
+    float s[4][4] __attribute__((aligned(16)));
+    float c[4][4] __attribute__((aligned(16)));
+    float r[4][4] __attribute__((aligned(16)));
+    float *pv = v;
+    *(Q *)a = *axis;
+    *(Q *)pv = *point;
+    k[0][0] = 0.0f;
+    k[1][0] = -a[2];
+    k[2][0] = a[1];
+    k[3][0] = 0.0f;
+    k[0][1] = a[2];
+    k[1][1] = 0.0f;
+    k[2][1] = -a[0];
+    k[3][1] = 0.0f;
+    k[0][2] = -a[1];
+    k[1][2] = a[0];
+    k[2][2] = 0.0f;
+    k[3][2] = 0.0f;
+    k[0][3] = 0.0f;
+    k[1][3] = 0.0f;
+    k[2][3] = 0.0f;
+    k[3][3] = 0.0f;
+    FUN_001fa378(k2, k, k);
+    FUN_L00_001ffd48(c, k2, 1.0f - fast_cos(angle));
+    FUN_L00_001ffd48(s, k, fast_sin(angle));
+    FUN_L00_001ffe20(s, s, c);
+    FUN_001f9fc8(c);
+    FUN_L00_001ffe20(r, s, c);
+    FUN_00214598(r, pv);
+}
