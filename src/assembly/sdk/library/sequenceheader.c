@@ -72,23 +72,26 @@ extern s32 func_0012BC10();
 extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct sceMpeg *arg0) {
-    s32 *sp30;
-    s32 *sp34;
-    s32 *sp38;
-    s32 *sp3C;
-    s32 *sp40;
-    s32 *sp44;
+    u8 *sp30;
+    u8 *sp34;
+    u8 *sp38;
+    u8 *sp3C;
+    u8 *sp40;
+    u8 *sp44;
     s32 chroma_height;
     s32 height;
     s32 width;
     s32 temp_6_16;
     s32 var_2_40;
     u32 temp_16_77;
-    s32 *temp_17_63;
-    s32 *temp_19_67;
-    s32 *temp_20_71;
-    s32 *temp_21_73;
-    struct MpegDecoder *temp_30_15;
+    s32 temp_22_48;
+    s32 temp_23_51;
+    s32 temp_18_75;
+    u8 *temp_17_63;
+    u8 *temp_19_67;
+    u8 *temp_20_71;
+    u8 *temp_21_73;
+    struct MpegDecoder *mpeg;
     u8 *var_2_53;
 
     mpeg = arg0->sys;
@@ -112,31 +115,34 @@ void func_0012C4C8(struct sceMpeg *arg0) {
     block_6:
         var_2_40 = (s32)(mpeg->vertical_size + 0xF) >> 4;
     }
-    temp_30_15->mb_height = var_2_40;
+    mpeg->mb_height = var_2_40;
     temp_22_48 = var_2_40 << 4;
-    temp_23_51 = temp_30_15->mb_width << 4;
+    temp_23_51 = mpeg->mb_width << 4;
     if (temp_23_51 == arg0->width) {
         if (temp_22_48 == arg0->height) {
             return;
         }
-        var_2_53 = ((u8 *)temp_30_15 + 0x528);
+        var_2_53 = ((u8 *)mpeg + 0x528);
     }
     var_2_53 = ((u8 *)mpeg + 0x528);
     {
         arg0->width = temp_23_51;
         arg0->height = temp_22_48;
-        temp_17_63 = ((u8 *)temp_30_15 + (0x108));
-        sp30 = ((u8 *)temp_30_15 + (0x320));
-        temp_19_67 = ((u8 *)temp_30_15 + (0x1E8));
-        sp34 = ((u8 *)temp_30_15 + (0x388));
-        temp_20_71 = ((u8 *)temp_30_15 + (0x250));
-        temp_21_73 = ((u8 *)temp_30_15 + (0x2B8));
-        sp38 = ((u8 *)temp_30_15 + (0x3F0));
+        temp_17_63 = ((u8 *)mpeg + (0x108));
+        sp30 = ((u8 *)mpeg + (0x320));
+        temp_19_67 = ((u8 *)mpeg + (0x1E8));
+        sp34 = ((u8 *)mpeg + (0x388));
+        temp_20_71 = ((u8 *)mpeg + (0x250));
+        temp_21_73 = ((u8 *)mpeg + (0x2B8));
+        sp38 = ((u8 *)mpeg + (0x3F0));
         temp_18_75 = temp_22_48 >> 1;
         temp_16_77 = (u32)((0x180 * temp_22_48) * temp_23_51) >> 8;
         sp44 = var_2_53;
-        sp3C = ((u8 *)temp_30_15 + (0x458));
-        sp40 = ((u8 *)temp_30_15 + (0x4C0));
+        sp3C = ((u8 *)mpeg + (0x458));
+        sp40 = ((u8 *)mpeg + (0x4C0));
+        width = temp_23_51;
+        height = temp_22_48;
+        chroma_height = temp_18_75;
         func_0012BC10(temp_17_63);
         mpeg->frame_buffers[0] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
         mpeg->frame_buffers[1] = reserve_aligned_buffer_space(mpeg, temp_17_63, temp_16_77, 0x40);
