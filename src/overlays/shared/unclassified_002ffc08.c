@@ -2,4 +2,9 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ffc08.s", FUN_L14_002ffc08);
+#include "qcopy.h"
+#include "sda.h"
+
+void FUN_L14_002ffc08(unsigned char *moby) {
+    moby[0x20] = 0x1;
+}

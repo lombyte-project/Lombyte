@@ -2,6 +2,39 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e8540.s", FUN_L00_002e8540);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e85d8.s", FUN_L00_002e85d8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002eaa30.s", FUN_L00_002eaa30);
+#include "eetypes.h"
+#include "qcopy.h"
+#include "sda.h"
+extern char *D_L00_00166E00_002e8490 __asm__("D_L00_00166E00");
+void FUN_L00_002e8540(float f) {
+    char *p = D_L00_00166E00_002e8490;
+    if (*(short *)(p + 0x86) == 0) {
+        *(float *)(*(char **)(p + 0x70) + 0x1cc) = f;
+    }
+}
+typedef struct { char b[0x140]; } Pane_2e3fa0;
+extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
+void FUN_L00_002e85d8(float a, float b) {
+    char *p = D_L00_00166E00_002e8590[0];
+    if (*(short *)(p + 0x86) == 0) {
+        char *q = *(char **)(p + 0x70) + 0x40;
+        if (a != 0.0f)
+            *(float *)(q + 0xe4) = a;
+        if (b != 0.0f)
+            *(float *)(q + 0xe8) = b;
+    }
+}
+/* Copies a vector into the current object's slot, switching to state 5 first. */
+
+extern char *D_L00_00166E00 __attribute__((section(".data")));
+extern char *FUN_L00_001eb1f8(int);
+
+void FUN_L00_002eaa30(char *src) {
+    char *g = D_L00_00166E00;
+    char *p;
+    if (*(short *)(g + 0x86) != 5)
+        p = FUN_L00_001eb1f8(5);
+    else
+        p = g;
+    qcopy(*(char **)(p + 0x70) + 0x90, src);
+}
