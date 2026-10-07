@@ -66,7 +66,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         if (interlace == 1) {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)(s64)(width * scale - 1) << 32) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12);
             if (state->nSFrame_mode == 0) {
@@ -77,7 +77,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         } else {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(height - 1) << 44) |
-                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)(s64)(width * scale - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12);
@@ -87,7 +87,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         if (interlace == 1) {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)(s64)(width * scale - 1) << 32) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12);
             if (state->nSFrame_mode == 0) {
@@ -98,7 +98,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
         } else {
             scale = (width + 0x9ff) / width;
             value = ((u64)(s64)(height - 1) << 44) |
-                    ((u64)(s64)(scale * width - 1) << 32) |
+                    ((u64)(s64)(width * scale - 1) << 32) |
                     ((u64)(s64)(scale - 1) << 23) |
                     ((u64)(((s64)(horizontal_offset * scale) + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
                     ((u64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12);
