@@ -784,7 +784,7 @@ segments:
           - [0x2e954, textbin, text_gap_0012d9d4_before_fun_0012d9d8]
           - [0x2e958, c, gameplay/state/run_game_main_loop]
           - [0x2e9a4, textbin, text_gap_0012da24_after_fun_0012d9d8]
-          - [0x2e9a8, c, assembly/textbin/audio/snd_start_sound_system]
+          - [0x2e9a8, c, textbin/audio/snd_start_sound_system]
           - [0x2ec00, c, audio/snd_flush_sound_commands]
           - [0x2ede0, textbin, text_gap_0012de60_before_fun_0012de70]
           - [0x2edf0, c, audio/rpc/snd_returns]
