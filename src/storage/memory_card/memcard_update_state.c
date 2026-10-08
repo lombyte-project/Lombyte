@@ -314,8 +314,8 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
-            start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
+            calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
+            start_audio_stream_read(chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
             MC.sub = 4;
             MC.busy = 0;
             break;
@@ -360,7 +360,7 @@ void memcard_update_state(void) {
                 if (MC.fd < 0) {
                     MC.fd = MC.result;
                 }
-                calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+                calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
                 switch (MC.sub) {
                 case 6:
                     MC.size = 0x3C4;
@@ -902,8 +902,8 @@ void memcard_update_state(void) {
         McChunk *chunk;
         s32 size;
 
-        calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
-        start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
+        calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
+        start_audio_stream_read(chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
         MC.sub = 18;
         MC.busy = 0;
         break;
@@ -914,7 +914,7 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+            calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
             MC.sub = 19;
             MC.buf = (u8 *)chunk + chunk->x10;
         }

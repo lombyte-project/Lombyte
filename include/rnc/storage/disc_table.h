@@ -22,7 +22,7 @@ struct DiscFile {
 struct DiscTable {
     u8 pad_0[0x8];
     struct DiscFile debug_font;            /* 0x8 */
-    struct DiscFile unk10;                 /* 0x10, read back on memory card restore */
+    struct DiscFile memcard_data;          /* 0x10, read by memcard_update_state and memcard_restore_game */
     struct DiscFile animation_streams[49]; /* 0x18, streamed animations by archive index */
     struct DiscFile music_10000[37];       /* 0x1A0, music tracks 10000.. */
     struct DiscFile unk2C8[6];             /* 0x2C8, one per language */
@@ -44,7 +44,7 @@ struct DiscTable {
     struct DiscFile help_text;             /* 0x1528, per-language archive read by update_menu_help_text_load */
     struct DiscFile unk1530[14];           /* 0x1530, overlays: x of an x/y pair picked by D_0015ED80 */
     struct DiscFile unk15A0[14];           /* 0x15A0, the y half of the 0x1530 pair */
-    struct DiscFile unk1610;               /* 0x1610, animation table */
+    struct DiscFile animation_table;       /* 0x1610, read with animation_asset_read_active set */
     struct DiscFile music_60000[62];       /* 0x1618, music tracks 60000.. */
     struct DiscFile unk1808[19];           /* 0x1808, overlays: x of an x/y pair picked by D_0015ED80 */
     struct DiscFile unk18A0[19];           /* 0x18A0, the y half of the 0x1808 pair */

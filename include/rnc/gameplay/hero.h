@@ -15,7 +15,7 @@ struct Moby;
 struct MobyTrail {
     Vec4 pos[8];                   /* 0x00: ring of source positions */
     Vec4 rot[8];                   /* 0x80: ring of source rotations */
-    s32 copy_arg[4];               /* 0x100: per-copy argument of the add call */
+    s32 copy_fade[4];              /* 0x100: start of copy moby byte 0x23; all 0 ends the trail */
     s32 delay[4];                  /* 0x110: frames each copy lags behind */
     struct Moby *copies[4];        /* 0x120 */
     s16 head;                      /* 0x130: next ring slot */

@@ -14,6 +14,8 @@
     CHECK((unsigned long)&((struct HeroItemSlot *)0)->field == (off))
 
 CHECK(sizeof(struct MobyTrail) == 0x140);
+CHECK((unsigned long)&((struct MobyTrail *)0)->copy_fade == 0x100);
+CHECK((unsigned long)&((struct MobyTrail *)0)->active == 0x13C);
 CHECK(sizeof(struct HeroItemSlot) == 0x50);
 CHECK(sizeof(struct Hero) == 0x2300);
 SLOT_OFFSET_CHECK(moby, 0x00);

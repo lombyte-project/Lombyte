@@ -21,8 +21,8 @@ void init_pads(void) {
     D_0013C940.socket = scePad2CreateSocket(&D_001CD760, &D_0013C940);
     D_001CD760.port = 2;
     D_001CD760.slot = 1;
-    D_0013C940.unk198 = 0;
-    D_0013C940.unk19C = 0;
+    D_0013C940.profile_state = 0;
+    D_0013C940.device_state = 0;
 }
 
 extern __typeof__(init_pads) func_00217048 __attribute__((alias("FUN_00217048")));
