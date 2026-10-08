@@ -5,59 +5,6 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 
-typedef struct {
-    u8 pad0[0x88];
-    f32 f88;
-    u8 pad8C[0x7C];
-    f32 f108;
-    u8 pad10C[0x8C];
-    s32 i198;
-    u8 pad19C[0x98];
-    f32 f234;
-    u8 pad238[0xA0];
-    f32 f2D8;
-    f32 f2DC;
-    u8 pad2E0[0x10];
-    f32 f2F0;
-    f32 f2F4;
-    u8 pad2F8[0x8];
-    s32 i300;
-    u8 pad304[0x4];
-    s16 h308;
-    u8 pad30A[0x2];
-    s16 h30C;
-    u8 pad30E[0x110];
-    s16 h41E;
-    u8 pad420[0xCC0];
-    u8 *p10E0;
-    u8 pad10E4[0x1FC];
-    s16 h12E0;
-    u8 pad12E2[1];
-    u8 b12E3;
-    u8 b12E4;
-    u8 b12E5;
-    u8 b12E6;
-    u8 b12E7;
-    u8 b12E8;
-    u8 b12E9;
-    u8 b12EA;
-    u8 b12EB;
-    u8 b12EC;
-    u8 b12ED;
-    u8 b12EE;
-    u8 pad12EF[0xD95];
-    s32 i2084;
-    u8 pad2088[0x4];
-    s32 i208C;
-    u8 pad2090[0x14];
-    u8 b20A4;
-    u8 pad20A5[0x4];
-    u8 b20A9;
-    u8 pad20AA[0x1FA];
-    f32 f22A4;
-    s32 i22A8;
-} P239fc0;
-extern P239fc0 D_0013F350_239fc0 __asm__("D_0013F350");
 extern s32 D_0015ED84_239fc0 __asm__("D_0015ED84");
 void FUN_001f9810_239fc0(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
@@ -65,85 +12,84 @@ int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 FUN_001f99c0_239fc0(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0020b930_239fc0(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
-#define P D_0013F350_239fc0
 void FUN_L05_00239fc0(void) {
-    u8 save = P.b12ED;
-    s16 t = P.h12E0;
+    u8 save = hero.unk12ED;
+    s16 t = hero.unk12E0;
     f32 d;
     int s;
-    FUN_001f9810_239fc0(&P.h12E0, 0x10);
-    P.b12ED = save;
-    P.h12E0 = -1;
-    P.b20A9 = 0;
-    P.h308 = 0;
+    FUN_001f9810_239fc0(&hero.unk12E0, 0x10);
+    hero.unk12ED = save;
+    hero.unk12E0 = -1;
+    hero.unk20A9 = 0;
+    hero.unk308 = 0;
     if (t == -1)
         return;
     if (t == 2) {
-        if (P.h30C == 0 || P.f2DC < 0.3f) {
-            P.b12E7 = 1;
-            if (P.b20A4 == 0 && P.p10E0 != 0 && *(s16 *)(P.p10E0 + 0xA6) == 0xAD)
-                P.h308 = 1;
+        if (hero.unk30C.s == 0 || hero.unk2DC < 0.3f) {
+            hero.unk12E7 = 1;
+            if (hero.unk20A4 == 0 && ((u8 *)hero.items[1].moby) != 0 && *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
+                hero.unk308 = 1;
         }
     }
     if (t == 14) {
-        P.b12E4 = 1;
-        P.f22A4 = 0.2f;
-        P.f2F0 = P.f2D8 + 0.2f;
+        hero.base_condition = 1;
+        hero.unk22A4 = 0.2f;
+        hero.height_threshold = hero.unk2D8.f + 0.2f;
     }
     if (t == 0) {
-        d = P.f2F0 - P.f2D8;
-        P.f22A4 = d;
+        d = hero.height_threshold - hero.unk2D8.f;
+        hero.unk22A4 = d;
         if (d < 0.85f && 0.25f < d)
-            P.b20A9 = 1;
-        P.b12E4 = 1;
+            hero.unk20A9 = 1;
+        hero.base_condition = 1;
     }
     if (t == 3)
-        P.b12E6 = 1;
-    if (D_0015ED84_239fc0 == 13 && P.i2084 != 0x7B &&
-        FUN_L00_001f0d60_239fc0((u8 *)&P + 0xD0, 2, 0, P.f234 + 0.03f) &&
+        hero.selector_3 = 1;
+    if (D_0015ED84_239fc0 == 13 && hero.state.current != 0x7B &&
+        FUN_L00_001f0d60_239fc0((u8 *)&hero.motion.unkD0, 2, 0, hero.unk234 + 0.03f) &&
         FUN_001f0b58_239fc0() == 11) {
         goto s7B;
     }
     if (t == 11)
-        P.b12EB = 1;
+        hero.selector_11 = 1;
     if (t == 5)
-        P.b12E8 = 1;
+        hero.unk12E8 = 1;
     if (t == 6)
-        P.b12E9 = 1;
+        hero.unk12E9 = 1;
     if (t == 4)
-        P.b12E3 = 1;
+        hero.unk12E3 = 1;
     if (t == 13)
-        P.b12EC = 1;
+        hero.selector_13 = 1;
     if (t == 1)
-        P.b12E5 = 1;
+        hero.selector_1 = 1;
     if (t == 8)
-        P.b12EA = 1;
+        hero.unk12EA = 1;
     if (t == 9)
-        P.b12EE = 1;
+        hero.unk12EE = 1;
     if (t == 12)
-        P.b12EA = 1;
-    if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
+        hero.unk12EA = 1;
+    if (hero.unk12E3 && hero.unk300 && hero.state.control_mode != 0x10 && hero.state.control_mode != 0x14 && hero.state.control_mode != 7) {
         s = 0x31;
         goto call;
     }
-    if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
+    if (hero.selector_1 && hero.unk300 && (hero.state.current != 0x3C || hero.unk41E != 0)) {
         FUN_L00_0020b930_239fc0();
-        if (P.i22A8)
+        if (hero.health.hp)
             goto call3c;
         s = 0x7C;
         goto call;
     }
-    if (P.b12EC && P.i2084 != 0x7F && FUN_001f99c0_239fc0(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
-        0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
+    if (hero.selector_13 && hero.state.current != 0x7F && FUN_001f99c0_239fc0(hero.height_threshold - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
+        0.0f < hero.height_threshold - hero.motion.pos.f[2] && hero.motion.unk100.f[2] < 0.0f) {
         FUN_L00_0020b930_239fc0();
         s = 0x7F;
         goto call;
     }
-    if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
-        FUN_001f99c0_239fc0(P.f2F4 - (P.f88 + 0.25f)) < 1.0f && 0.0f < P.f2F4 - P.f88 &&
-        (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
+    if (hero.selector_3 && hero.state.current != 0x68 && hero.state.current != 0x7B &&
+        FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f && 0.0f < hero.unk2F4 - hero.motion.pos.f[2] &&
+        (hero.state.current != 0x69 || hero.unk41E != 0) && hero.motion.unk100.f[2] < 0.0f) {
         FUN_L00_0020b930_239fc0();
-        if (P.i22A8) {
+        if (hero.health.hp) {
             s = 0x68;
             goto call;
         }
@@ -156,13 +102,12 @@ void FUN_L05_00239fc0(void) {
         s = 0x3C;
         goto call;
     }
-    if (P.b12EB && P.i2084 != 0x7B && FUN_001f99c0_239fc0(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
-        0.0f < P.f2F4 - P.f88 && P.f108 < 0.0f) {
+    if (hero.selector_11 && hero.state.current != 0x7B && FUN_001f99c0_239fc0(hero.unk2F4 - (hero.motion.pos.f[2] + 0.25f)) < 1.0f &&
+        0.0f < hero.unk2F4 - hero.motion.pos.f[2] && hero.motion.unk100.f[2] < 0.0f) {
         FUN_L00_0020b930_239fc0();
         hero_set_state(0x7B, 1);
     }
 }
-#undef P
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 typedef union {

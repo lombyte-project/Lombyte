@@ -5,25 +5,6 @@
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b2100.s", FUN_L00_002b2100);
 typedef struct {
-    u8 pad0[0x2FC];
-    u8 *p2FC;
-    s32 i300;
-    u8 pad304[0x688 - 0x304];
-    f32 f688;
-    u8 pad68C[0x10A0 - 0x68C];
-    s32 i10A0;
-    u8 pad10A4[0x2080 - 0x10A4];
-    u8 *p2080;
-    s32 i2084;
-    u8 pad2088[0x208C - 0x2088];
-    s32 i208C;
-    u8 pad2090[0x20AC - 0x2090];
-    u8 b20AC;
-    u8 pad20AD[0x22C8 - 0x20AD];
-    s16 h22C8;
-} G_b3058;
-
-typedef struct {
     u8 pad0[0x1A4];
     s32 i1A4;
 } C_b3058;
@@ -69,7 +50,6 @@ typedef struct {
     f32 fD8;
 } O_b3058;
 
-extern G_b3058 D_0013F350_b3058 __asm__("D_0013F350");
 extern C_b3058 D_0013C940_b3058 __asm__("D_0013C940");
 extern S_b3058 D_L00_00166C80_b3058 __asm__("D_L00_00166C80");
 extern R_b3058 D_00141680_b3058 __asm__("D_00141680");
@@ -91,7 +71,7 @@ void FUN_0022da68_b3058(s32, s32, void *) __asm__("FUN_0022da68");
 
 void FUN_L00_002b3058(O_b3058 *o) {
     V_b3058 *v;
-    G_b3058 *g;
+    struct Hero *g;
     C_b3058 *c;
     S_b3058 *s;
     R_b3058 *r;
@@ -106,39 +86,39 @@ void FUN_L00_002b3058(O_b3058 *o) {
     v = o->v;
     FUN_001f9740_b3058(v);
     c = &D_0013C940_b3058;
-    g = &D_0013F350_b3058;
-    if (!(c->i1A4 & g->i10A0))
+    g = &hero;
+    if (!(c->i1A4 & g->items[0].button_mask))
         goto tail;
     if (v->i0 != 0)
         goto tail;
     if (v->i4 != 0)
         goto tail;
-    if (g->b20AC != 0)
+    if (g->unk20AC != 0)
         goto tail;
-    k = g->i208C;
+    k = g->state.control_mode;
     if (k == 7 || k == 2 || k == 3 || k == 4 || k == 5 || k == 6 || k == 0x10 || k == 0xE ||
         k == 9 || k == 0xA || k == 0xB || k >= 0xD)
         goto tail;
-    if (g->i2084 == 0x72 || g->i2084 == 0x65)
+    if (g->state.current == 0x72 || g->state.current == 0x65)
         goto tail;
     s = &D_L00_00166C80_b3058;
     if (s->p180 != 0 && *(s16 *)(s->p180 + 0x86) == 5)
         goto tail;
-    if (g->i300 == 0)
+    if (g->unk300 == 0)
         goto tail;
-    if (g->p2FC != 0 && (*(s16 *)(g->p2FC + 0xA6) == 0x13E || *(s16 *)(g->p2FC + 0xA6) == 0x46F))
+    if (((u8 *)g->unk2FC) != 0 && (*(s16 *)(((u8 *)g->unk2FC) + 0xA6) == 0x13E || *(s16 *)(((u8 *)g->unk2FC) + 0xA6) == 0x46F))
         goto tail;
     if (FUN_L00_00233db8_b3058(-1, 1) != 0) {
         b = 0.0f;
-        a = g->f688;
-        if (g->i2084 == 1 && (*(u16 *)(g->p2080 + 0x34) & 1)) {
+        a = g->unk688;
+        if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
             a = FUN_001f9e90_b3058(s->f350, s->f354);
             b = -FUN_001f9e90_b3058(FUN_001f9b20_b3058(&s->f350), s->f358);
             FUN_001f9bf8_b3058(t, &s->f350, 0.3f);
             FUN_001f9bf8_b3058(u, s->v370, -0.35f);
             FUN_001f9a10_b3058(t, t, u);
             FUN_001f9a10_b3058(t, t, s->v140);
-        } else if (D_0013F350_b3058.h22C8 == 1) {
+        } else if (hero.unk22C8 == 1) {
             b = FUN_001f9e90_b3058(FUN_001f9b20_b3058(o->vD0), o->fD8);
             FUN_00214db0_b3058(t, 0.6f, a, -b);
             FUN_001f9a10_b3058(t, t, o->v10);
@@ -160,7 +140,7 @@ void FUN_L00_002b3058(O_b3058 *o) {
         }
         r->i6C = r->i6C | (1 << D_0015ED84_b3058) | 0x80000000;
         v->i0 = FUN_001f96f8_b3058(0x3C);
-    } else if (c->i1A4 & g->i10A0) {
+    } else if (c->i1A4 & g->items[0].button_mask) {
         FUN_0022da68_b3058(0, 0, o);
     }
 tail:
@@ -386,7 +366,6 @@ typedef union {
     float f[4];
 } V_2b46a8;
 extern unsigned char *D_L00_0015FFE4_2b46a8 __asm__("D_L00_0015FFE4");
-extern unsigned char D_0013F350_2b46a8[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern unsigned char D_L00_00166DC0_2b46a8[] __asm__("D_L00_00166DC0")
     __attribute__((section(".data")));
 extern unsigned char *FUN_002141f8_2b46a8(void *) __asm__("FUN_002141f8");
@@ -415,7 +394,7 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
     float e;
     float s;
     float t;
-    unsigned char *g;
+    struct Hero *g;
 
     best = 0;
     src.q = from->q;
@@ -442,8 +421,8 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
         if (bestd < d) {
             continue;
         }
-        g = D_0013F350_2b46a8;
-        FUN_00214db0_2b46a8(&w, d, *yaw, *pitch + *(float *)(g + 0x2E4) * 0.5f);
+        g = &hero;
+        FUN_00214db0_2b46a8(&w, d, *yaw, *pitch + g->unk2E4.f * 0.5f);
         FUN_001f9a10_2b46a8(&w, &w, from);
         e = FUN_001f9df8_2b46a8(FUN_001f9b48_2b46a8(&w, &tp) / (d + d));
         e = e + e;
@@ -584,11 +563,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_2b58d8;
-typedef struct {
-    unsigned char p[0x2080];
-    void *w2080;
-} G_2b58d8;
-extern G_2b58d8 D_0013F350_2b58d8 __asm__("D_0013F350");
 extern int D_L00_0017E508_2b58d8 __asm__("D_L00_0017E508") __attribute__((section(".data")));
 extern int D_L00_0015F608_2b58d8 __asm__("D_L00_0015F608");
 extern float D_L00_0016149C_2b58d8 __asm__("D_L00_0016149C") __attribute__((sda));
@@ -614,9 +588,9 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
     unsigned char *m = FUN_0020c4f8_2b58d8(0xAC);
     if (m) {
         unsigned char *v = *(unsigned char **)(m + 0x78);
-        unsigned char *G = (unsigned char *)&D_0013F350_2b58d8;
+        struct Hero *G = &hero;
         V_2b58d8 t;
-        *(unsigned char **)(G + 0x1FE0) = m;
+        G->unk1FE0 = m;
         D_L00_0017E508_2b58d8 = 1;
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
@@ -624,14 +598,14 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         m[0x20] = 1;
         *(float *)(m + 0x48) = fa;
         *(float *)(m + 0x44) = fb;
-        *(unsigned char **)(v + 0x24) = G + 0x1F60;
-        *(unsigned char **)(v + 0x28) = G + 0x1FA0;
+        *(unsigned char **)(v + 0x24) = G->unk1F60;
+        *(unsigned char **)(v + 0x28) = G->unk1FA0;
         *(unsigned char **)(v + 0x0) = a;
         qcopy(m + 0x10, pos);
         *(int *)(v + 0x8) = 0;
         *(int *)(v + 0xC) = 0;
-        if (*(void **)(G + 0x2FC) && FUN_L00_002603d0_2b58d8(*(void **)(G + 0x2FC)))
-            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(G + 0x100);
+        if ((void *)G->unk2FC && FUN_L00_002603d0_2b58d8((void *)G->unk2FC))
+            *(float *)(v + 0x4) = FUN_001f9af0_2b58d8(&G->motion.unk100);
         else
             *(int *)(v + 0x4) = 0;
         *(int *)(v + 0x10) = FUN_001f96f8_2b58d8(0xBB8);
@@ -658,8 +632,8 @@ unsigned char *FUN_L00_002b58d8(unsigned char *a, V_2b58d8 *pos, float fa, float
         t.q = *(OvlQuad *)(a + 0x10);
         t.f[2] = pos->f[2];
         if (FUN_001efa68_2b58d8(&t, pos, 0, ({
-                G_2b58d8 *g2 = &D_0013F350_2b58d8;
-                g2->w2080;
+                struct Hero *g2 = &hero;
+                (void *)g2->moby;
             }),
                                 0)) {
             m[0xBC] = 1;
@@ -859,15 +833,6 @@ extern s32 allocate_voice_for_target_entry(s32, s32, Moby *) __asm__("FUN_0022da
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002b6bc8(Moby *, f32);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-typedef struct {
-    u8 p0[0x10A0];
-    u32 w10A0;
-    u8 p10A4[0x10];
-    u32 w10B4;
-    u8 p10B8[0x20AC - 0x10B8];
-    u8 b20AC;
-} GS;
-extern GS D_0013F350;
 extern u32 D_0013C940[];
 extern u32 D_0013CAE0[];
 extern u8 D_0013E550[];
@@ -878,8 +843,6 @@ extern s32 D_0015ED84;
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F5CC;
 
-#define G_W(o) D_0013F350.w##o
-#define G_B(o) D_0013F350.b##o
 
 void FUN_L00_002b6f10(Moby *m) {
     Vars *o;
@@ -917,16 +880,16 @@ void FUN_L00_002b6f10(Moby *m) {
     }
     if ((u8)v != 2)
         goto end;
-    if (m->type == 3 && G_B(20AC) == 0) {
+    if (m->type == 3 && hero.unk20AC == 0) {
         D_L00_001614D4 = 0;
         o->cnt18++;
     } else {
         o->cnt18 = 0;
     }
     if (FUN_L00_0028d8c0(m, o->anim) == 0) {
-        b = D_0013C940[0x1A4 / 4] & G_W(10A0);
-        if ((b != 0 || ((D_0013C940[0x1A0 / 4] & G_W(10A0)) != 0 && o->retry >= 0x11)) &&
-            G_B(20AC) == 0) {
+        b = D_0013C940[0x1A4 / 4] & hero.items[0].button_mask;
+        if ((b != 0 || ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && o->retry >= 0x11)) &&
+            hero.unk20AC == 0) {
             if (b != 0) {
                 o->frame = FUN_001f96f8_c(FUN_L00_00257b90_c(0xF, 0x2D));
             }
@@ -952,7 +915,7 @@ void FUN_L00_002b6f10(Moby *m) {
             goto end;
         }
         if (o->anim < 0) {
-            if ((D_0013C940[0x1A0 / 4] & G_W(10A0)) != 0 && G_B(20AC) == 0)
+            if ((D_0013C940[0x1A0 / 4] & hero.items[0].button_mask) != 0 && hero.unk20AC == 0)
                 o->retry++;
             else
                 o->retry = 0;
@@ -962,8 +925,8 @@ void FUN_L00_002b6f10(Moby *m) {
         }
     } else {
         o->retry++;
-        if ((D_0013CAE0[0] & G_W(10A0)) != 0 || FUN_001f96f8_c(0x1E) >= o->cnt18) {
-            if (G_B(20AC) == 0)
+        if ((D_0013CAE0[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= o->cnt18) {
+            if (hero.unk20AC == 0)
                 goto L7340;
         }
     }
@@ -982,7 +945,7 @@ L7340:
     if (!(D_L00_0015F5CC & 3))
         FUN_L00_002b6bc8(m, o->radius);
 end:
-    if ((s32)(G_W(10B4) ^ 3) != 0)
+    if ((s32)(hero.items[0].state ^ 3) != 0)
         FUN_L00_002b7398(m);
 }
 
@@ -1159,7 +1122,6 @@ void FUN_L00_002b7568(u8 *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b77f0.s", FUN_L00_002b77f0);
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
-extern unsigned char D_0013F350_2b8230[] __asm__("D_0013F350");
 extern unsigned short D_00141BD8_2b8230 __asm__("D_00141BD8") __attribute__((section(".data")));
 extern unsigned char D_00141848_2b8230[] __asm__("D_00141848");
 extern int D_0015EEA4_2b8230 __asm__("D_0015EEA4");
@@ -1212,10 +1174,10 @@ void FUN_L00_002b8230(unsigned char *m) {
             *(unsigned short *)(P + 0x52) = FUN_001f96f8_2b8230(D_0015EEA4_2b8230) / 600;
         *(int *)(P + 0x54) = *(int *)(P + 0x54) | (1 << D_0015ED84_2b8230) | 0x80000000;
     } else if (*(short *)(v + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
-        D_0013F350_2b8230[0x20B4]++;
+        hero.unk20B4++;
     }
     *(short *)(v + 0x50) = 0;
-    if (D_0013F350_2b8230[0x20B4] >= 3)
+    if (hero.unk20B4 >= 3)
         FUN_L00_00203908_2b8230(0x4E24, 0x4E);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B9730), where it is exact; names translated to the US level program. */

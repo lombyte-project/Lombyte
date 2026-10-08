@@ -328,7 +328,9 @@ struct Hero {
     f32 unk610;                    /* 0x610 */
     f32 unk614;                    /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
-    u8 pad_61C[0x74];
+    u8 pad_61C[0x6C];
+    f32 unk688;                    /* 0x688 */
+    u8 pad_68C[0x4];
     f32 unk690;                    /* 0x690 */
     f32 unk694;                    /* 0x694 */
     s32 unk698;                    /* 0x698 */
@@ -527,7 +529,11 @@ struct Hero {
     u8 pad_17B0[0x570];
     f32 unk1D20;                   /* 0x1D20 */
     f32 unk1D24;                   /* 0x1D24 */
-    u8 pad_1D28[0x2CD];
+    u8 pad_1D28[0x238];
+    u8 unk1F60[0x40];              /* 0x1F60: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
+    u8 unk1FA0[0x40];              /* 0x1FA0: 0x40-byte buffer cleared by FUN_L00_002b58d8 */
+    u8 *unk1FE0;                   /* 0x1FE0: moby set by FUN_L00_002b58d8 */
+    u8 pad_1FE4[0x11];
     u8 unk1FF5;                    /* 0x1FF5 */
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
@@ -554,7 +560,8 @@ struct Hero {
     u8 unk20B1;                    /* 0x20B1 */
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
-    u8 pad_20B4[0x4];
+    u8 unk20B4;                    /* 0x20B4 */
+    u8 pad_20B5[0x3];
     s32 pending_item[7];           /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
