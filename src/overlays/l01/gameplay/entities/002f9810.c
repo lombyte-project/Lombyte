@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/gameplay/entities/moby.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f9810.s", FUN_L01_002f9810);
 typedef struct {
@@ -223,7 +224,90 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002fa1b0.s", FUN_L01_002fa1b0);
+
+/*
+ * Explosion burst at `where` (uses the unit's BurstVec): three particles in
+ * random colours from two six-colour palettes, two FUN_L00_002ac910 effects
+ * on `moby`, its sound unless the moby is dying (state 0xFD/0xFE), and a
+ * light flash of brightness `light` (negative: 13).
+ */
+typedef struct {
+    u32 c[6];
+} BurstPalette;
+
+/* Light used by the flash; FUN_L00_002d3838 places it at a position. */
+typedef struct {
+    u8 pad_00[0x20];
+    f32 r;
+    f32 g;
+    f32 b;
+} BurstLight;
+
+extern BurstPalette D_L01_0020B4F0;   /* inner colours */
+extern BurstPalette D_L01_0020B508;   /* outer colours */
+extern BurstLight D_L01_001E3440;
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
+/* s32 return is load-bearing: a void prototype changes the code */
+extern s32 FUN_L00_002ac910(void *, void *, void *, f32, s32, s32, s32, s32, s32);
+/* allocate_voice_for_target_entry; the unit declares it under this name */
+extern s32 FUN_0022da68(s32, s32, void *);
+extern void FUN_L00_002d3838(void *, void *, s32, s32);
+
+void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
+{
+    BurstVec pos;
+    BurstVec vel;
+    BurstPalette inner;
+    BurstPalette outer;
+    BurstPalette *inner_p;
+    BurstVec *pos_p;
+    f32 size;
+    f32 speed;
+    s32 i;
+
+    /* pos and inner are used through pointers, as in retail */
+    pos_p = &pos;
+    pos.q = *where;
+    clear_vector(&vel);
+    inner_p = &inner;
+    for (i = 2; i >= 0; i--) {
+        speed = random_float_between(8.0f, 10.0f) * D_0015ED6C;
+        size = scale * 400000.0f;
+        inner = D_L01_0020B4F0;
+        outer = D_L01_0020B508;
+        FUN_L00_0026a9f0(pos_p, &vel,
+                         inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
+                         size,
+                         random_int_between(FUN_001f96f8(0xF), FUN_001f96f8(0x14)),
+                         random_int_between(FUN_001f96f8(0x19), FUN_001f96f8(0x1E)),
+                         speed * scale, 0, 0);
+    }
+
+    if (moby != 0) {
+        FUN_L00_002ac910(moby, pos_p, &vel, scale + scale, FUN_001f96f8(0x14), 0x7F, 0, 0x40, 0x30);
+        FUN_L00_002ac910(moby, pos_p, &vel, scale * 1.5f, FUN_001f96f8(0x1D), 0x20, 0, 0x20, 0);
+        if (moby->state != 0xFE) {
+            if (moby->state != 0xFD && sound != -1) {
+                FUN_0022da68(sound, 0, moby);
+            }
+        }
+    }
+
+    if (light != 0.0f) {
+        if (light > 0.0f) {
+            D_L01_001E3440.g = light;
+            D_L01_001E3440.b = light;
+            D_L01_001E3440.r = light;
+        } else {
+            D_L01_001E3440.g = 13.0f;
+            D_L01_001E3440.b = 13.0f;
+            D_L01_001E3440.r = 13.0f;
+        }
+        FUN_L00_002d3838(&D_L01_001E3440, pos_p, 0, 0);
+    }
+}
 #include "rnc/math/vector.h"
 #include "rnc/overlay/quad.h"
 
@@ -258,7 +342,7 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern s32 FUN_001efa68(void *, void *, s32, void *, void *);
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L01_002fa1b0(void *, void *, s32, f32, f32);
+void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light);
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u8 D_L01_00167240[];
 extern u128 D_L01_001742E0;
