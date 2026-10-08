@@ -202,7 +202,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         if (((SpawnClass *)c->pclass)->always_draw != 0) {
             c->flags |= 0x400;
         }
-        c->pad71 = 0xFF;
+        c->unk71 = 0xFF;
         c->unk36 = 0x7F80;
         c->unk72 = 0xFF;
         c->unkA4 = 0xFF;

@@ -30,14 +30,14 @@ struct Moby {
     u8 prev_frame;                    /* frame index in prev_seq */
     u8 seq;                           /* animation sequence id */
     u8 prev_seq;
-    u8 pad54[4];
+    f32 unk54;
     f32 unk58;
     u8 pad5C[8];
     struct Manip *manips;
     void *cur_frame_data;
     void *prev_frame_data;
     u8 unk70;
-    u8 pad71;
+    u8 unk71;                         /* set to 0xFF when a moby changes class */
     u8 unk72;
     u8 unk73;
     void (*update)(struct Moby *moby);

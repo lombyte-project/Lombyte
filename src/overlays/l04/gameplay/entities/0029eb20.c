@@ -2513,5 +2513,122 @@ void FUN_L04_002c4850(char *moby) {
     }
     *(float *)(data + 0xD8) = alive;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6858.s", FUN_L04_002c6858);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a moby that follows a linked switch moby. */
+typedef struct {
+    s32 link;         /* index of the linked moby in the moby array, -1 for none */
+    s32 voice;        /* playing loop sound, -1 for none */
+} SwitchFollowerVars;
+
+/* The fields of a moby class header read when a moby changes class. */
+typedef struct {
+    u8 pad0[0xE];
+    u8 unkE;
+    u8 padF;
+    u32 unk10;
+    u8 pad14[0x10];
+    f32 scale;        /* 0x24 */
+} MobyClassHeader;
+
+extern char *moby_array __asm__("D_L04_0015FFD8") MACRO_ADDR;
+extern u8 D_L04_00197D40[];                 /* class slot by oclass */
+extern struct MobyClass *D_L04_00197480[];  /* class header by slot */
+extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
+extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void reset_moby_anim(struct Moby *) __asm__("FUN_0020c880");
+extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
+extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+
+/* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
+void FUN_L04_002c6858(struct Moby *m) {
+    SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
+    f32 last = m->unk54;
+    struct Moby *other;
+    f32 *pos;
+    f32 cur;
+
+    if (v == NULL) {
+        delete_moby(m);
+        return;
+    }
+    switch (m->state) {
+    case 0:
+        blend_anim(m, 1, 0, scale_game_frames(300));
+        m->state = 1;
+        m->unk58 = 0;
+        v->voice = -1;
+        if (m->oclass == 0x1B0) {
+            m->oclass = 0x41C;
+            m->unk22 = D_L04_00197D40[0x41C];
+            m->pclass = D_L04_00197480[m->unk22];
+            m->unk71 = 0xFF;
+            m->scale = ((MobyClassHeader *)m->pclass)->scale;
+            reset_moby_anim(m);
+            m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
+            m->unk94 = ((MobyClassHeader *)m->pclass)->unk10;
+            FUN_0020e098(m);
+        }
+        break;
+    case 1:
+        if (v->link == -1)
+            break;
+        other = (struct Moby *)(moby_array + (v->link << 8));
+        if (other->oclass != 0x118)
+            break;
+        pos = (f32 *)other->pvars;
+        cur = *pos;
+        m->unk54 = cur;
+        if (cur != last) {
+            if (*pos == 1.0f || *pos == 0.0f) {
+                if (voice_is_playing(m, v->voice)) {
+                    s32 h = v->voice;
+                    if (h != -1) {
+                        char *e = (char *)D_0013E550_u + h * 0x70;
+                        if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                            release_voice_slot(h);
+                    }
+                    v->voice = -1;
+                }
+                play_moby_voice(1, 0, m);
+                if (m->oclass == 0x41C && *pos == 1.0f) {
+                    m->oclass = 0x1B0;
+                    m->unk22 = D_L04_00197D40[0x1B0];
+                    m->pclass = D_L04_00197480[m->unk22];
+                    m->unk71 = 0xFF;
+                    m->scale = ((MobyClassHeader *)m->pclass)->scale;
+                    reset_moby_anim(m);
+                    m->unk72 = ((MobyClassHeader *)m->pclass)->unkE;
+                    m->unk94 = ((MobyClassHeader *)m->pclass)->unk10;
+                    FUN_0020e098(m);
+                    m->state = 2;
+                }
+            } else if (!voice_is_playing(m, v->voice)) {
+                v->voice = play_moby_voice(0, 4, m);
+            }
+        } else {
+            if (voice_is_playing(m, v->voice)) {
+                s32 h = v->voice;
+                if (h != -1) {
+                    char *e = (char *)D_0013E550_u + h * 0x70;
+                    if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                        release_voice_slot(h);
+                }
+                v->voice = -1;
+            }
+        }
+        break;
+    case 2:
+        if (voice_is_playing(m, v->voice)) {
+            s32 h = v->voice;
+            if (h != -1) {
+                char *e = (char *)D_0013E550_u + h * 0x70;
+                if (*(struct Moby **)(e + 0x88) == m && *(u8 *)(e + 0x74) != 0)
+                    release_voice_slot(h);
+            }
+            v->voice = -1;
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002c6bb8.s", FUN_L04_002c6bb8);
