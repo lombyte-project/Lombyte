@@ -1783,7 +1783,7 @@ segments:
           - [0x11f090, c, ui/menus/fun_0021e110]
           - [0x11f174, textbin, text_gap_0021e1f4_before_fun_0021e1f8]
           - [0x11f178, c, ui/menus/rotate_item_preview_moby]
-          - [0x11f1b0, c, assembly/textbin/fun_0021e230]
+          - [0x11f1b0, c, textbin/fun_0021e230]
           - [0x11f588, c, ui/menus/draw_available_item_preview_mobys]
           - [0x11f614, textbin, text_gap_0021e694_after_fun_0021e608]
           - [0x11f618, c, textbin/update_item_preview_transform]
