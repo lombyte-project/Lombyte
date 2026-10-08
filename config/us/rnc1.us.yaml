@@ -1735,7 +1735,7 @@ segments:
           - [0x11b298, c, ui/menus/fun_0021a318]
           - [0x11b2a8, c, assembly/textbin/fun_0021a328]
           - [0x11bb74, textbin, text_gap_0021abf4_before_fun_0021abf8]
-          - [0x11bb78, c, assembly/textbin/fun_0021abf8]
+          - [0x11bb78, c, ui/menus/fun_0021abf8]
           - [0x11c148, c, textbin/render_localized_ui_entry_list]
           - [0x11c654, textbin, text_gap_0021b6d4_before_fun_0021b6d8]
           - [0x11c658, c, ui/menus/fun_0021b6d8]

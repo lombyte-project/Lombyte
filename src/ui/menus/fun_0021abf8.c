@@ -1,26 +1,13 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021abf8/FUN_0021abf8.s", FUN_0021abf8);
-#else
-#include "types.h"
+#include "sda.h"
+#include "rnc/input/pad_state.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 
-#include "sda.h"
-
-#include "rnc/ui/menus/menu_screen.h"
-
-typedef struct {
-    u8 pad0[0x1B4];
-    s32 held;
-    u8 pad1B8[0xC];
-    s32 pressed;
-} MenuControllerState;
-
-extern MenuControllerState controller_state __asm__("D_0013C940");
+extern struct PadState D_0013C940;
+/* gp-relative here, so not the plain rnc/globals.h spellings. */
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
-extern s32 requested_level_index __asm__("D_0015ED88") __attribute__((sda));
+extern s32 game_language __asm__("D_0015ED88") __attribute__((sda));
 extern s32 mode_freeze_state __asm__("D_0015EEB0");
 extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern s32 menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
@@ -28,10 +15,15 @@ extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 extern s32 menu_action_messages[] __asm__("D_00199478");
 extern s32 selected_level_index[] __asm__("D_001A0314");
 
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
 extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
+/*
+ * Per-frame update of a menu list: fades the entry highlights, handles
+ * cancel/back, runs the selected entry's action on accept, and moves the
+ * selection up/down (with wrap or hand-off to the neighbouring list).
+ */
 s32 update_menu_entry_actions(struct MenuScreen *menu) __asm__("FUN_0021abf8");
 
 s32 update_menu_entry_actions(struct MenuScreen *menu) {
@@ -43,9 +35,6 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     s32 buttons;
     s16 fade_timer;
     s16 message_index;
-    struct MenuTextItem *items;
-    struct MenuTextItem *entry;
-    s32 selected_entry;
 
     focused = menu_system.current->focus == menu;
     for (entry_index = 0; menu->data.list.items[entry_index].text != 0; entry_index++) {
@@ -67,13 +56,13 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     if (!focused) {
         return 0;
     }
-    if (controller_state.pressed & 0xD00) {
+    if (D_0013C940.pressed_unmasked & 0xD00) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
         return -1;
     }
-    if (controller_state.pressed & 0x10) {
+    if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu->data.list.flags & 0x20) {
             selected_level_index[0] = current_level_index;
         }
@@ -83,10 +72,10 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             return -1;
         }
     }
-    if (controller_state.pressed & 0x40) {
-        items = menu->data.list.items;
-        selected_entry = menu->data.list.selected;
-        switch (items[selected_entry].action) {
+    if (D_0013C940.pressed_unmasked & 0x40) {
+        /* Index through menu-> directly: locals for items/selected change
+           which register keeps the copy of selected that actions 6 and 9 reuse. */
+        switch (menu->data.list.items[menu->data.list.selected].action) {
         case 0:
             break;
         case 1:
@@ -155,26 +144,23 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 9:
-            requested_level_index = items[selected_entry].param.value;
+            game_language = menu->data.list.items[menu->data.list.selected].param.value;
             return 0;
         case 2:
             allocate_voice_for_target_entry(2, 0x11, menu->moby);
             break;
         }
     }
-    entry_count = 0;
+    /* Count first, then read selected/flags: in the other order (or as a
+       do-while) the allocator shifts every register of the tail. */
+    for (entry_count = 0; menu->data.list.items[entry_count].text != 0; entry_count++) {
+    }
     previous_selection = menu->data.list.selected;
     flags = menu->data.list.flags;
-    if (menu->data.list.items[0].text != 0) {
-        do {
-            entry = &menu->data.list.items[entry_count];
-            entry_count++;
-        } while (entry[1].text != 0);
-    }
     if (flags & 1) {
-        buttons = controller_state.held;
+        buttons = D_0013C940.raw_pressed;
     } else {
-        buttons = controller_state.pressed;
+        buttons = D_0013C940.pressed_unmasked;
     }
     if ((buttons & 0x1000) || ((flags & 0x100) && (buttons & 4))) {
         if (menu->data.list.selected != 0) {
@@ -206,4 +192,3 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
 
 extern __typeof__(update_menu_entry_actions) func_0021ABF8 __attribute__((alias("FUN_0021abf8")));
 
-#endif /* NON_MATCHING */

@@ -390,6 +390,7 @@ RODATA_OVERLAYS = {
     "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
     "fun_00204428": (0x1E7CE0, 0xE8C60),  # switch table
     "mode_freeze_init": (0x1E78D0, 0xE8850),  # switch table
+    "fun_0021abf8": (0x1E8770, 0xE96F0),  # menu action switch table
 }
 
 # Recovered C units that define the small-data variables their original
