@@ -1,5 +1,23 @@
-#include "rnc/audio/streaming/advance_audio_stream_state.h"
 #include "types.h"
+
+struct AudioStream {
+    u8 pad_0[0x44];
+    s32 unk44;
+    s32 unk48;
+    s32 unk4C;
+};
+
+struct AudioStreamTableA {
+    u8 pad_0[0x2C8];
+    s32 unk2C8;
+    s32 unk2CC;
+};
+
+struct AudioStreamTableB {
+    u8 pad_0[0x2F8];
+    s32 unk2F8;
+    s32 unk2FC;
+};
 #include "rnc/storage/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"

@@ -1,8 +1,13 @@
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/ui/menus/fun_0021d1f8.h"
+
 #include "rnc/audio/music/music_stream_state.h"
+#include "rnc/ui/menus/menu_screen.h"
+
+struct WordCell {
+    s32 unk0;
+};
 
 typedef struct {
     u32 key;

@@ -1,6 +1,15 @@
-#include "rnc/gameplay/camera/refresh_camera_control_flags.h"
-#include "rnc/gameplay/hero.h"
 #include "types.h"
+
+struct CameraPosition {
+    u8 pad_0[0x8];
+    f32 z;
+};
+
+struct CameraTrackingControl {
+    u8 pad_0[0xC0];
+    s32 control_selector;
+};
+#include "rnc/gameplay/hero.h"
 extern s32 D_0015EF98;
 extern s32 D_0015EF9C;
 extern s32 D_0015EFA0;

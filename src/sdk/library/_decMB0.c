@@ -1,5 +1,16 @@
 #include "types.h"
-#include "rnc/sdk/library/_decMB0.h"
+#include "rnc/sdk/libmpeg.h"
+
+struct MpegMbState {
+    int unk0;
+    int unk4;
+    int unk8;
+    int unkC;
+    int unk10;
+    int unk14;
+    int unk18;
+    int unk1C;
+};
 
 extern u8 D_00153898[];
 extern void _Error();

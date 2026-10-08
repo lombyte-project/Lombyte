@@ -1,5 +1,14 @@
 #include "types.h"
-#include "rnc/sdk/library/motion_vector.h"
+
+struct MotionVector {
+    u8 pad_0[0x4];
+    s32 unk4;
+};
+
+struct MotionVectorStore {
+    s32 unk0;
+    s32 unk4;
+};
 
 extern s32 InitializeMemoryCardDirectory();
 extern s32 _ipuVdec();

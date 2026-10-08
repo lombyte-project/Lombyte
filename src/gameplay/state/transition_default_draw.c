@@ -1,4 +1,10 @@
-#include "rnc/gameplay/state/transition_default_draw.h"
+#include "types.h"
+
+struct Globals_0016045C {
+    u8 pad_0[0x4];
+    s16 unk4;
+    u8 pad_6[0x2];
+};
 #include "rnc/globals.h"
 extern u8 D_00100AE0[];
 extern s32 D_0013E504[];

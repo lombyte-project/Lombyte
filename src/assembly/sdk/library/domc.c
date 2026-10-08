@@ -5,8 +5,7 @@
 /* Exact SDK/library unit _doMC; includes target internal entry symbols. */
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/domc/_doMC.s", _doMC);
 #else
-#include "types.h"
-#include "rnc/sdk/library/domc.h"
+#include "rnc/sdk/libmpeg.h"
 
 extern u8 D_00153770[];
 extern s32 _Error();

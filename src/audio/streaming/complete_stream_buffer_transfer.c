@@ -1,6 +1,9 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/audio/streaming/complete_stream_buffer_transfer.h"
+
+struct WordCell {
+    s32 unk0;
+};
 
 extern u8 D_001D60B8[];
 extern void request_audio_stream_break(s32) __asm__("FUN_002166e8");

@@ -1,5 +1,9 @@
 #include "types.h"
-#include "rnc/video/decoder/video_dec_main.h"
+
+struct VideoDec {
+    u8 pad_0[0xD9174];
+    s32 unkD9174;
+};
 
 extern s32 D_0016120C;
 extern s32 vi_buf_reset() __asm__("func_0023BCC0");

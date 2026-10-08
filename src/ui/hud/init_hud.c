@@ -1,5 +1,20 @@
-#include "rnc/ui/hud/init_hud.h"
 #include "types.h"
+
+struct Globals_0015FA00 {
+    u8 pad_0[0x20];
+    u8 unk20;
+    u8 pad_21[0x3];
+};
+
+struct HudSlot {
+    s32 unk0;
+    u8 pad_4[0x3C];
+    s32 unk40;
+    u8 pad_44[0x4];
+    s32 unk48;
+    u8 pad_4C[0xC];
+    s32 unk58;
+};
 #include "rnc/ui/hud/hud_state.h"
 
 extern u8 D_0015F6D8[];

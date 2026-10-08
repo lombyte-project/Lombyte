@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/ui/menus/fun_0021fce0.h"
+#include "rnc/ui/menus/menu_screen.h"
 
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
 s32 FUN_0021fce0(struct MenuScreen *menu) {
