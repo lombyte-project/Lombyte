@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6328.s", FUN_L01_002f6328);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f6a30.s", FUN_L01_002f6a30);
@@ -481,7 +483,188 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00300220.s", FUN_L01_00300220);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302438.s", FUN_L01_00302438);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00302648.s", FUN_L01_00302648);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00307ca0.s", FUN_L01_00307ca0);
+
+typedef struct {
+    s32 id;                        /* collected flag index (D_0014BEC0 + level * 4), -1 none */
+    u8 pad4[8];
+    s16 unkC;                      /* nonzero: collect at once, no cutscene */
+    u8 padE[2];
+    Vec4f home;                    /* spawn position; w = spawn yaw */
+    u8 pad20[0x40];
+    f32 unk60;
+    f32 unk64;
+    f32 unk68;
+    s32 timer;                     /* frames until the pickup finishes */
+} Vars_307ca0;
+
+extern u8 D_0014BEC0[];
+/* MACRO_ADDR aliases: retail loads these with the one-register lui form */
+extern f32 D_0015ED6C_f __asm__("D_0015ED6C") MACRO_ADDR;
+extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
+extern u8 D_0015EDB5 MACRO_ADDR;
+extern s32 D_L01_0015F640 MACRO_ADDR;
+extern s32 D_L01_0015F404_n __asm__("D_L01_0015F404") MACRO_ADDR;
+extern f32 D_L01_00161F10_f __asm__("D_L01_00161F10") __attribute__((sda));
+extern f32 D_L01_00161F14_f __asm__("D_L01_00161F14") __attribute__((sda));
+extern f32 D_L01_00161F18_f __asm__("D_L01_00161F18") __attribute__((sda));
+extern f32 D_L01_00161F20_f __asm__("D_L01_00161F20") __attribute__((sda));
+extern f32 D_L01_00161F24_f __asm__("D_L01_00161F24") __attribute__((sda));
+extern f32 D_L01_00161F28_f __asm__("D_L01_00161F28") __attribute__((sda));
+extern f32 D_L01_00161F2C_f __asm__("D_L01_00161F2C") __attribute__((sda));
+extern s32 D_L01_00161F50_i __asm__("D_L01_00161F50") __attribute__((sda));
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f99c0(f32);
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern void FUN_001f99f8(void *);
+extern void FUN_001f4a58(s32);
+extern void FUN_L01_00231450(void);
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_00212f90(struct Moby *, s32, s32, s32);
+extern void FUN_L00_002323b8(f32, s32, s32);
+extern void FUN_L00_00263d40(s32, s32);
+extern void FUN_L01_00308470(struct Moby *);
+/* the unit defines these with a char * parameter further down */
+extern void FUN_L01_00308550_f(struct Moby *) __asm__("FUN_L01_00308550");
+extern void FUN_L01_00308380_f(struct Moby *) __asm__("FUN_L01_00308380");
+extern void FUN_L01_003087e0_f(struct Moby *) __asm__("FUN_L01_003087e0");
+extern void FUN_L01_003089f0_f(struct Moby *) __asm__("FUN_L01_003089f0");
+
+void FUN_L01_00307ca0(struct Moby *moby) {
+    Vars_307ca0 *vars = (Vars_307ca0 *)moby->pvars;
+    struct Hero *h;
+    Vec4f at;
+    Vec4f look;
+    Vec4f at2;
+    Vec4f look2;
+    int i;
+
+    switch (moby->state) {
+    case 0:
+        if (vars->id == -1 || D_0014BEC0[vars->id + D_0015ED84 * 4] != 0) {
+            goto remove;
+        }
+        qcopy(&vars->home, &moby->pos);
+        vars->home.w = moby->rot.z;
+        moby->rot.x = random_angle_radians();
+        moby->rot.y = random_angle_radians();
+        moby->rot.z = random_angle_radians();
+        moby->rot.w = random_angle_radians();
+        vars->unk68 = D_L01_00161F20_f * 0.017453292f * D_0015ED6C_f;
+        vars->unk64 = D_L01_00161F24_f * 0.017453292f * D_0015ED6C_f;
+        vars->unk60 = D_L01_00161F28_f * 0.017453292f * D_0015ED6C_f;
+        moby->state = 1;
+        FUN_L01_00308470(moby);
+        return;
+    case 1:
+        moby->scale = *(f32 *)((u8 *)moby->pclass + 0x24) * D_L01_00161F10_f;
+        moby->pos.z = vars->home.z + D_L01_00161F14_f + D_L01_00161F18_f * FUN_001f9de0(moby->rot.w);
+        moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20_f * 0.017453292f * D_0015ED6C_f);
+        moby->rot.y = FUN_001fa580_c(moby->rot.y, D_L01_00161F24_f * 0.017453292f * D_0015ED6C_f);
+        moby->rot.z = FUN_001fa580_c(moby->rot.z, D_L01_00161F28_f * 0.017453292f * D_0015ED6C_f);
+        moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_f * 0.017453292f * D_0015ED6C_f);
+        FUN_L01_00308550_f(moby);
+        if (!random_integer_below(D_L01_00161F50_i)) {
+            FUN_L01_003089f0_f(moby);
+        }
+        if (!(FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f)) {
+            return;
+        }
+        if (!(FUN_001f99c0(moby->pos.z - hero.motion.pos.f[2]) < 2.0f)) {
+            return;
+        }
+        if (hero.health.hp == 0) {
+            return;
+        }
+        if (hero.unk20A4 != 3 && hero.unk20A4 != 0) {
+            return;
+        }
+        if (vars->unkC != 0) {
+            D_L01_0015F640 = FUN_001f96f8(180);
+            FUN_L00_00263d40(0x53B3, -1);
+            D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
+            memcard_save_data(0, -1);
+        remove:
+            mark_moby_for_removal(moby);
+            return;
+        }
+        at.x = FUN_001f9dc8(vars->home.w) * 2.5f;
+        at.y = FUN_001f9de0(vars->home.w) * 2.5f;
+        at.z = 0.0f;
+        FUN_001f9a10_c(&at, &at, &vars->home);
+        FUN_001f99f8(&look);
+        look.z = FUN_001fa580_c(vars->home.w, 3.1415927f);
+        FUN_001f4a58(FUN_001f96f8(10));
+        if (hero.unk20A4 == 3) {
+            FUN_L01_00231450();
+        }
+        FUN_L00_00216f90(&at, &look, 0x72, 0);
+        allocate_voice_for_target_entry(0, 0, moby);
+        at2.x = FUN_001f9dc8(vars->home.w) * 1.25f;
+        at2.y = FUN_001f9de0(vars->home.w) * 1.25f;
+        at2.z = 0.0f;
+        at2.x += FUN_001f9dc8(FUN_001fa580_c(vars->home.w, 1.5707964f)) * 4.0f;
+        at2.y += FUN_001f9de0(FUN_001fa580_c(vars->home.w, 1.5707964f)) * 4.0f;
+        FUN_001f9a10_c(&at2, &at2, &vars->home);
+        at2.z += 1.0f;
+        FUN_001f99f8(&look2);
+        look2.z = FUN_001fa5c8_c(vars->home.w, 1.5707964f);
+        FUN_L00_002eaaa0(&at2, &look2, 1, 0, 0);
+        FUN_L00_002ea9d8(&at2);
+        FUN_L00_002eaa30(&look2);
+        qcopy(&moby->pos, &hero.motion.pos);
+        qcopy(&moby->rot, &hero.motion.rot);
+        if (moby->prev_seq != 1) {
+            FUN_00212f90(moby, 1, 0, 0);
+        }
+        FUN_L00_002323b8(0.0f, 0x82, 0);
+        if (D_0015EDB5) {
+            moby->flags |= 0x8000;
+        }
+        hero.unk20AF = 1;
+        D_L01_0015F404_n = 1;
+        moby->state = 2;
+        vars->timer = FUN_001f96f8(60);
+        return;
+    case 2:
+        FUN_L01_003087e0_f(moby);
+        qcopy(&moby->pos, &hero.motion.pos);
+        qcopy(&moby->rot, &hero.motion.rot);
+        if (moby->seq == 1) {
+            FUN_L01_00308380_f(moby);
+            if (!random_integer_below(10)) {
+                FUN_L01_003089f0_f(moby);
+            }
+            if (moby->unk70 & 2) {
+                if (moby->prev_seq != 0) {
+                    FUN_00212f90(moby, 0, 0, 0);
+                }
+                moby->unk31 = 0;
+                moby->flags |= 1;
+                for (i = 0; i < 4; i++) {
+                    FUN_L01_003089f0_f(moby);
+                }
+            }
+        }
+        h = &hero;
+        if (h->unkA98 & 2) {
+            FUN_L00_002323b8(FUN_001f96f8(30), 0, 0);
+        }
+        if (moby->seq != 0 || !FUN_001f9740(&vars->timer)) {
+            return;
+        }
+        D_L01_0015F640 = FUN_001f96f8(180);
+        FUN_L00_00263d40(0x53B3, -1);
+        D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
+        D_L01_0015F404 = 0;
+        FUN_L00_00216f90(&h->motion.pos, &h->motion.rot, 0, 0);
+        FUN_L00_002eac18(0);
+        memcard_save_data(0, -1);
+        mark_moby_for_removal(moby);
+        break;
+    }
+}
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C;
