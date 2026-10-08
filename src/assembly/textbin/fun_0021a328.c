@@ -62,6 +62,9 @@ int render_configured_text_label(struct MenuScreen *label) {
     int value_variant;
     int value_index;
     int flags;
+    int selector_flags;
+    int render_flags;
+    int text_flags;
     int draw_flags;
     int x;
     int y;
@@ -90,27 +93,27 @@ int render_configured_text_label(struct MenuScreen *label) {
     }
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);
-    flags = label->data.label.flags;
-    if (flags & 0x20) {
+    selector_flags = label->data.label.flags;
+    if (selector_flags & 0x20) {
         value_index = current_level_index - 1;
         if ((unsigned int)value_index >= 0x12) {
             value_index = -1;
         }
-    } else if (flags & 0x40) {
+    } else if (selector_flags & 0x40) {
         value_index = selected_level_index[0] - 1;
-    } else if (flags & 4) {
+    } else if (selector_flags & 4) {
         if (label->data.label.fade_timer < scale_game_frames(menu_fade_duration)) {
             label->data.label.fade_timer = scale_game_frames(menu_fade_duration);
         }
         value_index = 0;
         label->data.label.cached_value = 0;
         label->data.label.value_variant = 0;
-    } else if (flags & 0x80) {
+    } else if (selector_flags & 0x80) {
         value_index = menu_system.current->focus->data.list.selected;
-        if (flags & 0x8000) {
+        if (selector_flags & 0x8000) {
             value_variant = pal_mode != 0;
         }
-    } else if (flags & 0x100) {
+    } else if (selector_flags & 0x100) {
         page = menu_system.current->focus;
         value_index = page->data.grid.selected_cell;
         entry = &page->data.grid.cells[value_index];
@@ -121,7 +124,7 @@ int render_configured_text_label(struct MenuScreen *label) {
         } else {
             value_index = -1;
         }
-    } else if (flags & 0x1000) {
+    } else if (selector_flags & 0x1000) {
         page = menu_system.current->focus;
         value_index = page->data.list.selected;
         {
@@ -163,18 +166,18 @@ int render_configured_text_label(struct MenuScreen *label) {
         label->data.label.fade_timer += 3;
     }
 
-    flags = label->data.label.flags;
-    if (flags & 4) {
+    text_flags = label->data.label.flags;
+    if (text_flags & 4) {
         if (label->data.label.text_id == 0) {
             return 1;
         }
         text = get_help_message_text(label->data.label.text_id);
-    } else if (flags & 0x1000) {
+    } else if (text_flags & 0x1000) {
         if (label->data.label.text_id == 0xFFFF) {
             return 1;
         }
         text = get_help_message_text(label->data.label.text_id);
-    } else if ((flags & 0x100) && value_index == -1) {
+    } else if ((text_flags & 0x100) && value_index == -1) {
         text = unavailable_label_text;
     } else if (label->data.label.text_id != 0) {
         text = get_help_message_text(
@@ -193,15 +196,15 @@ int render_configured_text_label(struct MenuScreen *label) {
         }
     }
 
-    flags = label->data.label.flags;
-    draw_flags = flags;
+    render_flags = label->data.label.flags;
+    draw_flags = render_flags;
     x = 4;
     y = 4;
     if ((draw_flags & 0x4004) == 0x4004 && label->data.label.text_id == 0x523E) {
         draw_flags |= 1;
         y = 12;
     }
-    if ((flags & 0x800) && item_unlocked[value_index] == 0) {
+    if ((render_flags & 0x800) && item_unlocked[value_index] == 0) {
         draw_flags |= 3;
         text = get_help_message_text(0x4F54);
     }
