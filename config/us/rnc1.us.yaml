@@ -1791,7 +1791,7 @@ segments:
           - [0x11f810, c, ui/menus/draw_quit_game_menu]
           - [0x11f9c8, c, ui/menus/create_rotating_preview_moby]
           - [0x11fa70, c, ui/menus/release_item_preview_moby]
-          - [0x11faa0, c, assembly/textbin/ui/menus/inventory/draw_items_menu]
+          - [0x11faa0, c, textbin/ui/menus/inventory/draw_items_menu]
           - [0x11fef4, textbin, text_gap_0021ef74_before_fun_0021ef78]
           - [0x11fef8, c, ui/menus/setup_menu_display_text]
           - [0x1200a0, c, ui/menus/rotate_preview_moby_x]
