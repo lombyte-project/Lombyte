@@ -281,7 +281,7 @@ segments:
           - [0x1aaf0, c, sdk/debug/serial_putchar]
           - [0x1ab24, textbin, text_gap_00119b70_post_sdk_worker]
           - [0x1ab28, c, assembly/sdk/debug/ftoi]
-          - [0x1abb8, c, assembly/sdk/debug/printfloat]
+          - [0x1abb8, c, sdk/debug/printfloat]
           - [0x1ad20, c, assembly/sdk/debug/printf_impl]
           - [0x1b30c, textbin, text_gap_00119da0_post_sdk_worker]
           - [0x1b310, c, sdk/debug/kprintf]
