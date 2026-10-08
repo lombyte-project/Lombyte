@@ -76,10 +76,10 @@ void set_pal_mode(void) {
     second_image_buffer_address = image_buffer_address;
     draw_environment.zbuf2 = zbuf;
     draw_environment.zbuf1 = zbuf;
+    depth_buffer_register = zbuf;
     draw_environment.frame2 = draw_environment.frame1 = frame;
     draw_environment.xyoffset2 = screen_extent.left | ((u64)screen_extent.top << 32);
     draw_environment.xyoffset1 = screen_extent.left | ((u64)screen_extent.top << 32);
-    depth_buffer_register = zbuf;
     draw_environment.scissor2 = scissor;
     FlushCache(0);
     put_draw_buffer_large();
