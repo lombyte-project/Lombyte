@@ -47,6 +47,9 @@ s32 fast_decompress(u8 *source, u8 *destination)
     s32 count;
     u32 distance;
     u32 trailing;
+    u8 trailing_byte0;
+    u8 trailing_byte1;
+    u8 trailing_byte2;
 
     if (((u16)(source[0] | (source[1] << 8)) ^ 0x4157) != (source[2] ^ 0x44)) {
         RaiseKernelTrap();
@@ -145,11 +148,14 @@ copy_match:
         *output++ = *copy++;
     } while (--count > 0);
 copy_trailing:
-    trailing = input[-2] & 3;
+    trailing = *(volatile u8 *)(input - 2) & 3;
+    trailing_byte0 = *(volatile u8 *)(input + 0);
+    trailing_byte1 = *(volatile u8 *)(input + 1);
+    trailing_byte2 = *(volatile u8 *)(input + 2);
     if (trailing != 0) {
-        output[0] = input[0];
-        output[1] = input[1];
-        output[2] = input[2];
+        output[0] = trailing_byte0;
+        output[1] = trailing_byte1;
+        output[2] = trailing_byte2;
         output += trailing;
         input += trailing;
         goto read_command;
