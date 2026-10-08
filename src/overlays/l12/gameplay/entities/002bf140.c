@@ -1022,7 +1022,214 @@ void FUN_L12_002eb220(char *m) {
     *(unsigned char *)(m + 0xA4) = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002eb570.s", FUN_L12_002eb570);
+/* Data of the second watcher (FUN_L12_002eb570): the L16 watcher layout with
+ * the turret and base mobys it spawns at 0x164/0x168. */
+typedef struct {
+    char pad00[0x20];
+    L16WatchActivation activation;
+    char body[0x60];
+    float padC0;
+    float pitch;
+    float yaw;
+    float padCC;
+    float height;
+    char padD4[0xC];
+    char head[0x60];
+    char pad140[8];
+    float head_yaw;
+    char pad14C[0x14];
+    int region;
+    char *turret;
+    char *base;
+    char pad16C[4];
+    float target[4];
+    char pad180[4];
+    int moving_timer;
+    int target_timer;
+} L12WatchData;
+
+typedef struct {
+    char pad[0x46C];
+    int hidden;
+} L12WatchGlobals;
+
+extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") __attribute__((section(".data")));
+extern int D_L12_0015F5C4_b570 __asm__("D_L12_0015F5C4");
+extern char *D_L12_001600EC_b570 __asm__("D_L12_001600EC");
+extern float D_0015ED64_b570 __asm__("D_0015ED64");
+extern void FUN_L03_002db480_b570(void *) __asm__("FUN_L03_002db480");
+extern void blend_moby_animation_b570(void *, int, int, int) __asm__("FUN_00212f90");
+extern void FUN_L00_00260860_b570(int, int) __asm__("FUN_L00_00260860");
+
+void FUN_L12_002eb570(L16WatchMoby *m) {
+    L16WatchScratch scratch;
+    L12WatchData *d = (L12WatchData *)m->data;
+    float rate;
+    float head_rate;
+    int tracking;
+    FUN_L03_002db480_b570(m);
+    if (D_0013D5B0_b570.hidden == 0) {
+        if (m->animation != 1)
+            blend_moby_animation_b570(m, 1, 0, 2);
+    } else if (m->animation != 0) {
+        blend_moby_animation_b570(m, 0, 0, 2);
+    }
+    switch (m->state) {
+    case 0:
+        m->state = 1;
+        FUN_L00_002668a0(m, &d->activation);
+        d->activation.radius = 1.7f;
+        FUN_L02_0025c758(m);
+        if (D_0013D388_c[0x13C])
+            *(short *)((char *)d + 0x56) = -1;
+        break;
+    case 1:
+        if (D_0013D388_c[0x13C] == 0 && FUN_L00_00266448(m, &d->activation)) {
+            FUN_L01_002783a8_c(m, 2.52f);
+            *(int *)((char *)m + 0x58) = 0;
+            m->state = 2;
+        }
+        break;
+    case 2:
+        if (D_L12_0015F5C4_b570 != 2) {
+            *(float *)((char *)m + 0x58) = 1.0f;
+            FUN_L00_002502a0(m->widget);
+            if (d->region != -1) {
+                char *p = D_L12_001600EC_b570 + (d->region << 7);
+                FUN_L00_00284e50(p + 0x30, p + 0x70);
+            }
+            m->state = 1;
+            if (*(short *)((char *)d + 0x24) == 2) {
+                FUN_L00_00260860_b570(4, 0);
+                FUN_L00_00263d40_c(0x2EE6, -1);
+                if (d->region != -1) {
+                    char *p = D_L12_001600EC_b570 + (d->region << 7);
+                    FUN_L00_00284e50(p + 0x30, p + 0x70);
+                }
+                memcard_save_data(0, -1);
+            }
+        }
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->animation == 0) {
+        char *player = (char *)&D_0013E633_watch + 0xE9D;
+        tracking = 1;
+        if (FUN_001f9b80(m->position, player) < 8.0f &&
+            FUN_001f9e90_cf(
+                m->yaw,
+                FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
+                                    m->position[0],
+                                ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
+                                    m->position[1])) < 1.5707964f) {
+            if (vector_length_xyz(player + 0x80) > 0.01f)
+                d->moving_timer = scale_game_frames(120);
+            else
+                tick_countdown_32(&d->moving_timer);
+        } else if (d->moving_timer) {
+            d->moving_timer = 0;
+            qcopy(d->target, (char *)&D_0013E633_watch + 0xEED);
+        }
+        if (tick_countdown_32(&d->target_timer)) {
+            float heading;
+            d->target_timer =
+                random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(180.0f, 300.0f)));
+            heading =
+                fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+            build_spherical_offset(d->target, 6.0f, heading,
+                                   truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
+            add_vector_xyz(d->target, d->target, m->position);
+        }
+        if (d->moving_timer) {
+            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch.target, d->target);
+        }
+    }
+    if (D_0013D5B0_b570.hidden == 0) {
+        if (d->turret == 0) {
+            char *o = func_0020D348_m_x(0x4C1);
+            d->turret = o;
+            if (o) {
+                *(unsigned short *)(o + 0x32) = *(unsigned short *)((char *)m + 0x32);
+                d->turret[0x31] = 1;
+                {
+                    char *p = d->turret;
+                    qcopy(p + 0x10, (char *)m + 0x10);
+                    qcopy(p + 0x40, (char *)m + 0x40);
+                    FUN_L00_00250df8_x(p);
+                }
+                *(unsigned short *)(d->turret + 0x34) = 0;
+                blend_moby_animation_b570(d->turret, 1, 0, 2);
+            }
+        } else if (D_L12_0015F5C4_b570 == 2) {
+            *(unsigned short *)(d->turret + 0x34) |= 1;
+            d->turret[0x31] = 0;
+        } else {
+            *(unsigned short *)(d->turret + 0x34) &= ~1;
+            d->turret[0x31] = 1;
+        }
+        if (d->base == 0) {
+            char *o = func_0020D348_m_x(0x196);
+            d->base = o;
+            if (o) {
+                *(unsigned short *)(o + 0x32) = *(unsigned short *)((char *)m + 0x32);
+                d->base[0x31] = 1;
+                {
+                    char *p = d->base;
+                    qcopy(p + 0x10, (char *)m + 0x10);
+                    qcopy(p + 0x40, (char *)m + 0x40);
+                    FUN_L00_00250df8_x(p);
+                }
+            }
+        } else if (D_L12_0015F5C4_b570 == 2) {
+            *(unsigned short *)(d->turret + 0x34) |= 1;
+            d->turret[0x31] = 0;
+            *(unsigned short *)(d->base + 0x34) |= 1;
+            d->base[0x31] = 0;
+        } else {
+            *(unsigned short *)(d->turret + 0x34) &= ~1;
+            d->turret[0x31] = 1;
+            *(unsigned short *)(d->base + 0x34) &= ~1;
+            d->base[0x31] = 1;
+        }
+    } else {
+        if (d->base) {
+            FUN_0020c828_c(d->base);
+            d->base = 0;
+        }
+        if (d->turret) {
+            FUN_0020c828_c(d->turret);
+            d->turret = 0;
+        }
+    }
+    if (tracking) {
+        float yaw;
+        float pitch;
+        qcopy(scratch.eye, m->position);
+        scratch.eye[2] += 1.0f;
+        subtract_vector_xyz(scratch.delta, scratch.target, scratch.eye);
+        yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        d->pitch = pitch;
+        d->head_yaw = d->yaw = yaw * 0.5f;
+    }
+    if (D_0015EDB0_b)
+        d->height = 2.75f;
+    FUN_L00_002628d8(rate * D_0015ED64_b570, head_rate * D_0015ED64_b570, m, d->body, 1);
+    FUN_L00_002628d8(rate * D_0015ED64_b570, head_rate * D_0015ED64_b570, m, d->head, 0);
+}
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
 extern char D_0013D408[];
 extern char D_001413D4[];
