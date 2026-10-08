@@ -671,7 +671,61 @@ void FUN_L14_002b4340(unsigned char *m) {
     m[0xA4] = 0xFF;
     FUN_L00_0025d538(m, d + 0x60);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b4500.s", FUN_L14_002b4500);
+/* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
+extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
+extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8") __attribute__((sda));
+extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern int D_L14_0016150C_b45 __asm__("D_L14_0016150C") __attribute__((sda));
+extern float D_L14_00161510_b45 __asm__("D_L14_00161510") __attribute__((sda));
+extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
+extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
+extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
+
+int FUN_L14_002b4500(int index) {
+    short *p = D_L14_001ABF40_b45[index];
+    unsigned char *base;
+    unsigned char *q;
+    unsigned char *o;
+    unsigned char *d;
+    int st;
+    int t;
+    float f;
+    float g;
+    if (p == 0) {
+        return 0;
+    }
+    base = D_L14_0015FFD8_b45;
+    do {
+        st = *(unsigned short *)p & 0x7FFF;
+        q = base + (st << 8);
+        if ((*(unsigned char **)(q + 0x78))[0x8B] == 0) {
+            st = q[0x20];
+            if (st != 5 && st != 1) {
+                return 0;
+            }
+        }
+    } while (*p++ >= 0);
+    p = D_L14_001ABF40_b45[index];
+    do {
+        t = *(unsigned short *)p & 0x7FFF;
+        o = D_L14_0015FFD0_m45[2] + (t << 8);
+        if (o[0x20] == 3) {
+            d = *(unsigned char **)(o + 0x78);
+            FUN_00212ed8_b45(o, 4, 0);
+            o[0x20] = 5;
+            t = FUN_001f96f8_b45(D_L14_0016150C_b45);
+            *(short *)(d + 0x74) = t;
+            f = 1.0f / FUN_001fa6c0_b45(t);
+            g = 1.0f / (*(short *)(d + 0x74) * D_L14_00161510_b45);
+            *(float *)(d + 0x78) = f;
+            *(float *)(o + 0x58) = g;
+            *(float *)(d + 0x8C) = *(float *)(o + 0x48);
+            *(short *)(d + 0x88) = 0;
+            d[0x8B] = 0;
+        }
+    } while (*p++ >= 0);
+    return 1;
+}
 
 #define NOT_SDA
 

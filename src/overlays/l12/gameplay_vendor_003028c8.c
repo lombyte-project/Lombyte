@@ -67,7 +67,49 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306350.s", FUN_L12_00306350);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003069d0.s", FUN_L12_003069d0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003076e0.s", FUN_L12_003076e0);
+#include "qcopy.h"
+
+/* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
+extern char *D_L12_0015FFD8_p __asm__("D_L12_0015FFD8");
+extern float D_0015ED6C;
+extern void FUN_L00_00250df8(unsigned char *);
+extern float FUN_002132a8(float, float);
+extern void FUN_L00_0026de90(char *, int, float);
+extern short *FUN_002141f8(unsigned char *);
+
+void FUN_L12_003076e0(char *m) {
+    char *d = *(char **)(m + 0x78);
+    int *s = (int *)(d + (*(int *)(d + 0xF0) << 2));
+    unsigned char *o = (unsigned char *)D_L12_0015FFD8_p + (s[0x30] << 8);
+    char *p;
+    short *r;
+    int i;
+    qcopy(o + 0x10, m + 0x10);
+    *(float *)(o + 0x18) -= 0.35f;
+    o[0x20] = 0;
+    o[0xBC] = 0;
+    p = *(char **)(o + 0x24);
+    *(short *)(o + 0x34) = *(unsigned short *)(p + 0x44);
+    *(float *)(o + 0x2C) = *(float *)(p + 0x24);
+    o[0x30] = 0xFF;
+    o[0x31] = 1;
+    *(short *)(o + 0x36) = 0x7F80;
+    *(short *)(o + 0x32) = 0xFF;
+    o[0x71] = 0xFF;
+    o[0x72] = 0xFF;
+    o[0xA4] = 0xFF;
+    *(int *)(o + 0x94) = *(int *)(p + 0x10);
+    *(long *)(o + 0x38) = *(long *)(m + 0x38);
+    FUN_L00_00250df8(o);
+    *(char **)(o + 0xB8) = m;
+    for (i = 0; i < 14; i++) {
+        FUN_L00_0026de90(m + 0x10, 0, FUN_002132a8(D_0015ED6C * 3.0f, D_0015ED6C * 5.0f));
+    }
+    r = FUN_002141f8(o);
+    if (r != 0) {
+        *(float *)r = r[2];
+    }
+}
 
 #define NOT_SDA
 
@@ -80,7 +122,7 @@ extern float FUN_001f9b80(void *, void *);
 extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
 extern int FUN_001f9770(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L12_003076e0(char *);
+void FUN_L12_003076e0(char *m);
 extern void FUN_L12_00307ab8(char *m);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");

@@ -149,7 +149,49 @@ void FUN_L11_0030e978(unsigned char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030eb90.s", FUN_L11_0030eb90);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030f2a8.s", FUN_L11_0030f2a8);
+/* Waits for its linked moby, then either hands off to a cutscene or turns toward its target. */
+extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
+extern int D_L11_0015F5CC_t __asm__("D_L11_0015F5CC");
+extern char D_0013D3E3_t[] __asm__("D_0013D3E3");
+extern float D_0015ED6C_t __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED70_t __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern int FUN_L11_0030f270(char *);
+extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
+extern float FUN_001fa580_t(float, float) __asm__("FUN_001fa580");
+extern float FUN_L00_0025be00(float *p, float a, float *v, float b, float c, float d);
+
+void FUN_L11_0030f2a8(unsigned char *m) {
+    int s = m[0x20];
+    float *d = *(float **)(m + 0x78);
+    float a;
+    float r;
+    switch (s) {
+    case 0:
+        m[0x30] = 0xFF;
+        m[0x20] = 1;
+        d[2] = *(float *)(m + 0x48);
+        break;
+    case 1:
+        if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)d << 8))) {
+            if (D_L11_0015F5CC_t >= 11) {
+                D_0013D3E3_t[0] = s;
+                m[0x20] = 2;
+                FUN_0022da68_t(0, 0, m);
+            } else {
+                m[0x20] = 3;
+                *(float *)(m + 0x48) = FUN_001fa580_t(d[2], 1.0471976f);
+            }
+        }
+        break;
+    case 2:
+        a = FUN_001fa580_t(d[2], 1.0471976f);
+        r = D_0015ED70_t * 0.34906584f;
+        if (FUN_L00_0025be00((float *)(m + 0x48), a, d + 1, r, r, D_0015ED6C_t * 0.7853982f) == 0.0f) {
+            m[0x20] = 3;
+        }
+        break;
+    }
+}
 #include "qcopy.h"
 extern void *CreateMoby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
