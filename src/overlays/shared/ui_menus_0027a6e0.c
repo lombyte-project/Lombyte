@@ -2,5 +2,14 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027a6e0.s", FUN_L00_0027a6e0);
+extern unsigned char D_0013D4C2 __attribute__((section(".data")));
+extern char D_L00_001B47D0[];
+extern char D_L00_001B4808[];
+
+/* Points the menu at one of two item tables, picked by a game flag. */
+int FUN_L00_0027a6e0(char *menu) {
+    *(char **)(menu + 0x34) = D_0013D4C2 ? D_L00_001B47D0 : D_L00_001B4808;
+    return 0;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);

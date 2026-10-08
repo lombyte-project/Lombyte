@@ -77,7 +77,19 @@ void FUN_L03_002ebc58(void *arg) {
     normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
     cross_vectors_xyz(m + 0x20, m + 0x10, m);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002ebd70.s", FUN_L03_002ebd70);
+
+extern char D_0013F350[];
+
+/* Returns -1 while the game is in one of two blocking states, else 0. */
+int FUN_L03_002ebd70(void) {
+    char *g = D_0013F350;
+
+    if ((*(int *)(g + 0x2284) == 0x50 && *(int *)(g + 0x2084) != 0x11) || *(int *)(g + 0x2084) == 6) {
+        return -1;
+    }
+    return 0;
+}
+
 #define NOT_SDA
 
 #define MACRO_ADDR

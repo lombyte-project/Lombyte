@@ -32,8 +32,6 @@ void FUN_L04_002d3580(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ca420.s", FUN_L04_002ca420);
 
-
-
 #include "qcopy.h"
 
 /* Floating platform: bobs on a slow wave above its start height (or above the moby it rides), and spins
@@ -104,7 +102,16 @@ void FUN_L04_002cdda0(char *moby) {
     subtract_vector_xyz(delta, moby + 0x10, old);
     FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002ce060.s", FUN_L04_002ce060);
+
+extern void remove_moby_2ce060(void *) __asm__("FUN_0020c828");
+
+/* Marks the moby for removal; the unused buffer is kept for its frame. */
+void FUN_L04_002ce060(void *moby) {
+    char buf[0x50];
+
+    remove_moby_2ce060(moby);
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002d1418.s", FUN_L04_002d1418);
 #include "sda.h"
 

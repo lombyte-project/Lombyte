@@ -32,7 +32,27 @@ void FUN_L00_0020a228(float a, float b) {
     p->a = a;
     p->b = b;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00216ec0.s", FUN_L00_00216ec0);
+
+extern char D_0013F350[];
+
+/* Adds an entry to the first free slot of the eight-slot table. */
+void FUN_L00_00216ec0(int a, int b, int c) {
+    char *g = D_0013F350;
+    short *p = (short *)(g + 0x21D8);
+    int i;
+
+    for (i = 0; i < 8; i++) {
+        if (p[0] == 0) {
+            p[0] = 1;
+            p[3] = c;
+            p[2] = b;
+            p[1] = a;
+            return;
+        }
+        p += 4;
+    }
+}
+
 extern int D_0013F350_002321a8[] __asm__("D_0013F350");
 void FUN_L00_002321a8(void) {
     int *p = D_0013F350_002321a8;
