@@ -10,6 +10,7 @@
 
 extern int FUN_L03_002c6c60(void *);
 
+/* A class 0x23E moby in state 14 goes to state 1 and rises 1.5. */
 void FUN_L15_002d95a0(char *moby) {
     if (FUN_L03_002c6c60(moby)) {
         moby[0x20] = 1;

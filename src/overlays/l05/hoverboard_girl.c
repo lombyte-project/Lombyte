@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/math_consts.h"
 #include "asm.h"
 #include "sda.h"
 #include "eetypes.h"
@@ -303,8 +304,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         }
         if (advance_timer(&state->random_look_timer)) {
             state->random_look_timer = truncate_time(scale_time(random_float(180.0f, 300.0f)));
-            heading = add_angle(moby->yaw, random_float(-90.0f, 90.0f) * 0.017453292f);
-            pitch = random_float(0.0f, 30.0f) * 0.017453292f;
+            heading = add_angle(moby->yaw, random_float(-90.0f, 90.0f) * DEG_TO_RAD);
+            pitch = random_float(0.0f, 30.0f) * DEG_TO_RAD;
             vector_from_angles(6.0f, heading, pitch, &state->look_target);
             add_vector(&state->look_target, &state->look_target, &moby->position);
         }

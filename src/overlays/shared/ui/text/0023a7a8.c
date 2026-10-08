@@ -262,6 +262,7 @@ void FUN_L00_00235878();
 extern int D_L00_0015F968 __attribute__((sda));
 extern int D_L00_0015F970;
 extern int D_L00_0015F96C;
+/* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
 void FUN_L00_0023aef8(void) {
     FUN_L00_00235878();
     D_L00_0015F968 = 1;

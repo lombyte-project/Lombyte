@@ -54,6 +54,7 @@ extern float FUN_001f9dc8(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
 void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
     float s = (1.0f - FUN_001f9dc8(ang * 3.1415927f)) * 0.5f;
     out[0] = fast_add_rotations(a[0], fast_subtract_rotations(b[0], a[0]) * s);

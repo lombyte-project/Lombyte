@@ -526,6 +526,7 @@ void FUN_L00_00232628(void) {
 extern char D_0013F350[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
+/* Stores id at D_0013F350 + 0xAB8; -1 stands for 5 frames. */
 void FUN_L00_00232640(int id) {
     if (id == -1) {
         id = scale_game_frames(5);
