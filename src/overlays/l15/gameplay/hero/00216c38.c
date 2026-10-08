@@ -1740,7 +1740,7 @@ int hero_set_state(int a, int b) {
         p->unk5CC = D_0015ED6C * 2.5f;
         if (D_0015ED6C * 2.5f < p->unk5B0)
             p->unk5B0 = D_0015ED6C * 2.5f;
-        p->unk5AC = 0;
+        p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
         clear_vector(&p->motion.unk100);
         p->motion.velocity.f[2] = D_0015ED6C * 10.0f;

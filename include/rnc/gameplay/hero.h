@@ -64,7 +64,7 @@ struct HeroMotion {
     Vec4 unk100;                   /* 0x100 */
     Vec4 unk110;                   /* 0x110 */
     Vec4 unk120;                   /* 0x120 */
-    u8 pad_130[0x10];
+    Vec4 unk130;                   /* 0x130 */
     Vec4 unk140;                   /* 0x140 */
     Vec4 unk150;                   /* 0x150: copied from unk110/unk100 on hero_set_state */
     f32 unk160;                    /* 0x160 */
@@ -277,7 +277,9 @@ struct Hero {
     f32 unk4F0;                    /* 0x4F0 */
     u8 pad_4F4[0xC];
     Vec4 unk500;                   /* 0x500 */
-    u8 pad_510[0x30];
+    Vec4 unk510;                   /* 0x510 */
+    Vec4 unk520;                   /* 0x520 */
+    Vec4 unk530;                   /* 0x530 */
     Vec4 unk540;                   /* 0x540 */
     Vec4 unk550;                   /* 0x550 */
     s32 unk560;                    /* 0x560 */
@@ -288,7 +290,7 @@ struct Hero {
     f32 unk574;                    /* 0x574 */
     s32 unk578;                    /* 0x578 */
     f32 unk57C;                    /* 0x57C */
-    u8 pad_580[0x4];
+    f32 unk580;                    /* 0x580 */
     s32 unk584;                    /* 0x584 */
     f32 unk588;                    /* 0x588 */
     s32 unk58C;                    /* 0x58C */
@@ -299,7 +301,7 @@ struct Hero {
     s32 unk5A0;                    /* 0x5A0 */
     s32 unk5A4;                    /* 0x5A4 */
     s32 unk5A8;                    /* 0x5A8 */
-    s32 unk5AC;                    /* 0x5AC */
+    union { f32 f; s32 i; } unk5AC; /* 0x5AC: float approached toward a speed, zeroed as an int */
     f32 unk5B0;                    /* 0x5B0 */
     s32 unk5B4;                    /* 0x5B4 */
     s32 unk5B8;                    /* 0x5B8 */
@@ -309,9 +311,10 @@ struct Hero {
     s32 unk5C4;                    /* 0x5C4 */
     f32 unk5C8;                    /* 0x5C8 */
     f32 unk5CC;                    /* 0x5CC */
-    u8 pad_5D0[0x8];
+    f32 unk5D0;                    /* 0x5D0 */
+    f32 unk5D4;                    /* 0x5D4 */
     struct Moby *unk5D8;           /* 0x5D8 */
-    u8 pad_5DC[0x4];
+    f32 unk5DC;                    /* 0x5DC */
     Vec4 unk5E0;                   /* 0x5E0 */
     s32 *unk5F0;                   /* 0x5F0 */
     s32 unk5F4;                    /* 0x5F4 */
@@ -321,8 +324,9 @@ struct Hero {
     f32 unk604;                    /* 0x604 */
     u8 pad_608[0x4];
     s32 unk60C;                    /* 0x60C */
-    u8 pad_610[0x8];
-    s32 unk618;                    /* 0x618 */
+    f32 unk610;                    /* 0x610 */
+    f32 unk614;                    /* 0x614 */
+    union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
     u8 pad_61C[0x74];
     f32 unk690;                    /* 0x690 */
     f32 unk694;                    /* 0x694 */
@@ -523,7 +527,9 @@ struct Hero {
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
     s32 restore_item[7];           /* 0x210C: per slot: 1 puts saved_item back */
-    u8 pad_2128[0xF8];
+    u8 pad_2128[0xF0];
+    s32 unk2218;                   /* 0x2218 */
+    u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */
     s32 unk2224;                   /* 0x2224 */
     s32 unk2228;                   /* 0x2228 */

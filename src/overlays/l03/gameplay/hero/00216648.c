@@ -816,7 +816,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         p->rand_timer.range = 0x68;
         p->unk600 = 0;
-        p->unk618 = 0;
+        p->unk618.i = 0;
         seg = p->unk5F4;
         t = p->unk5F8;
         FUN_L00_0025d808(((int *)p->unk5F0), pos, &seg, &t, p->unk60C, 1.0f);
@@ -1625,7 +1625,7 @@ int hero_set_state(int a, int b) {
         p->unk5CC = D_0015ED6C * 2.5f;
         if (D_0015ED6C * 2.5f < p->unk5B0)
             p->unk5B0 = D_0015ED6C * 2.5f;
-        p->unk5AC = 0;
+        p->unk5AC.i = 0;
         clear_vector(&p->motion.velocity);
         clear_vector(&p->motion.unk100);
         p->motion.velocity.f[2] = D_0015ED6C * 10.0f;
