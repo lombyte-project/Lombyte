@@ -209,7 +209,87 @@ void FUN_L09_003033a0(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00303b30.s", FUN_L09_00303b30);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Damage source returned by FUN_L00_0025a420. */
+typedef struct {
+    u8 pad0[0x2C];
+    f32 damage;
+} VendorHitSource;
+
+typedef struct {
+    u8 pad0[0x26];
+    s16 hurt_timer;
+    u8 pad28[0x38];
+    u8 anim[8];
+    u8 pad68[8];
+    s32 link;
+} VendorVars;
+
+extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
+extern char D_L09_00208F90[];
+extern VendorHitSource *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern s32 FUN_00120478(f32);
+extern void FUN_001e93b0(char *, s32, s32);
+extern s32 FUN_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32);
+extern void FUN_L00_00257470(struct Moby *, s32, s32);
+extern void FUN_L00_0025d458(struct Moby *, u8 *);
+extern void FUN_L00_0025d538(struct Moby *, u8 *);
+extern s32 FUN_001f96f8(s32);
+
+void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
+    VendorHitSource *src;
+    struct Moby *link;
+    s32 hit;
+
+    if (moby->state != 3) {
+        src = FUN_L00_0025a420(moby, 0x330000, 0);
+        if (src != 0) {
+            FUN_001e93b0(D_L09_00208F90, moby->oclass, FUN_00120478(src->damage));
+        }
+        switch (FUN_00213928(moby, src, health, 0, &hit, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0.0f;
+            break;
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        }
+        if (hit >= 2) {
+            if (*health <= src->damage) {
+                *health = 0.0f;
+                moby->flags &= ~0x1000;
+                if (vars->link != -1) {
+                    link = &moby_list[vars->link];
+                    if (link != 0 && link->state != 0xFE && link->state != 0xFD
+                        && (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
+                        link->unkBC = 1;
+                    }
+                }
+                FUN_L00_00257470(moby, 0, -1);
+                vars->anim[7] = 0x78;
+                FUN_L00_0025d458(moby, vars->anim);
+                moby->state = 3;
+            } else {
+                *health -= src->damage;
+                vars->anim[7] = 0xFA;
+                vars->hurt_timer = FUN_001f96f8(60);
+                FUN_L00_0025d458(moby, vars->anim);
+            }
+        }
+        moby->unkA4 = 0xFF;
+    }
+    FUN_L00_0025d538(moby, vars->anim);
+}
 /* Pressure plate: waits for its trigger slot, hums while armed, wakes its linked moby when stepped on, then shatters. */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003050C0), where it is exact; names translated to the US level program. */
 
@@ -219,7 +299,6 @@ extern int D_L09_0015F5CC;
 extern int D_L09_0015FFD8; /* no foreign declaration */
 extern int FUN_L00_0025e450();
 extern unsigned char D_0013E550_c[] __asm__("D_0013E550");
-extern void FUN_L09_00303b30(char *, char *, char *);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
