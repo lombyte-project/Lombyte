@@ -13,7 +13,9 @@ struct Moby {
     Vec4f bsphere;
     Vec4f pos;
     u8 state;                         /* >= 0xFE: dead, waiting to respawn */
-    u8 pad21[3];
+    u8 unk21;
+    u8 unk22;                         /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
+    u8 pad23;
     struct MobyClass *pclass;
     struct Moby *next;
     f32 scale;                        /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
@@ -35,19 +37,29 @@ struct Moby {
     void *cur_frame_data;
     void *prev_frame_data;
     u8 unk70;
-    u8 pad71[3];
+    u8 pad71;
+    u8 unk72;
+    u8 pad73;
     void (*update)(struct Moby *moby);
     u8 *pvars;
     u8 unk7C;
     u8 pad7D;
     u8 unk7E;
-    u8 pad7F[0x27];
+    u8 pad7F[0x15];
+    u32 unk94;                        /* set from the class header's word 0x10 */
+    u8 pad98[0xC];
+    u8 unkA4;
+    u8 padA5;
     s16 oclass;
     u8 padA8[0xA];
     u16 unkB2;
-    u8 padB4[4];
+    s16 unkB4;
+    u8 padB6[2];
     void *unkB8;                      /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8 padBC[0x44];
+    u8 unkBC;
+    u8 padBD[0x23];
+    Vec4f unkE0;
+    u8 padF0[0x10];
 };
 
 #endif /* LOMBYTE_RNC_GAMEPLAY_ENTITIES_MOBY_H */
