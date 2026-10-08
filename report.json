@@ -1,14 +1,14 @@
 {
   "measures": {
-    "fuzzy_match_percent": 62.858021,
+    "fuzzy_match_percent": 62.858522,
     "total_code": "3547908",
-    "matched_code": "2154488",
-    "matched_code_percent": 60.725588,
+    "matched_code": "2154848",
+    "matched_code_percent": 60.735735,
     "total_functions": 4252,
-    "matched_functions": 3247,
-    "matched_functions_percent": 76.364064,
-    "complete_code": "2154488",
-    "complete_code_percent": 60.725588,
+    "matched_functions": 3248,
+    "matched_functions_percent": 76.387582,
+    "complete_code": "2154848",
+    "complete_code_percent": 60.735735,
     "total_units": 513,
     "complete_units": 298
   },
@@ -1991,15 +1991,15 @@
     {
       "name": "sdk/debug",
       "measures": {
-        "fuzzy_match_percent": 99.004374,
+        "fuzzy_match_percent": 99.356986,
         "total_code": "5048",
-        "matched_code": "2972",
-        "matched_code_percent": 58.874802,
+        "matched_code": "3332",
+        "matched_code_percent": 66.006339,
         "total_functions": 29,
-        "matched_functions": 25,
-        "matched_functions_percent": 86.206897,
-        "complete_code": "2972",
-        "complete_code_percent": 58.874802,
+        "matched_functions": 26,
+        "matched_functions_percent": 89.655172,
+        "complete_code": "3332",
+        "complete_code_percent": 66.006339,
         "total_units": 1,
         "complete_units": 0
       },
@@ -2151,7 +2151,7 @@
         {
           "name": "printfloat",
           "size": "360",
-          "fuzzy_match_percent": 95.0556,
+          "fuzzy_match_percent": 100.0,
           "address": "15296",
           "metadata": {
             "virtual_address": "109496"
@@ -51298,15 +51298,15 @@
       "id": "boot",
       "name": "Boot executable",
       "measures": {
-        "fuzzy_match_percent": 95.796222,
+        "fuzzy_match_percent": 95.801248,
         "total_code": "354140",
-        "matched_code": "263596",
-        "matched_code_percent": 74.43271,
+        "matched_code": "263956",
+        "matched_code_percent": 74.534365,
         "total_functions": 1229,
-        "matched_functions": 1124,
-        "matched_functions_percent": 91.456469,
-        "complete_code": "263596",
-        "complete_code_percent": 74.43271,
+        "matched_functions": 1125,
+        "matched_functions_percent": 91.537836,
+        "complete_code": "263956",
+        "complete_code_percent": 74.534365,
         "total_units": 118,
         "complete_units": 86
       }
@@ -51332,15 +51332,15 @@
       "id": "sdk",
       "name": "SDK",
       "measures": {
-        "fuzzy_match_percent": 96.764164,
+        "fuzzy_match_percent": 96.78651,
         "total_code": "79656",
-        "matched_code": "66280",
-        "matched_code_percent": 83.207794,
+        "matched_code": "66640",
+        "matched_code_percent": 83.659737,
         "total_functions": 314,
-        "matched_functions": 290,
-        "matched_functions_percent": 92.356688,
-        "complete_code": "66280",
-        "complete_code_percent": 83.207794,
+        "matched_functions": 291,
+        "matched_functions_percent": 92.675159,
+        "complete_code": "66640",
+        "complete_code_percent": 83.659737,
         "total_units": 12,
         "complete_units": 7
       }
