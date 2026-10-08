@@ -498,7 +498,69 @@ void FUN_L05_002db238(void *moby, void *dir) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303390.s", FUN_L05_00303390);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00303b08.s", FUN_L05_00303b08);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Pvars of a path-walking moby (only the fields this walker touches). */
+typedef struct {
+    u8 pad0[0xD0];
+    u8 move[0x24];        /* 0xD0: ground-move state */
+    f32 speed;            /* 0xF4 */
+    u8 padF8[0x164 - 0xF8];
+    s32 mode;             /* 0x164: 2 once the path is finished */
+    u8 pad168[0x280 - 0x168];
+    Vec4f goal;           /* 0x280: current path target */
+    f32 yaw_vel;          /* 0x290 */
+    u8 pad294[0x2C0 - 0x294];
+    s32 path;             /* 0x2C0 */
+    s32 path_pos;         /* 0x2C4 */
+    u8 pad2C8[0x2D4 - 0x2C8];
+    s32 stuck_timer;      /* 0x2D4 */
+} PathWalkerVars;
+
+extern f32 D_L05_00161A98 __attribute__((sda));
+extern s32 follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_L01_00276fe8");
+extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
+extern s32 FUN_L05_00303e50(char *moby, float *goal, float s);
+extern f32 FUN_L05_00304058(s32, void *, void *, f32);
+
+/* Walks m toward its next path node, steering `side` radians off the direct heading while
+   FUN_L05_00303e50 reports the way blocked; slows near the goal and arms the stuck timer
+   when it drifts off the path. */
+void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
+    PathWalkerVars *v = (PathWalkerVars *)m->pvars;
+    Vec4f dir, out, goal;
+    f32 a;
+    f32 dist;
+
+    if ((((s32)m >> 8) & 3) == (D_L05_0015F5CC_2d7020 & 3)) {
+        if (follow_path(&v->path, 1, v->path_pos, &m->pos, node, &v->goal, D_L05_00161A98 * 0.4f) == 0)
+            v->mode = 2;
+    }
+    qcopy(&goal, &v->goal);
+    dist = FUN_001f9b80(&m->pos, &goal);
+    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)m, (float *)&goal, D_L05_00161A98 * 0.4f)) {
+        a = FUN_001fa580(FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y), side);
+        approach_angle(&m->rot.z, a, &v->yaw_vel, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f,
+                       D_0015ED6C * 25.132742f);
+    } else {
+        approach_angle(&m->rot.z, FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y), &v->yaw_vel,
+                       D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
+    }
+    if (angle_diff(m->rot.z, FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y)) < 1.5707964f && dist > 3.0f)
+        approach_value(&v->speed, D_0015ED6C * 6.0f, D_0015ED70 * 6.0f);
+    else
+        approach_value(&v->speed, D_0015ED6C, D_0015ED70 * 6.0f);
+    dir.x = FUN_001f9dc8(m->rot.z) * 2.0f;
+    dir.y = FUN_001f9de0(m->rot.z) * 2.0f;
+    dir.z = 0.0f;
+    FUN_L00_00258b50(m, v->move, &dir, &out, 1.0f);
+    if (v->stuck_timer == 0) {
+        if (FUN_L05_00304058(v->path, &m->pos, &m->pos, D_L05_00161A98 * 0.4f) > 2.0f)
+            v->stuck_timer = FUN_001f96f8(5);
+    }
+}
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9dc8_c(float) __asm__("FUN_001f9dc8");
