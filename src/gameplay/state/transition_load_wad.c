@@ -1,23 +1,5 @@
-
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
+#include "rnc/storage/disc_table.h"
 typedef struct 
 {
   s32 x0;
@@ -91,15 +73,6 @@ typedef struct
 } LoadState;
 typedef struct 
 {
-  u8 pad0[0x14E8];
-  s32 x14E8;
-  s32 x14EC;
-  u8 pad14F0[0x38];
-  s32 x1528;
-  s32 x152C;
-} LevelInfo;
-typedef struct 
-{
   u8 pad0[0x58];
   s32 x58;
   s32 x5C;
@@ -122,7 +95,6 @@ typedef struct
   u8 padE[0x1A];
   void *x28;
 } MobyClass;
-extern LevelInfo D_00137B80;
 extern s32 D_0015EE74;
 extern s32 D_0015EE78;
 extern s32 D_0015EE8C;
@@ -228,7 +200,7 @@ void transition_load_wad(void)
   init_view_context();
   update_view_context();
   vu1_init_chain();
-  start_audio_stream_read(D_001940C0.hdr + 0x1000000, D_00137B80.x14E8, D_00137B80.x14EC);
+  start_audio_stream_read(D_001940C0.hdr + 0x1000000, disc_table.unk14E8.sector, disc_table.unk14E8.size);
   update_audio_stream_until_idle(1);
   FlushCache(0);
   size = FUN_0020b618(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
@@ -347,9 +319,9 @@ void transition_load_wad(void)
   }
   parse_space_scene_chunk(0);
   D_0015EF60 = D_001940C0.x1C;
-  load(D_001940C0.x1C, D_00137B80.x1528, D_00137B80.x152C);
+  load(D_001940C0.x1C, disc_table.unk1528.sector, disc_table.unk1528.size);
   D_0015EF64 = D_0015EF60;
-  D_001940C0.x1C = D_0015EF60 + (D_00137B80.x152C << 11);
+  D_001940C0.x1C = D_0015EF60 + (disc_table.unk1528.size << 11);
   for (k = 0; k < 8; k++)
   {
     QueueDmaTransfer(k);

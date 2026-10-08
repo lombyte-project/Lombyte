@@ -1,12 +1,12 @@
 #include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
 #include "rnc/globals.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 extern struct SaveSlotTable D_0013D290;
 extern struct Globals_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
 extern struct Globals_0013E030 D_0013E030;
-extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;
@@ -81,7 +81,7 @@ void do_space_transition(void) {
     snd_flush_sound_commands();
     sound_stop_all_sounds();
     music_stop();
-    D_001516D0.updates_suspended = 1;
+    music_stream_state.updates_suspended = 1;
     if (D_0015F634 != 0) {
         snd_unload_bank(D_0015F634->unk1C);
         snd_resolve_bank_xrefs();
@@ -107,7 +107,7 @@ void do_space_transition(void) {
         D_0015ED84 = D_0015F600;
         load_level_chunk_from_disc();
         sceCdSync(0);
-        D_001516D0.updates_suspended = 0;
+        music_stream_state.updates_suspended = 0;
         dmac_vif1_disable();
         return;
     }
@@ -211,7 +211,7 @@ void do_space_transition(void) {
         }
     }
     sceCdSync(0);
-    D_001516D0.updates_suspended = 0;
+    music_stream_state.updates_suspended = 0;
     dmac_vif1_disable();
 }
 

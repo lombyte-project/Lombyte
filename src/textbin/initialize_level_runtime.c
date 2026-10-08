@@ -8,6 +8,7 @@ void initialize_level_runtime(void) __asm__("FUN_00230f60");
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/storage/disc_table.h"
 
 typedef struct {
     s32 tex;         /* 0x00 */
@@ -80,11 +81,6 @@ typedef struct {
     s32 chunks[70];
 } SceneInfo;
 
-typedef struct {
-    u8 pad0[0x13B8];
-    s32 lsn;
-    s32 sectors;
-} DiscInfo;
 
 extern GameState D_0013E030;
 extern f32 D_0015F43C;
@@ -98,7 +94,6 @@ extern u8 D_001B3AC0[];
 extern u8 D_001B6880[];
 extern u8 D_001B6180[];
 extern MemInfo D_001940C0;
-extern DiscInfo D_00137B80;
 extern s64 D_0019E6C0[];
 extern s32 D_0015FF08;
 extern s32 D_001B5980[];
@@ -201,8 +196,8 @@ void initialize_level_runtime(void) {
     init_view_context();
     update_view_context();
     vu1_init_chain();
-    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000, D_00137B80.lsn,
-                                   D_00137B80.sectors);
+    submit_audio_stream_io_request(D_001940C0.buffer + 0x400000, disc_table.unk13B8.sector,
+                                   disc_table.unk13B8.size);
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);

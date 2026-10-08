@@ -11,12 +11,12 @@
 struct MusicStreamState {
     s32 unk0;
     u8 pad_4[0x4];
-    s16 pending_start_state;
-    u8 stop_pending;
+    s16 read_state;          /* 0x8: 0 idle, 1 reading, 2 done (start/finish_audio_stream_read) */
+    u8 break_requested;      /* 0xA: set by request_audio_stream_break */
     u8 updates_suspended;
-    s32 queued_flags;
-    s32 queued_volume;
-    s32 queued_track;
+    s32 read_sector;         /* 0xC */
+    s32 read_sector_count;   /* 0x10 */
+    s32 read_dst;            /* 0x14 */
     u8 pad_18[0x4];
     s32 queued_secondary_track;
     s16 crossfade_state;
@@ -36,7 +36,7 @@ struct MusicStreamState {
     s16 primary_flags;
     s16 primary_state;
     s16 primary_fade_flags;
-    u8 pad_42[0x2];
+    s16 unk42;
     s16 primary_crossfade_enabled;
     u8 pad_46[0x2];
     s32 primary_poll_interval;
@@ -48,7 +48,7 @@ struct MusicStreamState {
     s16 secondary_flags;
     s16 secondary_state;
     s16 secondary_fade_flags;
-    u8 pad_5E[0x2];
+    s16 unk5E;
     s16 secondary_crossfade_enabled;
     u8 pad_62[0x2];
     s32 secondary_poll_interval;
@@ -60,11 +60,13 @@ struct MusicStreamState {
     s16 transition_flags;
     s16 transition_state;
     s16 transition_fade_flags;
-    u8 pad_7A[0x2];
+    s16 unk7A;
     s16 transition_crossfade_enabled;
     u8 pad_7E[0x2];
     s32 transition_poll_interval;
     s32 transition_remaining_time;
 };
+
+extern struct MusicStreamState music_stream_state __asm__("D_001516D0");
 
 #endif /* LOMBYTE_RNC_AUDIO_MUSIC_MUSIC_STREAM_STATE_H */

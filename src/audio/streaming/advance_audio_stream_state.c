@@ -4,7 +4,6 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 
-extern struct MusicStreamState D_001516D0;
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 
 s32 advance_audio_stream_state(struct AudioStream *stream) __asm__("FUN_00220648");
@@ -13,7 +12,7 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
 
     switch (stream->unk44) {
     case 0:
-        if (stream->unk48 == 0 || D_001516D0.pending_start_state != 0) {
+        if (stream->unk48 == 0 || music_stream_state.read_state != 0) {
             break;
         }
         if (disc_table.unk2C8[game_language].size == 0) {
@@ -27,12 +26,12 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         }
         break;
     case 1:
-        if (D_001516D0.pending_start_state == 0) {
+        if (music_stream_state.read_state == 0) {
             stream->unk44 = 2;
         }
         break;
     case 2:
-        if (stream->unk4C == 0 || D_001516D0.pending_start_state != 0) {
+        if (stream->unk4C == 0 || music_stream_state.read_state != 0) {
             break;
         }
         if (disc_table.unk2F8[game_language].size == 0) {
@@ -46,7 +45,7 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         }
         break;
     case 3:
-        if (D_001516D0.pending_start_state == 0) {
+        if (music_stream_state.read_state == 0) {
             stream->unk44 = 4;
         }
         break;

@@ -811,7 +811,7 @@
     },
     {
       "name": "Transition_LoadWad",
-      "unit": "assembly/textbin/gameplay/state/transition_load_wad",
+      "unit": "gameplay/state/transition_load_wad",
       "unit_size": "0x71c",
       "match": "fragment",
       "address": "0x1ea830",
@@ -5034,8 +5034,8 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "textbin/gameplay/state/transition_load_wad",
-        "source_path": "src/textbin/gameplay/state/transition_load_wad.c",
+        "unit": "gameplay/state/transition_load_wad",
+        "source_path": "src/gameplay/state/transition_load_wad.c",
         "address": "0x001ea830",
         "current_name": "FUN_001ea830",
         "proposed_name": "transition_load_wad",

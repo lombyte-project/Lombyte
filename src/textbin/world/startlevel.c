@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 
 typedef struct {
     s32 off;
@@ -40,7 +41,6 @@ extern PadState D_0013C940;
 extern s32 D_00139378[];
 extern s32 D_00139380[];
 extern char D_001E76C0[];
-extern s32 D_00137B80[];
 extern volatile SoundSlot D_00186100[];
 extern volatile SoundSlot D_001861E0[];
 extern volatile SoundSlot * volatile D_0015F634;
@@ -181,7 +181,7 @@ void startlevel(void) {
     sceGsSyncV(0);
     D_0015F438++;
     DebugPrint(D_001E76C0);
-    bank = load_audio_bank_by_location(D_00137B80[0x14E0 / 4]);
+    bank = load_audio_bank_by_location(disc_table.unk14E0);
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
     D_001861E0[4].bank = bank;

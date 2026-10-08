@@ -1,6 +1,5 @@
 #include "types.h"
 #include "rnc/audio/streaming/update_audio_stream_until_idle.h"
-extern struct MusicStreamState D_001516D0;
 
 extern void ReadGlobalTableEntry(void);
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
@@ -11,14 +10,14 @@ s16 update_audio_stream_until_idle(s32 arg0) __asm__("FUN_002168a8");
 
 s16 update_audio_stream_until_idle(s32 arg0) {
     if (arg0 != 0) {
-        if (D_001516D0.unk8 != 0) {
+        if (music_stream_state.read_state != 0) {
             do {
                 sceGsSyncV(0);
                 music_update();
                 snd_reset_state_and_flush_commands();
                 snd_flush_sound_commands();
                 ReadGlobalTableEntry();
-            } while (D_001516D0.unk8 != 0);
+            } while (music_stream_state.read_state != 0);
         }
     } else {
         music_update();
@@ -26,5 +25,5 @@ s16 update_audio_stream_until_idle(s32 arg0) {
         snd_flush_sound_commands();
         ReadGlobalTableEntry();
     }
-    return D_001516D0.unk8;
+    return music_stream_state.read_state;
 }

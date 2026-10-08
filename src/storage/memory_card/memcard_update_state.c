@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 
 typedef struct {
     s32 port;
@@ -43,15 +44,7 @@ typedef struct {
     s32 x10;
 } McChunk;
 
-typedef struct {
-    u8 pad_0[0x10];
-    s32 x10;
-    s32 x14;
-} McLevel;
-
 extern McState D_0013D290;
-extern McLevel D_00137B80;
-extern s32 D_00137B94[];
 extern char D_0013D1D0[];
 extern char D_0013D1E8[];
 extern char D_0013D200[];
@@ -354,8 +347,8 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
-            start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
+            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+            start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
             MC.sub = 4;
             MC.busy = 0;
             break;
@@ -400,7 +393,7 @@ void memcard_update_state(void) {
                 if (MC.fd < 0) {
                     MC.fd = MC.result;
                 }
-                calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
+                calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
                 switch (MC.sub) {
                 case 6:
                     MC.size = 0x3C4;
@@ -942,8 +935,8 @@ void memcard_update_state(void) {
         McChunk *chunk;
         s32 size;
 
-        calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
-        start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
+        calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+        start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
         MC.sub = 18;
         MC.busy = 0;
         break;
@@ -954,7 +947,7 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
+            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
             MC.sub = 19;
             MC.buf = (u8 *)chunk + chunk->x10;
         }

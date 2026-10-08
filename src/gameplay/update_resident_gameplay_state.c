@@ -2,8 +2,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/globals.h"
-
-typedef unsigned int u128 __attribute__((mode(TI)));
+#include "rnc/gameplay/hero.h"
 
 typedef union {
     u128 quadword;
@@ -148,10 +147,6 @@ typedef struct {
     u16 unk5A;
 } DialoguePlaybackState;
 
-typedef struct {
-    u8 pad0[0x2080];
-    ResidentRenderObject *reference_object;
-} LevelObjectState;
 
 typedef struct {
     Vector4 a;
@@ -161,7 +156,6 @@ typedef struct {
 extern s32 D_0013CAE4[];
 extern u8 D_0013D4C0[];
 extern ResidentCinematicState level_render_state __asm__("D_0013E030");
-extern LevelObjectState D_0013F350;
 extern u8 D_001413F5[];
 extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
@@ -616,14 +610,14 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_a->unk94 = 0;
                 level_render_state.companion_a->flags |= 6;
                 level_render_state.companion_a->lifetime_stamp =
-                    D_0013F350.reference_object->lifetime_stamp;
+                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
                 level_render_state.companion_b = create_moby(10);
                 level_render_state.companion_b->selected_index = 0x1FF;
                 level_render_state.companion_b->opacity = 0xFF;
                 level_render_state.companion_b->unk94 = 0;
                 level_render_state.companion_b->flags |= 6;
                 level_render_state.companion_b->lifetime_stamp =
-                    D_0013F350.reference_object->lifetime_stamp;
+                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
             }
             func_001E93F0(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
             level_render_state.blend = 0.0f;

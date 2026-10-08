@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 
 extern s16 D_001516D8[];
-extern s32 D_00137B80[];
 extern s32 D_001D5CF8[];
 extern u8 D_001D5BF0[];
 extern u8 D_001996D0[];
@@ -23,8 +23,8 @@ int update_menu_help_text_load(char *menu) {
     switch (*(int *)(menu + 0x50)) {
     case 0:
         if (D_001516D8[0] == 0) {
-            if (start_audio_stream_read(D_001D5CF8[0], D_00137B80[0x1528 / 4],
-                                        D_00137B80[0x152C / 4]) != 0) {
+            if (start_audio_stream_read(D_001D5CF8[0], disc_table.unk1528.sector,
+                                        disc_table.unk1528.size) != 0) {
                 *(int *)(menu + 0x50) = 1;
             } else {
                 *(int *)(menu + 0x50) = 3;

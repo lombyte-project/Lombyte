@@ -2,13 +2,13 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/fun_0021d1f8.h"
+#include "rnc/audio/music/music_stream_state.h"
 
 typedef struct {
     u32 key;
     s32 flags;
 } PadBind;
 
-extern struct MusicStreamState D_001516D0;
 extern s32 D_001D5CF8[];
 extern PadBind D_001D60B8[];
 extern void initialize_graphics_buffer_descriptors(s32) __asm__("func_00225AC0");
@@ -28,7 +28,7 @@ s32 FUN_0021d1f8(struct MenuScreen *menu) {
         }
     }
     menu->unk50 = 0;
-    if (D_001516D0.pending_start_state == 0) {
+    if (music_stream_state.read_state == 0) {
         if (start_audio_stream_read(D_001D5CF8[0], disc_table.unk1528.sector, disc_table.unk1528.size) != 0) {
             menu->unk50 = 1;
         } else {

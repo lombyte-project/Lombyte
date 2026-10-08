@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
 #else
 #include "types.h"
+#include "rnc/storage/disc_table.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
@@ -29,16 +30,6 @@ typedef struct {
 } Moby;
 
 typedef struct {
-    s32 offset;
-    s32 sector_count;
-} AnimationArchiveEntry;
-
-typedef struct {
-    u8 pad0[0x18];
-    AnimationArchiveEntry entries[1];
-} AnimationArchive;
-
-typedef struct {
     u8 pad0[8];
     s16 active;
 } CdReadState;
@@ -55,7 +46,6 @@ typedef struct {
 } PreviewAnimationClassResource;
 
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
-extern AnimationArchive animation_archive __asm__("D_00137B80");
 typedef struct {
     u8 pad0[8];
     s32 item_type;
@@ -140,14 +130,14 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             } else {
                 u32 archive_index = animation_id - stream->streamed_animation_base;
                 s32 buffer_address = stream->buffer_address[stream->read_buffer_index];
-                s32 read_size = animation_archive.entries[archive_index].sector_count << 11;
+                s32 read_size = disc_table.animation_streams[archive_index].size << 11;
                 s32 read_address =
                     buffer_address + get_stream_buffer_size(buffer_address) - read_size;
 
                 stream->read_offset = read_address - buffer_address;
                 if (start_audio_stream_read(
-                        read_address, animation_archive.entries[archive_index].offset,
-                        animation_archive.entries[archive_index].sector_count) == 0) {
+                        read_address, disc_table.animation_streams[archive_index].sector,
+                        disc_table.animation_streams[archive_index].size) == 0) {
                     RaiseKernelTrap();
                 }
                 mark_stream_buffer_read_active(buffer_address);
