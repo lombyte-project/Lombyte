@@ -237,6 +237,7 @@ extern unsigned char D_0014C050[];
 extern char D_0013E550[];
 extern int FUN_L01_00275690(void *, float);
 extern int FUN_0022da68(int, int, void *);
+extern unsigned char *moby_bytes __asm__("D_L12_0015FFD8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_002502a0(int);
@@ -276,7 +277,7 @@ void FUN_L12_003081b0(struct Moby *m) {
                 }
             }
             d[1] = -1;
-            if (((struct Moby *)(D_L12_0015FFD8_p + (d[0] << 8)))->state == 7) {
+            if (moby_bytes[(d[0] << 8) + 0x20] == 7) {
                 if (m->unkB0 != 0xFF) {
                     FUN_L00_002502a0(m->unkB0);
                 }
