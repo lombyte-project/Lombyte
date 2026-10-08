@@ -288,7 +288,152 @@ int FUN_L12_002e2eb8(char *m, float speed) {
     return r;
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3528.s", FUN_L12_002e3528);
+#include "qcopy.h"
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/vector.h"
+
+/* Variables of the l12 troll moby (moby->pvars); the layout of FUN_L00_002e1678's TrollVars moved by 0xB0. */
+typedef struct {
+    u8 pad0[0x20];
+    f32 health;          /* 0x20 */
+    u8 pad24[2];
+    s16 stun_timer;      /* 0x26 */
+    u8 pad28[0x10];
+    s32 reset_alert;     /* 0x38 */
+    u8 pad3C[0xD4];
+    u8 anim[7];          /* 0x110: animation blend state */
+    u8 unk117;           /* 0x117 */
+    u8 pad118[8];
+    u8 fall[0x10];       /* 0x120 */
+    f32 unk130;          /* 0x130 */
+    f32 unk134;          /* 0x134 */
+    f32 unk138;          /* 0x138 */
+    f32 unk13C;          /* 0x13C */
+    u8 pad140[4];
+    s32 unk144;          /* 0x144 */
+    u8 pad148[8];
+    f32 unk150;          /* 0x150 */
+    f32 unk154;          /* 0x154 */
+    f32 unk158;          /* 0x158 */
+    u8 pad15C;
+    u8 unk15D;           /* 0x15D */
+    u8 pad15E[0x12];
+    f32 unk170;          /* 0x170 */
+    f32 unk174;          /* 0x174 */
+    u8 pad178[0x134];
+    f32 speed;           /* 0x2AC */
+    u8 pad2B0[0x14];
+    s32 alert_timer;     /* 0x2C4 */
+    u8 pad2C8[0x20];
+    s16 call_enabled;    /* 0x2E8 */
+    s16 call_timer;      /* 0x2EA */
+} TrollVars_e3528;
+
+typedef struct {
+    u8 pad0[0x10];
+    Vec4 pos;
+} TrollHit_e3528;
+
+extern f32 D_L12_001618D0_e3528 __asm__("D_L12_001618D0") __attribute__((sda));
+extern f32 D_L12_001618D4_e3528 __asm__("D_L12_001618D4") __attribute__((sda));
+extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
+extern s32 D_001413D0_e3528 __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 scale_game_frames_e3528(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown_e3528(s32 *) __asm__("FUN_001f9740");
+extern s32 random_integer_below_e3528(s32) __asm__("FUN_00213260");
+extern f32 fast_add_rotations_e3528(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_cos_e3528(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_e3528(f32) __asm__("FUN_001f9de0");
+extern s32 count_group_e3528(s32, s32) __asm__("FUN_L01_0026e008");
+extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
+extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
+extern TrollHit_e3528 *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void take_damage_e3528(struct Moby *, TrollHit_e3528 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern void knockback_e3528(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
+extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
+extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void anim_update_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void troll_alert_e3528(struct Moby *) __asm__("FUN_L12_002e3098");
+
+/* Damage and alert step of the l12 troll: refreshes its speed while alerted, now and then calls for help behind
+   itself, and takes hits (dying, or staggering back). */
+void FUN_L12_002e3528(struct Moby *moby) {
+    TrollVars_e3528 *vars = (TrollVars_e3528 *)moby->pvars;
+    Vec4 v;
+    s32 hit;
+    f32 dmg;
+    f32 angle;
+    f32 unused;
+    TrollHit_e3528 *coll;
+
+    if (vars->reset_alert != 0) {
+        vars->reset_alert = 0;
+        vars->alert_timer = scale_game_frames_e3528(0xF0);
+    }
+    if (moby->state != 9 && moby->state != 0xB && moby->state != 0) {
+        if (tick_countdown_e3528(&vars->alert_timer)) {
+            vars->speed = 12.0f;
+        } else {
+            vars->speed = 20.0f;
+        }
+    }
+    if (vars->call_enabled != 0 && moby->state != 9) {
+        s16 n = ++vars->call_timer;
+        if (scale_game_frames_e3528(0x3C) * 15 < n && moby->unk31 == 0 && moby->unk21 < 0xFF &&
+            count_group_e3528(moby->unk21, -1) >= 4 && random_integer_below_e3528(0x45) == 0) {
+            v.f[0] = fast_cos_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
+            v.f[1] = fast_sin_e3528(fast_add_rotations_e3528(moby->rot.z, 3.1415927f));
+            v.f[2] = 0.0f;
+            call_for_help_e3528(moby, D_001413D0_e3528, 0x10000, &moby->pos, v.f, 1.0f);
+        }
+    }
+    coll = find_hit_e3528(moby, 0x330000, 0);
+    dmg = 0.0f;
+    take_damage_e3528(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
+        if (moby->unk21 != 0xFF) {
+            alert_group_e3528(moby->unk21, 7);
+        }
+        if (dmg != 0.0f) {
+            vars->health -= dmg;
+            vars->unk130 = 0.008f;
+            vars->unk134 = 0.0005f;
+            vars->unk138 = D_L12_001618D4_e3528 * D_0015ED6C_e3528;
+            vars->unk13C = D_L12_001618D0_e3528 * D_0015ED6C_e3528;
+            vars->unk15D = 0;
+            vars->unk144 = 9;
+            vars->unk150 = 1.0f;
+            vars->unk154 = 1.0f;
+            vars->unk158 = 1.0f;
+            if (vars->health <= 0.0f) {
+                moby->flags &= ~0x1000;
+                vars->unk138 = D_0015ED6C_e3528 * 8.0f;
+                vars->unk13C = D_0015ED6C_e3528 * 10.0f;
+                v.q = coll->pos.q;
+                knockback_e3528(&v, &angle, &vars->unk138, &vars->unk13C);
+                start_fall_e3528(moby, vars->fall, 6, 1, 0, angle);
+                vars->unk170 = 11.0f;
+                vars->unk174 = 18.0f;
+                moby->state = 0x63;
+                vars->unk117 = 0x78;
+                anim_reset_e3528(moby, vars->anim);
+            } else {
+                v.q = coll->pos.q;
+                knockback_e3528(&v, &unused, &vars->unk138, &vars->unk13C);
+                start_fall_e3528(moby, vars->fall, 0xE, 1, 0, unused);
+                vars->unk174 = vars->unk170 = -1.0f;
+                moby->state = 7;
+                vars->unk117 = 0xFA;
+                vars->stun_timer = scale_game_frames_e3528(0x3C);
+                anim_reset_e3528(moby, vars->anim);
+            }
+            troll_alert_e3528(moby);
+        }
+    }
+    moby->unkA4 = 0xFF;
+    anim_update_e3528(moby, vars->anim);
+}
 /* Hoven engine exhaust: emits a flame and a smoke puff from each of the moby's two nozzles (the second one
  * mirrored across its local Y axis), with random jitter. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
