@@ -3,6 +3,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #define NOT_SDA
 
@@ -610,7 +611,43 @@ int FUN_L15_002ebfb0(int idx) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec030.s", FUN_L15_002ec030);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ec760.s", FUN_L15_002ec760);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edb20.s", FUN_L15_002edb20);
+/* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
+struct L15MissionState {
+    char pad0[0x30];
+    int mode;
+    char pad1[0x178 - 0x34];
+    int slot[5];
+};
+
+extern int D_L15_0015F5C4;
+extern struct L15MissionState mission_2edb20 __asm__("D_L15_0016CE60");
+extern void FUN_L00_002637f8(int);
+
+void FUN_L15_002edb20(struct Moby *m) {
+    switch (m->state) {
+    case 0:
+        m->unk30 = 0xFF;
+        m->state = 1;
+        break;
+    case 1:
+        if (D_L15_0015F5C4 == 2) {
+            if (mission_2edb20.mode == 1 || mission_2edb20.mode == 2 || mission_2edb20.mode == 3 ||
+                mission_2edb20.mode == 4 || mission_2edb20.mode == 6) {
+                int v = mission_2edb20.mode;
+                int i;
+                i = 0;
+                if (v == 1)
+                    i = 4;
+                else if (v == 2 || v == 3 || v == 4)
+                    i = 2;
+                else if (v == 6)
+                    i = 1;
+                FUN_L00_002637f8(mission_2edb20.slot[i]);
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
