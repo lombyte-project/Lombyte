@@ -45,7 +45,28 @@ s32 FUN_L11_00316128(const u8 *moby) {
     }
     return 0;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00316160.s", FUN_L11_00316160);
+#include "rnc/gameplay/entities/moby.h"
+
+extern int FUN_L00_002db8f8(void *);
+
+/* Grabbed check: while held, park the moby in state 0x14 (remembering its state) unless it cannot be grabbed; restore the saved state once released. */
+int FUN_L11_00316160(struct Moby *moby) {
+    int r = FUN_L00_002db8f8(moby);
+    if (r != 0) {
+        if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
+            moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 || moby->state == 0x14) {
+            if (moby->state != 0x14) {
+                moby->unkBC = moby->state;
+                moby->state = 0x14;
+            }
+        } else {
+            r = 0;
+        }
+    } else if (moby->state == 0x14) {
+        moby->state = moby->unkBC;
+    }
+    return r;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
