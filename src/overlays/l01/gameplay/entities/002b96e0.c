@@ -1832,15 +1832,6 @@ void FUN_L01_002efc60(Mob577 *self) {
     FUN_L00_0025d538(self, v->fx110);
     FUN_L00_0025a120(self);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002f3120.s", FUN_L01_002f3120);
-#include "sda.h"
-
-typedef struct {
-    s32 target;
-    f32 angle;
-    f32 speed;
-} RotVars;
-
 typedef struct Moby {
     Vec4f bsphere;                 /* 0x00 */
     Vec4f pos;                     /* 0x10 */
@@ -1855,6 +1846,140 @@ typedef struct Moby {
     s16 oclass;
     u8 padA8[0x58];
 } Moby;
+
+/*
+ * Path that carries the hero along (uses the unit's Moby, PePath and
+ * D_L01_001B0930_u declared above). While the hero's control mode is 0x11 or
+ * 0x12 and he is within `radius` of the path, he is pushed along
+ * the path (and toward it when `pull` is set), capped at max_speed; the
+ * nearest such path this frame wins through hero.unk22B8. When he left it
+ * (prev control mode 0x12, now 4 or 5) the push is damped instead.
+ */
+typedef struct {
+    Vec4 vel;                      /* 0x00: path velocity, copied to the hero push (motion.unkF0) */
+    u8 pad_10[0x10];
+    s32 path;                      /* 0x20: index into D_L01_001B0930, -1 none */
+    f32 max_speed;                 /* 0x24 */
+    f32 radius;                    /* 0x28: reach from the path */
+    s16 pull;                      /* 0x2C: nonzero pulls the hero onto the path */
+    s16 ready;                     /* 0x2E: segment lengths computed */
+} PathCarrierVars;
+
+extern f32 D_0015ED60;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+/* nearest point of the path to pos, with its segment and position on it */
+extern void FUN_L00_0025df68(PePath *, void *, void *, f32 *, s32 *, s32, f32, f32, f32);
+/* the point a step further along the path; nonzero at the path's end */
+extern s32 FUN_L00_0025d808(PePath *, void *, f32 *, s32 *, s32, f32);
+
+void FUN_L01_002f3120(Moby *self)
+{
+    PathCarrierVars *v;
+    PePath *path;
+    Vec4 nearest;
+    Vec4 ahead;
+    Vec4 dir;
+    Vec4 pull;
+    f32 t;
+    s32 seg;
+    s32 at_end;
+    f32 dist;
+    f32 limit;
+    f32 len;
+    f32 cap;
+    s32 i;
+
+    v = self->vars;
+    if (v == NULL || v->path == -1) {
+        return;
+    }
+    path = (PePath *)D_L01_001B0930_u[v->path];
+    if (v->ready == 0) {
+        /* store each segment's length in its start point's w */
+        v->ready = 1;
+        for (i = 0; i < path->count - 1; i++) {
+            path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[i + 1]);
+        }
+        path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[0]);
+        self->alpha = 0xFF;
+    }
+
+    if ((u32)(hero.state.control_mode - 0x11) >= 2 && hero.state.prev_control_mode != 0x11
+        && hero.state.prev_control_mode != 0x12 && hero.state.current != 0x12
+        && hero.state.prev != 0x12) {
+        return;
+    }
+    FUN_L00_0025df68(path, &hero.motion.pos, &nearest, &t, &seg, 0, 999.0f, 5.0f, 0.0f);
+    at_end = FUN_L00_0025d808(path, &ahead, &t, &seg, 0, 2.0f);
+    dist = FUN_001f9b80(&hero.motion.pos, &nearest);
+    if (v->radius < dist) {
+        return;
+    }
+
+    if ((u32)(hero.state.control_mode - 0x11) < 2) {
+        if (hero.unk22B8 < dist) {
+            return;
+        }
+        hero.unk22B8 = dist;
+        if (at_end == 0) {
+            subtract_vector_xyz(&dir, &ahead, &nearest);
+            normalize_vector_xyz(&dir, &dir, D_0015ED70 * 7.0f);
+            add_vector_xyz(v, v, &dir);
+            v->vel.f[2] = 0.0f;
+            if (v->max_speed < vector_length_xyz(v)) {
+                normalize_vector_xyz(v, v, v->max_speed);
+            }
+            qcopy(&hero.motion.unkF0, v);
+            if (v->pull != 0) {
+                subtract_vector_xyz(&pull, &nearest, &hero.motion.pos);
+                pull.f[2] = 0.0f;
+                limit = v->max_speed * 0.4f;
+                if (limit < vector_length_xyz(&pull)) {
+                    normalize_vector_xyz(&pull, &pull, limit);
+                }
+                add_vector_xyz(&hero.motion.unkF0, &hero.motion.unkF0, &pull);
+            }
+        } else {
+            /* past the end: slow down (factor 1 - 0.005 per frame unit) */
+            len = vector_length_xyz(v);
+            normalize_vector_xyz(v, v, D_0015ED60 * -0.004999995231628418f * len + len);
+            qcopy(&hero.motion.unkF0, v);
+        }
+        if (hero.state.control_mode == 0x12 && hero.state.prev == hero.state.control_mode) {
+            if (hero.state_timer < scale_game_frames(3)) {
+                cap = D_0015ED6C * 1.5f;
+                if (cap < hero.unk194) {
+                    hero.unk194 = cap;
+                }
+                clear_vector(&hero.motion.unk150);
+            }
+        }
+    } else if ((hero.state.prev_control_mode == 0x12 || hero.state.prev2_control_mode == 0x12)
+               && (u32)(hero.state.control_mode - 4) < 2) {
+        len = vector_length_xyz(v);
+        normalize_vector_xyz(v, v, D_0015ED60 * -0.014999985694885254f * len + len);
+        qcopy(&hero.motion.unkF0, v);
+        if (hero.unk1D8 < scale_game_frames(0x23)) {
+            hero.unk1D8 = scale_game_frames(0x23);
+        }
+    }
+}
+#include "sda.h"
+
+typedef struct {
+    s32 target;
+    f32 angle;
+    f32 speed;
+} RotVars;
 
 extern Moby *D_L01_0015FFD8;
 f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
