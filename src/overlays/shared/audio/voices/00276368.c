@@ -325,4 +325,49 @@ L2:
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002772c0.s", FUN_L00_002772c0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002779b0.s", FUN_L00_002779b0);
+
+#include "sda.h"
+
+typedef struct {
+    char pad0[0x38];
+    int i38;
+    int pad3c;
+    int i40;
+} P_2779c8;
+
+typedef struct {
+    int pad0;
+    P_2779c8 *p4;
+    int i8;
+    char padC[0x118];
+    int i124;
+} G_2779c8;
+
+extern G_2779c8 D_L00_001B9CF0_2779c8 __asm__("D_L00_001B9CF0") NOT_SDA;
+typedef struct {
+    char pad0[0x1C4];
+    int flags;
+} E_2779c8;
+
+extern E_2779c8 D_0013C940_2779c8 __asm__("D_0013C940") NOT_SDA;
+
+int FUN_L00_002779c8(int x) {
+    int v;
+
+    if (D_L00_001B9CF0_2779c8.p4->i40 != x) {
+        return 0;
+    }
+    if ((D_0013C940_2779c8.flags & 0xD00) && D_L00_001B9CF0_2779c8.i124 == 0) {
+        return 1;
+    }
+    if (D_0013C940_2779c8.flags & 0x10) {
+        v = D_L00_001B9CF0_2779c8.p4->i38;
+        if (v != 0) {
+            D_L00_001B9CF0_2779c8.i8 = v;
+        } else if (D_L00_001B9CF0_2779c8.i124 == 0) {
+            return -1;
+        }
+    }
+    return 0;
+}
+

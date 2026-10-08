@@ -363,6 +363,7 @@ OVERLAY_SN_UNITS = {
     "l18/gameplay/hero/0022e8f8.c",
     "l18/gameplay/vendor/002efb88.c",
     "l18/gameplay_vendor_002f88e8.c",
+    "shared/audio/voices/00276368.c",
     "shared/gameplay/animation/00235878.c",
     "shared/gameplay/camera/001eb188.c",
     "shared/gameplay/entities/00278fd8.c",
