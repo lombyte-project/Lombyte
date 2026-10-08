@@ -141,7 +141,7 @@ struct Hero {
     s32 unk1C0;                    /* 0x1C0 */
     s32 unk1C4;                    /* 0x1C4 */
     s16 unk1C8;                    /* 0x1C8 */
-    u8 pad_1CA[0x2];
+    s16 unk1CA;                    /* 0x1CA */
     s32 unk1CC;                    /* 0x1CC */
     s32 unk1D0;                    /* 0x1D0 */
     s32 unk1D4;                    /* 0x1D4 */
@@ -172,7 +172,8 @@ struct Hero {
     f32 unk234;                    /* 0x234 */
     u8 pad_238[0x4];
     u8 *coll_hit_moby;             /* 0x23C: moby of the last push-out collision hit */
-    u8 pad_240[0x8];
+    s32 unk240;                    /* 0x240 */
+    u8 pad_244[0x4];
     f32 unk248;                    /* 0x248 */
     u8 pad_24C[0xB];
     u8 unk257;                     /* 0x257 */
@@ -486,7 +487,8 @@ struct Hero {
     u8*unkD00;                     /* 0xD00 */
     u8*unkD04;                     /* 0xD04 */
     s32 unkD08;                    /* 0xD08 */
-    u8 pad_D0C[0x8];
+    u8 pad_D0C[0x4];
+    u8 *unkD10;                    /* 0xD10 */
     s32 unkD14;                    /* 0xD14 */
     u8 pad_D18[0x2D8];
     struct HeroRandTimer rand_timer;/* 0xFF0 */
@@ -522,7 +524,10 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x845];
+    u8 pad_17B0[0x570];
+    f32 unk1D20;                   /* 0x1D20 */
+    f32 unk1D24;                   /* 0x1D24 */
+    u8 pad_1D28[0x2CD];
     u8 unk1FF5;                    /* 0x1FF5 */
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
@@ -543,7 +548,7 @@ struct Hero {
     u8 pad_20AB[0x1];
     u8 unk20AC;                    /* 0x20AC */
     u8 unk20AD;                    /* 0x20AD */
-    u8 pad_20AE[0x1];
+    u8 unk20AE;                    /* 0x20AE */
     u8 unk20AF;                    /* 0x20AF */
     u8 pad_20B0[0x1];
     u8 unk20B1;                    /* 0x20B1 */
@@ -565,7 +570,8 @@ struct Hero {
     s32 unk2234;                   /* 0x2234 */
     u8 pad_2238[0x38];
     s32 unk2270;                   /* 0x2270 */
-    u8 pad_2274[0xC];
+    s32 unk2274;                   /* 0x2274 */
+    u8 pad_2278[0x8];
     struct Moby *unk2280;          /* 0x2280 */
     s32 unk2284;                   /* 0x2284 */
     u8 pad_2288[0x8];
