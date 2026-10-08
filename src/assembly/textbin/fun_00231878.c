@@ -44,19 +44,15 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     s32 archive_base;
     u64 texture_bits;
     u64 image_bits;
-    s32 disc_start_sector;
-    s32 disc_sector_count;
     struct CommonArchiveMemory *archive_memory;
 
     first_output = first_texture;
     second_output = second_texture;
     archive_memory = &D_001940C0;
     upload_index = 0;
-    disc_start_sector =
-        disc_table.loading_slides[language_index].sector;
-    disc_sector_count = disc_table.loading_slides[language_index].size;
-    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000), disc_start_sector,
-                           disc_sector_count);
+    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000),
+                           disc_table.loading_slides[language_index].sector,
+                           disc_table.loading_slides[language_index].size);
     sceCdSync(0);
     FlushCache(0);
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
