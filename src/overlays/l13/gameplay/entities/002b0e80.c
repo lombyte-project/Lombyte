@@ -268,7 +268,67 @@ void FUN_L13_002b48d8(unsigned char *moby) {
     if (moby[0xBC] >= 4)
         moby[0x20] = moby[0xBC];
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4958.s", FUN_L13_002b4958);
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+
+struct MobyClass {
+    u8 pad0[0x24];
+    f32 scale;                        /* base scale of the class */
+};
+
+/* pvars of the child spawned by FUN_L13_002b4958 */
+typedef struct {
+    void *unk0;
+    u8 pad4[0x8];
+    void *unkC;
+    u8 pad10[0x10];
+    f32 unk20;
+    s16 unk24;
+    u8 pad26[2];
+    u8 unk28;
+    u8 unk29;
+    u8 unk2A;
+    u8 pad2B[5];
+    f32 unk30;
+    u8 pad34[0x2C];
+    u8 unk60[0x10];
+    struct Moby *parent;
+} Vars;
+
+extern struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
+extern void FUN_L00_00250df8(struct Moby *moby);
+extern void FUN_L00_0025d1b8(struct Moby *moby);
+
+/* spawns a class 0x24 child that copies its parent's position and scale */
+struct Moby *FUN_L13_002b4958(struct Moby *parent) {
+    struct Moby *m;
+    Vars *v;
+
+    m = create_moby(0x24);
+    if (m != 0) {
+        v = (Vars *)m->pvars;
+        v->parent = parent;
+        v->unk0 = &v->unk20;
+        v->unkC = v->unk60;
+        m->unk30 = parent->unk30;
+        m->unk32 = v->parent->unk32;
+        m->unk31 = 1;
+        m->flags |= 0x20;
+        m->state = 0;
+        m->unkBC = 0;
+        qcopy(&m->pos, &v->parent->pos);
+        m->scale = m->pclass->scale * parent->scale / parent->pclass->scale;
+        v->unk20 = 1.0f;
+        v->unk24 = 1;
+        v->unk29 = 1;
+        v->unk2A = 3;
+        v->unk28 = 0;
+        v->unk30 = 0.9f;
+        FUN_L00_00250df8(m);
+        FUN_L00_0025d1b8(m);
+    }
+    return m;
+}
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0025a420(void *, int, int);
