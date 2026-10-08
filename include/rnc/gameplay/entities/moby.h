@@ -21,7 +21,7 @@ struct Moby {
     u16 flags;
     u8 pad36[2];
     u64 spawn_frame;                  /* frame count at which it may respawn */
-    u8 pad40[0x10];
+    Vec4f rot;                        /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
     u8 frame;                         /* animation frame */
     u8 prev_frame;                    /* frame index in prev_seq */
     u8 seq;                           /* animation sequence id */

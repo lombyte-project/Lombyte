@@ -276,7 +276,9 @@ struct Hero {
     s32 unk4E8;                    /* 0x4E8 */
     f32 unk4EC;                    /* 0x4EC */
     f32 unk4F0;                    /* 0x4F0 */
-    u8 pad_4F4[0xC];
+    u8 pad_4F4[0x4];
+    s32 unk4F8;                    /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
+    u8 pad_4FC[0x4];
     Vec4 unk500;                   /* 0x500 */
     Vec4 unk510;                   /* 0x510 */
     Vec4 unk520;                   /* 0x520 */
