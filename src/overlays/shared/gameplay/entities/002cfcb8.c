@@ -350,8 +350,8 @@ typedef struct M2d1e80 {
 } M2d1e80;
 extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0016C890[];
-void FUN_0020cca8(M2d1e80 *, s32, s32 *);
-void enqueue_callback_list_1(void *, M2d1e80 *) __asm__("FUN_001f4600");
+void FUN_0020cca8(void *, s32, void *);
+void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void FUN_L00_002d19b0(void);
 void FUN_L00_002d1e80(M2d1e80 *m) {
     s32 *v = m->vars;
@@ -403,7 +403,309 @@ void FUN_L00_002d2e28(unsigned char *moby) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2ee8.s", FUN_L00_002d2ee8);
+#include "qcopy.h"
+#include "qzero.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/input/pad_state.h"
+
+/* FUN_L00_002d2ee8: update for a moby that tracks hero.unk2040, the nearest
+ * oclass 0x25D moby. It orients itself towards it within the
+ * D_L00_00161950/54 limits (degrees), tints itself by the distance
+ * (hero.unk2044) while the 0x20 pad button is held, and at under 1.0 drains
+ * the target's count in steps of 5, then removes it. */
+
+typedef f32 Mtx2d2ee8[4][4] __attribute__((aligned(16)));
+typedef f32 Vec2d2ee8[4] __attribute__((aligned(16)));
+
+typedef struct Vars2d2ee8 {
+    s32 voice0;         /* 0x00 */
+    s32 voice1;         /* 0x04 */
+    s32 unk8;           /* 0x08: 0x7FFF */
+    s32 voice2;         /* 0x0C: distance hum */
+    Vec4 pos;           /* 0x10 */
+    u8 unk20;           /* 0x20 */
+    u8 pad21[3];
+    s32 unk24;          /* 0x24 */
+    s32 unk28;          /* 0x28 */
+    u8 pad2C[4];
+    Vec4 unk30;         /* 0x30 */
+} Vars2d2ee8;
+
+typedef struct TargetVars2d2ee8 {
+    u8 pad0[0x18];
+    s32 count;          /* 0x18: drained by 5 per step */
+} TargetVars2d2ee8;
+
+typedef struct VoiceSlot2d2ee8 {
+    u8 pad0[0x74];
+    u8 active;          /* 0x74 */
+    u8 pad75[0x13];
+    struct Moby *owner; /* 0x88 */
+} VoiceSlot2d2ee8;
+
+extern struct PadState D_0013C940 __attribute__((section(".data")));
+extern u8 D_0013E550[] __attribute__((section(".data")));
+extern f32 D_0015ED6C;
+extern u128 D_L00_001E1160 __attribute__((section(".data")));
+extern u8 D_L00_001E1170[] __attribute__((section(".data")));
+extern f32 D_L00_00161950 __attribute__((sda));
+extern f32 D_L00_00161954 __attribute__((sda));
+extern s32 D_L00_0016191C __attribute__((sda));
+extern s32 D_L00_00161920 __attribute__((sda));
+extern s32 D_L00_00161924 __attribute__((sda));
+extern s32 D_L00_0016192C __attribute__((sda));
+extern s32 D_L00_00161930 __attribute__((sda));
+extern f32 D_L00_00161940 __attribute__((sda));
+
+extern void FUN_L00_0024f7c8(struct Moby *, s32, void *);
+extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void FUN_001e93e8(void *, void *);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern void FUN_001f9ad8(void *, void *, void *);
+extern void FUN_001fa2d8(void *, void *);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_00214260(void *, void *);
+extern void FUN_L00_00259f50(void *, void *);
+extern void FUN_001fa400(void *, void *, void *, f32);
+extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_0028df38(s32, s32);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern void FUN_L00_0025f8e0(void *, f32);
+extern void FUN_L00_002a7438(void *, void *, void *, s32, s32, s32);
+/* the unit declares mark_moby_for_removal() without a prototype further down */
+extern void remove_moby_2d2ee8(void *) __asm__("FUN_0020c828");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern void FUN_L00_002d2a90(void);
+extern s32 FUN_001f96f8(s32);
+
+void FUN_L00_002d2ee8(struct Moby *moby) {
+    Vars2d2ee8 *vars;
+    struct Moby *t;
+    TargetVars2d2ee8 *tv;
+    Vec2d2ee8 u;
+    Vec2d2ee8 v;
+    Vec2d2ee8 w;
+    Mtx2d2ee8 m;
+    Mtx2d2ee8 m2;
+    Mtx2d2ee8 m3;
+    Mtx2d2ee8 m4;
+    f32 yaw;
+    f32 pitch;
+    f32 abs_yaw;
+    f32 abs_pitch;
+    f32 lim;
+    f32 zero;
+    f32 one;
+
+    if (moby == 0) {
+        return;
+    }
+    vars = (Vars2d2ee8 *)moby->pvars;
+    if (vars == 0) {
+        return;
+    }
+    FUN_L00_0024f7c8(moby, 0, &vars->pos);
+    switch (moby->state) {
+    case 0:
+        hero.unk2044 = 100000.0f;
+        hero.unk2040 = 0;
+        vars->voice0 = -1;
+        vars->voice1 = -1;
+        vars->voice2 = -1;
+        vars->unk8 = 0x7FFF;
+        vars->unk20 = D_0013C940.unk189;
+        vars->unk24 = 0;
+        vars->unk28 = 0;
+        qzero(&D_L00_001E1160);
+        attach_manipulator(moby, 3, &D_L00_001E1160);
+        moby->state = 1;
+        break;
+    case 3:
+    case 4:
+        break;
+    case 1:
+    case 2:
+        one = 1.0f;
+        *(u128 *)v = 0;
+        v[2] = one;
+        if (hero.unk2040 != 0 && hero.unk2040->oclass == 0x25D && hero.unk2040->state != 0xFE &&
+            hero.unk2040->state != 0xFD) {
+            pitch = FUN_001f9b80(&vars->pos, &hero.unk2040->pos);
+            pitch = FUN_001f9e90(pitch, hero.unk2040->pos.z - vars->pos.f[2]);
+            yaw = FUN_001f9e90(hero.unk2040->pos.x - vars->pos.f[0], hero.unk2040->pos.y - vars->pos.f[1]);
+            yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
+            pitch = fast_subtract_rotations(pitch, -1.5707964f);
+            abs_yaw = FUN_001f99c0(yaw);
+            abs_pitch = FUN_001f99c0(pitch);
+            lim = D_L00_00161950 * 0.017453292f;
+            if (lim < abs_yaw) {
+                yaw /= abs_yaw;
+                yaw *= lim;
+            }
+            lim = D_L00_00161954 * 0.017453292f;
+            if (lim < abs_pitch) {
+                pitch /= abs_pitch;
+                pitch *= lim;
+            }
+            zero = 0.0f;
+            yaw = fast_add_rotations(yaw, hero.motion.rot.f[2]);
+            pitch = fast_add_rotations(pitch, -1.5707964f);
+            build_spherical_offset(v, -3.0f, yaw, pitch);
+            FUN_001f9a10(w, &vars->pos, v);
+            FUN_001e93e8(&vars->pos, w);
+            FUN_001f9bf8(m[D_L00_00161920], v, (f32)D_L00_0016192C);
+            FUN_001f9ad8(m[D_L00_00161924], m[D_L00_00161920], &D_L00_00161940);
+            FUN_001f9bf8(m[D_L00_00161924], m[D_L00_00161924], (f32)D_L00_00161930);
+            FUN_001f9ad8(m[D_L00_0016191C], m[D_L00_00161924], m[D_L00_00161920]);
+            m[3][2] = zero;
+            m[3][1] = zero;
+            m[3][0] = zero;
+            m[3][3] = one;
+            FUN_0020cca8(moby, 2, m2);
+            FUN_001f9bf8(m2[0], m2[0], one);
+            FUN_001f9bf8(m2[1], m2[1], one);
+            FUN_001f9bf8(m2[2], m2[2], one);
+            FUN_001fa2d8(m3, m2);
+            m3[3][2] = zero;
+            m3[3][1] = zero;
+            m3[3][0] = zero;
+            m3[3][3] = one;
+            FUN_001fa378(m4, m3, m);
+            FUN_00214260(u, m4);
+        } else {
+            *(u128 *)w = 0;
+            FUN_L00_00259f50(u, w);
+        }
+        qcopy(&vars->unk30, v);
+        FUN_001fa400(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
+        FUN_0020cca8(moby, 3, w);
+        qcopy(&vars->unk30, w);
+        if (D_0013C940.pressed & 0x20) {
+            vars->unk24 = 0;
+            vars->unk28 = 0;
+        }
+        if ((D_0013C940.held & 0x20) && hero.items[0].unk20 > FUN_001f96f8(0xF)) {
+            if (hero.unk2044 < 10.0f) {
+                if (FUN_L00_0028d8c0(moby, vars->voice2) == 0 && vars->voice2 == -1) {
+                    vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
+                }
+                if (vars->voice2 != -1) {
+                    FUN_L00_0028df38(vars->voice2,
+                                     truncate_float_to_s32((10.0f - (hero.unk2044 + hero.unk2044)) * 32767.0f / 60.0f) - 0x1FFF);
+                }
+                {
+                    s32 c = truncate_float_to_s32(hero.unk2044 * 255.0f / 10.0f);
+                    s32 col = (c << 8) | 0xFF000000;
+
+                    moby->unk90 = ((c << 16) | col) | 0xFF;
+                }
+                t = hero.unk2040;
+                if (t != 0 && t->oclass == 0x25D && t->state != 0xFE && t->state != 0xFD && hero.unk2044 < 1.0f) {
+                    tv = (TargetVars2d2ee8 *)t->pvars;
+                    while (tv->count > 0) {
+                        w[0] = random_float_between(1.0f, 10.0f) * D_0015ED6C;
+                        w[1] = random_float_between(-10.0f, 10.0f) * D_0015ED6C;
+                        w[2] = random_float_between(1.0f, 12.0f) * D_0015ED6C;
+                        FUN_001f9cf8(w, w, &hero);
+                        {
+                            Vec4f *q = &hero.unk2040->pos;
+
+                            qcopy(q, &vars->pos);
+                            FUN_L00_0025f8e0(q, 0.2f);
+                        }
+                        t = hero.unk2040;
+                        FUN_L00_002a7438(t, &t->pos, w, 0x13, 5, 0);
+                        t = hero.unk2040;
+                        qcopy(&t->pos, &vars->pos);
+                        if (tv != 0) {
+                            if (tv->count > 0) {
+                                tv->count -= 5;
+                                t = hero.unk2040;
+                            }
+                            FUN_L00_002d2e28((u8 *)t);
+                        } else {
+                            FUN_L00_002d2e28((u8 *)t);
+                        }
+                    }
+                    remove_moby_2d2ee8(hero.unk2040);
+                    hero.unk2040 = 0;
+                    hero.unk2044 = 100000.0f;
+                    vars->unk8 = 0x7FFF;
+                    allocate_voice_for_target_entry(3, 0, moby);
+                    if (vars->voice2 != -1) {
+                        VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+
+                        if (e->owner == moby && e->active != 0) {
+                            release_voice_slot(vars->voice2);
+                        }
+                    }
+                    vars->voice2 = -1;
+                }
+            } else {
+                moby->unk90 = 0x80808080;
+                if (vars->voice0 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
+
+                    if (e->owner == moby && e->active != 0) {
+                        release_voice_slot(vars->voice0);
+                    }
+                }
+                vars->voice0 = -1;
+                if (vars->voice1 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice1 * 0x70);
+
+                    if (e->owner == moby && e->active != 0) {
+                        release_voice_slot(vars->voice1);
+                    }
+                }
+                vars->voice1 = -1;
+                if (vars->voice2 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+
+                    if (e->owner == moby && e->active != 0) {
+                        release_voice_slot(vars->voice2);
+                    }
+                }
+                vars->voice2 = -1;
+            }
+            enqueue_callback_list_1(FUN_L00_002d2a90, moby);
+            return;
+        }
+        moby->unk90 = 0x80808080;
+        if (vars->voice0 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
+
+            if (e->owner == moby && e->active != 0) {
+                release_voice_slot(vars->voice0);
+            }
+        }
+        vars->voice0 = -1;
+        if (vars->voice1 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice1 * 0x70);
+
+            if (e->owner == moby && e->active != 0) {
+                release_voice_slot(vars->voice1);
+            }
+        }
+        vars->voice1 = -1;
+        if (vars->voice2 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+
+            if (e->owner == moby && e->active != 0) {
+                release_voice_slot(vars->voice2);
+            }
+        }
+        vars->voice2 = -1;
+        break;
+    }
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -848,7 +1150,7 @@ int FUN_00213260_c(int) __asm__("FUN_00213260");
 void FUN_L00_002d7bf0(P *, int);
 void FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
 int FUN_001fa728(V *, float);
-float FUN_001f9b80(V *, V *);
+float FUN_001f9b80(void *, void *);
 float FUN_L00_00257c48(float, float);
 void FUN_001f9d20(V *, V *, void *);
 float random_float_between(float, float) __asm__("FUN_002132a8");

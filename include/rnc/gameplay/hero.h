@@ -548,8 +548,8 @@ struct Hero {
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
     u8 pad_1FF8[0x48];
-    s32 unk2040;                   /* 0x2040 */
-    f32 unk2044;                   /* 0x2044 */
+    struct Moby *unk2040;          /* 0x2040: nearest oclass 0x25D moby (FUN_L00_002d2ee8) */
+    f32 unk2044;                   /* 0x2044: distance to unk2040; 100000 when none */
     s32 unk2048;                   /* 0x2048 */
     u8 pad_204C[0x34];
     struct Moby *moby;             /* 0x2080: the hero's moby */

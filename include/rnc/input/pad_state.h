@@ -17,7 +17,9 @@ struct PadState {
     u8 pad_0[0x100] __attribute__((aligned(16)));
     f32 analog[16];                     /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */
     f32 analog_prev[16];                /* 0x140: copy of analog */
-    u8 pad_180[0x14];
+    u8 pad_180[0x9];
+    u8 unk189;                          /* 0x189: copied by FUN_L00_002d2ee8 on spawn */
+    u8 pad_18A[0xA];
     s32 socket;                         /* 0x194: scePad2CreateSocket(&param, &D_0013C940) result, init_pads */
     s32 profile_state;                  /* 0x198: 0 query profile, 1 read pad, 2 profile too long */
     s32 device_state;                   /* 0x19C: scePad2GetState result */
