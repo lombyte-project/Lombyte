@@ -70,12 +70,12 @@ void set_pal_mode(void) {
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
     scissor = ((u64)(screen_extent.width - 1) << 16) | ((u64)(screen_extent.height - 1) << 48);
-    draw_environment.scissor1 = scissor;
     first_image_buffer_address = image_buffer_address;
+    draw_environment.scissor1 = scissor;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
     second_image_buffer_address = image_buffer_address;
-    draw_environment.zbuf2 = zbuf;
     draw_environment.zbuf1 = zbuf;
+    draw_environment.zbuf2 = zbuf;
     depth_buffer_register = zbuf;
     draw_environment.frame2 = draw_environment.frame1 = frame;
     draw_environment.xyoffset2 = screen_extent.left | ((u64)screen_extent.top << 32);
