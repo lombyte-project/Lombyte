@@ -667,7 +667,34 @@ void FUN_L14_002f1140(char *moby) {
     *(float *)(d + 0xD4) = a * inv;
     *(float *)(d + 0xD8) = b * inv;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002f12f0.s", FUN_L14_002f12f0);
+/* Finds the moby in this moby's group list whose vars tag at 0xB4 matches, or returns null. */
+struct TaggedVars {
+    u8 pad0[0xB4];
+    s16 tag;   /* 0xB4 */
+};
+
+extern s32 D_L14_0015FFF4;
+extern u16 *D_L14_001ABF40[];
+extern struct Moby *D_L14_0015FFD8_12f0 __asm__("D_L14_0015FFD8");
+
+struct Moby *FUN_L14_002f12f0(struct Moby *moby, int tag) {
+    u16 *p;
+    struct Moby *pool;
+    int idx;
+
+    if (moby->unk21 < D_L14_0015FFF4 && (p = D_L14_001ABF40[moby->unk21]) != 0) {
+        pool = D_L14_0015FFD8_12f0;
+        do {
+            idx = *p & 0x7FFF;
+            if (((struct TaggedVars *)pool[idx].pvars)->tag == tag) {
+                goto found;
+            }
+        } while ((s16)*p++ >= 0);
+    }
+    return 0;
+found:
+    return &D_L14_0015FFD8_12f0[idx];
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
