@@ -435,7 +435,7 @@ extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern int FUN_L00_0028d8c0(void *, int);
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -507,7 +507,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
             max_speed = D_0015ED70;
         }
         target = moby->state == 2 ? 1.0f : 0.0f;
-        advance_accelerated_scalar(&vars->progress, &vars->speed, target, max_speed, max_speed, accel);
+        approach_with_speed(&vars->progress, &vars->speed, target, max_speed, max_speed, accel);
         moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
         moby->rot.z = fast_subtract_rotations(D_L05_001600EC_l[vars->pose].rot.z, vars->base_yaw) * vars->progress;
         moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
