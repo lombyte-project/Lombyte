@@ -1087,7 +1087,73 @@ int FUN_L07_0030ed30(char *moby, char *data) {
     return 0;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030eee8.s", FUN_L07_0030eee8);
+/* Picks the walker heading: keeps going while the probe ahead stays on its path and clear,
+ * else sweeps by its turn step for a clear heading, else faces the goal. */
+struct WalkerPath {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];
+};
+
+struct WalkerData {
+    u8 pad0[0xF0];
+    Vec4 goal;                 /* 0xF0 */
+    u8 pad100[0x28];
+    struct WalkerPath *path;   /* 0x128 */
+    u8 pad12C[8];
+    s32 wander;                /* 0x134 */
+    u8 pad138[4];
+    f32 heading;               /* 0x13C */
+    f32 turnStep;              /* 0x140 */
+};
+
+extern float FUN_001f9dc8(float);
+extern float FUN_001f9de0(float);
+extern float FUN_001f9e90(float, float);
+extern float FUN_001f99c0(float);
+extern float FUN_001fa580(float, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int FUN_L00_00259740(void *, void *, int);
+extern int line_blocked_30eee8(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+
+void FUN_L07_0030eee8(struct Moby *moby, struct WalkerData *data) {
+    float probe[4];
+    float angle;
+    float swept;
+    float step;
+
+    if (data->wander == 0) {
+        data->heading = FUN_001f9e90(data->goal.f[0] - moby->pos.x, data->goal.f[1] - moby->pos.y);
+        return;
+    }
+    {
+        probe[0] = FUN_001f9dc8(moby->rot.z) * 5.2f;
+        probe[1] = FUN_001f9de0(moby->rot.z) * 5.2f;
+        *(s32 *)&probe[2] = 0;
+        add_vector_xyz(probe, probe, &moby->pos);
+        if (FUN_L00_00259740(probe, data->path->pts, data->path->count) &&
+            !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
+            !FUN_L00_001f0d60(1.5f, probe, 0x24, moby))
+            return;
+        step = FUN_001f99c0(data->turnStep);
+        angle = moby->rot.z;
+        for (swept = 0.0f; swept < 6.2831855f; swept += step) {
+            angle = FUN_001fa580(angle, data->turnStep);
+            probe[0] = FUN_001f9dc8(angle) * 5.2f;
+            probe[1] = FUN_001f9de0(angle) * 5.2f;
+            *(s32 *)&probe[2] = 0;
+            add_vector_xyz(probe, probe, &moby->pos);
+            if (FUN_L00_00259740(probe, data->path->pts, data->path->count) &&
+                !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
+                !FUN_L00_001f0d60(1.5f, probe, 0x24, moby)) {
+                data->heading = angle;
+                return;
+            }
+        }
+    }
+    data->heading = FUN_001f9e90(data->goal.f[0] - moby->pos.x, data->goal.f[1] - moby->pos.y);
+}
 
 extern float D_0015ED60;
 extern float dist_30f308(void *) __asm__("FUN_0020c9e0");
