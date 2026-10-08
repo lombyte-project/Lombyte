@@ -71,7 +71,124 @@ struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life)
     }
     return m;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307d68.s", FUN_L09_00307d68);
+/* Optional query block for collision_line: a swept probe along dir. */
+typedef struct {
+    OvlVec4 dir;                   /* 0x00: unit direction; z/w overwritten with 1 and a range */
+    struct Moby *self;             /* 0x10: moby to ignore */
+    s32 mask;                      /* 0x14: collision classes */
+    u8 unk18;
+    u8 unk19;
+    s16 oclass;                    /* 0x1A */
+    f32 radius;                    /* 0x1C */
+    s32 unk20;
+} CollisionProbe_307d68;
+
+extern f32 D_0015ED6C_307d68 __asm__("D_0015ED6C");
+extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
+extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
+extern OvlVec4 D_L09_00173FE0_307d68 __asm__("D_L09_00173FE0");
+extern u8 D_L09_00174000_307d68[] __asm__("D_L09_00174000");
+extern f32 distance_307d68(void *, void *) __asm__("FUN_001f9b48");
+extern f32 FUN_001f9b80_307d68(void *, void *) __asm__("FUN_001f9b80");
+extern void add_vector_xyz_307d68(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz_307d68(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001f9c48_307d68(void *, void *, f32) __asm__("FUN_001f9c48");
+extern s32 allocate_voice_307d68(s32, s32, void *) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
+extern s32 tick_countdown_16_307d68(s16 *) __asm__("FUN_001f9770");
+extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe_307d68 *) __asm__("FUN_001efa68");
+extern f32 random_float_between_307d68(f32, f32) __asm__("FUN_002132a8");
+extern void FUN_L00_001ff660_307d68(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern f32 vector_length_xyz_307d68(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz_307d68(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern s32 scale_game_frames_307d68(s32) __asm__("FUN_001f96f8");
+extern s32 random_int_between_307d68(s32, s32) __asm__("FUN_L00_00257b90");
+extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
+extern void FUN_L00_0025e450_307d68(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32,
+                                    f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern s32 FUN_L00_001f2868_307d68(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
+
+/*
+ * Update of the shot FUN_L09_00307ba8 spawns (cf. FUN_L04_002af058): moves
+ * along vel, plays its sound once it starts moving away from the hero within
+ * 3 units, dies outside the level box, and on a hit (probing along the line
+ * from the hero until the timer runs out) bursts into five sparks and a
+ * flash, damages around the hit and is removed.
+ */
+void FUN_L09_00307d68(struct Moby *m)
+{
+    OvlVec4 old;
+    CollisionProbe_307d68 pr;
+    OvlVec4 push;
+    OvlVec4 r;
+    ShotVars_307ba8 *v = (ShotVars_307ba8 *)m->pvars;
+    CollisionProbe_307d68 *probe;
+    f32 d;
+    s32 i;
+
+    d = distance_307d68(&m->pos, &D_0013F3D0_307d68);
+    qcopy(&old, &m->pos);
+    add_vector_xyz_307d68(&m->pos, &m->pos, &v->vel);
+    if (v->unk28 == 0 && v->unk24 != 0 && v->dist < d && d < 3.0f) {
+        allocate_voice_307d68(0, 0, m);
+        v->unk28 = 1;
+    }
+    if (d < v->dist)
+        v->unk24 = 1;
+    v->dist = d;
+    if (m->pos.x < 2.0f || 1021.0f < m->pos.x || m->pos.y < 2.0f || 1021.0f < m->pos.y
+        || m->pos.z < 2.0f || 1021.0f < m->pos.z
+        || 255.0f < FUN_001f9b80_307d68(&m->pos, &D_L09_00166F40_307d68)) {
+        mark_moby_for_removal_307d68(m);
+        return;
+    }
+
+    probe = 0;
+    if (m->unkBC == 0) {
+        pr.mask = 0x70001;
+        pr.radius = 3.0f;
+        pr.self = m;
+        pr.unk20 = 1;
+        qcopy(&pr.dir, &v->vel);
+        subtract_vector_xyz_307d68(&pr.dir, &m->pos, &D_0013F3D0_307d68);
+        FUN_001f9c48_307d68(&pr.dir, &pr.dir, 1.0f);
+        probe = &pr;
+        pr.dir.f[2] = 1.0f;
+        pr.dir.f[3] = 5627.9248f;
+        pr.unk18 = 1;
+        pr.unk19 = 3;
+        pr.oclass = m->oclass;
+    }
+    if (tick_countdown_16_307d68(&v->life) && m->unkBC == 0) {
+        m->unkBC = 1;
+        v->life = v->life_max / 4;
+    } else if (v->life <= 0 && m->unkBC != 0) {
+        mark_moby_for_removal_307d68(m);
+        return;
+    }
+    if (collision_line_307d68(&old, &m->pos, 0, v->owner, probe) == 0)
+        return;
+
+    qcopy(&m->pos, &D_L09_00173FE0_307d68);
+    if (m->unkBC == 0) {
+        for (i = 0; i < 5; i++) {
+            r.q = 0;
+            r.f[0] = random_float_between_307d68(-1.0f, 1.0f);
+            r.f[1] = random_float_between_307d68(-1.0f, 1.0f);
+            r.f[2] = random_float_between_307d68(-1.0f, 1.0f);
+            push.q = r.q;
+            FUN_L00_001ff660_307d68(&r, v, D_L09_00174000_307d68);
+            normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&r) * 0.5f);
+            add_vector_xyz_307d68(&push, &r, &push);
+            normalize_vector_xyz_307d68(&push, &push, random_float_between_307d68(D_0015ED6C_307d68 * 3.0f, D_0015ED6C_307d68 * 6.0f));
+            FUN_L00_0026dd20_307d68(&m->pos, &push, 0x7F2F4F6F,
+                                    random_int_between_307d68(scale_game_frames_307d68(10), scale_game_frames_307d68(15)), 60000.0f);
+        }
+    }
+    FUN_L00_0025e450_307d68(m, v, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
+    FUN_L00_001f2868_307d68(1.1f, &m->pos, 0x10, m, probe);
+    mark_moby_for_removal_307d68(m);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
 extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
