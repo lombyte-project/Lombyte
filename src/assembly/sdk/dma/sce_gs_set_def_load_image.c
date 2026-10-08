@@ -14,6 +14,14 @@ typedef struct {
     u64 q[12];
 } sceGsLoadImage __attribute__((aligned(16)));
 
+typedef struct {
+    u64 nloop : 15;
+    u64 eop : 1;
+    u64 unused : 42;
+    u64 flg : 2;
+    u64 rest : 4;
+} sceGsLoadImageTag;
+
 extern void scePrintf(const char *message, ...);
 extern void __sync_synchronize(void);
 
@@ -56,9 +64,12 @@ s32 sceGsSetDefLoadImage(sceGsLoadImage *image, s16 destination_base,
 
     *(u128 *)&image->q[10] = 0;
     *(u128 *)&image->q[0] = 0;
-    image->q[10] = (u64)(size & 0x7fff) | 0x0800000000008000ULL;
-    image->q[0] = 0x1000000000000004ULL;
-    image->q[1] = 0xe;
+    ((sceGsLoadImageTag *)&image->q[10])->nloop = size;
+    ((sceGsLoadImageTag *)&image->q[10])->eop = 1;
+    ((sceGsLoadImageTag *)&image->q[10])->flg = 2;
+    ((sceGsLoadImageTag *)&image->q[0])->nloop = 4;
+    ((sceGsLoadImageTag *)&image->q[0])->rest = 1;
+    image->q[1] = (image->q[1] & ~0xfULL) | 0xe;
     image->q[2] = ((u64)(s64)destination_base << 0x20) |
                   ((u64)(s64)destination_width << 0x30) |
                   ((u64)(s64)pixel_format << 0x38);
