@@ -3,6 +3,10 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/watch.h"
+#include "qcopy.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
 
 #define NOT_SDA
 
@@ -379,7 +383,243 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f408.s", FUN_L05_0030f408);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00314eb0.s", FUN_L05_00314eb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003150f0.s", FUN_L05_003150f0);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003156d0.s", FUN_L05_003156d0);
+/* pvars of the lift: it rides between two heights with the hero standing on it. */
+typedef struct {
+    u8 pad0[0x20];
+    char rider[0x40]; /* 0x20: carried-object state for FUN_L00_00260738 */
+    f32 top;          /* 0x60 */
+    f32 bottom;       /* 0x64 */
+    s32 marker;       /* 0x68: marker ring in D_L05_001B0930 and camera id, -1: none */
+    s32 pose;         /* 0x6C: index into D_L05_001600EC */
+    f32 progress;     /* 0x70: 0 at the bottom, 1 at the top */
+    s32 sound;        /* 0x74: voice slot, -1: none */
+    f32 fade;         /* 0x78 */
+    s32 timer;        /* 0x7C */
+    f32 phase;        /* 0x80: glow pulse angle */
+    f32 base_yaw;     /* 0x84 */
+    f32 speed;        /* 0x88 */
+} LiftVars;
+
+typedef struct {
+    u8 pad0[0x70];
+    Vec4f rot; /* 0x70: z: yaw at the top */
+} LiftPose;
+
+typedef struct {
+    u32 handle;
+    u8 state;
+    u8 pad5[0x13];
+    struct Moby *owner; /* 0x18 */
+    u8 pad1C[0x54];
+} LiftVoice;
+
+typedef struct {
+    u8 header[0x70];
+    LiftVoice voices[30];
+} LiftVoicePool;
+
+/* The pool seen from slot n: its voice field is voices[n]. */
+typedef struct {
+    u8 header[0x70];
+    LiftVoice voice;
+} LiftVoiceWindow;
+
+extern LiftVoicePool voice_pool __asm__("D_0013E550");
+extern u16 D_0014162A __attribute__((section(".data")));
+extern f32 D_L05_0015F3FC;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
+
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
+extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
+extern int FUN_L00_0028d8c0(void *, int);
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 FUN_001f99c0(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001f9b80(void *, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eaaa0(void *, void *, s32, s32, s32);
+extern void FUN_L00_002eac18(s32);
+extern void lift_camera_view(void *, void *, void *) __asm__("FUN_L05_00315ee0");
+extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");
+
+void FUN_L05_003156d0(struct Moby *moby) {
+    LiftVars *vars = (LiftVars *)moby->pvars;
+    Vec4 delta;
+    Vec4 rot;
+    Vec4 eye;
+    Vec4 look;
+    f32 scale;
+    f32 accel;
+    f32 max_speed;
+    f32 target;
+    s32 level;
+
+    scale_vector_xyz(&delta, &moby->pos, -1.0f);
+    qcopy(&rot, &moby->rot);
+    switch (moby->state) {
+    case 0:
+        vars->phase = random_angle_radians();
+        vars->sound = -1;
+        vars->base_yaw = moby->rot.z;
+        moby->state = 3;
+        break;
+    case 1:
+        D_0014162A = vars->marker;
+        approach_value(&vars->fade, 1.0f, 0.133f);
+        D_L05_0015F3FC = vars->fade;
+        if (vars->fade == 1.0f) {
+            lift_camera_view(moby, &eye, &look);
+            FUN_L00_002eaaa0(&eye, &look, 1, 0, 0);
+            moby->state = moby->unkBC;
+            moby->unkBC = 1;
+        }
+        break;
+    case 2:
+    case 3:
+        if (!FUN_L00_0028d8c0(moby, vars->sound)) {
+            vars->sound = allocate_voice_for_target_entry(0, 4, moby);
+        }
+        if (moby->unkBC) {
+            D_0014162A = vars->marker;
+            approach_value(&vars->fade, 0.0f, 0.133f);
+            D_L05_0015F3FC = vars->fade;
+            lift_camera_view(moby, &eye, &look);
+            FUN_L00_002ea9d8(&eye);
+            FUN_L00_002eaa30(&look);
+            scale = 1.0f / (vars->top - vars->bottom);
+            accel = D_0015ED6C * (moby->unkBC ? 6.0f : 16.0f) * scale;
+            max_speed = D_0015ED70 * (moby->unkBC ? 6.0f : 16.0f) * scale;
+        } else {
+            accel = D_0015ED6C;
+            max_speed = D_0015ED70;
+        }
+        target = moby->state == 2 ? 1.0f : 0.0f;
+        advance_accelerated_scalar(&vars->progress, &vars->speed, target, max_speed, max_speed, accel);
+        moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
+        moby->rot.z = fast_subtract_rotations(D_L05_001600EC_l[vars->pose].rot.z, vars->base_yaw) * vars->progress;
+        moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
+        if (FUN_001f99c0(vars->progress - target) < 0.01f) {
+            vars->timer = scale_game_frames(120);
+            if (vars->sound != -1) {
+                LiftVoiceWindow *window = (LiftVoiceWindow *)((u8 *)&voice_pool + vars->sound * sizeof(LiftVoice));
+                if (window->voice.owner == moby && window->voice.state != 0) {
+                    release_voice_slot(vars->sound);
+                }
+            }
+            vars->sound = -1;
+            if (vars->speed > 0.00125f) {
+                vars->speed = 0.00125f;
+            } else if (vars->speed < -0.00125f) {
+                vars->speed = -0.00125f;
+            }
+            if (moby->unkBC) {
+                if (moby->state == 2) {
+                    moby->state = 6;
+                } else {
+                    moby->state = 7;
+                }
+            } else {
+                if (moby->state == 2) {
+                    moby->state = 4;
+                } else {
+                    moby->state = 5;
+                }
+            }
+        }
+        break;
+    case 6:
+    case 7:
+        if (FUN_L00_0028d8c0(moby, vars->sound)) {
+            release_voice_slot(vars->sound);
+            vars->sound = -1;
+        }
+        if (vars->timer > scale_game_frames(30) || FUN_001f9b80(&hero.motion.pos, &moby->pos) > 0.5f) {
+            tick_countdown_32_alt(&vars->timer);
+        }
+        if (hero.unk2FC != moby) {
+            FUN_L00_002eac18(1);
+            if (moby->state == 7) {
+                moby->state = 5;
+            } else {
+                moby->state = 4;
+            }
+            break;
+        }
+        if (vars->timer != 0) {
+            break;
+        }
+        vars->phase = fast_add_rotations(vars->phase, D_0015ED6C * 6.2831855f);
+        level = truncate_float_to_s32((FUN_001f9de0(vars->phase) * 4.0f - 3.0f) * 128.0f);
+        if (level > 0x80) {
+            level = 0x80;
+        } else if (level < 0x20) {
+            level = 0x20;
+        }
+        moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
+        if (hero.unk2FC == moby && hero.unk30E.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
+            allocate_voice_for_target_entry(1, 0, moby);
+            moby->unk90 = 0x80208020;
+            if (moby->state == 7) {
+                moby->state = 2;
+            } else {
+                moby->state = 3;
+            }
+        }
+        break;
+    case 4:
+    case 5:
+        vars->phase = fast_add_rotations(vars->phase, D_0015ED6C * 6.2831855f);
+        level = truncate_float_to_s32((FUN_001f9de0(vars->phase) * 4.0f - 3.0f) * 128.0f);
+        if (level > 0x80) {
+            level = 0x80;
+        } else if (level < 0x20) {
+            level = 0x20;
+        }
+        moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
+        if (hero.unk2FC == moby && hero.unk30E.s == 0 && FUN_001f9b80(&hero.motion.pos, &moby->pos) < 0.5f) {
+            allocate_voice_for_target_entry(1, 0, moby);
+            if (vars->marker != -1) {
+                place_marker_ring(moby);
+            }
+            moby->unk90 = 0x80208020;
+            if (moby->state == 5) {
+                moby->unkBC = 2;
+            } else {
+                moby->unkBC = 3;
+            }
+            moby->state = 1;
+            vars->fade = 0.0f;
+        } else if (moby->state == 4) {
+            f32 dist = FUN_001f9b80(&moby->pos, &hero.motion.pos);
+            if (FUN_001f99c0(hero.unk2D8.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
+                moby->unkBC = 0;
+                moby->state = 3;
+            }
+        } else if (moby->state == 5) {
+            f32 dist = FUN_001f9b80(&moby->pos, &hero.motion.pos);
+            if (FUN_001f99c0(hero.unk2D8.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
+                moby->unkBC = 0;
+                moby->state = 2;
+            }
+        }
+        break;
+    }
+    add_vector_xyz(&delta, &delta, &moby->pos);
+    FUN_L00_00260738(vars->rider, &delta, &rot, &moby->rot);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
