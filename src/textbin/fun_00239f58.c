@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00239f58/FUN_00239f58.s", FUN_00239f58);
-#else
-#include "types.h"
 
 typedef struct {
     f32 samples[16][16];
@@ -63,6 +57,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 h01;
     f32 h11;
     f32 first_row_height;
+    f32 weight_x;
+    f32 weight_y;
 
     tile_index = find_surface_height_map(x, y, z);
     if (tile_index < 0) {
@@ -76,12 +72,12 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_x = x - fraction_x;
     fraction_y = y - fraction_y;
     column = truncate_float_to_s32(fraction_x / surface_height_grid.cell_width);
-    row = truncate_float_to_s32(fraction_y / surface_height_grid.cell_height);
+    row = truncate_float_to_s32(*&fraction_y / surface_height_grid.cell_height);
     fraction_x -= func_001FA6C0(column) * surface_height_grid.cell_width;
-    fraction_x /= surface_height_grid.cell_width;
+    weight_x = fraction_x / surface_height_grid.cell_width;
     fraction_y -= func_001FA6C0(row) * surface_height_grid.cell_height;
     /* Divide the signed remainder after rounding the row, before choosing the sample bank. */
-    fraction_y /= surface_height_grid.cell_height;
+    weight_y = fraction_y / surface_height_grid.cell_height;
     h00 = tile->layers[surface_height_layer].samples[row][column];
     if (column == 15) {
         h10 = tile->layers[surface_height_layer].right_edge[row];
@@ -105,9 +101,9 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
         h11 = tile->layers[surface_height_layer].samples[row + 1][column + 1];
     }
     if (height != NULL) {
-        first_row_height = h00 + (h10 - h00) * fraction_x;
+        first_row_height = h00 + (h10 - h00) * weight_x;
         *height = first_row_height +
-                  ((h01 + (h11 - h01) * fraction_x) - first_row_height) * fraction_y + tile->z;
+                  ((h01 + (h11 - h01) * weight_x) - first_row_height) * weight_y + tile->z;
     }
     if (normal != NULL) {
         x_tangent[0] = surface_height_grid.cell_width;
@@ -126,4 +122,3 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
 
 extern __typeof__(sample_surface_height_map) func_00239F58 __attribute__((alias("FUN_00239f58")));
 
-#endif /* NON_MATCHING */

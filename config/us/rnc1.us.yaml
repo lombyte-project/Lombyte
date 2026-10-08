@@ -2140,7 +2140,7 @@ segments:
           - [0x13accc, textbin, text_gap_00239d4c_before_fun_00239d60]
           - [0x13ace0, c, gameplay/vendor/find_zone_at_point]
           - [0x13aea4, textbin, text_gap_00239f24_after_fun_00239d60]
-          - [0x13aed8, c, assembly/textbin/fun_00239f58]
+          - [0x13aed8, c, textbin/fun_00239f58]
           - [0x13b1cc, textbin, text_gap_0023a24c_before_fun_0023a318]
           - [0x13b240, c, ui/menus/fun_0023a2c0]
           - [0x13b294, textbin, text_gap_0023a314_after_fun_0023a2c0]
