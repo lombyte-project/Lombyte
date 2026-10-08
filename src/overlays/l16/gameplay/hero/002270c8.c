@@ -483,9 +483,6 @@ void FUN_L00_00234e00(void);
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-static __inline__ void qcopy_nc(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2");
-}
 void FUN_L16_002270c8(void) {
     unsigned char *moby;
     int prevSub;

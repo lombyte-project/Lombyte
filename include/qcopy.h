@@ -18,4 +18,9 @@ static __inline__ void qcopy(void *dst, void *src) {
     __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
 }
 
+/* Same copy without the "memory" clobber, for the few spots where retail keeps a value read after the copy in a register instead of reloading it. */
+static __inline__ void qcopy_nc(void *dst, void *src) {
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2");
+}
+
 #endif /* LOMBYTE_QCOPY_H */
