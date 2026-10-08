@@ -1,11 +1,5 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x11C];
-    s32 unk11C;
-    u8 pad_120[0x6F0];
-    s32 unk810;
-};
-
+#include "rnc/sdk/libmpeg.h"
 extern u8 D_00153848[];
 extern s32 _Error();
 extern s32 _decMB0();

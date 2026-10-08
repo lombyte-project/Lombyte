@@ -1,10 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/input/pad_state.h"
 
-struct PadState {
-    u8 pad_0[0x1C4];
-    s32 unk1C4;
-};
 struct Globals_00141848 {
     u8 pad_0[0xA8];
     u16 unkA8;
@@ -52,10 +49,10 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
     index = table->unk3C;
     id = *((s16 *)(((u8 *)(table->unk48 + (index * 0xA))) + 0x6));
     start_index = menu->unk50;
-    if (D_0013C940.unk1C4 & 8) {
+    if (D_0013C940.pressed & 8) {
         menu->unk50 = (start_index + 1) % 8;
     }
-    if (D_0013C940.unk1C4 & 4) {
+    if (D_0013C940.pressed & 4) {
         tmp = menu->unk50;
         menu->unk50 = (tmp + 7) % 8;
     }
@@ -64,7 +61,7 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
         allocate_voice_for_target_entry(1, 0x11, menu->unk14);
     }
     if (id != 0) {
-        if (D_0013D4C0[id] != 0 && (D_0013C940.unk1C4 & 0x40)) {
+        if (D_0013D4C0[id] != 0 && (D_0013C940.pressed & 0x40)) {
             if ((u16)D_00141848.unkA8 <= 0xFFFEU) {
                 D_00141848.unkA8 = (u16)(D_00141848.unkA8 + 1);
             }

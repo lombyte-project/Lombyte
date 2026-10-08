@@ -1,9 +1,5 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x1B4];
-    s32 unk1B4;
-};
-
+#include "rnc/sdk/libmpeg.h"
 extern s32 _extrainfo();
 extern s32 _flushBuf();
 extern s32 _nextBit();

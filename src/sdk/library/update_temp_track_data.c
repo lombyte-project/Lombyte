@@ -1,21 +1,5 @@
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-struct MpegDecoder {
-    u8 pad_0[0x150];
-    s32 unk150;
-    u8 pad_154[0x58];
-    s32 unk1AC;
-    u8 pad_1B0[0x69C];
-    s32 unk84C;
-    s32 unk850;
-    s32 unk854;
-};
+#include "types.h"
+#include "rnc/sdk/libmpeg.h"
 void UpdateTempTrackData(struct MpegDecoder *arg0, s32 delta) {
     s32 temp_2_30;
     s32 temp_3_21;

@@ -1,10 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-struct PadState {
-    u8 pad_0[0x1C4];
-    s32 unk1C4;
-};
-
+#include "rnc/input/pad_state.h"
 struct ModeEntry {
     u8 pad_0[0x38];
     s32 unk38;
@@ -40,10 +36,10 @@ s32 FUN_002212b8(Menu *menu) {
     if (menu_system.current->unk40 != menu) {
         return 0;
     }
-    if ((D_0013C940.unk1C4 & 0xD00) && menu_system.unk124 == 0) {
+    if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
-    if (D_0013C940.unk1C4 & 0x10) {
+    if (D_0013C940.pressed & 0x10) {
         if (menu_system.current->unk38 != 0) {
             menu_system.next = menu_system.current->unk38;
         } else if (menu_system.unk124 == 0) {
@@ -51,10 +47,10 @@ s32 FUN_002212b8(Menu *menu) {
         }
     }
     prev = menu->cursor;
-    if ((D_0013C940.unk1C4 & 0x1000) && prev != 0) {
+    if ((D_0013C940.pressed & 0x1000) && prev != 0) {
         menu->cursor = prev - 1;
     }
-    if (D_0013C940.unk1C4 & 0x4000) {
+    if (D_0013C940.pressed & 0x4000) {
         cur = menu->cursor;
         if (menu->items[cur + 1].unk0 != 0) {
             menu->cursor = cur + 1;
@@ -76,7 +72,7 @@ s32 FUN_002212b8(Menu *menu) {
             }
         } while (n < 4);
     }
-    if (D_0013C940.unk1C4 & 0x40) {
+    if (D_0013C940.pressed & 0x40) {
         if (item->value != NULL) {
             *item->value = (*item->value + 1) % n;
             allocate_voice_for_target_entry(0, 0x11, menu->unk14);

@@ -1,11 +1,6 @@
 #include "types.h"
+#include "rnc/sdk/libmpeg.h"
 
-struct MpegDecoder {
-    u8 pad_0[0xDC];
-    s32 unkDC;
-    s32 unkE0;
-    s32 unkE4;
-};
 struct MpegOutputSize {
     u8 pad_0[0x4];
     s32 unk4;

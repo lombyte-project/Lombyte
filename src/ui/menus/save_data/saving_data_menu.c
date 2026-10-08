@@ -1,12 +1,4 @@
 #include "types.h"
-struct PadState {
-    u8 pad_0[0x1A4];
-    s32 unk1A4;
-    u8 pad_1A8[0xC];
-    s32 unk1B4;
-    u8 pad_1B8[0xC];
-    s32 unk1C4;
-};
 struct ModeEntry {
     u8 pad_0[0x38];
     s32 unk38;
@@ -44,6 +36,7 @@ extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/input/pad_state.h"
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 prepare_save_game() __asm__("FUN_002269c0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -93,7 +86,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
             return 0;
         }
     block_13:
-        if (0xD00 & D_0013C940.unk1C4) {
+        if (0xD00 & D_0013C940.pressed) {
             if (menu_system.unk124 == 0) {
                 return 1;
             }
@@ -101,7 +94,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
 
     block_17:
-        if (D_0013C940.unk1C4 & 0x10) {
+        if (D_0013C940.pressed & 0x10) {
             temp_2_126 = menu_system.current->unk38;
             if (temp_2_126 != 0) {
                 menu_system.next = temp_2_126;

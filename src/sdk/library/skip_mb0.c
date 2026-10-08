@@ -1,15 +1,5 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x150];
-    s32 unk150;
-    u8 pad_154[0x20];
-    s32 unk174;
-    u8 pad_178[0x38];
-    s32 unk1B0;
-    u8 pad_1B4[0x65C];
-    s32 unk810;
-};
-
+#include "rnc/sdk/libmpeg.h"
 struct MpegSkipState {
     s32 unk0;
     s32 unk4;
@@ -41,11 +31,11 @@ s32 _skipMB0(struct MpegDecoder *arg0, struct MpegSkipState *arg1, s32 *arg2, st
         arg1->unk4 = 0;
         arg1->unk0 = 0;
     }
-    if (arg0->unk174 == 3) {
+    if (arg0->picture_structure == 3) {
         *arg2 = 2;
     } else {
         *arg2 = 1;
-        temp_2_32 = arg0->unk174 == 2;
+        temp_2_32 = arg0->picture_structure == 2;
         arg3->unk4 = temp_2_32;
         arg3->unk0 = temp_2_32;
     }

@@ -1,12 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
 
-struct PadState {
-    u8 pad0[0x1C0];
-    u32 held;
-    u32 pressed;
-};
-
 struct Menu;
 
 struct ModeEntry {
@@ -32,6 +26,7 @@ struct GameProgress {
 
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/input/pad_state.h"
 extern struct GameProgress D_001A00F0;
 extern u8 D_0013DD40[];
 extern u32 D_001CF874[];

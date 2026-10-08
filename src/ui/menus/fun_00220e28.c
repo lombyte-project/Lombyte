@@ -1,11 +1,5 @@
 #include "types.h"
 
-struct PadState {
-    u8 pad0[0x1C0];
-    u32 held;
-    u32 pressed;
-};
-
 struct MenuOpt {
     void *name;
     u8 *flag;
@@ -32,6 +26,7 @@ struct ModeEntry {
 
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/input/pad_state.h"
 extern f32 D_0015F43C;
 extern u8 D_0016034C;
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");

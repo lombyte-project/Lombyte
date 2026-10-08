@@ -1,23 +1,5 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x80];
-    s32 unk80;
-    u8 pad_84[0x4];
-    u64 unk88;
-    u8 pad_90[0x20];
-    s32 unkB0;
-    s32 unkB4;
-    s32 unkB8;
-    s32 unkBC;
-    s32 unkC0;
-    s32 unkC4;
-    s32 unkC8;
-    s32 unkCC;
-    s32 unkD0;
-    u8 pad_D4[0x784];
-    struct MpegDisplayState *unk858;
-};
-
+#include "rnc/sdk/libmpeg.h"
 struct MpegRefImage {
     u8 pad_0[0x28];
     s32 unk28;
