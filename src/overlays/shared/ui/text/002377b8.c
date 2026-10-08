@@ -530,7 +530,115 @@ void FUN_L00_00239d00(T00239d00 *o) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00239df8.s", FUN_L00_00239df8);
+/*
+ * Draw callback of the bolt counter HUD element (queued by FUN_L00_00266448
+ * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
+ * cnt[0] / D_L00_0015F824, the spinning bolt icon (frame from *unk80), the
+ * bolt count with a drop shadow, and a thousands separator every three
+ * digits (an apostrophe, or a dot for languages 3 and 5). Returns the element width.
+ */
+
+extern s32 camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+/* read through a volatile one-element array: retail reloads it */
+extern volatile s32 pal_mode[1] __asm__("D_0015ED80");
+extern s32 current_bolt_count __asm__("D_0015ED98");
+extern s32 game_language __asm__("D_0015ED88");
+extern s32 bolt_panel_open_steps __asm__("D_L00_0015F824") __attribute__((sda));
+extern s32 bolt_text_fade_steps __asm__("D_L00_0015F828") __attribute__((sda));
+extern s32 bolt_text_color_clear __asm__("D_L00_0015F82C") __attribute__((sda));
+extern s32 bolt_text_color_opaque __asm__("D_L00_0015F830") __attribute__((sda));
+extern s32 bolt_text_dx __asm__("D_L00_0015F834") __attribute__((sda));
+extern s32 bolt_text_dy __asm__("D_L00_0015F838") __attribute__((sda));
+/* separator offsets: apostrophe, then dot */
+extern s32 separator_apostrophe_dx __asm__("D_L00_0015F83C") __attribute__((sda));
+extern s32 separator_apostrophe_dy __asm__("D_L00_0015F840") __attribute__((sda));
+extern s32 separator_dot_dx __asm__("D_L00_0015F844") __attribute__((sda));
+extern s32 separator_dot_dy __asm__("D_L00_0015F848") __attribute__((sda));
+extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
+/* "%d" */
+extern char bolt_count_format[] __asm__("D_L00_0015F850") __attribute__((section(".data")));
+extern char separator_apostrophe[] __asm__("D_L00_0015F858") __attribute__((section(".data")));
+extern char separator_dot[] __asm__("D_L00_0015F860") __attribute__((section(".data")));
+
+extern f32 ConvertIntegerToFloat(int) __asm__("FUN_001fa6c0");
+extern int FastTweenColor(int, int, f32) __asm__("FUN_001fa6e0");
+extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
+extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
+extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+/* int return and no prototype are load-bearing */
+extern int sprintf_alt() __asm__("FUN_00116248");
+extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
+
+int FUN_L00_00239df8(HudElem *m)
+{
+    char buf[16];
+    s16 *frame;
+    u8 *fade;
+    int apostrophe;
+    int off;
+    int panel_x, cap_x, icon_x;
+    int y, x, digits, alpha, n, slide, color, shadow, sx, sy, i, dx, dy;
+    f32 open, text;
+
+    frame = m->unk80;
+    /* the byte offset kept in a local is load-bearing (retail tests m + off) */
+    off = 0x70;
+    if (camera_secondary_mode == 50 || ((u8 *)m)[off] == 0)
+        return m->w;
+
+    fade = m->cnt;
+    y = pal_mode[0] ? 10 : 18;
+    x = m->unk50;
+
+    open = ConvertIntegerToFloat(m->cnt[0]) / ConvertIntegerToFloat(bolt_panel_open_steps);
+    if (1.0f < open)
+        open = 1.0f;
+    else if (open < 0.0f)
+        open = 0.0f;
+    text = ConvertIntegerToFloat(fade[1]) / ConvertIntegerToFloat(bolt_text_fade_steps);
+    if (1.0f < text)
+        text = 1.0f;
+    else if (text < 0.0f)
+        text = 0.0f;
+
+    digits = 1;
+    panel_x = x - 0x1C;
+    cap_x = x - 0xC;
+    icon_x = x - 0x20;
+    alpha = truncate_float_to_s32((f32)truncate_float_to_s32(open * 128.0f) * 0.7f);
+    for (n = current_bolt_count; n >= 10; n /= 10)
+        digits++;
+    apostrophe = 0;
+
+    /* panel: right cap, stretched middle, left cap */
+    slide = truncate_float_to_s32((f32)(digit_width * digits) * open);
+    draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), cap_x, y, 32, 32, alpha);
+    panel_x -= slide;
+    draw_hud_sprite(get_icon_frame(0x7580, 0), panel_x, y, slide + 0x10, 32, alpha);
+    draw_hud_sprite(get_icon_frame(0x7580, 1), panel_x - 0x20, y, 32, 32, alpha);
+    draw_hud_icon(m, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
+
+    /* the count, shadow first */
+    color = FastTweenColor(bolt_text_color_clear, bolt_text_color_opaque, text);
+    shadow = FastTweenColor(0, 0x80000000, text);
+    sprintf_alt(buf, bolt_count_format, current_bolt_count);
+    font_print_right(x + bolt_text_dx + 1, y + bolt_text_dy + 1, shadow, buf, -1);
+    font_print_right(x + bolt_text_dx, y + bolt_text_dy, color, buf, -1);
+
+    /* thousands separators */
+    if (game_language != 3)
+        apostrophe = game_language != 5;
+    sprintf_alt(buf, apostrophe ? separator_apostrophe : separator_dot);
+    dy = apostrophe ? separator_apostrophe_dy : separator_dot_dy;
+    dx = apostrophe ? separator_apostrophe_dx : separator_dot_dx;
+    for (i = 3; i < digits; i += 3) {
+        sx = x + dx;
+        sy = y + dy;
+        font_print_right(sx - digit_width * i + 2, sy + 2, shadow, buf, -1);
+        font_print_right(sx - digit_width * i, sy, color, buf, -1);
+    }
+    return m->w;
+}
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0 __attribute__((sda));
