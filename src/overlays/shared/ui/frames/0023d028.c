@@ -59,6 +59,7 @@ void FUN_L00_0023d028(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d198.s", FUN_L00_0023d198);
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));
+/* Appends D_L00_001C3E98[i] to the 0xFF-terminated D_0015EDD0 list unless already present. */
 void FUN_L00_0023d3d8(int i) {
     int v = D_L00_001C3E98[i];
     int j;

@@ -425,6 +425,7 @@ extern void FUN_001fa2b8(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_0020e098(void *);
 
+/* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
 void FUN_L00_002d9fd0(char *a, char *b, void *c) {
     V t0, t1, t2;
     FUN_001fa050(&t0, c);

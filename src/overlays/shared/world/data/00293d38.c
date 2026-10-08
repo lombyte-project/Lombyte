@@ -18,6 +18,7 @@ typedef struct {
 extern StashSlot D_L00_001C12D8[];
 extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 
+/* SIF-DMAs size quadwords from slot base + off; -3 for a bad or empty slot, -1 past its limit. */
 int FUN_L00_00293d38(int arg, unsigned int slot, int off, int size) {
     int req[4];
     int lim;

@@ -41,6 +41,7 @@ extern unsigned char D_0014161B[];
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00232628(void);
 
+/* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
 void FUN_L00_00204f80(void) {
     char *g = D_0013F350;
     *(float *)(g + 0x220) = 0.8f;
@@ -1301,6 +1302,7 @@ extern T00209240 D_L00_001E7C10;
 extern s32 D_001413D0_00209240 __asm__("D_001413D0") __attribute__((section(".data")));
 extern u8 D_0013FE10[];
 void FUN_L00_0024f8f0(s32, s32, T00209240 *, void *);
+/* Calls 0024f8f0 with mode 9 and a copy of D_L00_001E7C10 on a, or on D_001413D0 when a is 0. */
 void FUN_L00_00209240(s32 a) {
     T00209240 t;
     if (a == 0)

@@ -9,6 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fde98.s", FUN_L00_001fde98);
 #include "qcopy.h"
 extern char D_L00_0016EA40_001fe990[] __asm__("D_L00_0016EA40");
 float FUN_00213308_001fe990() __asm__("FUN_00213308");
+/* Fills the first free 0x20-byte D_L00_0016EA40 slot with v, b and x; returns its index or -1. */
 int FUN_L00_001fe990(u128 *v, int b, float x) {
     u128 t;
     u128 *tp = &t;

@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/gameplay/hero.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern char D_0013F350_u[] __asm__("D_0013F350");
@@ -91,10 +92,9 @@ void FUN_L12_0022de30(void) {
     }
 }
 #include "qcopy.h"
-#define P D_0013F350_231ae0
+#define P hero
 /* Same source as the exact FUN_L01_00231ae0, with a b12E2/i300 branch. */
 
-extern P231ae0 D_0013F350_231ae0 __asm__("D_0013F350");
 extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
 extern f32 D_0015ED60_231ae0 __asm__("D_0015ED60");
 extern f32 D_0015ED64_231ae0 __asm__("D_0015ED64");
@@ -102,43 +102,43 @@ extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P D_0013F350_231ae0
+#define P hero
 void FUN_L12_00232b18(void) {
-    switch (P.b20A4) {
+    switch (P.unk20A4) {
     case 0:
-        P.f228 = 0.8f;
-        P.f22C = 0.7f;
-        P.f230 = 0.45f;
+        P.unk228 = 0.8f;
+        P.unk22C = 0.7f;
+        P.unk230 = 0.45f;
         break;
     case 3:
-        P.f228 = 0.8f;
-        P.f22C = 0.6f;
-        P.f230 = 0.45f;
+        P.unk228 = 0.8f;
+        P.unk22C = 0.6f;
+        P.unk230 = 0.45f;
         break;
     }
-    if (P.i208C == 4) {
-        if (P.i198 > P.i420 && P.s41E == 0)
-            P.f22C = P.f434;
-    } else if (P.i2084 == 6) {
-        P.f22C = 0.5f;
-    } else if (P.i2084 == 4) {
-        P.f228 = 0.35000002f;
-    } else if ((u32)(P.i208C - 0x11) < 2) {
-        P.f228 = 0.0f;
-        P.f22C = 0.0f;
-    } else if (P.b12E2 && P.i300) {
-        P.f228 = 0.8f;
-        P.f22C = 0.9f;
-    } else if (P.i2084 == 0x7F) {
-        P.f230 = 0.8f;
+    if (P.control_mode == 4) {
+        if (P.unk198 > P.unk420 && P.unk41E == 0)
+            P.unk22C = P.unk434;
+    } else if (P.secondary_mode == 6) {
+        P.unk22C = 0.5f;
+    } else if (P.secondary_mode == 4) {
+        P.unk228 = 0.35000002f;
+    } else if ((u32)(P.control_mode - 0x11) < 2) {
+        P.unk228 = 0.0f;
+        P.unk22C = 0.0f;
+    } else if (P.unk12E2 && P.unk300) {
+        P.unk228 = 0.8f;
+        P.unk22C = 0.9f;
+    } else if (P.secondary_mode == 0x7F) {
+        P.unk230 = 0.8f;
     }
-    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 ||
-        FUN_001f9b80_231ae0(P.v210, P.v80) > P.f234 * 0.5f) {
+    if (!P.unk257 || P.unk2094 == 0x12 || P.control_mode == 0x11 || P.base_condition ||
+        FUN_001f9b80_231ae0(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
-        P231ae0 *b = (P231ae0 *)((u8 *)q - 0x220);
-        approach_value_231ae0(b->f228, D_0015ED60_231ae0 * 0.02f, q);
-        approach_value_231ae0(b->f22C, D_0015ED60_231ae0 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->f230, D_0015ED64_231ae0 * 0.02f,
+        struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
+        approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
+        approach_value_231ae0(b->unk22C, D_0015ED60_231ae0 * 0.02f, q + 1);
+        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->unk230, D_0015ED64_231ae0 * 0.02f,
                                 D_0015ED64_231ae0 * 0.3f, D_0015ED6C_231ae0 * 4.0f);
     }
 }

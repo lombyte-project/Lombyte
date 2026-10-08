@@ -153,6 +153,7 @@ void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
 
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 
+/* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
 unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     int v[3];
     unsigned a;

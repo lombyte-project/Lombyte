@@ -45,6 +45,7 @@ extern char *D_L00_0015F660;
 extern char D_L00_00179410[];
 extern unsigned char D_0014161B[];
 
+/* When D_L00_00179410 is active, may set the 0x5A state to 5, then clears and resets the record. */
 void FUN_L00_002039a0(void) {
     if (*(int *)(D_L00_00179410) != 0) {
         int v = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);

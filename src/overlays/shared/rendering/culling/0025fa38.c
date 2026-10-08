@@ -46,6 +46,7 @@ extern int D_L00_001600F4;
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 
+/* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
 int FUN_L00_0025faf0(float *p, int idx) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));

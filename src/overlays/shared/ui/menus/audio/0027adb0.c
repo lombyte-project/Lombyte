@@ -12,6 +12,7 @@ extern s32 D_0015EE30;
 extern u8 D_00141E08[];
 extern u16 D_L00_00179452[];
 extern E_27adb0 D_L00_001B3D40[];
+/* Fills D_L00_001B3D40 from the D_00141E08 table in reverse order, then ends it with 0. */
 s32 FUN_L00_0027adb0(void) {
     s32 i, j;
     for (i = 0; i < D_0015EE30; i = j) {

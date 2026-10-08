@@ -443,6 +443,7 @@ M25f878 *FUN_L00_0025f878(s32 id) {
     return 0;
 }
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+/* Adds a random offset in [-r, r] to each of v[0..2]. */
 void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[0] += random_float_between(-r, r);
     v[1] += random_float_between(-r, r);

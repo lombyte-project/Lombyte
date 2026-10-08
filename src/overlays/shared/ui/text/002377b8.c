@@ -13,6 +13,7 @@ extern struct G D_0013F350;
 extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
 int FUN_001f96f8(int);
+/* Sets p+8 to 10 or 5 by D_0013E529, then sets or caps the 0x7C timer by the hero mode. */
 void FUN_L00_002377b8(char *p) {
     FUN_L00_00235ea0(p);
     if (D_0013E529[0] != 0)

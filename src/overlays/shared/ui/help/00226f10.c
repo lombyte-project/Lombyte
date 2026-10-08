@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/gameplay/hero.h"
 
 #define NOT_SDA
 
@@ -350,7 +351,6 @@ void FUN_L01_00231450(void) {
     }
     FUN_L01_0023cf98(0, 1);
 }
-extern G_8 D_0013F350_8 __asm__("D_0013F350");
 extern s32 D_L01_0015F5C4_8 __asm__("D_L01_0015F5C4");
 extern T_8 D_L01_00178580_8[] __asm__("D_L01_00178580");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
@@ -371,7 +371,7 @@ void FUN_L01_0023cf98_8(s32, s32) __asm__("FUN_L01_0023cf98");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-#define G D_0013F350_8
+#define G hero
 
 s32 FUN_L01_00231580(s32 arg) {
     u8 *m;
@@ -382,23 +382,23 @@ s32 FUN_L01_00231580(s32 arg) {
     f32 a, b, e;
     V_8 v;
 
-    if (G.i208C == 0x14) {
+    if (G.control_mode == 0x14) {
         return 0;
     }
-    if (G.i208C == 7) {
+    if (G.control_mode == 7) {
         return 0;
     }
-    if (G.i2084 == 0x32) {
+    if (G.secondary_mode == 0x32) {
         return 0;
     }
-    if (G.i1C0 != 0) {
+    if (G.unk1C0 != 0) {
         return 0;
     }
     if (D_L01_0015F5C4_8 != 0) {
         return 0;
     }
-    G.p2280 = 0;
-    m = G.p2080;
+    G.unk2280 = 0;
+    m = (u8 *)G.moby;
     if (m[0xA4] == 0xFF) {
         return 0;
     }
@@ -410,7 +410,7 @@ s32 FUN_L01_00231580(s32 arg) {
         return 0;
     }
     D_0013DF88_8[D_0015ED84_8]++;
-    G.p2280 = tbl->p20;
+    G.unk2280 = (struct Moby *)tbl->p20;
     D_0015EEA8_8++;
     if (arg == 0) {
         return 1;
@@ -425,47 +425,47 @@ s32 FUN_L01_00231580(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.f98, 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.f98, 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.unk98, 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.unk98, 3.1415927f));
         v.i[2] = 0;
     }
-    switch (G.b20A4) {
+    switch (G.unk20A4) {
     case 0:
-        mob = G.p2280;
+        mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
             FUN_L01_0023cf98_8(id, 1);
             return 1;
         }
-        if (G.i208C == 0x16) {
+        if (G.control_mode == 0x16) {
             FUN_L01_0023cf98_8(0x6D, 1);
-            G.f128 = D_0015ED6C_8 * 7.0f;
+            G.unk128 = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        if (G.i208C == 0x12) {
-            mob = G.p2280;
+        if (G.control_mode == 0x12) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             FUN_L01_0023cf98_8(0x75, 1);
-        } else if (G.i208C == 0x11) {
-            mob = G.p2280;
+        } else if (G.control_mode == 0x11) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             if (D_0015ED84_8 == 0xF || D_0015ED84_8 == 0x11) {
-                mob = G.p2280;
+                mob = (u8 *)G.unk2280;
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
                     FUN_L00_00216de8_8(0x1C, 0);
                 }
             }
             FUN_L01_0023cf98_8(0x76, 1);
-        } else if (G.i208C == 3) {
-            mob = G.p2280;
+        } else if (G.control_mode == 3) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0) {
                 id = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
@@ -479,7 +479,7 @@ s32 FUN_L01_00231580(s32 arg) {
         e = D_0015ED6C_8;
         a = e * 5.7f;
         b = e * 2.4f;
-        if (G.b12E7 != 0) {
+        if (G.unk12E7 != 0) {
             a = 0.0f;
             b = e * 1.7f;
         }
@@ -500,7 +500,6 @@ s32 FUN_L01_00231580(s32 arg) {
 /* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui_help_002020a8.c) /
    FUN_L00_00211380; L01 has only the mode-0 and mode-3 cases and no b12E2 branch. */
 
-extern P231ae0 D_0013F350_231ae0 __asm__("D_0013F350");
 extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
 extern f32 D_0015ED60_231ae0 __asm__("D_0015ED60");
 extern f32 D_0015ED64_231ae0 __asm__("D_0015ED64");
@@ -508,40 +507,40 @@ extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-#define P D_0013F350_231ae0
+#define P hero
 void FUN_L01_00231ae0(void) {
-    switch (P.b20A4) {
+    switch (P.unk20A4) {
     case 0:
-        P.f228 = 0.8f;
-        P.f22C = 0.7f;
-        P.f230 = 0.45f;
+        P.unk228 = 0.8f;
+        P.unk22C = 0.7f;
+        P.unk230 = 0.45f;
         break;
     case 3:
-        P.f228 = 0.8f;
-        P.f22C = 0.6f;
-        P.f230 = 0.45f;
+        P.unk228 = 0.8f;
+        P.unk22C = 0.6f;
+        P.unk230 = 0.45f;
         break;
     }
-    if (P.i208C == 4) {
-        if (P.i198 > P.i420 && P.s41E == 0)
-            P.f22C = P.f434;
-    } else if (P.i2084 == 6) {
-        P.f22C = 0.5f;
-    } else if (P.i2084 == 4) {
-        P.f228 = 0.35000002f;
-    } else if ((u32)(P.i208C - 0x11) < 2) {
-        P.f228 = 0.0f;
-        P.f22C = 0.0f;
-    } else if (P.i2084 == 0x7F) {
-        P.f230 = 0.8f;
+    if (P.control_mode == 4) {
+        if (P.unk198 > P.unk420 && P.unk41E == 0)
+            P.unk22C = P.unk434;
+    } else if (P.secondary_mode == 6) {
+        P.unk22C = 0.5f;
+    } else if (P.secondary_mode == 4) {
+        P.unk228 = 0.35000002f;
+    } else if ((u32)(P.control_mode - 0x11) < 2) {
+        P.unk228 = 0.0f;
+        P.unk22C = 0.0f;
+    } else if (P.secondary_mode == 0x7F) {
+        P.unk230 = 0.8f;
     }
-    if (!P.b257 || P.i2094 == 0x12 || P.i208C == 0x11 || P.b12E4 ||
-        FUN_001f9b80_231ae0(P.v210, P.v80) > P.f234 * 0.5f) {
+    if (!P.unk257 || P.unk2094 == 0x12 || P.control_mode == 0x11 || P.base_condition ||
+        FUN_001f9b80_231ae0(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
-        P231ae0 *b = (P231ae0 *)((u8 *)q - 0x220);
-        approach_value_231ae0(b->f228, D_0015ED60_231ae0 * 0.02f, q);
-        approach_value_231ae0(b->f22C, D_0015ED60_231ae0 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->f230, D_0015ED64_231ae0 * 0.02f,
+        struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
+        approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
+        approach_value_231ae0(b->unk22C, D_0015ED60_231ae0 * 0.02f, q + 1);
+        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->unk230, D_0015ED64_231ae0 * 0.02f,
                                 D_0015ED64_231ae0 * 0.3f, D_0015ED6C_231ae0 * 4.0f);
     }
 }

@@ -5,7 +5,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
-extern G_8 D_0013F350_8 __asm__("D_0013F350");
+#include "rnc/gameplay/hero.h"
 extern s32 D_L08_0015F5C4_8 __asm__("D_L08_0015F5C4");
 extern T_8 D_L08_00178900_8[] __asm__("D_L08_00178900");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
@@ -25,7 +25,7 @@ void FUN_L08_00230b38_8(s32, s32) __asm__("FUN_L08_00230b38");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
-#define G D_0013F350_8
+#define G hero
 
 s32 FUN_L08_00222800(s32 arg) {
     u8 *m;
@@ -36,23 +36,23 @@ s32 FUN_L08_00222800(s32 arg) {
     f32 a, b, e;
     V_8 v;
 
-    if (G.i208C == 0x14) {
+    if (G.control_mode == 0x14) {
         return 0;
     }
-    if (G.i208C == 7) {
+    if (G.control_mode == 7) {
         return 0;
     }
-    if (G.i2084 == 0x32) {
+    if (G.secondary_mode == 0x32) {
         return 0;
     }
-    if (G.i1C0 != 0) {
+    if (G.unk1C0 != 0) {
         return 0;
     }
     if (D_L08_0015F5C4_8 != 0) {
         return 0;
     }
-    G.p2280 = 0;
-    m = G.p2080;
+    G.unk2280 = 0;
+    m = (u8 *)G.moby;
     if (m[0xA4] == 0xFF) {
         return 0;
     }
@@ -64,10 +64,10 @@ s32 FUN_L08_00222800(s32 arg) {
         return 0;
     }
     D_0013DF88_8[current_level_index]++;
-    G.p2280 = tbl->p20;
+    G.unk2280 = (struct Moby *)tbl->p20;
     D_0015EEA8_8++;
-    if (G.i208C == 0xF) {
-        G.h5BE = 1;
+    if (G.control_mode == 0xF) {
+        G.unk5BE = 1;
         return 0;
     }
     if (arg == 0) {
@@ -83,47 +83,47 @@ s32 FUN_L08_00222800(s32 arg) {
     } else if (tbl->p20 != 0) {
         FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
     } else {
-        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.f98, 3.1415927f));
-        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.f98, 3.1415927f));
+        v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.unk98, 3.1415927f));
+        v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.unk98, 3.1415927f));
         v.i[2] = 0;
     }
-    switch (G.b20A4) {
+    switch (G.unk20A4) {
     case 0:
-        mob = G.p2280;
+        mob = (u8 *)G.unk2280;
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
             FUN_L08_00230b38_8(id, 1);
             return 1;
         }
-        if (G.i208C == 0x16) {
+        if (G.control_mode == 0x16) {
             FUN_L08_00230b38_8(0x6D, 1);
-            G.f128 = D_0015ED6C_8 * 7.0f;
+            G.unk128 = D_0015ED6C_8 * 7.0f;
             return 1;
         }
-        if (G.i208C == 0x12) {
-            mob = G.p2280;
+        if (G.control_mode == 0x12) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             FUN_L08_00230b38_8(0x75, 1);
-        } else if (G.i208C == 0x11) {
-            mob = G.p2280;
+        } else if (G.control_mode == 0x11) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
                 id = 0x82;
                 goto call_ret;
             }
             if (current_level_index == 0xF || current_level_index == 0x11) {
-                mob = G.p2280;
+                mob = (u8 *)G.unk2280;
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
                     FUN_L00_00216de8_8(0x1C, 0);
                 }
             }
             FUN_L08_00230b38_8(0x76, 1);
-        } else if (G.i208C == 3) {
-            mob = G.p2280;
+        } else if (G.control_mode == 3) {
+            mob = (u8 *)G.unk2280;
             if (mob != 0) {
                 id = 0x82;
                 if (*(s16 *)(mob + 0xA6) == 0x28F) {
@@ -137,7 +137,7 @@ s32 FUN_L08_00222800(s32 arg) {
         e = D_0015ED6C_8;
         a = e * 5.7f;
         b = e * 2.4f;
-        if (G.b12E7 != 0) {
+        if (G.unk12E7 != 0) {
             a = 0.0f;
             b = e * 1.7f;
         }

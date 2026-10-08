@@ -678,6 +678,7 @@ void FUN_L00_002223f8();
 void FUN_L00_002b57f0_u() __asm__("FUN_L00_002b57f0");
 void FUN_L00_00203b78();
 void mark_moby_for_removal() __asm__("FUN_0020c828");
+/* Clears the moby state word 4 and the 0x14 handle, calls release helpers, marks a for removal. */
 void FUN_L00_002b5b20(void *a, char **b) {
     char *x = *(char **)(*b + 0x78);
     if (x)

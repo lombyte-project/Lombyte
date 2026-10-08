@@ -36,6 +36,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 
+/* Sets a to b plus c (normalised) scaled by s times the dot of c and b. */
 void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
     Vq t0, t1;
     FUN_001f9bf8(&t1, c, 1.0f);

@@ -932,6 +932,7 @@ void FUN_L00_002335c8(float *out, float r, float angle, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233EE0), where it is exact; names translated to the US level program. */
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+/* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
 void FUN_L00_00233660(float *out, float x, float y, float z) {
     char *base;
 
@@ -1201,6 +1202,7 @@ extern u8 D_0013F350_00233d30[] __asm__("D_0013F350");
 void FUN_001f9d20_00233d30(void *, void *, void *) __asm__("FUN_001f9d20");
 f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
+/* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
 f32 FUN_L00_00233d30(f32 *v) {
     u8 *b = D_0013F350_00233d30;
     V00233d30 t;
@@ -1230,6 +1232,7 @@ extern s32 D_00140408[];
 extern TE33a D_L00_001C40B0[];
 extern s32 D_0013D428[];
 extern s32 D_0013DEA0[];
+/* Moves amount from D_0013D428[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 FUN_L00_00233db8(s32 idx, s32 amount) {
     s32 n;
     s32 v;
