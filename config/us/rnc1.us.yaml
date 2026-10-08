@@ -884,7 +884,7 @@ segments:
           - [0xea09c, textbin, text_gap_001e911c_after_fun_001e8d08]
           - [0xea0a8, c, runtime/dma/initialize_streaming_state]
           - [0xea0c0, textbin, text_gap_001e9140_before_fun_001e9168]
-          - [0xea0e8, c, assembly/textbin/rendering/texture/load_pif_as_psmt8_h]
+          - [0xea0e8, c, rendering/texture/load_pif_as_psmt8_h]
           - [0xea2b8, c, ui/fonts/load_debug_font]
           - [0xea324, textbin, text_gap_001e93a4_after_fun_001e9338]
           - [0xea330, c, sdk/debug/debug_print]
