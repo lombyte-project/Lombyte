@@ -335,6 +335,31 @@ class ProgressReportTests(unittest.TestCase):
             self.assertIn("No report for main yet", comment.render({}, new, "main"))
 
 
+class OverlaySourceStateTests(unittest.TestCase):
+    """overlay_units.source_state must count a C-named function bound to its label."""
+
+    def test_named_definition_counts_as_its_label(self):
+        units = load_module("rnc_overlay_units", ROOT / "scripts" / "overlay_units.py")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "src" / "overlays" / "l14").mkdir(parents=True)
+            (root / "src" / "overlays" / "l14" / "a.c").write_text(textwrap.dedent("""
+                extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
+                int hero_set_state(int a, int b) {
+                    return a + b;
+                }
+                void FUN_L14_00230000(void) {
+                }
+                INCLUDE_ASM("asm/FUN_L14_00230100.s", FUN_L14_00230100);
+                extern void other(void) __asm__("FUN_L14_00230200");
+            """))
+            stubs, c = units.source_state(root)
+        self.assertIn("FUN_L14_0022ff58", c)
+        self.assertIn("FUN_L14_00230000", c)
+        self.assertNotIn("FUN_L14_00230200", c)
+        self.assertEqual(list(stubs), ["FUN_L14_00230100"])
+
+
 class BaselineGuardTests(unittest.TestCase):
     """verify-baseline.sh must never delete a non-baseline directory."""
 

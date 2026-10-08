@@ -30,6 +30,10 @@ STUB_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*(FUN_L\d{2}_[0-9a-f]{8})
 # one-line definition); a prototype (its `;` right after the list) of a
 # function whose stub lives in another file is not that function's C
 DEF_RE = re.compile(r"^(?!extern\b)[A-Za-z_][\w\s\*]*?\b(FUN_L\d{2}_[0-9a-f]{8})\s*\([^;{}\n]*(?:\{|$)", re.M)
+# a C name bound to an overlay label (`int name(...) __asm__("FUN_L..");`) and
+# a definition under any name, so a named function counts as its label
+LABEL_RE = re.compile(r'\b([A-Za-z_]\w*)\s*\([^;{}]*\)\s*__asm__\s*\(\s*"(FUN_L\d{2}_[0-9a-f]{8})"\s*\)')
+NAMED_DEF_RE = re.compile(r"^(?!extern\b)[A-Za-z_][\w\s\*]*?\b([A-Za-z_]\w*)\s*\([^;{}\n]*(?:\{|$)", re.M)
 
 
 def load_levels(repo: Path) -> dict[int, dict]:
@@ -63,6 +67,11 @@ def source_state(repo: Path) -> tuple[dict[str, str], dict[str, str]]:
             stubs[name] = rel
         for name in DEF_RE.findall(text):
             if name not in stubs:
+                c[name] = rel
+        labels = dict(LABEL_RE.findall(text))
+        for cname in NAMED_DEF_RE.findall(text):
+            name = labels.get(cname)
+            if name and name not in stubs:
                 c[name] = rel
     return stubs, c
 
