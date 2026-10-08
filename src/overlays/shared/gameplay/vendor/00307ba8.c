@@ -2,7 +2,75 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307ba8.s", FUN_L09_00307ba8);
+#include "qcopy.h"
+#include "rnc/overlay/quad.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* pvars of the projectile moby FUN_L09_00307ba8 spawns */
+typedef struct {
+    OvlVec4 vel;     /* 0x00 */
+    f32 spin;        /* 0x10 */
+    s32 unk14;       /* 0x14 */
+    void *owner;     /* 0x18 */
+    s16 life;        /* 0x1C */
+    s16 life_max;    /* 0x1E */
+    f32 dist;        /* 0x20: distance from the hero at spawn */
+    s32 unk24;       /* 0x24 */
+    s32 unk28;       /* 0x28 */
+} ShotVars_307ba8;
+
+extern f32 D_0015ED6C_307ba8 __asm__("D_0015ED6C");
+extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
+extern struct Moby *create_moby_307ba8(s32) __asm__("FUN_0020c4f8");
+extern f32 vector_length_xy_307ba8(OvlVec4 *) __asm__("FUN_001f9b20");
+extern f32 atan2_307ba8(f32, f32) __asm__("FUN_001f9e90");
+extern f32 random_float_between_307ba8(f32, f32) __asm__("FUN_002132a8");
+extern f32 distance_307ba8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b48");
+extern u8 *FUN_L00_0026daa0_307ba8(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
+extern void FUN_L00_00250df8_307ba8(struct Moby *) __asm__("FUN_L00_00250df8");
+
+struct Moby *FUN_L09_00307ba8(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) {
+    OvlVec4 p;
+    OvlVec4 v;
+    OvlVec4 *pp = &p;
+    OvlVec4 *vp = &v;
+    struct Moby *m;
+    ShotVars_307ba8 *pv;
+    f32 r;
+    s32 trail;
+
+    p.q = pos->q;
+    v.q = vel->q;
+    m = create_moby_307ba8(0x4EA);
+    if (m != 0) {
+        pv = (ShotVars_307ba8 *)m->pvars;
+        pv->owner = owner;
+        m->rot.x = 0.0f;
+        m->scale *= 4.0f;
+        m->unk30 = 0xFF;
+        m->unk32 = 0xFF;
+        m->unk31 = 1;
+        m->rot.y = -atan2_307ba8(vector_length_xy_307ba8(vp), vp->f[2]);
+        m->rot.z = atan2_307ba8(v.f[0], vp->f[1]);
+        qcopy(&m->pos, pp);
+        qcopy(&pv->vel, vp);
+        r = D_0015ED6C_307ba8 * 1.5707964f;
+        pv->spin = random_float_between_307ba8(-r, r);
+        pv->unk14 = 0;
+        pv->life = life;
+        pv->life_max = life;
+        pv->dist = distance_307ba8((OvlVec4 *)&m->pos, &D_0013F3D0_307ba8);
+        pv->unk24 = 0;
+        pv->unk28 = 0;
+        trail = life * 5 / 4;
+        m->flags |= 0x200;
+        m->unk23 = 0x40;
+        FUN_L00_0026daa0_307ba8(400000.0f, m, 0x2F7F4F4F, trail, -1);
+        FUN_L00_0026daa0_307ba8(160000.0f, m, 0x4F7F7F7F, trail, -1);
+        FUN_L00_00250df8_307ba8(m);
+    }
+    return m;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00307d68.s", FUN_L09_00307d68);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030a778.s", FUN_L09_0030a778);
 extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");

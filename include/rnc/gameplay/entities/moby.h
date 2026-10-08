@@ -15,7 +15,7 @@ struct Moby {
     u8 state;                         /* >= 0xFE: dead, waiting to respawn */
     u8 unk21;
     u8 unk22;                         /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
-    u8 pad23;
+    u8 unk23;                         /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
     struct MobyClass *pclass;
     struct Moby *next;
     f32 scale;                        /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
