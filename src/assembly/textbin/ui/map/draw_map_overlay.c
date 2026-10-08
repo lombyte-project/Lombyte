@@ -341,21 +341,23 @@ void draw_map_overlay(void) {
             s32 ax, ay, bx, by;
             MapIcon *icon;
             s32 inner_offset;
+            s32 inner_stride;
 
             /* The flag-4 entry terminates the list. Separate overlapping icon
                bounds before either icon is drawn, using half of the smallest
                positive edge distance for each pair. */
             i = 0;
-            if (!(D_001A00F0.icons[1].flags & 4))
+            if (!(D_001A00F0.icons[1].flags & 4)) {
+                inner_stride = sizeof(MapIcon);
                 do {
                     if (D_001A00F0.icons[i].active == 0 || D_001A00F0.icons[i].texture_id == 0 ||
                         (D_001A00F0.icons[i].flags & 3)) {
                         goto next_outer_icon;
                     }
                     j = i + 1;
-                    inner_offset = j * sizeof(MapIcon);
+                    inner_offset = j * inner_stride;
                     for (; !(((MapIcon *)((u8 *)D_001A00F0.icons + inner_offset))->flags & 4);
-                         j++, inner_offset += sizeof(MapIcon)) {
+                         j++, inner_offset += inner_stride) {
                         pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                         if (pan_x <= 0)
                             continue;
@@ -402,6 +404,7 @@ void draw_map_overlay(void) {
                 next_outer_icon:
                     i++;
                 } while (!(D_001A00F0.icons[i + 1].flags & 4));
+            }
         }
 
         {

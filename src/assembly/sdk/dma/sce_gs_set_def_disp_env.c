@@ -60,7 +60,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     }
     output->smode2 = value;
     output->dispfb = ((u64)(pixel_storage_format & 15) << 15) |
-                     ((u64)(((width + 63) >> 6) & 63) << 9);
+                     ((u64)((width + 63) & 0xfc0) << 3);
 
     if (mode == 2) {
         if (interlace == 1) {

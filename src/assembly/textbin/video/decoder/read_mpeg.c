@@ -62,15 +62,16 @@ extern s32 vo_buf_is_full(s32) __asm__("func_0023D1F8");
 
    Timestamp handling is delegated, not omitted: init_all registers
    video_callback/pcm_callback; sceMpegDemuxPssRing supplies PES timestamps.
-   video_callback forwards signed 64-bit PTS/DTS through video_dec_put_ts
+   The callback record has data at +0x08, signed byte count at +0x0C,
+   and signed 64-bit PTS/DTS at +0x10/+0x18. video_callback forwards
+   these timestamps through video_dec_put_ts
    to ViBuf, while get_mpeg_timestamp returns them to libmpeg. The PCM
    callback feeds AudioDec; is_audio_ok gates startup, not a timestamp
    comparison here. These contracts follow existing C and retail callers;
    playback timing and malformed-stream behavior have not been run on PS2.
-   Dependency gaps for mechanical import: video_dec_set_stream's C wrapper
-   does not explicitly forward its callback arguments, and video_callback
-   tests video_dec_put_ts as s32 while that implementation declares void.
-   Their ABI/return contracts need separate recovery; no success is assumed.
+   video_dec_set_stream explicitly forwards the five callback-registration
+   arguments; video_dec_put_ts returns the timestamp queue result checked
+   by video_callback. Mechanical import must retain those contracts.
 
    Status: readable pending C, with retail oracle retained. Unknown pad and
    global meanings remain unnamed; this does not supply native IOP services. */

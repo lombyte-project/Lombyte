@@ -109,8 +109,8 @@ void update_view_context(void) {
     f32 vertical_fov;
     f32 viewport_width;
     f32 viewport_height;
-    s32 far_bits;
     s32 near_bits;
+    s32 far_bits;
     s32 mul_bits;
 
     depth_scale = -8388080.0f;
@@ -144,8 +144,8 @@ void update_view_context(void) {
     qcopy(&D_0018CFC0[3], &view->clip_distances);
 
     /* Retail lw instructions carry the fog endpoint float bits into packet fields. */
-    near_bits = *(s32 *)&view->fog_near_int;
     far_bits = *(s32 *)&view->fog_far_int;
+    near_bits = *(s32 *)&view->fog_near_int;
     fog_distance_range = view->fog_far_dist - view->fog_near_dist;
     fog_intensity_range = view->fog_far_int - view->fog_near_int;
     fog_multiplier = fog_intensity_range * near_clip / fog_distance_range;
@@ -163,13 +163,13 @@ void update_view_context(void) {
     D_001DE740.mul = mul_bits;
     D_001DE740.far_int = far_bits;
     D_001DE740.near_int = near_bits;
-    D_001DEA00.max = 0x437EFFFF;
     D_001DEA00.mul = mul_bits;
-    D_001DEA00.near_int = near_bits;
     D_001DE9B0.mul = mul_bits;
-    D_001DE9B0.near_int = near_bits;
     D_001DEA00.far_int = far_bits;
+    D_001DEA00.near_int = near_bits;
     D_001DE9B0.far_int = far_bits;
+    D_001DE9B0.near_int = near_bits;
+    D_001DEA00.max = 0x437EFFFF;
     D_001DE9B0.max = 0x437EFFFF;
     set_tfrag_dists();
 
@@ -209,22 +209,22 @@ void update_view_context(void) {
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;
     view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
-    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
     view->proj3[14] /= depth_scale;
-    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
+    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
+    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->screen_scale.f[0] = view->scr_x;
     view->screen_scale.f[1] = view->scr_y;
     view->screen_scale.f[2] = depth_scale;
     view->screen_scale.f[3] = view->fog_mul;
-    view->screen_bias.f[0] = 2048.0f;
-    view->screen_bias.f[1] = 2048.0f;
-    view->screen_bias.f[2] = 8388112.0f;
     view->inverse_projection_scale.f[0] = view->scr_x / view->proj[0];
-    view->screen_bias.f[3] = view->fog_add;
     view->inverse_projection_scale.f[1] = view->scr_y / view->proj[5];
     view->inverse_projection_scale.f[2] = depth_scale / view->proj[10];
     view->inverse_projection_scale.f[3] = view->fog_mul;
+    view->screen_bias.f[0] = 2048.0f;
+    view->screen_bias.f[1] = 2048.0f;
+    view->screen_bias.f[3] = view->fog_add;
+    view->screen_bias.f[2] = 8388112.0f;
     view->viewport_aspect.f[0] = view->scr_x / view->width;
     view->viewport_aspect.f[1] = view->scr_y / view->height;
     view->viewport_aspect.f[2] = 1.0f;

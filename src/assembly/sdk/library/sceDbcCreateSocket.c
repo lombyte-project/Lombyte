@@ -33,20 +33,16 @@ s32 sceDbcCreateSocket(struct DbcSocketParams *arg0, s32 arg1, s32 arg2) {
     struct DbcRpcBuffer *state = &D_0015B080;
     s32 i;
     s32 even;
-    s32 odd;
-    i = 0;
     state->unk28 = arg1;
     even = arg0->unk0;
+    i = 0;
     state->unk2C = arg2;
     state->unk0 = even;
-    odd = arg0->unk4;
-    state->unk4 = odd;
-    even = arg0->unk8;
-    state->unk8 = even;
-    odd = arg0->unkC;
-    state->unkC = odd;
-    even = arg0->unk10;
-    state->unk10 = even;
+    even = arg0->unk4;
+    state->unk4 = even;
+    state->unk8 = arg0->unk8;
+    state->unkC = arg0->unkC;
+    state->unk10 = arg0->unk10;
     do {
         state->pad_14[i] = arg0->name[i];
         i++;

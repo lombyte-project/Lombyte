@@ -51,7 +51,7 @@ s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
 
 s32 sound_options_menu(struct SoundMenu *menu) {
     s32 previous_selection;
-    s32 *first_volume;
+    s32 *first_volume = &D_0015EDF0;
     s32 previous_playback_mode;
     s32 previous_first_volume;
     s32 previous_second_volume;
@@ -84,7 +84,6 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     }
     previous_first_volume = D_0015EDF0;
     previous_second_volume = D_0015EDEC;
-    first_volume = &D_0015EDF0;
     if (D_0013C940.held_buttons & 0x2000) {
         if (menu->selected_option == 0) {
             D_0015EDF0 = (previous_second_volume + 3 < 0x401) ? previous_second_volume + 3 : 0x400;

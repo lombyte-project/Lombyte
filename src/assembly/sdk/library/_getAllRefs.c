@@ -87,10 +87,7 @@ void _getAllRefs(Decoder *d, int bx, int by, int mb_type, int motion_type, int p
                 _getRef0(d, refs[same][mvfs[1][0]], 0, 0, 8, 8, bx, by, pmv[1][0][0], pmv[1][0][1],
                          0, 0);
             } else if (motion_type == 3) {
-                same = 1;
-                if (!d->second_field) {
-                    same = 0;
-                }
+                same = d->second_field ? one : 0;
                 _dualPrimeVector(d, dmv, dmvector, pmv[0][0][0], pmv[0][0][1]);
                 _getRef0(d, refs[0][currentfield], 0, 0, 0, 16, bx, by, pmv[0][0][0], pmv[0][0][1],
                          0, 0);

@@ -41,7 +41,7 @@ extern s32 cd_check_ncmd() __asm__("func_00120A28");
 extern s32 sceCdNcmdDiskReady();
 extern s32 scePrintf();
 extern s32 sceSifCallRpc();
-extern s32 sceSifWriteBackDCache();
+extern void sceSifWriteBackDCache(void *ptr, s32 size);
 s32 sceCdRead(u32 dwSector, u32 dwSectorCount, s32 *pDestination, struct sceCdRMode *pMode) {
     s32 byteCount;
     s32 dataPattern;

@@ -1,16 +1,12 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_update/FUN_00216290.s",
-            FUN_00216290);
-#else
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 
 extern u8 D_00151704[];
 extern void snd_set_sound_params_cb(s32, s32, s32, s32, s32, s32,
-                                    void (*)(u32, s64), s32 *) __asm__("func_0012E4C0");
+                                    void (*)(u32, s64), s64) __asm__("func_0012E4C0");
 extern void set_sound_handle_id(u32, s64) __asm__("func_00216B68");
 extern void snd_continue_vag_stream(s32) __asm__("func_0012ECA0");
 extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
@@ -22,7 +18,7 @@ extern void music_start_track(s32, s32, s32) __asm__("func_00215C40");
 extern void music_start_track_body(s32, s32, s32) __asm__("func_00215D18");
 extern s32 music_transition(s32, s32, s32, s32) __asm__("func_00215E00");
 extern void music_update_stream(void *) __asm__("func_002160A8");
-extern s32 start_audio_stream_read(s32, s32, s32) __asm__("func_00216788");
+extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 
 void music_update(void) __asm__("FUN_00216290");
 
@@ -93,7 +89,7 @@ void music_update(void) {
                 /* The callback receives the old handle; mark its slot pending before submission. */
                 *(u32 *)&music_stream_state.primary.handle = 0xFFFFFFFF;
                 snd_set_sound_params_cb(handle, 5, fade_volume, 0, 0, 0, set_sound_handle_id,
-                                        &music_stream_state.primary.handle);
+                                        (s64)&music_stream_state.primary.handle);
             }
             break;
         case 3:
@@ -145,4 +141,5 @@ void music_update(void) {
         }
     }
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(music_update) func_00216290 __attribute__((alias("FUN_00216290")));

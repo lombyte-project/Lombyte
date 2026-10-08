@@ -117,11 +117,11 @@ void set_pal_mode(void) {
     first_image_buffer_address = image_buffer_address;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
     second_image_buffer_address = image_buffer_address;
+    draw_environment.zbuf2 = zbuf;
+    draw_environment.zbuf1 = zbuf;
     draw_environment.frame2 = draw_environment.frame1 = frame;
     draw_environment.xyoffset2 = screen_offsets.left | ((u64)screen_offsets.top << 32);
     draw_environment.xyoffset1 = screen_offsets.left | ((u64)screen_offsets.top << 32);
-    draw_environment.zbuf2 = zbuf;
-    draw_environment.zbuf1 = zbuf;
     depth_buffer_register = zbuf;
     draw_environment.scissor2 = scissor;
     FlushCache(0);

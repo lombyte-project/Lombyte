@@ -117,21 +117,19 @@ void _getRef0(Decoder *d, Frame *ref, int sfield, int dfield, int yofs, int h, i
 
     cdy = dy / 2;
     cdx = dx / 2;
-    ch = h >> 1;
     cx = (cdx >> 1) + (bx >> 1);
     if (fieldpred) {
-        cy = (cdy >> 1) * 2 + (by >> 1);
-        cy += (yofs >> 1) + sfield;
+        cy = ((cdy >> 1) * 2 + (by >> 1) + (yofs >> 1)) + sfield;
     } else {
-        cy = (cdy >> 1) + (by >> 1);
-        cy += (yofs >> 1) + sfield;
+        cy = ((cdy >> 1) + (yofs >> 1)) + ((by >> 1) + sfield);
     }
     cxm = cx >> 3;
     cym = cy >> 3;
     cxr = cx - cxm * 8;
     cyr = cy - cym * 8;
     ce->x = cxr;
-    ce->addr = work + 0x200 + (dfield + (yofs >> 1)) * 16;
+    ce->addr = work + (dfield + (yofs >> 1)) * 16 + 0x200;
+    ch = h >> 1;
     if ((cdy & 1)) {
         if (cyr + (ch << fieldpred) >= 8) {
             k = (8 >> fieldpred) - (cyr >> fieldpred) - 1;
