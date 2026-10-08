@@ -331,7 +331,10 @@ struct Hero {
     f32 unk610;                    /* 0x610 */
     f32 unk614;                    /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
-    u8 pad_61C[0x6C];
+    u8 pad_61C[0x54];
+    f32 unk670;                    /* 0x670 */
+    f32 unk674;                    /* 0x674 */
+    u8 pad_678[0x10];
     f32 unk688;                    /* 0x688 */
     u8 pad_68C[0x4];
     f32 unk690;                    /* 0x690 */

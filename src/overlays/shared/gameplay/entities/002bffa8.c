@@ -2,6 +2,9 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/collision.h"
 
 #define NOT_SDA
 
@@ -882,7 +885,147 @@ void FUN_L00_002c3888(float *pos,char *moby,void *vec) {
   *(float *)(moby+0x44)=fast_add_rotations(*(float *)(moby+0x44),fast_subtract_rotations(*(float *)(state+0x50),*(float *)(moby+0x44))*(D_0015ED60*smoothing));
  } else moby[0x20]=2;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c3af8.s", FUN_L00_002c3af8);
+
+/* Vars of a thrown moby (FUN_L00_002c3888 uses the same block). */
+typedef struct {
+    u8 pad_00[0x10];
+    Vec4 vel;                      /* 0x10: velocity per step */
+    Vec4 landing;                  /* 0x20: predicted landing point */
+    Vec4 normal;                   /* 0x30: surface normal there */
+    struct Moby *holder;           /* 0x40: moby it was thrown from */
+    s16 timer;                     /* 0x44 */
+    s16 unk46;
+} ThrowVars;
+
+extern s32 D_L00_0015F5C4;                          /* nonzero: no throws */
+extern f32 D_0015ED6C __attribute__((section(".sdata")));   /* frame-rate scale */
+extern f32 D_0015ED70 __attribute__((section(".sdata")));
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+/* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
+extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") __attribute__((section(".data")));
+extern Vec4 D_L00_00166DC0 __attribute__((section(".data")));
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 FUN_001f9dc8(f32);                        /* cos */
+extern f32 FUN_001f9de0(f32);                        /* sin */
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
+extern void FUN_00213508(void *, s32, f32);
+extern void FUN_001f4600(void *, void *);
+extern void FUN_L00_002c31c0(void);
+
+/*
+ * Predicts where a thrown moby lands: steps the velocity (with gravity) from
+ * its start until collision_line hits ground (or a moby other than the hero
+ * and the holder), for up to `timer` steps. Stores the landing point and
+ * normal in vars and pulls the point 5% toward D_L00_00166DC0. mode 0 needs
+ * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
+ */
+s32 FUN_L00_002c3af8(ThrowVars *v, struct Moby *m, s32 mode)
+{
+    Vec4 d, e, a, q, w;
+    s32 t;
+    s32 found = 0;
+    s32 i;
+
+    if (hero.state.current == 0x72)
+        return 0;
+    if (D_L00_0015F5C4 != 0)
+        return 0;
+    qcopy(&a, &m->pos);
+    if (m->state == 1) {
+        d.f[0] = FUN_001f9dc8(fast_add_rotations(-0.36196801066398620605f, atan2_f(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
+        d.f[1] = FUN_001f9de0(fast_add_rotations(-0.36196801066398620605f, atan2_f(hero.unk670, hero.unk674))) * 0.85903900861740112305f;
+        d.f[2] = 0.0f;
+        add_vector_xyz(&d, &d, &hero.motion.pos);
+        d.f[2] += 0.39081999659538269043f;
+        qcopy(&e, &v->vel);
+        if (hero.state.control_mode == 15)
+            add_vector_xyz(&e, &e, &hero.motion.unk100);
+        if (hero.unk2FC && FUN_L00_002603d0((int)hero.unk2FC) && mode)
+            add_vector_xyz(&e, &e, &hero.motion.unk100);
+        t = scale_game_frames(300);
+    } else {
+        u8 *holder_vars = v->holder->pvars;
+
+        qcopy(&d, &m->pos);
+        qcopy(&e, &v->vel);
+        {
+            s32 timer = v->timer;
+            s32 flag = *(s32 *)(holder_vars + 0x50);
+
+            t = timer;
+            if (flag)
+                v->unk46 = 1;
+        }
+    }
+    e.f[2] -= D_0015ED6C * 0.5f;
+    q.q = ((Vec4 *)&hero.moby->pos)->q;
+    q.f[2] = d.f[2];
+    if (collision_line(&q, &d, 0x10, hero.moby, 0) && (FUN_001f0b58() || 0.0f < e.f[2])) {
+        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+            if (((struct Moby *)coll_hit.moby != hero.moby && (struct Moby *)coll_hit.moby != v->holder)
+                || t < scale_game_frames(300) - scale_game_frames(10)) {
+                w.q = 0;
+                w.f[2] = 0.5f;
+                qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
+                found = 1;
+                add_vector_xyz(&w, &w, &v->landing);
+                FUN_00213508(&w, 0, 0.5f);
+            }
+        } else if (coll_hit.unk1C > 0) {
+            qcopy(&v->landing, &coll_hit.point);
+            found = 1;
+        }
+    }
+    while (!tick_countdown(&t) && !found) {
+        qcopy(&a, &d);
+        for (i = 9; i >= 0; i--) {
+            add_vector_xyz(&d, &d, &e);
+            e.f[2] -= D_0015ED70 * 9.0f;
+        }
+        if (!collision_line(&a, &d, 0x10, m, 0))
+            continue;
+        if (!FUN_001f0b58() && 0.0f < e.f[2])
+            continue;
+        if (coll_hit.moby != 0 && coll_hit.unk1C <= 0) {
+            if (((struct Moby *)coll_hit.moby == hero.moby || (struct Moby *)coll_hit.moby == v->holder)
+                && !(t < scale_game_frames(300) - scale_game_frames(10)))
+                continue;
+            w.q = 0;
+            w.f[2] = 0.5f;
+            qcopy(&v->landing, &((struct Moby *)coll_hit.moby)->pos);
+            add_vector_xyz(&w, &w, &v->landing);
+            FUN_00213508(&w, 0, 0.5f);
+            break;
+        } else if (coll_hit.unk1C > 0) {
+            qcopy(&v->landing, &coll_hit.point);
+            break;
+        }
+    }
+    if (t == 0)
+        return 0;
+    if (mode == 0) {
+        if (coll_hit.moby == 0)
+            return 0;
+        if (FUN_L00_002603d0(coll_hit.moby) == 0)
+            goto ret0;
+    }
+    if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0(coll_hit.moby))
+        FUN_001f4600(FUN_L00_002c31c0, m);
+    v->normal.q = coll_hit_normal.q;
+    subtract_vector_xyz(&a, &v->landing, &D_L00_00166DC0);
+    scale_vector_xyz(&a, &a, 0.94999998807907104492f);
+    add_vector_xyz(&v->landing, &a, &D_L00_00166DC0);
+    return 1;
+ret0:
+    /* a second return 0 block, as in retail */
+    return 0;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c53c0.s", FUN_L00_002c53c0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
