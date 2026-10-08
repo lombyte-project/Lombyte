@@ -1,11 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/storage/memory_card/data/memcard_restore_data/"
-            "FUN_0020af20.s",
-            FUN_0020af20);
-#else
 #include "types.h"
 #include "sda.h"
 
@@ -76,15 +71,15 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
             s32 blockSize = ((struct RestoreBlock *)buf)->size;
             s32 entrySize = e->size;
             dst = e->data + slot * entrySize;
-            if (e->size == blockSize) {
-                copySize = e->size;
-                blockSize = 1;
-                e->status = blockSize;
-            } else if (blockSize < e->size) {
+            if (blockSize == entrySize) {
+                s32 status = 1;
+                copySize = entrySize;
+                e->status = status;
+            } else if (blockSize < entrySize) {
                 copySize = blockSize;
                 e->status = -1;
             } else {
-                copySize = e->size;
+                copySize = entrySize;
                 e->status = -2;
             }
             if (memcmp(dst, ((struct RestoreBlock *)buf)->data, copySize) != 0) {
@@ -111,4 +106,5 @@ s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) {
     D_0013D290.slot[D_0013D290.cur].errors = errors;
     return errors;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(memcard_restore_data) func_0020AF20 __attribute__((alias("FUN_0020af20")));

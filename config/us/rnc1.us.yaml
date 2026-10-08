@@ -1476,7 +1476,7 @@ segments:
           - [0x10bcf8, c, storage/memory_card/data/memcard_prepare_data]
           - [0x10bde0, c, storage/memory_card/data/memcard_restore_info]
           - [0x10be9c, textbin, text_gap_0020af1c_after_fun_0020ae60]
-          - [0x10bea0, c, assembly/textbin/storage/memory_card/data/memcard_restore_data]
+          - [0x10bea0, c, textbin/storage/memory_card/data/memcard_restore_data]
           - [0x10c0f4, textbin, text_gap_0020b174_before_fun_0020b178]
           - [0x10c0f8, c, storage/memory_card/memcard_save_data]
           - [0x10c33c, textbin, text_gap_0020b3bc_after_fun_0020b178]
