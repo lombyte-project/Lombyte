@@ -144,8 +144,8 @@ void update_view_context(void) {
     qcopy(&D_0018CFC0[3], &view->clip_distances);
 
     /* Retail lw instructions carry the fog endpoint float bits into packet fields. */
-    near_bits = *(s32 *)&view->fog_near_int;
     far_bits = *(s32 *)&view->fog_far_int;
+    near_bits = *(s32 *)&view->fog_near_int;
     fog_distance_range = view->fog_far_dist - view->fog_near_dist;
     fog_intensity_range = view->fog_far_int - view->fog_near_int;
     fog_multiplier = fog_intensity_range * near_clip / fog_distance_range;
@@ -164,11 +164,11 @@ void update_view_context(void) {
     D_001DE740.far_int = far_bits;
     D_001DE740.near_int = near_bits;
     D_001DEA00.mul = mul_bits;
-    D_001DEA00.near_int = near_bits;
     D_001DE9B0.mul = mul_bits;
-    D_001DE9B0.near_int = near_bits;
     D_001DEA00.far_int = far_bits;
+    D_001DEA00.near_int = near_bits;
     D_001DE9B0.far_int = far_bits;
+    D_001DE9B0.near_int = near_bits;
     D_001DEA00.max = 0x437EFFFF;
     D_001DE9B0.max = 0x437EFFFF;
     set_tfrag_dists();
