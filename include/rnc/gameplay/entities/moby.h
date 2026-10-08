@@ -23,7 +23,7 @@ struct Moby {
     u8 unk31;                         /* set to 1 by spawners */
     s16 unk32;                        /* set to 0xFF (0x7F for beams) by spawners */
     u16 flags;
-    u8 pad36[2];
+    u16 unk36;                        /* set to 0x7F80 by spawners */
     u64 spawn_frame;                  /* frame count at which it may respawn */
     Vec4f rot;                        /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
     u8 frame;                         /* animation frame */
