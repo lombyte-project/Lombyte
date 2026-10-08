@@ -899,7 +899,57 @@ void FUN_L07_0030e458(char *m) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e720.s", FUN_L07_0030e720);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030e858.s", FUN_L07_0030e858);
+#include "rnc/gameplay/entities/moby.h"
+
+/* Knockback/launch parameters handed to FUN_L00_0025c558. */
+typedef struct {
+    u8 pad0[0x10];
+    f32 gravity;
+    f32 unk14;
+    f32 unk18;
+    f32 unk1C;
+    s32 flags;
+    s32 unk24;
+    f32 unk28;
+    u8 pad2C[4];
+    f32 unk30;
+    f32 unk34;
+    f32 unk38;
+    u8 pad3C;
+    u8 unk3D;
+    u8 pad3E[0xA];
+    f32 unk48;
+    f32 unk4C;
+    f32 unk50;
+    f32 unk54;
+} LaunchParams;
+
+extern void FUN_L00_0025ab48(Vec4f *, f32 *, f32 *, f32 *);
+extern void FUN_L00_0025c558(f32, struct Moby *, LaunchParams *, s32, s32, s32);
+
+void FUN_L07_0030e858(struct Moby *moby, LaunchParams *l, Vec4f *dir) {
+    Vec4f d;
+    f32 ang;
+
+    l->gravity = D_0015ED70 * 29.400002f;
+    l->unk14 = 0.0005f;
+    l->unk18 = D_0015ED6C * 9.0f;
+    l->unk1C = D_0015ED6C * 7.0f;
+    l->flags = 0x599;
+    l->unk24 = 13;
+    l->unk28 = 1.4f;
+    l->unk30 = 0.24f;
+    l->unk34 = 0.5f;
+    l->unk38 = 0.65f;
+    l->unk48 = 0.2f;
+    l->unk4C = 0.01f;
+    l->unk50 = 8.0f;
+    l->unk54 = 19.0f;
+    l->unk3D = 0;
+    *(u128 *)&d = *(u128 *)dir;
+    FUN_L00_0025ab48(&d, &ang, &l->unk18, &l->unk1C);
+    FUN_L00_0025c558(ang, moby, l, 6, 1, 0);
+}
 
 #define NOT_SDA
 
@@ -914,7 +964,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025d458(void *, short *);
 extern void FUN_L07_0030e720(void *, void *, void *);
-extern void FUN_L07_0030e858(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L07_0030e998(char *m, char *x, float *hp) {
