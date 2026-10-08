@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00233de0.s", FUN_L01_00233de0);
 #include "eetypes.h"
@@ -223,8 +224,8 @@ extern Bone D_L01_0017AB00[];
 extern Cam D_L01_00167100;
 extern Moby *D_L01_00178380[];
 extern Pad D_0013C940;
-extern Rec2C D_L01_0017C0A8[];
-extern S141948 D_00141848;
+extern HeroThresholdRow D_L01_0017C0A8[];
+extern struct UsageStats D_00141848;
 extern S17BEB8 D_L01_0017C238;
 extern char D_0013A4E0[];
 extern char D_0013E550[];
@@ -393,13 +394,13 @@ void FUN_L01_002370b8(void) {
                 FUN_L00_00211e30(0, D_0015ED64, D_0015ED64 * 0.0f, D_0015ED6C * 174.53293f);
                 if (*(int *)&D_L01_0015F688 > 0) {
                     if (tick_countdown_32((int *)&D_L01_0015F688)) {
-                        if (D_00141848.f90 < 0xFFFF) {
-                            D_00141848.f90++;
+                        if (D_00141848.stat[18].count < 0xFFFF) {
+                            D_00141848.stat[18].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.f92) {
-                            D_00141848.f92 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[18].last_time) {
+                            D_00141848.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.f94 = D_00141848.f94 | (1 << current_level_index) | 0x80000000;
+                        D_00141848.stat[18].level_mask = D_00141848.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                         *(int *)&D_L01_0015F688 = -1;
                         (*(int *)&D_L01_0015F68C)++;
                     }
@@ -665,14 +666,14 @@ void FUN_L01_002370b8(void) {
             hero.unk90E++;
             if (D_0013C940.f128 > 0.75f) {
                 if (++hero.unk90C > scale_game_frames(0x5A)) {
-                    if (D_00141848.f58 < 0xFFFF) {
-                        D_00141848.f58++;
+                    if (D_00141848.stat[11].count < 0xFFFF) {
+                        D_00141848.stat[11].count++;
                     }
                 }
-                if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.f5A) {
-                    D_00141848.f5A = scale_game_frames(D_0015EEA4) / 600;
+                if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[11].last_time) {
+                    D_00141848.stat[11].last_time = scale_game_frames(D_0015EEA4) / 600;
                 }
-                D_00141848.f5C = D_00141848.f5C | (1 << current_level_index) | 0x80000000;
+                D_00141848.stat[11].level_mask = D_00141848.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
             } else {
                 hero.unk90C = 0;
             }
@@ -1178,7 +1179,7 @@ void FUN_L01_002370b8(void) {
         }
     } break;
     case 0x13: {
-        Rec2C *r;
+        HeroThresholdRow *r;
 
         if (hero.unkA9C != 0 || hero.unkAA8 < D_L01_0017C0A8[hero.unkA60].f20) {
             hero.unk10A8 = 2;
@@ -1196,11 +1197,11 @@ void FUN_L01_002370b8(void) {
             if (d < 0.0f) {
                 d = 0.0f;
             }
-            if (r->f4 == 0) {
+            if (r->kind == 0) {
                 off = 0.75f;
                 range = 0.8f;
                 cap = 4.0f;
-            } else if (r->f4 == 1) {
+            } else if (r->kind == 1) {
                 off = 0.6f;
                 range = 1.7f;
                 cap = 4.0f;
@@ -1222,7 +1223,7 @@ void FUN_L01_002370b8(void) {
                 }
             }
         }
-        switch (r->f4) {
+        switch (r->kind) {
         case 0:
             if (hero.unkAA8 < 18.0f) {
                 hero.unk190 = D_0015ED6C * 4.4f * hero.unkA6C;
@@ -1247,7 +1248,7 @@ void FUN_L01_002370b8(void) {
         }
         fast_cos_cf(&hero.unkA90, 1.0f, 0.2f);
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
-            if (r->f4 == 1 && FUN_L00_0024f7c8_cf(hero.unkA5C, hero.rot.f[2]) > 0.0f) {
+            if (r->kind == 1 && FUN_L00_0024f7c8_cf(hero.unkA5C, hero.rot.f[2]) > 0.0f) {
                 hero.unkA90 = 1.0f / (FUN_001fa688(hero.unkA5C, hero.rot.f[2]) + 1.0f);
             }
             hero.target_yaw = hero.unkA5C;
@@ -1256,7 +1257,7 @@ void FUN_L01_002370b8(void) {
             int ok;
 
             ok = 1;
-            if (r->f4 == 1 && hero.unkA9C == 0 && hero.unkAA8 > 7.0f) {
+            if (r->kind == 1 && hero.unkA9C == 0 && hero.unkAA8 > 7.0f) {
                 ok = 0;
             }
             if (ok) {

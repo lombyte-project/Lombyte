@@ -7,6 +7,8 @@
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/overlay/hero_tables.h"
 
 struct GameState {
     u8 pad0[0x40];
@@ -407,16 +409,6 @@ struct MobyView {
     u8 padA8[0x18];
     Vec4 vC0;
 };
-struct Globals_00141848 {
-    u8 pad0[0x58];
-    u16 uh58;
-    u16 uh5A;
-    s32 i5C;
-    u8 pad60[0x30];
-    u16 uh90;
-    u16 uh92;
-    s32 i94;
-};
 struct PadState {
     u8 pad0[0x128];
     f32 f128;
@@ -500,7 +492,7 @@ extern f32 D_0015ED70;
 extern f32 D_0015ED70_a __asm__("D_0015ED70");
 extern s32 D_0015EEA4;
 extern u8 D_0013D4DC[];
-extern struct Globals_00141848 D_00141848;
+extern struct UsageStats D_00141848;
 #define S D_00141848
 extern s32 D_L18_0015F688 __attribute__((sda));
 extern s32 D_L18_0015F68C __attribute__((sda));
@@ -603,16 +595,7 @@ extern f32 FUN_001f9988(f32);
 extern f32 FUN_L00_00233a78(void *);
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern f32 FUN_L00_00213350(void *);
-struct LevelTable_TB {
-    u8 pad0[4];
-    s32 i04;
-    u8 pad8[0x10];
-    s32 i18;
-    s32 i1C;
-    s32 i20;
-    u8 pad24[8];
-};
-extern struct LevelTable_TB D_L18_0017C628[];
+extern struct HeroThresholdRow D_L18_0017C628[];
 extern struct LevelTable_QS D_L18_00167680;
 #define Q D_L18_00167680
 extern s32 D_0013CAE0[];
@@ -667,13 +650,8 @@ extern s32 advance_along_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("F
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void FUN_L00_00214108(void);
-struct LevelTable_T4C {
-    u8 pad0[0x18];
-    s32 x18;
-    u8 pad1C[0x30];
-};
 extern u8 D_L18_0017A4C0[];
-extern struct LevelTable_T4C D_L00_00179AC0_t[] __asm__("D_L18_0017A4C0");
+extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L18_0017A4C0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
@@ -735,15 +713,15 @@ void FUN_L18_0021eac8(void) {
                 FUN_L00_00211e30(0, D_0015ED64, D_0015ED64 * 0.0f, D_0015ED6C * 174.53293f);
                 if (D_L18_0015F688 > 0 && FUN_001f9740(&D_L18_0015F688) != 0) {
                     s32 t;
-                    if (S.uh90 < 0xFFFF) {
-                        S.uh90++;
+                    if (S.stat[18].count < 0xFFFF) {
+                        S.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.uh92 < t) {
-                        S.uh92 = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[18].last_time < t) {
+                        S.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L18_0015F688 = -1;
-                    S.i94 = S.i94 | (1 << current_level_index) | 0x80000000;
+                    S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                     D_L18_0015F68C++;
                 }
             }
@@ -943,14 +921,14 @@ void FUN_L18_0021eac8(void) {
                 P.h90E++;
                 if (PD.f128 > 0.75f) {
                     s32 t2;
-                    if (++P.h90C > scale_game_frames(90) && S.uh58 < 0xFFFF) {
-                        S.uh58++;
+                    if (++P.h90C > scale_game_frames(90) && S.stat[11].count < 0xFFFF) {
+                        S.stat[11].count++;
                     }
                     t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.uh5A < t2) {
-                        S.uh5A = scale_game_frames(D_0015EEA4) / 600;
+                    if (S.stat[11].last_time < t2) {
+                        S.stat[11].last_time = scale_game_frames(D_0015EEA4) / 600;
                     }
-                    S.i5C = S.i5C | (1 << current_level_index) | 0x80000000;
+                    S.stat[11].level_mask = S.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
                 } else {
                     P.h90C = 0;
                 }
@@ -1509,7 +1487,7 @@ void FUN_L18_0021eac8(void) {
         s32 t2;
         f32 r;
         f32 mx;
-        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].i18) {
+        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].f18) {
             P.h10A8 = 2;
         }
         P.f190 = 0.0f;
@@ -1587,7 +1565,7 @@ void FUN_L18_0021eac8(void) {
     case 0x15: {
         s32 jumping;
         P.f190 = 0.0f;
-        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].i18) {
+        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].f18) {
             P.h10A8 = 2;
         }
         jumping = P.i2090 == 1 && scale_game_frames(20) < P.i2098;
@@ -1656,12 +1634,12 @@ void FUN_L18_0021eac8(void) {
         break;
     }
     case 0x13: {
-        struct LevelTable_TB *tb;
+        struct HeroThresholdRow *tb;
         if (0) {
             FUN_L00_002167d0();
             break;
         }
-        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].i20) {
+        if (P.iA9C != 0 || P.fAA8 < D_L18_0017C628[P.iA60].f20) {
             P.h10A8 = 2;
         }
         tb = &D_L18_0017C628[P.iA60];
@@ -1675,11 +1653,11 @@ void FUN_L18_0021eac8(void) {
             if (d < 0.0f) {
                 d = 0.0f;
             }
-            if (tb->i04 == 0) {
+            if (tb->kind == 0) {
                 off = 0.75f;
                 tol = 0.8f;
                 mx = 4.0f;
-            } else if (tb->i04 == 1) {
+            } else if (tb->kind == 1) {
                 off = 0.6f;
                 tol = 1.7f;
                 mx = 4.0f;
@@ -1699,7 +1677,7 @@ void FUN_L18_0021eac8(void) {
                 }
             }
         }
-        switch (tb->i04) {
+        switch (tb->kind) {
         case 0:
             if (P.fAA8 < 18.0f) {
                 P.f190 = D_0015ED6C * 4.4f * P.fA6C;
@@ -1724,14 +1702,14 @@ void FUN_L18_0021eac8(void) {
         }
         approach_value(&P.fA90, 1.0f, 0.2f);
         if (P.iA58 != 0 || P.pmA54 != NULL) {
-            if (tb->i04 == 1 && fast_subtract_rotations(P.fA5C, P.u90.f98.v) > 0.0f) {
+            if (tb->kind == 1 && fast_subtract_rotations(P.fA5C, P.u90.f98.v) > 0.0f) {
                 P.fA90 = 1.0f / (fast_difference_between_rotations(P.fA5C, P.u90.f98.v) + 1.0f);
             }
             P.f180 = P.fA5C;
             FUN_L00_00211e30(0, D_0015ED64 * 0.05f, D_0015ED64 * 0.2f, D_0015ED6C * 15.009831f);
         } else {
             s32 ok = 1;
-            if (tb->i04 == 1 && P.iA9C == 0 && P.fAA8 > 7.0f) {
+            if (tb->kind == 1 && P.iA9C == 0 && P.fAA8 > 7.0f) {
                 ok = 0;
             }
             if (ok) {
@@ -2086,7 +2064,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_0026d598(&v0, &v10, 0);
         }
         t = P.i10B8;
-        has = D_L00_00179AC0_t[t].x18 != 0;
+        has = D_L00_00179AC0_t[t].unk18 != 0;
         if (t == 0xC) {
             has = 0;
         }

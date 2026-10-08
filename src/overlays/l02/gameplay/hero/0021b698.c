@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
 extern char D_0013F350_u[] __asm__("D_0013F350");
@@ -784,8 +785,8 @@ typedef struct {
 extern Cam D_L02_00167280;
 extern Moby *D_L02_00178500[];
 extern Pad D_0013C940;
-extern Rec2C D_L02_0017C228[];
-extern S141948 D_00141848;
+extern HeroThresholdRow D_L02_0017C228[];
+extern struct UsageStats D_00141848;
 extern S17BEB8 D_L02_0017C3B8;
 extern char D_0013A4E0[];
 extern char D_0013E550[];
@@ -933,13 +934,13 @@ void FUN_L02_00225c20(void) {
                 FUN_L00_00211e30(0, D_0015ED64, D_0015ED64 * 0.0f, D_0015ED6C * 174.53293f);
                 if (*(int *)&D_L02_0015F688 > 0) {
                     if (tick_countdown_32((int *)&D_L02_0015F688)) {
-                        if (D_00141848.f90 < 0xFFFF) {
-                            D_00141848.f90++;
+                        if (D_00141848.stat[18].count < 0xFFFF) {
+                            D_00141848.stat[18].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.f92) {
-                            D_00141848.f92 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[18].last_time) {
+                            D_00141848.stat[18].last_time = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.f94 = D_00141848.f94 | (1 << D_0015ED84) | 0x80000000;
+                        D_00141848.stat[18].level_mask = D_00141848.stat[18].level_mask | (1 << D_0015ED84) | 0x80000000;
                         *(int *)&D_L02_0015F688 = -1;
                         (*(int *)&D_L02_0015F68C)++;
                     }
@@ -1548,7 +1549,7 @@ void FUN_L02_00225c20(void) {
         }
     } break;
     case 0x13: {
-        Rec2C *r;
+        HeroThresholdRow *r;
 
         if (hero.unkA9C != 0 || hero.unkAA8 < D_L02_0017C228[hero.unkA60].f20) {
             hero.unk10A8 = 2;
@@ -1566,11 +1567,11 @@ void FUN_L02_00225c20(void) {
             if (d < 0.0f) {
                 d = 0.0f;
             }
-            if (r->f4 == 0) {
+            if (r->kind == 0) {
                 off = 0.75f;
                 range = 0.8f;
                 cap = 4.0f;
-            } else if (r->f4 == 1) {
+            } else if (r->kind == 1) {
                 off = 0.6f;
                 range = 1.7f;
                 cap = 4.0f;
@@ -1592,7 +1593,7 @@ void FUN_L02_00225c20(void) {
                 }
             }
         }
-        switch (r->f4) {
+        switch (r->kind) {
         case 0:
             if (hero.unkAA8 < 18.0f) {
                 hero.unk190 = D_0015ED6C * 4.4f * hero.unkA6C;
@@ -1617,7 +1618,7 @@ void FUN_L02_00225c20(void) {
         }
         approach_value(&hero.unkA90, 1.0f, 0.2f);
         if (hero.unkA58 != 0 || ((Moby *)hero.unkA54) != 0) {
-            if (r->f4 == 1 && fast_subtract_rotations(hero.unkA5C, hero.rot.f[2]) > 0.0f) {
+            if (r->kind == 1 && fast_subtract_rotations(hero.unkA5C, hero.rot.f[2]) > 0.0f) {
                 hero.unkA90 =
                     1.0f /
                     (fast_difference_between_rotations(hero.unkA5C, hero.rot.f[2]) + 1.0f);
@@ -1628,7 +1629,7 @@ void FUN_L02_00225c20(void) {
             int ok;
 
             ok = 1;
-            if (r->f4 == 1 && hero.unkA9C == 0 && hero.unkAA8 > 7.0f) {
+            if (r->kind == 1 && hero.unkA9C == 0 && hero.unkAA8 > 7.0f) {
                 ok = 0;
             }
             if (ok) {

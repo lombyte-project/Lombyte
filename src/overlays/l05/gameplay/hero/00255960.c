@@ -10,6 +10,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 05 build). */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/help_00256148.c: func_L05_00256148), where it is exact; names translated to the US level program. */
@@ -36,10 +37,10 @@ typedef struct {
 
 
 extern Pad D_0013C940;
-extern Rec2C D_L05_0017C088[];
-extern Rec4C D_L05_00179F20[];
-extern Rec70 D_L05_00179CF0[];
-extern S141948 D_00141848;
+extern HeroThresholdRow D_L05_0017C088[];
+extern HeroAnimRow D_L05_00179F20[];
+extern HeroTimedAnim D_L05_00179CF0[];
+extern struct UsageStats D_00141848;
 extern S17ABE0 D_L05_0017AAE0;
 extern S17C318 D_L05_0017C218;
 extern char D_0013E550[];
@@ -208,13 +209,13 @@ void FUN_L05_00255960(void) {
                         next = D_00141660;
                     }
                     if (next != 0 && cur != base) {
-                        if (D_00141848.fF8 < 0xFFFF) {
-                            D_00141848.fF8++;
+                        if (D_00141848.stat[31].count < 0xFFFF) {
+                            D_00141848.stat[31].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.fFA) {
-                            D_00141848.fFA = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[31].last_time) {
+                            D_00141848.stat[31].last_time = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.fFC = D_00141848.fFC | (1 << current_level_index) | 0x80000000;
+                        D_00141848.stat[31].level_mask = D_00141848.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
                         hero.pending_gadget = next;
                         hero.swap_tap_timer = 0;
                         hero.swap_tap2_timer = 0;
@@ -274,16 +275,16 @@ void FUN_L05_00255960(void) {
                         r = FUN_L00_002050b8(moby[0x53]);
                         if (r == FUN_L01_00226f10(0) && flag) {
                             if (FUN_L00_00229010(&record_index)) {
-                                Rec70 *rec;
+                                HeroTimedAnim *rec;
 
                                 hero.unk2270 = record_index;
                                 rec = &D_L05_00179CF0[record_index];
                                 hero.unk1E8 = scale_game_frames(0x78);
-                                rec->f60 = FUN_001f96b0(rec->f5C) * 60.0f;
-                                if (rec->f44 != 0) {
+                                rec->duration_frames = FUN_001f96b0(rec->duration) * 60.0f;
+                                if (rec->use_state_40 != 0) {
                                     hero_set_state(0x40, 1);
                                 } else {
-                                    FUN_L00_002323b8(rec->f48, 0, scale_game_frames(0xC));
+                                    FUN_L00_002323b8(rec->anim, 0, scale_game_frames(0xC));
                                 }
                             }
                         } else if (hero.unkA98 & 2) {
@@ -323,7 +324,7 @@ void FUN_L05_00255960(void) {
                         if (id != hero.unk2298) {
                             FUN_L00_0020e698();
                         } else {
-                            int anim = D_L05_00179F20[id].f24;
+                            int anim = D_L05_00179F20[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
                                 if (hero.unkD08 != 0) {
                                     hero.unkD14 = 1;
@@ -721,7 +722,7 @@ void FUN_L05_00255960(void) {
                         }
                     }
                     {
-                        Rec2C *rec = &D_L05_0017C088[hero.unkA60];
+                        HeroThresholdRow *rec = &D_L05_0017C088[hero.unkA60];
                         int t = (truncate_float_to_s32(hero.unkAA8) - rec->fC) * 2;
                         if ((float)rec->f14 < hero.unkAA8 && hero.unkA9C == 0 &&
                             !(hero.state == 0x15 && hero.unk308 != 0)) {

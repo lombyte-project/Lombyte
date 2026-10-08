@@ -3,16 +3,11 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
-struct Globals_00141848 {
-    u8 pad_0[0xA8];
-    u16 unkA8;
-    u16 unkAA;
-    s32 unkAC;
-};
 extern struct PadState D_0013C940;
 extern u8 D_0013D4C0[];
-extern struct Globals_00141848 D_00141848;
+extern struct UsageStats D_00141848;
 extern s32 D_0015EEA4;
 extern s32 scale_game_frames() __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -45,15 +40,15 @@ s32 FUN_0021c7a0(struct MenuScreen *menu) {
     }
     if (id != 0) {
         if (D_0013D4C0[id] != 0 && (D_0013C940.pressed & 0x40)) {
-            if ((u16)D_00141848.unkA8 <= 0xFFFEU) {
-                D_00141848.unkA8 = (u16)(D_00141848.unkA8 + 1);
+            if ((u16)D_00141848.stat[21].count <= 0xFFFEU) {
+                D_00141848.stat[21].count = (u16)(D_00141848.stat[21].count + 1);
             }
             tmp = scale_game_frames(D_0015EEA4) / 600;
-            if ((s32)D_00141848.unkAA < tmp) {
-                D_00141848.unkAA = (u16)(scale_game_frames(D_0015EEA4) / 600);
+            if ((s32)D_00141848.stat[21].last_time < tmp) {
+                D_00141848.stat[21].last_time = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->data.slots.items;
-            D_00141848.unkAC = (s32)((D_00141848.unkAC | (1 << current_level_index)) | 0x80000000);
+            D_00141848.stat[21].level_mask = (s32)((D_00141848.stat[21].level_mask | (1 << current_level_index)) | 0x80000000);
             i = 0;
             if (menu->data.slots.items[0] != id) {
                 scan = slots;

@@ -2,25 +2,10 @@
 #define LOMBYTE_RNC_OVERLAY_HERO_H
 
 #include "types.h"
+#include "rnc/overlay/hero_tables.h"
 
 /* 128-bit value, for whole-quadword copies. */
 typedef int OvlQuad __attribute__((mode(TI)));
-
-typedef struct {
-    char p0[0x44];
-    int f44;
-    int f48;
-    char p1[0x10];
-    float f5C;
-    int f60;
-    char p2[0xC];
-} Rec70;
-
-typedef struct {
-    char p0[0x24];
-    int f24;
-    char p1[0x24];
-} Rec4C;
 
 /*
  * Collision hit record filled by the overlay collision queries
@@ -79,35 +64,5 @@ typedef struct {
     char p1D8[0x4];
     int f1DC;
 } Pad;
-
-/* One 0x2C-byte row of a per-level table (all three older views merged). */
-typedef struct {
-    char p0[4];
-    int f4;
-    char p8[4];
-    int fC;
-    int f10;
-    int f14;
-    int f18;
-    int f1C;
-    int f20;
-    char p24[8];
-} Rec2C;
-
-/* Partial view of D_00141848 (both older views merged). */
-typedef struct {
-    char p0[0x58];
-    unsigned short f58;
-    unsigned short f5A;
-    int f5C;
-    char p60[0x30];
-    unsigned short f90;
-    unsigned short f92;
-    int f94;
-    char p98[0x60];
-    unsigned short fF8;
-    unsigned short fFA;
-    int fFC;
-} S141948;
 
 #endif /* LOMBYTE_RNC_OVERLAY_HERO_H */
