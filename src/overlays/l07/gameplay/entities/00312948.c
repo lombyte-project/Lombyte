@@ -385,15 +385,222 @@ extern void DeleteMoby(void *) __asm__("FUN_0020c828");
 
 #define MACRO_ADDR
 
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* pvars of the swooper's spawner: how it hunts. */
+typedef struct {
+    u8 pad0[0x7C];
+    f32 speed;        /* 0x7C */
+    u8 pad80[4];
+    s32 linger_time;  /* 0x84: copied into a removed swooper's life_timer */
+    f32 view_angle;   /* 0x88: degrees */
+    f32 view_range;   /* 0x8C */
+} SwooperSpawnerVars;
+
+/* pvars of a swooper. */
+typedef struct {
+    u8 pad0[0x20];
+    u8 collision[9];       /* 0x20: contact state for FUN_00213928 */
+    u8 unk29;              /* 0x29 */
+    u8 pad2A[0xE];
+    struct Moby *perch;    /* 0x38 */
+    u8 pad3C[0x24];
+    Vec4 velocity;         /* 0x60 */
+    Vec4 home;             /* 0x70 */
+    Vec4 goal;             /* 0x80 */
+    u8 pad90[8];
+    s32 life_timer;        /* 0x98 */
+    f32 dive_speed;        /* 0x9C */
+    struct Moby *spawner;  /* 0xA0 */
+    f32 turn_speed;        /* 0xA4 */
+    f32 pitch_speed;       /* 0xA8 */
+    s32 bob_timer;         /* 0xAC */
+} SwooperVars;
+
+/* What FUN_L07_002886d8 reports about the hero. */
+typedef struct {
+    Vec4 pos;
+    u8 pad10[0x30];
+    s32 found; /* 0x40 */
+} SwooperSight;
+
+typedef struct {
+    u8 pad0[0x20];
+    struct Moby *moby; /* 0x20 */
+} SwooperHit;
+
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031AA68), where it is exact; names translated to the US level program. */
 
-void FUN_L07_00319698(char *arg, char *other) {
-    char *dst = *(char **)(arg + 0x78);
-    if (other != 0) {
-        *(int *)(dst + 0x98) = scale_ticks(*(int *)(other + 0x84));
+void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
+    SwooperVars *vars = (SwooperVars *)moby->pvars;
+
+    if (spawner_vars != NULL) {
+        vars->life_timer = scale_ticks(spawner_vars->linger_time);
     }
-    DeleteMoby(arg);
+    DeleteMoby(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003196e0.s", FUN_L07_003196e0);
+
+extern Vec4 D_L07_00166E40;
+extern struct Moby *D_L07_00173ED8 __attribute__((section(".data")));
+extern Vec4 D_L07_00173EF0;
+extern f32 D_0015ED60;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+
+extern s32 FUN_L07_002886d8(struct Moby *, SwooperSight *, f32);
+extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 FUN_001f99c0(f32);
+extern void FUN_L00_0025a120(struct Moby *);
+extern SwooperHit *FUN_L00_0025a420(struct Moby *, s32, s32);
+extern s32 FUN_00213928(struct Moby *, SwooperHit *, void *, s32, s32 *, s32, s32, s32);
+extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, float, int, float, int, int, int, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void FUN_001f9c90(void *, void *, f32);
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
+extern f32 FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
+extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern void FUN_L00_00259888(void *, struct Moby *, s32, f32, void *);
+extern s32 FUN_L00_001f2868(f32, void *, s32, struct Moby *, void *);
+extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
+extern void FUN_L00_00259fe8(struct Moby *, f32);
+
+/* Swooper: holds at its goal, dives at the hero once it sees it and bursts on contact. */
+void FUN_L07_003196e0(struct Moby *moby) {
+    SwooperVars *vars;
+    SwooperSpawnerVars *spawner_vars;
+    SwooperSight sight;
+    SwooperHit *hit;
+    u8 *collision;
+    Vec4 dir;
+    u8 contact[0x30];
+    Vec4 probe;
+    Vec4 push;
+    s32 touching;
+    f32 pitch;
+
+    if (moby == NULL) {
+        return;
+    }
+    vars = (SwooperVars *)moby->pvars;
+    if (vars == NULL || vars->spawner == NULL) {
+        return;
+    }
+    collision = vars->collision;
+    spawner_vars = (SwooperSpawnerVars *)vars->spawner->pvars;
+    FUN_L07_002886d8(moby, &sight, spawner_vars->view_range);
+    if (moby->unk31 && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
+        FUN_L00_0025a120(moby);
+        moby->unk7F = 0x15;
+    }
+    hit = FUN_L00_0025a420(moby, 0x230000, 0);
+    FUN_00213928(moby, hit, collision, 0, &touching, 0, 0, 4);
+    if (touching >= 2 && hit != NULL && hit->moby->oclass != 0x363 && hit->moby->oclass != 0x458 &&
+        hit->moby->oclass != 0x367) {
+        FUN_L00_0025e450(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+        FUN_L00_00257470(moby, 0, -1);
+        FUN_L07_00319698(moby, spawner_vars);
+    }
+    switch (moby->state) {
+    case 0:
+        if (spawner_vars == NULL) {
+            break;
+        }
+        moby->flags |= 0x1000;
+        vzero_317cb0(&vars->velocity);
+        qcopy(&vars->home, &moby->pos);
+        moby->rot.y = 0.0f;
+        moby->rot.z = FUN_001f9e90(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y);
+        vars->unk29 = 0;
+        moby->state = 1;
+        moby->unkBC = 0;
+        break;
+    case 1:
+        subtract_vector_xyz(&vars->velocity, &vars->goal, &moby->pos);
+        FUN_L00_00258278(moby, FUN_001f9e90(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y),
+                         &vars->turn_speed, D_0015ED70 * 6.2831855f, D_0015ED6C * 3.1415927f,
+                         D_0015ED6C * 6.2831855f);
+        qcopy(&moby->pos, &vars->goal);
+        if ((vars->perch != NULL && FUN_001f9b80(&moby->pos, &vars->perch->pos) < 20.0f &&
+             FUN_001f99c0(moby->pos.z - vars->perch->pos.z) < 3.0f) ||
+            (sight.found != 0 && FUN_001f9b48(&moby->pos, &sight.pos) < spawner_vars->view_range &&
+             FUN_001f9b80(&moby->pos, &vars->spawner->pos) > 2.0f &&
+             fast_difference_between_rotations(moby->rot.z, FUN_001f9e90(sight.pos.f[0] - moby->pos.x,
+                                                                 sight.pos.f[1] - moby->pos.y)) <
+                 spawner_vars->view_angle * 0.017453292f)) {
+            if (moby->prev_seq != 1) {
+                blend_moby_animation((MobyAnim *)moby, 1, 0, 10);
+            }
+            vars->dive_speed = spawner_vars->speed * D_0015ED6C;
+            vars->life_timer = scale_ticks(600);
+            moby->unkBC = 1;
+            vars->bob_timer = scale_ticks(7);
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+            blend_moby_animation((MobyAnim *)moby, 2, 0, 10);
+        }
+        if (moby->unkBC == 1) {
+            moby->pos.z += D_0015ED60 * 0.1f;
+            if (tick_countdown_32_alt(&vars->bob_timer)) {
+                vars->bob_timer = scale_ticks(7);
+                moby->unkBC = 2;
+            }
+        } else if (moby->unkBC == 2) {
+            moby->pos.z -= D_0015ED60 * 0.1f;
+            if (tick_countdown_32_alt(&vars->bob_timer)) {
+                moby->unkBC = 0;
+            }
+        }
+        FUN_L00_00258278(moby, FUN_001f9e90(sight.pos.f[0] - moby->pos.x, sight.pos.f[1] - moby->pos.y),
+                         &vars->turn_speed, D_0015ED70 * 3.1415927f, D_0015ED6C * 3.1415927f,
+                         D_0015ED6C * 6.2831855f);
+        pitch = FUN_001f9e90(FUN_001f9b80(&moby->pos, &sight.pos), sight.pos.f[2] - moby->pos.z);
+        moby->rot.y = FUN_L00_00258110(&vars->pitch_speed, moby->rot.y, pitch,
+                                       D_0015ED70 * 3.1415927f, D_0015ED6C * 3.1415927f, D_0015ED6C * 6.2831855f);
+        subtract_vector_xyz(&dir, &sight.pos, &moby->pos);
+        if (moby->unkBC != 0) {
+            dir.f[2] = 0.0f;
+        }
+        normalize_vector_xyz(&dir, &dir, D_0015ED70 * 30.0f);
+        add_vector_xyz(&vars->velocity, &vars->velocity, &dir);
+        FUN_001f9c90(&vars->velocity, &vars->velocity, D_0015ED6C * 10.0f);
+        add_vector_xyz(&moby->pos, &moby->pos, &vars->velocity);
+        if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
+            FUN_L07_00319698(moby, spawner_vars);
+        }
+        FUN_L00_00259888(contact, moby, 0x10001, 1.0f, &vars->velocity);
+        qcopy(&probe, &moby->pos);
+        probe.f[2] += 0.75f;
+        if (FUN_L00_001f2868(0.75f, &probe, 0x10, moby, contact) && D_L07_00173ED8 != NULL &&
+            D_L07_00173ED8->oclass != 0x363 && D_L07_00173ED8->oclass != 0x456 &&
+            D_L07_00173ED8->oclass != 0x458 && D_L07_00173ED8->oclass != 0x365 &&
+            D_L07_00173ED8->oclass != 0x367) {
+            FUN_L00_0025e450(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+            FUN_L07_00319698(moby, spawner_vars);
+        }
+        qcopy(&probe, &moby->pos);
+        probe.f[2] += 0.55f;
+        if (FUN_L00_001f0d60(0.55f, &probe, 0, moby)) {
+            subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
+            add_vector_xyz(&moby->pos, &moby->pos, &push);
+        }
+        if (vars->life_timer == 0) {
+            FUN_L07_00319698(moby, spawner_vars);
+        }
+        break;
+    case 3:
+        FUN_L00_0025e450(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+        FUN_L07_00319698(moby, spawner_vars);
+        break;
+    case 4:
+        break;
+    }
+    FUN_L00_00259fe8(moby, 0.7f);
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319f48.s", FUN_L07_00319f48);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0031a250.s", FUN_L07_0031a250);
