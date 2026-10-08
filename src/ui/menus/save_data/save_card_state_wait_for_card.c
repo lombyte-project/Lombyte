@@ -1,7 +1,7 @@
 #include "sda.h"
 #include "rnc/globals.h"
 extern char D_0013D290[];
-extern int D_0015EEB0 MACRO_ADDR;
+extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 
 void save_card_state_wait_for_card(void) __asm__("FUN_002089d0");
 
@@ -11,16 +11,16 @@ void save_card_state_wait_for_card(void) {
     mode_freeze_flags &= ~0x20;
     v = *(int *)(s + 0x1C);
     if (v == 0) {
-        D_0015EEB0 = 9;
+        mode_freeze_state = 9;
         return;
     }
     if (v == -1) {
         *(int *)(s + 0x1C) = 0;
-        D_0015EEB0 = 9;
+        mode_freeze_state = 9;
         return;
     }
     if (v == -2)
-        D_0015EEB0 = 5;
+        mode_freeze_state = 5;
 }
 
 extern __typeof__(save_card_state_wait_for_card) func_002089D0

@@ -82,8 +82,8 @@ extern s32 D_0015ED98;
 extern s32 D_0015EE20;
 extern s32 D_0015EE24;
 extern s32 D_0015EE34;
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
+extern s32 mode_freeze_state __asm__("D_0015EEB0");
+extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 extern struct Globals_001D5BF0 D_001D5BF0;
@@ -117,7 +117,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
             if ((D_0013D290.unkD4 < 3) && (D_0013D290.unkDC < 0)) {
                 D_001D5BF0.unk128 = 0;
                 if (D_0013D290.unkE4 != 0) {
-                    D_0015EEB4 |= 0x80;
+                    mode_freeze_flags |= 0x80;
                     mode_freeze_init(3, D_001D5BF0.unk4);
                     goto block_46;
                 }
@@ -158,7 +158,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
     block_23:
     block_24:
-        if ((D_0015EEB0 != 0x10) && (D_0015EEB0 != 1)) {
+        if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1)) {
             D_001D5BF0.unk8 = (void *)D_001D5BF0.unk4->unk38;
             return 0;
         }

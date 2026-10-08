@@ -76,8 +76,8 @@ extern u8 D_00141050[];
 extern s32 D_0015ED84;
 extern s32 D_0015EE38;
 extern s32 D_0015EE3C;
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
+extern s32 mode_freeze_state __asm__("D_0015EEB0");
+extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern s32 D_0015F5E8;
 extern s32 D_0015F604;
 extern s32 D_0015F648;
@@ -276,11 +276,11 @@ void update_mode_freeze(void) {
                 D_00193300.unk24--;
             }
         }
-        switch (D_0015EEB0) {
+        switch (mode_freeze_state) {
         case 2:
             if (D_00193300.unk4 == 0) {
                 if (D_0013CAE4[0] & 0x40) {
-                    D_0015EEB4 &= ~1;
+                    mode_freeze_flags &= ~1;
                     D_0015F604 = D_00193300.unk14;
                 }
             }
@@ -288,11 +288,11 @@ void update_mode_freeze(void) {
 
         case 6:
             if (D_0013CAE4[0] & 0x20) {
-                D_0015EEB4 |= 8;
+                mode_freeze_flags |= 8;
             } else if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 = D_0015EEB4 | 0x20;
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags | 0x20;
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 if (D_0015F5E8 == 0) {
                     D_0015F604 = D_00193300.unk14;
                 }
@@ -301,11 +301,11 @@ void update_mode_freeze(void) {
 
         case 13:
             if (D_0013CAE4[0] & 0x20) {
-                D_0015EEB4 |= 0x10;
+                mode_freeze_flags |= 0x10;
             } else if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 = D_0015EEB4 | 0x20;
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags | 0x20;
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 if (D_0015F5E8 == 0) {
                     D_0015F604 = D_00193300.unk14;
                 }
@@ -320,9 +320,9 @@ void update_mode_freeze(void) {
 
         case 21:
             if (D_0013CAE4[0] & 0x40) {
-                D_0015EEB4 = D_0015EEB4 ^ 0x40;
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags ^ 0x40;
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
             }
             break;
@@ -333,7 +333,7 @@ void update_mode_freeze(void) {
             break;
 
         case 12:
-            if (D_0015EEB4 & 2) {
+            if (mode_freeze_flags & 2) {
                 break;
             }
 
@@ -341,29 +341,29 @@ void update_mode_freeze(void) {
 
         case 5:
             if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
             }
             break;
 
         case 19:
-            if ((D_0015F5E8 != 0) && (D_0015EEB4 & 2)) {
+            if ((D_0015F5E8 != 0) && (mode_freeze_flags & 2)) {
                 if (D_0013CAE4[0] & 0x40) {
                     load_and_initialize_level_chunk();
-                    D_0015EEB4 = D_0015EEB4 & (~2);
-                    D_0015EEB4 = D_0015EEB4 & (~4);
-                    D_0015EEB4 = D_0015EEB4 | 0x20;
+                    mode_freeze_flags = mode_freeze_flags & (~2);
+                    mode_freeze_flags = mode_freeze_flags & (~4);
+                    mode_freeze_flags = mode_freeze_flags | 0x20;
                     func_0022E188(0);
                     D_0013E05A[0] = 1;
                 } else if (D_0013CAE4[0] & 0x10) {
-                    D_0015EEB4 = D_0015EEB4 & (~2);
-                    D_0015EEB4 = D_0015EEB4 & (~4);
+                    mode_freeze_flags = mode_freeze_flags & (~2);
+                    mode_freeze_flags = mode_freeze_flags & (~4);
                     D_0015F604 = D_00193300.unk14;
                 }
             } else if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
             }
             break;
@@ -373,55 +373,55 @@ void update_mode_freeze(void) {
         case 24:
             if (D_0013CAE4[0] & 0x40) {
                 load_and_initialize_level_chunk();
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
-                D_0015EEB4 = D_0015EEB4 | 0x20;
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
+                mode_freeze_flags = mode_freeze_flags | 0x20;
                 func_0022E188(0);
                 D_0013E05A[0] = 1;
             } else if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 |= 0x20;
+                mode_freeze_flags |= 0x20;
                 D_0015F604 = D_00193300.unk14;
             }
             break;
 
         case 4:
             if (D_0015F5E8 != 0) {
-                if (D_0015EEB4 & 2) {
+                if (mode_freeze_flags & 2) {
                     struct S_0013C940 *p = &D_0013C940;
                     if (p->unk1A4 & 0x40) {
                         load_and_initialize_level_chunk();
-                        D_0015EEB4 = D_0015EEB4 & (~2);
-                        D_0015EEB4 = D_0015EEB4 & (~4);
+                        mode_freeze_flags = mode_freeze_flags & (~2);
+                        mode_freeze_flags = mode_freeze_flags & (~4);
                         func_0022E188(0);
                         D_0013E05A[0] = 1;
                     }
                     if (p->unk1A4 & 0x10) {
-                        D_0015EEB4 = D_0015EEB4 | 0x20;
-                        D_0015EEB4 = D_0015EEB4 & (~2);
-                        D_0015EEB4 = D_0015EEB4 & (~4);
+                        mode_freeze_flags = mode_freeze_flags | 0x20;
+                        mode_freeze_flags = mode_freeze_flags & (~2);
+                        mode_freeze_flags = mode_freeze_flags & (~4);
                         D_0015F604 = D_00193300.unk14;
                     }
-                } else if (D_0015EEB4 & 4) {
+                } else if (mode_freeze_flags & 4) {
                     if (D_0013CAE4[0] & 0x10) {
-                        D_0015EEB4 = D_0015EEB4 | 0x20;
-                        D_0015EEB4 = D_0015EEB4 & (~2);
-                        D_0015EEB4 = D_0015EEB4 & (~4);
+                        mode_freeze_flags = mode_freeze_flags | 0x20;
+                        mode_freeze_flags = mode_freeze_flags & (~2);
+                        mode_freeze_flags = mode_freeze_flags & (~4);
                         D_0015F604 = D_00193300.unk14;
                     }
                 } else {
                     D_0015F604 = D_00193300.unk14;
                 }
             } else if (D_0013CAE4[0] & 0x10) {
-                D_0015EEB4 = D_0015EEB4 | 0x20;
-                D_0015EEB4 = D_0015EEB4 & (~2);
-                D_0015EEB4 = D_0015EEB4 & (~4);
+                mode_freeze_flags = mode_freeze_flags | 0x20;
+                mode_freeze_flags = mode_freeze_flags & (~2);
+                mode_freeze_flags = mode_freeze_flags & (~4);
                 D_0015F604 = D_00193300.unk14;
             }
             break;
 
         case 9:
             if (D_0015F5E8 != 0) {
-                if (!(D_0015EEB4 & 6)) {
+                if (!(mode_freeze_flags & 6)) {
                     D_0015F604 = D_00193300.unk14;
                 }
             }

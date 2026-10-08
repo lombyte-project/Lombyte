@@ -10,12 +10,12 @@ struct Menu {
     char pad3[0xF4 - 0xE4];
     int f4;
 };
-extern int D_0015EEB0 MACRO_ADDR;
+extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 extern struct Menu D_0013D290;
 void save_card_state_init(void) __asm__("FUN_002088a8");
 
 void save_card_state_init(void) {
-    D_0015EEB0 = 3;
+    mode_freeze_state = 3;
     D_0013D290.sel = D_0013D290.saved;
     D_0013D290.f4 = 0;
 }

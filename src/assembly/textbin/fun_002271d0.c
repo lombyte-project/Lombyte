@@ -12,7 +12,6 @@ struct FullScreenAntiAliasingDimensions {
     s16 display_width;
     s16 display_height;
 };
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern struct FullScreenAntiAliasingDimensions fs_aa_buffer __asm__("D_00151780");
 extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 void append_fullscreen_setup_strips(void) __asm__("FUN_002271d0");

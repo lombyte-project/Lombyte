@@ -21,7 +21,6 @@ struct ScreenOfs {
     s32 y;
 };
 
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern struct ScreenOfs screen_offsets __asm__("D_0013E500");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
