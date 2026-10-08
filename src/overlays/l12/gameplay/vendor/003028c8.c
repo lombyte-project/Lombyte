@@ -230,7 +230,64 @@ void FUN_L12_00307ab8(char *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003081b0.s", FUN_L12_003081b0);
+#include "rnc/gameplay/entities/moby.h"
+
+extern s32 current_level_index __asm__("D_0015ED84");
+extern unsigned char D_0014C050[];
+extern char D_0013E550[];
+extern int FUN_L01_00275690(void *, float);
+extern int FUN_0022da68(int, int, void *);
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L00_002502a0(int);
+extern void FUN_L12_00308350(void);
+
+/* Pvars: d[0] is the moby to watch, d[1] the voice slot held for this moby. */
+void FUN_L12_003081b0(struct Moby *m) {
+    int st = m->state;
+    int vis;
+    int *d = (int *)m->pvars;
+
+    switch (st) {
+    case 0:
+        if (m->unkB0 != 0xFF && D_0014C050[m->unkB0 + current_level_index * 16] == 0xFF) {
+            mark_moby_for_removal(m);
+            break;
+        }
+        m->state = 1;
+        break;
+    case 1:
+        vis = 1;
+        if (FUN_L01_00275690(m, 48.0f) == -1) {
+            vis = 0;
+        }
+        if (vis) {
+            enqueue_callback_list_1(FUN_L12_00308350, m);
+        }
+        if (d[1] == -1) {
+            d[1] = FUN_0022da68(0, 4, m);
+        }
+        if (d[0] >= 0) {
+            int i = d[1];
+            if (i != -1) {
+                char *e = D_0013E550 + i * 0x70;
+                if (*(struct Moby **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
+                    release_voice_slot(i);
+                }
+            }
+            d[1] = -1;
+            if (((struct Moby *)(D_L12_0015FFD8_p + (d[0] << 8)))->state == 7) {
+                if (m->unkB0 != 0xFF) {
+                    FUN_L00_002502a0(m->unkB0);
+                }
+                FUN_0022da68(1, 0, m);
+                m->unk94 = 0;
+                m->state = 2;
+            }
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00308350.s", FUN_L12_00308350);
 #include "sda.h"
 
