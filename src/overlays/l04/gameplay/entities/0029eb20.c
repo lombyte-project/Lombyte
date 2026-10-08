@@ -116,7 +116,56 @@ void FUN_L04_002c4808(char *arg) {
     DeleteMoby(arg);
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029eb20.s", FUN_L04_0029eb20);
+/* Moves a moby along a path by a distance, stepping to the next point when it passes one. */
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/entities/moby.h"
+
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 point[1];
+} PathPoints_eb20;
+
+extern void FUN_001f9a28(Vec4 *out, void *a, void *b);
+extern f32 FUN_001f9af0(Vec4 *v);
+extern void FUN_001f9bf8(Vec4 *out, Vec4 *v, f32 len);
+extern f32 FUN_001f9ab0(Vec4 *a, Vec4 *b);
+extern void FUN_001f9a10(Vec4 *out, Vec4 *a, Vec4 *b);
+
+static inline s32 path_next_eb20(PathPoints_eb20 *path, s32 i, s32 dir) {
+    if (i == path->count - 1) {
+        return dir > 0 ? 0 : path->count - 2;
+    }
+    if (i == 0) {
+        return dir > 0 ? i + 1 : path->count - 1;
+    }
+    return i + dir;
+}
+
+s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 dist) {
+    Vec4 seg;
+    Vec4 rel;
+    s32 next;
+    f32 len;
+    f32 along;
+
+    next = path_next_eb20(path, i, dir);
+    FUN_001f9a28(&seg, &path->point[next], &path->point[i]);
+    len = FUN_001f9af0(&seg);
+    FUN_001f9bf8(&seg, &seg, 1.0f);
+    FUN_001f9a28(&rel, &m->pos, &path->point[i]);
+    along = FUN_001f9ab0(&rel, &seg) + dist;
+    if (len < along) {
+        i = next;
+        next = path_next_eb20(path, i, dir);
+        FUN_001f9a28(&seg, &path->point[next], &path->point[i]);
+        along = along - len;
+        FUN_001f9bf8(&seg, &seg, 1.0f);
+    }
+    FUN_001f9bf8(&seg, &seg, along);
+    FUN_001f9a10(&m->pos, &seg, &path->point[i]);
+    return i;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
