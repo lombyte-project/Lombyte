@@ -39,7 +39,7 @@ struct Moby {
     u8 unk70;
     u8 pad71;
     u8 unk72;
-    u8 pad73;
+    u8 unk73;
     void (*update)(struct Moby *moby);
     u8 *pvars;
     u8 unk7C;
@@ -58,7 +58,9 @@ struct Moby {
     u8 padB6[2];
     void *unkB8;                      /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
     u8 unkBC;
-    u8 padBD[0x23];
+    u8 padBD[3];
+    Vec4f unkC0;                      /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
+    Vec4f unkD0;
     Vec4f unkE0;
     u8 padF0[0x10];
 };
