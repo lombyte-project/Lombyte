@@ -253,7 +253,99 @@ char *FUN_L09_002ea778(void) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002eaa50.s", FUN_L09_002eaa50);
+#include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Variables of the pebble mobys the l09 rockfall spawner creates (moby->pvars). */
+typedef struct {
+    f32 vel[3];          /* 0x00: sideways drift */
+    f32 speed;           /* 0x0C */
+    s32 path;            /* 0x10 */
+    s32 unk14;           /* 0x14 */
+    s32 count;           /* 0x18: pebbles spawned (on the spawner) */
+    u8 pad1C[4];
+    Vec4 start;          /* 0x20 */
+    Vec4 offset;         /* 0x30 */
+    f32 spin_x;          /* 0x40 */
+    f32 spin_y;          /* 0x44 */
+    s32 unk48;           /* 0x48 */
+    u8 pad4C[4];
+    struct Moby *owner;  /* 0x50 */
+} PebbleVars;
+
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 pts[1];         /* 0x10: count + 1 points, pts[-1] is this header */
+} PebblePath;
+
+extern PebblePath *D_L09_001B0630_2eaa50[] __asm__("D_L09_001B0630");
+extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
+extern f32 D_0015ED6C_2eaa50 __asm__("D_0015ED6C");
+extern s32 random_integer_below_2eaa50(s32) __asm__("FUN_00213260");
+extern f32 random_float_2eaa50(f32, f32) __asm__("FUN_002132a8");
+extern struct Moby *create_moby_2eaa50(s32) __asm__("FUN_0020c4f8");
+extern void set_moby_color_2eaa50(struct Moby *, s32, s32, s32) __asm__("FUN_L00_002502f0");
+extern void activate_moby_2eaa50(struct Moby *) __asm__("FUN_L00_00250df8");
+extern void add_vector_2eaa50(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_2eaa50(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void cross_vector_2eaa50(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void normalize_vector_2eaa50(void *, void *, f32) __asm__("FUN_001f9bf8");
+
+/* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
+struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
+    struct Moby *m;
+    PebbleVars *ovars;
+    PebbleVars *vars;
+    PebblePath *path;
+    f32 r;
+    Vec4 a;
+    Vec4 b;
+
+    m = create_moby_2eaa50(random_integer_below_2eaa50(4) + 0x107);
+    if (m != 0) {
+        ovars = (PebbleVars *)owner->pvars;
+        vars = (PebbleVars *)m->pvars;
+        qcopy(&m->pos, &owner->pos);
+        ovars->count++;
+        vars->owner = owner;
+        vars->path = ovars->path;
+        vars->unk48 = 1;
+        vars->unk14 = 0;
+        m->unkBC = 1;
+        m->unk31 = 1;
+        m->unk30 = 0xFF;
+        m->unk32 = 0xFF;
+        set_moby_color_2eaa50(m, 0x80, 0x80, 0x80);
+        m->unk23 = 0;
+        m->scale *= random_float_2eaa50(0.4f, 0.85f);
+        vars->spin_x = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
+        vars->spin_y = random_float_2eaa50(-0.0052359877f, 0.0052359877f);
+        if (vars->path >= 0) {
+            path = D_L09_001B0630_2eaa50[vars->path];
+            r = random_float_2eaa50(-30.0f, 30.0f);
+            subtract_vector_2eaa50(&a, &path->pts[path->count - 1], &path->pts[path->count - 2]);
+            subtract_vector_2eaa50(&b, &path->pts[1], &path->pts[0]);
+            cross_vector_2eaa50(&b, &b, &a);
+            b.f[2] = 0.0f;
+            normalize_vector_2eaa50(vars, &b, r);
+            subtract_vector_2eaa50(&a, &path->pts[path->count - 1], &path->pts[0]);
+            cross_vector_2eaa50(&b, &b, &a);
+            normalize_vector_2eaa50(&b, &b, random_float_2eaa50(0.0f, 5.0f));
+            add_vector_2eaa50(vars, vars, &b);
+            qcopy(&vars->start, &path->pts[0]);
+            qcopy(&vars->offset, &ovars->offset);
+            add_vector_2eaa50(&m->pos, &path->pts[0], vars);
+            add_vector_2eaa50(&m->pos, &m->pos, D_L09_00166F40_2eaa50);
+            subtract_vector_2eaa50(&m->pos, &m->pos, &vars->offset);
+            vars->speed = r / 20.0f + 10.0f;
+            m->scale *= r / 100.0f + 1.0f;
+            vars->speed *= D_0015ED6C_2eaa50;
+        }
+        activate_moby_2eaa50(m);
+    }
+    return m;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
