@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/hero.h"
 
 typedef struct {
     char pad[0x24];
@@ -163,18 +164,6 @@ extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
 #define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
 #define GB(o) (D_0013F350_c2[o])
-typedef struct {
-    u8 pad0[0x18];
-    s32 i18;
-    s32 i1C;
-    union {
-        Q q;
-        f32 f[4];
-    } v20;
-    u8 pad30[0x10];
-    f32 f40;
-    f32 f44;
-} HS;
 extern HS HH __asm__("D_L15_00174440") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L15_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))

@@ -8,6 +8,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -1420,32 +1421,6 @@ void FUN_L15_0029ead0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029edb0.s", FUN_L15_0029edb0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a2488.s", FUN_L15_002a2488);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 extern char D_0013F350[];
 extern int D_L15_0015FFD8;

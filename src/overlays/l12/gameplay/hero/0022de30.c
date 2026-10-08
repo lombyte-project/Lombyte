@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/hero.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern char D_0013F350_u[] __asm__("D_0013F350");
@@ -93,42 +94,6 @@ void FUN_L12_0022de30(void) {
 #define P D_0013F350_231ae0
 /* Same source as the exact FUN_L01_00231ae0, with a b12E2/i300 branch. */
 
-typedef struct {
-    u8 pad0[0x80];
-    f32 v80[4];
-    u8 pad90[0x108];
-    s32 i198;
-    u8 pad19C[0x74];
-    f32 v210[4];
-    f32 f220;
-    f32 f224;
-    f32 f228;
-    f32 f22C;
-    f32 f230;
-    f32 f234;
-    f32 f238;
-    u8 pad23C[0x1B];
-    u8 b257;
-    u8 pad258[0xA8];
-    s32 i300;
-    u8 pad304[0x11A];
-    s16 s41E;
-    s32 i420;
-    u8 pad424[0x10];
-    f32 f434;
-    u8 pad438[0xEAA];
-    u8 b12E2;
-    u8 pad12E3;
-    u8 b12E4;
-    u8 pad12E5[0xD9F];
-    s32 i2084;
-    u8 pad2088[0x4];
-    s32 i208C;
-    u8 pad2090[0x4];
-    s32 i2094;
-    u8 pad2098[0xC];
-    u8 b20A4;
-} P231ae0;
 extern P231ae0 D_0013F350_231ae0 __asm__("D_0013F350");
 extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
 extern f32 D_0015ED60_231ae0 __asm__("D_0015ED60");
@@ -287,18 +252,6 @@ extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
 #define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
 #define GB(o) (D_0013F350_c2[o])
-typedef struct {
-    u8 pad0[0x18];
-    s32 i18;
-    s32 i1C;
-    union {
-        Q q;
-        f32 f[4];
-    } v20;
-    u8 pad30[0x10];
-    f32 f40;
-    f32 f44;
-} HS;
 extern HS HH __asm__("D_L12_001742C0") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L12_001742C0 + (o)))
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))

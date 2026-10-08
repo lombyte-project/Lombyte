@@ -4,19 +4,9 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/entities.h"
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
-
 typedef struct {
     char pad0[0x10];
     char pos[0x10];

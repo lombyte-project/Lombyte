@@ -84,7 +84,7 @@ typedef struct {
     M_FUN_L01_00308470 *m;
 } O_FUN_L01_00308470;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L01_00308470(O_FUN_L01_00308470 *o) {
     M_FUN_L01_00308470 *m = o->m;
     s32 i;
@@ -95,7 +95,7 @@ void FUN_L01_00308470(O_FUN_L01_00308470 *o) {
     m->a[2] = 1.25f;
     m->a[3] = 2.5f;
     for (i = 0; i < 4; i++)
-        m->c[i] = FUN_001f96f8(i * 0x40 + 0x3F);
+        m->c[i] = scale_game_frames(i * 0x40 + 0x3F);
     m->x40 = 2.5f;
     m->x44 = 3.0f;
     m->x4c = 2.5f;

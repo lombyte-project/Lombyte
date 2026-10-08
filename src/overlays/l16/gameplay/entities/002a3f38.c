@@ -20,6 +20,7 @@ int FUN_L16_002c4710(Level16VendorMoby *moby) {
     return moby->state == 6;
 }
 #include "qcopy.h"
+#include "rnc/overlay/entities.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C75D0), where it is exact; names translated to the US level program. */
 
@@ -523,17 +524,6 @@ void FUN_L16_002a3f38(unsigned char *m) {
     }
 }
 /* Migrated from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C5030). */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/entities.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e5958.s", FUN_L15_002e5958);
 #define NOT_SDA
@@ -30,17 +31,6 @@ void FUN_L15_002eb0a0(char *moby) {
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

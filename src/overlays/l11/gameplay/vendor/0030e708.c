@@ -4,6 +4,7 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/entities.h"
 
 /* Register this level's vendor data set. */
 
@@ -46,10 +47,6 @@ void FUN_L11_0031d7d8(char *m) {
 }
 /* Runs the two per-entry update calls over a 13-entry table. */
 
-typedef struct {
-    int a, b;
-} Pair;
-
 extern Pair D_L11_00217758[];
 extern char D_L11_00217770[];
 extern int D_L11_00207900[];
@@ -67,10 +64,7 @@ void FUN_L11_0031e6a8(int a) {
                          1);
     }
 }
-typedef struct {
-    int a, b;
-} Pair_002f0c18;
-extern Pair_002f0c18 D_L11_00162618[] __attribute__((section(".sdata")));
+extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
 extern int D_L11_00200728[];
 extern int D_L11_00207888[];
 extern int D_L11_00207860[];

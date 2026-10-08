@@ -9,6 +9,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002d8178.s", FUN_L06_002d8178);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/entities.h"
 
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
@@ -211,32 +213,6 @@ void FUN_L06_002ea498(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ea5e0.s", FUN_L06_002ea5e0);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 extern int FUN_L00_002dbb20(void *);
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -1674,17 +1650,6 @@ void FUN_L06_002f7930(char *m) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8EE8), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

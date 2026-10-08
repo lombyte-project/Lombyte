@@ -4,6 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
 
 extern char *CreateMoby_c13(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);
@@ -55,32 +56,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c1528.s", FUN_L13_002c1528);
 
 /* Spawns a moby of class 0x53 at a position, with its data block filled in. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C31B0), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 extern char *func_0020D348_m(int);
 extern int FUN_001f96f8(int);

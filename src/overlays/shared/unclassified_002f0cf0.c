@@ -3,13 +3,11 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/entities.h"
 extern char D_L08_001E8360[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
-typedef struct {
-    int a, b;
-} Pair_002f0c18;
-extern Pair_002f0c18 D_L08_00161E20[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
 extern int D_L08_001DB518[];
 extern int D_L08_001DDEE0[];
 extern int D_L08_001DDEC0[];

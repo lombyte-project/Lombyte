@@ -25,6 +25,7 @@ void FUN_L03_00291918(char *moby) {
     FUN_L02_002a46e0(moby);
 }
 #include "qcopy.h"
+#include "rnc/overlay/entities.h"
 
 /* update: follow the parent, blend its color, scale by the wind factor */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002BC140), where it is exact; names translated to the US level program. */
@@ -202,17 +203,6 @@ void FUN_L03_002ce238(char *m) {
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320B50), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

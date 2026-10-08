@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/entities.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -269,32 +271,6 @@ void FUN_L13_002b48d8(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002b4958.s", FUN_L13_002b4958);
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5C08), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
-
 extern char *FUN_L00_0025a420(void *, int, int);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int FUN_L00_0025a478(void *, void *, void *, int, int *, float *, int, int);
@@ -383,17 +359,6 @@ void FUN_L13_002b4a58(char *m, char *p) {
 }
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5E30), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

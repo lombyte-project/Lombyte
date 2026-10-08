@@ -3,6 +3,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/moby_anim.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 #define NOT_SDA
@@ -173,16 +174,16 @@ extern WP11 D_0013F350_d0710 __asm__("D_0013F350");
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa5c8(float, float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740(int *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_001f96b0(float);
-extern int FUN_001fa6d0(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void FUN_00214db0(void *, float, float, float);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -236,12 +237,12 @@ void FUN_L11_002d0710(WM11 *m) {
         char *player = D_0013E533 + 0xE9D;
         tracking = 1;
         if (FUN_001f9b80(m->position, player) < 8.0f &&
-            FUN_001fa688(m->yaw,
-                         FUN_001f9e90(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - m->position[0],
-                                      ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - m->position[1])) <
+            fast_difference_between_rotations(
+                m->yaw, FUN_001f9e90(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - m->position[0],
+                                     ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - m->position[1])) <
                 1.5707964f) {
             if (FUN_001f9af0(player + 0x80) > 0.01f)
-                d->moving_timer = FUN_001f96f8(120);
+                d->moving_timer = scale_game_frames(120);
             else
                 FUN_001f9740(&d->moving_timer);
         } else if (d->moving_timer) {
@@ -250,8 +251,9 @@ void FUN_L11_002d0710(WM11 *m) {
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
-            heading = FUN_001fa580(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
+            d->target_timer =
+                truncate_float_to_s32(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            heading = fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             FUN_00214db0(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             FUN_001f9a10(d->target, d->target, m->position);
         }
@@ -674,32 +676,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00309ac0.s", FUN_L11_00309ac0);
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 

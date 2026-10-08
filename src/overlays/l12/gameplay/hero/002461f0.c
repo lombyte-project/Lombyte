@@ -8,34 +8,10 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/hero.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 12 build). */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/help_00246938.c: func_L12_00246938), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char p0[0x44];
-    int f44;
-    int f48;
-    char p1[0x10];
-    float f5C;
-    int f60;
-    char p2[0xC];
-} Rec70;
-
-typedef struct {
-    char p0[0x24];
-    int f24;
-    char p1[0x24];
-} Rec4C;
-
-typedef struct {
-    char p0[0xC];
-    int fC;
-    char p1[4];
-    int f14;
-    int f18;
-    char p2[0x10];
-} Rec2C;
 
 typedef struct {
     char p0[0x254];
@@ -49,13 +25,6 @@ typedef struct {
     char p1[8];
     float f18;
 } S17C2B8;
-
-typedef struct {
-    char p0[0xF8];
-    unsigned short fF8;
-    unsigned short fFA;
-    int fFC;
-} S141948;
 
 typedef struct {
     char p0[0x80] __attribute__((aligned(16)));
@@ -269,19 +238,6 @@ typedef struct {
     short f22DC;
     short f22DE;
 } Hero;
-
-typedef struct {
-    char p0[0x1A0] __attribute__((aligned(16)));
-    int f1A0;
-    int f1A4;
-    char p1A8[0x10];
-    int f1B8;
-    char p1BC[0x4];
-    int f1C0;
-    int f1C4;
-    char p1C8[0xC];
-    int f1D4;
-} Pad;
 
 extern Hero D_0013F350;
 extern Pad D_0013C940;

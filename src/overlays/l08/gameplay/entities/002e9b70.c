@@ -3,6 +3,8 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/overlay/watch.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e9b70.s", FUN_L08_002e9b70);
 extern float D_0015ED6C;
@@ -82,10 +84,6 @@ void FUN_L08_002f0dc8(void) {
 }
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    int a, b;
-} Pair;
 
 extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
@@ -253,26 +251,11 @@ typedef struct {
     char pad7C[3];
     unsigned char b7F;
 } WM;
-typedef struct {
-    char pad00[0x80];
-    float position[4];
-    char pad90[0x40];
-    float aim[4];
-    char padE0[0x22E];
-    short disabled;
-    char pad310[0x1D7C];
-    int mode;
-} L16WatchPlayer;
-typedef struct {
-    float target[4];
-    float eye[4];
-    float delta[4];
-} L16WatchScratch;
 extern void FUN_L01_002783a8(void *, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED64;
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
@@ -352,7 +335,7 @@ void FUN_L08_00302ce8(WM *m) {
     case 0:
         ((unsigned char *)m)[0x30] = 0xFF;
         if (m->animation != 1)
-            blend_moby_animation(m, 1, 0, FUN_001f96f8(10));
+            blend_moby_animation(m, 1, 0, scale_game_frames(10));
         if (D_0013DD4A_w && D_0014C050[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             return;
@@ -383,7 +366,7 @@ void FUN_L08_00302ce8(WM *m) {
     case 2:
         if (m->flags70 & 2) {
             if (m->animation != random_integer_below(2) + 1)
-                blend_moby_animation(m, random_integer_below(2) + 1, 0, FUN_001f96f8(20));
+                blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
         if (FUN_L00_00266448(m, (char *)d + 0x20)) {
             m->state = 3;

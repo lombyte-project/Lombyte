@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020c758.s", FUN_L00_0020c758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
 #include "qcopy.h"
+#include "rnc/overlay/hero.h"
 typedef int Q_cf58 __attribute__((mode(TI)));
 typedef struct {
     f32 x, y, z, w;
@@ -2369,18 +2370,6 @@ extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
 #define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
 #define GB(o) (D_0013F350_c2[o])
-typedef struct {
-    u8 pad0[0x18];
-    s32 i18;
-    s32 i1C;
-    union {
-        Q q;
-        f32 f[4];
-    } v20;
-    u8 pad30[0x10];
-    f32 f40;
-    f32 f44;
-} HS;
 extern HS HH __asm__("D_L00_00173E40") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L00_00173E40 + (o)))
 #define HF(o) (*(f32 *)(D_L00_00173E40 + (o)))

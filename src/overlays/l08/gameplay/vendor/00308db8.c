@@ -3,12 +3,9 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/entities.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
-
-typedef struct {
-    int a, b;
-} Pair;
 
 extern Pair D_L08_001F8548[];
 extern char D_L08_001F8560[];
@@ -27,10 +24,7 @@ void FUN_L08_00308db8(int a) {
                          1);
     }
 }
-typedef struct {
-    int a, b;
-} Pair_002f0c18;
-extern Pair_002f0c18 D_L08_001623F8[] __attribute__((section(".sdata")));
+extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
 extern int D_L08_001F01C8[];
 extern int D_L08_001F4C18[];
 extern int D_L08_001F4C00[];

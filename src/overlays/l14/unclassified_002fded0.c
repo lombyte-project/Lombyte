@@ -24,7 +24,7 @@ void FUN_L14_002fe238(char *moby) {
 #include "qcopy.h"
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int scale_game_frames(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 typedef struct {
     char pad00[0x60];

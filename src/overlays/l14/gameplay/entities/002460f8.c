@@ -3,6 +3,8 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/entities.h"
 
 extern void AddDrawCallback(void *, void *) __asm__("FUN_001f4600");
 
@@ -94,32 +96,6 @@ void FUN_L14_002ac2b8(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002ac618.s", FUN_L14_002ac618);
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_0025a478(void *, void *, void *, int, void *, void *, int, int);
@@ -1024,7 +1000,7 @@ typedef struct {
 } Mover_5c30;
 
 extern int *D_L14_001B0BB0[];
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L14_002b5c30(char *moby) {
     Mover_5c30 *d = *(Mover_5c30 **)(moby + 0x78);
@@ -1038,7 +1014,7 @@ void FUN_L14_002b5c30(char *moby) {
     d->node = n;
     d->w = *(float *)((n << 4) + (char *)p + 0x1C);
     d->t = 0;
-    FUN_001f99f8(d->off);
+    clear_u64_value(d->off);
 }
 extern u8 D_0013E550[];
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
@@ -1068,7 +1044,7 @@ extern int *D_L14_001B0BB0[];
 extern float D_L14_00161540 __attribute__((sda));
 extern void FUN_001f9a28(void *, void *, void *);
 extern float FUN_001f9e90(float, float);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void FUN_L14_002b5d18(char *moby) {
     float f = D_L14_00161540 * 1.5f;
@@ -1091,7 +1067,7 @@ void FUN_L14_002b5d18(char *moby) {
     FUN_001f9a28(v, p + 0x20, moby + 0x10);
     *(float *)(moby + 0x48) = FUN_001f9e90(v[0], v[1]);
     *(int *)(d + 0xE4) = 0;
-    FUN_001f99f8(d + 0xF0);
+    clear_u64_value(d + 0xF0);
 }
 /* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
 typedef struct {
@@ -1473,17 +1449,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de2b8.s", FUN_L14_002de2b8);
 
 /* Updates a gem-lock sentry: picks up a sound slot and fires when the player is near. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002E0228), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

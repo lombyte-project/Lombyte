@@ -4,6 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
@@ -103,32 +104,6 @@ void FUN_L13_00306148(char *moby) {
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307660), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 extern char *func_0020D348_m_c(int);
 extern float FUN_001f9af0(void *);
@@ -264,7 +239,7 @@ extern float D_0015ED6C;
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
 extern float FUN_001f9e90(float, float);
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float rand_range_9e88(float, float) __asm__("FUN_002132a8");
 extern int random_below_9e88(int) __asm__("FUN_00213260");
 extern void FUN_L01_002b7a48(void *, int);
@@ -359,7 +334,7 @@ void FUN_L13_00309e88(char *moby) {
         if (*(int *)(h + 0x208C) != 0x14 && *(int *)(h + 0x208C) != 0x19 &&
             *(int *)(h + 0x2084) != 0x3D && *(int *)(h + 0x2084) != 0x7B &&
             *(int *)(h + 0x2084) != 0x7C)
-            b->angle = FUN_001fa580(b->angle, b->speed);
+            b->angle = fast_add_rotations(b->angle, b->speed);
         Tiles_9e88[b->idx].c1C = D_L13_001CAB80.c3C;
         Tiles_9e88[b->idx].c1D = D_L13_001CAB80.c3D;
         if (random_below_9e88(200) == 0) {

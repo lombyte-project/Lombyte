@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/overlay/watch.h"
 
 #define NOT_SDA __attribute__((section(".data")))
 
@@ -90,21 +92,6 @@ typedef struct {
     char pad7C[3];
     unsigned char b7F;
 } WM;
-typedef struct {
-    char pad00[0x80];
-    float position[4];
-    char pad90[0x40];
-    float aim[4];
-    char padE0[0x22E];
-    short disabled;
-    char pad310[0x1D7C];
-    int mode;
-} L16WatchPlayer;
-typedef struct {
-    float target[4];
-    float eye[4];
-    float delta[4];
-} L16WatchScratch;
 extern void FUN_L01_002783a8(void *, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -639,10 +626,6 @@ void FUN_L08_00308c90(char *moby) {
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    int a, b;
-} Pair;
 
 extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
 extern char D_L08_001F8560[];

@@ -4,51 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-typedef int Q_8 __attribute__((mode(TI)));
-
-typedef struct {
-    u8 pad0[0x98];
-    f32 f98;
-    u8 pad9C[0x128 - 0x9C];
-    f32 f128;
-    u8 pad12C[0x1C0 - 0x12C];
-    s32 i1C0;
-    u8 pad1C4[0x30E - 0x1C4];
-    s16 h30E;
-    u8 pad310[0x5BE - 0x310];
-    s16 h5BE;
-    u8 pad5C0[0x12E7 - 0x5C0];
-    u8 b12E7;
-    u8 pad12E8[0x2080 - 0x12E8];
-    u8 *p2080;
-    s32 i2084;
-    u8 pad2088[4];
-    s32 i208C;
-    u8 pad2090[0x20A4 - 0x2090];
-    u8 b20A4;
-    u8 pad20A5[0x2280 - 0x20A5];
-    u8 *p2280;
-} G_8;
-
-typedef struct {
-    u8 pad0[0x10];
-    Q_8 v10;
-    u8 *p20;
-    s32 i24;
-    u8 b28;
-    u8 pad29[3];
-    f32 f2C;
-    s32 i30;
-    u8 *p34;
-    u8 pad38[8];
-} T_8;
-
-typedef union {
-    Q_8 q;
-    f32 f[4];
-    s32 i[4];
-} V_8;
-
+#include "rnc/overlay/hero.h"
 extern G_8 D_0013F350_8 __asm__("D_0013F350");
 extern s32 D_L08_0015F5C4_8 __asm__("D_L08_0015F5C4");
 extern T_8 D_L08_00178900_8[] __asm__("D_L08_00178900");

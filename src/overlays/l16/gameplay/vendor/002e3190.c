@@ -8,6 +8,9 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/moby_anim.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/overlay/watch.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -56,27 +59,10 @@ typedef struct {
 } L16WatchMoby;
 
 typedef struct {
-    char pad00[0x80];
-    float position[4];
-    char pad90[0x40];
-    float aim[4];
-    char padE0[0x22E];
-    short disabled;
-    char pad310[0x1D7C];
-    int mode;
-} L16WatchPlayer;
-
-typedef struct {
     char pad00[0x70];
     unsigned char entered;
     unsigned char mission;
 } L16WatchFlags;
-
-typedef struct {
-    float target[4];
-    float eye[4];
-    float delta[4];
-} L16WatchScratch;
 
 extern char D_0013E533[];
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
@@ -1058,43 +1044,6 @@ void FUN_L16_002e56e0(Level16VendorTurnMoby *moby) {
 
 /* Update the wandering helper's motion, animations, interaction and damage states. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7270), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char _pad00[0x10];
-    unsigned char nframes; /* 0x10 */
-} AnimSeq;
-
-typedef struct {
-    char _pad00[0x48];
-    AnimSeq *seqs[1]; /* 0x48 */
-} AnimClass;
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
-
-typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
-    unsigned char frame;     /* 0x50 */
-    unsigned char nextFrame; /* 0x51 */
-    unsigned char seq;       /* 0x52 */
-    unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70; /* 0x70 */
-} MobyAnim;
 
 typedef struct {
     char pad0[0x10];

@@ -4,6 +4,7 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/entities.h"
 /* Recognize the active vendor object state. */
 
 int FUN_L11_0030f270(char *moby) {
@@ -15,10 +16,7 @@ int FUN_L11_0030f270(char *moby) {
 extern char D_L11_00217770[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
-typedef struct {
-    int a, b;
-} Pair_002f0c18;
-extern Pair_002f0c18 D_L11_00162628[] __attribute__((section(".sdata")));
+extern Pair D_L11_00162628[] __attribute__((section(".sdata")));
 extern int D_L11_00215268[];
 extern int D_L11_00217710[];
 extern int D_L11_002176F8[];

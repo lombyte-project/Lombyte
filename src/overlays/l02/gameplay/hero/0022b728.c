@@ -8,6 +8,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/hero.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
@@ -1571,31 +1572,6 @@ typedef struct {
 } T2C_22BE40_u;
 
 typedef struct {
-    char p0[0x44];
-    int f44;
-    int f48;
-    char p1[0x10];
-    float f5C;
-    int f60;
-    char p2[0xC];
-} Rec70;
-
-typedef struct {
-    char p0[0x24];
-    int f24;
-    char p1[0x24];
-} Rec4C;
-
-typedef struct {
-    char p0[0xC];
-    int fC;
-    char p1[4];
-    int f14;
-    int f18;
-    char p2[0x10];
-} Rec2C;
-
-typedef struct {
     char p0[0x254];
     float f254;
     float f258;
@@ -1607,13 +1583,6 @@ typedef struct {
     char p1[8];
     float f18;
 } S17C438;
-
-typedef struct {
-    char p0[0xF8];
-    unsigned short fF8;
-    unsigned short fFA;
-    int fFC;
-} S141948;
 
 typedef struct {
     char p0[0x80] __attribute__((aligned(16)));
@@ -1831,19 +1800,6 @@ typedef struct {
     short f22DC;
     short f22DE;
 } Hero;
-
-typedef struct {
-    char p0[0x1A0] __attribute__((aligned(16)));
-    int f1A0;
-    int f1A4;
-    char p1A8[0x10];
-    int f1B8;
-    char p1BC[0x4];
-    int f1C0;
-    int f1C4;
-    char p1C8[0xC];
-    int f1D4;
-} Pad;
 
 extern Hero D_0013F350_u __asm__("D_0013F350");
 extern Pad D_0013C940;

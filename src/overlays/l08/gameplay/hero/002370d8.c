@@ -8,34 +8,10 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/hero.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 08 build). */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00237818.c: func_L08_00237818), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char p0[0x44];
-    int f44;
-    int f48;
-    char p1[0x10];
-    float f5C;
-    int f60;
-    char p2[0xC];
-} Rec70;
-
-typedef struct {
-    char p0[0x24];
-    int f24;
-    char p1[0x24];
-} Rec4C;
-
-typedef struct {
-    char p0[0xC];
-    int fC;
-    char p1[4];
-    int f14;
-    int f18;
-    char p2[0x10];
-} Rec2C;
 
 typedef struct {
     char p0[0x254];
@@ -49,13 +25,6 @@ typedef struct {
     char p1[8];
     float f18;
 } S17C638;
-
-typedef struct {
-    char p0[0xF8];
-    unsigned short fF8;
-    unsigned short fFA;
-    int fFC;
-} S141948;
 
 typedef struct {
     char p0[0x74];
@@ -323,19 +292,6 @@ typedef struct {
     short f22DE;
 } Hero;
 
-typedef struct {
-    char p0[0x1A0] __attribute__((aligned(16)));
-    int f1A0;
-    int f1A4;
-    char p1A8[0x10];
-    int f1B8;
-    char p1BC[0x4];
-    int f1C0;
-    int f1C4;
-    char p1C8[0xC];
-    int f1D4;
-} Pad;
-
 extern Hero D_0013F350;
 extern Pad D_0013C940;
 extern Rec2C D_L08_0017C428[];
@@ -457,12 +413,12 @@ void FUN_L08_002370d8(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     int record_index;
-    int sp24;
-    float sp28;
-    int sp2C;
-    int sp30;
-    float sp34;
-    int sp38;
+    int path_seg;
+    float path_t;
+    int new_path;
+    int new_seg;
+    float new_t;
+    int new_loop;
     int sp3C;
     int sp40;
     float sp44;
@@ -1668,25 +1624,27 @@ void FUN_L08_002370d8(void) {
                                     float d = D_0013F350.f160 * (float)scale_game_frames(0);
 
                                     qcopy(v0, D_0013F350.f80);
-                                    sp24 = D_0013F350.f564;
-                                    sp28 = D_0013F350.f568;
-                                    if (FUN_L00_0025d808((int *)D_0013F350.f560, v0, &sp24, &sp28,
-                                                         D_0013F350.f584, d)) {
+                                    path_seg = D_0013F350.f564;
+                                    path_t = D_0013F350.f568;
+                                    /* Step a copy of the hero position along its current path. */
+                                    if (FUN_L00_0025d808((int *)D_0013F350.f560, v0, &path_seg,
+                                                         &path_t, D_0013F350.f584, d)) {
                                         scale_vector_xyz(v1, D_0013F350.f100,
                                                          scale_game_frames(0x30));
                                         add_vector_xyz(v0, D_0013F350.f80, v1);
                                     }
                                     v0[0] += fast_cos(ang) * f;
                                     v0[1] += fast_sin(ang) * f;
-                                    if (FUN_L00_0020cd08(v0, &sp2C, v1, &sp30, &sp34, &sp38,
-                                                         D_0013F350.f560, 0)) {
+                                    /* Look for another path (not this one) near the probe. */
+                                    if (FUN_L00_0020cd08(v0, &new_path, v1, &new_seg, &new_t,
+                                                         &new_loop, D_0013F350.f560, 0)) {
                                         D_0013F350.f594 = D_0013F350.f560;
                                         D_0013F350.f598 = D_0013F350.f564;
                                         D_0013F350.f59C = D_0013F350.f568;
                                         D_0013F350.f5A0 = D_0013F350.f584;
                                         qcopy(D_0013F350.f540, D_0013F350.f500);
-                                        D_0013F350.f560 = sp2C;
-                                        D_0013F350.f584 = sp38;
+                                        D_0013F350.f560 = new_path;
+                                        D_0013F350.f584 = new_loop;
                                         FUN_L00_0025df68((void *)D_0013F350.f560, D_0013F350.f80,
                                                          D_0013F350.f500, &D_0013F350.f564,
                                                          &D_0013F350.f568, D_0013F350.f584, 999.0f,

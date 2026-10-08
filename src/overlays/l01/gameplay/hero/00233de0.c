@@ -6,6 +6,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00233de0.s", FUN_L01_00233de0);
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/hero.h"
 
 typedef union {
     u128 q;
@@ -638,24 +639,6 @@ typedef struct {
     int f22F4;
 } Hero;
 
-typedef struct {
-    char p0[0x128] __attribute__((aligned(16)));
-    float f128;
-    float f12C;
-    char p130[0x70];
-    int f1A0;
-    int f1A4;
-    char p1A8[0x10];
-    int f1B8;
-    char p1BC[0x4];
-    int f1C0;
-    int f1C4;
-    char p1C8[0xC];
-    int f1D4;
-    char p1D8[0x4];
-    int f1DC;
-} Pad;
-
 typedef float FVec4[4] __attribute__((aligned(16)));
 
 typedef struct {
@@ -666,32 +649,11 @@ typedef struct {
 } Row13E650;
 
 typedef struct {
-    char p0[4];
-    int f4;
-    char p8[0x10];
-    int f18;
-    int f1C;
-    int f20;
-    char p24[8];
-} Rec2C;
-
-typedef struct {
     char p0[0x60];
     float f60[4];
     char p70[0x30];
     float fA0[4];
 } Bone;
-
-typedef struct {
-    char p0[0x58];
-    unsigned short f58;
-    unsigned short f5A;
-    int f5C;
-    char p60[0x30];
-    unsigned short f90;
-    unsigned short f92;
-    int f94;
-} S141948;
 
 typedef struct {
     char p0[0x158];

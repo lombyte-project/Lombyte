@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/overlay/watch.h"
 
 #define NOT_SDA
 
@@ -711,27 +712,10 @@ typedef struct {
 } WM;
 
 typedef struct {
-    char pad00[0x80];
-    float position[4];
-    char pad90[0x40];
-    float aim[4];
-    char padE0[0x22E];
-    short disabled;
-    char pad310[0x1D7C];
-    int mode;
-} L16WatchPlayer;
-
-typedef struct {
     char pad00[0x70];
     unsigned char entered;
     unsigned char mission;
 } L16WatchFlags;
-
-typedef struct {
-    float target[4];
-    float eye[4];
-    float delta[4];
-} L16WatchScratch;
 
 extern char D_0013E533[];
 extern char D_L05_001671C0[];

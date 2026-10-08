@@ -9,6 +9,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00308c68.s", FUN_L06_00308c68);
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/entities.h"
 
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
@@ -75,17 +76,6 @@ void FUN_L06_00309348(unsigned char *moby) {
 #include "sda.h"
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
-
 typedef struct {
     char pad0[0x10];
     char pos[0x10];
