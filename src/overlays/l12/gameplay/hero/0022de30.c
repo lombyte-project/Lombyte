@@ -115,7 +115,7 @@ void FUN_L12_00232b18(void) {
         break;
     }
     if (hero.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state == 6) {
         hero.unk22C = 0.5f;
@@ -250,7 +250,7 @@ extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
 #define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
 #define GB(o) (D_0013F350_c2[o])
-extern HS HH __asm__("D_L12_001742C0") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L12_001742C0 + (o)))
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 
@@ -311,29 +311,29 @@ void FUN_L12_00233e80(void) {
         GG.xB12ed = r;
     }
     if (GG.xH12e0 == 0xD) {
-        GG.xF2f0 = HH.v20.f[2];
-        v10.f[2] = HH.v20.f[2] - 0.01f;
+        GG.xF2f0 = HH.point.f[2];
+        v10.f[2] = HH.point.f[2] - 0.01f;
         if (FUN_001efa68_u(&v10, &v0, 4, GG.xI2080, 0) == 0) {
             goto d1;
         }
     }
-    if (HH.i18 != 0) {
-        if (FUN_L00_0025e3b8(HH.i18)) {
+    if (HH.moby != 0) {
+        if (FUN_L00_0025e3b8(HH.moby)) {
             GG.xH30a = 1;
         }
-        p = FUN_002141f8(HH.i18);
+        p = FUN_002141f8(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             GG.xH30a = 1;
         }
     }
-    if (HH.i1C > 0) {
-        qcopy((u8 *)&GG + 0x2A0, &HH.v20);
-        GG.u2d8.F = HH.v20.f[2];
+    if (HH.unk1C > 0) {
+        qcopy((u8 *)&GG + 0x2A0, &HH.point);
+        GG.u2d8.F = HH.point.f[2];
         GG.xF2dc = FUN_001f9b48((u8 *)&GG + 0x80, ((u8 *)&GG + 0x2A0));
-        GG.xI2fc = HH.i18;
-        FUN_00125180((u8 *)&GG + 0x270, (u8 *)&HH.f40);
-        GG.u2e0.F = FUN_L00_00233d30((u8 *)&HH.f40);
-        GG.xF2ec = FUN_001f9e90_c(HH.f40, HH.f44);
+        GG.xI2fc = HH.moby;
+        FUN_00125180((u8 *)&GG + 0x270, (u8 *)&HH.normal_x);
+        GG.u2e0.F = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        GG.xF2ec = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, ((u8 *)&GG + 0x2A0), (u8 *)&GG + 0x80);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&GG + 0x270)) {
             GG.xF2dc = -GG.xF2dc;
@@ -342,7 +342,7 @@ void FUN_L12_00233e80(void) {
             GG.u30c.H = 0;
             if (GG.u2e0.F <= 0.87266463f || GG.xB20b3 == 1 || GG.xI208c == 0x16) {
                 GG.u30e.H = 0;
-                GG.xIa80 = HH.i18;
+                GG.xIa80 = HH.moby;
             }
         }
     }
@@ -401,12 +401,12 @@ d1:
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
         if (FUN_001efa68_u(&v30, &v0, 0x22, GG.xI2080, 0)) {
-            f = HH.v20.f[2] - GG.u2d8.F;
+            f = HH.point.f[2] - GG.u2d8.F;
             GG.a2c0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 GG.a2c0.f[i] = 0.0f;
             }
-            FUN_00125180(&v60, (u8 *)&HH.f40);
+            FUN_00125180(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 GG.a2c8.f[i] = v50.f[1];

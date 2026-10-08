@@ -33,7 +33,7 @@ int FUN_L17_002020a8(int a) {
     }
     {
         struct Hero *g2 = &hero;
-        if (g2->unk22A8 == 1) {
+        if (g2->health == 1) {
             return 0x54;
         }
         if (g2->unk12E2 != 0) {
@@ -245,7 +245,7 @@ void FUN_L17_0020e1c0(void) {
         break;
     }
     if (hero.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state == 6) {
         hero.unk22C = 0.5f;

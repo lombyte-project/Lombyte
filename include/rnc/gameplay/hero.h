@@ -52,7 +52,7 @@ struct Hero {
     Vec4 unk120;                   /* 0x120 */
     u8 pad_130[0x10];
     Vec4 unk140;                   /* 0x140 */
-    Vec4 unk150;                   /* 0x150 */
+    Vec4 state_velocity;           /* 0x150: seeded from 0x110 or 0x100 on state entry (hero_set_state), length clamped by FUN_L00_0025f730 to N*D_0015ED6C, scaled by 0.8; xy length over 0.5*D_0015ED6C sends state 0 to 0x2F */
     f32 unk160;                    /* 0x160 */
     f32 unk164;                    /* 0x164 */
     f32 unk168;                    /* 0x168 */
@@ -98,8 +98,9 @@ struct Hero {
     s16 unk1F4;                    /* 0x1F4 */
     u8 pad_1F6[0x2];
     s16 unk1F8;                    /* 0x1F8 */
-    u8 pad_1FA[0x16];
-    Vec4 unk210;                   /* 0x210 */
+    u8 pad_1FA[0x6];
+    Vec4 unk200;                   /* 0x200: copied from collision hit D_L00_00173E80 by FUN_L00_002133a8 */
+    Vec4 unk210;                   /* 0x210: copied from collision hit D_L00_00173E60 by FUN_L00_002133a8 */
     f32 unk220;                    /* 0x220 */
     f32 unk224;                    /* 0x224 */
     f32 unk228;                    /* 0x228 */
@@ -107,7 +108,7 @@ struct Hero {
     f32 unk230;                    /* 0x230 */
     f32 unk234;                    /* 0x234 */
     f32 unk238;                    /* 0x238 */
-    u8 *unk23C;                    /* 0x23C */
+    u8 *coll_hit_moby;             /* 0x23C: CollisionHit.moby of the last push-out hit, stored by FUN_L00_002133a8 */
     u8 pad_240[0x8];
     f32 unk248;                    /* 0x248 */
     u8 pad_24C[0xB];
@@ -155,9 +156,9 @@ struct Hero {
     Vec4 unk400;                   /* 0x400 */
     f32 unk410;                    /* 0x410 */
     f32 unk414;                    /* 0x414 */
-    s32 unk418;                    /* 0x418 */
+    s32 snap_timer;                /* 0x418: set to scale_game_frames(1) when pos.z+velocity.z drops under unk500.z (velocity.z snapped to reach it), counted up each frame, past scale_game_frames(2) the state becomes 0x28 */
     s16 unk41C;                    /* 0x41C */
-    s16 unk41E;                    /* 0x41E */
+    s16 velocity_stopped;          /* 0x41E: set to 1 when the velocity length falls under 0.001 after state_timer_mark; cleared with snap_timer */
     s32 state_timer_mark;          /* 0x420: set to scale_game_frames(n) on state entry; state code compares state_timer against it */
     f32 unk424;                    /* 0x424 */
     f32 unk428;                    /* 0x428 */
@@ -172,8 +173,8 @@ struct Hero {
     s32 unk44C;                    /* 0x44C */
     s32 unk450;                    /* 0x450 */
     f32 unk454;                    /* 0x454 */
-    s32 unk458;                    /* 0x458 */
-    s32 unk45C;                    /* 0x45C */
+    f32 unk458;                    /* 0x458: speed eased toward ED6C*4.2 and scaled into velocity along unk438 (FUN_L02_00223450) */
+    f32 unk45C;                    /* 0x45C: speed eased toward ED6C*2 and scaled into velocity along rot.z (FUN_L02_00223450) */
     Vec4 unk460;                   /* 0x460 */
     Vec4 unk470;                   /* 0x470 */
     f32 unk480;                    /* 0x480 */
@@ -395,8 +396,10 @@ struct Hero {
     s32 unkD08;                    /* 0xD08 */
     u8 pad_D0C[0x8];
     s32 unkD14;                    /* 0xD14 */
-    u8 pad_D18[0x2E0];
-    s32 unkFF8;                    /* 0xFF8 */
+    u8 pad_D18[0x2D8];
+    s32 rand_timer_fired;          /* 0xFF0: FUN_L00_00205600 sets it to 1 when D_L00_0015F5CC passes rand_timer_deadline */
+    s32 rand_timer_deadline;       /* 0xFF4: frame count (D_L00_0015F5CC based) FUN_L00_00205600 waits for */
+    s32 rand_timer_range;          /* 0xFF8: FUN_L00_00205600 rearms rand_timer_deadline with two random_integer_below of it; 0 holds the timer off; hero_set_state zeroes it, most states set 0x68 */
     u8 pad_FFC[0x14];
     s32 unk1010;                   /* 0x1010 */
     u8 pad_1014[0x7C];
@@ -509,8 +512,9 @@ struct Hero {
     f32 unk229C;                   /* 0x229C */
     s32 unk22A0;                   /* 0x22A0 */
     f32 unk22A4;                   /* 0x22A4 */
-    s32 unk22A8;                   /* 0x22A8 */
-    u8 pad_22AC[0x6];
+    s32 health;                    /* 0x22A8: FUN_L00_002050c0 lowers it by the damage (at most 1) and clamps at 0; at 0 or below states 0 and 2 go to state 0x3D, and hero_set_state refuses most states while it is 0 */
+    s32 alt_health;                /* 0x22AC: health while unk20A4 is 1: FUN_L00_00210a08 swaps it into health (saving health in saved_health), FUN_L00_00210b30 swaps it back */
+    s16 saved_health;              /* 0x22B0: health kept here while alt_health is in use */
     s16 unk22B2;                   /* 0x22B2 */
     s32 unk22B4;                   /* 0x22B4 */
     u8 pad_22B8[0xC];
@@ -520,11 +524,11 @@ struct Hero {
     u8 pad_22CB[0x3];
     s16 unk22CE;                   /* 0x22CE */
     u8 pad_22D0[0x2];
-    s16 unk22D2;                   /* 0x22D2 */
+    s16 unk22D2;                   /* 0x22D2: set to scale_game_frames(0xF), or 0x1B while swap_tap2_timer runs, on a pad bit-0x10 press; no C reader yet */
     s16 swap_tap_timer;            /* 0x22D4: set to scale_game_frames(0x14) when pad bit 0x10 goes down, counted down each frame */
     s16 swap_tap2_timer;           /* 0x22D6: armed by a second bit-0x10 press inside swap_tap_timer; a press while it runs writes pending_gadget */
     s16 unk22D8;                   /* 0x22D8 */
-    u8 pad_22DA[0x2];
+    s16 unk22DA;                   /* 0x22DA: nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0, then cleared */
     s16 unk22DC;                   /* 0x22DC */
     s16 unk22DE;                   /* 0x22DE */
     s16 unk22E0;                   /* 0x22E0 */
@@ -550,7 +554,7 @@ HERO_OFFSET_CHECK(unk100, 0x100);
 HERO_OFFSET_CHECK(unk110, 0x110);
 HERO_OFFSET_CHECK(unk120, 0x120);
 HERO_OFFSET_CHECK(unk140, 0x140);
-HERO_OFFSET_CHECK(unk150, 0x150);
+HERO_OFFSET_CHECK(state_velocity, 0x150);
 HERO_OFFSET_CHECK(unk160, 0x160);
 HERO_OFFSET_CHECK(unk164, 0x164);
 HERO_OFFSET_CHECK(unk168, 0x168);
@@ -588,6 +592,7 @@ HERO_OFFSET_CHECK(unk1EE, 0x1EE);
 HERO_OFFSET_CHECK(unk1F2, 0x1F2);
 HERO_OFFSET_CHECK(unk1F4, 0x1F4);
 HERO_OFFSET_CHECK(unk1F8, 0x1F8);
+HERO_OFFSET_CHECK(unk200, 0x200);
 HERO_OFFSET_CHECK(unk210, 0x210);
 HERO_OFFSET_CHECK(unk220, 0x220);
 HERO_OFFSET_CHECK(unk224, 0x224);
@@ -596,7 +601,7 @@ HERO_OFFSET_CHECK(unk22C, 0x22C);
 HERO_OFFSET_CHECK(unk230, 0x230);
 HERO_OFFSET_CHECK(unk234, 0x234);
 HERO_OFFSET_CHECK(unk238, 0x238);
-HERO_OFFSET_CHECK(unk23C, 0x23C);
+HERO_OFFSET_CHECK(coll_hit_moby, 0x23C);
 HERO_OFFSET_CHECK(unk248, 0x248);
 HERO_OFFSET_CHECK(unk257, 0x257);
 HERO_OFFSET_CHECK(unk270, 0x270);
@@ -633,9 +638,9 @@ HERO_OFFSET_CHECK(unk3F8, 0x3F8);
 HERO_OFFSET_CHECK(unk400, 0x400);
 HERO_OFFSET_CHECK(unk410, 0x410);
 HERO_OFFSET_CHECK(unk414, 0x414);
-HERO_OFFSET_CHECK(unk418, 0x418);
+HERO_OFFSET_CHECK(snap_timer, 0x418);
 HERO_OFFSET_CHECK(unk41C, 0x41C);
-HERO_OFFSET_CHECK(unk41E, 0x41E);
+HERO_OFFSET_CHECK(velocity_stopped, 0x41E);
 HERO_OFFSET_CHECK(state_timer_mark, 0x420);
 HERO_OFFSET_CHECK(unk424, 0x424);
 HERO_OFFSET_CHECK(unk428, 0x428);
@@ -825,7 +830,9 @@ HERO_OFFSET_CHECK(unkAA8, 0xAA8);
 HERO_OFFSET_CHECK(unkAB4, 0xAB4);
 HERO_OFFSET_CHECK(unkD08, 0xD08);
 HERO_OFFSET_CHECK(unkD14, 0xD14);
-HERO_OFFSET_CHECK(unkFF8, 0xFF8);
+HERO_OFFSET_CHECK(rand_timer_fired, 0xFF0);
+HERO_OFFSET_CHECK(rand_timer_deadline, 0xFF4);
+HERO_OFFSET_CHECK(rand_timer_range, 0xFF8);
 HERO_OFFSET_CHECK(unk1010, 0x1010);
 HERO_OFFSET_CHECK(secondary_moby, 0x1090);
 HERO_OFFSET_CHECK(unk10A0, 0x10A0);
@@ -905,7 +912,9 @@ HERO_OFFSET_CHECK(unk2298, 0x2298);
 HERO_OFFSET_CHECK(unk229C, 0x229C);
 HERO_OFFSET_CHECK(unk22A0, 0x22A0);
 HERO_OFFSET_CHECK(unk22A4, 0x22A4);
-HERO_OFFSET_CHECK(unk22A8, 0x22A8);
+HERO_OFFSET_CHECK(health, 0x22A8);
+HERO_OFFSET_CHECK(alt_health, 0x22AC);
+HERO_OFFSET_CHECK(saved_health, 0x22B0);
 HERO_OFFSET_CHECK(unk22B2, 0x22B2);
 HERO_OFFSET_CHECK(unk22B4, 0x22B4);
 HERO_OFFSET_CHECK(unk22C4, 0x22C4);
@@ -916,6 +925,7 @@ HERO_OFFSET_CHECK(unk22D2, 0x22D2);
 HERO_OFFSET_CHECK(swap_tap_timer, 0x22D4);
 HERO_OFFSET_CHECK(swap_tap2_timer, 0x22D6);
 HERO_OFFSET_CHECK(unk22D8, 0x22D8);
+HERO_OFFSET_CHECK(unk22DA, 0x22DA);
 HERO_OFFSET_CHECK(unk22DC, 0x22DC);
 HERO_OFFSET_CHECK(unk22DE, 0x22DE);
 HERO_OFFSET_CHECK(unk22E0, 0x22E0);

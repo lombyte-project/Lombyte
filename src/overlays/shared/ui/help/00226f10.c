@@ -521,7 +521,7 @@ void FUN_L01_00231ae0(void) {
         break;
     }
     if (hero.control_mode == 4) {
-        if (hero.state_timer > hero.state_timer_mark && hero.unk41E == 0)
+        if (hero.state_timer > hero.state_timer_mark && hero.velocity_stopped == 0)
             hero.unk22C = hero.unk434;
     } else if (hero.state == 6) {
         hero.unk22C = 0.5f;
@@ -774,7 +774,7 @@ extern GS GG __asm__("D_0013F350") __attribute__((section(".data")));
 #define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
 #define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
 #define GB(o) (D_0013F350_c2[o])
-extern HS HH __asm__("D_L01_001742C0") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L01_001742C0") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L01_001742C0 + (o)))
 #define HF(o) (*(f32 *)(D_L01_001742C0 + (o)))
 
@@ -835,33 +835,33 @@ void FUN_L01_00232dc0(void) {
         GG.xB12ed = r;
     }
     if (GG.xH12e0 == 0xD) {
-        GG.xF2f0 = HH.v20.f[2];
-        v10.f[2] = HH.v20.f[2] - 0.01f;
+        GG.xF2f0 = HH.point.f[2];
+        v10.f[2] = HH.point.f[2] - 0.01f;
         if (FUN_001efa68_c(&v10, &v0, 4, GG.xI2080, 0) == 0) {
             goto d1;
         }
     }
     if (GG.xH12e0 == 0xB) {
-        GG.xF2f4 = HH.v20.f[2];
+        GG.xF2f4 = HH.point.f[2];
         goto d1;
     }
-    if (HH.i18 != 0) {
-        if (FUN_L00_0025e3b8(HH.i18)) {
+    if (HH.moby != 0) {
+        if (FUN_L00_0025e3b8(HH.moby)) {
             GG.xH30a = 1;
         }
-        p = FUN_002141f8(HH.i18);
+        p = FUN_002141f8(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             GG.xH30a = 1;
         }
     }
-    if (HH.i1C > 0) {
-        qcopy((u8 *)&GG + 0x2A0, &HH.v20);
-        GG.u2d8.F = HH.v20.f[2];
+    if (HH.unk1C > 0) {
+        qcopy((u8 *)&GG + 0x2A0, &HH.point);
+        GG.u2d8.F = HH.point.f[2];
         GG.xF2dc = FUN_001f9b48((u8 *)&GG + 0x80, ((u8 *)&GG + 0x2A0));
-        GG.xI2fc = HH.i18;
-        FUN_00125180_c((u8 *)&GG + 0x270, (u8 *)&HH.f40);
-        GG.u2e0.F = FUN_L00_00233d30((u8 *)&HH.f40);
-        GG.xF2ec = FUN_001f9e90_c(HH.f40, HH.f44);
+        GG.xI2fc = HH.moby;
+        FUN_00125180_c((u8 *)&GG + 0x270, (u8 *)&HH.normal_x);
+        GG.u2e0.F = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        GG.xF2ec = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, ((u8 *)&GG + 0x2A0), (u8 *)&GG + 0x80);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&GG + 0x270)) {
             GG.xF2dc = -GG.xF2dc;
@@ -870,7 +870,7 @@ void FUN_L01_00232dc0(void) {
             GG.u30c.H = 0;
             if (GG.u2e0.F <= 0.87266463f || GG.xB20b3 == 1 || GG.xI208c == 0x16) {
                 GG.u30e.H = 0;
-                GG.xIa80 = HH.i18;
+                GG.xIa80 = HH.moby;
             }
         }
     }
@@ -929,12 +929,12 @@ d1:
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
         if (FUN_001efa68_c(&v30, &v0, 0x22, GG.xI2080, 0)) {
-            f = HH.v20.f[2] - GG.u2d8.F;
+            f = HH.point.f[2] - GG.u2d8.F;
             GG.a2c0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 GG.a2c0.f[i] = 0.0f;
             }
-            FUN_00125180_c(&v60, (u8 *)&HH.f40);
+            FUN_00125180_c(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 GG.a2c8.f[i] = v50.f[1];
@@ -950,39 +950,10 @@ d1:
     }
 }
 typedef unsigned int u128_233940 __attribute__((mode(TI), aligned(16)));
-typedef struct {
-    u8 pad0[0x80];
-    u128_233940 pos;
-    u8 pad90[0x1CC - 0x90];
-    s32 w1CC;
-    u8 pad1D0[0x1F8 - 0x1D0];
-    s16 h1F8;
-    u8 pad1FA[6];
-    u128_233940 q200;
-    u128_233940 q210;
-    f32 f220;
-    f32 f224;
-    u8 pad228[0xC];
-    f32 f234;
-    u8 pad238[4];
-    s32 w23C;
-    u8 pad240[0x17];
-    u8 b257;
-    u8 pad258[0x2080 - 0x258];
-    s32 w2080;
-    s32 w2084;
-    u8 pad2088[4];
-    s32 w208C;
-    u8 pad2090[0x20B3 - 0x2090];
-    u8 b20B3;
-    u8 pad20B4[0x22DA - 0x20B4];
-    s16 h22DA;
-} G_233940;
 typedef union {
     u128_233940 q;
     f32 f[4];
 } V_233940;
-extern G_233940 G_233940v __asm__("D_0013F350");
 extern f32 D_0015ED60;
 extern u128_233940 coll_233940[] __asm__("D_L01_001742F0") __attribute__((section(".data")));
 extern void vzero_233940(void *) __asm__("FUN_001f99f8");
@@ -1004,59 +975,59 @@ s32 FUN_L01_00233940(s32 mode) {
     s32 i;
     u128_233940 *c;
     f32 h;
-    if (G_233940v.w1CC != 0) {
+    if (hero.unk1CC != 0) {
         return 1;
     }
-    qcopy(&old, &G_233940v.pos);
+    qcopy(&old, &hero.pos.q);
     vzero_233940(&v);
-    if (G_233940v.h22DA != 0) {
+    if (hero.unk22DA != 0) {
         f2347c0_233940();
-        G_233940v.h22DA = 0;
+        hero.unk22DA = 0;
     }
-    if (G_233940v.w208C != 0x11) {
-        if (G_233940v.b20B3 != 0 || G_233940v.h1F8 != 0) {
-            if (G_233940v.b20B3 == 1 || G_233940v.h1F8 != 0) {
+    if (hero.control_mode != 0x11) {
+        if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
+            if (hero.unk20B3 == 1 || hero.unk1F8 != 0) {
                 f233810_233940(&v, &v, 0.6f);
             } else {
-                f2334d0_233940(&v, &v, -G_233940v.f224);
+                f2334d0_233940(&v, &v, -hero.unk224);
             }
         } else {
-            v.f[2] = G_233940v.f224;
+            v.f[2] = hero.unk224;
         }
     }
-    vadd_233940(&G_233940v.pos, &G_233940v.pos, &v);
+    vadd_233940(&hero.pos.q, &hero.pos.q, &v);
     mask = 0x24;
-    if (G_233940v.w2084 == 0x7F) {
+    if (hero.state == 0x7F) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (G_233940v.b20B3 != 0) {
-            if (!coll1_233940(&G_233940v.pos, mask, G_233940v.w2080, D_0015ED60 * 0.4f))
+        if (hero.unk20B3 != 0) {
+            if (!coll1_233940(&hero.pos.q, mask, ((s32)hero.moby), D_0015ED60 * 0.4f))
                 break;
-        } else if (G_233940v.w208C == 0x11) {
-            if (!coll1_233940(&G_233940v.pos, mask, G_233940v.w2080, 0.6f))
+        } else if (hero.control_mode == 0x11) {
+            if (!coll1_233940(&hero.pos.q, mask, ((s32)hero.moby), 0.6f))
                 break;
         } else {
             s32 a;
-            h = G_233940v.f220 - G_233940v.f224;
+            h = hero.unk220 - hero.unk224;
             if (h < 0.05f) {
                 h = 0.05f;
             }
-            a = coll2_233940(&G_233940v.pos, mask, G_233940v.f234, G_233940v.w2080, h);
-            if (!(a | coll3_233940(&G_233940v.pos, G_233940v.f234)))
+            a = coll2_233940(&hero.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
+            if (!(a | coll3_233940(&hero.pos.q, hero.unk234)))
                 break;
         }
         c = coll_233940;
-        qcopy(&G_233940v.pos, c);
-        qcopy(&G_233940v.q200, c + 1);
-        qcopy(&G_233940v.q210, c - 1);
-        G_233940v.b257 = 1;
-        G_233940v.w23C = ((s32 *)c)[-6];
+        qcopy(&hero.pos.q, c);
+        qcopy(&hero.unk200.q, c + 1);
+        qcopy(&hero.unk210.q, c - 1);
+        hero.unk257 = 1;
+        hero.coll_hit_moby = ((u8 **)c)[-6];
     }
-    vsub_233940(&G_233940v.pos, &G_233940v.pos, &v);
-    vsub_233940(&w, &G_233940v.pos, &old);
+    vsub_233940(&hero.pos.q, &hero.pos.q, &v);
+    vsub_233940(&w, &hero.pos.q, &old);
     h = vlen_233940(&w);
-    if (G_233940v.f234 * 1.5f < h) {
+    if (hero.unk234 * 1.5f < h) {
         if (mode == 0xF) {
             if (512.0f < w.f[0])
                 w.f[0] = 512.0f;
@@ -1070,8 +1041,8 @@ s32 FUN_L01_00233940(s32 mode) {
                 w.f[2] = 512.0f;
             else if (w.f[2] < -512.0f)
                 w.f[2] = -512.0f;
-            vscl_233940(&w, &w, G_233940v.f234);
-            vadd_233940(&G_233940v.pos, &old, &w);
+            vscl_233940(&w, &w, hero.unk234);
+            vadd_233940(&hero.pos.q, &old, &w);
         }
         return -1;
     }
