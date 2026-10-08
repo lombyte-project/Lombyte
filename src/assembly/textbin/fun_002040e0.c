@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s", FUN_002040e0);
 #else
 #include "types.h"
+#include "rnc/rendering/resident_class.h"
 
 #define SCE_GS_SET_TEX0(tbp, width_units_64, psm, width_log2, height_log2, tcc, tfx, cbp, cpsm,    \
                         csm, csa, cld)                                                             \
@@ -20,16 +21,6 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002040e0/FUN_002040e0.s
 #define SCE_GS_SET_MIPTBP1(tbp1, tbw1, tbp2, width_units_128, tbp3, tbw3)                          \
     ((u64)(tbp1) | ((u64)(tbw1) << 14) | ((u64)(tbp2) << 20) | ((u64)(width_units_128) << 34) |    \
      ((u64)(tbp3) << 40) | ((u64)(tbw3) << 54))
-
-typedef struct {
-    s32 texture_index;
-    s16 width;
-    s16 height;
-    s16 draw_control_count;
-    s16 clut;
-    s16 mip_block_offset_0;
-    s16 mip_block_offset_1;
-} ResidentRenderTextureDefinition;
 
 typedef struct {
     u64 data;
@@ -150,8 +141,9 @@ void initialize_tfrag_render_data(TfragRenderHeader *header,
             height_log2 = highest_set_bit_index(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             tex0_word = ((width_units_64 << 14) | (((s64)width_log2 << 26) | ((s64)0x13 << 20))) |
-                        ((s64)height_log2 << 30) | ((s64)(texture->clut + gs_block_base) << 37) |
-                        ((s64)1 << 34) | (1ULL << 63);
+                        ((s64)height_log2 << 30) |
+                        ((s64)(texture->clut_block_offset + gs_block_base) << 37) | ((s64)1 << 34) |
+                        (1ULL << 63);
             clamp_word =
                 (s64)material_base | ((s64)material_shift << 2) | ((s64)texture_index << 24);
             tex1_word =

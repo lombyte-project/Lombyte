@@ -73,10 +73,10 @@ block_13:
     if (*(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x6CC) == 0) {
         goto block_16;
     }
-    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->unk81C);
+    func_001271D8(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work);
     return;
 block_16:
-    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->unk81C,
+    func_00127178(*(s32 *)(var30 + sp0 * 0x140), mpeg->mc_work,
                   *(s32 *)((u8 *)mpeg + sp0 * 0x140 + 0x594));
     return;
 }

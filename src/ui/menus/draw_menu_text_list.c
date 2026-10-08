@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/text/text_region.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
@@ -7,10 +8,6 @@
    the rows, then prints each item (and its optional subtitle) with the
    focused row highlighted, scrolling the box to keep it visible.
    Returns 1 once after flag 0x8000 is consumed, else 2. */
-
-typedef struct {
-    short s[12];
-} TextBox;
 
 extern u8 D_0013D408[];
 extern u8 D_001DF050[];
@@ -23,7 +20,8 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void EnableGlobalStateFlag(void) __asm__("func_001F61E8");
 extern void DisableGlobalStateFlag(void) __asm__("func_001F61F8");
-extern void font_print_window(TextBox *, long, char *, s32, s32, u8 *) __asm__("FUN_001f7090");
+extern void font_print_window(struct TextRegion *, long, char *, s32, s32,
+                              u8 *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern void *memset(void *, int, unsigned int);
@@ -78,8 +76,9 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     }
     y = row_height - font_size / 2;
     {
-        TextBox box = {{4, menu->height - 4, 0, menu->width - 2, 0, y - menu->data.list.scroll, 0,
-                        0, font_size + 2}};
+        struct TextRegion box = {
+            4, menu->height - 4, 0, menu->width - 2, 0, y - menu->data.list.scroll, 0,
+            0, font_size + 2};
 
         glyph_texture = get_effect_texture(font_kind);
         for (i = 0; menu->data.list.items[i].text != 0; i++) {
@@ -95,14 +94,14 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
             } else {
                 color = enabled ? 0x80FFA888 : 0x80303030;
             }
-            if (!(menu->data.list.flags & 0x10000) && selected && box.s[5] < 4) {
+            if (!(menu->data.list.flags & 0x10000) && selected && box.anchor_y < 4) {
                 menu->data.list.scroll -= 4;
             }
             text = get_help_message_text(menu->data.list.items[i].text);
-            box.s[4] = (menu->data.list.flags & 0xA00) ? 0x20 : 4;
+            box.anchor_x = (menu->data.list.flags & 0xA00) ? 0x20 : 4;
             if (menu->data.list.flags & 0x400) {
-                box.s[9] = 1;
-                box.s[4] = menu->width >> 1;
+                box.flags = 1;
+                box.anchor_x = menu->width >> 1;
             }
             if (selected) {
                 DisableGlobalStateFlag();
@@ -112,25 +111,25 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
                 EnableGlobalStateFlag();
             }
             if (menu->data.list.flags & 0x200) {
-                draw_menu_selection_marker(0xF, box.s[5] + 9, D_0013D408[i] != 0);
+                draw_menu_selection_marker(0xF, box.anchor_y + 9, D_0013D408[i] != 0);
             }
             if (menu->data.list.flags & 0x800) {
-                draw_menu_selection_marker(0xF, box.s[5] + 9,
+                draw_menu_selection_marker(0xF, box.anchor_y + 9,
                                            game_language == menu->data.list.items[i].param.value);
             }
-            box.s[5] += box.s[7];
+            box.anchor_y += box.rendered_height;
             if (menu->data.list.items[i].subtext != 0) {
                 text = get_help_message_text(menu->data.list.items[i].subtext);
-                box.s[4] = 0x14;
+                box.anchor_x = 0x14;
                 font_print_window(&box, color, text, -1, glyph_texture, font);
-                box.s[5] += row_height;
+                box.anchor_y += row_height;
             }
-            box.s[5] += 8;
+            box.anchor_y += 8;
             if (!(menu->data.list.flags & 0x10000) && selected) {
-                row_bottom = box.s[5] + box.s[7];
-                if (box.s[1] < row_bottom) {
+                row_bottom = box.anchor_y + box.rendered_height;
+                if (box.bottom < row_bottom) {
                     if (menu->data.list.flags & 0x8000) {
-                        menu->data.list.scroll += row_bottom - box.s[1];
+                        menu->data.list.scroll += row_bottom - box.bottom;
                     } else {
                         menu->data.list.scroll += 4;
                     }

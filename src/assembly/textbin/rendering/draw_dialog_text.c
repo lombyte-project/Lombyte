@@ -6,10 +6,9 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/draw_dialog_text/
             FUN_001fbc50);
 #else
 #include "types.h"
+#include "rnc/rendering/screen.h"
+#include "rnc/ui/text/text_region.h"
 
-typedef struct {
-    s16 s[12];
-} FontWindow;
 #include "types.h"
 #include "sda.h"
 
@@ -25,7 +24,6 @@ typedef struct {
     s32 fade_out;       /* 0x24 */
 } DialogState;
 
-extern s32 D_0013E500[];
 typedef struct {
     u8 pad0[0x894];
     s32 best_time; /* 0x894 */
@@ -80,8 +78,8 @@ extern char D_0015F5A0[];
 extern s32 D_0015F5E8;
 extern DialogState dialog_state __asm__("D_00193300");
 extern u8 D_001DF050[];
-extern FontWindow D_001E78F0;
-extern FontWindow D_001E7908;
+extern struct TextRegion D_001E78F0;
+extern struct TextRegion D_001E7908;
 
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -89,8 +87,10 @@ extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 extern void draw_outlined_rect(int, int, int, int, int) __asm__("func_001F6060");
 extern void font_print_center(int, int, long, char *, int) __asm__("func_001F6AF0");
-extern void font_print_window(FontWindow *, u64, char *, int, s64, void *) __asm__("func_001F7090");
-extern void font_print_window_regular(FontWindow *, long, char *, int) __asm__("func_001F7580");
+extern void font_print_window(struct TextRegion *, u64, char *, int, s64,
+                              void *) __asm__("func_001F7090");
+extern void font_print_window_regular(struct TextRegion *, long, char *,
+                                      int) __asm__("func_001F7580");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float func_001FA6C0(int);
@@ -111,7 +111,7 @@ void draw_dialog_text(void) __asm__("FUN_001fbc50");
 
 void draw_dialog_text(void) {
     char text_buffer[0x200];
-    FontWindow text_window;
+    struct TextRegion text_window;
     float fade_fraction;
     float dialog_scale;
     float blink_fraction;
@@ -169,20 +169,20 @@ void draw_dialog_text(void) {
         font_print_window(&text_window, mode5_color, (char *)0x70000000, -1, get_effect_texture(1),
                           D_001DF050);
         icon_size = 272.0f;
-        text_window.s[9] |= 4;
-        middle_y = text_window.s[5];
-        middle_y += text_window.s[7];
+        text_window.flags |= 4;
+        middle_y = text_window.anchor_y;
+        middle_y += text_window.rendered_height;
         font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1),
                           D_001DF050);
-        text_window.s[9] ^= 4;
-        text_window.s[5] = 0x136 - text_window.s[7];
+        text_window.flags ^= 4;
+        text_window.anchor_y = 0x136 - text_window.rendered_height;
         font_print_window(&text_window, mode5_color, (char *)text_cursor, -1, get_effect_texture(1),
                           D_001DF050);
         mode5_color =
             func_001FA6E0(0x20FFFF, 0x8020FFFF,
                           1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
         font_print_center(0x100, 0x140, mode5_color, get_help_message_text(0x524A), -1);
-        middle_y = (middle_y + text_window.s[5]) >> 1;
+        middle_y = (middle_y + text_window.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
         icon_y = middle_y - 0x20;
         draw_hud_sprite(get_icon_frame(0x755D, 0), 0xE0, icon_y, 0x40, 0x40,
@@ -302,31 +302,32 @@ void draw_dialog_text(void) {
             text = text_buffer;
             break;
         }
-        text_window = (FontWindow){{0, D_0013E500[1], 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5}};
+        text_window =
+            (struct TextRegion){0, D_0013E500.height, 0x60, 0x1A0, 0x100, 0x68, 0, 0, 0x10, 5};
         font_print_window_regular(&text_window, 0, text, -1);
-        y = text_window.s[7] + 0x28;
-        middle_y = (D_0013E500[1] - y) >> 1;
-        text_window.s[5] = middle_y + 4;
-        text_window.s[1] = middle_y + y;
-        text_window.s[0] = middle_y;
+        y = text_window.rendered_height + 0x28;
+        middle_y = (D_0013E500.height - y) >> 1;
+        text_window.anchor_y = middle_y + 4;
+        text_window.bottom = middle_y + y;
+        text_window.top = middle_y;
         dialog_fade = 1.0f - (float)dialog_state.fade_in / (float)scale_game_frames(30);
-        draw_ui_frame(text_window.s[0], text_window.s[1], 0x60, 0x1A0, (int)(dialog_fade * 80.0f));
-        text_window.s[9] ^= 4;
+        draw_ui_frame(text_window.top, text_window.bottom, 0x60, 0x1A0, (int)(dialog_fade * 80.0f));
+        text_window.flags ^= 4;
         font_print_window_regular(&text_window, func_001FA6E0(D_0015F4F0, D_0015F4F4, dialog_fade),
                                   text, -1);
         dialog_color =
             func_001FA6E0(0x20FFFF, 0x8020FFFF,
                           1.0f - (float)dialog_state.fade_out / (float)scale_game_frames(30));
         if (yes_text_id != 0) {
-            font_print_center(0xCA, text_window.s[1] - 0x14, dialog_color,
+            font_print_center(0xCA, text_window.bottom - 0x14, dialog_color,
                               get_help_message_text(yes_text_id), -1);
         }
         if (no_text_id != 0) {
-            font_print_center(0x135, text_window.s[1] - 0x14, dialog_color,
+            font_print_center(0x135, text_window.bottom - 0x14, dialog_color,
                               get_help_message_text(no_text_id), -1);
         }
         if (confirm_text_id != 0) {
-            font_print_center(0x100, text_window.s[1] - 0x14, dialog_color,
+            font_print_center(0x100, text_window.bottom - 0x14, dialog_color,
                               get_help_message_text(confirm_text_id), -1);
         }
         break;

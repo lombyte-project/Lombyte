@@ -5,11 +5,8 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00231878/FUN_00231878.s", FUN_00231878);
 #else
 #include "types.h"
+#include "rnc/sdk/libgraph.h"
 #include "rnc/storage/disc_table.h"
-
-typedef struct {
-    u64 data[12];
-} sceGsLoadImage __attribute__((aligned(16)));
 
 struct CommonArchiveMemory {
     u8 pad_0[0x14];

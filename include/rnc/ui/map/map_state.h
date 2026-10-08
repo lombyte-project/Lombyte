@@ -34,7 +34,7 @@ struct MapState {
     u8 *mask;                  /* 0x00C: 512x512 1-bit explored mask of the current level */
     u8 pad10[0x4];
     s32 unk14;                 /* 0x014: passed with mask to func_001FA860 */
-    s32 unk18;                 /* 0x018 */
+    s32 z;                     /* 0x018: GS Z of the map quads (draw_map_overlay packets) */
     struct MapMarker *markers; /* 0x01C: drawn by draw_map_markers, may be null */
     struct MapIcon *icons;     /* 0x020: icon list of the shown level */
     s32 unk24;                 /* 0x024: zero: update_map_zoom_and_pan and draw_map_overlay return early */

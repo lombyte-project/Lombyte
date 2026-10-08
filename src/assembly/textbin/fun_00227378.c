@@ -5,12 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00227378/FUN_00227378.s", FUN_00227378);
 #else
 #include "types.h"
-
-struct FullScreenAntiAliasingDimensions {
-    u8 pad_0[0x150];
-    s16 display_width;
-    s16 display_height;
-};
+#include "rnc/rendering/fs_aa_buffer.h"
 
 struct ClearStripPacket {
     s32 dma_control;
@@ -29,12 +24,6 @@ struct ClearStripPacket {
     s64 vertex_registers;
 };
 
-struct StripVertices {
-    s64 first;
-    s64 second;
-};
-
-extern struct FullScreenAntiAliasingDimensions fs_aa_buffer __asm__("D_00151780");
 extern struct ClearStripPacket *render_packet_cursor[1] __asm__("D_00160F00");
 
 void append_fullscreen_clear_strips(s64 color) __asm__("FUN_00227378");
@@ -44,7 +33,7 @@ void append_fullscreen_clear_strips(s64 color) {
     struct ClearStripPacket *packet_cursor;
     s64 *commands;
     volatile s64 *vertices;
-    struct FullScreenAntiAliasingDimensions *dimensions;
+    struct FsAaBuf *dimensions;
     s32 strip_count;
     s32 display_height;
     s32 display_width;

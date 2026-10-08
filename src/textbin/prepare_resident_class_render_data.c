@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/resident_class.h"
 #include "asm.h"
 
 #include "types.h"
@@ -56,11 +57,6 @@ typedef struct {
     u8 pad2C[0x1C];
     s32 nested_tables[1];
 } ResidentClassRenderHeader;
-
-typedef union {
-    u128 q;
-    u8 b[16];
-} MaterialMap;
 
 extern u8 resident_class_slot_by_id[] __asm__("D_001B3AC0");
 extern MaterialMap resident_class_material_maps[] __asm__("D_001B6880");

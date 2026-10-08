@@ -6,12 +6,9 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00202270/FUN_00202270.s
 #else
 
 #include "types.h"
+#include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "sda.h"
-
-typedef struct {
-    u128 data[6];
-} sceGsLoadImage;
 
 typedef struct {
     u8 pad0[8];

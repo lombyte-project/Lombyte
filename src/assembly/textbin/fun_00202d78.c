@@ -5,16 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00202d78/FUN_00202d78.s", FUN_00202d78);
 #else
 #include "types.h"
-
-struct ResidentRenderTextureDefinition {
-    u8 pad_0[4];
-    s16 width;
-    s16 height;
-    s16 draw_control_count;
-    s16 texture_block_offset;
-    s16 mip_block_offset_0;
-    s16 mip_block_offset_1;
-};
+#include "rnc/rendering/resident_class.h"
 
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 special_material_template[] __asm__("D_0019E6C0");
@@ -59,7 +50,7 @@ void build_indexed_resident_render_packet(u64 *packet,
     height_log2 = highest_set_bit_index(texture->height);
     gs_block_base = gs_texture_allocation_base >> 8;
     mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
-    texture_block = texture->texture_block_offset + gs_block_base;
+    texture_block = texture->clut_block_offset + gs_block_base;
     mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
     /* Preserve sparse writes: every other 64-bit packet word is untouched. */
     draw_control_count = texture->draw_control_count;

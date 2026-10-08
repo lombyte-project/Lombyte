@@ -6,18 +6,10 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00203730/FUN_00203730.s
 #else
 
 #include "types.h"
+#include "rnc/rendering/resident_class.h"
 #include "qcopy.h"
 #include "eetypes.h"
 
-typedef struct {
-    u8 pad0[4];
-    u16 width;
-    s16 height;
-    s16 draw_control_count;
-    s16 texture_block_offset;
-    s16 mip_block_offset_0;
-    s16 mip_block_offset_1;
-} ResidentRenderTextureDefinition;
 typedef struct {
     u64 tex0;
     u64 pad8;
@@ -54,10 +46,6 @@ typedef struct {
     u16 class_slot;
     f32 scale;
 } ObjectRenderClass;
-typedef union {
-    u128 q;
-    u8 b[16];
-} MaterialMap;
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
 extern s16 object_render_class_ids[] __asm__("D_001E1900");
 extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
@@ -152,7 +140,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
             gs_block_base = gs_texture_allocation_base >> 8;
             mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
             mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
-            texture_block = texture->texture_block_offset + gs_block_base;
+            texture_block = texture->clut_block_offset + gs_block_base;
             tex0_word = ((((u64)width_log2) << 26) | 0x1300000) | (((u64)width_units_64) << 14);
             tex0_word |= ((u64)height_log2) << 30;
             tex0_word |= (((u64)texture_block) << 37) | (((u64)1) << 34);

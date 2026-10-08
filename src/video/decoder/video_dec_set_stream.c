@@ -1,15 +1,8 @@
 #include "types.h"
-
-struct VideoDec;
-struct sceMpeg;
-struct sceMpegCbData;
-typedef s32 (*MpegStreamCallback)(struct sceMpeg *, struct sceMpegCbData *, void *);
-
-extern s32 sceMpegAddStrCallback(struct sceMpeg *, s32, s32,
-                                MpegStreamCallback, void *);
+#include "rnc/video/decoder/video_dec.h"
 
 /* Retail 0x0023cbd0 forwards all five incoming arguments unchanged to
-   sceMpegAddStrCallback. VideoDec starts with sceMpeg at offset zero.
+   sceMpegAddStrCallback.
    init_all installs video (type/channel 0/0) and PCM (type 3) callbacks,
    each with the decoder context as user data. The wrapper ignores the
    SDK's previous-callback result and always returns 1; this is not a
@@ -22,8 +15,7 @@ s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
 s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
                          s32 channel, MpegStreamCallback callback,
                          void *callback_context) {
-    sceMpegAddStrCallback((struct sceMpeg *)video_dec, stream_type, channel,
-                          callback, callback_context);
+    sceMpegAddStrCallback(&video_dec->mpeg, stream_type, channel, callback, callback_context);
     return 1;
 }
 
