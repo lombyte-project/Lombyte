@@ -7,33 +7,24 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/setdefaultqm/_setDefaul
             _setDefaultQM);
 #else
 #include "types.h"
-
-struct MpegQuantizerState {
-    u8 pad_0[0x858];
-    void *callback_context;
-};
-
-typedef struct {
-    s32 type;
-    u8 pad[0x1C];
-} MpegCallbackArgument;
+#include "rnc/sdk/libmpeg.h"
 
 extern s32 DIntr(void);
 extern void EnableInterrupts(void);
-extern void _dispatchMpegCallback(void *, MpegCallbackArgument *);
-extern void _sendIpuCommand(struct MpegQuantizerState *, s32);
-extern void _waitIpuIdle(struct MpegQuantizerState *);
+extern void _dispatchMpegCallback(void *, struct sceMpegCbData *);
+extern void _sendIpuCommand(struct MpegDecoder *, s32);
+extern void _waitIpuIdle(struct MpegDecoder *);
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command,
+void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command,
                                     u32 source_address) __asm__("_setDefaultQM");
 
-void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 command,
+void LoadDefaultMpegQuantizerMatrix(struct MpegDecoder *state, s32 command,
                                     u32 source_address) {
     s32 interrupts_enabled;
-    MpegCallbackArgument callback;
+    struct sceMpegCbData callback;
 
     callback.type = 2;
-    _dispatchMpegCallback(state->callback_context, &callback);
+    _dispatchMpegCallback(state->mpeg, &callback);
     _waitIpuIdle(state);
     _waitIpuIdle((*(volatile u32 *)0x10002000 = 0, state));
     interrupts_enabled = DIntr();
@@ -46,6 +37,6 @@ void LoadDefaultMpegQuantizerMatrix(struct MpegQuantizerState *state, s32 comman
     _sendIpuCommand(state, command);
     _waitIpuIdle(state);
     callback.type = 3;
-    _dispatchMpegCallback(state->callback_context, &callback);
+    _dispatchMpegCallback(state->mpeg, &callback);
 }
 #endif /* NON_MATCHING */

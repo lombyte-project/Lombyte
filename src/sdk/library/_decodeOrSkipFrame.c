@@ -30,10 +30,10 @@ s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
     }
     _outputFrame(tmp, tmp->frame_count, tmp->unk4);
     if ((tmp->picture_structure != 3) && (flag == 0)) {
-        tmp->unk120 = (s32)(tmp->unk120 == 0);
+        tmp->second_field = (s32)(tmp->second_field == 0);
     }
     decoder->frameCount = (s32)(tmp->frame_count - tmp->frame_base);
-    if (tmp->unk120 == 0) {
+    if (tmp->second_field == 0) {
         tmp->frame_count = (s32)(tmp->frame_count + 1);
         tmp->unk4 = (s32)(tmp->unk4 + 1);
     }

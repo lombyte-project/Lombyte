@@ -8,7 +8,7 @@ extern s32 _dispRefImageField(struct MpegDecoder *, struct MpegRefImage *, struc
 void _lastFrame(struct MpegDecoder *arg0) {
     s32 count;
     count = arg0->frame_count;
-    if (arg0->unk120 != 0) {
+    if (arg0->second_field != 0) {
         _Error(arg0, D_00153AB8, count);
     } else {
         if (arg0->picture_structure == 3) {
@@ -17,5 +17,5 @@ void _lastFrame(struct MpegDecoder *arg0) {
             _dispRefImageField(arg0, arg0->ref_images[5], arg0->ref_images[9], count - 1);
         }
     }
-    arg0->unk120 = 0;
+    arg0->second_field = 0;
 }

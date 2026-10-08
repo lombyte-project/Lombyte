@@ -19,7 +19,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
     s32 gate;
     bVar3 = 0;
     p = decoder->sys;
-    p->unk120 = 0;
+    p->second_field = 0;
     if ((arg2 == (-1)) || (arg1 < arg2)) {
         bVar3 = 1;
     };
@@ -31,7 +31,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
     if ((lVar5 != 0) && (bVar3 != 0)) {
         _decPicture(p);
     }
-    p->unk120 = 1;
+    p->second_field = 1;
     lVar5 = _nextHeader(p);
     if (lVar5 == 0) {
         _sceMpegFlush(decoder);
@@ -64,7 +64,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 arg1, s32 arg2) {
 out:
     _outputFrame(p, p->frame_count, p->unk4);
 
-    p->unk120 = 0;
+    p->second_field = 0;
     decoder->frameCount = p->frame_count - p->frame_base;
     p->frame_count = p->frame_count + 1;
     p->unk4 = (unsigned long long)(p->unk4 + 1);

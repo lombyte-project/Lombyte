@@ -18,3 +18,9 @@ OFFSET_CHECK(total_bytes, struct ViBuf, total_bytes, 0x48);
 OFFSET_CHECK(ts, struct ViBuf, ts, 0x50);
 OFFSET_CHECK(wt_ts, struct ViBuf, wt_ts, 0x5C);
 SIZE_CHECK(vi_buf, struct ViBuf, 0x60);
+
+#include "rnc/video/decoder/video_dec.h"
+
+OFFSET_CHECK(video_dec_vi_buf, struct VideoDec, vi_buf, 0x48);
+OFFSET_CHECK(video_dec_state, struct VideoDec, state, 0xA8);
+SIZE_CHECK(video_dec, struct VideoDec, 0xB8);

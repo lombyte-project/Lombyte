@@ -28,10 +28,7 @@ struct MpegCdStream {
     s32 next_sector;
 };
 
-/* Opaque here: sceMpeg occupies the leading 0x48 bytes, ViBuf begins at
-   +0x48 and the decoder state is at +0xA8 (video_dec_create/flush/get_state).
-   init_all reserves 0xB8 bytes before AudioDec; the trailing fields are
-   not inferred from this routine. */
+/* Defined in rnc/video/decoder/video_dec.h. */
 struct VideoDec;
 
 #endif /* LOMBYTE_RNC_VIDEO_DECODER_READ_MPEG_H */

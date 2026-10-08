@@ -1,11 +1,8 @@
 #include "types.h"
+#include "rnc/video/decoder/video_dec.h"
+
 struct Code4 {
     u8 b[4];
-};
-struct VideoDec {
-    u8 pad0[0x48];
-    u8 stream[0x60];
-    s32 state;
 };
 extern struct Code4 D_00161218[];
 extern s32 D_0016120C;
@@ -32,7 +29,7 @@ s32 video_dec_flush(struct VideoDec *vd) {
     r = cpy2area((p0 & 0x0FFFFFFF) | 0x20000000, n0, (p1 & 0x0FFFFFFF) | 0x20000000,
                                  n1, &code, 4, 0, 0);
     video_dec_end_put(D_0016120C + 0xD9048, r);
-    vi_buf_flush(vd->stream);
+    vi_buf_flush(&vd->vi_buf);
     if (vd->state == 0) {
         vd->state = 2;
     }
