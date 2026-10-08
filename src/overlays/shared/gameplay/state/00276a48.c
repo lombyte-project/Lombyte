@@ -27,5 +27,62 @@ int FUN_L01_00276c40(int idx, int a, int mask) {
     return 0;
 }
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276a48.s", FUN_L01_00276a48);
+#include "rnc/overlay/quad.h"
+
+/* A path in D_L01_001B0930: point count, then the points. */
+typedef struct {
+    s32 count;
+    u8 pad04[0xC];
+    OvlVec4 pts[1];
+} Path_276a48;
+
+extern Path_276a48 *D_L01_001B0930_276a48[] __asm__("D_L01_001B0930");
+extern void vec_sub_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern void vec_add_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
+extern void vec_cross_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
+extern void vec_normalize_276a48(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+extern s32 FUN_L00_00261968_276a48(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
+
+/* Bit i set for each point i of the path that none of the n segments in ids
+   reaches from pos (with a sideways margin of radius when it is nonzero). */
+s32 FUN_L01_00276a48(s32 *ids, s32 n, s32 path_index, f32 radius, OvlVec4 *pos) {
+    Path_276a48 *path = D_L01_001B0930_276a48[path_index];
+    OvlVec4 side;
+    OvlVec4 left;
+    OvlVec4 right;
+    OvlVec4 up;
+    s32 mask = 0;
+    s32 i;
+    s32 j;
+    s32 hit;
+
+    for (i = 0; i < path->count; i++) {
+        hit = 0;
+        for (j = 0; j < n; j++) {
+            if (radius != 0.0f) {
+                up.q = 0;
+                up.f[2] = 1.0f;
+                vec_sub_276a48(&side, pos, &path->pts[i]);
+                vec_cross_276a48(&side, &side, &up);
+                vec_normalize_276a48(&side, &side, radius);
+                vec_sub_276a48(&left, pos, &side);
+                vec_add_276a48(&right, pos, &side);
+                if (FUN_L00_00261968_276a48(ids[j], &left, &path->pts[i])) {
+                    hit = 1;
+                } else if (FUN_L00_00261968_276a48(ids[j], &right, &path->pts[i])) {
+                    hit = 1;
+                }
+            } else if (FUN_L00_00261968_276a48(ids[j], pos, &path->pts[i])) {
+                hit = 1;
+            }
+            if (hit) {
+                break;
+            }
+        }
+        if (!hit) {
+            mask |= 1 << i;
+        }
+    }
+    return mask;
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276fe8.s", FUN_L01_00276fe8);
