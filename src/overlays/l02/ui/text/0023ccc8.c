@@ -30,4 +30,114 @@ void FUN_L02_0023ccc8(char *m) {
     }
     *(int *)(m + 0x74) = **(int **)(m + 0xC);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_0023cda8.s", FUN_L02_0023cda8);
+#include "rnc/overlay/hud.h"
+
+extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
+extern f32 ConvertIntegerToFloat(s32) __asm__("FUN_001fa6c0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern int sprintf_alt(char *str, const char *fmt, ...) __asm__("FUN_00116248");
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
+extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
+extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+extern int FastTweenColor(int, int, float) __asm__("FUN_001fa6e0");
+extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
+extern s32 D_0013E504[];
+extern s32 D_0015ED80;
+extern char D_L02_0015F850[];
+extern s32 D_L02_0015F91C __attribute__((sda));
+extern s32 D_L02_0015F920 __attribute__((sda));
+extern s32 D_L02_0015F944 __attribute__((sda));
+extern s32 D_L02_0015F948 __attribute__((sda));
+extern s32 D_L02_0015F950 __attribute__((sda));
+extern s32 D_L02_0015F954 __attribute__((sda));
+extern s32 D_L02_0015F958 __attribute__((sda));
+extern s32 D_L02_0015F95C __attribute__((sda));
+
+/* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
+s32 FUN_L02_0023cda8(HudElem *m) {
+    char text[16];
+    int x;
+    int y;
+    unsigned char *fade = m->cnt;
+    int left;
+    f32 grow;
+    f32 shade;
+    int alpha;
+    int width;
+    int frame;
+    int bright;
+    int dark;
+    int len;
+    int px;
+    int bar;
+    int bottom;
+
+    if (fade[0] == 0) {
+        return m->w;
+    }
+    x = m->unk50;
+    y = m->unk54;
+    hud_screen_position(m, &x, &y);
+    left = x < 0x101;
+    if (left) {
+        x = D_L02_0015F944;
+    } else {
+        x = D_L02_0015F948;
+    }
+    bottom = D_0013E504[0];
+    y = D_0015ED80 != 0 ? bottom - 0x2A : bottom - 0x32;
+    grow = ConvertIntegerToFloat(fade[0]) / ConvertIntegerToFloat(D_L02_0015F91C);
+    if (1.0f < grow) {
+        grow = 1.0f;
+    } else if (grow < 0.0f) {
+        grow = 0.0f;
+    }
+    shade = ConvertIntegerToFloat(fade[1]) / ConvertIntegerToFloat(D_L02_0015F920);
+    if (1.0f < shade) {
+        shade = 1.0f;
+    } else if (shade < 0.0f) {
+        shade = 0.0f;
+    }
+    sprintf_alt(text, D_L02_0015F850, m->unk74);
+    alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
+    if (m->unk08 < 10) {
+        len = D_L02_0015F958;
+    } else {
+        len = D_L02_0015F95C;
+    }
+    px = x;
+    bar = px + 4;
+    width = truncate_float_to_s32((f32)len * grow);
+    if (left) {
+        frame = get_icon_frame(0x7580, 1);
+        draw_hud_sprite(frame, px - 0x1C, y, 0x20, 0x20, alpha);
+        frame = get_icon_frame(0x7580, 0);
+        draw_hud_sprite(frame, bar, y, width, 0x20, alpha);
+        frame = get_icon_frame(0x7580, 1);
+        draw_hud_sprite_flipped(frame, bar + width, y, 0x20, 0x20, alpha);
+    } else {
+        frame = get_icon_frame(0x7580, 1);
+        draw_hud_sprite_flipped(frame, bar, y, 0x20, 0x20, alpha);
+        px = bar - width;
+        frame = get_icon_frame(0x7580, 0);
+        draw_hud_sprite(frame, px, y, width, 0x20, alpha);
+        frame = get_icon_frame(0x7580, 1);
+        draw_hud_sprite(frame, px - 0x20, y, 0x20, 0x20, alpha);
+    }
+    if (left) {
+        draw_hud_icon(m, m->icon, x, y, 0, 0x80);
+    } else {
+        draw_hud_icon(m, m->icon, x - 0x16, y, 0, 0x80);
+    }
+    bright = FastTweenColor(D_L02_0015F950, D_L02_0015F954, shade);
+    dark = FastTweenColor(0, 0x80000000, shade);
+    if (left) {
+        font_print_right(x + 0x43, y + 9, dark, text, -1);
+        font_print_right(x + 0x42, y + 8, bright, text, -1);
+    } else {
+        font_print_right(x - 0x19, y + 9, dark, text, -1);
+        font_print_right(x - 0x1A, y + 8, bright, text, -1);
+    }
+    return m->w;
+}
