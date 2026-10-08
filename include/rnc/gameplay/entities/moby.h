@@ -52,7 +52,9 @@ struct Moby {
     u8 unkA4;
     u8 padA5;
     s16 oclass;
-    u8 padA8[0xA];
+    u8 padA8[8];
+    u8 unkB0;                         /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    u8 padB1;
     u16 unkB2;
     s16 unkB4;
     u8 padB6[2];
