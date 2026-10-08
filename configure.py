@@ -174,13 +174,6 @@ PADLESS_POLICY_UNITS = {}
 # scePad2Read and other already-exact siblings.
 SDK_COMPILER_FLAG_UNITS = {
     "sdk/rpc/sce_sif_init_iop_heap": "-fno-schedule-insns",
-    # DIntr: Sony libkernel privileged-loop glue.  The ps2sdk glue.c shape
-    # (pinned eie/next/res + `.p2align 3`) matches retail only under the size
-    # optimization with the missing-cse-follow-jumps policy; the default
-    # -O2 compile picks `daddu a0,v1` for the out arm instead of $zero and
-    # schedules the return move out of the jr delay slot.  100/100/100 under
-    # EE-GCC 2.9 with this flag pair (campaign pipeline-2026-09-11-7).
-    "sdk/library/DIntr": "-Os -fno-cse-follow-jumps",
     # No -fno-edge-lcm entry remains: the six that did (draw_debug_profiler,
     # fun_0022f778, draw_dialog_text, memcard_update_state, sound_update,
     # setup_fs_aa_buffer) belong to units that are still assembly wrappers,

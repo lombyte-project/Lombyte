@@ -383,7 +383,7 @@ segments:
           - [0x1e120, c, sdk/library/init_tlb]
           - [0x1e160, c, assembly/sdk/library/init_tlb32_mb]
           - [0x1e354, textbin, text_gap_0011d1e0_post_sdk_worker]
-          - [0x1e5e0, c, sdk/library/DIntr]
+          - [0x1e5e0, c, assembly/sdk/library/DIntr]
           - [0x1e628, c, sdk/interrupts/enable_interrupts]
           - [0x1e640, c, sdk/library/supplement_crt0]
           - [0x1e688, c, sdk/system/kernel_copy_rdata]

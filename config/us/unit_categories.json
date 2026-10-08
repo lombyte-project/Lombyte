@@ -242,7 +242,7 @@
     "runtime/dma/disable_dmac",
     "runtime/dma/enable_dmac",
     "video/display/handler_end_image",
-    "sdk/library/DIntr",
+    "assembly/sdk/library/DIntr",
     "sdk/interrupts/enable_interrupts",
     "sdk/library/__divdi3",
     "sdk/library/moddi3",
