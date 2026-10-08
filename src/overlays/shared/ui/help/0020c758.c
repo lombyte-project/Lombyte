@@ -194,24 +194,22 @@ void FUN_L00_0020d330(void) {
         }
     }
 }
-typedef struct {
-    char pad[0x50];
-} E_20d460;
-extern E_20d460 D_13F350_20d460[] __asm__("D_0013F350");
-/* Returns word 0x1090 of record i in ((char *)&hero) when its kind at 0x10B4 is 2, else 0. */
+/* Returns the moby of item slot i when the slot is ready (state 2), else 0. */
 s32 FUN_L00_0020d460(s32 i) {
-    char *p = (char *)&D_13F350_20d460[i];
-    if (*(s32 *)(p + 0x10B4) == 2) {
-        return *(s32 *)(p + 0x1090);
+    /* hero shifted by i slots, so items[0] is slot i */
+    struct Hero *p = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+    if (p->items[0].state == 2) {
+        return (s32)p->items[0].moby;
     }
     return 0;
 }
-/* Returns word 0x10B8 of record i (0x50 bytes) in ((char *)&hero) when its kind is 2, else -1. */
+/* Returns the item id of slot i when the slot is ready (state 2), else -1. */
 int FUN_L00_0020d498(int i) {
-    char *p = ((char *)&hero) + i * 0x50;
-    switch (*(int *)(p + 0x10B4)) {
+    /* hero shifted by i slots, so items[0] is slot i */
+    struct Hero *p = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+    switch (p->items[0].state) {
     case 2:
-        return *(int *)(p + 0x10B8);
+        return p->items[0].item_id;
     }
     return -1;
 }
@@ -764,28 +762,28 @@ typedef struct {
 } O;
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void FUN_L00_0020fca8(int i, int v) {
-    char *e;
+    struct Hero *e; /* hero shifted by i slots, so items[0] is slot i */
     {
-        char *f = ((char *)&hero) + i * 0x50;
+        struct Hero *f = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
         O *o;
-        *(int *)(f + 0x10a4) = v;
-        if (*(int *)(f + 0x10b4) != 3) {
-            o = *(O **)(f + 0x1090);
-            *(int *)(f + 0x10b4) = 3;
+        f->items[0].unk14 = v;
+        if (f->items[0].state != 3) {
+            o = (O *)f->items[0].moby;
+            f->items[0].state = 3;
             if (o && o->t != 0xfe && o->t != 0xfd && o->fn)
                 o->fn();
         }
     }
-    e = ((char *)&hero) + i * 0x50;
-    *(int *)(e + 0x10b4) = 0;
-    *(int *)(e + 0x10b8) = 0;
-    if (*(void **)(e + 0x1090)) {
-        mark_moby_for_removal(*(void **)(e + 0x1090));
-        *(void **)(e + 0x1090) = 0;
+    e = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+    e->items[0].state = 0;
+    e->items[0].item_id = 0;
+    if (e->items[0].moby) {
+        mark_moby_for_removal(e->items[0].moby);
+        e->items[0].moby = 0;
     }
-    if (*(void **)(e + 0x1094) && i != 3) {
-        mark_moby_for_removal(*(void **)(e + 0x1094));
-        *(void **)(e + 0x1094) = 0;
+    if (e->items[0].moby2 && i != 3) {
+        mark_moby_for_removal(e->items[0].moby2);
+        e->items[0].moby2 = 0;
     }
 }
 #define NOT_SDA
@@ -864,31 +862,6 @@ s32 FUN_L00_0020fe30(void) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x10B8];
-    int f10B8;
-    char pad4[0x1108 - 0x10BC];
-    int f1108;
-    char pad5[0x1158 - 0x110C];
-    int f1158;
-    char pad6[0x11A8 - 0x115C];
-    int f11A8;
-    char pad7[0x2084 - 0x11AC];
-    int f2084;
-    int f2088;
-    int f208C;
-    char pad1[0x20A6 - 0x2090];
-    unsigned char f20A6;
-    unsigned char f20A7;
-    unsigned char f20A8;
-    char pad2[3];
-    unsigned char f20AC;
-    char pad3[0x20B8 - 0x20AD];
-    int a[7];
-    int b[7];
-    int c[7];
-    int d[7];
-} Sel;
 
 typedef struct {
     char pad[0x20];
@@ -923,34 +896,34 @@ void FUN_L00_0020fea0(int i) {
 
     if (i == 0) {
         int v;
-        char *g = ((char *)&hero);
-        v = *(int *)(g + 0x10B8);
-        if (v != 8 && v != 0x17 && v != 9 && *(unsigned char *)(g + 0x10AC) == 2) {
-            *(unsigned char *)(g + 0x10AC) = 0;
+        struct Hero *g = &hero;
+        v = g->items[0].item_id;
+        if (v != 8 && v != 0x17 && v != 9 && g->items[0].unk1C == 2) {
+            g->items[0].unk1C = 0;
         }
     }
     if (i == 0) {
-        Sel *g = (Sel *)(((char *)&hero));
-        if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) != 8) {
-            g->f20A6 = 1;
+        struct Hero *g = &hero;
+        if (g->unk20A7 != 0 && g->items[0].item_id != 8) {
+            g->unk20A6 = 1;
         }
     }
     if (i == 0) {
-        Sel *g = (Sel *)(((char *)&hero));
-        if (g->f20A7 != 0 && *(int *)((char *)g + 0x10B8) == 8) {
-            if (g->a[0] == 0x1F) {
-                g->a[0] = 0;
+        struct Hero *g = &hero;
+        if (g->unk20A7 != 0 && g->items[0].item_id == 8) {
+            if (g->pending_item[0] == 0x1F) {
+                g->pending_item[0] = 0;
             }
-            if (g->a[0] != 0x18 && g->a[0] != 0x24) {
+            if (g->pending_item[0] != 0x18 && g->pending_item[0] != 0x24) {
                 return;
             }
         }
     }
     {
-        Sel *g = (Sel *)(((char *)&hero));
-        if (g->f20AC != 0 && i == 0) {
-            if (g->f20A6 == 0 || *(int *)((char *)g + 0x10B8) == 8) {
-                g->f20A6 = 0;
+        struct Hero *g = &hero;
+        if (g->unk20AC != 0 && i == 0) {
+            if (g->unk20A6 == 0 || g->items[0].item_id == 8) {
+                g->unk20A6 = 0;
                 return;
             }
         }
@@ -958,16 +931,16 @@ void FUN_L00_0020fea0(int i) {
     changed = 0;
     {
         char *pad = D_0013C940;
-        if ((*(int *)(pad + 0x1A4) & 0x80) || ((Sel *)(((char *)&hero)))->f20A6 != 0) {
+        if ((*(int *)(pad + 0x1A4) & 0x80) || hero.unk20A6 != 0) {
             if (i == 0) {
                 int v;
-                Sel *g = (Sel *)(((char *)&hero));
-                v = *(int *)((char *)g + 0x10B8);
+                struct Hero *g = &hero;
+                v = g->items[0].item_id;
                 if (v != 8) {
-                    if (g->f20A6 != 0 && v != 0 && v != 0x1F) {
-                        g->c[0] = v;
+                    if (g->unk20A6 != 0 && v != 0 && v != 0x1F) {
+                        g->saved_item[0] = v;
                     }
-                    ((Sel *)(((char *)&hero)))->b[i] = 8;
+                    hero.selected_item[i] = 8;
                     changed = 1;
                 }
             }
@@ -976,111 +949,111 @@ void FUN_L00_0020fea0(int i) {
     if (i == 0) {
         char *pad = D_0013C940;
         if (*(int *)(pad + 0x1A4) & 0x20) {
-            Sel *g = (Sel *)(((char *)&hero));
-            if (g->f20A7 == 0) {
-                if (g->f10B8 != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
-                    g->b[0] = *(int *)(D_00141660);
+            struct Hero *g = &hero;
+            if (g->unk20A7 == 0) {
+                if (g->items[0].item_id != *(int *)(D_00141660) && *(int *)(D_00141660) != 0) {
+                    g->selected_item[0] = *(int *)(D_00141660);
                     changed = 1;
                 }
             }
         }
     }
     if (i == 1) {
-        Sel *g;
-        if (FUN_L00_0020d568_c() || ((Sel *)(((char *)&hero)))->f2084 == 0x12) {
+        struct Hero *g;
+        if (FUN_L00_0020d568_c() || hero.state.current == 0x12) {
             int v;
-            g = (Sel *)(((char *)&hero));
-            v = *(int *)((char *)g + 0x1108);
+            g = &hero;
+            v = g->items[1].item_id;
             if (v != 0) {
-                g->c[1] = v;
-                g->a[1] = 0x26;
+                g->saved_item[1] = v;
+                g->pending_item[1] = 0x26;
             }
         }
-        g = (Sel *)(((char *)&hero));
-        if (g->f208C == 0xF && D_0013D4C0[0x1D] != 0) {
+        g = &hero;
+        if (g->state.control_mode == 0xF && D_0013D4C0[0x1D] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
-                g->a[1] = 0x1D;
+                g->pending_item[1] = 0x1D;
                 v = *(int *)((char *)g + i * 0x50 + 0x10B8);
                 if (v != 0) {
-                    g->c[i] = v;
+                    g->saved_item[i] = v;
                 } else {
-                    g->c[i] = 0x26;
+                    g->saved_item[i] = 0x26;
                 }
             }
         }
-        g = (Sel *)(((char *)&hero));
-        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && D_0013D4C0[0x1C] != 0) {
+        g = &hero;
+        if (g->unk12E7 != 0 && D_0013D4C0[0x1C] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1C || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
-                g->a[1] = 0x1C;
+                g->pending_item[1] = 0x1C;
                 v = *(int *)((char *)g + i * 0x50 + 0x10B8);
                 if (v != 0) {
-                    g->c[i] = v;
+                    g->saved_item[i] = v;
                 } else {
-                    g->c[i] = 0x26;
+                    g->saved_item[i] = 0x26;
                 }
             }
         }
     }
     flag6 = 0;
     if (i == 2) {
-        Sel *g = (Sel *)(((char *)&hero));
-        Sel *h;
-        Sel *h2;
-        if (g->f208C == 0x11 || g->f2084 == 0x76 || g->f2084 == 0x6A || g->f2084 == 0x82 ||
-            *(unsigned char *)((char *)g + 0x22CB) != 0) {
+        struct Hero *g = &hero;
+        struct Hero *h;
+        struct Hero *h2;
+        if (g->state.control_mode == 0x11 || g->state.current == 0x76 || g->state.current == 0x6A || g->state.current == 0x82 ||
+            g->unk22CB != 0) {
             if (((int *)(D_00141660))[i] != 6 ||
-                (h2 = (Sel *)(((char *)&hero)), *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
-                h = (Sel *)(((char *)&hero));
-                if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->b[i] != 6 &&
+                (h2 = &hero, *(int *)((char *)h2 + i * 0x50 + 0x10B8) == 0)) {
+                h = &hero;
+                if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->selected_item[i] != 6 &&
                     D_0013D4C0[6] != 0) {
                     int v;
-                    h->a[i] = 6;
+                    h->pending_item[i] = 6;
                     flag6 = 1;
                     v = *(int *)((char *)h + i * 0x50 + 0x10B8);
                     if (v != 0) {
-                        h->c[i] = v;
+                        h->saved_item[i] = v;
                     } else {
-                        h->c[i] = 0x26;
+                        h->saved_item[i] = 0x26;
                     }
                 }
             }
-        } else if (*(int *)((char *)g + 0x1158) == 6 && g->c[2] != 0) {
-            g->d[2] = 1;
+        } else if (g->items[2].item_id == 6 && g->saved_item[2] != 0) {
+            g->restore_item[2] = 1;
         }
     }
     flag4 = 0;
     if (i == 3) {
-        Sel *g;
-        if (FUN_L00_0020d568_c() || ((Sel *)(((char *)&hero)))->f2084 == 0x12) {
+        struct Hero *g;
+        if (FUN_L00_0020d568_c() || hero.state.current == 0x12) {
             if (*(int *)(D_00141660 + 0xC) != 4) {
                 int v;
-                g = (Sel *)(((char *)&hero));
-                v = *(int *)((char *)g + 0x11A8);
+                g = &hero;
+                v = g->items[3].item_id;
                 if (v != 4 && D_0013D4C0[4] != 0) {
-                    g->c[3] = v;
+                    g->saved_item[3] = v;
                     flag4 = 1;
-                    g->a[3] = 4;
+                    g->pending_item[3] = 4;
                 }
             }
-        } else if (((Sel *)(((char *)&hero)))->f11A8 == 4 && ((Sel *)(((char *)&hero)))->c[3] != 0) {
-            ((Sel *)(((char *)&hero)))->d[3] = 1;
+        } else if (hero.items[3].item_id == 4 && hero.saved_item[3] != 0) {
+            hero.restore_item[3] = 1;
         }
-        if (((Sel *)(((char *)&hero)))->f2084 == 8 && ((int *)(D_00141660))[i] == 4) {
-            ((Sel *)(((char *)&hero)))->a[i] = 2;
+        if (hero.state.current == 8 && ((int *)(D_00141660))[i] == 4) {
+            hero.pending_item[i] = 2;
         }
     }
     {
-        Sel *g = (Sel *)(((char *)&hero));
-        int *qb = g->d;
+        struct Hero *g = &hero;
+        int *qb = g->restore_item;
         int *q = qb + i;
         if (*q != 0) {
             int *r;
             int *rb;
             int w;
             *q = 0;
-            rb = g->c;
+            rb = g->saved_item;
             r = rb + i;
             w = *r;
             if (w != 0 && w != *(int *)((char *)g + i * 0x50 + 0x10B8)) {
@@ -1089,69 +1062,69 @@ void FUN_L00_0020fea0(int i) {
                 }
                 *r = 0;
                 ((int *)(D_00141660))[i] = w;
-                g->b[i] = w;
+                g->selected_item[i] = w;
                 if (i == 0) {
-                    D_L00_00179AC0[g->b[0]].f20 = 0x20;
+                    D_L00_00179AC0[g->selected_item[0]].f20 = 0x20;
                 }
                 changed = 1;
             }
         }
     }
     {
-        Sel *g = (Sel *)(((char *)&hero));
+        struct Hero *g = &hero;
         int *s;
         int *sb;
-        if (*(unsigned char *)((char *)g + 0x1FF5) != 0) {
+        if (g->unk1FF5 != 0) {
             FUN_L00_002cdcc0();
-            g->a[i] = 0;
+            g->pending_item[i] = 0;
         }
-        sb = g->a;
+        sb = g->pending_item;
         s = sb + i;
         if (*s == 0x1F) {
             if (FUN_L00_0020fe30_c()) {
                 int v;
-                if (*(short *)((char *)g + 0x22DE) == 0) {
+                if (g->unk22DE == 0) {
                     FUN_L00_00216de8(0x18, 0);
-                    *(short *)((char *)g + 0x22DE) = 0x12;
-                    *(short *)((char *)g + 0x22DC) = 1;
+                    g->unk22DE = 0x12;
+                    g->unk22DC = 1;
                 }
                 changed = 1;
-                g->b[i] = *s;
+                g->selected_item[i] = *s;
                 v = ((int *)(D_00141660))[i];
                 ((int *)(D_00141660))[i] = *s;
                 D_0015ED8C = v;
             }
-            ((Sel *)(((char *)&hero)))->a[i] = 0;
+            hero.pending_item[i] = 0;
         }
     }
     {
         int v;
-        Sel *g = (Sel *)(((char *)&hero));
-        int *ab = g->a;
+        struct Hero *g = &hero;
+        int *ab = g->pending_item;
         int *a = ab + i;
         v = *a;
         if (v != 0) {
-            int *bb = g->b;
+            int *bb = g->selected_item;
             int *b = bb + i;
             if (v != *b) {
                 if (v == 0x26) {
                     *b = 0;
                     ((int *)(D_00141660))[i] = 0;
                 } else {
-                    Sel *h;
+                    struct Hero *h;
                     int u;
-                    if (i == 0 && g->a[0] != 0x24 && *(int *)((char *)g + 0x10B8) != 8) {
+                    if (i == 0 && g->pending_item[0] != 0x24 && g->items[0].item_id != 8) {
                         D_0015ED8C = *(int *)(D_00141660);
                     }
-                    h = (Sel *)(((char *)&hero));
-                    u = h->a[i];
-                    h->b[i] = u;
+                    h = &hero;
+                    u = h->pending_item[i];
+                    h->selected_item[i] = u;
                     if (u != 0x24 && (flag6 == 0 || u != 6) && (flag4 == 0 || u != 4)) {
                         ((int *)(D_00141660))[i] = u;
                     }
                     if (i == 0) {
-                        Sel *k = (Sel *)(((char *)&hero));
-                        D_L00_00179AC0[k->b[0]].f20 = 0x20;
+                        struct Hero *k = &hero;
+                        D_L00_00179AC0[k->selected_item[0]].f20 = 0x20;
                     }
                 }
                 changed = 1;
@@ -1161,27 +1134,27 @@ void FUN_L00_0020fea0(int i) {
         }
     }
     {
-        char *s = ((char *)&hero) + i * 0x50;
-        st = *(unsigned char *)(s + 0x10AC);
+        struct Hero *s = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        st = s->items[0].unk1C;
         if (st == 2) {
             changed = 0;
         }
-        if (st == 1 && *(short *)(s + 0x10A8) == 0) {
-            *(short *)(s + 0x10A8) = *(unsigned char *)(s + 0x10AD);
+        if (st == 1 && s->items[0].timer == 0) {
+            s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(((char *)&hero) + 0x10A8 + i * 0x50) == 0) {
+    if (FUN_001f9770(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
-        Sel *g = (Sel *)(((char *)&hero));
+        struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
-        *(int *)((char *)g + 0x1010) =
+        g->unk1010 =
             FUN_L00_00257b90(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0_c(*((int *)(((char *)&hero) + 0x20D4) + i));
         FUN_L00_0020fd80_c(*((int *)(((char *)&hero) + 0x20D4) + i));
-        if (g->f20A8 != 0) {
+        if (g->unk20A8 != 0) {
             FUN_L00_0020e698_c();
         }
         if (i == 0) {
@@ -1192,34 +1165,34 @@ void FUN_L00_0020fea0(int i) {
             }
         }
         if (i == 3) {
-            if (((Sel *)(((char *)&hero)))->f11A8 == 3) {
+            if (hero.items[3].item_id == 3) {
                 D_0015ED94 = 1;
             } else {
                 D_0015ED94 = 0;
             }
         }
         {
-            Sel *k = (Sel *)(((char *)&hero));
-            char *s = (char *)k + i * 0x50;
-            *(unsigned char *)(s + 0x10AA) = 0;
-            k->a[i] = 0;
-            k->f20A6 = 0;
-            if (*(char **)((char *)k + 0xD00) != 0) {
-                *(int *)(*(char **)((char *)k + 0xD00) + 0x34) = 1;
+            struct Hero *k = &hero;
+            struct Hero *s = (struct Hero *)((char *)k + i * sizeof(struct HeroItemSlot));
+            s->items[0].unk1A = 0;
+            k->pending_item[i] = 0;
+            k->unk20A6 = 0;
+            if (k->unkD00 != 0) {
+                *(int *)(k->unkD00 + 0x34) = 1;
             }
-            if (*(char **)((char *)k + 0xD04) != 0) {
-                *(int *)(*(char **)((char *)k + 0xD04) + 0x34) = 1;
+            if (k->unkD04 != 0) {
+                *(int *)(k->unkD04 + 0x34) = 1;
             }
-            if (*(void **)(s + 0x1090) != 0) {
-                blend_moby_animation(*(void **)(s + 0x1090), 2, 0, 2);
+            if (s->items[0].moby != 0) {
+                blend_moby_animation(s->items[0].moby, 2, 0, 2);
             }
-            if (*(void **)(s + 0x1094) != 0 && i != 3) {
-                blend_moby_animation(*(void **)(s + 0x1094), 2, 0, 2);
+            if (s->items[0].moby2 != 0 && i != 3) {
+                blend_moby_animation(s->items[0].moby2, 2, 0, 2);
             }
         }
         {
-            char *e = ((char *)&hero);
-            *(int *)(e + i * 0x50 + 0x10B4) = 3;
+            struct Hero *e = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+            e->items[0].state = 3;
         }
     }
 }

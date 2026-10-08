@@ -40,7 +40,8 @@ struct HeroItemSlot {
     s32 button_mask;               /* 0x10: pad buttons that hold the gadget states */
     s32 unk14;                     /* 0x14: set on release */
     s16 timer;                     /* 0x18: counts down; a slot change waits for 0 */
-    u8 pad_1A[0x2];
+    u8 unk1A;                      /* 0x1A: cleared on a slot change */
+    u8 pad_1B[0x1];
     u8 unk1C;                      /* 0x1C: 2 blocks a slot change, 1 reloads timer */
     u8 timer_reload;               /* 0x1D: timer reload value */
     u8 pad_1E[0x2];
@@ -445,7 +446,9 @@ struct Hero {
     f32 unkAA8;                    /* 0xAA8 */
     u8 pad_AAC[0x8];
     s32 unkAB4;                    /* 0xAB4 */
-    u8 pad_AB8[0x250];
+    u8 pad_AB8[0x248];
+    u8*unkD00;                     /* 0xD00 */
+    u8*unkD04;                     /* 0xD04 */
     s32 unkD08;                    /* 0xD08 */
     u8 pad_D0C[0x8];
     s32 unkD14;                    /* 0xD14 */
@@ -483,7 +486,8 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x846];
+    u8 pad_17B0[0x845];
+    u8 unk1FF5;                    /* 0x1FF5 */
     u8 ammo_used;                  /* 0x1FF6 */
     u8 ammo_capacity;              /* 0x1FF7 */
     u8 pad_1FF8[0x48];
@@ -495,7 +499,7 @@ struct Hero {
     struct HeroState state;        /* 0x2084 */
     u8 unk20A4;                    /* 0x20A4 */
     u8 unk20A5;                    /* 0x20A5 */
-    u8 pad_20A6[0x1];
+    u8 unk20A6;                    /* 0x20A6: forces slot 0 to item 8 */
     u8 unk20A7;                    /* 0x20A7 */
     u8 unk20A8;                    /* 0x20A8 */
     u8 unk20A9;                    /* 0x20A9 */
@@ -537,7 +541,8 @@ struct Hero {
     s32 unk22C4;                   /* 0x22C4 */
     s16 unk22C8;                   /* 0x22C8 */
     u8 unk22CA;                    /* 0x22CA */
-    u8 pad_22CB[0x3];
+    u8 unk22CB;                    /* 0x22CB */
+    u8 pad_22CC[0x2];
     s16 unk22CE;                   /* 0x22CE */
     u8 pad_22D0[0x2];
     s16 unk22D2;                   /* 0x22D2 */
