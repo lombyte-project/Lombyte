@@ -172,7 +172,7 @@ s32 sound_update(void) {
     qzero(&listener_velocity);
     {
         s32 *history_position = &D_0013E550.listener_history_position;
-        history_index = *history_position + 1;
+        history_index = D_0013E550.listener_history_position + 1;
         history_index %= 4;
         *history_position = history_index;
     }

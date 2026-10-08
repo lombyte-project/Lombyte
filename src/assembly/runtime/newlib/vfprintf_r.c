@@ -55,9 +55,15 @@ extern u32 strlen(const char *);
 #define va_arg(ap, type) (*(type *)((ap += 8) - 8))
 #define va_ptr(ap, type) ((type)(*(void **)((ap += 8) - 8)))
 
-s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) __asm__("FUN_00116e20");
-extern __typeof__(_vfprintf_r) _vfprintf_r_link __asm__("_vfprintf_r") __attribute__((alias("FUN_00116e20")));
-s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
+#define PADSIZE 16
+	static _CONST char blanks[PADSIZE] =
+	 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
+	static _CONST char zeroes[PADSIZE] =
+	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+
+s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap);
+extern __typeof__(FUN_00116e20) _vfprintf_r __attribute__((alias("FUN_00116e20")));
+s32 FUN_00116e20(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 {
 	register char *fmt;	/* format string */
 	register int ch;	/* character from fmt */
@@ -99,11 +105,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	 * fields occur frequently, increase PADSIZE and make the initialisers
 	 * below longer.
 	 */
-#define	PADSIZE	16		/* pad chunk size */
-	static _CONST char blanks[PADSIZE] =
-	 {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
-	static _CONST char zeroes[PADSIZE] =
-	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+
 
 	/*
 	 * BEWARE, these `goto error' on error, and PAD uses `n'.
@@ -374,7 +376,7 @@ reswitch:	switch (ch) {
 			 *	-- ANSI X3J11
 			 */
 			/* NOSTRICT */
-			_uquad = (long)(int)va_ptr(ap, void *);
+			_uquad = (s32)va_ptr(ap, void *);
 			base = HEX;
 			xdigs = "0123456789abcdef";
 			flags |= HEXPREFIX;

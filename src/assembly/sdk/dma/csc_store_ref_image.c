@@ -10,7 +10,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/csc_store_ref_image/_csc_st
 
 typedef struct {
     u32 count;
-    s32 addr;
+    u32 addr;
 } CscDma;
 
 typedef struct {
@@ -76,7 +76,7 @@ void _csc_storeRefImage(CscDec *d, CscImage *img) {
             EnableInterrupts();
         }
         dma.addr = (dma.addr + 0xFFFF0) & 0x0FFFFFFF;
-        dma.count = dma.count - 0xFFFF;
+        dma.count -= 0xFFFF;
         if (small) {
             _doCSC(d, d->data, total);
         } else {

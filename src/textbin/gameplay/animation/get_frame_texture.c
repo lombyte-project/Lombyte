@@ -1,11 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM(
-    "config/us/expected/asm/assembly/textbin/gameplay/animation/get_frame_texture/FUN_001ffa10.s",
-    FUN_001ffa10);
-#else
 #include "types.h"
 
 struct FrameTextureRef {
@@ -131,8 +126,12 @@ u64 get_frame_texture(s32 frame_id) {
     if (return_shift < 0) {
         return_shift = 0;
     }
-    return_mode = image_page->gs_block_offset < (gs_texture_allocation_base >> 8) ? 0x1B : 0x13;
-    tex0_word = image_page->gs_block_offset | ((u64)(1 << return_shift) << 14);
+    return_mode = 0x13;
+    if (image_page->gs_block_offset < (gs_texture_allocation_base >> 8)) {
+        return_mode = 0x1B;
+    }
+    return_shift = 1 << return_shift;
+    tex0_word = image_page->gs_block_offset | ((u64)return_shift << 14);
     tex0_word |= (u64)return_mode << 20;
     tex0_word |= (u64)image_page->width_log2 << 26;
     tex0_word |= (u64)image_page->height_log2 << 30;
@@ -144,5 +143,3 @@ u64 get_frame_texture(s32 frame_id) {
 }
 
 extern __typeof__(get_frame_texture) func_001FFA10 __attribute__((alias("FUN_001ffa10")));
-
-#endif /* NON_MATCHING */

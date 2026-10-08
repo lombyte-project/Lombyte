@@ -31,13 +31,13 @@ void printfloat(f64 x) {
     /* Absolute loads avoid GP-relative references in the call delay slots. */
     if (dpcmp_f(x, 0.1) < 0) {
         while (dpcmp_f(x, 0.1) < 0) {
-            exponent -= 1;
+            --exponent;
             x = dpmul_f(x, 10.0);
         }
     } else {
         if (dpcmp_f(x, 1.0) >= 0) {
             while (dpcmp_f(x, 1.0) >= 0) {
-                exponent += 1;
+                ++exponent;
                 x = dpdiv_f(x, 10.0);
             }
         }

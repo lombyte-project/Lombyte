@@ -72,10 +72,10 @@ void initialize_gameplay_sound_system(void) {
     scaled_volume_80 = (sound_volume * 8) / 10;
     voice_pool.group_1_volume = music_volume;
     scaled_volume_70 = (sound_volume * 7) / 10;
-    voice_pool.group_2_volume = scaled_volume_80;
-    voice_pool.group_0_volume = scaled_volume_80;
-    voice_pool.group_3_volume = scaled_volume_70;
-    voice_pool.group_4_volume = scaled_volume_70;
+    *(volatile s32 *)&voice_pool.group_0_volume = scaled_volume_80;
+    *(volatile s32 *)&voice_pool.group_2_volume = scaled_volume_80;
+    *(volatile s32 *)&voice_pool.group_3_volume = scaled_volume_70;
+    *(volatile s32 *)&voice_pool.group_4_volume = scaled_volume_70;
     voice_pool.group_5_volume = sound_volume;
     reset_music();
     snd_set_master_volume(0, voice_pool.group_0_volume);

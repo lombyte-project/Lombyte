@@ -1,10 +1,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/snd_start_sound_system/FUN_0012da28.s",
-            FUN_0012da28);
-#else
 #include "types.h"
 #include "sda.h"
 
@@ -50,9 +46,11 @@ s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 s32 snd_start_sound_system(void) {
     s32 bind_result;
     s32 command_arg;
+    u8 *const command_buffer1 = D_00134280;
+    u8 *const command_buffer0 = D_00133280;
 
-    D_0015ECA0[0] = D_00133280;
-    D_0015ECA0[1] = D_00134280;
+    D_0015ECA0[0] = command_buffer0;
+    D_0015ECA0[1] = command_buffer1;
     D_0015ECB8[0] = D_00137280;
     D_0015ECB8[1] = D_001376C0;
     D_0015ECB0[0] = D_00135280;
@@ -100,4 +98,3 @@ s32 snd_start_sound_system(void) {
     command_arg = (s32)(u32)&sound_read_work.read_active;
     return snd_send_iop_command_and_wait(0, 4, &command_arg);
 }
-#endif /* NON_MATCHING */

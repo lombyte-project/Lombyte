@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/type2id/_type2id.s", _t
 
 extern u8 D_00132ED8[];
 
-u64 _type2id(s32 id, u64 value) {
+u64 _type2id(s32 id, s32 value) {
     volatile u64 pad;
     u64 result = 0;
     s32 byte_offset;
@@ -38,7 +38,7 @@ u64 _type2id(s32 id, u64 value) {
     cb:
         shift = 0x20;
     done:
-        result = (*((u64 *)(((u8 *)D_00132ED8) + byte_offset))) | (value << shift);
+        result = (*((u64 *)(((u8 *)D_00132ED8) + byte_offset))) | ((u64)value << shift);
     }
     return result;
 }
