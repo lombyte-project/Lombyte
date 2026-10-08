@@ -71,7 +71,76 @@ void FUN_L01_0030d260(void *unused, float *p) {
     FUN_001f9a10(p, p, g + 0x80);
     p[2] = p[2] + 1.0f;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030d308.s", FUN_L01_0030d308);
+#include "qcopy.h"
+#include "rnc/overlay/collision.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/hero.h"
+
+/* The part of a moby class FUN_L01_0030d308 reads */
+typedef struct {
+    u8 pad00[0x46];
+    s16 kind;      /* 0x46: 5 for lock-on targets */
+} TargetClass_30d308;
+
+extern struct Moby *D_L01_001ABE80_30d308[] __asm__("D_L01_001ABE80");
+extern CollisionHit D_L01_001742C0_30d308 __asm__("D_L01_001742C0");
+extern f32 distance_xyz_30d308(void *, void *) __asm__("FUN_001f9b48");
+extern f32 FUN_001f9988_30d308(f32) __asm__("FUN_001f9988");
+extern f32 atan2_30d308(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_difference_between_rotations_30d308(f32, f32) __asm__("FUN_001fa688");
+extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
+extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+
+/* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
+   best lock-on target for moby seen from `from` along `ang`. */
+struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch) {
+    f32 tp[4];
+    struct Moby *best = 0;
+    f32 bestScore = 1.0e9f;
+    s32 i;
+    struct Moby *t;
+
+    for (i = 0; (t = D_L01_001ABE80_30d308[i]) != 0; i++) {
+        f32 *hp;
+        s32 cls;
+        f32 dist, score, p2;
+        struct Moby *hit;
+
+        if (t->unk32 == 0) continue;
+        hp = FUN_002141f8_30d308(t);
+        if (t == 0 || t->pclass == 0) continue;
+        cls = ((TargetClass_30d308 *)t->pclass)->kind;
+        if (cls != 5 || hp == 0 || !(0.0f < *hp)) continue;
+        dist = distance_xyz_30d308(from, &t->pos);
+        if (!(dist < range)) continue;
+        qcopy(tp, &t->pos);
+        tp[2] += 0.4f;
+        score = fast_difference_between_rotations_30d308(ang[2], atan2_30d308(tp[0] - from[0], tp[1] - from[1]));
+        score = score * score;
+        if (!(score < yawMax * yawMax)) {
+            if (!(dist < near) || !(score < nearYaw * nearYaw)) continue;
+        }
+        p2 = fast_difference_between_rotations_30d308(ang[1], atan2_30d308(dist, tp[2] - from[2]));
+        p2 = p2 * p2;
+        if (!(p2 < pitchMax * pitchMax)) {
+            if (!(dist < near) || !(p2 < nearPitch * nearPitch)) continue;
+        }
+        score *= p2;
+        score *= FUN_001f9988_30d308(distance_xyz_30d308(from, tp));
+        if (!(score < bestScore)) continue;
+        if (collision_line_30d308(from, tp, 0, moby, 0)) {
+            hit = (struct Moby *)D_L01_001742C0_30d308.moby;
+            if (hit == 0 || hit == hero.moby || hit == 0 || hit->pclass == 0
+                || ((TargetClass_30d308 *)hit->pclass)->kind != cls) {
+                continue;
+            }
+        }
+        bestScore = score;
+        best = t;
+    }
+    return best;
+}
 #include "sda.h"
 
 
@@ -84,7 +153,8 @@ extern float FUN_001f9b80(void *, void *);
 extern void *FUN_002141f8(void *);
 extern int FUN_001f96f8(int);
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
-extern void *FUN_L01_0030d308(void *, void *, void *, float, float, float, float, float, float);
+struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
+                              f32 range, f32 near, f32 nearYaw, f32 nearPitch);
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
