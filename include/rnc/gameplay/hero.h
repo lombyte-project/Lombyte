@@ -131,13 +131,13 @@ struct Hero {
     s32 unk19C;                    /* 0x19C */
     s32 unk1A0;                    /* 0x1A0 */
     s32 unk1A4;                    /* 0x1A4 */
-    u8 pad_1A8[0x4];
+    s32 unk1A8;                    /* 0x1A8 */
     s32 unk1AC;                    /* 0x1AC */
     s16 unk1B0;                    /* 0x1B0 */
     s16 unk1B2;                    /* 0x1B2 */
     s32 unk1B4;                    /* 0x1B4 */
     s32 unk1B8;                    /* 0x1B8 */
-    u8 pad_1BC[0x4];
+    s32 unk1BC;                    /* 0x1BC */
     s32 unk1C0;                    /* 0x1C0 */
     s32 unk1C4;                    /* 0x1C4 */
     s16 unk1C8;                    /* 0x1C8 */
@@ -146,7 +146,7 @@ struct Hero {
     s32 unk1D0;                    /* 0x1D0 */
     s32 unk1D4;                    /* 0x1D4 */
     s16 unk1D8;                    /* 0x1D8 */
-    u8 pad_1DA[0x2];
+    s16 unk1DA;                    /* 0x1DA */
     s16 unk1DC;                    /* 0x1DC */
     s16 unk1DE;                    /* 0x1DE */
     s16 unk1E0;                    /* 0x1E0 */
@@ -154,12 +154,13 @@ struct Hero {
     s16 unk1E4;                    /* 0x1E4 */
     s16 unk1E6;                    /* 0x1E6 */
     s16 unk1E8;                    /* 0x1E8 */
-    u8 pad_1EA[0x4];
+    s16 unk1EA;                    /* 0x1EA */
+    s16 unk1EC;                    /* 0x1EC */
     s16 unk1EE;                    /* 0x1EE */
-    u8 pad_1F0[0x2];
+    s16 unk1F0;                    /* 0x1F0 */
     s16 unk1F2;                    /* 0x1F2 */
     s16 unk1F4;                    /* 0x1F4 */
-    u8 pad_1F6[0x2];
+    s16 unk1F6;                    /* 0x1F6 */
     s16 unk1F8;                    /* 0x1F8 */
     u8 pad_1FA[0x6];
     Vec4 unk200;                   /* 0x200 */
@@ -590,7 +591,8 @@ struct Hero {
     u8 pad_2278[0x8];
     struct Moby *unk2280;          /* 0x2280 */
     s32 unk2284;                   /* 0x2284 */
-    u8 pad_2288[0x8];
+    f32 unk2288;                   /* 0x2288 */
+    f32 unk228C;                   /* 0x228C */
     f32 unk2290;                   /* 0x2290 */
     s32 unk2294;                   /* 0x2294 */
     s32 unk2298;                   /* 0x2298 */
