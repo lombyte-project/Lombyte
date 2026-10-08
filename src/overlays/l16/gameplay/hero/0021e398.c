@@ -515,7 +515,7 @@ int hero_set_state(int a, int b) {
                 s->unk8BC = 0;
                 s->unk89C = 0;
                 s->unk8C4 = 0;
-                s->unk8B8 = 0;
+                s->unk8B8.i = 0;
                 s->unk8CE = 0;
                 s->unk8AF = 0;
             }

@@ -1910,7 +1910,7 @@ void FUN_L05_00255960(void) {
                                 if (FUN_L00_00266d60(0x40, scale_game_frames(9), 0)) {
                                     hero.unk89C = 1;
                                     hero.unk8BC = 1;
-                                    FillTransferWords(hero.unk6C0, 0, 0x60);
+                                    FillTransferWords(&hero.unk6C0, 0, 0x60);
                                     if (hero.unk8AC != 0) {
                                         float z = up + D_0015ED6C * 14.7f;
                                         hero.motion.unk110.f[2] = z;

@@ -335,38 +335,65 @@ struct Hero {
     s32 unk6A0;                    /* 0x6A0 */
     struct Moby *unk6A4;           /* 0x6A4 */
     u8 pad_6A8[0x18];
-    u8 unk6C0[0x60];               /* 0x6C0 */
-    u8 pad_720[0xB0];
+    Vec4 unk6C0;                   /* 0x6C0: 0x60 bytes cleared by FillTransferWords */
+    f32 unk6D0;                    /* 0x6D0 */
+    f32 unk6D4;                    /* 0x6D4 */
+    u8 pad_6D8[0x48];
+    Vec4 unk720;                   /* 0x720 */
+    u8 pad_730[0x10];
+    Vec4 unk740;                   /* 0x740 */
+    Vec4 unk750;                   /* 0x750 */
+    Vec4 unk760;                   /* 0x760 */
+    Vec4 unk770;                   /* 0x770 */
+    Vec4 unk780;                   /* 0x780 */
+    Vec4 unk790;                   /* 0x790 */
+    u8 pad_7A0[0x30];
     f32 unk7D0[0x20];              /* 0x7D0 */
-    u8 pad_850[0x10];
+    u8 pad_850[0x4];
+    f32 unk854;                    /* 0x854 */
+    f32 unk858;                    /* 0x858 */
+    f32 unk85C;                    /* 0x85C */
     f32 unk860;                    /* 0x860 */
-    u8 pad_864[0x8];
+    s32 unk864;                    /* 0x864 */
+    f32 unk868;                    /* 0x868 */
     u8 *unk86C;                    /* 0x86C */
     s32 unk870;                    /* 0x870 */
     f32 unk874;                    /* 0x874 */
-    u8 pad_878[0x10];
+    f32 unk878;                    /* 0x878 */
+    f32 unk87C;                    /* 0x87C */
+    u8 pad_880[0x4];
+    s16 unk884;                    /* 0x884 */
+    s16 unk886;                    /* 0x886 */
     s16 unk888;                    /* 0x888 */
-    u8 pad_88A[0xE];
+    s16 unk88A;                    /* 0x88A */
+    u8 unk88C;                     /* 0x88C */
+    u8 unk88D;                     /* 0x88D */
+    u8 unk88E;                     /* 0x88E */
+    u8 unk88F;                     /* 0x88F */
+    u8 pad_890[0x8];
     s16 unk898;                    /* 0x898 */
     u8 pad_89A[0x2];
     s16 unk89C;                    /* 0x89C */
     s16 unk89E;                    /* 0x89E */
     f32 unk8A0;                    /* 0x8A0 */
-    u8 pad_8A4[0x8];
+    f32 unk8A4;                    /* 0x8A4 */
+    u8 pad_8A8[0x4];
     s16 unk8AC;                    /* 0x8AC */
     u8 pad_8AE[0x1];
     u8 unk8AF;                     /* 0x8AF */
     s16 unk8B0;                    /* 0x8B0 */
     s16 unk8B2;                    /* 0x8B2 */
     void *unk8B4;                  /* 0x8B4 */
-    s32 unk8B8;                    /* 0x8B8 */
+    union { f32 f; s32 i; } unk8B8; /* 0x8B8: read as a float, zeroed as an int */
     s16 unk8BC;                    /* 0x8BC */
     s16 unk8BE;                    /* 0x8BE */
     u8 pad_8C0[0x4];
     s32 unk8C4;                    /* 0x8C4 */
-    u8 pad_8C8[0x6];
+    u8 pad_8C8[0x4];
+    s16 unk8CC;                    /* 0x8CC */
     u8 unk8CE;                     /* 0x8CE */
-    u8 pad_8CF[0x11];
+    u8 pad_8CF[0x1];
+    Vec4 unk8D0;                   /* 0x8D0 */
     s32 unk8E0;                    /* 0x8E0 */
     f32 unk8E4;                    /* 0x8E4 */
     f32 unk8E8;                    /* 0x8E8 */
@@ -534,7 +561,9 @@ struct Hero {
     s32 unk2224;                   /* 0x2224 */
     s32 unk2228;                   /* 0x2228 */
     s32 unk222C;                   /* 0x222C */
-    u8 pad_2230[0x40];
+    s32 unk2230;                   /* 0x2230 */
+    s32 unk2234;                   /* 0x2234 */
+    u8 pad_2238[0x38];
     s32 unk2270;                   /* 0x2270 */
     u8 pad_2274[0xC];
     struct Moby *unk2280;          /* 0x2280 */
