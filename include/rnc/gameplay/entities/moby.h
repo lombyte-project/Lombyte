@@ -43,7 +43,9 @@ struct Moby {
     u8 unk7E;
     u8 pad7F[0x27];
     s16 oclass;
-    u8 padA8[0x10];
+    u8 padA8[0xA];
+    u16 unkB2;
+    u8 padB4[4];
     void *unkB8;                      /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
     u8 padBC[0x44];
 };
