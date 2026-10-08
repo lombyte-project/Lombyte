@@ -45,7 +45,93 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7880.s", FUN_L15_002a7880);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002aa280.s", FUN_L15_002aa280);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c2938.s", FUN_L15_002c2938);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c4f88.s", FUN_L15_002c4f88);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c52b8.s", FUN_L15_002c52b8);
+#include "qcopy.h"
+#include "rnc/overlay/quad.h"
+
+/* A steering goal: the point to reach first, then the rest of the path state. */
+typedef struct {
+    union {
+        OvlQuad q;
+        float f[4];
+    } pos;
+    OvlQuad rest[4];
+} Goal_52b8;
+
+extern char *D_L15_0015FFE4_52b8 __asm__("D_L15_0015FFE4");
+extern float distance_52b8(void *, void *) __asm__("FUN_001f9b80");
+extern void add_vector_xyz_52b8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector_52b8(void *) __asm__("FUN_001f99f8");
+extern void normalize_vector_xyz_52b8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_52b8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz_52b8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float atan2_52b8(float, float) __asm__("FUN_001f9e90");
+
+/* Flocking step toward goal (cf. FUN_L15_002cf110): separates from live
+ * same-class mobys within 10 units and keeps ~15 units off the goal while
+ * another moby is closer to it (~10 otherwise); writes the steering point to
+ * out and returns the heading to follow. */
+float FUN_L15_002c52b8(char *m, float *out, Goal_52b8 goal) {
+    float tmp[4];
+    float dist;
+    float wsum;
+    int clear;
+    float k;
+    char *o;
+    dist = distance_52b8(m + 0x10, &goal);
+    clear = 1;
+    clear_vector_52b8(out);
+    wsum = 0.0f;
+    for (o = D_L15_0015FFE4_52b8; o != 0; o = *(char **)(o + 0x28)) {
+        if (o == m)
+            continue;
+        if (*(short *)(o + 0xA6) != *(short *)(m + 0xA6))
+            continue;
+        if ((u8)o[0x20] == 1 || (u8)o[0x20] == 0x40)
+            continue;
+        if (distance_52b8(o + 0x10, m + 0x10) < 10.0f) {
+            wsum += 6.0f;
+            subtract_vector_xyz_52b8(tmp, m + 0x10, o + 0x10);
+            scale_vector_xyz_52b8(tmp, tmp, 6.0f);
+            add_vector_xyz_52b8(out, out, tmp);
+        }
+        if (distance_52b8(o + 0x10, &goal) < dist)
+            clear = 0;
+    }
+    if (clear == 0) {
+        subtract_vector_xyz_52b8(tmp, m + 0x10, &goal);
+        if (dist < 14.5f) {
+            k = 15.0f;
+        } else if (15.5f < dist) {
+            k = -15.0f;
+        } else {
+            k = 0.0f;
+        }
+        wsum += 10.0f;
+        normalize_vector_xyz_52b8(tmp, tmp, k * 10.0f);
+        add_vector_xyz_52b8(out, out, tmp);
+        scale_vector_xyz_52b8(out, out, 1.0f / wsum);
+        add_vector_xyz_52b8(out, out, m + 0x10);
+    } else {
+        subtract_vector_xyz_52b8(tmp, m + 0x10, &goal);
+        if (dist < 9.5f) {
+            k = 10.0f;
+        } else if (10.5f < dist) {
+            k = -10.0f;
+        } else {
+            k = 0.0f;
+        }
+        wsum += 10.0f;
+        normalize_vector_xyz_52b8(tmp, tmp, k * 10.0f);
+        add_vector_xyz_52b8(out, out, tmp);
+        scale_vector_xyz_52b8(out, out, 1.0f / wsum);
+        add_vector_xyz_52b8(out, out, m + 0x10);
+    }
+    if (distance_52b8(m + 0x10, out) < 1.0f) {
+        qcopy(out, m + 0x10);
+        return atan2_52b8(goal.pos.f[0] - *(float *)(m + 0x10), goal.pos.f[1] - *(float *)(m + 0x14));
+    }
+    return atan2_52b8(out[0] - *(float *)(m + 0x10), out[1] - *(float *)(m + 0x14));
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002c5630.s", FUN_L15_002c5630);
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
