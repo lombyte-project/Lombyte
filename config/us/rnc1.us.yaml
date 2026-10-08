@@ -1886,7 +1886,7 @@ segments:
           - [0x125ca4, textbin, text_gap_00224d24_before_fun_00224d28]
           - [0x125ca8, c, ui/menus/update_menu_preview_animation_transform]
           - [0x125d94, textbin, text_gap_00224e14_after_fun_00224d28]
-          - [0x125d98, c, assembly/textbin/fun_00224e18]
+          - [0x125d98, c, textbin/fun_00224e18]
           - [0x125f40, c, ui/menus/update_menu_preview_animation_pose]
           - [0x126070, c, ui/menus/update_menu_preview_class_transform]
           - [0x126100, c, ui/menus/item_preview/update_ammo_preview_transform]

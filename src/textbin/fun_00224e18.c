@@ -1,14 +1,12 @@
 #include "types.h"
-#include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00224e18/FUN_00224e18.s", FUN_00224e18);
-#else
 /* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table[] __asm__("D_001863D0");
+/* Second name for the same table: the two arms below differ only in which name
+   they pass, which keeps the compiler from merging them before the call. */
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern char first_preview_manipulator[] __asm__("D_001D5E50");
 extern char second_preview_manipulator[] __asm__("D_001D5E10");
@@ -19,7 +17,7 @@ extern void normalize_vector_triplet(void *) __asm__("func_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
 extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");
 extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
-extern void attach_manipulator(int, int, void *) __asm__("func_0020CB10");
+extern void attach_manipulator(int, int, void *) __asm__("FUN_0020cb10");
 
 void update_menu_preview_pose_and_attachments(void *preview) __asm__("FUN_00224e18");
 
@@ -31,9 +29,6 @@ void update_menu_preview_pose_and_attachments(void *preview) {
     s32 is_second_preview_moby;
     s32 first_attachment_active;
     s32 second_attachment_active;
-    char *binding_table;
-    char *binding_table_alias;
-    s32 resource_address;
 
     advance_moby_animation(moby);
     refresh_moby_spatial_bounds(moby);
@@ -54,17 +49,16 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         detach_manipulator(source_moby_address, second_preview_manipulator);
     }
     if (!is_second_preview_moby) {
-        resource_address = moby->resource_address;
-        binding_table = preview_binding_table;
-        binding_table_alias = (char *)0x001863D0;
+        noop_callback_s(preview_binding_table_alias, preview_binding_table,
+                        moby->resource_address, 0, source_moby_address);
+        moby->primary_binding = preview_binding_table;
+        moby->secondary_binding = preview_binding_table;
     } else {
-        resource_address = moby->resource_address;
-        binding_table = (char *)0x001863D0;
-        binding_table_alias = preview_binding_table_alias;
+        noop_callback_s(preview_binding_table, preview_binding_table_alias,
+                        moby->resource_address, 0, source_moby_address);
+        moby->primary_binding = preview_binding_table_alias;
+        moby->secondary_binding = preview_binding_table_alias;
     }
-    noop_callback_s(binding_table_alias, binding_table, resource_address, 0, source_moby_address);
-    moby->primary_binding = binding_table;
-    moby->secondary_binding = binding_table;
     if (first_attachment_active) {
         attach_manipulator(source_moby_address, 0x17, first_preview_manipulator);
         *(int *)(first_preview_manipulator + 0x20) = 0;
@@ -80,4 +74,6 @@ void update_menu_preview_pose_and_attachments(void *preview) {
     moby->binding_blend_word = 0;
     moby->binding_state = 0;
 }
-#endif /* NON_MATCHING */
+
+extern __typeof__(update_menu_preview_pose_and_attachments) func_00224E18
+    __attribute__((alias("FUN_00224e18")));
