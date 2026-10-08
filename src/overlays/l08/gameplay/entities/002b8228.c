@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/hero.h"
 
 #define NOT_SDA
 
@@ -72,7 +73,83 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da0f0.s", FUN_L08_002da0f0);
+
+/* Splashes the hero into the water: once inits the water plane, queues the
+ * surface draw, and when the hero breaks the surface spawns spray and ripples. */
+
+extern int D_L08_00161970 __attribute__((sda));
+extern float D_L08_001D7060[4];
+extern char D_L08_0015F580[] __attribute__((section(".sdata")));
+extern int D_0015ED84;
+extern float D_0015ED6C;
+extern void FUN_L02_002a40d0(void *, float);
+extern void queue_2da0f0(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L08_002da0d0(void *);
+extern int FUN_L00_0028d8c0(struct Moby *, int);
+extern void release_voice_slot_2da0f0(int) __asm__("FUN_0022d798");
+extern char *FUN_L00_002d7e90(void *, float);
+extern float random_angle_2da0f0(void) __asm__("FUN_00213308");
+extern float rand_2da0f0(float, float) __asm__("FUN_002132a8");
+extern float cos_2da0f0(float) __asm__("FUN_001f9dc8");
+extern float sin_2da0f0(float) __asm__("FUN_001f9de0");
+extern int FUN_L00_00257b90(int, int);
+extern int rand_below_2da0f0(int) __asm__("FUN_00213260");
+extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void FUN_L00_00257d78(float *, float, float);
+extern void add_2da0f0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern unsigned char *FUN_L00_002718d0(void *, void *, void *, float, float);
+extern float FUN_001f96b0(float);
+extern int ftoi_2da0f0(float) __asm__("FUN_001fa6d0");
+
+void FUN_L08_002da0f0(struct Moby *moby) {
+    Vec4 pos;
+    Vec4 v;
+    char *r;
+    int i;
+    int n;
+    float sc, sp;
+
+    if (D_L08_00161970 == 0) {
+        D_L08_00161970 = 1;
+        FUN_L02_002a40d0(D_L08_001D7060, 0.6666667f);
+    }
+    queue_2da0f0(FUN_L08_002da0d0, moby);
+    if (D_0015ED84 != 8)
+        return;
+    if (!(hero.motion.pos.f[2] < D_L08_001D7060[2]))
+        return;
+    if (!(D_L08_001D7060[2] <= hero.motion.pos.f[2] - hero.motion.unk100.f[2]))
+        return;
+    if (FUN_L00_0028d8c0(hero.moby, hero.health.unk22B2)) {
+        release_voice_slot_2da0f0(hero.health.unk22B2);
+        hero.health.unk22B2 = -1;
+    }
+    qcopy(&pos, &hero.motion.pos);
+    pos.f[2] = D_L08_001D7060[2];
+    r = FUN_L00_002d7e90(&pos, 3.0f);
+    if (r)
+        r[0x23] = 0x70;
+    for (i = 0; i < 16; i++) {
+        float ang = random_angle_2da0f0();
+        float k = rand_2da0f0(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+        v.f[0] = cos_2da0f0(ang) * k;
+        v.f[1] = sin_2da0f0(ang) * k;
+        v.f[2] = rand_2da0f0(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+        n = FUN_L00_00257b90(0x5A, 0x78);
+        FUN_L00_0026f548(&pos, &v, rand_below_2da0f0(2), n);
+    }
+    for (i = 0; i < 16; i++) {
+        unsigned char *q;
+        FUN_L00_00257d78(v.f, 1.0f, 1.0f);
+        add_2da0f0(&v, &v, &pos);
+        v.f[2] = D_L08_001D7060[2] + 0.05f;
+        sc = rand_2da0f0(0.7f, 1.0f);
+        sp = i == 0 ? 2.0f : -2.0f;
+        q = FUN_L00_002718d0(&v, D_L08_0015F580, &D_L08_001D7060[2], sc, sp);
+        if (q)
+            *(short *)(q + 0xA) = ftoi_2da0f0(FUN_001f96b0(rand_2da0f0(30.0f, 60.0f)));
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002da3f0.s", FUN_L08_002da3f0);
 /* Picks the best candidate moby from the moby's list by heading and distance.
  * Exact since tools/ps2eeas_nops.py puts the hazard nop after the shared bc1fl's label. */
