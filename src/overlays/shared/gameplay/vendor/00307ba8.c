@@ -294,4 +294,185 @@ void FUN_L09_0030b350(void *moby, char *data) {
     }
     mark_moby_for_removal(moby);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030b3b0.s", FUN_L09_0030b3b0);
+/* Bubble update: drifts, bounces off level geometry and other bubbles, settles on the ground, then shrinks away. */
+#include "rnc/math/vector.h"
+#include "rnc/overlay/collision.h"
+#include "rnc/gameplay/entities/moby.h"
+
+struct MobyClass {
+    u8 pad0[0x10];
+    s32 unk10;   /* copied into moby->unk94 */
+    u8 pad14[0x10];
+    f32 scale;   /* 0x24: base scale of the class */
+};
+
+/* pvars of the class 0x75E bubble FUN_L09_0030b218 spawns */
+typedef struct {
+    Vec4 vel;              /* 0x00 */
+    struct Moby *owner;    /* 0x10: class 0x75D spawner; its pvars hold the bubble list at 0xB0 */
+    struct Moby *held;     /* 0x14: from FUN_L09_0030a778 when the bubble settles */
+    s16 life;              /* 0x18 */
+    u8 unk1A;
+    u8 sound_delay;        /* 0x1B */
+    u8 slot;               /* 0x1C: index in the owner's bubble list */
+} BubbleVars;
+
+typedef struct {
+    u8 pad0[0xB0];
+    struct Moby *bubbles[20];
+} BubbleOwnerVars;
+
+extern f32 D_0015ED60;
+extern f32 D_0015ED70;
+extern CollisionHit D_L09_00173FC0;
+
+extern s32 FUN_001efa68(void *, void *, s32, struct Moby *, s32);
+extern s32 FUN_001f0b58(void);
+extern s32 FUN_001f9770(void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 FUN_001f9af0(void *);
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 FUN_L00_001f0d60(f32, void *, s32, struct Moby *);
+extern void FUN_L00_001fefc8(void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_00259fe8(struct Moby *, f32);
+extern f32 FUN_L00_0025e310(f32);
+extern struct Moby *FUN_L09_0030a778(struct Moby *, Vec4 *);
+
+static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
+    CollisionHit *hit = &D_L09_00173FC0;
+
+    if (hit->moby == 0) {
+        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && FUN_001f0b58() == -1) {
+            scale_vector_xyz(&vars->vel, &vars->vel, 0.5f);
+            if (FUN_001f9af0(&vars->vel) < 0.025f) {
+                moby->state = 1;
+            }
+        }
+    } else if (((struct Moby *)hit->moby)->oclass != 0x75E) {
+        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && FUN_001f0b58() == -1) {
+            scale_vector_xyz(&vars->vel, &vars->vel, 1.2f);
+        }
+    } else {
+        vars->vel.f[2] *= random_float_between(0.9f, 1.1f);
+    }
+    if (vars->sound_delay == 0) {
+        allocate_voice_for_target_entry(0, 0, moby);
+        vars->sound_delay = 12;
+    }
+}
+
+void FUN_L09_0030b3b0(struct Moby *moby) {
+    BubbleVars *vars = (BubbleVars *)moby->pvars;
+    Vec4 prev;
+    Vec4 step;
+    Vec4 away;
+    BubbleOwnerVars *owner;
+    struct Moby *other;
+    struct Moby *held;
+    s32 i;
+    f32 dist;
+    f32 rate;
+
+    FUN_L00_001fefc8(&vars->sound_delay);
+    qcopy(&prev, &moby->pos);
+    switch (moby->state) {
+    case 0:
+        moby->scale += (moby->pclass->scale - moby->scale) * (D_0015ED60 * 0.05f);
+        add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
+        normalize_vector_xyz(&step, &vars->vel, 0.2f);
+        add_vector_xyz(&step, &step, &moby->pos);
+        moby->unk94 = 0;
+        vars->owner->unk94 = 0;
+        if (FUN_001efa68(&prev, &step, 4, moby, 0) != 0) {
+            subtract_vector_xyz(&step, &D_L09_00173FC0.point, &step);
+            normalize_vector_xyz(&step, &step, 0.215f);
+            add_vector_xyz(&moby->pos, &moby->pos, &step);
+            bubble_bounce(moby, vars);
+        }
+        if (FUN_L00_001f0d60(0.2f, &moby->pos, 4, moby) != 0) {
+            subtract_vector_xyz(&step, &D_L09_00173FC0.point, D_L09_00173FC0.pad30);
+            normalize_vector_xyz(&step, &step, 0.015f);
+            add_vector_xyz(&moby->pos, D_L09_00173FC0.pad30, &step);
+            bubble_bounce(moby, vars);
+        }
+        owner = (BubbleOwnerVars *)vars->owner->pvars;
+        for (i = 0; i < 20; i++) {
+            other = owner->bubbles[i];
+            if (other != moby && other != NULL && other->oclass == 0x75E && other->state != 0xFE &&
+                other->state != 0xFD) {
+                subtract_vector_xyz(&away, &moby->pos, &other->pos);
+                away.f[2] = 0.0f;
+                dist = FUN_001f9af0(&away);
+                if (dist < 1.8f) {
+                    scale_vector_xyz(&away, &away, (1.8f - dist) * (D_0015ED60 * -0.5f + 1.0f));
+                    add_vector_xyz(&moby->pos, &moby->pos, &away);
+                }
+            }
+        }
+        if (FUN_001f9770(&vars->life) != 0) {
+            moby->state = 2;
+        }
+        moby->rot.x = FUN_L00_0025e310(vars->vel.f[0]);
+        moby->rot.y = FUN_L00_0025e310(vars->vel.f[1]);
+        moby->unk94 = moby->pclass->unk10;
+        vars->owner->unk94 = vars->owner->pclass->unk10;
+        vars->vel.f[2] -= D_0015ED70 * 9.8f;
+        moby->rot.x += D_0015ED60 * 0.01f;
+        moby->rot.y += D_0015ED60 * 0.02f;
+        break;
+    case 1:
+        moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f) + 0.2f;
+        moby->pos.w = 0.0f;
+        step.q = ((Vec4 *)&moby->pos)->q;
+        vars->held = FUN_L09_0030a778(vars->owner, &step);
+        moby->state = 2;
+        break;
+    case 2:
+        rate = D_0015ED60 * 0.05f;
+        moby->scale -= moby->scale * rate;
+        if (vars->held != NULL && vars->unk1A != 0) {
+            vars->held->scale += (vars->held->pclass->scale - vars->held->scale) * rate;
+        }
+        if (moby->scale < moby->pclass->scale * (D_0015ED60 * 0.05f)) {
+            moby->scale = 0.0001f;
+            held = vars->held;
+            if (held == NULL || held->state == 0xFE || held->state == 0xFD || vars->unk1A == 0 ||
+                held->pclass->scale - 0.01f <= held->scale) {
+                FUN_L09_0030b350(moby, (char *)vars);
+            }
+        }
+        break;
+    }
+    FUN_L00_00259fe8(moby, moby->scale * 0.3f / moby->pclass->scale);
+    if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
+        FUN_L09_0030b350(moby, (char *)vars);
+        return;
+    }
+    if (moby->pos.x < 5.0f) {
+        moby->pos.x = 5.0f;
+    }
+    if (moby->pos.x > 1018.0f) {
+        moby->pos.x = 1018.0f;
+    }
+    if (moby->pos.y < 5.0f) {
+        moby->pos.y = 5.0f;
+    }
+    if (moby->pos.y > 1018.0f) {
+        moby->pos.y = 1018.0f;
+    }
+    if (moby->pos.z < 5.0f) {
+        moby->pos.z = 5.0f;
+    }
+    if (moby->pos.z > 1018.0f) {
+        moby->pos.z = 1018.0f;
+    }
+}
