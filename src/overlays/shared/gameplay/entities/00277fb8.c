@@ -2,7 +2,22 @@
 #include "types.h"
 #include "asm.h"
 
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00277fb8.s", FUN_L01_00277fb8);
+#include "rnc/gameplay/hero.h"
+
+/* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
+   or state 0x1C, otherwise unk2FC while unk30E is clear. */
+s32 FUN_L01_00277fb8(struct Moby *m) {
+    struct Hero *h = &hero;
+
+    if (h->state.control_mode == 3 || h->state.current == 0x1C) {
+        if ((struct Moby *)h->unk4F8 == m) {
+            return 1;
+        }
+    } else if (h->unk30E.s == 0 && h->unk2FC == m) {
+        return 1;
+    }
+    return 0;
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
