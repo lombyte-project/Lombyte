@@ -151,7 +151,49 @@ void FUN_L01_00228870(void) {
     FUN_L01_00228e38();
     FUN_L00_00208b60();
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228e38.s", FUN_L01_00228e38);
+extern int current_level_index __asm__("D_0015ED84");
+extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
+extern void FUN_L00_00250320(struct Moby *, int *, int *, int *);
+extern void FUN_L00_002502f0(struct Moby *, int, int, int);
+extern void FUN_L00_002072c8(void);
+extern void FUN_L00_00207330(struct Moby *, struct Moby *);
+
+/*
+ * Blinks the hero's moby colour for the first 30 frames of states 0x80 and
+ * 0x82 (and of state 0x76 for 20 frames in levels 15 and 17), then, when the
+ * equipped item is a gold weapon, runs FUN_L00_00207330 on its moby.
+ */
+void FUN_L01_00228e38(void)
+{
+    /* three scalars, not an array: an int[3] changes the stack layout */
+    int r, g, b;
+    int blink;
+
+    blink = 0;
+    if (hero.state.current == 0x80 || hero.state.current == 0x82)
+        blink = hero.state_timer < scale_game_frames(30);
+    if (current_level_index == 0xF || current_level_index == 0x11) {
+        if (hero.state.current == 0x76 && hero.state_timer < scale_game_frames(20))
+            blink = 1;
+    }
+    if (blink) {
+        FUN_L00_00250320(hero.moby, &r, &g, &b);
+        if (hero.state_timer % 4 < 3) {
+            r = 0;
+            g = 0;
+            b = 0;
+        } else {
+            r = 0x90;
+            g = 0x90;
+            b = 0xF0;
+        }
+        FUN_L00_002502f0(hero.moby, r, g, b);
+        FUN_L00_002072c8();
+    }
+    if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
+        && hero.items[0].moby != 0)
+        FUN_L00_00207330(hero.items[0].moby, hero.moby);
+}
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
 #endif
