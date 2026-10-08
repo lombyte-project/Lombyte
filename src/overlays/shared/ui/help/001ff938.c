@@ -138,19 +138,19 @@ void FUN_L15_00209450(void) {
         break;
     }
     if (P.control_mode == 4) {
-        if (P.unk198 > P.unk420 && P.unk41E == 0)
+        if (P.state_timer > P.unk420 && P.unk41E == 0)
             P.unk22C = P.unk434;
-    } else if (P.secondary_mode == 6) {
+    } else if (P.state == 6) {
         P.unk22C = 0.5f;
-    } else if (P.secondary_mode == 4) {
+    } else if (P.state == 4) {
         P.unk228 = 0.35000002f;
     } else if ((u32)(P.control_mode - 0x11) < 2) {
         P.unk228 = 0.0f;
         P.unk22C = 0.0f;
-    } else if (P.secondary_mode == 0x7F) {
+    } else if (P.state == 0x7F) {
         P.unk230 = 0.8f;
     }
-    if (!P.unk257 || P.unk2094 == 0x12 || P.control_mode == 0x11 || P.base_condition ||
+    if (!P.unk257 || P.prev_control_mode == 0x12 || P.control_mode == 0x11 || P.base_condition ||
         FUN_001f9b80_209450(P.unk210.f, P.pos.f) > P.unk234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);

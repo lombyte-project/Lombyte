@@ -76,7 +76,7 @@ void FUN_001ed470(void) {
     FUN_001f9a68(&cam->unk80, &cam->unk80, 1.0f / cam->unkA4);
     qcopy(&cam->unk60, &hero.pos);
 
-    if (hero.unk2284 != 0x50 || hero.secondary_mode == 0x11) {
+    if (hero.unk2284 != 0x50 || hero.state == 0x11) {
         cam->pos.f[0] = hero.pos.f[0];
         cam->pos.f[1] = hero.pos.f[1];
         cam->pos.f[2] =
@@ -90,7 +90,7 @@ void FUN_001ed470(void) {
     for (i = 0; i < 4; i++) {
         cam->hist[i] = cam->hist[i + 1];
     }
-    cam->hist[i] = hero.unk90.f[2];
+    cam->hist[i] = hero.rot.f[2];
 
     m = hero.unk2FC;
     if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {

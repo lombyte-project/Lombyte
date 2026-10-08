@@ -20,12 +20,12 @@ struct Hero {
     u8 pad_0[0x40];
     f32 unk40[16];                 /* 0x40 */
     Vec4 pos;                      /* 0x80 */
-    Vec4 unk90;                    /* 0x90 */
+    Vec4 rot;                      /* 0x90: f[2] is the yaw passed to fast_add_rotations/fast_difference_between_rotations */
     Vec4 unkA0;                    /* 0xA0 */
     u8 pad_B0[0x10];
     Vec4 unkC0;                    /* 0xC0 */
     u8 pad_D0[0x10];
-    Vec4 unkE0;                    /* 0xE0 */
+    Vec4 velocity;                 /* 0xE0: f[2] clamped at -9*D_0015ED6C, length tested against 7*D_0015ED6C, cleared on stop */
     Vec4 unkF0;                    /* 0xF0 */
     Vec4 unk100;                   /* 0x100 */
     Vec4 unk110;                   /* 0x110 */
@@ -44,7 +44,7 @@ struct Hero {
     u8 pad_18C[0x4];
     f32 unk190;                    /* 0x190 */
     f32 unk194;                    /* 0x194 */
-    s32 unk198;                    /* 0x198 */
+    s32 state_timer;               /* 0x198: zeroed by the set-state function; compared with scale_game_frames(n) */
     u8 pad_19C[0x4];
     s32 unk1A0;                    /* 0x1A0 */
     s32 unk1A4;                    /* 0x1A4 */
@@ -369,13 +369,13 @@ struct Hero {
     u8 ammo_capacity;              /* 0x1FF7 */
     u8 pad_1FF8[0x88];
     struct Moby *moby;             /* 0x2080 */
-    s32 secondary_mode;            /* 0x2084 */
-    s32 unk2088;                   /* 0x2088 */
+    s32 state;                     /* 0x2084: state id; the state machines switch on it, FUN_L14_0022ff58 sets it */
+    s32 state_step;                /* 0x2088: 0 on every state change; state code sets 1 and tests ==0/==1 */
     s32 control_mode;              /* 0x208C */
-    s32 unk2090;                   /* 0x2090 */
-    s32 unk2094;                   /* 0x2094 */
-    s32 unk2098;                   /* 0x2098 */
-    s32 unk209C;                   /* 0x209C */
+    s32 prev_state;                /* 0x2090: gets state on every state change */
+    s32 prev_control_mode;         /* 0x2094: gets control_mode on every state change */
+    s32 prev_state_timer;          /* 0x2098: gets state_timer on state change; copied back when the change is undone */
+    s32 prev2_state;               /* 0x209C: gets prev_state on every state change */
     u8 pad_20A0[0x4];
     u8 unk20A4;                    /* 0x20A4 */
     u8 unk20A5;                    /* 0x20A5 */
@@ -436,10 +436,10 @@ struct Hero {
         ((unsigned long)&((struct Hero *)0)->field == (off)) ? 1 : -1]
 HERO_OFFSET_CHECK(unk40, 0x40);
 HERO_OFFSET_CHECK(pos, 0x80);
-HERO_OFFSET_CHECK(unk90, 0x90);
+HERO_OFFSET_CHECK(rot, 0x90);
 HERO_OFFSET_CHECK(unkA0, 0xA0);
 HERO_OFFSET_CHECK(unkC0, 0xC0);
-HERO_OFFSET_CHECK(unkE0, 0xE0);
+HERO_OFFSET_CHECK(velocity, 0xE0);
 HERO_OFFSET_CHECK(unkF0, 0xF0);
 HERO_OFFSET_CHECK(unk100, 0x100);
 HERO_OFFSET_CHECK(unk110, 0x110);
@@ -456,7 +456,7 @@ HERO_OFFSET_CHECK(unk184, 0x184);
 HERO_OFFSET_CHECK(unk188, 0x188);
 HERO_OFFSET_CHECK(unk190, 0x190);
 HERO_OFFSET_CHECK(unk194, 0x194);
-HERO_OFFSET_CHECK(unk198, 0x198);
+HERO_OFFSET_CHECK(state_timer, 0x198);
 HERO_OFFSET_CHECK(unk1A0, 0x1A0);
 HERO_OFFSET_CHECK(unk1A4, 0x1A4);
 HERO_OFFSET_CHECK(unk1AC, 0x1AC);
@@ -688,13 +688,13 @@ HERO_OFFSET_CHECK(unk1670, 0x1670);
 HERO_OFFSET_CHECK(ammo_used, 0x1FF6);
 HERO_OFFSET_CHECK(ammo_capacity, 0x1FF7);
 HERO_OFFSET_CHECK(moby, 0x2080);
-HERO_OFFSET_CHECK(secondary_mode, 0x2084);
-HERO_OFFSET_CHECK(unk2088, 0x2088);
+HERO_OFFSET_CHECK(state, 0x2084);
+HERO_OFFSET_CHECK(state_step, 0x2088);
 HERO_OFFSET_CHECK(control_mode, 0x208C);
-HERO_OFFSET_CHECK(unk2090, 0x2090);
-HERO_OFFSET_CHECK(unk2094, 0x2094);
-HERO_OFFSET_CHECK(unk2098, 0x2098);
-HERO_OFFSET_CHECK(unk209C, 0x209C);
+HERO_OFFSET_CHECK(prev_state, 0x2090);
+HERO_OFFSET_CHECK(prev_control_mode, 0x2094);
+HERO_OFFSET_CHECK(prev_state_timer, 0x2098);
+HERO_OFFSET_CHECK(prev2_state, 0x209C);
 HERO_OFFSET_CHECK(unk20A4, 0x20A4);
 HERO_OFFSET_CHECK(unk20A5, 0x20A5);
 HERO_OFFSET_CHECK(unk20A7, 0x20A7);
