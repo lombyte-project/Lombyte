@@ -1,10 +1,5 @@
 #include "types.h"
-typedef struct {
-    u8 trycount;
-    u8 spindlctrl;
-    u8 datapattern;
-    u8 pad;
-} sceCdRMode;
+#include "rnc/sdk/libcdvd.h"
 extern sceCdRMode D_00151700[];
 extern u8 D_0015ED58;
 extern s32 D_0015EEBC;
