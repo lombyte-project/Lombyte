@@ -475,7 +475,7 @@ struct Hero {
     s32 unkA80;                    /* 0xA80 */
     u8 *unkA84;                    /* 0xA84 */
     u8 *unkA88;                    /* 0xA88 */
-    u8 pad_A8C[0x4];
+    void *unkA8C;                  /* 0xA8C */
     f32 unkA90;                    /* 0xA90 */
     f32 unkA94;                    /* 0xA94 */
     s32 unkA98;                    /* 0xA98 */
@@ -488,8 +488,7 @@ struct Hero {
     u8 pad_AB8[0x248];
     u8*unkD00;                     /* 0xD00 */
     u8*unkD04;                     /* 0xD04 */
-    s32 unkD08;                    /* 0xD08 */
-    u8 pad_D0C[0x4];
+    u8 *unkD08[2];                 /* 0xD08: per item slot 0/1: moby from FUN_L00_0024f028 */
     u8 *unkD10;                    /* 0xD10 */
     s32 unkD14;                    /* 0xD14 */
     u8 pad_D18[0x2D8];
@@ -515,9 +514,12 @@ struct Hero {
     u8 unk12EE;                    /* 0x12EE */
     u8 pad_12EF[0x325];
     s32 unk1614;                   /* 0x1614 */
-    u8 pad_1618[0x18];
+    u8 pad_1618[0x8];
+    void *unk1620;                 /* 0x1620 */
+    void *unk1624;                 /* 0x1624 */
+    u8 pad_1628[0x8];
     s32 unk1630;                   /* 0x1630 */
-    u8 pad_1634[0x2];
+    s16 unk1634;                   /* 0x1634 */
     s16 unk1636;                   /* 0x1636 */
     u8 pad_1638[0x8];
     Vec4 unk1640;                  /* 0x1640 */
@@ -526,7 +528,9 @@ struct Hero {
     s32 unk1660;                   /* 0x1660 */
     u8 pad_1664[0xC];
     struct MobyTrail trail;        /* 0x1670: trail of moby copies following hero.moby */
-    u8 pad_17B0[0x570];
+    u8 pad_17B0[0x350];
+    Vec4 unk1B00[32];              /* 0x1B00: ring of 32 quads indexed by unk21B0 */
+    u8 pad_1D00[0x20];
     f32 unk1D20;                   /* 0x1D20 */
     f32 unk1D24;                   /* 0x1D24 */
     u8 pad_1D28[0x238];
@@ -551,7 +555,7 @@ struct Hero {
     u8 unk20A8;                    /* 0x20A8 */
     u8 unk20A9;                    /* 0x20A9 */
     u8 unk20AA;                    /* 0x20AA */
-    u8 pad_20AB[0x1];
+    u8 unk20AB;                    /* 0x20AB */
     u8 unk20AC;                    /* 0x20AC */
     u8 unk20AD;                    /* 0x20AD */
     u8 unk20AE;                    /* 0x20AE */
@@ -566,7 +570,10 @@ struct Hero {
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
     s32 restore_item[7];           /* 0x210C: per slot: 1 puts saved_item back */
-    u8 pad_2128[0xF0];
+    u8 pad_2128[0x88];
+    s32 unk21B0;                   /* 0x21B0: unk1B00 ring index */
+    s32 unk21B4;                   /* 0x21B4: unk1B00 ring count */
+    u8 pad_21B8[0x60];
     s32 unk2218;                   /* 0x2218 */
     u8 pad_221C[0x4];
     s32 unk2220;                   /* 0x2220 */

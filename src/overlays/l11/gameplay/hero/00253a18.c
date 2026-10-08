@@ -274,7 +274,7 @@ void FUN_L11_00253a18(void) {
                             int keep = 0;
                             if (hero.unk20A8 != 0 && hero.unk20AA != 0) {
                                 if (((unsigned char *)hero.moby)[0x53] == hero.unk2294 ||
-                                    hero.unkD08 != 0) {
+                                    hero.unkD08[0] != 0) {
                                     keep = 1;
                                 }
                             }
@@ -309,7 +309,7 @@ void FUN_L11_00253a18(void) {
                         } else {
                             int anim = D_L11_0017A4C0[id].anim;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
-                                if (hero.unkD08 != 0) {
+                                if (hero.unkD08[0] != 0) {
                                     hero.unkD14 = 1;
                                 }
                                 hero.unk2294 = anim;
