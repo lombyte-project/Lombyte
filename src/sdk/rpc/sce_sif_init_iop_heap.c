@@ -2,10 +2,7 @@
  * -fno-schedule-insns entry in configure.py (SDK_COMPILER_FLAG_UNITS). */
 
 #include "types.h"
-struct sceSifClientData {
-    u8 pad_0[0x24];
-    s32 unk24;
-};
+#include "sifrpc.h"
 extern u8 D_0012FCAC[];
 extern struct sceSifClientData D_00158040;
 extern s32 sceSifBindRpc();
@@ -21,7 +18,7 @@ bind:
     if (sceSifBindRpc(&D_00158040, 0x80000003u, 0) < 0) {
         return -1;
     }
-    if (D_00158040.unk24 == 0) {
+    if (D_00158040.serve == 0) {
         goto retry;
     }
     *(s32 *)D_0012FCAC = 0;

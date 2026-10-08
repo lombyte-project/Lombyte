@@ -12,49 +12,13 @@ typedef struct {
 } FontHolder;
 
 typedef struct {
-    u8 pad_0[0x40];
-    void *owner;
-} MenuFocus;
-
-typedef struct {
-    u8 pad_0[0x4];
-    MenuFocus *focus;
-    u8 pad_8[0x28];
-    s32 slot[65];
-    s32 unk134;
-    s32 unk138;
-} MenuState;
-
-typedef struct {
     s32 slot;
     u8 pad_4[0x48];
 } ItemInfo;
 
-typedef struct {
-    u16 icon;
-    s16 frame;
-    s16 kind;
-    s16 id;
-    u16 pad_8;
-} MenuGridCell;
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 
-typedef struct {
-    u8 pad_0[0x14];
-    FontHolder *holder;
-    u8 pad_18[0x8];
-    s32 w;
-    s32 h;
-    u8 pad_28[0x8];
-    s32 flags;
-    f32 margin_x;
-    f32 margin_y;
-    s32 selected_cell;
-    s32 rows;
-    s32 cols;
-    MenuGridCell *cells;
-} MenuItemGrid;
-
-extern MenuState D_001D5BF0;
 extern ItemInfo D_001863D8[];
 extern u8 D_0013D388[];
 extern u8 D_0013D4C0[];
@@ -72,11 +36,11 @@ extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func
 extern void append_screen_sprite(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
-s32 draw_menu_item_grid(MenuItemGrid *grid) __asm__("FUN_0021d948");
+s32 draw_menu_item_grid(struct MenuScreen *grid) __asm__("FUN_0021d948");
 
-s32 draw_menu_item_grid(MenuItemGrid *grid) {
+s32 draw_menu_item_grid(struct MenuScreen *grid) {
     Font *font;
-    MenuGridCell *cell;
+    struct MenuGridCell *cell;
     s32 focused;
     f32 start_x, column_step, start_y, y, row_step, x;
     f32 scale;
@@ -87,51 +51,51 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
     s32 id, frame_offset;
     u32 color;
 
-    font = grid->holder->font;
-    focused = D_001D5BF0.focus->owner == grid;
-    cell = grid->cells;
+    font = ((FontHolder *)grid->moby)->font;
+    focused = menu_system.current->focus == grid;
+    cell = grid->data.grid.cells;
     vu1_add_g_sregister(0x42, 0x8000000044L);
     vu1_add_g_sregister(0x47, 0xB);
     setup_gif_paging(0);
 
-    if (grid->cols >= 2) {
-        start_x = grid->margin_x;
+    if (grid->data.grid.cols >= 2) {
+        start_x = grid->data.grid.margin_x;
         column_step = D_00160290 +
-                      (font->w - (start_x + start_x) - D_00160290 * grid->cols) / (grid->cols - 1);
+                      (font->w - (start_x + start_x) - D_00160290 * grid->data.grid.cols) / (grid->data.grid.cols - 1);
     } else {
         column_step = 0.0f;
         start_x = (font->w - D_00160290) * 0.5f;
     }
 
-    if (grid->flags & 2) {
+    if (grid->data.grid.flags & 2) {
         row_step = D_00160294 + 0.15f;
-        start_y = grid->margin_y;
-    } else if (grid->rows >= 2) {
-        start_y = grid->margin_y;
+        start_y = grid->data.grid.margin_y;
+    } else if (grid->data.grid.rows >= 2) {
+        start_y = grid->data.grid.margin_y;
         row_step = D_00160294 +
-                   (font->h - (start_y + start_y) - D_00160294 * grid->rows) / (grid->rows - 1);
+                   (font->h - (start_y + start_y) - D_00160294 * grid->data.grid.rows) / (grid->data.grid.rows - 1);
     } else {
         row_step = 0.0f;
         start_y = (font->h - D_00160294) * 0.5f;
     }
 
-    largest_dimension = grid->h;
-    if (largest_dimension < grid->w) {
-        largest_dimension = grid->w;
+    largest_dimension = grid->height;
+    if (largest_dimension < grid->width) {
+        largest_dimension = grid->width;
     }
     scale = (f32)(largest_dimension << 4) / (font->h < font->w ? font->w : font->h);
     icon_width = scale * D_00160290;
     icon_height = scale * D_00160294;
 
     y = start_y;
-    for (i = 0; i < grid->rows; i++) {
+    for (i = 0; i < grid->data.grid.rows; i++) {
         x = start_x;
-        for (j = 0; j < grid->cols; j++) {
+        for (j = 0; j < grid->data.grid.cols; j++) {
             top = scale * y;
             bottom = top + icon_height;
             left = scale * x;
             right = left + icon_width;
-            if (focused && grid->selected_cell == cell - grid->cells) {
+            if (focused && grid->data.grid.selected_cell == cell - grid->data.grid.cells) {
                 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) |
                         0x80000000;
                 append_screen_sprite(left - 0x30, top - 0x30, right + 0x30, bottom + 0x30, color,
@@ -143,16 +107,16 @@ s32 draw_menu_item_grid(MenuItemGrid *grid) {
                 frame_offset = 0;
                 if ((u16)cell->kind == 0) {
                     id = cell->id;
-                    if (D_001D5BF0.slot[D_001863D8[id].slot] == id && !(grid->flags & 0x20)) {
+                    if (menu_system.equipped[D_001863D8[id].slot] == id && !(grid->data.grid.flags & 0x20)) {
                         frame_offset = 1;
                     }
                     if (frame_offset == 0) {
                         frame_offset = D_0013E520[id] ? 4 : 0;
                     }
-                    if (D_001D5BF0.unk134 != 0 && (grid->flags & 8)) {
+                    if (menu_system.unk134 != 0 && (grid->data.grid.flags & 8)) {
                         frame_offset = 2;
                     }
-                    if (D_001D5BF0.unk138 != 0 && (grid->flags & 4)) {
+                    if (menu_system.unk138 != 0 && (grid->data.grid.flags & 4)) {
                         frame_offset = 2;
                     }
                 }

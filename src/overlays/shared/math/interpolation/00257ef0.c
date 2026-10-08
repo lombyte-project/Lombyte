@@ -12,6 +12,7 @@ extern float FUN_001f9dc8(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Cosine-eased rotation from x toward y at z. */
 float FUN_L00_00257ef0(float x, float y, float z) {
     float t = fast_subtract_rotations(y, x);
     float c = FUN_001f9dc8(z * 3.1415927f);
@@ -54,6 +55,7 @@ extern float FUN_001f9dc8(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+/* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
 void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
     float s = (1.0f - FUN_001f9dc8(ang * 3.1415927f)) * 0.5f;
     out[0] = fast_add_rotations(a[0], fast_subtract_rotations(b[0], a[0]) * s);
@@ -346,6 +348,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
 }
 float FUN_001fa6c0(int);
 void FUN_L00_00258830(int, int, float, float, float, int);
+/* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
     FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
 }
@@ -541,7 +544,40 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002591d0.s", FUN_L00_002591d0);
+extern int D_L00_0015FFF4_2591d0 __asm__("D_L00_0015FFF4");
+extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
+extern char *D_L00_00160114_2591d0 __asm__("D_L00_00160114");
+extern unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C");
+extern short D_L00_00160110_2591d0 __asm__("D_L00_00160110");
+extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
+int f2592b8_2591d0(char **, char *) __asm__("FUN_L00_002592b8");
+/* Looks up table entry idx and makes it current; the flag test reads the
+ * current entry back, as the original did. */
+int FUN_L00_002591d0(char **out, int idx, int a, int b) {
+    unsigned short *v;
+    char *e;
+    int c;
+    int h;
+    if (idx < 0 || D_L00_0015FFF4_2591d0 < idx) {
+        *out = 0;
+        return -1;
+    }
+    *out = 0;
+    D_L00_00160114_2591d0 = 0;
+    v = D_L00_001AB840_2591d0[idx];
+    D_L00_0016010C_2591d0 = v;
+    if (v == 0) return -1;
+    h = *v & 0x7FFF;
+    D_L00_00160110_2591d0 = h;
+    e = D_L00_0015FFD8_2591d0 + (h << 8);
+    D_L00_00160114_2591d0 = e;
+    *out = e;
+    c = (unsigned)(*(char *volatile *)&D_L00_00160114_2591d0)[0x20] >> 31;
+    if (!a) {
+        if (b || c) return f2592b8_2591d0(out, D_L00_00160114_2591d0);
+    } else if (b && !c) return f2592b8_2591d0(out, D_L00_00160114_2591d0);
+    return 0;
+}
 
 extern unsigned short *D_L00_0016010C;
 extern short D_L00_00160110;
@@ -598,6 +634,7 @@ int FUN_L00_002592b8(char **out, char *target, int a, int b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
+/* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
 int FUN_L00_00259430(int *p, int b) {
     int w = *p;
     int v = (w >> 24) - b;

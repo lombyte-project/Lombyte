@@ -2,5 +2,5 @@
 #include "types.h"
 #include "asm.h"
 
-extern int D_0015EDF0 __attribute__((section(".sdata")));
+extern int D_0015EDF0;
 extern int D_0013E5A0 __attribute__((section(".data")));

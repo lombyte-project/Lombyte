@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-static __inline__ void qcopy(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
+#include "qcopy.h"
 typedef struct {
     float m[16];
 } __attribute__((aligned(16))) Mtx;
@@ -44,6 +42,7 @@ void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
+/* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
 void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
     int i;
     int n = a[4] + a[5];
@@ -191,6 +190,7 @@ typedef struct {
     u8 pad[0x51];
     u8 b51, b52, b53;
 } A;
+/* Fills a1 from a0's bytes, a2/a3 and a 1/a4 step; calls FUN_L00_0024f190 when a5 is set. */
 void FUN_L00_0024f3e0(A *a0, S *a1, s32 a2, s32 a3, s32 a4, s32 a5) {
     a1->b22 = a0->b53;
     a1->b20 = a0->b51;

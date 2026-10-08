@@ -1,42 +1,25 @@
 #include "types.h"
-struct PreviewMenuGame {
-    u8 pad_0[0x40];
-    struct PreviewItemSelection *selection;
-};
-
-struct ItemPreviewPair {
-    u8 pad_0[0x44];
-    s32 primary_moby;
-    s32 secondary_moby;
-};
-
-struct PreviewItemSelection {
-    u8 pad_0[0x3C];
-    s32 index;
-    u8 pad_40[0x8];
-    s32 table_address;
-};
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 
 extern u8 available_preview_items[] __asm__("D_0013D4C0");
-extern struct PreviewMenuGame *preview_menu_games[] __asm__("D_001D5BF4");
 extern s32 draw_moby_list() __asm__("func_0020D330");
-s32 draw_available_item_preview_mobys(struct ItemPreviewPair *preview) __asm__("FUN_0021e608");
+s32 draw_available_item_preview_mobys(struct MenuScreen *preview) __asm__("FUN_0021e608");
 
-s32 draw_available_item_preview_mobys(struct ItemPreviewPair *preview) {
-    s32 primary_moby;
-    s32 secondary_moby;
-    struct PreviewItemSelection *selection;
+s32 draw_available_item_preview_mobys(struct MenuScreen *preview) {
+    char *primary_moby;
+    char *secondary_moby;
+    struct MenuScreen *grid;
 
-    selection = preview_menu_games[0]->selection;
-    if (available_preview_items[*(
-            s16 *)((u8 *)((selection->index * 0xA) + selection->table_address) + 0x6)] == 0) {
+    grid = menu_system.current->focus;
+    if (available_preview_items[grid->data.grid.cells[grid->data.grid.selected_cell].id] == 0) {
         return 0;
     }
-    primary_moby = preview->primary_moby;
+    primary_moby = preview->data.preview.moby;
     if (primary_moby != 0) {
         draw_moby_list(primary_moby, 1);
     }
-    secondary_moby = preview->secondary_moby;
+    secondary_moby = preview->data.preview.second_moby;
     if (secondary_moby != 0) {
         draw_moby_list(secondary_moby, 1);
     }

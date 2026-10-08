@@ -1,14 +1,5 @@
 #include "types.h"
-struct AudioDec {
-    s32 unk0;
-    s32 unk4;
-    u8 pad_8[0x28];
-    s32 unk30;
-    u8 *unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-};
+#include "rnc/audio/decoder/audio_dec.h"
 
 void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2,
                          s32 *size2) __asm__("FUN_0023ad58");
@@ -16,30 +7,30 @@ void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **p
 void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2, s32 *size2) {
     s32 t2;
 
-    if (dec->unk0 == 0) {
-        if (dec->unk4 != 4) {
-            *ptr1 = ((u8 *)dec + (dec->unk30 + 8));
-            *size1 = 0x28 - dec->unk30;
-            *ptr2 = dec->unk34;
-            *size2 = dec->unk40;
+    if (dec->state == 0) {
+        if (dec->strType != 4) {
+            *ptr1 = ((u8 *)&dec->hdr + dec->hdrCount);
+            *size1 = 0x28 - dec->hdrCount;
+            *ptr2 = dec->data;
+            *size2 = dec->size;
         } else {
-            *ptr1 = dec->unk34;
-            *size1 = dec->unk40;
+            *ptr1 = dec->data;
+            *size1 = dec->size;
             *ptr2 = NULL;
             *size2 = 0;
         }
     } else {
-        t2 = dec->unk40 - dec->unk3C;
-        if ((dec->unk40 - dec->unk38) >= t2) {
-            *ptr1 = dec->unk34 + dec->unk38;
+        t2 = dec->size - dec->count;
+        if ((dec->size - dec->put) >= t2) {
+            *ptr1 = dec->data + dec->put;
             *size1 = t2;
             *ptr2 = NULL;
             *size2 = 0;
         } else {
-            *ptr1 = dec->unk34 + dec->unk38;
-            *size1 = dec->unk40 - dec->unk38;
-            *ptr2 = dec->unk34;
-            *size2 = t2 - (dec->unk40 - dec->unk38);
+            *ptr1 = dec->data + dec->put;
+            *size1 = dec->size - dec->put;
+            *ptr2 = dec->data;
+            *size2 = t2 - (dec->size - dec->put);
         }
     }
 }

@@ -1,34 +1,9 @@
 /* Ported from rac1-decomp (src/game/movie/audiodec.c, func_0023C390). */
 #include "sda.h"
-typedef struct {
-    int state;           /* 0x00 */
-    int strType;         /* 0x04 */
-    char id[4];          /* 0x08 SpuStreamHeader */
-    int hsize;           /* 0x0C */
-    int type;            /* 0x10 */
-    int rate;            /* 0x14 */
-    int ch;              /* 0x18 */
-    int interSize;       /* 0x1C */
-    int loopStart;       /* 0x20 */
-    int loopEnd;         /* 0x24 */
-    char ssbd[8];        /* 0x28 SpuStreamBody */
-    int hdrCount;        /* 0x30 */
-    unsigned char *data; /* 0x34 */
-    int put;             /* 0x38 */
-    int count;           /* 0x3C */
-    int size;            /* 0x40 */
-    int totalBytes;      /* 0x44 */
-    int iopBuff;         /* 0x48 */
-    int iopBuffSize;     /* 0x4C */
-    int iopLastPos;      /* 0x50 */
-    int iopPausePos;     /* 0x54 */
-    int totalBytesSent;  /* 0x58 */
-    int iopZero;         /* 0x5C */
-    int spuPos;          /* 0x60 */
-} AudioDecA;
+#include "rnc/audio/decoder/audio_dec.h"
 extern unsigned char *D_001612BC MACRO_ADDR;
 extern int snd_get_movie_nax(void) __asm__("FUN_0012f178");
-extern void send_to_spu(AudioDecA *, unsigned char *, int, int) __asm__("func_0023AF18");
+extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("func_0023AF18");
 /* sendADPCM(_AudioDec *): once enough is buffered (state 1: 4 KiB,
    filling the IOP buffer from iopLastPos; state 2: the free space behind
    the SPU position FUN_0012f178 reports), sends 1 KiB per channel at a
@@ -42,7 +17,7 @@ extern void send_to_spu(AudioDecA *, unsigned char *, int, int) __asm__("func_00
 void send_adpcm(void *arg0) __asm__("FUN_0023afc0");
 
 void send_adpcm(void *arg0) {
-    AudioDecA *ad = arg0;
+    struct AudioDec *ad = arg0;
     int avail = 0;
     int i, j, n;
     unsigned char *src, *dst;
@@ -60,18 +35,18 @@ void send_adpcm(void *arg0) {
     case 3:
         return;
     }
-    while (avail >= 0x400 && ad->count >= ad->ch << 10) {
-        for (i = 0; i < ad->ch; i++) {
+    while (avail >= 0x400 && ad->count >= ad->hdr.ch << 10) {
+        for (i = 0; i < ad->hdr.ch; i++) {
             src = ad->data + (ad->put - ad->count + ad->size) % ad->size;
-            src += i * ad->interSize;
+            src += i * ad->hdr.interSize;
             dst = D_001612BC;
             n = 0;
             while (n < 0x400) {
-                for (j = 0; j < ad->interSize; j++) {
+                for (j = 0; j < ad->hdr.interSize; j++) {
                     *dst++ = *src++;
                     n++;
                 }
-                src += ad->interSize * (ad->ch - 1);
+                src += ad->hdr.interSize * (ad->hdr.ch - 1);
             }
             if (ad->spuPos + 0x400 == 0x1000) {
                 D_001612BC[0x3F1] = 3;
@@ -84,7 +59,7 @@ void send_adpcm(void *arg0) {
             send_to_spu(ad, D_001612BC, 0x400, i * 0x1000 + ad->spuPos);
         }
         ad->spuPos = (ad->spuPos + 0x400) % 0x1000;
-        ad->count -= ad->ch << 10;
+        ad->count -= ad->hdr.ch << 10;
         ad->iopLastPos += 0x400;
         avail -= 0x400;
     }

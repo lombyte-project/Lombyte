@@ -3,14 +3,6 @@
 
 #include "types.h"
 
-struct MusicStreamState {
-    u8 pad_0[0x8];
-    s16 unk8;
-    u8 unkA;
-    u8 pad_B;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-};
+#include "rnc/audio/music/music_stream_state.h"
 
 #endif /* LOMBYTE_RNC_AUDIO_LOAD_H */

@@ -2,16 +2,7 @@
 
 #include "types.h"
 #include "sda.h"
-
-struct LevelArchiveDiscTable {
-    u8 pad_0[0x2968];
-    s32 shared_start_sector;
-    s32 shared_sector_count;
-    s32 sound_start_sector;
-    s32 sound_sector_count;
-    s32 alternate_sound_start_sector;
-    s32 alternate_sound_sector_count;
-};
+#include "rnc/storage/disc_table.h"
 
 struct LevelArchiveDiscEntry {
     u8 pad_0[0x12C8];
@@ -24,7 +15,6 @@ struct LevelArchiveHeader {
     s32 sound_bank_offset;
 };
 
-extern struct LevelArchiveDiscTable D_00137B80;
 extern s16 D_0013E056[];
 extern s32 D_0015ED58 MACRO_ADDR;
 extern u32 D_0015ED5C MACRO_ADDR;
@@ -98,19 +88,19 @@ s32 service_level_archive_load(void) {
     case 0:
         if (D_0015ED80 != 0) {
             sound_aligned_bytes =
-                ((D_00137B80.alternate_sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+                ((disc_table.sound_archive_alt.size << 11) + 0xFFF) & 0xFFFFF000;
         } else {
-            sound_aligned_bytes = ((D_00137B80.sound_sector_count << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes = ((disc_table.sound_archive.size << 11) + 0xFFF) & 0xFFFFF000;
         }
-        disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        level_archive_sectors = *(s32 *)((u8 *)&D_00137B80 + level_index * 8 + 0x12CC);
+        disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
+        level_archive_sectors = *(s32 *)((u8 *)&disc_table + level_index * 8 + 0x12CC);
         sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
         sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
         level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
-        archive_start_or_sectors = D_00137B80.shared_sector_count;
+        archive_start_or_sectors = disc_table.shared_archive.size;
         sound_aligned_bytes = ((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000;
         shared_archive_buffer = level_archive_buffer - sound_aligned_bytes;
-        archive_start_or_bytes = D_00137B80.shared_start_sector;
+        archive_start_or_bytes = disc_table.shared_archive.sector;
         D_0015EE54 = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;
         *(struct LevelArchiveHeader **)0x0015EE4C =
@@ -120,17 +110,17 @@ s32 service_level_archive_load(void) {
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 1:
-        next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&D_00137B80 + level_index * 8);
-        submit_audio_stream_io_request(D_0015EE54, *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12C8), *(s32 *)((s32)&D_00137B80 + (level_index << 3) + 0x12CC));
+        next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
+        submit_audio_stream_io_request(D_0015EE54, *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8), *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
         if (D_0015ED80 != 0) {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.alternate_sound_start_sector,
-                                           D_00137B80.alternate_sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, disc_table.sound_archive_alt.sector,
+                                           disc_table.sound_archive_alt.size);
         } else {
-            submit_audio_stream_io_request(D_0015EE50, D_00137B80.sound_start_sector,
-                                           D_00137B80.sound_sector_count);
+            submit_audio_stream_io_request(D_0015EE50, disc_table.sound_archive.sector,
+                                           disc_table.sound_archive.size);
         }
     increment_stage:
         D_0015EE48 = D_0015EE48 + 1;

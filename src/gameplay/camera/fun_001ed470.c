@@ -1,25 +1,11 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "eetypes.h"
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
 
 #include "rnc/gameplay/entities/moby.h"
-
-struct Player {
-    u8 pad0[0x80];
-    Vec4 pos;
-    u8 pad90[0x8];
-    f32 unk98;
-    u8 pad9C[0x1F4];
-    Vec4 unk290;
-    u8 pad2A0[0x5C];
-    struct Moby *unk2FC;
-    u8 pad300[0x1D84];
-    s32 unk2084;
-    u8 pad2088[0x1FC];
-    s32 unk2284;
-};
 
 struct CamColl {
     Vec4 pos;
@@ -43,7 +29,6 @@ struct CamColl {
     f32 unkDC;
 };
 
-extern struct Player D_0013F350;
 extern struct CamColl D_001870D0;
 
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
@@ -64,7 +49,7 @@ void FUN_001ed470(void) {
     struct Moby *m;
 
     cam = &D_001870D0;
-    FUN_001f9bf8(&dir, &D_0013F350.unk290, -1.0f);
+    FUN_001f9bf8(&dir, &hero.unk290, -1.0f);
     qcopy(&cam->unk40, &cam->unk30);
     qcopy(&cam->unk30, &dir);
     if (FUN_001f9ab0(&cam->dir, &dir) < -0.98f) {
@@ -80,7 +65,7 @@ void FUN_001ed470(void) {
         cam_interp_values(&cam->dir_vel[2], cam->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f);
     FUN_001f9bf8(&cam->dir, &cam->dir, 1.0f);
 
-    FUN_001f9a28(&cam->unk70, &D_0013F350.pos, &cam->unk60);
+    FUN_001f9a28(&cam->unk70, &hero.motion.pos, &cam->unk60);
     cam->unkA0 = FUN_001f9af0(&cam->unk70);
     d = FUN_001f9ab0(&cam->unk70, &dir);
     cam->unkA8 = d;
@@ -89,25 +74,25 @@ void FUN_001ed470(void) {
     FUN_001f9a28(&cam->unk80, &cam->unk70, &proj);
     cam->unkA4 = FUN_001f9af0(&cam->unk80);
     FUN_001f9a68(&cam->unk80, &cam->unk80, 1.0f / cam->unkA4);
-    qcopy(&cam->unk60, &D_0013F350.pos);
+    qcopy(&cam->unk60, &hero.motion.pos);
 
-    if (D_0013F350.unk2284 != 0x50 || D_0013F350.unk2084 == 0x11) {
-        cam->pos.f[0] = D_0013F350.pos.f[0];
-        cam->pos.f[1] = D_0013F350.pos.f[1];
+    if (hero.unk2284 != 0x50 || hero.state.current == 0x11) {
+        cam->pos.f[0] = hero.motion.pos.f[0];
+        cam->pos.f[1] = hero.motion.pos.f[1];
         cam->pos.f[2] =
-            cam_interp_values(&cam->vel, cam->pos.f[2], D_0013F350.pos.f[2], 0.0075f, 0.175f, 0.0f);
-        cam->pos.f[3] = D_0013F350.pos.f[2];
+            cam_interp_values(&cam->vel, cam->pos.f[2], hero.motion.pos.f[2], 0.0075f, 0.175f, 0.0f);
+        cam->pos.f[3] = hero.motion.pos.f[2];
     } else {
-        cam->pos.f[0] = D_0013F350.pos.f[0];
-        cam->pos.f[1] = D_0013F350.pos.f[1];
+        cam->pos.f[0] = hero.motion.pos.f[0];
+        cam->pos.f[1] = hero.motion.pos.f[1];
     }
 
     for (i = 0; i < 4; i++) {
         cam->hist[i] = cam->hist[i + 1];
     }
-    cam->hist[i] = D_0013F350.unk98;
+    cam->hist[i] = hero.motion.rot.f[2];
 
-    m = D_0013F350.unk2FC;
+    m = hero.unk2FC;
     if (m != NULL && m->oclass != 0x4BA && m->oclass != 0x336) {
         if (m == cam->unkD4) {
             cam->unkDC = m->pos.z - cam->unkD8;
@@ -123,7 +108,7 @@ void FUN_001ed470(void) {
     } else {
         cam->unkDC = 0.0f;
         cam->unkD4 = NULL;
-        cam->unkD8 = D_0013F350.pos.f[2];
+        cam->unkD8 = hero.motion.pos.f[2];
     }
 }
 

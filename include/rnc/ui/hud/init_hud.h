@@ -9,11 +9,6 @@ struct Globals_0015FA00 {
     u8 pad_21[0x3];
 };
 
-struct Globals_0019A3E8 {
-    s32 unk0;
-    s32 unk4;
-};
-
 struct HudSlot {
     s32 unk0;
     u8 pad_4[0x3C];

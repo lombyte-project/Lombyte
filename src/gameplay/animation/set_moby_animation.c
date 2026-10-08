@@ -22,7 +22,7 @@ typedef struct {
     char _pad6C[4];
     unsigned char unk70;     /* 0x70 */
 } MobyAnim;
-extern void func_0020C880(void *);
+extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 /* Sets moby m's animation to sequence seq at frame (clamped to the
    sequence's last frame), the next frame to frame + 1 (clamped the same
    way, 0 if still out of range), refreshes the frame pointers
@@ -47,7 +47,7 @@ void set_moby_animation(MobyAnim *m, int seq, int frame) {
     if (m->nextFrame >= m->pClass->seqs[seq]->nframes) {
         m->nextFrame = 0;
     }
-    func_0020C880(m);
+    update_moby_animation_state(m);
     m->unk5C = *m->frameData;
     m->unk70 &= ~2;
 }

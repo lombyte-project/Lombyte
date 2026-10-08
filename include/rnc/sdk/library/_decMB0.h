@@ -2,32 +2,7 @@
 #define LOMBYTE_RNC_SDK_LIBRARY__DECMB0_H
 
 #include "types.h"
-
-struct MpegDecoder {
-    u8 pad_0[0x11C];
-    int unk11C;
-    u8 pad_120[0x30];
-    int unk150;
-    int unk154;
-    int unk158;
-    int unk15C;
-    int unk160;
-    int unk164;
-    int unk168;
-    int unk16C;
-    int unk170;
-    int unk174;
-    u8 pad_178[0x4];
-    int unk17C;
-    int unk180;
-    u8 pad_184[0x2C];
-    int unk1B0;
-    int unk1B4;
-    u8 pad_1B8[0x658];
-    int unk810;
-    u8 pad_814[0x34];
-    int unk848;
-};
+#include "rnc/sdk/libmpeg.h"
 
 struct MpegMbState {
     int unk0;

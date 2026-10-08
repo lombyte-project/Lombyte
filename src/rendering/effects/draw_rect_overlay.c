@@ -2,12 +2,9 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 
-struct PacketCursor {
-    int *p;
-};
-extern struct PacketCursor D_00160F00_s __asm__("D_00160F00") MACRO_ADDR;
-#define D_00160F00 (D_00160F00_s.p)
 extern int D_0013E500[];
 extern char D_00160820[];
 extern char D_00160830[];
@@ -20,35 +17,35 @@ extern char D_00160830[];
 void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) __asm__("FUN_001f52a0");
 
 void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) {
-    D_00160F00[0] = 0x10000005;
-    D_00160F00[1] = 0;
-    D_00160F00[2] = 0;
-    D_00160F00[3] = 0x50000005;
+    render_packet_cursor.words[0] = 0x10000005;
+    render_packet_cursor.words[1] = 0;
+    render_packet_cursor.words[2] = 0;
+    render_packet_cursor.words[3] = 0x50000005;
     {
-        int *base = D_00160F00;
-        D_00160F00 = base + 4;
-        qcopy(D_00160F00, D_00160820);
+        int *base = render_packet_cursor.words;
+        render_packet_cursor.words = base + 4;
+        qcopy(render_packet_cursor.words, D_00160820);
         *(short *)(base + 4) = 0x8001;
     }
     {
-        int *base = D_00160F00;
+        int *base = render_packet_cursor.words;
         long *p;
-        D_00160F00 = base + 4;
-        p = (long *)D_00160F00;
+        render_packet_cursor.words = base + 4;
+        p = (long *)render_packet_cursor.words;
         p[0] = 0x144;
         p[1] = rgba;
     }
     {
-        int *base = D_00160F00;
-        D_00160F00 = base + 4;
-        qcopy(D_00160F00, D_00160830);
+        int *base = render_packet_cursor.words;
+        render_packet_cursor.words = base + 4;
+        qcopy(render_packet_cursor.words, D_00160830);
         *(short *)(base + 4) = 0x8004;
     }
     {
-        int *base = D_00160F00;
+        int *base = render_packet_cursor.words;
         long *p;
-        D_00160F00 = base + 4;
-        p = (long *)D_00160F00;
+        render_packet_cursor.words = base + 4;
+        p = (long *)render_packet_cursor.words;
         p[0] = (x0 * 16 + D_0013E500[4] - 8) | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16) |
                ((long)0xFFFFF0 << 32);
         p[1] = (x1 * 16 + D_0013E500[4] - 8) | ((long)(y0 * 16 + D_0013E500[5] - 8) << 16) |
@@ -58,7 +55,7 @@ void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) {
         p[3] = (x1 * 16 + D_0013E500[4] - 8) | ((long)(y1 * 16 + D_0013E500[5] - 8) << 16) |
                ((long)0xFFFFF0 << 32);
     }
-    D_00160F00 = (int *)((char *)D_00160F00 + 0x20);
+    render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x20);
 }
 
 extern __typeof__(draw_rect_overlay) func_001F52A0 __attribute__((alias("FUN_001f52a0")));

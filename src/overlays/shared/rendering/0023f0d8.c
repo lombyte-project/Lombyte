@@ -14,6 +14,7 @@ extern float D_L00_0015FCA4;
 extern int D_L00_0015FC98;
 extern int D_L00_0015FC9C;
 
+/* Reads two ints and two floats from p into D_L00_0015FC98.. and keeps the rest pointer. */
 void FUN_L00_0023f0d8(char *p) {
     D_L00_0015FC98 = *(int *)p;
     p += 4;

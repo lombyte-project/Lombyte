@@ -7,6 +7,7 @@ typedef struct {
     s64 v;
 } S;
 extern u8 D_001413D0[];
+/* Copies the 64-bit value from the record D_001413D0[0] points to into p. */
 void FUN_L00_0025d1b8(S *p, s64 v) {
     v = (*(S **)&D_001413D0[0])->v;
     p->v = v;

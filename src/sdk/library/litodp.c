@@ -38,14 +38,7 @@ Boston, MA 02111-1307, USA.  */
 /* litodp: fp-bit si_to_float (bitfield-era variant); composes via __pack_d. */
 
 #include "types.h"
-
-typedef struct FpNumber {
-    s32 class;
-    u32 sign;
-    s32 normal_exp;
-    s32 alignment_padding;
-    u64 fraction;
-} FpNumber;
+#include "rnc/sdk/library/fp_number.h"
 
 u64 __pack_d(FpNumber *src);
 

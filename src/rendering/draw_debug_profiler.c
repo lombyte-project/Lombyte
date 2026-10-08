@@ -1,31 +1,11 @@
 #include "types.h"
+#include "rnc/rendering/draw_config.h"
 #include "sda.h"
 
 typedef struct {
     u8 pad_0[4];
     s16 unk4;
 } SpriteFile;
-
-typedef struct {
-    u8 pad_0[8];
-    s32 unk8;
-    s32 pad_C;
-    s32 unk10;
-    s32 pad_14;
-    s32 unk18;
-    s32 pad_1C;
-    s32 unk20;
-    s32 pad_24;
-    s32 unk28;
-    s32 pad_2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    s32 unk3C;
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-} DrawFlags;
 
 extern u8 D_00100AE0[];
 extern u16 D_0010FA90[];
@@ -65,7 +45,6 @@ extern u8 D_001610C1 MACRO_ADDR;
 extern u8 D_001610C2 MACRO_ADDR;
 extern u8 D_001610C3 MACRO_ADDR;
 extern s32 D_001872D4[];
-extern DrawFlags D_0018A2B0;
 extern s32 D_0018C34C[];
 extern u8 D_001D8EB0[];
 extern u8 D_001E1300[];
@@ -135,7 +114,7 @@ void draw_debug_profiler(void) {
     f32 div;
 
     if (D_0016045C == NULL || D_0016045C->unk4 != 0 || ((D_0015F434 ^ 1) & 1) ||
-        D_0018A2B0.unk8 == 0 || D_0018C34C[0] != 0) {
+        draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
     func_001F2260();
@@ -146,7 +125,7 @@ void draw_debug_profiler(void) {
     func_001F21B0(D_0015F380, 0xF);
     func_001F21B8(D_0015F380, 0xF);
     if (D_0016045C != NULL && (D_0015F434 & 1)) {
-        if (D_0018A2B0.unk8 != 0) {
+        if (draw_config.unk8 != 0) {
             transition_draw_sky();
         }
         func_001F21B8(D_0015F390, 0xE);
@@ -164,7 +143,7 @@ void draw_debug_profiler(void) {
         }
     }
     AppendDmaTag(0x02020000);
-    if (D_0018A2B0.unk34 != 0 && D_0015F46C != 0) {
+    if (draw_config.unk34 != 0 && D_0015F46C != 0) {
         vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_2();
@@ -177,7 +156,7 @@ void draw_debug_profiler(void) {
         draw_shrubs();
     }
     AppendDmaTag(0x02040000);
-    if (D_0018A2B0.unk44 != 0 && D_0015F370[0] != 0) {
+    if (draw_config.unk44 != 0 && D_0015F370[0] != 0) {
         draw_fogged_fullscreen_sprite(D_0015F370);
     }
     if (D_0015F434 & 0x20) {
@@ -185,7 +164,7 @@ void draw_debug_profiler(void) {
         draw_debug_font();
         do_gif_paging();
     }
-    if (D_0018A2B0.unk34 != 0 && D_0015F470 != 0) {
+    if (draw_config.unk34 != 0 && D_0015F470 != 0) {
         vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_3();
@@ -197,7 +176,7 @@ void draw_debug_profiler(void) {
     }
     AppendDmaTag(0x02080000);
     setup_gif_paging(0);
-    if ((D_0015F434 & 0x20) && D_0018A2B0.unk30 != 0 && D_0015F620 != 6) {
+    if ((D_0015F434 & 0x20) && draw_config.unk30 != 0 && D_0015F620 != 6) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
         D_0015F620 = 6;
     }
@@ -205,7 +184,7 @@ void draw_debug_profiler(void) {
     func_001F21B0(D_0015F3B0, 4);
     if (D_0015F434 & 0x20) {
         vu1_gs_regs_alt();
-        if (D_0018A2B0.unk34 != 0) {
+        if (draw_config.unk34 != 0) {
             if (D_0015F464 != 0) {
                 dispatch_callback_list_1();
             }
@@ -216,7 +195,7 @@ void draw_debug_profiler(void) {
         }
         func_001F21B0(D_0015F3C0, 6);
         func_001F21B8(D_0015F3C0, 6);
-        if (D_0018A2B0.unk38 != 0) {
+        if (draw_config.unk38 != 0) {
             vu1_add_g_sregister(8, 5);
             vu1_gs_regs_alt();
             FlushCache(0);
@@ -225,7 +204,7 @@ void draw_debug_profiler(void) {
         }
         func_001F21B0(D_0015F3D0, 8);
         func_001F21B8(D_0015F3D0, 8);
-        if (D_0018A2B0.unk3C != 0) {
+        if (draw_config.unk3C != 0) {
             if (D_0015F468 != 0) {
                 vu1_gs_regs_alt();
                 dispatch_callback_list_4();
@@ -239,7 +218,7 @@ void draw_debug_profiler(void) {
         func_001F21B0(D_0015F3E0, 6);
         func_001F21B8(D_0015F3E0, 6);
     }
-    if (D_0018A2B0.unk48 != 0) {
+    if (draw_config.unk48 != 0) {
         aa_blur_pass();
     }
     func_001F21B8(D_0015F3F0, 0xF);
@@ -247,7 +226,7 @@ void draw_debug_profiler(void) {
     if (D_0015F434 & 0x10000) {
         func_00237A70();
     }
-    if ((D_0015F434 & 0x80) && D_0018A2B0.unk40 != 0) {
+    if ((D_0015F434 & 0x80) && draw_config.unk40 != 0) {
         update_hud();
         draw_help();
         draw_letterbox_bars();
@@ -259,7 +238,7 @@ void draw_debug_profiler(void) {
     func_001F21B0(D_0015F3F8, 0xE);
     do_gif_paging();
     if (D_0015F434 & 0x40) {
-        if (D_0018A2B0.unk44 != 0) {
+        if (draw_config.unk44 != 0) {
             vu1_add_g_sregister(0x42, 0x8000000044);
             if (D_001872D4[0] != 0) {
                 emit_rgba_draw_packet(D_001610C0, D_001610C1, D_001610C2, D_001610C3);
@@ -289,7 +268,7 @@ void draw_debug_profiler(void) {
     vu1_sync_chain(2);
     func_001F21B0(D_0015F410, 0x11);
     if (D_0015F434 & 2) {
-        if (D_0018A2B0.unk10 != 0) {
+        if (draw_config.tfrag.enabled != 0) {
             FUN_00234f98(D_001E1300);
             patch_tfrag_gifs();
         }
@@ -298,7 +277,7 @@ void draw_debug_profiler(void) {
     vu1_sync_chain(4);
     func_001F21B0(D_0015F410, 0x11);
     if (D_0015F434 & 4) {
-        if (D_0018A2B0.unk18 != 0) {
+        if (draw_config.tie.enabled != 0) {
             if (D_0015ED80 != 0) {
                 register_entity_render_resources();
                 copy_render_buffer_pair();
@@ -312,7 +291,7 @@ void draw_debug_profiler(void) {
     vu1_sync_chain(8);
     func_001F21B0(D_0015F410, 0x11);
     if (D_0015F434 & 8) {
-        if (D_0018A2B0.unk20 != 0) {
+        if (draw_config.shrub.enabled != 0) {
             FUN_0022a5e0(D_001D8EB0);
             func_00228A30();
         }
@@ -321,7 +300,7 @@ void draw_debug_profiler(void) {
     vu1_sync_chain(0x10);
     func_001F21B0(D_0015F410, 0x11);
     if (D_0015F434 & 0x10) {
-        if (D_0018A2B0.unk28 != 0) {
+        if (draw_config.moby.enabled != 0) {
             patch_moby_gifs();
         }
         func_001F21B0(D_0015F428, 3);

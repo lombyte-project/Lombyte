@@ -1,6 +1,5 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
-extern struct TagPtr D_00160F00;
 extern struct TagPtr D_0015FF40;
 extern s32 D_0015FF3C;
 extern u8 D_001C8680[];
@@ -18,20 +17,20 @@ void FUN_0020d060(void) {
         D_0015FF40.p->vif1 = 0;
         return;
     }
-    tag = D_00160F00.p++;
+    tag = render_packet_cursor.tag++;
     D_0015FF40.p->tag = 0x20000000;
-    D_0015FF40.p->addr = (u32)D_00160F00.p;
+    D_0015FF40.p->addr = (u32)render_packet_cursor.tag;
     D_0015FF40.p->vif0 = 0;
     D_0015FF40.p->vif1 = 0;
     FUN_00227740();
     submit_graphics_setup_command_stream(D_001C8680);
-    D_00160F00.p->tag = 0x20000000;
-    D_00160F00.p->addr = (u32)(D_0015FF40.p + 1);
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0;
-    D_00160F00.p++;
+    render_packet_cursor.tag->tag = 0x20000000;
+    render_packet_cursor.tag->addr = (u32)(D_0015FF40.p + 1);
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0;
+    render_packet_cursor.tag++;
     tag->tag = 0x20000000;
-    tag->addr = (u32)D_00160F00.p;
+    tag->addr = (u32)render_packet_cursor.tag;
     tag->vif0 = 0;
     tag->vif1 = 0;
     func_001F21B0(D_0015FEC0, 8);

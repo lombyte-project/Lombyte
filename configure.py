@@ -233,87 +233,88 @@ OVERLAY_SN_UNITS = {
     "l02/gameplay/hero/0022b728.c",
     "l02/gameplay/vendor/002ebf20.c",
     "l03/gameplay/entities/00292578.c",
+    "l03/gameplay/entities/002c9eb8.c",
     "l03/gameplay/hero/00205830.c",
     "l03/gameplay/hero/00216648.c",
     "l03/gameplay/hero/0021c668.c",
-    "l03/runtime_startup_0022c728.c",
-    "l03/unclassified_002c9eb8.c",
+    "l03/runtime/startup/0022c728.c",
+    "l04/gameplay/entities/001f3038.c",
+    "l04/gameplay/entities/0024c4f0.c",
     "l04/gameplay/entities/0029eb20.c",
     "l04/gameplay/entities/002ca420.c",
-    "l04/gameplay_entities_0024c4f0.c",
-    "l04/unclassified_001f3038.c",
     "l05/gameplay/entities/002d1688.c",
     "l05/gameplay/entities/0030d6a0.c",
     "l05/gameplay/hero/00239fc0.c",
     "l05/gameplay/hero/00244a70.c",
     "l05/gameplay/hero/0024cee8.c",
     "l05/gameplay/hero/00255960.c",
+    "l06/gameplay/entities/002b4770.c",
     "l06/gameplay/entities/002fd1a0.c",
     "l06/gameplay/hero/002356a0.c",
     "l06/gameplay/hero/0023b440.c",
-    "l06/unclassified_002b4770.c",
     "l07/gameplay/entities/002cd2b0.c",
-    "l07/gameplay_vendor_0031d2e0.c",
-    "l07/ui_map_00270248.c",
-    "l07/unclassified_00312948.c",
+    "l07/gameplay/entities/00312948.c",
+    "l07/gameplay/vendor/0031d2e0.c",
+    "l07/ui/map/00270248.c",
     "l08/gameplay/entities/002b8228.c",
     "l08/gameplay/entities/002deee0.c",
+    "l08/gameplay/entities/002e9b70.c",
     "l08/gameplay/hero/00230b38.c",
     "l08/gameplay/hero/002370d8.c",
-    "l08/gameplay_vendor_00305138.c",
-    "l08/rendering_00279f00.c",
-    "l08/unclassified_002e9b70.c",
+    "l08/gameplay/vendor/00305138.c",
+    "l08/rendering/00279f00.c",
     "l09/gameplay/entities/0021e538.c",
     "l10/gameplay/entities/00295a38.c",
+    "l10/gameplay/vendor/002df270.c",
     "l10/gameplay/vendor/002ea1f0.c",
-    "l10/gameplay_vendor_002df270.c",
     "l11/gameplay/entities/002cb668.c",
     "l11/gameplay/hero/0023c7a0.c",
     "l11/gameplay/hero/0024db50.c",
     "l11/gameplay/hero/00253a18.c",
+    "l11/gameplay/vendor/0030c788.c",
     "l11/gameplay/vendor/00315968.c",
-    "l11/gameplay_vendor_0030c788.c",
     "l12/gameplay/entities/002bf140.c",
+    "l12/gameplay/entities/002ec720.c",
     "l12/gameplay/hero/0022de30.c",
     "l12/gameplay/hero/002400d0.c",
     "l12/gameplay/hero/002461f0.c",
-    "l12/gameplay_vendor_003028c8.c",
-    "l12/unclassified_002ec720.c",
+    "l12/gameplay/vendor/003028c8.c",
     "l13/gameplay/entities/002c13b0.c",
     "l13/gameplay/entities/002ea8c8.c",
-    "l13/gameplay_vendor_003058a8.c",
-    "l13/unclassified_002b8320.c",
+    "l13/gameplay/vendor/003058a8.c",
+    "l13/rendering/002b8320.c",
     "l14/gameplay/entities/002460f8.c",
     "l14/gameplay/entities/002df080.c",
+    "l14/gameplay/entities/002fded0.c",
     "l14/gameplay/hero/0022ff58.c",
     "l14/gameplay/hero/00235600.c",
-    "l14/unclassified_002fded0.c",
+    "l15/gameplay/entities/0029aff0.c",
     "l15/gameplay/hero/002044c8.c",
     "l15/gameplay/hero/00216c38.c",
     "l15/gameplay/hero/0021d040.c",
-    "l15/gameplay_vendor_002e73c0.c",
-    "l15/unclassified_0029aff0.c",
+    "l15/gameplay/vendor/002e73c0.c",
     "l16/gameplay/entities/002a3f38.c",
+    "l16/gameplay/entities/002cfc00.c",
     "l16/gameplay/hero/002097a0.c",
     "l16/gameplay/hero/0021e398.c",
     "l16/gameplay/hero/002270c8.c",
     "l16/gameplay/vendor/002e3190.c",
-    "l16/unclassified_002cfc00.c",
+    "l17/gameplay/entities/002a8da0.c",
     "l17/gameplay/hero/0021e530.c",
     "l17/gameplay/hero/002258a8.c",
-    "l17/gameplay_vendor_002e87d8.c",
-    "l17/gameplay_vendor_002ea418.c",
-    "l17/gameplay_vendor_002f26d0.c",
-    "l17/ui_help_002020a8.c",
-    "l17/unclassified_002a8da0.c",
+    "l17/gameplay/vendor/002e87d8.c",
+    "l17/gameplay/vendor/002ea418.c",
+    "l17/gameplay/vendor/002f26d0.c",
+    "l17/ui/help/002020a8.c",
     "l18/gameplay/entities/002a7220.c",
     "l18/gameplay/hero/00227dd0.c",
     "l18/gameplay/hero/0022e8f8.c",
     "l18/gameplay/vendor/002efb88.c",
-    "l18/gameplay_vendor_002f88e8.c",
+    "l18/gameplay/vendor/002f88e8.c",
     "shared/audio/voices/00276368.c",
     "shared/gameplay/animation/00235878.c",
     "shared/gameplay/camera/001eb188.c",
+    "shared/gameplay/camera/001fc008.c",
     "shared/gameplay/entities/00278fd8.c",
     "shared/gameplay/entities/00291918.c",
     "shared/gameplay/entities/002937a0.c",
@@ -323,6 +324,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/002a09a0.c",
     "shared/gameplay/entities/002a4038.c",
     "shared/gameplay/entities/002aa670.c",
+    "shared/gameplay/entities/002aee30.c",
     "shared/gameplay/entities/002b17d8.c",
     "shared/gameplay/entities/002b2100.c",
     "shared/gameplay/entities/002b3840.c",
@@ -331,6 +333,7 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/entities/002c8440.c",
     "shared/gameplay/entities/002c8830.c",
     "shared/gameplay/entities/002cfcb8.c",
+    "shared/gameplay/entities/002d6810.c",
     "shared/gameplay/entities/002d7f88.c",
     "shared/gameplay/entities/002f6328.c",
     "shared/gameplay/hero/00221310.c",
@@ -344,24 +347,22 @@ OVERLAY_SN_UNITS = {
     "shared/gameplay/vendor/0030b618.c",
     "shared/gameplay/vendor/0030e690.c",
     "shared/gameplay/vendor/00316f48.c",
-    "shared/gameplay_camera_001fc008.c",
     "shared/math/interpolation/00257ef0.c",
     "shared/math/interpolation/0026d930.c",
+    "shared/math/rotations/002899f8.c",
     "shared/math/vectors/0025c230.c",
-    "shared/math_rotations_002899f8.c",
     "shared/rendering/00269290.c",
     "shared/rendering/002712b8.c",
     "shared/rendering/0027f660.c",
     "shared/rendering/commands/0020bc88.c",
+    "shared/rendering/sky/00288ec0.c",
+    "shared/ui/help/001fe778.c",
     "shared/ui/help/0021d0a0.c",
     "shared/ui/help/00231d08.c",
     "shared/ui/help/00237488.c",
+    "shared/ui/menus/002497f8.c",
     "shared/ui/menus/0027f448.c",
-    "shared/ui_help_001fe778.c",
-    "shared/ui_menus_002497f8.c",
-    "shared/ui_text_001fb470.c",
-    "shared/unclassified_00288ec0.c",
-    "shared/unclassified_002aee30.c",
+    "shared/ui/text/001fb470.c",
 }
 
 # —— Retail link layout ——
@@ -645,6 +646,21 @@ def normalize_aliases(text):
     return text
 
 
+def pin_labels_before_align(text):
+    """Keep a local label that precedes a loop alignment at its own address.
+
+    cc1 can emit `$La:` `.p2align 3` `$Lb:` when a branch target ends up just
+    before an aligned loop head.  GNU as (and retail) leave `$La` before the
+    alignment nops; Ps2EeAs moves it past them.  `$La = .` defines the label
+    in place without that move.  Only a local label that is followed, after
+    the alignment, by another label is rewritten.
+    """
+    skip = r"(?:[ \t]*(?:\.set[ \t]+\w+|\.loc[^\n]*|#[^\n]*)?\r?\n)*"
+    pattern = re.compile(r"^(\$L\w+):[ \t]*(\r?\n" + skip + r"[ \t]*\.p2align[ \t]+\d[^\n]*\r?\n"
+                         + skip + r"\$L\w+:)", re.M)
+    return pattern.sub(lambda m: m.group(1) + " = ." + m.group(2), text)
+
+
 def unpad(data):
     if data[:7] != b"\x7fELF\x01\x01\x01" or struct.unpack_from("<H", data, 16)[0] != 1:
         raise ValueError("expected a little-endian ELF32 relocatable object")
@@ -888,7 +904,7 @@ def main(argv):
     policy = argv[4] if len(argv) == 5 else "none"
     data = open(source, "rb").read()
     if mode == "normalize":
-        assembly = normalize_aliases(data.decode())
+        assembly = pin_labels_before_align(normalize_aliases(data.decode()))
         if policy == "la-gprel":
             assembly = apply_la_gprel_policy(assembly)
         elif policy != "none":

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/tex_remap.h"
 struct Tfrag {
     u32 tex0;
     u8 pad4[0x1F];
@@ -10,10 +11,6 @@ struct Tfrag {
 struct TfragGroup {
     struct Tfrag *tfrags;
     s32 count;
-};
-struct TexRemap {
-    s16 lo;
-    s16 hi;
 };
 extern struct TfragGroup D_001E0F00[];
 extern struct TexRemap D_001E0C00[];

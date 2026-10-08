@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/globals.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -42,7 +43,6 @@ typedef struct {
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
 extern f32 sequence_fade __asm__("D_0015F43C");
-extern s32 game_stage __asm__("D_0015F604");
 extern s32 intro_overlay_alpha __asm__("D_0015EF50");
 extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
@@ -118,7 +118,7 @@ void update_gameplay_frame(void) {
         }
     }
     func_001E9428();
-    if (game_stage == 0) {
+    if (game_mode == 0) {
         intro_overlay_timer++;
         if (scale_game_frames(0x3C) < intro_overlay_timer) {
             if (++intro_overlay_alpha > 0x40) {
@@ -136,7 +136,7 @@ void update_gameplay_frame(void) {
             InitializeTransferCommand();
         }
         sound_update();
-    } else if (game_stage == 3) {
+    } else if (game_mode == 3) {
         intro_overlay_timer = scale_game_frames(0x3C);
         if ((intro_overlay_alpha -= 0x10) < 0) {
             intro_overlay_alpha = 0;
@@ -146,7 +146,7 @@ void update_gameplay_frame(void) {
         }
         func_002192A8();
         sound_update();
-    } else if (game_stage == 4) {
+    } else if (game_mode == 4) {
         update_mode_freeze();
         sound_update();
     }

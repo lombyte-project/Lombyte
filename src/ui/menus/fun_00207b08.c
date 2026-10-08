@@ -1,16 +1,8 @@
 #include "types.h"
-struct UiGlobals {
-    u8 pad_0[0xC];
-    s32 unkC;
-    u8 pad_10[0x4];
-    s32 unk14;
-    u8 pad_18[0x10];
-    s32 unk28;
-};
+#include "rnc/globals.h"
+#include "rnc/ui/map/map_state.h"
 
 extern s32 D_0013D560[];
-extern s32 D_0015ED84;
-extern struct UiGlobals D_001A00F0;
 extern void FillTransferWords();
 extern s32 func_001FA860();
 extern void func_00208030();
@@ -24,12 +16,12 @@ void FUN_00207b08(s32 buffer) {
         FillTransferWords(buffer, 0, 0x800);
         return;
     }
-    n = func_001FA860(buffer, 0x800, D_001A00F0.unk14, D_001A00F0.unkC);
+    n = func_001FA860(buffer, 0x800, D_001A00F0.unk14, D_001A00F0.mask);
     if (n == -1) {
         func_00208030(buffer);
     }
-    if (D_0013D560[D_0015ED84] < n) {
-        D_0013D560[D_0015ED84] = n;
+    if (D_0013D560[current_level_index] < n) {
+        D_0013D560[current_level_index] = n;
     }
 }
 

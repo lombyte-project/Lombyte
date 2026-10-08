@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 typedef struct {
     s32 state;    /* 0x00 */
@@ -43,10 +44,8 @@ extern s32 D_0013CAE0 NOT_SDA;
 extern s32 D_0013CAE4 NOT_SDA;
 extern HelpRecord D_00141968[];
 extern PlayerHud D_001516D0;
-extern s32 D_0015ED84;
 extern u8 D_0015EE1D;
 extern s32 D_0015EEA4;
-extern s32 D_0015F604;
 extern TextEntry *D_0015F6A0;
 extern HelpState D_001996D0;
 
@@ -73,7 +72,7 @@ void update_help_state(void) __asm__("FUN_001fde90");
 
 #define RECORD_FLAGS()                                                                             \
     D_00141968[D_001996D0.entry].flags =                                                           \
-        D_00141968[D_001996D0.entry].flags | (1 << D_0015ED84) | 0x80000000
+        D_00141968[D_001996D0.entry].flags | (1 << current_level_index) | 0x80000000
 
 void update_help_state(void) {
 
@@ -88,7 +87,7 @@ void update_help_state(void) {
         }
     }
 
-    if (D_0015F604 != 0 || D_001996D0.started == 0) {
+    if (game_mode != 0 || D_001996D0.started == 0) {
         D_001996D0.pending = -1;
         D_001996D0.state = 0;
         D_001996D0.timer = 0;

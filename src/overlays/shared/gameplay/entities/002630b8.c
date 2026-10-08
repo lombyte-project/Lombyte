@@ -7,8 +7,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002630c8.s", FUN_L00_002630c8);
 #include "rnc/math/vector.h"
 extern int D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
-extern float D_L00_0015FCA0 __attribute__((section(".sdata")));
-extern float D_L00_0015FCA4 __attribute__((section(".sdata")));
+extern float D_L00_0015FCA0;
+extern float D_L00_0015FCA4;
 float FUN_L00_00263468(Vec4 *v) {
     Vec4 t;
     int iy, ix;
@@ -28,8 +28,8 @@ typedef struct {
     Vec4_2634f8 pos;
     u8 pad2[8];
 } S166C80_2634f8;
-extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0") __attribute__((section(".sdata")));
-extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4") __attribute__((section(".sdata")));
+extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0");
+extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4");
 extern S166C80_2634f8 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80")
     __attribute__((section(".data")));
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
@@ -119,9 +119,10 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     FUN_001f7d30_00263618(&pk, 0, 0);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002637f8.s", FUN_L00_002637f8);
-extern unsigned char D_0015EDB7 __attribute__((section(".sdata")));
+extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
+/* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
     if (D_0015EDB7) {
         if (p[1] == 0)
@@ -191,11 +192,12 @@ void FUN_L00_00263b70(void *p0, void *p1, void *vel, float a, float b) {
         }
     }
 }
-extern int D_L00_0015F640_00263d40 __asm__("D_L00_0015F640") __attribute__((section(".sdata")));
+extern int D_L00_0015F640_00263d40 __asm__("D_L00_0015F640");
 extern char D_L00_00179118_00263d40[] __asm__("D_L00_00179118");
 int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
+/* Calls FUN_001165b8 with D_L00_00179118 and FUN_001fdd10(a); stores b (default 0xB4 frames). */
 void FUN_L00_00263d40(int a, int b) {
     if (b == -1)
         b = FUN_001f96f8_00263d40(0xB4);
@@ -207,6 +209,7 @@ extern s32 D_L00_0015F640;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void FUN_00116248();
+/* Calls FUN_00116248 on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);

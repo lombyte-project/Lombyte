@@ -9,7 +9,8 @@ void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 void FUN_L00_002772c0(int);
 void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
-void draw_dialog_text(void) __asm__("FUN_L00_002018c8");
+/* The level overlay's own copy of draw_dialog_text (FUN_001fbc50): same code, own data. */
+void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 void FUN_L00_001f8ec8(void) {
     if (D_L00_0015F5D8 == 0) {
         if (FUN_L00_00201720() == 0) {
@@ -19,16 +20,17 @@ void FUN_L00_001f8ec8(void) {
         } else if (FUN_L00_00201720() == 3)
             FUN_L00_002772c0(1);
         emit_rgba_draw_packet(0, 0, 0, 0x40);
-        draw_dialog_text();
+        level_draw_dialog_text();
     }
 }
 extern s32 D_L00_0015F5D8;
 void FUN_L00_002772c0(s32);
+/* Calls FUN_L00_002772c0(0) while D_L00_0015F5D8 is clear. */
 void FUN_L00_001f8f50(void) {
     if (D_L00_0015F5D8 == 0)
         FUN_L00_002772c0(0);
 }
-extern volatile s32 D_L00_0015F628 __attribute__((section(".sdata")));
+extern volatile s32 D_L00_0015F628;
 extern f32 D_L00_0015F3FC;
 extern s16 D_L00_0015F626;
 extern u8 D_L00_00173080[];

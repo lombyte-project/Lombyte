@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_00137B80[];
+#include "rnc/storage/disc_table.h"
 extern u8 D_0015ED58;
 extern s32 sceCdGetError();
 extern s32 sceCdRead();
@@ -24,7 +24,7 @@ s32 load_disc_sectors_into_global_buffer(void) {
         }
     } while (sceCdGetError() != 0);
     for (i = 0; i < 0x2960; i++) {
-        D_00137B80[i] = buf[i];
+        ((u8 *)&disc_table)[i] = buf[i];
     }
     return 1;
 }

@@ -6,6 +6,7 @@
 #include "qcopy.h"
 
 #include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/globals.h"
 
 typedef struct {
     u8 pad0[0x1D];
@@ -39,7 +40,6 @@ struct CameraTransitionState {
 
 extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
 extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 previous_camera_record_storage[] __asm__("D_00189650");
 extern s32 camera_position_publication_suppressed[] __asm__("D_0018C32C");
 

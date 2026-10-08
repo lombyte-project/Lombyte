@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00226b08/FUN_00226b08.s", FUN_00226b08);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
@@ -31,13 +32,7 @@ typedef struct {
     s32 unkEC;
 } Checkpoints;
 
-typedef struct {
-    u8 pad0[0xE0];
-    s32 unkE0;
-} GameInfo;
-
 extern Checkpoints D_0013D290;
-extern GameInfo D_001D5BF0;
 extern u8 D_0013D388[];
 extern u8 D_0013D408[];
 extern s32 D_0013D428[];
@@ -114,8 +109,8 @@ void FUN_00226b08(s32 slot) {
     if (slot >= 0) {
         D_0013D290.slot = slot;
         D_0013D290.entries[slot].unk0 = 0;
-        memcard_make_whole_save(D_001D5BF0.unkE0);
-        D_0013D290.unkEC = D_001D5BF0.unkE0;
+        memcard_make_whole_save(menu_system.unkE0);
+        D_0013D290.unkEC = menu_system.unkE0;
         D_0013D290.unkC0 = 0;
         if (D_0013D290.unkDC < 0) {
             D_0013D290.unkE0 = 0;

@@ -139,7 +139,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
-extern char *D_L10_0015F050 __asm__("D_L10_0015EF50") MACRO_ADDR;
+extern char *D_L10_0015F050 __asm__("D_L10_0015EF50");
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 

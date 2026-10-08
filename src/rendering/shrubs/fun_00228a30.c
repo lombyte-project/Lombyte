@@ -1,8 +1,5 @@
 #include "types.h"
-struct TexRemap {
-    s16 lo;
-    s16 hi;
-};
+#include "rnc/rendering/tex_remap.h"
 struct GifPacket {
     s32 count;
     s32 skip;

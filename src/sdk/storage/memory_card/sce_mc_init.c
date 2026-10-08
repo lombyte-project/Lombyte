@@ -1,17 +1,10 @@
 #include "types.h"
+#include "kernel.h"
 typedef struct {
     u8 pad0[0x24];
     void *server;
 } SifClientData;
 
-typedef struct {
-    s32 currentCount;
-    s32 maxCount;
-    s32 initCount;
-    s32 numWaitThreads;
-    u32 attr;
-    u32 option;
-} SemaParam;
 
 extern s32 D_00132DAC[];
 extern char D_00153450[];
@@ -20,7 +13,7 @@ extern char D_00153490[];
 extern SifClientData D_00159A00;
 extern u8 D_00159A80[];
 extern s32 D_0015AFC0[];
-extern s32 CreateSema(SemaParam *);
+extern s32 CreateSema(struct SemaParam *);
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
 extern s32 sceMcSync(s32, s32 *, s32 *);
@@ -30,7 +23,7 @@ extern s32 sceSifCallRpc(SifClientData *, u32, u32, void *, s32, void *, s32, vo
 extern s32 scePrintf(const char *, ...);
 
 s32 sceMcInit(void) {
-    SemaParam param;
+    struct SemaParam param;
     s32 ret;
     s32 i;
 

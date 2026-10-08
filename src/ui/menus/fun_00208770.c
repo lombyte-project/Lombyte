@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct ObjectVector {
     u8 pad_0[0x10];
@@ -9,7 +10,6 @@ struct ObjectVector {
 };
 
 extern u8 D_0013D5B0[];
-extern s32 D_0015ED84;
 extern u8 D_00199478[];
 extern u32 D_001E03B8[];
 
@@ -23,7 +23,7 @@ void FUN_00208770(void) {
     u8 **source;
     struct ObjectVector *object;
 
-    index = D_0015ED84;
+    index = current_level_index;
     if ((u32)index >= 0x13U) {
         return;
     }

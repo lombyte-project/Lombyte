@@ -5,6 +5,8 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225e70/FUN_00225e70.s", FUN_00225e70);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/storage/disc_table.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
@@ -29,16 +31,6 @@ typedef struct {
 } Moby;
 
 typedef struct {
-    s32 offset;
-    s32 sector_count;
-} AnimationArchiveEntry;
-
-typedef struct {
-    u8 pad0[0x18];
-    AnimationArchiveEntry entries[1];
-} AnimationArchive;
-
-typedef struct {
     u8 pad0[8];
     s16 active;
 } CdReadState;
@@ -46,7 +38,6 @@ typedef struct {
 extern s32 preview_request_count __asm__("D_00160350");
 extern s32 preview_request_count_address __asm__("D_00160350") MACRO_ADDR;
 extern CdReadState cd_read_state __asm__("D_001516D0");
-extern PreviewAnimationStreamState preview_stream_state __asm__("D_001D5BF0");
 extern PreviewAnimationRequest preview_animation_requests[] __asm__("D_001D5EC0");
 extern PreviewAnimationRequest active_preview_animation __asm__("D_001D6080");
 typedef struct {
@@ -55,7 +46,6 @@ typedef struct {
 } PreviewAnimationClassResource;
 
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
-extern AnimationArchive animation_archive __asm__("D_00137B80");
 typedef struct {
     u8 pad0[8];
     s32 item_type;
@@ -107,28 +97,28 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             delay_expired = 1;
         }
     }
-    if (preview_stream_state.pending_buffer != 0 && cd_read_state.active == 0) {
-        s32 buffer_index = preview_stream_state.pending_buffer - 1;
-        s32 *buffer_slot = &preview_stream_state.buffer_address[buffer_index];
+    if (menu_system.pending_buffer != 0 && cd_read_state.active == 0) {
+        s32 buffer_index = menu_system.pending_buffer - 1;
+        s32 *buffer_slot = &menu_system.stream_buffer[buffer_index];
         s32 buffer_address = *buffer_slot;
 
-        decompress_wad(buffer_address + preview_stream_state.read_offset, buffer_address);
-        preview_stream_state.read_offset = 0;
+        decompress_wad(buffer_address + menu_system.read_offset, buffer_address);
+        menu_system.read_offset = 0;
         clear_record_flag_by_key(buffer_address);
-        preview_stream_state.loaded_animation[buffer_index] =
+        menu_system.loaded_animation[buffer_index] =
             preview_animation_requests[0].animation_id;
         preview_animation_requests[0].status = 2;
         ((PreviewAnimationClassResource *)moby_class_resources[0])
             ->animation_tables[preview_animation_requests[0].animation_id] = *buffer_slot;
         relocate_asset_entry_pointers(moby_class_resources[0],
                                       preview_animation_requests[0].animation_id);
-        preview_stream_state.pending_buffer = 0;
+        menu_system.pending_buffer = 0;
     }
-    if (preview_stream_state.pending_buffer == 0 && cd_read_state.active == 0 &&
+    if (menu_system.pending_buffer == 0 && cd_read_state.active == 0 &&
         preview_request_count > 0) {
         if (preview_animation_requests[0].status == 0) {
             u32 animation_id = preview_animation_requests[0].animation_id;
-            PreviewAnimationStreamState *stream = &preview_stream_state;
+            struct MenuSystem *stream = &menu_system;
             u8 *loaded_animation = stream->loaded_animation;
 
             /* Retail uses the Boolean opposite-buffer index here. */
@@ -139,15 +129,15 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                 preview_animation_requests[0].status = 3;
             } else {
                 u32 archive_index = animation_id - stream->streamed_animation_base;
-                s32 buffer_address = stream->buffer_address[stream->read_buffer_index];
-                s32 read_size = animation_archive.entries[archive_index].sector_count << 11;
+                s32 buffer_address = stream->stream_buffer[stream->read_buffer_index];
+                s32 read_size = disc_table.animation_streams[archive_index].size << 11;
                 s32 read_address =
                     buffer_address + get_stream_buffer_size(buffer_address) - read_size;
 
                 stream->read_offset = read_address - buffer_address;
                 if (start_audio_stream_read(
-                        read_address, animation_archive.entries[archive_index].offset,
-                        animation_archive.entries[archive_index].sector_count) == 0) {
+                        read_address, disc_table.animation_streams[archive_index].sector,
+                        disc_table.animation_streams[archive_index].size) == 0) {
                     RaiseKernelTrap();
                 }
                 mark_stream_buffer_read_active(buffer_address);
@@ -161,9 +151,9 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
         (preview_animation_requests[0].status == 2 || preview_animation_requests[0].status == 3)) {
         s32 item_index = preview_animation_requests[0].item_index;
 
-        if (item_index != 0 && preview_stream_state.active_items[0] != item_index &&
-            preview_stream_state.active_items[2] != item_index &&
-            preview_stream_state.active_items[1] != item_index) {
+        if (item_index != 0 && menu_system.equipped[0] != item_index &&
+            menu_system.equipped[2] != item_index &&
+            menu_system.equipped[1] != item_index) {
             activate_request = 0;
             advance_preview_animation_queue();
         } else if (preview_animation_requests[0].trigger_mode == 0) {
@@ -184,11 +174,11 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
         load_preview_resource_bindings(active_preview_animation.resource_first,
                                        active_preview_animation.resource_count);
         blend_moby_animation_ex(source_moby, active_preview_animation.animation_id, 0, 10, 5);
-        if (active_preview_animation.animation_id == preview_stream_state.loaded_animation[0]) {
-            preview_stream_state.read_buffer_index = 1;
+        if (active_preview_animation.animation_id == menu_system.loaded_animation[0]) {
+            menu_system.read_buffer_index = 1;
         } else if (active_preview_animation.animation_id ==
-                   preview_stream_state.loaded_animation[1]) {
-            preview_stream_state.read_buffer_index = 0;
+                   menu_system.loaded_animation[1]) {
+            menu_system.read_buffer_index = 0;
         }
         if (preview_item_definitions[active_preview_animation.item_index].item_type == 2) {
             if (secondary_item_moby != 0) {

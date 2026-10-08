@@ -266,6 +266,7 @@ float FUN_L00_0025dcd8(u128_25dcd8 *out, u128_25dcd8 *p, u128_25dcd8 *a, u128_25
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 extern f32 FUN_L00_00200228(void *, f32);
+/* Wraps angle a into -pi..pi. */
 f32 FUN_L00_0025e310(f32 a) {
     f32 out;
     f32 x;
@@ -285,6 +286,7 @@ f32 FUN_L00_0025e310(f32 a) {
 
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
+/* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
 int FUN_L00_0025e368(char *a) {
     int r;
     if (a == 0) {
@@ -296,6 +298,7 @@ int FUN_L00_0025e368(char *a) {
     }
     return r;
 }
+/* True for a moby of one of eight listed classes. */
 s32 FUN_L00_0025e3f8(void *p) {
     s16 v = *(s16 *)((char *)p + 0xA6);
     if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
@@ -379,6 +382,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9bf8(void *, void *, float);
 
+/* Clamps vector a to length x: normalizes it to x when FastVecLength is longer. */
 void FUN_L00_0025f730(void *a, float x) {
     if (x < FUN_001f9af0(a)) {
         FUN_001f9bf8(a, a, x);
@@ -392,6 +396,7 @@ void FUN_L00_0025f730(void *a, float x) {
 
 extern int D_L00_0015FFD8;
 
+/* Adds the moby index of a to the short list unless present or the list holds max. */
 void FUN_L00_0025f780(int a, short *list, short max) {
     int k = ((a - D_L00_0015FFD8) << 8) >> 16;
     int i;
@@ -405,6 +410,7 @@ void FUN_L00_0025f780(int a, short *list, short max) {
     }
 }
 extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
+/* Removes moby p from the index list a by moving the last entry into its place. */
 void FUN_L00_0025f800(s32 p, s16 *a) {
     s32 i;
     for (i = 1; i <= a[0]; i++) {
@@ -426,6 +432,7 @@ typedef struct {
 } M25f878;
 extern s16 D_L00_001B0770[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
+/* Finds the moby in the D_L00_001B0770 index list whose data id matches id; 0 when none. */
 M25f878 *FUN_L00_0025f878(s32 id) {
     s32 i;
     for (i = 1; i <= D_L00_001B0770[0]; i++) {
@@ -436,13 +443,15 @@ M25f878 *FUN_L00_0025f878(s32 id) {
     return 0;
 }
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+/* Adds a random offset in [-r, r] to each of v[0..2]. */
 void FUN_L00_0025f8e0(f32 *v, f32 r) {
     v[0] += random_float_between(-r, r);
     v[1] += random_float_between(-r, r);
     v[2] += random_float_between(-r, r);
 }
-extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8") __attribute__((sda));
+extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
+/* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 FUN_L00_0025e3b8(u8 *m) {
     u32 v;
     if (m == 0) {

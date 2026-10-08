@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/transition_d
             FUN_001eb798);
 #else
 #include "types.h"
+#include "rnc/storage/disc_table.h"
 #include "sda.h"
 
 typedef struct {
@@ -18,16 +19,6 @@ typedef struct {
     char pad0[0x20];
     Chunk chunk[6];
 } WadHeader;
-
-typedef struct {
-    s32 a;
-    s32 b;
-} ChunkSrc;
-
-typedef struct {
-    char pad0[0x14F8];
-    ChunkSrc src[6];
-} Globals137B80;
 
 typedef struct {
     s32 start;
@@ -43,7 +34,6 @@ typedef struct {
     s32 f3C;
 } TransferState;
 
-extern Globals137B80 D_00137B80;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84;
 extern s32 D_0015ED88 __attribute__((sda));
@@ -111,14 +101,14 @@ void transition_do_transition(void) {
     s32 wait;
     s32 i;
     s32 old;
-    Globals137B80 *tbl;
+    struct DiscTable *tbl;
     u32 align_mask = 0xFFFFFFF0;
 
     D_0015ED84 = 0;
     *(volatile u32 *)0x10000010 = 0x83;
     *(volatile u32 *)0x10000000 = 0;
     load_and_initialize_level_chunk();
-    tbl = &D_00137B80;
+    tbl = &disc_table;
     transition_load_wad();
     p = (u8 *)D_001940C8[0];
     hdr = (WadHeader *)p;
@@ -127,22 +117,22 @@ void transition_do_transition(void) {
     p = (u8 *)hdr + 0x60;
     D_0015EE4C = hdr;
     hdr->chunk[1].size =
-        load(p, ((volatile ChunkSrc *)&tbl->src[1])->a, ((volatile ChunkSrc *)&tbl->src[1])->b);
+        load(p, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->sector, ((volatile struct DiscFile *)&tbl->wad_chunks[1])->size);
     hdr->chunk[1].off = p - (u8 *)hdr;
     p += (hdr->chunk[1].size + 0xF) & align_mask;
-    hdr->chunk[2].size = load(p, tbl->src[2].a, tbl->src[2].b);
+    hdr->chunk[2].size = load(p, tbl->wad_chunks[2].sector, tbl->wad_chunks[2].size);
     hdr->chunk[2].off = p - (u8 *)hdr;
     p += (hdr->chunk[2].size + 0xF) & align_mask;
-    hdr->chunk[3].size = load(p, tbl->src[3].a, tbl->src[3].b);
+    hdr->chunk[3].size = load(p, tbl->wad_chunks[3].sector, tbl->wad_chunks[3].size);
     hdr->chunk[3].off = p - (u8 *)hdr;
     p += (hdr->chunk[3].size + 0xF) & align_mask;
-    hdr->chunk[4].size = load(p, tbl->src[4].a, tbl->src[4].b);
+    hdr->chunk[4].size = load(p, tbl->wad_chunks[4].sector, tbl->wad_chunks[4].size);
     hdr->chunk[4].off = p - (u8 *)hdr;
     p += (hdr->chunk[4].size + 0xF) & align_mask;
-    hdr->chunk[5].size = load(p, tbl->src[5].a, tbl->src[5].b);
+    hdr->chunk[5].size = load(p, tbl->wad_chunks[5].sector, tbl->wad_chunks[5].size);
     hdr->chunk[5].off = p - (u8 *)hdr;
     p += (hdr->chunk[5].size + 0xF) & align_mask;
-    hdr->chunk[0].size = load(p, tbl->src[0].a, tbl->src[0].b);
+    hdr->chunk[0].size = load(p, tbl->wad_chunks[0].sector, tbl->wad_chunks[0].size);
     hdr->chunk[0].off = p - (u8 *)hdr;
     InitializeResourceEntry();
     initialize_sif_rpc();

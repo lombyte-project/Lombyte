@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECAB8). */
 #include "qcopy.h"
-extern char D_0013F350[];
+#include "rnc/gameplay/hero.h"
 extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
@@ -13,20 +13,20 @@ extern char D_001871B0[];
 void capture_camera_orientation(void) __asm__("FUN_001ec710");
 
 void capture_camera_orientation(void) {
-    char *g = D_0013F350;
+    struct Hero *g = &hero;
     char *r = D_001871B0;
     char local0[16];
     char local1[16];
     char local2[16];
 
-    FUN_001f9bf8(local0, *(char **)(g + 0x2080) + 0xC0, 1.0f);
-    FUN_001f9bf8(local1, *(char **)(g + 0x2080) + 0xD0, 1.0f);
-    FUN_001f9bf8(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+    FUN_001f9bf8(local0, (char *)g->moby + 0xC0, 1.0f);
+    FUN_001f9bf8(local1, (char *)g->moby + 0xD0, 1.0f);
+    FUN_001f9bf8(local2, (char *)g->moby + 0xE0, 1.0f);
 
     qcopy(r + 0x90, local0);
     qcopy(r + 0xA0, local2);
 
-    compute_camera_angles((float *)(r + 0x70), r + 0xC0, g + 0x80, local0, local1, local2);
+    compute_camera_angles((float *)(r + 0x70), r + 0xC0, (char *)&g->motion.pos, local0, local1, local2);
 
     qcopy(r + 0xB0, r + 0xD0);
 }

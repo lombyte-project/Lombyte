@@ -1,48 +1,32 @@
 #include "types.h"
-struct Obj {
-    u8 pad0[0xC];
-    void (*release)(struct Obj *, s32);
-};
-struct Owner {
-    u8 pad0[0x44];
-    struct Obj *objs[14];
-};
-struct GameState {
-    s32 state;
-    struct Owner *owner;
-    u8 pad8[0xC];
-    s32 unk14;
-    s32 unk18;
-    u8 pad1C[0xF4];
-    s32 progress;
-};
-extern struct GameState D_001D5BF0;
-extern s32 D_0015EE78;
+#include "rnc/globals.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 extern s32 D_001D5D90[];
 extern s32 delete_moby(s32) __asm__("FUN_00225530");
 void FUN_002191b8(void) {
     s32 i;
     s32 j;
-    struct Obj *obj;
+    struct MenuScreen *screen;
 
-    if (D_001D5BF0.progress < 10) {
+    if (menu_system.update_count < 10) {
         return;
     }
-    if (D_001D5BF0.owner != 0) {
+    if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
-            obj = D_001D5BF0.owner->objs[i];
-            if (obj != 0 && obj->release != 0) {
-                obj->release(obj, 0);
+            screen = menu_system.current->screens[i];
+            if (screen != 0 && screen->leave != 0) {
+                screen->leave(screen, 0);
             }
         }
-        D_001D5BF0.owner = 0;
+        menu_system.current = 0;
     }
-    D_0015EE78 = D_001D5BF0.unk18;
+    gs_texture_allocation_start = menu_system.saved_texture_start;
     for (j = 0; j < 14; j++) {
         D_001D5D90[j] = delete_moby(D_001D5D90[j]);
     }
-    D_001D5BF0.state = 20;
-    D_001D5BF0.unk14 = 2;
+    menu_system.state = 20;
+    menu_system.timer = 2;
 }
 
 extern __typeof__(FUN_002191b8) func_002191B8 __attribute__((alias("FUN_002191b8")));

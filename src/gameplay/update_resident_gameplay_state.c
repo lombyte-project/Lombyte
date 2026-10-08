@@ -1,8 +1,9 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 #include "qcopy.h"
-
-typedef unsigned int u128 __attribute__((mode(TI)));
+#include "rnc/globals.h"
+#include "rnc/gameplay/hero.h"
 
 typedef union {
     u128 quadword;
@@ -147,10 +148,6 @@ typedef struct {
     u16 unk5A;
 } DialoguePlaybackState;
 
-typedef struct {
-    u8 pad0[0x2080];
-    ResidentRenderObject *reference_object;
-} LevelObjectState;
 
 typedef struct {
     Vector4 a;
@@ -160,19 +157,15 @@ typedef struct {
 extern s32 D_0013CAE4[];
 extern u8 D_0013D4C0[];
 extern ResidentCinematicState level_render_state __asm__("D_0013E030");
-extern LevelObjectState D_0013F350;
 extern u8 D_001413F5[];
 extern DialoguePlaybackState D_001516D0;
 extern f32 D_0015ED60;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70 __attribute__((sda));
-extern s32 D_0015ED80;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0015EDB4;
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern f32 D_0015F440;
 extern s32 D_0015F5B0;
-extern s32 game_stage __asm__("D_0015F604");
 extern s32 D_0015F618[1];
 extern ResidentRenderObject *D_0015FF1C;
 extern CameraBlendNode *D_00160034;
@@ -181,7 +174,6 @@ extern ResidentCameraState D_00186F40;
 extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
 extern f32 D_0018CDB0[4];
 extern ScriptedPath *D_001CC3B0[];
-extern s32 D_001D5BF0 NOT_SDA;
 extern PositionPair D_001D99B0[];
 extern Vector4 D_001D9C80[];
 extern Vector4 D_001D9CB0[];
@@ -294,7 +286,7 @@ void update_resident_gameplay_state(void) {
         if (sequence_fade < 0.0f) {
             sequence_fade = 0.0f;
         }
-        ticks_per_bank = D_0015ED80 ? 0x50 : 0x60;
+        ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
         if ((D_0013CAE4[0] & 0x50) && scale_ticks(30) < render_sequence.time &&
             sequence_fade == 0.0f) {
@@ -355,11 +347,11 @@ void update_resident_gameplay_state(void) {
             }
             if (level_render_state.state == 0) {
                 pause_all_sounds(0);
-                D_001D5BF0 = 0xE;
+                menu_system.state = 0xE;
                 D_0015F618[0] = 1;
                 return;
             }
-            game_stage = 0;
+            game_mode = 0;
             music_unpause();
             D_0015F618[0] = 1;
             D_001413F5[0] = 0;
@@ -371,7 +363,7 @@ void update_resident_gameplay_state(void) {
             func_001E9440(&level_render_state.unk60, &level_render_state.unk70, 0, 1);
             return;
         }
-        bank_tick_limit = D_0015ED80 ? 0x50 : 0x60;
+        bank_tick_limit = pal_mode ? 0x50 : 0x60;
         if (render_sequence.frame >= bank_tick_limit) {
             parse_space_scene_chunk(++render_sequence.sequence_frame);
         }
@@ -618,14 +610,14 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_a->unk94 = 0;
                 level_render_state.companion_a->flags |= 6;
                 level_render_state.companion_a->lifetime_stamp =
-                    D_0013F350.reference_object->lifetime_stamp;
+                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
                 level_render_state.companion_b = create_moby(10);
                 level_render_state.companion_b->selected_index = 0x1FF;
                 level_render_state.companion_b->opacity = 0xFF;
                 level_render_state.companion_b->unk94 = 0;
                 level_render_state.companion_b->flags |= 6;
                 level_render_state.companion_b->lifetime_stamp =
-                    D_0013F350.reference_object->lifetime_stamp;
+                    ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
             }
             func_001E93F0(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
             level_render_state.blend = 0.0f;

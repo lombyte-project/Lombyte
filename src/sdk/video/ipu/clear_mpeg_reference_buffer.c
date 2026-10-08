@@ -1,47 +1,34 @@
 #include "types.h"
+#include "rnc/sdk/libmpeg.h"
 
-struct MpegReferenceBuffer {
-    u8 padding[0x28];
-    s32 status;
-};
+int ClearMpegReferenceBuffer(struct sceMpeg *mp) __asm__("ClearMpegReferenceBuffer");
 
-struct MpegReferenceTable {
-    u8 padding[0x1B8];
-    struct MpegReferenceBuffer *buffers[10];
-};
+/* Zero status of reference images 0, 4, 8, 1, 5, 9. */
+int ClearMpegReferenceBuffer(struct sceMpeg *mp) {
+    struct MpegDecoder *decoder = mp->sys;
+    struct MpegRefImage *buffer;
 
-struct MpegDecoder {
-    u8 padding[0x40];
-    struct MpegReferenceTable *reference_table;
-};
-
-int ClearMpegReferenceBuffer(struct MpegDecoder *decoder) __asm__("ClearMpegReferenceBuffer");
-
-int ClearMpegReferenceBuffer(struct MpegDecoder *decoder) {
-    struct MpegReferenceTable *reference_table = decoder->reference_table;
-    struct MpegReferenceBuffer *buffer;
-
-    buffer = reference_table->buffers[0];
+    buffer = decoder->ref_images[0];
     if (buffer != 0) {
         buffer->status = 0;
     }
-    buffer = reference_table->buffers[4];
+    buffer = decoder->ref_images[4];
     if (buffer != 0) {
         buffer->status = 0;
     }
-    buffer = reference_table->buffers[8];
+    buffer = decoder->ref_images[8];
     if (buffer != 0) {
         buffer->status = 0;
     }
-    buffer = reference_table->buffers[1];
+    buffer = decoder->ref_images[1];
     if (buffer != 0) {
         buffer->status = 0;
     }
-    buffer = reference_table->buffers[5];
+    buffer = decoder->ref_images[5];
     if (buffer != 0) {
         buffer->status = 0;
     }
-    buffer = reference_table->buffers[9];
+    buffer = decoder->ref_images[9];
     if (buffer != 0) {
         buffer->status = 0;
     }

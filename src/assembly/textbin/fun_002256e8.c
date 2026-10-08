@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002256e8/FUN_002256e8.s", FUN_002256e8);
 #else
 #include "types.h"
+#include "rnc/storage/disc_table.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -37,7 +38,6 @@ typedef struct {
     StreamedAnimationMoby *moby;
 } MobyAnimationStream;
 
-extern s32 level_archive[] __asm__("D_00137B80");
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
@@ -72,9 +72,9 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         if (cd_read_active[0] != 0) {
             break;
         }
-        table_index = 0x4F000 - (level_archive[0x1614 / 4] << 11);
-        if (start_audio_stream_read(stream->buffer + table_index, level_archive[0x1610 / 4],
-                                    level_archive[0x1614 / 4]) != 0) {
+        table_index = 0x4F000 - (disc_table.unk1610.size << 11);
+        if (start_audio_stream_read(stream->buffer + table_index, disc_table.unk1610.sector,
+                                    disc_table.unk1610.size) != 0) {
             stream->read_offset = table_index;
             stream->state = 1;
             animation_asset_read_active[0] = 1;

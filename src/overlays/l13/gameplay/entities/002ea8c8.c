@@ -48,7 +48,73 @@ char *FUN_L13_002ecd10(char *src, int arg, int id) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed4a8.s", FUN_L13_002ed4a8);
+/* Fades the moby in, waits for its linked moby to be collected or gone, fades out and kills it; spins it all the while. */
+extern int D_L13_0015FFD8_n __asm__("D_L13_0015FFD8");
+extern int D_0014C190_n[][64] __asm__("D_0014C190");
+extern int D_0015ED84_n __asm__("D_0015ED84");
+extern float D_0015ED60_n __asm__("D_0015ED60");
+extern char D_L13_001F4FB0_n[] __asm__("D_L13_001F4FB0");
+extern void print_n(char *, int, int) __asm__("FUN_001e93b0");
+extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void FUN_L13_002ed158(void *, void *);
+extern int ftoi_n(float) __asm__("FUN_001fa6d0");
+extern void stop_n(int) __asm__("FUN_L00_0023e838");
+extern void kill_n(void *) __asm__("FUN_0020c828");
+extern void spin_n(void *, int, int) __asm__("FUN_L00_0024efb0");
+
+void FUN_L13_002ed4a8(unsigned char *m) {
+    char *d = *(char **)(m + 0x78);
+    int a;
+    switch (m[0x20]) {
+    case 0:
+        m[0x20] = 1;
+        m[0x23] = 0x14;
+        *(unsigned short *)(m + 0x34) |= 0xA08;
+        *(short *)(d + 0xE) = -1;
+        *(float *)(d + 4) = 1.0f;
+        glow_n(m, 0x80, 0x80, 0x80);
+        break;
+    case 1:
+        if (*(int *)d != -1) {
+            unsigned char *o = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)d << 8));
+            if (o == 0 || o[0x20] == 0xFE || o[0x20] == 0xFD ||
+                (D_0014C190_n[D_0015ED84_n][*(short *)(o + 0xB2) >> 5] >> (*(unsigned short *)(o + 0xB2) & 0x1F)) & 1) {
+                *(float *)(d + 4) = 1.0f;
+                m[0x20] = 2;
+            }
+        } else {
+            *(float *)(d + 4) = 1.0f;
+            m[0x20] = 2;
+            print_n(D_L13_001F4FB0_n, *(short *)(m + 0xA6), *(short *)(m + 0xB2));
+        }
+        FUN_L13_002ed158(m, d);
+        break;
+    case 2:
+        *(float *)(d + 4) -= D_0015ED60_n * 0.05f;
+        if (*(float *)(d + 4) < 0.0f)
+            m[0x20] = 3;
+        else
+            m[0x23] = ftoi_n(*(float *)(d + 4) * 20.0f);
+        break;
+    case 3:
+        if (*(short *)(d + 0xE) != -1) {
+            stop_n(*(short *)(d + 0xE));
+            *(short *)(d + 0xE) = -1;
+        }
+        kill_n(m);
+        return;
+    }
+    a = 0xC0;
+    *(short *)(d + 0xC) += 0xC0;
+    if (*(short *)(d + 0xC) > 0x1000) {
+        *(short *)(d + 0xC) -= 0x1000;
+        a = -0xF40;
+    } else if (*(short *)(d + 0xC) < 0) {
+        *(short *)(d + 0xC) += 0x1000;
+        a = 0x10C0;
+    }
+    spin_n(*(void **)(m + 0x24), a, 0);
+}
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -83,7 +149,7 @@ extern char D_0013E533[];
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int D_L13_0015F5C4;
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int D_L13_00179710[];
 extern int FUN_L00_00203908(int a, int b);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

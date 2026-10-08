@@ -1,11 +1,8 @@
 /* Ported from rac1-decomp (src/game/space.c, func_00232A00). */
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/rendering/dma_tag.h"
 
-struct TagPtr {
-    int *p;
-};
-extern struct TagPtr D_00160F00;
 extern int D_0013E500[];
 extern char D_00160850[];
 
@@ -41,15 +38,15 @@ void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long 
     uv[3].f.u = u1;
     uv[3].f.v = v1;
 
-    D_00160F00.p[0] = 0x10000007;
-    D_00160F00.p[1] = 0;
-    D_00160F00.p[2] = 0;
-    D_00160F00.p[3] = 0x50000007;
-    base = D_00160F00.p;
-    D_00160F00.p = base + 4;
+    render_packet_cursor.words[0] = 0x10000007;
+    render_packet_cursor.words[1] = 0;
+    render_packet_cursor.words[2] = 0;
+    render_packet_cursor.words[3] = 0x50000007;
+    base = render_packet_cursor.words;
+    render_packet_cursor.words = base + 4;
     qcopy(base + 4, D_00160850);
     p = (long *)(base + 8);
-    D_00160F00.p = base + 8;
+    render_packet_cursor.words = base + 8;
     p[0] = tex;
     p[1] = 0x54;
     p[2] = (rgba & 0xFFFFFFFFL) | (0xFE00L << 46);
@@ -62,7 +59,7 @@ void FUN_002316e8(int x, int y, int w, int h, unsigned long rgba, unsigned long 
     p[9] = uv[3].bits;
     p[10] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
     p[11] = 0;
-    D_00160F00.p = (int *)((char *)D_00160F00.p + 0x60);
+    render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x60);
 }
 
 extern __typeof__(FUN_002316e8) func_002316E8 __attribute__((alias("FUN_002316e8")));

@@ -1,19 +1,20 @@
 #include "types.h"
+#include "rnc/audio/decoder/audio_dec.h"
 
 extern void FlushCache(s32);
 extern s32 sceSifSetDma(void *, s32);
 extern s32 sceSifDmaStat(s32);
 extern void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
 
-void send_to_spu(s32 *dec, s32 src, s32 size, s32 arg3) __asm__("FUN_0023af18");
+void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) __asm__("FUN_0023af18");
 
-void send_to_spu(s32 *dec, s32 src, s32 size, s32 arg3) {
+void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) {
     u32 descriptor[4];
     s32 dma_id;
 
     FlushCache(0);
     descriptor[0] = src;
-    descriptor[1] = dec[0x48 / 4];
+    descriptor[1] = dec->iopBuff;
     descriptor[2] = size;
     descriptor[3] = 0;
     do {

@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EC5B8). */
 #include "sda.h"
+#include "rnc/gameplay/hero.h"
 typedef struct {
     char unk_00[0x10];
     int unk10;
@@ -8,7 +9,6 @@ typedef struct {
 } CamRec20;
 extern CamRec20 *D_0015EF90 MACRO_ADDR;
 extern CamRec20 *D_0015EF40 MACRO_ADDR;
-extern char D_0013F350[];
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 typedef struct {
@@ -77,10 +77,10 @@ int camera_activation_check_priority(void *cur, void *other) {
         break;
     }
     case 7: {
-        char *base = D_0013F350;
+        struct Hero *base = &hero;
         short e = *(short *)(c + 0x86);
 
-        if (e != *(int *)(base + 0x2284)) {
+        if (e != base->unk2284) {
             return 0;
         }
         if (*(short *)(o + 0x7E) == 0 && !(state[8] > *(unsigned char *)(o + 0x7C))) {
@@ -94,7 +94,7 @@ int camera_activation_check_priority(void *cur, void *other) {
             int g = *(int *)((char *)rec->unk1C + 0x24);
 
             if (g < 0 ||
-                (*(int *)(base + 0x560) == D_0015EF40[g].unk10 && *(int *)(base + 0x570) == 0)) {
+                (base->unk560 == D_0015EF40[g].unk10 && base->unk570 == 0)) {
                 return 1;
             }
         }

@@ -2,7 +2,6 @@
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-extern struct TagPtr D_00160F00;
 extern s32 D_0013E500[];
 extern char D_00160860[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -22,19 +21,19 @@ void FUN_001f5808(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 
     if (x0 > 0x9000 || x1 < 0x7000 || y0 > 0x9000 || y1 < 0x7000) {
         return;
     }
-    D_00160F00.p->tag = 0x10000008;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = 0x50000008;
+    render_packet_cursor.tag->tag = 0x10000008;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000008;
     ub = u + uw;
     vb = v + vh;
     s0 = u * 16;
     s1 = ub * 16;
-    base = D_00160F00.p;
-    D_00160F00.p = base + 1;
+    base = render_packet_cursor.tag;
+    render_packet_cursor.tag = base + 1;
     qcopy(base + 1, D_00160860);
     p = (long *)(base + 2);
-    D_00160F00.p = base + 2;
+    render_packet_cursor.tag = base + 2;
     p[0] = tex;
     p[1] = 0x154;
     p[2] = (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
@@ -49,7 +48,7 @@ void FUN_001f5808(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 
     p[11] = x1 | ((long)y1 << 16) | ((long)0xFFFFF0 << 32);
     p[12] = 5;
     p[13] = 0;
-    D_00160F00.p = (struct DmaTag *)((u8 *)D_00160F00.p + 0x70);
+    render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }
 
 extern __typeof__(FUN_001f5808) func_001F5808 __attribute__((alias("FUN_001f5808")));

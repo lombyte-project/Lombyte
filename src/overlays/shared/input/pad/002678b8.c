@@ -7,6 +7,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002678b8.s", FUN_L00_002678b8);
 #else
 extern void *FUN_L00_002678c0(s32, s32);
 
+/* Calls FUN_L00_002678c0 with type and 0. */
 void *FUN_L00_002678b8(s32 type) {
     return FUN_L00_002678c0(type, 0);
 }

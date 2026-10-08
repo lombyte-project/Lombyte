@@ -1,10 +1,8 @@
 #include "types.h"
 #include "eetypes.h"
 #include "sda.h"
-
-struct TagPtr {
-    s32 *p;
-};
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 
 struct SkyTile {
     u128 bounds; /* 16-byte aligned: tile fields are addressed from the tile base */
@@ -23,7 +21,6 @@ struct Shell {
     struct SkyTile tiles[1];
 };
 
-extern struct TagPtr D_00160F00 MACRO_ADDR;
 extern s32 D_00160408[2] __attribute__((sda));
 extern s32 D_00160410 __attribute__((sda));
 extern u8 D_0013D0F0[];
@@ -52,11 +49,11 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
 
     FUN_0022c4c8(shell->tiles, shell->count, visibility);
 
-    D_00160F00.p[0] = 0x30000007;
-    *(s32 *)((u32)D_00160F00.p + 4) = (s32)D_0013D0F0;
-    *(s32 *)((u32)D_00160F00.p + 8) = 0;
-    *(s32 *)((u32)D_00160F00.p + 12) = 0x50000007;
-    D_00160F00.p += 4;
+    render_packet_cursor.words[0] = 0x30000007;
+    *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)D_0013D0F0;
+    *(s32 *)((u32)render_packet_cursor.words + 8) = 0;
+    *(s32 *)((u32)render_packet_cursor.words + 12) = 0x50000007;
+    render_packet_cursor.words += 4;
 
     D_00160410 = 1 - D_00160410;
     if (visibility[0] == 1) {

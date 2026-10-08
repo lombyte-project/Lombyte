@@ -5,18 +5,13 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_00225ac0/FUN_00225ac0.s", FUN_00225ac0);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 
 struct GraphicsBufferDescriptor {
     s32 address;
     s32 flags;
 };
-struct MenuGraphicsBuffers {
-    u8 pad00[0x108];
-    s32 primary_buffer;
-    s32 secondary_buffer;
-};
 
-extern struct MenuGraphicsBuffers menu_graphics_buffers __asm__("D_001D5BF0");
 extern struct GraphicsBufferDescriptor graphics_buffer_descriptors[5] __asm__("D_001D60B8");
 
 void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
@@ -38,8 +33,8 @@ void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 clear_remaining;
     struct GraphicsBufferDescriptor *descriptor;
 
-    primary_address = menu_graphics_buffers.primary_buffer;
-    secondary_address = menu_graphics_buffers.secondary_buffer;
+    primary_address = menu_system.help_text_buffer;
+    secondary_address = menu_system.unk10C;
     if (mode == 0) {
         primary_count = 1;
         secondary_count = 0;

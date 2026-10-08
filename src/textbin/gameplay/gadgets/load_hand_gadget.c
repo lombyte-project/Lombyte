@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/gameplay/hero.h"
 #include "asm.h"
 
 #include "types.h"
@@ -42,24 +44,6 @@ typedef struct HandGadgetDefinition {
     s32 oclass;
     u8 pad14[0x38];
 } HandGadgetDefinition;
-typedef struct HandGadgetSelection {
-    u8 pad00[0x1C];
-    s32 current_gadget;
-    u8 pad20[0x10];
-    s32 selected_gadget;
-    s32 attachment_gadget;
-    s32 animation_gadget;
-    s32 pose_gadget;
-    u8 pad40[0x8C];
-    s32 animation_base;
-    u8 padD0[0x48];
-    s32 resource_request_state;
-    s32 active_resource_class;
-    s32 requested_resource_class;
-    u8 pad124[0x1C];
-    s32 last_requested_resource_class;
-    s32 last_resource_request_state;
-} HandGadgetSelection;
 typedef struct HandGadgetManipulator {
     u8 pad0;
     u8 active;
@@ -84,20 +68,11 @@ typedef struct HandGadgetAnimation {
 } HandGadgetAnimation;
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-typedef struct HandGadgetPlayerState {
-    u8 pad0[0x10B8];
-    s32 equipped_gadget;
-    u8 pad10BC[0xF3A];
-    u8 ammo_used;
-    u8 ammo_capacity;
-} HandGadgetPlayerState;
-extern HandGadgetPlayerState player_state __asm__("D_0013F350");
 extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
 extern u8 *moby_class_resources[] __asm__("D_001B3200");
 extern u8 moby_class_slots[] __asm__("D_001B3AC0");
 extern HandGadgetAnimation gadget_animations[] __asm__("D_001D52E8");
-extern HandGadgetSelection gadget_selection __asm__("D_001D5BF0");
 extern HandGadgetManipulator class_pose_manipulator __asm__("D_001D5DD0");
 extern HandGadgetManipulator first_attachment_manipulator __asm__("D_001D5E10");
 extern HandGadgetManipulator second_attachment_manipulator __asm__("D_001D5E50");
@@ -146,24 +121,24 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     loaded_gadget = 0;
     moby = hand->class_pose_moby;
     previous_selected_class = (moby != 0) ? (moby->oclass) : (-1);
-    selected_gadget = gadget_selection.selected_gadget;
+    selected_gadget = menu_system.equipped[0];
     selected_class = gadget_definitions[selected_gadget].oclass;
-    selected_class_ready = selected_class == gadget_selection.requested_resource_class;
+    selected_class_ready = selected_class == menu_system.unk120;
     if ((previous_selected_class != selected_class) && selected_class_ready) {
         delete_moby(moby);
         if (class_pose_manipulator.active) {
             detach_manipulator(hand->source_moby_address, &class_pose_manipulator);
         }
-        if ((player_state.equipped_gadget != 0) &&
-            (selected_gadget != player_state.equipped_gadget)) {
+        if ((hero.items[0].item_id != 0) &&
+            (selected_gadget != hero.items[0].item_id)) {
             func_001E9470(0, 0);
         }
-        resource_request_state = gadget_selection.resource_request_state == 0;
+        resource_request_state = menu_system.resource_table_toggle == 0;
         select_world_object_resource_tables(selected_class, -1);
-        gadget_selection.active_resource_class = selected_class;
-        gadget_selection.resource_request_state = resource_request_state;
-        gadget_selection.last_requested_resource_class = selected_class;
-        gadget_selection.last_resource_request_state = resource_request_state;
+        menu_system.unk11C = selected_class;
+        menu_system.resource_table_toggle = resource_request_state;
+        menu_system.unk140 = selected_class;
+        menu_system.last_resource_table_toggle = resource_request_state;
         moby_class_resources[moby_class_slots[selected_class]][0xD] = 0;
         moby = create_menu_preview_moby(selected_class);
         if (moby != 0) {
@@ -185,13 +160,13 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->animation_moby;
     previous_animation_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[gadget_selection.animation_gadget].oclass;
+    requested_class = gadget_definitions[menu_system.equipped[2]].oclass;
     if (previous_animation_class != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
             moby = create_menu_preview_moby(requested_class);
             if (moby != 0) {
-                loaded_gadget = gadget_selection.animation_gadget;
+                loaded_gadget = menu_system.equipped[2];
                 *moby->vars = hand;
                 moby->update = update_menu_preview_animation_transform;
                 moby->update_kind = 4;
@@ -201,7 +176,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->first_attachment_moby;
     previous_attachment_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[gadget_selection.attachment_gadget].oclass;
+    requested_class = gadget_definitions[menu_system.equipped[1]].oclass;
     if (previous_attachment_class != requested_class) {
         moby = delete_moby(moby);
         if (first_attachment_manipulator.active) {
@@ -213,7 +188,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (requested_class != (-1)) {
             moby = create_menu_preview_moby(requested_class);
             if (moby != 0) {
-                loaded_gadget = gadget_selection.attachment_gadget;
+                loaded_gadget = menu_system.equipped[1];
                 *moby->vars = hand;
                 moby->update = update_menu_preview_pose_and_attachments;
                 moby->update_kind = 4;
@@ -241,7 +216,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     }
     moby = hand->pose_moby;
     previous_pose_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = gadget_definitions[gadget_selection.pose_gadget].oclass;
+    requested_class = gadget_definitions[menu_system.equipped[3]].oclass;
     if (previous_pose_class != requested_class) {
         moby = delete_moby(moby);
         if (requested_class != (-1)) {
@@ -311,13 +286,13 @@ s32 load_hand_gadget(HandGadgetState *hand) {
     do {
         moby = *ammo_moby_slot;
         previous_class = (moby != 0) ? (moby->oclass) : (-1);
-        requested_class = (slot_index < player_state.ammo_capacity) ? (0x1DF) : (-1);
+        requested_class = (slot_index < hero.ammo_capacity) ? (0x1DF) : (-1);
         if (previous_class != requested_class) {
             moby = delete_moby(moby);
             if (requested_class != (-1)) {
                 moby = create_menu_preview_moby(requested_class);
                 velocity_offset = slot_index * 4;
-                *ammo_offset = (slot_index < player_state.ammo_used) ? (0.0f) : (3.0f);
+                *ammo_offset = (slot_index < hero.ammo_used) ? (0.0f) : (3.0f);
                 *(s32 *)((u8 *)ammo_preview_velocities + velocity_offset) = 0;
                 if (moby != 0) {
                     *moby->vars = hand;
@@ -332,12 +307,12 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         ammo_moby_slot++;
         ammo_offset++;
     } while (slot_index < 8);
-    if (((loaded_gadget != gadget_selection.current_gadget) && (loaded_gadget > 0)) &&
+    if (((loaded_gadget != menu_system.current_gadget) && (loaded_gadget > 0)) &&
         (loaded_gadget < 0x24)) {
-        gadget_selection.current_gadget = loaded_gadget;
+        menu_system.current_gadget = loaded_gadget;
         clear_preview_animation_queue();
         queue_preview_animation(gadget_animations[loaded_gadget].primary_animation +
-                                    gadget_selection.animation_base,
+                                    menu_system.streamed_animation_base,
                                 0, gadget_animations[loaded_gadget].delay_frames, loaded_gadget,
                                 gadget_animations[loaded_gadget].item_animation,
                                 gadget_animations[loaded_gadget].attachment0_class,
@@ -350,7 +325,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
                                 gadget_animations[loaded_gadget].resource_count);
         if (gadget_animations[loaded_gadget].delay_frames != 0) {
             queue_preview_animation(gadget_animations[loaded_gadget].secondary_animation +
-                                        gadget_selection.animation_base,
+                                        menu_system.streamed_animation_base,
                                     2, 0, loaded_gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
         }
     }

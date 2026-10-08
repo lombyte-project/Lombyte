@@ -2,6 +2,8 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/texture_upload.h"
 
 struct FrameTextureRef {
     s16 palette_index;
@@ -20,20 +22,9 @@ struct FrameImagePage {
     u8 height_log2;
 };
 
-struct GifTexturePacket {
-    s32 palette_address;
-    u16 reserved_zero;
-    u16 palette_block_offset;
-    s32 image_address;
-    u8 image_width;
-    u8 image_height;
-    u16 image_base;
-};
-
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s32 pending_texture_upload_count __asm__("D_0015F458");
-extern struct GifTexturePacket pending_texture_uploads[] __asm__("D_0018D040");
+extern struct TextureUpload pending_texture_uploads[] __asm__("D_0018D040");
 struct FrameTextureTables {
     u8 pad00[0x20];
     s32 frame_references_address;
@@ -48,9 +39,9 @@ u64 get_frame_texture(s32 frame_id) {
     struct FrameTextureRef *frame;
     struct FramePalettePage *palette_page;
     struct FrameImagePage *image_page;
-    struct GifTexturePacket *packet;
-    struct GifTexturePacket *initial_packet;
-    struct GifTexturePacket *palette_packet;
+    struct TextureUpload *packet;
+    struct TextureUpload *initial_packet;
+    struct TextureUpload *palette_packet;
     u32 packet_offset;
     u32 queued_transfer;
     s32 image_upload_count;
@@ -76,13 +67,13 @@ u64 get_frame_texture(s32 frame_id) {
         packet_offset = pending_texture_upload_count * 0x10;
         palette_source_address = palette_page->source_address;
         initial_packet = pending_texture_uploads + pending_texture_upload_count;
-        initial_packet->palette_address = palette_source_address;
-        initial_packet->reserved_zero = 0;
-        initial_packet->palette_block_offset = 0x3FF0;
+        initial_packet->clut_data = palette_source_address;
+        initial_packet->unk4 = 0;
+        initial_packet->cbp = 0x3FF0;
         *(s32 *)((u8 *)pending_texture_uploads + packet_offset + 8) = palette_page->source_address;
-        initial_packet->image_width = 5;
-        initial_packet->image_height = 5;
-        initial_packet->image_base = 0x3FF0;
+        initial_packet->tw = 5;
+        initial_packet->th = 5;
+        initial_packet->tbp = 0x3FF0;
     }
 
     if (palette_page->gs_block_offset == 0) {
@@ -91,9 +82,9 @@ u64 get_frame_texture(s32 frame_id) {
         if (pending_texture_upload_count < 0x40) {
             queued_transfer = 1;
             palette_packet = pending_texture_uploads + pending_texture_upload_count;
-            palette_packet->palette_address = palette_page->source_address;
-            palette_packet->reserved_zero = 0;
-            palette_packet->palette_block_offset = palette_page->gs_block_offset;
+            palette_packet->clut_data = palette_page->source_address;
+            palette_packet->unk4 = 0;
+            palette_packet->cbp = palette_page->gs_block_offset;
         }
     }
 
@@ -112,9 +103,9 @@ u64 get_frame_texture(s32 frame_id) {
             packet = pending_texture_uploads + image_upload_count;
             *(s32 *)((u8 *)pending_texture_uploads + image_upload_count * 0x10 + 8) =
                 image_page->source_address;
-            packet->image_width = image_page->width_log2;
-            packet->image_height = image_page->height_log2;
-            packet->image_base = image_page->gs_block_offset;
+            packet->tw = image_page->width_log2;
+            packet->th = image_page->height_log2;
+            packet->tbp = image_page->gs_block_offset;
         }
     }
 

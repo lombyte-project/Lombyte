@@ -1,20 +1,5 @@
 #include "types.h"
-struct MenuScreen {
-    u8 pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
-    u8 pad_28[0x14];
-    s32 unk3C;
-    s32 unk40;
-    u8 pad_44[0x4];
-    struct MenuIcon *unk48;
-    u8 pad_4C[0x10];
-    s32 unk5C;
-};
-struct MenuIcon {
-    u16 unk0;
-    s16 unk2;
-};
+#include "rnc/ui/menus/menu_screen.h"
 extern s32 D_0015F438;
 extern s32 D_001601B0 __attribute__((sda));
 extern s32 SubtractIntegerWithClamp();
@@ -38,17 +23,17 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
     s32 byte_offset;
     struct MenuIcon *icon;
     i = 0;
-    y = (*menu).unk5C;
+    y = menu->data.icons.first_y;
     start_y = y;
-    x = ((s32)((menu->unk20 * 0x10) - 0x200)) >> 1;
+    x = ((s32)((menu->width * 0x10) - 0x200)) >> 1;
     setup_gif_paging(0);
     new_var3 = 0;
     new_var = new_var3;
-    if (menu->unk40 > new_var3) {
+    if (menu->data.icons.count > new_var3) {
         byte_offset = new_var3;
         do {
-            icon = (struct MenuIcon *)((u8 *)menu->unk48 + byte_offset);
-            if (menu->unk3C == i) {
+            icon = (struct MenuIcon *)((u8 *)menu->data.icons.list + byte_offset);
+            if (menu->data.icons.cursor == i) {
                 append_screen_rect_packet(
                     x - 0x30, y - 0x30, 0x230 + x, y + 0x230,
                     (u64)(u32)(((SubtractIntegerWithClamp(((*(s32 *)0x15F438) & 0x3F) - 0x20) +
@@ -62,23 +47,23 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
             i = i + 1;
             byte_offset += 0xA;
             draw_hud_sprite_subpixel(
-                get_icon_frame(icon->unk0, icon->unk2),
+                get_icon_frame(icon->icon, icon->frame),
                 new_var2 = x, y, 0x200, 0x200, 0x80);
             y += 0x260;
-        } while (i < menu->unk40);
+        } while (i < menu->data.icons.count);
     }
     if (start_y < new_var) {
-        append_screen_rect_packet(new_var, new_var, menu->unk20, 0x14, (u64)D_001601B0, new_var);
+        append_screen_rect_packet(new_var, new_var, menu->width, 0x14, (u64)D_001601B0, new_var);
         draw_hud_sprite(get_icon_frame(0xE99EU, 6), (x >> 4), 2, 0x20,
                         0x10, 0x80);
     }
-    height = menu->unk24;
+    height = menu->height;
     if ((height * 0x10) < y) {
         byte_offset = new_var;
-        append_screen_rect_packet(byte_offset, height - 0x14, menu->unk20, height,
+        append_screen_rect_packet(byte_offset, height - 0x14, menu->width, height,
                                   (u64)D_001601B0, byte_offset);
         draw_hud_sprite_flipped(get_icon_frame(0xE99EU, 6), (x >> 4),
-                                menu->unk24 - 0x12, 0x20, 0x10, 0x80);
+                                menu->height - 0x12, 0x20, 0x10, 0x80);
     }
     do_gif_paging();
     return 2;

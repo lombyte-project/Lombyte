@@ -10,6 +10,7 @@ extern void *D_L00_0015EFC0 __attribute__((sda));
 extern E001f36f8 D_L00_0016A840[];
 extern u8 D_L00_0016A040[];
 void FUN_L00_001f3770(s32, s32, s32, s32);
+/* Calls FUN_L00_001f3770 for each queued D_L00_0016A840 entry and resets the queue. */
 void FUN_L00_001f36f8(void) {
     s32 i;
     E001f36f8 *p;

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "eetypes.h"
+#include "rnc/globals.h"
 
 typedef struct {
     u128 data[6];
@@ -12,8 +13,6 @@ struct Ent {
     s32 unkC;
 };
 
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
 extern s32 D_0015EE8C;
 extern void FlushCache(s32 a0);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 x, s32 y, s32 w, s32 h, s32 a4, s32 a6,
@@ -35,15 +34,15 @@ void upload_texture_images(s32 arg0, s32 count, struct Ent *p) {
     s32 one;
     s32 x;
 
-    D_0015EE74 = D_0015EE8C;
-    D_0015EE78 = D_0015EE8C;
+    gs_texture_allocation_cursor = D_0015EE8C;
+    gs_texture_allocation_start = D_0015EE8C;
     if (count > 0) {
         i = count;
         one = 1;
         while (i != 0) {
             x = p->unk4;
             dst = arg0 + p->unkC;
-            vram = D_0015EE74;
+            vram = gs_texture_allocation_cursor;
             lo = (u16)x;
             hi = x >> 16;
             if (p->unk0 == 0x13) {
@@ -54,13 +53,13 @@ void upload_texture_images(s32 arg0, s32 count, struct Ent *p) {
                 if (prod <= 0xFF) {
                     prod = 0x100;
                 }
-                D_0015EE74 += prod;
+                gs_texture_allocation_cursor += prod;
             } else if (p->unk0 == 2) {
                 sceGsSetDefLoadImage(&img, (vram << 8) >> 16, 1, 2, 0, 0, 0x10, 0x10);
-                D_0015EE74 = D_0015EE74 + 0x200;
+                gs_texture_allocation_cursor = gs_texture_allocation_cursor + 0x200;
             } else if (p->unk0 == 0) {
                 sceGsSetDefLoadImage(&img, (vram << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
-                D_0015EE74 = D_0015EE74 + 0x400;
+                gs_texture_allocation_cursor = gs_texture_allocation_cursor + 0x400;
             }
             i--;
             FlushCache(0);
@@ -69,7 +68,7 @@ void upload_texture_images(s32 arg0, s32 count, struct Ent *p) {
             FUN_00120558(0, 0);
         }
     }
-    D_0015EE78 = D_0015EE74;
+    gs_texture_allocation_start = gs_texture_allocation_cursor;
 }
 
 extern __typeof__(upload_texture_images) func_00203120 __attribute__((alias("FUN_00203120")));

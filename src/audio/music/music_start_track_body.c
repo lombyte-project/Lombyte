@@ -1,12 +1,12 @@
 /* Ported from rac1-decomp (src/game/music.c, func_00216B68). */
-extern int D_00137B80[];
+#include "rnc/storage/disc_table.h"
 extern short D_001516D0[];
 extern void snd_play_vag_stream_by_loc_ex_cb(int, int, int, int, short, int, int, int, int,
                                              void (*)(int, long), long) __asm__("func_0012EC08");
 extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 /* music_StartTrackBody(int, int, int): when the music record at +0x34 is
    already playing (its word neither 0 nor -1) and not in state 9, starts
-   track track + 1 of the table at D_00137B80 + 0x2AA8 on it: state 9, the
+   track track + 1 of the table at disc_table.music_tracks on it: state 9, the
    track, track_flags and volume recorded, 10 and 48000 stored, then
    func_0012EC08 with the current word passed on as its eighth argument
    and 0x24 or 0x20 by track_flags's bit 0. The handle is read twice as in
@@ -31,7 +31,7 @@ void music_start_track_body(int track, int track_flags, int volume) {
     if (cur == 0 || cur == 0xFFFFFFFF) {
         return;
     }
-    base = (char *)D_00137B80;
+    base = (char *)&disc_table;
     tbl = (int *)(base + 0x2AA8);
     i = track + 1;
     if (tbl[i] == 0) {

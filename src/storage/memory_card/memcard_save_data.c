@@ -15,7 +15,7 @@ extern unsigned char D_0013DD58[];
 extern int D_0015ED98 MACRO_ADDR;
 extern int D_0015EE24 MACRO_ADDR;
 extern int D_0015EE20 MACRO_ADDR;
-extern int D_0015EEB4 MACRO_ADDR;
+extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
 extern char D_0014EED0[];
 extern char D_001506D0[];
 /* memcard_Save(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
@@ -54,7 +54,7 @@ int memcard_save_data(int slot, int flags) {
             goto done;
         }
         if (slot == 0) {
-            D_0015EEB4 |= 0x200;
+            mode_freeze_flags |= 0x200;
         }
         if (*(int *)(p + 0xD4) >= 3) {
             goto done;

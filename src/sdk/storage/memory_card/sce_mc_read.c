@@ -1,9 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 reserved_00[0x24];
-    s32 is_initialized;
-};
-
+#include "sifrpc.h"
 struct MemoryCardReadRequest {
     s32 file_descriptor;
     u8 reserved_04[0x8];
@@ -27,7 +23,7 @@ extern s32 sceSifWriteBackDCache();
 s32 sceMcRead(s32 file_descriptor, s32 *destination_buffer, s32 byte_count) {
     s32 rpc_result;
 
-    if (D_00159A00.is_initialized == 0) {
+    if (D_00159A00.serve == 0) {
         return -0x64;
     }
     if (PollSema(D_00132DAC[0]) < 0) {

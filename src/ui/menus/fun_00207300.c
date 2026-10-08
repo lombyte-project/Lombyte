@@ -1,22 +1,15 @@
 #include "types.h"
-struct GameState {
-    u8 pad_0[0x12E4];
-    u8 unk12E4;
-    u8 pad_12E5[0xDA7];
-    s32 unk208C;
-};
-
-extern struct GameState D_0013F350;
+#include "rnc/gameplay/hero.h"
 extern s32 D_001A03AC[];
 extern s32 func_00208818();
 s32 FUN_00207300(s32 px, s32 py, f32 fparg0, f32 fparg1, f32 fparg2) {
     s32 hit;
 
     hit = 0;
-    if ((u32)(D_0013F350.unk208C - 0x11) < 2U) {
+    if ((u32)(hero.state.control_mode - 0x11) < 2U) {
         goto block_2;
     }
-    if (D_0013F350.unk12E4 != 1) {
+    if (hero.base_condition != 1) {
         goto block_3;
     }
 block_2:

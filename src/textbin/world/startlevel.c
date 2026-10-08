@@ -1,5 +1,8 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "sda.h"
+#include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 
 typedef struct {
     s32 off;
@@ -30,17 +33,11 @@ extern s32 D_0015EF5C MACRO_ADDR;
 extern s32 D_0015EED8 MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
-extern s32 D_0015ED88;
 extern u8 D_24135F[];
-typedef struct {
-    u8 pad[0x1A4];
-    s32 unk1A4;
-} PadState;
-extern PadState D_0013C940;
+extern struct PadState D_0013C940;
 extern s32 D_00139378[];
 extern s32 D_00139380[];
 extern char D_001E76C0[];
-extern s32 D_00137B80[];
 extern volatile SoundSlot D_00186100[];
 extern volatile SoundSlot D_001861E0[];
 extern volatile SoundSlot * volatile D_0015F634;
@@ -120,7 +117,7 @@ void startlevel(void) {
     put_disp_buffer();
     PackDmaTag(0, 0, 0);
     hdr = (LevelHeader *)(((u32)D_24135F & 0xFFFFC000) + 0x2C0000);
-    while ((cur = check_memory_card()) != 0 && (frames < 11 || D_0013C940.unk1A4 == 0)) {
+    while ((cur = check_memory_card()) != 0 && (frames < 11 || D_0013C940.pressed == 0)) {
         if (cur != prev) {
             if (cur == 1) {
                 tbl = hdr->intro;
@@ -128,7 +125,7 @@ void startlevel(void) {
                 tbl = hdr->loading;
             }
             FlushCache(0);
-            func_0020B618(tbl[D_0015ED88].off + (s32)hdr, hdr->code + (s32)hdr);
+            func_0020B618(tbl[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
             PackDmaTag(0, 0, 0);
@@ -181,7 +178,7 @@ void startlevel(void) {
     sceGsSyncV(0);
     D_0015F438++;
     DebugPrint(D_001E76C0);
-    bank = load_audio_bank_by_location(D_00137B80[0x14E0 / 4]);
+    bank = load_audio_bank_by_location(disc_table.sound_bank);
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
     D_001861E0[4].bank = bank;

@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/draw.c, func_001F4630). */
 #include "sda.h"
-extern int *D_00160F00 MACRO_ADDR;
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 extern int *D_0015F450 MACRO_ADDR;
 extern int D_0015EE78 MACRO_ADDR;
 extern int D_0015EE74 MACRO_ADDR;
@@ -16,7 +17,7 @@ extern char D_0019A3E8[];
 static inline char *PagingArena(void) {
     return D_0019A3E8;
 }
-/* SetupGifPaging(int): marks the D_00160F00 packet in D_0015F450 and
+/* SetupGifPaging(int): marks the render_packet_cursor.words packet in D_0015F450 and
    reserves 0x10 bytes, copies D_0015EE78 to D_0015EE74, clears
    D_0015F458 and the first dword of the D_0015F45C paging slots, then,
    when arg0 is 0, clears the +4 half of the arena's 8-byte list entries:
@@ -31,12 +32,12 @@ static inline char *PagingArena(void) {
 void setup_gif_paging(int arg0) __asm__("FUN_001f4280");
 
 void setup_gif_paging(int arg0) {
-    int *p = D_00160F00;
+    int *p = render_packet_cursor.words;
     int i;
 
     D_0015F450 = p;
     p += 4;
-    D_00160F00 = p;
+    render_packet_cursor.words = p;
     D_0015EE74 = D_0015EE78;
     *(int *)&D_0015F458 = 0;
     {

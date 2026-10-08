@@ -8,7 +8,7 @@ extern u8 D_0013F4A0_002293a8[] __asm__("D_0013F4A0");
 extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern s32 D_L00_0015F6DC_002293a8 __asm__("D_L00_0015F6DC");
-s32 FUN_L00_002223f8_002293a8(s32, s32) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_002293a8(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void FUN_L00_002118c8_002293a8(s32, f32) __asm__("FUN_L00_002118c8");
@@ -21,12 +21,12 @@ void FUN_L00_002293a8(void) {
     b = D_0013F350_002293a8;
     *(s32 *)(b + 0x2284) = 0;
     if (b[0x12E2] != 0 && D_0015ED6C_002293a8 * 0.5f < *(f32 *)(b + 0x164)) {
-        FUN_L00_002223f8_002293a8(0x2F, 1);
+        hero_set_state(0x2F, 1);
         return;
     }
     FUN_L00_002118c8_002293a8(0, 1.0f);
     if (D_0013CAE0_002293a8 & 0xA) {
-        FUN_L00_002223f8_002293a8(4, 0);
+        hero_set_state(4, 0);
         FUN_L00_002323b8_002293a8(0xD, 2, -2.0f);
         FUN_L00_002325e0_002293a8(3, 0x12);
         return;
@@ -34,10 +34,10 @@ void FUN_L00_002293a8(void) {
     c = D_0013F350_002293a8;
     if (0.3f < *(f32 *)(c + 0x229C) && *(s32 *)(c + 0x1C4) == 0) {
         if (c[0x12E2] != 0 || c[0x20A9] != 0) {
-            FUN_L00_002223f8_002293a8(2, 1);
+            hero_set_state(2, 1);
             return;
         }
-        if (FUN_L00_002223f8_002293a8(2, 0)) {
+        if (hero_set_state(2, 0)) {
             *(s32 *)(c + 0x2088) = 1;
             n = FUN_001f96f8_002293a8(8);
             if (FUN_001f96f8_002293a8(5) < *(s32 *)(c + 0x418))
@@ -51,14 +51,14 @@ void FUN_L00_002293a8(void) {
     if ((D_0015ED6C_002293a8 * 3.0f < *(f32 *)(d + 0x168) &&
          FUN_001f96f8_002293a8(3) < *(s32 *)(d + 0x418)) ||
         *(s32 *)(d + 0x2084) == 0x10) {
-        if (FUN_L00_002223f8_002293a8(3, 0)) {
+        if (hero_set_state(3, 0)) {
             FUN_L00_002323b8_002293a8(5, 0, -1.0f);
             FUN_L00_0025f730_002293a8(D_0013F4A0_002293a8, D_0015ED6C_002293a8 * 5.0f);
         }
         return;
     }
     if (FUN_001f96f8_002293a8(12) < *(s32 *)(d + 0x418) || (*(s32 *)(d + 0xA98) & 2)) {
-        if (FUN_L00_002223f8_002293a8(0, 0)) {
+        if (hero_set_state(0, 0)) {
             if (FUN_L00_00205000_002293a8(0) == 0x54) {
                 n = FUN_L00_00205000_002293a8(0);
                 FUN_L00_002323b8_002293a8(n, 0, (f32)FUN_001f96f8_002293a8(15));
@@ -96,8 +96,9 @@ extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00266e00_229660(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int FUN_L00_00266d60_229660(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
-extern void FUN_L00_002223f8_229660(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_002223f8_229660b(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+/* A second C name for hero_set_state: retail keeps the two calls apart. */
+extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
 #define P D_0013F350_229660
 int FUN_L00_00229660(void) {
@@ -112,7 +113,7 @@ int FUN_L00_00229660(void) {
         FUN_L00_00266e00_229660(0x40, (void *)0x1F000, t + n, n)) {
         m = 0xB;
     found:
-        FUN_L00_002223f8_229660(m, 1);
+        hero_set_state(m, 1);
         return 1;
     }
     a = FUN_001f96f8_229660(9);
@@ -141,7 +142,7 @@ int FUN_L00_00229660(void) {
             m = 0xF;
             goto found;
         }
-        FUN_L00_002223f8_229660b(7, 1);
+        hero_set_state_2(7, 1);
         return 1;
     }
     return 0;
@@ -195,7 +196,7 @@ extern u8 D_0013F350[];
 extern E00229a98 D_L00_00179AC0[];
 s32 FUN_L00_0020d498(s32);
 void FUN_L00_0020e698(void);
-s32 FUN_L00_002223f8(s32, s32);
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8(s32, s32, f32);
 s32 FUN_L00_00229a98(void) {
@@ -209,7 +210,7 @@ s32 FUN_L00_00229a98(void) {
         return 0;
     }
     k = D_L00_00179AC0[id].x24;
-    if (FUN_L00_002223f8(0, 0) == 0)
+    if (hero_set_state(0, 0) == 0)
         return 0;
     FUN_L00_002323b8(k, 0, (f32)scale_game_frames(0xB));
     if (*(s32 *)(b + 0xD08) != 0)

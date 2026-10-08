@@ -1,19 +1,11 @@
 #include "types.h"
-struct MenuScreen {
-    u8 pad_0[0x44];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-};
-
+#include "rnc/ui/menus/menu_screen.h"
 extern s32 complete_stream_buffer_transfer() __asm__("func_00225CD8");
 s32 FUN_0021fd78(struct MenuScreen *menu) {
-    menu->unk48 = complete_stream_buffer_transfer(menu->unk48);
-    menu->unk4C = complete_stream_buffer_transfer(menu->unk4C);
-    menu->unk50 = -1;
-    menu->unk54 = -1;
-    menu->unk44 = -1;
+    menu->data.stream.buffer[0] = complete_stream_buffer_transfer(menu->data.stream.buffer[0]);
+    menu->data.stream.buffer[1] = complete_stream_buffer_transfer(menu->data.stream.buffer[1]);
+    menu->data.stream.loaded_entry[0] = -1;
+    menu->data.stream.loaded_entry[1] = -1;
+    menu->data.stream.state = -1;
     return 0;
 }

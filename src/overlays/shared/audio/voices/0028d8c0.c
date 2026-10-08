@@ -10,6 +10,7 @@
 
 extern char D_0013E533[];
 
+/* True when entry i (0x70 bytes) holds a at 0x88 and its byte at 0x74 is 1 or 2. */
 int FUN_L00_0028d8c0(int a, int i) {
     if (i >= 0) {
         char *p = D_0013E533 + 0x1D + i * 0x70;

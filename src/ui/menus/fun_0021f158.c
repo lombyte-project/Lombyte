@@ -1,10 +1,6 @@
 #include "types.h"
-#include "asm.h"
-#include "rnc/ui/menus/fun_0021f158.h"
-#include "types.h"
-
-#include "rnc/ui/menus/fun_0021f158.h"
-#include "types.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 
 extern s32 D_0013D428[];
 extern u8 D_0013D4C0[];
@@ -12,7 +8,6 @@ extern u8 D_001602A0[];
 extern u8 D_001602B8[];
 extern u8 D_001602C0[];
 extern u8 D_001602D0[];
-extern struct ModeRef *D_001D5BF4[];
 struct ImageEntry {
     u8 pad0[8];
     u16 unk8;
@@ -36,11 +31,11 @@ s32 FUN_0021f158(s32 arg0) {
     s32 temp_17_38;
     s32 temp_18_40;
     struct ImageEntry *entry;
-    struct MenuItem *temp_3_15;
+    struct MenuScreen *grid;
     u8 *end_ptr;
 
-    temp_3_15 = D_001D5BF4[0]->unk40;
-    temp_4_20 = *(s32 *)((u8 *)((temp_3_15->unk3C * 0xA) + temp_3_15->unk48) + 0x6);
+    grid = menu_system.current->focus;
+    temp_4_20 = grid->data.grid.cells[grid->data.grid.selected_cell].id;
     idx = temp_4_20;
     if (*(idx + D_0013D4C0) == 0) {
         return 0;
@@ -56,8 +51,7 @@ s32 FUN_0021f158(s32 arg0) {
         if (temp_17_38 < 0x3E8) {
             end_ptr = sp_slot + sprintf(sp_slot, D_001602B8, temp_17_38);
         } else {
-            end_ptr =
-                sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
+            end_ptr = sp_slot + sprintf(sp_slot, D_001602C0, temp_17_38 / 1000, temp_17_38 % 1000);
         }
         if ((s32)temp_18_40 < 0x3E8) {
             sprintf(end_ptr, D_001602A0, (s32)temp_18_40);

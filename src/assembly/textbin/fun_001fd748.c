@@ -18,17 +18,14 @@ typedef struct {
     s32 pad4[2];
 } LevelMapMarkerText;
 
-typedef struct {
-    u8 pad0[0x224];
-    s32 selected_level;
-} LevelMapSelection;
+#include "rnc/ui/map/map_state.h"
 
 extern u8 D_0013DD40[];
 extern u8 g_abLevelVisitState[] __asm__("D_0013DD58");
 extern s32 pal_mode __asm__("D_0015ED80");
 extern s32 game_frame_counter __asm__("D_0015F438");
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
-extern LevelMapSelection level_map_selection __asm__("D_001A00F0");
+extern struct MapState level_map_selection __asm__("D_001A00F0");
 extern LevelMapMarkerText level_map_labels[] __asm__("D_001DDD44");
 extern LevelMapMarker level_map_markers[] __asm__("D_001DDE28");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -109,7 +106,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             draw_hud_sprite(get_icon_frame(0xE99A, 0xC), marker_x - 5,
                             marker_y - 5, 10, 10, 0x80);
         }
-        if (level_index == level_map_selection.selected_level) {
+        if (level_index == level_map_selection.level) {
             label_x = marker_x + level_map_markers[level_index].label_offset_x;
             label_y = marker_y + level_map_markers[level_index].label_offset_y;
             label_direction[1] = level_map_markers[level_index].label_offset_y;

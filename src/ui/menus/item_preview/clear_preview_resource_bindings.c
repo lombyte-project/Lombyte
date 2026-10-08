@@ -1,9 +1,9 @@
+#include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 
 extern u8 moby_class_resources[] __asm__("D_001B3200");
 extern u8 class_resource_slots[] __asm__("D_001B3AC0");
 extern u8 preview_resource_bindings[] __asm__("D_001D59D8");
-extern PreviewAnimationStreamState preview_stream_state __asm__("D_001D5BF0");
 void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 void clear_preview_resource_bindings(void) {
     register s32 class_slot;
@@ -16,8 +16,8 @@ void clear_preview_resource_bindings(void) {
     register s32 resource_count;
     register s32 resource_end;
 
-    resource_index = preview_stream_state.resource_first;
-    if (resource_index < (resource_index + preview_stream_state.resource_count)) {
+    resource_index = menu_system.unkA8;
+    if (resource_index < (resource_index + menu_system.unkAC)) {
         u8 *class_slots = class_resource_slots;
         u8 *class_resources = moby_class_resources;
         u8 *bindings = preview_resource_bindings;
@@ -31,10 +31,10 @@ void clear_preview_resource_bindings(void) {
             animation_address = class_resource_address + (binding->animation_index * 4);
             *(s32 *)(animation_address + 0x48) = 0;
             binding += 1;
-            resource_first = preview_stream_state.resource_first;
-            resource_count = preview_stream_state.resource_count;
+            resource_first = menu_system.unkA8;
+            resource_count = menu_system.unkAC;
             resource_end = resource_first + resource_count;
         } while (resource_index < resource_end);
     }
-    preview_stream_state.resource_count = 0;
+    menu_system.unkAC = 0;
 }

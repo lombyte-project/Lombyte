@@ -1,4 +1,5 @@
 #include "types.h"
+#include "kernel.h"
 struct SifFileState {
     s32 unk0;
     s32 unk4;
@@ -9,14 +10,6 @@ struct SifFileState {
 struct SifFileEntry {
     s32 unk0;
     s32 unk4;
-};
-struct SemaParam {
-    s32 count;
-    s32 max_count;
-    s32 init_count;
-    s32 wait_threads;
-    s32 attr;
-    s32 option;
 };
 extern u32 D_0012FC94[];
 extern struct SifFileState D_00156880;
@@ -50,9 +43,9 @@ s32 sceClose(s32 fd) {
         return -9;
     }
     state->unkC = io->unk0;
-    sema.max_count = 1;
+    sema.maxCount = 1;
     state->unk10 = ((u8 *)io - (u8 *)D_00157D80) >> 4;
-    sema.init_count = 0;
+    sema.initCount = 0;
     sema.option = 0;
     sid = CreateSema(&sema);
     state->unk0 = sid;

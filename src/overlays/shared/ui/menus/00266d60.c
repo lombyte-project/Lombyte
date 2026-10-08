@@ -34,6 +34,7 @@ u32 FUN_L00_00266d60(u32 mask, s32 n, s32 *out) {
 extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
+/* True when both lookups succeed and the clamped difference of their values is below d. */
 int FUN_L00_00266e00(int a, int b, int c, int d) {
     int v[2];
     int r = 0;
@@ -52,6 +53,7 @@ typedef struct {
     f32 v[30];
 } Hist_266e80;
 extern Hist_266e80 D_0013C940;
+/* The value n entries back in the 30-entry history ring (n is capped at the count). */
 f32 FUN_L00_00266e80(s32 n) {
     s32 m;
     if (D_0013C940.count < n)

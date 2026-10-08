@@ -1,22 +1,22 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
 
-extern s32 D_0019A3E8[];
 extern s32 InitializeResourceEntry();
 s32 hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
 s32 hud_heap_alloc(s32 size) {
-    s32 *p = D_0019A3E8;
+    struct HudState *p = &hud_state;
     s32 cur;
 
-    if (p[4] == 0) {
+    if (p->heap_cur == 0) {
         InitializeResourceEntry();
     }
-    if (p[5] - p[4] < size) {
+    if (p->heap_end - p->heap_cur < size) {
         return 0;
     }
-    cur = p[4];
+    cur = p->heap_cur;
     size = (size + 15) & 0xFFFFFFF0;
-    p[4] = cur + size;
+    p->heap_cur = cur + size;
     return cur;
 }
 

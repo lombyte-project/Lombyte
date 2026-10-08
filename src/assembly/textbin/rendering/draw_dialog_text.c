@@ -41,8 +41,8 @@ extern s32 D_0015ED80;
 extern s32 D_0015ED84;
 extern s32 D_0015EE58[];
 extern s32 D_0015EE68[];
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
+extern s32 mode_freeze_state __asm__("D_0015EEB0");
+extern s32 mode_freeze_flags __asm__("D_0015EEB4");
 extern s32 D_0015F438;
 extern s32 D_0015F4E8 __attribute__((sda));
 extern s32 D_0015F4EC __attribute__((sda));
@@ -201,14 +201,14 @@ void draw_dialog_text(void) {
         yes_text_id = 0;
         confirm_text_id = 0;
         no_text_id = 0;
-        switch (D_0015EEB0) {
+        switch (mode_freeze_state) {
         case 6:
             text_id = 0x4FAF;
             yes_text_id = 0x524F;
             goto two;
         case 12:
             text_id = 0x4FA7;
-            if (!(D_0015EEB4 & 2)) {
+            if (!(mode_freeze_flags & 2)) {
                 goto back;
             }
         case 13:
@@ -244,7 +244,7 @@ void draw_dialog_text(void) {
             break;
         case 19:
             text_id = 0x4FA7;
-            if (D_0015EEB4 & 4) {
+            if (mode_freeze_flags & 4) {
                 goto back;
             }
             if (D_0015F5E8 != 0) {
@@ -277,7 +277,7 @@ void draw_dialog_text(void) {
             goto yesno;
         case 3:
         case 4:
-            if (D_0015F5E8 != 0 && (D_0015EEB4 & 2)) {
+            if (D_0015F5E8 != 0 && (mode_freeze_flags & 2)) {
                 text_id = 0x4FAB;
             yesno:
                 yes_text_id = 0x524E;

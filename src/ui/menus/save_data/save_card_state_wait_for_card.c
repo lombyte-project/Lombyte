@@ -1,26 +1,26 @@
 #include "sda.h"
-extern char D_0013D290[];
-extern int D_0015EEB4;
-extern int D_0015EEB0 MACRO_ADDR;
+#include "rnc/globals.h"
+#include "rnc/storage/memory_card/memory_card_state.h"
+extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
 
 void save_card_state_wait_for_card(void) __asm__("FUN_002089d0");
 
 void save_card_state_wait_for_card(void) {
-    char *s = D_0013D290;
+    struct MemoryCardState *s = &memory_card_state;
     int v;
-    D_0015EEB4 &= ~0x20;
-    v = *(int *)(s + 0x1C);
+    mode_freeze_flags &= ~0x20;
+    v = s->card[0].sync_result;
     if (v == 0) {
-        D_0015EEB0 = 9;
+        mode_freeze_state = 9;
         return;
     }
     if (v == -1) {
-        *(int *)(s + 0x1C) = 0;
-        D_0015EEB0 = 9;
+        s->card[0].sync_result = 0;
+        mode_freeze_state = 9;
         return;
     }
     if (v == -2)
-        D_0015EEB0 = 5;
+        mode_freeze_state = 5;
 }
 
 extern __typeof__(save_card_state_wait_for_card) func_002089D0

@@ -1,10 +1,5 @@
 #include "types.h"
 
-struct McBlock {
-    s32 unk0;
-    s32 unk4;
-    u8 pad_8[0x10];
-};
 
 struct McDirBlk {
     u8 pad_0[0x4];
@@ -13,7 +8,7 @@ struct McDirBlk {
     s32 unkBC;
 };
 
-extern struct McBlock D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern u8 D_0013D1D0[];
 extern u8 D_0013D348[];
 extern s32 sceMcGetInfo(s32, s32, s32, s32, s32);
@@ -32,7 +27,7 @@ s32 check_memory_card(void) {
     s32 *blk;
     struct McDirBlk *dir;
 
-    blk = &D_0013D290.unk0;
+    blk = &memory_card_state.card[0].port;
     result = sceMcGetInfo(blk[0], blk[1], &card_type, &free_blocks, &format);
 
     while (sceMcSync(1, D_0013D348, D_0013D348 + 4) == 0) {
@@ -54,7 +49,7 @@ s32 check_memory_card(void) {
     if (format == 0) {
         return 0;
     }
-    result = sceMcGetDir(D_0013D290.unk0, dir->unk4, D_0013D1D0, 0, -1, 0);
+    result = sceMcGetDir(memory_card_state.card[0].port, dir->unk4, D_0013D1D0, 0, -1, 0);
     while (sceMcSync(1, &cmd_code, &result) == 0) {
         sceGsSyncV(0);
     }

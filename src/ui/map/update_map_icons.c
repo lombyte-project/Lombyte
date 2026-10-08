@@ -1,5 +1,7 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 #include "rnc/ui/map/map_state.h"
+#include "rnc/globals.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
@@ -45,18 +47,9 @@ typedef struct {
     f32 z;
 } MapWorldObject;
 
-struct MapCursor {
-    u8 pad0[0x80];
-    f32 x;
-    f32 y;
-    f32 active;
-};
-
 extern u8 D_0013DD58[];
 extern MapIcon *D_001A2BC0[];
 extern s32 D_001A01F4[];
-extern struct MapCursor D_0013F350;
-extern s32 D_0015ED84;
 extern s32 D_0015FD60 __attribute__((sda));
 extern MapWorldObject *D_00199478[];
 extern MapPoint D_0013D5B0[];
@@ -86,9 +79,9 @@ void update_map_icons(s32 level, s32 flag) {
         D_001A00F0.icons = 0;
     }
 
-    if (D_0013F350.active != 0.0f && level == D_0015ED84 && flag) {
-        world_to_map_coords(&map_x, &map_y, D_0015FD60 ? level + 100 : level, D_0013F350.x,
-                            D_0013F350.y);
+    if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
+        world_to_map_coords(&map_x, &map_y, D_0015FD60 ? level + 100 : level, hero.motion.pos.f[0],
+                            hero.motion.pos.f[1]);
         D_001A00F0.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         D_001A00F0.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
     } else {
@@ -134,7 +127,7 @@ void update_map_icons(s32 level, s32 flag) {
                 icon->x = 0.625f;
                 icon->y = 0.72265625f;
             } else {
-                if (level == D_0015ED84) {
+                if (level == current_level_index) {
                     if (D_00199478[icon->id] != 0) {
                         world_to_map_coords(&icon->x, &icon->y, level, D_00199478[icon->id]->x,
                                             D_00199478[icon->id]->y);

@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/loaders.c, func_00204FC0). */
 
 #include "sda.h"
+#include "rnc/gameplay/hero.h"
 
 extern void FlushCache(int);
 
@@ -16,11 +17,6 @@ struct PartList {
 struct ColorSrc {
     unsigned char pad00[0x38];
     unsigned long color; /* 0x38 */
-};
-
-struct RenderGlobals {
-    unsigned char pad00[0x2080];
-    struct ColorSrc *color_src; /* 0x2080 */
 };
 
 struct GlobalIndex {
@@ -83,7 +79,6 @@ struct TransferState {
 
 extern struct TransferState D_0018CB20_t __asm__("D_0018CB20") NOT_SDA;
 extern struct GlobalIndex D_0013E030_g __asm__("D_0013E030");
-extern struct RenderGlobals D_00160488_r __asm__("D_0013F350");
 extern int D_0015F604 MACRO_ADDR;
 extern int D_00160488[];
 extern int func_0020C468_2(int, int) __asm__("FUN_0020b618");
@@ -142,10 +137,10 @@ void update_world_object_animation(void *arg0) {
             mob->unk34 |= 6;
             mob->flag72 = 0xFF;
             mob->unk94 = 0;
-            if (D_00160488_r.color_src == 0) {
+            if (hero.moby == 0) {
                 mob->color = 0x38383800000000;
             } else {
-                mob->color = D_00160488_r.color_src->color;
+                mob->color = ((struct ColorSrc *)hero.moby)->color;
             }
             if (mob->parts->flag) {
                 mob->flag73 = 0x18;

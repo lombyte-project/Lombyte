@@ -26,7 +26,6 @@ typedef struct {
 
 #include "rnc/rendering/dma_tag.h"
 
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
 extern char billboard_quad_header[] __asm__("D_001608E0");
 extern u8 camera_position[] __asm__("D_00187080");
 extern BillboardViewContext view_context __asm__("D_0018CD00");
@@ -101,15 +100,15 @@ void append_billboard_batch(void) {
                  ((24.0f - distance) * 16.0f);
         sine_offset = convert_float_to_integer(radius * fast_sin(record->angle));
         cosine_offset = convert_float_to_integer(radius * fast_cos(record->angle));
-        render_packet_cursor.p->tag = 0x10000009;
-        render_packet_cursor.p->addr = 0;
-        render_packet_cursor.p->vif0 = 0;
-        render_packet_cursor.p->vif1 = 0x50000009;
-        tag = render_packet_cursor.p;
-        render_packet_cursor.p = tag + 1;
+        render_packet_cursor.tag->tag = 0x10000009;
+        render_packet_cursor.tag->addr = 0;
+        render_packet_cursor.tag->vif0 = 0;
+        render_packet_cursor.tag->vif1 = 0x50000009;
+        tag = render_packet_cursor.tag;
+        render_packet_cursor.tag = tag + 1;
         qcopy(tag + 1, billboard_quad_header);
         packet_words = (s64 *)(tag + 2);
-        render_packet_cursor.p = tag + 2;
+        render_packet_cursor.tag = tag + 2;
         packet_words[0] = 5;
         packet_words[1] = get_effect_texture(0x13);
         packet_words[2] = 0x154;
@@ -126,7 +125,7 @@ void append_billboard_batch(void) {
         packet_words[13] = 0x2000200;
         packet_words[14] = packed_position + (-cosine_offset << 16) - sine_offset;
         packet_words[15] = 0;
-        render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x80);
+        render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x80);
     }
     vu1_add_g_sregister(0x42, 0x8000000044);
 }

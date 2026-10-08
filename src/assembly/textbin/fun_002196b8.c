@@ -5,6 +5,7 @@
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_002196b8/FUN_002196b8.s", FUN_002196b8);
 #else
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 #include "eetypes.h"
 #include "qcopy.h"
 
@@ -36,18 +37,10 @@ struct RenderPanel {
     s32 projected_height; /* 0x24 */
 };
 
-typedef struct {
-    u8 pad0[4];
-    u8 *panels; /* 0x04 */
-    u8 pad8[0xD0];
-    s32 special_slot_enabled; /* 0xD8 */
-} PanelRenderState;
-
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 extern void *resident_object_pool __asm__("D_0015FF18");
 extern s32 panel_clear_color __asm__("D_001601B0") __attribute__((sda));
 extern s32 panel_slot_enabled[] __asm__("D_001CE2C0");
-extern PanelRenderState panel_render_state __asm__("D_001D5BF0");
 extern PanelRenderSlot *panel_slots[] __asm__("D_001D5D90");
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
@@ -118,19 +111,19 @@ void render_level_effects_and_screen_sprites(void) {
     func_001F2260();
     for (effect_slot_index = 0; effect_slot_index < 14; effect_slot_index++) {
         if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 &&
-            (effect_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
+            (effect_slot_index != 6 || menu_system.unkD8 != 0)) {
             draw_moby_list(panel_slots[effect_slot_index], 1);
         }
     }
 
     panels = 0;
-    if (panel_render_state.panels != 0) {
-        panels = (RenderPanel **)(panel_render_state.panels + 0x44);
+    if (menu_system.current != 0) {
+        panels = (RenderPanel **)menu_system.current->screens;
     }
     for (projection_slot_index = 0; projection_slot_index < 14; projection_slot_index++) {
         slot = panel_slots[projection_slot_index];
         if (slot == 0 || panel_slot_enabled[projection_slot_index] == 0 ||
-            (projection_slot_index == 6 && panel_render_state.special_slot_enabled == 0)) {
+            (projection_slot_index == 6 && menu_system.unkD8 == 0)) {
             continue;
         }
         projected_frame = slot->frame;
@@ -177,7 +170,7 @@ void render_level_effects_and_screen_sprites(void) {
             if (panel_slot_enabled[draw_slot_index] == 0 || panel->draw == 0) {
                 continue;
             }
-            if (draw_slot_index == 6 && panel_render_state.special_slot_enabled == 0) {
+            if (draw_slot_index == 6 && menu_system.unkD8 == 0) {
                 continue;
             }
             if (pass == 0 && !(flags & 2)) {
@@ -268,7 +261,7 @@ void render_level_effects_and_screen_sprites(void) {
     setup_gif_paging(0);
     for (; final_slot_index < 14; final_slot_index++) {
         if (panel_slot_enabled[final_slot_index] != 0 &&
-            (final_slot_index != 6 || panel_render_state.special_slot_enabled != 0)) {
+            (final_slot_index != 6 || menu_system.unkD8 != 0)) {
             draw_menu_flashing_panel(slots[final_slot_index]);
         }
     }

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct GeometryQuad {
     f32 positions[4][4];
@@ -12,7 +13,6 @@ struct GeometryQuad {
 
 extern u64 D_00160580;
 extern u8 D_001D97B0[];
-extern s32 D_0015ED84;
 extern f32 D_001D9A90[];
 extern f32 D_001D9A50[][4];
 extern s32 D_001604F0 __attribute__((sda));
@@ -36,8 +36,8 @@ void draw_resident_textured_quad(void) {
     quad.primitive = 0x8000000044;
     quad.reserved = 0;
     copy_blocks_16_forward(quad.texture_coordinates, D_001D97B0, 0x20);
-    if ((u32)D_0015ED84 < 0x13) {
-        scale = D_001D9A90[D_0015ED84];
+    if ((u32)current_level_index < 0x13) {
+        scale = D_001D9A90[current_level_index];
     }
     for (vertex = 0; vertex < 4; vertex++) {
         quad.colors[vertex] = 0x80808080;

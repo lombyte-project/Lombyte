@@ -2,11 +2,7 @@
 #define LOMBYTE_RNC_SDK_LIBRARY_CPR8_H
 
 #include "types.h"
-
-struct MpegDecoder {
-    u8 pad_0[0xD8];
-    s32 unkD8;
-};
+#include "rnc/sdk/libmpeg.h"
 
 struct MpegCopyParams {
     s32 unk0;

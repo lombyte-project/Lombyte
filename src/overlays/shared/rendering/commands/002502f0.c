@@ -5,6 +5,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002502f0.s", FUN_L00_002502f0);
 #else
+/* Packs red, green and blue into the upper bytes of the 64-bit word at moby+0x38. */
 void FUN_L00_002502f0(void *moby, s32 red, s32 green, s32 blue) {
     volatile u64 *value = (volatile u64 *)((u8 *)moby + 0x38);
     u64 packed = *value;

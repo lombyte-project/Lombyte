@@ -1,9 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 pad_0[0x24];
-    s32 unk24;
-};
-
+#include "sifrpc.h"
 struct McChdirRequest {
     s32 unk0;
     s32 unk4;
@@ -29,7 +25,7 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
     s32 result;
     s32 var_2_28;
 
-    if (D_00159A00.unk24 == 0) {
+    if (D_00159A00.serve == 0) {
         return -0x64;
     }
     var_2_28 = -0xC8;

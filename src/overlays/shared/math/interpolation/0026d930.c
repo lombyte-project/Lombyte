@@ -32,7 +32,7 @@ typedef struct {
 } O_26e008;
 
 extern unsigned short *D_L01_001ABCC0_26e008[] __asm__("D_L01_001ABCC0") NOT_SDA;
-extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
 int FUN_L01_0026e008(int i, int st) {
     unsigned short *p;
@@ -67,7 +67,7 @@ void FUN_L01_0026e090(int i, int v) {
         } while (*(short *)p++ >= 0);
     }
 }
-extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
 /* 0x0026e0e0, 88 bytes.
  * Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c:
  * func_L01_0026F090), where it is exact; names translated to the US level

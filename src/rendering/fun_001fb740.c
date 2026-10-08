@@ -2,10 +2,9 @@
 
 #include "rnc/rendering/dma_tag.h"
 
-extern struct TagPtr D_00160F00;
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
-/* Appends a GIF packet to D_00160F00: a fixed 10-quad header (the last
+/* Appends a GIF packet to render_packet_cursor: a fixed 10-quad header (the last
    quads carry n = w / 32), then n pairs of sprite corner registers stepping
    0x200 (in 1/16 pixels) per column across a w x h area centred on 0x8000.
    c is volatile so the two pointer increments per pair stay separate, and
@@ -25,13 +24,13 @@ void FUN_001fb740(s32 w, s32 h) {
 
     n = w / 32;
     vu1_add_g_sregister(0x42, 0x800000004AULL);
-    D_00160F00.p->tag = (n + 5) | 0x10000000;
-    D_00160F00.p->addr = 0;
-    D_00160F00.p->vif0 = 0;
-    D_00160F00.p->vif1 = (n + 5) | 0x50000000;
-    tag = D_00160F00.p;
+    render_packet_cursor.tag->tag = (n + 5) | 0x10000000;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = (n + 5) | 0x50000000;
+    tag = render_packet_cursor.tag;
     q = (u64 *)(tag + 1);
-    D_00160F00.p = tag + 1;
+    render_packet_cursor.tag = tag + 1;
     zero = 0;
     q[zero] = 0x1000000000000001;
     q[1] = 0xE;
@@ -59,7 +58,7 @@ void FUN_001fb740(s32 w, s32 h) {
             i++;
         } while (i < n);
     }
-    D_00160F00.p = D_00160F00.p + (n + 5);
+    render_packet_cursor.tag = render_packet_cursor.tag + (n + 5);
 }
 
 extern __typeof__(FUN_001fb740) func_001FB740 __attribute__((alias("FUN_001fb740")));

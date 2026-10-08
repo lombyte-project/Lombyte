@@ -2,24 +2,8 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/globals.h"
 
-struct M {
-    s32 f0;
-    s32 *f4;
-    s32 *f8;
-    u8 pad_C[4];
-    s32 f10;
-    u8 pad_14[4];
-    s32 f18;
-    u8 pad_1C[0xE0];
-    s32 fFC;
-    s32 f100;
-    s32 f104;
-    s32 f108;
-    s32 f10C;
-    u8 pad_110[0x14];
-    s32 f124;
-};
 struct S {
     u8 pad_0[0x140];
     float f140, f144, f148;
@@ -44,14 +28,13 @@ struct O2 {
     u8 pad_4C[0x28];
     s32 *f74;
 };
-extern struct M D_001D5BF0;
-extern s32 D_001D45C8[];
+#include "rnc/ui/menus/menu_system.h"
+extern struct MenuPage D_001D45C8; /* page made current and next at init */
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern s32 D_001940C0[];
 extern s32 D_0015F438;
 extern s32 D_00160F0C;
-extern s32 D_0015EE78;
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern struct O2 *D_001D5D90[];
@@ -69,10 +52,10 @@ void func_00225AC0__void() __asm__("FUN_00225ac0");
 void FUN_00218f98(void) {
     s32 i;
     s32 a, b, c, d;
-    D_001D5BF0.f0 = 2;
-    D_001D5BF0.f4 = D_001D45C8;
-    D_001D5BF0.f8 = D_001D45C8;
-    D_001D5BF0.f124 = 0;
+    menu_system.state = 2;
+    menu_system.current = &D_001D45C8;
+    menu_system.next = &D_001D45C8;
+    menu_system.unk124 = 0;
     FUN_001f9a68((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);
@@ -84,17 +67,17 @@ void FUN_00218f98(void) {
     b = D_001940C0[2] + 0xA0000;
     c = a + 0x3C000;
     d = b + 0xE0000;
-    D_001D5BF0.fFC = c + 0xC1000;
-    D_001D5BF0.f100 = d + 0x11800;
+    menu_system.unkFC = c + 0xC1000;
+    menu_system.unk100 = d + 0x11800;
     D_00160F0C = 0xA0000;
-    D_001D5BF0.f104 = a;
-    D_001D5BF0.f10 = b;
-    D_001D5BF0.f108 = c;
-    D_001D5BF0.f10C = d;
+    menu_system.unk104 = a;
+    menu_system.unk10 = b;
+    menu_system.help_text_buffer = c;
+    menu_system.unk10C = d;
     func_00225AC0__void(1);
     vu1_init_chain();
-    D_001D5BF0.f18 = D_0015EE78;
-    if (D_001D5BF0.f4 != 0) {
+    menu_system.saved_texture_start = gs_texture_allocation_start;
+    if (menu_system.current != 0) {
         for (i = 0; i < 14; i++) {
             struct O2 *o = (struct O2 *)create_menu_preview_moby(0x472);
             D_001D5D90[i] = o;
@@ -108,7 +91,7 @@ void FUN_00218f98(void) {
                 D_001D5D90[i]->f40 = 0;
                 D_001D5D90[i]->f44 = 0;
                 D_001D5D90[i]->f48 = 0;
-                k = *(s32 *)((s32)D_001D5BF0.f4 + (i << 2));
+                k = menu_system.current->moby_anims[i];
                 set_moby_animation(D_001D5D90[i], k, D_001D5D90[i]->f24->tbl[k]->f10 - 1);
             }
         }

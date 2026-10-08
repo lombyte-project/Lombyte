@@ -5,16 +5,7 @@ struct Display {
     s16 w;
     s16 h;
 };
-struct Screen {
-    s32 w;
-    s32 h;
-    s32 hw;
-    s32 hh;
-    s32 x0;
-    s32 y0;
-    s32 x1;
-    s32 y1;
-};
+#include "rnc/rendering/screen.h"
 struct View {
     u8 pad0[0xA0];
     f32 unkA0;
@@ -35,7 +26,6 @@ struct View {
 };
 
 extern struct Display D_00151780;
-extern struct Screen D_0013E500;
 extern struct View D_0018CD00;
 extern f32 func_001FA6C0(s32);
 
@@ -49,14 +39,14 @@ void init_view_context(void) {
 
     hw = d->w >> 1;
     hh = d->h >> 1;
-    D_0013E500.w = d->w;
-    D_0013E500.h = d->h;
-    D_0013E500.hw = hw;
-    D_0013E500.hh = hh;
-    D_0013E500.x0 = (0x800 - hw) << 4;
-    D_0013E500.y0 = (0x800 - hh) << 4;
-    D_0013E500.x1 = (hw + 0x800) << 4;
-    D_0013E500.y1 = (hh + 0x800) << 4;
+    D_0013E500.width = d->w;
+    D_0013E500.height = d->h;
+    D_0013E500.half_width = hw;
+    D_0013E500.half_height = hh;
+    D_0013E500.left = (0x800 - hw) << 4;
+    D_0013E500.top = (0x800 - hh) << 4;
+    D_0013E500.right = (hw + 0x800) << 4;
+    D_0013E500.bottom = (hh + 0x800) << 4;
     v->unkA0 = 32.0f;
     v->unkA4 = 745472.0f;
     v->unkB0 = 0.63f;

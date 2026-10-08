@@ -3,7 +3,7 @@
 #include "sda.h"
 
 extern int D_0015ED84 MACRO_ADDR;
-extern char D_0013D290[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");
 extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
@@ -16,20 +16,20 @@ extern void func_00207B08(void *);
 void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");
 
 void prepare_save_game(int save_data, int slot) {
-    char *b = D_0013D290;
+    struct MemoryCardState *b = &memory_card_state;
     int saving = 1;
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     FUN_00208770();
     func_00207B08(D_00141EC0 + (D_0015ED84 << 11));
     memcard_make_whole_save((char *)save_data);
-    *(int *)(b + 0xF4) = saving;
-    *(int *)(b + 0xEC) = save_data;
-    *(int *)(b + 0x14) = slot;
-    *(int *)(b + 0xC0) = 0;
-    if (*(int *)(b + 0xDC) < 0) {
-        *(int *)(b + 0xE0) = 0;
-        *(int *)(b + 0xDC) = 0x13;
+    b->unkF4 = saving;
+    b->buf = (void *)save_data;
+    b->card[0].save_index = slot;
+    b->active_card = 0;
+    if (b->pending_state < 0) {
+        b->pending_card = 0;
+        b->pending_state = 0x13;
     }
 }
 

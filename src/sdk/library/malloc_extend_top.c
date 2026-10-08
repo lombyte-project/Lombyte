@@ -9,6 +9,7 @@
 /* malloc_extend_top e2: newlib mallocr.c malloc_extend_top adapted to the game ABI. */
 
 #include "types.h"
+#include "rnc/sdk/library/malloc_chunk.h"
 
 struct _reent;
 
@@ -23,13 +24,6 @@ extern u32 D_0012FBA0[]; /* sbrk_base */
 extern u64 D_0012FBA8[]; /* max_sbrked_mem */
 extern u64 D_0012FBB0[]; /* max_total_mem */
 extern s32 D_0012FBB8[]; /* current_mallinfo.arena (sbrked_mem, int) */
-
-struct malloc_chunk {
-    u32 prev_size;
-    u32 size;
-    struct malloc_chunk *fd;
-    struct malloc_chunk *bk;
-};
 
 typedef unsigned long POINTER_UINT;
 

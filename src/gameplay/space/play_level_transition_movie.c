@@ -1,21 +1,11 @@
 #include "types.h"
-struct MovieStreamDescriptor {
-    s32 stream_start;
-    s32 stream_size;
-};
-struct MovieStreamTables {
-    u8 pad0[0x1938];
-    struct MovieStreamDescriptor ntsc[12];
-    struct MovieStreamDescriptor pal[12];
-};
+#include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 struct SoundEnvironmentFlags {
     u8 pad0[0x6B];
     u8 flags;
 };
-extern s32 D_0015ED80;
-extern s32 D_0015ED88;
 extern s32 D_001940D4[];
-extern struct MovieStreamTables D_00137B80;
 extern struct SoundEnvironmentFlags D_0013E550;
 extern void count_vsync() __asm__("FUN_0012f1c8");
 extern void play_mpeg_stream(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
@@ -30,17 +20,17 @@ void play_level_transition_movie(s32 movie_index) {
     s32 stream_start;
     s32 archive_base;
 
-    if (D_0015ED80 != 0) {
-        stream_start = D_00137B80.pal[movie_index].stream_start;
-        stream_size = D_00137B80.pal[movie_index].stream_size;
+    if (pal_mode != 0) {
+        stream_start = disc_table.movies_alt[movie_index].sector;
+        stream_size = disc_table.movies_alt[movie_index].size;
     } else {
-        stream_start = D_00137B80.ntsc[movie_index].stream_start;
-        stream_size = D_00137B80.ntsc[movie_index].stream_size;
+        stream_start = disc_table.movies[movie_index].sector;
+        stream_size = disc_table.movies[movie_index].size;
     }
     archive_base = D_001940D4[0];
     D_0013E550.flags |= 8;
     play_mpeg_stream(stream_start, stream_size, (archive_base + 0x3F) & ~0x3F,
-                     (archive_base + 0x30003F) & ~0x3F, D_0015ED88);
+                     (archive_base + 0x30003F) & ~0x3F, game_language);
     sceGsSyncV(0);
     wait_for_graphics_pipeline_idle(0, 0);
     sceGsSyncVCallback(count_vsync);

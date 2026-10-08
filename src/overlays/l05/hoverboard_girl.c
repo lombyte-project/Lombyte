@@ -1,4 +1,6 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/math_consts.h"
 #include "asm.h"
 #include "sda.h"
 #include "eetypes.h"
@@ -74,34 +76,21 @@ typedef struct {
     s16 state;
 } HoverboardRaceEntry;
 
-typedef struct {
-    u8 pad00[0x80];
-    HoverboardGirlVector position;
-    u8 pad90[0x40];
-    HoverboardGirlVector look_position;
-    u8 padE0[0x20];
-    HoverboardGirlVector velocity;
-    u8 pad110[0x88];
-    s32 action_frame;
-    u8 pad19C[0x1EE8];
-    s32 action;
-} HoverboardGirlPlayerState;
 /* Partial resident player-data view: addresses verified in the retail loads. */
-extern HoverboardGirlPlayerState player_state __asm__("D_0013F350");
 
 typedef struct {
     f32 delta;
     f32 frame_scale;
     f32 movement_sampling_scale;
 } FrameTiming;
-extern FrameTiming frame_timing __asm__("D_0015ED64") __attribute__((sda));
-extern FrameTiming frame_timing_absolute __asm__("D_0015ED64") MACRO_ADDR;
-extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
+extern FrameTiming frame_timing __asm__("D_0015ED64");
+extern FrameTiming frame_timing_absolute __asm__("D_0015ED64");
+extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern s32 breast_growth_count __asm__("D_L05_00161ED0") __attribute__((sda));
-extern s32 game_mode __asm__("D_L05_0015F5C4") __attribute__((sda));
-extern s32 game_mode_absolute __asm__("D_L05_0015F5C4") MACRO_ADDR;
-extern s32 frame_number __asm__("D_L05_0015F5CC") __attribute__((sda));
-extern s32 frame_number_absolute __asm__("D_L05_0015F5CC") MACRO_ADDR;
+extern s32 game_mode __asm__("D_L05_0015F5C4");
+extern s32 game_mode_absolute __asm__("D_L05_0015F5C4");
+extern s32 frame_number __asm__("D_L05_0015F5CC");
+extern s32 frame_number_absolute __asm__("D_L05_0015F5CC");
 extern u8 race_completed __asm__("D_0013D388") NOT_SDA;
 extern HoverboardRaceGates race_gates __asm__("D_0013D5B0");
 extern HoverboardRaceEntry *race_entries[] __asm__("D_L05_001B1AF8");
@@ -286,30 +275,30 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     look_enabled = 0;
     if (moby->animation == 0 || moby->animation == 2) {
         look_enabled = 1;
-        if (vector_distance(&moby->position, &player_state.position) < 8.0f &&
+        if (vector_distance(&moby->position, &hero.motion.pos) < 8.0f &&
             absolute_angle_difference(
                 moby->yaw,
-                angle_from_xy(player_state.look_position.component[0] - moby->position.component[0],
-                              player_state.look_position.component[1] -
+                angle_from_xy(hero.motion.unkD0.component[0] - moby->position.component[0],
+                              hero.motion.unkD0.component[1] -
                                   moby->position.component[1])) < 1.5707964f) {
-            if (vector_length(&player_state.velocity) > 0.01f) {
+            if (vector_length(&hero.motion.unk100) > 0.01f) {
                 state->player_look_timer = scale_frame_count(120);
             } else {
                 advance_timer(&state->player_look_timer);
             }
         } else if (state->player_look_timer != 0) {
             state->player_look_timer = 0;
-            qcopy(&state->look_target, &player_state.look_position);
+            qcopy(&state->look_target, &hero.motion.unkD0);
         }
         if (advance_timer(&state->random_look_timer)) {
             state->random_look_timer = truncate_time(scale_time(random_float(180.0f, 300.0f)));
-            heading = add_angle(moby->yaw, random_float(-90.0f, 90.0f) * 0.017453292f);
-            pitch = random_float(0.0f, 30.0f) * 0.017453292f;
+            heading = add_angle(moby->yaw, random_float(-90.0f, 90.0f) * DEG_TO_RAD);
+            pitch = random_float(0.0f, 30.0f) * DEG_TO_RAD;
             vector_from_angles(6.0f, heading, pitch, &state->look_target);
             add_vector(&state->look_target, &state->look_target, &moby->position);
         }
         if (state->player_look_timer != 0) {
-            qcopy(&target_position, &player_state.look_position);
+            qcopy(&target_position, &hero.motion.unkD0);
             rotation_step = 0.03f;
             rotation_limit = 0.3f;
         } else {
@@ -338,13 +327,13 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
 
     /* The easter egg only counts flips within 15 units and a 70-degree
      * facing cone. Retail increments at action 11, frame 15; no debounce. */
-    if (vector_distance(&moby->position, &player_state.position) < 15.0f &&
+    if (vector_distance(&moby->position, &hero.motion.pos) < 15.0f &&
         absolute_angle_difference(
             moby->yaw,
-            angle_from_xy(player_state.position.component[0] - moby->position.component[0],
-                          player_state.position.component[1] - moby->position.component[1])) <
+            angle_from_xy(hero.motion.pos.component[0] - moby->position.component[0],
+                          hero.motion.pos.component[1] - moby->position.component[1])) <
             1.2217305f) {
-        if (player_state.action == 11 && player_state.action_frame == 15) {
+        if (hero.state.current == 11 && hero.state_timer == 15) {
             state->breast_growth_count++;
             if (state->breast_growth_count > 20)
                 state->breast_growth_count = 20;
@@ -352,7 +341,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         }
         /* Action 4 eventually reduces the effect, one step
          * every tenth game frame. Keep the scaled-frame threshold. */
-        if (player_state.action == 4 && scale_frame_count(20) < player_state.action_frame &&
+        if (hero.state.current == 4 && scale_frame_count(20) < hero.state_timer &&
             frame_number % 10 == 0) {
             state->breast_growth_count--;
             if (state->breast_growth_count < 0)

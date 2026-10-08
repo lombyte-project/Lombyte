@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_0015ED80;
+#include "rnc/globals.h"
 extern s32 D_0015EE24;
 extern s32 D_0015F5EC;
 void FUN_00226e08(void) {
@@ -12,7 +12,7 @@ void FUN_00226e08(void) {
         fifty = 50;
         new_value = old_value + 1;
         D_0015EE24 = new_value;
-        if (((new_value % fifty) == 0) && (D_0015ED80 != 0)) {
+        if (((new_value % fifty) == 0) && (pal_mode != 0)) {
             D_0015EE24 = old_value + 0xB;
         }
     }

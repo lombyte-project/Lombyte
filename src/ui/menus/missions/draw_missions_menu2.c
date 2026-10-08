@@ -1,9 +1,5 @@
 #include "types.h"
-
-struct GameState {
-    u8 pad_0[0x224];
-    s32 unk224;
-};
+#include "rnc/ui/map/map_state.h"
 
 struct MissionsMenu {
     u8 pad_0[0x20];
@@ -28,7 +24,6 @@ struct Rect {
     s16 unk16;
 };
 
-extern struct GameState D_001A00F0;
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void func_001F61E8();
@@ -70,7 +65,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
         p = (u32 *)0x70000000;
         do {
             y = off + 0xA;
-            flag = menu->sel[D_001A00F0.unk224] == i;
+            flag = menu->sel[D_001A00F0.level] == i;
             col = flag ? 0x8020FFFF : 0x80FFA888;
             if (flag) {
                 func_001F61F8();

@@ -1,15 +1,15 @@
 #include "sda.h"
-extern char D_0013D290[];
-extern int D_0015EEB0;
+#include "rnc/globals.h"
+#include "rnc/storage/memory_card/memory_card_state.h"
 
 void save_card_state_create_save_pending(void) __asm__("FUN_00208d20");
 
 void save_card_state_create_save_pending(void) {
-    char *s = D_0013D290;
-    if (*(int *)(s + 0xD4) == 2 && *(int *)(s + 0xDC) < 0) {
-        *(int *)(s + 0xDC) = 9;
-        *(int *)(s + 0xE0) = 0;
-        D_0015EEB0 = 0xF;
+    struct MemoryCardState *s = &memory_card_state;
+    if (s->state == 2 && s->pending_state < 0) {
+        s->pending_state = 9;
+        s->pending_card = 0;
+        mode_freeze_state = 0xF;
     }
 }
 

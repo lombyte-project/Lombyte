@@ -37,22 +37,12 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307d30.s", FUN_L06_00307d30);
 #include "sda.h"
+#include "rnc/overlay/entities.h"
 
 #include "qcopy.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char v[16];
-    char padv[16];
-    float f20;
-    char pad24[4];
-    float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
-} Child;
 
 typedef struct {
     char pad0[0x10];

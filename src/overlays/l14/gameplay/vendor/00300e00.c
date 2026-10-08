@@ -338,7 +338,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00315290.s", FUN_L14_00315290);
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern int func_L10_002F6E38_15920(void *) __asm__("FUN_L10_002f5a78");
-extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50") MACRO_ADDR;
+extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
 extern char D_0013E633_15920[] __asm__("D_001413DC");
 int FUN_L14_00315920(char *a, char *b) {
     char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(a + 0x84) * 32 + 0x1C);

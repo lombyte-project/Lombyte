@@ -13,6 +13,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_00210850(void *, int, int *, void *);
 
+/* Writes into arg2 the 0x30 point of joint arg1, scaled by 0x2C/1024 and moved to world space. */
 void FUN_L00_0024f7c8(char *arg0, int arg1, void *arg2) {
     char buf[0x40];
     int n;

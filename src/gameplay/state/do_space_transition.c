@@ -1,19 +1,18 @@
 #include "rnc/gameplay/state/do_space_transition.h"
 #include "sda.h"
+#include "rnc/globals.h"
+#include "rnc/audio/music/music_stream_state.h"
 
-extern struct SaveSlotTable D_0013D290;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern struct Globals_0013DD40 D_0013DD40;
 extern u8 D_0013DD58[];
 extern struct Globals_0013E030 D_0013E030;
-extern struct MusicStreamState D_001516D0;
 extern s32 D_0015ED5C MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
-extern s32 D_0015ED88;
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
 extern s32 D_0015F438 MACRO_ADDR;
 extern s32 D_0015F600 MACRO_ADDR;
-extern s32 D_0015F604;
 extern s32 D_0015F618 MACRO_ADDR;
 extern struct Globals_0015F634 *D_0015F634;
 extern struct Globals_0018CD00 D_0018CD00;
@@ -63,12 +62,12 @@ void do_space_transition(void) {
     s32 ok;
     s32 done;
 
-    lvl = D_0015ED88 - 1;
+    lvl = game_language - 1;
     if (lvl < 0) {
         lvl = 0;
     }
     D_00194100.unk10 |= 0x80000000;
-    D_0015F604 = 6;
+    game_mode = 6;
     D_0013E030.unk26 = 0;
     if (D_0013DD40.unk8 != 0 || D_0015F600 >= 8) {
         D_0013E030.unk26 = 1;
@@ -82,7 +81,7 @@ void do_space_transition(void) {
     snd_flush_sound_commands();
     sound_stop_all_sounds();
     music_stop();
-    D_001516D0.updates_suspended = 1;
+    music_stream_state.updates_suspended = 1;
     if (D_0015F634 != 0) {
         snd_unload_bank(D_0015F634->unk1C);
         snd_resolve_bank_xrefs();
@@ -100,7 +99,7 @@ void do_space_transition(void) {
     D_0018CD00.unk22C = 128.0f;
     PackDmaTag(0, 0, 0);
     if (D_0015F600 < 0) {
-        while (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0) {
+        while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             memcard_update_state();
             run_state_handler();
         }
@@ -108,7 +107,7 @@ void do_space_transition(void) {
         D_0015ED84 = D_0015F600;
         load_level_chunk_from_disc();
         sceCdSync(0);
-        D_001516D0.updates_suspended = 0;
+        music_stream_state.updates_suspended = 0;
         dmac_vif1_disable();
         return;
     }
@@ -203,7 +202,7 @@ void do_space_transition(void) {
                 FUN_00226e08();
             } while (service_level_archive_load() == 0);
         }
-        while (D_0013D290.unkD4 != 2 || D_0013D290.unkDC >= 0) {
+        while (memory_card_state.state != 2 || memory_card_state.pending_state >= 0) {
             FlushCache(0);
             sceGsSyncV(0);
             memcard_update_state();
@@ -212,7 +211,7 @@ void do_space_transition(void) {
         }
     }
     sceCdSync(0);
-    D_001516D0.updates_suspended = 0;
+    music_stream_state.updates_suspended = 0;
     dmac_vif1_disable();
 }
 

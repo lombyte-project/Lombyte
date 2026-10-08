@@ -1,11 +1,5 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x11C];
-    s32 unk11C;
-    u8 pad_120[0x6F0];
-    s32 unk810;
-};
-
+#include "rnc/sdk/libmpeg.h"
 extern u8 D_00153848[];
 extern s32 _Error();
 extern s32 _decMB0();
@@ -37,7 +31,7 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
         if (mbx >= nmb) {
             return 0;
         }
-        *(s32 *)((u8 *)mp + mp->unk810 * 0x140 + 0x6CC) = 0;
+        mp->mb_buf[mp->mb_buf_index].unk13C = 0;
         if (_waitBdecOut(mp) == 0) {
             return 2;
         }
@@ -72,10 +66,10 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
             return 2;
         }
         if (mbx != 0) {
-            _doMC(mp, mp->unk810 ^ 1);
+            _doMC(mp, mp->mb_buf_index ^ 1);
         }
         mbx++;
-        mp->unk810 ^= 1;
+        mp->mb_buf_index ^= 1;
         inc--;
     }
 }

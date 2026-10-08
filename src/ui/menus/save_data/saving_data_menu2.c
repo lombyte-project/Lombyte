@@ -1,85 +1,24 @@
 #include "types.h"
-
-typedef struct {
-    u8 pad0[0x1A4];
-    s32 held1;
-    u8 pad1A8[0xC];
-    s32 held2;
-    u8 pad1B8[0xC];
-    s32 pressed;
-} PadState;
-
-typedef struct {
-    u8 pad0[0x8];
-    s32 mode;
-    u8 padC[0x8];
-    s32 slot;
-    u8 pad18[0xBC];
-    s32 unkD4;
-    u8 padD8[0x4];
-    s32 unkDC;
-    u8 padE0[0x4];
-    s32 unkE4;
-    u8 padE8[0xC];
-    s32 unkF4;
-} SaveState;
-
-typedef struct {
-    u8 pad0[0x84];
-    s32 done;
-} SubMenu;
-
-typedef struct {
-    u8 pad0[0x38];
-    void *back;
-    u8 pad3C[0x4];
-    void *focus;
-} MenuPage;
-
-typedef struct {
-    s32 state;
-    MenuPage *page;
-    void *next;
-    u8 padC[0xC4];
-    SubMenu *sub;
-    s32 unkD4;
-    u8 padD8[0x4C];
-    s32 busy;
-    s32 saving;
-    s32 timer;
-} MenuState;
-
-typedef struct {
-    u8 pad0[0x14];
-    s32 sound;
-    u8 pad18[0x18];
-    s32 flags;
-    u8 pad34[0xC];
-    s32 cursor;
-    u8 pad44[0x4];
-    s32 unk48;
-    s32 stage;
-} Widget;
+#include "rnc/globals.h"
 
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
 
-extern PadState D_0013C940;
-extern SaveState D_0013D290;
+#include "rnc/input/pad_state.h"
+#include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
+extern struct PadState D_0013C940;
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern volatile u16 D_0013E05A[];
-extern s32 D_0015ED84;
 extern s32 D_0015ED98;
 extern s32 D_0015EE20;
 extern s32 D_0015EE24;
 extern s32 D_0015EE34;
 extern Unaligned64 D_0015EE98[1];
-extern s32 D_0015EEB0;
-extern s32 D_0015EEB4;
 extern s32 D_001D2640[];
-extern SubMenu D_001D4E38[];
-extern SubMenu D_001D4F98[];
-extern MenuState D_001D5BF0;
+extern struct MenuPage D_001D4E38[];
+extern struct MenuPage D_001D4F98[];
 extern void InitializeGlobalStateEntry(s32 value);
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
@@ -87,110 +26,110 @@ extern void FUN_00226a70(s32 arg0, s32 arg1);
 extern s32 FUN_00226b08();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
-s32 saving_data_menu2(Widget *w) __asm__("FUN_002235b8");
+s32 saving_data_menu2(struct MenuScreen *w) __asm__("FUN_002235b8");
 
-s32 saving_data_menu2(Widget *w) {
+s32 saving_data_menu2(struct MenuScreen *w) {
     s32 old;
     s32 pad;
     s32 cursor;
     s32 cur;
     s32 fl;
-    void *back;
+    struct MenuPage *back;
 
-    if (D_001D5BF0.page->focus != w) {
+    if (menu_system.current->focus != w) {
         return 0;
     }
-    old = w->cursor;
-    if (w->stage == 0 && D_001D5BF0.sub == D_001D4E38 && D_001D5BF0.sub->done != 0) {
-        w->stage = 1;
+    old = w->data.save.slot;
+    if (w->data.save.step == 0 && menu_system.previous == D_001D4E38 && menu_system.previous->confirmed != 0) {
+        w->data.save.step = 1;
     }
-    if (w->stage == 0 && D_001D5BF0.sub == D_001D4F98 && D_001D5BF0.sub->done != 0) {
-        w->stage = 1;
+    if (w->data.save.step == 0 && menu_system.previous == D_001D4F98 && menu_system.previous->confirmed != 0) {
+        w->data.save.step = 1;
     }
-    if (w->stage == 1) {
-        if (w->flags & 0x2000) {
-            FUN_00226b08(w->cursor);
+    if (w->data.save.step == 1) {
+        if (w->data.save.flags & 0x2000) {
+            FUN_00226b08(w->data.save.slot);
         } else {
-            FUN_00226a70(w->unk48, w->cursor);
+            FUN_00226a70(w->data.save.save_data, w->data.save.slot);
         }
-        D_001D5BF0.saving = 1;
-        D_001D5BF0.timer = 0x4FB5;
+        menu_system.save_pending = 1;
+        menu_system.message_id = 0x4FB5;
     }
-    w->stage = 2;
+    w->data.save.step = 2;
 
-    if (D_001D5BF0.saving != 0) {
-        if (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0) {
+    if (menu_system.save_pending != 0) {
+        if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             return 0;
         }
-        D_001D5BF0.saving = 0;
-        if (D_0013D290.unkE4 != 0) {
-            D_0015EEB4 |= 0x80;
-            mode_freeze_init(3, D_001D5BF0.page);
+        menu_system.save_pending = 0;
+        if (memory_card_state.err != 0) {
+            mode_freeze_flags |= 0x80;
+            mode_freeze_init(3, menu_system.current);
             return 0;
         }
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x24) = D_0015ED98;
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x20) = D_0015ED84;
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x2C) = D_0015EE24;
-        *(Unaligned64 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&D_0013D290 + D_0013D290.slot * 0x1C + 0x28) = D_0015EE20;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) = D_0015ED98;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) = current_level_index;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) = D_0015EE24;
+        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x30) = D_0015EE98[0];
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) = D_0015EE20;
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
 
-    if ((D_0013C940.pressed & 0xD00) && D_001D5BF0.busy == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
-    if (D_0013C940.pressed & 0x10) {
-        back = D_001D5BF0.page->back;
+    if (D_0013C940.pressed_unmasked & 0x10) {
+        back = menu_system.current->back;
         if (back != NULL) {
-            D_001D5BF0.next = back;
-        } else if (D_001D5BF0.busy == 0) {
+            menu_system.next = back;
+        } else if (menu_system.unk124 == 0) {
             return -1;
         }
     }
-    if (D_0015EEB0 != 0x10 && D_0015EEB0 != 1) {
-        D_001D5BF0.next = D_001D5BF0.page->back;
+    if (mode_freeze_state != 0x10 && mode_freeze_state != 1) {
+        menu_system.next = menu_system.current->back;
         return 0;
     }
-    if (D_0013D290.unkD4 >= 3 || D_0013D290.unkDC >= 0 || D_0013D290.mode != 2) {
+    if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 || memory_card_state.card[0].type != 2) {
         return 0;
     }
 
-    if (w->flags & 1) {
-        pad = D_0013C940.held2;
+    if (w->data.save.flags & 1) {
+        pad = D_0013C940.raw_pressed;
     } else {
-        pad = D_0013C940.held1;
+        pad = D_0013C940.pressed;
     }
-    w->cursor = D_0015EE34;
+    w->data.save.slot = D_0015EE34;
     if ((pad & 0x1000) && D_0015EE34 != 0) {
-        w->cursor = D_0015EE34 - 1;
+        w->data.save.slot = D_0015EE34 - 1;
     }
     if (pad & 0x4000) {
-        cur = w->cursor;
+        cur = w->data.save.slot;
         if (cur < 4) {
-            w->cursor = cur + 1;
+            w->data.save.slot = cur + 1;
         }
     }
-    cursor = w->cursor;
+    cursor = w->data.save.slot;
     D_0015EE34 = cursor;
-    if ((pad & 0x40) && D_0013D290.mode == 2) {
-        if (*(s32 *)((u8 *)&D_0013D290 + cursor * 0x1C + 0x20) != -1) {
-            D_001D5BF0.next = (w->flags & 0x2000) ? D_001D4F98 : D_001D4E38;
-            D_001D5BF0.unkD4 = (w->flags & 0x2000) ? 2 : 1;
-            D_001D2640[0] = w->cursor;
+    if ((pad & 0x40) && memory_card_state.card[0].type == 2) {
+        if (*(s32 *)((u8 *)&memory_card_state + cursor * 0x1C + 0x20) != -1) {
+            menu_system.next = (w->data.save.flags & 0x2000) ? D_001D4F98 : D_001D4E38;
+            menu_system.unkD4 = (w->data.save.flags & 0x2000) ? 2 : 1;
+            D_001D2640[0] = w->data.save.slot;
         } else {
-            w->stage = 1;
+            w->data.save.step = 1;
         }
     } else if (pad & 0x20) {
-        D_0013D290.unkF4 = 0;
-        fl = D_0015EEB4 & ~2;
-        D_0015EEB4 = fl & ~4;
+        memory_card_state.unkF4 = 0;
+        fl = mode_freeze_flags & ~2;
+        mode_freeze_flags = fl & ~4;
         load_and_initialize_level_chunk();
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
-    if (w->cursor != old) {
-        allocate_voice_for_target_entry(1, 0x11, w->sound);
+    if (w->data.save.slot != old) {
+        allocate_voice_for_target_entry(1, 0x11, w->moby);
     }
     return 0;
 }

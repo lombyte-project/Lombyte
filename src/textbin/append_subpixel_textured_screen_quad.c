@@ -2,17 +2,10 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/rendering/screen.h"
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-struct ScreenOfs {
-    u8 pad0[0x10];
-    s32 x;
-    s32 y;
-};
-
-extern struct TagPtr render_packet_cursor __asm__("D_00160F00");
-extern struct ScreenOfs screen_offsets __asm__("D_0013E500");
 extern char textured_quad_header[] __asm__("D_00160840");
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
@@ -36,24 +29,24 @@ void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen
     s32 texture_bottom;
     f32 screen_scale = 16.0f;
 
-    left = convert_float_to_integer(screen_x * screen_scale) + screen_offsets.x - 8;
+    left = convert_float_to_integer(screen_x * screen_scale) + D_0013E500.left - 8;
     right =
-        convert_float_to_integer((screen_x + screen_width) * screen_scale) + screen_offsets.x - 8;
-    top = convert_float_to_integer(screen_y * screen_scale) + screen_offsets.y - 8;
+        convert_float_to_integer((screen_x + screen_width) * screen_scale) + D_0013E500.left - 8;
+    top = convert_float_to_integer(screen_y * screen_scale) + D_0013E500.top - 8;
     bottom =
-        convert_float_to_integer((screen_y + screen_height) * screen_scale) + screen_offsets.y - 8;
+        convert_float_to_integer((screen_y + screen_height) * screen_scale) + D_0013E500.top - 8;
     texture_right = (texture_u + texture_width) << 4;
     texture_left = texture_u << 4;
     texture_bottom = texture_v + texture_height;
-    render_packet_cursor.p->tag = 0x10000007;
-    render_packet_cursor.p->addr = 0;
-    render_packet_cursor.p->vif0 = 0;
-    render_packet_cursor.p->vif1 = 0x50000007;
-    tag = render_packet_cursor.p;
-    render_packet_cursor.p = tag + 1;
+    render_packet_cursor.tag->tag = 0x10000007;
+    render_packet_cursor.tag->addr = 0;
+    render_packet_cursor.tag->vif0 = 0;
+    render_packet_cursor.tag->vif1 = 0x50000007;
+    tag = render_packet_cursor.tag;
+    render_packet_cursor.tag = tag + 1;
     qcopy(tag + 1, textured_quad_header);
     packet_words = (u64 *)(tag + 2);
-    render_packet_cursor.p = tag + 2;
+    render_packet_cursor.tag = tag + 2;
     packet_words[0] = texture_tex0;
     packet_words[1] = 0x154;
     packet_words[2] = color;
@@ -66,7 +59,7 @@ void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen
     packet_words[9] = (texture_bottom << 20) + texture_right;
     packet_words[10] = right | ((u64)bottom << 16) | 0xFFFFF000000000;
     packet_words[11] = 0;
-    render_packet_cursor.p = (struct DmaTag *)((u8 *)render_packet_cursor.p + 0x60);
+    render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x60);
 }
 
 extern __typeof__(append_subpixel_textured_screen_quad) func_001F55D8

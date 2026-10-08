@@ -1,38 +1,7 @@
 #include "types.h"
+#include "rnc/globals.h"
+#include "rnc/storage/disc_table.h"
 
-typedef struct {
-    s32 port;
-    s32 slot;
-    s32 type;
-    s32 free;
-    s32 format;
-    s32 x14;
-    s32 x18;
-    s32 x1C;
-    u8 pad_20[0x8C];
-    s32 xAC;
-    s32 xB0;
-    s32 xB4;
-} McCard;
-
-typedef struct {
-    McCard card[1];
-    s32 cmd;
-    s32 result;
-    s32 xC0;
-    s32 cur;
-    s32 xC8;
-    s32 busy;
-    s32 fd;
-    s32 state;
-    s32 sub;
-    s32 xDC;
-    s32 xE0;
-    s32 err;
-    s32 errCard;
-    void *buf;
-    s32 size;
-} McState;
 
 typedef struct {
     s32 x0;
@@ -42,15 +11,7 @@ typedef struct {
     s32 x10;
 } McChunk;
 
-typedef struct {
-    u8 pad_0[0x10];
-    s32 x10;
-    s32 x14;
-} McLevel;
-
-extern McState D_0013D290;
-extern McLevel D_00137B80;
-extern s32 D_00137B94[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_0013D1D0[];
 extern char D_0013D1E8[];
 extern char D_0013D200[];
@@ -60,7 +21,6 @@ extern char D_0013D270[];
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
 extern s16 D_001516D8[];
-extern s32 D_0015ED84;
 extern s32 D_0015EE90;
 extern char D_0015FE98[];
 extern char D_0015FEA0[];
@@ -93,7 +53,7 @@ extern s32 sceMcWrite(s32 fd, void *buf, s32 size);
 extern s32 sprintf(char *str, const char *format, ...);
 extern char *strcpy(char *, const char *);
 
-#define MC   D_0013D290
+#define MC   memory_card_state
 #define CARD MC.card[MC.cur]
 
 void memcard_update_state(void) __asm__("FUN_002093d8");
@@ -119,9 +79,9 @@ void memcard_update_state(void) {
 
     case 1:
         if (MC.result != 0) {
-            CARD.x14 = -3;
-            CARD.x1C = MC.result;
-            CARD.xAC = -1;
+            CARD.save_index = -3;
+            CARD.sync_result = MC.result;
+            CARD.errors = -1;
         }
         if (++MC.cur < 1) {
             MC.state = 0;
@@ -132,18 +92,18 @@ void memcard_update_state(void) {
         break;
 
     case 2:
-        if (MC.xDC >= 0) {
-            if (MC.card[0].x1C == 0) {
-                if (MC.xE0 >= 0) {
-                    MC.cur = MC.xE0;
-                    MC.state = MC.xDC;
+        if (MC.pending_state >= 0) {
+            if (MC.card[0].sync_result == 0) {
+                if (MC.pending_card >= 0) {
+                    MC.cur = MC.pending_card;
+                    MC.state = MC.pending_state;
                     MC.err = 0;
                 } else {
                     MC.err = 0x271A;
                 }
             }
-            MC.xDC = -1;
-            MC.xE0 = -1;
+            MC.pending_state = -1;
+            MC.pending_card = -1;
         } else {
             if (++MC.cur >= 31) {
                 MC.cur = 0;
@@ -167,7 +127,7 @@ void memcard_update_state(void) {
     case 4:
         if (MC.result != 0) {
             MC.err = 1;
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
         }
         MC.state = 0;
         MC.cur = 0;
@@ -188,7 +148,7 @@ void memcard_update_state(void) {
     case 6:
         if (MC.result != 0) {
             MC.err = 2;
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
         }
         MC.state = 0;
         MC.cur = 0;
@@ -206,20 +166,20 @@ void memcard_update_state(void) {
         switch (MC.sub) {
         case 0:
             if (MC.result == 0) {
-                s32 *p = &CARD.x14;
+                s32 *p = &CARD.save_index;
                 if (*p < 0) {
                     *p = -1;
                 }
                 MC.busy = 0;
                 MC.sub = 1;
             } else {
-                CARD.x14 = -2;
+                CARD.save_index = -2;
                 if (MC.result == -2) {
                     MC.err = 3;
-                    MC.errCard = MC.cur;
+                    MC.err_card = MC.cur;
                 } else if (MC.result != -4) {
                     MC.err = 4;
-                    MC.errCard = MC.cur;
+                    MC.err_card = MC.cur;
                 }
                 MC.state = 0;
                 MC.cur = 0;
@@ -237,8 +197,8 @@ void memcard_update_state(void) {
                 MC.fd = MC.result;
                 MC.sub = 3;
             } else {
-                CARD.x14 = -2;
-                MC.errCard = MC.cur;
+                CARD.save_index = -2;
+                MC.err_card = MC.cur;
                 if (MC.result == -7) {
                     MC.err = 0x2710;
                 } else if (MC.result == -5) {
@@ -259,24 +219,24 @@ void memcard_update_state(void) {
             break;
         case 3:
             MC.size = 8;
-            if (sceMcRead(MC.fd, &CARD.xB0, 8) == 0) {
+            if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 4;
             }
             break;
         case 4:
             if (MC.result == MC.size) {
-                CARD.xAC = 0;
-                if (CARD.xB0 != GetDmaPacketSpanBytes(D_001A04C0)) {
-                    CARD.xAC++;
+                CARD.errors = 0;
+                if (CARD.main_size != GetDmaPacketSpanBytes(D_001A04C0)) {
+                    CARD.errors++;
                 }
-                if (CARD.xB4 != GetDmaPacketSpanBytes(D_001A07C0)) {
-                    CARD.xAC++;
+                if (CARD.record_size != GetDmaPacketSpanBytes(D_001A07C0)) {
+                    CARD.errors++;
                 }
                 MC.busy = 0;
                 MC.sub = 5;
             } else {
-                CARD.x14 = -2;
-                MC.errCard = MC.cur;
+                CARD.save_index = -2;
+                MC.err_card = MC.cur;
                 if (MC.result >= 0) {
                     MC.err = 0x2716;
                     if (sceMcClose(MC.fd) == 0) {
@@ -314,7 +274,7 @@ void memcard_update_state(void) {
     case 9:
         MC.state = 10;
         MC.sub = 0;
-        CARD.x14 = 0;
+        CARD.save_index = 0;
     case 10:
         switch (MC.sub) {
         case 0:
@@ -322,7 +282,7 @@ void memcard_update_state(void) {
                 MC.sub = 1;
             } else {
                 MC.err = 7;
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 MC.state = 0;
                 MC.cur = 0;
             }
@@ -338,7 +298,7 @@ void memcard_update_state(void) {
                 MC.sub = 3;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result == -3) {
                 MC.err = 7;
             } else if (MC.result == -2) {
@@ -354,8 +314,8 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
-            start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
+            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+            start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
             MC.sub = 4;
             MC.busy = 0;
             break;
@@ -381,7 +341,7 @@ void memcard_update_state(void) {
                 strcpy(name, D_0013D240);
                 break;
             case 13:
-                sprintf(name, D_0013D270, CARD.x14);
+                sprintf(name, D_0013D270, CARD.save_index);
                 break;
             }
             if (sceMcOpen(CARD.port, CARD.slot, name, 0x203) == 0) {
@@ -400,7 +360,7 @@ void memcard_update_state(void) {
                 if (MC.fd < 0) {
                     MC.fd = MC.result;
                 }
-                calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
+                calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
                 switch (MC.sub) {
                 case 6:
                     MC.size = 0x3C4;
@@ -416,7 +376,7 @@ void memcard_update_state(void) {
                     } else {
                         MC.size = 0x3C04;
                     }
-                    MC.buf = &D_0015ED84;
+                    MC.buf = &current_level_index;
                     break;
                 case 14: {
                     s32 n = GetDmaPacketSpanBytes(D_001A04C0);
@@ -430,7 +390,7 @@ void memcard_update_state(void) {
                 }
             } else {
                 MC.err = 0xA;
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 MC.state = 0;
                 MC.cur = 0;
                 MC.busy = 0;
@@ -447,7 +407,7 @@ void memcard_update_state(void) {
                 }
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0xB;
                 if (sceMcClose(MC.fd) == 0) {
@@ -477,14 +437,14 @@ void memcard_update_state(void) {
                 MC.sub++;
             } else {
                 MC.err = 0xC;
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 MC.state = 0;
                 MC.cur = 0;
             }
             MC.busy = 0;
             break;
         case 17:
-            if (++CARD.x14 < 5) {
+            if (++CARD.save_index < 5) {
                 MC.sub = 13;
             } else {
                 MC.sub++;
@@ -492,10 +452,10 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 21:
-            MC.card[0].x14 = -1;
+            MC.card[0].save_index = -1;
             MC.state = 0;
             MC.cur = 0;
-            MC.card[0].xAC = 0;
+            MC.card[0].errors = 0;
             break;
         }
         break;
@@ -503,7 +463,7 @@ void memcard_update_state(void) {
     case 11:
         MC.state = 12;
         MC.sub = 0;
-        CARD.x14 = -2;
+        CARD.save_index = -2;
     case 12:
         switch (MC.sub) {
         case 0:
@@ -522,7 +482,7 @@ void memcard_update_state(void) {
                 if (MC.result == 0) {
                     MC.sub = 3;
                 } else {
-                    MC.errCard = MC.cur;
+                    MC.err_card = MC.cur;
                     if (MC.result == -5) {
                         MC.err = 0x10;
                     } else if (MC.result == -4) {
@@ -551,7 +511,7 @@ void memcard_update_state(void) {
             break;
         case 4:
             if (MC.result != 0) {
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 if (MC.result == -6) {
                     MC.err = 0x11;
                 } else if (MC.result == -5) {
@@ -573,13 +533,13 @@ void memcard_update_state(void) {
 
     case 21:
         MC.state = 22;
-        CARD.x18 = -1;
-        MC.xC8 = 0;
+        CARD.scan_save_index = -1;
+        MC.record_index = 0;
         break;
 
     case 22:
-        CARD.x18++;
-        if (CARD.x18 < 5) {
+        CARD.scan_save_index++;
+        if (CARD.scan_save_index < 5) {
             MC.sub = 0;
             MC.state = 23;
         } else {
@@ -589,14 +549,14 @@ void memcard_update_state(void) {
         }
         break;
     case 13:
-        if (CARD.x14 < 0) {
+        if (CARD.save_index < 0) {
             MC.busy = 0;
             MC.state = 0;
             MC.cur = 0;
             MC.err = 0x13;
             break;
         }
-        MC.xC8 = 0;
+        MC.record_index = 0;
         MC.sub = 0;
         MC.state = 14;
     case 14:
@@ -604,9 +564,9 @@ void memcard_update_state(void) {
         switch (MC.sub) {
         case 0:
             if (MC.state == 23) {
-                sprintf(name, D_0013D270, CARD.x18);
+                sprintf(name, D_0013D270, CARD.scan_save_index);
             } else {
-                sprintf(name, D_0013D270, CARD.x14);
+                sprintf(name, D_0013D270, CARD.save_index);
             }
             if (sceMcOpen(CARD.port, CARD.slot, name, 1) == 0) {
                 MC.sub++;
@@ -617,7 +577,7 @@ void memcard_update_state(void) {
                 MC.fd = MC.result;
                 MC.sub = 2;
             } else {
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 if (MC.result == -7) {
                     MC.err = 0x14;
                 } else if (MC.result == -5) {
@@ -638,7 +598,7 @@ void memcard_update_state(void) {
             break;
         case 2:
             MC.size = 8;
-            if (sceMcRead(MC.fd, &CARD.xB0, 8) == 0) {
+            if (sceMcRead(MC.fd, &CARD.main_size, 8) == 0) {
                 MC.sub = 3;
             }
             break;
@@ -648,7 +608,7 @@ void memcard_update_state(void) {
                 MC.sub = 4;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
@@ -674,7 +634,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 4:
-            MC.size = CARD.xB0;
+            MC.size = CARD.main_size;
             if (MC.size > 0x1800) {
                 RaiseKernelTrap();
             }
@@ -685,16 +645,16 @@ void memcard_update_state(void) {
         case 5:
             if (MC.result == MC.size) {
                 if (MC.state == 23) {
-                    memcard_restore_info(D_0014EED0, MC.cur, CARD.x18);
+                    memcard_restore_info(D_0014EED0, MC.cur, CARD.scan_save_index);
                     MC.sub = 8;
                 } else {
-                    CARD.xAC = memcard_restore_data(D_0014EED0, 0, D_001A04C0);
+                    CARD.errors = memcard_restore_data(D_0014EED0, 0, D_001A04C0);
                     MC.sub = 6;
                 }
                 MC.busy = 0;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
@@ -720,7 +680,7 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 6:
-            MC.size = CARD.xB4;
+            MC.size = CARD.record_size;
             if (MC.size > 0x1000) {
                 RaiseKernelTrap();
             }
@@ -730,8 +690,8 @@ void memcard_update_state(void) {
             break;
         case 7:
             if (MC.result == MC.size) {
-                CARD.xAC += memcard_restore_data(D_001506D0, MC.xC8, D_001A07C0);
-                if (++MC.xC8 < 20) {
+                CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, D_001A07C0);
+                if (++MC.record_index < 20) {
                     MC.sub = 6;
                 } else {
                     MC.sub = 8;
@@ -739,7 +699,7 @@ void memcard_update_state(void) {
                 MC.busy = 0;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
@@ -779,14 +739,14 @@ void memcard_update_state(void) {
         break;
 
     case 15:
-        if (CARD.xAC != 0) {
+        if (CARD.errors != 0) {
             MC.busy = 0;
             MC.state = 0;
             MC.cur = 0;
             MC.err = 0x2717;
             break;
         }
-        if (CARD.x14 < 0) {
+        if (CARD.save_index < 0) {
             MC.busy = 0;
             MC.state = 0;
             MC.cur = 0;
@@ -798,7 +758,7 @@ void memcard_update_state(void) {
     case 16:
         switch (MC.sub) {
         case 0:
-            sprintf(name, D_0013D270, CARD.x14);
+            sprintf(name, D_0013D270, CARD.save_index);
             if (sceMcOpen(CARD.port, CARD.slot, name, 2) == 0) {
                 MC.sub = 1;
             }
@@ -808,7 +768,7 @@ void memcard_update_state(void) {
                 MC.fd = MC.result;
                 MC.sub = 2;
             } else {
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
                 if (MC.result == -7) {
                     MC.err = 0x1E;
                 } else if (MC.result == -5) {
@@ -851,7 +811,7 @@ void memcard_update_state(void) {
                 MC.sub = 6;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0x25;
                 if (sceMcClose(MC.fd) == 0) {
@@ -877,11 +837,11 @@ void memcard_update_state(void) {
             MC.busy = 0;
             break;
         case 6:
-            if (MC.xC8 == 0) {
+            if (MC.record_index == 0) {
                 MC.sub = 8;
                 break;
             }
-            if (sceMcSeek(MC.fd, MC.xC8 * GetDmaPacketSpanBytes(D_001A07C0), 1) == 0) {
+            if (sceMcSeek(MC.fd, MC.record_index * GetDmaPacketSpanBytes(D_001A07C0), 1) == 0) {
                 MC.sub = 7;
             }
             break;
@@ -904,7 +864,7 @@ void memcard_update_state(void) {
                 MC.sub = 10;
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0x25;
                 if (sceMcClose(MC.fd) == 0) {
@@ -942,8 +902,8 @@ void memcard_update_state(void) {
         McChunk *chunk;
         s32 size;
 
-        calculate_ring_buffer_bounds(D_00137B80.x14 << 11, &chunk, &size);
-        start_audio_stream_read(chunk, D_00137B80.x10, D_00137B80.x14);
+        calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
+        start_audio_stream_read(chunk, disc_table.unk10.sector, disc_table.unk10.size);
         MC.sub = 18;
         MC.busy = 0;
         break;
@@ -954,7 +914,7 @@ void memcard_update_state(void) {
             McChunk *chunk;
             s32 size;
 
-            calculate_ring_buffer_bounds(D_00137B94[0] << 11, &chunk, &size);
+            calculate_ring_buffer_bounds(disc_table.unk10.size << 11, &chunk, &size);
             MC.sub = 19;
             MC.buf = (u8 *)chunk + chunk->x10;
         }
@@ -962,27 +922,27 @@ void memcard_update_state(void) {
         break;
 
     case 19:
-        if (CARD.xAC != 0) {
+        if (CARD.errors != 0) {
             MC.busy = 0;
             MC.state = 0;
             MC.cur = 0;
             MC.err = 0x2718;
             break;
         }
-        if (CARD.x14 < 0) {
+        if (CARD.save_index < 0) {
             MC.busy = 0;
             MC.state = 0;
             MC.cur = 0;
             MC.err = 0x27;
             break;
         }
-        MC.xC8 = 0;
+        MC.record_index = 0;
         MC.sub = 0;
         MC.state = 20;
     case 20:
         switch (MC.sub) {
         case 0:
-            sprintf(name, D_0013D270, CARD.x14);
+            sprintf(name, D_0013D270, CARD.save_index);
             if (sceMcOpen(CARD.port, CARD.slot, name, 2) == 0) {
                 MC.sub = 1;
             }
@@ -1000,7 +960,7 @@ void memcard_update_state(void) {
                 break;
             }
             MC.err = 0x2B;
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             MC.state = 0;
             MC.cur = 0;
             MC.busy = 0;
@@ -1012,7 +972,7 @@ void memcard_update_state(void) {
                 }
                 break;
             }
-            MC.errCard = MC.cur;
+            MC.err_card = MC.cur;
             if (MC.result >= 0) {
                 MC.err = 0xB;
                 if (sceMcClose(MC.fd) == 0) {
@@ -1038,7 +998,7 @@ void memcard_update_state(void) {
         case 3:
             if (MC.result != 0) {
                 MC.err = 0x2C;
-                MC.errCard = MC.cur;
+                MC.err_card = MC.cur;
             }
             MC.state = 0;
             MC.cur = 0;

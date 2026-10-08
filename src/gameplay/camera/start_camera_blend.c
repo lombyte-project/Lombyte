@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECC48). */
 #include "sda.h"
+#include "rnc/gameplay/hero.h"
 #include "qcopy.h"
-extern char D_0013F350[];
 extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
@@ -40,11 +40,11 @@ void start_camera_blend(void *arg) {
             func_002144D8(r + 0xD0, src);
             capture_camera_orientation();
         } else {
-            char *g = D_0013F350;
+            struct Hero *g = &hero;
 
-            FUN_001f9bf8(local0, *(char **)(g + 0x2080) + 0xC0, 1.0f);
-            FUN_001f9bf8(local1, *(char **)(g + 0x2080) + 0xD0, 1.0f);
-            FUN_001f9bf8(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
+            FUN_001f9bf8(local0, (char *)g->moby + 0xC0, 1.0f);
+            FUN_001f9bf8(local1, (char *)g->moby + 0xD0, 1.0f);
+            FUN_001f9bf8(local2, (char *)g->moby + 0xE0, 1.0f);
             compute_camera_angles((float *)(r + 0x70), src + 0x30, *(char **)(r - 0xF0) + 0x30,
                                   local0, local1, local2);
             func_002144D8(r + 0xB0, src);

@@ -28,6 +28,7 @@ typedef struct {
 } E00266858;
 extern E00266858 D_0013D5B0[];
 s32 FUN_L00_002667d0_u(s32, s32) __asm__("FUN_L00_002667d0");
+/* Stores b in the entry FUN_L00_002667d0 finds, if it finds one. */
 void FUN_L00_00266858(s32 a, s32 b) {
     s32 i = FUN_L00_002667d0_u(a, b);
     if (i != -1)

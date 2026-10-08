@@ -1,21 +1,12 @@
 /* Ported from rac1-decomp (src/game/bmain.c, func_001E9808). */
 #include "sda.h"
+#include "rnc/storage/disc_table.h"
 extern int D_0015ED80 MACRO_ADDR;
 extern int D_0015EED8 MACRO_ADDR;
 extern int D_0015F604 MACRO_ADDR;
 extern int D_0015EE88 MACRO_ADDR;
-typedef struct {
-    int b;
-    int a;
-} LevelLoad;
-typedef struct {
-    char pad0[0x1A78];
-    LevelLoad normal[4];
-    LevelLoad alt[4];
-} Globals137C80;
-extern Globals137C80 D_00137B80;
 extern char D_0013E550[];
-extern char D_0013D290[];
+#include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_001940C0[];
 extern void FlushCache(int);
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
@@ -32,7 +23,7 @@ extern int count_vsync(void) __asm__("FUN_0012f1c8");
 extern void sceGsSyncVCallback(void (*)(void));
 extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B10");
 /* Start level `level`: pick its two load parameters from the level
-   table in D_00137B80 (the alternate set while D_0015ED80 is set), stop
+   table in disc_table (the alternate set while D_0015ED80 is set), stop
    sound and wait for the loader (func_002093D8) to go idle, then load it
    (func_0023A3B8) and reset the display state. */
 void start_level(int level) __asm__("FUN_001e9488");
@@ -46,11 +37,11 @@ void start_level(int level) {
         return;
     }
     if (D_0015ED80 != 0) {
-        b = D_00137B80.alt[level].b;
-        a = D_00137B80.alt[level].a;
+        b = disc_table.start_movies_alt[level].sector;
+        a = disc_table.start_movies_alt[level].size;
     } else {
-        b = D_00137B80.normal[level].b;
-        a = D_00137B80.normal[level].a;
+        b = disc_table.start_movies[level].sector;
+        a = disc_table.start_movies[level].size;
     }
     D_0015EED8 = 2;
     D_0013E550[0x6B] |= 8;
@@ -64,8 +55,8 @@ void start_level(int level) {
     music_stop();
     snd_stream_safe_cd_sync(0);
     for (;;) {
-        char *ld = D_0013D290;
-        if (*(int *)(ld + 0xD4) < 3 && *(int *)(ld + 0xDC) < 0) {
+        struct MemoryCardState *ld = &memory_card_state;
+        if (ld->state < 3 && ld->pending_state < 0) {
             break;
         }
         memcard_update_state();

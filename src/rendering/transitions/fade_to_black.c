@@ -1,8 +1,8 @@
 #include "types.h"
+#include "rnc/rendering/dma_tag.h"
 
 extern u8 D_0013CDD0[];
 extern s32 D_0015F438;
-extern u8 *D_00160F00;
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
@@ -14,7 +14,7 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 sceGsSyncV(s32);
 
-#define VP (*(u8 *volatile *)&D_00160F00)
+#define VP (*(u8 *volatile *)&render_packet_cursor.bytes)
 
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
@@ -35,7 +35,7 @@ void fade_to_black(s32 n) {
         *(u32 *)(VP + 4) = (u32)D_0013CDD0;
         *(u32 *)(VP + 8) = 0;
         *(u32 *)(VP + 12) = 0x50000014;
-        D_00160F00 = VP + 0x10;
+        render_packet_cursor.bytes = VP + 0x10;
         vu1_sync_chain(1);
         sceGsSyncV(0);
         D_0015F438 += 1;

@@ -1,11 +1,7 @@
 #include "types.h"
-
-struct SifFileSlot {
-    s32 fd;
-    s32 flags;
-    s32 reserved8;
-    s32 reservedC;
-};
+#include "kernel.h"
+#include "rnc/sdk/library/sif_file_slot.h"
+#include "sifrpc.h"
 
 struct FsReadRequest {
     s32 completion_semaphore;
@@ -18,14 +14,6 @@ struct FsReadRequest {
     s32 slot;
 };
 
-struct SemaParam {
-    s32 count;
-    s32 max_count;
-    s32 init_count;
-    s32 wait_threads;
-    u32 attr;
-    u32 option;
-};
 
 extern struct FsReadRequest D_00156880;
 /* Also accessed by the asynchronous completion interrupt handler. */
@@ -34,10 +22,6 @@ extern s32 D_0012FC94[];
 extern s32 D_0012FCA4[];
 extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
-struct sceSifClientData {
-    u8 pad[0x28];
-};
-
 extern struct sceSifClientData D_00157F80;
 extern struct SifFileSlot *get_iob(s32 fd);
 extern s32 _sceFsWaitS(s32);
@@ -72,11 +56,11 @@ s32 sceRead(s32 fd, void *buffer, s32 length) {
         return -9;
     }
     request->fd = file_slot->fd;
-    semaphore_parameters.max_count = 1;
+    semaphore_parameters.maxCount = 1;
     request->slot = file_slot - D_00157D80;
     request->buffer = buffer;
     request->length = length;
-    semaphore_parameters.init_count = 0;
+    semaphore_parameters.initCount = 0;
     semaphore_parameters.option = 0;
     completion_semaphore = CreateSema(&semaphore_parameters);
     request->result = &result;

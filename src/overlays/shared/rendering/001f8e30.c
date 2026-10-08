@@ -14,6 +14,7 @@ extern int D_L00_0015F5D8;
 extern unsigned char D_001413F5[];
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
+/* Draws the debug profiler unless D_L00_0015F5D8 or D_001413F5[0xC] is set. */
 void FUN_L00_001f8e30(void) {
     if (D_L00_0015F5D8 == 0 && D_001413F5[0xC] == 0) {
         D_L00_0015F3F4 = 0x100FF;

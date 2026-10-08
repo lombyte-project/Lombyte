@@ -1,42 +1,11 @@
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
-typedef unsigned long long u64;
-typedef volatile s8 vs8;
-typedef volatile u8 vu8;
-typedef volatile s16 vs16;
-typedef volatile u16 vu16;
-typedef volatile s32 vs32;
-typedef volatile u32 vu32;
-typedef volatile s64 vs64;
-typedef volatile u64 vu64;
-typedef float f32;
-typedef double f64;
-typedef s32 b32;
+#include "types.h"
 struct PadState {
     u8 pad0[0x1A0];
     s64 unk1A0;
     u8 pad1A4[0x18];
     u32 held;
     u32 pressed;
-};
-struct MenuCur {
-    u8 pad0[0x38];
-    s32 unk38;
-};
-struct MenuSys {
-    u8 pad0[4];
-    struct MenuCur *cur;
-    s32 unk8;
-    u8 padC[0xD0];
-    s32 unkDC;
-    u8 padE0[0x44];
-    s32 unk124;
 };
 struct Menu {
     u8 pad0[0x34];
@@ -49,7 +18,7 @@ struct Menu {
     s32 unk54;
 };
 extern struct PadState D_0013C940;
-extern struct MenuSys D_001D5BF0;
+#include "rnc/ui/menus/menu_system.h"
 extern s32 D_001D2AF4[];
 extern u8 D_001D5098[];
 extern u8 D_001D5148[];
@@ -62,14 +31,14 @@ s32 FUN_002223f0(struct Menu *menu) {
     s32 n;
 
     flag = (D_0013C940.unk1A0 & 0xF) == 0xF;
-    if ((D_001D5BF0.unkDC == 0) || (flag && (((s32)D_0013C940.unk1A0) & 0x10))) {
-        if ((D_0013C940.pressed & 0xD00) && (D_001D5BF0.unk124 == 0)) {
+    if ((menu_system.unkDC == 0) || (flag && (((s32)D_0013C940.unk1A0) & 0x10))) {
+        if ((D_0013C940.pressed & 0xD00) && (menu_system.unk124 == 0)) {
             return 1;
         }
         if (D_0013C940.pressed & 0x10) {
-            if (D_001D5BF0.cur->unk38 != 0) {
-                D_001D5BF0.unk8 = D_001D5BF0.cur->unk38;
-            } else if (D_001D5BF0.unk124 == 0) {
+            if (menu_system.current->back != 0) {
+                menu_system.next = menu_system.current->back;
+            } else if (menu_system.unk124 == 0) {
                 return -1;
             }
         }
@@ -207,7 +176,7 @@ s32 FUN_002223f0(struct Menu *menu) {
 
     case 19:
         if (menu->unk40 == 0) {
-            if (D_001D5BF0.unkDC != 0) {
+            if (menu_system.unkDC != 0) {
                 return 1;
             }
         }

@@ -1,8 +1,7 @@
 #include "types.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/dma_tag.h"
 
-extern s32 D_0015EE74;
-extern s32 D_0015EE78;
-extern s32 D_00160F00;
 extern u8 D_00160F30[];
 extern u8 D_00160F40[];
 extern s32 D_00160F68;
@@ -22,12 +21,12 @@ void draw_ties_1(void) {
     register s32 current;
     register u8 *callbackData;
     register s32 callbackArg;
-    current = D_00160F00;
+    current = render_packet_cursor.addr;
     D_00160F68 = current;
     callbackData = D_00160F30;
     current += 0x10;
-    D_0015EE74 = D_0015EE78;
-    D_00160F00 = current;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
+    render_packet_cursor.addr = current;
     callbackArg = 1;
     func_001F21B8(callbackData, callbackArg);
     if (D_0018A2C8[0] != 0) {
@@ -37,7 +36,7 @@ void draw_ties_1(void) {
     }
     func_001F21B8(D_00160F40, 5);
     dma_tie_textures();
-    func_001F98D0(D_00160F00, D_001DF030, 0x20);
+    func_001F98D0(render_packet_cursor.addr, D_001DF030, 0x20);
     func_001F21B0(D_00160F40, 5);
 }
 

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/map/map_state.h"
 struct MenuItem {
     s16 id;
     s16 kind1;
@@ -18,11 +19,6 @@ struct MenuState {
     s32 available;
     struct MenuItem *items;
 };
-struct Level {
-    u8 pad0[0x224];
-    s32 level;
-};
-extern struct Level D_001A00F0;
 extern struct MenuItem *D_001A2B70[];
 extern struct MenuState D_001A2C10;
 extern u8 D_0013DD58[];

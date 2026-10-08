@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_system.h"
 
 /* Pause list handler (func_0022DA68's family): one `char *` pad local per
    block. The cursor at menu+0x3C moves on 0x1000/0x4000 within
@@ -11,17 +12,13 @@
    switch target has no early return: "else if" instead, which is what
    gives retail's bnel with the store in the delay slot. */
 extern u8 D_0013C940[];
-/* The array spelling matters: a scalar extern lets the assembler relax the
-   load to %gp_rel(D_001D5D14)(gp); retail loads it through lui/lw. */
-extern s32 D_001D5D14[];
-extern u8 D_001D5BF0[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
 int FUN_00219e10(char *menu) {
     {
         char *pad = D_0013C940;
         if (*(int *)(pad + 0x1C4) & 0xD00) {
-            if (D_001D5D14[0] == 0) {
+            if (menu_system.unk124 == 0) {
                 return 1;
             }
         }
@@ -29,11 +26,11 @@ int FUN_00219e10(char *menu) {
     {
         char *pad2 = D_0013C940;
         if (*(int *)(pad2 + 0x1C4) & 0x10) {
-            char *g = D_001D5BF0;
-            int t = *(int *)(*(char **)(g + 4) + 0x38);
+            struct MenuSystem *g = &menu_system;
+            struct MenuPage *t = g->current->back;
             if (t != 0) {
-                *(int *)(g + 8) = t;
-            } else if (*(int *)(g + 0x124) == 0) {
+                g->next = t;
+            } else if (g->unk124 == 0) {
                 return -1;
             }
         }

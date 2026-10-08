@@ -1,24 +1,18 @@
 #include "types.h"
+#include "rnc/ui/hud/hud_state.h"
+#include "rnc/globals.h"
 
-struct HudState {
-    u8 pad_0[0xC];
-    s32 unkC;
-    u8 pad_10[0x20];
-    s32 unk30;
-};
 struct HudSlot {
     u8 pad_0[0x18];
     s32 unk18;
 };
 extern s32 D_0015F444;
-extern s32 D_0015F604;
 extern s32 D_0015F680;
 extern s32 D_0015F684;
 extern s32 D_0015F688;
 extern u8 D_001993D8[];
 extern u8 D_00199428[];
 extern u8 D_00199B60[];
-extern struct HudState D_0019A3E8;
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
@@ -31,22 +25,22 @@ void update_hud(void) {
     s32 temp_2_59;
     s32 temp_2_76;
     s32 remaining;
-    if (D_0019A3E8.unk30 == 0) {
+    if (hud_state.unk30 == 0) {
         goto block_2;
     }
-    D_0019A3E8.unk30 = 0;
+    hud_state.unk30 = 0;
     return;
 block_2:
     if (D_0015F444 == 0) {
         goto block_5;
     }
 
-    D_0019A3E8.unk30 = 0;
+    hud_state.unk30 = 0;
     return;
 block_5:
     slot = D_00199B60;
 
-    D_0019A3E8.unkC = 0xFFFFF0;
+    hud_state.z = 0xFFFFF0;
     remaining = 0xC;
 loop_6:
     update_fn = ((struct HudSlot *)slot)->unk18;
@@ -69,7 +63,7 @@ block_8:
         goto block_27;
     }
 block_11:
-    if (D_0015F604 != 0) {
+    if (game_mode != 0) {
         goto block_28;
     }
 

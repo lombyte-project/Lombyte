@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct Menu {
     u8 pad0[0x20];
@@ -6,7 +7,6 @@ struct Menu {
     s32 h;
 };
 
-extern s32 D_0015ED84;
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -33,7 +33,7 @@ s32 draw_missions_menu(struct Menu *m) {
     if (t >= w) {
         w = t;
     }
-    if (D_0015ED84 != 0) {
+    if (current_level_index != 0) {
         t = measure_text_width_small(get_help_message_text(0x4EEF), -1);
         if (t >= w) {
             w = t;
@@ -55,11 +55,11 @@ s32 draw_missions_menu(struct Menu *m) {
     if (x < 2) {
         x = 2;
     }
-    step = m->h / (D_0015ED84 != 0 ? 7 : 6);
+    step = m->h / (current_level_index != 0 ? 7 : 6);
     func_001F61F8();
     y = step - 6;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEE), -1);
-    if (D_0015ED84 != 0) {
+    if (current_level_index != 0) {
         y += step;
         font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEF), -1);
     }

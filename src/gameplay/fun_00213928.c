@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/hero.h"
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_25a478 q; f32 f[4]; } V_25a478;
 typedef struct { u8 pad0[0xA6]; s16 hA6; } T_25a478;
@@ -24,8 +25,6 @@ typedef struct {
     u8 b2E;
 } Q_25a478;
 typedef struct { u8 pad0[0x10]; f32 x, y; } O_25a478;
-typedef struct { u8 pad0[0x80]; f32 x, y; } G_25a478;
-extern G_25a478 G_25a478v __asm__("D_0013F350");
 extern u8 D_0013E533[];
 extern f32 D_0015FFC8[2] __attribute__((sda));
 extern f32 D_001CC0C8[][8];
@@ -33,7 +32,7 @@ extern u8 D_001CC080[][4];
 extern Q_25a478 *func_002141F8(void *);
 extern Q_25a478 *ReadStateField(void *);
 extern s32 func_001F9770(s16 *);
-extern s32 func_001F96F8(s32);
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 func_001F9E90(f32, f32);
 extern f32 func_001F9DC8(f32);
 extern f32 func_001F9DE0(f32);
@@ -88,8 +87,8 @@ s32 FUN_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
         kind = p->kind;
         p->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
-            v.f[0] = func_001F9DC8(func_001F9E90(obj->x - G_25a478v.x, obj->y - G_25a478v.y));
-            v.f[1] = func_001F9DE0(func_001F9E90(obj->x - G_25a478v.x, obj->y - G_25a478v.y));
+            v.f[0] = func_001F9DC8(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            v.f[1] = func_001F9DE0(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
             v.f[2] = 1.0f;
             FUN_001f9bf8(&v, &v, FUN_001f9af0(pv) * 0.7f);
             FUN_001f9a68(pv, pv, 0.3f);
@@ -140,15 +139,15 @@ s32 FUN_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     if (q->h14 != kind) q->h1C = 0;
     if (func_001F9770(&q->h1C)) {
         switch (r) {
-        case 0: q->h1C = func_001F96F8(0x25); break;
-        case 1: q->h1C = func_001F96F8(0xF); break;
-        case 4: q->h1C = func_001F96F8(0x3C); break;
+        case 0: q->h1C = scale_game_frames(0x25); break;
+        case 1: q->h1C = scale_game_frames(0xF); break;
+        case 4: q->h1C = scale_game_frames(0x3C); break;
         case 7:
-            if (D_0013E533[0]) q->h1C = func_001F96F8(0x2D);
-            else q->h1C = func_001F96F8(0x3C);
+            if (D_0013E533[0]) q->h1C = scale_game_frames(0x2D);
+            else q->h1C = scale_game_frames(0x3C);
             break;
-        case 11: q->h1C = func_001F96F8(0x3C); break;
-        default: q->h1C = func_001F96F8(0x1E); break;
+        case 11: q->h1C = scale_game_frames(0x3C); break;
+        default: q->h1C = scale_game_frames(0x1E); break;
         }
     } else {
         switch (r) {

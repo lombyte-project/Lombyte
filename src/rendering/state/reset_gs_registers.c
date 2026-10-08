@@ -1,12 +1,10 @@
 #include "types.h"
+#include "rnc/rendering/dma_tag.h"
 struct GifTag {
     u32 w0;
     u32 addr;
     u32 w2;
     u32 w3;
-};
-struct TagPtr {
-    struct GifTag *p;
 };
 struct Disp {
     u8 pad0[0x230];
@@ -14,7 +12,6 @@ struct Disp {
     s32 b;
     s32 c;
 };
-extern struct TagPtr D_00160F00;
 extern u8 D_0013CFC0[];
 extern u8 D_0013CF10[];
 extern struct Disp D_0018CD00;
@@ -24,17 +21,17 @@ void reset_gs_registers(void) __asm__("FUN_001f3868");
 void reset_gs_registers(void) {
     struct GifTag *p;
 
-    D_00160F00.p->w0 = 0x30000013;
-    D_00160F00.p->addr = (u32)D_0013CFC0;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x50000013;
-    p = D_00160F00.p;
-    D_00160F00.p = p + 1;
+    render_packet_cursor.gif->w0 = 0x30000013;
+    render_packet_cursor.gif->addr = (u32)D_0013CFC0;
+    render_packet_cursor.gif->w2 = 0;
+    render_packet_cursor.gif->w3 = 0x50000013;
+    p = render_packet_cursor.gif;
+    render_packet_cursor.gif = p + 1;
     p[1].w0 = 0x3000000B;
-    D_00160F00.p->addr = (u32)D_0013CF10;
-    D_00160F00.p->w2 = 0;
-    D_00160F00.p->w3 = 0x5000000B;
-    D_00160F00.p++;
+    render_packet_cursor.gif->addr = (u32)D_0013CF10;
+    render_packet_cursor.gif->w2 = 0;
+    render_packet_cursor.gif->w3 = 0x5000000B;
+    render_packet_cursor.gif++;
     vu1_add_g_sregister(0x3D, D_0018CD00.a | ((u64)D_0018CD00.b << 8) | ((u64)D_0018CD00.c << 16));
 }
 

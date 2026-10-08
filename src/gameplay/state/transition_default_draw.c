@@ -1,13 +1,12 @@
 #include "rnc/gameplay/state/transition_default_draw.h"
+#include "rnc/globals.h"
 extern u8 D_00100AE0[];
 extern s32 D_0013E504[];
-extern s32 D_0015ED88;
 extern s64 D_0015EF48;
 extern s32 D_0015EF50;
 extern s32 D_0015EF54;
 extern f32 D_0015F43C;
 extern s32 D_0015F464;
-extern s32 D_0015F604;
 extern s32 D_0015F620;
 extern struct Globals_0016045C *D_0016045C;
 extern s32 D_0018A2E8[];
@@ -74,7 +73,7 @@ void transition_default_draw(s32 *arg0) {
     AppendDmaTag(0x02020000);
     draw_shrubs();
     AppendDmaTag(0x02040000);
-    if (D_0015F604 == 3) {
+    if (game_mode == 3) {
         render_level_effects_and_screen_sprites();
     } else {
         draw_mobys();
@@ -100,7 +99,7 @@ void transition_default_draw(s32 *arg0) {
                            (long)(D_0015EF50 << 24 | 0x808080), D_0015EF48);
     }
     if (D_0015EF54 != 0) {
-        n = D_0015ED88 - 1;
+        n = game_language - 1;
         if (n < 0) {
             n = 0;
         }
@@ -116,7 +115,7 @@ void transition_default_draw(s32 *arg0) {
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
-    if (D_0015F604 == 4) {
+    if (game_mode == 4) {
         draw_dialog_text();
     }
     vu1_sync_chain(2);

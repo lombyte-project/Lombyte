@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/map/map_state.h"
 
 struct Screen {
     u8 pad0[0x160];
@@ -6,24 +7,14 @@ struct Screen {
     s16 y;
 };
 
-struct Hud {
-    u8 pad0[0x228];
-    s32 state;
-    u8 pad22C[0x2C];
-    u64 tex0;
-    u64 tex1;
-    u64 tex2;
-};
-
 extern struct Screen D_00151780;
 extern volatile s32 D_0015F438;
-extern struct Hud D_001A00F0;
 extern s32 D_001DDF68[];
 extern void FUN_00200468(u64, s32, s32, s32, s32, s32, s32, s32, s32, s32);
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 s32 FUN_00220850(void) {
-    s32 st = D_001A00F0.state;
+    s32 st = D_001A00F0.loaded;
     s32 size;
     s32 off;
     s32 t;

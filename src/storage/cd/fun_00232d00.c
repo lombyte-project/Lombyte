@@ -1,14 +1,6 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 pad0[0x24];
-    void *serve;
-};
-struct StashEntry {
-    s32 addr;
-    s32 count;
-    s32 tag;
-    s32 pad;
-};
+#include "rnc/storage/stash.h"
+#include "sifrpc.h"
 struct Stash {
     s32 base;
     s32 size;

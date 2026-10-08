@@ -992,6 +992,7 @@ void FUN_L00_0026c6e8(void *pos, void *vel) {
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Moves both points by the vector at 0x30; lowers the top byte at a+4 by 6, 00267a08 below 0. */
 void FUN_L00_0026c7f0(char *a) {
     int t;
     FUN_001f9a10(a + 0x10, a + 0x10, a + 0x30);
@@ -1196,7 +1197,7 @@ void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *o) {
 }
 extern unsigned char *D_L00_001B20D8_0026ced0 __asm__("D_L00_001B20D8")
     __attribute__((section(".data")));
-extern float D_0015ED70_0026ced0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_0026ced0 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026ced0(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026ced0(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_0026ced0(void) __asm__("FUN_001160d8");
@@ -1616,9 +1617,6 @@ void FUN_L00_0026dbe0(unsigned char *p) {
     FUN_001f9bf8_0026dbe0(&b, &b, 0.4f);
     FUN_001f9a10_0026dbe0(p + 0x10, &a, &b);
 }
-static __inline__ void qcopy_0026dd20(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
 extern unsigned char *D_L00_001B20EC_0026dd20[] __asm__("D_L00_001B20EC");
 char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
@@ -1627,7 +1625,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
     char *o = FUN_L00_002678b8_0026dd20(0x1B);
     if (o) {
         char *q = o + 0x20;
-        qcopy_0026dd20(o + 0x10, pos);
+        qcopy(o + 0x10, pos);
         o[8] = FUN_001160d8_0026dd20();
         *(int *)(o + 4) = a;
         o[9] = FUN_001fa6d0_0026dd20(4.0f) + 0x40;
@@ -1636,7 +1634,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
         o[1] = 0;
         o[2] = D_L00_001B20EC_0026dd20[0][0];
         *(int *)(q + 0x18) = o[7];
-        qcopy_0026dd20(q, dir);
+        qcopy(q, dir);
         *(int *)(q + 0x10) = b;
         *(int *)(q + 0x14) = b;
     }
@@ -1919,7 +1917,7 @@ struct O_26e670_26e670 {
     u8 p40[4];
     s32 x44;
 };
-extern f32 D_0015ED64_26e670 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 D_0015ED64_26e670 __asm__("D_0015ED64");
 extern V_26e670_26e670 D_L00_00173E70_26e670 __asm__("D_L00_00173E70");
 extern V_26e670_26e670 D_L00_00166DC0_26e670 __asm__("D_L00_00166DC0");
 extern V_26e670_26e670 D_L00_00173E80_26e670 __asm__("D_L00_00173E80");
@@ -2170,6 +2168,7 @@ void FUN_L00_0026ee48(unsigned char *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 10) returns non-zero. */
 void FUN_L00_0026f048(char *a) {
     if (FUN_001f9770(a + 10) != 0) {
         FUN_L00_00267a08(a);
@@ -2295,7 +2294,7 @@ void FUN_L00_0026f280(char *m) {
 }
 extern unsigned char *D_L00_001B210C_0026f548 __asm__("D_L00_001B210C")
     __attribute__((section(".data")));
-extern float D_0015ED70_0026f548 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_0026f548 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026f548(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026f548(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_0026f548(float, float) __asm__("FUN_002132a8");
@@ -2847,6 +2846,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
+/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 0xA) returns non-zero; skips id -1. */
 void FUN_L00_00270710(char *a) {
     if (*(short *)(a + 0xA) != -1) {
         if (FUN_001f9770(a + 0xA) != 0) {
@@ -3056,7 +3056,7 @@ void FUN_L00_00270948(M_270948 *m) {
         e->x10 += 1.0f;
     m->b8 = (s32)(e->x10 * 256.0f);
 }
-extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64");
 f32 FUN_001fa6c0_2710a0(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_2710a0(s32) __asm__("FUN_001f96f8");

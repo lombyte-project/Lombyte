@@ -1,7 +1,9 @@
 /* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
+#include "rnc/rendering/draw_config.h"
+#define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
+#include "rnc/rendering/dma_tag.h"
 extern void FUN_001f98d0(void *, void *, int);
-extern int D_0018A2B0[];
 extern void FlushCache(int);
 extern char *D_001E1700[];
 extern char D_001E3000[];
@@ -10,7 +12,6 @@ extern char D_001E2A00[];
 extern char D_001E3E00[];
 extern char D_001E3200[];
 extern char D_001E4400[];
-extern int D_00160F00 MACRO_ADDR;
 extern int D_0015EE78 MACRO_ADDR;
 extern int D_0015EE74 MACRO_ADDR;
 extern int D_00160F68 MACRO_ADDR;
@@ -23,10 +24,6 @@ extern void FUN_00235be8(void);
 extern void WriteDmaChannel(void *, int, int);
 extern void dma_tie_textures(void) __asm__("func_00235640"); /* DmaTieTextures */
 extern int D_00160F4C MACRO_ADDR;
-typedef struct {
-    int unk00[6];
-    int unk18;
-} DrawCfg_236CA8;
 /* DrawTies_2: DrawTies_1's two passes, the first with the odd ties' 0x8
    flag set (and the saved tie data swapped in around it), the second with
    the even ones'. Each flag loop reads the tie count into its own local
@@ -43,16 +40,16 @@ void draw_ties_2(void) {
         }
     }
     {
-        int p = D_00160F00;
+        int p = render_packet_cursor.addr;
         D_00160F68 = p;
         D_0015EE74 = D_0015EE78;
         p += 0x10;
-        D_00160F00 = p;
+        render_packet_cursor.addr = p;
     }
     func_001F21B8(D_00160F30, 1);
     {
-        DrawCfg_236CA8 *d = (DrawCfg_236CA8 *)D_0018A2B0;
-        if (d->unk18 != 0) {
+        struct DrawConfig *d = &draw_config;
+        if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
             WriteDmaChannel(D_001E4400, 0x3600, 0x40);
@@ -76,13 +73,13 @@ void draw_ties_2(void) {
         }
     }
     {
-        DrawCfg_236CA8 *d = (DrawCfg_236CA8 *)D_0018A2B0;
-        int p = D_00160F00;
+        struct DrawConfig *d = &draw_config;
+        int p = render_packet_cursor.addr;
         D_00160F68 = p;
         D_0015EE74 = D_0015EE78;
         p += 0x10;
-        D_00160F00 = p;
-        if (d->unk18 != 0) {
+        render_packet_cursor.addr = p;
+        if (d->tie.enabled != 0) {
             FlushCache(0);
             FUN_00235be8();
             WriteDmaChannel(D_001E3200, 0x3600, 0x40);
@@ -97,7 +94,7 @@ void draw_ties_2(void) {
             *(short *)(D_001E1700[i] + 0x24) &= ~8;
         }
     }
-    FUN_001f98d0((void *)D_00160F00, D_001DF030, 0x20);
+    FUN_001f98d0((void *)render_packet_cursor.addr, D_001DF030, 0x20);
     func_001F21B0(D_00160F40, 5);
 }
 

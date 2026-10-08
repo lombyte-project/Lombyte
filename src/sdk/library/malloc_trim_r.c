@@ -9,6 +9,7 @@
 /* _malloc_trim_r t2: newlib mallocr.c malloc_trim with array externs (absolute addressing). */
 
 #include "types.h"
+#include "rnc/sdk/library/malloc_chunk.h"
 
 struct _reent;
 
@@ -19,13 +20,6 @@ extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 extern u32 D_0012F788[]; /* __malloc_av_ bins (pointer array) */
 extern u32 D_0012FBA0[]; /* sbrk_base */
 extern u32 D_0012FBB8[]; /* current_mallinfo.arena / sbrked_mem */
-
-struct malloc_chunk {
-    u32 prev_size;
-    u32 size;
-    struct malloc_chunk *fd;
-    struct malloc_chunk *bk;
-};
 
 #define SIZE_SZ                4
 #define MINSIZE                16

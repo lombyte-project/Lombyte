@@ -213,8 +213,8 @@ typedef struct {
 } T_23adb8;
 extern unsigned char D_0013F350_23adb8[] __asm__("D_0013F350");
 extern int D_L00_0015F968_23adb8 __asm__("D_L00_0015F968") __attribute__((sda));
-extern int D_L00_0015F96C_23adb8 __asm__("D_L00_0015F96C") __attribute__((section(".sdata")));
-extern int D_L00_0015F970_23adb8 __asm__("D_L00_0015F970") __attribute__((section(".sdata")));
+extern int D_L00_0015F96C_23adb8 __asm__("D_L00_0015F96C");
+extern int D_L00_0015F970_23adb8 __asm__("D_L00_0015F970");
 extern T_23adb8 D_L00_001C40B0_23adb8[] __asm__("D_L00_001C40B0");
 extern int D_0013D428_23adb8[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
@@ -260,8 +260,9 @@ void FUN_L00_0023adb8(void) {
 }
 void FUN_L00_00235878();
 extern int D_L00_0015F968 __attribute__((sda));
-extern int D_L00_0015F970 __attribute__((section(".sdata")));
-extern int D_L00_0015F96C __attribute__((section(".sdata")));
+extern int D_L00_0015F970;
+extern int D_L00_0015F96C;
+/* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
 void FUN_L00_0023aef8(void) {
     FUN_L00_00235878();
     D_L00_0015F968 = 1;

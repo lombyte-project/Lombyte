@@ -1,4 +1,6 @@
 #include "types.h"
+#include "kernel.h"
+#include "rnc/sdk/library/sif_file_slot.h"
 
 typedef char *va_list;
 
@@ -12,21 +14,6 @@ struct FsOpenRequest {
     s32 slot;
 };
 
-struct SemaParam {
-    s32 count;
-    s32 max_count;
-    s32 init_count;
-    s32 wait_threads;
-    s32 attr;
-    s32 option;
-};
-
-struct SifFileSlot {
-    s32 fd;
-    s32 flags;
-    s32 reserved8;
-    s32 reservedC;
-};
 
 extern s32 D_0012FC94[];
 extern s32 D_0012FCA0[];
@@ -86,9 +73,9 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     slot_index = file_slot - D_00157D80;
     request->flags = (s32)(flags & 0x6FFFFFFF);
     request->mode = mode;
-    semaphore_parameters.max_count = 1;
+    semaphore_parameters.maxCount = 1;
     request->slot = slot_index;
-    semaphore_parameters.init_count = 0;
+    semaphore_parameters.initCount = 0;
     semaphore_parameters.option = 0;
     completion_semaphore = CreateSema(&semaphore_parameters);
     request->result = &result;

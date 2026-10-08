@@ -1,37 +1,6 @@
 #include "types.h"
-struct MpegDecoder {
-    u8 pad_0[0x80];
-    s32 unk80;
-    u8 pad_84[0x4];
-    u64 unk88;
-    u8 pad_90[0x20];
-    s32 unkB0;
-    s32 unkB4;
-    s32 unkB8;
-    s32 unkBC;
-    s32 unkC0;
-    s32 unkC4;
-    s32 unkC8;
-    s32 unkCC;
-    s32 unkD0;
-    u8 pad_D4[0x784];
-    struct MpegDisplayState *unk858;
-};
-
-struct MpegRefImage {
-    u8 pad_0[0x28];
-    s32 unk28;
-    u8 pad_2C[0x18];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-};
-
+#include "rnc/sdk/libmpeg.h"
+/* s32 view of the owning sceMpeg (pts low word at 0x10, flags at 0x20). */
 struct MpegDisplayState {
     u8 pad_0[0x10];
     s32 unk10;
@@ -49,10 +18,10 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *arg1) {
     struct MpegDisplayState *ref_info;
     s32 *temp_7_9;
 
-    temp_7_9 = decoder->unk858;
+    temp_7_9 = (s32 *)decoder->mpeg;
     _getPtsDtsFlags(decoder, arg1, (s32 *)((u8 *)temp_7_9 + 0x10), (s32 *)((u8 *)temp_7_9 + 0x18),
                     (s32 *)((u8 *)temp_7_9 + 0x20));
-    ref_info = decoder->unk858;
+    ref_info = (struct MpegDisplayState *)decoder->mpeg;
     decoder->unk80 = (s32)ref_info->unk10;
     temp_6_28 = D_00132E98[(s32)(ref_info->unk20 >> 5) & 0xF];
     decoder->unkCC = (s32)arg1->unk5C;
@@ -65,7 +34,7 @@ void _dispRefImage(struct MpegDecoder *decoder, struct MpegRefImage *arg1) {
     decoder->unkC4 = (s32)arg1->unk54;
     decoder->unkC8 = (s32)arg1->unk58;
     if (_isOutSizeOK(decoder, arg1) != 0) {
-        if (arg1->unk28 == 1) {
+        if (arg1->status == 1) {
             if (decoder->unkB0 != 0) {
                 _csc_storeRefImage(decoder, arg1);
             } else {

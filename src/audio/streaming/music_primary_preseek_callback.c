@@ -1,26 +1,10 @@
 #include "types.h"
-struct MusicChannelHandle {
-    u32 handle;
-    u8 pad4[6];
-    s16 state;
-};
-struct MusicTrackParameters {
-    s16 track;
-    s16 volume;
-    s16 flags;
-};
-struct MusicStartParameters {
-    u8 pad0[0x38];
-    struct MusicTrackParameters primary;
-    u8 pad3e[0x16];
-    struct MusicTrackParameters secondary;
-};
-extern struct MusicStartParameters D_001516D0;
+#include "rnc/audio/music/music_stream_state.h"
 extern void music_preseek_track(s32, s32, s32) __asm__("func_00215B68");
 void music_primary_preseek_callback(u32 handle, s64 context) __asm__("FUN_00216a20");
 
 void music_primary_preseek_callback(u32 handle, s64 context) {
-    struct MusicChannelHandle *channel = (struct MusicChannelHandle *)(s32)context;
+    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(s32)context;
 
     if (channel != 0) {
         channel->handle = handle;
@@ -29,8 +13,8 @@ void music_primary_preseek_callback(u32 handle, s64 context) {
                 channel->state = 2;
             }
         } else {
-            music_preseek_track(D_001516D0.primary.track, D_001516D0.primary.flags,
-                                D_001516D0.primary.volume);
+            music_preseek_track(music_stream_state.primary.track, music_stream_state.primary.flags,
+                                music_stream_state.primary.volume);
         }
     }
 }
