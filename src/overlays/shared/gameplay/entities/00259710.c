@@ -217,7 +217,7 @@ typedef struct {
     } u_00259fe8;
     u128 b;
 } E_259fe8_00259fe8;
-extern int D_L00_0015F434_00259fe8 __asm__("D_L00_0015F434") __attribute__((section(".sdata")));
+extern int D_L00_0015F434_00259fe8 __asm__("D_L00_0015F434");
 extern E_259fe8_00259fe8 D_L00_0016E080_00259fe8[] __asm__("D_L00_0016E080")
     __attribute__((section(".data")));
 extern u128 D_L00_00173E80_00259fe8 __asm__("D_L00_00173E80") __attribute__((section(".data")));

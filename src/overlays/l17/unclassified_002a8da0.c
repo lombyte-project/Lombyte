@@ -849,7 +849,7 @@ typedef int u128 __attribute__((mode(TI)));
 
 extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001f2868();

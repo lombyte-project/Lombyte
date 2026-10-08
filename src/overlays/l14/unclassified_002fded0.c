@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002fded0.s", FUN_L14_002fded0);
 /* deletes the linked moby and then the owner if still active */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF6C0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_0015FFD8 __attribute__((section(".sdata")));
+extern char *D_L14_0015FFD8;
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void FUN_L14_002fe238(char *moby) {
@@ -421,7 +421,7 @@ typedef struct {
 extern L14LevelState D_L14_001BB930;
 extern s32 D_0014C190[][64];
 extern int D_0015ED84;
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 extern unsigned char D_0014C050[];
 extern char D_L14_00161FE8[];

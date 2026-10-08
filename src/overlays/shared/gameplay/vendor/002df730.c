@@ -61,7 +61,7 @@ void FUN_L00_002e01b0(char *m) {
     *(int *)(d + 4) = FUN_L00_00257b90_2e01b0(a, FUN_001f96f8_2e01b0(15));
 }
 extern char D_0013F350[];
-extern u8 *D_L00_0015FFD8 __attribute__((section(".sdata")));
+extern u8 *D_L00_0015FFD8;
 
 s32 FUN_L00_002e02e0(void) {
     char *base;

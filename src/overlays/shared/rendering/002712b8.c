@@ -348,7 +348,7 @@ void FUN_L00_00271df8(unsigned char *p) {
 typedef struct {
     f32 x, y, z, w;
 } V __attribute__((aligned(16)));
-extern f32 D_0015ED70 MACRO_ADDR;
+extern f32 D_0015ED70;
 void FUN_L00_001ff318(V *, V *, f32);
 void FUN_L00_001ff290(V *, V *, V *);
 s32 FUN_001f9770(void *);
@@ -1751,8 +1751,8 @@ void FUN_L00_00275510(char *m) {
         FUN_001f9770_cf(m);
     }
 }
-extern float D_0015ED64_002756f0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float D_0015ED60_002756f0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED64_002756f0 __asm__("D_0015ED64");
+extern float D_0015ED60_002756f0 __asm__("D_0015ED60");
 extern void FUN_001f9a10_002756f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f9b20_002756f0(void *) __asm__("FUN_001f9b20");
 extern int FUN_001f9770_002756f0(void *) __asm__("FUN_001f9770");

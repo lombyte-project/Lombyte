@@ -96,7 +96,7 @@ typedef struct {
     int a, b, c;
 } I3_29fcd0;
 extern I3_29fcd0 D_L00_00161178_29fcd0 __asm__("D_L00_00161178") __attribute__((section(".data")));
-extern long D_0015EED0_29fcd0 __asm__("D_0015EED0") __attribute__((section(".sdata")));
+extern long D_0015EED0_29fcd0 __asm__("D_0015EED0");
 void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void FUN_001f9a28_29fcd0(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9af0_29fcd0(void *) __asm__("FUN_001f9af0");

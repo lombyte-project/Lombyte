@@ -11,7 +11,7 @@ extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float fast_cos(float) __asm__("func_001F9DC8");
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
 extern int D_L00_0015F630_i __asm__("D_L00_0015F630");

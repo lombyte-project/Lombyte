@@ -38,7 +38,7 @@ typedef struct {
 } MO;
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern int FUN_L00_0025c698(void *, void *);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,

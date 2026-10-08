@@ -526,8 +526,7 @@ typedef struct {
 } Ent_03f80;
 extern float func_001F9D10_03f80(void *, void *) __asm__("FUN_001f9b48");
 extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
-extern Ent_03f80 *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8")
-    __attribute__((section(".sdata")));
+extern Ent_03f80 *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8");
 extern short D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *FUN_L05_00303f80(char *self, int idx) {
     short *list = D_L05_001AC040_03f80[idx];

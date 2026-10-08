@@ -83,7 +83,7 @@ extern char D_0013E533[];
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int D_L13_0015F5C4;
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int D_L13_00179710[];
 extern int FUN_L00_00203908(int a, int b);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

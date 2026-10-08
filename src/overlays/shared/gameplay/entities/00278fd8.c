@@ -44,7 +44,7 @@ extern float vector_length_xyz(void *);
 extern int *D_L15_001B0AB0[];
 extern int D_L15_0015F5C4;
 extern int D_L15_0015F5CC;
-extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int FUN_001f0b58(void);
 extern int FUN_001f9770(void *);
 extern int FUN_001fa6e0(int, int, float);
@@ -994,7 +994,7 @@ int FUN_L15_00299ae0(char *moby, float *point, float arg) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AE80), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(float *, float *);
-extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 
 int FUN_L15_00299ca0(void *mm) {
@@ -1036,7 +1036,7 @@ int FUN_L15_00299ca0(void *mm) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
-extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 
@@ -1222,7 +1222,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029ac30.s", FUN_L15_0029ac30);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
@@ -1506,7 +1506,7 @@ void FUN_L15_002cbba0(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[];
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");

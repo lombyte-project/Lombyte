@@ -1383,7 +1383,7 @@ typedef struct {
     short a;
     short b;
 } S_002ed230;
-extern char *D_L00_0015EF50_002ed230 __asm__("D_L00_0015EF50") __attribute__((section(".sdata")));
+extern char *D_L00_0015EF50_002ed230 __asm__("D_L00_0015EF50");
 extern unsigned char D_001413F4_002ed230 __asm__("D_001413F4") __attribute__((section(".data")));
 extern int D_0015ED84_002ed230 __asm__("D_0015ED84") __attribute__((sda));
 extern int D_001413DC_002ed230 __asm__("D_001413DC") __attribute__((section(".data")));
@@ -1424,7 +1424,7 @@ typedef struct {
     short x;
     short y;
 } S_2ed348_002ed348;
-extern char *D_L00_0015EF50_002ed348 __asm__("D_L00_0015EF50") __attribute__((section(".sdata")));
+extern char *D_L00_0015EF50_002ed348 __asm__("D_L00_0015EF50");
 extern char *D_L00_00166E00_002ed348 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern unsigned char D_001413F4_002ed348 __asm__("D_001413F4") __attribute__((section(".data")));
 extern char D_0013F3D0_002ed348[] __asm__("D_0013F3D0");

@@ -28,7 +28,7 @@ void FUN_L00_001f8f50(void) {
     if (D_L00_0015F5D8 == 0)
         FUN_L00_002772c0(0);
 }
-extern volatile s32 D_L00_0015F628 __attribute__((section(".sdata")));
+extern volatile s32 D_L00_0015F628;
 extern f32 D_L00_0015F3FC;
 extern s16 D_L00_0015F626;
 extern u8 D_L00_00173080[];

@@ -119,7 +119,7 @@ void FUN_L12_003076e0(char *m) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
-extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L12_0015FFD8_m __asm__("D_L12_0015FFD8");
 extern int FUN_001f9770(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void FUN_L12_003076e0(char *m);
@@ -268,8 +268,8 @@ typedef struct {
 extern char D_0013D388[];
 extern char D_0013F3D0[] NOT_SDA;
 extern char D_L12_0016CCF0[];
-extern int D_L12_0015F5C4 MACRO_ADDR;
-extern int D_L12_0015F5CC MACRO_ADDR;
+extern int D_L12_0015F5C4;
+extern int D_L12_0015F5CC;
 extern void FUN_L00_00298840(int);
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");

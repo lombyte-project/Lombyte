@@ -541,7 +541,40 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     }
     return r;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002591d0.s", FUN_L00_002591d0);
+extern int D_L00_0015FFF4_2591d0 __asm__("D_L00_0015FFF4");
+extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
+extern char *D_L00_00160114_2591d0 __asm__("D_L00_00160114");
+extern unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C");
+extern short D_L00_00160110_2591d0 __asm__("D_L00_00160110");
+extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
+int f2592b8_2591d0(char **, char *) __asm__("FUN_L00_002592b8");
+/* Looks up table entry idx and makes it current; the flag test reads the
+ * current entry back, as the original did. */
+int FUN_L00_002591d0(char **out, int idx, int a, int b) {
+    unsigned short *v;
+    char *e;
+    int c;
+    int h;
+    if (idx < 0 || D_L00_0015FFF4_2591d0 < idx) {
+        *out = 0;
+        return -1;
+    }
+    *out = 0;
+    D_L00_00160114_2591d0 = 0;
+    v = D_L00_001AB840_2591d0[idx];
+    D_L00_0016010C_2591d0 = v;
+    if (v == 0) return -1;
+    h = *v & 0x7FFF;
+    D_L00_00160110_2591d0 = h;
+    e = D_L00_0015FFD8_2591d0 + (h << 8);
+    D_L00_00160114_2591d0 = e;
+    *out = e;
+    c = (unsigned)(*(char *volatile *)&D_L00_00160114_2591d0)[0x20] >> 31;
+    if (!a) {
+        if (b || c) return f2592b8_2591d0(out, D_L00_00160114_2591d0);
+    } else if (b && !c) return f2592b8_2591d0(out, D_L00_00160114_2591d0);
+    return 0;
+}
 
 extern unsigned short *D_L00_0016010C;
 extern short D_L00_00160110;

@@ -7,7 +7,7 @@
 
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
-extern int D_L15_0015F5CC MACRO_ADDR;
+extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));

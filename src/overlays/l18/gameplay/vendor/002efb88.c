@@ -273,9 +273,9 @@ extern int D_L18_00162260_c7 __asm__("D_L18_00162260") __attribute__((sda));
 extern int D_L18_00162264_c7 __asm__("D_L18_00162264") __attribute__((sda));
 extern float D_L18_00162268_c7 __asm__("D_L18_00162268") __attribute__((sda));
 extern float D_L18_0016226C_c7 __asm__("D_L18_0016226C") __attribute__((sda));
-extern float D_0015ED6C_c7 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_c7 __asm__("D_0015ED6C");
 extern short *D_L18_001AC240_c7[] __asm__("D_L18_001AC240");
-extern unsigned char *D_L18_0015FFD8_c7 __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
+extern unsigned char *D_L18_0015FFD8_c7 __asm__("D_L18_0015FFD8");
 extern float FUN_001f9de0_c7(float) __asm__("FUN_001f9de0");
 extern int FUN_001fa6e0_c7(float, int, int) __asm__("FUN_001fa6e0");
 extern void FUN_001f9bf8_c7(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -2350,9 +2350,9 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
 /* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
 
-extern char *D_L18_0016016C __asm__("D_L18_001600EC") MACRO_ADDR;
+extern char *D_L18_0016016C __asm__("D_L18_001600EC");
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015EE6C __asm__("D_0015ED6C");
 extern float FUN_001f9b80(void *, void *);
 extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
 extern short D_L18_00162408_u __asm__("D_L18_00162378") __attribute__((sda));
@@ -2446,7 +2446,7 @@ unsigned char *FUN_L18_002f6e10(char *self) {
     return best;
 }
 extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
-extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002f6fa8, 124 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -2467,7 +2467,7 @@ void FUN_L18_002f6fa8(int unused, int idx) {
 }
 
 extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
-extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002f7028, 140 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -2754,8 +2754,8 @@ typedef struct {
 } M;
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern int D_L18_0015F5C4 MACRO_ADDR;
-extern int D_L18_0015F5CC MACRO_ADDR;
+extern int D_L18_0015F5C4;
+extern int D_L18_0015F5CC;
 extern int D_L18_001623A0_g __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));

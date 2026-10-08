@@ -45,11 +45,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002a40f0.s", FUN_L02_002a40f0);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
 
 extern char D_L02_0016D040[];
-extern float D_L02_001612F8 MACRO_ADDR;
-extern float D_L02_001612FC MACRO_ADDR;
-extern float D_L02_00161300 MACRO_ADDR;
-extern float D_L02_00161304 MACRO_ADDR;
-extern int *D_L02_001611C0 MACRO_ADDR;
+extern float D_L02_001612F8;
+extern float D_L02_001612FC;
+extern float D_L02_00161300;
+extern float D_L02_00161304;
+extern int *D_L02_001611C0;
 extern void FUN_001f2260(void);
 extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
@@ -108,7 +108,7 @@ extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
 extern char D_0013E633_d92f0[] __asm__("D_0013F3D0");
-extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void FUN_L02_002d92f0(char *moby) {
     float v[4];
     char *g;

@@ -20,10 +20,10 @@ extern s32 D_L00_00161608 __attribute__((sda));
 extern f32 D_L00_0016160C __attribute__((sda));
 extern f32 D_L00_00161610 __attribute__((sda));
 extern f32 D_L00_00161634 __attribute__((sda));
-extern s16 D_L00_00161660 __attribute__((section(".sdata")));
-extern s16 D_L00_00161662 __attribute__((section(".sdata")));
-extern s16 D_L00_00161664 __attribute__((section(".sdata")));
-extern s16 D_L00_00161666 __attribute__((section(".sdata")));
+extern s16 D_L00_00161660;
+extern s16 D_L00_00161662;
+extern s16 D_L00_00161664;
+extern s16 D_L00_00161666;
 extern u8 D_L00_001DB5C0[];
 extern u8 D_L00_001DBA20[];
 void FUN_L00_002baae0(void *, s32, s32, s32, f32, f32, f32);
@@ -1220,7 +1220,7 @@ void FUN_L00_002bf810(char *a, char *b, int n) {
         FUN_001f9a10(t, t, d);
     }
 }
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED6C;
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f99c0(float);
 extern float FUN_001f9e90(float, float);

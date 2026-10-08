@@ -127,7 +127,7 @@ void FUN_L16_002c9c38(int index, void *arg) {
     }
 }
 extern int D_L16_001ABCC0_u[] __asm__("D_L16_001ABCC0");
-extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8");
 /* 0x002ceca8, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -386,8 +386,8 @@ extern char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, 
                               float);
 extern char D_0013F350[];
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float D_0015ED6C MACRO_ADDR, D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR, D_0015ED70 MACRO_ADDR;
+extern float D_0015ED6C, D_0015EE70;
+extern float D_0015EE6C __asm__("D_0015ED6C"), D_0015ED70;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
@@ -931,7 +931,7 @@ extern void func_L00_001FF4B0_c9a50(void *, void *, float) __asm__("FUN_001f9bf8
 extern void func_001F9BD8_c9a50(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
-extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
 extern char D_L16_00167240_c9a50[] __asm__("D_L16_001671C0");
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
 void FUN_L16_002c9a50(unsigned char *m) {
@@ -1006,7 +1006,7 @@ extern int D_L16_001619A4 __attribute__((sda));
 extern int D_L16_001619A8 __attribute__((sda));
 extern int D_L16_001619AC __attribute__((sda));
 extern int D_L16_001619B0 __attribute__((sda));
-extern int D_L16_001600EC_m __asm__("D_L16_001600EC") __attribute__((section(".sdata")));
+extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int FUN_001fa6e0(float, int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -1626,8 +1626,8 @@ typedef int L16MoveQuad __attribute__((mode(TI)));
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern float D_0015ED6C MACRO_ADDR, D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR, D_0015ED70 MACRO_ADDR;
+extern float D_0015ED6C, D_0015EE70;
+extern float D_0015EE6C, D_0015ED70;
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -2649,7 +2649,7 @@ void *FUN_L16_002d5db0(int index, void *position) {
             return nearest;
     }
 }
-extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC");
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern short D_L16_00161A88_5e80 __asm__("D_L16_00161A88") __attribute__((sda));

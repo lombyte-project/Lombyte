@@ -448,7 +448,7 @@ void FUN_L14_002ef578(Level14VendorMoby *moby) {
 /* Clears the vendor moby's flags and marks its id as collected in both bit tables. */
 
 extern s32 D_0014C190[][64];
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 
 void FUN_L14_002ef5a8(Level14VendorMoby *m) {
@@ -687,7 +687,7 @@ typedef struct {
 extern L14LevelState D_L14_001BB930;
 extern s32 D_0014C190[][64];
 extern int D_0015ED84;
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 extern unsigned char D_0014C050[];
 extern char D_L14_00161F20[];

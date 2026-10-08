@@ -1196,7 +1196,7 @@ void FUN_L00_0026ccb0(O_0026ccb0_0026ccb0 *o) {
 }
 extern unsigned char *D_L00_001B20D8_0026ced0 __asm__("D_L00_001B20D8")
     __attribute__((section(".data")));
-extern float D_0015ED70_0026ced0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_0026ced0 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026ced0(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026ced0(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_0026ced0(void) __asm__("FUN_001160d8");
@@ -1919,7 +1919,7 @@ struct O_26e670_26e670 {
     u8 p40[4];
     s32 x44;
 };
-extern f32 D_0015ED64_26e670 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 D_0015ED64_26e670 __asm__("D_0015ED64");
 extern V_26e670_26e670 D_L00_00173E70_26e670 __asm__("D_L00_00173E70");
 extern V_26e670_26e670 D_L00_00166DC0_26e670 __asm__("D_L00_00166DC0");
 extern V_26e670_26e670 D_L00_00173E80_26e670 __asm__("D_L00_00173E80");
@@ -2295,7 +2295,7 @@ void FUN_L00_0026f280(char *m) {
 }
 extern unsigned char *D_L00_001B210C_0026f548 __asm__("D_L00_001B210C")
     __attribute__((section(".data")));
-extern float D_0015ED70_0026f548 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_0026f548 __asm__("D_0015ED70");
 unsigned char *FUN_L00_002678b8_0026f548(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026f548(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_0026f548(float, float) __asm__("FUN_002132a8");
@@ -3056,7 +3056,7 @@ void FUN_L00_00270948(M_270948 *m) {
         e->x10 += 1.0f;
     m->b8 = (s32)(e->x10 * 256.0f);
 }
-extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 D_0015ED64_2710a0 __asm__("D_0015ED64");
 f32 FUN_001fa6c0_2710a0(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_2710a0(f32) __asm__("FUN_001fa6d0");
 s32 FUN_001f96f8_2710a0(s32) __asm__("FUN_001f96f8");

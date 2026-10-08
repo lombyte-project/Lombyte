@@ -160,7 +160,7 @@ extern void func_L01_0023D688_2cd48(int, int) __asm__("FUN_L01_0023cf98");
 extern float func_001F9B88_2cd48(float) __asm__("FUN_001f99c0");
 extern void func_L00_0020BFA8_2cd48(void) __asm__("FUN_L00_0020b930");
 extern unsigned char D_0013E633_2cd48[] __asm__("D_0013F350");
-extern int D_0015EE84_m_2cd48 __asm__("D_0015ED84") MACRO_ADDR;
+extern int D_0015EE84_m_2cd48 __asm__("D_0015ED84");
 void FUN_L01_0022cd48(void) {
     char *p = (char *)D_0013E633_2cd48;
     int v;

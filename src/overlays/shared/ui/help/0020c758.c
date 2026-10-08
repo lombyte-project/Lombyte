@@ -2087,7 +2087,7 @@ typedef struct {
     short s30e;
 } G_2121c0_002121c0;
 extern G_2121c0_002121c0 D_0013F350_002121c0 __asm__("D_0013F350");
-extern float D_0015ED70_002121c0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_002121c0 __asm__("D_0015ED70");
 extern float FUN_001f9b20_002121c0(void *) __asm__("FUN_001f9b20");
 extern float FUN_001f9e90_002121c0(float, float) __asm__("FUN_001f9e90");
 extern void FUN_00125180_002121c0(void *, void *) __asm__("FUN_00125180");

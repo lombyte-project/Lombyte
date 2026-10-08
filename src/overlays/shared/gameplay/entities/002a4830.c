@@ -200,7 +200,7 @@ typedef struct {
 } C_2a4e48;
 extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern char D_0013F3D0_2a4e48[] __asm__("D_0013F3D0");
-extern float D_0015ED6C_2a4e48 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_2a4e48 __asm__("D_0015ED6C");
 extern void f9a28_2a4e48(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9ab0_2a4e48(void *, void *) __asm__("FUN_001f9ab0");
 extern void f9a68_2a4e48(void *, void *, float) __asm__("FUN_001f9a68");

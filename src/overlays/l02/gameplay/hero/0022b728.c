@@ -3688,7 +3688,7 @@ void FUN_L02_00230988(void) {
 }
 #include "sda.h"
 extern char D_0013E633_37478[] __asm__("D_0013F3D0");
-extern float D_0015EE6C_37478 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015EE6C_37478 __asm__("D_0015ED6C");
 extern void FUN_L02_0022b728_u(int, int) __asm__("FUN_L02_0022b728");
 
 void FUN_L02_00237478(void) {

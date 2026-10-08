@@ -618,7 +618,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
 extern char D_0013F3D0[];
-extern float D_0015ED60 MACRO_ADDR;
+extern float D_0015ED60;
 extern float FUN_L00_00257c48(float lo, float hi);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L14_00161B08_x __asm__("D_L14_00161B08") __attribute__((sda));

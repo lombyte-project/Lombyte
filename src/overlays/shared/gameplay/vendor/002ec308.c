@@ -79,7 +79,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ec4b8.s", FUN_L02_002ec4b8);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED6C;
 extern float FUN_001f96b0(float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001fa6e0(int, int, float);
@@ -544,7 +544,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb9c8.s", FUN_L02_002fb9c8);
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_0015EF50_c298 __asm__("D_L02_0015EF50") MACRO_ADDR;
+extern char *D_L02_0015EF50_c298 __asm__("D_L02_0015EF50");
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
 extern int FUN_L02_002fb9c8(char *);
 

@@ -137,7 +137,7 @@ typedef struct {
 } G_2d81b8;
 extern G_2d81b8 D_L00_00173E40_2d81b8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((section(".data")));
-extern float D_0015ED70_2d81b8 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_2d81b8 __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int FUN_L00_0025e3b8_2d81b8(void *) __asm__("FUN_L00_0025e3b8");
 void FUN_L00_002d81b8(unsigned char *m) {
@@ -1075,7 +1075,7 @@ void FUN_L00_002df4a8(M09 *m) {
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f9de0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int D_0015ED84;
 extern int FUN_001fa6e0(int, int, float);
 extern short D_L00_00161B90_d __asm__("D_L00_00161B90") __attribute__((sda));
 extern short D_L00_00161B94_d __asm__("D_L00_00161B94") __attribute__((sda));

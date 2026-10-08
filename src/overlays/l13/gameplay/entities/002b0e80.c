@@ -14,7 +14,7 @@ extern int func_00215570_b0e80(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void func_L01_0026F090_b0e80(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_L13_001F44E8_b0e80[] __asm__("D_L13_001F41F8");
 extern unsigned char D_0013E633_b0e80[] __asm__("D_0013F3D0");
-extern char *D_L13_00160058_m_b0e80 __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L13_00160058_m_b0e80 __asm__("D_L13_0015FFD8");
 void FUN_L13_002b0e80(char *moby) {
     char *data = *(char **)(moby + 0x78);
     if (*(int *)data == -1) {

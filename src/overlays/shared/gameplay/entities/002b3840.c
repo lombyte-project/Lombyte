@@ -6,7 +6,7 @@
 #include "qcopy.h"
 extern struct Moby *func_0020D348_m_d4168(int) __asm__("FUN_0020c4f8");
 extern int func_001F9850_d4168(int) __asm__("FUN_001f96f8");
-extern float D_0015EE6C_d4168 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
     char *moby = (char *)func_0020D348_m_d4168(0x5C3);
     if (moby != 0) {
@@ -362,7 +362,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_003186f8.s", FUN_L05_003186f8);
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
 extern void func_L16_002E5D68_19510(void *) __asm__("FUN_L05_00319208");
-extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC") MACRO_ADDR;
+extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC");
 void FUN_L05_00319510(void *moby_v) {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);

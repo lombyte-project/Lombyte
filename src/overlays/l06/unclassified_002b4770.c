@@ -3,7 +3,7 @@
 #include "asm.h"
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002d9e08, 108 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -22,7 +22,7 @@ void FUN_L06_002d9e08(int index) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002d9e78, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -41,7 +41,7 @@ void FUN_L06_002d9e78(int idx) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002e9e30, 108 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -62,7 +62,7 @@ void FUN_L06_002e9e30(int index) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f45a0, 80 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -78,7 +78,7 @@ void FUN_L06_002f45a0(int idx) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f45f0, 72 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -143,7 +143,7 @@ void FUN_L06_002f53e8(char *moby) {
     }
 }
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f9698, 96 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -219,7 +219,7 @@ float FUN_L06_002f96f8(char *self) {
     return FUN_001fa580(FUN_001fa580(lo, fast_difference_between_rotations(hi, lo) * 0.5f), ang);
 }
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f9948, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -239,7 +239,7 @@ void FUN_L06_002f9948(int idx) {
 }
 
 extern int D_L06_001ABFC0[];
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002f99b0, 120 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -291,7 +291,7 @@ void FUN_L06_002fb090(char *moby) {
 
 extern char D_0013F350[];
 extern char D_L06_00167540[] __attribute__((section(".data")));
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED6C;
 extern short D_0015ED70_s __asm__("D_0015ED70");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_00213f38(float *, float *, float, float, float, float);
@@ -861,7 +861,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fa9c0.s", FUN_L06_002fa9c0);
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC578), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0016016C __asm__("D_L06_001600EC") MACRO_ADDR;
+extern char *D_L06_0016016C __asm__("D_L06_001600EC");
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
 extern void FUN_L00_00216f90(void *, void *, int, int);

@@ -303,9 +303,9 @@ struct G_3063f0 {
     char *objs[1];
 };
 
-extern float D_L08_0015F59C_c __asm__("D_L08_0015F59C") __attribute__((section(".sdata")));
-extern float D_L08_0015F5A0_c __asm__("D_L08_0015F5A0") __attribute__((section(".sdata")));
-extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
+extern float D_L08_0015F59C_c __asm__("D_L08_0015F59C");
+extern float D_L08_0015F5A0_c __asm__("D_L08_0015F5A0");
+extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4");
 extern short D_L08_00162300_d __asm__("D_L08_00162300") __attribute__((sda));
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
@@ -411,7 +411,7 @@ extern int FUN_001fa6d0(float);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void FUN_L00_00284e50(void *, void *);
-extern int D_0015ED84_s __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_s __asm__("D_0015ED84");
 extern char D_L08_00162308[];
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;

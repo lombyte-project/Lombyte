@@ -127,7 +127,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d3e50.s", FUN_L02_002d3e50);
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6A90), where it is exact; names translated to the US level program. */
 
-extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L02_0015FFD8_m __asm__("D_L02_0015FFD8");
 extern int D_L02_001ABE40[];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 

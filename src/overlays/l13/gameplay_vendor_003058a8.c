@@ -487,7 +487,7 @@ void FUN_L13_0030ad38(char *moby, float *p, float *q) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002db890(char *);
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
 int FUN_L13_0030ae68(int idx, int arg) {
@@ -555,7 +555,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
 extern char *D_L13_001B07B0[];
 extern float D_0015ED60;
 extern float FUN_001f9b48(void *, void *);
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
 extern int FUN_L09_00294ae0(void *, void *, void *, int, int, float);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -630,7 +630,7 @@ typedef struct {
 } L13Action;
 
 extern L13Action D_L13_0016CB60;
-extern int D_L13_0015F5C4 __attribute__((section(".sdata")));
+extern int D_L13_0015F5C4;
 extern void FUN_L00_002637f8(int);
 
 void FUN_L13_0030bdf0(unsigned char *moby) {

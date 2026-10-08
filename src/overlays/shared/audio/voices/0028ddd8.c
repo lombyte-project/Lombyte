@@ -30,10 +30,10 @@ int FUN_L00_0028ddd8(int a, int b, int c, int d) {
 extern char D_0013E550_c[] __asm__("D_0013E550");
 
 extern unsigned char D_L00_001BD820[];
-extern int D_0015ED84 __attribute__((section(".sdata")));
-extern int D_L00_0015F574 __attribute__((section(".sdata")));
-extern int D_L00_0015F5F0 __attribute__((section(".sdata")));
-extern char *D_L00_0015F5F4 __attribute__((section(".sdata")));
+extern int D_0015ED84;
+extern int D_L00_0015F574;
+extern int D_L00_0015F5F0;
+extern char *D_L00_0015F5F4;
 
 int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
     int idx;

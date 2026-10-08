@@ -324,7 +324,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002caf70.s", FUN_L00_002caf70);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cb418.s", FUN_L00_002cb418);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
 #include "qcopy.h"
-extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C");
 extern int D_L00_001618A4_2cbf68 __asm__("D_L00_001618A4") __attribute__((sda));
 extern float D_L00_001618A0_2cbf68 __asm__("D_L00_001618A0") __attribute__((sda));
 extern unsigned char D_0013E535_2cbf68 __asm__("D_0013E535") __attribute__((section(".data")));

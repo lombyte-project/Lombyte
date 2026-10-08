@@ -1287,7 +1287,7 @@ typedef struct {
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int D_L14_0015F7EC __asm__("D_L14_0015F70C") MACRO_ADDR;
+extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int FUN_001fa728_dee28(char *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);

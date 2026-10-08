@@ -70,7 +70,7 @@ void FUN_L06_002fda30(char *m) {
     }
 }
 extern int D_L06_001ABFC0_u[] __asm__("D_L06_001ABFC0");
-extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 /* 0x002ffc38, 116 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */

@@ -2,11 +2,11 @@
 #include "types.h"
 #include "asm.h"
 
-extern int D_0015EE8C_23d028 __asm__("D_0015EE8C") __attribute__((section(".sdata")));
-extern int D_0015EE78_23d028 __asm__("D_0015EE78_gp") __attribute__((section(".sdata")));
-extern int D_0015EE74_23d028 __asm__("D_0015EE74") __attribute__((section(".sdata")));
-extern int D_0015ED84_23d028 __asm__("D_0015ED84") __attribute__((section(".sdata")));
-extern int D_0015EE24_23d028 __asm__("D_0015EE24") __attribute__((section(".sdata")));
+extern int D_0015EE8C_23d028 __asm__("D_0015EE8C");
+extern int D_0015EE78_23d028 __asm__("D_0015EE78_gp");
+extern int D_0015EE74_23d028 __asm__("D_0015EE74");
+extern int D_0015ED84_23d028 __asm__("D_0015ED84");
+extern int D_0015EE24_23d028 __asm__("D_0015EE24");
 extern char D_L00_00173EC0_23d028[] __asm__("D_L00_00173EC0") __attribute__((section(".data")));
 extern char D_L00_00197BC0_23d028[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern char D_L00_0019A980_23d028[] __asm__("D_L00_0019A980") __attribute__((section(".data")));

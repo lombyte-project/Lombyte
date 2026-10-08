@@ -161,7 +161,7 @@ typedef int u128 __attribute__((mode(TI)));
 extern char D_L01_001620E0 __attribute__((sda));
 extern char D_L01_001620F0 __attribute__((sda));
 extern char D_L01_00162100 __attribute__((sda));
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L01_0028a7a8(void *, void *, void *, void *, int);

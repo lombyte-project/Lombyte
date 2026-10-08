@@ -1393,7 +1393,7 @@ extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_001f4600_c(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_002f37d0_c(void *) __asm__("FUN_L06_002f37d0");
 
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern int D_L06_0015F5CC_c2 __asm__("D_L06_0015F5CC");
 
 void FUN_L06_002f38c8(char *obj) {
@@ -1706,7 +1706,7 @@ typedef struct {
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013E550[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern short D_L06_00161E74 __attribute__((sda));
@@ -1764,7 +1764,7 @@ void FUN_L06_002f7ab8(char *m) {
 /* Spawn forty particles at the moby with randomised parameters. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F9098), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern short D_L06_00161E84_d __asm__("D_L06_00161E84") __attribute__((sda));

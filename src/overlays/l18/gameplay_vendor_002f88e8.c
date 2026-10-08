@@ -115,7 +115,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern int D_L18_0015F5C4 MACRO_ADDR;
+extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
 void FUN_L18_002fa640(char *moby) {
@@ -192,7 +192,7 @@ void FUN_L18_002fa728(char *moby) {
     }
 }
 extern int D_L18_001AC240[];
-extern int D_L18_0015FFD8 __attribute__((section(".sdata")));
+extern int D_L18_0015FFD8;
 /* 0x002fa888, 88 bytes.
  * Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c:
  * func_L18_002FBCE8), where it is exact; names translated to the US level
@@ -555,7 +555,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc860.s", FUN_L18_002fc860);
 /* For each listed moby of matching type, spawns effects at five points. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
 
-extern int D_L18_0015FFD8 MACRO_ADDR;
+extern int D_L18_0015FFD8;
 extern short D_L18_00162654;
 extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
 extern void FUN_L00_00263618(void *, int, float, float);

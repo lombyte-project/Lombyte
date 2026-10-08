@@ -104,13 +104,13 @@ void FUN_L15_002d77c0(char *moby) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d79e8.s", FUN_L15_002d79e8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d7bb0.s", FUN_L15_002d7bb0);
-extern float D_0015ED60_8710 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED60_8710 __asm__("D_0015ED60");
 extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
-extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8") __attribute__((section(".sdata")));
-extern int D_L15_00161CCA_8710 __asm__("D_L15_00161CCA") __attribute__((section(".sdata")));
-extern int D_L15_00161CCC_8710 __asm__("D_L15_00161CCC") __attribute__((section(".sdata")));
-extern int D_L15_00161CCE_8710 __asm__("D_L15_00161CCE") __attribute__((section(".sdata")));
+extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
+extern int D_L15_00161CCA_8710 __asm__("D_L15_00161CCA");
+extern int D_L15_00161CCC_8710 __asm__("D_L15_00161CCC");
+extern int D_L15_00161CCE_8710 __asm__("D_L15_00161CCE");
 extern short D_L15_00161C58_8710 __asm__("D_L15_00161C58") __attribute__((sda));
 extern short D_L15_00161C54_8710 __asm__("D_L15_00161C54") __attribute__((sda));
 extern short D_L15_00161C3C_8710 __asm__("D_L15_00161C3C") __attribute__((sda));

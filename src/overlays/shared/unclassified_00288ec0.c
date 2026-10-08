@@ -140,9 +140,9 @@ void FUN_L00_002892d0(void) {
 /* rotates animated sky shells and draws each layer */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028A6F8), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0016051C MACRO_ADDR;
+extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[] NOT_SDA;
-extern int D_L00_0015F5CC MACRO_ADDR;
+extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
 void FUN_001fa070(void *, void *);
 void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
@@ -425,7 +425,7 @@ typedef struct {
     Part *parts;
 } Sys;
 
-extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C") __attribute__((section(".sdata")));
+extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C");
 extern u32 D_L00_00160500_c[1] __asm__("D_L00_00160500") __attribute__((sda));
 extern u32 D_L00_001604F0[1] __attribute__((sda));
 extern u8 D_L00_001BD7E0_c2[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
@@ -641,8 +641,8 @@ void FUN_L00_0028a3a8(void) {
 }
 typedef int T28a480_q __attribute__((mode(TI)));
 extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
-extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
-extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C") __attribute__((section(".sdata")));
+extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC");
+extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C");
 extern char D_L00_001BD7E0_28a480[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
 extern void FUN_001fa070_28a480(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");

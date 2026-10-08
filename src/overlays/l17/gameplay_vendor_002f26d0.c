@@ -261,7 +261,7 @@ void FUN_L17_002f26d0(char *moby) {
 }
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
-extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4") MACRO_ADDR;
+extern int D_L17_002f2e78_state __asm__("D_L17_0015F5C4");
 extern struct {
     int pad0[12];
     int v;
@@ -305,7 +305,7 @@ typedef struct {
 
 extern char D_L17_00167740[] __asm__("D_L17_001676C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015EE7C __asm__("D_0015ED7C") MACRO_ADDR;
+extern float D_0015EE7C __asm__("D_0015ED7C");
 extern float D_L17_0016D464 __asm__("D_L17_0016D3E4") NOT_SDA;
 extern float D_L17_001DE2C8[] __asm__("D_L17_001DDFF8");
 extern float D_L17_001DE310[] __asm__("D_L17_001DE040");
@@ -438,7 +438,7 @@ extern char D_0013E633[] __asm__("D_0013F3D0");
 extern float D_L17_001DE2B0[] __asm__("D_L17_001DDFE0");
 extern float D_L17_001DE328[] __asm__("D_L17_001DE058");
 extern float D_L17_001DE340[] __asm__("D_L17_001DE070");
-extern float D_L17_0015F718_m __asm__("D_L17_0015F638") __attribute__((section(".sdata")));
+extern float D_L17_0015F718_m __asm__("D_L17_0015F638");
 extern short D_L17_00162450 __asm__("D_L17_001623D0") __attribute__((sda));
 extern short D_L17_00162454 __asm__("D_L17_001623D4") __attribute__((sda));
 extern short D_L17_00162458 __asm__("D_L17_001623D8") __attribute__((sda));
@@ -555,8 +555,8 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern float D_0015ED6C MACRO_ADDR;
-extern float D_0015ED70 MACRO_ADDR;
+extern float D_0015ED6C;
+extern float D_0015ED70;
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00257c48(float lo, float hi);
@@ -565,7 +565,7 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int D_L17_0015F5CC MACRO_ADDR;
+extern int D_L17_0015F5CC;
 extern int FUN_001fa728(char *, float);
 extern int FUN_0022da68(int, int, int);
 extern int random_integer_below_c(int) __asm__("FUN_00213260");

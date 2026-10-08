@@ -416,7 +416,7 @@ typedef struct {
 } G;
 
 extern G D_L05_0016CC60;
-extern int D_L05_0015F5C4 MACRO_ADDR;
+extern int D_L05_0015F5C4;
 extern short D_L05_00161ED0_d __asm__("D_L05_00161ED0") __attribute__((sda));
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_L05_0017C8A0[];
@@ -894,8 +894,8 @@ extern char D_0013F3D0_318a68[] __asm__("D_0013F3D0");
 extern int D_L05_001612DC_318a68 __asm__("D_L05_001612DC") __attribute__((sda));
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
-extern float D_L05_001612E8_318a68 __asm__("D_L05_001612E8") MACRO_ADDR;
-extern float D_L05_001612EC_318a68 __asm__("D_L05_001612EC") MACRO_ADDR;
+extern float D_L05_001612E8_318a68 __asm__("D_L05_001612E8");
+extern float D_L05_001612EC_318a68 __asm__("D_L05_001612EC");
 extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int find_318a68(void *, int) __asm__("FUN_00214720");
 extern float sin_318a68(float) __asm__("FUN_001f9de0");
@@ -971,8 +971,7 @@ typedef struct {
     float direction[4];
 } PickupPose_318c78;
 
-extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC")
-    __attribute__((section(".sdata")));
+extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC");
 extern char *FUN_L05_00319598(void *, int);
 extern char D_0013CAE4[];
 extern char D_0013F350[];
@@ -980,7 +979,7 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_c2 __asm__("D_0015ED70");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L05_003195f8(char *);
 extern int D_0015ED84;
@@ -1132,7 +1131,7 @@ void FUN_L05_00318c78(char *moby) {
 }
 #include "qcopy.h"
 extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
-extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC") __attribute__((section(".sdata")));
+extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern int D_0015ED84_19208 __asm__("D_0015ED84");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
@@ -1235,7 +1234,7 @@ void FUN_L05_003193a8(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031B138), where it is exact; names translated to the US level program. */
 
-extern int D_L05_0015F5C4_c __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
+extern int D_L05_0015F5C4_c __asm__("D_L05_0015F5C4");
 
 void FUN_L05_00319c28(char *moby) {
     if (D_L05_0015F5C4_c == 2) {

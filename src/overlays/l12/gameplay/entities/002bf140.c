@@ -117,7 +117,7 @@ typedef union {
     float f[4];
 } L12Vector;
 
-extern float D_0015ED70_c __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
 extern void approach_value_c(f32 *, f32, f32) __asm__("func_00213ED8");
 extern float func_00214358_order(float, void *, int) __asm__("FUN_00213508");

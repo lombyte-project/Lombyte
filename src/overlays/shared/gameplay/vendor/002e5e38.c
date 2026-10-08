@@ -189,7 +189,7 @@ typedef struct {
 } G_2e7138;
 extern G_2e7138 D_0013F350_2e7138 __asm__("D_0013F350");
 extern float D_0013CA40_2e7138 __asm__("D_0013CA40") __attribute__((section(".data")));
-extern float D_0015ED60_2e7138 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED60_2e7138 __asm__("D_0015ED60");
 extern float D_L00_00161CB8_2e7138 __asm__("D_L00_00161CB8") __attribute__((sda));
 extern float D_L00_00161CC8_2e7138 __asm__("D_L00_00161CC8") __attribute__((sda));
 float FUN_001f9af0_2e7138(void *) __asm__("FUN_001f9af0");

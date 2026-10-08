@@ -304,7 +304,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern int D_0015ED84_c __asm__("D_0015ED84");
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern unsigned char D_0013DD42 __attribute__((section(".data")));
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern char D_L01_0020B600[];
@@ -663,7 +663,7 @@ void FUN_L01_003087e0(char *moby) {
 /* builds three jittered offsets and fires the same effect at each accumulated point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
 extern short D_L01_00161F54_d __asm__("D_L01_00161F54") __attribute__((sda));
 extern short D_L01_00161F58_d __asm__("D_L01_00161F58") __attribute__((sda));
@@ -747,7 +747,7 @@ extern int D_0015EE20 __attribute__((sda));
 extern char D_0013F3D0[];
 extern int D_0013CAE4[];
 extern unsigned char D_001413F5[];
-extern char *D_L01_0015FFD8 MACRO_ADDR;
+extern char *D_L01_0015FFD8;
 extern float D_0015ED70;
 extern int D_L01_0015F594 __attribute__((sda));
 extern short D_L01_00161F88_d __asm__("D_L01_00161F88") __attribute__((sda));

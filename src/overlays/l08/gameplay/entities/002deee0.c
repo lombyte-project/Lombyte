@@ -241,7 +241,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e24e8.s", FUN_L08_002e24e8);
 /* updates matching objects in the selected object range */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E4118), where it is exact; names translated to the US level program. */
 
-extern char *D_L08_0015FFD8 __attribute__((section(".sdata")));
+extern char *D_L08_0015FFD8;
 
 void FUN_L08_002e2da0(char *moby) {
     char *data = *(char **)(moby + 0x78);

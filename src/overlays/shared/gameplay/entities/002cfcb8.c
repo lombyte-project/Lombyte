@@ -377,7 +377,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2a90.s", FUN_L00_002d2a90);
 /* increments the selected packed nibble, saturating at fifteen */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D42D8), where it is exact; names translated to the US level program. */
 
-extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int D_0015ED84;
 extern unsigned char D_0014BF10[];
 
 void FUN_L00_002d2e28(unsigned char *moby) {
@@ -508,7 +508,7 @@ unsigned char *FUN_L00_002d3838(unsigned char *s, void *b, int c, void *d) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d3a10.s", FUN_L00_002d3a10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d4610.s", FUN_L00_002d4610);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5160.s", FUN_L00_002d5160);
-extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
 /* D_0015ED70 is declared sda above (FUN_L00_002d0538), but here retail loads it
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
 #define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])

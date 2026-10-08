@@ -84,8 +84,8 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237ba0.s", FUN_L00_00237ba0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002382a0.s", FUN_L00_002382a0);
-extern int D_L00_0015FA90 __attribute__((section(".sdata")));
-extern void *D_L00_0015FAC0 __attribute__((section(".sdata")));
+extern int D_L00_0015FA90;
+extern void *D_L00_0015FAC0;
 extern int D_L00_0015F718 __attribute__((sda));
 extern int D_L00_0015F71C __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
@@ -143,7 +143,7 @@ extern int D_L00_0017DC44 __attribute__((section(".data")));
 extern int D_00141610[];
 extern int D_L00_0015FA98;
 extern int D_L00_0015FA94;
-extern int D_L00_0015F3F8 __attribute__((section(".sdata")));
+extern int D_L00_0015F3F8;
 extern int FUN_001f96f8(int);
 extern float FUN_001f9988(float);
 extern float FUN_001f9e90(float, float);

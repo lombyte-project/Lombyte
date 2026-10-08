@@ -75,7 +75,7 @@ void FUN_L18_002d6280(unsigned char *arg) {
     *(unsigned short *)(arg + 0x34) = flags;
 }
 extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
-extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8") __attribute__((section(".sdata")));
+extern short D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002d6d50, 108 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -367,7 +367,7 @@ extern char D_0013F410[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern float FUN_001f9e90(float, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
@@ -698,7 +698,7 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L18_002d5f20(void *);
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
-extern float D_L18_6C_m __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_L18_6C_m __asm__("D_0015ED6C");
 
 void FUN_L18_002d5918(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -1714,7 +1714,7 @@ void FUN_L18_002df608(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E0E90), where it is exact; names translated to the US level program. */
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern float D_0015EE70 __asm__("D_0015ED70") MACRO_ADDR;
+extern float D_0015EE70 __asm__("D_0015ED70");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 void FUN_L18_002dfaa0(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6, int a7,

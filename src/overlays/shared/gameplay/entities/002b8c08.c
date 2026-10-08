@@ -594,7 +594,7 @@ typedef struct {
 
 extern float dist_2ef478(void *, void *) __asm__("FUN_001f9b48");
 extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
-extern Ent_2ef478 *ents_m_2ef478 __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern Ent_2ef478 *ents_m_2ef478 __asm__("D_L01_0015FFD8");
 extern char *ents_2ef478 __asm__("D_L01_0015FFD8");
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */

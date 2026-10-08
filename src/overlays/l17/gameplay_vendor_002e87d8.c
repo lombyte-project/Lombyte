@@ -9,13 +9,13 @@
 
 typedef int u128 __attribute__((mode(TI)));
 
-extern char *D_L17_00160058 __asm__("D_L17_0015FFD8") MACRO_ADDR;
+extern char *D_L17_00160058 __asm__("D_L17_0015FFD8");
 extern char D_L17_00167740[] __asm__("D_L17_001676C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015EE6C __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015EE6C __asm__("D_0015ED6C");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4") MACRO_ADDR;
+extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
@@ -1491,7 +1491,7 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L17_002ed018.s", FUN_L17_002ed018);
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EFA20), where it is exact; names translated to the US level program. */
 
-extern char *D_L17_001600EC __attribute__((section(".sdata")));
+extern char *D_L17_001600EC;
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") __attribute__((section(".sdata")));
@@ -2974,7 +2974,7 @@ extern char D_L17_001B0DB0[];
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_add_rotations(float, float);
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L17_001BADD0[];
 extern int D_L17_0015F594 __attribute__((sda));
 extern int FUN_L00_002644e0(int);
@@ -3238,9 +3238,9 @@ extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002eaa30");
 extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
 extern char D_L17_001B10B0_f2180[] __asm__("D_L17_001B0DB0");
-extern char *D_L17_0016016C_f2180 __asm__("D_L17_001600EC") MACRO_ADDR;
-extern float D_0015EE70_f2180 __asm__("D_0015ED70") MACRO_ADDR;
-extern float D_0015EE6C_f2180 __asm__("D_0015ED6C") MACRO_ADDR;
+extern char *D_L17_0016016C_f2180 __asm__("D_L17_001600EC");
+extern float D_0015EE70_f2180 __asm__("D_0015ED70");
+extern float D_0015EE6C_f2180 __asm__("D_0015ED6C");
 int FUN_L17_002f2180(char *moby, int idx) {
     float m[4], pos[4];
     struct Dat_3CC0_f2180 *d = *(struct Dat_3CC0_f2180 **)(moby + 0x78);

@@ -13,7 +13,7 @@ extern char D_L03_0016C960[];
 extern float D_0015ED6C;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_0024f7c8(void *, int, void *);

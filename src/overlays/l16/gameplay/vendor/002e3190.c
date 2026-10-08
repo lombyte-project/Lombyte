@@ -602,7 +602,7 @@ typedef struct {
     float direction[4];
 } L16PickupPose;
 
-extern L16PickupPose *D_L16_001600EC __attribute__((section(".sdata")));
+extern L16PickupPose *D_L16_001600EC;
 extern char *FUN_L05_00319598(void *, int);
 extern char D_0013CAE4[];
 extern char D_0013E550[];
@@ -611,10 +611,10 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED6C MACRO_ADDR,
-    D_0015EE70_c __asm__("D_0015EE70") __attribute__((section(".sdata")));
-extern float D_0015EE6C_u MACRO_ADDR,
-    D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED6C,
+    D_0015EE70_c __asm__("D_0015EE70");
+extern float D_0015EE6C_u,
+    D_0015ED70_c2 __asm__("D_0015ED70");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L05_003195f8(char *);
 extern short D_L16_0015F594;
@@ -767,7 +767,7 @@ void FUN_L16_002e43e0(char *moby) {
 #include "sda.h"
 #include "qcopy.h"
 extern float func_001F9D10_e4900(void *, void *) __asm__("FUN_001f9b48");
-extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC") MACRO_ADDR;
+extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 extern unsigned char D_0013D5C8_b_e4900[] __asm__("D_0013D4C0");
 void FUN_L16_002e4900(void *moby_v) {
     char *moby = moby_v;
@@ -849,7 +849,7 @@ extern char D_0013F3D0[];
 extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
 extern float D_L16_001D9750[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L16_0015F5CC_c __asm__("D_L16_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L16_0015F5CC_c __asm__("D_L16_0015F5CC");
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L16_00161DD8_x __asm__("D_L16_00161DD8") __attribute__((sda));
@@ -1470,7 +1470,7 @@ extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int D_0015EE6C[] __attribute__((section(".sdata")));
-extern volatile int D_0015EE6C_p __asm__("D_0015EE6C") __attribute__((section(".sdata")));
+extern volatile int D_0015EE6C_p __asm__("D_0015EE6C");
 extern int D_L16_0015F5CC;
 extern float D_L16_0015F638;
 extern int D_0015EEA4;

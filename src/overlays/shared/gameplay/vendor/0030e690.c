@@ -212,7 +212,7 @@ void FUN_L11_00319670(char *moby) {
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char D_0013F350[];
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_0015EE00;
 extern int D_0015EEA4;
 extern int FUN_L00_001f0d60(float, void *, int, void *);

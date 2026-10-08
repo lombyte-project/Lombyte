@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
-extern int D_L02_0015EF4C MACRO_ADDR;
+extern int D_L02_0015EF4C;
 extern int D_L02_001695F0[] NOT_SDA;
 
 void FUN_L02_001fc008(int x) {

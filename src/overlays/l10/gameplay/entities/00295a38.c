@@ -245,7 +245,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002befe8.s", FUN_L10_002befe8);
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E550[];
-extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *FUN_L00_0026fd28(char *a, char *b, unsigned char c, int d);
@@ -330,7 +330,7 @@ extern float func_002140F8_d8058(float, float) __asm__("FUN_002132a8");
 extern int func_001F9850_d8058(int) __asm__("FUN_001f96f8");
 extern void func_L00_00251E30_d8058(void *) __asm__("FUN_L00_00250df8");
 extern short D_L10_00161C6C_d8058 __asm__("D_L10_00161BEC") __attribute__((sda));
-extern float D_0015EE6C_d8058 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015EE6C_d8058 __asm__("D_0015ED6C");
 int FUN_L10_002d8058(int owner, char *pos, char *vec) {
     char *moby = func_0020D348_d8058(0x3AA);
     if (moby != 0) {
@@ -572,7 +572,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002dcc58.s", FUN_L10_002dcc58);
 typedef int dd_q __attribute__((mode(TI)));
 
 /* Spawns a moby at a spot, fills its data block and starts its fade and sound. */
-extern float D_0015ED6C_dd __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_dd __asm__("D_0015ED6C");
 extern unsigned char *FUN_0020c4f8_dd(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_002502f0_dd(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_001fa6d0_dd(float) __asm__("FUN_001fa6d0");
@@ -657,7 +657,7 @@ typedef struct {
 
 extern L10State D_L10_001BB6B0;
 extern char D_L10_00178580[];
-extern int D_0015ED84_m __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");

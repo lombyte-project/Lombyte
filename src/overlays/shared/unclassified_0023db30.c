@@ -5,7 +5,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023db30.s", FUN_L00_0023db30);
 #include "qcopy.h"
 typedef int ti_23e008 __attribute__((mode(TI)));
-extern float D_0015ED60_23e008 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED60_23e008 __asm__("D_0015ED60");
 extern void getpos_23e008(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float rndf_23e008(float, float) __asm__("FUN_002132a8");
 extern int rndi_23e008(int) __asm__("FUN_00213260");
@@ -62,7 +62,7 @@ typedef struct {
     int used;
     char pad2[0x30 - 0x14];
 } T_0023e5e0;
-extern float D_L00_0015F5D4_0023e5e0 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+extern float D_L00_0015F5D4_0023e5e0 __asm__("D_L00_0015F5D4");
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
 extern P_0023e5e0 D_L00_001802C0_0023e5e0[] __asm__("D_L00_001802C0");
 extern char D_L00_00180640_0023e5e0[] __asm__("D_L00_00180640");
@@ -108,7 +108,7 @@ typedef struct {
     int used;
     char pad2[0x30 - 0x14];
 } T_0023e738;
-extern float D_L00_0015F5D4_0023e738 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+extern float D_L00_0015F5D4_0023e738 __asm__("D_L00_0015F5D4");
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 extern char D_L00_00180640_0023e738[] __asm__("D_L00_00180640");
