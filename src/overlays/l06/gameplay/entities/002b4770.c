@@ -693,7 +693,93 @@ void FUN_L06_002f3ad8(char *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f3d70.s", FUN_L06_002f3d70);
+#include "rnc/math/vector.h"
+#include "qcopy.h"
+/* Sparks thrown off the swinging hazard while the camera is near it. */
+extern float camera_distance_to(void *, void *) __asm__("FUN_001f9b48");
+extern s32 sphere_visible(void *, f32) __asm__("FUN_001fa728");
+extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern char camera_position[] __asm__("D_0013F3D0");
+extern float frame_scale __asm__("D_0015ED6C");
+extern float spark_speed __asm__("D_L06_00161CEC") __attribute__((sda));
+extern float spark_dir_w __asm__("D_L06_00161CF4") __attribute__((sda));
+extern float spark_vel_w __asm__("D_L06_00161CF8") __attribute__((sda));
+extern int spark_color0 __asm__("D_L06_00161CFC") __attribute__((sda));
+extern int spark_color1 __asm__("D_L06_00161D00") __attribute__((sda));
+extern int spark_life_min __asm__("D_L06_00161D04") __attribute__((sda));
+extern int spark_life_max __asm__("D_L06_00161D08") __attribute__((sda));
+extern int spark_fade_min __asm__("D_L06_00161D0C") __attribute__((sda));
+extern int spark_fade_max __asm__("D_L06_00161D10") __attribute__((sda));
+extern int spark_frames __asm__("D_L06_00161D14") __attribute__((sda));
+extern float spark_drift_z __asm__("D_L06_00161D18") __attribute__((sda));
+extern float spark_drift_scale __asm__("D_L06_00161D1C") __attribute__((sda));
+extern float spark_spread __asm__("D_L06_00161D20") __attribute__((sda));
+
+void FUN_L06_002f3d70(char *m) {
+    Vec4 mat[4];
+    Vec4 at;
+    Vec4 dir;
+    Vec4 drift;
+    Vec4 offset;
+    Vec4 vel;
+    Vec4 sphere;
+    Vec4 *pos = (Vec4 *)(m + 0x10);
+    int life;
+    int fade;
+    int frames;
+    int t;
+
+    qcopy(&sphere, pos);
+    sphere.f[3] = 4.0f;
+    if (camera_distance_to(camera_position, pos) > 10.0f &&
+        sphere_visible(&sphere, 24.0f) == -1) {
+        return;
+    }
+    if (camera_distance_to(camera_position, pos) > 24.0f) {
+        return;
+    }
+    qcopy(&at, pos);
+    rotation_matrix(mat, m + 0x40);
+    clear_vector(&dir);
+    dir.f[0] = spark_speed * frame_scale;
+    transform_vector(&dir, &dir, mat);
+    dir.f[3] = spark_dir_w;
+    scale_vector_xyz(&drift, &dir, spark_drift_scale);
+    drift.f[2] = spark_drift_z * frame_scale;
+    vel.f[3] = spark_vel_w;
+
+    life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
+    t = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    if (life < t) life = t;
+    t = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_life_max)));
+    if (fade < t) fade = t;
+    frames = truncate_float_to_s32(scale_game_frames(spark_frames));
+
+    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    add_vector_xyz(&at, pos, &offset);
+    random_vector(&vel, 0.0f, spark_spread * frame_scale);
+    add_vector_xyz(&vel, &vel, &drift);
+    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+
+    life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
+    fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
+    scale_vector_xyz(&offset, &dir, random_float_between(0.0f, 1.0f));
+    add_vector_xyz(&at, pos, &offset);
+    random_vector(&vel, 0.0f, spark_spread * frame_scale);
+    add_vector_xyz(&vel, &vel, &drift);
+    spawn_spark(&at, &dir, &vel, spark_color0, spark_color1, life, fade, frames, 0x30);
+}
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 
 typedef struct {
