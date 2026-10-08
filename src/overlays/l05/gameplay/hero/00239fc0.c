@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/overlay/collision.h"
 
 typedef struct {
     u8 pad0[0x88];

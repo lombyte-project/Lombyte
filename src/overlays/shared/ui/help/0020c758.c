@@ -6,6 +6,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020c758.s", FUN_L00_0020c758);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/overlay/collision.h"
 #include "rnc/gameplay/hero.h"
 typedef int Q_cf58 __attribute__((mode(TI)));
 typedef struct {

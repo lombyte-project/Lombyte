@@ -28,10 +28,10 @@ s32 FUN_00220e28(struct MenuScreen *m) {
     if (!active) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
-    if (D_0013C940.pressed & 0x10) {
+    if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_blocked == 0) {
@@ -39,13 +39,13 @@ s32 FUN_00220e28(struct MenuScreen *m) {
         }
     }
     old = m->data.options.selection;
-    if ((D_0013C940.pressed & 0x1000) && old != 0) {
+    if ((D_0013C940.pressed_unmasked & 0x1000) && old != 0) {
         m->data.options.selection = old - 1;
     }
-    if ((D_0013C940.pressed & 0x4000) && m->data.options.list[m->data.options.selection + 1].name != 0) {
+    if ((D_0013C940.pressed_unmasked & 0x4000) && m->data.options.list[m->data.options.selection + 1].name != 0) {
         m->data.options.selection = m->data.options.selection + 1;
     }
-    if (D_0013C940.pressed & 0x40) {
+    if (D_0013C940.pressed_unmasked & 0x40) {
         allocate_voice_for_target_entry(0, 0x11, m->moby);
         if (m->data.options.list[m->data.options.selection].type & 1) {
             if (D_0016034C != 0) {

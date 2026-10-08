@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/overlay/collision.h"
 
 typedef struct {
     char pad[0x24];

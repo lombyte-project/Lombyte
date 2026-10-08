@@ -2,6 +2,10 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
+#include "rnc/overlay/quad.h"
+#include "rnc/overlay/collision.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
 
@@ -129,7 +133,7 @@ void FUN_L02_0021b698(void) {
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and no 0xF exit. */
 extern s32 D_L08_0015F5C4_8 __asm__("D_L02_0015F5C4");
-extern T_8 D_L08_00178900_8[] __asm__("D_L02_00178700");
+extern MobyLink D_L08_00178900_8[] __asm__("D_L02_00178700");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
@@ -152,12 +156,12 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 FUN_L02_0021ff70(s32 arg) {
     u8 *m;
-    T_8 *tbl;
+    MobyLink *tbl;
     u8 *mob;
     s32 flag;
     s32 id;
     f32 a, b, e;
-    V_8 v;
+    OvlVec4 v;
 
     if (G.state.control_mode == 0x14) {
         return 0;
@@ -180,27 +184,27 @@ s32 FUN_L02_0021ff70(s32 arg) {
         return 0;
     }
     tbl = &D_L08_00178900_8[m[0xA4]];
-    if (tbl->p34 != m) {
+    if (tbl->owner != m) {
         return 0;
     }
-    if ((tbl->i24 ^ 1) & 1) {
+    if ((tbl->active ^ 1) & 1) {
         return 0;
     }
     D_0013DF88_8[D_0015ED84_8]++;
-    G.unk2280 = (struct Moby *)tbl->p20;
+    G.unk2280 = (struct Moby *)tbl->target;
     D_0015EEA8_8++;
     if (arg == 0) {
         return 1;
     }
     FUN_L00_00206c08_8();
     flag = 0;
-    if (tbl->i30 & 1) {
-        qcopy(&v, &tbl->v10);
+    if (tbl->flags & 1) {
+        qcopy(&v, &tbl->pos);
         if (*(f32 *)((u8 *)tbl + 0x1C) == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (tbl->p20 != 0) {
-        FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->p20 + 0x10);
+    } else if (tbl->target != 0) {
+        FUN_001f9a28_8(&v, (u8 *)&G + 0x80, tbl->target + 0x10);
     } else {
         v.f[0] = FUN_001f9dc8_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
         v.f[1] = FUN_001f9de0_8(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
@@ -229,7 +233,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
             b = e * 1.7f;
         }
         FUN_L00_00210c80_8(&v, flag, a, b);
-        if (flag != 0 && tbl->b28 == 4) {
+        if (flag != 0 && tbl->unk28 == 4) {
             v.f[2] += v.f[2];
         }
         break;
@@ -784,7 +788,7 @@ typedef struct {
 
 extern Cam D_L02_00167280;
 extern Moby *D_L02_00178500[];
-extern Pad D_0013C940;
+extern struct PadState D_0013C940;
 extern HeroThresholdRow D_L02_0017C228[];
 extern struct UsageStats D_00141848;
 extern S17BEB8 D_L02_0017C3B8;
@@ -2025,11 +2029,11 @@ void FUN_L02_00225c20(void) {
             b = a;
         }
         FUN_L00_002118c8(hero.unk229C * b, 0);
-        if (hero.unk229C > 0.2f && !(D_0013C940.f1A0 & 3)) {
+        if (hero.unk229C > 0.2f && !(D_0013C940.held & 3)) {
             FUN_L00_00211e30(0, D_0015ED64 * 0.027f, D_0015ED64 * 0.3f,
                              D_0015ED6C * 5.934119f * hero.unk229C);
         }
-        if (D_0013C940.f1A0 & 3) {
+        if (D_0013C940.held & 3) {
             float keep;
 
             keep = hero.motion.target_yaw;

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
@@ -33,11 +34,7 @@ extern s32 D_0015EED8 MACRO_ADDR;
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED84 MACRO_ADDR;
 extern u8 D_24135F[];
-typedef struct {
-    u8 pad[0x1A4];
-    s32 unk1A4;
-} PadState;
-extern PadState D_0013C940;
+extern struct PadState D_0013C940;
 extern s32 D_00139378[];
 extern s32 D_00139380[];
 extern char D_001E76C0[];
@@ -120,7 +117,7 @@ void startlevel(void) {
     put_disp_buffer();
     PackDmaTag(0, 0, 0);
     hdr = (LevelHeader *)(((u32)D_24135F & 0xFFFFC000) + 0x2C0000);
-    while ((cur = check_memory_card()) != 0 && (frames < 11 || D_0013C940.unk1A4 == 0)) {
+    while ((cur = check_memory_card()) != 0 && (frames < 11 || D_0013C940.pressed == 0)) {
         if (cur != prev) {
             if (cur == 1) {
                 tbl = hdr->intro;

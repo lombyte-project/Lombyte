@@ -17,10 +17,10 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
     if (menu_system.current->focus != menu) {
         return 0;
     }
-    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
-    if (D_0013C940.pressed & 0x10) {
+    if (D_0013C940.pressed_unmasked & 0x10) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
         } else if (menu_system.close_blocked == 0) {
@@ -28,10 +28,10 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
         }
     }
     prev = menu->data.choices.selection;
-    if ((D_0013C940.pressed & 0x1000) && prev != 0) {
+    if ((D_0013C940.pressed_unmasked & 0x1000) && prev != 0) {
         menu->data.choices.selection = prev - 1;
     }
-    if (D_0013C940.pressed & 0x4000) {
+    if (D_0013C940.pressed_unmasked & 0x4000) {
         cur = menu->data.choices.selection;
         if (menu->data.choices.list[cur + 1].name != 0) {
             menu->data.choices.selection = cur + 1;
@@ -53,7 +53,7 @@ s32 FUN_002212b8(struct MenuScreen *menu) {
             }
         } while (n < 4);
     }
-    if (D_0013C940.pressed & 0x40) {
+    if (D_0013C940.pressed_unmasked & 0x40) {
         if (item->value != NULL) {
             *item->value = (*item->value + 1) % n;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);

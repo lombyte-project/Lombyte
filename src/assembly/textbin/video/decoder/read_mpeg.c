@@ -110,7 +110,7 @@ feed_movie:
         goto check_skip_policy;
     }
     skip_requested = 1;
-    if (D_0013C940.unk1A4 != 0) {
+    if (D_0013C940.pressed != 0) {
         goto apply_skip;
     }
 check_skip_policy:
@@ -128,14 +128,14 @@ check_skip_policy:
     }
 check_start_button:
     skip_requested = 1;
-    if (D_0013C940.unk1A4 & 0x800) {
+    if (D_0013C940.pressed & 0x800) {
         goto apply_skip;
     }
 check_pad_chord:
     mask_state = &D_0013C940;
     pad_mask = 0x8000000000FULL;
     skip_requested = 1;
-    if ((*(u64 *)&mask_state->unk1A0 & pad_mask) != pad_mask) {
+    if ((*(u64 *)&mask_state->held & pad_mask) != pad_mask) {
         skip_requested = 0;
     }
 apply_skip:

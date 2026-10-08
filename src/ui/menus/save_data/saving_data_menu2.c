@@ -76,10 +76,10 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         D_0013E05A[0] = 1;
     }
 
-    if ((D_0013C940.pressed & 0xD00) && menu_system.close_blocked == 0) {
+    if ((D_0013C940.pressed_unmasked & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
-    if (D_0013C940.pressed & 0x10) {
+    if (D_0013C940.pressed_unmasked & 0x10) {
         back = menu_system.current->back;
         if (back != NULL) {
             menu_system.next = back;
@@ -96,9 +96,9 @@ s32 saving_data_menu2(struct MenuScreen *w) {
     }
 
     if (w->data.save.flags & 1) {
-        pad = D_0013C940.unk1B4;
+        pad = D_0013C940.raw_pressed;
     } else {
-        pad = D_0013C940.unk1A4;
+        pad = D_0013C940.pressed;
     }
     w->data.save.slot = D_0015EE34;
     if ((pad & 0x1000) && D_0015EE34 != 0) {

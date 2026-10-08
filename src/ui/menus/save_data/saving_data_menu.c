@@ -66,7 +66,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
             return 0;
         }
     block_13:
-        if (0xD00 & D_0013C940.pressed) {
+        if (0xD00 & D_0013C940.pressed_unmasked) {
             if (menu_system.close_blocked == 0) {
                 return 1;
             }
@@ -74,7 +74,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
         }
 
     block_17:
-        if (D_0013C940.pressed & 0x10) {
+        if (D_0013C940.pressed_unmasked & 0x10) {
             temp_2_126 = menu_system.current->back;
             if (temp_2_126 != 0) {
                 menu_system.next = temp_2_126;
@@ -95,9 +95,9 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
         if (((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) && (memory_card_state.card[0].type == 2)) {
             if (menu->data.save.flags & 1) {
-                pad_buttons = D_0013C940.unk1B4;
+                pad_buttons = D_0013C940.raw_pressed;
             } else {
-                pad_buttons = D_0013C940.unk1A4;
+                pad_buttons = D_0013C940.pressed;
             }
             menu->data.save.slot = (s32)D_0015EE34;
             if ((pad_buttons & 0x1000) && (D_0015EE34 != 0)) {

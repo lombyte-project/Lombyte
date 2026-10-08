@@ -13,10 +13,10 @@ s32 update_menu_cycle_selection(struct MenuScreen *menu) __asm__("FUN_00221e50")
 s32 update_menu_cycle_selection(struct MenuScreen *menu) {
     struct MenuPage *back_page;
 
-    if ((controller_state.pressed & 0xD00) && menu_system.close_blocked == 0) {
+    if ((controller_state.pressed_unmasked & 0xD00) && menu_system.close_blocked == 0) {
         return 1;
     }
-    if (controller_state.pressed & 0x10) {
+    if (controller_state.pressed_unmasked & 0x10) {
         back_page = menu_system.current->back;
         if (back_page != 0) {
             menu_system.next = back_page;
@@ -24,10 +24,10 @@ s32 update_menu_cycle_selection(struct MenuScreen *menu) {
             return -1;
         }
     }
-    if (controller_state.unk1A4 & 0x2040) {
+    if (controller_state.pressed & 0x2040) {
         menu->data.cycle.selection = (menu->data.cycle.selection + 1) % 12;
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
-    } else if (controller_state.unk1A4 & 0x8020) {
+    } else if (controller_state.pressed & 0x8020) {
         menu->data.cycle.selection = (menu->data.cycle.selection + 11) % 12;
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
     }
