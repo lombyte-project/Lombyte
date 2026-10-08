@@ -1470,7 +1470,7 @@ void FUN_L00_002b4198(void *p) {
             }
             if (hero.state.current == 0x22) {
                 if (hero.state_timer < FUN_001f96f8_4198(0xF) ||
-                    (FUN_001f96f8_4198(0x21) < hero.state_timer && hero.unk30E != 0)) {
+                    (FUN_001f96f8_4198(0x21) < hero.state_timer && hero.unk30E.s != 0)) {
                     flag = 1;
                 }
             }

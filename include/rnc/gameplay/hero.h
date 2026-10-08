@@ -56,7 +56,7 @@ struct HeroMotion {
     Vec4 pos;                      /* 0x80: world position */
     Vec4 rot;                      /* 0x90: rotation; z is the yaw */
     Vec4 unkA0;                    /* 0xA0 */
-    u8 pad_B0[0x10];
+    Vec4 unkB0;                    /* 0xB0 */
     Vec4 unkC0;                    /* 0xC0 */
     Vec4 unkD0;                    /* 0xD0 */
     Vec4 velocity;                 /* 0xE0: per-frame velocity */
@@ -179,16 +179,16 @@ struct Hero {
     u8 unk257;                     /* 0x257 */
     u8 pad_258[0x18];
     Vec4 unk270;                   /* 0x270 */
-    u8 pad_280[0x10];
+    Vec4 unk280;                   /* 0x280 */
     Vec4 unk290;                   /* 0x290 */
     Vec4 unk2A0;                   /* 0x2A0 */
-    u8 pad_2B0[0x10];
+    Vec4 unk2B0;                   /* 0x2B0 */
     union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
-    f32 unk2D8;                    /* 0x2D8 */
+    union { f32 f; s32 i; } unk2D8; /* 0x2D8: written as a float and zeroed as an int */
     f32 unk2DC;                    /* 0x2DC */
-    f32 unk2E0;                    /* 0x2E0 */
+    union { f32 f; s32 i; } unk2E0; /* 0x2E0: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E4; /* 0x2E4: written as a float and zeroed as an int */
     union { f32 f; s32 i; } unk2E8; /* 0x2E8: written as a float and zeroed as an int */
     f32 unk2EC;                    /* 0x2EC */
@@ -200,8 +200,8 @@ struct Hero {
     f32 unk304;                    /* 0x304 */
     s16 unk308;                    /* 0x308 */
     s16 unk30A;                    /* 0x30A */
-    s16 unk30C;                    /* 0x30C */
-    s16 unk30E;                    /* 0x30E */
+    union { s16 s; u16 u; } unk30C; /* 0x30C: read signed, incremented unsigned */
+    union { s16 s; u16 u; } unk30E; /* 0x30E: read signed, incremented unsigned */
     u8 pad_310[0xA0];
     f32 unk3B0;                    /* 0x3B0 */
     s32 unk3B4;                    /* 0x3B4 */

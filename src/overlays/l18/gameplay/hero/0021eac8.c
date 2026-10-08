@@ -449,12 +449,12 @@ void FUN_L18_0021eac8(void) {
                 if (hero.unk2FC != NULL) {
                     qcopy(&hero.motion.pos, &hero.unk2A0);
                     hero.unk2DC = 0.0f;
-                    hero.unk30E = 0;
+                    hero.unk30E.s = 0;
                 }
             }
         } else {
             FUN_L15_0020a328(0);
-            if (hero.unk30E != 0) {
+            if (hero.unk30E.s != 0) {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
                 FUN_L00_002121c0();
             } else {
@@ -855,7 +855,7 @@ void FUN_L18_0021eac8(void) {
         FUN_L00_00212088(D_0015ED70 * 12.6f, D_0015ED70 * 12.6f);
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(D_0015ED70 * 12.6f);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -876,7 +876,7 @@ void FUN_L18_0021eac8(void) {
         FUN_L00_00212088(D_0015ED70 * 12.6f, D_0015ED70 * 12.6f);
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(D_0015ED70 * 12.6f);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, D_0015ED70 * 24.0f);
             FUN_L00_002121c0();
         } else {
@@ -1056,7 +1056,7 @@ void FUN_L18_0021eac8(void) {
                 FUN_001f9a10(&hero.motion.velocity, &hero.motion.velocity, &v30);
             }
         }
-        if (hero.unk99C != 0 && hero.unk30E != 0) {
+        if (hero.unk99C != 0 && hero.unk30E.s != 0) {
             if ((vz < 0.0f && hero.motion.velocity.f[2] > 0.0f) || hero.unk9BC != 0) {
                 f32 t;
                 s32 up;
@@ -1111,7 +1111,7 @@ void FUN_L18_0021eac8(void) {
                 hero.unk4B8 = 1.0f;
             }
         }
-        if (hero.unk4B8 != 0.0f && hero.unk30E != 0) {
+        if (hero.unk4B8 != 0.0f && hero.unk30E.s != 0) {
             qcopy(&v0, &hero.motion.pos);
             v0.f[2] -= 0.5f;
             m40[0].f[0] = FUN_001f9dc8(hero.motion.rot.f[2]);
@@ -1120,7 +1120,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_00259888(&v10, (struct MobyView *)hero.moby, 0x30000, 1.0f, &m40[0]);
             FUN_L00_001f2868(0.8f, &v0, 0x10, (struct MobyView *)hero.moby, &v10);
         }
-        if (hero.unk4B8 != 0.0f && hero.unk30E == 0) {
+        if (hero.unk4B8 != 0.0f && hero.unk30E.s == 0) {
             if (hero.unk4C4 == 0) {
                 Q.f160 = 0.2f;
                 Q.i168 = scale_game_frames(40);
@@ -1180,7 +1180,7 @@ void FUN_L18_0021eac8(void) {
         }
         mx = D_0015ED70 * 150.0f;
         t2 = scale_game_frames(14);
-        if (hero.unkA9C == 0 && hero.unkAA8 > 23.5f && hero.motion.unk100.f[2] < 0.0f && hero.unk30E != 0) {
+        if (hero.unkA9C == 0 && hero.unkAA8 > 23.5f && hero.motion.unk100.f[2] < 0.0f && hero.unk30E.s != 0) {
             qcopy(&v0, &hero.motion.pos);
             FUN_L00_002336e8(&v0, &v0, -0.5f);
             m40[0].f[0] = FUN_001f9dc8(hero.motion.rot.f[2]) * 2.0f;
@@ -1272,7 +1272,7 @@ void FUN_L18_0021eac8(void) {
         } else {
             FUN_L00_00212088(D_0015ED70 * 37.0f, D_0015ED70 * 28.0f);
             FUN_L00_002120d8(99999.0f);
-            if (hero.unk30E != 0) {
+            if (hero.unk30E.s != 0) {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             } else {
                 FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 54.0f);
@@ -1369,7 +1369,7 @@ void FUN_L18_0021eac8(void) {
         } else {
             FUN_L00_002120d8(99999.0f);
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 54.0f);
@@ -1465,7 +1465,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_00217118(3.7f, 0.0f);
         }
         FUN_L15_0020a328(1);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, D_0015ED70 * 24.0f);
             FUN_L00_002121c0();
         } else {
@@ -1483,7 +1483,7 @@ void FUN_L18_0021eac8(void) {
         }
         FUN_L00_00212088(D_0015ED70 * 30.0f, D_0015ED70 * 35.0f);
         FUN_L00_002120d8(99999.0f);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             hero.motion.velocity.f[2] = hero.motion.unk100.f[2] - D_0015ED70 * 25.0f;
             FUN_L00_002121c0();
         } else {
@@ -1521,9 +1521,9 @@ void FUN_L18_0021eac8(void) {
         if (hero.unk2FC != 0) {
             qcopy(&hero.motion.pos, &hero.unk2A0);
             hero.unk2DC = 0.0f;
-            hero.unk30E = 0;
+            hero.unk30E.s = 0;
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, D_0015ED70 * 24.0f);
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 54.0f);
@@ -1615,7 +1615,7 @@ void FUN_L18_0021eac8(void) {
         if (hero.unk1F4 != 0) {
             FUN_L00_00217118(5.0f, 0.2f);
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2130,7 +2130,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, sp * 0.72f);
             hero.unk304 = hero.motion.velocity.f[2];
         } else {
-            FUN_L00_0025b8c0(&hero.motion.pos.f[2], &hero.unk304, hero.unk2D8 + 0.17f, D_0015ED64 * 0.02f,
+            FUN_L00_0025b8c0(&hero.motion.pos.f[2], &hero.unk304, hero.unk2D8.f + 0.17f, D_0015ED64 * 0.02f,
                              D_0015ED64 * 0.35f, D_0015ED6C * 2.5f);
         }
         break;
@@ -2273,10 +2273,10 @@ void FUN_L18_0021eac8(void) {
                 FUN_001f9c48(&hero.motion.velocity, &hero.motion.velocity, l);
             }
         }
-        if (hero.unk2D8 > hero.unk410) {
+        if (hero.unk2D8.f > hero.unk410) {
             hero.unk410 = hero.unk410 + D_0015ED6C * 6.0f;
-            if (hero.unk410 > hero.unk2D8) {
-                hero.unk410 = hero.unk2D8;
+            if (hero.unk410 > hero.unk2D8.f) {
+                hero.unk410 = hero.unk2D8.f;
             }
         }
         if (hero.motion.pos.f[2] < hero.unk410) {
@@ -2318,7 +2318,7 @@ void FUN_L18_0021eac8(void) {
     case 0x16: {
         f32 l = FUN_001f9b20(&hero.motion.velocity);
         f32 d = D_0015ED70 * 4.0f;
-        if (hero.unk30E == 0 && scale_game_frames(10) < hero.state_timer) {
+        if (hero.unk30E.s == 0 && scale_game_frames(10) < hero.state_timer) {
             d = D_0015ED70 * 10.0f;
         }
         l -= d;
@@ -2378,7 +2378,7 @@ void FUN_L18_0021eac8(void) {
         if (hero.unk20A4 == 0) {
             FUN_L15_0020a328(1);
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2394,7 +2394,7 @@ void FUN_L18_0021eac8(void) {
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(D_0015ED70 * 12.0f);
         FUN_L15_0020a328(0);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk100, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2427,7 +2427,7 @@ void FUN_L18_0021eac8(void) {
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(D_0015ED70 * 12.6f);
         FUN_L15_0020a328(0);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2499,7 +2499,7 @@ void FUN_L18_0021eac8(void) {
             break;
         }
         FUN_L15_0020a328(1);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 54.0f);
@@ -2522,7 +2522,7 @@ void FUN_L18_0021eac8(void) {
                 hero.unkA90 = 0.5f;
             }
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2549,7 +2549,7 @@ void FUN_L18_0021eac8(void) {
                 FUN_L00_002a96f8((struct MobyView *)hero.moby, &v0, hero.motion.rot.f[2], w, 0, 0.5f, hero.motion.rot.f[2], w);
             }
         }
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2619,7 +2619,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_002120d8(99999.0f);
         }
         FUN_L15_0020a328(1);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2630,14 +2630,14 @@ void FUN_L18_0021eac8(void) {
     case 0x5D: {
         f32 len = FUN_001f9b20(&hero.motion.velocity);
         f32 l2 = len;
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             len = D_0015ED60 * -0.00999999f * l2 + l2;
         } else {
             len = D_0015ED60 * -0.07999998f * l2 + l2;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, D_0015ED70 * 24.0f);
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);
@@ -2654,7 +2654,7 @@ void FUN_L18_0021eac8(void) {
         clear_u64_value(&hero.motion.velocity);
         FUN_L00_00216710(D_0015ED70 * 12.6f);
         FUN_L15_0020a328(0);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2700,7 +2700,7 @@ void FUN_L18_0021eac8(void) {
             FUN_L00_002120d8(99999.0f);
         }
         FUN_L15_0020a328(1);
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk120, D_0015ED70 * 25.0f);
             FUN_L00_002121c0();
         } else {
@@ -2711,14 +2711,14 @@ void FUN_L18_0021eac8(void) {
     case 0x56: {
         f32 len = FUN_001f9b20(&hero.motion.velocity);
         f32 l2 = len;
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             len = D_0015ED60 * -0.00999999f * l2 + l2;
         } else {
             len = D_0015ED60 * -0.07999998f * l2 + l2;
         }
         FUN_L00_001ff600(len, &hero.motion.velocity, &hero.motion.velocity);
         hero.motion.velocity.f[2] = 0.0f;
-        if (hero.unk30E != 0) {
+        if (hero.unk30E.s != 0) {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.unk110, D_0015ED70 * 24.0f);
         } else {
             FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, 0.004f);

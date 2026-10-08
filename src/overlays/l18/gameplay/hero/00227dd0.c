@@ -162,7 +162,7 @@ int hero_set_state(int a, int b) {
             return 1;
         }
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -531,7 +531,7 @@ int hero_set_state(int a, int b) {
         {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
-            if (s->unk12EA != 0 && s->unk30C == 0) {
+            if (s->unk12EA != 0 && s->unk30C.s == 0) {
                 hero_set_state(0x79, 1);
                 return 0;
             }
@@ -620,7 +620,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 1;
         p->unk2284 = 0;
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }
@@ -665,7 +665,7 @@ int hero_set_state(int a, int b) {
         p->unk194 = vector_length_xy(&p->motion.unk110);
         if (D_0015ED6C * 7.0f < p->unk194)
             p->unk194 = D_0015ED6C * 7.0f;
-        if (p->unk12EA != 0 && p->unk30C == 0) {
+        if (p->unk12EA != 0 && p->unk30C.s == 0) {
             hero_set_state(0x79, 1);
             return 0;
         }

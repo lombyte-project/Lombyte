@@ -193,9 +193,9 @@ void FUN_L12_00235c08(void) {
                 FUN_L00_002118c8_235c08(0, ED6C * 2.5f);
                 arg = ED70 * 3.0f;
             }
-            if (0.2617994f < hero.unk2E0) {
+            if (0.2617994f < hero.unk2E0.f) {
                 hero.unk190 = 0.0f;
-                arg = hero.unk2E0 * (ED70 * 9.0f) / 0.7853982f;
+                arg = hero.unk2E0.f * (ED70 * 9.0f) / 0.7853982f;
             }
         }
         FUN_L00_00213e68_235c08(arg);
