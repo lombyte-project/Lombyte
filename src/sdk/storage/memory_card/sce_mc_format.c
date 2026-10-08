@@ -1,9 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 reserved_00[0x24];
-    s32 is_initialized;
-};
-
+#include "sifrpc.h"
 struct MemoryCardFormatRequest {
     u8 reserved_00[0x4];
     s32 port;
@@ -21,7 +17,7 @@ extern s32 sceSifCallRpc();
 s32 SceMcFormat(s32 port, s32 slot) {
     s32 rpc_result;
 
-    if (D_00159A00.is_initialized == 0) {
+    if (D_00159A00.serve == 0) {
         return -0x64;
     }
     if (PollSema(D_00132DAC[0]) < 0) {

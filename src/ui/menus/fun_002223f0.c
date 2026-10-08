@@ -7,10 +7,6 @@ struct PadState {
     u32 held;
     u32 pressed;
 };
-struct ModeEntry {
-    u8 pad0[0x38];
-    s32 unk38;
-};
 struct Menu {
     u8 pad0[0x34];
     s32 str;
@@ -40,8 +36,8 @@ s32 FUN_002223f0(struct Menu *menu) {
             return 1;
         }
         if (D_0013C940.pressed & 0x10) {
-            if (menu_system.current->unk38 != 0) {
-                menu_system.next = menu_system.current->unk38;
+            if (menu_system.current->back != 0) {
+                menu_system.next = menu_system.current->back;
             } else if (menu_system.unk124 == 0) {
                 return -1;
             }

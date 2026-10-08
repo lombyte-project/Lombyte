@@ -1,14 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 pad_C[0x4];
-    s32 unk10;
-    u8 pad_14[0x10];
-    s32 unk24;
-};
-
+#include "sifrpc.h"
 struct SifRpcPacket {
     u8 pad_0[0x14];
     s32 unk14;
@@ -29,14 +20,14 @@ s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     s32 sema_id;
     struct SifRpcPacket *packet;
 
-    client->unk10 = 0;
-    client->unk24 = 0;
+    client->command = 0;
+    client->serve = 0;
     packet = (struct SifRpcPacket *)get_available_rpc_packet(D_00156800);
     if (packet == NULL) {
         return -1;
     }
-    client->unk4 = (s32)packet->unk18;
-    client->unk0 = (s32)packet;
+    client->rpcd.pid = packet->unk18;
+    client->rpcd.paddr = packet;
     packet->unk20 = rpc_number;
     packet->unk14 = (s32)packet;
     packet->unk1C = (s32)client;
@@ -46,7 +37,7 @@ s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     sema_param[1] = 1;
     sema_param[2] = 0;
     sema_id = CreateSema(sema_param);
-    client->unk8 = sema_id;
+    client->rpcd.tid = sema_id;
     if (sema_id >= 0) {
         goto block_4;
     }
@@ -57,14 +48,14 @@ block_4:
         goto block_6;
     }
     func_0011AD90(packet);
-    DeleteSema(client->unk8);
+    DeleteSema(client->rpcd.tid);
     return -2;
 block_6:
-    WaitSema(client->unk8);
-    DeleteSema(client->unk8);
+    WaitSema(client->rpcd.tid);
+    DeleteSema(client->rpcd.tid);
     return 0;
 block_7:
-    client->unk8 = -1;
+    client->rpcd.tid = -1;
     if (sceSifSendCmd(0x80000009, packet, 0x40, 0, 0, 0) != 0) {
         return 0;
     }

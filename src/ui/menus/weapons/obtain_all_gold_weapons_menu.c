@@ -1,11 +1,6 @@
 #include "types.h"
 
-struct MenuScreen {
-    u8 pad_0[0x20];
-    u16 unk20;
-    u8 pad_22[2];
-    u16 unk24;
-};
+#include "rnc/ui/menus/menu_screen.h"
 
 struct MenuPacket {
     u8 pad_0[2];
@@ -39,8 +34,8 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     s16 pos_x = 0x18;
 
     func_001153FC(&tmp, 0, 0x18);
-    tmp.unk2 = menu->unk24;
-    tmp.unk6 = menu->unk20;
+    tmp.unk2 = menu->height;
+    tmp.unk6 = menu->width;
     tmp.unk10 = 0x10;
     packet = tmp;
     setup_gif_paging(0);

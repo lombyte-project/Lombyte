@@ -7,10 +7,6 @@ struct Pad {
     u32 pressed;
 };
 
-struct ModeEntry {
-    u8 pad0[0x38];
-    s32 unk38;
-};
 
 
 struct MapHdr {
@@ -109,8 +105,8 @@ s32 draw_map_screen(struct Screen *screen) {
             }
         }
         if (D_0013C940.pressed & 0x10) {
-            if (menu_system.current->unk38 != 0) {
-                menu_system.next = menu_system.current->unk38;
+            if (menu_system.current->back != 0) {
+                menu_system.next = menu_system.current->back;
             } else if (menu_system.unk124 == 0) {
                 return -1;
             }

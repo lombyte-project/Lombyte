@@ -1,12 +1,8 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_screen.h"
 struct ModeRef {
     u8 pad_0[0x84];
     s32 unk84;
-};
-
-struct MenuScreen {
-    u8 pad_0[0x54];
-    s32 unk54;
 };
 
 extern struct ModeRef *D_001D5BF4[];

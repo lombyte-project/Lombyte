@@ -1,16 +1,5 @@
 #include "types.h"
-struct MenuScreen {
-    u8 pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
-    u8 pad_28[0x14];
-    s32 unk3C;
-    s32 unk40;
-    u8 pad_44[0x4];
-    struct MenuIcon *unk48;
-    u8 pad_4C[0x10];
-    s32 unk5C;
-};
+#include "rnc/ui/menus/menu_screen.h"
 struct MenuIcon {
     u16 unk0;
     s16 unk2;
@@ -40,7 +29,7 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
     i = 0;
     y = (*menu).unk5C;
     start_y = y;
-    x = ((s32)((menu->unk20 * 0x10) - 0x200)) >> 1;
+    x = ((s32)((menu->width * 0x10) - 0x200)) >> 1;
     setup_gif_paging(0);
     new_var3 = 0;
     new_var = new_var3;
@@ -68,17 +57,17 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
         } while (i < menu->unk40);
     }
     if (start_y < new_var) {
-        append_screen_rect_packet(new_var, new_var, menu->unk20, 0x14, (u64)D_001601B0, new_var);
+        append_screen_rect_packet(new_var, new_var, menu->width, 0x14, (u64)D_001601B0, new_var);
         draw_hud_sprite(get_icon_frame(0xE99EU, 6), (x >> 4), 2, 0x20,
                         0x10, 0x80);
     }
-    height = menu->unk24;
+    height = menu->height;
     if ((height * 0x10) < y) {
         byte_offset = new_var;
-        append_screen_rect_packet(byte_offset, height - 0x14, menu->unk20, height,
+        append_screen_rect_packet(byte_offset, height - 0x14, menu->width, height,
                                   (u64)D_001601B0, byte_offset);
         draw_hud_sprite_flipped(get_icon_frame(0xE99EU, 6), (x >> 4),
-                                menu->unk24 - 0x12, 0x20, 0x10, 0x80);
+                                menu->height - 0x12, 0x20, 0x10, 0x80);
     }
     do_gif_paging();
     return 2;

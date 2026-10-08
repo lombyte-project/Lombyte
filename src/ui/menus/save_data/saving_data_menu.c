@@ -1,25 +1,4 @@
 #include "types.h"
-struct ModeEntry {
-    u8 pad_0[0x38];
-    s32 unk38;
-    u8 pad_3C[0x4];
-    s32 unk40;
-};
-struct ModeTarget {
-    u8 pad_0[0x84];
-    s32 unk84;
-};
-struct MenuScreen {
-    u8 pad_0[0x14];
-    s32 unk14;
-    u8 pad_18[0x18];
-    s32 unk30;
-    u8 pad_34[0xC];
-    s32 unk40;
-    u8 pad_44[0x4];
-    s32 unk48;
-    s32 unk4C;
-};
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
@@ -37,6 +16,7 @@ extern u8 D_001D2578[];
 extern s32 D_001D2640[];
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/ui/menus/menu_screen.h"
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 prepare_save_game() __asm__("FUN_002269c0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -44,13 +24,13 @@ s32 saving_data_menu(struct MenuScreen *menu) __asm__("FUN_00222f88");
 
 s32 saving_data_menu(struct MenuScreen *menu) {
     u8 *new_var;
-    s32 *temp_2_126;
+    struct MenuPage *temp_2_126;
     s32 prev_slot;
     s32 save_state;
     s32 slot;
     s32 selected_slot;
     s32 pad_buttons;
-    if (menu_system.current->unk40 == menu) {
+    if (menu_system.current->focus == menu) {
         if (((menu->unk4C == 0) && (menu_system.previous == D_001D2578)) &&
             (menu_system.previous->unk84 != 0)) {
             menu->unk4C = 1;
@@ -95,7 +75,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
 
     block_17:
         if (D_0013C940.pressed & 0x10) {
-            temp_2_126 = menu_system.current->unk38;
+            temp_2_126 = menu_system.current->back;
             if (temp_2_126 != 0) {
                 menu_system.next = temp_2_126;
                 goto block_23;
@@ -109,7 +89,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
     block_23:
     block_24:
         if ((mode_freeze_state != 0x10) && (mode_freeze_state != 1)) {
-            menu_system.next = (void *)menu_system.current->unk38;
+            menu_system.next = (void *)menu_system.current->back;
             return 0;
         }
 
@@ -142,7 +122,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 }
             }
             if (menu->unk40 != prev_slot) {
-                allocate_voice_for_target_entry(1, 0x11, menu->unk14);
+                allocate_voice_for_target_entry(1, 0x11, menu->moby);
             }
         block_46:;
 

@@ -1,12 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
-struct ModeEntry {
-    u8 pad_0[0x38];
-    s32 unk38;
-    u8 pad_3C[0x4];
-    void *unk40;
-};
 
 typedef struct MenuItem {
     s32 unk0;
@@ -33,15 +28,15 @@ s32 FUN_002212b8(Menu *menu) {
     s32 cur;
     s32 n;
 
-    if (menu_system.current->unk40 != menu) {
+    if (menu_system.current->focus != menu) {
         return 0;
     }
     if ((D_0013C940.pressed & 0xD00) && menu_system.unk124 == 0) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
-        if (menu_system.current->unk38 != 0) {
-            menu_system.next = menu_system.current->unk38;
+        if (menu_system.current->back != 0) {
+            menu_system.next = menu_system.current->back;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }

@@ -16,21 +16,16 @@ struct Menu {
     s32 timer;
 };
 
-struct ModeEntry {
-    u8 pad0[0x38];
-    s32 unk38;
-    u8 pad3C[4];
-    struct Menu *owner;
-};
 
 
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
 extern f32 D_0015F43C;
 extern u8 D_0016034C;
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
-extern void mode_freeze_init(s32, struct ModeEntry *) __asm__("func_001FBAB8");
+extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
@@ -40,7 +35,7 @@ s32 FUN_00220e28(struct Menu *m) {
     s32 t;
     s32 v;
 
-    active = menu_system.current->owner == m;
+    active = (struct Menu *)menu_system.current->focus == m;
     if (m->timer != 0) {
         t = m->timer - 1;
         v = t < 5 ? t : 4;
@@ -55,8 +50,8 @@ s32 FUN_00220e28(struct Menu *m) {
         return 1;
     }
     if (D_0013C940.pressed & 0x10) {
-        if (menu_system.current->unk38 != 0) {
-            menu_system.next = menu_system.current->unk38;
+        if (menu_system.current->back != 0) {
+            menu_system.next = menu_system.current->back;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }

@@ -1,9 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 pad_0[0x24];
-    s32 unk24;
-};
-
+#include "sifrpc.h"
 struct McGetInfoRequest {
     u8 pad_0[0x4];
     s32 unk4;
@@ -32,7 +28,7 @@ extern s32 sceSifWriteBackDCache();
 s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     s32 result;
 
-    if (D_00159A00.unk24 == 0) {
+    if (D_00159A00.serve == 0) {
         return -0x64;
     }
     if (PollSema(D_00132DAC[0]) < 0) {

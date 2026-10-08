@@ -1,10 +1,5 @@
 #include "types.h"
-struct MenuScreen {
-    u8 pad_0[0x48];
-    s32 unk48;
-    s32 unk4C;
-};
-
+#include "rnc/ui/menus/menu_screen.h"
 extern s32 initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
 extern s32 select_next_stream_buffer() __asm__("FUN_00225c18");
 s32 FUN_00222f18(struct MenuScreen *arg0) {

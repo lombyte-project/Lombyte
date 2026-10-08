@@ -1,13 +1,8 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_screen.h"
 struct ModeRef {
     u8 pad_0[0x40];
     struct MenuListInfo *unk40;
-};
-
-struct MenuScreen {
-    u8 pad_0[0x20];
-    s32 unk20;
-    s32 unk24;
 };
 
 struct MenuListInfo {
@@ -48,22 +43,22 @@ s32 FUN_002220f0(struct MenuScreen *menu) {
     }
     goto block_4;
 block_2:
-    height = menu->unk24;
-    width = menu->unk20;
+    height = menu->height;
+    width = menu->width;
     center_x = (s32)(width + ((u32)width >> 0x1F)) >> 1;
     center_y = ((s32)(height + ((u32)height >> 0x1F)) >> 1) - 8;
     font_print_center(center_x, center_y, 0x80FFA888, get_help_message_text(0x5019), -1);
     goto block_5;
 block_4:
     temp_20_48 = temp_20_22 * 0xC;
-    temp_16_50 = menu->unk20;
+    temp_16_50 = menu->width;
     temp_16_61 = (s32)(temp_16_50 + ((u32)temp_16_50 >> 0x1F)) >> 1;
-    temp_17_64 = ((s32)menu->unk24 / 3) - 8;
+    temp_17_64 = ((s32)menu->height / 3) - 8;
     font_print_center(temp_16_61, temp_17_64, 0x80FFA888,
                       get_help_message_text(*(s32 *)(void *)(temp_20_48 + D_001DDD40)), -1);
-    temp_17_75 = menu->unk20;
+    temp_17_75 = menu->width;
     temp_17_85 = (s32)(temp_17_75 + ((u32)temp_17_75 >> 0x1F)) >> 1;
-    temp_16_88 = ((s32)(menu->unk24 * 2) / 3) - 8;
+    temp_16_88 = ((s32)(menu->height * 2) / 3) - 8;
     font_print_center(temp_17_85, temp_16_88, 0x80FFA888,
                       get_help_message_text(*(s32 *)((u8 *)(D_001DDD40 + temp_20_48) + 0x4)), -1);
 block_5:

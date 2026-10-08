@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/library/sif_file_slot.h"
+#include "sifrpc.h"
 
 struct FsSeekRequest {
     s32 completion_semaphore;
@@ -27,10 +28,6 @@ extern s32 D_0012FC94[];
 extern s32 D_0012FCA4[];
 extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
-struct sceSifClientData {
-    u8 pad[0x28];
-};
-
 extern struct sceSifClientData D_00157F80;
 extern struct SifFileSlot *get_iob(s32 fd);
 extern s32 _sceFsWaitS(s32);

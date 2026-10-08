@@ -1,9 +1,5 @@
 #include "types.h"
-
-struct sceSifClientData {
-    u8 pad_0[0x24];
-    s32 unk24;
-};
+#include "sifrpc.h"
 
 extern s32 D_001312D0[];
 extern s32 D_001312DC[];
@@ -54,7 +50,7 @@ s32 cd_check_ncmd(s32 cmd) {
             }
             continue;
         }
-        if (D_00132490.unk24 != 0) {
+        if (D_00132490.serve != 0) {
             break;
         }
         for (spin = 0x100000; spin != -1; spin--) {

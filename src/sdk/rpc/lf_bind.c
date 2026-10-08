@@ -1,8 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 pad_0[0x24];
-    s32 unk24;
-};
+#include "sifrpc.h"
 extern s32 D_0012FCB0[];
 extern u8 D_00158200[];
 extern struct sceSifClientData D_00158400;
@@ -18,7 +15,7 @@ s32 _lf_bind(void) {
         if (sceSifBindRpc(&D_00158400, 0x80000006, 0) < 0) {
             return -1;
         }
-        if (D_00158400.unk24 != 0) {
+        if (D_00158400.serve != 0) {
             D_0012FCB0[0] = 0;
             if (sceSifCallRpc(&D_00158400, 0xFF, 0, 0, 0, D_00158200, 4, 0, 0) < 0) {
                 return 0xFFFEFFFF;

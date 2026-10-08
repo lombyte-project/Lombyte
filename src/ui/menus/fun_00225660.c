@@ -1,12 +1,8 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_screen.h"
 struct MusicStreamState {
     u8 pad_0[0x5A];
     u16 unk5A;
-};
-
-struct MenuScreen {
-    u8 pad_0[0x3C];
-    s32 unk3C;
 };
 
 extern struct MusicStreamState D_001516D0;

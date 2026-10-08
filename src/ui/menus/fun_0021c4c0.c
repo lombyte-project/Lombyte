@@ -3,12 +3,6 @@
 
 struct Menu;
 
-struct ModeEntry {
-    u8 pad0[0x38];
-    s32 unk38;
-    u8 pad3C[4];
-    struct Menu *owner;
-};
 
 
 struct Menu {
@@ -26,6 +20,7 @@ struct GameProgress {
 
 extern struct PadState D_0013C940;
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
 extern struct GameProgress D_001A00F0;
 extern u8 D_0013DD40[];
@@ -44,7 +39,7 @@ s32 FUN_0021c4c0(struct Menu *m) {
     s32 *ch;
 
     {
-        struct Menu *owner = menu_system.current->owner;
+        struct Menu *owner = (struct Menu *)menu_system.current->focus;
         old = D_001A00F0.level;
         if (owner != m) {
             if (old < 20) {
@@ -97,8 +92,8 @@ s32 FUN_0021c4c0(struct Menu *m) {
         }
     }
     if (D_0013C940.pressed & 0x10) {
-        if (menu_system.current->unk38 != 0) {
-            menu_system.next = menu_system.current->unk38;
+        if (menu_system.current->back != 0) {
+            menu_system.next = menu_system.current->back;
         } else if (menu_system.unk124 == 0) {
             return -1;
         }

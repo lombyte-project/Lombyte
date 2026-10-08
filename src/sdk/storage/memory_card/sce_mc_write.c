@@ -1,8 +1,5 @@
 #include "types.h"
-struct sceSifClientData {
-    u8 reserved_00[0x24];
-    s32 is_initialized;
-};
+#include "sifrpc.h"
 struct MemoryCardWriteRequest {
     s32 file_descriptor;
     s32 port;
@@ -29,7 +26,7 @@ s32 sceMcWrite(s32 fd, u8 *buffer, s32 size) {
     s32 root_off;
     s32 base;
 
-    if (D_00159A00.is_initialized == 0) {
+    if (D_00159A00.serve == 0) {
         return -0x64;
     }
     if (PollSema(D_00132DAC[0]) < 0) {
