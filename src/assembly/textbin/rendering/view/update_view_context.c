@@ -109,8 +109,8 @@ void update_view_context(void) {
     f32 vertical_fov;
     f32 viewport_width;
     f32 viewport_height;
-    s32 far_bits;
     s32 near_bits;
+    s32 far_bits;
     s32 mul_bits;
 
     depth_scale = -8388080.0f;
@@ -209,10 +209,10 @@ void update_view_context(void) {
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;
     view->inverse_screen_scale.f[0] = 1.0f / view->scr_x;
-    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
     view->proj3[14] /= depth_scale;
-    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->inverse_screen_scale.f[3] = 1.0f / view->fog_mul;
+    view->inverse_screen_scale.f[1] = 1.0f / view->scr_y;
+    view->inverse_screen_scale.f[2] = 1.0f / depth_scale;
     view->screen_scale.f[0] = view->scr_x;
     view->screen_scale.f[1] = view->scr_y;
     view->screen_scale.f[2] = depth_scale;
