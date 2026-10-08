@@ -93,7 +93,61 @@ void FUN_L02_002cb978(char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x40;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8910.s", FUN_L02_002d8910);
+
+#include "qcopy.h"
+
+typedef float V2d8910[4] __attribute__((aligned(16)));
+typedef struct {
+    char pad[0x140];
+    float x;
+    float y;
+} H2d8910;
+extern H2d8910 D_L02_00167280_2d8910 __asm__("D_L02_00167280") __attribute__((section(".data")));
+extern char *D_L02_001600EC_2d8910 __asm__("D_L02_001600EC");
+extern char D_0013F3D0_2d8910[] __asm__("D_0013F3D0");
+extern float addrot_2d8910(float, float) __asm__("FUN_001fa580");
+extern float diffrot_2d8910(float, float) __asm__("FUN_001fa688");
+extern float atan2_2d8910(float, float) __asm__("FUN_001f9e90");
+extern float cos_2d8910(float) __asm__("FUN_001f9dc8");
+extern float sin_2d8910(float) __asm__("FUN_001f9de0");
+extern void vadd_2d8910(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_2d8910(void *, void *, float) __asm__("FUN_001f9a68");
+
+/* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
+void FUN_L02_002d8910(float *pos, float *rot, char *moby) {
+    V2d8910 v;
+    float left;
+    float right;
+    float pick;
+    float to;
+    float dl;
+    int idx;
+    char *base;
+
+    idx = *(int *)(*(char **)(moby + 0x78) + 0xE8);
+    if (idx == -1) {
+        left = addrot_2d8910(*(float *)(moby + 0x48), 1.57079637f);
+        right = addrot_2d8910(*(float *)(moby + 0x48), -1.57079637f);
+        to = atan2_2d8910(D_L02_00167280_2d8910.x - *(float *)(moby + 0x10),
+                          D_L02_00167280_2d8910.y - *(float *)(moby + 0x14));
+        dl = diffrot_2d8910(to, left);
+        pick = dl < diffrot_2d8910(to, right) ? left : right;
+        vadd_2d8910(v, D_0013F3D0_2d8910, moby + 0x10);
+        scale_2d8910(v, v, 0.5f);
+        qcopy(pos, v);
+        pos[0] += cos_2d8910(pick) * 2.0f;
+        pos[1] += sin_2d8910(pick) * 2.0f;
+        pos[2] += 1.0f;
+        rot[0] = 0;
+        rot[1] = 0;
+        rot[2] = addrot_2d8910(pick, 3.14159274f);
+    } else {
+        base = D_L02_001600EC_2d8910;
+        qcopy(pos, base + idx * 128 + 0x30);
+        qcopy(rot, base + idx * 128 + 0x70);
+    }
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002d8ad0.s", FUN_L02_002d8ad0);
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))

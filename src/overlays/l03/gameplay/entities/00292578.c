@@ -342,7 +342,40 @@ void FUN_L03_0029cff0(char *m) {
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029d2e0.s", FUN_L03_0029d2e0);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_0029dba8.s", FUN_L03_0029dba8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002bad40.s", FUN_L03_002bad40);
+
+typedef int q128_2bad40 __attribute__((mode(TI)));
+char *f20c4f8_2bad40(int) __asm__("FUN_0020c4f8");
+float f213308_2bad40(void) __asm__("FUN_00213308");
+void f2502f0_2bad40(char *, int, int, int) __asm__("FUN_L00_002502f0");
+void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
+/* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
+char *FUN_L03_002bad40(char *parent, int unused, int color, int a3, int a4, float f, float scale) {
+    char *m = f20c4f8_2bad40(0xEB);
+    if (m) {
+        char *d = *(char **)(m + 0x78);
+        int r, g, b;
+        *(unsigned char *)(m + 0x30) = 0xFF;
+        *(short *)(m + 0x32) = 0x7F;
+        m[0x31] = 1;
+        *(float *)(m + 0x2C) *= scale;
+        *(char **)d = parent;
+        qcopy(m + 0x10, *(char **)(parent + 0x78) + 0xF0);
+        *(q128_2bad40 *)(m + 0x40) = *(q128_2bad40 *)(parent + 0x40);
+        *(float *)(m + 0x40) = f213308_2bad40();
+        *(short *)(d + 0xC) = a4;
+        b = (color >> 16) & 0xFF;
+        g = (color >> 8) & 0xFF;
+        r = color & 0xFF;
+        *(short *)(d + 0xE) = a4;
+        *(float *)(d + 0x14) = f;
+        *(int *)(d + 0x4) = color;
+        *(int *)(d + 0x8) = a3;
+        f2502f0_2bad40(m, r, g, b);
+        f250df8_2bad40(m);
+    }
+    return m;
+}
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c5bb8.s", FUN_L03_002c5bb8);
 /* Applies damage reaction, knockback parameters and animation state. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C7DE8), where it is exact; names translated to the US level program. */

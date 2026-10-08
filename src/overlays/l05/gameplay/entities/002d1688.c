@@ -212,7 +212,46 @@ void FUN_L05_00307480(char *moby, int a1, int a2, int a3) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1688.s", FUN_L05_002d1688);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d1e30.s", FUN_L05_002d1e30);
+
+typedef float V2d1e30[4] __attribute__((aligned(16)));
+extern int tick_2d1e30(void *) __asm__("FUN_001f9740");
+extern float addrot_2d1e30(float, float) __asm__("FUN_001fa580");
+extern float rand_2d1e30(float, float) __asm__("FUN_002132a8");
+extern void scale_2d1e30(void *, void *, float) __asm__("FUN_001f9a68");
+extern void vadd_2d1e30(void *, void *, void *) __asm__("FUN_001f9a10");
+extern char *spawn_2d1e30(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
+extern int frames_2d1e30(int) __asm__("FUN_001f96f8");
+extern int ftoi_2d1e30(float) __asm__("FUN_001fa6d0");
+extern float D_L05_001612E8_2d1e30 __asm__("D_L05_001612E8");
+extern char D_L05_0015F580_2d1e30[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
+
+/* When the timer runs out, spawns two effects beside the moby, one to each side, and restarts the timer. */
+void FUN_L05_002d1e30(char *moby) {
+    V2d1e30 v;
+    char *data;
+    char *p;
+    float a;
+    int i;
+    float *h;
+
+    data = *(char **)(moby + 0x78);
+    if (tick_2d1e30(data + 0x84) == 0) {
+        return;
+    }
+    for (i = 0; i < 2; i++) {
+        a = addrot_2d1e30(*(float *)(moby + 0x48), 3.14159274f);
+        addrot_2d1e30(a, rand_2d1e30(-0.785398006f, 0.785398006f));
+        scale_2d1e30(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
+        vadd_2d1e30(v, v, moby + 0x10);
+        v[2] = D_L05_001612E8_2d1e30 + 0.05f;
+        h = &D_L05_001612E8_2d1e30;
+        p = spawn_2d1e30(v, D_L05_0015F580_2d1e30, h, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
+        if (p != 0) {
+            *(short *)(p + 0xA) = frames_2d1e30(15);
+        }
+        *(int *)(data + 0x84) = ftoi_2d1e30(rand_2d1e30(3.0f, 5.0f));
+    }
+}
 
 #define NOT_SDA
 

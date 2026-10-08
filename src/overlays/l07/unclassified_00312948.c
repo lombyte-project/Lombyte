@@ -25,7 +25,48 @@ void FUN_L07_00312dc8(char *moby) {
     FUN_L07_00312948(moby, 0, 1.0f, 5.8f, ang, 1.0f, *(float *)(data + 0x1C8));
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312e70.s", FUN_L07_00312e70);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_003131b0.s", FUN_L07_003131b0);
+
+#include "qzero.h"
+
+typedef union {
+    unsigned int q __attribute__((mode(TI)));
+    float f[4];
+} U3131b0;
+typedef float V3131b0[4] __attribute__((aligned(16)));
+extern void vscale_3131b0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void vadd_3131b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void vsub_3131b0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_L07_00312e70(char *, float, int, float, int);
+extern void ray_3131b0(void *, char *, int, void *, float) __asm__("FUN_L00_00259888");
+extern int hit_3131b0(void *, void *, int, char *, void *) __asm__("FUN_001efa68");
+extern void probe_3131b0(float, void *, int, char *, void *) __asm__("FUN_L00_001f2868");
+
+/* Rope draw: moves the two end points along the rope direction, draws three strands, then casts a ray between the ends. */
+void FUN_L07_003131b0(char *moby) {
+    U3131b0 v;
+    char blk[0x30];
+    V3131b0 d;
+    char *data;
+    float one;
+
+    data = *(char **)(moby + 0x78);
+    qzero(&v);
+    one = 1.0f;
+    vscale_3131b0(&v, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
+    vadd_3131b0(data + 0x140, &v, data + 0x110);
+    vscale_3131b0(&v, &v, *(float *)(data + 0x16C));
+    vadd_3131b0(data + 0x120, &v, data + 0x110);
+    FUN_L07_00312e70(moby, one, 0, one, 0x20000080);
+    FUN_L07_00312e70(moby, 0.7f, 10, 2.0f, 0x28008080);
+    FUN_L07_00312e70(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
+    vsub_3131b0(d, data + 0x120, data + 0x110);
+    vscale_3131b0(d, d, one);
+    ray_3131b0(blk, moby, 0x30000, d, 1.00012302f);
+    if (hit_3131b0(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
+        probe_3131b0(0.5f, data + 0x120, 0, moby, blk);
+    }
+}
+
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314730), where it is exact; names translated to the US level program. */
 
 void *FUN_L07_00313350(void *unused, void *dp, void *op) {
