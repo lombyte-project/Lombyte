@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/gameplay/entities/moby.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e3078.s", FUN_L04_002e3078);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e4418.s", FUN_L04_002e4418);
@@ -79,4 +80,37 @@ void FUN_L04_002e5178(M2e5178 *m) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e53a0.s", FUN_L04_002e53a0);
+/* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
+struct L04MissionState {
+    char pad0[0x30];
+    int mode;
+    char pad1[0x178 - 0x34];
+    int slot[4];
+};
+
+extern int D_L04_0015F5C4;
+extern struct L04MissionState D_L04_0016C9E0;
+extern void FUN_L00_002637f8(int);
+
+void FUN_L04_002e53a0(struct Moby *m) {
+    switch (m->state) {
+    case 0:
+        m->unk30 = 0xFF;
+        m->state = 1;
+        break;
+    case 1:
+        if (D_L04_0015F5C4 == 2) {
+            if (D_L04_0016C9E0.mode == 0 || D_L04_0016C9E0.mode == 1) {
+                int v = D_L04_0016C9E0.mode;
+                int i;
+                i = 0;
+                if (v == 0)
+                    i = 3;
+                else if (v == 1)
+                    i = 2;
+                FUN_L00_002637f8(D_L04_0016C9E0.slot[i]);
+            }
+        }
+        break;
+    }
+}
